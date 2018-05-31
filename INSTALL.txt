@@ -1,0 +1,14 @@
+We provide a Makefile that should work on Mac OS X and Linux platforms
+
+Known dependencies:
+Linux:
+ - boost_thread, boost_chrono, boost_system
+ - libexpat-dev
+ - libcurl-dev
+ - qt5-base
+ - ivy -> https://www.eei.cena.fr/products/ivy/
+
+Mac OS X
+ - boost
+ - qt5
+ - ivy -> https://www.eei.cena.fr/products/ivy/

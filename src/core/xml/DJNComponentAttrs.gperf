@@ -1,0 +1,52 @@
+/*
+ *	djnn libraries
+ *
+ *	The copyright holders for the contents of this file are:
+ *		Ecole Nationale de l'Aviation Civile, France (2008-2015)
+ *	See file "license.terms" for the rights and conditions
+ *	defined by copyright holders.
+ *
+ *	djnn Core XML parser, attributes of components
+ *
+ *	Contributors:
+ *		Stéphane Chatty <chatty@enac.fr>
+ *
+ */
+
+%{
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "xml-dev.h"
+
+#define register
+
+	using namespace djnn;
+
+static int HandleId (Process**, const char*);
+static int HandleModel (Process**, const char*);
+
+%}
+
+struct djn_XMLAttrHandler;
+
+%%
+id, &HandleId
+model, &HandleModel
+%%
+
+struct djn_ComponentArgs_t djn_ComponentArgs = { "", 0 };
+
+static int
+HandleId (Process** e, const char* v)
+{
+  djn_ComponentArgs.id = v;
+  return 1;
+}
+
+static int
+HandleModel (Process** e, const char* v)
+{
+  djn_ComponentArgs.model = !!atoi (v);
+  return 1;
+}
