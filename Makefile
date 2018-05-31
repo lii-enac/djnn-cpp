@@ -175,8 +175,22 @@ tidy: $(all_tidy)
 
 -include $(deps)
 
+pre_cov: CXXFLAGS += --coverage
+pre_cov: LDFLAGS += --coverage
+pre_cov : djnn
+.PHONY: pre_cov
+
+cov:
+	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
+	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file)
+	genhtml -o $(lcov_output_dir) $(lcov_file)
+	cd $(lcov_output_dir) ; open index.html
+.PHONY: cov
+
 clean:
-	rm -rf $(build_dir) > /dev/null 2>&1 || true
+	rm -f $(deps) $(objs) $(libs) $(srcgens) $(cov)
+	rm -rf $(lcov_output_dir) > /dev/null 2>&1 || true
+	rmdir $(build_dir) > /dev/null 2>&1 || true
 .PHONY: clean
 
 distclean clear:

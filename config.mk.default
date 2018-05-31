@@ -1,1 +1,4 @@
 build_dir = build
+
+lcov_file := $(build_dir)/djnn_cov.info
+lcov_output_dir := $(build_dir)/coverage_html
