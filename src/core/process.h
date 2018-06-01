@@ -89,7 +89,7 @@ namespace djnn {
 
     // Actions
     virtual void draw () {};
-
+    virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
   private:
     static int _nb_anonymous;
     couplings_t _activation_couplings;

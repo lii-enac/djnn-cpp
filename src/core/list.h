@@ -33,6 +33,7 @@ namespace djnn {
     void remove_child (Process* c) override;
     void remove_child (const string &name) override;
     Process* find_component (const string &path) override;
+    Process* clone () override;
     virtual ~List ();
     int size () { return _size->get_value (); }
   private:

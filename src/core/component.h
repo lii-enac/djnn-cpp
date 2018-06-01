@@ -44,5 +44,6 @@ namespace djnn {
   public:
     Component () : Container () {}
     Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize (); }
+    Process* clone () override;
   };
 }

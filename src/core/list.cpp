@@ -172,6 +172,15 @@ namespace djnn
     return nullptr;
   }
 
+  Process*
+  List::clone () {
+    List* clone = new List ();
+    for (auto c: _children) {
+      clone->add_child (c->clone (), c->get_name ());
+    }
+    return clone;
+  }
+
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
                                                      shared_ptr<RefProperty> iter, shared_ptr<IntProperty> index,
                                                      bool forward) :

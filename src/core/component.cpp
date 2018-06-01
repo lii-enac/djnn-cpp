@@ -122,5 +122,14 @@ namespace djnn
     }
     cout << endl;
   }
+
+  Process*
+  Component::clone () {
+    Process* clone = new Component ();
+    for (auto c: _children) {
+      clone->add_child (c->clone (), c->get_name ());
+    }
+    return clone;
+  }
 }
 
