@@ -1,15 +1,5 @@
-QT_VERSION=5
-
-ifndef os
-os := $(shell uname -s)
-endif
 ifeq ($(os),Darwin)
-ifeq ($(QT_VERSION),4)
-QTLIBS = -framework QtOpenGL -framework QtGui -framework QtCore
-FRAMEWORKDIR = /Library/Frameworks
-endif
-
-ifeq ($(QT_VERSION),5)
+ifeq ($(graphics),QT)
 QTLIBS = -framework QtWidgets -framework QtOpenGL \
 		-framework QtGui -framework QtCore
 ifneq ("$(wildcard /opt/local/libexec/qt5/lib/*)","")
@@ -37,16 +27,27 @@ lib_ldflags = -F$(FRAMEWORKDIR) $(QTLIBS)
 endif
 
 ifeq ($(os),Linux)
+ifeq ($(graphics),QT)
 QTLIBS = Qt5OpenGL Qt5Gui
 moc := moc
 lib_cppflags = -I. -I$(LOCALDIR)/include `pkg-config --cflags $(QTLIBS)`
 lib_ldflags = `pkg-config --libs $(QTLIBS)`
-
+endif
 endif
 
+lib_srcs := $(shell find src/gui -name "*.cpp")
+lib_srcs += $(shell find src/gui/picking -name "*.cpp")
+lib_srcs += $(shell find src/gui/shapes -name "*.cpp")
+lib_srcs += $(shell find src/gui/style -name "*.cpp")
+lib_srcs += $(shell find src/gui/transformation -name "*.cpp")
+lib_srcs += $(shell find src/gui/XML -name "*.cpp")
+
+ifeq ($(graphics),QT)
 $(build_dir)/src/gui/qt/moc_MyQWindow.cpp: src/gui/qt/my_qwindow.h src/gui/backend.h
 	$(moc) $< > $@
 lib_objs += $(build_dir)/src/gui/qt/moc_MyQWindow.o
 lib_srcgens += $(build_dir)/src/gui/qt/moc_MyQWindow.cpp
+lib_srcs += $(shell find src/gui/qt -name "*.cpp")
+endif
 
 lib_djnn_deps = core

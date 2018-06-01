@@ -15,8 +15,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "qt_backend.h"
 #include "qt_window.h"
 
@@ -280,5 +278,3 @@ namespace djnn
     _context_manager->get_current ()->textAnchor = anchor;
   }
 } /* namespace djnn */
-
-#endif

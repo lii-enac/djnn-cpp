@@ -12,19 +12,24 @@
  *
  */
 
-#include "backend.h"
+#include "../backend.h"
 
-#include "qt/qt_backend.h"
-#include "qt/qt_mainloop.h"
+#include "qt_backend.h"
+#include "qt_mainloop.h"
 
 namespace djnn
 {
-  QtBackend* Backend::_instance;
+  class Backend::Impl {
+  public:
+    QtBackend* qt_backend;
+  };
+
+  Backend::Impl* Backend::_instance;
 
   AbstractBackend*
   Backend::instance ()
   {
-    return _instance;
+    return _instance->qt_backend;
   }
 
   void
@@ -32,7 +37,7 @@ namespace djnn
   {
     if (_instance != nullptr)
       return;
-  _instance = QtBackend::instance();
+  _instance->qt_backend = QtBackend::instance();
   QtMainloop::instance();
   }
 }

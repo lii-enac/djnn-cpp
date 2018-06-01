@@ -15,12 +15,7 @@
 
 #pragma once
 
-#define QT 1
-
 namespace djnn {
-#if QT
-  class QtBackend;
-#endif
   class AbstractBackend;
 
   class Backend
@@ -30,8 +25,7 @@ namespace djnn {
     static void init ();
     static void clear ();
   private:
-#if QT
-    static QtBackend* _instance;
-#endif
+    class Impl;
+    static Impl* _instance;
   };
 }

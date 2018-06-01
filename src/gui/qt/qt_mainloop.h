@@ -15,8 +15,6 @@
 #pragma once
 #include "../backend.h"
 
-#if QT
-
 #include "qt_window.h"
 #include "../../core/syshook/external_source.h"
 #include <QtCore/QAbstractEventDispatcher>
@@ -53,4 +51,3 @@ namespace djnn {
     char **argv;
   };
 }
-#endif

@@ -16,8 +16,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "qt_picking_view.h"
 #include <QtGui/QImage>
 
@@ -80,4 +78,3 @@ namespace djnn
     _pick_debug_win->update ();
   }
 } /* namespace djnn */
-#endif

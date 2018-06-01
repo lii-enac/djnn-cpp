@@ -16,8 +16,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "../picking/color_picking.h"
 #include "../../core/core-dev.h"
 #include "../window.h"
@@ -46,6 +44,3 @@ namespace djnn
     QPainter *_painter;
   };
 } /* namespace djnn */
-
-#endif
-  

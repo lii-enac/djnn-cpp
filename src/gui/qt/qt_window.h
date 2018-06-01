@@ -16,8 +16,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "../../core/syshook/external_source.h"
 #include "../window.h"
 #include "qt_picking_view.h"
@@ -52,5 +50,3 @@ namespace djnn {
   };
 
 }
-
-#endif

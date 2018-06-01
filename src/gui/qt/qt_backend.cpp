@@ -14,8 +14,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "qt_window.h"
@@ -160,5 +158,3 @@ namespace djnn
         || s->leave ()->has_coupling ();*/
   }
 } /* namespace djnn */
-#endif
-

@@ -17,8 +17,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include <iostream>
 #include <QtWidgets/QWidget>
 
@@ -55,4 +53,3 @@ namespace djnn {
     bool _updating;
   };
 }
-#endif

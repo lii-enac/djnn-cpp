@@ -14,8 +14,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "../../core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
@@ -95,5 +93,3 @@ namespace djnn
     }
   }
 }
-#endif
-

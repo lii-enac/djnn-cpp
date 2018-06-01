@@ -14,8 +14,6 @@
 
 #include "../backend.h"
 
-#if QT
-
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "qt_window.h"
@@ -435,5 +433,3 @@ namespace djnn
     }
   }
 } /* namespace djnn */
-#endif
-

@@ -14,8 +14,6 @@
 
 #pragma once
 
-#if QT
-
 //#include "qt_backend.h"
 #include "../style/style_types.h"
 #include "../../core/execution/component_observer.h"
@@ -74,5 +72,3 @@ namespace djnn
   };
 
 } /* namespace djnn */
-
-#endif

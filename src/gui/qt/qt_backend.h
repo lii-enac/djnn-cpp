@@ -14,8 +14,6 @@
 
 #pragma once
 
-#if QT
-
 #include "qt_context.h"
 #include "qt_picking_view.h"
 #include "../abstract_backend.h"
@@ -186,5 +184,3 @@ namespace djnn
   };
 
 } /* namespace djnn */
-
-#endif

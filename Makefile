@@ -34,6 +34,10 @@ ifndef arch
 arch := $(shell uname -m)
 endif
 
+ifndef graphics
+graphics := QT
+endif
+
 CC := $(crossp)cc
 CXX := $(crossp)c++
 GPERF ?= gperf
@@ -72,18 +76,19 @@ lib_cppflags :=
 lib_ldflags :=
 lib_djnn_deps := 
 
+# possibly override default
+-include $$(src_dir)/$1/djnn-lib.mk
+
 # default
 $1_gperf_srcs :=
 #$$(shell find src/$1 -name "*.gperf")
-$1_cpp_srcs := $$(lib_srcs) $$(shell find $$(src_dir)/$1 -name "*.cpp") $$($1_gperf_srcs:.gperf=.cpp)
-$1_c_srcs := $$(shell find $$(src_dir)/$1 -name "*.c")
+$1_cpp_srcs := $$(lib_srcs)
 $1_objs := $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 $1_cov_gcno  := $$($1_objs:.o=.gcno)
 $1_cov_gcda  := $$($1_objs:.o=.gcda)
 
-# possibly override default
--include $$(src_dir)/$1/djnn-lib.mk 
+
 
 $1_srcgens := $$(lib_srcgens)
 $1_objs += $$(lib_objs)
@@ -118,6 +123,7 @@ $1_tidy: $$($1_tidy_srcs)
 
 $1_dbg:
 	@echo $1_dbg
+	@echo $$($1_cpp_srcs)
 	@echo $$($1_objs)
 	@echo $$($1_djnn_deps)
 	@echo $$($1_lib_ldflags)
