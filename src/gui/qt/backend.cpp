@@ -19,7 +19,8 @@
 
 namespace djnn
 {
-  class Backend::Impl {
+  class Backend::Impl
+  {
   public:
     QtBackend* qt_backend;
   };
@@ -37,7 +38,8 @@ namespace djnn
   {
     if (_instance != nullptr)
       return;
-  _instance->qt_backend = QtBackend::instance();
-  QtMainloop::instance();
+    _instance = new Impl ();
+    _instance->qt_backend = QtBackend::instance ();
+    QtMainloop::instance ();
   }
 }
