@@ -466,6 +466,29 @@ namespace djnn
     grad->stops ()->add_child (this, "");
   }
 
+  GradientStop::GradientStop (double r, double g, double b, double a, double offset) :
+      AbstractGObj ()
+  {
+    _r = new DoubleProperty (this, "r", r);
+    _g = new DoubleProperty (this, "g", g);
+    _b = new DoubleProperty (this, "b", b);
+    _a = new DoubleProperty (this, "a", a);
+    _offset = new DoubleProperty (this, "offset", offset);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
+    _cb = new Coupling (_b, ACTIVATION, update, ACTIVATION);
+    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
+  }
+
+  Process*
+  GradientStop::clone ()
+  {
+    return new GradientStop (_r->get_value (), _g->get_value (), _b->get_value (), _a->get_value (),
+                             _offset->get_value ());
+  }
+
   GradientStop::~GradientStop ()
   {
     delete _cr;
@@ -512,6 +535,18 @@ namespace djnn
 
   AbstractGradient::AbstractGradient (Process *p, const std::string &n, int s, int fc) :
       AbstractGObj (p, n), _g (nullptr), _linear (false)
+  {
+    _spread = new IntProperty (this, "spread", s);
+    _coords = new IntProperty (this, "coords", fc);
+    _transforms = new List (this, "transforms");
+    _stops = new List (this, "stops");
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
+    _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
+  }
+
+  AbstractGradient::AbstractGradient (int s, int fc) :
+      AbstractGObj (), _g (nullptr), _linear (false)
   {
     _spread = new IntProperty (this, "spread", s);
     _coords = new IntProperty (this, "coords", fc);
@@ -584,6 +619,34 @@ namespace djnn
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
     Process::finalize ();
+  }
+
+  LinearGradient::LinearGradient (double x1, double y1, double x2, double y2, int s, int fc) :
+      AbstractGradient (s, fc)
+  {
+    _x1 = new DoubleProperty (this, "x1", x1);
+    _y1 = new DoubleProperty (this, "y1", y1);
+    _x2 = new DoubleProperty (this, "x2", x2);
+    _y2 = new DoubleProperty (this, "y2", y2);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+  }
+
+  Process*
+  LinearGradient::clone ()
+  {
+    LinearGradient *g = new LinearGradient (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value (),
+                                            spread ()->get_value (), coords ()->get_value ());
+    for (auto s : _stops->children ()) {
+      g->stops ()->add_child (s->clone (), "");
+    }
+    for (auto t : _transforms->children ()) {
+      g->transforms ()->add_child (t->clone (), "");
+    }
+    return g;
   }
 
   LinearGradient::~LinearGradient ()
@@ -695,6 +758,36 @@ namespace djnn
     _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
     _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
     Process::finalize ();
+  }
+
+  RadialGradient::RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc) :
+      AbstractGradient (s, fc)
+  {
+    _cx = new DoubleProperty (this, "cx", cx);
+    _cy = new DoubleProperty (this, "cy", cy);
+    _r = new DoubleProperty (this, "r", r);
+    _fx = new DoubleProperty (this, "fx", fx);
+    _fy = new DoubleProperty (this, "fy", fy);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
+    _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
+  }
+
+  Process*
+  RadialGradient::clone ()
+  {
+    RadialGradient *rg = new RadialGradient (_cx->get_value (), _cy->get_value (), _r->get_value (), _fx->get_value (),
+                                             _fy->get_value (), spread ()->get_value (), coords ()->get_value ());
+    for (auto s : _stops->children ()) {
+      rg->stops ()->add_child (s->clone (), "");
+    }
+    for (auto t : _transforms->children ()) {
+      rg->transforms ()->add_child (t->clone (), "");
+    }
+    return rg;
   }
 
   RadialGradient::~RadialGradient ()

@@ -27,6 +27,7 @@ namespace djnn
   {
   public:
     AbstractTranslation (Process *p, const string &n, double tx, double ty);
+    AbstractTranslation (double tx, double ty);
     virtual
     ~AbstractTranslation ();
     void
@@ -53,6 +54,8 @@ namespace djnn
   {
   public:
     GradientTranslation (Process *p, const string &n, double tx, double ty);
+    GradientTranslation (double tx, double ty);
+    Process* clone () override;
     virtual
     ~GradientTranslation ();
     void
@@ -63,6 +66,7 @@ namespace djnn
   {
   public:
     AbstractRotation (Process *p, const string &n, double a, double cx, double cy);
+    AbstractRotation (double a, double cx, double cy);
     virtual
     ~AbstractRotation ();
     void
@@ -89,6 +93,8 @@ namespace djnn
   {
   public:
     GradientRotation (Process *p, const string &n, double a, double cx, double cy);
+    GradientRotation (double a, double cx, double cy);
+    Process* clone () override;
     virtual
     ~GradientRotation ();
     void
@@ -99,6 +105,7 @@ namespace djnn
   {
   public:
     AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
+    AbstractScaling (double sx, double sy, double cx, double cy);
     virtual
     ~AbstractScaling ();
     void
@@ -121,10 +128,13 @@ namespace djnn
     void
     draw () override;
   };
+
   class GradientScaling : public AbstractScaling
   {
   public:
     GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
+    GradientScaling (double sx, double sy, double cx, double cy);
+    Process* clone () override;
     virtual
     ~GradientScaling ();
     void
@@ -135,6 +145,7 @@ namespace djnn
   {
   public:
     AbstractSkew (Process *p, const string &n, double a);
+    AbstractSkew (double a);
     virtual
     ~AbstractSkew ();
     void
@@ -152,6 +163,7 @@ namespace djnn
   {
   public:
     SkewX (Process *p, const string &n, double a);
+    SkewX (double a);
     virtual
     ~SkewX ();
     void
@@ -162,6 +174,8 @@ namespace djnn
   {
   public:
     GradientSkewX (Process *p, const string &n, double a);
+    GradientSkewX (double a);
+    Process* clone () override;
     virtual
     ~GradientSkewX ();
     void
@@ -182,6 +196,8 @@ namespace djnn
   {
   public:
     GradientSkewY (Process *p, const string &n, double a);
+    GradientSkewY (double a);
+    Process* clone () override;
     virtual
     ~GradientSkewY ();
     void
@@ -194,6 +210,9 @@ namespace djnn
     AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
 			double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34,
 			double m41, double m42, double m43, double m44);
+    AbstractHomography (double m11, double m12, double m13, double m14,
+          double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34,
+          double m41, double m42, double m43, double m44);
     virtual
     ~AbstractHomography ();
     void
@@ -226,6 +245,9 @@ namespace djnn
   public:
     GradientHomography (Process *p, const string &n, double m11, double m12, double m13, double m21,
 			double m22, double m23, double m31, double m32, double m33);
+    GradientHomography (double m11, double m12, double m13, double m21,
+          double m22, double m23, double m31, double m32, double m33);
+    Process* clone () override;
     virtual
     ~GradientHomography ();
     void
@@ -237,6 +259,9 @@ namespace djnn
   public:
     SimpleGradientTransform (Process *p, const string &n, double a, double b, double c, double d, double e,
 			     double f);
+    SimpleGradientTransform (double a, double b, double c, double d, double e,
+               double f);
+    Process* clone () override;
     virtual
     ~SimpleGradientTransform ();
     void

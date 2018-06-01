@@ -35,6 +35,16 @@ namespace djnn
     path->items ()->add_child (this, "");
   }
 
+  PathPoint::PathPoint (double x, double y) :
+      AbstractGObj ()
+  {
+    _x = new DoubleProperty (this, "x", x);
+    _y = new DoubleProperty (this, "y", y);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+  }
+
   PathPoint::~PathPoint ()
   {
     delete _cx;
@@ -67,6 +77,12 @@ namespace djnn
     }
   }
 
+  Process*
+  PathLine::clone ()
+  {
+    return new PathLine (_x->get_value (), _y->get_value ());
+  }
+
   void
   PathMove::draw ()
   {
@@ -75,7 +91,14 @@ namespace djnn
     }
   }
 
-  PathClosure::PathClosure (Process* p, const string &n)
+  Process*
+  PathMove::clone ()
+  {
+    return new PathMove (_x->get_value (), _y->get_value ());
+  }
+
+  PathClosure::PathClosure (Process* p, const string &n) :
+    AbstractGObj (p, n)
   {
     Path *path = dynamic_cast<Path*> (p);
     if (path == nullptr) {
@@ -89,6 +112,12 @@ namespace djnn
   PathClosure::draw ()
   {
     Backend::instance ()->draw_path_closure ();
+  }
+
+  Process*
+  PathClosure::clone ()
+  {
+    return new PathClosure ();
   }
 
   PathQuadratic::PathQuadratic (Process* p, const string &n, double x1, double y1, double x, double y) :
@@ -109,6 +138,20 @@ namespace djnn
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+  }
+
+  PathQuadratic::PathQuadratic (double x1, double y1, double x, double y) :
+      AbstractGObj ()
+  {
+    _x = new DoubleProperty (this, "x", x);
+    _y = new DoubleProperty (this, "y", y);
+    _x1 = new DoubleProperty (this, "x1", x1);
+    _y1 = new DoubleProperty (this, "y1", y1);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
   }
 
   PathQuadratic::~PathQuadratic ()
@@ -155,8 +198,13 @@ namespace djnn
     }
   }
 
-  PathCubic::PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x,
-                        double y) :
+  Process*
+  PathQuadratic::clone ()
+  {
+    return new PathQuadratic (_x1->get_value (), _y1->get_value (), _x->get_value (), _y->get_value ());
+  }
+
+  PathCubic::PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x, double y) :
       AbstractGObj (p, n)
   {
     Path *path = dynamic_cast<Path*> (p);
@@ -178,6 +226,24 @@ namespace djnn
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+  }
+
+  PathCubic::PathCubic (double x1, double y1, double x2, double y2, double x, double y) :
+      AbstractGObj ()
+  {
+    _x = new DoubleProperty (this, "x", x);
+    _y = new DoubleProperty (this, "y", y);
+    _x1 = new DoubleProperty (this, "x1", x1);
+    _y1 = new DoubleProperty (this, "y1", y1);
+    _x2 = new DoubleProperty (this, "x2", x2);
+    _y2 = new DoubleProperty (this, "y2", y2);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
   }
 
   PathCubic::~PathCubic ()
@@ -235,8 +301,15 @@ namespace djnn
     }
   }
 
-  PathArc::PathArc (Process* p, const string &n, double rx, double ry, double rotx, double fl, double swfl,
-                    double x, double y) :
+  Process*
+  PathCubic::clone ()
+  {
+    return new PathCubic (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value (), _x->get_value (),
+                          _y->get_value ());
+  }
+
+  PathArc::PathArc (Process* p, const string &n, double rx, double ry, double rotx, double fl, double swfl, double x,
+                    double y) :
       AbstractGObj (p, n)
   {
     Path *path = dynamic_cast<Path*> (p);
@@ -260,6 +333,26 @@ namespace djnn
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+  }
+
+  PathArc::PathArc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) :
+      AbstractGObj ()
+  {
+    _x = new DoubleProperty (this, "x", x);
+    _y = new DoubleProperty (this, "y", y);
+    _rotx = new DoubleProperty (this, "rotx", rotx);
+    _fl = new DoubleProperty (this, "fl", fl);
+    _swfl = new DoubleProperty (this, "swfl", swfl);
+    _rx = new DoubleProperty (this, "rx", rx);
+    _ry = new DoubleProperty (this, "ry", ry);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _crotx = new Coupling (_rotx, ACTIVATION, update, ACTIVATION);
+    _cfl = new Coupling (_fl, ACTIVATION, update, ACTIVATION);
+    _cswfl = new Coupling (_swfl, ACTIVATION, update, ACTIVATION);
+    _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
+    _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
   }
 
   PathArc::~PathArc ()
@@ -322,6 +415,13 @@ namespace djnn
     }
   }
 
+  Process*
+  PathArc::clone ()
+  {
+    return new PathArc (_rx->get_value (), _ry->get_value (), _rotx->get_value (), _fl->get_value (),
+                        _swfl->get_value (), _x->get_value (), _y->get_value ());
+  }
+
   Path::Path () :
       AbstractGShape ()
   {
@@ -361,11 +461,32 @@ namespace djnn
       Backend::instance ()->draw_path (this);
     }
   }
+
+  Process*
+  Path::clone ()
+  {
+    Path* clone = new Path ();
+    for (auto p: _items->children ()) {
+      clone->add_child (p->clone (), p->get_name ());
+    }
+    return clone;
+  }
+
   void
   PathClip::draw ()
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_clip (this);
     }
+  }
+
+  Process*
+  PathClip::clone ()
+  {
+    PathClip* clone = new PathClip ();
+    for (auto p: _items->children ()) {
+      clone->add_child (p->clone (), p->get_name ());
+    }
+    return clone;
   }
 }

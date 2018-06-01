@@ -35,6 +35,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  RectangleClip::RectangleClip (double x, double y, double w, double h) :
+      AbstractGShape ()
+  {
+    _x = new DoubleProperty (this, "x", x);
+    _y = new DoubleProperty (this, "y", y);
+    _width = new DoubleProperty (this, "width", w);
+    _height = new DoubleProperty (this, "height", h);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
+  }
+
   RectangleClip::~RectangleClip ()
   {
     delete _cx;
@@ -77,5 +91,10 @@ namespace djnn
       double h = _height->get_value ();
       Backend::instance ()->draw_rect_clip (this, x, y, w, h);
     }
+  }
+
+  Process*
+  RectangleClip::clone() {
+    return new RectangleClip (_x->get_value (), _y->get_value (), _width->get_value (), _height->get_value ());
   }
 } /* namespace djnn */

@@ -423,6 +423,7 @@ namespace djnn
   {
   public:
     GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset);
+    GradientStop (double r, double g, double b, double a, double offset);
     virtual
     ~GradientStop ();
     void
@@ -431,6 +432,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    Process* clone () override;
   private:
     DoubleProperty *_r, *_g, *_b, *_a, *_offset;
     Coupling *_cr, *_cg, *_cb, *_ca, *_co;
@@ -440,6 +442,7 @@ namespace djnn
   {
   public:
     AbstractGradient (Process *p, const std::string &n, int s, int fc);
+    AbstractGradient (int s, int fc);
     AbstractGradient (Process *p, const std::string &n);
     virtual
     ~AbstractGradient ();
@@ -489,6 +492,7 @@ namespace djnn
                     djnFillSpread s, djnFillCoords fc);
     LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2,
                     int s, int fc);
+    LinearGradient (double x1, double y1, double x2, double y2, int s, int fc);
     LinearGradient (Process *p, const std::string &n, LinearGradient *lg);
     virtual
     ~LinearGradient ();
@@ -498,6 +502,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    Process* clone () override;
     DoubleProperty*
     x1 ()
     {
@@ -542,6 +547,7 @@ namespace djnn
                     djnFillSpread s, djnFillCoords fc);
     RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx, double fy,
                         int s, int fc);
+    RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc);
     RadialGradient (Process *p, const std::string &n, RadialGradient *rg);
     virtual
     ~RadialGradient ();
@@ -551,6 +557,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    Process* clone () override;
     DoubleProperty*
     cx ()
     {

@@ -164,10 +164,12 @@ namespace djnn
   {
   public:
     RectangleClip (Process *p, const std::string& n, double x, double y, double w, double h);
+    RectangleClip (double x, double y, double w, double h);
     virtual
     ~RectangleClip ();
     void
     draw () override;
+    Process* clone () override;
     DoubleProperty*
     x ()
     {
@@ -344,6 +346,7 @@ namespace djnn
   {
   public:
     PathPoint (Process* p, const string &n, double x, double y);
+    PathPoint (double x, double y);
     virtual
     ~PathPoint ();
     DoubleProperty*
@@ -374,8 +377,11 @@ namespace djnn
         PathPoint (p, n, x, y)
     {
     }
+    PathMove (double x, double y) :
+            PathPoint (x, y) {}
     void
     draw () override;
+    Process* clone () override;
   };
 
   class PathLine : public PathPoint
@@ -385,14 +391,18 @@ namespace djnn
         PathPoint (p, n, x, y)
     {
     }
+    PathLine (double x, double y) :
+        PathPoint (x, y) {}
     void
     draw () override;
+    Process* clone () override;
   };
 
   class PathQuadratic : public AbstractGObj
   {
   public:
     PathQuadratic (Process* p, const string &n, double x1, double y1, double x, double y);
+    PathQuadratic (double x1, double y1, double x, double y);
     virtual
     ~PathQuadratic ();
     DoubleProperty*
@@ -417,6 +427,7 @@ namespace djnn
     }
     void
     draw () override;
+    Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_x1, *_y1;
     Coupling *_cx, *_cy, *_cx1, *_cy1;
@@ -430,6 +441,7 @@ namespace djnn
   {
   public:
     PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x, double y);
+    PathCubic (double x1, double y1, double x2, double y2, double x, double y);
     virtual
     ~PathCubic ();
     DoubleProperty*
@@ -464,6 +476,7 @@ namespace djnn
     }
     void
     draw () override;
+    Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_x1, *_y1, *_x2, *_y2;
     Coupling *_cx, *_cy, *_cx1, *_cy1, *_cx2, *_cy2;
@@ -478,6 +491,8 @@ namespace djnn
   public:
     PathArc (Process* p, const string &n, double rotx, double fl, double swfl, double rx, double ry, double x,
              double y);
+    PathArc (double rotx, double fl, double swfl, double rx, double ry, double x,
+                 double y);
     virtual
     ~PathArc ();
     DoubleProperty*
@@ -517,6 +532,7 @@ namespace djnn
     }
     void
     draw () override;
+    Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_rotx, *_fl, *_swfl, *_rx, *_ry;
     Coupling *_cx, *_cy, *_crotx, *_cfl, *_cswfl, *_crx, *_cry;
@@ -530,12 +546,14 @@ namespace djnn
   {
   public:
     PathClosure (Process* p, const string &n);
+    PathClosure () : AbstractGObj () {};
     virtual
     ~PathClosure ()
     {
     }
     void
     draw () override;
+    Process* clone () override;
   private:
     void
     activate () override
@@ -562,12 +580,12 @@ namespace djnn
     }
     void
     draw () override;
+    Process* clone () override;
   protected:
     void
     activate () override;
     void
     deactivate () override;
-  private:
     List *_items;
   };
   class PathClip : public Path
@@ -577,6 +595,10 @@ namespace djnn
         Path (p, n)
     {
     }
+    PathClip () :
+        Path ()
+    {
+    }
     virtual
     ~PathClip ()
     {
@@ -584,6 +606,7 @@ namespace djnn
     }
     void
     draw () override;
+    Process* clone () override;
   };
 
   class ImageWatcher;

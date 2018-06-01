@@ -29,6 +29,16 @@ namespace djnn
     _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
   }
 
+  AbstractTranslation::AbstractTranslation (double tx, double ty) :
+      AbstractGObj ()
+  {
+    _tx = new DoubleProperty (this, "tx", tx);
+    _ty = new DoubleProperty (this, "ty", ty);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
+    _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
+  }
+
   AbstractTranslation::~AbstractTranslation ()
   {
     delete _ctx;
@@ -72,6 +82,7 @@ namespace djnn
       Backend::instance ()->load_translation (tx, ty);
     }
   }
+
   GradientTranslation::GradientTranslation (Process *p, const string &n, double tx, double ty) :
       AbstractTranslation (p, n, tx, ty)
   {
@@ -81,6 +92,11 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
+  }
+
+  GradientTranslation::GradientTranslation (double tx, double ty) :
+      AbstractTranslation (tx, ty)
+  {
   }
 
   GradientTranslation::~GradientTranslation ()
@@ -96,8 +112,26 @@ namespace djnn
     Backend::instance ()->load_gradient_translation (tx, ty);
   }
 
+  Process*
+  GradientTranslation::clone ()
+  {
+    return new GradientTranslation (_tx->get_value (), _ty->get_value ());
+  }
+
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractGObj (p, n)
+  {
+    _a = new DoubleProperty (this, "a", a);
+    _cx = new DoubleProperty (this, "cx", cx);
+    _cy = new DoubleProperty (this, "cy", cy);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+  }
+
+  AbstractRotation::AbstractRotation (double a, double cx, double cy) :
+      AbstractGObj ()
   {
     _a = new DoubleProperty (this, "a", a);
     _cx = new DoubleProperty (this, "cx", cx);
@@ -156,6 +190,7 @@ namespace djnn
       Backend::instance ()->load_rotation (a, cx, cy);
     }
   }
+
   GradientRotation::GradientRotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractRotation (p, n, a, cx, cy)
   {
@@ -165,6 +200,11 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
+  }
+
+  GradientRotation::GradientRotation (double a, double cx, double cy) :
+      AbstractRotation (a, cx, cy)
+  {
   }
 
   GradientRotation::~GradientRotation ()
@@ -180,8 +220,28 @@ namespace djnn
     Backend::instance ()->load_gradient_rotation (a, cx, cy);
   }
 
+  Process*
+  GradientRotation::clone ()
+  {
+    return new GradientRotation (_a->get_value (), _cx->get_value (), _cy->get_value ());
+  }
+
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractGObj (p, n)
+  {
+    _sx = new DoubleProperty (this, "sx", sx);
+    _sy = new DoubleProperty (this, "sy", sy);
+    _cx = new DoubleProperty (this, "cx", cx);
+    _cy = new DoubleProperty (this, "cy", cy);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
+    _csy = new Coupling (_sy, ACTIVATION, update, ACTIVATION);
+    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+  }
+
+  AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
+      AbstractGObj ()
   {
     _sx = new DoubleProperty (this, "sx", sx);
     _sy = new DoubleProperty (this, "sy", sy);
@@ -247,6 +307,7 @@ namespace djnn
       Backend::instance ()->load_scaling (sx, sy, cx, cy);
     }
   }
+
   GradientScaling::GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractScaling (p, n, sx, sy, cx, cy)
   {
@@ -256,6 +317,11 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
+  }
+
+  GradientScaling::GradientScaling (double sx, double sy, double cx, double cy) :
+      AbstractScaling (sx, sy, cx, cy)
+  {
   }
 
   GradientScaling::~GradientScaling ()
@@ -272,8 +338,22 @@ namespace djnn
     Backend::instance ()->load_gradient_scaling (sx, sy, cx, cy);
   }
 
+  Process*
+  GradientScaling::clone ()
+  {
+    return new GradientScaling (_sx->get_value (), _sy->get_value (), _cx->get_value (), _cy->get_value ());
+  }
+
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
       AbstractGObj (p, n)
+  {
+    _a = new DoubleProperty (this, "a", a);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+  }
+
+  AbstractSkew::AbstractSkew (double a) :
+      AbstractGObj ()
   {
     _a = new DoubleProperty (this, "a", a);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -330,6 +410,11 @@ namespace djnn
     grad->transforms ()->add_child (this, "");
   }
 
+  GradientSkewX::GradientSkewX (double a) :
+      AbstractSkew (a)
+  {
+  }
+
   GradientSkewX::~GradientSkewX ()
   {
   }
@@ -339,6 +424,12 @@ namespace djnn
   {
     double a = _a->get_value ();
     Backend::instance ()->load_gradient_skew_x (a);
+  }
+
+  Process*
+  GradientSkewX::clone ()
+  {
+    return new GradientSkewX (_a->get_value ());
   }
 
   SkewY::SkewY (Process *p, const string &n, double a) :
@@ -372,6 +463,11 @@ namespace djnn
     grad->transforms ()->add_child (this, "");
   }
 
+  GradientSkewY::GradientSkewY (double a) :
+      AbstractSkew (a)
+  {
+  }
+
   GradientSkewY::~GradientSkewY ()
   {
   }
@@ -383,10 +479,63 @@ namespace djnn
     Backend::instance ()->load_gradient_skew_y (a);
   }
 
+  Process*
+  GradientSkewY::clone ()
+  {
+    return new GradientSkewY (_a->get_value ());
+  }
+
   AbstractHomography::AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, double m31, double m32,
                                           double m33, double m34, double m41, double m42, double m43, double m44) :
       AbstractGObj (p, n)
+  {
+    _m11 = new DoubleProperty (this, "m11", m11);
+    _m12 = new DoubleProperty (this, "m12", m12);
+    _m13 = new DoubleProperty (this, "m13", m13);
+    _m14 = new DoubleProperty (this, "m14", m14);
+
+    _m21 = new DoubleProperty (this, "m21", m21);
+    _m22 = new DoubleProperty (this, "m22", m22);
+    _m23 = new DoubleProperty (this, "m23", m23);
+    _m24 = new DoubleProperty (this, "m24", m24);
+
+    _m31 = new DoubleProperty (this, "m31", m31);
+    _m32 = new DoubleProperty (this, "m32", m32);
+    _m33 = new DoubleProperty (this, "m33", m33);
+    _m34 = new DoubleProperty (this, "m34", m34);
+
+    _m41 = new DoubleProperty (this, "m41", m41);
+    _m42 = new DoubleProperty (this, "m42", m42);
+    _m43 = new DoubleProperty (this, "m43", m43);
+    _m44 = new DoubleProperty (this, "m44", m44);
+
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);
+    _cm12 = new Coupling (_m12, ACTIVATION, update, ACTIVATION);
+    _cm13 = new Coupling (_m13, ACTIVATION, update, ACTIVATION);
+    _cm14 = new Coupling (_m14, ACTIVATION, update, ACTIVATION);
+
+    _cm21 = new Coupling (_m21, ACTIVATION, update, ACTIVATION);
+    _cm22 = new Coupling (_m22, ACTIVATION, update, ACTIVATION);
+    _cm23 = new Coupling (_m23, ACTIVATION, update, ACTIVATION);
+    _cm24 = new Coupling (_m24, ACTIVATION, update, ACTIVATION);
+
+    _cm31 = new Coupling (_m31, ACTIVATION, update, ACTIVATION);
+    _cm32 = new Coupling (_m32, ACTIVATION, update, ACTIVATION);
+    _cm33 = new Coupling (_m33, ACTIVATION, update, ACTIVATION);
+    _cm34 = new Coupling (_m34, ACTIVATION, update, ACTIVATION);
+
+    _cm41 = new Coupling (_m41, ACTIVATION, update, ACTIVATION);
+    _cm42 = new Coupling (_m42, ACTIVATION, update, ACTIVATION);
+    _cm43 = new Coupling (_m43, ACTIVATION, update, ACTIVATION);
+    _cm44 = new Coupling (_m44, ACTIVATION, update, ACTIVATION);
+  }
+
+  AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14, double m21, double m22,
+                                          double m23, double m24, double m31, double m32, double m33, double m34,
+                                          double m41, double m42, double m43, double m44) :
+      AbstractGObj ()
   {
     _m11 = new DoubleProperty (this, "m11", m11);
     _m12 = new DoubleProperty (this, "m12", m12);
@@ -575,6 +724,12 @@ namespace djnn
     grad->transforms ()->add_child (this, "");
   }
 
+  GradientHomography::GradientHomography (double m11, double m12, double m13, double m21, double m22, double m23,
+                                          double m31, double m32, double m33) :
+      AbstractHomography (m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
+  {
+  }
+
   GradientHomography::~GradientHomography ()
   {
   }
@@ -597,6 +752,14 @@ namespace djnn
     Backend::instance ()->load_gradient_homography (m11, m12, m13, m21, m22, m23, m31, m32, m33);
   }
 
+  Process*
+  GradientHomography::clone ()
+  {
+    return new GradientHomography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m21->get_value (),
+                                   _m22->get_value (), _m23->get_value (), _m31->get_value (), _m32->get_value (),
+                                   _m33->get_value ());
+  }
+
   SimpleGradientTransform::SimpleGradientTransform (Process *p, const string &n, double a, double b, double c, double d,
                                                     double e, double f) :
       AbstractHomography (p, n, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
@@ -607,6 +770,11 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
+  }
+
+  SimpleGradientTransform::SimpleGradientTransform (double a, double b, double c, double d, double e, double f) :
+      AbstractHomography (a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
+  {
   }
 
   SimpleGradientTransform::~SimpleGradientTransform ()
@@ -629,6 +797,14 @@ namespace djnn
     double m33 = _m33->get_value ();
 
     Backend::instance ()->load_gradient_homography (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+  }
+
+  Process*
+  SimpleGradientTransform::clone ()
+  {
+    return new GradientHomography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m21->get_value (),
+                                        _m22->get_value (), _m23->get_value (), _m31->get_value (), _m32->get_value (),
+                                        _m33->get_value ());
   }
 }
 
