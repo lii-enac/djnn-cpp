@@ -326,7 +326,7 @@ static int ParsePathClip(Process** e, const char* v) {
 			Container* clip = (Container*) it->second;
 			/* we iterate over the children of clip and add each child to *e */
 			for (auto child: clip->children ())
-			  ((Container*)*e)->add_child (child, "");
+			  ((Container*)*e)->add_child (child->clone (), "");
 		} else {
 			fprintf(stderr, "unknown URL %s for clip\n", v);
 			if (url)
