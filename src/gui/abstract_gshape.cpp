@@ -18,6 +18,8 @@
 
 namespace djnn
 {
+  vector<string> AbstractGShape::_ui =
+    { "press", "release", "move", "enter", "leave", "touches" };
 
   Touch::Touch (Process *p, const string &n) :
       Process (p, n)
@@ -41,42 +43,79 @@ namespace djnn
   void
   AbstractGShape::init_mouse_ui ()
   {
-    _press = new Spike (this, "press");
-    _release = new Spike (this, "release");
-    _move = new Spike (this, "move");
-    _enter = new Spike (this, "enter");
-    _leave = new Spike (this, "leave");
-    _touches = new Set (this, "touches");
-    _x = new DoubleProperty (0);
-    _y = new DoubleProperty (0);
-    _press->add_symbol ("x", _x);
-    _press->add_symbol ("y", _y);
-    _move->add_symbol ("x", _x);
-    _move->add_symbol ("y", _y);
+    Spike* press = new Spike (this, "press");
+    new Spike (this, "release");
+    Spike*  move = new Spike (this, "move");
+    new Spike (this, "enter");
+    new Spike (this, "leave");
+    new Set (this, "touches");
+    DoubleProperty* x = new DoubleProperty (0);
+    DoubleProperty* y = new DoubleProperty (0);
+    press->add_symbol ("x", x);
+    press->add_symbol ("y", y);
+    move->add_symbol ("x", x);
+    move->add_symbol ("y", y);
+    _has_ui = true;
   }
 
   AbstractGShape::AbstractGShape () :
-      AbstractGObj ()
+      AbstractGObj (), _has_ui (false)
   {
-    init_mouse_ui ();
   }
 
   AbstractGShape::AbstractGShape (Process *p, const std::string& n) :
-      AbstractGObj (p, n)
+      AbstractGObj (p, n), _has_ui (false)
   {
-    init_mouse_ui ();
+  }
+
+  Process*
+  AbstractGShape::find_component (const string &path)
+  {
+    if (_has_ui)
+      return Process::find_component (path);
+    else {
+      size_t found = path.find_first_of ('/');
+      string key = path;
+      if (found != string::npos) {
+        key = path.substr (0, found);
+      }
+      vector<string>::iterator it = _ui.begin ();
+      found = false;
+      while (!found && it != _ui.end ()) {
+        if (key.compare (*it) == 0) {
+          found = true;
+          init_mouse_ui ();
+        }
+        it++;
+      }
+      return Process::find_component (key);
+    }
   }
 
   AbstractGShape::~AbstractGShape ()
   {
-    delete _x;
-    delete _y;
-    delete _press;
-    delete _move;
-    delete _release;
-    delete _enter;
-    delete _leave;
-    delete _touches;
+    if (_has_ui) {
+      Process* press = find_component ("press");
+      Process* release = find_component ("release");
+      Process* move = find_component ("move");
+      Process* enter = find_component ("enter");
+      Process* leave = find_component ("leave");
+      Process* touches = find_component ("touches");
+      Process* x = find_component ("move/x");
+      Process* y = find_component ("move/y");
+      press->remove_symbol ("x");
+      press->remove_symbol ("y");
+      move->remove_symbol ("x");
+      move->remove_symbol ("y");
+      delete press;
+      delete release;
+      delete move;
+      delete enter;
+      delete leave;
+      delete x;
+      delete y;
+      delete touches;
+    }
   }
 
 } /* namespace djnn */

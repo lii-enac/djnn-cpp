@@ -39,31 +39,17 @@ namespace djnn
     AbstractGShape (Process *p, const std::string& n);
     AbstractGShape ();
     virtual ~AbstractGShape ();
-    Process* press () { return _press; }
-    Process* move () { return _move; }
-    Process* release () { return _release; }
-    Process* enter () { return _enter; }
-    Process* leave () { return _leave; }
-    Process* touches () { return _touches; }
-    DoubleProperty* x () { return _x; }
-    DoubleProperty* y () { return _y; }
+    bool has_ui () { return _has_ui; }
+    Process* find_component (const string &n) override;
     
   private:
     void init_mouse_ui ();
-    Process* _press;
-    Process* _move;
-    Process* _release;
-    Process* _enter;
-    Process* _leave;
-    Process* _touches;
-    DoubleProperty *_x;
-    DoubleProperty *_y;
+    static vector<string> _ui;
+    bool _has_ui;
   };
 
   inline bool is_pickable (AbstractGShape * s) {
-      return s->press ()->has_coupling () || s->x ()->has_coupling () || s->y ()->has_coupling ()
-        || s->move ()->has_coupling () || s->release ()->has_coupling () || s->enter ()->has_coupling ()
-        || s->leave ()->has_coupling ();
+      return s->has_ui ();
   }
 
 } /* namespace djnn */

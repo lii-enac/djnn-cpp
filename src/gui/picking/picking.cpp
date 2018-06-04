@@ -45,9 +45,9 @@ namespace djnn
     _win->press ()->notify_activation ();
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
-      s->x ()->set_value (x, true);
-      s->y ()->set_value (y, true);
-      s->press ()->notify_activation ();
+      ((DoubleProperty*)s->find_component ("move/x"))->set_value (x, true);
+      ((DoubleProperty*)s->find_component ("move/y"))->set_value (y, true);
+      s->find_component ("press")->notify_activation ();
       exec_ = true;
     }
     if (_win->press ()->has_coupling () || _win->x ()->has_coupling () || _win->y ()->has_coupling ()) {
@@ -69,19 +69,19 @@ namespace djnn
       exec_ = true;
     }
     if (s) {
-      s->x ()->set_value (x, true);
-      s->y ()->set_value (y, true);
+      ((DoubleProperty*)s->find_component ("move/x"))->set_value (x, true);
+      ((DoubleProperty*)s->find_component ("move/y"))->set_value (y, true);
       if (s != _cur_obj) {
         if (_cur_obj != 0)
-          _cur_obj->leave ()->notify_activation ();
-        s->enter ()->notify_activation ();
+          _cur_obj->find_component ("leave")->notify_activation ();
+        s->find_component ("enter")->notify_activation ();
         _cur_obj = s;
       }
-      s->move ()->notify_activation ();
+      s->find_component ("move")->notify_activation ();
       exec_ = true;
     } else {
       if (_cur_obj != nullptr) {
-        _cur_obj->leave ()->notify_activation ();
+        _cur_obj->find_component ("leave")->notify_activation ();
         _cur_obj = nullptr;
         exec_ = true;
       }
@@ -97,15 +97,15 @@ namespace djnn
     if (s) {
       if (s != _cur_obj) {
         if (_cur_obj != nullptr)
-          _cur_obj->leave ()->notify_activation ();
-        s->enter ()->notify_activation ();
+          _cur_obj->find_component ("leave")->notify_activation ();
+        s->find_component ("enter")->notify_activation ();
         _cur_obj = s;
       }
-      s->release ()->notify_activation ();
+      s->find_component ("release")->notify_activation ();
       exec_ = true;
     } else {
       if (_cur_obj != nullptr) {
-        _cur_obj->leave ()->notify_activation ();
+        _cur_obj->find_component ("leave")->notify_activation ();
         _cur_obj = 0;
         exec_ = true;
       }
