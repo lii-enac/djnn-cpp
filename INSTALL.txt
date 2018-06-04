@@ -1,14 +1,13 @@
 We provide a Makefile that should work on Mac OS X and Linux platforms
 
 Known dependencies:
-Linux:
- - boost_thread, boost_chrono, boost_system
- - libexpat-dev
- - libcurl-dev
- - qt5-base
- - ivy -> https://www.eei.cena.fr/products/ivy/
+
+Linux/Ubuntu:
+  sudo apt install libboost-thread-dev libexpat1-dev libcurl4-openssl-dev libqt5-base
 
 Mac OS X
- - boost
- - qt5
- - ivy -> https://www.eei.cena.fr/products/ivy/
+  brew install boost qt5
+ 
+On both platforms:
+  ivy bus -> https://www.eei.cena.fr/products/ivy/
+
