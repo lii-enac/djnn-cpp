@@ -90,7 +90,7 @@ namespace djnn
           Container *cont = dynamic_cast<Container*> (cur_parent);
           for (auto c : cont->children ()) {
             if (c == cur_child)
-              continue;
+              break;
             else if (c->get_cpnt_type () == WINDOW && c->get_state () <= activated) {
               _frame = dynamic_cast<Window*> (c);
               found = true;
