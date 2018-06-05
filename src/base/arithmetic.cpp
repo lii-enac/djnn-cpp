@@ -184,7 +184,7 @@ namespace djnn
   void
   AdderAccumulator::AdderAccumulatorAction::activate ()
   {
-    if (_parent->get_state () != activated)
+    if (_parent->get_state () > activated)
       return;
     double input = ((DoubleProperty*) _input.get ())->get_value ();
     double clamp_min = ((DoubleProperty*) _clamp_min.get ())->get_value ();

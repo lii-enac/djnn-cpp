@@ -33,7 +33,7 @@ namespace djnn
       virtual ~AdderAction () {}
       void activate ()
       {
-        if (_parent->get_state () != activated)
+        if (_parent->get_state () > activated)
           return;
         _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () + ((DoubleProperty*)_right.get())->get_value (), true);
       }
@@ -56,7 +56,7 @@ namespace djnn
       virtual ~SubtractorAction () {}
       void activate ()
       {
-        if (_parent->get_state () != activated)
+        if (_parent->get_state () > activated)
           return;
         _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () - ((DoubleProperty*)_right.get())->get_value (), true);
       }
@@ -80,7 +80,7 @@ namespace djnn
         virtual ~MultiplierAction () {}
         void activate ()
         {
-          if (_parent->get_state () != activated)
+          if (_parent->get_state () > activated)
             return;
           _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () * ((DoubleProperty*)_right.get())->get_value (), true);
         }
@@ -103,7 +103,7 @@ namespace djnn
         virtual ~DividerAction () {}
         void activate ()
         {
-     	  if (_parent->get_state () != activated)
+     	  if (_parent->get_state () > activated)
     	    return;
      	  double r = ((DoubleProperty*)_right.get())->get_value ();
      	  if (r == 0) {
@@ -131,7 +131,7 @@ namespace djnn
         virtual ~ModuloAction () {}
         void activate ()
         {
-     	  if (_parent->get_state () != activated)
+     	  if (_parent->get_state () > activated)
     	    return;
      	  int l = ((IntProperty*) _left.get())->get_value ();
      	  int r = ((IntProperty*) _right.get())->get_value ();
@@ -160,7 +160,7 @@ namespace djnn
         virtual ~AscendingComparatorAction () {}
         void activate ()
         {
-          if (_parent->get_state () != activated)
+          if (_parent->get_state () > activated)
             return;
           _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () <= ((DoubleProperty*)_right.get())->get_value (), true);
         }
@@ -183,7 +183,7 @@ namespace djnn
           virtual ~StrictAscendingComparatorAction () {}
           void activate ()
           {
-            if (_parent->get_state () != activated)
+            if (_parent->get_state () > activated)
               return;
             _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () < ((DoubleProperty*)_right.get())->get_value (), true);
           }
@@ -206,7 +206,7 @@ namespace djnn
           virtual ~EqualityComparatorAction () {}
           void activate ()
           {
-            if (_parent->get_state () != activated)
+            if (_parent->get_state () > activated)
               return;
             _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () == ((DoubleProperty*)_right.get())->get_value (), true);
           }
@@ -228,7 +228,7 @@ namespace djnn
       virtual ~SignInverterAction () {}
       void activate ()
       {
-        if (_parent->get_state () != activated)
+        if (_parent->get_state () > activated)
           return;
         _output.get()->set_value (-(((DoubleProperty*)_input.get())->get_value ()), true);
       }
@@ -250,7 +250,7 @@ namespace djnn
         virtual ~PredecessorAction () {}
         void activate ()
         {
-          if (_parent->get_state () != activated)
+          if (_parent->get_state () > activated)
             return;
 
           _output.get()->set_value (_prev, true);

@@ -191,7 +191,7 @@ namespace djnn
   void
   BidirectionalListIterator::IterAction::activate ()
   {
-    if (_parent->get_state () != activated)
+    if (_parent->get_state () > activated)
       return;
     int index = _index->get_value ();
     if (_forward) {
@@ -216,7 +216,7 @@ namespace djnn
   void
   BidirectionalListIterator::ResetAction::activate ()
   {
-    if (_parent->get_state () != activated)
+    if (_parent->get_state () > activated)
       return;
     _index->set_value (1, true);
   }

@@ -59,7 +59,7 @@ namespace djnn
       virtual ~TextCatenatorAction () {}
       void activate ()
       {
-        if (_parent->get_state () != activated)
+        if (_parent->get_state () > activated)
           return;
         string head = ((TextProperty*)_left.get())->get_value ();
         string tail = ((TextProperty*)_right.get())->get_value ();
@@ -85,7 +85,7 @@ namespace djnn
       virtual ~TextComparatorAction () {}
       void activate ()
       {
-        if (_parent->get_state () != activated)
+        if (_parent->get_state () > activated)
           return;
         string left = ((TextProperty*)_left.get())->get_value ();
         string right = ((TextProperty*)_right.get())->get_value ();

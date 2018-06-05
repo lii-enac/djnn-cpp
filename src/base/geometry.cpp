@@ -31,7 +31,7 @@ namespace djnn
   void
   HermiteCurve::HermiteCurveAction::activate ()
   {
-    if (_parent->get_state () != activated)
+    if (_parent->get_state () > activated)
       return;
     double t1 = ((DoubleProperty*) _t1.get ())->get_value ();
     double t2 = ((DoubleProperty*) _t2.get ())->get_value ();
