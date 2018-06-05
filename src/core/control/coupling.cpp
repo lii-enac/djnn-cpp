@@ -58,15 +58,11 @@ namespace djnn
 
   Coupling::~Coupling ()
   {
-    // TODO in some (not yet identified) circumstances this code causes a crash
-    // however we do want to remove the coupling from any future activation when we delete it
-#if 0
     if (m_src_flag == ACTIVATION) {
       _src->remove_activation_coupling (this);
     } else if (m_src_flag == DEACTIVATION) {
       _src->remove_deactivation_coupling (this);
     }
-#endif
   }
 
   void
