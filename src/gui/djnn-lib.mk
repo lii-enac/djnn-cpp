@@ -35,7 +35,7 @@ lib_ldflags = `pkg-config --libs $(QTLIBS)`
 endif
 endif
 
-lib_srcs := $(shell find src/gui -name "*.cpp")
+lib_srcs := src/gui/abstract_gobj.cpp src/gui/abstract_gshape.cpp src/gui/gui.cpp src/gui/window.cpp
 lib_srcs += $(shell find src/gui/picking -name "*.cpp")
 lib_srcs += $(shell find src/gui/shapes -name "*.cpp")
 lib_srcs += $(shell find src/gui/style -name "*.cpp")
