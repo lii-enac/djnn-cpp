@@ -107,7 +107,6 @@ namespace djnn
     	    return;
      	  double r = ((DoubleProperty*)_right.get())->get_value ();
      	  if (r == 0) {
-     	    cerr << "Warning: division per 0\n";
      	    return;
      	   }
     	  _result.get()->set_value (((DoubleProperty*)_left.get())->get_value () /r, true);
