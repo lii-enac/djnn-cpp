@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "core_types.h"
-#include "execution/graph.h"
+#include "../core_types.h"
+#include "../execution/graph.h"
 #include <vector>
 #include <map>
 #include <string>

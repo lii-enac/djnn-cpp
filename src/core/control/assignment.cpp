@@ -12,14 +12,14 @@
  *
  */
 
-#include "../core/bool_property.h"
+#include "../tree/bool_property.h"
 #include "assignment.h"
 
-#include "abstract_property.h"
-#include "int_property.h"
-#include "double_property.h"
-#include "text_property.h"
-#include "ref_property.h"
+#include "../tree/abstract_property.h"
+#include "../tree/int_property.h"
+#include "../tree/double_property.h"
+#include "../tree/text_property.h"
+#include "../tree/ref_property.h"
 
 #include <iostream>
 

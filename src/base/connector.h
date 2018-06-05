@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "../core/process.h"
-#include "../core/abstract_property.h"
-#include "../core/coupling.h"
-#include "../core/assignment.h"
+#include "../core/tree/process.h"
+#include "../core/tree/abstract_property.h"
+#include "../core/control/coupling.h"
+#include "../core/control/assignment.h"
 
 #include <iostream>
 

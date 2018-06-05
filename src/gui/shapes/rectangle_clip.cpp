@@ -14,7 +14,7 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
-#include "../../core/coupling.h"
+#include "../../core/control/coupling.h"
 #include "shapes.h"
 
 namespace djnn

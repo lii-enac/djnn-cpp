@@ -15,7 +15,7 @@
 #pragma once
 
 #include "syshook.h"
-#include "../process.h"
+#include "../tree/process.h"
 #include "external_source.h"
 
 #include <thread>

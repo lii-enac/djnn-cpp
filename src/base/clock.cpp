@@ -15,7 +15,7 @@
 
 #include "clock.h"
 #include "../core/syshook/syshook.h"
-#include "../core/int_property.h"
+#include "../core/tree/int_property.h"
 #include "../core/execution/graph.h"
 
 #include <boost/chrono.hpp>

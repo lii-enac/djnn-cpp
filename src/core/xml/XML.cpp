@@ -15,10 +15,10 @@
  */
 
 
-#include "../../core/process.h"
+#include "../tree/process.h"
 #include "xml.h"
 #include "xml-dev.h"
-#include "../text_property.h"
+#include "../tree/text_property.h"
 
 #include <expat.h>
 #include <curl/curl.h>

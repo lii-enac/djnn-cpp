@@ -13,10 +13,10 @@
  */
 
 #include "component.h"
-#include "execution/graph.h"
+#include "../execution/graph.h"
 #include <iostream>
 #include <algorithm>
-#include "execution/component_observer.h"
+#include "../execution/component_observer.h"
 
 #include <iostream>
 

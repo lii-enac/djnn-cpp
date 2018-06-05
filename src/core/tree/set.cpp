@@ -13,9 +13,9 @@
  */
 
 #include "set.h"
-#include "execution/graph.h"
+#include "../execution/graph.h"
 #include <algorithm>
-#include "execution/component_observer.h"
+#include "../execution/component_observer.h"
 
 namespace djnn
 {

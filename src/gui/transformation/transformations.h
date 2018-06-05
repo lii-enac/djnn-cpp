@@ -15,9 +15,9 @@
 #pragma once
 
 #include "../abstract_gobj.h"
-#include "../../core/process.h"
-#include "../../core/coupling.h"
-#include "../../core/double_property.h"
+#include "../../core/tree/process.h"
+#include "../../core/control/coupling.h"
+#include "../../core/tree/double_property.h"
 
 namespace djnn
 {

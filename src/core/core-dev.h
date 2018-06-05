@@ -17,6 +17,6 @@
 
 #include "execution/graph.h"
 #include "execution/component_observer.h"
-#include "coupling.h"
+#include "control/coupling.h"
 #include "syshook/syshook.h"
 #include "syshook/main_loop.h"

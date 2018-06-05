@@ -13,7 +13,7 @@
  */
 
 #include "abstract_gshape.h"
-#include "../core/spike.h"
+#include "../core/tree/spike.h"
 
 namespace djnn
 {

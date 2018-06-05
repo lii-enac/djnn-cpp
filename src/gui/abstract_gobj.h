@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "../core/double_property.h"
-#include "../core/process.h"
-#include "../core/component.h"
+#include "../core/tree/double_property.h"
+#include "../core/tree/process.h"
+#include "../core/tree/component.h"
 #include "../core/execution/component_observer.h"
 #include "window.h"
 #include <iostream>

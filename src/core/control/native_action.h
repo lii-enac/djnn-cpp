@@ -14,22 +14,26 @@
 
 #pragma once
 
-#include "process.h"
+#include "../tree/process.h"
 
 #include <string>
 
 namespace djnn {
   using namespace std;
 
-  class Activator : public Process
+  typedef void (NativeCode) (Process*);
+  class NativeAction : public Process
   {
   public:
-    Activator (Process* parent, const string &name, Process* src);
-    Activator (Process* parent, const string &name, Process* src, const string &spec);
-    virtual ~Activator ();
-    void activate () override { _action->activation(); };
+    NativeAction (Process* parent, const string &name, NativeCode *action, void* data, bool isModel);
+    NativeAction (NativeCode *action, void* data, bool isModel);
+    virtual ~NativeAction ();
+    void activate () override;
     void deactivate () override {}
+    void* data ();
   private:
-    Process *_action;
+    void *_data;
+    NativeCode *_action;
   };
+  void* get_native_user_data (Process* native_action);
 }

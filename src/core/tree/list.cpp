@@ -14,10 +14,10 @@
 
 #include "list.h"
 #include "spike.h"
-#include "coupling.h"
-#include "execution/graph.h"
+#include "../control/coupling.h"
+#include "../execution/graph.h"
 #include <algorithm>
-#include "execution/component_observer.h"
+#include "../execution/component_observer.h"
 
 namespace djnn
 {

@@ -12,7 +12,7 @@
  *
  */
 
-#include "../../core/coupling.h"
+#include "../../core/control/coupling.h"
 #include "../backend.h"
 #include "../abstract_backend.h"
 #include "../window.h"

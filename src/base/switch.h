@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "../core/component.h"
-#include "../core/coupling.h"
-#include "../core/text_property.h"
+#include "../core/tree/component.h"
+#include "../core/control/coupling.h"
+#include "../core/tree/text_property.h"
 
 namespace djnn {
   using namespace std;

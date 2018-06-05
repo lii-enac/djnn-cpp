@@ -14,23 +14,23 @@
 
 #pragma once
 
-#include "process.h"
-#include "binding.h"
-#include "activator.h"
-#include "component.h"
-#include "native_action.h"
-#include "spike.h"
-#include "assignment.h"
-#include "list.h"
+#include "tree/process.h"
+#include "control/binding.h"
+#include "control/activator.h"
+#include "tree/component.h"
+#include "control/native_action.h"
+#include "tree/spike.h"
+#include "control/assignment.h"
+#include "tree/list.h"
 #include "xml/xml.h"
-#include "exit.h"
+#include "control/exit.h"
 
-#include "abstract_property.h"
-#include "bool_property.h"
-#include "int_property.h"
-#include "double_property.h"
-#include "text_property.h"
-#include "ref_property.h"
+#include "tree/abstract_property.h"
+#include "tree/bool_property.h"
+#include "tree/int_property.h"
+#include "tree/double_property.h"
+#include "tree/text_property.h"
+#include "tree/ref_property.h"
 
 
 namespace djnn {

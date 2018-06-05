@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "../core/double_property.h"
-#include "../core/text_property.h"
-#include "../core/process.h"
+#include "../core/tree/double_property.h"
+#include "../core/tree/text_property.h"
+#include "../core/tree/process.h"
 
 #include <iostream>
 

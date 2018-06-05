@@ -12,9 +12,9 @@
  *
  */
 
-#include "execution/graph.h"
+#include "../execution/graph.h"
 #include "process.h"
-#include "coupling.h"
+#include "../control/coupling.h"
 
 #include <algorithm>
 #include <iostream>

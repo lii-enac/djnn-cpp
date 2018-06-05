@@ -14,11 +14,11 @@
 
 #pragma once
 
-#include "../core/process.h"
-#include "../core/bool_property.h"
-#include "../core/int_property.h"
-#include "../core/double_property.h"
-#include "../core/coupling.h"
+#include "../core/tree/process.h"
+#include "../core/tree/bool_property.h"
+#include "../core/tree/int_property.h"
+#include "../core/tree/double_property.h"
+#include "../core/control/coupling.h"
 
 #include <string>
 

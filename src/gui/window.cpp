@@ -15,8 +15,8 @@
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "abstract_backend.h"
-#include "../core/spike.h"
-#include "../core/component.h"
+#include "../core/tree/spike.h"
+#include "../core/tree/component.h"
 #include "window.h"
 
 namespace djnn

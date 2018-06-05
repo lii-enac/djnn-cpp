@@ -15,7 +15,7 @@
 
 
 #include "../utils-dev.h"
-#include "../process.h"
+#include "../tree/process.h"
 #include <map>
 
 typedef char XML_Char; // FIXME should not be public, and avoid including expat.h (maybe in xml-dev.h)

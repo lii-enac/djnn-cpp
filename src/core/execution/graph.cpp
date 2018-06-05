@@ -13,8 +13,8 @@
  */
 
 #include "graph.h"
-#include "../process.h"
-#include "../abstract_property.h"
+#include "../tree/process.h"
+#include "../tree/abstract_property.h"
 
 #include <algorithm>
 #include <iostream>

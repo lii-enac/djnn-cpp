@@ -12,7 +12,7 @@
  *
  */
 
-#include "../core/text_property.h"
+#include "../core/tree/text_property.h"
 #include "text.h"
 
 namespace djnn

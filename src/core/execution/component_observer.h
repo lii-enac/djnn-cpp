@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "../process.h"
+#include "../tree/process.h"
 
 namespace djnn
 {

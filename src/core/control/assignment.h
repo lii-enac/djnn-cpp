@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "process.h"
+#include "../tree/process.h"
 #include "coupling.h"
 
 namespace djnn {

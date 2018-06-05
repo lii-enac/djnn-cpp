@@ -14,11 +14,11 @@
 
 #pragma once
 
-#include "../../core/list.h"
+#include "../../core/tree/list.h"
 #include "../abstract_gshape.h"
 
-#include "../../core/int_property.h"
-#include "../../core/text_property.h"
+#include "../../core/tree/int_property.h"
+#include "../../core/tree/text_property.h"
 
 namespace djnn
 {

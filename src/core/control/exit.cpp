@@ -13,8 +13,8 @@
  */
 
 #include "exit.h"
-#include "syshook/main_loop.h"
-#include "process.h"
+#include "../syshook/main_loop.h"
+#include "../tree/process.h"
 
 #include <iostream>
 
