@@ -25,6 +25,8 @@ namespace djnn
     _type = Boolean;
     _true = std::shared_ptr<Process> (new Spike (this, "true"));
     _false = std::shared_ptr<Process> (new Spike (this, "false"));
+    Graph::instance ().add_edge (this, _true.get ());
+    Graph::instance ().add_edge (this, _false.get ());
     Process::finalize ();
   }
 
@@ -34,6 +36,8 @@ namespace djnn
     _type = Boolean;
     _true = std::shared_ptr<Process> (new Spike (this, "true"));
     _false = std::shared_ptr<Process> (new Spike (this, "false"));
+    Graph::instance ().add_edge (this, _true.get ());
+    Graph::instance ().add_edge (this, _false.get ());
   }
 
   void
