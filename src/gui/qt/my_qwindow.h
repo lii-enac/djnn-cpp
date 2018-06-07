@@ -33,10 +33,11 @@ namespace djnn {
     // /usr/local/Cellar/qt5/5.10.1/bin/moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp 
 
   public:
-    MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw) { _picking_view = new QtPickingView (w); }
+    MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw) {  setAttribute(Qt::WA_AcceptTouchEvents); _picking_view = new QtPickingView (w); }
     virtual ~MyQWidget () { delete _picking_view; }
   protected:
 
+    virtual bool event (QEvent *event) override;
     virtual void moveEvent (QMoveEvent *event) override;
     virtual void resizeEvent (QResizeEvent * event) override;
     virtual void mouseReleaseEvent (QMouseEvent *event) override;

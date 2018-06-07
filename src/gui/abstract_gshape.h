@@ -23,6 +23,16 @@
 namespace djnn
 {
 
+  class Touch : public Process
+  {
+  public:
+    Touch (Process *p, const std::string &n);
+    Touch ();
+    virtual ~Touch ();
+  private:
+    DoubleProperty *_x,* _y;
+  };
+
   class AbstractGShape : public AbstractGObj
   {
   public:
@@ -34,6 +44,7 @@ namespace djnn
     Process* release () { return _release; }
     Process* enter () { return _enter; }
     Process* leave () { return _leave; }
+    Process* touches () { return _touches; }
     DoubleProperty* x () { return _x; }
     DoubleProperty* y () { return _y; }
     
@@ -44,6 +55,7 @@ namespace djnn
     Process* _release;
     Process* _enter;
     Process* _leave;
+    Process* _touches;
     DoubleProperty *_x;
     DoubleProperty *_y;
   };

@@ -75,6 +75,7 @@ namespace djnn
     Process* _move;
     Process* _release;
     Process* _wheel;
+    Process* _touches;
     DoubleProperty *_x;
     DoubleProperty *_y;
     WinImpl *_win_impl;

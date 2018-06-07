@@ -17,6 +17,7 @@
 #include "abstract_backend.h"
 #include "../core/tree/spike.h"
 #include "../core/tree/component.h"
+#include "../core/tree/set.h"
 #include "window.h"
 
 namespace djnn
@@ -36,6 +37,7 @@ namespace djnn
     _release = new Spike;
     _move = new Spike;
     _wheel = new Spike;
+    _touches = new Set (this, "touches");
     _x = new DoubleProperty (0);
     _y = new DoubleProperty (0);
     _press->add_symbol ("x", _x);

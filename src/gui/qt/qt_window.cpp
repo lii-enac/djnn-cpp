@@ -92,6 +92,41 @@ namespace djnn
     }
   }
 
+  bool
+  MyQWidget::event (QEvent *event)
+  {
+    switch (event->type ())
+      {
+      case QEvent::TouchBegin:
+      case QEvent::TouchUpdate:
+      case QEvent::TouchEnd:
+        {
+          QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
+          for (auto touchPoint : touchPoints) {
+            switch (touchPoint.state ())
+              {
+              case Qt::TouchPointStationary:
+                cout << "no move " << &touchPoint << endl;
+                continue;
+              case Qt::TouchPointPressed:
+                cout << "pressed " << &touchPoint << endl;
+                break;
+              case Qt::TouchPointMoved:
+                cout << "moved " << &touchPoint << endl;
+                break;
+              case Qt::TouchPointReleased:
+                cout << "released " << &touchPoint << endl;
+                break;
+              }
+          }
+          break;
+        }
+      default:
+        return QWidget::event (event);
+      }
+    return true;
+  }
+
   void
   MyQWidget::moveEvent (QMoveEvent *event)
   {
@@ -131,8 +166,9 @@ namespace djnn
     //DBG;
     double x = event->x ();
     double y = event->y ();
-    bool exec_ = _picking_view->genericMousePress(x,y,event->button());
-    if (exec_) QtMainloop::instance ().set_please_exec (true);
+    bool exec_ = _picking_view->genericMousePress (x, y, event->button ());
+    if (exec_)
+      QtMainloop::instance ().set_please_exec (true);
   }
 
   void
@@ -140,8 +176,9 @@ namespace djnn
   {
     double x = event->x ();
     double y = event->y ();
-    bool exec_ = _picking_view->genericMouseMove(x,y);
-    if (exec_) QtMainloop::instance ().set_please_exec (true);
+    bool exec_ = _picking_view->genericMouseMove (x, y);
+    if (exec_)
+      QtMainloop::instance ().set_please_exec (true);
   }
 
   void
@@ -150,16 +187,18 @@ namespace djnn
     double x = event->x ();
     double y = event->y ();
 
-    bool exec_ = _picking_view->genericMouseRelease(x,y,event->button());
-    if (exec_) QtMainloop::instance ().set_please_exec (true);
+    bool exec_ = _picking_view->genericMouseRelease (x, y, event->button ());
+    if (exec_)
+      QtMainloop::instance ().set_please_exec (true);
   }
 
   void
   MyQWidget::wheelEvent (QWheelEvent *event)
   {
     QPoint angle = event->angleDelta () / 8; // the angle is in eights of a degree
-    bool exec_ = _picking_view->genericMouseWheel(angle.x(), angle.y());
-    if (exec_) QtMainloop::instance ().set_please_exec (true);
+    bool exec_ = _picking_view->genericMouseWheel (angle.x (), angle.y ());
+    if (exec_)
+      QtMainloop::instance ().set_please_exec (true);
   }
 
   void

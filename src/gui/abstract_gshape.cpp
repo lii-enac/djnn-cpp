@@ -14,9 +14,29 @@
 
 #include "abstract_gshape.h"
 #include "../core/tree/spike.h"
+#include "../core/tree/set.h"
 
 namespace djnn
 {
+
+  Touch::Touch (Process *p, const string &n) :
+      Process (p, n)
+  {
+    _x = new DoubleProperty (this, "x", 0);
+    _y = new DoubleProperty (this, "y", 0);
+    Process::finalize ();
+  }
+
+  Touch::Touch () :
+      Process ()
+  {
+    _x = new DoubleProperty (this, "x", 0);
+    _y = new DoubleProperty (this, "y", 0);
+  }
+
+  Touch::~Touch ()
+  {
+  }
 
   void
   AbstractGShape::init_mouse_ui ()
@@ -26,6 +46,7 @@ namespace djnn
     _move = new Spike (this, "move");
     _enter = new Spike (this, "enter");
     _leave = new Spike (this, "leave");
+    _touches = new Set (this, "touches");
     _x = new DoubleProperty (0);
     _y = new DoubleProperty (0);
     _press->add_symbol ("x", _x);
@@ -55,6 +76,7 @@ namespace djnn
     delete _release;
     delete _enter;
     delete _leave;
+    delete _touches;
   }
 
 } /* namespace djnn */
