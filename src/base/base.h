@@ -22,3 +22,4 @@
 #include "fsm.h"
 #include "switch.h"
 #include "text.h"
+#include "logic.h"
