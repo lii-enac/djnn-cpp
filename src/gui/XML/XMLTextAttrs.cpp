@@ -296,7 +296,7 @@ SVG_Utils::djn__SVGParseUnitAndValue(djnLengthUnit *unit, double *value,
 
 static int ParseFontFamily(Process** e, const char* v) {
 	if (!*e)
-		*e = new Component;
+		*e = new SVGHolder;
 
 	new FontFamily(*e, "font-family", v);
 	return 1;
@@ -305,7 +305,7 @@ static int ParseFontFamily(Process** e, const char* v) {
 static int ParseFontStyle(Process** e, const char* v) {
 	djnFontSlope style = djnNormalFont;
 	if (!*e)
-		*e = new Component;
+		*e = new SVGHolder;
 
 	if (strcmp(v, "italic") == 0)
 		style = djnItalicFont;
@@ -322,7 +322,7 @@ static int ParseFontWeight(Process** e, const char* v) {
 	unsigned int i;
 	int isANumber = 1;
 	if (!*e)
-		*e = new Component;
+		*e = new SVGHolder;
 
 	for (i = 0; i < strlen(v); i++) {
 		if (!isdigit(v[i]))
@@ -354,7 +354,7 @@ static int ParseFontSize(Process** e, const char* v) {
 	double sz = 0;
 	djnLengthUnit unit = djnNoLengthUnit;
 	if (!*e)
-		*e = new Component;
+		*e = new SVGHolder;
 
 	if (SVG_Utils::djn__SVGParseUnitAndValue(&unit, &sz, v)) {
 		new FontSize(*e, "font-size", unit, sz);

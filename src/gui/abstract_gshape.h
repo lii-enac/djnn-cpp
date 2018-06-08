@@ -22,6 +22,17 @@
 
 namespace djnn
 {
+  class SVGHolder : public Container
+  {
+  public:
+    SVGHolder (Process *p, const std::string& n) : Container (p, n), _gobj (nullptr) { Process::finalize (); }
+    SVGHolder () : Container (), _gobj (nullptr) {}
+    virtual ~SVGHolder () {}
+    Process* find_component (const string &path) override;
+    void set_gobj (Process* gobj) { _gobj = gobj; }
+  private:
+    Process* _gobj;
+  };
 
   class Touch : public Process
   {

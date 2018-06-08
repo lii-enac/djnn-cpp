@@ -299,7 +299,7 @@ static int ParseStroke(Process** e, const char* v) {
 	unsigned r, g, b;
 
 	if (!*e)
-		*e = new Component;
+		*e = new SVGHolder;
 
 	if (strncmp(v, "none", 4) == 0) {
 		djn_GraphicalShapeArgs.strokeType = djnStrokeNone;
@@ -317,7 +317,7 @@ static int ParseStroke(Process** e, const char* v) {
 
 static int ParsePathClip(Process** e, const char* v) {
 	if (!*e)
-		*e = new Component (nullptr, "");
+		*e = new SVGHolder;
 
 	if (strncmp(v, "url(", 4) == 0) {
 		char *url = djn_ParseURL(v);
@@ -345,7 +345,7 @@ static int ParseFill(Process** e, const char* v) {
 	unsigned r, g, b;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (strncmp(v, "none", 4) == 0) {
 		new NoFill(*e, "");
@@ -397,7 +397,7 @@ static int ParseOpacity(Process**e, const char* v) {
 	double alpha;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (!SVG_Utils::djn__SVGParseAlpha(&alpha, v)) {
 		fprintf(stderr, "cannot read opacity value %s\n", v);
@@ -417,7 +417,7 @@ static int ParseFillOpacity(Process** e, const char* v) {
 	double alpha;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (!SVG_Utils::djn__SVGParseAlpha(&alpha, v)) {
 		fprintf(stderr, "cannot read fill opacity value %s\n", v);
@@ -433,7 +433,7 @@ static int ParseStrokeOpacity(Process** e, const char* v) {
 	double alpha;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (!SVG_Utils::djn__SVGParseAlpha(&alpha, v)) {
 		fprintf(stderr, "cannot read stroke opacity value %s\n", v);
@@ -450,7 +450,7 @@ static int ParseStrokeWidth(Process** e, const char* v) {
 	char *end;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	width = strtod(v, &end);
 
@@ -470,7 +470,7 @@ static int ParseTransform(Process** e, const char* v) {
 	const char* end = v + strlen(v);
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	while (v < end) {
 		openparenthesis = strchr( (char*) v, '(');
@@ -648,7 +648,7 @@ static int ParseLineJoin(Process** e, const char* v) {
 	djnJoinStyle join = djnMiterJoin; /* SVG default value */
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (!strcmp(v, "round"))
 		join = djnRoundCapJoin;
@@ -664,7 +664,7 @@ static int ParseLineCap(Process** e, const char* v) {
 	djnCapStyle cap = djnButtCap; /* SVG default value */
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (!strcmp(v, "round"))
 		cap = djnRoundCap;
@@ -681,7 +681,7 @@ static int ParseMiterLimit(Process** e, const char* v) {
 	char *end;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	miterLimit = strtoul(v, &end, 10);
 
@@ -703,7 +703,7 @@ static int ParseStrokeDashArray(Process** e, const char* v) {
 	DashArray *dashArray;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (strncmp(v, "none", 4) == 0) {
 		new NoDashArray(*e, "");
@@ -759,7 +759,7 @@ static int ParseStrokeDashOffset(Process** e, const char* v) {
 	char *end;
 
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	offset = strtoul(v, &end, 10);
 
@@ -821,7 +821,7 @@ static int ParseStyle(Process **e, const char *v) {
 static int ParseTextAnchor(Process** e, const char* v) {
 	djnAnchorType anchor = djnStartAnchor;
 	if (!*e)
-		*e = new Component(nullptr, "");
+		*e = new SVGHolder;
 
 	if (strcmp(v, "end") == 0)
 		anchor = djnEndAnchor;

@@ -21,6 +21,15 @@ namespace djnn
   vector<string> AbstractGShape::_ui =
     { "press", "release", "move", "enter", "leave", "touches" };
 
+  Process*
+  SVGHolder::find_component (const string &path)
+  {
+    Process *p = Container::find_component (path);
+    if (p == nullptr && _gobj != nullptr)
+      p = _gobj->find_component (path);
+    return p;
+  }
+
   Touch::Touch (Process *p, const string &n) :
       Process (p, n)
   {
@@ -45,7 +54,7 @@ namespace djnn
   {
     Spike* press = new Spike (this, "press");
     new Spike (this, "release");
-    Spike*  move = new Spike (this, "move");
+    Spike* move = new Spike (this, "move");
     new Spike (this, "enter");
     new Spike (this, "leave");
     new Set (this, "touches");

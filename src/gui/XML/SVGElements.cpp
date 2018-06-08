@@ -39,6 +39,7 @@
 #include "../../core/core.h"
 #include "../../core/xml/xml-dev.h"
 #include "../gui-dev.h"
+#include "../abstract_gshape.h"
 
 #define register 
 
@@ -76,7 +77,7 @@
 	static void djn__CheckStroke (Process *);
 
 	/* the attribute name lookup procedures defined in other source files */
-#line 66 "src/gui/XML/SVGElements.gperf"
+#line 67 "src/gui/XML/SVGElements.gperf"
 
 #define TOTAL_KEYWORDS 25
 #define MIN_WORD_LENGTH 1
@@ -139,65 +140,65 @@ SVGElements_Hash::djn_SVGElementsLookup (register const char *str, register unsi
   static djn_XMLTagHandler wordlist[] =
     {
       {""},
-#line 80 "src/gui/XML/SVGElements.gperf"
+#line 81 "src/gui/XML/SVGElements.gperf"
       {"g", &StartGroup, &EndElement, &DataIgnored},
       {""},
-#line 72 "src/gui/XML/SVGElements.gperf"
+#line 73 "src/gui/XML/SVGElements.gperf"
       {"use", &StartTmp, &EndTmp, &DataIgnored},
-#line 89 "src/gui/XML/SVGElements.gperf"
+#line 90 "src/gui/XML/SVGElements.gperf"
       {"text", &StartText, &EndText, &TextData},
       {""}, {""},
-#line 76 "src/gui/XML/SVGElements.gperf"
+#line 77 "src/gui/XML/SVGElements.gperf"
       {"pattern", &StartTmp, &EndTmp, &DataIgnored},
-#line 90 "src/gui/XML/SVGElements.gperf"
+#line 91 "src/gui/XML/SVGElements.gperf"
       {"textPath", &StartTmp, &EndTmp, &DataIgnored},
-#line 82 "src/gui/XML/SVGElements.gperf"
+#line 83 "src/gui/XML/SVGElements.gperf"
       {"rect", &StartRect, &EndElement, &DataIgnored},
-#line 88 "src/gui/XML/SVGElements.gperf"
+#line 89 "src/gui/XML/SVGElements.gperf"
       {"image", &StartImage, &EndElement, &DataIgnored},
       {""},
-#line 81 "src/gui/XML/SVGElements.gperf"
+#line 82 "src/gui/XML/SVGElements.gperf"
       {"ellipse", &StartEllipse, &EndElement, &DataIgnored},
-#line 78 "src/gui/XML/SVGElements.gperf"
+#line 79 "src/gui/XML/SVGElements.gperf"
       {"clipPath", &StartPathClip, &EndPathClip, &DataIgnored},
-#line 87 "src/gui/XML/SVGElements.gperf"
+#line 88 "src/gui/XML/SVGElements.gperf"
       {"path", &StartPath, &EndElement, &DataIgnored},
       {""},
-#line 83 "src/gui/XML/SVGElements.gperf"
+#line 84 "src/gui/XML/SVGElements.gperf"
       {"circle", &StartCircle, &EndElement, &DataIgnored},
-#line 70 "src/gui/XML/SVGElements.gperf"
+#line 71 "src/gui/XML/SVGElements.gperf"
       {"desc", &StartIgnored, &EndIgnored, &DataIgnored},
-#line 69 "src/gui/XML/SVGElements.gperf"
+#line 70 "src/gui/XML/SVGElements.gperf"
       {"svg", &StartSVG, &EndElement, &DataIgnored},
-#line 75 "src/gui/XML/SVGElements.gperf"
+#line 76 "src/gui/XML/SVGElements.gperf"
       {"stop", &StartGradientStop, &EndElement, &DataIgnored},
       {""}, {""},
-#line 86 "src/gui/XML/SVGElements.gperf"
+#line 87 "src/gui/XML/SVGElements.gperf"
       {"polygon", &StartPolygon, &EndElement, &DataIgnored},
-#line 85 "src/gui/XML/SVGElements.gperf"
+#line 86 "src/gui/XML/SVGElements.gperf"
       {"polyline", &StartPolyline, &EndElement, &DataIgnored},
-#line 74 "src/gui/XML/SVGElements.gperf"
+#line 75 "src/gui/XML/SVGElements.gperf"
       {"radialGradient", &StartRadialGradient, &EndGradient, &DataIgnored},
-#line 91 "src/gui/XML/SVGElements.gperf"
+#line 92 "src/gui/XML/SVGElements.gperf"
       {"tspan", &StartTspan, &EndTspan, &TextData},
       {""},
-#line 71 "src/gui/XML/SVGElements.gperf"
+#line 72 "src/gui/XML/SVGElements.gperf"
       {"defs", &StartTmp, &EndTmp, &DataIgnored},
-#line 93 "src/gui/XML/SVGElements.gperf"
+#line 94 "src/gui/XML/SVGElements.gperf"
       {"metadata", &StartTmp, &EndTmp, &DataIgnored},
-#line 84 "src/gui/XML/SVGElements.gperf"
+#line 85 "src/gui/XML/SVGElements.gperf"
       {"line", &StartLine, &EndElement, &DataIgnored},
       {""}, {""},
-#line 92 "src/gui/XML/SVGElements.gperf"
+#line 93 "src/gui/XML/SVGElements.gperf"
       {"tref", &StartTmp, &EndTmp, &DataIgnored},
       {""},
-#line 79 "src/gui/XML/SVGElements.gperf"
+#line 80 "src/gui/XML/SVGElements.gperf"
       {"mask", &StartTmp, &EndTmp, &DataIgnored},
       {""},
-#line 77 "src/gui/XML/SVGElements.gperf"
+#line 78 "src/gui/XML/SVGElements.gperf"
       {"marker", &StartTmp, &EndTmp, &DataIgnored},
       {""}, {""},
-#line 73 "src/gui/XML/SVGElements.gperf"
+#line 74 "src/gui/XML/SVGElements.gperf"
       {"linearGradient", &StartLinearGradient, &EndGradient, &DataIgnored}
     };
 
@@ -215,7 +216,7 @@ SVGElements_Hash::djn_SVGElementsLookup (register const char *str, register unsi
     }
   return 0;
 }
-#line 94 "src/gui/XML/SVGElements.gperf"
+#line 95 "src/gui/XML/SVGElements.gperf"
 
 
 int djn__GrphIsInClip = 0;
@@ -225,7 +226,7 @@ int djn__GrphIsInClip = 0;
 map<string, Process*> djn__IdFillManager;
 map<string, Process*> djn__IdClipManager;
 
-void djnn::init_svg_parser() {
+void djnn::init_svg_parser () {
 	XML::djn_RegisterXMLParser("http://www.w3.org/2000/svg", &SVGElements_Hash::djn_SVGElementsLookup,
 			"SVG");
 
@@ -240,7 +241,7 @@ void djnn::init_svg_parser() {
  */
 
 static Process*
-StartSVG(const char** attrs, Process* current) {	
+StartSVG(const char** attrs, Process* current) {
 	Process* g = new Group(current, "SVG");
 	//Process* f;
 	djn_RectAreaArgs.x = 0.;
@@ -332,14 +333,14 @@ StartRect(const char** attrs, Process* current) {
 			djn_RectArgs.rx, djn_RectArgs.ry);
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, e);
+		((SVGHolder*) holder)->set_gobj (e);
 	}
 	return holder ? holder : e;
 }
 
 static Process*
-StartImage(const char** attrs, Process* current) {	
-	Process* holder = 0;
+StartImage(const char** attrs, Process* current) {
+	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_ImgArgs.x = 0.;
@@ -371,14 +372,14 @@ StartImage(const char** attrs, Process* current) {
 			djn_ImgArgs.h);
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, e);
+		((SVGHolder*) holder)->set_gobj (e);
 	}
 	return holder ? holder : e;
 }
 
 static Process*
-StartEllipse(const char** attrs, Process* current) {	
-	Process* holder = 0;
+StartEllipse(const char** attrs, Process* current) {
+	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_EllipseArgs.cx = 0.;
@@ -409,14 +410,14 @@ StartEllipse(const char** attrs, Process* current) {
 			djn_EllipseArgs.ry);
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, e);
+		((SVGHolder*) holder)->set_gobj (e);
 	}
 	return holder ? holder : e;
 }
 
 static Process*
 StartCircle(const char** attrs, Process* current) {
-	Process* holder = 0;
+	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_CircleArgs.cx = 0.;
@@ -446,15 +447,15 @@ StartCircle(const char** attrs, Process* current) {
 
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, e);
+		((SVGHolder*) holder)->set_gobj (e);
 	}
 
 	return holder ? holder : e;
 }
 
 static Process*
-StartLine(const char** attrs, Process* current) {	
-	Process* holder = 0;
+StartLine(const char** attrs, Process* current) {
+	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_LineArgs.x1 = 0.;
@@ -485,15 +486,15 @@ StartLine(const char** attrs, Process* current) {
 
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, e);
+		((SVGHolder*) holder)->set_gobj (e);
 	}
 
 	return holder ? holder : e;
 }
 
 static Process*
-StartPoly(const char** attrs, Process* current) {	
-	Process* holder = 0;
+StartPoly(const char** attrs, Process* current) {
+	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_PolyArgs.e = 0;
 
@@ -523,8 +524,8 @@ StartPoly(const char** attrs, Process* current) {
 			current->add_child(djn_PolyArgs.e, djn_GraphicalShapeArgs.id);
 	}
 	if (holder) {
+		((SVGHolder*) holder)->set_gobj (djn_PolyArgs.e);
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, djn_PolyArgs.e);
 	}
 
 	return holder ? holder : djn_PolyArgs.e ? djn_PolyArgs.e : current;
@@ -543,12 +544,12 @@ StartPolyline(const char** attrs, Process* current) {
 }
 
 static Process*
-StartText(const char** attrs, Process* current) {	
+StartText(const char** attrs, Process* current) {
 	/* it seems that we have to force the creation of a holder for the text
 	 * without this, and for a not yet elucidated reason,
 	 * the graphical context is not correctly managed
 	 */
-	Process* holder = new Component;
+	Process *holder = new SVGHolder;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_TextArgs.x = 0.;
 	djn_TextArgs.y = 0.;
@@ -607,8 +608,7 @@ TextData(const char* data, int len, Process* current) {
 
 static Process *
 StartTspan(const char** attrs, Process* current) {
-	
-	Process* holder;
+	Process *holder;
 
 	if (djn_TextArgs.data != 0) {
 		djnUnloadTextBuf(current);
@@ -648,8 +648,8 @@ EndTspan(Process *e) {
 }
 
 static Process*
-StartPath(const char** attrs, Process* current) {	
-	Process* holder = 0;
+StartPath(const char** attrs, Process* current) {
+	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_PathArgs.e = 0;
 
@@ -689,13 +689,13 @@ StartPath(const char** attrs, Process* current) {
 
 	if (holder) {
 		current->add_child (holder, djn_GraphicalShapeArgs.id);
-		alias_children(holder, djn_PathArgs.e);
+		((SVGHolder*) holder)->set_gobj (djn_PathArgs.e);
 	}
 	return holder ? holder : djn_PathArgs.e ? djn_PathArgs.e : current;
 }
 
 static Process*
-StartGroup(const char** attrs, Process* current) {	
+StartGroup(const char** attrs, Process* current) {
 	Process* e = new Group(0, "");
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -718,7 +718,6 @@ StartGroup(const char** attrs, Process* current) {
 
 static int parseGradientTransform(Process **e, char *v) {
 	int success = 1;
-	
 	djn_XMLAttrHandler *h;
 	char *openparenthesis, *closeparenthesis;
 	const char* end = v + strlen(v);
@@ -750,7 +749,7 @@ static int parseGradientTransform(Process **e, char *v) {
 }
 
 static Process*
-StartLinearGradient(const char** attrs, Process* current) {	
+StartLinearGradient(const char** attrs, Process* current) {
 	Process* e;
 	djn_LinearGradientArgs.x1 = 0.;
 	djn_LinearGradientArgs.y1 = 0.;
@@ -809,7 +808,7 @@ StartLinearGradient(const char** attrs, Process* current) {
 }
 
 static Process*
-StartRadialGradient(const char** attrs, Process* current) {	
+StartRadialGradient(const char** attrs, Process* current) {
 	Process* e;
 
 	djn_RadialGradientArgs.cx = 0.;
@@ -870,7 +869,7 @@ StartRadialGradient(const char** attrs, Process* current) {
 }
 
 static Process*
-StartGradientStop(const char** attrs, Process* current) {	
+StartGradientStop(const char** attrs, Process* current) {
 	djn_GradientStopArgs.r = 0;
 	djn_GradientStopArgs.g = 0;
 	djn_GradientStopArgs.b = 0;
@@ -923,7 +922,7 @@ EndGradient(Process* e) {
 
 static Process*
 StartPathClip(const char** attrs, Process* current) {
-	Process* holder = 0;
+	Process *holder = 0;
 	Process* e;
 	djn__GrphIsInClip = 1;
 
@@ -988,7 +987,7 @@ static void djnUnloadTextBuf(Process *e) {
 			djn_TextArgs.x, djn_TextArgs.y, djn_TextArgs.dx, djn_TextArgs.dy,
 			djn_TextArgs.dxUnit, djn_TextArgs.dyUnit, djn_TextArgs.encoding,
 			djn_TextArgs.data);
-	alias_children(e, t);
+	((SVGHolder*) e)->set_gobj (t);
 	free(djn_TextArgs.data);
 	djn_TextArgs.x = -1;
 	djn_TextArgs.y = -1;
