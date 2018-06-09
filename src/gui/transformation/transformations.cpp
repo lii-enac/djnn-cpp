@@ -106,7 +106,6 @@ namespace djnn
   void
   GradientTranslation::draw ()
   {
-    cout << "gradient translation\n";
     double tx = _tx->get_value ();
     double ty = _ty->get_value ();
     Backend::instance ()->load_gradient_translation (tx, ty);
