@@ -34,16 +34,6 @@ namespace djnn
     Process* _gobj;
   };
 
-  class Touch : public Process
-  {
-  public:
-    Touch (Process *p, const std::string &n);
-    Touch ();
-    virtual ~Touch ();
-  private:
-    DoubleProperty *_x,* _y;
-  };
-
   class AbstractGShape : public AbstractGObj
   {
   public:
@@ -57,6 +47,23 @@ namespace djnn
     void init_mouse_ui ();
     static vector<string> _ui;
     bool _has_ui;
+  };
+
+  class Touch : public Process
+  {
+  public:
+    Touch (Process *p, const std::string &n);
+    Touch ();
+    void activate () override {};
+    void deactivate () override {};
+    void set_x (double v) { _x->set_value (v, true); }
+    void set_y (double v) { _y->set_value (v, true); }
+    AbstractGShape* shape () { return _shape; }
+    void set_shape (AbstractGShape *s) { _shape = s; }
+    virtual ~Touch ();
+  private:
+    DoubleProperty *_x,* _y;
+    AbstractGShape* _shape;
   };
 
   inline bool is_pickable (AbstractGShape * s) {

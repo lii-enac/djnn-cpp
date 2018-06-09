@@ -31,18 +31,20 @@ namespace djnn
   }
 
   Touch::Touch (Process *p, const string &n) :
-      Process (p, n)
+      Process (p, n), _shape (nullptr)
   {
     _x = new DoubleProperty (this, "x", 0);
     _y = new DoubleProperty (this, "y", 0);
+    _activation_state = activated;
     Process::finalize ();
   }
 
   Touch::Touch () :
-      Process ()
+      Process (), _shape (nullptr)
   {
     _x = new DoubleProperty (this, "x", 0);
     _y = new DoubleProperty (this, "y", 0);
+    _activation_state = activated;
   }
 
   Touch::~Touch ()
@@ -57,7 +59,8 @@ namespace djnn
     Spike* move = new Spike (this, "move");
     new Spike (this, "enter");
     new Spike (this, "leave");
-    new Set (this, "touches");
+    Process* s = new Set (this, "touches");
+    s->set_activation_flag (activated);
     DoubleProperty* x = new DoubleProperty (0);
     DoubleProperty* y = new DoubleProperty (0);
     press->add_symbol ("x", x);
