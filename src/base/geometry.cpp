@@ -23,7 +23,7 @@ namespace djnn
                                                         shared_ptr<AbstractProperty> p1,
                                                         shared_ptr<AbstractProperty> p2,
                                                         shared_ptr<AbstractProperty> output) :
-      _input (input), _t1 (t1), _t2 (t2), _p1 (p1), _p2 (p2), _output (output)
+      Process (parent, name), _input (input), _t1 (t1), _t2 (t2), _p1 (p1), _p2 (p2), _output (output)
   {
     Process::finalize ();
   }
