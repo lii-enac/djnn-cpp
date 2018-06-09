@@ -64,14 +64,16 @@ namespace djnn
   {
     bool found = false;
     std::map<std::string, Process*>::iterator it;
+    string symbol;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
       if (it->second == c) {
-        remove_symbol (it->first);
+        symbol = it->first;
         found = true;
         continue;
       }
     }
     if (found) {
+      remove_symbol (symbol);
       _removed->set_value (c, true);
       _size->set_value (_size->get_value () - 1, true);
     }
