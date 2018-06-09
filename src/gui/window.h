@@ -57,6 +57,7 @@ namespace djnn
     Process* move () { return _move; }
     Process* release () { return _release; }
     Process* wheel () { return _wheel; }
+    Process* touches () { return _touches; }
     DoubleProperty* x () { return _x; }
     DoubleProperty* y () { return _y; }
     void set_frame ();

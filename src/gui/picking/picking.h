@@ -36,9 +36,13 @@ namespace djnn {
     bool genericMouseRelease(double x, double y, int button);
     bool genericMouseWheel(double x, double y);
 
+    bool genericTouchPress (double x, double y, int id);
+    bool genericTouchMove (double x, double y, int id);
+    bool genericTouchRelease (double x, double y, int id);
   protected:
     Window *_win;
     map<unsigned int, AbstractGShape*> _color_map;
     AbstractGShape *_cur_obj;
+    map <int, Touch*> _active_touches;
   };
 }
