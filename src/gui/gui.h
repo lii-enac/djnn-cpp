@@ -22,9 +22,7 @@
 
 namespace djnn {
 
-#if QT
-  extern int mouse_tracking;
-#endif
+extern int mouse_tracking;
 
 void init_gui ();
 void init_svg_parser ();
