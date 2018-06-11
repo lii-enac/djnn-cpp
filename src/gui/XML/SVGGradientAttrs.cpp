@@ -23,11 +23,10 @@
 
 #define TOTAL_KEYWORDS 5
 #define MIN_WORD_LENGTH 2
-#define MAX_WORD_LENGTH 34
+#define MAX_WORD_LENGTH 33
 #define MIN_HASH_VALUE 2
-#define MAX_HASH_VALUE 34
-/* maximum key range = 33, duplicates = 0 */
-
+#define MAX_HASH_VALUE 33
+/* maximum key range = 32, duplicates = 0 */
 
 inline /*ARGSUSED*/
 unsigned int
@@ -53,9 +52,9 @@ SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (register const char *str, reg
 #line 41 "src/gui/XML/SVGGradientAttrs.gperf"
       {"gradientTransform", &ParseGradientTransform},
       {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""},
+      {""}, {""}, {""}, {""}, {""}, {""},
 #line 42 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"http: //www.w3.org/1999/xlink*href", &ParseHRef}
+      {"http://www.w3.org/1999/xlink*href", &ParseHRef}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -123,9 +122,7 @@ static int ParseHRef(Process** e, const char* v) {
 	string id(v + sizeof(char));
 	map<string, Process*>::iterator it = djn__IdFillManager.find (id);
 	if (it == djn__IdFillManager.end()) {
-#ifdef DEBUG
 		fprintf (stderr, "unknown gradient %s\n", v);
-#endif
 		return 0;
 	}
 

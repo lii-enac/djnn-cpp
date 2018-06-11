@@ -450,6 +450,7 @@ namespace djnn
     activate () override;
     void
     deactivate () override;
+    virtual void update ();
     virtual void
     draw () override = 0;
     List*
@@ -500,6 +501,7 @@ namespace djnn
     activate () override;
     void
     deactivate () override;
+    void update () override;
     void
     draw () override;
     Process* clone () override;
@@ -551,6 +553,7 @@ namespace djnn
     RadialGradient (Process *p, const std::string &n, RadialGradient *rg);
     virtual
     ~RadialGradient ();
+    void update () override;
     void
     activate () override;
     void

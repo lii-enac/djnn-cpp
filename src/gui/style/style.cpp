@@ -486,7 +486,7 @@ namespace djnn
   GradientStop::clone ()
   {
     return new GradientStop (_r->get_value (), _g->get_value (), _b->get_value (), _a->get_value (),
-                             _offset->get_value ());
+			     _offset->get_value ());
   }
 
   GradientStop::~GradientStop ()
@@ -530,7 +530,7 @@ namespace djnn
   GradientStop::draw ()
   {
     Backend::instance ()->load_gradient_stop (_r->get_value (), _g->get_value (), _b->get_value (), _a->get_value (),
-                                              _offset->get_value ());
+					      _offset->get_value ());
   }
 
   AbstractGradient::AbstractGradient (Process *p, const std::string &n, int s, int fc) :
@@ -588,7 +588,7 @@ namespace djnn
   }
 
   LinearGradient::LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2,
-                                  djnFillSpread s, djnFillCoords fc) :
+				  djnFillSpread s, djnFillCoords fc) :
       AbstractGradient (p, n, s, fc)
   {
     _linear = true;
@@ -605,7 +605,7 @@ namespace djnn
   }
 
   LinearGradient::LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2, int s,
-                                  int fc) :
+				  int fc) :
       AbstractGradient (p, n, s, fc)
   {
     _linear = true;
@@ -639,7 +639,7 @@ namespace djnn
   LinearGradient::clone ()
   {
     LinearGradient *g = new LinearGradient (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value (),
-                                            spread ()->get_value (), coords ()->get_value ());
+					    spread ()->get_value (), coords ()->get_value ());
     for (auto s : _stops->children ()) {
       g->stops ()->add_child (s->clone (), "");
     }
@@ -725,7 +725,7 @@ namespace djnn
   }
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
-                                  double fy, djnFillSpread s, djnFillCoords fc) :
+				  double fy, djnFillSpread s, djnFillCoords fc) :
       AbstractGradient (p, n, s, fc)
   {
     _cx = new DoubleProperty (this, "cx", cx);
@@ -743,7 +743,7 @@ namespace djnn
   }
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
-                                  double fy, int s, int fc) :
+				  double fy, int s, int fc) :
       AbstractGradient (p, n, s, fc)
   {
     _cx = new DoubleProperty (this, "cx", cx);
@@ -780,7 +780,7 @@ namespace djnn
   RadialGradient::clone ()
   {
     RadialGradient *rg = new RadialGradient (_cx->get_value (), _cy->get_value (), _r->get_value (), _fx->get_value (),
-                                             _fy->get_value (), spread ()->get_value (), coords ()->get_value ());
+					     _fy->get_value (), spread ()->get_value (), coords ()->get_value ());
     for (auto s : _stops->children ()) {
       rg->stops ()->add_child (s->clone (), "");
     }
@@ -837,6 +837,8 @@ namespace djnn
   RefRadialGradient::RefRadialGradient (Process *p, const string &n, RadialGradient *rg) :
       AbstractGObj (p, n), _rg (rg)
   {
+    _rg->set_activation_flag (activated);
+    _rg->transforms ()->set_activation_flag (activated);
     for (auto t : _rg->transforms ()->children ()) {
       t->set_activation_flag (activated);
     }
@@ -851,18 +853,12 @@ namespace djnn
   RefRadialGradient::activate ()
   {
     AbstractGObj::activate ();
-    _rg->set_activation_flag (activated);
-    _rg->transforms ()->set_activation_flag (activated);
-    _rg->stops ()->set_activation_flag (activated);
   }
 
   void
   RefRadialGradient::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _rg->set_activation_flag (deactivated);
-    _rg->transforms ()->set_activation_flag (deactivated);
-    _rg->stops ()->set_activation_flag (deactivated);
   }
 
   void
@@ -870,6 +866,100 @@ namespace djnn
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (_rg);
+    }
+  }
+
+  void
+  AbstractGradient::update ()
+  {
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    if (_spread != (IntProperty*) find_component ("spread")) {
+      delete _cs;
+      delete _spread;
+      _spread = (IntProperty*) find_component ("spread");
+      _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
+    }
+    if (_coords != (IntProperty*) find_component ("coords")) {
+      delete _cc;
+      delete _coords;
+      _coords = (IntProperty*) find_component ("coords");
+      _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
+    }
+    if (_stops != (List*) find_component ("stops")) {
+      delete _stops;
+      _stops = (List*) find_component ("stops");
+    }
+    if (_transforms != (List*) find_component ("transforms")) {
+      delete _transforms;
+      _transforms = (List*) find_component ("transforms");
+    }
+  }
+
+  void
+  LinearGradient::update ()
+  {
+    AbstractGradient::update ();
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    if (_x1 != (DoubleProperty*) find_component ("x1")) {
+      delete _cx1;
+      delete _x1;
+      _x1 = (DoubleProperty*) find_component ("x1");
+      _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    }
+    if (_x2 != (DoubleProperty*) find_component ("x2")) {
+      delete _cx2;
+      delete _x2;
+      _x2 = (DoubleProperty*) find_component ("x2");
+      _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    }
+    if (_y1 != (DoubleProperty*) find_component ("y1")) {
+      delete _cy1;
+      delete _y1;
+      _y1 = (DoubleProperty*) find_component ("y1");
+      _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    }
+    if (_y2 != (DoubleProperty*) find_component ("y2")) {
+      delete _cy2;
+      delete _y2;
+      _y2 = (DoubleProperty*) find_component ("y2");
+      _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    }
+  }
+
+  void
+  RadialGradient::update ()
+  {
+    AbstractGradient::update ();
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    if (_cx != (DoubleProperty*) find_component ("cx")) {
+      delete _ccx;
+      delete _cx;
+      _cx = (DoubleProperty*) find_component ("cx");
+      _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    }
+    if (_cy != (DoubleProperty*) find_component ("cy")) {
+      delete _ccy;
+      delete _cy;
+      _cy = (DoubleProperty*) find_component ("cy");
+      _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    }
+    if (_r != (DoubleProperty*) find_component ("r")) {
+      delete _cr;
+      delete _r;
+      _r = (DoubleProperty*) find_component ("r");
+      _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    }
+    if (_fx != (DoubleProperty*) find_component ("fx")) {
+      delete _cfx;
+      delete _fx;
+      _fx = (DoubleProperty*) find_component ("fx");
+      _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
+    }
+    if (_fy != (DoubleProperty*) find_component ("fy")) {
+      delete _cfy;
+      delete _fy;
+      _fy = (DoubleProperty*) find_component ("fy");
+      _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
     }
   }
 

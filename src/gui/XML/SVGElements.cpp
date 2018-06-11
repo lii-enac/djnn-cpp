@@ -915,6 +915,7 @@ EndGradient(Process* e) {
 						gradient, djn_Inherited[i]);
 			}
 		}
+		((AbstractGradient*) gradient)->update ();
 	}
 
 	return gradient->get_parent();
