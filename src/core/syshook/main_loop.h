@@ -22,11 +22,6 @@
 #include <mutex>
 #include <iostream>
 
-#ifdef __MINGW32__
-#include <mingw.thread.h>
-#include <mingw.mutex.h>
-#endif
-
 namespace djnn
 {
 
@@ -53,52 +48,19 @@ namespace djnn
 
     // Process
     void
-    activate ()
-    {
-      if (another_source_wants_to_be_mainloop) {
-        run_in_own_thread ();
-        another_source_wants_to_be_mainloop->activate_from_mainloop ();
-      } else {
-        run_in_main_thread ();
-      }
-    }
+    activate ();
 
     void
-    deactivate ()
-    {
-      if (another_source_wants_to_be_mainloop) {
-        another_source_wants_to_be_mainloop->please_stop ();
-      } else {
-        own_mutex.unlock ();
-      }
-    }
+    deactivate ();
 
     void
-    run_in_main_thread ()
-    {
-      run ();
-    }
+    run_in_main_thread ();
 
     void
-    run_in_own_thread ()
-    {
-      new std::thread (&MainLoop::run, this);
-    }
+    run_in_own_thread ();
 
     void
-    run ()
-    {
-      djnn::release_exclusive_access (DBG_REL); // launch other threads
-
-      if (is_run_forever ()) {
-        own_mutex.lock (); // 1st lock: success
-        own_mutex.lock (); // 2nd lock: blocks forever
-      } else {
-        std::this_thread::sleep_for (_duration);
-      }
-      if (another_source_wants_to_be_mainloop)
-        another_source_wants_to_be_mainloop->please_stop ();
-    }
+    run ();
 
     std::mutex own_mutex;
     std::chrono::milliseconds _duration;
@@ -107,11 +69,7 @@ namespace djnn
     static std::shared_ptr<MainLoop> _instance;
     static std::once_flag onceFlag;
     // MainLoop should be created *before* any other external-source (is activated ?) -- or not ?
-    MainLoop ()
-    {
-      set_run_for_ever ();
-      djnn::get_exclusive_access (DBG_GET); // get hand to prevent any other thread from launching
-    }
+    MainLoop ();
   };
 
 }

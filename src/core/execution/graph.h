@@ -22,12 +22,6 @@
 #include <iostream>
 #include <memory>
 
-
-#ifdef __MINGW32__
-//#include <mingw.thread.h>
-#include <mingw.mutex.h>
-#endif
-
 namespace djnn
 {
   class Vertex

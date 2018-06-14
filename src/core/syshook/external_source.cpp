@@ -5,10 +5,6 @@
 //#include <thread>
 //#include <atomic>
 
-#ifdef __MINGW32__
-#include <mingw.thread.h>
-#endif
-
 namespace djnn {
 
 	typedef boost::thread thread_t;

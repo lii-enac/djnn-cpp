@@ -22,6 +22,7 @@ crossp :=
 #crossp := g
 #crossp := arm-none-eabi-
 #crossp := i686-w64-mingw32-
+#crossp := mingw-w64-x86_64-
 #brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
 #add -Imingw-std-threads to CXXFLAGS
 
@@ -41,23 +42,31 @@ endif
 CC := $(crossp)cc
 CXX := $(crossp)c++
 GPERF ?= gperf
+CXXFLAGS ?= $(CFLAGS) -std=c++14
+
 ifeq ($(os),Linux)
 lib_suffix=.so
-boost_thread = boost_thread
+boost_libs = -lboost_thread -lboost_chrono -lboost_system
 DYNLIB=-shared
 CFLAGS ?= -fpic -g -MMD -Wall
 endif
+
 ifeq ($(os),Darwin)
 lib_suffix=.dylib
-boost_thread = boost_thread-mt
+boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB=-dynamiclib
 CFLAGS ?= -g -MMD -Wall
 endif
-CXXFLAGS ?= $(CFLAGS) -std=c++14
-ifeq ($(os),win64)
-CXXFLAGS += -I$(src_dir)/core/ext/mingw-std-threads
+
+# for windows with mingw64 
+ifeq ($(os), MINGW64_NT-10.0)
+lib_suffix=.dll
+boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
+DYNLIB =-shared
+CFLAGS ?= -fpic -g -MMD -Wall
 endif
-LDFLAGS ?= -l$(boost_thread) -lboost_chrono -lboost_system -L$(build_dir)
+
+LDFLAGS ?= $(boost_libs) -L$(build_dir)
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
@@ -100,7 +109,7 @@ $1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_all_ldflags := $$($1_lib_ldflags)
 
-ifeq ($(os),Darwin)
+ifeq ($(os),$(filter $(os),Darwin MINGW64_NT-10.0))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
@@ -143,7 +152,8 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
 
-djnn_libs := core base comms display gui animation input
+djnn_libs := core base display gui animation
+# comms input
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
 #headers := $(foreach a,$(djnn_libs),$a/$a)
@@ -207,29 +217,28 @@ distclean clear:
 .PHONY: distclean clear
 
 dbg:
-	@echo $(libs)
+	@echo $(os)
 .PHONY: dbg
 
 ifeq ($(os),Darwin)
 #https://brew.sh/
 pkgdeps := expat curl
 pkgdeps += expat qt5
-#pkgdeps += expat freetype sdl2
+#pkgdeps += freetype sdl2
 pkgcmd := brew install
 endif
 
-ifeq ($(os),win64)
+ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
-pkgdeps := expat curl
-pkgdeps += qt5 
-#-static
+#pkgdeps := git make
+pkgdeps := pkg-config gcc boost expat curl qt5
 #pkgdeps += freetype SDL2
-pkdepgs := $(addprefix mingw-w64-i686-,$(pkgdeps))
+pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S
 endif
 
 install-pkgdeps:
 	$(pkgcmd) $(pkgdeps)
-.PHONY: install-deps
+.PHONY: install-pkgdeps
 
 

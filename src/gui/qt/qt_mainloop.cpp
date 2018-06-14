@@ -17,6 +17,8 @@
 #include "../../core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
+#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+
 namespace djnn
 {
 
@@ -34,7 +36,7 @@ namespace djnn
   }
 
   QtMainloop::QtMainloop () :
-      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr)
+      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
   {
     MainLoop::another_source_wants_to_be_mainloop = this;
     argc = 0;
@@ -89,14 +91,20 @@ namespace djnn
       w->check_for_update ();
     }
     djnn::release_exclusive_access (DBG_REL);
+    already_awake = false;
   }
 
   void
   QtMainloop::slot_for_awake ()
   {
+    if(already_awake) {
+      //DBG;
+      return;
+    }
     if (!get_please_stop ()) {
       djnn::get_exclusive_access (DBG_GET);
       // now qt can call event method on windows
+      already_awake = true;
     } else {
       _qapp->quit ();
     }

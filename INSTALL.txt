@@ -1,14 +1,37 @@
-We provide a Makefile that should work on MacOS (10.12+) and Linux platforms
+We provide a Makefile that should work on MacOS (10.12+),  Linux platforms, windows 10+
 
 Known dependencies:
 
+---- LINUX -----
+
 Linux/Ubuntu:
-  sudo apt install libboost-thread-dev libexpat1-dev libcurl4-gnutls-dev qt5-default pkg-config
+  sudo apt install git make
+  make install-pkgdeps
+  make -j4
+
+  #sudo apt install libboost-thread-dev libexpat1-dev libcurl4-gnutls-dev qt5-default pkg-config
+
+---- MACOS -----
 
 MacOS
-  brew install boost qt5
+  install brew then
+  brew install git make
+  make install-pkgdeps
+  make -j
  
-On both platforms:
+---- WINDOWS -----
+
+Win
+  install msys2 then : https://www.msys2.org/
+  pacman -S git make
+  git clone git@github.com:lii-enac/djnn-cpp.git
+  launch MINGW64 command line and then
+  make install-pkgdeps
+  make -j4
+ 
+---- ALL PLATEFORM -----
+
+All both platforms:
   ivy bus code -> https://www.eei.cena.fr/products/ivy/
   ivy bus on Linux/Ubuntu:
   	sudo apt install subversion libpcre3-dev libxt-dev tcl8.5-dev libglib2.0-dev

@@ -33,7 +33,6 @@ namespace djnn
 #if DBG_MUTEX
     std::cerr << debug << std::flush;
 #endif
-
     global_mutex.lock ();
 #if DBG_MUTEX
     std::cerr << " GOT " << std::endl << std::flush;
@@ -43,9 +42,12 @@ namespace djnn
   void
   release_exclusive_access (const char * debug)
   {
+#if DBG_MUTEX
+    std::cerr << debug << std::flush;
+#endif
     global_mutex.unlock ();
 #if DBG_MUTEX
-    std::cerr << debug << std::endl << std::flush;
+    std::cerr << " ROL " << std::endl << std::flush;
 #endif
   }
 

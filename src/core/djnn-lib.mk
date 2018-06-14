@@ -1,5 +1,7 @@
 lib_ldflags = -lexpat -lcurl -lpthread
-lib_srcs := src/core/syshook/external_source.cpp src/core/syshook/syshook.cpp src/core/syshook/timer.cpp src/core/core.cpp \
+lib_srcs := src/core/syshook/external_source.cpp src/core/syshook/syshook.cpp \
+			src/core/syshook/main_loop.cpp \
+			src/core/syshook/timer.cpp src/core/core.cpp \
 			src/core/error.cpp src/core/utils-dev.cpp src/core/uri.cpp
 
 lib_srcs += $(shell find src/core/control -name "*.cpp")
