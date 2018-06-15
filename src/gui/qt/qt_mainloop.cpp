@@ -54,7 +54,15 @@ namespace djnn
   void
   QtMainloop::please_stop ()
   {
-    ExternalSource::please_stop ();
+    if (_qapp)
+      _qapp->quit ();
+    //SL+MM : l'appel à please_stop demande l'interruption du thread via interrupt
+    //ce qui est susceptible suivant les versions de l'OS de plus ou moins bien
+    //se passer. A creuser, en attendant on demande à qt de quitter et ça résoud
+    //le bug de core dump sous ubuntu (appels multiples de exit)
+    //https://stackoverflow.com/questions/6375121/when-using-boostthreadinterrupt-do-you-need-to-catch-the-thread-interru
+    //https://quantnet.com/threads/c-multithreading-in-boost.10028/ (18.8)
+    //ExternalSource::please_stop ();
   }
 
   void

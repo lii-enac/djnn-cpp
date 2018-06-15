@@ -34,7 +34,7 @@ namespace djnn
   Exit::activate ()
   {
     MainLoop::instance ().deactivation ();
-    exit (_value->get_value ());
+    //exit (_value->get_value ());
   }
 
 }
