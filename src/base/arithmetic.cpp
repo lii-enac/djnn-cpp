@@ -127,7 +127,7 @@ namespace djnn
       UnaryOperator (p, n)
   {
     _input = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", i_val));
-    _output = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", -(i_val)));
+    _output = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", 0));
     init_couplings (
         shared_ptr<Process> (new PredecessorAction (this, "action", _input, _output, i_val)));
     Process::finalize ();
