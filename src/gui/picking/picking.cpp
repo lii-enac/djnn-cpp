@@ -65,7 +65,7 @@ namespace djnn
       t = it->second;
       _win->touches ()->remove_child (t);
       if (t->shape () != nullptr) {
-	t->shape ()->find_component ("touches")->remove_child (t);
+        t->shape ()->find_component ("touches")->remove_child (t);
       }
       _active_touches.erase (it);
       delete t;
@@ -97,18 +97,18 @@ namespace djnn
       ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
       ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       if (s != _cur_obj) {
-	if (_cur_obj != 0)
-	  _cur_obj->find_component ("leave")->notify_activation ();
-	s->find_component ("enter")->notify_activation ();
-	_cur_obj = s;
+        if (_cur_obj != 0)
+          _cur_obj->find_component ("leave")->notify_activation ();
+        s->find_component ("enter")->notify_activation ();
+        _cur_obj = s;
       }
       s->find_component ("move")->notify_activation ();
       exec_ = true;
     } else {
       if (_cur_obj != nullptr) {
-	_cur_obj->find_component ("leave")->notify_activation ();
-	_cur_obj = nullptr;
-	exec_ = true;
+        _cur_obj->find_component ("leave")->notify_activation ();
+        _cur_obj = nullptr;
+        exec_ = true;
       }
     }
     return exec_;
@@ -126,17 +126,17 @@ namespace djnn
       AbstractGShape *s = this->pick (x, y);
       AbstractGShape *t_shape = t->shape ();
       if (s == nullptr && t_shape != nullptr) {
-	t_shape->find_component ("touches")->remove_child (t);
-	t->set_shape (nullptr);
+        t_shape->find_component ("touches")->remove_child (t);
+        t->set_shape (nullptr);
       } else if (s != nullptr) {
-	if (t_shape == nullptr) {
-	  s->find_component ("touches")->add_child (t, to_string (id));
-	  t->set_shape (s);
-	} else if (s != t_shape) {
-	  t_shape->find_component ("touches")->remove_child (t);
-	  s->find_component ("touches")->add_child (t, to_string (id));
-	  t->set_shape (s);
-	}
+        if (t_shape == nullptr) {
+          s->find_component ("touches")->add_child (t, to_string (id));
+          t->set_shape (s);
+        } else if (s != t_shape) {
+          t_shape->find_component ("touches")->remove_child (t);
+          s->find_component ("touches")->add_child (t, to_string (id));
+          t->set_shape (s);
+        }
       }
     } else {
       genericTouchPress (x, y, id);
@@ -151,18 +151,18 @@ namespace djnn
     AbstractGShape *s = this->pick (x, y);
     if (s) {
       if (s != _cur_obj) {
-	if (_cur_obj != nullptr)
-	  _cur_obj->find_component ("leave")->notify_activation ();
-	s->find_component ("enter")->notify_activation ();
-	_cur_obj = s;
+        if (_cur_obj != nullptr)
+          _cur_obj->find_component ("leave")->notify_activation ();
+        s->find_component ("enter")->notify_activation ();
+        _cur_obj = s;
       }
       s->find_component ("release")->notify_activation ();
       exec_ = true;
     } else {
       if (_cur_obj != nullptr) {
-	_cur_obj->find_component ("leave")->notify_activation ();
-	_cur_obj = 0;
-	exec_ = true;
+        _cur_obj->find_component ("leave")->notify_activation ();
+        _cur_obj = 0;
+        exec_ = true;
       }
     }
     if (_win->release ()->has_coupling ()) {
@@ -183,7 +183,7 @@ namespace djnn
       t->set_y (y);
       AbstractGShape *t_shape = t->shape ();
       if (t_shape != nullptr) {
-	t_shape->find_component ("touches")->remove_child (t);
+        t_shape->find_component ("touches")->remove_child (t);
       }
       _win->touches ()->remove_child (t);
       _active_touches.erase (it);

@@ -55,7 +55,7 @@ namespace djnn
     QtMainloop::instance ().add_window (this);
     _qwidget = new MyQWidget (_window, this);
     QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
-		_window->height ()->get_value ());
+                _window->height ()->get_value ());
     if (mouse_tracking)
       _qwidget->setMouseTracking (true);
     _qwidget->setGeometry (rect);
@@ -100,40 +100,40 @@ namespace djnn
       case QEvent::TouchBegin:
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd:
-	{
-	  QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
-	  bool exec_ = false;
-	  for (auto touchPoint : touchPoints) {
-	    int id = touchPoint.id ();
-	    double x = touchPoint.pos ().x ();
-	    double y = touchPoint.pos ().y ();
-	    switch (touchPoint.state ())
-	      {
-	      case Qt::TouchPointStationary:
-		continue;
-	      case Qt::TouchPointPressed:
-		{
-		  exec_ |= _picking_view->genericTouchPress (x, y, id);
-		  break;
-		}
-	      case Qt::TouchPointMoved:
-		{
-		  exec_ |= _picking_view->genericTouchMove (x, y, id);
-		  break;
-		}
-	      case Qt::TouchPointReleased:
-		{
-		  exec_ |= _picking_view->genericTouchRelease (x, y, id);
-		  break;
-		}
-	      }
-	  }
-	  if (exec_)
-	    QtMainloop::instance ().set_please_exec (true);
-	}
-	break;
+        {
+          QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
+          bool exec_ = false;
+          for (auto touchPoint : touchPoints) {
+            int id = touchPoint.id ();
+            double x = touchPoint.pos ().x ();
+            double y = touchPoint.pos ().y ();
+            switch (touchPoint.state ())
+              {
+              case Qt::TouchPointStationary:
+                continue;
+              case Qt::TouchPointPressed:
+                {
+                  exec_ |= _picking_view->genericTouchPress (x, y, id);
+                  break;
+                }
+              case Qt::TouchPointMoved:
+                {
+                  exec_ |= _picking_view->genericTouchMove (x, y, id);
+                  break;
+                }
+              case Qt::TouchPointReleased:
+                {
+                  exec_ |= _picking_view->genericTouchRelease (x, y, id);
+                  break;
+                }
+              }
+          }
+          if (exec_)
+            QtMainloop::instance ().set_please_exec (true);
+        }
+        break;
       default:
-	return QWidget::event (event);
+        return QWidget::event (event);
       }
     return true;
   }
