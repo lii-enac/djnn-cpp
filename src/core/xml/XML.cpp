@@ -19,6 +19,7 @@
 #include "xml.h"
 #include "xml-dev.h"
 #include "../tree/text_property.h"
+#include "../error.h"
 
 #include <expat.h>
 #include <curl/curl.h>
@@ -91,7 +92,7 @@ namespace djnn {
       return curComponent;
     }
     else {
-      cerr << "djnn error: could not parse " << uri << endl;
+      error ("could not parse " + uri);
       return 0;
     };
   }
