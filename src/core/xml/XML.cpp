@@ -69,13 +69,17 @@ namespace djnn {
   Process*
   XML::djnLoadFromXML (const string &uri)
   {
+    string uri_ = uri;
+    std::size_t found = uri.find("://");
+    if (found == std::string::npos)
+      uri_ = "file://" + uri;
     djn__CurlData d;
     CURLcode res;
     CURL *curl = curl_easy_init ();
 
     if (!curl)
       return 0;
-    curl_easy_setopt(curl, CURLOPT_URL, uri.c_str ());
+    curl_easy_setopt(curl, CURLOPT_URL, uri_.c_str ());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, djn__ReadXML);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &d);
 
