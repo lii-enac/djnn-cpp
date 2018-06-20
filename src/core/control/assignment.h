@@ -43,7 +43,7 @@ namespace djnn {
     static void do_assignment (AbstractProperty* src, AbstractProperty* dst, bool propagate);
     virtual ~Assignment ();
   protected:
-    int init_assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
+    void init_assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     AbstractProperty* _src;
     AbstractProperty* _dst;
     unique_ptr<AssignmentAction> _action;

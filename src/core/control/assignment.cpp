@@ -20,6 +20,7 @@
 #include "../tree/double_property.h"
 #include "../tree/text_property.h"
 #include "../tree/ref_property.h"
+#include "../error.h"
 
 #include <iostream>
 
@@ -27,40 +28,33 @@ namespace djnn
 {
   using namespace std;
 
-  int
+  void
   Assignment::init_assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
                                bool isModel)
   {
     if (src == 0) {
-      cerr << "src argument cannot be null in assignment creation\n";
-      return 0;
+      error ("src argument cannot be null in assignment creation");
     }
     if (dst == 0) {
-      cerr << "dst argument cannot be null in assignment creation\n";
-      return 0;
+      error ("dst argument cannot be null in assignment creation");
     }
 
     Process *f = src->find_component (ispec);
     if (f == 0) {
-      cerr << "source not found in assignment creation\n";
-      return 0;
+      error ("source not found in assignment creation");
     }
     _src = dynamic_cast<AbstractProperty*> (f);
     if (_src == nullptr) {
-      cerr << "Warning: the source of an assignment must be a property\n";
-      return 0;
+      warning ("the source of an assignment must be a property");
     }
     f = dst->find_component (dspec);
     if (f == 0) {
-      cerr << "destination not found in assignment creation\n";
-      return 0;
+      error ("destination not found in assignment creation");
     }
     _dst = dynamic_cast<AbstractProperty*> (f);
     if (_dst == nullptr) {
-      cerr << "Warning: the destination of an assignment must be a property\n";
-      return 0;
+      warning ("the destination of an assignment must be a property");
     }
-    return 1;
   }
 
   Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec,

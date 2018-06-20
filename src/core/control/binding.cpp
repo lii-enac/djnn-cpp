@@ -14,6 +14,7 @@
 
 #include "binding.h"
 #include "../execution/graph.h"
+#include "../error.h"
 
 #include <iostream>
 
@@ -21,30 +22,26 @@ namespace djnn
 {
   using namespace std;
 
-  int
+  void
   Binding::init_binding (Process* src, const string & ispec, Process* dst, const string & dspec)
   {
     if (src == 0) {
-      cerr << "src argument cannot be null in binding creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("src argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     if (dst == 0) {
-      cerr << "dst argument cannot be null in binding creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("dst argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     if (ispec.length () > 0) {
       _src = src->find_component (ispec);
       if (_src == 0) {
-        cerr << "children " << ispec << " not found in binding (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-        return 0;
+        error ("source child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _src = src;
     if (dspec.length () > 0) {
       _dst = dst->find_component (dspec);
       if (_dst == 0) {
-        cerr << "children " << dspec << " not found in binding (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-        return 0;
+        error ("destination child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _dst = dst;
@@ -56,21 +53,18 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
     _c_src->disable ();
-    return 1;
   }
 
   Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec)
   {
-    if (!init_binding (src, ispec, dst, dspec))
-      exit (0);
+    init_binding (src, ispec, dst, dspec);
   }
 
   Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec,
                     Process* dst, const string & dspec) :
       Process (parent, name)
   {
-    if (!init_binding (src, ispec, dst, dspec))
-      exit (0);
+    init_binding (src, ispec, dst, dspec);
     Process::finalize ();
   }
 

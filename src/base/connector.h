@@ -49,7 +49,7 @@ namespace djnn {
     virtual ~Connector ();
 
   protected:
-    int init_connector (Process *src, string ispec, Process *dst, string dspec);
+    void init_connector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
     unique_ptr<Coupling>_c_src;

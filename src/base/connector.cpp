@@ -14,6 +14,7 @@
 
 #include "connector.h"
 #include "../core/execution/graph.h"
+#include "../core/error.h"
 
 #include <iostream>
 
@@ -35,33 +36,28 @@ namespace djnn
     init_connector (src, ispec, dst, dspec);
   }
 
-  int
+  void
   Connector::init_connector (Process *src, string ispec, Process *dst, string dspec)
   {
     if (src == 0) {
-      cerr << "src argument cannot be null in connector creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("src argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     if (dst == 0) {
-      cerr << "dst argument cannot be null in connector creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("dst argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     Process* c_src = src->find_component (ispec);
     if (c_src == 0) {
-      cerr << "source not found in connector creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("source not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_dst = dst->find_component (dspec);
     if (c_dst == 0) {
-      cerr << "destination not found in connector creation (" << get_name() << ", " << ispec << ", " << dspec << ")\n";
-      return 0;
+      error ("destination not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
-      cerr << "Warning: invalid source or destination in connector (" << get_name() << "," << ispec << " " << dspec << ")\n";
-      return 0;
+      warning ("invalid source or destination in connector (" + get_name() + "," + ispec + " " + dspec + ")");
     }
 
     _action = shared_ptr<Process> (
@@ -75,8 +71,6 @@ namespace djnn
     _c_src.get ()->disable ();
 
     _c_src->enable ();
-
-    return 1;
   }
 
   Connector::~Connector ()
