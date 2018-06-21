@@ -43,6 +43,7 @@ namespace djnn
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
     poly->points ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   PolyPoint::~PolyPoint ()

@@ -33,6 +33,7 @@ namespace djnn
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   PathPoint::PathPoint (double x, double y) :
@@ -106,6 +107,7 @@ namespace djnn
       return;
     }
     path->items ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   void
@@ -138,6 +140,7 @@ namespace djnn
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   PathQuadratic::PathQuadratic (double x1, double y1, double x, double y) :
@@ -226,6 +229,7 @@ namespace djnn
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   PathCubic::PathCubic (double x1, double y1, double x2, double y2, double x, double y) :
@@ -333,6 +337,7 @@ namespace djnn
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
     path->items ()->add_child (this, "");
+    p->add_symbol(n, this);
   }
 
   PathArc::PathArc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) :
