@@ -100,7 +100,7 @@ namespace djnn
         }
         it++;
       }
-      return Process::find_component (key);
+      return Process::find_component (path);
     }
   }
 
