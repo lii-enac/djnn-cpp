@@ -19,14 +19,14 @@ namespace djnn
   void
   error (const std::string &msg)
   {
-    std::cerr << "Error: " << msg << std::endl;
+    std::cerr << std::endl << std::endl << "djnn - ERROR: " << msg << std::endl << std::endl;
     exit (0);
   }
 
   void
   warning (const std::string &msg)
   {
-    std::cerr << "Warning: " << msg << std::endl;
+    std::cerr << std::endl << std::endl << "djnn - WARNING: " << msg << std::endl << std::endl;
   }
 
 }

@@ -13,6 +13,7 @@
  */
 
 #include "activator.h"
+#include "../error.h"
 #include <iostream>
 
 namespace djnn
@@ -23,7 +24,7 @@ namespace djnn
       Process (parent, name), _action (action)
   {
     if (_action == nullptr) {
-      std::cerr << "Error: action not found in activator" << name << endl;;
+      error  ("action not found in activator " + name);
       return;
     }
     Process::finalize ();
@@ -34,7 +35,7 @@ namespace djnn
   {
     _action = action->find_component (spec);
     if (_action == nullptr) {
-      std::cerr << "Error: action not found in activator" << name << endl;;
+      error  ("action not found in activator " + name);
       return;
     }
     Process::finalize ();
