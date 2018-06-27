@@ -13,6 +13,8 @@
  */
 
 #include "component.h"
+#include "../control/assignment.h"
+#include "../error.h"
 #include "../execution/graph.h"
 #include <iostream>
 #include <algorithm>
@@ -39,7 +41,7 @@ namespace djnn
 
   Container::~Container ()
   {
-    for (auto c: _children)
+    for (auto c : _children)
       delete c;
   }
 
@@ -50,8 +52,8 @@ namespace djnn
       return;
     _children.push_back (c);
     /* WARNING should we authorize multiple parenthood? */
-    if (c->get_parent () != nullptr && c->get_parent() != this) {
-      c->get_parent()->remove_child (c);
+    if (c->get_parent () != nullptr && c->get_parent () != this) {
+      c->get_parent ()->remove_child (c);
     }
     c->set_parent (this);
     add_symbol (name, c);
@@ -99,7 +101,7 @@ namespace djnn
     if (_activation_flag > activated)
       return;
     ComponentObserver::instance ().start_draw ();
-    for (auto c: _children) {
+    for (auto c : _children) {
       c->draw ();
     }
     ComponentObserver::instance ().end_draw ();
@@ -124,12 +126,54 @@ namespace djnn
   }
 
   Process*
-  Component::clone () {
+  Component::clone ()
+  {
     Process* clone = new Component ();
-    for (auto c: _children) {
+    for (auto c : _children) {
       clone->add_child (c->clone (), c->get_name ());
     }
     return clone;
+  }
+
+  AssignmentSequence::AssignmentSequence (Process *p, const string &n, bool is_model) :
+      Container (p, n)
+  {
+    _model = is_model;
+    Process::finalize ();
+  }
+
+  AssignmentSequence::AssignmentSequence () :
+      Container ()
+  {
+  }
+
+  void
+  AssignmentSequence::activate ()
+  {
+    for (auto c : _children) {
+      c->activation ();
+    }
+  }
+
+  void
+  AssignmentSequence::add_child (Process* c, const std::string& name)
+  {
+    if (c == nullptr)
+      return;
+
+    _children.push_back (c);
+    /* WARNING should we authorize multiple parenthood? */
+    if (c->get_parent () != nullptr && c->get_parent () != this) {
+      c->get_parent ()->remove_child (c);
+    }
+    c->set_parent (this);
+    add_symbol (name, c);
+  }
+
+  void
+  AssignmentSequence::post_activate ()
+  {
+    _activation_state = deactivated;
   }
 }
 
