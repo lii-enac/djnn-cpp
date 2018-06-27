@@ -50,7 +50,7 @@ namespace djnn
     _right = shared_ptr<AbstractProperty> (new DoubleProperty (this, "exponent", exponent));
     _result = shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", pow (base, exponent)));
     init_couplings (shared_ptr<Process> (new PowAction (this, "action", _left, _right, _result)));
-
+    Process::finalize ();
   }
 
   Sqrt::Sqrt (Process *p, const string &n, double i_val) :
