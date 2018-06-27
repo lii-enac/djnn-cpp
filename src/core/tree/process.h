@@ -71,6 +71,8 @@ namespace djnn {
 
     Process* state_dependency () { return _state_dependency; }
     activation_state get_state ();
+    void set_vertex (shared_ptr<Vertex> v) { _vertex = v; }
+    shared_ptr<Vertex> vertex () { return _vertex; };
     Process* get_parent ();
     void set_parent (Process* p) { _parent = p; }
     const string& get_name () const;
@@ -94,6 +96,7 @@ namespace djnn {
     static int _nb_anonymous;
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
+    shared_ptr<Vertex> _vertex;
 
   protected:
     virtual void pre_activate ();

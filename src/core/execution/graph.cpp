@@ -45,7 +45,7 @@ namespace djnn
   { 
     //TODO: does push_back check the doubles.
     _edges.push_back (dst);
-    dst->_count_egdes_in++; 
+    dst->_count_egdes_in++;
   }
 
   void
@@ -100,11 +100,6 @@ namespace djnn
   std::shared_ptr<Vertex>
   Graph::add_vertex (Process* c)
   {
-    // check if c is already in the graph
-    for (auto v : _vertices) {
-      if (v->get_component () == c)
-        return (v);
-    }
     std::shared_ptr<Vertex> v = make_shared<Vertex> (c);
     _vertices.push_back (v);
     _sorted = false;
@@ -141,14 +136,16 @@ namespace djnn
   void
   Graph::add_edge (Process* src, Process* dst)
   {
-    std::shared_ptr<Vertex> s = get_vertex (src);
+    std::shared_ptr<Vertex> s = src->vertex ();
     if (s == nullptr) {
       s = add_vertex (src);
+      src->set_vertex (s);
     }
 
-    std::shared_ptr<Vertex> d = get_vertex (dst);
+    std::shared_ptr<Vertex> d = dst->vertex ();
     if (d == nullptr) {
       d = add_vertex (dst);
+      dst->set_vertex (d);
     }
     s->add_edge (d);
     _sorted = false;

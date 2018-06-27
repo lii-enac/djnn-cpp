@@ -72,7 +72,7 @@ namespace djnn
   }
 
   Process::Process (Process* parent, const string& name) :
-      _parent (parent), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
+      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
           deactivated), _model (false), _activation_flag (NONE), _has_couplings (false)
   {
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
@@ -82,7 +82,7 @@ namespace djnn
   }
 
   Process::Process () :
-      _parent (nullptr), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
+      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
           deactivated), _model (false), _activation_flag (NONE), _has_couplings (false)
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
@@ -225,9 +225,9 @@ namespace djnn
   void
   Process::add_symbol (const string &name, Process* c)
   {
-   /* if ((_symtable.insert (std::pair<string, Process*> (name, c))).second == false) {
-      cerr << "Duplicate name " << name << " in component " << _name << endl;
-    }*/
+    /* if ((_symtable.insert (std::pair<string, Process*> (name, c))).second == false) {
+     cerr << "Duplicate name " << name << " in component " << _name << endl;
+     }*/
     _symtable[name] = c;
   }
 
