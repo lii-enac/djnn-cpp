@@ -292,6 +292,7 @@ namespace djnn
     }
     void
     draw () override;
+    void set_bounding_box (double x, double y, double w, double h);
   protected:
     void
     activate () override;
@@ -299,6 +300,8 @@ namespace djnn
     deactivate () override;
   private:
     List *_points;
+    Process* _bounding_box;
+    DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
     bool _closed;
   };
 
@@ -581,12 +584,15 @@ namespace djnn
     void
     draw () override;
     Process* clone () override;
+    void set_bounding_box (double x, double y, double w, double h);
   protected:
     void
     activate () override;
     void
     deactivate () override;
     List *_items;
+    Process* _bounding_box;
+    DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
   };
   class PathClip : public Path
   {

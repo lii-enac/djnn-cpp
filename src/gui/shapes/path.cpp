@@ -15,6 +15,7 @@
 #include "../backend.h"
 #include "../abstract_backend.h"
 #include "../../core/control/coupling.h"
+#include "../../core/tree/blank.h"
 #include "shapes.h"
 
 namespace djnn
@@ -431,12 +432,30 @@ namespace djnn
       AbstractGShape ()
   {
     _items = new List (this, "items");
+    _bounding_box = new Blank (this, "bounding_box");
+    _bbx = new DoubleProperty (0);
+    _bby = new DoubleProperty (0);
+    _bbw = new DoubleProperty (0);
+    _bbh = new DoubleProperty (0);
+    _bounding_box->add_symbol ("x", _bbx);
+    _bounding_box->add_symbol ("y", _bby);
+    _bounding_box->add_symbol ("width", _bbw);
+    _bounding_box->add_symbol ("height", _bbh);
   }
 
   Path::Path (Process* p, const string &n) :
       AbstractGShape (p, n)
   {
     _items = new List (this, "items");
+    _bounding_box = new Blank (this, "bounding_box");
+    _bbx = new DoubleProperty (0);
+    _bby = new DoubleProperty (0);
+    _bbw = new DoubleProperty (0);
+    _bbh = new DoubleProperty (0);
+    _bounding_box->add_symbol ("x", _bbx);
+    _bounding_box->add_symbol ("y", _bby);
+    _bounding_box->add_symbol ("width", _bbw);
+    _bounding_box->add_symbol ("height", _bbh);
     Process::finalize ();
   }
 
@@ -493,5 +512,14 @@ namespace djnn
       clone->add_child (p->clone (), p->get_name ());
     }
     return clone;
+  }
+
+  void
+  Path::set_bounding_box (double x, double y, double w, double h)
+  {
+    _bbx->set_value (x, true);
+    _bby->set_value (y, true);
+    _bbw->set_value (w, true);
+    _bbh->set_value (h, true);
   }
 }

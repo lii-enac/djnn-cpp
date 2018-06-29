@@ -198,6 +198,8 @@ namespace djnn
     if (p->closed ())
       path.closeSubpath ();
     path.setFillRule (_context_manager->get_current ()->fillRule);
+    p->set_bounding_box (path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
+                          path.boundingRect ().height ());
     load_drawing_context (p, path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
                           path.boundingRect ().height ());
     _painter->drawPath (path);
@@ -218,6 +220,8 @@ namespace djnn
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
+    p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
+                         cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     load_drawing_context (p, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->drawPath (cur_path);
@@ -390,6 +394,8 @@ namespace djnn
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
+    p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
+                         cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     load_drawing_context (p, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->setClipPath (cur_path);
