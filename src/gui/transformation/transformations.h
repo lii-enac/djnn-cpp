@@ -221,9 +221,9 @@ namespace djnn
     deactivate () override;
     virtual void
     draw () override = 0;
-  protected:
     DoubleProperty *_m11, *_m12, *_m13, *_m14, *_m21, *_m22, *_m23, *_m24, *_m31, *_m32, *_m33, *_m34, *_m41, *_m42,
 	*_m43, *_m44;
+  protected:
     Coupling *_cm11, *_cm12, *_cm13, *_cm14, *_cm21, *_cm22, *_cm23, *_cm24, *_cm31, *_cm32, *_cm33, *_cm34, *_cm41,
 	*_cm42, *_cm43, *_cm44;
   };
