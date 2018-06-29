@@ -39,6 +39,8 @@ namespace djnn {
     bool genericTouchPress (double x, double y, int id);
     bool genericTouchMove (double x, double y, int id);
     bool genericTouchRelease (double x, double y, int id);
+
+    void set_local_coords (AbstractGShape *s, Touch *t, double x, double y);
   protected:
     Window *_win;
     map<unsigned int, AbstractGShape*> _color_map;

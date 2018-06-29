@@ -13,6 +13,7 @@
  */
 
 #include "abstract_gshape.h"
+#include "transformation/transformations.h"
 #include "../core/tree/spike.h"
 #include "../core/tree/set.h"
 
@@ -35,6 +36,8 @@ namespace djnn
   {
     _x = new DoubleProperty (this, "x", 0);
     _y = new DoubleProperty (this, "y", 0);
+    _local_x = new DoubleProperty (this, "local_x", 0);
+    _local_y = new DoubleProperty (this, "local_y", 0);
     _activation_state = activated;
     Process::finalize ();
   }
@@ -44,6 +47,8 @@ namespace djnn
   {
     _x = new DoubleProperty (this, "x", 0);
     _y = new DoubleProperty (this, "y", 0);
+    _local_x = new DoubleProperty (this, "local_x", 0);
+    _local_y = new DoubleProperty (this, "local_y", 0);
     _activation_state = activated;
   }
 
@@ -63,21 +68,33 @@ namespace djnn
     s->set_activation_flag (activated);
     DoubleProperty* x = new DoubleProperty (0);
     DoubleProperty* y = new DoubleProperty (0);
+    DoubleProperty* local_x = new DoubleProperty (0);
+    DoubleProperty* local_y = new DoubleProperty (0);
     press->add_symbol ("x", x);
     press->add_symbol ("y", y);
+    press->add_symbol ("local_x", local_x);
+    press->add_symbol ("local_y", local_y);
     move->add_symbol ("x", x);
     move->add_symbol ("y", y);
+    move->add_symbol ("local_x", local_x);
+    move->add_symbol ("local_y", local_y);
+    _matrix = new Homography (this, "matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    _inverted_matrix = new Homography (this, "inverted_matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     _has_ui = true;
   }
 
   AbstractGShape::AbstractGShape () :
-      AbstractGObj (), _has_ui (false)
+      AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
   {
+    _origin_x = new DoubleProperty (this, "origin_x", 0);
+    _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
   AbstractGShape::AbstractGShape (Process *p, const std::string& n) :
-      AbstractGObj (p, n), _has_ui (false)
+      AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
   {
+    _origin_x = new DoubleProperty (this, "origin_x", 0);
+    _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
   Process*
@@ -106,6 +123,8 @@ namespace djnn
 
   AbstractGShape::~AbstractGShape ()
   {
+    delete _origin_x;
+    delete _origin_y;
     if (_has_ui) {
       Process* press = find_component ("press");
       Process* release = find_component ("release");
@@ -119,6 +138,8 @@ namespace djnn
       press->remove_symbol ("y");
       move->remove_symbol ("x");
       move->remove_symbol ("y");
+      delete _matrix;
+      delete _inverted_matrix;
       delete press;
       delete release;
       delete move;

@@ -15,6 +15,7 @@
  *
  */
 #include "color_picking.h"
+#include "../transformation/transformations.h"
 
 namespace djnn
 {
@@ -36,6 +37,21 @@ namespace djnn
       _color_map.clear ();
   }
 
+  void
+  Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y)
+  {
+    Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
+    double loc_x = h->_m11->get_value () * x + h->_m12->get_value () * y + h->_m13->get_value () + h->_m14->get_value () - s->origin_x ()->get_value ();
+    double loc_y = h->_m21->get_value () * x + h->_m22->get_value () * y + h->_m23->get_value () + h->_m24->get_value () - s->origin_y ()->get_value ();
+    if (t != nullptr) {
+      t->set_local_x (loc_x);
+      t->set_local_y (loc_y);
+    } else {
+      ((DoubleProperty*) s->find_component ("move/local_x"))->set_value (loc_x, true);
+      ((DoubleProperty*) s->find_component ("move/local_y"))->set_value (loc_y, true);
+    }
+  }
+
   bool
   Picking::genericMousePress (double x, double y, int button)
   {
@@ -47,6 +63,7 @@ namespace djnn
     if (s != nullptr) {
       ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
       ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
+      set_local_coords (s, nullptr, x, y);
       s->find_component ("press")->notify_activation ();
       exec_ = true;
     }
@@ -77,6 +94,7 @@ namespace djnn
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
       t->set_shape (s);
+      set_local_coords (s, t, x, y);
       s->find_component ("touches")->add_child (t, to_string (id));
     }
     return true;
@@ -96,6 +114,7 @@ namespace djnn
     if (s) {
       ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
       ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
+      set_local_coords (s, nullptr, x, y);
       if (s != _cur_obj) {
         if (_cur_obj != 0)
           _cur_obj->find_component ("leave")->notify_activation ();
@@ -137,6 +156,7 @@ namespace djnn
           s->find_component ("touches")->add_child (t, to_string (id));
           t->set_shape (s);
         }
+        set_local_coords (s, t, x, y);
       }
     } else {
       genericTouchPress (x, y, id);
@@ -184,6 +204,7 @@ namespace djnn
       AbstractGShape *t_shape = t->shape ();
       if (t_shape != nullptr) {
         t_shape->find_component ("touches")->remove_child (t);
+        set_local_coords (t_shape, t, x, y);
       }
       _win->touches ()->remove_child (t);
       _active_touches.erase (it);
