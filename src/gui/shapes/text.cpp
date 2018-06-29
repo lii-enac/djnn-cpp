@@ -38,6 +38,7 @@ namespace djnn
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
     _ctext = new Coupling (_text, ACTIVATION, update, ACTIVATION);
+    set_origin (x, y);
     Process::finalize ();
   }
 

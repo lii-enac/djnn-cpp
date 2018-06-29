@@ -37,6 +37,7 @@ namespace djnn
     _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
     _watcher = new ImageWatcher (this);
     _cpath = new Coupling (_path, ACTIVATION, _watcher, ACTIVATION);
+    set_origin (x, y);
     Process::finalize ();
   }
 

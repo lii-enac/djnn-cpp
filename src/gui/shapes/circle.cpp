@@ -30,6 +30,7 @@ namespace djnn
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    set_origin (cx, cy);
   }
 
   Circle::Circle (Process *p, const std::string& n, double cx, double cy, double r) :

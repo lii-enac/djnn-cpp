@@ -33,6 +33,7 @@ namespace djnn
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
+    set_origin (cx, cy);
   }
 
   Ellipse::Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry) :

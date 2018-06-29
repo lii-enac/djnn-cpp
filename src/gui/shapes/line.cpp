@@ -33,6 +33,7 @@ namespace djnn
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    set_origin (x1, y1);
   }
 
   Line::Line (Process *p, const std::string& n, double x1, double y1, double x2, double y2) :

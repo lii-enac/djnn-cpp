@@ -32,6 +32,7 @@ namespace djnn
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
     _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
     _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
+    set_origin (x, y);
     Process::finalize ();
   }
 
