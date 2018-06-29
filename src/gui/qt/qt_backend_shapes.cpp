@@ -32,7 +32,7 @@ namespace djnn
   {
     if (_painter == nullptr)
       return;
-    load_drawing_context (x, y, w, h);
+    load_drawing_context (s, x, y, w, h);
     _painter->drawRoundedRect (x, y, w, h, rx, ry);
 
     if (is_in_picking_view (s)) {
@@ -47,7 +47,7 @@ namespace djnn
     if (_painter == nullptr)
       return;
     QRectF rect (cx - r, cy - r, 2 * r, 2 * r);
-    load_drawing_context (rect.x (), rect.y (), rect.width (), rect.height ());
+    load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
     if (is_in_picking_view (s)) {
@@ -62,7 +62,7 @@ namespace djnn
     if (_painter == nullptr)
       return;
     QRect rect (cx - rx, cy - ry, 2 * rx, 2 * ry);
-    load_drawing_context (rect.x (), rect.y (), rect.width (), rect.height ());
+    load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
     if (is_in_picking_view (s)) {
@@ -77,7 +77,7 @@ namespace djnn
     if (_painter == nullptr)
       return;
     QLineF line (x1, y1, x2, y2);
-    load_drawing_context (x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
+    load_drawing_context (s, x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
     _painter->drawLine (line);
 
     if (is_in_picking_view (s)) {
@@ -139,7 +139,7 @@ namespace djnn
     /* dummy value for width-height parameters because we do not manage
      gradient for text object
      */
-    load_drawing_context (x, y, 1, 1);
+    load_drawing_context (t, x, y, 1, 1);
 
     /* Qt draws text with the outline color
      but we want it to use the fill color */
@@ -198,10 +198,9 @@ namespace djnn
     if (p->closed ())
       path.closeSubpath ();
     path.setFillRule (_context_manager->get_current ()->fillRule);
-    load_drawing_context (path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
+    load_drawing_context (p, path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
                           path.boundingRect ().height ());
     _painter->drawPath (path);
-
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->drawPath (path);
@@ -219,7 +218,7 @@ namespace djnn
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
-    load_drawing_context (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
+    load_drawing_context (p, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->drawPath (cur_path);
 
@@ -377,9 +376,8 @@ namespace djnn
   void
   QtBackend::draw_rect_clip (AbstractGShape *s, double x, double y, double w, double h)
   {
-    load_drawing_context (x, y, w, h);
+    load_drawing_context (s, x, y, w, h);
     _painter->setClipRect (x, y, w, h);
-
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->setClipRect (x, y, w, h);
@@ -392,7 +390,7 @@ namespace djnn
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
-    load_drawing_context (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
+    load_drawing_context (p, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->setClipPath (cur_path);
 
@@ -410,7 +408,7 @@ namespace djnn
     double w = i->width ()->get_value ();
     double h = i->height ()->get_value ();
     string path = i->path ()->get_value ();
-    load_drawing_context (x, y, w, h);
+    load_drawing_context (i, x, y, w, h);
     QRect rect (x, y, w, h);
     QPixmap *pm;
     if (i->invalid_cache ()) {

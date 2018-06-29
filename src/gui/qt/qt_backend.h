@@ -166,7 +166,7 @@ namespace djnn
     static std::once_flag onceFlag;
     QtBackend ();
     void
-    load_drawing_context (double tx, double ty, double width, double height);
+    load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height);
     void
     load_pick_context (AbstractGShape *s);
     void
