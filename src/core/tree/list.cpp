@@ -157,7 +157,7 @@ namespace djnn
         size_t index = std::stoi (path, &sz) - 1;
         if (index < _children.size ()) {
           Process* c = _children.at (index);
-          if (sz != 0) {
+          if (path.length () > sz) {
             return c->find_component (path.substr (sz + 1));
           } else
             return c;
