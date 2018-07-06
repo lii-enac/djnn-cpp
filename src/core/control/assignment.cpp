@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -28,8 +29,7 @@ namespace djnn
 {
   using namespace std;
 
-  void
-  Assignment::init_assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
+  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
                                bool isModel)
   {
     if (src == 0) {
@@ -57,54 +57,8 @@ namespace djnn
     }
   }
 
-  Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                          bool isModel)
-  {
-    _model = isModel;
-    init_assignment (src, ispec, dst, dspec, isModel);
-    _action = make_unique<AssignmentAction> (this,
-                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, true);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
-  }
-
-  Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
-                          Process* dst, const string &dspec, bool isModel) :
-      Process (parent, name)
-  {
-    _model = isModel;
-    init_assignment (src, ispec, dst, dspec, isModel);
-    _action = make_unique<AssignmentAction> (this,
-                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, true);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
-    if (parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
-    Process::finalize ();
-  }
-
-  Assignment::~Assignment ()
-  {
-    Graph::instance ().remove_edge (_src, _action.get ());
-    Graph::instance ().remove_edge (_action.get (), _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
-  }
   void
-  Assignment::activate ()
-  {
-    /* here we have an activation issue, an assignment must do its action when activated, but
-     * when the left side of an assignment is the result of an expression, we have to wait
-     * for the evaluation of the expression. The solution is now to trigger the calculation
-     * of the operators with an Activator component when they are on the left side of an assignment.
-     */
-    _action->activation ();
-  }
-
-  void
-  Assignment::do_assignment (AbstractProperty* src_p, AbstractProperty* dst_p, bool propagate)
+  AbstractAssignment::do_assignment (AbstractProperty* src_p, AbstractProperty* dst_p, bool propagate)
   {
     switch (src_p->type ())
       {
@@ -144,24 +98,89 @@ namespace djnn
       }
   }
 
+  Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
+                          bool isModel) : 
+      AbstractAssignment (src, ispec, dst, dspec, isModel)
+  {
+    _model = isModel;
+    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
+                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+                                             _src, _dst, true);
+    Graph::instance ().add_edge (_src, _action.get ());
+    Graph::instance ().add_edge (_action.get (), _dst);
+  }
+
+  Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
+                          Process* dst, const string &dspec, bool isModel) :
+      Process (parent, name), AbstractAssignment (src, ispec, dst, dspec, isModel)
+  {
+    _model = isModel;
+    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
+                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+                                             _src, _dst, true);
+    Graph::instance ().add_edge (_src, _action.get ());
+    Graph::instance ().add_edge (_action.get (), _dst);
+    if (parent && parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
+    Process::finalize ();
+  }
+
+  void
+  Assignment::activate ()
+  {
+    /* here we have an activation issue, an assignment must do its action when activated, but
+     * when the left side of an assignment is the result of an expression, we have to wait
+     * for the evaluation of the expression. The solution is now to trigger the calculation
+     * of the operators with an Activator component when they are on the left side of an assignment.
+     */
+    _action->activation ();
+  }
+
+  Assignment::~Assignment ()
+  {
+    Graph::instance ().remove_edge (_src, _action.get ());
+    Graph::instance ().remove_edge (_action.get (), _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+  }
+
+  
   PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst,
                                       const string &dspec, bool isModel) :
-      Assignment (src, ispec, dst, dspec, isModel)
+    AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
-    _action = make_unique<AssignmentAction> (this, "_action", _src, _dst, false);
+    _model = isModel;
+    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
+                                             "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+                                             _src, _dst, false);
     Graph::instance ().add_edge (_src, _action.get ());
     Graph::instance ().add_edge (_action.get (), _dst);
   }
 
   PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src,
                                       const string &ispec, Process* dst, const string &dspec, bool isModel) :
-      Assignment (parent, name, src, ispec, dst, dspec, isModel)
+      Process (parent, name), AbstractAssignment (src, ispec, dst, dspec, isModel) 
   {
-    _action = make_unique<AssignmentAction> (this, "_action", _src, _dst, false);
+    _model = isModel;
+    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
+                                             "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+                                             _src, _dst, false);
     Graph::instance ().add_edge (_src, _action.get ());
     Graph::instance ().add_edge (_action.get (), _dst);
     if (parent && parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
+    Process::finalize ();
+  }
+
+  void
+  PausedAssignment::activate ()
+  {
+    /* here we have an activation issue, an assignment must do its action when activated, but
+     * when the left side of an assignment is the result of an expression, we have to wait
+     * for the evaluation of the expression. The solution is now to trigger the calculation
+     * of the operators with an Activator component when they are on the left side of an assignment.
+     */
+    _action->activation ();
   }
 
   PausedAssignment::~PausedAssignment ()
@@ -172,3 +191,5 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
   }
 }
+
+

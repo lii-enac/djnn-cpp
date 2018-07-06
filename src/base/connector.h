@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -33,7 +34,7 @@ namespace djnn {
       ConnectorAction (Process* p, const string &n, AbstractProperty* src, AbstractProperty* dst, bool propagate) :
 	Process (p, n), _src (src), _dst (dst), _propagate (propagate) {};
       virtual ~ConnectorAction () {};
-      void activate () { Assignment::do_assignment (_src, _dst, _propagate); }
+      void activate () { AbstractAssignment::do_assignment (_src, _dst, _propagate); }
       void deactivate () {};
     private:
       AbstractProperty* _src;
@@ -61,7 +62,7 @@ namespace djnn {
   public:
     PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec) : Connector (p, n, src, ispec, dst, dspec) {}
     PausedConnector (Process *src, string ispec, Process *dst, string dspec) : Connector (src, ispec, dst, dspec) {}
-    void activate () override { _c_src->enable (); Assignment::do_assignment (_src, _dst, false);}
+    void activate () override { _c_src->enable (); AbstractAssignment::do_assignment (_src, _dst, false);}
     void deactivate () override { _c_src->disable(); }
     virtual ~PausedConnector () {}
   };
