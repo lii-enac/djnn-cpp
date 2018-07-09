@@ -87,7 +87,7 @@ namespace djnn
     try {
       int index = std::stoi (spec.substr (1, string::npos)) - 1;
       if (spec.at (0) == '<') {
-        it = _children.begin () + index - 1;
+        it = _children.begin () + index;
         it = _children.insert (it, c);
         finalize_child_insertion (c);
         return;
