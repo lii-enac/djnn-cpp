@@ -137,7 +137,8 @@ namespace djnn
         std::remove (_children.begin (), _children.end (), c);
         _removed->set_value (c, true);
       } else {
-         warning ( "index " + std::to_string(index) + " is out of bound for list '" + _name + "'");
+         /* we have to dispay index as the API user index */
+         warning ( "index " + std::to_string(index+1) + " is out of bound for list '" + _name + "'");
       }
     }
     catch (invalid_argument& arg) {
@@ -165,7 +166,8 @@ namespace djnn
           } else
             return c;
         } else {
-          warning ( "index " + std::to_string(index) + " is out of bound for list \'" + _name + "\'");
+          /* we have to dispay index as the API user index */
+          warning ( "index " + std::to_string(index+1) + " is out of bound for list \'" + _name + "\'");
         }
       }
       catch (invalid_argument& arg) {
