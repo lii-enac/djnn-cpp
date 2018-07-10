@@ -206,8 +206,8 @@ namespace djnn
   void
   MyQWidget::wheelEvent (QWheelEvent *event)
   {
-    QPoint angle = event->angleDelta () / 8; // the angle is in eights of a degree
-    bool exec_ = _picking_view->genericMouseWheel (angle.x (), angle.y ());
+    QPointF fdelta (event->angleDelta ());
+    bool exec_ = _picking_view->genericMouseWheel (fdelta.x () / 8, fdelta.y ());  // the angle is in eights of a degree
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
