@@ -112,7 +112,7 @@ namespace djnn
       goto label_error;
     }
     label_error: 
-      warning ("invalid specification " + spec + " for insertion in list '" + _name + "'");
+      warning ("invalid specification '" + spec + "' for insertion in list '" + _name + "'");
   }
 
   void
