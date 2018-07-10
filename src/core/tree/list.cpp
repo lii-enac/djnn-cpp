@@ -47,6 +47,12 @@ namespace djnn
   List::~List ()
   {
   }
+  
+  void
+  List::dump (int level)
+  {
+    cout << _name  << " [ index=" << _children.size () << " ]" << endl ;
+  }
 
   void
   List::finalize_child_insertion (Process *c)

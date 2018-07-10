@@ -32,6 +32,7 @@ namespace djnn {
     void insert (Process* c, const string& spec);
     void remove_child (Process* c) override;
     void remove_child (const string &name) override;
+    void dump(int level=0) override;
     Process* find_component (const string &path) override;
     Process* clone () override;
     virtual ~List ();
