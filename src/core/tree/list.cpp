@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -18,6 +19,7 @@
 #include "../execution/graph.h"
 #include <algorithm>
 #include "../execution/component_observer.h"
+#include "../error.h"
 
 namespace djnn
 {
@@ -97,13 +99,14 @@ namespace djnn
         finalize_child_insertion (c);
         return;
       } else {
-        goto error;
+        goto label_error;
       }
     }
     catch (invalid_argument& arg) {
-      goto error;
+      goto label_error;
     }
-    error: cerr << "Invalid specification " << spec << " for insertion in list " << _name << endl;
+    label_error: 
+      warning ("invalid specification " + spec + " for insertion in list '" + _name + "'");
   }
 
   void
@@ -134,11 +137,11 @@ namespace djnn
         std::remove (_children.begin (), _children.end (), c);
         _removed->set_value (c, true);
       } else {
-        cerr << "Index " << index << " out of bound for list " << _name << endl;
+         warning ( "index " + std::to_string(index) + " is out of bound for list '" + _name + "'");
       }
     }
     catch (invalid_argument& arg) {
-      cerr << "Invalid child name '" << name << "' for list " << _name << endl;
+      warning ("invalid child name '" + name + "' for list '" +_name + "'");
     }
   }
 
@@ -162,11 +165,11 @@ namespace djnn
           } else
             return c;
         } else {
-          cerr << "Index " << index << " out of bound for list " << _name << endl;
+          warning ( "index " + std::to_string(index) + " is out of bound for list \'" + _name + "\'");
         }
       }
       catch (invalid_argument& arg) {
-        cerr << "Invalid child name '" << path << "' for list " << _name << endl;
+        warning ("invalid child path '" + path + "' for list '" + _name + "'");
       }
     }
     return nullptr;
@@ -227,7 +230,7 @@ namespace djnn
   {
     _list = dynamic_cast<List*> (list);
     if (_list == nullptr) {
-      cerr << "WARNING: list iterator must take a List as its third argument\n";
+      warning ("list iterator must take a List as its third argument\n");
       return;
     }
     _next = make_shared<Spike> (this, "next");
