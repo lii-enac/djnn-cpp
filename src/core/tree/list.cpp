@@ -118,16 +118,16 @@ namespace djnn
   void
   List::remove_child (Process* c)
   {
-    bool found = false;
-    for (auto cpnt : _children) {
-      if (cpnt == c) {
-        found = true;
-        continue;
-      }
-    }
-    if (found) {
-      _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
-      _removed->set_value (c, true);
+    std::vector<Process*>::iterator newend = _children.end ();
+
+    /* remove if 'c' is found in the vector */
+    newend = std::remove_if (_children.begin (), _children.end (), 
+        [c](std::vector<Process*>::iterator::value_type v) { return v == c; });
+
+    /* check if end has changed and erase if necessary */
+    if (newend != _children.end ()){
+      _children.erase(newend, _children.end ());
+       _removed->set_value (c, true);
       _size->set_value (_size->get_value () - 1, true);
     }
   }
@@ -137,11 +137,11 @@ namespace djnn
   {
     size_t index;
     try {
-      index = std::stoi (name, nullptr) + 1;
+      /* from user index to internal index : -1 */
+      index = std::stoi (name, nullptr) - 1;
       if (index < _children.size ()) {
         Process* c = _children.at (index);
-        std::remove (_children.begin (), _children.end (), c);
-        _removed->set_value (c, true);
+        remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
          warning ( "index " + std::to_string(index+1) + " is out of bound for list '" + _name + "'");
