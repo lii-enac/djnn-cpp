@@ -207,7 +207,11 @@ namespace djnn
   MyQWidget::wheelEvent (QWheelEvent *event)
   {
     QPointF fdelta (event->angleDelta ());
-    bool exec_ = _picking_view->genericMouseWheel (fdelta.x () / 8, fdelta.y () / 8);  // the angle is in eights of a degree
+    double dx = fdelta.x () / 8;
+    double dy = fdelta.y () / 8;
+    if (dx == 0 && dy == 0) // some trackpads seem to send a lot of unwanted zero values
+      return;
+    bool exec_ = _picking_view->genericMouseWheel (dx, dy);  // the angle is in eights of a degree
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
