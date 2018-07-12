@@ -92,6 +92,8 @@ namespace djnn
 
   Process::~Process ()
   {
+    if (_vertex != nullptr)
+      _vertex->invalidate ();
   }
 
   bool
