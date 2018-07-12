@@ -140,7 +140,7 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
 
-djnn_libs := core base comms display gui animation
+djnn_libs := core base comms display gui animation input
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
 #headers := $(foreach a,$(djnn_libs),$a/$a)
