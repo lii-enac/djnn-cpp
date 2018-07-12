@@ -36,7 +36,7 @@ namespace djnn
   }
 
   Vertex::Vertex (Process* c) :
-      _vertex (c), _mark (NOT_MARKED), _start_date (0), _end_date (0), _count_egdes_in(0)
+      _vertex (c), _mark (NOT_MARKED), _start_date (0), _end_date (0), _count_egdes_in(0), _is_invalid (false)
   {
   }
 
@@ -241,7 +241,7 @@ namespace djnn
     _sorted_vertices.erase(
       std::remove_if (
         _sorted_vertices.begin (), _sorted_vertices.end (),
-        [](Vertex::vertices_t::iterator::value_type v) {return (dynamic_cast<AbstractProperty*> (v->get_component ()) != nullptr); }
+        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_component ()) != nullptr); }
       ), _sorted_vertices.end());
   }
 
@@ -271,9 +271,11 @@ namespace djnn
   void
   Graph::exec ()
   {
-    if (!_sorted)
-      sort ();
     for (auto v : _sorted_vertices) {
+      if (!_sorted)
+        break;
+      if (v->is_invalid ())
+        continue;
       int action = v->get_component ()->get_activation_flag ();
       switch (action)
         {
@@ -287,6 +289,10 @@ namespace djnn
           ;
         }
       v->get_component ()->set_activation_flag (NONE);
+    }
+    if (!_sorted) {
+      sort ();
+      exec ();
     }
   }
 }
