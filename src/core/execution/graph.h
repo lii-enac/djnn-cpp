@@ -56,11 +56,14 @@ namespace djnn
     const Process* get_component () const { return _vertex; }
 
     void print_vertex () const;
+    void invalidate () { _is_invalid = true; }
+    bool is_invalid () { return _is_invalid; }
 
   private:
     Process* _vertex;
     vertices_t _edges;
     int _mark, _start_date, _end_date, _count_egdes_in;
+    bool _is_invalid;
   };
 
   class Graph
