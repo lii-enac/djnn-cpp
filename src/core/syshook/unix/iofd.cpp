@@ -14,7 +14,7 @@
 
 #include "iofd.h"
 #include "../syshook.h"
-
+#include "../../error.h"
 #include <sys/select.h>
 
 namespace djnn {
@@ -41,19 +41,26 @@ namespace djnn {
   void
   IOFD::run ()
   {
-    while (!get_please_stop ()) {
-      fd_set reads;
-      FD_ZERO (&reads);
-      FD_SET (_readfd, &reads);
-
-      select(_readfd+1, &reads, nullptr, nullptr, nullptr); // blocking call
-
-      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-      if (!get_please_stop ()) {
-        _readable.get()->activation (); // propagating
-        Graph::instance ().exec (); // executing
+    set_please_stop (false);
+    try {
+      while (!get_please_stop ()) {
+        fd_set reads;
+        FD_ZERO (&reads);
+        FD_SET (_readfd, &reads);
+        int ret = select(_readfd+1, &reads, nullptr, nullptr, nullptr); // blocking call
+        if (ret == -1) {
+          warning ("error reading fd");
+          return;
+        }
+        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        if (!get_please_stop ()) {
+          _readable.get()->activation (); // propagating
+          Graph::instance ().exec (); // executing
+        }
+        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
-      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+    } catch (exception& e) {
+      warning (e.what());
     }
   }
 }
