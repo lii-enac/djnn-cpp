@@ -65,7 +65,7 @@ namespace djnn
     new Spike (this, "enter");
     new Spike (this, "leave");
     Process* s = new Set (this, "touches");
-    s->set_activation_flag (activated);
+    s->set_state (activated);
     DoubleProperty* x = new DoubleProperty (0);
     DoubleProperty* y = new DoubleProperty (0);
     DoubleProperty* local_x = new DoubleProperty (0);
