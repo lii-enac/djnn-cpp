@@ -70,6 +70,7 @@ namespace djnn {
     virtual void remove_child (const string& name);
 
     Process* state_dependency () { return _state_dependency; }
+    void set_state (activation_state state) { _activation_state = state; }
     activation_state get_state ();
     void set_vertex (shared_ptr<Vertex> v) { _vertex = v; }
     shared_ptr<Vertex> vertex () { return _vertex; };
