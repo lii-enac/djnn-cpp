@@ -60,7 +60,7 @@ namespace djnn {
     void notify_deactivation ();
 
     virtual Process* find_component (const string&);
-    static Process* find_component (Process*p, const string &path) { cout << "Warning: static find component not yet implemented\n"; return nullptr; }
+    static Process* find_component (Process*p, const string &path);
     void add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
     map<string, Process*> symtable () { return _symtable; }

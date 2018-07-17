@@ -15,7 +15,7 @@
 #include "../execution/graph.h"
 #include "process.h"
 #include "../control/coupling.h"
-
+#include "../uri.h"
 #include <algorithm>
 #include <iostream>
 
@@ -151,6 +151,14 @@ namespace djnn
       return (it->second);
     }
     return 0;
+  }
+
+  Process*
+  Process::find_component (Process *p, const string &path)
+  {
+    if (p == nullptr)
+      return URI::find_by_uri (path);
+    return p->find_component (path);
   }
 
   void
