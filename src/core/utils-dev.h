@@ -14,6 +14,15 @@
 
 #pragma once
 
+#include <time.h>
+#include <iostream>
+
+namespace djnn {
+  void get_monotonic_time (struct timespec *ts);
+  void t1 ();
+  void t2 (const std::string &msg = "");
+}
+
 #if defined (GPERF_VERSION) && GPERF_VERSION >= 31
 typedef size_t gperf_t;
 #else
