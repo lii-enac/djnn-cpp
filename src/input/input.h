@@ -16,6 +16,6 @@
 #include "../core/tree/process.h"
 
 namespace djnn {
-	void init_input ();
-	extern Process* Mice;
+  void init_input ();
+  extern Process *InputDevices, *Mice, *TouchPanels;
 }

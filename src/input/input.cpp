@@ -14,13 +14,22 @@
 
 #include "input-priv.h"
 #include "../core/tree/set.h"
+#include "../core/uri.h"
 
 namespace djnn {
+  Process *InputDevices = nullptr;
   Process *Mice = nullptr;
+  Process *TouchPanels = nullptr;
 
   void
   init_input () {
-    Mice = new Set (nullptr, "Mice");
+    InputDevices = new Set (nullptr, "InputDevices");
+    InputDevices->set_state (activated);
+    Mice = new Set (InputDevices, "Mice");
+    Mice->set_state (activated);
+    TouchPanels = new Set (InputDevices, "TouchPanels");
+    TouchPanels->set_state (activated);
+    URI::add_uri ("input", InputDevices);
     p_init_input ();
   }
 }
