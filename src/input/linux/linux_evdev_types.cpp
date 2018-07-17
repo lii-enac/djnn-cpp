@@ -29,6 +29,9 @@ namespace djnn {
       && libevdev_has_event_code (dev, EV_REL, REL_Y)
       && libevdev_has_event_code (dev, EV_KEY, BTN_LEFT)) {
         return make_unique<LinuxMouse> (Mice, n, dev);
+    } else if (libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_X)
+      && libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_Y)) {
+        return make_unique<LinuxTouchPanel> (TouchPanels, n, dev);
     }
     warning ("unknown device type");
     return nullptr;

@@ -19,12 +19,22 @@
 #include <libevdev/libevdev.h>
 
 #include "../input-priv.h"
+#include "../../core/tree/int_property.h"
+#include "../../core/tree/set.h"
 #include "../../core/syshook/unix/iofd.h"
 
 namespace djnn {
   enum dev_type {
     MOUSE, KEYBOARD, TOUCH_PANEL
   };
+
+#define MT_X (1 << 0)
+#define MT_Y (1 << 1)
+#define MT_W (1 << 2)
+#define MT_H (1 << 3)
+#define MT_CX (1 << 4)
+#define MT_CY (1 << 5)
+#define MT_PRESSURE (1 << 6)
 
   class LinuxDevice : public Process {
   public:
@@ -111,5 +121,46 @@ namespace djnn {
     unique_ptr<Spike> _move, _btn, _press, _release, _wheel;
     unique_ptr<IntProperty> _move_dx, _move_dy, _wheel_dx, _wheel_dy;
     unique_ptr<TextProperty> _btn_name;
+  };
+
+  enum touch_state {
+    UNUSED, NEW, USED
+  };
+
+  class LinuxTouch : public Process {
+    public:
+      LinuxTouch (unsigned int fieldmap);
+      ~LinuxTouch () {};
+      void activate () override {}
+      void deactivate () override {}
+      void set_x (double v) { _x->set_value (v, true); }
+      void set_y (double v) { _y->set_value (v, true); }
+      void set_width (double v) { _width->set_value (v, true); }
+      void set_height (double v) { _height->set_value (v, true); }
+      void set_cx (double v) { _cx->set_value (v, true); }
+      void set_cy (double v) { _cy->set_value (v, true); }
+      void set_pressure (double v) { _pressure->set_value (v, true); }
+      touch_state used () { return _used; }
+      void set_used (touch_state v) { _used = v; }
+    private:
+      touch_state _used;
+      unique_ptr<IntProperty> _x, _y, _width, _height, _cx, _cy, _pressure;
+  };
+
+  class LinuxTouchPanel : public LinuxDevice
+  {
+  public:
+    LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev);
+    ~LinuxTouchPanel ();
+    void activate () override {}
+    void deactivate () override {}
+    void handle_event (struct input_event *ev) override;
+  private:
+    unsigned int _fieldmap;
+    int _nb_slots;
+    std::vector<LinuxTouch*> _v_touches;
+    shared_ptr<Set> _touches;
+    unique_ptr<IntProperty> _max_x, _max_y;
+    LinuxTouch *_cur_touch;
   };
 }
