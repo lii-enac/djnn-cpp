@@ -23,6 +23,13 @@ namespace djnn
 {
   using namespace std;
 
+  void
+  Connector::ConnectorAction::activate () { 
+
+    if (_src->is_activable()) 
+      AbstractAssignment::do_assignment (_src, _dst, _propagate);   
+  }
+
   Connector::Connector (Process *p, string n, Process *src, string ispec, Process *dst,
                         string dspec) :
       Process (p, n), _c_src (nullptr)
@@ -43,9 +50,11 @@ namespace djnn
     if (src == 0) {
       error ("src argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     if (dst == 0) {
       error ("dst argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     Process* c_src = src->find_component (ispec);
     if (c_src == 0) {
       error ("source not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
@@ -55,6 +64,7 @@ namespace djnn
     if (c_dst == 0) {
       error ("destination not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
@@ -64,13 +74,15 @@ namespace djnn
     _action = shared_ptr<Process> (
         new ConnectorAction (this, "connector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
                              _dst, true));
+
     _c_src = unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+
     Graph::instance ().add_edge (_src, _action.get ());
     Graph::instance ().add_edge (_action.get (), _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
+    
     _c_src.get ()->disable ();
-
     _c_src->enable ();
   }
 
@@ -105,9 +117,11 @@ namespace djnn
     if (src == 0) {
       error ("src argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     if (dst == 0) {
       error ("dst argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     Process* c_src = src->find_component (ispec);
     if (c_src == 0) {
       error ("source not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
@@ -117,6 +131,7 @@ namespace djnn
     if (c_dst == 0) {
       error ("destination not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
+
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
@@ -127,13 +142,15 @@ namespace djnn
         new Connector::ConnectorAction (this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
                              _dst, false));
     _c_src = unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+    
     Graph::instance ().add_edge (_src, _action.get ());
     Graph::instance ().add_edge (_action.get (), _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
+    
     _c_src.get ()->disable ();
-
     _c_src->enable ();
+    
   }
 
   PausedConnector::~PausedConnector ()

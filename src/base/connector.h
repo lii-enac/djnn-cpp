@@ -36,7 +36,7 @@ namespace djnn {
       ConnectorAction (Process* p, const string &n, AbstractProperty* src, AbstractProperty* dst, bool propagate) :
 	Process (p, n), _src (src), _dst (dst), _propagate (propagate) {};
       virtual ~ConnectorAction () {};
-      void activate () { AbstractAssignment::do_assignment (_src, _dst, _propagate); }
+      void activate ();
       void deactivate () {};
     private:
       AbstractProperty* _src;
