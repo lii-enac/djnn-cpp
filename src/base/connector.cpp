@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -80,4 +81,67 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
   }
+
+
+
+
+  PausedConnector::PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst,
+                        string dspec) :
+      Process (p, n), _c_src (nullptr)
+  {
+    init_pausedconnector (src, ispec, dst, dspec);
+    Process::finalize ();
+  }
+
+  PausedConnector::PausedConnector (Process *src, string ispec, Process *dst, string dspec) :
+      _c_src (nullptr)
+  {
+    init_pausedconnector (src, ispec, dst, dspec);
+  }
+
+  void
+  PausedConnector::init_pausedconnector (Process *src, string ispec, Process *dst, string dspec)
+  {
+    if (src == 0) {
+      error ("src argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+    }
+    if (dst == 0) {
+      error ("dst argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+    }
+    Process* c_src = src->find_component (ispec);
+    if (c_src == 0) {
+      error ("source not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+    }
+
+    Process* c_dst = dst->find_component (dspec);
+    if (c_dst == 0) {
+      error ("destination not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+    }
+    _src = dynamic_cast<AbstractProperty*> (c_src);
+    _dst = dynamic_cast<AbstractProperty*> (c_dst);
+    if (!_src || !_dst) {
+      warning ("invalid source or destination in pausedconnector (" + get_name() + "," + ispec + " " + dspec + ")");
+    }
+
+    _action = shared_ptr<Process> (
+        new Connector::ConnectorAction (this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
+                             _dst, false));
+    _c_src = unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+    Graph::instance ().add_edge (_src, _action.get ());
+    Graph::instance ().add_edge (_action.get (), _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
+    _c_src.get ()->disable ();
+
+    _c_src->enable ();
+  }
+
+  PausedConnector::~PausedConnector ()
+  {
+    Graph::instance ().remove_edge (_src, _action.get ());
+    Graph::instance ().remove_edge (_action.get (), _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+  }
+
 }
