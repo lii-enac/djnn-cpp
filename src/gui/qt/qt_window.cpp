@@ -36,6 +36,7 @@ namespace djnn
 {
 
   int mouse_tracking = 0;
+  int full_screen = 0;
 
   QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
@@ -58,6 +59,8 @@ namespace djnn
                 _window->height ()->get_value ());
     if (mouse_tracking)
       _qwidget->setMouseTracking (true);
+    if (full_screen)
+      _qwidget->setWindowState(_qwidget->windowState() ^ Qt::WindowFullScreen);
     _qwidget->setGeometry (rect);
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->show ();

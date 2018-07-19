@@ -23,6 +23,7 @@
 namespace djnn {
 
 extern int mouse_tracking;
+extern int full_screen;
 
 void init_gui ();
 void init_svg_parser ();
