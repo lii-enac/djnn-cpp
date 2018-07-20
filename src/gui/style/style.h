@@ -25,7 +25,15 @@
 namespace djnn
 {
 
-  class AbstractColor : public AbstractGObj
+  class AbstractStyle : public AbstractGObj
+  {
+  public:
+    AbstractStyle (Process *p, const string &n);
+    AbstractStyle ();
+    virtual ~AbstractStyle ();
+  };
+
+  class AbstractColor : public AbstractStyle
   {
   public:
     AbstractColor (Process *p, const std::string& n, double r, double g, double b);
@@ -85,7 +93,7 @@ namespace djnn
     draw () override;
   };
 
-  class FillRule : public AbstractGObj
+  class FillRule : public AbstractStyle
   {
   public:
     FillRule (Process *p, const std::string &n, djnFillRuleType rule);
@@ -108,11 +116,11 @@ namespace djnn
     Coupling* _cr;
   };
 
-  class NoOutline : public AbstractGObj
+  class NoOutline : public AbstractStyle
   {
   public:
     NoOutline (Process *p, const std::string &n) :
-        AbstractGObj (p, n)
+        AbstractStyle (p, n)
     {
       Process::finalize ();
     }
@@ -123,22 +131,22 @@ namespace djnn
     void
     activate () override
     {
-      AbstractGObj::activate ();
+      AbstractStyle::activate ();
     }
     void
     deactivate () override
     {
-      AbstractGObj::deactivate ();
+      AbstractStyle::deactivate ();
     }
     void
     draw () override;
   };
 
-  class NoFill : public AbstractGObj
+  class NoFill : public AbstractStyle
   {
   public:
     NoFill (Process *p, const std::string &n) :
-        AbstractGObj (p, n)
+        AbstractStyle (p, n)
     {
       Process::finalize ();
     }
@@ -149,18 +157,18 @@ namespace djnn
     void
     activate () override
     {
-      AbstractGObj::activate ();
+      AbstractStyle::activate ();
     }
     void
     deactivate () override
     {
-      AbstractGObj::deactivate ();
+      AbstractStyle::deactivate ();
     }
     void
     draw () override;
   };
 
-  class Texture : public AbstractGObj
+  class Texture : public AbstractStyle
   {
   public:
     Texture (Process *p, const std::string &n, const std::string &path);
@@ -182,7 +190,7 @@ namespace djnn
     Coupling* _cp;
   };
 
-  class AbstractOpacity : public AbstractGObj
+  class AbstractOpacity : public AbstractStyle
   {
   public:
     AbstractOpacity (Process *p, const std::string &n, double alpha);
@@ -236,7 +244,7 @@ namespace djnn
     draw () override;
   };
 
-  class OutlineWidth : public AbstractGObj
+  class OutlineWidth : public AbstractStyle
   {
   public:
     OutlineWidth (Process *p, const std::string &n, double width);
@@ -259,7 +267,7 @@ namespace djnn
     Coupling* _cw;
   };
 
-  class OutlineCapStyle : public AbstractGObj
+  class OutlineCapStyle : public AbstractStyle
   {
   public:
     OutlineCapStyle (Process *p, const std::string &n, djnCapStyle cap);
@@ -283,7 +291,7 @@ namespace djnn
     Coupling* _cc;
   };
 
-  class OutlineJoinStyle : public AbstractGObj
+  class OutlineJoinStyle : public AbstractStyle
   {
   public:
     OutlineJoinStyle (Process *p, const std::string &n, djnJoinStyle cap);
@@ -307,7 +315,7 @@ namespace djnn
     Coupling* _cj;
   };
 
-  class OutlineMiterLimit : public AbstractGObj
+  class OutlineMiterLimit : public AbstractStyle
   {
   public:
     OutlineMiterLimit (Process *p, const std::string &n, int limit);
@@ -330,11 +338,11 @@ namespace djnn
     Coupling* _cl;
   };
 
-  class DashArray : public AbstractGObj
+  class DashArray : public AbstractStyle
   {
   public:
     DashArray (Process *p, const std::string &n) :
-        AbstractGObj (p, n)
+        AbstractStyle (p, n)
     {
       Process::finalize ();
     }
@@ -357,12 +365,12 @@ namespace djnn
     void
     activate () override
     {
-      AbstractGObj::activate ();
+      AbstractStyle::activate ();
     }
     void
     deactivate () override
     {
-      AbstractGObj::deactivate ();
+      AbstractStyle::deactivate ();
     }
     void
     draw () override;
@@ -370,11 +378,11 @@ namespace djnn
     vector<double> _dash_array;
   };
 
-  class NoDashArray : public AbstractGObj
+  class NoDashArray : public AbstractStyle
   {
   public:
     NoDashArray (Process *p, const std::string &n) :
-        AbstractGObj (p, n)
+        AbstractStyle (p, n)
     {
       Process::finalize ();
     }
@@ -385,18 +393,18 @@ namespace djnn
     void
     activate () override
     {
-      AbstractGObj::activate ();
+      AbstractStyle::activate ();
     }
     void
     deactivate () override
     {
-      AbstractGObj::deactivate ();
+      AbstractStyle::deactivate ();
     }
     void
     draw () override;
   };
 
-  class DashOffset : public AbstractGObj
+  class DashOffset : public AbstractStyle
   {
   public:
     DashOffset (Process *p, const std::string &n, double offset);
@@ -419,7 +427,7 @@ namespace djnn
     Coupling* _co;
   };
 
-  class GradientStop : public AbstractGObj
+  class GradientStop : public AbstractStyle
   {
   public:
     GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset);
@@ -438,7 +446,7 @@ namespace djnn
     Coupling *_cr, *_cg, *_cb, *_ca, *_co;
   };
 
-  class AbstractGradient : public AbstractGObj
+  class AbstractGradient : public AbstractStyle
   {
   public:
     AbstractGradient (Process *p, const std::string &n, int s, int fc);
@@ -530,7 +538,7 @@ namespace djnn
     Coupling *_cx1, *_cy1, *_cx2, *_cy2;
   };
 
-  class RefLinearGradient : public AbstractGObj
+  class RefLinearGradient : public AbstractStyle
   {
   public:
     RefLinearGradient (Process *p, const std::string &n, LinearGradient *lg);
@@ -591,7 +599,7 @@ namespace djnn
     Coupling *_ccx, *_ccy, *_cr, *_cfx, *_cfy;
   };
 
-  class RefRadialGradient : public AbstractGObj
+  class RefRadialGradient : public AbstractStyle
   {
   public:
     RefRadialGradient (Process *p, const std::string &n, RadialGradient *rg);
@@ -603,7 +611,7 @@ namespace djnn
     RadialGradient* _rg;
   };
 
-  class FontSize : public AbstractGObj
+  class FontSize : public AbstractStyle
   {
   public:
     FontSize (Process *p, const std::string &n, djnLengthUnit unit, double size);
@@ -622,7 +630,7 @@ namespace djnn
     Coupling *_cu, *_cs;
   };
 
-  class FontWeight : public AbstractGObj
+  class FontWeight : public AbstractStyle
   {
   public:
     FontWeight (Process *p, const std::string &n, int weight);
@@ -639,7 +647,7 @@ namespace djnn
     Coupling* _cw;
   };
 
-  class FontStyle : public AbstractGObj
+  class FontStyle : public AbstractStyle
   {
   public:
     FontStyle (Process *p, const std::string &n, djnFontSlope style);
@@ -657,7 +665,7 @@ namespace djnn
     Coupling* _cs;
   };
 
-  class FontFamily : public AbstractGObj
+  class FontFamily : public AbstractStyle
   {
   public:
     FontFamily (Process *p, const std::string &n, const std::string &family);
@@ -674,7 +682,7 @@ namespace djnn
     Coupling* _cf;
   };
 
-  class TextAnchor : public AbstractGObj
+  class TextAnchor : public AbstractStyle
   {
   public:
     TextAnchor (Process *p, const std::string &n, djnAnchorType anchor);

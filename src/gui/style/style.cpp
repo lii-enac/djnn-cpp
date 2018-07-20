@@ -19,8 +19,23 @@
 
 namespace djnn
 {
+
+  AbstractStyle::AbstractStyle (Process *p, const string &n) :
+      AbstractGObj (p, n)
+  {
+  }
+
+  AbstractStyle::AbstractStyle ()
+  {
+  }
+
+  AbstractStyle::~AbstractStyle ()
+  {
+  }
+
+
   AbstractColor::AbstractColor (Process *p, const std::string& n, double r, double g, double b) :
-      AbstractGObj (p, n), _cr (nullptr), _cg (nullptr), _cb (nullptr)
+      AbstractStyle (p, n), _cr (nullptr), _cg (nullptr), _cb (nullptr)
   {
     _r = new DoubleProperty (this, "r", r);
     _g = new DoubleProperty (this, "g", g);
@@ -35,7 +50,7 @@ namespace djnn
   void
   AbstractColor::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cr->enable (_frame);
     _cg->enable (_frame);
     _cb->enable (_frame);
@@ -44,7 +59,7 @@ namespace djnn
   void
   AbstractColor::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cr->disable ();
     _cg->disable ();
     _cb->disable ();
@@ -83,7 +98,7 @@ namespace djnn
   }
 
   FillRule::FillRule (Process* p, const std::string &n, djnFillRuleType rule) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _rule = new IntProperty (this, "rule", rule);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -92,7 +107,7 @@ namespace djnn
   }
 
   FillRule::FillRule (Process* p, const std::string &n, int rule) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _rule = new IntProperty (this, "rule", rule);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -109,14 +124,14 @@ namespace djnn
   void
   FillRule::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cr->enable (_frame);
   }
 
   void
   FillRule::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cr->disable ();
   }
 
@@ -145,7 +160,7 @@ namespace djnn
   }
 
   Texture::Texture (Process* p, const std::string &n, const std::string &path) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _path = new TextProperty (this, "path", path);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -162,14 +177,14 @@ namespace djnn
   void
   Texture::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cp->enable (_frame);
   }
 
   void
   Texture::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cp->disable ();
   }
 
@@ -182,7 +197,7 @@ namespace djnn
   }
 
   AbstractOpacity::AbstractOpacity (Process* p, const std::string &n, double alpha) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _alpha = new DoubleProperty (this, "a", alpha);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -199,14 +214,14 @@ namespace djnn
   void
   AbstractOpacity::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _ca->enable (_frame);
   }
 
   void
   AbstractOpacity::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _ca->disable ();
   }
 
@@ -226,7 +241,7 @@ namespace djnn
   }
 
   OutlineWidth::OutlineWidth (Process* p, const std::string &n, double width) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _width = new DoubleProperty (this, "width", width);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -243,14 +258,14 @@ namespace djnn
   void
   OutlineWidth::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cw->enable (_frame);
   }
 
   void
   OutlineWidth::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cw->disable ();
   }
 
@@ -263,7 +278,7 @@ namespace djnn
   }
 
   OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, djnCapStyle cap) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _cap = new IntProperty (this, "cap", cap);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -272,7 +287,7 @@ namespace djnn
   }
 
   OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, int cap) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _cap = new IntProperty (this, "cap", cap);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -289,14 +304,14 @@ namespace djnn
   void
   OutlineCapStyle::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cc->enable (_frame);
   }
 
   void
   OutlineCapStyle::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cc->disable ();
   }
 
@@ -309,7 +324,7 @@ namespace djnn
   }
 
   OutlineJoinStyle::OutlineJoinStyle (Process* p, const std::string &n, djnJoinStyle join) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _join = new IntProperty (this, "join", join);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -318,7 +333,7 @@ namespace djnn
   }
 
   OutlineJoinStyle::OutlineJoinStyle (Process* p, const std::string &n, int join) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _join = new IntProperty (this, "join", join);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -335,14 +350,14 @@ namespace djnn
   void
   OutlineJoinStyle::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cj->enable (_frame);
   }
 
   void
   OutlineJoinStyle::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cj->disable ();
   }
 
@@ -355,7 +370,7 @@ namespace djnn
   }
 
   OutlineMiterLimit::OutlineMiterLimit (Process* p, const std::string &n, int limit) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _limit = new IntProperty (this, "limit", limit);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -372,14 +387,14 @@ namespace djnn
   void
   OutlineMiterLimit::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cl->enable (_frame);
   }
 
   void
   OutlineMiterLimit::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cl->disable ();
   }
 
@@ -408,7 +423,7 @@ namespace djnn
   }
 
   DashOffset::DashOffset (Process* p, const std::string &n, double offset) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _offset = new DoubleProperty (this, "offset", offset);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -425,14 +440,14 @@ namespace djnn
   void
   DashOffset::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _co->enable (_frame);
   }
 
   void
   DashOffset::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _co->disable ();
   }
 
@@ -445,7 +460,7 @@ namespace djnn
   }
 
   GradientStop::GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
     if (grad == nullptr) {
@@ -467,7 +482,7 @@ namespace djnn
   }
 
   GradientStop::GradientStop (double r, double g, double b, double a, double offset) :
-      AbstractGObj ()
+      AbstractStyle ()
   {
     _r = new DoubleProperty (this, "r", r);
     _g = new DoubleProperty (this, "g", g);
@@ -507,7 +522,7 @@ namespace djnn
   void
   GradientStop::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cr->enable (_frame);
     _cg->enable (_frame);
     _cb->enable (_frame);
@@ -518,7 +533,7 @@ namespace djnn
   void
   GradientStop::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cr->disable ();
     _cg->disable ();
     _cb->disable ();
@@ -534,7 +549,7 @@ namespace djnn
   }
 
   AbstractGradient::AbstractGradient (Process *p, const std::string &n, int s, int fc) :
-      AbstractGObj (p, n), _g (nullptr), _linear (false)
+      AbstractStyle (p, n), _g (nullptr), _linear (false)
   {
     _spread = new IntProperty (this, "spread", s);
     _coords = new IntProperty (this, "coords", fc);
@@ -546,7 +561,7 @@ namespace djnn
   }
 
   AbstractGradient::AbstractGradient (int s, int fc) :
-      AbstractGObj (), _g (nullptr), _linear (false)
+      AbstractStyle (), _g (nullptr), _linear (false)
   {
     _spread = new IntProperty (this, "spread", s);
     _coords = new IntProperty (this, "coords", fc);
@@ -570,7 +585,7 @@ namespace djnn
   void
   AbstractGradient::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _stops->activation ();
     _transforms->activation ();
     _cs->enable (_frame);
@@ -580,7 +595,7 @@ namespace djnn
   void
   AbstractGradient::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _stops->deactivation ();
     _transforms->deactivation ();
     _cs->enable (_frame);
@@ -690,7 +705,7 @@ namespace djnn
   }
 
   RefLinearGradient::RefLinearGradient (Process *p, const string &n, LinearGradient *lg) :
-      AbstractGObj (p, n), _lg (lg)
+      AbstractStyle (p, n), _lg (lg)
   {
     _lg->set_activation_flag (activated);
     _lg->transforms ()->set_activation_flag (activated);
@@ -707,13 +722,13 @@ namespace djnn
   void
   RefLinearGradient::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
   }
 
   void
   RefLinearGradient::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
   }
 
   void
@@ -835,7 +850,7 @@ namespace djnn
   }
 
   RefRadialGradient::RefRadialGradient (Process *p, const string &n, RadialGradient *rg) :
-      AbstractGObj (p, n), _rg (rg)
+      AbstractStyle (p, n), _rg (rg)
   {
     _rg->set_activation_flag (activated);
     _rg->transforms ()->set_activation_flag (activated);
@@ -852,13 +867,13 @@ namespace djnn
   void
   RefRadialGradient::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
   }
 
   void
   RefRadialGradient::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
   }
 
   void
@@ -964,7 +979,7 @@ namespace djnn
   }
 
   FontSize::FontSize (Process *p, const std::string &n, djnLengthUnit unit, double size) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _unit = new IntProperty (this, "unit", unit);
     _size = new DoubleProperty (this, "size", size);
@@ -975,7 +990,7 @@ namespace djnn
   }
 
   FontSize::FontSize (Process *p, const std::string &n, int unit, double size) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _unit = new IntProperty (this, "unit", unit);
     _size = new DoubleProperty (this, "size", size);
@@ -996,7 +1011,7 @@ namespace djnn
   void
   FontSize::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cu->enable (_frame);
     _cs->enable (_frame);
   }
@@ -1004,7 +1019,7 @@ namespace djnn
   void
   FontSize::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cu->disable ();
     _cs->disable ();
   }
@@ -1018,7 +1033,7 @@ namespace djnn
   }
 
   FontWeight::FontWeight (Process* p, const std::string &n, int weight) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _weight = new IntProperty (this, "weight", weight);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1035,14 +1050,14 @@ namespace djnn
   void
   FontWeight::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cw->enable (_frame);
   }
 
   void
   FontWeight::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cw->disable ();
   }
 
@@ -1055,7 +1070,7 @@ namespace djnn
   }
 
   FontStyle::FontStyle (Process* p, const std::string &n, djnFontSlope style) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _style = new IntProperty (this, "style", style);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1064,7 +1079,7 @@ namespace djnn
   }
 
   FontStyle::FontStyle (Process* p, const std::string &n, int style) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _style = new IntProperty (this, "style", style);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1081,14 +1096,14 @@ namespace djnn
   void
   FontStyle::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cs->enable (_frame);
   }
 
   void
   FontStyle::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cs->disable ();
   }
 
@@ -1101,7 +1116,7 @@ namespace djnn
   }
 
   FontFamily::FontFamily (Process* p, const std::string &n, const std::string &family) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _family = new TextProperty (this, "family", family);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1118,14 +1133,14 @@ namespace djnn
   void
   FontFamily::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _cf->enable (_frame);
   }
 
   void
   FontFamily::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _cf->disable ();
   }
 
@@ -1138,7 +1153,7 @@ namespace djnn
   }
 
   TextAnchor::TextAnchor (Process* p, const std::string &n, djnAnchorType anchor) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _anchor = new IntProperty (this, "anchor", anchor);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1147,7 +1162,7 @@ namespace djnn
   }
 
   TextAnchor::TextAnchor (Process* p, const std::string &n, int anchor) :
-      AbstractGObj (p, n)
+      AbstractStyle (p, n)
   {
     _anchor = new IntProperty (this, "anchor", anchor);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -1164,14 +1179,14 @@ namespace djnn
   void
   TextAnchor::activate ()
   {
-    AbstractGObj::activate ();
+    AbstractStyle::activate ();
     _ca->enable (_frame);
   }
 
   void
   TextAnchor::deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractStyle::deactivate ();
     _ca->disable ();
   }
 

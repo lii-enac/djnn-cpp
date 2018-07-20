@@ -23,7 +23,15 @@ namespace djnn
 {
   using namespace std;
 
-  class AbstractTranslation : public AbstractGObj
+  class AbstractTransformation : public AbstractGObj
+  {
+  public:
+    AbstractTransformation (Process *p, const string &n);
+    AbstractTransformation ();
+    virtual ~AbstractTransformation ();
+  };
+
+  class AbstractTranslation : public AbstractTransformation
   {
   public:
     AbstractTranslation (Process *p, const string &n, double tx, double ty);
@@ -62,7 +70,7 @@ namespace djnn
     draw () override;
   };
 
-  class AbstractRotation : public AbstractGObj
+  class AbstractRotation : public AbstractTransformation
   {
   public:
     AbstractRotation (Process *p, const string &n, double a, double cx, double cy);
@@ -101,7 +109,7 @@ namespace djnn
     draw () override;
   };
 
-  class AbstractScaling : public AbstractGObj
+  class AbstractScaling : public AbstractTransformation
   {
   public:
     AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
@@ -141,7 +149,7 @@ namespace djnn
     draw () override;
   };
 
-  class AbstractSkew : public AbstractGObj
+  class AbstractSkew : public AbstractTransformation
   {
   public:
     AbstractSkew (Process *p, const string &n, double a);
@@ -204,7 +212,7 @@ namespace djnn
     draw () override;
   };
 
-  class AbstractHomography : public AbstractGObj
+  class AbstractHomography : public AbstractTransformation
   {
   public:
     AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,

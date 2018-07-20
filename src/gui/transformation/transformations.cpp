@@ -19,8 +19,21 @@
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
+  AbstractTransformation::AbstractTransformation (Process *p, const string &n) :
       AbstractGObj (p, n)
+  {
+  }
+
+  AbstractTransformation::AbstractTransformation ()
+  {
+  }
+
+  AbstractTransformation::~AbstractTransformation ()
+  {
+  }
+
+  AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
+      AbstractTransformation (p, n)
   {
     _tx = new DoubleProperty (this, "tx", tx);
     _ty = new DoubleProperty (this, "ty", ty);
@@ -30,7 +43,7 @@ namespace djnn
   }
 
   AbstractTranslation::AbstractTranslation (double tx, double ty) :
-      AbstractGObj ()
+      AbstractTransformation ()
   {
     _tx = new DoubleProperty (this, "tx", tx);
     _ty = new DoubleProperty (this, "ty", ty);
@@ -79,7 +92,7 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       double tx = _tx->get_value ();
       double ty = _ty->get_value ();
-      Backend::instance ()->load_translation (tx, ty);
+      Backend::instance ()->load_translation (this, tx, ty);
     }
   }
 
@@ -108,7 +121,7 @@ namespace djnn
   {
     double tx = _tx->get_value ();
     double ty = _ty->get_value ();
-    Backend::instance ()->load_gradient_translation (tx, ty);
+    Backend::instance ()->load_gradient_translation (this, tx, ty);
   }
 
   Process*
@@ -118,7 +131,7 @@ namespace djnn
   }
 
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
-      AbstractGObj (p, n)
+      AbstractTransformation (p, n)
   {
     _a = new DoubleProperty (this, "a", a);
     _cx = new DoubleProperty (this, "cx", cx);
@@ -130,7 +143,7 @@ namespace djnn
   }
 
   AbstractRotation::AbstractRotation (double a, double cx, double cy) :
-      AbstractGObj ()
+      AbstractTransformation ()
   {
     _a = new DoubleProperty (this, "a", a);
     _cx = new DoubleProperty (this, "cx", cx);
@@ -186,7 +199,7 @@ namespace djnn
       double a = _a->get_value ();
       double cx = _cx->get_value ();
       double cy = _cy->get_value ();
-      Backend::instance ()->load_rotation (a, cx, cy);
+      Backend::instance ()->load_rotation (this, a, cx, cy);
     }
   }
 
@@ -216,7 +229,7 @@ namespace djnn
     double a = _a->get_value ();
     double cx = _cx->get_value ();
     double cy = _cy->get_value ();
-    Backend::instance ()->load_gradient_rotation (a, cx, cy);
+    Backend::instance ()->load_gradient_rotation (this, a, cx, cy);
   }
 
   Process*
@@ -226,7 +239,7 @@ namespace djnn
   }
 
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
-      AbstractGObj (p, n)
+      AbstractTransformation (p, n)
   {
     _sx = new DoubleProperty (this, "sx", sx);
     _sy = new DoubleProperty (this, "sy", sy);
@@ -240,7 +253,7 @@ namespace djnn
   }
 
   AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
-      AbstractGObj ()
+      AbstractTransformation ()
   {
     _sx = new DoubleProperty (this, "sx", sx);
     _sy = new DoubleProperty (this, "sy", sy);
@@ -303,7 +316,7 @@ namespace djnn
       double sy = _sy->get_value ();
       double cx = _cx->get_value ();
       double cy = _cy->get_value ();
-      Backend::instance ()->load_scaling (sx, sy, cx, cy);
+      Backend::instance ()->load_scaling (this, sx, sy, cx, cy);
     }
   }
 
@@ -334,7 +347,7 @@ namespace djnn
     double sy = _sy->get_value ();
     double cx = _cx->get_value ();
     double cy = _cy->get_value ();
-    Backend::instance ()->load_gradient_scaling (sx, sy, cx, cy);
+    Backend::instance ()->load_gradient_scaling (this, sx, sy, cx, cy);
   }
 
   Process*
@@ -344,7 +357,7 @@ namespace djnn
   }
 
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
-      AbstractGObj (p, n)
+      AbstractTransformation (p, n)
   {
     _a = new DoubleProperty (this, "a", a);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -352,7 +365,7 @@ namespace djnn
   }
 
   AbstractSkew::AbstractSkew (double a) :
-      AbstractGObj ()
+      AbstractTransformation ()
   {
     _a = new DoubleProperty (this, "a", a);
     UpdateDrawing *update = UpdateDrawing::instance ();
@@ -394,7 +407,7 @@ namespace djnn
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       double a = _a->get_value ();
-      Backend::instance ()->load_skew_x (a);
+      Backend::instance ()->load_skew_x (this, a);
     }
   }
 
@@ -422,7 +435,7 @@ namespace djnn
   GradientSkewX::draw ()
   {
     double a = _a->get_value ();
-    Backend::instance ()->load_gradient_skew_x (a);
+    Backend::instance ()->load_gradient_skew_x (this, a);
   }
 
   Process*
@@ -447,7 +460,7 @@ namespace djnn
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       double a = _a->get_value ();
-      Backend::instance ()->load_skew_y (a);
+      Backend::instance ()->load_skew_y (this, a);
     }
   }
 
@@ -475,7 +488,7 @@ namespace djnn
   GradientSkewY::draw ()
   {
     double a = _a->get_value ();
-    Backend::instance ()->load_gradient_skew_y (a);
+    Backend::instance ()->load_gradient_skew_y (this, a);
   }
 
   Process*
@@ -487,7 +500,7 @@ namespace djnn
   AbstractHomography::AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, double m31, double m32,
                                           double m33, double m34, double m41, double m42, double m43, double m44) :
-      AbstractGObj (p, n)
+      AbstractTransformation (p, n)
   {
     _m11 = new DoubleProperty (this, "m11", m11);
     _m12 = new DoubleProperty (this, "m12", m12);
@@ -534,7 +547,7 @@ namespace djnn
   AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14, double m21, double m22,
                                           double m23, double m24, double m31, double m32, double m33, double m34,
                                           double m41, double m42, double m43, double m44) :
-      AbstractGObj ()
+      AbstractTransformation ()
   {
     _m11 = new DoubleProperty (this, "m11", m11);
     _m12 = new DoubleProperty (this, "m12", m12);
@@ -706,7 +719,7 @@ namespace djnn
       double m42 = _m42->get_value ();
       double m43 = _m43->get_value ();
       double m44 = _m44->get_value ();
-      Backend::instance ()->load_homography (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43,
+      Backend::instance ()->load_homography (this, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43,
                                              m44);
     }
   }
@@ -748,7 +761,7 @@ namespace djnn
     double m32 = _m32->get_value ();
     double m33 = _m33->get_value ();
 
-    Backend::instance ()->load_gradient_homography (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
   }
 
   Process*
@@ -785,17 +798,19 @@ namespace djnn
   {
     double m11 = _m11->get_value ();
     double m12 = _m12->get_value ();
-    double m13 = _m13->get_value ();
+    //double m13 = _m13->get_value ();
 
     double m21 = _m21->get_value ();
     double m22 = _m22->get_value ();
-    double m23 = _m23->get_value ();
+    //double m23 = _m23->get_value ();
 
     double m31 = _m31->get_value ();
     double m32 = _m32->get_value ();
-    double m33 = _m33->get_value ();
+    //double m33 = _m33->get_value ();
 
-    Backend::instance ()->load_gradient_homography (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    //Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    //a, b, 0, c, d, 0, e, f, 1)
+    Backend::instance ()->load_simple_gradient_transform (this, m11, m12, m21, m22, m31, m32);
   }
 
   Process*
