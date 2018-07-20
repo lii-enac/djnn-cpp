@@ -28,19 +28,19 @@
 namespace djnn
 {
   void
-  QtBackend::load_translation (double tx, double ty)
+  QtBackend::load_translation (Translation*, double tx, double ty)
   {
     _context_manager->get_current ()->matrix.translate (tx, ty);
   }
 
   void
-  QtBackend::load_gradient_translation (double tx, double ty)
+  QtBackend::load_gradient_translation (GradientTranslation*, double tx, double ty)
   {
     _context_manager->get_current ()->gradientTransform.translate (tx, ty);
   }
 
   void
-  QtBackend::load_rotation (double a, double cx, double cy)
+  QtBackend::load_rotation (Rotation*, double a, double cx, double cy)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     if (cx || cy)
@@ -51,7 +51,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_rotation (double a, double cx, double cy)
+  QtBackend::load_gradient_rotation (GradientRotation*, double a, double cx, double cy)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     if (cx || cy)
@@ -62,7 +62,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_scaling (double sx, double sy, double cx, double cy)
+  QtBackend::load_scaling (Scaling*, double sx, double sy, double cx, double cy)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     if (cx || cy)
@@ -73,7 +73,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_scaling (double sx, double sy, double cx, double cy)
+  QtBackend::load_gradient_scaling (GradientScaling*, double sx, double sy, double cx, double cy)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     if (cx || cy)
@@ -84,7 +84,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_skew_x (double a)
+  QtBackend::load_skew_x (SkewX*, double a)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
@@ -95,7 +95,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_skew_y (double a)
+  QtBackend::load_skew_y (SkewY*, double a)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
@@ -106,7 +106,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_skew_x (double a)
+  QtBackend::load_gradient_skew_x (GradientSkewX*, double a)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
@@ -114,7 +114,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_skew_y (double a)
+  QtBackend::load_gradient_skew_y (GradientSkewY*, double a)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   void
-  QtBackend::load_homography (double m11, double m12, double m13, double m14, double m21, double m22, double m23,
+  QtBackend::load_homography (AbstractHomography*, double m11, double m12, double m13, double m14, double m21, double m22, double m23,
                               double m24, double m31, double m32, double m33, double m34, double m41, double m42,
                               double m43, double m44)
   {
@@ -134,7 +134,7 @@ namespace djnn
   }
   
   void
-  QtBackend::load_gradient_homography (double m11, double m12, double m13, double m21, double m22, double m23,
+  QtBackend::load_gradient_homography (AbstractHomography*, double m11, double m12, double m13, double m21, double m22, double m23,
                                        double m31, double m32, double m33)
   {
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();

@@ -28,7 +28,7 @@
 namespace djnn
 {
   void
-  QtBackend::draw_rect (AbstractGShape *s, double x, double y, double w, double h, double rx, double ry)
+  QtBackend::draw_rect (Rectangle *s, double x, double y, double w, double h, double rx, double ry)
   {
     if (_painter == nullptr)
       return;
@@ -42,7 +42,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_circle (AbstractGShape *s, double cx, double cy, double r)
+  QtBackend::draw_circle (Circle *s, double cx, double cy, double r)
   {
     if (_painter == nullptr)
       return;
@@ -57,7 +57,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_ellipse (AbstractGShape *s, double cx, double cy, double rx, double ry)
+  QtBackend::draw_ellipse (Ellipse *s, double cx, double cy, double rx, double ry)
   {
     if (_painter == nullptr)
       return;
@@ -72,7 +72,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_line (AbstractGShape *s, double x1, double y1, double x2, double y2)
+  QtBackend::draw_line (Line *s, double x1, double y1, double x2, double y2)
   {
     if (_painter == nullptr)
       return;
@@ -378,7 +378,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_rect_clip (AbstractGShape *s, double x, double y, double w, double h)
+  QtBackend::draw_rect_clip (RectangleClip *s, double x, double y, double w, double h)
   {
     load_drawing_context (s, x, y, w, h);
     _painter->setClipRect (x, y, w, h);
