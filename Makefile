@@ -18,7 +18,7 @@ MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
 # cross-platform support
-#crossp :=
+crossp :=
 #crossp := g
 #crossp := arm-none-eabi-
 #crossp := i686-w64-mingw32-
@@ -73,6 +73,7 @@ lib_srcs :=
 lib_srcgens :=
 lib_objs :=
 lib_cppflags :=
+lib_cflags :=
 lib_ldflags :=
 lib_djnn_deps := 
 
@@ -82,13 +83,12 @@ lib_djnn_deps :=
 # default
 $1_gperf_srcs :=
 #$$(shell find src/$1 -name "*.gperf")
-$1_cpp_srcs := $$(lib_srcs)
+$1_cpp_srcs := $$(filter %.cpp,$$(lib_srcs))
+$1_c_srcs := $$(filter %.c,$$(lib_srcs))
 $1_objs := $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 $1_cov_gcno  := $$($1_objs:.o=.gcno)
 $1_cov_gcda  := $$($1_objs:.o=.gcda)
-
-
 
 $1_srcgens := $$(lib_srcgens)
 $1_objs += $$(lib_objs)
@@ -96,6 +96,7 @@ $1_objs += $$(lib_objs)
 $1_deps := $$($1_objs:.o=.d)
 $1_lib := $$(build_dir)/libdjnn-$1$$(lib_suffix)
 $1_lib_cppflags := $$(lib_cppflags)
+$1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_all_ldflags := $$($1_lib_ldflags)
 
@@ -107,6 +108,7 @@ endif
 endif
 
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
+$$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
@@ -124,6 +126,7 @@ $1_tidy: $$($1_tidy_srcs)
 $1_dbg:
 	@echo $1_dbg
 	@echo $$($1_cpp_srcs)
+	@echo $$($1_c_srcs)
 	@echo $$($1_objs)
 	@echo $$($1_djnn_deps)
 	@echo $$($1_lib_ldflags)
