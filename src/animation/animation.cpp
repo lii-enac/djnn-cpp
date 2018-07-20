@@ -12,15 +12,24 @@
  *
  */
 
-#pragma once
 
-#include <string>
-#include <vector>
+#include "animation.h"
 
-namespace djnn {
+namespace djnn
+{
+  
+  static bool __module_initialized = false;
 
-	extern std::vector<std::string> loadedModules; 
+  void
+  init_animation () {
 
-	void init_display ();
+    if ( __module_initialized == false ) {
+
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("animation");
+      
+    }
+  }
 
 }

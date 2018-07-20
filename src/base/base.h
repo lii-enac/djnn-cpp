@@ -23,3 +23,12 @@
 #include "switch.h"
 #include "text.h"
 #include "logic.h"
+
+
+namespace djnn {
+
+	extern std::vector<string> loadedModules; 
+
+	void init_base ();
+
+}

@@ -16,6 +16,10 @@
 #include "../core/tree/process.h"
 
 namespace djnn {
-  void init_input ();
-  extern Process *InputDevices, *Mice, *TouchPanels;
+
+	extern std::vector<string> loadedModules;
+	extern Process *InputDevices, *Mice, *TouchPanels;
+ 	
+ 	void init_input ();
+  
 }

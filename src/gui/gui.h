@@ -22,10 +22,12 @@
 
 namespace djnn {
 
-extern int mouse_tracking;
-extern int full_screen;
+	extern std::vector<string> loadedModules; 
+	extern int mouse_tracking;
+	extern int full_screen;
 
-void init_gui ();
-void init_svg_parser ();
-void clear_gui ();
+	void init_gui ();
+	void init_svg_parser ();
+	void clear_gui ();
+	
 }

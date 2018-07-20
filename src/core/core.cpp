@@ -9,17 +9,32 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
+
 
 #include "core-dev.h"
 
 namespace djnn
 {
+
+  std::vector<string> loadedModules;
+
+  static bool __module_initialized = false;
+
   void
   init_core ()
   {
-    MainLoop::instance ();
+    if (__module_initialized == false) {
+      
+      __module_initialized = true;
+
+      djnn::loadedModules.push_back("core");
+
+      MainLoop::instance ();
+     
+    }
   }
 
   void

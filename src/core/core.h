@@ -33,7 +33,12 @@
 #include "tree/ref_property.h"
 
 
+
 namespace djnn {
+
+  extern std::vector<string> loadedModules;
+
   void init_core ();
   void clear_core ();
+
 }

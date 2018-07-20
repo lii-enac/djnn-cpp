@@ -15,3 +15,11 @@
 #pragma once
 
 #include "IvyAccess.h"
+
+namespace djnn {
+
+	extern std::vector<string> loadedModules; 
+
+	void init_comms ();
+
+}

@@ -18,6 +18,11 @@
 
 namespace djnn
 {
+
+  extern std::vector<string> loadedModules; 
+
+  void init_animation ();
+
   class SlowInSlowOutInterpolator : public HermiteCurve
   {
   public:

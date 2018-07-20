@@ -17,19 +17,31 @@
 #include "../core/uri.h"
 
 namespace djnn {
+
+  static bool __module_initialized = false;
+
   Process *InputDevices = nullptr;
   Process *Mice = nullptr;
   Process *TouchPanels = nullptr;
 
   void
   init_input () {
-    InputDevices = new Set (nullptr, "InputDevices");
-    InputDevices->set_state (activated);
-    Mice = new Set (InputDevices, "Mice");
-    Mice->set_state (activated);
-    TouchPanels = new Set (InputDevices, "TouchPanels");
-    TouchPanels->set_state (activated);
-    URI::add_uri ("input", InputDevices);
-    p_init_input ();
+
+    if ( __module_initialized == false ) {
+
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("input");
+
+      InputDevices = new Set (nullptr, "InputDevices");
+      InputDevices->set_state (activated);
+      Mice = new Set (InputDevices, "Mice");
+      Mice->set_state (activated);
+      TouchPanels = new Set (InputDevices, "TouchPanels");
+      TouchPanels->set_state (activated);
+      URI::add_uri ("input", InputDevices);
+      p_init_input ();
+    }
+
   }
 }

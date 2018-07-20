@@ -18,15 +18,30 @@
 namespace djnn
 {
 
+  static bool __module_initialized = false;
+
   void
   init_gui () {
-    Backend::init ();
-    UpdateDrawing::init ();
-    init_svg_parser ();
+
+    if ( __module_initialized == false ) {
+
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("gui");
+
+      Backend::init ();
+      UpdateDrawing::init ();
+      init_svg_parser ();
+    }
   }
 
   void
   clear_gui () {
+
+    __module_initialized = false;
     UpdateDrawing::clear ();
+
   }
+
+
 } /* namespace Smala */
