@@ -45,6 +45,7 @@ namespace djnn {
     Component () : Container () {}
     Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize (); }
     Process* clone () override;
+    void serialize (const string& type) override;
   };
 
   class AssignmentSequence : public Container

@@ -19,6 +19,7 @@
 #include <iostream>
 #include <algorithm>
 #include "../execution/component_observer.h"
+#include "../serializer/serializer.h"
 
 #include <iostream>
 
@@ -134,6 +135,24 @@ namespace djnn
     }
     return clone;
   }
+
+
+  void
+  Component::serialize (const string& type) {
+
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("core:component");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    
+    for (auto c : _children)
+        c->serialize (type);
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
 
   AssignmentSequence::AssignmentSequence (Process *p, const string &n, bool is_model) :
       Container (p, n)

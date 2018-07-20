@@ -24,6 +24,7 @@
 #include "tree/list.h"
 #include "xml/xml.h"
 #include "control/exit.h"
+#include "serializer/serializer.h"
 
 #include "tree/abstract_property.h"
 #include "tree/bool_property.h"

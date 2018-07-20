@@ -17,6 +17,7 @@
 #include "../core/syshook/syshook.h"
 #include "../core/tree/int_property.h"
 #include "../core/execution/graph.h"
+#include "../core/serializer/serializer.h"
 
 #include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp>
@@ -103,5 +104,27 @@ namespace djnn
     }
   }
 
+  void
+  Clock::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:clock");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("period", _period->get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
 }
+
+
+
+
+
+
+
+
 

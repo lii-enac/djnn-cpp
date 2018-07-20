@@ -35,6 +35,7 @@ namespace djnn
     // Process
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
 
   private:
     shared_ptr<IntProperty> _period;
