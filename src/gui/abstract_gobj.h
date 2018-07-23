@@ -19,6 +19,7 @@
 #include "../core/tree/component.h"
 #include "../core/execution/component_observer.h"
 #include "window.h"
+#include "../core/error.h"
 #include <iostream>
 
 namespace djnn
@@ -30,11 +31,11 @@ namespace djnn
   {
   public:
     AbstractGObj () : Process(), _frame (nullptr) {
-      if (!gui_initialized) std::cout << "WARNING: gui not initialized" << std::endl;
+      if (!gui_initialized) warning ("Module GUI not initialized");
       _cpnt_type = GOBJ;
     }
     AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr) {
-      if (!gui_initialized) std::cout << "WARNING: gui not initialized" << std::endl;
+      if (!gui_initialized)  warning ("Module GUI not initialized");
       _cpnt_type = GOBJ;
     }
     virtual ~AbstractGObj () {};
