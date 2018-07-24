@@ -22,6 +22,12 @@ namespace djnn
 
   static int __JSONLevel = 0;
 
+  /* FIXME:
+  we don't know when is the end on the componant so there is problem with the last ","
+  one of the solution, for djnn developpers only is to add the number of attributes in the start.
+  save it and compare to __JSONLevel.
+  */
+
   void
   JSONSerializer::start (const string& classname) {
 
