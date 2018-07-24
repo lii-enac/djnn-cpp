@@ -23,7 +23,7 @@ namespace djnn {
   {
   
   public:
-  	static void pre_serialize (Process* root, const string& type);
+  	static void pre_serialize (Process* root, const string& format);
   	static void post_serialize (Process* root);
   	virtual void start (const string& name) = 0;
   	virtual void text_attribute (const string& name, const string& value) = 0;
@@ -41,23 +41,22 @@ namespace djnn {
   class XMLSerializer : public AbstractSerializer 
   {
   public:
-  	void start (const string& name) override;
+  	void start (const string& classname) override;
   	void text_attribute (const string& name, const string& value) override;
   	void int_attribute (const string& name, int value) override;
   	void float_attribute (const string& name, int value) override;
   	void end () override;
   };
 
-  /*
-  class Jsonserializer : public AbstractSerializer 
+  
+  class JSONSerializer : public AbstractSerializer 
   {
   public:
-  	void start (string *) override;
-  	void text_attribute (string , string *) override;
-  	void int_attribute (string, int) override;
-  	void float_attribute (string, int) override;
+  	void start (const string& classname) override;
+  	void text_attribute (const string& name, const string& value) override;
+  	void int_attribute (const string& name, int value) override;
+  	void float_attribute (const string& name, int value) override;
   	void end () override;
   };
-  */
 
 }

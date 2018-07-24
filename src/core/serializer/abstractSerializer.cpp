@@ -24,32 +24,39 @@ namespace djnn
   /* init static variable */
   Process* AbstractSerializer::serializationRoot = nullptr;
   AbstractSerializer* AbstractSerializer::serializer = nullptr;
+
+  static string __cur_format;
   
   void
-  AbstractSerializer::pre_serialize (Process* root, const string& type) {
+  AbstractSerializer::pre_serialize (Process* root, const string& format) {
      
      if (AbstractSerializer::serializationRoot == 0) {
 
         AbstractSerializer::serializationRoot = root;
+        __cur_format = format;
         
-        if (type.compare("XML") == 0) {
+        if (format.compare("XML") == 0) {
           AbstractSerializer::serializer = new XMLSerializer();
           cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n";
         }
-        else if (type.compare ("JSON") == 0){
-          warning ( "JSON serializer NOT Yet implemented " );
+        else if (format.compare ("JSON") == 0){
+          AbstractSerializer::serializer = new JSONSerializer();
+          cout << "{\n";
         }
         else
-          warning ( type + " is not a valid serializer format (XML|JSON) " );
+          warning ( format + " is not a valid serializer format (XML|JSON) " );
      }
   }
 
   void
   AbstractSerializer::post_serialize (Process* root) {
 
-     if (AbstractSerializer::serializationRoot == root) {
+    if (AbstractSerializer::serializationRoot == root) {
       AbstractSerializer::serializationRoot = nullptr;
       AbstractSerializer::serializer = nullptr;
+
+      if (__cur_format.compare("JSON") == 0) 
+      cout << "}\n";
     }
 
   }
