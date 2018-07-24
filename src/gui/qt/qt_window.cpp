@@ -178,9 +178,9 @@ namespace djnn
   MyQWidget::mousePressEvent (QMouseEvent *event)
   {
 //DBG;
-    double x = event->x ();
-    double y = event->y ();
-    bool exec_ = _picking_view->genericMousePress (x, y, event->button ());
+    mouse_pos_x = event->x ();
+    mouse_pos_y = event->y ();
+    bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, event->button ());
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
@@ -188,9 +188,9 @@ namespace djnn
   void
   MyQWidget::mouseMoveEvent (QMouseEvent *event)
   {
-    double x = event->x ();
-    double y = event->y ();
-    bool exec_ = _picking_view->genericMouseMove (x, y);
+    mouse_pos_x = event->x ();
+    mouse_pos_y = event->y ();
+    bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
@@ -198,10 +198,10 @@ namespace djnn
   void
   MyQWidget::mouseReleaseEvent (QMouseEvent *event)
   {
-    double x = event->x ();
-    double y = event->y ();
+    mouse_pos_x = event->x ();
+    mouse_pos_y = event->y ();
 
-    bool exec_ = _picking_view->genericMouseRelease (x, y, event->button ());
+    bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, event->button ());
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
@@ -241,6 +241,8 @@ namespace djnn
     _picking_view->init ();
     if (p)
       p->draw ();
+    if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
+      QtMainloop::instance ().set_please_exec (true);
 #if DEBUG
     _picking_view->display();
 #endif

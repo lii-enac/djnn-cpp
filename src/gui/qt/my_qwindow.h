@@ -50,7 +50,7 @@ namespace djnn {
     Window * _window;
     QtWindow * _qtwindow;
     QtPickingView *_picking_view;
-    
+    int mouse_pos_x, mouse_pos_y;
     bool _updating;
   };
 }

@@ -134,6 +134,37 @@ namespace djnn
   }
 
   bool
+  Picking::genericCheckShapeAfterDraw (double x, double y)
+  {
+    bool exec_ = false;
+    AbstractGShape *s = this->pick (x, y);
+    if (s) {
+      double cur_move_x = ((DoubleProperty*) s->find_component ("move/x"))->get_value ();
+      double cur_move_y = ((DoubleProperty*) s->find_component ("move/y"))->get_value ();
+      if (s == _cur_obj) {
+        if (cur_move_x == x && cur_move_y ==y)
+          return exec_;
+        else {
+          set_local_coords (s, nullptr, x, y);
+        }
+      } else {
+        if (_cur_obj != 0)
+          _cur_obj->find_component ("leave")->notify_activation ();
+        s->find_component ("enter")->notify_activation ();
+        _cur_obj = s;
+        exec_ = true;
+      }
+    } else {
+      if (_cur_obj != nullptr) {
+        _cur_obj->find_component ("leave")->notify_activation ();
+        _cur_obj = nullptr;
+        exec_ = true;
+      }
+    }
+    return exec_;
+  }
+
+  bool
   Picking::genericTouchMove (double x, double y, int id)
   {
     map<int, Touch*>::iterator it = _active_touches.find (id);
