@@ -26,7 +26,7 @@ namespace djnn
   void
   Connector::ConnectorAction::activate () { 
 
-    if (_src->is_activable()) 
+    if (_parent->get_state () < deactivating && _src->is_activable())
       AbstractAssignment::do_assignment (_src, _dst, _propagate);   
   }
 
