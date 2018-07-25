@@ -8,43 +8,25 @@
  *
  *
  *  Contributors:
- *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
-#include "spike.h"
+#include "blank.h"
 #include "../serializer/serializer.h"
+#include <iostream>
+#include <string>
 
 namespace djnn
 {
   using namespace std;
 
   void
-  Spike::pre_activate ()
-  {
-    if (_parent == 0 || _parent->get_state () == activated)
-      _activation_state = activating;
-  }
-
-  void
-  Spike::activate ()
-  {
-    if (_activation_state == activating)
-      notify_activation ();
-  }
-
-  void
-  Spike::post_activate ()
-  {
-    _activation_state = deactivated;
-  }
-
-  void
-  Spike::serialize (const string& format) {
+  Blank::serialize (const string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("core:spike");
+    AbstractSerializer::serializer->start ("core:blank");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->end ();
 

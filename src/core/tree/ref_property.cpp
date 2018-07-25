@@ -13,7 +13,7 @@
  */
 
 #include "ref_property.h"
-
+#include "../serializer/serializer.h"
 #include <iostream>
 
 namespace djnn
@@ -50,6 +50,21 @@ namespace djnn
     value = v;
     if (is_activable () && propagate)
       notify_activation ();
+  }
+
+  void
+  RefProperty::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:refproperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    //AbstractSerializer::serializer->int_attribute ("value", get_value ());
+    //djn_ComputePath (e->main_parent, rp->value, djn_curSerializationRoot, buf);
+    //djn_curSerializer->text_attribute ("value", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   void

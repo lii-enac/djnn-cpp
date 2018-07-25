@@ -31,6 +31,7 @@ namespace djnn {
     void set_value (const std::string &v, bool propagate) override;
 
     void dump (int level=0) override;
+    void serialize (const string& format) override;
   private:
     bool value;
     std::shared_ptr<Process> _true, _false;

@@ -13,6 +13,7 @@
  */
 
 #include "bool_property.h"
+#include "../serializer/serializer.h"
 #include <iostream>
 
 namespace djnn
@@ -81,6 +82,19 @@ namespace djnn
   BoolProperty::set_value (Process* v, bool propagate)
   {
     cerr << "Warning: undefined conversion from Component to Boolean\n";
+  }
+
+  void
+  BoolProperty::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:boolproperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("value", get_value () ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   void

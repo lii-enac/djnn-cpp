@@ -13,7 +13,7 @@
  */
 
 #include "int_property.h"
-
+#include "../serializer/serializer.h"
 #include <iostream>
 
 namespace djnn
@@ -63,6 +63,19 @@ namespace djnn
   IntProperty::set_value (Process* v, bool propagate)
   {
     cerr << "Warning: undefined conversion from Component to integer\n";
+  }
+
+  void
+  IntProperty::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:intproperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("value", get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   void

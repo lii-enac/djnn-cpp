@@ -13,7 +13,7 @@
  */
 
 #include "double_property.h"
-
+#include "../serializer/serializer.h"
 #include <iostream>
 
 namespace djnn
@@ -63,6 +63,19 @@ namespace djnn
   DoubleProperty::set_value (Process* v, bool propagate)
   {
     cerr << "Warning: undefined conversion from Component to Double\n";
+  }
+
+  void
+  DoubleProperty::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:doubleproperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("value", get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   void

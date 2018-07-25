@@ -34,6 +34,7 @@ namespace djnn {
     void set_value (const string &v, bool propagate) override;
 
     void dump (int level=0) override;
+    void serialize (const string& format) override;
   private:
     string value;
   };

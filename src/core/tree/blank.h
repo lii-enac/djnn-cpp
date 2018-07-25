@@ -31,6 +31,7 @@ namespace djnn {
     void pre_deactivate () override {}
     void deactivate () override { _activation_state = deactivated; }
     void post_deactivate () override {}
+    void serialize (const string& format) override;
   };
 
 }
