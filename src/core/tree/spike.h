@@ -25,11 +25,11 @@ namespace djnn {
     Spike (Process* parent, string name) : Process (parent, name) { _model = true; Process::finalize (); };
     virtual ~Spike () {};
   protected:
-    void pre_activate ();
-    void post_activate ();
-    void activate ();
-    void deactivate () {};
-    void deactivation () {};
+    void pre_activate () override;
+    void post_activate () override;
+    void activate () override;
+    void deactivate () override {};
+    void deactivation () override {};
   };
 
 }
