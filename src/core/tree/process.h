@@ -92,7 +92,7 @@ namespace djnn {
 
     // Actions
     virtual void draw () {};
-    virtual void serialize (const string& type) { cout << "serialize is not yet impemented for '" << _name << "'" << endl; }
+    virtual void serialize (const string& format) { cout << "serialize is not yet impemented for '" << _name << "'" << endl; }
     virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
   private:
     static int _nb_anonymous;

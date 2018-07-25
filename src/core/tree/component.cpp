@@ -138,15 +138,15 @@ namespace djnn
 
 
   void
-  Component::serialize (const string& type) {
+  Component::serialize (const string& format) {
 
-    AbstractSerializer::pre_serialize(this, type);
+    AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:component");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     
     for (auto c : _children)
-        c->serialize (type);
+        c->serialize (format);
     
     AbstractSerializer::serializer->end ();
 
@@ -193,6 +193,22 @@ namespace djnn
   AssignmentSequence::post_activate ()
   {
     _activation_state = deactivated;
+  }
+
+  void
+  AssignmentSequence::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:assignmentsequence");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    
+    for (auto c : _children)
+        c->serialize (format);
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 }
 

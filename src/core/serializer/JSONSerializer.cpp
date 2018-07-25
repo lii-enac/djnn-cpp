@@ -60,7 +60,7 @@ namespace djnn
   }
 
   void
-  JSONSerializer::float_attribute (const string& name, int value){
+  JSONSerializer::float_attribute (const string& name, double value){
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)

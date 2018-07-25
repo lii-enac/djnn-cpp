@@ -87,7 +87,7 @@ namespace djnn
   }
 
   void
-  XMLSerializer::float_attribute (const string& name, int value){
+  XMLSerializer::float_attribute (const string& name, double value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }

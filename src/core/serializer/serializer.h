@@ -28,7 +28,7 @@ namespace djnn {
   	virtual void start (const string& name) = 0;
   	virtual void text_attribute (const string& name, const string& value) = 0;
   	virtual void int_attribute (const string& name, int value) = 0;
-  	virtual void float_attribute (const string& name, int value) = 0;
+  	virtual void float_attribute (const string& name, double value) = 0;
   	virtual void end () = 0;
   
   public:
@@ -44,7 +44,7 @@ namespace djnn {
   	void start (const string& classname) override;
   	void text_attribute (const string& name, const string& value) override;
   	void int_attribute (const string& name, int value) override;
-  	void float_attribute (const string& name, int value) override;
+  	void float_attribute (const string& name, double value) override;
   	void end () override;
   };
 
@@ -55,7 +55,7 @@ namespace djnn {
   	void start (const string& classname) override;
   	void text_attribute (const string& name, const string& value) override;
   	void int_attribute (const string& name, int value) override;
-  	void float_attribute (const string& name, int value) override;
+  	void float_attribute (const string& name, double value) override;
   	void end () override;
   };
 
