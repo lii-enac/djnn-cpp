@@ -27,6 +27,7 @@
 #include "serializer/serializer.h"
 
 #include "tree/abstract_property.h"
+#include "tree/blank.h"
 #include "tree/bool_property.h"
 #include "tree/int_property.h"
 #include "tree/double_property.h"
