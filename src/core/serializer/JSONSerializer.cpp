@@ -75,7 +75,7 @@ namespace djnn
   int i;
   for (i = 0; i < __JSONLevel; ++i)
       cout << "\t";
-  cout << "}\n";
+  cout << "},\n";
    --__JSONLevel;
 
   }
