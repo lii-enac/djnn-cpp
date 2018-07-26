@@ -61,5 +61,14 @@ namespace djnn
     init_couplings (shared_ptr<Process> (new SqrtAction (this, "action", _input, _output)));
     Process::finalize ();
   }
+
+  Abs::Abs (Process *p, const string &n, double i_val) :
+      UnaryOperator (p, n)
+  {
+    _input = shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", i_val));
+    _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", sqrt (i_val)));
+    init_couplings (shared_ptr<Process> (new AbsAction (this, "action", _input, _output)));
+    Process::finalize ();
+  }
 }
 

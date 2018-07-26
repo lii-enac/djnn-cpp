@@ -130,4 +130,26 @@ namespace djnn
       Sqrt (Process *p, const string &name, double i_val);
       virtual ~Sqrt () {}
   };
+
+  class Abs : public UnaryOperator
+  {
+    private:
+      class AbsAction : public UnaryOperatorAction
+      {
+      public:
+        AbsAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+          UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+        virtual ~AbsAction () {}
+        void activate ()
+        {
+          if (_parent->get_state () > activated)
+            return;
+          _output.get()->set_value (abs (((DoubleProperty*)_input.get())->get_value ()), true);
+        }
+        void deactivate () {}
+      };
+    public:
+      Abs (Process *p, const string &name, double i_val);
+      virtual ~Abs () {}
+  };
 }
