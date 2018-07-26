@@ -40,6 +40,8 @@ namespace djnn {
     virtual bool event (QEvent *event) override;
     virtual void moveEvent (QMoveEvent *event) override;
     virtual void resizeEvent (QResizeEvent * event) override;
+    virtual void keyPressEvent (QKeyEvent *event) override;
+    virtual void keyReleaseEvent (QKeyEvent *event) override;
     virtual void mouseReleaseEvent (QMouseEvent *event) override;
     virtual void mousePressEvent (QMouseEvent *event) override;
     virtual void mouseMoveEvent (QMouseEvent *event) override;

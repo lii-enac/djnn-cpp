@@ -142,6 +142,20 @@ namespace djnn
   }
 
   void
+  MyQWidget::keyPressEvent (QKeyEvent *event)
+  {
+    _window->key_pressed ()->set_value (event->text().toStdString (), 1);
+    QtMainloop::instance ().set_please_exec (true);
+  }
+
+  void
+  MyQWidget::keyReleaseEvent (QKeyEvent *event)
+  {
+    _window->key_released ()->set_value (event->text().toStdString (), 1);
+    QtMainloop::instance ().set_please_exec (true);
+  }
+
+  void
   MyQWidget::moveEvent (QMoveEvent *event)
   {
     if (_updating)
