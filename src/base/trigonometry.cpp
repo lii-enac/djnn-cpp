@@ -125,7 +125,7 @@ namespace djnn
     Process::finalize ();
   }
 
-  HyperbolicArcTan::HyperbolicArcTan (Process *p, const string &n, double in_val) :
+  HyperbolicArcTangent::HyperbolicArcTangent (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
     _input = shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", in_val));

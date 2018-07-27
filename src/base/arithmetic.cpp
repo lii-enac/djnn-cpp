@@ -123,13 +123,13 @@ namespace djnn
     Process::finalize ();
   }
 
-  Predecessor::Predecessor (Process *p, const string &n, double i_val) :
+  Previous::Previous (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
     _input = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", i_val));
     _output = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", 0));
     init_couplings (
-        shared_ptr<Process> (new PredecessorAction (this, "action", _input, _output, i_val)));
+        shared_ptr<Process> (new PreviousAction (this, "action", _input, _output, i_val)));
     Process::finalize ();
   }
 

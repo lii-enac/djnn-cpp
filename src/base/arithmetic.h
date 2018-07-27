@@ -238,15 +238,15 @@ namespace djnn
     virtual ~SignInverter () {}
   };
 
-  class Predecessor : public UnaryOperator
+  class Previous : public UnaryOperator
     {
     private:
-      class PredecessorAction : public UnaryOperatorAction
+      class PreviousAction : public UnaryOperatorAction
       {
       public:
-        PredecessorAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output, double init_val) :
+        PreviousAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output, double init_val) :
           UnaryOperatorAction (parent, name, input, output), _prev (init_val) { Process::finalize (); }
-        virtual ~PredecessorAction () {}
+        virtual ~PreviousAction () {}
         void activate ()
         {
           if (_parent->get_state () > activated)
@@ -260,8 +260,8 @@ namespace djnn
         double _prev;
       };
     public:
-      Predecessor (Process *p, const string &name, double i_val);
-      virtual ~Predecessor () {}
+      Previous (Process *p, const string &name, double i_val);
+      virtual ~Previous () {}
     };
 
   class Incr : public Process

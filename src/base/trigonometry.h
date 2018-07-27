@@ -274,7 +274,7 @@ namespace djnn
     virtual ~HyperbolicArcSine () {}
   };
 
-  class HyperbolicArcTan : public UnaryOperator
+  class HyperbolicArcTangent : public UnaryOperator
   {
   private:
     class HyperbolicArcTangentAction : public UnaryOperatorAction
@@ -291,7 +291,7 @@ namespace djnn
       void deactivate () {}
     };
   public:
-    HyperbolicArcTan (Process *p, const string &n, double in_val);
-    virtual ~HyperbolicArcTan () {}
+    HyperbolicArcTangent (Process *p, const string &n, double in_val);
+    virtual ~HyperbolicArcTangent () {}
   };
 }
