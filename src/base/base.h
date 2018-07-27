@@ -16,6 +16,7 @@
 
 #include "arithmetic.h"
 #include "trigonometry.h"
+#include "geometry.h"
 #include "math_functions.h"
 #include "clock.h"
 #include "connector.h"
