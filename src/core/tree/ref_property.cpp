@@ -55,13 +55,14 @@ namespace djnn
   void
   RefProperty::serialize (const string& format) {
 
+    string buf;
+
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:refproperty");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    //AbstractSerializer::serializer->int_attribute ("value", get_value ());
-    //djn_ComputePath (e->main_parent, rp->value, djn_curSerializationRoot, buf);
-    //djn_curSerializer->text_attribute ("value", buf);
+    AbstractSerializer::compute_path (get_parent (), get_value (), buf);
+    AbstractSerializer::serializer->text_attribute ("value", buf);
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

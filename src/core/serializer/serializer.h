@@ -25,6 +25,7 @@ namespace djnn {
   public:
   	static void pre_serialize (Process* root, const string& format);
   	static void post_serialize (Process* root);
+    static  void compute_path (Process* from, Process* to, string& buf);
   	virtual void start (const string& name) = 0;
   	virtual void text_attribute (const string& name, const string& value) = 0;
   	virtual void int_attribute (const string& name, int value) = 0;
