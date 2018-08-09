@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -26,6 +27,7 @@ namespace djnn {
     virtual ~Exit () {}
     void activate () override;
     void deactivate () override {}
+    void serialize (const string& format) override;
   private:
     unique_ptr<IntProperty> _value;
   };

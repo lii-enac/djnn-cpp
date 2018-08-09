@@ -53,8 +53,9 @@ namespace djnn {
   public:
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    void activate ();
-    void deactivate () { _action->deactivation (); }
+    void activate () override;
+    void deactivate () override { _action->deactivation (); }
+    void serialize (const string& format) override;
     virtual ~Assignment (); 
   };
 
@@ -63,8 +64,9 @@ namespace djnn {
   public:
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    void activate ();
-    void deactivate () { _action->deactivation (); }
+    void activate () override;
+    void deactivate () override { _action->deactivation (); }
+    void serialize (const string& format) override;
     virtual ~PausedAssignment ();
   };
 

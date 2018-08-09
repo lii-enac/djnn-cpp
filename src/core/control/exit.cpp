@@ -9,12 +9,14 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "exit.h"
 #include "../syshook/main_loop.h"
 #include "../tree/process.h"
+#include "../serializer/serializer.h"
 
 #include <iostream>
 
@@ -35,6 +37,20 @@ namespace djnn
   {
     MainLoop::instance ().deactivation ();
     //exit (_value->get_value ());
+  }
+
+  void
+  Exit::serialize (const string& format) {
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:exit");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("value", _value->get_value ());
+    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
 }

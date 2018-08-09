@@ -22,6 +22,7 @@
 #include "../tree/text_property.h"
 #include "../tree/ref_property.h"
 #include "../error.h"
+#include "../serializer/serializer.h"
 
 #include <iostream>
 
@@ -144,6 +145,26 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
   }
 
+  void
+  Assignment::serialize (const string& format) {
+
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:assignment");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   
   PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst,
                                       const string &dspec, bool isModel) :
@@ -189,6 +210,26 @@ namespace djnn
     Graph::instance ().remove_edge (_action.get (), _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+  }
+
+  void
+  PausedAssignment::serialize (const string& format) {
+
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:pausedassignment");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 }
 

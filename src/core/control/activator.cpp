@@ -9,11 +9,13 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "activator.h"
 #include "../error.h"
+#include "../serializer/serializer.h"
 #include <iostream>
 
 namespace djnn
@@ -44,4 +46,21 @@ namespace djnn
   Activator::~Activator ()
   {
   }
+
+  void
+  Activator::serialize (const string& format) {
+
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:activator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _action, buf);
+    AbstractSerializer::serializer->text_attribute ("action", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
 }

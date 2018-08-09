@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -39,8 +40,9 @@ namespace djnn {
     Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
-    void activate () { _c_src->enable(); };
-    void deactivate () { _c_src->disable (); }
+    void activate () override { _c_src->enable(); };
+    void deactivate () override { _c_src->disable (); }
+    void serialize (const string& format) override;
     void exec ();
   private:
     void init_binding (Process* src, const string & ispec, Process* dst, const string & dspec);
