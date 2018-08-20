@@ -49,6 +49,7 @@ namespace djnn {
     Connector (Process *src, string ispec, Process *dst, string dspec);
     void activate () override { _c_src->enable (); _action->activation ();}
     void deactivate () override { _c_src->disable(); _action->deactivation ();}
+    void serialize (const string& type) override;
     virtual ~Connector ();
 
   protected:
@@ -65,7 +66,8 @@ namespace djnn {
     PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec);
     PausedConnector (Process *src, string ispec, Process *dst, string dspec);
     void activate () override { _c_src->enable (); _action->activation ();}
-    void deactivate () override { _c_src->disable(); _action->deactivation (); }
+    void deactivate () override { _c_src->disable(); _action->deactivation ();}
+    void serialize (const string& type) override;
     virtual ~PausedConnector ();
 
   protected:

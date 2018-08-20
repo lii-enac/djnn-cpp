@@ -16,6 +16,8 @@
 #include "connector.h"
 #include "../core/execution/graph.h"
 #include "../core/error.h"
+#include "../core/serializer/serializer.h"
+
 
 #include <iostream>
 
@@ -94,7 +96,24 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
   }
 
+  void
+  Connector::serialize (const string& format) {
 
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("base:connector");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
 
 
   PausedConnector::PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst,
@@ -159,6 +178,25 @@ namespace djnn
     Graph::instance ().remove_edge (_action.get (), _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+  }
+
+  void
+  PausedConnector::serialize (const string& format) {
+
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("base:pausedconnector");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
 }
