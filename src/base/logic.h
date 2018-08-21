@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -42,6 +43,7 @@ namespace djnn
   public:
     And (Process *p, const string &n, int l_val, int r_val);
     virtual ~And () {}
+    void serialize (const string& type) override;
   };
 
   class Or : public BinaryOperator
@@ -65,6 +67,7 @@ namespace djnn
   public:
     Or (Process *p, const string &n, int l_val, int r_val);
     virtual ~Or () {}
+    void serialize (const string& type) override;
   };
 
   class XOr : public BinaryOperator
@@ -88,6 +91,7 @@ namespace djnn
   public:
     XOr (Process *p, const string &n, int l_val, int r_val);
     virtual ~XOr () {}
+    void serialize (const string& type) override;
   };
 
   class Not : public UnaryOperator
@@ -109,5 +113,6 @@ namespace djnn
   public:
     Not (Process *p, const string &n, int in_val);
     virtual ~Not () {}
+    void serialize (const string& type) override;
   };
 }

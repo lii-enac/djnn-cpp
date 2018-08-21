@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "logic.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -26,6 +28,22 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  And::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:and");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("left", std::dynamic_pointer_cast<BoolProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("right", std::dynamic_pointer_cast<BoolProperty> (_right)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Or::Or (Process *p, const string &n, int l_val, int r_val) :
       BinaryOperator (p, n)
   {
@@ -34,6 +52,22 @@ namespace djnn
     _result = shared_ptr<AbstractProperty> (new BoolProperty (this, "result", l_val || r_val));
     init_couplings (shared_ptr<Process> (new OrAction (this, "action", _left, _right, _result)));
     Process::finalize ();
+  }
+
+  void
+  Or::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:or");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("left", std::dynamic_pointer_cast<BoolProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("right", std::dynamic_pointer_cast<BoolProperty> (_right)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 
   XOr::XOr (Process *p, const string &n, int l_val, int r_val) :
@@ -46,6 +80,22 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  XOr::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:xor");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("left", std::dynamic_pointer_cast<BoolProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("right", std::dynamic_pointer_cast<BoolProperty> (_right)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Not::Not (Process *p, const string &n, int in_val) :
       UnaryOperator (p, n)
   {
@@ -53,6 +103,21 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new BoolProperty (this, "output", !in_val));
     init_couplings (shared_ptr<Process> (new NotAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  Not::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:not");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<BoolProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 }
 
