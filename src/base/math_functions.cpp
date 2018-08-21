@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "math_functions.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -25,6 +27,21 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Exp::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:exp");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Log::Log (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
@@ -34,6 +51,21 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Log::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:log");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Log10::Log10 (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
@@ -41,6 +73,21 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", log10 (i_val)));
     init_couplings (shared_ptr<Process> (new Log10Action (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  Log10::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:log10");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 
   Pow::Pow (Process *p, const string &n, double base, double exponent) :
@@ -53,6 +100,22 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Pow::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:pow");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("base", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("exponent", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Sqrt::Sqrt (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
@@ -62,6 +125,21 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Sqrt::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:sqrt");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   Abs::Abs (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
@@ -69,6 +147,21 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", sqrt (i_val)));
     init_couplings (shared_ptr<Process> (new AbsAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  Abs::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:abs");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->int_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 }
 

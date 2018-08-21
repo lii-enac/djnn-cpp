@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -42,6 +43,7 @@ namespace djnn
   public:
     Exp (Process *p, const string &name, double i_val);
     virtual ~Exp () {}
+    void serialize (const string& type) override;
   };
 
   class Log : public UnaryOperator
@@ -64,6 +66,7 @@ namespace djnn
     public:
       Log (Process *p, const string &name, double i_val);
       virtual ~Log () {}
+      void serialize (const string& type) override;
   };
 
   class Log10 : public UnaryOperator
@@ -86,6 +89,7 @@ namespace djnn
     public:
       Log10 (Process *p, const string &name, double i_val);
       virtual ~Log10 () {}
+      void serialize (const string& type) override;
   };
 
   class Pow : public BinaryOperator
@@ -107,6 +111,7 @@ namespace djnn
      public:
        Pow (Process *p, const string &n, double base, double exponent);
        virtual ~Pow () {}
+       void serialize (const string& type) override;
    };
 
   class Sqrt : public UnaryOperator
@@ -129,6 +134,7 @@ namespace djnn
     public:
       Sqrt (Process *p, const string &name, double i_val);
       virtual ~Sqrt () {}
+      void serialize (const string& type) override;
   };
 
   class Abs : public UnaryOperator
@@ -151,5 +157,6 @@ namespace djnn
     public:
       Abs (Process *p, const string &name, double i_val);
       virtual ~Abs () {}
+      void serialize (const string& type) override;
   };
 }
