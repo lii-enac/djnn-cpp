@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "fsm.h"
+#include "../core/error.h"
 #include <iostream>
 
 namespace djnn
@@ -23,6 +25,10 @@ namespace djnn
       Container (p, n)
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
+    if (fsm == nullptr) {
+      warning ("only a FSM can be the parent of a FSM State\n");
+      return;
+    }
     fsm->set_initial (n);
     _parent_fsm = fsm;
     Process::finalize ();
@@ -81,7 +87,7 @@ namespace djnn
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
-      cerr << "Warning: only a FSM can be the parent of a FSM Transition\n";
+      warning ("only a FSM can be the parent of a FSM Transition\n");
       return;
     }
     _priority = fsm->priority ();
@@ -90,14 +96,14 @@ namespace djnn
     _src = dynamic_cast<FSMState*> (from);
     _dst = dynamic_cast<FSMState*> (to);
     if (_src == nullptr || _dst == nullptr) {
-      cerr << "Warning: only FSM states can be connected in a FSM transition\n";
+      warning ("only FSM states can be connected in a FSM transition\n");
       return;
     }
 
     _src->add_transition (this);
     _trigger = src->find_component (spec);
     if (_trigger == nullptr) {
-      cout << "WARNING: invalid source in transition " << n << endl;
+      warning ("invalid source in transition " + n + "\n");
       _c_src = nullptr;
       return;
     }
@@ -107,6 +113,49 @@ namespace djnn
     else
       _action = 0;
 
+    _fsm_action = make_shared<FSMTransitionAction> (this,
+                                                    "transition_action_" + _src->get_name () + "_" + _dst->get_name (),
+                                                    _src, _dst, _action);
+    _c_src = make_unique<Coupling> (_trigger, ACTIVATION, _fsm_action.get (), ACTIVATION);
+    Graph::instance ().add_edge (_trigger, _fsm_action.get ());
+    Graph::instance ().add_edge (_fsm_action.get (), p->find_component ("state"));
+    Graph::instance ().add_edge (_fsm_action.get (), _dst);
+    Graph::instance ().add_edge (_fsm_action.get (), _src);
+    if (_action) {
+      Graph::instance ().add_edge (_fsm_action.get (), _action);
+    }
+    _c_src.get ()->disable ();
+    Process::finalize ();
+  }
+
+  FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
+                                Process *trigger, Process *action) :
+      Process (p, n)
+  {
+    FSM *fsm = dynamic_cast<FSM*> (p);
+    if (fsm == nullptr) {
+      warning ("only a FSM can be the parent of a FSM Transition\n");
+      return;
+    }
+    _priority = fsm->priority ();
+    fsm->increase_priority ();
+
+    _src = dynamic_cast<FSMState*> (from);
+    _dst = dynamic_cast<FSMState*> (to);
+    if (_src == nullptr || _dst == nullptr) {
+      warning ("only FSM states can be connected in a FSM transition\n");
+      return;
+    }
+
+    _src->add_transition (this);
+    _trigger = trigger;
+    _action = action;
+    if (_trigger == nullptr) {
+      warning ("invalid source in transition " + n + "\n");
+      _c_src = nullptr;
+      return;
+    }
+  
     _fsm_action = make_shared<FSMTransitionAction> (this,
                                                     "transition_action_" + _src->get_name () + "_" + _dst->get_name (),
                                                     _src, _dst, _action);

@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -59,10 +60,12 @@ namespace djnn {
     };
   public:
     FSMTransition (Process *p, const string &n, Process* from, Process* to,
-		   Process *src, const string &spec, Process *action, const string &aspec);
+		   Process *src, const string &spec, Process *action = 0, const string &aspec = "");
+    FSMTransition (Process *p, const string &n, Process* from, Process* to,
+       Process *trigger, Process *action = 0);
     ~FSMTransition ();
-    void activate ();
-    void deactivate ();
+    void activate () override;
+    void deactivate () override;
     int priority () { return _priority; }
     Process* fsm_action () { return _fsm_action.get (); }
   private:
@@ -87,7 +90,7 @@ namespace djnn {
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
   private:
-    void init_FSM ();
+    void init_FSM (); 
     string _str_initial;
     shared_ptr<TextProperty> _fsm_state, _initial;
     FSMState* _cur_state;
