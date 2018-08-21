@@ -32,6 +32,7 @@ namespace djnn {
     ~FSMState () { _transitions.clear (); };
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
     void draw () override;
@@ -66,6 +67,7 @@ namespace djnn {
     ~FSMTransition ();
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
     int priority () { return _priority; }
     Process* fsm_action () { return _fsm_action.get (); }
   private:
@@ -86,14 +88,19 @@ namespace djnn {
     void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state.get()->set_value (name, true); };
     void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;
+    void add_state (FSMState* st) { _states.push_back(st); };
+    void add_transition (FSMTransition* tr) { _transitions.push_back(tr); };
     virtual ~FSM ();
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
+    void serialize (const string& type) override;
   private:
     void init_FSM (); 
     string _str_initial;
     shared_ptr<TextProperty> _fsm_state, _initial;
     FSMState* _cur_state;
+    list<FSMState*> _states;
+    list<FSMTransition*> _transitions;
     int _priority;
   };
 

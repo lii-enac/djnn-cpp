@@ -14,6 +14,7 @@
  */
 
 #include "fsm.h"
+#include "../core/serializer/serializer.h"
 #include "../core/error.h"
 #include <iostream>
 
@@ -32,6 +33,7 @@ namespace djnn
     fsm->set_initial (n);
     _parent_fsm = fsm;
     Process::finalize ();
+    _parent_fsm->FSM::add_state(this);
   }
 
   bool
@@ -80,6 +82,23 @@ namespace djnn
     Container::draw ();
   }
 
+  void
+  FSMState::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:fsmstate");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+
+    for (auto c : _children)
+        c->serialize (type);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
                                 Process *src, const string &spec, Process *action,
                                 const string &aspec) :
@@ -126,6 +145,7 @@ namespace djnn
     }
     _c_src.get ()->disable ();
     Process::finalize ();
+    fsm->FSM::add_transition(this);
   }
 
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
@@ -169,6 +189,7 @@ namespace djnn
     }
     _c_src.get ()->disable ();
     Process::finalize ();
+    fsm->FSM::add_transition(this);
   }
 
   FSMTransition::~FSMTransition ()
@@ -207,6 +228,34 @@ namespace djnn
       _src->deactivation ();
       _dst->activation ();
     }
+  }
+
+  void
+  FSMTransition::serialize (const string& type) {
+   
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:fsmtransition");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+
+    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::serializer->text_attribute ("from", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::serializer->text_attribute ("to", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _trigger, buf);
+    AbstractSerializer::serializer->text_attribute ("trigger", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _action, buf);
+    AbstractSerializer::serializer->text_attribute ("action", buf);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 
   void
@@ -252,5 +301,24 @@ namespace djnn
       return;
     if (_cur_state != nullptr)
       _cur_state->draw ();
+  }
+
+  void
+  FSM::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:fsm");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+
+    for (auto st : _states)
+        st->serialize (type);
+    for (auto tr : _transitions)
+        tr->serialize (type);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 }
