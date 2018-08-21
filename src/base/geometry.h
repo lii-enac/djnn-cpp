@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -47,6 +48,7 @@ namespace djnn
     virtual ~HermiteCurve ();
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
   private:
     shared_ptr<AbstractProperty> _input, _p1, _p2, _t1, _t2, _output;
     unique_ptr<Coupling> _c_input, _c_p1, _c_p2, _c_t1, _c_t2;

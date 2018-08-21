@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "geometry.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -109,6 +111,24 @@ namespace djnn
     _c_p2->disable ();
     _c_t1->disable ();
     _c_t2->disable ();
+  }
+
+  void
+  HermiteCurve::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hermitecurve");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("p1", std::dynamic_pointer_cast<DoubleProperty> (_p1)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("p2", std::dynamic_pointer_cast<DoubleProperty> (_p2)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("t1", std::dynamic_pointer_cast<DoubleProperty> (_t1)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("t2", std::dynamic_pointer_cast<DoubleProperty> (_t2)->get_value ());
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 }
 
