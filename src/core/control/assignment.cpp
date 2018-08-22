@@ -34,27 +34,27 @@ namespace djnn
                                bool isModel)
   {
     if (src == 0) {
-      error ("src argument cannot be null in assignment creation");
+      error ("src argument cannot be null in (Paused)assignment creation");
     }
     if (dst == 0) {
-      error ("dst argument cannot be null in assignment creation");
+      error ("dst argument cannot be null in (Paused)assignment creation");
     }
 
     Process *f = src->find_component (ispec);
     if (f == 0) {
-      error ("source not found in assignment creation");
+      error ("source not found in (Paused)assignment creation");
     }
     _src = dynamic_cast<AbstractProperty*> (f);
     if (_src == nullptr) {
-      warning ("the source of an assignment must be a property");
+      warning ("the source of an (Paused)assignment must be a property");
     }
     f = dst->find_component (dspec);
     if (f == 0) {
-      error ("destination not found in assignment creation");
+      error ("destination not found in (Paused)assignment creation");
     }
     _dst = dynamic_cast<AbstractProperty*> (f);
     if (_dst == nullptr) {
-      warning ("the destination of an assignment must be a property");
+      warning ("the destination of an (Paused)assignment must be a property");
     }
   }
 
