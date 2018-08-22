@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "switch.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -96,6 +98,24 @@ namespace djnn
         (it->second)->activation ();
       }
     }
+  }
+
+  void
+  Switch::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:switch");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("initial", _initial);
+
+    for (auto c : _children)
+        c->serialize (type);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 
 }

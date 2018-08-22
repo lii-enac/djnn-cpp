@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -30,8 +31,9 @@ namespace djnn {
       SwitchAction (Switch *parent, const string &name) :
 	Process (parent, "action"),  _sw (parent) { Process::finalize (); }
       virtual ~SwitchAction () {};
-      void activate () { _sw->change_branch(); };
-      void deactivate () {};
+      void activate () override { _sw->change_branch(); };
+      void deactivate () override {};
+      void serialize (const string& type) override {};
     private:
       Switch* _sw;
     };
@@ -42,6 +44,7 @@ namespace djnn {
     void deactivate () override;
     void draw () override;
     virtual ~Switch ();
+    void serialize (const string& type) override;
   private:
     void init_switch (const string &initial);
     void change_branch ();
