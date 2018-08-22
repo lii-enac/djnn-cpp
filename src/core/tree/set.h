@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -35,6 +36,7 @@ namespace djnn {
     void activate () override;
     void deactivate () override;
     virtual ~Set ();
+    void serialize (const string& type) override;
   private:
     shared_ptr<RefProperty> _added, _removed;
     shared_ptr <IntProperty> _size;

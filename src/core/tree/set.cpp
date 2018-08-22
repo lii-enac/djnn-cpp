@@ -9,13 +9,15 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "set.h"
 #include "../execution/graph.h"
-#include <algorithm>
 #include "../execution/component_observer.h"
+#include "../serializer/serializer.h"
+#include <algorithm>
 
 namespace djnn
 {
@@ -128,6 +130,23 @@ namespace djnn
       return Process::find_component (path);
     }
     return nullptr;
+  }
+
+  void
+  Set::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("core:set");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+
+    std::map<std::string, Process*>::iterator it;
+    for (it = _symtable.begin (); it != _symtable.end (); ++it)
+      it->second->serialize (type);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
 }
