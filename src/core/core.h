@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *		Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -33,6 +34,7 @@
 #include "tree/double_property.h"
 #include "tree/text_property.h"
 #include "tree/ref_property.h"
+#include "tree/set.h"
 
 
 
