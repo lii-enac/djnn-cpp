@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "../core/tree/text_property.h"
+#include "../core/serializer/serializer.h"
 #include "text.h"
 
 namespace djnn
@@ -55,6 +57,19 @@ namespace djnn
     init ();
   }
 
+  void
+  TextPrinter::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:textprinter");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   TextCatenator::TextCatenator (Process *p, const string &n) :
       BinaryOperator (p, n)
   {
@@ -65,6 +80,19 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  TextCatenator::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:textcatenator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+   
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   TextComparator::TextComparator (Process *p, const string &n, const string &left, const string &right) :
       BinaryOperator (p, n)
   {
@@ -73,6 +101,21 @@ namespace djnn
     _result = make_shared<BoolProperty> (this, "output", left.compare (right) == 0);
     init_couplings (make_shared<TextComparatorAction> (this, n + "_action", _left, _right, _result));
     Process::finalize ();
+  }
+
+  void
+  TextComparator::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:textcomparator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("left", std::dynamic_pointer_cast<TextProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->text_attribute ("right", std::dynamic_pointer_cast<TextProperty> (_right)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   void
@@ -128,6 +171,21 @@ namespace djnn
     _c_input->disable ();
     _c_decimal->disable ();
     _action->deactivation ();
+  }
+
+  void
+  DoubleFormatter::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:doubleformatter");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("initial", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("decimal", std::dynamic_pointer_cast<IntProperty> (_decimal)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 }
 

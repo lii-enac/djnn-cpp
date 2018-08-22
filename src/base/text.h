@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -37,9 +38,10 @@ namespace djnn
   public:
     TextPrinter ();
     TextPrinter (Process *p, const string &n);
-    void activate () { c_input.get()->enable(); };
-    void deactivate () { c_input.get()->disable (); };
+    void activate () override { c_input.get()->enable(); };
+    void deactivate () override { c_input.get()->disable (); };
     virtual ~TextPrinter ();
+    void serialize (const string& type) override;
   private:
     void init ();
     shared_ptr<TextProperty> input;
@@ -71,6 +73,7 @@ namespace djnn
   public:
     TextCatenator (Process *p, const string &name);
     virtual ~TextCatenator () {}
+    void serialize (const string& type) override;
   };
 
   class TextComparator : public BinaryOperator
@@ -96,6 +99,7 @@ namespace djnn
   public:
     TextComparator (Process *p, const string &name, const string &left, const string &right);
     virtual ~TextComparator () {}
+    void serialize (const string& type) override;
   };
 
   class DoubleFormatter : public Process
@@ -131,6 +135,7 @@ namespace djnn
     virtual ~DoubleFormatter ();
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
   private:
     void init (double initial, int decimal);
     shared_ptr<DoubleProperty> _input;
