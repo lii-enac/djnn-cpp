@@ -19,6 +19,7 @@
 #include "../execution/graph.h"
 #include <algorithm>
 #include "../execution/component_observer.h"
+#include "../serializer/serializer.h"
 #include "../error.h"
 
 namespace djnn
@@ -52,6 +53,10 @@ namespace djnn
   List::dump (int level)
   {
     cout << _name  << " [ index=" << _children.size () << " ]" << endl ;
+
+    //FIXME: indent problem
+    //for (auto c : _children)
+    //  c->dump(level);
   }
 
   void
@@ -192,6 +197,22 @@ namespace djnn
     return clone;
   }
 
+  void
+  List::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("core:list");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+
+    for (auto c : _children)
+        c->serialize (type);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
                                                      shared_ptr<RefProperty> iter, shared_ptr<IntProperty> index,
                                                      bool forward) :
@@ -282,6 +303,24 @@ namespace djnn
     _c_next->disable ();
     _c_previous->disable ();
     _c_reset->disable ();
+  }
+
+  void
+  BidirectionalListIterator::serialize (const string& type) {
+   
+    string buf;
+
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("core:bidirectionallistiterator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::compute_path (get_parent (), _list, buf);
+    AbstractSerializer::serializer->text_attribute ("list", buf);
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
   }
 }
 

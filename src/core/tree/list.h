@@ -38,6 +38,7 @@ namespace djnn {
     Process* clone () override;
     virtual ~List ();
     int size () { return _size->get_value (); }
+    void serialize (const string& type) override;
   private:
     void finalize_child_insertion (Process *child);
     shared_ptr<RefProperty> _added, _removed;
@@ -75,6 +76,7 @@ namespace djnn {
     virtual ~BidirectionalListIterator ();
     void activate () override;
     void deactivate () override;
+    void serialize (const string& type) override;
   private:
     List* _list;
     shared_ptr<Process> _next, _previous, _reset;
