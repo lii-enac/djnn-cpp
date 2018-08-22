@@ -9,10 +9,12 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #include "trigonometry.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -25,6 +27,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Cosine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:cosine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   Sine::Sine (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -32,6 +48,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", sin (in_val)));
     init_couplings (shared_ptr<Process> (new SineAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  Sine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:sine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   Tangent::Tangent (Process *p, const string &n, double in_val) :
@@ -43,6 +73,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  Tangent::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:tangent");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   ArcCosine::ArcCosine (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -50,6 +94,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", acos (in_val)));
     init_couplings (shared_ptr<Process> (new ArcCosineAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  ArcCosine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:arccosine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   ArcSine::ArcSine (Process *p, const string &n, double in_val) :
@@ -61,6 +119,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  ArcSine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:arcsine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   ArcTangent::ArcTangent (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -68,6 +140,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", atan (in_val)));
     init_couplings (shared_ptr<Process> (new ArcTangentAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  ArcTangent::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:arctangent");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   ArcTangent2::ArcTangent2 (Process *p, const string &n, double y_val, double x_val) :
@@ -80,6 +166,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  ArcTangent2::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:arctangent2");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("y", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("x", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   HyperbolicCosine::HyperbolicCosine (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -87,6 +187,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", cosh (in_val)));
     init_couplings (shared_ptr<Process> (new HyperbolicCosineAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  HyperbolicCosine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperboliccosine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   HyperbolicSine::HyperbolicSine (Process *p, const string &n, double in_val) :
@@ -98,6 +212,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  HyperbolicSine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperbolicsine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   HyperbolicTangent::HyperbolicTangent (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -105,6 +233,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", tanh (in_val)));
     init_couplings (shared_ptr<Process> (new HyperbolicTangentAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  HyperbolicTangent::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperbolictangent");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
   HyperbolicArcCosine::HyperbolicArcCosine (Process *p, const string &n, double in_val) :
@@ -116,6 +258,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  HyperbolicArcCosine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperbolicarccosine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   HyperbolicArcSine::HyperbolicArcSine (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -125,6 +281,20 @@ namespace djnn
     Process::finalize ();
   }
 
+  void
+  HyperbolicArcSine::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperbolicarcsine");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
   HyperbolicArcTangent::HyperbolicArcTangent (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -132,6 +302,20 @@ namespace djnn
     _output = shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", atanh (in_val)));
     init_couplings (shared_ptr<Process> (new HyperbolicArcTangentAction (this, "action", _input, _output)));
     Process::finalize ();
+  }
+
+  void
+  HyperbolicArcTangent::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:hyperbolicarctangent");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 }
 

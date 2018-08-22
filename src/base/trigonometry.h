@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -41,6 +42,7 @@ namespace djnn
   public:
     Cosine (Process *p, const string &n, double in_val);
     virtual ~Cosine () {}
+    void serialize (const string& type) override;
   };
 
   class Sine : public UnaryOperator
@@ -62,6 +64,7 @@ namespace djnn
   public:
     Sine (Process *p, const string &n, double in_val);
     virtual ~Sine () {}
+    void serialize (const string& type) override;
   };
 
   class Tangent : public UnaryOperator
@@ -83,6 +86,7 @@ namespace djnn
   public:
     Tangent (Process *p, const string &n, double in_val);
     virtual ~Tangent () {}
+    void serialize (const string& type) override;
   };
 
   class ArcCosine : public UnaryOperator
@@ -104,6 +108,7 @@ namespace djnn
   public:
     ArcCosine (Process *p, const string &n, double in_val);
     virtual ~ArcCosine () {}
+    void serialize (const string& type) override;
   };
 
   class ArcSine : public UnaryOperator
@@ -125,6 +130,7 @@ namespace djnn
   public:
     ArcSine (Process *p, const string &n, double in_val);
     virtual ~ArcSine () {}
+    void serialize (const string& type) override;
   };
 
   class ArcTangent : public UnaryOperator
@@ -146,6 +152,7 @@ namespace djnn
   public:
     ArcTangent (Process *p, const string &n, double in_val);
     virtual ~ArcTangent () {}
+    void serialize (const string& type) override;
   };
 
   class ArcTangent2 : public BinaryOperator
@@ -167,6 +174,7 @@ namespace djnn
     public:
       ArcTangent2 (Process *p, const string &n, double y_val, double x_val);
       virtual ~ArcTangent2 () {}
+      void serialize (const string& type) override;
     };
 
   class HyperbolicCosine : public UnaryOperator
@@ -188,6 +196,7 @@ namespace djnn
   public:
     HyperbolicCosine (Process *p, const string &n, double in_val);
     virtual ~HyperbolicCosine () {}
+    void serialize (const string& type) override;
   };
 
   class HyperbolicSine : public UnaryOperator
@@ -209,6 +218,7 @@ namespace djnn
   public:
     HyperbolicSine (Process *p, const string &n, double in_val);
     virtual ~HyperbolicSine () {}
+    void serialize (const string& type) override;
   };
 
   class HyperbolicTangent : public UnaryOperator
@@ -230,6 +240,7 @@ namespace djnn
   public:
     HyperbolicTangent (Process *p, const string &n, double in_val);
     virtual ~HyperbolicTangent () {}
+    void serialize (const string& type) override;
   };
 
   class HyperbolicArcCosine : public UnaryOperator
@@ -251,6 +262,7 @@ namespace djnn
   public:
     HyperbolicArcCosine (Process *p, const string &n, double in_val);
     virtual ~HyperbolicArcCosine () {}
+    void serialize (const string& type) override;
   };
 
   class HyperbolicArcSine : public UnaryOperator
@@ -272,6 +284,7 @@ namespace djnn
   public:
     HyperbolicArcSine (Process *p, const string &n, double in_val);
     virtual ~HyperbolicArcSine () {}
+    void serialize (const string& type) override;
   };
 
   class HyperbolicArcTangent : public UnaryOperator
@@ -293,5 +306,6 @@ namespace djnn
   public:
     HyperbolicArcTangent (Process *p, const string &n, double in_val);
     virtual ~HyperbolicArcTangent () {}
+    void serialize (const string& type) override;
   };
 }
