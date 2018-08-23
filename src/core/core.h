@@ -26,7 +26,7 @@
 #include "xml/xml.h"
 #include "control/exit.h"
 #include "serializer/serializer.h"
-
+#include "syshook/timer.h"
 #include "tree/abstract_property.h"
 #include "tree/blank.h"
 #include "tree/bool_property.h"
