@@ -62,6 +62,7 @@ namespace djnn
   {
     if (_activation_state == activated)
       return;
+    set_please_stop (false);
     start_thread();
   }
 
@@ -89,6 +90,7 @@ namespace djnn
       std::cerr << e.what() << std::endl;
     }
     _activation_state = deactivated;
+    //deactivation ();
   }
 
   void
