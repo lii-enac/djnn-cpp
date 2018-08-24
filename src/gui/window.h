@@ -46,8 +46,10 @@ namespace djnn
     DoubleProperty* width () { return _width; }
     DoubleProperty* height () { return _height; }
     TextProperty* title () { return _title; }
-    TextProperty* key_pressed () { return _key_pressed; }
-    TextProperty* key_released () { return _key_released; }
+    IntProperty* key_pressed () { return _key_pressed; }
+    IntProperty* key_released () { return _key_released; }
+    TextProperty* key_pressed_text () { return _key_pressed_text; }
+    TextProperty* key_released_text () { return _key_released_text; }
     Process* close () { return _close; }
     WinImpl* win_impl () { return _win_impl; }
     void set_refresh (bool r) { _refresh = r; }
@@ -81,8 +83,10 @@ namespace djnn
     Process* _touches;
     DoubleProperty *_x;
     DoubleProperty *_y;
-    TextProperty *_key_pressed;
-    TextProperty *_key_released;
+    TextProperty *_key_pressed_text;
+    IntProperty *_key_pressed;
+    TextProperty *_key_released_text;
+    IntProperty *_key_released;
     WinImpl *_win_impl;
     bool _refresh;
   };

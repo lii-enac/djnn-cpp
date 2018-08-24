@@ -30,8 +30,10 @@ namespace djnn
     _width = new DoubleProperty (this, "width", w);
     _height = new DoubleProperty (this, "height", h);
     _title = new TextProperty (this, "title", title);
-    _key_pressed = new TextProperty (this, "key-pressed", "");
-    _key_released = new TextProperty (this, "key-released", "");
+    _key_pressed = new IntProperty (this, "key-pressed", 0);
+    _key_released = new IntProperty (this, "key-released", 0);
+    _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
+    _key_released_text = new TextProperty (this, "key-released_text", "");
     _close = new Spike;
     add_symbol ("close", _close);
     _cpnt_type = WINDOW;
