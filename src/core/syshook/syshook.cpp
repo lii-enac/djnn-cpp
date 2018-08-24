@@ -36,7 +36,7 @@ namespace djnn
 
     global_mutex.lock ();
 #if DBG_MUTEX
-    std::cerr << " GOT " << ++count << std::endl << std::flush;
+    std::cerr << " GOT " << std::endl << std::flush;
 #endif
   }
 
