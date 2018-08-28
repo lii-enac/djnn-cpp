@@ -14,6 +14,7 @@
 
 
 #include "animation.h"
+#include "../core/serializer/serializer.h"
 
 namespace djnn
 {
@@ -30,6 +31,20 @@ namespace djnn
       djnn::loadedModules.push_back("animation");
       
     }
+  }
+
+  void
+  SlowInSlowOutInterpolator::serialize (const string& type)
+  {
+
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("animation:slowInslowoutinterpolator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+
   }
 
 }
