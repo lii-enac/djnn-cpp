@@ -84,14 +84,6 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("animation:oscillator");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("m", std::dynamic_pointer_cast<DoubleProperty> (_m)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("k", std::dynamic_pointer_cast<DoubleProperty> (_k)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("b", std::dynamic_pointer_cast<DoubleProperty> (_damping)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("v", std::dynamic_pointer_cast<DoubleProperty> (_v)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("output",
-                                                     std::dynamic_pointer_cast<DoubleProperty> (_output)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("dt",
-                                                     std::dynamic_pointer_cast<DoubleProperty> (_dt)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
