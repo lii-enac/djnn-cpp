@@ -14,6 +14,7 @@
 
 #include "double_property.h"
 #include "../serializer/serializer.h"
+#include "../error.h"
 #include <iostream>
 
 namespace djnn
@@ -55,14 +56,14 @@ namespace djnn
     }
     catch (const std::invalid_argument& ia) {
       value = oldVal;
-      cerr << "Warning: failed to convert " << v << " into a double value";
+      warning ("failed to convert " + v + " into a double property value\n");
     }
   }
 
   void
   DoubleProperty::set_value (Process* v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Component to Double\n";
+    warning ("undefined conversion from Component to Double\n");
   }
 
   void
