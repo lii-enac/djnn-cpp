@@ -251,7 +251,7 @@ namespace djnn
   {
     AbstractSerializer::pre_serialize(this, type);
 
-    AbstractSerializer::serializer->start ("base:bounded-value");
+    AbstractSerializer::serializer->start ("base:boundedvalue");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->int_attribute ("min", std::dynamic_pointer_cast<DoubleProperty> (_min)->get_value ());
     AbstractSerializer::serializer->int_attribute ("max", std::dynamic_pointer_cast<DoubleProperty> (_max)->get_value ());
