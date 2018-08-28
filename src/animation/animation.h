@@ -53,7 +53,7 @@ namespace djnn
       void deactivate () override;
       void serialize (const string& type) override;
     private:
-      shared_ptr<DoubleProperty> _m, _k, _b, _v, _output, _dt;
+      shared_ptr<DoubleProperty> _m, _k, _damping, _v, _output, _dt;
       shared_ptr<Process> _step;
       unique_ptr<Coupling> _c_step;
       shared_ptr<OscillatorAction> _action;

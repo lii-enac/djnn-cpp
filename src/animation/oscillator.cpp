@@ -32,7 +32,6 @@ namespace djnn
     double a = f / _m->get_value ();
     double v = _v->get_value () + a * _dt->get_value ();
     double output = _output->get_value () + v * _dt->get_value ();
-    //cout << "output: " << output << endl;
     _v->set_value (v, true);
     _output->set_value (output, true);
   }
@@ -42,12 +41,12 @@ namespace djnn
   {
     _m = make_shared<DoubleProperty> (this, "m", 1);
     _k = make_shared<DoubleProperty> (this, "k", 1);
-    _b = make_shared<DoubleProperty> (this, "b", 0);
+    _damping = make_shared<DoubleProperty> (this, "damping", 0);
     _v = make_shared<DoubleProperty> (this, "v", 0);
     _output = make_shared<DoubleProperty> (this, "output", 1);
     _dt = make_shared<DoubleProperty> (this, "dt", 0.001);
     _step = make_shared<Spike> (this, "step");
-    _action = make_unique < OscillatorAction > (this, "action", _m, _k, _b, _v, _output, _dt);
+    _action = make_unique < OscillatorAction > (this, "action", _m, _k, _damping, _v, _output, _dt);
     _c_step = make_unique < Coupling > (_step.get (), ACTIVATION, _action.get (), ACTIVATION);
     _c_step->disable ();
     Graph::instance ().add_edge (_step.get (), _action.get ());
@@ -87,7 +86,7 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->float_attribute ("m", std::dynamic_pointer_cast<DoubleProperty> (_m)->get_value ());
     AbstractSerializer::serializer->float_attribute ("k", std::dynamic_pointer_cast<DoubleProperty> (_k)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("b", std::dynamic_pointer_cast<DoubleProperty> (_b)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("b", std::dynamic_pointer_cast<DoubleProperty> (_damping)->get_value ());
     AbstractSerializer::serializer->float_attribute ("v", std::dynamic_pointer_cast<DoubleProperty> (_v)->get_value ());
     AbstractSerializer::serializer->float_attribute ("output",
                                                      std::dynamic_pointer_cast<DoubleProperty> (_output)->get_value ());
