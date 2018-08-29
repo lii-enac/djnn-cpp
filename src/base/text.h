@@ -16,6 +16,7 @@
 #pragma once
 
 #include "operators.h"
+#include "../core/tree/text_property.h"
 #include <iostream>
 
 namespace djnn
@@ -59,7 +60,7 @@ namespace djnn
                            shared_ptr<AbstractProperty> result) :
 		  BinaryOperatorAction (parent, name, left, right, result) {}
       virtual ~TextCatenatorAction () {}
-      void activate ()
+      void activate () override
       {
         if (_parent->get_state () > activated)
           return;
@@ -68,7 +69,7 @@ namespace djnn
         string out = head + tail;
         _result.get()->set_value (out, true);
       }
-      void deactivate () {}
+      void deactivate () override {}
     };
   public:
     TextCatenator (Process *p, const string &name);

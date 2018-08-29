@@ -24,6 +24,7 @@
 #include "switch.h"
 #include "text.h"
 #include "logic.h"
+#include "log.h"
 
 
 namespace djnn {
