@@ -71,9 +71,9 @@ namespace djnn
       _parent->add_child (this, _name);
   }
 
-  Process::Process (Process* parent, const string& name) :
+  Process::Process (Process* parent, const string& name, bool model) :
       _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (false), _activation_flag (NONE), _has_couplings (false)
+          deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
   {
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
@@ -81,9 +81,9 @@ namespace djnn
     _cpnt_type = UNDEFINED;
   }
 
-  Process::Process () :
+  Process::Process (bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (false), _activation_flag (NONE), _has_couplings (false)
+          deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
 

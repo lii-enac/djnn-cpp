@@ -42,8 +42,8 @@ namespace djnn {
   class Process
   {
   public:
-    Process (Process *parent, const string& name);
-    Process ();
+    Process (Process *parent, const string& name, bool model = false);
+    Process (bool model = false);
     virtual ~Process ();
     void finalize ();
     bool is_model ();
