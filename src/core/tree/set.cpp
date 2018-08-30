@@ -135,9 +135,10 @@ namespace djnn
   }
 
   void
-  Set::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
+  Set::serialize (const string& type)
+  {
+
+    AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("core:set");
     AbstractSerializer::serializer->text_attribute ("id", _name);
@@ -148,7 +149,9 @@ namespace djnn
 
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
+    AbstractSerializer::post_serialize (this);
+  }
+
   SetIterator::SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model) :
       Process (parent, name, model), _set (set), _action (action)
   {
