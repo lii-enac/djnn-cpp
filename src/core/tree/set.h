@@ -24,6 +24,18 @@
 namespace djnn {
   using namespace std;
 
+  class SetIterator : public Process
+  {
+  public:
+    SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model = true);
+    virtual ~SetIterator () {}
+    void activate () override;
+    void deactivate () override {};
+    void post_activate () override;
+  private:
+    Process *_set, *_action;
+  };
+
   class Set : public Process
   {
   public:

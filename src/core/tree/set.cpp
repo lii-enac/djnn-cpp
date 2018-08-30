@@ -17,6 +17,8 @@
 #include "../execution/graph.h"
 #include "../execution/component_observer.h"
 #include "../serializer/serializer.h"
+#include "../error.h"
+
 #include <algorithm>
 
 namespace djnn
@@ -147,7 +149,31 @@ namespace djnn
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
+  SetIterator::SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model) :
+      Process (parent, name, model), _set (set), _action (action)
+  {
+    Set *s = dynamic_cast<Set*> (set);
+    if (s == nullptr)
+      error ("The set argument must be a Set component in set iterator " + name);
+    Process::finalize ();
   }
 
+  void
+  SetIterator::activate ()
+  {
+    std::map<std::string, Process*>::iterator it;
+    std::map<std::string, Process*> map = _set->symtable ();
+    for (it = map.begin (); it != map.end (); ++it) {
+      _action->set_data (it->second);
+      _action->activation ();
+    }
+    notify_activation ();
+  }
+
+  void
+  SetIterator::post_activate ()
+  {
+    _activation_state = deactivated;
+  }
 }
 
