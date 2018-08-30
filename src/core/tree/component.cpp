@@ -58,9 +58,9 @@ namespace djnn
     }
     c->set_parent (this);
     add_symbol (name, c);
-    if (get_state () == activated) {
+    if (get_state () <= activated) {
       c->activation ();
-    } else if (c->get_state () == activated) {
+    } else {
       c->deactivation ();
     }
   }
