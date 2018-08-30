@@ -322,5 +322,31 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+
+  ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model) :
+      Process (parent, name, model), _action (action)
+  {
+    List *l = dynamic_cast<List*> (list);
+    if (l == nullptr)
+      error ("The list argument must be a List component in list iterator " + name);
+    _list = l;
+    Process::finalize ();
+  }
+
+  void
+  ListIterator::activate ()
+  {
+    for (auto p : _list->children ()) {
+      _action->set_data (p);
+      _action->activation ();
+    }
+    notify_activation ();
+  }
+
+  void
+  ListIterator::post_activate ()
+  {
+    _activation_state = deactivated;
+  }
 }
 

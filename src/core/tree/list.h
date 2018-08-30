@@ -45,6 +45,19 @@ namespace djnn {
     shared_ptr <IntProperty> _size;
   };
 
+  class ListIterator : public Process
+  {
+  public:
+    ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model = true);
+    virtual ~ListIterator () {}
+    void activate () override;
+    void deactivate () override {};
+    void post_activate () override;
+  private:
+    Process *_action;
+    List *_list;
+  };
+
   class BidirectionalListIterator : public Process
   {
   private:
