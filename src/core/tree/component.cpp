@@ -88,10 +88,14 @@ namespace djnn
   Container::activate ()
   {
     ComponentObserver::instance ().start_component ();
-    for (auto c : _children) {
-      if (!c->is_model ()) {
-        c->activation ();
+    /* WARNING Here we don't use C++ iterator as we want to allow
+     * the dynamic modification of children list */
+    int i = 0;
+    while (i < _children.size ()) {
+      if (!_children[i]->is_model ()) {
+        _children[i]->activation ();
       }
+      i++;
     }
     ComponentObserver::instance ().end_component ();
   }
