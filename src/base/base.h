@@ -25,6 +25,7 @@
 #include "text.h"
 #include "logic.h"
 #include "log.h"
+#include "counter.h"
 
 #include "switch_list.h"
 
