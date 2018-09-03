@@ -26,24 +26,25 @@
 namespace djnn
 {
 
-
+  using namespace std;
   
 
   class IvyAccess : public Process, public ExternalSource
   {
 
-  /*** private Class Ivy Actions ***/
+  /*** private Class Ivy Out Actions ***/ 
   private:
-     class IvyAction : public Process
+     class IvyOutAction : public Process
     {
-    private:
-      TextProperty *  _out;
     public:
-      IvyAction (Process* parent, const string &name, TextProperty* out) :
+      IvyOutAction (Process* parent, const string &name, TextProperty* out) :
       Process (parent, name), _out (out) {}
-      virtual ~IvyAction () {}
-      void activate () override;
+      virtual ~IvyOutAction () {}
+      void coupling_activation_hook () override;
+      void activate () override {};
       void deactivate () override {}
+    private:
+      TextProperty* _out;
     };
 
 
@@ -78,7 +79,7 @@ namespace djnn
     std::vector<TextProperty*> _in;
     TextProperty* _out;
     Coupling*  _out_c;
-    IvyAction*    _out_a;
+    IvyOutAction*    _out_a;
     TextProperty* _arriving;
     TextProperty* _leaving;
 

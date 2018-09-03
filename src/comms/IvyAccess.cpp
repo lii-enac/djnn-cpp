@@ -142,13 +142,13 @@ static void __on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data,
 namespace djnn
 {
 
-  /****  IVY ACTIONS ****/
+  /****  IVY OUT ACTIONS ****/
 
-  void
-  IvyAccess::IvyAction::activate ()
+ void
+  IvyAccess::IvyOutAction::coupling_activation_hook ()
   {  
-   IvySendMsg ("%s", _out->get_value().c_str());
- }
+     IvySendMsg ("%s", _out->get_value ().c_str ());
+  }
 
 
   /**** IVY ACCESS ****/
@@ -163,12 +163,13 @@ namespace djnn
 
     /* OUT child */
   _out = new TextProperty ( this, "out", "");
-  _out_a = new IvyAction (this, "out_action", _out);
+  _out_a = new IvyOutAction (this, "out_action", _out);
   _out_c = new Coupling (_out , ACTIVATION, _out_a, ACTIVATION );
   _out_c->disable();
   Graph::instance().add_edge(_out, _out_a);
   if (_parent && _parent->state_dependency () != nullptr)
     Graph::instance ().add_edge (_parent->state_dependency (), _out_a);
+
     /* ARRIVING child */
   _arriving = new TextProperty ( this,  "arriving", "");
 
