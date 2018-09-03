@@ -44,9 +44,8 @@ namespace djnn
   }
 
   void
-  UpdateDrawing::set_activation_flag (int flag)
+  UpdateDrawing::coupling_activation_hook ()
   {
-    Process::set_activation_flag (flag);
     Window *frame = dynamic_cast<Window*> (get_data ());
     if (frame == nullptr)
       return;

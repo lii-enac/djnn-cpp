@@ -54,7 +54,7 @@ namespace djnn
     ~UpdateDrawing () {};
     void activate () override;
     void deactivate () override {}
-    void set_activation_flag (int flag) override;
+    void coupling_activation_hook () override;
     static void init ();
     static void clear ();
   private:
