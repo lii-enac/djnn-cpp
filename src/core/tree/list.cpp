@@ -26,31 +26,24 @@ namespace djnn
 {
   using namespace std;
 
-  List::List () :
+  AbstractList::AbstractList () :
       Container ()
   {
-    _cpnt_type = COMPONENT;
     _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
     _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
     _size = std::unique_ptr<IntProperty> (new IntProperty (0));
   }
 
-  List::List (Process* parent, const string& name) :
-      Container (parent, name)
+  AbstractList::AbstractList (Process* parent, const string& name) :
+    Container (parent, name)
   {
-    _cpnt_type = COMPONENT;
     _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
     _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
     _size = std::unique_ptr<IntProperty> (new IntProperty (0));
-    Process::finalize ();
   }
 
-  List::~List ()
-  {
-  }
-  
   void
-  List::dump (int level)
+  AbstractList::dump (int level)
   {
     cout << _name  << " [ index=" << _children.size () << " ]" << endl ;
 
@@ -60,21 +53,7 @@ namespace djnn
   }
 
   void
-  List::finalize_child_insertion (Process *c)
-  {
-    c->set_parent (this);
-
-    if (get_state () == activated && c->get_state () == deactivated) {
-      c->activation ();
-    } else if (get_state () == deactivated && c->get_state () == activated) {
-      c->deactivation ();
-    }
-    _added->set_value (c, true);
-    _size->set_value (_size->get_value () + 1, true);
-  }
-
-  void
-  List::add_child (Process* c, const std::string& name)
+  AbstractList::add_child (Process* c, const std::string& name)
   {
     if (c == nullptr)
       return;
@@ -84,7 +63,7 @@ namespace djnn
   }
 
   void
-  List::insert (Process* c, const std::string& spec)
+  AbstractList::insert (Process* c, const std::string& spec)
   {
     if (spec.compare (">") == 0) {
       add_child (c, "");
@@ -121,7 +100,7 @@ namespace djnn
   }
 
   void
-  List::remove_child (Process* c)
+  AbstractList::remove_child (Process* c)
   {
     std::vector<Process*>::iterator newend = _children.end ();
 
@@ -138,7 +117,7 @@ namespace djnn
   }
 
   void
-  List::remove_child (const std::string& name)
+  AbstractList::remove_child (const std::string& name)
   {
     size_t index;
     try {
@@ -157,8 +136,37 @@ namespace djnn
     }
   }
 
+  List::List () :
+      AbstractList ()
+  {
+  }
+
+  List::List (Process* parent, const string& name) :
+    AbstractList (parent, name)
+  {
+    Process::finalize ();
+  }
+
+  List::~List ()
+  {
+  }
+
+  void
+  List::finalize_child_insertion (Process *c)
+  {
+    c->set_parent (this);
+
+    if (get_state () == activated && c->get_state () == deactivated) {
+      c->activation ();
+    } else if (get_state () == deactivated && c->get_state () == activated) {
+      c->deactivation ();
+    }
+    _added->set_value (c, true);
+    _size->set_value (_size->get_value () + 1, true);
+  }
+
   Process*
-  List::find_component (const string& path)
+  AbstractList::find_component (const string& path)
   {
     if (path.compare ("$added") == 0)
       return _added.get ();

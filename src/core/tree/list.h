@@ -24,25 +24,35 @@
 namespace djnn {
   using namespace std;
 
-  class List : public Container
+  class AbstractList : public Container
   {
   public:
-    List ();
-    List (Process *parent, const string& name);
+    AbstractList ();
+    AbstractList (Process *parent, const string& name);
     void add_child (Process* c, const string& name) override;
     void insert (Process* c, const string& spec);
     void remove_child (Process* c) override;
     void remove_child (const string &name) override;
     void dump(int level=0) override;
     Process* find_component (const string &path) override;
-    Process* clone () override;
-    virtual ~List ();
+    virtual ~AbstractList () {};
     int size () { return _size->get_value (); }
-    void serialize (const string& type) override;
-  private:
-    void finalize_child_insertion (Process *child);
+  protected:
+    virtual void finalize_child_insertion (Process *child) = 0;
     shared_ptr<RefProperty> _added, _removed;
     shared_ptr <IntProperty> _size;
+  };
+
+  class List : public AbstractList
+  {
+  public:
+    List ();
+    List (Process *parent, const string& name);
+    virtual ~List ();
+    void serialize (const string& type) override;
+    Process* clone () override;
+  private:
+    void finalize_child_insertion (Process *child) override;
   };
 
   class ListIterator : public Process
