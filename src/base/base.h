@@ -26,6 +26,7 @@
 #include "logic.h"
 #include "log.h"
 
+#include "switch_list.h"
 
 namespace djnn {
 
