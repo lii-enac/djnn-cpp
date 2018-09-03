@@ -68,6 +68,8 @@ namespace djnn {
     virtual void add_child (Process* c, const string& name);
     virtual void remove_child (Process* c);
     virtual void remove_child (const string& name);
+    virtual void coupling_activation_hook () {};
+    virtual void coupling_deactivation_hook () {};
 
     Process* state_dependency () { return _state_dependency; }
     void set_state (activation_state state) { _activation_state = state; }
