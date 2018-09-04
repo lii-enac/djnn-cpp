@@ -92,6 +92,7 @@ namespace djnn {
 
     virtual void dump (int level=0);
 
+    string debug_info () { return _dbg_info; }
     // Actions
     virtual void draw () {};
     virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
@@ -101,6 +102,7 @@ namespace djnn {
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     shared_ptr<Vertex> _vertex;
+    string _dbg_info;
 
   protected:
     virtual void pre_activate ();
