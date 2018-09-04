@@ -113,7 +113,7 @@ namespace djnn
 
   Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
                           Process* dst, const string &dspec, bool isModel) :
-      Process (parent, name), AbstractAssignment (src, ispec, dst, dspec, isModel)
+      AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,
@@ -180,7 +180,7 @@ namespace djnn
 
   PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src,
                                       const string &ispec, Process* dst, const string &dspec, bool isModel) :
-      Process (parent, name), AbstractAssignment (src, ispec, dst, dspec, isModel) 
+      AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,

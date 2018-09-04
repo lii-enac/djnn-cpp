@@ -21,7 +21,7 @@
 namespace djnn {
 
 
-  class AbstractAssignment {
+  class AbstractAssignment : public Process {
 
    friend class Assignment;
    friend class PausedAssignment;
@@ -42,6 +42,7 @@ namespace djnn {
 
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
+    AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     static void do_assignment (AbstractProperty* src, AbstractProperty* dst, bool propagate);
   protected:
     AbstractProperty* _src;
@@ -49,7 +50,7 @@ namespace djnn {
     unique_ptr<AssignmentAction> _action;
   };
 
-  class Assignment : public Process, AbstractAssignment {
+  class Assignment : public AbstractAssignment {
   public:
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
@@ -60,7 +61,7 @@ namespace djnn {
   };
 
 
-  class PausedAssignment : public Process, AbstractAssignment {
+  class PausedAssignment : public AbstractAssignment {
   public:
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
