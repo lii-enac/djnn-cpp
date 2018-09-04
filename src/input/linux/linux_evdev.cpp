@@ -28,7 +28,7 @@ namespace djnn {
     int err;
     _fd = open (node, O_RDONLY|O_NONBLOCK);
     if (_fd < 0) {
-      warning ("Cannot open " + string (node) + " for reading: " + string (strerror (errno)));
+      warning (this, "Cannot open " + string (node) + " for reading: " + string (strerror (errno)));
       _aborted = true;
       return;
     } else {
@@ -37,7 +37,7 @@ namespace djnn {
       if (err == 0) /* if success, release the grab */
       err = ioctl (_fd, EVIOCGRAB, 0);
       if (err) {
-        warning ("warning: " + string (node) + " is grabbed by another process");
+        warning (this, "warning: " + string (node) + " is grabbed by another process");
         close (_fd);
         _aborted = true;
         return;
@@ -47,7 +47,7 @@ namespace djnn {
     err = libevdev_set_fd (_dev, _fd);
 
     if (err < 0) {
-      warning ("failed to init evdev device " + string (node));
+      warning (this, "failed to init evdev device " + string (node));
       _aborted = true;
       close (_fd);
       return;
@@ -89,7 +89,7 @@ namespace djnn {
     do {
       err = libevdev_next_event (_dev, LIBEVDEV_READ_FLAG_NORMAL, &ev);
       if (err == LIBEVDEV_READ_STATUS_SYNC) {
-        warning ("input events may have been lost for device " + _name);
+        warning (this, "input events may have been lost for device " + _name);
       } else if (err == LIBEVDEV_READ_STATUS_SUCCESS) {
         _djn_dev->handle_event (&ev);
       }

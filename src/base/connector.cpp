@@ -50,27 +50,27 @@ namespace djnn
   Connector::init_connector (Process *src, string ispec, Process *dst, string dspec)
   {
     if (src == 0) {
-      error ("src argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "src argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     if (dst == 0) {
-      error ("dst argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "dst argument cannot be null in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_src = src->find_component (ispec);
     if (c_src == 0) {
-      error ("source not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "source not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_dst = dst->find_component (dspec);
     if (c_dst == 0) {
-      error ("destination not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "destination not found in connector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
-      warning ("invalid source or destination in connector (" + get_name() + "," + ispec + " " + dspec + ")");
+      warning (this, "invalid source or destination in connector (" + get_name() + "," + ispec + " " + dspec + ")");
     }
 
     _action = shared_ptr<Process> (
@@ -134,27 +134,27 @@ namespace djnn
   PausedConnector::init_pausedconnector (Process *src, string ispec, Process *dst, string dspec)
   {
     if (src == 0) {
-      error ("src argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "src argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     if (dst == 0) {
-      error ("dst argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "dst argument cannot be null in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_src = src->find_component (ispec);
     if (c_src == 0) {
-      error ("source not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "source not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_dst = dst->find_component (dspec);
     if (c_dst == 0) {
-      error ("destination not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "destination not found in pausedconnector creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
 
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
-      warning ("invalid source or destination in pausedconnector (" + get_name() + "," + ispec + " " + dspec + ")");
+      warning (this, "invalid source or destination in pausedconnector (" + get_name() + "," + ispec + " " + dspec + ")");
     }
 
     _action = shared_ptr<Process> (

@@ -65,7 +65,7 @@ namespace djnn {
     void post_activate () override;
   private:
     Process *_action;
-    List *_list;
+    Container *_list;
   };
 
   class BidirectionalListIterator : public Process

@@ -27,7 +27,7 @@ namespace djnn
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
-      warning ("only a FSM can be the parent of a FSM State\n");
+      warning (this, "only a FSM can be the parent of a FSM State\n");
       return;
     }
     fsm->set_initial (n);
@@ -106,7 +106,7 @@ namespace djnn
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
-      warning ("only a FSM can be the parent of a FSM Transition\n");
+      warning (this, "only a FSM can be the parent of a FSM Transition\n");
       return;
     }
     _priority = fsm->priority ();
@@ -115,14 +115,14 @@ namespace djnn
     _src = dynamic_cast<FSMState*> (from);
     _dst = dynamic_cast<FSMState*> (to);
     if (_src == nullptr || _dst == nullptr) {
-      warning ("only FSM states can be connected in a FSM transition\n");
+      warning (this, "only FSM states can be connected in a FSM transition\n");
       return;
     }
 
     _src->add_transition (this);
     _trigger = src->find_component (spec);
     if (_trigger == nullptr) {
-      warning ("invalid source in transition " + n + "\n");
+      warning (this, "invalid source in transition " + n + "\n");
       _c_src = nullptr;
       return;
     }
@@ -154,7 +154,7 @@ namespace djnn
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
-      warning ("only a FSM can be the parent of a FSM Transition\n");
+      warning (this, "only a FSM can be the parent of a FSM Transition\n");
       return;
     }
     _priority = fsm->priority ();
@@ -163,7 +163,7 @@ namespace djnn
     _src = dynamic_cast<FSMState*> (from);
     _dst = dynamic_cast<FSMState*> (to);
     if (_src == nullptr || _dst == nullptr) {
-      warning ("only FSM states can be connected in a FSM transition\n");
+      warning (this, "only FSM states can be connected in a FSM transition\n");
       return;
     }
 
@@ -171,7 +171,7 @@ namespace djnn
     _trigger = trigger;
     _action = action;
     if (_trigger == nullptr) {
-      warning ("invalid source in transition " + n + "\n");
+      warning (this, "invalid source in transition " + n + "\n");
       _c_src = nullptr;
       return;
     }

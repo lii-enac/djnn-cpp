@@ -166,7 +166,7 @@ namespace djnn
   {
     Set *s = dynamic_cast<Set*> (set);
     if (s == nullptr)
-      error ("The set argument must be a Set component in set iterator " + name);
+      error (this, "The set argument must be a Set component in set iterator " + name);
     Process::finalize ();
   }
 

@@ -56,14 +56,14 @@ namespace djnn
     }
     catch (const std::invalid_argument& ia) {
       value = oldVal;
-      warning ("failed to convert " + v + " into a double property value\n");
+      warning (this, "failed to convert " + v + " into a double property value\n");
     }
   }
 
   void
   DoubleProperty::set_value (Process* v, bool propagate)
   {
-    warning ("undefined conversion from Component to Double\n");
+    warning (this, "undefined conversion from Component to Double\n");
   }
 
   void

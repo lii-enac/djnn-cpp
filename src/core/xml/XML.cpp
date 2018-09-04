@@ -96,7 +96,7 @@ namespace djnn {
       return curComponent;
     }
     else {
-      error ("could not parse " + uri);
+      error (nullptr, "could not parse " + uri);
       return 0;
     };
   }

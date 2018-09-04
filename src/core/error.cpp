@@ -12,21 +12,36 @@
  *
  */
 
-#include "../core/error.h"
+#include "error.h"
 
 namespace djnn
 {
+  Context* Context::_instance = nullptr;
+
+  Context*
+  Context::instance ()
+  {
+    if (_instance == nullptr)
+      _instance = new Context ();
+    return _instance;
+  }
+
   void
-  error (const std::string &msg)
+  error (Process* p, const std::string &msg)
   {
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << msg << std::endl << std::endl;
+    if (p) {
+      std::cerr << p->debug_info () << std::endl;
+    }
     exit (0);
   }
 
   void
-  warning (const std::string &msg)
+  warning (Process *p, const std::string &msg)
   {
     std::cerr << std::endl << std::endl << "djnn - WARNING: " << msg << std::endl << std::endl;
+    if (p) {
+      std::cerr << p->debug_info () << std::endl;
+    }
   }
-
 }

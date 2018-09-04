@@ -16,6 +16,7 @@
 #include "process.h"
 #include "../control/coupling.h"
 #include "../uri.h"
+#include "../error.h"
 #include <algorithm>
 #include <iostream>
 
@@ -79,6 +80,10 @@ namespace djnn
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
     _cpnt_type = UNDEFINED;
+    if (Context::instance ()->line () != -1) {
+      _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
+    } else
+      _dbg_info = "non debug info";
   }
 
   Process::Process (bool model) :
@@ -88,6 +93,10 @@ namespace djnn
     _name = "anonymous_" + to_string (++_nb_anonymous);
 
     _cpnt_type = UNDEFINED;
+    if (Context::instance ()->line () != -1) {
+      _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
+    } else
+      _dbg_info = "non debug info";
   }
 
   Process::~Process ()

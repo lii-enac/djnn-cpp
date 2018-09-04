@@ -96,7 +96,7 @@ namespace djnn
       goto label_error;
     }
     label_error: 
-      warning ("invalid specification '" + spec + "' for insertion in list '" + _name + "'");
+      warning (this, "invalid specification '" + spec + "' for insertion in list '" + _name + "'");
   }
 
   void
@@ -128,11 +128,11 @@ namespace djnn
         remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
-         warning ( "index " + std::to_string(index+1) + " is out of bound for list '" + _name + "'");
+         warning (this, "index " + std::to_string(index+1) + " is out of bound for list '" + _name + "'");
       }
     }
     catch (invalid_argument& arg) {
-      warning ("invalid child name '" + name + "' for list '" +_name + "'");
+      warning (this, "invalid child name '" + name + "' for list '" +_name + "'");
     }
   }
 
@@ -186,11 +186,11 @@ namespace djnn
             return c;
         } else {
           /* we have to dispay index as the API user index */
-          warning ( "index " + std::to_string(index+1) + " is out of bound for list \'" + _name + "\'");
+          warning (this,  "index " + std::to_string(index+1) + " is out of bound for list \'" + _name + "\'");
         }
       }
       catch (invalid_argument& arg) {
-        warning ("invalid child path '" + path + "' for list '" + _name + "'");
+        warning (this, "invalid child path '" + path + "' for list '" + _name + "'");
       }
     }
     return nullptr;
@@ -267,7 +267,7 @@ namespace djnn
   {
     _list = dynamic_cast<List*> (list);
     if (_list == nullptr) {
-      warning ("list iterator must take a List as its third argument\n");
+      warning (this, "list iterator must take a List as its third argument\n");
       return;
     }
     _next = make_shared<Spike> (this, "next");
@@ -334,9 +334,9 @@ namespace djnn
   ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model) :
       Process (parent, name, model), _action (action)
   {
-    List *l = dynamic_cast<List*> (list);
+    Container *l = dynamic_cast<Container*> (list);
     if (l == nullptr)
-      error ("The list argument must be a List component in list iterator " + name);
+      error (this, "The list argument must be a List component in list iterator " + name);
     _list = l;
     Process::finalize ();
   }

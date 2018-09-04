@@ -28,22 +28,22 @@ namespace djnn
   Binding::init_binding (Process* src, const string & ispec, Process* dst, const string & dspec)
   {
     if (src == 0) {
-      error ("src argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "src argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     if (dst == 0) {
-      error ("dst argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this, "dst argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
     }
     if (ispec.length () > 0) {
       _src = src->find_component (ispec);
       if (_src == 0) {
-        error ("source child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
+        error (this, "source child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _src = src;
     if (dspec.length () > 0) {
       _dst = dst->find_component (dspec);
       if (_dst == 0) {
-        error ("destination child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
+        error (this, "destination child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _dst = dst;

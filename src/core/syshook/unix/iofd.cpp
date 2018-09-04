@@ -49,7 +49,7 @@ namespace djnn {
         FD_SET (_readfd, &reads);
         int ret = select(_readfd+1, &reads, nullptr, nullptr, nullptr); // blocking call
         if (ret == -1) {
-          warning ("error reading fd");
+          warning (nullptr, "error reading fd");
           return;
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
@@ -60,7 +60,7 @@ namespace djnn {
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
     } catch (exception& e) {
-      warning (e.what());
+      warning (nullptr, e.what());
     }
   }
 }

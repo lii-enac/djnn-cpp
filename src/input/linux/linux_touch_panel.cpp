@@ -100,7 +100,7 @@ namespace djnn {
             if (_cur_touch->used () == UNUSED)
               _cur_touch->set_used (NEW);
             else
-              warning ("warning, touch already used");
+              warning (this, "warning, touch already used");
           } else {
             _touches->remove_child (_cur_touch);
             _cur_touch->set_used (UNUSED);

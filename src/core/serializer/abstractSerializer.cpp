@@ -50,7 +50,7 @@ namespace djnn
           cout << "{\n";
         }
         else
-          warning ( format + " is not a valid serializer format (XML|JSON) " );
+          warning (nullptr, format + " is not a valid serializer format (XML|JSON) " );
      }
   }
 
