@@ -51,16 +51,25 @@ namespace djnn
   void
   Set::add_child (Process* c, const std::string& name)
   {
-    Process::add_child (c, name);
-    c->set_parent (this);
+    /* test if the child is already in the set
+     * it == _symtable.end () if the element is not find 
+     * only then we add it in the symtable to avoid duplicate
+     */
+    map<string, Process*>::iterator it;
+    it = _symtable.find(name);
+    if (it == _symtable.end ()) {
+      Process::add_child (c, name);
+      c->set_parent (this);
 
-    if (get_state () == activated) {
-      c->activation ();
-    } else if (c->get_state () == activated) {
-      c->deactivation ();
+      if (get_state () == activated) {
+        c->activation ();
+      } else if (c->get_state () == activated) {
+        c->deactivation ();
+      }
+      _added->set_value (c, true);
+      _size->set_value (_size->get_value () + 1, true);
     }
-    _added->set_value (c, true);
-    _size->set_value (_size->get_value () + 1, true);
+
   }
 
   void
