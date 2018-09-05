@@ -38,7 +38,7 @@ namespace djnn
     {
     public:
       IvyOutAction (Process* parent, const string &name, TextProperty* out) :
-      Process (parent, name), _out (out) {}
+      Process (parent, name), _out (out) { Process::finalize ();}
       virtual ~IvyOutAction () {}
       void coupling_activation_hook () override;
       void activate () override {};
