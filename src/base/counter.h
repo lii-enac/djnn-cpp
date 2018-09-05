@@ -24,42 +24,46 @@ namespace djnn
   class Counter : public Process
   {
   private:
+
+    /* RESET ACTION */
     class CounterResetAction : public Process
     {
     public:
       CounterResetAction (Process* p, const string &n, shared_ptr<DoubleProperty> init, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _init (init), _output (output) {};
+      Process (p, n), _init (init), _output (output) { Process::finalize ();};
     
       virtual ~CounterResetAction () {}
-      void activate ()
+      void activate () override
       {
         _output->set_value (_init->get_value (), true);
       }
-      void deactivate () {}
+      void deactivate () override {}
     private:
     	shared_ptr<DoubleProperty> _init;
     	shared_ptr<DoubleProperty> _output;
 
     };
 
+    /* STEP ACTION */
     class CounterStepAction : public Process
     {
     public:
       CounterStepAction (Process* p, const string &n, shared_ptr<DoubleProperty> delta, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _delta (delta), _output (output) {};
+      Process (p, n), _delta (delta), _output (output) { Process::finalize ();};
     
       virtual ~CounterStepAction () {}
-      void activate ()
+      void activate () override
       {
         _output->set_value (_output->get_value () +  _delta->get_value (), true);
       }
-      void deactivate () {}
+      void deactivate () override {}
     private:
     	shared_ptr<DoubleProperty> _delta;
     	shared_ptr<DoubleProperty> _output;
 
     };
 
+  /* COUNTER ACTION */
   public:
     Counter (Process* p, const std::string& n, double init, double delta);
     ~Counter();
