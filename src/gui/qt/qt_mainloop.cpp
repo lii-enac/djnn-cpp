@@ -96,6 +96,7 @@ namespace djnn
   {
     if (!get_please_stop ()) {
       djnn::get_exclusive_access (DBG_GET);
+      // now qt can call event method on windows
     } else {
       _qapp->quit ();
     }

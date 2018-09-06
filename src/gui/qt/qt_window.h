@@ -42,6 +42,8 @@ namespace djnn {
     void activate () override;
     void deactivate () override;
 
+    friend class MyQWidget;
+
   private:
     MyQWidget * _qwidget;
     Window* _window;
