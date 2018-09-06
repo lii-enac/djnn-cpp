@@ -167,8 +167,8 @@ namespace djnn
     const QPoint pos = event->pos ();
     int x = pos.x ();
     int y = pos.y ();
-    _window->x ()->set_value (x, 1);
-    _window->y ()->set_value (y, 1);
+    _window->pos_x ()->set_value (x, 1);
+    _window->pos_y ()->set_value (y, 1);
 
     _updating = false;
     QtMainloop::instance ().set_please_exec (true);
