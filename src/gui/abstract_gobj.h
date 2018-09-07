@@ -55,6 +55,7 @@ namespace djnn
     void activate () override;
     void deactivate () override {}
     void coupling_activation_hook () override;
+    void add_window_for_refresh (Window* w) { _win_list.push_back (w); w->set_refresh (true); }
     static void init ();
     static void clear ();
   private:

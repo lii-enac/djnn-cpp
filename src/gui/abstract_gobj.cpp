@@ -106,7 +106,7 @@ namespace djnn
         return;
       }
     }
-    UpdateDrawing::instance ()->set_data (_frame);
+    UpdateDrawing::instance ()->add_window_for_refresh (_frame);
     UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
   }
 
@@ -114,7 +114,7 @@ namespace djnn
   AbstractGObj::deactivate ()
   {
     if (_frame != nullptr) {
-      UpdateDrawing::instance ()->set_data (_frame);
+      UpdateDrawing::instance ()->add_window_for_refresh (_frame);
       UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
     }
   }
