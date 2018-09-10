@@ -79,7 +79,9 @@ namespace djnn
     move->add_symbol ("local_x", local_x);
     move->add_symbol ("local_y", local_y);
     _matrix = new Homography (this, "matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    _matrix->set_state (activated);
     _inverted_matrix = new Homography (this, "inverted_matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    _inverted_matrix->set_state (activated);
     _has_ui = true;
   }
 
