@@ -33,12 +33,14 @@ namespace djnn
     /* reset action */
     _action_reset = make_shared<CounterResetAction> (this, n + "_action_reset", _init, _output);
     _c_reset = make_unique<Coupling> (_reset.get (), ACTIVATION, _action_reset.get (), ACTIVATION);
+    _c_reset->disable ();
     Graph::instance ().add_edge (_reset.get (), _action_reset.get ());
     Graph::instance ().add_edge (_action_reset.get (), _output.get ());
 
     /* step action */    
     _action_step = make_shared<CounterStepAction> (this, n + "_action_step", _delta, _output);
     _c_step = make_unique<Coupling> (_step.get (), ACTIVATION, _action_step.get (), ACTIVATION);
+    _c_step->disable ();
     Graph::instance ().add_edge (_step.get (), _action_step.get ());
     Graph::instance ().add_edge (_action_step.get (), _output.get ());
 
@@ -56,6 +58,19 @@ namespace djnn
     Graph::instance ().remove_edge (_step.get (), _action_step.get ());
     Graph::instance ().remove_edge (_action_step.get (), _output.get ());
   }
+
+  void
+  Counter::activate () {
+    _c_reset->enable ();
+    _c_step->enable ();
+  }
+
+  void
+  Counter::deactivate () {
+    _c_reset->disable ();
+    _c_step->disable ();
+  }
+
 
   void
   Counter::serialize (const string& type) {

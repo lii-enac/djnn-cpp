@@ -30,7 +30,7 @@ namespace djnn
     {
     public:
       CounterResetAction (Process* p, const string &n, shared_ptr<DoubleProperty> init, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _init (init), _output (output) { Process::finalize ();};
+      Process (p, n), _init (init), _output (output) {};
     
       virtual ~CounterResetAction () {}
       void activate () override
@@ -49,7 +49,7 @@ namespace djnn
     {
     public:
       CounterStepAction (Process* p, const string &n, shared_ptr<DoubleProperty> delta, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _delta (delta), _output (output) { Process::finalize ();};
+      Process (p, n), _delta (delta), _output (output) {};
     
       virtual ~CounterStepAction () {}
       void activate () override
@@ -67,8 +67,8 @@ namespace djnn
   public:
     Counter (Process* p, const std::string& n, double init, double delta);
     ~Counter();
-    void activate () override {};
-    void deactivate () override {};
+    void activate () override;
+    void deactivate () override;
     void serialize (const string& type) override;
 
   private:
