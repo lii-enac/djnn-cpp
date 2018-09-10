@@ -47,7 +47,7 @@ namespace djnn
       }
     } else
       _dst = dst;
-    _action = make_unique<BindingAction> (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+    _action = make_unique<BindingAction> (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
                                           _dst);
     _c_src = std::unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
     Graph::instance ().add_edge (_src, _action.get ());

@@ -29,12 +29,12 @@ namespace djnn {
     class BindingAction : public Process
     {
     public:
-      BindingAction (Process* parent, const string &name, Process* dst) : Process (parent, name), _dst (dst) {}
+      BindingAction (Process* parent, const string &name, Process *src, Process* dst) : Process (parent, name), _dst (dst), _src (src) {}
       virtual ~BindingAction () {};
-      void activate () override { _dst->activation (); }
+      void activate () override { _dst->set_source (_src); _dst->activation (); }
       void deactivate () override {}
     private:
-      Process* _dst;
+      Process* _dst, *_src;
     };
   public:
     Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);
