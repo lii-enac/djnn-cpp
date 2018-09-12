@@ -62,8 +62,10 @@ namespace djnn
     Process* release () { return _release; }
     Process* wheel () { return _wheel; }
     Process* touches () { return _touches; }
-    DoubleProperty* x () { return _x; }
-    DoubleProperty* y () { return _y; }
+    DoubleProperty* press_x () { return _press_x; }
+    DoubleProperty* press_y () { return _press_y; }
+    DoubleProperty* move_x () { return _move_x; }
+    DoubleProperty* move_y () { return _move_y; }
     void set_frame ();
     
   private:
@@ -81,8 +83,10 @@ namespace djnn
     Process* _release;
     Process* _wheel;
     Process* _touches;
-    DoubleProperty *_x;
-    DoubleProperty *_y;
+    DoubleProperty *_press_x;
+    DoubleProperty *_press_y;
+    DoubleProperty *_move_x;
+    DoubleProperty *_move_y;
     TextProperty *_key_pressed_text;
     IntProperty *_key_pressed;
     TextProperty *_key_released_text;
