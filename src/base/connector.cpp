@@ -69,9 +69,11 @@ namespace djnn
 
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
-    if (!_src || !_dst) {
-      warning (this, "invalid source or destination in connector (" + get_name() + "," + ispec + " " + dspec + ")");
-    }
+    if (!_src)
+      warning (this, "invalid source (not a Property) in connector (" + get_name() + "," + ispec + ", " + dspec + ")");
+    if (!_dst)
+      warning (this, "invalid destination (not a Property) in connector (" + get_name() + "," + ispec + ", " + dspec + ")");
+  
 
     _action = shared_ptr<Process> (
         new ConnectorAction (this, "connector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
