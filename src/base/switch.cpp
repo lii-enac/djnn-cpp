@@ -56,7 +56,6 @@ namespace djnn
   void
   Switch::activate ()
   {
-    _activation_state = activating;
     _c_branch.get ()->enable ();
     change_branch ();
     _activation_state = activated;
@@ -65,7 +64,6 @@ namespace djnn
   void
   Switch::deactivate ()
   {
-    _activation_state = deactivating;
     _branch_name->set_value (_initial, true);
     _c_branch->disable ();
     if (_cur_branch != nullptr)
