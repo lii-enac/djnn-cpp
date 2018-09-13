@@ -64,7 +64,6 @@ namespace djnn
   void
   Switch::deactivate ()
   {
-    _branch_name->set_value (_initial, true);
     _c_branch->disable ();
     if (_cur_branch != nullptr)
       _cur_branch->deactivation ();
