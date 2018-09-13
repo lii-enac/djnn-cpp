@@ -18,7 +18,8 @@
 #include "../core/tree/int_property.h"
 #include "../core/execution/graph.h"
 #include "../core/serializer/serializer.h"
-
+#include "../core/utils-dev.h"
+#include <sys/time.h>
 #include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp>
 
@@ -32,6 +33,7 @@ namespace djnn
   Clock::Clock (std::chrono::milliseconds period)
   {
     _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period.count ()));
+    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
     _tick = shared_ptr<Process> (new Spike (this, "tick"));
   }
 
@@ -39,6 +41,7 @@ namespace djnn
       Process (p, n)
   {
     _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period.count ()));
+    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
     _tick = shared_ptr<Process> (new Spike (this, "tick"));
     Process::finalize ();
   }
@@ -46,6 +49,7 @@ namespace djnn
   Clock::Clock (int period)
   {
     _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period));
+    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
     _tick = shared_ptr<Process> (new Spike (this, "tick"));
   }
 
@@ -53,6 +57,7 @@ namespace djnn
       Process (p, n)
   {
     _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period));
+    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
     _tick = shared_ptr<Process> (new Spike (this, "tick"));
     Process::finalize ();
   }
@@ -78,6 +83,8 @@ namespace djnn
   void
   Clock::run ()
   {
+    struct timespec before;
+    struct timespec after;
     set_please_stop (false);
     try {
       //std::cerr << this << " >> run" << std::endl;
@@ -87,12 +94,16 @@ namespace djnn
         ::chrono::milliseconds duration (_period->get_value ());
         //std::cerr << this << "  >> sleep " << duration.count() << std::endl;
         //std
+        get_monotonic_time(&before);
         boost
         ::this_thread::sleep_for (duration); // blocking call
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
-          _tick.get()->activation (); // propagating
+          get_monotonic_time(&after);
+          double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
+          _elapsed->set_value (elapsedTime, true);
+          _tick->activation (); // propagating
           Graph::instance ().exec (); // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!

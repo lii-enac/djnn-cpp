@@ -39,6 +39,7 @@ namespace djnn
 
   private:
     shared_ptr<IntProperty> _period;
+    shared_ptr<DoubleProperty> _elapsed;
     shared_ptr <Process> _tick;
 
     void run() override;
