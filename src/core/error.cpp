@@ -30,9 +30,10 @@ namespace djnn
   error (Process* p, const std::string &msg)
   {
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << msg << std::endl << std::endl;
-    if (p) {
+    
+    if (p) 
       std::cerr << p->debug_info () << std::endl;
-    }
+    
     exit (0);
   }
 
@@ -40,8 +41,9 @@ namespace djnn
   warning (Process *p, const std::string &msg)
   {
     std::cerr << std::endl << std::endl << "djnn - WARNING: " << msg << std::endl << std::endl;
-    if (p) {
+    
+    if (p) 
       std::cerr << p->debug_info () << std::endl;
-    }
+    
   }
 }

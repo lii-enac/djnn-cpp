@@ -27,7 +27,7 @@ namespace djnn {
   /* connect to udev */
     _udev_connection = udev_new ();
     if (!_udev_connection) {
-      warning  ("Cannot connect to udev");
+      warning  (nullptr, "Cannot connect to udev");
       return;
     }
 
