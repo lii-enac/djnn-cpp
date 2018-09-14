@@ -56,7 +56,7 @@ namespace djnn
     }
     catch (const std::invalid_argument& ia) {
       value = oldVal;
-      warning (this, "failed to convert " + v + " into a double property value\n");
+      warning (this, "failed to convert the string \"" + v + "\" into a double property value\n");
     }
   }
 
