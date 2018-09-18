@@ -18,6 +18,7 @@
 #include "../core/control/coupling.h"
 #include "../core/execution/graph.h"
 #include "../core/serializer/serializer.h"
+#include "../core/tree/bool_property.h"
 #include "../core/error.h"
 
 namespace djnn
@@ -27,36 +28,46 @@ namespace djnn
   void
   SwitchList::Next::activate ()
   {
-    int i = _sw->index ()->get_value ();
-    if (i < _sw->children ().size ()) {
-      if (_sw->item ())
-        _sw->item ()->deactivation ();
-      Process *next = _sw->children ()[i];
-      i++;
-      _sw->set_item (next);
-      next->activation ();
-      _sw->index ()->set_value (i, true);
+    /* 
+     * next and previous only compute the correct index and then assign it
+     * the action on changed index cause the branches switch
+     */
+    int icur = _sw->index ()->get_value ();
+    int inext = icur + 1;
+    if (_sw->loop ()->get_value () && (inext > _sw->children ().size ()) ) {
+      inext = 1;
     }
+    if (!_sw->loop ()->get_value () && (inext >= _sw->children ().size ()) ) {
+      inext = _sw->children ().size ();
+    }
+    _sw->index ()->set_value (inext, true);
   }
 
   void
   SwitchList::Previous::activate ()
   {
-    int i = _sw->index ()->get_value ();
-    if (i - 1 >= 1 && !_sw->children ().empty ()) {
-      if (_sw->item ())
-        _sw->item ()->deactivation ();
-      Process *previous = _sw->children ()[i - 2];
-      i--;
-      _sw->set_item (previous);
-      previous->activation ();
-      _sw->index ()->set_value (i, true);
+    /* 
+     * next and previous only compute the correct index and then assign it
+     * the action on changed index cause the branches switch
+     */
+    int icur = _sw->index ()->get_value ();
+    int iprev = icur - 1;
+    if (_sw->loop ()->get_value () && (iprev <= 0) ) {
+      iprev = _sw->children ().size ();
     }
+    if (!_sw->loop ()->get_value () && (iprev < 1) ) {
+      iprev = 1;
+    }
+    _sw->index ()->set_value (iprev, true);
   }
 
   void
   SwitchList::ChangeIndex::activate ()
   {
+    /* 
+     * next and previous only compute the correct index and then assign it
+     * the action on changed index cause the branches switch
+     */
     int i = _sw->index ()->get_value ();
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
       if (_sw->item ())
@@ -68,8 +79,14 @@ namespace djnn
   }
 
   void
-  SwitchList::init ()
+  SwitchList::init (bool loop)
   {
+    /* 
+     * note:
+     * do not add directly Property into the symbol switchlist's table 
+     * switchlist sympbol table should only containt branch
+     */
+    _loop = make_unique<BoolProperty> (loop);
     _index = make_shared<IntProperty> (1);
     _next = make_shared<Spike> ();
     _previous = make_shared<Spike> ();
@@ -85,16 +102,16 @@ namespace djnn
     Graph::instance ().add_edge (_index.get (), _change_index_action.get ());
   }
 
-  SwitchList::SwitchList () :
+  SwitchList::SwitchList (bool loop) :
       AbstractList (), _cur_item (nullptr)
   {
-    init ();
+    init (loop);
   }
 
-  SwitchList::SwitchList (Process* parent, const string& name) :
+  SwitchList::SwitchList (Process* parent, const string& name, bool loop) :
       AbstractList (parent, name), _cur_item (nullptr)
   {
-    init ();
+    init (loop);
     Process::finalize ();
   }
 
@@ -145,6 +162,8 @@ namespace djnn
       return _previous.get ();
     else if (path.compare ("index") == 0)
       return _index.get ();
+    else if (path.compare ("loop") == 0)
+      return (Process *) _loop.get ();
     else
       return AbstractList::find_component (path);
   }
@@ -167,6 +186,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:switch-list");
     AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("loop", _loop ? "true" : "false");
 
     for (auto c : _children)
       c->serialize (type);

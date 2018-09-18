@@ -54,8 +54,8 @@ namespace djnn {
       SwitchList* _sw;
     };
   public:
-    SwitchList ();
-    SwitchList (Process *parent, const string& name);
+    SwitchList (bool loop=false);
+    SwitchList (Process *parent, const string& name, bool loop=false);
     virtual ~SwitchList ();
     Process* find_component (const string &path) override;
     void activate () override;
@@ -65,11 +65,13 @@ namespace djnn {
     Process* item () { return _cur_item; }
     void set_item (Process *item) { _cur_item = item; }
     IntProperty* index () { return _index.get (); }
+    BoolProperty* loop () { return _loop.get (); }
   private:
-    void init ();
+    void init (bool loop);
     void finalize_child_insertion (Process *child) override;
     shared_ptr<Spike> _next, _previous;
     shared_ptr <IntProperty> _index;
+    unique_ptr <BoolProperty> _loop;
     unique_ptr<Coupling> _c_next, _c_previous, _c_index;
     shared_ptr<Process> _next_action, _previous_action, _change_index_action;
     Process* _cur_item;
