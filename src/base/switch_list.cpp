@@ -28,7 +28,7 @@ namespace djnn
   void
   SwitchList::Next::activate ()
   {
-    /* 
+    /* note:
      * next and previous only compute the correct index and then assign it
      * the action on changed index cause the branches switch
      */
@@ -46,7 +46,7 @@ namespace djnn
   void
   SwitchList::Previous::activate ()
   {
-    /* 
+    /* note: 
      * next and previous only compute the correct index and then assign it
      * the action on changed index cause the branches switch
      */
@@ -64,17 +64,19 @@ namespace djnn
   void
   SwitchList::ChangeIndex::activate ()
   {
-    /* 
+    /* note:
      * next and previous only compute the correct index and then assign it
-     * the action on changed index cause the branches switch
+     * the action on changed index cause the branches switch ONLY if the
+     * index is different from the current one.
      */
     int i = _sw->index ()->get_value ();
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
-      if (_sw->item ())
+      Process* next = _sw->children ()[i - 1];
+      if (_sw->item () && _sw->item () != next) {
         _sw->item ()->deactivation ();
-      Process *next = _sw->children ()[i - 1];
-      _sw->set_item (next);
-      next->activation ();
+        _sw->set_item (next);
+        next->activation ();
+      }
     }
   }
 
