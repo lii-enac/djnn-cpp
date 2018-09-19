@@ -31,14 +31,14 @@ namespace djnn
     _delta = make_shared<DoubleProperty> (this, "delta", delta);
 
     /* reset action */
-    _action_reset = make_shared<CounterResetAction> (this, n + "_action_reset", _init, _output);
+    _action_reset = make_shared<CounterResetAction> (this, n + "_action_reset", &_reset_occurred);
     _c_reset = make_unique<Coupling> (_reset.get (), ACTIVATION, _action_reset.get (), ACTIVATION);
     _c_reset->disable ();
     Graph::instance ().add_edge (_reset.get (), _action_reset.get ());
     Graph::instance ().add_edge (_action_reset.get (), _output.get ());
 
     /* step action */    
-    _action_step = make_shared<CounterStepAction> (this, n + "_action_step", _delta, _output);
+    _action_step = make_shared<CounterStepAction> (this, n + "_action_step", _init, _delta, _output, &_reset_occurred);
     _c_step = make_unique<Coupling> (_step.get (), ACTIVATION, _action_step.get (), ACTIVATION);
     _c_step->disable ();
     Graph::instance ().add_edge (_step.get (), _action_step.get ());

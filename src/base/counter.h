@@ -29,38 +29,40 @@ namespace djnn
     class CounterResetAction : public Process
     {
     public:
-      CounterResetAction (Process* p, const string &n, shared_ptr<DoubleProperty> init, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _init (init), _output (output) {};
+      CounterResetAction (Process* p, const string &n, bool* reset_occurred) :
+      Process (p, n), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
-      void activate () override
-      {
-        _output->set_value (_init->get_value (), true);
-      }
+      void activate () override { *_reset_occurred = true; }
       void deactivate () override {}
     private:
-    	shared_ptr<DoubleProperty> _init;
-    	shared_ptr<DoubleProperty> _output;
-
+      bool *_reset_occurred;
     };
 
     /* STEP ACTION */
     class CounterStepAction : public Process
     {
     public:
-      CounterStepAction (Process* p, const string &n, shared_ptr<DoubleProperty> delta, shared_ptr<DoubleProperty> output) :
-      Process (p, n), _delta (delta), _output (output) {};
+      CounterStepAction (Process* p, const string &n, shared_ptr<DoubleProperty> init, shared_ptr<DoubleProperty> delta, shared_ptr<DoubleProperty> output, bool* reset_occurred) :
+      Process (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
       void activate () override
       {
-        _output->set_value (_output->get_value () +  _delta->get_value (), true);
+        /* if reset occured wew send _init else (_output + _delta ) */
+        if (*_reset_occurred) {
+          _output->set_value (_init->get_value (), true);
+          *_reset_occurred = false;
+        }
+        else
+          _output->set_value (_output->get_value () +  _delta->get_value (), true);
       }
       void deactivate () override {}
     private:
+      shared_ptr<DoubleProperty> _init;
     	shared_ptr<DoubleProperty> _delta;
     	shared_ptr<DoubleProperty> _output;
-
+      bool *_reset_occurred;
     };
 
   /* COUNTER ACTION */
@@ -72,6 +74,7 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
+    bool _reset_occurred;
     shared_ptr <Spike> _reset, _step;
     shared_ptr <DoubleProperty> _output, _init, _delta;
     unique_ptr<Coupling> _c_reset, _c_step;
