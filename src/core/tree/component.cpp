@@ -49,8 +49,10 @@ namespace djnn
   void
   Container::add_child (Process* c, const std::string& name)
   {
-    if (c == nullptr)
+    if (c == nullptr) {
+      error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
       return;
+    }
     _children.push_back (c);
     /* WARNING should we authorize multiple parenthood? */
     if (c->get_parent () != nullptr && c->get_parent () != this) {
