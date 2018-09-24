@@ -58,11 +58,15 @@ namespace djnn
     bool exec_ = false;
     _win->press_x ()->set_value (x, true);
     _win->press_y ()->set_value (y, true);
+    _win->move_x ()->set_value (x, true);
+    _win->move_y ()->set_value (y, true);
     _win->press ()->notify_activation ();
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
       ((DoubleProperty*) s->find_component ("press/x"))->set_value (x, true);
       ((DoubleProperty*) s->find_component ("press/y"))->set_value (y, true);
+      ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
+      ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       set_local_coords (s, nullptr, x, y);
       s->find_component ("press")->notify_activation ();
       exec_ = true;
