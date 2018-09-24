@@ -24,6 +24,8 @@ using namespace std;
 
 /** regexp function **/
 
+static bool __please_exec;
+
 static const char* __SkimRegex (const char* p, int* nb)
 {
   enum states {NORMAL, QUOTED, SUBEXP, BRACKETED};
@@ -86,6 +88,11 @@ static const char* __SkimRegex (const char* p, int* nb)
 /** IVY CALLBACK **/
 
 static void  __beforeSelect (void *data){
+  if (__please_exec){
+    __please_exec = false;
+    djnn::Graph::instance().exec();
+  }
+
   djnn::release_exclusive_access (DBG_GET);
 }
 
@@ -112,7 +119,8 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   /* assign value */
   string msg = string(argv[index_found]);
   txtprop->set_value(msg, true);
-  djnn::Graph::instance().exec();
+  __please_exec = true;  
+
 
 #ifdef __IVY_DEBUG__
   cout << "---------------------" << endl;
@@ -160,6 +168,7 @@ namespace djnn
   _bus =  bus;
   _appname =  appname;
   _ready_message = ready;
+  __please_exec = false;
 
     /* OUT child */
   _out = new TextProperty ( this, "out", "");
