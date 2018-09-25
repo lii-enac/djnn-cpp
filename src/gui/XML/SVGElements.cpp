@@ -618,7 +618,7 @@ StartTspan(const char** attrs, Process* current) {
 		djn_TextArgs.dyUnit = djnNoLengthUnit;
 	}
 
-	holder = new Component;
+	holder = new SVGHolder;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
