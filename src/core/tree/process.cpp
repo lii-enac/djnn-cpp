@@ -150,11 +150,19 @@ namespace djnn
     if (found != string::npos) {
       string newKey = key.substr (0, found);
       string path = key.substr (found + 1);
+      if (newKey[0] == '.' && newKey[1] == '.') {
+        if (_parent)
+          return _parent->find_component (path);
+        else
+          return nullptr;
+      }
       map<string, Process*>::iterator it = _symtable.find (newKey);
       if (it != _symtable.end ()) {
         return (it->second)->find_component (path);
       }
     }
+    if (key[0] == '.' && key[1] == '.')
+      return _parent;
     map<string, Process*>::iterator it = _symtable.find (key);
     if (it != _symtable.end ()) {
       return (it->second);
