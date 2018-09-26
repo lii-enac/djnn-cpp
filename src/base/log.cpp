@@ -30,8 +30,8 @@ namespace djnn
     Process* tp = new TextPrinter (this, "printer");
     alias (this, "label", tc->find_component("head"));
     alias (this, "input", tc->find_component("tail"));
-    ((TextProperty*)this->find_component ("label"))->set_value (label, true);
-    new Connector (this, "", tc, "output", tp, "input");
+    ((TextProperty*)this->find_component ("label"))->set_value (label, false);
+    new Connector (this, "", tc, "output", tp, "input", false);
   }
 
   void
