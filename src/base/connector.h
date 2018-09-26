@@ -45,10 +45,10 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec);
-    Connector (Process *src, string ispec, Process *dst, string dspec);
-    void activate () override { _c_src->enable (); _action->activation ();}
-    void deactivate () override { _c_src->disable(); _action->deactivation ();}
+    Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=false);
+    Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=false);
+    void activate () override;
+    void deactivate () override;
     void serialize (const string& type) override;
     virtual ~Connector ();
 
@@ -58,15 +58,16 @@ namespace djnn {
     AbstractProperty* _dst;
     unique_ptr<Coupling>_c_src;
     shared_ptr<Process> _action;
+    bool _copy_on_activation;
   };
 
   class PausedConnector : public Process
   {
   public:
-    PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec);
-    PausedConnector (Process *src, string ispec, Process *dst, string dspec);
-    void activate () override { _c_src->enable (); _action->activation ();}
-    void deactivate () override { _c_src->disable(); _action->deactivation ();}
+    PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
+    PausedConnector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
+    void activate () override;
+    void deactivate () override;
     void serialize (const string& type) override;
     virtual ~PausedConnector ();
 
@@ -76,5 +77,6 @@ namespace djnn {
     AbstractProperty* _dst;
     unique_ptr<Coupling>_c_src;
     shared_ptr<Process> _action;
+    bool _copy_on_activation;
   };
 }

@@ -33,17 +33,33 @@ namespace djnn
   }
 
   Connector::Connector (Process *p, string n, Process *src, string ispec, Process *dst,
-                        string dspec) :
-      Process (p, n), _c_src (nullptr)
+                        string dspec, bool copy_on_activation) :
+      Process (p, n), _c_src (nullptr), _copy_on_activation(copy_on_activation)
   {
     init_connector (src, ispec, dst, dspec);
     Process::finalize ();
   }
 
-  Connector::Connector (Process *src, string ispec, Process *dst, string dspec) :
-      _c_src (nullptr)
+  Connector::Connector (Process *src, string ispec, Process *dst, string dspec,
+                        bool copy_on_activation) :
+      _c_src (nullptr), _copy_on_activation(copy_on_activation)
   {
     init_connector (src, ispec, dst, dspec);
+  }
+
+  void
+  Connector::activate () 
+  { 
+    _c_src->enable ();
+    if (_copy_on_activation)
+      _action->activation ();
+  }
+
+  void
+  Connector::deactivate ()
+  { 
+    _c_src->disable();
+    _action->deactivation ();
   }
 
   void
@@ -119,17 +135,33 @@ namespace djnn
 
 
   PausedConnector::PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst,
-                        string dspec) :
-      Process (p, n), _c_src (nullptr)
+                        string dspec, bool copy_on_activation) :
+      Process (p, n), _c_src (nullptr), _copy_on_activation(copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
     Process::finalize ();
   }
 
-  PausedConnector::PausedConnector (Process *src, string ispec, Process *dst, string dspec) :
-      _c_src (nullptr)
+  PausedConnector::PausedConnector (Process *src, string ispec, Process *dst, string dspec, 
+                                    bool copy_on_activation) :
+      _c_src (nullptr), _copy_on_activation(copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
+  }
+
+  void
+  PausedConnector::activate () 
+  { 
+    _c_src->enable ();
+    if (_copy_on_activation) 
+      _action->activation ();
+  }
+
+  void
+  PausedConnector::deactivate ()
+  { 
+    _c_src->disable();
+    _action->deactivation ();
   }
 
   void
