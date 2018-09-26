@@ -45,8 +45,8 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=false);
-    Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=false);
+    Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
+    Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
     void activate () override;
     void deactivate () override;
     void serialize (const string& type) override;
