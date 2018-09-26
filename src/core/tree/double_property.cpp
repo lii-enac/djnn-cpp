@@ -48,11 +48,17 @@ namespace djnn
   void
   DoubleProperty::set_value (const string &v, bool propagate)
   {
+
     int oldVal = value;
     try {
-      value = stof (v);
-      if (is_activable () && propagate)
+
+      if (!v.empty ()) {
+        value = stof (v);
+        if (is_activable () && propagate)
         notify_activation ();
+      }
+
+      
     }
     catch (const std::invalid_argument& ia) {
       value = oldVal;
