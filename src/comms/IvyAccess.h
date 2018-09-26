@@ -72,11 +72,12 @@ namespace djnn
     Process* find_component (const string&) override;
 
   private:
-    std::string _bus;
-    std::string _appname;
-    std::string _ready_message;
+    string _bus;
+    string _appname;
+    string _ready_message;
 
-    std::vector<TextProperty*> _in;
+    //map<string, vector<tuple<int, TextProperty*>>> _in_map; 
+    map<string, vector<pair<int, TextProperty*>>> _in_map;   
     TextProperty* _out;
     Coupling*  _out_c;
     IvyOutAction*    _out_a;

@@ -24,8 +24,6 @@ using namespace std;
 
 /** regexp function **/
 
-static bool __please_exec;
-
 static const char* __SkimRegex (const char* p, int* nb)
 {
   enum states {NORMAL, QUOTED, SUBEXP, BRACKETED};
@@ -85,14 +83,31 @@ static const char* __SkimRegex (const char* p, int* nb)
   return q;
 }
 
+/** IVY DEBUG MAPPING **/
+
+#ifdef __IVY_DEBUG__
+static void
+__ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
+
+  map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
+  cout << endl << "MAP _in_map:" << endl;
+  for (mit = inmap.begin(); mit != inmap.end(); ++mit) {
+    cout << mit->first << " => (" ;
+    /* vector */
+    vector<pair<int, djnn::TextProperty*>>::iterator vit;
+    for (vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
+      /* pair */
+      cout << "[" << (*vit).first << ", " << (*vit).second << "] " ; 
+    }
+    cout << ")" << endl;
+  }
+  cout << endl;
+}
+#endif
+
 /** IVY CALLBACK **/
 
 static void  __beforeSelect (void *data){
-  if (__please_exec){
-    __please_exec = false;
-    djnn::Graph::instance().exec();
-  }
-
   djnn::release_exclusive_access (DBG_GET);
 }
 
@@ -102,26 +117,37 @@ static void  __afterSelect (void *data){
 
 static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
-  djnn::TextProperty* txtprop = (djnn::TextProperty*) user_data ;
 
-  int index_found = 0;
-  string full_regexp = txtprop->get_name();
+  /* debug */
+  //map<string, vector<pair<int, djnn::TextProperty*>>>* inmap =  (map<string, vector<pair<int, djnn::TextProperty*>>>*) user_data;
+  //__ivy_debug_mapping (*inmap);
 
-   /* find substr if needed */
-  int nb_subexp;
-  const char* re_end = __SkimRegex (full_regexp.c_str(), &nb_subexp);
-  if (*re_end != '\0'){
-    int len = full_regexp.find (re_end);
-    string i = full_regexp.substr (len+1);
-    index_found = stoi (i) - 1;
+  pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = (pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>*) user_data;
+  string regexp = keypair->first;
+  map<string, vector<pair<int, djnn::TextProperty*>>>* in_map =  keypair->second;
+
+#ifdef __IVY_DEBUG__
+  cout <<  endl <<"__on_ivy_Message" << endl;
+  cout <<  "regexp: '" << regexp << "'" << endl;
+  __ivy_debug_mapping (*in_map);
+#endif
+     
+
+  map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
+  mit = in_map->find(regexp);
+
+  if (mit != in_map->end ()){
+    /* the regexp exist in map */
+    vector<pair<int, djnn::TextProperty*>>::iterator vit;
+    for (vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
+      /* pair */
+      djnn::TextProperty* txtprop = (*vit).second;
+      string msg =  argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
+      txtprop->set_value(msg, true);
+    }
+
   }
-
-  /* assign value */
-  string msg = string(argv[index_found]);
-  txtprop->set_value(msg, true);
-  __please_exec = true;  
-
-
+  
 #ifdef __IVY_DEBUG__
   cout << "---------------------" << endl;
   cout << "__on_ivy_Message - "  << endl;
@@ -129,11 +155,13 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   for (int i=0; i < argc ; i++){
     cout << "argv[" << i << "] - " << string(argv[i]) << endl;
   } 
-  cout << "user_data (TextProperty - regexp) : \"" << full_regexp  << "\""<< endl;
-  cout << "index_found - " << index_found << endl;
+  cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
+  //cout << "index_found - " << index_found << endl;
   cout << "---------------------" << endl << endl;
 #endif
-
+ 
+  //cout << "------- EXEC -------" << endl ;  
+  djnn::Graph::instance().exec();
 }
 
 static void __on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, IvyApplicationEvent event )
@@ -168,7 +196,6 @@ namespace djnn
   _bus =  bus;
   _appname =  appname;
   _ready_message = ready;
-  __please_exec = false;
 
     /* OUT child */
   _out = new TextProperty ( this, "out", "");
@@ -199,10 +226,11 @@ IvyAccess::~IvyAccess ()
  if (_arriving) delete _arriving;
  if (_leaving) delete _leaving;
 
- while (!_in.empty()) {
-  delete _in.back();
-  _in.pop_back();
-}
+ // TODO Clean MAP
+ //while (!_in.empty()) {
+ // delete _in.back();
+ // _in.pop_back();
+ //}
  Graph::instance().remove_edge(_out, _out_a);
  if (_parent && _parent->state_dependency () != nullptr)
    Graph::instance ().remove_edge (_parent->state_dependency (), _out_a);
@@ -275,20 +303,32 @@ IvyAccess::find_component (const string& key)
         len = key.find (re_end, 3);
         regexp = key.substr (3, len-3);
       }
+      int index = stoi (re_end+1);
 
       /* add as a new _in child */
       /* and keep track of "/number" */
       TextProperty* newin = new TextProperty ( this, full_exp, "");
-      _in.push_back(newin);
 
+      /* if it is the first binding on this regexp we had  the callback else nothing */
+      map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
+      mit = _in_map.find(regexp);
+      if (mit == _in_map.end ()) {
+        /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
+        pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* regexp_keypair = new pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> (regexp, &_in_map);
+        IvyBindMsg(__on_ivy_Message, regexp_keypair, "%s", regexp.c_str() );
+      }
+
+      /* register in _in_map */  
+      _in_map[regexp].push_back (make_pair(index, newin));
+      
+     
 #ifdef __IVY_DEBUG__
-      cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << endl ;
+       __ivy_debug_mapping (_in_map);
+      cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
       cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif
 
-      /* bind on ivy only with regexp */
-      IvyBindMsg(__on_ivy_Message, newin, "%s", regexp.c_str() );
-
+    
       return newin;
     }
   }
