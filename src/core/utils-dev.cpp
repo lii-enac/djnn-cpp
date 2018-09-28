@@ -50,10 +50,8 @@ static int init = 0;
     if (!init)
       return;
     get_monotonic_time (&after);
-    double elapsedTime = after.tv_sec - before.tv_sec;
-    elapsedTime += after.tv_nsec - before.tv_nsec;
-    elapsedTime *= 1e-9;
-    std::cout << msg << " elapsedTime = " << elapsedTime << std::endl;
+    double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
+    std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
     init = 0;
   }
 }
