@@ -50,8 +50,10 @@ namespace djnn {
     virtual void activation ();
     virtual void deactivation ();
 
-    virtual void set_activation_flag (int flag);
+    void set_activation_flag (int flag);
     int get_activation_flag ();
+    virtual void exec (int flag) { set_activation_flag (flag); }
+
     void add_activation_coupling (Coupling* c);
     void add_deactivation_coupling (Coupling* c);
     void remove_activation_coupling (Coupling* c);

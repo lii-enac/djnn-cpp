@@ -135,8 +135,7 @@ namespace djnn
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,
                                              "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
                                              _src, _dst, true);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
+    Graph::instance ().add_edge (_src, _dst);
   }
 
   Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
@@ -147,10 +146,7 @@ namespace djnn
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,
                                              "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
                                              _src, _dst, true);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
-    if (parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
+    Graph::instance ().add_edge (_src, _dst);
     Process::finalize ();
   }
 
@@ -167,10 +163,7 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    Graph::instance ().remove_edge (_src, _action.get ());
-    Graph::instance ().remove_edge (_action.get (), _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+    Graph::instance ().remove_edge (_src, _dst);
   }
 
   void
@@ -202,8 +195,7 @@ namespace djnn
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,
                                              "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
                                              _src, _dst, false);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
+    Graph::instance ().add_edge (_src, _dst);
   }
 
   PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src,
@@ -214,10 +206,7 @@ namespace djnn
     _action = make_unique<AbstractAssignment::AssignmentAction> (this,
                                              "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
                                              _src, _dst, false);
-    Graph::instance ().add_edge (_src, _action.get ());
-    Graph::instance ().add_edge (_action.get (), _dst);
-    if (parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
+    Graph::instance ().add_edge (_src, _dst);
     Process::finalize ();
   }
 
@@ -234,10 +223,7 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
-    Graph::instance ().remove_edge (_src, _action.get ());
-    Graph::instance ().remove_edge (_action.get (), _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+    Graph::instance ().remove_edge (_src, _dst);
   }
 
   void

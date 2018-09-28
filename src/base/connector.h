@@ -36,8 +36,9 @@ namespace djnn {
       ConnectorAction (Process* p, const string &n, AbstractProperty* src, AbstractProperty* dst, bool propagate) :
 	Process (p, n), _src (src), _dst (dst), _propagate (propagate) {};
       virtual ~ConnectorAction () {};
-      void activate ();
-      void deactivate () {};
+      void activate () override;
+      void deactivate () override {};
+      void exec (int flag) override { activate (); }
     private:
       AbstractProperty* _src;
       AbstractProperty* _dst;

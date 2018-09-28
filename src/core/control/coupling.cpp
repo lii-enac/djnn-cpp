@@ -71,7 +71,7 @@ namespace djnn
     if (isEnable) {
       _dst->set_source (_src);
       _dst->set_data (_data);
-      _dst->set_activation_flag (m_dst_flag);
+      _dst->exec (m_dst_flag);
       _dst->coupling_activation_hook ();
     }
   }
@@ -82,7 +82,7 @@ namespace djnn
     if (isEnable) {
       _dst->set_source (_src);
       _dst->set_data (_data);
-      _dst->set_activation_flag (m_dst_flag);
+      _dst->exec (m_dst_flag);
       _dst->coupling_deactivation_hook ();
     }
   }

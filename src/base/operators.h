@@ -51,7 +51,6 @@ namespace djnn {
     void activate () { _c_left->enable(); _c_right->enable (); _action->activation (); };
     void deactivate () { _c_left->disable (); _c_right->disable (); _action->deactivation ();};
     virtual ~BinaryOperator ();
-    virtual void exec (void *data, Process *src) {};
   protected:
     void init_couplings (shared_ptr <Process> action);
     shared_ptr<AbstractProperty> _left, _right, _result;
@@ -76,7 +75,6 @@ namespace djnn {
     void activate () { _c_input->enable (); _action->activation ();}
     void deactivate () { _c_input->disable (); _action->deactivation ();}
     virtual ~UnaryOperator ();
-    virtual void exec (void *data, Process *src) {};
   protected:
     void init_couplings (shared_ptr <Process> action);
     shared_ptr<AbstractProperty> _input, _output;
