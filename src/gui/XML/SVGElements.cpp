@@ -29,6 +29,8 @@
 #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
 #endif
 
+//#define DEBUG
+
 #line 18 "src/gui/XML/SVGElements.gperf"
 
 #include <stdio.h>
@@ -242,6 +244,11 @@ void djnn::init_svg_parser () {
 
 static Process*
 StartSVG(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "startSVG\n");
+#endif
+
 	Process* g = new Group(current, "SVG");
 	//Process* f;
 	djn_RectAreaArgs.x = 0.;
@@ -291,6 +298,11 @@ static void djn__CheckStroke(Process* holder) {
 
 static Process*
 StartRect(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "startRect\n");
+#endif
+
 	Process* holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
@@ -340,6 +352,11 @@ StartRect(const char** attrs, Process* current) {
 
 static Process*
 StartImage(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "startImage\n");
+#endif
+
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
@@ -379,6 +396,11 @@ StartImage(const char** attrs, Process* current) {
 
 static Process*
 StartEllipse(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartEllipse\n");
+#endif
+
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
@@ -417,6 +439,12 @@ StartEllipse(const char** attrs, Process* current) {
 
 static Process*
 StartCircle(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartCircle\n");
+#endif
+	
+
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
@@ -455,6 +483,11 @@ StartCircle(const char** attrs, Process* current) {
 
 static Process*
 StartLine(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartLine\n");
+#endif
+
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
@@ -494,6 +527,11 @@ StartLine(const char** attrs, Process* current) {
 
 static Process*
 StartPoly(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartPoly\n");
+#endif
+
 	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_PolyArgs.e = 0;
@@ -533,18 +571,33 @@ StartPoly(const char** attrs, Process* current) {
 
 static Process*
 StartPolygon(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartPolygon\n");
+#endif
+
 	djn_PolyArgs.isPolygon = 1;
 	return StartPoly(attrs, current);
 }
 
 static Process*
 StartPolyline(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartPolyline\n");
+#endif
+
 	djn_PolyArgs.isPolygon = 0;
 	return StartPoly(attrs, current);
 }
 
 static Process*
 StartText(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartText\n");
+#endif
+
 	/* it seems that we have to force the creation of a holder for the text
 	 * without this, and for a not yet elucidated reason,
 	 * the graphical context is not correctly managed
@@ -608,6 +661,11 @@ TextData(const char* data, int len, Process* current) {
 
 static Process *
 StartTspan(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartTspan\n");
+#endif
+
 	Process *holder;
 
 	if (djn_TextArgs.data != 0) {
@@ -649,6 +707,11 @@ EndTspan(Process *e) {
 
 static Process*
 StartPath(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartPath\n");
+#endif
+
 	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_PathArgs.e = 0;
@@ -696,6 +759,11 @@ StartPath(const char** attrs, Process* current) {
 
 static Process*
 StartGroup(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartGroup\n");
+#endif
+
 	Process* e = new Group(0, "");
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -750,6 +818,11 @@ static int parseGradientTransform(Process **e, char *v) {
 
 static Process*
 StartLinearGradient(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartLinearGradient\n");
+#endif
+
 	Process* e;
 	djn_LinearGradientArgs.x1 = 0.;
 	djn_LinearGradientArgs.y1 = 0.;
@@ -809,6 +882,11 @@ StartLinearGradient(const char** attrs, Process* current) {
 
 static Process*
 StartRadialGradient(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartRadialGradient\n");
+#endif
+
 	Process* e;
 
 	djn_RadialGradientArgs.cx = 0.;
@@ -870,6 +948,11 @@ StartRadialGradient(const char** attrs, Process* current) {
 
 static Process*
 StartGradientStop(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartGradientStop\n");
+#endif
+
 	djn_GradientStopArgs.r = 0;
 	djn_GradientStopArgs.g = 0;
 	djn_GradientStopArgs.b = 0;
@@ -923,6 +1006,11 @@ EndGradient(Process* e) {
 
 static Process*
 StartPathClip(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartPathClip\n");
+#endif
+
 	Process *holder = 0;
 	Process* e;
 	djn__GrphIsInClip = 1;
@@ -935,7 +1023,7 @@ StartPathClip(const char** attrs, Process* current) {
 		XML::djn_XMLHandleAttr(&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
 #ifdef DEBUG
 		if (!ret)
-		fprintf (stderr, "unknown attribute '%s' in rect element\n", *attrs);
+		fprintf (stderr, "unknown attribute '%s' in pathClip element\n", *attrs);
 #endif
 		attrs++;
 		attrs++;
@@ -960,6 +1048,11 @@ EndPathClip(Process* e) {
 
 static Process*
 StartTmp(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartTmp\n");
+#endif
+
 	return current;
 }
 
@@ -970,6 +1063,11 @@ EndTmp(Process* e) {
 
 static Process*
 StartIgnored(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+		fprintf (stderr, "StartIgnored\n");
+#endif
+
 	return current;
 }
 
