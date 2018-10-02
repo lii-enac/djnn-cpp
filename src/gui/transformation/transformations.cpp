@@ -497,10 +497,11 @@ namespace djnn
     return new GradientSkewY (_a->get_value ());
   }
 
-  AbstractHomography::AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
-                                          double m21, double m22, double m23, double m24, double m31, double m32,
-                                          double m33, double m34, double m41, double m42, double m43, double m44) :
-      AbstractTransformation (p, n)
+  void
+  AbstractHomography::init_abstractHomography (double m11, double m12, double m13, double m14,
+                                               double m21, double m22, double m23, double m24,
+                                               double m31, double m32, double m33, double m34,
+                                               double m41, double m42, double m43, double m44)
   {
     _m11 = new DoubleProperty (this, "m11", m11);
     _m12 = new DoubleProperty (this, "m12", m12);
@@ -544,94 +545,71 @@ namespace djnn
     _cm44 = new Coupling (_m44, ACTIVATION, update, ACTIVATION);
   }
 
-  AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14, double m21, double m22,
-                                          double m23, double m24, double m31, double m32, double m33, double m34,
+  AbstractHomography::AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
+                                          double m21, double m22, double m23, double m24, 
+                                          double m31, double m32, double m33, double m34, 
+                                          double m41, double m42, double m43, double m44) :
+      AbstractTransformation (p, n)
+  {
+    init_abstractHomography (m11, m12, m13, m14,
+                             m21, m22, m23, m24,
+                             m31, m32, m33, m34,
+                             m41, m42, m43, m44);
+  }
+
+  AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
+                                          double m21, double m22, double m23, double m24,
+                                          double m31, double m32, double m33, double m34,
                                           double m41, double m42, double m43, double m44) :
       AbstractTransformation ()
   {
-    _m11 = new DoubleProperty (this, "m11", m11);
-    _m12 = new DoubleProperty (this, "m12", m12);
-    _m13 = new DoubleProperty (this, "m13", m13);
-    _m14 = new DoubleProperty (this, "m14", m14);
-
-    _m21 = new DoubleProperty (this, "m21", m21);
-    _m22 = new DoubleProperty (this, "m22", m22);
-    _m23 = new DoubleProperty (this, "m23", m23);
-    _m24 = new DoubleProperty (this, "m24", m24);
-
-    _m31 = new DoubleProperty (this, "m31", m31);
-    _m32 = new DoubleProperty (this, "m32", m32);
-    _m33 = new DoubleProperty (this, "m33", m33);
-    _m34 = new DoubleProperty (this, "m34", m34);
-
-    _m41 = new DoubleProperty (this, "m41", m41);
-    _m42 = new DoubleProperty (this, "m42", m42);
-    _m43 = new DoubleProperty (this, "m43", m43);
-    _m44 = new DoubleProperty (this, "m44", m44);
-
-    UpdateDrawing *update = UpdateDrawing::instance ();
-    _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);
-    _cm12 = new Coupling (_m12, ACTIVATION, update, ACTIVATION);
-    _cm13 = new Coupling (_m13, ACTIVATION, update, ACTIVATION);
-    _cm14 = new Coupling (_m14, ACTIVATION, update, ACTIVATION);
-
-    _cm21 = new Coupling (_m21, ACTIVATION, update, ACTIVATION);
-    _cm22 = new Coupling (_m22, ACTIVATION, update, ACTIVATION);
-    _cm23 = new Coupling (_m23, ACTIVATION, update, ACTIVATION);
-    _cm24 = new Coupling (_m24, ACTIVATION, update, ACTIVATION);
-
-    _cm31 = new Coupling (_m31, ACTIVATION, update, ACTIVATION);
-    _cm32 = new Coupling (_m32, ACTIVATION, update, ACTIVATION);
-    _cm33 = new Coupling (_m33, ACTIVATION, update, ACTIVATION);
-    _cm34 = new Coupling (_m34, ACTIVATION, update, ACTIVATION);
-
-    _cm41 = new Coupling (_m41, ACTIVATION, update, ACTIVATION);
-    _cm42 = new Coupling (_m42, ACTIVATION, update, ACTIVATION);
-    _cm43 = new Coupling (_m43, ACTIVATION, update, ACTIVATION);
-    _cm44 = new Coupling (_m44, ACTIVATION, update, ACTIVATION);
+    init_abstractHomography (m11, m12, m13, m14,
+                             m21, m22, m23, m24,
+                             m31, m32, m33, m34,
+                             m41, m42, m43, m44);
   }
 
   AbstractHomography::~AbstractHomography ()
   {
-    delete _cm11;
-    delete _cm12;
-    delete _cm13;
-    delete _cm14;
+    if (_cm11) delete _cm11;
+    if (_cm12) delete _cm12;
+    if (_cm13) delete _cm13;
+    if (_cm14) delete _cm14;
 
-    delete _cm21;
-    delete _cm22;
-    delete _cm23;
-    delete _cm24;
+    if (_cm21) delete _cm21;
+    if (_cm22) delete _cm22;
+    if (_cm23) delete _cm23;
+    if (_cm24) delete _cm24;
 
-    delete _cm31;
-    delete _cm32;
-    delete _cm33;
-    delete _cm34;
+    if (_cm31) delete _cm31;
+    if (_cm32) delete _cm32;
+    if (_cm33) delete _cm33;
+    if (_cm34) delete _cm34;
 
-    delete _cm41;
-    delete _cm42;
-    delete _cm43;
-    delete _cm44;
+    if (_cm41) delete _cm41;
+    if (_cm42) delete _cm42;
+    if (_cm43) delete _cm43;
+    if (_cm44) delete _cm44;
 
-    delete _m11;
-    delete _m12;
-    delete _m13;
-    delete _m14;
+    if (_m11) delete _m11;
+    if (_m12) delete _m12;
+    if (_m13) delete _m13;
+    if (_m14) delete _m14;
 
-    delete _m21;
-    delete _m22;
-    delete _m23;
-    delete _m24;
+    if (_m21) delete _m21;
+    if (_m22) delete _m22;
+    if (_m23) delete _m23;
+    if (_m24) delete _m24;
 
-    delete _m31;
-    delete _m32;
-    delete _m33;
-    delete _m34;
+    if (_m31) delete _m31;
+    if (_m32) delete _m32;
+    if (_m33) delete _m33;
+    if (_m34) delete _m34;
 
-    delete _m41;
-    delete _m42;
-    delete _m43;
-    delete _m44;
+    if (_m41) delete _m41;
+    if (_m42) delete _m42;
+    if (_m43) delete _m43;
+    if (_m44) delete _m44;
   }
 
   void
