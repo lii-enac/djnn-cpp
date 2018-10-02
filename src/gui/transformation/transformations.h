@@ -215,12 +215,14 @@ namespace djnn
   class AbstractHomography : public AbstractTransformation
   {
   public:
-    AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
-			double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34,
-			double m41, double m42, double m43, double m44);
-    AbstractHomography (double m11, double m12, double m13, double m14,
-          double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34,
-          double m41, double m42, double m43, double m44);
+    AbstractHomography (Process *p, const string &n, double m11=1, double m12=0, double m13=0, double m14=0,
+			double m21=0, double m22=1, double m23=0, double m24=0,
+      double m31=0, double m32=0, double m33=1, double m34=0,
+			double m41=0, double m42=0, double m43=0, double m44=1);
+    AbstractHomography (double m11=1, double m12=0, double m13=0, double m14=0,
+      double m21=0, double m22=1, double m23=0, double m24=0,
+      double m31=0, double m32=0, double m33=1, double m34=0,
+      double m41=0, double m42=0, double m43=0, double m44=1);
     virtual
     ~AbstractHomography ();
     void
@@ -239,9 +241,10 @@ namespace djnn
   class Homography : public AbstractHomography
   {
   public:
-    Homography (Process *p, const string &n, double m11, double m12, double m13, double m14, double m21,
-		double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41,
-		double m42, double m43, double m44);
+    Homography (Process *p, const string &n, double m11=1, double m12=0, double m13=0, double m14=0,
+      double m21=0, double m22=1, double m23=0, double m24=0,
+      double m31=0, double m32=0, double m33=1, double m34=0,
+      double m41=0, double m42=0, double m43=0, double m44=1);
     virtual
     ~Homography ();
     void
@@ -251,10 +254,12 @@ namespace djnn
   class GradientHomography : public AbstractHomography
   {
   public:
-    GradientHomography (Process *p, const string &n, double m11, double m12, double m13, double m21,
-			double m22, double m23, double m31, double m32, double m33);
-    GradientHomography (double m11, double m12, double m13, double m21,
-          double m22, double m23, double m31, double m32, double m33);
+    GradientHomography (Process *p, const string &n, double m11=1, double m12=0, double m13=0, 
+      double m21=0,	double m22=1, double m23=0,
+      double m31=0, double m32=0, double m33=1);
+    GradientHomography (double m11=1, double m12=0, double m13=0, 
+      double m21=0, double m22=1, double m23=0,
+      double m31=0, double m32=0, double m33=1);
     Process* clone () override;
     virtual
     ~GradientHomography ();
