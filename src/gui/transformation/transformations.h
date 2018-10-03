@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -214,6 +215,76 @@ namespace djnn
 
   class AbstractHomography : public AbstractTransformation
   {
+  /*** private Class translateBy Actions ***/ 
+  private:
+     class TranslateByAction : public Process
+    {
+    public:
+      TranslateByAction (Process* parent, const string &name, AbstractHomography *h) :
+      Process (parent, name), _h(h) { Process::finalize ();}
+      virtual ~TranslateByAction () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      AbstractHomography *_h;
+    };
+
+  /*** private Class scaleBy Actions ***/ 
+  private:
+     class ScaleByAction : public Process
+    {
+    public:
+      ScaleByAction (Process* parent, const string &name, AbstractHomography *h) :
+      Process (parent, name), _h(h) { Process::finalize ();}
+      virtual ~ScaleByAction () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      AbstractHomography *_h;
+    };
+
+  /*** private Class rotateBy Actions ***/ 
+  private:
+     class RotateByAction : public Process
+    {
+    public:
+      RotateByAction (Process* parent, const string &name, AbstractHomography *h) :
+      Process (parent, name), _h(h) { Process::finalize ();}
+      virtual ~RotateByAction () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      AbstractHomography *_h;
+    };
+
+  /*** private Class skew_X_By Actions ***/ 
+  private:
+     class Skew_X_ByAction : public Process
+    {
+    public:
+      Skew_X_ByAction (Process* parent, const string &name, AbstractHomography *h) :
+      Process (parent, name), _h(h) { Process::finalize ();}
+      virtual ~Skew_X_ByAction () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      AbstractHomography *_h;
+    };
+
+  /*** private Class skew_Y_By Actions ***/ 
+  private:
+     class Skew_Y_ByAction : public Process
+    {
+    public:
+      Skew_Y_ByAction (Process* parent, const string &name, AbstractHomography *h) :
+      Process (parent, name), _h(h) { Process::finalize ();}
+      virtual ~Skew_Y_ByAction () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      AbstractHomography *_h;
+    };
+
   public:
     AbstractHomography (Process *p, const string &n, double m11=1, double m12=0, double m13=0, double m14=0,
      double m21=0, double m22=1, double m23=0, double m24=0,
@@ -230,8 +301,35 @@ namespace djnn
     DoubleProperty *_m11, *_m12, *_m13, *_m14, *_m21, *_m22, *_m23, *_m24, *_m31, *_m32, *_m33, *_m34, *_m41, *_m42,
     *_m43, *_m44;
   protected:
+    /* mxx coupling */
     Coupling *_cm11, *_cm12, *_cm13, *_cm14, *_cm21, *_cm22, *_cm23, *_cm24, *_cm31, *_cm32, *_cm33, *_cm34, *_cm41,
     *_cm42, *_cm43, *_cm44;
+    /* translateBy ptr */
+    Spike  *_translateBy_spike;
+    DoubleProperty *_translateBy_dx, *_translateBy_dy;
+    Process* _translateBy_action;
+    Coupling *_tranlateBy_dx_coupling, *_tranlateBy_dy_coupling;
+    /* scaleBy ptr */
+    Spike  *_scaleBy_spike;
+    DoubleProperty *_scaleBy_cx, *_scaleBy_cy ,*_scaleBy_sx, *_scaleBy_sy;
+    Process *_scaleBy_action;
+    Coupling *_scaleBy_cx_coupling, *_scaleBy_cy_coupling, *_scaleBy_sx_coupling, *_scaleBy_sy_coupling;
+    /* rotateBy ptr */
+    Spike *_rotateBy_spike;
+    DoubleProperty *_rotateBy_cx, *_rotateBy_cy, *_rotateBy_da;
+    Process *_rotateBy_action;
+    Coupling *_rotateBy_cx_coupling, *_rotateBy_cy_coupling, *_rotateBy_da_coupling;
+    /* skewXBy ptr */
+    Spike *_skew_X_By_spike;
+    DoubleProperty *_skew_X_By_cx, *_skew_X_By_cy, *_skew_X_By_da;
+    Process *_skew_X_By_action;
+    Coupling *_skew_X_By_cx_coupling, *_skew_X_By_cy_coupling, *_skew_X_By_da_coupling;
+    /* skewXBy ptr */
+    Spike *_skew_Y_By_spike;
+    DoubleProperty *_skew_Y_By_cx, *_skew_Y_By_cy, *_skew_Y_By_da;
+    Process *_skew_Y_By_action;
+    Coupling *_skew_Y_By_cx_coupling, *_skew_Y_By_cy_coupling, *_skew_Y_By_da_coupling;
+
   private:
     void init_abstractHomography (double m11, double m12, double m13, double m14,
                                   double m21, double m22, double m23, double m24,
