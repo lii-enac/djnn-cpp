@@ -42,8 +42,9 @@ namespace djnn
 
   Container::~Container ()
   {
-    for (auto c : _children)
-      delete c;
+    int sz = _children.size ();
+    for (int i = sz - 1; i >= 0; i--)
+      delete _children[i];
   }
 
   void
