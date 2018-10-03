@@ -50,9 +50,9 @@ namespace djnn {
     void change_branch ();
     friend void SwitchAction::activate ();
     string _initial;
-    unique_ptr<Coupling> _c_branch;
-    shared_ptr<TextProperty> _branch_name;
-    shared_ptr<Process> _action;
+    Coupling* _c_branch;
+    TextProperty* _branch_name;
+    Process* _action;
     Process* _cur_branch;
   };
 

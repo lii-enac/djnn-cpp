@@ -36,27 +36,31 @@ namespace djnn
   Switch::init_switch (const string &initial)
   {
     _initial = initial;
-    _branch_name = shared_ptr<TextProperty> (new TextProperty (initial));
-    add_symbol ("state", _branch_name.get ());
-    _action = make_shared<SwitchAction> (this, get_name ());
-    Graph::instance ().add_edge (_branch_name.get (), _action.get ());
+    _branch_name = new TextProperty (initial);
+    add_symbol ("state", _branch_name);
+    _action = new SwitchAction (this, get_name ());
+    Graph::instance ().add_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
-    _state_dependency = _branch_name.get ();
-    _c_branch = make_unique<Coupling> (_branch_name.get (), ACTIVATION, _action.get (), ACTIVATION);
+      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    _state_dependency = _branch_name;
+    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION);
     _cur_branch = nullptr;
   }
 
   Switch::~Switch ()
   {
-    Graph::instance ().remove_edge (_branch_name.get (), _action.get ());
+    Graph::instance ().remove_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    set_vertex (nullptr);
+    delete _c_branch;
+    delete _branch_name;
   }
+
   void
   Switch::activate ()
   {
-    _c_branch.get ()->enable ();
+    _c_branch->enable ();
     change_branch ();
     _activation_state = activated;
   }
@@ -81,7 +85,7 @@ namespace djnn
   void
   Switch::change_branch ()
   {
-    string key = _branch_name.get ()->get_value ();
+    string key = _branch_name->get_value ();
     map<string, Process*>::iterator it = _symtable.find (key);
     if (it != _symtable.end ()) {
       if (_cur_branch == it->second) {
