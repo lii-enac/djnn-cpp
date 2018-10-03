@@ -117,11 +117,6 @@ static void  __afterSelect (void *data){
 
 static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
-
-  /* debug */
-  //map<string, vector<pair<int, djnn::TextProperty*>>>* inmap =  (map<string, vector<pair<int, djnn::TextProperty*>>>*) user_data;
-  //__ivy_debug_mapping (*inmap);
-
   pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = (pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>*) user_data;
   string regexp = keypair->first;
   map<string, vector<pair<int, djnn::TextProperty*>>>* in_map =  keypair->second;
@@ -156,7 +151,6 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
     cout << "argv[" << i << "] - " << string(argv[i]) << endl;
   } 
   cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
-  //cout << "index_found - " << index_found << endl;
   cout << "---------------------" << endl << endl;
 #endif
  
