@@ -152,8 +152,14 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
 
+ifeq ($(os),MINGW64_NT-10.0)
 djnn_libs := core base display gui animation
 # comms input
+else
+djnn_libs := core base comms display gui input animation
+endif
+
+
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
 #headers := $(foreach a,$(djnn_libs),$a/$a)
