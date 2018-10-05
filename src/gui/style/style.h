@@ -699,5 +699,53 @@ namespace djnn
     IntProperty* _anchor;
     Coupling* _ca;
   };
+
+  class RGBToLCHConverter : public Process
+  {
+  private:
+    class ConverterAction : public Process {
+      public:
+        ConverterAction (RGBToLCHConverter *p, const std::string &n);
+        virtual ~ConverterAction () {}
+        void activate () override;
+        void deactivate () override {};
+      private:
+        RGBToLCHConverter *_p;
+    };
+  public:
+    RGBToLCHConverter (Process *p, const std::string &n);
+    virtual ~RGBToLCHConverter ();
+    void activate () override;
+    void deactivate () override;
+  private:
+    IntProperty *_r, *_g, *_b;
+    DoubleProperty *_l, *_c, *_h;
+    ConverterAction *_action;
+    Coupling *_cr, *_cg, *_cb;
+  };
+
+  class LCHToRGBConverter : public Process
+  {
+  private:
+    class ConverterAction : public Process {
+      public:
+        ConverterAction (LCHToRGBConverter *p, const std::string &n);
+        virtual ~ConverterAction () {}
+        void activate () override;
+        void deactivate () override {};
+      private:
+        LCHToRGBConverter *_p;
+    };
+  public:
+    LCHToRGBConverter (Process *p, const std::string &n);
+    virtual ~LCHToRGBConverter ();
+    void activate () override;
+    void deactivate () override;
+  private:
+    IntProperty *_r, *_g, *_b;
+    DoubleProperty *_l, *_c, *_h;
+    ConverterAction *_action;
+    Coupling *_cl, *_cc, *_ch;
+  };
 }
 
