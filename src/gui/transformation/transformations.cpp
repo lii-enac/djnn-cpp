@@ -575,7 +575,8 @@ namespace djnn
     return c;
   }
 
-  //TODO: REMOVE this function
+  //DEBUG
+  #if 0
   static void
   print_array (array<array<double, 4>, 4> &a) {
     cout << endl;
@@ -586,6 +587,7 @@ namespace djnn
       cout << endl;
     }
   }
+  #endif
 
   static array<array<double, 4>, 4>
   create_translation_array (double dx, double dy) {
