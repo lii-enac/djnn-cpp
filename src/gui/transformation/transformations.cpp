@@ -815,8 +815,8 @@ namespace djnn
     _scaleBy_spike = new Spike (this, "scaleBy");
     _scaleBy_cx = new DoubleProperty (0);
     _scaleBy_cy = new DoubleProperty (0);
-    _scaleBy_sx = new DoubleProperty (0);
-    _scaleBy_sy = new DoubleProperty (0);
+    _scaleBy_sx = new DoubleProperty (1);
+    _scaleBy_sy = new DoubleProperty (1);
     _scaleBy_spike->add_symbol ("cx", _scaleBy_cx);
     _scaleBy_spike->add_symbol ("cy", _scaleBy_cy);
     _scaleBy_spike->add_symbol ("sx", _scaleBy_sx);
