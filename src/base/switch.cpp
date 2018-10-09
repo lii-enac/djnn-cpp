@@ -42,7 +42,7 @@ namespace djnn
     Graph::instance ().add_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
-    _state_dependency = _branch_name;
+    _state_dependency = _action;
     _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION);
     _cur_branch = nullptr;
   }

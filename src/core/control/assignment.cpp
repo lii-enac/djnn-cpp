@@ -147,6 +147,8 @@ namespace djnn
                                              "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
                                              _src, _dst, true);
     Graph::instance ().add_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
     Process::finalize ();
   }
 
