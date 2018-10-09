@@ -127,6 +127,10 @@ namespace djnn
     Graph::instance ().remove_edge (_next.get (), _next_action.get ());
     Graph::instance ().remove_edge (_previous.get (), _previous_action.get ());
     Graph::instance ().remove_edge (_index.get (), _change_index_action.get ());
+    Graph::instance ().remove_edge (_next_action.get (), _change_index_action.get ());
+    Graph::instance ().remove_edge (_previous_action.get (), _change_index_action.get ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _change_index_action.get ());
   }
 
   void
