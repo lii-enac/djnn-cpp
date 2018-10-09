@@ -102,6 +102,11 @@ namespace djnn
     Graph::instance ().add_edge (_next.get (), _next_action.get ());
     Graph::instance ().add_edge (_previous.get (), _previous_action.get ());
     Graph::instance ().add_edge (_index.get (), _change_index_action.get ());
+    Graph::instance ().add_edge (_next_action.get (), _index.get ());
+    Graph::instance ().add_edge (_previous_action.get (), _index.get ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _change_index_action.get ());
+     _state_dependency = _change_index_action.get ();
   }
 
   SwitchList::SwitchList (bool loop) :
