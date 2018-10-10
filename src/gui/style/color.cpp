@@ -101,6 +101,9 @@ namespace djnn
     Graph::instance ().add_edge (_r, _action);
     Graph::instance ().add_edge (_g, _action);
     Graph::instance ().add_edge (_b, _action);
+    Graph::instance ().add_edge (_action, _l);
+    Graph::instance ().add_edge (_action, _c);
+    Graph::instance ().add_edge (_action, _h);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
     Process::finalize ();
@@ -222,6 +225,9 @@ namespace djnn
     Graph::instance ().add_edge (_l, _action);
     Graph::instance ().add_edge (_c, _action);
     Graph::instance ().add_edge (_h, _action);
+    Graph::instance ().add_edge (_action, _r);
+    Graph::instance ().add_edge (_action, _g);
+    Graph::instance ().add_edge (_action, _b);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
     Process::finalize ();
