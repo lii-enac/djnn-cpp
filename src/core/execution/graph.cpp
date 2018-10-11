@@ -188,6 +188,8 @@ namespace djnn
   Graph::print_sorted ()
   {
     for (auto v : _sorted_vertices) {
+      if (v->get_component()->get_parent())
+        cout << v->get_component()->get_parent()->get_name () << "/";
       cout << v->get_component ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
     }
   }
