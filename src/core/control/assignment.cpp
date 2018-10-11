@@ -166,6 +166,8 @@ namespace djnn
   Assignment::~Assignment ()
   {
     Graph::instance ().remove_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
   }
 
   void

@@ -51,6 +51,8 @@ namespace djnn
                                           _dst);
     _c_src = std::unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
     Graph::instance ().add_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
     _c_src->disable ();
   }
 
@@ -70,6 +72,8 @@ namespace djnn
   Binding::~Binding ()
   {
     Graph::instance ().remove_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
   }
 
   void
