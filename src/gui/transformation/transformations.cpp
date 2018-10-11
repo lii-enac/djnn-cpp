@@ -533,15 +533,23 @@ namespace djnn
   static void
   array_to_homography (array<array<double, 4>, 4> &a, AbstractHomography* h) {
   
-    h->_m11->set_value (a[0][0], false);
-    h->_m12->set_value (a[0][1], false);
+    /* note:
+     * works only for 2D 
+     * propagation is not active for 3D
+     *  |  x  x  .  x  |
+     *  |  x  x  .  x  |
+     *  |  .  .  1  .  |
+     *  |  .  .  .  1  |
+     */
+    h->_m11->set_value (a[0][0], true);
+    h->_m12->set_value (a[0][1], true);
     h->_m13->set_value (a[0][2], false);
-    h->_m14->set_value (a[0][3], false);
+    h->_m14->set_value (a[0][3], true);
 
-    h->_m21->set_value (a[1][0], false);
-    h->_m22->set_value (a[1][1], false);
+    h->_m21->set_value (a[1][0], true);
+    h->_m22->set_value (a[1][1], true);
     h->_m23->set_value (a[1][2], false);
-    h->_m24->set_value (a[1][3], false);
+    h->_m24->set_value (a[1][3], true);
 
     h->_m31->set_value (a[2][0], false);
     h->_m32->set_value (a[2][1], false);
@@ -551,8 +559,7 @@ namespace djnn
     h->_m41->set_value (a[3][0], false);
     h->_m42->set_value (a[3][1], false);
     h->_m43->set_value (a[3][2], false);
-    // Only propagate on the last value to ask for only one window update
-    h->_m44->set_value (a[3][3], true);
+    h->_m44->set_value (a[3][3], false);
   }
 
 
@@ -672,7 +679,8 @@ namespace djnn
 
     array_to_homography (new_homography_array, _h);
     
-    //TODO: try to directly compute the mxx impacted by calculation
+    _h->_translateBy_dx->set_value (0, false);
+    _h->_translateBy_dy->set_value (0, false);
 
   }
 
@@ -693,6 +701,9 @@ namespace djnn
     array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_scaling_array, current_h);
 
     array_to_homography (new_homography_array, _h);
+
+    _h->_scaleBy_sx->set_value (1, false);
+    _h->_scaleBy_sy->set_value (1, false);
   }
 
   void
@@ -711,6 +722,8 @@ namespace djnn
     array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_rotation_array, current_h);
 
     array_to_homography (new_homography_array, _h);
+
+    _h->_rotateBy_da->set_value (0, false);
   }
 
   void
@@ -728,6 +741,8 @@ namespace djnn
     array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewx_array, current_h);
 
     array_to_homography (new_homography_array, _h);
+
+    _h->_skew_X_By_da->set_value (0, false);
   }
 
   void
@@ -745,6 +760,8 @@ namespace djnn
     array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewy_array, current_h);
 
     array_to_homography (new_homography_array, _h);
+
+     _h->_skew_Y_By_da->set_value (0, false);
   }
 
 
