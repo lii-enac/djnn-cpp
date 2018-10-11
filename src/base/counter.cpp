@@ -44,15 +44,19 @@ namespace djnn
     Graph::instance ().add_edge (_step.get (), _action_step.get ());
     Graph::instance ().add_edge (_action_step.get (), _output.get ());
 
-    if (p && p->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (p->state_dependency (), _action_reset.get ());
-      Graph::instance ().add_edge (p->state_dependency (), _action_step.get ());
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset.get ());
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_step.get ());
     }
     
     Process::finalize ();
   }
 
   Counter::~Counter () {
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action_reset.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action_step.get ());
+    }
     Graph::instance ().remove_edge (_reset.get (), _action_reset.get ());
     Graph::instance ().remove_edge (_action_reset.get (), _output.get ());
     Graph::instance ().remove_edge (_step.get (), _action_step.get ());
