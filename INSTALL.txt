@@ -1,39 +1,57 @@
-We provide a Makefile that should work on MacOS (10.12+),  Linux platforms, windows 10+
-
-Known dependencies:
+We provide a Makefile that should work on MacOS (10.12+), Linux, windows 10+.
 
 ---- LINUX -----
 
-Linux/Ubuntu:
-  sudo apt install git make
-  make install-pkgdeps
-  make -j4
-
-  #sudo apt install libboost-thread-dev libexpat1-dev libcurl4-gnutls-dev qt5-default pkg-config
+sudo apt install git make
+git clone git@github.com:lii-enac/djnn-cpp.git
+cd djnn-cpp
+make install-pkgdeps
+make -j4
 
 ---- MACOS -----
 
-MacOS
-  install brew then
-  brew install git make
-  make install-pkgdeps
-  make -j
- 
+install homebrew (https://brew.sh/)
+then in a Terminal:
+
+brew install git make
+git clone git@github.com:lii-enac/djnn-cpp.git
+cd djnn-cpp
+make install-pkgdeps
+make -j
+
 ---- WINDOWS -----
 
-Win
-  install msys2 then : https://www.msys2.org/
-  pacman -S git make
-  git clone git@github.com:lii-enac/djnn-cpp.git
-  launch MINGW64 command line and then
-  make install-pkgdeps
-  make -j4
- 
----- ALL PLATEFORM -----
+install msys2 (https://www.msys2.org/)
+then in msys2:
 
-All both platforms:
-  ivy bus code -> https://www.eei.cena.fr/products/ivy/
-  ivy bus on Linux/Ubuntu:
-  	sudo apt install subversion libpcre3-dev libxt-dev tcl8.5-dev libglib2.0-dev
-  ivy bus on MacOS
-  	brew install pcre
+pacman -S git make
+git clone git@github.com:lii-enac/djnn-cpp.git
+cd djnn-cpp
+make install-pkgdeps
+
+launch a mingw64 shell (and NOT msys2) then:
+cd djnn-cpp
+make -j
+ 
+---- ALL PLATFORM -----
+
+ivy bus -> https://www.eei.cena.fr/products/ivy/
+There is an installer fow windows.
+For linux and MacOS:
+
+dependencies on Linux/Ubuntu:
+	sudo apt install subversion libpcre3-dev
+    #libxt-dev tcl8.5-dev libglib2.0-dev
+dependencies on MacOS
+	brew install subversion pcre
+
+svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
+cd ivy-c/src
+
+make static-libs shared-libs
+sudo make installlibs includes
+
+or
+
+make -f Makefile.osx static-libs shared-libs
+sudo make -f Makefile.osx installlibs includes
