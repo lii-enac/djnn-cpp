@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -107,16 +108,10 @@ __ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
 /** IVY CALLBACK **/
 
-static void  __beforeSelect (void *data){
-  djnn::release_exclusive_access (DBG_GET);
-}
-
-static void  __afterSelect (void *data){
-  djnn::get_exclusive_access (DBG_REL);
-}
-
 static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
+  djnn::get_exclusive_access (DBG_GET);
+
   pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = (pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>*) user_data;
   string regexp = keypair->first;
   map<string, vector<pair<int, djnn::TextProperty*>>>* in_map =  keypair->second;
@@ -126,7 +121,6 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   cout <<  "regexp: '" << regexp << "'" << endl;
   __ivy_debug_mapping (*in_map);
 #endif
-     
 
   map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
   mit = in_map->find(regexp);
@@ -156,6 +150,8 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
  
   //cout << "------- EXEC -------" << endl ;  
   djnn::Graph::instance().exec();
+
+  djnn::release_exclusive_access (DBG_REL);
 }
 
 static void __on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, IvyApplicationEvent event )
@@ -220,11 +216,12 @@ IvyAccess::~IvyAccess ()
  if (_arriving) delete _arriving;
  if (_leaving) delete _leaving;
 
- // TODO Clean MAP
+ // TODO: Clean MAP
  //while (!_in.empty()) {
  // delete _in.back();
  // _in.pop_back();
  //}
+
  Graph::instance().remove_edge(_out, _out_a);
  if (_parent && _parent->state_dependency () != nullptr)
    Graph::instance ().remove_edge (_parent->state_dependency (), _out_a);
@@ -234,7 +231,6 @@ void
 IvyAccess::activate ()
 {
     /* launche thread */
-  //_thread = thread_t (&IvyAccess::run, this);
   start_thread ();
 
     /* enable coupling */
@@ -260,11 +256,6 @@ IvyAccess::run ()
   IvyInit (_appname.c_str(), _ready_message.c_str(), __on_ivy_arriving_leaving_agent, this, 0, 0);
 
   IvyStart(_bus.c_str());
-
-  /* get excclusive_access - before select */
-  IvySetBeforeSelectHook(__beforeSelect,0);
-  /* release exclusive_access - after select */
-  IvySetAfterSelectHook(__afterSelect,0);
 
   /* start Ivy mainloop */
   IvyMainLoop ();
