@@ -75,6 +75,7 @@ namespace djnn
   void
   Timer::run ()
   {
+    //DBG;
     try {
         boost
         ::chrono::milliseconds duration (_delay->get_value ());

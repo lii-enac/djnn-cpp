@@ -17,6 +17,8 @@
 #include "../../core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
+//#include <QThread>
+
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 namespace djnn
@@ -43,6 +45,7 @@ namespace djnn
     argv = 0;
     _qapp = new QApplication (argc, argv);
 
+    
     _qevtdispatcher = QAbstractEventDispatcher::instance ();
     QObject::connect (_qevtdispatcher, &QAbstractEventDispatcher::aboutToBlock,
                       [=]() {this->slot_for_about_to_block();});
@@ -68,9 +71,11 @@ namespace djnn
   }
 
   void
-  QtMainloop::activate_from_mainloop ()
+  //QtMainloop::activate_from_mainloop ()
+  QtMainloop::run ()
   {
     //set_please_stop (false);
+
     _qapp->exec ();
   }
 
@@ -101,6 +106,9 @@ namespace djnn
       //DBG;
       return;
     }
+    //QThread::currentThread()->setPriority(QThread::HighPriority);
+    //QThread::currentThread()->setPriority(QThread::LowestPriority);
+    
     if (!get_please_stop ()) {
       djnn::get_exclusive_access (DBG_GET);
       // now qt can call event method on windows

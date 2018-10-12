@@ -5,6 +5,15 @@
 //#include <thread>
 //#include <atomic>
 
+#include <pthread.h>
+
+#include <iostream>
+#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+
+#if defined(__WIN32__)
+#include <windows.h>
+#endif
+
 namespace djnn {
 
 	typedef boost::thread thread_t;
@@ -34,10 +43,35 @@ namespace djnn {
 	void
 	ExternalSource::start_thread ()
 	{
+		//DBG;
 		_impl->_thread =    
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
-    	thread_t (&ExternalSource::run, this);
+    	thread_t (&ExternalSource::private_run, this);
+
+    	auto native_thread = _impl->_thread.native_handle();
+#if defined(__WIN32__)
+    	//DBG;
+    	auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
+    	if(!b) {
+    		std::cerr << "fail to SetPriorityClass " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
+    	}
+#else
+    	sched_param sch;
+    	int policy; 
+    	pthread_getschedparam(native_thread, &policy, &sch);
+    	sch.sched_priority = 20;
+    	if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
+        	std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
+    	}
+#endif
+    	
+	}
+
+	void
+	ExternalSource::private_run ()
+	{	
+		run();
 	}
 	
 }

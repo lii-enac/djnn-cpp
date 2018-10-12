@@ -17,7 +17,8 @@ namespace djnn {
       if (another_source_wants_to_be_mainloop) {
         //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
-        another_source_wants_to_be_mainloop->activate_from_mainloop ();
+        //another_source_wants_to_be_mainloop->activate_from_mainloop ();
+        another_source_wants_to_be_mainloop->private_run ();
       } else {
         run_in_main_thread ();
       }
@@ -36,7 +37,7 @@ namespace djnn {
     void
     MainLoop::run_in_main_thread ()
     {
-      run ();
+      private_run ();
     }
 
     void
@@ -48,6 +49,7 @@ namespace djnn {
     void
     MainLoop::run ()
     {
+      //private_run();
       djnn::release_exclusive_access (DBG_REL); // launch other threads
 
       if (is_run_forever ()) {

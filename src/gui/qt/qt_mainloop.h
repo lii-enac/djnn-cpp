@@ -30,13 +30,14 @@ namespace djnn {
     static void clear ();
     virtual ~QtMainloop ();
     virtual void please_stop () override ;
-    virtual void activate_from_mainloop () override;
+    //virtual void activate_from_mainloop () override;
+    void run() override;// {}
     void wakeup ();
     void set_please_exec (bool exec) { _please_exec = exec; }
     void add_window (QtWindow* win) { _windows.push_back (win); }
     void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
   protected:
-    void run() override {}
+    //void run() override {}
   private:
     static shared_ptr<QtMainloop> _instance;
     static once_flag onceFlag;

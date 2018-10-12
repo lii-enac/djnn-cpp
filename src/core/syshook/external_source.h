@@ -14,9 +14,6 @@
 
 #pragma once
 
-
-
-
 namespace djnn
 {
   
@@ -80,7 +77,7 @@ namespace djnn
 
     //virtual void please_stop () { set_please_stop (true); }
     virtual void please_stop (); //{ _please_stop = true; _thread.interrupt(); }
-    virtual void activate_from_mainloop () {}
+    //virtual void activate_from_mainloop () {}
 
   protected:
     //virtual void set_please_stop (bool v) { _please_stop.store (v); }
@@ -93,6 +90,7 @@ namespace djnn
 
     virtual void start_thread();
     virtual void run() = 0;
+    friend class MainLoop;
 
     //std::thread _thread;
 
@@ -103,6 +101,7 @@ namespace djnn
 
     
   private:
+    void private_run();
     //std::atomic_bool
     bool _please_stop;
     

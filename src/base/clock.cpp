@@ -68,6 +68,7 @@ namespace djnn
     //djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
     //set_please_stop (true);
     //if ( _thread.joinable() ) _thread.join();
+    //DBG;
     please_stop();
     start_thread();
 
@@ -99,6 +100,7 @@ namespace djnn
         ::this_thread::sleep_for (duration); // blocking call
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        //std::cerr << this << "  ** sleep GOT" << std::endl;
         if (!get_please_stop ()) {
           get_monotonic_time(&after);
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);

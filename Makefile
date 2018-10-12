@@ -22,6 +22,8 @@ help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
 
+
+
 config.mk:
 	cp config.default.mk config.mk
 include config.default.mk
@@ -31,23 +33,21 @@ include config.default.mk
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
-# cross-platform support
-crossp :=
-#crossp := g
-#crossp := arm-none-eabi-
-#crossp := i686-w64-mingw32-
-#crossp := mingw-w64-x86_64-
-#brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
-#add -Imingw-std-threads to CXXFLAGS
-
-src_dir := src
-
 ifndef os
 os := $(shell uname -s)
 endif
 ifndef arch
 arch := $(shell uname -m)
 endif
+
+# cross-platform support
+crossp ?=
+#crossp := g
+#crossp := arm-none-eabi-
+#cross_prefix := em
+
+
+src_dir := src
 
 ifndef graphics
 graphics := QT
@@ -86,6 +86,13 @@ tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacO
 
 lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
+
+
+ifeq ($(os),MINGW64_NT-10.0)
+djnn_libs := core base display gui animation # comms input
+else
+djnn_libs := core base comms display gui input animation
+endif
 
 srcs :=
 objs :=
@@ -169,11 +176,7 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
 
-ifeq ($(os),MINGW64_NT-10.0)
-djnn_libs := core base display gui animation # comms input
-else
-djnn_libs := core base comms display gui input animation
-endif
+
 
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
@@ -244,7 +247,7 @@ dbg:
 
 ifeq ($(os),Linux)
 #https://brew.sh/
-pkgdeps := libexpat1-dev libcurl4-openssl-dev flex bison libudev-dev #gperf
+pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev #gperf
 pkgdeps += qtbase5-dev
 #pkgdeps += freetype sdl2
 pkgcmd := apt install -y
