@@ -1,3 +1,17 @@
+#	djnn cpp
+#
+#	The copyright holders for the contents of this file are:
+#		Ecole Nationale de l'Aviation Civile, France (2017-2018)
+#	See file "license.terms" for the rights and conditions
+#	defined by copyright holders.
+#
+#
+#	Contributors:
+#		Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+#		Stéphane Conversy <stephane.conversy@enac.fr>
+#		Mathieu Poirier	  <mathieu.poirier@enac.fr>
+
+
 default: all
 .PHONY: default
 
@@ -9,8 +23,8 @@ help:
 	@echo "experiment make -j !!"
 
 config.mk:
-	cp config.mk.default config.mk
-include config.mk.default
+	cp config.default.mk config.mk
+include config.default.mk
 -include config.mk
 
 # remove builtin rules: speed up build process and help debug
@@ -47,14 +61,14 @@ CXXFLAGS ?= $(CFLAGS) -std=c++14
 ifeq ($(os),Linux)
 lib_suffix=.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
-DYNLIB=-shared
+dynlib=-shared
 CFLAGS ?= -fpic -g -MMD -Wall
 endif
 
 ifeq ($(os),Darwin)
 lib_suffix=.dylib
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-DYNLIB=-dynamiclib
+dynlib=-dynamiclib
 CFLAGS ?= -g -MMD -Wall
 endif
 
@@ -62,13 +76,16 @@ endif
 ifeq ($(os), MINGW64_NT-10.0)
 lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-DYNLIB =-shared
+dynlib =-shared
 CFLAGS ?= -fpic -g -MMD -Wall
 endif
 
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
+
+lcov_file ?= $(build_dir)/djnn_cov.info
+lcov_output_dir ?= $(build_dir)/coverage_html
 
 srcs :=
 objs :=
@@ -123,7 +140,7 @@ $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
-	$$(CXX) $(DYNLIB) -o $$@ $$^ $$(LDFLAGS)
+	$$(CXX) $(dynlib) -o $$@ $$^ $$(LDFLAGS)
 
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
@@ -153,8 +170,7 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 endef
 
 ifeq ($(os),MINGW64_NT-10.0)
-djnn_libs := core base display gui animation
-# comms input
+djnn_libs := core base display gui animation # comms input
 else
 djnn_libs := core base comms display gui input animation
 endif
@@ -225,6 +241,14 @@ distclean clear:
 dbg:
 	@echo $(os)
 .PHONY: dbg
+
+ifeq ($(os),Linux)
+#https://brew.sh/
+pkgdeps := libexpat1-dev libcurl4-openssl-dev flex bison libudev-dev #gperf
+pkgdeps += qtbase5-dev
+#pkgdeps += freetype sdl2
+pkgcmd := apt install -y
+endif
 
 ifeq ($(os),Darwin)
 #https://brew.sh/

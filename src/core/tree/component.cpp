@@ -93,7 +93,7 @@ namespace djnn
     ComponentObserver::instance ().start_component ();
     /* WARNING Here we don't use C++ iterator as we want to allow
      * the dynamic modification of children list */
-    int i = 0;
+    unsigned int i = 0;
     while (i < _children.size ()) {
       if (!_children[i]->is_model ()) {
         _children[i]->activation ();

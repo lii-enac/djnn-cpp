@@ -1,6 +1,7 @@
 We provide a Makefile that should work on MacOS (10.12+), Linux, windows 10+.
 
 ---- LINUX -----
+in a Terminal:
 
 sudo apt install git make
 git clone git@github.com:lii-enac/djnn-cpp.git
@@ -21,15 +22,15 @@ make -j
 
 ---- WINDOWS -----
 
-install msys2 (https://www.msys2.org/)
-then in msys2:
+install MSYS2 (https://www.msys2.org/)
+then in an MSYS2 terminal:
 
 pacman -S git make
 git clone git@github.com:lii-enac/djnn-cpp.git
 cd djnn-cpp
 make install-pkgdeps
 
-launch a mingw64 shell (and NOT msys2) then:
+launch a mingw64 terminal (and NOT MSYS2) then:
 cd djnn-cpp
 make -j
  

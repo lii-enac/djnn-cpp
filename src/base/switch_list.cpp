@@ -32,15 +32,15 @@ namespace djnn
      * next and previous only compute the correct index and then assign it
      * the action on changed index cause the branches switch
      */
-    int icur = _sw->index ()->get_value ();
-    int inext = icur + 1;
+    unsigned int icur = _sw->index ()->get_value ();
+    unsigned int inext = icur + 1;
     if (_sw->loop ()->get_value () && (inext > _sw->children ().size ()) ) {
       inext = 1;
     }
     if (!_sw->loop ()->get_value () && (inext >= _sw->children ().size ()) ) {
       inext = _sw->children ().size ();
     }
-    _sw->index ()->set_value (inext, true);
+    _sw->index ()->set_value ((int)inext, true);
   }
 
   void
@@ -69,7 +69,7 @@ namespace djnn
      * the action on changed index cause the branches switch ONLY if the
      * index is different from the current one.
      */
-    int i = _sw->index ()->get_value ();
+    unsigned int i = _sw->index ()->get_value ();
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
       Process* next = _sw->children ()[i - 1];
       if (_sw->item () && _sw->item () != next) {
