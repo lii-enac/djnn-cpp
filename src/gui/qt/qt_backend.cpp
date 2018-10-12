@@ -182,6 +182,7 @@ namespace djnn
     QBrush pickBrush (_picking_view->pick_color ());
     pickPen.setStyle (Qt::SolidLine);
     pickPen.setColor (_picking_view->pick_color ());
+    pickPen.setWidth (cur_context->pen.width());
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
