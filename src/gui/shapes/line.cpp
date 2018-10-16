@@ -30,9 +30,13 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     set_origin (x1, y1);
   }
 
@@ -51,14 +55,14 @@ namespace djnn
 
   Line::~Line ()
   {
-    delete _cx1;
-    delete _cy1;
-    delete _cx2;
-    delete _cy2;
-    delete _x1;
-    delete _y1;
-    delete _x2;
-    delete _y2;
+    if (_cx1) {delete _cx1; _cx1 = nullptr;}
+    if (_cy1) {delete _cy1; _cy1 = nullptr;}
+    if (_cx2) {delete _cx2; _cx2 = nullptr;}
+    if (_cy2) {delete _cy2; _cy2 = nullptr;}
+    if (_x1) {delete _x1; _x1 = nullptr;}
+    if (_y1) {delete _y1; _y1 = nullptr;}
+    if (_x2) {delete _x2; _x2 = nullptr;}
+    if (_y2) {delete _y2; _y2 = nullptr;}
   }
 
   void

@@ -27,7 +27,9 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
   }
 
   PolyPoint::PolyPoint (Process* p, const string &n, double x, double y) :
@@ -42,17 +44,19 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     poly->points ()->add_child (this, "");
     p->add_symbol(n, this);
   }
 
   PolyPoint::~PolyPoint ()
   {
-    delete _cx;
-    delete _cy;
-    delete _x;
-    delete _y;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
   }
 
   void
@@ -112,7 +116,12 @@ namespace djnn
 
   Poly::~Poly ()
   {
-    delete _points;
+    if (_bbh) {delete _bbh; _bbh = nullptr;}
+    if (_bbw) {delete _bbw; _bbw = nullptr;}
+    if (_bby) {delete _bby; _bby = nullptr;}
+    if (_bbx) {delete _bbx; _bbx = nullptr;}
+    if (_bounding_box) {delete _bounding_box; _bounding_box = nullptr;}
+    if (_points) {delete _points; _points = nullptr;}
   }
 
   void

@@ -28,8 +28,11 @@ namespace djnn
     _r = new DoubleProperty (this, "r", r);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+     _ccy->disable ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     set_origin (cx, cy);
   }
 
@@ -48,12 +51,13 @@ namespace djnn
 
   Circle::~Circle ()
   {
-    delete _ccx;
-    delete _ccy;
-    delete _cr;
-    delete _cx;
-    delete _cy;
-    delete _r;
+    if (_ccx) { delete _ccx; _ccx = nullptr;}
+    if (_ccy) { delete _ccy; _ccy = nullptr;}
+    if (_cr) { delete _cr; _cr = nullptr;}
+
+    if (_cx) { delete _cx; _cx = nullptr;}
+    if (_cy) { delete _cy; _cy = nullptr;}
+    if (_r)  { delete _r;  _r = nullptr;}
   }
 
   void

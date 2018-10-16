@@ -73,70 +73,20 @@ namespace djnn
     Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxu, int dyu,
           const std::string &encoding, const std::string &text);
     Text (double x, double y, const std::string &text);
-    virtual
-    ~Text ();
-    void
-    draw () override;
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    dx ()
-    {
-      return _dx;
-    }
-    DoubleProperty*
-    dy ()
-    {
-      return _dy;
-    }
-    IntProperty*
-    dxU ()
-    {
-      return _dxU;
-    }
-    IntProperty*
-    dyU ()
-    {
-      return _dxU;
-    }
-    void
-    set_width (double width)
-    {
-      _width->set_value (width, true);
-    }
-    IntProperty*
-    width ()
-    {
-      return _width;
-    }
-    void
-    set_height (double height)
-    {
-      _height->set_value (height, true);
-    }
-    IntProperty*
-    height ()
-    {
-      return _height;
-    }
-    IntProperty*
-    encoding ()
-    {
-      return _encoding;
-    }
-    TextProperty*
-    text ()
-    {
-      return _text;
-    }
+    virtual ~Text ();
+    void draw () override;
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* dx () { return _dx;}
+    DoubleProperty* dy () { return _dy;}
+    IntProperty*    dxU () { return _dxU;}
+    IntProperty*    dyU () { return _dyU;}
+    IntProperty*    width () { return _width;}
+    void set_width (double width) { _width->set_value (width, true);}
+    IntProperty*    height () { return _height;}
+    void set_height (double height) { _height->set_value (height, true);}
+    IntProperty*    encoding () { return _encoding;}
+    TextProperty*   text (){ return _text;}
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
@@ -153,12 +103,9 @@ namespace djnn
     DoubleProperty *_fsize;
     IntProperty *_fstyle, *_fweight;
     TextSizeAction *_update_size;
-    void
-    init_text (double x, double y, const std::string &text);
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void init_text (double x, double y, const std::string &text);
+    void activate () override;
+    void deactivate () override;
   };
 
   class RectangleClip : public AbstractGShape
@@ -166,41 +113,21 @@ namespace djnn
   public:
     RectangleClip (Process *p, const std::string& n, double x, double y, double w, double h);
     RectangleClip (double x, double y, double w, double h);
-    virtual
-    ~RectangleClip ();
-    void
-    draw () override;
+    virtual ~RectangleClip ();
+    void draw () override;
     Process* clone () override;
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    width ()
-    {
-      return _width;
-    }
-    DoubleProperty*
-    height ()
-    {
-      return _height;
-    }
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* width () { return _width;}
+    DoubleProperty* height () { return _height;}
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
     DoubleProperty *_width;
     DoubleProperty *_height;
     Coupling *_cx, *_cy, *_cwidth, *_cheight;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class Line : public AbstractGShape
@@ -208,42 +135,21 @@ namespace djnn
   public:
     Line (Process *p, const std::string& n, double x1, double y1, double x2, double y2);
     Line (double x1, double y1, double x2, double y2);
-    virtual
-    ~Line ();
-    void
-    draw () override;
-    DoubleProperty*
-    x1 ()
-    {
-      return _x1;
-    }
-    DoubleProperty*
-    y1 ()
-    {
-      return _y1;
-    }
-    DoubleProperty*
-    x2 ()
-    {
-      return _x2;
-    }
-    DoubleProperty*
-    y2 ()
-    {
-      return _y2;
-    }
+    virtual ~Line ();
+    void draw () override;
+    DoubleProperty* x1 () { return _x1;}
+    DoubleProperty* y1 () { return _y1;}
+    DoubleProperty* x2 () { return _x2;}
+    DoubleProperty* y2 () { return _y2;}
   private:
     DoubleProperty *_x1;
     DoubleProperty *_y1;
     DoubleProperty *_x2;
     DoubleProperty *_y2;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2;
-    void
-    init_line (double x1, double y1, double x2, double y2);
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void init_line (double x1, double y1, double x2, double y2);
+    void activate () override;
+    void deactivate () override;
   };
 
   class PolyPoint : public AbstractGObj
@@ -251,27 +157,15 @@ namespace djnn
   public:
     PolyPoint (double x, double y);
     PolyPoint (Process* p, const string &n, double x, double y);
-    virtual
-    ~PolyPoint ();
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    void
-    draw () override;
+    virtual ~PolyPoint ();
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    void draw () override;
   private:
     DoubleProperty *_x, *_y;
     Coupling *_cx, *_cy;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class Poly : public AbstractGShape
@@ -279,26 +173,14 @@ namespace djnn
   public:
     Poly (int closed);
     Poly (Process* p, const string &n, int closed);
-    virtual
-    ~Poly ();
-    Process*
-    points ()
-    {
-      return _points;
-    }
-    bool
-    closed ()
-    {
-      return _closed;
-    }
-    void
-    draw () override;
+    virtual ~Poly ();
+    Process* points () { return _points;}
+    bool closed () { return _closed;}
+    void draw () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   private:
     List *_points;
     Process* _bounding_box;
@@ -309,41 +191,17 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon () :
-        Poly (1)
-    {
-    }
-    ;
-    Polygon (Process* p, const string &n) :
-        Poly (p, n, 1)
-    {
-    }
-    ;
-    virtual
-    ~Polygon ()
-    {
-    }
-    ;
+    Polygon () : Poly (1) {};
+    Polygon (Process* p, const string &n) : Poly (p, n, 1) {};
+    virtual ~Polygon () {};
   };
 
   class Polyline : public Poly
   {
   public:
-    Polyline () :
-        Poly (0)
-    {
-    }
-    ;
-    Polyline (Process* p, const string &n) :
-        Poly (p, n, 0)
-    {
-    }
-    ;
-    virtual
-    ~Polyline ()
-    {
-    }
-    ;
+    Polyline () : Poly (0) {};
+    Polyline (Process* p, const string &n) : Poly (p, n, 0) {};
+    virtual ~Polyline () {};
   };
 
   class PathPoint : public AbstractGObj
@@ -351,40 +209,25 @@ namespace djnn
   public:
     PathPoint (Process* p, const string &n, double x, double y);
     PathPoint (double x, double y);
-    virtual
-    ~PathPoint ();
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    virtual void
-    draw () override = 0;
+    virtual ~PathPoint ();
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    virtual void draw () override = 0;
   protected:
     DoubleProperty *_x, *_y;
     Coupling *_cx, *_cy;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class PathMove : public PathPoint
   {
   public:
     PathMove (Process* p, const string &n, double x, double y) :
-        PathPoint (p, n, x, y)
-    {
-    }
+        PathPoint (p, n, x, y) {}
     PathMove (double x, double y) :
             PathPoint (x, y) {}
-    void
-    draw () override;
+    void draw () override;
     Process* clone () override;
   };
 
@@ -392,13 +235,10 @@ namespace djnn
   {
   public:
     PathLine (Process* p, const string &n, double x, double y) :
-        PathPoint (p, n, x, y)
-    {
-    }
+        PathPoint (p, n, x, y) {}
     PathLine (double x, double y) :
         PathPoint (x, y) {}
-    void
-    draw () override;
+    void draw () override;
     Process* clone () override;
   };
 
@@ -407,38 +247,18 @@ namespace djnn
   public:
     PathQuadratic (Process* p, const string &n, double x1, double y1, double x, double y);
     PathQuadratic (double x1, double y1, double x, double y);
-    virtual
-    ~PathQuadratic ();
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    x1 ()
-    {
-      return _x1;
-    }
-    DoubleProperty*
-    y1 ()
-    {
-      return _y1;
-    }
-    void
-    draw () override;
+    virtual ~PathQuadratic ();
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* x1 () { return _x1;}
+    DoubleProperty* y1 () { return _y1;}
+    void draw () override;
     Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_x1, *_y1;
     Coupling *_cx, *_cy, *_cx1, *_cy1;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class PathCubic : public AbstractGObj
@@ -446,48 +266,20 @@ namespace djnn
   public:
     PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x, double y);
     PathCubic (double x1, double y1, double x2, double y2, double x, double y);
-    virtual
-    ~PathCubic ();
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    x1 ()
-    {
-      return _x1;
-    }
-    DoubleProperty*
-    y1 ()
-    {
-      return _y1;
-    }
-    DoubleProperty*
-    x2 ()
-    {
-      return _x2;
-    }
-    DoubleProperty*
-    y2 ()
-    {
-      return _y2;
-    }
-    void
-    draw () override;
+    virtual ~PathCubic ();
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* x1 () { return _x1;}
+    DoubleProperty* y1 () { return _y1;}
+    DoubleProperty* x2 () { return _x2;}
+    DoubleProperty* y2 () { return _y2;}
+    void draw () override;
     Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_x1, *_y1, *_x2, *_y2;
     Coupling *_cx, *_cy, *_cx1, *_cy1, *_cx2, *_cy2;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class PathArc : public AbstractGObj
@@ -497,53 +289,21 @@ namespace djnn
              double y);
     PathArc (double rotx, double fl, double swfl, double rx, double ry, double x,
                  double y);
-    virtual
-    ~PathArc ();
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    rotx ()
-    {
-      return _rotx;
-    }
-    DoubleProperty*
-    fl ()
-    {
-      return _fl;
-    }
-    DoubleProperty*
-    swfl ()
-    {
-      return _swfl;
-    }
-    DoubleProperty*
-    rx ()
-    {
-      return _rx;
-    }
-    DoubleProperty*
-    ry ()
-    {
-      return _ry;
-    }
-    void
-    draw () override;
+    virtual ~PathArc ();
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* rotx () {return _rotx;}
+    DoubleProperty* fl () { return _fl;}
+    DoubleProperty* swfl () { return _swfl;}
+    DoubleProperty* rx () { return _rx;}
+    DoubleProperty* ry () { return _ry;}
+    void draw () override;
     Process* clone () override;
   private:
     DoubleProperty *_x, *_y, *_rotx, *_fl, *_swfl, *_rx, *_ry;
     Coupling *_cx, *_cy, *_crotx, *_cfl, *_cswfl, *_crx, *_cry;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
   };
 
   class PathClosure : public AbstractGObj
@@ -551,68 +311,47 @@ namespace djnn
   public:
     PathClosure (Process* p, const string &n);
     PathClosure () : AbstractGObj () {};
-    virtual
-    ~PathClosure ()
-    {
-    }
-    void
-    draw () override;
+    virtual ~PathClosure () {}
+    void draw () override;
     Process* clone () override;
   private:
-    void
-    activate () override
+    void activate () override
     {
       AbstractGObj::activate ();
     }
-    void
-    deactivate () override
+    void deactivate () override
     {
       AbstractGObj::deactivate ();
     }
   };
+
   class Path : public djnn::AbstractGShape
   {
   public:
     Path ();
     Path (Process* p, const string &n);
-    virtual
-    ~Path ();
-    Process*
-    items ()
-    {
-      return _items;
-    }
-    void
-    draw () override;
+    virtual ~Path ();
+    Process* items () { return _items;}
+    void draw () override;
     Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
     List *_items;
     Process* _bounding_box;
     DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
   };
+
   class PathClip : public Path
   {
   public:
     PathClip (Process* p, const string &n) :
-        Path (p, n)
-    {
-    }
-    PathClip () :
-        Path ()
-    {
-    }
-    virtual
-    ~PathClip ()
-    {
-      //Path::~Path ();
-    }
-    void
-    draw () override;
+        Path (p, n) {}
+    PathClip () : 
+        Path () {}
+    virtual ~PathClip () {}
+    void draw () override;
     Process* clone () override;
   };
 
@@ -622,55 +361,19 @@ namespace djnn
   {
   public:
     Image (Process *p, const std::string& n, const std::string &path, double x, double y, double w, double h);
-    virtual
-    ~Image ();
-    void
-    draw () override;
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    width ()
-    {
-      return _width;
-    }
-    DoubleProperty*
-    height ()
-    {
-      return _height;
-    }
-    TextProperty*
-    path ()
-    {
-      return _path;
-    }
-    void*
-    cache ()
-    {
-      return _cache;
-    }
-    void
-    set_cache (void * cache)
-    {
-      _cache = cache;
-    }
-    bool
-    invalid_cache ()
-    {
-      return _invalid_cache;
-    }
-    void
-    set_invalid_cache (bool v)
-    {
-      _invalid_cache = v;
-    }
+    Image (const std::string &path, double x, double y, double w, double h);
+    virtual ~Image ();
+    void draw () override;
+    Process* clone () override;
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* width () { return _width;}
+    DoubleProperty* height () { return _height;}
+    TextProperty* path () { return _path;}
+    void* cache () { return _cache;}
+    void set_cache (void * cache) { _cache = cache;}
+    bool invalid_cache () { return _invalid_cache;}
+    void set_invalid_cache (bool v) { _invalid_cache = v;}
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
@@ -679,10 +382,8 @@ namespace djnn
     TextProperty *_path;
     Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath;
     ImageWatcher *_watcher;
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void activate () override;
+    void deactivate () override;
     void *_cache;
     bool _invalid_cache;
   };
@@ -691,23 +392,13 @@ namespace djnn
   {
   public:
     ImageWatcher (Image *i) :
-        Process (), _img (i)
-    {
-    }
-    virtual
-    ~ImageWatcher ()
-    {
-    }
-    void
-    activate () override
+        Process (), _img (i) {}
+    virtual ~ImageWatcher () {}
+    void activate () override
     {
       _img->set_invalid_cache (true);
     }
-    void
-    deactivate () override
-    {
-    }
-    ;
+    void deactivate () override {};
   private:
     Image * _img;
   };
@@ -717,39 +408,18 @@ namespace djnn
   public:
     Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry);
     Ellipse (double cx, double cy, double rx, double ry);
-    virtual
-    ~Ellipse ();
-    void
-    draw () override;
-    DoubleProperty*
-    cx ()
-    {
-      return _cx;
-    }
-    DoubleProperty*
-    cy ()
-    {
-      return _cy;
-    }
-    DoubleProperty*
-    rx ()
-    {
-      return _rx;
-    }
-    DoubleProperty*
-    ry ()
-    {
-      return _ry;
-    }
+    virtual ~Ellipse ();
+    void draw () override;
+    DoubleProperty* cx () { return _cx;}
+    DoubleProperty* cy () { return _cy;}
+    DoubleProperty* rx () { return _rx;}
+    DoubleProperty* ry () { return _ry;}
   private:
     DoubleProperty *_cx, *_cy, *_rx, *_ry;
     Coupling *_ccx, *_ccy, *_crx, *_cry;
-    void
-    init_ellipse (double cx, double cy, double rx, double ry);
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void init_ellipse (double cx, double cy, double rx, double ry);
+    void activate () override;
+    void deactivate () override;
   };
 
   class Circle : public AbstractGShape
@@ -757,56 +427,31 @@ namespace djnn
   public:
     Circle (Process *p, const std::string& n, double cx, double cy, double r);
     Circle (double cx, double cy, double r);
-    virtual
-    ~Circle ();
-    void
-    draw () override;
-    DoubleProperty*
-    cx ()
-    {
-      return _cx;
-    }
-    DoubleProperty*
-    cy ()
-    {
-      return _cy;
-    }
-    DoubleProperty*
-    r ()
-    {
-      return _r;
-    }
+    virtual ~Circle ();
+    void draw () override;
+    DoubleProperty* cx () { return _cx;}
+    DoubleProperty* cy () { return _cy;}
+    DoubleProperty* r ()  { return _r; }
   private:
     DoubleProperty *_cx;
     DoubleProperty *_cy;
     DoubleProperty *_r;
-    ;
     Coupling *_ccx, *_ccy, *_cr;
-    void
-    init_circle (double cx, double cy, double r);
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void init_circle (double cx, double cy, double r);
+    void activate () override;
+    void deactivate () override;
   };
 
   class Group : public Container
   {
   public:
     Group (Process *p, const string &n);
-    virtual ~Group () {}
-    Window*
-    frame ()
-    {
-      return _gobj->frame ();
-    }
-    void
-    activate () override;
-    void
-    deactivate () override;
-    void
-    draw () override;
-
+    Group ();
+    virtual ~Group ();
+    Window* frame () { return _gobj->frame ();}
+    void activate () override;
+    void deactivate () override;
+    void draw () override;
   protected:
     AbstractGObj *_gobj;
   };

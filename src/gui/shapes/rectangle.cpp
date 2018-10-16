@@ -31,17 +31,23 @@ namespace djnn
     _ry = new DoubleProperty (this, "ry", ry);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cwidth->disable ();
     _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
+    _cheight->disable ();
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
+    _crx->disable ();
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
+    _cry->disable ();
     set_origin (x, y);
     Process::finalize ();
   }
 
-  Rectangle::Rectangle (Process *p, const std::string& n, double x, double y, double w, double h, double rx,
-                        double ry) :
+  Rectangle::Rectangle (Process *p, const std::string& n, double x, double y, double w, double h, double rx = 0,
+                        double ry = 0) :
       AbstractGShape (p, n), _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (
           nullptr)
   {
@@ -57,19 +63,19 @@ namespace djnn
 
   Rectangle::~Rectangle ()
   {
-    delete _cx;
-    delete _cy;
-    delete _cwidth;
-    delete _cheight;
-    delete _crx;
-    delete _cry;
+    if (_cx) {delete _cx; _cx = nullptr;};
+    if (_cy) {delete _cy; _cy = nullptr;};
+    if (_cwidth) {delete _cwidth; _cwidth = nullptr;};
+    if (_cheight) {delete _cheight; _cheight = nullptr;};
+    if (_crx) {delete _crx; _crx = nullptr;};
+    if (_cry) {delete _cry; _cry = nullptr;};
 
-    delete _x;
-    delete _y;
-    delete _width;
-    delete _height;
-    delete _rx;
-    delete _ry;
+    if (_x) {delete _x; _x = nullptr;};
+    if (_y) {delete _y; _y = nullptr;};
+    if (_width) {delete _width; _width = nullptr;};
+    if (_height) {delete _height; _height = nullptr;};
+    if (_rx) {delete _rx; _rx = nullptr;};
+    if (_ry) {delete _ry; _ry = nullptr;};
   }
 
   void

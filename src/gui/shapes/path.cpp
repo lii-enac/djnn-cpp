@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -32,7 +33,9 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
@@ -44,15 +47,17 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
   }
 
   PathPoint::~PathPoint ()
   {
-    delete _cx;
-    delete _cy;
-    delete _x;
-    delete _y;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
   }
 
   void
@@ -137,9 +142,13 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
@@ -153,21 +162,25 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
   }
 
   PathQuadratic::~PathQuadratic ()
   {
-    delete _cx;
-    delete _cy;
-    delete _cx1;
-    delete _cy1;
-    delete _x;
-    delete _y;
-    delete _x1;
-    delete _y1;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_cx1) {delete _cx1; _cx1 = nullptr;}
+    if (_cy1) {delete _cy1; _cy1 = nullptr;}
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
+    if (_x1) {delete _x1; _x1 = nullptr;}
+    if (_y1) {delete _y1; _y1 = nullptr;}
   }
 
   void
@@ -224,11 +237,17 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx2->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cy2->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
@@ -244,28 +263,35 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx2->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cy2->disable ();
   }
 
   PathCubic::~PathCubic ()
   {
-    delete _cx;
-    delete _cy;
-    delete _cx1;
-    delete _cy1;
-    delete _cx2;
-    delete _cy2;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_cx1) {delete _cx1; _cx1 = nullptr;}
+    if (_cy1) {delete _cy1; _cy1 = nullptr;}
+    if (_cx2) {delete _cx2; _cx2 = nullptr;}
+    if (_cy2) {delete _cy2; _cy2 = nullptr;}
 
-    delete _x;
-    delete _y;
-    delete _x1;
-    delete _y1;
-    delete _x2;
-    delete _y2;
+
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
+    if (_x1) {delete _x1; _x1 = nullptr;}
+    if (_y1) {delete _y1; _y1 = nullptr;}
+    if (_x2) {delete _x2; _x2 = nullptr;}
+    if (_y2) {delete _y2; _y2 = nullptr;}
   }
 
   void
@@ -331,12 +357,19 @@ namespace djnn
     _ry = new DoubleProperty (this, "ry", ry);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _crotx = new Coupling (_rotx, ACTIVATION, update, ACTIVATION);
+    _crotx->disable ();
     _cfl = new Coupling (_fl, ACTIVATION, update, ACTIVATION);
+    _cfl->disable ();
     _cswfl = new Coupling (_swfl, ACTIVATION, update, ACTIVATION);
+    _cswfl->disable ();
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
+    _crx->disable ();
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
+    _cry->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
@@ -353,31 +386,38 @@ namespace djnn
     _ry = new DoubleProperty (this, "ry", ry);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _crotx = new Coupling (_rotx, ACTIVATION, update, ACTIVATION);
+    _crotx->disable ();
     _cfl = new Coupling (_fl, ACTIVATION, update, ACTIVATION);
+    _cfl->disable ();
     _cswfl = new Coupling (_swfl, ACTIVATION, update, ACTIVATION);
+    _cswfl->disable ();
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
+    _crx->disable ();
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
+    _cry->disable ();
   }
 
   PathArc::~PathArc ()
   {
-    delete _cx;
-    delete _cy;
-    delete _crotx;
-    delete _cfl;
-    delete _cswfl;
-    delete _crx;
-    delete _cry;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_crotx) {delete _crotx; _crotx = nullptr;}
+    if (_cfl) {delete _cfl; _cfl = nullptr;}
+    if (_cswfl) {delete _cswfl; _cswfl = nullptr;}
+    if (_crx) {delete _crx; _crx = nullptr;}
+    if (_cry) {delete _cry; _cry = nullptr;}
 
-    delete _x;
-    delete _y;
-    delete _rotx;
-    delete _fl;
-    delete _swfl;
-    delete _rx;
-    delete _ry;
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
+    if (_rotx) {delete _rotx; _rotx = nullptr;}
+    if (_fl) {delete _fl; _fl = nullptr;}
+    if (_swfl) {delete _swfl; _swfl = nullptr;}
+    if (_rx) {delete _rx; _rx = nullptr;}
+    if (_ry) {delete _ry; _ry = nullptr;}
   }
 
   void

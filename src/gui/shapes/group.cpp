@@ -26,6 +26,18 @@ namespace djnn
     Process::finalize ();
   }
 
+  Group::Group () :
+      Container (), _gobj (nullptr)
+  {
+    _cpnt_type = GOBJ;
+    _gobj = new AbstractGObj (this, "");
+  }
+
+  Group::~Group ()
+  {
+    if (_gobj) {delete _gobj; _gobj = nullptr;}
+  }
+
   void
   Group::activate ()
   {

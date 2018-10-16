@@ -30,9 +30,13 @@ namespace djnn
     _ry = new DoubleProperty (this, "ry", ry);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
     _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
+    _crx->disable ();
     _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
+    _cry->disable ();
     set_origin (cx, cy);
   }
 
@@ -51,14 +55,16 @@ namespace djnn
 
   Ellipse::~Ellipse ()
   {
-    delete _ccx;
-    delete _ccy;
-    delete _crx;
-    delete _cry;
-    delete _cx;
-    delete _cy;
-    delete _rx;
-    delete _ry;
+    
+    if (_ccx) { delete _ccx ; _ccx = nullptr;}
+    if (_ccy) { delete _ccy ; _ccy = nullptr;}
+    if (_crx) { delete _crx ; _crx = nullptr;}
+    if (_cry) { delete _cry ; _cry = nullptr;}
+
+    if (_cx) { delete _cx ; _cx = nullptr;}
+    if (_cy) { delete _cy ; _cy = nullptr;}
+    if (_rx) { delete _rx ; _rx = nullptr;}
+    if (_ry) { delete _ry ; _ry = nullptr;}
   }
 
   void

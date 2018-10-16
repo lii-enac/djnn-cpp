@@ -29,9 +29,13 @@ namespace djnn
     _height = new DoubleProperty (this, "height", h);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cwidth->disable ();
     _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
+    _cheight->disable ();
     set_origin (x, y);
     Process::finalize ();
   }
@@ -45,21 +49,25 @@ namespace djnn
     _height = new DoubleProperty (this, "height", h);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cwidth->disable ();
     _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
+    _cheight->disable ();
   }
 
   RectangleClip::~RectangleClip ()
   {
-    delete _cx;
-    delete _cy;
-    delete _cwidth;
-    delete _cheight;
-    delete _x;
-    delete _y;
-    delete _width;
-    delete _height;
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_cwidth) {delete _cwidth; _cwidth = nullptr;}
+    if (_cheight) {delete _cheight; _cheight = nullptr;}
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
+    if (_width) {delete _width; _width = nullptr;}
+    if (_height) {delete _height; _height = nullptr;}
   }
 
   void

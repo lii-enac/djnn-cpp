@@ -42,9 +42,13 @@ namespace djnn
     UpdateDrawing *update = UpdateDrawing::instance ();
     _update_size = new TextSizeAction (this, "size_action", this);
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _ctext = new Coupling (_text, ACTIVATION, update, ACTIVATION);
+    _ctext->disable ();
     _ctext_size = new Coupling (_text, ACTIVATION, _update_size, ACTIVATION);
+    _ctext_size->disable ();
     set_origin (x, y);
     Graph::instance ().add_edge (_text, _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
@@ -82,9 +86,13 @@ namespace djnn
     UpdateDrawing *update = UpdateDrawing::instance ();
     _update_size = new TextSizeAction (this, "size_action", this);
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
+    _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
+    _cy->disable ();
     _ctext = new Coupling (_text, ACTIVATION, update, ACTIVATION);
+    _ctext->disable ();
     _ctext_size = new Coupling (_text, ACTIVATION, _update_size, ACTIVATION);
+    _ctext_size->disable ();
     Graph::instance ().add_edge (_text, _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
@@ -92,46 +100,56 @@ namespace djnn
   }
 
   Text::Text (double x, double y, const std::string &text) :
-      AbstractGShape (), _text (nullptr), _cx (nullptr), _cy (nullptr)
+      AbstractGShape (), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
+          nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
   {
     init_text (x, y, text);
   }
 
   Text::~Text ()
   {
+    
     Graph::instance ().remove_edge (_text, _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
-    delete _cx;
-    delete _cy;
-    delete _ctext;
-    delete _ctext_size;
+    
+    if (_cx) {delete _cx; _cx = nullptr;}
+    if (_cy) {delete _cy; _cy = nullptr;}
+    if (_ctext) {delete _ctext; _ctext = nullptr;}
+    if (_ctext_size) {delete _ctext_size; _ctext_size = nullptr;}
+
     if (_cffamily) {
       Graph::instance ().remove_edge (_ffamily, _update_size);
       delete _cffamily;
+      _cffamily = nullptr;
     }
     if (_cfsize) {
       Graph::instance ().remove_edge (_fsize, _update_size);
       delete _cfsize;
+      _cfsize = nullptr;
     }
     if (_cfstyle) {
       Graph::instance ().remove_edge (_fstyle, _update_size);
       delete _cfstyle;
+      _cfstyle = nullptr;
     }
     if (_cfweight) {
       Graph::instance ().remove_edge (_fweight, _update_size);
       delete _cfweight;
+      _cfweight = nullptr;
     }
-    delete _x;
-    delete _y;
-    delete _text;
-    delete _dx;
-    delete _dy;
-    delete _dxU;
-    delete _dyU;
-    delete _width;
-    delete _height;
-    delete _encoding;
+
+    if (_x) {delete _x; _x = nullptr;}
+    if (_y) {delete _y; _y = nullptr;}
+    if (_text) {delete _text; _text = nullptr;}
+    if (_dx) {delete _dx; _dx = nullptr;}
+    if (_dy) {delete _dy; _dy = nullptr;}
+    if (_dxU) {delete _dxU; _dxU = nullptr;}
+    if (_dyU) {delete _dyU; _dyU = nullptr;}
+    if (_width) {delete _width; _width = nullptr;}
+    if (_height) {delete _height; _height = nullptr;}
+    if (_encoding) {delete _encoding; _encoding = nullptr;}
+  
   }
 
   void
@@ -147,6 +165,7 @@ namespace djnn
         if (_cffamily != nullptr) {
           Graph::instance ().remove_edge (_ffamily, _update_size);
           delete _cffamily;
+          _cffamily = nullptr;
         }
         if (_ffamily != nullptr) {
           _cffamily = new Coupling (_ffamily, ACTIVATION, _update_size, ACTIVATION);
@@ -160,6 +179,7 @@ namespace djnn
         if (_cfsize != nullptr) {
           Graph::instance ().remove_edge (_fsize, _update_size);
           delete _cfsize;
+          _cfsize = nullptr;
         }
         if (_fsize != nullptr) {
           _cfsize = new Coupling (_fsize, ACTIVATION, _update_size, ACTIVATION);
@@ -173,6 +193,7 @@ namespace djnn
         if (_cfstyle != nullptr) {
           Graph::instance ().remove_edge (_fstyle, _update_size);
           delete _cfstyle;
+          _cfstyle = nullptr;
         }
         if (_fstyle != nullptr) {
           _cfstyle = new Coupling (_fstyle, ACTIVATION, _update_size, ACTIVATION);
@@ -186,6 +207,7 @@ namespace djnn
         if (_cfweight != nullptr) {
           Graph::instance ().remove_edge (_fweight, _update_size);
           delete _cfweight;
+          _cfweight = nullptr;
         }
         if (_fweight != nullptr) {
           _cfweight = new Coupling (_fweight, ACTIVATION, _update_size, ACTIVATION);
