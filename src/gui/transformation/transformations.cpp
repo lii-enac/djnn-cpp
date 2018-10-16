@@ -44,7 +44,9 @@ namespace djnn
     _ty = new DoubleProperty (this, "ty", ty);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
+    _ctx->disable ();
     _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
+    _cty->disable ();
   }
 
   AbstractTranslation::AbstractTranslation (double tx, double ty) :
@@ -54,15 +56,17 @@ namespace djnn
     _ty = new DoubleProperty (this, "ty", ty);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
+    _ctx->disable ();
     _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
+    _cty->disable ();
   }
 
   AbstractTranslation::~AbstractTranslation ()
   {
-    delete _ctx;
-    delete _cty;
-    delete _tx;
-    delete _ty;
+    if (_cty) { delete _cty; _cty = nullptr; }
+    if (_ctx) { delete _ctx; _ctx = nullptr; }
+    if (_ty) { delete _ty; _ty = nullptr; }
+    if (_tx) { delete _tx; _tx = nullptr; }
   }
 
   void
@@ -143,8 +147,11 @@ namespace djnn
     _cy = new DoubleProperty (this, "cy", cy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
   }
 
   AbstractRotation::AbstractRotation (double a, double cx, double cy) :
@@ -155,18 +162,21 @@ namespace djnn
     _cy = new DoubleProperty (this, "cy", cy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
   }
 
   AbstractRotation::~AbstractRotation ()
   {
-    delete _ca;
-    delete _ccx;
-    delete _ccy;
-    delete _a;
-    delete _cx;
-    delete _cy;
+    if (_ca) { delete _ca; _ca = nullptr; }
+    if (_ccx) { delete _ccx; _ccx = nullptr; }
+    if (_ccy) { delete _ccy; _ccy = nullptr; }
+    if (_a) { delete _a; _a = nullptr; }
+    if (_cx) { delete _cx; _cx = nullptr; }
+    if (_cy) { delete _cy; _cy = nullptr; }
   }
 
   void
@@ -252,9 +262,13 @@ namespace djnn
     _cy = new DoubleProperty (this, "cy", cy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
+    _csx->disable ();
     _csy = new Coupling (_sy, ACTIVATION, update, ACTIVATION);
+    _csy->disable ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
   }
 
   AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
@@ -266,21 +280,25 @@ namespace djnn
     _cy = new DoubleProperty (this, "cy", cy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
+    _csx->disable ();
     _csy = new Coupling (_sy, ACTIVATION, update, ACTIVATION);
+    _csy->disable ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
   }
 
   AbstractScaling::~AbstractScaling ()
   {
-    delete _csx;
-    delete _csy;
-    delete _ccx;
-    delete _ccy;
-    delete _sx;
-    delete _sy;
-    delete _cx;
-    delete _cy;
+    if (_csx) { delete _csx; _csx = nullptr; }
+    if (_csy) { delete _csy; _csy = nullptr; }
+    if (_ccx) { delete _ccx; _ccx = nullptr; }
+    if (_ccy) { delete _ccy; _ccy = nullptr; }
+    if (_sx) { delete _sx; _sx = nullptr; }
+    if (_sy) { delete _sy; _sy = nullptr; }
+    if (_cx) { delete _cx; _cx = nullptr; }
+    if (_cy) { delete _cy; _cy = nullptr; }
   }
 
   void
@@ -367,6 +385,7 @@ namespace djnn
     _a = new DoubleProperty (this, "a", a);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
   }
 
   AbstractSkew::AbstractSkew (double a) :
@@ -375,12 +394,13 @@ namespace djnn
     _a = new DoubleProperty (this, "a", a);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
   }
 
   AbstractSkew::~AbstractSkew ()
   {
-    delete _ca;
-    delete _a;
+    if (_ca) { delete _ca; _ca = nullptr; }
+    if (_a) { delete _a; _a = nullptr; }
   }
 
   void
