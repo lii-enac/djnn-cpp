@@ -29,40 +29,15 @@ namespace djnn
     Rectangle (Process *p, const std::string& n, double x, double y, double w, double h, double rx,
                double ry);
     Rectangle (double x, double y, double w, double h, double rx, double ry);
-    virtual
-    ~Rectangle ();
-    void
-    draw () override;
-    DoubleProperty*
-    x ()
-    {
-      return _x;
-    }
-    DoubleProperty*
-    y ()
-    {
-      return _y;
-    }
-    DoubleProperty*
-    width ()
-    {
-      return _width;
-    }
-    DoubleProperty*
-    height ()
-    {
-      return _height;
-    }
-    DoubleProperty*
-    rx ()
-    {
-      return _rx;
-    }
-    DoubleProperty*
-    ry ()
-    {
-      return _ry;
-    }
+    virtual ~Rectangle ();
+    void draw () override;
+    Process* clone () override;
+    DoubleProperty* x () { return _x;}
+    DoubleProperty* y () { return _y;}
+    DoubleProperty* width () { return _width;}
+    DoubleProperty* height () { return _height;}
+    DoubleProperty* rx () { return _rx;}
+    DoubleProperty* ry () { return _ry;}
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
@@ -71,12 +46,9 @@ namespace djnn
     DoubleProperty *_rx;
     DoubleProperty *_ry;
     Coupling *_cx, *_cy, *_cwidth, *_cheight, *_crx, *_cry;
-    void
-    init_rectangle (double x, double y, double w, double h, double rx, double ry);
-    void
-    activate () override;
-    void
-    deactivate () override;
+    void init_rectangle (double x, double y, double w, double h, double rx, double ry);
+    void  activate () override;
+    void  deactivate () override;
   };
 
   class Text : public AbstractGShape

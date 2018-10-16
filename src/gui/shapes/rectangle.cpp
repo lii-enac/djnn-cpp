@@ -109,4 +109,12 @@ namespace djnn
       Backend::instance ()->draw_rect (this, x, y, w, h, rx, ry);
     }
   }
+
+  Process*
+  Rectangle::clone ()
+  {
+    return new Rectangle (_x->get_value (), _y->get_value (), 
+                          _width->get_value (), _height->get_value (), 
+                          _rx->get_value (), _ry->get_value ());
+  }
 } /* namespace djnn */
