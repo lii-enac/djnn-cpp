@@ -793,24 +793,40 @@ namespace djnn
 
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);
+    _cm11->disable ();
     _cm12 = new Coupling (_m12, ACTIVATION, update, ACTIVATION);
+    _cm12->disable ();
     _cm13 = new Coupling (_m13, ACTIVATION, update, ACTIVATION);
+    _cm13->disable ();
     _cm14 = new Coupling (_m14, ACTIVATION, update, ACTIVATION);
+    _cm14->disable ();
 
     _cm21 = new Coupling (_m21, ACTIVATION, update, ACTIVATION);
+    _cm21->disable ();
     _cm22 = new Coupling (_m22, ACTIVATION, update, ACTIVATION);
+    _cm22->disable ();
     _cm23 = new Coupling (_m23, ACTIVATION, update, ACTIVATION);
+    _cm23->disable ();
     _cm24 = new Coupling (_m24, ACTIVATION, update, ACTIVATION);
+    _cm24->disable ();
 
     _cm31 = new Coupling (_m31, ACTIVATION, update, ACTIVATION);
+    _cm31->disable ();
     _cm32 = new Coupling (_m32, ACTIVATION, update, ACTIVATION);
+    _cm32->disable ();
     _cm33 = new Coupling (_m33, ACTIVATION, update, ACTIVATION);
+    _cm33->disable ();
     _cm34 = new Coupling (_m34, ACTIVATION, update, ACTIVATION);
+    _cm34->disable ();
 
     _cm41 = new Coupling (_m41, ACTIVATION, update, ACTIVATION);
+    _cm41->disable ();
     _cm42 = new Coupling (_m42, ACTIVATION, update, ACTIVATION);
+    _cm42->disable ();
     _cm43 = new Coupling (_m43, ACTIVATION, update, ACTIVATION);
+    _cm43->disable ();
     _cm44 = new Coupling (_m44, ACTIVATION, update, ACTIVATION);
+    _cm44->disable ();
 
     /* note:
      * action work only for 2D 
@@ -1160,21 +1176,21 @@ namespace djnn
     _cm43->enable (_frame);
     _cm44->enable (_frame);
 
-    _tranlateBy_dx_coupling->enable ();
-    _tranlateBy_dy_coupling->enable ();
-    _scaleBy_cx_coupling->enable ();
-    _scaleBy_cy_coupling->enable ();
-    _scaleBy_sx_coupling->enable ();
-    _scaleBy_sy_coupling->enable ();
-    _rotateBy_cx_coupling->enable ();
-    _rotateBy_cy_coupling->enable ();
-    _rotateBy_da_coupling->enable ();
-    _skew_X_By_cx_coupling->enable ();
-    _skew_X_By_cy_coupling->enable ();
-    _skew_X_By_da_coupling->enable ();
-    _skew_Y_By_cx_coupling->enable ();
-    _skew_Y_By_cy_coupling->enable ();
-    _skew_Y_By_da_coupling->enable ();
+    _tranlateBy_dx_coupling->enable (_frame);
+    _tranlateBy_dy_coupling->enable (_frame);
+    _scaleBy_cx_coupling->enable (_frame);
+    _scaleBy_cy_coupling->enable (_frame);
+    _scaleBy_sx_coupling->enable (_frame);
+    _scaleBy_sy_coupling->enable (_frame);
+    _rotateBy_cx_coupling->enable (_frame);
+    _rotateBy_cy_coupling->enable (_frame);
+    _rotateBy_da_coupling->enable (_frame);
+    _skew_X_By_cx_coupling->enable (_frame);
+    _skew_X_By_cy_coupling->enable (_frame);
+    _skew_X_By_da_coupling->enable (_frame);
+    _skew_Y_By_cx_coupling->enable (_frame);
+    _skew_Y_By_cy_coupling->enable (_frame);
+    _skew_Y_By_da_coupling->enable (_frame);
   }
 
   void
