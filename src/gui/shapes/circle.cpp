@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -84,4 +85,10 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame)
       Backend::instance ()->draw_circle (this, _cx->get_value (), _cy->get_value (), _r->get_value ());
   }
+
+  Process*
+  Circle::clone ()
+  {
+    return new Circle (_cx->get_value (), _cy->get_value (), _r->get_value ());
+  } 
 } /* namespace djnn */

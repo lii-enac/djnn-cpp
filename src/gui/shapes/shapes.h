@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -75,6 +76,7 @@ namespace djnn
     Text (double x, double y, const std::string &text);
     virtual ~Text ();
     void draw () override;
+    Process* clone () override;
     DoubleProperty* x () { return _x;}
     DoubleProperty* y () { return _y;}
     DoubleProperty* dx () { return _dx;}
@@ -137,6 +139,7 @@ namespace djnn
     Line (double x1, double y1, double x2, double y2);
     virtual ~Line ();
     void draw () override;
+    Process* clone () override;
     DoubleProperty* x1 () { return _x1;}
     DoubleProperty* y1 () { return _y1;}
     DoubleProperty* x2 () { return _x2;}
@@ -161,6 +164,7 @@ namespace djnn
     DoubleProperty* x () { return _x;}
     DoubleProperty* y () { return _y;}
     void draw () override;
+    Process* clone () override;
   private:
     DoubleProperty *_x, *_y;
     Coupling *_cx, *_cy;
@@ -177,6 +181,7 @@ namespace djnn
     Process* points () { return _points;}
     bool closed () { return _closed;}
     void draw () override;
+    Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
     void activate () override;
@@ -410,6 +415,7 @@ namespace djnn
     Ellipse (double cx, double cy, double rx, double ry);
     virtual ~Ellipse ();
     void draw () override;
+    Process* clone () override;
     DoubleProperty* cx () { return _cx;}
     DoubleProperty* cy () { return _cy;}
     DoubleProperty* rx () { return _rx;}
@@ -429,6 +435,7 @@ namespace djnn
     Circle (double cx, double cy, double r);
     virtual ~Circle ();
     void draw () override;
+    Process* clone () override;
     DoubleProperty* cx () { return _cx;}
     DoubleProperty* cy () { return _cy;}
     DoubleProperty* r ()  { return _r; }
@@ -452,6 +459,7 @@ namespace djnn
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   protected:
     AbstractGObj *_gobj;
   };

@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -58,5 +59,17 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == frame ()) {
       Container::draw ();
     }
+  }
+
+  Process* 
+  Group::clone () 
+  {
+    Group* newg = new Group ();
+
+    for (auto c : _children) {
+      newg->add_child (c->clone (), c->get_name ());
+    }
+
+    return newg;
   }
 }

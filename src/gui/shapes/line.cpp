@@ -96,4 +96,10 @@ namespace djnn
       Backend::instance ()->draw_line (this, x1, y1, x2, y2);
     }
   }
+
+  Process*
+  Line::clone ()
+  {
+    return new Line (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value ());
+  }
 } /* namespace djnn */

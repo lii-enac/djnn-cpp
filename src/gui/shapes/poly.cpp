@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -83,6 +84,13 @@ namespace djnn
     }
   }
 
+  Process*
+  PolyPoint::clone () {
+  
+    return new PolyPoint (_x->get_value (), _y->get_value ());
+
+  }
+
   Poly::Poly (int closed) :
       AbstractGShape (), _closed (closed)
   {
@@ -153,5 +161,17 @@ namespace djnn
     _bby->set_value (y, true);
     _bbw->set_value (w, true);
     _bbh->set_value (h, true);
+  }
+
+  Process*
+  Poly::clone () {
+    
+    Poly* newp = new Poly (_closed);
+
+    for (auto p: _points->children ()) {
+      newp->_points->add_child (p->clone (), p->get_name ());
+    }
+
+    return newp;
   }
 }

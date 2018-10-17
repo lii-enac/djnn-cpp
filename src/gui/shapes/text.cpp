@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -254,4 +255,10 @@ namespace djnn
       Backend::instance ()->draw_text (this);
     }
   }
+
+  Process*
+  Text::clone ()
+  {
+    return new Text ( _x->get_value (), _y->get_value (), _text->get_value ());
+  } 
 } /* namespace djnn */
