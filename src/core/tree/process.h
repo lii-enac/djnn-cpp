@@ -70,6 +70,7 @@ namespace djnn {
     virtual void add_child (Process* c, const string& name);
     virtual void remove_child (Process* c);
     virtual void remove_child (const string& name);
+    virtual void move_child (Process *child_to_move, char spec, Process *child = 0) {}
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
 

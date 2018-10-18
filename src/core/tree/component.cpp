@@ -69,6 +69,35 @@ namespace djnn
   }
 
   void
+  Container::move_child (Process *child_to_move, char spec, Process *child2)
+  {
+    if (child2 == 0) {
+      if (spec != ':')
+        return;
+      else {
+        remove_child (child_to_move);
+        _children.insert (_children.begin (), child_to_move);
+        return;
+      }
+    }
+    auto it = std::find (_children.begin (), _children.end (), child2);
+    if (it == _children.end ()) {
+      return;
+    } else {
+      auto index = std::distance (_children.begin (), it);
+      if (spec == '<') {
+        remove_child (child_to_move);
+        _children.insert (_children.begin () + index, child_to_move);
+      } else if (spec == '>') {
+        remove_child (child_to_move);
+        _children.insert (_children.begin () + index + 1, child_to_move);
+      } else {
+        warning (this, "Undefined spec to move child " + child_to_move->get_name ());
+      }
+    }
+  }
+
+  void
   Container::remove_child (Process* c)
   {
     Process::remove_child (c);
