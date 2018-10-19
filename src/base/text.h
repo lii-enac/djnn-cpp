@@ -103,6 +103,50 @@ namespace djnn
     void serialize (const string& type) override;
   };
 
+  class TextAccumulator : public Process
+  {
+  private:
+    class AccumulateAction : public Process {
+      public:
+        AccumulateAction (Process *p, const string &n, TextProperty *input, TextProperty *state) : Process (p, n), _input (input), _state (state) {}
+        virtual ~AccumulateAction () {}
+        void activate () override {
+          std::string new_state = _state->get_value () + _input->get_value ();
+          _state->set_value (new_state, true);
+        }
+        void deactivate () override {}
+      private:
+        TextProperty* _input, *_state;
+    };
+    class DeleteAction : public Process {
+    public:
+      DeleteAction (Process *p, const string &n, TextProperty *state) : Process (p, n), _state (state) {}
+      virtual ~DeleteAction () {}
+      void activate () override {
+        int sz = _state->get_value ().size ();
+        std::string new_state = "";
+        if (sz > 1)
+          new_state = _state->get_value ().substr (0, sz - 1);
+        _state->set_value (new_state, true);
+      }
+      void deactivate () override {}
+    private:
+      TextProperty *_state;
+    };
+  public:
+    TextAccumulator (Process *p, const string &n, const string &init = "");
+    virtual ~TextAccumulator ();
+    void activate () override;
+    void deactivate () override;
+    void serialize (const string &type) override;
+  private:
+    TextProperty *_input, *_state;
+    Spike *_del;
+    AccumulateAction *_acc_action;
+    DeleteAction *_del_action;
+    Coupling *_c_acc, *_c_del;
+  };
+
   class DoubleFormatter : public Process
   {
   private:

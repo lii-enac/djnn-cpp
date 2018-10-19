@@ -187,5 +187,74 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+
+  TextAccumulator::TextAccumulator (Process *p, const string &n, const string &init) : Process (p, n)
+  {
+    _input = new TextProperty (this, "input", "");
+    _state = new TextProperty (this, "state", init);
+    _del = new Spike (this, "delete");
+    _acc_action = new AccumulateAction (this, "acc_action", _input, _state);
+    _del_action = new DeleteAction (this, "del_action", _state);
+    _c_acc = new Coupling (_input, ACTIVATION, _acc_action, ACTIVATION);
+    _c_acc->disable ();
+    _c_del = new Coupling (_del, ACTIVATION, _del_action, ACTIVATION);
+    _c_del->disable ();
+    Graph::instance ().add_edge (_input, _acc_action);
+    Graph::instance ().add_edge (_del, _del_action);
+    Graph::instance ().add_edge (_acc_action, _state);
+    Graph::instance ().add_edge (_del_action, _state);
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().add_edge (_parent->state_dependency (), _acc_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _del_action);
+    }
+    Process::finalize ();
+  }
+
+  TextAccumulator::~TextAccumulator () {
+    Graph::instance ().remove_edge (_input, _acc_action);
+    Graph::instance ().remove_edge (_del, _del_action);
+    Graph::instance ().remove_edge (_acc_action, _state);
+    Graph::instance ().remove_edge (_del_action, _state);
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().remove_edge (_parent->state_dependency (), _acc_action);
+      Graph::instance ().remove_edge (_parent->state_dependency (), _del_action);
+    }
+    set_vertex (nullptr);
+    delete _c_acc;
+    delete _c_del;
+    delete _acc_action;
+    delete _del_action;
+    delete _del;
+    delete _state;
+    delete _input;
+  }
+
+  void
+  TextAccumulator::activate ()
+  {
+    _c_acc->enable ();
+    _c_del->enable ();
+  }
+
+  void
+  TextAccumulator::deactivate ()
+  {
+    _c_acc->disable ();
+    _c_del->disable ();
+  }
+
+  void
+  TextAccumulator::serialize (const string &type)
+  {
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:text-accumulator");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("initial", _state->get_value ());
+
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
 }
 
