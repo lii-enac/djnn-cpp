@@ -27,7 +27,7 @@ namespace djnn {
     Container ();
     Container (Process* parent, const string& name);
     void add_child (Process* c, const string& name) override;
-    void move_child (Process *child_to_move, char spec, Process *child = 0) override;
+    void move_child (Process *child_to_move, int spec, Process *child = 0) override;
     void remove_child (Process* c) override;
     void remove_child (const string& name) override;
     void draw () override;
