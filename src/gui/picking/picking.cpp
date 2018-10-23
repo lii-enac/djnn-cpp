@@ -108,16 +108,16 @@ namespace djnn
   Picking::genericMouseMove (double x, double y)
   {
     bool exec_ = false;
-    _win->move_x ()->set_value (x, true);
-    _win->move_y ()->set_value (y, true);
+    if (x != old_x) _win->move_x ()->set_value (x, true);
+    if (y != old_y) _win->move_y ()->set_value (y, true);
     _win->move ()->notify_activation ();
     AbstractGShape *s = this->pick (x, y);
     if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
       exec_ = true;
     }
     if (s) {
-      ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
-      ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
+      if (x != old_x) ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
+      if (y != old_y) ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       set_local_coords (s, nullptr, x, y);
       if (s != _cur_obj) {
         if (_cur_obj != 0)
