@@ -28,6 +28,10 @@ namespace djnn
   class AbstractBackend
   {
   public:
+    AbstractBackend () : _window (nullptr) {
+      _text_context_manager = new TextContextManager ();
+    }
+
     virtual
     ~AbstractBackend ()
     {
@@ -269,9 +273,19 @@ namespace djnn
       load_gradient_homography (g, a, b, 0, c, d, 0, e, f, 1);
     }
 
+    virtual void
+    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
+    {
+    }
 
+    TextContextManager* get_text_context_manager ()
+    {
+      return _text_context_manager;
+    }
 
   protected:
     Window *_window;
+  private:
+    TextContextManager *_text_context_manager;
   };
 }

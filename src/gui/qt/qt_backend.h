@@ -160,6 +160,8 @@ namespace djnn
     void
     load_gradient_homography (AbstractHomography*, double m11, double m12, double m13, double m21, double m22, double m23, double m31,
 			      double m32, double m33) override;
+    void
+    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
 
   private:
     static std::shared_ptr<QtBackend> _instance;

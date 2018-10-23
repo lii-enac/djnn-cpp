@@ -19,6 +19,7 @@
 
 #include "../../core/tree/int_property.h"
 #include "../../core/tree/text_property.h"
+#include "../style/style.h"
 
 namespace djnn
 {
@@ -51,8 +52,63 @@ namespace djnn
     void  deactivate () override;
   };
 
+  class TextContext {
+  public:
+    TextContext ();
+    TextContext (shared_ptr<TextContext> parent);
+    virtual ~TextContext () {};
+    void set_font_size (FontSize *fs) { _font_size = fs; }
+    void set_font_family (FontFamily *ff) { _font_family = ff; }
+    void set_font_style (FontStyle *fs) { _font_style = fs; }
+    void set_font_weight (FontWeight *fw) { _font_weight = fw; }
+    FontSize* font_size () { return _font_size; }
+    FontFamily* font_family () { return _font_family; }
+    FontStyle* font_style () { return _font_style; }
+    FontWeight* font_weight () { return _font_weight; }
+  private:
+    FontFamily *_font_family;
+    FontSize *_font_size;
+    FontStyle *_font_style;
+    FontWeight *_font_weight;
+  };
+
+  class TextContextManager : public ContextManager
+  {
+  public:
+    TextContextManager () : ContextManager ()
+      {
+        ComponentObserver::instance ().add_context_manager (this);
+      }
+      ;
+      virtual
+      ~TextContextManager ()
+      {
+      }
+      ;
+      void pop () override;
+      void push () override;
+      shared_ptr<TextContext> get_current ();
+
+    private:
+      vector<shared_ptr<TextContext>> _context_list;
+  };
+
   class Text : public AbstractGShape
   {
+    class TextSizeAction : public Process
+    { friend Text;
+      public:
+        TextSizeAction (Process *p, const string &n, Text *text) : Process (p, n), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        ~TextSizeAction () {}
+        void activate () override;
+        void deactivate () override {};
+      private:
+        FontFamily*_ff;
+        FontSize* _fsz;
+        FontStyle* _fs;
+        FontWeight* _fw;
+        Text* _text;
+    };
   public:
     Text (Process *p, const std::string& n, double x, double y, const std::string &text);
     Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxu, int dyu,
@@ -92,10 +148,20 @@ namespace djnn
     {
       return _dxU;
     }
+    void
+    set_width (double width)
+    {
+      _width->set_value (width, true);
+    }
     IntProperty*
     width ()
     {
       return _width;
+    }
+    void
+    set_height (double height)
+    {
+      _height->set_value (height, true);
     }
     IntProperty*
     height ()
@@ -123,7 +189,11 @@ namespace djnn
     IntProperty *_height;
     IntProperty *_encoding;
     TextProperty *_text;
-    Coupling *_cx, *_cy, *_ctext;
+    Coupling *_cx, *_cy, *_ctext, *_ctext_size, *_cffamily, *_cfsize, *_cfstyle, *_cfweight;
+    TextProperty *_ffamily;
+    DoubleProperty *_fsize;
+    IntProperty *_fstyle, *_fweight;
+    TextSizeAction *_update_size;
     void
     init_text (double x, double y, const std::string &text);
     void

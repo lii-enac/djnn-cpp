@@ -1014,6 +1014,7 @@ namespace djnn
     AbstractStyle::activate ();
     _cu->enable (_frame);
     _cs->enable (_frame);
+    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_size (this);
   }
 
   void
@@ -1052,6 +1053,7 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cw->enable (_frame);
+    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_weight (this);
   }
 
   void
@@ -1098,6 +1100,7 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cs->enable (_frame);
+    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_style (this);
   }
 
   void
@@ -1135,6 +1138,7 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cf->enable (_frame);
+    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_family (this);
   }
 
   void

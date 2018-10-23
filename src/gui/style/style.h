@@ -624,6 +624,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    DoubleProperty* size () { return _size; }
   private:
     IntProperty *_unit;
     DoubleProperty *_size;
@@ -642,6 +643,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    IntProperty* weight () { return _weight; }
   private:
     IntProperty* _weight;
     Coupling* _cw;
@@ -660,6 +662,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    IntProperty* style () { return _style; }
   private:
     IntProperty* _style;
     Coupling* _cs;
@@ -677,6 +680,7 @@ namespace djnn
     deactivate () override;
     void
     draw () override;
+    TextProperty* family () { return _family; }
   private:
     TextProperty* _family;
     Coupling* _cf;

@@ -97,8 +97,6 @@ namespace djnn
     double dy = t->dy ()->get_value ();
     int dxU = t->dxU ()->get_value ();
     int dyU = t->dyU ()->get_value ();
-    int width = t->width ()->get_value ();
-    int height = t->height ()->get_value ();
     int encoding = t->encoding ()->get_value ();
     std::string text = t->text ()->get_value ();
     shared_ptr<QtContext> cur_context = _context_manager->get_current ();
@@ -155,10 +153,6 @@ namespace djnn
 
     QFontMetrics fm = _painter->fontMetrics ();
     QRect rect = fm.boundingRect (s);
-    if (width != rect.width ())
-      t->width ()->set_value (rect.width (), true);
-    if (height != rect.height ())
-      t->height ()->set_value (rect.height (), true);
 
     /* applying alignment attribute */
     switch (cur_context->textAnchor)

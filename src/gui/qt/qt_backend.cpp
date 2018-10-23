@@ -203,4 +203,33 @@ namespace djnn
         || s->move ()->has_coupling () || s->release ()->has_coupling () || s->enter ()->has_coupling ()
         || s->leave ()->has_coupling ();*/
   }
+
+  static QFont::Style fontStyleArray[3] =
+      { QFont::StyleNormal, QFont::StyleItalic, QFont::StyleOblique };
+  void
+  QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
+  {
+    QFont qfont;
+    if (ff) {
+      QString val (ff->family()->get_value ().c_str ());
+      qfont.setFamily (val);
+    }
+    if (fsz) {
+      qfont.setPixelSize (fsz->size ()->get_value ());
+    }
+    if (fs) {
+      int i = fs->style ()->get_value ();
+      if (i >= 0 && i <= 3)
+        qfont.setStyle (fontStyleArray [i]);
+    }
+    if (fw) {
+      qfont.setWeight (fw->weight ()->get_value ());
+    }
+    QString str (text->text ()->get_value().c_str ());
+    QFontMetrics fm (qfont);
+    int width = fm.width (str);
+    int height = fm.height ();
+    text->set_width (width);
+    text->set_height (height);
+  }
 } /* namespace djnn */
