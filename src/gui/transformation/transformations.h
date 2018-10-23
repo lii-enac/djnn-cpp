@@ -19,6 +19,7 @@
 #include "../../core/tree/process.h"
 #include "../../core/control/coupling.h"
 #include "../../core/tree/double_property.h"
+#include "../shapes/shapes.h"
 
 namespace djnn
 {
@@ -372,5 +373,63 @@ namespace djnn
     Process* clone () override;
     virtual ~SimpleGradientTransform ();
     void draw () override;
+  };
+
+  class ScreenToLocal : public Process 
+  {
+    /*** private Class stl_action Actions ***/ 
+    private:
+     class stl_action : public Process
+    {
+    public:
+      stl_action (Process* parent, const string &name, ScreenToLocal *stl) :
+      Process (parent, name), _stl(stl) { Process::finalize ();}
+      virtual ~stl_action () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      ScreenToLocal *_stl;
+    };
+
+    public:
+      ScreenToLocal (Process* parent, const string &name, Process* shape);
+      virtual ~ScreenToLocal () override; 
+      void activate () override;
+      void deactivate () override;
+    private:
+      AbstractGShape* _shape;
+      DoubleProperty *_inX, *_inY;
+      DoubleProperty *_outX, *_outY;
+      stl_action *_action;
+      Coupling *_cinX, *_cinY;
+  };
+
+  class LocalToScreen : public Process 
+  {
+    /*** private Class lts_action Actions ***/ 
+    private:
+     class lts_action : public Process
+    {
+    public:
+      lts_action (Process* parent, const string &name, LocalToScreen *lts) :
+      Process (parent, name), _lts(lts) { Process::finalize ();}
+      virtual ~lts_action () {}
+      void activate () override;
+      void deactivate () override {}
+    private:
+      LocalToScreen *_lts;
+    };
+
+    public:
+      LocalToScreen (Process* parent, const string &name, Process* shape);
+      virtual ~LocalToScreen () override; 
+      void activate () override;
+      void deactivate () override;
+    private:
+      AbstractGShape* _shape;
+      DoubleProperty *_inX, *_inY;
+      DoubleProperty *_outX, *_outY;
+      lts_action *_action;
+      Coupling *_cinX, *_cinY;
   };
 }
