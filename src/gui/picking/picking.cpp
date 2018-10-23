@@ -258,6 +258,8 @@ namespace djnn
     if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
       exec_ = true;
     }
+    _win->wheel_dx ()->set_value (0, false);
+    _win->wheel_dy ()->set_value (0, false);
     return exec_;
   }
 
