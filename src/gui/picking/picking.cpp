@@ -108,6 +108,8 @@ namespace djnn
   Picking::genericMouseMove (double x, double y)
   {
     bool exec_ = false;
+    double old_x = _win->move_x ()->get_value ();
+    double old_y = _win->move_y ()->get_value ();
     if (x != old_x) _win->move_x ()->set_value (x, true);
     if (y != old_y) _win->move_y ()->set_value (y, true);
     _win->move ()->notify_activation ();
