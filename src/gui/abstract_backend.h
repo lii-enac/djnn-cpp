@@ -29,7 +29,6 @@ namespace djnn
   {
   public:
     AbstractBackend () : _window (nullptr) {
-      _text_context_manager = new TextContextManager ();
     }
 
     virtual
@@ -278,14 +277,7 @@ namespace djnn
     {
     }
 
-    TextContextManager* get_text_context_manager ()
-    {
-      return _text_context_manager;
-    }
-
   protected:
     Window *_window;
-  private:
-    TextContextManager *_text_context_manager;
   };
 }

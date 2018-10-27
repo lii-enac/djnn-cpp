@@ -52,47 +52,6 @@ namespace djnn
     void  deactivate () override;
   };
 
-  class TextContext {
-  public:
-    TextContext ();
-    TextContext (shared_ptr<TextContext> parent);
-    virtual ~TextContext () {};
-    void set_font_size (FontSize *fs) { _font_size = fs; }
-    void set_font_family (FontFamily *ff) { _font_family = ff; }
-    void set_font_style (FontStyle *fs) { _font_style = fs; }
-    void set_font_weight (FontWeight *fw) { _font_weight = fw; }
-    FontSize* font_size () { return _font_size; }
-    FontFamily* font_family () { return _font_family; }
-    FontStyle* font_style () { return _font_style; }
-    FontWeight* font_weight () { return _font_weight; }
-  private:
-    FontFamily *_font_family;
-    FontSize *_font_size;
-    FontStyle *_font_style;
-    FontWeight *_font_weight;
-  };
-
-  class TextContextManager : public ContextManager
-  {
-  public:
-    TextContextManager () : ContextManager ()
-      {
-        ComponentObserver::instance ().add_context_manager (this);
-      }
-      ;
-      virtual
-      ~TextContextManager ()
-      {
-      }
-      ;
-      void pop () override;
-      void push () override;
-      shared_ptr<TextContext> get_current ();
-
-    private:
-      vector<shared_ptr<TextContext>> _context_list;
-  };
-
   class Text : public AbstractGShape
   {
     class TextSizeAction : public Process

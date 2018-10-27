@@ -38,6 +38,9 @@ namespace djnn
       Process (parent, name)
   {
     _cpnt_type = COMPONENT;
+    Container* c = dynamic_cast<Container*> (parent);
+    if (c)
+      c->init_context (_cur_context);
   }
 
   Container::~Container ()
@@ -183,10 +186,10 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("core:component");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    
+
     for (auto c : _children)
         c->serialize (format);
-    
+
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -241,10 +244,10 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("core:assignmentsequence");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    
+
     for (auto c : _children)
         c->serialize (format);
-    
+
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

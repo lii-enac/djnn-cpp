@@ -20,40 +20,6 @@
 
 namespace djnn
 {
-  shared_ptr<TextContext>
-  TextContextManager::get_current ()
-  {
-    return _context_list.back ();
-  }
-  void
-  TextContextManager::push ()
-  {
-    if (_context_list.empty ())
-      _context_list.push_back (make_shared<TextContext> ());
-    else {
-      _context_list.push_back (make_shared<TextContext> (_context_list.back ()));
-    }
-  }
-
-  void
-  TextContextManager::pop ()
-  {
-    _context_list.pop_back ();
-  }
-
-  TextContext::TextContext () :
-      _font_family (nullptr), _font_size (nullptr), _font_style (nullptr), _font_weight (nullptr)
-  {
-  }
-
-  TextContext::TextContext (shared_ptr<TextContext> context)
-  {
-    _font_family = context->_font_family;
-    _font_size = context->_font_size;
-    _font_style = context->_font_style;
-    _font_weight = context->_font_weight;
-  }
-
   void
   Text::TextSizeAction::activate ()
   {
@@ -172,30 +138,60 @@ namespace djnn
   Text::activate ()
   {
     AbstractGObj::activate ();
-    shared_ptr<TextContext> tc = Backend::instance ()->get_text_context_manager ()->get_current ();
-    if (!_cffamily && tc->font_family ()) {
-      _ffamily = tc->font_family ()->family ();
-      _cffamily = new Coupling (_ffamily, ACTIVATION, _update_size, ACTIVATION);
-      _update_size->_ff = tc->font_family ();
-      Graph::instance ().add_edge (_ffamily, _update_size);
-    }
-    if (!_cfsize && tc->font_size ()) {
-      _fsize = tc->font_size ()->size ();
-      _cfsize = new Coupling (_fsize, ACTIVATION, _update_size, ACTIVATION);
-      _update_size->_fsz = tc->font_size ();
-      Graph::instance ().add_edge (_fsize, _update_size);
-    }
-    if (!_cfstyle && tc->font_style ()) {
-      _fstyle = tc->font_style ()->style ();
-      _cfstyle = new Coupling (_fstyle, ACTIVATION, _update_size, ACTIVATION);
-      _update_size->_fs = tc->font_style ();
-      Graph::instance ().add_edge (_fstyle, _update_size);
-    }
-    if (!_cfweight && tc->font_weight ()) {
-      _fweight = tc->font_weight ()->weight ();
-      _cfweight = new Coupling (_fweight, ACTIVATION, _update_size, ACTIVATION);
-      _update_size->_fw = tc->font_weight ();
-      Graph::instance ().add_edge (_fweight, _update_size);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c) {
+      Process* ff = c->get_from_context ("FontFamily");
+      if (ff && ((FontFamily*) ff)->family () != _ffamily) {
+        _ffamily = ((FontFamily*) ff)->family ();
+        _update_size->_ff = (FontFamily*) ff;
+        if (_cffamily != nullptr) {
+          Graph::instance ().remove_edge (_ffamily, _update_size);
+          delete _cffamily;
+        }
+        if (_ffamily != nullptr) {
+          _cffamily = new Coupling (_ffamily, ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (_ffamily, _update_size);
+        }
+      }
+      Process* fsz = c->get_from_context ("FontSize");
+      if (fsz && ((FontSize*) fsz)->size () != _fsize) {
+        _fsize = ((FontSize*) fsz)->size ();
+        _update_size->_fsz = (FontSize*) fsz;
+        if (_cfsize != nullptr) {
+          Graph::instance ().remove_edge (_fsize, _update_size);
+          delete _cfsize;
+        }
+        if (_fsize != nullptr) {
+          _cfsize = new Coupling (_fsize, ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (_fsize, _update_size);
+        }
+      }
+      Process* fs = c->get_from_context ("FontStyle");
+      if (fs && ((FontStyle*) fs)->style () != _fstyle) {
+        _fstyle = ((FontStyle*) fs)->style ();
+        _update_size->_fs = (FontStyle*) fs;
+        if (_cfstyle != nullptr) {
+          Graph::instance ().remove_edge (_fstyle, _update_size);
+          delete _cfstyle;
+        }
+        if (_fstyle != nullptr) {
+          _cfstyle = new Coupling (_fstyle, ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (_fstyle, _update_size);
+        }
+      }
+      Process* fw = c->get_from_context ("FontWeight");
+      if (fw && ((FontWeight*) fw)->weight () != _fweight) {
+        _fweight = ((FontWeight*) fw)->weight ();
+        _update_size->_fw = (FontWeight*) fw;
+        if (_cfweight != nullptr) {
+          Graph::instance ().remove_edge (_fweight, _update_size);
+          delete _cfweight;
+        }
+        if (_fweight != nullptr) {
+          _cfweight = new Coupling (_fweight, ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (_fweight, _update_size);
+        }
+      }
     }
     _cx->enable (_frame);
     _cy->enable (_frame);

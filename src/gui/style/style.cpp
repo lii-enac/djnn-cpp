@@ -1014,7 +1014,10 @@ namespace djnn
     AbstractStyle::activate ();
     _cu->enable (_frame);
     _cs->enable (_frame);
-    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_size (this);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c) {
+      c->add_to_context ("FontSize", this);
+    }
   }
 
   void
@@ -1053,7 +1056,9 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cw->enable (_frame);
-    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_weight (this);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c)
+      c->add_to_context ("FontWeight", this);
   }
 
   void
@@ -1100,7 +1105,9 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cs->enable (_frame);
-    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_style (this);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c)
+      c->add_to_context ("FontStyle", this);
   }
 
   void
@@ -1138,7 +1145,9 @@ namespace djnn
   {
     AbstractStyle::activate ();
     _cf->enable (_frame);
-    Backend::instance ()->get_text_context_manager ()->get_current ()->set_font_family (this);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c)
+      c->add_to_context ("FontFamily", this);
   }
 
   void
