@@ -122,7 +122,7 @@ namespace djnn
     _src->add_transition (this);
     _trigger = src->find_component (spec);
     if (_trigger == nullptr) {
-      warning (this, "invalid source in transition " + n + "\n");
+      warning (this, "invalid SOURCE in transition ( name: " + n + ", src spec: " + spec + ", action spec:" + aspec + ")\n");
       _c_src = nullptr;
       return;
     }

@@ -62,27 +62,27 @@ namespace djnn
                                  bool isModel) : Process (p, n)
     {
       if (src == 0) {
-        error (this, "src argument cannot be null in (Paused)assignment creation");
+        error (this, "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       if (dst == 0) {
-        error (this, "dst argument cannot be null in (Paused)assignment creation");
+        error (this, "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
 
       Process *f = src->find_component (ispec);
       if (f == 0) {
-        error (this, "source not found in (Paused)assignment creation");
+        error (this, "SOURCE not found in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       _src = dynamic_cast<AbstractProperty*> (f);
       if (_src == nullptr) {
-        warning (this, "the source of an (Paused)assignment must be a property");
+        warning (this, "the SOURCE of an (Paused)assignment must be a property ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       f = dst->find_component (dspec);
       if (f == 0) {
-        error (this, "destination not found in (Paused)assignment creation");
+        error (this, "DESTINATION not found in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       _dst = dynamic_cast<AbstractProperty*> (f);
       if (_dst == nullptr) {
-        warning (this, "the destination of an (Paused)assignment must be a property");
+        warning (this, "the DESTINATION of an (Paused)assignment must be a property ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
     }
 
