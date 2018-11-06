@@ -268,6 +268,18 @@ namespace djnn
     _state_dependency = _fsm_state.get ();
   }
 
+  FSM::FSM () : Process ()
+  {
+    init_FSM ();
+  }
+
+  FSM::FSM (Process *p, const string &n) : 
+    Process (p, n), _cur_state (nullptr), _priority (0) 
+  { 
+    init_FSM ();
+    Process::finalize ();
+  }
+
   FSM::~FSM ()
   {
     if (_parent && _parent->state_dependency () != nullptr)

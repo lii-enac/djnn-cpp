@@ -81,8 +81,8 @@ namespace djnn {
   class FSM : public Process
   {
   public:
-    FSM (Process *p, const string &n) : Process (p, n), _cur_state (nullptr), _priority (0) { init_FSM (); Process::finalize (); };
-    FSM () : Process () { init_FSM (); };
+    FSM ();
+    FSM (Process *p, const string &n);
     void activate () override;
     void deactivate () override;
     void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state.get()->set_value (name, true); };
