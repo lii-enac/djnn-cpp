@@ -42,8 +42,11 @@ namespace djnn
     _b = new DoubleProperty (this, "b", b);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
+    _cg->disable ();
     _cb = new Coupling (_b, ACTIVATION, update, ACTIVATION);
+    _cb->disable ();
     Process::finalize ();
   }
 
@@ -67,12 +70,12 @@ namespace djnn
 
   AbstractColor::~AbstractColor ()
   {
-    delete _cr;
-    delete _cg;
-    delete _cb;
-    delete _r;
-    delete _g;
-    delete _b;
+    if (_cr) { delete _cr; _cr = nullptr;}
+    if (_cg) { delete _cg; _cg = nullptr;}
+    if (_cb) { delete _cb; _cb = nullptr;}
+    if (_r) { delete _r; _r = nullptr;}
+    if (_g) { delete _g; _g = nullptr;}
+    if (_b) { delete _b; _b = nullptr;}
   }
 
   void
@@ -103,6 +106,7 @@ namespace djnn
     _rule = new IntProperty (this, "rule", rule);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     Process::finalize ();
   }
 
@@ -112,13 +116,14 @@ namespace djnn
     _rule = new IntProperty (this, "rule", rule);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     Process::finalize ();
   }
 
   FillRule::~FillRule ()
   {
-    delete _rule;
-    delete _cr;
+    if (_rule) { delete _rule; _rule = nullptr;}
+    if (_cr) { delete _cr; _cr = nullptr;}
   }
 
   void
@@ -165,13 +170,14 @@ namespace djnn
     _path = new TextProperty (this, "path", path);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cp = new Coupling (_path, ACTIVATION, update, ACTIVATION);
+    _cp->disable ();
     Process::finalize ();
   }
 
   Texture::~Texture ()
   {
-    delete _cp;
-    delete _path;
+    if (_cp) { delete _cp; _cp = nullptr;}
+    if (_path) { delete _path; _path = nullptr;}
   }
 
   void
@@ -202,13 +208,14 @@ namespace djnn
     _alpha = new DoubleProperty (this, "a", alpha);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_alpha, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     Process::finalize ();
   }
 
   AbstractOpacity::~AbstractOpacity ()
   {
-    delete _ca;
-    delete _alpha;
+    if (_ca) { delete _ca; _ca = nullptr;}
+    if (_alpha) { delete _alpha; _alpha = nullptr;}
   }
 
   void
@@ -246,13 +253,14 @@ namespace djnn
     _width = new DoubleProperty (this, "width", width);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cw = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cw->disable ();
     Process::finalize ();
   }
 
   OutlineWidth::~OutlineWidth ()
   {
-    delete _cw;
-    delete _width;
+    if (_cw) { delete _cw; _cw = nullptr;}
+    if (_width) { delete _width; _width = nullptr;}
   }
 
   void
@@ -283,6 +291,7 @@ namespace djnn
     _cap = new IntProperty (this, "cap", cap);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
     Process::finalize ();
   }
 
@@ -292,13 +301,14 @@ namespace djnn
     _cap = new IntProperty (this, "cap", cap);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
     Process::finalize ();
   }
 
   OutlineCapStyle::~OutlineCapStyle ()
   {
-    delete _cc;
-    delete _cap;
+    if (_cc) { delete _cc; _cc = nullptr;}
+    if (_cap) { delete _cap; _cap = nullptr;}
   }
 
   void
@@ -329,6 +339,7 @@ namespace djnn
     _join = new IntProperty (this, "join", join);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
+    _cj->disable ();
     Process::finalize ();
   }
 
@@ -338,13 +349,14 @@ namespace djnn
     _join = new IntProperty (this, "join", join);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
+    _cj->disable ();
     Process::finalize ();
   }
 
   OutlineJoinStyle::~OutlineJoinStyle ()
   {
-    delete _cj;
-    delete _join;
+    if (_cj) { delete _cj; _cj = nullptr;}
+    if (_join) { delete _join; _join = nullptr;}
   }
 
   void
@@ -375,13 +387,14 @@ namespace djnn
     _limit = new IntProperty (this, "limit", limit);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cl = new Coupling (_limit, ACTIVATION, update, ACTIVATION);
+    _cl->disable ();
     Process::finalize ();
   }
 
   OutlineMiterLimit::~OutlineMiterLimit ()
   {
-    delete _cl;
-    delete _limit;
+    if (_cl) { delete _cl; _cl = nullptr;}
+    if (_limit) { delete _limit; _limit = nullptr;}
   }
 
   void
@@ -428,13 +441,14 @@ namespace djnn
     _offset = new DoubleProperty (this, "offset", offset);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
+    _co->disable ();
     Process::finalize ();
   }
 
   DashOffset::~DashOffset ()
   {
-    delete _co;
-    delete _offset;
+    if (_co) { delete _co; _co = nullptr;}
+    if (_offset) { delete _offset; _offset = nullptr;}
   }
 
   void
@@ -474,10 +488,15 @@ namespace djnn
     _offset = new DoubleProperty (this, "offset", offset);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
+    _cg->disable ();
     _cb = new Coupling (_b, ACTIVATION, update, ACTIVATION);
+    _cb->disable ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
+    _co->disable ();
     grad->stops ()->add_child (this, "");
   }
 
@@ -491,10 +510,15 @@ namespace djnn
     _offset = new DoubleProperty (this, "offset", offset);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
+    _cg->disable ();
     _cb = new Coupling (_b, ACTIVATION, update, ACTIVATION);
+    _cb->disable ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
+    _co->disable ();
   }
 
   Process*
@@ -506,17 +530,17 @@ namespace djnn
 
   GradientStop::~GradientStop ()
   {
-    delete _cr;
-    delete _cg;
-    delete _cb;
-    delete _ca;
-    delete _co;
+    if (_cr) { delete _cr; _cr = nullptr;}
+    if (_cg) { delete _cg; _cg = nullptr;}
+    if (_cb) { delete _cb; _cb = nullptr;}
+    if (_ca) { delete _ca; _ca = nullptr;}
+    if (_co) { delete _co; _co = nullptr;}
 
-    delete _r;
-    delete _g;
-    delete _b;
-    delete _a;
-    delete _offset;
+    if (_r) { delete _r; _r = nullptr;}
+    if (_g) { delete _g; _g = nullptr;}
+    if (_b) { delete _b; _b = nullptr;}
+    if (_a) { delete _a; _a = nullptr;}
+    if (_offset) { delete _offset; _offset = nullptr;}
   }
 
   void
@@ -557,7 +581,9 @@ namespace djnn
     _stops = new List (this, "stops");
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
   }
 
   AbstractGradient::AbstractGradient (int s, int fc) :
@@ -569,17 +595,20 @@ namespace djnn
     _stops = new List (this, "stops");
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
   }
 
   AbstractGradient::~AbstractGradient ()
   {
-    delete _cs;
-    delete _cc;
-    delete _spread;
-    delete _coords;
-    delete _transforms;
-    //delete _stops;
+    if (_cs) { delete _cs; _cs = nullptr;}
+    if (_cc) { delete _cc; _cc = nullptr;}
+    if (_spread) { delete _spread; _spread = nullptr;}
+    if (_coords) { delete _coords; _coords = nullptr;}
+    if (_transforms) { delete _transforms; _transforms = nullptr;}
+    //TODO: why "delete _stops" is commented ? 11.2018
+    //if (_stops) { delete _stops; _stops = nullptr;}
   }
 
   void
@@ -613,9 +642,13 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx2->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cy2->disable ();
     Process::finalize ();
   }
 
@@ -630,9 +663,13 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx2->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cy2->disable ();
     Process::finalize ();
   }
 
@@ -645,9 +682,13 @@ namespace djnn
     _y2 = new DoubleProperty (this, "y2", y2);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
+    _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
+    _cy1->disable ();
     _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
+    _cx2->disable ();
     _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
+    _cy2->disable ();
   }
 
   Process*
@@ -666,14 +707,15 @@ namespace djnn
 
   LinearGradient::~LinearGradient ()
   {
-    delete _cx1;
-    delete _cx2;
-    delete _cy1;
-    delete _cy2;
-    delete _x1;
-    delete _y1;
-    delete _x2;
-    delete _y2;
+    if (_cx1) { delete _cx1; _cx1 = nullptr;}
+    if (_cx2) { delete _cx2; _cx2 = nullptr;}
+    if (_cy1) { delete _cy1; _cy1 = nullptr;}
+    if (_cy2) { delete _cy2; _cy2 = nullptr;}
+    
+    if (_x1) { delete _x1; _x1 = nullptr;}
+    if (_y1) { delete _y1; _y1 = nullptr;}
+    if (_x2) { delete _x2; _x2 = nullptr;}
+    if (_y2) { delete _y2; _y2 = nullptr;}
   }
 
   void
@@ -750,10 +792,15 @@ namespace djnn
     _fy = new DoubleProperty (this, "fy", fy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
+    _cfx->disable ();
     _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
+    _cfy->disable ();
     Process::finalize ();
   }
 
@@ -768,10 +815,15 @@ namespace djnn
     _fy = new DoubleProperty (this, "fy", fy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
+    _cfx->disable ();
     _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
+    _cfy->disable ();
     Process::finalize ();
   }
 
@@ -785,10 +837,15 @@ namespace djnn
     _fy = new DoubleProperty (this, "fy", fy);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
+    _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
+    _ccy->disable ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
     _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
+    _cfx->disable ();
     _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
+    _cfy->disable ();
   }
 
   Process*
@@ -807,16 +864,17 @@ namespace djnn
 
   RadialGradient::~RadialGradient ()
   {
-    delete _ccx;
-    delete _ccy;
-    delete _cr;
-    delete _cfx;
-    delete _cfy;
-    delete _cx;
-    delete _cy;
-    delete _fx;
-    delete _fy;
-    delete _r;
+    if (_ccx) { delete _ccx; _ccx = nullptr;}
+    if (_ccy) { delete _ccy; _ccy = nullptr;}
+    if (_cr) { delete _cr; _cr = nullptr;}
+    if (_cfx) { delete _cfx; _cfx = nullptr;}
+    if (_cfy) { delete _cfy; _cfy = nullptr;}
+    
+    if (_cx) { delete _cx; _cx = nullptr;}
+    if (_cy) { delete _cy; _cy = nullptr;}
+    if (_fx) { delete _fx; _fx = nullptr;}
+    if (_fy) { delete _fy; _fy = nullptr;}
+    if (_r) { delete _r; _r = nullptr;}
   }
 
   void
@@ -985,7 +1043,9 @@ namespace djnn
     _size = new DoubleProperty (this, "size", size);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
+    _cu->disable ();
     _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     Process::finalize ();
   }
 
@@ -996,16 +1056,19 @@ namespace djnn
     _size = new DoubleProperty (this, "size", size);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
+    _cu->disable ();
     _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     Process::finalize ();
   }
 
   FontSize::~FontSize ()
   {
-    delete _cu;
-    delete _cs;
-    delete _unit;
-    delete _size;
+    if (_cu) { delete _cu; _cu = nullptr;}
+    if (_cs) { delete _cs; _cs = nullptr;}
+    
+    if (_unit) { delete _unit; _unit = nullptr;}
+    if (_size) { delete _size; _size = nullptr;}
   }
 
   void
@@ -1042,13 +1105,14 @@ namespace djnn
     _weight = new IntProperty (this, "weight", weight);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cw = new Coupling (_weight, ACTIVATION, update, ACTIVATION);
+    _cw->disable ();
     Process::finalize ();
   }
 
   FontWeight::~FontWeight ()
   {
-    delete _cw;
-    delete _weight;
+    if (_cw) { delete _cw; _cw = nullptr;}
+    if (_weight) { delete _weight; _weight = nullptr;}
   }
 
   void
@@ -1082,6 +1146,7 @@ namespace djnn
     _style = new IntProperty (this, "style", style);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     Process::finalize ();
   }
 
@@ -1091,13 +1156,14 @@ namespace djnn
     _style = new IntProperty (this, "style", style);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
     Process::finalize ();
   }
 
   FontStyle::~FontStyle ()
   {
-    delete _cs;
-    delete _style;
+    if (_cs) { delete _cs; _cs = nullptr;}
+    if (_style) { delete _style; _style = nullptr;}
   }
 
   void
@@ -1131,13 +1197,14 @@ namespace djnn
     _family = new TextProperty (this, "family", family);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cf = new Coupling (_family, ACTIVATION, update, ACTIVATION);
+    _cf->disable ();
     Process::finalize ();
   }
 
   FontFamily::~FontFamily ()
   {
-    delete _cf;
-    delete _family;
+    if (_cf) { delete _cf; _cf = nullptr;}
+    if (_family) { delete _family; _family = nullptr;}
   }
 
   void
@@ -1171,6 +1238,7 @@ namespace djnn
     _anchor = new IntProperty (this, "anchor", anchor);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
     Process::finalize ();
   }
 
@@ -1185,8 +1253,8 @@ namespace djnn
 
   TextAnchor::~TextAnchor ()
   {
-    delete _ca;
-    delete _anchor;
+    if (_ca) { delete _ca; _ca = nullptr;}
+    if (_anchor) { delete _anchor; _anchor = nullptr;}
   }
 
   void
