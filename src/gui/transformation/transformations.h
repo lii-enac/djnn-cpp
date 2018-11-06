@@ -38,14 +38,10 @@ namespace djnn
   public:
     AbstractTranslation (Process *p, const string &n, double tx, double ty);
     AbstractTranslation (double tx, double ty);
-    virtual
-    ~AbstractTranslation ();
-    void
-    activate () override;
-    void
-    deactivate () override;
-    virtual void
-    draw () override = 0;
+    virtual ~AbstractTranslation ();
+    void activate () override;
+    void deactivate () override;
+    virtual void draw () override = 0;
   protected:
     DoubleProperty *_tx, *_ty;
     Coupling *_ctx, *_cty;
@@ -55,10 +51,8 @@ namespace djnn
   {
   public:
     Translation (Process *p, const string &n, double tx, double ty);
-    virtual
-    ~Translation ();
-    void
-    draw () override;
+    virtual ~Translation ();
+    void draw () override;
   };
   class GradientTranslation : public AbstractTranslation
   {
@@ -66,10 +60,8 @@ namespace djnn
     GradientTranslation (Process *p, const string &n, double tx, double ty);
     GradientTranslation (double tx, double ty);
     Process* clone () override;
-    virtual
-    ~GradientTranslation ();
-    void
-    draw () override;
+    virtual ~GradientTranslation ();
+    void draw () override;
   };
 
   class AbstractRotation : public AbstractTransformation
@@ -77,14 +69,10 @@ namespace djnn
   public:
     AbstractRotation (Process *p, const string &n, double a, double cx, double cy);
     AbstractRotation (double a, double cx, double cy);
-    virtual
-    ~AbstractRotation ();
-    void
-    activate () override;
-    void
-    deactivate () override;
-    virtual void
-    draw () override = 0;
+    virtual ~AbstractRotation ();
+    void activate () override;
+    void deactivate () override;
+    virtual void draw () override = 0;
   protected:
     DoubleProperty *_a, *_cx, *_cy;
     Coupling *_ca, *_ccx, *_ccy;
@@ -94,10 +82,8 @@ namespace djnn
   {
   public:
     Rotation (Process *p, const string &n, double a, double cx, double cy);
-    virtual
-    ~Rotation ();
-    void
-    draw () override;
+    virtual ~Rotation ();
+    void draw () override;
   };
   class GradientRotation : public AbstractRotation
   {
@@ -105,10 +91,8 @@ namespace djnn
     GradientRotation (Process *p, const string &n, double a, double cx, double cy);
     GradientRotation (double a, double cx, double cy);
     Process* clone () override;
-    virtual
-    ~GradientRotation ();
-    void
-    draw () override;
+    virtual ~GradientRotation ();
+    void draw () override;
   };
 
   class AbstractScaling : public AbstractTransformation
@@ -116,14 +100,10 @@ namespace djnn
   public:
     AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
     AbstractScaling (double sx, double sy, double cx, double cy);
-    virtual
-    ~AbstractScaling ();
-    void
-    activate () override;
-    void
-    deactivate () override;
-    virtual void
-    draw () override = 0;
+    virtual ~AbstractScaling ();
+    void activate () override;
+    void deactivate () override;
+    virtual void draw () override = 0;
   protected:
     DoubleProperty *_sx, *_sy, *_cx, *_cy;
     Coupling *_csx, *_csy, *_ccx, *_ccy;
@@ -133,10 +113,8 @@ namespace djnn
   {
   public:
     Scaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
-    virtual
-    ~Scaling ();
-    void
-    draw () override;
+    virtual ~Scaling ();
+    void draw () override;
   };
 
   class GradientScaling : public AbstractScaling
@@ -145,10 +123,8 @@ namespace djnn
     GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
     GradientScaling (double sx, double sy, double cx, double cy);
     Process* clone () override;
-    virtual
-    ~GradientScaling ();
-    void
-    draw () override;
+    virtual ~GradientScaling ();
+    void draw () override;
   };
 
   class AbstractSkew : public AbstractTransformation
@@ -156,14 +132,10 @@ namespace djnn
   public:
     AbstractSkew (Process *p, const string &n, double a);
     AbstractSkew (double a);
-    virtual
-    ~AbstractSkew ();
-    void
-    activate () override;
-    void
-    deactivate () override;
-    virtual void
-    draw () override = 0;
+    virtual ~AbstractSkew ();
+    void activate () override;
+    void deactivate () override;
+    virtual void draw () override = 0;
   protected:
     DoubleProperty *_a;
     Coupling *_ca;
@@ -174,10 +146,8 @@ namespace djnn
   public:
     SkewX (Process *p, const string &n, double a);
     SkewX (double a);
-    virtual
-    ~SkewX ();
-    void
-    draw () override;
+    virtual ~SkewX ();
+    void draw () override;
   };
 
   class GradientSkewX : public AbstractSkew
@@ -186,20 +156,16 @@ namespace djnn
     GradientSkewX (Process *p, const string &n, double a);
     GradientSkewX (double a);
     Process* clone () override;
-    virtual
-    ~GradientSkewX ();
-    void
-    draw () override;
+    virtual ~GradientSkewX ();
+    void draw () override;
   };
 
   class SkewY : public AbstractSkew
   {
   public:
     SkewY (Process *p, const string &n, double a);
-    virtual
-    ~SkewY ();
-    void
-    draw () override;
+    virtual ~SkewY ();
+    void draw () override;
   };
 
   class GradientSkewY : public AbstractSkew
@@ -208,10 +174,8 @@ namespace djnn
     GradientSkewY (Process *p, const string &n, double a);
     GradientSkewY (double a);
     Process* clone () override;
-    virtual
-    ~GradientSkewY ();
-    void
-    draw () override;
+    virtual ~GradientSkewY ();
+    void draw () override;
   };
 
   class AbstractHomography : public AbstractTransformation
