@@ -33,6 +33,20 @@ namespace djnn
   {
   }
 
+  AbstractColor::AbstractColor (double r, double g, double b) :
+      _cr (nullptr), _cg (nullptr), _cb (nullptr)
+  {
+    _r = new DoubleProperty (this, "r", r);
+    _g = new DoubleProperty (this, "g", g);
+    _b = new DoubleProperty (this, "b", b);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
+    _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
+    _cg->disable ();
+    _cb = new Coupling (_b, ACTIVATION, update, ACTIVATION);
+    _cb->disable ();
+  }
 
   AbstractColor::AbstractColor (Process *p, const std::string& n, double r, double g, double b) :
       AbstractStyle (p, n), _cr (nullptr), _cg (nullptr), _cb (nullptr)
@@ -89,6 +103,12 @@ namespace djnn
     }
   }
 
+  Process*
+  FillColor::clone ()
+  {
+    return new FillColor (_r->get_value (), _g->get_value (), _b->get_value ());
+  }
+
   void
   OutlineColor::draw ()
   {
@@ -98,6 +118,12 @@ namespace djnn
       int b = (int) _b->get_value ();
       Backend::instance ()->load_outline_color (r, g, b);
     }
+  }
+
+  Process*
+  OutlineColor::clone ()
+  {
+    return new OutlineColor (_r->get_value (), _g->get_value (), _b->get_value ());
   }
 
   FillRule::FillRule (Process* p, const std::string &n, djnFillRuleType rule) :
@@ -110,6 +136,15 @@ namespace djnn
     Process::finalize ();
   }
 
+  FillRule::FillRule (djnFillRuleType rule) :
+      AbstractStyle ()
+  {
+    _rule = new IntProperty (this, "rule", rule);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
+  }
+
   FillRule::FillRule (Process* p, const std::string &n, int rule) :
       AbstractStyle (p, n)
   {
@@ -118,6 +153,15 @@ namespace djnn
     _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     Process::finalize ();
+  }
+
+  FillRule::FillRule (int rule) :
+      AbstractStyle ()
+  {
+    _rule = new IntProperty (this, "rule", rule);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
+    _cr->disable ();
   }
 
   FillRule::~FillRule ()
@@ -148,12 +192,24 @@ namespace djnn
     }
   }
 
+  Process*
+  FillRule::clone ()
+  {
+    return new FillRule (_rule->get_value ());
+  }
+
   void
   NoOutline::draw ()
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_outline ();
     }
+  }
+
+  Process*
+  NoOutline::clone ()
+  {
+    return new NoOutline ();
   }
 
   void
@@ -164,6 +220,12 @@ namespace djnn
     }
   }
 
+  Process*
+  NoFill::clone ()
+  {
+    return new NoFill ();
+  }
+
   Texture::Texture (Process* p, const std::string &n, const std::string &path) :
       AbstractStyle (p, n)
   {
@@ -172,6 +234,15 @@ namespace djnn
     _cp = new Coupling (_path, ACTIVATION, update, ACTIVATION);
     _cp->disable ();
     Process::finalize ();
+  }
+
+  Texture::Texture (const std::string &path) :
+      AbstractStyle ()
+  {
+    _path = new TextProperty (this, "path", path);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cp = new Coupling (_path, ACTIVATION, update, ACTIVATION);
+    _cp->disable ();
   }
 
   Texture::~Texture ()
@@ -202,6 +273,12 @@ namespace djnn
     }
   }
 
+  Process*
+  Texture::clone ()
+  {
+    return new Texture (_path->get_value ());
+  }
+
   AbstractOpacity::AbstractOpacity (Process* p, const std::string &n, double alpha) :
       AbstractStyle (p, n)
   {
@@ -210,6 +287,15 @@ namespace djnn
     _ca = new Coupling (_alpha, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
     Process::finalize ();
+  }
+
+  AbstractOpacity::AbstractOpacity (double alpha) :
+      AbstractStyle ()
+  {
+    _alpha = new DoubleProperty (this, "a", alpha);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ca = new Coupling (_alpha, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
   }
 
   AbstractOpacity::~AbstractOpacity ()
@@ -239,12 +325,25 @@ namespace djnn
       Backend::instance ()->load_outline_opacity ((float) _alpha->get_value ());
     }
   }
+
+  Process*
+  OutlineOpacity::clone ()
+  {
+    return new OutlineOpacity (_alpha->get_value ());
+  }
+
   void
   FillOpacity::draw ()
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_opacity ((float) _alpha->get_value ());
     }
+  }
+
+  Process*
+  FillOpacity::clone ()
+  {
+    return new FillOpacity (_alpha->get_value ());
   }
 
   OutlineWidth::OutlineWidth (Process* p, const std::string &n, double width) :
@@ -255,6 +354,15 @@ namespace djnn
     _cw = new Coupling (_width, ACTIVATION, update, ACTIVATION);
     _cw->disable ();
     Process::finalize ();
+  }
+
+  OutlineWidth::OutlineWidth (double width) :
+      AbstractStyle ()
+  {
+    _width = new DoubleProperty (this, "width", width);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cw = new Coupling (_width, ACTIVATION, update, ACTIVATION);
+    _cw->disable ();
   }
 
   OutlineWidth::~OutlineWidth ()
@@ -285,6 +393,12 @@ namespace djnn
     }
   }
 
+  Process*
+  OutlineWidth::clone ()
+  {
+    return new OutlineWidth (_width->get_value ());
+  }
+
   OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, djnCapStyle cap) :
       AbstractStyle (p, n)
   {
@@ -295,14 +409,22 @@ namespace djnn
     Process::finalize ();
   }
 
-  OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, int cap) :
-      AbstractStyle (p, n)
+  OutlineCapStyle::OutlineCapStyle (djnCapStyle cap) :
+      AbstractStyle ()
   {
     _cap = new IntProperty (this, "cap", cap);
     UpdateDrawing *update = UpdateDrawing::instance ();
     _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
     _cc->disable ();
-    Process::finalize ();
+  }
+
+  OutlineCapStyle::OutlineCapStyle (int cap) :
+      AbstractStyle ()
+  {
+    _cap = new IntProperty (this, "cap", cap);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
   }
 
   OutlineCapStyle::~OutlineCapStyle ()
@@ -333,6 +455,11 @@ namespace djnn
     }
   }
 
+  Process* OutlineCapStyle::clone ()
+  {
+    return new OutlineCapStyle (_cap->get_value ());
+  }
+
   OutlineJoinStyle::OutlineJoinStyle (Process* p, const std::string &n, djnJoinStyle join) :
       AbstractStyle (p, n)
   {
@@ -343,6 +470,15 @@ namespace djnn
     Process::finalize ();
   }
 
+  OutlineJoinStyle::OutlineJoinStyle (djnJoinStyle join) :
+      AbstractStyle ()
+  {
+    _join = new IntProperty (this, "join", join);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
+    _cj->disable ();
+  }
+
   OutlineJoinStyle::OutlineJoinStyle (Process* p, const std::string &n, int join) :
       AbstractStyle (p, n)
   {
@@ -351,6 +487,15 @@ namespace djnn
     _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
     _cj->disable ();
     Process::finalize ();
+  }
+
+  OutlineJoinStyle::OutlineJoinStyle (int join) :
+      AbstractStyle ()
+  {
+    _join = new IntProperty (this, "join", join);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
+    _cj->disable ();
   }
 
   OutlineJoinStyle::~OutlineJoinStyle ()
@@ -381,6 +526,11 @@ namespace djnn
     }
   }
 
+  Process* OutlineJoinStyle::clone ()
+  {
+    return new OutlineJoinStyle (_join->get_value ());
+  }
+
   OutlineMiterLimit::OutlineMiterLimit (Process* p, const std::string &n, int limit) :
       AbstractStyle (p, n)
   {
@@ -389,6 +539,15 @@ namespace djnn
     _cl = new Coupling (_limit, ACTIVATION, update, ACTIVATION);
     _cl->disable ();
     Process::finalize ();
+  }
+
+  OutlineMiterLimit::OutlineMiterLimit (int limit) :
+      AbstractStyle ()
+  {
+    _limit = new IntProperty (this, "limit", limit);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cl = new Coupling (_limit, ACTIVATION, update, ACTIVATION);
+    _cl->disable ();
   }
 
   OutlineMiterLimit::~OutlineMiterLimit ()
@@ -419,12 +578,29 @@ namespace djnn
     }
   }
 
+  Process*
+  OutlineMiterLimit::clone ()
+  {
+    return new OutlineMiterLimit (_limit->get_value ());
+  }
+
   void
   DashArray::draw ()
   {
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_array (_dash_array);
     }
+  }
+
+  Process* DashArray::clone ()
+  {
+    DashArray* newda = new DashArray ();
+
+    for (auto d : _dash_array) {
+      newda->_dash_array.push_back(d);
+    }
+
+    return newda;
   }
 
   void
@@ -435,6 +611,12 @@ namespace djnn
     }
   }
 
+  Process*
+  NoDashArray::clone ()
+  {
+    return new NoDashArray ();
+  }
+
   DashOffset::DashOffset (Process* p, const std::string &n, double offset) :
       AbstractStyle (p, n)
   {
@@ -443,6 +625,15 @@ namespace djnn
     _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
     _co->disable ();
     Process::finalize ();
+  }
+
+  DashOffset::DashOffset (double offset) :
+      AbstractStyle ()
+  {
+    _offset = new DoubleProperty (this, "offset", offset);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
+    _co->disable ();
   }
 
   DashOffset::~DashOffset ()
@@ -471,6 +662,12 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_offset (_offset->get_value ());
     }
+  }
+
+  Process*
+  DashOffset::clone ()
+  {
+    return new DashOffset (_offset->get_value ());
   }
 
   GradientStop::GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset) :
@@ -1049,6 +1246,18 @@ namespace djnn
     Process::finalize ();
   }
 
+  FontSize::FontSize (djnLengthUnit unit, double size) :
+      AbstractStyle ()
+  {
+    _unit = new IntProperty (this, "unit", unit);
+    _size = new DoubleProperty (this, "size", size);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
+    _cu->disable ();
+    _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
+  }
+
   FontSize::FontSize (Process *p, const std::string &n, int unit, double size) :
       AbstractStyle (p, n)
   {
@@ -1060,6 +1269,18 @@ namespace djnn
     _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     Process::finalize ();
+  }
+
+  FontSize::FontSize (int unit, double size) :
+      AbstractStyle ()
+  {
+    _unit = new IntProperty (this, "unit", unit);
+    _size = new DoubleProperty (this, "size", size);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
+    _cu->disable ();
+    _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
   }
 
   FontSize::~FontSize ()
@@ -1099,6 +1320,12 @@ namespace djnn
     }
   }
 
+  Process*
+  FontSize::clone ()
+  {
+    return new FontSize (_unit->get_value (), _size->get_value ());
+  }
+
   FontWeight::FontWeight (Process* p, const std::string &n, int weight) :
       AbstractStyle (p, n)
   {
@@ -1107,6 +1334,15 @@ namespace djnn
     _cw = new Coupling (_weight, ACTIVATION, update, ACTIVATION);
     _cw->disable ();
     Process::finalize ();
+  }
+
+  FontWeight::FontWeight (int weight) :
+      AbstractStyle ()
+  {
+    _weight = new IntProperty (this, "weight", weight);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cw = new Coupling (_weight, ACTIVATION, update, ACTIVATION);
+    _cw->disable ();
   }
 
   FontWeight::~FontWeight ()
@@ -1140,6 +1376,12 @@ namespace djnn
     }
   }
 
+  Process*
+  FontWeight::clone ()
+  {
+    return new FontWeight (_weight->get_value ());
+  }
+
   FontStyle::FontStyle (Process* p, const std::string &n, djnFontSlope style) :
       AbstractStyle (p, n)
   {
@@ -1150,6 +1392,15 @@ namespace djnn
     Process::finalize ();
   }
 
+  FontStyle::FontStyle (djnFontSlope style) :
+      AbstractStyle ()
+  {
+    _style = new IntProperty (this, "style", style);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
+  }
+
   FontStyle::FontStyle (Process* p, const std::string &n, int style) :
       AbstractStyle (p, n)
   {
@@ -1158,6 +1409,15 @@ namespace djnn
     _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     Process::finalize ();
+  }
+
+  FontStyle::FontStyle (int style) :
+      AbstractStyle ()
+  {
+    _style = new IntProperty (this, "style", style);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
+    _cs->disable ();
   }
 
   FontStyle::~FontStyle ()
@@ -1191,6 +1451,12 @@ namespace djnn
     }
   }
 
+  Process*
+  FontStyle::clone ()
+  {
+    return new FontStyle (_style->get_value ());
+  }
+
   FontFamily::FontFamily (Process* p, const std::string &n, const std::string &family) :
       AbstractStyle (p, n)
   {
@@ -1199,6 +1465,15 @@ namespace djnn
     _cf = new Coupling (_family, ACTIVATION, update, ACTIVATION);
     _cf->disable ();
     Process::finalize ();
+  }
+
+  FontFamily::FontFamily (const std::string &family) :
+      AbstractStyle ()
+  {
+    _family = new TextProperty (this, "family", family);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _cf = new Coupling (_family, ACTIVATION, update, ACTIVATION);
+    _cf->disable ();
   }
 
   FontFamily::~FontFamily ()
@@ -1232,6 +1507,12 @@ namespace djnn
     }
   }
 
+  Process*
+  FontFamily::clone ()
+  {
+    return new FontFamily (_family->get_value ());
+  }
+
   TextAnchor::TextAnchor (Process* p, const std::string &n, djnAnchorType anchor) :
       AbstractStyle (p, n)
   {
@@ -1242,6 +1523,15 @@ namespace djnn
     Process::finalize ();
   }
 
+  TextAnchor::TextAnchor (djnAnchorType anchor) :
+      AbstractStyle ()
+  {
+    _anchor = new IntProperty (this, "anchor", anchor);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
+    _ca->disable ();
+  }
+
   TextAnchor::TextAnchor (Process* p, const std::string &n, int anchor) :
       AbstractStyle (p, n)
   {
@@ -1249,6 +1539,14 @@ namespace djnn
     UpdateDrawing *update = UpdateDrawing::instance ();
     _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
     Process::finalize ();
+  }
+
+  TextAnchor::TextAnchor (int anchor) :
+      AbstractStyle ()
+  {
+    _anchor = new IntProperty (this, "anchor", anchor);
+    UpdateDrawing *update = UpdateDrawing::instance ();
+    _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
   }
 
   TextAnchor::~TextAnchor ()
@@ -1277,6 +1575,12 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_text_anchor ((djnAnchorType) _anchor->get_value ());
     }
+  }
+
+  Process*
+  TextAnchor::clone ()
+  {
+    return new TextAnchor (_anchor->get_value ());
   }
 }
 

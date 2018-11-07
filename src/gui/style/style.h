@@ -37,6 +37,7 @@ namespace djnn
   {
   public:
     AbstractColor (Process *p, const std::string& n, double r, double g, double b);
+    AbstractColor (double r, double g, double b);
     virtual ~AbstractColor ();
     virtual void draw () override = 0;
     DoubleProperty* r () { return _r;}
@@ -54,8 +55,11 @@ namespace djnn
   public:
     FillColor (Process *p, const std::string& n, double r, double g, double b) :
         AbstractColor (p, n, r, g, b) {}
+    FillColor (double r, double g, double b) :
+        AbstractColor (r, g, b) {}
     virtual ~FillColor () {}
     void draw () override;
+    Process* clone () override;
   };
 
   class OutlineColor : public AbstractColor
@@ -63,20 +67,26 @@ namespace djnn
   public:
     OutlineColor (Process *p, const std::string& n, double r, double g, double b) :
         AbstractColor (p, n, r, g, b) {}
+    OutlineColor (double r, double g, double b) :
+        AbstractColor (r, g, b) {}
     virtual ~OutlineColor () {}
     void draw () override;
+    Process* clone () override;
   };
 
   class FillRule : public AbstractStyle
   {
   public:
     FillRule (Process *p, const std::string &n, djnFillRuleType rule);
+    FillRule (djnFillRuleType rule);
     FillRule (Process *p, const std::string &n, int rule);
+    FillRule (int rule);
     virtual ~FillRule ();
     IntProperty* rule () { return _rule;}
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     IntProperty* _rule;
     Coupling* _cr;
@@ -87,10 +97,13 @@ namespace djnn
   public:
     NoOutline (Process *p, const std::string &n) :
         AbstractStyle (p, n) { Process::finalize ();}
+    NoOutline () :
+        AbstractStyle () {}    
     virtual ~NoOutline () {}
     void activate () override { AbstractStyle::activate ();}
     void deactivate () override { AbstractStyle::deactivate ();}
     void draw () override;
+    Process* clone () override;
   };
 
   class NoFill : public AbstractStyle
@@ -98,21 +111,26 @@ namespace djnn
   public:
     NoFill (Process *p, const std::string &n) :
         AbstractStyle (p, n) { Process::finalize ();}
+    NoFill () :
+        AbstractStyle () {}
     virtual ~NoFill () {}
     void activate () override { AbstractStyle::activate ();}
     void deactivate () override { AbstractStyle::deactivate ();}
     void draw () override;
+    Process* clone () override;
   };
 
   class Texture : public AbstractStyle
   {
   public:
     Texture (Process *p, const std::string &n, const std::string &path);
+    Texture (const std::string &path);
     virtual ~Texture ();
     TextProperty* path () { return _path;}
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     TextProperty* _path;
     Coupling* _cp;
@@ -122,6 +140,7 @@ namespace djnn
   {
   public:
     AbstractOpacity (Process *p, const std::string &n, double alpha);
+    AbstractOpacity (double alpha);
     virtual ~AbstractOpacity ();
     DoubleProperty* alpha () { return _alpha;}
     void activate () override;
@@ -137,8 +156,11 @@ namespace djnn
   public:
     OutlineOpacity (Process *p, const std::string &n, double alpha) :
         AbstractOpacity (p, n, alpha) {}
+    OutlineOpacity (double alpha) :
+        AbstractOpacity (alpha) {}
     virtual ~OutlineOpacity () {};
     void draw () override;
+    Process* clone () override;
   };
 
   class FillOpacity : public AbstractOpacity
@@ -146,19 +168,24 @@ namespace djnn
   public:
     FillOpacity (Process *p, const std::string &n, double alpha) :
         AbstractOpacity (p, n, alpha) {}
+    FillOpacity (double alpha) :
+        AbstractOpacity (alpha) {}
     virtual ~FillOpacity () {};
     void draw () override;
+    Process* clone () override;
   };
 
   class OutlineWidth : public AbstractStyle
   {
   public:
     OutlineWidth (Process *p, const std::string &n, double width);
+    OutlineWidth (double width);
     virtual ~OutlineWidth ();
     DoubleProperty* width () { return _width;};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     DoubleProperty* _width;
     Coupling* _cw;
@@ -168,12 +195,15 @@ namespace djnn
   {
   public:
     OutlineCapStyle (Process *p, const std::string &n, djnCapStyle cap);
+    OutlineCapStyle (djnCapStyle cap);
     OutlineCapStyle (Process *p, const std::string &n, int cap);
+    OutlineCapStyle (int cap);
     virtual ~OutlineCapStyle ();
     IntProperty* cap () { return _cap;};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     IntProperty* _cap;
     Coupling* _cc;
@@ -182,13 +212,16 @@ namespace djnn
   class OutlineJoinStyle : public AbstractStyle
   {
   public:
-    OutlineJoinStyle (Process *p, const std::string &n, djnJoinStyle cap);
-    OutlineJoinStyle (Process *p, const std::string &n, int cap);
+    OutlineJoinStyle (Process *p, const std::string &n, djnJoinStyle join);
+    OutlineJoinStyle (djnJoinStyle join);
+    OutlineJoinStyle (Process *p, const std::string &n, int join);
+    OutlineJoinStyle (int join);
     virtual ~OutlineJoinStyle ();
     IntProperty* join () { return _join;};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     IntProperty* _join;
     Coupling* _cj;
@@ -198,11 +231,13 @@ namespace djnn
   {
   public:
     OutlineMiterLimit (Process *p, const std::string &n, int limit);
+    OutlineMiterLimit (int limit);
     virtual ~OutlineMiterLimit ();
     IntProperty* limit () { return _limit;};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     IntProperty* _limit;
     Coupling* _cl;
@@ -213,6 +248,8 @@ namespace djnn
   public:
     DashArray (Process *p, const std::string &n) :
         AbstractStyle (p, n) { Process::finalize ();}
+    DashArray () :
+        AbstractStyle () {}
     virtual ~DashArray () { _dash_array.clear ();}
     vector<double> dash_array () { return _dash_array;}
     void add_sub_pattern (double dash, double space)
@@ -223,6 +260,7 @@ namespace djnn
     void activate () override { AbstractStyle::activate ();}
     void deactivate () override { AbstractStyle::deactivate ();}
     void draw () override;
+    Process* clone () override;
   private:
     vector<double> _dash_array;
   };
@@ -232,21 +270,26 @@ namespace djnn
   public:
     NoDashArray (Process *p, const std::string &n) :
         AbstractStyle (p, n) { Process::finalize ();}
+    NoDashArray () :
+        AbstractStyle () {}
     virtual ~NoDashArray () {}
     void activate () override { AbstractStyle::activate ();}
     void deactivate () override { AbstractStyle::deactivate ();}
     void draw () override;
+    Process* clone () override;
   };
 
   class DashOffset : public AbstractStyle
   {
   public:
     DashOffset (Process *p, const std::string &n, double offset);
+    DashOffset (double offset);
     virtual ~DashOffset ();
     DoubleProperty* offset () { return _offset;};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     DoubleProperty* _offset;
     Coupling* _co;
@@ -368,11 +411,14 @@ namespace djnn
   {
   public:
     FontSize (Process *p, const std::string &n, djnLengthUnit unit, double size);
+    FontSize (djnLengthUnit unit, double size);
     FontSize (Process *p, const std::string &n, int unit, double size);
+    FontSize (int unit, double size);
     virtual ~FontSize ();
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
     DoubleProperty* size () { return _size; }
   private:
     IntProperty *_unit;
@@ -384,10 +430,12 @@ namespace djnn
   {
   public:
     FontWeight (Process *p, const std::string &n, int weight);
+    FontWeight (int weight);
     virtual ~FontWeight ();
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
     IntProperty* weight () { return _weight; }
   private:
     IntProperty* _weight;
@@ -398,11 +446,14 @@ namespace djnn
   {
   public:
     FontStyle (Process *p, const std::string &n, djnFontSlope style);
+    FontStyle (djnFontSlope style);
     FontStyle (Process *p, const std::string &n, int style);
+    FontStyle (int style);
     virtual ~FontStyle ();
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
     IntProperty* style () { return _style; }
   private:
     IntProperty* _style;
@@ -413,10 +464,12 @@ namespace djnn
   {
   public:
     FontFamily (Process *p, const std::string &n, const std::string &family);
+    FontFamily (const std::string &family);
     virtual ~FontFamily ();
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
     TextProperty* family () { return _family; }
   private:
     TextProperty* _family;
@@ -427,11 +480,14 @@ namespace djnn
   {
   public:
     TextAnchor (Process *p, const std::string &n, djnAnchorType anchor);
+    TextAnchor (djnAnchorType anchor);
     TextAnchor (Process *p, const std::string &n, int anchor);
+    TextAnchor (int anchor);
     virtual ~TextAnchor ();
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     IntProperty* _anchor;
     Coupling* _ca;
