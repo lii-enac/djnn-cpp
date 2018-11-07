@@ -51,9 +51,12 @@ namespace djnn
   {
   public:
     Translation (Process *p, const string &n, double tx, double ty);
+    Translation (double tx, double ty);
     virtual ~Translation ();
     void draw () override;
+    Process* clone () override;
   };
+
   class GradientTranslation : public AbstractTranslation
   {
   public:
@@ -82,17 +85,20 @@ namespace djnn
   {
   public:
     Rotation (Process *p, const string &n, double a, double cx, double cy);
+    Rotation (double a, double cx, double cy);
     virtual ~Rotation ();
     void draw () override;
+    Process* clone () override;
   };
+
   class GradientRotation : public AbstractRotation
   {
   public:
     GradientRotation (Process *p, const string &n, double a, double cx, double cy);
     GradientRotation (double a, double cx, double cy);
-    Process* clone () override;
     virtual ~GradientRotation ();
     void draw () override;
+    Process* clone () override;
   };
 
   class AbstractScaling : public AbstractTransformation
@@ -113,8 +119,10 @@ namespace djnn
   {
   public:
     Scaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
+    Scaling (double sx, double sy, double cx, double cy);
     virtual ~Scaling ();
     void draw () override;
+    Process* clone () override;
   };
 
   class GradientScaling : public AbstractScaling
@@ -122,9 +130,9 @@ namespace djnn
   public:
     GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
     GradientScaling (double sx, double sy, double cx, double cy);
-    Process* clone () override;
     virtual ~GradientScaling ();
     void draw () override;
+    Process* clone () override;
   };
 
   class AbstractSkew : public AbstractTransformation
@@ -148,6 +156,7 @@ namespace djnn
     SkewX (double a);
     virtual ~SkewX ();
     void draw () override;
+    Process* clone () override;
   };
 
   class GradientSkewX : public AbstractSkew
@@ -155,17 +164,19 @@ namespace djnn
   public:
     GradientSkewX (Process *p, const string &n, double a);
     GradientSkewX (double a);
-    Process* clone () override;
     virtual ~GradientSkewX ();
     void draw () override;
+    Process* clone () override;
   };
 
   class SkewY : public AbstractSkew
   {
   public:
     SkewY (Process *p, const string &n, double a);
+    SkewY (double a);
     virtual ~SkewY ();
     void draw () override;
+    Process* clone () override;
   };
 
   class GradientSkewY : public AbstractSkew
@@ -173,9 +184,9 @@ namespace djnn
   public:
     GradientSkewY (Process *p, const string &n, double a);
     GradientSkewY (double a);
-    Process* clone () override;
     virtual ~GradientSkewY ();
     void draw () override;
+    Process* clone () override;
   };
 
   class AbstractHomography : public AbstractTransformation
@@ -309,8 +320,13 @@ namespace djnn
       double m21=0, double m22=1, double m23=0, double m24=0,
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
+    Homography (double m11=1, double m12=0, double m13=0, double m14=0,
+      double m21=0, double m22=1, double m23=0, double m24=0,
+      double m31=0, double m32=0, double m33=1, double m34=0,
+      double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~Homography ();
     void draw () override;
+    Process* clone () override;
   };
 
   class GradientHomography : public AbstractHomography
@@ -322,9 +338,9 @@ namespace djnn
     GradientHomography (double m11=1, double m12=0, double m13=0, 
       double m21=0, double m22=1, double m23=0,
       double m31=0, double m32=0, double m33=1);
-    Process* clone () override;
     virtual ~GradientHomography ();
     void draw () override;
+    Process* clone () override;
   };
 
   class SimpleGradientTransform : public AbstractHomography
@@ -334,9 +350,9 @@ namespace djnn
       double f);
     SimpleGradientTransform (double a, double b, double c, double d, double e,
      double f);
-    Process* clone () override;
     virtual ~SimpleGradientTransform ();
     void draw () override;
+    Process* clone () override;
   };
 
   class ScreenToLocal : public Process 

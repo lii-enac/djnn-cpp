@@ -91,6 +91,11 @@ namespace djnn
     Process::finalize ();
   }
 
+  Translation::Translation (double tx, double ty) :
+      AbstractTranslation (tx, ty)
+  {
+  }
+
   Translation::~Translation ()
   {
   }
@@ -103,6 +108,12 @@ namespace djnn
       double ty = _ty->get_value ();
       Backend::instance ()->load_translation (this, tx, ty);
     }
+  }
+
+  Process*
+  Translation::clone ()
+  {
+    return new Translation (_tx->get_value (), _ty->get_value ());
   }
 
   GradientTranslation::GradientTranslation (Process *p, const string &n, double tx, double ty) :
@@ -203,6 +214,11 @@ namespace djnn
     Process::finalize ();
   }
 
+  Rotation::Rotation (double a, double cx, double cy) :
+      AbstractRotation (a, cx, cy)
+  {
+  }
+
   Rotation::~Rotation ()
   {
   }
@@ -216,6 +232,12 @@ namespace djnn
       double cy = _cy->get_value ();
       Backend::instance ()->load_rotation (this, a, cx, cy);
     }
+  }
+
+  Process*
+  Rotation::clone ()
+  {
+    return new Rotation (_a->get_value(), _cx->get_value (), _cy->get_value ());
   }
 
   GradientRotation::GradientRotation (Process *p, const string &n, double a, double cx, double cy) :
@@ -327,6 +349,12 @@ namespace djnn
     Process::finalize ();
   }
 
+  Scaling::Scaling (double sx, double sy, double cx, double cy) :
+      AbstractScaling (sx, sy, cx, cy)
+  {
+    
+  }
+
   Scaling::~Scaling ()
   {
   }
@@ -341,6 +369,12 @@ namespace djnn
       double cy = _cy->get_value ();
       Backend::instance ()->load_scaling (this, sx, sy, cx, cy);
     }
+  }
+
+  Process*
+  Scaling::clone ()
+  {
+    return new Scaling (_sx->get_value (), _sy->get_value (), _cx->get_value (), _cy->get_value ());
   }
 
   GradientScaling::GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
@@ -423,6 +457,11 @@ namespace djnn
     Process::finalize ();
   }
 
+  SkewX::SkewX (double a) :
+      AbstractSkew (a)
+  {
+  }
+
   SkewX::~SkewX ()
   {
   }
@@ -434,6 +473,12 @@ namespace djnn
       double a = _a->get_value ();
       Backend::instance ()->load_skew_x (this, a);
     }
+  }
+
+  Process*
+  SkewX::clone ()
+  {
+    return new SkewX (_a->get_value ());
   }
 
   GradientSkewX::GradientSkewX (Process *p, const string &n, double a) :
@@ -475,9 +520,13 @@ namespace djnn
     Process::finalize ();
   }
 
+  SkewY::SkewY (double a) :
+      AbstractSkew (a)
+  {
+  }
+
   SkewY::~SkewY ()
   {
-    //AbstractSkew::~AbstractSkew ();
   }
 
   void
@@ -487,6 +536,12 @@ namespace djnn
       double a = _a->get_value ();
       Backend::instance ()->load_skew_y (this, a);
     }
+  }
+
+  Process*
+  SkewY::clone ()
+  {
+    return new SkewY (_a->get_value ());
   }
 
   GradientSkewY::GradientSkewY (Process *p, const string &n, double a) :
@@ -1262,6 +1317,14 @@ namespace djnn
     Process::finalize ();
   }
 
+  Homography::Homography (double m11, double m12, double m13, double m14, double m21,
+                          double m22, double m23, double m24, double m31, double m32, double m33, double m34,
+                          double m41, double m42, double m43, double m44) :
+      AbstractHomography (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
+  {
+
+  }
+
   Homography::~Homography ()
   {
   }
@@ -1292,6 +1355,15 @@ namespace djnn
       Backend::instance ()->load_homography (this, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43,
                                              m44);
     }
+  }
+
+  Process*
+  Homography::clone ()
+  {
+    return new Homography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m14->get_value (),
+                           _m21->get_value (), _m22->get_value (), _m23->get_value (), _m24->get_value (),
+                           _m31->get_value (), _m32->get_value (), _m33->get_value (), _m34->get_value (),
+                           _m41->get_value (), _m42->get_value (), _m43->get_value (), _m44->get_value ());
   }
 
   GradientHomography::GradientHomography (Process *p, const string &n, double m11, double m12, double m13, double m21,
