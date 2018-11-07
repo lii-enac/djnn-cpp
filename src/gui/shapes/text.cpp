@@ -40,7 +40,7 @@ namespace djnn
     _height = new IntProperty (this, "height", 0);
     _encoding = new IntProperty (this, "encoding", djnUtf8);
     _text = new TextProperty (this, "text", text);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _update_size = new TextSizeAction (this, "size_action", this);
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
@@ -84,7 +84,7 @@ namespace djnn
       code = djnAscii;
     _encoding = new IntProperty (this, "encoding", code);
     _text = new TextProperty (this, "text", text);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _update_size = new TextSizeAction (this, "size_action", this);
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();

@@ -54,7 +54,7 @@ namespace djnn
     _r = new DoubleProperty (this, "r", r);
     _g = new DoubleProperty (this, "g", g);
     _b = new DoubleProperty (this, "b", b);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
@@ -130,7 +130,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _rule = new IntProperty (this, "rule", rule);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     Process::finalize ();
@@ -149,7 +149,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _rule = new IntProperty (this, "rule", rule);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cr = new Coupling (_rule, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     Process::finalize ();
@@ -230,7 +230,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _path = new TextProperty (this, "path", path);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cp = new Coupling (_path, ACTIVATION, update, ACTIVATION);
     _cp->disable ();
     Process::finalize ();
@@ -283,7 +283,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _alpha = new DoubleProperty (this, "a", alpha);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_alpha, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
     Process::finalize ();
@@ -350,7 +350,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _width = new DoubleProperty (this, "width", width);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cw = new Coupling (_width, ACTIVATION, update, ACTIVATION);
     _cw->disable ();
     Process::finalize ();
@@ -403,7 +403,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _cap = new IntProperty (this, "cap", cap);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
     _cc->disable ();
     Process::finalize ();
@@ -423,7 +423,7 @@ namespace djnn
       AbstractStyle ()
   {
     _cap = new IntProperty (this, "cap", cap);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
     _cc->disable ();
   }
@@ -474,7 +474,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _join = new IntProperty (this, "join", join);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
     _cj->disable ();
     Process::finalize ();
@@ -493,7 +493,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _join = new IntProperty (this, "join", join);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cj = new Coupling (_join, ACTIVATION, update, ACTIVATION);
     _cj->disable ();
     Process::finalize ();
@@ -545,7 +545,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _limit = new IntProperty (this, "limit", limit);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cl = new Coupling (_limit, ACTIVATION, update, ACTIVATION);
     _cl->disable ();
     Process::finalize ();
@@ -631,7 +631,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _offset = new DoubleProperty (this, "offset", offset);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _co = new Coupling (_offset, ACTIVATION, update, ACTIVATION);
     _co->disable ();
     Process::finalize ();
@@ -693,7 +693,7 @@ namespace djnn
     _b = new DoubleProperty (this, "b", b);
     _a = new DoubleProperty (this, "a", a);
     _offset = new DoubleProperty (this, "offset", offset);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
@@ -715,7 +715,7 @@ namespace djnn
     _b = new DoubleProperty (this, "b", b);
     _a = new DoubleProperty (this, "a", a);
     _offset = new DoubleProperty (this, "offset", offset);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
     _cr->disable ();
     _cg = new Coupling (_g, ACTIVATION, update, ACTIVATION);
@@ -786,7 +786,7 @@ namespace djnn
     _coords = new IntProperty (this, "coords", fc);
     _transforms = new List (this, "transforms");
     _stops = new List (this, "stops");
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
@@ -800,7 +800,7 @@ namespace djnn
     _coords = new IntProperty (this, "coords", fc);
     _transforms = new List (this, "transforms");
     _stops = new List (this, "stops");
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
@@ -846,7 +846,7 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     _x2 = new DoubleProperty (this, "x2", x2);
     _y2 = new DoubleProperty (this, "y2", y2);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
     _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
@@ -867,7 +867,7 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     _x2 = new DoubleProperty (this, "x2", x2);
     _y2 = new DoubleProperty (this, "y2", y2);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
     _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
@@ -886,7 +886,7 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     _x2 = new DoubleProperty (this, "x2", x2);
     _y2 = new DoubleProperty (this, "y2", y2);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
     _cx1->disable ();
     _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
@@ -1017,7 +1017,7 @@ namespace djnn
     _r = new DoubleProperty (this, "r", r);
     _fx = new DoubleProperty (this, "fx", fx);
     _fy = new DoubleProperty (this, "fy", fy);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
     _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
@@ -1040,7 +1040,7 @@ namespace djnn
     _r = new DoubleProperty (this, "r", r);
     _fx = new DoubleProperty (this, "fx", fx);
     _fy = new DoubleProperty (this, "fy", fy);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
     _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
@@ -1062,7 +1062,7 @@ namespace djnn
     _r = new DoubleProperty (this, "r", r);
     _fx = new DoubleProperty (this, "fx", fx);
     _fy = new DoubleProperty (this, "fy", fy);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
     _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
@@ -1193,7 +1193,7 @@ namespace djnn
   void
   AbstractGradient::update ()
   {
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     if (_spread != (IntProperty*) find_component ("spread")) {
       delete _cs;
       delete _spread;
@@ -1220,7 +1220,7 @@ namespace djnn
   LinearGradient::update ()
   {
     AbstractGradient::update ();
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     if (_x1 != (DoubleProperty*) find_component ("x1")) {
       delete _cx1;
       delete _x1;
@@ -1251,7 +1251,7 @@ namespace djnn
   RadialGradient::update ()
   {
     AbstractGradient::update ();
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     if (_cx != (DoubleProperty*) find_component ("cx")) {
       delete _ccx;
       delete _cx;
@@ -1289,7 +1289,7 @@ namespace djnn
   {
     _unit = new IntProperty (this, "unit", unit);
     _size = new DoubleProperty (this, "size", size);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
     _cu->disable ();
     _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
@@ -1302,7 +1302,7 @@ namespace djnn
   {
     _unit = new IntProperty (this, "unit", unit);
     _size = new DoubleProperty (this, "size", size);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cu = new Coupling (_unit, ACTIVATION, update, ACTIVATION);
     _cu->disable ();
     _cs = new Coupling (_size, ACTIVATION, update, ACTIVATION);
@@ -1381,7 +1381,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _weight = new IntProperty (this, "weight", weight);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cw = new Coupling (_weight, ACTIVATION, update, ACTIVATION);
     _cw->disable ();
     Process::finalize ();
@@ -1437,7 +1437,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _style = new IntProperty (this, "style", style);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     Process::finalize ();
@@ -1456,7 +1456,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _style = new IntProperty (this, "style", style);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cs = new Coupling (_style, ACTIVATION, update, ACTIVATION);
     _cs->disable ();
     Process::finalize ();
@@ -1512,7 +1512,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _family = new TextProperty (this, "family", family);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cf = new Coupling (_family, ACTIVATION, update, ACTIVATION);
     _cf->disable ();
     Process::finalize ();
@@ -1568,7 +1568,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _anchor = new IntProperty (this, "anchor", anchor);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
     Process::finalize ();
@@ -1587,7 +1587,7 @@ namespace djnn
       AbstractStyle (p, n)
   {
     _anchor = new IntProperty (this, "anchor", anchor);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_anchor, ACTIVATION, update, ACTIVATION);
     Process::finalize ();
   }

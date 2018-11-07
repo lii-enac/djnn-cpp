@@ -29,7 +29,7 @@ namespace djnn
     _cy = new DoubleProperty (this, "cy", cy);
     _rx = new DoubleProperty (this, "rx", rx);
     _ry = new DoubleProperty (this, "ry", ry);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
     _ccx->disable ();
     _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);

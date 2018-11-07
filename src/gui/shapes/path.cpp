@@ -31,7 +31,7 @@ namespace djnn
     }
     _x = new DoubleProperty (this, "x", x);
     _y = new DoubleProperty (this, "y", y);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -45,7 +45,7 @@ namespace djnn
   {
     _x = new DoubleProperty (this, "x", x);
     _y = new DoubleProperty (this, "y", y);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -140,7 +140,7 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     _x1 = new DoubleProperty (this, "x1", x1);
     _y1 = new DoubleProperty (this, "y1", y1);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -160,7 +160,7 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     _x1 = new DoubleProperty (this, "x1", x1);
     _y1 = new DoubleProperty (this, "y1", y1);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -235,7 +235,7 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     _x2 = new DoubleProperty (this, "x2", x2);
     _y2 = new DoubleProperty (this, "y2", y2);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -261,7 +261,7 @@ namespace djnn
     _y1 = new DoubleProperty (this, "y1", y1);
     _x2 = new DoubleProperty (this, "x2", x2);
     _y2 = new DoubleProperty (this, "y2", y2);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -355,7 +355,7 @@ namespace djnn
     _swfl = new DoubleProperty (this, "swfl", swfl);
     _rx = new DoubleProperty (this, "rx", rx);
     _ry = new DoubleProperty (this, "ry", ry);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -384,7 +384,7 @@ namespace djnn
     _swfl = new DoubleProperty (this, "swfl", swfl);
     _rx = new DoubleProperty (this, "rx", rx);
     _ry = new DoubleProperty (this, "ry", ry);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);

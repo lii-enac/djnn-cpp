@@ -27,7 +27,7 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     _width = new DoubleProperty (this, "width", w);
     _height = new DoubleProperty (this, "height", h);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
@@ -47,7 +47,7 @@ namespace djnn
     _y = new DoubleProperty (this, "y", y);
     _width = new DoubleProperty (this, "width", w);
     _height = new DoubleProperty (this, "height", h);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);

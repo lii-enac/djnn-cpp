@@ -14,11 +14,12 @@
 
 #include "gui.h"
 #include "backend.h"
-
+#include "../core/syshook/main_loop.h"
 namespace djnn
 {
 
   static bool __module_initialized = false;
+  Process *DrawingRefreshManager;
 
   void
   init_gui () {
@@ -31,6 +32,8 @@ namespace djnn
 
       Backend::init ();
       UpdateDrawing::init ();
+      DrawingRefreshManager = UpdateDrawing::instance ();
+      MainLoop::instance ().add_background_process (DrawingRefreshManager);
       init_svg_parser ();
     }
   }
