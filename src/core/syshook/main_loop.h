@@ -43,7 +43,7 @@ namespace djnn
     }
 
     static ExternalSource * another_source_wants_to_be_mainloop;
-
+    void add_background_process (Process *p) { _background_processes.push_back (p); }
   protected:
 
     // Process
@@ -70,6 +70,7 @@ namespace djnn
     static std::once_flag onceFlag;
     // MainLoop should be created *before* any other external-source (is activated ?) -- or not ?
     MainLoop ();
+    vector<Process*> _background_processes;
   };
 
 }

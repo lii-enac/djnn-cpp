@@ -14,6 +14,9 @@ namespace djnn {
     void
     MainLoop::activate ()
     {
+      for (auto p: _background_processes) {
+        p->activation ();
+      }
       if (another_source_wants_to_be_mainloop) {
         //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
