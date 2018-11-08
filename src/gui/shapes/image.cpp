@@ -53,7 +53,7 @@ namespace djnn
     _height = new DoubleProperty (this, "height", h);
     _path = new TextProperty (this, "path", path);
     set_cache (nullptr);
-    UpdateDrawing *update = UpdateDrawing::instance ();
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
     _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
