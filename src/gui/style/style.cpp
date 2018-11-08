@@ -409,6 +409,16 @@ namespace djnn
     Process::finalize ();
   }
 
+  OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, int cap) :
+      AbstractStyle (p, n)
+  {
+    _cap = new IntProperty (this, "cap", cap);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    _cc = new Coupling (_cap, ACTIVATION, update, ACTIVATION);
+    _cc->disable ();
+    Process::finalize ();
+  }
+
   OutlineCapStyle::OutlineCapStyle (djnCapStyle cap) :
       AbstractStyle ()
   {
