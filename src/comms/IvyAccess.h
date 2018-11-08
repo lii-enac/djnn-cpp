@@ -52,7 +52,7 @@ namespace djnn
 
   public:
     IvyAccess (Process *p, const std::string& n, 
-      const std::string& bus="224.1.2.3:2010", const std::string& appname="NO_NAME", const std::string& ready="READY");
+      const std::string& bus="224.1.2.3:2010", const std::string& appname="NO_NAME", const std::string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
 
