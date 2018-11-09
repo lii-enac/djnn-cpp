@@ -83,4 +83,10 @@ namespace djnn
   {
     cout << _name << " [ " << value << " ]";
   }
+
+  Process*
+  IntProperty::clone ()
+  {
+    return new IntProperty (value);
+  }
 }

@@ -76,4 +76,10 @@ namespace djnn
   TextProperty::dump (int level) {
     cout << _name << " [ " << value << " ]" ;
   }
+
+  Process* 
+  TextProperty::clone ()
+  {
+    return new TextProperty (value);
+  }
 }

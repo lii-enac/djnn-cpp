@@ -102,4 +102,10 @@ namespace djnn
   {
     cout << _name << " [ " << value << " ]";
   }
+
+  Process* 
+  BoolProperty::clone () 
+  {
+    return new BoolProperty (value);
+  }
 }

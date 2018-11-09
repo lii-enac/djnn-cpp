@@ -150,6 +150,16 @@ namespace djnn
     ComponentObserver::instance ().end_draw ();
   }
 
+  Process*
+  Container::clone ()
+  {
+    Process* clone = new Container ();
+    for (auto c : _children) {
+      clone->add_child (c->clone (), c->get_name ());
+    }
+    return clone;
+  }
+
   void
   Container::deactivate ()
   {

@@ -24,6 +24,7 @@ namespace djnn {
     Blank () : Process () {}
     Blank (Process* parent, string name) : Process (parent, name) { Process::finalize (); }
     virtual ~Blank () {};
+    Process* clone () override;
   protected:
     void pre_activate () override {}
     void activate () override { _activation_state = activated; }

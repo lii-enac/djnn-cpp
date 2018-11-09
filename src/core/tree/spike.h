@@ -25,6 +25,7 @@ namespace djnn {
     Spike (Process* parent, string name) : Process (parent, name) { _model = true; Process::finalize (); };
     virtual ~Spike () {};
     void serialize (const string& format) override;
+    Process* clone () override;
   protected:
     void pre_activate () override;
     void post_activate () override;

@@ -50,4 +50,10 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+
+  Process* 
+  Spike::clone ()
+  {
+    return new Spike ();
+  }
 }

@@ -35,6 +35,7 @@ namespace djnn {
 
     void dump (int level=0) override;
     void serialize (const string& format) override;
+    Process* clone () override;
   private:
     double value;
   };

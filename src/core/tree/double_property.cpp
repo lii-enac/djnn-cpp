@@ -90,4 +90,9 @@ namespace djnn
   {
     cout << _name << " [ " << value << " ]";
   }
+
+  Process* DoubleProperty::clone ()
+  {
+    return new DoubleProperty (value);
+  }
 }

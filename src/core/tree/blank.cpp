@@ -32,4 +32,10 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+
+  Process* 
+  Blank::clone () 
+  {
+  	return new Blank ();
+  }
 }

@@ -72,4 +72,10 @@ namespace djnn
   RefProperty::dump (int level) {
     cout << _name << " [ " << value << " ]" ;
   }
+
+  Process* 
+  RefProperty::clone ()
+  {
+    return new RefProperty (value);
+  }
 }
