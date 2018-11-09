@@ -81,10 +81,12 @@ static int ParsePoints(Process** e, const char* v) {
 		vv = p;
 
 		/* skip comma and separating white space */
+		while (*vv == ' ' || *vv == '\t' || *vv == '\n' || *vv == '\r')
+			++vv;
 		if (*vv == ',')
 			++vv;
-		else
-			goto error;
+		//else
+		//	goto error;
 		while (*vv == ' ' || *vv == '\t' || *vv == '\n' || *vv == '\r')
 			++vv;
 
