@@ -547,10 +547,20 @@ SVG_Utils::djn__SVGParseColor (unsigned *r, unsigned *g, unsigned *b, const char
   while (*v == ' ' ||  *v == '\t' || *v == '\n' || *v == '\r')
     v++;
   if (*v == '#') {
-    unsigned rgb = strtoul (v+1, 0, 16);
-    *r = (rgb & 0xff0000) >> 16;
-    *g = (rgb & 0x00ff00) >> 8;
-    *b = (rgb & 0x0000ff);
+    char* endptr;
+    unsigned rgb = strtoul (v+1, &endptr, 16);
+    if(endptr-(v+1)==6) {
+       *r = (rgb & 0xff0000) >> 16;
+       *g = (rgb & 0x00ff00) >> 8;
+       *b = (rgb & 0x0000ff);
+    } else if (endptr-(v+1)==3) {
+       *r = (rgb & 0xf00) >> 4;
+       *g = (rgb & 0x0f0) >> 0;
+       *b = (rgb & 0x00f) << 4;
+    } else {
+      fprintf (stderr, "invalid color %s\n", v);
+      return 0;
+    }
     return 1;
 
   } else if (strncmp (v, "rgb(", 4) == 0) {
