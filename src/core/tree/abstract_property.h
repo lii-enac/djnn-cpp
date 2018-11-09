@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -34,6 +35,7 @@ namespace djnn {
     virtual void set_value (bool v, bool propagate) = 0;
     virtual void set_value (Process* v, bool propagate) = 0;
     virtual void set_value (const string &v, bool propagate) = 0;
+    virtual void set_value (const char* v, bool propagate) = 0;
   protected:
     PropertyType _type;
     void post_activate () { _activation_state = deactivated; };
