@@ -28,6 +28,7 @@ namespace djnn
     SVGHolder (Process *p, const std::string& n) : Container (p, n), _gobj (nullptr) { Process::finalize (); }
     SVGHolder () : Container (), _gobj (nullptr) {}
     virtual ~SVGHolder () {}
+    Process* clone () override;
     Process* find_component (const string &path) override;
     void set_gobj (Process* gobj) { _gobj = gobj; }
   private:

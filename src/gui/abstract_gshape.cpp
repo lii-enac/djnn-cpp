@@ -31,6 +31,20 @@ namespace djnn
     return p;
   }
 
+  Process*
+  SVGHolder::clone ()
+  {
+    SVGHolder* newh = new SVGHolder ();
+
+    for (auto c : _children) {
+      newh->add_child (c->clone (), c->get_name ());
+    }
+
+    newh->_gobj = _children.back ();
+
+    return newh;
+  }
+
   Touch::Touch (Process *p, const string &n) :
       Process (p, n), _shape (nullptr)
   {
