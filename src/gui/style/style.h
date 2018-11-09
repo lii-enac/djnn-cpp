@@ -362,10 +362,12 @@ namespace djnn
   {
   public:
     RefLinearGradient (Process *p, const std::string &n, LinearGradient *lg);
+    RefLinearGradient (LinearGradient *lg);
     virtual ~RefLinearGradient () {};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     LinearGradient *_lg;
   };
@@ -399,10 +401,12 @@ namespace djnn
   {
   public:
     RefRadialGradient (Process *p, const std::string &n, RadialGradient *rg);
+    RefRadialGradient (RadialGradient *rg);
     virtual ~RefRadialGradient () {};
     void activate () override;
     void deactivate () override;
     void draw () override;
+    Process* clone () override;
   private:
     RadialGradient* _rg;
   };

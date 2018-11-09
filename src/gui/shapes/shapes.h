@@ -454,7 +454,7 @@ namespace djnn
   public:
     Group (Process *p, const string &n);
     Group ();
-    virtual ~Group ();
+    virtual ~Group () override;
     Window* frame () { return _gobj->frame ();}
     void activate () override;
     void deactivate () override;

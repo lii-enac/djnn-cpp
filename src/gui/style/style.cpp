@@ -814,8 +814,7 @@ namespace djnn
     if (_spread) { delete _spread; _spread = nullptr;}
     if (_coords) { delete _coords; _coords = nullptr;}
     if (_transforms) { delete _transforms; _transforms = nullptr;}
-    //TODO: why "delete _stops" is commented ? 11.2018
-    //if (_stops) { delete _stops; _stops = nullptr;}
+    if (_stops) { delete _stops; _stops = nullptr;}
   }
 
   void
@@ -904,10 +903,10 @@ namespace djnn
     LinearGradient *g = new LinearGradient (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value (),
 					    spread ()->get_value (), coords ()->get_value ());
     for (auto s : _stops->children ()) {
-      g->stops ()->add_child (s->clone (), "");
+      g->stops ()->add_child (s->clone (), s->get_name ());
     }
     for (auto t : _transforms->children ()) {
-      g->transforms ()->add_child (t->clone (), "");
+      g->transforms ()->add_child (t->clone (), t->get_name ());
     }
     return g;
   }
@@ -968,6 +967,21 @@ namespace djnn
     Process::finalize ();
   }
 
+  RefLinearGradient::RefLinearGradient (LinearGradient *lg) :
+      AbstractStyle (), _lg (lg)
+  {
+    _lg->set_activation_flag (activated);
+    _lg->transforms ()->set_activation_flag (activated);
+    for (auto t : _lg->transforms ()->children ()) {
+      t->set_activation_flag (activated);
+    }
+    _lg->stops ()->set_activation_flag (activated);
+    for (auto s : _lg->stops ()->children ()) {
+      s->set_activation_flag (activated);
+    }
+    Process::finalize ();
+  }
+
   void
   RefLinearGradient::activate ()
   {
@@ -986,6 +1000,12 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_linear_gradient (_lg);
     }
+  }
+
+  Process*
+  RefLinearGradient::clone ()
+  {
+    return new RefLinearGradient (_lg);
   }
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
@@ -1061,10 +1081,10 @@ namespace djnn
     RadialGradient *rg = new RadialGradient (_cx->get_value (), _cy->get_value (), _r->get_value (), _fx->get_value (),
 					     _fy->get_value (), spread ()->get_value (), coords ()->get_value ());
     for (auto s : _stops->children ()) {
-      rg->stops ()->add_child (s->clone (), "");
+      rg->stops ()->add_child (s->clone (), s->get_name ());
     }
     for (auto t : _transforms->children ()) {
-      rg->transforms ()->add_child (t->clone (), "");
+      rg->transforms ()->add_child (t->clone (), t->get_name ());
     }
     return rg;
   }
@@ -1129,6 +1149,21 @@ namespace djnn
     Process::finalize ();
   }
 
+  RefRadialGradient::RefRadialGradient (RadialGradient *rg) :
+      AbstractStyle (), _rg (rg)
+  {
+    _rg->set_activation_flag (activated);
+    _rg->transforms ()->set_activation_flag (activated);
+    for (auto t : _rg->transforms ()->children ()) {
+      t->set_activation_flag (activated);
+    }
+    _rg->stops ()->set_activation_flag (activated);
+    for (auto s : _rg->stops ()->children ()) {
+      s->set_activation_flag (activated);
+    }
+    Process::finalize ();
+  }
+
   void
   RefRadialGradient::activate ()
   {
@@ -1147,6 +1182,12 @@ namespace djnn
     if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (_rg);
     }
+  }
+
+  Process*
+  RefRadialGradient::clone ()
+  {
+    return new RefRadialGradient (_rg);
   }
 
   void
