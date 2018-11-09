@@ -83,6 +83,7 @@ namespace djnn
         ::this_thread::sleep_for (duration); // blocking call
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
+          _activation_state = deactivated;
           _end->notify_activation (); // propagating
           Graph::instance ().exec (); // executing
         }
@@ -90,7 +91,6 @@ namespace djnn
     } catch (exception& e) {
       std::cerr << e.what() << std::endl;
     }
-    _activation_state = deactivated;
     //deactivation ();
   }
 
