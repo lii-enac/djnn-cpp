@@ -166,8 +166,8 @@ namespace djnn
 
   FillRule::~FillRule ()
   {
-    if (_rule) { delete _rule; _rule = nullptr;}
     if (_cr) { delete _cr; _cr = nullptr;}
+    if (_rule) { delete _rule; _rule = nullptr;}
   }
 
   void
