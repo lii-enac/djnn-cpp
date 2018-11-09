@@ -46,8 +46,9 @@ namespace djnn
   Container::~Container ()
   {
     int sz = _children.size ();
-    for (int i = sz - 1; i >= 0; i--)
-      delete _children[i];
+    for (int i = sz - 1; i >= 0; i--) {
+      if (_children[i]) {delete _children[i]; _children[i] = nullptr;};
+    }
   }
 
   void
