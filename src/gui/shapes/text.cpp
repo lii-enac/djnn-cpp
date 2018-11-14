@@ -228,6 +228,7 @@ namespace djnn
     if (_cfweight)
       _cfweight->enable ();
     _ctext_size->enable ();
+    _update_size->activation ();
   }
 
   void
