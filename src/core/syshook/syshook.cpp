@@ -24,7 +24,7 @@
 namespace djnn
 {
 
-  static std::mutex global_mutex;
+  static std::mutex* global_mutex;
   //thread_local bool _please_stop;
   
   void
@@ -33,9 +33,9 @@ namespace djnn
 #if DBG_MUTEX
     std::cerr << debug << std::flush;
 #endif
-    global_mutex.lock ();
+    global_mutex->lock ();
 #if DBG_MUTEX
-    std::cerr << " GOT " << std::endl << std::flush;
+    std::cerr << " GOT " << debug << std::endl << std::flush;
 #endif
   }
 
@@ -45,9 +45,9 @@ namespace djnn
 #if DBG_MUTEX
     std::cerr << debug << std::flush;
 #endif
-    global_mutex.unlock ();
+    global_mutex->unlock ();
 #if DBG_MUTEX
-    std::cerr << " ROL " << std::endl << std::flush;
+    std::cerr << " ROL " << debug << std::endl << std::flush;
 #endif
   }
 
@@ -59,6 +59,7 @@ namespace djnn
   MainLoop::instance ()
   {
     std::call_once (MainLoop::onceFlag, [] () {
+      global_mutex = new std::mutex ();      
       _instance.reset(new MainLoop);
     });
 

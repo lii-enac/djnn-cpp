@@ -106,7 +106,7 @@ namespace djnn
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
           _elapsed->set_value (elapsedTime, true);
           _tick->activation (); // propagating
-          Graph::instance ().exec (); // executing
+          GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }

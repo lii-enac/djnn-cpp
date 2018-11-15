@@ -75,6 +75,9 @@ namespace djnn
   QtMainloop::run ()
   {
     //set_please_stop (false);
+    
+    /* slot_about_to_block will be called ASA qapp->exec */
+    djnn::get_exclusive_access (DBG_GET);
 
     _qapp->exec ();
   }
@@ -89,7 +92,7 @@ namespace djnn
   QtMainloop::slot_for_about_to_block ()
   {
     if (_please_exec) {
-      Graph::instance ().exec ();
+      GRAPH_EXEC;
       _please_exec = false;
     }
     for (auto w : _windows) {

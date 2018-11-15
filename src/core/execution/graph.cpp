@@ -19,10 +19,14 @@
 #include <algorithm>
 #include <iostream>
 
+#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+
 namespace djnn
 {
   std::shared_ptr<Graph> Graph::_instance;
   std::once_flag Graph::onceFlag;
+
+  static std::mutex graph_mutex;
 
   enum
   {
@@ -189,8 +193,8 @@ namespace djnn
   {
     for (auto v : _sorted_vertices) {
       if (v->get_component()->get_parent())
-        cout << v->get_component()->get_parent()->get_name () << "/";
-      cout << v->get_component ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
+        cerr << v->get_component()->get_parent()->get_name () << "/";
+      cerr << v->get_component ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
     }
   }
 
@@ -273,11 +277,16 @@ namespace djnn
   void
   Graph::exec ()
   {
-    for (auto v : _sorted_vertices) {
-      if (!_sorted)
-        break;
-      if (v->is_invalid ())
-        continue;
+    //graph_mutex.lock ();
+
+    bool is_end = false;
+    while (!is_end) {
+      is_end = true;
+      for (auto v : _sorted_vertices) {
+      	if (!_sorted)
+      	  break;
+        if (v->is_invalid ())
+          continue;
       int action = v->get_component ()->get_activation_flag ();
       switch (action)
         {
@@ -294,7 +303,10 @@ namespace djnn
     }
     if (!_sorted) {
       sort ();
-      exec ();
+      is_end = false;
     }
+   }
+   //graph_mutex.unlock ();
   }
+
 }

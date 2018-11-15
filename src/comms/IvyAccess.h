@@ -56,16 +56,8 @@ namespace djnn
     
     virtual ~IvyAccess ();
 
-    void set_arriving(string v) {
-      _arriving->set_value (v, true);
-      Graph::instance().exec();
-    }
-
-    void set_leaving(string v) {
-      _leaving->set_value (v, true);
-      Graph::instance().exec();
-    }
-
+    void set_arriving(string v);
+    void set_leaving(string v);
   protected:
     void activate () override;
     void deactivate () override;

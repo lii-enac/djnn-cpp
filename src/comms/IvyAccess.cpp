@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 using namespace std;
 
@@ -148,8 +149,7 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   cout << "---------------------" << endl << endl;
 #endif
  
-  //cout << "------- EXEC -------" << endl ;  
-  djnn::Graph::instance().exec();
+  //GRAPH_EXEC;
 
   djnn::release_exclusive_access (DBG_REL);
 }
@@ -227,38 +227,81 @@ IvyAccess::~IvyAccess ()
    Graph::instance ().remove_edge (_parent->state_dependency (), _out_a);
 }
 
+void IvyAccess::set_arriving(string v) {
+  _arriving->set_value (v, true);
+
+  djnn::get_exclusive_access (DBG_GET);
+  GRAPH_EXEC;
+  djnn::release_exclusive_access (DBG_REL);
+}
+
+void IvyAccess::set_leaving(string v) {
+  _leaving->set_value (v, true);
+
+  djnn::get_exclusive_access (DBG_GET);
+  GRAPH_EXEC;
+  djnn::release_exclusive_access (DBG_REL);
+}
+
 void
 IvyAccess::activate ()
 {
-    /* launche thread */
+  please_stop ();
+
+  /* launche thread */
   start_thread ();
-
-    /* enable coupling */
-  _out_c->enable();
-
 }
 
 void
 IvyAccess::deactivate ()
 {
-    /* disable coupling */
-  _out_c->disable();
-
-    /* Stop IvyAccess */
-  IvyStop();
-
   please_stop();
+
+  /* requeste Ivy to stop */
+  IvyStop();
+}
+
+static void  __beforeSelect (void *data){
+  djnn::get_exclusive_access (DBG_GET);
+  GRAPH_EXEC;    
+  djnn::release_exclusive_access (DBG_REL);
+}
+
+static void  __afterSelect (void *data){
+  //djnn::get_exclusive_access (DBG_REL);
 }
 
 void
 IvyAccess::run ()
 {
-  IvyInit (_appname.c_str(), _ready_message.c_str(), __on_ivy_arriving_leaving_agent, this, 0, 0);
+  set_please_stop (false);
+  try {
 
-  IvyStart(_bus.c_str());
+      /* enable coupling */
+    //djnn::get_exclusive_access (DBG_GET);
+    _out_c->enable();
+    //djnn::release_exclusive_access (DBG_REL);
 
-  /* start Ivy mainloop */
-  IvyMainLoop ();
+    IvyInit (_appname.c_str(), _ready_message.c_str(), __on_ivy_arriving_leaving_agent, this, 0, 0);
+
+      /* get exclusive_access - before select */
+    IvySetBeforeSelectHook(__beforeSelect,0);
+      /* release exclusive_access - after select */
+    IvySetAfterSelectHook(__afterSelect,0);
+
+    IvyStart(_bus.c_str());
+    while (!get_please_stop ()) {
+      /* start Ivy mainloop */
+      IvyMainLoop ();
+    }
+    /* disable coupling */
+    //djnn::get_exclusive_access (DBG_GET);
+    _out_c->disable();
+    //djnn::release_exclusive_access (DBG_REL); 
+
+  } catch (exception& e) {
+    warning (nullptr, e.what());
+  }
 }
 
 Process*

@@ -35,7 +35,7 @@ namespace djnn {
   void
   IOFD::deactivate ()
   {
-    set_please_stop (true);
+    please_stop ();
   }
 
   void
@@ -55,7 +55,7 @@ namespace djnn {
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           _readable.get()->activation (); // propagating
-          Graph::instance ().exec (); // executing
+         GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }

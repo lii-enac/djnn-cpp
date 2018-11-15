@@ -85,7 +85,7 @@ namespace djnn
         if (!get_please_stop ()) {
           _activation_state = deactivated;
           _end->notify_activation (); // propagating
-          Graph::instance ().exec (); // executing
+          GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     } catch (exception& e) {

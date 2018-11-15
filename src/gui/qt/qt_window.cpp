@@ -187,7 +187,7 @@ namespace djnn
     _window->width ()->set_value (w, true);
 
     _updating = false;
-    Graph::instance ().exec ();
+    QtMainloop::instance ().set_please_exec (true);
     _qtwindow->_please_update = false;
   }
 

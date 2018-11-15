@@ -13,3 +13,12 @@ lib_srcs += $(shell find src/core/xml -name "*.cpp")
 ifeq ($(os),$(filter $(os),Darwin Linux))
 lib_srcs += src/core/syshook/unix/iofd.cpp
 endif
+
+# ifeq ($(os),MINGW64_NT-10.0)
+# ifeq ($(graphics),QT)
+# QTLIBS = Qt5Core
+# moc := moc
+# lib_cppflags += -I. -I$(LOCALDIR)/include $(shell pkg-config --cflags $(QTLIBS))
+# lib_ldflags += $(shell pkg-config --libs $(QTLIBS)) 
+# endif
+# endif
