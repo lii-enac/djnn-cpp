@@ -38,7 +38,7 @@ namespace djnn
   }
 
   QtMainloop::QtMainloop () :
-      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
+      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false), i_got_lock_first_run(false)
   {
     MainLoop::another_source_wants_to_be_mainloop = this;
     argc = 0;
@@ -78,6 +78,7 @@ namespace djnn
     
     /* slot_about_to_block will be called ASA qapp->exec */
     djnn::get_exclusive_access (DBG_GET);
+    i_got_lock_first_run = true;
 
     _qapp->exec ();
   }
@@ -112,6 +113,11 @@ namespace djnn
     //QThread::currentThread()->setPriority(QThread::HighPriority);
     //QThread::currentThread()->setPriority(QThread::LowestPriority);
     
+    if(i_got_lock_first_run) {
+      i_got_lock_first_run = false;
+      djnn::release_exclusive_access (DBG_REL);
+    }
+
     if (!get_please_stop ()) {
       djnn::get_exclusive_access (DBG_GET);
       // now qt can call event method on windows
