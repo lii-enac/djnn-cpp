@@ -48,7 +48,7 @@ namespace djnn {
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
     	thread_t (&ExternalSource::private_run, this);
-
+#if 0
     	auto native_thread = _impl->_thread.native_handle();
 #if defined(__WIN32__)
     	//DBG;
@@ -64,6 +64,7 @@ namespace djnn {
     	if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
         	std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
     	}
+#endif
 #endif
     	
 	}
