@@ -1,11 +1,12 @@
 #include "external_source.h"
 
 #include <boost/thread/thread.hpp>
-
 //#include <thread>
+#include <pthread.h>
+#include <QThread.h>
+
 //#include <atomic>
 
-#include <pthread.h>
 
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -16,7 +17,8 @@
 
 namespace djnn {
 
-	typedef boost::thread thread_t;
+	//typedef boost::thread thread_t;
+    typedef QThread* thread_t;
 
 	class ExternalSource::Impl {
 	public:
@@ -25,7 +27,9 @@ namespace djnn {
 
 	ExternalSource::ExternalSource ()
     : _impl(new ExternalSource::Impl), _please_stop (false)
-    {}
+    {
+        _impl->_thread=nullptr;
+    }
 
     ExternalSource::~ExternalSource () {
       //please_stop ();
@@ -37,7 +41,8 @@ namespace djnn {
 	ExternalSource::please_stop ()
 	{
 		_please_stop = true;
-		_impl->_thread.interrupt();
+		//_impl->_thread.interrupt();
+        if(_impl->_thread) _impl->_thread->requestInterruption();
 	}
 
 	void
@@ -47,7 +52,11 @@ namespace djnn {
 		_impl->_thread =    
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
-    	thread_t (&ExternalSource::private_run, this);
+
+    	//thread_t (&ExternalSource::private_run, this);
+        QThread::create([this]() { this->ExternalSource::private_run();});
+        _impl->_thread->start();
+
 #if 0
     	auto native_thread = _impl->_thread.native_handle();
 #if defined(__WIN32__)

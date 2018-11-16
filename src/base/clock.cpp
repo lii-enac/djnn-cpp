@@ -23,7 +23,7 @@
 #include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp>
 
-
+//#include <QThread.h>
 #include <iostream>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
@@ -84,6 +84,7 @@ namespace djnn
   void
   Clock::run ()
   {
+//    QThread::currentThread()->setPriority(QThread::TimeCriticalPriority);
     struct timespec before;
     struct timespec after;
     set_please_stop (false);

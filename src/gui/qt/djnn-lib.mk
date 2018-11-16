@@ -16,26 +16,26 @@ QTGUI = $(FRAMEWORKDIR)/QtGui.framework
 QTCORE = $(FRAMEWORKDIR)/QtCore.framework
 
 #$(build_dir)/src/gui/qt/%.o: CXXFLAGS +=
-lib_cppflags = -I. \
+lib_cppflags += -I. \
 		-I$(LOCALDIR)/include -F$(FRAMEWORKDIR) \
 		-I$(QTWIDGETS)/Headers -I$(QTOPENGL)/Headers \
 		-I$(QTGUI)/Headers -I$(QTCORE)/Headers
-lib_ldflags = -F$(FRAMEWORKDIR) $(QTLIBS)
+lib_ldflags += -F$(FRAMEWORKDIR) $(QTLIBS)
 endif
 
 
 ifeq ($(os),Linux)
 QTLIBS = Qt5OpenGL Qt5Gui
 moc := moc
-lib_cppflags = -I. -I$(LOCALDIR)/include `pkg-config --cflags $(QTLIBS)`
-lib_ldflags = `pkg-config --libs $(QTLIBS)`
+lib_cppflags += -I. -I$(LOCALDIR)/include `pkg-config --cflags $(QTLIBS)`
+lib_ldflags += `pkg-config --libs $(QTLIBS)`
 endif
 
 
-$(build_dir)/src/gui/qt/moc_MyQWindow.cpp: src/gui/qt/my_qwindow.h src/gui/backend.h
-	$(moc) $< > $@
-
-lib_objs += $(build_dir)/src/gui/qt/moc_MyQWindow.o
-lib_srcgens += $(build_dir)/src/gui/qt/moc_MyQWindow.cpp
-lib_srcs += $(shell find src/gui/qt -name "*.cpp")
+ifeq ($(os),MINGW64_NT-10.0)
+QTLIBS = Qt5OpenGL Qt5Core
+moc := moc
+lib_cppflags += -I. -I$(LOCALDIR)/include $(shell pkg-config --cflags $(QTLIBS))
+lib_ldflags += $(shell pkg-config --libs $(QTLIBS)) 
+endif
 

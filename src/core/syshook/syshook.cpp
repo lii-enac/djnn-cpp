@@ -19,23 +19,28 @@
 #include <chrono>
 #include <iostream>
 
+#include <QThread.h>
+#include <QMutex.h>
+
 #define DBG_MUTEX 0
 
 namespace djnn
 {
+  //typedef std::mutex mutex_t;
+  typedef QMutex mutex_t;
 
-  static std::mutex* global_mutex;
+  static mutex_t* global_mutex;
   //thread_local bool _please_stop;
   
   void
   get_exclusive_access (const char * debug)
   {
 #if DBG_MUTEX
-    std::cerr << debug << std::flush;
+    //std::cerr << debug << " priority:" << QThread::currentThread()->priority() << std::flush;
 #endif
     global_mutex->lock ();
 #if DBG_MUTEX
-    std::cerr << " GOT " << debug << std::endl << std::flush;
+    std::cerr << " GOT " << debug << " priority:" << QThread::currentThread()->priority() << std::endl << std::flush;
 #endif
   }
 
@@ -43,11 +48,11 @@ namespace djnn
   release_exclusive_access (const char * debug)
   {
 #if DBG_MUTEX
-    std::cerr << debug << std::flush;
+    //std::cerr << debug << std::flush;
 #endif
     global_mutex->unlock ();
 #if DBG_MUTEX
-    std::cerr << " ROL " << debug << std::endl << std::flush;
+    //std::cerr << " ROL " << debug << std::endl << std::flush;
 #endif
   }
 
@@ -59,7 +64,7 @@ namespace djnn
   MainLoop::instance ()
   {
     std::call_once (MainLoop::onceFlag, [] () {
-      global_mutex = new std::mutex ();      
+      global_mutex = new mutex_t ();      
       _instance.reset(new MainLoop);
     });
 

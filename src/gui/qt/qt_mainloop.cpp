@@ -92,6 +92,7 @@ namespace djnn
   void
   QtMainloop::slot_for_about_to_block ()
   {
+    //DBG;
     if (_please_exec) {
       GRAPH_EXEC;
       _please_exec = false;
@@ -106,6 +107,7 @@ namespace djnn
   void
   QtMainloop::slot_for_awake ()
   {
+    //DBG;
     if(already_awake) {
       //DBG;
       return;
