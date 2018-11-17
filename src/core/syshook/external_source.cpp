@@ -3,7 +3,7 @@
 #include <boost/thread/thread.hpp>
 //#include <thread>
 #include <pthread.h>
-#include <QThread.h>
+#include <QThread>
 
 //#include <atomic>
 
@@ -15,20 +15,23 @@
 #include <windows.h>
 #endif
 
+    //typedef boost::thread thread_t;
+    typedef QThread* my_thread_t;
+    //typedef std::unique_ptr<QThread> my_thread_t;
+
+
 namespace djnn {
 
-	//typedef boost::thread thread_t;
-    typedef QThread* thread_t;
 
 	class ExternalSource::Impl {
 	public:
-    	thread_t _thread;
+    	my_thread_t _thread;
 	};
 
 	ExternalSource::ExternalSource ()
     : _impl(new ExternalSource::Impl), _please_stop (false)
     {
-        _impl->_thread=nullptr;
+        //_impl->_thread=nullptr;
     }
 
     ExternalSource::~ExternalSource () {
@@ -42,20 +45,29 @@ namespace djnn {
 	{
 		_please_stop = true;
 		//_impl->_thread.interrupt();
-        if(_impl->_thread) _impl->_thread->requestInterruption();
+        if(_impl->_thread) {
+            _impl->_thread->requestInterruption();
+        }
 	}
 
 	void
 	ExternalSource::start_thread ()
 	{
 		//DBG;
+        //delete _impl;
+        //auto prev_thread = _impl->_thread;
 		_impl->_thread =    
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
 
     	//thread_t (&ExternalSource::private_run, this);
-        QThread::create([this]() { this->ExternalSource::private_run();});
+        //std::make_unique<QThread>(
+        QThread::create([this]() { this->ExternalSource::private_run(); })
+        //)
+        ;
+        QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
         _impl->_thread->start();
+
 
 #if 0
     	auto native_thread = _impl->_thread.native_handle();
@@ -78,9 +90,70 @@ namespace djnn {
     	
 	}
 
+#if 0
+#if 0
+static const char* th_err(int errmsg)
+{
+    switch(errmsg) {
+        case ESRCH: return "No thread with the ID thread could be found"; break;
+        case EINVAL: return "policy is not a recognized policy, or param does not make sense for the policy"; break;
+        case EPERM: return ""; break;
+        default: return "unknown pthread error"; break;
+    }
+}
+#endif
+
+    void
+    ExternalSource::set_thread_priority ()
+    {
+#if 0 //defined(__WIN32__)
+        auto native_thread = _impl->_thread.native_handle();
+        std::cerr << native_thread << __EFL__;
+        //if(native_thread==-1) native_thread = 
+        //DBG;
+        int priority = GetThreadPriority(native_thread);
+        if(priority==THREAD_PRIORITY_ERROR_RETURN) {
+            std::cerr << "fail to GetThreadPriority " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
+        } else {
+            std::cerr << "thread priority: " << priority << __EFL__;
+            #if 1
+           auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
+           if(!b) {
+              std::cerr << "fail to SetThreadPriority " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
+           }
+        }
+        #endif
+#endif
+#if 0
+        sched_param sch;
+        int policy;
+        int err;
+        auto native_thread = pthread_self();
+        err=pthread_getschedparam(native_thread, &policy, &sch);
+        if (err) {
+            std::cerr << "Failed to getschedparam: " << th_err(err) << __EFL__;
+        } else {
+            std::cout << "thread priority: " << sch.sched_priority << __EFL__;
+            #if 0
+            sch.sched_priority = 20;
+            err=pthread_setschedparam(native_thread, SCHED_FIFO, &sch);
+            if (err) {
+                std::cerr << "Failed to setschedparam: " << th_err(err) << __FILE__ << ":" << __LINE__ << std::endl;;
+            }
+            #endif
+        }
+#endif
+#if 0
+    std::cerr << "qt thread priority " << QThread::currentThread()->priority () << __EFL__;
+    QThread::currentThread()->setPriority(QThread::HighestPriority); 
+    std::cerr << "qt thread priority " << QThread::currentThread()->priority () << __EFL__;
+#endif
+#endif
+
 	void
 	ExternalSource::private_run ()
 	{	
+        //set_thread_priority();
 		run();
 	}
 	
