@@ -1,23 +1,40 @@
 #include "external_source.h"
 
+#if 1 //defined(__WIN32__)
+#define DJNN_USE_QTHREAD 1
+#else
+#define DJNN_USE_BOOST_THREAD 1
+#endif
+
+#if DJNN_USE_BOOST_THREAD
 #include <boost/thread/thread.hpp>
-//#include <thread>
+typedef boost::thread djnn_thread_t;
+#endif
+
+#if DJNN_USE_CPP_THREAD
+#include <thread>
+typedef std::thread djnn_thread_t;
+#endif
+
+#if DJNN_USE_PTHREAD
 #include <pthread.h>
+#endif
+
+#if DJNN_USE_QTHREAD
 #include <QThread>
+typedef QThread* djnn_thread_t;
+#endif
 
 //#include <atomic>
 
+//#if defined(__WIN32__)
+//#include <windows.h>
+//#endif
+
+//typedef std::unique_ptr<QThread> my_thread_t;
 
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-
-#if defined(__WIN32__)
-#include <windows.h>
-#endif
-
-    //typedef boost::thread thread_t;
-    typedef QThread* my_thread_t;
-    //typedef std::unique_ptr<QThread> my_thread_t;
 
 
 namespace djnn {
@@ -25,13 +42,15 @@ namespace djnn {
 
 	class ExternalSource::Impl {
 	public:
-    	my_thread_t _thread;
+    	djnn_thread_t _thread;
 	};
 
 	ExternalSource::ExternalSource ()
     : _impl(new ExternalSource::Impl), _please_stop (false)
     {
-        _impl->_thread=nullptr;
+        #if DJNN_USE_QTHREAD
+        _impl->_thread = nullptr;
+        #endif
     }
 
     ExternalSource::~ExternalSource () {
@@ -44,10 +63,17 @@ namespace djnn {
 	ExternalSource::please_stop ()
 	{
 		_please_stop = true;
-		//_impl->_thread.interrupt();
+
+        #if DJNN_USE_BOOST_THREAD
+		_impl->_thread.interrupt();
+        #endif
+
+        #if DJNN_USE_QTHREAD
         if(_impl->_thread) {
             _impl->_thread->requestInterruption();
         }
+        #endif
+        
 	}
 
 	void
@@ -59,14 +85,18 @@ namespace djnn {
 		_impl->_thread =    
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
+        #if DJNN_USE_BOOST_THREAD
+    	djnn_thread_t (&ExternalSource::private_run, this);
+        #endif
 
-    	//thread_t (&ExternalSource::private_run, this);
+        #if DJNN_USE_QTHREAD
         //std::make_unique<QThread>(
         QThread::create([this]() { this->ExternalSource::private_run(); })
         //)
         ;
         QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
         _impl->_thread->start();
+        #endif
 
 
 #if 0
