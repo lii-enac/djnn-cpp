@@ -1,6 +1,6 @@
 #include "external_source.h"
 
-#if 1 //defined(__WIN32__)
+#if defined(__WIN32__)
 #define DJNN_USE_QTHREAD 1
 #else
 #define DJNN_USE_BOOST_THREAD 1

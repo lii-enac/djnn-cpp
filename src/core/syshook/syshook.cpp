@@ -14,22 +14,43 @@
 
 #include "main_loop.h"
 #include "syshook.h"
+
+
+#if defined(__WIN32__)
+#define DJNN_USE_QTHREAD 1
+#else
+#define DJNN_USE_BOOST_THREAD 1
+#endif
+
+#if DJNN_USE_BOOST_THREAD
+#include <boost/thread/mutex.hpp>
+typedef boost::mutex djnn_mutex_t;
+#endif
+
+#if DJNN_USE_CPP_THREAD
 #include <mutex>
+typedef std::thread djnn_mutex_t;
+#endif
+
+#if DJNN_USE_PTHREAD
+#include <pthread.h>
+#endif
+
+#if DJNN_USE_QTHREAD
+#include <QMutex>
+typedef QMutex djnn_mutex_t;
+#endif
+
 
 #include <chrono>
 #include <iostream>
-
-#include <QThread.h>
-#include <QMutex.h>
 
 #define DBG_MUTEX 0
 
 namespace djnn
 {
-  //typedef std::mutex mutex_t;
-  typedef QMutex mutex_t;
 
-  static mutex_t* global_mutex;
+  static djnn_mutex_t* global_mutex;
   //thread_local bool _please_stop;
   
   void
@@ -64,7 +85,7 @@ namespace djnn
   MainLoop::instance ()
   {
     std::call_once (MainLoop::onceFlag, [] () {
-      global_mutex = new mutex_t ();      
+      global_mutex = new djnn_mutex_t ();      
       _instance.reset(new MainLoop);
     });
 
