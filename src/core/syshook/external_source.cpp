@@ -31,13 +31,13 @@ namespace djnn {
 	ExternalSource::ExternalSource ()
     : _impl(new ExternalSource::Impl), _please_stop (false)
     {
-        //_impl->_thread=nullptr;
+        _impl->_thread=nullptr;
     }
 
     ExternalSource::~ExternalSource () {
       //please_stop ();
       //if ( _thread.joinable() ) _thread.join();
-    	delete _impl;
+      //delete _impl;
     }
 
 	void
