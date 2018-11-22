@@ -31,7 +31,7 @@ namespace djnn {
     void set_value (Process* v, bool propagate) override;
     void set_value (const std::string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
-
+    double get_double_value () override { return (double) value; }
     void dump (int level=0) override;
     void serialize (const string& format) override;
     Process* clone () override;

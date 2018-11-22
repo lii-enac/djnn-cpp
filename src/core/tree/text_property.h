@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "../error.h"
 #include "abstract_property.h"
 #include <string>
 
@@ -33,7 +34,16 @@ namespace djnn {
     void set_value (Process* v, bool propagate) override;
     void set_value (const string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
-
+    double get_double_value () override {
+      try {
+        double r = stof (value);
+        return r;
+      }
+      catch (const std::invalid_argument& ia) {
+        warning (this, "undefined double value for text property");
+        return 0;
+      }
+    }
     void dump (int level=0) override;
     void serialize (const string& format) override;
     Process* clone () override;

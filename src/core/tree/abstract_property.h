@@ -36,6 +36,7 @@ namespace djnn {
     virtual void set_value (Process* v, bool propagate) = 0;
     virtual void set_value (const string &v, bool propagate) = 0;
     virtual void set_value (const char* v, bool propagate) = 0;
+    virtual double get_double_value () = 0;
   protected:
     PropertyType _type;
     void post_activate () { _activation_state = deactivated; };
