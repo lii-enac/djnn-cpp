@@ -20,6 +20,7 @@
 #include "control/activator.h"
 #include "tree/component.h"
 #include "control/native_action.h"
+#include "control/native_expression_action.h"
 #include "tree/spike.h"
 #include "control/assignment.h"
 #include "tree/list.h"
