@@ -1,6 +1,6 @@
 We provide a Makefile that should work on MacOS (10.12+), Linux, Windows 10+.
 
----- LINUX -----
+---- LINUX -----  
 in a Terminal:
 
 sudo apt install git make  
@@ -9,8 +9,7 @@ cd djnn-cpp
 make install-pkgdeps  
 make -j4  
 
----- MACOS -----
-
+---- MACOS -----  
 install homebrew (https://brew.sh/)  
 then in a Terminal:
 
@@ -20,8 +19,7 @@ cd djnn-cpp
 make install-pkgdeps  
 make -j  
 
----- WINDOWS -----
-
+---- WINDOWS -----  
 install MSYS2 (https://www.msys2.org/)  
 then in an MSYS2 terminal:
 
@@ -35,7 +33,6 @@ cd djnn-cpp
 make -j
  
 ---- ALL PLATFORMS -----
-
 ivy bus -> https://www.eei.cena.fr/products/ivy/  
 
 Windows:
