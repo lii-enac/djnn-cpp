@@ -32,7 +32,7 @@ lib_ldflags += `pkg-config --libs $(QTLIBS)`
 endif
 
 
-ifeq ($(os),MINGW64_NT-10.0)
+ifeq ($(os),$(osmingw))
 QTLIBS = Qt5OpenGL Qt5Core
 moc := moc
 lib_cppflags += -I. -I$(LOCALDIR)/include $(shell pkg-config --cflags $(QTLIBS))

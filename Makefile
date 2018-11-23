@@ -46,6 +46,10 @@ crossp ?=
 #crossp := arm-none-eabi-
 #cross_prefix := em
 
+osmingw := MINGW64_NT-10.0
+#osmingw := MINGW64_NT-6.1
+#osmingw := MINGW32_NT-6.1
+
 
 src_dir := src
 
@@ -73,7 +77,7 @@ CFLAGS ?= -g -MMD -Wall
 endif
 
 # for windows with mingw64 
-ifeq ($(os), MINGW64_NT-10.0)
+ifeq ($(os),$(osmingw))
 lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 dynlib =-shared
@@ -88,7 +92,7 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-ifeq ($(os),MINGW64_NT-10.0)
+ifeq ($(os),$(osmingw))
 djnn_libs := core base display gui animation # comms input
 else
 djnn_libs := core base comms display gui input animation
