@@ -18,15 +18,15 @@ namespace djnn
 {
   using namespace std;
 
-  NativeExpressionAction::NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool isModel) :
-      Process (), _data (data), _action (action)
+  NativeExpressionAction::NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter, bool isModel) :
+      Process (), _data (data), _action (action), _string_setter (string_setter)
   {
     _model = isModel;
   }
 
-  NativeExpressionAction::NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*> data,
+  NativeExpressionAction::NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter,
                               bool isModel) :
-      Process (parent, name), _data (data), _action (action)
+      Process (parent, name), _data (data), _action (action), _string_setter (string_setter)
   {
     _model = isModel;
     Process::finalize ();
@@ -39,7 +39,7 @@ namespace djnn
   void
   NativeExpressionAction::activate ()
   {
-    (_action) (_data);
+    (_action) (_data, _string_setter);
   }
 
   std::map<std::string, AbstractProperty*>

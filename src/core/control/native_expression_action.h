@@ -21,12 +21,12 @@
 namespace djnn {
   using namespace std;
 
-  typedef void (NativeExpression) (std::map<std::string, AbstractProperty*>);
+  typedef void (NativeExpression) (std::map<std::string, AbstractProperty*>, bool string_setter);
   class NativeExpressionAction : public Process
   {
   public:
-    NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool isModel);
-    NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool isModel);
+    NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter, bool isModel);
+    NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter, bool isModel);
     virtual ~NativeExpressionAction ();
     void activate () override;
     void deactivate () override {}
@@ -34,5 +34,6 @@ namespace djnn {
   private:
     std::map<std::string, AbstractProperty*> _data;
     NativeExpression *_action;
+    bool _string_setter;
   };
 }
