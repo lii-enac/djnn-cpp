@@ -32,7 +32,7 @@ launch a mingw64 terminal (and NOT MSYS2) then:
 cd djnn-cpp  
 make -j
  
----- ALL PLATFORMS -----
+---- ALL PLATFORMS -----  
 ivy bus -> https://www.eei.cena.fr/products/ivy/  
 
 Windows:
