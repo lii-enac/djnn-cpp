@@ -45,7 +45,7 @@ namespace djnn
   void
   AbstractList::dump (int level)
   {
-    cout << _name  << " [ index=" << _children.size () << " ]" << endl ;
+    cout << (_parent ? _parent->find_component_name(this) : _name)  << " [ index=" << _children.size () << " ]" << endl ;
 
     //FIXME: indent problem
     //for (auto c : _children)

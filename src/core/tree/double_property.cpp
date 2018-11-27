@@ -88,7 +88,7 @@ namespace djnn
   void
   DoubleProperty::dump (int level)
   {
-    cout << _name << " [ " << value << " ]";
+    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << value << " ]";
   }
 
   Process* DoubleProperty::clone ()

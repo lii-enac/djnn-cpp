@@ -389,7 +389,7 @@ namespace djnn
   void
   Process::dump (int level)
   {
-    cout << _name << ": ";
+    cout << (_parent ? _parent->find_component_name(this) : _name) << ": ";
 
     /* check if the component is empty - should be ?*/
     if (_symtable.empty ()) {
