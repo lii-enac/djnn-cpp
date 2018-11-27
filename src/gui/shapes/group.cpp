@@ -67,7 +67,7 @@ namespace djnn
     Group* newg = new Group ();
 
     for (auto c : _children) {
-      newg->add_child (c->clone (), c->get_name ());
+      newg->add_child (c->clone (), this->find_component_name(c));
     }
 
     return newg;

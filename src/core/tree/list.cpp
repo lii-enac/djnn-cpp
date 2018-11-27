@@ -200,7 +200,7 @@ namespace djnn
   List::clone () {
     List* clone = new List ();
     for (auto c: _children) {
-      clone->add_child (c->clone (), c->get_name ());
+      clone->add_child (c->clone (), "");
     }
     return clone;
   }

@@ -37,7 +37,7 @@ namespace djnn
     SVGHolder* newh = new SVGHolder ();
 
     for (auto c : _children) {
-      newh->add_child (c->clone (), c->get_name ());
+      newh->add_child (c->clone (), this->find_component_name(c));
     }
 
     newh->_gobj = _children.back ();

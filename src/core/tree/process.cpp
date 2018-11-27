@@ -178,6 +178,29 @@ namespace djnn
     return p->find_component (path);
   }
 
+  string
+  Process::find_component_name (Process* symbol)
+  {
+
+    // FIXME : low efficiency function cause by linear search. use with care !
+
+    map<string, Process*>::iterator it;
+    string key = "name_not_found";
+
+    for (it = _symtable.begin(); it != _symtable.end(); ++it)
+    {
+      if (it->second == symbol)
+      {
+        //debug
+        //cerr << "key found : " << it->first << endl;
+        return it->first;
+      }
+    }
+
+    return key;
+;
+  }
+
   void
   Process::remove_symbol (const string& name)
   {

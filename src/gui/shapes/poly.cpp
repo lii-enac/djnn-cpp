@@ -169,7 +169,7 @@ namespace djnn
     Poly* newp = new Poly (_closed);
 
     for (auto p: _points->children ()) {
-      newp->_points->add_child (p->clone (), p->get_name ());
+      newp->_points->add_child (p->clone (), "");
     }
 
     return newp;

@@ -156,7 +156,7 @@ namespace djnn
   {
     Process* clone = new Container ();
     for (auto c : _children) {
-      clone->add_child (c->clone (), c->get_name ());
+      clone->add_child (c->clone (), this->find_component_name(c));
     }
     return clone;
   }
@@ -184,7 +184,7 @@ namespace djnn
   {
     Process* clone = new Component ();
     for (auto c : _children) {
-      clone->add_child (c->clone (), c->get_name ());
+      clone->add_child (c->clone (), this->find_component_name(c));
     }
     return clone;
   }

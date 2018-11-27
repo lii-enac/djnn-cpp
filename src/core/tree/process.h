@@ -69,7 +69,9 @@ namespace djnn {
     void notify_deactivation ();
 
     virtual Process* find_component (const string&);
-    static Process* find_component (Process*p, const string &path);
+    static Process* find_component (Process* p, const string &path);
+    // FIXME : low efficiency function cause by linear search. use with care !
+    virtual string find_component_name (Process* child);
     void add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
     map<string, Process*> symtable () { return _symtable; }
