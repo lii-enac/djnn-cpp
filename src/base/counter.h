@@ -43,7 +43,7 @@ namespace djnn
     class CounterStepAction : public Process
     {
     public:
-      CounterStepAction (Process* p, const string &n, shared_ptr<DoubleProperty> init, shared_ptr<DoubleProperty> delta, shared_ptr<DoubleProperty> output, bool* reset_occurred) :
+      CounterStepAction (Process* p, const string &n, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
       Process (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
@@ -59,9 +59,9 @@ namespace djnn
       }
       void deactivate () override {}
     private:
-      shared_ptr<DoubleProperty> _init;
-    	shared_ptr<DoubleProperty> _delta;
-    	shared_ptr<DoubleProperty> _output;
+      DoubleProperty *_init;
+    	DoubleProperty *_delta;
+    	DoubleProperty *_output;
       bool *_reset_occurred;
     };
 
@@ -75,10 +75,10 @@ namespace djnn
 
   private:
     bool _reset_occurred;
-    shared_ptr <Spike> _reset, _step;
-    shared_ptr <DoubleProperty> _output, _init, _delta;
-    unique_ptr<Coupling> _c_reset, _c_step;
-    shared_ptr<Process> _action_reset, _action_step;
+    Spike *_reset, *_step;
+    DoubleProperty *_output, *_init, *_delta;
+    Coupling *_c_reset, *_c_step;
+    Process *_action_reset, *_action_step;
   };
 
 }

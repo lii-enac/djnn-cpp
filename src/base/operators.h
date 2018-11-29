@@ -34,14 +34,14 @@ namespace djnn {
   class BinaryOperatorAction : public Process
   {
   public:
-    BinaryOperatorAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                          shared_ptr<AbstractProperty> result) :
+    BinaryOperatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                          AbstractProperty* result) :
     Process (parent, name), _left (left), _right (right), _result (result) {}
     virtual ~BinaryOperatorAction () {};
   protected:
-    shared_ptr<AbstractProperty> _left;
-    shared_ptr<AbstractProperty> _right;
-    shared_ptr<AbstractProperty> _result;
+    AbstractProperty* _left;
+    AbstractProperty* _right;
+    AbstractProperty* _result;
   };
 
   class BinaryOperator : public Process
@@ -52,22 +52,23 @@ namespace djnn {
     void deactivate () { _c_left->disable (); _c_right->disable (); _action->deactivation ();};
     virtual ~BinaryOperator ();
   protected:
-    void init_couplings (shared_ptr <Process> action);
-    shared_ptr<AbstractProperty> _left, _right, _result;
-    unique_ptr<Coupling> _c_left, _c_right;
-    shared_ptr<Process> _action;
+    void init_couplings (Process* action);
+    AbstractProperty *_left, *_right, *_result;
+    Coupling *_c_left, *_c_right;
+    Process *_action;
   };
 
   class UnaryOperatorAction : public Process
   {
   public:
-    UnaryOperatorAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+    UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
     Process (parent, name), _input (input), _output (output){}
     virtual ~UnaryOperatorAction () {};
   protected:
-    shared_ptr<AbstractProperty> _input;
-    shared_ptr<AbstractProperty> _output;
+    AbstractProperty* _input;
+    AbstractProperty* _output;
   };
+
   class UnaryOperator : public Process
   {
   public:
@@ -76,9 +77,9 @@ namespace djnn {
     void deactivate () { _c_input->disable (); _action->deactivation ();}
     virtual ~UnaryOperator ();
   protected:
-    void init_couplings (shared_ptr <Process> action);
-    shared_ptr<AbstractProperty> _input, _output;
-    unique_ptr<Coupling> _c_input;
-    shared_ptr<Process> _action;
+    void init_couplings (Process* action);
+    AbstractProperty* _input, *_output;
+    Coupling *_c_input;
+    Process *_action;
   };
 }

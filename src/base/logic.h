@@ -28,15 +28,15 @@ namespace djnn
     class AndAction : public BinaryOperatorAction
     {
     public:
-      AndAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                 shared_ptr<AbstractProperty> result) :
+      AndAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                 AbstractProperty* result) :
           BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
       virtual ~AndAction () {}
       void activate ()
       {
         if (_parent->get_state () > activated)
           return;
-        _result.get()->set_value (((BoolProperty*) _left.get())->get_value () && ((BoolProperty*) _right.get())->get_value (), true);
+        _result->set_value (((BoolProperty*) _left)->get_value () && ((BoolProperty*) _right)->get_value (), true);
       }
       void deactivate () {}
     };
@@ -52,15 +52,15 @@ namespace djnn
     class OrAction : public BinaryOperatorAction
     {
     public:
-      OrAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                shared_ptr<AbstractProperty> result) :
+      OrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                AbstractProperty* result) :
                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
       virtual ~OrAction () {}
       void activate ()
       {
         if (_parent->get_state () > activated)
           return;
-        _result.get()->set_value (((BoolProperty*) _left.get())->get_value () != ((BoolProperty*) _right.get())->get_value (), true);
+        _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
       void deactivate () {}
     };
@@ -76,15 +76,15 @@ namespace djnn
     class XOrAction : public BinaryOperatorAction
     {
     public:
-      XOrAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                 shared_ptr<AbstractProperty> result) :
+      XOrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                 AbstractProperty* result) :
                    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
       virtual ~XOrAction () {}
       void activate ()
       {
         if (_parent->get_state () > activated)
           return;
-        _result.get()->set_value (((BoolProperty*) _left.get())->get_value () != ((BoolProperty*) _right.get())->get_value (), true);
+        _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
       void deactivate () {}
     };
@@ -100,13 +100,13 @@ namespace djnn
     class NotAction : public UnaryOperatorAction
     {
     public:
-      NotAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      NotAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~NotAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (!((BoolProperty*) _input.get())->get_value (), true);
+        _output->set_value (!((BoolProperty*) _input)->get_value (), true);
       }
       void deactivate () {}
     };

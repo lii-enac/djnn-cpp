@@ -32,34 +32,41 @@ namespace djnn
 {
   Clock::Clock (std::chrono::milliseconds period)
   {
-    _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period.count ()));
-    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
-    _tick = shared_ptr<Process> (new Spike (this, "tick"));
+    _period = new IntProperty (this, "period", period.count ());
+    _elapsed = new DoubleProperty (this, "elapsed", 0);
+    _tick = new Spike (this, "tick");
   }
 
   Clock::Clock (Process *p, const std::string& n, std::chrono::milliseconds period) :
       Process (p, n)
   {
-    _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period.count ()));
-    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
-    _tick = shared_ptr<Process> (new Spike (this, "tick"));
+    _period = new IntProperty (this, "period", period.count ());
+    _elapsed = new DoubleProperty (this, "elapsed", 0);
+    _tick = new Spike (this, "tick");
     Process::finalize ();
   }
 
   Clock::Clock (int period)
   {
-    _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period));
-    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
-    _tick = shared_ptr<Process> (new Spike (this, "tick"));
+    _period = new IntProperty (this, "period", period);
+    _elapsed = new DoubleProperty (this, "elapsed", 0);
+    _tick = new Spike (this, "tick");
   }
 
   Clock::Clock (Process *p, const std::string& n, int period) :
       Process (p, n)
   {
-    _period = shared_ptr<IntProperty> (new IntProperty (this, "period", period));
-    _elapsed = shared_ptr<DoubleProperty> (new DoubleProperty (this, "elapsed", 0));
-    _tick = shared_ptr<Process> (new Spike (this, "tick"));
+    _period = new IntProperty (this, "period", period);
+    _elapsed = new DoubleProperty (this, "elapsed", 0);
+    _tick = new Spike (this, "tick");
     Process::finalize ();
+  }
+
+  Clock::~Clock ()
+  {
+    if (_tick) { delete _tick; _tick = nullptr;}
+    if (_elapsed) { delete _elapsed; _elapsed = nullptr;}
+    if (_period) { delete _period; _period = nullptr;}
   }
 
   void

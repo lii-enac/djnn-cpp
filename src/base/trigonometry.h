@@ -29,13 +29,13 @@ namespace djnn
     class CosineAction : public UnaryOperatorAction
     {
     public:
-      CosineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      CosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~CosineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (cos (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (cos (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -51,13 +51,13 @@ namespace djnn
     class SineAction : public UnaryOperatorAction
     {
     public:
-      SineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      SineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~SineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (sin (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (sin (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -73,13 +73,13 @@ namespace djnn
     class TangentAction : public UnaryOperatorAction
     {
     public:
-      TangentAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      TangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~TangentAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (tan (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (tan (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -95,13 +95,13 @@ namespace djnn
     class ArcCosineAction : public UnaryOperatorAction
     {
     public:
-      ArcCosineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      ArcCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcCosineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (acos (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (acos (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -117,13 +117,13 @@ namespace djnn
     class ArcSineAction : public UnaryOperatorAction
     {
     public:
-      ArcSineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      ArcSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcSineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (asin (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (asin (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -139,13 +139,13 @@ namespace djnn
     class ArcTangentAction : public UnaryOperatorAction
     {
     public:
-      ArcTangentAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      ArcTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcTangentAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (atan (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (atan (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -161,13 +161,13 @@ namespace djnn
       class ArcTangent2Action : public BinaryOperatorAction
       {
       public:
-        ArcTangent2Action (Process *p, const string &n, shared_ptr<AbstractProperty> y, shared_ptr<AbstractProperty> x, shared_ptr<AbstractProperty> result) :
+        ArcTangent2Action (Process *p, const string &n, AbstractProperty* y, AbstractProperty* x, AbstractProperty* result) :
           BinaryOperatorAction (p, n, y, x, result) { Process::finalize (); }
         virtual ~ArcTangent2Action () {}
         void activate () {
           if (_parent->get_state () > activated)
                     return;
-          _result.get()->set_value (atan2 (((DoubleProperty*) _left.get())->get_value (), ((DoubleProperty*) _right.get())->get_value ()), true);
+          _result->set_value (atan2 (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
         void deactivate () {}
       };
@@ -183,13 +183,13 @@ namespace djnn
     class HyperbolicCosineAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicCosineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicCosineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (cosh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (cosh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -205,13 +205,13 @@ namespace djnn
     class HyperbolicSineAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicSineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicSineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (sinh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (sinh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -227,13 +227,13 @@ namespace djnn
     class HyperbolicTangentAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicTangentAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicTangentAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (tanh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (tanh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -249,13 +249,13 @@ namespace djnn
     class HyperbolicArcCosineAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicArcCosineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicArcCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcCosineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (acosh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (acosh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -271,13 +271,13 @@ namespace djnn
     class HyperbolicArcSineAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicArcSineAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicArcSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcSineAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (asinh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (asinh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -293,13 +293,13 @@ namespace djnn
     class HyperbolicArcTangentAction : public UnaryOperatorAction
     {
     public:
-      HyperbolicArcTangentAction (Process *p, const string &n, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      HyperbolicArcTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcTangentAction () {}
       void activate () {
         if (_parent->get_state () > activated)
                   return;
-        _output.get()->set_value (atanh (((DoubleProperty*) _input.get())->get_value ()), true);
+        _output->set_value (atanh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
     };

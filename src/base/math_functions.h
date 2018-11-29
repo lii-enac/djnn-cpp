@@ -29,14 +29,14 @@ namespace djnn
     class ExpAction : public UnaryOperatorAction
     {
     public:
-      ExpAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+      ExpAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
       virtual ~ExpAction () {}
       void activate ()
       {
         if (_parent->get_state () > activated)
           return;
-        _output.get()->set_value (exp (((DoubleProperty*)_input.get())->get_value ()), true);
+        _output->set_value (exp (((DoubleProperty*)_input)->get_value ()), true);
       }
       void deactivate () {}
     };
@@ -52,14 +52,14 @@ namespace djnn
       class LogAction : public UnaryOperatorAction
       {
       public:
-        LogAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+        LogAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
         virtual ~LogAction () {}
         void activate ()
         {
           if (_parent->get_state () > activated)
             return;
-          _output.get()->set_value (log (((DoubleProperty*)_input.get())->get_value ()), true);
+          _output->set_value (log (((DoubleProperty*)_input)->get_value ()), true);
         }
         void deactivate () {}
       };
@@ -75,14 +75,14 @@ namespace djnn
       class Log10Action : public UnaryOperatorAction
       {
       public:
-        Log10Action (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+        Log10Action (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
         virtual ~Log10Action () {}
         void activate ()
         {
           if (_parent->get_state () > activated)
             return;
-          _output.get()->set_value (log10 (((DoubleProperty*)_input.get())->get_value ()), true);
+          _output->set_value (log10 (((DoubleProperty*)_input)->get_value ()), true);
         }
         void deactivate () {}
       };
@@ -98,13 +98,13 @@ namespace djnn
       class PowAction : public BinaryOperatorAction
       {
       public:
-        PowAction (Process *p, const string &n, shared_ptr<AbstractProperty> base, shared_ptr<AbstractProperty> exp, shared_ptr<AbstractProperty> result) :
+        PowAction (Process *p, const string &n, AbstractProperty* base, AbstractProperty* exp, AbstractProperty* result) :
           BinaryOperatorAction (p, n, base, exp, result) { Process::finalize (); }
         virtual ~PowAction () {}
         void activate () {
           if (_parent->get_state () > activated)
             return;
-          _result.get()->set_value (pow (((DoubleProperty*) _left.get())->get_value (), ((DoubleProperty*) _right.get())->get_value ()), true);
+          _result->set_value (pow (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
          void deactivate () {}
        };
@@ -120,14 +120,14 @@ namespace djnn
       class SqrtAction : public UnaryOperatorAction
       {
       public:
-        SqrtAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+        SqrtAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
         virtual ~SqrtAction () {}
         void activate ()
         {
           if (_parent->get_state () > activated)
             return;
-          _output.get()->set_value (sqrt (((DoubleProperty*)_input.get())->get_value ()), true);
+          _output->set_value (sqrt (((DoubleProperty*)_input)->get_value ()), true);
         }
         void deactivate () {}
       };
@@ -143,14 +143,14 @@ namespace djnn
       class AbsAction : public UnaryOperatorAction
       {
       public:
-        AbsAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> output) :
+        AbsAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
         virtual ~AbsAction () {}
         void activate ()
         {
           if (_parent->get_state () > activated)
             return;
-          _output.get()->set_value (abs (((DoubleProperty*)_input.get())->get_value ()), true);
+          _output->set_value (abs (((DoubleProperty*)_input)->get_value ()), true);
         }
         void deactivate () {}
       };
@@ -166,15 +166,15 @@ namespace djnn
       class MinAction : public BinaryOperatorAction
       {
       public:
-        MinAction (Process *p, const string &n, shared_ptr<AbstractProperty> min, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> result) :
+        MinAction (Process *p, const string &n, AbstractProperty* min, AbstractProperty* input, AbstractProperty* result) :
           BinaryOperatorAction (p, n, min, input, result) { Process::finalize (); }
         virtual ~MinAction () {}
         void activate () {
           if (_parent->get_state () > activated)
             return;
-          double min = ((DoubleProperty*) _left.get())->get_value ();
-          double input = ((DoubleProperty*) _right.get())->get_value ();
-          _result.get()->set_value ((min <= input ? input : min), true);
+          double min = ((DoubleProperty*) _left)->get_value ();
+          double input = ((DoubleProperty*) _right)->get_value ();
+          _result->set_value ((min <= input ? input : min), true);
         }
          void deactivate () {}
        };
@@ -190,15 +190,15 @@ namespace djnn
       class MaxAction : public BinaryOperatorAction
       {
       public:
-        MaxAction (Process *p, const string &n, shared_ptr<AbstractProperty> max, shared_ptr<AbstractProperty> input, shared_ptr<AbstractProperty> result) :
+        MaxAction (Process *p, const string &n, AbstractProperty* max, AbstractProperty* input, AbstractProperty* result) :
           BinaryOperatorAction (p, n, max, input, result) { Process::finalize (); }
         virtual ~MaxAction () {}
         void activate () {
           if (_parent->get_state () > activated)
             return;
-          double max = ((DoubleProperty*) _left.get())->get_value ();
-          double input = ((DoubleProperty*) _right.get())->get_value ();
-          _result.get()->set_value ((max >= input ? input : max), true);
+          double max = ((DoubleProperty*) _left)->get_value ();
+          double input = ((DoubleProperty*) _right)->get_value ();
+          _result->set_value ((max >= input ? input : max), true);
         }
          void deactivate () {}
        };
@@ -214,23 +214,23 @@ namespace djnn
     class BoundedValueAction : public Process
     {
     public:
-      BoundedValueAction (Process *p, const string &n, shared_ptr<AbstractProperty> min,
-                          shared_ptr<AbstractProperty> max, shared_ptr<AbstractProperty> input,
-                          shared_ptr<AbstractProperty> result) : Process (p, n), _min (min), _max (max), _input (input), _result (result) {}
+      BoundedValueAction (Process *p, const string &n, AbstractProperty* min,
+                          AbstractProperty* max, AbstractProperty* input,
+                          AbstractProperty* result) : Process (p, n), _min (min), _max (max), _input (input), _result (result) {}
     virtual ~BoundedValueAction () {}
       void activate () override {
-        double max = ((DoubleProperty*) _max.get())->get_value ();
-        double min = ((DoubleProperty*) _min.get())->get_value ();
-        double input = ((DoubleProperty*) _input.get())->get_value ();
+        double max = ((DoubleProperty*) _max)->get_value ();
+        double min = ((DoubleProperty*) _min)->get_value ();
+        double input = ((DoubleProperty*) _input)->get_value ();
         double r = input < min ? min : (input > max ? max : input);
-        _result.get()->set_value (r, true);
+        _result->set_value (r, true);
       }
       void deactivate () override {}
     private:
-      shared_ptr<AbstractProperty> _min;
-      shared_ptr<AbstractProperty> _max;
-      shared_ptr<AbstractProperty> _input;
-      shared_ptr<AbstractProperty> _result;
+      AbstractProperty *_min;
+      AbstractProperty *_max;
+      AbstractProperty *_input;
+      AbstractProperty *_result;
     };
   public:
     BoundedValue (Process *p, const string &n, double min, double max, double init_val);
@@ -239,8 +239,8 @@ namespace djnn
     virtual ~BoundedValue ();
     void serialize (const string& type) override;
   protected:
-    shared_ptr<AbstractProperty> _min, _max, _input, _result;
-    unique_ptr<Coupling> _c_min, _c_max, _c_input;
-    shared_ptr<Process> _action;
+    AbstractProperty  *_min, *_max, *_input, *_result;
+    Coupling *_c_min, *_c_max, *_c_input;
+    Process *_action;
   };
 }

@@ -30,6 +30,7 @@ namespace djnn
     Clock (Process* p, const std::string& n, int period = 1000);
     Clock (std::chrono::milliseconds period = 1000ms);
     Clock (int period = 1000);
+    ~Clock (); 
 
   protected:
     // Process
@@ -38,9 +39,9 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
-    shared_ptr<IntProperty> _period;
-    shared_ptr<DoubleProperty> _elapsed;
-    shared_ptr <Process> _tick;
+    IntProperty *_period;
+    DoubleProperty *_elapsed;
+    Process *_tick;
 
     void run() override;
   };

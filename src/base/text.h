@@ -29,25 +29,25 @@ namespace djnn
     class TextPrinterAction : public Process
     {
     public:
-      TextPrinterAction (Process *p, const string &n, shared_ptr<TextProperty> input) : Process(p, n), _input (input) {}
+      TextPrinterAction (Process *p, const string &n, TextProperty* input) : Process(p, n), _input (input) {}
       virtual ~TextPrinterAction () {}
       void activate () override;
       void deactivate () override {}
     private:
-      shared_ptr<TextProperty> _input;
+      TextProperty* _input;
     };
   public:
     TextPrinter ();
     TextPrinter (Process *p, const string &n);
-    void activate () override { c_input.get()->enable(); };
-    void deactivate () override { c_input.get()->disable (); };
+    void activate () override { c_input->enable(); };
+    void deactivate () override { c_input->disable (); };
     virtual ~TextPrinter ();
     void serialize (const string& type) override;
   private:
     void init ();
-    shared_ptr<TextProperty> input;
-    shared_ptr<Process> _action;
-    unique_ptr<Coupling> c_input;
+    TextProperty* _input;
+    Process* _action;
+    Coupling* c_input;
   };
 
   class TextCatenator : public BinaryOperator
@@ -56,18 +56,18 @@ namespace djnn
     class TextCatenatorAction : public BinaryOperatorAction
     {
     public:
-      TextCatenatorAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                           shared_ptr<AbstractProperty> result) :
+      TextCatenatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                           AbstractProperty* result) :
 		  BinaryOperatorAction (parent, name, left, right, result) {}
       virtual ~TextCatenatorAction () {}
       void activate () override
       {
         if (_parent->get_state () > activated)
           return;
-        string head = ((TextProperty*)_left.get())->get_value ();
-        string tail = ((TextProperty*)_right.get())->get_value ();
+        string head = ((TextProperty*)_left)->get_value ();
+        string tail = ((TextProperty*)_right)->get_value ();
         string out = head + tail;
-        _result.get()->set_value (out, true);
+        _result->set_value (out, true);
       }
       void deactivate () override {}
     };
@@ -83,17 +83,17 @@ namespace djnn
     class TextComparatorAction : public BinaryOperatorAction
     {
     public:
-      TextComparatorAction (Process* parent, const string &name, shared_ptr<AbstractProperty> left, shared_ptr<AbstractProperty> right,
-                           shared_ptr<AbstractProperty> result) :
+      TextComparatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
+                           AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) {}
       virtual ~TextComparatorAction () {}
       void activate ()
       {
         if (_parent->get_state () > activated)
           return;
-        string left = ((TextProperty*)_left.get())->get_value ();
-        string right = ((TextProperty*)_right.get())->get_value ();
-        _result.get()->set_value (left.compare (right) == 0, true);
+        string left = ((TextProperty*)_left)->get_value ();
+        string right = ((TextProperty*)_right)->get_value ();
+        _result->set_value (left.compare (right) == 0, true);
       }
       void deactivate () {}
     };
@@ -116,7 +116,7 @@ namespace djnn
         }
         void deactivate () override {}
       private:
-        TextProperty* _input, *_state;
+        TextProperty *_input, *_state;
     };
     class DeleteAction : public Process {
     public:
@@ -153,26 +153,26 @@ namespace djnn
     class DoubleFormatterAction : public Process
     {
     public:
-      DoubleFormatterAction (Process* p, const string &n, shared_ptr<DoubleProperty> in, shared_ptr<IntProperty> dec, shared_ptr<TextProperty> out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize (); }
+      DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize (); }
       virtual ~DoubleFormatterAction () {}
       void activate () override {
-        int decimal = _decimal.get()->get_value ();
-        double value = _input.get()->get_value();
+        int decimal = _decimal->get_value ();
+        double value = _input->get_value();
         string res = to_string (value);
         std::size_t found = res.find('.');
         if (found == string::npos) {
-          _output.get()->set_value (res, true);
+          _output->set_value (res, true);
         }
         else {
           res = res.substr (0, found + decimal + 1);
-          _output.get()->set_value (res, true);
+          _output->set_value (res, true);
         }
       }
       void deactivate () override {}
     private:
-      shared_ptr<DoubleProperty> _input;
-      shared_ptr<IntProperty> _decimal;
-      shared_ptr<TextProperty> _output;
+      DoubleProperty* _input;
+      IntProperty* _decimal;
+      TextProperty* _output;
     };
   public:
     DoubleFormatter (double initial, int decimal);
@@ -183,10 +183,10 @@ namespace djnn
     void serialize (const string& type) override;
   private:
     void init (double initial, int decimal);
-    shared_ptr<DoubleProperty> _input;
-    shared_ptr<IntProperty> _decimal;
-    shared_ptr<TextProperty> _output;
-    unique_ptr<Coupling> _c_input, _c_decimal;
-    shared_ptr<Process> _action;
+    DoubleProperty* _input;
+    IntProperty* _decimal;
+    TextProperty* _output;
+    Coupling *_c_input, *_c_decimal;
+    Process *_action;
   };
 }

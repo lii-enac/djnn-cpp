@@ -21,11 +21,10 @@ namespace djnn
   Adder::Adder (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", l_val + r_val));
-    init_couplings (
-        shared_ptr<Process> (new AdderAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new DoubleProperty (this, "result", l_val + r_val);
+    init_couplings (new AdderAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -36,8 +35,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:adder");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -47,11 +46,10 @@ namespace djnn
   Subtractor::Subtractor (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", l_val - r_val));
-    init_couplings (
-        shared_ptr<Process> (new SubtractorAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new DoubleProperty (this, "result", l_val - r_val);
+    init_couplings (new SubtractorAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -62,8 +60,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:subtractor");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -73,12 +71,10 @@ namespace djnn
   Multiplier::Multiplier (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", l_val * r_val));
-    ;
-    init_couplings (
-        shared_ptr<Process> (new MultiplierAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new DoubleProperty (this, "result", l_val * r_val);
+    init_couplings (new MultiplierAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -89,8 +85,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:multiplier");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -100,13 +96,12 @@ namespace djnn
   Divider::Divider (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", 0));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new DoubleProperty (this, "result", 0);
     if (r_val != 0)
-      _result.get ()->set_value (l_val / r_val, true);
-    init_couplings (
-        shared_ptr<Process> (new DividerAction (this, "action", _left, _right, _result)));
+      _result->set_value (l_val / r_val, true);
+    init_couplings (new DividerAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -117,8 +112,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:divider");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -128,13 +123,12 @@ namespace djnn
   Modulo::Modulo (Process *p, const string &n, int l_val, int r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new IntProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new IntProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new IntProperty (this, "result", 0));
+    _left = new IntProperty (this, "left", l_val);
+    _right = new IntProperty (this, "right", r_val);
+    _result = new IntProperty (this, "result", 0);
     if ((int) r_val != 0)
-      _result.get ()->set_value ((int) l_val % (int) r_val, true);
-    init_couplings (
-        shared_ptr<Process> (new ModuloAction (this, "action", _left, _right, _result)));
+      _result->set_value ((int) l_val % (int) r_val, true);
+    init_couplings (new ModuloAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -145,8 +139,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:modulo");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->int_attribute ("left", std::dynamic_pointer_cast<IntProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->int_attribute ("right", std::dynamic_pointer_cast<IntProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("left", dynamic_cast<IntProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->int_attribute ("right",dynamic_cast<IntProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -156,12 +150,10 @@ namespace djnn
   AscendingComparator::AscendingComparator (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new BoolProperty (this, "result", l_val <= r_val));
-    init_couplings (
-        shared_ptr<Process> (
-            new AscendingComparatorAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new BoolProperty (this, "result", l_val <= r_val);
+    init_couplings (new AscendingComparatorAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -172,8 +164,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:ascendingcomparator");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -184,12 +176,10 @@ namespace djnn
                                                         double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new BoolProperty (this, "result", l_val < r_val));
-    init_couplings (
-        shared_ptr<Process> (
-            new StrictAscendingComparatorAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new BoolProperty (this, "result", l_val < r_val);
+    init_couplings (new StrictAscendingComparatorAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -200,8 +190,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:strictascendingcomparator");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -211,12 +201,10 @@ namespace djnn
   EqualityComparator::EqualityComparator (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
-    _left = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "left", l_val));
-    _right = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "right", r_val));
-    _result = std::shared_ptr<AbstractProperty> (new BoolProperty (this, "result", l_val == r_val));
-    init_couplings (
-        shared_ptr<Process> (
-            new EqualityComparatorAction (this, "action", _left, _right, _result)));
+    _left = new DoubleProperty (this, "left", l_val);
+    _right = new DoubleProperty (this, "right", r_val);
+    _result = new BoolProperty (this, "result", l_val == r_val);
+    init_couplings (new EqualityComparatorAction (this, "action", _left, _right, _result));
     Process::finalize ();
   }
 
@@ -227,8 +215,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:equalitycomparator");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("left", std::dynamic_pointer_cast<DoubleProperty> (_left)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("right", std::dynamic_pointer_cast<DoubleProperty> (_right)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -238,10 +226,9 @@ namespace djnn
   SignInverter::SignInverter (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
-    _input = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", i_val));
-    _output = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", -(i_val)));
-    init_couplings (
-        shared_ptr<Process> (new SignInverterAction (this, "action", _input, _output)));
+    _input = new DoubleProperty (this, "input", i_val);
+    _output = new DoubleProperty (this, "output", -(i_val));
+    init_couplings (new SignInverterAction (this, "action", _input, _output));
     Process::finalize ();
   }
 
@@ -252,7 +239,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:signinverter");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -262,10 +249,9 @@ namespace djnn
   Previous::Previous (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
-    _input = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", i_val));
-    _output = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "output", 0));
-    init_couplings (
-        shared_ptr<Process> (new PreviousAction (this, "action", _input, _output, i_val)));
+    _input = new DoubleProperty (this, "input", i_val);
+    _output = new DoubleProperty (this, "output", 0);
+    init_couplings (new PreviousAction (this, "action", _input, _output, i_val));
     Process::finalize ();
   }
 
@@ -276,7 +262,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:previous");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -286,11 +272,11 @@ namespace djnn
   int
   Incr::init_incr (bool isModel)
   {
-    _delta = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "delta", 1));
-    _state = std::shared_ptr<AbstractProperty> (new DoubleProperty (this, "state", 0));
-    Graph::instance ().add_edge (this, _state.get ());
+    _delta = new DoubleProperty (this, "delta", 1);
+    _state = new DoubleProperty (this, "state", 0);
+    Graph::instance ().add_edge (this, _state);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _state.get ());
+      Graph::instance ().add_edge (_parent->state_dependency (), _state);
     _model = isModel;
     return 1;
   }
@@ -308,17 +294,20 @@ namespace djnn
   }
 
   Incr::~Incr ()
-  {
-    Graph::instance ().remove_edge (this, _state.get ());
+  { 
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _state.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _state);
+    Graph::instance ().remove_edge (this, _state);
+
+    if(_state) { delete _state; _state=nullptr;}
+    if (_delta) { delete _delta; _delta=nullptr;}
   }
 
   void
   Incr::activate ()
   {
-    _state.get ()->set_value (
-        ((DoubleProperty*) _state.get ())->get_value () + ((DoubleProperty*) _delta.get ())->get_value (), true);
+    _state->set_value (
+        ((DoubleProperty*) _state)->get_value () + ((DoubleProperty*) _delta)->get_value (), true);
   }
 
   void
@@ -336,10 +325,10 @@ namespace djnn
   }
 
   AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const string &name,
-                                                                    shared_ptr<AbstractProperty> input,
-                                                                    shared_ptr<AbstractProperty> clamp_min,
-                                                                    shared_ptr<AbstractProperty> clamp_max,
-                                                                    shared_ptr<AbstractProperty> result) :
+                                                                    AbstractProperty* input,
+                                                                    AbstractProperty* clamp_min,
+                                                                    AbstractProperty* clamp_max,
+                                                                    AbstractProperty* result) :
       Process (parent, name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
   {
     Process::finalize ();
@@ -350,10 +339,10 @@ namespace djnn
   {
     if (_parent->get_state () > activated)
       return;
-    double input = ((DoubleProperty*) _input.get ())->get_value ();
-    double clamp_min = ((DoubleProperty*) _clamp_min.get ())->get_value ();
-    double clamp_max = ((DoubleProperty*) _clamp_max.get ())->get_value ();
-    double value = ((DoubleProperty*) _result.get ())->get_value ();
+    double input = ((DoubleProperty*) _input)->get_value ();
+    double clamp_min = ((DoubleProperty*) _clamp_min)->get_value ();
+    double clamp_max = ((DoubleProperty*) _clamp_max)->get_value ();
+    double value = ((DoubleProperty*) _result)->get_value ();
     value += input;
     if (clamp_min < clamp_max) {
       value = value < clamp_min ? clamp_min : value;
@@ -366,31 +355,38 @@ namespace djnn
                                       double clamp_max) :
       Process (parent, name)
   {
-    _input = shared_ptr<AbstractProperty> (new DoubleProperty (this, "input", input));
-    _clamp_min = shared_ptr<AbstractProperty> (new DoubleProperty (this, "clamp_min", clamp_min));
-    _clamp_max = shared_ptr<AbstractProperty> (new DoubleProperty (this, "clamp_max", clamp_max));
+    _input = new DoubleProperty (this, "input", input);
+    _clamp_min = new DoubleProperty (this, "clamp_min", clamp_min);
+    _clamp_max = new DoubleProperty (this, "clamp_max", clamp_max);
 
     if (clamp_min < clamp_max) {
       input = input < clamp_min ? clamp_min : input;
       input = input > clamp_max ? clamp_max : input;
     }
-    _result = shared_ptr<AbstractProperty> (new DoubleProperty (this, "result", input));
-    _action = make_unique<AdderAccumulatorAction> (this, name + "_action", _input, _clamp_min, _clamp_max, _result);
-    _c_input = make_unique<Coupling> (_input.get (), ACTIVATION, _action.get (), ACTIVATION);
+    _result = new DoubleProperty (this, "result", input);
+    _action = new AdderAccumulatorAction (this, name + "_action", _input, _clamp_min, _clamp_max, _result);
+    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
     _c_input->disable ();
-    Graph::instance ().add_edge (_input.get (), _action.get ());
-    Graph::instance ().add_edge (_action.get (), _result.get ());
+    Graph::instance ().add_edge (_input, _action);
+    Graph::instance ().add_edge (_action, _result);
     if (parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), _action.get ());
+      Graph::instance ().add_edge (parent->state_dependency (), _action);
     Process::finalize ();
   }
 
   AdderAccumulator::~AdderAccumulator ()
   {
-    Graph::instance ().remove_edge (_input.get (), _action.get ());
-    Graph::instance ().remove_edge (_action.get (), _result.get ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    Graph::instance ().remove_edge (_input, _action);
+    Graph::instance ().remove_edge (_action, _result);
+
+    if (_c_input) { delete _c_input; _c_input=nullptr;}
+    if (_action) { delete _action; _action=nullptr;}
+    if (_result) { delete _result; _result=nullptr;}
+    if (_clamp_max) { delete _clamp_max; _clamp_max=nullptr;}
+    if (_clamp_min) { delete _clamp_min; _clamp_min=nullptr;}
+    if (_input) { delete _input; _input=nullptr;}
   }
 
   void
@@ -412,9 +408,9 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:adderaccumulator");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->float_attribute ("input", std::dynamic_pointer_cast<DoubleProperty> (_input)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("clamp_min", std::dynamic_pointer_cast<DoubleProperty> (_clamp_min)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("clamp_max", std::dynamic_pointer_cast<DoubleProperty> (_clamp_max)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("clamp_min", dynamic_cast<DoubleProperty*> (_clamp_min)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("clamp_max", dynamic_cast<DoubleProperty*> (_clamp_max)->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

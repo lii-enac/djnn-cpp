@@ -88,25 +88,25 @@ namespace djnn
      * do not add directly Property into the symbol switchlist's table 
      * switchlist sympbol table should only containt branch
      */
-    _loop = make_unique<BoolProperty> (loop);
-    _index = make_shared<IntProperty> (1);
-    _next = make_shared<Spike> ();
-    _previous = make_shared<Spike> ();
-    _next_action = make_shared<Next> (this);
-    _previous_action = make_shared<Previous> (this);
-    _change_index_action = make_shared<ChangeIndex> (this);
+    _loop = new BoolProperty (loop);
+    _index = new IntProperty (1);
+    _next = new Spike ();
+    _previous = new Spike ();
+    _next_action = new Next (this);
+    _previous_action = new Previous (this);
+    _change_index_action = new ChangeIndex (this);
 
-    _c_next = make_unique < Coupling > (_next.get (), ACTIVATION, _next_action.get (), ACTIVATION);
-    _c_previous = make_unique < Coupling > (_previous.get (), ACTIVATION, _previous_action.get (), ACTIVATION);
-    _c_index = make_unique < Coupling > (_index.get (), ACTIVATION, _change_index_action.get (), ACTIVATION);
-    Graph::instance ().add_edge (_next.get (), _next_action.get ());
-    Graph::instance ().add_edge (_previous.get (), _previous_action.get ());
-    Graph::instance ().add_edge (_index.get (), _change_index_action.get ());
-    Graph::instance ().add_edge (_next_action.get (), _index.get ());
-    Graph::instance ().add_edge (_previous_action.get (), _index.get ());
+    _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION);
+    _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION);
+    _c_index = new Coupling (_index, ACTIVATION, _change_index_action, ACTIVATION);
+    Graph::instance ().add_edge (_next, _next_action);
+    Graph::instance ().add_edge (_previous, _previous_action);
+    Graph::instance ().add_edge (_index, _change_index_action);
+    Graph::instance ().add_edge (_next_action, _index);
+    Graph::instance ().add_edge (_previous_action, _index);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _change_index_action.get ());
-     _state_dependency = _change_index_action.get ();
+      Graph::instance ().add_edge (_parent->state_dependency (), _change_index_action);
+     _state_dependency = _change_index_action;
   }
 
   SwitchList::SwitchList (bool loop) :
@@ -124,13 +124,24 @@ namespace djnn
 
   SwitchList::~SwitchList ()
   {
-    Graph::instance ().remove_edge (_next.get (), _next_action.get ());
-    Graph::instance ().remove_edge (_previous.get (), _previous_action.get ());
-    Graph::instance ().remove_edge (_index.get (), _change_index_action.get ());
-    Graph::instance ().remove_edge (_next_action.get (), _change_index_action.get ());
-    Graph::instance ().remove_edge (_previous_action.get (), _change_index_action.get ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _change_index_action.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _change_index_action);
+    Graph::instance ().remove_edge (_next, _next_action);
+    Graph::instance ().remove_edge (_previous, _previous_action);
+    Graph::instance ().remove_edge (_index, _change_index_action);
+    Graph::instance ().remove_edge (_next_action, _change_index_action);
+    Graph::instance ().remove_edge (_previous_action, _change_index_action);
+
+    if (_c_index) { delete _c_index ; _c_index = nullptr;}
+    if (_c_previous) { delete _c_previous ; _c_previous = nullptr;}
+    if (_c_next) { delete _c_next ; _c_next = nullptr;}
+    if (_change_index_action) { delete _change_index_action ; _change_index_action = nullptr;}
+    if (_previous_action) { delete _previous_action ; _previous_action = nullptr;}
+    if (_next_action) { delete _next_action ; _next_action = nullptr;}
+    if (_previous) { delete _previous ; _previous = nullptr;}
+    if (_next) { delete _next ; _next = nullptr;}
+    if (_index) { delete _index ; _index = nullptr;}
+    if (_loop) { delete _loop ; _loop = nullptr;} 
   }
 
   void
@@ -168,13 +179,13 @@ namespace djnn
   SwitchList::find_component (const string& path)
   {
     if (path.compare ("next") == 0)
-      return _next.get ();
+      return _next;
     else if (path.compare ("previous") == 0)
-      return _previous.get ();
+      return _previous;
     else if (path.compare ("index") == 0)
-      return _index.get ();
+      return _index;
     else if (path.compare ("loop") == 0)
-      return (Process *) _loop.get ();
+      return (Process *) _loop;
     else
       return AbstractList::find_component (path);
   }

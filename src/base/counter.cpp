@@ -24,29 +24,29 @@ namespace djnn
   Counter::Counter (Process *p, const std::string& n, double init, double delta) :
       Process (p, n)
   {
-    _reset = make_shared<Spike> (this, "reset");
-    _step = make_shared<Spike> (this, "step");
-    _output = make_shared<DoubleProperty> (this, "output", init);
-    _init = make_shared<DoubleProperty> (this, "init", init);
-    _delta = make_shared<DoubleProperty> (this, "delta", delta);
+    _reset = new Spike (this, "reset");
+    _step = new Spike (this, "step");
+    _output = new DoubleProperty (this, "output", init);
+    _init = new DoubleProperty (this, "init", init);
+    _delta = new DoubleProperty (this, "delta", delta);
 
     /* reset action */
-    _action_reset = make_shared<CounterResetAction> (this, n + "_action_reset", &_reset_occurred);
-    _c_reset = make_unique<Coupling> (_reset.get (), ACTIVATION, _action_reset.get (), ACTIVATION);
+    _action_reset = new CounterResetAction (this, n + "_action_reset", &_reset_occurred);
+    _c_reset = new Coupling (_reset, ACTIVATION, _action_reset, ACTIVATION);
     _c_reset->disable ();
-    Graph::instance ().add_edge (_reset.get (), _action_reset.get ());
-    Graph::instance ().add_edge (_action_reset.get (), _output.get ());
+    Graph::instance ().add_edge (_reset, _action_reset);
+    Graph::instance ().add_edge (_action_reset, _output);
 
     /* step action */    
-    _action_step = make_shared<CounterStepAction> (this, n + "_action_step", _init, _delta, _output, &_reset_occurred);
-    _c_step = make_unique<Coupling> (_step.get (), ACTIVATION, _action_step.get (), ACTIVATION);
+    _action_step = new CounterStepAction (this, n + "_action_step", _init, _delta, _output, &_reset_occurred);
+    _c_step = new Coupling (_step, ACTIVATION, _action_step, ACTIVATION);
     _c_step->disable ();
-    Graph::instance ().add_edge (_step.get (), _action_step.get ());
-    Graph::instance ().add_edge (_action_step.get (), _output.get ());
+    Graph::instance ().add_edge (_step, _action_step);
+    Graph::instance ().add_edge (_action_step, _output);
 
     if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset.get ());
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_step.get ());
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset);
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_step);
     }
     
     Process::finalize ();
@@ -54,13 +54,23 @@ namespace djnn
 
   Counter::~Counter () {
     if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action_reset.get ());
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action_step.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action_reset);
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action_step);
     }
-    Graph::instance ().remove_edge (_reset.get (), _action_reset.get ());
-    Graph::instance ().remove_edge (_action_reset.get (), _output.get ());
-    Graph::instance ().remove_edge (_step.get (), _action_step.get ());
-    Graph::instance ().remove_edge (_action_step.get (), _output.get ());
+    Graph::instance ().remove_edge (_reset, _action_reset);
+    Graph::instance ().remove_edge (_action_reset, _output);
+    Graph::instance ().remove_edge (_step, _action_step);
+    Graph::instance ().remove_edge (_action_step, _output);
+
+    if (_c_step) { delete _c_step; _c_step = nullptr;}
+    if (_action_step) { delete _action_step; _action_step = nullptr;}
+    if (_c_reset) { delete _c_reset; _c_reset = nullptr;}
+    if (_action_reset) { delete _action_reset; _action_reset = nullptr;}
+    if (_delta) { delete _delta; _delta = nullptr;}
+    if (_init) { delete _init; _init = nullptr;}
+    if (_output) { delete _output; _output = nullptr;}
+    if (_step) { delete _step; _step = nullptr;}
+    if (_reset) { delete _reset; _reset = nullptr;}
   }
 
   void

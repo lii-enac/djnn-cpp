@@ -57,8 +57,8 @@ namespace djnn {
     void init_connector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
-    unique_ptr<Coupling>_c_src;
-    shared_ptr<Process> _action;
+    Coupling *_c_src;
+    Process *_action;
     bool _copy_on_activation;
   };
 
@@ -76,8 +76,8 @@ namespace djnn {
     void init_pausedconnector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
-    unique_ptr<Coupling>_c_src;
-    shared_ptr<Process> _action;
+    Coupling *_c_src;
+    Process *_action;
     bool _copy_on_activation;
   };
 }

@@ -90,12 +90,8 @@ namespace djnn
     if (!_dst)
       warning (this, "invalid destination (not a Property) in connector (" + get_name() + "," + ispec + ", " + dspec + ")");
   
-
-    _action = shared_ptr<Process> (
-        new ConnectorAction (this, "connector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
-                             _dst, true));
-
-    _c_src = unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+    _action = new ConnectorAction (this, "connector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
+    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
 
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
@@ -105,9 +101,12 @@ namespace djnn
 
   Connector::~Connector ()
   {
-    Graph::instance ().remove_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    Graph::instance ().remove_edge (_src, _dst);
+    
+    if (_c_src) { delete _c_src; _c_src = nullptr;}
+    if (_action) { delete _action; _action = nullptr;}
   }
 
   void
@@ -187,10 +186,8 @@ namespace djnn
       warning (this, "invalid source or destination in pausedconnector (" + get_name() + "," + ispec + " " + dspec + ")");
     }
 
-    _action = shared_ptr<Process> (
-        new Connector::ConnectorAction (this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
-                             _dst, false));
-    _c_src = unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+    _action = new Connector::ConnectorAction (this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
+    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
     
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
@@ -201,9 +198,12 @@ namespace djnn
 
   PausedConnector::~PausedConnector ()
   {
-    Graph::instance ().remove_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    Graph::instance ().remove_edge (_src, _dst);
+    
+    if (_c_src) { delete _c_src; _c_src = nullptr;}
+    if (_action) { delete _action; _action = nullptr;}
   }
 
   void

@@ -33,15 +33,14 @@ namespace djnn
     class HermiteCurveAction : public Process
     {
     public:
-      HermiteCurveAction (Process* parent, const string &name, shared_ptr<AbstractProperty> input,
-                          shared_ptr<AbstractProperty> p1, shared_ptr<AbstractProperty> p2,
-                          shared_ptr<AbstractProperty> t1, shared_ptr<AbstractProperty> t2,
-                          shared_ptr<AbstractProperty> output);
+      HermiteCurveAction (Process* parent, const string &name, AbstractProperty *input, AbstractProperty *p1,
+                          AbstractProperty *p2, AbstractProperty *t1, AbstractProperty *t2,
+                          AbstractProperty *output);
       virtual ~HermiteCurveAction () {}
       void activate () override;
       void deactivate () override {}
     private:
-      shared_ptr<AbstractProperty> _input, _p1, _p2, _t1, _t2, _output;
+      AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };
   public:
     HermiteCurve (Process *p, const string &name, double p1, double p2, double t1, double t2);
@@ -50,8 +49,8 @@ namespace djnn
     void deactivate () override;
     void serialize (const string& type) override;
   private:
-    shared_ptr<AbstractProperty> _input, _p1, _p2, _t1, _t2, _output;
-    unique_ptr<Coupling> _c_input, _c_p1, _c_p2, _c_t1, _c_t2;
-    shared_ptr<Process> _action;
+    AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
+    Coupling *_c_input, *_c_p1, *_c_p2, *_c_t1, *_c_t2;
+    Process *_action;
   };
 }

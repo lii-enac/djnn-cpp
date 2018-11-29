@@ -69,12 +69,12 @@ namespace djnn {
     void deactivate () override;
     void serialize (const string& type) override;
     int priority () { return _priority; }
-    Process* fsm_action () { return _fsm_action.get (); }
+    Process* fsm_action () { return _fsm_action; }
   private:
     FSMState* _src, *_dst;
     Process *_action, *_trigger;
-    shared_ptr<Process> _fsm_action;
-    unique_ptr<Coupling>_c_src;
+    Process *_fsm_action;
+    Coupling *_c_src;
     int _priority;
   };
 
@@ -85,7 +85,7 @@ namespace djnn {
     FSM (Process *p, const string &n);
     void activate () override;
     void deactivate () override;
-    void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state.get()->set_value (name, true); };
+    void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state->set_value (name, true); };
     void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;
     void add_state (FSMState* st) { _states.push_back(st); };
@@ -97,7 +97,7 @@ namespace djnn {
   private:
     void init_FSM (); 
     string _str_initial;
-    shared_ptr<TextProperty> _fsm_state, _initial;
+    TextProperty *_fsm_state, *_initial;
     FSMState* _cur_state;
     list<FSMState*> _states;
     list<FSMTransition*> _transitions;
