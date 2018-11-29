@@ -17,10 +17,10 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (Process *p, const string &n, shared_ptr<DoubleProperty> m,
-                                                  shared_ptr<DoubleProperty> k, shared_ptr<DoubleProperty> b,
-                                                  shared_ptr<DoubleProperty> v, shared_ptr<DoubleProperty> output,
-                                                  shared_ptr<DoubleProperty> dt) :
+  Oscillator::OscillatorAction::OscillatorAction (Process *p, const string &n, DoubleProperty* m,
+                                                  DoubleProperty* k, DoubleProperty* b,
+                                                  DoubleProperty* v, DoubleProperty* output,
+                                                  DoubleProperty* dt) :
       Process (p, n), _m (m), _k (k), _b (b), _v (v), _output (output), _dt (dt)
   {
   }
@@ -39,29 +39,39 @@ namespace djnn
   Oscillator::Oscillator (Process *p, const string &n) :
       Process (p, n)
   {
-    _m = make_shared<DoubleProperty> (this, "m", 1);
-    _k = make_shared<DoubleProperty> (this, "k", 1);
-    _damping = make_shared<DoubleProperty> (this, "damping", 0);
-    _v = make_shared<DoubleProperty> (this, "v", 0);
-    _output = make_shared<DoubleProperty> (this, "output", 1);
-    _dt = make_shared<DoubleProperty> (this, "dt", 0.001);
-    _step = make_shared<Spike> (this, "step");
-    _action = make_unique < OscillatorAction > (this, "action", _m, _k, _damping, _v, _output, _dt);
-    _c_step = make_unique < Coupling > (_step.get (), ACTIVATION, _action.get (), ACTIVATION);
+    _m = new DoubleProperty (this, "m", 1);
+    _k = new DoubleProperty (this, "k", 1);
+    _damping = new DoubleProperty (this, "damping", 0);
+    _v = new DoubleProperty (this, "v", 0);
+    _output = new DoubleProperty (this, "output", 1);
+    _dt = new DoubleProperty (this, "dt", 0.001);
+    _step = new Spike (this, "step");
+    _action = new OscillatorAction (this, "action", _m, _k, _damping, _v, _output, _dt);
+    _c_step = new Coupling (_step, ACTIVATION, _action, ACTIVATION);
     _c_step->disable ();
-    Graph::instance ().add_edge (_step.get (), _action.get ());
-    Graph::instance ().add_edge (_action.get (), _output.get ());
+    Graph::instance ().add_edge (_step, _action);
+    Graph::instance ().add_edge (_action, _output);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action.get ());
+      Graph::instance ().add_edge (_parent->state_dependency (), _action);
     Process::finalize ();
   }
 
   Oscillator::~Oscillator ()
-  {
-    Graph::instance ().remove_edge (_step.get (), _action.get ());
-    Graph::instance ().remove_edge (_action.get (), _output.get ());
+  { 
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action.get ());
+      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    Graph::instance ().remove_edge (_step, _action);
+    Graph::instance ().remove_edge (_action, _output);
+    
+    if (_c_step) { delete _c_step; _c_step=nullptr;}
+    if (_action) { delete _action; _action=nullptr;}
+    if (_step) { delete _step; _step=nullptr;}
+    if (_dt) { delete _dt; _dt=nullptr;}
+    if (_v) { delete _v; _v=nullptr;}
+    if (_output) { delete _output; _output=nullptr;}
+    if (_damping) { delete _damping; _damping=nullptr;}
+    if (_k) { delete _k; _k=nullptr;}
+    if (_m) { delete _m; _m=nullptr;}
   }
 
   void

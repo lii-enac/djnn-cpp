@@ -39,13 +39,13 @@ namespace djnn
   private:
     class OscillatorAction : public Process {
     public:
-      OscillatorAction (Process *p, const string &n, shared_ptr<DoubleProperty> m, shared_ptr<DoubleProperty> k,
-                        shared_ptr<DoubleProperty> b, shared_ptr<DoubleProperty> v, shared_ptr<DoubleProperty> output,
-                        shared_ptr<DoubleProperty> dt);
+      OscillatorAction (Process *p, const string &n, DoubleProperty* m, DoubleProperty* k,
+                        DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,
+                        DoubleProperty* dt);
         void activate () override;
         void deactivate () override {}
       private:
-        shared_ptr<DoubleProperty> _m, _k, _b, _v, _output, _dt;
+        DoubleProperty *_m, *_k, *_b, *_v, *_output, *_dt;
       };
     public:
       Oscillator (Process *p, const string &n);
@@ -54,9 +54,9 @@ namespace djnn
       void deactivate () override;
       void serialize (const string& type) override;
     private:
-      shared_ptr<DoubleProperty> _m, _k, _damping, _v, _output, _dt;
-      shared_ptr<Process> _step;
-      unique_ptr<Coupling> _c_step;
-      shared_ptr<OscillatorAction> _action;
+      DoubleProperty *_m, *_k, *_damping, *_v, *_output, *_dt;
+      Process* _step;
+      Coupling* _c_step;
+      OscillatorAction* _action;
   };
 }
