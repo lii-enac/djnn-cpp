@@ -46,12 +46,13 @@ static int init = 0;
     init = 1;
   }
 
-  void t2 (const std::string &msg) {
+  double t2 (const std::string &msg) {
     if (!init)
-      return;
+      return 0.0;
     get_monotonic_time (&after);
     double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
     std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
     init = 0;
+    return elapsedTime;
   }
 }

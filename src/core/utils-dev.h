@@ -20,7 +20,7 @@
 namespace djnn {
   void get_monotonic_time (struct timespec *ts);
   void t1 ();
-  void t2 (const std::string &msg = "");
+  double t2 (const std::string &msg = "");
 }
 
 #if defined (GPERF_VERSION) && GPERF_VERSION >= 31

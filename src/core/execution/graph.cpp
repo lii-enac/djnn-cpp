@@ -21,6 +21,14 @@
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
+#define _PERF_TEST 0
+#if _PERF_TEST
+#include "../utils-dev.h"
+static int graph_counter = 0;
+static double graph_total = 0.0;
+static double graph_average = 0.0;
+#endif
+
 namespace djnn
 {
   std::shared_ptr<Graph> Graph::_instance;
@@ -277,6 +285,11 @@ namespace djnn
   void
   Graph::exec ()
   {
+
+#if _PERF_TEST
+    t1 ();
+#endif
+
     //graph_mutex.lock ();
 
     bool is_end = false;
@@ -307,6 +320,14 @@ namespace djnn
     }
    }
    //graph_mutex.unlock ();
+
+#if _PERF_TEST
+      double time = t2 ("\nGRAPH_EXEC : ");
+      graph_counter = graph_counter + 1;
+      graph_total = graph_total + time ;
+      graph_average = graph_total / graph_counter;
+      cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl; 
+#endif
   }
 
 }

@@ -32,6 +32,14 @@
 #define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG 0
 
+#define _PERF_TEST 0
+#if _PERF_TEST
+#include "../../core/utils-dev.h"
+static int draw_counter = 0;
+static double draw_total = 0.0;
+static double draw_average = 0.0;
+#endif
+
 namespace djnn
 {
 
@@ -256,8 +264,19 @@ namespace djnn
     backend->set_picking_view (_picking_view);
     Process *p = _window->get_parent ();
     _picking_view->init ();
-    if (p)
+    if (p) {
+#if _PERF_TEST
+      t1();
+#endif
       p->draw ();
+#if _PERF_TEST
+      double time = t2 ("\nDRAW : ");
+      draw_counter = draw_counter + 1;
+      draw_total = draw_total + time ;
+      draw_average = draw_total / draw_counter;
+      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl; 
+#endif
+    }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
       QtMainloop::instance ().set_please_exec (true);
 #if DEBUG
