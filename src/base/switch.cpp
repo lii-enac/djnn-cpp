@@ -14,6 +14,7 @@
  */
 
 #include "switch.h"
+#include "../core/core.h"
 #include "../core/serializer/serializer.h"
 
 namespace djnn
@@ -46,6 +47,7 @@ namespace djnn
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
 
     _cur_branch = nullptr;
+    _cpnt_type = SWITCH_T;
   }
 
   Switch::~Switch ()

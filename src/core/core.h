@@ -41,8 +41,19 @@
 
 namespace djnn {
 
+  class StructureObserver {
+  public:
+    StructureObserver () {};
+    virtual ~StructureObserver () {};
+    virtual void add_container (Process *cont) = 0;
+    virtual void remove_container (Process *cont) = 0;
+    virtual void add_child_to_container (Process *cont, Process *c, int index) = 0;
+    virtual void add_child_at (Process *cont, Process *c, int index) = 0;
+    virtual void move_child_to (Process *cont, Process *c, int index) = 0;
+    virtual void remove_child_from_container (Process *cont, Process *c) = 0;
+  };
   extern std::vector<string> loadedModules;
-
+  extern std::vector<StructureObserver*> structure_observer_list;
   void init_core ();
   void clear_core ();
 

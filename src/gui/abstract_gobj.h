@@ -34,11 +34,11 @@ namespace djnn
   public:
     AbstractGObj () : Process(), _frame (nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
-      _cpnt_type = GOBJ;
+      _cpnt_type = GOBJ_T;
     }
     AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr) {
       if (!gui_initialized)  warning (this, "Module GUI not initialized");
-      _cpnt_type = GOBJ;
+      _cpnt_type = GOBJ_T;
     }
     virtual ~AbstractGObj () {};
     Window*& frame () { return _frame; }

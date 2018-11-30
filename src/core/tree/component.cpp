@@ -13,6 +13,7 @@
  */
 
 #include "component.h"
+#include "../core.h"
 #include "../control/assignment.h"
 #include "../error.h"
 #include "../execution/graph.h"
@@ -31,16 +32,22 @@ namespace djnn
 
   Container::Container ()
   {
-    _cpnt_type = COMPONENT;
+    _cpnt_type = COMPONENT_T;
+    for (auto s: structure_observer_list) {
+      s->add_container (this);
+    }
   }
 
   Container::Container (Process* parent, const string& name) :
       Process (parent, name)
   {
-    _cpnt_type = COMPONENT;
+    _cpnt_type = COMPONENT_T;
     Container* c = dynamic_cast<Container*> (parent);
     if (c)
       c->init_context (_cur_context);
+    for (auto s: structure_observer_list) {
+      s->add_container (this);
+    }
   }
 
   Container::~Container ()
@@ -48,6 +55,9 @@ namespace djnn
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
       if (_children[i]) {delete _children[i]; _children[i] = nullptr;};
+    }
+    for (auto s: structure_observer_list) {
+      s->remove_container (this);
     }
   }
 
@@ -70,6 +80,9 @@ namespace djnn
     } else if (c->get_state () == activated) {
       c->deactivation ();
     }
+    for (auto s: structure_observer_list) {
+      s->add_child_to_container (this, c, _children.size () - 1);
+    }
   }
 
   void
@@ -79,10 +92,16 @@ namespace djnn
       if (spec == FIRST) {
         remove_child (child_to_move);
         _children.insert (_children.begin (), child_to_move);
+        for (auto s: structure_observer_list) {
+          s->move_child_to (this, child_to_move, 0);
+        }
         return;
       } else if (spec == LAST) {
         remove_child (child_to_move);
         _children.push_back (child_to_move);
+        for (auto s: structure_observer_list) {
+          s->move_child_to (this, child_to_move, _children.size () - 1);
+        }
       } else
         return;
     }
@@ -94,9 +113,15 @@ namespace djnn
       if (spec == BEFORE) {
         remove_child (child_to_move);
         _children.insert (_children.begin () + index, child_to_move);
+        for (auto s: structure_observer_list) {
+          s->move_child_to (this, child_to_move, index);
+        }
       } else if (spec == AFTER) {
         remove_child (child_to_move);
         _children.insert (_children.begin () + index + 1, child_to_move);
+        for (auto s: structure_observer_list) {
+          s->move_child_to (this, child_to_move, index + 1);
+        }
       } else {
         cout << "spec = " << spec << endl;
         warning (this, "Undefined spec to move child " + child_to_move->get_name ());
@@ -109,6 +134,9 @@ namespace djnn
   {
     Process::remove_child (c);
     _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
+    for (auto s: structure_observer_list) {
+      s->remove_child_from_container (this, c);
+    }
   }
 
   void
@@ -119,6 +147,9 @@ namespace djnn
       Process* c = it->second;
       _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
       _symtable.erase (it);
+      for (auto s: structure_observer_list) {
+        s->remove_child_from_container (this, c);
+      }
     } else
       std::cerr << "Warning: symbol " << name << " not found in Component " << _name << "\n";
   }

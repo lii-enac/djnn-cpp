@@ -13,6 +13,7 @@
  *
  */
 
+#include "../core.h"
 #include "list.h"
 #include "spike.h"
 #include "../control/coupling.h"
@@ -58,15 +59,21 @@ namespace djnn
     if (c == nullptr)
       return;
     _children.push_back (c);
-
+    for (auto s: structure_observer_list) {
+      s->add_child_to_container (this, c, _children.size () - 1);
+    }
     finalize_child_insertion (c);
   }
 
   void
   AbstractList::insert (Process* c, const std::string& spec)
   {
+    int index = _children.size () - 1;
     if (spec.compare (">") == 0) {
       add_child (c, "");
+      for (auto s: structure_observer_list) {
+        s->add_child_to_container (this, c, index);
+      }
       return;
     }
     std::vector<Process*>::iterator it;
@@ -74,19 +81,29 @@ namespace djnn
       it = _children.begin ();
       it = _children.insert (it, c);
       finalize_child_insertion (c);
+      index = 0;
+      for (auto s: structure_observer_list) {
+        s->add_child_to_container (this, c, index);
+      }
       return;
     }
     try {
-      int index = std::stoi (spec.substr (1, string::npos)) - 1;
+      index = std::stoi (spec.substr (1, string::npos)) - 1;
       if (spec.at (0) == '<') {
         it = _children.begin () + index;
         it = _children.insert (it, c);
         finalize_child_insertion (c);
+        for (auto s: structure_observer_list) {
+          s->add_child_to_container (this, c, index);
+        }
         return;
       } else if (spec.at (0) == '>') {
         it = _children.begin () + index + 1;
         it = _children.insert (it, c);
         finalize_child_insertion (c);
+        for (auto s: structure_observer_list) {
+          s->add_child_to_container (this, c, index + 1);
+        }
         return;
       } else {
         goto label_error;
@@ -103,7 +120,9 @@ namespace djnn
   AbstractList::remove_child (Process* c)
   {
     std::vector<Process*>::iterator newend = _children.end ();
-
+    for (auto s: structure_observer_list) {
+      s->remove_child_from_container (this, c);
+    }
     /* remove if 'c' is found in the vector */
     newend = std::remove_if (_children.begin (), _children.end (), 
         [c](std::vector<Process*>::iterator::value_type v) { return v == c; });

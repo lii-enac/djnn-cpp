@@ -22,7 +22,7 @@ namespace djnn
   Group::Group (Process* p, const string &n) :
       Container (p, n), _gobj (nullptr)
   {
-    _cpnt_type = GOBJ;
+    _cpnt_type = GOBJ_T;
     _gobj = new AbstractGObj (this, "");
     Process::finalize ();
   }
@@ -30,7 +30,7 @@ namespace djnn
   Group::Group () :
       Container (), _gobj (nullptr)
   {
-    _cpnt_type = GOBJ;
+    _cpnt_type = GOBJ_T;
     _gobj = new AbstractGObj (this, "");
   }
 

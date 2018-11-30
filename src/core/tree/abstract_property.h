@@ -23,8 +23,8 @@ namespace djnn {
   class AbstractProperty : public Process
   {
   public:
-    AbstractProperty (Process* parent, const string &name) : Process (parent, name) { _type = Integer; _cpnt_type = PROPERTY; };
-    AbstractProperty () : Process () { _type = Integer; _cpnt_type = PROPERTY; };
+    AbstractProperty (Process* parent, const string &name) : Process (parent, name) { _type = Integer; _cpnt_type = PROPERTY_T; };
+    AbstractProperty () : Process () { _type = Integer; _cpnt_type = PROPERTY_T; };
     virtual ~AbstractProperty () {};
     PropertyType type () { return _type; }
     bool is_activable () {

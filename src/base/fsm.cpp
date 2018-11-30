@@ -13,6 +13,7 @@
  *
  */
 
+#include "../core/core.h"
 #include "fsm.h"
 #include "../core/serializer/serializer.h"
 #include "../core/error.h"
@@ -266,6 +267,7 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _fsm_state);
     _state_dependency = _fsm_state;
+    _cpnt_type = FSM_T;
   }
 
   FSM::FSM () : Process ()

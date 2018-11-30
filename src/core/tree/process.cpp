@@ -79,7 +79,7 @@ namespace djnn
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
-    _cpnt_type = UNDEFINED;
+    _cpnt_type = UNDEFINED_T;
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
@@ -92,7 +92,7 @@ namespace djnn
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
 
-    _cpnt_type = UNDEFINED;
+    _cpnt_type = UNDEFINED_T;
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
@@ -410,7 +410,7 @@ namespace djnn
         cout << "|\t";
       cout << " +" << i++ << " ";
       it->second->dump (level);
-      if (it->second->_cpnt_type != COMPONENT || indent == level - 1)
+      if (it->second->_cpnt_type != COMPONENT_T || indent == level - 1)
         cout << endl;
     }
     indent--;

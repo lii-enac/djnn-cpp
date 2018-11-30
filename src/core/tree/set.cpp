@@ -28,7 +28,7 @@ namespace djnn
   Set::Set () :
       Process ()
   {
-    _cpnt_type = COMPONENT;
+    _cpnt_type = COMPONENT_T;
     _added = new RefProperty (nullptr);
     _removed = new RefProperty (nullptr);
     _size = new IntProperty (0);
@@ -37,7 +37,7 @@ namespace djnn
   Set::Set (Process* parent, const string& name) :
       Process (parent, name)
   {
-    _cpnt_type = COMPONENT;
+    _cpnt_type = COMPONENT_T;
     _added = new RefProperty (nullptr);
     _removed = new RefProperty (nullptr);
     _size = new IntProperty (0);

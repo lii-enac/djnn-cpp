@@ -262,13 +262,14 @@ namespace djnn
     QPainter painter (this);
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
-    Process *p = _window->get_parent ();
+    Process *p = _window->holder ();
     _picking_view->init ();
     if (p) {
 #if _PERF_TEST
       t1();
 #endif
-      p->draw ();
+      if (p)
+        p->draw ();
 #if _PERF_TEST
       double time = t2 ("\nDRAW : ");
       draw_counter = draw_counter + 1;

@@ -20,6 +20,7 @@ namespace djnn
 {
 
   std::vector<string> loadedModules;
+  std::vector<StructureObserver*> structure_observer_list;
 
   static bool __module_initialized = false;
 

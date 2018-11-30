@@ -24,11 +24,13 @@ namespace djnn {
   using namespace std;
 
   enum {
-    UNDEFINED,
-    PROPERTY,
-    COMPONENT,
-    WINDOW,
-    GOBJ
+    UNDEFINED_T,
+    PROPERTY_T,
+    COMPONENT_T,
+    FSM_T,
+    SWITCH_T,
+    WINDOW_T,
+    GOBJ_T
   };
 
   enum {

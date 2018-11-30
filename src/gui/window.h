@@ -67,7 +67,9 @@ namespace djnn
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
     void set_frame ();
-    
+    Process* holder () { return _holder; }
+    void set_holder (Process *p) { _holder = p; }
+
   private:
     void init_ui (const std::string &title, double x, double y, double w, double h);
     void set_frame_to_component (Process* c);
@@ -93,6 +95,7 @@ namespace djnn
     IntProperty *_key_released;
     WinImpl *_win_impl;
     bool _refresh;
+    Process* _holder;
   };
 
 } /* namespace djnn */
