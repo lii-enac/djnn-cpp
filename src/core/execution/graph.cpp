@@ -296,23 +296,19 @@ namespace djnn
     while (!is_end) {
       is_end = true;
       for (auto v : _sorted_vertices) {
-      	if (!_sorted)
-      	  break;
-        if (v->is_invalid ())
-          continue;
-      int action = v->get_component ()->get_activation_flag ();
-      switch (action)
-        {
-        case ACTIVATION:
-          v->get_component ()->activation ();
-          break;
-        case DEACTIVATION:
-          v->get_component ()->deactivation ();
-          break;
-        default:
-          ;
+      	if (!_sorted) break;
+        if (v->is_invalid ()) continue;
+        int action = v->get_component ()->get_activation_flag ();
+        switch (action) {
+          case ACTIVATION:
+            v->get_component ()->activation ();
+            break;
+          case DEACTIVATION:
+            v->get_component ()->deactivation ();
+            break;
+          default:;
         }
-      v->get_component ()->set_activation_flag (NONE);
+        v->get_component ()->set_activation_flag (NONE);
     }
     if (!_sorted) {
       sort ();
