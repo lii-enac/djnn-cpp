@@ -32,10 +32,10 @@ namespace djnn
   public:
     Vertex (Process* c);
     virtual ~Vertex () { } ;
-    typedef std::vector<std::shared_ptr<Vertex>> vertices_t;
+    typedef std::vector< Vertex* > vertices_t;
 
-    void add_edge (std::shared_ptr<Vertex> dst);
-    void remove_edge (std::shared_ptr<Vertex> dst);
+    void add_edge (Vertex* dst);
+    void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
     int get_count_egdes_in () { return _count_egdes_in; }
@@ -68,7 +68,7 @@ namespace djnn
   public:
     virtual ~Graph ();
     static Graph& instance ();
-    std::shared_ptr<Vertex> add_vertex (Process* c);
+    Vertex* add_vertex (Process* c);
     void add_output_node (Process* c);
     void remove_output_node (Process* c);
     void add_edge (Process* src, Process* dst);
@@ -82,11 +82,11 @@ namespace djnn
     Vertex::vertices_t get_sorted () { return _sorted_vertices; }
 
   private:
-    static std::shared_ptr<Graph> _instance;
+    static Graph* _instance;
     static std::once_flag onceFlag;
     Graph ();
-    void browse_in_depth (std::shared_ptr<Vertex> v);
-    std::shared_ptr<Vertex> get_vertex (Process* c);
+    void browse_in_depth (Vertex* v);
+    Vertex* get_vertex (Process* c);
     Vertex::vertices_t _vertices;
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;

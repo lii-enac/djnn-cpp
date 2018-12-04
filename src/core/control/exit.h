@@ -24,12 +24,12 @@ namespace djnn {
   {
   public:
     Exit (Process* p, const string &name, int value, bool is_model);
-    virtual ~Exit () {}
+    virtual ~Exit ();
     void activate () override;
     void deactivate () override {}
     void serialize (const string& format) override;
   private:
-    unique_ptr<IntProperty> _value;
+    IntProperty *_value;
   };
 
 }

@@ -31,7 +31,7 @@ static double graph_average = 0.0;
 
 namespace djnn
 {
-  std::shared_ptr<Graph> Graph::_instance;
+  Graph* Graph::_instance;
   std::once_flag Graph::onceFlag;
 
   static std::mutex graph_mutex;
@@ -42,7 +42,7 @@ namespace djnn
   };
 
   bool
-  sort_vertices (std::shared_ptr<Vertex> v1, std::shared_ptr<Vertex>v2)
+  sort_vertices (Vertex* v1, Vertex *v2)
   {
     return (v1->get_end_date () > v2->get_end_date ());
   }
@@ -53,7 +53,7 @@ namespace djnn
   }
 
   void
-  Vertex::add_edge (std::shared_ptr<Vertex> dst) 
+  Vertex::add_edge (Vertex *dst) 
   { 
     //TODO: does push_back check the doubles.
     _edges.push_back (dst);
@@ -61,7 +61,7 @@ namespace djnn
   }
 
   void
-  Vertex::remove_edge (std::shared_ptr<Vertex> dst)
+  Vertex::remove_edge (Vertex *dst)
   {
     Vertex::vertices_t::iterator newend = _edges.end ();
 
@@ -99,7 +99,7 @@ namespace djnn
     clear ();
   }
 
-  std::shared_ptr<Vertex>
+  Vertex*
   Graph::get_vertex (Process* c)
   {
     for (auto v : _vertices) {
@@ -109,10 +109,10 @@ namespace djnn
     return nullptr;
   }
 
-  std::shared_ptr<Vertex>
+  Vertex*
   Graph::add_vertex (Process* c)
   {
-    std::shared_ptr<Vertex> v = make_shared<Vertex> (c);
+    Vertex* v = new Vertex (c);
     _vertices.push_back (v);
     _sorted = false;
     return (v);
@@ -126,7 +126,7 @@ namespace djnn
       if (v->get_component () == c)
         return;
     }
-    std::shared_ptr<Vertex> v = make_shared<Vertex> (c);
+    Vertex *v = new Vertex (c);
     _output_nodes.push_back (v);
   }
 
@@ -148,13 +148,13 @@ namespace djnn
   void
   Graph::add_edge (Process* src, Process* dst)
   {
-    std::shared_ptr<Vertex> s = src->vertex ();
+    Vertex *s = src->vertex ();
     if (s == nullptr) {
       s = add_vertex (src);
       src->set_vertex (s);
     }
 
-    std::shared_ptr<Vertex> d = dst->vertex ();
+    Vertex *d = dst->vertex ();
     if (d == nullptr) {
       d = add_vertex (dst);
       dst->set_vertex (d);
@@ -166,8 +166,8 @@ namespace djnn
   void
   Graph::remove_edge (Process* src, Process* dst)
   {
-    std::shared_ptr<Vertex> s = get_vertex (src);
-    std::shared_ptr<Vertex> d = get_vertex (dst);
+    Vertex *s = get_vertex (src);
+    Vertex *d = get_vertex (dst);
     if (s == nullptr || d == nullptr)
       return;
     s->remove_edge (d);
@@ -210,10 +210,10 @@ namespace djnn
   Graph::instance ()
   {
     std::call_once (Graph::onceFlag, [] () {
-      _instance.reset(new Graph);
+      _instance = new Graph();
     });
 
-    return *(_instance.get ());
+    return *(_instance);
   }
 
   void
@@ -260,7 +260,7 @@ namespace djnn
   }
 
   void
-  Graph::browse_in_depth (std::shared_ptr<Vertex> v)
+  Graph::browse_in_depth (Vertex *v)
   {
     v->set_mark (BROWSING);
     v->set_start_date (++_cur_date);

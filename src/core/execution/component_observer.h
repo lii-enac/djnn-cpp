@@ -39,8 +39,8 @@ namespace djnn
   private:
     ComponentObserver (const ComponentObserver&) = delete;
     ComponentObserver & operator=(const ComponentObserver&) = delete;
-    static std::unique_ptr<ComponentObserver> _instance;
-    static std::once_flag onceFlag;
+    static ComponentObserver *_instance;
+    static once_flag onceFlag;
     ComponentObserver ();
     vector<ContextManager*> _manager_list;
     vector<ContextManager*> _draw_manager_list;

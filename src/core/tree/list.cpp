@@ -29,17 +29,17 @@ namespace djnn
   AbstractList::AbstractList () :
       Container ()
   {
-    _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _size = std::unique_ptr<IntProperty> (new IntProperty (0));
+    _added = new RefProperty (nullptr);
+    _removed = new RefProperty (nullptr);
+    _size = new IntProperty (0);
   }
 
   AbstractList::AbstractList (Process* parent, const string& name) :
     Container (parent, name)
   {
-    _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _size = std::unique_ptr<IntProperty> (new IntProperty (0));
+    _added = new RefProperty (nullptr);
+    _removed = new RefProperty (nullptr);
+    _size = new IntProperty (0);
   }
 
   void
@@ -149,6 +149,13 @@ namespace djnn
 
   List::~List ()
   {
+    _added = nullptr;
+    _removed = nullptr;
+
+    if (_added) {delete _added; _added = nullptr;}
+    if (_removed) {delete _removed; _removed = nullptr;}
+    if (_size) {delete _size; _size = nullptr;}
+    
   }
 
   void
@@ -169,11 +176,11 @@ namespace djnn
   AbstractList::find_component (const string& path)
   {
     if (path.compare ("$added") == 0)
-      return _added.get ();
+      return _added;
     else if (path.compare ("$removed") == 0)
-      return _removed.get ();
+      return _removed;
     else if (path.compare ("size") == 0)
-      return _size.get ();
+      return _size;
     else {
       try {
         string::size_type sz;
@@ -222,7 +229,7 @@ namespace djnn
   }
 
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
-                                                     shared_ptr<RefProperty> iter, shared_ptr<IntProperty> index,
+                                                     RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Process (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
   {
@@ -248,7 +255,7 @@ namespace djnn
   }
 
   BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const string& name,
-                                                       shared_ptr<IntProperty> index) :
+                                                       IntProperty *index) :
       Process (parent, name), _index (index)
   {
   }
@@ -270,31 +277,53 @@ namespace djnn
       warning (this, "list iterator must take a List as its third argument\n");
       return;
     }
-    _next = make_shared<Spike> (this, "next");
-    _previous = make_shared<Spike> (this, "previous");
-    _reset = make_shared<Spike> (this, "reset");
-    _iter = make_shared<RefProperty> (this, "iter", nullptr);
-    _index = make_shared<IntProperty> (this, "index", 1);
-    _next_action = make_unique<IterAction> (this, name + "_next_action", _list, _iter, _index, true);
-    _previous_action = make_unique<IterAction> (this, name + "_previous_action", _list, _iter, _index, false);
-    _reset_action = make_unique<ResetAction> (this, name + "_reset_action", _index);
-    _c_next = make_unique<Coupling> (_next.get (), ACTIVATION, _next_action.get (), ACTIVATION);
+    _next = new Spike (this, "next");
+    _previous = new Spike (this, "previous");
+    _reset = new Spike (this, "reset");
+    _iter = new RefProperty (this, "iter", nullptr);
+    _index = new IntProperty (this, "index", 1);
+    _next_action = new IterAction (this, name + "_next_action", _list, _iter, _index, true);
+    _previous_action = new IterAction (this, name + "_previous_action", _list, _iter, _index, false);
+    _reset_action = new ResetAction (this, name + "_reset_action", _index);
+    _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION);
     _c_next->disable ();
-    _c_previous = make_unique<Coupling> (_previous.get (), ACTIVATION, _previous_action.get (), ACTIVATION);
+    _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION);
     _c_previous->disable ();
-    _c_reset = make_unique<Coupling> (_reset.get (), ACTIVATION, _reset_action.get (), ACTIVATION);
+    _c_reset = new Coupling (_reset, ACTIVATION, _reset_action, ACTIVATION);
     _c_next->disable ();
-    Graph::instance ().add_edge (_next.get (), _next_action.get ());
-    Graph::instance ().add_edge (_previous.get (), _previous_action.get ());
-    Graph::instance ().add_edge (_reset.get (), _reset_action.get ());
+    Graph::instance ().add_edge (_next, _next_action);
+    Graph::instance ().add_edge (_previous, _previous_action);
+    Graph::instance ().add_edge (_reset, _reset_action);
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().add_edge (_parent->state_dependency (), _next_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _previous_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _reset_action);
+    }
     Process::finalize ();
   }
 
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
-    Graph::instance ().remove_edge (_next.get (), _next_action.get ());
-    Graph::instance ().remove_edge (_previous.get (), _previous_action.get ());
-    Graph::instance ().remove_edge (_reset.get (), _reset_action.get ());
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().remove_edge (_parent->state_dependency (), _next_action);
+      Graph::instance ().remove_edge (_parent->state_dependency (), _previous_action);
+      Graph::instance ().remove_edge (_parent->state_dependency (), _reset_action);
+    }
+    Graph::instance ().remove_edge (_next, _next_action);
+    Graph::instance ().remove_edge (_previous, _previous_action);
+    Graph::instance ().remove_edge (_reset, _reset_action);
+
+    if (_c_reset) { delete _c_reset; _c_reset = nullptr;}
+    if (_c_previous) { delete _c_previous; _c_previous = nullptr;}
+    if (_c_next) { delete _c_next; _c_next = nullptr;}
+    if (_reset_action) { delete _reset_action; _reset_action = nullptr;}
+    if (_previous_action) { delete _previous_action; _previous_action = nullptr;}
+    if (_next_action) { delete _next_action; _next_action = nullptr;}
+    if (_index) { delete _index; _index = nullptr;}
+    if (_iter) { delete _iter; _iter = nullptr;}
+    if (_reset) { delete _reset; _reset = nullptr;}
+    if (_previous) { delete _previous; _previous = nullptr;}
+    if (_next) { delete _next; _next = nullptr;}
   }
 
   void

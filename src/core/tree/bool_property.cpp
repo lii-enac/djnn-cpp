@@ -24,10 +24,10 @@ namespace djnn
       AbstractProperty (p, n), value (v)
   {
     _type = Boolean;
-    _true = std::shared_ptr<Process> (new Spike (this, "true"));
-    _false = std::shared_ptr<Process> (new Spike (this, "false"));
-    Graph::instance ().add_edge (this, _true.get ());
-    Graph::instance ().add_edge (this, _false.get ());
+    _true = new Spike (this, "true");
+    _false = new Spike (this, "false");
+    Graph::instance ().add_edge (this, _true);
+    Graph::instance ().add_edge (this, _false);
     Process::finalize ();
   }
 
@@ -35,10 +35,19 @@ namespace djnn
       AbstractProperty (), value (v)
   {
     _type = Boolean;
-    _true = std::shared_ptr<Process> (new Spike (this, "true"));
-    _false = std::shared_ptr<Process> (new Spike (this, "false"));
-    Graph::instance ().add_edge (this, _true.get ());
-    Graph::instance ().add_edge (this, _false.get ());
+    _true = new Spike (this, "true");
+    _false = new Spike (this, "false");
+    Graph::instance ().add_edge (this, _true);
+    Graph::instance ().add_edge (this, _false);
+  }
+
+  BoolProperty::~BoolProperty ()
+  {
+    Graph::instance ().remove_edge (this, _false);
+    Graph::instance ().remove_edge (this, _true);
+    
+    if (_false) { delete _false; _false = nullptr;}
+    if (_true) { delete _true; _true = nullptr;}
   }
 
   void

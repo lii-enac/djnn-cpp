@@ -32,7 +32,7 @@ namespace djnn {
 
 		void run () override;
 
-		shared_ptr <Process> _readable;
+		Process *_readable;
 		int _readfd;
 	};
 }

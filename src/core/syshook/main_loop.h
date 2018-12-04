@@ -66,7 +66,7 @@ namespace djnn
     std::chrono::milliseconds _duration;
 
   private:
-    static std::shared_ptr<MainLoop> _instance;
+    static MainLoop *_instance;
     static std::once_flag onceFlag;
     // MainLoop should be created *before* any other external-source (is activated ?) -- or not ?
     MainLoop ();

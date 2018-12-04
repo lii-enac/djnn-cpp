@@ -31,30 +31,36 @@ namespace djnn
 {
   Timer::Timer (std::chrono::milliseconds period)
   {
-    _delay = shared_ptr<IntProperty> (new IntProperty (this, "delay", period.count ()));
-    _end = shared_ptr<Blank> (new Blank (this, "end"));
+    _delay = new IntProperty (this, "delay", period.count ());
+    _end = new Blank (this, "end");
   }
 
   Timer::Timer (Process *p, const std::string& n, std::chrono::milliseconds period) :
       Process (p, n)
   {
-    _delay = shared_ptr<IntProperty> (new IntProperty (this, "delay", period.count ()));
-    _end = shared_ptr<Blank> (new Blank (this, "end"));
+    _delay = new IntProperty (this, "delay", period.count ());
+    _end = new Blank (this, "end");
     Process::finalize ();
   }
 
   Timer::Timer (int period)
   {
-    _delay = shared_ptr<IntProperty> (new IntProperty (this, "delay", period));
-    _end = shared_ptr<Blank> (new Blank (this, "end"));
+    _delay = new IntProperty (this, "delay", period);
+    _end = new Blank (this, "end");
   }
 
   Timer::Timer (Process *p, const std::string& n, int period) :
       Process (p, n)
   {
-    _delay = shared_ptr<IntProperty> (new IntProperty (this, "delay", period));
-    _end = shared_ptr<Blank> (new Blank (this, "end"));
+    _delay = new IntProperty (this, "delay", period);
+    _end = new Blank (this, "end");
     Process::finalize ();
+  }
+
+  Timer::~Timer ()
+  {
+    if (_end) { delete _end; _end = nullptr;}
+    if (_delay) { delete _delay; _delay = nullptr;}
   }
 
   void

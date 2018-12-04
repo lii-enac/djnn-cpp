@@ -31,7 +31,7 @@ typedef QThread* djnn_thread_t;
 //#include <windows.h>
 //#endif
 
-//typedef std::unique_ptr<QThread> my_thread_t;
+//typedef QThread *my_thread_t;
 
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -90,7 +90,7 @@ namespace djnn {
         #endif
 
         #if DJNN_USE_QTHREAD
-        //std::make_unique<QThread>(
+        //QThread (
         QThread::create([this]() { this->ExternalSource::private_run(); })
         //)
         ;

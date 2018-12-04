@@ -39,8 +39,8 @@ namespace djnn {
     int size () { return _size->get_value (); }
   protected:
     virtual void finalize_child_insertion (Process *child) = 0;
-    shared_ptr<RefProperty> _added, _removed;
-    shared_ptr <IntProperty> _size;
+    RefProperty *_added, *_removed;
+    IntProperty *_size;
   };
 
   class List : public AbstractList
@@ -74,25 +74,25 @@ namespace djnn {
     class IterAction : public Process
     {
     public:
-      IterAction (Process *parent, const string& name, List *list, shared_ptr<RefProperty> iter, shared_ptr<IntProperty> index, bool forward);
+      IterAction (Process *parent, const string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void activate () override;
       void deactivate () override {}
     private:
       List* _list;
-      shared_ptr<RefProperty> _iter;
-      shared_ptr<IntProperty> _index;
+      RefProperty *_iter;
+      IntProperty *_index;
       bool _forward;
     };
     class ResetAction : public Process
     {
     public:
-      ResetAction (Process *parent, const string& name, shared_ptr<IntProperty> index);
+      ResetAction (Process *parent, const string& name, IntProperty *index);
       virtual ~ResetAction () {}
       void activate () override;
       void deactivate () override {}
     private:
-      shared_ptr<IntProperty> _index;
+      IntProperty *_index;
     };
   public:
     BidirectionalListIterator (Process *parent, const string& name, Process* list);
@@ -102,10 +102,10 @@ namespace djnn {
     void serialize (const string& type) override;
   private:
     List* _list;
-    shared_ptr<Process> _next, _previous, _reset;
-    shared_ptr<RefProperty> _iter;
-    shared_ptr<IntProperty> _index;
-    unique_ptr<Coupling> _c_next, _c_reset, _c_previous;
-    unique_ptr<Process> _next_action, _previous_action, _reset_action;
+    Process *_next, *_previous, *_reset;
+    RefProperty *_iter;
+    IntProperty *_index;
+    Coupling *_c_next, *_c_reset, *_c_previous;
+    Process  *_next_action, *_previous_action, *_reset_action;
   };
 }

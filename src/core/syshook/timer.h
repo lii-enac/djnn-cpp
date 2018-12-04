@@ -31,6 +31,7 @@ namespace djnn
     Timer (Process* p, const std::string& n, int period = 1000);
     Timer (std::chrono::milliseconds period = 1000ms);
     Timer (int period = 1000);
+    ~Timer ();
 
   protected:
     // Process
@@ -39,8 +40,8 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
-    shared_ptr<IntProperty> _delay;
-    shared_ptr <Blank> _end;
+    IntProperty *_delay;
+    Blank *_end;
 
     void run() override;
   };

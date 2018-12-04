@@ -19,7 +19,7 @@
 namespace djnn
 {
 
-  std::unique_ptr<ComponentObserver> ComponentObserver::_instance;
+  ComponentObserver* ComponentObserver::_instance;
   std::once_flag ComponentObserver::onceFlag;
 
   ComponentObserver::ComponentObserver ()
@@ -35,10 +35,10 @@ namespace djnn
   ComponentObserver::instance ()
   {
     std::call_once (ComponentObserver::onceFlag, [] () {
-      _instance.reset(new ComponentObserver);
+      _instance = new ComponentObserver();
     });
 
-    return *(_instance.get ());
+    return *(_instance) ;
   }
 
    void

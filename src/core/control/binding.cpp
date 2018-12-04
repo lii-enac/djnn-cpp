@@ -47,9 +47,9 @@ namespace djnn
       }
     } else
       _dst = dst;
-    _action = make_unique<BindingAction> (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
+    _action = new BindingAction (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
                                           _dst);
-    _c_src = std::unique_ptr<Coupling> (new Coupling (_src, ACTIVATION, _action.get (), ACTIVATION));
+    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _dst);
@@ -71,9 +71,14 @@ namespace djnn
 
   Binding::~Binding ()
   {
-    Graph::instance ().remove_edge (_src, _dst);
+
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    Graph::instance ().remove_edge (_src, _dst);
+
+    if (_c_src) { delete _c_src; _c_src = nullptr;}
+    if (_action) { delete _action; _action = nullptr;}
+    
   }
 
   void

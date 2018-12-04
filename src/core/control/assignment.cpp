@@ -132,9 +132,7 @@ namespace djnn
       AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
-    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
-                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, true);
+    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
     Graph::instance ().add_edge (_src, _dst);
   }
 
@@ -143,9 +141,7 @@ namespace djnn
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
-    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
-                                             "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, true);
+    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _dst);
@@ -165,9 +161,11 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    Graph::instance ().remove_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    Graph::instance ().remove_edge (_src, _dst);
+    
+    if (_action) { delete _action; _action = nullptr;}
   }
 
   void
@@ -196,9 +194,7 @@ namespace djnn
     AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
-    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
-                                             "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, false);
+    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
     Graph::instance ().add_edge (_src, _dst);
   }
 
@@ -207,10 +203,10 @@ namespace djnn
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     _model = isModel;
-    _action = make_unique<AbstractAssignment::AssignmentAction> (this,
-                                             "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                             _src, _dst, false);
+    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
     Graph::instance ().add_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
     Process::finalize ();
   }
 
@@ -227,7 +223,11 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
+    
+    if (_action) { delete _action; _action = nullptr;}
   }
 
   void

@@ -23,6 +23,7 @@ namespace djnn {
   public:
     BoolProperty (bool v);
     BoolProperty (Process *p, const string &name, bool v);
+    ~BoolProperty ();
     bool get_value () { return value; };
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
@@ -36,6 +37,6 @@ namespace djnn {
     Process* clone () override;
   private:
     bool value;
-    std::shared_ptr<Process> _true, _false;
+    Process *_true, *_false;
   };
 }

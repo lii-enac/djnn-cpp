@@ -28,8 +28,13 @@ namespace djnn
       Process (p, name)
   {
     _model = is_model;
-    _value = make_unique<IntProperty> (this, "value", value);
+    _value = new IntProperty (this, "value", value);
     Process::finalize ();
+  }
+
+  Exit::~Exit ()
+  {
+    if (_value) {delete _value; _value = nullptr;}
   }
 
   void

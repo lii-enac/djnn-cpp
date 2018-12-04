@@ -47,7 +47,7 @@ namespace djnn {
   private:
     void init_binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     Process *_src, *_dst;
-    std::unique_ptr<Coupling> _c_src;
-    std::unique_ptr<BindingAction> _action;
+    Coupling *_c_src;
+    BindingAction *_action;
   };
 }

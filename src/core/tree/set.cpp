@@ -29,23 +29,29 @@ namespace djnn
       Process ()
   {
     _cpnt_type = COMPONENT;
-    _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _size = std::unique_ptr<IntProperty> (new IntProperty (0));
+    _added = new RefProperty (nullptr);
+    _removed = new RefProperty (nullptr);
+    _size = new IntProperty (0);
   }
 
   Set::Set (Process* parent, const string& name) :
       Process (parent, name)
   {
     _cpnt_type = COMPONENT;
-    _added = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _removed = std::unique_ptr<RefProperty> (new RefProperty (nullptr));
-    _size = std::unique_ptr<IntProperty> (new IntProperty (0));
+    _added = new RefProperty (nullptr);
+    _removed = new RefProperty (nullptr);
+    _size = new IntProperty (0);
     Process::finalize ();
   }
 
   Set::~Set ()
   {
+    _added = nullptr;
+    _removed = nullptr;
+
+    if (_size) { delete _size; _size = nullptr;}
+    if (_removed) { delete _removed; _removed = nullptr;}
+    if (_added) { delete _added; _added = nullptr;}
   }
 
   void
@@ -132,11 +138,11 @@ namespace djnn
   Set::find_component (const string& path)
   {
     if (path.compare ("$added") == 0)
-      return _added.get ();
+      return _added;
     else if (path.compare ("$removed") == 0)
-      return _removed.get ();
+      return _removed;
     else if (path.compare ("size") == 0)
-      return _size.get ();
+      return _size;
     else {
       return Process::find_component (path);
     }

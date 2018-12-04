@@ -79,16 +79,16 @@ namespace djnn
 
   ExternalSource * MainLoop::another_source_wants_to_be_mainloop = nullptr;
 
-  std::shared_ptr<MainLoop> MainLoop::_instance;
+  MainLoop* MainLoop::_instance;
   std::once_flag MainLoop::onceFlag;
   MainLoop&
   MainLoop::instance ()
   {
     std::call_once (MainLoop::onceFlag, [] () {
       global_mutex = new djnn_mutex_t ();      
-      _instance.reset(new MainLoop);
+      _instance = new MainLoop();
     });
 
-    return *(_instance.get ());
+    return *(_instance);
   }
 }

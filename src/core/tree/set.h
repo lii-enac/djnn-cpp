@@ -50,7 +50,7 @@ namespace djnn {
     virtual ~Set ();
     void serialize (const string& type) override;
   private:
-    shared_ptr<RefProperty> _added, _removed;
-    shared_ptr <IntProperty> _size;
+    RefProperty *_added, *_removed;
+    IntProperty *_size;
   };
 }

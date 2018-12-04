@@ -48,7 +48,7 @@ namespace djnn {
   protected:
     AbstractProperty* _src;
     AbstractProperty* _dst;
-    unique_ptr<AssignmentAction> _action;
+    AssignmentAction* _action;
   };
 
   class Assignment : public AbstractAssignment {
