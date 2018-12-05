@@ -27,27 +27,28 @@
 
 namespace djnn
 {
-  std::shared_ptr<QtBackend> QtBackend::_instance;
+  QtBackend *QtBackend::_instance;
   std::once_flag QtBackend::onceFlag;
 
   QtBackend*
   QtBackend::instance ()
   {
     std::call_once (QtBackend::onceFlag, [] () {
-      _instance.reset(new QtBackend);
+      _instance = new QtBackend();
     });
 
-    return _instance.get ();
+    return _instance;
   }
 
   QtBackend::QtBackend () :
       _painter (nullptr), _picking_view (nullptr)
   {
-    _context_manager = make_unique<QtContextManager> ();
+    _context_manager = new QtContextManager ();
   }
 
   QtBackend::~QtBackend ()
   {
+    if (_context_manager) { delete _context_manager; _context_manager = nullptr;}
   }
 
   void
@@ -79,7 +80,7 @@ namespace djnn
   void
   QtBackend::load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     QMatrix4x4 matrix = cur_context->matrix;
     QTransform transform = matrix.toTransform ();
     if (s->matrix () != nullptr) {
@@ -177,7 +178,7 @@ namespace djnn
   void
   QtBackend::load_pick_context (AbstractGShape *s)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     QPen pickPen;
     QBrush pickBrush (_picking_view->pick_color ());
     pickPen.setStyle (Qt::SolidLine);

@@ -115,7 +115,7 @@ namespace djnn
   private:
     UpdateDrawing (const UpdateDrawing&) = delete;
     UpdateDrawing & operator=(const UpdateDrawing&) = delete;
-    static std::shared_ptr<UpdateDrawing> _instance;
+    static UpdateDrawing* _instance;
     static std::once_flag onceFlag;
     std::vector<Window*> _win_list;
     BoolProperty *_auto_refresh;

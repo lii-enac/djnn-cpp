@@ -164,7 +164,7 @@ namespace djnn
     update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
 
   private:
-    static std::shared_ptr<QtBackend> _instance;
+    static QtBackend *_instance;
     static std::once_flag onceFlag;
     QtBackend ();
     void
@@ -177,7 +177,7 @@ namespace djnn
     is_in_picking_view (AbstractGShape *s);
     QPainter *_painter;
     QtPickingView *_picking_view;
-    unique_ptr<QtContextManager> _context_manager;
+    QtContextManager *_context_manager;
     QPolygonF cur_poly;
     QPainterPath cur_path;
     QLinearGradient cur_linear_gradient;

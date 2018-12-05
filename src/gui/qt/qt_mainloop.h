@@ -39,7 +39,7 @@ namespace djnn {
   protected:
     //void run() override {}
   private:
-    static shared_ptr<QtMainloop> _instance;
+    static QtMainloop* _instance;
     static once_flag onceFlag;
     QtMainloop ();
     bool _please_exec;

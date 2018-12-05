@@ -26,7 +26,7 @@
 
 namespace djnn
 {
-  shared_ptr<QtContext>
+  QtContext*
   QtContextManager::get_current ()
   {
     return _context_list.back ();
@@ -37,9 +37,9 @@ namespace djnn
   {
     QtBackend::instance ()->save_context ();
     if (_context_list.empty ())
-      _context_list.push_back (make_shared<QtContext> ());
+      _context_list.push_back (new QtContext ());
     else {
-      _context_list.push_back (make_shared<QtContext> (_context_list.back ()));
+      _context_list.push_back (new QtContext (_context_list.back ()));
     }
   }
 
@@ -68,7 +68,7 @@ namespace djnn
     //update_relative_units (); Fail at startup
   }
 
-  QtContext::QtContext (shared_ptr<QtContext> p)
+  QtContext::QtContext (QtContext *p)
   {
     pen = QPen (p->pen);
     brush = QBrush (p->brush);

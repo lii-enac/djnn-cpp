@@ -24,17 +24,17 @@
 namespace djnn
 {
 
-  std::shared_ptr<QtMainloop> QtMainloop::_instance;
+  QtMainloop* QtMainloop::_instance;
   std::once_flag QtMainloop::onceFlag;
 
   QtMainloop&
   QtMainloop::instance ()
   {
     std::call_once (QtMainloop::onceFlag, [] () {
-      _instance.reset(new QtMainloop);
+      _instance = new QtMainloop ();
     });
 
-    return *(_instance.get ());
+    return *(_instance);
   }
 
   QtMainloop::QtMainloop () :

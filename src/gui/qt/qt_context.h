@@ -30,7 +30,7 @@ namespace djnn
     friend class QtBackend;
   public:
     QtContext ();
-    QtContext (shared_ptr<QtContext> parent);
+    QtContext (QtContext* parent);
     virtual ~QtContext ();
   private:
     int DEFAULT_DPI_RES;
@@ -43,10 +43,8 @@ namespace djnn
     QFont font;
     double factor[10];
     int textAnchor;
-    void
-    update_relative_units ();
-    double
-    get_unit_factor (djnLengthUnit unit);
+    void update_relative_units ();
+    double get_unit_factor (djnLengthUnit unit);
   };
 
   class QtContextManager : public ContextManager
@@ -65,10 +63,10 @@ namespace djnn
     ;
     void pop () override;
     void push () override;
-    shared_ptr<QtContext> get_current ();
+    QtContext* get_current ();
 
   private:
-    vector<shared_ptr<QtContext>> _context_list;
+    vector<QtContext*> _context_list;
   };
 
 } /* namespace djnn */

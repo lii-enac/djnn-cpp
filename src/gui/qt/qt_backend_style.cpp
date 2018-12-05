@@ -48,7 +48,7 @@ namespace djnn
   void
   QtBackend::load_fill_color (int r, int g, int b)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->brush.setStyle (Qt::SolidPattern);
     int a = cur_context->brush.color ().alpha ();
     cur_context->brush.setColor (QColor (r, g, b, a));
@@ -57,7 +57,7 @@ namespace djnn
   void
   QtBackend::load_outline_color (int r, int g, int b)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     if (cur_context->pen.style () == Qt::NoPen) {
       cur_context->pen.setStyle (Qt::SolidLine);
     }
@@ -68,21 +68,21 @@ namespace djnn
   void
   QtBackend::load_fill_rule (djnFillRuleType rule)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->fillRule = fillRules[rule];
   }
 
   void
   QtBackend::load_no_outline ()
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->pen.setStyle (Qt::NoPen);
   }
 
   void
   QtBackend::load_no_fill ()
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->brush.setStyle (Qt::NoBrush);
   }
 
@@ -96,7 +96,7 @@ namespace djnn
   void
   QtBackend::load_outline_opacity (float a)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     QColor c = cur_context->pen.color ();
     float oldAlpha = c.alphaF ();
     c.setAlphaF (oldAlpha * a);
@@ -106,7 +106,7 @@ namespace djnn
   void
   QtBackend::load_fill_opacity (float a)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->alpha *= a;
     if (cur_context->brush.style () == Qt::SolidPattern) {
       QColor c = cur_context->brush.color ();
@@ -162,7 +162,7 @@ namespace djnn
   void
   QtBackend::load_dash_array (vector<double> dash)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     cur_context->pen.setStyle (Qt::CustomDashLine);
     QVector<qreal> vector (0);
     for (auto d : dash)
@@ -230,7 +230,7 @@ namespace djnn
   void
   QtBackend::load_font_size (djnLengthUnit unit, double size)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     if (unit == djnPxLength)
       cur_context->font.setPixelSize (size);
     else
@@ -241,7 +241,7 @@ namespace djnn
   void
   QtBackend::load_font_weight (int weight)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     if (weight == -1)
       weight = cur_context->font.weight () - 10 < 0 ? 0 : cur_context->font.weight () - 10; /* lighter */
     if (weight == 100)
@@ -253,7 +253,7 @@ namespace djnn
   void
   QtBackend::load_font_style (djnFontSlope style)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     int val = style;
     if (style >= (int) (sizeof(fontStyleArray) / sizeof(QFont::Style))) {
       std::cerr << "Invalid Qt font style, default will be used\n";
@@ -266,7 +266,7 @@ namespace djnn
   void
   QtBackend::load_font_family (const string &family)
   {
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     QString val (family.c_str ());
     cur_context->font.setFamily (val);
     cur_context->update_relative_units ();

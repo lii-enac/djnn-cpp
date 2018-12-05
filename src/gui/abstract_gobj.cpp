@@ -18,7 +18,7 @@ namespace djnn
 {
 
   bool gui_initialized = false;
-  std::shared_ptr<UpdateDrawing> UpdateDrawing::_instance;
+  UpdateDrawing *UpdateDrawing::_instance;
   std::once_flag UpdateDrawing::onceFlag;
 
   UpdateDrawing::UpdateDrawing ()
@@ -42,24 +42,26 @@ namespace djnn
     Graph::instance ().remove_edge (_damaged, _draw_sync);
     Graph::instance ().remove_edge (_auto_refresh, _update_auto_refresh_action);
     Graph::instance ().remove_output_node (_redraw_action);
-    delete _redraw_when_draw_sync;
-    delete _redraw_when_damaged;
-    delete _redraw_action;
-    delete _c_update_auto_refresh;
-    delete _damaged;
-    delete _draw_sync;
-    delete _auto_refresh;
-    delete _update_auto_refresh_action;
+    
+    if (_redraw_when_draw_sync) { delete _redraw_when_draw_sync; _redraw_when_draw_sync = nullptr; }
+    if (_redraw_when_damaged) { delete _redraw_when_damaged; _redraw_when_damaged = nullptr; }
+    if (_redraw_action) { delete _redraw_action; _redraw_action = nullptr; }
+    if (_c_update_auto_refresh) { delete _c_update_auto_refresh; _c_update_auto_refresh = nullptr; }
+
+    if (_damaged) { delete _damaged; _damaged = nullptr; }
+    if (_draw_sync) { delete _draw_sync; _draw_sync = nullptr; }
+    if (_auto_refresh) { delete _auto_refresh; _auto_refresh = nullptr; }
+    if (_update_auto_refresh_action) { delete _update_auto_refresh_action; _update_auto_refresh_action = nullptr; }
   }
 
   UpdateDrawing*
   UpdateDrawing::instance ()
   {
     std::call_once (UpdateDrawing::onceFlag, [] () {
-      _instance.reset(new UpdateDrawing);
+      _instance = new UpdateDrawing ();
     });
 
-    return _instance.get ();
+    return _instance;
   }
 
   void

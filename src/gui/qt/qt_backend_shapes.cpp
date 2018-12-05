@@ -99,7 +99,7 @@ namespace djnn
     int dyU = t->dyU ()->get_value ();
     int encoding = t->encoding ()->get_value ();
     std::string text = t->text ()->get_value ();
-    shared_ptr<QtContext> cur_context = _context_manager->get_current ();
+    QtContext *cur_context = _context_manager->get_current ();
     double dxfactor = cur_context->factor[dxU];
     double dyfactor = cur_context->factor[dyU];
 
@@ -414,7 +414,7 @@ namespace djnn
     if (i->invalid_cache ()) {
       if (i->cache () != nullptr) {
         pm = (QPixmap*) (i->cache ());
-        delete (pm);
+        delete (pm); pm = nullptr;
       }
       QFileInfo fi (path.c_str ());
       pm = new QPixmap (fi.absoluteFilePath ());
