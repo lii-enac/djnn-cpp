@@ -63,19 +63,24 @@ namespace djnn {
       return;
     }
     // FIXME: this should be done lazily
-    _iofd = make_unique<IOFD> (_fd);
+    _iofd = new IOFD (_fd);
     _iofd->activation ();
-    _action = make_shared<Evdev::EvdevAction> (this);
-    _readable_cpl = make_unique<Coupling> (_iofd->find_component ("readable"), ACTIVATION, _action.get(), ACTIVATION);
-    Graph::instance().add_edge (_iofd->find_component ("readable"), _action.get ());
+    _action = new EvdevAction (this);
+    _readable_cpl = new Coupling (_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
+    Graph::instance().add_edge (_iofd->find_component ("readable"), _action);
   }
 
   Evdev::~Evdev ()
   {
     if (_aborted)
       return;
-    Graph::instance().remove_edge (_iofd->find_component ("readable"), _action.get ());
+    Graph::instance().remove_edge (_iofd->find_component ("readable"), _action);
     _iofd->deactivation ();
+
+    if (_readable_cpl) { delete _readable_cpl; _readable_cpl=nullptr;}
+    if (_action) { delete _action; _action=nullptr;}
+    if (_iofd) { delete _iofd; _iofd=nullptr;}
+    
     libevdev_free (_dev);
     close (_fd);
   }

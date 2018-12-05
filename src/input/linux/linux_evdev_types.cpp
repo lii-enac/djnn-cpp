@@ -19,7 +19,7 @@
 
 
 namespace djnn {
-  unique_ptr<LinuxDevice>
+  LinuxDevice*
   map_device (const struct libevdev *dev, const string &n)
   {
     //int keyFound = 0;
@@ -28,10 +28,10 @@ namespace djnn {
     if (libevdev_has_event_code (dev, EV_REL, REL_X)
       && libevdev_has_event_code (dev, EV_REL, REL_Y)
       && libevdev_has_event_code (dev, EV_KEY, BTN_LEFT)) {
-        return make_unique<LinuxMouse> (Mice, n, dev);
+        return new LinuxMouse (Mice, n, dev);
     } else if (libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_X)
       && libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_Y)) {
-        return make_unique<LinuxTouchPanel> (TouchPanels, n, dev);
+        return new LinuxTouchPanel (TouchPanels, n, dev);
     }
     warning (nullptr, "unknown device type");
     return nullptr;
