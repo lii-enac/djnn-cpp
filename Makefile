@@ -259,7 +259,7 @@ endif
 
 ifeq ($(os),Darwin)
 #https://brew.sh/
-pkgdeps := expat curl
+pkgdeps := expat curl boost
 pkgdeps += expat qt5
 #pkgdeps += freetype sdl2
 pkgcmd := brew install

@@ -4,7 +4,7 @@ We provide a Makefile that should work on MacOS (10.12+), Linux, Windows 10+.
 in a Terminal:
 
 sudo apt install git make  
-git clone git@github.com:lii-enac/djnn-cpp.git  
+git clone https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
 make -j4  
@@ -14,7 +14,7 @@ install homebrew (https://brew.sh/)
 then in a Terminal:
 
 brew install git make  
-git clone git@github.com:lii-enac/djnn-cpp.git  
+git clone https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
 make -j  
@@ -24,7 +24,7 @@ install MSYS2 (https://www.msys2.org/)
 then in an MSYS2 terminal:
 
 pacman -S git make  
-git clone git@github.com:lii-enac/djnn-cpp.git  
+git clone https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
 
