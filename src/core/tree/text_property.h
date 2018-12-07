@@ -23,7 +23,7 @@ namespace djnn {
   class TextProperty: public AbstractProperty {
   public:
     TextProperty (string v) : AbstractProperty (), value (v) { _type = String; };
-    TextProperty (Process*  p, const string &name, string v) : AbstractProperty (p, name), value (v) { _type = String; Process::finalize (); };
+    TextProperty (Process*  p, const string &name, const string &v) : AbstractProperty (p, name), value (v.c_str ()) { _type = String; Process::finalize (); };
     void activate () override {} ;
     void deactivate () override {};
     string& get_value () { return value; };

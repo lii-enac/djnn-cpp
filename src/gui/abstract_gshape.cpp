@@ -40,7 +40,7 @@ namespace djnn
       newh->add_child (c->clone (), this->find_component_name(c));
     }
 
-    newh->_gobj = _children.back ();
+    newh->_gobj = newh->_children.back ();
 
     return newh;
   }
