@@ -48,13 +48,13 @@ namespace djnn
 
     //shapes
     void
-    draw_rect (Rectangle *s, double x, double y, double w, double h, double rx, double ry) override;
+    draw_rect (Rectangle *s) override;
     void
-    draw_circle (Circle *s, double cx, double cy, double r) override;
+    draw_circle (Circle *s) override;
     void
-    draw_ellipse (Ellipse *s, double cx, double cy, double rx, double ry) override;
+    draw_ellipse (Ellipse *s) override;
     void
-    draw_line (Line *s, double x1, double y1, double x2, double y2) override;
+    draw_line (Line *s) override;
     void
     draw_text (Text *t) override;
     void
@@ -78,7 +78,7 @@ namespace djnn
     void
     draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry, double xAxisRotation);
     void
-    draw_rect_clip (RectangleClip *r, double x, double y, double w, double h) override;
+    draw_rect_clip (RectangleClip *r) override;
     void
     draw_path_clip (Path *p) override;
     void

@@ -40,6 +40,7 @@ namespace djnn
     DoubleProperty* height () { return _height;}
     DoubleProperty* rx () { return _rx;}
     DoubleProperty* ry () { return _ry;}
+    void get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry);
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
@@ -123,6 +124,7 @@ namespace djnn
     DoubleProperty* y () { return _y;}
     DoubleProperty* width () { return _width;}
     DoubleProperty* height () { return _height;}
+    void get_properties_values (double &x, double &y, double &w, double &h);
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;
@@ -145,6 +147,7 @@ namespace djnn
     DoubleProperty* y1 () { return _y1;}
     DoubleProperty* x2 () { return _x2;}
     DoubleProperty* y2 () { return _y2;}
+    void get_properties_values (double &x1, double &y1, double &x2, double &y2);
   private:
     DoubleProperty *_x1;
     DoubleProperty *_y1;
@@ -421,6 +424,7 @@ namespace djnn
     DoubleProperty* cy () { return _cy;}
     DoubleProperty* rx () { return _rx;}
     DoubleProperty* ry () { return _ry;}
+    void get_properties_values (double &cx, double &cy, double &rx, double &ry);
   private:
     DoubleProperty *_cx, *_cy, *_rx, *_ry;
     Coupling *_ccx, *_ccy, *_crx, *_cry;
@@ -440,6 +444,7 @@ namespace djnn
     DoubleProperty* cx () { return _cx;}
     DoubleProperty* cy () { return _cy;}
     DoubleProperty* r ()  { return _r; }
+    void get_properties_values (double &cx, double &cy, double &r);
   private:
     DoubleProperty *_cx;
     DoubleProperty *_cy;

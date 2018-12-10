@@ -88,14 +88,18 @@ namespace djnn
   void
   Line::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double x1 = _x1->get_value ();
-      double y1 = _y1->get_value ();
-      double x2 = _x2->get_value ();
-      double y2 = _y2->get_value ();
-      Backend::instance ()->draw_line (this, x1, y1, x2, y2);
+      Backend::instance ()->draw_line (this);
     }
+  }
+
+  void
+  Line::get_properties_values (double &x1, double &y1, double &x2, double &y2)
+  {
+    x1 = _x1->get_value ();
+    y1 = _y1->get_value ();
+    x2 = _x2->get_value ();
+    y2 = _y2->get_value ();
   }
 
   Process*

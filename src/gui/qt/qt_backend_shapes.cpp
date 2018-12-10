@@ -28,10 +28,12 @@
 namespace djnn
 {
   void
-  QtBackend::draw_rect (Rectangle *s, double x, double y, double w, double h, double rx, double ry)
+  QtBackend::draw_rect (Rectangle *s)
   {
     if (_painter == nullptr)
       return;
+    double x, y, w, h, rx, ry;
+    s->get_properties_values(x,y,w,h,rx,ry);
     load_drawing_context (s, x, y, w, h);
     _painter->drawRoundedRect (x, y, w, h, rx, ry);
 
@@ -42,10 +44,12 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_circle (Circle *s, double cx, double cy, double r)
+  QtBackend::draw_circle (Circle *s)
   {
     if (_painter == nullptr)
       return;
+    double cx, cy, r;
+    s->get_properties_values (cx, cy, r);
     QRectF rect (cx - r, cy - r, 2 * r, 2 * r);
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
@@ -57,10 +61,12 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_ellipse (Ellipse *s, double cx, double cy, double rx, double ry)
+  QtBackend::draw_ellipse (Ellipse *s)
   {
     if (_painter == nullptr)
       return;
+    double cx, cy, rx, ry;
+    s->get_properties_values (cx, cy, rx, ry);
     QRect rect (cx - rx, cy - ry, 2 * rx, 2 * ry);
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
@@ -72,10 +78,12 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_line (Line *s, double x1, double y1, double x2, double y2)
+  QtBackend::draw_line (Line *s)
   {
     if (_painter == nullptr)
       return;
+    double x1, y1, x2, y2;
+    s->get_properties_values (x1, y1, x2, y2);
     QLineF line (x1, y1, x2, y2);
     load_drawing_context (s, x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
     _painter->drawLine (line);
@@ -372,8 +380,10 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_rect_clip (RectangleClip *s, double x, double y, double w, double h)
+  QtBackend::draw_rect_clip (RectangleClip *s)
   {
+    double x, y, w, h;
+    s->get_properties_values(x,y,w,h);
     load_drawing_context (s, x, y, w, h);
     _painter->setClipRect (x, y, w, h);
     if (is_in_picking_view (s)) {

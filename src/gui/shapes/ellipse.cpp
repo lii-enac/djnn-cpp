@@ -91,9 +91,19 @@ namespace djnn
   void
   Ellipse::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame)
-    if (somehow_activating () && Backend::instance ()->window () == _frame)
-      Backend::instance ()->draw_ellipse (this, _cx->get_value (), _cy->get_value (), _rx->get_value (), _ry->get_value ());
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+      Backend::instance ()->draw_ellipse (this);
+    }
+  }
+
+  void
+  Ellipse::get_properties_values (double &cx, double &cy, double &rx, double &ry)
+  {
+    cx = _cx->get_value ();
+    cy = _cy->get_value ();
+    rx = _rx->get_value ();
+    ry = _ry->get_value ();
+>>>>>>> 7c86dfb2... gui backend change draw API to prepare for caching
   }
 
   Process*

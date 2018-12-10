@@ -106,17 +106,22 @@ namespace djnn
   void
   Rectangle::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double x = _x->get_value ();
-      double y = _y->get_value ();
-      double w = _width->get_value ();
-      double h = _height->get_value ();
-      double rx = _rx->get_value ();
-      double ry = _ry->get_value ();
-      Backend::instance ()->draw_rect (this, x, y, w, h, rx, ry);
+      Backend::instance ()->draw_rect (this);
     }
   }
+
+  void
+  Rectangle::get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry)
+  {
+    x = _x->get_value ();
+    y = _y->get_value ();
+    w = _width->get_value ();
+    h = _height->get_value ();
+    rx = _rx->get_value ();
+    ry = _ry->get_value ();
+  }
+
 
   Process*
   Rectangle::clone ()

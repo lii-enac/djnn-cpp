@@ -53,19 +53,19 @@ namespace djnn
 
     // shapes
     virtual void
-    draw_rect (Rectangle *s, double x, double y, double w, double h, double rx, double ry)
+    draw_rect (Rectangle *s)
     {
     }
     virtual void
-    draw_circle (Circle *s, double cx, double cy, double r)
+    draw_circle (Circle *s)
     {
     }
     virtual void
-    draw_ellipse (Ellipse *s, double cx, double cy, double rx, double ry)
+    draw_ellipse (Ellipse *s)
     {
     }
     virtual void
-    draw_line (Line *s, double x1, double y1, double x2, double y2)
+    draw_line (Line *s)
     {
     }
     virtual void
@@ -109,7 +109,7 @@ namespace djnn
     {
     }
     virtual void
-    draw_rect_clip (RectangleClip *s, double x, double y, double w, double h)
+    draw_rect_clip (RectangleClip *s)
     {
     }
     virtual void

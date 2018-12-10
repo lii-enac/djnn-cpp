@@ -82,9 +82,18 @@ namespace djnn
   void
   Circle::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame)
-    if (somehow_activating () && Backend::instance ()->window () == _frame)
-      Backend::instance ()->draw_circle (this, _cx->get_value (), _cy->get_value (), _r->get_value ());
+
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+      Backend::instance ()->draw_circle (this);
+    }
+  }
+
+  void
+  Circle::get_properties_values (double &cx, double &cy, double &r)
+  {
+    cx = _cx->get_value ();
+    cy = _cy->get_value ();
+    r = _r->get_value ();
   }
 
   Process*
