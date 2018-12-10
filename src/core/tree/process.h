@@ -50,6 +50,14 @@ namespace djnn {
     LAST
   };
 
+  enum notify_mask {
+    notify_none               = 1 << 0,
+    notify_generic            = 1 << 1,
+    notify_damaged_geometry   = 1 << 2,
+    notify_damaged_transform  = 1 << 3,
+    notify_damaged_style      = 1 << 4
+  };
+
   typedef vector<Coupling*> couplings_t;
 
   class Process
@@ -70,6 +78,8 @@ namespace djnn {
     void remove_deactivation_coupling (Coupling* c);
     void notify_activation ();
     void notify_deactivation ();
+
+    virtual void notify( int nm ) {}
 
     virtual Process* find_component (const string&);
     static Process* find_component (Process* p, const string &path);

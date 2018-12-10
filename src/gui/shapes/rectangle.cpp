@@ -24,12 +24,12 @@ namespace djnn
   void
   Rectangle::init_rectangle (double x, double y, double w, double h, double rx, double ry)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _width = new DoubleProperty (this, "width", w);
-    _height = new DoubleProperty (this, "height", h);
-    _rx = new DoubleProperty (this, "rx", rx);
-    _ry = new DoubleProperty (this, "ry", ry);
+    _x = new DoubleProperty (this, "x", x, notify_damaged_transform);
+    _y = new DoubleProperty (this, "y", y, notify_damaged_transform);
+    _width = new DoubleProperty (this, "width", w, notify_damaged_geometry);
+    _height = new DoubleProperty (this, "height", h, notify_damaged_geometry);
+    _rx = new DoubleProperty (this, "rx", rx, notify_damaged_geometry);
+    _ry = new DoubleProperty (this, "ry", ry, notify_damaged_geometry);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
     _cx->disable ();
@@ -122,6 +122,10 @@ namespace djnn
     ry = _ry->get_value ();
   }
 
+  void
+  Rectangle::notify( int nm ) {
+    //std::cout << __FUNCTION__ << " " << nm << std::endl; 
+  }
 
   Process*
   Rectangle::clone ()

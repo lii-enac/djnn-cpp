@@ -41,6 +41,8 @@ namespace djnn
     DoubleProperty* rx () { return _rx;}
     DoubleProperty* ry () { return _ry;}
     void get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry);
+
+    virtual void notify( int nm ) override;
   private:
     DoubleProperty *_x;
     DoubleProperty *_y;

@@ -33,8 +33,12 @@ namespace djnn
   DoubleProperty::set_value (double v, bool propagate)
   {
     value = v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      if( _notify_mask != notify_none) {
+        get_parent () -> notify( _notify_mask );
+      }
+    }
   }
 
   void
