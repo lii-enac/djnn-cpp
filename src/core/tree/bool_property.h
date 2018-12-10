@@ -22,7 +22,7 @@ namespace djnn {
   class BoolProperty: public AbstractProperty {
   public:
     BoolProperty (bool v);
-    BoolProperty (Process *p, const string &name, bool v);
+    BoolProperty (Process *p, const string &name, bool v, int nm=notify_none);
     ~BoolProperty ();
     virtual int get_prop_type () override { return Boolean; }
     bool get_value () { return value; };

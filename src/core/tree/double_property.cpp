@@ -25,8 +25,10 @@ namespace djnn
   DoubleProperty::set_value (int v, bool propagate)
   {
     value = v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
@@ -35,9 +37,7 @@ namespace djnn
     value = v;
     if (is_activable () && propagate) {
       notify_activation ();
-      if( _notify_mask != notify_none) {
-        get_parent () -> notify( _notify_mask );
-      }
+      notify_parent ();
     }
   }
 
@@ -45,8 +45,10 @@ namespace djnn
   DoubleProperty::set_value (bool v, bool propagate)
   {
     value = v ? 1 : 0;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
@@ -58,8 +60,10 @@ namespace djnn
 
       if (!v.empty ()) {
         value = stof (v);
-        if (is_activable () && propagate)
-        notify_activation ();
+        if (is_activable () && propagate) {
+          notify_activation ();
+          notify_parent ();
+        }
       }
 
       

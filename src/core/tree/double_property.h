@@ -39,7 +39,6 @@ namespace djnn {
     Process* clone () override;
   private:
     double value;
-    int _notify_mask;
   };
 
 }

@@ -48,8 +48,10 @@ namespace djnn
   RefProperty::set_value (Process* v, bool propagate)
   {
     value = v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void

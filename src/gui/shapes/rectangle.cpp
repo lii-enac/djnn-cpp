@@ -122,11 +122,6 @@ namespace djnn
     ry = _ry->get_value ();
   }
 
-  void
-  Rectangle::notify( int nm ) {
-    //std::cout << __FUNCTION__ << " " << nm << std::endl; 
-  }
-
   Process*
   Rectangle::clone ()
   {

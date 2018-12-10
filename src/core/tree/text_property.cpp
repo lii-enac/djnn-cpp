@@ -24,33 +24,40 @@ namespace djnn
   TextProperty::set_value (int v, bool propagate)
   {
     value = to_string (v);
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
   TextProperty::set_value (double v, bool propagate)
   {
     value = to_string (v);
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
   TextProperty::set_value (bool v, bool propagate)
   {
     value = v ? "true" : "false";
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
-    ;
+      notify_parent ();
+    }
   }
 
   void
   TextProperty::set_value (const string &v, bool propagate)
   {
     value = v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void

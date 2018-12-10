@@ -48,7 +48,7 @@ namespace djnn
     DoubleProperty* origin_y () { return _origin_y; }
     bool has_ui () { return _has_ui; }
     Process* find_component (const string &n) override;
-    
+
   private:
     void init_mouse_ui ();
     Process* _matrix, *_inverted_matrix;

@@ -24,7 +24,7 @@ namespace djnn {
   class TextProperty: public AbstractProperty {
   public:
     TextProperty (string v) : AbstractProperty (), value (v) {};
-    TextProperty (Process*  p, const string &name, const string &v) : AbstractProperty (p, name), value (v.c_str ()) { Process::finalize (); };
+    TextProperty (Process*  p, const string &name, const string &v, int nm = notify_none) : AbstractProperty (p, name, nm), value (v.c_str ()) { Process::finalize (); };
     virtual int get_prop_type () override { return String; }
     void activate () override {} ;
     void deactivate () override {};
@@ -34,7 +34,7 @@ namespace djnn {
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
     void set_value (const string &v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
+    void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); };
     double get_double_value () override {
       try {
         double r = stof (value);

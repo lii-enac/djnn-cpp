@@ -43,8 +43,12 @@ namespace djnn
     Window*& frame () { return _frame; }
     void activate () override;
     void deactivate () override;
+    void notify_change (int nm) override { _damaged |= nm; }
+    void reset_damaged () { _damaged = notify_none; }
+    int get_damaged () { return _damaged; }
   protected:
     Window *_frame;
+    int _damaged;
   };
 
 

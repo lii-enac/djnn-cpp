@@ -24,24 +24,30 @@ namespace djnn
   IntProperty::set_value (int v, bool propagate)
   {
     value = v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
   IntProperty::set_value (double v, bool propagate)
   {
     value = (int) v;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
   IntProperty::set_value (bool v, bool propagate)
   {
     value = v ? 1 : 0;
-    if (is_activable () && propagate)
+    if (is_activable () && propagate) {
       notify_activation ();
+      notify_parent ();
+    }
   }
 
   void
@@ -50,8 +56,10 @@ namespace djnn
     int oldVal = value;
     try {
       value = stoi (v);
-      if (is_activable () && propagate)
+      if (is_activable () && propagate) {
         notify_activation ();
+        notify_parent ();
+      }
     }
     catch (const std::invalid_argument& ia) {
       value = oldVal;

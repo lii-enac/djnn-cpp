@@ -79,7 +79,7 @@ namespace djnn {
     void notify_activation ();
     void notify_deactivation ();
 
-    virtual void notify( int nm ) {}
+    virtual void notify_change ( int nm ) {}
 
     virtual Process* find_component (const string&);
     static Process* find_component (Process* p, const string &path);
