@@ -89,7 +89,9 @@ namespace djnn {
   {
     _parent->remove_child (this);
 
-    // destroy all elements
+    // destroy all touches and clear
+    for (std::vector<LinuxTouch*>::iterator it = _v_touches.begin () ; it != _v_touches.end(); ++it)
+      if (*it) { delete *it; *it=nullptr;}
     _v_touches.clear ();
 
     if (_max_y) { delete _max_y; _max_y = nullptr;}

@@ -52,6 +52,10 @@ namespace djnn
   {
   }
 
+  Vertex::~Vertex () {
+    _edges.clear ();
+  }
+
   void
   Vertex::add_edge (Vertex *dst) 
   { 
@@ -63,13 +67,14 @@ namespace djnn
   void
   Vertex::remove_edge (Vertex *dst)
   {
-    Vertex::vertices_t::iterator newend = _edges.end ();
-
+   
     //remove
+    Vertex::vertices_t::iterator newend = _edges.end ();
     newend = std::remove (_edges.begin (), _edges.end (), dst);
 
     //check if end has changed and erase
     if (newend != _edges.end ()){
+      // erase them from _edges
       _edges.erase(newend, _edges.end ());
       dst->_count_egdes_in--;
     }
@@ -103,7 +108,7 @@ namespace djnn
   Graph::get_vertex (Process* c)
   {
     for (auto v : _vertices) {
-      if (v->get_process  () == c)
+      if (v->get_process () == c)
         return (v);
     }
     return nullptr;
@@ -123,7 +128,7 @@ namespace djnn
   {
     // check if c is already in the graph
     for (auto v : _output_nodes) {
-      if (v->get_process  () == c)
+      if (v->get_process () == c)
         return;
     }
     Vertex *v = new Vertex (c);
@@ -133,16 +138,20 @@ namespace djnn
   void
   Graph::remove_output_node (Process* c)
   {
-    /*int i = 0;
-    for (auto v : _output_nodes) {
-      if (v->get_process  () == c)
-        _output_nodes.erase (_output_nodes.begin () + i);
-      i++;
-    }*/
-    _output_nodes.erase(std::remove_if (_output_nodes.begin (), _output_nodes.end (),
-      [c](Vertex::vertices_t::iterator::value_type v) {return v->get_process  () == c;}
-      ),
-    _output_nodes.end());
+    //remove_if 
+    Vertex::vertices_t::iterator new_end = _output_nodes.end ();
+
+    new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
+      [c](Vertex::vertices_t::iterator::value_type v) {return v->get_process () == c;});
+
+    if (new_end != _output_nodes.end ()) {
+      // delete nodes
+      for (Vertex::vertices_t::iterator it = new_end ; it != _output_nodes.end(); ++it)
+        if (*it) { delete *it; *it=nullptr;}
+
+      //erase from vector
+      _output_nodes.erase( new_end, _output_nodes.end ());
+    }
   }
 
   void
@@ -172,16 +181,26 @@ namespace djnn
       return;
     s->remove_edge (d);
 
-    // remove vertex if no more out_edges and in_edges
-    Vertex::vertices_t::iterator newend = _vertices.end ();
-    if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0))
-      newend = std::remove (_vertices.begin (), _vertices.end (), s);
-    if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0))
-      newend = std::remove (_vertices.begin (), newend, d);
+    /* 
+      note :
+      remove and delete vertex if they have no more out_edges and in_edges
+     */
 
-    // erase only once 
-    if (newend != _vertices.end ())
+    // 1 - remove src if necessary
+    Vertex::vertices_t::iterator newend = _vertices.end ();
+    if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0)) {
+      newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
+      if (s) { delete s; s =nullptr;} // ==  src->set_vertex (nullptr);
+    }
+
+    // 2 - remove dst if necessary
+    newend = _vertices.end ();
+    if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0)){
+      newend = std::remove (_vertices.begin (), _vertices.end (), d);
+      _vertices.erase(newend, _vertices.end ());
+      if (d) { delete d; d =nullptr;} // ==  dst->set_vertex (nullptr);
+    }
 
     _sorted = false;
   }
@@ -243,20 +262,20 @@ namespace djnn
   void
   Graph::remove_properties ()
   {
-    /*auto v_it = _sorted_vertices.begin ();
-    while (v_it != _sorted_vertices.end ()) {
-      auto& v = *v_it;
-      AbstractProperty* p = dynamic_cast<AbstractProperty*> (v->get_process  ());
-      if (p != nullptr)
-        v_it = _sorted_vertices.erase (v_it);
-      else
-        ++v_it;
-    }*/
-    _sorted_vertices.erase(
-      std::remove_if (
-        _sorted_vertices.begin (), _sorted_vertices.end (),
-        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_process  ()) != nullptr); }
-      ), _sorted_vertices.end());
+    // remove_if 
+    Vertex::vertices_t::iterator new_end = _sorted_vertices.end ();
+
+    new_end = std::remove_if ( _sorted_vertices.begin (), _sorted_vertices.end (),
+        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_process  ()) != nullptr); });
+
+    /* note : 
+       DO NOT delete the vertices from _sorted_vertices
+       because they are own by _vertices.
+       we just manage ptr on the vertices in _sorted_vertices.
+    */
+     
+    // erase them from _sorted_vertices
+    _sorted_vertices.erase( new_end, _sorted_vertices.end ());
   }
 
   void
@@ -277,8 +296,17 @@ namespace djnn
   void
   Graph::clear ()
   {
+    // nothing to delete because vertices are own by _vertices.
     _sorted_vertices.clear ();
+
+    // delete vertices from _vertices and clear.
+    for (Vertex::vertices_t::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
+        if (*it) { delete *it; *it=nullptr;}
     _vertices.clear ();
+
+    // delete output_vertices from _outpur_nodes and clear 
+    for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
+        if (*it) { delete *it; *it=nullptr;}
     _output_nodes.clear ();
   }
 
@@ -298,17 +326,17 @@ namespace djnn
       for (auto v : _sorted_vertices) {
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
-        int action = v->get_process  ()->get_activation_flag ();
+        int action = v->get_process ()->get_activation_flag ();
         switch (action) {
           case ACTIVATION:
-            v->get_process  ()->activation ();
+            v->get_process ()->activation ();
             break;
           case DEACTIVATION:
-            v->get_process  ()->deactivation ();
+            v->get_process ()->deactivation ();
             break;
           default:;
         }
-        v->get_process  ()->set_activation_flag (NONE);
+        v->get_process ()->set_activation_flag (NONE);
     }
     if (!_sorted) {
       sort ();

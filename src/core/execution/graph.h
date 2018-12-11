@@ -31,7 +31,7 @@ namespace djnn
   {
   public:
     Vertex (Process* c);
-    virtual ~Vertex () { } ;
+    virtual ~Vertex ();
     typedef std::vector< Vertex* > vertices_t;
 
     void add_edge (Vertex* dst);

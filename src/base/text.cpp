@@ -233,7 +233,6 @@ namespace djnn
     Graph::instance ().remove_edge (_acc_action, _state);
     Graph::instance ().remove_edge (_del_action, _state);
   
-    set_vertex (nullptr);
     if (_c_acc) { delete _c_acc; _c_acc=nullptr;}
     if (_c_del) { delete _c_del; _c_del=nullptr;}
     if (_acc_action) { delete _acc_action; _acc_action=nullptr;}

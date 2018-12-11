@@ -46,6 +46,7 @@ namespace djnn
   void
   QtContextManager::pop ()
   {
+    delete _context_list.back ();
     _context_list.pop_back ();
     QtBackend::instance ()->restore_context();
   }
