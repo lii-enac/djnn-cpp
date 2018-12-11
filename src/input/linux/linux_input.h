@@ -66,7 +66,7 @@ namespace djnn {
   public:
     Evdev (const char* node);
     ~Evdev ();
-    Process* action () { return _action.get (); }
+    Process* action () { return _action; }
     void handle_evdev_msg ();
   private:
     Process *_action;

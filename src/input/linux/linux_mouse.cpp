@@ -23,28 +23,28 @@
 namespace djnn {
   LinuxMouse::LinuxMouse (Process *p, const string &n, const struct libevdev *dev) : LinuxDevice (p, n, MOUSE)
   {
-    _move = make_unique<Spike> (this, "move");
-    _move_dx = make_unique<IntProperty> (nullptr, "dx", 0);
-    _move_dy = make_unique<IntProperty> (nullptr, "dy", 0);
-    _move->add_symbol ("dx", _move_dx.get ());
-    _move->add_symbol ("dy", _move_dy.get ());
-    _btn = make_unique<Spike> (this, "button");
-    _press = make_unique<Spike> (_btn.get (), "press");
-    _release = make_unique<Spike> (_btn.get (), "release");
-    _btn_name = make_unique<TextProperty> (nullptr, "name", "");
-    _btn->add_symbol ("name", _btn_name.get ());
+    _move = new Spike (this, "move");
+    _move_dx = new IntProperty (nullptr, "dx", 0);
+    _move_dy = new IntProperty (nullptr, "dy", 0);
+    _move->add_symbol ("dx", _move_dx);
+    _move->add_symbol ("dy", _move_dy);
+    _btn = new Spike (this, "button");
+    _press = new Spike (_btn, "press");
+    _release = new Spike (_btn, "release");
+    _btn_name = new TextProperty (nullptr, "name", "");
+    _btn->add_symbol ("name", _btn_name);
     int w, hw;
     w = libevdev_has_event_code (dev, EV_REL, REL_WHEEL);
     hw = libevdev_has_event_code (dev, EV_REL, REL_HWHEEL);
     if (w || hw) {
-      _wheel = make_unique<Spike> (this, "wheel");
+      _wheel = new Spike (this, "wheel");
       if (w) {
-        _wheel_dy = make_unique<IntProperty> (nullptr, "dy", 0);
-        _wheel->add_symbol ("dy", _wheel_dy.get ());
+        _wheel_dy = new IntProperty (nullptr, "dy", 0);
+        _wheel->add_symbol ("dy", _wheel_dy);
       }
       if (hw) {
-        _wheel_dx = make_unique<IntProperty> (nullptr, "dx", 0);
-        _wheel->add_symbol ("dx", _wheel_dx.get ());
+        _wheel_dx = new IntProperty (nullptr, "dx", 0);
+        _wheel->add_symbol ("dx", _wheel_dx);
       }
     }
     _activation_state = activated;
@@ -54,6 +54,17 @@ namespace djnn {
   LinuxMouse::~LinuxMouse ()
   {
     _parent->remove_child (this);
+
+    if (_wheel_dx) { delete _wheel_dx; _wheel_dx = nullptr;}
+    if (_wheel_dy) { delete _wheel_dy; _wheel_dy = nullptr;}
+    if (_wheel) { delete _wheel; _wheel = nullptr;}
+    if (_btn_name) { delete _btn_name; _btn_name = nullptr;}
+    if (_release) { delete _release; _release = nullptr;}
+    if (_press) { delete _press; _press = nullptr;}
+    if (_btn) { delete _btn; _btn = nullptr;}
+    if (_move_dy) { delete _move_dy; _move_dy = nullptr;}
+    if (_move_dx) { delete _move_dx; _move_dx = nullptr;}
+    if (_move) { delete _move; _move = nullptr;}
   }
 
   void

@@ -54,9 +54,9 @@ namespace djnn {
     udev_monitor_enable_receiving (_udev_mon);
     _udev_iofd = new IOFD (udev_monitor_get_fd (_udev_mon));
     _udev_iofd->activation ();
-    _action = make_shared<Udev::UdevAction> (this);
-    _readable_cpl = make_unique<Coupling> (_udev_iofd->find_component ("readable"), ACTIVATION, _action.get(), ACTIVATION);
-    Graph::instance().add_edge (_udev_iofd->find_component ("readable"), _action.get ());
+    _action = new UdevAction (this);
+    _readable_cpl = new Coupling (_udev_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
+    Graph::instance().add_edge (_udev_iofd->find_component ("readable"), _action);
   }
 
   Udev::~Udev ()
@@ -64,7 +64,12 @@ namespace djnn {
     _udev_iofd->deactivation ();
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
-    delete _udev_iofd;
+    
+    Graph::instance().remove_edge (_udev_iofd->find_component ("readable"), _action);
+    if (_readable_cpl) { delete _readable_cpl; _readable_cpl = nullptr;}
+    if (_action) {delete _action; _action = nullptr;}
+    if (_udev_iofd) { delete _udev_iofd; _udev_iofd = nullptr;;
+
   }
 
   void

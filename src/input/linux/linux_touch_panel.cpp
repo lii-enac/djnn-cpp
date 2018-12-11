@@ -28,31 +28,42 @@ namespace djnn {
     set_state(activated);
     _used = UNUSED;
     if (fieldmap & MT_X)
-      _x = make_unique<IntProperty> (this, "x", 0);
+      _x = new IntProperty (this, "x", 0);
     if (fieldmap & MT_Y)
-      _y = make_unique<IntProperty> (this, "y", 0);
+      _y = new IntProperty (this, "y", 0);
     if (fieldmap & MT_W)
-      _width = make_unique<IntProperty> (this, "width", 0);
+      _width = new IntProperty (this, "width", 0);
     if (fieldmap & MT_H)
-      _height = make_unique<IntProperty> (this, "height", 0);
+      _height = new IntProperty (this, "height", 0);
     if (fieldmap & MT_CX)
-      _cx = make_unique<IntProperty> (this, "cx", 0);
+      _cx = new IntProperty (this, "cx", 0);
     if (fieldmap & MT_CY)
-      _cy = make_unique<IntProperty> (this, "cy", 0);
+      _cy = new IntProperty (this, "cy", 0);
     if (fieldmap & MT_PRESSURE)
-      _pressure = make_unique<IntProperty> (this, "pressure", 0);
+      _pressure = new IntProperty (this, "pressure", 0);
+  }
+
+  LinuxTouch::~LinuxTouch ()
+  {
+    if (_pressure) { delete _pressure; _pressure = nullptr;}
+    if (_cy) { delete _cy; _cy = nullptr;}
+    if (_cx) { delete _cx; _cx = nullptr;}
+    if (_height) { delete _height; _height = nullptr;}
+    if (_width) { delete _width; _width = nullptr;}
+    if (_y) { delete _y; _y = nullptr;}
+    if (_x) { delete _x; _x = nullptr;}
   }
 
   LinuxTouchPanel::LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev) : LinuxDevice (p, n, TOUCH_PANEL)
   {
-    _touches = make_unique<Set> (this, "touches");
+    _touches = new Set (this, "touches");
     _activation_state = activated;
     _touches->set_state (activated);
     _fieldmap = 0;
     _cur_touch = nullptr;
     _nb_slots = libevdev_get_abs_maximum (dev, ABS_MT_SLOT) + 1;
-    _max_x = make_unique<IntProperty> (this, "maxX", libevdev_get_abs_maximum (dev, ABS_MT_POSITION_X));
-    _max_y = make_unique<IntProperty> (this, "maxY", libevdev_get_abs_maximum (dev, ABS_MT_POSITION_Y));
+    _max_x = new IntProperty (this, "maxX", libevdev_get_abs_maximum (dev, ABS_MT_POSITION_X));
+    _max_y = new IntProperty (this, "maxY", libevdev_get_abs_maximum (dev, ABS_MT_POSITION_Y));
     if (libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_X))
       _fieldmap |= MT_X;
     if (libevdev_has_event_code (dev, EV_ABS, ABS_MT_POSITION_Y))
@@ -77,8 +88,13 @@ namespace djnn {
   LinuxTouchPanel::~LinuxTouchPanel ()
   {
     _parent->remove_child (this);
-    for (auto t: _v_touches)
-      delete t;
+
+    // destroy all elements
+    _v_touches.clear ();
+
+    if (_max_y) { delete _max_y; _max_y = nullptr;}
+    if (_max_x) ( delete _max_x; _max_x = nullptr;)
+    if (_touches) { delete _touches; _touches = nullptr;}
   }
 
   void
