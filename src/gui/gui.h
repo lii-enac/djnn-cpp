@@ -20,6 +20,8 @@
 #include "shapes/shapes.h"
 #include "transformation/transformations.h"
 
+#include <algorithm>
+
 namespace djnn {
 
 	extern std::vector<string> loadedModules; 
