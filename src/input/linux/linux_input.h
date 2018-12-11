@@ -130,7 +130,7 @@ namespace djnn {
   class LinuxTouch : public Process {
     public:
       LinuxTouch (unsigned int fieldmap);
-      ~LinuxTouch () {};
+      ~LinuxTouch ();
       void activate () override {}
       void deactivate () override {}
       void set_x (double v) { _x->set_value (v, true); }

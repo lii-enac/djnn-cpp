@@ -93,7 +93,7 @@ namespace djnn {
     _v_touches.clear ();
 
     if (_max_y) { delete _max_y; _max_y = nullptr;}
-    if (_max_x) ( delete _max_x; _max_x = nullptr;)
+    if (_max_x) { delete _max_x; _max_x = nullptr;}
     if (_touches) { delete _touches; _touches = nullptr;}
   }
 
