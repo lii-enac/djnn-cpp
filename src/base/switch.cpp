@@ -39,22 +39,25 @@ namespace djnn
     _branch_name = new TextProperty (initial);
     add_symbol ("state", _branch_name);
     _action = new SwitchAction (this, get_name ());
+    _state_dependency = _action;
+    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION);
     Graph::instance ().add_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
-    _state_dependency = _action;
-    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION);
+
     _cur_branch = nullptr;
   }
 
   Switch::~Switch ()
   {
-    Graph::instance ().remove_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    Graph::instance ().remove_edge (_branch_name, _action);
+   
     set_vertex (nullptr);
-    delete _c_branch;
-    delete _branch_name;
+    if (_c_branch) { delete _c_branch; _c_branch = nullptr;}
+    if (_action) { delete _action; _action = nullptr;}
+    if (_branch_name) { delete _branch_name; _branch_name = nullptr;}
   }
 
   void
