@@ -359,9 +359,11 @@ static int ParseFill(Process** e, const char* v) {
 			if (ag->is_linear ()) {
 			  LinearGradient* lg = dynamic_cast<LinearGradient*> (ag);
 			  new RefLinearGradient ((*e), "", lg);
+			  (*e)->add_symbol (string (url), lg);
 			} else {
 			  RadialGradient* rg = dynamic_cast<RadialGradient*> (ag);
 			  new RefRadialGradient ((*e), "", rg);
+			  (*e)->add_symbol (string (url), rg);
 			}
 		}
 		else {
