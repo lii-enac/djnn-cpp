@@ -49,8 +49,8 @@ namespace djnn
     void set_end_date (int date) { _end_date = date; };
     int get_end_date () const { return _end_date; }
 
-    Process* get_component () { return _vertex; }
-    const Process* get_component () const { return _vertex; }
+    Process* get_process () { return _vertex; }
+    const Process* get_process () const { return _vertex; }
 
     void print_vertex () const;
     void invalidate () { _is_invalid = true; }

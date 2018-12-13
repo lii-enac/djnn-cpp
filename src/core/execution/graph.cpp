@@ -103,7 +103,7 @@ namespace djnn
   Graph::get_vertex (Process* c)
   {
     for (auto v : _vertices) {
-      if (v->get_component () == c)
+      if (v->get_process  () == c)
         return (v);
     }
     return nullptr;
@@ -123,7 +123,7 @@ namespace djnn
   {
     // check if c is already in the graph
     for (auto v : _output_nodes) {
-      if (v->get_component () == c)
+      if (v->get_process  () == c)
         return;
     }
     Vertex *v = new Vertex (c);
@@ -135,12 +135,12 @@ namespace djnn
   {
     /*int i = 0;
     for (auto v : _output_nodes) {
-      if (v->get_component () == c)
+      if (v->get_process  () == c)
         _output_nodes.erase (_output_nodes.begin () + i);
       i++;
     }*/
     _output_nodes.erase(std::remove_if (_output_nodes.begin (), _output_nodes.end (),
-      [c](Vertex::vertices_t::iterator::value_type v) {return v->get_component () == c;}
+      [c](Vertex::vertices_t::iterator::value_type v) {return v->get_process  () == c;}
       ),
     _output_nodes.end());
   }
@@ -200,9 +200,9 @@ namespace djnn
   Graph::print_sorted ()
   {
     for (auto v : _sorted_vertices) {
-      if (v->get_component()->get_parent())
-        cerr << v->get_component()->get_parent()->get_name () << "/";
-      cerr << v->get_component ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
+      if (v->get_process ()->get_parent())
+        cerr << v->get_process ()->get_parent()->get_name () << "/";
+      cerr << v->get_process  ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
     }
   }
 
@@ -246,7 +246,7 @@ namespace djnn
     /*auto v_it = _sorted_vertices.begin ();
     while (v_it != _sorted_vertices.end ()) {
       auto& v = *v_it;
-      AbstractProperty* p = dynamic_cast<AbstractProperty*> (v->get_component ());
+      AbstractProperty* p = dynamic_cast<AbstractProperty*> (v->get_process  ());
       if (p != nullptr)
         v_it = _sorted_vertices.erase (v_it);
       else
@@ -255,7 +255,7 @@ namespace djnn
     _sorted_vertices.erase(
       std::remove_if (
         _sorted_vertices.begin (), _sorted_vertices.end (),
-        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_component ()) != nullptr); }
+        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_process  ()) != nullptr); }
       ), _sorted_vertices.end());
   }
 
@@ -298,17 +298,17 @@ namespace djnn
       for (auto v : _sorted_vertices) {
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
-        int action = v->get_component ()->get_activation_flag ();
+        int action = v->get_process  ()->get_activation_flag ();
         switch (action) {
           case ACTIVATION:
-            v->get_component ()->activation ();
+            v->get_process  ()->activation ();
             break;
           case DEACTIVATION:
-            v->get_component ()->deactivation ();
+            v->get_process  ()->deactivation ();
             break;
           default:;
         }
-        v->get_component ()->set_activation_flag (NONE);
+        v->get_process  ()->set_activation_flag (NONE);
     }
     if (!_sorted) {
       sort ();
