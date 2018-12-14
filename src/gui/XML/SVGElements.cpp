@@ -249,6 +249,8 @@ StartSVG(const char** attrs, Process* current) {
 		fprintf (stderr, "startSVG\n");
 #endif
 
+	djn__IdFillManager.clear ();
+	djn__IdClipManager.clear ();
 	Process* g = new Group(current, "SVG");
 	//Process* f;
 	djn_RectAreaArgs.x = 0.;
