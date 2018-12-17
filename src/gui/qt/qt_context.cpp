@@ -51,7 +51,7 @@ namespace djnn
   }
 
   QtContext::QtContext () :
-      pen (QColor ("darkslategray"), 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), brush (QColor ("lightgray"),
+      pen (QColor ("darkslategray"), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), brush (QColor ("lightgray"),
                                                                                             Qt::SolidPattern), matrix (), gradientTransform (), font ()
   {
     alpha = 1;
