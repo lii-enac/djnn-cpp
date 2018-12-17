@@ -160,13 +160,14 @@ namespace djnn
         double value = _input->get_value();
         string res = to_string (value);
         std::size_t found = res.find('.');
-        if (found == string::npos) {
-          _output->set_value (res, true);
-        }
-        else {
+        if (found != string::npos) {
+          if (decimal == 0) {
+            res = res.substr (0, found);
+          } else {
           res = res.substr (0, found + decimal + 1);
-          _output->set_value (res, true);
+          }
         }
+        _output->set_value (res, true);
       }
       void deactivate () override {}
     private:
