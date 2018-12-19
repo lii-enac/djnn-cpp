@@ -36,6 +36,7 @@ namespace djnn {
     void serialize (const string& format) override;
     Process* clone () override;
   private:
+    void init_BoolProperty ();
     bool value;
     Process *_true, *_false;
   };

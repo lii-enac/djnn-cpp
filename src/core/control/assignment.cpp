@@ -30,61 +30,46 @@ namespace djnn
 {
   using namespace std;
 
-  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                               bool isModel)
+  void
+  AbstractAssignment::init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec) 
   {
     if (src == 0) {
-      error (this, "src argument cannot be null in (Paused)assignment creation");
-    }
-    if (dst == 0) {
-      error (this, "dst argument cannot be null in (Paused)assignment creation");
-    }
-
-    Process *f = src->find_component (ispec);
-    if (f == 0) {
-      error (this, "source not found in (Paused)assignment creation");
-    }
-    _src = dynamic_cast<AbstractProperty*> (f);
-    if (_src == nullptr) {
-      warning (this, "the source of an (Paused)assignment must be a property");
-    }
-    f = dst->find_component (dspec);
-    if (f == 0) {
-      error (this, "destination not found in (Paused)assignment creation");
-    }
-    _dst = dynamic_cast<AbstractProperty*> (f);
-    if (_dst == nullptr) {
-      warning (this, "the destination of an (Paused)assignment must be a property");
-    }
-  }
-
-  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec,
-                                 bool isModel) : Process (p, n)
-    {
-      if (src == 0) {
-        error (this, "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (this, "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       if (dst == 0) {
-        error (this, "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (this, "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
 
       Process *f = src->find_component (ispec);
       if (f == 0) {
-        error (this, "SOURCE not found in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (this, "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       _src = dynamic_cast<AbstractProperty*> (f);
       if (_src == nullptr) {
-        warning (this, "the SOURCE of an (Paused)assignment must be a property ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        warning (this, "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       f = dst->find_component (dspec);
       if (f == 0) {
-        error (this, "DESTINATION not found in (Paused)assignment creation ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (this, "DESTINATION not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
       _dst = dynamic_cast<AbstractProperty*> (f);
       if (_dst == nullptr) {
-        warning (this, "the DESTINATION of an (Paused)assignment must be a property ( name: " + n + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        warning (this, "the DESTINATION of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
       }
-    }
+  }
+
+  
+  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
+                               bool isModel) : Process (isModel)
+  {
+    init_AbstractAssignment (src, ispec, dst, dspec);
+  }
+
+  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec,
+                                 bool isModel) : Process (p, n, isModel)
+  {
+    init_AbstractAssignment (src, ispec, dst, dspec);   
+  }
 
   void
   AbstractAssignment::do_assignment (AbstractProperty* src_p, AbstractProperty* dst_p, bool propagate)
@@ -127,24 +112,26 @@ namespace djnn
       }
   }
 
+  void
+  Assignment::init_Assignment (){
+    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
+    Graph::instance ().add_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+  }
+
   Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
                           bool isModel) : 
       AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
-    _model = isModel;
-    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
-    Graph::instance ().add_edge (_src, _dst);
+    init_Assignment ();
   }
 
   Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
                           Process* dst, const string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
-    _model = isModel;
-    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
-    Graph::instance ().add_edge (_src, _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    init_Assignment ();
     Process::finalize ();
   }
 
@@ -188,25 +175,27 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  
+  void
+  PausedAssignment::init_PausedAssignment ()
+  {
+    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
+    Graph::instance ().add_edge (_src, _dst);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+  }
+
   PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst,
                                       const string &dspec, bool isModel) :
     AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
-    _model = isModel;
-    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
-    Graph::instance ().add_edge (_src, _dst);
+    init_PausedAssignment ();
   }
 
   PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src,
                                       const string &ispec, Process* dst, const string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
-    _model = isModel;
-    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
-    Graph::instance ().add_edge (_src, _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    init_PausedAssignment ();
     Process::finalize ();
   }
 

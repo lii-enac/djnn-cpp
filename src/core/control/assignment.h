@@ -41,6 +41,8 @@ namespace djnn {
     bool _propagate;
   };
 
+  private:
+    void init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec);
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
@@ -49,9 +51,12 @@ namespace djnn {
     AbstractProperty* _src;
     AbstractProperty* _dst;
     AssignmentAction* _action;
+
   };
 
   class Assignment : public AbstractAssignment {
+  private:
+    void init_Assignment ();
   public:
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
@@ -63,6 +68,8 @@ namespace djnn {
 
 
   class PausedAssignment : public AbstractAssignment {
+  private:
+    void init_PausedAssignment ();
   public:
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);

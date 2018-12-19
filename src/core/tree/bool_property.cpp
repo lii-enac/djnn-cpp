@@ -20,25 +20,26 @@ namespace djnn
 {
   using namespace std;
 
-  BoolProperty::BoolProperty (Process *p, const string& n, bool v) :
-      AbstractProperty (p, n), value (v)
-  {
+  void
+  BoolProperty::init_BoolProperty (){
     _type = Boolean;
     _true = new Spike (this, "true");
     _false = new Spike (this, "false");
     Graph::instance ().add_edge (this, _true);
     Graph::instance ().add_edge (this, _false);
+  }
+
+  BoolProperty::BoolProperty (Process *p, const string& n, bool v) :
+      AbstractProperty (p, n), value (v)
+  {
+    init_BoolProperty ();
     Process::finalize ();
   }
 
   BoolProperty::BoolProperty (bool v) :
       AbstractProperty (), value (v)
   {
-    _type = Boolean;
-    _true = new Spike (this, "true");
-    _false = new Spike (this, "false");
-    Graph::instance ().add_edge (this, _true);
-    Graph::instance ().add_edge (this, _false);
+    init_BoolProperty ();
   }
 
   BoolProperty::~BoolProperty ()
