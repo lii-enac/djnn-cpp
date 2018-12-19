@@ -28,17 +28,25 @@ namespace djnn
   }
 
   void
-  Text::init_text (double x, double y, const std::string &text)
+  Text::init_text (double x, double y, double dx, double dy, int dxu, int dyu,
+              const std::string &encoding, const std::string &text)
   {
     _x = new DoubleProperty (this, "x", x);
     _y = new DoubleProperty (this, "y", y);
-    _dx = new DoubleProperty (this, "dx", 0);
-    _dy = new DoubleProperty (this, "dy", 0);
-    _dxU = new IntProperty (this, "dxU", 0);
-    _dyU = new IntProperty (this, "dyU", 0);
+    _dx = new DoubleProperty (this, "dx", dx);
+    _dy = new DoubleProperty (this, "dy", dy);
+    _dxU = new IntProperty (this, "dxU", dxu);
+    _dyU = new IntProperty (this, "dyU", dyu);
     _width = new IntProperty (this, "width", 0);
     _height = new IntProperty (this, "height", 0);
-    _encoding = new IntProperty (this, "encoding", djnUtf8);
+
+    djnTextEncoding code = djnUtf8;
+    if (encoding.compare ("ISO-8859-1") == 0)
+      code = djnLatin1;
+    else if (encoding.compare ("ASCII") == 0)
+      code = djnAscii;
+    _encoding = new IntProperty (this, "encoding", code);
+
     _text = new TextProperty (this, "text", text);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _update_size = new TextSizeAction (this, "size_action", this);
@@ -54,14 +62,14 @@ namespace djnn
     Graph::instance ().add_edge (_text, _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
-    Process::finalize ();
   }
 
   Text::Text (Process *p, const std::string& n, double x, double y, const std::string &text) :
       AbstractGShape (p, n), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
           nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
   {
-    init_text (x, y, text);
+    init_text (x, y, 0, 0, 0, 0, "", text);
+    Process::finalize ();
   }
 
   Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxu, int dyu,
@@ -69,34 +77,7 @@ namespace djnn
       AbstractGShape (p, n), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
           nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _dx = new DoubleProperty (this, "dx", dx);
-    _dy = new DoubleProperty (this, "dy", dy);
-    _dxU = new IntProperty (this, "dxU", dxu);
-    _dyU = new IntProperty (this, "dyU", dyu);
-    _width = new IntProperty (this, "width", 0);
-    _height = new IntProperty (this, "height", 0);
-    djnTextEncoding code = djnUtf8;
-    if (encoding.compare ("ISO-8859-1") == 0)
-      code = djnLatin1;
-    else if (encoding.compare ("ASCII") == 0)
-      code = djnAscii;
-    _encoding = new IntProperty (this, "encoding", code);
-    _text = new TextProperty (this, "text", text);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _update_size = new TextSizeAction (this, "size_action", this);
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _ctext = new Coupling (_text, ACTIVATION, update, ACTIVATION);
-    _ctext->disable ();
-    _ctext_size = new Coupling (_text, ACTIVATION, _update_size, ACTIVATION);
-    _ctext_size->disable ();
-    Graph::instance ().add_edge (_text, _update_size);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
+    init_text (x, y, dx, dy, dxu, dyu, encoding, text);
     Process::finalize ();
   }
 
@@ -104,15 +85,15 @@ namespace djnn
       AbstractGShape (), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
           nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
   {
-    init_text (x, y, text);
+    init_text (x, y, 0, 0, 0, 0, "", text);
   }
 
   Text::~Text ()
   {
     
-    Graph::instance ().remove_edge (_text, _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
+    Graph::instance ().remove_edge (_text, _update_size);
     
     if (_cx) {delete _cx; _cx = nullptr;}
     if (_cy) {delete _cy; _cy = nullptr;}

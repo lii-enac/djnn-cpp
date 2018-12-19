@@ -113,29 +113,23 @@ namespace djnn
   {
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
-    Graph::instance ().remove_edge (_r, _action);
-    Graph::instance ().remove_edge (_g, _action);
+    Graph::instance ().remove_edge (_action, _h);
+    Graph::instance ().remove_edge (_action, _c);
+    Graph::instance ().remove_edge (_action, _l);
     Graph::instance ().remove_edge (_b, _action);
-    delete _cr;
-    _cr = nullptr;
-    delete _cg;
-    _cg = nullptr;
-    delete _cb;
-    _cb = nullptr;
-    delete _action;
-    _action = nullptr;
-    delete _r;
-    _r = nullptr;
-    delete _g;
-    _g = nullptr;
-    delete _b;
-    _b = nullptr;
-    delete _l;
-    _l = nullptr;
-    delete _c;
-    _c = nullptr;
-    delete _h;
-    _h = nullptr;
+    Graph::instance ().remove_edge (_g, _action);
+    Graph::instance ().remove_edge (_r, _action);
+
+    if (_cb) { delete _cb;  _cb = nullptr;}
+    if (_cg) { delete _cg;  _cg = nullptr;}
+    if (_cr) { delete _cr;  _cr = nullptr;}
+    if (_action) { delete _action;  _action = nullptr;}
+    if (_h) { delete _h;  _h = nullptr;}
+    if (_c) { delete _c;  _c = nullptr;}
+    if (_l) { delete _l;  _l = nullptr;}
+    if (_b) { delete _b;  _b = nullptr;}
+    if (_g) { delete _g;  _g = nullptr;}
+    if (_r) { delete _r;  _r = nullptr;}
   }
 
   void
@@ -237,29 +231,23 @@ namespace djnn
   {
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
-    Graph::instance ().remove_edge (_r, _action);
-    Graph::instance ().remove_edge (_g, _action);
-    Graph::instance ().remove_edge (_b, _action);
-    delete _cl;
-    _cl = nullptr;
-    delete _cc;
-    _cc = nullptr;
-    delete _ch;
-    _ch = nullptr;
-    delete _action;
-    _action = nullptr;
-    delete _r;
-    _r = nullptr;
-    delete _g;
-    _g = nullptr;
-    delete _b;
-    _b = nullptr;
-    delete _l;
-    _l = nullptr;
-    delete _c;
-    _c = nullptr;
-    delete _h;
-    _h = nullptr;
+    Graph::instance ().remove_edge (_action, _b);
+    Graph::instance ().remove_edge (_action, _g);
+    Graph::instance ().remove_edge (_action, _r);
+    Graph::instance ().remove_edge (_h, _action);
+    Graph::instance ().remove_edge (_c, _action);
+    Graph::instance ().remove_edge (_l, _action);
+
+    if (_ch) { delete _ch;  _ch = nullptr;}
+    if (_cc) { delete _cc;  _cc = nullptr;}
+    if (_cl) { delete _cl;  _cl = nullptr;}
+    if (_action) { delete _action;  _action = nullptr;}
+    if (_h) { delete _h;  _h = nullptr;}
+    if (_c) { delete _c;  _c = nullptr;}
+    if (_l) { delete _l;  _l = nullptr;}
+    if (_b) { delete _b;  _b = nullptr;}
+    if (_g) { delete _g;  _g = nullptr;}
+    if (_r) { delete _r;  _r = nullptr;}
   }
 
   void

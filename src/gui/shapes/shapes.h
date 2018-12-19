@@ -105,7 +105,8 @@ namespace djnn
     DoubleProperty *_fsize;
     IntProperty *_fstyle, *_fweight;
     TextSizeAction *_update_size;
-    void init_text (double x, double y, const std::string &text);
+    void init_text (double x, double y, double dx, double dy, int dxu, int dyu,
+              const std::string &encoding, const std::string &text);
     void activate () override;
     void deactivate () override;
   };
