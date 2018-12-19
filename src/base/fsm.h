@@ -71,6 +71,7 @@ namespace djnn {
     int priority () { return _priority; }
     Process* fsm_action () { return _fsm_action; }
   private:
+    void init_FSMTransition ();
     FSMState* _src, *_dst;
     Process *_action, *_trigger;
     Process *_fsm_action;

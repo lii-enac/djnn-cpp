@@ -100,6 +100,20 @@ namespace djnn
 
   }
 
+  void
+  FSMTransition::init_FSMTransition () 
+  {
+    _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
+    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION);
+    _c_src->disable ();
+    Graph::instance ().add_edge (_trigger, _fsm_action);
+    Graph::instance ().add_edge (_fsm_action, _parent->find_component ("state"));
+    Graph::instance ().add_edge (_fsm_action, _dst);
+    Graph::instance ().add_edge (_fsm_action, _src);
+    if (_action)
+      Graph::instance ().add_edge (_fsm_action, _action);
+  }
+
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
                                 Process *src, const string &spec, Process *action,
                                 const string &aspec) :
@@ -133,16 +147,8 @@ namespace djnn
     else
       _action = 0;
 
-    _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
-    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION);
-    Graph::instance ().add_edge (_trigger, _fsm_action);
-    Graph::instance ().add_edge (_fsm_action, p->find_component ("state"));
-    Graph::instance ().add_edge (_fsm_action, _dst);
-    Graph::instance ().add_edge (_fsm_action, _src);
-    if (_action) {
-      Graph::instance ().add_edge (_fsm_action, _action);
-    }
-    _c_src->disable ();
+    init_FSMTransition ();
+    
     Process::finalize ();
     fsm->FSM::add_transition(this);
   }
@@ -175,25 +181,17 @@ namespace djnn
       return;
     }
   
-    _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
-    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION);
-    Graph::instance ().add_edge (_trigger, _fsm_action);
-    Graph::instance ().add_edge (_fsm_action, p->find_component ("state"));
-    Graph::instance ().add_edge (_fsm_action, _dst);
-    Graph::instance ().add_edge (_fsm_action, _src);
-    if (_action) {
-      Graph::instance ().add_edge (_fsm_action, _action);
-    }
-    _c_src->disable ();
+    init_FSMTransition ();
+    
     Process::finalize ();
     fsm->FSM::add_transition(this);
   }
 
   FSMTransition::~FSMTransition ()
   {
-    if (_action) {
+    if (_action)
       Graph::instance ().remove_edge (_fsm_action, _action);
-    }
+    
     Graph::instance ().remove_edge (_trigger, _fsm_action);
     Graph::instance ().remove_edge (_fsm_action, get_parent ()->find_component ("state"));
     Graph::instance ().remove_edge (_fsm_action, _dst);
