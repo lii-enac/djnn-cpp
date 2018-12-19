@@ -19,7 +19,7 @@
 #include "qt_picking_view.h"
 #include <QtGui/QImage>
 
-#define DEBUG 0
+#define DEBUG_PICKING  0
 
 namespace djnn
 {
@@ -27,7 +27,7 @@ namespace djnn
   QtPickingView::QtPickingView (Window *win) :
       ColorPickingView (win), _pick_debug_win (nullptr), _image (nullptr), _painter (nullptr)
   {
-#if DEBUG
+#if DEBUG_PICKING 
     _pick_debug_win = new QLabel ();
 #endif
   }

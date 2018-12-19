@@ -30,7 +30,7 @@
 #include <QtGui/QMouseEvent>
 
 #define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DEBUG 0
+#define DEBUG_PICKING  0
 
 #define _PERF_TEST 0
 #if _PERF_TEST
@@ -280,7 +280,7 @@ namespace djnn
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
       QtMainloop::instance ().set_please_exec (true);
-#if DEBUG
+#if DEBUG_PICKING 
     _picking_view->display();
 #endif
   }
