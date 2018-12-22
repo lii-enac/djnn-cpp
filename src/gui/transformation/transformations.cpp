@@ -40,8 +40,8 @@ namespace djnn
   AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
       AbstractTransformation (p, n)
   {
-    _tx = new DoubleProperty (this, "tx", tx);
-    _ty = new DoubleProperty (this, "ty", ty);
+    _tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
+    _ty = new DoubleProperty (this, "ty", ty, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
     _ctx->disable ();
@@ -52,8 +52,8 @@ namespace djnn
   AbstractTranslation::AbstractTranslation (double tx, double ty) :
       AbstractTransformation ()
   {
-    _tx = new DoubleProperty (this, "tx", tx);
-    _ty = new DoubleProperty (this, "ty", ty);
+    _tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
+    _ty = new DoubleProperty (this, "ty", ty, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
     _ctx->disable ();
@@ -154,9 +154,9 @@ namespace djnn
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractTransformation (p, n)
   {
-    _a = new DoubleProperty (this, "a", a);
-    _cx = new DoubleProperty (this, "cx", cx);
-    _cy = new DoubleProperty (this, "cy", cy);
+    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -169,9 +169,9 @@ namespace djnn
   AbstractRotation::AbstractRotation (double a, double cx, double cy) :
       AbstractTransformation ()
   {
-    _a = new DoubleProperty (this, "a", a);
-    _cx = new DoubleProperty (this, "cx", cx);
-    _cy = new DoubleProperty (this, "cy", cy);
+    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -280,10 +280,10 @@ namespace djnn
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractTransformation (p, n)
   {
-    _sx = new DoubleProperty (this, "sx", sx);
-    _sy = new DoubleProperty (this, "sy", sy);
-    _cx = new DoubleProperty (this, "cx", cx);
-    _cy = new DoubleProperty (this, "cy", cy);
+    _sx = new DoubleProperty (this, "sx", sx, notify_damaged_transform);
+    _sy = new DoubleProperty (this, "sy", sy, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
     _csx->disable ();
@@ -298,10 +298,10 @@ namespace djnn
   AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
       AbstractTransformation ()
   {
-    _sx = new DoubleProperty (this, "sx", sx);
-    _sy = new DoubleProperty (this, "sy", sy);
-    _cx = new DoubleProperty (this, "cx", cx);
-    _cy = new DoubleProperty (this, "cy", cy);
+    _sx = new DoubleProperty (this, "sx", sx, notify_damaged_transform);
+    _sy = new DoubleProperty (this, "sy", sy, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
     _csx->disable ();
@@ -419,7 +419,7 @@ namespace djnn
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
       AbstractTransformation (p, n)
   {
-    _a = new DoubleProperty (this, "a", a);
+    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -428,7 +428,7 @@ namespace djnn
   AbstractSkew::AbstractSkew (double a) :
       AbstractTransformation ()
   {
-    _a = new DoubleProperty (this, "a", a);
+    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -851,25 +851,25 @@ namespace djnn
                                                double m31, double m32, double m33, double m34,
                                                double m41, double m42, double m43, double m44)
   {
-    _m11 = new DoubleProperty (this, "m11", m11);
-    _m12 = new DoubleProperty (this, "m12", m12);
-    _m13 = new DoubleProperty (this, "m13", m13);
-    _m14 = new DoubleProperty (this, "m14", m14);
+    _m11 = new DoubleProperty (this, "m11", m11, notify_damaged_transform);
+    _m12 = new DoubleProperty (this, "m12", m12, notify_damaged_transform);
+    _m13 = new DoubleProperty (this, "m13", m13, notify_damaged_transform);
+    _m14 = new DoubleProperty (this, "m14", m14, notify_damaged_transform);
 
-    _m21 = new DoubleProperty (this, "m21", m21);
-    _m22 = new DoubleProperty (this, "m22", m22);
-    _m23 = new DoubleProperty (this, "m23", m23);
-    _m24 = new DoubleProperty (this, "m24", m24);
+    _m21 = new DoubleProperty (this, "m21", m21, notify_damaged_transform);
+    _m22 = new DoubleProperty (this, "m22", m22, notify_damaged_transform);
+    _m23 = new DoubleProperty (this, "m23", m23, notify_damaged_transform);
+    _m24 = new DoubleProperty (this, "m24", m24, notify_damaged_transform);
 
-    _m31 = new DoubleProperty (this, "m31", m31);
-    _m32 = new DoubleProperty (this, "m32", m32);
-    _m33 = new DoubleProperty (this, "m33", m33);
-    _m34 = new DoubleProperty (this, "m34", m34);
+    _m31 = new DoubleProperty (this, "m31", m31, notify_damaged_transform);
+    _m32 = new DoubleProperty (this, "m32", m32, notify_damaged_transform);
+    _m33 = new DoubleProperty (this, "m33", m33, notify_damaged_transform);
+    _m34 = new DoubleProperty (this, "m34", m34, notify_damaged_transform);
 
-    _m41 = new DoubleProperty (this, "m41", m41);
-    _m42 = new DoubleProperty (this, "m42", m42);
-    _m43 = new DoubleProperty (this, "m43", m43);
-    _m44 = new DoubleProperty (this, "m44", m44);
+    _m41 = new DoubleProperty (this, "m41", m41, notify_damaged_transform);
+    _m42 = new DoubleProperty (this, "m42", m42, notify_damaged_transform);
+    _m43 = new DoubleProperty (this, "m43", m43, notify_damaged_transform);
+    _m44 = new DoubleProperty (this, "m44", m44, notify_damaged_transform);
 
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);

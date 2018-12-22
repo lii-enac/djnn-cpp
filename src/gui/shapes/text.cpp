@@ -31,23 +31,23 @@ namespace djnn
   Text::init_text (double x, double y, double dx, double dy, int dxu, int dyu,
               const std::string &encoding, const std::string &text)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _dx = new DoubleProperty (this, "dx", dx);
-    _dy = new DoubleProperty (this, "dy", dy);
-    _dxU = new IntProperty (this, "dxU", dxu);
-    _dyU = new IntProperty (this, "dyU", dyu);
-    _width = new IntProperty (this, "width", 0);
-    _height = new IntProperty (this, "height", 0);
+    _x = new DoubleProperty (this, "x", x, notify_damaged_transform);
+    _y = new DoubleProperty (this, "y", y, notify_damaged_transform);
+    _dx = new DoubleProperty (this, "dx", dx, notify_damaged_transform);
+    _dy = new DoubleProperty (this, "dy", dy, notify_damaged_transform);
+    _dxU = new IntProperty (this, "dxU", dxu, notify_damaged_transform);
+    _dyU = new IntProperty (this, "dyU", dyu, notify_damaged_transform);
+    _width = new IntProperty (this, "width", 0, notify_damaged_geometry);
+    _height = new IntProperty (this, "height", 0, notify_damaged_geometry);
 
     djnTextEncoding code = djnUtf8;
     if (encoding.compare ("ISO-8859-1") == 0)
       code = djnLatin1;
     else if (encoding.compare ("ASCII") == 0)
       code = djnAscii;
-    _encoding = new IntProperty (this, "encoding", code);
+    _encoding = new IntProperty (this, "encoding", code, notify_damaged_geometry);
 
-    _text = new TextProperty (this, "text", text);
+    _text = new TextProperty (this, "text", text, notify_damaged_geometry);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _update_size = new TextSizeAction (this, "size_action", this);
     _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
