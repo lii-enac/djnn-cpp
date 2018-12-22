@@ -68,7 +68,6 @@ namespace djnn
   public:
     virtual ~Graph ();
     static Graph& instance ();
-    Vertex* add_vertex (Process* c);
     void add_output_node (Process* c);
     void remove_output_node (Process* c);
     void add_edge (Process* src, Process* dst);
@@ -86,6 +85,7 @@ namespace djnn
     static std::once_flag onceFlag;
     Graph ();
     void browse_in_depth (Vertex* v);
+    Vertex* add_vertex (Process* c);
     Vertex* get_vertex (Process* c);
     Vertex::vertices_t _vertices;
     Vertex::vertices_t _sorted_vertices;

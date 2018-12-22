@@ -41,19 +41,13 @@ namespace djnn
     NOT_MARKED, BROWSING, MARKED
   };
 
-  bool
-  sort_vertices (Vertex* v1, Vertex *v2)
-  {
-    return (v1->get_end_date () > v2->get_end_date ());
-  }
-
   Vertex::Vertex (Process* c) :
       _vertex (c), _mark (NOT_MARKED), _start_date (0), _end_date (0), _count_egdes_in(0), _is_invalid (false)
   {
   }
 
   Vertex::~Vertex () {
-    _edges.clear ();
+    // _edges.clear (); // useless
   }
 
   void
@@ -67,7 +61,6 @@ namespace djnn
   void
   Vertex::remove_edge (Vertex *dst)
   {
-   
     //remove
     Vertex::vertices_t::iterator newend = _edges.end ();
     newend = std::remove (_edges.begin (), _edges.end (), dst);
@@ -102,6 +95,23 @@ namespace djnn
   Graph::~Graph ()
   {
     clear ();
+  }
+
+  void
+  Graph::clear ()
+  {
+    // nothing to delete because vertices are own by _vertices.
+    _sorted_vertices.clear ();
+
+    // delete vertices from _vertices and clear.
+    for (Vertex::vertices_t::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
+        if (*it) { delete *it; } // *it=nullptr;} // useless since clear is called next
+    _vertices.clear ();
+
+    // delete output_vertices from _outpur_nodes and clear 
+    for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
+        if (*it) { delete *it; } // *it=nullptr;} // useless since clear is called next
+    _output_nodes.clear ();
   }
 
   Vertex*
@@ -147,7 +157,7 @@ namespace djnn
     if (new_end != _output_nodes.end ()) {
       // delete nodes
       for (Vertex::vertices_t::iterator it = new_end ; it != _output_nodes.end(); ++it)
-        if (*it) { delete *it; *it=nullptr;}
+        if (*it) { delete *it; } // useless: *it=nullptr;}
 
       //erase from vector
       _output_nodes.erase( new_end, _output_nodes.end ());
@@ -191,7 +201,7 @@ namespace djnn
     if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0)) {
       newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
-      if (s) { delete s; s =nullptr;} // ==  src->set_vertex (nullptr);
+      if (s) { delete s; } // useless: s =nullptr;} // ==  src->set_vertex (nullptr);
     }
 
     // 2 - remove dst if necessary
@@ -199,7 +209,7 @@ namespace djnn
     if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0)){
       newend = std::remove (_vertices.begin (), _vertices.end (), d);
       _vertices.erase(newend, _vertices.end ());
-      if (d) { delete d; d =nullptr;} // ==  dst->set_vertex (nullptr);
+      if (d) { delete d; } // useless: d =nullptr;} // ==  dst->set_vertex (nullptr);
     }
 
     _sorted = false;
@@ -236,27 +246,18 @@ namespace djnn
   }
 
   void
-  Graph::sort ()
+  Graph::browse_in_depth (Vertex *v)
   {
-    if (_sorted)
-      return;
-
-    _cur_date = 0;
-    _sorted_vertices.clear ();
-
-    // set every vertex as NOT_MARKED before sorting them
-    for (auto v : _vertices) {
-      v->set_mark (NOT_MARKED);
+    v->set_mark (BROWSING);
+    v->set_start_date (++_cur_date);
+    for (auto v2 : v->get_edges ()) {
+      if (v2->get_mark () == NOT_MARKED) {
+        browse_in_depth (v2);
+      }
     }
-
-    for (auto v : _vertices) {
-      if (v->get_mark () == NOT_MARKED)
-        browse_in_depth (v);
-    }
-    std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), sort_vertices);
-    remove_properties ();
-    _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
-    _sorted = true;
+    v->set_end_date (++_cur_date);
+    v->set_mark (MARKED);
+    _sorted_vertices.push_back (v);
   }
 
   void
@@ -278,36 +279,34 @@ namespace djnn
     _sorted_vertices.erase( new_end, _sorted_vertices.end ());
   }
 
-  void
-  Graph::browse_in_depth (Vertex *v)
+  bool
+  sort_vertices (Vertex* v1, Vertex *v2)
   {
-    v->set_mark (BROWSING);
-    v->set_start_date (++_cur_date);
-    for (auto v2 : v->get_edges ()) {
-      if (v2->get_mark () == NOT_MARKED) {
-        browse_in_depth (v2);
-      }
-    }
-    v->set_end_date (++_cur_date);
-    v->set_mark (MARKED);
-    _sorted_vertices.push_back (v);
+    return (v1->get_end_date () > v2->get_end_date ());
   }
 
   void
-  Graph::clear ()
+  Graph::sort ()
   {
-    // nothing to delete because vertices are own by _vertices.
+    if (_sorted)
+      return;
+
+    _cur_date = 0;
     _sorted_vertices.clear ();
 
-    // delete vertices from _vertices and clear.
-    for (Vertex::vertices_t::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
-        if (*it) { delete *it; *it=nullptr;}
-    _vertices.clear ();
+    // set every vertex as NOT_MARKED before sorting them
+    for (auto v : _vertices) {
+      v->set_mark (NOT_MARKED);
+    }
 
-    // delete output_vertices from _outpur_nodes and clear 
-    for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
-        if (*it) { delete *it; *it=nullptr;}
-    _output_nodes.clear ();
+    for (auto v : _vertices) {
+      if (v->get_mark () == NOT_MARKED)
+        browse_in_depth (v);
+    }
+    std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), sort_vertices);
+    remove_properties ();
+    _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
+    _sorted = true;
   }
 
   void
