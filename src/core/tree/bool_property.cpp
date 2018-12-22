@@ -29,8 +29,8 @@ namespace djnn
     Graph::instance ().add_edge (this, _false);
   }
 
-  BoolProperty::BoolProperty (Process *p, const string& n, bool v) :
-      AbstractProperty (p, n), value (v)
+  BoolProperty::BoolProperty (Process *p, const string& n, bool v, int notify_mask) :
+      AbstractProperty (p, n, notify_mask), value (v)
   {
     init_BoolProperty ();
     Process::finalize ();
