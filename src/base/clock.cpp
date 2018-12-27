@@ -20,24 +20,23 @@
 #include "../core/serializer/serializer.h"
 #include "../core/utils-dev.h"
 #include <sys/time.h>
-#include <boost/chrono.hpp>
-#include <boost/thread/thread.hpp>
 
-//#include <QThread.h>
+#include "../core/syshook/cpp-thread.h"
+
 #include <iostream>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
 {
-  Clock::Clock (std::chrono::milliseconds period)
+  Clock::Clock (milliseconds period)
   {
     _period = new IntProperty (this, "period", period.count ());
     _elapsed = new DoubleProperty (this, "elapsed", 0);
     _tick = new Spike (this, "tick");
   }
 
-  Clock::Clock (Process *p, const std::string& n, std::chrono::milliseconds period) :
+  Clock::Clock (Process *p, const std::string& n, milliseconds period) :
       Process (p, n)
   {
     _period = new IntProperty (this, "period", period.count ());
@@ -92,20 +91,18 @@ namespace djnn
   Clock::run ()
   {
 //    QThread::currentThread()->setPriority(QThread::TimeCriticalPriority);
+    //DBG;
     struct timespec before;
     struct timespec after;
     set_please_stop (false);
     try {
       //std::cerr << this << " >> run" << std::endl;
       while (!get_please_stop ()) {
-        //std
-        boost
-        ::chrono::milliseconds duration (_period->get_value ());
+        chrono::milliseconds duration (_period->get_value ());
         //std::cerr << this << "  >> sleep " << duration.count() << std::endl;
         //std
         get_monotonic_time(&before);
-        boost
-        ::this_thread::sleep_for (duration); // blocking call
+        this_thread::sleep_for (chrono::milliseconds(duration)); // blocking call
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         //std::cerr << this << "  ** sleep GOT" << std::endl;

@@ -18,17 +18,19 @@
 #include "../core/tree/process.h"
 #include "../core/syshook/external_source.h"
 
-#include <chrono>
+#include "../core/syshook/cpp-time.h"
 
 namespace djnn
 {
+  using namespace std::chrono;
+  //using namespace boost::chrono;
 
   class Clock : public Process, public ExternalSource
   {
   public:
-    Clock (Process* p, const std::string& n, std::chrono::milliseconds period = 1000ms);
+    Clock (Process* p, const std::string& n, milliseconds period = seconds(1));
     Clock (Process* p, const std::string& n, int period = 1000);
-    Clock (std::chrono::milliseconds period = 1000ms);
+    Clock (milliseconds period = seconds(1));
     Clock (int period = 1000);
     ~Clock (); 
 

@@ -19,23 +19,21 @@
 #include "../execution/graph.h"
 #include "../serializer/serializer.h"
 
-#include <boost/chrono.hpp>
-#include <boost/thread/thread.hpp>
-
+#include "cpp-thread.h"
+#include "cpp-time.h"
 
 #include <iostream>
-
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
 {
-  Timer::Timer (std::chrono::milliseconds period)
+  Timer::Timer (chrono::milliseconds period)
   {
     _delay = new IntProperty (this, "delay", period.count ());
     _end = new Blank (this, "end");
   }
 
-  Timer::Timer (Process *p, const std::string& n, std::chrono::milliseconds period) :
+  Timer::Timer (Process *p, const std::string& n, chrono::milliseconds period) :
       Process (p, n)
   {
     _delay = new IntProperty (this, "delay", period.count ());
@@ -83,10 +81,8 @@ namespace djnn
   {
     //DBG;
     try {
-        boost
-        ::chrono::milliseconds duration (_delay->get_value ());
-        boost
-        ::this_thread::sleep_for (duration); // blocking call
+        chrono::milliseconds duration (_delay->get_value ());
+        this_thread::sleep_for (duration); // blocking call
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           _activation_state = deactivated;

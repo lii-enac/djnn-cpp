@@ -1,29 +1,7 @@
 #include "external_source.h"
 
-#if defined(__WIN32__)
-#define DJNN_USE_QTHREAD 1
-#else
-#define DJNN_USE_BOOST_THREAD 1
-#endif
+#include "cpp-thread.h"
 
-#if DJNN_USE_BOOST_THREAD
-#include <boost/thread/thread.hpp>
-typedef boost::thread djnn_thread_t;
-#endif
-
-#if DJNN_USE_CPP_THREAD
-#include <thread>
-typedef std::thread djnn_thread_t;
-#endif
-
-#if DJNN_USE_PTHREAD
-#include <pthread.h>
-#endif
-
-#if DJNN_USE_QTHREAD
-#include <QThread>
-typedef QThread* djnn_thread_t;
-#endif
 
 //#include <atomic>
 
@@ -87,6 +65,10 @@ namespace djnn {
     	//interruptible_thread (&Clock::run, this);
         #if DJNN_USE_BOOST_THREAD
     	djnn_thread_t (&ExternalSource::private_run, this);
+        #endif
+
+        #if DJNN_USE_CPP_THREAD
+        djnn_thread_t (&ExternalSource::private_run, this);
         #endif
 
         #if DJNN_USE_QTHREAD
@@ -184,6 +166,8 @@ static const char* th_err(int errmsg)
 	ExternalSource::private_run ()
 	{	
         //set_thread_priority();
+        //std::cerr << "run " << name << std::endl; 
+        DBG;
 		run();
 	}
 	

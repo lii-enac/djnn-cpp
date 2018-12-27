@@ -65,15 +65,17 @@ CXXFLAGS ?= $(CFLAGS) -std=c++14
 ifeq ($(os),Linux)
 lib_suffix=.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
-dynlib=-shared
-CFLAGS ?= -fpic -g -MMD -Wall
+DYNLIB=-shared
+CFLAGS ?= -fpic -g -MMD -O0 -Wall
+LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
 ifeq ($(os),Darwin)
 lib_suffix=.dylib
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-dynlib=-dynamiclib
-CFLAGS ?= -g -MMD -Wall
+DYNLIB=-dynamiclib
+CFLAGS ?= -g -MMD #-Wall
+LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
 # for windows with mingw64 
@@ -82,9 +84,23 @@ lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 dynlib =-shared
 CFLAGS ?= -fpic -g -MMD -Wall
+LDFLAGS ?= $(boost_libs) -L$(build_dir)
+endif
+	
+ifeq ($(findstring android,$(cross_prefix)),android)
+CXXFLAGS := \
+-I/usr/local/Cellar/android-ndk/r14//sources/cxx-stl/llvm-libc++/include \
+-I/usr/local/include \
+-DSDL_DISABLE_IMMINTRIN_H \
+$(CXXFLAGS)
+
+CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
+
 endif
 
-LDFLAGS ?= $(boost_libs) -L$(build_dir)
+
+CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 -DDJNN_USE_BOOST_CHRONO
+
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
@@ -140,7 +156,7 @@ $1_lib_all_ldflags := $$($1_lib_ldflags)
 ifeq ($(os),$(filter $(os),Darwin MINGW64_NT-10.0))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
-$1_lib_all_ldflags += $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
+$1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
 endif
 endif
 
@@ -151,8 +167,7 @@ $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
-	$$(CXX) $(dynlib) -o $$@ $$^ $$(LDFLAGS)
-
+	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) -Wl,-install_name,$$($1_libname),
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
@@ -161,15 +176,138 @@ $1_tidy: $$($1_tidy_srcs)
 .PHONY: $1_tidy
 
 $1_dbg:
-	@echo $1_dbg
-	@echo $$($1_cpp_srcs)
-	@echo $$($1_c_srcs)
 	@echo $$($1_objs)
 	@echo $$($1_djnn_deps)
 	@echo $$($1_lib_ldflags)
+
+$1_tructruc:
+	#@echo $1_dbg
+	#@echo $$($1_cpp_srcs)
+	#@echo $$($1_c_srcs)
+	#@echo $$($1_objs)
 	@echo $$($1_lib_all_ldflags)
-	@echo $$($1_cov_gcno)
-	@echo $$($1_cov_gcda)
+	#@echo $$($1_cov_gcno)
+	#@echo $$($1_cov_gcda)
+
+srcs += $$($1_srcs)
+srcgens += $$($1_srcgens)
+objs += $$($1_objs)
+deps += $$($1_deps)
+libs += $$($1_lib)
+cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
+
+endef
+
+
+
+
+$(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
+
+#headers := $(foreach a,$(djnn_libs),$a/$a)
+headers := $(djnn_libs)
+headers := $(addsuffix .h,$(headers)) $(addsuffix -dev.h,$(headers))
+headers := $(addprefix $(build_dir)/include/djnn/,$(headers))
+
+headers: $(headers)
+.PHONY: headers
+
+djnn: $(libs) $(headers)
+.PHONY: djnn
+
+$(build_dir)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(build_dir)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# for generated .cpp
+$(build_dir)/%.o: $(build_dir)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(build_dir)/include/djnn/%.h: src/*/%.h
+	@mkdir -p $(dir $@)
+	cp $< $@
+
+%_tidy: %
+	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
+.PHONY: %_tidy
+
+all_tidy := $(addsuffix _tidy,$(srcs))
+tidy: $(all_tidy)
+.PHONY: tidy
+
+-include $(deps)
+
+pre_cov: CXXFLAGS += --coverage
+pre_cov: LDFLAGS += --coverage
+pre_cov : djnn
+.PHONY: pre_cov
+
+cov:
+	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
+	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file)
+	genhtml -o $(lcov_output_dir) $(lcov_file)
+	cd $(lcov_output_dir) ; open index.html
+.PHONY: cov
+
+clean:
+	rm -f $(deps) $(objs) $(libs) $(srcgens) $(cov)
+	rm -rf $(lcov_output_dir) > /dev/null 2>&1 || true
+	rmdir $(build_dir) > /dev/null 2>&1 || true
+.PHONY: clean
+
+distclean clear:
+	rm -rf $(build_dir)
+.PHONY: distclean clear
+
+dbg:
+	@echo $(os)
+.PHONY: dbg
+
+ifeq ($(os),Linux)
+#https://brew.sh/
+pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev
+pkgdeps += qt5-default
+#pkgdeps += freetype sdl2
+pkgcmd := apt install -y
+endif
+
+ifeq ($(os),Darwin)
+#https://brew.sh/
+pkgdeps := expat curl boost
+pkgdeps += expat qt5
+#pkgdeps += freetype sdl2
+pkgcmd := brew install
+endif
+
+ifeq ($(os),MINGW64_NT-10.0)
+#https://www.msys2.org/
+#pkgdeps := git make
+pkgdeps := pkg-config gcc boost expat curl qt5
+#pkgdeps += freetype SDL2
+pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
+pkgcmd := pacman -S
+endif
+
+install-pkgdeps:
+	$(pkgcmd) $(pkgdeps)
+.PHONY: install-pkgdeps
+
+
+echo $$($1_djnn_deps)
+	@echo $$($1_lib_ldflags)
+
+$1_tructruc:
+	#@echo $1_dbg
+	#@echo $$($1_cpp_srcs)
+	#@echo $$($1_c_srcs)
+	#@echo $$($1_objs)
+	@echo $$($1_lib_all_ldflags)
+	#@echo $$($1_cov_gcno)
+	#@echo $$($1_cov_gcda)
 
 srcs += $$($1_srcs)
 srcgens += $$($1_srcgens)

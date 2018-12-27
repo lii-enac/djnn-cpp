@@ -101,6 +101,7 @@ namespace djnn
 
   Process::~Process ()
   {
+    //auto _vertex = Graph::instance().get_vertex(this);
     if (_vertex != nullptr)
       _vertex->invalidate ();
   }
@@ -250,6 +251,7 @@ namespace djnn
   Process::set_activation_flag (int flag)
   {
     _activation_flag = flag;
+    //if(_vertex) _vertex->set_activation_flag(flag);
   }
 
   int

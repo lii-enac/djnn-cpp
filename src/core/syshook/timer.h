@@ -19,7 +19,7 @@
 #include "../tree/blank.h"
 #include "external_source.h"
 
-#include <chrono>
+#include "cpp-time.h"
 
 namespace djnn
 {
@@ -27,9 +27,9 @@ namespace djnn
   class Timer : public Process, public ExternalSource
   {
   public:
-    Timer (Process* p, const std::string& n, std::chrono::milliseconds period = 1000ms);
+    Timer (Process* p, const std::string& n, chrono::milliseconds period = chrono::milliseconds(1000));
     Timer (Process* p, const std::string& n, int period = 1000);
-    Timer (std::chrono::milliseconds period = 1000ms);
+    Timer (chrono::milliseconds period = chrono::milliseconds(1000));
     Timer (int period = 1000);
     ~Timer ();
 

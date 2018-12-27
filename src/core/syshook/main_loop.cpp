@@ -1,4 +1,5 @@
 #include "main_loop.h"
+#include "cpp-thread.h"
 
 namespace djnn {
 
@@ -46,20 +47,28 @@ namespace djnn {
     void
     MainLoop::run_in_own_thread ()
     {
-      new std::thread (&MainLoop::run, this);
+      new djnn_thread_t (&MainLoop::run, this);
     }
+
+#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
     void
     MainLoop::run ()
     {
       //private_run();
+      //DBG;
       djnn::release_exclusive_access (DBG_REL); // launch other threads
-
+      //DBG;
       if (is_run_forever ()) {
+        //DBG;
         own_mutex.lock (); // 1st lock: success
         own_mutex.lock (); // 2nd lock: blocks forever
       } else {
-        std::this_thread::sleep_for (_duration);
+        //DBG;
+        //std::
+        //boost::
+        this_thread::sleep_for (chrono::milliseconds(_duration));
+        //DBG;
       }
       if (another_source_wants_to_be_mainloop)
         another_source_wants_to_be_mainloop->please_stop ();

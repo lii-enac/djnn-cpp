@@ -18,28 +18,30 @@
 #include "../tree/process.h"
 #include "external_source.h"
 
-#include <thread>
-#include <mutex>
-#include <iostream>
+#include "cpp-time.h"
+#include "cpp-thread.h"
 
 namespace djnn
 {
-
   class MainLoop : public Process, ExternalSource
   {
 
   public:
     static MainLoop& instance ();
+
     void set_run_for_ever () {
-      _duration = -1s;
+      _duration = chrono::milliseconds(-1);
     }
 
     bool is_run_forever () const {
-      return _duration == -1s;
+      return _duration == chrono::milliseconds(-1);
     }
     
-    void set_run_for (std::chrono::milliseconds duration) {
-      _duration = duration;
+    void set_run_for (chrono::milliseconds d) {
+      _duration = d;
+    }
+    void set_run_for (chrono::seconds d) {
+      _duration = chrono::duration_cast<chrono::milliseconds>(d);
     }
 
     static ExternalSource * another_source_wants_to_be_mainloop;
@@ -63,7 +65,7 @@ namespace djnn
     run ();
 
     std::mutex own_mutex;
-    std::chrono::milliseconds _duration;
+    chrono::milliseconds _duration;
 
   private:
     static MainLoop *_instance;
