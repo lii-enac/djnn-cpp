@@ -15,14 +15,9 @@
 #include "main_loop.h"
 #include "syshook.h"
 
+#include "cpp-thread.h"
 
-#if defined(__WIN32__)
-#define DJNN_USE_QTHREAD 1
-#else
-#define DJNN_USE_BOOST_THREAD 1
-#endif
-
-#if DJNN_USE_BOOST_THREAD
+#if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
 #include <boost/thread/mutex.hpp>
 typedef boost::mutex djnn_mutex_t;
 #endif
@@ -59,9 +54,13 @@ namespace djnn
 #if DBG_MUTEX
     //std::cerr << debug << " priority:" << QThread::currentThread()->priority() << std::flush;
 #endif
+#if !DJNN_USE_BOOST_FIBER
     global_mutex->lock ();
+#endif
 #if DBG_MUTEX
-    std::cerr << " GOT " << debug << " priority:" << QThread::currentThread()->priority() << std::endl << std::flush;
+    std::cerr << " GOT " << debug
+    //<< " priority:" << QThread::currentThread()->priority()
+    << std::endl << std::flush;
 #endif
   }
 
@@ -71,9 +70,11 @@ namespace djnn
 #if DBG_MUTEX
     //std::cerr << debug << std::flush;
 #endif
+#if !DJNN_USE_BOOST_FIBER
     global_mutex->unlock ();
+#endif
 #if DBG_MUTEX
-    //std::cerr << " ROL " << debug << std::endl << std::flush;
+    std::cerr << " ROL " << debug << std::endl << std::flush;
 #endif
   }
 

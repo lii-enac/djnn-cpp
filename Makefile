@@ -72,7 +72,7 @@ endif
 
 ifeq ($(os),Darwin)
 lib_suffix=.dylib
-boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
+boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber-mt -lboost_context-mt
 DYNLIB=-dynamiclib
 CFLAGS ?= -g -MMD #-Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
@@ -98,8 +98,66 @@ CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arc
 
 endif
 
+ifeq ($(cross_prefix),em)
+EMFLAGS := -Wall -Oz -s WASM=0 -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
+-s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
+-s TOTAL_MEMORY=1GB
 
-CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 -DDJNN_USE_BOOST_CHRONO
+#-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
+
+#TOTAL_MEMORY?
+#-s ALLOW_MEMORY_GROWTH=1 
+#-s WASM=1 
+#-s ALLOW_MEMORY_GROWTH=1 
+
+lib_suffix=.bc
+#boost_libs = -lboost_thread -lboost_chrono -lboost_system
+#boost_libs = \
+#	../boost_1_68_0/bin.v2/libs/chrono/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/libboost_chrono.bc \
+#	../boost_1_68_0/bin.v2/libs/system/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/libboost_system.bc \
+#	../boost_1_68_0/bin.v2/libs/thread/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/threadapi-pthread/threading-multi/libboost_thread.bc
+
+CFLAGS += $(EMFLAGS) \
+	-I../ext-libs/libexpat/expat/lib \
+	-I../ext-libs/curl/include \
+	-I../ext-libs/boost_1_68_0 \
+	-I/usr/local/include #glm
+os := em
+
+LDFLAGS = $(EMFLAGS)
+
+	# ../ext-libs/libexpat/expat/lib/.libs/libexpat.dylib \
+	# ../ext-libs/curl/lib/.libs/libcurl.dylib \
+	# ../ext-libs/fontconfig/src/.libs/libfontconfig.dylib \
+	# ../ext-libs/boost_1_68_0/bin.v2/libs/chrono/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/libboost_chrono.bc \
+	# ../ext-libs/boost_1_68_0/bin.v2/libs/system/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/libboost_system.bc \
+#see smala Makefile
+#	../ext-libs/boost_1_68_0/bin.v2/libs/thread/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/threadapi-pthread/threading-multi/libboost_thread.bc \
+
+#https://stackoverflow.com/questions/15724357/using-boost-with-emscripten
+# ./bootstrap.sh
+# emacs project-config.jam
+# using darwin : : em++ ;
+# ./b2 cxxstd=14 toolset=emscripten link=static thread chrono system
+
+endif
+
+	
+ifeq ($(findstring android,$(cross_prefix)),android)
+CXXFLAGS := \
+-I/usr/local/Cellar/android-ndk/r14//sources/cxx-stl/llvm-libc++/include \
+-I/usr/local/include \
+-DSDL_DISABLE_IMMINTRIN_H \
+$(CXXFLAGS)
+
+CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
+
+endif
+
+CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 \
+-DDJNN_USE_BOOST_THREAD -DDJNN_USE_BOOST_CHRONO
+
+#-DDDJNN_USE_BOOST_FIBER - D DDJNN_USE_STD_CHRONO
 
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
@@ -197,129 +255,6 @@ libs += $$($1_lib)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
-
-
-
-
-$(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
-
-#headers := $(foreach a,$(djnn_libs),$a/$a)
-headers := $(djnn_libs)
-headers := $(addsuffix .h,$(headers)) $(addsuffix -dev.h,$(headers))
-headers := $(addprefix $(build_dir)/include/djnn/,$(headers))
-
-headers: $(headers)
-.PHONY: headers
-
-djnn: $(libs) $(headers)
-.PHONY: djnn
-
-$(build_dir)/%.o: %.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(build_dir)/%.o: %.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# for generated .cpp
-$(build_dir)/%.o: $(build_dir)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(build_dir)/include/djnn/%.h: src/*/%.h
-	@mkdir -p $(dir $@)
-	cp $< $@
-
-%_tidy: %
-	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
-.PHONY: %_tidy
-
-all_tidy := $(addsuffix _tidy,$(srcs))
-tidy: $(all_tidy)
-.PHONY: tidy
-
--include $(deps)
-
-pre_cov: CXXFLAGS += --coverage
-pre_cov: LDFLAGS += --coverage
-pre_cov : djnn
-.PHONY: pre_cov
-
-cov:
-	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
-	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file)
-	genhtml -o $(lcov_output_dir) $(lcov_file)
-	cd $(lcov_output_dir) ; open index.html
-.PHONY: cov
-
-clean:
-	rm -f $(deps) $(objs) $(libs) $(srcgens) $(cov)
-	rm -rf $(lcov_output_dir) > /dev/null 2>&1 || true
-	rmdir $(build_dir) > /dev/null 2>&1 || true
-.PHONY: clean
-
-distclean clear:
-	rm -rf $(build_dir)
-.PHONY: distclean clear
-
-dbg:
-	@echo $(os)
-.PHONY: dbg
-
-ifeq ($(os),Linux)
-#https://brew.sh/
-pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev
-pkgdeps += qt5-default
-#pkgdeps += freetype sdl2
-pkgcmd := apt install -y
-endif
-
-ifeq ($(os),Darwin)
-#https://brew.sh/
-pkgdeps := expat curl boost
-pkgdeps += expat qt5
-#pkgdeps += freetype sdl2
-pkgcmd := brew install
-endif
-
-ifeq ($(os),MINGW64_NT-10.0)
-#https://www.msys2.org/
-#pkgdeps := git make
-pkgdeps := pkg-config gcc boost expat curl qt5
-#pkgdeps += freetype SDL2
-pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
-pkgcmd := pacman -S
-endif
-
-install-pkgdeps:
-	$(pkgcmd) $(pkgdeps)
-.PHONY: install-pkgdeps
-
-
-echo $$($1_djnn_deps)
-	@echo $$($1_lib_ldflags)
-
-$1_tructruc:
-	#@echo $1_dbg
-	#@echo $$($1_cpp_srcs)
-	#@echo $$($1_c_srcs)
-	#@echo $$($1_objs)
-	@echo $$($1_lib_all_ldflags)
-	#@echo $$($1_cov_gcno)
-	#@echo $$($1_cov_gcda)
-
-srcs += $$($1_srcs)
-srcgens += $$($1_srcgens)
-objs += $$($1_objs)
-deps += $$($1_deps)
-libs += $$($1_lib)
-cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
-
-endef
-
-
-
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 

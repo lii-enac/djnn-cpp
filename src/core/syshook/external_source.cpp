@@ -63,12 +63,8 @@ namespace djnn {
 		_impl->_thread =    
     	//std::thread (&Clock::run, this);
     	//interruptible_thread (&Clock::run, this);
-        #if DJNN_USE_BOOST_THREAD
+        #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
     	djnn_thread_t (&ExternalSource::private_run, this);
-        #endif
-
-        #if DJNN_USE_CPP_THREAD
-        djnn_thread_t (&ExternalSource::private_run, this);
         #endif
 
         #if DJNN_USE_QTHREAD

@@ -61,8 +61,9 @@ namespace djnn {
       //DBG;
       if (is_run_forever ()) {
         //DBG;
-        own_mutex.lock (); // 1st lock: success
-        own_mutex.lock (); // 2nd lock: blocks forever
+        //own_mutex.lock (); // 1st lock: success
+        //own_mutex.lock (); // 2nd lock: blocks forever
+        while (1) this_thread::sleep_for(chrono::seconds(20000));
       } else {
         //DBG;
         //std::
