@@ -163,7 +163,7 @@ static const char* th_err(int errmsg)
 	{	
         //set_thread_priority();
         //std::cerr << "run " << name << std::endl; 
-        DBG;
+        //DBG;
 		run();
 	}
 	
