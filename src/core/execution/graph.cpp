@@ -370,7 +370,9 @@ namespace djnn
       graph_counter = graph_counter + 1;
       graph_total = graph_total + time ;
       graph_average = graph_total / graph_counter;
-      cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl; 
+      cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl;
+      cerr << "GRAPH size: " << _vertices.size () << endl;
+      cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
       cerr << "\033[0m"  << endl;
 #endif
   }
