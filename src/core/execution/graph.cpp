@@ -47,7 +47,6 @@ namespace djnn
   }
 
   Vertex::~Vertex () {
-    // _edges.clear (); // useless
   }
 
   void
@@ -105,12 +104,12 @@ namespace djnn
 
     // delete vertices from _vertices and clear.
     for (Vertex::vertices_t::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
-        if (*it) { delete *it; } // *it=nullptr;} // useless since clear is called next
+        if (*it) delete *it;
     _vertices.clear ();
 
     // delete output_vertices from _outpur_nodes and clear 
     for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
-        if (*it) { delete *it; } // *it=nullptr;} // useless since clear is called next
+        if (*it) delete *it;
     _output_nodes.clear ();
   }
 
@@ -157,7 +156,7 @@ namespace djnn
     if (new_end != _output_nodes.end ()) {
       // delete nodes
       for (Vertex::vertices_t::iterator it = new_end ; it != _output_nodes.end(); ++it)
-        if (*it) { delete *it; } // useless: *it=nullptr;}
+        if (*it) delete *it;
 
       //erase from vector
       _output_nodes.erase( new_end, _output_nodes.end ());
@@ -201,7 +200,7 @@ namespace djnn
     if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0)) {
       newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
-      if (s) { delete s; } // useless: s =nullptr;} // ==  src->set_vertex (nullptr);
+      if (s) delete s; // ==  src->set_vertex (nullptr);
     }
 
     // 2 - remove dst if necessary
@@ -209,7 +208,7 @@ namespace djnn
     if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0)){
       newend = std::remove (_vertices.begin (), _vertices.end (), d);
       _vertices.erase(newend, _vertices.end ());
-      if (d) { delete d; } // useless: d =nullptr;} // ==  dst->set_vertex (nullptr);
+      if (d) delete d; // ==  dst->set_vertex (nullptr);
     }
 
     _sorted = false;
