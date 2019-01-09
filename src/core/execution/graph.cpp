@@ -27,6 +27,9 @@
 static int graph_counter = 0;
 static double graph_total = 0.0;
 static double graph_average = 0.0;
+static int sorted_counter = 0;
+static double sorted_total = 0.0;
+static double sorted_average = 0.0;
 #endif
 
 namespace djnn
@@ -290,6 +293,10 @@ namespace djnn
     if (_sorted)
       return;
 
+#if _PERF_TEST
+    t1 ();
+#endif
+
     _cur_date = 0;
     _sorted_vertices.clear ();
 
@@ -306,6 +313,19 @@ namespace djnn
     remove_properties ();
     _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
     _sorted = true;
+
+#if _PERF_TEST
+      // print in YELLOW
+      cerr << "\033[1;33m" << endl;
+      double time = t2 ("SORT_GRAPH : ");
+      sorted_counter = sorted_counter + 1;
+      sorted_total = sorted_total + time ;
+      sorted_average = sorted_total / sorted_counter;
+      cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
+      cerr << "GRAPH size: " << _vertices.size () << endl;
+      cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+      cerr << "\033[0m"  << endl;
+#endif
   }
 
   void
@@ -344,11 +364,14 @@ namespace djnn
    //graph_mutex.unlock ();
 
 #if _PERF_TEST
-      double time = t2 ("\nGRAPH_EXEC : ");
+      // print in GREEN
+      cerr << "\033[1;32m" << endl;
+      double time = t2 ("GRAPH_EXEC : ");
       graph_counter = graph_counter + 1;
       graph_total = graph_total + time ;
       graph_average = graph_total / graph_counter;
       cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl; 
+      cerr << "\033[0m"  << endl;
 #endif
   }
 

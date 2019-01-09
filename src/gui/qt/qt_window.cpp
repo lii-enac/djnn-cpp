@@ -271,11 +271,14 @@ namespace djnn
       if (p)
         p->draw ();
 #if _PERF_TEST
-      double time = t2 ("\nDRAW : ");
+      // print in RED
+      cerr << "\033[1;31m" << endl;
+      double time = t2 ("DRAW : ");
       draw_counter = draw_counter + 1;
       draw_total = draw_total + time ;
       draw_average = draw_total / draw_counter;
-      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl; 
+      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
+      cerr << "\033[0m"  << endl;
 #endif
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
