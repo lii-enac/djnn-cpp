@@ -427,7 +427,7 @@ namespace djnn
 
     if (is_in_picking_view (i)) {
       load_pick_context (i);
-      _picking_view->painter ()->drawPixmap (rect, *pm);
+      _picking_view->painter ()->drawRect (rect);
     }
   }
 } /* namespace djnn */
