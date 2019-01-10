@@ -219,6 +219,11 @@ $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(
 endif
 endif
 
+$1_lib_rpath := -Wl,-rpath,$$($1_libname)
+ifeq ($(os), Darwin))
+$1_lib_rpath := -Wl,-install_name,$$($1_libname),
+endif
+
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
@@ -226,7 +231,7 @@ $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
-	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) -Wl,-install_name,$$($1_libname),
+	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
