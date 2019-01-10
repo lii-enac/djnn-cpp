@@ -220,7 +220,7 @@ endif
 endif
 
 $1_lib_rpath := -Wl,-rpath,$$($1_libname)
-ifeq ($(os), Darwin))
+ifeq ($(os), Darwin)
 $1_lib_rpath := -Wl,-install_name,$$($1_libname),
 endif
 
