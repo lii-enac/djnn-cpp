@@ -77,7 +77,7 @@ namespace djnn
           deactivated)
   {
     set_is_model (model);
-    set_activation_flag (NONE);
+    unset_activation_flag ();
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
@@ -92,7 +92,7 @@ namespace djnn
           deactivated)
   {
     set_is_model (model);
-    set_activation_flag (NONE);
+    unset_activation_flag ();
     _name = "anonymous_" + to_string (++_nb_anonymous);
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
@@ -106,12 +106,6 @@ namespace djnn
     if (_vertex != nullptr)
       _vertex->invalidate ();
   }
-
-  /*bool
-  Process::is_model ()
-  {
-    return _model;
-  }*/
 
   void
   Process::activation ()
@@ -310,7 +304,7 @@ namespace djnn
   {
     notify_deactivation ();
     _activation_state = deactivated;
-    set_activation_flag (NONE);
+    unset_activation_flag ();
   }
 
   activation_state

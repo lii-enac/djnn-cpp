@@ -79,7 +79,7 @@ namespace djnn
   void
   Switch::draw ()
   {
-    if (get_activation_flag () == DEACTIVATION)
+    if (is_deactivation_requested ())
       return;
     if (_cur_branch != nullptr)
       _cur_branch->draw ();

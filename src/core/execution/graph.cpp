@@ -344,17 +344,9 @@ namespace djnn
       for (auto v : _sorted_vertices) {
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
-        int action = v->get_process ()->get_activation_flag ();
-        switch (action) {
-          case ACTIVATION:
-            v->get_process ()->activation ();
-            break;
-          case DEACTIVATION:
-            v->get_process ()->deactivation ();
-            break;
-          default:;
-        }
-        v->get_process ()->set_activation_flag (NONE);
+        auto * p = v->get_process ();
+        p->do_something_according_to_activation_flag ();
+        p->unset_activation_flag ();
     }
     if (!_sorted) {
       sort ();

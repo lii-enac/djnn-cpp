@@ -171,7 +171,7 @@ namespace djnn
   void
   Container::draw ()
   {
-    if (get_activation_flag () == DEACTIVATION)
+    if (is_deactivation_requested ())
       return;
     ComponentObserver::instance ().start_draw ();
     for (auto c : _children) {

@@ -369,6 +369,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
+    void activate_children ();
     LinearGradient *_lg;
   };
 
@@ -408,6 +409,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
+    void activate_children ();
     RadialGradient* _rg;
   };
 

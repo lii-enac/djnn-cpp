@@ -63,7 +63,7 @@ namespace djnn {
     virtual void activation ();
     virtual void deactivation ();
 
-    virtual void exec (int flag) { set_activation_flag (flag); }
+    virtual void exec (int flag) { _set_activation_flag (flag); }
 
     void add_activation_coupling (Coupling* c);
     void add_deactivation_coupling (Coupling* c);
@@ -117,13 +117,6 @@ namespace djnn {
     virtual void draw () {};
     virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
     virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
-  
-  private:
-    static int _nb_anonymous;
-    couplings_t _activation_couplings;
-    couplings_t _deactivation_couplings;
-    Vertex *_vertex;
-    string _dbg_info;
 
   protected:
     virtual void pre_activate ();
@@ -134,30 +127,58 @@ namespace djnn {
     virtual void deactivate () = 0;
     virtual void post_deactivate ();
 
+  private:
+    static int _nb_anonymous;
+
+    couplings_t _activation_couplings;
+    couplings_t _deactivation_couplings;
+    Vertex *_vertex;
+    string _dbg_info;
+
+  protected:
     map<string, Process*> _symtable;
     string _name;
     Process *_parent, *_state_dependency;
     Process *_data;
     activation_state _activation_state;
 
+  private:
     bitset<8> _bitset;
-    const unsigned int MODEL_BIT=0;
-    const unsigned int ACTIVATION_NONE_BIT=1;
-    const unsigned int ACTIVATE_OR_DEACTIVATE_BIT=2;
+    enum {
+        MODEL_BIT,
+        ACTIVATION_NONE_BIT,
+        ACTIVATE_OR_DEACTIVATE_BIT
+    };
 
-    void set_is_model(bool v) { _bitset[MODEL_BIT]=v; }
   public:
+    void set_is_model (bool v) { _bitset[MODEL_BIT]=v; }
     bool is_model () { return _bitset[MODEL_BIT]; }
-    void set_activation_flag (int flag) {
-        switch(flag) {
-            case NONE: _bitset[ACTIVATION_NONE_BIT]=true; break;
-            case ACTIVATION: _bitset[ACTIVATION_NONE_BIT]=false; _bitset[ACTIVATE_OR_DEACTIVATE_BIT]=true; break;
-            case DEACTIVATION: _bitset[ACTIVATION_NONE_BIT]=false; _bitset[ACTIVATE_OR_DEACTIVATE_BIT]=false; break;
+
+    void set_activation_flag ()      {        _bitset[ACTIVATION_NONE_BIT]= false; }
+    void unset_activation_flag ()    {        _bitset[ACTIVATION_NONE_BIT]= true;  }
+    bool is_unset_activation_flag () { return _bitset[ACTIVATION_NONE_BIT]==true;  }
+    bool is_set_activation_flag ()   { return _bitset[ACTIVATION_NONE_BIT]==false; }
+
+    void request_activation ()        {        set_activation_flag();      _bitset[ACTIVATE_OR_DEACTIVATE_BIT]= true; }
+    bool is_activation_requested ()   { return is_set_activation_flag() && _bitset[ACTIVATE_OR_DEACTIVATE_BIT]==true; }
+
+    void request_deactivation ()      {        set_activation_flag();      _bitset[ACTIVATE_OR_DEACTIVATE_BIT]= false; }
+    bool is_deactivation_requested () { return is_set_activation_flag() && _bitset[ACTIVATE_OR_DEACTIVATE_BIT]==false; }
+
+    void do_something_according_to_activation_flag () {
+        if(is_set_activation_flag ()) {
+            if (is_activation_requested ()) activation ();
+            else deactivation ();
         }
     }
-    int get_activation_flag () {
-        if (_bitset[ACTIVATION_NONE_BIT]) return NONE;
-        else return DEACTIVATION - _bitset[ACTIVATE_OR_DEACTIVATE_BIT];
+
+    // old API, still here because of exec
+    void _set_activation_flag (int flag) {
+        switch(flag) {
+            case NONE: unset_activation_flag (); break;
+            case ACTIVATION: request_activation (); break;
+            case DEACTIVATION: request_deactivation (); break;
+        }
     }
 
   };
