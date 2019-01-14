@@ -74,7 +74,7 @@ namespace djnn
 
   Process::Process (Process* parent, const string& name, bool model) :
       _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
+          deactivated), _model (model), _activation_flag (NONE)
   {
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
@@ -88,7 +88,7 @@ namespace djnn
 
   Process::Process (bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
+          deactivated), _model (model), _activation_flag (NONE)
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
 
@@ -264,14 +264,14 @@ namespace djnn
   Process::add_activation_coupling (Coupling* c)
   {
     _activation_couplings.push_back (c);
-    _has_couplings = true;
+    //_has_couplings = true;
   }
 
   void
   Process::add_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.push_back (c);
-    _has_couplings = true;
+    //_has_couplings = true;
   }
 
   void

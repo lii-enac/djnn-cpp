@@ -97,7 +97,7 @@ namespace djnn {
     int get_cpnt_type ();
     couplings_t& get_activation_couplings ();
     couplings_t& get_deactivation_couplings ();
-    bool has_coupling () { return _has_couplings; } ;
+    bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
 
     void set_data (Process* data);
     Process* get_data ();
@@ -140,7 +140,6 @@ namespace djnn {
     bool _model;
     int _activation_flag;
     int _cpnt_type;
-    bool _has_couplings;
   };
 
   void
