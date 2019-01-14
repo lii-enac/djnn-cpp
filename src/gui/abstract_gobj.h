@@ -57,7 +57,7 @@ namespace djnn
         RedrawAction (UpdateDrawing *p, const string &n) : Process (p, n), _ud (p) { Process::finalize (); }
         virtual ~RedrawAction () {}
         void activate () {
-          for (auto w : _ud->get_win_list ()) {
+          for (auto& w : _ud->get_win_list ()) {
             if (w != nullptr) {
               w->update ();
               w->set_refresh (false);
@@ -107,7 +107,7 @@ namespace djnn
       if (_auto_refresh->get_value()) _redraw_when_damaged->enable ();
       else _redraw_when_damaged->disable ();
     }
-    std::vector<Window*> get_win_list () { return _win_list; };
+    std::vector<Window*>& get_win_list () { return _win_list; };
     Process* get_damaged () { return _damaged; }
     void clear_list () {_win_list.clear (); }
     static void init ();
