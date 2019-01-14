@@ -85,7 +85,6 @@ namespace djnn
     QTransform transform = matrix.toTransform ();
     if (s->matrix () != nullptr) {
       Homography *h = dynamic_cast<Homography*> (s->matrix ());
-      Homography *hi = dynamic_cast<Homography*> (s->inverted_matrix ());
       QMatrix4x4 loc_matrix = QMatrix4x4 (matrix);
       h->_m11->set_value (loc_matrix (0, 0), false);
       h->_m12->set_value (loc_matrix (0, 1), false);
@@ -106,26 +105,29 @@ namespace djnn
       h->_m42->set_value (loc_matrix (3, 1), false);
       h->_m43->set_value (loc_matrix (3, 2), false);
       h->_m44->set_value (loc_matrix (3, 3), false);
-      loc_matrix = loc_matrix.inverted ();
-      hi->_m11->set_value (loc_matrix (0, 0), false);
-      hi->_m12->set_value (loc_matrix (0, 1), false);
-      hi->_m13->set_value (loc_matrix (0, 2), false);
-      hi->_m14->set_value (loc_matrix (0, 3), false);
+    }
+    if (s->inverted_matrix () != nullptr) {
+      Homography *hi = dynamic_cast<Homography*> (s->inverted_matrix ());
+      QMatrix4x4 loc_matrix_inv = QMatrix4x4 (matrix).inverted ();
+      hi->_m11->set_value (loc_matrix_inv (0, 0), false);
+      hi->_m12->set_value (loc_matrix_inv (0, 1), false);
+      hi->_m13->set_value (loc_matrix_inv (0, 2), false);
+      hi->_m14->set_value (loc_matrix_inv (0, 3), false);
 
-      hi->_m21->set_value (loc_matrix (1, 0), false);
-      hi->_m22->set_value (loc_matrix (1, 1), false);
-      hi->_m23->set_value (loc_matrix (1, 2), false);
-      hi->_m24->set_value (loc_matrix (1, 3), false);
+      hi->_m21->set_value (loc_matrix_inv (1, 0), false);
+      hi->_m22->set_value (loc_matrix_inv (1, 1), false);
+      hi->_m23->set_value (loc_matrix_inv (1, 2), false);
+      hi->_m24->set_value (loc_matrix_inv (1, 3), false);
 
-      hi->_m31->set_value (loc_matrix (2, 0), false);
-      hi->_m32->set_value (loc_matrix (2, 1), false);
-      hi->_m33->set_value (loc_matrix (2, 2), false);
-      hi->_m34->set_value (loc_matrix (2, 3), false);
+      hi->_m31->set_value (loc_matrix_inv (2, 0), false);
+      hi->_m32->set_value (loc_matrix_inv (2, 1), false);
+      hi->_m33->set_value (loc_matrix_inv (2, 2), false);
+      hi->_m34->set_value (loc_matrix_inv (2, 3), false);
 
-      hi->_m41->set_value (loc_matrix (3, 0), false);
-      hi->_m42->set_value (loc_matrix (3, 1), false);
-      hi->_m43->set_value (loc_matrix (3, 2), false);
-      hi->_m44->set_value (loc_matrix (3, 3), false);
+      hi->_m41->set_value (loc_matrix_inv (3, 0), false);
+      hi->_m42->set_value (loc_matrix_inv (3, 1), false);
+      hi->_m43->set_value (loc_matrix_inv (3, 2), false);
+      hi->_m44->set_value (loc_matrix_inv (3, 3), false);
     }
 
     /* setup the painting environment of the drawing view */

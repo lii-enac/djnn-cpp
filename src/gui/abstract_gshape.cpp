@@ -94,22 +94,22 @@ namespace djnn
     move->add_symbol ("y", my);
     move->add_symbol ("local_x", local_x);
     move->add_symbol ("local_y", local_y);
-    _matrix = new Homography (this, "matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-    _matrix->set_state (activated);
-    _inverted_matrix = new Homography (this, "inverted_matrix", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-    _inverted_matrix->set_state (activated);
+    if( !_inverted_matrix) {
+      _inverted_matrix = new Homography (this, "inverted_matrix");
+      _inverted_matrix->set_state (activated);
+    }
     _has_ui = true;
   }
 
   AbstractGShape::AbstractGShape () :
-      AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
+    AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
   AbstractGShape::AbstractGShape (Process *p, const std::string& n) :
-      AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
+    AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
@@ -126,14 +126,25 @@ namespace djnn
       if (found != string::npos) {
         key = path.substr (0, found);
       }
-      vector<string>::iterator it = _ui.begin ();
-      found = false;
-      while (!found && it != _ui.end ()) {
-        if (key.compare (*it) == 0) {
-          found = true;
-          init_mouse_ui ();
+      if (key.compare ("matrix") == 0) {
+        _matrix = new Homography (this, "matrix");
+        _matrix->set_state (activated);
+      }
+      else if (key.compare ("inverted_matrix") == 0) {
+        _inverted_matrix = new Homography (this, "inverted_matrix");
+        _inverted_matrix->set_state (activated);
+      }
+      else {
+        //  "press", "release", "move", "enter", "leave", "touches"
+        vector<string>::iterator it = _ui.begin ();
+        found = false;
+        while (!found && it != _ui.end ()) {
+          if (key.compare (*it) == 0) {
+            found = true;
+            init_mouse_ui ();
+          }
+          it++;
         }
-        it++;
       }
       return Process::find_component (path);
     }
