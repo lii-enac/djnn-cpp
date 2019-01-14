@@ -29,7 +29,7 @@ namespace djnn
   void
   alias_children (Process* p, Process* from)
   {
-    map<string, Process*> symtable = from->symtable ();
+    map<string, Process*>& symtable = from->symtable ();
     for (auto& sym : symtable) {
       p->add_symbol (sym.first, sym.second);
     }
@@ -54,10 +54,10 @@ namespace djnn
       cerr << "trying to merge unknown child " << sy1 << endl;
       return;
     }
-    for (auto c : x2->get_activation_couplings ()) {
+    for (auto& c : x2->get_activation_couplings ()) {
       x1->add_activation_coupling (c);
     }
-    for (auto c : x2->get_deactivation_couplings ()) {
+    for (auto& c : x2->get_deactivation_couplings ()) {
       x1->add_deactivation_coupling (c);
     }
     p2->remove_child (sy2);
@@ -351,13 +351,13 @@ namespace djnn
     return _cpnt_type;
   }
 
-  couplings_t
+  couplings_t&
   Process::get_activation_couplings ()
   {
     return _activation_couplings;
   }
 
-  couplings_t
+  couplings_t&
   Process::get_deactivation_couplings ()
   {
     return _deactivation_couplings;

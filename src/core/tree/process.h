@@ -76,7 +76,7 @@ namespace djnn {
     virtual string find_component_name (Process* child);
     void add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
-    map<string, Process*> symtable () { return _symtable; }
+    map<string, Process*>& symtable () { return _symtable; }
 
     virtual void add_child (Process* c, const string& name);
     virtual void remove_child (Process* c);
@@ -95,8 +95,8 @@ namespace djnn {
     const string& get_name () const;
 
     int get_cpnt_type ();
-    couplings_t get_activation_couplings ();
-    couplings_t get_deactivation_couplings ();
+    couplings_t& get_activation_couplings ();
+    couplings_t& get_deactivation_couplings ();
     bool has_coupling () { return _has_couplings; } ;
 
     void set_source (Process* src);

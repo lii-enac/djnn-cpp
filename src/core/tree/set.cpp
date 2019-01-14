@@ -180,7 +180,7 @@ namespace djnn
   SetIterator::activate ()
   {
     std::map<std::string, Process*>::iterator it;
-    std::map<std::string, Process*> map = _set->symtable ();
+    std::map<std::string, Process*>& map = _set->symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
       _action->activation ();
