@@ -73,7 +73,7 @@ namespace djnn
   }
 
   Process::Process (Process* parent, const string& name, bool model) :
-      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
+      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr), _activation_state (
           deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
   {
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
@@ -83,11 +83,11 @@ namespace djnn
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
-      _dbg_info = "non debug info";
+      _dbg_info = "no debug info";
   }
 
   Process::Process (bool model) :
-      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _source (nullptr), _data (nullptr), _activation_state (
+      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr), _activation_state (
           deactivated), _model (model), _activation_flag (NONE), _has_couplings (false)
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
@@ -96,7 +96,7 @@ namespace djnn
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
-      _dbg_info = "non debug info";
+      _dbg_info = "no debug info";
   }
 
   Process::~Process ()
@@ -186,7 +186,6 @@ namespace djnn
     // FIXME : low efficiency function cause by linear search. use with care !
 
     map<string, Process*>::iterator it;
-    string key = "name_not_found";
 
     for (it = _symtable.begin(); it != _symtable.end(); ++it)
     {
@@ -198,6 +197,7 @@ namespace djnn
       }
     }
 
+    string key = "name_not_found";
     return key;
 ;
   }
@@ -232,8 +232,8 @@ namespace djnn
   void
   Process::notify_activation ()
   {
-    couplings_t couplings_cpy = couplings_t (_activation_couplings);
-    for (auto coupling : couplings_cpy) {
+    couplings_t couplings_cpy = _activation_couplings;
+    for (auto& coupling : couplings_cpy) {
       coupling->propagateActivation ();
     }
   }
@@ -241,8 +241,8 @@ namespace djnn
   void
   Process::notify_deactivation ()
   {
-    couplings_t couplings_cpy = couplings_t (_deactivation_couplings);
-    for (auto coupling : couplings_cpy) {
+    couplings_t couplings_cpy = _deactivation_couplings;
+    for (auto& coupling : couplings_cpy) {
       coupling->propagateDeactivation ();
     }
   }
@@ -361,18 +361,6 @@ namespace djnn
   Process::get_deactivation_couplings ()
   {
     return _deactivation_couplings;
-  }
-
-  void
-  Process::set_source (Process* src)
-  {
-    _source = src;
-  }
-
-  Process*
-  Process::get_activation_source ()
-  {
-    return _source;
   }
 
   void

@@ -42,7 +42,7 @@ namespace djnn
     (_action) (_data, _string_setter);
   }
 
-  std::map<std::string, AbstractProperty*>
+  std::map<std::string, AbstractProperty*>&
   NativeExpressionAction::data ()
   {
     return _data;

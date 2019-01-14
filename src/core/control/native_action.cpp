@@ -19,14 +19,14 @@ namespace djnn
   using namespace std;
 
   NativeAction::NativeAction (NativeCode *action, void* data, bool isModel) :
-      Process (), _data (data), _action (action)
+      Process (), _data (data), _action (action), _activation_source (nullptr)
   {
     _model = isModel;
   }
 
   NativeAction::NativeAction (Process* parent, const string &name, NativeCode *action, void* data,
                               bool isModel) :
-      Process (parent, name), _data (data), _action (action)
+      Process (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {
     _model = isModel;
     Process::finalize ();

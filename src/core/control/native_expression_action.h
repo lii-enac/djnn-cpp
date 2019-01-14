@@ -30,7 +30,7 @@ namespace djnn {
     virtual ~NativeExpressionAction ();
     void activate () override;
     void deactivate () override {}
-    std::map<std::string, AbstractProperty*> data ();
+    std::map<std::string, AbstractProperty*>& data ();
   private:
     std::map<std::string, AbstractProperty*> _data;
     NativeExpression *_action;

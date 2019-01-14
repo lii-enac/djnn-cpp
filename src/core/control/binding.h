@@ -31,7 +31,7 @@ namespace djnn {
     public:
       BindingAction (Process* parent, const string &name, Process *src, Process* dst) : Process (parent, name), _dst (dst), _src (src) {}
       virtual ~BindingAction () {};
-      void activate () override { _dst->set_source (_src); _dst->activation (); }
+      void activate () override { _dst->set_activation_source (_src); _dst->activation (); }
       void deactivate () override {}
       void exec (int flag) override { activate (); }
     private:

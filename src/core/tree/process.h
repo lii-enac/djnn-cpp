@@ -99,8 +99,6 @@ namespace djnn {
     couplings_t& get_deactivation_couplings ();
     bool has_coupling () { return _has_couplings; } ;
 
-    void set_source (Process* src);
-    Process* get_activation_source ();
     void set_data (Process* data);
     Process* get_data ();
 
@@ -111,6 +109,7 @@ namespace djnn {
     virtual void draw () {};
     virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
     virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+  
   private:
     static int _nb_anonymous;
     couplings_t _activation_couplings;
@@ -119,6 +118,12 @@ namespace djnn {
     string _dbg_info;
 
   protected:
+    // for NativeAction
+    virtual void set_activation_source (Process* src) {}
+    virtual Process* get_activation_source () { return nullptr; }
+    friend class Binding;
+    friend class Coupling;
+
     virtual void pre_activate ();
     virtual void activate () = 0;
     virtual void post_activate ();
@@ -130,7 +135,9 @@ namespace djnn {
     map<string, Process*> _symtable;
     string _name;
     Process *_parent, *_state_dependency;
-    Process* _source, *_data;
+    Process
+        //*_activation_source,
+        *_data;
     activation_state _activation_state;
     bool _model;
     int _activation_flag;
