@@ -84,6 +84,12 @@ namespace djnn
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
       _dbg_info = "no debug info";
+
+    static int notdone=0;
+    if(!notdone) {
+      notdone=1;
+      printf("%lu\n", sizeof(Process));
+    }
   }
 
   Process::Process (bool model) :

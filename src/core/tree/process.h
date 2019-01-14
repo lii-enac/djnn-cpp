@@ -102,6 +102,12 @@ namespace djnn {
     void set_data (Process* data);
     Process* get_data ();
 
+    // for NativeAction
+    virtual void set_activation_source (Process* src) {}
+    virtual Process* get_activation_source () { return nullptr; }
+    friend class Binding;
+    friend class Coupling;
+
     virtual void dump (int level=0);
 
     string debug_info () { return _dbg_info; }
@@ -118,12 +124,6 @@ namespace djnn {
     string _dbg_info;
 
   protected:
-    // for NativeAction
-    virtual void set_activation_source (Process* src) {}
-    virtual Process* get_activation_source () { return nullptr; }
-    friend class Binding;
-    friend class Coupling;
-
     virtual void pre_activate ();
     virtual void activate () = 0;
     virtual void post_activate ();
