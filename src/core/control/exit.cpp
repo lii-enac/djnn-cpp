@@ -24,10 +24,10 @@ namespace djnn
 {
   using namespace std;
 
-  Exit::Exit (Process* p, const string &name, int value, bool is_model) :
+  Exit::Exit (Process* p, const string &name, int value, bool isModel) :
       Process (p, name)
   {
-    _model = is_model;
+    set_is_model (isModel);
     _value = new IntProperty (this, "value", value);
     Process::finalize ();
   }
@@ -52,7 +52,7 @@ namespace djnn
     AbstractSerializer::serializer->start ("core:exit");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->int_attribute ("value", _value->get_value ());
-    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

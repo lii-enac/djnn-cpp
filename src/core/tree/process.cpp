@@ -74,8 +74,10 @@ namespace djnn
 
   Process::Process (Process* parent, const string& name, bool model) :
       _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (model), _activation_flag (NONE)
+          deactivated)//, //_model (model), _activation_flag (NONE)
   {
+    set_is_model (model);
+    set_activation_flag (NONE);
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
@@ -87,8 +89,10 @@ namespace djnn
 
   Process::Process (bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated), _model (model), _activation_flag (NONE)
+          deactivated)//, _model (model), _activation_flag (NONE)
   {
+    set_is_model (model);
+    set_activation_flag (NONE);
     _name = "anonymous_" + to_string (++_nb_anonymous);
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
@@ -103,11 +107,11 @@ namespace djnn
       _vertex->invalidate ();
   }
 
-  bool
+  /*bool
   Process::is_model ()
   {
     return _model;
-  }
+  }*/
 
   void
   Process::activation ()
@@ -244,6 +248,7 @@ namespace djnn
     }
   }
 
+/*
   void
   Process::set_activation_flag (int flag)
   {
@@ -256,7 +261,7 @@ namespace djnn
   {
     return _activation_flag;
   }
-
+*/
   void
   Process::add_activation_coupling (Coupling* c)
   {
@@ -321,7 +326,7 @@ namespace djnn
   {
     notify_deactivation ();
     _activation_state = deactivated;
-    _activation_flag = NONE;
+    set_activation_flag (NONE);
   }
 
   activation_state

@@ -311,7 +311,7 @@ namespace djnn
   void
   FSM::draw ()
   {
-    if (_activation_flag > activated)
+    if (get_activation_flag () == DEACTIVATION)
       return;
     if (_cur_state != nullptr)
       _cur_state->draw ();

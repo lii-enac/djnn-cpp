@@ -169,7 +169,7 @@ namespace djnn
     buf.clear ();
     AbstractSerializer::compute_path (get_parent (), _dst, buf);
     AbstractSerializer::serializer->text_attribute ("destination", buf);
-    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -233,7 +233,7 @@ namespace djnn
     buf.clear ();
     AbstractSerializer::compute_path (get_parent (), _dst, buf);
     AbstractSerializer::serializer->text_attribute ("destination", buf);
-    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

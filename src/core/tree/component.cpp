@@ -171,7 +171,7 @@ namespace djnn
   void
   Container::draw ()
   {
-    if (_activation_flag > activated)
+    if (get_activation_flag () > activated)
       return;
     ComponentObserver::instance ().start_draw ();
     for (auto c : _children) {
@@ -236,10 +236,10 @@ namespace djnn
   }
 
 
-  AssignmentSequence::AssignmentSequence (Process *p, const string &n, bool is_model) :
+  AssignmentSequence::AssignmentSequence (Process *p, const string &n, bool isModel) :
       Container (p, n)
   {
-    _model = is_model;
+    set_is_model (isModel);
     Process::finalize ();
   }
 

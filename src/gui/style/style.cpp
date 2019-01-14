@@ -955,14 +955,14 @@ namespace djnn
   RefLinearGradient::RefLinearGradient (Process *p, const string &n, LinearGradient *lg) :
       AbstractStyle (p, n), _lg (lg)
   {
-    _lg->set_activation_flag (activated);
-    _lg->transforms ()->set_activation_flag (activated);
+    _lg->set_activation_flag (ACTIVATION);
+    _lg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _lg->transforms ()->children ()) {
-      t->set_activation_flag (activated);
+      t->set_activation_flag (ACTIVATION);
     }
-    _lg->stops ()->set_activation_flag (activated);
+    _lg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _lg->stops ()->children ()) {
-      s->set_activation_flag (activated);
+      s->set_activation_flag (ACTIVATION);
     }
     Process::finalize ();
   }
@@ -970,14 +970,14 @@ namespace djnn
   RefLinearGradient::RefLinearGradient (LinearGradient *lg) :
       AbstractStyle (), _lg (lg)
   {
-    _lg->set_activation_flag (activated);
-    _lg->transforms ()->set_activation_flag (activated);
+    _lg->set_activation_flag (ACTIVATION);
+    _lg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _lg->transforms ()->children ()) {
-      t->set_activation_flag (activated);
+      t->set_activation_flag (ACTIVATION);
     }
-    _lg->stops ()->set_activation_flag (activated);
+    _lg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _lg->stops ()->children ()) {
-      s->set_activation_flag (activated);
+      s->set_activation_flag (ACTIVATION);
     }
     Process::finalize ();
   }
@@ -1137,14 +1137,14 @@ namespace djnn
   RefRadialGradient::RefRadialGradient (Process *p, const string &n, RadialGradient *rg) :
       AbstractStyle (p, n), _rg (rg)
   {
-    _rg->set_activation_flag (activated);
-    _rg->transforms ()->set_activation_flag (activated);
+    _rg->set_activation_flag (ACTIVATION);
+    _rg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _rg->transforms ()->children ()) {
-      t->set_activation_flag (activated);
+      t->set_activation_flag (ACTIVATION);
     }
-    _rg->stops ()->set_activation_flag (activated);
+    _rg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _rg->stops ()->children ()) {
-      s->set_activation_flag (activated);
+      s->set_activation_flag (ACTIVATION);
     }
     Process::finalize ();
   }
@@ -1152,14 +1152,14 @@ namespace djnn
   RefRadialGradient::RefRadialGradient (RadialGradient *rg) :
       AbstractStyle (), _rg (rg)
   {
-    _rg->set_activation_flag (activated);
-    _rg->transforms ()->set_activation_flag (activated);
+    _rg->set_activation_flag (ACTIVATION);
+    _rg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _rg->transforms ()->children ()) {
-      t->set_activation_flag (activated);
+      t->set_activation_flag (ACTIVATION);
     }
-    _rg->stops ()->set_activation_flag (activated);
+    _rg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _rg->stops ()->children ()) {
-      s->set_activation_flag (activated);
+      s->set_activation_flag (ACTIVATION);
     }
     Process::finalize ();
   }

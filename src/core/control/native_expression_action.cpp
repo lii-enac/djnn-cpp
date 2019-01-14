@@ -21,14 +21,14 @@ namespace djnn
   NativeExpressionAction::NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter, bool isModel) :
       Process (), _data (data), _action (action), _string_setter (string_setter)
   {
-    _model = isModel;
+    set_is_model (isModel);
   }
 
   NativeExpressionAction::NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*> data, bool string_setter,
                               bool isModel) :
       Process (parent, name), _data (data), _action (action), _string_setter (string_setter)
   {
-    _model = isModel;
+    set_is_model (isModel);
     Process::finalize ();
   }
 

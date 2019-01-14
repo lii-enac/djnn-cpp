@@ -21,8 +21,8 @@ namespace djnn {
 
   class Spike: public Process {
   public:
-    Spike () : Process () { _model = true; };
-    Spike (Process* parent, string name) : Process (parent, name) { _model = true; Process::finalize (); };
+    Spike () : Process () { set_is_model (true); };
+    Spike (Process* parent, string name) : Process (parent, name) { set_is_model (true); Process::finalize (); };
     virtual ~Spike () {};
     void serialize (const string& format) override;
     Process* clone () override;

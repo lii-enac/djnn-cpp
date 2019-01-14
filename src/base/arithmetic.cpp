@@ -277,7 +277,7 @@ namespace djnn
     Graph::instance ().add_edge (this, _state);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _state);
-    _model = isModel;
+    set_is_model (isModel);
     return 1;
   }
 
@@ -317,7 +317,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:incr");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->text_attribute ("model", _model ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

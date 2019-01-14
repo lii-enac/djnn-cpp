@@ -16,13 +16,16 @@
 
 #include "../core_types.h"
 #include "../execution/graph.h"
+
 #include <vector>
 #include <map>
 #include <string>
+#include <bitset>
 
 namespace djnn {
   using namespace std;
 
+  // process types
   enum {
     UNDEFINED_T,
     PROPERTY_T,
@@ -33,12 +36,14 @@ namespace djnn {
     GOBJ_T
   };
 
+  // activation types
   enum {
     NONE,
     ACTIVATION,
     DEACTIVATION
   };
 
+  // child position spec
   enum {
     FIRST,
     BEFORE,
@@ -55,12 +60,9 @@ namespace djnn {
     Process (bool model = false);
     virtual ~Process ();
     void finalize ();
-    bool is_model ();
     virtual void activation ();
     virtual void deactivation ();
 
-    void set_activation_flag (int flag);
-    int get_activation_flag ();
     virtual void exec (int flag) { set_activation_flag (flag); }
 
     void add_activation_coupling (Coupling* c);
@@ -137,8 +139,27 @@ namespace djnn {
     Process *_parent, *_state_dependency;
     Process *_data;
     activation_state _activation_state;
-    bool _model;
-    int _activation_flag;
+
+    bitset<8> _bitset;
+    const unsigned int MODEL_BIT=0;
+    const unsigned int ACTIVATION_NONE_BIT=1;
+    const unsigned int ACTIVATE_OR_DEACTIVATE_BIT=2;
+
+    void set_is_model(bool v) { _bitset[MODEL_BIT]=v; }
+  public:
+    bool is_model () { return _bitset[MODEL_BIT]; }
+    void set_activation_flag (int flag) {
+        switch(flag) {
+            case NONE: _bitset[ACTIVATION_NONE_BIT]=true; break;
+            case ACTIVATION: _bitset[ACTIVATION_NONE_BIT]=false; _bitset[ACTIVATE_OR_DEACTIVATE_BIT]=true; break;
+            case DEACTIVATION: _bitset[ACTIVATION_NONE_BIT]=false; _bitset[ACTIVATE_OR_DEACTIVATE_BIT]=false; break;
+        }
+    }
+    int get_activation_flag () {
+        if (_bitset[ACTIVATION_NONE_BIT]) return NONE;
+        else return DEACTIVATION - _bitset[ACTIVATE_OR_DEACTIVATE_BIT];
+    }
+
   };
 
   void
