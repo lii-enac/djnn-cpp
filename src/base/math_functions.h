@@ -34,7 +34,8 @@ namespace djnn
       virtual ~ExpAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _output->set_value (exp (((DoubleProperty*)_input)->get_value ()), true);
       }
@@ -57,7 +58,8 @@ namespace djnn
         virtual ~LogAction () {}
         void activate ()
         {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           _output->set_value (log (((DoubleProperty*)_input)->get_value ()), true);
         }
@@ -80,7 +82,8 @@ namespace djnn
         virtual ~Log10Action () {}
         void activate ()
         {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           _output->set_value (log10 (((DoubleProperty*)_input)->get_value ()), true);
         }
@@ -102,7 +105,8 @@ namespace djnn
           BinaryOperatorAction (p, n, base, exp, result) { Process::finalize (); }
         virtual ~PowAction () {}
         void activate () {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           _result->set_value (pow (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
@@ -125,7 +129,8 @@ namespace djnn
         virtual ~SqrtAction () {}
         void activate ()
         {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           _output->set_value (sqrt (((DoubleProperty*)_input)->get_value ()), true);
         }
@@ -148,7 +153,8 @@ namespace djnn
         virtual ~AbsAction () {}
         void activate ()
         {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           _output->set_value (abs (((DoubleProperty*)_input)->get_value ()), true);
         }
@@ -170,7 +176,8 @@ namespace djnn
           BinaryOperatorAction (p, n, min, input, result) { Process::finalize (); }
         virtual ~MinAction () {}
         void activate () {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           double min = ((DoubleProperty*) _left)->get_value ();
           double input = ((DoubleProperty*) _right)->get_value ();
@@ -194,7 +201,8 @@ namespace djnn
           BinaryOperatorAction (p, n, max, input, result) { Process::finalize (); }
         virtual ~MaxAction () {}
         void activate () {
-          if (_parent->get_state () > activated)
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
             return;
           double max = ((DoubleProperty*) _left)->get_value ();
           double input = ((DoubleProperty*) _right)->get_value ();

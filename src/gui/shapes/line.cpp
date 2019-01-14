@@ -88,7 +88,8 @@ namespace djnn
   void
   Line::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double x1 = _x1->get_value ();
       double y1 = _y1->get_value ();
       double x2 = _x2->get_value ();

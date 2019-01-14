@@ -34,7 +34,8 @@ namespace djnn
       virtual ~AndAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () && ((BoolProperty*) _right)->get_value (), true);
       }
@@ -58,7 +59,8 @@ namespace djnn
       virtual ~OrAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
@@ -82,7 +84,8 @@ namespace djnn
       virtual ~XOrAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
@@ -104,7 +107,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~NotAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
                   return;
         _output->set_value (!((BoolProperty*) _input)->get_value (), true);
       }

@@ -109,7 +109,8 @@ namespace djnn
   void
   Image::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_image (this);
     }
   }

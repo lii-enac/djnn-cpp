@@ -33,8 +33,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~CosineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (cos (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -55,8 +56,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~SineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (sin (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -77,8 +79,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~TangentAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (tan (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -99,8 +102,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcCosineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (acos (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -121,8 +125,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcSineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (asin (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -143,8 +148,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~ArcTangentAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (atan (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -165,8 +171,9 @@ namespace djnn
           BinaryOperatorAction (p, n, y, x, result) { Process::finalize (); }
         virtual ~ArcTangent2Action () {}
         void activate () {
-          if (_parent->get_state () > activated)
-                    return;
+          //if (_parent->get_state () > activated)
+          if (!_parent->somehow_activating ())
+            return;
           _result->set_value (atan2 (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
         void deactivate () {}
@@ -187,8 +194,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicCosineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (cosh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -209,8 +217,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicSineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (sinh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -231,8 +240,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicTangentAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (tanh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -253,8 +263,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcCosineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (acosh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -275,8 +286,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcSineAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (asinh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}
@@ -297,8 +309,9 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
       virtual ~HyperbolicArcTangentAction () {}
       void activate () {
-        if (_parent->get_state () > activated)
-                  return;
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
+          return;
         _output->set_value (atanh (((DoubleProperty*) _input)->get_value ()), true);
       }
       void deactivate () {}

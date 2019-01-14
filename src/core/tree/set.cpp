@@ -65,9 +65,11 @@ namespace djnn
       Process::add_child (c, name);
       c->set_parent (this);
 
-      if (get_state () == activated) {
+      //if (get_state () == activated) {
+      if (is_activated () ) {
         c->activation ();
-      } else if (c->get_state () == activated) {
+      //} else if (c->get_state () == activated) {
+      } else if (c->is_activated ()) {
         c->deactivation ();
       }
       _added->set_value (c, true);
@@ -189,7 +191,8 @@ namespace djnn
   void
   SetIterator::post_activate ()
   {
-    _activation_state = deactivated;
+    //_activation_state = deactivated;
+    set_deactivated ();
   }
 }
 

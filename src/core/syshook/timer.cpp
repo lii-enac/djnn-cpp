@@ -64,7 +64,8 @@ namespace djnn
   void
   Timer::activate ()
   {
-    if (_activation_state == activated)
+    //if (_activation_state == activated)
+    if ( is_activated() )
       return;
     set_please_stop (false);
     start_thread();
@@ -85,7 +86,8 @@ namespace djnn
         this_thread::sleep_for (duration); // blocking call
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
-          _activation_state = deactivated;
+          //_activation_state = deactivated;
+          set_deactivated ();
           _end->notify_activation (); // propagating
           GRAPH_EXEC; // executing
         }

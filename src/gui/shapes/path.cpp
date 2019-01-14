@@ -79,7 +79,8 @@ namespace djnn
   void
   PathLine::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_line (_x->get_value (), _y->get_value ());
     }
   }
@@ -93,7 +94,8 @@ namespace djnn
   void
   PathMove::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_move (_x->get_value (), _y->get_value ());
     }
   }
@@ -206,7 +208,8 @@ namespace djnn
   void
   PathQuadratic::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double x = _x->get_value ();
       double y = _y->get_value ();
       double x1 = _x1->get_value ();
@@ -321,7 +324,8 @@ namespace djnn
   void
   PathCubic::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double x = _x->get_value ();
       double y = _y->get_value ();
       double x1 = _x1->get_value ();
@@ -449,7 +453,8 @@ namespace djnn
   void
   PathArc::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double x = _x->get_value ();
       double y = _y->get_value ();
       double rotx = _rotx->get_value ();
@@ -521,7 +526,8 @@ namespace djnn
   void
   Path::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path (this);
     }
   }
@@ -539,7 +545,8 @@ namespace djnn
   void
   PathClip::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_clip (this);
     }
   }

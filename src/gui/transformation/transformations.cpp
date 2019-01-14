@@ -103,7 +103,8 @@ namespace djnn
   void
   Translation::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double tx = _tx->get_value ();
       double ty = _ty->get_value ();
       Backend::instance ()->load_translation (this, tx, ty);
@@ -226,7 +227,8 @@ namespace djnn
   void
   Rotation::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double a = _a->get_value ();
       double cx = _cx->get_value ();
       double cy = _cy->get_value ();
@@ -362,7 +364,8 @@ namespace djnn
   void
   Scaling::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double sx = _sx->get_value ();
       double sy = _sy->get_value ();
       double cx = _cx->get_value ();
@@ -469,7 +472,8 @@ namespace djnn
   void
   SkewX::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double a = _a->get_value ();
       Backend::instance ()->load_skew_x (this, a);
     }
@@ -532,7 +536,8 @@ namespace djnn
   void
   SkewY::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double a = _a->get_value ();
       Backend::instance ()->load_skew_y (this, a);
     }
@@ -1332,7 +1337,8 @@ namespace djnn
   void
   Homography::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double m11 = _m11->get_value ();
       double m12 = _m12->get_value ();
       double m13 = _m13->get_value ();

@@ -65,7 +65,8 @@ namespace djnn
   {
     _c_branch->enable ();
     change_branch ();
-    _activation_state = activated;
+    //_activation_state = activated;
+    set_activated ();
   }
 
   void
@@ -92,11 +93,13 @@ namespace djnn
     map<string, Process*>::iterator it = _symtable.find (key);
     if (it != _symtable.end ()) {
       if (_cur_branch == it->second) {
-        if (_cur_branch->get_state () == deactivated)
+        //if (_cur_branch->get_state () == deactivated)
+        if (_cur_branch->is_deactivated ())
           _cur_branch->activation ();
         return;
       } else {
-        if (_cur_branch != nullptr && _cur_branch->get_state () == activated)
+        //if (_cur_branch != nullptr && _cur_branch->get_state () == activated)
+        if (_cur_branch != nullptr && _cur_branch->is_activated ())
           _cur_branch->deactivation ();
         _cur_branch = it->second;
         (it->second)->activation ();

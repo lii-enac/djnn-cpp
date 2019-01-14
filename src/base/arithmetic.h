@@ -34,7 +34,8 @@ namespace djnn
       virtual ~AdderAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () + ((DoubleProperty*)_right)->get_value (), true);
       }
@@ -59,7 +60,8 @@ namespace djnn
       virtual ~SubtractorAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () - ((DoubleProperty*)_right)->get_value (), true);
       }
@@ -85,7 +87,8 @@ namespace djnn
       virtual ~MultiplierAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () * ((DoubleProperty*)_right)->get_value (), true);
       }
@@ -110,7 +113,8 @@ namespace djnn
       virtual ~DividerAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
          return;
        double r = ((DoubleProperty*)_right)->get_value ();
        if (r == 0) {
@@ -139,7 +143,8 @@ private:
     virtual ~ModuloAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
        return;
      int l = ((IntProperty*) _left)->get_value ();
      int r = ((IntProperty*) _right)->get_value ();
@@ -170,7 +175,8 @@ private:
     virtual ~AscendingComparatorAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () <= ((DoubleProperty*)_right)->get_value (), true);
     }
@@ -195,7 +201,8 @@ private:
     virtual ~StrictAscendingComparatorAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () < ((DoubleProperty*)_right)->get_value (), true);
     }
@@ -220,7 +227,8 @@ private:
     virtual ~EqualityComparatorAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () == ((DoubleProperty*)_right)->get_value (), true);
     }
@@ -244,7 +252,8 @@ private:
     virtual ~SignInverterAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
         return;
       _output->set_value (-(((DoubleProperty*)_input)->get_value ()), true);
     }
@@ -268,7 +277,8 @@ private:
     virtual ~PreviousAction () {}
     void activate ()
     {
-      if (_parent->get_state () > activated)
+      //if (_parent->get_state () > activated)
+      if (!_parent->somehow_activating ())
         return;
 
       _output->set_value (_prev, true);

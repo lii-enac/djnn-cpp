@@ -62,7 +62,8 @@ namespace djnn
       virtual ~TextCatenatorAction () {}
       void activate () override
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         string head = ((TextProperty*)_left)->get_value ();
         string tail = ((TextProperty*)_right)->get_value ();
@@ -89,7 +90,8 @@ namespace djnn
       virtual ~TextComparatorAction () {}
       void activate ()
       {
-        if (_parent->get_state () > activated)
+        //if (_parent->get_state () > activated)
+        if (!_parent->somehow_activating ())
           return;
         string left = ((TextProperty*)_left)->get_value ();
         string right = ((TextProperty*)_right)->get_value ();

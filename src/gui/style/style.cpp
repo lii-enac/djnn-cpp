@@ -95,7 +95,8 @@ namespace djnn
   void
   FillColor::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       int r = (int) _r->get_value ();
       int g = (int) _g->get_value ();
       int b = (int) _b->get_value ();
@@ -112,7 +113,8 @@ namespace djnn
   void
   OutlineColor::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       int r = (int) _r->get_value ();
       int g = (int) _g->get_value ();
       int b = (int) _b->get_value ();
@@ -187,7 +189,8 @@ namespace djnn
   void
   FillRule::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_rule ((djnFillRuleType) (_rule->get_value ()));
     }
   }
@@ -201,7 +204,8 @@ namespace djnn
   void
   NoOutline::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_outline ();
     }
   }
@@ -215,7 +219,8 @@ namespace djnn
   void
   NoFill::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_fill ();
     }
   }
@@ -268,7 +273,8 @@ namespace djnn
   void
   Texture::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_texture (_path->get_value ());
     }
   }
@@ -321,7 +327,8 @@ namespace djnn
   void
   OutlineOpacity::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_opacity ((float) _alpha->get_value ());
     }
   }
@@ -335,7 +342,8 @@ namespace djnn
   void
   FillOpacity::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_opacity ((float) _alpha->get_value ());
     }
   }
@@ -388,7 +396,8 @@ namespace djnn
   void
   OutlineWidth::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_width (_width->get_value ());
     }
   }
@@ -460,7 +469,8 @@ namespace djnn
   void
   OutlineCapStyle::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_cap_style ((djnCapStyle) _cap->get_value ());
     }
   }
@@ -531,7 +541,8 @@ namespace djnn
   void
   OutlineJoinStyle::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_join_style ((djnJoinStyle) _join->get_value ());
     }
   }
@@ -583,7 +594,8 @@ namespace djnn
   void
   OutlineMiterLimit::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_miter_limit (_limit->get_value ());
     }
   }
@@ -597,7 +609,8 @@ namespace djnn
   void
   DashArray::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_array (_dash_array);
     }
   }
@@ -616,7 +629,8 @@ namespace djnn
   void
   NoDashArray::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_dash_array ();
     }
   }
@@ -669,7 +683,8 @@ namespace djnn
   void
   DashOffset::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_offset (_offset->get_value ());
     }
   }
@@ -947,7 +962,8 @@ namespace djnn
   void
   LinearGradient::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_linear_gradient (this);
     }
   }
@@ -995,7 +1011,8 @@ namespace djnn
   void
   RefLinearGradient::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_linear_gradient (_lg);
     }
   }
@@ -1127,7 +1144,8 @@ namespace djnn
   void
   RadialGradient::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (this);
     }
   }
@@ -1175,7 +1193,8 @@ namespace djnn
   void
   RefRadialGradient::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (_rg);
     }
   }
@@ -1362,7 +1381,8 @@ namespace djnn
   void
   FontSize::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_size ((djnLengthUnit) _unit->get_value (), _size->get_value ());
     }
   }
@@ -1418,7 +1438,8 @@ namespace djnn
   void
   FontWeight::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_weight (_weight->get_value ());
     }
   }
@@ -1493,7 +1514,8 @@ namespace djnn
   void
   FontStyle::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_style ((djnFontSlope) _style->get_value ());
     }
   }
@@ -1549,7 +1571,8 @@ namespace djnn
   void
   FontFamily::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_family (_family->get_value ());
     }
   }
@@ -1619,7 +1642,8 @@ namespace djnn
   void
   TextAnchor::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_text_anchor ((djnAnchorType) _anchor->get_value ());
     }
   }

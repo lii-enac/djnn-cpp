@@ -91,7 +91,8 @@ namespace djnn
   void
   Ellipse::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame)
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame)
+    if (somehow_activating () && Backend::instance ()->window () == _frame)
       Backend::instance ()->draw_ellipse (this, _cx->get_value (), _cy->get_value (), _rx->get_value (), _ry->get_value ());
   }
 

@@ -106,7 +106,8 @@ namespace djnn
   void
   Rectangle::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double x = _x->get_value ();
       double y = _y->get_value ();
       double w = _width->get_value ();

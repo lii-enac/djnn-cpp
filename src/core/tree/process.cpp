@@ -279,7 +279,8 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (_activation_state != deactivated || (_parent != 0 && !_parent->somehow_activating() ))
+    //if (_activation_state != deactivated || (_parent != 0 && !_parent->somehow_activating() ))
+    if (!is_deactivated() || (_parent != 0 && !_parent->somehow_activating() ))
       return;
     set_activating ();
   }
@@ -307,12 +308,13 @@ namespace djnn
     unset_activation_flag ();
   }
 
+/*
   activation_state
   Process::get_state ()
   {
     return _activation_state;
   }
-
+*/
   Process*
   Process::get_parent ()
   {

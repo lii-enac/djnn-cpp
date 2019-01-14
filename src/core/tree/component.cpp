@@ -73,9 +73,11 @@ namespace djnn
     }
     c->set_parent (this);
     add_symbol (name, c);
-    if (get_state () == activated && !c->is_model ()) {
+    //if (get_state () == activated && !c->is_model ()) {
+    if (is_activated () && !c->is_model ()) {
       c->activation ();
-    } else if (c->get_state () == activated) {
+    //} else if (c->get_state () == activated) {
+    } else if (c->is_activated ()) {
       c->deactivation ();
     }
     for (auto s: structure_observer_list) {
@@ -274,7 +276,8 @@ namespace djnn
   void
   AssignmentSequence::post_activate ()
   {
-    _activation_state = deactivated;
+    //_activation_state = deactivated;
+    set_deactivated();
   }
 
   void

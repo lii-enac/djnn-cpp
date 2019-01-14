@@ -39,7 +39,8 @@ namespace djnn {
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;
   protected:
-    void post_activate () override { _activation_state = deactivated; }
+    //void post_activate () override { _activation_state = deactivated; }
+    void post_activate () override { set_deactivated (); }
     void activate () override {}
     void deactivate () override {}
     void deactivation () override {}

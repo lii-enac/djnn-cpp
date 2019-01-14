@@ -79,7 +79,8 @@ namespace djnn
   void
   PolyPoint::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly_point (_x->get_value (), _y->get_value ());
     }
   }
@@ -149,7 +150,8 @@ namespace djnn
   void
   Poly::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly (this);
     }
   }

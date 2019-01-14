@@ -54,7 +54,8 @@ namespace djnn
   void
   Group::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == frame ()) {
+    //if (_activation_state <= activated && Backend::instance ()->window () == frame ()) {
+    if (somehow_activating () && Backend::instance ()->window () == frame ()) {
       Container::draw ();
     }
   }

@@ -34,7 +34,8 @@ namespace djnn
     _redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION);
     _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION);
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
-    _activation_state = activated;
+    //_activation_state = activated;
+    set_activated ();
   }
 
   UpdateDrawing::~UpdateDrawing ()
@@ -105,7 +106,8 @@ namespace djnn
   void
   AbstractGObj::activate ()
   {
-    if (_frame == nullptr || _frame->get_state () <= activated) {
+    //if (_frame == nullptr || _frame->get_state () <= activated) {
+    if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
        *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent) and go through its
        *  children in order to find a frame. If no frame is found when the list iteration process arrived to (cur_child),
@@ -120,7 +122,8 @@ namespace djnn
           for (auto c : cont->children ()) {
             if (c == cur_child)
               break;
-            else if (c->get_cpnt_type () == WINDOW_T && c->get_state () <= activated) {
+            //else if (c->get_cpnt_type () == WINDOW_T && c->get_state () <= activated) {
+            else if (c->get_cpnt_type () == WINDOW_T && c->somehow_activating ()) {
               _frame = dynamic_cast<Window*> (c);
               found = true;
             }

@@ -182,9 +182,11 @@ namespace djnn
   {
     c->set_parent (this);
 
-    if (get_state () == activated && c->get_state () == deactivated) {
-      c->activation ();
-    } else if (get_state () == deactivated && c->get_state () == activated) {
+    //if (get_state () == activated && c->get_state () == deactivated) {
+    if (is_activated () && c->is_deactivated ()) {
+        c->activation ();
+    //} else if (get_state () == deactivated && c->get_state () == activated) {
+    } else if (is_deactivated () && c->is_activated ()) {
       c->deactivation ();
     }
     _added->set_value (c, true);
@@ -257,7 +259,8 @@ namespace djnn
   void
   BidirectionalListIterator::IterAction::activate ()
   {
-    if (_parent->get_state () > activated)
+    //if (_parent->get_state () > activated)
+    if (!_parent->somehow_activating () )
       return;
     int index = _index->get_value ();
     if (_forward) {
@@ -282,7 +285,8 @@ namespace djnn
   void
   BidirectionalListIterator::ResetAction::activate ()
   {
-    if (_parent->get_state () > activated)
+    //if (_parent->get_state () > activated)
+    if (!_parent->somehow_activating ())
       return;
     _index->set_value (1, true);
   }
@@ -402,7 +406,8 @@ namespace djnn
   void
   ListIterator::post_activate ()
   {
-    _activation_state = deactivated;
+    //_activation_state = deactivated;
+    set_deactivated ();
   }
 }
 

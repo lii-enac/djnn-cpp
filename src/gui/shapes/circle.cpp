@@ -82,7 +82,8 @@ namespace djnn
   void
   Circle::draw ()
   {
-    if (_activation_state <= activated && Backend::instance ()->window () == _frame)
+    //if (_activation_state <= activated && Backend::instance ()->window () == _frame)
+    if (somehow_activating () && Backend::instance ()->window () == _frame)
       Backend::instance ()->draw_circle (this, _cx->get_value (), _cy->get_value (), _r->get_value ());
   }
 
