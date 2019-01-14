@@ -28,7 +28,7 @@ namespace djnn
   void
   Connector::ConnectorAction::activate () { 
     /* do we have to check if the source is activable? */
-    if (_parent->get_state () < deactivating)
+    if ( _parent->somehow_activating () )
       AbstractAssignment::do_assignment (_src, _dst, _propagate);   
   }
 

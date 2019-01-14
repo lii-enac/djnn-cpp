@@ -181,6 +181,17 @@ namespace djnn {
         }
     }
 
+    void set_activating ()     {        _activation_state =  activating; }
+    bool is_activating ()      { return _activation_state == activating; }
+    void set_activated ()      {        _activation_state =  activated; }
+    bool is_activated ()       { return _activation_state == activated; }
+    bool somehow_activating () { return _activation_state < deactivating; }
+
+    void set_deactivating () {        _activation_state =  deactivating; }
+    bool is_deactivating ()  { return _activation_state == deactivating; }
+    void set_deactivated ()  {        _activation_state =  deactivated; }
+    bool is_deactivated ()   { return _activation_state == deactivated; }
+
   };
 
   void

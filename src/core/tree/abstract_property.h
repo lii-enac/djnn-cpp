@@ -28,9 +28,8 @@ namespace djnn {
     virtual ~AbstractProperty () {}
     virtual int get_cpnt_type () override { return PROPERTY_T; }
     virtual int get_prop_type () = 0;
-    //PropertyType type () { return _type; }
     bool is_activable () {
-      return get_parent () == 0 || get_parent ()->get_state () < deactivating;
+      return get_parent () == 0 || get_parent ()->somehow_activating ();
     }
     virtual void set_value (int v, bool propagate) = 0;
     virtual void set_value (double v, bool propagate) = 0;

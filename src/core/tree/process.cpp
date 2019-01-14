@@ -279,16 +279,16 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (_activation_state != deactivated || (_parent != 0 && _parent->get_state () > activated))
+    if (_activation_state != deactivated || (_parent != 0 && !_parent->somehow_activating() ))
       return;
-    _activation_state = activating;
+    set_activating ();
   }
 
   void
   Process::post_activate ()
   {
     notify_activation ();
-    _activation_state = activated;
+    set_activated ();
   }
 
   void
@@ -296,14 +296,14 @@ namespace djnn
   {
     if (_activation_state != activated)
       return;
-    _activation_state = deactivating;
+    set_deactivating ();
   }
 
   void
   Process::post_deactivate ()
   {
     notify_deactivation ();
-    _activation_state = deactivated;
+    set_deactivated ();
     unset_activation_flag ();
   }
 

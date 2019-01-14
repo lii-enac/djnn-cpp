@@ -23,20 +23,20 @@ namespace djnn
   Spike::pre_activate ()
   {
     if (_parent == 0 || _parent->get_state () == activated)
-      _activation_state = activating;
+      set_activating ();
   }
 
   void
   Spike::activate ()
   {
-    if (_activation_state == activating)
+    if ( is_activating () )
       notify_activation ();
   }
 
   void
   Spike::post_activate ()
   {
-    _activation_state = deactivated;
+    set_deactivated ();
   }
 
   void
