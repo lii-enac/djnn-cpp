@@ -16,12 +16,55 @@
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
+
+#define _PERF_TEST 0
+#if _PERF_TEST
+static int __nb_Drawing_object = 0;
+#endif
+
 namespace djnn
 {
 
   static bool __module_initialized = false;
   Process *DrawingRefreshManager;
   GUIStructureObserver * gui_structure_observer;
+
+
+  void 
+  GUIStructureHolder::add_gui_child (Process *c, int index) {
+
+#if _PERF_TEST
+   __nb_Drawing_object++;
+#endif
+   _children.push_back (std::pair<Process*, int> (c, index)); 
+ }
+
+
+ void 
+ GUIStructureHolder::remove_gui_child (Process *c) { 
+
+#if _PERF_TEST
+   __nb_Drawing_object--;
+#endif
+
+   _children.erase (std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p){return p.first == c;}), _children.end ()); 
+ }
+
+ void 
+ GUIStructureHolder::draw () {
+
+  ComponentObserver::instance ().start_draw ();
+  for (auto p: _children) {
+    p.first->draw ();
+  }
+  ComponentObserver::instance ().end_draw ();
+
+#if _PERF_TEST
+  cerr << "\033[1;31m" << endl;
+  cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << endl;
+  cerr << "\033[0m";
+#endif
+}
 
   void
   GUIStructureHolder::add_gui_child_at (Process *c, int index)

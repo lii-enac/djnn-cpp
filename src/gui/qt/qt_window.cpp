@@ -272,7 +272,7 @@ namespace djnn
         p->draw ();
 #if _PERF_TEST
       // print in RED
-      cerr << "\033[1;31m" << endl;
+      cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
       draw_counter = draw_counter + 1;
       draw_total = draw_total + time ;
@@ -283,6 +283,7 @@ namespace djnn
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
       QtMainloop::instance ().set_please_exec (true);
+
 #if DEBUG_PICKING 
     _picking_view->display();
 #endif
