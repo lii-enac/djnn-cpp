@@ -21,8 +21,8 @@ namespace djnn
   using namespace std;
 
   void
-  BoolProperty::init_BoolProperty (){
-    _type = Boolean;
+  BoolProperty::init_BoolProperty ()
+  {
     _true = new Spike (this, "true");
     _false = new Spike (this, "false");
     Graph::instance ().add_edge (this, _true);

@@ -94,7 +94,7 @@ namespace djnn {
     void set_parent (Process* p) { _parent = p; }
     const string& get_name () const;
 
-    int get_cpnt_type ();
+    virtual int get_cpnt_type () { return UNDEFINED_T; }
     couplings_t& get_activation_couplings ();
     couplings_t& get_deactivation_couplings ();
     bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
@@ -139,7 +139,6 @@ namespace djnn {
     activation_state _activation_state;
     bool _model;
     int _activation_flag;
-    int _cpnt_type;
   };
 
   void

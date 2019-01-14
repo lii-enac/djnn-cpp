@@ -74,7 +74,7 @@ namespace djnn
   void
   AbstractAssignment::do_assignment (AbstractProperty* src_p, AbstractProperty* dst_p, bool propagate)
   {
-    switch (src_p->type ())
+    switch (src_p->get_prop_type ())
       {
       case Integer:
         {

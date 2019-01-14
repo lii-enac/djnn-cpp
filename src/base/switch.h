@@ -29,7 +29,7 @@ namespace djnn {
     {
     public:
       SwitchAction (Switch *parent, const string &name) :
-	Process (parent, "action"),  _sw (parent) { Process::finalize (); }
+	     Process (parent, "action"),  _sw (parent) { Process::finalize (); }
       virtual ~SwitchAction () {};
       void activate () override { _sw->change_branch(); };
       void deactivate () override {};
@@ -40,6 +40,7 @@ namespace djnn {
   public:
     Switch (Process *parent, const string &name, const string &initial);
     Switch (const string &initial);
+    virtual int get_cpnt_type () override { return SWITCH_T; }
     void activate () override;
     void deactivate () override;
     void draw () override;

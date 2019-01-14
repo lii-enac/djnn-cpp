@@ -21,8 +21,9 @@ namespace djnn {
 
   class IntProperty: public AbstractProperty {
   public:
-    IntProperty (int v) : AbstractProperty (), value (v) { _type = Integer; };
-    IntProperty (Process *p, const string &name, int v) : AbstractProperty (p, name), value (v) { _type = Integer; Process::finalize (); };
+    IntProperty (int v) : AbstractProperty (), value (v) {};
+    IntProperty (Process *p, const string &name, int v) : AbstractProperty (p, name), value (v) { Process::finalize (); };
+    virtual int get_prop_type () override { return Integer; }
     int get_value () { return value; };
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;

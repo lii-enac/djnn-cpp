@@ -30,6 +30,7 @@ namespace djnn {
   public:
     FSMState (Process *p, const string &n);
     ~FSMState () { _transitions.clear (); };
+    virtual int get_cpnt_type () override { return FSM_T; }
     void activate () override;
     void deactivate () override;
     void serialize (const string& type) override;

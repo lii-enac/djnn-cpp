@@ -79,7 +79,6 @@ namespace djnn
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
-    _cpnt_type = UNDEFINED_T;
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
@@ -91,8 +90,6 @@ namespace djnn
           deactivated), _model (model), _activation_flag (NONE)
   {
     _name = "anonymous_" + to_string (++_nb_anonymous);
-
-    _cpnt_type = UNDEFINED_T;
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else
@@ -345,12 +342,6 @@ namespace djnn
     return _name;
   }
 
-  int
-  Process::get_cpnt_type ()
-  {
-    return _cpnt_type;
-  }
-
   couplings_t&
   Process::get_activation_couplings ()
   {
@@ -400,7 +391,7 @@ namespace djnn
         cout << "|\t";
       cout << " +" << i++ << " ";
       it->second->dump (level);
-      if (it->second->_cpnt_type != COMPONENT_T || indent == level - 1)
+      if (it->second->get_cpnt_type() != COMPONENT_T || indent == level - 1)
         cout << endl;
     }
     indent--;

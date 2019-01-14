@@ -32,7 +32,6 @@ namespace djnn
 
   Container::Container ()
   {
-    _cpnt_type = COMPONENT_T;
     for (auto s: structure_observer_list) {
       s->add_container (this);
     }
@@ -41,7 +40,6 @@ namespace djnn
   Container::Container (Process* parent, const string& name) :
       Process (parent, name)
   {
-    _cpnt_type = COMPONENT_T;
     Container* c = dynamic_cast<Container*> (parent);
     if (c)
       c->init_context (_cur_context);

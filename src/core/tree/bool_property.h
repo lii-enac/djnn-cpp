@@ -24,6 +24,7 @@ namespace djnn {
     BoolProperty (bool v);
     BoolProperty (Process *p, const string &name, bool v);
     ~BoolProperty ();
+    virtual int get_prop_type () override { return Boolean; }
     bool get_value () { return value; };
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;

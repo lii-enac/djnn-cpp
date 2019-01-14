@@ -36,7 +36,6 @@ namespace djnn
     _key_released_text = new TextProperty (this, "key-released_text", "");
     _close = new Spike;
     add_symbol ("close", _close);
-    _cpnt_type = WINDOW_T;
     _press = new Spike;
     _release = new Spike;
     _move = new Spike;

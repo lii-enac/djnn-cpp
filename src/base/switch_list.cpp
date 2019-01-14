@@ -107,7 +107,6 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _change_index_action);
     _state_dependency = _change_index_action;
-    _cpnt_type = SWITCH_T;
   }
 
   SwitchList::SwitchList (bool loop) :

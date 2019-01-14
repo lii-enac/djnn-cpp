@@ -23,10 +23,12 @@ namespace djnn {
   class AbstractProperty : public Process
   {
   public:
-    AbstractProperty (Process* parent, const string &name) : Process (parent, name) { _type = Integer; _cpnt_type = PROPERTY_T; };
-    AbstractProperty () : Process () { _type = Integer; _cpnt_type = PROPERTY_T; };
-    virtual ~AbstractProperty () {};
-    PropertyType type () { return _type; }
+    AbstractProperty (Process* parent, const string &name) : Process (parent, name) {}
+    AbstractProperty () : Process () {}
+    virtual ~AbstractProperty () {}
+    virtual int get_cpnt_type () override { return PROPERTY_T; }
+    virtual int get_prop_type () = 0;
+    //PropertyType type () { return _type; }
     bool is_activable () {
       return get_parent () == 0 || get_parent ()->get_state () < deactivating;
     }
@@ -38,11 +40,10 @@ namespace djnn {
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;
   protected:
-    PropertyType _type;
-    void post_activate () { _activation_state = deactivated; };
-    void activate () {};
-    void deactivate () {};
-    void deactivation () {};
+    void post_activate () override { _activation_state = deactivated; }
+    void activate () override {}
+    void deactivate () override {}
+    void deactivation () override {}
   };
 
 }
