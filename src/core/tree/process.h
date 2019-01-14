@@ -102,11 +102,11 @@ namespace djnn {
     void set_data (Process* data);
     Process* get_data ();
 
-    // for NativeAction
+    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void set_activation_source (Process* src) {}
     virtual Process* get_activation_source () { return nullptr; }
-    friend class Binding;
-    friend class Coupling;
+    //friend class Binding;
+    //friend class Coupling;
 
     virtual void dump (int level=0);
 
@@ -135,9 +135,7 @@ namespace djnn {
     map<string, Process*> _symtable;
     string _name;
     Process *_parent, *_state_dependency;
-    Process
-        //*_activation_source,
-        *_data;
+    Process *_data;
     activation_state _activation_state;
     bool _model;
     int _activation_flag;
