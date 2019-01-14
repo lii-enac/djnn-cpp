@@ -16,49 +16,12 @@
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
-
-#define _PERF_TEST 0
-#if _PERF_TEST
-#include "../core/utils-dev.h"
-static int draw_counter = 0;
-static double draw_total = 0.0;
-static double draw_average = 0.0;
-#endif
-
 namespace djnn
 {
 
   static bool __module_initialized = false;
   Process *DrawingRefreshManager;
   GUIStructureObserver * gui_structure_observer;
-
-
-  void
-  GUIStructureHolder::draw () {
-
-#if _PERF_TEST
-      t1();
-#endif
-
-      ComponentObserver::instance ().start_draw ();
-      for (auto p: _children) {
-        p.first->draw ();
-      }
-      ComponentObserver::instance ().end_draw ();
-
-#if _PERF_TEST
-      // print in RED
-      cerr << "\033[1;31m" << endl;
-      double time = t2 ("DRAW : ");
-      draw_counter = draw_counter + 1;
-      draw_total = draw_total + time ;
-      draw_average = draw_total / draw_counter;
-      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
-      //cerr << "_children size: " << _children.size () << endl;
-      cerr << "\033[0m"  << endl;
-#endif
-
-    }
 
   void
   GUIStructureHolder::add_gui_child_at (Process *c, int index)

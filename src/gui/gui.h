@@ -32,7 +32,12 @@ namespace djnn {
     void add_gui_child_at (Process *c, int index);
     void move_child_to (Process *c, int index);
     void remove_gui_child (Process *c) { _children.erase (std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p){return p.first == c;}), _children.end ()); }
-    void draw () override;
+    void draw () override {
+      ComponentObserver::instance ().start_draw ();
+      for (auto p: _children) {
+        p.first->draw ();
+      }
+      ComponentObserver::instance ().end_draw ();}
     void activate () override {}
     void deactivate () override {}
   private:
