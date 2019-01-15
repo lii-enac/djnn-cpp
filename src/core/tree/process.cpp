@@ -73,11 +73,11 @@ namespace djnn
   }
 
   Process::Process (Process* parent, const string& name, bool model) :
-      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated)
+      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
   {
     set_is_model (model);
     unset_activation_flag ();
+    set_deactivated ();
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
@@ -88,11 +88,11 @@ namespace djnn
   }
 
   Process::Process (bool model) :
-      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr), _activation_state (
-          deactivated)
+      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
   {
     set_is_model (model);
     unset_activation_flag ();
+    set_deactivated ();
     _name = "anonymous_" + to_string (++_nb_anonymous);
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
@@ -295,7 +295,8 @@ namespace djnn
   void
   Process::pre_deactivate ()
   {
-    if (_activation_state != activated)
+    //if (_activation_state != activated)
+    if (is_activated ())
       return;
     set_deactivating ();
   }
