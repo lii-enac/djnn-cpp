@@ -22,63 +22,75 @@
 
 namespace djnn
 {
-
-  void
-  Circle::init_circle (double cx, double cy, double r)
-  {
-    _cx = new DoubleProperty (this, "cx", cx);
-    _cy = new DoubleProperty (this, "cy", cy);
-    _r = new DoubleProperty (this, "r", r);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    _ccx->disable ();
-    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-     _ccy->disable ();
-    _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
-    _cr->disable ();
-    set_origin (cx, cy);
-  }
-
   Circle::Circle (Process *p, const std::string& n, double cx, double cy, double r) :
-      AbstractGShape (p, n), _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
+      AbstractGShape (p, n),
+      raw_props{.cx=cx, .cy=cy, .r=r},
+      _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
-    init_circle (cx, cy, r);
+    set_origin(cx,cy);
     Process::finalize ();
   }
 
   Circle::Circle (double cx, double cy, double r) :
-      AbstractGShape (), _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
+      AbstractGShape (),
+      raw_props{.cx=cx, .cy=cy, .r=r},
+      _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
-    init_circle (cx, cy, r);
+    set_origin(cx,cy);
   }
 
   Circle::~Circle ()
   {
-    if (_ccx) { delete _ccx; _ccx = nullptr;}
-    if (_ccy) { delete _ccy; _ccy = nullptr;}
-    if (_cr) { delete _cr; _cr = nullptr;}
+    delete _ccx; _ccx = nullptr;
+    delete _ccy; _ccy = nullptr;
+    delete _cr; _cr = nullptr;
+  }
 
-    if (_cx) { delete _cx; _cx = nullptr;}
-    if (_cy) { delete _cy; _cy = nullptr;}
-    if (_r)  { delete _r;  _r = nullptr;}
+  Process*
+  Circle::find_component (const string& name)
+  {
+    Process* res = AbstractGShape::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="cx") {
+      coupling=&_ccx;
+      rawp=&raw_props.cx;
+    } else
+    if(name=="cy") {
+      coupling=&_ccy;
+      rawp=&raw_props.cy;
+    } else
+    if(name=="r") {
+      coupling=&_cr;
+      rawp=&raw_props.r;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);
+
+    return res;
   }
 
   void
   Circle::activate ()
   {
     AbstractGObj::activate ();
-    _ccx->enable (_frame);
-    _ccy->enable (_frame);
-    _cr->enable (_frame);
+    if(_ccx) _ccx->enable (_frame);
+    if(_ccy) _ccy->enable (_frame);
+    if(_cr)  _cr->enable (_frame);
   }
 
   void
   Circle::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _ccx->disable ();
-    _ccy->disable ();
-    _cr->disable ();
+    if(_ccx) _ccx->disable ();
+    if(_ccy) _ccy->disable ();
+    if(_cr)  _cr->disable ();
   }
 
   void
@@ -93,14 +105,15 @@ namespace djnn
   void
   Circle::get_properties_values (double &cx, double &cy, double &r)
   {
-    cx = _cx->get_value ();
-    cy = _cy->get_value ();
-    r = _r->get_value ();
+    cx = raw_props.cx;
+    cy = raw_props.cy;
+    r = raw_props.r;
   }
 
   Process*
   Circle::clone ()
   {
-    return new Circle (_cx->get_value (), _cy->get_value (), _r->get_value ());
-  } 
+    return new Circle (raw_props.cx, raw_props.cy, raw_props.r);
+  }
+
 } /* namespace djnn */

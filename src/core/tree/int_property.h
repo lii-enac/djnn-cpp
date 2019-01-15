@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -19,25 +20,49 @@
 namespace djnn {
   using namespace std;
 
-  class IntProperty: public AbstractProperty {
+  class AbstractIntProperty : public AbstractProperty {
   public:
-    IntProperty (int v) : AbstractProperty (), value (v) {}
-    IntProperty (Process *p, const string &name, int v, int nm = notify_none) : AbstractProperty (p, name, nm), value (v) { Process::finalize (); }
+    AbstractIntProperty () : AbstractProperty () { };
+    AbstractIntProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize (); };
     virtual int get_prop_type () override { return Integer; }
-    int get_value () { return value; };
+
+    // AbstractProperty interface
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
     void set_value (const string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
-    double get_double_value () override { return (double) value; }
-
+    double get_double_value () override { return get_ref_value(); }
     void dump (int level=0) override;
+
+    int get_value () { return get_ref_value(); };
+  protected:
+    virtual int& get_ref_value() = 0;
+  };
+
+  class IntProperty : public AbstractIntProperty {
+  public:
+    IntProperty (int v) : AbstractIntProperty (), value(v) { }
+    IntProperty (Process* p, const string &name, int v) : AbstractIntProperty (p, name), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;
+  protected:
+    virtual int& get_ref_value() override { return value; }
   private:
     int value;
+  };
+
+  class IntPropertyProxy : public AbstractIntProperty {
+  public:
+    IntPropertyProxy (int &v) : AbstractIntProperty (), value(v) { }
+    IntPropertyProxy (Process* p, const string &name, int &v, int notify_mask=notify_none) : AbstractIntProperty (p, name, notify_mask), value(v) { }
+    void serialize (const string& format) override;
+    Process* clone () override;
+  protected:
+    virtual int& get_ref_value() override { return value; }
+  private:
+    int& value;
   };
 
 }

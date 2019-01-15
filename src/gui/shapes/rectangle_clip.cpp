@@ -22,73 +22,82 @@ namespace djnn
 {
 
   RectangleClip::RectangleClip (Process *p, const std::string& n, double x, double y, double w, double h) :
-      AbstractGShape (p, n)
+      AbstractGShape (p, n),
+      raw_props{.x=x, .y=y, .width=w, .height=h},
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _width = new DoubleProperty (this, "width", w);
-    _height = new DoubleProperty (this, "height", h);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
-    _cwidth->disable ();
-    _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
-    _cheight->disable ();
     set_origin (x, y);
     Process::finalize ();
   }
 
   RectangleClip::RectangleClip (double x, double y, double w, double h) :
-      AbstractGShape ()
+      AbstractGShape (),
+      raw_props{.x=x, .y=y, .width=w, .height=h},
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _width = new DoubleProperty (this, "width", w);
-    _height = new DoubleProperty (this, "height", h);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
-    _cwidth->disable ();
-    _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
-    _cheight->disable ();
+    set_origin (x, y);
   }
 
   RectangleClip::~RectangleClip ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_cwidth) {delete _cwidth; _cwidth = nullptr;}
-    if (_cheight) {delete _cheight; _cheight = nullptr;}
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_width) {delete _width; _width = nullptr;}
-    if (_height) {delete _height; _height = nullptr;}
+    delete _cx; _cx = nullptr;
+    delete _cy; _cy = nullptr;
+    delete _cwidth; _cwidth = nullptr;
+    delete _cheight; _cheight = nullptr;
+  }
+
+  Process*
+  RectangleClip::find_component (const string& name)
+  {
+    Process* res = AbstractGShape::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="x") {
+      coupling=&_cx;
+      rawp=&raw_props.x;
+    } else
+    if(name=="y") {
+      coupling=&_cy;
+      rawp=&raw_props.y;
+    } else
+    if(name=="width") {
+      coupling=&_cwidth;
+      rawp=&raw_props.width;
+    } else
+    if(name=="height") {
+      coupling=&_cheight;
+      rawp=&raw_props.height;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);
+
+    return res;
+
   }
 
   void
   RectangleClip::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _cwidth->enable (_frame);
-    _cheight->enable (_frame);
+    if (_cx) _cx->enable (_frame);
+    if (_cy) _cy->enable (_frame);
+    if (_cwidth) _cwidth->enable (_frame);
+    if (_cheight) _cheight->enable (_frame);
   }
 
   void
   RectangleClip::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _cwidth->disable ();
-    _cheight->disable ();
+    if (_cx) _cx->disable ();
+    if (_cy) _cy->disable ();
+    if (_cwidth) _cwidth->disable ();
+    if (_cheight) _cheight->disable ();
   }
 
   void
@@ -102,14 +111,14 @@ namespace djnn
   void
   RectangleClip::get_properties_values (double &x, double &y, double &w, double &h)
   {
-    x = _x->get_value ();
-    y = _y->get_value ();
-    w = _width->get_value ();
-    h = _height->get_value ();
+    x = raw_props.x;
+    y = raw_props.y;
+    w = raw_props.width;
+    h = raw_props.height;
   }
 
   Process*
   RectangleClip::clone() {
-    return new RectangleClip (_x->get_value (), _y->get_value (), _width->get_value (), _height->get_value ());
+    return new RectangleClip (raw_props.x, raw_props.y, raw_props.width, raw_props.height);
   }
 } /* namespace djnn */

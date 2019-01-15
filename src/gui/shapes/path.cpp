@@ -22,87 +22,100 @@
 
 namespace djnn
 {
+  PathPoint::PathPoint (double x, double y) :
+      AbstractGObj (),
+      raw_props{.x=x, .y=y},
+      _cx(nullptr), _cy(nullptr)
+  {
+  }
+
   PathPoint::PathPoint (Process* p, const string &n, double x, double y) :
-      AbstractGObj (p, n)
+      AbstractGObj (p,n),
+      raw_props{.x=x, .y=y},
+      _cx(nullptr), _cy(nullptr)
   {
     Path *path = dynamic_cast<Path*> (p);
     if (path == nullptr) {
-      cerr << "Parent of path point must be Path\n";
+      cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
       return;
     }
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
 
-  PathPoint::PathPoint (double x, double y) :
-      AbstractGObj ()
-  {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-  }
-
   PathPoint::~PathPoint ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
+    delete _cx; _cx = nullptr;
+    delete _cy; _cy = nullptr;
+  }
+
+  Process*
+  PathPoint::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="x") {
+      coupling=&_cx;
+      rawp=&raw_props.x;
+    } else
+    if(name=="y") {
+      coupling=&_cy;
+      rawp=&raw_props.y;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);
+
+    return res;
   }
 
   void
   PathPoint::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
+    if(_cx) _cx->enable (_frame);
+    if(_cy) _cy->enable (_frame);
   }
 
   void
   PathPoint::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
+    if(_cx) _cx->disable ();
+    if(_cy) _cy->disable ();
   }
 
   void
   PathLine::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_path_line (_x->get_value (), _y->get_value ());
+      Backend::instance ()->draw_path_line (raw_props.x, raw_props.y);
     }
   }
 
   Process*
   PathLine::clone ()
   {
-    return new PathLine (_x->get_value (), _y->get_value ());
+    return new PathLine (raw_props.x, raw_props.y);
   }
 
   void
   PathMove::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_path_move (_x->get_value (), _y->get_value ());
+      Backend::instance ()->draw_path_move (raw_props.x, raw_props.y);
     }
   }
 
   Process*
   PathMove::clone ()
   {
-    return new PathMove (_x->get_value (), _y->get_value ());
+    return new PathMove (raw_props.x, raw_props.y);
   }
 
   PathClosure::PathClosure (Process* p, const string &n) :
@@ -130,343 +143,330 @@ namespace djnn
   }
 
   PathQuadratic::PathQuadratic (Process* p, const string &n, double x1, double y1, double x, double y) :
-      AbstractGObj (p, n)
+      AbstractGObj (p, n),
+      raw_props{ .x1=x1, .y1=y1, .x=x, .y=y },
+      _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
   {
     Path *path = dynamic_cast<Path*> (p);
     if (path == nullptr) {
       cerr << "Parent of path quadratic must be Path\n";
       return;
     }
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _x1 = new DoubleProperty (this, "x1", x1);
-    _y1 = new DoubleProperty (this, "y1", y1);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
-    _cx1->disable ();
-    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
-    _cy1->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
 
   PathQuadratic::PathQuadratic (double x1, double y1, double x, double y) :
-      AbstractGObj ()
+      AbstractGObj (),
+      raw_props{.x1=x1, .y1=y1, .x=x, .y=y},
+      _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _x1 = new DoubleProperty (this, "x1", x1);
-    _y1 = new DoubleProperty (this, "y1", y1);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
-    _cx1->disable ();
-    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
-    _cy1->disable ();
   }
 
   PathQuadratic::~PathQuadratic ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_cx1) {delete _cx1; _cx1 = nullptr;}
-    if (_cy1) {delete _cy1; _cy1 = nullptr;}
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_x1) {delete _x1; _x1 = nullptr;}
-    if (_y1) {delete _y1; _y1 = nullptr;}
+    delete _cx1; _cx1 = nullptr;
+    delete _cy1; _cy1 = nullptr;
+    delete _cx;  _cx = nullptr;
+    delete _cy;  _cy = nullptr;
+  }
+
+  Process*
+  PathQuadratic::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="x1") {
+      coupling=&_cx1;
+      rawp=&raw_props.x1;
+    } else
+    if(name=="y1") {
+      coupling=&_cy1;
+      rawp=&raw_props.y1;
+    } else
+    if(name=="x") {
+      coupling=&_cx;
+      rawp=&raw_props.x;
+    } else
+    if(name=="y") {
+      coupling=&_cy;
+      rawp=&raw_props.y;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);
+
+    return res;
   }
 
   void
   PathQuadratic::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _cx1->enable (_frame);
-    _cy1->enable (_frame);
+    if (_cx1) _cx1->enable (_frame);
+    if (_cy1) _cy1->enable (_frame);
+    if (_cx)  _cx->enable (_frame);
+    if (_cy)  _cy->enable (_frame);
   }
 
   void
   PathQuadratic::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _cx1->disable ();
-    _cy1->disable ();
+    if(_cx1) _cx1->disable ();
+    if(_cy1) _cy1->disable ();
+    if(_cx)  _cx->disable ();
+    if(_cy)  _cy->disable ();
   }
 
   void
   PathQuadratic::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double x = _x->get_value ();
-      double y = _y->get_value ();
-      double x1 = _x1->get_value ();
-      double y1 = _y1->get_value ();
-      Backend::instance ()->draw_path_quadratic (x1, y1, x, y);
+      Backend::instance ()->draw_path_quadratic (raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     }
   }
 
   Process*
   PathQuadratic::clone ()
   {
-    return new PathQuadratic (_x1->get_value (), _y1->get_value (), _x->get_value (), _y->get_value ());
+    return new PathQuadratic (raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
   }
 
+
   PathCubic::PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x, double y) :
-      AbstractGObj (p, n)
+      AbstractGObj (p, n),
+      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
+      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
   {
     Path *path = dynamic_cast<Path*> (p);
     if (path == nullptr) {
       cerr << "Parent of path cubic must be Path\n";
       return;
     }
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _x1 = new DoubleProperty (this, "x1", x1);
-    _y1 = new DoubleProperty (this, "y1", y1);
-    _x2 = new DoubleProperty (this, "x2", x2);
-    _y2 = new DoubleProperty (this, "y2", y2);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
-    _cx1->disable ();
-    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
-    _cy1->disable ();
-    _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
-    _cx2->disable ();
-    _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
-    _cy2->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
 
   PathCubic::PathCubic (double x1, double y1, double x2, double y2, double x, double y) :
-      AbstractGObj ()
+      AbstractGObj (),
+      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
+      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _x1 = new DoubleProperty (this, "x1", x1);
-    _y1 = new DoubleProperty (this, "y1", y1);
-    _x2 = new DoubleProperty (this, "x2", x2);
-    _y2 = new DoubleProperty (this, "y2", y2);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
-    _cx1->disable ();
-    _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
-    _cy1->disable ();
-    _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
-    _cx2->disable ();
-    _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
-    _cy2->disable ();
   }
 
   PathCubic::~PathCubic ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_cx1) {delete _cx1; _cx1 = nullptr;}
-    if (_cy1) {delete _cy1; _cy1 = nullptr;}
-    if (_cx2) {delete _cx2; _cx2 = nullptr;}
-    if (_cy2) {delete _cy2; _cy2 = nullptr;}
+    delete _cx1; _cx1 = nullptr;
+    delete _cy1; _cy1 = nullptr;
+    delete _cx2; _cx2 = nullptr;
+    delete _cy2; _cy2 = nullptr;
+    delete _cx;  _cx = nullptr;
+    delete _cy;  _cy = nullptr;
+  }
 
+  Process*
+  PathCubic::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
 
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_x1) {delete _x1; _x1 = nullptr;}
-    if (_y1) {delete _y1; _y1 = nullptr;}
-    if (_x2) {delete _x2; _x2 = nullptr;}
-    if (_y2) {delete _y2; _y2 = nullptr;}
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="x1") {
+      coupling=&_cx1;
+      rawp=&raw_props.x1;
+    } else
+    if(name=="y1") {
+      coupling=&_cy1;
+      rawp=&raw_props.y1;
+    } else
+    if(name=="x2") {
+      coupling=&_cx2;
+      rawp=&raw_props.x2;
+    } else
+    if(name=="y2") {
+      coupling=&_cy2;
+      rawp=&raw_props.y2;
+    } else
+    if(name=="x") {
+      coupling=&_cx;
+      rawp=&raw_props.x;
+    } else
+    if(name=="y") {
+      coupling=&_cy;
+      rawp=&raw_props.y;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);    
+
+    return res;
   }
 
   void
   PathCubic::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _cx1->enable (_frame);
-    _cy1->enable (_frame);
-    _cx2->enable (_frame);
-    _cy2->enable (_frame);
+    if (_cx1) _cx1->enable (_frame);
+    if (_cy1) _cy1->enable (_frame);
+    if (_cx2) _cx2->enable (_frame);
+    if (_cy2) _cy2->enable (_frame);
+    if (_cx)  _cx ->enable (_frame);
+    if (_cy)  _cy ->enable (_frame);
   }
 
   void
   PathCubic::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _cx1->disable ();
-    _cy1->disable ();
-    _cx2->disable ();
-    _cy2->disable ();
+    if(_cx1) _cx1->disable ();
+    if(_cy1) _cy1->disable ();
+    if(_cx2) _cx2->disable ();
+    if(_cy2) _cy2->disable ();
+    if(_cx)  _cx ->disable ();
+    if(_cy)  _cy ->disable ();
   }
 
   void
   PathCubic::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double x = _x->get_value ();
-      double y = _y->get_value ();
-      double x1 = _x1->get_value ();
-      double y1 = _y1->get_value ();
-      double x2 = _x2->get_value ();
-      double y2 = _y2->get_value ();
-      Backend::instance ()->draw_path_cubic (x1, y1, x2, y2, x, y);
+      Backend::instance ()->draw_path_cubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     }
   }
 
   Process*
   PathCubic::clone ()
   {
-    return new PathCubic (_x1->get_value (), _y1->get_value (), _x2->get_value (), _y2->get_value (), _x->get_value (),
-                          _y->get_value ());
+    return new PathCubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
   }
+
+  //
 
   PathArc::PathArc (Process* p, const string &n, double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y) :
-      AbstractGObj (p, n)
+      AbstractGObj (p, n),
+      raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
+      _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl(nullptr), _cx (nullptr), _cy (nullptr)
   {
     Path *path = dynamic_cast<Path*> (p);
     if (path == nullptr) {
       cerr << "Parent of path arc must be Path\n";
       return;
     }
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _rotx = new DoubleProperty (this, "rotx", rotx);
-    _fl = new DoubleProperty (this, "fl", fl);
-    _swfl = new DoubleProperty (this, "swfl", swfl);
-    _rx = new DoubleProperty (this, "rx", rx);
-    _ry = new DoubleProperty (this, "ry", ry);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _crotx = new Coupling (_rotx, ACTIVATION, update, ACTIVATION);
-    _crotx->disable ();
-    _cfl = new Coupling (_fl, ACTIVATION, update, ACTIVATION);
-    _cfl->disable ();
-    _cswfl = new Coupling (_swfl, ACTIVATION, update, ACTIVATION);
-    _cswfl->disable ();
-    _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
-    _crx->disable ();
-    _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
-    _cry->disable ();
     path->items ()->add_child (this, "");
     p->add_symbol(n, this);
   }
 
   PathArc::PathArc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) :
-      AbstractGObj ()
+      AbstractGObj (),
+      raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
+      _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl(nullptr), _cx (nullptr), _cy (nullptr)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _rotx = new DoubleProperty (this, "rotx", rotx);
-    _fl = new DoubleProperty (this, "fl", fl);
-    _swfl = new DoubleProperty (this, "swfl", swfl);
-    _rx = new DoubleProperty (this, "rx", rx);
-    _ry = new DoubleProperty (this, "ry", ry);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _crotx = new Coupling (_rotx, ACTIVATION, update, ACTIVATION);
-    _crotx->disable ();
-    _cfl = new Coupling (_fl, ACTIVATION, update, ACTIVATION);
-    _cfl->disable ();
-    _cswfl = new Coupling (_swfl, ACTIVATION, update, ACTIVATION);
-    _cswfl->disable ();
-    _crx = new Coupling (_rx, ACTIVATION, update, ACTIVATION);
-    _crx->disable ();
-    _cry = new Coupling (_ry, ACTIVATION, update, ACTIVATION);
-    _cry->disable ();
   }
 
   PathArc::~PathArc ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_crotx) {delete _crotx; _crotx = nullptr;}
-    if (_cfl) {delete _cfl; _cfl = nullptr;}
-    if (_cswfl) {delete _cswfl; _cswfl = nullptr;}
-    if (_crx) {delete _crx; _crx = nullptr;}
-    if (_cry) {delete _cry; _cry = nullptr;}
+    delete _crotx; _crotx = nullptr;
+    delete _cfl; _cfl = nullptr;
+    delete _cswfl; _cswfl = nullptr;
+    delete _crx; _crx = nullptr;
+    delete _cry; _cry = nullptr;
+    delete _cx; _cx = nullptr;
+    delete _cy; _cy = nullptr;
+  }
 
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_rotx) {delete _rotx; _rotx = nullptr;}
-    if (_fl) {delete _fl; _fl = nullptr;}
-    if (_swfl) {delete _swfl; _swfl = nullptr;}
-    if (_rx) {delete _rx; _rx = nullptr;}
-    if (_ry) {delete _ry; _ry = nullptr;}
+  Process*
+  PathArc::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+
+    if(name=="rotx") {
+      coupling=&_crotx;
+      rawp=&raw_props.rotx;
+    } else
+    if(name=="fl") {
+      coupling=&_cfl;
+      rawp=&raw_props.fl;
+    } else
+    if(name=="swfl") {
+      coupling=&_cswfl;
+      rawp=&raw_props.swfl;
+    } else
+    if(name=="rx") {
+      coupling=&_crx;
+      rawp=&raw_props.rx;
+    } else
+    if(name=="ry") {
+      coupling=&_cry;
+      rawp=&raw_props.ry;
+    } else
+    if(name=="x") {
+      coupling=&_cx;
+      rawp=&raw_props.x;
+    } else
+    if(name=="y") {
+      coupling=&_cy;
+      rawp=&raw_props.y;
+    } else
+    return nullptr;
+
+    DoublePropertyProxy* prop = nullptr;
+    res = create_GObj_prop(&prop, coupling, rawp, name);    
+
+    return res;
   }
 
   void
   PathArc::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _crotx->enable (_frame);
-    _cfl->enable (_frame);
-    _cswfl->enable (_frame);
-    _crx->enable (_frame);
-    _cry->enable (_frame);
+    if(_crotx) _crotx->enable (_frame);
+    if(_cfl) _cfl->enable (_frame);
+    if(_cswfl) _cswfl->enable (_frame);
+    if(_crx) _crx->enable (_frame);
+    if(_cry) _cry->enable (_frame);
+    if(_cx) _cx->enable (_frame);
+    if(_cx) _cy->enable (_frame);
   }
 
   void
   PathArc::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _crotx->disable ();
-    _cfl->disable ();
-    _cswfl->disable ();
-    _crx->disable ();
-    _cry->disable ();
+    if(_crotx) _crotx->disable ();
+    if(_cfl) _cfl->disable ();
+    if(_cswfl) _cswfl->disable ();
+    if(_crx) _crx->disable ();
+    if(_cry) _cry->disable ();
+    if(_cx) _cx->disable ();
+    if(_cy) _cy->disable ();
   }
 
   void
   PathArc::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double x = _x->get_value ();
-      double y = _y->get_value ();
-      double rotx = _rotx->get_value ();
-      double fl = _fl->get_value ();
-      double swfl = _swfl->get_value ();
-      double rx = _rx->get_value ();
-      double ry = _ry->get_value ();
-      Backend::instance ()->draw_path_arc (rx, ry, rotx, fl, swfl, x, y);
+      Backend::instance ()->draw_path_arc (raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     }
   }
 
   Process*
   PathArc::clone ()
   {
-    return new PathArc (_rx->get_value (), _ry->get_value (), _rotx->get_value (), _fl->get_value (),
-                        _swfl->get_value (), _x->get_value (), _y->get_value ());
+    return new PathArc (raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
   }
 
   Path::Path () :

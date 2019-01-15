@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -30,20 +31,16 @@ namespace djnn
     Graph::instance ().add_edge (this, _false);
   }
 
-  BoolProperty::BoolProperty (Process *p, const string& n, bool v, int notify_mask) :
-      AbstractProperty (p, n, notify_mask), value (v)
+  void
+  BoolPropertyProxy::init_BoolProperty ()
   {
-    init_BoolProperty ();
-    Process::finalize ();
+    _true = new Spike (this, "true");
+    _false = new Spike (this, "false");
+    Graph::instance ().add_edge (this, _true);
+    Graph::instance ().add_edge (this, _false);
   }
 
-  BoolProperty::BoolProperty (bool v) :
-      AbstractProperty (), value (v)
-  {
-    init_BoolProperty ();
-  }
-
-  BoolProperty::~BoolProperty ()
+  AbstractBoolProperty::~AbstractBoolProperty ()
   {
     if(_false) {
       Graph::instance ().remove_edge (this, _false);
@@ -58,21 +55,21 @@ namespace djnn
   }
 
   void
-  BoolProperty::set_value (int v, bool propagate)
+  AbstractBoolProperty::set_value (double v, bool propagate)
   {
     set_value((bool)(v!=0.0), propagate);
   }
 
   void
-  BoolProperty::set_value (double v, bool propagate)
+  AbstractBoolProperty::set_value (int v, bool propagate)
   {
     set_value((bool)(v!=0), propagate);
   }
 
   void
-  BoolProperty::set_value (bool v, bool propagate)
+  AbstractBoolProperty::set_value (bool v, bool propagate)
   {
-    value = v;
+    get_ref_value() = v;
     if (is_activable () && propagate) {
       notify_activation ();
       if (v)
@@ -83,10 +80,10 @@ namespace djnn
   }
 
   void
-  BoolProperty::set_value (const string &v, bool propagate)
+  AbstractBoolProperty::set_value (const string &v, bool propagate)
   {
     if (v.compare ("true") == 0) {
-      value = true;
+      //get_ref_value() = true;
       set_value (true, propagate);
     } else if (v.compare ("false") == 0) {
       set_value (false, propagate);
@@ -95,17 +92,22 @@ namespace djnn
   }
 
   void
-  BoolProperty::set_value (Process* v, bool propagate)
+  AbstractBoolProperty::set_value (Process* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Boolean\n");
   }
 
   void
-  BoolProperty::serialize (const string& format) {
+  AbstractBoolProperty::dump (int level)
+  {
+    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << get_value() << " ]";
+  }
 
+  void
+  BoolProperty::serialize (const string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("core:boolproperty");
+    AbstractSerializer::serializer->start ("core:BoolProperty");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->text_attribute ("value", get_value () ? "true" : "false");
     AbstractSerializer::serializer->end ();
@@ -114,14 +116,26 @@ namespace djnn
   }
 
   void
-  BoolProperty::dump (int level)
-  {
-    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << value << " ]";
+  BoolPropertyProxy::serialize (const string& format) {
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:BoolProperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("value", get_value () ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
-  Process* 
-  BoolProperty::clone () 
+  Process*
+  BoolProperty::clone ()
   {
-    return new BoolProperty (value);
+    return new BoolProperty (get_value());
+  }
+
+  Process*
+  BoolPropertyProxy::clone ()
+  {
+    return new BoolPropertyProxy (get_ref_value()); // FIXME
   }
 }

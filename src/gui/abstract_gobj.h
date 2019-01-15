@@ -2,19 +2,21 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
 #pragma once
 
 #include "../core/tree/bool_property.h"
+#include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/tree/process.h"
 #include "../core/tree/component.h"
@@ -47,6 +49,11 @@ namespace djnn
     void reset_damaged () { _damaged = notify_none; }
     int get_damaged () { return _damaged; }
   protected:
+    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, Coupling  **cprop, bool *rawp, const string& name);
+    virtual Process* create_GObj_prop (IntPropertyProxy **prop, Coupling  **cprop, int *rawp, const string& name);
+    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, Coupling  **cprop, double *rawp, const string& name);
+    virtual Process* create_GObj_prop (TextPropertyProxy **prop, Coupling  **cprop, string *rawp, const string& name);
+
     Window *_frame;
     int _damaged;
   };

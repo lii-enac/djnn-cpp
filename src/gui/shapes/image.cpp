@@ -21,90 +21,107 @@
 namespace djnn
 {
   Image::Image (const std::string& path, double x, double y, double w, double h) :
+      AbstractGShape (),
+      raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
       _invalid_cache (true)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _width = new DoubleProperty (this, "width", w);
-    _height = new DoubleProperty (this, "height", h);
-    _path = new TextProperty (this, "path", path);
-    set_cache (nullptr);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
-    _cwidth->disable ();
-    _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
-    _cheight->disable ();
-    _watcher = new ImageWatcher (this);
-    _cpath = new Coupling (_path, ACTIVATION, _watcher, ACTIVATION);
-    _cpath->disable ();
     set_origin (x, y);
   }
 
   Image::Image (Process *p, const std::string& n, const std::string& path, double x, double y, double w,
 		double h) :
-      AbstractGShape (p, n), _invalid_cache (true)
+      AbstractGShape (p, n),
+      raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
+      _invalid_cache (true)
   {
-    _x = new DoubleProperty (this, "x", x);
-    _y = new DoubleProperty (this, "y", y);
-    _width = new DoubleProperty (this, "width", w);
-    _height = new DoubleProperty (this, "height", h);
-    _path = new TextProperty (this, "path", path);
     set_cache (nullptr);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _cwidth = new Coupling (_width, ACTIVATION, update, ACTIVATION);
-    _cwidth->disable ();
-    _cheight = new Coupling (_height, ACTIVATION, update, ACTIVATION);
-    _cheight->disable ();
-    _watcher = new ImageWatcher (this);
-    _cpath = new Coupling (_path, ACTIVATION, _watcher, ACTIVATION);
-    _cpath->disable ();
     set_origin (x, y);
     Process::finalize ();
   }
 
   Image::~Image ()
   {
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_cwidth) {delete _cwidth; _cwidth = nullptr;}
-    if (_cheight) {delete _cheight; _cheight = nullptr;}
-    if (_cpath) {delete _cpath; _cpath = nullptr;}
-    if (_watcher) {delete _watcher; _watcher = nullptr;}
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_width) {delete _width; _width = nullptr;}
-    if (_height) {delete _height; _height = nullptr;}
-    if (_path) {delete _path; _path = nullptr;}
+    delete _cx; _cx = nullptr;
+    delete _cy; _cy = nullptr;
+    delete _cwidth; _cwidth = nullptr;
+    delete _cheight; _cheight = nullptr;
+    delete _cpath; _cpath = nullptr;
+    delete _watcher; _watcher = nullptr;
+  }
+
+  Process*
+  Image::find_component (const string& name)
+  {
+    Process* res = AbstractGShape::find_component(name);
+    if(res) return res;
+
+    bool propd = false;
+    bool propt = false;
+    Coupling ** coupling;
+    double* rawpd;
+    string* rawps;
+
+    if(name=="x") {
+      propd = true;
+      coupling=&_cx;
+      rawpd=&raw_props.x;
+    } else
+    if(name=="y") {
+      propd = true;
+      coupling=&_cy;
+      rawpd=&raw_props.y;
+    } else
+    if(name=="width") {
+      propd = true;
+      coupling=&_cwidth;
+      rawpd=&raw_props.width;
+    } else
+    if(name=="height") {
+      propd = true;
+      coupling=&_cheight;
+      rawpd=&raw_props.height;
+    } else
+    if(name=="path") {
+      propt = true;
+      coupling=&_cpath;
+      rawps=&raw_props.path;
+    } else
+    return nullptr;
+    
+    if(propd) {
+      DoublePropertyProxy* prop = nullptr;
+      res = create_GObj_prop(&prop, coupling, rawpd, name);
+    }
+    else if(propt) {
+      TextPropertyProxy* prop = nullptr;
+      res = create_GObj_prop(&prop, coupling, rawps, name);
+    } 
+
+    return res;
   }
 
   void
   Image::activate ()
   {
     AbstractGObj::activate ();
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _cwidth->enable (_frame);
-    _cheight->enable (_frame);
-    _cpath->enable (_frame);
+    if (_cx) _cx->enable (_frame);
+    if (_cy) _cy->enable (_frame);
+    if (_cwidth) _cwidth->enable (_frame);
+    if (_cheight) _cheight->enable (_frame);
+    if (_cpath) _cpath->enable (_frame);
   }
 
   void
   Image::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _cwidth->disable ();
-    _cheight->disable ();
-    _cpath->disable ();
+    if (_cx) _cx->disable ();
+    if (_cy) _cy->disable ();
+    if (_cwidth) _cwidth->disable ();
+    if (_cheight) _cheight->disable ();
+    if (_cpath) _cpath->disable ();
   }
 
   void
@@ -118,6 +135,6 @@ namespace djnn
   Process*
   Image::clone () 
   {
-    return new Image (_path->get_value (), _x->get_value (), _y->get_value (), _width->get_value (), _height->get_value ());
+    return new Image (raw_props.path, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
   } 
 } /* namespace djnn */

@@ -17,6 +17,49 @@
 
 namespace djnn
 {
+  Process*
+  AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, Coupling **cprop, bool *rawp, const string& name, int notify_mask)
+  {
+    if(*prop) return *prop;
+    *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    (*cprop)->disable ();
+    return *prop;
+  }
+
+  Process*
+  AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, Coupling **cprop, int *rawp, const string& name, int notify_mask)
+  {
+    if(*prop) return *prop;
+    *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    (*cprop)->disable ();
+    return *prop;
+  }
+
+  Process*
+  AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, Coupling **cprop, double *rawp, const string& name, int notify_mask)
+  {
+    if(*prop) return *prop;
+    *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    (*cprop)->disable ();
+    return *prop;
+  }
+
+  Process*
+  AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, Coupling **cprop, string *rawp, const string& name, int notify_mask)
+  {
+    if(*prop) return *prop;
+    *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    (*cprop)->disable ();
+    return *prop;
+  }
 
   bool gui_initialized = false;
   UpdateDrawing *UpdateDrawing::_instance;

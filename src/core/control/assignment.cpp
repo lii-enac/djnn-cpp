@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,6 +10,7 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -78,25 +79,25 @@ namespace djnn
       {
       case Integer:
         {
-          IntProperty* ip = dynamic_cast<IntProperty*> (src_p);
+          AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
           dst_p->set_value (ip->get_value (), propagate);
           break;
         }
       case Boolean:
         {
-          BoolProperty* bp = dynamic_cast<BoolProperty*> (src_p);
+          AbstractBoolProperty* bp = dynamic_cast<AbstractBoolProperty*> (src_p);
           dst_p->set_value (bp->get_value (), propagate);
           break;
         }
       case Double:
         {
-          DoubleProperty* dp = dynamic_cast<DoubleProperty*> (src_p);
+          AbstractDoubleProperty* dp = dynamic_cast<AbstractDoubleProperty*> (src_p);
           dst_p->set_value (dp->get_value (), propagate);
           break;
         }
       case String:
         {
-          TextProperty* tp = dynamic_cast<TextProperty*> (src_p);
+          AbstractTextProperty* tp = dynamic_cast<AbstractTextProperty*> (src_p);
           dst_p->set_value (string (tp->get_value ()), propagate);
           break;
         }

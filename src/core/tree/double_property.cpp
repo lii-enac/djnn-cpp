@@ -23,9 +23,15 @@ namespace djnn
   using namespace std;
 
   void
-  DoubleProperty::set_value (int v, bool propagate)
+  AbstractDoubleProperty::set_value (int v, bool propagate)
   {
-    value = v;
+    set_value((double)v, propagate);
+  }
+
+  void
+  AbstractDoubleProperty::set_value (double v, bool propagate)
+  {
+    get_ref_value() = v;
     if (is_activable () && propagate) {
       notify_activation ();
       notify_parent ();
@@ -33,57 +39,40 @@ namespace djnn
   }
 
   void
-  DoubleProperty::set_value (double v, bool propagate)
+  AbstractDoubleProperty::set_value (bool v, bool propagate)
   {
-    value = v;
-    if (is_activable () && propagate) {
-      notify_activation ();
-      notify_parent ();
-    }
+    set_value((double)(v ? 1 : 0), propagate);
   }
 
   void
-  DoubleProperty::set_value (bool v, bool propagate)
+  AbstractDoubleProperty::set_value (const string &v, bool propagate)
   {
-    value = v ? 1 : 0;
-    if (is_activable () && propagate) {
-      notify_activation ();
-      notify_parent ();
-    }
-  }
-
-  void
-  DoubleProperty::set_value (const string &v, bool propagate)
-  {
-
-    int oldVal = value;
+    double oldVal = get_value();
     try {
-
       if (!v.empty ()) {
-        value = stof (v);
-        if (is_activable () && propagate) {
-          notify_activation ();
-          notify_parent ();
-        }
+        set_value((double)stof (v), propagate);
       }
-
-      
     }
     catch (const std::invalid_argument& ia) {
-      value = oldVal;
+      get_ref_value() = oldVal;
       warning (this, "failed to convert the string \"" + v + "\" into a double property value\n");
     }
   }
 
   void
-  DoubleProperty::set_value (Process* v, bool propagate)
+  AbstractDoubleProperty::set_value (Process* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Double\n");
   }
 
   void
-  DoubleProperty::serialize (const string& format) {
+  AbstractDoubleProperty::dump (int level)
+  {
+    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << get_value() << " ]";
+  }
 
+  void
+  DoubleProperty::serialize (const string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:doubleproperty");
@@ -95,13 +84,26 @@ namespace djnn
   }
 
   void
-  DoubleProperty::dump (int level)
-  {
-    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << value << " ]";
+  DoublePropertyProxy::serialize (const string& format) {
+    AbstractSerializer::pre_serialize(this, format);
+
+    AbstractSerializer::serializer->start ("core:doubleproperty");
+    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->float_attribute ("value", get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 
-  Process* DoubleProperty::clone ()
+  Process*
+  DoubleProperty::clone ()
   {
-    return new DoubleProperty (value);
+    return new DoubleProperty (get_value());
+  }
+
+  Process*
+  DoublePropertyProxy::clone ()
+  {
+    return new DoublePropertyProxy (get_ref_value()); // FIXME
   }
 }

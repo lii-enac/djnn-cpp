@@ -28,111 +28,214 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  void
-  Text::init_text (double x, double y, double dx, double dy, int dxu, int dyu,
-              const std::string &encoding, const std::string &text)
+  Text::Text (Process *p, const std::string& n, double x, double y, const std::string &text) :
+      AbstractGShape (p, n),
+
+      raw_props{.x=x, .y=y, .dx=0, .dy=0, .fsize=12, .dxU=0, .dyU=0, .width=0, .height=0,
+        .encoding=djnUtf8, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
+
+      _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
+      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
+      
   {
-    _x = new DoubleProperty (this, "x", x, notify_damaged_transform);
-    _y = new DoubleProperty (this, "y", y, notify_damaged_transform);
-    _dx = new DoubleProperty (this, "dx", dx, notify_damaged_transform);
-    _dy = new DoubleProperty (this, "dy", dy, notify_damaged_transform);
-    _dxU = new IntProperty (this, "dxU", dxu, notify_damaged_transform);
-    _dyU = new IntProperty (this, "dyU", dyu, notify_damaged_transform);
-    _width = new IntProperty (this, "width", 0, notify_damaged_geometry);
-    _height = new IntProperty (this, "height", 0, notify_damaged_geometry);
-
     djnTextEncoding code = djnUtf8;
-    if (encoding.compare ("ISO-8859-1") == 0)
-      code = djnLatin1;
-    else if (encoding.compare ("ASCII") == 0)
-      code = djnAscii;
-    _encoding = new IntProperty (this, "encoding", code, notify_damaged_geometry);
-
-    _text = new TextProperty (this, "text", text, notify_damaged_geometry);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _update_size = new TextSizeAction (this, "size_action", this);
-    _cx = new Coupling (_x, ACTIVATION, update, ACTIVATION);
-    _cx->disable ();
-    _cy = new Coupling (_y, ACTIVATION, update, ACTIVATION);
-    _cy->disable ();
-    _ctext = new Coupling (_text, ACTIVATION, update, ACTIVATION);
-    _ctext->disable ();
-    _ctext_size = new Coupling (_text, ACTIVATION, _update_size, ACTIVATION);
-    _ctext_size->disable ();
     set_origin (x, y);
-    Graph::instance ().add_edge (_text, _update_size);
+    
+    /* populate : text, width, height */
+    this->text();
+    this->width();
+    this->height();
+
+    _update_size = new TextSizeAction (this, "size_action", this);
+    Graph::instance ().add_edge (this->text(), _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
-  }
-
-  Text::Text (Process *p, const std::string& n, double x, double y, const std::string &text) :
-      AbstractGShape (p, n), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
-          nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
-  {
-    init_text (x, y, 0, 0, 0, 0, "", text);
     Process::finalize ();
   }
 
-  Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxu, int dyu,
+  Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxU, int dyU,
               const std::string &encoding, const std::string &text) :
-      AbstractGShape (p, n), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
-          nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
+      AbstractGShape (p, n),
+
+      raw_props{.x=x, .y=y, .dx=dx, .dy=dy, .fsize=12, .dxU=dxU, .dyU=dyU, .width=0, .height=0,
+        .encoding=0, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
+
+      _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
+      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
+      
   {
-    init_text (x, y, dx, dy, dxu, dyu, encoding, text);
+    djnTextEncoding code = djnUtf8;
+    set_origin (x, y);
+
+    /* populate : text, width, height */
+    this->text();
+    this->width();
+    this->height();
+
+    _update_size = new TextSizeAction (this, "size_action", this);
+    Graph::instance ().add_edge (this->text(), _update_size);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
     Process::finalize ();
   }
 
   Text::Text (double x, double y, const std::string &text) :
-      AbstractGShape (), _text (nullptr), _cx (nullptr), _cy (nullptr), _cffamily (nullptr), _cfsize (nullptr), _cfstyle (
-          nullptr), _cfweight (nullptr), _ffamily (nullptr), _fsize (nullptr), _fstyle (nullptr), _fweight (nullptr)
+      AbstractGShape (),
+
+      raw_props{.x=x, .y=y, .dx=0, .dy=0, .fsize=12, .dxU=0, .dyU=0, .width=0, .height=0,
+        .encoding=0, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
+
+      _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
+      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
+      
   {
-    init_text (x, y, 0, 0, 0, 0, "", text);
+    djnTextEncoding code = djnUtf8;
+    set_origin (x, y);
+
+    /* populate : text, width, height */
+    this->text();
+    this->width();
+    this->height();
+
+    _update_size = new TextSizeAction (this, "size_action", this);
+    Graph::instance ().add_edge (this->text(), _update_size);
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
   }
 
   Text::~Text ()
   {
-    
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
-    Graph::instance ().remove_edge (_text, _update_size);
+    Graph::instance ().remove_edge (this->text(), _update_size);
     
     if (_cx) {delete _cx; _cx = nullptr;}
     if (_cy) {delete _cy; _cy = nullptr;}
     if (_ctext) {delete _ctext; _ctext = nullptr;}
-    if (_ctext_size) {delete _ctext_size; _ctext_size = nullptr;}
+    if (_cfsize) {delete _cfsize; _cfsize = nullptr;}
 
     if (_cffamily) {
-      Graph::instance ().remove_edge (_ffamily, _update_size);
+      Graph::instance ().remove_edge ( this->ffamily (), _update_size);
       delete _cffamily;
       _cffamily = nullptr;
     }
     if (_cfsize) {
-      Graph::instance ().remove_edge (_fsize, _update_size);
+      Graph::instance ().remove_edge ( this->fsize (), _update_size);
       delete _cfsize;
       _cfsize = nullptr;
     }
     if (_cfstyle) {
-      Graph::instance ().remove_edge (_fstyle, _update_size);
+      Graph::instance ().remove_edge ( this->fstyle (), _update_size);
       delete _cfstyle;
       _cfstyle = nullptr;
     }
     if (_cfweight) {
-      Graph::instance ().remove_edge (_fweight, _update_size);
+      Graph::instance ().remove_edge ( this->fweight (), _update_size);
       delete _cfweight;
       _cfweight = nullptr;
     }
+  }
 
-    if (_x) {delete _x; _x = nullptr;}
-    if (_y) {delete _y; _y = nullptr;}
-    if (_text) {delete _text; _text = nullptr;}
-    if (_dx) {delete _dx; _dx = nullptr;}
-    if (_dy) {delete _dy; _dy = nullptr;}
-    if (_dxU) {delete _dxU; _dxU = nullptr;}
-    if (_dyU) {delete _dyU; _dyU = nullptr;}
-    if (_width) {delete _width; _width = nullptr;}
-    if (_height) {delete _height; _height = nullptr;}
-    if (_encoding) {delete _encoding; _encoding = nullptr;}
-  
+  Process*
+  Text::find_component (const string& name)
+  {
+    Process* res = AbstractGShape::find_component(name);
+    if(res) return res;
+
+    bool propd = false;
+    bool propi = false;
+    bool propt = false;
+    Coupling ** coupling;
+    double* rawpd;
+    int* rawpi;
+    string* rawpt;
+
+    if(name=="x") {
+      propd = true;
+      coupling=&_cx;
+      rawpd=&raw_props.x;
+    } else
+    if(name=="y") {
+      propd = true;
+      coupling=&_cy;
+      rawpd=&raw_props.y;
+    } else
+    if(name=="dx") {
+      propd = true;
+      coupling=&_cdx;
+      rawpd=&raw_props.dx;
+    } else
+    if(name=="dy") {
+      propd = true;
+      coupling=&_cdy;
+      rawpd=&raw_props.dy;
+    } else
+    if(name=="fsize") {
+      propd = true;
+      coupling=&_cfsize;
+      rawpd=&raw_props.fsize;
+    } else
+    if(name=="dxU") {
+      propi = true;
+      coupling=&_cdx;
+      rawpi=&raw_props.dxU;
+    } else
+    if(name=="dyU") {
+      propi = true;
+      coupling=&_cdyU;
+      rawpi=&raw_props.dyU;
+    } else
+    if(name=="width") {
+      propi = true;
+      coupling=&_cwidth;
+      rawpi=&raw_props.width;
+    } else
+    if(name=="height") {
+      propi = true;
+      coupling=&_cheight;
+      rawpi=&raw_props.height;
+    } else
+    if(name=="encoding") {
+      propi = true;
+      coupling=&_cencoding;
+      rawpi=&raw_props.encoding;
+    } else
+    if(name=="fstyle") {
+      propi = true;
+      coupling=&_cfstyle;
+      rawpi=&raw_props.fstyle;
+    } else
+    if(name=="fweight") {
+      propi = true;
+      coupling=&_cfweight;
+      rawpi=&raw_props.fweight;
+    } else
+    if(name=="text") {
+      propt = true;
+      coupling=&_ctext;
+      rawpt=&raw_props.text;
+    } else
+    if(name=="ffamily") {
+      propt = true;
+      coupling=&_cffamily;
+      rawpt=&raw_props.ffamily;
+    } else
+    return nullptr;
+    
+    if (propd) {
+      DoublePropertyProxy* prop = nullptr;
+      res = create_GObj_prop(&prop, coupling, rawpd, name);
+    }
+    else if (propt) {
+      TextPropertyProxy* prop = nullptr;
+      res = create_GObj_prop(&prop, coupling, rawpt, name);
+    }
+    else if (propi) {
+      IntPropertyProxy* prop = nullptr;
+      res = create_GObj_prop(&prop, coupling, rawpi, name);
+    }
+    
+    return res;
   }
 
   void
@@ -142,65 +245,65 @@ namespace djnn
     Container *c = dynamic_cast<Container*> (_parent);
     if (c) {
       Process* ff = c->get_from_context ("FontFamily");
-      if (ff && ((FontFamily*) ff)->family () != _ffamily) {
-        _ffamily = ((FontFamily*) ff)->family ();
+      if (ff && ((FontFamily*) ff)->family ()->get_value () != raw_props.ffamily) {
+        //this->ffamily () = ((FontFamily*) ff)->family ();
         _update_size->_ff = (FontFamily*) ff;
         if (_cffamily != nullptr) {
-          Graph::instance ().remove_edge (_ffamily, _update_size);
+          Graph::instance ().remove_edge ( this->ffamily (), _update_size);
           delete _cffamily;
           _cffamily = nullptr;
         }
-        if (_ffamily != nullptr) {
-          _cffamily = new Coupling (_ffamily, ACTIVATION, _update_size, ACTIVATION);
-          Graph::instance ().add_edge (_ffamily, _update_size);
+        if (this->ffamily () != nullptr) {
+          _cffamily = new Coupling (this->ffamily (), ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (this->ffamily (), _update_size);
         }
       }
       Process* fsz = c->get_from_context ("FontSize");
-      if (fsz && ((FontSize*) fsz)->size () != _fsize) {
-        _fsize = ((FontSize*) fsz)->size ();
+      if (fsz && ((FontSize*) fsz)->size ()->get_value () != raw_props.fsize) {
+        //_fsize = ((FontSize*) fsz)->size ();
         _update_size->_fsz = (FontSize*) fsz;
         if (_cfsize != nullptr) {
-          Graph::instance ().remove_edge (_fsize, _update_size);
+          Graph::instance ().remove_edge (this->fsize (), _update_size);
           delete _cfsize;
           _cfsize = nullptr;
         }
-        if (_fsize != nullptr) {
-          _cfsize = new Coupling (_fsize, ACTIVATION, _update_size, ACTIVATION);
-          Graph::instance ().add_edge (_fsize, _update_size);
+        if (this->fsize () != nullptr) {
+          _cfsize = new Coupling (this->fsize (), ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (this->fsize (), _update_size);
         }
       }
       Process* fs = c->get_from_context ("FontStyle");
-      if (fs && ((FontStyle*) fs)->style () != _fstyle) {
-        _fstyle = ((FontStyle*) fs)->style ();
+      if (fs && ((FontStyle*) fs)->style ()->get_value () != raw_props.fstyle) {
+        //_fstyle = ((FontStyle*) fs)->style ();
         _update_size->_fs = (FontStyle*) fs;
         if (_cfstyle != nullptr) {
-          Graph::instance ().remove_edge (_fstyle, _update_size);
+          Graph::instance ().remove_edge (this->fstyle (), _update_size);
           delete _cfstyle;
           _cfstyle = nullptr;
         }
-        if (_fstyle != nullptr) {
-          _cfstyle = new Coupling (_fstyle, ACTIVATION, _update_size, ACTIVATION);
-          Graph::instance ().add_edge (_fstyle, _update_size);
+        if (this->fstyle () != nullptr) {
+          _cfstyle = new Coupling (this->fstyle (), ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (this->fstyle (), _update_size);
         }
       }
       Process* fw = c->get_from_context ("FontWeight");
-      if (fw && ((FontWeight*) fw)->weight () != _fweight) {
-        _fweight = ((FontWeight*) fw)->weight ();
+      if (fw && ((FontWeight*) fw)->weight ()->get_value () != raw_props.fweight) {
+        //_fweight = ((FontWeight*) fw)->weight ();
         _update_size->_fw = (FontWeight*) fw;
         if (_cfweight != nullptr) {
-          Graph::instance ().remove_edge (_fweight, _update_size);
+          Graph::instance ().remove_edge (this->fweight (), _update_size);
           delete _cfweight;
           _cfweight = nullptr;
         }
-        if (_fweight != nullptr) {
-          _cfweight = new Coupling (_fweight, ACTIVATION, _update_size, ACTIVATION);
-          Graph::instance ().add_edge (_fweight, _update_size);
+        if (this->fweight () != nullptr) {
+          _cfweight = new Coupling (this->fweight (), ACTIVATION, _update_size, ACTIVATION);
+          Graph::instance ().add_edge (this->fweight (), _update_size);
         }
       }
     }
-    _cx->enable (_frame);
-    _cy->enable (_frame);
-    _ctext->enable (_frame);
+    if(_cx) _cx->enable (_frame);
+    if(_cy) _cy->enable (_frame);
+    if(_ctext) _ctext->enable (_frame);
     if (_cffamily)
       _cffamily->enable ();
     if (_cfsize)
@@ -209,17 +312,17 @@ namespace djnn
       _cfstyle->enable ();
     if (_cfweight)
       _cfweight->enable ();
-    _ctext_size->enable ();
-    _update_size->activation ();
+    if(_cfsize) _cfsize->enable ();
+    if(_update_size) _update_size->activation ();
   }
 
   void
   Text::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cx->disable ();
-    _cy->disable ();
-    _ctext->disable ();
+    if(_cx) _cx->disable ();
+    if(_cy) _cy->disable ();
+    if(_ctext) _ctext->disable ();
     if (_cffamily)
       _cffamily->disable ();
     if (_cfsize)
@@ -228,7 +331,7 @@ namespace djnn
       _cfstyle->disable ();
     if (_cfweight)
       _cfweight->disable ();
-    _ctext_size->disable ();
+    if(_cfsize) _cfsize->disable ();
   }
 
   void
@@ -242,6 +345,6 @@ namespace djnn
   Process*
   Text::clone ()
   {
-    return new Text ( _x->get_value (), _y->get_value (), _text->get_value ());
+    return new Text ( raw_props.x, raw_props.y, raw_props.text);
   } 
 } /* namespace djnn */
