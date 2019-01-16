@@ -25,31 +25,40 @@ namespace djnn
   using namespace std;
 
   void
-  Binding::init_binding (Process* src, const string & ispec, Process* dst, const string & dspec)
+  Binding::init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec,
+			 bool to_activate)
   {
     if (src == 0) {
-      error (this, "src argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this,
+	     "src argument cannot be null in binding creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
     if (dst == 0) {
-      error (this, "dst argument cannot be null in binding creation (" + get_name() + ", " + ispec + ", " + dspec + ")");
+      error (this,
+	     "dst argument cannot be null in binding creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
     if (ispec.length () > 0) {
       _src = src->find_component (ispec);
       if (_src == 0) {
-        error (this, "source child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
+	error (this,
+	       "source child " + ispec + " not found in binding (" + get_name () + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _src = src;
     if (dspec.length () > 0) {
       _dst = dst->find_component (dspec);
       if (_dst == 0) {
-        error (this, "destination child " + ispec + " not found in binding (" + get_name() + ", " + ispec + ", " + dspec + ")");
+	error (
+	    this,
+	    "destination child " + ispec + " not found in binding (" + get_name () + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _dst = dst;
     _action = new BindingAction (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
-                                          _dst);
-    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+				 _dst, to_activate);
+    if (on_activation)
+      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+    else
+      _c_src = new Coupling (_src, DEACTIVATION, _action, ACTIVATION);
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _dst);
@@ -58,14 +67,22 @@ namespace djnn
 
   Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec)
   {
-    init_binding (src, ispec, dst, dspec);
+    init_binding (src, ispec, true, dst, dspec, true);
   }
 
-  Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec,
-                    Process* dst, const string & dspec) :
+  Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst,
+		    const string & dspec) :
       Process (parent, name)
   {
-    init_binding (src, ispec, dst, dspec);
+    init_binding (src, ispec, true, dst, dspec, true);
+    Process::finalize ();
+  }
+
+  Binding::Binding (Process* parent, const string &name, Process* src, bool on_activation, const string & ispec,
+		    Process* dst, const string & dspec, bool activate) :
+      Process (parent, name)
+  {
+    init_binding (src, ispec, on_activation, dst, dspec, activate);
     Process::finalize ();
   }
 
@@ -76,17 +93,24 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
-    if (_c_src) { delete _c_src; _c_src = nullptr;}
-    if (_action) { delete _action; _action = nullptr;}
-    
+    if (_c_src) {
+      delete _c_src;
+      _c_src = nullptr;
+    }
+    if (_action) {
+      delete _action;
+      _action = nullptr;
+    }
+
   }
 
   void
-  Binding::serialize (const string& format) {
+  Binding::serialize (const string& format)
+  {
 
     string buf;
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:binding");
     AbstractSerializer::serializer->text_attribute ("id", _name);
@@ -97,7 +121,7 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("destination", buf);
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
+    AbstractSerializer::post_serialize (this);
   }
 
 }
