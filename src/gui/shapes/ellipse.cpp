@@ -103,7 +103,6 @@ namespace djnn
     cy = _cy->get_value ();
     rx = _rx->get_value ();
     ry = _ry->get_value ();
->>>>>>> 7c86dfb2... gui backend change draw API to prepare for caching
   }
 
   Process*

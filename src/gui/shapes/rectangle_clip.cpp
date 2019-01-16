@@ -94,7 +94,7 @@ namespace djnn
   RectangleClip::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_rect_clip (this, x, y, w, h);
+      Backend::instance ()->draw_rect_clip (this);
     }
   }
 

@@ -23,8 +23,8 @@ namespace djnn {
 
   class DoubleProperty: public AbstractProperty {
   public:
-    DoubleProperty (double v) : AbstractProperty (), value (v), _notify_mask(notify_none) {};
-    DoubleProperty (Process* p, const string &name, double v, int nm=notify_none) : AbstractProperty (p, name), value (v), _notify_mask (nm) { Process::finalize (); };
+    DoubleProperty (double v) : AbstractProperty (), value (v) {};
+    DoubleProperty (Process* p, const string &name, double v, int nm=notify_none) : AbstractProperty (p, name, nm), value (v) { Process::finalize (); };
     virtual int get_prop_type () override { return Double; }
     double get_value () { return value; };
     void set_value (int newValue, bool propagate) override;
