@@ -20,7 +20,6 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <bitset>
 
 namespace djnn {
   using namespace std;
@@ -88,8 +87,7 @@ namespace djnn {
     virtual void coupling_deactivation_hook () {};
 
     Process* state_dependency () { return _state_dependency; }
-    //void set_state (activation_state state) { _activation_state = state; }
-    //activation_state get_state ();
+
     void set_vertex (Vertex *v) { _vertex = v; }
     Vertex* vertex () { return _vertex; };
     Process* get_parent ();
@@ -97,6 +95,7 @@ namespace djnn {
     const string& get_name () const;
 
     virtual int get_cpnt_type () { return UNDEFINED_T; }
+    
     couplings_t& get_activation_couplings ();
     couplings_t& get_deactivation_couplings ();
     bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
@@ -111,8 +110,8 @@ namespace djnn {
     //friend class Coupling;
 
     virtual void dump (int level=0);
-
     string debug_info () { return _dbg_info; }
+
     // Actions
     virtual void draw () {};
     virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
@@ -130,6 +129,7 @@ namespace djnn {
   private:
     static int _nb_anonymous;
 
+// instance fields start
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
@@ -138,42 +138,74 @@ namespace djnn {
   protected:
     map<string, Process*> _symtable;
     string _name;
-    Process *_parent, *_state_dependency;
+    Process *_parent;
+    Process *_state_dependency;
     Process *_data;
 
   private:
-    bitset<8> _bitset;
-    enum {
-        MODEL_BIT,
-        ACTIVATION_NONE_BIT,
-        ACTIVATE_OR_DEACTIVATE_BIT,
-
-        ACTIVATE_STATE_LOW_BIT,
-        ACTIVATE_STATE_HIGH_BIT,
+    unsigned int _bitset;
+// instance fields end
+    
+    enum bit_shift {
+        MODEL_SHIFT               = 0 ,
+        ACTIVATION_FLAG_SHIFT     = 1 ,
+        ACTIVATION_STATE_SHIFT    = 3
     };
 
-    enum activation_state {
-        activating,
-        activated,
-        deactivating,
-        deactivated
+    enum bit_mask {
+        MODEL_MASK                = 0b1  << MODEL_SHIFT ,
+        ACTIVATION_FLAG_MASK      = 0b11 << ACTIVATION_FLAG_SHIFT ,
+        ACTIVATION_STATE_MASK     = 0b11 << ACTIVATION_STATE_SHIFT
     };
-    activation_state _activation_state;
+
+    enum bit_value {
+        MODEL_FALSE                   = 0b0  << MODEL_SHIFT ,
+        MODEL_TRUE                    = 0b1  << MODEL_SHIFT ,
+
+        ACTIVATION_FLAG_NONE          = 0b00 << ACTIVATION_FLAG_SHIFT ,
+        ACTIVATION_FLAG_ACTIVATION    = 0b01 << ACTIVATION_FLAG_SHIFT ,
+        ACTIVATION_FLAG_DEACTIVATION  = 0b10 << ACTIVATION_FLAG_SHIFT ,
+
+        ACTIVATION_STATE_ACTIVATING   = 0b00 << ACTIVATION_STATE_SHIFT ,
+        ACTIVATION_STATE_ACTIVATED    = 0b01 << ACTIVATION_STATE_SHIFT ,
+        ACTIVATION_STATE_DEACTIVATING = 0b10 << ACTIVATION_STATE_SHIFT ,
+        ACTIVATION_STATE_DEACTIVATED  = 0b11 << ACTIVATION_STATE_SHIFT
+    };
+
+    void set_flag    (bit_mask MASK, bit_value VALUE) { _bitset = (_bitset & ~MASK) |  VALUE; }
+    bool is_flag_set (bit_mask MASK, bit_value VALUE) { return    (_bitset &  MASK) == VALUE; }
 
   public:
-    void set_is_model (bool v) { _bitset[MODEL_BIT]=v; }
-    bool is_model () { return _bitset[MODEL_BIT]; }
+    // model
+    void set_is_model (bool v)        { if(v) set_is_model (); else (unset_is_model());   }
+    void set_is_model ()              {        set_flag    (MODEL_MASK, MODEL_TRUE);  }
+    void unset_is_model ()            {        set_flag    (MODEL_MASK, MODEL_FALSE); }
+    bool is_model ()                  { return is_flag_set (MODEL_MASK, MODEL_TRUE);  }
 
-    void set_activation_flag ()      {        _bitset[ACTIVATION_NONE_BIT]= false; }
-    void unset_activation_flag ()    {        _bitset[ACTIVATION_NONE_BIT]= true;  }
-    bool is_unset_activation_flag () { return _bitset[ACTIVATION_NONE_BIT]==true;  }
-    bool is_set_activation_flag ()   { return _bitset[ACTIVATION_NONE_BIT]==false; }
+    // (future?) activation flag
+    void unset_activation_flag ()     {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
+    bool is_unset_activation_flag ()  { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
+    bool is_set_activation_flag ()    { return !is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
 
-    void request_activation ()        {        set_activation_flag();      _bitset[ACTIVATE_OR_DEACTIVATE_BIT]= true; }
-    bool is_activation_requested ()   { return is_set_activation_flag() && _bitset[ACTIVATE_OR_DEACTIVATE_BIT]==true; }
+    void request_activation ()        {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_ACTIVATION); }
+    bool is_activation_requested ()   { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_ACTIVATION); }
 
-    void request_deactivation ()      {        set_activation_flag();      _bitset[ACTIVATE_OR_DEACTIVATE_BIT]= false; }
-    bool is_deactivation_requested () { return is_set_activation_flag() && _bitset[ACTIVATE_OR_DEACTIVATE_BIT]==false; }
+    void request_deactivation ()      {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_DEACTIVATION);  }
+    bool is_deactivation_requested () { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_DEACTIVATION);  }
+
+    // activation state
+    void set_activating ()            {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATING); }
+    bool is_activating ()             { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATING); }
+    void set_activated ()             {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATED); }
+    bool is_activated ()              { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATED); }
+
+    void set_deactivating ()          {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATING); }
+    bool is_deactivating ()           { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATING); }
+    void set_deactivated ()           {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATED); }
+    bool is_deactivated ()            { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATED); }
+
+    bool somehow_activating ()        { return    (_bitset & ACTIVATION_STATE_MASK) < ACTIVATION_STATE_DEACTIVATING; }
+    bool somehow_deactivating ()      { return    (_bitset & ACTIVATION_STATE_MASK) > ACTIVATION_STATE_ACTIVATED;    }
 
     void do_something_according_to_activation_flag () {
         if(is_set_activation_flag ()) {
@@ -191,38 +223,9 @@ namespace djnn {
         }
     }
 
-    //void set_activating ()     {        _bitset[ACTIVATED_STATE_LOW_BIT] = false; _bitset[ACTIVATED_STATE_HI_BIT] = false; }
-    //void set_activating ()     {        _bitset.to_ulong() &= 0 ACTIVATED_STATE_LOW_BIT ; }
-
-    // void set_activating ()      {       _bitset[ACTIVATED_BIT] =  false; }
-    // bool is_activating ()      { return _bitset[ACTIVATED_BIT] == false; }
-    // void set_activated ()      {        _bitset[ACTIVATED_BIT] =  true; }
-    // bool is_activated ()       { return _bitset[ACTIVATED_BIT] == true; }
-    // bool somehow_activating () { return _activation_state < deactivating; }
-
-    // void set_deactivating ()   {        _bitset[DEACTIVATED_BIT] =  false; }
-    // bool is_deactivating ()    { return _bitset[DEACTIVATED_BIT] == false; }
-    // void set_deactivated ()    {        _bitset[DEACTIVATED_BIT] =  true; }
-    // bool is_deactivated ()     { return _bitset[DEACTIVATED_BIT] == true; }
-
-    void set_activating ()     {        _activation_state =  activating; }
-    bool is_activating ()      { return _activation_state == activating; }
-    void set_activated ()      {        _activation_state =  activated; }
-    bool is_activated ()       { return _activation_state == activated; }
-    bool somehow_activating () { return _activation_state < deactivating; }
-    bool somehow_deactivating () { return _activation_state > activated; }
-
-    void set_deactivating ()   {        _activation_state =  deactivating; }
-    bool is_deactivating ()    { return _activation_state == deactivating; }
-    void set_deactivated ()    {        _activation_state =  deactivated; }
-    bool is_deactivated ()     { return _activation_state == deactivated; }
-
   };
 
-  void
-  alias_children (Process *p, Process *to);
-  void
-  alias (Process *p, const string &name, Process* from);
-  void
-  merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
+  void alias_children (Process *p, Process *to);
+  void alias (Process *p, const string &name, Process* from);
+  void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
 }
