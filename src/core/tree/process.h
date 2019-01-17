@@ -152,20 +152,22 @@ namespace djnn {
     Process *_state_dependency;
     Process *_data;
 
-  private:
+  protected:
     unsigned int _bitset;
 // instance fields end
     
     enum bit_shift {
         MODEL_SHIFT               = 0 ,
         ACTIVATION_FLAG_SHIFT     = 1 ,
-        ACTIVATION_STATE_SHIFT    = 3
+        ACTIVATION_STATE_SHIFT    = 3 ,
+        BINDING_ACTION_SHIFT      = 5
     };
 
     enum bit_mask {
         MODEL_MASK                = 0b1  << MODEL_SHIFT ,
         ACTIVATION_FLAG_MASK      = 0b11 << ACTIVATION_FLAG_SHIFT ,
-        ACTIVATION_STATE_MASK     = 0b11 << ACTIVATION_STATE_SHIFT
+        ACTIVATION_STATE_MASK     = 0b11 << ACTIVATION_STATE_SHIFT ,
+        BINDING_ACTION_MASK       = 0b11 << BINDING_ACTION_SHIFT
     };
 
     enum bit_value {
@@ -179,7 +181,9 @@ namespace djnn {
         ACTIVATION_STATE_ACTIVATING   = 0b00 << ACTIVATION_STATE_SHIFT ,
         ACTIVATION_STATE_ACTIVATED    = 0b01 << ACTIVATION_STATE_SHIFT ,
         ACTIVATION_STATE_DEACTIVATING = 0b10 << ACTIVATION_STATE_SHIFT ,
-        ACTIVATION_STATE_DEACTIVATED  = 0b11 << ACTIVATION_STATE_SHIFT
+        ACTIVATION_STATE_DEACTIVATED  = 0b11 << ACTIVATION_STATE_SHIFT ,
+        BINDING_ACTION_ACTIVATE       = 0b0  << BINDING_ACTION_SHIFT ,
+        BINDING_ACTION_DEACTIVATE     = 0b1  << BINDING_ACTION_SHIFT
     };
 
     void set_flag    (bit_mask MASK, bit_value VALUE) { _bitset = (_bitset & ~MASK) |  VALUE; }
