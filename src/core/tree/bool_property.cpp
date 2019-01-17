@@ -14,6 +14,7 @@
 
 #include "bool_property.h"
 #include "../serializer/serializer.h"
+#include "../error.h"
 #include <iostream>
 
 namespace djnn
@@ -44,23 +45,28 @@ namespace djnn
 
   BoolProperty::~BoolProperty ()
   {
-    Graph::instance ().remove_edge (this, _false);
-    Graph::instance ().remove_edge (this, _true);
-    
-    if (_false) { delete _false; _false = nullptr;}
-    if (_true) { delete _true; _true = nullptr;}
+    if(_false) {
+      Graph::instance ().remove_edge (this, _false);
+      delete _false;
+      _false = nullptr;
+    }
+    if(_true) {
+      Graph::instance ().remove_edge (this, _true);
+      delete _true;
+      _true = nullptr;
+    }
   }
 
   void
   BoolProperty::set_value (int v, bool propagate)
   {
-    v == 0 ? set_value (false, propagate) : set_value (true, propagate);
+    set_value((bool)(v!=0.0), propagate);
   }
 
   void
   BoolProperty::set_value (double v, bool propagate)
   {
-    v == 0 ? set_value (false, propagate) : set_value (true, propagate);
+    set_value((bool)(v!=0), propagate);
   }
 
   void
@@ -91,7 +97,7 @@ namespace djnn
   void
   BoolProperty::set_value (Process* v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Component to Boolean\n";
+    warning (this, "undefined conversion from Component to Boolean\n");
   }
 
   void

@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -106,7 +107,6 @@ namespace djnn
   void
   AbstractGObj::activate ()
   {
-    //if (_frame == nullptr || _frame->get_state () <= activated) {
     if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
        *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent) and go through its
@@ -122,7 +122,6 @@ namespace djnn
           for (auto c : cont->children ()) {
             if (c == cur_child)
               break;
-            //else if (c->get_cpnt_type () == WINDOW_T && c->get_state () <= activated) {
             else if (c->get_cpnt_type () == WINDOW_T && c->somehow_activating ()) {
               _frame = dynamic_cast<Window*> (c);
               found = true;

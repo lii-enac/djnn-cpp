@@ -14,6 +14,7 @@
 
 #include "int_property.h"
 #include "../serializer/serializer.h"
+#include "../error.h"
 #include <iostream>
 
 namespace djnn
@@ -70,7 +71,7 @@ namespace djnn
   void
   IntProperty::set_value (Process* v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Component to integer\n";
+    warning (this, "undefined conversion from Component to Int\n");
   }
 
   void
