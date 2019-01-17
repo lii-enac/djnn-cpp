@@ -29,19 +29,21 @@ namespace djnn {
     class BindingAction : public Process
     {
     public:
-      BindingAction (Process* parent, const string &name, Process *src, Process* dst, bool activate) : Process (parent, name), _dst (dst), _src (src), _activate (activate){}
+      BindingAction (Process* parent, const string &name, Process *src, Process* dst, bool activate) : Process (parent, name), _dst (dst), _src (src){ set_binding_activate (activate); }
       virtual ~BindingAction () {};
       void activate () override {
-	_dst->set_activation_source (_src);
-	if (_activate) {
-	  _dst->activation ();
-	}
-	else
-	  _dst->deactivation ();
+      	_dst->set_activation_source (_src);
+      	if (is_binding_activate()) {
+      	  _dst->activation ();
+      	}
+      	else
+      	  _dst->deactivation ();
       }
       void deactivate () override {}
       void exec (int flag) override { activate (); }
     private:
+      void set_binding_activate(bool activate) { _activate = activate; }
+      bool is_binding_activate() { return _activate; }
       Process* _dst, *_src;
       bool _activate;
     };
