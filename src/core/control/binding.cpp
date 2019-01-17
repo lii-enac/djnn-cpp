@@ -53,8 +53,7 @@ namespace djnn
       }
     } else
       _dst = dst;
-    _action = new BindingAction (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src,
-				 _dst, to_activate);
+    _action = new BindingAction (this, "binding_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", to_activate);
     if (on_activation)
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
     else

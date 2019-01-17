@@ -25,27 +25,31 @@ namespace djnn {
 
   class Binding : public Process
   {
+    friend class BindingAction;
   private:
     class BindingAction : public Process
     {
     public:
-      BindingAction (Process* parent, const string &name, Process *src, Process* dst, bool activate) : Process (parent, name), _dst (dst), _src (src){ set_binding_activate (activate); }
+      BindingAction (Process* parent, const string &name, bool activate) : Process (parent, name) { set_binding_activate (activate); }
       virtual ~BindingAction () {};
       void activate () override {
-      	_dst->set_activation_source (_src);
+      	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);
       	if (is_binding_activate()) {
-      	  _dst->activation ();
+      	  ((Binding*)_parent)->_dst->activation ();
       	}
       	else
-      	  _dst->deactivation ();
+      	  ((Binding*)_parent)->_dst->deactivation ();
       }
       void deactivate () override {}
       void exec (int flag) override { activate (); }
     private:
-      void set_binding_activate(bool activate) { _activate = activate; }
-      bool is_binding_activate() { return _activate; }
-      Process* _dst, *_src;
-      bool _activate;
+      void set_binding_activate (bool activate) {
+        if (activate)
+          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE);
+        else
+          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_DEACTIVATE);
+      }
+      bool is_binding_activate() { return is_flag_set (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE); }
     };
   public:
     Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);
