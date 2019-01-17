@@ -45,14 +45,14 @@ namespace djnn
     Window*& frame () { return _frame; }
     void activate () override;
     void deactivate () override;
-    void notify_change (int nm) override { _damaged |= nm; }
+    void notify_change (unsigned int nm) override { _damaged |= nm; }
     void reset_damaged () { _damaged = notify_none; }
     int get_damaged () { return _damaged; }
   protected:
-    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, Coupling  **cprop, bool *rawp, const string& name);
-    virtual Process* create_GObj_prop (IntPropertyProxy **prop, Coupling  **cprop, int *rawp, const string& name);
-    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, Coupling  **cprop, double *rawp, const string& name);
-    virtual Process* create_GObj_prop (TextPropertyProxy **prop, Coupling  **cprop, string *rawp, const string& name);
+    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, Coupling  **cprop, bool *rawp, const string& name, int notify_mask);
+    virtual Process* create_GObj_prop (IntPropertyProxy **prop, Coupling  **cprop, int *rawp, const string& name, int notify_mask);
+    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, Coupling  **cprop, double *rawp, const string& name, int notify_mask);
+    virtual Process* create_GObj_prop (TextPropertyProxy **prop, Coupling  **cprop, string *rawp, const string& name, int notify_mask);
 
     Window *_frame;
     int _damaged;

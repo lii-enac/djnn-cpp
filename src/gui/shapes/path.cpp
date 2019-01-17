@@ -57,6 +57,7 @@ namespace djnn
 
     Coupling ** coupling;
     double* rawp;
+    int notify_mask = notify_none;
 
     if(name=="x") {
       coupling=&_cx;
@@ -179,6 +180,7 @@ namespace djnn
 
     Coupling ** coupling;
     double* rawp;
+    int notify_mask = notify_none;
 
     if(name=="x1") {
       coupling=&_cx1;
@@ -278,6 +280,7 @@ namespace djnn
 
     Coupling ** coupling;
     double* rawp;
+    int notify_mask = notify_none;
 
     if(name=="x1") {
       coupling=&_cx1;
@@ -392,6 +395,7 @@ namespace djnn
 
     Coupling ** coupling;
     double* rawp;
+    int notify_mask = notify_none;
 
     if(name=="rotx") {
       coupling=&_crotx;

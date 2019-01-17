@@ -91,7 +91,7 @@ namespace djnn
     } else
     return nullptr;
     
-    DoublePropertyProxy* prop = nullptr;
+    DoublePropertyProxy* prop = nullptr; // do not cache
     res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
 
     return res;

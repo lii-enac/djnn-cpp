@@ -149,90 +149,105 @@ namespace djnn
     double* rawpd;
     int* rawpi;
     string* rawpt;
+    int notify_mask = notify_none;
 
     if(name=="x") {
       propd = true;
       coupling=&_cx;
       rawpd=&raw_props.x;
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="y") {
       propd = true;
       coupling=&_cy;
       rawpd=&raw_props.y;
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="dx") {
       propd = true;
       coupling=&_cdx;
       rawpd=&raw_props.dx;
+      notify_mask = notify_damaged_geometry; // or transform ?
     } else
     if(name=="dy") {
       propd = true;
       coupling=&_cdy;
       rawpd=&raw_props.dy;
+      notify_mask = notify_damaged_geometry; // or transform ?
     } else
     if(name=="fsize") {
       propd = true;
       coupling=&_cfsize;
       rawpd=&raw_props.fsize;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="dxU") {
       propi = true;
       coupling=&_cdx;
       rawpi=&raw_props.dxU;
+      notify_mask = notify_damaged_geometry; // or transform ?
     } else
     if(name=="dyU") {
       propi = true;
       coupling=&_cdyU;
       rawpi=&raw_props.dyU;
+      notify_mask = notify_damaged_geometry; // or transform ?
     } else
     if(name=="width") {
       propi = true;
       coupling=&_cwidth;
       rawpi=&raw_props.width;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="height") {
       propi = true;
       coupling=&_cheight;
       rawpi=&raw_props.height;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="encoding") {
       propi = true;
       coupling=&_cencoding;
       rawpi=&raw_props.encoding;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="fstyle") {
       propi = true;
       coupling=&_cfstyle;
       rawpi=&raw_props.fstyle;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="fweight") {
       propi = true;
       coupling=&_cfweight;
       rawpi=&raw_props.fweight;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="text") {
       propt = true;
       coupling=&_ctext;
       rawpt=&raw_props.text;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="ffamily") {
       propt = true;
       coupling=&_cffamily;
       rawpt=&raw_props.ffamily;
+      notify_mask = notify_damaged_geometry;
     } else
     return nullptr;
     
     if (propd) {
       DoublePropertyProxy* prop = nullptr;
-      res = create_GObj_prop(&prop, coupling, rawpd, name);
+      res = create_GObj_prop(&prop, coupling, rawpd, name, notify_mask);
     }
     else if (propt) {
       TextPropertyProxy* prop = nullptr;
-      res = create_GObj_prop(&prop, coupling, rawpt, name);
+      res = create_GObj_prop(&prop, coupling, rawpt, name, notify_mask);
     }
     else if (propi) {
       IntPropertyProxy* prop = nullptr;
-      res = create_GObj_prop(&prop, coupling, rawpi, name);
+      res = create_GObj_prop(&prop, coupling, rawpi, name, notify_mask);
     }
     
     return res;

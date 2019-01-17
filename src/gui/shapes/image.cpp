@@ -62,41 +62,47 @@ namespace djnn
     Coupling ** coupling;
     double* rawpd;
     string* rawps;
+    int notify_mask = notify_none;
 
     if(name=="x") {
       propd = true;
       coupling=&_cx;
       rawpd=&raw_props.x;
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="y") {
       propd = true;
       coupling=&_cy;
       rawpd=&raw_props.y;
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="width") {
       propd = true;
       coupling=&_cwidth;
       rawpd=&raw_props.width;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="height") {
       propd = true;
       coupling=&_cheight;
       rawpd=&raw_props.height;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="path") {
       propt = true;
       coupling=&_cpath;
       rawps=&raw_props.path;
+      notify_mask = notify_damaged_geometry;
     } else
     return nullptr;
     
     if(propd) {
-      DoublePropertyProxy* prop = nullptr;
-      res = create_GObj_prop(&prop, coupling, rawpd, name);
+      DoublePropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawpd, name, notify_mask);
     }
     else if(propt) {
-      TextPropertyProxy* prop = nullptr;
-      res = create_GObj_prop(&prop, coupling, rawps, name);
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawps, name, notify_mask);
     } 
 
     return res;
