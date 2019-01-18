@@ -38,51 +38,83 @@ namespace djnn
   }
 
   AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
-      AbstractTransformation (p, n)
+      AbstractTransformation (p, n),
+      raw_props{.tx=tx, .ty=ty},
+      _ctx (nullptr), _cty (nullptr)
   {
-    _tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
-    _ty = new DoubleProperty (this, "ty", ty, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
-    _ctx->disable ();
-    _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
-    _cty->disable ();
   }
 
   AbstractTranslation::AbstractTranslation (double tx, double ty) :
-      AbstractTransformation ()
+      AbstractTransformation (),
+      raw_props{.tx=tx, .ty=ty},
+      _ctx (nullptr), _cty (nullptr)
   {
-    _tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
+    /*_tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
     _ty = new DoubleProperty (this, "ty", ty, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
     _ctx->disable ();
     _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
-    _cty->disable ();
+    _cty->disable ();*/
   }
 
   AbstractTranslation::~AbstractTranslation ()
   {
-    if (_cty) { delete _cty; _cty = nullptr; }
-    if (_ctx) { delete _ctx; _ctx = nullptr; }
-    if (_ty) { delete _ty; _ty = nullptr; }
-    if (_tx) { delete _tx; _tx = nullptr; }
+    delete _ctx; //_cty = nullptr;
+    delete _cty; //_ctx = nullptr; 
+    //delete _ty; //_ty = nullptr;
+    //delete _tx; //_tx = nullptr;
+  }
+
+  Process*
+  AbstractTranslation::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+    int notify_mask = notify_none;
+
+    if(name=="tx") {
+      coupling=&_ctx;
+      rawp=&raw_props.tx;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="ty") {
+      coupling=&_cty;
+      rawp=&raw_props.ty;
+      notify_mask = notify_damaged_transform;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+
+    return res;
+  }
+
+  void
+  AbstractTranslation::get_properties_values (double &tx, double &ty)
+  {
+    tx = raw_props.tx;
+    ty = raw_props.ty;
   }
 
   void
   AbstractTranslation::activate ()
   {
     AbstractGObj::activate ();
-    _ctx->enable (_frame);
-    _cty->enable (_frame);
+    if(_ctx) _ctx->enable (_frame);
+    if(_cty) _cty->enable (_frame);
   }
 
   void
   AbstractTranslation::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _ctx->disable ();
-    _cty->disable ();
+    if(_ctx)_ctx->disable ();
+    if(_cty) _cty->disable ();
   }
 
   Translation::Translation (Process *p, const string &n, double tx, double ty) :
@@ -103,18 +135,15 @@ namespace djnn
   void
   Translation::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double tx = _tx->get_value ();
-      double ty = _ty->get_value ();
-      Backend::instance ()->load_translation (this, tx, ty);
+      Backend::instance ()->load_translation (this, raw_props.tx, raw_props.ty);
     }
   }
 
   Process*
   Translation::clone ()
   {
-    return new Translation (_tx->get_value (), _ty->get_value ());
+    return new Translation (raw_props.tx, raw_props.ty);
   }
 
   GradientTranslation::GradientTranslation (Process *p, const string &n, double tx, double ty) :
@@ -140,73 +169,94 @@ namespace djnn
   void
   GradientTranslation::draw ()
   {
-    double tx = _tx->get_value ();
-    double ty = _ty->get_value ();
-    Backend::instance ()->load_gradient_translation (this, tx, ty);
+    Backend::instance ()->load_gradient_translation (this, raw_props.tx, raw_props.ty);
   }
 
   Process*
   GradientTranslation::clone ()
   {
-    return new GradientTranslation (_tx->get_value (), _ty->get_value ());
+    return new GradientTranslation (raw_props.tx, raw_props.ty);
   }
 
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
-      AbstractTransformation (p, n)
+      AbstractTransformation (p, n),
+      raw_props{.a=a, .cx=cx, .cy=cy},
+      _ccx (nullptr), _ccy (nullptr)
   {
-    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
-    _ca->disable ();
-    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    _ccx->disable ();
-    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-    _ccy->disable ();
   }
 
   AbstractRotation::AbstractRotation (double a, double cx, double cy) :
-      AbstractTransformation ()
+      AbstractTransformation (),
+      raw_props{.a=a, .cx=cx, .cy=cy},
+      _ccx (nullptr), _ccy (nullptr)
   {
-    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
-    _ca->disable ();
-    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    _ccx->disable ();
-    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-    _ccy->disable ();
   }
 
   AbstractRotation::~AbstractRotation ()
   {
-    if (_ca) { delete _ca; _ca = nullptr; }
-    if (_ccx) { delete _ccx; _ccx = nullptr; }
-    if (_ccy) { delete _ccy; _ccy = nullptr; }
-    if (_a) { delete _a; _a = nullptr; }
-    if (_cx) { delete _cx; _cx = nullptr; }
-    if (_cy) { delete _cy; _cy = nullptr; }
+    delete _ca; //_ca = nullptr;
+    delete _ccx; //_ccx = nullptr;
+    delete _ccy; //_ccy = nullptr;
   }
+
+  Process*
+  AbstractRotation::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+    int notify_mask = notify_none;
+
+    if(name=="a") {
+      coupling=&_ca;
+      rawp=&raw_props.a;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="cx") {
+      coupling=&_ccx;
+      rawp=&raw_props.cx;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="cy") {
+      coupling=&_ccy;
+      rawp=&raw_props.cy;
+      notify_mask = notify_damaged_transform;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+
+    return res;
+  }
+
+  void
+  AbstractRotation::get_properties_values (double &a, double &cx, double &cy)
+  {
+    a = raw_props.a;
+    cx = raw_props.cx;
+    cy = raw_props.cy;
+  }
+
 
   void
   AbstractRotation::activate ()
   {
     AbstractGObj::activate ();
-    _ca->enable (_frame);
-    _ccx->enable (_frame);
-    _ccy->enable (_frame);
+    if(_ca) _ca->enable (_frame);
+    if(_ccx) _ccx->enable (_frame);
+    if(_ccy) _ccy->enable (_frame);
   }
 
   void
   AbstractRotation::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _ca->disable ();
-    _ccx->disable ();
-    _ccy->disable ();
+    if(_ca) _ca->disable ();
+    if(_ccx) _ccx->disable ();
+    if(_ccy) _ccy->disable ();
   }
 
   Rotation::Rotation (Process *p, const string &n, double a, double cx, double cy) :
@@ -227,19 +277,15 @@ namespace djnn
   void
   Rotation::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double a = _a->get_value ();
-      double cx = _cx->get_value ();
-      double cy = _cy->get_value ();
-      Backend::instance ()->load_rotation (this, a, cx, cy);
+      Backend::instance ()->load_rotation (this, raw_props.a, raw_props.cx, raw_props.cy);
     }
   }
 
   Process*
   Rotation::clone ()
   {
-    return new Rotation (_a->get_value(), _cx->get_value (), _cy->get_value ());
+    return new Rotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
 
   GradientRotation::GradientRotation (Process *p, const string &n, double a, double cx, double cy) :
@@ -265,25 +311,22 @@ namespace djnn
   void
   GradientRotation::draw ()
   {
-    double a = _a->get_value ();
-    double cx = _cx->get_value ();
-    double cy = _cy->get_value ();
-    Backend::instance ()->load_gradient_rotation (this, a, cx, cy);
+    Backend::instance ()->load_gradient_rotation (this, raw_props.a, raw_props.cx, raw_props.cy);
   }
 
   Process*
   GradientRotation::clone ()
   {
-    return new GradientRotation (_a->get_value (), _cx->get_value (), _cy->get_value ());
+    return new GradientRotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
 
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractTransformation (p, n)
   {
-    _sx = new DoubleProperty (this, "sx", sx, notify_damaged_transform);
-    _sy = new DoubleProperty (this, "sy", sy, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
+    _sx = new DoubleProperty (this, "sx", sx); //, notify_damaged_transform);
+    _sy = new DoubleProperty (this, "sy", sy); //, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx); //, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy); //, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
     _csx->disable ();
@@ -298,10 +341,10 @@ namespace djnn
   AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
       AbstractTransformation ()
   {
-    _sx = new DoubleProperty (this, "sx", sx, notify_damaged_transform);
-    _sy = new DoubleProperty (this, "sy", sy, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy, notify_damaged_transform);
+    _sx = new DoubleProperty (this, "sx", sx); //, notify_damaged_transform);
+    _sy = new DoubleProperty (this, "sy", sy); //, notify_damaged_transform);
+    _cx = new DoubleProperty (this, "cx", cx); //, notify_damaged_transform);
+    _cy = new DoubleProperty (this, "cy", cy); //, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
     _csx->disable ();
@@ -419,7 +462,7 @@ namespace djnn
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
       AbstractTransformation (p, n)
   {
-    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
+    _a = new DoubleProperty (this, "a", a);//, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -428,7 +471,7 @@ namespace djnn
   AbstractSkew::AbstractSkew (double a) :
       AbstractTransformation ()
   {
-    _a = new DoubleProperty (this, "a", a, notify_damaged_transform);
+    _a = new DoubleProperty (this, "a", a);//, notify_damaged_transform);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
     _ca->disable ();
@@ -851,25 +894,25 @@ namespace djnn
                                                double m31, double m32, double m33, double m34,
                                                double m41, double m42, double m43, double m44)
   {
-    _m11 = new DoubleProperty (this, "m11", m11, notify_damaged_transform);
-    _m12 = new DoubleProperty (this, "m12", m12, notify_damaged_transform);
-    _m13 = new DoubleProperty (this, "m13", m13, notify_damaged_transform);
-    _m14 = new DoubleProperty (this, "m14", m14, notify_damaged_transform);
+    _m11 = new DoubleProperty (this, "m11", m11);//, notify_damaged_transform);
+    _m12 = new DoubleProperty (this, "m12", m12);//, notify_damaged_transform);
+    _m13 = new DoubleProperty (this, "m13", m13);//, notify_damaged_transform);
+    _m14 = new DoubleProperty (this, "m14", m14);//, notify_damaged_transform);
 
-    _m21 = new DoubleProperty (this, "m21", m21, notify_damaged_transform);
-    _m22 = new DoubleProperty (this, "m22", m22, notify_damaged_transform);
-    _m23 = new DoubleProperty (this, "m23", m23, notify_damaged_transform);
-    _m24 = new DoubleProperty (this, "m24", m24, notify_damaged_transform);
+    _m21 = new DoubleProperty (this, "m21", m21); //, notify_damaged_transform);
+    _m22 = new DoubleProperty (this, "m22", m22); //, notify_damaged_transform);
+    _m23 = new DoubleProperty (this, "m23", m23); //, notify_damaged_transform);
+    _m24 = new DoubleProperty (this, "m24", m24); //, notify_damaged_transform);
 
-    _m31 = new DoubleProperty (this, "m31", m31, notify_damaged_transform);
-    _m32 = new DoubleProperty (this, "m32", m32, notify_damaged_transform);
-    _m33 = new DoubleProperty (this, "m33", m33, notify_damaged_transform);
-    _m34 = new DoubleProperty (this, "m34", m34, notify_damaged_transform);
+    _m31 = new DoubleProperty (this, "m31", m31); //, notify_damaged_transform);
+    _m32 = new DoubleProperty (this, "m32", m32); //, notify_damaged_transform);
+    _m33 = new DoubleProperty (this, "m33", m33); //, notify_damaged_transform);
+    _m34 = new DoubleProperty (this, "m34", m34); //, notify_damaged_transform);
 
-    _m41 = new DoubleProperty (this, "m41", m41, notify_damaged_transform);
-    _m42 = new DoubleProperty (this, "m42", m42, notify_damaged_transform);
-    _m43 = new DoubleProperty (this, "m43", m43, notify_damaged_transform);
-    _m44 = new DoubleProperty (this, "m44", m44, notify_damaged_transform);
+    _m41 = new DoubleProperty (this, "m41", m41); //, notify_damaged_transform);
+    _m42 = new DoubleProperty (this, "m42", m42); //, notify_damaged_transform);
+    _m43 = new DoubleProperty (this, "m43", m43); //, notify_damaged_transform);
+    _m44 = new DoubleProperty (this, "m44", m44); //, notify_damaged_transform);
 
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);

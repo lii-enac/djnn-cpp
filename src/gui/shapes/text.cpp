@@ -117,22 +117,22 @@ namespace djnn
     if (_cffamily) {
       Graph::instance ().remove_edge ( this->ffamily (), _update_size);
       delete _cffamily;
-      _cffamily = nullptr;
+      //_cffamily = nullptr;
     }
     if (_cfsize) {
       Graph::instance ().remove_edge ( this->fsize (), _update_size);
       delete _cfsize;
-      _cfsize = nullptr;
+      //_cfsize = nullptr;
     }
     if (_cfstyle) {
       Graph::instance ().remove_edge ( this->fstyle (), _update_size);
       delete _cfstyle;
-      _cfstyle = nullptr;
+      //_cfstyle = nullptr;
     }
     if (_cfweight) {
       Graph::instance ().remove_edge ( this->fweight (), _update_size);
       delete _cfweight;
-      _cfweight = nullptr;
+      //_cfweight = nullptr;
     }
   }
 
@@ -183,7 +183,7 @@ namespace djnn
     } else
     if(name=="dxU") {
       propi = true;
-      coupling=&_cdx;
+      coupling=&_cdxU;
       rawpi=&raw_props.dxU;
       notify_mask = notify_damaged_geometry; // or transform ?
     } else
@@ -254,6 +254,26 @@ namespace djnn
   }
 
   void
+  Text::get_properties_values (double &x, double &y, double &dx, double &dy, double &fsize, int &dxU, int &dyU, int &width, int &height, int &encoding, int &fstyle, int &fweight, string &text, string &ffamily)
+  {
+    x = raw_props.x;
+    y = raw_props.y;
+    dx = raw_props.dx;
+    dy = raw_props.dy;
+    fsize = raw_props.fsize;
+    dxU = raw_props.dxU;
+    dyU = raw_props.dyU;
+    width = raw_props.width;
+    height = raw_props.height;
+    encoding = raw_props.encoding;
+    fstyle = raw_props.fstyle;
+    fweight = raw_props.fweight;
+    text = raw_props.text;
+    ffamily = raw_props.ffamily;
+  }
+    
+
+  void
   Text::activate ()
   {
     AbstractGObj::activate ();
@@ -319,14 +339,10 @@ namespace djnn
     if(_cx) _cx->enable (_frame);
     if(_cy) _cy->enable (_frame);
     if(_ctext) _ctext->enable (_frame);
-    if (_cffamily)
-      _cffamily->enable ();
-    if (_cfsize)
-      _cfsize->enable ();
-    if (_cfstyle)
-      _cfstyle->enable ();
-    if (_cfweight)
-      _cfweight->enable ();
+    if (_cffamily) _cffamily->enable ();
+    if (_cfsize) _cfsize->enable ();
+    if (_cfstyle) _cfstyle->enable ();
+    if (_cfweight) _cfweight->enable ();
     if(_cfsize) _cfsize->enable ();
     if(_update_size) _update_size->activation ();
   }
@@ -338,14 +354,10 @@ namespace djnn
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
     if(_ctext) _ctext->disable ();
-    if (_cffamily)
-      _cffamily->disable ();
-    if (_cfsize)
-      _cfsize->disable ();
-    if (_cfstyle)
-      _cfstyle->disable ();
-    if (_cfweight)
-      _cfweight->disable ();
+    if (_cffamily) _cffamily->disable ();
+    if (_cfsize) _cfsize->disable ();
+    if (_cfstyle) _cfstyle->disable ();
+    if (_cfweight) _cfweight->disable ();
     if(_cfsize) _cfsize->disable ();
   }
 
@@ -360,6 +372,6 @@ namespace djnn
   Process*
   Text::clone ()
   {
-    return new Text ( raw_props.x, raw_props.y, raw_props.text);
+    return new Text (raw_props.x, raw_props.y, raw_props.text);
   } 
 } /* namespace djnn */

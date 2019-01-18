@@ -64,12 +64,12 @@ namespace djnn {
     if(name=="x") {
       coupling=&_cx;
       rawp=&raw_props.x;
-      notify_mask = notify_damaged_transform;
+      notify_mask = notify_damaged_geometry;
     } else
     if(name=="y") {
       coupling=&_cy;
       rawp=&raw_props.y;
-      notify_mask = notify_damaged_transform;
+      notify_mask = notify_damaged_geometry;
     } else
     return nullptr;
     

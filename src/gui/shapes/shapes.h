@@ -140,6 +140,7 @@ namespace djnn
     virtual ~Text ();
     void draw () override;
     Process* clone () override;
+    void get_properties_values (double &x, double &y, double &dx, double &dy, double &fsize, int &dxU, int &dyU, int &width, int &height, int &encoding, int &fstyle, int &fweight, string &text, string &ffamily);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }

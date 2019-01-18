@@ -39,11 +39,17 @@ namespace djnn
     AbstractTranslation (Process *p, const string &n, double tx, double ty);
     AbstractTranslation (double tx, double ty);
     virtual ~AbstractTranslation ();
+    void get_properties_values (double &tx, double &ty);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_component("tx"); }
+    AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_component("ty"); }
     void activate () override;
     void deactivate () override;
     virtual void draw () override = 0;
   protected:
-    DoubleProperty *_tx, *_ty;
+    struct raw_props_t { double tx,ty; };
+    raw_props_t raw_props;
+    //DoubleProperty *_tx, *_ty;
     Coupling *_ctx, *_cty;
   };
 
@@ -73,11 +79,23 @@ namespace djnn
     AbstractRotation (Process *p, const string &n, double a, double cx, double cy);
     AbstractRotation (double a, double cx, double cy);
     virtual ~AbstractRotation ();
+    void get_properties_values (double &a, double &cx, double &cy);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
+    // TODO Rot by (u,v)
+    // AbstractDoubleProperty* ux () { return (AbstractDoubleProperty*) find_component("ux"); }
+    // AbstractDoubleProperty* uy () { return (AbstractDoubleProperty*) find_component("uy"); }
+    // AbstractDoubleProperty* vx () { return (AbstractDoubleProperty*) find_component("vx"); }
+    // AbstractDoubleProperty* vy () { return (AbstractDoubleProperty*) find_component("vy"); }
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
     void activate () override;
     void deactivate () override;
     virtual void draw () override = 0;
   protected:
-    DoubleProperty *_a, *_cx, *_cy;
+    struct raw_props_t { double a,cx,cy; };
+    raw_props_t raw_props;
+    //DoubleProperty *_a, *_cx, *_cy;
     Coupling *_ca, *_ccx, *_ccy;
   };
 

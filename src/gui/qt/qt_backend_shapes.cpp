@@ -100,14 +100,9 @@ namespace djnn
   void
   QtBackend::draw_text (Text *t)
   {
-    double x = t->x ()->get_value ();
-    double y = t->y ()->get_value ();
-    double dx = t->dx ()->get_value ();
-    double dy = t->dy ()->get_value ();
-    int dxU = t->dxU ()->get_value ();
-    int dyU = t->dyU ()->get_value ();
-    int encoding = t->encoding ()->get_value ();
-    std::string text = t->text ()->get_value ();
+    double x, y, dx, dy, fsize; int dxU, dyU, width, height, encoding, fstyle, fweight; string text, ffamily;
+    t->get_properties_values(x, y, dx, dy, fsize, dxU, dyU, width, height, encoding, fstyle, fweight, text, ffamily);
+
     QtContext *cur_context = _context_manager->get_current ();
     double dxfactor = cur_context->factor[dxU];
     double dyfactor = cur_context->factor[dyU];

@@ -203,7 +203,7 @@ namespace djnn
     if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0)) {
       newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
-      if (s) delete s; // ==  src->set_vertex (nullptr);
+      if (s) delete s; src->set_vertex (nullptr);
     }
 
     // 2 - remove dst if necessary
@@ -211,7 +211,7 @@ namespace djnn
     if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0)){
       newend = std::remove (_vertices.begin (), _vertices.end (), d);
       _vertices.erase(newend, _vertices.end ());
-      if (d) delete d; // ==  dst->set_vertex (nullptr);
+      if (d) delete d; dst->set_vertex (nullptr);
     }
 
     _sorted = false;
