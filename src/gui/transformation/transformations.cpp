@@ -49,21 +49,12 @@ namespace djnn
       raw_props{.tx=tx, .ty=ty},
       _ctx (nullptr), _cty (nullptr)
   {
-    /*_tx = new DoubleProperty (this, "tx", tx, notify_damaged_transform);
-    _ty = new DoubleProperty (this, "ty", ty, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ctx = new Coupling (_tx, ACTIVATION, update, ACTIVATION);
-    _ctx->disable ();
-    _cty = new Coupling (_ty, ACTIVATION, update, ACTIVATION);
-    _cty->disable ();*/
   }
 
   AbstractTranslation::~AbstractTranslation ()
   {
     delete _ctx; //_cty = nullptr;
     delete _cty; //_ctx = nullptr; 
-    //delete _ty; //_ty = nullptr;
-    //delete _tx; //_tx = nullptr;
   }
 
   Process*
@@ -321,39 +312,18 @@ namespace djnn
   }
 
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
-      AbstractTransformation (p, n)
+      AbstractTransformation (p, n),
+      raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
+      _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
   {
-    _sx = new DoubleProperty (this, "sx", sx); //, notify_damaged_transform);
-    _sy = new DoubleProperty (this, "sy", sy); //, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx); //, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy); //, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
-    _csx->disable ();
-    _csy = new Coupling (_sy, ACTIVATION, update, ACTIVATION);
-    _csy->disable ();
-    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    _ccx->disable ();
-    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-    _ccy->disable ();
+
   }
 
   AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
-      AbstractTransformation ()
+      AbstractTransformation (),
+      raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
+      _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
   {
-    _sx = new DoubleProperty (this, "sx", sx); //, notify_damaged_transform);
-    _sy = new DoubleProperty (this, "sy", sy); //, notify_damaged_transform);
-    _cx = new DoubleProperty (this, "cx", cx); //, notify_damaged_transform);
-    _cy = new DoubleProperty (this, "cy", cy); //, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _csx = new Coupling (_sx, ACTIVATION, update, ACTIVATION);
-    _csx->disable ();
-    _csy = new Coupling (_sy, ACTIVATION, update, ACTIVATION);
-    _csy->disable ();
-    _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    _ccx->disable ();
-    _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-    _ccy->disable ();
   }
 
   AbstractScaling::~AbstractScaling ()
@@ -362,30 +332,77 @@ namespace djnn
     if (_csy) { delete _csy; _csy = nullptr; }
     if (_ccx) { delete _ccx; _ccx = nullptr; }
     if (_ccy) { delete _ccy; _ccy = nullptr; }
-    if (_sx) { delete _sx; _sx = nullptr; }
-    if (_sy) { delete _sy; _sy = nullptr; }
-    if (_cx) { delete _cx; _cx = nullptr; }
-    if (_cy) { delete _cy; _cy = nullptr; }
+    //if (_sx) { delete _sx; _sx = nullptr; }
+    //if (_sy) { delete _sy; _sy = nullptr; }
+    //if (_cx) { delete _cx; _cx = nullptr; }
+    //if (_cy) { delete _cy; _cy = nullptr; }
+  }
+
+  Process*
+  AbstractScaling::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+    int notify_mask = notify_none;
+
+    if(name=="sx") {
+      coupling=&_csx;
+      rawp=&raw_props.sx;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="sy") {
+      coupling=&_csy;
+      rawp=&raw_props.sy;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="cx") {
+      coupling=&_ccx;
+      rawp=&raw_props.cx;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="cy") {
+      coupling=&_ccy;
+      rawp=&raw_props.cy;
+      notify_mask = notify_damaged_transform;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+
+    return res;
+  }
+
+  void
+  AbstractScaling::get_properties_values (double &sx, double &sy, double &cx, double &cy)
+  {
+    sx = raw_props.sx;
+    sy = raw_props.sy;
+    cx = raw_props.cx;
+    cy = raw_props.cy;
   }
 
   void
   AbstractScaling::activate ()
   {
     AbstractGObj::activate ();
-    _csx->enable (_frame);
-    _csy->enable (_frame);
-    _ccx->enable (_frame);
-    _ccy->enable (_frame);
+    if(_csx) _csx->enable (_frame);
+    if(_csy) _csy->enable (_frame);
+    if(_ccx) _ccx->enable (_frame);
+    if(_ccy) _ccy->enable (_frame);
   }
 
   void
   AbstractScaling::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _csx->disable ();
-    _csy->disable ();
-    _ccx->disable ();
-    _ccy->disable ();
+    if(_csx) _csx->disable ();
+    if(_csy) _csy->disable ();
+    if(_ccx) _ccx->disable ();
+    if(_ccy) _ccy->disable ();
   }
 
   Scaling::Scaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
@@ -409,18 +426,14 @@ namespace djnn
   {
     //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double sx = _sx->get_value ();
-      double sy = _sy->get_value ();
-      double cx = _cx->get_value ();
-      double cy = _cy->get_value ();
-      Backend::instance ()->load_scaling (this, sx, sy, cx, cy);
+      Backend::instance ()->load_scaling (this, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     }
   }
 
   Process*
   Scaling::clone ()
   {
-    return new Scaling (_sx->get_value (), _sy->get_value (), _cx->get_value (), _cy->get_value ());
+    return new Scaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
   GradientScaling::GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
@@ -446,17 +459,13 @@ namespace djnn
   void
   GradientScaling::draw ()
   {
-    double sx = _sx->get_value ();
-    double sy = _sy->get_value ();
-    double cx = _cx->get_value ();
-    double cy = _cy->get_value ();
-    Backend::instance ()->load_gradient_scaling (this, sx, sy, cx, cy);
+    Backend::instance ()->load_gradient_scaling (this, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
   Process*
   GradientScaling::clone ()
   {
-    return new GradientScaling (_sx->get_value (), _sy->get_value (), _cx->get_value (), _cy->get_value ());
+    return new GradientScaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :

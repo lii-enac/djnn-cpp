@@ -109,6 +109,16 @@ namespace djnn
   }
 
   void
+  Image::get_properties_values (string &path, double &x, double &y, double &w, double &h)
+  {
+    path = raw_props.path;
+    x = raw_props.x;
+    y = raw_props.y;
+    w = raw_props.width;
+    h = raw_props.height;
+  }
+
+  void
   Image::activate ()
   {
     AbstractGObj::activate ();

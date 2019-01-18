@@ -422,6 +422,7 @@ namespace djnn
     Image (Process *p, const std::string& n, const std::string &path, double x, double y, double w, double h);
     Image (const std::string &path, double x, double y, double w, double h);
     virtual ~Image ();
+    void get_properties_values (std::string &path, double &x, double &y, double &w, double &h);
     void draw () override;
     Process* clone () override;
     virtual Process* find_component (const string&) override;

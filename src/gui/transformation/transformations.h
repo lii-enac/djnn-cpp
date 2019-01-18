@@ -125,11 +125,19 @@ namespace djnn
     AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy);
     AbstractScaling (double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
+    void get_properties_values (double &sx, double &sy, double &cx, double &cy);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_component("sx"); }
+    AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_component("sy"); }
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
     void activate () override;
     void deactivate () override;
     virtual void draw () override = 0;
   protected:
-    DoubleProperty *_sx, *_sy, *_cx, *_cy;
+    struct raw_props_t { double sx,sy,cx,cy; };
+    raw_props_t raw_props;
+    //DoubleProperty *_sx, *_sy, *_cx, *_cy;
     Coupling *_csx, *_csy, *_ccx, *_ccy;
   };
 

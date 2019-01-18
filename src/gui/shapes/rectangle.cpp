@@ -95,7 +95,17 @@ namespace djnn
     res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
 
     return res;
+  }
 
+  void
+  Rectangle::get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry)
+  {
+    x = raw_props.x;
+    y = raw_props.y;
+    w = raw_props.width;
+    h = raw_props.height;
+    rx = raw_props.rx;
+    ry = raw_props.ry;
   }
 
   void
@@ -130,16 +140,6 @@ namespace djnn
     }
   }
 
-  void
-  Rectangle::get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry)
-  {
-    x = raw_props.x;
-    y = raw_props.y;
-    w = raw_props.width;
-    h = raw_props.height;
-    rx = raw_props.rx;
-    ry = raw_props.ry;
-  }
 
   Process*
   Rectangle::clone ()
