@@ -25,7 +25,7 @@ namespace djnn {
 
   LinuxTouch::LinuxTouch (unsigned int fieldmap) : Process ()
   {
-    set_state(activated);
+    set_activated ();
     _used = UNUSED;
     if (fieldmap & MT_X)
       _x = new IntProperty (this, "x", 0);
@@ -57,8 +57,8 @@ namespace djnn {
   LinuxTouchPanel::LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev) : LinuxDevice (p, n, TOUCH_PANEL)
   {
     _touches = new Set (this, "touches");
-    _activation_state = activated;
-    _touches->set_state (activated);
+    set_activated ();
+    _touches->set_activated ();
     _fieldmap = 0;
     _cur_touch = nullptr;
     _nb_slots = libevdev_get_abs_maximum (dev, ABS_MT_SLOT) + 1;

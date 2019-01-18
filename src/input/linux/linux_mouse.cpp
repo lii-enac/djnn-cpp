@@ -47,7 +47,7 @@ namespace djnn {
         _wheel->add_symbol ("dx", _wheel_dx);
       }
     }
-    _activation_state = activated;
+    set_activated ();
     Process::finalize ();
   }
 
