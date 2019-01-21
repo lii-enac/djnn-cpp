@@ -77,7 +77,7 @@ namespace djnn
     Process::finalize ();
   }
 
-  Binding::Binding (Process* parent, const string &name, Process* src, bool on_activation, const string & ispec,
+  Binding::Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation,
 		    Process* dst, const string & dspec, bool activate) :
       Process (parent, name)
   {

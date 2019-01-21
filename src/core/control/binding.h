@@ -53,7 +53,7 @@ namespace djnn {
     };
   public:
     Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);
-    Binding (Process* parent, const string &name, Process* src, bool on_activation, const string & ispec, Process* dst, const string & dspec, bool activate);
+    Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate);
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
     void activate () override { _c_src->enable(); };
