@@ -86,48 +86,50 @@ namespace djnn
     if (s->matrix () != nullptr) {
       Homography *h = dynamic_cast<Homography*> (s->matrix ());
       QMatrix4x4 loc_matrix = QMatrix4x4 (matrix);
-      h->_m11->set_value (loc_matrix (0, 0), false);
-      h->_m12->set_value (loc_matrix (0, 1), false);
-      h->_m13->set_value (loc_matrix (0, 2), false);
-      h->_m14->set_value (loc_matrix (0, 3), false);
+      // we don't want any propagation so we can write directly in raw_props
+      h->raw_props.m11 = loc_matrix (0, 0);
+      h->raw_props.m12 = loc_matrix (0, 1);
+      h->raw_props.m13 = loc_matrix (0, 2);
+      h->raw_props.m14 = loc_matrix (0, 3);
 
-      h->_m21->set_value (loc_matrix (1, 0), false);
-      h->_m22->set_value (loc_matrix (1, 1), false);
-      h->_m23->set_value (loc_matrix (1, 2), false);
-      h->_m24->set_value (loc_matrix (1, 3), false);
+      h->raw_props.m21 = loc_matrix (1, 0);
+      h->raw_props.m22 = loc_matrix (1, 1);
+      h->raw_props.m23 = loc_matrix (1, 2);
+      h->raw_props.m24 = loc_matrix (1, 3);
 
-      h->_m31->set_value (loc_matrix (2, 0), false);
-      h->_m32->set_value (loc_matrix (2, 1), false);
-      h->_m33->set_value (loc_matrix (2, 2), false);
-      h->_m34->set_value (loc_matrix (2, 3), false);
+      h->raw_props.m31 = loc_matrix (2, 0);
+      h->raw_props.m32 = loc_matrix (2, 1);
+      h->raw_props.m33 = loc_matrix (2, 2);
+      h->raw_props.m34 = loc_matrix (2, 3);
 
-      h->_m41->set_value (loc_matrix (3, 0), false);
-      h->_m42->set_value (loc_matrix (3, 1), false);
-      h->_m43->set_value (loc_matrix (3, 2), false);
-      h->_m44->set_value (loc_matrix (3, 3), false);
+      h->raw_props.m41 = loc_matrix (3, 0);
+      h->raw_props.m42 = loc_matrix (3, 1);
+      h->raw_props.m43 = loc_matrix (3, 2);
+      h->raw_props.m44 = loc_matrix (3, 3);
     }
     if (s->inverted_matrix () != nullptr) {
       Homography *hi = dynamic_cast<Homography*> (s->inverted_matrix ());
       QMatrix4x4 loc_matrix_inv = QMatrix4x4 (matrix).inverted ();
-      hi->_m11->set_value (loc_matrix_inv (0, 0), false);
-      hi->_m12->set_value (loc_matrix_inv (0, 1), false);
-      hi->_m13->set_value (loc_matrix_inv (0, 2), false);
-      hi->_m14->set_value (loc_matrix_inv (0, 3), false);
+      // we don't want any propagation so we can write directly in raw_props
+      hi->raw_props.m11 = loc_matrix_inv (0, 0);
+      hi->raw_props.m12 = loc_matrix_inv (0, 1);
+      hi->raw_props.m13 = loc_matrix_inv (0, 2);
+      hi->raw_props.m14 = loc_matrix_inv (0, 3);
 
-      hi->_m21->set_value (loc_matrix_inv (1, 0), false);
-      hi->_m22->set_value (loc_matrix_inv (1, 1), false);
-      hi->_m23->set_value (loc_matrix_inv (1, 2), false);
-      hi->_m24->set_value (loc_matrix_inv (1, 3), false);
+      hi->raw_props.m21 = loc_matrix_inv (1, 0);
+      hi->raw_props.m22 = loc_matrix_inv (1, 1);
+      hi->raw_props.m23 = loc_matrix_inv (1, 2);
+      hi->raw_props.m24 = loc_matrix_inv (1, 3);
 
-      hi->_m31->set_value (loc_matrix_inv (2, 0), false);
-      hi->_m32->set_value (loc_matrix_inv (2, 1), false);
-      hi->_m33->set_value (loc_matrix_inv (2, 2), false);
-      hi->_m34->set_value (loc_matrix_inv (2, 3), false);
+      hi->raw_props.m31 = loc_matrix_inv (2, 0);
+      hi->raw_props.m32 = loc_matrix_inv (2, 1);
+      hi->raw_props.m33 = loc_matrix_inv (2, 2);
+      hi->raw_props.m34 = loc_matrix_inv (2, 3);
 
-      hi->_m41->set_value (loc_matrix_inv (3, 0), false);
-      hi->_m42->set_value (loc_matrix_inv (3, 1), false);
-      hi->_m43->set_value (loc_matrix_inv (3, 2), false);
-      hi->_m44->set_value (loc_matrix_inv (3, 3), false);
+      hi->raw_props.m41 = loc_matrix_inv (3, 0);
+      hi->raw_props.m42 = loc_matrix_inv (3, 1);
+      hi->raw_props.m43 = loc_matrix_inv (3, 2);
+      hi->raw_props.m44 = loc_matrix_inv (3, 3);
     }
 
     /* setup the painting environment of the drawing view */

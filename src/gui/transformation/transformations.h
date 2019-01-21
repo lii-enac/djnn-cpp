@@ -298,11 +298,32 @@ namespace djnn
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
+    void get_properties_values (double &m11, double &m12, double &m13, double &m14, 
+                                double &m21, double &m22, double &m23, double &m24,
+                                double &m31, double &m32, double &m33, double &m34,
+                                double &m41, double &m42, double &m43, double &m44);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* m11 () { return (AbstractDoubleProperty*) find_component("m11"); }
+    AbstractDoubleProperty* m12 () { return (AbstractDoubleProperty*) find_component("m12"); }
+    AbstractDoubleProperty* m13 () { return (AbstractDoubleProperty*) find_component("m13"); }
+    AbstractDoubleProperty* m14 () { return (AbstractDoubleProperty*) find_component("m14"); }
+    AbstractDoubleProperty* m21 () { return (AbstractDoubleProperty*) find_component("m21"); }
+    AbstractDoubleProperty* m22 () { return (AbstractDoubleProperty*) find_component("m22"); }
+    AbstractDoubleProperty* m23 () { return (AbstractDoubleProperty*) find_component("m23"); }
+    AbstractDoubleProperty* m24 () { return (AbstractDoubleProperty*) find_component("m24"); }
+    AbstractDoubleProperty* m31 () { return (AbstractDoubleProperty*) find_component("m31"); }
+    AbstractDoubleProperty* m32 () { return (AbstractDoubleProperty*) find_component("m32"); }
+    AbstractDoubleProperty* m33 () { return (AbstractDoubleProperty*) find_component("m33"); }
+    AbstractDoubleProperty* m34 () { return (AbstractDoubleProperty*) find_component("m34"); }
+    AbstractDoubleProperty* m41 () { return (AbstractDoubleProperty*) find_component("m41"); }
+    AbstractDoubleProperty* m42 () { return (AbstractDoubleProperty*) find_component("m42"); }
+    AbstractDoubleProperty* m43 () { return (AbstractDoubleProperty*) find_component("m43"); }
+    AbstractDoubleProperty* m44 () { return (AbstractDoubleProperty*) find_component("m44"); }
     void activate () override;
     void deactivate () override;
     virtual void draw () override = 0;
-    DoubleProperty *_m11, *_m12, *_m13, *_m14, *_m21, *_m22, *_m23, *_m24, *_m31, *_m32, *_m33, *_m34, *_m41, *_m42,
-    *_m43, *_m44;
+    struct raw_props_t { double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44; };
+    raw_props_t raw_props;
   protected:
     /* mxx coupling */
     Coupling *_cm11, *_cm12, *_cm13, *_cm14, *_cm21, *_cm22, *_cm23, *_cm24, *_cm31, *_cm32, *_cm33, *_cm34, *_cm41,
@@ -334,10 +355,7 @@ namespace djnn
     Coupling *_skew_Y_By_cx_coupling, *_skew_Y_By_cy_coupling, *_skew_Y_By_da_coupling;
 
   private:
-    void init_abstractHomography (double m11, double m12, double m13, double m14,
-                                  double m21, double m22, double m23, double m24,
-                                  double m31, double m32, double m33, double m34,
-                                  double m41, double m42, double m43, double m44);
+    void init_abstractHomography ();
   };
 
   class Homography : public AbstractHomography

@@ -34,12 +34,12 @@ namespace djnn
     else {
       Homography *hi = dynamic_cast<Homography*> (_stl->_shape->inverted_matrix ());
 
-      double resultX = hi->_m11->get_value () * _stl->_inX->get_value () + 
-                       hi->_m12->get_value () * _stl->_inY->get_value () + 
-                       hi->_m14->get_value () - _stl->_shape->origin_x ()->get_value () ;
-      double resultY = hi->_m21->get_value () * _stl->_inX->get_value () + 
-                       hi->_m22->get_value () * _stl->_inY->get_value () +
-                       hi->_m24->get_value () - _stl->_shape->origin_y ()->get_value ();
+      double resultX = hi->raw_props.m11 * _stl->_inX->get_value () + 
+                       hi->raw_props.m12 * _stl->_inY->get_value () + 
+                       hi->raw_props.m14 - _stl->_shape->origin_x ()->get_value () ;
+      double resultY = hi->raw_props.m21 * _stl->_inX->get_value () + 
+                       hi->raw_props.m22 * _stl->_inY->get_value () +
+                       hi->raw_props.m24 - _stl->_shape->origin_y ()->get_value ();
 
       _stl->_outX->set_value (resultX, true);
       _stl->_outY->set_value (resultY, true);
@@ -120,12 +120,12 @@ namespace djnn
 
       double x = _lts->_inX->get_value () + _lts->_shape->origin_x ()->get_value ();
       double y = _lts->_inY->get_value () + _lts->_shape->origin_y ()->get_value ();
-      double resultX = h->_m11->get_value () * x + 
-                       h->_m12->get_value () * y + 
-                       h->_m14->get_value () ;
-      double resultY = h->_m21->get_value () * x + 
-                       h->_m22->get_value () * y +
-                       h->_m24->get_value () ;
+      double resultX = h->raw_props.m11 * x + 
+                       h->raw_props.m12 * y + 
+                       h->raw_props.m14 ;
+      double resultY = h->raw_props.m21 * x + 
+                       h->raw_props.m22 * y +
+                       h->raw_props.m24;
 
       _lts->_outX->set_value (resultX, true);
       _lts->_outY->set_value (resultY, true);

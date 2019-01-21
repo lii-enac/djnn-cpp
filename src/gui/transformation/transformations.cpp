@@ -654,25 +654,25 @@ namespace djnn
   static void
   homography_to_array (AbstractHomography *h, array<array<double, 4>, 4> &a) {
 
-    a[0][0] = h->_m11->get_value ();
-    a[0][1] = h->_m12->get_value ();
-    a[0][2] = h->_m13->get_value ();
-    a[0][3] = h->_m14->get_value ();
+    a[0][0] = h->raw_props.m11;
+    a[0][1] = h->raw_props.m12;
+    a[0][2] = h->raw_props.m13;
+    a[0][3] = h->raw_props.m14;
 
-    a[1][0] = h->_m21->get_value ();
-    a[1][1] = h->_m22->get_value ();
-    a[1][2] = h->_m23->get_value ();
-    a[1][3] = h->_m24->get_value ();
+    a[1][0] = h->raw_props.m21;
+    a[1][1] = h->raw_props.m22;
+    a[1][2] = h->raw_props.m23;
+    a[1][3] = h->raw_props.m24;
 
-    a[2][0] = h->_m31->get_value ();
-    a[2][1] = h->_m32->get_value ();
-    a[2][2] = h->_m33->get_value ();
-    a[2][3] = h->_m34->get_value ();
+    a[2][0] = h->raw_props.m31;
+    a[2][1] = h->raw_props.m32;
+    a[2][2] = h->raw_props.m33;
+    a[2][3] = h->raw_props.m34;
 
-    a[3][0] = h->_m41->get_value ();
-    a[3][1] = h->_m42->get_value ();
-    a[3][2] = h->_m43->get_value ();
-    a[3][3] = h->_m44->get_value ();
+    a[3][0] = h->raw_props.m41;
+    a[3][1] = h->raw_props.m42;
+    a[3][2] = h->raw_props.m43;
+    a[3][3] = h->raw_props.m44;
 
   }
 
@@ -686,26 +686,27 @@ namespace djnn
      *  |  x  x  .  x  |
      *  |  .  .  1  .  |
      *  |  .  .  .  1  |
+     * so those which are not properties write directly into raw_props
      */
-    h->_m11->set_value (a[0][0], true);
-    h->_m12->set_value (a[0][1], true);
-    h->_m13->set_value (a[0][2], false);
-    h->_m14->set_value (a[0][3], true);
+    h->m11 ()->set_value (a[0][0], true);
+    h->m12 ()->set_value (a[0][1], true);
+    h->raw_props.m13 = a[0][2];
+    h->m14 ()->set_value (a[0][3], true);
 
-    h->_m21->set_value (a[1][0], true);
-    h->_m22->set_value (a[1][1], true);
-    h->_m23->set_value (a[1][2], false);
-    h->_m24->set_value (a[1][3], true);
+    h->m21 ()->set_value (a[1][0], true);
+    h->m22 ()->set_value (a[1][1], true);
+    h->raw_props.m23 = a[1][2];
+    h->m24 ()->set_value (a[1][3], true);
 
-    h->_m31->set_value (a[2][0], false);
-    h->_m32->set_value (a[2][1], false);
-    h->_m33->set_value (a[2][2], false);
-    h->_m34->set_value (a[2][3], false);
+    h->raw_props.m31 = a[2][0];
+    h->raw_props.m32 = a[2][1];
+    h->raw_props.m33 = a[2][2];
+    h->raw_props.m34 = a[2][3];
 
-    h->_m41->set_value (a[3][0], false);
-    h->_m42->set_value (a[3][1], false);
-    h->_m43->set_value (a[3][2], false);
-    h->_m44->set_value (a[3][3], false);
+    h->raw_props.m41 = a[3][0];
+    h->raw_props.m42 = a[3][1];
+    h->raw_props.m43 = a[3][2];
+    h->raw_props.m44 = a[3][3];
   }
 
 
@@ -912,68 +913,8 @@ namespace djnn
 
 
   void
-  AbstractHomography::init_abstractHomography (double m11, double m12, double m13, double m14,
-                                               double m21, double m22, double m23, double m24,
-                                               double m31, double m32, double m33, double m34,
-                                               double m41, double m42, double m43, double m44)
+  AbstractHomography::init_abstractHomography ()
   {
-    _m11 = new DoubleProperty (this, "m11", m11);//, notify_damaged_transform);
-    _m12 = new DoubleProperty (this, "m12", m12);//, notify_damaged_transform);
-    _m13 = new DoubleProperty (this, "m13", m13);//, notify_damaged_transform);
-    _m14 = new DoubleProperty (this, "m14", m14);//, notify_damaged_transform);
-
-    _m21 = new DoubleProperty (this, "m21", m21); //, notify_damaged_transform);
-    _m22 = new DoubleProperty (this, "m22", m22); //, notify_damaged_transform);
-    _m23 = new DoubleProperty (this, "m23", m23); //, notify_damaged_transform);
-    _m24 = new DoubleProperty (this, "m24", m24); //, notify_damaged_transform);
-
-    _m31 = new DoubleProperty (this, "m31", m31); //, notify_damaged_transform);
-    _m32 = new DoubleProperty (this, "m32", m32); //, notify_damaged_transform);
-    _m33 = new DoubleProperty (this, "m33", m33); //, notify_damaged_transform);
-    _m34 = new DoubleProperty (this, "m34", m34); //, notify_damaged_transform);
-
-    _m41 = new DoubleProperty (this, "m41", m41); //, notify_damaged_transform);
-    _m42 = new DoubleProperty (this, "m42", m42); //, notify_damaged_transform);
-    _m43 = new DoubleProperty (this, "m43", m43); //, notify_damaged_transform);
-    _m44 = new DoubleProperty (this, "m44", m44); //, notify_damaged_transform);
-
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _cm11 = new Coupling (_m11, ACTIVATION, update, ACTIVATION);
-    _cm11->disable ();
-    _cm12 = new Coupling (_m12, ACTIVATION, update, ACTIVATION);
-    _cm12->disable ();
-    _cm13 = new Coupling (_m13, ACTIVATION, update, ACTIVATION);
-    _cm13->disable ();
-    _cm14 = new Coupling (_m14, ACTIVATION, update, ACTIVATION);
-    _cm14->disable ();
-
-    _cm21 = new Coupling (_m21, ACTIVATION, update, ACTIVATION);
-    _cm21->disable ();
-    _cm22 = new Coupling (_m22, ACTIVATION, update, ACTIVATION);
-    _cm22->disable ();
-    _cm23 = new Coupling (_m23, ACTIVATION, update, ACTIVATION);
-    _cm23->disable ();
-    _cm24 = new Coupling (_m24, ACTIVATION, update, ACTIVATION);
-    _cm24->disable ();
-
-    _cm31 = new Coupling (_m31, ACTIVATION, update, ACTIVATION);
-    _cm31->disable ();
-    _cm32 = new Coupling (_m32, ACTIVATION, update, ACTIVATION);
-    _cm32->disable ();
-    _cm33 = new Coupling (_m33, ACTIVATION, update, ACTIVATION);
-    _cm33->disable ();
-    _cm34 = new Coupling (_m34, ACTIVATION, update, ACTIVATION);
-    _cm34->disable ();
-
-    _cm41 = new Coupling (_m41, ACTIVATION, update, ACTIVATION);
-    _cm41->disable ();
-    _cm42 = new Coupling (_m42, ACTIVATION, update, ACTIVATION);
-    _cm42->disable ();
-    _cm43 = new Coupling (_m43, ACTIVATION, update, ACTIVATION);
-    _cm43->disable ();
-    _cm44 = new Coupling (_m44, ACTIVATION, update, ACTIVATION);
-    _cm44->disable ();
-
     /* note:
      * action work only for 2D 
      * propagation is not active for 3D
@@ -996,12 +937,12 @@ namespace djnn
     _tranlateBy_dy_coupling->disable ();
     Graph::instance().add_edge(_translateBy_dx, _translateBy_action);
     Graph::instance().add_edge(_translateBy_dy, _translateBy_action);
-    Graph::instance().add_edge(_translateBy_action, _m11);
-    Graph::instance().add_edge(_translateBy_action, _m12);
-    Graph::instance().add_edge(_translateBy_action, _m14);
-    Graph::instance().add_edge(_translateBy_action, _m21);
-    Graph::instance().add_edge(_translateBy_action, _m22);
-    Graph::instance().add_edge(_translateBy_action, _m24);
+    Graph::instance().add_edge(_translateBy_action, m11 ());
+    Graph::instance().add_edge(_translateBy_action, m12 ());
+    Graph::instance().add_edge(_translateBy_action, m14 ());
+    Graph::instance().add_edge(_translateBy_action, m21 ());
+    Graph::instance().add_edge(_translateBy_action, m22 ());
+    Graph::instance().add_edge(_translateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _translateBy_action);
 
@@ -1028,12 +969,12 @@ namespace djnn
     Graph::instance().add_edge(_scaleBy_cy, _scaleBy_action);
     Graph::instance().add_edge(_scaleBy_sx, _scaleBy_action);
     Graph::instance().add_edge(_scaleBy_sy, _scaleBy_action);
-    Graph::instance().add_edge(_scaleBy_action, _m11);
-    Graph::instance().add_edge(_scaleBy_action, _m12);
-    Graph::instance().add_edge(_scaleBy_action, _m14);
-    Graph::instance().add_edge(_scaleBy_action, _m21);
-    Graph::instance().add_edge(_scaleBy_action, _m22);
-    Graph::instance().add_edge(_scaleBy_action, _m24);
+    Graph::instance().add_edge(_scaleBy_action, m11 ());
+    Graph::instance().add_edge(_scaleBy_action, m12 ());
+    Graph::instance().add_edge(_scaleBy_action, m14 ());
+    Graph::instance().add_edge(_scaleBy_action, m21 ());
+    Graph::instance().add_edge(_scaleBy_action, m22 ());
+    Graph::instance().add_edge(_scaleBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _scaleBy_action);
 
@@ -1055,12 +996,12 @@ namespace djnn
     Graph::instance().add_edge(_rotateBy_cx, _rotateBy_action);
     Graph::instance().add_edge(_rotateBy_cy, _rotateBy_action);
     Graph::instance().add_edge(_rotateBy_da, _rotateBy_action);
-    Graph::instance().add_edge(_rotateBy_action, _m11);
-    Graph::instance().add_edge(_rotateBy_action, _m12);
-    Graph::instance().add_edge(_rotateBy_action, _m14);
-    Graph::instance().add_edge(_rotateBy_action, _m21);
-    Graph::instance().add_edge(_rotateBy_action, _m22);
-    Graph::instance().add_edge(_rotateBy_action, _m24);
+    Graph::instance().add_edge(_rotateBy_action, m11 ());
+    Graph::instance().add_edge(_rotateBy_action, m12 ());
+    Graph::instance().add_edge(_rotateBy_action, m14 ());
+    Graph::instance().add_edge(_rotateBy_action, m21 ());
+    Graph::instance().add_edge(_rotateBy_action, m22 ());
+    Graph::instance().add_edge(_rotateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _rotateBy_action);
 
@@ -1082,12 +1023,12 @@ namespace djnn
     Graph::instance().add_edge(_skew_X_By_cx, _skew_X_By_action);
     Graph::instance().add_edge(_skew_X_By_cy, _skew_X_By_action);
     Graph::instance().add_edge(_skew_X_By_da, _skew_X_By_action);
-    Graph::instance().add_edge(_skew_X_By_action, _m11);
-    Graph::instance().add_edge(_skew_X_By_action, _m12);
-    Graph::instance().add_edge(_skew_X_By_action, _m14);
-    Graph::instance().add_edge(_skew_X_By_action, _m21);
-    Graph::instance().add_edge(_skew_X_By_action, _m22);
-    Graph::instance().add_edge(_skew_X_By_action, _m24);
+    Graph::instance().add_edge(_skew_X_By_action, m11 ());
+    Graph::instance().add_edge(_skew_X_By_action, m12 ());
+    Graph::instance().add_edge(_skew_X_By_action, m14 ());
+    Graph::instance().add_edge(_skew_X_By_action, m21 ());
+    Graph::instance().add_edge(_skew_X_By_action, m22 ());
+    Graph::instance().add_edge(_skew_X_By_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _skew_X_By_action);
 
@@ -1110,12 +1051,12 @@ namespace djnn
     Graph::instance().add_edge(_skew_Y_By_cx, _skew_Y_By_action);
     Graph::instance().add_edge(_skew_Y_By_cy, _skew_Y_By_action);
     Graph::instance().add_edge(_skew_Y_By_da, _skew_Y_By_action);
-    Graph::instance().add_edge(_skew_Y_By_action, _m11);
-    Graph::instance().add_edge(_skew_Y_By_action, _m12);
-    Graph::instance().add_edge(_skew_Y_By_action, _m14);
-    Graph::instance().add_edge(_skew_Y_By_action, _m21);
-    Graph::instance().add_edge(_skew_Y_By_action, _m22);
-    Graph::instance().add_edge(_skew_Y_By_action, _m24);
+    Graph::instance().add_edge(_skew_Y_By_action, m11 ());
+    Graph::instance().add_edge(_skew_Y_By_action, m12 ());
+    Graph::instance().add_edge(_skew_Y_By_action, m14 ());
+    Graph::instance().add_edge(_skew_Y_By_action, m21 ());
+    Graph::instance().add_edge(_skew_Y_By_action, m22 ());
+    Graph::instance().add_edge(_skew_Y_By_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _skew_Y_By_action);
 
@@ -1128,79 +1069,49 @@ namespace djnn
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
                                           double m41, double m42, double m43, double m44) :
-      AbstractTransformation (p, n)
+      AbstractTransformation (p, n),
+      raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
+                .m21=m21, .m22=m22, .m23=m23, .m24=m24,
+                .m31=m31, .m32=m32, .m33=m33, .m34=m34,
+                .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
+      _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
+      _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
+      _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
+      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr)
   {
-    init_abstractHomography (m11, m12, m13, m14,
-                             m21, m22, m23, m24,
-                             m31, m32, m33, m34,
-                             m41, m42, m43, m44);
+    init_abstractHomography ();
   }
 
   AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24,
                                           double m31, double m32, double m33, double m34,
                                           double m41, double m42, double m43, double m44) :
-      AbstractTransformation ()
+      AbstractTransformation (),
+      raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
+                .m21=m21, .m22=m22, .m23=m23, .m24=m24,
+                .m31=m31, .m32=m32, .m33=m33, .m34=m34,
+                .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
+      _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
+      _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
+      _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
+      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr)
   {
-    init_abstractHomography (m11, m12, m13, m14,
-                             m21, m22, m23, m24,
-                             m31, m32, m33, m34,
-                             m41, m42, m43, m44);
+    init_abstractHomography ();
   }
 
   AbstractHomography::~AbstractHomography ()
   {
-    if (_cm11) {delete _cm11; _cm11 = nullptr;}
-    if (_cm12) {delete _cm12; _cm12 = nullptr;}
-    if (_cm13) {delete _cm13; _cm13 = nullptr;}
-    if (_cm14) {delete _cm14; _cm14 = nullptr;}
-
-    if (_cm21) {delete _cm21; _cm21 = nullptr;}
-    if (_cm22) {delete _cm22; _cm22 = nullptr;}
-    if (_cm23) {delete _cm23; _cm23 = nullptr;}
-    if (_cm24) {delete _cm24; _cm24 = nullptr;}
-
-    if (_cm31) {delete _cm31; _cm31 = nullptr;}
-    if (_cm32) {delete _cm32; _cm32 = nullptr;}
-    if (_cm33) {delete _cm33; _cm33 = nullptr;}
-    if (_cm34) {delete _cm34; _cm34 = nullptr;}
-
-    if (_cm41) {delete _cm41; _cm41 = nullptr;}
-    if (_cm42) {delete _cm42; _cm42 = nullptr;}
-    if (_cm43) {delete _cm43; _cm43 = nullptr;}
-    if (_cm44) {delete _cm44; _cm44 = nullptr;}
-
-    if (_m11) {delete _m11; _m11 = nullptr;}
-    if (_m12) {delete _m12; _m12 = nullptr;}
-    if (_m13) {delete _m13; _m13 = nullptr;}
-    if (_m14) {delete _m14; _m14 = nullptr;}
-
-    if (_m21) {delete _m21; _m21 = nullptr;}
-    if (_m22) {delete _m22; _m22 = nullptr;}
-    if (_m23) {delete _m23; _m23 = nullptr;}
-    if (_m24) {delete _m24; _m24 = nullptr;}
-
-    if (_m31) {delete _m31; _m31 = nullptr;}
-    if (_m32) {delete _m32; _m32 = nullptr;}
-    if (_m33) {delete _m33; _m33 = nullptr;}
-    if (_m34) {delete _m34; _m34 = nullptr;}
-
-    if (_m41) {delete _m41; _m41 = nullptr;}
-    if (_m42) {delete _m42; _m42 = nullptr;}
-    if (_m43) {delete _m43; _m43 = nullptr;}
-    if (_m44) {delete _m44; _m44 = nullptr;}
-
     /* translate BY - Becarfull of the order */
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _translateBy_action);
-    Graph::instance().remove_edge(_translateBy_action, _m11);
-    Graph::instance().remove_edge(_translateBy_action, _m12);
-    Graph::instance().remove_edge(_translateBy_action, _m14);
-    Graph::instance().remove_edge(_translateBy_action, _m21);
-    Graph::instance().remove_edge(_translateBy_action, _m22);
-    Graph::instance().remove_edge(_translateBy_action, _m24);
     Graph::instance().remove_edge(_translateBy_dx, _translateBy_action);
     Graph::instance().remove_edge(_translateBy_dy, _translateBy_action);
+    Graph::instance().remove_edge(_translateBy_action, this->m11 ());
+    Graph::instance().remove_edge(_translateBy_action, this->m12 ());
+    Graph::instance().remove_edge(_translateBy_action, this->m14 ());
+    Graph::instance().remove_edge(_translateBy_action, this->m21 ());
+    Graph::instance().remove_edge(_translateBy_action, this->m22 ());
+    Graph::instance().remove_edge(_translateBy_action, this->m24 ());
     if (_tranlateBy_dx_coupling) {delete _tranlateBy_dx_coupling; _tranlateBy_dx_coupling=nullptr;}
     if (_tranlateBy_dy_coupling) {delete _tranlateBy_dy_coupling; _tranlateBy_dy_coupling=nullptr;}
     if (_translateBy_action) {delete _translateBy_action; _translateBy_action=nullptr;}
@@ -1216,12 +1127,12 @@ namespace djnn
     Graph::instance().remove_edge(_scaleBy_cy, _scaleBy_action);
     Graph::instance().remove_edge(_scaleBy_sx, _scaleBy_action);
     Graph::instance().remove_edge(_scaleBy_sy, _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_action, _m11);
-    Graph::instance().remove_edge(_scaleBy_action, _m12);
-    Graph::instance().remove_edge(_scaleBy_action, _m14);
-    Graph::instance().remove_edge(_scaleBy_action, _m21);
-    Graph::instance().remove_edge(_scaleBy_action, _m22);
-    Graph::instance().remove_edge(_scaleBy_action, _m24);
+    Graph::instance().remove_edge(_scaleBy_action, this->m11 ());
+    Graph::instance().remove_edge(_scaleBy_action, this->m12 ());
+    Graph::instance().remove_edge(_scaleBy_action, this->m14 ());
+    Graph::instance().remove_edge(_scaleBy_action, this->m21 ());
+    Graph::instance().remove_edge(_scaleBy_action, this->m22 ());
+    Graph::instance().remove_edge(_scaleBy_action, this->m24 ());
     if (_scaleBy_cx_coupling) {delete _scaleBy_cx_coupling; _scaleBy_cx_coupling=nullptr;}
     if (_scaleBy_cy_coupling) {delete _scaleBy_cy_coupling; _scaleBy_cy_coupling=nullptr;}
     if (_scaleBy_sx_coupling) {delete _scaleBy_sx_coupling; _scaleBy_sx_coupling=nullptr;}
@@ -1239,12 +1150,12 @@ namespace djnn
     Graph::instance().remove_edge(_rotateBy_cx, _rotateBy_action);
     Graph::instance().remove_edge(_rotateBy_cy, _rotateBy_action);
     Graph::instance().remove_edge(_rotateBy_da, _rotateBy_action);
-    Graph::instance().remove_edge(_rotateBy_action, _m11);
-    Graph::instance().remove_edge(_rotateBy_action, _m12);
-    Graph::instance().remove_edge(_rotateBy_action, _m14);
-    Graph::instance().remove_edge(_rotateBy_action, _m21);
-    Graph::instance().remove_edge(_rotateBy_action, _m22);
-    Graph::instance().remove_edge(_rotateBy_action, _m24);
+    Graph::instance().remove_edge(_rotateBy_action, this->m11 ());
+    Graph::instance().remove_edge(_rotateBy_action, this->m12 ());
+    Graph::instance().remove_edge(_rotateBy_action, this->m14 ());
+    Graph::instance().remove_edge(_rotateBy_action, this->m21 ());
+    Graph::instance().remove_edge(_rotateBy_action, this->m22 ());
+    Graph::instance().remove_edge(_rotateBy_action, this->m24 ());
     if (_rotateBy_cx_coupling) {delete _rotateBy_cx_coupling; _rotateBy_cx_coupling=nullptr;}
     if (_rotateBy_cy_coupling) {delete _rotateBy_cy_coupling; _rotateBy_cy_coupling=nullptr;}
     if (_rotateBy_da_coupling) {delete _rotateBy_da_coupling; _rotateBy_da_coupling=nullptr;}
@@ -1260,12 +1171,12 @@ namespace djnn
     Graph::instance().remove_edge(_skew_X_By_cx, _skew_X_By_action);
     Graph::instance().remove_edge(_skew_X_By_cy, _skew_X_By_action);
     Graph::instance().remove_edge(_skew_X_By_da, _skew_X_By_action);
-    Graph::instance().remove_edge(_skew_X_By_action, _m11);
-    Graph::instance().remove_edge(_skew_X_By_action, _m12);
-    Graph::instance().remove_edge(_skew_X_By_action, _m14);
-    Graph::instance().remove_edge(_skew_X_By_action, _m21);
-    Graph::instance().remove_edge(_skew_X_By_action, _m22);
-    Graph::instance().remove_edge(_skew_X_By_action, _m24);
+    Graph::instance().remove_edge(_skew_X_By_action, this->m11 ());
+    Graph::instance().remove_edge(_skew_X_By_action, this->m12 ());
+    Graph::instance().remove_edge(_skew_X_By_action, this->m14 ());
+    Graph::instance().remove_edge(_skew_X_By_action, this->m21 ());
+    Graph::instance().remove_edge(_skew_X_By_action, this->m22 ());
+    Graph::instance().remove_edge(_skew_X_By_action, this->m24 ());
     if (_skew_X_By_cx_coupling) {delete _skew_X_By_cx_coupling; _skew_X_By_cx_coupling=nullptr;}
     if (_skew_X_By_cy_coupling) {delete _skew_X_By_cy_coupling; _skew_X_By_cy_coupling=nullptr;}
     if (_skew_X_By_da_coupling) {delete _skew_X_By_da_coupling; _skew_X_By_da_coupling=nullptr;}
@@ -1281,12 +1192,12 @@ namespace djnn
     Graph::instance().remove_edge(_skew_Y_By_cx, _skew_Y_By_action);
     Graph::instance().remove_edge(_skew_Y_By_cy, _skew_Y_By_action);
     Graph::instance().remove_edge(_skew_Y_By_da, _skew_Y_By_action);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m11);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m12);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m14);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m21);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m22);
-    Graph::instance().remove_edge(_skew_Y_By_action, _m24);
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m11 ());
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m12 ());
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m14 ());
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m21 ());
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m22 ());
+    Graph::instance().remove_edge(_skew_Y_By_action, this->m24 ());
     if (_skew_Y_By_cx_coupling) {delete _skew_Y_By_cx_coupling; _skew_Y_By_cx_coupling=nullptr;}
     if (_skew_Y_By_cy_coupling) {delete _skew_Y_By_cy_coupling; _skew_Y_By_cy_coupling=nullptr;}
     if (_skew_Y_By_da_coupling) {delete _skew_Y_By_da_coupling; _skew_Y_By_da_coupling=nullptr;}
@@ -1298,29 +1209,154 @@ namespace djnn
 
   }
 
+  Process*
+  AbstractHomography::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+    int notify_mask = notify_none;
+
+    if(name=="m11") {
+      coupling=&_cm11;
+      rawp=&raw_props.m11;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m12") {
+      coupling=&_cm12;
+      rawp=&raw_props.m12;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m13") {
+      coupling=&_cm13;
+      rawp=&raw_props.m13;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m14") {
+      coupling=&_cm14;
+      rawp=&raw_props.m14;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m21") {
+      coupling=&_cm21;
+      rawp=&raw_props.m21;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m22") {
+      coupling=&_cm22;
+      rawp=&raw_props.m22;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m23") {
+      coupling=&_cm23;
+      rawp=&raw_props.m23;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m24") {
+      coupling=&_cm24;
+      rawp=&raw_props.m24;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m31") {
+      coupling=&_cm31;
+      rawp=&raw_props.m31;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m32") {
+      coupling=&_cm32;
+      rawp=&raw_props.m32;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m33") {
+      coupling=&_cm33;
+      rawp=&raw_props.m33;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m33") {
+      coupling=&_cm34;
+      rawp=&raw_props.m34;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m41") {
+      coupling=&_cm41;
+      rawp=&raw_props.m41;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m42") {
+      coupling=&_cm42;
+      rawp=&raw_props.m42;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m43") {
+      coupling=&_cm43;
+      rawp=&raw_props.m43;
+      notify_mask = notify_damaged_transform;
+    } else
+    if(name=="m44") {
+      coupling=&_cm44;
+      rawp=&raw_props.m44;
+      notify_mask = notify_damaged_transform;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+
+    return res;
+  }
+
+  void
+  AbstractHomography::get_properties_values (double &m11, double &m12, double &m13, double &m14, 
+                                           double &m21, double &m22, double &m23, double &m24,
+                                           double &m31, double &m32, double &m33, double &m34,
+                                           double &m41, double &m42, double &m43, double &m44)
+  {
+    m11 = raw_props.m11;
+    m12 = raw_props.m12;
+    m13 = raw_props.m13;
+    m14 = raw_props.m14;
+
+    m21 = raw_props.m21;
+    m22 = raw_props.m22;
+    m23 = raw_props.m23;
+    m24 = raw_props.m24;
+
+    m31 = raw_props.m31;
+    m32 = raw_props.m32;
+    m33 = raw_props.m33;
+    m34 = raw_props.m34;
+
+    m41 = raw_props.m41;
+    m42 = raw_props.m42;
+    m43 = raw_props.m43;
+    m44 = raw_props.m44;
+  }
+
   void
   AbstractHomography::activate ()
   {
     AbstractGObj::activate ();
-    _cm11->enable (_frame);
-    _cm12->enable (_frame);
-    _cm13->enable (_frame);
-    _cm14->enable (_frame);
+    if (_cm11) _cm11->enable (_frame);
+    if (_cm12) _cm12->enable (_frame);
+    if (_cm13) _cm13->enable (_frame);
+    if (_cm14) _cm14->enable (_frame);
 
-    _cm21->enable (_frame);
-    _cm22->enable (_frame);
-    _cm23->enable (_frame);
-    _cm24->enable (_frame);
+    if (_cm21) _cm21->enable (_frame);
+    if (_cm22) _cm22->enable (_frame);
+    if (_cm23) _cm23->enable (_frame);
+    if (_cm24) _cm24->enable (_frame);
 
-    _cm31->enable (_frame);
-    _cm32->enable (_frame);
-    _cm33->enable (_frame);
-    _cm34->enable (_frame);
+    if (_cm31) _cm31->enable (_frame);
+    if (_cm32) _cm32->enable (_frame);
+    if (_cm33) _cm33->enable (_frame);
+    if (_cm34) _cm34->enable (_frame);
 
-    _cm41->enable (_frame);
-    _cm42->enable (_frame);
-    _cm43->enable (_frame);
-    _cm44->enable (_frame);
+    if (_cm41) _cm41->enable (_frame);
+    if (_cm42) _cm42->enable (_frame);
+    if (_cm43) _cm43->enable (_frame);
+    if (_cm44) _cm44->enable (_frame);
 
     _tranlateBy_dx_coupling->enable (_frame);
     _tranlateBy_dy_coupling->enable (_frame);
@@ -1343,25 +1379,25 @@ namespace djnn
   AbstractHomography::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _cm11->disable ();
-    _cm12->disable ();
-    _cm13->disable ();
-    _cm14->disable ();
+    if (_cm11) _cm11->disable ();
+    if (_cm12) _cm12->disable ();
+    if (_cm13) _cm13->disable ();
+    if (_cm14) _cm14->disable ();
 
-    _cm21->disable ();
-    _cm22->disable ();
-    _cm23->disable ();
-    _cm24->disable ();
+    if (_cm21) _cm21->disable ();
+    if (_cm22) _cm22->disable ();
+    if (_cm23) _cm23->disable ();
+    if (_cm24) _cm24->disable ();
 
-    _cm31->disable ();
-    _cm32->disable ();
-    _cm33->disable ();
-    _cm34->disable ();
+    if (_cm31) _cm31->disable ();
+    if (_cm32) _cm32->disable ();
+    if (_cm33) _cm33->disable ();
+    if (_cm34) _cm34->disable ();
 
-    _cm41->disable ();
-    _cm42->disable ();
-    _cm43->disable ();
-    _cm44->disable ();
+    if (_cm41) _cm41->disable ();
+    if (_cm42) _cm42->disable ();
+    if (_cm43) _cm43->disable ();
+    if (_cm44) _cm44->disable ();
 
     _tranlateBy_dx_coupling->disable ();
     _tranlateBy_dy_coupling->disable ();
@@ -1404,37 +1440,21 @@ namespace djnn
   Homography::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double m11 = _m11->get_value ();
-      double m12 = _m12->get_value ();
-      double m13 = _m13->get_value ();
-      double m14 = _m14->get_value ();
-
-      double m21 = _m21->get_value ();
-      double m22 = _m22->get_value ();
-      double m23 = _m23->get_value ();
-      double m24 = _m24->get_value ();
-
-      double m31 = _m31->get_value ();
-      double m32 = _m32->get_value ();
-      double m33 = _m33->get_value ();
-      double m34 = _m34->get_value ();
-
-      double m41 = _m41->get_value ();
-      double m42 = _m42->get_value ();
-      double m43 = _m43->get_value ();
-      double m44 = _m44->get_value ();
-      Backend::instance ()->load_homography (this, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43,
-                                             m44);
+      Backend::instance ()->load_homography (this, 
+                                             raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
+                                             raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
+                                             raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
+                                             raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
     }
   }
 
   Process*
   Homography::clone ()
   {
-    return new Homography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m14->get_value (),
-                           _m21->get_value (), _m22->get_value (), _m23->get_value (), _m24->get_value (),
-                           _m31->get_value (), _m32->get_value (), _m33->get_value (), _m34->get_value (),
-                           _m41->get_value (), _m42->get_value (), _m43->get_value (), _m44->get_value ());
+    return new Homography (raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
+                           raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
+                           raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
+                           raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
   }
 
   GradientHomography::GradientHomography (Process *p, const string &n, double m11, double m12, double m13, double m21,
@@ -1462,27 +1482,18 @@ namespace djnn
   void
   GradientHomography::draw ()
   {
-    double m11 = _m11->get_value ();
-    double m12 = _m12->get_value ();
-    double m13 = _m13->get_value ();
-
-    double m21 = _m21->get_value ();
-    double m22 = _m22->get_value ();
-    double m23 = _m23->get_value ();
-
-    double m31 = _m31->get_value ();
-    double m32 = _m32->get_value ();
-    double m33 = _m33->get_value ();
-
-    Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    Backend::instance ()->load_gradient_homography (this, 
+                                                    raw_props.m11, raw_props.m12, raw_props.m13,
+                                                    raw_props.m21, raw_props.m22, raw_props.m23,
+                                                    raw_props.m31, raw_props.m32, raw_props.m33);
   }
 
   Process*
   GradientHomography::clone ()
   {
-    return new GradientHomography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m21->get_value (),
-                                   _m22->get_value (), _m23->get_value (), _m31->get_value (), _m32->get_value (),
-                                   _m33->get_value ());
+    return new GradientHomography ( raw_props.m11, raw_props.m12, raw_props.m13,
+                                    raw_props.m21, raw_props.m22, raw_props.m23,
+                                    raw_props.m31, raw_props.m32, raw_props.m33);
   }
 
   SimpleGradientTransform::SimpleGradientTransform (Process *p, const string &n, double a, double b, double c, double d,
@@ -1509,29 +1520,29 @@ namespace djnn
   void
   SimpleGradientTransform::draw ()
   {
-    double m11 = _m11->get_value ();
-    double m12 = _m12->get_value ();
-    //double m13 = _m13->get_value ();
+    // double m11 = _m11->get_value ();
+    // double m12 = _m12->get_value ();
+    // //double m13 = _m13->get_value ();
 
-    double m21 = _m21->get_value ();
-    double m22 = _m22->get_value ();
-    //double m23 = _m23->get_value ();
+    // double m21 = _m21->get_value ();
+    // double m22 = _m22->get_value ();
+    // //double m23 = _m23->get_value ();
 
-    double m31 = _m31->get_value ();
-    double m32 = _m32->get_value ();
-    //double m33 = _m33->get_value ();
+    // double m31 = _m31->get_value ();
+    // double m32 = _m32->get_value ();
+    // //double m33 = _m33->get_value ();
 
     //Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
     //a, b, 0, c, d, 0, e, f, 1)
-    Backend::instance ()->load_simple_gradient_transform (this, m11, m12, m21, m22, m31, m32);
+    Backend::instance ()->load_simple_gradient_transform (this, raw_props.m11, raw_props.m12, raw_props.m21, raw_props.m22, raw_props.m31, raw_props.m32);
   }
 
   Process*
   SimpleGradientTransform::clone ()
   {
-    return new GradientHomography (_m11->get_value (), _m12->get_value (), _m13->get_value (), _m21->get_value (),
-                                        _m22->get_value (), _m23->get_value (), _m31->get_value (), _m32->get_value (),
-                                        _m33->get_value ());
+    return new GradientHomography (raw_props.m11, raw_props.m12, raw_props.m13,
+                                   raw_props.m21, raw_props.m22, raw_props.m23,
+                                   raw_props.m31, raw_props.m32, raw_props.m33);
   }
 }
 

@@ -41,8 +41,8 @@ namespace djnn
   Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y)
   {
     Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
-    double loc_x = h->_m11->get_value () * x + h->_m12->get_value () * y + h->_m13->get_value () + h->_m14->get_value () - s->origin_x ()->get_value ();
-    double loc_y = h->_m21->get_value () * x + h->_m22->get_value () * y + h->_m23->get_value () + h->_m24->get_value () - s->origin_y ()->get_value ();
+    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14 - s->origin_x ()->get_value ();
+    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24 - s->origin_y ()->get_value ();
     if (t != nullptr) {
       t->set_local_x (loc_x);
       t->set_local_y (loc_y);
