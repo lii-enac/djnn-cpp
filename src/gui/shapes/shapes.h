@@ -344,8 +344,10 @@ namespace djnn
   class PathArc : public AbstractGObj
   {
   public:
-    PathArc (Process* p, const string &n, double rotx, double fl, double swfl, double rx, double ry, double x, double y);
-    PathArc (double rotx, double fl, double swfl, double rx, double ry, double x, double y);
+    PathArc (Process* p, const string &n,  double rx, double ry, double rotx, double fl, double swfl, double x,
+                    double y);
+    PathArc ( double rx, double ry, double rotx, double fl, double swfl, double x,
+                    double y);
     virtual ~PathArc ();
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_component("rotx"); }
@@ -358,9 +360,9 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
-    struct raw_props_t { double rotx,roty,fl,swfl,rx,ry,x,y; };
+    struct raw_props_t { double rx,ry,rotx,fl,swfl,x,y; };
     raw_props_t raw_props;
-    Coupling *_crotx, *_cfl, *_cswfl, *_crx, *_cry, *_cx, *_cy;
+    Coupling *_crx, *_cry, *_crotx, *_cfl, *_cswfl, *_cx, *_cy;
     void activate () override;
     void deactivate () override;
   };
