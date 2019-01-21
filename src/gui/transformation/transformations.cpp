@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,6 +10,7 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -464,41 +465,65 @@ namespace djnn
   }
 
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
-      AbstractTransformation (p, n)
+      AbstractTransformation (p, n), 
+      raw_props{ .a=a },
+      _ca (nullptr)
   {
-    _a = new DoubleProperty (this, "a", a);//, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
-    _ca->disable ();
   }
 
   AbstractSkew::AbstractSkew (double a) :
-      AbstractTransformation ()
+      AbstractTransformation (), 
+      raw_props{ .a=a },
+      _ca (nullptr)
   {
-    _a = new DoubleProperty (this, "a", a);//, notify_damaged_transform);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _ca = new Coupling (_a, ACTIVATION, update, ACTIVATION);
-    _ca->disable ();
   }
 
   AbstractSkew::~AbstractSkew ()
   {
     if (_ca) { delete _ca; _ca = nullptr; }
-    if (_a) { delete _a; _a = nullptr; }
+  }
+
+  Process*
+  AbstractSkew::find_component (const string& name)
+  {
+    Process* res = AbstractGObj::find_component(name);
+    if(res) return res;
+
+    Coupling ** coupling;
+    double* rawp;
+    int notify_mask = notify_none;
+
+    if(name=="a") {
+      coupling=&_ca;
+      rawp=&raw_props.a;
+      notify_mask = notify_damaged_transform;
+    } else
+    return nullptr;
+    
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+
+    return res;
+  }
+
+  void
+  AbstractSkew::get_properties_values (double &a)
+  {
+    a = raw_props.a;
   }
 
   void
   AbstractSkew::activate ()
   {
     AbstractGObj::activate ();
-    _ca->enable (_frame);
+    if (_ca) _ca->enable (_frame);
   }
 
   void
   AbstractSkew::deactivate ()
   {
     AbstractGObj::deactivate ();
-    _ca->disable ();
+    if (_ca) _ca->disable ();
   }
 
   SkewX::SkewX (Process *p, const string &n, double a) :
@@ -519,17 +544,15 @@ namespace djnn
   void
   SkewX::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double a = _a->get_value ();
-      Backend::instance ()->load_skew_x (this, a);
+      Backend::instance ()->load_skew_x (this, raw_props.a);
     }
   }
 
   Process*
   SkewX::clone ()
   {
-    return new SkewX (_a->get_value ());
+    return new SkewX (raw_props.a);
   }
 
   GradientSkewX::GradientSkewX (Process *p, const string &n, double a) :
@@ -555,14 +578,13 @@ namespace djnn
   void
   GradientSkewX::draw ()
   {
-    double a = _a->get_value ();
-    Backend::instance ()->load_gradient_skew_x (this, a);
+    Backend::instance ()->load_gradient_skew_x (this, raw_props.a);
   }
 
   Process*
   GradientSkewX::clone ()
   {
-    return new GradientSkewX (_a->get_value ());
+    return new GradientSkewX (raw_props.a);
   }
 
   SkewY::SkewY (Process *p, const string &n, double a) :
@@ -583,17 +605,15 @@ namespace djnn
   void
   SkewY::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      double a = _a->get_value ();
-      Backend::instance ()->load_skew_y (this, a);
+      Backend::instance ()->load_skew_y (this, raw_props.a);
     }
   }
 
   Process*
   SkewY::clone ()
   {
-    return new SkewY (_a->get_value ());
+    return new SkewY (raw_props.a);
   }
 
   GradientSkewY::GradientSkewY (Process *p, const string &n, double a) :
@@ -619,14 +639,13 @@ namespace djnn
   void
   GradientSkewY::draw ()
   {
-    double a = _a->get_value ();
-    Backend::instance ()->load_gradient_skew_y (this, a);
+    Backend::instance ()->load_gradient_skew_y (this, raw_props.a);
   }
 
   Process*
   GradientSkewY::clone ()
   {
-    return new GradientSkewY (_a->get_value ());
+    return new GradientSkewY (raw_props.a);
   }
 
 

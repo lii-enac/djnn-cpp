@@ -167,11 +167,15 @@ namespace djnn
     AbstractSkew (Process *p, const string &n, double a);
     AbstractSkew (double a);
     virtual ~AbstractSkew ();
+    void get_properties_values (double &a);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
     void activate () override;
     void deactivate () override;
     virtual void draw () override = 0;
   protected:
-    DoubleProperty *_a;
+    struct raw_props_t { double a; };
+    raw_props_t raw_props;
     Coupling *_ca;
   };
 
