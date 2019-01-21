@@ -53,8 +53,8 @@ namespace djnn
 
   AbstractTranslation::~AbstractTranslation ()
   {
-    delete _ctx; //_cty = nullptr;
-    delete _cty; //_ctx = nullptr; 
+    delete _ctx;
+    delete _cty;
   }
 
   Process*
@@ -172,14 +172,14 @@ namespace djnn
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractTransformation (p, n),
       raw_props{.a=a, .cx=cx, .cy=cy},
-      _ccx (nullptr), _ccy (nullptr)
+      _ca(nullptr), _ccx (nullptr), _ccy (nullptr)
   {
   }
 
   AbstractRotation::AbstractRotation (double a, double cx, double cy) :
       AbstractTransformation (),
       raw_props{.a=a, .cx=cx, .cy=cy},
-      _ccx (nullptr), _ccy (nullptr)
+      _ca(nullptr), _ccx (nullptr), _ccy (nullptr)
   {
   }
 
@@ -332,10 +332,6 @@ namespace djnn
     if (_csy) { delete _csy; _csy = nullptr; }
     if (_ccx) { delete _ccx; _ccx = nullptr; }
     if (_ccy) { delete _ccy; _ccy = nullptr; }
-    //if (_sx) { delete _sx; _sx = nullptr; }
-    //if (_sy) { delete _sy; _sy = nullptr; }
-    //if (_cx) { delete _cx; _cx = nullptr; }
-    //if (_cy) { delete _cy; _cy = nullptr; }
   }
 
   Process*
@@ -424,7 +420,6 @@ namespace djnn
   void
   Scaling::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
       Backend::instance ()->load_scaling (this, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     }
