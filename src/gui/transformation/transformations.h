@@ -49,7 +49,6 @@ namespace djnn
   protected:
     struct raw_props_t { double tx,ty; };
     raw_props_t raw_props;
-    //DoubleProperty *_tx, *_ty;
     Coupling *_ctx, *_cty;
   };
 
@@ -95,7 +94,6 @@ namespace djnn
   protected:
     struct raw_props_t { double a,cx,cy; };
     raw_props_t raw_props;
-    //DoubleProperty *_a, *_cx, *_cy;
     Coupling *_ca, *_ccx, *_ccy;
   };
 
@@ -137,7 +135,6 @@ namespace djnn
   protected:
     struct raw_props_t { double sx,sy,cx,cy; };
     raw_props_t raw_props;
-    //DoubleProperty *_sx, *_sy, *_cx, *_cy;
     Coupling *_csx, *_csy, *_ccx, *_ccy;
   };
 

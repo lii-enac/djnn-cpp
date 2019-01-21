@@ -186,9 +186,9 @@ namespace djnn
 
   AbstractRotation::~AbstractRotation ()
   {
-    delete _ca; //_ca = nullptr;
-    delete _ccx; //_ccx = nullptr;
-    delete _ccy; //_ccy = nullptr;
+    delete _ca;
+    delete _ccx;
+    delete _ccy;
   }
 
   Process*
@@ -1403,7 +1403,6 @@ namespace djnn
   void
   Homography::draw ()
   {
-    //if (_activation_state <= activated && Backend::instance ()->window () == _frame) {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
       double m11 = _m11->get_value ();
       double m12 = _m12->get_value ();
