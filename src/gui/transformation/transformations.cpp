@@ -910,21 +910,10 @@ namespace djnn
 
      _h->_skew_Y_By_da->set_value (0, false);
   }
-
-
+ 
   void
-  AbstractHomography::init_abstractHomography ()
+  AbstractHomography::init_translationBy () 
   {
-    /* note:
-     * action work only for 2D 
-     * propagation is not active for 3D
-     *  |  x  x  .  x  |
-     *  |  x  x  .  x  |
-     *  |  .  .  1  .  |
-     *  |  .  .  .  1  |
-     */
-
-    /* translateBy */
     _translateBy_spike = new Spike (this, "translateBy");
     _translateBy_dx = new DoubleProperty (0);
     _translateBy_dy = new DoubleProperty (0);
@@ -945,8 +934,11 @@ namespace djnn
     Graph::instance().add_edge(_translateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _translateBy_action);
+  }
 
-    /* scaleBy */
+  void
+  AbstractHomography::init_scaleBy () 
+  {
     _scaleBy_spike = new Spike (this, "scaleBy");
     _scaleBy_cx = new DoubleProperty (0);
     _scaleBy_cy = new DoubleProperty (0);
@@ -977,8 +969,11 @@ namespace djnn
     Graph::instance().add_edge(_scaleBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _scaleBy_action);
+  }
 
-    /* rotateBy */
+  void
+  AbstractHomography::init_rotateBy () 
+  {
     _rotateBy_spike = new Spike (this, "rotateBy");
     _rotateBy_cx = new DoubleProperty (0);
     _rotateBy_cy = new DoubleProperty (0);
@@ -1004,8 +999,11 @@ namespace djnn
     Graph::instance().add_edge(_rotateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _rotateBy_action);
+  }
 
-    /* _skew_X_By */
+  void
+  AbstractHomography::init_skewXBy () 
+  {
     _skew_X_By_spike = new Spike (this, "skewXBy");
     _skew_X_By_cx = new DoubleProperty (0);
     _skew_X_By_cy = new DoubleProperty (0);
@@ -1031,9 +1029,11 @@ namespace djnn
     Graph::instance().add_edge(_skew_X_By_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _skew_X_By_action);
+  }
 
-
-    /* _skew_Y_By */
+  void
+  AbstractHomography::init_skewYBy () 
+  {
     _skew_Y_By_spike = new Spike (this, "skewYBy");
     _skew_Y_By_cx = new DoubleProperty (0);
     _skew_Y_By_cy = new DoubleProperty (0);
@@ -1059,9 +1059,6 @@ namespace djnn
     Graph::instance().add_edge(_skew_Y_By_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _skew_Y_By_action);
-
-
-
   }
 
 
@@ -1077,9 +1074,28 @@ namespace djnn
       _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
       _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
       _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
-      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr)
+      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
+      /* translateBy ptr */
+      _translateBy_spike(nullptr), _translateBy_action(nullptr),
+      _translateBy_dx(nullptr), _translateBy_dy(nullptr),
+      _tranlateBy_dx_coupling(nullptr), _tranlateBy_dy_coupling(nullptr),
+      /* scaleBy ptr */
+      _scaleBy_spike(nullptr), _scaleBy_action(nullptr),
+      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr),
+      _scaleBy_cx_coupling(nullptr), _scaleBy_cy_coupling(nullptr), _scaleBy_sx_coupling(nullptr), _scaleBy_sy_coupling(nullptr),
+      /* rotateBy ptr */
+      _rotateBy_spike(nullptr), _rotateBy_action(nullptr), 
+      _rotateBy_cx(nullptr), _rotateBy_cy(nullptr), _rotateBy_da(nullptr),
+      _rotateBy_cx_coupling(nullptr), _rotateBy_cy_coupling(nullptr), _rotateBy_da_coupling(nullptr),
+      /* skewXBy ptr */
+      _skew_X_By_spike(nullptr), _skew_X_By_action(nullptr),
+      _skew_X_By_cx(nullptr), _skew_X_By_cy(nullptr), _skew_X_By_da(nullptr),
+      _skew_X_By_cx_coupling(nullptr), _skew_X_By_cy_coupling(nullptr), _skew_X_By_da_coupling(nullptr),
+      /* skewXBy ptr */
+      _skew_Y_By_spike(nullptr), _skew_Y_By_action(nullptr), 
+      _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
+      _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
   {
-    init_abstractHomography ();
   }
 
   AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
@@ -1094,118 +1110,141 @@ namespace djnn
       _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
       _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
       _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
-      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr)
+      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
+       /* translateBy ptr */
+      _translateBy_spike(nullptr),
+      _translateBy_dx(nullptr), _translateBy_dy(nullptr), _translateBy_action(nullptr),
+      _tranlateBy_dx_coupling(nullptr), _tranlateBy_dy_coupling(nullptr),
+      /* scaleBy ptr */
+      _scaleBy_spike(nullptr),
+      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr), _scaleBy_action(nullptr),
+      _scaleBy_cx_coupling(nullptr), _scaleBy_cy_coupling(nullptr), _scaleBy_sx_coupling(nullptr), _scaleBy_sy_coupling(nullptr),
+      /* rotateBy ptr */
+      _rotateBy_spike(nullptr), _rotateBy_action(nullptr), 
+      _rotateBy_cx(nullptr), _rotateBy_cy(nullptr), _rotateBy_da(nullptr),
+      _rotateBy_cx_coupling(nullptr), _rotateBy_cy_coupling(nullptr), _rotateBy_da_coupling(nullptr),
+       /* skewXBy ptr */
+      _skew_X_By_spike(nullptr), _skew_X_By_action(nullptr),
+      _skew_X_By_cx(nullptr), _skew_X_By_cy(nullptr), _skew_X_By_da(nullptr),
+      _skew_X_By_cx_coupling(nullptr), _skew_X_By_cy_coupling(nullptr), _skew_X_By_da_coupling(nullptr),
+      /* skewXBy ptr */
+      _skew_Y_By_spike(nullptr), _skew_Y_By_action(nullptr), 
+      _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
+      _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
   {
-    init_abstractHomography ();
   }
 
   AbstractHomography::~AbstractHomography ()
   {
-    /* translate BY - Becarfull of the order */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _translateBy_action);
-    Graph::instance().remove_edge(_translateBy_dx, _translateBy_action);
-    Graph::instance().remove_edge(_translateBy_dy, _translateBy_action);
-    Graph::instance().remove_edge(_translateBy_action, this->m11 ());
-    Graph::instance().remove_edge(_translateBy_action, this->m12 ());
-    Graph::instance().remove_edge(_translateBy_action, this->m14 ());
-    Graph::instance().remove_edge(_translateBy_action, this->m21 ());
-    Graph::instance().remove_edge(_translateBy_action, this->m22 ());
-    Graph::instance().remove_edge(_translateBy_action, this->m24 ());
-    if (_tranlateBy_dx_coupling) {delete _tranlateBy_dx_coupling; _tranlateBy_dx_coupling=nullptr;}
-    if (_tranlateBy_dy_coupling) {delete _tranlateBy_dy_coupling; _tranlateBy_dy_coupling=nullptr;}
-    if (_translateBy_action) {delete _translateBy_action; _translateBy_action=nullptr;}
-    if (_translateBy_dx) {delete _translateBy_dx; _translateBy_dx=nullptr;}
-    if (_translateBy_dy) {delete _translateBy_dy; _translateBy_dy=nullptr;}
-    if (_translateBy_spike) {delete _translateBy_spike; _translateBy_spike=nullptr;} 
- 
+    if (_translateBy_action){
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _translateBy_action);
+      Graph::instance().remove_edge(_translateBy_dx, _translateBy_action);
+      Graph::instance().remove_edge(_translateBy_dy, _translateBy_action);
+      Graph::instance().remove_edge(_translateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_translateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_translateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_translateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_translateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_translateBy_action, this->m24 ());
+      delete _tranlateBy_dx_coupling; _tranlateBy_dx_coupling=nullptr;
+      delete _tranlateBy_dy_coupling; _tranlateBy_dy_coupling=nullptr;
+      delete _translateBy_action; _translateBy_action=nullptr;
+      delete _translateBy_dx; _translateBy_dx=nullptr;
+      delete _translateBy_dy; _translateBy_dy=nullptr;
+      delete _translateBy_spike; _translateBy_spike=nullptr;
+    }
 
-    /* scale BY - Becarfull of the order */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_cx, _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_cy, _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_sx, _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_sy, _scaleBy_action);
-    Graph::instance().remove_edge(_scaleBy_action, this->m11 ());
-    Graph::instance().remove_edge(_scaleBy_action, this->m12 ());
-    Graph::instance().remove_edge(_scaleBy_action, this->m14 ());
-    Graph::instance().remove_edge(_scaleBy_action, this->m21 ());
-    Graph::instance().remove_edge(_scaleBy_action, this->m22 ());
-    Graph::instance().remove_edge(_scaleBy_action, this->m24 ());
-    if (_scaleBy_cx_coupling) {delete _scaleBy_cx_coupling; _scaleBy_cx_coupling=nullptr;}
-    if (_scaleBy_cy_coupling) {delete _scaleBy_cy_coupling; _scaleBy_cy_coupling=nullptr;}
-    if (_scaleBy_sx_coupling) {delete _scaleBy_sx_coupling; _scaleBy_sx_coupling=nullptr;}
-    if (_scaleBy_sy_coupling) {delete _scaleBy_sy_coupling; _scaleBy_sy_coupling=nullptr;}
-    if (_scaleBy_action) {delete _translateBy_action; _translateBy_action=nullptr;}
-    if (_scaleBy_cx) {delete _scaleBy_cx; _scaleBy_cx=nullptr;}
-    if (_scaleBy_cy) {delete _scaleBy_cy; _scaleBy_cy=nullptr;}
-    if (_scaleBy_sx) {delete _scaleBy_sx; _scaleBy_sx=nullptr;}
-    if (_scaleBy_sy) {delete _scaleBy_sy; _scaleBy_sy=nullptr;}
-    if (_scaleBy_spike) {delete _scaleBy_spike; _scaleBy_spike=nullptr;} 
+    if (_scaleBy_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _scaleBy_action);
+      Graph::instance().remove_edge(_scaleBy_cx, _scaleBy_action);
+      Graph::instance().remove_edge(_scaleBy_cy, _scaleBy_action);
+      Graph::instance().remove_edge(_scaleBy_sx, _scaleBy_action);
+      Graph::instance().remove_edge(_scaleBy_sy, _scaleBy_action);
+      Graph::instance().remove_edge(_scaleBy_action, this->m11 ());
+      Graph::instance().remove_edge(_scaleBy_action, this->m12 ());
+      Graph::instance().remove_edge(_scaleBy_action, this->m14 ());
+      Graph::instance().remove_edge(_scaleBy_action, this->m21 ());
+      Graph::instance().remove_edge(_scaleBy_action, this->m22 ());
+      Graph::instance().remove_edge(_scaleBy_action, this->m24 ());
+      delete _scaleBy_cx_coupling; _scaleBy_cx_coupling=nullptr;
+      delete _scaleBy_cy_coupling; _scaleBy_cy_coupling=nullptr;
+      delete _scaleBy_sx_coupling; _scaleBy_sx_coupling=nullptr;
+      delete _scaleBy_sy_coupling; _scaleBy_sy_coupling=nullptr;
+      delete _translateBy_action; _translateBy_action=nullptr;
+      delete _scaleBy_cx; _scaleBy_cx=nullptr;
+      delete _scaleBy_cy; _scaleBy_cy=nullptr;
+      delete _scaleBy_sx; _scaleBy_sx=nullptr;
+      delete _scaleBy_sy; _scaleBy_sy=nullptr;
+      delete _scaleBy_spike; _scaleBy_spike=nullptr;
+    }
 
-    /* rotate BY - Becarfull of the order */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _rotateBy_action);
-    Graph::instance().remove_edge(_rotateBy_cx, _rotateBy_action);
-    Graph::instance().remove_edge(_rotateBy_cy, _rotateBy_action);
-    Graph::instance().remove_edge(_rotateBy_da, _rotateBy_action);
-    Graph::instance().remove_edge(_rotateBy_action, this->m11 ());
-    Graph::instance().remove_edge(_rotateBy_action, this->m12 ());
-    Graph::instance().remove_edge(_rotateBy_action, this->m14 ());
-    Graph::instance().remove_edge(_rotateBy_action, this->m21 ());
-    Graph::instance().remove_edge(_rotateBy_action, this->m22 ());
-    Graph::instance().remove_edge(_rotateBy_action, this->m24 ());
-    if (_rotateBy_cx_coupling) {delete _rotateBy_cx_coupling; _rotateBy_cx_coupling=nullptr;}
-    if (_rotateBy_cy_coupling) {delete _rotateBy_cy_coupling; _rotateBy_cy_coupling=nullptr;}
-    if (_rotateBy_da_coupling) {delete _rotateBy_da_coupling; _rotateBy_da_coupling=nullptr;}
-    if (_rotateBy_action) {delete _rotateBy_action; _rotateBy_action=nullptr;}
-    if (_rotateBy_cx) {delete _rotateBy_cx; _rotateBy_cx=nullptr;}
-    if (_rotateBy_cy) {delete _rotateBy_cy; _rotateBy_cy=nullptr;}
-    if (_rotateBy_da) {delete _rotateBy_da; _rotateBy_da=nullptr;}
-    if (_rotateBy_spike) {delete _rotateBy_spike; _rotateBy_spike=nullptr;} 
+    if (_rotateBy_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rotateBy_action);
+      Graph::instance().remove_edge(_rotateBy_cx, _rotateBy_action);
+      Graph::instance().remove_edge(_rotateBy_cy, _rotateBy_action);
+      Graph::instance().remove_edge(_rotateBy_da, _rotateBy_action);
+      Graph::instance().remove_edge(_rotateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_rotateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_rotateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_rotateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_rotateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_rotateBy_action, this->m24 ());
+      delete _rotateBy_cx_coupling; _rotateBy_cx_coupling=nullptr;
+      delete _rotateBy_cy_coupling; _rotateBy_cy_coupling=nullptr;
+      delete _rotateBy_da_coupling; _rotateBy_da_coupling=nullptr;
+      delete _rotateBy_action; _rotateBy_action=nullptr;
+      delete _rotateBy_cx; _rotateBy_cx=nullptr;
+      delete _rotateBy_cy; _rotateBy_cy=nullptr;
+      delete _rotateBy_da; _rotateBy_da=nullptr;
+      delete _rotateBy_spike; _rotateBy_spike=nullptr;
+    }
 
-    /* skew Y BY - Becarfull of the order */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _skew_X_By_action);
-    Graph::instance().remove_edge(_skew_X_By_cx, _skew_X_By_action);
-    Graph::instance().remove_edge(_skew_X_By_cy, _skew_X_By_action);
-    Graph::instance().remove_edge(_skew_X_By_da, _skew_X_By_action);
-    Graph::instance().remove_edge(_skew_X_By_action, this->m11 ());
-    Graph::instance().remove_edge(_skew_X_By_action, this->m12 ());
-    Graph::instance().remove_edge(_skew_X_By_action, this->m14 ());
-    Graph::instance().remove_edge(_skew_X_By_action, this->m21 ());
-    Graph::instance().remove_edge(_skew_X_By_action, this->m22 ());
-    Graph::instance().remove_edge(_skew_X_By_action, this->m24 ());
-    if (_skew_X_By_cx_coupling) {delete _skew_X_By_cx_coupling; _skew_X_By_cx_coupling=nullptr;}
-    if (_skew_X_By_cy_coupling) {delete _skew_X_By_cy_coupling; _skew_X_By_cy_coupling=nullptr;}
-    if (_skew_X_By_da_coupling) {delete _skew_X_By_da_coupling; _skew_X_By_da_coupling=nullptr;}
-    if (_skew_X_By_action) {delete _skew_X_By_action; _skew_X_By_action=nullptr;}
-    if (_skew_X_By_cx) {delete _skew_X_By_cx; _skew_X_By_cx=nullptr;}
-    if (_skew_X_By_cy) {delete _skew_X_By_cy; _skew_X_By_cy=nullptr;}
-    if (_skew_X_By_da) {delete _skew_X_By_da; _skew_X_By_da=nullptr;}
-    if (_skew_X_By_spike) {delete _skew_X_By_spike; _skew_X_By_spike=nullptr;} 
+    if (_skew_X_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _skew_X_By_action);
+      Graph::instance().remove_edge(_skew_X_By_cx, _skew_X_By_action);
+      Graph::instance().remove_edge(_skew_X_By_cy, _skew_X_By_action);
+      Graph::instance().remove_edge(_skew_X_By_da, _skew_X_By_action);
+      Graph::instance().remove_edge(_skew_X_By_action, this->m11 ());
+      Graph::instance().remove_edge(_skew_X_By_action, this->m12 ());
+      Graph::instance().remove_edge(_skew_X_By_action, this->m14 ());
+      Graph::instance().remove_edge(_skew_X_By_action, this->m21 ());
+      Graph::instance().remove_edge(_skew_X_By_action, this->m22 ());
+      Graph::instance().remove_edge(_skew_X_By_action, this->m24 ());
+      delete _skew_X_By_cx_coupling; _skew_X_By_cx_coupling=nullptr;
+      delete _skew_X_By_cy_coupling; _skew_X_By_cy_coupling=nullptr;
+      delete _skew_X_By_da_coupling; _skew_X_By_da_coupling=nullptr;
+      delete _skew_X_By_action; _skew_X_By_action=nullptr;
+      delete _skew_X_By_cx; _skew_X_By_cx=nullptr;
+      delete _skew_X_By_cy; _skew_X_By_cy=nullptr;
+      delete _skew_X_By_da; _skew_X_By_da=nullptr;
+      delete _skew_X_By_spike; _skew_X_By_spike=nullptr;
+    }
 
-    /* skew Y BY - Becarfull of the order */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _skew_Y_By_action);
-    Graph::instance().remove_edge(_skew_Y_By_cx, _skew_Y_By_action);
-    Graph::instance().remove_edge(_skew_Y_By_cy, _skew_Y_By_action);
-    Graph::instance().remove_edge(_skew_Y_By_da, _skew_Y_By_action);
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m11 ());
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m12 ());
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m14 ());
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m21 ());
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m22 ());
-    Graph::instance().remove_edge(_skew_Y_By_action, this->m24 ());
-    if (_skew_Y_By_cx_coupling) {delete _skew_Y_By_cx_coupling; _skew_Y_By_cx_coupling=nullptr;}
-    if (_skew_Y_By_cy_coupling) {delete _skew_Y_By_cy_coupling; _skew_Y_By_cy_coupling=nullptr;}
-    if (_skew_Y_By_da_coupling) {delete _skew_Y_By_da_coupling; _skew_Y_By_da_coupling=nullptr;}
-    if (_skew_Y_By_action) {delete _skew_Y_By_action; _skew_Y_By_action=nullptr;}
-    if (_skew_Y_By_cx) {delete _skew_Y_By_cx; _skew_Y_By_cx=nullptr;}
-    if (_skew_Y_By_cy) {delete _skew_Y_By_cy; _skew_Y_By_cy=nullptr;}
-    if (_skew_Y_By_da) {delete _skew_Y_By_da; _skew_Y_By_da=nullptr;}
-    if (_skew_Y_By_spike) {delete _skew_Y_By_spike; _skew_Y_By_spike=nullptr;}
+    if (_skew_Y_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _skew_Y_By_action);
+      Graph::instance().remove_edge(_skew_Y_By_cx, _skew_Y_By_action);
+      Graph::instance().remove_edge(_skew_Y_By_cy, _skew_Y_By_action);
+      Graph::instance().remove_edge(_skew_Y_By_da, _skew_Y_By_action);
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m11 ());
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m12 ());
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m14 ());
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m21 ());
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m22 ());
+      Graph::instance().remove_edge(_skew_Y_By_action, this->m24 ());
+      delete _skew_Y_By_cx_coupling; _skew_Y_By_cx_coupling=nullptr;
+      delete _skew_Y_By_cy_coupling; _skew_Y_By_cy_coupling=nullptr;
+      delete _skew_Y_By_da_coupling; _skew_Y_By_da_coupling=nullptr;
+      delete _skew_Y_By_action; _skew_Y_By_action=nullptr;
+      delete _skew_Y_By_cx; _skew_Y_By_cx=nullptr;
+      delete _skew_Y_By_cy; _skew_Y_By_cy=nullptr;
+      delete _skew_Y_By_da; _skew_Y_By_da=nullptr;
+      delete _skew_Y_By_spike; _skew_Y_By_spike=nullptr;
+    }
 
   }
 
@@ -1299,6 +1338,26 @@ namespace djnn
       rawp=&raw_props.m44;
       notify_mask = notify_damaged_transform;
     } else
+    if (name.find ("translateBy") != std::string::npos) {
+      init_translationBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("scaleBy") != std::string::npos) {
+      init_scaleBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("rotateBy") != std::string::npos) {
+      init_rotateBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("skewXBy") != std::string::npos) {
+      init_skewXBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("skewYBy") != std::string::npos) {
+      init_skewYBy();
+      return AbstractGObj::find_component(name);
+    } else
     return nullptr;
     
     DoublePropertyProxy* prop = nullptr; // do not cache
@@ -1358,21 +1417,31 @@ namespace djnn
     if (_cm43) _cm43->enable (_frame);
     if (_cm44) _cm44->enable (_frame);
 
-    _tranlateBy_dx_coupling->enable (_frame);
-    _tranlateBy_dy_coupling->enable (_frame);
-    _scaleBy_cx_coupling->enable (_frame);
-    _scaleBy_cy_coupling->enable (_frame);
-    _scaleBy_sx_coupling->enable (_frame);
-    _scaleBy_sy_coupling->enable (_frame);
-    _rotateBy_cx_coupling->enable (_frame);
-    _rotateBy_cy_coupling->enable (_frame);
-    _rotateBy_da_coupling->enable (_frame);
-    _skew_X_By_cx_coupling->enable (_frame);
-    _skew_X_By_cy_coupling->enable (_frame);
-    _skew_X_By_da_coupling->enable (_frame);
-    _skew_Y_By_cx_coupling->enable (_frame);
-    _skew_Y_By_cy_coupling->enable (_frame);
-    _skew_Y_By_da_coupling->enable (_frame);
+    if (_translateBy_action) {
+      _tranlateBy_dx_coupling->enable (_frame);
+      _tranlateBy_dy_coupling->enable (_frame);
+    }
+    if (_scaleBy_action) {
+      _scaleBy_cx_coupling->enable (_frame);
+      _scaleBy_cy_coupling->enable (_frame);
+      _scaleBy_sx_coupling->enable (_frame);
+      _scaleBy_sy_coupling->enable (_frame);
+    }
+    if (_rotateBy_action) {
+      _rotateBy_cx_coupling->enable (_frame);
+      _rotateBy_cy_coupling->enable (_frame);
+      _rotateBy_da_coupling->enable (_frame);
+    }
+    if (_skew_X_By_action) {
+      _skew_X_By_cx_coupling->enable (_frame);
+      _skew_X_By_cy_coupling->enable (_frame);
+      _skew_X_By_da_coupling->enable (_frame);
+    }
+    if (_skew_Y_By_action) {
+      _skew_Y_By_cx_coupling->enable (_frame);
+      _skew_Y_By_cy_coupling->enable (_frame);
+      _skew_Y_By_da_coupling->enable (_frame);
+    }
   }
 
   void
@@ -1399,21 +1468,31 @@ namespace djnn
     if (_cm43) _cm43->disable ();
     if (_cm44) _cm44->disable ();
 
-    _tranlateBy_dx_coupling->disable ();
-    _tranlateBy_dy_coupling->disable ();
-    _scaleBy_cx_coupling->disable ();
-    _scaleBy_cy_coupling->disable ();
-    _scaleBy_sx_coupling->disable ();
-    _scaleBy_sy_coupling->disable ();
-    _rotateBy_cx_coupling->disable ();
-    _rotateBy_cy_coupling->disable ();
-    _rotateBy_da_coupling->disable ();
-    _skew_X_By_cx_coupling->disable ();
-    _skew_X_By_cy_coupling->disable ();
-    _skew_X_By_da_coupling->disable ();
-    _skew_Y_By_cx_coupling->disable ();
-    _skew_Y_By_cy_coupling->disable ();
-    _skew_Y_By_da_coupling->disable ();
+    if (_translateBy_action) {
+      _tranlateBy_dx_coupling->disable ();
+      _tranlateBy_dy_coupling->disable ();
+    }
+    if (_scaleBy_action) {
+      _scaleBy_cx_coupling->disable ();
+      _scaleBy_cy_coupling->disable ();
+      _scaleBy_sx_coupling->disable ();
+      _scaleBy_sy_coupling->disable ();
+    }
+    if (_rotateBy_action) {
+      _rotateBy_cx_coupling->disable ();
+      _rotateBy_cy_coupling->disable ();
+      _rotateBy_da_coupling->disable ();
+    }
+    if (_skew_X_By_action) {
+      _skew_X_By_cx_coupling->disable ();
+      _skew_X_By_cy_coupling->disable ();
+      _skew_X_By_da_coupling->disable ();
+    }
+    if (_skew_Y_By_action) {
+      _skew_Y_By_cx_coupling->disable ();
+      _skew_Y_By_cy_coupling->disable ();
+      _skew_Y_By_da_coupling->disable ();
+    }
   }
 
   Homography::Homography (Process *p, const string &n, double m11, double m12, double m13, double m14, double m21,

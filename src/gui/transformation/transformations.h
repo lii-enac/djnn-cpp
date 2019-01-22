@@ -355,7 +355,11 @@ namespace djnn
     Coupling *_skew_Y_By_cx_coupling, *_skew_Y_By_cy_coupling, *_skew_Y_By_da_coupling;
 
   private:
-    void init_abstractHomography ();
+    void init_translationBy ();
+    void init_scaleBy ();
+    void init_rotateBy ();
+    void init_skewXBy ();
+    void init_skewYBy ();
   };
 
   class Homography : public AbstractHomography
