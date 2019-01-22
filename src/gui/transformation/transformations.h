@@ -330,28 +330,28 @@ namespace djnn
     *_cm42, *_cm43, *_cm44;
     /* translateBy ptr */
     Spike  *_translateBy_spike;
-    DoubleProperty *_translateBy_dx, *_translateBy_dy;
     Process* _translateBy_action;
+    DoubleProperty *_translateBy_dx, *_translateBy_dy;
     Coupling *_tranlateBy_dx_coupling, *_tranlateBy_dy_coupling;
     /* scaleBy ptr */
     Spike  *_scaleBy_spike;
-    DoubleProperty *_scaleBy_cx, *_scaleBy_cy ,*_scaleBy_sx, *_scaleBy_sy;
     Process *_scaleBy_action;
+    DoubleProperty *_scaleBy_cx, *_scaleBy_cy ,*_scaleBy_sx, *_scaleBy_sy;
     Coupling *_scaleBy_cx_coupling, *_scaleBy_cy_coupling, *_scaleBy_sx_coupling, *_scaleBy_sy_coupling;
     /* rotateBy ptr */
     Spike *_rotateBy_spike;
-    DoubleProperty *_rotateBy_cx, *_rotateBy_cy, *_rotateBy_da;
     Process *_rotateBy_action;
+    DoubleProperty *_rotateBy_cx, *_rotateBy_cy, *_rotateBy_da;
     Coupling *_rotateBy_cx_coupling, *_rotateBy_cy_coupling, *_rotateBy_da_coupling;
     /* skewXBy ptr */
     Spike *_skew_X_By_spike;
-    DoubleProperty *_skew_X_By_cx, *_skew_X_By_cy, *_skew_X_By_da;
     Process *_skew_X_By_action;
+    DoubleProperty *_skew_X_By_cx, *_skew_X_By_cy, *_skew_X_By_da;
     Coupling *_skew_X_By_cx_coupling, *_skew_X_By_cy_coupling, *_skew_X_By_da_coupling;
     /* skewXBy ptr */
     Spike *_skew_Y_By_spike;
-    DoubleProperty *_skew_Y_By_cx, *_skew_Y_By_cy, *_skew_Y_By_da;
     Process *_skew_Y_By_action;
+    DoubleProperty *_skew_Y_By_cx, *_skew_Y_By_cy, *_skew_Y_By_da;
     Coupling *_skew_Y_By_cx_coupling, *_skew_Y_By_cy_coupling, *_skew_Y_By_da_coupling;
 
   private:
