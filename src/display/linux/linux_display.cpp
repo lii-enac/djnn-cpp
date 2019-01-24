@@ -12,6 +12,13 @@
  *
  */
 
-#pragma once
+#include "linux_display.h"
 
-#include "display.h"
+namespace djnn {
+  static DRMUdev *udev;
+
+  void
+  p_init_display () {
+    udev = new DRMUdev ();
+  }
+}

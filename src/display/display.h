@@ -17,10 +17,14 @@
 #include <string>
 #include <vector>
 
+#include "../core/tree/process.h"
+
 namespace djnn {
 
-	extern std::vector<std::string> loadedModules; 
+  extern std::vector<std::string> loadedModules;
 
-	void init_display ();
+  extern Process *GPUs;
+  extern Process *Displays;
+  void init_display ();
 
 }

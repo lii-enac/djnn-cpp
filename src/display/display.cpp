@@ -13,12 +13,17 @@
  */
 
 
-#include "display.h"
+#include "display-priv.h"
+#include "../core/tree/set.h"
+#include "../core/uri.h"
 
 namespace djnn
 {
   
   static bool __module_initialized = false;
+
+  Process *GPUs = nullptr;
+  Process *Displays = nullptr;
 
   void
   init_display () {
@@ -28,6 +33,13 @@ namespace djnn
       __module_initialized = true;
       
       djnn::loadedModules.push_back("display");
+      GPUs = new Set (nullptr, "GPUs");
+      GPUs->set_activated ();
+      Displays = new Set (nullptr, "Displays");
+      Displays->set_activated ();
+      URI::add_uri ("gpu", GPUs);
+      URI::add_uri ("display", Displays);
+      p_init_display ();
       
     }
   }

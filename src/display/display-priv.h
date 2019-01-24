@@ -13,5 +13,8 @@
  */
 
 #pragma once
+#include "display-dev.h"
 
-#include "display.h"
+namespace djnn {
+  void p_init_display ();
+}
