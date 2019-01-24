@@ -80,7 +80,7 @@ namespace djnn
     return nullptr;
     
     DoublePropertyProxy* prop = nullptr;
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_none);
+    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
 
     return res;
   }
