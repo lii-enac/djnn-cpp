@@ -1111,19 +1111,19 @@ namespace djnn
       _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
       _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
       _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
-       /* translateBy ptr */
-      _translateBy_spike(nullptr),
-      _translateBy_dx(nullptr), _translateBy_dy(nullptr), _translateBy_action(nullptr),
+      /* translateBy ptr */
+      _translateBy_spike(nullptr), _translateBy_action(nullptr),
+      _translateBy_dx(nullptr), _translateBy_dy(nullptr),
       _tranlateBy_dx_coupling(nullptr), _tranlateBy_dy_coupling(nullptr),
       /* scaleBy ptr */
-      _scaleBy_spike(nullptr),
-      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr), _scaleBy_action(nullptr),
+      _scaleBy_spike(nullptr), _scaleBy_action(nullptr),
+      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr),
       _scaleBy_cx_coupling(nullptr), _scaleBy_cy_coupling(nullptr), _scaleBy_sx_coupling(nullptr), _scaleBy_sy_coupling(nullptr),
       /* rotateBy ptr */
       _rotateBy_spike(nullptr), _rotateBy_action(nullptr), 
       _rotateBy_cx(nullptr), _rotateBy_cy(nullptr), _rotateBy_da(nullptr),
       _rotateBy_cx_coupling(nullptr), _rotateBy_cy_coupling(nullptr), _rotateBy_da_coupling(nullptr),
-       /* skewXBy ptr */
+      /* skewXBy ptr */
       _skew_X_By_spike(nullptr), _skew_X_By_action(nullptr),
       _skew_X_By_cx(nullptr), _skew_X_By_cy(nullptr), _skew_X_By_da(nullptr),
       _skew_X_By_cx_coupling(nullptr), _skew_X_By_cy_coupling(nullptr), _skew_X_By_da_coupling(nullptr),

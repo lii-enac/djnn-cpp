@@ -38,7 +38,6 @@ namespace djnn
       _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
       
   {
-    djnTextEncoding code = djnUtf8;
     set_origin (x, y);
     
     /* populate : text, width, height */
@@ -64,7 +63,6 @@ namespace djnn
       _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
       
   {
-    djnTextEncoding code = djnUtf8;
     set_origin (x, y);
 
     /* populate : text, width, height */
@@ -89,7 +87,6 @@ namespace djnn
       _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
       
   {
-    djnTextEncoding code = djnUtf8;
     set_origin (x, y);
 
     /* populate : text, width, height */

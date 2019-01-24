@@ -330,7 +330,7 @@ namespace djnn
     *_cm42, *_cm43, *_cm44;
     /* translateBy ptr */
     Spike  *_translateBy_spike;
-    Process* _translateBy_action;
+    Process *_translateBy_action;
     DoubleProperty *_translateBy_dx, *_translateBy_dy;
     Coupling *_tranlateBy_dx_coupling, *_tranlateBy_dy_coupling;
     /* scaleBy ptr */
