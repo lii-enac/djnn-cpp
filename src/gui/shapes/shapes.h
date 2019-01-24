@@ -43,7 +43,7 @@ namespace djnn
     AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_component("ry"); }
 
   private:
-    struct raw_props_t { double x,y,width,height,rx,ry; };
+    struct raw_props_t { double x, y, width, height, rx, ry; };
     raw_props_t raw_props;
     Coupling *_cx, *_cy, *_cwidth, *_cheight, *_crx, *_cry;
     void activate () override;

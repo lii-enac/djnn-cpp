@@ -46,8 +46,10 @@ namespace djnn
     { Qt::WindingFill, Qt::OddEvenFill };
 
   void
-  QtBackend::load_fill_color (int r, int g, int b)
+  QtBackend::load_fill_color (AbstractColor *c)
   {
+    double r, g, b;
+    c->get_properties_values(r, g, b);
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->brush.setStyle (Qt::SolidPattern);
     int a = cur_context->brush.color ().alpha ();
@@ -55,8 +57,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_outline_color (int r, int g, int b)
+  QtBackend::load_outline_color (AbstractColor *c)
   {
+    double r, g, b;
+    c->get_properties_values(r, g, b);
     QtContext *cur_context = _context_manager->get_current ();
     if (cur_context->pen.style () == Qt::NoPen) {
       cur_context->pen.setStyle (Qt::SolidLine);
@@ -66,8 +70,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_fill_rule (djnFillRuleType rule)
+  QtBackend::load_fill_rule (FillRule *fr)
   {
+    int rule;
+    fr->get_properties_values(rule);
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->fillRule = fillRules[rule];
   }
@@ -87,15 +93,19 @@ namespace djnn
   }
 
   void
-  QtBackend::load_texture (const std::string &path)
+  QtBackend::load_texture (Texture *t)
   {
+    std::string path;
+    t->get_properties_values(path);
     QPixmap pic (path.c_str ());
     _context_manager->get_current ()->brush.setTexture (pic);
   }
 
   void
-  QtBackend::load_outline_opacity (float a)
+  QtBackend::load_outline_opacity (OutlineOpacity *oo)
   {
+    double a;
+    oo->get_properties_values (a);
     QtContext *cur_context = _context_manager->get_current ();
     QColor c = cur_context->pen.color ();
     float oldAlpha = c.alphaF ();
@@ -104,8 +114,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_fill_opacity (float a)
+  QtBackend::load_fill_opacity (FillOpacity *fo)
   {
+    double a;
+    fo->get_properties_values(a);
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->alpha *= a;
     if (cur_context->brush.style () == Qt::SolidPattern) {
@@ -126,16 +138,19 @@ namespace djnn
   }
 
   void
-  QtBackend::load_outline_width (double w)
+  QtBackend::load_outline_width (OutlineWidth *ow)
   {
+    double w;
+    ow->get_properties_values(w);
     _context_manager->get_current ()->pen.setWidthF (w);
   }
 
   void
-  QtBackend::load_outline_cap_style (djnCapStyle cap)
+  QtBackend::load_outline_cap_style (OutlineCapStyle *ocs)
   {
-    int c = cap;
-    if (cap >= (sizeof(capStyleArray) / sizeof(Qt::PenCapStyle))) {
+    int c;
+    ocs->get_properties_values(c);
+    if (c >= (sizeof(capStyleArray) / sizeof(Qt::PenCapStyle))) {
       std::cerr << "Invalid Qt cap style, default will be used\n";
       c = 0;
     }
@@ -143,10 +158,11 @@ namespace djnn
   }
 
   void
-  QtBackend::load_outline_join_style (djnJoinStyle join)
+  QtBackend::load_outline_join_style (OutlineJoinStyle *ojs)
   {
-    int j = join;
-    if (join >= (sizeof(joinStyleArray) / sizeof(Qt::PenJoinStyle))) {
+    int j;
+    ojs->get_properties_values(j);
+    if (j >= (sizeof(joinStyleArray) / sizeof(Qt::PenJoinStyle))) {
       std::cerr << "Invalid Qt join style, default will be used\n";
       j = 0;
     }
@@ -154,14 +170,18 @@ namespace djnn
   }
 
   void
-  QtBackend::load_outline_miter_limit (int limit)
+  QtBackend::load_outline_miter_limit (OutlineMiterLimit *oml)
   {
+    int limit;
+    oml->get_properties_values(limit);
     _context_manager->get_current ()->pen.setMiterLimit (limit);
   }
 
   void
-  QtBackend::load_dash_array (vector<double> dash)
+  QtBackend::load_dash_array (DashArray *da)
   {
+    vector<double> dash;
+    dash = da->dash_array ();
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->pen.setStyle (Qt::CustomDashLine);
     QVector<qreal> vector (0);
@@ -177,14 +197,19 @@ namespace djnn
   }
 
   void
-  QtBackend::load_dash_offset (double offset)
+  QtBackend::load_dash_offset (DashOffset *od)
   {
+    double offset;
+    od->get_properties_values(offset);
     _context_manager->get_current ()->pen.setDashOffset (offset);
   }
 
   void
-  QtBackend::load_gradient_stop (int r, int g, int b, float a, float offset)
+  QtBackend::load_gradient_stop (GradientStop *gs)
   {
+    double r, g, b;
+    double a, offset;
+    gs->get_properties_values(r, g, b, a, offset);
     QColor color (r, g, b);
     color.setAlphaF (a);
     cur_gradient->setColorAt (offset, color);
@@ -205,10 +230,8 @@ namespace djnn
   void
   QtBackend::load_linear_gradient (LinearGradient *g)
   {
-    double x1 = g->x1 ()->get_value ();
-    double y1 = g->y1 ()->get_value ();
-    double x2 = g->x2 ()->get_value ();
-    double y2 = g->y2 ()->get_value ();
+    double x1, y1, x2, y2;
+    g->get_properties_values (x1, y1, x2, y2);
     cur_linear_gradient = QLinearGradient (x1, y1, x2, y2);
     cur_gradient = &cur_linear_gradient;
     prepare_gradient (g);
@@ -217,30 +240,32 @@ namespace djnn
   void
   QtBackend::load_radial_gradient (RadialGradient *g)
   {
-    double cx = g->cx ()->get_value ();
-    double cy = g->cy ()->get_value ();
-    double r = g->r ()->get_value ();
-    double fx = g->fx ()->get_value ();
-    double fy = g->fy ()->get_value ();
+    double cx, cy, r, fx, fy;
+    g->get_properties_values (cx, cy, r, fx, fy);
     cur_radial_gradient = QRadialGradient (cx, cy, r, fx, fy);
     cur_gradient = &cur_radial_gradient;
     prepare_gradient (g);
   }
 
   void
-  QtBackend::load_font_size (djnLengthUnit unit, double size)
+  QtBackend::load_font_size (FontSize *fs)
   {
+    int unit;
+    double size;
+    fs->get_properties_values(unit, size);
     QtContext *cur_context = _context_manager->get_current ();
     if (unit == djnPxLength)
       cur_context->font.setPixelSize (size);
     else
-      cur_context->font.setPointSizeF (size * cur_context->get_unit_factor (unit));
+      cur_context->font.setPointSizeF (size * cur_context->get_unit_factor ((djnn::djnLengthUnit)unit));
     cur_context->update_relative_units ();
   }
 
   void
-  QtBackend::load_font_weight (int weight)
+  QtBackend::load_font_weight (FontWeight *fw)
   {
+    int weight;
+    fw->get_properties_values(weight);
     QtContext *cur_context = _context_manager->get_current ();
     if (weight == -1)
       weight = cur_context->font.weight () - 10 < 0 ? 0 : cur_context->font.weight () - 10; /* lighter */
@@ -251,8 +276,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_font_style (djnFontSlope style)
+  QtBackend::load_font_style (FontStyle *fs)
   {
+    int style;
+    fs->get_properties_values(style);
     QtContext *cur_context = _context_manager->get_current ();
     int val = style;
     if (style >= (int) (sizeof(fontStyleArray) / sizeof(QFont::Style))) {
@@ -264,8 +291,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_font_family (const string &family)
+  QtBackend::load_font_family (FontFamily *ff)
   {
+    string family;
+    ff->get_properties_values(family);
     QtContext *cur_context = _context_manager->get_current ();
     QString val (family.c_str ());
     cur_context->font.setFamily (val);
@@ -273,8 +302,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_text_anchor (djnAnchorType anchor)
+  QtBackend::load_text_anchor (TextAnchor *a)
   {
+    int anchor;
+    a->get_properties_values(anchor);
     _context_manager->get_current ()->textAnchor = anchor;
   }
 } /* namespace djnn */

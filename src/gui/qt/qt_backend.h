@@ -87,51 +87,51 @@ namespace djnn
 
     //style
     void
-    load_fill_color (int r, int g, int b) override;
+    load_fill_color (AbstractColor *c) override;
     void
-    load_outline_color (int r, int g, int b) override;
+    load_outline_color (AbstractColor *c) override;
     void
-    load_fill_rule (djnFillRuleType rule) override;
+    load_fill_rule (FillRule *fr) override;
     void
     load_no_outline () override;
     void
     load_no_fill () override;
     void
-    load_texture (const std::string &path) override;
+    load_texture (Texture *t) override;
     void
-    load_outline_opacity (float alpha) override;
+    load_outline_opacity (OutlineOpacity *oo) override;
     void
-    load_fill_opacity (float alpha) override;
+    load_fill_opacity (FillOpacity *fo) override;
     void
-    load_outline_width (double w) override;
+    load_outline_width (OutlineWidth *ow) override;
     void
-    load_outline_cap_style (djnCapStyle cap) override;
+    load_outline_cap_style (OutlineCapStyle *ocs) override;
     void
-    load_outline_join_style (djnJoinStyle join) override;
+    load_outline_join_style (OutlineJoinStyle *ojs) override;
     void
-    load_outline_miter_limit (int limit) override;
+    load_outline_miter_limit (OutlineMiterLimit *oml) override;
     void
-    load_dash_array (vector<double> dash) override;
+    load_dash_array (DashArray *da) override;
     void
     load_no_dash_array () override;
     void
-    load_dash_offset (double offset) override;
+    load_dash_offset (DashOffset *od) override;
     void
-    load_gradient_stop (int r, int g, int b, float a, float offset) override;
+    load_gradient_stop (GradientStop *gs) override;
     void
     load_linear_gradient (LinearGradient *g) override;
     void
     load_radial_gradient (RadialGradient *g) override;
     void
-    load_font_size (djnLengthUnit unit, double size) override;
+    load_font_size (FontSize *fs) override;
     void
-    load_font_weight (int weight) override;
+    load_font_weight (FontWeight *fw) override;
     void
-    load_font_style (djnFontSlope style) override;
+    load_font_style (FontStyle *fs) override;
     void
-    load_font_family (const string &family) override;
+    load_font_family (FontFamily *ff) override;
     void
-    load_text_anchor (djnAnchorType anchor) override;
+    load_text_anchor (TextAnchor *a) override;
 
     //transformations
     void

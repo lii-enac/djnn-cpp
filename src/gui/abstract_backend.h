@@ -124,15 +124,15 @@ namespace djnn
 
     // style
     virtual void
-    load_fill_color (int r, int g, int b)
+    load_fill_color (AbstractColor *c)
     {
     }
     virtual void
-    load_outline_color (int r, int g, int b)
+    load_outline_color (AbstractColor *c)
     {
     }
     virtual void
-    load_fill_rule (djnFillRuleType rule)
+    load_fill_rule (FillRule *fr)
     {
     }
     virtual void
@@ -144,35 +144,35 @@ namespace djnn
     {
     }
     virtual void
-    load_texture (const std::string &path)
+    load_texture (Texture *t)
     {
     }
     virtual void
-    load_outline_opacity (float alpha)
+    load_outline_opacity (OutlineOpacity *oo)
     {
     }
     virtual void
-    load_fill_opacity (float alpha)
+    load_fill_opacity (FillOpacity *fo)
     {
     }
     virtual void
-    load_outline_width (double w)
+    load_outline_width (OutlineWidth *ow)
     {
     }
     virtual void
-    load_outline_cap_style (djnCapStyle cap)
+    load_outline_cap_style (OutlineCapStyle *ocs)
     {
     }
     virtual void
-    load_outline_join_style (djnJoinStyle join)
+    load_outline_join_style (OutlineJoinStyle *ojs)
     {
     }
     virtual void
-    load_outline_miter_limit (int limit)
+    load_outline_miter_limit (OutlineMiterLimit *oml)
     {
     }
     virtual void
-    load_dash_array (vector<double> dash)
+    load_dash_array (DashArray *da)
     {
     }
     virtual void
@@ -180,11 +180,11 @@ namespace djnn
     {
     }
     virtual void
-    load_dash_offset (double offset)
+    load_dash_offset (DashOffset *od)
     {
     }
     virtual void
-    load_gradient_stop (int r, int g, int b, float a, float offset)
+    load_gradient_stop (GradientStop *gs)
     {
     }
     virtual void
@@ -196,23 +196,23 @@ namespace djnn
     {
     }
     virtual void
-    load_font_size (djnLengthUnit unit, double size)
+    load_font_size (FontSize *fs)
     {
     }
     virtual void
-    load_font_weight (int weight)
+    load_font_weight (FontWeight *fw)
     {
     }
     virtual void
-    load_font_style (djnFontSlope style)
+    load_font_style (FontStyle *fs)
     {
     }
     virtual void
-    load_font_family (const string &family)
+    load_font_family (FontFamily *ff)
     {
     }
     virtual void
-    load_text_anchor (djnAnchorType anchor)
+    load_text_anchor (TextAnchor *a)
     {
     }
 

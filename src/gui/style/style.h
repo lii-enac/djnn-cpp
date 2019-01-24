@@ -40,11 +40,15 @@ namespace djnn
     AbstractColor (double r, double g, double b);
     virtual ~AbstractColor ();
     virtual void draw () override = 0;
-    DoubleProperty* r () { return _r;}
-    DoubleProperty* g () { return _g;}
-    DoubleProperty* b () { return _b;}
+    void get_properties_values (double &r, double &g, double &b);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component("r"); }
+    AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component("g"); }
+    AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component("b"); }
+
   protected:
-    DoubleProperty *_r, *_g, *_b;
+    struct raw_props_t { double r, g, b; };
+    raw_props_t raw_props;
     Coupling *_cr, *_cg, *_cb;
     void activate () override;
     void deactivate () override;
@@ -82,13 +86,18 @@ namespace djnn
     FillRule (Process *p, const std::string &n, int rule);
     FillRule (int rule);
     virtual ~FillRule ();
-    IntProperty* rule () { return _rule;}
+    void get_properties_values (int &rule);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* rule () { return (AbstractIntProperty*) find_component("rule"); }
+    //IntProperty* rule () { return _rule;}
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    IntProperty* _rule;
+    //IntProperty* _rule;
+    struct raw_props_t { int rule; };
+    raw_props_t raw_props;
     Coupling* _cr;
   };
 
@@ -126,13 +135,18 @@ namespace djnn
     Texture (Process *p, const std::string &n, const std::string &path);
     Texture (const std::string &path);
     virtual ~Texture ();
-    TextProperty* path () { return _path;}
+    void get_properties_values (string &path);
+    virtual Process* find_component (const string&) override;
+    AbstractTextProperty* path () { return (AbstractTextProperty*) find_component("path"); }
+    //TextProperty* path () { return _path;}
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    TextProperty* _path;
+    //TextProperty* _path;
+    struct raw_props_t { string path; };
+    raw_props_t raw_props;
     Coupling* _cp;
   };
 
@@ -142,12 +156,17 @@ namespace djnn
     AbstractOpacity (Process *p, const std::string &n, double alpha);
     AbstractOpacity (double alpha);
     virtual ~AbstractOpacity ();
-    DoubleProperty* alpha () { return _alpha;}
+    void get_properties_values (double &alpha);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* alpha () { return (AbstractDoubleProperty*) find_component("alpha"); }
+    //DoubleProperty* alpha () { return _alpha;}
     void activate () override;
     void deactivate () override;
     void draw () override = 0;
   protected:
-    DoubleProperty* _alpha;
+    //DoubleProperty* _alpha;
+    struct raw_props_t { double alpha; };
+    raw_props_t raw_props;
     Coupling* _ca;
   };
 
@@ -181,13 +200,18 @@ namespace djnn
     OutlineWidth (Process *p, const std::string &n, double width);
     OutlineWidth (double width);
     virtual ~OutlineWidth ();
-    DoubleProperty* width () { return _width;};
+    void get_properties_values (double &width);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
+    //DoubleProperty* width () { return _width;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    DoubleProperty* _width;
+    //DoubleProperty* _width;
+    struct raw_props_t { double width; };
+    raw_props_t raw_props;
     Coupling* _cw;
   };
 
@@ -199,13 +223,18 @@ namespace djnn
     OutlineCapStyle (Process *p, const std::string &n, int cap);
     OutlineCapStyle (int cap);
     virtual ~OutlineCapStyle ();
-    IntProperty* cap () { return _cap;};
+    void get_properties_values (int &cap);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* cap () { return (AbstractIntProperty*) find_component("cap"); }
+    //IntProperty* cap () { return _cap;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    IntProperty* _cap;
+    //IntProperty* _cap;
+    struct raw_props_t { int cap; };
+    raw_props_t raw_props;
     Coupling* _cc;
   };
 
@@ -217,13 +246,18 @@ namespace djnn
     OutlineJoinStyle (Process *p, const std::string &n, int join);
     OutlineJoinStyle (int join);
     virtual ~OutlineJoinStyle ();
-    IntProperty* join () { return _join;};
+    void get_properties_values (int &join);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* join () { return (AbstractIntProperty*) find_component("join"); }
+    //IntProperty* join () { return _join;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    IntProperty* _join;
+    //IntProperty* _join;
+    struct raw_props_t { int join; };
+    raw_props_t raw_props;
     Coupling* _cj;
   };
 
@@ -233,13 +267,18 @@ namespace djnn
     OutlineMiterLimit (Process *p, const std::string &n, int limit);
     OutlineMiterLimit (int limit);
     virtual ~OutlineMiterLimit ();
-    IntProperty* limit () { return _limit;};
+    void get_properties_values (int &limit);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* limit () { return (AbstractIntProperty*) find_component("limit"); }
+    //IntProperty* limit () { return _limit;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    IntProperty* _limit;
+    //IntProperty* _limit;
+    struct raw_props_t { int limit; };
+    raw_props_t raw_props;
     Coupling* _cl;
   };
 
@@ -285,13 +324,18 @@ namespace djnn
     DashOffset (Process *p, const std::string &n, double offset);
     DashOffset (double offset);
     virtual ~DashOffset ();
-    DoubleProperty* offset () { return _offset;};
+    void get_properties_values (double &offset);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component("offset"); }
+    //DoubleProperty* offset () { return _offset;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    DoubleProperty* _offset;
+    struct raw_props_t { double offset; };
+    raw_props_t raw_props;
+    //DoubleProperty* _offset;
     Coupling* _co;
   };
 
@@ -301,33 +345,48 @@ namespace djnn
     GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset);
     GradientStop (double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
+    void get_properties_values (double &r, double &g, double &b, double &a, double &offset);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component("r"); }
+    AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component("g"); }
+    AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component("b"); }
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
+    AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component("offset"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    DoubleProperty *_r, *_g, *_b, *_a, *_offset;
+    //DoubleProperty *_r, *_g, *_b, *_a, *_offset;
+    struct raw_props_t { double r; double g; double b; double a;  double offset; };
+    raw_props_t raw_props;
     Coupling *_cr, *_cg, *_cb, *_ca, *_co;
   };
 
   class AbstractGradient : public AbstractStyle
   {
   public:
-    AbstractGradient (Process *p, const std::string &n, int s, int fc);
-    AbstractGradient (int s, int fc);
+    AbstractGradient (Process *p, const std::string &n, int spread, int coords);
+    AbstractGradient (int spread, int coords);
     AbstractGradient (Process *p, const std::string &n);
     virtual ~AbstractGradient ();
+    void get_properties_values (int &spread, int &coords);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* spread () { return (AbstractIntProperty*) find_component("spread"); }
+    AbstractIntProperty* coords () { return (AbstractIntProperty*) find_component("coords"); }
     void activate () override;
     void deactivate () override;
     virtual void update ();
     virtual void draw () override = 0;
     List* transforms () { return _transforms;}
     List* stops () { return _stops;}
-    IntProperty* spread () { return _spread;}
-    IntProperty* coords () { return _coords;}
+    // IntProperty* spread () { return _spread;}
+    // IntProperty* coords () { return _coords;}
     bool is_linear () { return _linear;}
   protected:
-    IntProperty *_spread, *_coords;
+    //IntProperty *_spread, *_coords;
+    struct raw_props_t { int spread; int coords; };
+    raw_props_t raw_props;
     Coupling *_cs, *_cc;
     List *_stops, *_transforms;
     AbstractGradient *_g;
@@ -344,17 +403,25 @@ namespace djnn
     LinearGradient (double x1, double y1, double x2, double y2, int s, int fc);
     LinearGradient (Process *p, const std::string &n, LinearGradient *lg);
     virtual ~LinearGradient ();
+    void get_properties_values (double &x1, double &y1, double &x2, double &y2);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
+    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
+    AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_component("x2"); }
+    AbstractDoubleProperty* y2 () { return (AbstractDoubleProperty*) find_component("y2"); }
     void activate () override;
     void deactivate () override;
     void update () override;
     void draw () override;
     Process* clone () override;
-    DoubleProperty* x1 () { return _x1;}
-    DoubleProperty* y1 () { return _y1;}
-    DoubleProperty* x2 () { return _x2;}
-    DoubleProperty* y2 () { return _y2;}
+    // DoubleProperty* x1 () { return _x1;}
+    // DoubleProperty* y1 () { return _y1;}
+    // DoubleProperty* x2 () { return _x2;}
+    // DoubleProperty* y2 () { return _y2;}
   private:
-    DoubleProperty *_x1, *_y1, *_x2, *_y2;
+    //DoubleProperty *_x1, *_y1, *_x2, *_y2;
+    struct raw_props_t { double x1; double y1; double x2; double y2; };
+    raw_props_t raw_props;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2;
   };
 
@@ -383,18 +450,27 @@ namespace djnn
     RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc);
     RadialGradient (Process *p, const std::string &n, RadialGradient *rg);
     virtual ~RadialGradient ();
+    void get_properties_values (double &cx, double &cy, double &r, double &fx, double &fy);
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
+    AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component("r"); }
+    AbstractDoubleProperty* fx () { return (AbstractDoubleProperty*) find_component("fx"); }
+    AbstractDoubleProperty* fy () { return (AbstractDoubleProperty*) find_component("fy"); }
     void update () override;
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    DoubleProperty* cx () { return _cx;}
-    DoubleProperty* cy () { return _cy;}
-    DoubleProperty* r () { return _r;}
-    DoubleProperty* fx () { return _fx;}
-    DoubleProperty* fy () { return _fy;}
+    // DoubleProperty* cx () { return _cx;}
+    // DoubleProperty* cy () { return _cy;}
+    // DoubleProperty* r () { return _r;}
+    // DoubleProperty* fx () { return _fx;}
+    // DoubleProperty* fy () { return _fy;}
   private:
-    DoubleProperty *_cx, *_cy, *_r, *_fx, *_fy;
+    //DoubleProperty *_cx, *_cy, *_r, *_fx, *_fy;
+    struct raw_props_t { double cx; double cy; double r; double fx; double fy; };
+    raw_props_t raw_props;
     Coupling *_ccx, *_ccy, *_cr, *_cfx, *_cfy;
   };
 
@@ -421,14 +497,20 @@ namespace djnn
     FontSize (Process *p, const std::string &n, int unit, double size);
     FontSize (int unit, double size);
     virtual ~FontSize ();
+    void get_properties_values (int &unit, double &size);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* unit () { return (AbstractIntProperty*) find_component("unit"); }
+    AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_component("size"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    DoubleProperty* size () { return _size; }
+    //DoubleProperty* size () { return _size; }
   private:
-    IntProperty *_unit;
-    DoubleProperty *_size;
+    struct raw_props_t { int unit; double size; };
+    raw_props_t raw_props;
+    // IntProperty *_unit;
+    // DoubleProperty *_size;
     Coupling *_cu, *_cs;
   };
 
@@ -438,13 +520,18 @@ namespace djnn
     FontWeight (Process *p, const std::string &n, int weight);
     FontWeight (int weight);
     virtual ~FontWeight ();
+    void get_properties_values (int &weight);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* weight () { return (AbstractIntProperty*) find_component("weight"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    IntProperty* weight () { return _weight; }
+    //IntProperty* weight () { return _weight; }
   private:
-    IntProperty* _weight;
+    struct raw_props_t { int weight; };
+    raw_props_t raw_props;
+    //IntProperty* _weight;
     Coupling* _cw;
   };
 
@@ -456,13 +543,18 @@ namespace djnn
     FontStyle (Process *p, const std::string &n, int style);
     FontStyle (int style);
     virtual ~FontStyle ();
+    void get_properties_values (int &style);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* style () { return (AbstractIntProperty*) find_component("style"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    IntProperty* style () { return _style; }
+    //IntProperty* style () { return _style; }
   private:
-    IntProperty* _style;
+    //IntProperty* _style;
+    struct raw_props_t { int style; };
+    raw_props_t raw_props;
     Coupling* _cs;
   };
 
@@ -472,13 +564,18 @@ namespace djnn
     FontFamily (Process *p, const std::string &n, const std::string &family);
     FontFamily (const std::string &family);
     virtual ~FontFamily ();
+    void get_properties_values (string &family);
+    virtual Process* find_component (const string&) override;
+    AbstractTextProperty* family () { return (AbstractTextProperty*) find_component("family"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    TextProperty* family () { return _family; }
+    //TextProperty* family () { return _family; }
   private:
-    TextProperty* _family;
+    //TextProperty* _family;
+    struct raw_props_t { string family; };
+    raw_props_t raw_props;
     Coupling* _cf;
   };
 
@@ -490,12 +587,17 @@ namespace djnn
     TextAnchor (Process *p, const std::string &n, int anchor);
     TextAnchor (int anchor);
     virtual ~TextAnchor ();
+    void get_properties_values (int &anchor);
+    virtual Process* find_component (const string&) override;
+    AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_component("anchor"); }
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    IntProperty* _anchor;
+    //IntProperty* _anchor;
+    struct raw_props_t { int anchor; };
+    raw_props_t raw_props;
     Coupling* _ca;
   };
 
