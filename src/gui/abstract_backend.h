@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -217,59 +218,58 @@ namespace djnn
 
     // transform
     virtual void
-    load_translation (Translation*, double tx, double ty)
+    load_translation (Translation*)
     {
     }
     virtual void
-    load_gradient_translation (GradientTranslation*, double tx, double ty)
+    load_gradient_translation (GradientTranslation*)
     {
     }
     virtual void
-    load_rotation (Rotation*, double a, double cx, double cy)
+    load_rotation (Rotation*)
     {
     }
     virtual void
-    load_gradient_rotation (GradientRotation*, double a, double cx, double cy)
+    load_gradient_rotation (GradientRotation*)
     {
     }
     virtual void
-    load_scaling (Scaling*, double sx, double sy, double cx, double cy)
+    load_scaling (Scaling*)
     {
     }
     virtual void
-    load_gradient_scaling (GradientScaling*, double sx, double sy, double cx, double cy)
+    load_gradient_scaling (GradientScaling*)
     {
     }
     virtual void
-    load_skew_x (SkewX*, double a)
+    load_skew_x (SkewX*)
     {
     }
     virtual void
-    load_gradient_skew_x (GradientSkewX*, double a)
+    load_gradient_skew_x (GradientSkewX*)
     {
     }
     virtual void
-    load_skew_y (SkewY*, double a)
+    load_skew_y (SkewY*)
     {
     }
     virtual void
-    load_gradient_skew_y (GradientSkewY*, double a)
+    load_gradient_skew_y (GradientSkewY*)
     {
     }
     virtual void
-    load_homography (AbstractHomography*, double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24,
-                     double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44)
+    load_homography (AbstractHomography*)
     {
     }
     virtual void
-    load_gradient_homography (AbstractHomography*, double m11, double m12, double m13, double m21, double m22, double m23, double m31,
-                              double m32, double m33)
+    load_gradient_homography (AbstractHomography*)
     {
     }
     void
-    load_simple_gradient_transform (AbstractHomography* g, double a, double b, double c, double d, double e, double f)
+    load_simple_gradient_transform (AbstractHomography* g)
     {
-      load_gradient_homography (g, a, b, 0, c, d, 0, e, f, 1);
+      //get_property
+      //load_gradient_homography (g, a, b, 0, c, d, 0, e, f, 1);
     }
 
     virtual void

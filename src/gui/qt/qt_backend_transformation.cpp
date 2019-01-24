@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -28,20 +29,26 @@
 namespace djnn
 {
   void
-  QtBackend::load_translation (Translation*, double tx, double ty)
+  QtBackend::load_translation (Translation* t)
   {
+    double tx, ty;
+    t->get_properties_values (tx, ty);
     _context_manager->get_current ()->matrix.translate (tx, ty);
   }
 
   void
-  QtBackend::load_gradient_translation (GradientTranslation*, double tx, double ty)
+  QtBackend::load_gradient_translation (GradientTranslation* t)
   {
+    double tx, ty;
+    t->get_properties_values (tx, ty);
     _context_manager->get_current ()->gradientTransform.translate (tx, ty);
   }
 
   void
-  QtBackend::load_rotation (Rotation*, double a, double cx, double cy)
+  QtBackend::load_rotation (Rotation* r)
   {
+    double a, cx, cy;
+    r->get_properties_values (a, cx, cy);
     QtContext *cur_context = _context_manager->get_current ();
     if (cx || cy)
       cur_context->matrix.translate (cx, cy, 0);
@@ -51,8 +58,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_rotation (GradientRotation*, double a, double cx, double cy)
+  QtBackend::load_gradient_rotation (GradientRotation* r)
   {
+    double a, cx, cy;
+    r->get_properties_values (a, cx, cy);
     QtContext *cur_context = _context_manager->get_current ();
     if (cx || cy)
       cur_context->gradientTransform.translate (cx, cy);
@@ -62,8 +71,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_scaling (Scaling*, double sx, double sy, double cx, double cy)
+  QtBackend::load_scaling (Scaling* s)
   {
+    double sx, sy, cx, cy;
+    s->get_properties_values (sx, sy, cx, cy);
     QtContext *cur_context = _context_manager->get_current ();
     if (cx || cy)
       cur_context->matrix.translate (cx, cy, 0);
@@ -73,8 +84,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_scaling (GradientScaling*, double sx, double sy, double cx, double cy)
+  QtBackend::load_gradient_scaling (GradientScaling* s)
   {
+    double sx, sy, cx, cy;
+    s->get_properties_values (sx, sy, cx, cy);
     QtContext *cur_context = _context_manager->get_current ();
     if (cx || cy)
       cur_context->gradientTransform.translate (cx, cy);
@@ -84,8 +97,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_skew_x (SkewX*, double a)
+  QtBackend::load_skew_x (SkewX* s)
   {
+    double a;
+    s->get_properties_values (a);
     QtContext *cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
     QMatrix4x4 origin = cur_context->matrix;
@@ -95,8 +110,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_skew_y (SkewY*, double a)
+  QtBackend::load_skew_y (SkewY* s)
   {
+    double a;
+    s->get_properties_values (a);
     QtContext *cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
     QMatrix4x4 origin = cur_context->matrix;
@@ -106,26 +123,30 @@ namespace djnn
   }
 
   void
-  QtBackend::load_gradient_skew_x (GradientSkewX*, double a)
+  QtBackend::load_gradient_skew_x (GradientSkewX* s)
   {
+    double a;
+    s->get_properties_values (a);
     QtContext *cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
     cur_context->gradientTransform.shear (tan (a_rad), 0);
   }
 
   void
-  QtBackend::load_gradient_skew_y (GradientSkewY*, double a)
+  QtBackend::load_gradient_skew_y (GradientSkewY* s)
   {
+    double a;
+    s->get_properties_values (a);
     QtContext *cur_context = _context_manager->get_current ();
     double a_rad = a * 0.017453292519943; /* convert degrees to radians */
     cur_context->gradientTransform.shear (0, tan (a_rad));
   }
 
   void
-  QtBackend::load_homography (AbstractHomography*, double m11, double m12, double m13, double m14, double m21, double m22, double m23,
-                              double m24, double m31, double m32, double m33, double m34, double m41, double m42,
-                              double m43, double m44)
+  QtBackend::load_homography (AbstractHomography* h)
   {
+    double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44;
+    h->get_properties_values (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
     QtContext *cur_context = _context_manager->get_current ();
     QMatrix4x4 origin = cur_context->matrix;
     QMatrix4x4 newT (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
@@ -134,9 +155,10 @@ namespace djnn
   }
   
   void
-  QtBackend::load_gradient_homography (AbstractHomography*, double m11, double m12, double m13, double m21, double m22, double m23,
-                                       double m31, double m32, double m33)
+  QtBackend::load_gradient_homography (AbstractHomography* h)
   {
+    double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44;
+    h->get_properties_values (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
     QtContext *cur_context = _context_manager->get_current ();
     QTransform origin = cur_context->gradientTransform;
     QTransform newT (m11, m12, m13, m21, m22, m23, m31, m32, m33);

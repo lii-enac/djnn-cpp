@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -134,32 +135,30 @@ namespace djnn
 
     //transformations
     void
-    load_translation (Translation*, double tx, double ty) override;
+    load_translation (Translation* t) override;
     void
-    load_gradient_translation (GradientTranslation*, double tx, double ty) override;
+    load_gradient_translation (GradientTranslation* t) override;
     void
-    load_rotation (Rotation*, double a, double cx, double cy) override;
+    load_rotation (Rotation* r) override;
     void
-    load_gradient_rotation (GradientRotation*, double a, double cx, double cy) override;
+    load_gradient_rotation (GradientRotation* r) override;
     void
-    load_scaling (Scaling*, double sx, double sy, double cx, double cy) override;
+    load_scaling (Scaling* s) override;
     void
-    load_gradient_scaling (GradientScaling*, double sx, double sy, double cx, double cy) override;
+    load_gradient_scaling (GradientScaling* s) override;
     void
-    load_skew_x (SkewX*, double a) override;
+    load_skew_x (SkewX* s) override;
     void
-    load_gradient_skew_x (GradientSkewX*, double a) override;
+    load_gradient_skew_x (GradientSkewX* s) override;
     void
-    load_skew_y (SkewY*, double a) override;
+    load_skew_y (SkewY* s) override;
     void
-    load_gradient_skew_y (GradientSkewY*, double a) override;
+    load_gradient_skew_y (GradientSkewY* s) override;
     void
-    load_homography (AbstractHomography*, double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24,
-		     double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44)
+    load_homography (AbstractHomography* h)
 			 override;
     void
-    load_gradient_homography (AbstractHomography*, double m11, double m12, double m13, double m21, double m22, double m23, double m31,
-			      double m32, double m33) override;
+    load_gradient_homography (AbstractHomography* h) override;
     void
     update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
 

@@ -128,7 +128,7 @@ namespace djnn
   Translation::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_translation (this, raw_props.tx, raw_props.ty);
+      Backend::instance ()->load_translation (this);
     }
   }
 
@@ -161,7 +161,7 @@ namespace djnn
   void
   GradientTranslation::draw ()
   {
-    Backend::instance ()->load_gradient_translation (this, raw_props.tx, raw_props.ty);
+    Backend::instance ()->load_gradient_translation (this);
   }
 
   Process*
@@ -270,7 +270,7 @@ namespace djnn
   Rotation::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_rotation (this, raw_props.a, raw_props.cx, raw_props.cy);
+      Backend::instance ()->load_rotation (this);
     }
   }
 
@@ -303,7 +303,7 @@ namespace djnn
   void
   GradientRotation::draw ()
   {
-    Backend::instance ()->load_gradient_rotation (this, raw_props.a, raw_props.cx, raw_props.cy);
+    Backend::instance ()->load_gradient_rotation (this);
   }
 
   Process*
@@ -422,7 +422,7 @@ namespace djnn
   Scaling::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_scaling (this, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+      Backend::instance ()->load_scaling (this);
     }
   }
 
@@ -455,7 +455,7 @@ namespace djnn
   void
   GradientScaling::draw ()
   {
-    Backend::instance ()->load_gradient_scaling (this, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    Backend::instance ()->load_gradient_scaling (this);
   }
 
   Process*
@@ -545,7 +545,7 @@ namespace djnn
   SkewX::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_skew_x (this, raw_props.a);
+      Backend::instance ()->load_skew_x (this);
     }
   }
 
@@ -578,7 +578,7 @@ namespace djnn
   void
   GradientSkewX::draw ()
   {
-    Backend::instance ()->load_gradient_skew_x (this, raw_props.a);
+    Backend::instance ()->load_gradient_skew_x (this);
   }
 
   Process*
@@ -606,7 +606,7 @@ namespace djnn
   SkewY::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_skew_y (this, raw_props.a);
+      Backend::instance ()->load_skew_y (this);
     }
   }
 
@@ -639,7 +639,7 @@ namespace djnn
   void
   GradientSkewY::draw ()
   {
-    Backend::instance ()->load_gradient_skew_y (this, raw_props.a);
+    Backend::instance ()->load_gradient_skew_y (this);
   }
 
   Process*
@@ -1519,11 +1519,7 @@ namespace djnn
   Homography::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->load_homography (this, 
-                                             raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
-                                             raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
-                                             raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
-                                             raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
+      Backend::instance ()->load_homography (this);
     }
   }
 
@@ -1561,10 +1557,7 @@ namespace djnn
   void
   GradientHomography::draw ()
   {
-    Backend::instance ()->load_gradient_homography (this, 
-                                                    raw_props.m11, raw_props.m12, raw_props.m13,
-                                                    raw_props.m21, raw_props.m22, raw_props.m23,
-                                                    raw_props.m31, raw_props.m32, raw_props.m33);
+    Backend::instance ()->load_gradient_homography (this);
   }
 
   Process*
@@ -1613,7 +1606,7 @@ namespace djnn
 
     //Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
     //a, b, 0, c, d, 0, e, f, 1)
-    Backend::instance ()->load_simple_gradient_transform (this, raw_props.m11, raw_props.m12, raw_props.m21, raw_props.m22, raw_props.m31, raw_props.m32);
+    Backend::instance ()->load_simple_gradient_transform (this);
   }
 
   Process*
