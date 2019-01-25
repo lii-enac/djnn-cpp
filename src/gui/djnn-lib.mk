@@ -13,4 +13,9 @@ ifeq ($(graphics),SDL)
 include src/gui/sdl/djnn-lib.mk
 endif
 
+ifeq ($(graphics),CAIRO)
+include src/gui/sdl-cairo/djnn-lib.mk
+lib_srcs += $(shell find src/gui/cairo -name "*.cpp")
+endif
+
 lib_djnn_deps = core
