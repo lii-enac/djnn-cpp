@@ -330,7 +330,7 @@ dbg:
 
 ifeq ($(os),Linux)
 #https://brew.sh/
-pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev
+pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev
 pkgdeps += qt5-default
 #pkgdeps += freetype sdl2
 pkgcmd := apt install -y
