@@ -60,7 +60,6 @@ endif
 CC := $(crossp)cc
 CXX := $(crossp)c++
 GPERF ?= gperf
-CXXFLAGS ?= $(CFLAGS) -std=c++14
 
 ifeq ($(os),Linux)
 lib_suffix=.so
