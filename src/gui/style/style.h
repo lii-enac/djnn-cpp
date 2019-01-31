@@ -290,7 +290,7 @@ namespace djnn
     DashArray () :
         AbstractStyle () {}
     virtual ~DashArray () { _dash_array.clear ();}
-    vector<double> dash_array () { return _dash_array;}
+    const vector<double>& dash_array () const { return _dash_array;}
     void add_sub_pattern (double dash, double space)
     {
       _dash_array.push_back (dash);

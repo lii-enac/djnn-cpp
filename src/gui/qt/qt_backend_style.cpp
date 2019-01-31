@@ -180,8 +180,7 @@ namespace djnn
   void
   QtBackend::load_dash_array (DashArray *da)
   {
-    vector<double> dash;
-    dash = da->dash_array ();
+    const vector<double>& dash = da->dash_array ();
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->pen.setStyle (Qt::CustomDashLine);
     QVector<qreal> vector (0);
