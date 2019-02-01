@@ -63,9 +63,9 @@ namespace djnn
 
   Clock::~Clock ()
   {
-    if (_tick) { delete _tick; _tick = nullptr;}
-    if (_elapsed) { delete _elapsed; _elapsed = nullptr;}
-    if (_period) { delete _period; _period = nullptr;}
+    delete _tick;
+    delete _elapsed;
+    delete _period;
   }
 
   void

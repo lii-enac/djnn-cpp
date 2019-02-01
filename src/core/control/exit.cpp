@@ -34,7 +34,7 @@ namespace djnn
 
   Exit::~Exit ()
   {
-    if (_value) {delete _value; _value = nullptr;}
+    delete _value;
   }
 
   void

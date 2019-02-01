@@ -89,18 +89,18 @@ namespace djnn
     Graph::instance ().remove_edge (_t2, _action);
     Graph::instance ().remove_edge (_action, _output);
 
-    if (_c_t2) { delete _c_t2; _c_t2 = nullptr;}
-    if (_c_t1) { delete _c_t1; _c_t1 = nullptr;}
-    if (_c_p2) { delete _c_p2; _c_p2 = nullptr;}
-    if (_c_p1) { delete _c_p1; _c_p1 = nullptr;}
-    if (_c_input) { delete _c_input; _c_input = nullptr;}
-    if (_action) { delete _action; _action = nullptr;}
-    if (_output) { delete _output; _output = nullptr;}
-    if (_t2) { delete _t2; _t2 = nullptr;}
-    if (_t1) { delete _t1; _t1 = nullptr;}
-    if (_p2) { delete _p2; _p2 = nullptr;}
-    if (_p1) { delete _p1; _p1 = nullptr;}
-    if (_input) { delete _input; _input = nullptr;}
+    delete _c_t2;
+    delete _c_t1;
+    delete _c_p2;
+    delete _c_p1;
+    delete _c_input;
+    delete _action;
+    delete _output;
+    delete _t2;
+    delete _t1;
+    delete _p2;
+    delete _p1;
+    delete _input;
   }
 
   void

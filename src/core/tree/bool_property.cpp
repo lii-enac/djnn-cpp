@@ -45,12 +45,10 @@ namespace djnn
     if(_false) {
       Graph::instance ().remove_edge (this, _false);
       delete _false;
-      _false = nullptr;
     }
     if(_true) {
       Graph::instance ().remove_edge (this, _true);
       delete _true;
-      _true = nullptr;
     }
   }
 

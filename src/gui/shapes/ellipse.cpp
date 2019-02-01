@@ -41,10 +41,10 @@ namespace djnn
 
   Ellipse::~Ellipse ()
   {
-    delete _ccx; _ccx = nullptr;
-    delete _ccy; _ccy = nullptr;
-    delete _crx; _crx = nullptr;
-    delete _cry; _cry = nullptr;
+    delete _ccx;
+    delete _ccy;
+    delete _crx;
+    delete _cry;
   }
 
   Process*

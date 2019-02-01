@@ -197,8 +197,8 @@ namespace djnn
     Graph::instance ().remove_edge (_fsm_action, _dst);
     Graph::instance ().remove_edge (_fsm_action, _src);
 
-    if (_fsm_action) { delete _fsm_action; _fsm_action = nullptr;}
-    if (_c_src) { delete _c_src; _c_src = nullptr;}
+    delete _fsm_action;
+    delete _c_src;
     
   }
 
@@ -284,8 +284,8 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _fsm_state);
 
-    if (_initial) { delete _initial; _initial = nullptr;}
-    if (_fsm_state) { delete _fsm_state; _fsm_state = nullptr;}
+    delete _initial;
+    delete _fsm_state;
   }
   void
   FSM::activate ()

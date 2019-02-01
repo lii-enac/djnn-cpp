@@ -245,14 +245,14 @@ namespace djnn
     Graph::instance ().remove_edge (_min, _action);
     Graph::instance ().remove_edge (_max, _action);
     
-    if (_c_input) { delete _c_input; _c_input=nullptr;}
-    if (_c_max) { delete _c_max; _c_max=nullptr;}
-    if (_c_min) { delete _c_min; _c_min=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_result) { delete _result; _result=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}
-    if (_max) { delete _max; _max=nullptr;}
-    if (_min) { delete _min; _min=nullptr;}
+    delete _c_input;
+    delete _c_max;
+    delete _c_min;
+    delete _action;
+    delete _result;
+    delete _input;
+    delete _max;
+    delete _min;
   }
 
   void

@@ -209,12 +209,12 @@ namespace djnn
 
 IvyAccess::~IvyAccess ()
 {
- if (_out) delete _out;
- if (_out_c) delete _out_c;
- if (_out_a) delete _out_a;
+  delete _out;
+  delete _out_c;
+  delete _out_a;
 
- if (_arriving) delete _arriving;
- if (_leaving) delete _leaving;
+  delete _arriving;
+  delete _leaving;
 
  // TODO: Clean MAP
  //while (!_in.empty()) {

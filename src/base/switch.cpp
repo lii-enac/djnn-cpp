@@ -55,9 +55,9 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
     Graph::instance ().remove_edge (_branch_name, _action);
    
-    if (_c_branch) { delete _c_branch; _c_branch = nullptr;}
-    if (_action) { delete _action; _action = nullptr;}
-    if (_branch_name) { delete _branch_name; _branch_name = nullptr;}
+    delete _c_branch;
+    delete _action;
+    delete _branch_name;
   }
 
   void

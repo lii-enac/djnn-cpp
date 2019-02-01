@@ -113,9 +113,10 @@ namespace djnn {
     udev_unref (_udev_connection);
 
     Graph::instance().remove_edge (_udev_iofd->find_component ("readable"), _action);
-    if (_readable_cpl) { delete _readable_cpl; _readable_cpl = nullptr;}
-    if (_action) { delete _action; _action = nullptr;}
-    if (_udev_iofd) { delete _udev_iofd; _udev_iofd = nullptr;}
+
+    delete _readable_cpl;
+    delete _action;
+    delete _udev_iofd;
 
   }
 

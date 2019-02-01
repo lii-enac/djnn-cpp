@@ -63,15 +63,15 @@ namespace djnn
     Graph::instance ().remove_edge (_step, _action);
     Graph::instance ().remove_edge (_action, _output);
     
-    if (_c_step) { delete _c_step; _c_step=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_step) { delete _step; _step=nullptr;}
-    if (_dt) { delete _dt; _dt=nullptr;}
-    if (_v) { delete _v; _v=nullptr;}
-    if (_output) { delete _output; _output=nullptr;}
-    if (_damping) { delete _damping; _damping=nullptr;}
-    if (_k) { delete _k; _k=nullptr;}
-    if (_m) { delete _m; _m=nullptr;}
+    delete _c_step;
+    delete _action;
+    delete _step;
+    delete _dt;
+    delete _v;
+    delete _output;
+    delete _damping;
+    delete _k;
+    delete _m;
   }
 
   void

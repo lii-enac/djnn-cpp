@@ -55,16 +55,16 @@ namespace djnn {
   {
     _parent->remove_child (this);
 
-    if (_wheel_dx) { delete _wheel_dx; _wheel_dx = nullptr;}
-    if (_wheel_dy) { delete _wheel_dy; _wheel_dy = nullptr;}
-    if (_wheel) { delete _wheel; _wheel = nullptr;}
-    if (_btn_name) { delete _btn_name; _btn_name = nullptr;}
-    if (_release) { delete _release; _release = nullptr;}
-    if (_press) { delete _press; _press = nullptr;}
-    if (_btn) { delete _btn; _btn = nullptr;}
-    if (_move_dy) { delete _move_dy; _move_dy = nullptr;}
-    if (_move_dx) { delete _move_dx; _move_dx = nullptr;}
-    if (_move) { delete _move; _move = nullptr;}
+    delete _wheel_dx;
+    delete _wheel_dy;
+    delete _wheel;
+    delete _btn_name;
+    delete _release;
+    delete _press;
+    delete _btn;
+    delete _move_dy;
+    delete _move_dx;
+    delete _move;
   }
 
   void

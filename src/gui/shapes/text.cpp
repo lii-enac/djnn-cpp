@@ -106,30 +106,26 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
     Graph::instance ().remove_edge (this->text(), _update_size);
     
-    if (_cx) {delete _cx; _cx = nullptr;}
-    if (_cy) {delete _cy; _cy = nullptr;}
-    if (_ctext) {delete _ctext; _ctext = nullptr;}
-    if (_cfsize) {delete _cfsize; _cfsize = nullptr;}
+    delete _cx;
+    delete _cy;
+    delete _ctext;
+    delete _cfsize;
 
     if (_cffamily) {
       Graph::instance ().remove_edge ( this->ffamily (), _update_size);
       delete _cffamily;
-      //_cffamily = nullptr;
     }
     if (_cfsize) {
       Graph::instance ().remove_edge ( this->fsize (), _update_size);
       delete _cfsize;
-      //_cfsize = nullptr;
     }
     if (_cfstyle) {
       Graph::instance ().remove_edge ( this->fstyle (), _update_size);
       delete _cfstyle;
-      //_cfstyle = nullptr;
     }
     if (_cfweight) {
       Graph::instance ().remove_edge ( this->fweight (), _update_size);
       delete _cfweight;
-      //_cfweight = nullptr;
     }
   }
 

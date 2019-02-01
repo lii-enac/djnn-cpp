@@ -92,14 +92,8 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
-    if (_c_src) {
-      delete _c_src;
-      _c_src = nullptr;
-    }
-    if (_action) {
-      delete _action;
-      _action = nullptr;
-    }
+    delete _c_src;
+    delete _action;
 
   }
 

@@ -41,10 +41,10 @@ namespace djnn
 
   Line::~Line ()
   {
-    delete _cx1; _cx1 = nullptr;
-    delete _cy1; _cy1 = nullptr;
-    delete _cx2; _cx2 = nullptr;
-    delete _cy2; _cy2 = nullptr;
+    delete _cx1;
+    delete _cy1;
+    delete _cx2;
+    delete _cy2;
   }
 
   Process*

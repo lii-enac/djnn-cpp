@@ -45,8 +45,8 @@ namespace djnn
 
   PathPoint::~PathPoint ()
   {
-    delete _cx; _cx = nullptr;
-    delete _cy; _cy = nullptr;
+    delete _cx;
+    delete _cy;
   }
 
   Process*
@@ -168,10 +168,10 @@ namespace djnn
 
   PathQuadratic::~PathQuadratic ()
   {
-    delete _cx1; _cx1 = nullptr;
-    delete _cy1; _cy1 = nullptr;
-    delete _cx;  _cx = nullptr;
-    delete _cy;  _cy = nullptr;
+    delete _cx1;
+    delete _cy1;
+    delete _cx;
+    delete _cy;
   }
 
   Process*
@@ -270,12 +270,12 @@ namespace djnn
 
   PathCubic::~PathCubic ()
   {
-    delete _cx1; _cx1 = nullptr;
-    delete _cy1; _cy1 = nullptr;
-    delete _cx2; _cx2 = nullptr;
-    delete _cy2; _cy2 = nullptr;
-    delete _cx;  _cx = nullptr;
-    delete _cy;  _cy = nullptr;
+    delete _cx1;
+    delete _cy1;
+    delete _cx2;
+    delete _cy2;
+    delete _cx;
+    delete _cy;
   }
 
   Process*
@@ -390,13 +390,13 @@ namespace djnn
 
   PathArc::~PathArc ()
   {
-    delete _crotx; _crotx = nullptr;
-    delete _cfl; _cfl = nullptr;
-    delete _cswfl; _cswfl = nullptr;
-    delete _crx; _crx = nullptr;
-    delete _cry; _cry = nullptr;
-    delete _cx; _cx = nullptr;
-    delete _cy; _cy = nullptr;
+    delete _crotx;
+    delete _cfl;
+    delete _cswfl;
+    delete _crx;
+    delete _cry;
+    delete _cx;
+    delete _cy;
   }
 
   Process*

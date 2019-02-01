@@ -41,9 +41,9 @@ namespace djnn
 
   Circle::~Circle ()
   {
-    delete _ccx; _ccx = nullptr;
-    delete _ccy; _ccy = nullptr;
-    delete _cr; _cr = nullptr;
+    delete _ccx;
+    delete _ccy;
+    delete _cr;
   }
 
   Process*

@@ -52,7 +52,7 @@ namespace djnn
   {
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
-      if (_children[i]) {delete _children[i]; _children[i] = nullptr;};
+      { delete _children[i]; _children[i] = nullptr;};
     }
     for (auto s: structure_observer_list) {
       s->remove_container (this);

@@ -169,9 +169,9 @@ namespace djnn
 
   List::~List ()
   {
-    if (_added) {delete _added; _added = nullptr;}
-    if (_removed) {delete _removed; _removed = nullptr;}
-    if (_size) {delete _size; _size = nullptr;} 
+    delete _added; 
+    delete _removed;
+    delete _size;
   }
 
   void
@@ -329,17 +329,17 @@ namespace djnn
     Graph::instance ().remove_edge (_previous, _previous_action);
     Graph::instance ().remove_edge (_reset, _reset_action);
 
-    if (_c_reset) { delete _c_reset; _c_reset = nullptr;}
-    if (_c_previous) { delete _c_previous; _c_previous = nullptr;}
-    if (_c_next) { delete _c_next; _c_next = nullptr;}
-    if (_reset_action) { delete _reset_action; _reset_action = nullptr;}
-    if (_previous_action) { delete _previous_action; _previous_action = nullptr;}
-    if (_next_action) { delete _next_action; _next_action = nullptr;}
-    if (_index) { delete _index; _index = nullptr;}
-    if (_iter) { delete _iter; _iter = nullptr;}
-    if (_reset) { delete _reset; _reset = nullptr;}
-    if (_previous) { delete _previous; _previous = nullptr;}
-    if (_next) { delete _next; _next = nullptr;}
+    delete _c_reset;
+    delete _c_previous;
+    delete _c_next;
+    delete _reset_action;
+    delete _previous_action;
+    delete _next_action;
+    delete _index;
+    delete _iter;
+    delete _reset;
+    delete _previous;
+    delete _next;
   }
 
   void

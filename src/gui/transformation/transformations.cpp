@@ -329,10 +329,10 @@ namespace djnn
 
   AbstractScaling::~AbstractScaling ()
   {
-    if (_csx) { delete _csx; _csx = nullptr; }
-    if (_csy) { delete _csy; _csy = nullptr; }
-    if (_ccx) { delete _ccx; _ccx = nullptr; }
-    if (_ccy) { delete _ccy; _ccy = nullptr; }
+    delete _csx;
+    delete _csy;
+    delete _ccx;
+    delete _ccy;
   }
 
   Process*
@@ -480,7 +480,7 @@ namespace djnn
 
   AbstractSkew::~AbstractSkew ()
   {
-    if (_ca) { delete _ca; _ca = nullptr; }
+    delete _ca;
   }
 
   Process*
@@ -1147,12 +1147,12 @@ namespace djnn
       Graph::instance().remove_edge(_translateBy_action, this->m21 ());
       Graph::instance().remove_edge(_translateBy_action, this->m22 ());
       Graph::instance().remove_edge(_translateBy_action, this->m24 ());
-      delete _tranlateBy_dx_coupling; _tranlateBy_dx_coupling=nullptr;
-      delete _tranlateBy_dy_coupling; _tranlateBy_dy_coupling=nullptr;
-      delete _translateBy_action; _translateBy_action=nullptr;
-      delete _translateBy_dx; _translateBy_dx=nullptr;
-      delete _translateBy_dy; _translateBy_dy=nullptr;
-      delete _translateBy_spike; _translateBy_spike=nullptr;
+      delete _tranlateBy_dx_coupling;
+      delete _tranlateBy_dy_coupling;
+      delete _translateBy_action;
+      delete _translateBy_dx;
+      delete _translateBy_dy;
+      delete _translateBy_spike;
     }
 
     if (_scaleBy_action) {
@@ -1168,16 +1168,16 @@ namespace djnn
       Graph::instance().remove_edge(_scaleBy_action, this->m21 ());
       Graph::instance().remove_edge(_scaleBy_action, this->m22 ());
       Graph::instance().remove_edge(_scaleBy_action, this->m24 ());
-      delete _scaleBy_cx_coupling; _scaleBy_cx_coupling=nullptr;
-      delete _scaleBy_cy_coupling; _scaleBy_cy_coupling=nullptr;
-      delete _scaleBy_sx_coupling; _scaleBy_sx_coupling=nullptr;
-      delete _scaleBy_sy_coupling; _scaleBy_sy_coupling=nullptr;
-      delete _translateBy_action; _translateBy_action=nullptr;
-      delete _scaleBy_cx; _scaleBy_cx=nullptr;
-      delete _scaleBy_cy; _scaleBy_cy=nullptr;
-      delete _scaleBy_sx; _scaleBy_sx=nullptr;
-      delete _scaleBy_sy; _scaleBy_sy=nullptr;
-      delete _scaleBy_spike; _scaleBy_spike=nullptr;
+      delete _scaleBy_cx_coupling;
+      delete _scaleBy_cy_coupling;
+      delete _scaleBy_sx_coupling;
+      delete _scaleBy_sy_coupling;
+      delete _translateBy_action;
+      delete _scaleBy_cx;
+      delete _scaleBy_cy;
+      delete _scaleBy_sx;
+      delete _scaleBy_sy;
+      delete _scaleBy_spike;
     }
 
     if (_rotateBy_action) {
@@ -1192,14 +1192,14 @@ namespace djnn
       Graph::instance().remove_edge(_rotateBy_action, this->m21 ());
       Graph::instance().remove_edge(_rotateBy_action, this->m22 ());
       Graph::instance().remove_edge(_rotateBy_action, this->m24 ());
-      delete _rotateBy_cx_coupling; _rotateBy_cx_coupling=nullptr;
-      delete _rotateBy_cy_coupling; _rotateBy_cy_coupling=nullptr;
-      delete _rotateBy_da_coupling; _rotateBy_da_coupling=nullptr;
-      delete _rotateBy_action; _rotateBy_action=nullptr;
-      delete _rotateBy_cx; _rotateBy_cx=nullptr;
-      delete _rotateBy_cy; _rotateBy_cy=nullptr;
-      delete _rotateBy_da; _rotateBy_da=nullptr;
-      delete _rotateBy_spike; _rotateBy_spike=nullptr;
+      delete _rotateBy_cx_coupling;
+      delete _rotateBy_cy_coupling;
+      delete _rotateBy_da_coupling;
+      delete _rotateBy_action;
+      delete _rotateBy_cx;
+      delete _rotateBy_cy;
+      delete _rotateBy_da;
+      delete _rotateBy_spike;
     }
 
     if (_skew_X_By_action) {
@@ -1214,14 +1214,14 @@ namespace djnn
       Graph::instance().remove_edge(_skew_X_By_action, this->m21 ());
       Graph::instance().remove_edge(_skew_X_By_action, this->m22 ());
       Graph::instance().remove_edge(_skew_X_By_action, this->m24 ());
-      delete _skew_X_By_cx_coupling; _skew_X_By_cx_coupling=nullptr;
-      delete _skew_X_By_cy_coupling; _skew_X_By_cy_coupling=nullptr;
-      delete _skew_X_By_da_coupling; _skew_X_By_da_coupling=nullptr;
-      delete _skew_X_By_action; _skew_X_By_action=nullptr;
-      delete _skew_X_By_cx; _skew_X_By_cx=nullptr;
-      delete _skew_X_By_cy; _skew_X_By_cy=nullptr;
-      delete _skew_X_By_da; _skew_X_By_da=nullptr;
-      delete _skew_X_By_spike; _skew_X_By_spike=nullptr;
+      delete _skew_X_By_cx_coupling;
+      delete _skew_X_By_cy_coupling;
+      delete _skew_X_By_da_coupling;
+      delete _skew_X_By_action;
+      delete _skew_X_By_cx;
+      delete _skew_X_By_cy;
+      delete _skew_X_By_da;
+      delete _skew_X_By_spike;
     }
 
     if (_skew_Y_By_action) {
@@ -1236,14 +1236,14 @@ namespace djnn
       Graph::instance().remove_edge(_skew_Y_By_action, this->m21 ());
       Graph::instance().remove_edge(_skew_Y_By_action, this->m22 ());
       Graph::instance().remove_edge(_skew_Y_By_action, this->m24 ());
-      delete _skew_Y_By_cx_coupling; _skew_Y_By_cx_coupling=nullptr;
-      delete _skew_Y_By_cy_coupling; _skew_Y_By_cy_coupling=nullptr;
-      delete _skew_Y_By_da_coupling; _skew_Y_By_da_coupling=nullptr;
-      delete _skew_Y_By_action; _skew_Y_By_action=nullptr;
-      delete _skew_Y_By_cx; _skew_Y_By_cx=nullptr;
-      delete _skew_Y_By_cy; _skew_Y_By_cy=nullptr;
-      delete _skew_Y_By_da; _skew_Y_By_da=nullptr;
-      delete _skew_Y_By_spike; _skew_Y_By_spike=nullptr;
+      delete _skew_Y_By_cx_coupling;
+      delete _skew_Y_By_cy_coupling;
+      delete _skew_Y_By_da_coupling;
+      delete _skew_Y_By_action;
+      delete _skew_Y_By_cx;
+      delete _skew_Y_By_cy;
+      delete _skew_Y_By_da;
+      delete _skew_Y_By_spike;
     }
 
   }

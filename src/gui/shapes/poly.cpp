@@ -47,8 +47,8 @@ namespace djnn {
 
   PolyPoint::~PolyPoint ()
   {
-    delete _cx; _cx = nullptr;
-    delete _cy; _cy = nullptr;
+    delete _cx;
+    delete _cy;
   }
 
   Process*
@@ -141,12 +141,12 @@ namespace djnn {
 
   Poly::~Poly ()
   {
-    if (_bbh) {delete _bbh; _bbh = nullptr;}
-    if (_bbw) {delete _bbw; _bbw = nullptr;}
-    if (_bby) {delete _bby; _bby = nullptr;}
-    if (_bbx) {delete _bbx; _bbx = nullptr;}
-    if (_bounding_box) {delete _bounding_box; _bounding_box = nullptr;}
-    if (_points) {delete _points; _points = nullptr;}
+    delete _bbh;
+    delete _bbw;
+    delete _bby;
+    delete _bbx;
+    delete _bounding_box;
+    delete _points;
   }
 
   void

@@ -132,16 +132,16 @@ namespace djnn
     Graph::instance ().remove_edge (_next_action, _change_index_action);
     Graph::instance ().remove_edge (_previous_action, _change_index_action);
 
-    if (_c_index) { delete _c_index ; _c_index = nullptr;}
-    if (_c_previous) { delete _c_previous ; _c_previous = nullptr;}
-    if (_c_next) { delete _c_next ; _c_next = nullptr;}
-    if (_change_index_action) { delete _change_index_action ; _change_index_action = nullptr;}
-    if (_previous_action) { delete _previous_action ; _previous_action = nullptr;}
-    if (_next_action) { delete _next_action ; _next_action = nullptr;}
-    if (_previous) { delete _previous ; _previous = nullptr;}
-    if (_next) { delete _next ; _next = nullptr;}
-    if (_index) { delete _index ; _index = nullptr;}
-    if (_loop) { delete _loop ; _loop = nullptr;} 
+    delete _c_index;
+    delete _c_previous;
+    delete _c_next;
+    delete _change_index_action;
+    delete _previous_action;
+    delete _next_action;
+    delete _previous;
+    delete _next;
+    delete _index;
+    delete _loop;
   }
 
   void

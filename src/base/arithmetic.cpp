@@ -299,8 +299,8 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _state);
     Graph::instance ().remove_edge (this, _state);
 
-    if(_state) { delete _state; _state=nullptr;}
-    if (_delta) { delete _delta; _delta=nullptr;}
+    delete _state;
+    delete _delta;
   }
 
   void
@@ -382,12 +382,12 @@ namespace djnn
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_action, _result);
 
-    if (_c_input) { delete _c_input; _c_input=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_result) { delete _result; _result=nullptr;}
-    if (_clamp_max) { delete _clamp_max; _clamp_max=nullptr;}
-    if (_clamp_min) { delete _clamp_min; _clamp_min=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}
+    delete _c_input;
+    delete _action;
+    delete _result;
+    delete _clamp_max;
+    delete _clamp_min;
+    delete _input;
   }
 
   void

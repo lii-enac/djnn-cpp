@@ -40,10 +40,10 @@ namespace djnn
 
   RectangleClip::~RectangleClip ()
   {
-    delete _cx; _cx = nullptr;
-    delete _cy; _cy = nullptr;
-    delete _cwidth; _cwidth = nullptr;
-    delete _cheight; _cheight = nullptr;
+    delete _cx;
+    delete _cy;
+    delete _cwidth;
+    delete _cheight;
   }
 
   Process*

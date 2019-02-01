@@ -120,16 +120,16 @@ namespace djnn
     Graph::instance ().remove_edge (_g, _action);
     Graph::instance ().remove_edge (_r, _action);
 
-    if (_cb) { delete _cb;  _cb = nullptr;}
-    if (_cg) { delete _cg;  _cg = nullptr;}
-    if (_cr) { delete _cr;  _cr = nullptr;}
-    if (_action) { delete _action;  _action = nullptr;}
-    if (_h) { delete _h;  _h = nullptr;}
-    if (_c) { delete _c;  _c = nullptr;}
-    if (_l) { delete _l;  _l = nullptr;}
-    if (_b) { delete _b;  _b = nullptr;}
-    if (_g) { delete _g;  _g = nullptr;}
-    if (_r) { delete _r;  _r = nullptr;}
+    delete _cb;
+    delete _cg;
+    delete _cr;
+    delete _action;
+    delete _h;
+    delete _c;
+    delete _l;
+    delete _b;
+    delete _g;
+    delete _r;
   }
 
   void
@@ -238,16 +238,16 @@ namespace djnn
     Graph::instance ().remove_edge (_c, _action);
     Graph::instance ().remove_edge (_l, _action);
 
-    if (_ch) { delete _ch;  _ch = nullptr;}
-    if (_cc) { delete _cc;  _cc = nullptr;}
-    if (_cl) { delete _cl;  _cl = nullptr;}
-    if (_action) { delete _action;  _action = nullptr;}
-    if (_h) { delete _h;  _h = nullptr;}
-    if (_c) { delete _c;  _c = nullptr;}
-    if (_l) { delete _l;  _l = nullptr;}
-    if (_b) { delete _b;  _b = nullptr;}
-    if (_g) { delete _g;  _g = nullptr;}
-    if (_r) { delete _r;  _r = nullptr;}
+    delete _ch;
+    delete _cc;
+    delete _cl;
+    delete _action;
+    delete _h;
+    delete _c;
+    delete _l;
+    delete _b;
+    delete _g;
+    delete _r;
   }
 
   void

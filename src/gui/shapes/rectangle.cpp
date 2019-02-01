@@ -40,12 +40,12 @@ namespace djnn
 
   Rectangle::~Rectangle ()
   {
-    delete _cx; //_cx = nullptr;
-    delete _cy; //_cy = nullptr;
-    delete _cwidth; //_cwidth = nullptr;
-    delete _cheight; //_cheight = nullptr;
-    delete _crx; //_crx = nullptr;
-    delete _cry; //_cry = nullptr;
+    delete _cx;
+    delete _cy;
+    delete _cwidth;
+    delete _cheight;
+    delete _crx;
+    delete _cry;
   }
 
   

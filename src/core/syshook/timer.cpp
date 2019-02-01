@@ -57,8 +57,8 @@ namespace djnn
 
   Timer::~Timer ()
   {
-    if (_end) { delete _end; _end = nullptr;}
-    if (_delay) { delete _delay; _delay = nullptr;}
+    delete _end;
+    delete _delay;
   }
 
   void

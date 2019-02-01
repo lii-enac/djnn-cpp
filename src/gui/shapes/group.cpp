@@ -34,7 +34,7 @@ namespace djnn
 
   Group::~Group ()
   {
-    if (_gobj) {delete _gobj; _gobj = nullptr;}
+    delete _gobj;
   }
 
   void

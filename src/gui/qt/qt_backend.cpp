@@ -48,7 +48,7 @@ namespace djnn
 
   QtBackend::~QtBackend ()
   {
-    if (_context_manager) { delete _context_manager; _context_manager = nullptr;}
+    delete _context_manager;
   }
 
   void

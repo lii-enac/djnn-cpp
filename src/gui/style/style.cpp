@@ -173,7 +173,7 @@ namespace djnn
 
   FillRule::~FillRule ()
   {
-    if (_cr) { delete _cr; _cr = nullptr;}
+    delete _cr;
   }
 
   Process*
@@ -278,7 +278,7 @@ namespace djnn
 
   Texture::~Texture ()
   {
-    if (_cp) { delete _cp; _cp = nullptr;}
+    delete _cp;
   }
 
 
@@ -356,7 +356,7 @@ namespace djnn
 
   AbstractOpacity::~AbstractOpacity ()
   {
-    if (_ca) { delete _ca; _ca = nullptr;}
+    delete _ca;
   }
 
   Process*
@@ -447,7 +447,7 @@ namespace djnn
 
   OutlineWidth::~OutlineWidth ()
   {
-    if (_cw) { delete _cw; _cw = nullptr;}
+    delete _cw;
   }
 
   Process*
@@ -539,7 +539,7 @@ namespace djnn
 
   OutlineCapStyle::~OutlineCapStyle ()
   {
-    if (_cc) { delete _cc; _cc = nullptr;}
+    delete _cc;
   }
 
   Process*
@@ -630,7 +630,7 @@ namespace djnn
 
   OutlineJoinStyle::~OutlineJoinStyle ()
   {
-    if (_cj) { delete _cj; _cj = nullptr;}
+    delete _cj;
   }
 
   Process*
@@ -706,7 +706,7 @@ namespace djnn
 
   OutlineMiterLimit::~OutlineMiterLimit ()
   {
-    if (_cl) { delete _cl; _cl = nullptr;}
+    delete _cl;
   }
 
   Process*
@@ -816,7 +816,7 @@ namespace djnn
 
   DashOffset::~DashOffset ()
   {
-    if (_co) { delete _co; _co = nullptr;}
+    delete _co;
   }
 
   Process*
@@ -905,11 +905,11 @@ namespace djnn
 
   GradientStop::~GradientStop ()
   {
-    if (_cr) { delete _cr; _cr = nullptr;}
-    if (_cg) { delete _cg; _cg = nullptr;}
-    if (_cb) { delete _cb; _cb = nullptr;}
-    if (_ca) { delete _ca; _ca = nullptr;}
-    if (_co) { delete _co; _co = nullptr;}
+    delete _cr;
+    delete _cg;
+    delete _cb;
+    delete _ca;
+    delete _co;
   }
 
   Process*
@@ -1015,10 +1015,10 @@ namespace djnn
 
   AbstractGradient::~AbstractGradient ()
   {
-    if (_cs) { delete _cs; _cs = nullptr;}
-    if (_cc) { delete _cc; _cc = nullptr;}
-    if (_transforms) { delete _transforms; _transforms = nullptr;}
-    if (_stops) { delete _stops; _stops = nullptr;}
+    delete _cs;
+    delete _cc;
+    delete _transforms;
+    delete _stops;
   }
 
   Process*
@@ -1121,10 +1121,10 @@ namespace djnn
 
   LinearGradient::~LinearGradient ()
   {
-    if (_cx1) { delete _cx1; _cx1 = nullptr;}
-    if (_cx2) { delete _cx2; _cx2 = nullptr;}
-    if (_cy1) { delete _cy1; _cy1 = nullptr;}
-    if (_cy2) { delete _cy2; _cy2 = nullptr;}
+    delete _cx1;
+    delete _cx2;
+    delete _cy1;
+    delete _cy2;
   }
 
   Process*
@@ -1297,11 +1297,11 @@ namespace djnn
 
   RadialGradient::~RadialGradient ()
   {
-    if (_ccx) { delete _ccx; _ccx = nullptr;}
-    if (_ccy) { delete _ccy; _ccy = nullptr;}
-    if (_cr) { delete _cr; _cr = nullptr;}
-    if (_cfx) { delete _cfx; _cfx = nullptr;}
-    if (_cfy) { delete _cfy; _cfy = nullptr;}
+    delete _ccx;
+    delete _ccy;
+    delete _cr;
+    delete _cfx;
+    delete _cfy;
   }
 
   Process*
@@ -1498,8 +1498,8 @@ namespace djnn
 
   FontSize::~FontSize ()
   {
-    if (_cu) { delete _cu; _cu = nullptr;}
-    if (_cs) { delete _cs; _cs = nullptr;}
+    delete _cu;
+    delete _cs;
   }
 
   Process*
@@ -1597,7 +1597,7 @@ namespace djnn
 
   FontWeight::~FontWeight ()
   {
-    if (_cw) { delete _cw; _cw = nullptr;}
+    delete _cw;
   }
 
   Process*
@@ -1692,7 +1692,7 @@ namespace djnn
 
   FontStyle::~FontStyle ()
   {
-    if (_cs) { delete _cs; _cs = nullptr;}
+    delete _cs;
   }
 
   Process*
@@ -1772,7 +1772,7 @@ namespace djnn
 
   FontFamily::~FontFamily ()
   {
-    if (_cf) { delete _cf; _cf = nullptr;}
+    delete _cf;
   }
 
   Process*
@@ -1867,7 +1867,7 @@ namespace djnn
 
   TextAnchor::~TextAnchor ()
   {
-    if (_ca) { delete _ca; _ca = nullptr;}
+    delete _ca;
   }
 
   Process*

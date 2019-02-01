@@ -34,11 +34,11 @@ namespace djnn
 
   QtPickingView::~QtPickingView ()
   {
-    if (_painter) { delete _painter; _painter = nullptr;}
-    if (_image) { delete _image; _image = nullptr;}
+    delete _painter;
+    delete _image;
 
 #if DEBUG_PICKING 
-    if (_pick_debug_win) { delete _pick_debug_win; _pick_debug_win = nullptr;}
+    delete _pick_debug_win;
 #endif   
   }
 

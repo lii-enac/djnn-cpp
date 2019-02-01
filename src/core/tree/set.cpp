@@ -47,9 +47,9 @@ namespace djnn
     _added = nullptr;
     _removed = nullptr;
 
-    if (_size) { delete _size; _size = nullptr;}
-    if (_removed) { delete _removed; _removed = nullptr;}
-    if (_added) { delete _added; _added = nullptr;}
+    delete _size;
+    delete _removed;
+    delete _added;
   }
 
   void

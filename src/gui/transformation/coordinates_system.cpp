@@ -86,13 +86,13 @@ namespace djnn
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);
     Graph::instance().remove_edge(_action, _outY);
-    if (_cinY) { delete _cinY ; _cinY = nullptr;}
-    if (_cinX) { delete _cinX ; _cinX = nullptr;}
-    if (_action) { delete _action ; _action = nullptr;}
-    if (_outX) { delete _outX ; _outX = nullptr;}
-    if (_outY) { delete _outY ; _outY = nullptr;}
-    if (_inX) { delete _inX ; _inX = nullptr;}
-    if (_inY) { delete _inY ; _inY = nullptr;}
+    delete _cinY;
+    delete _cinX;
+    delete _action;
+    delete _outX;
+    delete _outY;
+    delete _inX;
+    delete _inY;
 
   }
 
@@ -172,13 +172,13 @@ namespace djnn
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);
     Graph::instance().remove_edge(_action, _outY);
-    if (_cinY) { delete _cinY ; _cinY = nullptr;}
-    if (_cinX) { delete _cinX ; _cinX = nullptr;}
-    if (_action) { delete _action ; _action = nullptr;}
-    if (_outX) { delete _outX ; _outX = nullptr;}
-    if (_outY) { delete _outY ; _outY = nullptr;}
-    if (_inX) { delete _inX ; _inX = nullptr;}
-    if (_inY) { delete _inY ; _inY = nullptr;}
+    delete _cinY;
+    delete _cinX;
+    delete _action;
+    delete _outX;
+    delete _outY;
+    delete _inX;
+    delete _inY;
 
   }
 

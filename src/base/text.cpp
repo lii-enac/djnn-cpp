@@ -38,9 +38,9 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
     Graph::instance ().remove_edge (_input, _action);
 
-    if (c_input) { delete c_input; c_input=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}  
+    delete c_input;
+    delete _action;
+    delete _input;
   }
 
   void
@@ -148,12 +148,12 @@ namespace djnn
     Graph::instance ().remove_edge (_decimal, _action);
     Graph::instance ().remove_edge (_action, _output);
 
-    if (_c_decimal) { delete _c_decimal; _c_decimal=nullptr;}
-    if (_c_input) { delete _c_input; _c_input=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_output) { delete _output; _output=nullptr;}
-    if (_decimal) { delete _decimal; _decimal=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}
+    delete _c_decimal;
+    delete _c_input;
+    delete _action;
+    delete _output;
+    delete _decimal;
+    delete _input;
     
   }
   DoubleFormatter::DoubleFormatter (Process* parent, const string &name, double initial, int decimal) :
@@ -233,13 +233,13 @@ namespace djnn
     Graph::instance ().remove_edge (_acc_action, _state);
     Graph::instance ().remove_edge (_del_action, _state);
   
-    if (_c_acc) { delete _c_acc; _c_acc=nullptr;}
-    if (_c_del) { delete _c_del; _c_del=nullptr;}
-    if (_acc_action) { delete _acc_action; _acc_action=nullptr;}
-    if (_del_action) { delete _del_action; _del_action=nullptr;}
-    if (_del) { delete _del; _del=nullptr;}
-    if (_state) { delete _state; _state=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}
+    delete _c_acc;
+    delete _c_del;
+    delete _acc_action;
+    delete _del_action;
+    delete _del;
+    delete _state;
+    delete _input;
   }
 
   void

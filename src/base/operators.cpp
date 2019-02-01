@@ -52,12 +52,12 @@ namespace djnn
     Graph::instance ().remove_edge (_right, _action);
     Graph::instance ().remove_edge (_action, _result);
 
-    if (_c_right) { delete _c_right; _c_right=nullptr;}
-    if (_c_left) { delete _c_left; _c_left=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_left) { delete _left; _left=nullptr;}
-    if (_right) { delete _right; _right=nullptr;}
-    if (_result) { delete _result; _result=nullptr;} 
+    delete _c_right;
+    delete _c_left;
+    delete _action;
+    delete _left;
+    delete _right;
+    delete _result;
   }
 
   UnaryOperator::UnaryOperator (Process *p, const string &n) :
@@ -84,9 +84,9 @@ namespace djnn
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_action, _output);
 
-    if (_c_input) { delete _c_input; _c_input=nullptr;}
-    if (_action) { delete _action; _action=nullptr;}
-    if (_input) { delete _input; _input=nullptr;}
-    if (_output) { delete _output; _output=nullptr;}
+    delete _c_input;
+    delete _action;
+    delete _input;
+    delete _output;
   }
 } /* namespace djnn */

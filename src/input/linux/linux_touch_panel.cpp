@@ -45,13 +45,13 @@ namespace djnn {
 
   LinuxTouch::~LinuxTouch ()
   {
-    if (_pressure) { delete _pressure; _pressure = nullptr;}
-    if (_cy) { delete _cy; _cy = nullptr;}
-    if (_cx) { delete _cx; _cx = nullptr;}
-    if (_height) { delete _height; _height = nullptr;}
-    if (_width) { delete _width; _width = nullptr;}
-    if (_y) { delete _y; _y = nullptr;}
-    if (_x) { delete _x; _x = nullptr;}
+    delete _pressure;
+    delete _cy;
+    delete _cx;
+    delete _height;
+    delete _width;
+    delete _y;
+    delete _x;
   }
 
   LinuxTouchPanel::LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev) : LinuxDevice (p, n, TOUCH_PANEL)
@@ -91,12 +91,12 @@ namespace djnn {
 
     // destroy all touches and clear
     for (std::vector<LinuxTouch*>::iterator it = _v_touches.begin () ; it != _v_touches.end(); ++it)
-      if (*it) { delete *it; *it=nullptr;}
+      delete *it;
     _v_touches.clear ();
 
-    if (_max_y) { delete _max_y; _max_y = nullptr;}
-    if (_max_x) { delete _max_x; _max_x = nullptr;}
-    if (_touches) { delete _touches; _touches = nullptr;}
+    delete _max_y;
+    delete _max_x;
+    delete _touches;
   }
 
   void
