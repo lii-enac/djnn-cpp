@@ -369,7 +369,7 @@ namespace djnn
     double* rawp;
     int notify_mask = notify_none;
 
-    if(name=="alpha") {
+    if(name=="a") {
       coupling=&_ca;
       rawp=&raw_props.alpha;
       notify_mask = notify_damaged_style;

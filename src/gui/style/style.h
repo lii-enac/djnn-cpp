@@ -158,7 +158,7 @@ namespace djnn
     virtual ~AbstractOpacity ();
     void get_properties_values (double &alpha);
     virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* alpha () { return (AbstractDoubleProperty*) find_component("alpha"); }
+    AbstractDoubleProperty* alpha () { return (AbstractDoubleProperty*) find_component("a"); }
     //DoubleProperty* alpha () { return _alpha;}
     void activate () override;
     void deactivate () override;
