@@ -109,7 +109,13 @@ namespace djnn
     delete _cx;
     delete _cy;
     delete _ctext;
-    delete _cfsize;
+    delete _cdx;
+    delete _cdy;
+    delete _cdxU;
+    delete _cdyU;
+    delete _cwidth;
+    delete _cheight;
+    delete _cencoding;
 
     if (_cffamily) {
       Graph::instance ().remove_edge ( this->ffamily (), _update_size);
@@ -329,29 +335,44 @@ namespace djnn
         }
       }
     }
-    if(_cx) _cx->enable (_frame);
-    if(_cy) _cy->enable (_frame);
-    if(_ctext) _ctext->enable (_frame);
-    if (_cffamily) _cffamily->enable ();
-    if (_cfsize) _cfsize->enable ();
-    if (_cfstyle) _cfstyle->enable ();
-    if (_cfweight) _cfweight->enable ();
-    if(_cfsize) _cfsize->enable ();
-    if(_update_size) _update_size->activation ();
+    if (_cx) _cx->enable (_frame);
+    if (_cy) _cy->enable (_frame);
+    if (_ctext) _ctext->enable (_frame);
+    if (_cdx) _cdx->enable (_frame);
+    if (_cdy) _cdy->enable (_frame);
+    if (_cdxU) _cdxU->enable (_frame);
+    if (_cdyU) _cdyU->enable (_frame);
+    if (_cwidth) _cwidth->enable (_frame);
+    if (_cheight) _cheight->enable (_frame);
+    if (_cencoding) _cencoding->enable (_frame);
+    
+    if (_cffamily) _cffamily->enable (_frame);
+    if (_cfsize) _cfsize->enable (_frame);
+    if (_cfstyle) _cfstyle->enable (_frame);
+    if (_cfweight) _cfweight->enable (_frame);
+
+    if (_update_size) _update_size->activation ();
   }
 
   void
   Text::deactivate ()
   {
     AbstractGObj::deactivate ();
-    if(_cx) _cx->disable ();
-    if(_cy) _cy->disable ();
-    if(_ctext) _ctext->disable ();
+    if (_cx) _cx->disable ();
+    if (_cy) _cy->disable ();
+    if (_ctext) _ctext->disable ();
+    if (_cdx) _cdx->disable ();
+    if (_cdy) _cdy->disable ();
+    if (_cdxU) _cdxU->disable ();
+    if (_cdyU) _cdyU->disable ();
+    if (_cwidth) _cwidth->disable ();
+    if (_cheight) _cheight->disable ();
+    if (_cencoding) _cencoding->disable ();
+
     if (_cffamily) _cffamily->disable ();
     if (_cfsize) _cfsize->disable ();
     if (_cfstyle) _cfstyle->disable ();
     if (_cfweight) _cfweight->disable ();
-    if(_cfsize) _cfsize->disable ();
   }
 
   void
