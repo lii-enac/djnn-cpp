@@ -80,16 +80,26 @@ namespace djnn
   {
     delete _pos_x;
     delete _pos_y;
-    delete _w_dx;
-    delete _w_dy;
     delete _width;
     delete _height;
     delete _title;
+    delete _key_pressed;
+    delete _key_released;
+    delete _key_pressed_text;
+    delete _key_released_text;
     delete _close;
     delete _press;
     delete _release;
     delete _move;
     delete _wheel;
+    delete _touches;
+    delete _press_x;
+    delete _press_y;
+    delete _move_x;
+    delete _move_y;
+    delete _w_dx;
+    delete _w_dy;
+    
     delete _win_impl;
   }
 
