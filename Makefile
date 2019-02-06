@@ -26,6 +26,7 @@ help:
 
 config.mk:
 	cp config.default.mk config.mk
+
 include config.default.mk
 -include config.mk
 
@@ -40,26 +41,36 @@ ifndef arch
 arch := $(shell uname -m)
 endif
 
-# cross-platform support
-crossp ?=
-#crossp := g
-#crossp := arm-none-eabi-
+# cross-compile support
+ifndef cross_prefix
+cross_prefix := llvm-g
+#cross_prefix := g
+#cross_prefix := arm-none-eabi-
+#cross_prefix := /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #cross_prefix := em
+#cross_prefix := i686-w64-mingw32-
+#brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
+#add -Imingw-std-threads to CXXFLAGS
+
+#cross_prefix := /usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
+endif
 
 osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
 
-
 src_dir := src
 
-ifndef graphics
-graphics := QT
-endif
-
-CC := $(crossp)cc
-CXX := $(crossp)c++
+graphics ?= QT
+CC := $(cross_prefix)cc
+CXX := $(cross_prefix)++
 GPERF ?= gperf
+
+thread ?= BOOST
+# FIBER STD
+chrono ?= BOOST
+# FIBER STD
+
 
 ifeq ($(os),Linux)
 lib_suffix=.so
@@ -154,9 +165,7 @@ CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arc
 endif
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 \
--DDJNN_USE_BOOST_THREAD -DDJNN_USE_BOOST_CHRONO
-
-#-DDDJNN_USE_BOOST_FIBER - D DDJNN_USE_STD_CHRONO
+-DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
@@ -273,6 +282,23 @@ headers: $(headers)
 
 djnn: $(libs) $(headers)
 .PHONY: djnn
+
+# config_header_files := $(build_dir)/src/core/syshook/cpp-thread-config.h $(build_dir)/src/core/syshook/cpp-chrono-config.h
+# config_headers: $(config_header_files)
+# .PHONY: config_headers
+# #.PHONY: $(config_header_files)
+
+# $(build_dir)/src/core/syshook/cpp-thread-config.h: $(FORCE)
+# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
+# 	@echo "#define DJNN_USE_"$(thread)"_THREAD 1" > $(config.h)
+# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@; fi
+# 	@rm $(config.h)
+# $(build_dir)/src/core/syshook/cpp-chrono-config.h: $(FORCE)
+# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
+# 	@echo "#define DJNN_USE_"$(chrono)"_CHRONO 1" > $(config.h)
+# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@;  fi
+# 	@rm $(config.h)
+
 
 $(build_dir)/%.o: %.cpp
 	@mkdir -p $(dir $@)
