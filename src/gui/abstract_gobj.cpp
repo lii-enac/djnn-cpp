@@ -86,7 +86,6 @@ namespace djnn
     _redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION);
     _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION);
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
-    //_activation_state = activated;
     set_activated ();
   }
 

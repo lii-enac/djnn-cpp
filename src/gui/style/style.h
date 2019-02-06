@@ -89,13 +89,11 @@ namespace djnn
     void get_properties_values (int &rule);
     virtual Process* find_component (const string&) override;
     AbstractIntProperty* rule () { return (AbstractIntProperty*) find_component("rule"); }
-    //IntProperty* rule () { return _rule;}
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //IntProperty* _rule;
     struct raw_props_t { int rule; };
     raw_props_t raw_props;
     Coupling* _cr;
@@ -138,13 +136,11 @@ namespace djnn
     void get_properties_values (string &path);
     virtual Process* find_component (const string&) override;
     AbstractTextProperty* path () { return (AbstractTextProperty*) find_component("path"); }
-    //TextProperty* path () { return _path;}
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //TextProperty* _path;
     struct raw_props_t { string path; };
     raw_props_t raw_props;
     Coupling* _cp;
@@ -159,12 +155,10 @@ namespace djnn
     void get_properties_values (double &alpha);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* alpha () { return (AbstractDoubleProperty*) find_component("a"); }
-    //DoubleProperty* alpha () { return _alpha;}
     void activate () override;
     void deactivate () override;
     void draw () override = 0;
   protected:
-    //DoubleProperty* _alpha;
     struct raw_props_t { double alpha; };
     raw_props_t raw_props;
     Coupling* _ca;
@@ -203,13 +197,11 @@ namespace djnn
     void get_properties_values (double &width);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
-    //DoubleProperty* width () { return _width;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //DoubleProperty* _width;
     struct raw_props_t { double width; };
     raw_props_t raw_props;
     Coupling* _cw;
@@ -226,13 +218,11 @@ namespace djnn
     void get_properties_values (int &cap);
     virtual Process* find_component (const string&) override;
     AbstractIntProperty* cap () { return (AbstractIntProperty*) find_component("cap"); }
-    //IntProperty* cap () { return _cap;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //IntProperty* _cap;
     struct raw_props_t { int cap; };
     raw_props_t raw_props;
     Coupling* _cc;
@@ -249,13 +239,11 @@ namespace djnn
     void get_properties_values (int &join);
     virtual Process* find_component (const string&) override;
     AbstractIntProperty* join () { return (AbstractIntProperty*) find_component("join"); }
-    //IntProperty* join () { return _join;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //IntProperty* _join;
     struct raw_props_t { int join; };
     raw_props_t raw_props;
     Coupling* _cj;
@@ -270,13 +258,11 @@ namespace djnn
     void get_properties_values (int &limit);
     virtual Process* find_component (const string&) override;
     AbstractIntProperty* limit () { return (AbstractIntProperty*) find_component("limit"); }
-    //IntProperty* limit () { return _limit;};
     void activate () override;
     void deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    //IntProperty* _limit;
     struct raw_props_t { int limit; };
     raw_props_t raw_props;
     Coupling* _cl;
@@ -327,7 +313,6 @@ namespace djnn
     void get_properties_values (double &offset);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component("offset"); }
-    //DoubleProperty* offset () { return _offset;};
     void activate () override;
     void deactivate () override;
     void draw () override;
@@ -335,7 +320,6 @@ namespace djnn
   private:
     struct raw_props_t { double offset; };
     raw_props_t raw_props;
-    //DoubleProperty* _offset;
     Coupling* _co;
   };
 
@@ -357,7 +341,6 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
-    //DoubleProperty *_r, *_g, *_b, *_a, *_offset;
     struct raw_props_t { double r; double g; double b; double a;  double offset; };
     raw_props_t raw_props;
     Coupling *_cr, *_cg, *_cb, *_ca, *_co;
@@ -380,11 +363,8 @@ namespace djnn
     virtual void draw () override = 0;
     List* transforms () { return _transforms;}
     List* stops () { return _stops;}
-    // IntProperty* spread () { return _spread;}
-    // IntProperty* coords () { return _coords;}
     bool is_linear () { return _linear;}
   protected:
-    //IntProperty *_spread, *_coords;
     struct raw_props_t { int spread; int coords; };
     raw_props_t raw_props;
     Coupling *_cs, *_cc;
@@ -414,12 +394,7 @@ namespace djnn
     void update () override;
     void draw () override;
     Process* clone () override;
-    // DoubleProperty* x1 () { return _x1;}
-    // DoubleProperty* y1 () { return _y1;}
-    // DoubleProperty* x2 () { return _x2;}
-    // DoubleProperty* y2 () { return _y2;}
   private:
-    //DoubleProperty *_x1, *_y1, *_x2, *_y2;
     struct raw_props_t { double x1; double y1; double x2; double y2; };
     raw_props_t raw_props;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2;
@@ -462,13 +437,7 @@ namespace djnn
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    // DoubleProperty* cx () { return _cx;}
-    // DoubleProperty* cy () { return _cy;}
-    // DoubleProperty* r () { return _r;}
-    // DoubleProperty* fx () { return _fx;}
-    // DoubleProperty* fy () { return _fy;}
   private:
-    //DoubleProperty *_cx, *_cy, *_r, *_fx, *_fy;
     struct raw_props_t { double cx; double cy; double r; double fx; double fy; };
     raw_props_t raw_props;
     Coupling *_ccx, *_ccy, *_cr, *_cfx, *_cfy;
@@ -505,12 +474,9 @@ namespace djnn
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    //DoubleProperty* size () { return _size; }
   private:
     struct raw_props_t { int unit; double size; };
     raw_props_t raw_props;
-    // IntProperty *_unit;
-    // DoubleProperty *_size;
     Coupling *_cu, *_cs;
   };
 
@@ -527,11 +493,9 @@ namespace djnn
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    //IntProperty* weight () { return _weight; }
   private:
     struct raw_props_t { int weight; };
     raw_props_t raw_props;
-    //IntProperty* _weight;
     Coupling* _cw;
   };
 
@@ -550,9 +514,7 @@ namespace djnn
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    //IntProperty* style () { return _style; }
   private:
-    //IntProperty* _style;
     struct raw_props_t { int style; };
     raw_props_t raw_props;
     Coupling* _cs;
@@ -571,9 +533,7 @@ namespace djnn
     void deactivate () override;
     void draw () override;
     Process* clone () override;
-    //TextProperty* family () { return _family; }
   private:
-    //TextProperty* _family;
     struct raw_props_t { string family; };
     raw_props_t raw_props;
     Coupling* _cf;
@@ -595,7 +555,6 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
-    //IntProperty* _anchor;
     struct raw_props_t { int anchor; };
     raw_props_t raw_props;
     Coupling* _ca;

@@ -364,8 +364,6 @@ namespace djnn
     return new PathCubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
   }
 
-  //
-
   PathArc::PathArc (Process* p, const string &n, double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y) :
       AbstractGObj (p, n),

@@ -52,7 +52,7 @@ namespace djnn
       return _window;
     }
 
-    // shapes
+    /* shapes */
     virtual void
     draw_rect (Rectangle *s)
     {
@@ -122,7 +122,7 @@ namespace djnn
     {
     }
 
-    // style
+    /* style */
     virtual void
     load_fill_color (AbstractColor *c)
     {
@@ -216,7 +216,7 @@ namespace djnn
     {
     }
 
-    // transform
+    /* transform */
     virtual void
     load_translation (Translation*)
     {

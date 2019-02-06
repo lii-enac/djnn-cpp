@@ -38,7 +38,7 @@ namespace djnn {
     MyQWidget* qwidget() { return _qwidget; }
 
   protected:
-    // Process
+    /* Process */
     void activate () override;
     void deactivate () override;
 
