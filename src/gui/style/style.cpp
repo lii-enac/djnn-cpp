@@ -1444,95 +1444,26 @@ namespace djnn
   void
   AbstractGradient::update ()
   {
-    // Process *update = UpdateDrawing::instance ()->get_damaged ();
-    // if (_spread != (IntProperty*) find_component ("spread")) {
-    //   delete _cs;
-    //   delete _spread;
-    //   _spread = (IntProperty*) find_component ("spread");
-    //   _cs = new Coupling (_spread, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_coords != (IntProperty*) find_component ("coords")) {
-    //   delete _cc;
-    //   delete _coords;
-    //   _coords = (IntProperty*) find_component ("coords");
-    //   _cc = new Coupling (_coords, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_stops != (List*) find_component ("stops")) {
-    //   delete _stops;
-    //   _stops = (List*) find_component ("stops");
-    // }
-    // if (_transforms != (List*) find_component ("transforms")) {
-    //   delete _transforms;
-    //   _transforms = (List*) find_component ("transforms");
-    // }
+    if ( stops () != (List*) find_component ("stops")) {
+      delete _stops;
+      _stops = (List*) find_component ("stops");
+    }
+    if (_transforms != (List*) find_component ("transforms")) {
+      delete _transforms;
+      _transforms = (List*) find_component ("transforms");
+     }
   }
 
   void
   LinearGradient::update ()
   {
-    // AbstractGradient::update ();
-    // Process *update = UpdateDrawing::instance ()->get_damaged ();
-    // if (_x1 != (DoubleProperty*) find_component ("x1")) {
-    //   delete _cx1;
-    //   delete _x1;
-    //   _x1 = (DoubleProperty*) find_component ("x1");
-    //   _cx1 = new Coupling (_x1, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_x2 != (DoubleProperty*) find_component ("x2")) {
-    //   delete _cx2;
-    //   delete _x2;
-    //   _x2 = (DoubleProperty*) find_component ("x2");
-    //   _cx2 = new Coupling (_x2, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_y1 != (DoubleProperty*) find_component ("y1")) {
-    //   delete _cy1;
-    //   delete _y1;
-    //   _y1 = (DoubleProperty*) find_component ("y1");
-    //   _cy1 = new Coupling (_y1, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_y2 != (DoubleProperty*) find_component ("y2")) {
-    //   delete _cy2;
-    //   delete _y2;
-    //   _y2 = (DoubleProperty*) find_component ("y2");
-    //   _cy2 = new Coupling (_y2, ACTIVATION, update, ACTIVATION);
-    // }
+    AbstractGradient::update ();
   }
 
   void
   RadialGradient::update ()
   {
-    // AbstractGradient::update ();
-    // Process *update = UpdateDrawing::instance ()->get_damaged ();
-    // if (_cx != (DoubleProperty*) find_component ("cx")) {
-    //   delete _ccx;
-    //   delete _cx;
-    //   _cx = (DoubleProperty*) find_component ("cx");
-    //   _ccx = new Coupling (_cx, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_cy != (DoubleProperty*) find_component ("cy")) {
-    //   delete _ccy;
-    //   delete _cy;
-    //   _cy = (DoubleProperty*) find_component ("cy");
-    //   _ccy = new Coupling (_cy, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_r != (DoubleProperty*) find_component ("r")) {
-    //   delete _cr;
-    //   delete _r;
-    //   _r = (DoubleProperty*) find_component ("r");
-    //   _cr = new Coupling (_r, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_fx != (DoubleProperty*) find_component ("fx")) {
-    //   delete _cfx;
-    //   delete _fx;
-    //   _fx = (DoubleProperty*) find_component ("fx");
-    //   _cfx = new Coupling (_fx, ACTIVATION, update, ACTIVATION);
-    // }
-    // if (_fy != (DoubleProperty*) find_component ("fy")) {
-    //   delete _cfy;
-    //   delete _fy;
-    //   _fy = (DoubleProperty*) find_component ("fy");
-    //   _cfy = new Coupling (_fy, ACTIVATION, update, ACTIVATION);
-    // }
+    AbstractGradient::update ();
   }
 
   FontSize::FontSize (Process *p, const std::string &n, djnLengthUnit unit, double size) :
