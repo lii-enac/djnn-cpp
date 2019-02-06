@@ -166,13 +166,13 @@ namespace djnn
       propd = true;
       coupling=&_cdx;
       rawpd=&raw_props.dx;
-      notify_mask = notify_damaged_geometry; // or transform ?
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="dy") {
       propd = true;
       coupling=&_cdy;
       rawpd=&raw_props.dy;
-      notify_mask = notify_damaged_geometry; // or transform ?
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="fsize") {
       propd = true;
@@ -184,13 +184,13 @@ namespace djnn
       propi = true;
       coupling=&_cdxU;
       rawpi=&raw_props.dxU;
-      notify_mask = notify_damaged_geometry; // or transform ?
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="dyU") {
       propi = true;
       coupling=&_cdyU;
       rawpi=&raw_props.dyU;
-      notify_mask = notify_damaged_geometry; // or transform ?
+      notify_mask = notify_damaged_transform;
     } else
     if(name=="width") {
       propi = true;
