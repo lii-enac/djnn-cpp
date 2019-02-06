@@ -18,7 +18,7 @@
 #include "../core/tree/process.h"
 #include "../core/syshook/external_source.h"
 
-#include "../core/syshook/cpp-time.h"
+#include "../core/syshook/cpp-chrono.h"
 
 namespace djnn
 {

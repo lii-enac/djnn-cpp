@@ -1,5 +1,7 @@
 #pragma once
 
+//#include "core/syshook/cpp-thread-config.h"
+
 #if defined(__WIN32__)
 #define DJNN_USE_QTHREAD 1
 #define DJNN_USE_BOOST_THREAD 0

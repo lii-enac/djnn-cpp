@@ -18,7 +18,7 @@
 #include "../tree/process.h"
 #include "external_source.h"
 
-#include "cpp-time.h"
+#include "cpp-chrono.h"
 #include "cpp-thread.h"
 
 namespace djnn
