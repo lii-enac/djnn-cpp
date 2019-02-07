@@ -52,7 +52,7 @@ namespace djnn {
       std::map<Uint32, SDLWindow*> _windows;
 
       SDLMainloop();
-      static std::shared_ptr<SDLMainloop> _instance;
+      static SDLMainloop* _instance;
       static std::once_flag onceFlag;
 
       bool _wakeup_already_triggered;

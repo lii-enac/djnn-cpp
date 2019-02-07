@@ -18,17 +18,17 @@
 
 namespace djnn {
 
-	std::shared_ptr<SDLMainloop> SDLMainloop::_instance;
+	SDLMainloop* SDLMainloop::_instance;
   	std::once_flag SDLMainloop::onceFlag;
 
   	SDLMainloop&
   	SDLMainloop::instance ()
   	{
     	std::call_once (SDLMainloop::onceFlag, [] () {
-      		_instance.reset(new SDLMainloop);
+      		_instance = new SDLMainloop ();
     	});
 
-    	return *(_instance.get ());
+    	return *(_instance);
   	}
 
 	SDLMainloop::SDLMainloop()
