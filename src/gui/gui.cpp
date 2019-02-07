@@ -12,7 +12,7 @@
  *
  */
 
-#include "gui.h"
+#include "gui-priv.h"
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
@@ -225,6 +225,7 @@ namespace djnn
       init_svg_parser ();
       gui_structure_observer = new GUIStructureObserver ();
       structure_observer_list.push_back (gui_structure_observer);
+      p_init_gui ();
     }
   }
 

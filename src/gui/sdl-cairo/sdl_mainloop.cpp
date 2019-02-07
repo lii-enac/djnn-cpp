@@ -170,6 +170,8 @@ namespace djnn {
       }
   #endif
 
+      _windows.clear ();
+      set_please_stop (false);
       SDL_Quit();
   }
 
