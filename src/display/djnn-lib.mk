@@ -3,8 +3,8 @@ lib_srcs := src/display/display.cpp
 
 ifeq ($(os),Linux)
 	lib_srcs += $(shell find src/display/linux -name "*.cpp")
-	lib_ldflags = -ludev -ldrm
-	lib_cppflags = -I/usr/include/drm
+	lib_ldflags = `pkg-config --libs libdrm libudev`
+	lib_cppflags = `pkg-config --cflags libdrm`
 else
 	lib_srcs += src/display/alt/alt_display.cpp
 endif
