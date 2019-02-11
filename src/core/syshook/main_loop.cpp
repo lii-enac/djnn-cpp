@@ -47,7 +47,16 @@ namespace djnn {
     void
     MainLoop::run_in_own_thread ()
     {
+      #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
+      //auto * th =
       new djnn_thread_t (&MainLoop::run, this);
+      #endif
+
+      #if DJNN_USE_QTHREAD
+      auto * th = QThread::create([this]() { this->ExternalSource::private_run(); });
+      QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
+      th->start();
+      #endif
     }
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
