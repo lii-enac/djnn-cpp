@@ -19,7 +19,6 @@
 #include "external_source.h"
 
 #include "cpp-chrono.h"
-#include "cpp-thread.h"
 
 namespace djnn
 {
