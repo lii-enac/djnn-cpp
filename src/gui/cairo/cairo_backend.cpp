@@ -19,6 +19,7 @@
 #include "../transformation/transformations.h"
 #include <iostream>
 #include <cmath>
+#include <locale.h>
 
 #define SDL 1
 
@@ -41,6 +42,9 @@ namespace djnn
       _instance = new CairoBackend();
     });
 
+    // workaround : because Cairo rewrite LC_NUMERIC and after that our parser can't parse any double
+    setlocale(LC_NUMERIC, "C");
+    
     return _instance;
   }
 
