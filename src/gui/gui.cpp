@@ -44,10 +44,15 @@ namespace djnn
  GUIStructureHolder::remove_gui_child (Process *c) { 
 
 #if _PERF_TEST
-   __nb_Drawing_object--;
+  /* substract __nb_Drawing_object only if 'c' was a GOBJ (was in GUIStructureHolder::_children) */
+  std::vector<std::pair<Process*, int>>::iterator new_end = std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p){return p.first == c;});
+  if (new_end != _children.end ()) {
+    _children.erase (new_end, _children.end ()); 
+    __nb_Drawing_object--;
+  } 
+#else
+  _children.erase (std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p){return p.first == c;}), _children.end ()); 
 #endif
-
-   _children.erase (std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p){return p.first == c;}), _children.end ()); 
  }
 
  void 
