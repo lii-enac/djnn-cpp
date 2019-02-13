@@ -29,7 +29,14 @@ namespace djnn {
     {
     public:
       SwitchAction (Switch *parent, const string &name) :
-	     Process (parent, "action"),  _sw (parent) { Process::finalize (); }
+	      Process (parent, "action"),  _sw (parent) { 
+          /* removed but keep comment as legacy
+           * avoid to add the action in Container::_children list
+           * otherwise there is a side effect on ~switch which 
+           * occured after ~container which already deleted _children
+           */ 
+          //Process::finalize (); 
+        }
       virtual ~SwitchAction () {};
       void activate () override { _sw->change_branch(); };
       void deactivate () override {};

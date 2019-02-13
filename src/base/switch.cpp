@@ -37,6 +37,7 @@ namespace djnn
   Switch::init_switch (const string &initial)
   {
     _initial = initial;
+    /*  added it symTable but not in _children */
     _branch_name = new TextProperty (initial);
     add_symbol ("state", _branch_name);
     _action = new SwitchAction (this, get_name ());
@@ -56,8 +57,13 @@ namespace djnn
     Graph::instance ().remove_edge (_branch_name, _action);
    
     delete _c_branch;
-    delete _action;
     delete _branch_name;
+    /* note :
+     * Here, we can delete _action because is has not been add into _children
+     * avoid to add the action in Container::_children list
+     * otherwise there is a side effect on ~switch which 
+     * occured after ~container which already deleted _children */
+    delete _action;
   }
 
   void
