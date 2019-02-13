@@ -102,6 +102,14 @@ namespace djnn
         (it->second)->activation ();
       }
     }
+    else {
+      /* note: 
+       * if the new _branch_name is not an existing branch of the switch
+       * the state is set at _branch_name and the _cur_branch is deactivated
+       */
+      if (_cur_branch)
+        _cur_branch->deactivation ();
+    }
   }
 
   void
