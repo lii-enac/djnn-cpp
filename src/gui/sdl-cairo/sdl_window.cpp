@@ -34,7 +34,7 @@
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define attr(a) #a ":" << a << " "
-#define _PERF_TEST 0
+#define _PERF_TEST 1
 #if _PERF_TEST
 #include "../../core/utils-dev.h"
 static int draw_counter = 0;

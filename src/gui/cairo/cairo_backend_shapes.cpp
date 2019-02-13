@@ -211,25 +211,81 @@ namespace djnn
     }
   }
 
+  static double dx, dy;
+  static cairo_matrix_t mm;
   void
   CairoBackend::draw_poly (Poly* p)
   {
     if (!cur_cairo_state)
       return;
+    PolyImpl* cache = (PolyImpl*) p->impl ();
+    if (cache == nullptr || (p->get_damaged () & (notify_damaged_geometry))  || (_context_manager->get_current()->get_damaged() & notify_damaged_transform)) {
+      if (cache) {
+        delete cache;
+        cache = nullptr;
+      }
+      cairo_get_matrix (cur_cairo_state, &mm);
+      cout << "draw poly xx " << mm.xx << " yx " << mm.yx << " xy " << mm.xy << " yy " << mm.yy << endl;
+      //mm.x0 = 0; // we don't want the translation
+      //mm.y0 = 0;
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) p->points ())->children ()[0];
+      dx = first_pt->x ()->get_value ();
+      dy = first_pt->y ()->get_value ();
+      for (auto pt : ((Container*) p->points ())->children ()) {
+        double x = ((PolyPoint*) pt)->x ()->get_value ();
+        double y = ((PolyPoint*) pt)->y ()->get_value ();
+        if (x < dx)
+          dx = x;
+        if (y < dy)
+          dy = y;
+      }
+      cairo_matrix_transform_distance (&mm, &dx, &dy);
+      cairo_push_group (cur_cairo_state);
+      if (!first_pt)
+        return;
+      cairo_translate (cur_cairo_state, -dx, -dy);
 
-    PolyPoint* first_pt = (PolyPoint*) ((Container*) p->points ())->children ()[0];
-    if (!first_pt)
-      return;
-    cairo_move_to (cur_cairo_state, first_pt->x ()->get_value (), first_pt->y ()->get_value ());
-    p->points ()->draw ();
-    if (p->closed ())
-      cairo_close_path (cur_cairo_state);
-    double x, y, w, h;
-    cairo_path_extents (cur_cairo_state, &x, &y, &w, &h);
-    p->set_bounding_box (x, y, w, h);
-    fill_and_stroke ();
+      double init_x = first_pt->x ()->get_value ();
+      double init_y = first_pt->y ()->get_value ();
+      cairo_matrix_transform_distance (&mm, &init_x, &init_y);
+      cairo_move_to (cur_cairo_state, init_x, init_y);
+      p->points ()->draw ();
+      if (p->closed ())
+        cairo_close_path (cur_cairo_state);
+      double x1, y1, x2, y2;
+      cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
+
+      /*x1 = mm.xx * x1 + mm.xy * y1 + mm.x0;
+      y1 = mm.yx * x1 + mm.yy * y1 + mm.y0;
+      x2 = mm.xx * x2 + mm.xy * y2 + mm.x0;
+      y2 = mm.yx * x2 + mm.yy * y2 + mm.y0; */
+      int w = x2 - x1;
+      int h = y2 - y1;
+      cout << "dx " << dx << " dy " <<  dy << " x2 " << x2 << " x1 " << x1 << " w " << w << " h " << h <<  endl;
+      p->set_bounding_box (dx, dy, w, h);
+      fill_and_stroke ();
+      cairo_pattern_t * pattern = cairo_pop_group (cur_cairo_state);
+      cache = new PolyImpl (pattern, dx, dy, w, h);
+      p->set_impl (cache);
+    }
+    cairo_save (cur_cairo_state);
+
+    cairo_get_matrix (cur_cairo_state, &mm);
+    double tx = mm.x0;
+    double ty = mm.y0;
+    cairo_matrix_init_identity (&mm);
+    cairo_set_matrix (cur_cairo_state, &mm);
+    cairo_translate (cur_cairo_state, tx + cache->x(), ty + cache->y());
+    cairo_rectangle (cur_cairo_state, 0, 0, cache->w (), cache->h ());
+    cairo_set_source (cur_cairo_state, cache->pattern ());
+    cairo_fill_preserve (cur_cairo_state);
+    cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
+    cairo_stroke_preserve (cur_cairo_state);
+    cairo_restore (cur_cairo_state);
+    cairo_new_path (cur_cairo_state);
 
     if (is_in_picking_view (p)) {
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) p->points ())->children ()[0];
       cairo_move_to (cur_cairo_picking_state, first_pt->x ()->get_value (), first_pt->y ()->get_value ());
       for (int i = 1; i < ((Container*) p->points ())->children ().size (); ++i) {
         PolyPoint* polypoint = (PolyPoint*) ((Container*) p->points ())->children ()[i];
@@ -245,6 +301,10 @@ namespace djnn
   void
   CairoBackend::draw_poly_point (double x, double y)
   {
+    //double x1 = mm.xx * x + mm.xy * y + mm.x0;
+    //double y1 = mm.yx * x + mm.yy * y + mm.y0;
+    cairo_matrix_transform_distance (&mm, &x, &y);
+    cout << "new point " << " x " << x << " y " << y << endl;
     cairo_line_to (cur_cairo_state, x, y);
   }
 

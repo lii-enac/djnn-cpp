@@ -46,6 +46,19 @@ namespace djnn
       int _posX, _posY, _width, _height, _b;
       PangoLayout* _layout;
   };
+  class PolyImpl : public AbstractGObjImpl {
+  public:
+    PolyImpl (cairo_pattern_t *p, int x, int y, int w, int h) : _pattern (p), _x(x), _y(y), _w(w), _h(h){}
+    virtual ~PolyImpl () {}
+    cairo_pattern_t* pattern () { return _pattern; }
+    int x () { return _x; }
+    int y () { return _y; }
+    int w () { return _w; }
+    int h () { return _h; }
+  private:
+    cairo_pattern_t *_pattern;
+    int _x, _y, _w, _h;
+  };
   class CairoContextManager;
   class CairoBackend : public AbstractBackend
   {

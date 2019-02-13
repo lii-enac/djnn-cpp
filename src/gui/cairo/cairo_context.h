@@ -50,11 +50,15 @@ namespace djnn
     double _lineWidth;
     PangoFontDescription *_font;
     int _textAnchor;
+    unsigned int _damaged;
     void update_relative_units ();
     double get_unit_factor (djnLengthUnit unit);
     void clear_fill_pattern ();
     void clear_stroke_pattern ();
     void is_fill_builder () { _fill_builder = true; }
+    void notify_change (unsigned int nm) { _damaged |= nm; }
+    void reset_damaged () { _damaged = notify_none; }
+    unsigned int get_damaged () { return _damaged; }
   private:
     bool _font_builder, _fill_builder, _stroke_builder;
   };

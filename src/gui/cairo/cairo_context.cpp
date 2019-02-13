@@ -61,7 +61,7 @@ namespace djnn
 
   CairoContext::CairoContext () :
     _fillType (COLOR), _strokeType (NO_SOURCE), _fillPattern (nullptr), _strokePattern (nullptr), _gradientCoordinateMode (
-        0), _dashOffset (0), _textAnchor (0), _font_builder (true), _fill_builder (false), _stroke_builder (false)
+        0), _dashOffset (0), _textAnchor (0), _font_builder (true), _fill_builder (false), _stroke_builder (false), _damaged (notify_none)
   {
     _gradientMatrix = (cairo_matrix_t*) malloc (sizeof(cairo_matrix_t));
     _fill.a = 1;
@@ -105,6 +105,7 @@ namespace djnn
     _gradientCoordinateMode = cc->_gradientCoordinateMode;
     pango_font_description_merge (_font, cc->_font, TRUE);
     _textAnchor = cc->_textAnchor;
+    _damaged = cc->_damaged;
   }
 
   CairoContext::~CairoContext ()
