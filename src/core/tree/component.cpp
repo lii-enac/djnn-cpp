@@ -50,13 +50,19 @@ namespace djnn
 
   Container::~Container ()
   {
+    /* delete and remove children from this container */
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
-      { delete _children[i]; _children[i] = nullptr;};
+      /* remove child from structure_observer (if in structure_observer) */
+      for (auto s: structure_observer_list) 
+        s->remove_child_from_container (this, _children[i]);
+      delete _children[i]; 
+      _children.pop_back();
     }
-    for (auto s: structure_observer_list) {
+
+    /* remove container from structure_observer_list */
+    for (auto s: structure_observer_list)
       s->remove_container (this);
-    }
   }
 
   void
