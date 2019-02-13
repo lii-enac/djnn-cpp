@@ -286,6 +286,14 @@ namespace djnn
 
     delete _initial;
     delete _fsm_state;
+
+    for (FSMTransition* t : _transitions) {
+        delete t;
+    }
+    for (FSMState* s : _states) {
+        delete s;
+    }
+
   }
   void
   FSM::activate ()
