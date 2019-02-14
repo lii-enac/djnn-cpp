@@ -44,7 +44,10 @@ endif
 # cross-compile support
 ifndef cross_prefix
 cross_prefix := llvm-g
-#cross_prefix := g
+
+ifeq ($(os),Linux)
+cross_prefix := g
+endif
 #cross_prefix := arm-none-eabi-
 #cross_prefix := /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #cross_prefix := em
