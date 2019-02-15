@@ -10,6 +10,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Update and improvement on memory performance.
 
 
+## [1.2.0] - 2019-02-15
+### Added
+- cleaned code - especially delete and destructeur.
+- Improved Makefile and compilation on Linux.
+- Switches can now have unknown branches, use such as default branch and deactivate the current branch if running.
+- improved PERF_TEST in gui.cpp.
+
+### Fixed
+- improved delete: GUI text, GUI window, FSM
+- fixed Mainloop thread creation for Windows.
+- fixed side effect in Switch destructor.
+- fixed Container destructor, now, delete children items from structure observers 
+
+### Changed
+- GUI/cache - x, y, dx, dy ... now notify damaged transform.
+- renamed cpp-time into cpp-chrono.
+
+
 
 ## [1.1.2] - 2017-02-06 [YANKED]
 ### Added
