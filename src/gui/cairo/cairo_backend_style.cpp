@@ -117,7 +117,7 @@ namespace djnn
       set_stroke_source ();
       cairo_stroke (cur_cairo_state);
     }
-    cairo_new_path (cur_cairo_state);
+   cairo_new_path (cur_cairo_state);
   }
 
   void

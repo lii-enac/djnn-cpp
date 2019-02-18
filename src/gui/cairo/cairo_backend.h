@@ -46,10 +46,10 @@ namespace djnn
       int _posX, _posY, _width, _height, _b;
       PangoLayout* _layout;
   };
-  class PolyImpl : public AbstractGObjImpl {
+  class ShapeImpl : public AbstractGObjImpl {
   public:
-    PolyImpl (cairo_pattern_t *p, int x, int y, int w, int h) : _pattern (p), _x(x), _y(y), _w(w), _h(h){}
-    virtual ~PolyImpl () {}
+    ShapeImpl (cairo_pattern_t *p, int x, int y, int w, int h) : _pattern (p), _x(x), _y(y), _w(w), _h(h){}
+    virtual ~ShapeImpl () { cairo_pattern_destroy (_pattern); }
     cairo_pattern_t* pattern () { return _pattern; }
     int x () { return _x; }
     int y () { return _y; }
@@ -59,6 +59,7 @@ namespace djnn
     cairo_pattern_t *_pattern;
     int _x, _y, _w, _h;
   };
+
   class CairoContextManager;
   class CairoBackend : public AbstractBackend
   {
