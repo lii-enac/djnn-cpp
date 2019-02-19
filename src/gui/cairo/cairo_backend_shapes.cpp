@@ -110,7 +110,7 @@ namespace djnn
 
     cairo_pattern_t * pattern;
     pattern = cairo_pop_group (cur_cairo_state);
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+    //cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
     cairo_restore (cur_cairo_state);
 
@@ -123,28 +123,20 @@ namespace djnn
   CairoBackend::draw_cache(AbstractGShape *s)
   {
     ShapeImpl* cache = (ShapeImpl*) s->impl ();
-    cairo_save (cur_cairo_state);
-
     cairo_matrix_t mm;
+    cairo_surface_t *surface;
+    double tx=cache->x(), ty=cache->y();
+
+    cairo_save (cur_cairo_state);
     cairo_get_matrix (cur_cairo_state, &mm);
-    double tx=0, ty=0;
     cairo_matrix_transform_point (&mm, &tx, &ty); // find current translation
-    //cairo_identity_matrix(cur_cairo_state);
-    //cairo_translate (cur_cairo_state, tx, ty ); // apply current translation and forget other transformation (e.g. scale)
-    //cairo_translate (cur_cairo_state, cache->x(), cache->y() );
-    cairo_matrix_init_translate (&mm, tx+cache->x(), ty+cache->y() ); // apply current translation and forget other transformations (e.g. scale)
+    cairo_matrix_init_translate (&mm, tx, ty ); // forget other transformations (e.g. scale) and apply current translation
     cairo_set_matrix(cur_cairo_state, &mm);
     cairo_rectangle (cur_cairo_state, 0, 0, cache->w (), cache->h ());
-    //cairo_rectangle (cur_cairo_state, cache->x(), cache->y(), cache->w (), cache->h ()); // not the same!
-    //cairo_set_source (cur_cairo_state, cache->pattern ());
-    cairo_surface_t *surface;
     cairo_pattern_get_surface(cache->pattern (), &surface);
     cairo_set_source_surface(cur_cairo_state, surface, 0,0);
     cairo_fill_preserve (cur_cairo_state);
-    //cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5); // DBG
-    //cairo_stroke_preserve (cur_cairo_state); // DBG
     cairo_new_path (cur_cairo_state);
-
     cairo_restore (cur_cairo_state);
   }
 
