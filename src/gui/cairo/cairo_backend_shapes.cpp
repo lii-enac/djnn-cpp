@@ -94,24 +94,32 @@ namespace djnn
       // circle specific
       double cx, cy, r;
       s->get_properties_values (cx, cy, r);      
-      double bbx=cx-r, bby=cy-r;
-      double bbw=r*2, bbh=r*2;
+      double
+        bbx=cx-r,
+        bby=cy-r,
+        bbw=r*2,
+        bbh=r*2;
       //
 
       cairo_matrix_t mm;
       cairo_get_matrix (cur_cairo_state, &mm);
       double lw = cairo_get_line_width(cur_cairo_state); // stroke width
-      double aaw = 1.0; // antialiasing
-      double surr = lw/2.+aaw;
+      double surr = lw/2.; // will be transformed
+      double aaw = 1.0; // antialiasing in *pixels*, should not be transformed
+      
       bbx -= surr;
       bby -= surr;
-      
       double tbbx=bbx, tbby=bby;
       cairo_matrix_transform_point (&mm, &tbbx, &tbby);
+      bbx -= aaw;
+      bby -= aaw;
 
-      bbw+=surr*2;
-      bbh+=surr*2;
-      cairo_matrix_transform_distance (&mm, &bbw, &bbh);
+      bbw += surr*2;
+      bbh += surr*2;
+      double tbbw=bbw, tbbh=bbh;
+      cairo_matrix_transform_distance (&mm, &tbbw, &tbbh);
+      tbbw += aaw*2;
+      tbbh += aaw*2;
 
       cairo_save (cur_cairo_state);
       cairo_identity_matrix(cur_cairo_state);
@@ -130,7 +138,8 @@ namespace djnn
 
       cairo_restore (cur_cairo_state);
 
-      cache = new ShapeImpl (pattern, bbx, bby, bbw, bbh);
+      // we keep the non-transformed translation for further drawing, but use the transformed dimensions
+      cache = new ShapeImpl (pattern, bbx, bby, tbbw, tbbh);
       s->set_impl (cache);
     }
 
@@ -139,20 +148,21 @@ namespace djnn
     cairo_matrix_t mm;
     cairo_get_matrix (cur_cairo_state, &mm);
     double tx=0, ty=0;
-    //tx = cache->x(); ty = cache->y();
-    cairo_matrix_transform_point (&mm, &tx, &ty);
-    cairo_identity_matrix(cur_cairo_state);
-    cairo_translate (cur_cairo_state, tx, ty );
-    cairo_translate (cur_cairo_state, cache->x(), cache->y() );
+    cairo_matrix_transform_point (&mm, &tx, &ty); // find current translation
+    //cairo_identity_matrix(cur_cairo_state);
+    //cairo_translate (cur_cairo_state, tx, ty ); // apply current translation and forget other transformation (e.g. scale)
+    //cairo_translate (cur_cairo_state, cache->x(), cache->y() );
+    cairo_matrix_init_translate (&mm, tx+cache->x(), ty+cache->y() ); // apply current translation and forget other transformations (e.g. scale)
+    cairo_set_matrix(cur_cairo_state, &mm);
     cairo_rectangle (cur_cairo_state, 0, 0, cache->w (), cache->h ());
-    //cairo_rectangle (cur_cairo_state, cache->x(), cache->y(), cache->w (), cache->h ());
+    //cairo_rectangle (cur_cairo_state, cache->x(), cache->y(), cache->w (), cache->h ()); // not the same!
     //cairo_set_source (cur_cairo_state, cache->pattern ());
     cairo_surface_t *surface;
     cairo_pattern_get_surface(cache->pattern (), &surface);
     cairo_set_source_surface(cur_cairo_state, surface, 0,0);
     cairo_fill_preserve (cur_cairo_state);
-    //cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
-    //cairo_stroke_preserve (cur_cairo_state);
+    //cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5); // DBG
+    //cairo_stroke_preserve (cur_cairo_state); // DBG
     cairo_new_path (cur_cairo_state);
 
     cairo_restore (cur_cairo_state);
