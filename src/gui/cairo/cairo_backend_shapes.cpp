@@ -142,9 +142,9 @@ namespace djnn
   {
     if (!cur_cairo_state)
       return;
+    double x, y, w, h, rx, ry;
     #if CACHE_GEOMETRY
     if(test_cache(s)) {
-      double x, y, w, h, rx, ry;
       s->get_properties_values (x, y, w, h, rx, ry);
       build_cache (s,
         [&](bounding_box& bbox) {   
@@ -157,14 +157,12 @@ namespace djnn
     }
     draw_cache(s);
     #else
-    double x, y, w, h, rx, ry;
     s->get_properties_values (x, y, w, h, rx, ry);
     draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_state);
     fill_and_stroke ();
     #endif
 
     if (is_in_picking_view (s)) {
-      double x, y, w, h, rx, ry;
       s->get_properties_values (x, y, w, h, rx, ry);
       draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_picking_state);
       pick_fill_and_stroke ();
@@ -177,9 +175,9 @@ namespace djnn
   {
     if (!cur_cairo_state)
       return;
+    double cx, cy, r;
     #if CACHE_GEOMETRY
     if(test_cache(s)) {
-      double cx, cy, r;
       s->get_properties_values (cx, cy, r);
       build_cache (s,
         [&](bounding_box& bbox) {
@@ -192,14 +190,12 @@ namespace djnn
     }
     draw_cache(s);
     #else
-    double cx, cy, r;
     s->get_properties_values (cx, cy, r);
     cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
     fill_and_stroke ();
     #endif
 
     if (is_in_picking_view (s)) {
-      double cx, cy, r;
       s->get_properties_values (cx, cy, r);
       cairo_arc (cur_cairo_picking_state, cx, cy, r, 0., 2 * 3.14159265);
       pick_fill_and_stroke ();
@@ -223,12 +219,27 @@ namespace djnn
     if (!cur_cairo_state)
       return;
     double cx, cy, rx, ry;
+    #if CACHE_GEOMETRY
+    if(test_cache(s)) {
+      s->get_properties_values (cx, cy, rx, ry);
+      build_cache (s,
+        [&](bounding_box& bbox) {
+          bbox = {cx-rx, cy-ry, rx*2, ry*2};
+        },
+        [&]() {
+          draw_cairo_ellipse (cx, cy, rx, ry, cur_cairo_picking_state);
+        }
+      );
+    }
+    draw_cache(s);
+    #else
     s->get_properties_values (cx, cy, rx, ry);
     draw_cairo_ellipse (cx, cy, rx, ry, cur_cairo_state);
-
     fill_and_stroke ();
+    #endif
 
     if (is_in_picking_view (s)) {
+      s->get_properties_values (cx, cy, rx, ry);
       draw_cairo_ellipse (cx, cy, rx, ry, cur_cairo_picking_state);
       pick_fill_and_stroke ();
       _pick_view->add_gobj (s);
@@ -241,12 +252,30 @@ namespace djnn
     if (!cur_cairo_state)
       return;
     double x1, y1, x2, y2;
+    #if 0//CACHE_GEOMETRY
+    if(test_cache(s)) {
+      
+      s->get_properties_values (x1, y1, x2, y2);
+      build_cache (s,
+        [&](bounding_box& bbox) {
+          bbox = {x1<x2?x1:x2, y1<y2?y1:y2, abs(x2-x1), abs(y2-y1)};
+        },
+        [&]() {
+          cairo_move_to (cur_cairo_state, x1, y1);
+          cairo_line_to (cur_cairo_state, x2, y2);
+        }
+      );
+    }
+    draw_cache(s);
+    #else
     s->get_properties_values (x1, y1, x2, y2);
     cairo_move_to (cur_cairo_state, x1, y1);
     cairo_line_to (cur_cairo_state, x2, y2);
     fill_and_stroke ();
+    #endif
 
     if (is_in_picking_view (s)) {
+      s->get_properties_values (x1, y1, x2, y2);
       cairo_move_to (cur_cairo_picking_state, x1, y1);
       cairo_line_to (cur_cairo_picking_state, x2, y2);
       pick_fill_and_stroke ();
@@ -335,79 +364,77 @@ namespace djnn
   static double dx, dy;
   static cairo_matrix_t mm;
   void
-  CairoBackend::draw_poly (Poly* p)
+  CairoBackend::draw_poly (Poly* s)
   {
     if (!cur_cairo_state)
       return;
-    ShapeImpl* cache = (ShapeImpl*) p->impl ();
-    if (cache == nullptr || (p->get_damaged () & (notify_damaged_geometry))
-        || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform)) {
-      if (cache) {
-        delete cache;
-        cache = nullptr;
-      }
-      cairo_get_matrix (cur_cairo_state, &mm);
-      PolyPoint* first_pt = (PolyPoint*) ((Container*) p->points ())->children ()[0];
-      dx = first_pt->x ()->get_value ();
-      dy = first_pt->y ()->get_value ();
-      for (auto pt : ((Container*) p->points ())->children ()) {
-        double x = ((PolyPoint*) pt)->x ()->get_value ();
-        double y = ((PolyPoint*) pt)->y ()->get_value ();
-        if (x < dx)
-          dx = x;
-        if (y < dy)
-          dy = y;
-      }
-      cairo_matrix_transform_distance (&mm, &dx, &dy);
-      cairo_push_group (cur_cairo_state);
-      if (!first_pt)
-        return;
-      cairo_translate (cur_cairo_state, -dx, -dy);
 
-      double init_x = first_pt->x ()->get_value ();
-      double init_y = first_pt->y ()->get_value ();
-      //cairo_matrix_transform_distance (&mm, &init_x, &init_y);
-      cairo_move_to (cur_cairo_state, init_x, init_y);
-      p->points ()->draw ();
-      if (p->closed ())
-        cairo_close_path (cur_cairo_state);
-      double x1, y1, x2, y2;
-      cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
-
-      int w = x2 - x1;
-      int h = y2 - y1;
-      p->set_bounding_box (dx, dy, w, h);
-      fill_and_stroke ();
-      cairo_pattern_t * pattern = cairo_pop_group (cur_cairo_state);
-      cache = new ShapeImpl (pattern, dx, dy, w, h);
-      p->set_impl (cache);
+    #if CACHE_GEOMETRY
+    if(test_cache(s)) {
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
+      build_cache (s,
+        [&](bounding_box& bbox) {
+          double minx = first_pt->x ()->get_value ();
+          double miny = first_pt->y ()->get_value ();
+          double maxx = minx;
+          double maxy = maxy;
+          for (auto pt : ((Container*) s->points ())->children ()) {
+            double x = ((PolyPoint*) pt)->x ()->get_value ();
+            double y = ((PolyPoint*) pt)->y ()->get_value ();
+            if (x < minx)
+              minx = x;
+            else if(x>maxx)
+              maxx = x;
+            if (y < miny)
+              miny = y;
+            else if(y>maxy)
+              maxy = y;
+          }
+          bbox = {minx, miny, maxx-minx, maxy-miny};
+          s->set_bounding_box (bbox.x, bbox.y, bbox.w, bbox.h);
+        },
+        [&]() {
+          double init_x = first_pt->x ()->get_value ();
+          double init_y = first_pt->y ()->get_value ();
+          //cairo_matrix_transform_distance (&mm, &init_x, &init_y);
+          cairo_move_to (cur_cairo_state, init_x, init_y);
+          s->points ()->draw ();
+          if (s->closed ())
+            cairo_close_path (cur_cairo_state);
+          }
+      );
     }
-    cairo_save (cur_cairo_state);
+    draw_cache(s);
+    #else
+    PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
+    double init_x = first_pt->x ()->get_value ();
+    double init_y = first_pt->y ()->get_value ();
+    //cairo_matrix_transform_distance (&mm, &init_x, &init_y);
+    cairo_move_to (cur_cairo_state, init_x, init_y);
+    s->points ()->draw ();
+    if (s->closed ())
+      cairo_close_path (cur_cairo_state);
 
-    cairo_get_matrix (cur_cairo_state, &mm);
-    double tx = mm.x0;
-    double ty = mm.y0;
-    cairo_matrix_init_translate (&mm, tx, ty);
-    cairo_set_matrix (cur_cairo_state, &mm);
-    cairo_rectangle (cur_cairo_state, 0, 0, cache->w (), cache->h ());
-    cairo_set_source (cur_cairo_state, cache->pattern ());
-    cairo_fill_preserve (cur_cairo_state);
-    cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
-    cairo_stroke_preserve (cur_cairo_state);
-    cairo_restore (cur_cairo_state);
-    cairo_new_path (cur_cairo_state);
+    double x1, y1, x2, y2;
+    cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
 
-    if (is_in_picking_view (p)) {
-      PolyPoint* first_pt = (PolyPoint*) ((Container*) p->points ())->children ()[0];
+    int w = x2 - x1;
+    int h = y2 - y1;
+    s->set_bounding_box (dx, dy, w, h);
+    fill_and_stroke ();
+    #endif
+    
+    if (is_in_picking_view (s)) {
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
       cairo_move_to (cur_cairo_picking_state, first_pt->x ()->get_value (), first_pt->y ()->get_value ());
-      for (int i = 1; i < ((Container*) p->points ())->children ().size (); ++i) {
-        PolyPoint* polypoint = (PolyPoint*) ((Container*) p->points ())->children ()[i];
+      for (int i = 1; i < ((Container*) s->points ())->children ().size (); ++i) {
+        PolyPoint* polypoint = (PolyPoint*) ((Container*) s->points ())->children ()[i];
         cairo_line_to (cur_cairo_picking_state, polypoint->x ()->get_value (), polypoint->y ()->get_value ());
       }
-      if (p->closed ())
+      if (s->closed ())
         cairo_close_path (cur_cairo_picking_state);
       pick_fill_and_stroke ();
-      _pick_view->add_gobj (p);
+      _pick_view->add_gobj (s);
     }
   }
 
