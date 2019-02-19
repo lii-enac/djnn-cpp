@@ -91,27 +91,37 @@ namespace djnn
         cache = nullptr;
       }
 
+      // circle specific
+      double cx, cy, r;
+      s->get_properties_values (cx, cy, r);      
+      double bbx=cx-r, bby=cy-r;
+      double bbw=r*2, bbh=r*2;
+      //
+
       cairo_matrix_t mm;
       cairo_get_matrix (cur_cairo_state, &mm);
+      double lw = cairo_get_line_width(cur_cairo_state); // stroke width
+      double aaw = 1.0; // antialiasing
+      double surr = lw/2.+aaw;
+      bbx -= surr;
+      bby -= surr;
+      
+      double tbbx=bbx, tbby=bby;
+      cairo_matrix_transform_point (&mm, &tbbx, &tbby);
 
-      double cx, cy, r;
-      s->get_properties_values (cx, cy, r);
-
-      double
-        tx=cx-r, ty=cy-r,
-        ttx=tx, tty=ty;
-      cairo_matrix_transform_point (&mm, &ttx, &tty);
-
-      double w=r*2,h=r*2;
-      cairo_matrix_transform_distance (&mm, &w, &h);
+      bbw+=surr*2;
+      bbh+=surr*2;
+      cairo_matrix_transform_distance (&mm, &bbw, &bbh);
 
       cairo_save (cur_cairo_state);
       cairo_identity_matrix(cur_cairo_state);
-      cairo_translate (cur_cairo_state, -ttx, -tty);
+      cairo_translate (cur_cairo_state, -tbbx, -tbby);
       cairo_transform (cur_cairo_state, &mm);
 
       cairo_push_group (cur_cairo_state);
+      // circle-specific
       cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
+      //
       fill_and_stroke ();
 
       cairo_pattern_t * pattern;
@@ -120,7 +130,7 @@ namespace djnn
 
       cairo_restore (cur_cairo_state);
 
-      cache = new ShapeImpl (pattern, tx, ty, w, h);
+      cache = new ShapeImpl (pattern, bbx, bby, bbw, bbh);
       s->set_impl (cache);
     }
 
@@ -141,8 +151,8 @@ namespace djnn
     cairo_pattern_get_surface(cache->pattern (), &surface);
     cairo_set_source_surface(cur_cairo_state, surface, 0,0);
     cairo_fill_preserve (cur_cairo_state);
-    cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
-    cairo_stroke_preserve (cur_cairo_state);
+    //cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
+    //cairo_stroke_preserve (cur_cairo_state);
     cairo_new_path (cur_cairo_state);
 
     cairo_restore (cur_cairo_state);
