@@ -73,61 +73,81 @@ namespace djnn
   void
   CairoBackend::draw_circle (Circle *s)
   {
+    //std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
     if (!cur_cairo_state)
       return;
-    cairo_matrix_t mm;
+    #if 0
+    double cx, cy, r;
+    s->get_properties_values (cx, cy, r);
+    cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
+    fill_and_stroke ();
+    #else
     ShapeImpl* cache = (ShapeImpl*) s->impl ();
     if (cache == nullptr || (s->get_damaged () & (notify_damaged_geometry))
         || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform)) {
+
       if (cache) {
         delete cache;
         cache = nullptr;
       }
+
+      cairo_matrix_t mm;
       cairo_get_matrix (cur_cairo_state, &mm);
+
       double cx, cy, r;
-      double dx, dy, tx, ty;
       s->get_properties_values (cx, cy, r);
-      dx = cx - r;
-      dy = cy - r;
-      tx = mm.x0;
-      ty = mm.y0;
-      cout << "get cx " << cx << " cy " << cy << " r " << r << endl;
-      cairo_matrix_transform_distance (&mm, &cx, &cy);
-      cairo_matrix_transform_distance (&mm, &dx, &dy);
-      r = r * mm.xx; //abs (cx - dx);
-      cout << "after cx " << cx << " cy " << cy << " r " << r << endl;
+
+      double
+        tx=cx-r, ty=cy-r,
+        ttx=tx, tty=ty;
+      cairo_matrix_transform_point (&mm, &ttx, &tty);
+
+      double w=r*2,h=r*2;
+      cairo_matrix_transform_distance (&mm, &w, &h);
+
       cairo_save (cur_cairo_state);
-      cairo_translate (cur_cairo_state, -tx - cx, -ty - cy);
+      cairo_identity_matrix(cur_cairo_state);
+      cairo_translate (cur_cairo_state, -ttx, -tty);
+      cairo_transform (cur_cairo_state, &mm);
+
       cairo_push_group (cur_cairo_state);
-      cairo_translate (cur_cairo_state, r,  r);
-      cairo_arc (cur_cairo_state, 0, 0, r, 0., 2 * 3.14159265);
+      cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
       fill_and_stroke ();
-      cairo_pattern_t * pattern = cairo_pop_group (cur_cairo_state);
+
+      cairo_pattern_t * pattern;
+      pattern = cairo_pop_group (cur_cairo_state);
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-      cache = new ShapeImpl (pattern, cx, cy, r * 2, r * 2);
-      s->set_impl (cache);
+
       cairo_restore (cur_cairo_state);
+
+      cache = new ShapeImpl (pattern, tx, ty, w, h);
+      s->set_impl (cache);
     }
+
     cairo_save (cur_cairo_state);
 
+    cairo_matrix_t mm;
     cairo_get_matrix (cur_cairo_state, &mm);
-    double tx = mm.x0;
-    double ty = mm.y0;
-    cairo_matrix_init_translate (&mm, tx, ty);
-    cairo_set_matrix (cur_cairo_state, &mm);
-    cairo_rectangle (cur_cairo_state,  cache->x(), cache->y(), cache->w (), cache->h ());
-    cairo_set_source (cur_cairo_state, cache->pattern ());
+    double tx=0, ty=0;
+    //tx = cache->x(); ty = cache->y();
+    cairo_matrix_transform_point (&mm, &tx, &ty);
+    cairo_identity_matrix(cur_cairo_state);
+    cairo_translate (cur_cairo_state, tx, ty );
+    cairo_translate (cur_cairo_state, cache->x(), cache->y() );
+    cairo_rectangle (cur_cairo_state, 0, 0, cache->w (), cache->h ());
+    //cairo_rectangle (cur_cairo_state, cache->x(), cache->y(), cache->w (), cache->h ());
+    //cairo_set_source (cur_cairo_state, cache->pattern ());
+    cairo_surface_t *surface;
+    cairo_pattern_get_surface(cache->pattern (), &surface);
+    cairo_set_source_surface(cur_cairo_state, surface, 0,0);
     cairo_fill_preserve (cur_cairo_state);
     cairo_set_source_rgb (cur_cairo_state, 0.5, 0.5, 0.5);
     cairo_stroke_preserve (cur_cairo_state);
-    cairo_restore (cur_cairo_state);
     cairo_new_path (cur_cairo_state);
-    /*
-     double cx, cy, r;
-     s->get_properties_values (cx, cy, r);
-     cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
-     fill_and_stroke ();
-     */
+
+    cairo_restore (cur_cairo_state);
+    #endif
+
     if (is_in_picking_view (s)) {
       double cx, cy, r;
       s->get_properties_values (cx, cy, r);
