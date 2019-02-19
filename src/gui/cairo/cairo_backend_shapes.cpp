@@ -21,7 +21,7 @@
 #include <iostream>
 #include <cmath>
 
-#define CACHE_GEOMETRY 1
+#define CACHE_GEOMETRY 0
 
 namespace djnn
 {
@@ -75,24 +75,24 @@ namespace djnn
       cache = nullptr;
     }
 
-    bounding_box bbox;
-    get_bbox(bbox);
-    bounding_box tbbox=bbox; // bbox to be transformed
-
     double lw = cairo_get_line_width(cur_cairo_state); // stroke width
     double surr = lw/2.; // will be transformed
     double aaw = 1.0; // antialiasing in *pixels*, should not be transformed
 
+    bounding_box bbox;
+    get_bbox(bbox);
+    bbox.x -= surr; bbox.y -= surr;
+    bbox.w += surr*2; bbox.h += surr*2;
+    bounding_box tbbox=bbox; // bbox to be transformed
+
     cairo_matrix_t mm;
     cairo_get_matrix (cur_cairo_state, &mm);
     
-    bbox.x -= surr; bbox.y -= surr;
-    tbbox.x = bbox.x; tbbox.y = bbox.y;
+    //tbbox.x = bbox.x; tbbox.y = bbox.y;
     cairo_matrix_transform_point (&mm, &tbbox.x, &tbbox.y);
-    bbox.x -= aaw; bbox.y -= aaw;
+    tbbox.x -= aaw; tbbox.y -= aaw;
 
-    bbox.w += surr*2; bbox.h += surr*2;
-    tbbox.w = bbox.w; tbbox.h = bbox.h;
+    //tbbox.w = bbox.w; tbbox.h = bbox.h;
     cairo_matrix_transform_distance (&mm, &tbbox.w, &tbbox.h);
     tbbox.w += aaw*2; tbbox.h += aaw*2;
 
@@ -107,6 +107,7 @@ namespace djnn
 
     cairo_pattern_t * pattern;
     pattern = cairo_pop_group (cur_cairo_state);
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
     cairo_restore (cur_cairo_state);
 
