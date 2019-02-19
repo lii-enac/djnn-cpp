@@ -218,6 +218,16 @@ namespace djnn
     PangoFontMap *_PFM;
     PangoContext *_context;
     PangoLayout *_layout;
-  };
 
+
+    struct bounding_box;
+    bool
+    test_cache(AbstractGShape *s);
+    void
+    build_cache(AbstractGShape *s, const std::function <void (bounding_box& bbox)>& get_bbox, const std::function <void ()>& draw);
+    void
+    draw_cache(AbstractGShape *s);
+
+
+};
 } /* namespace djnn */

@@ -21,6 +21,8 @@
 #include <iostream>
 #include <cmath>
 
+#define CACHE_GEOMETRY 1
+
 namespace djnn
 {
   static void
@@ -50,56 +52,35 @@ namespace djnn
       cairo_rel_curve_to (state, 0.0, -c2, rx - c1, -ry, rx, -ry);
       cairo_close_path (state);
     }
-
   }
 
-  void
-  CairoBackend::draw_rect (Rectangle *s)
-  {
-    if (!cur_cairo_state)
-      return;
-    double x, y, w, h, rx, ry;
-    s->get_properties_values (x, y, w, h, rx, ry);
-    draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_state);
-    fill_and_stroke ();
+  struct CairoBackend::bounding_box {
+    double x, y, w, h;
+  };
 
-    if (is_in_picking_view (s)) {
-      draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_picking_state);
-      pick_fill_and_stroke ();
-      _pick_view->add_gobj (s);
-    }
-  }
-
-  void
-  CairoBackend::draw_circle (Circle *s)
+  bool
+  CairoBackend::test_cache(AbstractGShape *s)
   {
-    //std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-    if (!cur_cairo_state)
-      return;
-    #if 0
-    double cx, cy, r;
-    s->get_properties_values (cx, cy, r);
-    cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
-    fill_and_stroke ();
-    #else
     ShapeImpl* cache = (ShapeImpl*) s->impl ();
-    if (cache == nullptr || (s->get_damaged () & (notify_damaged_geometry))
-        || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform)) {
+    return (cache == nullptr || (s->get_damaged () & (notify_damaged_geometry))
+        || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform));
+  }
+
+  void
+  CairoBackend::build_cache(AbstractGShape *s, const std::function <void (bounding_box& bbox)>& get_bbox, const std::function <void ()>& draw)
+  {
+    ShapeImpl* cache = (ShapeImpl*) s->impl ();
+    //if (cache == nullptr || (s->get_damaged () & (notify_damaged_geometry))
+    //    || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform)) {
 
       if (cache) {
         delete cache;
         cache = nullptr;
       }
 
-      // circle specific
-      double cx, cy, r;
-      s->get_properties_values (cx, cy, r);      
-      double
-        bbx=cx-r,
-        bby=cy-r,
-        bbw=r*2,
-        bbh=r*2;
-      //
+      bounding_box bbox;
+      get_bbox(bbox);
+      bounding_box tbbox=bbox;
 
       cairo_matrix_t mm;
       cairo_get_matrix (cur_cairo_state, &mm);
@@ -107,29 +88,27 @@ namespace djnn
       double surr = lw/2.; // will be transformed
       double aaw = 1.0; // antialiasing in *pixels*, should not be transformed
       
-      bbx -= surr;
-      bby -= surr;
-      double tbbx=bbx, tbby=bby;
-      cairo_matrix_transform_point (&mm, &tbbx, &tbby);
-      bbx -= aaw;
-      bby -= aaw;
+      bbox.x -= surr;
+      bbox.y -= surr;
+      tbbox.x=bbox.x; tbbox.y=bbox.y;
+      cairo_matrix_transform_point (&mm, &tbbox.x, &tbbox.y);
+      bbox.x -= aaw;
+      bbox.y -= aaw;
 
-      bbw += surr*2;
-      bbh += surr*2;
-      double tbbw=bbw, tbbh=bbh;
-      cairo_matrix_transform_distance (&mm, &tbbw, &tbbh);
-      tbbw += aaw*2;
-      tbbh += aaw*2;
+      bbox.w += surr*2;
+      bbox.h += surr*2;
+      tbbox.w=bbox.w; tbbox.h=bbox.h;
+      cairo_matrix_transform_distance (&mm, &tbbox.w, &tbbox.h);
+      tbbox.w += aaw*2;
+      tbbox.h += aaw*2;
 
       cairo_save (cur_cairo_state);
       cairo_identity_matrix(cur_cairo_state);
-      cairo_translate (cur_cairo_state, -tbbx, -tbby);
+      cairo_translate (cur_cairo_state, -tbbox.x, -tbbox.y);
       cairo_transform (cur_cairo_state, &mm);
 
       cairo_push_group (cur_cairo_state);
-      // circle-specific
-      cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
-      //
+      draw();
       fill_and_stroke ();
 
       cairo_pattern_t * pattern;
@@ -139,10 +118,15 @@ namespace djnn
       cairo_restore (cur_cairo_state);
 
       // we keep the non-transformed translation for further drawing, but use the transformed dimensions
-      cache = new ShapeImpl (pattern, bbx, bby, tbbw, tbbh);
+      cache = new ShapeImpl (pattern, bbox.x, bbox.y, tbbox.w, tbbox.h);
       s->set_impl (cache);
-    }
+    
+  }
 
+  void
+  CairoBackend::draw_cache(AbstractGShape *s)
+  {
+    ShapeImpl* cache = (ShapeImpl*) s->impl ();
     cairo_save (cur_cairo_state);
 
     cairo_matrix_t mm;
@@ -166,6 +150,67 @@ namespace djnn
     cairo_new_path (cur_cairo_state);
 
     cairo_restore (cur_cairo_state);
+  }
+
+  void
+  CairoBackend::draw_rect (Rectangle *s)
+  {
+    if (!cur_cairo_state)
+      return;
+    #if CACHE_GEOMETRY
+    if(test_cache(s)) {
+      double x, y, w, h, rx, ry;
+      s->get_properties_values (x, y, w, h, rx, ry);
+      build_cache (s,
+        [&](bounding_box& bbox) {   
+          bbox = {x, y, w, h};
+        },
+        [&]() {
+          draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_state);
+        }
+      );
+    }
+    draw_cache(s);
+    #else
+    double x, y, w, h, rx, ry;
+    s->get_properties_values (x, y, w, h, rx, ry);
+    draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_state);
+    fill_and_stroke ();
+    #endif
+
+    if (is_in_picking_view (s)) {
+      double x, y, w, h, rx, ry;
+      s->get_properties_values (x, y, w, h, rx, ry);
+      draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_picking_state);
+      pick_fill_and_stroke ();
+      _pick_view->add_gobj (s);
+    }
+  }
+
+  void
+  CairoBackend::draw_circle (Circle *s)
+  {
+    if (!cur_cairo_state)
+      return;
+    #if CACHE_GEOMETRY
+    if(test_cache(s)) {
+      double cx, cy, r;
+      s->get_properties_values (cx, cy, r);
+      build_cache (s,
+        [&](bounding_box& bbox) {
+          bbox = {cx-r, cy-r, r*2, r*2};
+        },
+        [&]() {
+          cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
+        }
+      );
+    }
+    draw_cache(s);
+    #else
+    double cx, cy, r;
+    s->get_properties_values (cx, cy, r);
+    cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
+    fill_and_stroke ();
     #endif
 
     if (is_in_picking_view (s)) {
