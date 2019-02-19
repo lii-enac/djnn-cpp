@@ -90,7 +90,6 @@ namespace djnn
     if (s->get_damaged () & notify_damaged_transform) {
       cairo_matrix_t mm;
       cairo_get_matrix (cur_cairo_state, &mm);
-      cout << "xx " << mm.xx << " yx " << mm.yx << " xy " << mm.xy << " yy " << mm.yy << endl;
       _context_manager->get_current ()->notify_change (notify_damaged_transform);
       s->reset_damaged ();
     }

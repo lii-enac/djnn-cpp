@@ -441,7 +441,6 @@ namespace djnn
   void
   CairoBackend::draw_poly_point (double x, double y)
   {
-    cairo_matrix_transform_distance (&mm, &x, &y);
     cairo_line_to (cur_cairo_state, x, y);
   }
 
