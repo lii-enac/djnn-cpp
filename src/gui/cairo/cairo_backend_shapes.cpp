@@ -70,57 +70,53 @@ namespace djnn
   CairoBackend::build_cache(AbstractGShape *s, const std::function <void (bounding_box& bbox)>& get_bbox, const std::function <void ()>& draw)
   {
     ShapeImpl* cache = (ShapeImpl*) s->impl ();
-    //if (cache == nullptr || (s->get_damaged () & (notify_damaged_geometry))
-    //    || (_context_manager->get_current ()->get_damaged () & notify_damaged_transform)) {
+    if (cache) {
+      delete cache;
+      cache = nullptr;
+    }
 
-      if (cache) {
-        delete cache;
-        cache = nullptr;
-      }
+    bounding_box bbox;
+    get_bbox(bbox);
+    bounding_box tbbox=bbox;
 
-      bounding_box bbox;
-      get_bbox(bbox);
-      bounding_box tbbox=bbox;
-
-      cairo_matrix_t mm;
-      cairo_get_matrix (cur_cairo_state, &mm);
-      double lw = cairo_get_line_width(cur_cairo_state); // stroke width
-      double surr = lw/2.; // will be transformed
-      double aaw = 1.0; // antialiasing in *pixels*, should not be transformed
-      
-      bbox.x -= surr;
-      bbox.y -= surr;
-      tbbox.x=bbox.x; tbbox.y=bbox.y;
-      cairo_matrix_transform_point (&mm, &tbbox.x, &tbbox.y);
-      bbox.x -= aaw;
-      bbox.y -= aaw;
-
-      bbox.w += surr*2;
-      bbox.h += surr*2;
-      tbbox.w=bbox.w; tbbox.h=bbox.h;
-      cairo_matrix_transform_distance (&mm, &tbbox.w, &tbbox.h);
-      tbbox.w += aaw*2;
-      tbbox.h += aaw*2;
-
-      cairo_save (cur_cairo_state);
-      cairo_identity_matrix(cur_cairo_state);
-      cairo_translate (cur_cairo_state, -tbbox.x, -tbbox.y);
-      cairo_transform (cur_cairo_state, &mm);
-
-      cairo_push_group (cur_cairo_state);
-      draw();
-      fill_and_stroke ();
-
-      cairo_pattern_t * pattern;
-      pattern = cairo_pop_group (cur_cairo_state);
-      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-
-      cairo_restore (cur_cairo_state);
-
-      // we keep the non-transformed translation for further drawing, but use the transformed dimensions
-      cache = new ShapeImpl (pattern, bbox.x, bbox.y, tbbox.w, tbbox.h);
-      s->set_impl (cache);
+    cairo_matrix_t mm;
+    cairo_get_matrix (cur_cairo_state, &mm);
+    double lw = cairo_get_line_width(cur_cairo_state); // stroke width
+    double surr = lw/2.; // will be transformed
+    double aaw = 1.0; // antialiasing in *pixels*, should not be transformed
     
+    bbox.x -= surr;
+    bbox.y -= surr;
+    tbbox.x=bbox.x; tbbox.y=bbox.y;
+    cairo_matrix_transform_point (&mm, &tbbox.x, &tbbox.y);
+    bbox.x -= aaw;
+    bbox.y -= aaw;
+
+    bbox.w += surr*2;
+    bbox.h += surr*2;
+    tbbox.w=bbox.w; tbbox.h=bbox.h;
+    cairo_matrix_transform_distance (&mm, &tbbox.w, &tbbox.h);
+    tbbox.w += aaw*2;
+    tbbox.h += aaw*2;
+
+    cairo_save (cur_cairo_state);
+    cairo_identity_matrix(cur_cairo_state);
+    cairo_translate (cur_cairo_state, -tbbox.x, -tbbox.y);
+    cairo_transform (cur_cairo_state, &mm);
+
+    cairo_push_group (cur_cairo_state);
+    draw();
+    fill_and_stroke ();
+
+    cairo_pattern_t * pattern;
+    pattern = cairo_pop_group (cur_cairo_state);
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+
+    cairo_restore (cur_cairo_state);
+
+    // we keep the non-transformed translation for further drawing, but use the transformed dimensions
+    cache = new ShapeImpl (pattern, bbox.x, bbox.y, tbbox.w, tbbox.h);
+    s->set_impl (cache);
   }
 
   void
