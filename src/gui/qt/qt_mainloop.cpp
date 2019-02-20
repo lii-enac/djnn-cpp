@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,6 +10,8 @@
  *  Contributors:
  *      Stéphane Conversy <stephane.conversy@enac.fr>
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *
  */
 
 #include "../backend.h"
@@ -40,7 +42,9 @@ namespace djnn
   QtMainloop::QtMainloop () :
       _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false), i_got_lock_first_run(false)
   {
-    MainLoop::another_source_wants_to_be_mainloop = this;
+
+    MainLoop::instance ().set_another_source_wants_to_be_mainloop (this);
+    
     argc = 0;
     argv = 0;
     _qapp = new QApplication (argc, argv);
@@ -56,6 +60,7 @@ namespace djnn
   {
     _qapp->quit ();
   }
+
   void
   QtMainloop::please_stop ()
   {

@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -77,8 +78,6 @@ namespace djnn
     std::cerr << " ROL " << debug << std::endl << std::flush;
 #endif
   }
-
-  ExternalSource * MainLoop::another_source_wants_to_be_mainloop = nullptr;
 
   MainLoop* MainLoop::_instance;
   std::once_flag MainLoop::onceFlag;

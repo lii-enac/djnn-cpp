@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mahieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -43,7 +44,9 @@ namespace djnn
       _duration = chrono::duration_cast<chrono::milliseconds>(d);
     }
 
-    static ExternalSource * another_source_wants_to_be_mainloop;
+    void set_another_source_wants_to_be_mainloop (ExternalSource *);
+    ExternalSource * _another_source_wants_to_be_mainloop;
+    
     void add_background_process (Process *p) { _background_processes.push_back (p); }
   protected:
 

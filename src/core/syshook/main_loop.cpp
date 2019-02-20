@@ -1,3 +1,19 @@
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *
+ */
+
 #include "main_loop.h"
 #include "cpp-thread.h"
 
@@ -11,28 +27,33 @@ namespace djnn {
     }
 
 
-// Process
     void
     MainLoop::activate ()
     {
       for (auto p: _background_processes) {
         p->activation ();
       }
-      if (another_source_wants_to_be_mainloop) {
+      if (_another_source_wants_to_be_mainloop) {
         //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
         //another_source_wants_to_be_mainloop->activate_from_mainloop ();
-        another_source_wants_to_be_mainloop->private_run ();
+        _another_source_wants_to_be_mainloop->private_run ();
       } else {
         run_in_main_thread ();
       }
     }
 
+    void 
+    MainLoop::set_another_source_wants_to_be_mainloop (ExternalSource *source)
+    {
+      _another_source_wants_to_be_mainloop = source;
+    }
+
     void
     MainLoop::deactivate ()
     {
-      if (another_source_wants_to_be_mainloop) {
-        another_source_wants_to_be_mainloop->please_stop ();
+      if (_another_source_wants_to_be_mainloop) {
+        _another_source_wants_to_be_mainloop->please_stop ();
       } else {
         own_mutex.unlock ();
       }
@@ -80,8 +101,8 @@ namespace djnn {
         this_thread::sleep_for (chrono::milliseconds(_duration));
         //DBG;
       }
-      if (another_source_wants_to_be_mainloop)
-        another_source_wants_to_be_mainloop->please_stop ();
+      if (_another_source_wants_to_be_mainloop)
+        _another_source_wants_to_be_mainloop->please_stop ();
     }
 
 
