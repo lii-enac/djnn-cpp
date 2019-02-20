@@ -19,13 +19,15 @@
 
 namespace djnn {
 
-    // MainLoop should be created *before* any other external-source (is activated ?) -- or not ?
     MainLoop::MainLoop ()
     {
       set_run_for_ever ();
-      djnn::get_exclusive_access (DBG_GET); // get hand to prevent any other thread from launching
-    }
 
+      /* FIXME: removed and keep as legacy for NOW.
+       * the mainloop don't keep mutex a lauch anymore.
+       * BEFORE: // MainLoop should be created *before* any other external-source (is activated ?) -- or not ? */
+      //djnn::get_exclusive_access (DBG_GET); // get hand to prevent any other thread from launching
+    }
 
     void
     MainLoop::activate ()
@@ -87,7 +89,11 @@ namespace djnn {
     {
       //private_run();
       //DBG;
-      djnn::release_exclusive_access (DBG_REL); // launch other threads
+
+      /* FIXME: removed and keep as legacy for NOW.
+       * the mainloop don't keep mutex a lauch anymore */
+      //djnn::release_exclusive_access (DBG_REL); // launch other threads
+
       //DBG;
       if (is_run_forever ()) {
         //DBG;

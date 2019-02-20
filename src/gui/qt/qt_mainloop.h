@@ -40,6 +40,7 @@ namespace djnn {
     void set_please_exec (bool exec) { _please_exec = exec; }
     void add_window (QtWindow* win) { _windows.push_back (win); }
     void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+  
   private:
     static QtMainloop* _instance;
     static once_flag onceFlag;
@@ -51,7 +52,6 @@ namespace djnn {
     void slot_for_about_to_block ();
     vector<QtWindow*> _windows;
     bool already_awake;
-    bool i_got_lock_first_run;
     int argc;
     char **argv;
   };

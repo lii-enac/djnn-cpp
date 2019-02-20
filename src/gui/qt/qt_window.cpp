@@ -106,6 +106,13 @@ namespace djnn
   bool
   MyQWidget::event (QEvent *event)
   {
+
+    /* note:
+     * Get and release Mutex on each event BUT only the events that 
+     * WE manage else we let Qt and QTwidgets dealing with these Events.
+     */
+    djnn::get_exclusive_access (DBG_GET);
+
     switch (event->type ())
       {
       case QEvent::TouchBegin:
@@ -143,9 +150,27 @@ namespace djnn
             QtMainloop::instance ().set_please_exec (true);
         }
         break;
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+        case QEvent::Move:
+        case QEvent::Resize:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonRelease:
+        case QEvent::Wheel:
+        case QEvent::Close:
+        case QEvent::Paint:
+          QWidget::event (event);
+          break;
+
       default:
-        return QWidget::event (event);
+        {
+          /* Event not managed by us */
+          djnn::release_exclusive_access (DBG_REL);
+          return QWidget::event (event);
+        }
       }
+    djnn::release_exclusive_access (DBG_REL);
     return true;
   }
 
@@ -255,8 +280,8 @@ namespace djnn
   void
   MyQWidget::paintEvent (QPaintEvent *event)
   {
-    DBG
-    ;
+    DBG;
+
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
     backend->set_window (_window);
     QPainter painter (this);
@@ -268,7 +293,6 @@ namespace djnn
 #if _PERF_TEST
       t1();
 #endif
-      if (p)
         p->draw ();
 #if _PERF_TEST
       // print in RED

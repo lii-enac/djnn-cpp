@@ -40,7 +40,7 @@ namespace djnn
   }
 
   QtMainloop::QtMainloop () :
-      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false), i_got_lock_first_run(false)
+      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
   {
 
     MainLoop::instance ().set_another_source_wants_to_be_mainloop (this);
@@ -83,8 +83,6 @@ namespace djnn
     //set_please_stop (false);
     
     /* slot_about_to_block will be called ASA qapp->exec */
-    djnn::get_exclusive_access (DBG_GET);
-    i_got_lock_first_run = true;
 
     _qapp->exec ();
   }
@@ -99,14 +97,19 @@ namespace djnn
   QtMainloop::slot_for_about_to_block ()
   {
     //DBG;
+
     if (_please_exec) {
+      /* protect access on graph execeution */
+      djnn::get_exclusive_access (DBG_GET);
       GRAPH_EXEC;
+      djnn::release_exclusive_access (DBG_REL);
       _please_exec = false;
     }
+
     for (auto w : _windows) {
       w->check_for_update ();
     }
-    djnn::release_exclusive_access (DBG_REL);
+
     already_awake = false;
   }
 
@@ -114,24 +117,20 @@ namespace djnn
   QtMainloop::slot_for_awake ()
   {
     //DBG;
+
     if(already_awake) {
-      //DBG;
       return;
     }
+
     //QThread::currentThread()->setPriority(QThread::HighPriority);
     //QThread::currentThread()->setPriority(QThread::LowestPriority);
     
-    if(i_got_lock_first_run) {
-      i_got_lock_first_run = false;
-      djnn::release_exclusive_access (DBG_REL);
-    }
-
     if (!get_please_stop ()) {
-      djnn::get_exclusive_access (DBG_GET);
       // now qt can call event method on windows
       already_awake = true;
-    } else {
+
+    } else
       _qapp->quit ();
-    }
+
   }
 }
