@@ -15,6 +15,26 @@
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 
+#if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
+#include <boost/thread/mutex.hpp>
+typedef boost::mutex djnn_mutex_t;
+#endif
+
+#if DJNN_USE_CPP_THREAD
+#include <mutex>
+typedef std::thread djnn_mutex_t;
+#endif
+
+#if DJNN_USE_PTHREAD
+#include <pthread.h>
+#endif
+
+#if DJNN_USE_QTHREAD
+#include <QMutex>
+typedef QMutex djnn_mutex_t;
+#endif
+
+
 namespace djnn {
 
 
@@ -35,6 +55,19 @@ namespace djnn {
       //please_stop ();
       //if ( _thread.joinable() ) _thread.join();
       //delete _impl;
+    }
+
+
+    static djnn_mutex_t launch_mutex;
+    void
+    ExternalSource::launch_mutex_lock()
+    {
+        launch_mutex.lock();
+    }
+    void
+    ExternalSource::launch_mutex_unlock()
+    {
+        launch_mutex.unlock();
     }
 
 	void
@@ -164,6 +197,8 @@ static const char* th_err(int errmsg)
         //set_thread_priority();
         //std::cerr << "run " << name << std::endl; 
         //DBG;
+        launch_mutex.lock();
+        launch_mutex.unlock();
 		run();
 	}
 	

@@ -96,10 +96,14 @@ namespace djnn
 
     //interruptible_thread _thread;
 
+  protected:
+    static void launch_mutex_lock();
+    static void launch_mutex_unlock();
+
+
     class Impl;
     Impl * _impl;
 
-    
   private:
     void private_run();
     //std::atomic_bool

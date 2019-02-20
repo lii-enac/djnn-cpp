@@ -22,11 +22,8 @@ namespace djnn {
     MainLoop::MainLoop ()
     {
       set_run_for_ever ();
-
-      /* FIXME: removed and keep as legacy for NOW.
-       * the mainloop don't keep mutex a lauch anymore.
-       * BEFORE: // MainLoop should be created *before* any other external-source (is activated ?) -- or not ? */
-      //djnn::get_exclusive_access (DBG_GET); // get hand to prevent any other thread from launching
+      
+      launch_mutex_lock();
     }
 
     void
@@ -39,7 +36,7 @@ namespace djnn {
         //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
         //another_source_wants_to_be_mainloop->activate_from_mainloop ();
-        _another_source_wants_to_be_mainloop->private_run ();
+        _another_source_wants_to_be_mainloop->run ();
       } else {
         run_in_main_thread ();
       }
@@ -64,7 +61,8 @@ namespace djnn {
     void
     MainLoop::run_in_main_thread ()
     {
-      private_run ();
+      launch_mutex_unlock();
+      run ();
     }
 
     void
@@ -76,7 +74,7 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_QTHREAD
-      auto * th = QThread::create([this]() { this->ExternalSource::private_run(); });
+      auto * th = QThread::create([this]() { this->ExternalSource::run(); });
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
       th->start();
       #endif
@@ -87,14 +85,8 @@ namespace djnn {
     void
     MainLoop::run ()
     {
-      //private_run();
       //DBG;
 
-      /* FIXME: removed and keep as legacy for NOW.
-       * the mainloop don't keep mutex a lauch anymore */
-      //djnn::release_exclusive_access (DBG_REL); // launch other threads
-
-      //DBG;
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success

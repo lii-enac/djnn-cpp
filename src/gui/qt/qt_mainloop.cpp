@@ -83,6 +83,8 @@ namespace djnn
     //set_please_stop (false);
     
     /* slot_about_to_block will be called ASA qapp->exec */
+    
+    launch_mutex_unlock();
 
     _qapp->exec ();
   }
