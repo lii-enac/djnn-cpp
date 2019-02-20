@@ -416,7 +416,7 @@ namespace djnn
 
     int w = x2 - x1;
     int h = y2 - y1;
-    s->set_bounding_box (dx, dy, w, h);
+    s->set_bounding_box (x1, y1, w, h);
     fill_and_stroke ();
     #endif
     
@@ -448,9 +448,10 @@ namespace djnn
       return;
     in_picking_view = is_in_picking_view (p);
     p->items ()->draw ();
-    double x, y, w, h;
-    cairo_path_extents (cur_cairo_state, &x, &y, &w, &h);
-    p->set_bounding_box (x, y, w, h);
+    double x1, y1, x2, y2;
+    cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
+    p->set_bounding_box (x1, y1, x2 - x1, y2 - y1);
+    cairo_clip (cur_cairo_state);
     fill_and_stroke ();
 
     if (in_picking_view) {
@@ -643,9 +644,9 @@ namespace djnn
     if (!cur_cairo_state)
       return;
     p->items ()->draw ();
-    double x, y, w, h;
-    cairo_path_extents (cur_cairo_state, &x, &y, &w, &h);
-    p->set_bounding_box (x, y, w, h);
+    double x1, y1, x2, y2;
+    cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
+    p->set_bounding_box (x1, y1, x2 - x1, y2 - y1);
     cairo_clip (cur_cairo_state);
 
     if (in_picking_view) {
