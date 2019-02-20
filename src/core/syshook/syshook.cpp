@@ -53,13 +53,15 @@ namespace djnn
   get_exclusive_access (const char * debug)
   {
 #if DBG_MUTEX
-    //std::cerr << debug << " priority:" << QThread::currentThread()->priority() << std::flush;
+    std::cerr << debug << std::flush;
 #endif
+
 #if !DJNN_USE_BOOST_FIBER
     global_mutex->lock ();
 #endif
+    
 #if DBG_MUTEX
-    std::cerr << " GOT " << debug
+    std::cerr << " GOT (" << debug << ")"
     //<< " priority:" << QThread::currentThread()->priority()
     << std::endl << std::flush;
 #endif
@@ -69,13 +71,16 @@ namespace djnn
   release_exclusive_access (const char * debug)
   {
 #if DBG_MUTEX
-    //std::cerr << debug << std::flush;
+    std::cerr << debug << std::flush;
 #endif
+
 #if !DJNN_USE_BOOST_FIBER
     global_mutex->unlock ();
 #endif
+
 #if DBG_MUTEX
-    std::cerr << " ROL " << debug << std::endl << std::flush;
+    std::cerr << " ROL (" << debug << ")"
+    << std::endl << std::flush;
 #endif
   }
 
