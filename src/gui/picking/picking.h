@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2014-2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -16,10 +16,11 @@
 
 #pragma once
 
-#include "../window.h"
 #include "../abstract_gshape.h"
 
 namespace djnn {
+
+  class Window;
   class Picking
   {
   public:
@@ -30,6 +31,8 @@ namespace djnn {
     virtual AbstractGShape* pick (double x, double y) = 0;
     virtual void add_gobj (AbstractGShape* gobj) = 0;
     virtual int get_pixel(int x, int y) = 0;
+
+    void object_deleted (AbstractGShape* gobj);
 
     bool genericMousePress(double x, double y, int button);
     bool genericMouseMove(double x, double y);

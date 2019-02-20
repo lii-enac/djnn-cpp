@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -16,6 +17,7 @@
 #include "transformation/transformations.h"
 #include "../core/tree/spike.h"
 #include "../core/tree/set.h"
+#include "window.h"
 
 namespace djnn
 {
@@ -152,6 +154,11 @@ namespace djnn
 
   AbstractGShape::~AbstractGShape ()
   {
+    //remove from picking_view if is the current object
+    if (is_pickable(this))
+      if (this->frame () && this->frame ()->picking_view ())    
+        this->frame ()->picking_view ()->object_deleted(this);
+
     delete _origin_x;
     delete _origin_y;
     if (_has_ui) {

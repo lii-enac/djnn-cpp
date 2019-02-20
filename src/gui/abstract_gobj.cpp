@@ -10,9 +10,11 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
+#include "window.h"
 #include "abstract_gobj.h"
 
 namespace djnn
@@ -67,6 +69,28 @@ namespace djnn
     else
       (*cprop)->disable ();
     return *prop;
+  }
+
+  void 
+  UpdateDrawing::RedrawAction::activate () 
+  {
+    for (auto& w : _ud->get_win_list ()) {
+      if (w != nullptr) {
+        w->update ();
+        w->set_refresh (false);
+      }
+    }
+    _ud->clear_list ();
+  }
+
+  void 
+  UpdateDrawing::UndelayedSpike::coupling_activation_hook () 
+  {
+    Window *frame = dynamic_cast<Window*> (get_data ());
+    if (frame && !frame->refresh ()) {
+      _ud->add_window_for_refresh (frame);
+    }
+    notify_activation (); 
   }
 
   bool gui_initialized = false;
@@ -135,6 +159,12 @@ namespace djnn
       _win_list.push_back (frame);
       frame->set_refresh (true);
     }
+  }
+
+  void 
+  UpdateDrawing::add_window_for_refresh (Window* w) 
+  {
+    _win_list.push_back (w); w->set_refresh (true); 
   }
 
   void

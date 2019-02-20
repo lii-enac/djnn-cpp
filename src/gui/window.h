@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -17,6 +18,7 @@
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
 #include "../core/tree/process.h"
+#include "picking/picking.h"
 
 #include <iostream>
 
@@ -25,11 +27,16 @@ namespace djnn
 
   class WinImpl {
   public:
-    WinImpl () {}
-    virtual ~WinImpl () {}
+    WinImpl () : _picking_view(nullptr) {}
+    virtual ~WinImpl () { delete _picking_view;}
     virtual void activate () = 0;
     virtual void deactivate () = 0;
     virtual void update () = 0;
+    Picking* picking_view () { return _picking_view;};
+    void set_picking_view (Picking* p) { _picking_view = p;};
+     
+  private:
+    Picking *_picking_view;
   };
 
   class Window : public Process
@@ -58,6 +65,8 @@ namespace djnn
     void update () { _win_impl->update (); };
     void activate () override { _win_impl->activate (); }
     void deactivate () override { _win_impl->deactivate (); }
+    Picking* picking_view () { return _win_impl->picking_view ();}
+    void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
     Process* press () { return _press; }
     Process* move () { return _move; }
     Process* release () { return _release; }

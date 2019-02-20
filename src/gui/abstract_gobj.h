@@ -10,6 +10,7 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -18,17 +19,18 @@
 #include "../core/tree/bool_property.h"
 #include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
+#include "../core/tree/text_property.h"
 #include "../core/tree/process.h"
 #include "../core/tree/component.h"
 #include "../core/execution/component_observer.h"
 #include "../core/control/coupling.h"
-#include "window.h"
 #include "../core/error.h"
 #include <iostream>
 
 namespace djnn
 {
 
+  class Window;
   extern bool gui_initialized;
 
   class AbstractGObj : public Process
@@ -66,16 +68,8 @@ namespace djnn
       public:
         RedrawAction (UpdateDrawing *p, const string &n) : Process (p, n), _ud (p) { Process::finalize (); }
         virtual ~RedrawAction () {}
-        void activate () {
-          for (auto& w : _ud->get_win_list ()) {
-            if (w != nullptr) {
-              w->update ();
-              w->set_refresh (false);
-            }
-          }
-          _ud->clear_list ();
-        }
-        void deactivate () {}
+        void activate () override ;
+        void deactivate () override {}
       private:
         UpdateDrawing* _ud;
     };
@@ -87,12 +81,7 @@ namespace djnn
       void post_activate () override { set_deactivated (); }
       void activate () override {};
       void deactivate () override {};
-      void coupling_activation_hook () override {
-        Window *frame = dynamic_cast<Window*> (get_data ());
-        if (frame && !frame->refresh ()) {
-          _ud->add_window_for_refresh (frame);
-         }
-        notify_activation (); };
+      void coupling_activation_hook () override;
     private:
       UpdateDrawing* _ud;
     };
@@ -112,7 +101,7 @@ namespace djnn
     void activate () override;
     void deactivate () override {}
     void coupling_activation_hook () override;
-    void add_window_for_refresh (Window* w) { _win_list.push_back (w); w->set_refresh (true); }
+    void add_window_for_refresh (Window* w);
     void update_auto_refresh () {
       if (_auto_refresh->get_value()) _redraw_when_damaged->enable ();
       else _redraw_when_damaged->disable ();

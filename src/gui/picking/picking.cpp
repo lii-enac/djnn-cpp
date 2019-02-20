@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2014-2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -23,7 +23,7 @@ namespace djnn
   Picking::Picking (Window *win) :
       _win (win), _cur_obj (nullptr)
   {
-
+    _win->set_picking_view(this);
   }
 
   Picking::~Picking ()
@@ -139,6 +139,15 @@ namespace djnn
     return exec_;
   }
 
+
+ void 
+ Picking::object_deleted (AbstractGShape* gobj)
+ {
+   // Reset _cur_obj to nullptr if this object has been removed from picking_view
+   if (_cur_obj == gobj)
+      _cur_obj = nullptr;
+ }
+
   bool
   Picking::genericCheckShapeAfterDraw (double x, double y)
   {
@@ -154,14 +163,14 @@ namespace djnn
           set_local_coords (s, nullptr, x, y);
         }
       } else {
-        if (_cur_obj != 0)
+        if (_cur_obj)
           _cur_obj->find_component ("leave")->notify_activation ();
         s->find_component ("enter")->notify_activation ();
         _cur_obj = s;
         exec_ = true;
       }
     } else {
-      if (_cur_obj != nullptr) {
+      if (_cur_obj) {
         _cur_obj->find_component ("leave")->notify_activation ();
         _cur_obj = nullptr;
         exec_ = true;
