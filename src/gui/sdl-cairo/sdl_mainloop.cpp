@@ -122,9 +122,11 @@ namespace djnn {
   SDLMainloop::sdl_run ()
   {
     // wait for official mainloop to finish initing
-    djnn::get_exclusive_access (DBG_GET);
-    djnn::release_exclusive_access (DBG_REL);
+    //djnn::get_exclusive_access (DBG_GET);
+    //djnn::release_exclusive_access (DBG_REL);
 
+    launch_mutex_unlock();
+    
     #if 1
       while (!get_please_stop ()) {
         SDL_Event e;
