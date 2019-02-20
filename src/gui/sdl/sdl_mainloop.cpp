@@ -33,7 +33,7 @@ namespace djnn {
 
 	SDLMainloop::SDLMainloop()
 	{
-		MainLoop::another_source_wants_to_be_mainloop = this;
+		MainLoop::instance ().set_another_source_wants_to_be_mainloop (this);
 	}
 
 	SDLMainloop::~SDLMainloop()

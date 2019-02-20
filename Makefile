@@ -396,7 +396,7 @@ pkgdeps += qt5
 pkgdeps += cairo pango
 pkgdeps += sdl2
 pkgcmd := brew install
-endif
+endif 
 
 ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/

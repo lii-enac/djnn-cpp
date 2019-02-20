@@ -51,7 +51,10 @@ namespace djnn
       _window (win), _sdl_window (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _sdl_surface (nullptr), _my_cairo_surface (
           nullptr), is_activated (false)
   {
+
     _picking_view = new CairoPickingView (win);
+    WinImpl::set_picking_view (_picking_view);
+
 #if PICKING_DBG
     _pick_sdl_renderer = nullptr;
     _pick_sdl_surface = nullptr;
@@ -266,7 +269,9 @@ namespace djnn
     }
   }
 }
-Graph::instance ().exec ();
+
+GRAPH_EXEC;
+
 }
 
 }

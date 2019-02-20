@@ -45,7 +45,7 @@ namespace djnn {
   SDLMainloop::SDLMainloop()
   : _wakeup_already_triggered(false)
   {
-    MainLoop::another_source_wants_to_be_mainloop = this;
+    MainLoop::instance ().set_another_source_wants_to_be_mainloop (this);
   }
 
   SDLMainloop::~SDLMainloop()
