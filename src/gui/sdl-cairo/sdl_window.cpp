@@ -24,6 +24,10 @@
 
 #include <SDL2/SDL.h>
 
+// cairo gl
+#include <SDL2/SDL_syswm.h>
+#include <cairo/cairo-gl.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,13 +38,6 @@
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define attr(a) #a ":" << a << " "
-#define _PERF_TEST 1
-#if _PERF_TEST
-#include "../../core/utils-dev.h"
-static int draw_counter = 0;
-static double draw_total = 0.0;
-static double draw_average = 0.0;
-#endif
 
 namespace djnn
 {
@@ -122,7 +119,6 @@ namespace djnn
       t1();
     #endif
 
-
     cairo_surface_t *drawing_surface, *picking_surface;
     unsigned char *data, *picking_data;
     CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
@@ -130,14 +126,24 @@ namespace djnn
     backend->set_window (_window);
     backend->set_picking_view (_picking_view);
     _picking_view->init ();
+
     drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
-                                                           _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
+                                                          _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
     picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _sdl_surface->w, _sdl_surface->h);
+
+    // cairo gl
+    // SDL_SysWMinfo info;
+    // SDL_GetWindowWMInfo(_sdl_window, &info);
+    // // https://stackoverflow.com/questions/39476501/how-to-obtain-the-glxcontext-in-sdl
+    // cairo_device_t* device = cairo_glx_device_create (&info.x11.Display, (GLXContext) _sdl_context);
+    // drawing_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR_ALPHA, _sdl_surface->w, _sdl_surface->h);
+    // picking_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR, _sdl_surface->w, _sdl_surface->h);
 
     _my_cairo_surface->update (drawing_surface, picking_surface);
 
     cairo_surface_flush (drawing_surface);
     cairo_surface_flush (picking_surface);
+
     data = cairo_image_surface_get_data (drawing_surface);
     picking_data = cairo_image_surface_get_data (picking_surface);
     _picking_view->set_data (picking_data, _sdl_surface->w, _sdl_surface->h,
@@ -153,7 +159,9 @@ namespace djnn
 #endif
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
-    #if _PERF_TEST
+
+
+#if _PERF_TEST
       // print in RED
       cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
