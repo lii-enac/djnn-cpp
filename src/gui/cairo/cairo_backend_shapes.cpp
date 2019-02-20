@@ -361,8 +361,6 @@ namespace djnn
     }
   }
 
-  static double dx, dy;
-  static cairo_matrix_t mm;
   void
   CairoBackend::draw_poly (Poly* s)
   {
@@ -396,7 +394,6 @@ namespace djnn
         [&]() {
           double init_x = first_pt->x ()->get_value ();
           double init_y = first_pt->y ()->get_value ();
-          //cairo_matrix_transform_distance (&mm, &init_x, &init_y);
           cairo_move_to (cur_cairo_state, init_x, init_y);
           s->points ()->draw ();
           if (s->closed ())
@@ -409,7 +406,6 @@ namespace djnn
     PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
     double init_x = first_pt->x ()->get_value ();
     double init_y = first_pt->y ()->get_value ();
-    //cairo_matrix_transform_distance (&mm, &init_x, &init_y);
     cairo_move_to (cur_cairo_state, init_x, init_y);
     s->points ()->draw ();
     if (s->closed ())
