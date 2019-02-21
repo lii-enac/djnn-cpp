@@ -21,10 +21,8 @@
 #include <cmath>
 #include <locale.h>
 
-#define SDL 1
-
-#if SDL
-#include "../sdl-cairo/sdl_window.h"
+#if DJNN_SDL
+#include "cairo_sdl_window.h"
 #endif
 
 namespace djnn
@@ -93,8 +91,8 @@ namespace djnn
   WinImpl*
   CairoBackend::create_window (Window *win, const std::string& title, double x, double y, double w, double h)
   {
-#if SDL
-    return new SDLWindow (win, title, x, y, w, h);
+#if DJNN_SDL
+    return new CairoSDLWindow (win, title, x, y, w, h);
 #endif
   }
 

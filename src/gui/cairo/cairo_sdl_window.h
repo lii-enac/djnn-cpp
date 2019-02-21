@@ -1,0 +1,55 @@
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+
+ *
+ */
+
+#pragma once
+
+#include "../sdl/sdl_window.h"
+#include "../cairo/my_cairo_surface.h"
+
+namespace djnn {
+
+  class CairoSDLWindow : public SDLWindow
+  {
+  public:
+    CairoSDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
+    virtual ~CairoSDLWindow ();
+
+    void update () override;
+    virtual void redraw () override;
+
+  protected:
+    // Process
+    void activate () override;
+    void deactivate () override;
+
+    // SDLWindow
+    virtual void handle_resized(int w, int h) override;
+
+  private:
+    SDL_Renderer *_sdl_renderer;
+    SDL_Texture *_sdl_texture;
+    SDL_Surface * _sdl_surface;
+    MyCairoSurface *_my_cairo_surface;
+    CairoPickingView *_picking_view;
+    
+#if PICKING_DBG
+    SDL_Window *_pick_sdl_window;
+    SDL_Renderer *_pick_sdl_renderer;
+    SDL_Texture *_pick_sdl_texture;
+    SDL_Surface * _pick_sdl_surface;
+#endif
+  };
+}
