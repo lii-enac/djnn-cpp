@@ -23,10 +23,6 @@
 
 #include <SDL2/SDL.h>
 
-// cairo gl
-//#include <SDL2/SDL_syswm.h>
-//#include <cairo/cairo-gl.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,15 +39,26 @@ namespace djnn
 
   int mouse_tracking; // unused but important for Qt
 
+  // https://stackoverflow.com/questions/32294913/getting-contiunous-window-resize-event-in-sdl-2
+  static int resizingEventWatcher(void* data, SDL_Event* event) {
+    if (event->type == SDL_WINDOWEVENT &&
+        event->window.event == SDL_WINDOWEVENT_RESIZED) {
+      SDL_Window* win = SDL_GetWindowFromID(event->window.windowID);
+      if (win == ((SDLWindow*)data)->sdl_window()) {
+        printf("resizing.....\n");
+      }
+    }
+    return 0;
+  }
+
   SDLWindow::SDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
       _window (win), _sdl_window (nullptr), is_activated (false)
   {
+    SDL_AddEventWatch(resizingEventWatcher, this);
   }
 
   SDLWindow::~SDLWindow ()
   {
-    if (is_activated)
-      deactivate ();
   }
 
   void

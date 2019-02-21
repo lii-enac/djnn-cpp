@@ -10,7 +10,6 @@
  *  Contributors:
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
-
  *
  */
 
@@ -21,11 +20,11 @@
 
 namespace djnn {
 
-  class CairoSDLWindow : public SDLWindow
-  {
+class CairoGLSDLWindow : public SDLWindow
+{
   public:
-    CairoSDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
-    virtual ~CairoSDLWindow ();
+    CairoGLSDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
+    virtual ~CairoGLSDLWindow ();
 
     void update () override;
     virtual void redraw () override;
@@ -38,18 +37,22 @@ namespace djnn {
     // SDLWindow
     virtual void handle_resized(int w, int h) override;
 
-  private:
-    SDL_Surface * _sdl_surface;
-    SDL_Renderer *_sdl_renderer;
-    SDL_Texture *_sdl_texture;
+    SDL_GLContext sdl_context() { return _sdl_context; }
+    // FIXME better name
+    void end_redraw();
+    void update_hdpi();
+
+  	SDL_GLContext _sdl_context;
     MyCairoSurface *_my_cairo_surface;
     CairoPickingView *_picking_view;
+
+    //SDL_Surface * _sdl_surface;
     
-#if PICKING_DBG
-    SDL_Window *_pick_sdl_window;
-    SDL_Renderer *_pick_sdl_renderer;
-    SDL_Texture *_pick_sdl_texture;
-    SDL_Surface * _pick_sdl_surface;
-#endif
-  };
+    //SDL_Texture * _sdl_texture;
+    //SDL_Surface * _sdl_surface_picking;
+    //SDLPickingView * _picking_view;
+
+    int _refresh_rate;
+};
+
 }

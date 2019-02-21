@@ -10,14 +10,14 @@ namespace djnn
 {
   CairoSDLWindow::CairoSDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
   SDLWindow(win, title, x,y,w,h),
-  _sdl_renderer (nullptr), _sdl_texture (nullptr), _sdl_surface (nullptr), _my_cairo_surface (nullptr)
+  _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _my_cairo_surface (nullptr)
   {
     _picking_view = new CairoPickingView (win);
     WinImpl::set_picking_view (_picking_view);
 
 #if PICKING_DBG
-    _pick_sdl_renderer = nullptr;
     _pick_sdl_surface = nullptr;
+    _pick_sdl_renderer = nullptr;
     _pick_sdl_texture = nullptr;
     _pick_sdl_window = nullptr;
 #endif
@@ -25,7 +25,8 @@ namespace djnn
 
   CairoSDLWindow::~CairoSDLWindow ()
   {
-    
+    if (is_activated)
+      deactivate (); 
   }
 
   void
