@@ -25,8 +25,8 @@
 #include <SDL2/SDL.h>
 
 // cairo gl
-#include <SDL2/SDL_syswm.h>
-#include <cairo/cairo-gl.h>
+//#include <SDL2/SDL_syswm.h>
+//#include <cairo/cairo-gl.h>
 
 #include <stdio.h>
 #include <stdlib.h>
