@@ -99,14 +99,14 @@ namespace djnn
         remove_child (child_to_move);
         _children.insert (_children.begin (), child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, 0);
+          s->move_child_to (this, child_to_move, 0, spec, 0);
         }
         return;
       } else if (spec == LAST) {
         remove_child (child_to_move);
         _children.push_back (child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, _children.size () - 1);
+          s->move_child_to (this, child_to_move, 0, spec, _children.size () - 1);
         }
       } else
         return;
@@ -120,13 +120,13 @@ namespace djnn
         remove_child (child_to_move);
         _children.insert (_children.begin () + index, child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index);
+          s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else if (spec == AFTER) {
         remove_child (child_to_move);
         _children.insert (_children.begin () + index + 1, child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index + 1);
+          s->move_child_to (this, child_to_move, index, spec, index + 1);
         }
       } else {
         cout << "spec = " << spec << endl;
