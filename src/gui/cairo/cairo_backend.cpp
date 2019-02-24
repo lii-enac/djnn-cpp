@@ -23,6 +23,7 @@
 
 #if DJNN_SDL
 #include "cairo_sdl_window.h"
+#include "cairo_gl_sdl_window.h"
 #endif
 
 namespace djnn
@@ -93,6 +94,7 @@ namespace djnn
   {
 #if DJNN_SDL
     return new CairoSDLWindow (win, title, x, y, w, h);
+    //return new CairoGLSDLWindow (win, title, x, y, w, h);
 #endif
   }
 

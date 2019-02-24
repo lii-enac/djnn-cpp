@@ -5,6 +5,7 @@
 #include <SDL2/SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
+
 //#include "opengl.h"
 //#include "gl_dbg.h"
 
@@ -184,7 +185,6 @@ namespace djnn {
   void
   CairoGLSDLWindow::redraw ()
   {
-
     #if _PERF_TEST
     t1();
     #endif
@@ -205,38 +205,32 @@ namespace djnn {
     //drawing_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR_ALPHA, _sdl_surface->w, _sdl_surface->h);
     //picking_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR, _sdl_surface->w, _sdl_surface->h);
 
+    #if defined(SDL_VIDEO_DRIVER_X11) && CAIRO_HAS_GLX_FUNCTIONS
     SDL_SysWMinfo info;
     SDL_GetWindowWMInfo(_sdl_window, &info);
-
-    #if defined(SDL_VIDEO_DRIVER_X11) && CAIRO_HAS_GLX_FUNCTIONS
     // https://stackoverflow.com/questions/39476501/how-to-obtain-the-glxcontext-in-sdl
     cairo_device_t* device = cairo_glx_device_create (info.x11.Display, (GLXContext) _sdl_context);
     drawing_surface = cairo_gl_surface_create_for_window (device, info.x11.Window, w, h);
     picking_surface = cairo_gl_surface_create_for_window (device, info.x11.Window, w, h);
     #endif
-
-    #if defined(SDL_VIDEO_DRIVER_VIVANTE) && CAIRO_HAS_EGL_FUNCTIONS
-    cairo_device_t* device = cairo__device_create (&info.vivante.display, (GLXContext) _sdl_context);
-
-    cairo_public cairo_device_t *
-    cairo_egl_device_create (EGLDisplay dpy, EGLContext egl);
-
-    cairo_public cairo_surface_t *
-    cairo_gl_surface_create_for_egl (cairo_device_t *device,
-         EGLSurface  egl,
-         int     width,
-         int     height);
-
-    #endif
     
+    #if CAIRO_HAS_EGL_FUNCTIONS
+    cairo_device_t* device = cairo_egl_device_create (eglGetCurrentDisplay(), (EGLContext) _sdl_context);
+    drawing_surface = cairo_gl_surface_create_for_egl (device, eglGetCurrentSurface(EGL_DRAW), _window->width ()->get_value (), _window->height ()->get_value ());
+    picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _window->width ()->get_value (), _window->height ()->get_value ());
+    #endif
     
     _my_cairo_surface->update (drawing_surface, picking_surface);
 
     cairo_surface_flush (drawing_surface);
     cairo_surface_flush (picking_surface);
 
-    data = cairo_image_surface_get_data (drawing_surface);
-    picking_data = cairo_image_surface_get_data (picking_surface);
+    cairo_gl_surface_swapbuffers(drawing_surface);
+    
+    //SDL_GL_SwapWindow (_sdl_window);
+
+    //data = cairo_image_surface_get_data (drawing_surface);
+    //picking_data = cairo_image_surface_get_data (picking_surface);
     //_picking_view->set_data (picking_data, _sdl_surface->w, _sdl_surface->h,
     //                         cairo_image_surface_get_stride (picking_surface));
 

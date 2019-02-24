@@ -17,7 +17,7 @@
 
 #include "cairo_backend.h"
 
-#define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
 
 #ifndef DOUBLE_BUFFER
@@ -47,8 +47,6 @@ namespace djnn
   void
   MyCairoSurface::update (cairo_surface_t* drawing_surface, cairo_surface_t* picking_surface)
   {
-    DBG
-    ;
     if (!drawing_surface)
       return;
     CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());

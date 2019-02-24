@@ -3,13 +3,13 @@ lib_cflags := $(lib_cppflags)
 
 ifeq ($(os),Darwin)
 # macos opengl
-lib_ldflags += -framework OpenGL
-lib_cflags += -DGL_SILENCE_DEPRECATION=1
-lib_cppflags += -DGL_SILENCE_DEPRECATION=1
+# lib_cflags += -DGL_SILENCE_DEPRECATION=1
+# lib_cppflags += -DGL_SILENCE_DEPRECATION=1
+# lib_ldflags += -framework OpenGL
 # SwiftShader
-# lib_cflags += -DUSE_GL_ES_VERSION_2_0
-# lib_cppflags += -DUSE_GL_ES_VERSION_2_0
-# lib_ldflags += -L/Users/conversy/src-ext/SwiftShader/build -lGLESv2 -lEGL 
+lib_cflags += -DUSE_GL_ES_VERSION_2_0
+lib_cppflags += -DUSE_GL_ES_VERSION_2_0
+lib_ldflags += -L/Users/conversy/src-ext/SwiftShader/build -lGLESv2 -lEGL 
 endif
 
 ifeq ($(os),Linux)
