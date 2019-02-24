@@ -5,9 +5,8 @@
 #include <SDL2/SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
-
-//#include "opengl.h"
-//#include "gl_dbg.h"
+#include "opengl.h"
+#include "gl_dbg.h"
 
 #include <iostream>
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
@@ -23,6 +22,8 @@ static double draw_total = 0.0;
 static double draw_average = 0.0;
 #endif
 
+static int glad_inited=0;
+
 namespace djnn {
 
   CairoGLSDLWindow::CairoGLSDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
@@ -31,6 +32,17 @@ namespace djnn {
   {
     _picking_view = new CairoPickingView (win);
     WinImpl::set_picking_view (_picking_view);
+
+#ifdef __glad_h_
+    if(!glad_inited) {
+      int glad_status = gladLoadGL();
+      //int glad_status = gladLoadGLLoader(SDL_GL_GetProcAddress);
+      if(glad_status) std::cerr << "glad could not open opengl" << __FL__;
+      printf("OpenGL %d.%d\n", GLVersion.major, GLVersion.minor);
+      std::cout << "info: " << glGetString(GL_VENDOR) << " " << glGetString(GL_VERSION) << __FL__;
+      glad_inited=1;
+    }
+#endif
   }
 
   CairoGLSDLWindow::~CairoGLSDLWindow ()
@@ -66,15 +78,16 @@ namespace djnn {
     SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
 
-#if USE_GL_2_1
+#if USE_GL_VERSION_2_1
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
-    // SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE ); //MacOS https://stackoverflow.com/a/13095742
     // SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
     // SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 2 );
+    // SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE ); //MacOS https://stackoverflow.com/a/13095742
 #endif
 
 #ifdef USE_GL_ES_VERSION_2_0
+    DBG;
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 0 );
@@ -115,7 +128,7 @@ namespace djnn {
 
     SDL_DisplayMode mode;
     SDL_GetWindowDisplayMode(_sdl_window, &mode);
-    std::cerr << "SDL " << mode.refresh_rate << "hz"<< __FL__;
+    //std::cerr << "SDL " << mode.refresh_rate << "hz"<< __FL__;
     _refresh_rate = mode.refresh_rate;
 
     //int ww, wh;
@@ -126,6 +139,9 @@ namespace djnn {
       fprintf(stderr, "Couldn't create context: %s\n", SDL_GetError());
       exit(1);
     }
+
+    //std::cerr << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << " " << glGetString(GL_VERSION) << __FL__;
+
 
     /* This makes our buffer swap syncronized with the monitor's vertical refresh */
     //SDL_GL_SetSwapInterval(1);
@@ -197,6 +213,8 @@ namespace djnn {
     backend->set_picking_view (_picking_view);
     _picking_view->init ();
 
+    double w = _window->width ()->get_value (), h = _window->height ()->get_value ();
+
     //drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
     //                                                      _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
     //picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _sdl_surface->w, _sdl_surface->h);
@@ -205,30 +223,79 @@ namespace djnn {
     //drawing_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR_ALPHA, _sdl_surface->w, _sdl_surface->h);
     //picking_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR, _sdl_surface->w, _sdl_surface->h);
 
-    #if defined(SDL_VIDEO_DRIVER_X11) && CAIRO_HAS_GLX_FUNCTIONS
+    // see https://news.ycombinator.com/item?id=16539446
+
+  #if defined(SDL_VIDEO_DRIVER_X11) && CAIRO_HAS_GLX_FUNCTIONS
     SDL_SysWMinfo info;
     SDL_GetWindowWMInfo(_sdl_window, &info);
     // https://stackoverflow.com/questions/39476501/how-to-obtain-the-glxcontext-in-sdl
-    cairo_device_t* device = cairo_glx_device_create (info.x11.Display, (GLXContext) _sdl_context);
-    drawing_surface = cairo_gl_surface_create_for_window (device, info.x11.Window, w, h);
-    picking_surface = cairo_gl_surface_create_for_window (device, info.x11.Window, w, h);
-    #endif
+    cairo_device_t* device = cairo_glx_device_create (info.info.x11.Display, (GLXContext) _sdl_context);
+    if(device==nullptr) {
+      std::cerr << "could not create cairo glx device" << __FL__;
+      exit(1);
+    }
+    cairo_status_t st = cairo_device_status (device);
+    if( st != CAIRO_STATUS_SUCCESS ) {
+       std::cerr << cairo_status_to_string (st) << __FL__;
+       exit(1);
+    }
+    drawing_surface = cairo_gl_surface_create_for_window (device, info.info.x11.Window, w, h);
+    if(drawing_surface==nullptr) {
+      std::cerr << "could not create cairo gl surface" << __FL__;
+      exit(1);
+    }
+    st = cairo_surface_status (drawing_surface);
+    if( st != CAIRO_STATUS_SUCCESS ) {
+       std::cerr << cairo_status_to_string (st) << __FL__;
+       exit(1);
+    }
+    picking_surface = cairo_gl_surface_create_for_window (device, info.info.x11.Window, w, h);
+  #endif
     
-    #if CAIRO_HAS_EGL_FUNCTIONS
+  #if CAIRO_HAS_EGL_FUNCTIONS
     cairo_device_t* device = cairo_egl_device_create (eglGetCurrentDisplay(), (EGLContext) _sdl_context);
-    drawing_surface = cairo_gl_surface_create_for_egl (device, eglGetCurrentSurface(EGL_DRAW), _window->width ()->get_value (), _window->height ()->get_value ());
-    picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _window->width ()->get_value (), _window->height ()->get_value ());
-    #endif
-    
+    if(device==nullptr) {
+      std::cerr << "could not create cairo egl device" << __FL__;
+      exit(1);
+    }
+    cairo_status_t st = cairo_device_status (device);
+    if( st != CAIRO_STATUS_SUCCESS ) {
+       std::cerr << cairo_status_to_string (st) << __FL__;
+       exit(1);
+    }
+    drawing_surface = cairo_gl_surface_create_for_egl (device, eglGetCurrentSurface(EGL_DRAW), w, h);
+    if(drawing_surface==nullptr) {
+      std::cerr << "could not create cairo gl surface" << __FL__;
+      exit(1);
+    }
+    st = cairo_surface_status (drawing_surface);
+    if( st != CAIRO_STATUS_SUCCESS ) {
+       std::cerr << cairo_status_to_string (st) << __FL__;
+       exit(1);
+    }
+    picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
+  #endif
+
+#if 1
     _my_cairo_surface->update (drawing_surface, picking_surface);
 
     cairo_surface_flush (drawing_surface);
     cairo_surface_flush (picking_surface);
-
     cairo_gl_surface_swapbuffers(drawing_surface);
-    
-    //SDL_GL_SwapWindow (_sdl_window);
+#endif
 
+#if 0
+    #define CHKSDL if(sdlerr<0) std::cerr << SDL_GetError() << __FL__;
+    int sdlerr;
+
+    sdlerr = SDL_GL_MakeCurrent(_sdl_window, _sdl_context); CHKSDL;
+    glViewport(0, 0, w, h);
+    glClearColor(1,0,0,1); CHKGL;
+    glClear (GL_COLOR_BUFFER_BIT); CHKGL;
+
+    SDL_GL_SwapWindow (_sdl_window); CHKGL;
+    DBG;
+#endif
     //data = cairo_image_surface_get_data (drawing_surface);
     //picking_data = cairo_image_surface_get_data (picking_surface);
     //_picking_view->set_data (picking_data, _sdl_surface->w, _sdl_surface->h,
@@ -242,9 +309,10 @@ namespace djnn {
     SDL_RenderCopy (_pick_sdl_renderer, _pick_sdl_texture, nullptr, nullptr);
     SDL_RenderPresent (_pick_sdl_renderer);
 #endif
+#if 1
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
-
+#endif
 
 #if _PERF_TEST
       // print in RED

@@ -1,4 +1,6 @@
-lib_cppflags += -I$(src_dir)/gui/gl -I$(src_dir)/gui/gl/khronos
+local_dir := $(src_dir)/gui/gl_
+
+lib_cppflags += -I$(local_dir) -I$(local_dir)/khronos
 lib_cflags := $(lib_cppflags)
 
 ifeq ($(os),Darwin)
@@ -22,11 +24,11 @@ lib_ldflags += -lGL
 endif
 
 #glu-srcs := $(shell find $(ext-dir)/glu -name "*.c")
-glad-srcs := $(shell find $(src_dir)/gui/gl/glad -name "*.c") 
+glad-srcs := $(shell find $(local_dir)/glad -name "*.c") 
 
 ext-srcs := \
 $(glad-srcs)
 
-srcs := $(shell find src/gui/gl -name "*.cpp")
+srcs := $(shell find $(local_dir) -name "*.cpp")
 
 lib_srcs +=  $(srcs) $(ext-srcs)
