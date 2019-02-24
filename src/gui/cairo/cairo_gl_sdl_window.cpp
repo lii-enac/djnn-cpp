@@ -219,10 +219,6 @@ namespace djnn {
     //                                                      _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
     //picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _sdl_surface->w, _sdl_surface->h);
 
-    // cairo gl
-    //drawing_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR_ALPHA, _sdl_surface->w, _sdl_surface->h);
-    //picking_surface = cairo_gl_surface_create (device, CAIRO_CONTENT_COLOR, _sdl_surface->w, _sdl_surface->h);
-
     // see https://news.ycombinator.com/item?id=16539446
 
   #if defined(SDL_VIDEO_DRIVER_X11) && CAIRO_HAS_GLX_FUNCTIONS
