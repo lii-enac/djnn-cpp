@@ -15,8 +15,6 @@ endif
 
 ifeq ($(graphics),CAIRO)
 include src/gui/cairo/djnn-lib.mk
-lib_srcs += $(shell find src/gui/sdl-cairo -name "*.cpp")
-#include src/gui/sdl/djnn-lib.mk
 endif
 
 lib_djnn_deps = core
