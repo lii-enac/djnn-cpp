@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Update and improvement GUI backend.
 - Update and improvement on memory performance.
 
+## [1.2.1] - 2019-02-25 [YANKED]
+### Fixed
+- fixed move_child_to and add_child_at in djnn core and gui
+
 
 ## [1.2.0] - 2019-02-15
 ### Added
