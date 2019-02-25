@@ -136,7 +136,7 @@ namespace djnn
   Rectangle::draw ()
   {
     if (somehow_activating () && Backend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_rect (this);
+      Backend::instance ()->draw_rectangle (this);
     }
   }
 

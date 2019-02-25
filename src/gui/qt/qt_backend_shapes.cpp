@@ -29,7 +29,7 @@
 namespace djnn
 {
   void
-  QtBackend::draw_rect (Rectangle *s)
+  QtBackend::draw_rectangle (Rectangle *s)
   {
     if (_painter == nullptr)
       return;

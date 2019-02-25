@@ -54,7 +54,7 @@ namespace djnn
 
     /* shapes */
     virtual void
-    draw_rect (Rectangle *s)
+    draw_rectangle (Rectangle *s)
     {
     }
     virtual void
