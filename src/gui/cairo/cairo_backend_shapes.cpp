@@ -138,7 +138,7 @@ namespace djnn
   }
 
   void
-  CairoBackend::draw_rect (Rectangle *s)
+  CairoBackend::draw_rectangle (Rectangle *s)
   {
     if (!cur_cairo_state)
       return;

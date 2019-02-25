@@ -88,7 +88,7 @@ namespace djnn
 
     //shapes
     void
-    draw_rect (Rectangle *s) override;
+    draw_rectangle (Rectangle *s) override;
     void
     draw_circle (Circle *s) override;
     void
