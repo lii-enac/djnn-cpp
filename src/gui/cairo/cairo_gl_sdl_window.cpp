@@ -1,12 +1,14 @@
 #include "cairo_gl_sdl_window.h"
 #include "../sdl/sdl_mainloop.h"
 
+#include "opengl.h"
+#include "gl_dbg.h"
+
 // cairo gl
 #include <SDL2/SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
-#include "opengl.h"
-#include "gl_dbg.h"
+
 
 #include <iostream>
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
@@ -111,10 +113,10 @@ namespace djnn {
 
     _sdl_window = SDL_CreateWindow (
         _window->title ()->get_value ().c_str(), 
-        (int) (_window->pos_x ()->get_value ()),
-        (int) (_window->pos_y ()->get_value ()),
-        (int) (_window->width ()->get_value ()),
-        (int) (_window->height ()->get_value ()),
+        (int) x,
+        (int) y,
+        (int) w,
+        (int) h,
         SDL_WINDOW_SHOWN
         | SDL_WINDOW_RESIZABLE
         | SDL_WINDOW_ALLOW_HIGHDPI
@@ -225,7 +227,7 @@ namespace djnn {
     SDL_SysWMinfo info;
     SDL_GetWindowWMInfo(_sdl_window, &info);
     // https://stackoverflow.com/questions/39476501/how-to-obtain-the-glxcontext-in-sdl
-    cairo_device_t* device = cairo_glx_device_create (info.info.x11.Display, (GLXContext) _sdl_context);
+    cairo_device_t* device = cairo_glx_device_create (info.info.x11.display, (GLXContext) _sdl_context);
     if(device==nullptr) {
       std::cerr << "could not create cairo glx device" << __FL__;
       exit(1);
@@ -235,7 +237,7 @@ namespace djnn {
        std::cerr << cairo_status_to_string (st) << __FL__;
        exit(1);
     }
-    drawing_surface = cairo_gl_surface_create_for_window (device, info.info.x11.Window, w, h);
+    drawing_surface = cairo_gl_surface_create_for_window (device, info.info.x11.window, w, h);
     if(drawing_surface==nullptr) {
       std::cerr << "could not create cairo gl surface" << __FL__;
       exit(1);
@@ -245,10 +247,9 @@ namespace djnn {
        std::cerr << cairo_status_to_string (st) << __FL__;
        exit(1);
     }
-    picking_surface = cairo_gl_surface_create_for_window (device, info.info.x11.Window, w, h);
-  #endif
-    
-  #if CAIRO_HAS_EGL_FUNCTIONS
+    picking_surface = cairo_gl_surface_create_for_window (device, info.info.x11.window, w, h);
+
+  #elif CAIRO_HAS_EGL_FUNCTIONS
     cairo_device_t* device = cairo_egl_device_create (eglGetCurrentDisplay(), (EGLContext) _sdl_context);
     if(device==nullptr) {
       std::cerr << "could not create cairo egl device" << __FL__;
