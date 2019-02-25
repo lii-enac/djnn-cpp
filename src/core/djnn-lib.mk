@@ -15,6 +15,6 @@ lib_srcs += src/core/syshook/unix/iofd.cpp
 endif
 
 ifeq ($(graphics),QT)
-include src/gui/qt/djnn-lib.mk
+include src/gui/qt/djnn-lib-flags.mk
 endif
 
