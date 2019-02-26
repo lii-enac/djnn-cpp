@@ -72,7 +72,6 @@ namespace djnn
     void remove_output_node (Process* c);
     void add_edge (Process* src, Process* dst);
     void remove_edge (Process* src, Process* dst);
-    void remove_properties ();
     void sort ();
     void exec ();
     void clear ();

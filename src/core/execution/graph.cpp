@@ -276,28 +276,6 @@ namespace djnn
     v->set_mark (MARKED); 
   }
 
-  /* 
-   // TO BE REMOVED
-  void
-  Graph::remove_properties ()
-  {
-    // remove_if 
-    Vertex::vertices_t::iterator new_end = _sorted_vertices.end ();
-
-    new_end = std::remove_if ( _sorted_vertices.begin (), _sorted_vertices.end (),
-        [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_process  ()) != nullptr); });
-
-    // note : 
-    //   DO NOT delete the vertices from _sorted_vertices
-    //   because they are own by _vertices.
-    //   we just manage ptr on the vertices in _sorted_vertices.
-    //
-     
-    // erase them from _sorted_vertices
-    _sorted_vertices.erase( new_end, _sorted_vertices.end ());
-  }
-  */
-
   bool
   cmp_vertices (Vertex* v1, Vertex *v2)
   {
@@ -328,9 +306,6 @@ namespace djnn
     }
 
     std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), cmp_vertices);
-
-    // TO BE REMOVED
-    //remove_properties ();
 
     _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
     _sorted = true;
