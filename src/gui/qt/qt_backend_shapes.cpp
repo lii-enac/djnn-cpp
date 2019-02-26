@@ -431,6 +431,7 @@ namespace djnn
     } else {
       pm = (QPixmap*) (i->cache ());
     }
+    _painter->setRenderHint(QPainter::SmoothPixmapTransform);
     _painter->drawPixmap (rect, *pm);
 
     if (is_in_picking_view (i)) {
