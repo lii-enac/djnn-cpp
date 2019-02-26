@@ -45,7 +45,7 @@ namespace djnn
   };
 
   Vertex::Vertex (Process* c) :
-      _vertex (c), _mark (NOT_MARKED), _start_date (0), _end_date (0), _count_egdes_in(0), _is_invalid (false)
+      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
   {
   }
 
@@ -245,7 +245,7 @@ namespace djnn
     for (auto v : _sorted_vertices) {
       if (v->get_process ()->get_parent())
         cerr << v->get_process ()->get_parent()->get_name () << "/";
-      cerr << v->get_process  ()->get_name () << " (" << v->get_start_date () << ", " << v->get_end_date () << ")\n";
+      cerr << v->get_process  ()->get_name () << " (" << v->get_timestamp () << ")\n";
     }
   }
 
@@ -264,7 +264,6 @@ namespace djnn
       _sorted_vertices.push_back (v);
 
     v->set_mark (BROWSING);
-    //v->set_start_date (++_cur_date);
 
     for (auto & v2 : v->get_edges ()) {
       if (v2->get_mark () == NOT_MARKED) {
@@ -272,14 +271,14 @@ namespace djnn
       }
     }
     
-    v->set_end_date (++_cur_date);
+    v->set_timestamp (++_cur_date);
     v->set_mark (MARKED); 
   }
 
   bool
   cmp_vertices (Vertex* v1, Vertex *v2)
   {
-    return (v2->get_end_date () < v1->get_end_date ());
+    return (v2->get_timestamp () < v1->get_timestamp ());
   }
 
   void

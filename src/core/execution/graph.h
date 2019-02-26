@@ -43,11 +43,8 @@ namespace djnn
     void set_mark (int m) { _mark = m; }
     int get_mark () const { return _mark; }
 
-    void set_start_date (int date) { _start_date = date; };
-    int get_start_date () const { return _start_date; }
-
-    void set_end_date (int date) { _end_date = date; };
-    int get_end_date () const { return _end_date; }
+    void set_timestamp (int date) { _timestamp = date; };
+    int get_timestamp () const { return _timestamp; }
 
     Process* get_process () { return _vertex; }
     const Process* get_process () const { return _vertex; }
@@ -59,7 +56,7 @@ namespace djnn
   private:
     Process* _vertex;
     vertices_t _edges;
-    int _mark, _start_date, _end_date, _count_egdes_in;
+    int _mark, _timestamp, _count_egdes_in;
     bool _is_invalid;
   };
 
