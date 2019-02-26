@@ -89,6 +89,16 @@ namespace djnn
     }
   }
 
+  Graph&
+  Graph::instance ()
+  {
+    std::call_once (Graph::onceFlag, [] () {
+      _instance = new Graph();
+    });
+
+    return *(_instance);
+  }
+
   Graph::Graph () :
       _cur_date (0), _sorted (false)
   {
@@ -239,31 +249,35 @@ namespace djnn
     }
   }
 
-  Graph&
-  Graph::instance ()
-  {
-    std::call_once (Graph::onceFlag, [] () {
-      _instance = new Graph();
-    });
-
-    return *(_instance);
-  }
-
   void
   Graph::browse_in_depth (Vertex *v)
   {
+
+    // skip invalid vertex
+    if (v->is_invalid ()) {
+      v->set_mark (MARKED);
+      return;
+    }
+
+    // add vertex if it's not a property
+    if ( v->get_process ()->get_cpnt_type() != PROPERTY_T)
+      _sorted_vertices.push_back (v);
+
     v->set_mark (BROWSING);
-    v->set_start_date (++_cur_date);
-    for (auto v2 : v->get_edges ()) {
+    //v->set_start_date (++_cur_date);
+
+    for (auto & v2 : v->get_edges ()) {
       if (v2->get_mark () == NOT_MARKED) {
         browse_in_depth (v2);
       }
     }
+    
     v->set_end_date (++_cur_date);
-    v->set_mark (MARKED);
-    _sorted_vertices.push_back (v);
+    v->set_mark (MARKED); 
   }
 
+  /* 
+   // TO BE REMOVED
   void
   Graph::remove_properties ()
   {
@@ -273,20 +287,21 @@ namespace djnn
     new_end = std::remove_if ( _sorted_vertices.begin (), _sorted_vertices.end (),
         [](Vertex::vertices_t::iterator::value_type v) { return v->is_invalid () || (dynamic_cast<AbstractProperty*> (v->get_process  ()) != nullptr); });
 
-    /* note : 
-       DO NOT delete the vertices from _sorted_vertices
-       because they are own by _vertices.
-       we just manage ptr on the vertices in _sorted_vertices.
-    */
+    // note : 
+    //   DO NOT delete the vertices from _sorted_vertices
+    //   because they are own by _vertices.
+    //   we just manage ptr on the vertices in _sorted_vertices.
+    //
      
     // erase them from _sorted_vertices
     _sorted_vertices.erase( new_end, _sorted_vertices.end ());
   }
+  */
 
   bool
-  sort_vertices (Vertex* v1, Vertex *v2)
+  cmp_vertices (Vertex* v1, Vertex *v2)
   {
-    return (v1->get_end_date () > v2->get_end_date ());
+    return (v2->get_end_date () < v1->get_end_date ());
   }
 
   void
@@ -311,8 +326,12 @@ namespace djnn
       if (v->get_mark () == NOT_MARKED)
         browse_in_depth (v);
     }
-    std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), sort_vertices);
-    remove_properties ();
+
+    std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), cmp_vertices);
+
+    // TO BE REMOVED
+    //remove_properties ();
+
     _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
     _sorted = true;
 
