@@ -40,7 +40,7 @@ namespace djnn
 }
 """
 
-getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_component("%(PROP_NAME)s"); }"""
+getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_component ("%(PROP_NAME)s"); }"""
 
 def_string = """
 #include "../backend.h"
@@ -202,7 +202,7 @@ def just_do_it(dc):
 
     SET_ORIGIN = ''
     if(len(dc.props)>2):
-        SET_ORIGIN = "set_origin(" + dc.props[0].name + ', ' + dc.props[1].name + ');'
+        SET_ORIGIN = "set_origin (" + dc.props[0].name + ', ' + dc.props[1].name + ');'
     # print (SET_ORIGIN)
 
     d = {
@@ -266,21 +266,21 @@ dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
 dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
-#dcs.append(dc)
-
-dc = DjnnClass("Image", "AbstractGShape", "src/gui/shapes")
-dc.props.append(Prop('x', 'double', None, "transform"))
-dc.props.append(Prop('y', 'double', None, "transform"))
-dc.props.append(Prop('width', 'double', None, "geometry"))
-dc.props.append(Prop('height', 'double', None, "geometry"))
-dc.props.append(Prop('path', 'text', "0", "geometry"))
-#dcs.append(dc)
+dcs.append(dc)
 
 dc = DjnnClass("Circle", "AbstractGShape", "../src/gui/shapes")
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
 dcs.append(dc)
+
+dc = DjnnClass("Image", "AbstractGShape", "../src/gui/shapes")
+dc.props.append(Prop('x', 'double', None, "transform"))
+dc.props.append(Prop('y', 'double', None, "transform"))
+dc.props.append(Prop('width', 'double', None, "geometry"))
+dc.props.append(Prop('height', 'double', None, "geometry"))
+dc.props.append(Prop('path', 'text', "0", "geometry"))
+#dcs.append(dc)
 
 
 for dc in dcs:
