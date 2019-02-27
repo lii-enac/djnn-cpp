@@ -13,6 +13,9 @@
  *
  */
 
+
+#include "../../core/error.h"
+
 #include "../backend.h"
 
 #include "qt_context.h"
@@ -409,11 +412,6 @@ namespace djnn
   void
   QtBackend::draw_image (Image *i)
   {
-    // double x = i->x ()->get_value ();
-    // double y = i->y ()->get_value ();
-    // double w = i->width ()->get_value ();
-    // double h = i->height ()->get_value ();
-    // string path = i->path ()->get_value ();
     double x,y,w,h; string path;
     i->get_properties_values(path, x,y,w,h);
     load_drawing_context (i, x, y, w, h);
@@ -425,7 +423,12 @@ namespace djnn
         delete (pm); pm = nullptr;
       }
       QFileInfo fi (path.c_str ());
+
+      if (!fi.exists ())
+        warning (nullptr, " Image Loading - file NOT found - Did you use absolutePath eg. /home/johndoe/path/to/image ?\n");
+
       pm = new QPixmap (fi.absoluteFilePath ());
+
       i->set_cache (pm);
       i->set_invalid_cache (false);
     } else {
