@@ -44,6 +44,23 @@ namespace djnn
     delete _ccx;
 		delete _ccy;
 		delete _cr;
+
+    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
+    if (_symtable.size () > 2) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("cx");
+			if (it != _symtable.end ())
+				delete it->second;
+
+			it = _symtable.find ("cy");
+			if (it != _symtable.end ())
+				delete it->second;
+
+			it = _symtable.find ("r");
+		  if (it != _symtable.end ())
+				delete it->second;
+    }
   }
  
   Process*
