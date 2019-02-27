@@ -70,6 +70,13 @@ namespace djnn
   %(CLASS)s::~%(CLASS)s ()
   {
     %(DELETE_COUPLINGS)s;
+
+    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
+    if (_symtable.size () > 2) {
+      std::map<std::string, Process*>::iterator it;
+
+      %(DELETE_DYN_PROPS)s
+    }
   }
  
   Process*
@@ -183,6 +190,8 @@ def just_do_it(dc):
     # print (COUPLINGS_INIT)
     DELETE_COUPLINGS = (';'+join_str).join(['delete _c' + p.name for p in dc.props])
     # print (DELETE_COUPLINGS)
+    DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = _symtable.find ("' + p.name + '");\n\t\t\tif (it != _symtable.end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
+    #print (DELETE_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)
     DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (_frame)' for p in dc.props])
@@ -210,6 +219,7 @@ def just_do_it(dc):
         'RAW_PROPS_INIT': RAW_PROPS_INIT,
         'COUPLINGS_INIT': COUPLINGS_INIT,
         'DELETE_COUPLINGS': DELETE_COUPLINGS,
+        'DELETE_DYN_PROPS': DELETE_DYN_PROPS,
         'DEF_PROPS_REF_SET': DEF_PROPS_REF_SET,
         'DEF_COUPLINGS_ENABLE': DEF_COUPLINGS_ENABLE,
         'DEF_COUPLINGS_DISABLE': DEF_COUPLINGS_DISABLE,
