@@ -23,8 +23,8 @@ namespace djnn
   Image::Image (const std::string& path, double x, double y, double w, double h) :
       AbstractGShape (),
       raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
-      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
-      _invalid_cache (true)
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr), _cwatcher(nullptr),
+      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
   }
@@ -33,10 +33,9 @@ namespace djnn
 		double h) :
       AbstractGShape (p, n),
       raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
-      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
-      _invalid_cache (true)
+      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr), _cwatcher(nullptr),
+      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
-    set_cache (nullptr);
     set_origin (x, y);
     Process::finalize ();
   }
@@ -48,7 +47,9 @@ namespace djnn
     delete _cwidth;
     delete _cheight;
     delete _cpath;
+    delete _cwatcher;
     delete _watcher;
+    //delete _cache; // can't delete void*
   }
 
   Process*
@@ -97,13 +98,19 @@ namespace djnn
     return nullptr;
     
     if(propd) {
-      DoublePropertyProxy* prop = nullptr; // do not cache
+      DoublePropertyProxy* prop = nullptr;
       res = create_GObj_prop(&prop, coupling, rawpd, name, notify_mask);
     }
     else if(propt) {
-      TextPropertyProxy* prop = nullptr; // do not cache
+      TextPropertyProxy* prop = nullptr; 
       res = create_GObj_prop(&prop, coupling, rawps, name, notify_mask);
-    } 
+
+      //textProperty is only use for path SO should be: name = "path"
+      _watcher = new ImageWatcher (this);
+      _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
+      _cwatcher->disable ();
+      Graph::instance ().add_edge (res, _watcher);
+    }
 
     return res;
   }
@@ -127,6 +134,7 @@ namespace djnn
     if (_cwidth) _cwidth->enable (_frame);
     if (_cheight) _cheight->enable (_frame);
     if (_cpath) _cpath->enable (_frame);
+    if (_cwatcher) _cwatcher->enable();
   }
 
   void
@@ -138,6 +146,7 @@ namespace djnn
     if (_cwidth) _cwidth->disable ();
     if (_cheight) _cheight->disable ();
     if (_cpath) _cpath->disable ();
+    if (_cwatcher) _cwatcher->disable();
   }
 
   void

@@ -440,7 +440,7 @@ namespace djnn
   private:
     struct raw_props_t { double x,y,width,height; string path; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath;
+    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath, *_cwatcher;
     ImageWatcher *_watcher;
     void activate () override;
     void deactivate () override;
