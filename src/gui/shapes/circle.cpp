@@ -27,7 +27,7 @@ namespace djnn
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
-    set_origin(cx, cy);
+    set_origin (cx, cy);
     Process::finalize ();
   }
 
@@ -36,7 +36,7 @@ namespace djnn
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
-    set_origin(cx, cy);
+    set_origin (cx, cy);
   }
 
   Circle::~Circle ()
@@ -58,7 +58,7 @@ namespace djnn
 				delete it->second;
 
 			it = _symtable.find ("r");
-		  if (it != _symtable.end ())
+			if (it != _symtable.end ())
 				delete it->second;
     }
   }
