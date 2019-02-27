@@ -51,17 +51,18 @@ def_string = """
 namespace djnn
 {
   %(CLASS)s::%(CLASS)s (Process *p, const std::string& n, %(DECL_PROPS_CALL_DEF)s):
-    %(INHERITS)s (p, n),
-    raw_props{%(RAW_PROPS_INIT)s},
-    %(COUPLINGS_INIT)s
+      %(INHERITS)s (p, n),
+      raw_props{%(RAW_PROPS_INIT)s},
+      %(COUPLINGS_INIT)s
   {
     %(SET_ORIGIN)s
     Process::finalize ();
   }
 
   %(CLASS)s::%(CLASS)s (%(DECL_PROPS_CALL_DEF)s):
-    raw_props{%(RAW_PROPS_INIT)s},
-    %(COUPLINGS_INIT)s
+      %(INHERITS)s (), 
+      raw_props{%(RAW_PROPS_INIT)s},
+      %(COUPLINGS_INIT)s
   {
     %(SET_ORIGIN)s
   }
@@ -180,7 +181,7 @@ def just_do_it(dc):
     RAW_PROPS_INIT = ', '.join(['.' + p.name + '=' + p.name for p in dc.props])
     # print (RAW_PROPS_INIT)
     join_str = '\n\t\t'
-    COUPLINGS_INIT = (','+join_str).join(['_c' + p.name + '(nullptr)' for p in dc.props])
+    COUPLINGS_INIT = (', ').join(['_c' + p.name + ' (nullptr)' for p in dc.props])
     # print (COUPLINGS_INIT)
     DELETE_COUPLINGS = (';'+join_str).join(['delete _c' + p.name for p in dc.props])
     # print (DELETE_COUPLINGS)
@@ -250,14 +251,14 @@ class DjnnClass:
 
 dcs = []
 
-dc = DjnnClass("Rectangle", "AbstractGShape", "src/gui/shapes")
+dc = DjnnClass("Rectangle", "AbstractGShape", "../src/gui/shapes")
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
 dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
-dcs.append(dc)
+#dcs.append(dc)
 
 dc = DjnnClass("Image", "AbstractGShape", "src/gui/shapes")
 dc.props.append(Prop('x', 'double', None, "transform"))
@@ -267,7 +268,7 @@ dc.props.append(Prop('height', 'double', None, "geometry"))
 dc.props.append(Prop('path', 'text', "0", "geometry"))
 #dcs.append(dc)
 
-dc = DjnnClass("Circle", "AbstractGShape", "src/gui/shapes")
+dc = DjnnClass("Circle", "AbstractGShape", "../src/gui/shapes")
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
