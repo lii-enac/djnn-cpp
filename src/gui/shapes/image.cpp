@@ -46,10 +46,13 @@ namespace djnn
     delete _cy;
     delete _cwidth;
     delete _cheight;
-    delete _cpath;
-    delete _cwatcher;
-    delete _watcher;
+    delete _cpath;  
     //delete _cache; // can't delete void*
+    if (_cwatcher) {
+      Graph::instance ().remove_edge ( this->path (), _watcher);
+      delete _cwatcher;
+    }
+    delete _watcher;
   }
 
   Process*
