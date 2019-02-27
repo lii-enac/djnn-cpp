@@ -51,18 +51,18 @@ def_string = """
 namespace djnn
 {
   %(CLASS)s::%(CLASS)s (Process *p, const std::string& n, %(DECL_PROPS_CALL_DEF)s):
-      %(INHERITS)s (p, n),
-      raw_props{%(RAW_PROPS_INIT)s},
-      %(COUPLINGS_INIT)s
+    %(INHERITS)s (p, n),
+    raw_props{%(RAW_PROPS_INIT)s},
+    %(COUPLINGS_INIT)s
   {
     %(SET_ORIGIN)s
     Process::finalize ();
   }
 
   %(CLASS)s::%(CLASS)s (%(DECL_PROPS_CALL_DEF)s):
-      %(INHERITS)s (), 
-      raw_props{%(RAW_PROPS_INIT)s},
-      %(COUPLINGS_INIT)s
+    %(INHERITS)s (), 
+    raw_props{%(RAW_PROPS_INIT)s},
+    %(COUPLINGS_INIT)s
   {
     %(SET_ORIGIN)s
   }
@@ -71,8 +71,7 @@ namespace djnn
   {
     %(DELETE_COUPLINGS)s;
   }
-
-  
+ 
   Process*
   %(CLASS)s::find_component (const string& name)
   {
@@ -86,7 +85,6 @@ namespace djnn
     typedef string text;
     text* rawp_Text;
     int notify_mask = notify_none;
-
     %(CREATE_PROPERTIES)s
     return nullptr;
     
