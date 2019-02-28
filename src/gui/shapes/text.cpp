@@ -133,6 +133,66 @@ namespace djnn
       Graph::instance ().remove_edge ( this->fweight (), _update_size);
       delete _cfweight;
     }
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("dx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("dy");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fsize");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("dxU");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("dyU");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("width");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("height");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("encoding");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fstyle");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fweight");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("text");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("ffamily");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
