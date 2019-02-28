@@ -624,7 +624,7 @@ namespace djnn
   }
 
   void
-  CairoBackend::draw_rect_clip (RectangleClip *s)
+  CairoBackend::draw_rectangleclip (RectangleClip *s)
   {
     if (!cur_cairo_state)
       return;
