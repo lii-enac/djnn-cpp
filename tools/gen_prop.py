@@ -17,6 +17,8 @@ copyright = """/*
 """
 
 decl_string = """
+#pragma once
+
 namespace djnn
 {
   class %(CLASS)s : public %(INHERITS)s
@@ -164,7 +166,7 @@ def just_do_it(dc):
     # print (DECL_PROPS_REF_CALL)
     DECL_PROPS_STRUCT = '; '.join([p.type + ' ' + p.name for p in dc.props])
     # print (DECL_PROPS_STRUCT)
-    DECL_PROPS_COUPLING_POINTER = ', '.join(['_c' + p.name for p in dc.props])
+    DECL_PROPS_COUPLING_POINTER = ', '.join(['*_c' + p.name for p in dc.props])
     # print (DECL_PROPS_COUPLING_POINTER)
 
     PROP_GETTERS = ''
