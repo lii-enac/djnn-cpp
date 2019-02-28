@@ -47,6 +47,18 @@ namespace djnn
   {
     delete _cx;
     delete _cy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -172,6 +184,26 @@ namespace djnn
     delete _cy1;
     delete _cx;
     delete _cy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -276,6 +308,34 @@ namespace djnn
     delete _cy2;
     delete _cx;
     delete _cy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("x2");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y2");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -395,6 +455,38 @@ namespace djnn
     delete _cry;
     delete _cx;
     delete _cy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("rotx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fl");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("swfl");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("rx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("ry");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
