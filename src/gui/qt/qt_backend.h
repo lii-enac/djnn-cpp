@@ -79,7 +79,7 @@ namespace djnn
     void
     draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry, double xAxisRotation);
     void
-    draw_rect_clip (RectangleClip *r) override;
+    draw_rectangleclip (RectangleClip *r) override;
     void
     draw_path_clip (Path *p) override;
     void

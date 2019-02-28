@@ -110,7 +110,7 @@ namespace djnn
     {
     }
     virtual void
-    draw_rect_clip (RectangleClip *s)
+    draw_rectangleclip (RectangleClip *s)
     {
     }
     virtual void

@@ -379,7 +379,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_rect_clip (RectangleClip *s)
+  QtBackend::draw_rectangleclip (RectangleClip *s)
   {
     double x, y, w, h;
     s->get_properties_values(x,y,w,h);
