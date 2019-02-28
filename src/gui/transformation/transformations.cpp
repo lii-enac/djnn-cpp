@@ -56,6 +56,18 @@ namespace djnn
   {
     delete _ctx;
     delete _cty;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("tx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("ty");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -189,6 +201,22 @@ namespace djnn
     delete _ca;
     delete _ccx;
     delete _ccy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("a");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("cx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("cy");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -333,6 +361,26 @@ namespace djnn
     delete _csy;
     delete _ccx;
     delete _ccy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("sx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("sy");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("cx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("cy");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -481,6 +529,14 @@ namespace djnn
   AbstractSkew::~AbstractSkew ()
   {
     delete _ca;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("a");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1244,6 +1300,74 @@ namespace djnn
       delete _skew_Y_By_cy;
       delete _skew_Y_By_da;
       delete _skew_Y_By_spike;
+    }
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("m11");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m12");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m13");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m14");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m21");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m22");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m23");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m24");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m31");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m32");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m33");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m34");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m41");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m42");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m43");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("m44");
+      if (it != _symtable.end ())
+        delete it->second;
     }
 
   }
