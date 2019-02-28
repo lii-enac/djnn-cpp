@@ -23,97 +23,15 @@
 #include "../../core/tree/text_property.h"
 #include "../style/style.h"
 
+#include "rectangle.h"
+#include "rectangleclip.h"
+#include "circle.h"
+#include "ellipse.h"
+#include "line.h"
+
+
 namespace djnn
 {
-  class Rectangle : public AbstractGShape
-  {
-  public:
-    Rectangle (Process *p, const std::string& n, double x, double y, double w, double h, double rx, double ry);
-    Rectangle (double x, double y, double w, double h, double rx, double ry);
-    virtual ~Rectangle ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double &x, double &y, double &w, double &h, double &rx, double &ry);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
-    AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
-    AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
-    AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_component("rx"); }
-    AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_component("ry"); }
-
-  private:
-    struct raw_props_t { double x, y, width, height, rx, ry; };
-    raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_crx, *_cry;
-    void activate () override;
-    void deactivate () override;
-  };
-  
-  class Circle : public AbstractGShape
-  {
-  public:
-    Circle (Process *p, const std::string& n, double cx, double cy, double r);
-    Circle (double cx, double cy, double r);
-    virtual ~Circle ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double &cx, double &cy, double &r);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
-    AbstractDoubleProperty* r ()  { return (AbstractDoubleProperty*) find_component("r"); }
-  private:
-    struct raw_props_t { double cx, cy, r; };
-    raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_cr;
-    void activate () override;
-    void deactivate () override;
-  };
-
-  class Ellipse : public AbstractGShape
-  {
-  public:
-    Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry);
-    Ellipse (double cx, double cy, double rx, double ry);
-    virtual ~Ellipse ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double &cx, double &cy, double &rx, double &ry);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
-    AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_component("rx"); }
-    AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_component("ry"); }
-  private:
-    struct raw_props_t { double cx, cy, rx, ry; };
-    raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_crx, *_cry;
-    void activate () override;
-    void deactivate () override;
-  };
-
-  class Line : public AbstractGShape
-  {
-  public:
-    Line (Process *p, const std::string& n, double x1, double y1, double x2, double y2);
-    Line (double x1, double y1, double x2, double y2);
-    virtual ~Line ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double &x1, double &y1, double &x2, double &y2);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
-    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
-    AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_component("x2"); }
-    AbstractDoubleProperty* y2 () { return (AbstractDoubleProperty*) find_component("y2"); }
-  private:
-    struct raw_props_t { double x1, y1, x2, y2; };
-    raw_props_t raw_props;
-    Coupling *_cx1, *_cy1, *_cx2, *_cy2;
-    void activate () override;
-    void deactivate () override;
-  };
 
   class Text : public AbstractGShape
   {
@@ -170,28 +88,6 @@ namespace djnn
     
     void init_text (double x, double y, double dx, double dy, int dxu, int dyu,
               const std::string &encoding, const std::string &text);
-    void activate () override;
-    void deactivate () override;
-  };
-
-  class RectangleClip : public AbstractGShape
-  {
-  public:
-    RectangleClip (Process *p, const std::string& n, double x, double y, double w, double h);
-    RectangleClip (double x, double y, double w, double h);
-    virtual ~RectangleClip ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double &x, double &y, double &w, double &h);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
-    AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
-    AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
-  private:
-    struct raw_props_t { double x,y,width,height; };
-    raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight;
     void activate () override;
     void deactivate () override;
   };
