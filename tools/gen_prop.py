@@ -245,7 +245,6 @@ class Prop:
         self.default_value = default_value
         self.damage = damage
 
-
 class DjnnClass:
 
     def __init__(self, name, inherits, path):
@@ -268,10 +267,31 @@ dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
 dcs.append(dc)
 
+dc = DjnnClass("Ellipse", "AbstractGShape", "../src/gui/shapes")
+dc.props.append(Prop('cx', 'double', None, "transform"))
+dc.props.append(Prop('cy', 'double', None, "transform"))
+dc.props.append(Prop('rx', 'double', None, "geometry"))
+dc.props.append(Prop('ry', 'double', None, "geometry"))
+dcs.append(dc)
+
 dc = DjnnClass("Circle", "AbstractGShape", "../src/gui/shapes")
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
+dcs.append(dc)
+
+dc = DjnnClass("Line", "AbstractGShape", "../src/gui/shapes")
+dc.props.append(Prop('x1', 'double', None, "transform"))
+dc.props.append(Prop('y1', 'double', None, "transform"))
+dc.props.append(Prop('x2', 'double', None, "geometry"))
+dc.props.append(Prop('y2', 'double', None, "geometry"))
+dcs.append(dc)
+
+dc = DjnnClass("RectangleClip", "AbstractGShape", "../src/gui/shapes")
+dc.props.append(Prop('x', 'double', None, "transform"))
+dc.props.append(Prop('y', 'double', None, "transform"))
+dc.props.append(Prop('width', 'double', None, "geometry"))
+dc.props.append(Prop('height', 'double', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("Image", "AbstractGShape", "../src/gui/shapes")
