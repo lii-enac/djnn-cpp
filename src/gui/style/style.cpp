@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -45,6 +46,29 @@ namespace djnn
       _cr (nullptr), _cg (nullptr), _cb (nullptr)
   {
     Process::finalize ();
+  }
+
+  AbstractColor::~AbstractColor ()
+  {
+    delete _cr;
+    delete _cg;
+    delete _cb;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("r");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("g");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("b");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -104,13 +128,6 @@ namespace djnn
     if (_cr) _cr->disable ();
     if (_cg) _cg->disable ();
     if (_cb) _cb->disable ();
-  }
-
-  AbstractColor::~AbstractColor ()
-  {
-    delete _cr;
-    delete _cg;
-    delete _cb;
   }
 
   void
@@ -174,6 +191,14 @@ namespace djnn
   FillRule::~FillRule ()
   {
     delete _cr;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("rule");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -279,6 +304,14 @@ namespace djnn
   Texture::~Texture ()
   {
     delete _cp;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("path");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
 
@@ -357,6 +390,14 @@ namespace djnn
   AbstractOpacity::~AbstractOpacity ()
   {
     delete _ca;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("a");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -448,6 +489,14 @@ namespace djnn
   OutlineWidth::~OutlineWidth ()
   {
     delete _cw;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("width");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -540,6 +589,14 @@ namespace djnn
   OutlineCapStyle::~OutlineCapStyle ()
   {
     delete _cc;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("cap");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -631,6 +688,14 @@ namespace djnn
   OutlineJoinStyle::~OutlineJoinStyle ()
   {
     delete _cj;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("join");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -707,6 +772,14 @@ namespace djnn
   OutlineMiterLimit::~OutlineMiterLimit ()
   {
     delete _cl;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("limit");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -817,6 +890,14 @@ namespace djnn
   DashOffset::~DashOffset ()
   {
     delete _co;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("offset");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -910,6 +991,30 @@ namespace djnn
     delete _cb;
     delete _ca;
     delete _co;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("r");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("g");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("b");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("a");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("offset");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1019,6 +1124,18 @@ namespace djnn
     delete _cc;
     delete _transforms;
     delete _stops;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("spread");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("coords");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1125,6 +1242,26 @@ namespace djnn
     delete _cx2;
     delete _cy1;
     delete _cy2;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y1");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("x2");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y2");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1302,6 +1439,30 @@ namespace djnn
     delete _cr;
     delete _cfx;
     delete _cfy;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("cx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("cy");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("r");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fx");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("fy");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1500,6 +1661,18 @@ namespace djnn
   {
     delete _cu;
     delete _cs;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("unit");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("size");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1598,6 +1771,14 @@ namespace djnn
   FontWeight::~FontWeight ()
   {
     delete _cw;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("weight");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1693,6 +1874,14 @@ namespace djnn
   FontStyle::~FontStyle ()
   {
     delete _cs;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("style");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1773,6 +1962,14 @@ namespace djnn
   FontFamily::~FontFamily ()
   {
     delete _cf;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("family");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
@@ -1868,6 +2065,14 @@ namespace djnn
   TextAnchor::~TextAnchor ()
   {
     delete _ca;
+
+    if (_symtable.empty () == false) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("anchor");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
