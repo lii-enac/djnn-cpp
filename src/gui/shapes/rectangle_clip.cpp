@@ -44,6 +44,27 @@ namespace djnn
     delete _cy;
     delete _cwidth;
     delete _cheight;
+
+    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
+    if (_symtable.size () > 2) {
+      std::map<std::string, Process*>::iterator it;
+
+      it = _symtable.find ("x");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("y");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("width");
+      if (it != _symtable.end ())
+        delete it->second;
+
+      it = _symtable.find ("height");
+      if (it != _symtable.end ())
+        delete it->second;
+    }
   }
 
   Process*
