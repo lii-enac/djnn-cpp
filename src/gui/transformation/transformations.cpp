@@ -864,6 +864,14 @@ namespace djnn
 
   static array<array<double, 4>, 4>
   create_pivot_transform_array (array<array<double, 4>, 4> &transform_array, double dx, double dy) {
+    // pre : normalement multiplication à droite de la matrice mais pour le pivot ça ne marche qu'en multiplication à gauche !?!?!?!?
+    //    coord locales au rectangle
+    //      test    -> OK sauf les rotations consécutives à un scaling non homothétique, qui déforment en skew
+    //      handleE -> OK sauf après les scaling souris des tests
+    // post : multiplication à gauche de la matrice
+    //    coord locales à la référence avant l'Homography
+    //      tests   -> OK sauf les scalings non homothétiques, qui déforment en skew
+    //      handleE -> le scaling déforme en skew et diverge parfois
     array<array<double, 4>, 4> transl = create_translation_array (dx, dy);
     array<array<double, 4>, 4> buff = multiply_arrays (transl, transform_array);
     array<array<double, 4>, 4> inv_transl = create_translation_array (-dx, -dy);
@@ -881,7 +889,8 @@ namespace djnn
     double dy = _h->_translateBy_dy->get_value ();
     array<array<double, 4>, 4> translation_array = create_translation_array (dx, dy);
   
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (translation_array, current_h);
+    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, translation_array); // pre
+    array<array<double, 4>, 4> new_homography_array = multiply_arrays (translation_array, current_h); // post
 
     array_to_homography (new_homography_array, _h);
     
@@ -901,10 +910,22 @@ namespace djnn
     double sx = _h->_scaleBy_sx->get_value ();
     double sy = _h->_scaleBy_sy->get_value ();
 
+    _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
+    _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
+
     array<array<double, 4>, 4> scaling_array = create_scaling_array (sx, sy);
 
     array<array<double, 4>, 4> pivot_scaling_array = create_pivot_transform_array (scaling_array, cx, cy);
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_scaling_array, current_h);
+    /*
+    array<array<double, 4>, 4> pivot_scaling_array {{
+    { sx,   0,  0,  (1 - sx) * cx },
+    {  0,  sy,  0,  (1 - sy) * cy },
+    {  0,   0,  1,         0      },
+    {  0,   0,  0,         1      }}};
+    */
+
+    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_scaling_array); // pre
+    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_scaling_array, current_h); // post
 
     array_to_homography (new_homography_array, _h);
 
@@ -922,10 +943,24 @@ namespace djnn
     double cy = _h->_rotateBy_cy->get_value ();
     double da = _h->_rotateBy_da->get_value ();
 
+    _h->_acca->set_value (_h->_acca->get_value () + da, true);
+
     array<array<double, 4>, 4> rotation_array = create_rotation_array (da);
 
     array<array<double, 4>, 4> pivot_rotation_array = create_pivot_transform_array (rotation_array, cx, cy);
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_rotation_array, current_h);
+    /*
+    double angle_in_radians = degrees_to_radians (da);
+    double cos = std::cos (angle_in_radians);
+    double sin = std::sin (angle_in_radians);
+    array<array<double, 4>, 4> pivot_rotation_array {{
+    { cos, -sin, 0,  cx * (1 - cos) + cy * sin },
+    { sin, cos,  0,  cy * (1 - cos) - cx * sin },
+    {  0,   0,   1,               0            },
+    {  0,   0,   0,               1            }}};
+    */
+
+    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_rotation_array); // pre
+    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_rotation_array, current_h); // post
 
     array_to_homography (new_homography_array, _h);
 
@@ -944,7 +979,9 @@ namespace djnn
 
     array<array<double, 4>, 4> skewx_array = create_skew_x_array (da);
     array<array<double, 4>, 4> pivot_skewx_array = create_pivot_transform_array (skewx_array, cx, cy);
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewx_array, current_h);
+
+    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_skewx_array); // pre
+    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewx_array, current_h); // post
 
     array_to_homography (new_homography_array, _h);
 
@@ -963,7 +1000,9 @@ namespace djnn
 
     array<array<double, 4>, 4> skewy_array = create_skew_y_array (da);
     array<array<double, 4>, 4> pivot_skewy_array = create_pivot_transform_array (skewy_array, cx, cy);
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewy_array, current_h);
+
+    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_skewy_array); // pre
+    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewy_array, current_h); // post
 
     array_to_homography (new_homography_array, _h);
 
@@ -1155,6 +1194,9 @@ namespace djnn
       _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
       _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
   {
+    _acca = new DoubleProperty (this, "acca", 0);
+    _accsx = new DoubleProperty (this, "accsx", 1);
+    _accsy = new DoubleProperty (this, "accsy", 1);
   }
 
   AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
@@ -1191,6 +1233,9 @@ namespace djnn
       _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
       _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
   {
+    _acca = new DoubleProperty (this, "acca", 0);
+    _accsx = new DoubleProperty (this, "accsx", 1);
+    _accsy = new DoubleProperty (this, "accsy", 1);
   }
 
   AbstractHomography::~AbstractHomography ()

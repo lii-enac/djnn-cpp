@@ -324,6 +324,10 @@ namespace djnn
     virtual void draw () override = 0;
     struct raw_props_t { double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44; };
     raw_props_t raw_props;
+
+    /* accumulators (rotation angle + scaling coefficients) */
+    DoubleProperty *_acca, *_accsx, *_accsy;
+
   protected:
     /* mxx coupling */
     Coupling *_cm11, *_cm12, *_cm13, *_cm14, *_cm21, *_cm22, *_cm23, *_cm24, *_cm31, *_cm32, *_cm33, *_cm34, *_cm41,
