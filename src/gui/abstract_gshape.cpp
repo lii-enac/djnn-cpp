@@ -158,13 +158,25 @@ namespace djnn
 
   AbstractGShape::~AbstractGShape ()
   {
-    //remove from picking_view if is the current object
+    // remove from picking_view if is the current object
     if (is_pickable(this))
       if (this->frame () && this->frame ()->picking_view ())    
         this->frame ()->picking_view ()->object_deleted(this);
 
+    // remove _origin_x and _origin_y
     delete _origin_x;
     delete _origin_y;
+
+    // remove matrix and inverted_matrix if necessary
+    if (_matrix)
+      delete _matrix;
+
+    //it = _symtable.find ("inverted_matrix");
+    if (_inverted_matrix)
+      delete _inverted_matrix;
+
+    // remove _ui if it exist
+    // FIXME: try to not use find_component
     if (_has_ui) {
       Process* press = find_component ("press");
       Process* release = find_component ("release");
@@ -172,22 +184,32 @@ namespace djnn
       Process* enter = find_component ("enter");
       Process* leave = find_component ("leave");
       Process* touches = find_component ("touches");
-      Process* x = find_component ("move/x");
-      Process* y = find_component ("move/y");
-      press->remove_symbol ("x");
-      press->remove_symbol ("y");
+      Process* mx = find_component ("move/x");
+      Process* my = find_component ("move/y");
+      Process* px = find_component ("press/x");
+      Process* py = find_component ("press/y");
+      Process* local_x = find_component ("press/local_x");
+      Process* local_y = find_component ("press/local_y");
+      move->remove_symbol ("local_x");
+      move->remove_symbol ("local_y");
       move->remove_symbol ("x");
       move->remove_symbol ("y");
-      delete _matrix;
-      delete _inverted_matrix;
-      delete press;
-      delete release;
-      delete move;
-      delete enter;
-      delete leave;
-      delete x;
-      delete y;
+      press->remove_symbol ("x");
+      press->remove_symbol ("y");
+      press->remove_symbol ("local_x");
+      press->remove_symbol ("local_y");
+      delete local_y;
+      delete local_x;
+      delete my;
+      delete mx;
+      delete py;
+      delete px;
       delete touches;
+      delete leave;
+      delete enter;
+      delete move;
+      delete release;
+      delete press;
     }
   }
 
