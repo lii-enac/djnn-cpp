@@ -616,6 +616,12 @@ namespace djnn
   Path::~Path ()
   {
     delete _items;
+
+    delete _bbh;
+    delete _bbw;
+    delete _bby;
+    delete _bbx;
+    delete _bounding_box;
   }
 
   void
