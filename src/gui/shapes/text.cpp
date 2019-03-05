@@ -106,6 +106,7 @@ namespace djnn
       Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
     Graph::instance ().remove_edge (this->text(), _update_size);
     
+    delete _update_size;
     delete _cx;
     delete _cy;
     delete _ctext;
