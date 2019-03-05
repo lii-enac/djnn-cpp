@@ -451,7 +451,6 @@ namespace djnn
     double x1, y1, x2, y2;
     cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
     p->set_bounding_box (x1, y1, x2 - x1, y2 - y1);
-    cairo_clip (cur_cairo_state);
     fill_and_stroke ();
 
     if (in_picking_view) {
