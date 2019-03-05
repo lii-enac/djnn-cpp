@@ -70,6 +70,10 @@ namespace djnn
 
   Touch::~Touch ()
   {
+    delete _x;
+    delete _y;
+    delete _local_x;
+    delete _local_y;
   }
 
   void
