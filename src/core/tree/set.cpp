@@ -44,9 +44,6 @@ namespace djnn
 
   Set::~Set ()
   {
-    _added = nullptr;
-    _removed = nullptr;
-
     delete _size;
     delete _removed;
     delete _added;
