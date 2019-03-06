@@ -11,6 +11,7 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Nicolas Saporito <nicolas.saporito@enac.fr>
  *
  */
 
@@ -710,457 +711,1204 @@ namespace djnn
 
   /* ----  HOMOGRAPHIES ---- */ 
 
-  static void
-  homography_to_array (AbstractHomography *h, array<array<double, 4>, 4> &a) {
-
-    a[0][0] = h->raw_props.m11;
-    a[0][1] = h->raw_props.m12;
-    a[0][2] = h->raw_props.m13;
-    a[0][3] = h->raw_props.m14;
-
-    a[1][0] = h->raw_props.m21;
-    a[1][1] = h->raw_props.m22;
-    a[1][2] = h->raw_props.m23;
-    a[1][3] = h->raw_props.m24;
-
-    a[2][0] = h->raw_props.m31;
-    a[2][1] = h->raw_props.m32;
-    a[2][2] = h->raw_props.m33;
-    a[2][3] = h->raw_props.m34;
-
-    a[3][0] = h->raw_props.m41;
-    a[3][1] = h->raw_props.m42;
-    a[3][2] = h->raw_props.m43;
-    a[3][3] = h->raw_props.m44;
-
-  }
-
-  static void
-  array_to_homography (array<array<double, 4>, 4> &a, AbstractHomography* h) {
-  
-    /* note:
-     * works only for 2D 
-     * propagation is not active for 3D
-     *  |  x  x  .  x  |
-     *  |  x  x  .  x  |
-     *  |  .  .  1  .  |
-     *  |  .  .  .  1  |
-     * so those which are not properties write directly into raw_props
-     */
-    h->m11 ()->set_value (a[0][0], true);
-    h->m12 ()->set_value (a[0][1], true);
-    h->raw_props.m13 = a[0][2];
-    h->m14 ()->set_value (a[0][3], true);
-
-    h->m21 ()->set_value (a[1][0], true);
-    h->m22 ()->set_value (a[1][1], true);
-    h->raw_props.m23 = a[1][2];
-    h->m24 ()->set_value (a[1][3], true);
-
-    h->raw_props.m31 = a[2][0];
-    h->raw_props.m32 = a[2][1];
-    h->raw_props.m33 = a[2][2];
-    h->raw_props.m34 = a[2][3];
-
-    h->raw_props.m41 = a[3][0];
-    h->raw_props.m42 = a[3][1];
-    h->raw_props.m43 = a[3][2];
-    h->raw_props.m44 = a[3][3];
-  }
-
 
   static double
   degrees_to_radians (double angle) {
     return angle * 3.1415927 / 180;
   }
 
-  static array<array<double, 4>, 4>
-  multiply_arrays (array<array<double, 4>, 4> &a, array<array<double, 4>, 4> &b) {
-    array<array<double, 4>, 4> c;
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        c[i][j] = 0;
-        for (int k = 0; k < 4; k++) {
-          c[i][j] += a[i][k] * b[k][j];
+  void
+  AbstractHomography::updateState2d () 
+  {
+    double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44;
+    get_properties_values (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
+    if (m12 == 0.0 && m21 == 0.0) {
+      if (m11 == 1.0 && m22 == 1.0) {
+        if (m14 == 0.0 && m24 == 0.0) {
+          state2d = APPLY_IDENTITY;
+        } else {
+          state2d = APPLY_TRANSLATE;
+        }
+      } else {
+        if (m14 == 0.0 && m24 == 0.0) {
+          state2d = APPLY_SCALE;
+        } else {
+          state2d = (APPLY_SCALE | APPLY_TRANSLATE);
+        }
+      }
+    } else {
+      if (m11 == 0.0 && m22 == 0.0) {
+        if (m14 == 0.0 && m24 == 0.0) {
+          state2d = APPLY_SHEAR;
+        } else {
+          state2d = (APPLY_SHEAR | APPLY_TRANSLATE);
+        }
+      } else {
+        if (m14 == 0.0 && m24 == 0.0) {
+          state2d = (APPLY_SHEAR | APPLY_SCALE);
+        } else {
+          state2d = (APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE);
         }
       }
     }
-    return c;
   }
 
-  //DEBUG
-  #if 0
-  static void
-  print_array (array<array<double, 4>, 4> &a) {
-    cout << endl;
-    for (int l=0; l<4; l++) {
-      for (int c=0; c<4; c++) {
-        cout << a[l][c] <<  " ";
-      }
-      cout << endl;
+  void 
+  AbstractHomography::rightTranslate (double dx, double dy) 
+  {
+    rightTranslate2d (dx, dy);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void 
+  AbstractHomography::rightTranslate2d (double dx, double dy) 
+  {
+    double old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44;
+    get_properties_values (old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44);
+    double new_m14, new_m24;
+    switch (state2d) {
+      case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+        new_m14 = dx * old_m11 + dy * old_m12 + old_m14;
+        new_m24 = dx * old_m21 + dy * old_m22 + old_m24;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+            state2d = APPLY_SHEAR | APPLY_SCALE;
+        }
+        break;
+      case APPLY_SHEAR | APPLY_SCALE:
+        new_m14 = dx * old_m11 + dy * old_m12;
+        new_m24 = dx * old_m21 + dy * old_m22;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 != 0.0 || new_m24 != 0.0) {
+            state2d = APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE;
+        }
+        break;
+      case APPLY_SHEAR | APPLY_TRANSLATE:
+        new_m14 = dy * old_m12 + old_m14;
+        new_m24 = dx * old_m21 + old_m24;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+            state2d = APPLY_SHEAR;
+        }
+        break;
+      case APPLY_SHEAR:
+        new_m14 = dy * old_m12;
+        new_m24 = dx * old_m21;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 != 0.0 || new_m24 != 0.0) {
+            state2d = APPLY_SHEAR | APPLY_TRANSLATE;
+        }
+        break;
+      case APPLY_SCALE | APPLY_TRANSLATE:
+        new_m14 = dx * old_m11 + old_m14;
+        new_m24 = dy * old_m22 + old_m24;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+            state2d = APPLY_SCALE;
+        }
+        break;
+      case APPLY_SCALE:
+        new_m14 = dx * old_m11;
+        new_m24 = dy * old_m22;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 != 0.0 || new_m24 != 0.0) {
+            state2d = APPLY_SCALE | APPLY_TRANSLATE;
+        }
+        break;
+      case APPLY_TRANSLATE:
+        new_m14 = dx + old_m14;
+        new_m24 = dy + old_m24;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+            state2d = APPLY_IDENTITY;
+        }
+        break;
+      case APPLY_IDENTITY:
+        m14 ()->set_value (dx, false);
+        m24 ()->set_value (dy, false);
+        if (dx != 0.0 || dy != 0.0) {
+            state2d = APPLY_TRANSLATE;
+        }
+        break;
+      default:
+        cerr << "AbstractHomography::rightTranslate2d -> missing case in a switch " << state2d << endl;
+        // cannot reach
+        break;
     }
   }
-  #endif
 
-  static array<array<double, 4>, 4>
-  create_translation_array (double dx, double dy) {
-    array<array<double, 4>, 4> result {{
-      { 1, 0, 0, dx},
-      { 0, 1, 0, dy},
-      { 0, 0, 1, 0 },
-      { 0, 0, 0, 1 }}};
-    return result;
-  }
-
-  static array<array<double, 4>, 4>
-  create_scaling_array (double sx, double sy) {
-    array<array<double, 4>, 4> result {{
-    { sx,   0,  0,  0 },
-    {  0,  sy,  0,  0 },
-    {  0,   0,  1,  0 },
-    {  0,   0,  0,  1 }}};
-    return result;
-  }
-
-  static array<array<double, 4>, 4>
-  create_skew_x_array (double angle_in_degrees) {
-    // clockwise rotation
-    double angle_in_radians = degrees_to_radians (angle_in_degrees);
-    double tan = std::tan (angle_in_radians);
-    array<array<double, 4>, 4> result {{
-    { 1, -tan, 0,  0 },
-    { 0,  1,  0,  0 },
-    { 0,  0,  1,  0 },
-    { 0,  0,  0,  1 }}};
-    return result;
-  }
-
-  static array<array<double, 4>, 4>
-  create_skew_y_array (double angle_in_degrees) {
-    // clockwise rotation
-    double angle_in_radians = degrees_to_radians (angle_in_degrees);
-    double tan = std::tan (angle_in_radians);
-    array<array<double, 4>, 4> result {{
-    {  1,  0,  0,  0 },
-    { tan, 1,  0,  0 },
-    {  0,  0,  1,  0 },
-    {  0,  0,  0,  1 }}};
-    return result;
-  }
-
-  static array<array<double, 4>, 4>
-  create_rotation_array (double angle_in_degrees) {
-    // clockwise rotation
-    double angle_in_radians = degrees_to_radians (angle_in_degrees);
-    double cos = std::cos (angle_in_radians);
-    double sin = std::sin (angle_in_radians);
-    array<array<double, 4>, 4> result {{
-    { cos, -sin, 0,  0 },
-    { sin, cos,  0,  0 },
-    {  0,   0,   1,  0 },
-    {  0,   0,   0,  1 }}};
-    return result;
-  }
-
-  static array<array<double, 4>, 4>
-  create_pivot_transform_array (array<array<double, 4>, 4> &transform_array, double dx, double dy) {
-    // pre : normalement multiplication à droite de la matrice mais pour le pivot ça ne marche qu'en multiplication à gauche !?!?!?!?
-    //    coord locales au rectangle
-    //      test    -> OK sauf les rotations consécutives à un scaling non homothétique, qui déforment en skew
-    //      handleE -> OK sauf après les scaling souris des tests
-    // post : multiplication à gauche de la matrice
-    //    coord locales à la référence avant l'Homography
-    //      tests   -> OK sauf les scalings non homothétiques, qui déforment en skew
-    //      handleE -> le scaling déforme en skew et diverge parfois
-    array<array<double, 4>, 4> transl = create_translation_array (dx, dy);
-    array<array<double, 4>, 4> buff = multiply_arrays (transl, transform_array);
-    array<array<double, 4>, 4> inv_transl = create_translation_array (-dx, -dy);
-    array<array<double, 4>, 4> result = multiply_arrays (buff, inv_transl);
-    return result;
+  void 
+  AbstractHomography::leftTranslate (double dx, double dy) 
+  {
+    leftTranslate2d (dx, dy);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
   }
 
   void
-  AbstractHomography::TranslateByAction::activate () 
-  { 
-    array<array<double, 4>, 4> current_h;
-    homography_to_array (_h, current_h);
+  AbstractHomography::leftTranslate2d (double dx, double dy) 
+  {
+    double new_m14 = m14 ()->get_value () + dx;
+    double new_m24 = m24 ()->get_value () + dy;
+    m14 ()->set_value (new_m14, false);
+    m24 ()->set_value (new_m24, false);
+    if (new_m14 == 0.0 && new_m24 == 0.0) {
+        state2d &= ~APPLY_TRANSLATE;
+    } else {
+        state2d |= APPLY_TRANSLATE;
+    }
+  }
 
-    double dx = _h->_translateBy_dx->get_value ();
-    double dy = _h->_translateBy_dy->get_value ();
-    array<array<double, 4>, 4> translation_array = create_translation_array (dx, dy);
+  void
+  AbstractHomography::rightScale (double sx, double sy) 
+  {
+    rightScale2d (sx, sy);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightScale (double sx, double sy, double cx, double cy) 
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      rightTranslate2d (cx, cy);
+      rightScale2d (sx, sy);
+      rightTranslate2d (-cx, -cy);
+    } else {
+      rightScale2d (sx, sy);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightScale2d (double sx, double sy) {
+    double old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44;
+    get_properties_values (old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44);
+    double new_m11, new_m12, new_m21, new_m22;
+    int mystate = state2d;
+    switch (mystate) {
+      case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+      case APPLY_SHEAR | APPLY_SCALE:
+        m11 ()->set_value (old_m11 * sx, false);
+        m22 ()->set_value (old_m22 * sy, false);
+        // fall-through
+      case APPLY_SHEAR | APPLY_TRANSLATE:
+      case APPLY_SHEAR:
+        new_m12 = old_m12 * sy;
+        new_m21 = old_m21 * sx;
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 == 0.0 && new_m21 == 0.0) {
+            mystate &= APPLY_TRANSLATE;
+            if (old_m11 != 1.0 || old_m22 != 1.0) {
+                mystate |= APPLY_SCALE;
+            }
+            state2d = mystate;
+        } else if (old_m11 == 0.0 && old_m22 == 0.0) {
+            state2d &= ~APPLY_SCALE;
+        }
+        break;
+      case APPLY_SCALE | APPLY_TRANSLATE:
+      case APPLY_SCALE:
+        new_m11 = old_m11 * sx;
+        new_m22 = old_m22 * sy;
+        m11 ()->set_value (new_m11, false);
+        m22 ()->set_value (new_m22, false);
+        if (new_m11 == 1.0 && new_m22 == 1.0) {
+            state2d = (mystate &= APPLY_TRANSLATE);
+        }
+        break;
+      case APPLY_TRANSLATE:
+      case APPLY_IDENTITY:
+        m11 ()->set_value (sx, false);
+        m22 ()->set_value (sy, false);
+        if (sx != 1.0 || sy != 1.0) {
+            state2d = (mystate | APPLY_SCALE);
+        }
+        break;
+      default:
+        cerr << "AbstractHomography::rightScale2d -> missing case in a switch " << state2d << endl;
+        // cannot reach
+        break;
+    }
+  }
+
+  void
+  AbstractHomography::leftScale (double sx, double sy) 
+  {
+    leftScale2d (sx, sy);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::leftScale (double sx, double sy, double cx, double cy) 
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      leftTranslate2d (-cx, -cy);
+      leftScale2d (sx, sy);
+      leftTranslate2d (cx, cy);
+    } else {
+      leftScale2d (sx, sy);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::leftScale2d (double sx, double sy) 
+  {
+    double old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44;
+    get_properties_values (old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44);
+    double new_m11, new_m12, new_m21, new_m22, new_m14, new_m24;
+    int mystate = state2d;
+    switch (mystate) {
+      case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+        new_m14 = old_m14 * sx;
+        new_m24 = old_m24 * sy;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+          mystate = mystate & ~APPLY_TRANSLATE;
+          state2d = mystate;
+        }
+        // fall-through
+      case APPLY_SHEAR | APPLY_SCALE:
+        m11 ()->set_value (old_m11 * sx, false);
+        m22 ()->set_value (old_m22 * sy, false);
+        // fall-through
+      case APPLY_SHEAR:
+        new_m12 = old_m12 * sx;
+        new_m21 = old_m21 * sy;
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 == 0.0 && new_m21 == 0.0) {
+          mystate &= APPLY_TRANSLATE;
+          if (old_m11 != 1.0 || old_m22 != 1.0) {
+            mystate |= APPLY_SCALE;
+          }
+          state2d = mystate;
+        }
+        break;
+      case APPLY_SHEAR | APPLY_TRANSLATE:
+        new_m14 = old_m14 * sx;
+        new_m24 = old_m24 * sy;
+        new_m12 = old_m12 * sx;
+        new_m21 = old_m21 * sy;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 == 0.0 && new_m21 == 0.0) {
+          if (new_m14 == 0.0 && new_m24 == 0.0) {
+            state2d = APPLY_SCALE;
+          } else {
+            state2d = APPLY_SCALE | APPLY_TRANSLATE;
+          }
+        } else if (new_m14 ==0.0 && new_m24 == 0.0) {
+          state2d = APPLY_SHEAR;
+        }
+        break;
+      case APPLY_SCALE | APPLY_TRANSLATE:
+        new_m14 = old_m14 * sx;
+        new_m24 = old_m24 * sy;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+          mystate = mystate & ~APPLY_TRANSLATE;
+          state2d = mystate;
+        }
+        // fall-through
+      case APPLY_SCALE:
+        new_m11 = old_m11 * sx;
+        new_m22 = old_m22 * sy;
+        m11 ()->set_value (new_m11, false);
+        m22 ()->set_value (new_m22, false);
+        if (new_m11 == 1.0 && new_m22 == 1.0) {
+          state2d = (mystate &= APPLY_TRANSLATE);
+        }
+        break;
+      case APPLY_TRANSLATE:
+        new_m14 = old_m14 * sx;
+        new_m24 = old_m24 * sy;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+          mystate = mystate & ~APPLY_TRANSLATE;
+          state2d = mystate;
+        }
+        // fall-through
+      case APPLY_IDENTITY:
+        m11 ()->set_value (sx, false);
+        m22 ()->set_value (sy, false);
+        if (sx != 1.0 || sy != 1.0) {
+          state2d = mystate | APPLY_SCALE;
+        }
+        break;
+      default:
+        cerr << "AbstractHomography::leftScale2d -> missing case in a switch " << state2d << endl;
+        // cannot reach
+        break;
+    }
+  }
+
+  void
+  AbstractHomography::rightRotate (double da) 
+  {
+    rightRotate2d (da);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightRotate (double da, double cx, double cy) 
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      rightTranslate2d (cx, cy);
+      rightRotate2d (da);
+      rightTranslate2d (-cx, -cy);
+    } else {
+      rightRotate2d (da);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightRotate2d (double da_in_degrees) 
+  {
+    double old_m11 = m11 ()->get_value ();
+    double old_m12 = m12 ()->get_value ();
+    double old_m21 = m21 ()->get_value ();
+    double old_m22 = m22 ()->get_value ();
+    double da_in_radians = degrees_to_radians (da_in_degrees);
+    double cos = std::cos (da_in_radians);
+    double sin = std::sin (da_in_radians);
+    if (sin == 1.0) {
+      rightRotate2d_90 ();
+    } else if (sin == -1.0) {
+      rightRotate2d_270 ();
+    } else {
+      if (cos == -1.0) {
+        rightRotate2d_180 ();
+      } else if (cos != 1.0) {
+        m11 ()->set_value (cos * old_m11 + sin * old_m12, false);
+        m12 ()->set_value (-sin * old_m11 + cos * old_m12, false);
+        m21 ()->set_value (cos * old_m21 + sin * old_m22, false);
+        m22 ()->set_value (-sin * old_m21 + cos * old_m22, false);
+        updateState2d ();
+      }
+    }
+  }
+
+  void
+  AbstractHomography::rightRotate2d_90 () 
+  {
+    double new_m11 = m12 ()->get_value ();
+    double new_m12 = - m11 ()->get_value ();
+    double new_m21 = m22 ()->get_value ();
+    double new_m22 = - m21 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m12 ()->set_value (new_m12, false);
+    m21 ()->set_value (new_m21, false);
+    m22 ()->set_value (new_m22, false);
+    int newstate = rot90conversion[state2d];
+    if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SCALE && new_m11 == 1.0 && new_m22 == 1.0) {
+      newstate -= APPLY_SCALE;
+    } else if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SHEAR && new_m12 == 0.0 && new_m21 == 0.0) {
+      newstate = ((newstate & ~APPLY_SHEAR) | APPLY_SCALE);
+    }
+    state2d = newstate;
+  }
+
+  void
+  AbstractHomography::rightRotate2d_180 () 
+  {
+    double new_m11 = - m11 ()->get_value ();
+    double new_m22 = - m22 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m22 ()->set_value (new_m22, false);
+    int oldstate = state2d;
+    if ((oldstate & (APPLY_SHEAR)) != 0) {
+      // If there was a shear, then this rotation has no
+      // effect on the state.
+      m12 ()->set_value (- m12 ()->get_value (), false);
+      m21 ()->set_value (- m21 ()->get_value (), false);
+    } else {
+      // No shear means the SCALE state may toggle when
+      // m11 and m22 are negated.
+      if (new_m11 == 1.0 && new_m22 == 1.0) {
+        state2d = oldstate & ~APPLY_SCALE;
+      } else {
+        state2d = oldstate | APPLY_SCALE;
+      }
+    }
+  }
+
+  void
+  AbstractHomography::rightRotate2d_270 () 
+  {
+    double new_m11 = - m12 ()->get_value ();
+    double new_m12 = m11 ()->get_value ();
+    double new_m21 = - m22 ()->get_value ();
+    double new_m22 = m21 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m12 ()->set_value (new_m12, false);
+    m21 ()->set_value (new_m21, false);
+    m22 ()->set_value (new_m22, false);
+    int newstate = rot90conversion[state2d];
+    if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SCALE && new_m11 == 1.0 && new_m22 == 1.0) {
+      newstate -= APPLY_SCALE;
+    } else if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SHEAR && new_m12 == 0.0 && new_m21 == 0.0) {
+      newstate = ((newstate & ~APPLY_SHEAR) | APPLY_SCALE);
+    }
+    state2d = newstate;
+  }
+
+  void
+  AbstractHomography::leftRotate (double angle) 
+  {
+    leftRotate2d(angle);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::leftRotate (double angle, double cx, double cy) 
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      leftTranslate2d (-cx, -cy);
+      leftRotate2d (angle);
+      leftTranslate2d (cx, cy);
+    } else {
+      leftRotate2d (angle);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::leftRotate2d (double da_in_degrees) 
+  {
+    double old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44;
+    get_properties_values (old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44);
+    double da_in_radians = degrees_to_radians (da_in_degrees);
+    double cos = std::cos (da_in_radians);
+    double sin = std::sin (da_in_radians);
+    if (sin == 1.0) {
+      leftRotate2d_90 ();
+    } else if (sin == -1.0) {
+      leftRotate2d_270 ();
+    } else {
+      if (cos == -1.0) {
+        leftRotate2d_180 ();
+      } else if (cos != 1.0) {
+        m11 ()->set_value (cos * old_m11 - sin * old_m21, false);
+        m21 ()->set_value (sin * old_m11 + cos * old_m21, false);
+        m12 ()->set_value (cos * old_m12 - sin * old_m22, false);
+        m22 ()->set_value (sin * old_m12 + cos * old_m22, false);
+        m14 ()->set_value (cos * old_m14 - sin * old_m24, false);
+        m24 ()->set_value (sin * old_m14 + cos * old_m24, false);
+        updateState2d ();
+      }
+    }
+  }
+
+  void
+  AbstractHomography::leftRotate2d_90() {
+    double new_m11 = - m21 ()->get_value ();
+    double new_m12 = - m22 ()->get_value ();
+    double new_m14 = - m24 ()->get_value ();
+    double new_m21 = m11 ()->get_value ();
+    double new_m22 = m12 ()->get_value ();
+    double new_m24 = m14 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m12 ()->set_value (new_m12, false);
+    m14 ()->set_value (new_m14, false);
+    m21 ()->set_value (new_m21, false);
+    m22 ()->set_value (new_m22, false);
+    m24 ()->set_value (new_m24, false);
+    int newstate = rot90conversion[state2d];
+    if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SCALE && new_m11 == 1.0 && new_m22 == 1.0) {
+      newstate -= APPLY_SCALE;
+    } else if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SHEAR && new_m12 == 0.0 && new_m21 == 0.0) {
+      newstate = ((newstate & ~APPLY_SHEAR) | APPLY_SCALE);
+    }
+    state2d = newstate;
+  }
+
+  void
+  AbstractHomography::leftRotate2d_180 () 
+  {
+    double new_m11 = - m11 ()->get_value ();
+    double new_m22 = - m22 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m12 ()->set_value (- m12 ()->get_value (), false);
+    m14 ()->set_value (- m14 ()->get_value (), false);
+    m21 ()->set_value (- m21 ()->get_value (), false);
+    m22 ()->set_value (new_m22, false);
+    m24 ()->set_value (- m24 ()->get_value (), false);
+    if ((state2d & APPLY_SHEAR) != 0) {
+      if (new_m11 == 0.0 && new_m22 == 0.0) {
+        state2d &= ~APPLY_SCALE;
+      } else {
+        state2d |= APPLY_SCALE;
+      }
+    } else {
+      if (new_m11 == 1.0 && new_m22 == 1.0) {
+        state2d &= ~APPLY_SCALE;
+      } else {
+        state2d |= APPLY_SCALE;
+      }
+    }
+  }
+
+  void
+  AbstractHomography::leftRotate2d_270 ()
+  {
+    double new_m11 = m21 ()->get_value ();
+    double new_m12 = m22 ()->get_value ();
+    double new_m14 = m24 ()->get_value ();
+    double new_m21 = - m11 ()->get_value ();
+    double new_m22 = - m12 ()->get_value ();
+    double new_m24 = - m14 ()->get_value ();
+    m11 ()->set_value (new_m11, false);
+    m12 ()->set_value (new_m12, false);
+    m21 ()->set_value (new_m21, false);
+    m22 ()->set_value (new_m22, false);
+    m14 ()->set_value (new_m14, false);
+    m24 ()->set_value (new_m24, false);
+    int newstate = rot90conversion[state2d];
+    if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SCALE && new_m11 == 1.0 && new_m22 == 1.0) {
+      newstate -= APPLY_SCALE;
+    } else if ((newstate & (APPLY_SHEAR | APPLY_SCALE)) == APPLY_SHEAR && new_m12 == 0.0 && new_m21 == 0.0) {
+      newstate = ((newstate & ~APPLY_SHEAR) | APPLY_SCALE);
+    }
+    state2d = newstate;
+  }
+
+  void
+  AbstractHomography::rightSkew (double dax, double day)
+  {
+    rightSkew2d (dax, day);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightSkew (double dax, double day, double cx, double cy)
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      rightTranslate2d (cx, cy);
+      rightSkew2d (dax, day);
+      rightTranslate2d (-cx, -cy);
+    } else {
+      rightSkew2d (dax, day);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+
+  void
+  AbstractHomography::rightSkew2d (double dax_in_degrees, double day_in_degrees)
+  {
+    double dax_in_radians = degrees_to_radians (dax_in_degrees);
+    double shx = - std::tan (dax_in_radians);
+    double day_in_radians = degrees_to_radians (day_in_degrees);
+    double shy = std::tan (day_in_radians);
+    int mystate = state2d;
+    double old_m11, old_m12, old_m21, old_m22, new_m11, new_m12, new_m21, new_m22;
+    switch (mystate) {
+      case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+      case APPLY_SHEAR | APPLY_SCALE:
+        old_m11 = m11 ()->get_value ();
+        old_m12 = m12 ()->get_value ();
+        m11 ()-> set_value (old_m11 + old_m12 * shy, false);
+        m12 ()-> set_value (old_m11 * shx + old_m12, false);
+        old_m21 = m21 ()->get_value ();
+        old_m22 = m22 ()->get_value ();
+        m21 ()->set_value (old_m21 + old_m22 * shy, false);
+        m22 ()->set_value (old_m21 * shx + old_m22, false);
+        updateState2d();
+        return;
+      case APPLY_SHEAR | APPLY_TRANSLATE:
+      case APPLY_SHEAR:
+        new_m11 = m12 ()->get_value () * shy;
+        new_m22 = m21 ()->get_value () * shx;
+        m11 ()->set_value (new_m11, false);
+        m22 ()->set_value (new_m22, false);
+        if (new_m11 != 0.0 || new_m22 != 0.0) {
+          state2d = mystate | APPLY_SCALE;
+        }
+        return;
+      case APPLY_SCALE | APPLY_TRANSLATE:
+      case APPLY_SCALE:
+        new_m12 = m11 ()->get_value () * shx;
+        new_m21 = m22 ()->get_value () * shy;
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 != 0.0 || new_m21 != 0.0) {
+          state2d = mystate | APPLY_SHEAR;
+        }
+        return;
+      case APPLY_TRANSLATE:
+      case APPLY_IDENTITY:
+        new_m12 = shx;
+        new_m21 = shy;
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 != 0.0 || new_m21 != 0.0) {
+          state2d = mystate | APPLY_SCALE | APPLY_SHEAR;
+        }
+        return;
+      default:
+        cerr << "AbstractHomography::rightSkew2d -> missing case in a switch " << state2d << endl;
+        // cannot reach
+        break;
+    }
+  }
+
+  void
+  AbstractHomography::leftSkew (double dax, double day)
+  {
+    leftSkew2d(dax, day);
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
   
-    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, translation_array); // pre
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (translation_array, current_h); // post
-
-    array_to_homography (new_homography_array, _h);
-    
-    _h->_translateBy_dx->set_value (0, false);
-    _h->_translateBy_dy->set_value (0, false);
-
+  void
+  AbstractHomography::leftSkew (double dax, double day, double cx, double cy)
+  {
+    if (cx != 0.0 || cy != 0.0) {
+      leftTranslate2d (-cx, -cy);
+      leftSkew2d (dax, day);
+      leftTranslate2d (cx, cy);
+    } else {
+      leftSkew2d (dax, day);
+    }
+    // Hack to propagate the matrix modification after complete calculation FIXME
+    m11 ()->set_value (m11 ()->get_value (), true);
+  }
+  
+  void
+  AbstractHomography::leftSkew2d (double dax_in_degrees, double day_in_degrees)
+  {
+    double dax_in_radians = degrees_to_radians (dax_in_degrees);
+    double shx = - std::tan (dax_in_radians);
+    double day_in_radians = degrees_to_radians (day_in_degrees);
+    double shy = std::tan (day_in_radians);
+    int mystate = state2d;
+    double old_m11, old_m12, old_m14, old_m21, old_m22, old_m24, new_m12, new_m14, new_m21, new_m24;
+    switch (mystate) {
+      case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+      case APPLY_SHEAR | APPLY_TRANSLATE:
+        old_m14 = m14 ()->get_value ();
+        old_m24 = m24 ()->get_value ();
+        m14 ()->set_value (old_m14 + shx * old_m24, false);
+        m24 ()->set_value (old_m24 + shy * old_m14, false);
+        // fall-through
+      case APPLY_SHEAR | APPLY_SCALE:
+      case APPLY_SHEAR:
+        old_m11 = m11 ()->get_value ();
+        old_m12 = m12 ()->get_value ();
+        old_m21 = m21 ()->get_value ();
+        old_m22 = m22 ()->get_value ();
+        m11 ()->set_value (old_m11 + shx * old_m21, false);
+        m12 ()->set_value (old_m12 + shx * old_m22, false);
+        m21 ()->set_value (shy * old_m11 + old_m21, false);
+        m22 ()->set_value (shy * old_m12 + old_m22, false);
+        updateState2d();
+        return;
+      case APPLY_SCALE | APPLY_TRANSLATE:
+        old_m14 = m14 ()->get_value ();
+        old_m24 = m24 ()->get_value ();
+        new_m14 = old_m14 + shx * old_m24;
+        new_m24 = old_m24 + shy * old_m14;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+          mystate = mystate & ~APPLY_TRANSLATE;
+          state2d = mystate;
+        }
+        // fall-through
+      case APPLY_SCALE:
+        new_m12 = shx * m22 ()->get_value ();
+        new_m21 = shy * m11 ()->get_value ();
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 != 0.0 || new_m21 != 0.0) {
+          state2d = mystate | APPLY_SHEAR;
+        }
+        return;
+      case APPLY_TRANSLATE:
+        old_m14 = m14 ()->get_value ();
+        old_m24 = m24 ()->get_value ();
+        new_m14 = old_m14 + shx * old_m24;
+        new_m24 = old_m24 + shy * old_m14;
+        m14 ()->set_value (new_m14, false);
+        m24 ()->set_value (new_m24, false);
+        if (new_m14 == 0.0 && new_m24 == 0.0) {
+          mystate = mystate & ~APPLY_TRANSLATE;
+          state2d = mystate;
+        }
+        // fall-through
+      case APPLY_IDENTITY:
+        new_m12 = shx;
+        new_m21 = shy;
+        m12 ()->set_value (new_m12, false);
+        m21 ()->set_value (new_m21, false);
+        if (new_m12 != 0.0 || new_m21 != 0.0) {
+          state2d = mystate | APPLY_SCALE | APPLY_SHEAR;
+        }
+        return;
+      default:
+        cerr << "AbstractHomography::leftSkew2d -> missing case in a switch " << state2d << endl;
+        // cannot reach
+        break;
+    }
   }
 
   void
-  AbstractHomography::ScaleByAction::activate () 
+  AbstractHomography::RightTranslateByAction::activate () 
   { 
-    array<array<double, 4>, 4> current_h;
-    homography_to_array (_h, current_h);
+    double dx = _h->_rightTranslateBy_dx->get_value ();
+    double dy = _h->_rightTranslateBy_dy->get_value ();
 
-    double cx = _h->_scaleBy_cx->get_value ();
-    double cy = _h->_scaleBy_cy->get_value ();
-    double sx = _h->_scaleBy_sx->get_value ();
-    double sy = _h->_scaleBy_sy->get_value ();
+    _h->rightTranslate (dx, dy);
+    
+    _h->_rightTranslateBy_dx->set_value (0, false);
+    _h->_rightTranslateBy_dy->set_value (0, false);
+  }
+
+  void
+  AbstractHomography::LeftTranslateByAction::activate () 
+  { 
+    double dx = _h->_leftTranslateBy_dx->get_value ();
+    double dy = _h->_leftTranslateBy_dy->get_value ();
+
+    _h->leftTranslate (dx, dy);
+    
+    _h->_leftTranslateBy_dx->set_value (0, false);
+    _h->_leftTranslateBy_dy->set_value (0, false);
+  }
+
+  void
+  AbstractHomography::RightScaleByAction::activate () 
+  { 
+    double cx = _h->_rightScaleBy_cx->get_value ();
+    double cy = _h->_rightScaleBy_cy->get_value ();
+    double sx = _h->_rightScaleBy_sx->get_value ();
+    double sy = _h->_rightScaleBy_sy->get_value ();
+
+    _h->rightScale (sx, sy, cx, cy);
 
     _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
     _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
-
-    array<array<double, 4>, 4> scaling_array = create_scaling_array (sx, sy);
-
-    array<array<double, 4>, 4> pivot_scaling_array = create_pivot_transform_array (scaling_array, cx, cy);
-    /*
-    array<array<double, 4>, 4> pivot_scaling_array {{
-    { sx,   0,  0,  (1 - sx) * cx },
-    {  0,  sy,  0,  (1 - sy) * cy },
-    {  0,   0,  1,         0      },
-    {  0,   0,  0,         1      }}};
-    */
-
-    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_scaling_array); // pre
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_scaling_array, current_h); // post
-
-    array_to_homography (new_homography_array, _h);
-
-    _h->_scaleBy_sx->set_value (1, false);
-    _h->_scaleBy_sy->set_value (1, false);
+    _h->_rightScaleBy_sx->set_value (1, false);
+    _h->_rightScaleBy_sy->set_value (1, false);
   }
 
   void
-  AbstractHomography::RotateByAction::activate () 
+  AbstractHomography::LeftScaleByAction::activate () 
   { 
-    array<array<double, 4>, 4> current_h;
-    homography_to_array (_h, current_h);
+    double cx = _h->_leftScaleBy_cx->get_value ();
+    double cy = _h->_leftScaleBy_cy->get_value ();
+    double sx = _h->_leftScaleBy_sx->get_value ();
+    double sy = _h->_leftScaleBy_sy->get_value ();
 
-    double cx = _h->_rotateBy_cx->get_value ();
-    double cy = _h->_rotateBy_cy->get_value ();
-    double da = _h->_rotateBy_da->get_value ();
+    _h->leftScale (sx, sy, cx, cy);
+
+    _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
+    _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
+    _h->_leftScaleBy_sx->set_value (1, false);
+    _h->_leftScaleBy_sy->set_value (1, false);
+  }
+
+  void
+  AbstractHomography::RightRotateByAction::activate () 
+  { 
+    double cx = _h->_rightRotateBy_cx->get_value ();
+    double cy = _h->_rightRotateBy_cy->get_value ();
+    double da = _h->_rightRotateBy_da->get_value ();
+
+    _h->rightRotate (da, cx, cy);
 
     _h->_acca->set_value (_h->_acca->get_value () + da, true);
-
-    array<array<double, 4>, 4> rotation_array = create_rotation_array (da);
-
-    array<array<double, 4>, 4> pivot_rotation_array = create_pivot_transform_array (rotation_array, cx, cy);
-    /*
-    double angle_in_radians = degrees_to_radians (da);
-    double cos = std::cos (angle_in_radians);
-    double sin = std::sin (angle_in_radians);
-    array<array<double, 4>, 4> pivot_rotation_array {{
-    { cos, -sin, 0,  cx * (1 - cos) + cy * sin },
-    { sin, cos,  0,  cy * (1 - cos) - cx * sin },
-    {  0,   0,   1,               0            },
-    {  0,   0,   0,               1            }}};
-    */
-
-    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_rotation_array); // pre
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_rotation_array, current_h); // post
-
-    array_to_homography (new_homography_array, _h);
-
-    _h->_rotateBy_da->set_value (0, false);
+    _h->_rightRotateBy_da->set_value (0, false);
   }
 
   void
-  AbstractHomography::Skew_X_ByAction::activate () 
+  AbstractHomography::LeftRotateByAction::activate () 
   { 
-    array<array<double, 4>, 4> current_h;
-    homography_to_array (_h, current_h);
+    double cx = _h->_leftRotateBy_cx->get_value ();
+    double cy = _h->_leftRotateBy_cy->get_value ();
+    double da = _h->_leftRotateBy_da->get_value ();
 
-    double cx = _h->_skew_X_By_cx->get_value ();
-    double cy = _h->_skew_X_By_cy->get_value ();
-    double da = _h->_skew_X_By_da->get_value ();
+    _h->leftRotate (da, cx, cy);
 
-    array<array<double, 4>, 4> skewx_array = create_skew_x_array (da);
-    array<array<double, 4>, 4> pivot_skewx_array = create_pivot_transform_array (skewx_array, cx, cy);
-
-    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_skewx_array); // pre
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewx_array, current_h); // post
-
-    array_to_homography (new_homography_array, _h);
-
-    _h->_skew_X_By_da->set_value (0, false);
+    _h->_acca->set_value (_h->_acca->get_value () + da, true);
+    _h->_leftRotateBy_da->set_value (0, false);
   }
 
   void
-  AbstractHomography::Skew_Y_ByAction::activate () 
+  AbstractHomography::Right_Skew_X_ByAction::activate ()
   { 
-    array<array<double, 4>, 4> current_h;
-    homography_to_array (_h, current_h);
+    double cx = _h->_rightSkew_X_By_cx->get_value ();
+    double cy = _h->_rightSkew_X_By_cy->get_value ();
+    double dax = _h->_rightSkew_X_By_da->get_value ();
 
-    double cx = _h->_skew_Y_By_cx->get_value ();
-    double cy = _h->_skew_Y_By_cy->get_value ();
-    double da = _h->_skew_Y_By_da->get_value ();
+    _h->rightSkew (dax, 0, cx, cy);
 
-    array<array<double, 4>, 4> skewy_array = create_skew_y_array (da);
-    array<array<double, 4>, 4> pivot_skewy_array = create_pivot_transform_array (skewy_array, cx, cy);
+    _h->_rightSkew_X_By_da->set_value (0, false);
+  }
 
-    // array<array<double, 4>, 4> new_homography_array = multiply_arrays (current_h, pivot_skewy_array); // pre
-    array<array<double, 4>, 4> new_homography_array = multiply_arrays (pivot_skewy_array, current_h); // post
+  void
+  AbstractHomography::Left_Skew_X_ByAction::activate ()
+  { 
+    double cx = _h->_leftSkew_X_By_cx->get_value ();
+    double cy = _h->_leftSkew_X_By_cy->get_value ();
+    double dax = _h->_leftSkew_X_By_da->get_value ();
 
-    array_to_homography (new_homography_array, _h);
+    _h->leftSkew (dax, 0, cx, cy);
 
-     _h->_skew_Y_By_da->set_value (0, false);
+    _h->_leftSkew_X_By_da->set_value (0, false);
+  }
+
+  void
+  AbstractHomography::Right_Skew_Y_ByAction::activate ()
+  { 
+    double cx = _h->_rightSkew_Y_By_cx->get_value ();
+    double cy = _h->_rightSkew_Y_By_cy->get_value ();
+    double day = _h->_rightSkew_Y_By_da->get_value ();
+
+    _h->rightSkew (0, day, cx, cy);
+
+    _h->_rightSkew_Y_By_da->set_value (0, false);
   }
  
   void
-  AbstractHomography::init_translationBy () 
-  {
-    _translateBy_spike = new Spike (this, "translateBy");
-    _translateBy_dx = new DoubleProperty (0);
-    _translateBy_dy = new DoubleProperty (0);
-    _translateBy_spike->add_symbol( "dx", _translateBy_dx);
-    _translateBy_spike->add_symbol( "dy", _translateBy_dy);
-    _translateBy_action = new TranslateByAction (this, "action_translate_by", this);
-    _tranlateBy_dx_coupling = new Coupling (_translateBy_dx, ACTIVATION, _translateBy_action, ACTIVATION);
-    this->somehow_activating () ? _tranlateBy_dx_coupling->enable (_frame) : _tranlateBy_dx_coupling->disable ();
-    _tranlateBy_dy_coupling = new Coupling (_translateBy_dy, ACTIVATION, _translateBy_action, ACTIVATION);
-    this->somehow_activating () ? _tranlateBy_dy_coupling->enable(_frame) : _tranlateBy_dy_coupling->disable ();
-    Graph::instance().add_edge(_translateBy_dx, _translateBy_action);
-    Graph::instance().add_edge(_translateBy_dy, _translateBy_action);
-    Graph::instance().add_edge(_translateBy_action, m11 ());
-    Graph::instance().add_edge(_translateBy_action, m12 ());
-    Graph::instance().add_edge(_translateBy_action, m14 ());
-    Graph::instance().add_edge(_translateBy_action, m21 ());
-    Graph::instance().add_edge(_translateBy_action, m22 ());
-    Graph::instance().add_edge(_translateBy_action, m24 ());
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _translateBy_action);
+  AbstractHomography::Left_Skew_Y_ByAction::activate ()
+  { 
+    double cx = _h->_leftSkew_Y_By_cx->get_value ();
+    double cy = _h->_leftSkew_Y_By_cy->get_value ();
+    double day = _h->_leftSkew_Y_By_da->get_value ();
+
+    _h->leftSkew (0, day, cx, cy);
+
+    _h->_leftSkew_Y_By_da->set_value (0, false);
   }
 
   void
-  AbstractHomography::init_scaleBy () 
+  AbstractHomography::init_rightTranslateBy ()
   {
-    _scaleBy_spike = new Spike (this, "scaleBy");
-    _scaleBy_cx = new DoubleProperty (0);
-    _scaleBy_cy = new DoubleProperty (0);
-    _scaleBy_sx = new DoubleProperty (1);
-    _scaleBy_sy = new DoubleProperty (1);
-    _scaleBy_spike->add_symbol ("cx", _scaleBy_cx);
-    _scaleBy_spike->add_symbol ("cy", _scaleBy_cy);
-    _scaleBy_spike->add_symbol ("sx", _scaleBy_sx);
-    _scaleBy_spike->add_symbol ("sy", _scaleBy_sy);
-    _scaleBy_action = new ScaleByAction (this, "action_scale_by", this);
-    _scaleBy_cx_coupling = new Coupling (_scaleBy_cx, ACTIVATION, _scaleBy_action, ACTIVATION);
-    this->somehow_activating () ? _scaleBy_cx_coupling->enable(_frame) : _scaleBy_cx_coupling->disable ();
-    _scaleBy_cy_coupling = new Coupling (_scaleBy_cy, ACTIVATION, _scaleBy_action, ACTIVATION);
-    this->somehow_activating () ? _scaleBy_cy_coupling->enable(_frame) : _scaleBy_cy_coupling->disable ();
-    _scaleBy_sx_coupling = new Coupling (_scaleBy_sx, ACTIVATION, _scaleBy_action, ACTIVATION);
-    this->somehow_activating () ? _scaleBy_sx_coupling->enable(_frame) : _scaleBy_sx_coupling->disable ();
-    _scaleBy_sy_coupling = new Coupling (_scaleBy_sy, ACTIVATION, _scaleBy_action, ACTIVATION);
-    this->somehow_activating () ? _scaleBy_sy_coupling->enable(_frame) :_scaleBy_sy_coupling->disable ();
-    Graph::instance().add_edge(_scaleBy_cx, _scaleBy_action);
-    Graph::instance().add_edge(_scaleBy_cy, _scaleBy_action);
-    Graph::instance().add_edge(_scaleBy_sx, _scaleBy_action);
-    Graph::instance().add_edge(_scaleBy_sy, _scaleBy_action);
-    Graph::instance().add_edge(_scaleBy_action, m11 ());
-    Graph::instance().add_edge(_scaleBy_action, m12 ());
-    Graph::instance().add_edge(_scaleBy_action, m14 ());
-    Graph::instance().add_edge(_scaleBy_action, m21 ());
-    Graph::instance().add_edge(_scaleBy_action, m22 ());
-    Graph::instance().add_edge(_scaleBy_action, m24 ());
+    _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
+    _rightTranslateBy_dx = new DoubleProperty (0);
+    _rightTranslateBy_dy = new DoubleProperty (0);
+    _rightTranslateBy_spike->add_symbol( "dx", _rightTranslateBy_dx);
+    _rightTranslateBy_spike->add_symbol( "dy", _rightTranslateBy_dy);
+    _rightTranslateBy_action = new RightTranslateByAction (this, "action_right_translate_by", this);
+    _rightTranslateBy_dx_coupling = new Coupling (_rightTranslateBy_dx, ACTIVATION, _rightTranslateBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightTranslateBy_dx_coupling->enable (_frame) : _rightTranslateBy_dx_coupling->disable ();
+    _rightTranslateBy_dy_coupling = new Coupling (_rightTranslateBy_dy, ACTIVATION, _rightTranslateBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightTranslateBy_dy_coupling->enable(_frame) : _rightTranslateBy_dy_coupling->disable ();
+    Graph::instance().add_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
+    Graph::instance().add_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
+    Graph::instance().add_edge(_rightTranslateBy_action, m11 ());
+    Graph::instance().add_edge(_rightTranslateBy_action, m12 ());
+    Graph::instance().add_edge(_rightTranslateBy_action, m14 ());
+    Graph::instance().add_edge(_rightTranslateBy_action, m21 ());
+    Graph::instance().add_edge(_rightTranslateBy_action, m22 ());
+    Graph::instance().add_edge(_rightTranslateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _scaleBy_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _rightTranslateBy_action);
   }
 
   void
-  AbstractHomography::init_rotateBy () 
+  AbstractHomography::init_leftTranslateBy ()
   {
-    _rotateBy_spike = new Spike (this, "rotateBy");
-    _rotateBy_cx = new DoubleProperty (0);
-    _rotateBy_cy = new DoubleProperty (0);
-    _rotateBy_da = new DoubleProperty (0);
-    _rotateBy_spike->add_symbol ("cx", _rotateBy_cx);
-    _rotateBy_spike->add_symbol ("cy", _rotateBy_cy);
-    _rotateBy_spike->add_symbol ("da", _rotateBy_da);
-    _rotateBy_action = new RotateByAction (this, "action_rotateBy_by", this);
-    _rotateBy_cx_coupling = new Coupling (_rotateBy_cx, ACTIVATION, _rotateBy_action, ACTIVATION);
-    this->somehow_activating () ? _rotateBy_cx_coupling->enable(_frame) : _rotateBy_cx_coupling->disable ();
-    _rotateBy_cy_coupling = new Coupling (_rotateBy_cy, ACTIVATION, _rotateBy_action, ACTIVATION);
-    this->somehow_activating () ? _rotateBy_cy_coupling->enable(_frame) : _rotateBy_cy_coupling->disable ();
-    _rotateBy_da_coupling = new Coupling (_rotateBy_da, ACTIVATION, _rotateBy_action, ACTIVATION);
-    this->somehow_activating () ? _rotateBy_da_coupling->enable(_frame) : _rotateBy_da_coupling->disable ();
-    Graph::instance().add_edge(_rotateBy_cx, _rotateBy_action);
-    Graph::instance().add_edge(_rotateBy_cy, _rotateBy_action);
-    Graph::instance().add_edge(_rotateBy_da, _rotateBy_action);
-    Graph::instance().add_edge(_rotateBy_action, m11 ());
-    Graph::instance().add_edge(_rotateBy_action, m12 ());
-    Graph::instance().add_edge(_rotateBy_action, m14 ());
-    Graph::instance().add_edge(_rotateBy_action, m21 ());
-    Graph::instance().add_edge(_rotateBy_action, m22 ());
-    Graph::instance().add_edge(_rotateBy_action, m24 ());
+    _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
+    _leftTranslateBy_dx = new DoubleProperty (0);
+    _leftTranslateBy_dy = new DoubleProperty (0);
+    _leftTranslateBy_spike->add_symbol( "dx", _leftTranslateBy_dx);
+    _leftTranslateBy_spike->add_symbol( "dy", _leftTranslateBy_dy);
+    _leftTranslateBy_action = new LeftTranslateByAction (this, "action_left_translate_by", this);
+    _leftTranslateBy_dx_coupling = new Coupling (_leftTranslateBy_dx, ACTIVATION, _leftTranslateBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftTranslateBy_dx_coupling->enable (_frame) : _leftTranslateBy_dx_coupling->disable ();
+    _leftTranslateBy_dy_coupling = new Coupling (_leftTranslateBy_dy, ACTIVATION, _leftTranslateBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftTranslateBy_dy_coupling->enable(_frame) : _leftTranslateBy_dy_coupling->disable ();
+    Graph::instance().add_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
+    Graph::instance().add_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
+    Graph::instance().add_edge(_leftTranslateBy_action, m11 ());
+    Graph::instance().add_edge(_leftTranslateBy_action, m12 ());
+    Graph::instance().add_edge(_leftTranslateBy_action, m14 ());
+    Graph::instance().add_edge(_leftTranslateBy_action, m21 ());
+    Graph::instance().add_edge(_leftTranslateBy_action, m22 ());
+    Graph::instance().add_edge(_leftTranslateBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _rotateBy_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _leftTranslateBy_action);
   }
 
   void
-  AbstractHomography::init_skewXBy () 
+  AbstractHomography::init_rightScaleBy () 
   {
-    _skew_X_By_spike = new Spike (this, "skewXBy");
-    _skew_X_By_cx = new DoubleProperty (0);
-    _skew_X_By_cy = new DoubleProperty (0);
-    _skew_X_By_da = new DoubleProperty (0);
-    _skew_X_By_spike->add_symbol ("cx", _skew_X_By_cx);
-    _skew_X_By_spike->add_symbol ("cy", _skew_X_By_cy);
-    _skew_X_By_spike->add_symbol ("da", _skew_X_By_da);
-    _skew_X_By_action = new Skew_X_ByAction (this, "action_skew_X_by", this);
-    _skew_X_By_cx_coupling = new Coupling (_skew_X_By_cx, ACTIVATION, _skew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_X_By_cx_coupling->enable(_frame) : _skew_X_By_cx_coupling->disable ();
-    _skew_X_By_cy_coupling = new Coupling (_skew_X_By_cy, ACTIVATION, _skew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_X_By_cy_coupling->enable(_frame) : _skew_X_By_cy_coupling->disable ();
-    _skew_X_By_da_coupling = new Coupling (_skew_X_By_da, ACTIVATION, _skew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_X_By_da_coupling->enable(_frame) : _skew_X_By_da_coupling->disable ();
-    Graph::instance().add_edge(_skew_X_By_cx, _skew_X_By_action);
-    Graph::instance().add_edge(_skew_X_By_cy, _skew_X_By_action);
-    Graph::instance().add_edge(_skew_X_By_da, _skew_X_By_action);
-    Graph::instance().add_edge(_skew_X_By_action, m11 ());
-    Graph::instance().add_edge(_skew_X_By_action, m12 ());
-    Graph::instance().add_edge(_skew_X_By_action, m14 ());
-    Graph::instance().add_edge(_skew_X_By_action, m21 ());
-    Graph::instance().add_edge(_skew_X_By_action, m22 ());
-    Graph::instance().add_edge(_skew_X_By_action, m24 ());
+    _rightScaleBy_spike = new Spike (this, "rightScaleBy");
+    _rightScaleBy_cx = new DoubleProperty (0);
+    _rightScaleBy_cy = new DoubleProperty (0);
+    _rightScaleBy_sx = new DoubleProperty (1);
+    _rightScaleBy_sy = new DoubleProperty (1);
+    _rightScaleBy_spike->add_symbol ("cx", _rightScaleBy_cx);
+    _rightScaleBy_spike->add_symbol ("cy", _rightScaleBy_cy);
+    _rightScaleBy_spike->add_symbol ("sx", _rightScaleBy_sx);
+    _rightScaleBy_spike->add_symbol ("sy", _rightScaleBy_sy);
+    _rightScaleBy_action = new RightScaleByAction (this, "action_right_scale_by", this);
+    _rightScaleBy_cx_coupling = new Coupling (_rightScaleBy_cx, ACTIVATION, _rightScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightScaleBy_cx_coupling->enable(_frame) : _rightScaleBy_cx_coupling->disable ();
+    _rightScaleBy_cy_coupling = new Coupling (_rightScaleBy_cy, ACTIVATION, _rightScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightScaleBy_cy_coupling->enable(_frame) : _rightScaleBy_cy_coupling->disable ();
+    _rightScaleBy_sx_coupling = new Coupling (_rightScaleBy_sx, ACTIVATION, _rightScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightScaleBy_sx_coupling->enable(_frame) : _rightScaleBy_sx_coupling->disable ();
+    _rightScaleBy_sy_coupling = new Coupling (_rightScaleBy_sy, ACTIVATION, _rightScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightScaleBy_sy_coupling->enable(_frame) :_rightScaleBy_sy_coupling->disable ();
+    Graph::instance().add_edge(_rightScaleBy_cx, _rightScaleBy_action);
+    Graph::instance().add_edge(_rightScaleBy_cy, _rightScaleBy_action);
+    Graph::instance().add_edge(_rightScaleBy_sx, _rightScaleBy_action);
+    Graph::instance().add_edge(_rightScaleBy_sy, _rightScaleBy_action);
+    Graph::instance().add_edge(_rightScaleBy_action, m11 ());
+    Graph::instance().add_edge(_rightScaleBy_action, m12 ());
+    Graph::instance().add_edge(_rightScaleBy_action, m14 ());
+    Graph::instance().add_edge(_rightScaleBy_action, m21 ());
+    Graph::instance().add_edge(_rightScaleBy_action, m22 ());
+    Graph::instance().add_edge(_rightScaleBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _skew_X_By_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _rightScaleBy_action);
   }
 
   void
-  AbstractHomography::init_skewYBy () 
+  AbstractHomography::init_leftScaleBy () 
   {
-    _skew_Y_By_spike = new Spike (this, "skewYBy");
-    _skew_Y_By_cx = new DoubleProperty (0);
-    _skew_Y_By_cy = new DoubleProperty (0);
-    _skew_Y_By_da = new DoubleProperty (0);
-    _skew_Y_By_spike->add_symbol ("cx", _skew_Y_By_cx);
-    _skew_Y_By_spike->add_symbol ("cy", _skew_Y_By_cy);
-    _skew_Y_By_spike->add_symbol ("da", _skew_Y_By_da);
-    _skew_Y_By_action = new Skew_Y_ByAction (this, "action_skew_Y_by", this);
-    _skew_Y_By_cx_coupling = new Coupling (_skew_Y_By_cx, ACTIVATION, _skew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_Y_By_cx_coupling->enable(_frame) : _skew_Y_By_cx_coupling->disable ();
-    _skew_Y_By_cy_coupling = new Coupling (_skew_Y_By_cy, ACTIVATION, _skew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_Y_By_cy_coupling->enable(_frame) : _skew_Y_By_cy_coupling->disable ();
-    _skew_Y_By_da_coupling = new Coupling (_skew_Y_By_da, ACTIVATION, _skew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? _skew_Y_By_da_coupling->enable(_frame) : _skew_Y_By_da_coupling->disable ();
-    Graph::instance().add_edge(_skew_Y_By_cx, _skew_Y_By_action);
-    Graph::instance().add_edge(_skew_Y_By_cy, _skew_Y_By_action);
-    Graph::instance().add_edge(_skew_Y_By_da, _skew_Y_By_action);
-    Graph::instance().add_edge(_skew_Y_By_action, m11 ());
-    Graph::instance().add_edge(_skew_Y_By_action, m12 ());
-    Graph::instance().add_edge(_skew_Y_By_action, m14 ());
-    Graph::instance().add_edge(_skew_Y_By_action, m21 ());
-    Graph::instance().add_edge(_skew_Y_By_action, m22 ());
-    Graph::instance().add_edge(_skew_Y_By_action, m24 ());
+    _leftScaleBy_spike = new Spike (this, "leftScaleBy");
+    _leftScaleBy_cx = new DoubleProperty (0);
+    _leftScaleBy_cy = new DoubleProperty (0);
+    _leftScaleBy_sx = new DoubleProperty (1);
+    _leftScaleBy_sy = new DoubleProperty (1);
+    _leftScaleBy_spike->add_symbol ("cx", _leftScaleBy_cx);
+    _leftScaleBy_spike->add_symbol ("cy", _leftScaleBy_cy);
+    _leftScaleBy_spike->add_symbol ("sx", _leftScaleBy_sx);
+    _leftScaleBy_spike->add_symbol ("sy", _leftScaleBy_sy);
+    _leftScaleBy_action = new LeftScaleByAction (this, "action_left_scale_by", this);
+    _leftScaleBy_cx_coupling = new Coupling (_leftScaleBy_cx, ACTIVATION, _leftScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftScaleBy_cx_coupling->enable(_frame) : _leftScaleBy_cx_coupling->disable ();
+    _leftScaleBy_cy_coupling = new Coupling (_leftScaleBy_cy, ACTIVATION, _leftScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftScaleBy_cy_coupling->enable(_frame) : _leftScaleBy_cy_coupling->disable ();
+    _leftScaleBy_sx_coupling = new Coupling (_leftScaleBy_sx, ACTIVATION, _leftScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftScaleBy_sx_coupling->enable(_frame) : _leftScaleBy_sx_coupling->disable ();
+    _leftScaleBy_sy_coupling = new Coupling (_leftScaleBy_sy, ACTIVATION, _leftScaleBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftScaleBy_sy_coupling->enable(_frame) :_leftScaleBy_sy_coupling->disable ();
+    Graph::instance().add_edge(_leftScaleBy_cx, _leftScaleBy_action);
+    Graph::instance().add_edge(_leftScaleBy_cy, _leftScaleBy_action);
+    Graph::instance().add_edge(_leftScaleBy_sx, _leftScaleBy_action);
+    Graph::instance().add_edge(_leftScaleBy_sy, _leftScaleBy_action);
+    Graph::instance().add_edge(_leftScaleBy_action, m11 ());
+    Graph::instance().add_edge(_leftScaleBy_action, m12 ());
+    Graph::instance().add_edge(_leftScaleBy_action, m14 ());
+    Graph::instance().add_edge(_leftScaleBy_action, m21 ());
+    Graph::instance().add_edge(_leftScaleBy_action, m22 ());
+    Graph::instance().add_edge(_leftScaleBy_action, m24 ());
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _skew_Y_By_action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _leftScaleBy_action);
   }
 
+  void
+  AbstractHomography::init_rightRotateBy () 
+  {
+    _rightRotateBy_spike = new Spike (this, "rightRotateBy");
+    _rightRotateBy_cx = new DoubleProperty (0);
+    _rightRotateBy_cy = new DoubleProperty (0);
+    _rightRotateBy_da = new DoubleProperty (0);
+    _rightRotateBy_spike->add_symbol ("cx", _rightRotateBy_cx);
+    _rightRotateBy_spike->add_symbol ("cy", _rightRotateBy_cy);
+    _rightRotateBy_spike->add_symbol ("da", _rightRotateBy_da);
+    _rightRotateBy_action = new RightRotateByAction (this, "action_right_rotate_by", this);
+    _rightRotateBy_cx_coupling = new Coupling (_rightRotateBy_cx, ACTIVATION, _rightRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightRotateBy_cx_coupling->enable(_frame) : _rightRotateBy_cx_coupling->disable ();
+    _rightRotateBy_cy_coupling = new Coupling (_rightRotateBy_cy, ACTIVATION, _rightRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightRotateBy_cy_coupling->enable(_frame) : _rightRotateBy_cy_coupling->disable ();
+    _rightRotateBy_da_coupling = new Coupling (_rightRotateBy_da, ACTIVATION, _rightRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _rightRotateBy_da_coupling->enable(_frame) : _rightRotateBy_da_coupling->disable ();
+    Graph::instance().add_edge(_rightRotateBy_cx, _rightRotateBy_action);
+    Graph::instance().add_edge(_rightRotateBy_cy, _rightRotateBy_action);
+    Graph::instance().add_edge(_rightRotateBy_da, _rightRotateBy_action);
+    Graph::instance().add_edge(_rightRotateBy_action, m11 ());
+    Graph::instance().add_edge(_rightRotateBy_action, m12 ());
+    Graph::instance().add_edge(_rightRotateBy_action, m14 ());
+    Graph::instance().add_edge(_rightRotateBy_action, m21 ());
+    Graph::instance().add_edge(_rightRotateBy_action, m22 ());
+    Graph::instance().add_edge(_rightRotateBy_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _rightRotateBy_action);
+  }
 
-  AbstractHomography::AbstractHomography (Process *p, const string &n, double m11, double m12, double m13, double m14,
+  void
+  AbstractHomography::init_leftRotateBy () 
+  {
+    _leftRotateBy_spike = new Spike (this, "leftRotateBy");
+    _leftRotateBy_cx = new DoubleProperty (0);
+    _leftRotateBy_cy = new DoubleProperty (0);
+    _leftRotateBy_da = new DoubleProperty (0);
+    _leftRotateBy_spike->add_symbol ("cx", _leftRotateBy_cx);
+    _leftRotateBy_spike->add_symbol ("cy", _leftRotateBy_cy);
+    _leftRotateBy_spike->add_symbol ("da", _leftRotateBy_da);
+    _leftRotateBy_action = new LeftRotateByAction (this, "action_left_rotate_by", this);
+    _leftRotateBy_cx_coupling = new Coupling (_leftRotateBy_cx, ACTIVATION, _leftRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftRotateBy_cx_coupling->enable(_frame) : _leftRotateBy_cx_coupling->disable ();
+    _leftRotateBy_cy_coupling = new Coupling (_leftRotateBy_cy, ACTIVATION, _leftRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftRotateBy_cy_coupling->enable(_frame) : _leftRotateBy_cy_coupling->disable ();
+    _leftRotateBy_da_coupling = new Coupling (_leftRotateBy_da, ACTIVATION, _leftRotateBy_action, ACTIVATION);
+    this->somehow_activating () ? _leftRotateBy_da_coupling->enable(_frame) : _leftRotateBy_da_coupling->disable ();
+    Graph::instance().add_edge(_leftRotateBy_cx, _leftRotateBy_action);
+    Graph::instance().add_edge(_leftRotateBy_cy, _leftRotateBy_action);
+    Graph::instance().add_edge(_leftRotateBy_da, _leftRotateBy_action);
+    Graph::instance().add_edge(_leftRotateBy_action, m11 ());
+    Graph::instance().add_edge(_leftRotateBy_action, m12 ());
+    Graph::instance().add_edge(_leftRotateBy_action, m14 ());
+    Graph::instance().add_edge(_leftRotateBy_action, m21 ());
+    Graph::instance().add_edge(_leftRotateBy_action, m22 ());
+    Graph::instance().add_edge(_leftRotateBy_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _leftRotateBy_action);
+  }
+
+  void
+  AbstractHomography::init_rightSkewXBy () 
+  {
+    _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
+    _rightSkew_X_By_cx = new DoubleProperty (0);
+    _rightSkew_X_By_cy = new DoubleProperty (0);
+    _rightSkew_X_By_da = new DoubleProperty (0);
+    _rightSkew_X_By_spike->add_symbol ("cx", _rightSkew_X_By_cx);
+    _rightSkew_X_By_spike->add_symbol ("cy", _rightSkew_X_By_cy);
+    _rightSkew_X_By_spike->add_symbol ("da", _rightSkew_X_By_da);
+    _rightSkew_X_By_action = new Right_Skew_X_ByAction (this, "action_right_skewX_by", this);
+    _rightSkew_X_By_cx_coupling = new Coupling (_rightSkew_X_By_cx, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_X_By_cx_coupling->enable(_frame) : _rightSkew_X_By_cx_coupling->disable ();
+    _rightSkew_X_By_cy_coupling = new Coupling (_rightSkew_X_By_cy, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_X_By_cy_coupling->enable(_frame) : _rightSkew_X_By_cy_coupling->disable ();
+    _rightSkew_X_By_da_coupling = new Coupling (_rightSkew_X_By_da, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_X_By_da_coupling->enable(_frame) : _rightSkew_X_By_da_coupling->disable ();
+    Graph::instance().add_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
+    Graph::instance().add_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
+    Graph::instance().add_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
+    Graph::instance().add_edge(_rightSkew_X_By_action, m11 ());
+    Graph::instance().add_edge(_rightSkew_X_By_action, m12 ());
+    Graph::instance().add_edge(_rightSkew_X_By_action, m14 ());
+    Graph::instance().add_edge(_rightSkew_X_By_action, m21 ());
+    Graph::instance().add_edge(_rightSkew_X_By_action, m22 ());
+    Graph::instance().add_edge(_rightSkew_X_By_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _rightSkew_X_By_action);
+  }
+
+  void
+  AbstractHomography::init_leftSkewXBy () 
+  {
+    _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
+    _leftSkew_X_By_cx = new DoubleProperty (0);
+    _leftSkew_X_By_cy = new DoubleProperty (0);
+    _leftSkew_X_By_da = new DoubleProperty (0);
+    _leftSkew_X_By_spike->add_symbol ("cx", _leftSkew_X_By_cx);
+    _leftSkew_X_By_spike->add_symbol ("cy", _leftSkew_X_By_cy);
+    _leftSkew_X_By_spike->add_symbol ("da", _leftSkew_X_By_da);
+    _leftSkew_X_By_action = new Left_Skew_X_ByAction (this, "action_left_skewX_by", this);
+    _leftSkew_X_By_cx_coupling = new Coupling (_leftSkew_X_By_cx, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_X_By_cx_coupling->enable(_frame) : _leftSkew_X_By_cx_coupling->disable ();
+    _leftSkew_X_By_cy_coupling = new Coupling (_leftSkew_X_By_cy, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_X_By_cy_coupling->enable(_frame) : _leftSkew_X_By_cy_coupling->disable ();
+    _leftSkew_X_By_da_coupling = new Coupling (_leftSkew_X_By_da, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_X_By_da_coupling->enable(_frame) : _leftSkew_X_By_da_coupling->disable ();
+    Graph::instance().add_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
+    Graph::instance().add_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
+    Graph::instance().add_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
+    Graph::instance().add_edge(_leftSkew_X_By_action, m11 ());
+    Graph::instance().add_edge(_leftSkew_X_By_action, m12 ());
+    Graph::instance().add_edge(_leftSkew_X_By_action, m14 ());
+    Graph::instance().add_edge(_leftSkew_X_By_action, m21 ());
+    Graph::instance().add_edge(_leftSkew_X_By_action, m22 ());
+    Graph::instance().add_edge(_leftSkew_X_By_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _leftSkew_X_By_action);
+  }
+
+  void
+  AbstractHomography::init_rightSkewYBy () 
+  {
+    _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
+    _rightSkew_Y_By_cx = new DoubleProperty (0);
+    _rightSkew_Y_By_cy = new DoubleProperty (0);
+    _rightSkew_Y_By_da = new DoubleProperty (0);
+    _rightSkew_Y_By_spike->add_symbol ("cx", _rightSkew_Y_By_cx);
+    _rightSkew_Y_By_spike->add_symbol ("cy", _rightSkew_Y_By_cy);
+    _rightSkew_Y_By_spike->add_symbol ("da", _rightSkew_Y_By_da);
+    _rightSkew_Y_By_action = new Right_Skew_Y_ByAction (this, "action_right_skewY_by", this);
+    _rightSkew_Y_By_cx_coupling = new Coupling (_rightSkew_Y_By_cx, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_Y_By_cx_coupling->enable(_frame) : _rightSkew_Y_By_cx_coupling->disable ();
+    _rightSkew_Y_By_cy_coupling = new Coupling (_rightSkew_Y_By_cy, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_Y_By_cy_coupling->enable(_frame) : _rightSkew_Y_By_cy_coupling->disable ();
+    _rightSkew_Y_By_da_coupling = new Coupling (_rightSkew_Y_By_da, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _rightSkew_Y_By_da_coupling->enable(_frame) : _rightSkew_Y_By_da_coupling->disable ();
+    Graph::instance().add_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
+    Graph::instance().add_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
+    Graph::instance().add_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m11 ());
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m12 ());
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m14 ());
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m21 ());
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m22 ());
+    Graph::instance().add_edge(_rightSkew_Y_By_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _rightSkew_Y_By_action);
+  }
+
+  void
+  AbstractHomography::init_leftSkewYBy () 
+  {
+    _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
+    _leftSkew_Y_By_cx = new DoubleProperty (0);
+    _leftSkew_Y_By_cy = new DoubleProperty (0);
+    _leftSkew_Y_By_da = new DoubleProperty (0);
+    _leftSkew_Y_By_spike->add_symbol ("cx", _leftSkew_Y_By_cx);
+    _leftSkew_Y_By_spike->add_symbol ("cy", _leftSkew_Y_By_cy);
+    _leftSkew_Y_By_spike->add_symbol ("da", _leftSkew_Y_By_da);
+    _leftSkew_Y_By_action = new Left_Skew_Y_ByAction (this, "action_left_skewY_by", this);
+    _leftSkew_Y_By_cx_coupling = new Coupling (_leftSkew_Y_By_cx, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_Y_By_cx_coupling->enable(_frame) : _leftSkew_Y_By_cx_coupling->disable ();
+    _leftSkew_Y_By_cy_coupling = new Coupling (_leftSkew_Y_By_cy, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_Y_By_cy_coupling->enable(_frame) : _leftSkew_Y_By_cy_coupling->disable ();
+    _leftSkew_Y_By_da_coupling = new Coupling (_leftSkew_Y_By_da, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
+    this->somehow_activating () ? _leftSkew_Y_By_da_coupling->enable(_frame) : _leftSkew_Y_By_da_coupling->disable ();
+    Graph::instance().add_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
+    Graph::instance().add_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
+    Graph::instance().add_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m11 ());
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m12 ());
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m14 ());
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m21 ());
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m22 ());
+    Graph::instance().add_edge(_leftSkew_Y_By_action, m24 ());
+    if (_parent && _parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (_parent->state_dependency (), _leftSkew_Y_By_action);
+  }
+
+  AbstractHomography::AbstractHomography (Process *p, const string &n, 
+                                          double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
                                           double m41, double m42, double m43, double m44) :
@@ -1173,26 +1921,48 @@ namespace djnn
       _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
       _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
       _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
-      /* translateBy ptr */
-      _translateBy_spike(nullptr), _translateBy_action(nullptr),
-      _translateBy_dx(nullptr), _translateBy_dy(nullptr),
-      _tranlateBy_dx_coupling(nullptr), _tranlateBy_dy_coupling(nullptr),
-      /* scaleBy ptr */
-      _scaleBy_spike(nullptr), _scaleBy_action(nullptr),
-      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr),
-      _scaleBy_cx_coupling(nullptr), _scaleBy_cy_coupling(nullptr), _scaleBy_sx_coupling(nullptr), _scaleBy_sy_coupling(nullptr),
-      /* rotateBy ptr */
-      _rotateBy_spike(nullptr), _rotateBy_action(nullptr), 
-      _rotateBy_cx(nullptr), _rotateBy_cy(nullptr), _rotateBy_da(nullptr),
-      _rotateBy_cx_coupling(nullptr), _rotateBy_cy_coupling(nullptr), _rotateBy_da_coupling(nullptr),
-      /* skewXBy ptr */
-      _skew_X_By_spike(nullptr), _skew_X_By_action(nullptr),
-      _skew_X_By_cx(nullptr), _skew_X_By_cy(nullptr), _skew_X_By_da(nullptr),
-      _skew_X_By_cx_coupling(nullptr), _skew_X_By_cy_coupling(nullptr), _skew_X_By_da_coupling(nullptr),
-      /* skewXBy ptr */
-      _skew_Y_By_spike(nullptr), _skew_Y_By_action(nullptr), 
-      _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
-      _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
+
+      /* rightTranslateBy ptr */
+      _rightTranslateBy_spike(nullptr), _rightTranslateBy_action(nullptr),
+      _rightTranslateBy_dx(nullptr), _rightTranslateBy_dy(nullptr),
+      _rightTranslateBy_dx_coupling(nullptr), _rightTranslateBy_dy_coupling(nullptr),
+      /* leftTranslateBy ptr */
+      _leftTranslateBy_spike(nullptr), _leftTranslateBy_action(nullptr),
+      _leftTranslateBy_dx(nullptr), _leftTranslateBy_dy(nullptr),
+      _leftTranslateBy_dx_coupling(nullptr), _leftTranslateBy_dy_coupling(nullptr),
+      /* rightScaleBy ptr */
+      _rightScaleBy_spike(nullptr), _rightScaleBy_action(nullptr),
+      _rightScaleBy_cx(nullptr), _rightScaleBy_cy(nullptr), _rightScaleBy_sx(nullptr), _rightScaleBy_sy(nullptr),
+      _rightScaleBy_cx_coupling(nullptr), _rightScaleBy_cy_coupling(nullptr), _rightScaleBy_sx_coupling(nullptr), _rightScaleBy_sy_coupling(nullptr),
+      /* leftScaleBy ptr */
+      _leftScaleBy_spike(nullptr), _leftScaleBy_action(nullptr),
+      _leftScaleBy_cx(nullptr), _leftScaleBy_cy(nullptr), _leftScaleBy_sx(nullptr), _leftScaleBy_sy(nullptr),
+      _leftScaleBy_cx_coupling(nullptr), _leftScaleBy_cy_coupling(nullptr), _leftScaleBy_sx_coupling(nullptr), _leftScaleBy_sy_coupling(nullptr),
+      /* rightRotateBy ptr */
+      _rightRotateBy_spike(nullptr), _rightRotateBy_action(nullptr), 
+      _rightRotateBy_cx(nullptr), _rightRotateBy_cy(nullptr), _rightRotateBy_da(nullptr),
+      _rightRotateBy_cx_coupling(nullptr), _rightRotateBy_cy_coupling(nullptr), _rightRotateBy_da_coupling(nullptr),
+      /* leftRotateBy ptr */
+      _leftRotateBy_spike(nullptr), _leftRotateBy_action(nullptr), 
+      _leftRotateBy_cx(nullptr), _leftRotateBy_cy(nullptr), _leftRotateBy_da(nullptr),
+      _leftRotateBy_cx_coupling(nullptr), _leftRotateBy_cy_coupling(nullptr), _leftRotateBy_da_coupling(nullptr),
+      /* rightSkewXBy ptr */
+      _rightSkew_X_By_spike(nullptr), _rightSkew_X_By_action(nullptr),
+      _rightSkew_X_By_cx(nullptr), _rightSkew_X_By_cy(nullptr), _rightSkew_X_By_da(nullptr),
+      _rightSkew_X_By_cx_coupling(nullptr), _rightSkew_X_By_cy_coupling(nullptr), _rightSkew_X_By_da_coupling(nullptr),
+      /* leftSkewXBy ptr */
+      _leftSkew_X_By_spike(nullptr), _leftSkew_X_By_action(nullptr),
+      _leftSkew_X_By_cx(nullptr), _leftSkew_X_By_cy(nullptr), _leftSkew_X_By_da(nullptr),
+      _leftSkew_X_By_cx_coupling(nullptr), _leftSkew_X_By_cy_coupling(nullptr), _leftSkew_X_By_da_coupling(nullptr),
+      /* rightSkewYBy ptr */
+      _rightSkew_Y_By_spike(nullptr), _rightSkew_Y_By_action(nullptr), 
+      _rightSkew_Y_By_cx(nullptr), _rightSkew_Y_By_cy(nullptr), _rightSkew_Y_By_da(nullptr),
+      _rightSkew_Y_By_cx_coupling(nullptr), _rightSkew_Y_By_cy_coupling(nullptr), _rightSkew_Y_By_da_coupling(nullptr),
+      /* leftSkewYBy ptr */
+      _leftSkew_Y_By_spike(nullptr), _leftSkew_Y_By_action(nullptr), 
+      _leftSkew_Y_By_cx(nullptr), _leftSkew_Y_By_cy(nullptr), _leftSkew_Y_By_da(nullptr),
+      _leftSkew_Y_By_cx_coupling(nullptr), _leftSkew_Y_By_cy_coupling(nullptr), _leftSkew_Y_By_da_coupling(nullptr)
+
   {
     _acca = new DoubleProperty (this, "acca", 0);
     _accsx = new DoubleProperty (this, "accsx", 1);
@@ -1202,152 +1972,229 @@ namespace djnn
   AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24,
                                           double m31, double m32, double m33, double m34,
-                                          double m41, double m42, double m43, double m44) :
-      AbstractTransformation (),
-      raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
-                .m21=m21, .m22=m22, .m23=m23, .m24=m24,
-                .m31=m31, .m32=m32, .m33=m33, .m34=m34,
-                .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
-      _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
-      _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
-      _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
-      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
-      /* translateBy ptr */
-      _translateBy_spike(nullptr), _translateBy_action(nullptr),
-      _translateBy_dx(nullptr), _translateBy_dy(nullptr),
-      _tranlateBy_dx_coupling(nullptr), _tranlateBy_dy_coupling(nullptr),
-      /* scaleBy ptr */
-      _scaleBy_spike(nullptr), _scaleBy_action(nullptr),
-      _scaleBy_cx(nullptr), _scaleBy_cy(nullptr), _scaleBy_sx(nullptr), _scaleBy_sy(nullptr),
-      _scaleBy_cx_coupling(nullptr), _scaleBy_cy_coupling(nullptr), _scaleBy_sx_coupling(nullptr), _scaleBy_sy_coupling(nullptr),
-      /* rotateBy ptr */
-      _rotateBy_spike(nullptr), _rotateBy_action(nullptr), 
-      _rotateBy_cx(nullptr), _rotateBy_cy(nullptr), _rotateBy_da(nullptr),
-      _rotateBy_cx_coupling(nullptr), _rotateBy_cy_coupling(nullptr), _rotateBy_da_coupling(nullptr),
-      /* skewXBy ptr */
-      _skew_X_By_spike(nullptr), _skew_X_By_action(nullptr),
-      _skew_X_By_cx(nullptr), _skew_X_By_cy(nullptr), _skew_X_By_da(nullptr),
-      _skew_X_By_cx_coupling(nullptr), _skew_X_By_cy_coupling(nullptr), _skew_X_By_da_coupling(nullptr),
-      /* skewXBy ptr */
-      _skew_Y_By_spike(nullptr), _skew_Y_By_action(nullptr), 
-      _skew_Y_By_cx(nullptr), _skew_Y_By_cy(nullptr), _skew_Y_By_da(nullptr),
-      _skew_Y_By_cx_coupling(nullptr), _skew_Y_By_cy_coupling(nullptr), _skew_Y_By_da_coupling(nullptr)
-  {
-    _acca = new DoubleProperty (this, "acca", 0);
-    _accsx = new DoubleProperty (this, "accsx", 1);
-    _accsy = new DoubleProperty (this, "accsy", 1);
-  }
+                                          double m41, double m42, double m43, double m44) : 
+      AbstractHomography(nullptr, "", m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44) {}
 
   AbstractHomography::~AbstractHomography ()
   {
-    if (_translateBy_action){
+    if (_rightTranslateBy_action){
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _translateBy_action);
-      Graph::instance().remove_edge(_translateBy_dx, _translateBy_action);
-      Graph::instance().remove_edge(_translateBy_dy, _translateBy_action);
-      Graph::instance().remove_edge(_translateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_translateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_translateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_translateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_translateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_translateBy_action, this->m24 ());
-      delete _tranlateBy_dx_coupling;
-      delete _tranlateBy_dy_coupling;
-      delete _translateBy_action;
-      delete _translateBy_dx;
-      delete _translateBy_dy;
-      delete _translateBy_spike;
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rightTranslateBy_action);
+      Graph::instance().remove_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
+      Graph::instance().remove_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_rightTranslateBy_action, this->m24 ());
+      delete _rightTranslateBy_dx_coupling;
+      delete _rightTranslateBy_dy_coupling;
+      delete _rightTranslateBy_action;
+      delete _rightTranslateBy_dx;
+      delete _rightTranslateBy_dy;
+      delete _rightTranslateBy_spike;
     }
 
-    if (_scaleBy_action) {
+    if (_leftTranslateBy_action){
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _scaleBy_action);
-      Graph::instance().remove_edge(_scaleBy_cx, _scaleBy_action);
-      Graph::instance().remove_edge(_scaleBy_cy, _scaleBy_action);
-      Graph::instance().remove_edge(_scaleBy_sx, _scaleBy_action);
-      Graph::instance().remove_edge(_scaleBy_sy, _scaleBy_action);
-      Graph::instance().remove_edge(_scaleBy_action, this->m11 ());
-      Graph::instance().remove_edge(_scaleBy_action, this->m12 ());
-      Graph::instance().remove_edge(_scaleBy_action, this->m14 ());
-      Graph::instance().remove_edge(_scaleBy_action, this->m21 ());
-      Graph::instance().remove_edge(_scaleBy_action, this->m22 ());
-      Graph::instance().remove_edge(_scaleBy_action, this->m24 ());
-      delete _scaleBy_cx_coupling;
-      delete _scaleBy_cy_coupling;
-      delete _scaleBy_sx_coupling;
-      delete _scaleBy_sy_coupling;
-      delete _scaleBy_action;
-      delete _scaleBy_cx;
-      delete _scaleBy_cy;
-      delete _scaleBy_sx;
-      delete _scaleBy_sy;
-      delete _scaleBy_spike;
+        Graph::instance ().remove_edge (_parent->state_dependency (), _leftTranslateBy_action);
+      Graph::instance().remove_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
+      Graph::instance().remove_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_leftTranslateBy_action, this->m24 ());
+      delete _leftTranslateBy_dx_coupling;
+      delete _leftTranslateBy_dy_coupling;
+      delete _leftTranslateBy_action;
+      delete _leftTranslateBy_dx;
+      delete _leftTranslateBy_dy;
+      delete _leftTranslateBy_spike;
     }
 
-    if (_rotateBy_action) {
+    if (_rightScaleBy_action) {
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _rotateBy_action);
-      Graph::instance().remove_edge(_rotateBy_cx, _rotateBy_action);
-      Graph::instance().remove_edge(_rotateBy_cy, _rotateBy_action);
-      Graph::instance().remove_edge(_rotateBy_da, _rotateBy_action);
-      Graph::instance().remove_edge(_rotateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_rotateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_rotateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_rotateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_rotateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_rotateBy_action, this->m24 ());
-      delete _rotateBy_cx_coupling;
-      delete _rotateBy_cy_coupling;
-      delete _rotateBy_da_coupling;
-      delete _rotateBy_action;
-      delete _rotateBy_cx;
-      delete _rotateBy_cy;
-      delete _rotateBy_da;
-      delete _rotateBy_spike;
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_cx, _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_sy, _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m11 ());
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m12 ());
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m14 ());
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m21 ());
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m22 ());
+      Graph::instance().remove_edge(_rightScaleBy_action, this->m24 ());
+      delete _rightScaleBy_cx_coupling;
+      delete _rightScaleBy_cy_coupling;
+      delete _rightScaleBy_sx_coupling;
+      delete _rightScaleBy_sy_coupling;
+      delete _rightScaleBy_action;
+      delete _rightScaleBy_cx;
+      delete _rightScaleBy_cy;
+      delete _rightScaleBy_sx;
+      delete _rightScaleBy_sy;
+      delete _rightScaleBy_spike;
     }
 
-    if (_skew_X_By_action) {
+    if (_leftScaleBy_action) {
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _skew_X_By_action);
-      Graph::instance().remove_edge(_skew_X_By_cx, _skew_X_By_action);
-      Graph::instance().remove_edge(_skew_X_By_cy, _skew_X_By_action);
-      Graph::instance().remove_edge(_skew_X_By_da, _skew_X_By_action);
-      Graph::instance().remove_edge(_skew_X_By_action, this->m11 ());
-      Graph::instance().remove_edge(_skew_X_By_action, this->m12 ());
-      Graph::instance().remove_edge(_skew_X_By_action, this->m14 ());
-      Graph::instance().remove_edge(_skew_X_By_action, this->m21 ());
-      Graph::instance().remove_edge(_skew_X_By_action, this->m22 ());
-      Graph::instance().remove_edge(_skew_X_By_action, this->m24 ());
-      delete _skew_X_By_cx_coupling;
-      delete _skew_X_By_cy_coupling;
-      delete _skew_X_By_da_coupling;
-      delete _skew_X_By_action;
-      delete _skew_X_By_cx;
-      delete _skew_X_By_cy;
-      delete _skew_X_By_da;
-      delete _skew_X_By_spike;
+        Graph::instance ().remove_edge (_parent->state_dependency (), _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_cx, _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_sy, _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m11 ());
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m12 ());
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m14 ());
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m21 ());
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m22 ());
+      Graph::instance().remove_edge(_leftScaleBy_action, this->m24 ());
+      delete _leftScaleBy_cx_coupling;
+      delete _leftScaleBy_cy_coupling;
+      delete _leftScaleBy_sx_coupling;
+      delete _leftScaleBy_sy_coupling;
+      delete _leftScaleBy_action;
+      delete _leftScaleBy_cx;
+      delete _leftScaleBy_cy;
+      delete _leftScaleBy_sx;
+      delete _leftScaleBy_sy;
+      delete _leftScaleBy_spike;
     }
 
-    if (_skew_Y_By_action) {
+    if (_rightRotateBy_action) {
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _skew_Y_By_action);
-      Graph::instance().remove_edge(_skew_Y_By_cx, _skew_Y_By_action);
-      Graph::instance().remove_edge(_skew_Y_By_cy, _skew_Y_By_action);
-      Graph::instance().remove_edge(_skew_Y_By_da, _skew_Y_By_action);
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m11 ());
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m12 ());
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m14 ());
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m21 ());
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m22 ());
-      Graph::instance().remove_edge(_skew_Y_By_action, this->m24 ());
-      delete _skew_Y_By_cx_coupling;
-      delete _skew_Y_By_cy_coupling;
-      delete _skew_Y_By_da_coupling;
-      delete _skew_Y_By_action;
-      delete _skew_Y_By_cx;
-      delete _skew_Y_By_cy;
-      delete _skew_Y_By_da;
-      delete _skew_Y_By_spike;
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rightRotateBy_action);
+      Graph::instance().remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
+      Graph::instance().remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
+      Graph::instance().remove_edge(_rightRotateBy_da, _rightRotateBy_action);
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_rightRotateBy_action, this->m24 ());
+      delete _rightRotateBy_cx_coupling;
+      delete _rightRotateBy_cy_coupling;
+      delete _rightRotateBy_da_coupling;
+      delete _rightRotateBy_action;
+      delete _rightRotateBy_cx;
+      delete _rightRotateBy_cy;
+      delete _rightRotateBy_da;
+      delete _rightRotateBy_spike;
+    }
+
+    if (_leftRotateBy_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _leftRotateBy_action);
+      Graph::instance().remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
+      Graph::instance().remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
+      Graph::instance().remove_edge(_leftRotateBy_da, _leftRotateBy_action);
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m11 ());
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m12 ());
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m14 ());
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m21 ());
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m22 ());
+      Graph::instance().remove_edge(_leftRotateBy_action, this->m24 ());
+      delete _leftRotateBy_cx_coupling;
+      delete _leftRotateBy_cy_coupling;
+      delete _leftRotateBy_da_coupling;
+      delete _leftRotateBy_action;
+      delete _leftRotateBy_cx;
+      delete _leftRotateBy_cy;
+      delete _leftRotateBy_da;
+      delete _leftRotateBy_spike;
+    }
+
+    if (_rightSkew_X_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rightSkew_X_By_action);
+      Graph::instance().remove_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
+      Graph::instance().remove_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
+      Graph::instance().remove_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m11 ());
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m12 ());
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m14 ());
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m21 ());
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m22 ());
+      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m24 ());
+      delete _rightSkew_X_By_cx_coupling;
+      delete _rightSkew_X_By_cy_coupling;
+      delete _rightSkew_X_By_da_coupling;
+      delete _rightSkew_X_By_action;
+      delete _rightSkew_X_By_cx;
+      delete _rightSkew_X_By_cy;
+      delete _rightSkew_X_By_da;
+      delete _rightSkew_X_By_spike;
+    }
+
+    if (_leftSkew_X_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _leftSkew_X_By_action);
+      Graph::instance().remove_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
+      Graph::instance().remove_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
+      Graph::instance().remove_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m11 ());
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m12 ());
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m14 ());
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m21 ());
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m22 ());
+      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m24 ());
+      delete _leftSkew_X_By_cx_coupling;
+      delete _leftSkew_X_By_cy_coupling;
+      delete _leftSkew_X_By_da_coupling;
+      delete _leftSkew_X_By_action;
+      delete _leftSkew_X_By_cx;
+      delete _leftSkew_X_By_cy;
+      delete _leftSkew_X_By_da;
+      delete _leftSkew_X_By_spike;
+    }
+
+    if (_rightSkew_Y_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _rightSkew_Y_By_action);
+      Graph::instance().remove_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
+      Graph::instance().remove_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
+      Graph::instance().remove_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m11 ());
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m12 ());
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m14 ());
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m21 ());
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m22 ());
+      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m24 ());
+      delete _rightSkew_Y_By_cx_coupling;
+      delete _rightSkew_Y_By_cy_coupling;
+      delete _rightSkew_Y_By_da_coupling;
+      delete _rightSkew_Y_By_action;
+      delete _rightSkew_Y_By_cx;
+      delete _rightSkew_Y_By_cy;
+      delete _rightSkew_Y_By_da;
+      delete _rightSkew_Y_By_spike;
+    }
+
+    if (_leftSkew_Y_By_action) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _leftSkew_Y_By_action);
+      Graph::instance().remove_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
+      Graph::instance().remove_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
+      Graph::instance().remove_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m11 ());
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m12 ());
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m14 ());
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m21 ());
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m22 ());
+      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m24 ());
+      delete _leftSkew_Y_By_cx_coupling;
+      delete _leftSkew_Y_By_cy_coupling;
+      delete _leftSkew_Y_By_da_coupling;
+      delete _leftSkew_Y_By_action;
+      delete _leftSkew_Y_By_cx;
+      delete _leftSkew_Y_By_cy;
+      delete _leftSkew_Y_By_da;
+      delete _leftSkew_Y_By_spike;
     }
 
     if (_symtable.empty () == false) {
@@ -1510,24 +2357,44 @@ namespace djnn
       rawp=&raw_props.m44;
       notify_mask = notify_damaged_transform;
     } else
-    if (name.find ("translateBy") != std::string::npos) {
-      init_translationBy();
+    if (name.find ("rightTranslateBy") != std::string::npos) {
+      init_rightTranslateBy();
       return AbstractGObj::find_component(name);
     } else
-    if (name.find ("scaleBy") != std::string::npos) {
-      init_scaleBy();
+    if (name.find ("leftTranslateBy") != std::string::npos) {
+      init_leftTranslateBy();
       return AbstractGObj::find_component(name);
     } else
-    if (name.find ("rotateBy") != std::string::npos) {
-      init_rotateBy();
+    if (name.find ("rightScaleBy") != std::string::npos) {
+      init_rightScaleBy();
       return AbstractGObj::find_component(name);
     } else
-    if (name.find ("skewXBy") != std::string::npos) {
-      init_skewXBy();
+    if (name.find ("leftScaleBy") != std::string::npos) {
+      init_leftScaleBy();
       return AbstractGObj::find_component(name);
     } else
-    if (name.find ("skewYBy") != std::string::npos) {
-      init_skewYBy();
+    if (name.find ("rightRotateBy") != std::string::npos) {
+      init_rightRotateBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("leftRotateBy") != std::string::npos) {
+      init_leftRotateBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("rightSkewXBy") != std::string::npos) {
+      init_rightSkewXBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("leftSkewXBy") != std::string::npos) {
+      init_leftSkewXBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("rightSkewYBy") != std::string::npos) {
+      init_rightSkewYBy();
+      return AbstractGObj::find_component(name);
+    } else
+    if (name.find ("leftSkewYBy") != std::string::npos) {
+      init_leftSkewYBy();
       return AbstractGObj::find_component(name);
     } else
     return nullptr;
@@ -1589,30 +2456,55 @@ namespace djnn
     if (_cm43) _cm43->enable (_frame);
     if (_cm44) _cm44->enable (_frame);
 
-    if (_translateBy_action) {
-      _tranlateBy_dx_coupling->enable (_frame);
-      _tranlateBy_dy_coupling->enable (_frame);
+    if (_rightTranslateBy_action) {
+      _rightTranslateBy_dx_coupling->enable (_frame);
+      _rightTranslateBy_dy_coupling->enable (_frame);
     }
-    if (_scaleBy_action) {
-      _scaleBy_cx_coupling->enable (_frame);
-      _scaleBy_cy_coupling->enable (_frame);
-      _scaleBy_sx_coupling->enable (_frame);
-      _scaleBy_sy_coupling->enable (_frame);
+    if (_leftTranslateBy_action) {
+      _leftTranslateBy_dx_coupling->enable (_frame);
+      _leftTranslateBy_dy_coupling->enable (_frame);
     }
-    if (_rotateBy_action) {
-      _rotateBy_cx_coupling->enable (_frame);
-      _rotateBy_cy_coupling->enable (_frame);
-      _rotateBy_da_coupling->enable (_frame);
+    if (_rightScaleBy_action) {
+      _rightScaleBy_cx_coupling->enable (_frame);
+      _rightScaleBy_cy_coupling->enable (_frame);
+      _rightScaleBy_sx_coupling->enable (_frame);
+      _rightScaleBy_sy_coupling->enable (_frame);
     }
-    if (_skew_X_By_action) {
-      _skew_X_By_cx_coupling->enable (_frame);
-      _skew_X_By_cy_coupling->enable (_frame);
-      _skew_X_By_da_coupling->enable (_frame);
+    if (_leftScaleBy_action) {
+      _leftScaleBy_cx_coupling->enable (_frame);
+      _leftScaleBy_cy_coupling->enable (_frame);
+      _leftScaleBy_sx_coupling->enable (_frame);
+      _leftScaleBy_sy_coupling->enable (_frame);
     }
-    if (_skew_Y_By_action) {
-      _skew_Y_By_cx_coupling->enable (_frame);
-      _skew_Y_By_cy_coupling->enable (_frame);
-      _skew_Y_By_da_coupling->enable (_frame);
+    if (_rightRotateBy_action) {
+      _rightRotateBy_cx_coupling->enable (_frame);
+      _rightRotateBy_cy_coupling->enable (_frame);
+      _rightRotateBy_da_coupling->enable (_frame);
+    }
+    if (_leftRotateBy_action) {
+      _leftRotateBy_cx_coupling->enable (_frame);
+      _leftRotateBy_cy_coupling->enable (_frame);
+      _leftRotateBy_da_coupling->enable (_frame);
+    }
+    if (_rightSkew_X_By_action) {
+      _rightSkew_X_By_cx_coupling->enable (_frame);
+      _rightSkew_X_By_cy_coupling->enable (_frame);
+      _rightSkew_X_By_da_coupling->enable (_frame);
+    }
+    if (_leftSkew_X_By_action) {
+      _leftSkew_X_By_cx_coupling->enable (_frame);
+      _leftSkew_X_By_cy_coupling->enable (_frame);
+      _leftSkew_X_By_da_coupling->enable (_frame);
+    }
+    if (_rightSkew_Y_By_action) {
+      _rightSkew_Y_By_cx_coupling->enable (_frame);
+      _rightSkew_Y_By_cy_coupling->enable (_frame);
+      _rightSkew_Y_By_da_coupling->enable (_frame);
+    }    
+    if (_leftSkew_Y_By_action) {
+      _leftSkew_Y_By_cx_coupling->enable (_frame);
+      _leftSkew_Y_By_cy_coupling->enable (_frame);
+      _leftSkew_Y_By_da_coupling->enable (_frame);
     }
   }
 
@@ -1640,30 +2532,55 @@ namespace djnn
     if (_cm43) _cm43->disable ();
     if (_cm44) _cm44->disable ();
 
-    if (_translateBy_action) {
-      _tranlateBy_dx_coupling->disable ();
-      _tranlateBy_dy_coupling->disable ();
+    if (_rightTranslateBy_action) {
+      _rightTranslateBy_dx_coupling->disable ();
+      _rightTranslateBy_dy_coupling->disable ();
     }
-    if (_scaleBy_action) {
-      _scaleBy_cx_coupling->disable ();
-      _scaleBy_cy_coupling->disable ();
-      _scaleBy_sx_coupling->disable ();
-      _scaleBy_sy_coupling->disable ();
+    if (_leftTranslateBy_action) {
+      _leftTranslateBy_dx_coupling->disable ();
+      _leftTranslateBy_dy_coupling->disable ();
     }
-    if (_rotateBy_action) {
-      _rotateBy_cx_coupling->disable ();
-      _rotateBy_cy_coupling->disable ();
-      _rotateBy_da_coupling->disable ();
+    if (_rightScaleBy_action) {
+      _rightScaleBy_cx_coupling->disable ();
+      _rightScaleBy_cy_coupling->disable ();
+      _rightScaleBy_sx_coupling->disable ();
+      _rightScaleBy_sy_coupling->disable ();
     }
-    if (_skew_X_By_action) {
-      _skew_X_By_cx_coupling->disable ();
-      _skew_X_By_cy_coupling->disable ();
-      _skew_X_By_da_coupling->disable ();
+    if (_leftScaleBy_action) {
+      _leftScaleBy_cx_coupling->disable ();
+      _leftScaleBy_cy_coupling->disable ();
+      _leftScaleBy_sx_coupling->disable ();
+      _leftScaleBy_sy_coupling->disable ();
     }
-    if (_skew_Y_By_action) {
-      _skew_Y_By_cx_coupling->disable ();
-      _skew_Y_By_cy_coupling->disable ();
-      _skew_Y_By_da_coupling->disable ();
+    if (_rightRotateBy_action) {
+      _rightRotateBy_cx_coupling->disable ();
+      _rightRotateBy_cy_coupling->disable ();
+      _rightRotateBy_da_coupling->disable ();
+    }
+    if (_leftRotateBy_action) {
+      _leftRotateBy_cx_coupling->disable ();
+      _leftRotateBy_cy_coupling->disable ();
+      _leftRotateBy_da_coupling->disable ();
+    }
+    if (_rightSkew_X_By_action) {
+      _rightSkew_X_By_cx_coupling->disable ();
+      _rightSkew_X_By_cy_coupling->disable ();
+      _rightSkew_X_By_da_coupling->disable ();
+    }
+    if (_leftSkew_X_By_action) {
+      _leftSkew_X_By_cx_coupling->disable ();
+      _leftSkew_X_By_cy_coupling->disable ();
+      _leftSkew_X_By_da_coupling->disable ();
+    }
+    if (_rightSkew_Y_By_action) {
+      _rightSkew_Y_By_cx_coupling->disable ();
+      _rightSkew_Y_By_cy_coupling->disable ();
+      _rightSkew_Y_By_da_coupling->disable ();
+    }    
+    if (_leftSkew_Y_By_action) {
+      _leftSkew_Y_By_cx_coupling->disable ();
+      _leftSkew_Y_By_cy_coupling->disable ();
+      _leftSkew_Y_By_da_coupling->disable ();
     }
   }
 
@@ -1764,13 +2681,13 @@ namespace djnn
   void
   SimpleGradientTransform::draw ()
   {
-    // double m11 = _m11->get_value ();
-    // double m12 = _m12->get_value ();
-    // //double m13 = _m13->get_value ();
+    // double m11 = new_m11->get_value ();
+    // double m12 = new_m12->get_value ();
+    // //double m13 = new_m13->get_value ();
 
-    // double m21 = _m21->get_value ();
-    // double m22 = _m22->get_value ();
-    // //double m23 = _m23->get_value ();
+    // double m21 = new_m21->get_value ();
+    // double m22 = new_m22->get_value ();
+    // //double m23 = new_m23->get_value ();
 
     // double m31 = _m31->get_value ();
     // double m32 = _m32->get_value ();
