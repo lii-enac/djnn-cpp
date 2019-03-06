@@ -3,9 +3,11 @@ lib_srcs += $(shell find src/gui/cairo -name "*.cpp" -not -path "*gl*")
 cairo_backend ?= pixmap
 #cairo_backend ?= gl
 
+#/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/
+
 ifeq ($(cairo_backend),pixmap)
-lib_cppflags += -I. -I$(LOCALDIR)/include `pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
-lib_ldflags += `pkg-config --libs cairo pango pangocairo`
+lib_cppflags += -I. -I$(LOCALDIR)/include `env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
+lib_ldflags += `env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig pkg-config --libs cairo pango pangocairo`
 endif
 
 ifeq ($(cairo_backend),gl)
