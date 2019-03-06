@@ -168,12 +168,8 @@ namespace djnn
     delete _origin_y;
 
     // remove matrix and inverted_matrix if necessary
-    if (_matrix)
-      delete _matrix;
-
-    //it = _symtable.find ("inverted_matrix");
-    if (_inverted_matrix)
-      delete _inverted_matrix;
+    delete _matrix;
+    delete _inverted_matrix;
 
     // remove _ui if it exist
     // FIXME: try to not use find_component
