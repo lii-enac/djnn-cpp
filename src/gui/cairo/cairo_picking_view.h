@@ -34,9 +34,9 @@ namespace djnn
     // ColorPickingView
     virtual int get_pixel(int x, int y) override;
 
-    void set_data (unsigned char* data, int w, int h, int stride) { _cur_data = data; _w =w; _h = h; _stride = stride;}
+    void set_data (unsigned char* data, int w, int h, int stride) { _cur_data = data; _w =w; _h = h; _stride = stride; }
+
   private:
-    //Window * _win;
     unsigned char* _cur_data;
     int _w, _h, _stride;
   };
