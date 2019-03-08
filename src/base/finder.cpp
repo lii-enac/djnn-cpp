@@ -31,6 +31,8 @@ namespace djnn
     Finder* f = (Finder*) _parent;
     string path = f->_path->get_value ();
     string key = f->_key->get_value ();
+    if (key.empty())
+      return;
     Process *res;
     for (auto c : f->_container->children ()) {
       res = c->find_component (path);
