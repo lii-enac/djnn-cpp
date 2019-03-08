@@ -25,20 +25,23 @@ namespace djnn {
   {
   public:
     ColorPickingView (Window *win);
-    virtual
-    ~ColorPickingView ();
+    virtual ~ColorPickingView ();
+
+    // Picking
     virtual void init ();
-    unsigned int pick_color () { return _pick_color; }
     AbstractGShape* pick (double x, double y);
     void add_gobj (AbstractGShape* gobj);
     virtual int get_pixel(int x, int y) = 0;
+
+    // ColorPicking
+    unsigned int pick_color () { return _pick_color; }
 
   protected:
     unsigned int _pick_color;
     map<unsigned int, AbstractGShape*> _color_map;
 
-    double myrandom();
     int seed;
+    double myrandom();
     void next_color();
 
   };

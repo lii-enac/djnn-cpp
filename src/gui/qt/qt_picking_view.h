@@ -32,10 +32,14 @@ namespace djnn
   {
   public:
     QtPickingView (Window *win);
-    virtual
-    ~QtPickingView ();
-    virtual void init ();
-    virtual int get_pixel(int x, int y);
+    virtual ~QtPickingView ();
+
+    // Picking
+    virtual void init () override;
+    // ColorPickingView
+    virtual int get_pixel(int x, int y) override;
+
+    // QtPickingView
     QPainter* painter () { return _painter; }
     void display ();
   private:
