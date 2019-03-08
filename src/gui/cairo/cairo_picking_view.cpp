@@ -22,7 +22,7 @@ namespace djnn
 {
 
   CairoPickingView::CairoPickingView (Window *win) :
-      ColorPickingView (win), _w (0), _cur_data (0), _h (0), _win (win), _stride (0)
+      ColorPickingView (win), _w (0), _cur_data (0), _h (0), _stride (0)
   {
     assert(win);
   }
