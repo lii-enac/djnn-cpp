@@ -28,6 +28,15 @@ namespace djnn
   {
   }
 
+  void
+  ColorPickingView::init ()
+  {
+    _pick_color = 0xff000000;
+    seed = 0;
+    next_color();
+    if (!_color_map.empty ())
+      _color_map.clear ();
+  }
 
   double
   ColorPickingView::myrandom()
@@ -68,16 +77,6 @@ namespace djnn
       return it->second;
     }
     return nullptr;
-  }
-
-  void
-  ColorPickingView::init ()
-  {
-    _pick_color = 0xff000000;
-    seed = 0;
-    next_color();
-    if (!_color_map.empty ())
-      _color_map.clear ();
   }
 
 

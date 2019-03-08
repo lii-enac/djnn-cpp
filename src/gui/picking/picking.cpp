@@ -33,8 +33,6 @@ namespace djnn
   void
   Picking::init ()
   {
-    if (!_color_map.empty ())
-      _color_map.clear ();
   }
 
   void
