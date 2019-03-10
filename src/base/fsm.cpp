@@ -78,12 +78,6 @@ namespace djnn
   }
 
   void
-  FSMState::draw ()
-  {
-    Container::draw ();
-  }
-
-  void
   FSMState::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);

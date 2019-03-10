@@ -35,7 +35,6 @@ namespace djnn {
     void serialize (const string& type) override;
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
-    void draw () override;
     void add_transition (FSMTransition *t) { FSMTransition* pt = t; _transitions.push_front (pt); };
   private:
     list<FSMTransition*> _transitions;
