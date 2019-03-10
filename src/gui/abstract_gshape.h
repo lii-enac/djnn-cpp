@@ -49,6 +49,8 @@ namespace djnn
     bool has_ui () { return _has_ui; }
     Process* find_component (const string &n) override;
 
+    void pick () override;
+
   private:
     void init_mouse_ui ();
     Process* _matrix, *_inverted_matrix;

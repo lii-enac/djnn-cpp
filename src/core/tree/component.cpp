@@ -179,6 +179,7 @@ namespace djnn
   void
   Container::draw ()
   {
+    //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
     if (is_deactivation_requested ())
       return;
     ComponentObserver::instance ().start_draw ();
@@ -186,6 +187,20 @@ namespace djnn
       c->draw ();
     }
     ComponentObserver::instance ().end_draw ();
+  }
+
+  void
+  Container::pick ()
+  {
+    //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
+    if (is_deactivation_requested ()) {
+      return;
+    }
+    //ComponentObserver::instance ().start_pick ();
+    for (auto c : _children) {
+      c->pick ();
+    }
+    //ComponentObserver::instance ().end_pick ();
   }
 
   Process*

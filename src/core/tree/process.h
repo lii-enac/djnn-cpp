@@ -123,9 +123,10 @@ namespace djnn {
     string debug_info () { return _dbg_info; }
 
     // Actions
-    virtual void draw () {};
+    virtual void draw () {}
     virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
     virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+    virtual void pick() {}
 
   protected:
     virtual void pre_activate ();

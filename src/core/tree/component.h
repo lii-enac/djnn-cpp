@@ -33,6 +33,7 @@ namespace djnn {
     void remove_child (Process* c) override;
     void remove_child (const string& name) override;
     void draw () override;
+    void pick () override; 
     Process* clone () override;
     void activate () override;
     void deactivate () override;

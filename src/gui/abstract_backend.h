@@ -122,6 +122,11 @@ namespace djnn
     {
     }
 
+    virtual void
+    pick_gshape (AbstractGShape *s)
+    {
+    }
+
     /* style */
     virtual void
     load_fill_color (AbstractColor *c)

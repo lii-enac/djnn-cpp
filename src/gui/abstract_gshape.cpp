@@ -18,6 +18,8 @@
 #include "../core/tree/spike.h"
 #include "../core/tree/set.h"
 #include "window.h"
+#include "../backend.h"
+#include "../abstract_backend.h"
 
 namespace djnn
 {
@@ -206,6 +208,15 @@ namespace djnn
       delete move;
       delete release;
       delete press;
+    }
+  }
+
+  void
+  AbstractGShape::pick ()
+  {
+    //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
+    if (somehow_activating () && is_pickable(this) && Backend::instance ()->window () == _frame) {
+      Backend::instance ()->pick_gshape (this);
     }
   }
 
