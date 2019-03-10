@@ -40,7 +40,7 @@ class CairoGLSDLWindow : public SDLWindow
     SDL_GLContext sdl_context() { return _sdl_context; }
     // FIXME better name
     void end_redraw();
-    void update_hdpi();
+    void update_hdpi() override;
 
   	SDL_GLContext _sdl_context;
     MyCairoSurface *_my_cairo_surface;
