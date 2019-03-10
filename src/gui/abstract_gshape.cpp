@@ -18,8 +18,8 @@
 #include "../core/tree/spike.h"
 #include "../core/tree/set.h"
 #include "window.h"
-#include "../backend.h"
-#include "../abstract_backend.h"
+#include "backend.h"
+#include "abstract_backend.h"
 
 namespace djnn
 {
