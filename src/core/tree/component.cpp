@@ -297,7 +297,6 @@ namespace djnn
   void
   AssignmentSequence::post_activate ()
   {
-    //_activation_state = deactivated;
     set_deactivated();
   }
 
