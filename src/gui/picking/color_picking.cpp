@@ -34,7 +34,7 @@ namespace djnn
     _pick_color = 0xff000000;
     seed = 0;
     next_color();
-    if (!_color_map.empty ())
+    //if (!_color_map.empty ())
       _color_map.clear ();
   }
 
@@ -52,12 +52,13 @@ namespace djnn
     _pick_color++;
 #else
     // repeatable random, helpful for debugging
-    // //(maxed out to 200 to see color on white bg)
+    // (maxed out to 200 to see color on white bg)
     // (mined out to 100 to see color on black bg)
     int r = 100+myrandom()*155;
     int g = 100+myrandom()*155;
     int b = 100+myrandom()*155;
     _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
+    //std::cerr << hex << _pick_color << dec << std::endl;
 #endif
   }
 
