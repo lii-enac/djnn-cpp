@@ -108,8 +108,10 @@ CXXFLAGS := \
 $(CXXFLAGS)
 
 CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
-
 endif
+
+CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 \
+-DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 
 ifeq ($(cross_prefix),em)
 EMFLAGS := -Wall -Oz -s WASM=0 -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
@@ -155,6 +157,7 @@ LDFLAGS = $(EMFLAGS)
 
 endif
 
+<<<<<<< HEAD
 	
 ifeq ($(findstring android,$(cross_prefix)),android)
 CXXFLAGS := \
@@ -169,6 +172,8 @@ endif
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 \
 -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+=======
+>>>>>>> 427e1b1e... Makefile - clean up
 
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
