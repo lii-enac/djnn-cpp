@@ -51,6 +51,7 @@ namespace djnn {
     void activate () override;
     void deactivate () override;
     void draw () override;
+    void pick () override;
     virtual ~Switch ();
     void serialize (const string& type) override;
   private:

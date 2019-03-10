@@ -320,6 +320,15 @@ namespace djnn
   }
 
   void
+  FSM::pick ()
+  {
+    if (is_deactivation_requested ())
+      return;
+    if (_cur_state != nullptr)
+      _cur_state->pick ();
+  }
+
+  void
   FSM::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);

@@ -92,6 +92,15 @@ namespace djnn
   }
 
   void
+  Switch::pick ()
+  {
+    if (is_deactivation_requested ())
+      return;
+    if (_cur_branch != nullptr)
+      _cur_branch->pick ();
+  }
+
+  void
   Switch::change_branch ()
   {
     string key = _branch_name->get_value ();
