@@ -25,11 +25,11 @@
 
 #include <assert.h>
 
-unsigned int get_next_picking_color(djnn::GLSDLWindow* w)
-{
-  return dynamic_cast<djnn::ColorPickingView*>(w->picking_view())->pick_color();
-  //return 0;
-}
+// unsigned int get_next_picking_color(djnn::GLSDLWindow* w)
+// {
+//   return dynamic_cast<djnn::ColorPickingView*>(w->picking_view())->pick_color();
+//   //return 0;
+// }
 
 namespace djnn
 {
