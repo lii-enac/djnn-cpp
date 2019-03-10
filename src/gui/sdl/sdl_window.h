@@ -49,6 +49,7 @@ namespace djnn {
   protected:
     virtual void handle_resized(int w, int h);
     virtual void redraw ();
+    virtual void update_hdpi() {}
 
     djnn::Window* _window;
     SDL_Window *_sdl_window;

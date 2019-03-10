@@ -135,6 +135,7 @@ namespace djnn
           int y = e.window.data2;
           _window->pos_x ()->set_value (x, true);
           _window->pos_y ()->set_value (y, true);
+          update_hdpi(); 
           break;
         }
         case SDL_WINDOWEVENT_SIZE_CHANGED: {
@@ -145,6 +146,7 @@ namespace djnn
           _window->width ()->set_value (width, true);
           _window->height ()->set_value (height, true);
           handle_resized(width,height);
+          update_hdpi(); 
           redraw ();
 
           break;
