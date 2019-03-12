@@ -40,7 +40,11 @@ namespace djnn {
 
 	class ExternalSource::Impl {
 	public:
-    	djnn_thread_t _thread;
+        #if DJNN_USE_QTHREAD
+        djnn_thread_t * _thread;
+        #else
+        djnn_thread_t _thread;
+        #endif
 	};
 
 	ExternalSource::ExternalSource ()

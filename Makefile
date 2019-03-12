@@ -43,11 +43,8 @@ endif
 
 # cross-compile support
 ifndef cross_prefix
-cross_prefix := llvm-g
-
-ifeq ($(os),Linux)
 cross_prefix := g
-endif
+#cross_prefix := llvm-g
 #cross_prefix := arm-none-eabi-
 #cross_prefix := /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #cross_prefix := em
@@ -95,7 +92,7 @@ endif
 ifeq ($(os),$(osmingw))
 lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-dynlib =-shared
+DYNLIB =-shared
 CFLAGS ?= -fpic -g -MMD -Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
@@ -110,8 +107,13 @@ $(CXXFLAGS)
 CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
 endif
 
-CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14 \
--DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
+
+ifeq ($(os),$(osmingw))
+CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+else
+CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+endif
 
 ifeq ($(cross_prefix),em)
 EMFLAGS := -Wall -Oz -s WASM=0 -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \

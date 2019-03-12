@@ -74,7 +74,8 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_QTHREAD
-      auto * th = QThread::create([this]() { this->ExternalSource::run(); });
+      //auto * th = QThread::create([this]() { this->ExternalSource::run(); });
+      auto * th = QThread::create([this]() { this->MainLoop::run(); });
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
       th->start();
       #endif
