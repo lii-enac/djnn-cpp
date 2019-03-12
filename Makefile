@@ -366,7 +366,7 @@ ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
-#pkgdeps += freetype SDL2
+#pkgdeps += freetype SDL2 cairo
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S
 endif
