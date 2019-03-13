@@ -1,7 +1,7 @@
 #	djnn cpp
 #
 #	The copyright holders for the contents of this file are:
-#		Ecole Nationale de l'Aviation Civile, France (2017-2018)
+#		Ecole Nationale de l'Aviation Civile, France (2017-2019)
 #	See file "license.terms" for the rights and conditions
 #	defined by copyright holders.
 #
@@ -11,6 +11,9 @@
 #		Stéphane Conversy <stephane.conversy@enac.fr>
 #		Mathieu Poirier	  <mathieu.poirier@enac.fr>
 
+# remove builtin rules: speed up build process and help debug
+MAKEFLAGS += --no-builtin-rules
+.SUFFIXES:
 
 default: all
 .PHONY: default
@@ -22,7 +25,6 @@ help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
 
-
 config.mk:
 	cp config.default.mk config.mk
 
@@ -30,19 +32,8 @@ include config.default.mk
 -include config.mk
 
 src_dir ?= src
-build_dir ?= build_dir
+build_dir ?= build
 graphics ?= QT
-
-# remove builtin rules: speed up build process and help debug
-MAKEFLAGS += --no-builtin-rules
-.SUFFIXES:
-
-ifndef os
-os := $(shell uname -s)
-endif
-ifndef arch
-arch := $(shell uname -m)
-endif
 
 # cross-compile support
 ifndef cross_prefix
@@ -72,7 +63,6 @@ osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
 
-
 GPERF ?= gperf
 
 thread ?= BOOST
@@ -80,9 +70,11 @@ thread ?= BOOST
 chrono ?= BOOST
 # QT FIBER STD
 
+
 ifeq ($(os),Linux)
 lib_suffix=.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
+#-lboost_fiber-mt -lboost_context-mt
 DYNLIB=-shared
 CFLAGS ?= -fpic -g -MMD -O0 -Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
@@ -112,13 +104,10 @@ CXXFLAGS := \
 -DSDL_DISABLE_IMMINTRIN_H \
 $(CXXFLAGS)
 
-CFLAGS := $(CFLAGS) -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
+CFLAGS += -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
+CXXFLAGS += -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
 endif
 
-CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
-
-ifeq ($(os),$(osmingw))
-CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 ifeq ($(graphics),QT)
 #ifeq ($(os),$(osmingw))
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
@@ -127,12 +116,21 @@ else
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 endif
 
-ifeq ($(cross_prefix),em)
-EMFLAGS := -Wall -Oz -s WASM=0 -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
--s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
--s TOTAL_MEMORY=1GB
+CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
 
-#-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
+ifeq ($(cross_prefix),em)
+# compiles but does not work yet since SDL and threads are not compatible in emscripten
+# see: https://github.com/emscripten-core/emscripten/issues/6009
+# it's being worked on though
+# see: https://github.com/emscripten-ports/SDL2/pull/77
+
+
+EMFLAGS := -Wall -Oz -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
+-s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
+-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
+-DSDL_DISABLE_IMMINTRIN_H
+
+#-s WASM=0 
 #TOTAL_MEMORY?
 #-s ALLOW_MEMORY_GROWTH=1 
 #-s WASM=1 
@@ -145,11 +143,15 @@ lib_suffix=.bc
 #	../boost_1_68_0/bin.v2/libs/system/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/libboost_system.bc \
 #	../boost_1_68_0/bin.v2/libs/thread/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/threadapi-pthread/threading-multi/libboost_thread.bc
 
-CFLAGS += $(EMFLAGS) \
+EMCFLAGS += $(EMFLAGS) \
 	-I../ext-libs/libexpat/expat/lib \
 	-I../ext-libs/curl/include \
 	-I../ext-libs/boost_1_68_0 \
+	-I../ext-libs/fontconfig \
 	-I/usr/local/include #glm
+CFLAGS += $(EMCFLAGS)
+CXXFLAGS += $(EMCFLAGS)
+
 os := em
 
 LDFLAGS = $(EMFLAGS)
@@ -171,6 +173,10 @@ LDFLAGS = $(EMFLAGS)
 endif
 
 
+#ifeq ($(os),win64)
+#CXXFLAGS += -I$(src_dir)/core/ext/mingw-std-threads
+#endif
+#LDFLAGS ?= -l$(boost_thread) -lboost_chrono -lboost_system -L$(build_dir)
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
@@ -178,10 +184,14 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
+djnn_libs := core base comms display gui input animation
 ifeq ($(os),$(osmingw))
 djnn_libs := core base display gui animation # comms input
-else
-djnn_libs := core base comms display gui input animation
+endif
+ifeq ($(findstring avr,$(cross_prefix)),avr)
+djnn_libs := core base
+CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include
+#https://github.com/andysworkshop/avr-stl/releases
 endif
 
 srcs :=
@@ -227,6 +237,7 @@ $1_lib_all_ldflags := $$($1_lib_ldflags)
 ifeq ($(os),$(filter $(os),Darwin MINGW64_NT-10.0))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
+#$1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix -ldjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
 endif
 endif
@@ -273,6 +284,17 @@ libs += $$($1_lib)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
+
+djnn_libs := core base comms display gui input animation
+
+ifeq ($(cross_prefix),em)
+djnn_libs := core base display gui animation
+# comms input
+endif
+ifeq ($(os),MINGW64_NT-10.0)
+djnn_libs := core base display gui animation
+# comms input
+endif
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
@@ -354,22 +376,25 @@ distclean clear:
 .PHONY: distclean clear
 
 dbg:
-	@echo $(os)
+	@echo $(gui_lib_cppflags)
 .PHONY: dbg
 
 ifeq ($(os),Linux)
 #https://brew.sh/
-pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev
-pkgdeps += qt5-default
-#pkgdeps += freetype sdl2
+pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
+pkgdeps += qt5-default 
+pkgdeps += libfreetype6-dev libsdl2-dev libglm-dev
+pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
+#pkgdeps += libraspberrypi-dev
 pkgcmd := apt install -y
 endif
 
 ifeq ($(os),Darwin)
 #https://brew.sh/
 pkgdeps := expat curl boost
-pkgdeps += expat qt5
-#pkgdeps += freetype sdl2
+pkgdeps += qt5
+pkgdeps += cairo pango
+pkgdeps += sdl2
 pkgcmd := brew install
 endif
 
@@ -377,9 +402,9 @@ ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
-#pkgdeps += freetype SDL2 cairo pango
+pkgdeps += freetype SDL2 cairo pango fontconfig
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
-pkgcmd := pacman -S
+pkgcmd := pacman -S --needed
 endif
 
 install-pkgdeps:
