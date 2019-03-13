@@ -29,7 +29,7 @@ typedef std::thread djnn_mutex_t;
 #include <pthread.h>
 #endif
 
-#if DJNN_USE_QTHREAD
+#if DJNN_USE_QT_THREAD
 #include <QMutex>
 typedef QMutex djnn_mutex_t;
 #endif
@@ -40,7 +40,7 @@ namespace djnn {
 
 	class ExternalSource::Impl {
 	public:
-        #if DJNN_USE_QTHREAD
+        #if DJNN_USE_QT_THREAD
         djnn_thread_t * _thread;
         #else
         djnn_thread_t _thread;
@@ -104,7 +104,7 @@ namespace djnn {
     	djnn_thread_t (&ExternalSource::private_run, this);
         #endif
 
-        #if DJNN_USE_QTHREAD
+        #if DJNN_USE_QT_THREAD
         //QThread (
         QThread::create([this]() { this->ExternalSource::private_run(); })
         //)

@@ -55,21 +55,31 @@ cross_prefix := g
 #cross_prefix := /usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
 endif
 
+CC := $(cross_prefix)cc
+CXX := $(cross_prefix)++
+
+
+src_dir ?= src
+
+ifndef os
+os := $(shell uname -s)
+endif
+ifndef arch
+arch := $(shell uname -m)
+endif
+
 osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
 
-src_dir := src
-
 graphics ?= QT
-CC := $(cross_prefix)cc
-CXX := $(cross_prefix)++
+
 GPERF ?= gperf
 
 thread ?= BOOST
-# FIBER STD
+# QT FIBER STD
 chrono ?= BOOST
-# FIBER STD
+# QT FIBER STD
 
 
 ifeq ($(os),Linux)

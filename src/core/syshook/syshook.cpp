@@ -32,7 +32,7 @@ typedef std::thread djnn_mutex_t;
 #include <pthread.h>
 #endif
 
-#if DJNN_USE_QTHREAD
+#if DJNN_USE_QT_THREAD
 #include <QMutex>
 typedef QMutex djnn_mutex_t;
 #endif
