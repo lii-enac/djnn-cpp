@@ -23,12 +23,15 @@ help:
 	@echo "experiment make -j !!"
 
 
-
 config.mk:
 	cp config.default.mk config.mk
 
 include config.default.mk
 -include config.mk
+
+src_dir ?= src
+build_dir ?= build_dir
+graphics ?= QT
 
 # remove builtin rules: speed up build process and help debug
 MAKEFLAGS += --no-builtin-rules
@@ -58,9 +61,6 @@ endif
 CC := $(cross_prefix)cc
 CXX := $(cross_prefix)++
 
-
-src_dir ?= src
-
 ifndef os
 os := $(shell uname -s)
 endif
@@ -72,7 +72,6 @@ osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
 
-graphics ?= QT
 
 GPERF ?= gperf
 
@@ -80,7 +79,6 @@ thread ?= BOOST
 # QT FIBER STD
 chrono ?= BOOST
 # QT FIBER STD
-
 
 ifeq ($(os),Linux)
 lib_suffix=.so
@@ -121,6 +119,10 @@ CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
 
 ifeq ($(os),$(osmingw))
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+ifeq ($(graphics),QT)
+#ifeq ($(os),$(osmingw))
+CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+#endif
 else
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 endif
@@ -131,7 +133,6 @@ EMFLAGS := -Wall -Oz -s WASM=0 -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
 -s TOTAL_MEMORY=1GB
 
 #-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
-
 #TOTAL_MEMORY?
 #-s ALLOW_MEMORY_GROWTH=1 
 #-s WASM=1 
@@ -376,7 +377,7 @@ ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
-#pkgdeps += freetype SDL2 cairo
+#pkgdeps += freetype SDL2 cairo pango
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S
 endif
