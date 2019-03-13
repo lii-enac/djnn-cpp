@@ -28,7 +28,7 @@ pacman -S git make
 ```
 launch a mingw64 terminal (and NOT MSYS2) then:  
 ```
-git clone https://github.com/lii-enac/djnn-cpp.git  
+git clone -c core.symlinks=true https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
 make -j  
