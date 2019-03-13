@@ -112,7 +112,7 @@ namespace djnn
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
     djnn::get_exclusive_access (DBG_GET);
-
+    bool exec_ = false;
     switch (event->type ())
       {
       case QEvent::TouchBegin:
@@ -120,11 +120,11 @@ namespace djnn
       case QEvent::TouchEnd:
         {
           QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
-          bool exec_ = false;
-          for (auto touchPoint : touchPoints) {
-            int id = touchPoint.id ();
-            double x = touchPoint.pos ().x ();
-            double y = touchPoint.pos ().y ();
+          
+          for (const auto & touchPoint : touchPoints) {
+            const int &id = touchPoint.id ();
+            const double &x = touchPoint.pos ().x ();
+            const double &y = touchPoint.pos ().y ();
             switch (touchPoint.state ())
               {
               case Qt::TouchPointStationary:
@@ -160,7 +160,7 @@ namespace djnn
         case QEvent::Wheel:
         case QEvent::Close:
         case QEvent::Paint:
-          QWidget::event (event);
+          exec_ = QWidget::event (event);
           break;
 
       default:
@@ -171,7 +171,8 @@ namespace djnn
         }
       }
     djnn::release_exclusive_access (DBG_REL);
-    return true;
+    //if(exec_) event->accept();
+    return exec_;
   }
 
   void
