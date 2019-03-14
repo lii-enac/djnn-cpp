@@ -160,6 +160,21 @@ namespace djnn
       }
       return found;
     }
+
+    /* special case find from root - using find_component ("//johndoe") */
+    //FIXME: improved with c++20 if (key.starts_with("//")
+    if (key.length () > 2 && key[0] == '/' && key[1] == '/') {
+        Process* current_cpnt = this;
+        Process* current_parent = current_cpnt->_parent;
+        while (current_parent != nullptr) {
+          current_cpnt = current_parent;
+          current_parent = current_cpnt->_parent;
+        }
+        //DEBUG
+        //cout << "root found: " << current_cpnt->_name << endl;
+        return current_cpnt->find_component (key.substr(2));
+      }
+
     size_t found = key.find_first_of ('/');
     if (found != string::npos) {
       string newKey = key.substr (0, found);
