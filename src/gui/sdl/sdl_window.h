@@ -46,12 +46,12 @@ namespace djnn {
       user_event_awake
     };
 
-  protected:
     virtual void handle_resized(int w, int h);
     virtual void update_hdpi();
     virtual void redraw ();
-    virtual void update_hdpi() {}
-
+    
+  protected:
+    
     djnn::Window* _window;
     SDL_Window *_sdl_window;
     bool is_activated;

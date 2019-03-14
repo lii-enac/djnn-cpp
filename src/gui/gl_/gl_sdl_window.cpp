@@ -38,7 +38,8 @@ namespace djnn {
   void
   GLSDLWindow::handle_resized(int w, int h)
   {
-
+    SDLWindow::handle_resized(w,h);
+    redraw();
   }
 
   void

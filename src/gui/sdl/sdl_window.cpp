@@ -44,8 +44,12 @@ namespace djnn
     if (event->type == SDL_WINDOWEVENT &&
         event->window.event == SDL_WINDOWEVENT_RESIZED) {
       SDL_Window* win = SDL_GetWindowFromID(event->window.windowID);
-      if (win == ((SDLWindow*)data)->sdl_window()) {
-        printf("resizing.....\n");
+      SDLWindow * djnnwin = (SDLWindow*)data;
+      if (win == djnnwin->sdl_window()) {
+        //printf("resizing.....\n");
+        int w,h;
+        SDL_GetWindowSize(win, &w,&h);
+        djnnwin->handle_resized(w,h);
       }
     }
     return 0;
@@ -64,6 +68,9 @@ namespace djnn
   void
   SDLWindow::handle_resized(int w, int h)
   {
+    _window->width()->set_value(w, true);
+    _window->height()->set_value(h, true);
+    //redraw(); // delegated to inheriting *SDLWindows
   }
 
   void
@@ -152,12 +159,12 @@ namespace djnn
           int width = e.window.data1;
           int height = e.window.data2;
           if (width == _window->width ()->get_value () && height == _window->height ()->get_value())
-          return;
-          _window->width ()->set_value (width, true);
-          _window->height ()->set_value (height, true);
-          handle_resized(width,height);
+            return;
+          //_window->width ()->set_value (width, true);
+          //_window->height ()->set_value (height, true);
           update_hdpi(); 
-          redraw ();
+          handle_resized(width,height);
+          //redraw ();
 
           break;
         }

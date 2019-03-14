@@ -19,34 +19,30 @@
 
 namespace djnn {
 
+class GLSDLPickingView;
+
 class GLSDLWindow : public SDLWindow
 {
   public:
     GLSDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
     virtual ~GLSDLWindow ();
 
-    void update () override;
+   // SDLWindow API
+    virtual void handle_resized(int w, int h) override;
+    virtual void update_hdpi() override;
     virtual void redraw () override;
 
+    void end_redraw(); // useless?
+    void update () override;
   protected:
-    // Process
+    // Process API
     void activate () override;
     void deactivate () override;
 
-    // SDLWindow
-    virtual void handle_resized(int w, int h) override;
-
     SDL_GLContext sdl_context() { return _sdl_context; }
-    // FIXME better name
-    void end_redraw();
-    void update_hdpi();
-
-  	SDL_GLContext _sdl_context;
-    //SDL_Surface * _sdl_surface;
     
-    //SDL_Texture * _sdl_texture;
-    //SDL_Surface * _sdl_surface_picking;
-    //SDLPickingView * _picking_view;
+  	SDL_GLContext _sdl_context;
+    GLSDLPickingView * _picking_view;
 
     int _refresh_rate;
 };
