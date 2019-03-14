@@ -62,9 +62,19 @@ namespace djnn
   }
 
   void
-  SDLWindow::handle_resized(int w, int h) {}
+  SDLWindow::handle_resized(int w, int h)
+  {
+  }
+
   void
-  SDLWindow::redraw () {}
+  SDLWindow::update_hdpi()
+  {
+  }
+
+  void
+  SDLWindow::redraw ()
+  {
+  }
 
   
 

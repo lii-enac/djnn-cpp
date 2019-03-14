@@ -48,6 +48,7 @@ namespace djnn {
 
   protected:
     virtual void handle_resized(int w, int h);
+    virtual void update_hdpi();
     virtual void redraw ();
     virtual void update_hdpi() {}
 
