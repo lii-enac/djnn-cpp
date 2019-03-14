@@ -140,8 +140,26 @@ namespace djnn
   Process*
   Process::find_component (const string& key)
   {
+    //DEBUG
+    //cout << "key: " << key << endl;
+
     if (key.length () == 0)
       return this;
+
+    /* special case find '*' */ 
+    if (key[0] == '*') {
+      Process* found = find_component (key.substr(2)); // without "/*""
+      if (!found) {
+        /* we iterate in depth on each child and stop on the first 'key' found*/
+        auto it = _symtable.begin ();
+        while ( it != _symtable.end ()) {
+          found = it->second->find_component (key); // with "/*""
+          if (found) return found;
+          ++it;
+        }
+      }
+      return found;
+    }
     size_t found = key.find_first_of ('/');
     if (found != string::npos) {
       string newKey = key.substr (0, found);
