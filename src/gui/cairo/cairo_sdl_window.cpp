@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/select.h>
+//#include <sys/select.h>
 
 #include <iostream>
 
@@ -49,11 +49,8 @@ namespace djnn
 
   CairoSDLWindow::CairoSDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
   SDLWindow(win, title, x,y,w,h),
-      //_window (win), _sdl_window (nullptr),
-      _sdl_renderer (nullptr), _sdl_texture (nullptr), _sdl_surface (nullptr), _my_cairo_surface (nullptr)
-      //is_activated (false)
+      _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _picking_data (nullptr), _my_cairo_surface (nullptr)
   {
-
     _picking_view = new CairoPickingView (win);
     WinImpl::set_picking_view (_picking_view);
 
@@ -79,23 +76,39 @@ namespace djnn
     if (_sdl_texture) SDL_DestroyTexture (_sdl_texture);
     _sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
     _sdl_texture = SDL_CreateTexture (_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+
+    delete _picking_data;
+    int stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+    _picking_data = new unsigned char[stride*height];
+
 #if PICKING_DBG
     if (_pick_sdl_surface) SDL_FreeSurface (_pick_sdl_surface);
     if (_pick_sdl_texture) SDL_DestroyTexture (_pick_sdl_texture);
     _pick_sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
     _pick_sdl_texture = SDL_CreateTexture (_pick_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
 #endif
+    
     redraw();
   }
 
   void
   CairoSDLWindow::activate ()
   {
-    int w = (int) (_window->width ()->get_value ());
-    int h = (int) (_window->height ()->get_value ());
-    _sdl_window = SDL_CreateWindow (_window->title ()->get_value ().c_str (), (int) (_window->pos_x ()->get_value ()),
-                                    (int) (_window->pos_y ()->get_value ()), w, h,
-                                    SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
+    double x, y, w, h;
+    x = _window->pos_x ()->get_value ();
+    y = _window->pos_y ()->get_value ();
+    w = _window->width ()->get_value ();
+    h = _window->height ()->get_value ();
+    const std::string &title = _window->title ()->get_value ();
+
+    //int w = (int) (_window->width ()->get_value ());
+    //int h = (int) (_window->height ()->get_value ());
+
+    if(x<=0) x = SDL_WINDOWPOS_UNDEFINED;
+    if(y<=0) y = SDL_WINDOWPOS_UNDEFINED;
+
+    _sdl_window = SDL_CreateWindow (title.c_str (), x, y, w, h,
+                                    SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
     if (_sdl_window == NULL) {
       std::cerr << "Window could not be created! SDL_Error:" << SDL_GetError () << std::endl;
       return;
@@ -105,14 +118,19 @@ namespace djnn
     _my_cairo_surface = new MyCairoSurface (_window);
     _sdl_texture = SDL_CreateTexture (_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, w, h);
 
+    //delete _picking_data;
+    int stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, w);
+    _picking_data = new unsigned char[stride*((int)h)];
+
 #if PICKING_DBG
-    _pick_sdl_window = SDL_CreateWindow ("pick", (int) (_window->pos_x ()->get_value () + w),
-                                        (int) (_window->pos_y ()->get_value ()), w, h,
-                                        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    _pick_sdl_window = SDL_CreateWindow ("pick", (int) (x + w),
+                                        (int) (y), w, h,
+                                        SDL_WINDOW_RESIZABLE);
     _pick_sdl_surface = SDL_CreateRGBSurface (0, w, h, 32, 0, 0, 0, 0);
     _pick_sdl_renderer = SDL_CreateRenderer (_pick_sdl_window, -1, SDL_RENDERER_TARGETTEXTURE);
     _pick_sdl_texture = SDL_CreateTexture (_pick_sdl_renderer, SDL_PIXELFORMAT_ARGB32, SDL_TEXTUREACCESS_STREAMING, w, h);
 #endif
+
     SDLMainloop::instance ().add_window (this);
     is_activated = true;
   }
@@ -131,6 +149,8 @@ namespace djnn
     _my_cairo_surface = nullptr;
     _sdl_surface = nullptr;
     _sdl_window = nullptr;
+    delete _picking_data;
+    _picking_data = nullptr;
     is_activated = false;
   }
 
@@ -151,7 +171,9 @@ namespace djnn
     _picking_view->init ();
     drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
                                                            _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
-    picking_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, _sdl_surface->w, _sdl_surface->h);
+
+    picking_surface = cairo_image_surface_create_for_data ((unsigned char*) _picking_data, CAIRO_FORMAT_ARGB32,
+                                                           _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
 
     _my_cairo_surface->update (drawing_surface, picking_surface);
 
@@ -172,6 +194,7 @@ namespace djnn
 #endif
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
+
     #if _PERF_TEST
       // print in RED
       cerr << "\033[1;31m";

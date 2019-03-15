@@ -42,6 +42,7 @@ namespace djnn {
     SDL_Surface * _sdl_surface;
     SDL_Renderer *_sdl_renderer;
     SDL_Texture *_sdl_texture;
+    unsigned char * _picking_data;
     MyCairoSurface *_my_cairo_surface;
     CairoPickingView *_picking_view;
     
