@@ -112,6 +112,10 @@ ifeq ($(graphics),QT)
 #ifeq ($(os),$(osmingw))
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 #endif
+else ifneq (,$(filter $(graphics),CAIRO GL))
+#ifeq ($(os),$(osmingw))
+CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+#endif
 else
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 endif

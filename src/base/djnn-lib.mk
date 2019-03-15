@@ -4,3 +4,7 @@ lib_srcs := $(shell find src/base -name "*.cpp")
 ifeq ($(graphics),QT)
 include src/gui/qt/djnn-lib-flags.mk
 endif
+
+ifneq (,$(filter $(graphics),CAIRO GL))
+include src/gui/sdl/djnn-lib-flags.mk
+endif

@@ -92,12 +92,21 @@ namespace djnn {
         //DBG;
         //own_mutex.lock (); // 1st lock: success
         //own_mutex.lock (); // 2nd lock: blocks forever
+        #if DJNN_USE_SDL_THREAD
+        while (1) SDL_Delay(20000);
+        #else
         while (1) this_thread::sleep_for(chrono::seconds(20000));
+        #endif
       } else {
         //DBG;
         //std::
         //boost::
-        this_thread::sleep_for (chrono::milliseconds(_duration));
+        #if DJNN_USE_SDL_THREAD
+        SDL_Delay(20000);
+        #else
+        this_thread::sleep_for (_duration);
+        #endif
+        
         //DBG;
       }
       if (_another_source_wants_to_be_mainloop)

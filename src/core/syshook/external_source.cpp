@@ -1,6 +1,7 @@
 #include "external_source.h"
 
 #include "cpp-thread.h"
+#include "cpp-mutex.h"
 
 
 //#include <atomic>
@@ -14,6 +15,7 @@
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
+#if 0
 
 #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
 #include <boost/thread/mutex.hpp>
@@ -33,14 +35,14 @@ typedef std::thread djnn_mutex_t;
 #include <QMutex>
 typedef QMutex djnn_mutex_t;
 #endif
-
+#endif
 
 namespace djnn {
 
 
 	class ExternalSource::Impl {
 	public:
-        #if DJNN_USE_QT_THREAD
+        #if DJNN_THREAD_IS_POINTER
         djnn_thread_t * _thread;
         #else
         djnn_thread_t _thread;
@@ -50,7 +52,7 @@ namespace djnn {
 	ExternalSource::ExternalSource ()
     : _impl(new ExternalSource::Impl), _please_stop (false)
     {
-        #if DJNN_USE_QTHREAD
+        #if DJNN_THREAD_IS_POINTER
         _impl->_thread = nullptr;
         #endif
     }
@@ -62,16 +64,36 @@ namespace djnn {
     }
 
 
-    static djnn_mutex_t launch_mutex;
+    static djnn_mutex_t * launch_mutex;
+
+    void
+    ExternalSource::init()
+    {
+        #if DJNN_USE_SDL_THREAD
+        launch_mutex = SDL_CreateMutex();
+        #else
+        launch_mutex = new djnn_mutex_t();
+        #endif
+    }
+
     void
     ExternalSource::launch_mutex_lock()
     {
-        launch_mutex.lock();
+        #if DJNN_USE_SDL_THREAD
+        SDL_LockMutex(launch_mutex);
+        #else
+        launch_mutex->lock();
+        #endif
     }
     void
     ExternalSource::launch_mutex_unlock()
     {
-        launch_mutex.unlock();
+
+        #if DJNN_USE_SDL_THREAD
+        SDL_UnlockMutex(launch_mutex);
+        #else
+        launch_mutex->unlock();
+        #endif
     }
 
 	void
@@ -90,6 +112,15 @@ namespace djnn {
         #endif
         
 	}
+
+    #if DJNN_USE_SDL_THREAD
+    static int SDL_TreadFunction(void* data)
+    {
+        ExternalSource * es = (ExternalSource*) data;
+        es->private_run ();
+        return 0;
+    }
+    #endif
 
 	void
 	ExternalSource::start_thread ()
@@ -111,6 +142,11 @@ namespace djnn {
         ;
         QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
         _impl->_thread->start();
+        #endif
+
+        #if DJNN_USE_SDL_THREAD
+        //SDL_CreateThread(this->ExternalSource::private_run(), "djnn thread", this);
+        SDL_CreateThread(SDL_TreadFunction, "djnn thread", this);
         #endif
 
 
@@ -201,8 +237,8 @@ static const char* th_err(int errmsg)
         //set_thread_priority();
         //std::cerr << "run " << name << std::endl; 
         //DBG;
-        launch_mutex.lock();
-        launch_mutex.unlock();
+        launch_mutex_lock();
+        launch_mutex_unlock();
 		run();
 	}
 	

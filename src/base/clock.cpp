@@ -102,7 +102,14 @@ namespace djnn
         //std::cerr << this << "  >> sleep " << duration.count() << std::endl;
         //std
         get_monotonic_time(&before);
-        this_thread::sleep_for (chrono::milliseconds(duration)); // blocking call
+        //this_thread::sleep_for (chrono::milliseconds(duration)); // blocking call
+
+        #if DJNN_USE_SDL_THREAD
+        SDL_Delay(_period->get_value ()); // blocking call
+        #else
+        this_thread::sleep_for (duration); // blocking call
+        #endif
+
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         //std::cerr << this << "  ** sleep GOT" << std::endl;

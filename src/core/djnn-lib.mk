@@ -14,7 +14,21 @@ ifeq ($(os),$(filter $(os),Darwin Linux))
 lib_srcs += src/core/syshook/unix/iofd.cpp
 endif
 
+# library-specific thread support
 ifeq ($(graphics),QT)
 include src/gui/qt/djnn-lib-flags.mk
 endif
 
+#ifeq ($(graphics),CAIRO)
+ifneq (,$(filter $(graphics),CAIRO GL))
+include src/gui/sdl/djnn-lib-flags.mk
+endif
+
+src/core/djnn-srcs.mk:
+	srcs=""
+	srcs+=`find src/core -name "*.cpp"`
+	echo $$srcs
+	echo `find src/core -name "*.cpp"`
+	echo lib_srcs := $$srcs > $@
+
+.PHONY: src/core/djnn-srcs.mk

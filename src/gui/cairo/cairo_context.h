@@ -18,6 +18,8 @@
 #include "../style/style_types.h"
 #include "../../core/execution/component_observer.h"
 
+#include <cairo/cairo.h>
+#include <pango/pango.h>
 
 namespace djnn
 {

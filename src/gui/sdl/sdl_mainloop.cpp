@@ -132,16 +132,20 @@ namespace djnn {
       while (!get_please_stop ()) {
         SDL_Event e;
         _wakeup_already_triggered=false;
+        //std::cerr << ">> SDL_WaitEvent " << __FL__;
         SDL_WaitEvent (&e); // blocking call
+        //SDL_PollEvent (&e); // non-blocking call
+       // std::cerr << "<< SDL_WaitEvent " << __FL__;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         __Event e_ (e); // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
 
-  #if 1 // slightly more efficient loop: handle all events in the queue
+  #if 0 
+        // slightly more efficient loop: handle all events in the queue
         if (!get_please_stop ()) { handle_event (e_); }
         const unsigned int max_events = 10;
         SDL_Event es[max_events];
         int pending = SDL_PeepEvents (es, max_events, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
-        //std::cerr << "pending events: " << pending << __FL__;
+        std::cerr << "   pending events: " << pending << " " << __FL__;
         if (pending && !get_please_stop ()) {
              SDL_Event &e = es[max_events-pending];
              bool redraw_awake=false;
@@ -166,9 +170,11 @@ namespace djnn {
           //djnn::release_exclusive_access (DBG_REL);
           //this_thread::yield();
         }
-  #else // simple loop: handle one event at a time, might be costly to acquire mutex each time
+  #else 
+        // simple loop: handle one event at a time, might be costly to acquire mutex each time
         if (!get_please_stop ()) handle_event (e_);
   #endif
+        //std::cerr << std::endl;
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
   #endif

@@ -83,7 +83,12 @@ namespace djnn
     //DBG;
     try {
         chrono::milliseconds duration (_delay->get_value ());
+        //this_thread::sleep_for (duration); // blocking call
+        #if DJNN_USE_SDL_THREAD
+        SDL_Delay(_delay->get_value ()); // blocking call
+        #else
         this_thread::sleep_for (duration); // blocking call
+        #endif
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           //_activation_state = deactivated;

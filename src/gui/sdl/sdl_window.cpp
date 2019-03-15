@@ -128,6 +128,7 @@ namespace djnn
       //std::cerr << "SDL awake" << __FL__;
       static Uint32 lastTick=0;
       Uint32 tick = SDL_GetTicks();
+      float _refresh_rate=120.f;
       if(tick - lastTick > 1000/_refresh_rate) {
         lastTick = tick;
         redraw();

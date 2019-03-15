@@ -79,6 +79,8 @@ namespace djnn
     virtual void please_stop (); //{ _please_stop = true; _thread.interrupt(); }
     //virtual void activate_from_mainloop () {}
 
+        void private_run();
+
   protected:
     //virtual void set_please_stop (bool v) { _please_stop.store (v); }
     //virtual bool get_please_stop () const { return _please_stop.load (); }
@@ -91,6 +93,8 @@ namespace djnn
     virtual void start_thread();
     virtual void run() = 0;
     friend class MainLoop;
+
+    static void init();
 
     //std::thread _thread;
 
@@ -105,7 +109,6 @@ namespace djnn
     Impl * _impl;
 
   private:
-    void private_run();
     //std::atomic_bool
     bool _please_stop;
     

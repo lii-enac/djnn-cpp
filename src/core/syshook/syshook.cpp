@@ -15,28 +15,9 @@
 
 #include "main_loop.h"
 #include "syshook.h"
+#include "external_source.h"
 
-#include "cpp-thread.h"
-
-#if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
-#include <boost/thread/mutex.hpp>
-typedef boost::mutex djnn_mutex_t;
-#endif
-
-#if DJNN_USE_CPP_THREAD
-#include <mutex>
-typedef std::thread djnn_mutex_t;
-#endif
-
-#if DJNN_USE_PTHREAD
-#include <pthread.h>
-#endif
-
-#if DJNN_USE_QT_THREAD
-#include <QMutex>
-typedef QMutex djnn_mutex_t;
-#endif
-
+#include "cpp-mutex.h"
 
 #include <chrono>
 #include <iostream>
@@ -57,7 +38,12 @@ namespace djnn
 #endif
 
 #if !DJNN_USE_BOOST_FIBER
-    global_mutex->lock ();
+        #if DJNN_USE_SDL_THREAD
+        SDL_LockMutex(global_mutex);
+        #else
+        global_mutex->lock();
+        #endif
+    //global_mutex->lock ();
 #endif
     
 #if DBG_MUTEX
@@ -75,7 +61,12 @@ namespace djnn
 #endif
 
 #if !DJNN_USE_BOOST_FIBER
-    global_mutex->unlock ();
+        #if DJNN_USE_SDL_THREAD
+        SDL_UnlockMutex(global_mutex);
+        #else
+        global_mutex->unlock();
+        #endif
+    //global_mutex->unlock ();
 #endif
 
 #if DBG_MUTEX
@@ -90,7 +81,13 @@ namespace djnn
   MainLoop::instance ()
   {
     std::call_once (MainLoop::onceFlag, [] () {
-      global_mutex = new djnn_mutex_t ();      
+      #if DJNN_USE_SDL_THREAD
+      global_mutex = SDL_CreateMutex();
+      #else
+      global_mutex = new djnn_mutex_t();
+      #endif
+      //global_mutex = new djnn_mutex_t ();
+      ExternalSource::init();
       _instance = new MainLoop();
     });
 
