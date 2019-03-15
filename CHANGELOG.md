@@ -9,9 +9,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Update and improvement GUI backend.
 - Update and improvement on memory performance.
 
+
+
+## [1.3.0] - 2019-03-15
+### NEW
+- NEW component - BASE - Finder - raise "found"/"not found" if the property of a component (path) is equal to "something"
+- NEW machanism for find_component: '//' to start research from ROOT. 
+	eg: find_component ("//foo")  from ROOT give me 'foo' component.
+- NEW machanism for find_component: '*' research recursively to find the first corresponding element. 
+ 	eg: find_component ("foo/*/bar") from 'foo' component give me the first 'bar' component you found.
+- NEW experimental backend: SDL/Cairo
+ 	eg: in config.mk change line : "graphics := QT" -> "graphics := CAIRO"
+
+### Added
+- added warning on image loading if file is not found
+- added watcher on image path. You can now bind to path to modify
+- added tools to generate backend's code more easily : tools/gen_prop.py
+- remade shape.h and added cicle.h, ellipse.h, line.h, rectangle.h, rectangleclip.h
+- added pick() function to Process.
+
+### Changed
+- improved the execution graph performance : sort, browse_in_depth and remove_properties, _timestamp
+- changed mechanism to access picking_view directly from. 
+- improved Thread mechanism.
+- improved mainloop mechanism.
+- improved djnn-lib.mk files.
+- improved README.md with more install info.
+- improved Makefile.
+- improved Image quality display by Qt (set smoothPixmalTransform filter by default)
+- improved backend code : auto-generated
+- cleaned up code
+
+### Fixed
+- fixed Windows (10/8) compilation.
+- fixed delete on all backend objects.
+- fixed Memory leaks: Touch, Path, abstract_gshape, set, Text
+
+### Deprecated
+- renamed draw_rect -> draw_rectagnle function
+- reanmed dran_rect_clip -> draw_rectangleclip function
+
+### Removed
+- remove useless draw in FSM.
+
+
+
 ## [1.2.1] - 2019-02-25 [YANKED]
 ### Fixed
 - fixed move_child_to and add_child_at in djnn core and gui
+
 
 
 ## [1.2.0] - 2019-02-15
@@ -41,16 +87,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - fixed gradient loaded from SVG file
 
 
+
 ## [1.1.1] - 2017-02-04 [YANKED]
 ### Fixed
 - API - AbstractOpacity API, replaced bad name "alpha" by "a".
 - activated frame/windows touches.
 
 
+
 ## [1.1.0] - 2019-02-01
+### NEW
+- NEW anti-binding mechanism
+- NEW basic support for Linux display
+
 ### Added
-- added anti-binding.
-- added basic support for Linux display
 - Makefile : add rule make install-pkgdeps for all platform (MacOS, Linux, Windows).
 - compilation on Windows (8/10) is working.
 - properties are now dynamically generated for GUI (shape/transform/style) component.
@@ -76,6 +126,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - memory leak and performances on execution graph.
 - Makefile for Linux.
+
 
 
 ## [1.0.0] - 2018-12-17
