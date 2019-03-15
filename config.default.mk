@@ -1,3 +1,3 @@
 build_dir := build
-graphics := CAIRO
+graphics := QT
 
