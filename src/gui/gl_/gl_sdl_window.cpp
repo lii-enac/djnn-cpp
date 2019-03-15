@@ -109,6 +109,8 @@ namespace djnn {
       return;
     }
 
+    update_hdpi();
+
     SDL_DisplayMode mode;
     SDL_GetWindowDisplayMode(_sdl_window, &mode);
     //std::cerr << "SDL " << mode.refresh_rate << "hz"<< __FL__;
