@@ -47,17 +47,18 @@ namespace djnn
   int
   GLSDLPickingView::get_pixel (int x, int y)
   {
-#ifdef __EMSCRIPTEN__
-    static int get_pixel_warn=0;
-    if(!get_pixel_warn) std::cout << "warning get pixel unimplemented on emscripten" << std::endl;
-    get_pixel_warn=1;
-    return 0;
-#else
-    glReadBuffer(GL_BACK);
-    unsigned int color;
+//#if defined(GL_VERSION_1_0) || defined(GL_ES_VERSION_3_0)
+#if defined(GL_READ_BUFFER)
+    glReadBuffer(GL_BACK);//glReadBuffer(GL_FRONT); // if debugging with visible picking view
     double scale = current_context().hidpi_scale();
+    unsigned int color;
     glReadPixels(x*scale, (_win->height()->get_value()-y)*scale, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &color);
     return color;
+#else
+    static int get_pixel_warn=0;
+    if(!get_pixel_warn) std::cout << "warning get pixel unimplemented in GLES2" << std::endl;
+    get_pixel_warn=1;
+    return 0;
 #endif
     //glReadBuffer(GL_FRONT); // if debugging with visible picking view
     //std::cerr << attr(x) << attr(y) << attr(_win->height()->get_value()) << __FL__;
