@@ -34,19 +34,14 @@ include config.default.mk
 src_dir ?= src
 build_dir ?= build
 graphics ?= QT
+#options: QT CAIRO GL
 
 # cross-compile support
 ifndef cross_prefix
 cross_prefix := g
-#cross_prefix := llvm-g
-#cross_prefix := arm-none-eabi-
-#cross_prefix := /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
-#cross_prefix := em
-#cross_prefix := i686-w64-mingw32-
-#brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
-#add -Imingw-std-threads to CXXFLAGS
-
-#cross_prefix := /usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
+#options: g llvm-g i686-w64-mingw32- arm-none-eabi- em
+#/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
+#/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
 endif
 
 CC := $(cross_prefix)cc
@@ -66,9 +61,9 @@ osmingw := MINGW64_NT-10.0
 GPERF ?= gperf
 
 thread ?= BOOST
-# QT FIBER STD
+#options: QT FIBER STD
 chrono ?= BOOST
-# QT FIBER STD
+#options: QT FIBER STD
 
 
 ifeq ($(os),Linux)
@@ -88,7 +83,7 @@ CFLAGS ?= -g -MMD #-Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
-# for windows with mingw64 
+# for windows with mingwXX
 ifeq ($(os),$(osmingw))
 lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
@@ -109,13 +104,9 @@ CXXFLAGS += -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/us
 endif
 
 ifeq ($(graphics),QT)
-#ifeq ($(os),$(osmingw))
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-#endif
 else ifneq (,$(filter $(graphics),CAIRO GL))
-#ifeq ($(os),$(osmingw))
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-#endif
 else
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
 endif
@@ -177,10 +168,6 @@ LDFLAGS = $(EMFLAGS)
 endif
 
 
-#ifeq ($(os),win64)
-#CXXFLAGS += -I$(src_dir)/core/ext/mingw-std-threads
-#endif
-#LDFLAGS ?= -l$(boost_thread) -lboost_chrono -lboost_system -L$(build_dir)
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
@@ -189,6 +176,7 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 
 
 djnn_libs := core base comms display gui input animation
+
 ifeq ($(os),$(osmingw))
 djnn_libs := core base display gui animation # comms input
 endif
@@ -415,4 +403,7 @@ install-pkgdeps:
 	$(pkgcmd) $(pkgdeps)
 .PHONY: install-pkgdeps
 
+# mingw on mac:
+#brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
+#add -Imingw-std-threads to CXXFLAGS
 

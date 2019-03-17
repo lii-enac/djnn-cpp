@@ -25,9 +25,6 @@ namespace djnn {
 
   class SDLWindow;
 
-  // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
-    struct __Event;
-
   class SDLMainloop : public ExternalSource {
     public:
       static SDLMainloop& instance ();
@@ -47,7 +44,9 @@ namespace djnn {
 
     private:
       void sdl_run () ;
-      void handle_event(__Event&);
+      void sdl_run_coop () ;
+      void handle_events(SDL_Event&) ;
+      void handle_single_event(SDL_Event&) ;
 
       std::map<Uint32, SDLWindow*> _windows;
 

@@ -31,9 +31,6 @@ namespace djnn {
 
   class SDLPickingView;
 
-  // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
-  struct __Event;
-
   class SDLWindow : public WinImpl
   {
   public:
@@ -41,7 +38,7 @@ namespace djnn {
     virtual ~SDLWindow ();
     SDL_Window * sdl_window() { return _sdl_window; }
 
-    void handle_event(__Event&);
+    void handle_event(SDL_Event&);
     enum {
       user_event_awake
     };
@@ -58,4 +55,3 @@ namespace djnn {
   };
 
 }
-//#endif

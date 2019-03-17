@@ -66,20 +66,21 @@ namespace djnn {
     }
 
 #ifdef __EMSCRIPTEN__
-    std::function<void()> loop;
-  //typedef void(*mainloop_fun_t) (void);
+    //typedef void(*mainloop_fun_t) (void);
     //mainloop_fun_t loop;
-
-  static void main_loop() { loop(); }
+    std::function<void()> loop;
+    static void main_loop() { loop(); }
 #endif
 
   void
     //SDLMainloop::activate_from_mainloop ()
     SDLMainloop::run ()
     {
+      launch_mutex_unlock();
       //set_please_stop (false);
 #ifdef __EMSCRIPTEN__
-      loop = [&]{sdl_run();};
+
+      loop = [&]{sdl_run_coop();};
       emscripten_set_main_loop(main_loop, 0, true);
 #else
       sdl_run();
@@ -109,81 +110,39 @@ namespace djnn {
       wakeup(nullptr); // wakeup
   }
 
-  // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
-  struct __Event
-  {
-      __Event (SDL_Event& e_) :
-      e (e_)
-      {
-      }
-      SDL_Event& e;
-  };
-
   void
   SDLMainloop::sdl_run ()
   {
-    // wait for official mainloop to finish initing
-    //djnn::get_exclusive_access (DBG_GET);
-    //djnn::release_exclusive_access (DBG_REL);
-
-    launch_mutex_unlock();
+    while (!get_please_stop ()) {
+      _wakeup_already_triggered=false;
+      SDL_Event e;
+      //std::cerr << ">> SDL_WaitEvent " << __FL__;
+      SDL_WaitEvent (&e); // blocking call
+      //std::cerr << "<< SDL_WaitEvent " << __FL__;
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+      handle_events(e);
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+    }
     
-    #if 1
-      while (!get_please_stop ()) {
-        SDL_Event e;
-        _wakeup_already_triggered=false;
-        //std::cerr << ">> SDL_WaitEvent " << __FL__;
-        SDL_WaitEvent (&e); // blocking call
-        //SDL_PollEvent (&e); // non-blocking call
-       // std::cerr << "<< SDL_WaitEvent " << __FL__;
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        __Event e_ (e); // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
 
-  #if 1 
-        // slightly more efficient loop: handle all events in the queue
-        if (!get_please_stop ()) { handle_event (e_); }
-        const unsigned int max_events = 10;
-        SDL_Event es[max_events];
-        int pending = SDL_PeepEvents (es, max_events, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
-        //std::cerr << "   pending events: " << pending << " " << __FL__;
-        if (pending && !get_please_stop ()) {
-             SDL_Event &e = es[max_events-pending];
-             bool redraw_awake=false;
-             SDL_Event redraw_event;
-           do {
-             SDL_WaitEvent (&e); // should be non-blocking call, since there are pending events
-             if(e.type==SDL_USEREVENT && e.user.code==SDLWindow::user_event_awake) {
-              redraw_awake=true;
-              redraw_event=e;
-              continue;
-             }
-             __Event e_ (e);
-             handle_event (e_);
-             if (get_please_stop ()) break;
-           } while (--pending);
+    ////MainLoop::instance().please_stop();
+    ////MainLoop::instance().join();
 
-           if(redraw_awake) {
-             __Event e_ (redraw_event);
-             handle_event (e_);
-           }
-        } else {
-          //djnn::release_exclusive_access (DBG_REL);
-          //this_thread::yield();
-        }
-  #else 
-        // simple loop: handle one event at a time, might be costly to acquire mutex each time
-        if (!get_please_stop ()) handle_event (e_);
-  #endif
-        //std::cerr << std::endl;
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-      }
-  #endif
+    _windows.clear ();
+    set_please_stop (false);
+    SDL_Quit();
+  }
 
-      //MainLoop::instance().please_stop();
-      //MainLoop::instance().join();
-      _windows.clear ();
-      set_please_stop (false);
-      SDL_Quit();
+  void
+  SDLMainloop::sdl_run_coop ()
+  {
+    SDL_Event e;
+    _wakeup_already_triggered=false;
+    SDL_PollEvent (&e); // non-blocking call
+    djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+    handle_events(e);
+    djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+    SDL_Delay( 1 ); // for emscripten
   }
 
   const char*
@@ -197,36 +156,76 @@ namespace djnn {
     }
   }
 
+
   void
-    SDLMainloop::handle_event (__Event& e_)
-    {
-      SDL_Event& e=e_.e;
-      //std::cerr << sdl_event_to_char(e.type) << __FL__; 
-      switch (e.type)
-      {
-        //case Expose:
-        //case EnterNotify:
-        //case SDL_KEYDOWN:
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION:
-        case SDL_MOUSEWHEEL:
-        case SDL_WINDOWEVENT:
-        case SDL_USEREVENT: // redraw
-        {
-          SDLWindow * w = _windows[e.window.windowID];
-          if(w) w->handle_event(e_);
-          break;
-        }
-        case SDL_QUIT:
-            std::cout << "Shutting down now!!!" << std::endl;
-            please_stop ();
-            break;
-        default:
-            //std::cout << "do nothing " << sdl_event_to_char(e.type) << __FL__;
-            break;
-      }
+  SDLMainloop::handle_events(SDL_Event& first_event)
+  {
+    #if 1 
+    // slightly more efficient loop: handle all events in the queue
+    if (!get_please_stop ()) { handle_single_event (first_event); }
+
+    const unsigned int max_events = 10;
+    SDL_Event es[max_events];
+    int pending = SDL_PeepEvents (es, max_events, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
+    //std::cerr << "   pending events: " << pending << " " << __FL__;
+    if (pending && !get_please_stop ()) {
+       SDL_Event &e = es[max_events-pending];
+       bool redraw_awake=false;
+       SDL_Event redraw_event;
+
+       do {
+         SDL_WaitEvent (&e); // should be non-blocking call, since there are pending events
+         if(e.type==SDL_USEREVENT && e.user.code==SDLWindow::user_event_awake) {
+          redraw_awake=true;
+          redraw_event=e;
+          continue;
+         }
+         handle_single_event (e);
+         if (get_please_stop ()) break;
+       } while (--pending);
+
+       if(redraw_awake) {
+         handle_single_event (e);
+       }
+    } else {
+      //djnn::release_exclusive_access (DBG_REL);
+      //this_thread::yield();
     }
+  #else 
+    // simple loop: handle one event at a time, might be costly to acquire mutex each time
+    if (!get_please_stop ()) handle_event (e);
+  #endif
+  }
+
+  void
+  SDLMainloop::handle_single_event (SDL_Event& e)
+  {
+    //std::cerr << sdl_event_to_char(e.type) << __FL__; 
+    switch (e.type)
+    {
+      //case Expose:
+      //case EnterNotify:
+      //case SDL_KEYDOWN:
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+      case SDL_MOUSEMOTION:
+      case SDL_MOUSEWHEEL:
+      case SDL_WINDOWEVENT:
+      case SDL_USEREVENT: // redraw
+      {
+        SDLWindow * w = _windows[e.window.windowID];
+        if(w) w->handle_event(e);
+        break;
+      }
+      case SDL_QUIT:
+          std::cout << "Shutting down now!!!" << std::endl;
+          please_stop ();
+          break;
+      default:
+          //std::cout << "do nothing " << sdl_event_to_char(e.type) << __FL__;
+          break;
+    }
+  }
 
 }
 
