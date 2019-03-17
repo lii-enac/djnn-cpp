@@ -119,29 +119,20 @@ ifeq ($(cross_prefix),em)
 # it's being worked on though
 # see: https://github.com/emscripten-ports/SDL2/pull/77
 
+os := em
+DYNLIB=
+lib_suffix=.bc
 
-EMFLAGS := -Wall -Oz -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
+EMFLAGS := -Wall -Oz -s USE_SDL=2 -s USE_FREETYPE=1 \
 -s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
-<<<<<<< HEAD
--s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
--DSDL_DISABLE_IMMINTRIN_H
-=======
 -DSDL_DISABLE_IMMINTRIN_H \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
->>>>>>> 0dfda0d09... gui/gl_ - clean up and emscripten support
 
-#-s WASM=0 
-#TOTAL_MEMORY?
-#-s ALLOW_MEMORY_GROWTH=1 
-#-s WASM=1 
-#-s ALLOW_MEMORY_GROWTH=1 
+#-s FULL_ES2=1
+#-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
 
-lib_suffix=.bc
-#boost_libs = -lboost_thread -lboost_chrono -lboost_system
-#boost_libs = \
-#	../boost_1_68_0/bin.v2/libs/chrono/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/libboost_chrono.bc \
-#	../boost_1_68_0/bin.v2/libs/system/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/libboost_system.bc \
-#	../boost_1_68_0/bin.v2/libs/thread/build/emscripten-1.38.12/debug/cxxstd-14-iso/link-static/threadapi-pthread/threading-multi/libboost_thread.bc
+#CC := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CC)
+#CXX := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CXX)
 
 EMCFLAGS += $(EMFLAGS) \
 	-I../ext-libs/libexpat/expat/lib \
@@ -149,12 +140,10 @@ EMCFLAGS += $(EMFLAGS) \
 	-I../ext-libs/boost_1_68_0 \
 	-I../ext-libs/fontconfig \
 	-I/usr/local/include #glm
+
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
-
-os := em
-
-LDFLAGS = $(EMFLAGS)
+LDFLAGS = $(EMFLAGS) --emrun
 
 	# ../ext-libs/libexpat/expat/lib/.libs/libexpat.dylib \
 	# ../ext-libs/curl/lib/.libs/libcurl.dylib \
@@ -182,9 +171,16 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 
 djnn_libs := core base comms display gui input animation
 
-ifeq ($(os),$(osmingw))
-djnn_libs := core base display gui animation # comms input
+ifeq ($(cross_prefix),em)
+djnn_libs := core base display gui animation
+# comms input
 endif
+
+ifeq ($(os),$(osmingw))
+djnn_libs := core base display gui animation
+# comms input
+endif
+
 ifeq ($(findstring avr,$(cross_prefix)),avr)
 djnn_libs := core base
 CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include
@@ -234,7 +230,6 @@ $1_lib_all_ldflags := $$($1_lib_ldflags)
 ifeq ($(os),$(filter $(os),Darwin MINGW64_NT-10.0))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
-#$1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix -ldjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
 endif
 endif
@@ -281,17 +276,6 @@ libs += $$($1_lib)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
-
-djnn_libs := core base comms display gui input animation
-
-ifeq ($(cross_prefix),em)
-djnn_libs := core base display gui animation
-# comms input
-endif
-ifeq ($(os),MINGW64_NT-10.0)
-djnn_libs := core base display gui animation
-# comms input
-endif
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
@@ -381,6 +365,7 @@ ifeq ($(os),Linux)
 pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
 pkgdeps += qt5-default 
 pkgdeps += libfreetype6-dev libsdl2-dev libglm-dev
+pkgdeps += libdrm-dev
 pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
 #pkgdeps += libraspberrypi-dev
 pkgcmd := apt install -y
@@ -393,7 +378,7 @@ pkgdeps += qt5
 pkgdeps += cairo pango
 pkgdeps += sdl2
 pkgcmd := brew install
-endif 
+endif
 
 ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
