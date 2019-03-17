@@ -113,7 +113,7 @@ namespace djnn {
 
     SDL_DisplayMode mode;
     SDL_GetWindowDisplayMode(_sdl_window, &mode);
-    //std::cerr << "SDL " << mode.refresh_rate << "hz"<< __FL__;
+    std::cout << "SDL " << mode.refresh_rate << "hz"<< __FL__;
     _refresh_rate = mode.refresh_rate;
 
     _sdl_context = SDL_GL_CreateContext(_sdl_window);

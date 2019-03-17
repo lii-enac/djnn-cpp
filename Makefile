@@ -122,8 +122,13 @@ ifeq ($(cross_prefix),em)
 
 EMFLAGS := -Wall -Oz -s USE_SDL=2 -s FULL_ES2=1 -s USE_FREETYPE=1 \
 -s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
+<<<<<<< HEAD
 -s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
 -DSDL_DISABLE_IMMINTRIN_H
+=======
+-DSDL_DISABLE_IMMINTRIN_H \
+-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
+>>>>>>> 0dfda0d09... gui/gl_ - clean up and emscripten support
 
 #-s WASM=0 
 #TOTAL_MEMORY?
