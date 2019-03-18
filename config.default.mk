@@ -1,10 +1,6 @@
-graphics := QT
-#options: QT CAIRO GL
-
 display := QT
 #options: QT SDL
-
-
+physics := ODE
 # cross-compile support
 cross_prefix := g
 #options: g llvm-g arm-none-eabi- em

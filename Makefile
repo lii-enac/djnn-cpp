@@ -184,7 +184,7 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-djnn_libs := core base comms display gui input animation
+djnn_libs := core base comms display gui input animation physics
 
 ifeq ($(cross_prefix),em)
 djnn_libs := core base display gui animation

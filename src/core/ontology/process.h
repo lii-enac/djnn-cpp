@@ -29,7 +29,8 @@ namespace djnn {
     FSM_T,
     SWITCH_T,
     WINDOW_T,
-    GOBJ_T
+    GOBJ_T,
+    WORLD_T
   };
 
   // activation types
