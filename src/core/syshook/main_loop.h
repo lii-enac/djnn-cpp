@@ -48,6 +48,8 @@ namespace djnn
     ExternalSource * _another_source_wants_to_be_mainloop;
     
     void add_background_process (Process *p) { _background_processes.push_back (p); }
+
+    void external_run_for_qt5_9_fixme() { run(); }
   protected:
 
     // Process

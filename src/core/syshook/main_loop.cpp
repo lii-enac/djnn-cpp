@@ -65,6 +65,7 @@ namespace djnn {
       run ();
     }
 
+
     void
     MainLoop::run_in_own_thread ()
     {
@@ -94,6 +95,8 @@ namespace djnn {
         //own_mutex.lock (); // 2nd lock: blocks forever
         #if DJNN_USE_SDL_THREAD
         while (1) SDL_Delay(20000);
+        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+        QThread::currentThread()->wait(20000);
         #else
         while (1) this_thread::sleep_for(chrono::seconds(20000));
         #endif
@@ -103,6 +106,8 @@ namespace djnn {
         //boost::
         #if DJNN_USE_SDL_THREAD
         SDL_Delay(20000);
+        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+        QThread::currentThread()->wait(_duration.count());
         #else
         this_thread::sleep_for (_duration);
         #endif

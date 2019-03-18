@@ -1,5 +1,15 @@
 #pragma once
 
+#ifndef __WIN32__
+#if DJNN_USE_QT_THREAD
+#include <QtGlobal>
+#if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+#undef DJNN_USE_QT_THREAD
+#define DJNN_USE_STD_THREAD 1
+#endif
+#endif
+#endif
+
 #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
 	#include <boost/thread/mutex.hpp>
 	namespace djnn {
@@ -8,7 +18,7 @@
 	#define DJNN_MUTEX_IS_POINTER 0
 #endif
 
-#if DJNN_USE_CPP_THREAD
+#if DJNN_USE_STD_THREAD
 	#include <mutex>
 	namespace djnn {
 		typedef std::mutex djnn_mutex_t;

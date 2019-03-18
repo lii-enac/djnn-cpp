@@ -125,20 +125,18 @@ namespace djnn {
 	void
 	ExternalSource::start_thread ()
 	{
-		//DBG;
-        //delete _impl;
-        //auto prev_thread = _impl->_thread;
-		_impl->_thread =    
-    	//std::thread (&Clock::run, this);
-    	//interruptible_thread (&Clock::run, this);
+        #if DJNN_USE_STD_THREAD
+        if(_impl->_thread.joinable()) _impl->_thread.detach();
+        #endif
+
+		_impl->_thread = 
+
         #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
     	djnn_thread_t (&ExternalSource::private_run, this);
         #endif
 
-        #if DJNN_USE_QT_THREAD
-        //QThread (
+        #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
         QThread::create([this]() { this->ExternalSource::private_run(); })
-        //)
         ;
         QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
         _impl->_thread->start();
