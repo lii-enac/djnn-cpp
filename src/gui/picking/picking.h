@@ -17,6 +17,7 @@
 #pragma once
 
 #include "../abstract_gshape.h"
+#include "../gui-priv.h"
 
 namespace djnn {
 
@@ -33,10 +34,10 @@ namespace djnn {
 
     void object_deleted (AbstractGShape* gobj);
 
-    bool genericMousePress(double x, double y, int button);
+    bool genericMousePress(double x, double y, mouse_button button);
     bool genericMouseMove(double x, double y);
     bool genericCheckShapeAfterDraw (double x, double y);
-    bool genericMouseRelease(double x, double y, int button);
+    bool genericMouseRelease(double x, double y, mouse_button button);
     bool genericMouseWheel(double x, double y);
 
     bool genericTouchPress (double x, double y, int id);

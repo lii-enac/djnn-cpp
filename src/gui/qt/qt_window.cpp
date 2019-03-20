@@ -68,7 +68,7 @@ namespace djnn
     if (mouse_tracking)
       _qwidget->setMouseTracking (true);
     if (full_screen)
-      _qwidget->setWindowState(_qwidget->windowState() ^ Qt::WindowFullScreen);
+      _qwidget->setWindowState (_qwidget->windowState () ^ Qt::WindowFullScreen);
     _qwidget->setGeometry (rect);
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->show ();
@@ -119,8 +119,8 @@ namespace djnn
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd:
         {
-          QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
-          
+          QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
+
           for (const auto & touchPoint : touchPoints) {
             const int &id = touchPoint.id ();
             const double &x = touchPoint.pos ().x ();
@@ -150,18 +150,18 @@ namespace djnn
             QtMainloop::instance ().set_please_exec (true);
         }
         break;
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-        case QEvent::Move:
-        case QEvent::Resize:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseMove:
-        case QEvent::MouseButtonRelease:
-        case QEvent::Wheel:
-        case QEvent::Close:
-        case QEvent::Paint:
-          exec_ = QWidget::event (event);
-          break;
+      case QEvent::KeyPress:
+      case QEvent::KeyRelease:
+      case QEvent::Move:
+      case QEvent::Resize:
+      case QEvent::MouseButtonPress:
+      case QEvent::MouseMove:
+      case QEvent::MouseButtonRelease:
+      case QEvent::Wheel:
+      case QEvent::Close:
+      case QEvent::Paint:
+        exec_ = QWidget::event (event);
+        break;
 
       default:
         {
@@ -179,7 +179,7 @@ namespace djnn
   MyQWidget::keyPressEvent (QKeyEvent *event)
   {
     _window->key_pressed ()->set_value (event->key (), 1);
-    _window->key_pressed_text ()->set_value (event->text().toStdString (), 1);
+    _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);
     QtMainloop::instance ().set_please_exec (true);
   }
 
@@ -187,7 +187,7 @@ namespace djnn
   MyQWidget::keyReleaseEvent (QKeyEvent *event)
   {
     _window->key_released ()->set_value (event->key (), 1);
-    _window->key_released_text ()->set_value (event->text().toStdString (), 1);
+    _window->key_released_text ()->set_value (event->text ().toStdString (), 1);
     QtMainloop::instance ().set_please_exec (true);
   }
 
@@ -225,13 +225,35 @@ namespace djnn
     _qtwindow->_please_update = false;
   }
 
+  static mouse_button
+  get_button (int n)
+  {
+    mouse_button button_id = BUTTON_LEFT;
+    switch (n)
+      {
+      case Qt::LeftButton:
+        button_id = BUTTON_LEFT;
+        break;
+      case Qt::RightButton:
+        button_id = BUTTON_RIGHT;
+        break;
+      case Qt::MiddleButton:
+        button_id = BUTTON_MIDDLE;
+        break;
+      default:
+        button_id = BUTTON_LEFT;
+      }
+    return button_id;
+  }
+
   void
   MyQWidget::mousePressEvent (QMouseEvent *event)
   {
 //DBG;
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
-    bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, event->button ());
+
+    bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
@@ -252,7 +274,7 @@ namespace djnn
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
 
-    bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, event->button ());
+    bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);
   }
@@ -294,16 +316,16 @@ namespace djnn
 #if _PERF_TEST
       t1();
 #endif
-        p->draw ();
+      p->draw ();
 #if _PERF_TEST
       // print in RED
       cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
       draw_counter = draw_counter + 1;
-      draw_total = draw_total + time ;
+      draw_total = draw_total + time;
       draw_average = draw_total / draw_counter;
       cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
-      cerr << "\033[0m"  << endl;
+      cerr << "\033[0m" << endl;
 #endif
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))

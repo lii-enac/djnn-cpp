@@ -27,6 +27,7 @@ namespace djnn
 
   static bool __module_initialized = false;
   Process *DrawingRefreshManager;
+  Process *GenericMouse;
   GUIStructureObserver * gui_structure_observer;
 
   void
@@ -208,6 +209,31 @@ namespace djnn
       it_cont->second->remove_gui_child (c);
   }
 
+  GUIMouseButton::GUIMouseButton (Process *p, const string &n) : Process (p, n)
+  {
+    _press = new Spike (this, "press");
+    _release = new Spike (this, "release");
+    Process::finalize ();
+  }
+
+  GUIMouse::GUIMouse (Process *p, const string &n) : Process (p, n)
+  {
+    _left = new GUIMouseButton (this, "left");
+    _right = new GUIMouseButton (this, "right");
+    _middle = new GUIMouseButton (this, "middle");
+    _pos_x = new DoubleProperty (this, "x", 0);
+    _pos_y = new DoubleProperty (this, "y", 0);
+  }
+
+  GUIMouse::~GUIMouse ()
+  {
+    delete _left;
+    delete _right;
+    delete _middle;
+    delete _pos_x;
+    delete _pos_y;
+  }
+
   void
   init_gui ()
   {
@@ -221,6 +247,8 @@ namespace djnn
       Backend::init ();
       UpdateDrawing::init ();
       DrawingRefreshManager = UpdateDrawing::instance ();
+      GenericMouse = new GUIMouse (nullptr, "");
+      GenericMouse->activation ();
       MainLoop::instance ().add_background_process (DrawingRefreshManager);
       init_svg_parser ();
       gui_structure_observer = new GUIStructureObserver ();

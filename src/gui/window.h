@@ -18,17 +18,17 @@
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
 #include "../core/tree/process.h"
-#include "picking/picking.h"
 
 #include <iostream>
 
 namespace djnn
 {
 
+  class Picking;
   class WinImpl {
   public:
     WinImpl () : _picking_view(nullptr) {}
-    virtual ~WinImpl () { delete _picking_view;}
+    virtual ~WinImpl () {}
     virtual void activate () = 0;
     virtual void deactivate () = 0;
     virtual void update () = 0;
@@ -94,6 +94,9 @@ namespace djnn
     Process* _move;
     Process* _release;
     Process* _wheel;
+    Process* _left_button;
+    Process* _right_button;
+    Process* _middle_button;
     Process* _touches;
     DoubleProperty *_press_x;
     DoubleProperty *_press_y;

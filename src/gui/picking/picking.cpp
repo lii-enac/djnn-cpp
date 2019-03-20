@@ -40,8 +40,10 @@ namespace djnn
   Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y)
   {
     Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
-    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14 - s->origin_x ()->get_value ();
-    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24 - s->origin_y ()->get_value ();
+    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
+        - s->origin_x ()->get_value ();
+    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
+        - s->origin_y ()->get_value ();
     if (t != nullptr) {
       t->set_local_x (loc_x);
       t->set_local_y (loc_y);
@@ -52,7 +54,7 @@ namespace djnn
   }
 
   bool
-  Picking::genericMousePress (double x, double y, int button)
+  Picking::genericMousePress (double x, double y, mouse_button button)
   {
     bool exec_ = false;
     _win->press_x ()->set_value (x, true);
@@ -70,7 +72,25 @@ namespace djnn
       s->find_component ("press")->notify_activation ();
       exec_ = true;
     }
+    switch (button)
+      {
+      case BUTTON_LEFT:
+        ((GUIMouse*)GenericMouse)->left ()->press ()->activation ();
+        break;
+      case BUTTON_RIGHT:
+	((GUIMouse*)GenericMouse)->right ()->press ()->activation ();
+        break;
+      case BUTTON_MIDDLE:
+	((GUIMouse*)GenericMouse)->middle ()->press ()->activation ();
+        break;
+      default:
+	((GUIMouse*)GenericMouse)->left ()->press ()->activation ();
+      }
     if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
+      exec_ = true;
+    }
+    if (((GUIMouse*)GenericMouse)->left ()->press ()->has_coupling () || ((GUIMouse*)GenericMouse)->right ()->press ()->has_coupling ()
+        || ((GUIMouse*)GenericMouse)->middle ()->press ()->has_coupling ()) {
       exec_ = true;
     }
     return exec_;
@@ -109,16 +129,20 @@ namespace djnn
     bool exec_ = false;
     double old_x = _win->move_x ()->get_value ();
     double old_y = _win->move_y ()->get_value ();
-    if (x != old_x) _win->move_x ()->set_value (x, true);
-    if (y != old_y) _win->move_y ()->set_value (y, true);
+    if (x != old_x)
+      _win->move_x ()->set_value (x, true);
+    if (y != old_y)
+      _win->move_y ()->set_value (y, true);
     _win->move ()->notify_activation ();
     AbstractGShape *s = this->pick (x, y);
     if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
       exec_ = true;
     }
     if (s) {
-      if (x != old_x) ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
-      if (y != old_y) ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
+      if (x != old_x)
+        ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
+      if (y != old_y)
+        ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       set_local_coords (s, nullptr, x, y);
       if (s != _cur_obj) {
         if (_cur_obj != 0)
@@ -135,17 +159,21 @@ namespace djnn
         exec_ = true;
       }
     }
+    ((GUIMouse*)GenericMouse)->x ()->set_value (x, true);
+    ((GUIMouse*)GenericMouse)->y ()->set_value (y, true);
+    if (((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
+      exec_ = true;
+    }
     return exec_;
   }
 
-
- void 
- Picking::object_deleted (AbstractGShape* gobj)
- {
-   // Reset _cur_obj to nullptr if this object has been removed from picking_view
-   if (_cur_obj == gobj)
+  void
+  Picking::object_deleted (AbstractGShape* gobj)
+  {
+    // Reset _cur_obj to nullptr if this object has been removed from picking_view
+    if (_cur_obj == gobj)
       _cur_obj = nullptr;
- }
+  }
 
   bool
   Picking::genericCheckShapeAfterDraw (double x, double y)
@@ -156,7 +184,7 @@ namespace djnn
       double cur_move_x = ((DoubleProperty*) s->find_component ("move/x"))->get_value ();
       double cur_move_y = ((DoubleProperty*) s->find_component ("move/y"))->get_value ();
       if (s == _cur_obj) {
-        if (cur_move_x == x && cur_move_y ==y)
+        if (cur_move_x == x && cur_move_y == y)
           return exec_;
         else {
           set_local_coords (s, nullptr, x, y);
@@ -210,7 +238,7 @@ namespace djnn
   }
 
   bool
-  Picking::genericMouseRelease (double x, double y, int button)
+  Picking::genericMouseRelease (double x, double y, mouse_button button)
   {
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
@@ -230,8 +258,26 @@ namespace djnn
         exec_ = true;
       }
     }
+    switch (button)
+      {
+      case BUTTON_LEFT:
+	((GUIMouse*)GenericMouse)->left ()->release ()->activation ();
+        break;
+      case BUTTON_RIGHT:
+	((GUIMouse*)GenericMouse)->right ()->release ()->activation ();
+        break;
+      case BUTTON_MIDDLE:
+	((GUIMouse*)GenericMouse)->middle ()->release ()->activation ();
+        break;
+      default:
+	((GUIMouse*)GenericMouse)->left ()->release ()->activation ();
+      }
     if (_win->release ()->has_coupling ()) {
       _win->release ()->notify_activation ();
+      exec_ = true;
+    }
+    if (((GUIMouse*)GenericMouse)->left ()->release ()->has_coupling () || ((GUIMouse*)GenericMouse)->right ()->release ()->has_coupling ()
+        || ((GUIMouse*)GenericMouse)->middle ()->release ()->has_coupling ()) {
       exec_ = true;
     }
     return exec_;

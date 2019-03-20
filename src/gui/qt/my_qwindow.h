@@ -34,7 +34,7 @@ namespace djnn {
 
   public:
     MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw), _updating (false) {  setAttribute(Qt::WA_AcceptTouchEvents, true); _picking_view = new QtPickingView (w); }
-    virtual ~MyQWidget () { }
+    virtual ~MyQWidget () { delete _picking_view; }
   protected:
 
     virtual bool event (QEvent *event) override;

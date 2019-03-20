@@ -20,6 +20,7 @@
 #include "window.h"
 #include "backend.h"
 #include "abstract_backend.h"
+#include "picking/picking.h"
 
 namespace djnn
 {
@@ -163,7 +164,7 @@ namespace djnn
     // remove from picking_view if is the current object
     if (is_pickable(this))
       if (this->frame () && this->frame ()->picking_view ())    
-        this->frame ()->picking_view ()->object_deleted(this);
+        this->frame ()->picking_view ()->object_deleted (this);
 
     // remove _origin_x and _origin_y
     delete _origin_x;
