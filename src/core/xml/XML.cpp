@@ -71,8 +71,19 @@ namespace djnn {
   {
     string uri_ = uri;
     std::size_t found = uri.find("://");
-    if (found == std::string::npos)
-      uri_ = "file://" + uri;
+    if (found == std::string::npos) {
+      FILE * pFile;
+      pFile = fopen (uri.c_str (),"r");
+      Process* res;
+      if (pFile!=NULL)
+        res = djnParseXML (pFile);
+      else {
+        cerr << "unable to load file " + uri << endl;
+        return nullptr;
+      }
+      fclose (pFile);
+      return res;
+    }
     djn__CurlData d;
     CURLcode res;
     CURL *curl = curl_easy_init ();
