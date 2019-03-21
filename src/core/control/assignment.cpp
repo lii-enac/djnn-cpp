@@ -83,18 +83,20 @@ namespace djnn
             "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:"
                 + dspec + ")\n");
       }
-      _src = dynamic_cast<AbstractProperty*> (f);
-      if (_src == nullptr) {
-        warning (
-            this,
-            "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
-                + ", dst spec:" + dspec + ")\n");
-      }
+      _src = f; //dynamic_cast<AbstractProperty*> (f);
+      /*
+       if (_src == nullptr) {
+       warning (
+       this,
+       "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
+       + ", dst spec:" + dspec + ")\n");
+       }
+       */
     }
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     if (ref_dst_pair.first != nullptr) {
       _ref_dst = ref_dst_pair.first;
-      _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, &_dst);
+      _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
       _update_dst->activate ();
       _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
@@ -170,44 +172,51 @@ namespace djnn
   }
 
   void
-  AbstractAssignment::do_assignment (AbstractProperty* src_p, AbstractProperty* dst_p, bool propagate)
+  AbstractAssignment::do_assignment (Process* src, AbstractProperty* dst_p, bool propagate)
   {
-    switch (src_p->get_prop_type ())
-      {
-      case Integer:
+    AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (src);
+    if (src_p) {
+      switch (src_p->get_prop_type ())
         {
-          AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
-          dst_p->set_value (ip->get_value (), propagate);
-          break;
+        case Integer:
+          {
+            AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
+            dst_p->set_value (ip->get_value (), propagate);
+            break;
+          }
+        case Boolean:
+          {
+            AbstractBoolProperty* bp = dynamic_cast<AbstractBoolProperty*> (src_p);
+            dst_p->set_value (bp->get_value (), propagate);
+            break;
+          }
+        case Double:
+          {
+            AbstractDoubleProperty* dp = dynamic_cast<AbstractDoubleProperty*> (src_p);
+            dst_p->set_value (dp->get_value (), propagate);
+            break;
+          }
+        case String:
+          {
+            AbstractTextProperty* tp = dynamic_cast<AbstractTextProperty*> (src_p);
+            dst_p->set_value (string (tp->get_value ()), propagate);
+            break;
+          }
+        case Reference:
+          {
+            RefProperty* rp = dynamic_cast<RefProperty*> (src_p);
+            dst_p->set_value (rp->get_value (), propagate);
+            break;
+          }
+        default:
+          cout << "Unknown property type\n";
+          return;
         }
-      case Boolean:
-        {
-          AbstractBoolProperty* bp = dynamic_cast<AbstractBoolProperty*> (src_p);
-          dst_p->set_value (bp->get_value (), propagate);
-          break;
-        }
-      case Double:
-        {
-          AbstractDoubleProperty* dp = dynamic_cast<AbstractDoubleProperty*> (src_p);
-          dst_p->set_value (dp->get_value (), propagate);
-          break;
-        }
-      case String:
-        {
-          AbstractTextProperty* tp = dynamic_cast<AbstractTextProperty*> (src_p);
-          dst_p->set_value (string (tp->get_value ()), propagate);
-          break;
-        }
-      case Reference:
-        {
-          RefProperty* rp = dynamic_cast<RefProperty*> (src_p);
-          dst_p->set_value (rp->get_value (), propagate);
-          break;
-        }
-      default:
-        cout << "Unknown property type\n";
-        return;
-      }
+    } else if (dst_p->get_prop_type () == Reference) {
+      ((RefProperty*) dst_p)->set_value (src, propagate);
+    } else {
+      warning (nullptr, "incompatible source and destination in (Paused)assignment \n");
+    }
   }
 
   void

@@ -80,7 +80,7 @@ namespace djnn
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     if (ref_src_pair.first != nullptr) {
       _ref_src = ref_src_pair.first;
-      _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, &_src);
+      _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, (Process**)&_src);
 
       _c_update_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION);
       Graph::instance ().add_edge (ref_src_pair.first, _update_src);
@@ -99,7 +99,7 @@ namespace djnn
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     if (ref_dst_pair.first != nullptr) {
       _ref_dst = ref_dst_pair.first;
-      _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, &_dst);
+      _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
 
       _c_update_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
