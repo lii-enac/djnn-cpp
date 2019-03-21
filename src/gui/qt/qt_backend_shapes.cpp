@@ -425,7 +425,7 @@ namespace djnn
       QFileInfo fi (path.c_str ());
 
       if (!fi.exists ())
-        warning (nullptr, " Image Loading - file NOT found - Did you use absolutePath eg. /home/johndoe/path/to/image ?\n");
+        warning (nullptr, " Image Loading - file NOT found - path used: " + path);
 
       pm = new QPixmap (fi.absoluteFilePath ());
 
