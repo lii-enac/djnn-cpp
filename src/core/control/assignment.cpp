@@ -24,6 +24,7 @@
 #include "../tree/ref_property.h"
 #include "../error.h"
 #include "../serializer/serializer.h"
+#include "../utils-dev.h"
 
 #include <iostream>
 
@@ -32,44 +33,140 @@ namespace djnn
   using namespace std;
 
   void
-  AbstractAssignment::init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec) 
+  UpdateSrcOrDst::activate ()
+  {
+    Process* v = _prop->get_value ();
+    if (!v) {
+      _to_update = nullptr;
+      return;
+    }
+    AbstractProperty *res = dynamic_cast<AbstractProperty*> (v->find_component (_spec));
+    if (!res) {
+      warning (this, "Source or destination in (Paused)assignment is not a property");
+      _to_update = nullptr;
+      return;
+    }
+    *_to_update = res;
+    ((SrcDstLink*) _parent)->update_graph ();
+  }
+
+  void
+  AbstractAssignment::init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec)
   {
     if (src == 0) {
-        error (this, "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
-      }
-      if (dst == 0) {
-        error (this, "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
-      }
+      error (
+          this,
+          "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+              + ", dst spec:" + dspec + ")\n");
+    }
+    if (dst == 0) {
+      error (
+          this,
+          "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+              + ", dst spec:" + dspec + ")\n");
+    }
 
+    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
+    if (ref_src_pair.first != nullptr) {
+      _ref_src = ref_src_pair.first;
+      _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, &_src);
+      _update_src->activate ();
+      _c_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION);
+      Graph::instance ().add_edge (ref_src_pair.first, _update_src);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+    } else {
       Process *f = src->find_component (ispec);
       if (f == 0) {
-        error (this, "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (
+            this,
+            "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:"
+                + dspec + ")\n");
       }
       _src = dynamic_cast<AbstractProperty*> (f);
       if (_src == nullptr) {
-        warning (this, "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        warning (
+            this,
+            "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n");
       }
-      f = dst->find_component (dspec);
+    }
+    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
+    if (ref_dst_pair.first != nullptr) {
+      _ref_dst = ref_dst_pair.first;
+      _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, &_dst);
+      _update_dst->activate ();
+      _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION);
+      Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+    } else {
+      Process *f = dst->find_component (dspec);
       if (f == 0) {
-        error (this, "DESTINATION not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        error (
+            this,
+            "DESTINATION not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n");
       }
       _dst = dynamic_cast<AbstractProperty*> (f);
       if (_dst == nullptr) {
-        warning (this, "the DESTINATION of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec + ", dst spec:" + dspec + ")\n");
+        warning (
+            this,
+            "the DESTINATION of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n");
       }
+    }
   }
 
-  
+  void
+  AbstractAssignment::update_graph ()
+  {
+    if (_has_coupling) {
+      Graph::instance ().remove_edge (_src, _dst);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    }
+    if (_src && _dst) {
+      Graph::instance ().add_edge (_src, _dst);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+      _has_coupling = true;
+    } else {
+      _has_coupling = false;
+    }
+  }
+
   AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                               bool isModel) : Process (isModel)
+                                          bool isModel) :
+      Process (isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr), _c_src (
+          nullptr), _c_dst (nullptr)
   {
     init_AbstractAssignment (src, ispec, dst, dspec);
   }
 
-  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec,
-                                 bool isModel) : Process (p, n, isModel)
+  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
+                                          const string &dspec, bool isModel) :
+      Process (p, n, isModel)
   {
-    init_AbstractAssignment (src, ispec, dst, dspec);   
+    init_AbstractAssignment (src, ispec, dst, dspec);
+  }
+
+  AbstractAssignment::~AbstractAssignment ()
+  {
+    if (_update_src) {
+      Graph::instance ().remove_edge (_ref_src, _update_src);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+      delete _c_src;
+      delete _update_src;
+    }
+    if (_update_dst) {
+      Graph::instance ().remove_edge (_ref_dst, _update_dst);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+      delete _c_dst;
+      delete _update_dst;
+    }
   }
 
   void
@@ -114,22 +211,27 @@ namespace djnn
   }
 
   void
-  Assignment::init_Assignment (){
-    _action = new AssignmentAction (this, "assignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, true);
-    Graph::instance ().add_edge (_src, _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+  Assignment::init_Assignment ()
+  {
+    string src_name = _src ? _src->get_name () : "";
+    string dst_name = _dst ? _dst->get_name () : "";
+    _action = new AssignmentAction (this, "assignment_" + src_name + "_to_" + dst_name + "_action", &_src, &_dst, true);
+    if (_src && _dst) {
+      Graph::instance ().add_edge (_src, _dst);
+      _has_coupling = true;
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    }
   }
 
-  Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                          bool isModel) : 
+  Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel) :
       AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
     init_Assignment ();
   }
 
-  Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec,
-                          Process* dst, const string &dspec, bool isModel) :
+  Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst,
+                          const string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     init_Assignment ();
@@ -152,16 +254,17 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
-    
+
     delete _action;
   }
 
   void
-  Assignment::serialize (const string& format) {
+  Assignment::serialize (const string& format)
+  {
 
     string buf;
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:assignment");
     AbstractSerializer::serializer->text_attribute ("id", _name);
@@ -173,27 +276,29 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
+    AbstractSerializer::post_serialize (this);
   }
 
   void
   PausedAssignment::init_PausedAssignment ()
   {
-    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", _src, _dst, false);
+    _action = new AssignmentAction (this,
+                                    "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
+                                    &_src, &_dst, false);
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _dst);
   }
 
-  PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst,
-                                      const string &dspec, bool isModel) :
-    AbstractAssignment (src, ispec, dst, dspec, isModel)
+  PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
+                                      bool isModel) :
+      AbstractAssignment (src, ispec, dst, dspec, isModel)
   {
     init_PausedAssignment ();
   }
 
-  PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src,
-                                      const string &ispec, Process* dst, const string &dspec, bool isModel) :
+  PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec,
+                                      Process* dst, const string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     init_PausedAssignment ();
@@ -216,16 +321,17 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
-    
+
     delete _action;
   }
 
   void
-  PausedAssignment::serialize (const string& format) {
+  PausedAssignment::serialize (const string& format)
+  {
 
     string buf;
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:pausedassignment");
     AbstractSerializer::serializer->text_attribute ("id", _name);
@@ -237,8 +343,7 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
+    AbstractSerializer::post_serialize (this);
   }
 }
-
 
