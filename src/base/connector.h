@@ -25,7 +25,7 @@
 namespace djnn {
   using namespace std;
 
-  class Connector : public Process
+  class Connector : public Process, public SrcDstLink
   {
     friend class PausedConnector;
    
@@ -33,15 +33,15 @@ namespace djnn {
     class ConnectorAction : public Process
     {
     public:
-      ConnectorAction (Process* p, const string &n, AbstractProperty* src, AbstractProperty* dst, bool propagate) :
-	Process (p, n), _src (src), _dst (dst), _propagate (propagate) {};
+      ConnectorAction (Process* p, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+        Process (p, n), _src (src), _dst (dst), _propagate (propagate) {};
       virtual ~ConnectorAction () {};
       void activate () override;
       void deactivate () override {};
       void exec (int flag) override { activate (); }
     private:
-      AbstractProperty* _src;
-      AbstractProperty* _dst;
+      AbstractProperty** _src;
+      AbstractProperty** _dst;
       bool _propagate;
     };
 
@@ -50,6 +50,7 @@ namespace djnn {
     Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
     void activate () override;
     void deactivate () override;
+    void update_graph () override;
     void serialize (const string& type) override;
     virtual ~Connector ();
 
@@ -57,8 +58,12 @@ namespace djnn {
     void init_connector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
+    RefProperty *_ref_src, *_ref_dst;
     Coupling *_c_src;
     Process *_action;
+    UpdateSrcOrDst* _update_src, *_update_dst;
+    Coupling *_c_update_src, *_c_update_dst;
+    bool _has_coupling;
     bool _copy_on_activation;
   };
 
