@@ -70,6 +70,23 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
+  Process*
+  RefProperty::find_component (const string &path)
+  {
+    if (path.empty ())
+      return this;
+    size_t found = path.find_first_of ('/');
+    string key = path;
+    string subpath = "";
+    if (found != string::npos) {
+      key = path.substr (0, found);
+      subpath = path.substr (found + 1, path.size () - 1);
+    }
+    if (key.compare ("$value") == 0)
+      return value->find_component (subpath);
+    return nullptr;
+  }
+
   void
   RefProperty::dump (int level) {
     cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << value << " ]" ;
