@@ -22,14 +22,17 @@
 #include <mach/mach.h>
 #endif
 
-namespace djnn {
-  void get_monotonic_time(struct timespec *ts) {
-  #ifdef __MACH__
+namespace djnn
+{
+  void
+  get_monotonic_time (struct timespec *ts)
+  {
+#ifdef __MACH__
     clock_serv_t cclock;
     mach_timespec_t mts;
-    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &cclock);
-    clock_get_time(cclock, &mts);
-    mach_port_deallocate(mach_task_self(), cclock);
+    host_get_clock_service (mach_host_self (), SYSTEM_CLOCK, &cclock);
+    clock_get_time (cclock, &mts);
+    mach_port_deallocate (mach_task_self(), cclock);
     ts->tv_sec = mts.tv_sec;
     ts->tv_nsec = mts.tv_nsec;
 #else
@@ -37,16 +40,20 @@ namespace djnn {
 #endif
   }
 
-static struct timespec before;
-static struct timespec after;
-static int init = 0;
+  static struct timespec before;
+  static struct timespec after;
+  static int init = 0;
 
-  void t1 () {
-    get_monotonic_time(&before);
+  void
+  t1 ()
+  {
+    get_monotonic_time (&before);
     init = 1;
   }
 
-  double t2 (const std::string &msg) {
+  double
+  t2 (const std::string &msg)
+  {
     if (!init)
       return 0.0;
     get_monotonic_time (&after);
@@ -54,5 +61,28 @@ static int init = 0;
     std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
     init = 0;
     return elapsedTime;
+  }
+
+  pair<RefProperty*, string>
+  check_for_ref (Process* src, const string &spec)
+  {
+    if (spec.empty ())
+      return pair<RefProperty*, string> (nullptr, spec);
+    size_t found = spec.find ("$value");
+    if (found != string::npos) {
+      Process *prop = src;
+      if (found > 0)
+        prop = src->find_component (spec.substr (0, found - 1));
+      if (!prop)
+        return pair<RefProperty*, string> (nullptr, spec);
+      RefProperty *ref = dynamic_cast<RefProperty*> (prop);
+      if (ref != nullptr && spec.size () > 6) {
+        string new_spec = spec.substr (found + 6);
+        if (new_spec.at (0) == '/')
+          new_spec = new_spec.substr (1);
+        return pair<RefProperty*, string> (ref, new_spec);
+      }
+    }
+    return pair<RefProperty*, string> (nullptr, spec);
   }
 }
