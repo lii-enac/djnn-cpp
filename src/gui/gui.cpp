@@ -17,6 +17,8 @@
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
 
+#include  <algorithm>
+
 #define _PERF_TEST 0
 #if _PERF_TEST
 static int __nb_Drawing_object = 0;
