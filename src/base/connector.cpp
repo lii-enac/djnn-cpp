@@ -164,6 +164,20 @@ namespace djnn
 
     delete _c_src;
     delete _action;
+    if (_update_src) {
+      Graph::instance ().remove_edge (_ref_src, _update_src);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+      delete _c_update_src;
+      delete _update_src;
+    }
+    if (_update_dst) {
+      Graph::instance ().remove_edge (_ref_dst, _update_dst);
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+      delete _c_update_dst;
+      delete _update_dst;
+    }
   }
 
   void
