@@ -18,6 +18,7 @@
 
 #include "../backend.h"
 #include "../window.h"
+#include "../picking/picking.h"
 #include "../../core/tree/process.h"
 #include "../../core/syshook/external_source.h"
 
