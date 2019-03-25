@@ -140,15 +140,16 @@ namespace djnn
 
   AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
                                           bool isModel) :
-      Process (isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr), _c_src (
-          nullptr), _c_dst (nullptr)
+      Process (isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr), 
+      _c_src (nullptr), _c_dst (nullptr)
   {
     init_AbstractAssignment (src, ispec, dst, dspec);
   }
 
   AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
                                           const string &dspec, bool isModel) :
-      Process (p, n, isModel)
+      Process (p, n, isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr),
+      _c_src (nullptr), _c_dst (nullptr)
   {
     init_AbstractAssignment (src, ispec, dst, dspec);
   }
@@ -158,14 +159,14 @@ namespace djnn
     if (_update_src) {
       Graph::instance ().remove_edge (_ref_src, _update_src);
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+        Graph::instance ().remove_edge (_parent->state_dependency (), _update_src);
       delete _c_src;
       delete _update_src;
     }
     if (_update_dst) {
       Graph::instance ().remove_edge (_ref_dst, _update_dst);
       if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+        Graph::instance ().remove_edge (_parent->state_dependency (), _update_dst);
       delete _c_dst;
       delete _update_dst;
     }
