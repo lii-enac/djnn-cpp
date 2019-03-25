@@ -71,6 +71,7 @@ namespace djnn {
 #ifdef USE_GL_ES_VERSION_2_0
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
+    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 0 );
 #endif
     
@@ -118,12 +119,12 @@ namespace djnn {
 
     _sdl_context = SDL_GL_CreateContext(_sdl_window);
     if (!_sdl_context) {
-      fprintf(stderr, "Couldn't create context: %s\n", SDL_GetError());
+      fprintf(stderr, "Couldn't create context: %s %s:%d\n", SDL_GetError(), __FILE__, __LINE__);
       exit(1);
     }
 
     /* This makes our buffer swap syncronized with the monitor's vertical refresh */
-    //SDL_GL_SetSwapInterval(1);
+    SDL_GL_SetSwapInterval(1);
 
     SDLMainloop::instance ().add_window (this);
   }
@@ -186,21 +187,28 @@ namespace djnn {
     t1();
     #endif
 
-    glClearColor (1, 1, 1, 0);
-    glClear (GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  	glEnable(GL_BLEND);
-
-  	//__EFL__;
-  	CHKGL;
-
-    //GLBackend* backend = dynamic_cast<GLBackend*> (Backend::instance ());
-    //backend->start_redraw();
-    //backend->set_window (_window);
+    backend->set_window (_window);
     Process *p = _window->get_parent ();
-    if (p) {
-       p->draw ();
-    }
+  
+
+    backend->start_redraw();
+    if (p) p->draw ();
+    backend->end_redraw();
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    SDL_GL_SwapWindow (_sdl_window); // does not work on webgl :-/ swap is implicit
+
+//#ifdef __EMSCRIPTEN__
+    // draw picking scene in back buffer
+    backend->start_pick();
+    if (p) p->pick();
+    backend->end_pick();
+//#endif
+
+
+    //SDL_GL_SwapWindow (_sdl_window); //debug picking
+
+    //std::cerr << std::endl;
 
     #if _PERF_TEST
     // print in RED
