@@ -66,11 +66,16 @@ namespace djnn {
       GUIMouseButton* left () { return _left; }
       GUIMouseButton* right () { return _right; }
       GUIMouseButton* middle () { return _middle; }
+      Process* move () { return _move; }
+      Process* wheel () { return _wheel; }
       DoubleProperty* x () { return _pos_x; }
       DoubleProperty* y () { return _pos_y; }
+      DoubleProperty* dx () { return _dx; }
+      DoubleProperty* dy () { return _dy; }
     private:
       GUIMouseButton *_left, *_right, *_middle;
-      DoubleProperty *_pos_x, *_pos_y;
+      Spike *_move, *_wheel;
+      DoubleProperty *_pos_x, *_pos_y, *_dx, *_dy;
     };
 
   typedef enum mouse_button {

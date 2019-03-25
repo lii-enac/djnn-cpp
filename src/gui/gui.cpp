@@ -223,8 +223,14 @@ namespace djnn
     _left = new GUIMouseButton (this, "left");
     _right = new GUIMouseButton (this, "right");
     _middle = new GUIMouseButton (this, "middle");
+    _move = new Spike (this, "move");
+    _wheel = new Spike (this, "wheel");
     _pos_x = new DoubleProperty (this, "x", 0);
     _pos_y = new DoubleProperty (this, "y", 0);
+    _dx = new DoubleProperty (0);
+    _dy = new DoubleProperty (0);
+    _wheel->add_symbol ("dx", _dx);
+    _wheel->add_symbol ("dy", _dy);
   }
 
   GUIMouse::~GUIMouse ()
@@ -232,8 +238,14 @@ namespace djnn
     delete _left;
     delete _right;
     delete _middle;
+    delete _move;
     delete _pos_x;
     delete _pos_y;
+    _wheel->remove_symbol ("dx");
+    _wheel->remove_symbol ("dy");
+    delete _wheel;
+    delete _dx;
+    delete _dy;
   }
 
   void

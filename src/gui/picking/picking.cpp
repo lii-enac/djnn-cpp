@@ -161,7 +161,8 @@ namespace djnn
     }
     ((GUIMouse*)GenericMouse)->x ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->y ()->set_value (y, true);
-    if (((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
+    ((GUIMouse*)GenericMouse)->move ()->activation ();
+    if (((GUIMouse*)GenericMouse)->move ()->has_coupling() || ((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
       exec_ = true;
     }
     return exec_;
@@ -316,6 +317,14 @@ namespace djnn
     }
     _win->wheel_dx ()->set_value (0, false);
     _win->wheel_dy ()->set_value (0, false);
+    ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
+    ((GUIMouse*)GenericMouse)->dy ()->set_value (y, true);
+    ((GUIMouse*)GenericMouse)->wheel ()->activation ();
+    if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() || ((GUIMouse*)GenericMouse)->dx ()->has_coupling() || ((GUIMouse*)GenericMouse)->dy ()->has_coupling()) {
+      exec_ = true;
+     }
+    ((GUIMouse*)GenericMouse)->dx ()->set_value (0, false);
+    ((GUIMouse*)GenericMouse)->dy ()->set_value (0, false);
     return exec_;
   }
 
