@@ -93,14 +93,26 @@ LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 	
 ifeq ($(findstring android,$(cross_prefix)),android)
-CXXFLAGS := \
--I/usr/local/Cellar/android-ndk/r14//sources/cxx-stl/llvm-libc++/include \
--I/usr/local/include \
+os := android
+inc_android =  \
 -DSDL_DISABLE_IMMINTRIN_H \
-$(CXXFLAGS)
+-I/usr/local/Cellar/android-ndk/r14/sources/cxx-stl/llvm-libc++/include \
+-I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include \
+-I../ext-libs/android/libexpat/expat/lib \
+-I../ext-libs/android/curl/include \
+-I../ext-libs/boost_1_68_0 \
+-I../ext-libs/fontconfig \
+-I/usr/local/include \
+--sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
+#/usr/local/include for glm
 
-CFLAGS += -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
-CXXFLAGS += -I/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm/usr/include
+CFLAGS += $(inc_android)
+CXXFLAGS += $(inc_android)
+
+LDFLAGS := -L../ext-libs/android/libexpat/expat/lib/.libs \
+-L../ext-libs/android/curl/lib/.libs \
+--sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
+
 endif
 
 ifeq ($(graphics),QT)
@@ -126,9 +138,12 @@ lib_suffix=.bc
 EMFLAGS := -Wall -Oz -s USE_SDL=2 -s USE_FREETYPE=1 \
 -s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
 -DSDL_DISABLE_IMMINTRIN_H \
--s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
+-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
+-s USE_WEBGL2=1
 
+#-s USE_WEBGL2=1
 #-s FULL_ES2=1
+#-s FULL_ES3=1
 #-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
 
 #CC := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CC)
