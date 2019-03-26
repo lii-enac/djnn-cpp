@@ -37,9 +37,14 @@ namespace djnn
       return _duration == chrono::milliseconds(-1);
     }
     
+    void set_run_for (int milliseconds) {
+      _duration = chrono::milliseconds(milliseconds);
+    }
+
     void set_run_for (chrono::milliseconds d) {
       _duration = d;
     }
+
     void set_run_for (chrono::seconds d) {
       _duration = chrono::duration_cast<chrono::milliseconds>(d);
     }
