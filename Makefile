@@ -192,8 +192,8 @@ djnn_libs := core base display gui animation
 endif
 
 ifeq ($(os),$(osmingw))
-djnn_libs := core base display gui animation
-# comms input
+djnn_libs := core base comms display gui animation
+# input
 endif
 
 ifeq ($(findstring avr,$(cross_prefix)),avr)

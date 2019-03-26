@@ -38,7 +38,13 @@ make -j
 ivy bus -> https://www.eei.cena.fr/products/ivy/  
 
 Windows:
-There is an installer on the above website.
+```
+pacman -S subversion
+svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
+cd ivy-c/src
+make static-libs shared-libs  
+#sudo make installlibs includes  
+```
 
 Linux/Ubuntu:
 ```
