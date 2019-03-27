@@ -127,6 +127,21 @@ namespace djnn
           picking_view ()->genericMouseMove (e.motion.x, e.motion.y);
           break;
         }
+      case SDL_FINGERDOWN:
+        {
+          picking_view ()->genericTouchPress (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          break;
+        }
+      case SDL_FINGERUP:
+        {
+          picking_view ()->genericTouchRelease (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          break;
+        }
+      case SDL_FINGERMOTION:
+        {
+          picking_view ()->genericTouchMove (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          break;
+        }
       case SDL_MOUSEWHEEL:
         {
           picking_view ()->genericMouseWheel (e.wheel.x, e.wheel.y);

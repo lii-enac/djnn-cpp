@@ -152,7 +152,9 @@ namespace djnn {
       HE(SDL_USEREVENT);
       HE(SDL_MOUSEMOTION);
       HE(SDL_FINGERMOTION);
-      default: printf("unknown SDL event %x\n",t);return "unknown SDL event"; break;
+      HE(SDL_FINGERDOWN);
+      HE(SDL_FINGERUP);
+      default: return "unknown SDL event" ; break;
     }
   }
 
@@ -213,8 +215,35 @@ namespace djnn {
       case SDL_WINDOWEVENT:
       case SDL_USEREVENT: // redraw
       {
+        //std::cout << sdl_event_to_char(e.type) << " " << __FL__;
         SDLWindow * w = _windows[e.window.windowID];
         if(w) w->handle_event(e);
+        break;
+      }
+      case SDL_FINGERDOWN:
+      case SDL_FINGERUP:
+      case SDL_FINGERMOTION:
+      {
+        //std::cout << sdl_event_to_char(e.type) << " " << e.tfinger.x << " " << e.tfinger.y << " " << e.tfinger.touchId << " " << __FL__;
+        if(!_windows.empty()) {
+          // SDL does not try to associate touch events and window
+          // it should work with touch screens first
+          // so pretend that the touch device boundaries are mapped to the those of the display
+          SDL_Rect rect;
+          SDL_GetDisplayBounds(0, &rect);
+          e.tfinger.x *= rect.w;
+          e.tfinger.y *= rect.h ;
+          // pick the first window
+          SDLWindow * w = _windows.begin()->second;
+          SDL_Window * sdlw = w->sdl_window();
+          
+          int x,y;
+          SDL_GetWindowPosition(sdlw, &x, &y);
+          e.tfinger.x -= x;
+          e.tfinger.y -= y;
+          //std::cout << sdl_event_to_char(e.type) << " " << e.tfinger.x << " " << e.tfinger.y << " " << e.tfinger.touchId << " " << __FL__;
+          w->handle_event(e);
+        }
         break;
       }
       case SDL_QUIT:

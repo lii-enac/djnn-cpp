@@ -70,11 +70,15 @@ namespace djnn
     void set_y (double v) { _y->set_value (v, true); }
     void set_local_x (double v) { _local_x->set_value (v, true); }
     void set_local_y (double v) { _local_y->set_value (v, true); }
+    void set_pressure (double v) { _pressure->set_value (v, true); }
+    void set_id (int v) { _id->set_value (v, true); }
+    
     AbstractGShape* shape () { return _shape; }
     void set_shape (AbstractGShape *s) { _shape = s; }
     virtual ~Touch ();
   private:
-    DoubleProperty *_x,* _y, *_local_x, *_local_y;
+    DoubleProperty *_x,* _y, *_local_x, *_local_y, *_pressure;
+    IntProperty *_id;
     AbstractGShape* _shape;
   };
 

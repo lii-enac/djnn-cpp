@@ -125,23 +125,24 @@ namespace djnn
             const int &id = touchPoint.id ();
             const double &x = touchPoint.pos ().x ();
             const double &y = touchPoint.pos ().y ();
+            const double &pressure = touchPoint.pressure ();
             switch (touchPoint.state ())
               {
               case Qt::TouchPointStationary:
                 continue;
               case Qt::TouchPointPressed:
                 {
-                  exec_ |= _picking_view->genericTouchPress (x, y, id);
+                  exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
                   break;
                 }
               case Qt::TouchPointMoved:
                 {
-                  exec_ |= _picking_view->genericTouchMove (x, y, id);
+                  exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
                   break;
                 }
               case Qt::TouchPointReleased:
                 {
-                  exec_ |= _picking_view->genericTouchRelease (x, y, id);
+                  exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
                   break;
                 }
               }

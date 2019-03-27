@@ -97,7 +97,7 @@ namespace djnn
   }
 
   bool
-  Picking::genericTouchPress (double x, double y, int id)
+  Picking::genericTouchPress (double x, double y, int id, float pressure)
   {
     map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
@@ -114,6 +114,8 @@ namespace djnn
     _active_touches[id] = t;
     t->set_x (x);
     t->set_y (y);
+    t->set_pressure (pressure);
+    t->set_id (id);
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
       t->set_shape (s);
@@ -208,7 +210,7 @@ namespace djnn
   }
 
   bool
-  Picking::genericTouchMove (double x, double y, int id)
+  Picking::genericTouchMove (double x, double y, int id, float pressure)
   {
     map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
@@ -216,6 +218,8 @@ namespace djnn
       t = it->second;
       t->set_x (x);
       t->set_y (y);
+      t->set_pressure (pressure);
+      t->set_id (id);
       AbstractGShape *s = this->pick (x, y);
       AbstractGShape *t_shape = t->shape ();
       if (s == nullptr && t_shape != nullptr) {
@@ -233,7 +237,7 @@ namespace djnn
         set_local_coords (s, t, x, y);
       }
     } else {
-      genericTouchPress (x, y, id);
+      genericTouchPress (x, y, id, pressure);
     }
     return true;
   }
@@ -285,7 +289,7 @@ namespace djnn
   }
 
   bool
-  Picking::genericTouchRelease (double x, double y, int id)
+  Picking::genericTouchRelease (double x, double y, int id, float pressure)
   {
     map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
@@ -293,6 +297,8 @@ namespace djnn
       t = it->second;
       t->set_x (x);
       t->set_y (y);
+      t->set_pressure (pressure);
+      t->set_id (id);
       AbstractGShape *t_shape = t->shape ();
       if (t_shape != nullptr) {
         t_shape->find_component ("touches")->remove_child (t);

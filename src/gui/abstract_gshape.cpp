@@ -57,6 +57,8 @@ namespace djnn
     _y = new DoubleProperty (this, "y", 0);
     _local_x = new DoubleProperty (this, "local_x", 0);
     _local_y = new DoubleProperty (this, "local_y", 0);
+    _pressure = new DoubleProperty (this, "pressure", 0);
+    _id = new IntProperty (this, "id", 0);
     set_activated();
     Process::finalize ();
   }
@@ -68,6 +70,8 @@ namespace djnn
     _y = new DoubleProperty (this, "y", 0);
     _local_x = new DoubleProperty (this, "local_x", 0);
     _local_y = new DoubleProperty (this, "local_y", 0);
+    _pressure = new DoubleProperty (this, "pressure", 0);
+    _id = new IntProperty (this, "id", 0);
     set_activated();
   }
 
@@ -77,6 +81,8 @@ namespace djnn
     delete _y;
     delete _local_x;
     delete _local_y;
+    delete _pressure;
+    delete _id;
   }
 
   void
