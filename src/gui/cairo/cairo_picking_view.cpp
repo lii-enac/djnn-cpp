@@ -34,8 +34,10 @@ namespace djnn
   int
   CairoPickingView::get_pixel (int x, int y)
   {
-    if (x > _w || y > _h)
+    if (x < 0 || y < 0 || x > _w || y > _h)
       return 0;
+
+    //std::cerr << x << " " << y << std::endl;
 
     unsigned char *px = _cur_data + (y * _stride) + x * 4;
     unsigned int result = (unsigned int) (px[3] << 24 | (px[2] << 16) | (px[1] << 8) | px[0]);

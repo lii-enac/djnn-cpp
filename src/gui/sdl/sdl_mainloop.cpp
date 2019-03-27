@@ -229,20 +229,34 @@ namespace djnn {
           // SDL does not try to associate touch events and window
           // it should work with touch screens first
           // so pretend that the touch device boundaries are mapped to the those of the display
-          SDL_Rect rect;
-          SDL_GetDisplayBounds(0, &rect);
-          e.tfinger.x *= rect.w;
-          e.tfinger.y *= rect.h ;
-          // pick the first window
+          int sw=1,sh=1;
+          int dx=0,dy=0;
+
+           // pick the first window
           SDLWindow * w = _windows.begin()->second;
           SDL_Window * sdlw = w->sdl_window();
-          
-          int x,y;
-          SDL_GetWindowPosition(sdlw, &x, &y);
-          e.tfinger.x -= x;
-          e.tfinger.y -= y;
+
+          #ifndef __WIN32__
+          /*SDL_Rect rect;
+          SDL_GetDisplayBounds(0, &rect);
+          sw=rect.w;
+          sh=rect.h;
+
+           SDL_GetWindowPosition(sdlw, &dx, &dy);
+          */
+          #else
+          // SDL on win32 gives coordinates according to window :-/
+          SDL_GetWindowSize(sdlw, &sw, &sh);
+          #endif
+
+          e.tfinger.x *= sw;
+          e.tfinger.y *= sh ;
+          e.tfinger.x -= dx;
+          e.tfinger.y -= dy;
+
           //std::cout << sdl_event_to_char(e.type) << " " << e.tfinger.x << " " << e.tfinger.y << " " << e.tfinger.touchId << " " << __FL__;
           w->handle_event(e);
+          //std::cout << std::endl;
         }
         break;
       }
