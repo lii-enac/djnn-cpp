@@ -127,7 +127,7 @@ namespace djnn
       //std::cerr << this << " << stop" << std::endl;
 
     } catch (exception& e) {
-      std::cerr << e.what() << std::endl;
+      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
   }
 

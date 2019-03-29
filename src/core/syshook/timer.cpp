@@ -100,7 +100,7 @@ namespace djnn
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     } catch (exception& e) {
-      std::cerr << e.what() << std::endl;
+      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
     //deactivation ();
   }
