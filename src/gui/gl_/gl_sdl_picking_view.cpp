@@ -52,7 +52,7 @@ namespace djnn
   
 
   int
-  GLSDLPickingView::get_pixel (int x, int y)
+  GLSDLPickingView::get_pixel (unsigned int x, unsigned int y)
   {
 //#if defined(GL_VERSION_1_0) || defined(GL_ES_VERSION_3_0)
 
@@ -74,22 +74,27 @@ namespace djnn
     // get_pixel_warn=1;
     // return 0;
 
-    double scale = current_context().hidpi_scale();
-
     unsigned int w_ = _win->width()->get_value();
     unsigned int h_ = _win->height()->get_value();
-    unsigned int x_ = x * scale;
-    unsigned int y_ = (h_-y) * scale;
-    unsigned index = y_ * w_ + x_;
-    unsigned int color=0;
-    //assert(picking_data);
 
-    if(!picking_data) {
+    y = h_ - y;
+
+    if (x < 0 || y < 0 || x >= w_ || y >= h_)
+      return 0;
+    //std::cerr << attr(x) << attr(y) << attr(w_) << attr(h_) << __FL__;
+    //std::cerr << attr((y >= h_)) << __FL__;
+
+    double scale = current_context().hidpi_scale();
+
+    if (!picking_data) {
       gl2d_render_scene_picking_post_get_data(_win, w_, h_, false, current_context().hidpi_scale());
     }
+    unsigned int x_ = x * scale;
+    unsigned int y_ = y * scale;
     
-    if(picking_data) color = ((unsigned int*) picking_data)[index];
-    //BGRA
+    unsigned int index = y_ * w_ * scale + x_;
+    //std::cerr << attr(x_) << attr(y_) << attr(w_) << attr(h_) << attr(scale) << attr(index) << __FL__;
+    unsigned int color = ((unsigned int*) picking_data)[index];
 
     //std::cerr << hex << attr(color) << dec << __FL__;
     return color;

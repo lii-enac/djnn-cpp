@@ -2,14 +2,13 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2018)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
- *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
- *
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  */
 
 #pragma once
@@ -22,22 +21,20 @@
 
 namespace djnn
 {
+  class GLSDLWindow;
 
-  class CairoPickingView : public ColorPickingView
+  class GLSDLPickingView : public ColorPickingView
   {
   public:
-    CairoPickingView (Window *win);
-    virtual ~CairoPickingView ();
-
+    GLSDLPickingView (Window *win, GLSDLWindow *sdlwin);
+    virtual ~GLSDLPickingView ();
+    
     // Picking
     virtual void init () override;
     // ColorPickingView
     virtual int get_pixel(unsigned int x, unsigned int y) override;
 
-    void set_data (unsigned char* data, int w, int h, int stride) { _cur_data = data; _w =w; _h = h; _stride = stride; }
-
   private:
-    unsigned char* _cur_data;
-    int _w, _h, _stride;
+    GLSDLWindow * _sdlwin;
   };
 } /* namespace djnn */

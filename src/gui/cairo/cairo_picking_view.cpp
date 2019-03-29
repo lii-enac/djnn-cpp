@@ -32,7 +32,7 @@ namespace djnn
   }
 
   int
-  CairoPickingView::get_pixel (int x, int y)
+  CairoPickingView::get_pixel (unsigned int x, unsigned int y)
   {
     if (x < 0 || y < 0 || x > _w || y > _h)
       return 0;

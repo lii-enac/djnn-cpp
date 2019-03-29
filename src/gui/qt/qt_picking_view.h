@@ -37,7 +37,7 @@ namespace djnn
     // Picking
     virtual void init () override;
     // ColorPickingView
-    virtual int get_pixel(int x, int y) override;
+    virtual int get_pixel(unsigned int x, unsigned int y) override;
 
     // QtPickingView
     QPainter* painter () { return _painter; }
