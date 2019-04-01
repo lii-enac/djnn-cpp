@@ -108,7 +108,8 @@ namespace djnn
         t->shape ()->find_component ("touches")->remove_child (t);
       }
       _active_touches.erase (it);
-      delete t;
+      Graph::instance().add_process_to_delete (t);
+      //delete t;
     }
     t = new Touch (_win->touches (), to_string (id));
     _active_touches[id] = t;
@@ -306,7 +307,8 @@ namespace djnn
       }
       _win->touches ()->remove_child (t);
       _active_touches.erase (it);
-      delete t;
+      Graph::instance().add_process_to_delete (t);
+      //delete t;
     }
     return true;
   }
