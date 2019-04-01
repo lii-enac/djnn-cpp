@@ -84,8 +84,8 @@ namespace djnn
     fill_and_stroke ();
     void
     pick_fill_and_stroke ();
-    WinImpl*
-    create_window (Window *win, const std::string& title, double x, double y, double w, double h) override;
+    //WinImpl*
+    //create_window (Window *win, const std::string& title, double x, double y, double w, double h) override;
 
     //shapes
     void

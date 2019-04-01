@@ -1,4 +1,4 @@
-lib_srcs += $(shell find src/gui/cairo -name "*.cpp" -not -path "*gl*")
+lib_srcs += $(shell find src/gui/cairo -name "*.cpp"  -not -path "*sdl*")
 
 cairo_backend ?= pixmap
 #cairo_backend ?= gl
@@ -23,10 +23,15 @@ ifeq ($(os),Darwin)
 lib_ldflags += -lintl -Wl,-framework -Wl,CoreFoundation -L/Users/conversy/src-ext/SwiftShader/build -lEGL
 endif
 #temporary
-include src/gui/gl_/djnn-lib.mk
+include src/display/gl/djnn-lib.mk
 endif
 
-include src/gui/sdl/djnn-lib.mk
+
+ifeq ($(display),SDL)
+include src/gui/cairo/sdl/djnn-lib.mk
+endif
+
+#include src/display/sdl/djnn-lib.mk
 
 # -------------------
 # compiling cairo for opengl

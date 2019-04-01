@@ -44,9 +44,10 @@ namespace djnn
     void
     set_picking_view (QtPickingView *p);
     QPainter *painter () { return _painter; }
+    /*
     WinImpl*
     create_window (Window *win, const std::string& title, double x, double y, double w, double h) override;
-
+    */
     //shapes
     void
     draw_rectangle (Rectangle *s) override;

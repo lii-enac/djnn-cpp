@@ -22,6 +22,9 @@
 #include "qt_backend.h"
 #include "qt_window.h"
 
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>
 #include <QtCore/QtMath>
@@ -111,11 +114,11 @@ namespace djnn
     double dyfactor = cur_context->factor[dyU];
 
     if (dxU == djnPercentLength) {
-      int v = (int) _window->width ()->get_value ();
+      int v = DisplayBackend::instance()->window()->width ()->get_value ();
       dx = v * dx / 100;
     }
     if (dyU == djnPercentLength) {
-      int v = _window->height ()->get_value ();
+      int v = DisplayBackend::instance()->window()->height ()->get_value ();
       dy = v * dy / 100;
     }
 

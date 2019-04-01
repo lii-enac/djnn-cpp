@@ -16,9 +16,11 @@
 
 #pragma once
 
-#include "../backend.h"
+//#include "../backend.h"
+//#include "../backend.h"
+//#include "../window.h"
 #include "../window.h"
-#include "../picking/picking.h"
+#include "../../gui/picking/picking.h"
 #include "../../core/tree/process.h"
 #include "../../core/syshook/external_source.h"
 
@@ -39,11 +41,11 @@ namespace djnn {
     virtual ~SDLWindow ();
     SDL_Window * sdl_window() { return _sdl_window; }
 
-    void handle_event(SDL_Event&);
     enum {
       user_event_awake
     };
 
+    virtual void handle_event(SDL_Event&);
     virtual void handle_resized(int w, int h);
     virtual void update_hdpi();
     virtual void redraw ();

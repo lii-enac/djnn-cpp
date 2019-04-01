@@ -12,13 +12,19 @@
  *
  */
 
-#include "abstract_gobj.h"
-#include "backend.h"
-#include "abstract_backend.h"
+#include "window.h"
+
+#include "../gui/abstract_gobj.h"
+#include "../gui/backend.h"
+#include "../gui/abstract_backend.h"
+
+#include "../display/display.h"
+#include "../display/abstract_display.h"
+
 #include "../core/tree/spike.h"
 #include "../core/tree/component.h"
 #include "../core/tree/set.h"
-#include "window.h"
+
 
 namespace djnn
 {
@@ -59,7 +65,7 @@ namespace djnn
     add_symbol ("release", _release);
     add_symbol ("wheel", _wheel);
 
-    _win_impl = Backend::instance ()->create_window (this, title, x, y, w, h);
+    _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
   Window::Window (const std::string &title, double x, double y, double w, double h) :

@@ -16,9 +16,11 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 #include "../../core/control/coupling.h"
 #include "shapes.h"
-#include "../window.h"
 
 namespace djnn
 {
@@ -439,7 +441,7 @@ namespace djnn
   void
   Text::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
         Backend::instance ()->draw_text (this);
     }
   }

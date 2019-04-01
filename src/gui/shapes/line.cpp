@@ -17,6 +17,9 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 #include "shapes.h"
 #include "../../core/control/coupling.h"
 
@@ -156,7 +159,7 @@ namespace djnn
   void
   Line::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_line (this);
     }
   }

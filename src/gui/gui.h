@@ -15,7 +15,7 @@
 #pragma once
 
 #include "../core/core.h"
-#include "window.h"
+//#include "window.h"
 #include "style/style.h"
 #include "shapes/shapes.h"
 #include "transformation/transformations.h"

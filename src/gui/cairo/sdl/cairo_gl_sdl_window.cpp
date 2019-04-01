@@ -1,5 +1,5 @@
 #include "cairo_gl_sdl_window.h"
-#include "../sdl/sdl_mainloop.h"
+#include "../../../display/sdl/sdl_mainloop.h"
 
 #include "opengl.h"
 #include "gl_dbg.h"

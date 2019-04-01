@@ -16,6 +16,9 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 #include "../../core/control/coupling.h"
 #include "../../core/tree/blank.h"
 #include "shapes.h"
@@ -110,7 +113,7 @@ namespace djnn {
   void
   PolyPoint::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly_point (raw_props.x, raw_props.y);
     }
   }
@@ -178,7 +181,7 @@ namespace djnn {
   void
   Poly::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly (this);
     }
   }

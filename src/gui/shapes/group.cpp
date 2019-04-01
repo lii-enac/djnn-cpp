@@ -16,6 +16,8 @@
 #include "shapes.h"
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
 
 namespace djnn
 {
@@ -54,7 +56,7 @@ namespace djnn
   void
   Group::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == frame ()) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == frame ()) {
       Container::draw ();
     }
   }

@@ -18,7 +18,7 @@
 
 #include "../picking/color_picking.h"
 #include "../../core/core-dev.h"
-#include "../window.h"
+#include "../../display/window.h"
 #include "../abstract_gshape.h"
 #include <map>
 #include <QtGui/QImage>

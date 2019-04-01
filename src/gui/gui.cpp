@@ -16,8 +16,15 @@
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
+#include "../display/window.h"
 
-#include  <algorithm>
+#include <algorithm>
+
+
+#include <iostream>
+#define __FL__ " " __FILE__ ":" << __LINE__ << std::endl;
+#define __EFL__ std::cerr << __FUNCTION__ << " " << __FILE__ ":" << __LINE__ << std::endl;
+#define DBG __EFL__
 
 #define _PERF_TEST 0
 #if _PERF_TEST
@@ -248,6 +255,8 @@ namespace djnn
     delete _dy;
   }
 
+  extern void p_init_p_display ();
+
   void
   init_gui ()
   {
@@ -267,6 +276,7 @@ namespace djnn
       init_svg_parser ();
       gui_structure_observer = new GUIStructureObserver ();
       structure_observer_list.push_back (gui_structure_observer);
+      p_init_p_display ();
       p_init_gui ();
     }
   }

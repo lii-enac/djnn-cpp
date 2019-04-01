@@ -14,9 +14,10 @@
  */
 
 #include "../sdl/sdl_mainloop.h"
-#include "../gui-priv.h"
+#include "../../gui/gui-priv.h"
 #include "sdl_window.h"
-#include "../backend.h"
+//#include "../backend.h"
+#include "../display.h"
 
 #include "../../core/syshook/syshook.h"
 #include "../../core/execution/graph.h"
@@ -112,41 +113,7 @@ namespace djnn
       {
       case SDL_KEYDOWN:
         break;
-      case SDL_MOUSEBUTTONDOWN:
-        {
-          picking_view ()->genericMousePress (e.button.x, e.button.y, get_button (e.button.button));
-          break;
-        }
-      case SDL_MOUSEBUTTONUP:
-        {
-          picking_view ()->genericMouseRelease (e.button.x, e.button.y, get_button (e.button.button));
-          break;
-        }
-      case SDL_MOUSEMOTION:
-        {
-          picking_view ()->genericMouseMove (e.motion.x, e.motion.y);
-          break;
-        }
-      case SDL_FINGERDOWN:
-        {
-          picking_view ()->genericTouchPress (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
-          break;
-        }
-      case SDL_FINGERUP:
-        {
-          picking_view ()->genericTouchRelease (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
-          break;
-        }
-      case SDL_FINGERMOTION:
-        {
-          picking_view ()->genericTouchMove (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
-          break;
-        }
-      case SDL_MOUSEWHEEL:
-        {
-          picking_view ()->genericMouseWheel (e.wheel.x, e.wheel.y);
-          break;
-        }
+      
       case SDL_USEREVENT:
         {
           if (e.user.code == user_event_awake) {
@@ -213,8 +180,7 @@ namespace djnn
         }
       }
 
-    GRAPH_EXEC;
-
+    //GRAPH_EXEC;
   }
 
 }

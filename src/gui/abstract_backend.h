@@ -20,7 +20,7 @@
 #include "transformation/transformations.h"
 #include "style/style.h"
 #include "style/style_types.h"
-#include "window.h"
+//#include "window.h"
 
 namespace djnn
 {
@@ -29,14 +29,14 @@ namespace djnn
   class AbstractBackend
   {
   public:
-    AbstractBackend () : _window (nullptr) {
+    AbstractBackend ()/* : _window (nullptr)*/ {
     }
 
     virtual
     ~AbstractBackend ()
     {
     }
-    
+    /*
     virtual WinImpl*
     create_window (Window *win, const std::string& title, double x, double y, double w, double h) = 0;
 
@@ -50,7 +50,7 @@ namespace djnn
     window ()
     {
       return _window;
-    }
+    }*/
 
     /* shapes */
     virtual void
@@ -283,6 +283,6 @@ namespace djnn
     }
 
   protected:
-    Window *_window;
+    //Window *_window;
   };
 }

@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "../core/tree/process.h"
+#include "window.h"
 
 namespace djnn {
 
@@ -26,5 +27,24 @@ namespace djnn {
   extern Process *GPUs;
   extern Process *Displays;
   void init_display ();
+
+  class AbstractDisplay;
+
+  class DisplayBackend
+  {
+  public:
+    static AbstractDisplay* instance ();
+    static void init ();
+    static void clear ();
+  private:
+    //class Impl;
+    class Impl
+    {
+      public:
+      //SDLDisplayBackend* backend;
+      AbstractDisplay* backend;
+    };
+    static Impl* _instance;
+  };
 
 }

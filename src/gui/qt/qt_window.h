@@ -17,7 +17,7 @@
 #include "../backend.h"
 
 #include "../../core/syshook/external_source.h"
-#include "../window.h"
+#include "../../display/window.h"
 #include "qt_picking_view.h"
 
 #include <string>

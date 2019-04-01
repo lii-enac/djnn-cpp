@@ -14,6 +14,9 @@
 
 #include "../backend.h"
 
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+
 #include "qt_backend.h"
 #include "qt_mainloop.h"
 
@@ -41,5 +44,53 @@ namespace djnn
     _instance = new Impl ();
     _instance->qt_backend = QtBackend::instance ();
     QtMainloop::instance ();
+  }
+
+  class QtDisplayBackend : public AbstractDisplay {
+  public:
+    static QtDisplayBackend* instance ();
+    WinImpl* create_window (Window *win, const std::string& title,  double x, double y, double w, double h);
+
+    struct Impl;
+    Impl *impl;
+
+    static std::shared_ptr<QtDisplayBackend> _instance;
+    static std::once_flag onceFlag;
+
+  };
+
+  std::shared_ptr<QtDisplayBackend> QtDisplayBackend::_instance;
+  std::once_flag QtDisplayBackend::onceFlag;
+
+  WinImpl*
+  QtDisplayBackend::create_window (Window *win, const std::string& title,  double x, double y, double w, double h)
+  {
+    return new QtWindow (win, title, x, y, w, h);
+  }
+
+  QtDisplayBackend*
+  QtDisplayBackend::instance ()
+  {
+    //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+    std::call_once (QtDisplayBackend::onceFlag, [] () {
+      _instance.reset(new QtDisplayBackend);
+    });
+
+    return _instance.get ();
+  }
+
+  void
+  DisplayBackend::init ()
+  {
+    //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+    if (_instance != nullptr)
+      return;
+    _instance = new Impl ();
+    _instance->backend = QtDisplayBackend::instance ();
+    //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+  }
+
+  void p_init_p_display() {
+    DisplayBackend::init ();
   }
 }

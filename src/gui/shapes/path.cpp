@@ -16,6 +16,9 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 #include "../../core/control/coupling.h"
 #include "../../core/tree/blank.h"
 #include "shapes.h"
@@ -108,7 +111,7 @@ namespace djnn
   void
   PathLine::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_line (raw_props.x, raw_props.y);
     }
   }
@@ -122,7 +125,7 @@ namespace djnn
   void
   PathMove::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_move (raw_props.x, raw_props.y);
     }
   }
@@ -267,7 +270,7 @@ namespace djnn
   void
   PathQuadratic::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_quadratic (raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     }
   }
@@ -413,7 +416,7 @@ namespace djnn
   void
   PathCubic::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_cubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     }
   }
@@ -571,7 +574,7 @@ namespace djnn
   void
   PathArc::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_arc (raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     }
   }
@@ -641,7 +644,7 @@ namespace djnn
   void
   Path::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path (this);
     }
   }
@@ -659,7 +662,7 @@ namespace djnn
   void
   PathClip::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_clip (this);
     }
   }

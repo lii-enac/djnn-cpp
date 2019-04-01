@@ -21,7 +21,7 @@ endif
 
 #ifeq ($(graphics),CAIRO)
 ifneq (,$(filter $(graphics),CAIRO GL))
-include src/gui/sdl/djnn-lib-flags.mk
+include src/display/sdl/djnn-lib-flags.mk
 endif
 
 src/core/djnn-srcs.mk:

@@ -1,4 +1,5 @@
-lib_srcs := src/gui/abstract_gobj.cpp src/gui/abstract_gshape.cpp src/gui/gui.cpp src/gui/window.cpp
+lib_srcs += src/gui/abstract_gobj.cpp src/gui/abstract_gshape.cpp src/gui/gui.cpp
+#src/gui/window.cpp
 lib_srcs += $(shell find src/gui/picking -name "*.cpp")
 lib_srcs += $(shell find src/gui/shapes -name "*.cpp")
 lib_srcs += $(shell find src/gui/style -name "*.cpp")
@@ -17,4 +18,5 @@ ifeq ($(graphics),CAIRO)
 include src/gui/cairo/djnn-lib.mk
 endif
 
-lib_djnn_deps = core
+lib_djnn_deps = display core
+

@@ -17,9 +17,11 @@
 #include "transformation/transformations.h"
 #include "../core/tree/spike.h"
 #include "../core/tree/set.h"
-#include "window.h"
+#include "../display/window.h"
 #include "backend.h"
 #include "abstract_backend.h"
+#include "../display/display.h"
+#include "../display/abstract_display.h"
 #include "picking/picking.h"
 
 namespace djnn
@@ -222,7 +224,7 @@ namespace djnn
   AbstractGShape::pick ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (somehow_activating () && is_pickable(this) && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }
   }

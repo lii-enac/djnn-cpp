@@ -19,6 +19,9 @@
 
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 
 #include <array>
 #include <cmath>
@@ -139,7 +142,7 @@ namespace djnn
   void
   Translation::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_translation (this);
     }
   }
@@ -297,7 +300,7 @@ namespace djnn
   void
   Rotation::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_rotation (this);
     }
   }
@@ -469,7 +472,7 @@ namespace djnn
   void
   Scaling::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_scaling (this);
     }
   }
@@ -600,7 +603,7 @@ namespace djnn
   void
   SkewX::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_x (this);
     }
   }
@@ -661,7 +664,7 @@ namespace djnn
   void
   SkewY::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_y (this);
     }
   }
@@ -1642,7 +1645,7 @@ namespace djnn
   void
   Homography::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_homography (this);
     }
   }

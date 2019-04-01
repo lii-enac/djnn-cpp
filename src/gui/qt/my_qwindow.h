@@ -21,7 +21,7 @@
 #include <QtWidgets/QWidget>
 
 #include "../../core/syshook/external_source.h"
-#include "../window.h"
+#include "../../display/window.h"
 #include "../qt/qt_window.h"
 
 namespace djnn {

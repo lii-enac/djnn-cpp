@@ -25,23 +25,29 @@ namespace djnn
   Process *GPUs = nullptr;
   Process *Displays = nullptr;
 
+  DisplayBackend::Impl* DisplayBackend::_instance;
+
+  AbstractDisplay*
+  DisplayBackend::instance ()
+  {
+    return _instance->backend;
+  }
+
   void
   init_display () {
-
     if ( __module_initialized == false ) {
-
-      __module_initialized = true;
-      
-      djnn::loadedModules.push_back("display");
+      //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
       GPUs = new Set (nullptr, "GPUs");
       GPUs->set_activated ();
       Displays = new Set (nullptr, "Displays");
       Displays->set_activated ();
       URI::add_uri ("gpu", GPUs);
       URI::add_uri ("display", Displays);
-      p_init_display ();
-      
+      //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+      //p_init_display ();
+      djnn::loadedModules.push_back("display");
+      __module_initialized = true;
     }
-  }
+  }  
 
 }

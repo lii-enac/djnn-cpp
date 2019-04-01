@@ -18,6 +18,9 @@
 #include "qt_window.h"
 #include "qt_backend.h"
 #include "qt_mainloop.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+
 #include "../../core/syshook/main_loop.h"
 #include "../../core/syshook/syshook.h"
 #include "../../core/execution/graph.h"
@@ -307,7 +310,7 @@ namespace djnn
     DBG;
 
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
-    backend->set_window (_window);
+    DisplayBackend::instance()->set_window (_window);
     QPainter painter (this);
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);

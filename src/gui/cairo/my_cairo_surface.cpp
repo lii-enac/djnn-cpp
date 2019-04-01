@@ -14,8 +14,9 @@
 
 #include "my_cairo_surface.h"
 #include "../backend.h"
-
 #include "cairo_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
@@ -50,7 +51,7 @@ namespace djnn
     if (!drawing_surface)
       return;
     CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
-    backend->set_window (_window);
+    DisplayBackend::instance()->set_window (_window);
     Process *p = _window->holder ();
     if (p) {
 #if _PERF_TEST

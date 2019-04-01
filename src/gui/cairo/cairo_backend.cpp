@@ -22,8 +22,8 @@
 #include <locale.h>
 
 #if DJNN_SDL
-#include "cairo_sdl_window.h"
-#include "cairo_gl_sdl_window.h"
+#include "sdl/cairo_sdl_window.h"
+//#include "cairo_gl_sdl_window.h"
 #endif
 
 namespace djnn
@@ -33,6 +33,9 @@ namespace djnn
 
   cairo_t* cur_cairo_state = nullptr;
   cairo_t* cur_cairo_picking_state = nullptr;
+
+  void
+  p_init_gui () {}
 
   CairoBackend*
   CairoBackend::instance ()
@@ -87,15 +90,6 @@ namespace djnn
   void
   CairoBackend::load_pick_context (AbstractGShape *s)
   {
-  }
-
-  WinImpl*
-  CairoBackend::create_window (Window *win, const std::string& title, double x, double y, double w, double h)
-  {
-#if DJNN_SDL
-    return new CairoSDLWindow (win, title, x, y, w, h);
-    //return new CairoGLSDLWindow (win, title, x, y, w, h);
-#endif
   }
 
   bool

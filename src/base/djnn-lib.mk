@@ -6,5 +6,5 @@ include src/gui/qt/djnn-lib-flags.mk
 endif
 
 ifneq (,$(filter $(graphics),CAIRO GL))
-include src/gui/sdl/djnn-lib-flags.mk
+include src/display/sdl/djnn-lib-flags.mk
 endif

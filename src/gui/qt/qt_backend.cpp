@@ -194,11 +194,13 @@ namespace djnn
     _picking_view->add_gobj (s);
   }
 
+  /*
   WinImpl*
   QtBackend::create_window (Window *win, const std::string& title, double x, double y, double w, double h)
   {
     return new QtWindow (win, title, x, y, w, h);
   }
+  */
 
   bool
   QtBackend::is_in_picking_view (AbstractGShape *s)

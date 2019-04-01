@@ -17,10 +17,12 @@
 #pragma once
 
 #include "picking.h"
-#include "../window.h"
-#include "../abstract_gshape.h"
+#include "../../display/window.h"
+//#include "../abstract_gshape.h"
 
 namespace djnn {
+  class AbstractGShape;
+  
 	class ColorPickingView : public Picking
   {
   public:

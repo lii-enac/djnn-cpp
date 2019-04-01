@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "../sdl/sdl_window.h"
-#include "../cairo/my_cairo_surface.h"
+#include "../../../display/sdl/sdl_window.h"
+#include "../my_cairo_surface.h"
 
 namespace djnn {
 
@@ -28,15 +28,17 @@ namespace djnn {
     virtual ~CairoSDLWindow ();
 
     void update () override;
+
+    // SDLWindow API
+    virtual void handle_event(SDL_Event&) override;
+    virtual void handle_resized(int w, int h) override;
+    virtual void update_hdpi() override;
     virtual void redraw () override;
 
   protected:
     // Process
     void activate () override;
     void deactivate () override;
-
-    // SDLWindow
-    virtual void handle_resized(int w, int h) override;
 
   private:
     SDL_Surface * _sdl_surface;

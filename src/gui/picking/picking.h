@@ -16,11 +16,12 @@
 
 #pragma once
 
-#include "../abstract_gshape.h"
-#include "../gui-priv.h"
+//#include "../abstract_gshape.h"
+#include "../../gui/gui-priv.h"
 
 namespace djnn {
 
+  class AbstractGShape;
   class Window;
   class Picking
   {

@@ -13,14 +13,17 @@
  *
  */
 
-#include "../sdl/sdl_mainloop.h"
+#include "../../../display/sdl/sdl_mainloop.h"
 #include "cairo_sdl_window.h"
-#include "../cairo/my_cairo_surface.h"
-#include "../backend.h"
+#include "../my_cairo_surface.h"
+#include "../../backend.h"
 
-#include "../../core/syshook/syshook.h"
-#include "../../core/execution/graph.h"
-#include "../../core/syshook/main_loop.h"
+#include "../../../display/display.h"
+#include "../../../display/abstract_display.h"
+
+#include "../../../core/syshook/syshook.h"
+#include "../../../core/execution/graph.h"
+#include "../../../core/syshook/main_loop.h"
 
 #include <SDL2/SDL.h>
 
@@ -66,29 +69,6 @@ namespace djnn
   {
     if (is_activated)
       deactivate ();
-  }
-
-  void
-  CairoSDLWindow::handle_resized(int width, int height)
-  {
-    SDLWindow::handle_resized(width, height);
-    if (_sdl_surface) SDL_FreeSurface (_sdl_surface);
-    if (_sdl_texture) SDL_DestroyTexture (_sdl_texture);
-    _sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
-    _sdl_texture = SDL_CreateTexture (_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-
-    delete _picking_data;
-    int stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
-    _picking_data = new unsigned char[stride*height];
-
-#if PICKING_DBG
-    if (_pick_sdl_surface) SDL_FreeSurface (_pick_sdl_surface);
-    if (_pick_sdl_texture) SDL_DestroyTexture (_pick_sdl_texture);
-    _pick_sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
-    _pick_sdl_texture = SDL_CreateTexture (_pick_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-#endif
-    
-    redraw();
   }
 
   void
@@ -154,6 +134,115 @@ namespace djnn
     is_activated = false;
   }
 
+
+  static mouse_button
+  get_button (Uint8 n)
+  {
+    mouse_button button_id = BUTTON_LEFT;
+    switch (n)
+      {
+      case SDL_BUTTON_LEFT:
+        button_id = BUTTON_LEFT;
+        break;
+      case SDL_BUTTON_RIGHT:
+        button_id = BUTTON_RIGHT;
+        break;
+      case SDL_BUTTON_MIDDLE:
+        button_id = BUTTON_MIDDLE;
+        break;
+      default:
+        button_id = BUTTON_LEFT;
+      }
+    return button_id;
+  }
+
+  void
+  CairoSDLWindow::handle_event (SDL_Event& e)
+  {
+    bool handled = false;
+    switch (e.type)
+      {
+      case SDL_MOUSEBUTTONDOWN:
+        {
+          picking_view ()->genericMousePress (e.button.x, e.button.y, get_button (e.button.button));
+          handled = true;
+          break;
+        }
+      case SDL_MOUSEBUTTONUP:
+        {
+          picking_view ()->genericMouseRelease (e.button.x, e.button.y, get_button (e.button.button));
+          handled = true;
+          break;
+        }
+      case SDL_MOUSEMOTION:
+        {
+          picking_view ()->genericMouseMove (e.motion.x, e.motion.y);
+          handled = true;
+          break;
+        }
+      case SDL_FINGERDOWN:
+        {
+          picking_view ()->genericTouchPress (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          handled = true;
+          break;
+        }
+      case SDL_FINGERUP:
+        {
+          picking_view ()->genericTouchRelease (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          handled = true;
+          break;
+        }
+      case SDL_FINGERMOTION:
+        {
+          picking_view ()->genericTouchMove (e.tfinger.x, e.tfinger.y, e.tfinger.fingerId, e.tfinger.pressure);
+          handled = true;
+          break;
+        }
+      case SDL_MOUSEWHEEL:
+        {
+          picking_view ()->genericMouseWheel (e.wheel.x, e.wheel.y);
+          handled = true;
+          break;
+        }
+      }
+
+    if(!handled) SDLWindow::handle_event(e);
+
+    GRAPH_EXEC;
+  }
+
+  
+  void
+  CairoSDLWindow::handle_resized(int width, int height)
+  {
+    SDLWindow::handle_resized(width, height);
+    if (_sdl_surface) SDL_FreeSurface (_sdl_surface);
+    if (_sdl_texture) SDL_DestroyTexture (_sdl_texture);
+    _sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
+    _sdl_texture = SDL_CreateTexture (_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+
+    delete _picking_data;
+    int stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+    _picking_data = new unsigned char[stride*height];
+
+#if PICKING_DBG
+    if (_pick_sdl_surface) SDL_FreeSurface (_pick_sdl_surface);
+    if (_pick_sdl_texture) SDL_DestroyTexture (_pick_sdl_texture);
+    _pick_sdl_surface = SDL_CreateRGBSurface (0, width, height, 32, 0, 0, 0, 0);
+    _pick_sdl_texture = SDL_CreateTexture (_pick_sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+#endif
+    
+    redraw();
+  }
+
+  void
+  CairoSDLWindow::update_hdpi()
+  {
+    // FIXME should be a connection
+    SDLWindow::update_hdpi();
+  }
+
+
   void
   CairoSDLWindow::redraw ()
   {
@@ -161,12 +250,13 @@ namespace djnn
       t1();
     #endif
 
-
     cairo_surface_t *drawing_surface, *picking_surface;
     unsigned char *data, *picking_data;
     CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
 
-    backend->set_window (_window);
+    auto dbackend = DisplayBackend::instance();
+    dbackend->set_window (_window);
+    
     backend->set_picking_view (_picking_view);
     _picking_view->init ();
     drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
