@@ -43,15 +43,15 @@ namespace djnn
   }
 
   Coupling::Coupling (Process* src, int src_flag, Process* dst,
-                      int dst_flag) :
-      _src (src), _dst (dst), _data (nullptr), m_src_flag (src_flag), m_dst_flag (dst_flag)
+                      int dst_flag, bool immediate_processing) :
+      _immediate_processing (immediate_processing), _src (src), _dst (dst), _data (nullptr), m_src_flag (src_flag), m_dst_flag (dst_flag)
   {
     init_coupling (src, m_src_flag, dst, m_dst_flag);
   }
 
   Coupling::Coupling (Process* src, int src_flag, Process* dst,
-                      int dst_flag, Process* data) :
-      _src (src), _dst (dst), _data (data), m_src_flag (src_flag), m_dst_flag (dst_flag)
+                      int dst_flag, Process* data, bool immediate_processing) :
+    _immediate_processing (immediate_processing), _src (src), _dst (dst), _data (data), m_src_flag (src_flag), m_dst_flag (dst_flag)
   {
     init_coupling (src, m_src_flag, dst, m_dst_flag);
   }
@@ -68,6 +68,8 @@ namespace djnn
   void
   Coupling::propagateActivation ()
   {
+    if (_immediate_processing)
+      executeActivation ();
     if (isEnable) {
       _dst->set_activation_source (_src);
       _dst->set_data (_data);

@@ -23,8 +23,8 @@ namespace djnn {
 
   class Coupling : public std::enable_shared_from_this<Coupling> {
   public:
-    Coupling (Process* src, int src_flag, Process* dst, int dst_flag);
-    Coupling (Process* src, int src_flag, Process* dst, int dst_flag, Process* data);
+    Coupling (Process* src, int src_flag, Process* dst, int dst_flag, bool immediate_processing = false);
+    Coupling (Process* src, int src_flag, Process* dst, int dst_flag, Process* data, bool immediate_processing = false);
     virtual ~Coupling();
     void init_coupling (Process* src, int src_flag, Process* dst, int dst_flag);
     void set_data (Process* data) { _data = data; }
@@ -35,7 +35,7 @@ namespace djnn {
     void enable (Process* data) { isEnable = true; _data = data; };
     void disable () { isEnable = false; };
   private:
-    bool isEnable;
+    bool isEnable, _immediate_processing;
     Process* _src, *_dst, *_data;
     int m_src_flag, m_dst_flag;
   };
