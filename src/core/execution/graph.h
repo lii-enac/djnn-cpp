@@ -74,11 +74,13 @@ namespace djnn
     void clear ();
     void print_graph ();
     void print_sorted ();
+    void add_process_to_delete (Process *p) { _to_delete.push_back (p); }
     Vertex::vertices_t get_sorted () { return _sorted_vertices; }
 
   private:
     static Graph* _instance;
     static std::once_flag onceFlag;
+    std::vector<Process*> _to_delete;
     Graph ();
     void browse_in_depth (Vertex* v);
     Vertex* add_vertex (Process* c);

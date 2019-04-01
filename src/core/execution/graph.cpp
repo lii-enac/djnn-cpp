@@ -348,6 +348,12 @@ namespace djnn
       is_end = false;
     }
    }
+   if (!_to_delete.empty ()) {
+    for (auto p: _to_delete)
+      delete p;
+    _to_delete.clear ();
+   }
+
    //graph_mutex.unlock ();
 
 #if _PERF_TEST
