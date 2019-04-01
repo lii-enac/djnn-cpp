@@ -40,7 +40,7 @@ namespace djnn
     _release = new Spike;
     _move = new Spike;
     _wheel = new Spike;
-    _touches = new Set (this, "touches");
+    _touches = new List (this, "touches");
     _touches->set_activated ();
     _press_x = new DoubleProperty (0);
     _press_y = new DoubleProperty (0);
