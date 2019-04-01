@@ -28,6 +28,7 @@
 #include "counter.h"
 #include "finder.h"
 #include "switch_list.h"
+#include "dictionary.h"
 
 namespace djnn {
 
