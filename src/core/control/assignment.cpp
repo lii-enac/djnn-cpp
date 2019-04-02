@@ -37,13 +37,13 @@ namespace djnn
   {
     Process* v = _prop->get_value ();
     if (!v) {
-      _to_update = nullptr;
+      *_to_update = nullptr;
       return;
     }
     AbstractProperty *res = dynamic_cast<AbstractProperty*> (v->find_component (_spec));
     if (!res) {
       warning (this, "Source or destination in (Paused)assignment is not a property");
-      _to_update = nullptr;
+      * _to_update = nullptr;
       return;
     }
     *_to_update = res;
