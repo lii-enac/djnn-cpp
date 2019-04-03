@@ -25,7 +25,7 @@
 namespace djnn {
   using namespace std;
 
-  class Connector : public Process, public SrcDstLink
+  class Connector : public SrcToDstLink
   {
     friend class PausedConnector;
    

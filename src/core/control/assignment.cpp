@@ -47,7 +47,7 @@ namespace djnn
       return;
     }
     *_to_update = res;
-    ((SrcDstLink*) _parent)->update_graph ();
+   ((SrcToDstLink*) _parent)->update_graph ();
   }
 
   void
@@ -139,17 +139,17 @@ namespace djnn
   }
 
   AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                                          bool isModel) :
-      Process (isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr), 
-      _c_src (nullptr), _c_dst (nullptr)
+					  bool isModel) :
+      SrcToDstLink (isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr), _c_src (
+	  nullptr), _c_dst (nullptr)
   {
     init_AbstractAssignment (src, ispec, dst, dspec);
   }
 
   AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
-                                          const string &dspec, bool isModel) :
-      Process (p, n, isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (nullptr),
-      _c_src (nullptr), _c_dst (nullptr)
+					  const string &dspec, bool isModel) :
+      SrcToDstLink (p, n, isModel), _ref_src (nullptr), _ref_dst (nullptr), _update_src (nullptr), _update_dst (
+	  nullptr), _c_src (nullptr), _c_dst (nullptr)
   {
     init_AbstractAssignment (src, ispec, dst, dspec);
   }

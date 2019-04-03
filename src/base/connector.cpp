@@ -34,8 +34,9 @@ namespace djnn
   }
 
   Connector::Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec,
-                        bool copy_on_activation) :
-      Process (p, n), _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (nullptr), _update_dst (nullptr), _copy_on_activation (copy_on_activation)
+			bool copy_on_activation) :
+      SrcToDstLink (p, n), _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (
+	  nullptr), _update_dst (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_connector (src, ispec, dst, dspec);
     Process::finalize ();

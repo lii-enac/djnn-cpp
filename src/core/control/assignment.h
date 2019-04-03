@@ -20,12 +20,6 @@
 
 namespace djnn {
 
-  class SrcDstLink {
-  public:
-    SrcDstLink() {}
-    virtual ~SrcDstLink () {}
-    virtual void update_graph () = 0;
-  };
   class UpdateSrcOrDst : public Process
   {
     public:
@@ -38,7 +32,15 @@ namespace djnn {
       RefProperty* _prop;
       string _spec;
   };
-  class AbstractAssignment : public Process, public SrcDstLink {
+  class SrcToDstLink : public Process {
+  public:
+    SrcToDstLink (bool is_model = false) : Process (is_model) {}
+    SrcToDstLink (Process* p, const string &n, bool is_model = false) : Process (p, n, is_model) {}
+    virtual ~SrcToDstLink () {}
+    virtual void update_graph () = 0;
+  };
+
+  class AbstractAssignment : public SrcToDstLink {
 
    friend class Assignment;
    friend class PausedAssignment;
