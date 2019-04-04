@@ -68,6 +68,8 @@ namespace djnn
       _qwidget->setMouseTracking (true);
     if (full_screen)
       _qwidget->setWindowState (_qwidget->windowState () ^ Qt::WindowFullScreen);
+    if (hide_pointer)
+      _qwidget->setCursor(Qt::BlankCursor);
     _qwidget->setGeometry (rect);
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->show ();

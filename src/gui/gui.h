@@ -25,6 +25,7 @@ namespace djnn {
   extern std::vector<string> loadedModules;
   extern int mouse_tracking;
   extern int full_screen;
+  extern int hide_pointer;
   extern Process* DrawingRefreshManager;
   extern Process* GenericMouse;
 
