@@ -45,10 +45,6 @@ static double draw_average = 0.0;
 
 namespace djnn
 {
-
-  int mouse_tracking = 0;
-  int full_screen = 0;
-
   QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
   {

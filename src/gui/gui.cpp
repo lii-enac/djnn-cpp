@@ -38,6 +38,8 @@ namespace djnn
   Process *DrawingRefreshManager;
   Process *GenericMouse;
   GUIStructureObserver * gui_structure_observer;
+  int mouse_tracking = 0;
+  int full_screen = 0;
 
   void
   GUIStructureHolder::add_gui_child (Process *c, int index)

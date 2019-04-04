@@ -38,8 +38,6 @@
 namespace djnn
 {
 
-  int mouse_tracking; // unused but important for Qt
-
   // https://stackoverflow.com/questions/32294913/getting-contiunous-window-resize-event-in-sdl-2
   static int
   resizingEventWatcher (void* data, SDL_Event* event)
