@@ -6,10 +6,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
+- UPdate the Docs !
 - Update and improvement GUI backend.
 - Update and improvement on memory performance.
 
+#--------------------------------------------
 
+## [1.4.0] - 2019-04-05
+### NEW
+- Added New Display API: move frame/window into display. should use init_display ()
+- Added Dictionary class Component : see smala->cookbook->multi-touch as exemple.
+- Added generic mouse Class for Qt/SDL backend :
+    eg: GenericMouse : x, y, move (x, y), left, middle, right and wheel (dx, dy)
+- Added virtual "$value" for refproperty as a dereferencing pointer to use with dynamic assignment/connector
+    eg: connector (myref/$value/x, foo/x) will connect any component stored in myref by his "x" child to "foo/x" 
+- Added dynamic assignment/connector that will react properly on myref/$value
+- Possibility to postpone delete at the end of the graph execution: use for touches
+- Added new Global variables : mouse_tracking (=0), full_screen (=0), hide_pointer (=0)
+- Added support for custom cursor/pointer
+
+### Added
+- Can now use relative path for XML or Image loading (or absolute URI)
+    eg : XML::djnLoadFromXML (path/to/file) or XML::djnLoadFromXML (file://absolute/path/to/file)
+- Added touch support for SDL
+- Added pressure to touch
+- Added Touch support for Windows
+- Enable immediate processing in couplings - low level API
+
+### Changed
+- "Touches" is now a list instead of a set 
+- Improved Color_picking
+- Improved Qt image loading
+- Improved Install.md for ivy on windows (not finished)
+
+### Fixed
+- Fixed a bug on thread running < Qt-5.10
+- Fixed HDPI for 
+- Fixed Linux Compilation
+
+#--------------------------------------------
 
 ## [1.3.0] - 2019-03-15
 ### NEW
@@ -52,13 +87,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 - remove useless draw in FSM.
 
-
+#--------------------------------------------
 
 ## [1.2.1] - 2019-02-25 [YANKED]
 ### Fixed
 - fixed move_child_to and add_child_at in djnn core and gui
 
-
+#--------------------------------------------
 
 ## [1.2.0] - 2019-02-15
 ### Added
@@ -77,23 +112,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - GUI/cache - x, y, dx, dy ... now notify damaged transform.
 - renamed cpp-time into cpp-chrono.
 
+#--------------------------------------------
 
-
-## [1.1.2] - 2017-02-06 [YANKED]
+## [1.1.2] - 2019-02-06 [YANKED]
 ### Added
 - CHANGELOG.md
 
 ### Fixed
 - fixed gradient loaded from SVG file
 
+#--------------------------------------------
 
-
-## [1.1.1] - 2017-02-04 [YANKED]
+## [1.1.1] - 2019-02-04 [YANKED]
 ### Fixed
 - API - AbstractOpacity API, replaced bad name "alpha" by "a".
 - activated frame/windows touches.
 
-
+#--------------------------------------------
 
 ## [1.1.0] - 2019-02-01
 ### NEW
@@ -127,7 +162,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - memory leak and performances on execution graph.
 - Makefile for Linux.
 
-
+#--------------------------------------------
 
 ## [1.0.0] - 2018-12-17
 note: debut on changelog. This section has to be completed, if we have time. 
