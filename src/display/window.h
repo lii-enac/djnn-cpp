@@ -32,6 +32,7 @@ namespace djnn
     virtual void activate () = 0;
     virtual void deactivate () = 0;
     virtual void update () = 0;
+    virtual void set_cursor (const string &path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
      
@@ -79,7 +80,7 @@ namespace djnn
     void set_frame ();
     Process* holder () { return _holder; }
     void set_holder (Process *p) { _holder = p; }
-
+    void set_cursor (const string &path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
   private:
     void init_ui (const std::string &title, double x, double y, double w, double h);
     void set_frame_to_component (Process* c);
@@ -109,6 +110,30 @@ namespace djnn
     WinImpl *_win_impl;
     bool _refresh;
     Process* _holder;
+  };
+
+   class Cursor : public Process {
+    class UpdateCursorAction : public Process {
+    public:
+      UpdateCursorAction (Process *p, const string &n) : Process (p, n) {}
+      ~UpdateCursorAction () {}
+      void activate () override;
+      void deactivate () override {};
+    };
+   public:
+    Cursor (Process *p, const string &n, const string &path, int hotX, int hotY);
+    virtual ~Cursor ();
+    Window* get_win ();
+    void activate () override;
+    void deactivate () override;
+    void update_cursor ();
+    Process* find_component (const string &n) override;
+   private:
+    struct raw_props_t { int hot_x; int hot_y; string path; };
+    raw_props_t raw_props;
+    Coupling *_c_x, *_c_y, *_c_path;
+    UpdateCursorAction *_action;
+    Window* _win;
   };
 
 } /* namespace djnn */

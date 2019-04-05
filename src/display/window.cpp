@@ -109,5 +109,111 @@ namespace djnn
     delete _win_impl;
   }
 
+  void
+  Cursor::UpdateCursorAction::activate () {
+    ((Cursor*) _parent)->update_cursor ();
+  }
+
+  Cursor::Cursor (Process *p, const string &n, const string &path, int hotX, int hotY) :
+      Process (p, n), raw_props
+        { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
+
+  {
+    _action = new UpdateCursorAction (this, "action");
+    Process::finalize ();
+  }
+
+  Process*
+  Cursor::find_component (const string &name)
+  {
+    Process* res = Process::find_component (name);
+    if (res)
+      return res;
+    else if (name == "hotX") {
+      res = new IntPropertyProxy (this, "hotX", raw_props.hot_x);
+      _c_x = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+    } else if (name == "hotY") {
+      res = new IntPropertyProxy (this, "hotY", raw_props.hot_y);
+      _c_y = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+    } else if (name == "path") {
+      res = new TextPropertyProxy (this, "path", raw_props.path);
+      _c_path = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+    }
+    return res;
+  }
+
+  void
+  Cursor::activate ()
+  {
+    if (_c_x)
+      _c_x->enable ();
+    if (_c_y)
+      _c_y->enable ();
+    if (_c_path)
+      _c_path->enable ();
+    if (_win == nullptr || _win->somehow_deactivating ()) {
+      bool found = false;
+      Process *cur_parent = _parent;
+      Process *cur_child = this;
+      while (!found && cur_parent != nullptr) {
+        if (cur_parent->get_cpnt_type () == COMPONENT_T) {
+          Container *cont = dynamic_cast<Container*> (cur_parent);
+          for (auto c : cont->children ()) {
+            if (c == cur_child)
+              break;
+            else if (c->get_cpnt_type () == WINDOW_T && c->somehow_activating ()) {
+              _win = dynamic_cast<Window*> (c);
+              found = true;
+            }
+          }
+        }
+        do {
+          cur_child = cur_parent;
+          cur_parent = cur_parent->get_parent ();
+        } while (cur_parent != nullptr && cur_parent->get_cpnt_type () != COMPONENT_T);
+      }
+      if (!found) {
+        std::cout << "Warning no running frame found for cursor " << _name << endl;
+        return;
+      }
+    }
+    update_cursor ();
+  }
+
+  void
+  Cursor::update_cursor ()
+  {
+    if (_win)
+      _win->set_cursor (raw_props.path, raw_props.hot_x, raw_props.hot_y);
+  }
+
+  void
+  Cursor::deactivate () {
+    if (_c_x)
+      _c_x->disable ();
+    if (_c_y)
+      _c_y->disable ();
+    if (_c_path)
+      _c_path->disable ();
+  }
+
+  Cursor::~Cursor ()
+  {
+    if (_c_x) {
+      Process* x = find_component ("x");
+      delete _c_x;
+      delete x;
+    }
+    if (_c_y) {
+      Process* y = find_component ("y");
+      delete _c_y;
+      delete y;
+    }
+    if (_c_path) {
+      Process* path = find_component ("path");
+      delete _c_path;
+      delete path;
+    }
+  }
 
 } /* namespace djnn */

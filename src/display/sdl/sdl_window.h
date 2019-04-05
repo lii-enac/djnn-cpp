@@ -40,7 +40,7 @@ namespace djnn {
     SDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
     virtual ~SDLWindow ();
     SDL_Window * sdl_window() { return _sdl_window; }
-
+    void set_cursor (const string &path, int hotX, int hotY) override;
     enum {
       user_event_awake
     };
@@ -54,6 +54,8 @@ namespace djnn {
     
     djnn::Window* _window;
     SDL_Window *_sdl_window;
+    SDL_Cursor *_cursor;
+    SDL_Surface *_cursor_surface;
     bool is_activated;
   };
 

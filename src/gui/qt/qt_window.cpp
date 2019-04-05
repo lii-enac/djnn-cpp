@@ -31,6 +31,7 @@
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QBitmap>
 
 #define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
@@ -93,6 +94,14 @@ namespace djnn
     //_qwidget->update (); // won't work since qt is blocked in mainloop
     _please_update = true; // so remind this...
     QtMainloop::instance ().wakeup (); // ... and wake up qt
+  }
+
+  void
+  QtWindow::set_cursor (const string &path, int hotX, int hotY) {
+    if (_qwidget == nullptr)
+      return;
+    QBitmap bmp (path.c_str ());
+    _qwidget->setCursor (QCursor (bmp, hotX, hotY));
   }
 
   void

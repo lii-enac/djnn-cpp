@@ -35,6 +35,7 @@ namespace djnn {
     virtual ~QtWindow ();
     void update () override;
     void check_for_update ();
+    void set_cursor (const string &path, int hotX, int hotY) override;
     MyQWidget* qwidget() { return _qwidget; }
 
   protected:

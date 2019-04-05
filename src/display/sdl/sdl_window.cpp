@@ -24,6 +24,7 @@
 #include "../../core/syshook/main_loop.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,13 +57,35 @@ namespace djnn
   }
 
   SDLWindow::SDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
-      _window (win), _sdl_window (nullptr), is_activated (false)
+      _window (win), _sdl_window (nullptr), _cursor (nullptr), _cursor_surface (nullptr), is_activated (false)
   {
     SDL_AddEventWatch (resizingEventWatcher, this);
   }
 
+  void
+  SDLWindow::set_cursor (const string &path, int hotX, int hotY)
+  {
+    if (_cursor)
+      SDL_FreeCursor (_cursor);
+    if (_cursor_surface)
+      SDL_FreeSurface (_cursor_surface);
+    _cursor_surface = IMG_Load (path.c_str ());
+    if (!_cursor_surface)
+      return;
+    _cursor = SDL_CreateColorCursor (_cursor_surface, hotX, hotY);
+    if (!_cursor) {
+      SDL_FreeSurface (_cursor_surface);
+      return;
+    }
+    SDL_SetCursor (_cursor);
+  }
+
   SDLWindow::~SDLWindow ()
   {
+    if (_cursor_surface)
+      SDL_FreeSurface (_cursor_surface);
+    if (_cursor)
+      SDL_FreeCursor (_cursor);
   }
 
   void

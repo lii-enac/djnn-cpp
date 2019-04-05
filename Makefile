@@ -379,7 +379,7 @@ ifeq ($(os),Linux)
 #https://brew.sh/
 pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
 pkgdeps += qt5-default 
-pkgdeps += libfreetype6-dev libsdl2-dev libglm-dev
+pkgdeps += libfreetype6-dev libsdl2-dev libglm-dev libsdl2-image-dev
 pkgdeps += libdrm-dev
 pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
 #pkgdeps += libraspberrypi-dev
@@ -391,7 +391,7 @@ ifeq ($(os),Darwin)
 pkgdeps := expat curl boost
 pkgdeps += qt5
 pkgdeps += cairo pango
-pkgdeps += sdl2
+pkgdeps += sdl2 sdl2_image
 pkgcmd := brew install
 endif
 
