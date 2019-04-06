@@ -14,11 +14,11 @@
 
 #pragma once
 
-#include "../backend.h"
+//#include "../backend.h"
 
 #include "../../core/syshook/external_source.h"
 #include "../../display/window.h"
-#include "qt_picking_view.h"
+//#include "qt_picking_view.h"
 
 #include <string>
 
@@ -36,6 +36,7 @@ namespace djnn {
     void update () override;
     void check_for_update ();
     void set_cursor (const string &path, int hotX, int hotY) override;
+    //void set_qwidget(MyQWidget* q) { _qwidget = q; }
     MyQWidget* qwidget() { return _qwidget; }
 
   protected:

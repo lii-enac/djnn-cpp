@@ -1,8 +1,8 @@
 lib_djnn_deps = core
 lib_srcs := $(shell find src/base -name "*.cpp")
 
-ifeq ($(graphics),QT)
-include src/gui/qt/djnn-lib-flags.mk
+ifeq ($(display),QT)
+include src/display/qt/djnn-lib-flags.mk #already included in core
 endif
 
 ifneq (,$(filter $(graphics),CAIRO GL))

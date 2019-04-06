@@ -8,6 +8,10 @@ lib_ldflags += `pkg-config --libs libdrm libudev`
 lib_cppflags += `pkg-config --cflags libdrm`
 endif
 
+ifeq ($(display),QT)
+include src/display/qt/djnn-lib.mk
+endif
+
 ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib.mk
 endif

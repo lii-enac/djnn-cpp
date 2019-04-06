@@ -78,12 +78,6 @@ namespace djnn {
       DoubleProperty *_pos_x, *_pos_y, *_dx, *_dy;
     };
 
-  typedef enum mouse_button {
-    BUTTON_LEFT,
-    BUTTON_MIDDLE,
-    BUTTON_RIGHT
-  } mouse_button;
-
   void p_init_gui ();
   extern GUIStructureObserver* gui_structure_observer;
 }

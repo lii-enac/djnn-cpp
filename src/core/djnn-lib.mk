@@ -15,8 +15,8 @@ lib_srcs += src/core/syshook/unix/iofd.cpp
 endif
 
 # library-specific thread support
-ifeq ($(graphics),QT)
-include src/gui/qt/djnn-lib-flags.mk
+ifeq ($(display),QT)
+include src/display/qt/djnn-lib-flags.mk
 endif
 
 #ifeq ($(graphics),CAIRO)

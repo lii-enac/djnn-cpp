@@ -22,6 +22,10 @@
 
 namespace djnn {
 
+  extern int mouse_tracking;
+  extern int full_screen;
+  extern int hide_pointer;
+
   extern std::vector<std::string> loadedModules;
 
   extern Process *GPUs;

@@ -12,26 +12,32 @@
  *
  */
 
-#include "../backend.h"
+#include "../../backend.h"
+#include "../qt_backend.h"
 
-#include "my_qwindow.h"
-#include "qt_window.h"
-#include "qt_backend.h"
-#include "qt_mainloop.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
+#include "my_qqwindow.h"
+#include "../../../display/display.h"
+#include "../../../display/abstract_display.h"
+#include "../../../display/qt/my_qwindow.h"
+// #include "qt_window.h"
+#include "../../../display/qt/qt_mainloop.h"
+// #include "../display.h"
+// #include "../display-dev.h"
+// #include "../abstract_display.h"
 
-#include "../../core/syshook/main_loop.h"
-#include "../../core/syshook/syshook.h"
-#include "../../core/execution/graph.h"
-#include "../../core/execution/component_observer.h"
+// #include "../../core/syshook/main_loop.h"
+// #include "../../core/syshook/syshook.h"
+// #include "../../core/execution/graph.h"
+// #include "../../core/execution/component_observer.h"
 
-#include <QtCore/QAbstractEventDispatcher>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QBitmap>
+// #include <QtCore/QAbstractEventDispatcher>
+// #include <QtWidgets/QApplication>
+// #include <QtWidgets/QWidget>
+// #include <QtGui/QPainter>
+// #include <QtGui/QMouseEvent>
+// #include <QtGui/QBitmap>
+#include <QEvent>
+#include <QTouchEvent>
 
 #define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
@@ -46,75 +52,8 @@ static double draw_average = 0.0;
 
 namespace djnn
 {
-  QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
-      _qwidget (nullptr), _window (win), _please_update (true)
-  {
-  }
-
-  QtWindow::~QtWindow ()
-  {
-    QtMainloop::instance ().remove_window (this);
-    if (_qwidget != nullptr)
-      delete _qwidget;
-  }
-
-  void
-  QtWindow::activate ()
-  {
-    QtMainloop::instance ().add_window (this);
-    _qwidget = new MyQWidget (_window, this);
-    QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
-                _window->height ()->get_value ());
-    if (mouse_tracking)
-      _qwidget->setMouseTracking (true);
-    if (full_screen)
-      _qwidget->setWindowState (_qwidget->windowState () ^ Qt::WindowFullScreen);
-    if (hide_pointer)
-      _qwidget->setCursor(Qt::BlankCursor);
-    _qwidget->setGeometry (rect);
-    _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
-    _qwidget->show ();
-  }
-
-  void
-  QtWindow::deactivate ()
-  {
-    QtMainloop::instance ().remove_window (this);
-    delete _qwidget;
-    _qwidget = nullptr;
-  }
-
-  void
-  QtWindow::update ()
-  {
-    DBG
-    ;
-    if (_qwidget == nullptr)
-      return;
-    //_qwidget->update (); // won't work since qt is blocked in mainloop
-    _please_update = true; // so remind this...
-    QtMainloop::instance ().wakeup (); // ... and wake up qt
-  }
-
-  void
-  QtWindow::set_cursor (const string &path, int hotX, int hotY) {
-    if (_qwidget == nullptr)
-      return;
-    QBitmap bmp (path.c_str ());
-    _qwidget->setCursor (QCursor (bmp, hotX, hotY));
-  }
-
-  void
-  QtWindow::check_for_update ()
-  {
-    if (_please_update) {
-      _qwidget->update ();
-      _please_update = false;
-    }
-  }
-
   bool
-  MyQWidget::event (QEvent *event)
+  MyQQWidget::event (QEvent *event)
   {
 
     /* note:
@@ -161,18 +100,22 @@ namespace djnn
             QtMainloop::instance ().set_please_exec (true);
         }
         break;
-      case QEvent::KeyPress:
-      case QEvent::KeyRelease:
-      case QEvent::Move:
-      case QEvent::Resize:
+
       case QEvent::MouseButtonPress:
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
       case QEvent::Wheel:
+      
+        exec_ = QWidget::event (event);
+        break;
+
+      case QEvent::KeyPress:
+      case QEvent::KeyRelease:
       case QEvent::Close:
       case QEvent::Paint:
         exec_ = QWidget::event (event);
         break;
+
 
       default:
         {
@@ -186,55 +129,6 @@ namespace djnn
     return exec_;
   }
 
-  void
-  MyQWidget::keyPressEvent (QKeyEvent *event)
-  {
-    _window->key_pressed ()->set_value (event->key (), 1);
-    _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);
-    QtMainloop::instance ().set_please_exec (true);
-  }
-
-  void
-  MyQWidget::keyReleaseEvent (QKeyEvent *event)
-  {
-    _window->key_released ()->set_value (event->key (), 1);
-    _window->key_released_text ()->set_value (event->text ().toStdString (), 1);
-    QtMainloop::instance ().set_please_exec (true);
-  }
-
-  void
-  MyQWidget::moveEvent (QMoveEvent *event)
-  {
-    if (_updating)
-      return;
-    _updating = true;
-
-    const QPoint pos = event->pos ();
-    int x = pos.x ();
-    int y = pos.y ();
-    _window->pos_x ()->set_value (x, 1);
-    _window->pos_y ()->set_value (y, 1);
-
-    _updating = false;
-    QtMainloop::instance ().set_please_exec (true);
-  }
-
-  void
-  MyQWidget::resizeEvent (QResizeEvent * event)
-  {
-    if (_updating)
-      return;
-    _updating = true;
-
-    int h = event->size ().height ();
-    int w = event->size ().width ();
-    _window->height ()->set_value (h, true);
-    _window->width ()->set_value (w, true);
-
-    _updating = false;
-    QtMainloop::instance ().set_please_exec (true);
-    _qtwindow->_please_update = false;
-  }
 
   static mouse_button
   get_button (int n)
@@ -258,7 +152,7 @@ namespace djnn
   }
 
   void
-  MyQWidget::mousePressEvent (QMouseEvent *event)
+  MyQQWidget::mousePressEvent (QMouseEvent *event)
   {
 //DBG;
     mouse_pos_x = event->x ();
@@ -270,7 +164,7 @@ namespace djnn
   }
 
   void
-  MyQWidget::mouseMoveEvent (QMouseEvent *event)
+  MyQQWidget::mouseMoveEvent (QMouseEvent *event)
   {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
@@ -280,7 +174,7 @@ namespace djnn
   }
 
   void
-  MyQWidget::mouseReleaseEvent (QMouseEvent *event)
+  MyQQWidget::mouseReleaseEvent (QMouseEvent *event)
   {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
@@ -291,7 +185,7 @@ namespace djnn
   }
 
   void
-  MyQWidget::wheelEvent (QWheelEvent *event)
+  MyQQWidget::wheelEvent (QWheelEvent *event)
   {
     QPointF fdelta (event->angleDelta ());
     double dx = fdelta.x () / 8;
@@ -304,15 +198,7 @@ namespace djnn
   }
 
   void
-  MyQWidget::closeEvent (QCloseEvent *event)
-  {
-// close child should be notified but Qt wants the control
-// and will not let it do the job
-    _window->close ()->notify_activation ();
-  }
-
-  void
-  MyQWidget::paintEvent (QPaintEvent *event)
+  MyQQWidget::paintEvent (QPaintEvent *event)
   {
     DBG;
 

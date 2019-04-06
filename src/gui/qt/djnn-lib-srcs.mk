@@ -1,7 +1,7 @@
-$(build_dir)/src/gui/qt/moc_MyQWindow.cpp: src/gui/qt/my_qwindow.h src/gui/backend.h
-	$(moc) $< > $@
+local_dir := src/gui/qt
 
-lib_objs += $(build_dir)/src/gui/qt/moc_MyQWindow.o
-lib_srcgens += $(build_dir)/src/gui/qt/moc_MyQWindow.cpp
-lib_srcs += $(shell find src/gui/qt -name "*.cpp")
+lib_srcs += $(shell find $(local_dir) -name "*.cpp")
 
+#ifeq ($(graphics),QT)
+include $(local_dir)/qt/djnn-lib-srcs.mk
+#endif

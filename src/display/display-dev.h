@@ -15,3 +15,12 @@
 #pragma once
 
 #include "display.h"
+
+namespace djnn {
+  typedef enum mouse_button {
+    BUTTON_LEFT,
+    BUTTON_MIDDLE,
+    BUTTON_RIGHT
+  } mouse_button;
+
+}
