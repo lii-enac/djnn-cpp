@@ -1231,7 +1231,7 @@ namespace djnn
       delete _scaleBy_cy_coupling;
       delete _scaleBy_sx_coupling;
       delete _scaleBy_sy_coupling;
-      delete _translateBy_action;
+      delete _scaleBy_action;
       delete _scaleBy_cx;
       delete _scaleBy_cy;
       delete _scaleBy_sx;
