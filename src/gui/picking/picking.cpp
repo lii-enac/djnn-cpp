@@ -111,7 +111,7 @@ namespace djnn
       Graph::instance().add_process_to_delete (t);
       //delete t;
     }
-    t = new Touch (_win->touches (), to_string (id));
+    t = new Touch (_win->touches (), to_string (id), x, y, pressure);
     _active_touches[id] = t;
     t->set_x (x);
     t->set_y (y);

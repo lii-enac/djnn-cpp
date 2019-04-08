@@ -62,7 +62,7 @@ namespace djnn
   class Touch : public Process
   {
   public:
-    Touch (Process *p, const std::string &n);
+    Touch (Process *p, const std::string &n, double init_x, double init_y, double init_pressure);
     Touch ();
     void activate () override {};
     void deactivate () override {};

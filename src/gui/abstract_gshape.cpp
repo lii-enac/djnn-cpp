@@ -52,14 +52,14 @@ namespace djnn
     return newh;
   }
 
-  Touch::Touch (Process *p, const string &n) :
+  Touch::Touch (Process *p, const string &n, double init_x, double init_y, double init_pressure) :
       Process (p, n), _shape (nullptr)
   {
-    _x = new DoubleProperty (this, "x", 0);
-    _y = new DoubleProperty (this, "y", 0);
+    _x = new DoubleProperty (this, "x", init_x);
+    _y = new DoubleProperty (this, "y", init_y);
     _local_x = new DoubleProperty (this, "local_x", 0);
     _local_y = new DoubleProperty (this, "local_y", 0);
-    _pressure = new DoubleProperty (this, "pressure", 0);
+    _pressure = new DoubleProperty (this, "pressure", init_pressure);
     _id = new IntProperty (this, "id", 0);
     set_activated();
     Process::finalize ();
