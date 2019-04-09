@@ -109,12 +109,12 @@ namespace djnn
         exec_ = QWidget::event (event);
         break;
 
-      case QEvent::KeyPress:
-      case QEvent::KeyRelease:
-      case QEvent::Close:
-      case QEvent::Paint:
-        exec_ = QWidget::event (event);
-        break;
+      // case QEvent::KeyPress:
+      // case QEvent::KeyRelease:
+      // case QEvent::Close:
+      // case QEvent::Paint:
+      //   exec_ = QWidget::event (event);
+      //   break;
 
 
       default:
