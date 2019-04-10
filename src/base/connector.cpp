@@ -152,6 +152,11 @@ namespace djnn
         Graph::instance ().add_edge (_parent->state_dependency (), _dst);
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
       _has_coupling = true;
+      if (is_activated ()) {
+        _action->activation ();
+      } else {
+        _c_src->disable ();
+      }
     } else {
       _has_coupling = false;
     }
