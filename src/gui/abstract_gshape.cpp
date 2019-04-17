@@ -24,6 +24,8 @@
 #include "../display/abstract_display.h"
 #include "picking/picking.h"
 
+#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+
 namespace djnn
 {
   vector<string> AbstractGShape::_ui =
@@ -170,9 +172,17 @@ namespace djnn
   AbstractGShape::~AbstractGShape ()
   {
     // remove from picking_view if is the current object
-    if (is_pickable(this))
-      if (this->frame () && this->frame ()->picking_view ())    
-        this->frame ()->picking_view ()->object_deleted (this);
+    //DBG;
+    if (is_pickable(this)) {
+      //DBG;
+      if (this->frame ()) {
+        //DBG;
+        if(this->frame ()->picking_view ()) {
+          //DBG;
+          this->frame ()->picking_view ()->object_deleted (this);
+        }
+      }
+    }
 
     // remove _origin_x and _origin_y
     delete _origin_x;

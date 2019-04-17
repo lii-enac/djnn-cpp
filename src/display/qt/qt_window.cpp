@@ -66,7 +66,8 @@ namespace djnn
     QtMainloop::instance ().add_window (this);
     
     //_qwidget = new MyQQWidget (_window, this);
-    _qwidget = dynamic_cast<QtDisplayBackend*>(DisplayBackend::instance())->create_qwidget(_window, this); 
+    _qwidget = dynamic_cast<QtDisplayBackend*>(DisplayBackend::instance())->create_qwidget(_window, this);
+    WinImpl::set_picking_view(_qwidget->get_picking_view());
 
     if (mouse_tracking)
       _qwidget->setMouseTracking (true);

@@ -40,6 +40,7 @@ namespace djnn {
       setAttribute(Qt::WA_AcceptTouchEvents, true);
       _picking_view = new QtPickingView (w);
     }
+    virtual Picking* get_picking_view() override { return _picking_view; }
     virtual ~MyQQWidget () { 
       delete _picking_view;
     }

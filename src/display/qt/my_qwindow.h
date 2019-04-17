@@ -26,6 +26,8 @@
 
 namespace djnn {
 
+  class Picking;
+
   // no signal for QWidget events!!!
   class MyQWidget : public QWidget
   {
@@ -40,6 +42,7 @@ namespace djnn {
     virtual ~MyQWidget () { 
       //delete _picking_view;
     }
+    virtual Picking* get_picking_view() { return nullptr; }
   protected:
 
     virtual bool event (QEvent *event) override;

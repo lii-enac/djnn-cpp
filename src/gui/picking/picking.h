@@ -33,8 +33,8 @@ namespace djnn {
     ~Picking ();
     virtual void init () = 0;
     virtual AbstractGShape* pick (double x, double y) = 0;
-    virtual void add_gobj (AbstractGShape* gobj) = 0;
 
+    virtual void add_gobj (AbstractGShape* gobj) = 0;
     void object_deleted (AbstractGShape* gobj);
 
     bool genericMousePress(double x, double y, mouse_button button);
@@ -49,6 +49,9 @@ namespace djnn {
 
     void set_local_coords (AbstractGShape *s, Touch *t, double x, double y);
   protected:
+
+    bool genericEnterLeave (AbstractGShape* gobj);
+
     Window *_win;
     AbstractGShape *_cur_obj;
     map <int, Touch*> _active_touches;
