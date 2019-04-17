@@ -38,6 +38,7 @@ namespace djnn
     Process* v = _prop->get_value ();
     if (!v) {
       *_to_update = nullptr;
+      ((SrcToDstLink*) _parent)->update_graph ();
       return;
     }
     AbstractProperty *res = dynamic_cast<AbstractProperty*> (v->find_component (_spec));
