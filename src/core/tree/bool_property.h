@@ -36,6 +36,7 @@ namespace djnn {
     void set_value (const string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
+    string get_string_value () override { return std::to_string (get_ref_value ()); }
     void dump (int level=0) override;
 
     bool get_value () { return get_ref_value(); };

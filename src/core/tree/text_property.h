@@ -46,6 +46,7 @@ namespace djnn {
         return 0;
       }
     }
+    string get_string_value () override { return get_ref_value (); }
     void dump (int level=0) override;
 
     string& get_value () { return get_ref_value(); };
