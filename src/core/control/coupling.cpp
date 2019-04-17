@@ -70,7 +70,7 @@ namespace djnn
   {
     if (_immediate_processing)
       executeActivation ();
-    if (isEnable) {
+    else if (isEnable) {
       _dst->set_activation_source (_src);
       _dst->set_data (_data);
       _dst->exec (m_dst_flag);
@@ -81,7 +81,9 @@ namespace djnn
   void
   Coupling::propagateDeactivation ()
   {
-    if (isEnable) {
+    if (_immediate_processing)
+      executeDeactivation ();
+    else if (isEnable) {
       _dst->set_activation_source (_src);
       _dst->set_data (_data);
       _dst->exec (m_dst_flag);
@@ -96,6 +98,16 @@ namespace djnn
       _dst->set_activation_source (_src);
       _dst->set_data (_data);
       _dst->activation ();
+    }
+  }
+  void
+  Coupling::executeDeactivation ()
+  {
+    if (isEnable) {
+      _dst->set_activation_source (_src);
+      _dst->set_data (_data);
+      _dst->deactivation ();
+      _dst->coupling_deactivation_hook ();
     }
   }
 }
