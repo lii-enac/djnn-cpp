@@ -105,8 +105,9 @@ namespace djnn
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
       case QEvent::Wheel:
-      
-        exec_ = QWidget::event (event);
+        djnn::release_exclusive_access (DBG_REL);
+        exec_ = MyQWidget::event (event);
+        return exec_;
         break;
 
       // case QEvent::KeyPress:
@@ -121,7 +122,7 @@ namespace djnn
         {
           /* Event not managed by us */
           djnn::release_exclusive_access (DBG_REL);
-          return QWidget::event (event);
+          return MyQWidget::event (event);
         }
       }
     djnn::release_exclusive_access (DBG_REL);
