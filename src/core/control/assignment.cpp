@@ -72,10 +72,7 @@ namespace djnn
       _ref_src = ref_src_pair.first;
       _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, &_src);
       _update_src->activate ();
-      _c_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION);
-      Graph::instance ().add_edge (ref_src_pair.first, _update_src);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+      _c_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION, true);
     } else {
       Process *f = src->find_component (ispec);
       if (f == 0) {
@@ -124,19 +121,6 @@ namespace djnn
   void
   AbstractAssignment::update_graph ()
   {
-    if (_has_coupling) {
-      Graph::instance ().remove_edge (_src, _dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
-    }
-    if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
-      _has_coupling = true;
-    } else {
-      _has_coupling = false;
-    }
   }
 
   AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
@@ -158,16 +142,10 @@ namespace djnn
   AbstractAssignment::~AbstractAssignment ()
   {
     if (_update_src) {
-      Graph::instance ().remove_edge (_ref_src, _update_src);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _update_src);
       delete _c_src;
       delete _update_src;
     }
     if (_update_dst) {
-      Graph::instance ().remove_edge (_ref_dst, _update_dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _update_dst);
       delete _c_dst;
       delete _update_dst;
     }

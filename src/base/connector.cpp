@@ -83,10 +83,7 @@ namespace djnn
       _ref_src = ref_src_pair.first;
       _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, (Process**)&_src);
 
-      _c_update_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION);
-      Graph::instance ().add_edge (ref_src_pair.first, _update_src);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
+      _c_update_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION, true);
     } else {
       Process* c_src = src->find_component (ispec);
       if (c_src == 0) {
@@ -102,10 +99,7 @@ namespace djnn
       _ref_dst = ref_dst_pair.first;
       _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
 
-      _c_update_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION);
-      Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+      _c_update_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
     } else {
       Process* c_dst = dst->find_component (dspec);
       if (c_dst == 0) {
@@ -140,16 +134,10 @@ namespace djnn
   Connector::update_graph ()
   {
     if (_has_coupling) {
-      Graph::instance ().remove_edge (_src, _dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
       delete _c_src;
       _c_src = nullptr;
     }
     if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
       _has_coupling = true;
       if (is_activated ()) {
@@ -171,16 +159,10 @@ namespace djnn
     delete _c_src;
     delete _action;
     if (_update_src) {
-      Graph::instance ().remove_edge (_ref_src, _update_src);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_src);
       delete _c_update_src;
       delete _update_src;
     }
     if (_update_dst) {
-      Graph::instance ().remove_edge (_ref_dst, _update_dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
       delete _c_update_dst;
       delete _update_dst;
     }
