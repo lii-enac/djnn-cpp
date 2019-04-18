@@ -14,11 +14,19 @@
 
 #include "ref_property.h"
 #include "../serializer/serializer.h"
+#include <sstream>
 #include <iostream>
 
 namespace djnn
 {
   using namespace std;
+  string
+  RefProperty::get_string_value ()
+  {
+    std::ostringstream address;
+    address << (void const *) value;
+    return address.str ();
+  }
 
   void
   RefProperty::set_value (int v, bool propagate)

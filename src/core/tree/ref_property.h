@@ -35,7 +35,7 @@ namespace djnn {
     void set_value (const string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
     double get_double_value () override { warning (this, "undefined double value for ref property"); return 0; }
-    string get_string_value () override { return std::to_string ((long)value); }
+    string get_string_value () override;
     Process* find_component (const string &path) override;
     void dump (int level=0) override;
     void serialize (const string& format) override;
