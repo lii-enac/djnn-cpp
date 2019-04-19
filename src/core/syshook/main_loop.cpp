@@ -17,6 +17,9 @@
 #include "main_loop.h"
 #include "cpp-thread.h"
 
+#include <iostream>
+#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+
 namespace djnn {
 
     MainLoop* MainLoop::_instance;
@@ -46,9 +49,7 @@ namespace djnn {
         p->activation ();
       }
       if (_another_source_wants_to_be_mainloop) {
-        //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
-        //another_source_wants_to_be_mainloop->activate_from_mainloop ();
         _another_source_wants_to_be_mainloop->run ();
       } else {
         run_in_main_thread ();
@@ -79,6 +80,15 @@ namespace djnn {
     }
 
 
+    #if DJNN_USE_SDL_THREAD
+    static int SDL_ThreadFunction(void* data)
+    {
+        auto * ml = (MainLoop*) data;
+        ml->private_run ();
+        return 0;
+    }
+    #endif
+
     void
     MainLoop::run_in_own_thread ()
     {
@@ -93,32 +103,39 @@ namespace djnn {
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
       th->start();
       #endif
+
+      #if DJNN_USE_SDL_THREAD
+      SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this);
+      #endif
     }
 
-#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
     void
     MainLoop::run ()
     {
-      //DBG;
-
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success
         //own_mutex.lock (); // 2nd lock: blocks forever
-        #if DJNN_USE_SDL_THREAD
-        while (1) SDL_Delay(20000);
-        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-        QThread::currentThread()->wait(20000);
-        #else
-        while (1) this_thread::sleep_for(chrono::seconds(20000));
-        #endif
+        while (1) {
+          unsigned int duration = 2000;
+          #if DJNN_USE_SDL_THREAD
+          SDL_Delay(duration);
+          #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+          QThread::currentThread()->wait(duration);
+          #else
+          this_thread::sleep_for(chrono::seconds(duration));
+          #endif
+          if(get_please_stop()) {
+            break;
+          }
+        }
+        
       } else {
-        //DBG;
         //std::
         //boost::
         #if DJNN_USE_SDL_THREAD
-        SDL_Delay(20000);
+        SDL_Delay(_duration.count());
         #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
         QThread::currentThread()->wait(_duration.count());
         #else

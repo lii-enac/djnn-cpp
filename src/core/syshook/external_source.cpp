@@ -39,7 +39,6 @@ typedef QMutex djnn_mutex_t;
 
 namespace djnn {
 
-
 	class ExternalSource::Impl {
 	public:
         #if DJNN_THREAD_IS_POINTER
@@ -58,9 +57,20 @@ namespace djnn {
     }
 
     ExternalSource::~ExternalSource () {
-      //please_stop ();
-      //if ( _thread.joinable() ) _thread.join();
-      //delete _impl;
+        please_stop ();
+        if(_impl->_thread) {
+            #if DJNN_USE_QT_THREAD
+            _impl->_thread->wait();
+
+            #elif DJNN_USE_SDL_THREAD
+            int threadReturnValue;
+            SDL_WaitThread(_impl->_thread, &threadReturnValue);
+
+            #else
+            if ( _impl->_thread->joinable() ) _impl->_thread->join();
+            #endif
+        }
+        delete _impl;
     }
 
 
@@ -105,7 +115,7 @@ namespace djnn {
 		_impl->_thread.interrupt();
         #endif
 
-        #if DJNN_USE_QTHREAD
+        #if DJNN_USE_QT_THREAD
         if(_impl->_thread) {
             _impl->_thread->requestInterruption();
         }
@@ -114,7 +124,7 @@ namespace djnn {
 	}
 
     #if DJNN_USE_SDL_THREAD
-    static int SDL_TreadFunction(void* data)
+    static int SDL_ThreadFunction(void* data)
     {
         ExternalSource * es = (ExternalSource*) data;
         es->private_run ();
@@ -144,7 +154,7 @@ namespace djnn {
 
         #if DJNN_USE_SDL_THREAD
         //SDL_CreateThread(this->ExternalSource::private_run(), "djnn thread", this);
-        SDL_CreateThread(SDL_TreadFunction, "djnn thread", this);
+        SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this);
         #endif
 
 

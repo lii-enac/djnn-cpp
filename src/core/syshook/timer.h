@@ -31,7 +31,7 @@ namespace djnn
     Timer (Process* p, const std::string& n, int period = 1000);
     Timer (chrono::milliseconds period = chrono::milliseconds(1000));
     Timer (int period = 1000);
-    ~Timer ();
+    virtual ~Timer ();
 
   protected:
     // Process

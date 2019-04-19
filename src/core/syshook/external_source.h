@@ -79,7 +79,7 @@ namespace djnn
     virtual void please_stop (); //{ _please_stop = true; _thread.interrupt(); }
     //virtual void activate_from_mainloop () {}
 
-        void private_run();
+    void private_run();
 
   protected:
     //virtual void set_please_stop (bool v) { _please_stop.store (v); }
