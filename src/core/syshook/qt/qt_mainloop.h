@@ -17,8 +17,8 @@
 #pragma once
 //#include "../backend.h"
 
-#include "qt_window.h"
-#include "../../core/syshook/external_source.h"
+//#include "qt_window.h"
+#include "../external_source.h"
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 #include <vector>
@@ -28,9 +28,18 @@ namespace djnn {
 
   using namespace std;
 
+  class QtMainloopListener {
+  public:
+    virtual ~QtMainloopListener() {}
+    virtual void slot_for_about_to_block ();
+  };
+
+  class MainLoop;
+
   class QtMainloop : public ExternalSource {
   
   public:
+    static void build_instance (MainLoop*);
     static QtMainloop& instance ();
     static void clear ();
     virtual ~QtMainloop ();
@@ -38,19 +47,22 @@ namespace djnn {
     void run() override;
     void wakeup ();
     void set_please_exec (bool exec) { _please_exec = exec; }
-    void add_window (QtWindow* win) { _windows.push_back (win); }
-    void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+    //void add_window (QtWindow* win) { _windows.push_back (win); }
+    //void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+    void add_listener (QtMainloopListener* mll) { _mlls.push_back (mll); }
+    void remove_listener (QtMainloopListener* mll) { _mlls.erase (remove (_mlls.begin (), _mlls.end (), mll), _mlls.end ()); }
   
   private:
     static QtMainloop* _instance;
     static once_flag onceFlag;
-    QtMainloop ();
+    QtMainloop (MainLoop*);
     bool _please_exec;
     QApplication* _qapp;
     QAbstractEventDispatcher*_qevtdispatcher;
     void slot_for_awake ();
     void slot_for_about_to_block ();
-    vector<QtWindow*> _windows;
+    //vector<QtWindow*> _windows;
+    vector<QtMainloopListener*> _mlls;
     bool already_awake;
     int argc;
     char **argv;

@@ -16,7 +16,7 @@
 
 //#include "../backend.h"
 
-#include "../../core/syshook/main_loop.h"
+#include "../main_loop.h"
 #include "qt_mainloop.h"
 
 //#include <QThread>
@@ -29,26 +29,33 @@ namespace djnn
   QtMainloop* QtMainloop::_instance;
   std::once_flag QtMainloop::onceFlag;
 
+  void
+  QtMainloop::build_instance (MainLoop * ml)
+  {
+    _instance = new QtMainloop (ml);
+  }
+
   QtMainloop&
   QtMainloop::instance ()
   {
-    std::call_once (QtMainloop::onceFlag, [] () {
-      _instance = new QtMainloop ();
-    });
+    // std::call_once (QtMainloop::onceFlag, [ml] () {
+    //   DBG;
+    //   _instance = new QtMainloop (ml);
+    //   DBG;
+    // });
 
     return *(_instance);
   }
 
-  QtMainloop::QtMainloop () :
+  QtMainloop::QtMainloop (MainLoop * ml) :
       _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
   {
-
-    MainLoop::instance ().set_another_source_wants_to_be_mainloop (this);
-    
+    //MainLoop::instance ()
+    (*ml)
+    .set_another_source_wants_to_be_mainloop (this);
     argc = 0;
     argv = 0;
     _qapp = new QApplication (argc, argv);
-
     
     _qevtdispatcher = QAbstractEventDispatcher::instance ();
     QObject::connect (_qevtdispatcher, &QAbstractEventDispatcher::aboutToBlock,
@@ -96,6 +103,9 @@ namespace djnn
   }
 
   void
+  QtMainloopListener::slot_for_about_to_block () {}
+
+  void
   QtMainloop::slot_for_about_to_block ()
   {
     //DBG;
@@ -108,9 +118,11 @@ namespace djnn
       _please_exec = false;
     }
 
-    for (auto w : _windows) {
-      w->check_for_update ();
-    }
+    for (auto mll : _mlls) mll->slot_for_about_to_block();
+
+    //for (auto w : _windows) {
+    //  w->check_for_update ();
+    //}
 
     already_awake = false;
   }

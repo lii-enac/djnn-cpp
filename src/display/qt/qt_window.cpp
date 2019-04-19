@@ -18,7 +18,7 @@
 #include "qt_window.h"
 #include "qt_display.h"
 //#include "qt_backend.h"
-#include "qt_mainloop.h"
+#include "../../core/syshook/qt/qt_mainloop.h"
 #include "../display.h"
 #include "../display-dev.h"
 #include "../abstract_display.h"
@@ -55,7 +55,8 @@ namespace djnn
 
   QtWindow::~QtWindow ()
   {
-    QtMainloop::instance ().remove_window (this);
+    //QtMainloop::instance ().remove_window (this);
+    QtDisplayBackend::instance ()->remove_window (this);
     if (_qwidget != nullptr)
       delete _qwidget;
   }
@@ -63,7 +64,8 @@ namespace djnn
   void
   QtWindow::activate ()
   {
-    QtMainloop::instance ().add_window (this);
+    //QtMainloop::instance ().add_window (this);
+    QtDisplayBackend::instance ()->add_window (this);
     
     //_qwidget = new MyQQWidget (_window, this);
     _qwidget = dynamic_cast<QtDisplayBackend*>(DisplayBackend::instance())->create_qwidget(_window, this);
@@ -86,7 +88,8 @@ namespace djnn
   void
   QtWindow::deactivate ()
   {
-    QtMainloop::instance ().remove_window (this);
+    //QtMainloop::instance ().remove_window (this);
+    QtDisplayBackend::instance ()->remove_window (this);
     delete _qwidget;
     _qwidget = nullptr;
   }

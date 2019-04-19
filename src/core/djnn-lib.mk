@@ -17,6 +17,7 @@ endif
 # library-specific thread support
 ifeq ($(display),QT)
 include src/display/qt/djnn-lib-flags.mk
+lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
 endif
 
 #ifeq ($(graphics),CAIRO)

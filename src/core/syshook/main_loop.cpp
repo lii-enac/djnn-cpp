@@ -17,6 +17,10 @@
 #include "main_loop.h"
 #include "cpp-thread.h"
 
+#if DJNN_USE_QT_THREAD
+#include "qt/qt_mainloop.h"
+#endif
+
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
@@ -31,6 +35,9 @@ namespace djnn {
         init_global_mutex();
         ExternalSource::init();
         _instance = new MainLoop();
+        #if DJNN_USE_QT_THREAD
+        QtMainloop::build_instance(_instance);
+        #endif
       });
 
       return *(_instance);
@@ -118,6 +125,7 @@ namespace djnn {
         //own_mutex.lock (); // 1st lock: success
         //own_mutex.lock (); // 2nd lock: blocks forever
         while (1) {
+          DBG;
           unsigned int duration = 2000;
           #if DJNN_USE_SDL_THREAD
           SDL_Delay(duration);

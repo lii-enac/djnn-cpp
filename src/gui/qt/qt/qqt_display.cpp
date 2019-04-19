@@ -17,14 +17,14 @@
 
 #include "../../../display/qt/qt_display.h"
 #include "../../../display/qt/qt_window.h"
-#include "../../../display/qt/qt_mainloop.h"
+#include "../../../core/syshook/qt/qt_mainloop.h"
 
 #include "my_qqwindow.h"
 
 #include <iostream>
 
 namespace djnn {
-  #if 1
+
   class QtQtDisplayBackend : public QtDisplayBackend {
   public:
     //static QtDisplayBackend* instance ();
@@ -34,13 +34,15 @@ namespace djnn {
     struct Impl;
     Impl *impl;
 
-    static std::shared_ptr<QtDisplayBackend> _instance;
+    static std::shared_ptr<QtQtDisplayBackend> _instance;
     static std::once_flag onceFlag;
 
+    static QtQtDisplayBackend* instance ();
+
   };
-#endif
-  std::shared_ptr<QtDisplayBackend> QtDisplayBackend::_instance;
-  std::once_flag QtDisplayBackend::onceFlag;
+
+  std::shared_ptr<QtQtDisplayBackend> QtQtDisplayBackend::_instance;
+  std::once_flag QtQtDisplayBackend::onceFlag;
 
   WinImpl*
   QtQtDisplayBackend::create_window (Window *win, const std::string& title,  double x, double y, double w, double h)
@@ -55,17 +57,32 @@ namespace djnn {
     return new MyQQWidget (win, qtwin);
   }
 
-  QtDisplayBackend*
-  QtDisplayBackend::instance ()
+  class QtDisplayBackendMainLoopListener : public QtMainloopListener {
+  public:
+    QtDisplayBackendMainLoopListener(QtDisplayBackend* b) : _backend(b) {}
+    virtual void slot_for_about_to_block () {
+      _backend->slot_for_about_to_block();
+    }
+  private:
+    QtDisplayBackend* _backend;
+  };
+
+  extern QtDisplayBackend* __instance;
+  
+  QtQtDisplayBackend*
+  QtQtDisplayBackend::instance ()
   {
     //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
-    std::call_once (QtDisplayBackend::onceFlag, [] () {
+    std::call_once (QtQtDisplayBackend::onceFlag, [] () {
       _instance.reset(new QtQtDisplayBackend);
+      QtMainloop::instance ().add_listener(new QtDisplayBackendMainLoopListener(_instance.get ()));
+      __instance = _instance.get ();
     });
 
     return _instance.get ();
   }
 
+  
   void
   DisplayBackend::init ()
   {
@@ -73,11 +90,12 @@ namespace djnn {
     if (_instance != nullptr)
       return;
     _instance = new Impl ();
-    _instance->backend = QtDisplayBackend::instance ();
+    _instance->backend = QtQtDisplayBackend::instance ();
     //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
   }
 
-  void p_init_p_display() {
+  void
+  p_init_p_display() {
     DisplayBackend::init ();
   }
 
