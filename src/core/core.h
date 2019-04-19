@@ -18,6 +18,7 @@
 #include "tree/process.h"
 #include "control/binding.h"
 #include "control/activator.h"
+#include "control/synchronizer.h"
 #include "tree/component.h"
 #include "control/native_action.h"
 #include "control/native_expression_action.h"
