@@ -35,14 +35,6 @@ namespace djnn {
         ((Synchronizer*) _parent)->propagate ();
       }
       void deactivate () override {}
-    private:
-      void set_binding_activate (bool activate) {
-        if (activate)
-          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE);
-        else
-          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_DEACTIVATE);
-      }
-      bool is_binding_activate() { return is_flag_set (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE); }
     };
   public:
     Synchronizer (Process* parent, const string &name, Process* dst, const string & dspec);
