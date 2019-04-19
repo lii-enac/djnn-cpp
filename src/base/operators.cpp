@@ -69,20 +69,14 @@ namespace djnn
   UnaryOperator::init_couplings (Process* action)
   {
     _action = action;
-    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
+    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     _c_input->disable ();
-    Graph::instance ().add_edge (_input, _action);
-    Graph::instance ().add_edge (_action, _output);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    Graph::instance ().add_edge (_input, _output);
   }
 
   UnaryOperator::~UnaryOperator ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
-    Graph::instance ().remove_edge (_input, _action);
-    Graph::instance ().remove_edge (_action, _output);
+    Graph::instance ().remove_edge (_input, _output);
 
     delete _c_input;
     delete _action;
