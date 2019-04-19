@@ -26,6 +26,7 @@
 
 namespace djnn
 {
+  void init_global_mutex();
   void get_exclusive_access(const char* debug);
   void release_exclusive_access(const char* debug);
 

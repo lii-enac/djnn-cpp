@@ -19,10 +19,23 @@
 
 namespace djnn {
 
+    MainLoop* MainLoop::_instance;
+    std::once_flag MainLoop::onceFlag;
+    MainLoop&
+    MainLoop::instance ()
+    {
+      std::call_once (MainLoop::onceFlag, [] () {
+        init_global_mutex();
+        ExternalSource::init();
+        _instance = new MainLoop();
+      });
+
+      return *(_instance);
+    }
+
     MainLoop::MainLoop ()
     {
       set_run_for_ever ();
-      
       launch_mutex_lock();
     }
 
@@ -116,6 +129,8 @@ namespace djnn {
       }
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
+
+      launch_mutex_lock(); // reacquire launch mutex
     }
 
 

@@ -13,9 +13,9 @@
  *
  */
 
-#include "main_loop.h"
+//#include "main_loop.h"
 #include "syshook.h"
-#include "external_source.h"
+//#include "external_source.h"
 
 #include "cpp-mutex.h"
 
@@ -29,6 +29,15 @@ namespace djnn
 
   static djnn_mutex_t* global_mutex;
   //thread_local bool _please_stop;
+
+  void
+  init_global_mutex() {
+    #if DJNN_USE_SDL_THREAD
+    global_mutex = SDL_CreateMutex();
+    #else
+    global_mutex = new djnn_mutex_t();
+    #endif
+  }
   
   void
   get_exclusive_access (const char * debug)
@@ -75,22 +84,4 @@ namespace djnn
 #endif
   }
 
-  MainLoop* MainLoop::_instance;
-  std::once_flag MainLoop::onceFlag;
-  MainLoop&
-  MainLoop::instance ()
-  {
-    std::call_once (MainLoop::onceFlag, [] () {
-      #if DJNN_USE_SDL_THREAD
-      global_mutex = SDL_CreateMutex();
-      #else
-      global_mutex = new djnn_mutex_t();
-      #endif
-      //global_mutex = new djnn_mutex_t ();
-      ExternalSource::init();
-      _instance = new MainLoop();
-    });
-
-    return *(_instance);
-  }
 }
