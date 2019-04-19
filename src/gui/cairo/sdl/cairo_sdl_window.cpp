@@ -118,7 +118,6 @@ namespace djnn
   void
   CairoSDLWindow::deactivate ()
   {
-    DBG;
     SDLMainloop::instance ().remove_window (this);
     delete _my_cairo_surface;
     if (_sdl_surface)
@@ -126,7 +125,6 @@ namespace djnn
     if (_sdl_renderer)
       SDL_DestroyRenderer (_sdl_renderer);
     if (_sdl_window) {
-      DBG;
       SDL_DestroyWindow (_sdl_window);
     }
     _my_cairo_surface = nullptr;

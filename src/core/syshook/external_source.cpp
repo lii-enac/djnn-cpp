@@ -63,8 +63,9 @@ namespace djnn {
             _impl->_thread->wait();
 
             #elif DJNN_USE_SDL_THREAD
-            int threadReturnValue;
-            SDL_WaitThread(_impl->_thread, &threadReturnValue);
+            //int threadReturnValue;
+            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
+            SDL_DetachThread(_impl->_thread);
 
             #else
             if ( _impl->_thread->joinable() ) _impl->_thread->join();
