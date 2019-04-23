@@ -19,8 +19,6 @@
 #include "../core/tree/text_property.h"
 #include "../core/tree/process.h"
 
-#include <iostream>
-
 namespace djnn
 {
 

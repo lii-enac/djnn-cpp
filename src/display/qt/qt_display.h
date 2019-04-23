@@ -3,6 +3,7 @@
 #include "../abstract_display.h"
 #include <mutex>
 #include <vector>
+#include <algorithm>
 
 namespace djnn {
 
@@ -27,7 +28,7 @@ class QtDisplayBackend : public AbstractDisplay {
     virtual void slot_for_about_to_block ();
 
     void add_window (QtWindow* win) { _windows.push_back (win); }
-    void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+    void remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
 
     //static std::shared_ptr<QtDisplayBackend> _instance;
     //static std::once_flag onceFlag;
