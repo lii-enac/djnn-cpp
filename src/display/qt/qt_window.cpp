@@ -242,9 +242,8 @@ namespace djnn
     _window->height ()->set_value (h, true);
     _window->width ()->set_value (w, true);
 
-    _updating = false;
-    QtMainloop::instance ().set_please_exec (true);
-    _qtwindow->_please_update = false;
+   _updating = false;
+   GRAPH_EXEC;
   }
 
   void
