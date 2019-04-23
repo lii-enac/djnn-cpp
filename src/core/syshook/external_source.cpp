@@ -58,7 +58,11 @@ namespace djnn {
 
     ExternalSource::~ExternalSource () {
         please_stop ();
+        #if DJNN_THREAD_IS_POINTER
         if(_impl->_thread) {
+        #else
+        if(_impl->_thread.joinable()) {
+        #endif
             #if DJNN_USE_QT_THREAD
             _impl->_thread->wait();
 
@@ -68,7 +72,11 @@ namespace djnn {
             SDL_DetachThread(_impl->_thread);
 
             #else
+            #if DJNN_THREAD_IS_POINTER
             if ( _impl->_thread->joinable() ) _impl->_thread->join();
+            #else
+            if ( (_impl->_thread).joinable() ) (_impl->_thread).join();
+            #endif
             #endif
         }
         delete _impl;
