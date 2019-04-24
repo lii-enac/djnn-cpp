@@ -78,11 +78,11 @@ namespace djnn
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    Coupling ** coupling;
-    double* rawp_Double;
-    int* rawp_Int;
+    Coupling ** coupling = nullptr;
+    double* rawp_Double = nullptr;
+    int* rawp_Int = nullptr;
     typedef string text;
-    text* rawp_Text;
+    text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
     if(name=="x") {

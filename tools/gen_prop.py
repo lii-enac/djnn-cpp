@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 copyright = """/*
  *  djnn v2
  *
@@ -47,6 +49,9 @@ getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abs
 def_string = """
 #include "../backend.h"
 #include "../abstract_backend.h"
+#include "../../display/display.h"
+#include "../../display/abstract_display.h"
+#include "../../display/window.h"
 #include "shapes.h"
 #include "../../core/control/coupling.h"
 
@@ -136,7 +141,7 @@ namespace djnn
   void
   %(CLASS)s::draw ()
   {
-    if (somehow_activating () && Backend::instance ()->window () == _frame) {
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_%(CLASS_LOWER)s (this);
     }
   }
