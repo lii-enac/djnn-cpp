@@ -76,6 +76,8 @@ namespace djnn
     //if ( _thread.joinable() ) _thread.join();
     //DBG;
     //please_stop();
+    if ( is_activated() )
+      return;
     start_thread();
 
     //djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
