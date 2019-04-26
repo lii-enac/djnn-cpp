@@ -67,7 +67,7 @@ namespace djnn
     //if (_activation_state == activated)
     if ( is_activated() )
       return;
-    set_please_stop (false);
+    //set_please_stop (false);
     start_thread();
   }
 
