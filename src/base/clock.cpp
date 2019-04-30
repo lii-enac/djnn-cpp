@@ -74,7 +74,7 @@ namespace djnn
     //djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
     //set_please_stop (true);
     //if ( _thread.joinable() ) _thread.join();
-    //DBG;
+    DBG;
     //please_stop();
     if ( is_activated() )
       return;
@@ -86,6 +86,7 @@ namespace djnn
   void
   Clock::deactivate ()
   {
+    DBG;
     please_stop ();
   }
 

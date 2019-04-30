@@ -64,10 +64,8 @@ namespace djnn
   void
   Timer::activate ()
   {
-    //if (_activation_state == activated)
     if ( is_activated() )
       return;
-    //set_please_stop (false);
     start_thread();
   }
 
@@ -81,6 +79,7 @@ namespace djnn
   Timer::run ()
   {
     //DBG;
+    set_please_stop (false);
     try {
         chrono::milliseconds duration (_delay->get_value ());
         //this_thread::sleep_for (duration); // blocking call
