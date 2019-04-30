@@ -1,3 +1,5 @@
+lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
+
 ifeq ($(os),Darwin)
 QTLIBS = -framework QtWidgets -framework QtOpenGL \
 		-framework QtGui -framework QtCore
@@ -38,5 +40,3 @@ moc := moc
 lib_cppflags += -I. -I$(LOCALDIR)/include $(shell pkg-config --cflags $(QTLIBS))
 lib_ldflags += $(shell pkg-config --libs $(QTLIBS)) 
 endif
-
-lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
