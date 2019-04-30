@@ -71,30 +71,20 @@ namespace djnn
   void
   Clock::activate ()
   {
-    //djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-    //set_please_stop (true);
-    //if ( _thread.joinable() ) _thread.join();
-    DBG;
-    //please_stop();
     if ( is_activated() )
       return;
     start_thread();
-
-    //djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
   }
 
   void
   Clock::deactivate ()
   {
-    DBG;
     please_stop ();
   }
 
   void
   Clock::run ()
-  {
-//    QThread::currentThread()->setPriority(QThread::TimeCriticalPriority);
-    //DBG;
+  { //DBG;
     struct timespec before;
     struct timespec after;
     set_please_stop (false);
