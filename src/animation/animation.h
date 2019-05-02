@@ -29,8 +29,7 @@ namespace djnn
   class SlowInSlowOutInterpolator : public HermiteCurve
   {
   public:
-    SlowInSlowOutInterpolator (Process *p, const string &n) :
-        HermiteCurve (p, n, 0, 1, 0, 0) {}
+    SlowInSlowOutInterpolator (Process *p, const string &n);
     void serialize (const string& type) override;
   };
 

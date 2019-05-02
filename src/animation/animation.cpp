@@ -32,6 +32,9 @@ namespace djnn
       
     }
   }
+  
+  SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (Process *p, const string &n) :
+        HermiteCurve (p, n, 0, 1, 0, 0) {}
 
   void
   SlowInSlowOutInterpolator::serialize (const string& type)
