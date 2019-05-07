@@ -35,6 +35,7 @@ namespace djnn
 
       MainLoop::instance ();
      
+      setlocale(LC_NUMERIC, "C");
     }
   }
 
