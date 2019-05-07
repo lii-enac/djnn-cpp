@@ -248,6 +248,14 @@ static const char* th_err(int errmsg)
 #endif
 #endif
 
+    void
+    ExternalSource::thread_terminated ()
+    {
+#if DJNN_THREAD_IS_POINTER
+        _impl->_thread = nullptr;
+#endif
+    }
+
 	void
 	ExternalSource::private_run ()
 	{	

@@ -72,6 +72,8 @@ namespace djnn
   void
   Timer::deactivate ()
   {
+    if ( !is_activated () )
+      return;
     please_stop ();
   }
 
@@ -95,6 +97,7 @@ namespace djnn
           //_activation_state = deactivated;
           set_deactivated ();
           _end->notify_activation (); // propagating
+          thread_terminated ();
           GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
