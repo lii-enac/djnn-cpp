@@ -52,6 +52,35 @@ namespace djnn
     Process::finalize ();
   }
 
+  Counter::Counter (double init, double delta) :
+      Process ()
+  {
+    _reset = new Spike (this, "reset");
+    _step = new Spike (this, "step");
+    _output = new DoubleProperty (this, "output", init);
+    _init = new DoubleProperty (this, "init", init);
+    _delta = new DoubleProperty (this, "delta", delta);
+
+    /* reset action */
+    _action_reset = new CounterResetAction (this, "counter_action_reset", &_reset_occurred);
+    _c_reset = new Coupling (_reset, ACTIVATION, _action_reset, ACTIVATION);
+    _c_reset->disable ();
+    Graph::instance ().add_edge (_reset, _action_reset);
+    Graph::instance ().add_edge (_action_reset, _output);
+
+    /* step action */    
+    _action_step = new CounterStepAction (this, "counter_action_step", _init, _delta, _output, &_reset_occurred);
+    _c_step = new Coupling (_step, ACTIVATION, _action_step, ACTIVATION);
+    _c_step->disable ();
+    Graph::instance ().add_edge (_step, _action_step);
+    Graph::instance ().add_edge (_action_step, _output);
+
+    if (_parent && _parent->state_dependency () != nullptr) {
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset);
+      Graph::instance ().add_edge (_parent->state_dependency (), _action_step);
+    }
+  }
+
   Counter::~Counter () {
     if (_parent && _parent->state_dependency () != nullptr) {
       Graph::instance ().remove_edge (_parent->state_dependency (), _action_reset);
