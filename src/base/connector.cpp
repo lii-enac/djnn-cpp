@@ -117,7 +117,7 @@ namespace djnn
     _action = new ConnectorAction (this, "connector_" + src_name + "_to_" + dst_name + "_action", &_src, &_dst,
                                    true);
     if (_src) {
-      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _c_src->disable ();
       if (_dst) {
         Graph::instance ().add_edge (_src, _dst);
@@ -138,7 +138,7 @@ namespace djnn
       _c_src = nullptr;
     }
     if (_src && _dst) {
-      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _has_coupling = true;
       if (is_activated ()) {
         _action->activation ();
