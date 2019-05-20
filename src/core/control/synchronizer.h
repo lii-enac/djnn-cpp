@@ -32,7 +32,8 @@ namespace djnn {
       SynchronizerAction (Process* parent, const string &name) : Process (parent, name) {}
       virtual ~SynchronizerAction () {};
       void activate () override {
-        ((Synchronizer*) _parent)->propagate ();
+        if (_parent->somehow_activating ())
+          ((Synchronizer*) _parent)->propagate ();
       }
       void deactivate () override {}
     };
