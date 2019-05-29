@@ -271,12 +271,12 @@ namespace djnn
   void
   PausedAssignment::init_PausedAssignment ()
   {
-    _action = new AssignmentAction (this,
-                                    "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action",
-                                    &_src, &_dst, false);
+    _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
     Graph::instance ().add_edge (_src, _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    if (_src && _dst) {
+      if (_parent && _parent->state_dependency () != nullptr)
+        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    }
   }
 
   PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
