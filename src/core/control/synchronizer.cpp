@@ -26,16 +26,18 @@ namespace djnn
   Synchronizer::Synchronizer (Process *p, const string &n, Process* dst, const string & dspec) :
       Process (p, n)
   {
-    if (dst == 0) {
+    if (dst == nullptr) {
       error (this, "dst argument cannot be null in synchronizer creation (" + n + ", " + dspec + ")");
     }
     _dst = dst->find_component (dspec);
-    if (_dst == 0) {
+    if (_dst == nullptr) {
       error (this, "destination child " + dspec + " not found in synchronizer (" + get_name () + ", " + dspec + ")");
     }
 
     _action = new SynchronizerAction (this, "synchronizer_" + _dst->get_name () + "_action");
+    Graph::instance ().add_edge (_action, _dst);
     Process::finalize ();
+
 
   }
 
@@ -46,6 +48,7 @@ namespace djnn
       Graph::instance ().remove_edge (src, _action);
       delete c;
     }
+    Graph::instance ().remove_edge (_action, _dst);
     delete _action;
   }
 
@@ -68,13 +71,15 @@ namespace djnn
   void
   Synchronizer::add_source (Process *src, const string &ispec)
   {
-    if (src == 0) {
+    if (src == nullptr) {
       error (this,
              "src argument cannot be null in source addition to synchronizer (" + get_name () + ", " + ispec + ")");
     }
     Process* _src = src->find_component (ispec);
     Coupling *cpl = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+    cpl->disable ();
     Graph::instance ().add_edge (_src, _action);
+
     _c_list.push_back (cpl);
   }
 
