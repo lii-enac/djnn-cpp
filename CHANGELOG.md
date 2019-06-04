@@ -12,6 +12,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 #--------------------------------------------
 
+## [1.5.0] - 2019-06-04
+### NEW
+- New module : display
+- New Synchronizer component to synchronise different source of interaction : eg: to react once x and y of the mouse changed.
+
+### Added
+- Added accumulated transform props to Homography
+- Added get_string method on properties
+- Added a new constructor for counter component
+
+### Changed
+- Assignments and connectors can now have dynamic source and destination : automatically reassigned
+- redefine execution graph : connectors, bindings, unary operators are directly executed => use synchronizer to create a point of synchronisation
+- Frame/window component is now owned by display module and not gui anymore : use initDisplay () and #include "display/display.h
+- Changed Touch component constructor
+- Connector component trigger a copy if activated
+- Updated the documentation of the execution model
+- Moved qt mainloop in core/syshook/qt
+- Touches is now a list instead of set.
+- Cleaned Code
+
+### Removed
+- Removed Frame/Window component from gui module
+
+### Fixed
+- Fixed some component destructors : homography
+- Fixed thread mutex lock in some case : conflic between diplay and gui module, launch and stop
+- Fixed bug bon picking and enter/leave mechanism
+- Fixed compilation issues on Windows platform
+- Fixed malinloop for qt 5.9 
+- Fixed extern_source and mainloop handling in SDL
+- Fixed clock and timer mechanism with new graph execution
+- Fixed Locale for non GUI app.
+
+#--------------------------------------------
+
 ## [1.4.0] - 2019-04-05
 ### NEW
 - Added New Display API: move frame/window into display. should use init_display ()
