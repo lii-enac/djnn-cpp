@@ -129,11 +129,11 @@ namespace djnn {
     virtual void pick() {}
 
   protected:
-    virtual void pre_activate ();
+    virtual bool pre_activate ();
     virtual void activate () = 0;
     virtual void post_activate ();
 
-    virtual void pre_deactivate ();
+    virtual bool pre_deactivate ();
     virtual void deactivate () = 0;
     virtual void post_deactivate ();
 
@@ -239,6 +239,20 @@ namespace djnn {
         }
     }
 
+  };
+
+  class Action : public Process {
+  public:
+    Action (bool model = false) : Process (model) {}
+    Action (Process *p, const string &n, bool model = false) : Process (p, n, model) {}
+    virtual ~Action () {}
+    virtual bool pre_activate () override {
+      if ((_parent != 0 && !_parent->somehow_activating() ))
+    return false;
+      set_activating ();
+      return true;
+    }
+    void post_activate () override { notify_activation (); set_deactivated (); }
   };
 
   void alias_children (Process *p, Process *to);

@@ -21,7 +21,7 @@ namespace djnn
   HermiteCurve::HermiteCurveAction::HermiteCurveAction (Process* parent, const string &name,
                                                         AbstractProperty *input, AbstractProperty *p1, AbstractProperty *p2,
                                                         AbstractProperty *t1, AbstractProperty *t2, AbstractProperty *output) :
-      Process (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
+      Action (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
   {
     Process::finalize ();
   }

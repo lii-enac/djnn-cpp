@@ -111,9 +111,9 @@ namespace djnn
   };
 
    class Cursor : public Process {
-    class UpdateCursorAction : public Process {
+    class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (Process *p, const string &n) : Process (p, n) {}
+      UpdateCursorAction (Process *p, const string &n) : Action (p, n) {}
       ~UpdateCursorAction () {}
       void activate () override;
       void deactivate () override {};

@@ -35,6 +35,7 @@ namespace djnn {
     void enable () { isEnable = true; };
     void enable (Process* data) { isEnable = true; _data = data; };
     void disable () { isEnable = false; };
+    bool is_enable () { return isEnable; }
     Process* get_src () { return _src; }
     Process* get_dst () { return _dst; }
   private:

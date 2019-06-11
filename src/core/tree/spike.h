@@ -27,7 +27,7 @@ namespace djnn {
     void serialize (const string& format) override;
     Process* clone () override;
   protected:
-    void pre_activate () override;
+    bool pre_activate () override;
     void post_activate () override;
     void activate () override;
     void deactivate () override {};

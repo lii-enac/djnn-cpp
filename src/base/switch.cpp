@@ -42,8 +42,8 @@ namespace djnn
     add_symbol ("state", _branch_name);
     _action = new SwitchAction (this, get_name ());
     _state_dependency = _action;
-    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION);
-    Graph::instance ().add_edge (_branch_name, _action);
+    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
+    //Graph::instance ().add_edge (_branch_name, _action);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
 
@@ -54,7 +54,7 @@ namespace djnn
   {
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
-    Graph::instance ().remove_edge (_branch_name, _action);
+    //Graph::instance ().remove_edge (_branch_name, _action);
    
     delete _c_branch;
     delete _branch_name;

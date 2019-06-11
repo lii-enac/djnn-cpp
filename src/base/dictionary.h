@@ -24,29 +24,29 @@ namespace djnn {
   using namespace std;
 
   class Dictionary: public Process {
-    class FindAction : public Process
+    class FindAction : public Action
     {
     public:
       FindAction (Process* p, const string &n) :
-        Process (p, n) {};
+        Action (p, n) {};
       virtual ~FindAction () {};
       void activate () override;
       void deactivate () override {};
     };
-    class AddEntryAction : public Process
+    class AddEntryAction : public Action
     {
     public:
       AddEntryAction (Process* p, const string &n) :
-        Process (p, n) {};
+        Action (p, n) {};
       virtual ~AddEntryAction () {};
       void activate () override;
       void deactivate () override {};
     };
-    class DelEntryAction : public Process
+    class DelEntryAction : public Action
     {
     public:
       DelEntryAction (Process* p, const string &n) :
-        Process (p, n) {};
+        Action (p, n) {};
       virtual ~DelEntryAction () {};
       void activate () override;
       void deactivate () override {};

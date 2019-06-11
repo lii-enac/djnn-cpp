@@ -75,9 +75,9 @@ namespace djnn
   class UpdateDrawing : public Process
   {
   private:
-    class RedrawAction : public Process {
+    class RedrawAction : public Action {
       public:
-        RedrawAction (UpdateDrawing *p, const string &n) : Process (p, n), _ud (p) { Process::finalize (); }
+        RedrawAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) { Process::finalize (); }
         virtual ~RedrawAction () {}
         void activate () override ;
         void deactivate () override {}
@@ -96,10 +96,10 @@ namespace djnn
     private:
       UpdateDrawing* _ud;
     };
-    class AutoRefreshAction : public Process
+    class AutoRefreshAction : public Action
     {
     public:
-      AutoRefreshAction (UpdateDrawing *p, const string &n) : Process (p, n), _ud (p) { Process::finalize (); }
+      AutoRefreshAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) { Process::finalize (); }
       virtual ~AutoRefreshAction () {}
       void activate () override { _ud->update_auto_refresh (); };
       void deactivate () override {}

@@ -27,10 +27,10 @@ namespace djnn {
   {
     friend class BindingAction;
   private:
-    class BindingAction : public Process
+    class BindingAction : public Action
     {
     public:
-      BindingAction (Process* parent, const string &name, bool activate) : Process (parent, name) { set_binding_activate (activate); }
+      BindingAction (Process* parent, const string &name, bool activate) : Action (parent, name) { set_binding_activate (activate); }
       virtual ~BindingAction () {};
       void activate () override {
       	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);

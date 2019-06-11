@@ -25,11 +25,11 @@ namespace djnn {
   class Switch : public Container
   {
   private:
-    class SwitchAction : public Process
+    class SwitchAction : public Action
     {
     public:
       SwitchAction (Switch *parent, const string &name) :
-	      Process (parent, "action"),  _sw (parent) { 
+        Action (parent, "action"),  _sw (parent) {
           /* removed but keep comment as legacy
            * avoid to add the action in Container::_children list
            * otherwise there is a side effect on ~switch which 

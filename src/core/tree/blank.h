@@ -26,11 +26,11 @@ namespace djnn {
     virtual ~Blank () {};
     Process* clone () override;
   protected:
-    void pre_activate () override {}
+    bool pre_activate () override { return true; }
     //void activate () override { _activation_state = activated; }
     void activate () override { set_activated (); }
     void post_activate () override {}
-    void pre_deactivate () override {}
+    bool pre_deactivate () override { return true;}
     //void deactivate () override { _activation_state = deactivated; }
     void deactivate () override { set_deactivated (); }
     void post_deactivate () override {}

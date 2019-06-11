@@ -36,7 +36,7 @@ namespace djnn
   class Oscillator : public Process
   {
   private:
-    class OscillatorAction : public Process {
+    class OscillatorAction : public Action {
     public:
       OscillatorAction (Process *p, const string &n, DoubleProperty* m, DoubleProperty* k,
                         DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,

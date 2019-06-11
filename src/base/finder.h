@@ -25,10 +25,10 @@ namespace djnn
   class Finder : public Process
   {
   private:
-    class FinderAction : public Process
+    class FinderAction : public Action
     {
     public:
-      FinderAction (Process *p, const string &n) : Process (p, n) { Process::finalize (); }
+      FinderAction (Process *p, const string &n) : Action (p, n) { Process::finalize (); }
       virtual ~FinderAction () {}
       void activate () override;
       void deactivate () override {};

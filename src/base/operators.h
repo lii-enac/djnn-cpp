@@ -31,12 +31,12 @@ namespace djnn {
     Process* r_val;
   } init_val;
 
-  class BinaryOperatorAction : public Process
+  class BinaryOperatorAction : public Action
   {
   public:
     BinaryOperatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                           AbstractProperty* result) :
-    Process (parent, name), _left (left), _right (right), _result (result) {}
+    Action (parent, name), _left (left), _right (right), _result (result) {}
     virtual ~BinaryOperatorAction () {};
   protected:
     AbstractProperty* _left;
@@ -58,11 +58,11 @@ namespace djnn {
     Process *_action;
   };
 
-  class UnaryOperatorAction : public Process
+  class UnaryOperatorAction : public Action
   {
   public:
     UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-    Process (parent, name), _input (input), _output (output){}
+    Action (parent, name), _input (input), _output (output){}
     virtual ~UnaryOperatorAction () {};
   protected:
     AbstractProperty* _input;

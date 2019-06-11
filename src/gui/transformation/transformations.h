@@ -221,11 +221,11 @@ namespace djnn
   {
   /*** private Class rightTranslateBy Actions ***/ 
   private:
-     class RightTranslateByAction : public Process
+     class RightTranslateByAction : public Action
     {
     public:
       RightTranslateByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~RightTranslateByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -235,11 +235,11 @@ namespace djnn
 
   /*** private Class leftTranslateBy Actions ***/ 
   private:
-     class LeftTranslateByAction : public Process
+     class LeftTranslateByAction : public Action
     {
     public:
       LeftTranslateByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~LeftTranslateByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -249,11 +249,11 @@ namespace djnn
 
   /*** private Class rightScaleBy Actions ***/ 
   private:
-     class RightScaleByAction : public Process
+     class RightScaleByAction : public Action
     {
     public:
       RightScaleByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~RightScaleByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -263,11 +263,11 @@ namespace djnn
 
   /*** private Class leftScaleBy Actions ***/ 
   private:
-     class LeftScaleByAction : public Process
+     class LeftScaleByAction : public Action
     {
     public:
       LeftScaleByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~LeftScaleByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -277,11 +277,11 @@ namespace djnn
 
   /*** private Class rightRotateBy Actions ***/ 
   private:
-     class RightRotateByAction : public Process
+     class RightRotateByAction : public Action
     {
     public:
       RightRotateByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~RightRotateByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -291,11 +291,11 @@ namespace djnn
 
   /*** private Class leftRotateBy Actions ***/ 
   private:
-     class LeftRotateByAction : public Process
+     class LeftRotateByAction : public Action
     {
     public:
       LeftRotateByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~LeftRotateByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -305,11 +305,11 @@ namespace djnn
 
   /*** private Class right_skew_X_By Actions ***/ 
   private:
-     class Right_Skew_X_ByAction : public Process
+     class Right_Skew_X_ByAction : public Action
     {
     public:
       Right_Skew_X_ByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~Right_Skew_X_ByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -319,11 +319,11 @@ namespace djnn
 
   /*** private Class left_skew_X_By Actions ***/ 
   private:
-     class Left_Skew_X_ByAction : public Process
+     class Left_Skew_X_ByAction : public Action
     {
     public:
       Left_Skew_X_ByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~Left_Skew_X_ByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -333,11 +333,11 @@ namespace djnn
 
   /*** private Class right_skew_Y_By Actions ***/ 
   private:
-     class Right_Skew_Y_ByAction : public Process
+     class Right_Skew_Y_ByAction : public Action
     {
     public:
       Right_Skew_Y_ByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~Right_Skew_Y_ByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -347,11 +347,11 @@ namespace djnn
 
   /*** private Class left_skew_Y_By Actions ***/ 
   private:
-     class Left_Skew_Y_ByAction : public Process
+     class Left_Skew_Y_ByAction : public Action
     {
     public:
       Left_Skew_Y_ByAction (Process* parent, const string &name, AbstractHomography *h) :
-      Process (parent, name), _h(h) { Process::finalize ();}
+      Action (parent, name), _h(h) { Process::finalize ();}
       virtual ~Left_Skew_Y_ByAction () {}
       void activate () override;
       void deactivate () override {}
@@ -597,11 +597,11 @@ namespace djnn
   {
     /*** private Class stl_action Actions ***/ 
     private:
-     class stl_action : public Process
+     class stl_action : public Action
     {
     public:
       stl_action (Process* parent, const string &name, ScreenToLocal *stl) :
-      Process (parent, name), _stl(stl) { Process::finalize ();}
+      Action (parent, name), _stl(stl) { Process::finalize ();}
       virtual ~stl_action () {}
       void activate () override;
       void deactivate () override {}
@@ -626,11 +626,11 @@ namespace djnn
   {
     /*** private Class lts_action Actions ***/ 
     private:
-     class lts_action : public Process
+     class lts_action : public Action
     {
     public:
       lts_action (Process* parent, const string &name, LocalToScreen *lts) :
-      Process (parent, name), _lts(lts) { Process::finalize ();}
+      Action (parent, name), _lts(lts) { Process::finalize ();}
       virtual ~lts_action () {}
       void activate () override;
       void deactivate () override {}

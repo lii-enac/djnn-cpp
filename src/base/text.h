@@ -26,10 +26,10 @@ namespace djnn
   class TextPrinter : public Process
   {
   private:
-    class TextPrinterAction : public Process
+    class TextPrinterAction : public Action
     {
     public:
-      TextPrinterAction (Process *p, const string &n, TextProperty* input) : Process(p, n), _input (input) {}
+      TextPrinterAction (Process *p, const string &n, TextProperty* input) : Action (p, n), _input (input) {}
       virtual ~TextPrinterAction () {}
       void activate () override;
       void deactivate () override {}

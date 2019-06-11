@@ -110,17 +110,19 @@ namespace djnn
   void
   Process::activation ()
   {
-    pre_activate ();
-    activate ();
-    post_activate ();
+    if (pre_activate ()) {
+      activate ();
+      post_activate ();
+    }
   }
 
   void
   Process::deactivation ()
   {
-    pre_deactivate ();
-    deactivate ();
-    post_deactivate ();
+    if (pre_deactivate ()) {
+      deactivate ();
+      post_deactivate ();
+    }
   }
 
   void
@@ -261,7 +263,17 @@ namespace djnn
   Process::notify_activation ()
   {
     couplings_t couplings_cpy = _activation_couplings;
+    /* WARNING: disputable choice.
+     * The immediate propagation could disable some couplings.
+     * We make the choice to register all the couplings associated with a source before propagating
+     * the activation. Thus the disabling of a coupling will be effective only on the next run.
+     * */
+    std::vector<Coupling*> to_propagate;
     for (auto& coupling : couplings_cpy) {
+      if (coupling->is_enable ())
+        to_propagate.push_back (coupling);
+    }
+    for (auto& coupling : to_propagate) {
       coupling->propagateActivation ();
     }
   }
@@ -270,7 +282,17 @@ namespace djnn
   Process::notify_deactivation ()
   {
     couplings_t couplings_cpy = _deactivation_couplings;
+    /* WARNING: disputable choice.
+     * The immediate propagation could disable some couplings.
+     * We make the choice to register all the couplings associated with a source before propagating
+     * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
+     * */
+    std::vector<Coupling*> to_propagate;
     for (auto& coupling : couplings_cpy) {
+      if (coupling->is_enable ())
+        to_propagate.push_back (coupling);
+    }
+    for (auto& coupling : to_propagate) {
       coupling->propagateDeactivation ();
     }
   }
@@ -304,7 +326,7 @@ namespace djnn
     add_symbol (name, c);
   }
 
-  void
+  bool
   Process::pre_activate ()
   {
     /* no activation if :
@@ -314,8 +336,9 @@ namespace djnn
      */
     //if (_activation_state != deactivated || (_parent != 0 && !_parent->somehow_activating() ))
     if (!is_deactivated() || (_parent != 0 && !_parent->somehow_activating() ))
-      return;
+      return false;
     set_activating ();
+    return true;
   }
 
   void
@@ -325,13 +348,14 @@ namespace djnn
     set_activated ();
   }
 
-  void
+  bool
   Process::pre_deactivate ()
   {
     //if (_activation_state != activated)
     if (!is_activated ())
-      return;
+      return false;
     set_deactivating ();
+    return true;
   }
 
   void

@@ -21,7 +21,7 @@ namespace djnn
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
-      Process (p, n), _m (m), _k (k), _b (b), _v (v), _output (output), _dt (dt)
+      Action (p, n), _m (m), _k (k), _b (b), _v (v), _output (output), _dt (dt)
   {
   }
 

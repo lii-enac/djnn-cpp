@@ -57,6 +57,7 @@ namespace djnn {
       }
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();
+        set_activated ();
         _another_source_wants_to_be_mainloop->run ();
       } else {
         run_in_main_thread ();

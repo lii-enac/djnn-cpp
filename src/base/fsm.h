@@ -44,11 +44,11 @@ namespace djnn {
   class FSMTransition : public Process
   {
   private:
-    class FSMTransitionAction : public Process
+    class FSMTransitionAction : public Action
     {
     public:
       FSMTransitionAction (Process *p, const string &n, FSMState* src, FSMState* dst, Process* action) :
-	Process (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
+	Action (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
       virtual ~FSMTransitionAction () {};
       void activate ();
       void deactivate () {};

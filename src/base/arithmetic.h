@@ -302,6 +302,7 @@ public:
   Incr (bool is_model);
   void activate () override;
   void deactivate () override {}
+  void post_activate () override { notify_activation (); set_deactivated (); }
   virtual ~Incr ();
 private:
   int

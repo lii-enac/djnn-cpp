@@ -22,7 +22,7 @@ namespace djnn {
   using namespace std;
 
   typedef void (NativeExpression) (std::map<std::string, AbstractProperty*>&, bool string_setter);
-  class NativeExpressionAction : public Process
+  class NativeExpressionAction : public Action
   {
   public:
     NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel);

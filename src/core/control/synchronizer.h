@@ -26,10 +26,10 @@ namespace djnn {
   {
     friend class BindingAction;
   private:
-    class SynchronizerAction : public Process
+    class SynchronizerAction : public Action
     {
     public:
-      SynchronizerAction (Process* parent, const string &name) : Process (parent, name) {}
+      SynchronizerAction (Process* parent, const string &name) : Action (parent, name) {}
       virtual ~SynchronizerAction () {};
       void activate () override {
         if (_parent->somehow_activating ())

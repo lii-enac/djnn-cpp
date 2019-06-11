@@ -22,7 +22,7 @@ namespace djnn {
   using namespace std;
 
   typedef void (NativeCode) (Process*);
-  class NativeAction : public Process
+  class NativeAction : public Action
   {
   public:
     NativeAction (Process* parent, const string &name, NativeCode *action, void* data, bool isModel);

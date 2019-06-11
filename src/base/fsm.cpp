@@ -98,14 +98,16 @@ namespace djnn
   FSMTransition::init_FSMTransition () 
   {
     _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
-    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION);
+    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION, true);
     _c_src->disable ();
+    /*
     Graph::instance ().add_edge (_trigger, _fsm_action);
     Graph::instance ().add_edge (_fsm_action, _parent->find_component ("state"));
     Graph::instance ().add_edge (_fsm_action, _dst);
     Graph::instance ().add_edge (_fsm_action, _src);
     if (_action)
       Graph::instance ().add_edge (_fsm_action, _action);
+    */
   }
 
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
@@ -183,6 +185,7 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
+    /*
     if (_action)
       Graph::instance ().remove_edge (_fsm_action, _action);
     
@@ -190,7 +193,7 @@ namespace djnn
     Graph::instance ().remove_edge (_fsm_action, get_parent ()->find_component ("state"));
     Graph::instance ().remove_edge (_fsm_action, _dst);
     Graph::instance ().remove_edge (_fsm_action, _src);
-
+    */
     delete _fsm_action;
     delete _c_src;
     
@@ -256,6 +259,7 @@ namespace djnn
   {
     _fsm_state = new TextProperty (this, "state", "");
     _initial = new TextProperty (this, "initial", "");
+    /* Do we have to keep this edge? */
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _fsm_state);
     _state_dependency = _fsm_state;

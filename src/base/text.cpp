@@ -25,19 +25,20 @@ namespace djnn
   {
     _input = new TextProperty (this, "input", "");
     _action = new TextPrinterAction (this, get_name () + "_action", _input);
-    c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
+    c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     c_input->disable ();
-    Graph::instance ().add_edge (_input, _action);
+    /* Graph::instance ().add_edge (_input, _action);
     if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+      Graph::instance ().add_edge (_parent->state_dependency (), _action); */
   }
 
   TextPrinter::~TextPrinter ()
   {
+    /*
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (_parent->state_dependency (), _action);
     Graph::instance ().remove_edge (_input, _action);
-
+     */
     delete c_input;
     delete _action;
     delete _input;

@@ -219,12 +219,12 @@ namespace djnn
   class BoundedValue : public Process
   {
   private:
-    class BoundedValueAction : public Process
+    class BoundedValueAction : public Action
     {
     public:
       BoundedValueAction (Process *p, const string &n, AbstractProperty* min,
                           AbstractProperty* max, AbstractProperty* input,
-                          AbstractProperty* result) : Process (p, n), _min (min), _max (max), _input (input), _result (result) {}
+                          AbstractProperty* result) : Action (p, n), _min (min), _max (max), _input (input), _result (result) {}
     virtual ~BoundedValueAction () {}
       void activate () override {
         double max = ((DoubleProperty*) _max)->get_value ();

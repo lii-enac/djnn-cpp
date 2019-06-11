@@ -30,7 +30,7 @@ namespace djnn
   class HermiteCurve : public Process
   {
   private:
-    class HermiteCurveAction : public Process
+    class HermiteCurveAction : public Action
     {
     public:
       HermiteCurveAction (Process* parent, const string &name, AbstractProperty *input, AbstractProperty *p1,

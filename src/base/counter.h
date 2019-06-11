@@ -26,11 +26,11 @@ namespace djnn
   private:
 
     /* RESET ACTION */
-    class CounterResetAction : public Process
+    class CounterResetAction : public Action
     {
     public:
       CounterResetAction (Process* p, const string &n, bool* reset_occurred) :
-      Process (p, n), _reset_occurred(reset_occurred) {};
+      Action (p, n), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
       void activate () override { *_reset_occurred = true; }
@@ -40,11 +40,11 @@ namespace djnn
     };
 
     /* STEP ACTION */
-    class CounterStepAction : public Process
+    class CounterStepAction : public Action
     {
     public:
       CounterStepAction (Process* p, const string &n, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
-      Process (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
+      Action (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
       void activate () override

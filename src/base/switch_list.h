@@ -26,27 +26,27 @@ namespace djnn {
   class SwitchList : public AbstractList
   {
   private:
-    class Next : public Process {
+    class Next : public Action {
     public:
-      Next (SwitchList *p) : Process (), _sw (p) { Process::finalize(); }
+      Next (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
       virtual ~Next () {}
       void activate () override;
       void deactivate () override {}
     private:
       SwitchList* _sw;
     };
-    class Previous : public Process {
+    class Previous : public Action {
     public:
-      Previous (SwitchList *p) : Process (), _sw (p) { Process::finalize(); }
+      Previous (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
       virtual ~Previous () {}
       void activate () override;
       void deactivate () override {}
     private:
       SwitchList* _sw;
     };
-    class ChangeIndex : public Process {
+    class ChangeIndex : public Action {
     public:
-      ChangeIndex (SwitchList *p) : Process (), _sw (p) { Process::finalize(); }
+      ChangeIndex (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
       virtual ~ChangeIndex () {}
       void activate () override;
       void deactivate () override {}

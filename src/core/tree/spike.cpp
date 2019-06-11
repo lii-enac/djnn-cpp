@@ -19,12 +19,15 @@ namespace djnn
 {
   using namespace std;
 
-  void
+  bool
   Spike::pre_activate ()
   {
     //if (_parent == 0 || _parent->get_state () == activated)
-    if (_parent == 0 || _parent->is_activated ())
+    if (_parent == 0 || _parent->is_activated ()) {
       set_activating ();
+      return true;
+    }
+    return false;
   }
 
   void
