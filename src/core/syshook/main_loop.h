@@ -61,10 +61,10 @@ namespace djnn
 
     // Process
     void
-    activate ();
+    activate () override;
 
     void
-    deactivate ();
+    deactivate () override;
 
     void
     run_in_main_thread ();
@@ -73,10 +73,17 @@ namespace djnn
     run_in_own_thread ();
 
     void
-    run ();
+    run () override;
 
     std::mutex own_mutex;
     chrono::milliseconds _duration;
+
+    // FIXME: hack to reactivate mainloop : used only for unit_test
+    //        djnn application only has one mainloop.
+    bool
+    pre_activate () override {
+      return true;
+    }
 
   private:
     static MainLoop *_instance;
