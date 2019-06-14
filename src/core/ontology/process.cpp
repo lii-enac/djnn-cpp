@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -272,11 +273,11 @@ namespace djnn
      * */
     std::vector<Coupling*> to_propagate;
     for (auto& coupling : couplings_cpy) {
-      if (coupling->is_enable ())
+      if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagateActivation ();
+      coupling->propagate_activation ();
     }
   }
 
@@ -291,11 +292,11 @@ namespace djnn
      * */
     std::vector<Coupling*> to_propagate;
     for (auto& coupling : couplings_cpy) {
-      if (coupling->is_enable ())
+      if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagateDeactivation ();
+      coupling->propagate_deactivation ();
     }
   }
 

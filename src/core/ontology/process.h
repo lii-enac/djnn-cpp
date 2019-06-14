@@ -9,6 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -88,7 +89,13 @@ namespace djnn {
     // pseudo, graph-less coupling
     virtual void notify_change ( unsigned int nm ) {}
 
-    // tree, symtable 
+    // Actions
+    virtual void draw () {}
+    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+    virtual void pick() {}
+
+    // tree, component, symtable 
     virtual void add_child (Process* c, const string& name);
     virtual void remove_child (Process* c);
     virtual void remove_child (const string& name);
@@ -121,12 +128,6 @@ namespace djnn {
 
     virtual void dump (int level=0);
     string debug_info () { return _dbg_info; }
-
-    // Actions
-    virtual void draw () {}
-    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
-    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
-    virtual void pick() {}
 
   protected:
     virtual bool pre_activate ();
