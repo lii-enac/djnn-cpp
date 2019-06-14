@@ -22,6 +22,17 @@ namespace djnn
 {
   using namespace std;
 
+  bool
+  getBool (Process* p)
+  {
+    BoolProperty *bp = dynamic_cast<BoolProperty*> (p);
+    if (bp != nullptr)
+      return bp->get_value();
+    else
+      warning (p, "getBool only works on boolean properties");
+    return false;
+  }
+
   void
   BoolProperty::init_BoolProperty ()
   {

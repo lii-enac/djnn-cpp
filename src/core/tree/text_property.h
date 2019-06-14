@@ -77,4 +77,6 @@ namespace djnn {
   private:
     string& value;
   };
+
+  string& getString (Process* p);
 }

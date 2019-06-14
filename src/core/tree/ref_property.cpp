@@ -20,6 +20,18 @@
 namespace djnn
 {
   using namespace std;
+
+  Process*
+  getRef (Process* p)
+  {
+    RefProperty *rp = dynamic_cast<RefProperty*> (p);
+    if (rp != nullptr)
+      return rp->get_value();
+    else
+      warning (p, "getRef only works on reference properties");
+    return nullptr;
+  }
+
   string
   RefProperty::get_string_value ()
   {

@@ -44,4 +44,5 @@ namespace djnn {
     Process* value;
 };
 
+  Process* getRef (Process *p);
 }

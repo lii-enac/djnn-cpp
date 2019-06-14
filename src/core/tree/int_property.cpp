@@ -22,6 +22,17 @@ namespace djnn
 {
   using namespace std;
 
+  int
+  getInt (Process* p)
+  {
+    IntProperty *ip = dynamic_cast<IntProperty*> (p);
+    if (ip != nullptr)
+      return ip->get_value();
+    else
+      warning (p, "getInt only works on integer properties");
+    return 0;
+  }
+
   void
   AbstractIntProperty::set_value (double v, bool propagate)
   {

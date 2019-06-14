@@ -22,6 +22,17 @@ namespace djnn
 {
   using namespace std;
 
+  double
+  getDouble (Process* p)
+  {
+    DoubleProperty *dp = dynamic_cast<DoubleProperty*> (p);
+    if (dp != nullptr)
+      return dp->get_value();
+    else
+      warning (p, "getDouble only works on double properties");
+    return 0;
+  }
+
   void
   AbstractDoubleProperty::set_value (int v, bool propagate)
   {

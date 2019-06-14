@@ -68,4 +68,5 @@ namespace djnn {
     double& value;
   };
 
+  double getDouble (Process *p);
 }

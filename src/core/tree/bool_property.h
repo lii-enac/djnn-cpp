@@ -71,4 +71,5 @@ namespace djnn {
     void init_BoolProperty ();
   };
 
+  bool getBool (Process *p);
 }

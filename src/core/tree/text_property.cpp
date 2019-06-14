@@ -21,6 +21,19 @@ namespace djnn
 {
   using namespace std;
 
+  static string null_string = "null string";
+
+  string&
+  getString (Process* p)
+  {
+    TextProperty *tp = dynamic_cast<TextProperty*> (p);
+    if (tp != nullptr)
+      return tp->get_value();
+    else
+      warning (p, "getString only works on text/string properties");
+    return null_string;
+  }
+
   void
   AbstractTextProperty::set_value (int v, bool propagate)
   {
