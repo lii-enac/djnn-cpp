@@ -14,9 +14,6 @@
 
 #pragma once
 
-//#include "../core_types.h"
-//#include "../execution/graph.h"
-
 #include "coupling.h"
 
 #include <vector>
@@ -71,48 +68,49 @@ namespace djnn {
     Process (bool model = false);
     virtual ~Process ();
     void finalize ();
+
     virtual void activation ();
     virtual void deactivation ();
 
-    virtual void exec (int flag) { _set_activation_flag (flag); }
-
+    // coupling
     void add_activation_coupling (Coupling* c);
     void add_deactivation_coupling (Coupling* c);
     void remove_activation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
+    couplings_t& get_activation_couplings ();
+    couplings_t& get_deactivation_couplings ();
+    bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
+
+    virtual void coupling_activation_hook () {};
+    virtual void coupling_deactivation_hook () {};
     void notify_activation ();
     void notify_deactivation ();
-
+    // pseudo, graph-less coupling
     virtual void notify_change ( unsigned int nm ) {}
 
-    virtual Process* find_component (const string&);
+    // tree, symtable 
+    virtual void add_child (Process* c, const string& name);
+    virtual void remove_child (Process* c);
+    virtual void remove_child (const string& name);
+    virtual void move_child (Process *child_to_move, int spec, Process *child = 0) {}
+
+    virtual Process* find_component (const string&); // FIXME: should be find_child
     static Process* find_component (Process* p, const string &path);
     // FIXME : low efficiency function cause by linear search. use with care !
     virtual string find_component_name (Process* child);
     void add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
     map<string, Process*>& symtable () { return _symtable; }
-
-    virtual void add_child (Process* c, const string& name);
-    virtual void remove_child (Process* c);
-    virtual void remove_child (const string& name);
-    virtual void move_child (Process *child_to_move, int spec, Process *child = 0) {}
-    virtual void coupling_activation_hook () {};
-    virtual void coupling_deactivation_hook () {};
-
-    Process* state_dependency () { return _state_dependency; }
-
-    void set_vertex (Vertex *v) { _vertex = v; }
-    Vertex* vertex () { return _vertex; };
+    virtual int get_cpnt_type () { return UNDEFINED_T; }
     Process* get_parent ();
     void set_parent (Process* p) { _parent = p; }
     const string& get_name () const;
 
-    virtual int get_cpnt_type () { return UNDEFINED_T; }
-    
-    couplings_t& get_activation_couplings ();
-    couplings_t& get_deactivation_couplings ();
-    bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
+    // execution graph
+    void set_vertex (Vertex *v) { _vertex = v; }
+    Vertex* vertex () { return _vertex; };
+    // execution scheduling
+    Process* state_dependency () { return _state_dependency; }
 
     void set_data (Process* data);
     Process* get_data ();
@@ -120,8 +118,6 @@ namespace djnn {
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void set_activation_source (Process* src) {}
     virtual Process* get_activation_source () { return nullptr; }
-    //friend class Binding;
-    //friend class Coupling;
 
     virtual void dump (int level=0);
     string debug_info () { return _dbg_info; }
@@ -234,15 +230,6 @@ namespace djnn {
         }
     }
 
-    // old API, still here because of exec
-    void _set_activation_flag (int flag) {
-        switch(flag) {
-            case NONE: unset_activation_flag (); break;
-            case ACTIVATION: request_activation (); break;
-            case DEACTIVATION: request_deactivation (); break;
-        }
-    }
-
   };
 
   class Action : public Process {
@@ -252,7 +239,7 @@ namespace djnn {
     virtual ~Action () {}
     virtual bool pre_activate () override {
       if ((_parent != 0 && !_parent->somehow_activating() ))
-    return false;
+        return false;
       set_activating ();
       return true;
     }

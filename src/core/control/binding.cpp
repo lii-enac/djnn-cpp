@@ -39,8 +39,8 @@ namespace djnn
     if (ispec.length () > 0) {
       _src = src->find_component (ispec);
       if (_src == 0) {
-	error (this,
-	       "source child " + ispec + " not found in binding (" + get_name () + ", " + ispec + ", " + dspec + ")");
+	       error (this,
+	        "source child " + ispec + " not found in binding (" + get_name () + ", " + ispec + ", " + dspec + ")");
       }
     } else
       _src = src;
