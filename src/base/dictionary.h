@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "../core/tree/ref_property.h"
 #include "../core/tree/spike.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include <map>
 
 namespace djnn {

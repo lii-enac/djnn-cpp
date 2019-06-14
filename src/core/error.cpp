@@ -13,6 +13,7 @@
  */
 
 #include "error.h"
+#include <iostream>
 
 namespace djnn
 {

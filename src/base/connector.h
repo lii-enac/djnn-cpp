@@ -15,9 +15,9 @@
 
 #pragma once
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "../core/tree/abstract_property.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include "../core/control/assignment.h"
 
 #include <iostream>

@@ -13,13 +13,13 @@
  */
 
 #pragma once
-#include <iostream>
-#include "../tree/process.h"
 
-using namespace std;
+#include "../ontology/process.h"
+#include <string>
 
 namespace djnn {
-  
+
+  using namespace std;  
 
   class AbstractSerializer
   {

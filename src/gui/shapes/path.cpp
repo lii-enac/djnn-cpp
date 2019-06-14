@@ -19,7 +19,7 @@
 #include "../../display/display.h"
 #include "../../display/abstract_display.h"
 #include "../../display/window.h"
-#include "../../core/control/coupling.h"
+#include "../../core/ontology/coupling.h"
 #include "../../core/tree/blank.h"
 #include "shapes.h"
 

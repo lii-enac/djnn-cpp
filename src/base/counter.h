@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "../core/tree/spike.h"
 #include "../core/tree/double_property.h"
 

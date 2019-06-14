@@ -15,9 +15,11 @@
 
 #pragma once
 
+#include "../core/ontology/process.h"
+
+#include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
-#include "../core/tree/process.h"
 
 namespace djnn
 {

@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "../core/syshook/external_source.h"
 
 #include "../core/syshook/cpp-chrono.h"
@@ -24,6 +24,9 @@ namespace djnn
 {
   using namespace std::chrono;
   //using namespace boost::chrono;
+
+  class IntProperty;
+  class DoubleProperty;
 
   class Clock : public Process, public ExternalSource
   {

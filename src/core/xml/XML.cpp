@@ -14,7 +14,7 @@
  *
  */
 
-#include "../tree/process.h"
+#include "../ontology/process.h"
 #include "xml.h"
 #include "xml-dev.h"
 #include "../tree/text_property.h"

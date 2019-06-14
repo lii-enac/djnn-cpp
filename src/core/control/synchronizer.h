@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "../tree/process.h"
-#include "coupling.h"
+#include "../ontology/process.h"
+#include "../ontology/coupling.h"
 
 #include <string>
 
@@ -46,7 +46,7 @@ namespace djnn {
   private:
     void propagate ();
     Process *_dst;
-    std::vector<Coupling*>_c_list;
+    std::vector<Coupling*> _c_list;
     SynchronizerAction *_action;
   };
 }

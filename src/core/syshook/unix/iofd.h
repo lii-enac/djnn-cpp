@@ -15,7 +15,7 @@
 #pragma once
 
 #include "../external_source.h"
-#include "../../tree/process.h"
+#include "../../ontology/process.h"
 
 namespace djnn {
 	class IOFD : public Process, public ExternalSource {

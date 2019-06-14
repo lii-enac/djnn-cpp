@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include "../tree/process.h"
-#include "coupling.h"
+#include "../ontology/process.h"
+#include "../ontology/coupling.h"
 
 #include <string>
 

@@ -19,6 +19,9 @@
 
 //#include "qt_window.h"
 #include "../external_source.h"
+#include "../../execution/graph.h"
+
+
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 #include <vector>

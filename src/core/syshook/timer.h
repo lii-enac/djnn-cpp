@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "../tree/process.h"
+#include "../ontology/process.h"
 #include "../tree/blank.h"
 #include "external_source.h"
 
@@ -23,6 +23,8 @@
 
 namespace djnn
 {
+  class IntProperty;
+  class Blank;
 
   class Timer : public Process, public ExternalSource
   {

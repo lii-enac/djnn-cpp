@@ -12,10 +12,11 @@
  *
  */
 
-
-#include "../core/serializer/serializer.h"
-#include "../core/control/coupling.h"
 #include "counter.h"
+
+#include "../core/ontology/coupling.h"
+#include "../core/execution/graph.h"
+#include "../core/serializer/serializer.h"
 
 #include <iostream>
 

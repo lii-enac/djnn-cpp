@@ -16,7 +16,7 @@
 #include "../../core/tree/bool_property.h"
 #include "../../core/tree/int_property.h"
 #include "../../core/tree/set.h"
-#include "../../core/control/coupling.h"
+#include "../../core/ontology/coupling.h"
 #include "../../core/error.h"
 #include <string.h>
 

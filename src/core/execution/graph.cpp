@@ -13,7 +13,7 @@
  */
 
 #include "graph.h"
-#include "../tree/process.h"
+//#include "../ontology/process.h"
 #include "../tree/abstract_property.h"
 
 #include <algorithm>

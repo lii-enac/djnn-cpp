@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "tree/process.h"
+#include "ontology/process.h"
 #include "control/binding.h"
 #include "control/activator.h"
 #include "control/synchronizer.h"

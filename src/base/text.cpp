@@ -13,9 +13,11 @@
  *
  */
 
+#include "text.h"
+
+#include "../core/execution/graph.h"
 #include "../core/tree/text_property.h"
 #include "../core/serializer/serializer.h"
-#include "text.h"
 
 namespace djnn
 {

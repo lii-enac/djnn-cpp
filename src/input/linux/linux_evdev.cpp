@@ -14,7 +14,7 @@
 
 #include "linux_input.h"
 #include "../../core/error.h"
-#include "../../core/control/coupling.h"
+#include "../../core/ontology/coupling.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>

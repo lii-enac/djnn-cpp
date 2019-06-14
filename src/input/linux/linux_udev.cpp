@@ -13,7 +13,7 @@
  */
 
 #include "linux_input.h"
-#include "../../core/control/coupling.h"
+#include "../../core/ontology/coupling.h"
 #include "../../core/error.h"
 #include <string.h>
 

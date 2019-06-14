@@ -14,6 +14,8 @@
  */
 
 #include "math_functions.h"
+
+#include "../core/execution/graph.h"
 #include "../core/serializer/serializer.h"
 
 namespace djnn

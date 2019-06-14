@@ -14,14 +14,20 @@
 
 #pragma once
 
+#include "../core/tree/list.h"
+
+//#include "../core/tree/int_property.h"
+#include "../core/tree/spike.h"
+
 #include <list>
 #include <iostream>
-#include "../core/tree/int_property.h"
-#include "../core/tree/list.h"
-#include "../core/tree/spike.h"
+
 
 namespace djnn {
   using namespace std;
+
+  class IntProperty;
+  class BoolProperty;
 
   class SwitchList : public AbstractList
   {

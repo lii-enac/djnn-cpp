@@ -14,15 +14,18 @@
  *
  */
 
-#include "../core.h"
 #include "list.h"
+
 #include "spike.h"
-#include "../control/coupling.h"
+#include "../ontology/coupling.h"
 #include "../execution/graph.h"
-#include <algorithm>
 #include "../execution/component_observer.h"
 #include "../serializer/serializer.h"
 #include "../error.h"
+#include "../core.h"
+
+#include <algorithm>
+
 
 namespace djnn
 {

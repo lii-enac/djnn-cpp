@@ -14,11 +14,14 @@
  */
 
 #pragma once
-#include "../tree/process.h"
 
-#include <iostream>
+#include "../ontology/process.h"
+
+#include <string>
 
 namespace djnn {
+
+  class IntProperty;
 
   class Exit : public Process
   {

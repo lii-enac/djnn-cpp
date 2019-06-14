@@ -14,7 +14,8 @@
 
 #pragma once
 
-#include "../tree/process.h"
+#include "../ontology/process.h"
+#include "../tree/abstract_property.h"
 
 #include <string>
 

@@ -16,8 +16,10 @@
 #pragma once
 
 #include "../core/tree/component.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include "../core/tree/text_property.h"
+
+#include <list>
 
 namespace djnn {
   using namespace std;

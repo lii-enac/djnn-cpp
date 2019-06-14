@@ -14,14 +14,18 @@
  *
  */
 
-#include "../tree/bool_property.h"
 #include "assignment.h"
 
+
 #include "../tree/abstract_property.h"
+#include "../tree/bool_property.h"
 #include "../tree/int_property.h"
 #include "../tree/double_property.h"
 #include "../tree/text_property.h"
 #include "../tree/ref_property.h"
+
+#include "../execution/graph.h"
+
 #include "../error.h"
 #include "../serializer/serializer.h"
 #include "../utils-dev.h"

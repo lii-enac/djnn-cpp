@@ -13,8 +13,11 @@
  */
 
 #include "iofd.h"
+
 #include "../syshook.h"
 #include "../../error.h"
+#include "../../execution/graph.h"
+
 #include <sys/select.h>
 
 namespace djnn {

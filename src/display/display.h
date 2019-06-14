@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "window.h"
 
 namespace djnn {

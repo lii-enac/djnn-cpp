@@ -12,9 +12,10 @@
  *
  */
 
-#include "../execution/graph.h"
 #include "process.h"
-#include "../control/coupling.h"
+#include "coupling.h"
+
+#include "../execution/graph.h"
 #include "../uri.h"
 #include "../error.h"
 #include <algorithm>
@@ -408,6 +409,12 @@ namespace djnn
   {
     return _data;
   }
+
+  void
+  Process::serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+  
+  Process*
+  Process::clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
 
   static int indent = -1;
   void

@@ -13,8 +13,8 @@
  */
 
 #include "coupling.h"
+#include "process.h"
 #include "../execution/graph.h"
-#include "../tree/process.h"
 
 #include <iostream>
 

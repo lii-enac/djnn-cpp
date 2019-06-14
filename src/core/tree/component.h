@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include "process.h"
-#include <list>
+#include "../ontology/process.h"
+
+//#include <list>
 
 namespace djnn {
   using namespace std;

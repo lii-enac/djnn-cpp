@@ -15,7 +15,7 @@
 #include <algorithm>
 
 #include "switch_list.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include "../core/execution/graph.h"
 #include "../core/serializer/serializer.h"
 #include "../core/tree/bool_property.h"

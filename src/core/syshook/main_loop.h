@@ -16,7 +16,7 @@
 #pragma once
 
 #include "syshook.h"
-#include "../tree/process.h"
+#include "../ontology/process.h"
 #include "external_source.h"
 
 #include "cpp-chrono.h"

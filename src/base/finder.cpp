@@ -12,14 +12,15 @@
  *
  */
 
+#include "finder.h"
+
 #include "../core/serializer/serializer.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include "../core/tree/int_property.h"
 #include "../core/tree/bool_property.h"
 #include "../core/tree/double_property.h"
+#include "../core/execution/graph.h"
 #include "../core/error.h"
-
-#include "finder.h"
 
 #include <iostream>
 

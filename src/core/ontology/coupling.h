@@ -13,15 +13,16 @@
  */
 
 #pragma once
-#include <iostream>
-#include <memory>
+//#include <iostream>
+//#include <memory>
 
 
 namespace djnn {
 
   class Process;
 
-  class Coupling : public std::enable_shared_from_this<Coupling> {
+  class Coupling //: public std::enable_shared_from_this<Coupling> 
+  {
   public:
     Coupling (Process* src, int src_flag, Process* dst, int dst_flag, bool immediate_processing = false);
     Coupling (Process* src, int src_flag, Process* dst, int dst_flag, Process* data, bool immediate_processing = false);

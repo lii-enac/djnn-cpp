@@ -40,12 +40,12 @@ namespace djnn {
   //   deactivated
   // };
 
-  enum PropertyType {
-    Boolean,
-    Integer,
-    Double,
-    String,
-    Reference
-  };
+  // enum PropertyType {
+  //   Boolean,
+  //   Integer,
+  //   Double,
+  //   String,
+  //   Reference
+  // };
 }
 

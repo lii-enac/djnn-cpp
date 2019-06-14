@@ -16,16 +16,18 @@
 
 #pragma once
 
+#include "../core/ontology/process.h"
+#include "../core/ontology/coupling.h"
 #include "../core/tree/bool_property.h"
 #include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
-#include "../core/tree/process.h"
 #include "../core/tree/component.h"
+#include "../core/execution/graph.h"
 #include "../core/execution/component_observer.h"
-#include "../core/control/coupling.h"
 #include "../core/error.h"
-#include <iostream>
+
+//#include <iostream>
 
 namespace djnn
 {

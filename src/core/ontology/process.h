@@ -14,8 +14,10 @@
 
 #pragma once
 
-#include "../core_types.h"
-#include "../execution/graph.h"
+//#include "../core_types.h"
+//#include "../execution/graph.h"
+
+#include "coupling.h"
 
 #include <vector>
 #include <map>
@@ -59,6 +61,8 @@ namespace djnn {
   };
 
   typedef vector<Coupling*> couplings_t;
+
+  class Vertex;
 
   class Process
   {
@@ -124,8 +128,8 @@ namespace djnn {
 
     // Actions
     virtual void draw () {}
-    virtual void serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
-    virtual Process* clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
     virtual void pick() {}
 
   protected:

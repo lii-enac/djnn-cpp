@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include <iostream>
-#include "tree/process.h"
+#include "ontology/process.h"
+
+#include <string>
 
 namespace djnn
 {

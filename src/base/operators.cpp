@@ -12,12 +12,15 @@
  *
  */
 
+#include "operators.h"
+
 #include "../core/tree/bool_property.h"
 #include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
 #include "../core/tree/ref_property.h"
-#include "operators.h"
+#include "../core/execution/graph.h"
+
 
 namespace djnn
 {

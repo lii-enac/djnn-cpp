@@ -14,6 +14,8 @@
 
 #include "dictionary.h"
 
+#include "../core/execution/graph.h"
+
 #include <iostream>
 
 namespace djnn

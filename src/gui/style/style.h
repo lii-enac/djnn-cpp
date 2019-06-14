@@ -16,7 +16,7 @@
 
 #include "../../core/tree/list.h"
 #include "../abstract_gobj.h"
-#include "../../core/tree/process.h"
+#include "../../core/ontology/process.h"
 
 #include "style_types.h"
 

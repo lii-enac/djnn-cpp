@@ -19,7 +19,7 @@
 #include "../../display/abstract_display.h"
 #include "../../display/window.h"
 #include "shapes.h"
-#include "../../core/control/coupling.h"
+#include "../../core/ontology/coupling.h"
 
 namespace djnn
 {

@@ -15,10 +15,10 @@
 
 #include "exit.h"
 #include "../syshook/main_loop.h"
-#include "../tree/process.h"
+//#include "../ontology/process.h"
 #include "../serializer/serializer.h"
 
-#include <iostream>
+//#include <iostream>
 
 namespace djnn
 {

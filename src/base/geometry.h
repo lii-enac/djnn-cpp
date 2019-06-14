@@ -15,11 +15,11 @@
 
 #pragma once
 
-#include "../core/tree/process.h"
+#include "../core/ontology/process.h"
 #include "../core/tree/bool_property.h"
 #include "../core/tree/int_property.h"
 #include "../core/tree/double_property.h"
-#include "../core/control/coupling.h"
+#include "../core/ontology/coupling.h"
 #include <iostream>
 #include <cmath>
 
