@@ -3,39 +3,8 @@
 #include "cpp-thread.h"
 #include "cpp-mutex.h"
 
-
-//#include <atomic>
-
-//#if defined(__WIN32__)
-//#include <windows.h>
-//#endif
-
-//typedef QThread *my_thread_t;
-
 #include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-
-#if 0
-
-#if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER
-#include <boost/thread/mutex.hpp>
-typedef boost::mutex djnn_mutex_t;
-#endif
-
-#if DJNN_USE_CPP_THREAD
-#include <mutex>
-typedef std::thread djnn_mutex_t;
-#endif
-
-#if DJNN_USE_PTHREAD
-#include <pthread.h>
-#endif
-
-#if DJNN_USE_QT_THREAD
-#include <QMutex>
-typedef QMutex djnn_mutex_t;
-#endif
-#endif
 
 namespace djnn {
 

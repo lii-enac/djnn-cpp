@@ -13,9 +13,7 @@
  *
  */
 
-//#include "main_loop.h"
 #include "syshook.h"
-//#include "external_source.h"
 
 #include "cpp-mutex.h"
 
