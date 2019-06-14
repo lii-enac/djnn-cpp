@@ -14,7 +14,7 @@
 
 #include "linux_input.h"
 #include "../../core/ontology/coupling.h"
-#include "../../core/error.h"
+#include "../../core/utils/error.h"
 #include <string.h>
 
 namespace djnn {

@@ -20,7 +20,7 @@
 #include "../core/tree/bool_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/execution/graph.h"
-#include "../core/error.h"
+#include "../core/utils/error.h"
 
 #include <iostream>
 

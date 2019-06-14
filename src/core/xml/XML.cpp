@@ -18,7 +18,7 @@
 #include "xml.h"
 #include "xml-dev.h"
 #include "../tree/text_property.h"
-#include "../error.h"
+#include "../utils/error.h"
 
 
 #include <expat.h>

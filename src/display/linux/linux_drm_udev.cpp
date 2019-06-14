@@ -17,7 +17,7 @@
 #include "../../core/tree/int_property.h"
 #include "../../core/tree/set.h"
 #include "../../core/ontology/coupling.h"
-#include "../../core/error.h"
+#include "../../core/utils/error.h"
 #include <string.h>
 
 #include <fcntl.h>

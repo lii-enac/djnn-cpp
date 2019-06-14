@@ -15,9 +15,9 @@
 
 #include "connector.h"
 #include "../core/execution/graph.h"
-#include "../core/error.h"
+#include "../core/utils/error.h"
 #include "../core/serializer/serializer.h"
-#include "../core/utils-dev.h"
+#include "../core/utils/utils-dev.h"
 
 #include <iostream>
 

@@ -15,7 +15,7 @@
 
 #include "display-priv.h"
 #include "../core/tree/set.h"
-#include "../core/uri.h"
+#include "../core/utils/uri.h"
 
 namespace djnn
 {

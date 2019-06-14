@@ -15,7 +15,7 @@
 
 #include "bool_property.h"
 #include "../serializer/serializer.h"
-#include "../error.h"
+#include "../utils/error.h"
 #include "../execution/graph.h"
 
 #include <iostream>

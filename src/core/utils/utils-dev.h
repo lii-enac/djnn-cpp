@@ -14,9 +14,10 @@
 
 #pragma once
 
+#include "../tree/ref_property.h"
+
 #include <time.h>
 #include <iostream>
-#include "tree/ref_property.h"
 
 namespace djnn {
   void get_monotonic_time (struct timespec *ts);

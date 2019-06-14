@@ -19,7 +19,7 @@
 #include "../core/execution/graph.h"
 #include "../core/serializer/serializer.h"
 #include "../core/tree/bool_property.h"
-#include "../core/error.h"
+#include "../core/utils/error.h"
 
 namespace djnn
 {

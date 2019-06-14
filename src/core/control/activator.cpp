@@ -14,7 +14,7 @@
  */
 
 #include "activator.h"
-#include "../error.h"
+#include "../utils/error.h"
 #include "../serializer/serializer.h"
 #include <iostream>
 

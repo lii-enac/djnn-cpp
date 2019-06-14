@@ -15,7 +15,7 @@
 
 #include "../transformation/transformations.h"
 #include "../../core/tree/spike.h"
-#include "../../core/error.h"
+#include "../../core/utils/error.h"
 
 #include "../backend.h"
 #include "../abstract_backend.h"

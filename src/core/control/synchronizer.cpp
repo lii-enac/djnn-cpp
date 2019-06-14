@@ -14,7 +14,7 @@
 
 #include "synchronizer.h"
 #include "../execution/graph.h"
-#include "../error.h"
+#include "../utils/error.h"
 #include "../serializer/serializer.h"
 
 #include <iostream>

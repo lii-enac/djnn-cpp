@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "ontology/process.h"
+#include "../ontology/process.h"
 
 #include <string>
 

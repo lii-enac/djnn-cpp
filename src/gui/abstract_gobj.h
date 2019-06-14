@@ -25,7 +25,7 @@
 #include "../core/tree/component.h"
 #include "../core/execution/graph.h"
 #include "../core/execution/component_observer.h"
-#include "../core/error.h"
+#include "../core/utils/error.h"
 
 //#include <iostream>
 

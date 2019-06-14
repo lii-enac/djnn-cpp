@@ -17,7 +17,7 @@
 #include "../execution/graph.h"
 #include "../execution/component_observer.h"
 #include "../serializer/serializer.h"
-#include "../error.h"
+#include "../utils/error.h"
 
 #include <algorithm>
 
