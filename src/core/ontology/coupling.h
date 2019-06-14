@@ -27,8 +27,7 @@ namespace djnn {
     void set_data (Process* data) { _data = data; }
     void propagateActivation ();
     void propagateDeactivation ();
-    void executeActivation ();
-    void executeDeactivation ();
+    void immediateProcessing ();
     void enable () { isEnable = true; };
     void enable (Process* data) { isEnable = true; _data = data; };
     void disable () { isEnable = false; };
