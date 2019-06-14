@@ -14,15 +14,15 @@
 
 #pragma once
 
-//#include "graph.h"
 #include "../core_types.h"
 
 #include <mutex>
 #include <vector>
-#include <iostream>
 #include <memory>
 
+//#include <iostream>
 #define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
+
 #define GRAPH_EXEC { Graph::instance ().exec (); }
 
 namespace djnn
@@ -32,8 +32,8 @@ namespace djnn
   public:
     Vertex (Process* c);
     virtual ~Vertex ();
+    
     typedef std::vector< Vertex* > vertices_t;
-
     void add_edge (Vertex* dst);
     void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
@@ -56,26 +56,30 @@ namespace djnn
   private:
     Process* _vertex;
     vertices_t _edges;
-    int _mark, _timestamp, _count_egdes_in;
+    int _mark, _timestamp;
+    int _count_egdes_in;
     bool _is_invalid;
   };
 
   class Graph
   {
   public:
-    virtual ~Graph ();
     static Graph& instance ();
-    void add_output_node (Process* c);
-    void remove_output_node (Process* c);
+    virtual ~Graph ();
+    
     void add_edge (Process* src, Process* dst);
     void remove_edge (Process* src, Process* dst);
+    void add_output_node (Process* c);
+    void remove_output_node (Process* c);
+
     void sort ();
     void exec ();
     void clear ();
-    void print_graph ();
-    void print_sorted ();
     void add_process_to_delete (Process *p) { _to_delete.push_back (p); }
-    Vertex::vertices_t get_sorted () { return _sorted_vertices; }
+    const Vertex::vertices_t& get_sorted () { return _sorted_vertices; }
+
+    void print_graph ();
+    void print_sorted (); 
 
   private:
     static Graph* _instance;

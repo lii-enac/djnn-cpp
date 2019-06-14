@@ -15,9 +15,7 @@
 #pragma once
 #include "../ontology/process.h"
 
-//#include <iostream>
 #include <vector>
-//#include <map>
 #include <mutex>
 
 namespace djnn

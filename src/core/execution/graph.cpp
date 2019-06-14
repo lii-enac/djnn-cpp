@@ -13,7 +13,6 @@
  */
 
 #include "graph.h"
-//#include "../ontology/process.h"
 #include "../tree/abstract_property.h"
 
 #include <algorithm>
@@ -45,7 +44,7 @@ namespace djnn
   };
 
   Vertex::Vertex (Process* c) :
-      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
+      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _is_invalid (false), _count_egdes_in(0)
   {
   }
 
@@ -78,7 +77,7 @@ namespace djnn
   void
   Vertex::print_vertex () const
   {
-    std::cout << "vertex (" << _vertex->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
+    std::cout << "vertex (" << _vertex->get_name () << ") - " /*<< _count_egdes_in << ", " */<< _edges.size () << " :\t";
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
     else {
@@ -210,7 +209,7 @@ namespace djnn
 
     // 1 - remove src if necessary
     Vertex::vertices_t::iterator newend = _vertices.end ();
-    if ((s->get_edges ().size () == 0) && (s->get_count_egdes_in () == 0)) {
+    if ( !(s->get_edges ().empty ()) && (s->get_count_egdes_in () == 0)) {
       newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
       delete s;
@@ -219,7 +218,7 @@ namespace djnn
 
     // 2 - remove dst if necessary
     newend = _vertices.end ();
-    if ((d->get_edges ().size () == 0) && (d->get_count_egdes_in () == 0)){
+    if (!(d->get_edges ().empty ()) && (d->get_count_egdes_in () == 0)){
       newend = std::remove (_vertices.begin (), _vertices.end (), d);
       _vertices.erase(newend, _vertices.end ());
       delete d;

@@ -17,6 +17,8 @@
 #include "../display/window.h"
 #include "abstract_gobj.h"
 
+#include <iostream>
+
 namespace djnn
 {
   Process*
