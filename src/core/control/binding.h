@@ -41,6 +41,7 @@ namespace djnn {
       	  ((Binding*)_parent)->_dst->deactivation ();
       }
       void deactivate () override {}
+      void exec (int flag) override { activate (); }
     private:
       void set_binding_activate (bool activate) {
         if (activate)

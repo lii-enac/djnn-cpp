@@ -54,6 +54,7 @@ namespace djnn {
     virtual ~AssignmentAction () {}
     void activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void deactivate () override {}
+    void exec (int flag) override { activate (); }
     void set_src (Process** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
   private:

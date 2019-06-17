@@ -50,6 +50,8 @@ namespace djnn
       dst_request_activation ();
     } else if (dst_flag == DEACTIVATION) {
       dst_request_deactivation ();
+    } else if (dst_flag == NONE) {
+      unset_dst_activation_flag ();
     }
   }
 
@@ -88,10 +90,16 @@ namespace djnn
     else if (is_enabled ()) {
       _dst->set_activation_source (_src);
       _dst->set_data (_data);
+
+      //_dst->exec (is_dst_activation_requested () ? DEACTIVATION : ACTIVATION);
       if ( is_dst_activation_requested () ) {
-        _dst->request_activation ();
+        //_dst->request_activation ();
+        _dst->exec (ACTIVATION);
+      } else if ( is_dst_deactivation_requested () ) {
+        //_dst->request_deactivation ();
+        _dst->exec (DEACTIVATION);
       } else {
-        _dst->request_deactivation ();
+        _dst->exec (NONE);
       }
       _dst->coupling_activation_hook ();
     }

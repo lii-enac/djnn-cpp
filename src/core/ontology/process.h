@@ -71,6 +71,13 @@ namespace djnn {
     // main public API
     void activation ();
     void deactivation ();
+    virtual void exec (int flag) {       
+        switch(flag) {
+            case NONE: unset_activation_flag (); break;
+            case ACTIVATION: request_activation (); break;
+            case DEACTIVATION: request_deactivation (); break;
+        }
+    }
 
     // coupling
     void add_activation_coupling (Coupling* c);

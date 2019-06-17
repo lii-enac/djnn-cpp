@@ -96,9 +96,9 @@ namespace djnn {
     void src_request_deactivation ()      {         set_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_DEACTIVATION);  }
     bool is_src_deactivation_requested () { return  is_flag_set (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_DEACTIVATION);  }
 
-  //void unset_dst_activation_flag ()     {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
-  //bool is_unset_dst_activation_flag ()  { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
-  //bool is_set_dst_activation_flag ()    { return !is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
+    void unset_dst_activation_flag ()     {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
+    bool is_unset_dst_activation_flag ()  { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
+    bool is_set_dst_activation_flag ()    { return !is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
     void dst_request_activation ()        {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_ACTIVATION); }
     bool is_dst_activation_requested ()   { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_ACTIVATION); }
     void dst_request_deactivation ()      {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_DEACTIVATION);  }
