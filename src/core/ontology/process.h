@@ -73,32 +73,6 @@ namespace djnn {
     void activation ();
     void deactivation ();
 
-    // actions to be redefined by subclasses
-    virtual void draw () {}
-    virtual void pick() {}
-    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
-    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
-
-    // tree, component, symtable 
-    virtual void add_child (Process* c, const string& name);
-    virtual void remove_child (Process* c);
-    virtual void remove_child (const string& name);
-    virtual void move_child (Process *child_to_move, int spec, Process *child = 0) {}
-    virtual Process* find_component (const string&); // FIXME: should be find_child
-    static Process* find_component (Process* p, const string &path);
-    // FIXME : low efficiency function cause by linear search. use with care !
-    virtual string find_component_name (Process* child);
-    void add_symbol (const string &name, Process* c);
-    void remove_symbol (const string& name);
-    map<string, Process*>& symtable () { return _symtable; }
-    virtual int get_cpnt_type () { return UNDEFINED_T; }
-
-    const string& get_name () const;
-    Process* get_parent ();
-    void set_parent (Process* p) { _parent = p; }
-    void set_data (Process* data);
-    Process* get_data ();
-
     // coupling
     void add_activation_coupling (Coupling* c);
     void add_deactivation_coupling (Coupling* c);
@@ -119,9 +93,35 @@ namespace djnn {
     Vertex* vertex () { return _vertex; };
     Process* state_dependency () { return _state_dependency; } // for execution scheduling
 
+    // actions to be redefined by subclasses
+    virtual void draw () {}
+    virtual void pick() {}
+    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void set_activation_source (Process* src) {}
     virtual Process* get_activation_source () { return nullptr; }
+
+    // tree, component, symtable 
+    virtual void add_child (Process* c, const string& name);
+    virtual void remove_child (Process* c);
+    virtual void remove_child (const string& name);
+    virtual void move_child (Process *child_to_move, int spec, Process *child = 0) {}
+    virtual Process* find_component (const string&); // FIXME: should be find_child
+    static Process* find_component (Process* p, const string &path);
+    // FIXME : low efficiency function cause by linear search. use with care !
+    virtual string find_component_name (Process* child);
+    void add_symbol (const string &name, Process* c);
+    void remove_symbol (const string& name);
+    map<string, Process*>& symtable () { return _symtable; }
+    virtual int get_cpnt_type () { return UNDEFINED_T; }
+
+    const string& get_name () const;
+    Process* get_parent ();
+    void set_parent (Process* p) { _parent = p; }
+    void set_data (Process* data);
+    Process* get_data ();
 
     // debug
     virtual void dump (int level=0);
