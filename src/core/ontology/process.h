@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include "coupling.h"
-
 #include <vector>
 #include <map>
 #include <string>
@@ -58,9 +56,10 @@ namespace djnn {
     notify_damaged_style      = 1 << 4
   };
 
-  typedef vector<Coupling*> couplings_t;
-
+  class Coupling;
   class Vertex;
+
+  typedef vector<Coupling*> couplings_t;
 
   class Process
   {
