@@ -19,23 +19,8 @@
 #include "../../../display/display.h"
 #include "../../../display/abstract_display.h"
 #include "../../../display/qt/my_qwindow.h"
-// #include "qt_window.h"
 #include "../../../core/syshook/qt/qt_mainloop.h"
-// #include "../display.h"
-// #include "../display-dev.h"
-// #include "../abstract_display.h"
 
-// #include "../../core/syshook/main_loop.h"
-// #include "../../core/syshook/syshook.h"
-// #include "../../core/execution/graph.h"
-// #include "../../core/execution/component_observer.h"
-
-// #include <QtCore/QAbstractEventDispatcher>
-// #include <QtWidgets/QApplication>
-// #include <QtWidgets/QWidget>
-// #include <QtGui/QPainter>
-// #include <QtGui/QMouseEvent>
-// #include <QtGui/QBitmap>
 #include <QEvent>
 #include <QTouchEvent>
 

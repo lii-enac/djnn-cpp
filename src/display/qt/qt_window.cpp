@@ -17,7 +17,7 @@
 #include "my_qwindow.h"
 #include "qt_window.h"
 #include "qt_display.h"
-//#include "qt_backend.h"
+
 #include "../../core/syshook/qt/qt_mainloop.h"
 #include "../display.h"
 #include "../display-dev.h"
@@ -26,7 +26,6 @@
 #include "../../core/syshook/main_loop.h"
 #include "../../core/syshook/syshook.h"
 #include "../../core/execution/graph.h"
-#include "../../core/execution/component_observer.h"
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>

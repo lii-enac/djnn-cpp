@@ -19,7 +19,6 @@
 #include "cairo_picking_view.h"
 #include "../abstract_backend.h"
 #include "../backend.h"
-#include "../../core/execution/component_observer.h"
 
 #include <cairo/cairo.h>
 #include <pango/pango.h>

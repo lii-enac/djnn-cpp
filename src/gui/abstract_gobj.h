@@ -24,10 +24,7 @@
 #include "../core/tree/text_property.h"
 #include "../core/tree/component.h"
 #include "../core/execution/graph.h"
-#include "../core/execution/component_observer.h"
 #include "../core/utils/error.h"
-
-//#include <iostream>
 
 namespace djnn
 {

@@ -14,8 +14,8 @@
  */
 
 #include "set.h"
+
 #include "../execution/graph.h"
-#include "../execution/component_observer.h"
 #include "../serializer/serializer.h"
 #include "../utils/error.h"
 

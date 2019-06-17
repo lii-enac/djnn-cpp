@@ -16,9 +16,10 @@
 #pragma once
 
 #include "qt_context.h"
+
 #include "qt/qt_picking_view.h"
 #include "../abstract_backend.h"
-#include "../../core/execution/component_observer.h"
+
 #include <QtGui/QPainterPath>
 
 class QWidget;

@@ -19,7 +19,6 @@
 #include "spike.h"
 #include "../ontology/coupling.h"
 #include "../execution/graph.h"
-#include "../execution/component_observer.h"
 #include "../serializer/serializer.h"
 #include "../utils/error.h"
 #include "../core.h"

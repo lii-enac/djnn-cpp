@@ -14,9 +14,9 @@
 
 #pragma once
 
-//#include "qt_backend.h"
 #include "../style/style_types.h"
-#include "../../core/execution/component_observer.h"
+#include "../../core/tree/component_observer.h"
+
 #include <QtGui/QPen>
 #include <QtGui/QBrush>
 #include <QtGui/QMatrix4x4>

@@ -15,8 +15,8 @@
 
 #include "core.h"
 
+#include "ontology/process.h"
 #include "ontology/coupling.h"
 #include "execution/graph.h"
-#include "execution/component_observer.h"
 #include "syshook/syshook.h"
 #include "syshook/main_loop.h"

@@ -17,6 +17,7 @@
 #include "backend.h"
 #include "../core/syshook/main_loop.h"
 #include "../display/window.h"
+#include "../core/tree/component_observer.h"
 
 #include <algorithm>
 

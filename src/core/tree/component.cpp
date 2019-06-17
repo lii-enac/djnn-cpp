@@ -13,15 +13,15 @@
  */
 
 #include "component.h"
+
 #include "../core.h"
 #include "../control/assignment.h"
 #include "../utils/error.h"
 #include "../execution/graph.h"
-#include <iostream>
-#include <algorithm>
-#include "../execution/component_observer.h"
+#include "../tree/component_observer.h"
 #include "../serializer/serializer.h"
 
+#include <algorithm>
 #include <iostream>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
