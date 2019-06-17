@@ -35,7 +35,7 @@ namespace djnn {
            * otherwise there is a side effect on ~switch which 
            * occured after ~container which already deleted _children
            */ 
-          //Process::finalize (); 
+          //Process::finalize_construction (); 
         }
       virtual ~SwitchAction () {};
       void activate () override { _sw->change_branch(); };

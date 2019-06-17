@@ -127,7 +127,7 @@ namespace djnn {
     const string& debug_info () { return _dbg_info; }
 
   protected:
-    void finalize ();
+    void finalize_construction ();
 
     virtual bool pre_activate ();
     virtual void activate () = 0;

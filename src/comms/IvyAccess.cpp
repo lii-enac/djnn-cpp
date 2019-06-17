@@ -204,7 +204,7 @@ namespace djnn
 
     /* IN is a special child build in IvyAccess::find_component */
 
-  Process::finalize ();
+  Process::finalize_construction ();
 }
 
 IvyAccess::~IvyAccess ()

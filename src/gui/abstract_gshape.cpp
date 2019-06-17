@@ -64,7 +64,7 @@ namespace djnn
     _pressure = new DoubleProperty (this, "pressure", init_pressure);
     _id = new IntProperty (this, "id", 0);
     set_activated();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Touch::Touch () :

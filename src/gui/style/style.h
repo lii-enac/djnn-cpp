@@ -103,7 +103,7 @@ namespace djnn
   {
   public:
     NoOutline (Process *p, const std::string &n) :
-        AbstractStyle (p, n) { Process::finalize ();}
+        AbstractStyle (p, n) { Process::finalize_construction (); }
     NoOutline () :
         AbstractStyle () {}    
     virtual ~NoOutline () {}
@@ -117,7 +117,7 @@ namespace djnn
   {
   public:
     NoFill (Process *p, const std::string &n) :
-        AbstractStyle (p, n) { Process::finalize ();}
+        AbstractStyle (p, n) { Process::finalize_construction (); }
     NoFill () :
         AbstractStyle () {}
     virtual ~NoFill () {}
@@ -272,7 +272,7 @@ namespace djnn
   {
   public:
     DashArray (Process *p, const std::string &n) :
-        AbstractStyle (p, n) { Process::finalize ();}
+        AbstractStyle (p, n) { Process::finalize_construction (); }
     DashArray () :
         AbstractStyle () {}
     virtual ~DashArray () { _dash_array.clear ();}
@@ -294,7 +294,7 @@ namespace djnn
   {
   public:
     NoDashArray (Process *p, const std::string &n) :
-        AbstractStyle (p, n) { Process::finalize ();}
+        AbstractStyle (p, n) { Process::finalize_construction (); }
     NoDashArray () :
         AbstractStyle () {}
     virtual ~NoDashArray () {}

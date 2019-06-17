@@ -613,7 +613,7 @@ namespace djnn
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Path::~Path ()

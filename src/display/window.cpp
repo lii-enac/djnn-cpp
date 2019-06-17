@@ -79,7 +79,7 @@ namespace djnn
       Process (p, n), _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Window::~Window ()
@@ -120,7 +120,7 @@ namespace djnn
 
   {
     _action = new UpdateCursorAction (this, "action");
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Process*

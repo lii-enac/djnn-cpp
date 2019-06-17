@@ -69,7 +69,7 @@ namespace djnn
   }
 
   void
-  Process::finalize ()
+  Process::finalize_construction ()
   {
     if (_parent != nullptr)
       _parent->add_child (this, _name);

@@ -30,7 +30,7 @@ namespace djnn
     {
     public:
       ExpAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+        UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
       virtual ~ExpAction () {}
       void activate ()
       {
@@ -54,7 +54,7 @@ namespace djnn
       {
       public:
         LogAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-          UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+          UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~LogAction () {}
         void activate ()
         {
@@ -78,7 +78,7 @@ namespace djnn
       {
       public:
         Log10Action (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-          UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+          UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~Log10Action () {}
         void activate ()
         {
@@ -102,7 +102,7 @@ namespace djnn
       {
       public:
         PowAction (Process *p, const string &n, AbstractProperty* base, AbstractProperty* exp, AbstractProperty* result) :
-          BinaryOperatorAction (p, n, base, exp, result) { Process::finalize (); }
+          BinaryOperatorAction (p, n, base, exp, result) { Process::finalize_construction (); }
         virtual ~PowAction () {}
         void activate () {
           //if (_parent->get_state () > activated)
@@ -125,7 +125,7 @@ namespace djnn
       {
       public:
         SqrtAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-          UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+          UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~SqrtAction () {}
         void activate ()
         {
@@ -149,7 +149,7 @@ namespace djnn
       {
       public:
         AbsAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-          UnaryOperatorAction (parent, name, input, output) { Process::finalize (); }
+          UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~AbsAction () {}
         void activate ()
         {
@@ -173,7 +173,7 @@ namespace djnn
       {
       public:
         MinAction (Process *p, const string &n, AbstractProperty* min, AbstractProperty* input, AbstractProperty* result) :
-          BinaryOperatorAction (p, n, min, input, result) { Process::finalize (); }
+          BinaryOperatorAction (p, n, min, input, result) { Process::finalize_construction (); }
         virtual ~MinAction () {}
         void activate () {
           //if (_parent->get_state () > activated)
@@ -198,7 +198,7 @@ namespace djnn
       {
       public:
         MaxAction (Process *p, const string &n, AbstractProperty* max, AbstractProperty* input, AbstractProperty* result) :
-          BinaryOperatorAction (p, n, max, input, result) { Process::finalize (); }
+          BinaryOperatorAction (p, n, max, input, result) { Process::finalize_construction (); }
         virtual ~MaxAction () {}
         void activate () {
           //if (_parent->get_state () > activated)

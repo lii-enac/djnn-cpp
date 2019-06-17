@@ -40,7 +40,7 @@ namespace djnn
   RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *p, const std::string &n) :
       Process (p, n), _p (p)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -106,7 +106,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _h);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   RGBToLCHConverter::~RGBToLCHConverter ()
@@ -151,7 +151,7 @@ namespace djnn
   LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *p, const std::string &n) :
       Process (p, n), _p (p)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -224,7 +224,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _b);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   LCHToRGBConverter::~LCHToRGBConverter ()

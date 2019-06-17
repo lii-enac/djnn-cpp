@@ -30,7 +30,7 @@ namespace djnn
     public:
       AndAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                  AbstractProperty* result) :
-          BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
+          BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~AndAction () {}
       void activate ()
       {
@@ -55,7 +55,7 @@ namespace djnn
     public:
       OrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                 AbstractProperty* result) :
-                  BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
+                  BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~OrAction () {}
       void activate ()
       {
@@ -80,7 +80,7 @@ namespace djnn
     public:
       XOrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                  AbstractProperty* result) :
-                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize (); }
+                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~XOrAction () {}
       void activate ()
       {
@@ -104,7 +104,7 @@ namespace djnn
     {
     public:
       NotAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~NotAction () {}
       void activate () {
         //if (_parent->get_state () > activated)

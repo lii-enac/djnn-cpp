@@ -263,7 +263,7 @@ namespace djnn
       Container (p, n)
   {
     set_is_model (isModel);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   AssignmentSequence::AssignmentSequence () :

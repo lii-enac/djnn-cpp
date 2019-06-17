@@ -29,7 +29,7 @@ namespace djnn
       Action (parent, name), _data (data), _action (action), _string_setter (string_setter)
   {
     set_is_model (isModel);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   NativeExpressionAction::~NativeExpressionAction ()

@@ -31,7 +31,7 @@ namespace djnn
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
   {
     set_origin (cx, cy);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Ellipse::Ellipse (double cx, double cy, double rx, double ry):

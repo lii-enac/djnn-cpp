@@ -48,7 +48,7 @@ namespace djnn
       raw_props{.r=r, .g=g, .b=b},
       _cr (nullptr), _cg (nullptr), _cb (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   AbstractColor::~AbstractColor ()
@@ -166,7 +166,7 @@ namespace djnn
       raw_props{.rule=rule},
       _cr (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FillRule::FillRule (djnFillRuleType rule) :
@@ -181,7 +181,7 @@ namespace djnn
       raw_props{.rule=rule},
       _cr (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FillRule::FillRule (int rule) :
@@ -294,7 +294,7 @@ namespace djnn
       raw_props{.path=path},
       _cp (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Texture::Texture (const std::string &path) :
@@ -380,7 +380,7 @@ namespace djnn
       raw_props{.alpha=alpha},
       _ca (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   AbstractOpacity::AbstractOpacity (double alpha) :
@@ -479,7 +479,7 @@ namespace djnn
       raw_props{.width=width},
       _cw (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineWidth::OutlineWidth (double width) :
@@ -564,7 +564,7 @@ namespace djnn
       raw_props{.cap=cap},
       _cc (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, int cap) :
@@ -572,7 +572,7 @@ namespace djnn
       raw_props{.cap=cap},
       _cc (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineCapStyle::OutlineCapStyle (djnCapStyle cap) :
@@ -663,7 +663,7 @@ namespace djnn
       raw_props{.join=join},
       _cj (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineJoinStyle::OutlineJoinStyle (djnJoinStyle join) :
@@ -678,7 +678,7 @@ namespace djnn
       raw_props{.join=join},
       _cj (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineJoinStyle::OutlineJoinStyle (int join) :
@@ -762,7 +762,7 @@ namespace djnn
       raw_props{.limit=limit},
       _cl (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   OutlineMiterLimit::OutlineMiterLimit (int limit) :
@@ -880,7 +880,7 @@ namespace djnn
       raw_props{.offset=offset},
       _co (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   DashOffset::DashOffset (double offset) :
@@ -1204,7 +1204,7 @@ namespace djnn
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     _linear = true;
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   LinearGradient::LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2, int s,
@@ -1214,7 +1214,7 @@ namespace djnn
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     _linear = true;
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   LinearGradient::LinearGradient (double x1, double y1, double x2, double y2, int s, int fc) :
@@ -1346,14 +1346,14 @@ namespace djnn
       AbstractStyle (p, n), _lg (lg)
   {
     activate_children ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   RefLinearGradient::RefLinearGradient (LinearGradient *lg) :
       AbstractStyle (), _lg (lg)
   {
     activate_children ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -1402,7 +1402,7 @@ namespace djnn
       raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
       _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
@@ -1411,7 +1411,7 @@ namespace djnn
       raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
       _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   RadialGradient::RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc) :
@@ -1555,14 +1555,14 @@ namespace djnn
       AbstractStyle (p, n), _rg (rg)
   {
     activate_children ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   RefRadialGradient::RefRadialGradient (RadialGradient *rg) :
       AbstractStyle (), _rg (rg)
   {
     activate_children ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -1635,7 +1635,7 @@ namespace djnn
       raw_props{.unit=unit, .size=size},
       _cu (nullptr), _cs (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontSize::FontSize (djnLengthUnit unit, double size) :
@@ -1650,7 +1650,7 @@ namespace djnn
       raw_props{.unit=unit, .size=size},
       _cu (nullptr), _cs (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontSize::FontSize (int unit, double size) :
@@ -1761,7 +1761,7 @@ namespace djnn
       raw_props{.weight=weight},
       _cw (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontWeight::FontWeight (int weight) :
@@ -1849,7 +1849,7 @@ namespace djnn
       raw_props{.style=style},
       _cs (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontStyle::FontStyle (djnFontSlope style) :
@@ -1864,7 +1864,7 @@ namespace djnn
       raw_props{.style=style},
       _cs (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontStyle::FontStyle (int style) :
@@ -1952,7 +1952,7 @@ namespace djnn
       raw_props{.family=family},
       _cf (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FontFamily::FontFamily (const std::string &family) :
@@ -2040,7 +2040,7 @@ namespace djnn
       raw_props{.anchor=anchor},
       _ca (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   TextAnchor::TextAnchor (djnAnchorType anchor) :
@@ -2055,7 +2055,7 @@ namespace djnn
       raw_props{.anchor=anchor},
       _ca (nullptr)
   {
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   TextAnchor::TextAnchor (int anchor) :

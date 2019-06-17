@@ -22,7 +22,7 @@ namespace djnn {
   class Blank: public Process {
   public:
     Blank () : Process () {}
-    Blank (Process* parent, string name) : Process (parent, name) { Process::finalize (); }
+    Blank (Process* parent, string name) : Process (parent, name) { Process::finalize_construction (); }
     virtual ~Blank () {};
     Process* clone () override;
   protected:

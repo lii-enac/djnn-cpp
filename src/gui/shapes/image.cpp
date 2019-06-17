@@ -40,7 +40,7 @@ namespace djnn
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Image::~Image ()

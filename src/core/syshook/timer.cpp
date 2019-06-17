@@ -38,7 +38,7 @@ namespace djnn
   {
     _delay = new IntProperty (this, "delay", period.count ());
     _end = new Blank (this, "end");
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Timer::Timer (int period)
@@ -52,7 +52,7 @@ namespace djnn
   {
     _delay = new IntProperty (this, "delay", period);
     _end = new Blank (this, "end");
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Timer::~Timer ()

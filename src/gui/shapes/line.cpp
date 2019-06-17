@@ -31,7 +31,7 @@ namespace djnn
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     set_origin (x1, y1);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Line::Line (double x1, double y1, double x2, double y2):

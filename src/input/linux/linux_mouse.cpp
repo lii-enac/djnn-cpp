@@ -48,7 +48,7 @@ namespace djnn {
       }
     }
     set_activated ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   LinuxMouse::~LinuxMouse ()

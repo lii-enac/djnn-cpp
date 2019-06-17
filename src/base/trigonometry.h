@@ -30,7 +30,7 @@ namespace djnn
     {
     public:
       CosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~CosineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -53,7 +53,7 @@ namespace djnn
     {
     public:
       SineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~SineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -76,7 +76,7 @@ namespace djnn
     {
     public:
       TangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~TangentAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -99,7 +99,7 @@ namespace djnn
     {
     public:
       ArcCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~ArcCosineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -122,7 +122,7 @@ namespace djnn
     {
     public:
       ArcSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~ArcSineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -145,7 +145,7 @@ namespace djnn
     {
     public:
       ArcTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~ArcTangentAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -168,7 +168,7 @@ namespace djnn
       {
       public:
         ArcTangent2Action (Process *p, const string &n, AbstractProperty* y, AbstractProperty* x, AbstractProperty* result) :
-          BinaryOperatorAction (p, n, y, x, result) { Process::finalize (); }
+          BinaryOperatorAction (p, n, y, x, result) { Process::finalize_construction (); }
         virtual ~ArcTangent2Action () {}
         void activate () {
           //if (_parent->get_state () > activated)
@@ -191,7 +191,7 @@ namespace djnn
     {
     public:
       HyperbolicCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicCosineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -214,7 +214,7 @@ namespace djnn
     {
     public:
       HyperbolicSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicSineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -237,7 +237,7 @@ namespace djnn
     {
     public:
       HyperbolicTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicTangentAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -260,7 +260,7 @@ namespace djnn
     {
     public:
       HyperbolicArcCosineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicArcCosineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -283,7 +283,7 @@ namespace djnn
     {
     public:
       HyperbolicArcSineAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicArcSineAction () {}
       void activate () {
         //if (_parent->get_state () > activated)
@@ -306,7 +306,7 @@ namespace djnn
     {
     public:
       HyperbolicArcTangentAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize (); }
+        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~HyperbolicArcTangentAction () {}
       void activate () {
         //if (_parent->get_state () > activated)

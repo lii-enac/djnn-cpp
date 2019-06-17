@@ -25,7 +25,7 @@ namespace djnn {
   class RefProperty: public AbstractProperty {
   public:
     RefProperty (Process* v) : AbstractProperty (), value (v) {};
-    RefProperty (Process* p, const string &name, Process* v, int nm = notify_none) : AbstractProperty (p, name, nm), value (v) { Process::finalize (); };
+    RefProperty (Process* p, const string &name, Process* v, int nm = notify_none) : AbstractProperty (p, name, nm), value (v) { Process::finalize_construction (); };
     virtual int get_prop_type () override { return Reference; }
     Process* get_value () { return value; };
     void set_value (int newValue, bool propagate) override;

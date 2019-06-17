@@ -25,7 +25,7 @@ namespace djnn
       Container (p, n), _gobj (nullptr)
   {
     _gobj = new AbstractGObj (this, "");
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Group::Group () :

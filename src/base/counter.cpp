@@ -50,7 +50,7 @@ namespace djnn
       Graph::instance ().add_edge (_parent->state_dependency (), _action_step);
     }
     
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Counter::Counter (double init, double delta) :

@@ -74,7 +74,7 @@ namespace djnn
       Process (parent, name)
   {
     init_binding (src, ispec, true, dst, dspec, true);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Binding::Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation,
@@ -82,7 +82,7 @@ namespace djnn
       Process (parent, name)
   {
     init_binding (src, ispec, on_activation, dst, dspec, activate);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Binding::~Binding ()

@@ -25,7 +25,7 @@ namespace djnn
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val && r_val);
     init_couplings (new AndAction (this, "action", _left, _right, _result));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -51,7 +51,7 @@ namespace djnn
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val || r_val);
     init_couplings (new OrAction (this, "action", _left, _right, _result));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -77,7 +77,7 @@ namespace djnn
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val != r_val);
     init_couplings (new XOrAction (this, "action", _left, _right, _result));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -102,7 +102,7 @@ namespace djnn
     _input = new BoolProperty (this, "input", in_val);
     _output = new BoolProperty (this, "output", !in_val);
     init_couplings (new NotAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void

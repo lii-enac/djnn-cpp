@@ -36,7 +36,7 @@ namespace djnn
     }
     fsm->set_initial (n);
     _parent_fsm = fsm;
-    Process::finalize ();
+    Process::finalize_construction ();
     _parent_fsm->FSM::add_state(this);
   }
 
@@ -148,7 +148,7 @@ namespace djnn
 
     init_FSMTransition ();
     
-    Process::finalize ();
+    Process::finalize_construction ();
     fsm->FSM::add_transition(this);
   }
 
@@ -182,7 +182,7 @@ namespace djnn
   
     init_FSMTransition ();
     
-    Process::finalize ();
+    Process::finalize_construction ();
     fsm->FSM::add_transition(this);
   }
 
@@ -277,7 +277,7 @@ namespace djnn
     Process (p, n), _cur_state (nullptr), _priority (0) 
   { 
     init_FSM ();
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   FSM::~FSM ()

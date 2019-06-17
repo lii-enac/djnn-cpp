@@ -26,7 +26,7 @@ namespace djnn {
   class AbstractTextProperty : public AbstractProperty {
   public:
     AbstractTextProperty () : AbstractProperty () { };
-    AbstractTextProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize (); };
+    AbstractTextProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize_construction (); };
     virtual int get_prop_type () override { return String; }
 
     // AbstractProperty interface

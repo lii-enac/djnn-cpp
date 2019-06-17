@@ -63,7 +63,7 @@ namespace djnn
     %(COUPLINGS_INIT)s
   {
     %(SET_ORIGIN)s
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   %(CLASS)s::%(CLASS)s (%(DECL_PROPS_CALL_DEF)s):

@@ -51,7 +51,7 @@ namespace djnn
     Graph::instance ().add_edge (this->text(), _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxU, int dyU,
@@ -76,7 +76,7 @@ namespace djnn
     Graph::instance ().add_edge (this->text(), _update_size);
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   Text::Text (double x, double y, const std::string &text) :

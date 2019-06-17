@@ -74,7 +74,7 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
 
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   ScreenToLocal::~ScreenToLocal () 
@@ -160,7 +160,7 @@ namespace djnn
     if (_parent && _parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (_parent->state_dependency (), _action);
 
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   LocalToScreen::~LocalToScreen () 

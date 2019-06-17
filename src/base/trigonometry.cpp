@@ -24,7 +24,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", cos (in_val));
     init_couplings (new CosineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -47,7 +47,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", sin (in_val));
     init_couplings (new SineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -70,7 +70,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", tan (in_val));
     init_couplings (new TangentAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -93,7 +93,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", acos (in_val));
     init_couplings (new ArcCosineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -116,7 +116,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", asin (in_val));
     init_couplings (new ArcSineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -139,7 +139,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", atan (in_val));
     init_couplings (new ArcTangentAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -163,7 +163,7 @@ namespace djnn
     _right = new DoubleProperty (this, "x", x_val);
     _result = new DoubleProperty (this, "result", atan2 (y_val, x_val));
     init_couplings (new ArcTangent2Action (this, "action", _left, _right, _result));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -186,7 +186,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", cosh (in_val));
     init_couplings (new HyperbolicCosineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -209,7 +209,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", sinh (in_val));
     init_couplings (new HyperbolicSineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -232,7 +232,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", tanh (in_val));
     init_couplings (new HyperbolicTangentAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -255,7 +255,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", acosh (in_val));
     init_couplings (new HyperbolicArcCosineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -278,7 +278,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", asinh (in_val));
     init_couplings (new HyperbolicArcSineAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void
@@ -301,7 +301,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", in_val);
     _output = new DoubleProperty (this, "output", atanh (in_val));
     init_couplings (new HyperbolicArcTangentAction (this, "action", _input, _output));
-    Process::finalize ();
+    Process::finalize_construction ();
   }
 
   void

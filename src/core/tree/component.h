@@ -69,7 +69,7 @@ namespace djnn {
   {
   public:
     Component () : Container () {}
-    Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize (); }
+    Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize_construction (); }
     Process* clone () override;
     void serialize (const string& format) override;
   };

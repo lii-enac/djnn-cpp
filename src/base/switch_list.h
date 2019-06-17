@@ -34,7 +34,7 @@ namespace djnn {
   private:
     class Next : public Action {
     public:
-      Next (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
+      Next (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~Next () {}
       void activate () override;
       void deactivate () override {}
@@ -43,7 +43,7 @@ namespace djnn {
     };
     class Previous : public Action {
     public:
-      Previous (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
+      Previous (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~Previous () {}
       void activate () override;
       void deactivate () override {}
@@ -52,7 +52,7 @@ namespace djnn {
     };
     class ChangeIndex : public Action {
     public:
-      ChangeIndex (SwitchList *p) : Action (), _sw (p) { Process::finalize(); }
+      ChangeIndex (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~ChangeIndex () {}
       void activate () override;
       void deactivate () override {}
