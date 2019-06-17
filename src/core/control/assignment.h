@@ -47,10 +47,10 @@ namespace djnn {
    friend class PausedAssignment;
    /* PRIVATE CLASS */
   private:
-   class AssignmentAction : public Process
+   class AssignmentAction : public Action
    {
    public:
-    AssignmentAction (Process* p, const string &n, Process** src, AbstractProperty** dst, bool propagate) : Process (p, n), _src (src), _dst (dst), _propagate (propagate) {}
+    AssignmentAction (Process* p, const string &n, Process** src, AbstractProperty** dst, bool propagate) : Action (p, n), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void deactivate () override {}
@@ -88,7 +88,8 @@ namespace djnn {
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     void activate () override;
-    void deactivate () override { _action->deactivation (); }
+    void post_activate () override { set_deactivated (); }
+    void deactivate () override {}
     void serialize (const string& format) override;
     virtual ~Assignment ();
   };
@@ -101,7 +102,8 @@ namespace djnn {
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     void activate () override;
-    void deactivate () override { _action->deactivation (); }
+    void post_activate () override { set_deactivated (); }
+    void deactivate () override {}
     void serialize (const string& format) override;
     virtual ~PausedAssignment ();
   };
