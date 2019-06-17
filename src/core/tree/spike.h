@@ -31,7 +31,6 @@ namespace djnn {
     void post_activate () override;
     void activate () override;
     void deactivate () override {};
-    void deactivation () override {};
   };
 
 }

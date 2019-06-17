@@ -70,8 +70,8 @@ namespace djnn {
     virtual ~Process ();
 
     // main public API
-    virtual void activation ();
-    virtual void deactivation ();
+    void activation ();
+    void deactivation ();
 
     // actions to be redefined by subclasses
     virtual void draw () {}
@@ -112,14 +112,12 @@ namespace djnn {
     virtual void coupling_deactivation_hook () {};
     void notify_activation ();
     void notify_deactivation ();
-    // pseudo, graph-less coupling
-    virtual void notify_change ( unsigned int nm ) {}
+    virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
 
     // execution graph
     void set_vertex (Vertex *v) { _vertex = v; }
     Vertex* vertex () { return _vertex; };
-    // execution scheduling
-    Process* state_dependency () { return _state_dependency; }
+    Process* state_dependency () { return _state_dependency; } // for execution scheduling
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void set_activation_source (Process* src) {}
@@ -142,7 +140,7 @@ namespace djnn {
   private:
     static int _nb_anonymous;
 
-// instance fields start
+// <instance fields start here>
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
@@ -157,7 +155,7 @@ namespace djnn {
 
   protected:
     unsigned int _bitset;
-// instance fields end
+// </instance fields end here>
     
     enum bit_shift {
         MODEL_SHIFT               = 0 ,
@@ -239,6 +237,7 @@ namespace djnn {
     Action (bool model = false) : Process (model) {}
     Action (Process *p, const string &n, bool model = false) : Process (p, n, model) {}
     virtual ~Action () {}
+  protected:
     virtual bool pre_activate () override {
       if ((_parent != 0 && !_parent->somehow_activating() ))
         return false;

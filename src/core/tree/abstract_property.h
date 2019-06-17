@@ -52,7 +52,6 @@ namespace djnn {
     void post_activate () override { set_deactivated (); }
     void activate () override {}
     void deactivate () override {}
-    void deactivation () override {}
     int _notify_mask;
   };
 
