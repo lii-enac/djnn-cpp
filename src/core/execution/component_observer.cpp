@@ -13,6 +13,7 @@
  */
 
 #include "component_observer.h"
+
 #include <algorithm>
 #include <iostream>
 

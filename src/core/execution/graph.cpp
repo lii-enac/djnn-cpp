@@ -13,7 +13,6 @@
  */
 
 #include "graph.h"
-#include "../tree/abstract_property.h"
 
 #include <algorithm>
 #include <iostream>

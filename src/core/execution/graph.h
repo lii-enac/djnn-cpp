@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../core_types.h"
+#include "../ontology/process.h"
 
 #include <mutex>
 #include <vector>
