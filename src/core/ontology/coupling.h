@@ -33,11 +33,10 @@ namespace djnn {
     Process* get_src () { return _src; }
     Process* get_dst () { return _dst; }
     
-    void enable ()              { set_is_enabled (); };
-    void enable (Process* data) { set_is_enabled (); _data = data; };
-    void disable ()             { unset_is_enabled (); };
-    bool is_enabled ()          { return is_flag_set (ENABLED_MASK, ENABLED_TRUE);  }
-
+    void enable ()              { set_enabled (true); };
+    void enable (Process* data) { set_enabled (true); _data = data; };
+    void disable ()             { set_enabled (false); };
+    bool is_enabled ()          { return get_enabled (); }
 
   private:
     void init_coupling (Process* src, int src_flag, Process* dst, int dst_flag);
@@ -77,46 +76,22 @@ namespace djnn {
         DST_ACTIVATION_FLAG_DEACTIVATION  = 0b10 << DST_ACTIVATION_FLAG_SHIFT ,
     };
 
-    void set_flag    (bit_mask MASK, bit_value VALUE) { _bitset = (_bitset & ~MASK) |  VALUE; }
-    bool is_flag_set (bit_mask MASK, bit_value VALUE) { return    (_bitset &  MASK) == VALUE; }
+    void set_flag    (bit_mask MASK, bit_value VALUE)             { _bitset = (_bitset & ~MASK) |  VALUE; }
+    void set_flag    (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
+    bool is_flag_set (bit_mask MASK, bit_value VALUE)             { return    (_bitset &  MASK) == VALUE; }
+    int  get_flag    (bit_mask MASK, bit_shift SHIFT)             { return    (_bitset &  MASK) >> SHIFT; }
 
-    void set_is_enabled ()                {         set_flag    (ENABLED_MASK, ENABLED_TRUE);  }
-    void unset_is_enabled ()              {         set_flag    (ENABLED_MASK, ENABLED_FALSE); }
-  //bool is_enabled ()                    { return  is_flag_set (ENABLED_MASK, ENABLED_TRUE);  } // public
+    bool get_enabled ()                    { return get_flag    (ENABLED_MASK, ENABLED_SHIFT); }
+    void set_enabled (bool VALUE)          {        set_flag    (ENABLED_MASK, ENABLED_SHIFT, VALUE); }
 
-    void set_is_immediate_processing ()   {         set_flag    (IMMEDIATE_MASK, IMMEDIATE_TRUE);  }
-    void unset_is_immediate_processing () {         set_flag    (IMMEDIATE_MASK, IMMEDIATE_FALSE); }
-    bool is_immediate_processing ()       { return  is_flag_set (IMMEDIATE_MASK, IMMEDIATE_TRUE);  }
+    bool get_immediate_processing ()       { return get_flag    (IMMEDIATE_MASK, IMMEDIATE_SHIFT); }
+    void set_immediate_processing (bool VALUE) {    set_flag    (IMMEDIATE_MASK, IMMEDIATE_SHIFT, VALUE); }
 
-  //void unset_src_activation_flag ()     {         set_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_NONE); }
-  //bool is_unset_src_activation_flag ()  { return  is_flag_set (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_NONE); }
-  //bool is_set_src_activation_flag ()    { return !is_flag_set (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_NONE); }
-    void src_request_activation ()        {         set_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_ACTIVATION); }
-    bool is_src_activation_requested ()   { return  is_flag_set (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_ACTIVATION); }
-    void src_request_deactivation ()      {         set_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_DEACTIVATION);  }
-    bool is_src_deactivation_requested () { return  is_flag_set (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_DEACTIVATION);  }
+    int  get_src_activation_flag ()        { return get_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_SHIFT); }
+    void set_src_activation_flag (int VALUE) {      set_flag    (SRC_ACTIVATION_FLAG_MASK, SRC_ACTIVATION_FLAG_SHIFT, VALUE); }
 
-    int  get_activation_flag ()           { return              (_bitset & DST_ACTIVATION_FLAG_MASK) >> DST_ACTIVATION_FLAG_SHIFT; }
-    //void  set_activation_flag ()           { return              (_bitset & DST_ACTIVATION_FLAG_MASK) >> DST_ACTIVATION_FLAG_SHIFT; }
-    void unset_dst_activation_flag ()     {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
-    bool is_unset_dst_activation_flag ()  { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
-    bool is_set_dst_activation_flag ()    { return !is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_NONE); }
-    void dst_request_activation ()        {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_ACTIVATION); }
-    bool is_dst_activation_requested ()   { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_ACTIVATION); }
-    void dst_request_deactivation ()      {         set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_DEACTIVATION);  }
-    bool is_dst_deactivation_requested () { return  is_flag_set (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_DEACTIVATION);  }
-    
-    //bool __is_enabled;
-    //bool __immediate_processing;
-    //int m_src_flag, m_dst_flag;
-
-    //void set_is_enabled () { __is_enabled = true; }
-    //void unset_is_enabled () { __is_enabled = false; }
-    //public: bool is_enabled() { return __is_enabled; }
-    
-    //void set_is_immediate_processing () { __immediate_processing = true; }
-    //void unset_is_immediate_processing () { __immediate_processing = false; }
-    //bool is_immediate_processing () { return __immediate_processing; }
+    int  get_dst_activation_flag ()       { return  get_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_SHIFT); }
+    void set_dst_activation_flag (int VALUE) {      set_flag    (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_SHIFT, VALUE); }
     
   };
 

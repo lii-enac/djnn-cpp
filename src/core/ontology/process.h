@@ -23,7 +23,7 @@ namespace djnn {
   using namespace std;
 
   // process types
-  enum {
+  enum property_e {
     UNDEFINED_T,
     PROPERTY_T,
     COMPONENT_T,
@@ -34,14 +34,14 @@ namespace djnn {
   };
 
   // activation types
-  enum {
+  enum activation_e {
     NONE,
     ACTIVATION,
     DEACTIVATION
   };
 
   // child position spec
-  enum {
+  enum child_position_e {
     FIRST,
     BEFORE,
     AFTER,
