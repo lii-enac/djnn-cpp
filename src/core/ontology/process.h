@@ -123,6 +123,7 @@ namespace djnn {
     virtual void set_activation_source (Process* src) {}
     virtual Process* get_activation_source () { return nullptr; }
 
+    // debug
     virtual void dump (int level=0);
     const string& debug_info () { return _dbg_info; }
 
@@ -168,7 +169,7 @@ namespace djnn {
         MODEL_MASK                = 0b1  << MODEL_SHIFT ,
         ACTIVATION_FLAG_MASK      = 0b11 << ACTIVATION_FLAG_SHIFT ,
         ACTIVATION_STATE_MASK     = 0b11 << ACTIVATION_STATE_SHIFT ,
-        BINDING_ACTION_MASK       = 0b1 << BINDING_ACTION_SHIFT
+        BINDING_ACTION_MASK       = 0b1  << BINDING_ACTION_SHIFT
     };
 
     enum bit_value {
