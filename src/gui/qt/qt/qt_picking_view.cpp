@@ -45,7 +45,7 @@ namespace djnn
   int
   QtPickingView::get_pixel (unsigned int x, unsigned int y)
   {
-    if (x < 0 || x >= _image->width () || y < 0 || y >= _image->height ())
+    if (x < 0 || x >= (unsigned int)_image->width () || y < 0 || y >= (unsigned int)_image->height ())
       return -1;
     return _image->pixel (x, y);
   }

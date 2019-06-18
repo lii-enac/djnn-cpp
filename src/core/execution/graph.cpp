@@ -43,7 +43,7 @@ namespace djnn
   };
 
   Vertex::Vertex (Process* c) :
-      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _is_invalid (false), _count_egdes_in(0)
+      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
   {
   }
 
