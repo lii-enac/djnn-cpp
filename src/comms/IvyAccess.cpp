@@ -209,22 +209,22 @@ namespace djnn
 
 IvyAccess::~IvyAccess ()
 {
-  delete _out;
-  delete _out_c;
-  delete _out_a;
+  Graph::instance().remove_edge(_out, _out_a);
+  if (_parent && _parent->state_dependency () != nullptr)
+   Graph::instance ().remove_edge (_parent->state_dependency (), _out_a);
 
-  delete _arriving;
-  delete _leaving;
+ delete _out;
+ delete _out_c;
+ delete _out_a;
+
+ delete _arriving;
+ delete _leaving;
 
  // TODO: Clean MAP
  //while (!_in.empty()) {
  // delete _in.back();
  // _in.pop_back();
  //}
-
- Graph::instance().remove_edge(_out, _out_a);
- if (_parent && _parent->state_dependency () != nullptr)
-   Graph::instance ().remove_edge (_parent->state_dependency (), _out_a);
 }
 
 void IvyAccess::set_arriving(string v) {
