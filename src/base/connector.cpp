@@ -140,7 +140,7 @@ namespace djnn
     if (_src && _dst) {
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _has_coupling = true;
-      if (is_activated ()) {
+      if ( get_activation_state()==ACTIVATED ) {
         _action->activation ();
       } else {
         _c_src->disable ();
@@ -171,7 +171,6 @@ namespace djnn
   void
   Connector::serialize (const string& format)
   {
-
     string buf;
 
     AbstractSerializer::pre_serialize (this, format);

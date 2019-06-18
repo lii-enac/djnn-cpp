@@ -71,7 +71,7 @@ namespace djnn
   void
   Clock::activate ()
   {
-    if ( is_activated() )
+    if ( get_activation_state () == ACTIVATED )
       return;
     start_thread();
   }

@@ -24,8 +24,8 @@ namespace djnn
   using namespace std;
 
   void
-  Coupling::init_coupling (Process* src, int src_flag, Process* dst,
-                           int dst_flag)
+  Coupling::init_coupling (Process* src, activation_e src_flag, Process* dst,
+                           activation_e dst_flag)
   {
     if (src == 0) {
       cerr << "Warning: the source of a coupling cannot be null\n";
@@ -36,7 +36,7 @@ namespace djnn
       return;
     }
 
-    set_enabled(true);
+    set_is_enabled(true);
 
     set_src_activation_flag (src_flag);
     if (src_flag == ACTIVATION) {
@@ -48,16 +48,16 @@ namespace djnn
     set_dst_activation_flag (dst_flag);
   }
 
-  Coupling::Coupling (Process* src, int src_flag, Process* dst,
-                      int dst_flag, bool immediate_processing) :
+  Coupling::Coupling (Process* src, activation_e src_flag, Process* dst,
+                      activation_e dst_flag, bool immediate_processing) :
       _src (src), _dst (dst), _data (nullptr)
   {
     set_immediate_processing (immediate_processing);
     init_coupling (src, src_flag, dst, dst_flag);
   }
 
-  Coupling::Coupling (Process* src, int src_flag, Process* dst,
-                      int dst_flag, Process* data, bool immediate_processing) :
+  Coupling::Coupling (Process* src, activation_e src_flag, Process* dst,
+                      activation_e dst_flag, Process* data, bool immediate_processing) :
     Coupling(src, src_flag, dst, dst_flag, immediate_processing)
   {
     _data = data;

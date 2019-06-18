@@ -72,7 +72,8 @@ namespace djnn
   {
     _c_branch->enable ();
     change_branch ();
-    set_activated ();
+    //set_activated ();
+    set_activation_state (ACTIVATED);
   }
 
   void
@@ -86,7 +87,7 @@ namespace djnn
   void
   Switch::draw ()
   {
-    if (is_deactivation_requested ())
+    if (get_activation_flag () == DEACTIVATION)
       return;
     if (_cur_branch != nullptr)
       _cur_branch->draw ();
@@ -95,7 +96,7 @@ namespace djnn
   void
   Switch::pick ()
   {
-    if (is_deactivation_requested ())
+    if (get_activation_flag() == DEACTIVATION)
       return;
     if (_cur_branch != nullptr)
       _cur_branch->pick ();
@@ -108,11 +109,11 @@ namespace djnn
     map<string, Process*>::iterator it = _symtable.find (key);
     if (it != _symtable.end ()) {
       if (_cur_branch == it->second) {
-        if (_cur_branch->is_deactivated ())
+        if (_cur_branch->get_activation_state () == DEACTIVATED)
           _cur_branch->activation ();
         return;
       } else {
-        if (_cur_branch != nullptr && _cur_branch->is_activated ())
+        if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
           _cur_branch->deactivation ();
         _cur_branch = it->second;
         (it->second)->activation ();

@@ -34,14 +34,11 @@ namespace djnn {
       djnn::loadedModules.push_back("input");
 
       InputDevices = new Set (nullptr, "InputDevices");
-      //InputDevices->set_state (activated);
-      InputDevices->set_activated ();
+      InputDevices->set_activation_state (ACTIVATED);
       Mice = new Set (InputDevices, "Mice");
-      //Mice->set_state (activated);
-      Mice->set_activated ();
+      Mice->set_activation_state (ACTIVATED);
       TouchPanels = new Set (InputDevices, "TouchPanels");
-      //TouchPanels->set_state (activated);
-      TouchPanels->set_activated ();
+      TouchPanels->set_activation_state (ACTIVATED);
       URI::add_uri ("input", InputDevices);
       p_init_input ();
     }

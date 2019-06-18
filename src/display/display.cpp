@@ -42,9 +42,9 @@ namespace djnn
     if ( __module_initialized == false ) {
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
       GPUs = new Set (nullptr, "GPUs");
-      GPUs->set_activated ();
+      GPUs->set_activation_state (ACTIVATED);
       Displays = new Set (nullptr, "Displays");
-      Displays->set_activated ();
+      Displays->set_activation_state (ACTIVATED);
       URI::add_uri ("gpu", GPUs);
       URI::add_uri ("display", Displays);
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;

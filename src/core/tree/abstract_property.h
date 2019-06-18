@@ -49,7 +49,7 @@ namespace djnn {
     virtual double get_double_value () = 0;
     virtual string get_string_value () = 0;
   protected:
-    void post_activate () override { set_deactivated (); }
+    void post_activate () override { set_activation_state (DEACTIVATED); }
     void activate () override {}
     void deactivate () override {}
     int _notify_mask;

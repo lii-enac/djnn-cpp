@@ -30,26 +30,23 @@ namespace djnn {
     class BindingAction : public Action
     {
     public:
-      BindingAction (Process* parent, const string &name, bool activate) : Action (parent, name) { set_binding_activate (activate); }
+      BindingAction (Process* parent, const string &name, bool activate) : Action (parent, name) { set_binding_action (activate); }
       virtual ~BindingAction () {};
       void activate () override {
       	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);
-      	if (is_binding_activate()) {
+      	if (get_binding_action()) {
       	  ((Binding*)_parent)->_dst->activation ();
       	}
       	else
       	  ((Binding*)_parent)->_dst->deactivation ();
       }
       void deactivate () override {}
-      void exec (int flag) override { activate (); }
+      void exec (activation_e flag) override { activate (); }
     private:
-      void set_binding_activate (bool activate) {
-        if (activate)
-          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE);
-        else
-          set_flag (BINDING_ACTION_MASK, BINDING_ACTION_DEACTIVATE);
-      }
-      bool is_binding_activate() { return is_flag_set (BINDING_ACTION_MASK, BINDING_ACTION_ACTIVATE); }
+      
+      bool get_binding_action ()           { return get_bitset (BINDING_ACTION_MASK, BINDING_ACTION_SHIFT); }
+      void set_binding_action (bool VALUE) {        set_bitset (BINDING_ACTION_MASK, BINDING_ACTION_SHIFT, VALUE); }
+
     };
   public:
     Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);

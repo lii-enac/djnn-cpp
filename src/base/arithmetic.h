@@ -60,7 +60,6 @@ namespace djnn
       virtual ~SubtractorAction () {}
       void activate ()
       {
-        //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () - ((DoubleProperty*)_right)->get_value (), true);
@@ -87,7 +86,6 @@ namespace djnn
       virtual ~MultiplierAction () {}
       void activate ()
       {
-        //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () * ((DoubleProperty*)_right)->get_value (), true);
@@ -113,7 +111,6 @@ namespace djnn
       virtual ~DividerAction () {}
       void activate ()
       {
-        //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
          return;
        double r = ((DoubleProperty*)_right)->get_value ();
@@ -143,7 +140,6 @@ private:
     virtual ~ModuloAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
        return;
      int l = ((IntProperty*) _left)->get_value ();
@@ -175,7 +171,6 @@ private:
     virtual ~AscendingComparatorAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () <= ((DoubleProperty*)_right)->get_value (), true);
@@ -201,7 +196,6 @@ private:
     virtual ~StrictAscendingComparatorAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () < ((DoubleProperty*)_right)->get_value (), true);
@@ -227,7 +221,6 @@ private:
     virtual ~EqualityComparatorAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () == ((DoubleProperty*)_right)->get_value (), true);
@@ -252,7 +245,6 @@ private:
     virtual ~SignInverterAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
         return;
       _output->set_value (-(((DoubleProperty*)_input)->get_value ()), true);
@@ -277,7 +269,6 @@ private:
     virtual ~PreviousAction () {}
     void activate ()
     {
-      //if (_parent->get_state () > activated)
       if (!_parent->somehow_activating ())
         return;
 
@@ -302,7 +293,7 @@ public:
   Incr (bool is_model);
   void activate () override;
   void deactivate () override {}
-  void post_activate () override { notify_activation (); set_deactivated (); }
+  void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
   virtual ~Incr ();
 private:
   int

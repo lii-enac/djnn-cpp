@@ -88,7 +88,7 @@ namespace djnn
     public:
       UndelayedSpike (UpdateDrawing *p, const string &n)  : Process (p, n), _ud (p) { set_is_model (true); Process::finalize_construction (); }
       virtual ~UndelayedSpike () {}
-      void post_activate () override { set_deactivated (); }
+      void post_activate () override { set_activation_state (DEACTIVATED); }
       void activate () override {};
       void deactivate () override {};
       void coupling_activation_hook () override;

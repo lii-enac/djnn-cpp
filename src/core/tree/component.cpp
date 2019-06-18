@@ -80,10 +80,12 @@ namespace djnn
     c->set_parent (this);
     add_symbol (name, c);
     //if (get_state () == activated && !c->is_model ()) {
-    if (is_activated () && !c->is_model ()) {
+    //if (is_activated () && !c->is_model ()) {
+    if (get_activation_state () == ACTIVATED && !c->get_is_model ()) {
       c->activation ();
     //} else if (c->get_state () == activated) {
-    } else if (c->is_activated ()) {
+    //} else if (c->is_activated ()) {
+    } else if (c->get_activation_state () == ACTIVATED) {
       c->deactivation ();
     }
     for (auto s: structure_observer_list) {
@@ -168,7 +170,7 @@ namespace djnn
      * the dynamic modification of children list */
     unsigned int i = 0;
     while (i < _children.size ()) {
-      if (!_children[i]->is_model ()) {
+      if (!_children[i]->get_is_model ()) {
         _children[i]->activation ();
       }
       i++;
@@ -180,7 +182,7 @@ namespace djnn
   Container::draw ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (is_deactivation_requested ())
+    if (get_activation_flag () == DEACTIVATION)
       return;
     ComponentObserver::instance ().start_draw ();
     for (auto c : _children) {
@@ -193,9 +195,8 @@ namespace djnn
   Container::pick ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (is_deactivation_requested ()) {
+    if (get_activation_flag () == DEACTIVATION)
       return;
-    }
     //ComponentObserver::instance ().start_pick ();
     for (auto c : _children) {
       c->pick ();
@@ -297,7 +298,7 @@ namespace djnn
   void
   AssignmentSequence::post_activate ()
   {
-    set_deactivated();
+    set_activation_state (DEACTIVATED);
   }
 
   void

@@ -45,7 +45,7 @@ namespace djnn
   {
     int priority = t->priority ();
     for (auto t2 : _transitions) {
-      if (t2 != t && t2->fsm_action ()->is_activation_requested () && t2->priority () < priority)
+      if (t2 != t && t2->fsm_action ()->get_activation_flag () == ACTIVATION && t2->priority () < priority)
         return false;
     }
     return true;
@@ -55,8 +55,8 @@ namespace djnn
   FSMState::disable_transitions (FSMTransition *t)
   {
     for (auto t2 : _transitions) {
-      if (t2 != t && t2->fsm_action ()->is_activation_requested ()) {
-        t2->fsm_action ()->unset_activation_flag ();
+      if (t2 != t && t2->fsm_action ()->get_activation_flag () == ACTIVATION) {
+        t2->fsm_action ()->set_activation_flag (NONE_ACTIVATION);
       }
     }
   }
@@ -320,7 +320,7 @@ namespace djnn
   void
   FSM::draw ()
   {
-    if (is_deactivation_requested ())
+    if (get_activation_flag() == DEACTIVATION)
       return;
     if (_cur_state != nullptr)
       _cur_state->draw ();
@@ -329,7 +329,7 @@ namespace djnn
   void
   FSM::pick ()
   {
-    if (is_deactivation_requested ())
+    if (get_activation_flag() == DEACTIVATION)
       return;
     if (_cur_state != nullptr)
       _cur_state->pick ();
@@ -351,6 +351,5 @@ namespace djnn
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
-
   }
 }

@@ -319,7 +319,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:incr");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", get_is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
@@ -339,7 +339,6 @@ namespace djnn
   void
   AdderAccumulator::AdderAccumulatorAction::activate ()
   {
-    //if (_parent->get_state () > activated)
     if (!_parent->somehow_activating ())
       return;
     double input = ((DoubleProperty*) _input)->get_value ();

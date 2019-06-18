@@ -79,8 +79,8 @@ namespace djnn
       _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
   {
     set_is_model (model);
-    unset_activation_flag ();
-    set_deactivated ();
+    set_activation_flag (NONE_ACTIVATION);
+    set_activation_state (DEACTIVATED);
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
     if (_parent != nullptr)
       _state_dependency = _parent->_state_dependency;
@@ -94,8 +94,8 @@ namespace djnn
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
   {
     set_is_model (model);
-    unset_activation_flag ();
-    set_deactivated ();
+    set_activation_flag (NONE_ACTIVATION);
+    set_activation_state (DEACTIVATED);
     _name = "anonymous_" + to_string (++_nb_anonymous);
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
@@ -105,7 +105,6 @@ namespace djnn
 
   Process::~Process ()
   {
-    //auto _vertex = Graph::instance().get_vertex(this);
     if (_vertex != nullptr)
       _vertex->invalidate ();
   }
@@ -337,10 +336,9 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    //if (_activation_state != deactivated || (_parent != 0 && !_parent->somehow_activating() ))
-    if (!is_deactivated() || (_parent != 0 && !_parent->somehow_activating() ))
+    if (get_activation_state () != DEACTIVATED || (_parent != 0 && !_parent->somehow_activating() ))
       return false;
-    set_activating ();
+    set_activation_state (ACTIVATING);
     return true;
   }
 
@@ -348,16 +346,15 @@ namespace djnn
   Process::post_activate ()
   {
     notify_activation ();
-    set_activated ();
+    set_activation_state (ACTIVATED);
   }
 
   bool
   Process::pre_deactivate ()
   {
-    //if (_activation_state != activated)
-    if (!is_activated ())
+    if (get_activation_state() != ACTIVATED)
       return false;
-    set_deactivating ();
+    set_activation_state (DEACTIVATING);
     return true;
   }
 
@@ -365,17 +362,10 @@ namespace djnn
   Process::post_deactivate ()
   {
     notify_deactivation ();
-    set_deactivated ();
-    unset_activation_flag ();
+    set_activation_state (DEACTIVATED);
+    set_activation_flag (NONE_ACTIVATION);
   }
 
-/*
-  activation_state
-  Process::get_state ()
-  {
-    return _activation_state;
-  }
-*/
   Process*
   Process::get_parent ()
   {
@@ -388,14 +378,14 @@ namespace djnn
     return _name;
   }
 
-  couplings_t&
-  Process::get_activation_couplings ()
+  const Process::couplings_t&
+  Process::get_activation_couplings () const
   {
     return _activation_couplings;
   }
 
-  couplings_t&
-  Process::get_deactivation_couplings ()
+  const Process::couplings_t&
+  Process::get_deactivation_couplings () const
   {
     return _deactivation_couplings;
   }

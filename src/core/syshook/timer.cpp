@@ -90,8 +90,7 @@ namespace djnn
         #endif
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
-          //_activation_state = deactivated;
-          set_deactivated ();
+          set_activation_state (DEACTIVATED);
           _end->notify_activation (); // propagating
           thread_terminated ();
           GRAPH_EXEC; // executing

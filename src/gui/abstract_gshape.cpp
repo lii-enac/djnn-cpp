@@ -63,7 +63,7 @@ namespace djnn
     _local_y = new DoubleProperty (this, "local_y", 0);
     _pressure = new DoubleProperty (this, "pressure", init_pressure);
     _id = new IntProperty (this, "id", 0);
-    set_activated();
+    set_activation_state (ACTIVATED);
     Process::finalize_construction ();
   }
 
@@ -76,7 +76,7 @@ namespace djnn
     _local_y = new DoubleProperty (this, "local_y", 0);
     _pressure = new DoubleProperty (this, "pressure", 0);
     _id = new IntProperty (this, "id", 0);
-    set_activated();
+    set_activation_state (ACTIVATED);
   }
 
   Touch::~Touch ()
@@ -98,7 +98,7 @@ namespace djnn
     new Spike (this, "enter");
     new Spike (this, "leave");
     Process* s = new List (this, "touches");
-    s->set_activated ();
+    s->set_activation_state (ACTIVATED);
     DoubleProperty* px = new DoubleProperty (0);
     DoubleProperty* py = new DoubleProperty (0);
     DoubleProperty* mx = new DoubleProperty (0);
@@ -115,7 +115,7 @@ namespace djnn
     move->add_symbol ("local_y", local_y);
     if( !_inverted_matrix) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
-      _inverted_matrix->set_activated ();
+      _inverted_matrix->set_activation_state (ACTIVATED);
     }
     _has_ui = true;
   }
@@ -147,11 +147,11 @@ namespace djnn
       }
       if (key.compare ("matrix") == 0) {
         _matrix = new Homography (this, "matrix");
-        _matrix->set_activated ();
+        _matrix->set_activation_state (ACTIVATED);
       }
       else if (key.compare ("inverted_matrix") == 0) {
         _inverted_matrix = new Homography (this, "inverted_matrix");
-        _inverted_matrix->set_activated ();
+        _inverted_matrix->set_activation_state (ACTIVATED);
       }
       else {
         /*  "press", "release", "move", "enter", "leave", "touches" */

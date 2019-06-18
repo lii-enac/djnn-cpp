@@ -54,7 +54,7 @@ namespace djnn {
     virtual ~AssignmentAction () {}
     void activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void deactivate () override {}
-    void exec (int flag) override { activate (); }
+    void exec (activation_e flag) override { activate (); }
     void set_src (Process** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
   private:
@@ -88,7 +88,7 @@ namespace djnn {
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     void activate () override;
-    void post_activate () override { set_deactivated (); }
+    void post_activate () override { set_activation_state (DEACTIVATED); }
     void deactivate () override {}
     void serialize (const string& format) override;
     virtual ~Assignment ();
@@ -102,7 +102,7 @@ namespace djnn {
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     void activate () override;
-    void post_activate () override { set_deactivated (); }
+    void post_activate () override { set_activation_state (DEACTIVATED); }
     void deactivate () override {}
     void serialize (const string& format) override;
     virtual ~PausedAssignment ();

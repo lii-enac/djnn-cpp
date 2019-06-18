@@ -181,9 +181,9 @@ namespace djnn
   {
     c->set_parent (this);
 
-    if (is_activated () && c->is_deactivated ()) {
+    if (get_activation_state () == ACTIVATED && c->get_activation_state () == DEACTIVATED) {
       c->activation ();
-    } else if (is_deactivated () && c->is_activated ()) {
+    } else if (get_activation_state () == DEACTIVATED && c->get_activation_state () == ACTIVATED) {
       c->deactivation ();
     }
     _added->set_value (c, true);
@@ -401,7 +401,7 @@ namespace djnn
   void
   ListIterator::post_activate ()
   {
-    set_deactivated ();
+    set_activation_state (DEACTIVATED);
   }
 }
 

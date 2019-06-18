@@ -22,9 +22,8 @@ namespace djnn
   bool
   Spike::pre_activate ()
   {
-    //if (_parent == 0 || _parent->get_state () == activated)
-    if (_parent == 0 || _parent->is_activated ()) {
-      set_activating ();
+    if (_parent == 0 || _parent->get_activation_state () == ACTIVATED) {
+      set_activation_state (ACTIVATING);
       return true;
     }
     return false;
@@ -33,19 +32,18 @@ namespace djnn
   void
   Spike::activate ()
   {
-    if ( is_activating () )
+    if ( get_activation_state () == ACTIVATING)
       notify_activation ();
   }
 
   void
   Spike::post_activate ()
   {
-    set_deactivated ();
+    set_activation_state (DEACTIVATED);
   }
 
   void
   Spike::serialize (const string& format) {
-
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:spike");

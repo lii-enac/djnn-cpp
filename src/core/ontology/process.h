@@ -34,10 +34,17 @@ namespace djnn {
   };
 
   // activation types
-  enum activation_e {
-    NONE,
-    ACTIVATION,
+  enum activation_e { // FIXME: should be renamed as activation request
+    NONE_ACTIVATION,
+    ACTIVATION, // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2
     DEACTIVATION
+  };
+
+  enum activation_state_e {
+    ACTIVATING,
+    ACTIVATED,
+    DEACTIVATING,
+    DEACTIVATED
   };
 
   // child position spec
@@ -59,8 +66,6 @@ namespace djnn {
   class Coupling;
   class Vertex;
 
-  typedef vector<Coupling*> couplings_t;
-
   class Process
   {
   public:
@@ -69,14 +74,10 @@ namespace djnn {
     virtual ~Process ();
 
     // main public API
-    void activation ();
-    void deactivation ();
-    virtual void exec (int flag) {       
-        switch(flag) {
-            case NONE: unset_activation_flag (); break;
-            case ACTIVATION: request_activation (); break;
-            case DEACTIVATION: request_deactivation (); break;
-        }
+    void activation ();   // FIXME: should be activate ()
+    void deactivation (); // FIXME: should be deactivate ()
+    virtual void exec (activation_e flag) {
+        set_activation_flag (flag);
     }
 
     // coupling
@@ -84,9 +85,10 @@ namespace djnn {
     void add_deactivation_coupling (Coupling* c);
     void remove_activation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
-    couplings_t& get_activation_couplings ();
-    couplings_t& get_deactivation_couplings ();
-    bool has_coupling () { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
+    typedef vector<Coupling*> couplings_t;
+    const couplings_t& get_activation_couplings () const;
+    const couplings_t& get_deactivation_couplings () const;
+    bool has_coupling () const { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -110,17 +112,19 @@ namespace djnn {
     virtual Process* get_activation_source () { return nullptr; }
 
     // tree, component, symtable 
-    virtual void add_child (Process* c, const string& name);
+    virtual void    add_child (Process* c, const string& name);
     virtual void remove_child (Process* c);
     virtual void remove_child (const string& name);
-    virtual void move_child (Process *child_to_move, int spec, Process *child = 0) {}
+    virtual void   move_child (Process *child_to_move, int spec, Process *child = 0) {}
     virtual Process* find_component (const string&); // FIXME: should be find_child
-    static Process* find_component (Process* p, const string &path);
+    static  Process* find_component (Process* p, const string &path);
     // FIXME : low efficiency function cause by linear search. use with care !
-    virtual string find_component_name (Process* child);
+    virtual string   find_component_name (Process* child);
     void add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
-    map<string, Process*>& symtable () { return _symtable; }
+
+    typedef map<string, Process*> symtable_t;
+    symtable_t& symtable () { return _symtable; }
     virtual int get_cpnt_type () { return UNDEFINED_T; }
 
     const string& get_name () const;
@@ -154,7 +158,7 @@ namespace djnn {
     string _dbg_info;
 
   protected:
-    map<string, Process*> _symtable;
+    symtable_t _symtable;
     string _name;
     Process *_parent;
     Process *_state_dependency;
@@ -178,61 +182,28 @@ namespace djnn {
         BINDING_ACTION_MASK       = 0b1  << BINDING_ACTION_SHIFT
     };
 
-    enum bit_value {
-        MODEL_FALSE                   = 0b0  << MODEL_SHIFT ,
-        MODEL_TRUE                    = 0b1  << MODEL_SHIFT ,
-
-        ACTIVATION_FLAG_NONE          = 0b00 << ACTIVATION_FLAG_SHIFT ,
-        ACTIVATION_FLAG_ACTIVATION    = 0b01 << ACTIVATION_FLAG_SHIFT ,
-        ACTIVATION_FLAG_DEACTIVATION  = 0b10 << ACTIVATION_FLAG_SHIFT ,
-
-        ACTIVATION_STATE_ACTIVATING   = 0b00 << ACTIVATION_STATE_SHIFT ,
-        ACTIVATION_STATE_ACTIVATED    = 0b01 << ACTIVATION_STATE_SHIFT ,
-        ACTIVATION_STATE_DEACTIVATING = 0b10 << ACTIVATION_STATE_SHIFT ,
-        ACTIVATION_STATE_DEACTIVATED  = 0b11 << ACTIVATION_STATE_SHIFT ,
-
-        BINDING_ACTION_ACTIVATE       = 0b0  << BINDING_ACTION_SHIFT ,
-        BINDING_ACTION_DEACTIVATE     = 0b1  << BINDING_ACTION_SHIFT
-    };
-
-    void set_flag    (bit_mask MASK, bit_value VALUE) { _bitset = (_bitset & ~MASK) |  VALUE; }
-    bool is_flag_set (bit_mask MASK, bit_value VALUE) { return    (_bitset &  MASK) == VALUE; }
+    int  get_bitset  (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
+    void set_bitset  (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
 
   public:
-    // model
-    void set_is_model (bool v)        { if(v) set_is_model (); else (unset_is_model());   }
-    void set_is_model ()              {        set_flag    (MODEL_MASK, MODEL_TRUE);  }
-    void unset_is_model ()            {        set_flag    (MODEL_MASK, MODEL_FALSE); }
-    bool is_model ()                  { return is_flag_set (MODEL_MASK, MODEL_TRUE);  }
+    bool get_is_model () const              { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
+    void set_is_model (bool VALUE)          {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
 
-    // (future?) activation flag
-    void unset_activation_flag ()     {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
-    bool is_unset_activation_flag ()  { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
-    bool is_set_activation_flag ()    { return !is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_NONE); }
+    activation_e get_activation_flag () const        { return static_cast<activation_e>      (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
+    void set_activation_flag (activation_e VALUE) {                                           set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, VALUE); }
 
-    void request_activation ()        {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_ACTIVATION); }
-    bool is_activation_requested ()   { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_ACTIVATION); }
+    activation_state_e get_activation_state () const { return static_cast<activation_state_e>(get_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT)); }
+    void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, VALUE); }
 
-    void request_deactivation ()      {         set_flag    (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_DEACTIVATION);  }
-    bool is_deactivation_requested () { return  is_flag_set (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_DEACTIVATION);  }
-
-    // activation state
-    void set_activating ()            {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATING); }
-    bool is_activating ()             { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATING); }
-    void set_activated ()             {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATED); }
-    bool is_activated ()              { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_ACTIVATED); }
-
-    void set_deactivating ()          {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATING); }
-    bool is_deactivating ()           { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATING); }
-    void set_deactivated ()           {         set_flag    (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATED); }
-    bool is_deactivated ()            { return  is_flag_set (ACTIVATION_STATE_MASK, ACTIVATION_STATE_DEACTIVATED); }
-
-    bool somehow_activating ()        { return    (_bitset & ACTIVATION_STATE_MASK) < ACTIVATION_STATE_DEACTIVATING; }
-    bool somehow_deactivating ()      { return    (_bitset & ACTIVATION_STATE_MASK) > ACTIVATION_STATE_ACTIVATED;    }
+  public:
+    bool is_activated ()         const { return  get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test
+    bool is_deactivated ()       const { return  get_activation_state () == DEACTIVATED; }
+    bool somehow_activating ()   const { return  get_activation_state () <= ACTIVATED; }
+    bool somehow_deactivating () const { return  get_activation_state () >= DEACTIVATING; }
 
     void do_something_according_to_activation_flag () {
-        if(is_set_activation_flag ()) {
-            if (is_activation_requested ()) activation ();
+        if (get_activation_flag () != NONE_ACTIVATION) {
+            if (get_activation_flag () == ACTIVATION) activation ();
             else deactivation ();
         }
     }
@@ -246,12 +217,12 @@ namespace djnn {
     virtual ~Action () {}
   protected:
     virtual bool pre_activate () override {
-      if ((_parent != 0 && !_parent->somehow_activating() ))
+      if ((_parent != 0 && !_parent->somehow_activating () ))
         return false;
-      set_activating ();
+      set_activation_state(ACTIVATING);
       return true;
     }
-    void post_activate () override { notify_activation (); set_deactivated (); }
+    void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
   };
 
   void alias_children (Process *p, Process *to);
@@ -260,5 +231,5 @@ namespace djnn {
   inline Process* find (Process *p) { return p; }
   inline Process* find (Process *p, const string& path) { return p->find_component (path); }
   inline Process* find (const string& path) { return Process::find_component (nullptr, path); }
-  inline Process* clone (Process *p) { return p->clone(); }
+  inline Process* clone (Process *p) { return p->clone (); }
 }

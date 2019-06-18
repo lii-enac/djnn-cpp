@@ -1359,14 +1359,14 @@ namespace djnn
   void
   RefLinearGradient::activate_children ()
   {
-    _lg->request_activation ();
-    _lg->transforms ()->request_activation ();
+    _lg->set_activation_flag (ACTIVATION);
+    _lg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _lg->transforms ()->children ()) {
-      t->request_activation ();
+      t->set_activation_flag (ACTIVATION);
     }
-    _lg->stops ()->request_activation ();
+    _lg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _lg->stops ()->children ()) {
-      s->request_activation ();
+      s->set_activation_flag (ACTIVATION);
     }
   }
 
@@ -1568,14 +1568,14 @@ namespace djnn
   void
   RefRadialGradient::activate_children ()
   {
-    _rg->request_activation ();
-    _rg->transforms ()->request_activation ();
+    _rg->set_activation_flag (ACTIVATION);
+    _rg->transforms ()->set_activation_flag (ACTIVATION);
     for (auto t : _rg->transforms ()->children ()) {
-      t->request_activation ();
+      t->set_activation_flag (ACTIVATION);
     }
-    _rg->stops ()->request_activation ();
+    _rg->stops ()->set_activation_flag (ACTIVATION);
     for (auto s : _rg->stops ()->children ()) {
-      s->request_activation ();
+      s->set_activation_flag (ACTIVATION);
     }
   }
 
