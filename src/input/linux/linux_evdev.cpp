@@ -15,6 +15,7 @@
 #include "linux_input.h"
 #include "../../core/utils/error.h"
 #include "../../core/ontology/coupling.h"
+#include "../../core/execution/graph.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
