@@ -18,6 +18,7 @@
 #include "../../core/tree/set.h"
 #include "../../core/ontology/coupling.h"
 #include "../../core/utils/error.h"
+#include "../../core/execution/graph.h"
 #include <string.h>
 
 #include <fcntl.h>
