@@ -97,5 +97,5 @@ namespace djnn
   };
   void
   init_xml ();
-
+  inline Process* loadFromXML (const std::string &uri) { return XML::djnLoadFromXML (uri); }
 }
