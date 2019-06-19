@@ -72,47 +72,82 @@ namespace djnn
     }
   }
 
+  // void
+  // Coupling::propagate_activation ()
+  // {
+  //   if (get_immediate_processing ())
+  //     process_immediately ();
+  //   else if (is_enabled ()) {
+  //     _dst->set_activation_source (_src);
+  //     _dst->set_data (_data);
+  //     _dst->exec(get_dst_activation_flag());
+  //     _dst->coupling_activation_hook ();
+  //   }
+  // }
+
+  // void
+  // Coupling::propagate_deactivation ()
+  // {
+  //   if (get_immediate_processing ())
+  //     process_immediately ();
+  //   else if (is_enabled ()) {
+  //     _dst->set_activation_source (_src);
+  //     _dst->set_data (_data);
+  //     _dst->exec(get_dst_activation_flag());
+  //     _dst->coupling_deactivation_hook ();
+  //   }
+  // }
+
+  // void
+  // Coupling::process_immediately ()
+  // {
+  //   if (is_enabled ()) {
+  //     _dst->set_activation_source (_src);
+  //     _dst->set_data (_data);
+
+  //     if ( get_dst_activation_flag () == ACTIVATION ) {
+  //       _dst->activation ();
+  //       _dst->coupling_activation_hook ();
+  //     }
+  //     else if ( get_dst_activation_flag () == DEACTIVATION ) {
+  //       _dst->deactivation ();
+  //       _dst->coupling_deactivation_hook ();
+  //     }
+  //   }
+  // }
+
   void
   Coupling::propagate_activation ()
   {
-    if (get_immediate_processing ())
-      process_immediately ();
-    else if (is_enabled ()) {
-      _dst->set_activation_source (_src);
-      _dst->set_data (_data);
-      _dst->exec(get_dst_activation_flag());
-      _dst->coupling_activation_hook ();
+    //if (!is_enabled ()) return; // useless already tested elsewhere
+    _dst->set_activation_source (_src);
+    _dst->set_data (_data);
+    if (get_immediate_processing ()) {
+      _dst->activation ();
     }
+    else {
+      _dst->exec(get_dst_activation_flag());
+    }
+    _dst->coupling_activation_hook ();
   }
 
   void
   Coupling::propagate_deactivation ()
   {
-    if (get_immediate_processing ())
-      process_immediately ();
-    else if (is_enabled ()) {
-      _dst->set_activation_source (_src);
-      _dst->set_data (_data);
-      _dst->exec(get_dst_activation_flag());
-      _dst->coupling_deactivation_hook ();
+    //if (!is_enabled ()) return; // useless already tested elsewhere
+    _dst->set_activation_source (_src);
+    _dst->set_data (_data);
+    if (get_immediate_processing ()) {
+      _dst->deactivation ();
     }
+    else {
+      _dst->exec(get_dst_activation_flag());
+    }
+    _dst->coupling_deactivation_hook ();
   }
 
   void
   Coupling::process_immediately ()
   {
-    if (is_enabled ()) {
-      _dst->set_activation_source (_src);
-      _dst->set_data (_data);
-
-      if ( get_dst_activation_flag () == ACTIVATION ) {
-        _dst->activation ();
-        _dst->coupling_activation_hook ();
-      }
-      else if ( get_dst_activation_flag () == DEACTIVATION ) {
-        _dst->deactivation ();
-        _dst->coupling_deactivation_hook ();
-      }
-    }
   }
 }
