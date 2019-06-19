@@ -34,7 +34,7 @@ namespace djnn {
   };
 
   // activation types
-  enum activation_e { // FIXME: should be renamed as activation request
+  enum activation_flag_e {
     NONE_ACTIVATION,
     ACTIVATION, // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2
     DEACTIVATION
@@ -76,7 +76,7 @@ namespace djnn {
     // main public API
     void activation ();   // FIXME: should be activate ()
     void deactivation (); // FIXME: should be deactivate ()
-    virtual void exec (activation_e flag) {
+    virtual void exec (activation_flag_e flag) {
         set_activation_flag (flag);
     }
 
@@ -182,29 +182,32 @@ namespace djnn {
         BINDING_ACTION_MASK       = 0b1  << BINDING_ACTION_SHIFT
     };
 
-    int  get_bitset  (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
-    void set_bitset  (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
+    int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
+    void set_bitset (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
 
   public:
-    bool get_is_model () const              { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
-    void set_is_model (bool VALUE)          {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
+    bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
+    void set_is_model (bool VALUE) {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
 
-    activation_e get_activation_flag () const        { return static_cast<activation_e>      (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
-    void set_activation_flag (activation_e VALUE) {                                           set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, VALUE); }
+    activation_flag_e get_activation_flag () const   { return static_cast<activation_flag_e> (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
+    void set_activation_flag (activation_flag_e VALUE) {                                      set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, VALUE); }
 
     activation_state_e get_activation_state () const { return static_cast<activation_state_e>(get_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT)); }
     void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, VALUE); }
 
   public:
-    bool is_activated ()         const { return  get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test
-    bool is_deactivated ()       const { return  get_activation_state () == DEACTIVATED; }
-    bool somehow_activating ()   const { return  get_activation_state () <= ACTIVATED; }
-    bool somehow_deactivating () const { return  get_activation_state () >= DEACTIVATING; }
+    //bool is_activation_requested ()   const { return  get_activation_flag ()  == ACTIVATION;}
+    //bool is_deactivation_requested () const { return  get_activation_flag ()  == DEACTIVATION;}
+    bool is_activated ()              const { return  get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test suite
+    bool is_deactivated ()            const { return  get_activation_state () == DEACTIVATED; }
+    bool somehow_activating ()        const { return  get_activation_state () <= ACTIVATED; }
+    bool somehow_deactivating ()      const { return  get_activation_state () >= DEACTIVATING; }
 
     void do_something_according_to_activation_flag () {
-        if (get_activation_flag () != NONE_ACTIVATION) {
-            if (get_activation_flag () == ACTIVATION) activation ();
-            else deactivation ();
+        switch(get_activation_flag ()) {
+          case NONE_ACTIVATION: break;
+          case ACTIVATION:      activation (); break;
+          case DEACTIVATION:    deactivation (); break;
         }
     }
 

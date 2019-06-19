@@ -319,7 +319,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:incr");
     AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->text_attribute ("model", get_is_model () ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

@@ -79,12 +79,9 @@ namespace djnn
     }
     c->set_parent (this);
     add_symbol (name, c);
-    //if (get_state () == activated && !c->is_model ()) {
-    //if (is_activated () && !c->is_model ()) {
-    if (get_activation_state () == ACTIVATED && !c->get_is_model ()) {
+    
+    if (get_activation_state () == ACTIVATED && !c->is_model ()) {
       c->activation ();
-    //} else if (c->get_state () == activated) {
-    //} else if (c->is_activated ()) {
     } else if (c->get_activation_state () == ACTIVATED) {
       c->deactivation ();
     }
@@ -170,7 +167,7 @@ namespace djnn
      * the dynamic modification of children list */
     unsigned int i = 0;
     while (i < _children.size ()) {
-      if (!_children[i]->get_is_model ()) {
+      if (!_children[i]->is_model ()) {
         _children[i]->activation ();
       }
       i++;

@@ -52,7 +52,7 @@ namespace djnn
     AbstractSerializer::serializer->start ("core:exit");
     AbstractSerializer::serializer->text_attribute ("id", _name);
     AbstractSerializer::serializer->int_attribute ("value", _value->get_value ());
-    AbstractSerializer::serializer->text_attribute ("model", get_is_model () ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

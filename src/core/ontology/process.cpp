@@ -264,14 +264,14 @@ namespace djnn
   void
   Process::notify_activation ()
   {
-    couplings_t couplings_cpy = _activation_couplings;
+    couplings_t couplings_copy = _activation_couplings;
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : couplings_cpy) {
+    for (auto& coupling : couplings_copy) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
@@ -283,14 +283,14 @@ namespace djnn
   void
   Process::notify_deactivation ()
   {
-    couplings_t couplings_cpy = _deactivation_couplings;
+    couplings_t couplings_copy = _deactivation_couplings;
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
      * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : couplings_cpy) {
+    for (auto& coupling : couplings_copy) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
