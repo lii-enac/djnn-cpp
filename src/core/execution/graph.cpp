@@ -340,11 +340,11 @@ namespace djnn
         auto * p = v->get_process ();
         p->do_something_according_to_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
-    }
-    if (!_sorted) {
-      sort ();
-      is_end = false;
-    }
+      }
+      if (!_sorted) {
+        sort ();
+        is_end = false;
+      }
    }
    if (!_to_delete.empty ()) {
     for (auto p: _to_delete)
@@ -355,16 +355,16 @@ namespace djnn
    //graph_mutex.unlock ();
 
 #if _PERF_TEST
-      // print in GREEN
-      cerr << "\033[1;32m" << endl;
-      double time = t2 ("GRAPH_EXEC : ");
-      graph_counter = graph_counter + 1;
-      graph_total = graph_total + time ;
-      graph_average = graph_total / graph_counter;
-      cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl;
-      cerr << "GRAPH size: " << _vertices.size () << endl;
-      cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
-      cerr << "\033[0m"  << endl;
+    // print in GREEN
+    cerr << "\033[1;32m" << endl;
+    double time = t2 ("GRAPH_EXEC : ");
+    graph_counter = graph_counter + 1;
+    graph_total = graph_total + time ;
+    graph_average = graph_total / graph_counter;
+    cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl;
+    cerr << "GRAPH size: " << _vertices.size () << endl;
+    cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+    cerr << "\033[0m"  << endl;
 #endif
   }
 
