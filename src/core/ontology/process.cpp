@@ -264,7 +264,7 @@ namespace djnn
   void
   Process::notify_activation ()
   {
-    couplings_t couplings_copy = _activation_couplings;
+    couplings_t& couplings_copy = _activation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
@@ -283,7 +283,7 @@ namespace djnn
   void
   Process::notify_deactivation ()
   {
-    couplings_t couplings_copy = _deactivation_couplings;
+    couplings_t& couplings_copy = _deactivation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
