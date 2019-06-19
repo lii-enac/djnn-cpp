@@ -26,7 +26,7 @@ using namespace std;
 
 /** regexp function **/
 
-static const char* __SkimRegex (const char* p, int* nb)
+static const char* _skim_regex (const char* p, int* nb)
 {
   enum states {NORMAL, QUOTED, SUBEXP, BRACKETED};
   const char* q = p;
@@ -89,7 +89,7 @@ static const char* __SkimRegex (const char* p, int* nb)
 
 #ifdef __IVY_DEBUG__
 static void
-__ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
+_ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
   map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
   cout << endl << "MAP _in_map:" << endl;
@@ -109,7 +109,7 @@ __ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
 /** IVY CALLBACK **/
 
-static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char **argv )
+static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
   djnn::get_exclusive_access (DBG_GET);
 
@@ -118,9 +118,9 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   map<string, vector<pair<int, djnn::TextProperty*>>>* in_map =  keypair->second;
 
 #ifdef __IVY_DEBUG__
-  cout <<  endl <<"__on_ivy_Message" << endl;
+  cout <<  endl <<"_on_ivy_message" << endl;
   cout <<  "regexp: '" << regexp << "'" << endl;
-  __ivy_debug_mapping (*in_map);
+  _ivy_debug_mapping (*in_map);
 #endif
 
   map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
@@ -140,7 +140,7 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   
 #ifdef __IVY_DEBUG__
   cout << "---------------------" << endl;
-  cout << "__on_ivy_Message - "  << endl;
+  cout << "_on_ivy_message - "  << endl;
   cout << "argc " << argc  << endl ;
   for (int i=0; i < argc ; i++){
     cout << "argv[" << i << "] - " << string(argv[i]) << endl;
@@ -154,7 +154,7 @@ static void __on_ivy_Message ( IvyClientPtr app, void *user_data, int argc, char
   djnn::release_exclusive_access (DBG_REL);
 }
 
-static void __on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, IvyApplicationEvent event )
+static void _on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, IvyApplicationEvent event )
 {
   djnn::IvyAccess* ivy = (djnn::IvyAccess*) user_data;
 
@@ -261,13 +261,13 @@ IvyAccess::deactivate ()
   IvyStop();
 }
 
-static void  __beforeSelect (void *data){
+static void  _before_select (void *data){
   djnn::get_exclusive_access (DBG_GET);
   GRAPH_EXEC;    
   djnn::release_exclusive_access (DBG_REL);
 }
 
-static void  __afterSelect (void *data){
+static void  _after_select (void *data){
   //djnn::get_exclusive_access (DBG_REL);
 }
 
@@ -282,12 +282,12 @@ IvyAccess::run ()
     _out_c->enable();
     //djnn::release_exclusive_access (DBG_REL);
 
-    IvyInit (_appname.c_str(), _ready_message.c_str(), __on_ivy_arriving_leaving_agent, this, 0, 0);
+    IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
 
       /* get exclusive_access - before select */
-    IvySetBeforeSelectHook(__beforeSelect,0);
+    IvySetBeforeSelectHook(_before_select,0);
       /* release exclusive_access - after select */
-    IvySetAfterSelectHook(__afterSelect,0);
+    IvySetAfterSelectHook(_after_select,0);
 
     IvyStart(_bus.c_str());
     while (!get_please_stop ()) {
@@ -324,7 +324,7 @@ IvyAccess::find_component (const string& key)
 
       /* build the substring */
       int nb_subexp, len = 0;
-      const char* re_end = __SkimRegex (key.substr (3).c_str(), &nb_subexp);
+      const char* re_end = _skim_regex (key.substr (3).c_str(), &nb_subexp);
       string full_exp = key.substr (3);
       string regexp = full_exp;
       if(*re_end != '\0'){
@@ -343,7 +343,7 @@ IvyAccess::find_component (const string& key)
       if (mit == _in_map.end ()) {
         /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
         pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* regexp_keypair = new pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> (regexp, &_in_map);
-        IvyBindMsg(__on_ivy_Message, regexp_keypair, "%s", regexp.c_str() );
+        IvyBindMsg(_on_ivy_message, regexp_keypair, "%s", regexp.c_str() );
       }
 
       /* register in _in_map */  
@@ -351,7 +351,7 @@ IvyAccess::find_component (const string& key)
       
      
 #ifdef __IVY_DEBUG__
-       __ivy_debug_mapping (_in_map);
+       _ivy_debug_mapping (_in_map);
       cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
       cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif

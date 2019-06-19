@@ -220,39 +220,35 @@ namespace djnn
   PausedConnector::init_pausedconnector (Process *src, string ispec, Process *dst, string dspec)
   {
     if (src == 0) {
-      error (
-          this,
-          "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec
-              + ")");
+      error ( this, "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
     if (dst == 0) {
-      error (
-          this,
-          "dst argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec
-              + ")");
+      error ( this, "dst argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_src = src->find_component (ispec);
+
     if (c_src == 0) {
       error (this, "source not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
     Process* c_dst = dst->find_component (dspec);
+
     if (c_dst == 0) {
       error (this,
-             "destination not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+       "destination not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
     _src = dynamic_cast<AbstractProperty*> (c_src);
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
       warning (this,
-               "invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")");
+       "invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")");
     }
 
     _action = new Connector::ConnectorAction (
-        this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
+      this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
     _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
 
     Graph::instance ().add_edge (_src, _dst);

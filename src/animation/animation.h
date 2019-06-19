@@ -17,8 +17,6 @@
 #include <iostream>
 #include "../base/geometry.h"
 
-using namespace std;
-
 namespace djnn
 {
 

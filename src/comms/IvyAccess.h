@@ -68,7 +68,6 @@ namespace djnn
     string _appname;
     string _ready_message;
 
-    //map<string, vector<tuple<int, TextProperty*>>> _in_map; 
     map<string, vector<pair<int, TextProperty*>>> _in_map;   
     TextProperty* _out;
     Coupling*  _out_c;

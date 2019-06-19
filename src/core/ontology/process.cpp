@@ -198,7 +198,7 @@ namespace djnn
       return _parent;
     map<string, Process*>::iterator it = _symtable.find (key);
     if (it != _symtable.end ()) {
-      return (it->second);
+      return it->second;
     }
     return 0;
   }

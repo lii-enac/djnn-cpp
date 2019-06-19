@@ -129,7 +129,7 @@ namespace djnn
   {
     for (auto v : _vertices) {
       if (v->get_process () == c)
-        return (v);
+        return v;
     }
     return nullptr;
   }
@@ -140,7 +140,7 @@ namespace djnn
     Vertex* v = new Vertex (c);
     _vertices.push_back (v);
     _sorted = false;
-    return (v);
+    return v;
   }
 
   void
@@ -276,7 +276,7 @@ namespace djnn
   bool
   cmp_vertices (Vertex* v1, Vertex *v2)
   {
-    return (v2->get_timestamp () < v1->get_timestamp ());
+    return v2->get_timestamp () < v1->get_timestamp ();
   }
 
   void

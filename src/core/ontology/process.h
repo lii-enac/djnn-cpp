@@ -217,7 +217,7 @@ namespace djnn {
     virtual ~Action () {}
   protected:
     virtual bool pre_activate () override {
-      if ((_parent != 0 && !_parent->somehow_activating () ))
+      if (_parent != 0 && !_parent->somehow_activating () )
         return false;
       set_activation_state(ACTIVATING);
       return true;

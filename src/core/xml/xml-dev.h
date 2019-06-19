@@ -18,20 +18,20 @@
 #include "../utils/utils-dev.h"
 #include "xml.h"
 
-#include <map>
-
 using namespace djnn;
+
+#include <map>
 
 class DJNComponentAttrs_Hash
 {
 private:
   static inline unsigned int hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *djn_DJNComponentAttrsLookup (const char *str, unsigned int len);
+  static djnn::djn_XMLAttrHandler *djn_DJNComponentAttrsLookup (const char *str, unsigned int len);
 };
 
-extern djn_XMLAttrHandler*
-djn_DJNComponentAttrsLookup (const char*, gperf_t);
+extern djnn::djn_XMLAttrHandler*
+djn_DJNComponentAttrsLookup (const char*, djnn::gperf_t);
 
 
 typedef struct djn_ComponentArgs_t
@@ -63,8 +63,8 @@ extern struct djn_ModuleArgs
   const char *name;
 } djn_ModuleArgs;
 
-extern map<string, Process*> djn__IdFillManager;
-extern map<string, Process*> djn__IdClipManager;
+extern std::map<std::string, djnn::Process*> djn__IdFillManager;
+extern std::map<std::string, djnn::Process*> djn__IdClipManager;
 
 extern void
 djn__InitXMLLoaders ();

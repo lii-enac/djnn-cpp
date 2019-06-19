@@ -97,8 +97,8 @@ namespace djnn
     Spike* move = new Spike (this, "move");
     new Spike (this, "enter");
     new Spike (this, "leave");
-    Process* s = new List (this, "touches");
-    s->set_activation_state (ACTIVATED);
+    Process* touches = new List (this, "touches");
+    touches->set_activation_state (ACTIVATED);
     DoubleProperty* px = new DoubleProperty (0);
     DoubleProperty* py = new DoubleProperty (0);
     DoubleProperty* mx = new DoubleProperty (0);
