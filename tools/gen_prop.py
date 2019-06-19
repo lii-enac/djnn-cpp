@@ -186,7 +186,6 @@ def just_do_it(dc):
         PROP_GETTERS += "\t\t"+getter_string % d + "\n"
         CREATE_PROPERTIES += get_or_create_property_string % d
 
-    # print (PROP_GETTERS)
     # print (CREATE_PROPERTIES)
 
     DECL_PROPS_CALL_DEF = ', '.join([p.type + ' ' + p.name for p in dc.props])
@@ -239,7 +238,6 @@ def just_do_it(dc):
 
     filename = dc.name.lower()
     path = dc.path + '/' + filename
-    # path = filename
     open (path+'.h', 'w').write(decl_content)
     open (path+'.cpp', 'w').write(def_content)    
 
