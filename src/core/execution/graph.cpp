@@ -232,7 +232,7 @@ namespace djnn
   }
 
   void
-  Graph::print_graph ()
+  Graph::print_graph () const
   {
     cout << " --- GRAPH --- " << endl ;
     for (auto v : _vertices) {
@@ -242,7 +242,7 @@ namespace djnn
   }
 
   void
-  Graph::print_sorted ()
+  Graph::print_sorted () const
   {
     for (auto v : _sorted_vertices) {
       if (v->get_process ()->get_parent())
@@ -278,7 +278,7 @@ namespace djnn
   }
 
   bool
-  cmp_vertices (Vertex* v1, Vertex *v2)
+  cmp_vertices (const Vertex* v1, const Vertex *v2)
   {
     return v2->get_timestamp () < v1->get_timestamp ();
   }

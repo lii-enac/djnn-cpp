@@ -40,18 +40,19 @@ namespace djnn
     const vertices_t& get_edges () const { return _edges; }
     int get_count_egdes_in () { return _count_egdes_in; }
 
-    void set_mark (int m) { _mark = m; }
-    int get_mark () const { return _mark; }
+    void invalidate   () { _is_invalid = true; }
+    bool is_invalid   () { return _is_invalid; }
+
+    void set_mark (int m)  { _mark = m; }
+    int  get_mark () const { return _mark; }
 
     void set_timestamp (int date) { _timestamp = date; };
-    int get_timestamp () const { return _timestamp; }
+    int  get_timestamp () const   { return _timestamp; }
 
-    Process* get_process () { return _vertex; }
+    Process*       get_process ()       { return _vertex; }
     const Process* get_process () const { return _vertex; }
 
     void print_vertex () const;
-    void invalidate () { _is_invalid = true; }
-    bool is_invalid () { return _is_invalid; }
 
   private:
     Process* _vertex;
@@ -76,10 +77,10 @@ namespace djnn
     void exec ();
     void clear ();
     void add_process_to_delete (Process *p) { _to_delete.push_back (p); }
-    const Vertex::vertices_t& get_sorted () { return _sorted_vertices; }
+    const Vertex::vertices_t& get_sorted () const { return _sorted_vertices; }
 
-    void print_graph ();
-    void print_sorted (); 
+    void print_graph  () const;
+    void print_sorted () const; 
 
   private:
     static Graph* _instance;
