@@ -34,7 +34,7 @@ namespace djnn {
     AbstractProperty (Process* parent, const string &name, int nm=notify_none) : Process (parent, name), _notify_mask (nm) {}
     AbstractProperty () : Process (), _notify_mask (notify_none) {}
     virtual ~AbstractProperty () {};
-    virtual int get_cpnt_type () override { return PROPERTY_T; }
+    virtual process_type_e get_cpnt_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () = 0;
     bool is_activable () {
       return get_parent () == 0 || get_parent ()->somehow_activating ();

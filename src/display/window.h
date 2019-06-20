@@ -46,7 +46,7 @@ namespace djnn
     Window (const std::string& title, double x, double y, double w, double h);
     Window (Process *p, const std::string& n, const std::string& title, double x, double y, double w, double h);
     virtual ~Window ();
-    virtual int get_cpnt_type () override { return WINDOW_T; }
+    virtual process_type_e get_cpnt_type () const override { return WINDOW_T; }
 
     DoubleProperty* pos_x () { return _pos_x; }
     DoubleProperty* pos_y () { return _pos_y; }

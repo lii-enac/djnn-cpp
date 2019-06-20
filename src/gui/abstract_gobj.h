@@ -44,10 +44,10 @@ namespace djnn
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr), _impl (nullptr) {
-      if (!gui_initialized)  warning (this, "Module GUI not initialized");
+      if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
-    virtual int get_cpnt_type () override { return GOBJ_T; }
+    virtual process_type_e get_cpnt_type () const override { return GOBJ_T; }
     Window*& frame () { return _frame; }
     void activate () override;
     void deactivate () override;

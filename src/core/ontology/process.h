@@ -23,7 +23,7 @@ namespace djnn {
   using namespace std;
 
   // process types
-  enum property_e {
+  enum process_type_e {
     UNDEFINED_T,
     PROPERTY_T,
     COMPONENT_T,
@@ -72,6 +72,7 @@ namespace djnn {
     Process (Process *parent, const string& name, bool model = false);
     Process (bool model = false);
     virtual ~Process ();
+    virtual process_type_e get_cpnt_type () const { return UNDEFINED_T; }
 
     // main public API
     void activation ();   // FIXME: should be activate ()

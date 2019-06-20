@@ -47,7 +47,7 @@ namespace djnn {
   public:
     Switch (Process *parent, const string &name, const string &initial);
     Switch (const string &initial);
-    virtual int get_cpnt_type () override { return SWITCH_T; }
+    virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     void activate () override;
     void deactivate () override;
     void draw () override;
