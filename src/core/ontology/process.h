@@ -20,7 +20,9 @@
 #include <string>
 
 namespace djnn {
-  using namespace std;
+  using std::string;
+  using std::vector;
+  using std::map;
 
   // process types
   enum process_type_e {

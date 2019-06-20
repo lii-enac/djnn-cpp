@@ -37,6 +37,10 @@ namespace djnn
 
   static std::mutex graph_mutex;
 
+  using std::cout;
+  using std::cerr;
+  using std::endl;
+
   enum
   {
     NOT_MARKED, BROWSING, MARKED
