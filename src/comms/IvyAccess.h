@@ -19,8 +19,6 @@
 #include "../core/ontology/process.h"
 #include "../core/syshook/external_source.h"
 
-#include <iostream>
-
 //#define __IVY_DEBUG__
 
 namespace djnn

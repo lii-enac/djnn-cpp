@@ -15,14 +15,11 @@
 
 #pragma once
 
-//#include "../backend.h"
-
-#include <iostream>
-#include <QtWidgets/QWidget>
-
 #include "../../core/syshook/external_source.h"
 #include "../../display/window.h"
 #include "../qt/qt_window.h"
+
+#include <QtWidgets/QWidget>
 
 namespace djnn {
 

@@ -16,10 +16,10 @@
 #pragma once
 
 #include "component.h"
-#include <list>
-#include <iostream>
 #include "ref_property.h"
 #include "int_property.h"
+
+#include <list>
 
 namespace djnn {
   using namespace std;

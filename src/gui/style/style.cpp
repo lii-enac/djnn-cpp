@@ -21,6 +21,8 @@
 #include "style.h"
 #include "../../core/ontology/coupling.h"
 
+#include <iostream>
+
 namespace djnn
 {
 

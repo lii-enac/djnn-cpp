@@ -27,6 +27,8 @@
 #include <array>
 #include <cmath>
 
+#include <iostream>
+
 namespace djnn
 {
   AbstractTransformation::AbstractTransformation (Process *p, const string &n) :

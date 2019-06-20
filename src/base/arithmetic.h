@@ -16,7 +16,6 @@
 #pragma once
 
 #include "operators.h"
-#include <iostream>
 
 namespace djnn
 {
@@ -145,7 +144,7 @@ private:
      int l = ((IntProperty*) _left)->get_value ();
      int r = ((IntProperty*) _right)->get_value ();
      if (r == 0) {
-      cerr << "Warning: modulo per 0\n";
+      //cerr << "Warning: modulo per 0\n";
       return;
     }
     _result->set_value (l % r, true);

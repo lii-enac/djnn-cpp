@@ -18,7 +18,7 @@
 
 #include "../core/tree/double_property.h"
 #include "../core/ontology/process.h"
-#include <iostream>
+
 
 namespace djnn
 {

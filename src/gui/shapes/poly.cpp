@@ -23,6 +23,8 @@
 #include "../../core/tree/blank.h"
 #include "shapes.h"
 
+#include <iostream>
+
 using namespace std;
 
 namespace djnn {
