@@ -80,7 +80,7 @@ namespace djnn
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
     if (get_immediate_processing ()) {
-      _dst->activation ();
+      process_immediately ();
     }
     else {
       //_dst->exec(get_dst_activation_flag());
@@ -96,7 +96,7 @@ namespace djnn
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
     if (get_immediate_processing ()) {
-      _dst->deactivation ();
+      process_immediately ();
     }
     else {
       //_dst->exec(get_dst_activation_flag());
@@ -108,6 +108,14 @@ namespace djnn
   void
   Coupling::process_immediately ()
   {
+    if ( get_dst_activation_flag () == ACTIVATION ) {
+      _dst->activation ();
+      _dst->coupling_activation_hook ();
+    }
+    else if ( get_dst_activation_flag () == DEACTIVATION ) {
+      _dst->deactivation ();
+      _dst->coupling_deactivation_hook ();
+    }
   }
 
   // void
