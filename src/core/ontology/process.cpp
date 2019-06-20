@@ -76,37 +76,28 @@ namespace djnn
   }
 
   Process::Process (Process* parent, const string& name, bool model) :
-      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
+      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)
   {
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
-    _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
-    if (_parent != nullptr)
-      _state_dependency = _parent->_state_dependency;
+    if (_parent != nullptr) _state_dependency = _parent->_state_dependency;
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
-    } else
+    } else {
       _dbg_info = "no debug info";
+    }
+    _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
   }
 
   Process::Process (bool model) :
-      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)//, _activation_state (deactivated)
+      Process(nullptr, "", model)
   {
-    set_is_model (model);
-    set_activation_flag (NONE_ACTIVATION);
-    set_activation_state (DEACTIVATED);
-    _name = "anonymous_" + to_string (++_nb_anonymous);
-    if (Context::instance ()->line () != -1) {
-      _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
-    } else
-      _dbg_info = "no debug info";
   }
 
   Process::~Process ()
   {
-    if (_vertex != nullptr)
-      _vertex->invalidate ();
+    if (_vertex != nullptr) _vertex->invalidate ();
   }
 
   void
