@@ -45,7 +45,7 @@ namespace djnn
   }
 
   Process::Process (bool model) :
-      Process(nullptr, "", model)
+      Process(nullptr, "  ", model)
   {
   }
 
@@ -107,7 +107,7 @@ namespace djnn
   bool
   Process::pre_deactivate ()
   {
-    if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (_parent != 0 && !_parent->somehow_deactivating() )) like pre_activate ?
+    if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (_parent != 0 && !_parent->somehow_deactivating() )) like pre_activate ? => OK
       return false;
     set_activation_state (DEACTIVATING);
     return true;
@@ -118,7 +118,7 @@ namespace djnn
   {
     notify_deactivation ();
     set_activation_state (DEACTIVATED);
-    set_activation_flag (NONE_ACTIVATION);
+    //set_activation_flag (NONE_ACTIVATION);
   }
 
   void
