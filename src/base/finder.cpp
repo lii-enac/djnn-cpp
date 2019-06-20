@@ -114,15 +114,13 @@ namespace djnn
     Graph::instance ().add_edge (_key, _action);
     Graph::instance ().add_edge (_action, _result);
 
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
     Process::finalize_construction ();
   }
 
   Finder::~Finder ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_key, _action);
     Graph::instance ().remove_edge (_action, _result);
     delete _cfind;

@@ -410,6 +410,21 @@ namespace djnn
   }
 
   void
+  add_state_dependency (Process *parent, Process *p)
+  {
+    if (parent && parent->state_dependency () != nullptr)
+      Graph::instance ().add_edge (parent->state_dependency (), p); 
+  }
+
+  void
+  remove_state_dependency (Process *parent, Process *p)
+  {
+    if (parent && parent->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (parent->state_dependency (), p);
+  }
+
+
+  void
   Process::serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
   
   Process*

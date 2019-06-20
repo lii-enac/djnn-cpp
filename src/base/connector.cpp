@@ -121,8 +121,7 @@ namespace djnn
       _c_src->disable ();
       if (_dst) {
         Graph::instance ().add_edge (_src, _dst);
-        if (_parent && _parent->state_dependency () != nullptr)
-          Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+        add_state_dependency (_parent, _dst);
         _has_coupling = true;
       }
     }
@@ -152,8 +151,7 @@ namespace djnn
 
   Connector::~Connector ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    remove_state_dependency (_parent, _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _c_src;
@@ -252,16 +250,14 @@ namespace djnn
     _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
 
     Graph::instance ().add_edge (_src, _dst);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+    add_state_dependency (_parent, _dst);
     _c_src->disable ();
 
   }
 
   PausedConnector::~PausedConnector ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    remove_state_dependency (_parent, _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _c_src;

@@ -71,8 +71,7 @@ namespace djnn
     Graph::instance().add_edge(_inY, _action);
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
 
     Process::finalize_construction ();
   }
@@ -80,8 +79,7 @@ namespace djnn
   ScreenToLocal::~ScreenToLocal () 
   {
 
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance().remove_edge(_inX, _action);
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);
@@ -157,8 +155,7 @@ namespace djnn
     Graph::instance().add_edge(_inY, _action);
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
 
     Process::finalize_construction ();
   }
@@ -166,8 +163,7 @@ namespace djnn
   LocalToScreen::~LocalToScreen () 
   {
 
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance().remove_edge(_inX, _action);
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);

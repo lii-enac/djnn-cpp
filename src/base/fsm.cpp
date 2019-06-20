@@ -263,8 +263,7 @@ namespace djnn
     _fsm_state = new TextProperty (this, "state", "");
     _initial = new TextProperty (this, "initial", "");
     /* Do we have to keep this edge? */
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _fsm_state);
+    add_state_dependency (_parent, _fsm_state);
     _state_dependency = _fsm_state;
   }
 
@@ -282,8 +281,7 @@ namespace djnn
 
   FSM::~FSM ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _fsm_state);
+    remove_state_dependency (_parent, _fsm_state);
 
     delete _initial;
     delete _fsm_state;

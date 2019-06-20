@@ -102,8 +102,7 @@ namespace djnn
       _update_dst->impl_activate ();
       _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);
+      add_state_dependency (_parent, _update_dst);
     } else {
       Process *f = dst->find_component (dspec);
       if (f == 0) {
@@ -212,8 +211,7 @@ namespace djnn
     if (_src && _dst) {
       Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+      add_state_dependency (_parent, _dst);
     }
   }
 
@@ -244,8 +242,7 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    remove_state_dependency (_parent, _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
@@ -278,8 +275,7 @@ namespace djnn
     _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
     Graph::instance ().add_edge (_src, _dst);
     if (_src && _dst) {
-      if (_parent && _parent->state_dependency () != nullptr)
-        Graph::instance ().add_edge (_parent->state_dependency (), _dst);
+      add_state_dependency (_parent, _dst);
     }
   }
 
@@ -311,8 +307,7 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _dst);
+    remove_state_dependency (_parent, _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;

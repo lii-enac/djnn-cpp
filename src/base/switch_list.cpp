@@ -104,8 +104,7 @@ namespace djnn
     Graph::instance ().add_edge (_index, _change_index_action);
     Graph::instance ().add_edge (_next_action, _index);
     Graph::instance ().add_edge (_previous_action, _index);*/
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _change_index_action);
+    add_state_dependency (_parent, _change_index_action);
     _state_dependency = _change_index_action;
   }
 
@@ -124,8 +123,7 @@ namespace djnn
 
   SwitchList::~SwitchList ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _change_index_action);
+    remove_state_dependency (_parent, _change_index_action);
 /*    Graph::instance ().remove_edge (_next, _next_action);
     Graph::instance ().remove_edge (_previous, _previous_action);
     Graph::instance ().remove_edge (_index, _change_index_action);

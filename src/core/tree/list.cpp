@@ -312,21 +312,17 @@ namespace djnn
     Graph::instance ().add_edge (_next, _next_action);
     Graph::instance ().add_edge (_previous, _previous_action);
     Graph::instance ().add_edge (_reset, _reset_action);
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (_parent->state_dependency (), _next_action);
-      Graph::instance ().add_edge (_parent->state_dependency (), _previous_action);
-      Graph::instance ().add_edge (_parent->state_dependency (), _reset_action);
-    }
+    add_state_dependency (_parent, _next_action);
+    add_state_dependency (_parent, _previous_action);
+    add_state_dependency (_parent, _reset_action);
     Process::finalize_construction ();
   }
 
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().remove_edge (_parent->state_dependency (), _next_action);
-      Graph::instance ().remove_edge (_parent->state_dependency (), _previous_action);
-      Graph::instance ().remove_edge (_parent->state_dependency (), _reset_action);
-    }
+    remove_state_dependency (_parent, _next_action);
+    remove_state_dependency (_parent, _previous_action);
+    remove_state_dependency (_parent, _reset_action);
     Graph::instance ().remove_edge (_next, _next_action);
     Graph::instance ().remove_edge (_previous, _previous_action);
     Graph::instance ().remove_edge (_reset, _reset_action);

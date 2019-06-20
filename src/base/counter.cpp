@@ -45,10 +45,8 @@ namespace djnn
     Graph::instance ().add_edge (_step, _action_step);
     Graph::instance ().add_edge (_action_step, _output);
 
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset);
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_step);
-    }
+    add_state_dependency (_parent, _action_reset);
+    add_state_dependency (_parent, _action_step);
     
     Process::finalize_construction ();
   }
@@ -76,17 +74,13 @@ namespace djnn
     Graph::instance ().add_edge (_step, _action_step);
     Graph::instance ().add_edge (_action_step, _output);
 
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_reset);
-      Graph::instance ().add_edge (_parent->state_dependency (), _action_step);
-    }
+    add_state_dependency (_parent, _action_reset);
+    add_state_dependency (_parent, _action_step);
   }
 
   Counter::~Counter () {
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action_reset);
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action_step);
-    }
+    remove_state_dependency (_parent, _action_reset);
+    remove_state_dependency (_parent, _action_step);
     Graph::instance ().remove_edge (_reset, _action_reset);
     Graph::instance ().remove_edge (_action_reset, _output);
     Graph::instance ().remove_edge (_step, _action_step);

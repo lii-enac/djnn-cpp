@@ -49,8 +49,7 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
+    add_state_dependency (_parent, _update_size);
     Process::finalize_construction ();
   }
 
@@ -74,8 +73,7 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
+    add_state_dependency (_parent, _update_size);
     Process::finalize_construction ();
   }
 
@@ -98,14 +96,12 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _update_size);
+    add_state_dependency (_parent, _update_size);
   }
 
   Text::~Text ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _update_size);
+    remove_state_dependency (_parent, _update_size);
     Graph::instance ().remove_edge (this->text(), _update_size);
     
     delete _update_size;

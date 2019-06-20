@@ -45,16 +45,14 @@ namespace djnn
     _state_dependency = _action;
     _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
     //Graph::instance ().add_edge (_branch_name, _action);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
 
     _cur_branch = nullptr;
   }
 
   Switch::~Switch ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     //Graph::instance ().remove_edge (_branch_name, _action);
    
     delete _c_branch;

@@ -277,8 +277,7 @@ namespace djnn
     _delta = new DoubleProperty (this, "delta", 1);
     _state = new DoubleProperty (this, "state", 0);
     Graph::instance ().add_edge (this, _state);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _state);
+    add_state_dependency (_parent, _state);
     set_is_model (isModel);
     return 1;
   }
@@ -297,8 +296,7 @@ namespace djnn
 
   Incr::~Incr ()
   { 
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _state);
+    remove_state_dependency (_parent, _state);
     Graph::instance ().remove_edge (this, _state);
 
     delete _state;
@@ -371,15 +369,13 @@ namespace djnn
     _c_input->disable ();
     Graph::instance ().add_edge (_input, _action);
     Graph::instance ().add_edge (_action, _result);
-    if (parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
     Process::finalize_construction ();
   }
 
   AdderAccumulator::~AdderAccumulator ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_action, _result);
 

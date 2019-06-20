@@ -32,15 +32,13 @@ namespace djnn
     c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     c_input->disable ();
     /* Graph::instance ().add_edge (_input, _action);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action); */
+    add_state_dependency (_parent, _action); */
   }
 
   TextPrinter::~TextPrinter ()
   {
     /*
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_input, _action);
      */
     delete c_input;
@@ -141,14 +139,12 @@ namespace djnn
     Graph::instance ().add_edge (_input, _action);
     Graph::instance ().add_edge (_decimal, _action);
     Graph::instance ().add_edge (_action, _output);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
   }
 
   DoubleFormatter::~DoubleFormatter ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_decimal, _action);
     Graph::instance ().remove_edge (_action, _output);
@@ -220,19 +216,14 @@ namespace djnn
     Graph::instance ().add_edge (_del, _del_action);
     Graph::instance ().add_edge (_acc_action, _state);
     Graph::instance ().add_edge (_del_action, _state);
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().add_edge (_parent->state_dependency (), _acc_action);
-      Graph::instance ().add_edge (_parent->state_dependency (), _del_action);
-    }
+    add_state_dependency (_parent, _acc_action);
+    add_state_dependency (_parent, _del_action);
     Process::finalize_construction ();
   }
 
-  TextAccumulator::~TextAccumulator () {
-    
-    if (_parent && _parent->state_dependency () != nullptr) {
-      Graph::instance ().remove_edge (_parent->state_dependency (), _acc_action);
-      Graph::instance ().remove_edge (_parent->state_dependency (), _del_action);
-    }
+  TextAccumulator::~TextAccumulator () {    
+    remove_state_dependency (_parent, _acc_action);
+    remove_state_dependency (_parent, _del_action);
     Graph::instance ().remove_edge (_input, _acc_action);
     Graph::instance ().remove_edge (_del, _del_action);
     Graph::instance ().remove_edge (_acc_action, _state);

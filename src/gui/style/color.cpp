@@ -104,15 +104,13 @@ namespace djnn
     Graph::instance ().add_edge (_action, _l);
     Graph::instance ().add_edge (_action, _c);
     Graph::instance ().add_edge (_action, _h);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
     Process::finalize_construction ();
   }
 
   RGBToLCHConverter::~RGBToLCHConverter ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_action, _h);
     Graph::instance ().remove_edge (_action, _c);
     Graph::instance ().remove_edge (_action, _l);
@@ -222,15 +220,13 @@ namespace djnn
     Graph::instance ().add_edge (_action, _r);
     Graph::instance ().add_edge (_action, _g);
     Graph::instance ().add_edge (_action, _b);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
     Process::finalize_construction ();
   }
 
   LCHToRGBConverter::~LCHToRGBConverter ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_action, _b);
     Graph::instance ().remove_edge (_action, _g);
     Graph::instance ().remove_edge (_action, _r);

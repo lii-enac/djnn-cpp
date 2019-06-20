@@ -86,6 +86,7 @@ namespace djnn {
     void    add_deactivation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
+    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -96,7 +97,6 @@ namespace djnn {
     // execution graph
     void     set_vertex (Vertex *v) { _vertex = v; }
     Vertex*  vertex () { return _vertex; };
-    Process* state_dependency () { return _state_dependency; } // for execution scheduling
 
     // actions to be redefined by subclasses
     virtual     void draw () {}
@@ -216,6 +216,8 @@ namespace djnn {
   void alias_children (Process *p, Process *to);
   void alias (Process *p, const string &name, Process* from);
   void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
+  void add_state_dependency (Process *_parent, Process *p);
+  void remove_state_dependency (Process *_parent, Process *p);
   inline Process* find (Process *p) { return p; }
   inline Process* find (Process *p, const string& path) { return p->find_component (path); }
   inline Process* find (const string& path) { return Process::find_component (nullptr, path); }

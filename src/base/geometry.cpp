@@ -74,15 +74,13 @@ namespace djnn
     Graph::instance ().add_edge (_t1, _action);
     Graph::instance ().add_edge (_t2, _action);
     Graph::instance ().add_edge (_action, _output);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _action);
+    add_state_dependency (_parent, _action);
     Process::finalize_construction ();
   }
 
   HermiteCurve::~HermiteCurve ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _action);
+    remove_state_dependency (_parent, _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_p1, _action);
     Graph::instance ().remove_edge (_p2, _action);

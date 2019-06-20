@@ -291,9 +291,9 @@ namespace djnn
     if (_sorted)
       return;
 
-#if _PERF_TEST
+    #if _PERF_TEST
     t1 ();
-#endif
+    #endif
 
     _cur_date = 0;
     _sorted_vertices.clear ();
@@ -313,27 +313,27 @@ namespace djnn
     _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
     _sorted = true;
 
-#if _PERF_TEST
-      // print in YELLOW
-      cerr << "\033[1;33m" << endl;
-      double time = t2 ("SORT_GRAPH : ");
-      sorted_counter = sorted_counter + 1;
-      sorted_total = sorted_total + time ;
-      sorted_average = sorted_total / sorted_counter;
-      cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
-      cerr << "GRAPH size: " << _vertices.size () << endl;
-      cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
-      cerr << "\033[0m"  << endl;
-#endif
+    #if _PERF_TEST
+    // print in YELLOW
+    cerr << "\033[1;33m" << endl;
+    double time = t2 ("SORT_GRAPH : ");
+    sorted_counter = sorted_counter + 1;
+    sorted_total = sorted_total + time ;
+    sorted_average = sorted_total / sorted_counter;
+    cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
+    cerr << "GRAPH size: " << _vertices.size () << endl;
+    cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+    cerr << "\033[0m"  << endl;
+    #endif
   }
 
   void
   Graph::exec ()
   {
 
-#if _PERF_TEST
+    #if _PERF_TEST
     t1 ();
-#endif
+    #endif
 
     //graph_mutex.lock ();
 
@@ -360,7 +360,7 @@ namespace djnn
 
    //graph_mutex.unlock ();
 
-#if _PERF_TEST
+    #if _PERF_TEST
     // print in GREEN
     cerr << "\033[1;32m" << endl;
     double time = t2 ("GRAPH_EXEC : ");
@@ -371,7 +371,7 @@ namespace djnn
     cerr << "GRAPH size: " << _vertices.size () << endl;
     cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
     cerr << "\033[0m"  << endl;
-#endif
+    #endif
   }
 
 }
