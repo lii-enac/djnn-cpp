@@ -21,7 +21,8 @@
 
 namespace djnn
 {
-  using namespace std;
+  //using namespace std;
+  using std::cerr;
 
   void
   Coupling::init_coupling (Process* src, activation_flag_e src_flag, Process* dst,

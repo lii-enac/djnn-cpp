@@ -214,6 +214,15 @@ namespace djnn {
     friend void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
   };
 
+  void alias_children (Process *p, Process *to);
+  void alias (Process *p, const string &name, Process* from);
+  void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
+  inline Process* find (Process *p) { return p; }
+  inline Process* find (Process *p, const string& path) { return p->find_component (path); }
+  inline Process* find (const string& path) { return Process::find_component (nullptr, path); }
+  inline Process* clone (Process *p) { return p->clone (); }
+
+
   class Action : public Process {
   public:
     Action (bool model = false) : Process (model) {}
@@ -229,11 +238,4 @@ namespace djnn {
     void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
   };
 
-  void alias_children (Process *p, Process *to);
-  void alias (Process *p, const string &name, Process* from);
-  void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
-  inline Process* find (Process *p) { return p; }
-  inline Process* find (Process *p, const string& path) { return p->find_component (path); }
-  inline Process* find (const string& path) { return Process::find_component (nullptr, path); }
-  inline Process* clone (Process *p) { return p->clone (); }
 }

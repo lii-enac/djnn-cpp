@@ -29,13 +29,6 @@ namespace djnn
 
   int Process::_nb_anonymous = 0;
 
-  void
-  Process::finalize_construction ()
-  {
-    if (_parent != nullptr)
-      _parent->add_child (this, _name);
-  }
-
   Process::Process (Process* parent, const string& name, bool model) :
       _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)
   {
@@ -56,10 +49,20 @@ namespace djnn
   {
   }
 
+  void
+  Process::finalize_construction ()
+  {
+    if (_parent != nullptr)
+      _parent->add_child (this, _name);
+  }
+
   Process::~Process ()
   {
     if (_vertex != nullptr) _vertex->invalidate ();
   }
+
+
+  // main activation API
 
   void
   Process::activation ()
@@ -174,15 +177,19 @@ namespace djnn
   void
   Process::remove_activation_coupling (Coupling* c)
   {
-    _activation_couplings.erase (std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
-                                 _activation_couplings.end ());
+    _activation_couplings.erase (
+      std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
+      _activation_couplings.end ()
+    );
   }
 
   void
   Process::remove_deactivation_coupling (Coupling* c)
   {
-    _deactivation_couplings.erase (std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),
-                                   _deactivation_couplings.end ());
+    _deactivation_couplings.erase (
+      std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),
+      _deactivation_couplings.end ()
+    );
   }
 
   const Process::couplings_t&
@@ -199,7 +206,7 @@ namespace djnn
 
 
   // tree, component, symtable 
-  
+
   Process*
   Process::find_component (const string& key)
   {
@@ -320,7 +327,13 @@ namespace djnn
     remove_symbol (name);
   }
 
-  
+  void
+  Process::add_child (Process* c, const string& name)
+  {
+    if (c == nullptr)
+      return;
+    add_symbol (name, c);
+  }
 
   void
   Process::add_symbol (const string &name, Process* c)
@@ -329,14 +342,6 @@ namespace djnn
      cerr << "Duplicate name " << name << " in component " << _name << endl;
      }*/
     _symtable[name] = c;
-  }
-
-  void
-  Process::add_child (Process* c, const string& name)
-  {
-    if (c == nullptr)
-      return;
-    add_symbol (name, c);
   }
 
   Process*
@@ -366,7 +371,7 @@ namespace djnn
   void
   alias_children (Process* p, Process* from)
   {
-    map<string, Process*>& symtable = from->symtable ();
+    Process::symtable_t& symtable = from->symtable ();
     for (auto& sym : symtable) {
       p->add_symbol (sym.first, sym.second);
     }
