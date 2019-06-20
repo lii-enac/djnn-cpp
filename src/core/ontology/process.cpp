@@ -35,12 +35,16 @@ namespace djnn
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
-    if (_parent != nullptr) _state_dependency = _parent->_state_dependency;
+
+    if (_parent != nullptr)
+      _state_dependency = _parent->_state_dependency;
+    
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else {
       _dbg_info = "no debug info";
     }
+
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
   }
 
@@ -50,7 +54,7 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction ()
+  Process::finalize_construction () // called by SubProcess
   {
     if (_parent != nullptr)
       _parent->add_child (this, _name);
@@ -58,7 +62,8 @@ namespace djnn
 
   Process::~Process ()
   {
-    if (_vertex != nullptr) _vertex->invalidate ();
+    if (_vertex != nullptr)
+      _vertex->invalidate ();
   }
 
 
@@ -118,20 +123,19 @@ namespace djnn
   {
     notify_deactivate ();
     set_activation_state (DEACTIVATED);
-    //set_activation_flag (NONE_ACTIVATION);
+    set_activation_flag (NONE_ACTIVATION); // already done in graph
   }
 
   void
   Process::notify_activate ()
   {
-    couplings_t& couplings_copy = _activation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : couplings_copy) {
+    for (auto& coupling : _activation_couplings) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
@@ -143,14 +147,13 @@ namespace djnn
   void
   Process::notify_deactivate ()
   {
-    couplings_t& couplings_copy = _deactivation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
      * We make the choice to register all the couplings associated with a source before propagating
      * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : couplings_copy) {
+    for (auto& coupling : _deactivation_couplings) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
@@ -312,11 +315,12 @@ namespace djnn
   Process::remove_child (Process* c)
   {
     std::map<std::string, Process*>::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it)
+    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
       if (it->second == c) {
         remove_symbol (it->first);
         return;
       }
+    }
   }
 
   void

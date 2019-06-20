@@ -50,26 +50,30 @@ namespace djnn
   }
 
   Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                      activation_flag_e dst_flag, bool immediate_processing) :
+                      activation_flag_e dst_flag, bool immediate_propagation) :
       _src (src), _dst (dst), _data (nullptr)
   {
-    set_immediate_processing (immediate_processing);
+    set_immediate_propagation (immediate_propagation);
     init_coupling (src, src_flag, dst, dst_flag);
   }
 
   Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                      activation_flag_e dst_flag, Process* data, bool immediate_processing) :
-    Coupling(src, src_flag, dst, dst_flag, immediate_processing)
+                      activation_flag_e dst_flag, Process* data, bool immediate_propagation) :
+    Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
   {
     _data = data;
   }
 
   Coupling::~Coupling ()
   {
-    if(get_src_activation_flag () == ACTIVATION) {
+    switch(get_src_activation_flag ()) {
+    case ACTIVATION:
       _src->remove_activation_coupling (this);
-    } else if (get_src_activation_flag () == DEACTIVATION) {
+      break;
+    case DEACTIVATION:
       _src->remove_deactivation_coupling (this);
+      break;
+    default: break;
     }
   }
 
@@ -80,8 +84,8 @@ namespace djnn
     assert(is_enabled ());
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
-    if (get_immediate_processing ()) {
-      process_immediately ();
+    if (is_immediate ()) {
+      propagate_immediately ();
     }
     else {
       _dst->set_activation_flag (get_dst_activation_flag());
@@ -96,8 +100,8 @@ namespace djnn
     assert(is_enabled ());
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
-    if (get_immediate_processing ()) {
-      process_immediately ();
+    if (is_immediate ()) {
+      propagate_immediately ();
     }
     else {
       _dst->set_activation_flag (get_dst_activation_flag());
@@ -106,15 +110,18 @@ namespace djnn
   }
 
   void
-  Coupling::process_immediately ()
+  Coupling::propagate_immediately ()
   {
-    if ( get_dst_activation_flag () == ACTIVATION ) {
+    switch(get_dst_activation_flag ()) {
+    case NONE_ACTIVATION: break;
+    case ACTIVATION:
       _dst->activate ();
       _dst->coupling_activation_hook ();
-    }
-    else if ( get_dst_activation_flag () == DEACTIVATION ) {
+      break;
+    case DEACTIVATION:
       _dst->deactivate ();
       _dst->coupling_deactivation_hook ();
+      break;
     }
   }
 
