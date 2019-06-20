@@ -395,7 +395,7 @@ namespace djnn
       _action->set_data (p);
       _action->activate ();
     }
-    notify_activate ();
+    notify_activation ();
   }
 
   void

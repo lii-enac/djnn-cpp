@@ -180,7 +180,7 @@ namespace djnn
       _action->set_data (it->second);
       _action->activate ();
     }
-    notify_activate ();
+    notify_activation ();
   }
 
   void

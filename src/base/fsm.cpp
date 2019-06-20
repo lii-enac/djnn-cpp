@@ -222,7 +222,7 @@ namespace djnn
     _src->disable_transitions (_t);
     if (_action != 0)
       _action->activate ();
-    notify_activate ();
+    notify_activation ();
     if (_src != _dst) {
       _src->deactivate ();
       _dst->activate ();

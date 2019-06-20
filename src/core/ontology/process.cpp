@@ -104,7 +104,7 @@ namespace djnn
   void
   Process::post_activate ()
   {
-    notify_activate ();
+    notify_activation ();
     set_activation_state (ACTIVATED);
     // TOCHECK: why not set_activation_flag (NONE_ACTIVATION); like post_deactivate ?
   }
@@ -121,13 +121,13 @@ namespace djnn
   void
   Process::post_deactivate ()
   {
-    notify_deactivate ();
+    notify_deactivation ();
     set_activation_state (DEACTIVATED);
     set_activation_flag (NONE_ACTIVATION); // already done in graph
   }
 
   void
-  Process::notify_activate ()
+  Process::notify_activation ()
   {
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
@@ -140,12 +140,12 @@ namespace djnn
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagate_activate ();
+      coupling->propagate_activation ();
     }
   }
 
   void
-  Process::notify_deactivate ()
+  Process::notify_deactivation ()
   {
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
@@ -158,7 +158,7 @@ namespace djnn
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagate_deactivate ();
+      coupling->propagate_deactivation ();
     }
   }
 

@@ -78,7 +78,7 @@ namespace djnn
   }
 
   void
-  Coupling::propagate_activate ()
+  Coupling::propagate_activation ()
   {
     //if (!is_enabled ()) return; // useless already tested elsewhere
     assert(is_enabled ());
@@ -94,7 +94,7 @@ namespace djnn
   }
 
   void
-  Coupling::propagate_deactivate ()
+  Coupling::propagate_deactivation ()
   {
     //if (!is_enabled ()) return; // useless already tested elsewhere
     assert(is_enabled ());

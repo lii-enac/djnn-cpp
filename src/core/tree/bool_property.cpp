@@ -82,11 +82,11 @@ namespace djnn
   {
     get_ref_value() = v;
     if (is_activable () && propagate) {
-      notify_activate ();
+      notify_activation ();
       if (v)
-        _true->notify_activate ();
+        _true->notify_activation ();
       else
-        _false->notify_activate ();
+        _false->notify_activation ();
     }
   }
 

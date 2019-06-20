@@ -89,8 +89,8 @@ namespace djnn {
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
-    void         notify_activate ();
-    void         notify_deactivate ();
+    void         notify_activation ();
+    void         notify_deactivation ();
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
   
     // execution graph
@@ -235,7 +235,7 @@ namespace djnn {
       return true;
     }
     void post_activate () override {
-      notify_activate ();
+      notify_activation ();
       set_activation_state (DEACTIVATED);
     }
   };
