@@ -17,6 +17,7 @@
 #include "process.h"
 #include "../execution/graph.h"
 
+#include <cassert>
 #include <iostream>
 
 namespace djnn
