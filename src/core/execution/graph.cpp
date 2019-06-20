@@ -41,9 +41,10 @@ namespace djnn
   using std::cerr;
   using std::endl;
 
-  enum
-  {
-    NOT_MARKED, BROWSING, MARKED
+  enum mark_e {
+    NOT_MARKED,
+    BROWSING,
+    MARKED
   };
 
   Vertex::Vertex (Process* c) :
@@ -57,7 +58,8 @@ namespace djnn
   void
   Vertex::add_edge (Vertex *dst) 
   { 
-    //TODO: does push_back check the doubles.
+    //TOCHECK: does push_back check the doubles?
+    // answer: double entries? no...
     _edges.push_back (dst);
     dst->_count_egdes_in++;
   }

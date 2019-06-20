@@ -33,7 +33,7 @@ namespace djnn {
   };
 
   // activation types
-  enum activation_flag_e { // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2
+  enum activation_flag_e { // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2, would make A/D 1 bit-only
     NONE_ACTIVATION,
     ACTIVATION,
     DEACTIVATION
