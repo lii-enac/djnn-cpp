@@ -285,7 +285,7 @@ namespace djnn
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
-    map<string, Process*>::iterator it;
+    symtable_t::iterator it;
 
     for (it = _symtable.begin(); it != _symtable.end(); ++it)
     {
@@ -304,7 +304,7 @@ namespace djnn
   void
   Process::remove_symbol (const string& name)
   {
-    map<string, Process*>::iterator it = _symtable.find (name);
+    symtable_t::iterator it = _symtable.find (name);
     if (it != _symtable.end ())
       _symtable.erase (it);
     else
@@ -314,7 +314,7 @@ namespace djnn
   void
   Process::remove_child (Process* c)
   {
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
       if (it->second == c) {
         remove_symbol (it->first);
@@ -433,7 +433,7 @@ namespace djnn
 
     cout << endl;
     indent++;
-    std::map<string, Process*>::iterator it;
+    symtable_t::iterator it;
     int i = 0;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
       for (int j = 0; j < indent; j++)
