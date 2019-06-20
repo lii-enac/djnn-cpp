@@ -100,7 +100,7 @@ namespace djnn
       _ref_dst = ref_dst_pair.first;
       _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
       _update_dst->activate ();
-      _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION);
+      _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
       if (_parent && _parent->state_dependency () != nullptr)
         Graph::instance ().add_edge (_parent->state_dependency (), _update_dst);

@@ -41,7 +41,7 @@ namespace djnn {
       	  ((Binding*)_parent)->_dst->deactivation ();
       }
       void deactivate () override {}
-      void exec (activation_flag_e flag) override { activate (); }
+      //void exec (activation_flag_e flag) override { activate (); }
     private:
       
       bool get_binding_action ()           { return get_bitset (BINDING_ACTION_MASK, BINDING_ACTION_SHIFT); }

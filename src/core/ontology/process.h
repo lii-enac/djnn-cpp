@@ -79,9 +79,9 @@ namespace djnn {
     // main public API
     void activation ();   // FIXME: should be activate ()
     void deactivation (); // FIXME: should be deactivate ()
-    virtual void exec (activation_flag_e flag) {
-        set_activation_flag (flag);
-    }
+    // virtual void exec (activation_flag_e flag) {
+    //     set_activation_flag (flag);
+    // }
 
     // coupling
     void add_activation_coupling (Coupling* c);

@@ -249,7 +249,7 @@ namespace djnn
 
     _action = new Connector::ConnectorAction (
       this, "pausedconnector_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
-    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
+    _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
 
     Graph::instance ().add_edge (_src, _dst);
     if (_parent && _parent->state_dependency () != nullptr)
