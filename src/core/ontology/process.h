@@ -84,60 +84,54 @@ namespace djnn {
     // }
 
     // coupling
-    void add_activation_coupling (Coupling* c);
-    void add_deactivation_coupling (Coupling* c);
+    void    add_activation_coupling (Coupling* c);
     void remove_activation_coupling (Coupling* c);
+    void    add_deactivation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
-    typedef vector<Coupling*> couplings_t;
-    const couplings_t& get_activation_couplings () const;
-    const couplings_t& get_deactivation_couplings () const;
-    bool has_coupling () const { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
+    bool    has_coupling () const { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
-    void notify_activation ();
-    void notify_deactivation ();
+    void         notify_activation ();
+    void         notify_deactivation ();
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
-
+  
     // execution graph
-    void set_vertex (Vertex *v) { _vertex = v; }
-    Vertex* vertex () { return _vertex; };
+    void     set_vertex (Vertex *v) { _vertex = v; }
+    Vertex*  vertex () { return _vertex; };
     Process* state_dependency () { return _state_dependency; } // for execution scheduling
 
     // actions to be redefined by subclasses
-    virtual void draw () {}
-    virtual void pick() {}
-    virtual void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+    virtual     void draw () {}
+    virtual     void pick() {}
+    virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
     virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
-    virtual void set_activation_source (Process* src) {}
+    virtual void     set_activation_source (Process* src) {}
     virtual Process* get_activation_source () { return nullptr; }
 
     // tree, component, symtable 
-    virtual void    add_child (Process* c, const string& name);
-    virtual void remove_child (Process* c);
-    virtual void remove_child (const string& name);
-    virtual void   move_child (Process *child_to_move, int spec, Process *child = 0) {}
+    virtual void      add_child (Process* c, const string& name);
+    virtual void   remove_child (Process* c);
+    virtual void   remove_child (const string& name);
+    virtual void     move_child (Process *child_to_move, int spec, Process *child = 0) {}
     virtual Process* find_component (const string&); // FIXME: should be find_child
     static  Process* find_component (Process* p, const string &path);
-    // FIXME : low efficiency function cause by linear search. use with care !
-    virtual string   find_component_name (Process* child);
-    void add_symbol (const string &name, Process* c);
+    virtual string   find_component_name (Process* child); // FIXME : low efficiency function cause by linear search. use with care !
+    void    add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
 
     typedef map<string, Process*> symtable_t;
     symtable_t& symtable () { return _symtable; }
-    virtual int get_cpnt_type () { return UNDEFINED_T; }
-
     const string& get_name () const;
     Process* get_parent ();
-    void set_parent (Process* p) { _parent = p; }
-    void set_data (Process* data);
+    void     set_parent (Process* p) { _parent = p; }
+    void     set_data (Process* data);
     Process* get_data ();
 
     // debug
-    virtual void dump (int level=0);
+    virtual  void dump (int level=0);
     const string& debug_info () { return _dbg_info; }
 
   protected:
@@ -152,9 +146,13 @@ namespace djnn {
     virtual void post_deactivate ();
 
   private:
-    static int _nb_anonymous;
+    typedef vector<Coupling*> couplings_t;
+    const couplings_t& get_activation_couplings () const;
+    const couplings_t& get_deactivation_couplings () const;
 
-// <instance fields start here>
+  private:
+    static int _nb_anonymous;
+// >>instance fields start here
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
@@ -169,20 +167,20 @@ namespace djnn {
 
   protected:
     unsigned int _bitset;
-// </instance fields end here>
+// <<instance fields end here
     
     enum bit_shift {
-        MODEL_SHIFT               = 0 ,
-        ACTIVATION_FLAG_SHIFT     = 1 ,
-        ACTIVATION_STATE_SHIFT    = 3 ,
-        BINDING_ACTION_SHIFT      = 5
+        MODEL_SHIFT            = 0 ,
+        ACTIVATION_FLAG_SHIFT  = 1 ,
+        ACTIVATION_STATE_SHIFT = 3 ,
+        BINDING_ACTION_SHIFT   = 5
     };
 
     enum bit_mask {
-        MODEL_MASK                = 0b1  << MODEL_SHIFT ,
-        ACTIVATION_FLAG_MASK      = 0b11 << ACTIVATION_FLAG_SHIFT ,
-        ACTIVATION_STATE_MASK     = 0b11 << ACTIVATION_STATE_SHIFT ,
-        BINDING_ACTION_MASK       = 0b1  << BINDING_ACTION_SHIFT
+        MODEL_MASK             = 0b1  << MODEL_SHIFT ,
+        ACTIVATION_FLAG_MASK   = 0b11 << ACTIVATION_FLAG_SHIFT ,
+        ACTIVATION_STATE_MASK  = 0b11 << ACTIVATION_STATE_SHIFT ,
+        BINDING_ACTION_MASK    = 0b1  << BINDING_ACTION_SHIFT
     };
 
     int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
@@ -192,34 +190,34 @@ namespace djnn {
     bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
     void set_is_model (bool VALUE) {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
 
-    activation_flag_e get_activation_flag () const   { return static_cast<activation_flag_e> (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
+    activation_flag_e  get_activation_flag () const  { return static_cast<activation_flag_e> (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
     void set_activation_flag (activation_flag_e VALUE) {                                      set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, VALUE); }
 
     activation_state_e get_activation_state () const { return static_cast<activation_state_e>(get_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT)); }
     void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, VALUE); }
 
   public:
-    //bool is_activation_requested ()   const { return  get_activation_flag ()  == ACTIVATION;}
-    //bool is_deactivation_requested () const { return  get_activation_flag ()  == DEACTIVATION;}
-    bool is_activated ()              const { return  get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test suite
-    bool is_deactivated ()            const { return  get_activation_state () == DEACTIVATED; }
-    bool somehow_activating ()        const { return  get_activation_state () <= ACTIVATED; }
-    bool somehow_deactivating ()      const { return  get_activation_state () >= DEACTIVATING; }
+    bool is_activated ()         const { return get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test suite
+    bool is_deactivated ()       const { return get_activation_state () == DEACTIVATED; }
+    bool somehow_activating ()   const { return get_activation_state () <= ACTIVATED; }
+    bool somehow_deactivating () const { return get_activation_state () >= DEACTIVATING; }
 
     void do_something_according_to_activation_flag () {
-        switch(get_activation_flag ()) {
+        switch( get_activation_flag () ) {
           case NONE_ACTIVATION: break;
           case ACTIVATION:      activation (); break;
           case DEACTIVATION:    deactivation (); break;
         }
     }
 
+    // strange, only used in gradient...
+    friend void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
   };
 
   class Action : public Process {
   public:
     Action (bool model = false) : Process (model) {}
-    Action (Process *p, const string &n, bool model = false) : Process (p, n, model) {}
+    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model) {}
     virtual ~Action () {}
   protected:
     virtual bool pre_activate () override {
