@@ -17,6 +17,7 @@
 
 #include "../ontology/process.h"
 #include "../ontology/coupling.h"
+#include "../control/action.h"
 #include "../tree/ref_property.h"
 
 namespace djnn {

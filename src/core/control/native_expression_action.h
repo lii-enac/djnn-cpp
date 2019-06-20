@@ -15,9 +15,8 @@
 #pragma once
 
 #include "../ontology/process.h"
+#include "../control/action.h"
 #include "../tree/abstract_property.h"
-
-#include <string>
 
 namespace djnn {
   using namespace std;

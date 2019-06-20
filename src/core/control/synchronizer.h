@@ -16,8 +16,8 @@
 
 #include "../ontology/process.h"
 #include "../ontology/coupling.h"
+#include "../control/action.h"
 
-#include <string>
 
 namespace djnn {
   using namespace std;

@@ -15,8 +15,9 @@
 
 #pragma once
 
-#include "../core/tree/component.h"
 #include "../core/ontology/coupling.h"
+#include "../core/control/action.h"
+#include "../core/tree/component.h"
 #include "../core/tree/text_property.h"
 
 namespace djnn {

@@ -221,23 +221,4 @@ namespace djnn {
   inline Process* find (const string& path) { return Process::find_component (nullptr, path); }
   inline Process* clone (Process *p) { return p->clone (); }
 
-
-  class Action : public Process {
-  public:
-    Action (bool model = false) : Process (model) {}
-    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model) {}
-    virtual ~Action () {}
-  protected:
-    virtual bool pre_activate () override {
-      if (_parent != 0 && !_parent->somehow_activating () )
-        return false;
-      set_activation_state(ACTIVATING);
-      return true;
-    }
-    void post_activate () override {
-      notify_activation ();
-      set_activation_state (DEACTIVATED);
-    }
-  };
-
 }

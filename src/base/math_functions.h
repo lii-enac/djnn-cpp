@@ -16,7 +16,7 @@
 #pragma once
 
 #include "operators.h"
-#include <iostream>
+
 #include <cmath>
 
 namespace djnn

@@ -15,9 +15,11 @@
 #pragma once
 
 #include "../core/ontology/process.h"
+#include "../core/ontology/coupling.h"
+#include "../core/control/action.h"
 #include "../core/tree/ref_property.h"
 #include "../core/tree/spike.h"
-#include "../core/ontology/coupling.h"
+
 #include <map>
 
 namespace djnn {

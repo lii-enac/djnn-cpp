@@ -16,11 +16,12 @@
 #pragma once
 
 #include "../core/ontology/process.h"
-#include "../core/tree/abstract_property.h"
 #include "../core/ontology/coupling.h"
+#include "../core/control/action.h"
+#include "../core/tree/abstract_property.h"
 #include "../core/control/assignment.h"
+#include "../core/control/action.h"
 
-#include <iostream>
 
 namespace djnn {
   using namespace std;

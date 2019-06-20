@@ -14,13 +14,11 @@
 
 #pragma once
 
+#include "../core/control/action.h"
 #include "../core/tree/list.h"
-
-//#include "../core/tree/int_property.h"
 #include "../core/tree/spike.h"
 
 #include <list>
-#include <iostream>
 
 
 namespace djnn {
