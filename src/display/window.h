@@ -29,8 +29,8 @@ namespace djnn
   public:
     WinImpl () : _picking_view(nullptr) {}
     virtual ~WinImpl () {}
-    virtual void activate () = 0;
-    virtual void deactivate () = 0;
+    virtual void impl_activate () = 0;
+    virtual void impl_deactivate () = 0;
     virtual void update () = 0;
     virtual void set_cursor (const string &path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
@@ -64,8 +64,8 @@ namespace djnn
     void set_refresh (bool r) { _refresh = r; }
     bool refresh () { return _refresh; }
     void update () { _win_impl->update (); };
-    void activate () override { _win_impl->activate (); }
-    void deactivate () override { _win_impl->deactivate (); }
+    void impl_activate () override { _win_impl->impl_activate (); }
+    void impl_deactivate () override { _win_impl->impl_deactivate (); }
     Picking* picking_view () { return _win_impl->picking_view ();}
     void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
     Process* press () { return _press; }
@@ -117,15 +117,15 @@ namespace djnn
     public:
       UpdateCursorAction (Process *p, const string &n) : Action (p, n) {}
       ~UpdateCursorAction () {}
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
     };
    public:
     Cursor (Process *p, const string &n, const string &path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void update_cursor ();
     Process* find_component (const string &n) override;
    private:

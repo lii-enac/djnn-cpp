@@ -47,7 +47,7 @@ namespace djnn
   }
 
   void
-  TextPrinter::TextPrinterAction::activate ()
+  TextPrinter::TextPrinterAction::impl_activate ()
   {
     std::cout << _input->get_value () << std::endl;
   }
@@ -173,7 +173,7 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::activate ()
+  DoubleFormatter::impl_activate ()
   {
     _c_input->enable ();
     _c_decimal->enable ();
@@ -181,7 +181,7 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::deactivate ()
+  DoubleFormatter::impl_deactivate ()
   {
     _c_input->disable ();
     _c_decimal->disable ();
@@ -246,14 +246,14 @@ namespace djnn
   }
 
   void
-  TextAccumulator::activate ()
+  TextAccumulator::impl_activate ()
   {
     _c_acc->enable ();
     _c_del->enable ();
   }
 
   void
-  TextAccumulator::deactivate ()
+  TextAccumulator::impl_deactivate ()
   {
     _c_acc->disable ();
     _c_del->disable ();

@@ -64,8 +64,8 @@ namespace djnn
   public:
     Touch (Process *p, const std::string &n, double init_x, double init_y, double init_pressure);
     Touch ();
-    void activate () override {};
-    void deactivate () override {};
+    void impl_activate () override {};
+    void impl_deactivate () override {};
     void set_x (double v) { _x->set_value (v, true); }
     void set_y (double v) { _y->set_value (v, true); }
     void set_local_x (double v) { _local_x->set_value (v, true); }

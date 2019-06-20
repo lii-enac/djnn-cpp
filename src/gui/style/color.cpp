@@ -44,7 +44,7 @@ namespace djnn
   }
 
   void
-  RGBToLCHConverter::ConverterAction::activate ()
+  RGBToLCHConverter::ConverterAction::impl_activate ()
   {
     double R = _p->_r->get_value () / 255.0;
     double G = _p->_g->get_value () / 255.0;
@@ -133,7 +133,7 @@ namespace djnn
   }
 
   void
-  RGBToLCHConverter::activate ()
+  RGBToLCHConverter::impl_activate ()
   {
     _cr->enable ();
     _cg->enable ();
@@ -141,7 +141,7 @@ namespace djnn
   }
 
   void
-  RGBToLCHConverter::deactivate ()
+  RGBToLCHConverter::impl_deactivate ()
   {
     _cr->disable ();
     _cg->disable ();
@@ -155,7 +155,7 @@ namespace djnn
   }
 
   void
-  LCHToRGBConverter::ConverterAction::activate ()
+  LCHToRGBConverter::ConverterAction::impl_activate ()
   {
     double L = _p->_l->get_value ();
     double C = _p->_c->get_value ();
@@ -251,7 +251,7 @@ namespace djnn
   }
 
   void
-  LCHToRGBConverter::activate ()
+  LCHToRGBConverter::impl_activate ()
   {
     _cl->enable ();
     _cc->enable ();
@@ -259,7 +259,7 @@ namespace djnn
   }
 
   void
-  LCHToRGBConverter::deactivate ()
+  LCHToRGBConverter::impl_deactivate ()
   {
     _cl->disable ();
     _cc->disable ();

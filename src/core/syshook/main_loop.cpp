@@ -50,7 +50,7 @@ namespace djnn {
     }
 
     void
-    MainLoop::activate ()
+    MainLoop::impl_activate ()
     {
       for (auto p: _background_processes) {
         p->activation ();
@@ -71,7 +71,7 @@ namespace djnn {
     }
 
     void
-    MainLoop::deactivate ()
+    MainLoop::impl_deactivate ()
     {
       if (_another_source_wants_to_be_mainloop) {
         _another_source_wants_to_be_mainloop->please_stop ();

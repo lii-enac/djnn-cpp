@@ -33,8 +33,8 @@ namespace djnn
       Action (p, n), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
-      void activate () override { *_reset_occurred = true; }
-      void deactivate () override {}
+      void impl_activate () override { *_reset_occurred = true; }
+      void impl_deactivate () override {}
     private:
       bool *_reset_occurred;
     };
@@ -47,7 +47,7 @@ namespace djnn
       Action (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
-      void activate () override
+      void impl_activate () override
       {
         /* if reset occured wew send _init else (_output + _delta ) */
         if (*_reset_occurred) {
@@ -57,7 +57,7 @@ namespace djnn
         else
           _output->set_value (_output->get_value () +  _delta->get_value (), true);
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     private:
       DoubleProperty *_init;
     	DoubleProperty *_delta;
@@ -70,8 +70,8 @@ namespace djnn
     Counter (Process* p, const std::string& n, double init, double delta);
     Counter (double init, double delta);
     ~Counter();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
 
   private:

@@ -50,8 +50,8 @@ namespace djnn {
     virtual string get_string_value () = 0;
   protected:
     void post_activate () override { set_activation_state (DEACTIVATED); }
-    void activate () override {}
-    void deactivate () override {}
+    void impl_activate () override {}
+    void impl_deactivate () override {}
     int _notify_mask;
   };
 

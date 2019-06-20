@@ -30,8 +30,8 @@ namespace djnn {
     SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model = true);
     virtual ~SetIterator () {}
     virtual process_type_e get_cpnt_type () const override { return COMPONENT_T; }
-    void activate () override;
-    void deactivate () override {};
+    void impl_activate () override;
+    void impl_deactivate () override {};
     void post_activate () override;
   private:
     Process *_set, *_action;
@@ -46,8 +46,8 @@ namespace djnn {
     void remove_child (Process* c) override;
     void remove_child (const string &name) override;
     Process* find_component (const string &path) override;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual ~Set ();
     void serialize (const string& type) override;
   private:

@@ -74,7 +74,7 @@ namespace djnn
   }
 
   void 
-  UpdateDrawing::RedrawAction::activate () 
+  UpdateDrawing::RedrawAction::impl_activate () 
   {
     for (auto& w : _ud->get_win_list ()) {
       if (w != nullptr) {
@@ -143,7 +143,7 @@ namespace djnn
   }
 
   void
-  UpdateDrawing::activate ()
+  UpdateDrawing::impl_activate ()
   {
     if (_auto_refresh->get_value ())
       _redraw_when_damaged->enable ();
@@ -187,7 +187,7 @@ namespace djnn
   }
 
   void
-  AbstractGObj::activate ()
+  AbstractGObj::impl_activate ()
   {
     if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
@@ -225,7 +225,7 @@ namespace djnn
   }
 
   void
-  AbstractGObj::deactivate ()
+  AbstractGObj::impl_deactivate ()
   {
     if (_frame != nullptr) {
       UpdateDrawing::instance ()->add_window_for_refresh (_frame);

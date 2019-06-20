@@ -68,11 +68,11 @@ namespace djnn
   CairoSDLWindow::~CairoSDLWindow ()
   {
     if (is_activated)
-      deactivate ();
+      impl_deactivate ();
   }
 
   void
-  CairoSDLWindow::activate ()
+  CairoSDLWindow::impl_activate ()
   {
     double x, y, w, h;
     x = _window->pos_x ()->get_value ();
@@ -116,7 +116,7 @@ namespace djnn
   }
 
   void
-  CairoSDLWindow::deactivate ()
+  CairoSDLWindow::impl_deactivate ()
   {
     SDLMainloop::instance ().remove_window (this);
     delete _my_cairo_surface;

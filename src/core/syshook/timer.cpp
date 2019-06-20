@@ -62,13 +62,13 @@ namespace djnn
   }
 
   void
-  Timer::activate ()
+  Timer::impl_activate ()
   {
     start_thread();
   }
 
   void
-  Timer::deactivate ()
+  Timer::impl_deactivate ()
   {
     please_stop ();
   }

@@ -32,14 +32,14 @@ namespace djnn
       ExpAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
       virtual ~ExpAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _output->set_value (exp (((DoubleProperty*)_input)->get_value ()), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Exp (Process *p, const string &name, double i_val);
@@ -56,14 +56,14 @@ namespace djnn
         LogAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~LogAction () {}
-        void activate ()
+        void impl_activate ()
         {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
           _output->set_value (log (((DoubleProperty*)_input)->get_value ()), true);
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       };
     public:
       Log (Process *p, const string &name, double i_val);
@@ -80,14 +80,14 @@ namespace djnn
         Log10Action (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~Log10Action () {}
-        void activate ()
+        void impl_activate ()
         {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
           _output->set_value (log10 (((DoubleProperty*)_input)->get_value ()), true);
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       };
     public:
       Log10 (Process *p, const string &name, double i_val);
@@ -104,13 +104,13 @@ namespace djnn
         PowAction (Process *p, const string &n, AbstractProperty* base, AbstractProperty* exp, AbstractProperty* result) :
           BinaryOperatorAction (p, n, base, exp, result) { Process::finalize_construction (); }
         virtual ~PowAction () {}
-        void activate () {
+        void impl_activate () {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
           _result->set_value (pow (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
-         void deactivate () {}
+         void impl_deactivate () {}
        };
      public:
        Pow (Process *p, const string &n, double base, double exponent);
@@ -127,14 +127,14 @@ namespace djnn
         SqrtAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~SqrtAction () {}
-        void activate ()
+        void impl_activate ()
         {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
           _output->set_value (sqrt (((DoubleProperty*)_input)->get_value ()), true);
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       };
     public:
       Sqrt (Process *p, const string &name, double i_val);
@@ -151,14 +151,14 @@ namespace djnn
         AbsAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
           UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
         virtual ~AbsAction () {}
-        void activate ()
+        void impl_activate ()
         {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
           _output->set_value (abs (((DoubleProperty*)_input)->get_value ()), true);
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       };
     public:
       Abs (Process *p, const string &name, double i_val);
@@ -175,7 +175,7 @@ namespace djnn
         MinAction (Process *p, const string &n, AbstractProperty* min, AbstractProperty* input, AbstractProperty* result) :
           BinaryOperatorAction (p, n, min, input, result) { Process::finalize_construction (); }
         virtual ~MinAction () {}
-        void activate () {
+        void impl_activate () {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
@@ -183,7 +183,7 @@ namespace djnn
           double input = ((DoubleProperty*) _right)->get_value ();
           _result->set_value ((min <= input ? input : min), true);
         }
-         void deactivate () {}
+         void impl_deactivate () {}
        };
      public:
        Min (Process *p, const string &n, double min, double init_val);
@@ -200,7 +200,7 @@ namespace djnn
         MaxAction (Process *p, const string &n, AbstractProperty* max, AbstractProperty* input, AbstractProperty* result) :
           BinaryOperatorAction (p, n, max, input, result) { Process::finalize_construction (); }
         virtual ~MaxAction () {}
-        void activate () {
+        void impl_activate () {
           //if (_parent->get_state () > activated)
           if (!_parent->somehow_activating ())
             return;
@@ -208,7 +208,7 @@ namespace djnn
           double input = ((DoubleProperty*) _right)->get_value ();
           _result->set_value ((max >= input ? input : max), true);
         }
-         void deactivate () {}
+         void impl_deactivate () {}
        };
      public:
        Max (Process *p, const string &n, double max, double init_val);
@@ -226,14 +226,14 @@ namespace djnn
                           AbstractProperty* max, AbstractProperty* input,
                           AbstractProperty* result) : Action (p, n), _min (min), _max (max), _input (input), _result (result) {}
     virtual ~BoundedValueAction () {}
-      void activate () override {
+      void impl_activate () override {
         double max = ((DoubleProperty*) _max)->get_value ();
         double min = ((DoubleProperty*) _min)->get_value ();
         double input = ((DoubleProperty*) _input)->get_value ();
         double r = input < min ? min : (input > max ? max : input);
         _result->set_value (r, true);
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     private:
       AbstractProperty *_min;
       AbstractProperty *_max;
@@ -242,8 +242,8 @@ namespace djnn
     };
   public:
     BoundedValue (Process *p, const string &n, double min, double max, double init_val);
-    void activate () override { _c_min->enable(); _c_max->enable (); _c_input->enable (); _action->activation (); };
-    void deactivate () override { _c_min->disable (); _c_max->disable (); _c_input->disable (); _action->deactivation ();};
+    void impl_activate () override { _c_min->enable(); _c_max->enable (); _c_input->enable (); _action->activation (); };
+    void impl_deactivate () override { _c_min->disable (); _c_max->disable (); _c_input->disable (); _action->deactivation ();};
     virtual ~BoundedValue ();
     void serialize (const string& type) override;
   protected:

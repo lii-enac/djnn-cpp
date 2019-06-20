@@ -68,7 +68,7 @@ namespace djnn
   }
 
   void
-  Switch::activate ()
+  Switch::impl_activate ()
   {
     _c_branch->enable ();
     change_branch ();
@@ -77,7 +77,7 @@ namespace djnn
   }
 
   void
-  Switch::deactivate ()
+  Switch::impl_deactivate ()
   {
     _c_branch->disable ();
     if (_cur_branch != nullptr)

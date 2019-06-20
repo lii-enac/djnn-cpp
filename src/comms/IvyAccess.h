@@ -41,8 +41,8 @@ namespace djnn
       Process (parent, name), _out (out) { Process::finalize_construction (); }
       virtual ~IvyOutAction () {}
       void coupling_activation_hook () override;
-      void activate () override {};
-      void deactivate () override {}
+      void impl_activate () override {};
+      void impl_deactivate () override {}
     private:
       TextProperty* _out;
     };
@@ -59,8 +59,8 @@ namespace djnn
     void set_arriving(string v);
     void set_leaving(string v);
   protected:
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     Process* find_component (const string&) override;
 
   private:

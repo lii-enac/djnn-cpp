@@ -28,8 +28,8 @@ namespace djnn {
     NativeAction (Process* parent, const string &name, NativeCode *action, void* data, bool isModel);
     NativeAction (NativeCode *action, void* data, bool isModel);
     virtual ~NativeAction ();
-    void activate () override;
-    void deactivate () override {}
+    void impl_activate () override;
+    void impl_deactivate () override {}
     void* data ();
 
     virtual void set_activation_source (Process* src) override { _activation_source = src; }

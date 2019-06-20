@@ -32,14 +32,14 @@ namespace djnn
        AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~AdderAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () + ((DoubleProperty*)_right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Adder (Process *p, const string &name, double l_val, double r_val);
@@ -58,13 +58,13 @@ namespace djnn
         AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~SubtractorAction () {}
-      void activate ()
+      void impl_activate ()
       {
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () - ((DoubleProperty*)_right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Subtractor (Process *p, const string &name, double l_val, double r_val);
@@ -84,13 +84,13 @@ namespace djnn
         AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~MultiplierAction () {}
-      void activate ()
+      void impl_activate ()
       {
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((DoubleProperty*)_left)->get_value () * ((DoubleProperty*)_right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Multiplier (Process *p, const string &name, double l_val, double r_val);
@@ -109,7 +109,7 @@ namespace djnn
        AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~DividerAction () {}
-      void activate ()
+      void impl_activate ()
       {
         if (!_parent->somehow_activating ())
          return;
@@ -119,7 +119,7 @@ namespace djnn
       }
       _result->set_value (((DoubleProperty*)_left)->get_value () /r, true);
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   };
   public:
   Divider (Process *p, const string &name, double l_val, double r_val);
@@ -138,7 +138,7 @@ private:
       AbstractProperty* result) :
     BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
     virtual ~ModuloAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
        return;
@@ -150,7 +150,7 @@ private:
     }
     _result->set_value (l % r, true);
   }
-  void deactivate () {}
+  void impl_deactivate () {}
 };
 public:
   Modulo (Process *p, const string &name, int l_val, int r_val);
@@ -169,13 +169,13 @@ private:
      AbstractProperty* result) :
     BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
     virtual ~AscendingComparatorAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () <= ((DoubleProperty*)_right)->get_value (), true);
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   };
 public:
   AscendingComparator (Process *p, const string &name, double l_val, double r_val);
@@ -194,13 +194,13 @@ private:
      AbstractProperty* result) :
     BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
     virtual ~StrictAscendingComparatorAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () < ((DoubleProperty*)_right)->get_value (), true);
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   };
 public:
   StrictAscendingComparator (Process *p, const string &name, double l_val, double r_val);
@@ -219,13 +219,13 @@ private:
       AbstractProperty* result) :
     BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
     virtual ~EqualityComparatorAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
         return;
       _result->set_value (((DoubleProperty*)_left)->get_value () == ((DoubleProperty*)_right)->get_value (), true);
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   };
 public:
   EqualityComparator (Process *p, const string &name, double l_val, double r_val);
@@ -243,13 +243,13 @@ private:
     SignInverterAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
     UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
     virtual ~SignInverterAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
         return;
       _output->set_value (-(((DoubleProperty*)_input)->get_value ()), true);
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   };
 public:
   SignInverter (Process *p, const string &name, double i_val);
@@ -267,7 +267,7 @@ private:
     PreviousAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output, double init_val) :
     UnaryOperatorAction (parent, name, input, output), _prev (init_val) { Process::finalize_construction (); }
     virtual ~PreviousAction () {}
-    void activate ()
+    void impl_activate ()
     {
       if (!_parent->somehow_activating ())
         return;
@@ -275,7 +275,7 @@ private:
       _output->set_value (_prev, true);
       _prev = ((DoubleProperty*)_input)->get_value ();
     }
-    void deactivate () {}
+    void impl_deactivate () {}
   private:
     double _prev;
   };
@@ -291,8 +291,8 @@ class Incr : public Process
 public:
   Incr (Process *parent, string name, bool is_model);
   Incr (bool is_model);
-  void activate () override;
-  void deactivate () override {}
+  void impl_activate () override;
+  void impl_deactivate () override {}
   void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
   virtual ~Incr ();
 private:
@@ -312,16 +312,16 @@ private:
     AdderAccumulatorAction (Process* parent, const string &name, AbstractProperty* input,
       AbstractProperty* clamp_min, AbstractProperty* clamp_max,
       AbstractProperty* result);
-    void activate () override;
-    void deactivate () override {}
+    void impl_activate () override;
+    void impl_deactivate () override {}
   private:
     AbstractProperty  *_input, *_clamp_min, *_clamp_max, *_result;
   };
 public:
   AdderAccumulator (Process* parent, const string &name, double input, double clamp_min, double clamp_max);
   virtual ~AdderAccumulator ();
-  void activate () override;
-  void deactivate () override;
+  void impl_activate () override;
+  void impl_deactivate () override;
 protected:
   void serialize (const string& type) override;
 private:

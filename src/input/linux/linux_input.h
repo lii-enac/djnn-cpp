@@ -57,11 +57,11 @@ namespace djnn {
         EvdevAction (Evdev* evdev) :
         Process (), _evdev (evdev) {}
         virtual ~EvdevAction () {}
-        void activate ()
+        void impl_activate ()
         {
           _evdev->handle_evdev_msg ();
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       private:
         Evdev* _evdev;
     };
@@ -88,11 +88,11 @@ namespace djnn {
         UdevAction (Udev* udev) :
         Process (), _udev (udev) {}
         virtual ~UdevAction () {}
-        void activate ()
+        void impl_activate ()
         {
           _udev->handle_udev_msg ();
         }
-        void deactivate () {}
+        void impl_deactivate () {}
       private:
         Udev* _udev;
     };
@@ -116,8 +116,8 @@ namespace djnn {
     LinuxMouse (Process *p, const string &n, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
-    void activate () override {}
-    void deactivate () override {}
+    void impl_activate () override {}
+    void impl_deactivate () override {}
     void handle_event (struct input_event *ev) override;
   private:
     Spike *_move, *_btn, *_press, *_release, *_wheel;
@@ -133,8 +133,8 @@ namespace djnn {
     public:
       LinuxTouch (unsigned int fieldmap);
       ~LinuxTouch ();
-      void activate () override {}
-      void deactivate () override {}
+      void impl_activate () override {}
+      void impl_deactivate () override {}
       void set_x (double v) { _x->set_value (v, true); }
       void set_y (double v) { _y->set_value (v, true); }
       void set_width (double v) { _width->set_value (v, true); }
@@ -154,8 +154,8 @@ namespace djnn {
   public:
     LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev);
     ~LinuxTouchPanel ();
-    void activate () override {}
-    void deactivate () override {}
+    void impl_activate () override {}
+    void impl_deactivate () override {}
     void handle_event (struct input_event *ev) override;
   private:
     unsigned int _fieldmap;

@@ -32,8 +32,8 @@ namespace djnn {
   public:
     FSMState (Process *p, const string &n);
     ~FSMState () { _transitions.clear (); };
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
@@ -52,8 +52,8 @@ namespace djnn {
       FSMTransitionAction (Process *p, const string &n, FSMState* src, FSMState* dst, Process* action) :
 	Action (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
       virtual ~FSMTransitionAction () {};
-      void activate ();
-      void deactivate () {};
+      void impl_activate ();
+      void impl_deactivate () {};
     private:
       FSMTransition *_t;
       FSMState* _src;
@@ -66,8 +66,8 @@ namespace djnn {
     FSMTransition (Process *p, const string &n, Process* from, Process* to,
        Process *trigger, Process *action = 0);
     ~FSMTransition ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
     int priority () { return _priority; }
     Process* fsm_action () { return _fsm_action; }
@@ -85,8 +85,8 @@ namespace djnn {
   public:
     FSM ();
     FSM (Process *p, const string &n);
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual process_type_e get_cpnt_type () const override { return FSM_T; }
     void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state->set_value (name, true); };
     void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };

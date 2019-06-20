@@ -95,17 +95,17 @@ namespace djnn {
   }
 
   void
-  PolyPoint::activate ()
+  PolyPoint::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_cx) _cx->enable (_frame);
     if(_cy) _cy->enable (_frame);
   }
 
   void
-  PolyPoint::deactivate ()
+  PolyPoint::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
   }
@@ -165,16 +165,16 @@ namespace djnn {
   }
 
   void
-  Poly::activate ()
+  Poly::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     _points->activation ();
   }
 
   void
-  Poly::deactivate ()
+  Poly::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     _points->deactivation ();
   }
 

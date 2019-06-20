@@ -29,14 +29,14 @@ namespace djnn {
   }
 
   void
-  IOFD::activate ()
+  IOFD::impl_activate ()
   {
     please_stop ();
     start_thread ();
   }
 
   void
-  IOFD::deactivate ()
+  IOFD::impl_deactivate ()
   {
     please_stop ();
   }

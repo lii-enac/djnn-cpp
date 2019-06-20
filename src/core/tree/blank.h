@@ -27,10 +27,10 @@ namespace djnn {
     Process* clone () override;
   protected:
     bool pre_activate () override { return true; }
-    void activate () override { set_activation_state(ACTIVATED); }
+    void impl_activate () override { set_activation_state(ACTIVATED); }
     void post_activate () override { set_activation_state (DEACTIVATED); }
     bool pre_deactivate () override { return true;}
-    void deactivate () override { set_activation_state(DEACTIVATED); }
+    void impl_deactivate () override { set_activation_state(DEACTIVATED); }
     void post_deactivate () override {}
     void serialize (const string& format) override;
   };

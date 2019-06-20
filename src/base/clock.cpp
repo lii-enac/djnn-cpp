@@ -69,7 +69,7 @@ namespace djnn
   }
 
   void
-  Clock::activate ()
+  Clock::impl_activate ()
   {
     if ( get_activation_state () == ACTIVATED )
       return;
@@ -77,7 +77,7 @@ namespace djnn
   }
 
   void
-  Clock::deactivate ()
+  Clock::impl_deactivate ()
   {
     please_stop ();
   }

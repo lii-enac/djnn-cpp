@@ -50,7 +50,7 @@ namespace djnn {
   CairoGLSDLWindow::~CairoGLSDLWindow ()
   {
     if (is_activated)
-      deactivate (); 
+      impl_deactivate (); 
   }
 
 
@@ -62,7 +62,7 @@ namespace djnn {
   }
 
   void
-  CairoGLSDLWindow::activate ()
+  CairoGLSDLWindow::impl_activate ()
   {
     //std::cerr << _window->title ()->get_value ().c_str() << std::endl;
     double x, y, w, h;
@@ -154,7 +154,7 @@ namespace djnn {
   }
 
   void
-  CairoGLSDLWindow::deactivate ()
+  CairoGLSDLWindow::impl_deactivate ()
   {
     SDLMainloop::instance ().remove_window (this);
     delete _my_cairo_surface;

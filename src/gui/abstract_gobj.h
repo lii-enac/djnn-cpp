@@ -49,8 +49,8 @@ namespace djnn
     virtual ~AbstractGObj () {};
     virtual process_type_e get_cpnt_type () const override { return GOBJ_T; }
     Window*& frame () { return _frame; }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void notify_change (unsigned int nm) override { _damaged |= nm; }
     void reset_damaged () { _damaged = notify_none; }
     int get_damaged () { return _damaged; }
@@ -78,8 +78,8 @@ namespace djnn
       public:
         RedrawAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) { Process::finalize_construction (); }
         virtual ~RedrawAction () {}
-        void activate () override ;
-        void deactivate () override {}
+        void impl_activate () override ;
+        void impl_deactivate () override {}
       private:
         UpdateDrawing* _ud;
     };
@@ -89,8 +89,8 @@ namespace djnn
       UndelayedSpike (UpdateDrawing *p, const string &n)  : Process (p, n), _ud (p) { set_is_model (true); Process::finalize_construction (); }
       virtual ~UndelayedSpike () {}
       void post_activate () override { set_activation_state (DEACTIVATED); }
-      void activate () override {};
-      void deactivate () override {};
+      void impl_activate () override {};
+      void impl_deactivate () override {};
       void coupling_activation_hook () override;
     private:
       UpdateDrawing* _ud;
@@ -100,16 +100,16 @@ namespace djnn
     public:
       AutoRefreshAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) { Process::finalize_construction (); }
       virtual ~AutoRefreshAction () {}
-      void activate () override { _ud->update_auto_refresh (); };
-      void deactivate () override {}
+      void impl_activate () override { _ud->update_auto_refresh (); };
+      void impl_deactivate () override {}
     private:
       UpdateDrawing *_ud;
     };
   public:
     static UpdateDrawing* instance ();
     ~UpdateDrawing ();
-    void activate () override;
-    void deactivate () override {}
+    void impl_activate () override;
+    void impl_deactivate () override {}
     void coupling_activation_hook () override;
     void add_window_for_refresh (Window* w);
     void update_auto_refresh () {

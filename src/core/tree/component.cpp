@@ -160,7 +160,7 @@ namespace djnn
   }
 
   void
-  Container::activate ()
+  Container::impl_activate ()
   {
     ComponentObserver::instance ().start_component ();
     /* WARNING Here we don't use C++ iterator as we want to allow
@@ -212,7 +212,7 @@ namespace djnn
   }
 
   void
-  Container::deactivate ()
+  Container::impl_deactivate ()
   {
     for (auto c : _children) {
       c->deactivation ();
@@ -270,7 +270,7 @@ namespace djnn
   }
 
   void
-  AssignmentSequence::activate ()
+  AssignmentSequence::impl_activate ()
   {
     for (auto c : _children) {
       c->activation ();

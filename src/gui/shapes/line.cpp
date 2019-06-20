@@ -137,9 +137,9 @@ namespace djnn
   }
 
   void
-  Line::activate ()
+  Line::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_cx1) _cx1->enable (_frame);
 		if(_cy1) _cy1->enable (_frame);
 		if(_cx2) _cx2->enable (_frame);
@@ -147,9 +147,9 @@ namespace djnn
   }
 
   void
-  Line::deactivate ()
+  Line::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx1) _cx1->disable ();
 		if(_cy1) _cy1->disable ();
 		if(_cx2) _cx2->disable ();

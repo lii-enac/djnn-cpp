@@ -28,8 +28,8 @@ namespace djnn {
     Activator (Process* parent, const string &name, Process* src);
     Activator (Process* parent, const string &name, Process* src, const string &spec);
     virtual ~Activator ();
-    void activate () override { _action->activation(); };
-    void deactivate () override {}
+    void impl_activate () override { _action->activation(); };
+    void impl_deactivate () override {}
     void serialize (const string& format) override;
   private:
     Process *_action;

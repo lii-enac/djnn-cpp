@@ -28,7 +28,7 @@ namespace djnn
   }
 
   void
-  HermiteCurve::HermiteCurveAction::activate ()
+  HermiteCurve::HermiteCurveAction::impl_activate ()
   {
     //if (_parent->get_state () > activated)
     if (!_parent->somehow_activating ())
@@ -105,7 +105,7 @@ namespace djnn
   }
 
   void
-  HermiteCurve::activate ()
+  HermiteCurve::impl_activate ()
   {
     _c_input->enable ();
     _c_p1->enable ();
@@ -115,7 +115,7 @@ namespace djnn
   }
 
   void
-  HermiteCurve::deactivate ()
+  HermiteCurve::impl_deactivate ()
   {
     _c_input->disable ();
     _c_p1->disable ();

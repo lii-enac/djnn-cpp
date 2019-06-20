@@ -30,8 +30,8 @@ namespace djnn {
       FindAction (Process* p, const string &n) :
         Action (p, n) {};
       virtual ~FindAction () {};
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
     };
     class AddEntryAction : public Action
     {
@@ -39,8 +39,8 @@ namespace djnn {
       AddEntryAction (Process* p, const string &n) :
         Action (p, n) {};
       virtual ~AddEntryAction () {};
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
     };
     class DelEntryAction : public Action
     {
@@ -48,14 +48,14 @@ namespace djnn {
       DelEntryAction (Process* p, const string &n) :
         Action (p, n) {};
       virtual ~DelEntryAction () {};
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
     };
   public:
     Dictionary (Process* parent, const string &name);
     virtual ~Dictionary ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void add_entry (Process* key, Process *value);
     Process* get_value (Process* key);
     void del_entry (Process* key);

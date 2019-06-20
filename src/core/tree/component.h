@@ -36,8 +36,8 @@ namespace djnn {
     void draw () override;
     void pick () override; 
     Process* clone () override;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void print_children ();
     virtual ~Container ();
     children_t children () { return _children; }
@@ -82,9 +82,9 @@ namespace djnn {
     virtual ~AssignmentSequence () {};
     void add_child (Process* c, const string& name) override;
     void draw () override {}
-    void activate () override;
+    void impl_activate () override;
     void post_activate () override;
-    void deactivate () override {};
+    void impl_deactivate () override {};
     void serialize (const string& format) override;
   };
 }

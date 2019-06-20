@@ -41,8 +41,8 @@ namespace djnn
       public:
         TextSizeAction (Process *p, const string &n, Text *text) : Process (p, n), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
-        void activate () override;
-        void deactivate () override {};
+        void impl_activate () override;
+        void impl_deactivate () override {};
       private:
         FontFamily*_ff;
         FontSize* _fsz;
@@ -88,8 +88,8 @@ namespace djnn
     
     void init_text (double x, double y, double dx, double dy, int dxu, int dyu,
               const std::string &encoding, const std::string &text);
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class PolyPoint : public AbstractGObj
@@ -109,8 +109,8 @@ namespace djnn
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;
     Coupling *_cx, *_cy;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class Poly : public AbstractGShape
@@ -125,8 +125,8 @@ namespace djnn
     Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   private:
     List *_points;
     Process* _bounding_box;
@@ -166,8 +166,8 @@ namespace djnn
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;
     Coupling *_cx, *_cy;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class PathMove : public PathPoint
@@ -209,8 +209,8 @@ namespace djnn
     struct raw_props_t { double x1,y1,x,y; };
     raw_props_t raw_props;
     Coupling *_cx1, *_cy1, *_cx, *_cy;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class PathCubic : public AbstractGObj
@@ -233,8 +233,8 @@ namespace djnn
     raw_props_t raw_props;
     DoublePropertyProxy *_x1, *_y1, *_x2, *_y2, *_x, *_y;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2, *_cx, *_cy;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class PathArc : public AbstractGObj
@@ -259,8 +259,8 @@ namespace djnn
     struct raw_props_t { double rx,ry,rotx,fl,swfl,x,y; };
     raw_props_t raw_props;
     Coupling *_crx, *_cry, *_crotx, *_cfl, *_cswfl, *_cx, *_cy;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   };
 
   class PathClosure : public AbstractGObj
@@ -272,13 +272,13 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
-    void activate () override
+    void impl_activate () override
     {
-      AbstractGObj::activate ();
+      AbstractGObj::impl_activate ();
     }
-    void deactivate () override
+    void impl_deactivate () override
     {
-      AbstractGObj::deactivate ();
+      AbstractGObj::impl_deactivate ();
     }
   };
 
@@ -293,8 +293,8 @@ namespace djnn
     Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     List *_items;
     Process* _bounding_box;
     DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
@@ -338,8 +338,8 @@ namespace djnn
     raw_props_t raw_props;
     Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath, *_cwatcher;
     ImageWatcher *_watcher;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void *_cache;
     bool _invalid_cache;
   };
@@ -350,11 +350,11 @@ namespace djnn
     ImageWatcher (Image *i) :
         Process (), _img (i) {}
     virtual ~ImageWatcher () {}
-    void activate () override
+    void impl_activate () override
     {
       _img->set_invalid_cache (true);
     }
-    void deactivate () override {};
+    void impl_deactivate () override {};
   private:
     Image * _img;
   };
@@ -366,8 +366,8 @@ namespace djnn
     Group ();
     virtual ~Group () override;
     Window* frame () { return _gobj->frame ();}
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void draw () override;
     Process* clone () override;
   protected:

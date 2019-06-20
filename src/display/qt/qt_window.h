@@ -41,8 +41,8 @@ namespace djnn {
 
   protected:
     /* Process */
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
 
     friend class MyQWidget;
 

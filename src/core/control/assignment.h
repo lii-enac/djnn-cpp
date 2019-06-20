@@ -26,8 +26,8 @@ namespace djnn {
     public:
       UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process **to_update) : Process (p, n), _to_update (to_update), _prop (prop), _spec (spec) {}
       virtual ~UpdateSrcOrDst () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       Process** _to_update;
       RefProperty* _prop;
@@ -52,8 +52,8 @@ namespace djnn {
    public:
     AssignmentAction (Process* p, const string &n, Process** src, AbstractProperty** dst, bool propagate) : Action (p, n), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
-    void activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
-    void deactivate () override {}
+    void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
+    void impl_deactivate () override {}
     void set_src (Process** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
   private:
@@ -86,9 +86,9 @@ namespace djnn {
   public:
     Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    void activate () override;
+    void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
-    void deactivate () override {}
+    void impl_deactivate () override {}
     void serialize (const string& format) override;
     virtual ~Assignment ();
   };
@@ -100,9 +100,9 @@ namespace djnn {
   public:
     PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    void activate () override;
+    void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
-    void deactivate () override {}
+    void impl_deactivate () override {}
     void serialize (const string& format) override;
     virtual ~PausedAssignment ();
   };

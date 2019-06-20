@@ -37,7 +37,7 @@ namespace djnn
   }
 
   void
-  NativeAction::activate ()
+  NativeAction::impl_activate ()
   {
     (_action) (this);
   }

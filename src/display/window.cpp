@@ -110,7 +110,7 @@ namespace djnn
   }
 
   void
-  Cursor::UpdateCursorAction::activate () {
+  Cursor::UpdateCursorAction::impl_activate () {
     ((Cursor*) _parent)->update_cursor ();
   }
 
@@ -143,7 +143,7 @@ namespace djnn
   }
 
   void
-  Cursor::activate ()
+  Cursor::impl_activate ()
   {
     if (_c_x)
       _c_x->enable ();
@@ -188,7 +188,7 @@ namespace djnn
   }
 
   void
-  Cursor::deactivate () {
+  Cursor::impl_deactivate () {
     if (_c_x)
       _c_x->disable ();
     if (_c_y)

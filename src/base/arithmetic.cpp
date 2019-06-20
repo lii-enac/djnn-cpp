@@ -306,7 +306,7 @@ namespace djnn
   }
 
   void
-  Incr::activate ()
+  Incr::impl_activate ()
   {
     _state->set_value (
         ((DoubleProperty*) _state)->get_value () + ((DoubleProperty*) _delta)->get_value (), true);
@@ -337,7 +337,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::AdderAccumulatorAction::activate ()
+  AdderAccumulator::AdderAccumulatorAction::impl_activate ()
   {
     if (!_parent->somehow_activating ())
       return;
@@ -392,13 +392,13 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::activate ()
+  AdderAccumulator::impl_activate ()
   {
     _c_input->enable ();
   }
 
   void
-  AdderAccumulator::deactivate ()
+  AdderAccumulator::impl_deactivate ()
   {
     _c_input->disable ();
   }

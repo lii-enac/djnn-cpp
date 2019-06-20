@@ -37,8 +37,8 @@ namespace djnn
 
   protected:
     // Process
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
 
   private:

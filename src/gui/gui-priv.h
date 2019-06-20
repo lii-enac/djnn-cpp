@@ -24,8 +24,8 @@ namespace djnn {
       void move_child_to (Process *c, int neighboor_index, int spec, int new_index);
       void remove_gui_child (Process *c);
       void draw () override;
-      void activate () override {}
-      void deactivate () override {}
+      void impl_activate () override {}
+      void impl_deactivate () override {}
     private:
       std::vector<std::pair<Process*, int>> _children;
     };
@@ -51,8 +51,8 @@ namespace djnn {
       ~GUIMouseButton () { delete _press; delete _release; }
       Process* press () { return _press; }
       Process* release () { return _release; }
-      void activate () {}
-      void deactivate () {}
+      void impl_activate () {}
+      void impl_deactivate () {}
     private:
       Process *_press, *_release;
     };
@@ -61,8 +61,8 @@ namespace djnn {
     public:
       GUIMouse (Process *p, const string &n);
       ~GUIMouse ();
-      void activate () { _left->activation (); _right->activation (); _middle->activation ();}
-      void deactivate () {}
+      void impl_activate () { _left->activation (); _right->activation (); _middle->activation ();}
+      void impl_deactivate () {}
       GUIMouseButton* left () { return _left; }
       GUIMouseButton* right () { return _right; }
       GUIMouseButton* middle () { return _middle; }

@@ -244,7 +244,7 @@ void IvyAccess::set_leaving(string v) {
 }
 
 void
-IvyAccess::activate ()
+IvyAccess::impl_activate ()
 {
   please_stop ();
 
@@ -253,7 +253,7 @@ IvyAccess::activate ()
 }
 
 void
-IvyAccess::deactivate ()
+IvyAccess::impl_deactivate ()
 {
   please_stop();
 

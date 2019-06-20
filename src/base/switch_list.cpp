@@ -26,7 +26,7 @@ namespace djnn
   using namespace std;
 
   void
-  SwitchList::Next::activate ()
+  SwitchList::Next::impl_activate ()
   {
     /* note:
      * next and previous only compute the correct index and then assign it
@@ -44,7 +44,7 @@ namespace djnn
   }
 
   void
-  SwitchList::Previous::activate ()
+  SwitchList::Previous::impl_activate ()
   {
     /* note: 
      * next and previous only compute the correct index and then assign it
@@ -62,7 +62,7 @@ namespace djnn
   }
 
   void
-  SwitchList::ChangeIndex::activate ()
+  SwitchList::ChangeIndex::impl_activate ()
   {
     /* note:
      * next and previous only compute the correct index and then assign it
@@ -145,7 +145,7 @@ namespace djnn
   }
 
   void
-  SwitchList::activate ()
+  SwitchList::impl_activate ()
   {
     _c_next->enable ();
     _c_previous->enable ();
@@ -158,7 +158,7 @@ namespace djnn
   }
 
   void
-  SwitchList::deactivate ()
+  SwitchList::impl_deactivate ()
   {
     _c_next->disable ();
     _c_previous->disable ();

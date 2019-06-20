@@ -26,7 +26,7 @@ namespace djnn
   using namespace std;
 
   void
-  Connector::ConnectorAction::activate ()
+  Connector::ConnectorAction::impl_activate ()
   {
     /* do we have to check if the source is activable? */
     if (_parent->somehow_activating () && *_src && *_dst)
@@ -49,7 +49,7 @@ namespace djnn
   }
 
   void
-  Connector::activate ()
+  Connector::impl_activate ()
   {
     if (_c_src)
       _c_src->enable ();
@@ -58,7 +58,7 @@ namespace djnn
   }
 
   void
-  Connector::deactivate ()
+  Connector::impl_deactivate ()
   {
     if (_c_src)
       _c_src->disable ();
@@ -126,8 +126,8 @@ namespace djnn
         _has_coupling = true;
       }
     }
-    if (_update_src) _update_src->activate ();
-    if (_update_dst) _update_dst->activate ();
+    if (_update_src) _update_src->impl_activate ();
+    if (_update_dst) _update_dst->impl_activate ();
   }
 
   void
@@ -202,7 +202,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::activate ()
+  PausedConnector::impl_activate ()
   {
     _c_src->enable ();
     if (_copy_on_activation)
@@ -210,7 +210,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::deactivate ()
+  PausedConnector::impl_deactivate ()
   {
     _c_src->disable ();
     _action->deactivation ();

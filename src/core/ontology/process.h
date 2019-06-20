@@ -77,8 +77,8 @@ namespace djnn {
     virtual process_type_e get_cpnt_type () const { return UNDEFINED_T; }
 
     // main public API
-    void activation ();   // FIXME: should be activate ()
-    void deactivation (); // FIXME: should be deactivate ()
+    void activation ();   // FIXME: should be impl_activate ()
+    void deactivation (); // FIXME: should be impl_deactivate ()
 
     // coupling
     void    add_activation_coupling (Coupling* c);
@@ -135,11 +135,11 @@ namespace djnn {
     void finalize_construction ();
 
     virtual bool pre_activate ();
-    virtual void activate () = 0;
+    virtual void impl_activate () = 0;
     virtual void post_activate ();
 
     virtual bool pre_deactivate ();
-    virtual void deactivate () = 0;
+    virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
   private:

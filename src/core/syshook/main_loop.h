@@ -61,10 +61,10 @@ namespace djnn
 
     // Process
     void
-    activate () override;
+    impl_activate () override;
 
     void
-    deactivate () override;
+    impl_deactivate () override;
 
     void
     run_in_main_thread ();

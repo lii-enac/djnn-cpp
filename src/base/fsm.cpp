@@ -62,22 +62,22 @@ namespace djnn
   }
 
   void
-  FSMState::activate ()
+  FSMState::impl_activate ()
   {
     for (auto t : _transitions) {
       t->activation ();
     }
-    Container::activate ();
+    Container::impl_activate ();
     _parent_fsm->update_state (this, _name);
   }
 
   void
-  FSMState::deactivate ()
+  FSMState::impl_deactivate ()
   {
     for (auto t : _transitions) {
       t->deactivation ();
     }
-    Container::deactivate ();
+    Container::impl_deactivate ();
   }
 
   void
@@ -203,19 +203,19 @@ namespace djnn
   }
 
   void
-  FSMTransition::activate ()
+  FSMTransition::impl_activate ()
   {
     _c_src->enable ();
   }
 
   void
-  FSMTransition::deactivate ()
+  FSMTransition::impl_deactivate ()
   {
     _c_src->disable ();
   }
 
   void
-  FSMTransition::FSMTransitionAction::activate ()
+  FSMTransition::FSMTransitionAction::impl_activate ()
   {
     if (!_src->is_highest_priority (_t))
       return;
@@ -297,7 +297,7 @@ namespace djnn
 
   }
   void
-  FSM::activate ()
+  FSM::impl_activate ()
   {
     _fsm_state->activation ();
     _initial->activation ();
@@ -311,7 +311,7 @@ namespace djnn
   }
 
   void
-  FSM::deactivate ()
+  FSM::impl_deactivate ()
   {
     if (_cur_state != 0)
       _cur_state->deactivation ();

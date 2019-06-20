@@ -60,8 +60,8 @@ namespace djnn {
   public:
     ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model = true);
     virtual ~ListIterator () {}
-    void activate () override;
-    void deactivate () override {};
+    void impl_activate () override;
+    void impl_deactivate () override {};
     void post_activate () override;
   private:
     Process *_action;
@@ -76,8 +76,8 @@ namespace djnn {
     public:
       IterAction (Process *parent, const string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       List* _list;
       RefProperty *_iter;
@@ -89,16 +89,16 @@ namespace djnn {
     public:
       ResetAction (Process *parent, const string& name, IntProperty *index);
       virtual ~ResetAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       IntProperty *_index;
     };
   public:
     BidirectionalListIterator (Process *parent, const string& name, Process* list);
     virtual ~BidirectionalListIterator ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
   private:
     List* _list;

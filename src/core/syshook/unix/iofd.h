@@ -26,8 +26,8 @@ namespace djnn {
 
 	protected:
 		// abstract_component
-		virtual void activate () override;
-    	virtual void deactivate () override;
+		virtual void impl_activate () override;
+    	virtual void impl_deactivate () override;
 	private:
 
 		void run () override;

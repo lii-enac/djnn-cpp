@@ -32,7 +32,7 @@ namespace djnn {
     public:
       BindingAction (Process* parent, const string &name, bool activate) : Action (parent, name) { set_binding_action (activate); }
       virtual ~BindingAction () {};
-      void activate () override {
+      void impl_activate () override {
       	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);
       	if (get_binding_action()) {
       	  ((Binding*)_parent)->_dst->activation ();
@@ -40,7 +40,7 @@ namespace djnn {
       	else
       	  ((Binding*)_parent)->_dst->deactivation ();
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
 
     private:
       
@@ -53,8 +53,8 @@ namespace djnn {
     Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate);
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
-    void activate () override { _c_src->enable(); };
-    void deactivate () override { _c_src->disable (); }
+    void impl_activate () override { _c_src->enable(); };
+    void impl_deactivate () override { _c_src->disable (); }
     void serialize (const string& format) override;
   private:
     void init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate);

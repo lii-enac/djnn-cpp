@@ -254,7 +254,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::IterAction::activate ()
+  BidirectionalListIterator::IterAction::impl_activate ()
   {
     if (_parent->somehow_deactivating () )
       return;
@@ -279,7 +279,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::ResetAction::activate ()
+  BidirectionalListIterator::ResetAction::impl_activate ()
   {
     if (_parent->somehow_deactivating ())
       return;
@@ -345,7 +345,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::activate ()
+  BidirectionalListIterator::impl_activate ()
   {
     _c_next->enable ();
     _c_previous->enable ();
@@ -353,7 +353,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::deactivate ()
+  BidirectionalListIterator::impl_deactivate ()
   {
     _c_next->disable ();
     _c_previous->disable ();
@@ -389,7 +389,7 @@ namespace djnn
   }
 
   void
-  ListIterator::activate ()
+  ListIterator::impl_activate ()
   {
     for (auto p : _list->children ()) {
       _action->set_data (p);

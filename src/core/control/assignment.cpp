@@ -37,7 +37,7 @@ namespace djnn
   using namespace std;
 
   void
-  UpdateSrcOrDst::activate ()
+  UpdateSrcOrDst::impl_activate ()
   {
     Process* v = _prop->get_value ();
     if (!v) {
@@ -75,7 +75,7 @@ namespace djnn
     if (ref_src_pair.first != nullptr) {
       _ref_src = ref_src_pair.first;
       _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, &_src);
-      _update_src->activate ();
+      _update_src->impl_activate ();
       _c_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION, true);
     } else {
       Process *f = src->find_component (ispec);
@@ -99,7 +99,7 @@ namespace djnn
     if (ref_dst_pair.first != nullptr) {
       _ref_dst = ref_dst_pair.first;
       _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
-      _update_dst->activate ();
+      _update_dst->impl_activate ();
       _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
       if (_parent && _parent->state_dependency () != nullptr)
@@ -232,7 +232,7 @@ namespace djnn
   }
 
   void
-  Assignment::activate ()
+  Assignment::impl_activate ()
   {
     /* here we have an activation issue, an assignment must do its action when activated, but
      * when the left side of an assignment is the result of an expression, we have to wait
@@ -299,7 +299,7 @@ namespace djnn
   }
 
   void
-  PausedAssignment::activate ()
+  PausedAssignment::impl_activate ()
   {
     /* here we have an activation issue, an assignment must do its action when activated, but
      * when the left side of an assignment is the result of an expression, we have to wait

@@ -27,7 +27,7 @@
 namespace djnn
 {
   void
-  Finder::FinderAction::activate ()
+  Finder::FinderAction::impl_activate ()
   {
     Finder* f = (Finder*) _parent;
     string path = f->_path->get_value ();
@@ -134,13 +134,13 @@ namespace djnn
   }
 
   void
-  Finder::activate ()
+  Finder::impl_activate ()
   {
     _cfind->enable ();
   }
 
   void
-  Finder::deactivate ()
+  Finder::impl_deactivate ()
   {
     _cfind->disable ();
   }

@@ -23,7 +23,7 @@ namespace djnn
   using namespace std;
 
   void
-  Dictionary::FindAction::activate ()
+  Dictionary::FindAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)_parent;
     Process* key = d->key ()->get_value ();
@@ -36,7 +36,7 @@ namespace djnn
   }
 
   void
-  Dictionary::DelEntryAction::activate ()
+  Dictionary::DelEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)_parent;
     Process* key = d->key ()->get_value ();
@@ -50,7 +50,7 @@ namespace djnn
   }
 
   void
-  Dictionary::AddEntryAction::activate ()
+  Dictionary::AddEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)_parent;
     Process* key = d->key ()->get_value ();
@@ -79,14 +79,14 @@ namespace djnn
     Process::finalize_construction ();
   }
   void
-  Dictionary::activate ()
+  Dictionary::impl_activate ()
   {
     _c_add->enable ();
     _c_del->enable ();
     _c_find->enable ();
   }
   void
-  Dictionary::deactivate ()
+  Dictionary::impl_deactivate ()
   {
     _c_add->disable ();
     _c_del->disable ();

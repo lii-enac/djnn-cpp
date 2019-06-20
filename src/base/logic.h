@@ -32,14 +32,14 @@ namespace djnn
                  AbstractProperty* result) :
           BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~AndAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () && ((BoolProperty*) _right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     And (Process *p, const string &n, int l_val, int r_val);
@@ -57,14 +57,14 @@ namespace djnn
                 AbstractProperty* result) :
                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~OrAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Or (Process *p, const string &n, int l_val, int r_val);
@@ -82,14 +82,14 @@ namespace djnn
                  AbstractProperty* result) :
                    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
       virtual ~XOrAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
           return;
         _result->set_value (((BoolProperty*) _left)->get_value () != ((BoolProperty*) _right)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     XOr (Process *p, const string &n, int l_val, int r_val);
@@ -106,13 +106,13 @@ namespace djnn
       NotAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
       virtual ~NotAction () {}
-      void activate () {
+      void impl_activate () {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
                   return;
         _output->set_value (!((BoolProperty*) _input)->get_value (), true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     Not (Process *p, const string &n, int in_val);

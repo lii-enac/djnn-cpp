@@ -116,18 +116,18 @@ namespace djnn
   }
 
   void
-  AbstractColor::activate ()
+  AbstractColor::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if(_cr) _cr->enable (_frame);
     if(_cg) _cg->enable (_frame);
     if(_cb) _cb->enable (_frame);
   }
 
   void
-  AbstractColor::deactivate ()
+  AbstractColor::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cr) _cr->disable ();
     if (_cg) _cg->disable ();
     if (_cb) _cb->disable ();
@@ -234,16 +234,16 @@ namespace djnn
   }
 
   void
-  FillRule::activate ()
+  FillRule::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if(_cr) _cr->enable (_frame);
   }
 
   void
-  FillRule::deactivate ()
+  FillRule::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cr) _cr->disable ();
   }
 
@@ -348,16 +348,16 @@ namespace djnn
   }
 
   void
-  Texture::activate ()
+  Texture::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cp) _cp->enable (_frame);
   }
 
   void
-  Texture::deactivate ()
+  Texture::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cp) _cp->disable ();
   }
 
@@ -433,16 +433,16 @@ namespace djnn
   }
 
   void
-  AbstractOpacity::activate ()
+  AbstractOpacity::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_ca) _ca->enable (_frame);
   }
 
   void
-  AbstractOpacity::deactivate ()
+  AbstractOpacity::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_ca) _ca->disable ();
   }
 
@@ -532,16 +532,16 @@ namespace djnn
   }
 
   void
-  OutlineWidth::activate ()
+  OutlineWidth::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cw) _cw->enable (_frame);
   }
 
   void
-  OutlineWidth::deactivate ()
+  OutlineWidth::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cw) _cw->disable ();
   }
 
@@ -632,16 +632,16 @@ namespace djnn
   }
 
   void
-  OutlineCapStyle::activate ()
+  OutlineCapStyle::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cc) _cc->enable (_frame);
   }
 
   void
-  OutlineCapStyle::deactivate ()
+  OutlineCapStyle::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cc) _cc->disable ();
   }
 
@@ -731,16 +731,16 @@ namespace djnn
   }
 
   void
-  OutlineJoinStyle::activate ()
+  OutlineJoinStyle::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cj) _cj->enable (_frame);
   }
 
   void
-  OutlineJoinStyle::deactivate ()
+  OutlineJoinStyle::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cj) _cj->disable ();
   }
 
@@ -815,16 +815,16 @@ namespace djnn
   }
 
   void
-  OutlineMiterLimit::activate ()
+  OutlineMiterLimit::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cl) _cl->enable (_frame);
   }
 
   void
-  OutlineMiterLimit::deactivate ()
+  OutlineMiterLimit::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cl) _cl->disable ();
   }
 
@@ -934,16 +934,16 @@ namespace djnn
 
 
   void
-  DashOffset::activate ()
+  DashOffset::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_co) _co->enable (_frame);
   }
 
   void
-  DashOffset::deactivate ()
+  DashOffset::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_co) _co->disable ();
   }
 
@@ -1074,9 +1074,9 @@ namespace djnn
   }
 
   void
-  GradientStop::activate ()
+  GradientStop::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cr) _cr->enable (_frame);
     if (_cg) _cg->enable (_frame);
     if (_cb) _cb->enable (_frame);
@@ -1085,9 +1085,9 @@ namespace djnn
   }
 
   void
-  GradientStop::deactivate ()
+  GradientStop::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cr) _cr->disable ();
     if (_cg) _cg->disable ();
     if (_cb) _cb->disable ();
@@ -1178,9 +1178,9 @@ namespace djnn
 
 
   void
-  AbstractGradient::activate ()
+  AbstractGradient::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     _stops->activation ();
     _transforms->activation ();
     if (_cs) _cs->enable (_frame);
@@ -1188,9 +1188,9 @@ namespace djnn
   }
 
   void
-  AbstractGradient::deactivate ()
+  AbstractGradient::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     _stops->deactivation ();
     _transforms->deactivation ();
     if (_cs) _cs->enable (_frame);
@@ -1315,9 +1315,9 @@ namespace djnn
   }
 
   void
-  LinearGradient::activate ()
+  LinearGradient::impl_activate ()
   {
-    AbstractGradient::activate ();
+    AbstractGradient::impl_activate ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx2) _cx2->enable (_frame);
@@ -1325,9 +1325,9 @@ namespace djnn
   }
 
   void
-  LinearGradient::deactivate ()
+  LinearGradient::impl_deactivate ()
   {
-    AbstractGradient::deactivate ();
+    AbstractGradient::impl_deactivate ();
     if (_cx1) _cx1->disable ();
     if (_cy1) _cy1->disable ();
     if (_cx2) _cx2->disable ();
@@ -1371,15 +1371,15 @@ namespace djnn
   }
 
   void
-  RefLinearGradient::activate ()
+  RefLinearGradient::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
   }
 
   void
-  RefLinearGradient::deactivate ()
+  RefLinearGradient::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
   }
 
   void
@@ -1522,9 +1522,9 @@ namespace djnn
   }
 
   void
-  RadialGradient::activate ()
+  RadialGradient::impl_activate ()
   {
-    AbstractGradient::activate ();
+    AbstractGradient::impl_activate ();
     if (_ccx) _ccx->enable (_frame);
     if (_ccy) _ccy->enable (_frame);
     if (_cr) _cr->enable (_frame);
@@ -1533,9 +1533,9 @@ namespace djnn
   }
 
   void
-  RadialGradient::deactivate ()
+  RadialGradient::impl_deactivate ()
   {
-    AbstractGradient::deactivate ();
+    AbstractGradient::impl_deactivate ();
     if (_ccx) _ccx->disable ();
     if (_ccy) _ccy->disable ();
     if (_cr) _cr->disable ();
@@ -1580,15 +1580,15 @@ namespace djnn
   }
 
   void
-  RefRadialGradient::activate ()
+  RefRadialGradient::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
   }
 
   void
-  RefRadialGradient::deactivate ()
+  RefRadialGradient::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
   }
 
   void
@@ -1723,9 +1723,9 @@ namespace djnn
   }
 
   void
-  FontSize::activate ()
+  FontSize::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cu) _cu->enable (_frame);
     if (_cs) _cs->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
@@ -1735,9 +1735,9 @@ namespace djnn
   }
 
   void
-  FontSize::deactivate ()
+  FontSize::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cu) _cu->disable ();
     if (_cs) _cs->disable ();
   }
@@ -1814,9 +1814,9 @@ namespace djnn
   }
 
   void
-  FontWeight::activate ()
+  FontWeight::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cw) _cw->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
@@ -1824,9 +1824,9 @@ namespace djnn
   }
 
   void
-  FontWeight::deactivate ()
+  FontWeight::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cw) _cw->disable ();
   }
 
@@ -1917,9 +1917,9 @@ namespace djnn
   }
 
   void
-  FontStyle::activate ()
+  FontStyle::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cs) _cs->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
@@ -1927,9 +1927,9 @@ namespace djnn
   }
 
   void
-  FontStyle::deactivate ()
+  FontStyle::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cs) _cs->disable ();
   }
 
@@ -2005,9 +2005,9 @@ namespace djnn
   }
 
   void
-  FontFamily::activate ()
+  FontFamily::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_cf) _cf->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
@@ -2015,9 +2015,9 @@ namespace djnn
   }
 
   void
-  FontFamily::deactivate ()
+  FontFamily::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_cf) _cf->disable ();
   }
 
@@ -2108,16 +2108,16 @@ namespace djnn
   }
 
   void
-  TextAnchor::activate ()
+  TextAnchor::impl_activate ()
   {
-    AbstractStyle::activate ();
+    AbstractStyle::impl_activate ();
     if (_ca) _ca->enable (_frame);
   }
 
   void
-  TextAnchor::deactivate ()
+  TextAnchor::impl_deactivate ()
   {
-    AbstractStyle::deactivate ();
+    AbstractStyle::impl_deactivate ();
     if (_ca) _ca->disable ();
   }
 

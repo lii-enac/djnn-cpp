@@ -125,18 +125,18 @@ namespace djnn
   }
 
   void
-  Circle::activate ()
+  Circle::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_ccx) _ccx->enable (_frame);
 		if(_ccy) _ccy->enable (_frame);
 		if(_cr) _cr->enable (_frame);
   }
 
   void
-  Circle::deactivate ()
+  Circle::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
 		if(_cr) _cr->disable ();

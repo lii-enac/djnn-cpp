@@ -28,8 +28,8 @@ namespace djnn {
   public:
     Exit (Process* p, const string &name, int value, bool is_model);
     virtual ~Exit ();
-    void activate () override;
-    void deactivate () override {}
+    void impl_activate () override;
+    void impl_deactivate () override {}
     void serialize (const string& format) override;
   private:
     IntProperty *_value;

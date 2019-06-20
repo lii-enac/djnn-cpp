@@ -37,7 +37,7 @@ namespace djnn
   }
 
   void
-  NativeExpressionAction::activate ()
+  NativeExpressionAction::impl_activate ()
   {
     (_action) (_data, _string_setter);
   }

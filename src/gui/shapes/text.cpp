@@ -25,7 +25,7 @@
 namespace djnn
 {
   void
-  Text::TextSizeAction::activate ()
+  Text::TextSizeAction::impl_activate ()
   {
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
@@ -336,9 +336,9 @@ namespace djnn
     
 
   void
-  Text::activate ()
+  Text::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     Container *c = dynamic_cast<Container*> (_parent);
     if (c) {
       Process* ff = c->get_from_context ("FontFamily");
@@ -418,9 +418,9 @@ namespace djnn
   }
 
   void
-  Text::deactivate ()
+  Text::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if (_cx) _cx->disable ();
     if (_cy) _cy->disable ();
     if (_ctext) _ctext->disable ();

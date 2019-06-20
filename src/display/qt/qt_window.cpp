@@ -61,7 +61,7 @@ namespace djnn
   }
 
   void
-  QtWindow::activate ()
+  QtWindow::impl_activate ()
   {
     //QtMainloop::instance ().add_window (this);
     QtDisplayBackend::instance ()->add_window (this);
@@ -85,7 +85,7 @@ namespace djnn
   }
 
   void
-  QtWindow::deactivate ()
+  QtWindow::impl_deactivate ()
   {
     //QtMainloop::instance ().remove_window (this);
     QtDisplayBackend::instance ()->remove_window (this);

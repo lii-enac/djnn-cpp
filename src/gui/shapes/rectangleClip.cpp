@@ -137,9 +137,9 @@ namespace djnn
   }
 
   void
-  RectangleClip::activate ()
+  RectangleClip::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_cx) _cx->enable (_frame);
 		if(_cy) _cy->enable (_frame);
 		if(_cwidth) _cwidth->enable (_frame);
@@ -147,9 +147,9 @@ namespace djnn
   }
 
   void
-  RectangleClip::deactivate ()
+  RectangleClip::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();

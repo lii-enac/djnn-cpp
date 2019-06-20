@@ -36,8 +36,8 @@ namespace djnn {
       ConnectorAction (Process* p, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
         Action (p, n), _src (src), _dst (dst), _propagate (propagate) {};
       virtual ~ConnectorAction () {};
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
       
     private:
       AbstractProperty** _src;
@@ -48,8 +48,8 @@ namespace djnn {
   public:
     Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
     Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void update_graph () override;
     void serialize (const string& type) override;
     virtual ~Connector ();
@@ -72,8 +72,8 @@ namespace djnn {
   public:
     PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
     PausedConnector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
     virtual ~PausedConnector ();
 

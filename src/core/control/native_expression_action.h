@@ -29,8 +29,8 @@ namespace djnn {
     NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel);
     NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel);
     virtual ~NativeExpressionAction ();
-    void activate () override;
-    void deactivate () override {}
+    void impl_activate () override;
+    void impl_deactivate () override {}
     std::map<std::string, AbstractProperty*>& data ();
   private:
     std::map<std::string, AbstractProperty*> _data;

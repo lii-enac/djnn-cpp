@@ -93,17 +93,17 @@ namespace djnn
   }
 
   void
-  PathPoint::activate ()
+  PathPoint::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_cx) _cx->enable (_frame);
     if(_cy) _cy->enable (_frame);
   }
 
   void
-  PathPoint::deactivate ()
+  PathPoint::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
   }
@@ -248,9 +248,9 @@ namespace djnn
   }
 
   void
-  PathQuadratic::activate ()
+  PathQuadratic::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx)  _cx->enable (_frame);
@@ -258,9 +258,9 @@ namespace djnn
   }
 
   void
-  PathQuadratic::deactivate ()
+  PathQuadratic::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx1) _cx1->disable ();
     if(_cy1) _cy1->disable ();
     if(_cx)  _cx->disable ();
@@ -390,9 +390,9 @@ namespace djnn
   }
 
   void
-  PathCubic::activate ()
+  PathCubic::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx2) _cx2->enable (_frame);
@@ -402,9 +402,9 @@ namespace djnn
   }
 
   void
-  PathCubic::deactivate ()
+  PathCubic::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx1) _cx1->disable ();
     if(_cy1) _cy1->disable ();
     if(_cx2) _cx2->disable ();
@@ -546,9 +546,9 @@ namespace djnn
   }
 
   void
-  PathArc::activate ()
+  PathArc::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_crotx) _crotx->enable (_frame);
     if(_cfl) _cfl->enable (_frame);
     if(_cswfl) _cswfl->enable (_frame);
@@ -559,9 +559,9 @@ namespace djnn
   }
 
   void
-  PathArc::deactivate ()
+  PathArc::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_crotx) _crotx->disable ();
     if(_cfl) _cfl->disable ();
     if(_cswfl) _cswfl->disable ();
@@ -628,16 +628,16 @@ namespace djnn
   }
 
   void
-  Path::activate ()
+  Path::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     _items->activation ();
   }
 
   void
-  Path::deactivate ()
+  Path::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     _items->deactivation ();
   }
 

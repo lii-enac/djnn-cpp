@@ -68,7 +68,7 @@ namespace djnn
   Process::activation ()
   {
     if (pre_activate ()) {
-      activate ();
+      impl_activate ();
       post_activate ();
     }
   }
@@ -77,7 +77,7 @@ namespace djnn
   Process::deactivation ()
   {
     if (pre_deactivate ()) {
-      deactivate ();
+      impl_deactivate ();
       post_deactivate ();
     }
   }

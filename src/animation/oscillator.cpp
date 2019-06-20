@@ -28,7 +28,7 @@ namespace djnn
   }
 
   void
-  Oscillator::OscillatorAction::activate ()
+  Oscillator::OscillatorAction::impl_activate ()
   {
     double f = (-_k->get_value () * _output->get_value ()) - (_b->get_value () * _v->get_value ());
     double a = f / _m->get_value ();
@@ -77,13 +77,13 @@ namespace djnn
   }
 
   void
-  Oscillator::activate ()
+  Oscillator::impl_activate ()
   {
     _c_step->enable ();
   }
 
   void
-  Oscillator::deactivate ()
+  Oscillator::impl_deactivate ()
   {
     _c_step->disable ();
   }

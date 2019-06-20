@@ -31,16 +31,16 @@ namespace djnn
     public:
       TextPrinterAction (Process *p, const string &n, TextProperty* input) : Action (p, n), _input (input) {}
       virtual ~TextPrinterAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       TextProperty* _input;
     };
   public:
     TextPrinter ();
     TextPrinter (Process *p, const string &n);
-    void activate () override { c_input->enable(); };
-    void deactivate () override { c_input->disable (); };
+    void impl_activate () override { c_input->enable(); };
+    void impl_deactivate () override { c_input->disable (); };
     virtual ~TextPrinter ();
     void serialize (const string& type) override;
   private:
@@ -60,7 +60,7 @@ namespace djnn
                            AbstractProperty* result) :
 		  BinaryOperatorAction (parent, name, left, right, result) {}
       virtual ~TextCatenatorAction () {}
-      void activate () override
+      void impl_activate () override
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
@@ -70,7 +70,7 @@ namespace djnn
         string out = head + tail;
         _result->set_value (out, true);
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     };
   public:
     TextCatenator (Process *p, const string &name);
@@ -88,7 +88,7 @@ namespace djnn
                            AbstractProperty* result) :
       BinaryOperatorAction (parent, name, left, right, result) {}
       virtual ~TextComparatorAction () {}
-      void activate ()
+      void impl_activate ()
       {
         //if (_parent->get_state () > activated)
         if (!_parent->somehow_activating ())
@@ -97,7 +97,7 @@ namespace djnn
         string right = ((TextProperty*)_right)->get_value ();
         _result->set_value (left.compare (right) == 0, true);
       }
-      void deactivate () {}
+      void impl_deactivate () {}
     };
   public:
     TextComparator (Process *p, const string &name, const string &left, const string &right);
@@ -112,11 +112,11 @@ namespace djnn
       public:
         AccumulateAction (Process *p, const string &n, TextProperty *input, TextProperty *state) : Process (p, n), _input (input), _state (state) {}
         virtual ~AccumulateAction () {}
-        void activate () override {
+        void impl_activate () override {
           std::string new_state = _state->get_value () + _input->get_value ();
           _state->set_value (new_state, true);
         }
-        void deactivate () override {}
+        void impl_deactivate () override {}
       private:
         TextProperty *_input, *_state;
     };
@@ -124,22 +124,22 @@ namespace djnn
     public:
       DeleteAction (Process *p, const string &n, TextProperty *state) : Process (p, n), _state (state) {}
       virtual ~DeleteAction () {}
-      void activate () override {
+      void impl_activate () override {
         int sz = _state->get_value ().size ();
         std::string new_state = "";
         if (sz > 1)
           new_state = _state->get_value ().substr (0, sz - 1);
         _state->set_value (new_state, true);
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     private:
       TextProperty *_state;
     };
   public:
     TextAccumulator (Process *p, const string &n, const string &init = "");
     virtual ~TextAccumulator ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string &type) override;
   private:
     TextProperty *_input, *_state;
@@ -157,7 +157,7 @@ namespace djnn
     public:
       DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize_construction (); }
       virtual ~DoubleFormatterAction () {}
-      void activate () override {
+      void impl_activate () override {
         int decimal = _decimal->get_value ();
         double value = _input->get_value();
         string res = to_string (value);
@@ -171,7 +171,7 @@ namespace djnn
         }
         _output->set_value (res, true);
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     private:
       DoubleProperty* _input;
       IntProperty* _decimal;
@@ -181,8 +181,8 @@ namespace djnn
     DoubleFormatter (double initial, int decimal);
     DoubleFormatter (Process* parent, const string &name, double initial, int decimal);
     virtual ~DoubleFormatter ();
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void serialize (const string& type) override;
   private:
     void init (double initial, int decimal);

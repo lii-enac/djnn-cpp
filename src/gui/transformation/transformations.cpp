@@ -110,17 +110,17 @@ namespace djnn
   }
 
   void
-  AbstractTranslation::activate ()
+  AbstractTranslation::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_ctx) _ctx->enable (_frame);
     if(_cty) _cty->enable (_frame);
   }
 
   void
-  AbstractTranslation::deactivate ()
+  AbstractTranslation::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_ctx)_ctx->disable ();
     if(_cty) _cty->disable ();
   }
@@ -266,18 +266,18 @@ namespace djnn
 
 
   void
-  AbstractRotation::activate ()
+  AbstractRotation::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_ca) _ca->enable (_frame);
     if(_ccx) _ccx->enable (_frame);
     if(_ccy) _ccy->enable (_frame);
   }
 
   void
-  AbstractRotation::deactivate ()
+  AbstractRotation::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_ca) _ca->disable ();
     if(_ccx) _ccx->disable ();
     if(_ccy) _ccy->disable ();
@@ -435,9 +435,9 @@ namespace djnn
   }
 
   void
-  AbstractScaling::activate ()
+  AbstractScaling::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_csx) _csx->enable (_frame);
     if(_csy) _csy->enable (_frame);
     if(_ccx) _ccx->enable (_frame);
@@ -445,9 +445,9 @@ namespace djnn
   }
 
   void
-  AbstractScaling::deactivate ()
+  AbstractScaling::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_csx) _csx->disable ();
     if(_csy) _csy->disable ();
     if(_ccx) _ccx->disable ();
@@ -573,16 +573,16 @@ namespace djnn
   }
 
   void
-  AbstractSkew::activate ()
+  AbstractSkew::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if (_ca) _ca->enable (_frame);
   }
 
   void
-  AbstractSkew::deactivate ()
+  AbstractSkew::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if (_ca) _ca->disable ();
   }
 
@@ -1478,7 +1478,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::RightTranslateByAction::activate () 
+  AbstractHomography::RightTranslateByAction::impl_activate () 
   { 
     double dx = _h->_rightTranslateBy_dx->get_value ();
     double dy = _h->_rightTranslateBy_dy->get_value ();
@@ -1490,7 +1490,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::LeftTranslateByAction::activate () 
+  AbstractHomography::LeftTranslateByAction::impl_activate () 
   { 
     double dx = _h->_leftTranslateBy_dx->get_value ();
     double dy = _h->_leftTranslateBy_dy->get_value ();
@@ -1502,7 +1502,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::RightScaleByAction::activate () 
+  AbstractHomography::RightScaleByAction::impl_activate () 
   { 
     double cx = _h->_rightScaleBy_cx->get_value ();
     double cy = _h->_rightScaleBy_cy->get_value ();
@@ -1518,7 +1518,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::LeftScaleByAction::activate () 
+  AbstractHomography::LeftScaleByAction::impl_activate () 
   { 
     double cx = _h->_leftScaleBy_cx->get_value ();
     double cy = _h->_leftScaleBy_cy->get_value ();
@@ -1534,7 +1534,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::RightRotateByAction::activate () 
+  AbstractHomography::RightRotateByAction::impl_activate () 
   { 
     double cx = _h->_rightRotateBy_cx->get_value ();
     double cy = _h->_rightRotateBy_cy->get_value ();
@@ -1547,7 +1547,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::LeftRotateByAction::activate () 
+  AbstractHomography::LeftRotateByAction::impl_activate () 
   { 
     double cx = _h->_leftRotateBy_cx->get_value ();
     double cy = _h->_leftRotateBy_cy->get_value ();
@@ -1560,7 +1560,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::Right_Skew_X_ByAction::activate ()
+  AbstractHomography::Right_Skew_X_ByAction::impl_activate ()
   { 
     double cx = _h->_rightSkew_X_By_cx->get_value ();
     double cy = _h->_rightSkew_X_By_cy->get_value ();
@@ -1572,7 +1572,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::Left_Skew_X_ByAction::activate ()
+  AbstractHomography::Left_Skew_X_ByAction::impl_activate ()
   { 
     double cx = _h->_leftSkew_X_By_cx->get_value ();
     double cy = _h->_leftSkew_X_By_cy->get_value ();
@@ -1584,7 +1584,7 @@ namespace djnn
   }
 
   void
-  AbstractHomography::Right_Skew_Y_ByAction::activate ()
+  AbstractHomography::Right_Skew_Y_ByAction::impl_activate ()
   { 
     double cx = _h->_rightSkew_Y_By_cx->get_value ();
     double cy = _h->_rightSkew_Y_By_cy->get_value ();
@@ -1596,7 +1596,7 @@ namespace djnn
   }
  
   void
-  AbstractHomography::Left_Skew_Y_ByAction::activate ()
+  AbstractHomography::Left_Skew_Y_ByAction::impl_activate ()
   { 
     double cx = _h->_leftSkew_Y_By_cx->get_value ();
     double cy = _h->_leftSkew_Y_By_cy->get_value ();
@@ -2433,9 +2433,9 @@ namespace djnn
   }
 
   void
-  AbstractHomography::activate ()
+  AbstractHomography::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if (_cm11) _cm11->enable (_frame);
     if (_cm12) _cm12->enable (_frame);
     if (_cm13) _cm13->enable (_frame);
@@ -2509,9 +2509,9 @@ namespace djnn
   }
 
   void
-  AbstractHomography::deactivate ()
+  AbstractHomography::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if (_cm11) _cm11->disable ();
     if (_cm12) _cm12->disable ();
     if (_cm13) _cm13->disable ();

@@ -104,13 +104,13 @@ namespace djnn
   }
 
   void
-  Counter::activate () {
+  Counter::impl_activate () {
     _c_reset->enable ();
     _c_step->enable ();
   }
 
   void
-  Counter::deactivate () {
+  Counter::impl_deactivate () {
     _c_reset->disable ();
     _c_step->disable ();
   }

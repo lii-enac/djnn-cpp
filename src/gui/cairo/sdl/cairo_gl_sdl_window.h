@@ -31,8 +31,8 @@ class CairoGLSDLWindow : public SDLWindow
 
   protected:
     // Process
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
 
     // SDLWindow
     virtual void handle_resized(int w, int h) override;

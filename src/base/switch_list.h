@@ -36,8 +36,8 @@ namespace djnn {
     public:
       Next (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~Next () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };
@@ -45,8 +45,8 @@ namespace djnn {
     public:
       Previous (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~Previous () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };
@@ -54,8 +54,8 @@ namespace djnn {
     public:
       ChangeIndex (SwitchList *p) : Action (), _sw (p) { Process::finalize_construction (); }
       virtual ~ChangeIndex () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };
@@ -65,8 +65,8 @@ namespace djnn {
     virtual ~SwitchList ();
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     Process* find_component (const string &path) override;
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     Process* clone () override;
     void serialize (const string& type) override;
     Process* item () { return _cur_item; }

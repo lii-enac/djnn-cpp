@@ -27,7 +27,7 @@ namespace djnn
 {
 
   void
-  ScreenToLocal::stl_action::activate () {
+  ScreenToLocal::stl_action::impl_activate () {
 
     if (_stl->_shape->inverted_matrix () == nullptr)
       warning (this, "ScreenToLocal::stl_action::activate - inverted_matrix has not been initialized");
@@ -97,21 +97,21 @@ namespace djnn
   }
 
   void
-  ScreenToLocal::activate () 
+  ScreenToLocal::impl_activate () 
   {
     _cinX->enable ();
     _cinY->enable ();
   }
 
   void
-  ScreenToLocal::deactivate () 
+  ScreenToLocal::impl_deactivate () 
   {
     _cinX->disable ();
     _cinY->disable ();
   }
 
   void
-  LocalToScreen::lts_action::activate () {
+  LocalToScreen::lts_action::impl_activate () {
 
     if (_lts->_shape->matrix () == nullptr)
       warning (this, "LocalToScreen::stl_action::activate - matrix has not been initialized");
@@ -183,14 +183,14 @@ namespace djnn
   }
 
   void
-  LocalToScreen::activate () 
+  LocalToScreen::impl_activate () 
   {
     _cinX->enable ();
     _cinY->enable ();
   }
 
   void
-  LocalToScreen::deactivate () 
+  LocalToScreen::impl_deactivate () 
   {
     _cinX->disable ();
     _cinY->disable ();

@@ -43,7 +43,7 @@ namespace djnn {
   }
 
   void
-  GLSDLWindow::activate ()
+  GLSDLWindow::impl_activate ()
   {
     //std::cerr << _window->title ()->get_value ().c_str() << std::endl;
     double x, y, w, h;
@@ -130,7 +130,7 @@ namespace djnn {
   }
 
   void
-  GLSDLWindow::deactivate ()
+  GLSDLWindow::impl_deactivate ()
   {
     SDLMainloop::instance ().remove_window (this);
     //delete _picking_view;

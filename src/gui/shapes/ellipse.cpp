@@ -137,9 +137,9 @@ namespace djnn
   }
 
   void
-  Ellipse::activate ()
+  Ellipse::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_ccx) _ccx->enable (_frame);
 		if(_ccy) _ccy->enable (_frame);
 		if(_crx) _crx->enable (_frame);
@@ -147,9 +147,9 @@ namespace djnn
   }
 
   void
-  Ellipse::deactivate ()
+  Ellipse::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
 		if(_crx) _crx->disable ();

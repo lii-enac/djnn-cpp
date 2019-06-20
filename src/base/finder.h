@@ -30,14 +30,14 @@ namespace djnn
     public:
       FinderAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (); }
       virtual ~FinderAction () {}
-      void activate () override;
-      void deactivate () override {};
+      void impl_activate () override;
+      void impl_deactivate () override {};
     };
     public:
       Finder (Process *p, const string &n, Process *container, const string& path);
       virtual ~Finder ();
-      void activate () override;
-      void deactivate () override;
+      void impl_activate () override;
+      void impl_deactivate () override;
       void serialize (const string& type) override;
     private:
       Container* _container;

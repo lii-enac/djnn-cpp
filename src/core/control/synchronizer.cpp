@@ -53,7 +53,7 @@ namespace djnn
   }
 
   void
-  Synchronizer::activate ()
+  Synchronizer::impl_activate ()
   {
     for (auto c: _c_list) {
       c->enable ();
@@ -61,7 +61,7 @@ namespace djnn
   }
 
   void
-  Synchronizer::deactivate ()
+  Synchronizer::impl_deactivate ()
   {
     for (auto c: _c_list) {
       c->disable ();
@@ -79,7 +79,7 @@ namespace djnn
     Coupling *cpl = new Coupling (_src, ACTIVATION, _action, ACTIVATION);
     /* 
       if the synchronizer is already activated => cpl->enable (by default)
-      if the synchronizer is not activated => cpl->disable (it will be enable by synchronizer::activate () function)
+      if the synchronizer is not activated => cpl->disable (it will be enable by synchronizer::impl_activate () function)
     */
     if (!this->somehow_activating ())
     cpl->disable ();

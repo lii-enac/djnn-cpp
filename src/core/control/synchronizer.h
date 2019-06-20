@@ -31,18 +31,18 @@ namespace djnn {
     public:
       SynchronizerAction (Process* parent, const string &name) : Action (parent, name) {}
       virtual ~SynchronizerAction () {};
-      void activate () override {
+      void impl_activate () override {
         if (_parent->somehow_activating ())
           ((Synchronizer*) _parent)->propagate ();
       }
-      void deactivate () override {}
+      void impl_deactivate () override {}
     };
   public:
     Synchronizer (Process* parent, const string &name, Process* dst, const string & dspec);
     virtual ~Synchronizer ();
     void add_source (Process* src, const string &spec);
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
   private:
     void propagate ();
     Process *_dst;

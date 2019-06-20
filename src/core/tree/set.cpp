@@ -112,7 +112,7 @@ namespace djnn
   }
 
   void
-  Set::activate ()
+  Set::impl_activate ()
   {
     std::map<std::string, Process*>::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
@@ -121,7 +121,7 @@ namespace djnn
   }
 
   void
-  Set::deactivate ()
+  Set::impl_deactivate ()
   {
     std::map<std::string, Process*>::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
@@ -172,7 +172,7 @@ namespace djnn
   }
 
   void
-  SetIterator::activate ()
+  SetIterator::impl_activate ()
   {
     std::map<std::string, Process*>::iterator it;
     std::map<std::string, Process*>& map = _set->symtable ();

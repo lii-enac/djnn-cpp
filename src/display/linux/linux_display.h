@@ -26,8 +26,8 @@ namespace djnn {
   public:
     DRMConnector (Process *p, const string& name, int id, bool connected);
     ~DRMConnector ();
-    void activate () {}
-    void deactivate () {}
+    void impl_activate () {}
+    void impl_deactivate () {}
     void set_display (Process* display) { _display = display; }
   private:
     Process* _display;
@@ -38,8 +38,8 @@ namespace djnn {
   public:
     DRMDevice (Process *p, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
-    void activate () {}
-    void deactivate () {}
+    void impl_activate () {}
+    void impl_deactivate () {}
     int fd () { return _fd; }
   private:
     int _fd;
@@ -52,11 +52,11 @@ namespace djnn {
           DRMUdevAction (DRMUdev* udev) :
           Process (), _udev (udev) {}
           virtual ~DRMUdevAction () {}
-          void activate ()
+          void impl_activate ()
           {
             _udev->handle_udev_msg ();
           }
-          void deactivate () {}
+          void impl_deactivate () {}
         private:
           DRMUdev* _udev;
       };

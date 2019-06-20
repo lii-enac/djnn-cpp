@@ -40,17 +40,17 @@ namespace djnn
   }
 
   void
-  Group::activate ()
+  Group::impl_activate ()
   {
-    Container::activate ();
-    _gobj->activate ();
+    Container::impl_activate ();
+    _gobj->impl_activate ();
   }
 
   void
-  Group::deactivate ()
+  Group::impl_deactivate ()
   {
-    Container::deactivate ();
-    _gobj->deactivate ();
+    Container::impl_deactivate ();
+    _gobj->impl_deactivate ();
   }
 
   void

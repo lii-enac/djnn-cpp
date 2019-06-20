@@ -161,9 +161,9 @@ namespace djnn
   }
 
   void
-  Rectangle::activate ()
+  Rectangle::impl_activate ()
   {
-    AbstractGObj::activate ();
+    AbstractGObj::impl_activate ();
     if(_cx) _cx->enable (_frame);
 		if(_cy) _cy->enable (_frame);
 		if(_cwidth) _cwidth->enable (_frame);
@@ -173,9 +173,9 @@ namespace djnn
   }
 
   void
-  Rectangle::deactivate ()
+  Rectangle::impl_deactivate ()
   {
-    AbstractGObj::deactivate ();
+    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();

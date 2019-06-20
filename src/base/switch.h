@@ -38,8 +38,8 @@ namespace djnn {
           //Process::finalize_construction (); 
         }
       virtual ~SwitchAction () {};
-      void activate () override { _sw->change_branch(); };
-      void deactivate () override {};
+      void impl_activate () override { _sw->change_branch(); };
+      void impl_deactivate () override {};
       void serialize (const string& type) override {};
     private:
       Switch* _sw;
@@ -48,8 +48,8 @@ namespace djnn {
     Switch (Process *parent, const string &name, const string &initial);
     Switch (const string &initial);
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     void draw () override;
     void pick () override;
     virtual ~Switch ();
@@ -57,7 +57,7 @@ namespace djnn {
   private:
     void init_switch (const string &initial);
     void change_branch ();
-    friend void SwitchAction::activate ();
+    friend void SwitchAction::impl_activate ();
     string _initial;
     Coupling* _c_branch;
     TextProperty* _branch_name;

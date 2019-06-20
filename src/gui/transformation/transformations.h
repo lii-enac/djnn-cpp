@@ -44,8 +44,8 @@ namespace djnn
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_component("tx"); }
     AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_component("ty"); }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual void draw () override = 0;
   protected:
     struct raw_props_t { double tx,ty; };
@@ -89,8 +89,8 @@ namespace djnn
     // AbstractDoubleProperty* vy () { return (AbstractDoubleProperty*) find_component("vy"); }
     AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
     AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual void draw () override = 0;
   protected:
     struct raw_props_t { double a,cx,cy; };
@@ -130,8 +130,8 @@ namespace djnn
     AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_component("sy"); }
     AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
     AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual void draw () override = 0;
   protected:
     struct raw_props_t { double sx,sy,cx,cy; };
@@ -168,8 +168,8 @@ namespace djnn
     void get_properties_values (double &a);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual void draw () override = 0;
   protected:
     struct raw_props_t { double a; };
@@ -227,8 +227,8 @@ namespace djnn
       RightTranslateByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~RightTranslateByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -241,8 +241,8 @@ namespace djnn
       LeftTranslateByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~LeftTranslateByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -255,8 +255,8 @@ namespace djnn
       RightScaleByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~RightScaleByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -269,8 +269,8 @@ namespace djnn
       LeftScaleByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~LeftScaleByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -283,8 +283,8 @@ namespace djnn
       RightRotateByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~RightRotateByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -297,8 +297,8 @@ namespace djnn
       LeftRotateByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~LeftRotateByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -311,8 +311,8 @@ namespace djnn
       Right_Skew_X_ByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~Right_Skew_X_ByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -325,8 +325,8 @@ namespace djnn
       Left_Skew_X_ByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~Left_Skew_X_ByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -339,8 +339,8 @@ namespace djnn
       Right_Skew_Y_ByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~Right_Skew_Y_ByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -353,8 +353,8 @@ namespace djnn
       Left_Skew_Y_ByAction (Process* parent, const string &name, AbstractHomography *h) :
       Action (parent, name), _h(h) { Process::finalize_construction (); }
       virtual ~Left_Skew_Y_ByAction () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -390,8 +390,8 @@ namespace djnn
     AbstractDoubleProperty* m42 () { return (AbstractDoubleProperty*) find_component("m42"); }
     AbstractDoubleProperty* m43 () { return (AbstractDoubleProperty*) find_component("m43"); }
     AbstractDoubleProperty* m44 () { return (AbstractDoubleProperty*) find_component("m44"); }
-    void activate () override;
-    void deactivate () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
     virtual void draw () override = 0;
     struct raw_props_t { double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44; };
     raw_props_t raw_props;
@@ -603,8 +603,8 @@ namespace djnn
       stl_action (Process* parent, const string &name, ScreenToLocal *stl) :
       Action (parent, name), _stl(stl) { Process::finalize_construction (); }
       virtual ~stl_action () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       ScreenToLocal *_stl;
     };
@@ -612,8 +612,8 @@ namespace djnn
     public:
       ScreenToLocal (Process* parent, const string &name, Process* shape);
       virtual ~ScreenToLocal () override; 
-      void activate () override;
-      void deactivate () override;
+      void impl_activate () override;
+      void impl_deactivate () override;
     private:
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
@@ -632,8 +632,8 @@ namespace djnn
       lts_action (Process* parent, const string &name, LocalToScreen *lts) :
       Action (parent, name), _lts(lts) { Process::finalize_construction (); }
       virtual ~lts_action () {}
-      void activate () override;
-      void deactivate () override {}
+      void impl_activate () override;
+      void impl_deactivate () override {}
     private:
       LocalToScreen *_lts;
     };
@@ -641,8 +641,8 @@ namespace djnn
     public:
       LocalToScreen (Process* parent, const string &name, Process* shape);
       virtual ~LocalToScreen () override; 
-      void activate () override;
-      void deactivate () override;
+      void impl_activate () override;
+      void impl_deactivate () override;
     private:
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
