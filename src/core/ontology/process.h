@@ -20,9 +20,6 @@
 #include <string>
 
 namespace djnn {
-  using std::string;
-  using std::vector;
-  using std::map;
 
   // process types
   enum process_type_e {
@@ -36,9 +33,9 @@ namespace djnn {
   };
 
   // activation types
-  enum activation_flag_e {
+  enum activation_flag_e { // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2
     NONE_ACTIVATION,
-    ACTIVATION, // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2
+    ACTIVATION,
     DEACTIVATION
   };
 
@@ -49,14 +46,6 @@ namespace djnn {
     DEACTIVATED
   };
 
-  // child position spec
-  enum child_position_e {
-    FIRST,
-    BEFORE,
-    AFTER,
-    LAST
-  };
-
   enum notify_mask {
     notify_none               = 1 << 0,
     notify_generic            = 1 << 1,
@@ -65,8 +54,19 @@ namespace djnn {
     notify_damaged_style      = 1 << 4
   };
 
+  // child position spec
+  enum child_position_e {
+    FIRST,
+    BEFORE,
+    AFTER,
+    LAST
+  };
+
   class Coupling;
   class Vertex;
+  using std::string;
+  using std::vector;
+  using std::map;
 
   class Process
   {
@@ -85,7 +85,7 @@ namespace djnn {
     void remove_activation_coupling (Coupling* c);
     void    add_deactivation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
-    bool    has_coupling () const { return !get_activation_couplings ().empty() ||  !get_deactivation_couplings ().empty(); } ;
+    bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -100,7 +100,7 @@ namespace djnn {
 
     // actions to be redefined by subclasses
     virtual     void draw () {}
-    virtual     void pick() {}
+    virtual     void pick () {}
     virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
     virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
 
@@ -149,7 +149,9 @@ namespace djnn {
 
   private:
     static int _nb_anonymous;
+
 // >>instance fields start here
+  private:
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;

@@ -280,7 +280,6 @@ namespace djnn
   string
   Process::find_component_name (Process* symbol)
   {
-
     // FIXME : low efficiency function cause by linear search. use with care !
 
     map<string, Process*>::iterator it;
@@ -297,7 +296,6 @@ namespace djnn
 
     string key = "name_not_found";
     return key;
-;
   }
 
   void
