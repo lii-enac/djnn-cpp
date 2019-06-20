@@ -38,8 +38,7 @@ namespace djnn {
       virtual ~ConnectorAction () {};
       void activate () override;
       void deactivate () override {};
-      //void exec (activation_flag_e flag) override { activate (); }
-
+      
     private:
       AbstractProperty** _src;
       AbstractProperty** _dst;
