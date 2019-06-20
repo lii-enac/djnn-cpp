@@ -216,7 +216,7 @@ namespace djnn
     //DEBUG
     //cout << "key: " << key << endl;
 
-    if (key.length () == 0)
+    if (key.empty ())
       return this;
 
     /* special case find '*' */ 
