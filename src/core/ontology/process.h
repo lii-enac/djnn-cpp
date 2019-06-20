@@ -201,7 +201,7 @@ namespace djnn {
     bool somehow_activating ()   const { return get_activation_state () <= ACTIVATED; }
     bool somehow_deactivating () const { return get_activation_state () >= DEACTIVATING; }
 
-    void do_something_according_to_activation_flag () {
+    void trigger_activation_flag () {
         switch( get_activation_flag () ) {
           case NONE_ACTIVATION: break;
           case ACTIVATION:      activate (); break;

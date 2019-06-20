@@ -344,7 +344,7 @@ namespace djnn
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
         auto * p = v->get_process ();
-        p->do_something_according_to_activation_flag ();
+        p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
       }
       if (!_sorted) {
