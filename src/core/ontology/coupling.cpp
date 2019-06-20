@@ -72,6 +72,10 @@ namespace djnn
     }
   }
 
+      //_dst->exec(get_dst_activation_flag());
+      _dst->set_activation_flag (get_dst_activation_flag());
+      //_dst->exec(get_dst_activation_flag());
+      _dst->set_activation_flag (get_dst_activation_flag());
   // void
   // Coupling::propagate_activation ()
   // {
