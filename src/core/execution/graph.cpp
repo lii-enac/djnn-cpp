@@ -183,18 +183,18 @@ namespace djnn
   void
   Graph::add_edge (Process* src, Process* dst)
   {
-    Vertex *s = src->vertex ();
-    if (s == nullptr) {
-      s = add_vertex (src);
-      src->set_vertex (s);
+    Vertex *vs = src->vertex ();
+    if (vs == nullptr) {
+      vs = add_vertex (src);
+      src->set_vertex (vs);
     }
 
-    Vertex *d = dst->vertex ();
-    if (d == nullptr) {
-      d = add_vertex (dst);
-      dst->set_vertex (d);
+    Vertex *vd = dst->vertex ();
+    if (vd == nullptr) {
+      vd = add_vertex (dst);
+      dst->set_vertex (vd);
     }
-    s->add_edge (d);
+    vs->add_edge (vd);
     _sorted = false;
   }
 
