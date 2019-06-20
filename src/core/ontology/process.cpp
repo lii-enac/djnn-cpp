@@ -65,7 +65,7 @@ namespace djnn
   // main activation API
 
   void
-  Process::activation ()
+  Process::activate ()
   {
     if (pre_activate ()) {
       impl_activate ();
@@ -74,7 +74,7 @@ namespace djnn
   }
 
   void
-  Process::deactivation ()
+  Process::deactivate ()
   {
     if (pre_deactivate ()) {
       impl_deactivate ();
@@ -99,7 +99,7 @@ namespace djnn
   void
   Process::post_activate ()
   {
-    notify_activation ();
+    notify_activate ();
     set_activation_state (ACTIVATED);
     // TOCHECK: why not set_activation_flag (NONE_ACTIVATION); like post_deactivate ?
   }
@@ -116,13 +116,13 @@ namespace djnn
   void
   Process::post_deactivate ()
   {
-    notify_deactivation ();
+    notify_deactivate ();
     set_activation_state (DEACTIVATED);
     //set_activation_flag (NONE_ACTIVATION);
   }
 
   void
-  Process::notify_activation ()
+  Process::notify_activate ()
   {
     couplings_t& couplings_copy = _activation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
@@ -136,12 +136,12 @@ namespace djnn
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagate_activation ();
+      coupling->propagate_activate ();
     }
   }
 
   void
-  Process::notify_deactivation ()
+  Process::notify_deactivate ()
   {
     couplings_t& couplings_copy = _deactivation_couplings; // SUPERFIXME: useless since couplings are copied below
     /* WARNING: disputable choice.
@@ -155,7 +155,7 @@ namespace djnn
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
-      coupling->propagate_deactivation ();
+      coupling->propagate_deactivate ();
     }
   }
 

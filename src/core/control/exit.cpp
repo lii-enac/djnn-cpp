@@ -40,7 +40,7 @@ namespace djnn
   void
   Exit::impl_activate ()
   {
-    MainLoop::instance ().deactivation ();
+    MainLoop::instance ().deactivate ();
     //exit (_value->get_value ());
   }
 

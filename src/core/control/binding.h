@@ -35,10 +35,10 @@ namespace djnn {
       void impl_activate () override {
       	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);
       	if (get_binding_action()) {
-      	  ((Binding*)_parent)->_dst->activation ();
+      	  ((Binding*)_parent)->_dst->activate ();
       	}
       	else
-      	  ((Binding*)_parent)->_dst->deactivation ();
+      	  ((Binding*)_parent)->_dst->deactivate ();
       }
       void impl_deactivate () override {}
 

@@ -33,7 +33,7 @@ namespace djnn
   Spike::impl_activate ()
   {
     if ( get_activation_state () == ACTIVATING)
-      notify_activation ();
+      notify_activate ();
   }
 
   void

@@ -73,14 +73,14 @@ namespace djnn
     if (s) {
       if (s != _cur_obj) {
         if (_cur_obj != nullptr)
-          _cur_obj->find_component ("leave")->notify_activation ();
-        s->find_component ("enter")->notify_activation ();
+          _cur_obj->find_component ("leave")->notify_activate ();
+        s->find_component ("enter")->notify_activate ();
         _cur_obj = s;
         exec_ = true;
       }    
     } else {
       if (_cur_obj != nullptr) {
-        _cur_obj->find_component ("leave")->notify_activation ();
+        _cur_obj->find_component ("leave")->notify_activate ();
         _cur_obj = nullptr;
         exec_ = true;
       }
@@ -104,7 +104,7 @@ namespace djnn
           set_local_coords (s, nullptr, x, y);
         }
       } 
-      s->find_component ("move")->notify_activation ();
+      s->find_component ("move")->notify_activate ();
     }
 
     exec_ |= genericEnterLeave(s);
@@ -120,7 +120,7 @@ namespace djnn
     _win->press_y ()->set_value (y, true);
     _win->move_x ()->set_value (x, true);
     _win->move_y ()->set_value (y, true);
-    _win->press ()->notify_activation ();
+    _win->press ()->notify_activate ();
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
@@ -129,7 +129,7 @@ namespace djnn
       ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
       ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       set_local_coords (s, nullptr, x, y);
-      s->find_component ("press")->notify_activation ();
+      s->find_component ("press")->notify_activate ();
       exec_ = true;
     }
 
@@ -138,16 +138,16 @@ namespace djnn
     switch (button)
       {
       case BUTTON_LEFT:
-        ((GUIMouse*)GenericMouse)->left ()->press ()->activation ();
+        ((GUIMouse*)GenericMouse)->left ()->press ()->activate ();
         break;
       case BUTTON_RIGHT:
-	((GUIMouse*)GenericMouse)->right ()->press ()->activation ();
+	((GUIMouse*)GenericMouse)->right ()->press ()->activate ();
         break;
       case BUTTON_MIDDLE:
-	((GUIMouse*)GenericMouse)->middle ()->press ()->activation ();
+	((GUIMouse*)GenericMouse)->middle ()->press ()->activate ();
         break;
       default:
-	((GUIMouse*)GenericMouse)->left ()->press ()->activation ();
+	((GUIMouse*)GenericMouse)->left ()->press ()->activate ();
       }
     if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
       exec_ = true;
@@ -201,7 +201,7 @@ namespace djnn
       _win->move_x ()->set_value (x, true);
     if (y != old_y)
       _win->move_y ()->set_value (y, true);
-    _win->move ()->notify_activation ();
+    _win->move ()->notify_activate ();
     if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
       exec_ = true;
     }
@@ -213,7 +213,7 @@ namespace djnn
       if (y != old_y)
         ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
       set_local_coords (s, nullptr, x, y);
-      s->find_component ("move")->notify_activation ();
+      s->find_component ("move")->notify_activate ();
       exec_ = true;
     }
 
@@ -221,7 +221,7 @@ namespace djnn
 
     ((GUIMouse*)GenericMouse)->x ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->y ()->set_value (y, true);
-    ((GUIMouse*)GenericMouse)->move ()->activation ();
+    ((GUIMouse*)GenericMouse)->move ()->activate ();
     if (((GUIMouse*)GenericMouse)->move ()->has_coupling() || ((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
       exec_ = true;
     }
@@ -267,7 +267,7 @@ namespace djnn
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
     if (s) {
-      s->find_component ("release")->notify_activation ();
+      s->find_component ("release")->notify_activate ();
       exec_ = true;
     }
 
@@ -276,19 +276,19 @@ namespace djnn
     switch (button)
       {
       case BUTTON_LEFT:
-	((GUIMouse*)GenericMouse)->left ()->release ()->activation ();
+	((GUIMouse*)GenericMouse)->left ()->release ()->activate ();
         break;
       case BUTTON_RIGHT:
-	((GUIMouse*)GenericMouse)->right ()->release ()->activation ();
+	((GUIMouse*)GenericMouse)->right ()->release ()->activate ();
         break;
       case BUTTON_MIDDLE:
-	((GUIMouse*)GenericMouse)->middle ()->release ()->activation ();
+	((GUIMouse*)GenericMouse)->middle ()->release ()->activate ();
         break;
       default:
-	((GUIMouse*)GenericMouse)->left ()->release ()->activation ();
+	((GUIMouse*)GenericMouse)->left ()->release ()->activate ();
       }
     if (_win->release ()->has_coupling ()) {
-      _win->release ()->notify_activation ();
+      _win->release ()->notify_activate ();
       exec_ = true;
     }
     if (((GUIMouse*)GenericMouse)->left ()->release ()->has_coupling () || ((GUIMouse*)GenericMouse)->right ()->release ()->has_coupling ()
@@ -328,7 +328,7 @@ namespace djnn
     bool exec_ = false;
     _win->wheel_dx ()->set_value (x, true);
     _win->wheel_dy ()->set_value (y, true);
-    _win->wheel ()->notify_activation ();
+    _win->wheel ()->notify_activate ();
     if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
       exec_ = true;
     }
@@ -336,7 +336,7 @@ namespace djnn
     _win->wheel_dy ()->set_value (0, false);
     ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->dy ()->set_value (y, true);
-    ((GUIMouse*)GenericMouse)->wheel ()->activation ();
+    ((GUIMouse*)GenericMouse)->wheel ()->activate ();
     if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() || ((GUIMouse*)GenericMouse)->dx ()->has_coupling() || ((GUIMouse*)GenericMouse)->dy ()->has_coupling()) {
       exec_ = true;
      }

@@ -72,9 +72,9 @@ namespace djnn {
   {
     _btn_name->set_value (name, true);
     if (val)
-      _press->activation ();
+      _press->activate ();
     else
-      _release->activation ();
+      _release->activate ();
   }
 
   void

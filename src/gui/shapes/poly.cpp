@@ -168,14 +168,14 @@ namespace djnn {
   Poly::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    _points->activation ();
+    _points->activate ();
   }
 
   void
   Poly::impl_deactivate ()
   {
     AbstractGObj::impl_deactivate ();
-    _points->deactivation ();
+    _points->deactivate ();
   }
 
   void

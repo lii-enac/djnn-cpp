@@ -81,7 +81,7 @@ namespace djnn
   {
     _c_branch->disable ();
     if (_cur_branch != nullptr)
-      _cur_branch->deactivation ();
+      _cur_branch->deactivate ();
   }
 
   void
@@ -110,13 +110,13 @@ namespace djnn
     if (it != _symtable.end ()) {
       if (_cur_branch == it->second) {
         if (_cur_branch->get_activation_state () == DEACTIVATED)
-          _cur_branch->activation ();
+          _cur_branch->activate ();
         return;
       } else {
         if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
-          _cur_branch->deactivation ();
+          _cur_branch->deactivate ();
         _cur_branch = it->second;
-        (it->second)->activation ();
+        (it->second)->activate ();
       }
     }
     else {
@@ -125,7 +125,7 @@ namespace djnn
        * the state is set at _branch_name and the _cur_branch is deactivated
        */
       if (_cur_branch)
-        _cur_branch->deactivation ();
+        _cur_branch->deactivate ();
     }
   }
 

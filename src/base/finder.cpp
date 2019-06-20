@@ -40,7 +40,7 @@ namespace djnn
       if (res) {
         if (res->get_cpnt_type () != PROPERTY_T) {
           f->_result->set_value (c, true);
-          f->_found->activation ();
+          f->_found->activate ();
           return;
         } else {
           switch (((AbstractProperty*) res)->get_prop_type ())
@@ -50,7 +50,7 @@ namespace djnn
                 int v = (int) stoi (key);
                 if (v == ((IntProperty*) res)->get_value ()) {
                   f->_result->set_value (c, true);
-                  f->_found->activation ();
+                  f->_found->activate ();
                   return;
                 }
               }
@@ -62,7 +62,7 @@ namespace djnn
               if ((key.compare ("true") == 0 && ((BoolProperty*) res)->get_value () == 1)
                   || (key.compare ("false") == 0 && ((BoolProperty*) res)->get_value () == 0)) {
                 f->_result->set_value (c, true);
-                f->_found->activation ();
+                f->_found->activate ();
                 return;
               }
               break;
@@ -71,7 +71,7 @@ namespace djnn
                 double v = (double) stof (key);
                 if (v == ((DoubleProperty*) res)->get_value ()) {
                   f->_result->set_value (c, true);
-                  f->_found->activation ();
+                  f->_found->activate ();
                   return;
                 }
               }
@@ -82,7 +82,7 @@ namespace djnn
             case String:
               if (key.compare (((TextProperty*) res)->get_value ()) == 0) {
                 f->_result->set_value (c, true);
-                f->_found->activation ();
+                f->_found->activate ();
                 return;
               }
               break;
@@ -92,7 +92,7 @@ namespace djnn
         }
       }
     }
-    f->_not_found->activation ();
+    f->_not_found->activate ();
   }
 
   Finder::Finder (Process *p, const string &n, Process *container, const string &path) :

@@ -182,9 +182,9 @@ namespace djnn
     c->set_parent (this);
 
     if (get_activation_state () == ACTIVATED && c->get_activation_state () == DEACTIVATED) {
-      c->activation ();
+      c->activate ();
     } else if (get_activation_state () == DEACTIVATED && c->get_activation_state () == ACTIVATED) {
-      c->deactivation ();
+      c->deactivate ();
     }
     _added->set_value (c, true);
     _size->set_value (_size->get_value () + 1, true);
@@ -393,9 +393,9 @@ namespace djnn
   {
     for (auto p : _list->children ()) {
       _action->set_data (p);
-      _action->activation ();
+      _action->activate ();
     }
-    notify_activation ();
+    notify_activate ();
   }
 
   void

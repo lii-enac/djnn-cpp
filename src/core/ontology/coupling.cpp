@@ -74,7 +74,7 @@ namespace djnn
   }
 
   void
-  Coupling::propagate_activation ()
+  Coupling::propagate_activate ()
   {
     //if (!is_enabled ()) return; // useless already tested elsewhere
     assert(is_enabled ());
@@ -90,7 +90,7 @@ namespace djnn
   }
 
   void
-  Coupling::propagate_deactivation ()
+  Coupling::propagate_deactivate ()
   {
     //if (!is_enabled ()) return; // useless already tested elsewhere
     assert(is_enabled ());
@@ -109,11 +109,11 @@ namespace djnn
   Coupling::process_immediately ()
   {
     if ( get_dst_activation_flag () == ACTIVATION ) {
-      _dst->activation ();
+      _dst->activate ();
       _dst->coupling_activation_hook ();
     }
     else if ( get_dst_activation_flag () == DEACTIVATION ) {
-      _dst->deactivation ();
+      _dst->deactivate ();
       _dst->coupling_deactivation_hook ();
     }
   }

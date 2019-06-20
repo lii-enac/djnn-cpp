@@ -1181,8 +1181,8 @@ namespace djnn
   AbstractGradient::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    _stops->activation ();
-    _transforms->activation ();
+    _stops->activate ();
+    _transforms->activate ();
     if (_cs) _cs->enable (_frame);
     if (_cc) _cc->enable (_frame);
   }
@@ -1191,8 +1191,8 @@ namespace djnn
   AbstractGradient::impl_deactivate ()
   {
     AbstractStyle::impl_deactivate ();
-    _stops->deactivation ();
-    _transforms->deactivation ();
+    _stops->deactivate ();
+    _transforms->deactivate ();
     if (_cs) _cs->enable (_frame);
     if (_cc) _cc->enable (_frame);
   }

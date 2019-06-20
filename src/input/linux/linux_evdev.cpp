@@ -65,7 +65,7 @@ namespace djnn {
     }
     // FIXME: this should be done lazily
     _iofd = new IOFD (_fd);
-    _iofd->activation ();
+    _iofd->activate ();
     _action = new EvdevAction (this);
     _readable_cpl = new Coupling (_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
     Graph::instance().add_edge (_iofd->find_component ("readable"), _action);
@@ -76,7 +76,7 @@ namespace djnn {
     if (_aborted)
       return;
     Graph::instance().remove_edge (_iofd->find_component ("readable"), _action);
-    _iofd->deactivation ();
+    _iofd->deactivate ();
 
     delete _readable_cpl;
     delete _action;

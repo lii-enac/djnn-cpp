@@ -91,7 +91,7 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           set_activation_state (DEACTIVATED);
-          _end->notify_activation (); // propagating
+          _end->notify_activate (); // propagating
           thread_terminated ();
           GRAPH_EXEC; // executing
         }
@@ -99,7 +99,7 @@ namespace djnn
     } catch (exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
-    //deactivation ();
+    //deactivate ();
   }
 
   void

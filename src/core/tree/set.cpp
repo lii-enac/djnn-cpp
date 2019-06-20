@@ -63,9 +63,9 @@ namespace djnn
       c->set_parent (this);
 
       if (get_activation_state () == ACTIVATED) {
-        c->activation ();
+        c->activate ();
       } else if (c->get_activation_state () == ACTIVATED) {
-        c->deactivation ();
+        c->deactivate ();
       }
       _added->set_value (c, true);
       _size->set_value (_size->get_value () + 1, true);
@@ -116,7 +116,7 @@ namespace djnn
   {
     std::map<std::string, Process*>::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
-      it->second->activation ();
+      it->second->activate ();
     }
   }
 
@@ -125,7 +125,7 @@ namespace djnn
   {
     std::map<std::string, Process*>::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
-      it->second->deactivation ();
+      it->second->deactivate ();
     }
   }
 
@@ -178,9 +178,9 @@ namespace djnn
     std::map<std::string, Process*>& map = _set->symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
-      _action->activation ();
+      _action->activate ();
     }
-    notify_activation ();
+    notify_activate ();
   }
 
   void

@@ -48,8 +48,8 @@ namespace djnn {
   {
   public:
     BinaryOperator (Process *p, const string &n);
-    void impl_activate () { _c_left->enable(); _c_right->enable (); _action->activation (); };
-    void impl_deactivate () { _c_left->disable (); _c_right->disable (); _action->deactivation ();};
+    void impl_activate () { _c_left->enable(); _c_right->enable (); _action->activate (); };
+    void impl_deactivate () { _c_left->disable (); _c_right->disable (); _action->deactivate ();};
     virtual ~BinaryOperator ();
   protected:
     void init_couplings (Process* action);
@@ -73,8 +73,8 @@ namespace djnn {
   {
   public:
     UnaryOperator (Process *p, const string &n);
-    void impl_activate () { _c_input->enable (); _action->activation ();}
-    void impl_deactivate () { _c_input->disable (); _action->deactivation ();}
+    void impl_activate () { _c_input->enable (); _action->activate ();}
+    void impl_deactivate () { _c_input->disable (); _action->deactivate ();}
     virtual ~UnaryOperator ();
   protected:
     void init_couplings (Process* action);

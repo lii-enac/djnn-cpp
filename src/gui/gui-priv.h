@@ -61,7 +61,7 @@ namespace djnn {
     public:
       GUIMouse (Process *p, const string &n);
       ~GUIMouse ();
-      void impl_activate () { _left->activation (); _right->activation (); _middle->activation ();}
+      void impl_activate () { _left->activate (); _right->activate (); _middle->activate ();}
       void impl_deactivate () {}
       GUIMouseButton* left () { return _left; }
       GUIMouseButton* right () { return _right; }

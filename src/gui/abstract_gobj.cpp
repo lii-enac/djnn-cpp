@@ -92,7 +92,7 @@ namespace djnn
     if (frame && !frame->refresh ()) {
       _ud->add_window_for_refresh (frame);
     }
-    notify_activation (); 
+    notify_activate (); 
   }
 
   bool gui_initialized = false;
@@ -221,7 +221,7 @@ namespace djnn
       }
     }
     UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-    UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+    UpdateDrawing::instance ()->get_damaged ()->notify_activate ();
   }
 
   void
@@ -229,7 +229,7 @@ namespace djnn
   {
     if (_frame != nullptr) {
       UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-      UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+      UpdateDrawing::instance ()->get_damaged ()->notify_activate ();
     }
   }
 }

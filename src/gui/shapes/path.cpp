@@ -631,14 +631,14 @@ namespace djnn
   Path::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    _items->activation ();
+    _items->activate ();
   }
 
   void
   Path::impl_deactivate ()
   {
     AbstractGObj::impl_deactivate ();
-    _items->deactivation ();
+    _items->deactivate ();
   }
 
   void

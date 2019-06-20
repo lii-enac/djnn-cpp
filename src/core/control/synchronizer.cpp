@@ -91,7 +91,7 @@ namespace djnn
   void
   Synchronizer::propagate ()
   {
-    _dst->activation ();
+    _dst->activate ();
   }
 }
 

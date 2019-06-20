@@ -272,7 +272,7 @@ namespace djnn
       UpdateDrawing::init ();
       DrawingRefreshManager = UpdateDrawing::instance ();
       GenericMouse = new GUIMouse (nullptr, "");
-      GenericMouse->activation ();
+      GenericMouse->activate ();
       MainLoop::instance ().add_background_process (DrawingRefreshManager);
       init_svg_parser ();
       gui_structure_observer = new GUIStructureObserver ();

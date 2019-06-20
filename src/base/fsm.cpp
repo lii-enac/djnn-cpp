@@ -65,7 +65,7 @@ namespace djnn
   FSMState::impl_activate ()
   {
     for (auto t : _transitions) {
-      t->activation ();
+      t->activate ();
     }
     Container::impl_activate ();
     _parent_fsm->update_state (this, _name);
@@ -75,7 +75,7 @@ namespace djnn
   FSMState::impl_deactivate ()
   {
     for (auto t : _transitions) {
-      t->deactivation ();
+      t->deactivate ();
     }
     Container::impl_deactivate ();
   }
@@ -221,11 +221,11 @@ namespace djnn
       return;
     _src->disable_transitions (_t);
     if (_action != 0)
-      _action->activation ();
-    notify_activation ();
+      _action->activate ();
+    notify_activate ();
     if (_src != _dst) {
-      _src->deactivation ();
-      _dst->activation ();
+      _src->deactivate ();
+      _dst->activate ();
     }
   }
 
@@ -299,14 +299,14 @@ namespace djnn
   void
   FSM::impl_activate ()
   {
-    _fsm_state->activation ();
-    _initial->activation ();
+    _fsm_state->activate ();
+    _initial->activate ();
     _initial->set_value (_str_initial, true);
 
     if (_str_initial.length () != 0) {
       FSMState* init_state = dynamic_cast<FSMState*> (find_component (_str_initial));
       if (init_state)
-        init_state->activation ();
+        init_state->activate ();
     }
   }
 
@@ -314,7 +314,7 @@ namespace djnn
   FSM::impl_deactivate ()
   {
     if (_cur_state != 0)
-      _cur_state->deactivation ();
+      _cur_state->deactivate ();
   }
 
   void

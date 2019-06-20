@@ -239,7 +239,7 @@ namespace djnn
      * for the evaluation of the expression. The solution is now to trigger the calculation
      * of the operators with an Activator component when they are on the left side of an assignment.
      */
-    _action->activation ();
+    _action->activate ();
   }
 
   Assignment::~Assignment ()
@@ -306,7 +306,7 @@ namespace djnn
      * for the evaluation of the expression. The solution is now to trigger the calculation
      * of the operators with an Activator component when they are on the left side of an assignment.
      */
-    _action->activation ();
+    _action->activate ();
   }
 
   PausedAssignment::~PausedAssignment ()

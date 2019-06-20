@@ -101,7 +101,7 @@ namespace djnn {
     udev_monitor_filter_add_match_subsystem_devtype (_udev_mon, "drm", 0);
     udev_monitor_enable_receiving (_udev_mon);
     _udev_iofd = new IOFD (udev_monitor_get_fd (_udev_mon));
-    _udev_iofd->activation ();
+    _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
     _readable_cpl = new Coupling (_udev_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
     Graph::instance().add_edge (_udev_iofd->find_component ("readable"), _action);
@@ -109,7 +109,7 @@ namespace djnn {
 
   DRMUdev::~DRMUdev ()
   {
-    _udev_iofd->deactivation ();
+    _udev_iofd->deactivate ();
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
 

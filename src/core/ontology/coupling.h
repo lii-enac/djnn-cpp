@@ -26,8 +26,8 @@ namespace djnn {
     virtual ~Coupling();
     void set_data (Process* data) { _data = data; }
     
-    void propagate_activation ();
-    void propagate_deactivation ();
+    void propagate_activate ();
+    void propagate_deactivate ();
 
     // process
     Process* get_src () { return _src; }

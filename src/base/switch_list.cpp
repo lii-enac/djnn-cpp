@@ -73,9 +73,9 @@ namespace djnn
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
       Process* next = _sw->children ()[i - 1];
       if (_sw->item () && _sw->item () != next) {
-        _sw->item ()->deactivation ();
+        _sw->item ()->deactivate ();
         _sw->set_item (next);
-        next->activation ();
+        next->activate ();
       }
     }
   }
@@ -154,7 +154,7 @@ namespace djnn
       return;
     if (_cur_item == nullptr)
       _cur_item = _children[0];
-    _cur_item->activation ();
+    _cur_item->activate ();
   }
 
   void
@@ -164,7 +164,7 @@ namespace djnn
     _c_previous->disable ();
     _c_index->disable ();
     if (_cur_item)
-      _cur_item->deactivation ();
+      _cur_item->deactivate ();
   }
 
   void

@@ -242,8 +242,8 @@ namespace djnn
     };
   public:
     BoundedValue (Process *p, const string &n, double min, double max, double init_val);
-    void impl_activate () override { _c_min->enable(); _c_max->enable (); _c_input->enable (); _action->activation (); };
-    void impl_deactivate () override { _c_min->disable (); _c_max->disable (); _c_input->disable (); _action->deactivation ();};
+    void impl_activate () override { _c_min->enable(); _c_max->enable (); _c_input->enable (); _action->activate (); };
+    void impl_deactivate () override { _c_min->disable (); _c_max->disable (); _c_input->disable (); _action->deactivate ();};
     virtual ~BoundedValue ();
     void serialize (const string& type) override;
   protected:

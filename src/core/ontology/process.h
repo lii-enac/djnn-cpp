@@ -77,8 +77,8 @@ namespace djnn {
     virtual process_type_e get_cpnt_type () const { return UNDEFINED_T; }
 
     // main public API
-    void activation ();   // FIXME: should be impl_activate ()
-    void deactivation (); // FIXME: should be impl_deactivate ()
+    void activate ();
+    void deactivate ();
 
     // coupling
     void    add_activation_coupling (Coupling* c);
@@ -89,8 +89,8 @@ namespace djnn {
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
-    void         notify_activation ();
-    void         notify_deactivation ();
+    void         notify_activate ();
+    void         notify_deactivate ();
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
   
     // execution graph
@@ -204,8 +204,8 @@ namespace djnn {
     void do_something_according_to_activation_flag () {
         switch( get_activation_flag () ) {
           case NONE_ACTIVATION: break;
-          case ACTIVATION:      activation (); break;
-          case DEACTIVATION:    deactivation (); break;
+          case ACTIVATION:      activate (); break;
+          case DEACTIVATION:    deactivate (); break;
         }
     }
 
@@ -234,7 +234,10 @@ namespace djnn {
       set_activation_state(ACTIVATING);
       return true;
     }
-    void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
+    void post_activate () override {
+      notify_activate ();
+      set_activation_state (DEACTIVATED);
+    }
   };
 
 }

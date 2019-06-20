@@ -53,7 +53,7 @@ namespace djnn {
     MainLoop::impl_activate ()
     {
       for (auto p: _background_processes) {
-        p->activation ();
+        p->activate ();
       }
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();

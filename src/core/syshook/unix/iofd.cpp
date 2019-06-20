@@ -57,7 +57,7 @@ namespace djnn {
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
-          _readable->activation (); // propagating
+          _readable->activate (); // propagating
          GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!

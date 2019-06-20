@@ -54,7 +54,7 @@ namespace djnn
     if (_c_src)
       _c_src->enable ();
     if (_copy_on_activation)
-      _action->activation ();
+      _action->activate ();
   }
 
   void
@@ -62,7 +62,7 @@ namespace djnn
   {
     if (_c_src)
       _c_src->disable ();
-    _action->deactivation ();
+    _action->deactivate ();
   }
 
   void
@@ -141,7 +141,7 @@ namespace djnn
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
-        _action->activation ();
+        _action->activate ();
       } else {
         _c_src->disable ();
       }
@@ -206,14 +206,14 @@ namespace djnn
   {
     _c_src->enable ();
     if (_copy_on_activation)
-      _action->activation ();
+      _action->activate ();
   }
 
   void
   PausedConnector::impl_deactivate ()
   {
     _c_src->disable ();
-    _action->deactivation ();
+    _action->deactivate ();
   }
 
   void

@@ -57,7 +57,7 @@ namespace djnn
   {
     get_ref_value() = v;
     if (is_activable () && propagate) {
-      notify_activation ();
+      notify_activate ();
       notify_parent ();
     }
   }

@@ -177,7 +177,7 @@ namespace djnn
   {
     _c_input->enable ();
     _c_decimal->enable ();
-    _action->activation ();
+    _action->activate ();
   }
 
   void
@@ -185,7 +185,7 @@ namespace djnn
   {
     _c_input->disable ();
     _c_decimal->disable ();
-    _action->deactivation ();
+    _action->deactivate ();
   }
 
   void

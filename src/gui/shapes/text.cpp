@@ -414,7 +414,7 @@ namespace djnn
     if (_cfstyle) _cfstyle->enable (_frame);
     if (_cfweight) _cfweight->enable (_frame);
 
-    if (_update_size) _update_size->activation ();
+    if (_update_size) _update_size->activate ();
   }
 
   void

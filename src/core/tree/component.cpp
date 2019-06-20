@@ -81,9 +81,9 @@ namespace djnn
     add_symbol (name, c);
     
     if (get_activation_state () == ACTIVATED && !c->is_model ()) {
-      c->activation ();
+      c->activate ();
     } else if (c->get_activation_state () == ACTIVATED) {
-      c->deactivation ();
+      c->deactivate ();
     }
     for (auto s: structure_observer_list) {
       s->add_child_to_container (this, c, _children.size () - 1);
@@ -168,7 +168,7 @@ namespace djnn
     unsigned int i = 0;
     while (i < _children.size ()) {
       if (!_children[i]->is_model ()) {
-        _children[i]->activation ();
+        _children[i]->activate ();
       }
       i++;
     }
@@ -215,7 +215,7 @@ namespace djnn
   Container::impl_deactivate ()
   {
     for (auto c : _children) {
-      c->deactivation ();
+      c->deactivate ();
     }
   }
 
@@ -273,7 +273,7 @@ namespace djnn
   AssignmentSequence::impl_activate ()
   {
     for (auto c : _children) {
-      c->activation ();
+      c->activate ();
     }
   }
 
