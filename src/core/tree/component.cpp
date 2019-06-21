@@ -91,7 +91,7 @@ namespace djnn
   }
 
   void
-  Container::move_child (Process *child_to_move, int spec, Process *child2)
+  Container::move_child (Process *child_to_move, child_position_e spec, Process *child2)
   {
     if (child2 == 0) {
       if (spec == FIRST) {

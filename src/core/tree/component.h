@@ -30,7 +30,7 @@ namespace djnn {
     Container (Process* parent, const string& name);
     virtual process_type_e get_cpnt_type () const override { return COMPONENT_T; }
     void add_child (Process* c, const string& name) override;
-    void move_child (Process *child_to_move, int spec, Process *child = 0) override;
+    void move_child (Process *child_to_move, child_position_e spec, Process *child = 0) override;
     void remove_child (Process* c) override;
     void remove_child (const string& name) override;
     void draw () override;
