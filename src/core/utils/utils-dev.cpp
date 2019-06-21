@@ -67,23 +67,41 @@ namespace djnn
   pair<RefProperty*, string>
   check_for_ref (Process* src, const string &spec)
   {
-    if (spec.empty ())
+    /* spec is empty */
+    if (spec.empty ()) 
       return pair<RefProperty*, string> (nullptr, spec);
+    
     size_t found = spec.find ("$value");
+    /* we found §value */
     if (found != string::npos) {
+      
       Process *prop = src;
-      if (found > 0)
+      
+      /* $value is not the first element, eg : foo/bar/$value */
+      if (found > 0) 
         prop = src->find_component (spec.substr (0, found - 1));
-      if (!prop)
+      
+      /* prop == src (not null) OR the new element find by find_component */
+      if (!prop) 
         return pair<RefProperty*, string> (nullptr, spec);
+
+
       RefProperty *ref = dynamic_cast<RefProperty*> (prop);
-      if (ref != nullptr && spec.size () > 6) {
-        string new_spec = spec.substr (found + 6);
-        if (new_spec.at (0) == '/')
-          new_spec = new_spec.substr (1);
+      /* ref is a refproperty */
+      if (ref != nullptr ) {
+        string new_spec = "";
+        /* spec is more than juste $value, eg : boo/bar/$value/toto */
+        if ( spec.size () > 6) {
+          new_spec = spec.substr (found + 6);
+          if (new_spec.at (0) == '/') 
+            new_spec = new_spec.substr (1);
+        }
+
         return pair<RefProperty*, string> (ref, new_spec);
-      }
-    }
-    return pair<RefProperty*, string> (nullptr, spec);
-  }
-}
+       }
+     }
+
+     /* we did not found $value */
+     return pair<RefProperty*, string> (nullptr, spec);
+   }
+ }
