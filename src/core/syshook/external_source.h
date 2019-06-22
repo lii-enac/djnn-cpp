@@ -16,57 +16,6 @@
 
 namespace djnn
 {
-  
-
-  #if 0
-  // form https://stackoverflow.com/questions/13893060/i-want-to-kill-a-stdthread-using-its-thread-object
-  // Synopsis
-  class interrupt_thread_exception;
-  class interruptible_thread;
-  void check_for_interrupt();
-
-  // Interrupt exception
-  class interrupt_thread_exception: public virtual std::exception {
-  public:
-      virtual char const* what() const noexcept(true) override { return "interrupt"; }
-  }; // class interrupt_thread_exception
-
-  // Interruptible thread
-  class interruptible_thread {
-  public:
-      friend void check_for_interrupt();
-
-      template <typename Function, typename... Args>
-      interruptible_thread(Function&& fun, Args&&... args):
-      _flag(false),
-          _thread([](std::atomic_bool& f, Function&& fun, Args&&... args) {
-                      _flag_ref = &f; fun(std::forward<Args>(args)...);
-                  },
-                  _flag,
-                  std::forward<Function>(fun),
-                  std::forward<Args>(args)...)
-      {}
-
-      bool stopping() const { return _flag.load(); }
-
-      void stop() { _flag.store(true); }
-
-  private:
-      static thread_local std::atomic_bool* _flag_ref;
-
-      std::atomic_bool _flag;
-      std::thread _thread;
-  }; // class interruptible_thread
-
-  // Interruption checker
-  inline void check_for_interrupt() noexcept(false) {
-      if (not interruptible_thread::_flag_ref) { return; }
-      if (not interruptible_thread::_flag_ref->load()) { return; }
-
-      throw interrupt_thread_exception();
-  } // check_for_interrupt
-#endif
-
   //extern thread_local bool _please_stop;
 
   class ExternalSource
