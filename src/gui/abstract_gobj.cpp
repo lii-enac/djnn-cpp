@@ -16,6 +16,8 @@
 
 #include "../display/window.h"
 #include "abstract_gobj.h"
+#include "backend.h"
+#include "abstract_backend.h"
 
 #include <iostream>
 
@@ -186,6 +188,9 @@ namespace djnn
     }
   }
 
+  AbstractGObjImpl::~AbstractGObjImpl() {}
+
+
   void
   AbstractGObj::impl_activate ()
   {
@@ -222,6 +227,7 @@ namespace djnn
     }
     UpdateDrawing::instance ()->add_window_for_refresh (_frame);
     UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+    Backend::instance()->activate_gobj(this);
   }
 
   void
@@ -230,6 +236,9 @@ namespace djnn
     if (_frame != nullptr) {
       UpdateDrawing::instance ()->add_window_for_refresh (_frame);
       UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+      UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
+      //UpdateDrawing::instance ()->request_activation ();
+      Backend::instance()->deactivate_gobj(this);
     }
   }
 }

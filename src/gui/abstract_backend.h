@@ -282,6 +282,16 @@ namespace djnn
     {
     }
 
+    virtual void
+    activate_gobj (AbstractGObj*)
+    {   
+    }
+
+    virtual void
+    deactivate_gobj (AbstractGObj*)
+    {   
+    }
+
   protected:
     //Window *_window;
   };

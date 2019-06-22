@@ -35,16 +35,16 @@ namespace djnn
 
   class AbstractGObjImpl {
   public:
-    virtual ~AbstractGObjImpl() {}
+    virtual ~AbstractGObjImpl();
   };
 
   class AbstractGObj : public Process
   {
   public:
-    AbstractGObj () : Process(), _frame (nullptr), _impl (nullptr) {
+    AbstractGObj () : Process(), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
-    AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr), _impl (nullptr) {
+    AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
@@ -53,12 +53,13 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void notify_change (unsigned int nm) override { _damaged |= nm; }
+    void reset_damaged (unsigned int nm) { _damaged &= ~nm; }
     void reset_damaged () { _damaged = notify_none; }
     int get_damaged () { return _damaged; }
 
     AbstractGObjImpl* impl() { return _impl; }
     void set_impl(AbstractGObjImpl* i) { _impl=i; }
-
+    
   protected:
     virtual Process* create_GObj_prop (BoolPropertyProxy **prop, Coupling  **cprop, bool *rawp, const string& name, int notify_mask);
     virtual Process* create_GObj_prop (IntPropertyProxy **prop, Coupling  **cprop, int *rawp, const string& name, int notify_mask);
