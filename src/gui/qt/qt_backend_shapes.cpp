@@ -404,7 +404,7 @@ namespace djnn
                          cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     load_drawing_context (p, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
-    _painter->setClipPath (cur_path);
+    _painter->setClipPath (cur_path, Qt::ReplaceClip); // could be Qt::UniteClip
 
     if (is_in_picking_view (p)) {
       load_pick_context (p);
