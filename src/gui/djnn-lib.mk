@@ -10,10 +10,6 @@ ifeq ($(graphics),QT)
 include src/gui/qt/djnn-lib.mk
 endif
 
-ifeq ($(graphics),GL)
-include src/gui/sdl/djnn-lib.mk
-endif
-
 ifeq ($(graphics),CAIRO)
 include src/gui/cairo/djnn-lib.mk
 endif

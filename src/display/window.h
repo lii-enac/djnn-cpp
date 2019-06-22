@@ -60,6 +60,7 @@ namespace djnn
     IntProperty* key_released () { return _key_released; }
     TextProperty* key_pressed_text () { return _key_pressed_text; }
     TextProperty* key_released_text () { return _key_released_text; }
+    DoubleProperty* hidpi_scale () { return _hidpi_scale; }
     Process* close () { return _close; }
     WinImpl* win_impl () { return _win_impl; }
     void set_refresh (bool r) { _refresh = r; }
@@ -91,6 +92,7 @@ namespace djnn
     DoubleProperty* _width;
     DoubleProperty* _height;
     TextProperty* _title;
+    DoubleProperty* _hidpi_scale;
     Process *_close;
     Process* _press;
     Process* _move;

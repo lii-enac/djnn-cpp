@@ -40,6 +40,7 @@ namespace djnn
     _key_released = new IntProperty (this, "key-released", 0);
     _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
     _key_released_text = new TextProperty (this, "key-released_text", "");
+    _hidpi_scale = new DoubleProperty (this, "hidpi_scale", 1);
     _close = new Spike;
     add_symbol ("close", _close);
     _press = new Spike;

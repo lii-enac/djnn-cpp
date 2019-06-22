@@ -58,8 +58,8 @@ namespace djnn
     int g = 100+myrandom()*155;
     int b = 100+myrandom()*155;
     _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
-    //std::cerr << hex << _pick_color << dec << std::endl;
 #endif
+    //std::cerr << hex << _pick_color << dec << std::endl;
   }
 
   void
