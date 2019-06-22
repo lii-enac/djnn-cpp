@@ -35,6 +35,16 @@ namespace djnn
   }
 
   void
+  setString (Process* p, string& v)
+  {
+    TextProperty *tp = dynamic_cast<TextProperty*> (p);
+    if (tp != nullptr)
+      tp->set_value (v, true);
+    else
+      warning (p, "setString only works on text/string properties");
+  }
+
+  void
   AbstractTextProperty::set_value (int v, bool propagate)
   {
     set_value(to_string (v), propagate);

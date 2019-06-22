@@ -67,4 +67,5 @@ namespace djnn {
   };
 
   int getInt (Process *p);
+  void setInt (Process *p, int v);
 }

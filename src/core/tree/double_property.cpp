@@ -34,6 +34,15 @@ namespace djnn
   }
 
   void
+  setDouble (Process* p, double v)
+  {
+    DoubleProperty *dp = dynamic_cast<DoubleProperty*> (p);
+    if (dp != nullptr)
+      dp->set_value(v, true);
+    else
+      warning (p, "setDouble only works on double properties");
+  }
+  void
   AbstractDoubleProperty::set_value (int v, bool propagate)
   {
     set_value((double)v, propagate);

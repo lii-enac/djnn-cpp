@@ -69,4 +69,5 @@ namespace djnn {
   };
 
   double getDouble (Process *p);
+  void setDouble (Process *p, double v);
 }

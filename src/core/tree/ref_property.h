@@ -45,4 +45,5 @@ namespace djnn {
 };
 
   Process* getRef (Process *p);
+  void setRef (Process *p, Process *v);
 }

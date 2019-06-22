@@ -34,6 +34,16 @@ namespace djnn
   }
 
   void
+  setInt (Process* p, int v)
+  {
+    IntProperty *ip = dynamic_cast<IntProperty*> (p);
+    if (ip != nullptr)
+      ip->set_value (v, true);
+    else
+      warning (p, "setInt only works on integer properties");
+  }
+
+  void
   AbstractIntProperty::set_value (double v, bool propagate)
   {
     set_value((int)v, propagate);

@@ -72,4 +72,5 @@ namespace djnn {
   };
 
   bool getBool (Process *p);
+  void setBool (Process *p, bool v);
 }

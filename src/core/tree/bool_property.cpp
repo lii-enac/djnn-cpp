@@ -36,6 +36,16 @@ namespace djnn
   }
 
   void
+  setBool (Process* p, bool v)
+  {
+    BoolProperty *bp = dynamic_cast<BoolProperty*> (p);
+    if (bp != nullptr)
+      bp->set_value(v, true);
+    else
+      warning (p, "setBool only works on boolean properties");
+  }
+
+  void
   BoolProperty::init_BoolProperty ()
   {
     _true = new Spike (this, "true");

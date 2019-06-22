@@ -32,6 +32,16 @@ namespace djnn
     return nullptr;
   }
 
+  void
+  setRef (Process* p, Process *v)
+  {
+    RefProperty *rp = dynamic_cast<RefProperty*> (p);
+    if (rp != nullptr)
+      rp->set_value (v, true);
+    else
+      warning (p, "setRef only works on reference properties");
+  }
+
   string
   RefProperty::get_string_value ()
   {

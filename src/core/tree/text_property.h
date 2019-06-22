@@ -79,4 +79,5 @@ namespace djnn {
   };
 
   string& getString (Process* p);
+  void setString (Process *p, string &v);
 }
