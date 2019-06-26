@@ -81,8 +81,6 @@ namespace djnn
   void
   Coupling::propagate_activation ()
   {
-    //if (!is_enabled ()) return; // useless already tested elsewhere
-    assert(is_enabled ());
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
     if (is_immediate ()) {
@@ -97,8 +95,6 @@ namespace djnn
   void
   Coupling::propagate_deactivation ()
   {
-    //if (!is_enabled ()) return; // useless already tested elsewhere
-    assert(is_enabled ());
     _dst->set_activation_source (_src);
     _dst->set_data (_data);
     if (is_immediate ()) {
