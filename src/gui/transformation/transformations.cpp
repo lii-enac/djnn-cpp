@@ -1682,6 +1682,8 @@ namespace djnn
     Graph::instance().add_edge(_rightScaleBy_cy, _rightScaleBy_action);
     Graph::instance().add_edge(_rightScaleBy_sx, _rightScaleBy_action);
     Graph::instance().add_edge(_rightScaleBy_sy, _rightScaleBy_action);
+    Graph::instance().add_edge(_rightScaleBy_action, _accsx);
+    Graph::instance().add_edge(_rightScaleBy_action, _accsy);
     Graph::instance().add_edge(_rightScaleBy_action, m11 ());
     Graph::instance().add_edge(_rightScaleBy_action, m12 ());
     Graph::instance().add_edge(_rightScaleBy_action, m14 ());
@@ -1716,6 +1718,8 @@ namespace djnn
     Graph::instance().add_edge(_leftScaleBy_cy, _leftScaleBy_action);
     Graph::instance().add_edge(_leftScaleBy_sx, _leftScaleBy_action);
     Graph::instance().add_edge(_leftScaleBy_sy, _leftScaleBy_action);
+    Graph::instance().add_edge(_leftScaleBy_action, _accsx);
+    Graph::instance().add_edge(_leftScaleBy_action, _accsy);
     Graph::instance().add_edge(_leftScaleBy_action, m11 ());
     Graph::instance().add_edge(_leftScaleBy_action, m12 ());
     Graph::instance().add_edge(_leftScaleBy_action, m14 ());
@@ -1745,6 +1749,7 @@ namespace djnn
     Graph::instance().add_edge(_rightRotateBy_cx, _rightRotateBy_action);
     Graph::instance().add_edge(_rightRotateBy_cy, _rightRotateBy_action);
     Graph::instance().add_edge(_rightRotateBy_da, _rightRotateBy_action);
+    Graph::instance().add_edge(_rightRotateBy_action, _acca);
     Graph::instance().add_edge(_rightRotateBy_action, m11 ());
     Graph::instance().add_edge(_rightRotateBy_action, m12 ());
     Graph::instance().add_edge(_rightRotateBy_action, m14 ());
@@ -1774,6 +1779,7 @@ namespace djnn
     Graph::instance().add_edge(_leftRotateBy_cx, _leftRotateBy_action);
     Graph::instance().add_edge(_leftRotateBy_cy, _leftRotateBy_action);
     Graph::instance().add_edge(_leftRotateBy_da, _leftRotateBy_action);
+    Graph::instance().add_edge(_leftRotateBy_action, _acca);
     Graph::instance().add_edge(_leftRotateBy_action, m11 ());
     Graph::instance().add_edge(_leftRotateBy_action, m12 ());
     Graph::instance().add_edge(_leftRotateBy_action, m14 ());
@@ -2011,6 +2017,8 @@ namespace djnn
       Graph::instance().remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
       Graph::instance().remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
       Graph::instance().remove_edge(_rightScaleBy_sy, _rightScaleBy_action);
+      Graph::instance().remove_edge(_rightScaleBy_action, _accsx);
+      Graph::instance().remove_edge(_rightScaleBy_action, _accsy);
       Graph::instance().remove_edge(_rightScaleBy_action, this->m11 ());
       Graph::instance().remove_edge(_rightScaleBy_action, this->m12 ());
       Graph::instance().remove_edge(_rightScaleBy_action, this->m14 ());
@@ -2035,6 +2043,8 @@ namespace djnn
       Graph::instance().remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
       Graph::instance().remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
       Graph::instance().remove_edge(_leftScaleBy_sy, _leftScaleBy_action);
+      Graph::instance().remove_edge(_leftScaleBy_action, _accsx);
+      Graph::instance().remove_edge(_leftScaleBy_action, _accsy);
       Graph::instance().remove_edge(_leftScaleBy_action, this->m11 ());
       Graph::instance().remove_edge(_leftScaleBy_action, this->m12 ());
       Graph::instance().remove_edge(_leftScaleBy_action, this->m14 ());
@@ -2058,6 +2068,7 @@ namespace djnn
       Graph::instance().remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
       Graph::instance().remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
       Graph::instance().remove_edge(_rightRotateBy_da, _rightRotateBy_action);
+      Graph::instance().remove_edge(_rightRotateBy_action, _acca);
       Graph::instance().remove_edge(_rightRotateBy_action, this->m11 ());
       Graph::instance().remove_edge(_rightRotateBy_action, this->m12 ());
       Graph::instance().remove_edge(_rightRotateBy_action, this->m14 ());
@@ -2079,6 +2090,7 @@ namespace djnn
       Graph::instance().remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
       Graph::instance().remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
       Graph::instance().remove_edge(_leftRotateBy_da, _leftRotateBy_action);
+      Graph::instance().remove_edge(_leftRotateBy_action, _acca);
       Graph::instance().remove_edge(_leftRotateBy_action, this->m11 ());
       Graph::instance().remove_edge(_leftRotateBy_action, this->m12 ());
       Graph::instance().remove_edge(_leftRotateBy_action, this->m14 ());
