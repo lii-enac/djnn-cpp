@@ -91,7 +91,6 @@ namespace djnn
     Graph ();
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);
-    Vertex* get_vertex (Process* c);
     Vertex::vertices_t _vertices;
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;
