@@ -89,7 +89,7 @@ namespace djnn
     static std::once_flag onceFlag;
     std::vector<Process*> _to_delete;
     Graph ();
-    void browse_in_depth (Vertex* v);
+    void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);
     Vertex* get_vertex (Process* c);
     Vertex::vertices_t _vertices;

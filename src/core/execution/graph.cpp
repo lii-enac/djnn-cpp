@@ -254,7 +254,7 @@ namespace djnn
   }
 
   void
-  Graph::browse_in_depth (Vertex *v)
+  Graph::traverse_depth_first (Vertex *v)
   {
 
     // skip invalid vertex
@@ -271,7 +271,7 @@ namespace djnn
 
     for (auto & v2 : v->get_edges ()) {
       if (v2->get_mark () == NOT_MARKED) {
-        browse_in_depth (v2);
+        traverse_depth_first (v2);
       }
     }
     
@@ -303,14 +303,18 @@ namespace djnn
       v->set_mark (NOT_MARKED);
     }
 
+    // traverse
     for (auto v : _vertices) {
       if (v->get_mark () == NOT_MARKED)
-        browse_in_depth (v);
+        traverse_depth_first (v);
     }
 
+    // sort
     std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), cmp_vertices);
 
+    // append ouptut nodes
     _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
+
     _sorted = true;
 
     #if _PERF_TEST
