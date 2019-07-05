@@ -38,7 +38,8 @@ namespace djnn
     void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
-    int get_count_egdes_in () { return _count_egdes_in; }
+    int get_count_edges_in () { return _count_egdes_in; }
+    int get_count_edges_out () { return _edges.size ();}
 
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
@@ -73,6 +74,7 @@ namespace djnn
     void add_output_node (Process* c);
     void remove_output_node (Process* c);
 
+    int  size () {return _vertices.size ();}
     void sort ();
     void exec ();
     void clear ();

@@ -214,7 +214,7 @@ namespace djnn
 
     // 1 - remove src if necessary
     Vertex::vertices_t::iterator newend = _vertices.end ();
-    if ( !(s->get_edges ().empty ()) && (s->get_count_egdes_in () == 0)) {
+    if ( s->get_edges ().empty () && (s->get_count_edges_in () == 0)) {
       newend = std::remove (_vertices.begin (), _vertices.end (), s);
       _vertices.erase(newend, _vertices.end ());
       delete s;
@@ -223,7 +223,7 @@ namespace djnn
 
     // 2 - remove dst if necessary
     newend = _vertices.end ();
-    if (!(d->get_edges ().empty ()) && (d->get_count_egdes_in () == 0)){
+    if (d->get_edges ().empty () && (d->get_count_edges_in () == 0)){
       newend = std::remove (_vertices.begin (), _vertices.end (), d);
       _vertices.erase(newend, _vertices.end ());
       delete d;
