@@ -29,7 +29,7 @@
 namespace djnn
 {
   vector<string> AbstractGShape::_ui =
-    { "press", "release", "move", "enter", "leave", "touches" };
+    { "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
   Process*
   SVGHolder::find_component (const string &path)
@@ -54,15 +54,33 @@ namespace djnn
     return newh;
   }
 
+  void
+  Touch::init_touch (double init_x, double init_y, double init_pressure)
+  {
+    _init_x = new DoubleProperty (this, "init_x", init_x);
+    _init_y = new DoubleProperty (this, "init_y", init_y);
+    _local_init_x = new DoubleProperty (this, "local_init_x", 0);
+    _local_init_y = new DoubleProperty (this, "local_init_y", 0);
+    _move_x = new DoubleProperty (init_x);
+    _move_y = new DoubleProperty (init_y);
+    _local_move_x = new DoubleProperty (0);
+    _local_move_y = new DoubleProperty (0);
+    _pressure = new DoubleProperty (this, "pressure", init_pressure);
+    _id = new IntProperty (this, "id", 0);
+    _move = new Spike (this, "move");
+    _move->add_symbol ("x", _move_x);
+    _move->add_symbol ("y", _move_y);
+    _move->add_symbol ("move_x", _local_move_x);
+    _move->add_symbol ("move_y", _local_move_y);
+    _enter = new Spike (this, "enter");
+    _leave = new Spike (this, "leave");
+    _last_shape = new RefProperty (this, "last_shape", nullptr);
+  }
+
   Touch::Touch (Process *p, const string &n, double init_x, double init_y, double init_pressure) :
       Process (p, n), _shape (nullptr)
   {
-    _x = new DoubleProperty (this, "x", init_x);
-    _y = new DoubleProperty (this, "y", init_y);
-    _local_x = new DoubleProperty (this, "local_x", 0);
-    _local_y = new DoubleProperty (this, "local_y", 0);
-    _pressure = new DoubleProperty (this, "pressure", init_pressure);
-    _id = new IntProperty (this, "id", 0);
+    init_touch (init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
     Process::finalize_construction ();
   }
@@ -70,65 +88,180 @@ namespace djnn
   Touch::Touch () :
       Process (), _shape (nullptr)
   {
-    _x = new DoubleProperty (this, "x", 0);
-    _y = new DoubleProperty (this, "y", 0);
-    _local_x = new DoubleProperty (this, "local_x", 0);
-    _local_y = new DoubleProperty (this, "local_y", 0);
-    _pressure = new DoubleProperty (this, "pressure", 0);
-    _id = new IntProperty (this, "id", 0);
+    init_touch (0, 0, 0);
     set_activation_state (ACTIVATED);
   }
 
   Touch::~Touch ()
   {
-    delete _x;
-    delete _y;
-    delete _local_x;
-    delete _local_y;
+    delete _init_x;
+    delete _init_y;
+    delete _local_init_x;
+    delete _local_init_y;
+    _move->remove_symbol ("local_x");
+    _move->remove_symbol ("local_y");
+    _move->remove_symbol ("x");
+    _move->remove_symbol ("y");
+    delete _move_x;
+    delete _move_y;
+    delete _local_move_x;
+    delete _local_move_y;
+    delete _move;
+    delete _enter;
+    delete _leave;
     delete _pressure;
     delete _id;
+    delete _last_shape;
+  }
+
+  UI::UI (Process *p) : parent (p)
+  {
+    press = new Spike (p, "press");
+    move = new Spike (p, "move");
+    release = new Spike (p, "release");
+    enter = new Spike (p, "enter");
+    leave = new Spike (p, "leave");
+    mouse = new Component (p, "mouse");
+    mouse_press = new Spike (mouse, "press");
+    mouse_release = new Spike (mouse, "release");
+    mouse_move  = new Spike (mouse, "move");
+    mouse_enter = new Spike (mouse, "enter");
+    mouse_leave = new Spike (mouse, "leave");
+    touches = new List (p, "touches");
+    touches->set_activation_state (ACTIVATED);
+
+    move_x = new DoubleProperty (0);
+    move_y = new DoubleProperty (0);
+    press_x = new DoubleProperty (0);
+    press_y = new DoubleProperty (0);
+
+    local_move_x = new DoubleProperty (0);
+    local_move_y = new DoubleProperty (0);
+    local_press_x = new DoubleProperty (0);
+    local_press_y = new DoubleProperty (0);
+
+    move->add_symbol ("x", move_x);
+    move->add_symbol ("y", move_y);
+    move->add_symbol ("local_x", local_move_x);
+    move->add_symbol ("local_y", local_move_y);
+
+    press->add_symbol ("x", press_x);
+    press->add_symbol ("y", press_y);
+    press->add_symbol ("local_x", local_press_x);
+    press->add_symbol ("local_y", local_press_y);
+
+    mouse_press_x = new DoubleProperty (0);
+    mouse_press_y = new DoubleProperty (0);
+    mouse_move_x = new DoubleProperty (0);
+    mouse_move_y = new DoubleProperty (0);
+
+    mouse_local_press_x = new DoubleProperty (0);
+    mouse_local_press_y = new DoubleProperty (0);
+    mouse_local_move_x = new DoubleProperty (0);
+    mouse_local_move_y = new DoubleProperty (0);
+
+    mouse_move->add_symbol ("x", mouse_move_x);
+    mouse_move->add_symbol ("y", mouse_move_y);
+    mouse_move->add_symbol ("local_x", mouse_local_move_x);
+    mouse_move->add_symbol ("local_y", mouse_local_move_y);
+
+    mouse_press->add_symbol ("x", mouse_press_x);
+    mouse_press->add_symbol ("y", mouse_press_y);
+    mouse_press->add_symbol ("local_x", mouse_local_press_x);
+    mouse_press->add_symbol ("local_y", mouse_local_press_y);
+  }
+
+  UI::~UI()
+  {
+    move->remove_symbol ("x");
+    move->remove_symbol ("y");
+    move->remove_symbol ("local_x");
+    move->remove_symbol ("local_y");
+
+    press->remove_symbol ("x");
+    press->remove_symbol ("y");
+    press->remove_symbol ("local_x");
+    press->remove_symbol ("local_y");
+
+    mouse_move->remove_symbol ("x");
+    mouse_move->remove_symbol ("y");
+    mouse_move->remove_symbol ("local_x");
+    mouse_move->remove_symbol ("local_y");
+
+    mouse_press->remove_symbol ("x");
+    mouse_press->remove_symbol ("y");
+    mouse_press->remove_symbol ("local_x");
+    mouse_press->remove_symbol ("local_y");
+
+    delete mouse_press_x;
+    delete mouse_press_y;
+    delete mouse_move_x;
+    delete mouse_move_y;
+
+    delete mouse_local_press_x;
+    delete mouse_local_press_y;
+    delete mouse_local_move_x;
+    delete mouse_local_move_y;
+
+    delete move_x;
+    delete move_y;
+    delete press_x;
+    delete press_y;
+
+    delete local_move_x;
+    delete local_move_y;
+    delete local_press_x;
+    delete local_press_y;
+
+    parent->remove_child (touches);
+    parent->remove_child (mouse);
+    parent->remove_child (press);
+    parent->remove_child (release);
+    parent->remove_child (move);
+    parent->remove_child (enter);
+    parent->remove_child (leave);
+
+    mouse->remove_child (mouse_press);
+    mouse->remove_child (mouse_release);
+    mouse->remove_child (mouse_move);
+    mouse->remove_child (mouse_enter);
+    mouse->remove_child (mouse_leave);
+
+    delete touches;
+    delete press;
+    delete release;
+    delete move;
+    delete enter;
+    delete leave;
+    delete mouse_press;
+    delete mouse_release;
+    delete mouse_move;
+    delete mouse_enter;
+    delete mouse_leave;
+    delete mouse;
   }
 
   void
-  AbstractGShape::init_mouse_ui ()
+  AbstractGShape::init_ui ()
   {
-    Spike* press = new Spike (this, "press");
-    new Spike (this, "release");
-    Spike* move = new Spike (this, "move");
-    new Spike (this, "enter");
-    new Spike (this, "leave");
-    Process* touches = new List (this, "touches");
-    touches->set_activation_state (ACTIVATED);
-    DoubleProperty* px = new DoubleProperty (0);
-    DoubleProperty* py = new DoubleProperty (0);
-    DoubleProperty* mx = new DoubleProperty (0);
-    DoubleProperty* my = new DoubleProperty (0);
-    DoubleProperty* local_x = new DoubleProperty (0);
-    DoubleProperty* local_y = new DoubleProperty (0);
-    press->add_symbol ("x", px);
-    press->add_symbol ("y", py);
-    press->add_symbol ("local_x", local_x);
-    press->add_symbol ("local_y", local_y);
-    move->add_symbol ("x", mx);
-    move->add_symbol ("y", my);
-    move->add_symbol ("local_x", local_x);
-    move->add_symbol ("local_y", local_y);
+    ui = new UI (this);
+
     if( !_inverted_matrix) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
       _inverted_matrix->set_activation_state (ACTIVATED);
     }
-    _has_ui = true;
+
   }
 
   AbstractGShape::AbstractGShape () :
-    AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
+    AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
   AbstractGShape::AbstractGShape (Process *p, const std::string& n) :
-    AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), _has_ui (false)
+    AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
@@ -137,7 +270,7 @@ namespace djnn
   Process*
   AbstractGShape::find_component (const string &path)
   {
-    if (_has_ui)
+    if (ui)
       return Process::find_component (path);
     else {
       size_t found = path.find_first_of ('/');
@@ -160,7 +293,7 @@ namespace djnn
         while (!found && it != _ui.end ()) {
           if (key.compare (*it) == 0) {
             found = true;
-            init_mouse_ui ();
+            init_ui ();
           }
           it++;
         }
@@ -194,39 +327,8 @@ namespace djnn
 
     // remove _ui if it exist
     // FIXME: try to not use find_component
-    if (_has_ui) {
-      Process* press = find_component ("press");
-      Process* release = find_component ("release");
-      Process* move = find_component ("move");
-      Process* enter = find_component ("enter");
-      Process* leave = find_component ("leave");
-      Process* touches = find_component ("touches");
-      Process* mx = find_component ("move/x");
-      Process* my = find_component ("move/y");
-      Process* px = find_component ("press/x");
-      Process* py = find_component ("press/y");
-      Process* local_x = find_component ("press/local_x");
-      Process* local_y = find_component ("press/local_y");
-      move->remove_symbol ("local_x");
-      move->remove_symbol ("local_y");
-      move->remove_symbol ("x");
-      move->remove_symbol ("y");
-      press->remove_symbol ("x");
-      press->remove_symbol ("y");
-      press->remove_symbol ("local_x");
-      press->remove_symbol ("local_y");
-      delete local_y;
-      delete local_x;
-      delete my;
-      delete mx;
-      delete py;
-      delete px;
-      delete touches;
-      delete leave;
-      delete enter;
-      delete move;
-      delete release;
-      delete press;
+    if (ui != nullptr) {
+      delete ui;
     }
   }
 

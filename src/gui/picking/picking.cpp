@@ -39,7 +39,7 @@ namespace djnn
   }
 
   void
-  Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y)
+  Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y, bool is_move)
   {
     Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
     double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
@@ -47,11 +47,24 @@ namespace djnn
     double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
         - s->origin_y ()->get_value ();
     if (t != nullptr) {
-      t->set_local_x (loc_x);
-      t->set_local_y (loc_y);
+      if (is_move) {
+        t->set_local_move_x (loc_x);
+        t->set_local_move_y (loc_y);
+
+      } else {
+        t->set_local_init_x (loc_x);
+        t->set_local_init_y (loc_y);
+      }
     } else {
-      ((DoubleProperty*) s->find_component ("move/local_x"))->set_value (loc_x, true);
-      ((DoubleProperty*) s->find_component ("move/local_y"))->set_value (loc_y, true);
+      s->get_ui()->mouse_local_move_x->set_value (loc_x, true);
+      s->get_ui()->mouse_local_move_y->set_value (loc_y, true);
+    }
+    if (is_move) {
+      s->get_ui()->local_move_x->set_value (loc_x, true);
+      s->get_ui()->local_move_y->set_value (loc_y, true);
+    } else {
+      s->get_ui()->local_press_x->set_value (loc_x, true);
+      s->get_ui()->local_press_y->set_value (loc_y, true);
     }
   }
 
@@ -73,15 +86,15 @@ namespace djnn
     if (s) {
       if (s != _cur_obj) {
         if (_cur_obj != nullptr)
-          _cur_obj->find_component ("leave")->notify_activation ();
-        s->find_component ("enter")->notify_activation ();
-        _cur_obj = s;
+          _cur_obj->get_ui()->leave->notify_activation ();
+        s->get_ui ()->enter->notify_activation ();
+        //_cur_obj = s;
         exec_ = true;
       }    
     } else {
       if (_cur_obj != nullptr) {
-        _cur_obj->find_component ("leave")->notify_activation ();
-        _cur_obj = nullptr;
+        _cur_obj->get_ui ()->leave->notify_activation ();
+        //_cur_obj = nullptr;
         exec_ = true;
       }
     }
@@ -95,16 +108,17 @@ namespace djnn
     AbstractGShape *s = this->pick (x, y);
 
     if (s) {
-      double cur_move_x = ((DoubleProperty*) s->find_component ("move/x"))->get_value ();
-      double cur_move_y = ((DoubleProperty*) s->find_component ("move/y"))->get_value ();
+      double cur_move_x = s->get_ui ()->move_x->get_value ();
+      double cur_move_y = s->get_ui ()->move_y->get_value ();
       if (s == _cur_obj) {
         if (cur_move_x == x && cur_move_y == y)
           return exec_;
         else {
-          set_local_coords (s, nullptr, x, y);
+          set_local_coords (s, nullptr, x, y, true);
         }
       } 
-      s->find_component ("move")->notify_activation ();
+      s->get_ui ()->move->notify_activation ();
+      s->get_ui ()->mouse_move->notify_activation ();
     }
 
     exec_ |= genericEnterLeave(s);
@@ -124,12 +138,17 @@ namespace djnn
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
-      ((DoubleProperty*) s->find_component ("press/x"))->set_value (x, true);
-      ((DoubleProperty*) s->find_component ("press/y"))->set_value (y, true);
-      ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
-      ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
-      set_local_coords (s, nullptr, x, y);
-      s->find_component ("press")->notify_activation ();
+      s->get_ui()->press_x->set_value (x, true);
+      s->get_ui()->press_y->set_value (y, true);
+      s->get_ui()->move_x->set_value (x, true);
+      s->get_ui()->move_y->set_value (y, true);
+      s->get_ui()->mouse_press_x->set_value (x, true);
+      s->get_ui()->mouse_press_y->set_value (y, true);
+      s->get_ui()->mouse_move_x->set_value (x, true);
+      s->get_ui()->mouse_move_y->set_value (y, true);
+      set_local_coords (s, nullptr, x, y, false);
+      s->get_ui()->press->notify_activation ();
+      s->get_ui()->mouse_press->notify_activation ();
       exec_ = true;
     }
 
@@ -168,7 +187,8 @@ namespace djnn
       t = it->second;
       _win->touches ()->remove_child (t);
       if (t->shape () != nullptr) {
-        t->shape ()->find_component ("touches")->remove_child (t);
+        t->shape ()->get_ui()->touches->remove_child (t);
+        t->leave ();
       }
       _active_touches.erase (it);
       Graph::instance().add_process_to_delete (t);
@@ -176,16 +196,14 @@ namespace djnn
     }
     t = new Touch (_win->touches (), to_string (id), x, y, pressure);
     _active_touches[id] = t;
-    t->set_x (x);
-    t->set_y (y);
-    t->set_pressure (pressure);
-    t->set_id (id);
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
       t->set_shape (s);
-      set_local_coords (s, t, x, y);
-      s->find_component ("touches")->add_child (t, to_string (id));
+      t->set_last_shape (s);
+      set_local_coords (s, t, x, y, false);
+      s->get_ui()->touches->add_child (t, to_string (id));
+      t->enter ();
     }
     return true;
   }
@@ -208,12 +226,17 @@ namespace djnn
 
     AbstractGShape *s = this->pick (x, y);
     if (s) {
-      if (x != old_x)
-        ((DoubleProperty*) s->find_component ("move/x"))->set_value (x, true);
-      if (y != old_y)
-        ((DoubleProperty*) s->find_component ("move/y"))->set_value (y, true);
-      set_local_coords (s, nullptr, x, y);
-      s->find_component ("move")->notify_activation ();
+      if (x != old_x) {
+        s->get_ui()->move_x->set_value (x, true);
+        s->get_ui()->mouse_move_x->set_value (x, true);
+      }
+      if (y != old_y) {
+        s->get_ui()->move_y->set_value (y, true);
+        s->get_ui()->mouse_move_y->set_value (y, true);
+      }
+      set_local_coords (s, nullptr, x, y, true);
+      s->get_ui()->move->notify_activation ();
+      s->get_ui()->mouse_move->notify_activation ();
       exec_ = true;
     }
 
@@ -235,25 +258,29 @@ namespace djnn
     Touch *t;
     if (it != _active_touches.end ()) {
       t = it->second;
-      t->set_x (x);
-      t->set_y (y);
+      t->set_move_x (x);
+      t->set_move_y (y);
       t->set_pressure (pressure);
       t->set_id (id);
       AbstractGShape *s = this->pick (x, y);
       AbstractGShape *t_shape = t->shape ();
       if (s == nullptr && t_shape != nullptr) {
-        t_shape->find_component ("touches")->remove_child (t);
+        t_shape->get_ui ()->touches->remove_child (t);
         t->set_shape (nullptr);
+        t->leave ();
       } else if (s != nullptr) {
         if (t_shape == nullptr) {
-          s->find_component ("touches")->add_child (t, to_string (id));
+          s->get_ui ()->touches->add_child (t, to_string (id));
           t->set_shape (s);
+          t->leave ();
         } else if (s != t_shape) {
-          t_shape->find_component ("touches")->remove_child (t);
-          s->find_component ("touches")->add_child (t, to_string (id));
+          t_shape->get_ui ()->touches->remove_child (t);
+          s->get_ui ()->touches->add_child (t, to_string (id));
           t->set_shape (s);
+          t->set_last_shape (s);
+          t->leave ();
         }
-        set_local_coords (s, t, x, y);
+        set_local_coords (s, t, x, y, true);
       }
     } else {
       genericTouchPress (x, y, id, pressure);
@@ -267,7 +294,8 @@ namespace djnn
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
     if (s) {
-      s->find_component ("release")->notify_activation ();
+      s->get_ui()->release->notify_activation ();
+      s->get_ui()->mouse_release->notify_activation ();
       exec_ = true;
     }
 
@@ -305,14 +333,15 @@ namespace djnn
     Touch *t;
     if (it != _active_touches.end ()) {
       t = it->second;
-      t->set_x (x);
-      t->set_y (y);
+      t->set_move_x (x);
+      t->set_move_y (y);
       t->set_pressure (pressure);
       t->set_id (id);
       AbstractGShape *t_shape = t->shape ();
       if (t_shape != nullptr) {
-        t_shape->find_component ("touches")->remove_child (t);
-        set_local_coords (t_shape, t, x, y);
+        t_shape->get_ui()->touches->remove_child (t);
+        t->leave ();
+        set_local_coords (t_shape, t, x, y, true);
       }
       _win->touches ()->remove_child (t);
       _active_touches.erase (it);

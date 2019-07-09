@@ -16,6 +16,7 @@
 
 #include "abstract_gobj.h"
 
+#include "../core/tree/ref_property.h"
 #include "../core/tree/double_property.h"
 #include "../core/ontology/process.h"
 
@@ -35,6 +36,19 @@ namespace djnn
     Process* _gobj;
   };
 
+  class UI {
+  public:
+    UI (Process *p);
+    virtual ~UI ();
+    friend class Picking;
+  private:
+    DoubleProperty *move_x, *move_y, *press_x, *press_y, *local_move_x, *local_move_y, *local_press_x, *local_press_y;
+    DoubleProperty *mouse_press_x, *mouse_press_y, *mouse_move_x, *mouse_move_y;
+    DoubleProperty *mouse_local_press_x, *mouse_local_press_y, *mouse_local_move_x, *mouse_local_move_y;
+    Process *press, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
+    Process *parent;
+  };
+
   class AbstractGShape : public AbstractGObj
   {
   public:
@@ -46,17 +60,18 @@ namespace djnn
     void set_origin (double x, double y) { _origin_x->set_value (x, true); _origin_y->set_value (y, true); }
     DoubleProperty* origin_x () { return _origin_x; }
     DoubleProperty* origin_y () { return _origin_y; }
-    bool has_ui () { return _has_ui; }
+    bool has_ui () { return ui != nullptr; }
+    UI* get_ui () { return ui; }
     Process* find_component (const string &n) override;
 
     void pick () override;
 
   private:
-    void init_mouse_ui ();
+    void init_ui ();
     Process* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
     static vector<string> _ui;
-    bool _has_ui;
+    UI *ui;
   };
 
   class Touch : public Process
@@ -66,20 +81,29 @@ namespace djnn
     Touch ();
     void impl_activate () override {};
     void impl_deactivate () override {};
-    void set_x (double v) { _x->set_value (v, true); }
-    void set_y (double v) { _y->set_value (v, true); }
-    void set_local_x (double v) { _local_x->set_value (v, true); }
-    void set_local_y (double v) { _local_y->set_value (v, true); }
+    void set_init_x (double v) { _init_x->set_value (v, true); }
+    void set_init_y (double v) { _init_y->set_value (v, true); }
+    void set_move_x (double v) { _move_x->set_value (v, true); }
+    void set_move_y (double v) { _move_y->set_value (v, true); }
+    void set_local_init_x (double v) { _local_init_x->set_value (v, true); }
+    void set_local_init_y (double v) { _local_init_y->set_value (v, true); }
+    void set_local_move_x (double v) { _local_move_x->set_value (v, true); }
+    void set_local_move_y (double v) { _local_move_y->set_value (v, true); }
     void set_pressure (double v) { _pressure->set_value (v, true); }
     void set_id (int v) { _id->set_value (v, true); }
-    
+    void leave () { _leave->activate (); }
+    void enter () { _enter->activate (); }
     AbstractGShape* shape () { return _shape; }
     void set_shape (AbstractGShape *s) { _shape = s; }
+    void set_last_shape (AbstractGShape *s) { _last_shape->set_value(s, true); }
     virtual ~Touch ();
   private:
-    DoubleProperty *_x,* _y, *_local_x, *_local_y, *_pressure;
+    void init_touch (double init_x, double init_y, double init_pressure);
+    DoubleProperty *_init_x,* _init_y, *_move_x,* _move_y, *_local_init_x, *_local_init_y, *_local_move_x, *_local_move_y, *_pressure;
     IntProperty *_id;
+    RefProperty *_last_shape;
     AbstractGShape* _shape;
+    Process *_move, *_enter, *_leave;
   };
 
   inline bool is_pickable (AbstractGShape * s) {
