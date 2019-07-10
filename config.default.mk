@@ -1,6 +1,6 @@
 display := QT
 #options: QT SDL
-physics := ODE
+physics := # set to ODE 
 # cross-compile support
 cross_prefix := g
 #options: g llvm-g arm-none-eabi- em
