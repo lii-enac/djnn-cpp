@@ -563,7 +563,7 @@ namespace djnn
   class RGBToLCHConverter : public Process
   {
   private:
-    class ConverterAction : public Process {
+    class ConverterAction : public Action {
       public:
         ConverterAction (RGBToLCHConverter *p, const std::string &n);
         virtual ~ConverterAction () {}
@@ -587,7 +587,7 @@ namespace djnn
   class LCHToRGBConverter : public Process
   {
   private:
-    class ConverterAction : public Process {
+    class ConverterAction : public Action {
       public:
         ConverterAction (LCHToRGBConverter *p, const std::string &n);
         virtual ~ConverterAction () {}
