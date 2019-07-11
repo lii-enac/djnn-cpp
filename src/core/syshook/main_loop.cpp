@@ -138,7 +138,7 @@ namespace djnn {
           }
         }
         
-      } else {
+      } else { /* mainloop run for _duration time */
         //std::
         //boost::
         #if DJNN_USE_SDL_THREAD
@@ -149,6 +149,10 @@ namespace djnn {
         this_thread::sleep_for (_duration);
         #endif
         
+        // FIXME : should be removed : with mainloop deactivation
+        // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
+        set_run_for_ever ();
+
         //DBG;
       }
       if (_another_source_wants_to_be_mainloop)
