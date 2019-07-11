@@ -23,7 +23,7 @@ namespace djnn
 {
 
   Picking::Picking (Window *win) :
-      _win (win), _cur_obj (nullptr)
+      _win (win), _catching_shape (nullptr)
   {
     // FIXME: uniformiser l'API
     //_win->set_picking_view(this);
@@ -73,9 +73,9 @@ namespace djnn
   {
     // Reset _cur_obj to nullptr if this object has been removed from picking_view
     //DBG;
-    if (_cur_obj == gobj) {
+    if (_catching_shape == gobj) {
       //DBG;
-      _cur_obj = nullptr;
+      _catching_shape = nullptr;
     }
   }
 
@@ -84,17 +84,23 @@ namespace djnn
     auto s = picked;
     bool exec_ = false;
     if (s) {
-      if (s != _cur_obj) {
-        if (_cur_obj != nullptr)
-          _cur_obj->get_ui()->leave->notify_activation ();
+      if (s != _catching_shape) {
+        if (_catching_shape != nullptr) { _catching_shape->get_ui()->leave->notify_activation (); }
+        else if (s != _hover && _hover != nullptr) { _hover->get_ui()->leave->notify_activation (); }
+
         s->get_ui ()->enter->notify_activation ();
-        //_cur_obj = s;
+        _hover = s;
         exec_ = true;
       }    
     } else {
-      if (_cur_obj != nullptr) {
-        _cur_obj->get_ui ()->leave->notify_activation ();
-        //_cur_obj = nullptr;
+      if (_catching_shape != nullptr) {
+        _catching_shape->get_ui ()->leave->notify_activation ();
+        _hover = nullptr;
+        exec_ = true;
+      }
+      else if (_hover != nullptr) {
+        _hover->get_ui()->leave->notify_activation ();
+        _hover = nullptr;
         exec_ = true;
       }
     }
@@ -110,7 +116,7 @@ namespace djnn
     if (s) {
       double cur_move_x = s->get_ui ()->move_x->get_value ();
       double cur_move_y = s->get_ui ()->move_y->get_value ();
-      if (s == _cur_obj) {
+      if (s == _catching_shape) {
         if (cur_move_x == x && cur_move_y == y)
           return exec_;
         else {

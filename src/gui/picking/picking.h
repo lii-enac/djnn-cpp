@@ -53,7 +53,7 @@ namespace djnn {
     bool genericEnterLeave (AbstractGShape* gobj);
 
     Window *_win;
-    AbstractGShape *_cur_obj;
+    AbstractGShape *_catching_shape, *_hover;
     map <int, Touch*> _active_touches;
   };
 }
