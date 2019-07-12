@@ -23,7 +23,7 @@ namespace djnn
 {
 
   Picking::Picking (Window *win) :
-      _win (win), _catching_shape (nullptr)
+      _win (win), _catching_shape (nullptr), _hover (nullptr)
   {
     // FIXME: uniformiser l'API
     //_win->set_picking_view(this);
