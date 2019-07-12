@@ -19,6 +19,8 @@
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
+#include "../utils/utils-dev.h"
+
 #define _PERF_TEST 0
 #if _PERF_TEST
 #include "../utils/utils-dev.h"
@@ -82,7 +84,7 @@ namespace djnn
   void
   Vertex::print_vertex () const
   {
-    std::cout << "vertex (" << _vertex->get_name () << ") - " /*<< _count_egdes_in << ", " */<< _edges.size () << " :\t";
+    std::cout << "vertex (" << _vertex->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
     else {
@@ -120,7 +122,7 @@ namespace djnn
     _sorted_vertices.clear ();
 
     // delete vertices from _vertices and clear.
-    for (Vertex::vertices_t::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
+    for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
         if (*it) delete *it;
     _vertices.clear ();
 
@@ -145,6 +147,7 @@ namespace djnn
   {
     Vertex* v = new Vertex (c);
     _vertices.push_back (v);
+    v->set_position_in_vertices (_vertices.end ());
     _sorted = false;
     return v;
   }
@@ -201,8 +204,20 @@ namespace djnn
   void
   Graph::remove_edge (Process* src, Process* dst)
   {
-    Vertex *s = get_vertex (src);
-    Vertex *d = get_vertex (dst);
+    //Vertex *s = get_vertex (src);
+    Vertex *s = src->vertex ();
+
+    //Vertex *d = get_vertex (dst);
+    Vertex *d = dst->vertex ();
+
+    // if (s != s2)
+    //   cerr << "WRONG SRC !!! " << s2 << " - " << s << " - src " <<  src->get_name () << " - get_vertex () " << s2->get_process ()->get_name () << " - ->vertex " << s->get_process ()->get_name ()  << endl;
+
+
+    // if (d != d2)
+    //   cerr << "WRONG SRC !!! " << d2 << " - " << d << " - dst " <<  dst->get_name () << " - get_vertex () " << d2->get_process ()->get_name () << " - ->vertex " << d->get_process ()->get_name ()  << endl;
+
+
     if (s == nullptr || d == nullptr)
       return;
     s->remove_edge (d);
@@ -212,23 +227,29 @@ namespace djnn
       remove and delete vertex if they have no more out_edges and in_edges
      */
 
+    //t1 ();
     // 1 - remove src if necessary
-    Vertex::vertices_t::iterator newend = _vertices.end ();
+    //std::list< Vertex* >::iterator newend = _vertices.end ();
     if ( s->get_edges ().empty () && (s->get_count_edges_in () == 0)) {
-      newend = std::remove (_vertices.begin (), _vertices.end (), s);
-      _vertices.erase(newend, _vertices.end ());
-      delete s;
+      //newend = std::remove (_vertices.begin (), _vertices.end (), s);
+      //_vertices.erase(newend, _vertices.end ());
+      _vertices.erase(s->get_position_in_vertices ());
       src->set_vertex (nullptr);
+      delete s; 
     }
+    //t2 ("remove SRC node:  ");
 
     // 2 - remove dst if necessary
-    newend = _vertices.end ();
+    //t1 ();
+    //newend = _vertices.end ();
     if (d->get_edges ().empty () && (d->get_count_edges_in () == 0)){
-      newend = std::remove (_vertices.begin (), _vertices.end (), d);
-      _vertices.erase(newend, _vertices.end ());
-      delete d;
+      //newend = std::remove (_vertices.begin (), _vertices.end (), d);
+      //_vertices.erase(newend, _vertices.end ());
+      _vertices.erase(d->get_position_in_vertices ());
       dst->set_vertex (nullptr);
+      delete d;
     }
+    //t2 ("remove DST node:  ");
 
     _sorted = false;
   }
@@ -357,8 +378,10 @@ namespace djnn
       }
    }
    if (!_to_delete.empty ()) {
-    for (auto p: _to_delete)
+    for (auto p: _to_delete) {
       delete p;
+      p = nullptr;
+    }
     _to_delete.clear ();
    }
 

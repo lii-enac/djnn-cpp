@@ -18,6 +18,7 @@
 
 #include <mutex>
 #include <vector>
+#include <list>
 #include <memory>
 
 //#include <iostream>
@@ -40,6 +41,8 @@ namespace djnn
     const vertices_t& get_edges () const { return _edges; }
     int get_count_edges_in () { return _count_egdes_in; }
     int get_count_edges_out () { return _edges.size ();}
+    void set_position_in_vertices (std::list <Vertex *>::iterator end) { pos = std::prev(end); }
+    std::list< Vertex* >::iterator get_position_in_vertices () { return pos; }
 
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
@@ -58,6 +61,7 @@ namespace djnn
   private:
     Process* _vertex;
     vertices_t _edges;
+    std::list< Vertex* >::iterator pos;
     int _mark, _timestamp;
     int _count_egdes_in;
     bool _is_invalid;
@@ -92,7 +96,10 @@ namespace djnn
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);
     Vertex* get_vertex (Process* c);
-    Vertex::vertices_t _vertices;
+    
+    //Vertex::vertices_t _vertices;
+    std::list< Vertex* > _vertices;
+
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;
     int _cur_date;
