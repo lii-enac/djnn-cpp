@@ -70,8 +70,8 @@ namespace djnn
     _move = new Spike (this, "move");
     _move->add_symbol ("x", _move_x);
     _move->add_symbol ("y", _move_y);
-    _move->add_symbol ("move_x", _local_move_x);
-    _move->add_symbol ("move_y", _local_move_y);
+    _move->add_symbol ("local_x", _local_move_x);
+    _move->add_symbol ("local_y", _local_move_y);
     _enter = new Spike (this, "enter");
     _leave = new Spike (this, "leave");
     _last_shape = new RefProperty (this, "last_shape", nullptr);
