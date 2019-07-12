@@ -131,6 +131,16 @@ namespace djnn
   }
 
   Vertex*
+  Graph::get_vertex (Process* c)
+  {
+    for (auto v : _vertices) {
+      if (v->get_process () == c)
+        return v;
+    }
+    return nullptr;
+  }
+
+  Vertex*
   Graph::add_vertex (Process* c)
   {
     Vertex* v = new Vertex (c);
@@ -191,8 +201,8 @@ namespace djnn
   void
   Graph::remove_edge (Process* src, Process* dst)
   {
-    Vertex *s = src->vertex ();
-    Vertex *d = dst->vertex ();
+    Vertex *s = get_vertex (src);
+    Vertex *d = get_vertex (dst);
     if (s == nullptr || d == nullptr)
       return;
     s->remove_edge (d);
