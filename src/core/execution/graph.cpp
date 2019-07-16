@@ -50,7 +50,7 @@ namespace djnn
   };
 
   Vertex::Vertex (Process* c) :
-      _vertex (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
+      _process (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
   {
   }
 
@@ -84,12 +84,12 @@ namespace djnn
   void
   Vertex::print_vertex () const
   {
-    std::cout << "vertex (" << _vertex->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
+    std::cout << "vertex (" << _process->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
-        std::cout << e->_vertex->get_name () << " ";
+        std::cout << e->_process->get_name () << " ";
       }
       std::cout << std::endl;
     }

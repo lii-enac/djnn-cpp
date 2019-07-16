@@ -53,13 +53,13 @@ namespace djnn
     void set_timestamp (int date) { _timestamp = date; };
     int  get_timestamp () const   { return _timestamp; }
 
-    Process*       get_process ()       { return _vertex; }
-    const Process* get_process () const { return _vertex; }
+    Process*       get_process ()       { return _process; }
+    const Process* get_process () const { return _process; }
 
     void print_vertex () const;
 
   private:
-    Process* _vertex;
+    Process* _process;
     vertices_t _edges;
     std::list< Vertex* >::iterator pos;
     int _mark, _timestamp;
