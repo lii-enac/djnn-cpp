@@ -204,19 +204,28 @@ namespace djnn
   void
   Graph::remove_edge (Process* src, Process* dst)
   {
-    //Vertex *s = get_vertex (src);
+    Vertex *s2 = get_vertex (src);
     Vertex *s = src->vertex ();
 
-    //Vertex *d = get_vertex (dst);
+    Vertex *d2 = get_vertex (dst);
     Vertex *d = dst->vertex ();
 
-    // if (s != s2)
-    //   cerr << "WRONG SRC !!! " << s2 << " - " << s << " - src " <<  src->get_name () << " - get_vertex () " << s2->get_process ()->get_name () << " - ->vertex " << s->get_process ()->get_name ()  << endl;
+    //cerr << "vertices_size : " << _vertices.size () << endl;
+
+    if (s != s2) {
+      if (s && s2 && s->get_process () && s2->get_process ())
+         cerr << "WRONG SRC !!! " << s2 << " - " << s << " - src: " <<  src->get_name () << " - \"get_vertex ()\" " << s2->get_process ()->get_name () << " - \"->vertex\" " << s->get_process ()->get_name ()  << endl;
+       else
+        cerr << "WRONG SRC !!! AND one is NULLLL" << endl;
+    }
 
 
-    // if (d != d2)
-    //   cerr << "WRONG SRC !!! " << d2 << " - " << d << " - dst " <<  dst->get_name () << " - get_vertex () " << d2->get_process ()->get_name () << " - ->vertex " << d->get_process ()->get_name ()  << endl;
-
+    if (d != d2) {
+      if (d && d2 && d->get_process () && d2->get_process ())
+       cerr << "WRONG DST !!! " << d2 << " - " << d << " - dst " <<  dst->get_name () << " - \"get_vertex ()\" " << d2->get_process ()->get_name () << " - \"->vertex\" " << d->get_process ()->get_name ()  << endl;
+      else
+        cerr << "WRONG DST !!! AND one is NULLLL" << endl;
+    }
 
     if (s == nullptr || d == nullptr)
       return;

@@ -19,6 +19,8 @@
 #include <map>
 #include <string>
 
+#include <iostream>
+
 namespace djnn {
 
   // process types
@@ -96,7 +98,11 @@ namespace djnn {
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
   
     // execution graph
-    void     set_vertex (Vertex *v) { _vertex = v; }
+    void     set_vertex (Vertex *v) 
+    { 
+      if (_vertex && v && _vertex != v) std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ; 
+      _vertex = v; 
+    }
     Vertex*  vertex () { return _vertex; };
 
     // actions to be redefined by subclasses
