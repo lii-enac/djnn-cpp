@@ -328,9 +328,9 @@ namespace djnn
 
     // remove _ui if it exist
     // FIXME: try to not use find_component
-    if (ui != nullptr) {
+    //if (ui != nullptr) {
       delete ui;
-    }
+    //}
   }
 
   void
