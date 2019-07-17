@@ -109,7 +109,7 @@ namespace djnn
   bool
   Picking::genericCheckShapeAfterDraw (double x, double y)
   {
-    if (_mouse_released)
+    if (_mouse_released && mouse_tracking == 0)
       return false;
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
@@ -140,7 +140,8 @@ namespace djnn
     s->get_ui()->press_y->set_value (y, true);
     s->get_ui()->move_x->set_value (x, true);
     s->get_ui()->move_y->set_value (y, true);
-    s->get_ui()->enter->notify_activation ();
+    if (s != _hover)
+      s->get_ui()->enter->notify_activation ();
     s->get_ui()->press->notify_activation ();
     _catching_shape = s;
     _hover = s;
@@ -159,14 +160,15 @@ namespace djnn
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
+      if (s != _hover)
+        s->get_ui()->mouse_enter->notify_activation ();
       common_press (x, y, s);
       s->get_ui()->mouse_press_x->set_value (x, true);
       s->get_ui()->mouse_press_y->set_value (y, true);
       s->get_ui()->mouse_move_x->set_value (x, true);
       s->get_ui()->mouse_move_y->set_value (y, true);
       set_local_coords (s, nullptr, x, y, false);
-      s->get_ui()->mouse_enter->notify_activation ();
-      s->get_ui()->mouse_press->notify_activation ();
+      s->get_ui()->mouse_press->notify_activation ();;
 
       exec_ = true;
     }
@@ -329,8 +331,10 @@ namespace djnn
     if (s) {
       s->get_ui ()->release->notify_activation ();
       s->get_ui ()->mouse_release->notify_activation ();
-      s->get_ui ()->leave->notify_activation ();
-      s->get_ui ()->mouse_leave->notify_activation ();
+      if (mouse_tracking == 0) {
+        s->get_ui ()->leave->notify_activation ();
+        s->get_ui ()->mouse_leave->notify_activation ();
+      }
       exec_ = true;
     }
     if (_catching_shape && _catching_shape != s) {
@@ -339,7 +343,9 @@ namespace djnn
       exec_ = true;
     }
 
-    _hover = nullptr;
+    if (mouse_tracking == 0) {
+      _hover = nullptr;
+    }
     _catching_shape = nullptr;
 
     //exec_ |= genericEnterLeave(s);
