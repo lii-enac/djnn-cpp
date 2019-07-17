@@ -23,7 +23,7 @@ namespace djnn
 {
 
   Picking::Picking (Window *win) :
-      _win (win), _catching_shape (nullptr), _hover (nullptr)
+      _win (win), _catching_shape (nullptr), _hover (nullptr), _mouse_released (true)
   {
     // FIXME: uniformiser l'API
     //_win->set_picking_view(this);
@@ -109,6 +109,8 @@ namespace djnn
   bool
   Picking::genericCheckShapeAfterDraw (double x, double y)
   {
+    if (_mouse_released)
+      return false;
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
 
@@ -131,9 +133,23 @@ namespace djnn
     return exec_;
   }
 
+  void
+  Picking::common_press (double x, double y , AbstractGShape *s)
+  {
+    s->get_ui()->press_x->set_value (x, true);
+    s->get_ui()->press_y->set_value (y, true);
+    s->get_ui()->move_x->set_value (x, true);
+    s->get_ui()->move_y->set_value (y, true);
+    s->get_ui()->enter->notify_activation ();
+    s->get_ui()->press->notify_activation ();
+    _catching_shape = s;
+    _hover = s;
+  }
+
   bool
   Picking::genericMousePress (double x, double y, mouse_button button)
   {
+    _mouse_released = false;
     bool exec_ = false;
     _win->press_x ()->set_value (x, true);
     _win->press_y ()->set_value (y, true);
@@ -143,22 +159,15 @@ namespace djnn
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
-      s->get_ui()->press_x->set_value (x, true);
-      s->get_ui()->press_y->set_value (y, true);
-      s->get_ui()->move_x->set_value (x, true);
-      s->get_ui()->move_y->set_value (y, true);
+      common_press (x, y, s);
       s->get_ui()->mouse_press_x->set_value (x, true);
       s->get_ui()->mouse_press_y->set_value (y, true);
       s->get_ui()->mouse_move_x->set_value (x, true);
       s->get_ui()->mouse_move_y->set_value (y, true);
       set_local_coords (s, nullptr, x, y, false);
-
-      s->get_ui()->enter->notify_activation ();
       s->get_ui()->mouse_enter->notify_activation ();
-      s->get_ui()->press->notify_activation ();
       s->get_ui()->mouse_press->notify_activation ();
-      _catching_shape = s;
-      _hover = s;
+
       exec_ = true;
     }
 
@@ -207,6 +216,7 @@ namespace djnn
 
     AbstractGShape *s = this->pick (x, y);
     if (s != nullptr) {
+      common_press (x, y, s);
       t->set_shape (s);
       t->set_last_shape (s);
       set_local_coords (s, t, x, y, false);
@@ -303,6 +313,7 @@ namespace djnn
         }
         set_local_coords (s, t, x, y, true);
       }
+      genericEnterLeave (s);
     } else {
       genericTouchPress (x, y, id, pressure);
     }
@@ -312,6 +323,7 @@ namespace djnn
   bool
   Picking::genericMouseRelease (double x, double y, mouse_button button)
   {
+    _mouse_released = true;
     bool exec_ = false;
     AbstractGShape *s = this->pick (x, y);
     if (s) {
@@ -361,6 +373,7 @@ namespace djnn
   bool
   Picking::genericTouchRelease (double x, double y, int id, float pressure)
   {
+    AbstractGShape *s = this->pick (x, y);
     map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     if (it != _active_touches.end ()) {
@@ -380,6 +393,15 @@ namespace djnn
       Graph::instance().add_process_to_delete (t);
       //delete t;
     }
+    if (s) {
+      s->get_ui ()->release->notify_activation ();
+      s->get_ui ()->leave->notify_activation ();
+    }
+    if (_catching_shape && _catching_shape != s) {
+      _catching_shape->get_ui ()->release->notify_activation ();
+    }
+    _hover = nullptr;
+    _catching_shape = nullptr;
     return true;
   }
 

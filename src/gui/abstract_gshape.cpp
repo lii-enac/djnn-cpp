@@ -74,6 +74,7 @@ namespace djnn
     _move->add_symbol ("local_y", _local_move_y);
     _enter = new Spike (this, "enter");
     _leave = new Spike (this, "leave");
+    _release = new Spike (this, "release");
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 

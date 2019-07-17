@@ -37,6 +37,8 @@ namespace djnn {
     virtual void add_gobj (AbstractGShape* gobj) = 0;
     void object_deleted (AbstractGShape* gobj);
 
+    void common_press (double x, double y, AbstractGShape *s);
+
     bool genericMousePress(double x, double y, mouse_button button);
     bool genericMouseMove(double x, double y);
     bool genericCheckShapeAfterDraw (double x, double y);
@@ -55,5 +57,6 @@ namespace djnn {
     Window *_win;
     AbstractGShape *_catching_shape, *_hover;
     map <int, Touch*> _active_touches;
+    bool _mouse_released;
   };
 }

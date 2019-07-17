@@ -92,6 +92,7 @@ namespace djnn
     void set_pressure (double v) { _pressure->set_value (v, true); }
     void set_id (int v) { _id->set_value (v, true); }
     void leave () { _leave->activate (); }
+    void release () { _release->activate (); }
     void enter () { _enter->activate (); }
     AbstractGShape* shape () { return _shape; }
     void set_shape (AbstractGShape *s) { _shape = s; }
@@ -103,7 +104,7 @@ namespace djnn
     IntProperty *_id;
     RefProperty *_last_shape;
     AbstractGShape* _shape;
-    Process *_move, *_enter, *_leave;
+    Process *_move, *_enter, *_leave, *_release;
   };
 
   inline bool is_pickable (AbstractGShape * s) {
