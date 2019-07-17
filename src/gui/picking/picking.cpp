@@ -158,6 +158,7 @@ namespace djnn
       set_local_coords (s, nullptr, x, y, false);
       s->get_ui()->press->notify_activation ();
       s->get_ui()->mouse_press->notify_activation ();
+      _catching_shape = s;
       exec_ = true;
     }
 
@@ -248,6 +249,20 @@ namespace djnn
       s->get_ui()->mouse_move->notify_activation ();
       exec_ = true;
     }
+    if (_catching_shape != nullptr && _catching_shape != s) {
+      if (x != old_x) {
+        _catching_shape->get_ui()->move_x->set_value (x, true);
+        _catching_shape->get_ui()->mouse_move_x->set_value (x, true);
+      }
+      if (y != old_y) {
+        _catching_shape->get_ui()->move_y->set_value (y, true);
+        _catching_shape->get_ui()->mouse_move_y->set_value (y, true);
+      }
+      set_local_coords (_catching_shape, nullptr, x, y, true);
+      _catching_shape->get_ui()->move->notify_activation ();
+      _catching_shape->get_ui()->mouse_move->notify_activation ();
+      exec_ = true;
+    }
 
     exec_ |= genericEnterLeave(s);
 
@@ -305,6 +320,12 @@ namespace djnn
     if (s) {
       s->get_ui()->release->notify_activation ();
       s->get_ui()->mouse_release->notify_activation ();
+      exec_ = true;
+    }
+    if (_catching_shape) {
+      _catching_shape->get_ui()->release->notify_activation ();
+      _catching_shape->get_ui()->mouse_release->notify_activation ();
+      _catching_shape = nullptr;
       exec_ = true;
     }
 
