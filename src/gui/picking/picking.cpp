@@ -77,6 +77,9 @@ namespace djnn
       //DBG;
       _catching_shape = nullptr;
     }
+    if (_hover == gobj) {
+      _hover = nullptr;
+    }
   }
 
   bool
