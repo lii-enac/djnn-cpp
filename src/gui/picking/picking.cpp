@@ -313,6 +313,9 @@ namespace djnn
           t->set_last_shape (s);
           t->leave ();
         }
+        s->get_ui()->move_x->set_value (x, true);
+        s->get_ui()->move_y->set_value (y, true);
+        s->get_ui()->move->notify_activation ();
         set_local_coords (s, t, x, y, true);
       }
       genericEnterLeave (s);
