@@ -60,10 +60,24 @@ namespace djnn
   void
   Vertex::add_edge (Vertex *dst) 
   { 
-    //TOCHECK: does push_back check the doubles?
-    // answer: double entries? no...
-    _edges.push_back (dst);
-    dst->_count_egdes_in++;
+    
+    /* 
+       NOTE : We SHOULD avoid duplicate in this vector.
+       here a vector is used because the insert order is importante and used in sorting (traverse_depth_first)
+       we can't use std::set, std::unordered_set or std::map because it break this order.
+       BUT the find on stc::vector O(n) is more complex than std::set O(log(n)) or std::unordered_set O(1)
+    */
+
+    // FIXME: maybe adapte the sort algorithm to use set or better unordered_set 
+
+    auto result = std::find(_edges.begin(), _edges.end(), dst);
+ 
+    /* if it is a new edge */
+    if (result == _edges.end()) {
+      _edges.push_back (dst);
+      dst->_count_egdes_in++;
+    }
+    
   }
 
   void
