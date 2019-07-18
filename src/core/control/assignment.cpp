@@ -45,11 +45,9 @@ namespace djnn
       ((SrcToDstLink*) _parent)->update_graph ();
       return;
     }
-    AbstractProperty *res = dynamic_cast<AbstractProperty*> (v->find_component (_spec));
+    Process *res = v->find_component (_spec);
     if (!res) {
-      warning (this, "Source or destination in (Paused)assignment is not a property");
-      * _to_update = nullptr;
-      return;
+      warning (this, "Source or destination not found dynamic link structure");
     }
     *_to_update = res;
    ((SrcToDstLink*) _parent)->update_graph ();

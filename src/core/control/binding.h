@@ -18,11 +18,12 @@
 #include "../ontology/process.h"
 #include "../ontology/coupling.h"
 #include "../control/action.h"
+#include "../control/assignment.h"
 
 namespace djnn {
   using namespace std;
 
-  class Binding : public Process
+  class Binding : public SrcToDstLink
   {
     friend class BindingAction;
   private:
@@ -54,11 +55,16 @@ namespace djnn {
     virtual ~Binding ();
     void impl_activate () override { _c_src->enable(); };
     void impl_deactivate () override { _c_src->disable (); }
+    void update_graph () override;
     void serialize (const string& format) override;
   private:
     void init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate);
     Process *_src, *_dst;
+    RefProperty *_ref_src, *_ref_dst;
     Coupling *_c_src;
     BindingAction *_action;
+    UpdateSrcOrDst* _update_src, *_update_dst;
+    Coupling *_c_update_src, *_c_update_dst;
+    bool _has_coupling;
   };
 }
