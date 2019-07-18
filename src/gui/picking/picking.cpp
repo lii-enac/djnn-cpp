@@ -398,6 +398,7 @@ namespace djnn
         t->leave ();
         set_local_coords (t_shape, t, x, y, true);
       }
+      t->set_shape (nullptr);
       _win->touches ()->remove_child (t);
       _active_touches.erase (it);
       Graph::instance().add_process_to_delete (t);
