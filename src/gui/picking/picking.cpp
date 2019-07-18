@@ -305,13 +305,14 @@ namespace djnn
         if (t_shape == nullptr) {
           s->get_ui ()->touches->add_child (t, to_string (id));
           t->set_shape (s);
-          t->leave ();
+          t->enter ();
         } else if (s != t_shape) {
           t_shape->get_ui ()->touches->remove_child (t);
           s->get_ui ()->touches->add_child (t, to_string (id));
           t->set_shape (s);
           t->set_last_shape (s);
           t->leave ();
+          t->enter ();
         }
         s->get_ui()->move_x->set_value (x, true);
         s->get_ui()->move_y->set_value (y, true);
