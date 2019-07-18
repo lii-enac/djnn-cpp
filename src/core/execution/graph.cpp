@@ -84,11 +84,16 @@ namespace djnn
   void
   Vertex::print_vertex () const
   {
-    std::cout << "vertex (" << _process->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
+    std::cout << "vertex (" ;
+    if (_process->get_parent ())
+      std::cout << _process->get_parent ()->get_name () << "/";
+
+    std::cout <<  _process->get_name () << ") - " << _count_egdes_in << ", " << _edges.size () << " :\t";
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
+        if (e->_process->get_parent ()) std::cout << e->_process->get_parent ()->get_name () << "/";
         std::cout << e->_process->get_name () << " ";
       }
       std::cout << std::endl;
