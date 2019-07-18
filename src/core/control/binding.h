@@ -53,8 +53,8 @@ namespace djnn {
     Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate);
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
-    void impl_activate () override { _c_src->enable(); };
-    void impl_deactivate () override { _c_src->disable (); }
+    void impl_activate () override { if (_c_src) _c_src->enable(); };
+    void impl_deactivate () override { if (_c_src) _c_src->disable (); }
     void update_graph () override;
     void serialize (const string& format) override;
   private:
