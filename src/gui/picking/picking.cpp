@@ -72,9 +72,7 @@ namespace djnn
   Picking::object_deleted (AbstractGShape* gobj)
   {
     // Reset _cur_obj to nullptr if this object has been removed from picking_view
-    //DBG;
     if (_catching_shape == gobj) {
-      //DBG;
       _catching_shape = nullptr;
     }
     if (_hover == gobj) {
