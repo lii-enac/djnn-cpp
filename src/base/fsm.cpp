@@ -283,15 +283,15 @@ namespace djnn
   {
     remove_state_dependency (_parent, _fsm_state);
 
-    delete _initial;
-    delete _fsm_state;
-
     for (FSMTransition* t : _transitions) {
         delete t;
     }
     for (FSMState* s : _states) {
         delete s;
     }
+
+    delete _initial;
+    delete _fsm_state;
 
   }
   void
