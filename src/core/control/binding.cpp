@@ -95,9 +95,7 @@ namespace djnn
     if (_src && _dst) {
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _has_coupling = true;
-      if ( get_activation_state()==ACTIVATED ) {
-        _action->activate ();
-      } else {
+      if (get_activation_state() != ACTIVATED ) {
         _c_src->disable ();
       }
     } else {
