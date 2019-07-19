@@ -44,7 +44,6 @@ namespace djnn
     _action = new SwitchAction (this, get_name ());
     _state_dependency = _action;
     _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
-    //Graph::instance ().add_edge (_branch_name, _action);
     add_state_dependency (_parent, _action);
 
     _cur_branch = nullptr;
@@ -52,17 +51,22 @@ namespace djnn
 
   Switch::~Switch ()
   {
+    /* note:
+     * We have to delete all content BEFORE deleting _action and _branch_name
+     * especially all the state_dependency
+     */
+    Container::clean_up_content ();
+
     remove_state_dependency (_parent, _action);
-    //Graph::instance ().remove_edge (_branch_name, _action);
    
     delete _c_branch;
-    delete _branch_name;
     /* note :
      * Here, we can delete _action because is has not been add into _children
      * avoid to add the action in Container::_children list
      * otherwise there is a side effect on ~switch which 
      * occured after ~container which already deleted _children */
     delete _action;
+    delete _branch_name;
   }
 
   void
