@@ -99,12 +99,6 @@ namespace djnn
     _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION, true);
     _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION, true);
     _c_index = new Coupling (_index, ACTIVATION, _change_index_action, ACTIVATION, true);
-    /*Graph::instance ().add_edge (_next, _next_action);
-    Graph::instance ().add_edge (_previous, _previous_action);
-    Graph::instance ().add_edge (_index, _change_index_action);
-    Graph::instance ().add_edge (_next_action, _index);
-    Graph::instance ().add_edge (_previous_action, _index);*/
-    add_state_dependency (_parent, _change_index_action);
     _state_dependency = _change_index_action;
   }
 
@@ -123,12 +117,9 @@ namespace djnn
 
   SwitchList::~SwitchList ()
   {
+    Container::clean_up_content ();
+
     remove_state_dependency (_parent, _change_index_action);
-/*    Graph::instance ().remove_edge (_next, _next_action);
-    Graph::instance ().remove_edge (_previous, _previous_action);
-    Graph::instance ().remove_edge (_index, _change_index_action);
-    Graph::instance ().remove_edge (_next_action, _change_index_action);
-    Graph::instance ().remove_edge (_previous_action, _change_index_action); */
 
     delete _c_index;
     delete _c_previous;
