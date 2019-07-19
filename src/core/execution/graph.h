@@ -44,6 +44,9 @@ namespace djnn
     void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
     std::list< Vertex* >::iterator get_position_in_vertices () { return _pos; }
 
+    void invalidate   () { _is_invalid = true; }
+    bool is_invalid   () { return _is_invalid; }
+
     void set_mark (int m)  { _mark = m; }
     int  get_mark () const { return _mark; }
 
