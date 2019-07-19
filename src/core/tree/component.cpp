@@ -48,7 +48,7 @@ namespace djnn
     }
   }
 
-  Container::~Container ()
+  void Container::clean_up_content () 
   {
     /* delete and remove children from this container */
     int sz = _children.size ();
@@ -63,6 +63,11 @@ namespace djnn
     /* remove container from structure_observer_list */
     for (auto s: structure_observer_list)
       s->remove_container (this);
+  }
+
+  Container::~Container ()
+  {
+    clean_up_content ();
   }
 
   void

@@ -39,6 +39,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     void print_children ();
+    void clean_up_content ();
     virtual ~Container ();
     children_t children () { return _children; }
     void
