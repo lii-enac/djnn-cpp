@@ -104,18 +104,6 @@ namespace djnn
     remove_state_dependency (_parent, _update_size);
     Graph::instance ().remove_edge (this->text(), _update_size);
     
-    delete _update_size;
-    delete _cx;
-    delete _cy;
-    delete _ctext;
-    delete _cdx;
-    delete _cdy;
-    delete _cdxU;
-    delete _cdyU;
-    delete _cwidth;
-    delete _cheight;
-    delete _cencoding;
-
     if (_cffamily) {
       Graph::instance ().remove_edge ( this->ffamily (), _update_size);
       delete _cffamily;
@@ -132,6 +120,20 @@ namespace djnn
       Graph::instance ().remove_edge ( this->fweight (), _update_size);
       delete _cfweight;
     }
+
+    delete _update_size;
+    delete _cx;
+    delete _cy;
+    delete _ctext;
+    delete _cdx;
+    delete _cdy;
+    delete _cdxU;
+    delete _cdyU;
+    delete _cwidth;
+    delete _cheight;
+    delete _cencoding;
+
+    
 
     if (_symtable.empty () == false) {
       std::map<std::string, Process*>::iterator it;
