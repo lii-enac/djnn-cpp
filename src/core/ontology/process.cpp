@@ -21,7 +21,6 @@
 #include "../utils/error.h"
 
 #include <algorithm>
-#include <iostream>
 
 namespace djnn
 {
@@ -62,8 +61,19 @@ namespace djnn
 
   Process::~Process ()
   {
-    if (_vertex != nullptr)
-      _vertex->invalidate ();
+    //debug
+    //cerr << __FUNCTION__  << " - " <<  (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;;
+
+    /* note: 
+       this code is to prevent bugs 
+       this should NEVER happen
+       _vertex should be nullptr at this place
+       if not, something (Process)  IS NOT well deleted
+    */
+    if (_vertex != nullptr){
+       error  ( nullptr, " Process::~Process - " +  (_parent ? _parent->get_name () + "/"  : "") + _name  + " - _vertex is NOT NULL and it should\n");
+       _vertex->invalidate ();
+    }
   }
 
 
@@ -308,7 +318,7 @@ namespace djnn
     if (it != _symtable.end ())
       _symtable.erase (it);
     else
-      cerr << "Warning: symbol " << name << " not found in component " << name << "\n";
+      warning (nullptr,   "Warning: symbol " + name + " not found in component " + name + "\n");
   }
 
   void
