@@ -289,12 +289,6 @@ namespace djnn
   Graph::traverse_depth_first (Vertex *v)
   {
 
-    // skip invalid vertex
-    if (v->is_invalid ()) {
-      v->set_mark (MARKED);
-      return;
-    }
-
     // add vertex if it's not a property
     if ( v->get_process ()->get_cpnt_type() != PROPERTY_T)
       _sorted_vertices.push_back (v);
@@ -378,7 +372,6 @@ namespace djnn
       is_end = true;
       for (auto v : _sorted_vertices) {
       	if (!_sorted) break;
-        if (v->is_invalid ()) continue;
         auto * p = v->get_process ();
         p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);

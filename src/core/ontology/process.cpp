@@ -71,8 +71,8 @@ namespace djnn
        if not, something (Process)  IS NOT well deleted
     */
     if (_vertex != nullptr){
-       _vertex->invalidate ();
        error  ( nullptr, " Process::~Process - " +  (_parent ? _parent->get_name () + "/"  : "parent_NULL") + _name  + " - _vertex is NOT NULL and it should\n");
+       //_vertex->invalidate ();
     }
   }
 
