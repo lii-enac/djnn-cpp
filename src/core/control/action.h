@@ -17,14 +17,18 @@
 #pragma once
 
 #include "../ontology/process.h"
+#include "../execution/graph.h"
 
 namespace djnn {
 
   class Action : public Process {
   public:
-    Action (bool model = false) : Process (model) {}
+    Action (bool model = false) : Process (model), _src(nullptr), _dst(nullptr) {}
     Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model) {}
-    virtual ~Action () {}
+    virtual ~Action ();
+
+    void add_native_edge (Process * src, Process * dst);
+
   protected:
     virtual bool pre_activate () override {
       if (_parent != 0 && !_parent->somehow_activating () )
@@ -36,5 +40,8 @@ namespace djnn {
       notify_activation ();
       set_activation_state (DEACTIVATED);
     }
+
+  private:
+    Process *_src,*_dst;
   };
 }

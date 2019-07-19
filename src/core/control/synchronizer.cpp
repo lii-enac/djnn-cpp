@@ -68,6 +68,12 @@ namespace djnn
     }
   }
 
+  void 
+  Synchronizer::add_native_edge (Process *src, Process* dst)
+  {
+    _action->add_native_edge (src, dst);
+  }
+
   void
   Synchronizer::add_source (Process *src, const string &ispec)
   {

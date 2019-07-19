@@ -43,6 +43,8 @@ namespace djnn {
     void add_source (Process* src, const string &spec);
     void impl_activate () override;
     void impl_deactivate () override;
+    void add_native_edge (Process *src, Process* dst);
+    
   private:
     void propagate ();
     Process *_dst;
