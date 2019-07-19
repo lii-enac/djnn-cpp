@@ -39,7 +39,7 @@ namespace djnn
     void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
-    int get_count_edges_in () { return _count_egdes_in; }
+    int get_count_edges_in () { return _count_edges_in; }
     int get_count_edges_out () { return _edges.size ();}
     void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
     std::list< Vertex* >::iterator get_position_in_vertices () { return _pos; }
@@ -63,7 +63,7 @@ namespace djnn
     vertices_t _edges;
     std::list< Vertex* >::iterator _pos;
     int _mark, _timestamp;
-    int _count_egdes_in;
+    int _count_edges_in;
     bool _is_invalid;
   };
 
@@ -74,6 +74,7 @@ namespace djnn
     virtual ~Graph ();
     
     void add_edge (Process* src, Process* dst);
+    void add_native_edge (Process *src, Process* dst);
     void remove_edge (Process* src, Process* dst);
     void add_output_node (Process* c);
     void remove_output_node (Process* c);

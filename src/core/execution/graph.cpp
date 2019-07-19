@@ -49,7 +49,7 @@ namespace djnn
   };
 
   Vertex::Vertex (Process* c) :
-      _process (c), _mark (NOT_MARKED), _timestamp (0), _count_egdes_in(0), _is_invalid (false)
+      _process (c), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
   {
   }
 
@@ -74,7 +74,7 @@ namespace djnn
     /* if it is a new edge */
     if (result == _edges.end()) {
       _edges.push_back (dst);
-      dst->_count_egdes_in++;
+      dst->_count_edges_in++;
 
       // print debug
       // cerr << "add_edge : " << "\t between " << 
@@ -94,10 +94,10 @@ namespace djnn
     newend = std::remove (_edges.begin (), _edges.end (), dst);
 
     //check if end has changed and erase
-    if (newend != _edges.end ()){
+    if (newend != _edges.end ()) {
       // erase them from _edges
       _edges.erase(newend, _edges.end ());
-      dst->_count_egdes_in--;
+      dst->_count_edges_in--;
 
       // print debug
       // cerr << "remove_edge : " << "\t between " << 
@@ -114,7 +114,7 @@ namespace djnn
     std::cout << "vertex (" <<
     ( _process->get_parent () ? _process->get_parent ()->get_name () + "/" : "") <<
     _process->get_name () << ") - " << 
-    _count_egdes_in << ", " << _edges.size () << " :\t";
+    _count_edges_in << ", " << _edges.size () << " :\t";
 
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
@@ -154,12 +154,12 @@ namespace djnn
 
     // delete vertices from _vertices and clear.
     for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
-        if (*it) delete *it;
+        delete *it;
     _vertices.clear ();
 
     // delete output_vertices from _outpur_nodes and clear 
     for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
-        if (*it) delete *it;
+        delete *it;
     _output_nodes.clear ();
   }
 
@@ -197,7 +197,7 @@ namespace djnn
     if (new_end != _output_nodes.end ()) {
       // delete nodes
       for (Vertex::vertices_t::iterator it = new_end ; it != _output_nodes.end(); ++it)
-        if (*it) delete *it;
+        delete *it;
 
       //erase from vector
       _output_nodes.erase( new_end, _output_nodes.end ());
