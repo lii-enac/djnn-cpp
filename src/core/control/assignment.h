@@ -34,6 +34,7 @@ namespace djnn {
       RefProperty* _prop;
       string _spec;
   };
+
   class SrcToDstLink : public Process {
   public:
     SrcToDstLink (bool is_model = false) : Process (is_model) {}
@@ -93,7 +94,6 @@ namespace djnn {
     void serialize (const string& format) override;
     virtual ~Assignment ();
   };
-
 
   class PausedAssignment : public AbstractAssignment {
   private:

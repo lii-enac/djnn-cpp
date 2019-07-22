@@ -147,6 +147,9 @@ namespace djnn
       delete _update_src;
     }
     if (_update_dst) {
+      remove_state_dependency (_parent, _update_dst);
+      Graph::instance ().remove_edge (_ref_dst, _update_dst);
+
       delete _c_dst;
       delete _update_dst;
     }
@@ -240,8 +243,8 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    remove_state_dependency (_parent, _dst);
-    Graph::instance ().remove_edge (_src, _dst);
+    //remove_state_dependency (_parent, _dst);
+    //Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
   }
@@ -305,8 +308,8 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
-    remove_state_dependency (_parent, _dst);
-    Graph::instance ().remove_edge (_src, _dst);
+    //remove_state_dependency (_parent, _dst);
+    //Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
   }
