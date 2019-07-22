@@ -24,7 +24,7 @@ namespace djnn {
   class Action : public Process {
   public:
     Action (bool model = false) : Process (model), _src(nullptr), _dst(nullptr) {}
-    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model) {}
+    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model), _src(nullptr), _dst(nullptr) {}
     virtual ~Action ();
 
     void add_native_edge (Process * src, Process * dst);
