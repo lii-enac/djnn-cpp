@@ -78,7 +78,7 @@ namespace djnn
     QtContext *cur_context = _context_manager->get_current ();
     if (cx || cy)
       cur_context->matrix.translate (cx, cy, 0);
-    cur_context->matrix.scale (sx, sy, 1);
+    cur_context->matrix.scale (sx, sy);
     if (cx || cy)
       cur_context->matrix.translate (-cx, -cy, 0);
   }
