@@ -81,11 +81,11 @@ namespace djnn
   QtBackend::load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height)
   {
     QtContext *cur_context = _context_manager->get_current ();
-    QMatrix4x4 matrix = cur_context->matrix;
-    QTransform transform = matrix.toTransform ();
+    const QMatrix4x4& matrix = cur_context->matrix;
+    const QTransform transform = matrix.toTransform ();
     if (s->matrix () != nullptr) {
       Homography *h = dynamic_cast<Homography*> (s->matrix ());
-      QMatrix4x4 loc_matrix = QMatrix4x4 (matrix);
+      const QMatrix4x4 & loc_matrix = QMatrix4x4 (matrix);
       // we don't want any propagation so we can write directly in raw_props
       h->raw_props.m11 = loc_matrix (0, 0);
       h->raw_props.m12 = loc_matrix (0, 1);
@@ -109,7 +109,7 @@ namespace djnn
     }
     if (s->inverted_matrix () != nullptr) {
       Homography *hi = dynamic_cast<Homography*> (s->inverted_matrix ());
-      QMatrix4x4 loc_matrix_inv = QMatrix4x4 (matrix).inverted ();
+      const QMatrix4x4 loc_matrix_inv = QMatrix4x4 (matrix).inverted ();
       // we don't want any propagation so we can write directly in raw_props
       hi->raw_props.m11 = loc_matrix_inv (0, 0);
       hi->raw_props.m12 = loc_matrix_inv (0, 1);
