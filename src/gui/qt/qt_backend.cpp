@@ -183,11 +183,16 @@ namespace djnn
   QtBackend::load_pick_context (AbstractGShape *s)
   {
     QtContext *cur_context = _context_manager->get_current ();
-    QPen pickPen;
     QBrush pickBrush (_picking_view->pick_color ());
-    pickPen.setStyle (Qt::SolidLine);
+    QPen pickPen;
+    if (cur_context->pen.style () == Qt::NoPen) {
+      pickPen.setStyle (Qt::NoPen);
+    } else {
+      pickPen.setStyle (Qt::SolidLine);
+    }
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width());
+    _picking_view->painter ()->setRenderHint (QPainter::Antialiasing, true);
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
