@@ -42,11 +42,17 @@ namespace djnn
     double x, y, w, h, rx, ry;
     s->get_properties_values(x,y,w,h,rx,ry);
     load_drawing_context (s, x, y, w, h);
-    _painter->drawRoundedRect (x, y, w, h, rx, ry);
+    if(x<1 || y<1 || w<1 || h<1)
+      _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry);
+    else
+      _painter->drawRoundedRect (x, y, w, h, rx, ry);
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      _picking_view->painter ()->drawRoundedRect (x, y, w, h, rx, ry);
+      if(x<1 || y<1 || w<1 || h<1)
+        _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry);
+      else
+        _picking_view->painter ()->drawRoundedRect (x, y, w, h, rx, ry);
     }
   }
 
