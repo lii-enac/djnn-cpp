@@ -42,17 +42,11 @@ namespace djnn
     double x, y, w, h, rx, ry;
     s->get_properties_values(x,y,w,h,rx,ry);
     load_drawing_context (s, x, y, w, h);
-    if(x<1 || y<1 || w<1 || h<1)
-      _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry);
-    else
-      _painter->drawRoundedRect (x, y, w, h, rx, ry);
+    _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      if(x<1 || y<1 || w<1 || h<1)
-        _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry);
-      else
-        _picking_view->painter ()->drawRoundedRect (x, y, w, h, rx, ry);
+      _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
     }
   }
 
@@ -80,7 +74,7 @@ namespace djnn
       return;
     double cx, cy, rx, ry;
     s->get_properties_values (cx, cy, rx, ry);
-    QRect rect (cx - rx, cy - ry, 2 * rx, 2 * ry);
+    QRectF rect (cx - rx, cy - ry, 2 * rx, 2 * ry);
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
