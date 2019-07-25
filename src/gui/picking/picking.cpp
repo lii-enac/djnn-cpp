@@ -294,23 +294,25 @@ namespace djnn
       t->set_pressure (pressure);
       t->set_id (id);
       AbstractGShape *s = this->pick (x, y);
-      AbstractGShape *init_shape = t->init_shape ();
       AbstractGShape *cur_shape = t->current_shape ();
+      AbstractGShape *init_shape = t->init_shape ();
       if (s == nullptr && cur_shape != nullptr) {
-        cur_shape->get_ui ()->touches->remove_child (t);
+        if (cur_shape != init_shape)
+          cur_shape->get_ui ()->touches->remove_child (t);
         t->set_current_shape (nullptr);
         t->leave ();
       } else if (s != nullptr && s != cur_shape) {
-        cur_shape->get_ui ()->touches->remove_child (t);
+        if (cur_shape != nullptr && cur_shape != init_shape)
+          cur_shape->get_ui ()->touches->remove_child (t);
         s->get_ui ()->touches->add_child (t, to_string (id));
         t->set_current_shape (s);
         t->enter ();
+        s->get_ui ()->move_x->set_value (x, true);
+        s->get_ui ()->move_y->set_value (y, true);
+        s->get_ui ()->move->notify_activation ();
+        set_local_coords (s, t, x, y, true);
       }
-      s->get_ui ()->move_x->set_value (x, true);
-      s->get_ui ()->move_y->set_value (y, true);
-      s->get_ui ()->move->notify_activation ();
       t->get_move ()->notify_activation ();
-      set_local_coords (s, t, x, y, true);
       genericEnterLeave (s);
     } else {
       genericTouchPress (x, y, id, pressure);
