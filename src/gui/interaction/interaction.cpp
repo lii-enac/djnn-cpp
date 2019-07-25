@@ -126,10 +126,10 @@ namespace djnn
   {
     double ds, dr, dx, dy;
     if (estimateTSR (touches, &dx, &dy, &ds, &dr)) {
-      _matrix->leftTranslate (dx, dy);
+       double scale = sqrt (dr*dr + ds*ds);
       _matrix->leftRotate (atan2 (dr, ds) * 180/M_PI);
-      double scale = sqrt (dr*dr + ds*ds);
       _matrix->leftScale (scale, scale);
+      _matrix->leftTranslate (dx, dy);
     }
   }
 
