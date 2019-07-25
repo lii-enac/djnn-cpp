@@ -192,7 +192,7 @@ djnn_libs := core base display gui animation
 endif
 
 ifeq ($(os),$(osmingw))
-djnn_libs := core base comms display gui animation
+djnn_libs := core base comms display gui animation utils files
 # input
 endif
 
@@ -403,7 +403,7 @@ ifeq ($(os),MINGW64_NT-10.0)
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
-pkgdeps += freetype SDL2 cairo pango fontconfig
+pkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S --needed
 endif
