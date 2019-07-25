@@ -149,5 +149,5 @@ namespace djnn {
     RemoveTouchAction *_remove_touch_action;
     TouchMoveAction *_t_move1;
   };
-  void estimateTSR (const vector< Point* > &old_pts, const vector< Point* > &new_pts, double *dx, double *dy, double *ds, double *dr);
+  bool estimateTSR (map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
 }

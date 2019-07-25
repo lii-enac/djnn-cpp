@@ -177,17 +177,18 @@ namespace djnn
    * for Manipulating 2D Objects on Touch Screens, MSc Thesis, 2016
    * Javascript sources are available here: https://github.com/axelpale/nudged
    */
-  void estimateTSR (const vector< Point* > &old_pts, const vector< Point* > &new_pts, double *dx, double *dy, double *ds, double *dr)
+  bool
+  estimateTSR (map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr)
   {
     double a, b, c, d;
     double a1, b1, c1, d1, a2, b2, ad, bc, ac, bd;
     a1 = b1 = c1 = d1 = a2 = b2 = ad = bc = ac = bd = 0;
-    int sz = min (old_pts.size (), new_pts.size ());
-    for (int i = 0; i < sz; i++) {
-      a = old_pts[i]->x();
-      b = old_pts[i]->y();
-      c = new_pts[i]->x();
-      d = new_pts[i]->y();
+    int sz = 0;
+    for (map<int, TouchAlive*>::iterator it = pts.begin () ; it != pts.end (); ++it) {
+      a = it->second->_last_pt->x();
+      b = it->second->_last_pt->y();
+      c = it->second->_new_pt->x();
+      d = it->second->_new_pt->y();
       a1 += a;
       b1 += b;
       c1 += c;
@@ -198,7 +199,10 @@ namespace djnn
       bc += b * c;
       ac += a * c;
       bd += b * d;
+      sz++;
     }
+    if (sz == 0)
+      return false;
     double den = (sz * a2) + (sz * b2) - (a1 * a1) - (b1 * b1);
     double epsilon = 0.00000001;
     if (-epsilon < den && den < epsilon) {
@@ -206,12 +210,13 @@ namespace djnn
       *dr = 0;
       *dx = (c1 / sz) - a;
       *dy = (d1 / sz) - b;
-      return;
+      return true;
     }
     *ds = (sz * (ac + bd) - a1 * c1 - b1 * d1) / den;
     *dr = (sz * (ad - bc) + b1 * c1 - a1 * d1) / den;
     *dx = (-a1 * (ac + bd) + b1 * (ad - bc) + a2 * c1 + b2 * c1) / den;
     *dy = (-b1 * (ac + bd) - a1 * (ad - bc) + a2 * d1 + b2 * d1) / den;
+    return true;
   }
 
 } /* namespace djnn */

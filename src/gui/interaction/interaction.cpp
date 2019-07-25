@@ -21,6 +21,10 @@
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 namespace djnn
 {
   ScaleRotateTranslate::ScaleRotateTranslate(Process *p, const string &n, Process* shape, Process* matrix) : Process (p, n)
@@ -120,22 +124,13 @@ namespace djnn
   void
   ScaleRotateTranslate::update ()
   {
-
-    vector <Point*> old_pts;
-    vector <Point*> new_pts;
-    for ( map<int, TouchAlive*>::iterator it = touches.begin () ; it != touches.end (); ++it) {
-      old_pts.push_back (it->second->_last_pt);
-      new_pts.push_back (it->second->_new_pt);
-    }
-    if (old_pts.empty ())
-      return;
     double ds, dr, dx, dy;
-    estimateTSR (old_pts, new_pts, &dx, &dy, &ds, &dr);
-
-    _matrix->leftTranslate (dx, dy);
-    _matrix->leftRotate (atan2 (dr, ds) * 180/M_PI);
-    double scale = sqrt (dr*dr + ds*ds);
-    _matrix->leftScale (scale, scale);
+    if (estimateTSR (touches, &dx, &dy, &ds, &dr)) {
+      _matrix->leftTranslate (dx, dy);
+      _matrix->leftRotate (atan2 (dr, ds) * 180/M_PI);
+      double scale = sqrt (dr*dr + ds*ds);
+      _matrix->leftScale (scale, scale);
+    }
   }
 
 } /* namespace djnn */
