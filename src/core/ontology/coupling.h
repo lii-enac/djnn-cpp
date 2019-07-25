@@ -41,6 +41,8 @@ namespace djnn {
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
 
+    void about_to_delete_src () { _src = nullptr; }
+
   private:
     void init_coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag);
     void propagate_immediately ();

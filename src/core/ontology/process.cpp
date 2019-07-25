@@ -70,6 +70,12 @@ namespace djnn
        _vertex should be nullptr at this place
        if not, something (Process)  IS NOT well deleted
     */
+    for (auto c : _activation_couplings) {
+      c->about_to_delete_src ();
+    }
+    for (auto c : _deactivation_couplings) {
+      c->about_to_delete_src ();
+    }
     if (_vertex != nullptr){
        _vertex->invalidate ();
        warning ( nullptr, " Process::~Process - " +  (_parent ? _parent->get_name () + "/"  : "parent_NULL") + _name  + " - _vertex is NOT NULL and it should\n");
