@@ -6,8 +6,9 @@ namespace djnn {
 	Action::~Action ()
 	{
 		if(_src) {
-			assert (_dst);
-			Graph::instance ().remove_edge (_src, _dst);	
+            for (auto dst: _dsts ) {
+			     Graph::instance ().remove_edge (_src, dst);
+             }
 		}
 	}
 
@@ -16,10 +17,10 @@ namespace djnn {
     {
     	assert (src);
     	assert (dst);
-    	assert (_src == nullptr);
-    	assert (_dst == nullptr);
+        // there may be multiple output to a native expression, but with a single _src
+        if(_src) assert (src==_src);
+        else _src = src;
     	Graph::instance ().add_edge (src, dst);
-    	_src = src;
-    	_dst = dst;
+        _dsts.push_back(dst);
     }
 }

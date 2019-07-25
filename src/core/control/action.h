@@ -19,12 +19,14 @@
 #include "../ontology/process.h"
 #include "../execution/graph.h"
 
+#include <vector>
+
 namespace djnn {
 
   class Action : public Process {
   public:
-    Action (bool model = false) : Process (model), _src(nullptr), _dst(nullptr) {}
-    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model), _src(nullptr), _dst(nullptr) {}
+    Action (bool model = false) : Process (model), _src(nullptr) {}
+    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model), _src(nullptr) {}
     virtual ~Action ();
 
     void add_native_edge (Process * src, Process * dst);
@@ -42,6 +44,7 @@ namespace djnn {
     }
 
   private:
-    Process *_src,*_dst;
+    Process *_src;
+    std::vector<Process*> _dsts;
   };
 }
