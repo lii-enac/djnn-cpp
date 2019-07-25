@@ -3,6 +3,7 @@
 #include <cassert>
 
 namespace djnn {
+    // [FIXME] this should go in a specific native_expression_action...
 	Action::~Action ()
 	{
 		if(_src) {
