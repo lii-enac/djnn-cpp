@@ -47,10 +47,10 @@ namespace djnn {
 
   class DRMUdev {
     private:
-      class DRMUdevAction: public Process {
+      class DRMUdevAction: public Action {
         public:
           DRMUdevAction (DRMUdev* udev) :
-          Process (), _udev (udev) {}
+          Action (), _udev (udev) {}
           virtual ~DRMUdevAction () {}
           void impl_activate ()
           {
