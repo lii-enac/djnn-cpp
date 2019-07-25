@@ -14,37 +14,30 @@
 
 #include "native_expression_action.h"
 
+#include <cassert>
+
 namespace djnn
 {
   using namespace std;
 
-  NativeExpressionAction::NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel) :
-      Action (), _data (data), _action (action), _string_setter (string_setter)
-  {
-    set_is_model (isModel);
-  }
-
-  NativeExpressionAction::NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter,
-                              bool isModel) :
-      Action (parent, name), _data (data), _action (action), _string_setter (string_setter)
-  {
-    set_is_model (isModel);
-    Process::finalize_construction ();
-  }
-
   NativeExpressionAction::~NativeExpressionAction ()
   {
+    if(_src) {
+      for (auto dst: _dsts ) {
+        Graph::instance ().remove_edge (_src, dst);
+      }
+    }
   }
 
   void
-  NativeExpressionAction::impl_activate ()
+  NativeExpressionAction::add_native_edge (Process * src, Process * dst)
   {
-    (_action) (_data, _string_setter);
-  }
-
-  std::map<std::string, AbstractProperty*>&
-  NativeExpressionAction::data ()
-  {
-    return _data;
+    assert (src);
+    assert (dst);
+    // there may be multiple output to a native expression, but with a single _src
+    if(_src) assert (src==_src);
+    else _src = src;
+    Graph::instance ().add_edge (src, dst);
+    _dsts.push_back(dst);
   }
 }

@@ -16,7 +16,7 @@
 
 #include "../ontology/process.h"
 #include "../ontology/coupling.h"
-#include "../control/action.h"
+#include "../control/native_expression_action.h"
 
 
 namespace djnn {
@@ -26,10 +26,10 @@ namespace djnn {
   {
     friend class BindingAction;
   private:
-    class SynchronizerAction : public Action
+    class SynchronizerAction : public NativeExpressionAction
     {
     public:
-      SynchronizerAction (Process* parent, const string &name) : Action (parent, name) {}
+      SynchronizerAction (Process* parent, const string &name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
         if (_parent->somehow_activating ())

@@ -16,24 +16,20 @@
 
 #include "../ontology/process.h"
 #include "../control/action.h"
-#include "../tree/abstract_property.h"
 
 namespace djnn {
   using namespace std;
 
-  typedef void (NativeExpression) (std::map<std::string, AbstractProperty*>&, bool string_setter);
-  class NativeExpressionAction : public Action
-  {
+class NativeExpressionAction : public Action {
   public:
-    NativeExpressionAction (Process* parent, const string &name, NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel);
-    NativeExpressionAction (NativeExpression *action, std::map<std::string, AbstractProperty*>& data, bool string_setter, bool isModel);
+    NativeExpressionAction (bool model = false) : Action (model), _src(nullptr) {}
+    NativeExpressionAction (Process *p, const std::string &n, bool model = false) : Action (p, n, model), _src(nullptr) {}
     virtual ~NativeExpressionAction ();
-    void impl_activate () override;
-    void impl_deactivate () override {}
-    std::map<std::string, AbstractProperty*>& data ();
+
+    void add_native_edge (Process * src, Process * dst);
+
   private:
-    std::map<std::string, AbstractProperty*> _data;
-    NativeExpression *_action;
-    bool _string_setter;
+    Process *_src;
+    std::vector<Process*> _dsts;
   };
 }
