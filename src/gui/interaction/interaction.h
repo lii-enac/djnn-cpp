@@ -24,8 +24,6 @@ namespace djnn {
     START, DRAGGING, RRR
   } State;
 
-  void estimateTSR (const vector< pair<double, double> > &old_pts, const vector< pair<double, double> > &new_pts, double *dx, double *dy, double *ds, double *dr);
-
   class Point;
   class Vector
   {
@@ -86,6 +84,15 @@ namespace djnn {
   private:
     double **_matrix;
   };
+
+  class TouchAlive {
+    public:
+      TouchAlive (Point *last_pt, Point *new_pt, Coupling *cpl) :  _last_pt (last_pt), _new_pt (new_pt), _cpl (cpl) {}
+      virtual ~TouchAlive () { delete _cpl; delete _last_pt; delete _new_pt;}
+    Point *_last_pt, *_new_pt;
+    Coupling *_cpl;
+  };
+
   class ScaleRotateTranslate : public Process
   {
   private:
@@ -133,16 +140,14 @@ namespace djnn {
     void remove_touch ();
     void touch_move (Touch *t);
   private:
-    void change_state (State s) { _state = s; }
     Process *_shape, *_touches, *_added, *_removed;
     AbstractHomography *_matrix;
-    Coupling *_c_on_add, *_c_on_del, *_c_move_c1, *_c_move_c2, *_c_move_t1, *_c_move_t2;
+    map <int, TouchAlive*> touches;
+    Coupling *_c_on_add, *_c_on_del, *_c_move;
     ScaleRotateTranslateAction *_update_action;
     AddTouchAction *_add_touch_action;
     RemoveTouchAction *_remove_touch_action;
-    TouchMoveAction *_t_move1, *_t_move2;
-    State _state;
-    Point *_last_point1, *_last_point2, *_new_point1, *_new_point2, *_last_point_hyst_1, *_last_point_hyst_2;
-    int _cursor1_id, _cursor2_id;
+    TouchMoveAction *_t_move1;
   };
+  void estimateTSR (const vector< Point* > &old_pts, const vector< Point* > &new_pts, double *dx, double *dy, double *ds, double *dr);
 }

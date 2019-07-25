@@ -177,17 +177,17 @@ namespace djnn
    * for Manipulating 2D Objects on Touch Screens, MSc Thesis, 2016
    * Javascript sources are available here: https://github.com/axelpale/nudged
    */
-  void estimateTSR (const vector< pair<double, double> > &old_pts, const vector< pair<double, double> > &new_pts, double *dx, double *dy, double *ds, double *dr)
+  void estimateTSR (const vector< Point* > &old_pts, const vector< Point* > &new_pts, double *dx, double *dy, double *ds, double *dr)
   {
     double a, b, c, d;
     double a1, b1, c1, d1, a2, b2, ad, bc, ac, bd;
     a1 = b1 = c1 = d1 = a2 = b2 = ad = bc = ac = bd = 0;
     int sz = min (old_pts.size (), new_pts.size ());
     for (int i = 0; i < sz; i++) {
-      a = old_pts[i].first;
-      b = old_pts[i].second;
-      c = new_pts[i].first;
-      d = new_pts[i].second;
+      a = old_pts[i]->x();
+      b = old_pts[i]->y();
+      c = new_pts[i]->x();
+      d = new_pts[i]->y();
       a1 += a;
       b1 += b;
       c1 += c;
