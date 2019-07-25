@@ -98,9 +98,10 @@ namespace djnn
     void leave () { _leave->activate (); }
     void release () { _release->activate (); }
     void enter () { _enter->activate (); }
-    AbstractGShape* shape () { return _shape; }
-    void set_shape (AbstractGShape *s) { _shape = s; }
-    void set_last_shape (AbstractGShape *s) { _last_shape->set_value(s, true); }
+    AbstractGShape* init_shape () { return _shape; }
+    AbstractGShape* current_shape () { return _last_shape->get_value (); }
+    void set_init_shape (AbstractGShape *s) { _shape = s; }
+    void set_current_shape (AbstractGShape *s) { _last_shape->set_value(s, true); }
     virtual ~Touch ();
   private:
     void init_touch (int id, double init_x, double init_y, double init_pressure);
