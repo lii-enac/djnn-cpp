@@ -2326,7 +2326,7 @@ namespace djnn
       rawp=&raw_props.m33;
       notify_mask = notify_damaged_transform;
     } else
-    if(name=="m33") {
+    if(name=="m34") {
       coupling=&_cm34;
       rawp=&raw_props.m34;
       notify_mask = notify_damaged_transform;
