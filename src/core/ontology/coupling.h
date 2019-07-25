@@ -28,11 +28,13 @@ namespace djnn {
     
     void propagate_activation ();
     void propagate_deactivation ();
+    void change_source (Process *src, Process *data = nullptr);
 
     // process
-    Process* get_src () { return _src; }
-    Process* get_dst () { return _dst; }
-    
+    Process* get_src ()  { return _src; }
+    Process* get_dst ()  { return _dst; }
+    Process* get_data () { return _data; }
+
     void enable ()              { set_is_enabled (true); };
     void enable (Process* data) { set_is_enabled (true); _data = data; };
     void disable ()             { set_is_enabled (false); };
