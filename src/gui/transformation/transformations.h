@@ -508,7 +508,7 @@ namespace djnn
      * need to be applied when performing a transformation.
      */
     int state2d = APPLY_IDENTITY;
-
+  public:
     void updateState2d ();
     void rightTranslate (double dx, double dy);
     void rightTranslate2d (double dx, double dy);
