@@ -55,7 +55,7 @@ namespace djnn
   }
 
   void
-  Touch::init_touch (double init_x, double init_y, double init_pressure)
+  Touch::init_touch (int id, double init_x, double init_y, double init_pressure)
   {
     _init_x = new DoubleProperty (this, "init_x", init_x);
     _init_y = new DoubleProperty (this, "init_y", init_y);
@@ -66,7 +66,7 @@ namespace djnn
     _local_move_x = new DoubleProperty (0);
     _local_move_y = new DoubleProperty (0);
     _pressure = new DoubleProperty (this, "pressure", init_pressure);
-    _id = new IntProperty (this, "id", 0);
+    _id = new IntProperty (this, "id", id);
     _move = new Spike (this, "move");
     _move->add_symbol ("x", _move_x);
     _move->add_symbol ("y", _move_y);
@@ -78,10 +78,10 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (Process *p, const string &n, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (Process *p, const string &n, int id, double init_x, double init_y, double init_pressure) :
       Process (p, n), _shape (nullptr)
   {
-    init_touch (init_x, init_y, init_pressure);
+    init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
     Process::finalize_construction ();
   }
@@ -89,7 +89,7 @@ namespace djnn
   Touch::Touch () :
       Process (), _shape (nullptr)
   {
-    init_touch (0, 0, 0);
+    init_touch (0, 0, 0, 0);
     set_activation_state (ACTIVATED);
   }
 

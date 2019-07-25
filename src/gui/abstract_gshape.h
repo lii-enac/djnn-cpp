@@ -77,7 +77,7 @@ namespace djnn
   class Touch : public Process
   {
   public:
-    Touch (Process *p, const std::string &n, double init_x, double init_y, double init_pressure);
+    Touch (Process *p, const std::string &n, int id, double init_x, double init_y, double init_pressure);
     Touch ();
     void impl_activate () override {};
     void impl_deactivate () override {};
@@ -91,6 +91,10 @@ namespace djnn
     void set_local_move_y (double v) { _local_move_y->set_value (v, true); }
     void set_pressure (double v) { _pressure->set_value (v, true); }
     void set_id (int v) { _id->set_value (v, true); }
+    int get_id () { return _id->get_value (); }
+    double get_move_x () { return _move_x->get_value(); }
+    double get_move_y () { return _move_y->get_value(); }
+    Process* get_move () { return _move; }
     void leave () { _leave->activate (); }
     void release () { _release->activate (); }
     void enter () { _enter->activate (); }
@@ -99,7 +103,7 @@ namespace djnn
     void set_last_shape (AbstractGShape *s) { _last_shape->set_value(s, true); }
     virtual ~Touch ();
   private:
-    void init_touch (double init_x, double init_y, double init_pressure);
+    void init_touch (int id, double init_x, double init_y, double init_pressure);
     DoubleProperty *_init_x,* _init_y, *_move_x,* _move_y, *_local_init_x, *_local_init_y, *_local_move_x, *_local_move_y, *_pressure;
     IntProperty *_id;
     RefProperty *_last_shape;

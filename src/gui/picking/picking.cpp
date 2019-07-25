@@ -211,7 +211,7 @@ namespace djnn
       Graph::instance().add_process_to_delete (t);
       //delete t;
     }
-    t = new Touch (_win->touches (), to_string (id), x, y, pressure);
+    t = new Touch (_win->touches (), to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
 
     AbstractGShape *s = this->pick (x, y);
@@ -315,6 +315,7 @@ namespace djnn
         s->get_ui()->move_x->set_value (x, true);
         s->get_ui()->move_y->set_value (y, true);
         s->get_ui()->move->notify_activation ();
+        t->get_move ()->notify_activation ();
         set_local_coords (s, t, x, y, true);
       }
       genericEnterLeave (s);
