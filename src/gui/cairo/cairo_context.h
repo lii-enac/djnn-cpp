@@ -17,6 +17,7 @@
 #include "cairo_backend.h"
 #include "../style/style_types.h"
 #include "../../core/tree/component_observer.h"
+#include "../../core/ontology/process.h"
 
 #include <cairo/cairo.h>
 #include <pango/pango.h>

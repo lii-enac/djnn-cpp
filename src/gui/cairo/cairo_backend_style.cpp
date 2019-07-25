@@ -113,7 +113,7 @@ namespace djnn
       }
       cairo_fill_preserve (cur_cairo_state);
     }
-    if (cur->_strokeType != NONE) {
+    if (cur->_strokeType != NO_SOURCE) {
       set_stroke_source ();
       cairo_stroke (cur_cairo_state);
     }
@@ -129,7 +129,7 @@ namespace djnn
     double b = (color & 0xFF) / 255.0;
     cairo_set_source_rgb (cur_cairo_picking_state, r, g, b);
     cairo_fill_preserve (cur_cairo_picking_state);
-    if (_context_manager->get_current ()->_strokeType != NONE) {
+    if (_context_manager->get_current ()->_strokeType != NO_SOURCE) {
       cairo_stroke (cur_cairo_picking_state);
     }
     cairo_new_path (cur_cairo_picking_state);
