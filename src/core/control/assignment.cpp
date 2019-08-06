@@ -243,8 +243,8 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    //remove_state_dependency (_parent, _dst);
-    //Graph::instance ().remove_edge (_src, _dst);
+    remove_state_dependency (_parent, _dst);
+    Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
   }
@@ -308,8 +308,8 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
-    //remove_state_dependency (_parent, _dst);
-    //Graph::instance ().remove_edge (_src, _dst);
+    remove_state_dependency (_parent, _dst);
+    Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
   }
