@@ -139,6 +139,9 @@ namespace djnn
     }
   }
 
+  /* note: 
+    remove child but do not delete child 
+  */
   void
   Container::remove_child (Process* c)
   {
@@ -149,19 +152,18 @@ namespace djnn
     }
   }
 
+  /* note: 
+    remove child but do not delete child 
+  */
   void
   Container::remove_child (const std::string& name)
   {
     std::map<std::string, Process*>::iterator it = _symtable.find (name);
     if (it != _symtable.end ()) {
       Process* c = it->second;
-      _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
-      _symtable.erase (it);
-      for (auto s: structure_observer_list) {
-        s->remove_child_from_container (this, c);
-      }
+      Container::remove_child(c);
     } else
-      std::cerr << "Warning: symbol " << name << " not found in Component " << _name << "\n";
+      warning (nullptr,  " symbol " + name + " not found in Component " + _name + "\n");
   }
 
   void

@@ -80,6 +80,9 @@ namespace djnn
        _vertex->invalidate ();
        warning ( nullptr, " Process::~Process - " +  (_parent ? _parent->get_name () + "/"  : "parent_NULL") + _name  + " - _vertex is NOT NULL and it should\n");
     }
+
+    /* make sure everything is wiped out the symtable */
+    _symtable.clear ();
   }
 
 
@@ -324,7 +327,7 @@ namespace djnn
     if (it != _symtable.end ())
       _symtable.erase (it);
     else
-      warning (nullptr,   "Warning: symbol " + name + " not found in component " + name + "\n");
+      warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");
   }
 
   void
@@ -333,7 +336,7 @@ namespace djnn
     symtable_t::iterator it;
     for (it = _symtable.begin (); it != _symtable.end (); ++it) {
       if (it->second == c) {
-        remove_symbol (it->first);
+        _symtable.erase (it->first);
         return;
       }
     }
