@@ -50,6 +50,7 @@ namespace djnn {
     void impl_deactivate () override;
     virtual ~Set ();
     void serialize (const string& type) override;
+    void dump(int level=0) override;
   private:
     RefProperty *_added, *_removed;
     IntProperty *_size;

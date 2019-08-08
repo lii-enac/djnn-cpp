@@ -145,6 +145,12 @@ namespace djnn
   }
 
   void
+  Set::dump (int level)
+  {
+    cout << (_parent ? _parent->find_component_name(this) : _name)  << " [ cardinality=" << _size->get_value () << " ]" << endl ;
+  }
+
+  void
   Set::serialize (const string& type)
   {
 
