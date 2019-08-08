@@ -356,11 +356,14 @@ tidy: $(all_tidy)
 pre_cov: CXXFLAGS += --coverage
 pre_cov: LDFLAGS += --coverage
 pre_cov : djnn
+	lcov -d $(build_dir) -b . --zerocounters
 .PHONY: pre_cov
 
 cov:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
-	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file)
+	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file) 
+	# convert lcov report to gcov report
+	gcovr --xml-pretty -o $(build_dir)/gcov_report.xml -s
 	genhtml -o $(lcov_output_dir) $(lcov_file)
 	cd $(lcov_output_dir) ; open index.html
 .PHONY: cov
