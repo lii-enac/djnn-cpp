@@ -78,6 +78,8 @@ namespace djnn
              "dst argument cannot be null in connector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
+    /* if src is a refProperty->$value */
+
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     if (ref_src_pair.first != nullptr) {
       _ref_src = ref_src_pair.first;
@@ -94,6 +96,9 @@ namespace djnn
         warning (this,
                  "invalid source (not a Property) in connector (" + get_name () + "," + ispec + ", " + dspec + ")");
     }
+
+    /* if dst is a refProperty->$value */
+
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     if (ref_dst_pair.first != nullptr) {
       _ref_dst = ref_dst_pair.first;
