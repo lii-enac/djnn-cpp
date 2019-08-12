@@ -383,12 +383,22 @@ dbg:
 .PHONY: dbg
 
 ifeq ($(os),Linux)
-#https://brew.sh/
 pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
-pkgdeps += qt5-default 
-pkgdeps += libfreetype6-dev libsdl2-dev libglm-dev libsdl2-image-dev
+ifeq ($(display),QT)
+pkgdeps += qt5-default
+endif
+ifeq ($(display),SDL)
+pkgdeps += libsdl2-dev libsdl2-image-dev
+endif
+ifeq ($(display),DRM)
 pkgdeps += libdrm-dev
+endif
+ifeq ($(graphics),CAIRO)
 pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
+endif
+ifeq ($(graphics),GL)
+pkgdeps += libfreetype6-dev libglm-dev
+endif
 #pkgdeps += libraspberrypi-dev
 pkgcmd := apt install -y
 endif
