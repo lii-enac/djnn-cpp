@@ -237,6 +237,11 @@ namespace djnn
        if not, something (Process or edge dependency) IS NOT well deleted
     */
     if (vs == nullptr || vd == nullptr) {
+
+      std::cerr << "remove_edge: " <<
+      ( p_src->get_parent () ? p_src->get_parent ()->get_name () + "/" : "" ) << p_src->get_name () << "  " << vs << " - " << 
+      ( p_dst->get_parent () ? p_dst->get_parent ()->get_name () + "/" : "" ) << p_dst->get_name () << "  " << vd << endl;
+
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
       //assert(0);
       return;
