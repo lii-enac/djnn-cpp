@@ -98,6 +98,18 @@ namespace djnn
   }
 
   void
+  FSM::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    // if (_parent){
+    //   remove_state_dependency (_parent, _state_dependency);
+    // }
+
+    add_state_dependency (p, _state_dependency);
+    _parent = p; 
+  }
+
+  void
   FSMTransition::init_FSMTransition () 
   {
     _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
@@ -262,8 +274,9 @@ namespace djnn
   {
     _fsm_state = new TextProperty (this, "state", "");
     _initial = new TextProperty (this, "initial", "");
-    /* Do we have to keep this edge? */
-    add_state_dependency (_parent, _fsm_state);
+    
+    // Note: this is made by Container::addchild () --> set_parent () --> add_state_dependency ()
+    //add_state_dependency (_parent, _fsm_state); 
     _state_dependency = _fsm_state;
   }
 

@@ -116,7 +116,8 @@ namespace djnn {
     virtual Process* get_activation_source () { return nullptr; }
 
     // tree, component, symtable 
-    virtual void      add_child (Process* c, const string& name);
+    virtual void   set_parent (Process* p) { _parent = p; }
+    virtual void   add_child (Process* c, const string& name);
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
@@ -130,7 +131,7 @@ namespace djnn {
     symtable_t& symtable () { return _symtable; }
     const string& get_name () const;
     Process* get_parent ();
-    void     set_parent (Process* p) { _parent = p; }
+    
     void     set_data (Process* data);
     Process* get_data ();
 

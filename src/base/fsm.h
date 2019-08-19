@@ -32,7 +32,7 @@ namespace djnn {
   {
   public:
     FSMState (Process *p, const string &n);
-    ~FSMState () { _transitions.clear (); };
+    ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
     void serialize (const string& type) override;
@@ -98,6 +98,7 @@ namespace djnn {
     virtual ~FSM ();
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
+    void set_parent (Process* p) override;
     void serialize (const string& type) override;
   private:
     void init_FSM (); 

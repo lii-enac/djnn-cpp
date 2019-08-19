@@ -431,14 +431,14 @@ namespace djnn
   void
   add_state_dependency (Process *parent, Process *p)
   {
-    if (parent && parent->state_dependency () != nullptr)
+    if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (parent->state_dependency (), p); 
   }
 
   void
   remove_state_dependency (Process *parent, Process *p)
   {
-    if (parent && parent->state_dependency () != nullptr)
+    if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (parent->state_dependency (), p);
   }
 

@@ -119,7 +119,7 @@ namespace djnn
   {
     Container::clean_up_content ();
 
-    remove_state_dependency (_parent, _change_index_action);
+    remove_state_dependency (_parent, _state_dependency);
 
     delete _c_index;
     delete _c_previous;
