@@ -61,20 +61,22 @@ namespace djnn
   { 
     
     /* 
-       NOTE : We SHOULD avoid duplicate in this vector.
+       NOTE : We SHOULD avoid duplicate edges in this vector.
        here a vector is used because the insert order is importante and used in sorting (traverse_depth_first)
        we can't use std::set, std::unordered_set or std::map because it break this order.
        BUT the find on stc::vector O(n) is more complex than std::set O(log(n)) or std::unordered_set O(1)
+
+       We add another _map_edges to manage duplicate info !
+       FIXME: maybe adapte the sort algorithm to use set or better unordered_set OR maybe replace current vector by _map_edges
     */
 
-    // FIXME: maybe adapte the sort algorithm to use set or better unordered_set 
-
-    auto result = std::find(_edges.begin(), _edges.end(), dst);
+    auto result = _map_edges.find(dst);
  
-    /* if it is a new edge */
-    if (result == _edges.end()) {
+    /* if is a NEW edge */
+    if (result == _map_edges.end()) {
       _edges.push_back (dst);
       dst->_count_edges_in++;
+      _map_edges[dst] = 1;
 
       // print debug
       // cerr << "add_edge : " << "\t between " << 
@@ -83,28 +85,48 @@ namespace djnn
       // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
       // dst->_process->get_name () << endl;
     }
+    /* it a duplicate */
+    else
+      result->second = ++result->second ;
+    
     
   }
 
   void
   Vertex::remove_edge (Vertex *dst)
   {
-    //remove
-    Vertex::vertices_t::iterator newend = _edges.end ();
-    newend = std::remove (_edges.begin (), _edges.end (), dst);
+    auto result = _map_edges.find(dst);
 
-    //check if end has changed and erase
-    if (newend != _edges.end ()) {
-      // erase them from _edges
-      _edges.erase(newend, _edges.end ());
-      dst->_count_edges_in--;
+    /* remove duplicate */
+    if (result != _map_edges.end () && result->second > 1)
+      result->second = --result->second;
+    
+    else {
+      
+      /* NOTE: 
+         for now we keep this complicated way to erase instead of 
+         _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
+         to manage wrong removing, as in unit-test
+      */
 
-      // print debug
-      // cerr << "remove_edge : " << "\t between " << 
-      // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
-      // this->_process->get_name () << " - " <<
-      // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
-      // dst->_process->get_name () << endl;
+      /* or remove dst from _edges vector  */
+      Vertex::vertices_t::iterator newend = _edges.end ();
+      newend = std::remove (_edges.begin (), _edges.end (), dst);
+
+      /* check if end has changed and erase */
+      if (newend != _edges.end ()) {
+        /* erase them from _edges */
+        _edges.erase(newend, _edges.end ());
+        _map_edges.erase(dst); 
+        dst->_count_edges_in--;
+
+        // print debug
+        // cerr << "remove_edge : " << "\t between " << 
+        // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
+        // this->_process->get_name () << " - " <<
+        // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
+        // dst->_process->get_name () << endl;
+      }
     }
   }
 
@@ -113,14 +135,16 @@ namespace djnn
   {
     std::cout << "vertex (" <<
     ( _process->get_parent () ? _process->get_parent ()->get_name () + "/" : "") <<
-    _process->get_name () << ") - " << 
-    _count_edges_in << ", " << _edges.size () << " :\t";
+    _process->get_name () << ") - [" << 
+    _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
       cout << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
-         std::cout << ( e->_process->get_parent () ?  e->_process->get_parent ()->get_name () + "/" : "" ) << e->_process->get_name () << " " ;
+         auto result = _map_edges.find(e);
+         std::cout << ( e->_process->get_parent () ?  e->_process->get_parent ()->get_name () + "/" : "" ) << e->_process->get_name () << " [x"
+         << result->second << "] \t" ;
       }
       std::cout << std::endl;
     }
@@ -149,15 +173,15 @@ namespace djnn
   void
   Graph::clear ()
   {
-    // nothing to delete because vertices are own by _vertices.
+    /* nothing to delete because vertices are own by _vertices. */
     _sorted_vertices.clear ();
 
-    // delete vertices from _vertices and clear.
+    /* delete vertices from _vertices and clear.*/
     for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
         delete *it;
     _vertices.clear ();
 
-    // delete output_vertices from _outpur_nodes and clear 
+    /* delete output_vertices from _outpur_nodes and clear */
     for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
         delete *it;
     _output_nodes.clear ();
@@ -176,7 +200,7 @@ namespace djnn
   void
   Graph::add_output_node (Process* c)
   {
-    // check if c is already in the graph
+    /* check if c is already in the graph */
     for (auto v : _output_nodes) {
       if (v->get_process () == c)
         return;
@@ -208,6 +232,10 @@ namespace djnn
   Graph::add_edge (Process* src, Process* dst)
   {
 
+    // std::cerr << "add_edge: " <<
+    //   ( src->get_parent () ? src->get_parent ()->get_name () + "/" : "" ) << src->get_name () << " - " << 
+    //   ( dst->get_parent () ? dst->get_parent ()->get_name () + "/" : "" ) << dst->get_name () << endl;
+
     Vertex *vs = src->vertex ();
     if (vs == nullptr) {
       vs = add_vertex (src);
@@ -219,6 +247,7 @@ namespace djnn
       vd = add_vertex (dst);
       dst->set_vertex (vd);
     }
+
     vs->add_edge (vd);
     _sorted = false;
   }
@@ -226,6 +255,10 @@ namespace djnn
   void
   Graph::remove_edge (Process* p_src, Process* p_dst)
   {
+
+    // std::cerr << "remove_edge: " <<
+    //   ( p_src->get_parent () ? p_src->get_parent ()->get_name () + "/" : "" ) << p_src->get_name () << " - " << 
+    //   ( p_dst->get_parent () ? p_dst->get_parent ()->get_name () + "/" : "" ) << p_dst->get_name () << endl;
 
     Vertex *vs = p_src->vertex ();
     Vertex *vd = p_dst->vertex ();
@@ -296,6 +329,7 @@ namespace djnn
   {
 
     // skip invalid vertex
+    //FIXME: we shound use this code anymore - check with coverage result
     if (v->is_invalid ()) {
       v->set_mark (MARKED);
       return;
