@@ -26,6 +26,8 @@
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
+//#define DEBUG
+
 namespace djnn
 {
   using namespace std;
@@ -48,11 +50,25 @@ namespace djnn
     }
   }
 
+#ifdef DEBUG
+  static int nb_space = 0;
+#endif
+
   void Container::clean_up_content () 
   {
+#ifdef DEBUG
+    for (int space = 0; space < nb_space; space++ ) cerr << "\t";
+    ++nb_space ;
+    cerr << "--- " << _name << " :" << endl;
+#endif
+
     /* delete and remove children from this container */
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
+#ifdef DEBUG
+      for (int space=0; space < nb_space; space++ ) cerr << "\t";
+      cerr << i << ". " << _children[i]->get_name () << endl ;
+#endif
       /* remove child from structure_observer (if in structure_observer) */
       for (auto s: structure_observer_list) 
         s->remove_child_from_container (this, _children[i]);
@@ -63,11 +79,16 @@ namespace djnn
     /* remove container from structure_observer_list */
     for (auto s: structure_observer_list)
       s->remove_container (this);
+
+#ifdef DEBUG
+      --nb_space ;
+#endif
   }
 
   Container::~Container ()
   {
-    clean_up_content ();
+    if (!_children.empty ())
+      clean_up_content ();
   }
 
   void
