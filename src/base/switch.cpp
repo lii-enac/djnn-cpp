@@ -38,8 +38,12 @@ namespace djnn
   Switch::init_switch (const string &initial)
   {
     _initial = initial;
-    /*  added it symTable but not in _children */
-    _branch_name = new TextProperty (initial);
+    /*  be carefull :
+        we have to add branch_name in the process symTable but NOT in the container _children list 
+        so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
+        then added to symtable with his real name
+    */
+    _branch_name = new TextProperty (nullptr, "switch_state", initial);
     add_symbol ("state", _branch_name);
     _action = new SwitchAction (this, get_name ());
     _state_dependency = _action;
