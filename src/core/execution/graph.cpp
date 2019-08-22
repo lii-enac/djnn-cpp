@@ -331,6 +331,9 @@ namespace djnn
     // skip invalid vertex
     //FIXME: we shound use this code anymore - check with coverage result
     if (v->is_invalid ()) {
+      //assert (0);
+      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+      cerr << "vertex: " << v << "- v->process " << v->get_process ();
       v->set_mark (MARKED);
       return;
     }
@@ -341,7 +344,7 @@ namespace djnn
 
     v->set_mark (BROWSING);
 
-    for (auto & v2 : v->get_edges ()) {
+    for (auto& v2 : v->get_edges ()) {
       if (v2->get_mark () == NOT_MARKED) {
         traverse_depth_first (v2);
       }
