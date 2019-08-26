@@ -92,27 +92,27 @@ namespace djnn
   }
 
   void
-  Container::add_child (Process* c, const std::string& name)
+  Container::add_child (Process* child, const std::string& name)
   {
-    if (c == nullptr) {
+    if (child == nullptr) {
       error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
       return;
     }
-    _children.push_back (c);
+    _children.push_back (child);
     /* WARNING should we authorize multiple parenthood? */
-    if (c->get_parent () != nullptr && c->get_parent () != this) {
-      c->get_parent ()->remove_child (c);
+    if (child->get_parent () != nullptr && child->get_parent () != this) {
+      child->get_parent ()->remove_child (child);
     }
-    c->set_parent (this);
-    add_symbol (name, c);
+    child->set_parent (this);
+    add_symbol (name, child);
     
-    if (get_activation_state () == ACTIVATED && !c->is_model ()) {
-      c->activate ();
-    } else if (c->get_activation_state () == ACTIVATED) {
-      c->deactivate ();
+    if (get_activation_state () == ACTIVATED && !child->is_model ()) {
+      child->activate ();
+    } else if (child->get_activation_state () == ACTIVATED) {
+      child->deactivate ();
     }
     for (auto s: structure_observer_list) {
-      s->add_child_to_container (this, c, _children.size () - 1);
+      s->add_child_to_container (this, child, _children.size () - 1);
     }
   }
 
