@@ -26,7 +26,7 @@ namespace djnn
       Container (parent, name)
   {
     init_switch (initial);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   Switch::Switch (const string &initial)

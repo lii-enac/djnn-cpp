@@ -203,7 +203,7 @@ namespace djnn
 
     /* IN is a special child build in IvyAccess::find_component */
 
-  Process::finalize_construction ();
+  Process::finalize_construction (p);
 }
 
 IvyAccess::~IvyAccess ()

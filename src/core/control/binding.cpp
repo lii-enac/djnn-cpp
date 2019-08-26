@@ -117,7 +117,7 @@ namespace djnn
           nullptr), _has_coupling (false)
   {
     init_binding (src, ispec, true, dst, dspec, true);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   Binding::Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation,
@@ -127,7 +127,7 @@ namespace djnn
           nullptr), _has_coupling (false)
   {
     init_binding (src, ispec, on_activation, dst, dspec, activate);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   Binding::~Binding ()

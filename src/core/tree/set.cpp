@@ -39,7 +39,7 @@ namespace djnn
     _added = new RefProperty (nullptr);
     _removed = new RefProperty (nullptr);
     _size = new IntProperty (0);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   Set::~Set ()
@@ -174,7 +174,7 @@ namespace djnn
     Set *s = dynamic_cast<Set*> (set);
     if (s == nullptr)
       error (this, "The set argument must be a Set component in set iterator " + name);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void

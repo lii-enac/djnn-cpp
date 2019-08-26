@@ -42,7 +42,7 @@ namespace djnn
     _period = new IntProperty (this, "period", period.count ());
     _elapsed = new DoubleProperty (this, "elapsed", 0);
     _tick = new Spike (this, "tick");
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Clock::Clock (int period)
@@ -58,7 +58,7 @@ namespace djnn
     _period = new IntProperty (this, "period", period);
     _elapsed = new DoubleProperty (this, "elapsed", 0);
     _tick = new Spike (this, "tick");
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Clock::~Clock ()

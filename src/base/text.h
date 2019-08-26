@@ -154,7 +154,7 @@ namespace djnn
     class DoubleFormatterAction : public Process
     {
     public:
-      DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize_construction (); }
+      DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize_construction (p); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _decimal->get_value ();

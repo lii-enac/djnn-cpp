@@ -115,7 +115,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _result);
 
     add_state_dependency (_parent, _action);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Finder::~Finder ()

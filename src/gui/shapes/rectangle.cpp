@@ -31,7 +31,7 @@ namespace djnn
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
   {
     set_origin (x, y);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Rectangle::Rectangle (double x, double y, double width, double height, double rx, double ry):

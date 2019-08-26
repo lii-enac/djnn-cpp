@@ -223,7 +223,7 @@ namespace djnn
   {
     _press = new Spike (this, "press");
     _release = new Spike (this, "release");
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   GUIMouse::GUIMouse (Process *p, const string &n) : Process (p, n)

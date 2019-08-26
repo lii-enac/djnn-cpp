@@ -26,7 +26,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", exp (i_val));
     init_couplings (new ExpAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -50,7 +50,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", log (i_val));
     init_couplings (new LogAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -74,7 +74,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", log10 (i_val));
     init_couplings (new Log10Action (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -99,7 +99,7 @@ namespace djnn
     _right = new DoubleProperty (this, "exponent", exponent);
     _result = new DoubleProperty (this, "result", pow (base, exponent));
     init_couplings (new PowAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -124,7 +124,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", sqrt (i_val));
     init_couplings (new SqrtAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -148,7 +148,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", sqrt (i_val));
     init_couplings (new AbsAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -173,7 +173,7 @@ namespace djnn
     _right = new DoubleProperty (this, "input", init_val);
     _result = new DoubleProperty (this, "result", min < init_val ? init_val : min);
     init_couplings (new MinAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -199,7 +199,7 @@ namespace djnn
     _right = new DoubleProperty (this, "input", init_val);
     _result = new DoubleProperty (this, "result", max >= init_val ? init_val : max);
     init_couplings (new MaxAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -234,7 +234,7 @@ namespace djnn
     Graph::instance ().add_edge (_input, _action);
     Graph::instance ().add_edge (_action, _result);
     add_state_dependency (_parent, _action);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   BoundedValue::~BoundedValue ()

@@ -45,7 +45,7 @@ namespace djnn
       file.close();
       }
     }
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Properties::~Properties ()

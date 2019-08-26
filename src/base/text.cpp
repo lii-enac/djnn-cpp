@@ -56,7 +56,7 @@ namespace djnn
       Process (p, n)
   {
     init ();
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   TextPrinter::TextPrinter ()
@@ -84,7 +84,7 @@ namespace djnn
     _right = new TextProperty (this, "tail", "");
     _result = new TextProperty (this, "output", "");
     init_couplings (new TextCatenatorAction (this, n + "_action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -107,7 +107,7 @@ namespace djnn
     _right = new TextProperty (this, "right", right);
     _result = new BoolProperty (this, "output", left.compare (right) == 0);
     init_couplings (new TextComparatorAction (this, n + "_action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -161,7 +161,7 @@ namespace djnn
       Process (parent, name)
   {
     init (initial, decimal);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   DoubleFormatter::DoubleFormatter (double initial, int decimal) :
@@ -218,7 +218,7 @@ namespace djnn
     Graph::instance ().add_edge (_del_action, _state);
     add_state_dependency (_parent, _acc_action);
     add_state_dependency (_parent, _del_action);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   TextAccumulator::~TextAccumulator () {    

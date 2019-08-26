@@ -32,7 +32,7 @@ namespace djnn
     class FileReaderAction : public Action
     {
     public:
-      FileReaderAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (); }
+      FileReaderAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
       void impl_activate () override;
       void impl_deactivate () override {}
     };

@@ -39,7 +39,7 @@ namespace djnn
 	  nullptr), _update_dst (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_connector (src, ispec, dst, dspec);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Connector::Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation) :
@@ -195,7 +195,7 @@ namespace djnn
       Process (p, n), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   PausedConnector::PausedConnector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation) :

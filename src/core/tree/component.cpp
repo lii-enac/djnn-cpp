@@ -289,7 +289,7 @@ namespace djnn
       Container (p, n)
   {
     set_is_model (isModel);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   AssignmentSequence::AssignmentSequence () :

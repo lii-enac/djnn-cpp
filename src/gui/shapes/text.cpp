@@ -50,7 +50,7 @@ namespace djnn
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
     add_state_dependency (_parent, _update_size);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxU, int dyU,
@@ -74,7 +74,7 @@ namespace djnn
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
     add_state_dependency (_parent, _update_size);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Text::Text (double x, double y, const std::string &text) :

@@ -29,7 +29,7 @@ namespace djnn
   {
     set_is_model (isModel);
     _value = new IntProperty (this, "value", value);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Exit::~Exit ()

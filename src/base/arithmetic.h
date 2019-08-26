@@ -29,7 +29,7 @@ namespace djnn
     public:
       AdderAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
        AbstractProperty* result) :
-      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~AdderAction () {}
       void impl_activate ()
       {
@@ -55,7 +55,7 @@ namespace djnn
     public:
       SubtractorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
         AbstractProperty* result) :
-      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~SubtractorAction () {}
       void impl_activate ()
       {
@@ -81,7 +81,7 @@ namespace djnn
     public:
       MultiplierAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
         AbstractProperty* result) :
-      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~MultiplierAction () {}
       void impl_activate ()
       {
@@ -106,7 +106,7 @@ namespace djnn
     public:
       DividerAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
        AbstractProperty* result) :
-      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+      BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~DividerAction () {}
       void impl_activate ()
       {
@@ -135,7 +135,7 @@ private:
   public:
     ModuloAction (Process* parent, string name, AbstractProperty* left, AbstractProperty* right,
       AbstractProperty* result) :
-    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
     virtual ~ModuloAction () {}
     void impl_activate ()
     {
@@ -166,7 +166,7 @@ private:
   public:
     AscendingComparatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
      AbstractProperty* result) :
-    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
     virtual ~AscendingComparatorAction () {}
     void impl_activate ()
     {
@@ -191,7 +191,7 @@ private:
   public:
     StrictAscendingComparatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
      AbstractProperty* result) :
-    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
     virtual ~StrictAscendingComparatorAction () {}
     void impl_activate ()
     {
@@ -216,7 +216,7 @@ private:
   public:
     EqualityComparatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
       AbstractProperty* result) :
-    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+    BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
     virtual ~EqualityComparatorAction () {}
     void impl_activate ()
     {
@@ -240,7 +240,7 @@ private:
   {
   public:
     SignInverterAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-    UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (); }
+    UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (parent); }
     virtual ~SignInverterAction () {}
     void impl_activate ()
     {
@@ -264,7 +264,7 @@ private:
   {
   public:
     PreviousAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output, double init_val) :
-    UnaryOperatorAction (parent, name, input, output), _prev (init_val) { Process::finalize_construction (); }
+    UnaryOperatorAction (parent, name, input, output), _prev (init_val) { Process::finalize_construction (parent); }
     virtual ~PreviousAction () {}
     void impl_activate ()
     {

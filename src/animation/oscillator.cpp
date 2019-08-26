@@ -54,7 +54,7 @@ namespace djnn
     Graph::instance ().add_edge (_step, _action);
     Graph::instance ().add_edge (_action, _output);
     add_state_dependency (_parent, _action);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Oscillator::~Oscillator ()

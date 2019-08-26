@@ -166,7 +166,7 @@ namespace djnn
   List::List (Process* parent, const string& name) :
     AbstractList (parent, name)
   {
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   List::~List ()
@@ -315,7 +315,7 @@ namespace djnn
     add_state_dependency (_parent, _next_action);
     add_state_dependency (_parent, _previous_action);
     add_state_dependency (_parent, _reset_action);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   BidirectionalListIterator::~BidirectionalListIterator ()
@@ -381,7 +381,7 @@ namespace djnn
     if (l == nullptr)
       error (this, "The list argument must be a List component in list iterator " + name);
     _list = l;
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void

@@ -24,7 +24,7 @@ namespace djnn {
   class AbstractBoolProperty : public AbstractProperty {
   public:
     AbstractBoolProperty () : AbstractProperty () {};
-    AbstractBoolProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize_construction (); };
+    AbstractBoolProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize_construction (p); };
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () override { return Boolean; }
 

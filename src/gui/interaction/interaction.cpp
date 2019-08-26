@@ -53,7 +53,7 @@ namespace djnn
     _c_move = new Coupling (_t_move1, ACTIVATION, _update_action, ACTIVATION);
     Graph::instance().add_edge (_t_move1, _update_action);
 
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   ScaleRotateTranslate::~ScaleRotateTranslate ()

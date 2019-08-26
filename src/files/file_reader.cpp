@@ -32,7 +32,7 @@ namespace djnn
     _output = new TextProperty (this, "output", "");
     _action = new FileReaderAction (this, "action");
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   FileReader::~FileReader ()

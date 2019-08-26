@@ -227,7 +227,7 @@ namespace djnn
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     init_Assignment ();
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -292,7 +292,7 @@ namespace djnn
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel)
   {
     init_PausedAssignment ();
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void

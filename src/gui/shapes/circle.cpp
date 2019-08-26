@@ -31,7 +31,7 @@ namespace djnn
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
     set_origin (cx, cy);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Circle::Circle (double cx, double cy, double r):

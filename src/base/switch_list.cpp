@@ -112,7 +112,7 @@ namespace djnn
       AbstractList (parent, name), _cur_item (nullptr)
   {
     init (loop);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   SwitchList::~SwitchList ()

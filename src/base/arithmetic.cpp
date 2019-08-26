@@ -27,7 +27,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new DoubleProperty (this, "result", l_val + r_val);
     init_couplings (new AdderAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -52,7 +52,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new DoubleProperty (this, "result", l_val - r_val);
     init_couplings (new SubtractorAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -77,7 +77,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new DoubleProperty (this, "result", l_val * r_val);
     init_couplings (new MultiplierAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -104,7 +104,7 @@ namespace djnn
     if (r_val != 0)
       _result->set_value (l_val / r_val, true);
     init_couplings (new DividerAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -131,7 +131,7 @@ namespace djnn
     if ((int) r_val != 0)
       _result->set_value ((int) l_val % (int) r_val, true);
     init_couplings (new ModuloAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -156,7 +156,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val <= r_val);
     init_couplings (new AscendingComparatorAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -182,7 +182,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val < r_val);
     init_couplings (new StrictAscendingComparatorAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -207,7 +207,7 @@ namespace djnn
     _right = new DoubleProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val == r_val);
     init_couplings (new EqualityComparatorAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -231,7 +231,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", -(i_val));
     init_couplings (new SignInverterAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -254,7 +254,7 @@ namespace djnn
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", 0);
     init_couplings (new PreviousAction (this, "action", _input, _output, i_val));
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   void
@@ -291,7 +291,7 @@ namespace djnn
       Process (parent, name)
   {
     init_incr (isModel);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   Incr::~Incr ()
@@ -331,7 +331,7 @@ namespace djnn
                                                                     AbstractProperty* result) :
       Process (parent, name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
   {
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -370,7 +370,7 @@ namespace djnn
     Graph::instance ().add_edge (_input, _action);
     Graph::instance ().add_edge (_action, _result);
     add_state_dependency (_parent, _action);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   AdderAccumulator::~AdderAccumulator ()

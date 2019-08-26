@@ -73,7 +73,7 @@ namespace djnn
     Graph::instance().add_edge(_action, _outY);
     add_state_dependency (_parent, _action);
 
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   ScreenToLocal::~ScreenToLocal () 
@@ -157,7 +157,7 @@ namespace djnn
     Graph::instance().add_edge(_action, _outY);
     add_state_dependency (_parent, _action);
 
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   LocalToScreen::~LocalToScreen () 

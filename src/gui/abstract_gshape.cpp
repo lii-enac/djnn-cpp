@@ -83,7 +83,7 @@ namespace djnn
   {
     init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Touch::Touch () :

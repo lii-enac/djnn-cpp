@@ -18,14 +18,14 @@
 
 namespace djnn
 {
-  And::And (Process *p, const string &n, int l_val, int r_val) :
-      BinaryOperator (p, n)
+  And::And (Process *parent, const string &n, int l_val, int r_val) :
+      BinaryOperator (parent, n)
   {
     _left = new BoolProperty (this, "left", l_val);
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val && r_val);
     init_couplings (new AndAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -44,14 +44,14 @@ namespace djnn
 
   }
 
-  Or::Or (Process *p, const string &n, int l_val, int r_val) :
-      BinaryOperator (p, n)
+  Or::Or (Process *parent, const string &n, int l_val, int r_val) :
+      BinaryOperator (parent, n)
   {
     _left = new BoolProperty (this, "left", l_val);
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val || r_val);
     init_couplings (new OrAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -70,14 +70,14 @@ namespace djnn
 
   }
 
-  XOr::XOr (Process *p, const string &n, int l_val, int r_val) :
-      BinaryOperator (p, n)
+  XOr::XOr (Process *parent, const string &n, int l_val, int r_val) :
+      BinaryOperator (parent, n)
   {
     _left = new BoolProperty (this, "left", l_val);
     _right = new BoolProperty (this, "right", r_val);
     _result = new BoolProperty (this, "result", l_val != r_val);
     init_couplings (new XOrAction (this, "action", _left, _right, _result));
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -96,13 +96,13 @@ namespace djnn
 
   }
 
-  Not::Not (Process *p, const string &n, int in_val) :
-      UnaryOperator (p, n)
+  Not::Not (Process *parent, const string &n, int in_val) :
+      UnaryOperator (parent, n)
   {
     _input = new BoolProperty (this, "input", in_val);
     _output = new BoolProperty (this, "output", !in_val);
     init_couplings (new NotAction (this, "action", _input, _output));
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void

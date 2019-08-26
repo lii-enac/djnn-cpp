@@ -24,7 +24,7 @@ namespace djnn
                                                         AbstractProperty *t1, AbstractProperty *t2, AbstractProperty *output) :
       Action (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
   {
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   void
@@ -75,7 +75,7 @@ namespace djnn
     Graph::instance ().add_edge (_t2, _action);
     Graph::instance ().add_edge (_action, _output);
     add_state_dependency (_parent, _action);
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   HermiteCurve::~HermiteCurve ()

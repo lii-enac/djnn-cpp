@@ -82,7 +82,7 @@ namespace djnn {
       LinuxTouch *lt = new LinuxTouch (_fieldmap);
       _v_touches.push_back (lt);
     }
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   LinuxTouchPanel::~LinuxTouchPanel ()

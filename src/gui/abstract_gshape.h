@@ -26,7 +26,7 @@ namespace djnn
   class SVGHolder : public Container
   {
   public:
-    SVGHolder (Process *p, const std::string& n) : Container (p, n), _gobj (nullptr) { Process::finalize_construction (); }
+    SVGHolder (Process *p, const std::string& n) : Container (p, n), _gobj (nullptr) { Process::finalize_construction (p); }
     SVGHolder () : Container (), _gobj (nullptr) {}
     virtual ~SVGHolder () {}
     Process* clone () override;

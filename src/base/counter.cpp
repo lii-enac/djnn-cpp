@@ -48,7 +48,7 @@ namespace djnn
     add_state_dependency (_parent, _action_reset);
     add_state_dependency (_parent, _action_step);
     
-    Process::finalize_construction ();
+    Process::finalize_construction (p);
   }
 
   Counter::Counter (double init, double delta) :

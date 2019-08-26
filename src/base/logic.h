@@ -29,7 +29,7 @@ namespace djnn
     public:
       AndAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                  AbstractProperty* result) :
-          BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+          BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~AndAction () {}
       void impl_activate ()
       {
@@ -54,7 +54,7 @@ namespace djnn
     public:
       OrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                 AbstractProperty* result) :
-                  BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+                  BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~OrAction () {}
       void impl_activate ()
       {
@@ -79,7 +79,7 @@ namespace djnn
     public:
       XOrAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
                  AbstractProperty* result) :
-                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (); }
+                   BinaryOperatorAction (parent, name, left, right, result) { Process::finalize_construction (parent); }
       virtual ~XOrAction () {}
       void impl_activate ()
       {
@@ -102,8 +102,8 @@ namespace djnn
     class NotAction : public UnaryOperatorAction
     {
     public:
-      NotAction (Process *p, const string &n, AbstractProperty* input, AbstractProperty* output) :
-        UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (); }
+      NotAction (Process *parent, const string &n, AbstractProperty* input, AbstractProperty* output) :
+        UnaryOperatorAction (parent, n, input, output) { Process::finalize_construction (parent); }
       virtual ~NotAction () {}
       void impl_activate () {
         //if (_parent->get_state () > activated)
