@@ -29,15 +29,12 @@ namespace djnn
   int Process::_nb_anonymous = 0;
 
   Process::Process (Process* parent, const string& name, bool model) :
-      _vertex (nullptr), _parent (parent), _state_dependency (nullptr), _data (nullptr)
+      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
   {
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
-
-    if (_parent != nullptr)
-      _state_dependency = _parent->_state_dependency;
-    
+   
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else {
@@ -53,10 +50,12 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction () // called by SubProcess
+  Process::finalize_construction (Process* parent) /* called by SubProcess to link to parent */
   {
-    if (_parent != nullptr)
-      _parent->add_child (this, _name);
+    if ( parent != nullptr){
+      parent->add_child (this, _name);
+      _state_dependency = parent->_state_dependency;
+    }
   }
 
   Process::~Process ()
@@ -349,11 +348,14 @@ namespace djnn
   }
 
   void
-  Process::add_child (Process* c, const string& name)
+  Process::add_child (Process* child, const string& name)
   {
-    if (c == nullptr)
+
+    if (child == nullptr)
       return;
-    add_symbol (name, c);
+    
+    child->set_parent (this);
+    add_symbol (name, child);
   }
 
   void

@@ -140,7 +140,7 @@ namespace djnn {
     const string& debug_info () { return _dbg_info; }
 
   protected:
-    void finalize_construction ();
+    void finalize_construction (Process* parent);
 
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;
