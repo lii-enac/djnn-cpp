@@ -21,17 +21,30 @@
 
 namespace djnn
 {
-  Group::Group (Process* p, const string &n) :
-      Container (p, n), _gobj (nullptr)
+  Group::Group (Process* parent, const string &n) :
+      Container (parent, n), _gobj (nullptr)
   {
-    _gobj = new AbstractGObj (this, "");
-    Process::finalize_construction (p);
+    _gobj = new AbstractGObj (this, "_gobj");
+    
+    /* AbstractGObj do not have a call to finalize_construction */
+    /* we have to add_child it here */
+    _gobj->set_parent (this);
+    
+
+    Process::finalize_construction (parent);
+
+    /* and set state_dependency here AFTER setting the parent to "this" */
+    _gobj->state_dependency (this->state_dependency ());
   }
 
   Group::Group () :
       Container (), _gobj (nullptr)
   {
-    _gobj = new AbstractGObj (this, "");
+    _gobj = new AbstractGObj (this, "_gobj");
+    /* AbstractGObj do not have a call to finalize_construction */
+    /* we have to add_child it here */
+    _gobj->set_parent (this);
+    _gobj->state_dependency (this->state_dependency ());
   }
 
   Group::~Group ()
