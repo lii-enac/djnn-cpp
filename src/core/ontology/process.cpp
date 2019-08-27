@@ -50,11 +50,17 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction (Process* parent) /* called by SubProcess to link to parent */
+  Process::finalize_construction (Process* parent, Process* state_dep) /* called by SubProcess to link to parent */
   {
-    if ( parent != nullptr){
+    if (parent){
+
+      // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
+      if (state_dep == nullptr)
+        _state_dependency = parent->state_dependency ();
+      else
+        _state_dependency = state_dep;
+
       parent->add_child (this, _name);
-      _state_dependency = parent->_state_dependency;
     }
   }
 
@@ -353,7 +359,7 @@ namespace djnn
 
     if (child == nullptr)
       return;
-    
+
     child->set_parent (this);
     add_symbol (name, child);
   }

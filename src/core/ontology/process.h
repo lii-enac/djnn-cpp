@@ -90,6 +90,7 @@ namespace djnn {
     void remove_deactivation_coupling (Coupling* c);
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
     Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
+    void state_dependency (Process* s) { _state_dependency = s; }
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -140,7 +141,7 @@ namespace djnn {
     const string& debug_info () { return _dbg_info; }
 
   protected:
-    void finalize_construction (Process* parent);
+    void finalize_construction (Process* parent, Process* state=nullptr );
 
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;
