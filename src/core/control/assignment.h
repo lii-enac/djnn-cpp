@@ -25,7 +25,7 @@ namespace djnn {
   class UpdateSrcOrDst : public Action
   {
     public:
-      UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process **to_update) : Action (p, n), _to_update (to_update), _prop (prop), _spec (spec) {}
+      UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process **to_update);
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
       void impl_deactivate () override {}

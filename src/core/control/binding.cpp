@@ -25,6 +25,19 @@ namespace djnn
 {
   using namespace std;
 
+  Binding::BindingAction::BindingAction (Process* parent, const string &name, bool activate) : 
+    Action (parent, name) 
+  { 
+    /* this action should not be added to process::symtable so NO Process::add_child 
+          we can't call Process::finalize_construction */
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+    }
+
+    set_binding_action (activate); 
+  }
+
   void
   Binding::init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec,
 			 bool to_activate)

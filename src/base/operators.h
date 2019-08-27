@@ -36,8 +36,7 @@ namespace djnn {
   {
   public:
     BinaryOperatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
-                          AbstractProperty* result) :
-    Action (parent, name), _left (left), _right (right), _result (result) {}
+                          AbstractProperty* result);
     virtual ~BinaryOperatorAction () {};
   protected:
     AbstractProperty* _left;
@@ -62,8 +61,7 @@ namespace djnn {
   class UnaryOperatorAction : public Action
   {
   public:
-    UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
-    Action (parent, name), _input (input), _output (output){}
+    UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output);
     virtual ~UnaryOperatorAction () {};
   protected:
     AbstractProperty* _input;

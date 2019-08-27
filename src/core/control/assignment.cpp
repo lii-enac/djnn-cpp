@@ -36,6 +36,18 @@ namespace djnn
 {
   using namespace std;
 
+
+  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const string &n, RefProperty* prop, const string &spec, Process **to_update) : 
+    Action (parent, n), _to_update (to_update), _prop (prop), _spec (spec) 
+  { 
+      /* this action should not be added to process::symtable so NO Process::add_child 
+          we can't call Process::finalize_construction */
+      if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+  }
+
   void
   UpdateSrcOrDst::impl_activate ()
   {

@@ -26,6 +26,19 @@ namespace djnn
 {
   using namespace std;
 
+  BinaryOperatorAction::BinaryOperatorAction (Process* parent, const string &name, 
+      AbstractProperty* left, AbstractProperty* right, AbstractProperty* result) :
+    Action (parent, name), _left (left), _right (right), _result (result)
+  {
+    /* this action should not be added to process::symtable so NO Process::add_child 
+          we can't call Process::finalize_construction */
+      if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+  }
+
+
   BinaryOperator::BinaryOperator (Process *p, const string &n) :
       Process (p, n), _left (nullptr), _right (nullptr), _result (nullptr), _c_left (nullptr), _c_right (
           nullptr), _action (nullptr)
@@ -59,6 +72,17 @@ namespace djnn
     delete _left;
     delete _right;
     delete _result;
+  }
+
+  UnaryOperatorAction::UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
+    Action (parent, name), _input (input), _output (output)
+  {
+    /* this action should not be added to process::symtable so NO Process::add_child 
+          we can't call Process::finalize_construction */
+      if (parent) {
+          Process::set_parent (parent);
+          _state_dependency = parent->state_dependency ();
+      }
   }
 
   UnaryOperator::UnaryOperator (Process *p, const string &n) :

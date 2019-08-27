@@ -34,8 +34,7 @@ namespace djnn {
     class ConnectorAction : public Action
     {
     public:
-      ConnectorAction (Process* p, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
-        Action (p, n), _src (src), _dst (dst), _propagate (propagate) {};
+      ConnectorAction (Process* p, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};

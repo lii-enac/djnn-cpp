@@ -25,6 +25,17 @@ namespace djnn
 {
   using namespace std;
 
+  Connector::ConnectorAction::ConnectorAction (Process* parent, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+        Action (parent, n), _src (src), _dst (dst), _propagate (propagate) 
+  {
+    /* this action should not be added to process::symtable so NO Process::add_child 
+          we can't call Process::finalize_construction */
+      if (parent) {
+          _state_dependency = parent->state_dependency ();
+          Process::set_parent (parent);   
+      }
+  }
+
   void
   Connector::ConnectorAction::impl_activate ()
   {
