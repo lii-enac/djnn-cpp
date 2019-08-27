@@ -54,7 +54,7 @@ namespace djnn {
     void draw () override;
     void pick () override;
     virtual ~Switch ();
-    void set_parent (Process* p) override { add_state_dependency (p, _state_dependency); _parent = p; }
+    void set_parent (Process* p) override;
     void serialize (const string& type) override;
   private:
     void init_switch (const string &initial);

@@ -31,16 +31,10 @@ namespace djnn
     _action = new TextPrinterAction (this, get_name () + "_action", _input);
     c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     c_input->disable ();
-    /* Graph::instance ().add_edge (_input, _action);
-    add_state_dependency (_parent, _action); */
   }
 
   TextPrinter::~TextPrinter ()
   {
-    /*
-    remove_state_dependency (_parent, _action);
-    Graph::instance ().remove_edge (_input, _action);
-     */
     delete c_input;
     delete _action;
     delete _input;
@@ -139,7 +133,6 @@ namespace djnn
     Graph::instance ().add_edge (_input, _action);
     Graph::instance ().add_edge (_decimal, _action);
     Graph::instance ().add_edge (_action, _output);
-    add_state_dependency (_parent, _action);
   }
 
   DoubleFormatter::~DoubleFormatter ()
@@ -155,8 +148,21 @@ namespace djnn
     delete _output;
     delete _decimal;
     delete _input;
-    
   }
+
+  void
+  DoubleFormatter::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
+  }
+
   DoubleFormatter::DoubleFormatter (Process* parent, const string &name, double initial, int decimal) :
       Process (parent, name)
   {
@@ -216,8 +222,6 @@ namespace djnn
     Graph::instance ().add_edge (_del, _del_action);
     Graph::instance ().add_edge (_acc_action, _state);
     Graph::instance ().add_edge (_del_action, _state);
-    add_state_dependency (_parent, _acc_action);
-    add_state_dependency (_parent, _del_action);
     Process::finalize_construction (p);
   }
 
@@ -236,6 +240,21 @@ namespace djnn
     delete _del;
     delete _state;
     delete _input;
+  }
+
+  void
+  TextAccumulator::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _acc_action);
+       remove_state_dependency (_parent, _del_action);
+    }
+
+    add_state_dependency (p, _acc_action);
+    add_state_dependency (p, _del_action);
+    
+    _parent = p; 
   }
 
   void

@@ -578,6 +578,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
   private:
+    void set_parent (Process* p) override;
     IntProperty *_r, *_g, *_b;
     DoubleProperty *_l, *_c, *_h;
     ConverterAction *_action;
@@ -602,6 +603,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
   private:
+    void set_parent (Process* p) override;
     IntProperty *_r, *_g, *_b;
     DoubleProperty *_l, *_c, *_h;
     ConverterAction *_action;

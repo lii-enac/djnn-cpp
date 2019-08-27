@@ -53,6 +53,7 @@ namespace djnn {
     virtual ~BinaryOperator ();
   protected:
     void init_couplings (Process* action);
+    void set_parent (Process* p);
     AbstractProperty *_left, *_right, *_result;
     Coupling *_c_left, *_c_right;
     Process *_action;

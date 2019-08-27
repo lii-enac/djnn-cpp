@@ -74,7 +74,6 @@ namespace djnn
     Graph::instance ().add_edge (_t1, _action);
     Graph::instance ().add_edge (_t2, _action);
     Graph::instance ().add_edge (_action, _output);
-    add_state_dependency (_parent, _action);
     Process::finalize_construction (p);
   }
 
@@ -100,6 +99,19 @@ namespace djnn
     delete _p2;
     delete _p1;
     delete _input;
+  }
+
+  void
+  HermiteCurve::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+
+    _parent = p; 
   }
 
   void

@@ -48,6 +48,7 @@ namespace djnn
     void impl_deactivate () override;
     void serialize (const string& type) override;
   private:
+    void set_parent (Process* p) override;
     AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     Coupling *_c_input, *_c_p1, *_c_p2, *_c_t1, *_c_t2;
     Process *_action;

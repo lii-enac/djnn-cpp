@@ -76,6 +76,7 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
+    void set_parent (Process* p) override;
     bool _reset_occurred;
     Spike *_reset, *_step;
     DoubleProperty *_output, *_init, *_delta;

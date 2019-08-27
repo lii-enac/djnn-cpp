@@ -73,9 +73,6 @@ namespace djnn
     _c_step->disable ();
     Graph::instance ().add_edge (_step, _action_step);
     Graph::instance ().add_edge (_action_step, _output);
-
-    add_state_dependency (_parent, _action_reset);
-    add_state_dependency (_parent, _action_step);
   }
 
   Counter::~Counter () {
@@ -95,6 +92,21 @@ namespace djnn
     delete _output;
     delete _step;
     delete _reset;
+  }
+
+  void
+  Counter::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _action_reset);
+       remove_state_dependency (_parent, _action_step);
+    }
+
+    add_state_dependency (p, _action_reset);
+    add_state_dependency (p, _action_step);
+
+    _parent = p; 
   }
 
   void

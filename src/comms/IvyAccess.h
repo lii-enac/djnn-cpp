@@ -60,6 +60,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     Process* find_component (const string&) override;
+    void set_parent (Process* p) override;
 
   private:
     string _bus;

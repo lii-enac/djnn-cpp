@@ -49,7 +49,6 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    add_state_dependency (_parent, _update_size);
     Process::finalize_construction (p);
   }
 
@@ -73,7 +72,6 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    add_state_dependency (_parent, _update_size);
     Process::finalize_construction (p);
   }
 
@@ -96,7 +94,6 @@ namespace djnn
 
     _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
-    add_state_dependency (_parent, _update_size);
   }
 
   Text::~Text ()
@@ -194,6 +191,19 @@ namespace djnn
       if (it != _symtable.end ())
         delete it->second;
     }
+  }
+
+  void
+  Text::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _update_size);
+    }
+
+    add_state_dependency (p, _update_size);
+    
+    _parent = p; 
   }
 
   Process*

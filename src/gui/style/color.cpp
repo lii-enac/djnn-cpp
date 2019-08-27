@@ -104,7 +104,6 @@ namespace djnn
     Graph::instance ().add_edge (_action, _l);
     Graph::instance ().add_edge (_action, _c);
     Graph::instance ().add_edge (_action, _h);
-    add_state_dependency (_parent, _action);
     Process::finalize_construction (p);
   }
 
@@ -128,6 +127,19 @@ namespace djnn
     delete _b;
     delete _g;
     delete _r;
+  }
+
+  void
+  RGBToLCHConverter::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
   }
 
   void
@@ -220,8 +232,20 @@ namespace djnn
     Graph::instance ().add_edge (_action, _r);
     Graph::instance ().add_edge (_action, _g);
     Graph::instance ().add_edge (_action, _b);
-    add_state_dependency (_parent, _action);
     Process::finalize_construction (p);
+  }
+
+  void
+  LCHToRGBConverter::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
   }
 
   LCHToRGBConverter::~LCHToRGBConverter ()

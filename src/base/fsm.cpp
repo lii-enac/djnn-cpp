@@ -98,18 +98,6 @@ namespace djnn
   }
 
   void
-  FSM::set_parent (Process* p)
-  { 
-    /* in case of re-parenting remove edge dependency in graph */
-    // if (_parent){
-    //   remove_state_dependency (_parent, _state_dependency);
-    // }
-
-    add_state_dependency (p, _state_dependency);
-    _parent = p; 
-  }
-
-  void
   FSMTransition::init_FSMTransition () 
   {
     _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
@@ -275,26 +263,26 @@ namespace djnn
     _fsm_state = new TextProperty (this, "state", "");
     _initial = new TextProperty (this, "initial", "");
     
-    // Note: this is made by Container::addchild () --> set_parent () --> add_state_dependency ()
-    //add_state_dependency (_parent, _fsm_state); 
-    _state_dependency = _fsm_state;
   }
 
   FSM::FSM () : Process ()
   {
     init_FSM ();
+    _state_dependency = _fsm_state;  
   }
 
   FSM::FSM (Process *p, const string &n) : 
     Process (p, n), _cur_state (nullptr), _priority (0) 
   { 
     init_FSM ();
-    Process::finalize_construction (p);
+
+    /* with state_dependency */
+    Process::finalize_construction (p, _fsm_state);
   }
 
   FSM::~FSM ()
   {
-    remove_state_dependency (_parent, _fsm_state);
+    remove_state_dependency (_parent, _state_dependency);
 
     for (FSMTransition* t : _transitions) {
         delete t;
@@ -305,8 +293,20 @@ namespace djnn
 
     delete _initial;
     delete _fsm_state;
-
   }
+
+  void
+  FSM::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _state_dependency);
+    }
+
+    add_state_dependency (p, _state_dependency);
+    _parent = p; 
+  }
+
   void
   FSM::impl_activate ()
   {

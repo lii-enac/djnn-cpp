@@ -99,20 +99,32 @@ namespace djnn
     _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION, true);
     _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION, true);
     _c_index = new Coupling (_index, ACTIVATION, _change_index_action, ACTIVATION, true);
-    _state_dependency = _change_index_action;
   }
 
   SwitchList::SwitchList (bool loop) :
       AbstractList (), _cur_item (nullptr)
   {
     init (loop);
+    _state_dependency = _change_index_action;
   }
 
   SwitchList::SwitchList (Process* parent, const string& name, bool loop) :
       AbstractList (parent, name), _cur_item (nullptr)
   {
     init (loop);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, _change_index_action);
+  }
+
+  void
+  SwitchList::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _state_dependency);
+    }
+
+    add_state_dependency (p, _state_dependency);
+    _parent = p; 
   }
 
   SwitchList::~SwitchList ()

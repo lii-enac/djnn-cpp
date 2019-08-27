@@ -247,6 +247,7 @@ namespace djnn
     virtual ~BoundedValue ();
     void serialize (const string& type) override;
   protected:
+    void set_parent (Process* p) override;
     AbstractProperty  *_min, *_max, *_input, *_result;
     Coupling *_c_min, *_c_max, *_c_input;
     Process *_action;

@@ -71,7 +71,7 @@ namespace djnn {
     void set_item (Process *item) { _cur_item = item; }
     IntProperty* index () { return _index; }
     BoolProperty* loop () { return _loop; }
-    void set_parent (Process* p) override { add_state_dependency (p, _state_dependency); _parent = p; }
+    void set_parent (Process* p) override;
     
   private:
     void init (bool loop);

@@ -73,6 +73,7 @@ namespace djnn {
     virtual ~AbstractAssignment ();
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
   protected:
+    void set_parent (Process* p) override;
     Process* _src;
     AbstractProperty* _dst;
     RefProperty *_ref_src, *_ref_dst;

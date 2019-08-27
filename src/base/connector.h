@@ -55,6 +55,7 @@ namespace djnn {
     virtual ~Connector ();
 
   protected:
+    void set_parent (Process* p) override;
     void init_connector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
@@ -78,6 +79,7 @@ namespace djnn {
     virtual ~PausedConnector ();
 
   protected:
+    void set_parent (Process* p) override;
     void init_pausedconnector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;

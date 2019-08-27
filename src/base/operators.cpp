@@ -56,7 +56,6 @@ namespace djnn
     Graph::instance ().add_edge (_left, _action);
     Graph::instance ().add_edge (_right, _action);
     Graph::instance ().add_edge (_action, _result);
-    add_state_dependency (_parent, _action);
   }
 
   BinaryOperator::~BinaryOperator ()
@@ -72,6 +71,19 @@ namespace djnn
     delete _left;
     delete _right;
     delete _result;
+  }
+
+  void
+  BinaryOperator::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
   }
 
   UnaryOperatorAction::UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :

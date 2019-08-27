@@ -114,7 +114,6 @@ namespace djnn
     Graph::instance ().add_edge (_key, _action);
     Graph::instance ().add_edge (_action, _result);
 
-    add_state_dependency (_parent, _action);
     Process::finalize_construction (p);
   }
 
@@ -129,6 +128,18 @@ namespace djnn
     delete _found;
     delete _not_found;
     delete _action;
+  }
+
+  void
+  Finder::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    _parent = p; 
   }
 
   void

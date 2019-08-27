@@ -58,6 +58,7 @@ namespace djnn {
     void update_graph () override;
     void serialize (const string& format) override;
   private:
+    void set_parent (Process* p) override;
     void init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate);
     Process *_src, *_dst;
     RefProperty *_ref_src, *_ref_dst;

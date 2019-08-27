@@ -53,7 +53,6 @@ namespace djnn
     _c_step->disable ();
     Graph::instance ().add_edge (_step, _action);
     Graph::instance ().add_edge (_action, _output);
-    add_state_dependency (_parent, _action);
     Process::finalize_construction (p);
   }
 
@@ -72,6 +71,18 @@ namespace djnn
     delete _damping;
     delete _k;
     delete _m;
+  }
+
+  void
+  Oscillator::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    _parent = p; 
   }
 
   void

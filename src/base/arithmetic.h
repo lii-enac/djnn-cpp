@@ -299,6 +299,7 @@ private:
   init_incr (bool isModel);
   AbstractProperty *_delta, *_state;
 protected:
+  void set_parent (Process* p) override;
   void serialize (const string& type) override;
 };
 
@@ -322,6 +323,7 @@ public:
   void impl_activate () override;
   void impl_deactivate () override;
 protected:
+  void set_parent (Process* p) override;
   void serialize (const string& type) override;
 private:
   AbstractProperty *_input, *_clamp_min, *_clamp_max, *_result;

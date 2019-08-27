@@ -41,6 +41,7 @@ namespace djnn
       void impl_deactivate () override;
       void serialize (const string& type) override;
     private:
+      void set_parent (Process* p) override;
       Container* _container;
       TextProperty *_path, *_key;
       RefProperty *_result;

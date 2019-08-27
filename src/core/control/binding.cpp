@@ -89,13 +89,26 @@ namespace djnn
         _c_src = new Coupling (_src, DEACTIVATION, _action, ACTIVATION, true);
       if (_dst) {
         Graph::instance ().add_edge (_src, _dst);
-        add_state_dependency (_parent, _dst);
         _c_src->disable ();
         _has_coupling = true;
       }
     }
     if (_update_src) _update_src->impl_activate ();
     if (_update_dst) _update_dst->impl_activate ();
+  }
+
+  void
+  Binding::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent && _dst) {
+       remove_state_dependency (_parent, _dst);
+    }
+
+    if (_dst)
+      add_state_dependency (p, _dst);
+
+    _parent = p; 
   }
 
   void

@@ -77,6 +77,7 @@ namespace djnn
     void set_width (double width) { this->width ()->set_value (width, true); }
     void set_height (double height) { this->height ()->set_value (height, true); }
   private:
+    void set_parent (Process* p) override;
     struct raw_props_t { double x, y, dx, dy, fsize; int dxU, dyU, width, height, encoding, fstyle, fweight; string text, ffamily;};
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 

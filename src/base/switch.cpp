@@ -26,12 +26,13 @@ namespace djnn
       Container (parent, name)
   {
     init_switch (initial);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, _action);
   }
 
   Switch::Switch (const string &initial)
   {
     init_switch (initial);
+    _state_dependency = _action;
   }
 
   void
@@ -45,28 +46,14 @@ namespace djnn
     */
     _branch_name = new TextProperty (nullptr, "switch_state", initial);
     add_symbol ("state", _branch_name);
-    _action = new SwitchAction (this, get_name ());
-    _state_dependency = _action;
+    _action = new SwitchAction (this, "switch_action");
     _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
-
-    // Note: this is made by Container::addchild () --> set_parent () --> add_state_dependency ()
-    //add_state_dependency (_parent, _action);
-
-    //DEBUG
-    // std::cerr << "init_switch - ADD_STATE (if exist) : " <<
-    //   ( _parent ? _parent->get_name () + "/" : "/" ) << get_name () <<  " _parent->state_dep: " <<  ( _parent ? _parent->state_dependency () : nullptr) << " ----- " <<
-    //   ( _parent ? _parent->get_name () + "/" : "PARENT_NULL" ) << " - " << _action->get_name () << endl;
 
     _cur_branch = nullptr;
   }
 
   Switch::~Switch ()
   {
-     //DEBUG
-     // std::cerr << "~switch- REMOVE_STATE (if exist)  : " <<
-     //  ( _parent ? _parent->get_name () + "/" : "/" ) << get_name () <<  " _parent->state_dep: " <<  ( _parent ? _parent->state_dependency () : nullptr) << " ----- " <<
-     //  ( _parent ? _parent->get_name () + "/" : "PARENT_NULL" ) << " - " << _action->get_name () << endl;
-
     remove_state_dependency (_parent, _state_dependency);
 
     /* note:
@@ -118,6 +105,18 @@ namespace djnn
       return;
     if (_cur_branch != nullptr)
       _cur_branch->pick ();
+  }
+
+  void
+  Switch::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _state_dependency);
+    }
+
+    add_state_dependency (p, _state_dependency);
+    _parent = p; 
   }
 
   void

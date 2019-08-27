@@ -101,6 +101,7 @@ namespace djnn {
     void impl_deactivate () override;
     void serialize (const string& type) override;
   private:
+    void set_parent (Process* p) override;
     List* _list;
     Process *_next, *_previous, *_reset;
     RefProperty *_iter;

@@ -141,6 +141,7 @@ namespace djnn
     void impl_deactivate () override;
     void serialize (const string &type) override;
   private:
+    void set_parent (Process* p) override;
     TextProperty *_input, *_state;
     Spike *_del;
     AccumulateAction *_acc_action;
@@ -184,6 +185,7 @@ namespace djnn
     void impl_deactivate () override;
     void serialize (const string& type) override;
   private:
+    void set_parent (Process* p) override;
     void init (double initial, int decimal);
     DoubleProperty* _input;
     IntProperty* _decimal;

@@ -95,15 +95,8 @@ namespace djnn
             "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:"
                 + dspec + ")\n");
       }
-      _src = f; //dynamic_cast<AbstractProperty*> (f);
-      /*
-       if (_src == nullptr) {
-       warning (
-       this,
-       "the SOURCE of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
-       + ", dst spec:" + dspec + ")\n");
-       }
-       */
+      _src = f; 
+
     }
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     if (ref_dst_pair.first != nullptr) {
@@ -112,7 +105,6 @@ namespace djnn
       _update_dst->impl_activate ();
       _c_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
       Graph::instance ().add_edge (ref_dst_pair.first, _update_dst);
-      add_state_dependency (_parent, _update_dst);
     } else {
       Process *f = dst->find_component (dspec);
       if (f == 0) {
@@ -129,6 +121,26 @@ namespace djnn
                 + ", dst spec:" + dspec + ")\n");
       }
     }
+  }
+
+  void
+  AbstractAssignment::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+      if (_update_dst)
+        remove_state_dependency (_parent, _update_dst);
+      if (_dst)
+        remove_state_dependency (_parent, _dst);
+    }
+
+   /* add new */
+    if (_update_dst)
+      add_state_dependency (p, _update_dst);
+    if (_dst)
+      add_state_dependency (p, _dst);
+
+    _parent = p; 
   }
 
   void
@@ -224,7 +236,6 @@ namespace djnn
     if (_src && _dst) {
       Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
-      add_state_dependency (_parent, _dst);
     }
   }
 

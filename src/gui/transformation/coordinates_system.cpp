@@ -71,7 +71,6 @@ namespace djnn
     Graph::instance().add_edge(_inY, _action);
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
-    add_state_dependency (_parent, _action);
 
     Process::finalize_construction (p);
   }
@@ -92,6 +91,19 @@ namespace djnn
     delete _inX;
     delete _inY;
 
+  }
+
+  void
+  ScreenToLocal::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
   }
 
   void
@@ -155,7 +167,6 @@ namespace djnn
     Graph::instance().add_edge(_inY, _action);
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
-    add_state_dependency (_parent, _action);
 
     Process::finalize_construction (p);
   }
@@ -176,6 +187,19 @@ namespace djnn
     delete _inX;
     delete _inY;
 
+  }
+
+  void
+  LocalToScreen::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _action);
+    }
+
+    add_state_dependency (p, _action);
+    
+    _parent = p; 
   }
 
   void

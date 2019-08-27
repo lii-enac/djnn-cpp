@@ -616,6 +616,7 @@ namespace djnn
       void impl_activate () override;
       void impl_deactivate () override;
     private:
+      void set_parent (Process* p) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;
@@ -645,6 +646,7 @@ namespace djnn
       void impl_activate () override;
       void impl_deactivate () override;
     private:
+      void set_parent (Process* p) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;

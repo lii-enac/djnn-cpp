@@ -312,9 +312,6 @@ namespace djnn
     Graph::instance ().add_edge (_next, _next_action);
     Graph::instance ().add_edge (_previous, _previous_action);
     Graph::instance ().add_edge (_reset, _reset_action);
-    add_state_dependency (_parent, _next_action);
-    add_state_dependency (_parent, _previous_action);
-    add_state_dependency (_parent, _reset_action);
     Process::finalize_construction (parent);
   }
 
@@ -338,6 +335,23 @@ namespace djnn
     delete _reset;
     delete _previous;
     delete _next;
+  }
+
+  void
+  BidirectionalListIterator::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent) {
+       remove_state_dependency (_parent, _next_action);
+       remove_state_dependency (_parent, _previous_action);
+       remove_state_dependency (_parent, _reset_action);
+    }
+    
+    add_state_dependency (p, _next_action);
+    add_state_dependency (p, _previous_action);
+    add_state_dependency (p, _reset_action);
+
+    _parent = p; 
   }
 
   void

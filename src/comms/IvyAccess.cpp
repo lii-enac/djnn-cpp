@@ -193,7 +193,6 @@ namespace djnn
   _out_c = new Coupling (_out , ACTIVATION, _out_a, ACTIVATION );
   _out_c->disable();
   Graph::instance().add_edge(_out, _out_a);
-  add_state_dependency (_parent, _out_a);
 
     /* ARRIVING child */
   _arriving = new TextProperty ( this,  "arriving", "");
@@ -223,6 +222,19 @@ IvyAccess::~IvyAccess ()
  // delete _in.back();
  // _in.pop_back();
  //}
+}
+
+void
+IvyAccess::set_parent (Process* p)
+{ 
+  /* in case of re-parenting remove edge dependency in graph */
+  if (_parent) {
+      remove_state_dependency (_parent, _out_a);
+  }
+
+  add_state_dependency (p, _out_a);
+    
+  _parent = p; 
 }
 
 void IvyAccess::set_arriving(string v) {
