@@ -51,7 +51,7 @@ namespace djnn {
     {
     public:
       FSMTransitionAction (Process *p, const string &n, FSMState* src, FSMState* dst, Process* action) :
-	Action (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
+	       Action (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
       void impl_deactivate () {};

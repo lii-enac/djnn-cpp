@@ -46,9 +46,9 @@ namespace djnn {
     void draw () override;
     void pick () override;
     virtual ~Switch ();
-    void set_parent (Process* p) override;
     void serialize (const string& type) override;
   private:
+    void set_parent (Process* p) override;
     void init_switch (const string &initial);
     void change_branch ();
     friend void SwitchAction::impl_activate ();

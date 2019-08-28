@@ -23,7 +23,7 @@ namespace djnn
   using namespace std;
 
   Switch::SwitchAction::SwitchAction (Switch *parent, const string &name) :
-        Action (parent, "action"),  _sw (parent) 
+        Action (parent, name),  _sw (parent) 
   {
       /* note:
       * avoid to add the action in Container::_children list
@@ -63,6 +63,7 @@ namespace djnn
     add_symbol ("state", _branch_name);
     _action = new SwitchAction (this, "switch_action");
     _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
+    _c_branch->disable ();
 
     _cur_branch = nullptr;
   }
@@ -92,7 +93,6 @@ namespace djnn
   {
     _c_branch->enable ();
     change_branch ();
-    //set_activated ();
     set_activation_state (ACTIVATED);
   }
 
