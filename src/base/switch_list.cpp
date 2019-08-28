@@ -25,6 +25,21 @@ namespace djnn
 {
   using namespace std;
 
+  SwitchList::Next::Next  (SwitchList *parent) : 
+    Action (parent, "_next_action"), _sw (parent)
+  {
+      /* note:
+      * avoid to add the action in Container::_children list
+      * otherwise there is a side effect on ~switch which 
+      * occured after ~container which already deleted _children
+      */ 
+       
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+  }
+
   void
   SwitchList::Next::impl_activate ()
   {
@@ -43,6 +58,21 @@ namespace djnn
     _sw->index ()->set_value ((int)inext, true);
   }
 
+  SwitchList::Previous::Previous  (SwitchList *parent) : 
+    Action (parent, "_previous_action"), _sw (parent)
+  {
+      /* note:
+      * avoid to add the action in Container::_children list
+      * otherwise there is a side effect on ~switch which 
+      * occured after ~container which already deleted _children
+      */ 
+       
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+  }
+
   void
   SwitchList::Previous::impl_activate ()
   {
@@ -59,6 +89,21 @@ namespace djnn
       iprev = 1;
     }
     _sw->index ()->set_value (iprev, true);
+  }
+
+  SwitchList::ChangeIndex::ChangeIndex  (SwitchList *parent) : 
+    Action (parent, "_change_index_action"), _sw (parent)
+  {
+      /* note:
+      * avoid to add the action in Container::_children list
+      * otherwise there is a side effect on ~switch which 
+      * occured after ~container which already deleted _children
+      */ 
+       
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
   }
 
   void
@@ -85,13 +130,13 @@ namespace djnn
   {
     /* 
      * note:
-     * do not add directly Property into the symbol switchlist's table 
+     * do not add directly Property, spikes and actions into the symbol switchlist's table 
      * switchlist sympbol table should only containt branch
      */
-    _loop = new BoolProperty (loop);
-    _index = new IntProperty (1);
-    _next = new Spike ();
-    _previous = new Spike ();
+    _loop = new BoolProperty (nullptr, "_loop", loop);
+    _index = new IntProperty (nullptr, "_index", 1);
+    _next = new Spike (nullptr, "_next");
+    _previous = new Spike (nullptr, "_previous");
     _next_action = new Next (this);
     _previous_action = new Previous (this);
     _change_index_action = new ChangeIndex (this);
@@ -99,6 +144,9 @@ namespace djnn
     _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION, true);
     _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION, true);
     _c_index = new Coupling (_index, ACTIVATION, _change_index_action, ACTIVATION, true);
+    _c_next->disable ();
+    _c_previous->disable ();
+    _c_index->disable ();
   }
 
   SwitchList::SwitchList (bool loop) :

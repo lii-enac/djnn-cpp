@@ -22,6 +22,21 @@ namespace djnn
 {
   using namespace std;
 
+  Switch::SwitchAction::SwitchAction (Switch *parent, const string &name) :
+        Action (parent, "action"),  _sw (parent) 
+  {
+      /* note:
+      * avoid to add the action in Container::_children list
+      * otherwise there is a side effect on ~switch which 
+      * occured after ~container which already deleted _children
+      */ 
+       
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+  }
+
   Switch::Switch (Process *parent, const string &name, const string &initial) :
       Container (parent, name)
   {
