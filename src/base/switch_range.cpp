@@ -26,11 +26,11 @@ namespace djnn
                                         bool right_open) :
       Container (parent, name), _left_open (left_open), _right_open (right_open)
   {
-    _lower = new DoubleProperty (lower);
-    _upper = new DoubleProperty (upper);
+    _lower = new DoubleProperty (nullptr, "_lower", lower);
+    _upper = new DoubleProperty (nullptr, "_upper", upper);
     add_symbol ("lower", _lower);
     add_symbol ("upper", _upper);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent);
   }
 
   SwitchRangeBranch::~SwitchRangeBranch ()
@@ -67,16 +67,34 @@ namespace djnn
     return l && u;
   }
 
+
+  SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange *parent, const string &name) :
+      Action (parent, name),  _sw (parent) 
+  {
+    /* note:
+      * avoid to add the action in Container::_children list
+      * otherwise there is a side effect on ~switch which 
+      * occured after ~container which already deleted _children
+      */ 
+       
+    if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+          
+  }
+
   SwitchRange::SwitchRange (Process *parent, const string &name, double initial) :
       Container (parent, name)
   {
     init_switch_range (initial);
-    Process::finalize_construction ();
+    Process::finalize_construction (parent, _action);
   }
 
   SwitchRange::SwitchRange (double initial)
   {
     init_switch_range (initial);
+    _state_dependency = _action;
   }
 
   void
@@ -84,26 +102,25 @@ namespace djnn
   {
     _initial = initial;
     /*  added to symTable but not in _children */
-    _branch_range = new DoubleProperty (initial);
+    _branch_range = new DoubleProperty (nullptr, "switch_state", initial);
     add_symbol ("state", _branch_range);
-    _action = new SwitchRangeAction (this, get_name ());
-    _state_dependency = _action;
+    _action = new SwitchRangeAction (this, "switch_range_action");
     _c_branch = new Coupling (_branch_range, ACTIVATION, _action, ACTIVATION, true);
-    add_state_dependency (_parent, _action);
+    _c_branch->disable ();
 
     _cur_branch = nullptr;
   }
 
   SwitchRange::~SwitchRange ()
   {
+    remove_state_dependency (_parent, _state_dependency);
+
     /* note:
      * We have to delete all content BEFORE deleting _action and _branch_name
      * especially all the state_dependency
      */
     Container::clean_up_content ();
 
-    remove_state_dependency (_parent, _action);
-   
     delete _c_branch;
     /* note :
      * Here, we can delete _action because is has not been add into _children
@@ -112,6 +129,18 @@ namespace djnn
      * occured after ~container which already deleted _children */
     delete _action;
     delete _branch_range;
+  }
+
+  void
+  SwitchRange::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (_parent){
+       remove_state_dependency (_parent, _state_dependency);
+    }
+
+    add_state_dependency (p, _state_dependency);
+    _parent = p; 
   }
 
   void

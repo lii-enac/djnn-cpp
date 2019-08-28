@@ -41,15 +41,7 @@ namespace djnn {
     class SwitchRangeAction : public Action
     {
     public:
-      SwitchRangeAction (SwitchRange *parent, const string &name) :
-        Action (parent, "action"),  _sw (parent) {
-          /* removed but keep comment as legacy
-           * avoid to add the action in Container::_children list
-           * otherwise there is a side effect on ~switch which 
-           * occured after ~container which already deleted _children
-           */ 
-          //Process::finalize_construction (); 
-        }
+      SwitchRangeAction (SwitchRange *parent, const string &name);
       virtual ~SwitchRangeAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
@@ -68,6 +60,7 @@ namespace djnn {
     virtual ~SwitchRange ();
     void serialize (const string& type) override;
   private:
+    void set_parent (Process* p) override;
     void init_switch_range (double initial);
     void change_branch ();
     friend void SwitchRangeAction::impl_activate ();
