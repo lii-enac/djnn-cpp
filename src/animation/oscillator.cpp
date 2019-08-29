@@ -39,7 +39,7 @@ namespace djnn
   }
 
   Oscillator::Oscillator (Process *p, const string &n) :
-      Process (p, n)
+      Process (n)
   {
     _m = new DoubleProperty (this, "m", 1);
     _k = new DoubleProperty (this, "k", 1);

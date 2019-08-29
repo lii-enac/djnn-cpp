@@ -38,7 +38,7 @@ namespace djnn
   }
 
   World::World (Process *p, const string& n, double x, double y, double z) :
-      Process (p, n), raw_props
+      Process (n), raw_props
         { .x = x, .y = y, .z = z, .dt = 0.016 }, _dt (nullptr)
 
   {
@@ -119,7 +119,7 @@ namespace djnn
    */
 
   PhyObj::PhyObj (Process *p, const string& n, double x, double y, double z, double mass) :
-      Process (p, n), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
+      Process (n), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
           nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr), _cx (
           nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _update_from_engine (
           false), raw_props

@@ -27,7 +27,7 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(Process *p, const string &n, Process* shape, Process* matrix) : Process (p, n)
+  ScaleRotateTranslate::ScaleRotateTranslate(Process *p, const string &n, Process* shape, Process* matrix) : Process (n)
   {
     if (shape == nullptr || matrix == nullptr) {
       error (this, "Shape or Matrix cannot be null in ScaleRotateTranslate constructor");

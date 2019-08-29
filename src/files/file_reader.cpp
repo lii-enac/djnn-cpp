@@ -26,7 +26,7 @@ namespace djnn
     ((FileReader*)_parent)->read ();
   }
 
-  FileReader::FileReader (Process *p, const string &n, const string& filename) : Process (p, n)
+  FileReader::FileReader (Process *p, const string &n, const string& filename) : Process (n)
   {
     _input = new TextProperty (this, "input", filename);
     _output = new TextProperty (this, "output", "");

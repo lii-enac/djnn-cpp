@@ -249,7 +249,7 @@ namespace djnn
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
-      Process (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
+      Process (name), _list (list), _iter (iter), _index (index), _forward (forward)
   {
   }
 
@@ -274,7 +274,7 @@ namespace djnn
 
   BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const string& name,
                                                        IntProperty *index) :
-      Process (parent, name), _index (index)
+      Process (name), _index (index)
   {
   }
 
@@ -288,7 +288,7 @@ namespace djnn
 
   BidirectionalListIterator::BidirectionalListIterator (Process *parent, const string& name,
                                                         Process* list) :
-      Process (parent, name)
+      Process (name)
   {
     _list = dynamic_cast<List*> (list);
     if (_list == nullptr) {
@@ -389,7 +389,7 @@ namespace djnn
   }
 
   ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model) :
-      Process (parent, name, model), _action (action)
+      Process (name, model), _action (action)
   {
     Container *l = dynamic_cast<Container*> (list);
     if (l == nullptr)

@@ -47,7 +47,7 @@ namespace djnn
   }
 
   TextPrinter::TextPrinter (Process *p, const string &n) :
-      Process (p, n)
+      Process (n)
   {
     init ();
     Process::finalize_construction (p);
@@ -164,7 +164,7 @@ namespace djnn
   }
 
   DoubleFormatter::DoubleFormatter (Process* parent, const string &name, double initial, int decimal) :
-      Process (parent, name)
+      Process (name)
   {
     init (initial, decimal);
     Process::finalize_construction (parent);
@@ -207,7 +207,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  TextAccumulator::TextAccumulator (Process *p, const string &n, const string &init) : Process (p, n)
+  TextAccumulator::TextAccumulator (Process *p, const string &n, const string &init) : Process (n)
   {
     _input = new TextProperty (this, "input", "");
     _state = new TextProperty (this, "state", init);

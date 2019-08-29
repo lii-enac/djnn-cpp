@@ -96,7 +96,7 @@ namespace djnn
   }
 
   Finder::Finder (Process *p, const string &n, Process *container, const string &path) :
-      Process (p, n)
+      Process (n)
   {
     _container = dynamic_cast<Container*> (container);
     if (_container == nullptr) {

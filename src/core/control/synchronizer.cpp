@@ -24,7 +24,7 @@ namespace djnn
   using namespace std;
 
   Synchronizer::Synchronizer (Process *p, const string &n, Process* dst, const string & dspec) :
-      Process (p, n)
+      Process (n)
   {
     if (dst == nullptr) {
       error (this, "dst argument cannot be null in synchronizer creation (" + n + ", " + dspec + ")");

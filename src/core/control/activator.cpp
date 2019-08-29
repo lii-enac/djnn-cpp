@@ -23,7 +23,7 @@ namespace djnn
   using namespace std;
 
   Activator::Activator (Process* parent, const string &name, Process* action) :
-      Process (parent, name), _action (action)
+      Process (name), _action (action)
   {
     if (_action == nullptr) {
       error  (this, "action not found in activator " + name);
@@ -33,7 +33,7 @@ namespace djnn
   }
 
   Activator::Activator (Process* parent, const string &name, Process* action, const string &spec) :
-      Process (parent, name)
+      Process (name)
   {
     _action = action->find_component (spec);
     if (_action == nullptr) {

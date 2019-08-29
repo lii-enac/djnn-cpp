@@ -58,7 +58,7 @@ namespace djnn
     d->get_map ()[key] = value;
   }
 
-  Dictionary::Dictionary (Process *parent, const string &name) : Process (parent, name)
+  Dictionary::Dictionary (Process *parent, const string &name) : Process (name)
   {
     _key = new RefProperty (this, "key", nullptr);
     _value = new RefProperty (this, "value", nullptr);

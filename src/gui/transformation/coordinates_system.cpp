@@ -48,7 +48,7 @@ namespace djnn
   }
 
   ScreenToLocal::ScreenToLocal (Process *p, const string &n, Process* shape) :
-  Process (p, n)
+  Process (n)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)
@@ -144,7 +144,7 @@ namespace djnn
   }
 
   LocalToScreen::LocalToScreen (Process *p, const string &n, Process* shape) :
-  Process (p, n)
+  Process (n)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)

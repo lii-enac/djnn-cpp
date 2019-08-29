@@ -34,7 +34,7 @@ namespace djnn
 
 
   BinaryOperator::BinaryOperator (Process *p, const string &n) :
-      Process (p, n), _left (nullptr), _right (nullptr), _result (nullptr), _c_left (nullptr), _c_right (
+      Process (n), _left (nullptr), _right (nullptr), _result (nullptr), _c_left (nullptr), _c_right (
           nullptr), _action (nullptr)
   {
   }
@@ -86,7 +86,7 @@ namespace djnn
   }
 
   UnaryOperator::UnaryOperator (Process *p, const string &n) :
-      Process (p, n), _input (nullptr), _output (), _c_input (nullptr), _action (nullptr)
+      Process (n), _input (nullptr), _output (), _c_input (nullptr), _action (nullptr)
   {
   }
 

@@ -74,7 +74,7 @@ namespace djnn {
   class Process
   {
   public:
-    Process (Process *parent, const string& name, bool model = false);
+    Process (const string& name, bool model = false);
     Process (bool model = false);
     virtual ~Process ();
     virtual process_type_e get_cpnt_type () const { return UNDEFINED_T; }

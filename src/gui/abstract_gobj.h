@@ -44,7 +44,7 @@ namespace djnn
     AbstractGObj () : Process(), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
-    AbstractGObj (Process *p, const std::string& n) : Process (p, n), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
+    AbstractGObj (Process *p, const std::string& n) : Process (n), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
@@ -88,7 +88,7 @@ namespace djnn
     class UndelayedSpike : public Process
     {
     public:
-      UndelayedSpike (UpdateDrawing *p, const string &n)  : Process (p, n), _ud (p) { set_is_model (true); Process::finalize_construction (p); }
+      UndelayedSpike (UpdateDrawing *p, const string &n)  : Process (n), _ud (p) { set_is_model (true); Process::finalize_construction (p); }
       virtual ~UndelayedSpike () {}
       void post_activate () override { set_activation_state (DEACTIVATED); }
       void impl_activate () override {};

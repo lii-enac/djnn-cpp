@@ -28,7 +28,7 @@ namespace djnn
 
   int Process::_nb_anonymous = 0;
 
-  Process::Process (Process* parent, const string& name, bool model) :
+  Process::Process (const string& name, bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
   {
     set_is_model (model);
@@ -45,7 +45,7 @@ namespace djnn
   }
 
   Process::Process (bool model) :
-      Process(nullptr, "  ", model)
+      Process("  ", model)
   {
   }
 

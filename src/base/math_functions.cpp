@@ -219,7 +219,7 @@ namespace djnn
   }
 
   BoundedValue::BoundedValue (Process *p, const string &n, double min, double max, double init_val) :
-      Process (p, n)
+      Process (n)
   {
     _min = new DoubleProperty (this, "min", min);
     _max = new DoubleProperty (this, "max", max);

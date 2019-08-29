@@ -40,7 +40,7 @@ namespace djnn
   }
 
   Container::Container (Process* parent, const string& name) :
-      Process (parent, name)
+      Process (name)
   {
     Container* c = dynamic_cast<Container*> (parent);
     if (c)

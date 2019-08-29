@@ -48,7 +48,7 @@ namespace djnn
   }
 
   HermiteCurve::HermiteCurve (Process *p, const string &n, double p1, double p2, double t1, double t2) :
-      Process (p, n)
+      Process (n)
   {
     _input = new DoubleProperty (this, "input", 0);
     _p1 = new DoubleProperty (this, "p1", p1);

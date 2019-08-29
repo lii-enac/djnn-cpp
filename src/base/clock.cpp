@@ -37,7 +37,7 @@ namespace djnn
   }
 
   Clock::Clock (Process *p, const std::string& n, milliseconds period) :
-      Process (p, n)
+      Process (n)
   {
     _period = new IntProperty (this, "period", period.count ());
     _elapsed = new DoubleProperty (this, "elapsed", 0);
@@ -53,7 +53,7 @@ namespace djnn
   }
 
   Clock::Clock (Process *p, const std::string& n, int period) :
-      Process (p, n)
+      Process (n)
   {
     _period = new IntProperty (this, "period", period);
     _elapsed = new DoubleProperty (this, "elapsed", 0);

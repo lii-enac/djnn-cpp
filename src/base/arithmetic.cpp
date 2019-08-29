@@ -287,7 +287,7 @@ namespace djnn
   }
 
   Incr::Incr (Process *parent, string name, bool isModel) :
-      Process (parent, name)
+      Process (name)
   {
     init_incr (isModel);
     Process::finalize_construction (parent);
@@ -340,7 +340,7 @@ namespace djnn
                                                                     AbstractProperty* clamp_min,
                                                                     AbstractProperty* clamp_max,
                                                                     AbstractProperty* result) :
-      Process (parent, name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
+      Process (name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
   {
     Process::finalize_construction (parent);
   }
@@ -364,7 +364,7 @@ namespace djnn
 
   AdderAccumulator::AdderAccumulator (Process* parent, const string &name, double input, double clamp_min,
                                       double clamp_max) :
-      Process (parent, name)
+      Process (name)
   {
     _input = new DoubleProperty (this, "input", input);
     _clamp_min = new DoubleProperty (this, "clamp_min", clamp_min);

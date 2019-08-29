@@ -81,7 +81,7 @@ namespace djnn
   }
 
   RGBToLCHConverter::RGBToLCHConverter (Process *p, const std::string &n) :
-      Process (p, n)
+      Process (n)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);
@@ -208,7 +208,7 @@ namespace djnn
   }
 
   LCHToRGBConverter::LCHToRGBConverter (Process *p, const std::string &n) :
-      Process (p, n)
+      Process (n)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);

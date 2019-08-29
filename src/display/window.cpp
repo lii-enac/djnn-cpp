@@ -77,7 +77,7 @@ namespace djnn
 
   Window::Window (Process *p, const std::string &n, const std::string &title, double x, double y, double w,
 		  double h) :
-      Process (p, n), _refresh (false), _holder (nullptr)
+      Process (n), _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
     Process::finalize_construction (p);
@@ -116,7 +116,7 @@ namespace djnn
   }
 
   Cursor::Cursor (Process *p, const string &n, const string &path, int hotX, int hotY) :
-      Process (p, n), raw_props
+      Process (n), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
   {

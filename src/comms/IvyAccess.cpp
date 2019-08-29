@@ -181,7 +181,7 @@ namespace djnn
 
  IvyAccess::IvyAccess (Process *p, const std::string& n, 
   const std::string& bus, const std::string& appname, const std::string& ready, bool isModel) :
- Process (p, n, isModel)
+ Process (n, isModel)
  {
   _bus =  bus;
   _appname =  appname;

@@ -34,7 +34,7 @@ namespace djnn
   }
 
   Set::Set (Process* parent, const string& name) :
-      Process (parent, name)
+      Process (name)
   {
     _added = new RefProperty (nullptr);
     _removed = new RefProperty (nullptr);
@@ -169,7 +169,7 @@ namespace djnn
   }
 
   SetIterator::SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model) :
-      Process (parent, name, model), _set (set), _action (action)
+      Process (name, model), _set (set), _action (action)
   {
     Set *s = dynamic_cast<Set*> (set);
     if (s == nullptr)

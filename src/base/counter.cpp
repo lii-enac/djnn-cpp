@@ -23,7 +23,7 @@
 namespace djnn
 {
   Counter::Counter (Process *p, const std::string& n, double init, double delta) :
-      Process (p, n)
+      Process (n)
   {
     _reset = new Spike (this, "reset");
     _step = new Spike (this, "step");

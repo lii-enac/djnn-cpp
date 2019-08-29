@@ -34,7 +34,7 @@ namespace djnn
   }
 
   Timer::Timer (Process *p, const std::string& n, chrono::milliseconds period) :
-      Process (p, n)
+      Process (n)
   {
     _delay = new IntProperty (this, "delay", period.count ());
     _end = new Blank (this, "end");
@@ -48,7 +48,7 @@ namespace djnn
   }
 
   Timer::Timer (Process *p, const std::string& n, int period) :
-      Process (p, n)
+      Process (n)
   {
     _delay = new IntProperty (this, "delay", period);
     _end = new Blank (this, "end");

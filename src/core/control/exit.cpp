@@ -25,7 +25,7 @@ namespace djnn
   using namespace std;
 
   Exit::Exit (Process* p, const string &name, int value, bool isModel) :
-      Process (p, name)
+      Process (name)
   {
     set_is_model (isModel);
     _value = new IntProperty (this, "value", value);

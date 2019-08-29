@@ -79,7 +79,7 @@ namespace djnn
   }
 
   Touch::Touch (Process *p, const string &n, int id, double init_x, double init_y, double init_pressure) :
-      Process (p, n), _shape (nullptr)
+      Process (n), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);

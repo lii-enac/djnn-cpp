@@ -29,7 +29,7 @@ namespace djnn
     ((Properties*)_parent)->add_property ();
   }
 
-  Properties::Properties (Process *p, const string &n, const string &filename) : Process (p, n)
+  Properties::Properties (Process *p, const string &n, const string &filename) : Process (n)
   {
     _input = new TextProperty (this, "input", "");
     _action = new PropertiesAction (this, "action");

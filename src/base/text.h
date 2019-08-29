@@ -109,7 +109,7 @@ namespace djnn
   private:
     class AccumulateAction : public Process {
       public:
-        AccumulateAction (Process *p, const string &n, TextProperty *input, TextProperty *state) : Process (p, n), _input (input), _state (state) {}
+        AccumulateAction (Process *p, const string &n, TextProperty *input, TextProperty *state) : Process (n), _input (input), _state (state) {}
         virtual ~AccumulateAction () {}
         void impl_activate () override {
           std::string new_state = _state->get_value () + _input->get_value ();
@@ -121,7 +121,7 @@ namespace djnn
     };
     class DeleteAction : public Process {
     public:
-      DeleteAction (Process *p, const string &n, TextProperty *state) : Process (p, n), _state (state) {}
+      DeleteAction (Process *p, const string &n, TextProperty *state) : Process (n), _state (state) {}
       virtual ~DeleteAction () {}
       void impl_activate () override {
         int sz = _state->get_value ().size ();
@@ -155,7 +155,7 @@ namespace djnn
     class DoubleFormatterAction : public Process
     {
     public:
-      DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (p, n), _input (in), _decimal (dec), _output (out) { Process::finalize_construction (p); }
+      DoubleFormatterAction (Process* p, const string &n, DoubleProperty* in, IntProperty* dec, TextProperty* out) : Process (n), _input (in), _decimal (dec), _output (out) { Process::finalize_construction (p); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _decimal->get_value ();

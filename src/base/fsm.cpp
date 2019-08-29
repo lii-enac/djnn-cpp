@@ -108,7 +108,7 @@ namespace djnn
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
                                 Process *src, const string &spec, Process *action,
                                 const string &aspec) :
-      Process (p, n)
+      Process (n)
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
@@ -146,7 +146,7 @@ namespace djnn
 
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
                                 Process *trigger, Process *action) :
-      Process (p, n)
+      Process (n)
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
@@ -254,7 +254,7 @@ namespace djnn
   }
 
   FSM::FSM (Process *p, const string &n) : 
-    Process (p, n), _cur_state (nullptr), _priority (0) 
+    Process (n), _cur_state (nullptr), _priority (0) 
   { 
     init_FSM ();
 

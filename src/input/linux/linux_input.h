@@ -40,7 +40,7 @@ namespace djnn {
 
   class LinuxDevice : public Process {
   public:
-    LinuxDevice (Process *p, const string& n, dev_type type) : Process (p, n), _type (type) {}
+    LinuxDevice (Process *p, const string& n, dev_type type) : Process (n), _type (type) {}
     ~LinuxDevice () {}
     virtual void handle_event (struct input_event *ev) = 0;
     dev_type type () { return _type; }
