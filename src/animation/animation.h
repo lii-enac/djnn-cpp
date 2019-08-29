@@ -39,11 +39,11 @@ namespace djnn
       OscillatorAction (Process *p, const string &n, DoubleProperty* m, DoubleProperty* k,
                         DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,
                         DoubleProperty* dt);
-        void impl_activate () override;
-        void impl_deactivate () override {}
-      private:
+      void impl_activate () override;
+      void impl_deactivate () override {}
+    private:
         DoubleProperty *_m, *_k, *_b, *_v, *_output, *_dt;
-      };
+    };
     public:
       Oscillator (Process *p, const string &n);
       virtual ~Oscillator ();

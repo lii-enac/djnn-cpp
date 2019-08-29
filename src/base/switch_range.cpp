@@ -71,17 +71,6 @@ namespace djnn
   SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange *parent, const string &name) :
       Action (parent, name),  _sw (parent) 
   {
-    /* note:
-      * avoid to add the action in Container::_children list
-      * otherwise there is a side effect on ~switch which 
-      * occured after ~container which already deleted _children
-      */ 
-       
-    if (parent) {
-        _state_dependency = parent->state_dependency ();
-        Process::set_parent (parent);
-      }
-          
   }
 
   SwitchRange::SwitchRange (Process *parent, const string &name, double initial) :

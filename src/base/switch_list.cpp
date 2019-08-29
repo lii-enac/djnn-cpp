@@ -28,16 +28,6 @@ namespace djnn
   SwitchList::Next::Next  (SwitchList *parent) : 
     Action (parent, "_next_action"), _sw (parent)
   {
-      /* note:
-      * avoid to add the action in Container::_children list
-      * otherwise there is a side effect on ~switch which 
-      * occured after ~container which already deleted _children
-      */ 
-       
-    if (parent) {
-        _state_dependency = parent->state_dependency ();
-        Process::set_parent (parent);
-      }
   }
 
   void
@@ -61,16 +51,6 @@ namespace djnn
   SwitchList::Previous::Previous  (SwitchList *parent) : 
     Action (parent, "_previous_action"), _sw (parent)
   {
-      /* note:
-      * avoid to add the action in Container::_children list
-      * otherwise there is a side effect on ~switch which 
-      * occured after ~container which already deleted _children
-      */ 
-       
-    if (parent) {
-        _state_dependency = parent->state_dependency ();
-        Process::set_parent (parent);
-      }
   }
 
   void
@@ -94,16 +74,6 @@ namespace djnn
   SwitchList::ChangeIndex::ChangeIndex  (SwitchList *parent) : 
     Action (parent, "_change_index_action"), _sw (parent)
   {
-      /* note:
-      * avoid to add the action in Container::_children list
-      * otherwise there is a side effect on ~switch which 
-      * occured after ~container which already deleted _children
-      */ 
-       
-    if (parent) {
-        _state_dependency = parent->state_dependency ();
-        Process::set_parent (parent);
-      }
   }
 
   void

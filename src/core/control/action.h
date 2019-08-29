@@ -24,7 +24,18 @@ namespace djnn {
   class Action : public Process {
   public:
     Action (bool model = false) : Process (model) {}
-    Action (Process *p, const std::string &n, bool model = false) : Process (p, n, model) {}
+    Action (Process *parent, const std::string &n, bool model = false) : Process (parent, n, model) 
+    {
+      /* note:
+       * finaliaze_constructor for action 
+       * they add a symbol process but do not appear in _children Component
+       * so they has to be delete manualy from destructor
+       */ 
+       if (parent) {
+        _state_dependency = parent->state_dependency ();
+        Process::set_parent (parent);
+      }
+    }
     virtual ~Action ();
 
   protected:

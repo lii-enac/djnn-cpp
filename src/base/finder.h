@@ -29,7 +29,7 @@ namespace djnn
     class FinderAction : public Action
     {
     public:
-      FinderAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      FinderAction (Process *p, const string &n) : Action (p, n) {}
       virtual ~FinderAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};

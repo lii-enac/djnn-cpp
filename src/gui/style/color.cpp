@@ -40,7 +40,6 @@ namespace djnn
   RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *p, const std::string &n) :
       Action (p, n), _p (p)
   {
-    Process::finalize_construction (p);
   }
 
   void
@@ -161,7 +160,6 @@ namespace djnn
   LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *p, const std::string &n) :
       Action (p, n), _p (p)
   {
-    Process::finalize_construction (p);
   }
 
   void

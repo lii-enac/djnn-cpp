@@ -99,7 +99,7 @@ namespace djnn {
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      ScaleRotateTranslateAction (Process *p, const string &n) : Action (p, n) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)_parent)->update ();};
       void impl_deactivate () override {};
@@ -108,7 +108,7 @@ namespace djnn {
     class TouchMoveAction : public Action
     {
     public:
-      TouchMoveAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      TouchMoveAction (Process *p, const string &n) : Action (p, n) {}
       ~TouchMoveAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)_parent)->touch_move ((Touch*)_data); };
       void impl_deactivate () override {};
@@ -117,7 +117,7 @@ namespace djnn {
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      AddTouchAction (Process *p, const string &n) : Action (p, n) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)_parent)->add_touch (); };
       void impl_deactivate () override {};
@@ -125,7 +125,7 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      RemoveTouchAction (Process *p, const string &n) : Action (p, n) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)_parent)->remove_touch ();};
       void impl_deactivate () override {};

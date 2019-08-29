@@ -78,14 +78,14 @@ namespace djnn
   class PhyObj : public Process {
     class D3PhyObjUpdatePosition : public Action {
         public:
-          D3PhyObjUpdatePosition (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+          D3PhyObjUpdatePosition (Process *p, const string &n) : Action (p, n) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
-          D3PhyObjUpdateVelocity (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+          D3PhyObjUpdateVelocity (Process *p, const string &n) : Action (p, n) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
           void impl_deactivate () override {}

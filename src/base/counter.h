@@ -31,7 +31,7 @@ namespace djnn
     {
     public:
       CounterResetAction (Process* p, const string &n, bool* reset_occurred) :
-      Action (p, n), _reset_occurred(reset_occurred) {};
+        Action (p, n), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
       void impl_activate () override { *_reset_occurred = true; }
@@ -45,7 +45,7 @@ namespace djnn
     {
     public:
       CounterStepAction (Process* p, const string &n, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
-      Action (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
+        Action (p, n), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
       void impl_activate () override

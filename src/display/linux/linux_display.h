@@ -50,7 +50,7 @@ namespace djnn {
       class DRMUdevAction: public Action {
         public:
           DRMUdevAction (DRMUdev* udev) :
-          Action (), _udev (udev) {}
+            Action (), _udev (udev) {}
           virtual ~DRMUdevAction () {}
           void impl_activate ()
           {

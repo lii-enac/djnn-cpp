@@ -33,7 +33,7 @@ namespace djnn
     class PropertiesAction : public Action
     {
     public:
-      PropertiesAction (Process *p, const string &n) : Action (p, n) { Process::finalize_construction (p); }
+      PropertiesAction (Process *p, const string &n) : Action (p, n) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };

@@ -30,12 +30,6 @@ namespace djnn
       AbstractProperty* left, AbstractProperty* right, AbstractProperty* result) :
     Action (parent, name), _left (left), _right (right), _result (result)
   {
-    /* this action should not be added to process::symtable so NO Process::add_child 
-          we can't call Process::finalize_construction */
-      if (parent) {
-        _state_dependency = parent->state_dependency ();
-        Process::set_parent (parent);
-      }
   }
 
 
@@ -89,12 +83,6 @@ namespace djnn
   UnaryOperatorAction::UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
     Action (parent, name), _input (input), _output (output)
   {
-    /* this action should not be added to process::symtable so NO Process::add_child 
-          we can't call Process::finalize_construction */
-      if (parent) {
-          Process::set_parent (parent);
-          _state_dependency = parent->state_dependency ();
-      }
   }
 
   UnaryOperator::UnaryOperator (Process *p, const string &n) :
