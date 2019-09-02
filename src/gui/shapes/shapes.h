@@ -35,11 +35,11 @@ namespace djnn
 
   class Text : public AbstractGShape
   {
-    class TextSizeAction : public Process
+    class TextSizeAction : public Action
     {
       friend Text;
       public:
-        TextSizeAction (Process *p, const string &n, Text *text) : Process (n), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        TextSizeAction (Process *p, const string &n, Text *text) : Action (p, n), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
         void impl_deactivate () override {};

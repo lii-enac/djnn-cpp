@@ -32,11 +32,11 @@ namespace djnn
 
   /*** private Class Ivy Out Actions ***/ 
   private:
-     class IvyOutAction : public Process
+     class IvyOutAction : public Action
     {
     public:
       IvyOutAction (Process* parent, const string &name, TextProperty* out) :
-      Process (name), _out (out) { Process::finalize_construction (parent); }
+      Action (parent, name), _out (out) { Process::finalize_construction (parent); }
       virtual ~IvyOutAction () {}
       void coupling_activation_hook () override;
       void impl_activate () override {};

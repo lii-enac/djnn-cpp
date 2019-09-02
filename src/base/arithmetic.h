@@ -306,7 +306,7 @@ protected:
 class AdderAccumulator : public Process
 {
 private:
-  class AdderAccumulatorAction : public Process
+  class AdderAccumulatorAction : public Action
   {
   public:
     AdderAccumulatorAction (Process* parent, const string &name, AbstractProperty* input,

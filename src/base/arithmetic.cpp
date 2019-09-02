@@ -340,7 +340,7 @@ namespace djnn
                                                                     AbstractProperty* clamp_min,
                                                                     AbstractProperty* clamp_max,
                                                                     AbstractProperty* result) :
-      Process (name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
+      Action (parent, name), _input (input), _clamp_min (clamp_min), _clamp_max (clamp_max), _result (result)
   {
     Process::finalize_construction (parent);
   }

@@ -249,7 +249,7 @@ namespace djnn
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
-      Process (name), _list (list), _iter (iter), _index (index), _forward (forward)
+      Action (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
   {
   }
 
@@ -274,7 +274,7 @@ namespace djnn
 
   BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const string& name,
                                                        IntProperty *index) :
-      Process (name), _index (index)
+      Action (parent, name), _index (index)
   {
   }
 

@@ -18,6 +18,7 @@
 #include "component.h"
 #include "ref_property.h"
 #include "int_property.h"
+#include "../control/action.h"
 
 #include <list>
 
@@ -71,7 +72,7 @@ namespace djnn {
   class BidirectionalListIterator : public Process
   {
   private:
-    class IterAction : public Process
+    class IterAction : public Action
     {
     public:
       IterAction (Process *parent, const string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
@@ -84,7 +85,7 @@ namespace djnn {
       IntProperty *_index;
       bool _forward;
     };
-    class ResetAction : public Process
+    class ResetAction : public Action
     {
     public:
       ResetAction (Process *parent, const string& name, IntProperty *index);
