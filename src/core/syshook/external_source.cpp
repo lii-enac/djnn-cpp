@@ -87,6 +87,8 @@ namespace djnn {
 	void
 	ExternalSource::please_stop ()
 	{
+        if(_please_stop) return;
+
 		_please_stop = true;
 
         #if DJNN_USE_BOOST_THREAD
@@ -94,8 +96,8 @@ namespace djnn {
         #endif
 
         #if DJNN_USE_QT_THREAD
-        if(_impl->_thread) {
-            _impl->_thread->requestInterruption();
+        if(_impl &&_impl->_thread) {
+           _impl->_thread->requestInterruption();
         }
         #endif
         
@@ -126,7 +128,7 @@ namespace djnn {
         #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
         QThread::create([this]() { this->ExternalSource::private_run(); })
         ;
-        QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
+        //QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
         _impl->_thread->start();
         #endif
 

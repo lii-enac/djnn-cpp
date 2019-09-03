@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <mutex>
+
 namespace djnn
 {
   //extern thread_local bool _please_stop;
@@ -59,8 +61,8 @@ namespace djnn
     Impl * _impl;
 
   private:
-    //std::atomic_bool
-    bool _please_stop;
+    std::atomic_bool _please_stop;
+   //bool _please_stop;
     
   };
 
