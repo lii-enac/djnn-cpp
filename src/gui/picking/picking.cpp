@@ -71,12 +71,25 @@ namespace djnn
   void
   Picking::object_deleted (AbstractGShape* gobj)
   {
-    // Reset _cur_obj to nullptr if this object has been removed from picking_view
+    /* Reset _catching_shape to nullptr if this object has been removed from picking_view */
     if (_catching_shape == gobj) {
       _catching_shape = nullptr;
     }
+
+     /* Reset _hover to nullptr if this object has been removed from picking_view */
     if (_hover == gobj) {
       _hover = nullptr;
+    }
+
+    /* reset all _active_touches[x]->init_shape ans _active_touches[x]->current_shape */
+    Touch *t;
+    for ( auto iter = _active_touches.begin(); iter != _active_touches.end(); ++iter) 
+    {
+      t = iter->second;
+      if (t->init_shape () == gobj)
+        t->set_init_shape (nullptr);
+      if (t->current_shape () == gobj)
+        t->set_current_shape (nullptr);
     }
   }
 
