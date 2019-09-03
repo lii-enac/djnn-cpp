@@ -17,10 +17,12 @@
 
 #include "Ivy/ivy.h"
 #include "Ivy/ivyloop.h"
+#include "../core/syshook/../utils/error.h"
 
 #include <iostream>
 #include <string>
 #include <unistd.h>
+
 
 using namespace std;
 
@@ -256,7 +258,10 @@ void IvyAccess::set_leaving(string v) {
 void
 IvyAccess::impl_activate ()
 {
-  please_stop ();
+
+  if ( get_activation_state () == ACTIVATED )
+    /* should never happen for IvyAccess */
+    return;
 
   /* launche thread */
   start_thread ();
@@ -268,7 +273,13 @@ IvyAccess::impl_deactivate ()
   please_stop();
 
   /* requeste Ivy to stop */
-  IvyStop();
+  /* note:
+  *  IvyStop has never been implemented : 
+  *  so Ivy won't stop if you insert into your main root and delete it 
+  */
+  warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n\t\t solution: do not give parent to your IvyAccess (or nullptr)) and manage it separently from your main root \n\t\t and to not delete it - it will block");
+  //IvyStop();
+  
 }
 
 static void  _before_select (void *data){
@@ -288,9 +299,7 @@ IvyAccess::run ()
   try {
 
       /* enable coupling */
-    //djnn::get_exclusive_access (DBG_GET);
     _out_c->enable();
-    //djnn::release_exclusive_access (DBG_REL);
 
     IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
 
@@ -300,14 +309,20 @@ IvyAccess::run ()
     IvySetAfterSelectHook(_after_select,0);
 
     IvyStart(_bus.c_str());
+    
+    /* note :
+    * for now,
+    * We can NOT get out of IvyMainLoop:
+    * IvyStop has never been implemented
+    * 
+    */
     while (!get_please_stop ()) {
       /* start Ivy mainloop */
       IvyMainLoop ();
     }
+    
     /* disable coupling */
-    //djnn::get_exclusive_access (DBG_GET);
     _out_c->disable();
-    //djnn::release_exclusive_access (DBG_REL); 
 
   } catch (exception& e) {
     warning (nullptr, e.what());
