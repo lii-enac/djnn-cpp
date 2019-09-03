@@ -131,15 +131,15 @@ namespace djnn
     touches = new List (p, "touches");
     touches->set_activation_state (ACTIVATED);
 
-    move_x = new DoubleProperty (0);
-    move_y = new DoubleProperty (0);
-    press_x = new DoubleProperty (0);
-    press_y = new DoubleProperty (0);
+    move_x = new DoubleProperty (nullptr, "move_x", 0);
+    move_y = new DoubleProperty (nullptr, "move_y", 0);
+    press_x = new DoubleProperty (nullptr, "press_x", 0);
+    press_y = new DoubleProperty (nullptr, "press_y", 0);
 
-    local_move_x = new DoubleProperty (0);
-    local_move_y = new DoubleProperty (0);
-    local_press_x = new DoubleProperty (0);
-    local_press_y = new DoubleProperty (0);
+    local_move_x = new DoubleProperty (nullptr, "local_move_x", 0);
+    local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
+    local_press_x = new DoubleProperty (nullptr, "local_press_x", 0);
+    local_press_y = new DoubleProperty (nullptr, "local_press_y", 0);
 
     move->add_symbol ("x", move_x);
     move->add_symbol ("y", move_y);
@@ -151,15 +151,15 @@ namespace djnn
     press->add_symbol ("local_x", local_press_x);
     press->add_symbol ("local_y", local_press_y);
 
-    mouse_press_x = new DoubleProperty (0);
-    mouse_press_y = new DoubleProperty (0);
-    mouse_move_x = new DoubleProperty (0);
-    mouse_move_y = new DoubleProperty (0);
+    mouse_press_x = new DoubleProperty (nullptr, "mouse_press_x", 0);
+    mouse_press_y = new DoubleProperty (nullptr, "mouse_press_y", 0);
+    mouse_move_x = new DoubleProperty (nullptr, "mouse_move_x", 0);
+    mouse_move_y = new DoubleProperty (nullptr, "mouse_move_y", 0);
 
-    mouse_local_press_x = new DoubleProperty (0);
-    mouse_local_press_y = new DoubleProperty (0);
-    mouse_local_move_x = new DoubleProperty (0);
-    mouse_local_move_y = new DoubleProperty (0);
+    mouse_local_press_x = new DoubleProperty (nullptr, "mouse_local_press_x", 0);
+    mouse_local_press_y = new DoubleProperty (nullptr, "mouse_local_press_y", 0);
+    mouse_local_move_x = new DoubleProperty (nullptr, "mouse_local_move_x", 0);
+    mouse_local_move_y = new DoubleProperty (nullptr, "mouse_local_move_y", 0);
 
     mouse_move->add_symbol ("x", mouse_move_x);
     mouse_move->add_symbol ("y", mouse_move_y);
