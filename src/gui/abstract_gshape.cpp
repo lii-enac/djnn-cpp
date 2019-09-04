@@ -228,7 +228,14 @@ namespace djnn
     mouse->remove_child (mouse_enter);
     mouse->remove_child (mouse_leave);
 
+    /* HACK 
+    * clear _children of the (djnn:List) touches before
+    * deleting it (touches), to avoid ~Container to delete inside touches
+    * which are also in a _active_touches list
+    */
+    ((List*) touches)->children ().clear ();
     delete touches;
+    
     delete press;
     delete release;
     delete move;
