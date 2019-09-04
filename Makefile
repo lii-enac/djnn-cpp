@@ -200,6 +200,10 @@ ifeq ($(physics), ODE)
 djnn_libs += physics
 endif
 
+ifeq ($(phidgets), PHIDGETS)
+djnn_libs += phidgets
+endif
+
 ifeq ($(findstring avr,$(cross_prefix)),avr)
 djnn_libs := core base
 CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include

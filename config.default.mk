@@ -1,6 +1,7 @@
 display := QT
 #options: QT SDL
-physics := # set to ODE 
+physics := # set to ODE
+phidgets := # set to PHIDGETS
 # cross-compile support
 cross_prefix := g
 #options: g llvm-g arm-none-eabi- em
