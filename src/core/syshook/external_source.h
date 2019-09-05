@@ -61,8 +61,8 @@ namespace djnn
     Impl * _impl;
 
   private:
-    std::atomic_bool _please_stop;
-   //bool _please_stop;
+  //std::atomic_bool _please_stop; // do not compile on linux
+    bool _please_stop;
     
   };
 
