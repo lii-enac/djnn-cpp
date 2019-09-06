@@ -16,11 +16,13 @@
 #include "display-priv.h"
 #include "../core/tree/set.h"
 #include "../core/utils/uri.h"
+#include "update_drawing.h"
 
 namespace djnn
 {
   
   static bool __module_initialized = false;
+  Process *DrawingRefreshManager;
 
   int mouse_tracking = 0;
   int full_screen = 0;
@@ -41,6 +43,8 @@ namespace djnn
   init_display () {
     if ( __module_initialized == false ) {
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+      UpdateDrawing::init ();
+      DrawingRefreshManager = UpdateDrawing::instance ();
       GPUs = new Set (nullptr, "GPUs");
       GPUs->set_activation_state (ACTIVATED);
       Displays = new Set (nullptr, "Displays");
@@ -52,6 +56,11 @@ namespace djnn
       djnn::loadedModules.push_back("display");
       __module_initialized = true;
     }
-  }  
+  }
+
+  void
+  clear_display () {
+    UpdateDrawing::clear ();
+  }
 
 }

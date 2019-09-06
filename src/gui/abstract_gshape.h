@@ -16,10 +16,10 @@
 
 #include "abstract_gobj.h"
 
+#include "../core/ontology/process.h"
 #include "../core/tree/ref_property.h"
 #include "../core/tree/double_property.h"
-#include "../core/ontology/process.h"
-
+#include "../core/tree/component.h"
 
 namespace djnn
 {

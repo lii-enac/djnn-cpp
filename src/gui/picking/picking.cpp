@@ -82,10 +82,10 @@ namespace djnn
     }
 
     /* reset all _active_touches[x]->init_shape ans _active_touches[x]->current_shape */
-    Touch *t;
     for ( auto iter = _active_touches.begin(); iter != _active_touches.end(); ++iter) 
     {
-      t = iter->second;
+      Touch *t = iter->second;
+      assert(t);
       if (t->init_shape () == gobj)
         t->set_init_shape (nullptr);
       if (t->current_shape () == gobj)

@@ -31,6 +31,7 @@ namespace djnn {
   extern Process *GPUs;
   extern Process *Displays;
   void init_display ();
+  void clear_display ();
 
   class AbstractDisplay;
 

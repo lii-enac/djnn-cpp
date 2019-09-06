@@ -20,6 +20,7 @@
 
 #include "../display/display.h"
 #include "../display/abstract_display.h"
+#include "../display/update_drawing.h"
 
 #include "../core/tree/spike.h"
 #include "../core/tree/component.h"
@@ -85,6 +86,8 @@ namespace djnn
 
   Window::~Window ()
   {
+    UpdateDrawing::instance ()->remove_window_for_refresh(this);
+    
     delete _pos_x;
     delete _pos_y;
     delete _width;

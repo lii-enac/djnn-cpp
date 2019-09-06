@@ -1,5 +1,5 @@
 lib_djnn_deps = core
-lib_srcs += src/display/display.cpp src/display/window.cpp
+lib_srcs += src/display/display.cpp src/display/window.cpp src/display/update_drawing.cpp
 #lib_srcs += $(shell find src/display/picking -name "*.cpp")
 
 ifeq ($(os),Linux)

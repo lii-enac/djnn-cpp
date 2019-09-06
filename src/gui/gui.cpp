@@ -36,7 +36,7 @@ namespace djnn
 {
 
   static bool __module_initialized = false;
-  Process *DrawingRefreshManager;
+  
   Process *GenericMouse;
   GUIStructureObserver * gui_structure_observer;
 
@@ -269,8 +269,7 @@ namespace djnn
       djnn::loadedModules.push_back ("gui");
 
       Backend::init ();
-      UpdateDrawing::init ();
-      DrawingRefreshManager = UpdateDrawing::instance ();
+      
       GenericMouse = new GUIMouse (nullptr, "");
       GenericMouse->activate ();
       MainLoop::instance ().add_background_process (DrawingRefreshManager);
@@ -287,7 +286,7 @@ namespace djnn
   {
 
     __module_initialized = false;
-    UpdateDrawing::clear ();
+    
 
   }
 
