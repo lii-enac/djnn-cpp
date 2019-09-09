@@ -431,6 +431,7 @@ namespace djnn
         is_end = false;
       }
    }
+   /* use for touch */ 
    if (!_to_delete.empty ()) {
     for (auto p: _to_delete) {
       delete p;
