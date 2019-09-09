@@ -120,6 +120,14 @@ namespace djnn
   }
 
   void
+  AbstractList::clear ()
+  {
+    /* empty _children without calling delete on each element IF they are pointers */
+    _children.clear ();
+    _size->set_value (0, true);
+  }
+
+  void
   AbstractList::remove_child (Process* c)
   {
     std::vector<Process*>::iterator newend = _children.end ();

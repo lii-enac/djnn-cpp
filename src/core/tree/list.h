@@ -35,6 +35,7 @@ namespace djnn {
     void remove_child (Process* c) override;
     void remove_child (const string &name) override;
     void dump(int level=0) override;
+    void clear (); /* empty _children without calling delete on each element IF they are pointers */
     Process* find_component (const string &path) override;
     virtual ~AbstractList () {};
     int size () { return _size->get_value (); }
