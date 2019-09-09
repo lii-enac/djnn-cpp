@@ -63,7 +63,7 @@ namespace djnn
     delete _c_move;
 
     map<int, TouchAlive*>::iterator it;
-    for ( it = touches.begin (); it != touches.end (); it++ ) {
+    for ( it = touches.begin (); it != touches.end (); ++it ) {
       delete it->second;
       touches.erase (it);
     }
