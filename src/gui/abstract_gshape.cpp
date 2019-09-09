@@ -230,10 +230,10 @@ namespace djnn
 
     /* HACK 
     * clear _children of the (djnn:List) touches before
-    * deleting it (touches), to avoid ~Container to delete inside touches
+    * deleting it (touches), to avoid ~Container to delete touches inside "touches list"
     * which are also in a _active_touches list
     */
-    ((List*) touches)->children ().clear ();
+    ((List*) touches)->clear ();
     delete touches;
     
     delete press;
