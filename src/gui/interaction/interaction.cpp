@@ -58,16 +58,25 @@ namespace djnn
 
   ScaleRotateTranslate::~ScaleRotateTranslate ()
   {
-    Graph::instance().remove_edge (_t_move1, _update_action);
 
-    delete _c_on_del;
-    delete _c_on_add;
+    Graph::instance().remove_edge (_t_move1, _update_action);
     delete _c_move;
 
+    map<int, TouchAlive*>::iterator it;
+    for ( it = touches.begin (); it != touches.end (); it++ ) {
+      delete it->second;
+      touches.erase (it);
+    }
+
     delete _update_action;
-    delete _add_touch_action;
-    delete _remove_touch_action;
+    
+    delete _c_on_del;
+    delete _c_on_add;
+
     delete _t_move1;
+    
+    delete _remove_touch_action;
+    delete _add_touch_action;
   }
 
   void
