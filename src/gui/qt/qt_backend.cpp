@@ -239,7 +239,8 @@ namespace djnn
     }
     QString str (text->text ()->get_value().c_str ());
     QFontMetrics fm (qfont);
-    int width = fm.width (str);
+    //int width = fm.width (str);
+    int width = fm.horizontalAdvance (str);
     int height = fm.height ();
     text->set_width (width);
     text->set_height (height);

@@ -15,17 +15,20 @@
  */
 
 
-#include "../backend.h"
-#include "../abstract_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
-#include "../../display/window.h"
-#include "shapes.h"
-#include "../../core/ontology/coupling.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
+#include "display/window.h"
+#include "gui/shapes/shapes.h"
+#include "gui/style/style.h"
+#include "core/ontology/coupling.h"
+
+#include "rectangle.h"
 
 namespace djnn
 {
-  Rectangle::Rectangle (Process *p, const std::string& n, double x, double y, double width, double height, double rx, double ry):
+  Rectangle::Rectangle (Process *p, const std::string& n, double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (p, n),
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
@@ -34,7 +37,7 @@ namespace djnn
     Process::finalize_construction (p);
   }
 
-  Rectangle::Rectangle (double x, double y, double width, double height, double rx, double ry):
+  Rectangle::Rectangle (double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (), 
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
@@ -163,7 +166,8 @@ namespace djnn
   void
   Rectangle::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
+    AbstractGShape::impl_activate ();
+    auto _frame = frame ();
     if(_cx) _cx->enable (_frame);
 		if(_cy) _cy->enable (_frame);
 		if(_cwidth) _cwidth->enable (_frame);
@@ -175,7 +179,7 @@ namespace djnn
   void
   Rectangle::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
+    AbstractGShape::impl_deactivate ();
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();
@@ -184,17 +188,23 @@ namespace djnn
 		if(_cry) _cry->disable ();
   }
 
+  
   void
   Rectangle::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_rectangle (this);
     }
   }
 
+
+  
   Process*
   Rectangle::clone ()
   {
     return new Rectangle (raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
   }
+
+  
 } /* namespace djnn */

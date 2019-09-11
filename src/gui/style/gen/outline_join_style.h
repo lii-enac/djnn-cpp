@@ -19,24 +19,22 @@
 
 namespace djnn
 {
-  class Circle : public AbstractGShape
+  class OutlineJoinStyle : public AbstractStyle
   {
   public:
-    Circle (Process *p, const std::string& n, double cx, double cy, double r);
-    Circle (double cx, double cy, double r);
-    virtual ~Circle ();
+    OutlineJoinStyle (Process *p, const std::string& n, int join);
+    OutlineJoinStyle (int join);
+    virtual ~OutlineJoinStyle ();
     void draw () override;
     Process* clone () override;
-    void get_properties_values (double& cx, double& cy, double& r);
+    void get_properties_values (int& join);
     virtual Process* find_component (const string&) override;
-		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component ("cx"); }
-		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component ("cy"); }
-		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component ("r"); }
+		AbstractIntProperty* join () { return (AbstractIntProperty*) find_component ("join"); }
 
-  private:
-    struct raw_props_t { double cx; double cy; double r; };
+  protected:
+    struct raw_props_t { int join; };
     raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_cr;
+    Coupling *_cjoin;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -15,64 +15,67 @@
  */
 
 
-#include "../backend.h"
-#include "../abstract_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
-#include "../../display/window.h"
-#include "shapes.h"
-#include "../../core/ontology/coupling.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
+#include "display/window.h"
+#include "gui/shapes/shapes.h"
+#include "gui/style/style.h"
+#include "core/ontology/coupling.h"
+
+#include "rectangle_clip.h"
 
 namespace djnn
 {
-  Ellipse::Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry):
+  RectangleClip::RectangleClip (Process *p, const std::string& n, double x, double y, double width, double height) :
     AbstractGShape (p, n),
-    raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
-    _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
+    raw_props{.x=x, .y=y, .width=width, .height=height},
+    _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
-    set_origin (cx, cy);
+    set_origin (x, y);
     Process::finalize_construction (p);
   }
 
-  Ellipse::Ellipse (double cx, double cy, double rx, double ry):
+  RectangleClip::RectangleClip (double x, double y, double width, double height) :
     AbstractGShape (), 
-    raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
-    _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
+    raw_props{.x=x, .y=y, .width=width, .height=height},
+    _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
-    set_origin (cx, cy);
+    set_origin (x, y);
   }
 
-  Ellipse::~Ellipse ()
+  RectangleClip::~RectangleClip ()
   {
-    delete _ccx;
-		delete _ccy;
-		delete _crx;
-		delete _cry;
+    delete _cx;
+		delete _cy;
+		delete _cwidth;
+		delete _cheight;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (_symtable.size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("cx");
+      it = _symtable.find ("x");
 			if (it != _symtable.end ())
 				delete it->second;
 
-			it = _symtable.find ("cy");
+			it = _symtable.find ("y");
 			if (it != _symtable.end ())
 				delete it->second;
 
-			it = _symtable.find ("rx");
+			it = _symtable.find ("width");
 			if (it != _symtable.end ())
 				delete it->second;
 
-			it = _symtable.find ("ry");
+			it = _symtable.find ("height");
 			if (it != _symtable.end ())
 				delete it->second;
     }
   }
  
   Process*
-  Ellipse::find_component (const string& name)
+  RectangleClip::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -85,27 +88,27 @@ namespace djnn
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
-    if(name=="cx") {
-      coupling=&_ccx;
-      rawp_Double=&raw_props.cx;
+    if(name=="x") {
+      coupling=&_cx;
+      rawp_Double=&raw_props.x;
       notify_mask = notify_damaged_transform;
       prop_Double=true;
     } else
-    if(name=="cy") {
-      coupling=&_ccy;
-      rawp_Double=&raw_props.cy;
+    if(name=="y") {
+      coupling=&_cy;
+      rawp_Double=&raw_props.y;
       notify_mask = notify_damaged_transform;
       prop_Double=true;
     } else
-    if(name=="rx") {
-      coupling=&_crx;
-      rawp_Double=&raw_props.rx;
+    if(name=="width") {
+      coupling=&_cwidth;
+      rawp_Double=&raw_props.width;
       notify_mask = notify_damaged_geometry;
       prop_Double=true;
     } else
-    if(name=="ry") {
-      coupling=&_cry;
-      rawp_Double=&raw_props.ry;
+    if(name=="height") {
+      coupling=&_cheight;
+      rawp_Double=&raw_props.height;
       notify_mask = notify_damaged_geometry;
       prop_Double=true;
     } else
@@ -128,45 +131,52 @@ namespace djnn
   }
 
   void
-  Ellipse::get_properties_values (double& cx, double& cy, double& rx, double& ry)
+  RectangleClip::get_properties_values (double& x, double& y, double& width, double& height)
   {
-    cx = raw_props.cx;
-		cy = raw_props.cy;
-		rx = raw_props.rx;
-		ry = raw_props.ry;
+    x = raw_props.x;
+		y = raw_props.y;
+		width = raw_props.width;
+		height = raw_props.height;
   }
 
   void
-  Ellipse::impl_activate ()
+  RectangleClip::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
-    if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
-		if(_crx) _crx->enable (_frame);
-		if(_cry) _cry->enable (_frame);
+    AbstractGShape::impl_activate ();
+    auto _frame = frame ();
+    if(_cx) _cx->enable (_frame);
+		if(_cy) _cy->enable (_frame);
+		if(_cwidth) _cwidth->enable (_frame);
+		if(_cheight) _cheight->enable (_frame);
   }
 
   void
-  Ellipse::impl_deactivate ()
+  RectangleClip::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
-    if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
-		if(_crx) _crx->disable ();
-		if(_cry) _cry->disable ();
+    AbstractGShape::impl_deactivate ();
+    if(_cx) _cx->disable ();
+		if(_cy) _cy->disable ();
+		if(_cwidth) _cwidth->disable ();
+		if(_cheight) _cheight->disable ();
   }
 
+  
   void
-  Ellipse::draw ()
+  RectangleClip::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_ellipse (this);
+      Backend::instance ()->draw_rectangle_clip (this);
     }
   }
 
+
+  
   Process*
-  Ellipse::clone ()
+  RectangleClip::clone ()
   {
-    return new Ellipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
+    return new RectangleClip (raw_props.x, raw_props.y, raw_props.width, raw_props.height);
   }
+
+  
 } /* namespace djnn */

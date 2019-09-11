@@ -15,34 +15,37 @@
  */
 
 
-#include "../backend.h"
-#include "../abstract_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
-#include "../../display/window.h"
-#include "shapes.h"
-#include "../../core/ontology/coupling.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
+#include "display/window.h"
+#include "gui/shapes/shapes.h"
+#include "gui/style/style.h"
+#include "core/ontology/coupling.h"
+
+#include "abstract_prop_linear_gradient.h"
 
 namespace djnn
 {
-  Line::Line (Process *p, const std::string& n, double x1, double y1, double x2, double y2):
-    AbstractGShape (p, n),
+  AbstractPropLinearGradient::AbstractPropLinearGradient (Process *p, const std::string& n, double x1, double y1, double x2, double y2, int spread, int coords) :
+    AbstractGradient (p, n, spread, coords),
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
-    set_origin (x1, y1);
-    Process::finalize_construction (p);
+    
+    
   }
 
-  Line::Line (double x1, double y1, double x2, double y2):
-    AbstractGShape (), 
+  AbstractPropLinearGradient::AbstractPropLinearGradient (double x1, double y1, double x2, double y2, int spread, int coords) :
+    AbstractGradient (spread, coords), 
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
-    set_origin (x1, y1);
+    
   }
 
-  Line::~Line ()
+  AbstractPropLinearGradient::~AbstractPropLinearGradient ()
   {
     delete _cx1;
 		delete _cy1;
@@ -72,9 +75,9 @@ namespace djnn
   }
  
   Process*
-  Line::find_component (const string& name)
+  AbstractPropLinearGradient::find_component (const string& name)
   {
-    Process* res = AbstractGShape::find_component(name);
+    Process* res = AbstractGradient::find_component(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -88,25 +91,25 @@ namespace djnn
     if(name=="x1") {
       coupling=&_cx1;
       rawp_Double=&raw_props.x1;
-      notify_mask = notify_damaged_transform;
+      notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
     if(name=="y1") {
       coupling=&_cy1;
       rawp_Double=&raw_props.y1;
-      notify_mask = notify_damaged_transform;
+      notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
     if(name=="x2") {
       coupling=&_cx2;
       rawp_Double=&raw_props.x2;
-      notify_mask = notify_damaged_geometry;
+      notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
     if(name=="y2") {
       coupling=&_cy2;
       rawp_Double=&raw_props.y2;
-      notify_mask = notify_damaged_geometry;
+      notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
     return nullptr;
@@ -128,7 +131,7 @@ namespace djnn
   }
 
   void
-  Line::get_properties_values (double& x1, double& y1, double& x2, double& y2)
+  AbstractPropLinearGradient::get_properties_values (double& x1, double& y1, double& x2, double& y2, int& spread, int& coords)
   {
     x1 = raw_props.x1;
 		y1 = raw_props.y1;
@@ -137,9 +140,10 @@ namespace djnn
   }
 
   void
-  Line::impl_activate ()
+  AbstractPropLinearGradient::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
+    AbstractGradient::impl_activate ();
+    auto _frame = frame ();
     if(_cx1) _cx1->enable (_frame);
 		if(_cy1) _cy1->enable (_frame);
 		if(_cx2) _cx2->enable (_frame);
@@ -147,26 +151,17 @@ namespace djnn
   }
 
   void
-  Line::impl_deactivate ()
+  AbstractPropLinearGradient::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
+    AbstractGradient::impl_deactivate ();
     if(_cx1) _cx1->disable ();
 		if(_cy1) _cy1->disable ();
 		if(_cx2) _cx2->disable ();
 		if(_cy2) _cy2->disable ();
   }
 
-  void
-  Line::draw ()
-  {
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_line (this);
-    }
-  }
+  
 
-  Process*
-  Line::clone ()
-  {
-    return new Line (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
-  }
+  
+  
 } /* namespace djnn */

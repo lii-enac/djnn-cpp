@@ -71,22 +71,35 @@ namespace djnn
   }
 
   Window::Window (const std::string &title, double x, double y, double w, double h) :
-    Process(), _refresh (false), _holder (nullptr)
+    Process(),
+    //_self_shared_ptr(this),
+    _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
   }
 
   Window::Window (Process *p, const std::string &n, const std::string &title, double x, double y, double w,
 		  double h) :
-      Process (n), _refresh (false), _holder (nullptr)
+      Process (n),
+      //_self_shared_ptr(this),
+      _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
     Process::finalize_construction (p);
   }
 
+  // std::weak_ptr<Window>
+  // Window::get_weak_ptr()
+  // {
+  //   return _self_shared_ptr;
+  // }
+
+
   Window::~Window ()
   {
     UpdateDrawing::instance ()->remove_window_for_refresh(this);
+
+    //_self_shared_ptr.reset ();
     
     delete _pos_x;
     delete _pos_y;

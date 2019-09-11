@@ -98,6 +98,7 @@ namespace djnn
   PathPoint::impl_activate ()
   {
     AbstractGObj::impl_activate ();
+    auto _frame = frame ();
     if(_cx) _cx->enable (_frame);
     if(_cy) _cy->enable (_frame);
   }
@@ -113,6 +114,7 @@ namespace djnn
   void
   PathLine::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_line (raw_props.x, raw_props.y);
     }
@@ -127,6 +129,7 @@ namespace djnn
   void
   PathMove::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_move (raw_props.x, raw_props.y);
     }
@@ -253,6 +256,7 @@ namespace djnn
   PathQuadratic::impl_activate ()
   {
     AbstractGObj::impl_activate ();
+    auto _frame = frame ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx)  _cx->enable (_frame);
@@ -272,6 +276,7 @@ namespace djnn
   void
   PathQuadratic::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_quadratic (raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     }
@@ -395,6 +400,7 @@ namespace djnn
   PathCubic::impl_activate ()
   {
     AbstractGObj::impl_activate ();
+    auto _frame = frame ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx2) _cx2->enable (_frame);
@@ -418,6 +424,7 @@ namespace djnn
   void
   PathCubic::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_cubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     }
@@ -551,6 +558,7 @@ namespace djnn
   PathArc::impl_activate ()
   {
     AbstractGObj::impl_activate ();
+    auto _frame = frame ();
     if(_crotx) _crotx->enable (_frame);
     if(_cfl) _cfl->enable (_frame);
     if(_cswfl) _cswfl->enable (_frame);
@@ -576,6 +584,7 @@ namespace djnn
   void
   PathArc::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_arc (raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     }
@@ -646,6 +655,7 @@ namespace djnn
   void
   Path::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path (this);
     }
@@ -664,6 +674,7 @@ namespace djnn
   void
   PathClip::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_clip (this);
     }

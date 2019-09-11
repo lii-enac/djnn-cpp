@@ -38,7 +38,7 @@ namespace djnn
   AbstractStyle::~AbstractStyle ()
   {
   }
-
+/*
   AbstractColor::AbstractColor (double r, double g, double b) :
       raw_props{.r=r, .g=g, .b=b},
       _cr (nullptr), _cg (nullptr), _cb (nullptr)
@@ -121,6 +121,7 @@ namespace djnn
   AbstractColor::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if(_cr) _cr->enable (_frame);
     if(_cg) _cg->enable (_frame);
     if(_cb) _cb->enable (_frame);
@@ -134,10 +135,11 @@ namespace djnn
     if (_cg) _cg->disable ();
     if (_cb) _cb->disable ();
   }
-
+*/
   void
   FillColor::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_color (this);
     }
@@ -152,6 +154,7 @@ namespace djnn
   void
   OutlineColor::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_color (this);
     }
@@ -163,6 +166,7 @@ namespace djnn
     return new OutlineColor (raw_props.r, raw_props.g, raw_props.b);
   }
 
+  /*
   FillRule::FillRule (Process* p, const std::string &n, djnFillRuleType rule) :
       AbstractStyle (p, n),
       raw_props{.rule=rule},
@@ -239,6 +243,7 @@ namespace djnn
   FillRule::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if(_cr) _cr->enable (_frame);
   }
 
@@ -249,23 +254,28 @@ namespace djnn
     if (_cr) _cr->disable ();
   }
 
+
   void
   FillRule::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_rule (this);
     }
   }
+
 
   Process*
   FillRule::clone ()
   {
     return new FillRule (raw_props.rule);
   }
+  */
 
   void
   NoOutline::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_outline ();
     }
@@ -280,6 +290,7 @@ namespace djnn
   void
   NoFill::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_fill ();
     }
@@ -290,7 +301,7 @@ namespace djnn
   {
     return new NoFill ();
   }
-
+/*
   Texture::Texture (Process* p, const std::string &n, const std::string &path) :
       AbstractStyle (p, n),
       raw_props{.path=path},
@@ -353,6 +364,7 @@ namespace djnn
   Texture::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cp) _cp->enable (_frame);
   }
 
@@ -366,6 +378,7 @@ namespace djnn
   void
   Texture::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_texture (this);
     }
@@ -376,7 +389,8 @@ namespace djnn
   {
     return new Texture (raw_props.path);
   }
-
+*/
+/*
   AbstractOpacity::AbstractOpacity (Process* p, const std::string &n, double alpha) :
       AbstractStyle (p, n),
       raw_props{.alpha=alpha},
@@ -438,6 +452,7 @@ namespace djnn
   AbstractOpacity::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_ca) _ca->enable (_frame);
   }
 
@@ -447,10 +462,12 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
     if (_ca) _ca->disable ();
   }
-
+*/
+  
   void
   OutlineOpacity::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_opacity (this);
     }
@@ -465,6 +482,7 @@ namespace djnn
   void
   FillOpacity::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_fill_opacity (this);
     }
@@ -476,6 +494,7 @@ namespace djnn
     return new FillOpacity (raw_props.alpha);
   }
 
+/*
   OutlineWidth::OutlineWidth (Process* p, const std::string &n, double width) :
       AbstractStyle (p, n),
       raw_props{.width=width},
@@ -490,6 +509,7 @@ namespace djnn
       _cw (nullptr)
   {
   }
+
 
   OutlineWidth::~OutlineWidth ()
   {
@@ -537,6 +557,7 @@ namespace djnn
   OutlineWidth::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cw) _cw->enable (_frame);
   }
 
@@ -545,11 +566,12 @@ namespace djnn
   {
     AbstractStyle::impl_deactivate ();
     if (_cw) _cw->disable ();
-  }
-
+  }*/
+/*
   void
   OutlineWidth::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_width (this);
     }
@@ -560,7 +582,8 @@ namespace djnn
   {
     return new OutlineWidth (raw_props.width);
   }
-
+*/
+/*
   OutlineCapStyle::OutlineCapStyle (Process* p, const std::string &n, djnCapStyle cap) :
       AbstractStyle (p, n),
       raw_props{.cap=cap},
@@ -637,6 +660,7 @@ namespace djnn
   OutlineCapStyle::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cc) _cc->enable (_frame);
   }
 
@@ -646,10 +670,12 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
     if (_cc) _cc->disable ();
   }
-
+*/
+  /*
   void
   OutlineCapStyle::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_cap_style (this);
     }
@@ -659,7 +685,8 @@ namespace djnn
   {
     return new OutlineCapStyle ((djnCapStyle) raw_props.cap);
   }
-
+  */
+/*
   OutlineJoinStyle::OutlineJoinStyle (Process* p, const std::string &n, djnJoinStyle join) :
       AbstractStyle (p, n),
       raw_props{.join=join},
@@ -735,7 +762,7 @@ namespace djnn
   void
   OutlineJoinStyle::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cj) _cj->enable (_frame);
   }
 
@@ -745,10 +772,12 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
     if (_cj) _cj->disable ();
   }
-
+*/
+  /*
   void
   OutlineJoinStyle::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_join_style (this);
     }
@@ -757,8 +786,8 @@ namespace djnn
   Process* OutlineJoinStyle::clone ()
   {
     return new OutlineJoinStyle (raw_props.join);
-  }
-
+  }*/
+/*
   OutlineMiterLimit::OutlineMiterLimit (Process* p, const std::string &n, int limit) :
       AbstractStyle (p, n),
       raw_props{.limit=limit},
@@ -820,6 +849,7 @@ namespace djnn
   OutlineMiterLimit::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cl) _cl->enable (_frame);
   }
 
@@ -829,10 +859,12 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
     if (_cl) _cl->disable ();
   }
-
+*/
+  /*
   void
   OutlineMiterLimit::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_miter_limit (this);
     }
@@ -842,17 +874,19 @@ namespace djnn
   OutlineMiterLimit::clone ()
   {
     return new OutlineMiterLimit (raw_props.limit);
-  }
+  }*/
 
   void
   DashArray::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_array (this);
     }
   }
 
-  Process* DashArray::clone ()
+  Process*
+  DashArray::clone ()
   {
     DashArray* newda = new DashArray ();
 
@@ -866,6 +900,7 @@ namespace djnn
   void
   NoDashArray::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_no_dash_array ();
     }
@@ -877,6 +912,7 @@ namespace djnn
     return new NoDashArray ();
   }
 
+/*
   DashOffset::DashOffset (Process* p, const std::string &n, double offset) :
       AbstractStyle (p, n),
       raw_props{.offset=offset},
@@ -939,6 +975,7 @@ namespace djnn
   DashOffset::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_co) _co->enable (_frame);
   }
 
@@ -952,6 +989,7 @@ namespace djnn
   void
   DashOffset::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_dash_offset (this);
     }
@@ -962,7 +1000,8 @@ namespace djnn
   {
     return new DashOffset (raw_props.offset);
   }
-
+*/
+  /*
   GradientStop::GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset) :
       AbstractStyle (p, n),
       raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
@@ -1079,6 +1118,7 @@ namespace djnn
   GradientStop::impl_activate ()
   {
     AbstractStyle::impl_activate ();
+    auto _frame = frame ();
     if (_cr) _cr->enable (_frame);
     if (_cg) _cg->enable (_frame);
     if (_cb) _cb->enable (_frame);
@@ -1101,12 +1141,12 @@ namespace djnn
   GradientStop::draw ()
   {
     Backend::instance ()->load_gradient_stop (this);
-  }
+  }*/
 
   AbstractGradient::AbstractGradient (Process *p, const std::string &n, int spread, int coords) :
-      AbstractStyle (p, n),
-      raw_props{.spread=spread, .coords=coords},
-      _cs(nullptr), _cc(nullptr),
+      AbstractPropGradient (p, n, spread, coords),
+      //raw_props{.spread=spread, .coords=coords},
+      //_cs(nullptr), _cc(nullptr),
       _g (nullptr), _linear (false)
   {
     _transforms = new List (this, "transforms");
@@ -1114,9 +1154,9 @@ namespace djnn
   }
 
   AbstractGradient::AbstractGradient (int spread, int coords) :
-      AbstractStyle (),
-      raw_props{.spread=spread, .coords=coords},
-      _cs(nullptr), _cc(nullptr),
+      AbstractPropGradient (spread, coords),
+      //raw_props{.spread=spread, .coords=coords},
+      //_cs(nullptr), _cc(nullptr),
       _g (nullptr), _linear (false)
   {
     _transforms = new List (this, "transforms");
@@ -1125,7 +1165,9 @@ namespace djnn
 
   AbstractGradient::~AbstractGradient ()
   {
-    delete _cs;
+    // FIXME delete _transforms and _stops ???
+
+/*    delete _cs;
     delete _cc;
     delete _transforms;
     delete _stops;
@@ -1141,8 +1183,10 @@ namespace djnn
       if (it != _symtable.end ())
         delete it->second;
     }
+    */
   }
 
+  /*
   Process*
   AbstractGradient::find_component (const string& name)
   {
@@ -1185,6 +1229,7 @@ namespace djnn
     AbstractStyle::impl_activate ();
     _stops->activate ();
     _transforms->activate ();
+    //auto _frame = frame ();
     if (_cs) _cs->enable (_frame);
     if (_cc) _cc->enable (_frame);
   }
@@ -1195,15 +1240,17 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
     _stops->deactivate ();
     _transforms->deactivate ();
+    auto _frame = frame ();
     if (_cs) _cs->enable (_frame);
     if (_cc) _cc->enable (_frame);
   }
+  */
 
   LinearGradient::LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2,
 				  djnFillSpread s, djnFillCoords fc) :
-      AbstractGradient (p, n, s, fc), 
-      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
-      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
+      AbstractPropLinearGradient (p, n, x1, y1, x2, y2, s, fc)
+     // raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
+     // _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     _linear = true;
     Process::finalize_construction (p);
@@ -1211,18 +1258,18 @@ namespace djnn
 
   LinearGradient::LinearGradient (Process *p, const std::string &n, double x1, double y1, double x2, double y2, int s,
 				  int fc) :
-      AbstractGradient (p, n, s, fc), 
-      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
-      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
+      AbstractPropLinearGradient (p, n, x1, y1, x2, y2, s, fc)
+      //raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
+      //_cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     _linear = true;
     Process::finalize_construction (p);
   }
 
   LinearGradient::LinearGradient (double x1, double y1, double x2, double y2, int s, int fc) :
-      AbstractGradient (s, fc), 
-      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
-      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
+      AbstractPropLinearGradient (x1, y1, x2, y2, s, fc)
+      //raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
+      //_cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     _linear = true;
   }
@@ -1241,6 +1288,11 @@ namespace djnn
     return g;
   }
 
+  LinearGradient::~LinearGradient ()
+  {
+  }
+
+  /*
   LinearGradient::~LinearGradient ()
   {
     delete _cx1;
@@ -1267,6 +1319,7 @@ namespace djnn
       if (it != _symtable.end ())
         delete it->second;
     }
+
   }
 
   Process*
@@ -1320,6 +1373,7 @@ namespace djnn
   LinearGradient::impl_activate ()
   {
     AbstractGradient::impl_activate ();
+    auto _frame = frame ();
     if (_cx1) _cx1->enable (_frame);
     if (_cy1) _cy1->enable (_frame);
     if (_cx2) _cx2->enable (_frame);
@@ -1335,10 +1389,11 @@ namespace djnn
     if (_cx2) _cx2->disable ();
     if (_cy2) _cy2->disable ();
   }
-
+  */
   void
   LinearGradient::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_linear_gradient (this);
     }
@@ -1386,6 +1441,7 @@ namespace djnn
   void
   RefLinearGradient::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_linear_gradient (_lg);
     }
@@ -1399,28 +1455,30 @@ namespace djnn
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
 				  double fy, djnFillSpread s, djnFillCoords fc) :
-      AbstractGradient (p, n, s, fc), 
-      raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
-      _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
+      AbstractPropRadialGradient (p, n, cx, cy, r, fx, fy, s, fc)
+      //raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
+      //_ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   RadialGradient::RadialGradient (Process *p, const std::string &n, double cx, double cy, double r, double fx,
 				  double fy, int s, int fc) :
-      AbstractGradient (p, n, s, fc), 
-      raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
-      _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
+      AbstractPropRadialGradient (p, n, cx, cy, r, fx, fy, s, fc)
+      //raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
+      //_ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   RadialGradient::RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc) :
-      AbstractGradient (s, fc), 
-      raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
-      _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
+      AbstractPropRadialGradient (cx, cy, r, fx, fy, s, fc)
+      //raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
+      //_ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
   }
+
+  RadialGradient::~RadialGradient () {}
 
   Process*
   RadialGradient::clone ()
@@ -1435,7 +1493,7 @@ namespace djnn
     }
     return rg;
   }
-
+/*
   RadialGradient::~RadialGradient ()
   {
     delete _ccx;
@@ -1526,6 +1584,7 @@ namespace djnn
   RadialGradient::impl_activate ()
   {
     AbstractGradient::impl_activate ();
+    auto _frame = frame ();
     if (_ccx) _ccx->enable (_frame);
     if (_ccy) _ccy->enable (_frame);
     if (_cr) _cr->enable (_frame);
@@ -1543,10 +1602,11 @@ namespace djnn
     if (_cfx) _cfx->disable ();
     if (_cfy) _cfy->disable ();
   }
-
+*/
   void
   RadialGradient::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (this);
     }
@@ -1594,6 +1654,7 @@ namespace djnn
   void
   RefRadialGradient::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_radial_gradient (_rg);
     }
@@ -1617,7 +1678,7 @@ namespace djnn
       _transforms = (List*) find_component ("transforms");
      }
   }
-
+/*
   void
   LinearGradient::update ()
   {
@@ -1629,37 +1690,39 @@ namespace djnn
   {
     AbstractGradient::update ();
   }
+*/
 
   FontSize::FontSize (Process *p, const std::string &n, djnLengthUnit unit, double size) :
-      AbstractStyle (p, n), 
-      raw_props{.unit=unit, .size=size},
-      _cu (nullptr), _cs (nullptr)
+      AbstractPropFontSize (p, n, unit, size)
+      //raw_props{.unit=unit, .size=size},
+      //_cu (nullptr), _cs (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontSize::FontSize (djnLengthUnit unit, double size) :
-      AbstractStyle (), 
-      raw_props{.unit=unit, .size=size},
-      _cu (nullptr), _cs (nullptr)
+      AbstractPropFontSize (unit, size) 
+      //raw_props{.unit=unit, .size=size},
+      //_cu (nullptr), _cs (nullptr)
   {
   }
 
   FontSize::FontSize (Process *p, const std::string &n, int unit, double size) :
-      AbstractStyle (p, n), 
-      raw_props{.unit=unit, .size=size},
-      _cu (nullptr), _cs (nullptr)
+      AbstractPropFontSize (p, n, unit, size)
+      //raw_props{.unit=unit, .size=size},
+      //_cu (nullptr), _cs (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontSize::FontSize (int unit, double size) :
-      AbstractStyle (), 
-      raw_props{.unit=unit, .size=size},
-      _cu (nullptr), _cs (nullptr)
+      AbstractPropFontSize (unit, size)
+      //raw_props{.unit=unit, .size=size},
+      //_cu (nullptr), _cs (nullptr)
   {
   }
 
+/*
   FontSize::~FontSize ()
   {
     delete _cu;
@@ -1721,30 +1784,31 @@ namespace djnn
     unit = raw_props.unit;
     size = raw_props.size;
   }
-
+*/
   void
   FontSize::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
-    if (_cu) _cu->enable (_frame);
-    if (_cs) _cs->enable (_frame);
+    AbstractPropFontSize::impl_activate ();
+    //if (_cu) _cu->enable (frame);
+    //if (_cs) _cs->enable (frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c) {
       c->add_to_context ("FontSize", this);
     }
   }
 
-  void
+  /*void
   FontSize::impl_deactivate ()
   {
     AbstractStyle::impl_deactivate ();
     if (_cu) _cu->disable ();
     if (_cs) _cs->disable ();
   }
-
+*/
   void
   FontSize::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_size (this);
     }
@@ -1757,20 +1821,20 @@ namespace djnn
   }
 
   FontWeight::FontWeight (Process* p, const std::string &n, int weight) :
-      AbstractStyle (p, n), 
-      raw_props{.weight=weight},
-      _cw (nullptr)
+      AbstractPropFontWeight (p, n, weight) 
+      //raw_props{.weight=weight},
+      //_cw (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontWeight::FontWeight (int weight) :
-      AbstractStyle (), 
-      raw_props{.weight=weight},
-      _cw (nullptr)
+      AbstractPropFontWeight (weight)
+      //raw_props{.weight=weight},
+      //_cw (nullptr)
   {
   }
-
+/*
   FontWeight::~FontWeight ()
   {
     delete _cw;
@@ -1812,27 +1876,28 @@ namespace djnn
   {
     weight = raw_props.weight;
   }
-
+*/
   void
   FontWeight::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
-    if (_cw) _cw->enable (_frame);
+    AbstractPropFontWeight::impl_activate ();
+    //if (_cw) _cw->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
       c->add_to_context ("FontWeight", this);
   }
 
-  void
+  /*void
   FontWeight::impl_deactivate ()
   {
     AbstractStyle::impl_deactivate ();
     if (_cw) _cw->disable ();
   }
-
+*/
   void
   FontWeight::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_weight (this);
     }
@@ -1845,35 +1910,35 @@ namespace djnn
   }
 
   FontStyle::FontStyle (Process* p, const std::string &n, djnFontSlope style) :
-      AbstractStyle (p, n), 
-      raw_props{.style=style},
-      _cs (nullptr)
+      AbstractPropFontStyle (p, n, style)
+      //raw_props{.style=style},
+      //_cs (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontStyle::FontStyle (djnFontSlope style) :
-      AbstractStyle (), 
-      raw_props{.style=style},
-      _cs (nullptr)
+      AbstractPropFontStyle (style)
+      //raw_props{.style=style},
+      //_cs (nullptr)
   {
   }
 
   FontStyle::FontStyle (Process* p, const std::string &n, int style) :
-      AbstractStyle (p, n), 
-      raw_props{.style=style},
-      _cs (nullptr)
+      AbstractPropFontStyle (p, n, style)
+      //raw_props{.style=style},
+      //_cs (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontStyle::FontStyle (int style) :
-      AbstractStyle (), 
-      raw_props{.style=style},
-      _cs (nullptr)
+      AbstractPropFontStyle (style)
+      //raw_props{.style=style},
+      //_cs (nullptr)
   {
   }
-
+/*
   FontStyle::~FontStyle ()
   {
     delete _cs;
@@ -1915,27 +1980,28 @@ namespace djnn
   {
     style = raw_props.style;
   }
-
+*/
   void
   FontStyle::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
-    if (_cs) _cs->enable (_frame);
+    AbstractPropFontStyle::impl_activate ();
+    //if (_cs) _cs->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
       c->add_to_context ("FontStyle", this);
   }
-
+/*
   void
   FontStyle::impl_deactivate ()
   {
     AbstractStyle::impl_deactivate ();
     if (_cs) _cs->disable ();
   }
-
+*/
   void
   FontStyle::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_style (this);
     }
@@ -1948,20 +2014,20 @@ namespace djnn
   }
 
   FontFamily::FontFamily (Process* p, const std::string &n, const std::string &family) :
-      AbstractStyle (p, n), 
-      raw_props{.family=family},
-      _cf (nullptr)
+      AbstractPropFontFamily (p, n, family)
+      //raw_props{.family=family},
+      //_cf (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   FontFamily::FontFamily (const std::string &family) :
-      AbstractStyle (), 
-      raw_props{.family=family},
-      _cf (nullptr)
+      AbstractPropFontFamily (family)
+      //raw_props{.family=family},
+      //_cf (nullptr)
   {
   }
-
+/*
   FontFamily::~FontFamily ()
   {
     delete _cf;
@@ -2003,27 +2069,28 @@ namespace djnn
   {
     family = raw_props.family;
   }
-
+*/
   void
   FontFamily::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
-    if (_cf) _cf->enable (_frame);
+    AbstractPropFontFamily::impl_activate ();
+    //if (_cf) _cf->enable (_frame);
     Container *c = dynamic_cast<Container*> (_parent);
     if (c)
       c->add_to_context ("FontFamily", this);
   }
-
+/*
   void
   FontFamily::impl_deactivate ()
   {
     AbstractStyle::impl_deactivate ();
     if (_cf) _cf->disable ();
   }
-
+*/
   void
   FontFamily::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_font_family (this);
     }
@@ -2035,33 +2102,36 @@ namespace djnn
     return new FontFamily (raw_props.family);
   }
 
+
+
+/*
   TextAnchor::TextAnchor (Process* p, const std::string &n, djnAnchorType anchor) :
-      AbstractStyle (p, n), 
-      raw_props{.anchor=anchor},
-      _ca (nullptr)
+      AbstractPropTextAnchor (p, n, anchor)
+      //raw_props{.anchor=anchor},
+      //_ca (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   TextAnchor::TextAnchor (djnAnchorType anchor) :
-      AbstractStyle (), 
-      raw_props{.anchor=anchor},
-      _ca (nullptr)
+      AbstractPropTextAnchor (anchor) 
+      //raw_props{.anchor=anchor},
+      //_ca (nullptr)
   {
   }
 
   TextAnchor::TextAnchor (Process* p, const std::string &n, int anchor) :
-      AbstractStyle (p, n), 
-      raw_props{.anchor=anchor},
-      _ca (nullptr)
+      AbstractPropTextAnchor (p, n, anchor), 
+      //raw_props{.anchor=anchor},
+      //_ca (nullptr)
   {
     Process::finalize_construction (p);
   }
 
   TextAnchor::TextAnchor (int anchor) :
-      AbstractStyle (), 
-      raw_props{.anchor=anchor},
-      _ca (nullptr)
+      AbstractPropTextAnchor (anchor) 
+      //raw_props{.anchor=anchor},
+      //_ca (nullptr)
   {
   }
 
@@ -2110,8 +2180,11 @@ namespace djnn
   void
   TextAnchor::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
-    if (_ca) _ca->enable (_frame);
+    AbstractPropTextAnchor::impl_activate ();
+    //if (_ca) _ca->enable (_frame);
+    Container *c = dynamic_cast<Container*> (_parent);
+    if (c)
+      c->add_to_context ("FontFamily", this);
   }
 
   void
@@ -2134,5 +2207,6 @@ namespace djnn
   {
     return new TextAnchor (raw_props.anchor);
   }
+  */
 }
 

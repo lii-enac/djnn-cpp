@@ -98,7 +98,8 @@ namespace djnn {
   void 
   UpdateDrawing::add_window_for_refresh (Window* w) 
   {
-    _win_list.push_back (w); w->set_refresh (true); 
+    _win_list.push_back (w);
+    w->set_refresh (true); 
   }
 
    void 

@@ -18,8 +18,8 @@
 #include <vector>
 #include "shapes/shapes.h"
 #include "transformation/transformations.h"
-#include "style/style.h"
 #include "style/style_types.h"
+#include "style/style.h"
 //#include "window.h"
 
 namespace djnn
@@ -110,7 +110,7 @@ namespace djnn
     {
     }
     virtual void
-    draw_rectangleclip (RectangleClip *s)
+    draw_rectangle_clip (RectangleClip *s)
     {
     }
     virtual void

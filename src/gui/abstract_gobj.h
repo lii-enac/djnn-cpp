@@ -23,6 +23,8 @@
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
 
+#include <memory>
+
 namespace djnn
 {
 
@@ -45,7 +47,9 @@ namespace djnn
     }
     virtual ~AbstractGObj () {};
     virtual process_type_e get_cpnt_type () const override { return GOBJ_T; }
-    Window*& frame () { return _frame; }
+    Window*& frame () { return _frame; } 
+    //std::weak_ptr<Window>
+    //auto frame () { return &*AbstractGObj::_frame.lock (); }
     void impl_activate () override;
     void impl_deactivate () override;
     void notify_change (unsigned int nm) override { _damaged |= nm; }
@@ -63,7 +67,9 @@ namespace djnn
     virtual Process* create_GObj_prop (TextPropertyProxy **prop, Coupling  **cprop, string *rawp, const string& name, int notify_mask);
 
   protected:
-    Window *_frame;
+    void update_frame_if_necessary ();
+    Window * _frame;
+    //std::weak_ptr<Window> _frame;
     unsigned int _damaged;
     AbstractGObjImpl *_impl;
   };

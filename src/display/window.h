@@ -22,6 +22,8 @@
 #include "../core/tree/double_property.h"
 #include "../core/tree/text_property.h"
 
+#include <memory>
+
 namespace djnn
 {
 
@@ -40,6 +42,27 @@ namespace djnn
   private:
     Picking *_picking_view;
   };
+
+  // template<typename T>
+  // class valid_ptr
+  // {
+  // public:
+  //     valid_ptr() = delete;
+  //     valid_ptr(valid_ptr const&) = delete;
+  //     valid_ptr(T data) : ptr_(new T{data}) {}
+  //     void operator=(valid_ptr const&) = delete;
+  //     ~valid_ptr() {delete ptr_;}
+
+  //     T* operator->() {return ptr_;};
+  //     void reset(T data) {this->~valid_ptr(); ptr_ = new T{data};}
+  //     void set(T value) {*ptr_ = value;}
+  //     T get() {return *ptr_;}
+  //     bool is_valid () const { return ptr_ != nullptr; }
+  //     void invalidate () { ptr_ = nullptr; }
+
+  // private:
+  //     T* ptr_;
+  // };
 
   class Window : public Process
   {
@@ -83,6 +106,10 @@ namespace djnn
     Process* holder () { return _holder; }
     void set_holder (Process *p) { _holder = p; }
     void set_cursor (const string &path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
+
+    //std::weak_ptr<Window> get_weak_ptr();
+    //std::shared_ptr<Window> _self_shared_ptr;
+
   private:
     void init_ui (const std::string &title, double x, double y, double w, double h);
     void set_frame_to_component (Process* c);

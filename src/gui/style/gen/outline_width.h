@@ -19,25 +19,22 @@
 
 namespace djnn
 {
-  class RectangleClip : public AbstractGShape
+  class OutlineWidth : public AbstractStyle
   {
   public:
-    RectangleClip (Process *p, const std::string& n, double x, double y, double width, double height);
-    RectangleClip (double x, double y, double width, double height);
-    virtual ~RectangleClip ();
+    OutlineWidth (Process *p, const std::string& n, double width);
+    OutlineWidth (double width);
+    virtual ~OutlineWidth ();
     void draw () override;
     Process* clone () override;
-    void get_properties_values (double& x, double& y, double& width, double& height);
+    void get_properties_values (double& width);
     virtual Process* find_component (const string&) override;
-		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component ("x"); }
-		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component ("y"); }
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
-		AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component ("height"); }
 
-  private:
-    struct raw_props_t { double x; double y; double width; double height; };
+  protected:
+    struct raw_props_t { double width; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight;
+    Coupling *_cwidth;
     void impl_activate () override;
     void impl_deactivate () override;
   };

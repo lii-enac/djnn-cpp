@@ -15,36 +15,40 @@
  */
 
 
-#include "../backend.h"
-#include "../abstract_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
-#include "../../display/window.h"
-#include "shapes.h"
-#include "../../core/ontology/coupling.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
+#include "display/window.h"
+#include "gui/shapes/shapes.h"
+#include "gui/style/style.h"
+#include "core/ontology/coupling.h"
+
+#include "abstract_image.h"
 
 namespace djnn
 {
-  RectangleClip::RectangleClip (Process *p, const std::string& n, double x, double y, double width, double height):
+  AbstractImage::AbstractImage (Process *p, const std::string& n, std::string path, double x, double y, double width, double height) :
     AbstractGShape (p, n),
-    raw_props{.x=x, .y=y, .width=width, .height=height},
-    _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
+    raw_props{.path=path, .x=x, .y=y, .width=width, .height=height},
+    _cpath (nullptr), _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
     set_origin (x, y);
-    Process::finalize_construction (p);
+    
   }
 
-  RectangleClip::RectangleClip (double x, double y, double width, double height):
+  AbstractImage::AbstractImage (std::string path, double x, double y, double width, double height) :
     AbstractGShape (), 
-    raw_props{.x=x, .y=y, .width=width, .height=height},
-    _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
+    raw_props{.path=path, .x=x, .y=y, .width=width, .height=height},
+    _cpath (nullptr), _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
     set_origin (x, y);
   }
 
-  RectangleClip::~RectangleClip ()
+  AbstractImage::~AbstractImage ()
   {
-    delete _cx;
+    delete _cpath;
+		delete _cx;
 		delete _cy;
 		delete _cwidth;
 		delete _cheight;
@@ -53,7 +57,11 @@ namespace djnn
     if (_symtable.size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x");
+      it = _symtable.find ("path");
+			if (it != _symtable.end ())
+				delete it->second;
+
+			it = _symtable.find ("x");
 			if (it != _symtable.end ())
 				delete it->second;
 
@@ -72,7 +80,7 @@ namespace djnn
   }
  
   Process*
-  RectangleClip::find_component (const string& name)
+  AbstractImage::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -85,6 +93,12 @@ namespace djnn
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
+    if(name=="path") {
+      coupling=&_cpath;
+      rawp_Text=&raw_props.path;
+      notify_mask = notify_damaged_geometry;
+      prop_Text=true;
+    } else
     if(name=="x") {
       coupling=&_cx;
       rawp_Double=&raw_props.x;
@@ -128,45 +142,40 @@ namespace djnn
   }
 
   void
-  RectangleClip::get_properties_values (double& x, double& y, double& width, double& height)
+  AbstractImage::get_properties_values (std::string& path, double& x, double& y, double& width, double& height)
   {
-    x = raw_props.x;
+    path = raw_props.path;
+		x = raw_props.x;
 		y = raw_props.y;
 		width = raw_props.width;
 		height = raw_props.height;
   }
 
   void
-  RectangleClip::impl_activate ()
+  AbstractImage::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
-    if(_cx) _cx->enable (_frame);
+    AbstractGShape::impl_activate ();
+    auto _frame = frame ();
+    if(_cpath) _cpath->enable (_frame);
+		if(_cx) _cx->enable (_frame);
 		if(_cy) _cy->enable (_frame);
 		if(_cwidth) _cwidth->enable (_frame);
 		if(_cheight) _cheight->enable (_frame);
   }
 
   void
-  RectangleClip::impl_deactivate ()
+  AbstractImage::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
-    if(_cx) _cx->disable ();
+    AbstractGShape::impl_deactivate ();
+    if(_cpath) _cpath->disable ();
+		if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();
 		if(_cheight) _cheight->disable ();
   }
 
-  void
-  RectangleClip::draw ()
-  {
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_rectangleclip (this);
-    }
-  }
+  
 
-  Process*
-  RectangleClip::clone ()
-  {
-    return new RectangleClip (raw_props.x, raw_props.y, raw_props.width, raw_props.height);
-  }
+  
+  
 } /* namespace djnn */

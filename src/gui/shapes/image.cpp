@@ -23,33 +23,35 @@
 
 namespace djnn
 {
-  Image::Image (const std::string& path, double x, double y, double w, double h) :
-      AbstractGShape (),
-      raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
-      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr), _cwatcher(nullptr),
-      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
-  {
-    set_origin (x, y);
-  }
-
-  Image::Image (Process *p, const std::string& n, const std::string& path, double x, double y, double w,
-		double h) :
-      AbstractGShape (p, n),
-      raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
-      _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr), _cwatcher(nullptr),
+  Image::Image (Process *p, const std::string& n, std::string path, double x, double y, double w,
+    double h) :
+      AbstractImage (p, n, path, x, y, w, h),
+      //raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
+      //_cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
+      _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
     Process::finalize_construction (p);
   }
 
+  Image::Image (std::string path, double x, double y, double w, double h) :
+      AbstractImage (path, x, y, w, h),
+      //raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
+      //_cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
+      _cwatcher(nullptr),
+      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
+  {
+    set_origin (x, y);
+  }
+
   Image::~Image ()
   {
-    delete _cx;
-    delete _cy;
-    delete _cwidth;
-    delete _cheight;
-    delete _cpath;  
+    // delete _cx;
+    // delete _cy;
+    // delete _cwidth;
+    // delete _cheight;
+    // delete _cpath;  
     //delete _cache; // can't delete void*
     if (_cwatcher) {
       Graph::instance ().remove_edge ( this->path (), _watcher);
@@ -58,37 +60,37 @@ namespace djnn
     delete _watcher;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (_symtable.size () > 2) {
-      std::map<std::string, Process*>::iterator it;
+    // if (_symtable.size () > 2) {
+    //   std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
-        delete it->second;
+    //   it = _symtable.find ("x");
+    //   if (it != _symtable.end ())
+    //     delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
-        delete it->second;
+    //   it = _symtable.find ("y");
+    //   if (it != _symtable.end ())
+    //     delete it->second;
 
-      it = _symtable.find ("width");
-      if (it != _symtable.end ())
-        delete it->second;
+    //   it = _symtable.find ("width");
+    //   if (it != _symtable.end ())
+    //     delete it->second;
 
-      it = _symtable.find ("height");
-      if (it != _symtable.end ())
-        delete it->second;
+    //   it = _symtable.find ("height");
+    //   if (it != _symtable.end ())
+    //     delete it->second;
 
-      it = _symtable.find ("path");
-      if (it != _symtable.end ())
-        delete it->second;
-    }
+    //   it = _symtable.find ("path");
+    //   if (it != _symtable.end ())
+    //     delete it->second;
+    // }
   }
 
   Process*
   Image::find_component (const string& name)
   {
-    Process* res = AbstractGShape::find_component(name);
+    Process* res = AbstractImage::find_component(name);
     if(res) return res;
-
+/*
     bool propd = false;
     bool propt = false;
     Coupling ** coupling;
@@ -135,7 +137,8 @@ namespace djnn
     else if(propt) {
       TextPropertyProxy* prop = nullptr; 
       res = create_GObj_prop(&prop, coupling, rawps, name, notify_mask);
-
+*/
+    if( name=="path" ) {
       //textProperty is only use for path SO should be: name = "path"
       _watcher = new ImageWatcher (this);
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
@@ -145,7 +148,7 @@ namespace djnn
 
     return res;
   }
-
+/*
   void
   Image::get_properties_values (string &path, double &x, double &y, double &w, double &h)
   {
@@ -155,34 +158,35 @@ namespace djnn
     w = raw_props.width;
     h = raw_props.height;
   }
-
+*/
   void
   Image::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
-    if (_cx) _cx->enable (_frame);
-    if (_cy) _cy->enable (_frame);
-    if (_cwidth) _cwidth->enable (_frame);
-    if (_cheight) _cheight->enable (_frame);
-    if (_cpath) _cpath->enable (_frame);
+    AbstractImage::impl_activate ();
+    // if (_cx) _cx->enable (_frame);
+    // if (_cy) _cy->enable (_frame);
+    // if (_cwidth) _cwidth->enable (_frame);
+    // if (_cheight) _cheight->enable (_frame);
+    // if (_cpath) _cpath->enable (_frame);
     if (_cwatcher) _cwatcher->enable();
   }
 
   void
   Image::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
-    if (_cx) _cx->disable ();
-    if (_cy) _cy->disable ();
-    if (_cwidth) _cwidth->disable ();
-    if (_cheight) _cheight->disable ();
-    if (_cpath) _cpath->disable ();
+    AbstractImage::impl_deactivate ();
+    // if (_cx) _cx->disable ();
+    // if (_cy) _cy->disable ();
+    // if (_cwidth) _cwidth->disable ();
+    // if (_cheight) _cheight->disable ();
+    // if (_cpath) _cpath->disable ();
     if (_cwatcher) _cwatcher->disable();
   }
 
   void
   Image::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_image (this);
     }

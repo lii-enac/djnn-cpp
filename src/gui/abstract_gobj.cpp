@@ -31,8 +31,10 @@ namespace djnn
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ())
+    if (this->somehow_activating ()) {
+      auto _frame = frame ();
       (*cprop)->enable(_frame);
+    }
     else
       (*cprop)->disable ();
     return *prop;
@@ -44,8 +46,10 @@ namespace djnn
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ())
+    if (this->somehow_activating ()) {
+      auto _frame = frame ();
       (*cprop)->enable(_frame);
+    }
     else
       (*cprop)->disable ();
     return *prop;
@@ -57,8 +61,10 @@ namespace djnn
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ())
+    if (this->somehow_activating ()) {
+      auto _frame = frame ();
       (*cprop)->enable(_frame);
+    }
     else
       (*cprop)->disable ();
     return *prop;
@@ -70,8 +76,10 @@ namespace djnn
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ())
+    if (this->somehow_activating ()) {
+      auto _frame = frame ();
       (*cprop)->enable(_frame);
+    }
     else
       (*cprop)->disable ();
     return *prop;
@@ -81,10 +89,10 @@ namespace djnn
 
   AbstractGObjImpl::~AbstractGObjImpl() {}
 
-
   void
-  AbstractGObj::impl_activate ()
+  AbstractGObj::update_frame_if_necessary ()
   {
+    auto _frame = frame ();
     if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
        *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent) and go through its
@@ -94,6 +102,9 @@ namespace djnn
       bool found = false;
       Process *cur_parent = _parent;
       Process *cur_child = this;
+
+      Window * frame = nullptr;
+
       while (!found && cur_parent != nullptr) {
         if (cur_parent->get_cpnt_type () == COMPONENT_T) {
           Container *cont = dynamic_cast<Container*> (cur_parent);
@@ -101,7 +112,7 @@ namespace djnn
             if (c == cur_child)
               break;
             else if (c->get_cpnt_type () == WINDOW_T && c->somehow_activating ()) {
-              _frame = dynamic_cast<Window*> (c);
+              frame = dynamic_cast<Window*> (c);
               found = true;
             }
           }
@@ -111,11 +122,24 @@ namespace djnn
           cur_parent = cur_parent->get_parent ();
         } while (cur_parent != nullptr && cur_parent->get_cpnt_type () != COMPONENT_T);
       }
+
       if (!found) {
         std::cout << "Warning no running frame found\n";
         return;
       }
+
+      //_frame = frame;
+      //AbstractGObj::_frame = frame->get_weak_ptr ();
+      AbstractGObj::frame () = frame;
     }
+  }
+
+  void
+  AbstractGObj::impl_activate ()
+  {
+    //std::cerr << __FILE__ << __LINE__ << std::endl;
+    update_frame_if_necessary ();
+    auto _frame = frame ();
     UpdateDrawing::instance ()->add_window_for_refresh (_frame);
     UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
     Backend::instance()->activate_gobj(this);
@@ -124,6 +148,7 @@ namespace djnn
   void
   AbstractGObj::impl_deactivate ()
   {
+    auto _frame = frame ();
     if (_frame != nullptr) {
       UpdateDrawing::instance ()->add_window_for_refresh (_frame);
       UpdateDrawing::instance ()->get_damaged ()->notify_activation ();

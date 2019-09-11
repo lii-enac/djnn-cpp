@@ -230,7 +230,8 @@ namespace djnn
   QtBackend::load_linear_gradient (LinearGradient *g)
   {
     double x1, y1, x2, y2;
-    g->get_properties_values (x1, y1, x2, y2);
+    int spread, coords;
+    g->get_properties_values (x1, y1, x2, y2, spread, coords);
     cur_linear_gradient = QLinearGradient (x1, y1, x2, y2);
     cur_gradient = &cur_linear_gradient;
     prepare_gradient (g);
@@ -240,7 +241,8 @@ namespace djnn
   QtBackend::load_radial_gradient (RadialGradient *g)
   {
     double cx, cy, r, fx, fy;
-    g->get_properties_values (cx, cy, r, fx, fy);
+    int spread, coords;
+    g->get_properties_values (cx, cy, r, fx, fy, spread, coords);
     cur_radial_gradient = QRadialGradient (cx, cy, r, fx, fy);
     cur_gradient = &cur_radial_gradient;
     prepare_gradient (g);

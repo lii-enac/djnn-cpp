@@ -19,25 +19,24 @@
 
 namespace djnn
 {
-  class Ellipse : public AbstractGShape
+  class AbstractRotation : public AbstractTransformation
   {
   public:
-    Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry);
-    Ellipse (double cx, double cy, double rx, double ry);
-    virtual ~Ellipse ();
-    void draw () override;
-    Process* clone () override;
-    void get_properties_values (double& cx, double& cy, double& rx, double& ry);
+    AbstractRotation (Process *p, const std::string& n, double a, double cx, double cy);
+    AbstractRotation (double a, double cx, double cy);
+    virtual ~AbstractRotation ();
+    
+    
+    void get_properties_values (double& a, double& cx, double& cy);
     virtual Process* find_component (const string&) override;
+		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component ("a"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component ("cx"); }
 		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component ("cy"); }
-		AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_component ("rx"); }
-		AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_component ("ry"); }
 
-  private:
-    struct raw_props_t { double cx; double cy; double rx; double ry; };
+  protected:
+    struct raw_props_t { double a; double cx; double cy; };
     raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_crx, *_cry;
+    Coupling *_ca, *_ccx, *_ccy;
     void impl_activate () override;
     void impl_deactivate () override;
   };

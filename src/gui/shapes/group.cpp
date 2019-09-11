@@ -69,7 +69,8 @@ namespace djnn
   void
   Group::draw ()
   {
-    if (somehow_activating () && DisplayBackend::instance ()->window () == frame ()) {
+    auto _frame = frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Container::draw ();
     }
   }

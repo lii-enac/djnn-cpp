@@ -100,6 +100,7 @@ namespace djnn {
   PolyPoint::impl_activate ()
   {
     AbstractGObj::impl_activate ();
+    auto _frame = frame ();
     if(_cx) _cx->enable (_frame);
     if(_cy) _cy->enable (_frame);
   }
@@ -115,6 +116,7 @@ namespace djnn {
   void
   PolyPoint::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly_point (raw_props.x, raw_props.y);
     }
@@ -183,6 +185,7 @@ namespace djnn {
   void
   Poly::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly (this);
     }

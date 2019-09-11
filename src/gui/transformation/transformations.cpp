@@ -44,6 +44,7 @@ namespace djnn
   {
   }
 
+/*
   AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
       AbstractTransformation (p, n),
       raw_props{.tx=tx, .ty=ty},
@@ -126,6 +127,7 @@ namespace djnn
     if(_ctx)_ctx->disable ();
     if(_cty) _cty->disable ();
   }
+*/
 
   Translation::Translation (Process *p, const string &n, double tx, double ty) :
       AbstractTranslation (p, n, tx, ty)
@@ -145,6 +147,7 @@ namespace djnn
   void
   Translation::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_translation (this);
     }
@@ -187,7 +190,7 @@ namespace djnn
   {
     return new GradientTranslation (raw_props.tx, raw_props.ty);
   }
-
+/*
   AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractTransformation (p, n),
       raw_props{.a=a, .cx=cx, .cy=cy},
@@ -284,7 +287,7 @@ namespace djnn
     if(_ccx) _ccx->disable ();
     if(_ccy) _ccy->disable ();
   }
-
+*/
   Rotation::Rotation (Process *p, const string &n, double a, double cx, double cy) :
       AbstractRotation (p, n, a, cx, cy)
   {
@@ -303,6 +306,7 @@ namespace djnn
   void
   Rotation::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_rotation (this);
     }
@@ -345,7 +349,7 @@ namespace djnn
   {
     return new GradientRotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
-
+/*
   AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractTransformation (p, n),
       raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
@@ -455,7 +459,7 @@ namespace djnn
     if(_ccx) _ccx->disable ();
     if(_ccy) _ccy->disable ();
   }
-
+*/
   Scaling::Scaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
       AbstractScaling (p, n, sx, sy, cx, cy)
   {
@@ -475,6 +479,7 @@ namespace djnn
   void
   Scaling::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_scaling (this);
     }
@@ -517,7 +522,7 @@ namespace djnn
   {
     return new GradientScaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
-
+/*
   AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
       AbstractTransformation (p, n), 
       raw_props{ .a=a },
@@ -587,7 +592,7 @@ namespace djnn
     AbstractGObj::impl_deactivate ();
     if (_ca) _ca->disable ();
   }
-
+*/
   SkewX::SkewX (Process *p, const string &n, double a) :
       AbstractSkew (p, n, a)
   {
@@ -606,6 +611,7 @@ namespace djnn
   void
   SkewX::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_x (this);
     }
@@ -667,6 +673,7 @@ namespace djnn
   void
   SkewY::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_y (this);
     }
@@ -1612,6 +1619,7 @@ namespace djnn
   void
   AbstractHomography::init_rightTranslateBy ()
   {
+    auto _frame = frame ();
     _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
     _rightTranslateBy_dx = new DoubleProperty (0);
     _rightTranslateBy_dy = new DoubleProperty (0);
@@ -1636,6 +1644,7 @@ namespace djnn
   void
   AbstractHomography::init_leftTranslateBy ()
   {
+    auto _frame = frame ();
     _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
     _leftTranslateBy_dx = new DoubleProperty (0);
     _leftTranslateBy_dy = new DoubleProperty (0);
@@ -1660,6 +1669,7 @@ namespace djnn
   void
   AbstractHomography::init_rightScaleBy () 
   {
+    auto _frame = frame ();
     _rightScaleBy_spike = new Spike (this, "rightScaleBy");
     _rightScaleBy_cx = new DoubleProperty (0);
     _rightScaleBy_cy = new DoubleProperty (0);
@@ -1696,6 +1706,7 @@ namespace djnn
   void
   AbstractHomography::init_leftScaleBy () 
   {
+    auto _frame = frame ();
     _leftScaleBy_spike = new Spike (this, "leftScaleBy");
     _leftScaleBy_cx = new DoubleProperty (0);
     _leftScaleBy_cy = new DoubleProperty (0);
@@ -1732,6 +1743,7 @@ namespace djnn
   void
   AbstractHomography::init_rightRotateBy () 
   {
+    auto _frame = frame ();
     _rightRotateBy_spike = new Spike (this, "rightRotateBy");
     _rightRotateBy_cx = new DoubleProperty (0);
     _rightRotateBy_cy = new DoubleProperty (0);
@@ -1762,6 +1774,7 @@ namespace djnn
   void
   AbstractHomography::init_leftRotateBy () 
   {
+    auto _frame = frame ();
     _leftRotateBy_spike = new Spike (this, "leftRotateBy");
     _leftRotateBy_cx = new DoubleProperty (0);
     _leftRotateBy_cy = new DoubleProperty (0);
@@ -1792,6 +1805,7 @@ namespace djnn
   void
   AbstractHomography::init_rightSkewXBy () 
   {
+    auto _frame = frame ();
     _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
     _rightSkew_X_By_cx = new DoubleProperty (0);
     _rightSkew_X_By_cy = new DoubleProperty (0);
@@ -1821,6 +1835,7 @@ namespace djnn
   void
   AbstractHomography::init_leftSkewXBy () 
   {
+    auto _frame = frame ();
     _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
     _leftSkew_X_By_cx = new DoubleProperty (0);
     _leftSkew_X_By_cy = new DoubleProperty (0);
@@ -1850,6 +1865,7 @@ namespace djnn
   void
   AbstractHomography::init_rightSkewYBy () 
   {
+    auto _frame = frame ();
     _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
     _rightSkew_Y_By_cx = new DoubleProperty (0);
     _rightSkew_Y_By_cy = new DoubleProperty (0);
@@ -1879,6 +1895,7 @@ namespace djnn
   void
   AbstractHomography::init_leftSkewYBy () 
   {
+    auto _frame = frame ();
     _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
     _leftSkew_Y_By_cx = new DoubleProperty (0);
     _leftSkew_Y_By_cy = new DoubleProperty (0);
@@ -1910,15 +1927,21 @@ namespace djnn
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
                                           double m41, double m42, double m43, double m44) :
-      AbstractTransformation (p, n),
-      raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
-                .m21=m21, .m22=m22, .m23=m23, .m24=m24,
-                .m31=m31, .m32=m32, .m33=m33, .m34=m34,
-                .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
-      _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
-      _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
-      _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
-      _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
+      AbstractPropHomography (p, n,
+                                          m11, m12, m13, m14,
+                                          m21, m22, m23, m24, 
+                                          m31, m32, m33, m34, 
+                                          m41, m42, m43, m44),
+      raw_props(AbstractPropHomography::raw_props),
+      // AbstractTransformation (p, n),
+      // raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
+      //           .m21=m21, .m22=m22, .m23=m23, .m24=m24,
+      //           .m31=m31, .m32=m32, .m33=m33, .m34=m34,
+      //           .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
+      // _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
+      // _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
+      // _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
+      // _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
 
       /* rightTranslateBy ptr */
       _rightTranslateBy_spike(nullptr), _rightTranslateBy_action(nullptr),
@@ -2190,7 +2213,7 @@ namespace djnn
       delete _leftSkew_Y_By_da;
       delete _leftSkew_Y_By_spike;
     }
-
+/*
     if (_symtable.empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
@@ -2258,15 +2281,15 @@ namespace djnn
       if (it != _symtable.end ())
         delete it->second;
     }
-
+*/
   }
 
   Process*
   AbstractHomography::find_component (const string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractPropHomography::find_component(name);
     if(res) return res;
-
+/*
     Coupling ** coupling;
     double* rawp;
     int notify_mask = notify_none;
@@ -2351,6 +2374,7 @@ namespace djnn
       rawp=&raw_props.m44;
       notify_mask = notify_damaged_transform;
     } else
+    */
     if (name.find ("rightTranslateBy") != std::string::npos) {
       init_rightTranslateBy();
       return AbstractGObj::find_component(name);
@@ -2393,12 +2417,12 @@ namespace djnn
     } else
     return nullptr;
     
-    DoublePropertyProxy* prop = nullptr; // do not cache
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
+    //DoublePropertyProxy* prop = nullptr; // do not cache
+    //res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
 
     return res;
   }
-
+/*
   void
   AbstractHomography::get_properties_values (double &m11, double &m12, double &m13, double &m14, 
                                            double &m21, double &m22, double &m23, double &m24,
@@ -2425,30 +2449,31 @@ namespace djnn
     m43 = raw_props.m43;
     m44 = raw_props.m44;
   }
-
+*/
   void
   AbstractHomography::impl_activate ()
   {
-    AbstractGObj::impl_activate ();
-    if (_cm11) _cm11->enable (_frame);
-    if (_cm12) _cm12->enable (_frame);
-    if (_cm13) _cm13->enable (_frame);
-    if (_cm14) _cm14->enable (_frame);
+    AbstractPropHomography::impl_activate ();
+    // if (_cm11) _cm11->enable (_frame);
+    // if (_cm12) _cm12->enable (_frame);
+    // if (_cm13) _cm13->enable (_frame);
+    // if (_cm14) _cm14->enable (_frame);
 
-    if (_cm21) _cm21->enable (_frame);
-    if (_cm22) _cm22->enable (_frame);
-    if (_cm23) _cm23->enable (_frame);
-    if (_cm24) _cm24->enable (_frame);
+    // if (_cm21) _cm21->enable (_frame);
+    // if (_cm22) _cm22->enable (_frame);
+    // if (_cm23) _cm23->enable (_frame);
+    // if (_cm24) _cm24->enable (_frame);
 
-    if (_cm31) _cm31->enable (_frame);
-    if (_cm32) _cm32->enable (_frame);
-    if (_cm33) _cm33->enable (_frame);
-    if (_cm34) _cm34->enable (_frame);
+    // if (_cm31) _cm31->enable (_frame);
+    // if (_cm32) _cm32->enable (_frame);
+    // if (_cm33) _cm33->enable (_frame);
+    // if (_cm34) _cm34->enable (_frame);
 
-    if (_cm41) _cm41->enable (_frame);
-    if (_cm42) _cm42->enable (_frame);
-    if (_cm43) _cm43->enable (_frame);
-    if (_cm44) _cm44->enable (_frame);
+    // if (_cm41) _cm41->enable (_frame);
+    // if (_cm42) _cm42->enable (_frame);
+    // if (_cm43) _cm43->enable (_frame);
+    // if (_cm44) _cm44->enable (_frame);
+    auto _frame = frame ();
 
     if (_rightTranslateBy_action) {
       _rightTranslateBy_dx_coupling->enable (_frame);
@@ -2505,26 +2530,26 @@ namespace djnn
   void
   AbstractHomography::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
-    if (_cm11) _cm11->disable ();
-    if (_cm12) _cm12->disable ();
-    if (_cm13) _cm13->disable ();
-    if (_cm14) _cm14->disable ();
+    AbstractPropHomography::impl_deactivate ();
+    // if (_cm11) _cm11->disable ();
+    // if (_cm12) _cm12->disable ();
+    // if (_cm13) _cm13->disable ();
+    // if (_cm14) _cm14->disable ();
 
-    if (_cm21) _cm21->disable ();
-    if (_cm22) _cm22->disable ();
-    if (_cm23) _cm23->disable ();
-    if (_cm24) _cm24->disable ();
+    // if (_cm21) _cm21->disable ();
+    // if (_cm22) _cm22->disable ();
+    // if (_cm23) _cm23->disable ();
+    // if (_cm24) _cm24->disable ();
 
-    if (_cm31) _cm31->disable ();
-    if (_cm32) _cm32->disable ();
-    if (_cm33) _cm33->disable ();
-    if (_cm34) _cm34->disable ();
+    // if (_cm31) _cm31->disable ();
+    // if (_cm32) _cm32->disable ();
+    // if (_cm33) _cm33->disable ();
+    // if (_cm34) _cm34->disable ();
 
-    if (_cm41) _cm41->disable ();
-    if (_cm42) _cm42->disable ();
-    if (_cm43) _cm43->disable ();
-    if (_cm44) _cm44->disable ();
+    // if (_cm41) _cm41->disable ();
+    // if (_cm42) _cm42->disable ();
+    // if (_cm43) _cm43->disable ();
+    // if (_cm44) _cm44->disable ();
 
     if (_rightTranslateBy_action) {
       _rightTranslateBy_dx_coupling->disable ();
@@ -2601,6 +2626,7 @@ namespace djnn
   void
   Homography::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_homography (this);
     }

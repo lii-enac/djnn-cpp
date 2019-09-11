@@ -178,7 +178,8 @@ namespace djnn
       }
 
     rect.moveTo (posX, posY - rect.height ());
-    curTextX = rect.x () + fm.width (s);
+    //curTextX = rect.x () + fm.width (s);
+    curTextX = rect.x () + fm.horizontalAdvance (s);
     curTextY = rect.y () + fm.height ();
 
     _painter->drawText (p, s);
@@ -382,7 +383,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_rectangleclip (RectangleClip *s)
+  QtBackend::draw_rectangle_clip (RectangleClip *s)
   {
     double x, y, w, h;
     s->get_properties_values(x,y,w,h);
@@ -415,7 +416,8 @@ namespace djnn
   void
   QtBackend::draw_image (Image *i)
   {
-    double x,y,w,h; string path;
+    double x,y,w,h;
+    string path;
     i->get_properties_values(path, x,y,w,h);
     load_drawing_context (i, x, y, w, h);
     QRect rect (x, y, w, h);

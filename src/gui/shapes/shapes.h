@@ -23,11 +23,12 @@
 #include "../../core/tree/text_property.h"
 #include "../style/style.h"
 
-#include "rectangle.h"
-#include "rectangleclip.h"
-#include "circle.h"
-#include "ellipse.h"
-#include "line.h"
+#include "gen/rectangle.h"
+#include "gen/rectangle_clip.h"
+#include "gen/circle.h"
+#include "gen/ellipse.h"
+#include "gen/line.h"
+#include "gen/abstract_image.h"
 
 
 namespace djnn
@@ -315,13 +316,38 @@ namespace djnn
 
   class ImageWatcher;
 
-  class Image : public AbstractGShape
+  /*class AbstractImage : public AbstractGShape
   {
   public:
-    Image (Process *p, const std::string& n, const std::string &path, double x, double y, double w, double h);
-    Image (const std::string &path, double x, double y, double w, double h);
-    virtual ~Image ();
+    AbstractImage (Process *p, const std::string& n, const std::string &path, double x, double y, double w, double h);
+    AbstractImage (const std::string &path, double x, double y, double w, double h);
+    virtual ~AbstractImage ();
     void get_properties_values (std::string &path, double &x, double &y, double &w, double &h);
+    void draw () override;
+    Process* clone () override;
+    virtual Process* find_component (const string&) override;
+    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
+    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
+    AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
+    AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
+    AbstractTextProperty* path () { return (AbstractTextProperty*) find_component("path"); }
+    
+  private:
+    struct raw_props_t { double x,y,width,height; string path; };
+    raw_props_t raw_props;
+    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath, *_cwatcher;
+    void impl_activate () override;
+    void impl_deactivate () override;
+    void *_cache;
+  };*/
+
+  class Image : public AbstractImage
+  {
+  public:
+    Image (Process *p, const std::string& n, std::string path, double x, double y, double w, double h);
+    Image (std::string path, double x, double y, double w, double h);
+    virtual ~Image ();
+    //void get_properties_values (std::string &path, double &x, double &y, double &w, double &h);
     void draw () override;
     Process* clone () override;
     virtual Process* find_component (const string&) override;
@@ -366,7 +392,10 @@ namespace djnn
     Group (Process *p, const string &n);
     Group ();
     virtual ~Group () override;
-    Window* frame () { return _gobj->frame ();}
+    //Window*
+    //std::weak_ptr<Window>
+    auto
+      frame () { return _gobj->frame ();}
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;

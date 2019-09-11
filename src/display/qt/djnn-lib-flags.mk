@@ -19,7 +19,7 @@ QTCORE = $(FRAMEWORKDIR)/QtCore.framework
 
 #$(build_dir)/src/gui/qt/%.o: CXXFLAGS +=
 lib_cppflags += -I. \
-		-I$(LOCALDIR)/include -F$(FRAMEWORKDIR) \
+		-F$(FRAMEWORKDIR) \
 		-I$(QTWIDGETS)/Headers -I$(QTOPENGL)/Headers \
 		-I$(QTGUI)/Headers -I$(QTCORE)/Headers
 lib_ldflags += -F$(FRAMEWORKDIR) $(QTLIBS)

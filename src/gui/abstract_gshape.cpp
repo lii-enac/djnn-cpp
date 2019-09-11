@@ -316,11 +316,13 @@ namespace djnn
     //DBG;
     if (is_pickable(this)) {
       //DBG;
-      if (this->frame ()) {
+
+      auto _frame = frame ();
+      if (_frame) {
         //DBG;
-        if(this->frame ()->picking_view ()) {
+        if(_frame->picking_view ()) {
           //DBG;
-          this->frame ()->picking_view ()->object_deleted (this);
+          _frame->picking_view ()->object_deleted (this);
         }
       }
     }
@@ -344,6 +346,7 @@ namespace djnn
   AbstractGShape::pick ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
+    auto _frame = frame ();
     if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }

@@ -95,6 +95,8 @@ DYNLIB =-shared
 CFLAGS ?= -fpic -g -MMD -Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
+
+CFLAGS += -I$(src_dir)
 	
 ifeq ($(findstring android,$(cross_prefix)),android)
 os := android

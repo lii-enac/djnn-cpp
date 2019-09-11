@@ -406,6 +406,9 @@ namespace djnn
         }
       }
     }
+
+    auto _frame = frame ();
+    
     if (_cx) _cx->enable (_frame);
     if (_cy) _cy->enable (_frame);
     if (_ctext) _ctext->enable (_frame);
@@ -449,6 +452,7 @@ namespace djnn
   void
   Text::draw ()
   {
+    auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
         Backend::instance ()->draw_text (this);
     }
