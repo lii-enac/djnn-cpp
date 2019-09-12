@@ -106,9 +106,9 @@ namespace djnn
   void
   PathPoint::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
+    AbstractGObj::impl_deactivate ();
   }
 
   void
@@ -266,11 +266,11 @@ namespace djnn
   void
   PathQuadratic::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if(_cx1) _cx1->disable ();
     if(_cy1) _cy1->disable ();
     if(_cx)  _cx->disable ();
     if(_cy)  _cy->disable ();
+    AbstractGObj::impl_deactivate ();
   }
 
   void
@@ -412,13 +412,13 @@ namespace djnn
   void
   PathCubic::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if(_cx1) _cx1->disable ();
     if(_cy1) _cy1->disable ();
     if(_cx2) _cx2->disable ();
     if(_cy2) _cy2->disable ();
     if(_cx)  _cx ->disable ();
     if(_cy)  _cy ->disable ();
+    AbstractGObj::impl_deactivate ();
   }
 
   void
@@ -571,7 +571,6 @@ namespace djnn
   void
   PathArc::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if(_crotx) _crotx->disable ();
     if(_cfl) _cfl->disable ();
     if(_cswfl) _cswfl->disable ();
@@ -579,6 +578,7 @@ namespace djnn
     if(_cry) _cry->disable ();
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
+    AbstractGObj::impl_deactivate ();
   }
 
   void
@@ -648,8 +648,8 @@ namespace djnn
   void
   Path::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     _items->deactivate ();
+    AbstractGShape::impl_deactivate ();
   }
 
   void

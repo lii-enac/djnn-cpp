@@ -155,6 +155,7 @@ namespace djnn
       UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
       //UpdateDrawing::instance ()->request_activation ();
       Backend::instance()->deactivate_gobj(this);
+      _frame = nullptr;
     }
   }
 }

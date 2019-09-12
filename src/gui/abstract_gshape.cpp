@@ -310,22 +310,23 @@ namespace djnn
     }
   }
 
-  AbstractGShape::~AbstractGShape ()
+  void
+  AbstractGShape::impl_deactivate ()
   {
     // remove from picking_view if is the current object
-    //DBG;
     if (is_pickable(this)) {
-      //DBG;
-
-      auto _frame = frame ();
-      if (_frame) {
-        //DBG;
-        if(_frame->picking_view ()) {
-          //DBG;
-          _frame->picking_view ()->object_deleted (this);
+      if (this->frame ()) {
+        if(this->frame ()->picking_view ()) {
+          this->frame ()->picking_view ()->object_deactivated (this);
         }
       }
     }
+
+    AbstractGObj::impl_deactivate ();
+  }
+
+  AbstractGShape::~AbstractGShape ()
+  {
 
     // remove _origin_x and _origin_y
     delete _origin_x;

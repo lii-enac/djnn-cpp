@@ -431,7 +431,6 @@ namespace djnn
   void
   Text::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if (_cx) _cx->disable ();
     if (_cy) _cy->disable ();
     if (_ctext) _ctext->disable ();
@@ -447,6 +446,7 @@ namespace djnn
     if (_cfsize) _cfsize->disable ();
     if (_cfstyle) _cfstyle->disable ();
     if (_cfweight) _cfweight->disable ();
+    AbstractGShape::impl_deactivate ();
   }
 
   void

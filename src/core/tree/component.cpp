@@ -27,6 +27,7 @@
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 //#define DEBUG
+//#define DEBUG_DEACTIVATE
 
 namespace djnn
 {
@@ -204,6 +205,18 @@ namespace djnn
   }
 
   void
+  Container::impl_deactivate ()
+  {
+    for(auto it = _children.rbegin(); it != _children.rend(); ++it) {
+      auto& c = *it;
+#ifdef DEBUG_DEACTIVATE
+      cerr << __FUNCTION__ << " name: " << c->get_name () << endl;
+#endif
+      c->deactivate ();
+    }
+  }
+
+  void
   Container::draw ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
@@ -237,14 +250,6 @@ namespace djnn
       clone->add_child (c->clone (), this->find_component_name(c));
     }
     return clone;
-  }
-
-  void
-  Container::impl_deactivate ()
-  {
-    for (auto c : _children) {
-      c->deactivate ();
-    }
   }
 
   void

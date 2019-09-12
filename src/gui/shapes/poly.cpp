@@ -108,9 +108,9 @@ namespace djnn {
   void
   PolyPoint::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     if(_cx) _cx->disable ();
     if(_cy) _cy->disable ();
+    AbstractGObj::impl_deactivate ();
   }
 
   void
@@ -178,8 +178,8 @@ namespace djnn {
   void
   Poly::impl_deactivate ()
   {
-    AbstractGObj::impl_deactivate ();
     _points->deactivate ();
+    AbstractGShape::impl_deactivate ();
   }
 
   void

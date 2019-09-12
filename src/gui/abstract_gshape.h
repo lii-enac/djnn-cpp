@@ -63,6 +63,7 @@ namespace djnn
     bool has_ui () { return ui != nullptr; }
     UI* get_ui () { return ui; }
     Process* find_component (const string &n) override;
+    void impl_deactivate () override;
 
     void pick () override;
 

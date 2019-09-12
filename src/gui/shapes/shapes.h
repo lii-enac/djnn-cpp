@@ -284,7 +284,7 @@ namespace djnn
     }
   };
 
-  class Path : public djnn::AbstractGShape
+  class Path : public AbstractGShape
   {
   public:
     Path ();

@@ -2530,7 +2530,6 @@ namespace djnn
   void
   AbstractHomography::impl_deactivate ()
   {
-    AbstractPropHomography::impl_deactivate ();
     // if (_cm11) _cm11->disable ();
     // if (_cm12) _cm12->disable ();
     // if (_cm13) _cm13->disable ();
@@ -2601,6 +2600,7 @@ namespace djnn
       _leftSkew_Y_By_cy_coupling->disable ();
       _leftSkew_Y_By_da_coupling->disable ();
     }
+    AbstractPropHomography::impl_deactivate ();
   }
 
   Homography::Homography (Process *p, const string &n, double m11, double m12, double m13, double m14, double m21,

@@ -62,8 +62,8 @@ namespace djnn
   void
   Group::impl_deactivate ()
   {
-    Container::impl_deactivate ();
     _gobj->impl_deactivate ();
+    Container::impl_deactivate ();
   }
 
   void

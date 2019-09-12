@@ -69,7 +69,7 @@ namespace djnn
   }
 
   void
-  Picking::object_deleted (AbstractGShape* gobj)
+  Picking::object_deactivated (AbstractGShape* gobj)
   {
     /* Reset _catching_shape to nullptr if this object has been removed from picking_view */
     if (_catching_shape == gobj) {

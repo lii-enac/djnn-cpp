@@ -174,13 +174,13 @@ namespace djnn
   void
   Image::impl_deactivate ()
   {
-    AbstractImage::impl_deactivate ();
     // if (_cx) _cx->disable ();
     // if (_cy) _cy->disable ();
     // if (_cwidth) _cwidth->disable ();
     // if (_cheight) _cheight->disable ();
     // if (_cpath) _cpath->disable ();
     if (_cwatcher) _cwatcher->disable();
+    AbstractImage::impl_deactivate ();
   }
 
   void
