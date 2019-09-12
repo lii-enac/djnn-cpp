@@ -164,8 +164,30 @@ namespace djnn {
     h->format = f;
 
     djn__NamespaceTable->insert (pair<string, djn__XMLParser*> (uri, h));
+    //cerr << "XML registered " << uri << endl;
     return 1;
   }
+
+  int
+  XML::djn_UnregisterXMLParser (const string &uri)
+  {
+    djn__XMLParser *h;
+    map<string, djn__XMLParser*>::iterator it;
+    it = djn__NamespaceTable->find (uri);
+    if (it == djn__NamespaceTable->end ()) {
+      cerr << "unregister warning: no registered XML parsers on namespace " << uri << endl;
+      return 0;
+    }
+
+    //h = (djn__XMLParser*) malloc (sizeof(djn__XMLParser));
+    //h->lookup = l;
+    //h->format = f;
+    free(it->second);
+    djn__NamespaceTable->erase (it);
+    //cerr << "XML unregistered " << uri << endl;
+    return 1;
+  }
+
 
   void
   XML::clear_xml_parser () {

@@ -286,10 +286,8 @@ namespace djnn
   void
   clear_gui ()
   {
-
+    clear_svg_parser ();
     __module_initialized = false;
-    
-
   }
 
 } /* namespace Smala */

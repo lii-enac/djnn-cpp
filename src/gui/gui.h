@@ -32,5 +32,6 @@ namespace djnn {
 
   void init_gui ();
   void init_svg_parser ();
+  void clear_svg_parser ();
   void clear_gui ();
 }

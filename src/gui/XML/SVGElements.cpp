@@ -238,6 +238,10 @@ void djnn::init_svg_parser () {
 
 }
 
+void djnn::clear_svg_parser () {
+	XML::djn_UnregisterXMLParser("http://www.w3.org/2000/svg");
+}
+
 /*
  *  the SVG element start and end handlers
  */
