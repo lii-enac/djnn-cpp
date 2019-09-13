@@ -25,8 +25,8 @@ namespace djnn
     TextAnchor (Process *p, const std::string& n, int anchor);
     TextAnchor (int anchor);
     virtual ~TextAnchor ();
-    
-    
+    void draw () override;
+    Process* clone () override;
     void get_properties_values (int& anchor);
     virtual Process* find_component (const string&) override;
 		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_component ("anchor"); }

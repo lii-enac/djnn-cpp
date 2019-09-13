@@ -34,7 +34,7 @@ namespace djnn
     _canchor (nullptr)
   {
     
-    
+    Process::finalize_construction (p);
   }
 
   TextAnchor::TextAnchor (int anchor) :
@@ -119,7 +119,22 @@ namespace djnn
   }
 
   
+  void
+  TextAnchor::draw ()
+  {
+    auto _frame = frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_text_anchor (this);
+    }
+  }
+
 
   
+  Process*
+  TextAnchor::clone ()
+  {
+    return new TextAnchor (raw_props.anchor);
+  }
+
   
 } /* namespace djnn */
