@@ -16,8 +16,10 @@
 
 namespace djnn {
   static Udev *udev;
+
   void
   p_init_input () {
     udev = new Udev ();
+    p_init_gpios ();
   }
 }

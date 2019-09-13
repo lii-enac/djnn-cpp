@@ -13,9 +13,15 @@
  */
 
 #include "../input-priv.h"
+#include "../../core/utils/error.h"
 
 namespace djnn {
   void
   p_init_input () {
+  }
+  Process* p_find_gpio (const string &path, direction_e dir)
+  {
+    warning (nullptr, "GPIOs not supported on this platform");
+    return nullptr;
   }
 }

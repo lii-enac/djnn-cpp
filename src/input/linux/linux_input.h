@@ -19,6 +19,8 @@
 #include <libevdev/libevdev.h>
 
 #include "../input-priv.h"
+#include "../../core/control/action.h"
+#include "../../core/ontology/coupling.h"
 #include "../../core/tree/int_property.h"
 #include "../../core/tree/text_property.h"
 #include "../../core/tree/set.h"
@@ -164,5 +166,42 @@ namespace djnn {
     Set *_touches;
     IntProperty *_max_x, *_max_y;
     LinuxTouch *_cur_touch;
+  };
+
+  class GPIOLine: public Process {
+    class GPIOLineWriteAction : public Action {
+    public:
+      GPIOLineWriteAction (Process *p, const string &n) : Action (p, n) {}
+      virtual ~GPIOLineWriteAction () {}
+    protected:
+      void impl_activate () override { ((GPIOLine*)_parent)->write_value (); }
+      void impl_deactivate () override {}
+    };
+    class GPIOLineReadAction : public Action {
+    public:
+      GPIOLineReadAction (Process *p, const string &n) : Action (p, n) {}
+      virtual ~GPIOLineReadAction () {}
+    protected:
+      void impl_activate () override { ((GPIOLine*)_parent)->read_value (); }
+      void impl_deactivate () override {}
+    };
+  public:
+    GPIOLine (Process *p, const string &n, int pin, direction_e dir);
+    virtual ~GPIOLine ();
+    direction_e get_direction () { return _dir; }
+    int get_pin () { return _pin; }
+    void write_value ();
+    void read_value ();
+  protected:
+    void impl_activate () override {}
+    void impl_deactivate () override {}
+  private:
+    int _pin;
+    direction_e _dir;
+    int _fd;
+    IOFD *_iofd;
+    BoolProperty *_value;
+    Process *_action;
+    Coupling *_c_action;
   };
 }

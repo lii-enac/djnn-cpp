@@ -17,4 +17,6 @@
 
 namespace djnn {
   void p_init_input ();
+  void p_init_gpios ();
+  Process* p_find_gpio (const string &path, direction_e dir);
 }
