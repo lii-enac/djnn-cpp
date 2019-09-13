@@ -114,8 +114,8 @@ namespace djnn
   void
   AbstractOpacity::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_calpha) _calpha->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

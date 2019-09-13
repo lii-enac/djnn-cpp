@@ -153,11 +153,11 @@ namespace djnn
   void
   AbstractPropLinearGradient::impl_deactivate ()
   {
-    AbstractGradient::impl_deactivate ();
     if(_cx1) _cx1->disable ();
 		if(_cy1) _cy1->disable ();
 		if(_cx2) _cx2->disable ();
 		if(_cy2) _cy2->disable ();
+    AbstractGradient::impl_deactivate ();
   }
 
   

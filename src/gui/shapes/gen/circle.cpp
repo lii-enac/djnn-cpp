@@ -140,10 +140,10 @@ namespace djnn
   void
   Circle::impl_deactivate ()
   {
-    AbstractGShape::impl_deactivate ();
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
 		if(_cr) _cr->disable ();
+    AbstractGShape::impl_deactivate ();
   }
 
   

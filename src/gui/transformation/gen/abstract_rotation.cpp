@@ -140,10 +140,10 @@ namespace djnn
   void
   AbstractRotation::impl_deactivate ()
   {
-    AbstractTransformation::impl_deactivate ();
     if(_ca) _ca->disable ();
 		if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
+    AbstractTransformation::impl_deactivate ();
   }
 
   

@@ -114,8 +114,8 @@ namespace djnn
   void
   AbstractPropFontWeight::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cweight) _cweight->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

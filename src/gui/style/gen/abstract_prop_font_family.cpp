@@ -114,8 +114,8 @@ namespace djnn
   void
   AbstractPropFontFamily::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cfamily) _cfamily->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

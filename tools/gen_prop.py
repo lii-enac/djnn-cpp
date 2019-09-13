@@ -142,8 +142,8 @@ namespace djnn
   void
   %(CLASS)s::impl_deactivate ()
   {
-    %(INHERITS)s::impl_deactivate ();
     %(DEF_COUPLINGS_DISABLE)s;
+    %(INHERITS)s::impl_deactivate ();
   }
 
   %(DEF_DRAW)s
@@ -459,7 +459,7 @@ dc = DjnnClass("DashOffset", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('offset', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("GradientStop", "AbstractStyle", "../src/gui/style", origin=None)
+dc = DjnnClass("AbstractPropGradientStop", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
 dc.props.append(Prop('r', 'double', None, "style"))
 dc.props.append(Prop('g', 'double', None, "style"))
 dc.props.append(Prop('b', 'double', None, "style"))

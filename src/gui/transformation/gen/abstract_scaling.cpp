@@ -153,11 +153,11 @@ namespace djnn
   void
   AbstractScaling::impl_deactivate ()
   {
-    AbstractTransformation::impl_deactivate ();
     if(_csx) _csx->disable ();
 		if(_csy) _csy->disable ();
 		if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
+    AbstractTransformation::impl_deactivate ();
   }
 
   

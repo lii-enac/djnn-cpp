@@ -114,8 +114,8 @@ namespace djnn
   void
   Texture::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cpath) _cpath->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

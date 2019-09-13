@@ -127,9 +127,9 @@ namespace djnn
   void
   AbstractTranslation::impl_deactivate ()
   {
-    AbstractTransformation::impl_deactivate ();
     if(_ctx) _ctx->disable ();
 		if(_cty) _cty->disable ();
+    AbstractTransformation::impl_deactivate ();
   }
 
   

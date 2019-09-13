@@ -166,12 +166,12 @@ namespace djnn
   void
   AbstractPropRadialGradient::impl_deactivate ()
   {
-    AbstractGradient::impl_deactivate ();
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
 		if(_cr) _cr->disable ();
 		if(_cfx) _cfx->disable ();
 		if(_cfy) _cfy->disable ();
+    AbstractGradient::impl_deactivate ();
   }
 
   

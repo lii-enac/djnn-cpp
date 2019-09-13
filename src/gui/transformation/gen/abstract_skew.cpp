@@ -114,8 +114,8 @@ namespace djnn
   void
   AbstractSkew::impl_deactivate ()
   {
-    AbstractTransformation::impl_deactivate ();
     if(_ca) _ca->disable ();
+    AbstractTransformation::impl_deactivate ();
   }
 
   

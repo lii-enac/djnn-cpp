@@ -179,13 +179,13 @@ namespace djnn
   void
   Rectangle::impl_deactivate ()
   {
-    AbstractGShape::impl_deactivate ();
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();
 		if(_cheight) _cheight->disable ();
 		if(_crx) _crx->disable ();
 		if(_cry) _cry->disable ();
+    AbstractGShape::impl_deactivate ();
   }
 
   

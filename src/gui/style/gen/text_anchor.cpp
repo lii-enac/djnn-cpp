@@ -114,8 +114,8 @@ namespace djnn
   void
   TextAnchor::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_canchor) _canchor->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

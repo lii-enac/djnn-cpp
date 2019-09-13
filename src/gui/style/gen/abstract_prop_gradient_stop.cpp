@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "gradient_stop.h"
+#include "abstract_prop_gradient_stop.h"
 
 namespace djnn
 {
-  GradientStop::GradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset) :
+  AbstractPropGradientStop::AbstractPropGradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset) :
     AbstractStyle (p, n),
     raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
   {
     
-    Process::finalize_construction (p);
+    
   }
 
-  GradientStop::GradientStop (double r, double g, double b, double a, double offset) :
+  AbstractPropGradientStop::AbstractPropGradientStop (double r, double g, double b, double a, double offset) :
     AbstractStyle (), 
     raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     
   }
 
-  GradientStop::~GradientStop ()
+  AbstractPropGradientStop::~AbstractPropGradientStop ()
   {
     delete _cr;
 		delete _cg;
@@ -80,7 +80,7 @@ namespace djnn
   }
  
   Process*
-  GradientStop::find_component (const string& name)
+  AbstractPropGradientStop::find_component (const string& name)
   {
     Process* res = AbstractStyle::find_component(name);
     if(res) return res;
@@ -142,7 +142,7 @@ namespace djnn
   }
 
   void
-  GradientStop::get_properties_values (double& r, double& g, double& b, double& a, double& offset)
+  AbstractPropGradientStop::get_properties_values (double& r, double& g, double& b, double& a, double& offset)
   {
     r = raw_props.r;
 		g = raw_props.g;
@@ -152,7 +152,7 @@ namespace djnn
   }
 
   void
-  GradientStop::impl_activate ()
+  AbstractPropGradientStop::impl_activate ()
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
@@ -164,33 +164,18 @@ namespace djnn
   }
 
   void
-  GradientStop::impl_deactivate ()
+  AbstractPropGradientStop::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cr) _cr->disable ();
 		if(_cg) _cg->disable ();
 		if(_cb) _cb->disable ();
 		if(_ca) _ca->disable ();
 		if(_coffset) _coffset->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   
-  void
-  GradientStop::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->load_gradient_stop (this);
-    }
-  }
-
 
   
-  Process*
-  GradientStop::clone ()
-  {
-    return new GradientStop (raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
-  }
-
   
 } /* namespace djnn */

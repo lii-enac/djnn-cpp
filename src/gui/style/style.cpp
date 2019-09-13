@@ -1001,11 +1001,12 @@ namespace djnn
     return new DashOffset (raw_props.offset);
   }
 */
-  /*
+
   GradientStop::GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset) :
-      AbstractStyle (p, n),
-      raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
-      _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _co (nullptr)
+      //AbstractStyle (p, n),
+      AbstractPropGradientStop (p, n, r, g, b, a, offset)
+      //raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
+      //_cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _co (nullptr)
   {
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
     if (grad == nullptr) {
@@ -1016,9 +1017,14 @@ namespace djnn
   }
 
   GradientStop::GradientStop (double r, double g, double b, double a, double offset) :
-      AbstractStyle (),
-      raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
-      _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _co (nullptr)
+      //AbstractStyle (),
+      AbstractPropGradientStop (r, g, b, a, offset)
+      //raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
+      //_cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _co (nullptr)
+  {
+  }
+
+  GradientStop::~GradientStop()
   {
   }
 
@@ -1027,7 +1033,7 @@ namespace djnn
   {
     return new GradientStop (raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
   }
-
+/*
   GradientStop::~GradientStop ()
   {
     delete _cr;
@@ -1136,12 +1142,12 @@ namespace djnn
     if (_ca) _ca->disable ();
     if (_co) _co->disable ();
   }
-
+*/
   void
   GradientStop::draw ()
   {
     Backend::instance ()->load_gradient_stop (this);
-  }*/
+  }
 
   AbstractGradient::AbstractGradient (Process *p, const std::string &n, int spread, int coords) :
       AbstractPropGradient (p, n, spread, coords),

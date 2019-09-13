@@ -19,14 +19,14 @@
 
 namespace djnn
 {
-  class GradientStop : public AbstractStyle
+  class AbstractPropGradientStop : public AbstractStyle
   {
   public:
-    GradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset);
-    GradientStop (double r, double g, double b, double a, double offset);
-    virtual ~GradientStop ();
-    void draw () override;
-    Process* clone () override;
+    AbstractPropGradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset);
+    AbstractPropGradientStop (double r, double g, double b, double a, double offset);
+    virtual ~AbstractPropGradientStop ();
+    
+    
     void get_properties_values (double& r, double& g, double& b, double& a, double& offset);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component ("r"); }

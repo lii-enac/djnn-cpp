@@ -114,8 +114,8 @@ namespace djnn
   void
   DashOffset::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_coffset) _coffset->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

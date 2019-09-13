@@ -114,8 +114,8 @@ namespace djnn
   void
   FillRule::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_crule) _crule->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

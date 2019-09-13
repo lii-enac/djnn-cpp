@@ -114,8 +114,8 @@ namespace djnn
   void
   OutlineMiterLimit::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_climit) _climit->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

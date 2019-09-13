@@ -43,7 +43,7 @@ namespace djnn
 #include "gen/outline_join_style.h"
 #include "gen/outline_miter_limit.h"
 #include "gen/dash_offset.h"
-#include "gen/gradient_stop.h"
+#include "gen/abstract_prop_gradient_stop.h"
 #include "gen/text_anchor.h"
 
 #include "gen/abstract_color.h"
@@ -354,30 +354,34 @@ namespace djnn
     Coupling* _co;
   };
 */
-  /*
-  class GradientStop : public AbstractStyle
+}
+
+//#include "gen/abstract_prop_gradient_stop.h"
+
+namespace djnn {
+  class GradientStop : public AbstractPropGradientStop
   {
   public:
     GradientStop (Process *p, const std::string &n, double r, double g, double b, double a, double offset);
     GradientStop (double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
-    void get_properties_values (double &r, double &g, double &b, double &a, double &offset);
-    virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component("r"); }
-    AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component("g"); }
-    AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component("b"); }
-    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
-    AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component("offset"); }
-    void impl_activate () override;
-    void impl_deactivate () override;
+    // void get_properties_values (double &r, double &g, double &b, double &a, double &offset);
+    // virtual Process* find_component (const string&) override;
+    // AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component("r"); }
+    // AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component("g"); }
+    // AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component("b"); }
+    // AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
+    // AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component("offset"); }
+    // void impl_activate () override;
+    // void impl_deactivate () override;
     void draw () override;
     Process* clone () override;
   private:
-    struct raw_props_t { double r; double g; double b; double a;  double offset; };
-    raw_props_t raw_props;
-    Coupling *_cr, *_cg, *_cb, *_ca, *_co;
+    // struct raw_props_t { double r; double g; double b; double a;  double offset; };
+    // raw_props_t raw_props;
+    // Coupling *_cr, *_cg, *_cb, *_ca, *_co;
   };
-  */
+  
 
   /*class AbstractGradient : public AbstractStyle
   {

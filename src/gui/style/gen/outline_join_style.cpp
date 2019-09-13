@@ -114,8 +114,8 @@ namespace djnn
   void
   OutlineJoinStyle::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cjoin) _cjoin->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

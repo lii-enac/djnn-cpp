@@ -140,10 +140,10 @@ namespace djnn
   void
   AbstractColor::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cr) _cr->disable ();
 		if(_cg) _cg->disable ();
 		if(_cb) _cb->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

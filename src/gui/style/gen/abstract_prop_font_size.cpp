@@ -127,9 +127,9 @@ namespace djnn
   void
   AbstractPropFontSize::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cunit) _cunit->disable ();
 		if(_csize) _csize->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

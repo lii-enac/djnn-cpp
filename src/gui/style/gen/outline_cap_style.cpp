@@ -114,8 +114,8 @@ namespace djnn
   void
   OutlineCapStyle::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_ccap) _ccap->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

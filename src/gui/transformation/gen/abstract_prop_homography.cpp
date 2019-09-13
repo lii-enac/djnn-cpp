@@ -309,7 +309,6 @@ namespace djnn
   void
   AbstractPropHomography::impl_deactivate ()
   {
-    AbstractTransformation::impl_deactivate ();
     if(_cm11) _cm11->disable ();
 		if(_cm12) _cm12->disable ();
 		if(_cm13) _cm13->disable ();
@@ -326,6 +325,7 @@ namespace djnn
 		if(_cm42) _cm42->disable ();
 		if(_cm43) _cm43->disable ();
 		if(_cm44) _cm44->disable ();
+    AbstractTransformation::impl_deactivate ();
   }
 
   

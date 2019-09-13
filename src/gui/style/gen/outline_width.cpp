@@ -114,8 +114,8 @@ namespace djnn
   void
   OutlineWidth::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cwidth) _cwidth->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   

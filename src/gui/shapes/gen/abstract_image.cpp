@@ -166,12 +166,12 @@ namespace djnn
   void
   AbstractImage::impl_deactivate ()
   {
-    AbstractGShape::impl_deactivate ();
     if(_cpath) _cpath->disable ();
 		if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
 		if(_cwidth) _cwidth->disable ();
 		if(_cheight) _cheight->disable ();
+    AbstractGShape::impl_deactivate ();
   }
 
   

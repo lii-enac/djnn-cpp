@@ -153,11 +153,11 @@ namespace djnn
   void
   Ellipse::impl_deactivate ()
   {
-    AbstractGShape::impl_deactivate ();
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
 		if(_crx) _crx->disable ();
 		if(_cry) _cry->disable ();
+    AbstractGShape::impl_deactivate ();
   }
 
   

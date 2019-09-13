@@ -127,9 +127,9 @@ namespace djnn
   void
   AbstractPropGradient::impl_deactivate ()
   {
-    AbstractStyle::impl_deactivate ();
     if(_cspread) _cspread->disable ();
 		if(_ccoords) _ccoords->disable ();
+    AbstractStyle::impl_deactivate ();
   }
 
   
