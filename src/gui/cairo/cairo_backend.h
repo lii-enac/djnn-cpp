@@ -116,7 +116,7 @@ namespace djnn
     void
     draw_path_closure () override;
     void
-    draw_rectangleclip (RectangleClip *r) override;
+    draw_rectangle_clip (RectangleClip *r) override;
     void
     draw_path_clip (Path *p) override;
     void

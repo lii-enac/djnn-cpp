@@ -320,7 +320,8 @@ namespace djnn
   CairoBackend::load_linear_gradient (LinearGradient *g)
   {
     double x1, y1, x2, y2;
-    g->get_properties_values (x1, y1, x2, y2);
+    int spread, coords;
+    g->get_properties_values (x1, y1, x2, y2, spread, coords);
     _cur_cairo_pattern = cairo_pattern_create_linear (x1, y1, x2, y2);
     prepare_gradient (g);
   }
@@ -329,7 +330,8 @@ namespace djnn
   CairoBackend::load_radial_gradient (RadialGradient *g)
   {
     double cx, cy, r, fx, fy;
-    g->get_properties_values (cx, cy, r, fx, fy);
+    int spread, coords;
+    g->get_properties_values (cx, cy, r, fx, fy, spread, coords);
     _cur_cairo_pattern = cairo_pattern_create_radial (cx, cy, r, fx, fy, 0);
     prepare_gradient (g);
   }
