@@ -422,8 +422,8 @@ endif
 
 ifeq ($(os), MinGW)
 #https://www.msys2.org/
-#pkgdeps := git make
-pkgdeps := pkg-config gcc boost expat curl qt5
+#pkgdeps := git make pkg-config
+pkgdeps := gcc boost expat curl qt5
 pkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S --needed
