@@ -21,12 +21,12 @@ make install-pkgdeps
 make -j  
 ```
 ---- WINDOWS -----  
-install MSYS2 (https://www.msys2.org/)  
-then in an MSYS2 terminal:
+install MSYS2 (follow instructions from https://www.msys2.org/)  
+then in an MSYS2-MSYS terminal:
 ```
 pacman -S git make pkg-config
 ```
-launch a mingw64 terminal (and NOT MSYS2) then:  
+launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then:  
 ```
 git clone -c core.symlinks=true https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
