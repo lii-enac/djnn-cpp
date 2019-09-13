@@ -54,7 +54,8 @@ ifndef arch
 arch := $(shell uname -m)
 endif
 
-osmingw := MINGW64_NT-10.0
+osmingw := MINGW64_NT-6.3-9600-WOW64
+#osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
 
@@ -250,7 +251,7 @@ $1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_all_ldflags := $$($1_lib_ldflags)
 
-ifeq ($(os),$(filter $(os),Darwin MINGW64_NT-10.0))
+ifeq ($(os),$(filter $(os),Darwin $(osmingw)))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
@@ -416,7 +417,7 @@ pkgdeps += sdl2 sdl2_image
 pkgcmd := brew install
 endif
 
-ifeq ($(os),MINGW64_NT-10.0)
+ifeq ($(os), $(osmingw))
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
@@ -426,6 +427,7 @@ pkgcmd := pacman -S --needed
 endif
 
 install-pkgdeps:
+	echo $(os)
 	$(pkgcmd) $(pkgdeps)
 .PHONY: install-pkgdeps
 

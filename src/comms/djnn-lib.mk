@@ -21,7 +21,7 @@ lib_ldflags = -L/usr/local/lib64 -livy -lpcre
 endif
 ifeq ($(os),$(osmingw))
 lib_cppflags = -I../ivy-c
-lib_ldflags = -L../ivy-c/src -livy -lws2_32 -L/mingw64/lib -lpcre
+lib_ldflags = -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 
 lib_srcs := $(shell find src/comms -name "*.cpp")
