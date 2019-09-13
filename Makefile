@@ -54,7 +54,10 @@ ifndef arch
 arch := $(shell uname -m)
 endif
 
-osmingw := MINGW64_NT-6.3-9600-WOW64
+ifeq ($(findstring MINGW,$(os)),MINGW)
+os := MinGW
+endif
+#osmingw := MINGW64_NT-6.3-9600-WOW64
 #osmingw := MINGW64_NT-10.0
 #osmingw := MINGW64_NT-6.1
 #osmingw := MINGW32_NT-6.1
@@ -85,7 +88,7 @@ LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
 # for windows with mingwXX
-ifeq ($(os),$(osmingw))
+ifeq ($(os),MinGW)
 lib_suffix=.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB =-shared
@@ -192,7 +195,7 @@ djnn_libs := core base display gui animation
 # comms input
 endif
 
-ifeq ($(os),$(osmingw))
+ifeq ($(os),MinGW)
 djnn_libs := core base comms display gui animation utils files
 # input
 endif
@@ -251,7 +254,7 @@ $1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_all_ldflags := $$($1_lib_ldflags)
 
-ifeq ($(os),$(filter $(os),Darwin $(osmingw)))
+ifeq ($(os),$(filter $(os),Darwin MinGW))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
@@ -417,7 +420,7 @@ pkgdeps += sdl2 sdl2_image
 pkgcmd := brew install
 endif
 
-ifeq ($(os), $(osmingw))
+ifeq ($(os), MinGW)
 #https://www.msys2.org/
 #pkgdeps := git make
 pkgdeps := pkg-config gcc boost expat curl qt5
