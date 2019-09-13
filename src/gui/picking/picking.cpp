@@ -16,6 +16,7 @@
  */
 #include "color_picking.h"
 #include "../transformation/transformations.h"
+#include <assert.h>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 

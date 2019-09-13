@@ -15,8 +15,8 @@
 
 #include "IvyAccess.h"
 
-#include "Ivy/ivy.h"
-#include "Ivy/ivyloop.h"
+#include "ivy.h" //FIXME
+#include "ivyloop.h" // FIXME
 #include "../core/syshook/../utils/error.h"
 
 #include <iostream>

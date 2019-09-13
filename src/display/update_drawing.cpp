@@ -3,6 +3,8 @@
 #include "../core/control/action.h"
 #include "../core/tree/bool_property.h"
 
+#include <algorithm>
+
 namespace djnn {
 
   void 
@@ -105,7 +107,7 @@ namespace djnn {
    void 
   UpdateDrawing::remove_window_for_refresh (Window* w) 
   {
-    _win_list.erase (remove (_win_list.begin (), _win_list.end (), w), _win_list.end ());
+    _win_list.erase (std::remove (_win_list.begin (), _win_list.end (), w), _win_list.end ());
     w->set_refresh (false);
   }
 

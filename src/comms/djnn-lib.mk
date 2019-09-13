@@ -12,15 +12,15 @@ lib_djnn_deps = core
 # sudo make installlibs includes
 
 ifeq ($(os),Darwin)
-lib_cppflags = -I/opt/local/include/
+lib_cppflags = -I/opt/local/include/Ivy
 lib_ldflags = -L/opt/local/lib -livy
 endif
 ifeq ($(os),Linux)
-lib_cppflags = -I/usr/local/include/
+lib_cppflags = -I/usr/local/include/Ivy
 lib_ldflags = -L/usr/local/lib64 -livy -lpcre
 endif
 ifeq ($(os),MinGW)
-lib_cppflags = -I../ivy-c
+lib_cppflags = -I/usr/include
 lib_ldflags = -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 

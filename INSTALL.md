@@ -42,8 +42,9 @@ Windows:
 pacman -S subversion
 svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
 cd ivy-c/src
-make static-libs shared-libs  
-#sudo make installlibs includes  
+make -f Makefile.mingw static-libs shared-libs
+(you may modify Makefile.mingw to not install:  libxtivy.* libtclivy.*, libgtkivy.*)
+make -f Makefile.mingw installlibs includes
 ```
 
 Linux/Ubuntu:
