@@ -12,6 +12,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 #--------------------------------------------
 
+## [1.6.0] - 2019-09-17
+### NEW
+ - New physics module (optional)
+ - New Phidgets module (optional)
+ - New utils module
+ - New simple file reader component
+ - New Switch_range component
+ - New support GPIO for linux plateform in input module
+ - New implementation of multitouch
+ - New UI for graphical object working with mouse and touch
+ - New ScaleRotateTranslate component behavior for multitouch purpose.
+ - Implemented the general concept of dynamic destruction (delete)
+ - Process can only have 1 execution graph vertex associate and vice versa
+
+### Added
+ - Added internal enum process_type_e
+ - Added Action class
+ - Added functions in properties : set*, get*
+ - Added new functions in execution graph API
+ - Added UI touch
+ - Added mechanism to secure process/coupling interaction on process delete : about_to_delete_src ()
+ - Added some Makefile elements for code coverage
+ - Added dump function for set component
+
+### Changed
+ - Improved execution graph and model for performances : can't reactivate a component already activate, except components made for it.
+ - Improved Management of edges duplicates in execution graph.
+ - Improved parent setting : made only once in finalize_construction () or in add_child ().
+ - Replaced Process (parent, name) by Process (name)
+ - add_state_dependency are now made in set_parent when the parent is set.
+ - Blank component deactivates right after his activation (like a spike component)
+ - Moved process and coupling on core/ontology directory
+ - Vertices_t is now a std::list instead of std::vecor (perf)
+ - Coupling can now change src
+ - Mainloop can now stop and restart
+ - Improved propagation algorithm
+ - Improved state dependence mechanism
+ - Improved execution flag management
+ - Improved the use of auto generation file using gen_prop.py
+ - Replaced Process::finalize by Process::finalize_construction
+ - Replaced de/activate () by impl_de/activate ()
+ - Replaced de/activation () by de/activate ()
+ - Replaced set_activate by set_activation_state
+ - Replaced browse_in_depth by traverse_depth_first
+ - Improved IvyAccess Code.
+ - Improved general performance : memory, leak
+ - Improved quality code : sonarqube check
+ - Improved Makefile mechanism for Windows, Linux, Raspbian and MacOs
+ - Cleaned code
+ - Improved Install.md
+
+### Fixed
+ - Fixed picking deactivation
+ - Fixed Rectangle can now be draw with width/heigh < than 1
+ - Fixed several component's destructor
+ - Fixed enter/leave event management
+ - Fixed bug on activation propagation
+ - Fixed synchronizer coupling
+ - Fixed Linux compilation : udev, qt5.9
+ - Fixed Windows compilation
+ - Fixed Cairo compilation
+
+#--------------------------------------------
+
 ## [1.5.0] - 2019-06-04
 ### NEW
 - New module : display
@@ -202,6 +266,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.0.0] - 2018-12-17
 note: debut on changelog. This section has to be completed, if we have time. 
+### NEW
 ### Added
 ### Changed
 ### Deprecated
