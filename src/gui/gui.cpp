@@ -264,6 +264,16 @@ namespace djnn
   init_gui ()
   {
 
+    bool found_display = false;
+    for(auto it = djnn::loadedModules.rbegin(); it != djnn::loadedModules.rend(); ++it) {
+      if (*it == "display"){
+        found_display = true;
+        continue;
+      }
+    }
+    if (!found_display)
+        error (nullptr, " module display has not been initialized before module GUI and it should");
+
     if (__module_initialized == false) {
 
       __module_initialized = true;
