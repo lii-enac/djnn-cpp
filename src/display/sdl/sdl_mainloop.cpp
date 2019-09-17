@@ -113,6 +113,7 @@ namespace djnn {
   void
   SDLMainloop::sdl_run ()
   {
+    set_please_stop (false);
     while (!get_please_stop ()) {
       _wakeup_already_triggered=false;
       SDL_Event e;
