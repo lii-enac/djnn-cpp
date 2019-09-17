@@ -30,19 +30,21 @@
 namespace djnn
 {
   Clock::Clock (milliseconds period)
+  : Clock(period.count ())
   {
-    _period = new IntProperty (this, "period", period.count ());
-    _elapsed = new DoubleProperty (this, "elapsed", 0);
-    _tick = new Spike (this, "tick");
+    //_period = new IntProperty (this, "period", period.count ());
+    //_elapsed = new DoubleProperty (this, "elapsed", 0);
+    //_tick = new Spike (this, "tick");
   }
 
   Clock::Clock (Process *p, const std::string& n, milliseconds period) :
-      Process (n)
+      Clock(p, n, period.count ())
+      //Process (n)
   {
-    _period = new IntProperty (this, "period", period.count ());
-    _elapsed = new DoubleProperty (this, "elapsed", 0);
-    _tick = new Spike (this, "tick");
-    Process::finalize_construction (p);
+    //_period = new IntProperty (this, "period", period.count ());
+    //_elapsed = new DoubleProperty (this, "elapsed", 0);
+    //_tick = new Spike (this, "tick");
+    //Process::finalize_construction (p);
   }
 
   Clock::Clock (int period)
