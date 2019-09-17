@@ -30,18 +30,18 @@
 
 namespace djnn {
 
-    SDLMainloop* SDLMainloop::_instance;
-    std::once_flag SDLMainloop::onceFlag;
+  SDLMainloop* SDLMainloop::_instance;
+  std::once_flag SDLMainloop::onceFlag;
 
-    SDLMainloop&
-    SDLMainloop::instance ()
-    {
-      std::call_once (SDLMainloop::onceFlag, [] () {
-          _instance = new SDLMainloop ();
-      });
+  SDLMainloop&
+  SDLMainloop::instance ()
+  {
+    std::call_once (SDLMainloop::onceFlag, [] () {
+        _instance = new SDLMainloop ();
+    });
 
-      return *(_instance);
-    }
+    return *(_instance);
+  }
 
   SDLMainloop::SDLMainloop()
   : _wakeup_already_triggered(false)
@@ -59,55 +59,55 @@ namespace djnn {
     _windows[SDL_GetWindowID(win->sdl_window())] = win;
   }
     
-    void
-    SDLMainloop::remove_window (SDLWindow* win)
-    {
-      _windows.erase(SDL_GetWindowID(win->sdl_window()));
-    }
+  void
+  SDLMainloop::remove_window (SDLWindow* win)
+  {
+    _windows.erase(SDL_GetWindowID(win->sdl_window()));
+  }
 
 #ifdef __EMSCRIPTEN__
-    //typedef void(*mainloop_fun_t) (void);
-    //mainloop_fun_t loop;
-    std::function<void()> loop;
-    static void main_loop() { loop(); }
+  //typedef void(*mainloop_fun_t) (void);
+  //mainloop_fun_t loop;
+  std::function<void()> loop;
+  static void main_loop() { loop(); }
 #endif
+
 
   void
-    //SDLMainloop::activate_from_mainloop ()
-    SDLMainloop::run ()
-    {
-      launch_mutex_unlock();
-      //set_please_stop (false);
+  SDLMainloop::run ()
+  {
+    //std::cerr << __PRETTY_FUNCTION__ <<std::endl;
+    launch_mutex_unlock();
+    //set_please_stop (false);
 #ifdef __EMSCRIPTEN__
-
-      loop = [&]{sdl_run_coop();};
-      emscripten_set_main_loop(main_loop, 0, true);
+    loop = [&]{sdl_run_coop();};
+    emscripten_set_main_loop(main_loop, 0, true);
 #else
-      sdl_run();
+    sdl_run();
 #endif
-    }
+  }
 
-    void
-    SDLMainloop::wakeup (SDLWindow * requestingWin)
-    {
-      if(_wakeup_already_triggered) return;
-      //DBG;
-      // push a dummy event into the queue so that the event loop has a chance to stop
-      SDL_Event e;
-      e.type = SDL_USEREVENT;
-      e.user.code = SDLWindow::user_event_awake;
-      if (requestingWin)
-        e.window.windowID = SDL_GetWindowID(requestingWin->sdl_window());
-      //SDL_PeepEvents (&e, 1, SDL_ADDEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
-      SDL_PushEvent(&e);
-      _wakeup_already_triggered = true;
-    }
+  void
+  SDLMainloop::wakeup (SDLWindow * requestingWin)
+  {
+    if(_wakeup_already_triggered) return;
+    //DBG;
+    // push a dummy event into the queue so that the event loop has a chance to stop
+    SDL_Event e;
+    e.type = SDL_USEREVENT;
+    e.user.code = SDLWindow::user_event_awake;
+    if (requestingWin)
+      e.window.windowID = SDL_GetWindowID(requestingWin->sdl_window());
+    //SDL_PeepEvents (&e, 1, SDL_ADDEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
+    SDL_PushEvent(&e);
+    _wakeup_already_triggered = true;
+  }
 
     void
   SDLMainloop::please_stop ()
   {
-      ExternalSource::please_stop();
-      wakeup(nullptr); // wakeup
+    ExternalSource::please_stop();
+    wakeup(nullptr); // wakeup
   }
 
   void
@@ -123,14 +123,12 @@ namespace djnn {
       handle_events(e);
       djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
-    
 
     ////MainLoop::instance().please_stop();
     ////MainLoop::instance().join();
 
     _windows.clear ();
-    set_please_stop (false);
-    SDL_Quit();
+    //SDL_Quit();
   }
 
   void
