@@ -18,7 +18,7 @@ namespace djnn {
 	};
 
 	ExternalSource::ExternalSource ()
-    : _impl(new ExternalSource::Impl), _please_stop (false)
+    : cancelled(nullptr), _impl(new ExternalSource::Impl), _please_stop (false)
     {
         #if DJNN_THREAD_IS_POINTER
         _impl->_thread = nullptr;
@@ -26,6 +26,8 @@ namespace djnn {
     }
 
     ExternalSource::~ExternalSource () {
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        thread_local_cancelled = true;
         please_stop ();
         #if DJNN_THREAD_IS_POINTER
         if(_impl->_thread) {
@@ -67,6 +69,7 @@ namespace djnn {
     void
     ExternalSource::launch_mutex_lock()
     {
+        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
         #if DJNN_USE_SDL_THREAD
         SDL_LockMutex(launch_mutex);
         #else
@@ -76,7 +79,7 @@ namespace djnn {
     void
     ExternalSource::launch_mutex_unlock()
     {
-
+        //std::cerr << __PRETTY_FUNCTION__ << std::endl;
         #if DJNN_USE_SDL_THREAD
         SDL_UnlockMutex(launch_mutex);
         #else
@@ -84,12 +87,14 @@ namespace djnn {
         #endif
     }
 
+    thread_local bool ExternalSource::thread_local_cancelled;
+
 	void
 	ExternalSource::please_stop ()
 	{
         if(_please_stop) return;
 
-		_please_stop = true;
+		set_please_stop(true);
 
         #if DJNN_USE_BOOST_THREAD
 		_impl->_thread.interrupt();
@@ -100,6 +105,9 @@ namespace djnn {
            _impl->_thread->requestInterruption();
         }
         #endif
+
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        if(cancelled) *cancelled = true;
         
 	}
 
@@ -108,6 +116,7 @@ namespace djnn {
     {
         ExternalSource * es = (ExternalSource*) data;
         es->private_run ();
+        //std::cerr << "end of thread " << __PRETTY_FUNCTION__ << " " << ExternalSource::thread_local_cancelled << " " << &ExternalSource::thread_local_cancelled << std::endl;
         return 0;
     }
     #endif
@@ -231,7 +240,9 @@ static const char* th_err(int errmsg)
 	ExternalSource::private_run ()
 	{	
         //set_thread_priority();
-        //std::cerr << "run " << name << std::endl; 
+        cancelled = &ExternalSource::thread_local_cancelled;
+        *cancelled = false;
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
         //DBG;
         launch_mutex_lock();
         launch_mutex_unlock();

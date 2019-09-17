@@ -32,6 +32,9 @@ namespace djnn
 
     void private_run();
 
+    static thread_local bool thread_local_cancelled;
+    bool *cancelled;
+
   protected:
     //virtual void set_please_stop (bool v) { _please_stop.store (v); }
     //virtual bool get_please_stop () const { return _please_stop.load (); }
@@ -65,7 +68,5 @@ namespace djnn
     bool _please_stop;
     
   };
-
-
 
 }
