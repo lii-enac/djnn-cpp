@@ -27,6 +27,7 @@ namespace djnn
   {
 
   public:
+    ~MainLoop ();
     static MainLoop& instance ();
 
     void set_run_for_ever () {
