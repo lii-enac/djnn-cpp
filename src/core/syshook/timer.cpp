@@ -91,6 +91,8 @@ namespace djnn
         #else
         this_thread::sleep_for (duration); // blocking call
         #endif
+        launch_mutex_lock();
+        launch_mutex_unlock();
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           set_activation_state (DEACTIVATED);

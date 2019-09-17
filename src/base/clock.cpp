@@ -107,6 +107,8 @@ namespace djnn
         this_thread::sleep_for (duration); // blocking call
         #endif
 
+        launch_mutex_lock();
+        launch_mutex_unlock();
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         //std::cerr << this << "  ** sleep GOT" << std::endl;
