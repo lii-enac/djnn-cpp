@@ -178,8 +178,8 @@ namespace djnn
       }
 
     rect.moveTo (posX, posY - rect.height ());
-    //curTextX = rect.x () + fm.width (s);
-    curTextX = rect.x () + fm.horizontalAdvance (s);
+    curTextX = rect.x () + fm.width (s);  // for qt 5.9
+    //curTextX = rect.x () + fm.horizontalAdvance (s); // for qt 5.12
     curTextY = rect.y () + fm.height ();
 
     _painter->drawText (p, s);
