@@ -93,10 +93,18 @@ namespace djnn
         #endif
         launch_mutex_lock();
         launch_mutex_unlock();
+        if(thread_local_cancelled) {
+          //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+          return;
+        }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           set_activation_state (DEACTIVATED);
           _end->notify_activation (); // propagating
+          if(thread_local_cancelled) {
+            //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+            return;
+          }
           thread_terminated ();
           GRAPH_EXEC; // executing
         }
