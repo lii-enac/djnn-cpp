@@ -57,6 +57,7 @@ namespace djnn
   Clock::Clock (Process *p, const std::string& n, int period) :
       Process (n)
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl; 
     _period = new IntProperty (this, "period", period);
     _elapsed = new DoubleProperty (this, "elapsed", 0);
     _tick = new Spike (this, "tick");
@@ -65,6 +66,7 @@ namespace djnn
 
   Clock::~Clock ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     delete _tick;
     delete _elapsed;
     delete _period;
@@ -81,6 +83,7 @@ namespace djnn
   void
   Clock::impl_deactivate ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     please_stop ();
   }
 
@@ -118,11 +121,12 @@ namespace djnn
 
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        //std::cerr << this << "  ** sleep GOT" << std::endl;
+        //std::cerr << this << "  ** sleep GOT " << this->get_name () << std::endl;
         if (!get_please_stop ()) {
           get_monotonic_time(&after);
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
           _elapsed->set_value (elapsedTime, true);
+          //std::cerr << this << " " << get_name () << " tick activate" << std::endl;
           _tick->activate (); // propagating
           if(thread_local_cancelled) {
             //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
