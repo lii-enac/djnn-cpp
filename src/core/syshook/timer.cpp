@@ -52,6 +52,7 @@ namespace djnn
   Timer::Timer (Process *p, const std::string& n, int period) :
       Process (n)
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
     _delay = new IntProperty (this, "delay", period);
     _end = new Blank (this, "end");
     Process::finalize_construction (p);
@@ -59,6 +60,7 @@ namespace djnn
 
   Timer::~Timer ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
     delete _end;
     delete _delay;
   }
@@ -72,6 +74,7 @@ namespace djnn
   void
   Timer::impl_deactivate ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     please_stop ();
   }
 
@@ -91,8 +94,11 @@ namespace djnn
         #else
         this_thread::sleep_for (duration); // blocking call
         #endif
+
         launch_mutex_lock();
         launch_mutex_unlock();
+        
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(thread_local_cancelled) {
           //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
           return;
@@ -100,6 +106,7 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!get_please_stop ()) {
           set_activation_state (DEACTIVATED);
+          //std::cerr << this << " " << get_name () << " end notify_activation" << std::endl;
           _end->notify_activation (); // propagating
           if(thread_local_cancelled) {
             //std::cerr << this << " " << get_name () << " cancelled" << std::endl;

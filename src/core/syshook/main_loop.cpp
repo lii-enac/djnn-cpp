@@ -22,7 +22,7 @@
 #endif
 
 #include <iostream>
-#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+#define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 namespace djnn {
 
@@ -47,21 +47,39 @@ namespace djnn {
     : _another_source_wants_to_be_mainloop (nullptr)
     {
       set_run_for_ever ();
-      launch_mutex_lock();
+      //std::cerr <<"mainloop::lock"<<std::endl;
+      launch_mutex_lock ();
+    }
+
+    MainLoop::~MainLoop ()
+    {
+      //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
     }
 
     void
     MainLoop::impl_activate ()
     {
+      //std::cerr << std::endl << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
       for (auto p: _background_processes) {
         p->activate ();
       }
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();
         set_activation_state (ACTIVATED);
+        //DBG;
         _another_source_wants_to_be_mainloop->run ();
       } else {
         run_in_main_thread ();
+      }
+    }
+    void
+    MainLoop::impl_deactivate ()
+    {
+      //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl << std::endl;
+      if (_another_source_wants_to_be_mainloop) {
+        _another_source_wants_to_be_mainloop->please_stop ();
+      } else {
+        own_mutex.unlock ();
       }
     }
 
@@ -71,19 +89,11 @@ namespace djnn {
       _another_source_wants_to_be_mainloop = source;
     }
 
-    void
-    MainLoop::impl_deactivate ()
-    {
-      if (_another_source_wants_to_be_mainloop) {
-        _another_source_wants_to_be_mainloop->please_stop ();
-      } else {
-        own_mutex.unlock ();
-      }
-    }
 
     void
     MainLoop::run_in_main_thread ()
     {
+      //std::cerr <<"mainloop::unlock"<<std::endl;
       launch_mutex_unlock();
       run ();
     }
@@ -120,7 +130,7 @@ namespace djnn {
 
     void
     MainLoop::run ()
-    {
+    {//DBG;
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success
@@ -159,7 +169,8 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
 
-      launch_mutex_lock(); // reacquire launch mutex
+      //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
+      launch_mutex_lock (); // reacquire launch mutex
     }
 
 
