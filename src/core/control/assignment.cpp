@@ -250,6 +250,11 @@ namespace djnn
   void
   Assignment::impl_activate ()
   {
+    /* when an assignment is in a deactivate fsm branch and src has changed. it is not aware of it.
+       we have to re-evaluate it */
+    if (_update_src)
+      _update_src->impl_activate ();
+
     /* here we have an activation issue, an assignment must do its action when activated, but
      * when the left side of an assignment is the result of an expression, we have to wait
      * for the evaluation of the expression. The solution is now to trigger the calculation

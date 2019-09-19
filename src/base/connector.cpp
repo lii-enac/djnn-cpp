@@ -56,6 +56,10 @@ namespace djnn
   void
   Connector::impl_activate ()
   {
+    /* when an connector is in a deactivate fsm branch and src has changed. it is not aware of it.
+       we have to re-evaluate it */
+    if (_update_src)
+      _update_src->impl_activate ();
     if (_c_src)
       _c_src->enable ();
     if (_copy_on_activation)
