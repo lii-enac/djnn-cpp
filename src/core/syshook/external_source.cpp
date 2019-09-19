@@ -29,13 +29,15 @@ namespace djnn {
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         thread_local_cancelled = true;
         please_stop ();
+
         #if DJNN_THREAD_IS_POINTER
         if(_impl->_thread) {
         #else
         if(_impl->_thread.joinable()) {
         #endif
+            
             #if DJNN_USE_QT_THREAD
-            _impl->_thread->wait();
+            //_impl->_thread->wait();
 
             #elif DJNN_USE_SDL_THREAD
             //int threadReturnValue;
@@ -94,6 +96,8 @@ namespace djnn {
 	{
         if(_please_stop) return;
 
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        if(cancelled) *cancelled = true;
 		set_please_stop(true);
 
         #if DJNN_USE_BOOST_THREAD
@@ -105,10 +109,6 @@ namespace djnn {
            _impl->_thread->requestInterruption();
         }
         #endif
-
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        if(cancelled) *cancelled = true;
-        
 	}
 
     #if DJNN_USE_SDL_THREAD
