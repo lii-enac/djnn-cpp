@@ -110,8 +110,8 @@ namespace djnn
         this_thread::sleep_for (duration); // blocking call
         #endif
 
-        launch_mutex_lock();
-        launch_mutex_unlock();
+        //launch_mutex_lock();
+        //launch_mutex_unlock();
 
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(thread_local_cancelled) {
@@ -121,6 +121,13 @@ namespace djnn
 
         //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        
+        if(thread_local_cancelled) {
+            //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+            break;
+          }
+
         //std::cerr << this << "  ** sleep GOT " << this->get_name () << std::endl;
         if (!get_please_stop ()) {
           get_monotonic_time(&after);
@@ -128,10 +135,7 @@ namespace djnn
           _elapsed->set_value (elapsedTime, true);
           //std::cerr << this << " " << get_name () << " tick activate" << std::endl;
           _tick->activate (); // propagating
-          if(thread_local_cancelled) {
-            //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-            return;
-          }
+          
           GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
