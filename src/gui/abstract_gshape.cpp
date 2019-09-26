@@ -61,10 +61,10 @@ namespace djnn
     _init_y = new DoubleProperty (this, "init_y", init_y);
     _local_init_x = new DoubleProperty (this, "local_init_x", 0);
     _local_init_y = new DoubleProperty (this, "local_init_y", 0);
-    _move_x = new DoubleProperty (init_x);
-    _move_y = new DoubleProperty (init_y);
-    _local_move_x = new DoubleProperty (0);
-    _local_move_y = new DoubleProperty (0);
+    _move_x = new DoubleProperty (nullptr, "move_x", init_x);
+    _move_y = new DoubleProperty (nullptr, "move_y", init_y);
+    _local_move_x = new DoubleProperty (nullptr, "local_move_x", 0);
+    _local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
     _pressure = new DoubleProperty (this, "pressure", init_pressure);
     _id = new IntProperty (this, "id", id);
     _move = new Spike (this, "move");
@@ -337,10 +337,7 @@ namespace djnn
     delete _inverted_matrix;
 
     // remove _ui if it exist
-    // FIXME: try to not use find_component
-    //if (ui != nullptr) {
-      delete ui;
-    //}
+    delete ui;
   }
 
   void
