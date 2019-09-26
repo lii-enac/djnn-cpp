@@ -215,8 +215,11 @@ namespace djnn {
       case SDL_USEREVENT: // redraw
       {
         //std::cout << sdl_event_to_char(e.type) << " " << __FL__;
-        SDLWindow * w = _windows[e.window.windowID];
-        if(w) w->handle_event(e);
+        auto it = _windows.find(e.window.windowID);
+        if(it != _windows.end()) {
+          SDLWindow * w = it->second;
+          w->handle_event(e);
+        }
         break;
       }
       case SDL_FINGERDOWN:
