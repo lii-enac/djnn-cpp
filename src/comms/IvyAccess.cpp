@@ -283,7 +283,15 @@ IvyAccess::impl_deactivate ()
 }
 
 static void  _before_select (void *data){
+  if(ExternalSource::thread_local_cancelled) {
+    //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+    return;
+  }
   djnn::get_exclusive_access (DBG_GET);
+  if(ExternalSource::thread_local_cancelled) {
+    //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+    return;
+  }
   GRAPH_EXEC;    
   djnn::release_exclusive_access (DBG_REL);
 }
