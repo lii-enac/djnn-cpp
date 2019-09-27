@@ -58,7 +58,7 @@ namespace djnn {
     } else {
       return nullptr;
     }
-    string::size_type sz;
+    //string::size_type sz;
     const string buff = path.substr (pos);
     Process *c = nullptr;
     if (pos == 3) {

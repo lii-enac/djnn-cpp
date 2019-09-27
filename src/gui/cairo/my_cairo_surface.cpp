@@ -50,7 +50,7 @@ namespace djnn
   {
     if (!drawing_surface)
       return;
-    CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
+    //CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
     Process *p = _window->holder ();
     if (p) {

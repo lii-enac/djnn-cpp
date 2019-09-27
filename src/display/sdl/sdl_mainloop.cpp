@@ -238,7 +238,6 @@ namespace djnn {
 
            // pick the first window
           SDLWindow * w = _windows.begin()->second;
-          SDL_Window * sdlw = w->sdl_window();
 
           #ifndef __WIN32__
           /*SDL_Rect rect;
@@ -250,6 +249,7 @@ namespace djnn {
           */
           #else
           // SDL on win32 gives coordinates according to window :-/
+          SDL_Window * sdlw = w->sdl_window();
           SDL_GetWindowSize(sdlw, &sw, &sh);
           #endif
 

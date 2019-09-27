@@ -171,7 +171,7 @@ namespace djnn {
   int
   XML::djn_UnregisterXMLParser (const string &uri)
   {
-    djn__XMLParser *h;
+    //djn__XMLParser *h;
     map<string, djn__XMLParser*>::iterator it;
     it = djn__NamespaceTable->find (uri);
     if (it == djn__NamespaceTable->end ()) {
