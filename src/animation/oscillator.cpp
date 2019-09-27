@@ -77,7 +77,7 @@ namespace djnn
   Oscillator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
+    if (_parent) {
        remove_state_dependency (_parent, _action);
     }
 

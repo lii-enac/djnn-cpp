@@ -130,7 +130,7 @@ namespace djnn
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
-    djnn::get_exclusive_access (DBG_GET);
+    //djnn::get_exclusive_access (DBG_GET);
     bool exec_ = false;
     switch (event->type ())
       {
@@ -190,11 +190,11 @@ namespace djnn
       default:
         {
           /* Event not managed by us */
-          djnn::release_exclusive_access (DBG_REL);
+          //djnn::release_exclusive_access (DBG_REL);
           return QWidget::event (event);
         }
       }
-    djnn::release_exclusive_access (DBG_REL);
+    //djnn::release_exclusive_access (DBG_REL);
     //if(exec_) event->accept();
     return exec_;
   }

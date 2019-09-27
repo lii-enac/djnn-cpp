@@ -45,9 +45,10 @@ namespace djnn {
 
     MainLoop::MainLoop ()
     : _another_source_wants_to_be_mainloop (nullptr)
-    {
-      set_run_for_ever ();
+    {//DBG;
+      set_run_for_ever (); // default mode is forever
       //std::cerr <<"mainloop::lock"<<std::endl;
+      djnn::get_exclusive_access (DBG_GET);
       launch_mutex_lock ();
     }
 
@@ -66,7 +67,6 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();
         set_activation_state (ACTIVATED);
-        //DBG;
         _another_source_wants_to_be_mainloop->run ();
       } else {
         run_in_main_thread ();
@@ -94,8 +94,7 @@ namespace djnn {
     MainLoop::run_in_main_thread ()
     {
       //std::cerr <<"mainloop::unlock"<<std::endl;
-      launch_mutex_unlock();
-      run ();
+      private_run ();
     }
 
 
@@ -113,11 +112,12 @@ namespace djnn {
     {
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
       //auto * th =
-      new djnn_thread_t (&MainLoop::run, this);
+      new djnn_thread_t (&MainLoop::private_run, this);
       #endif
 
       #if DJNN_USE_QT_THREAD
-      auto * th = QThread::create([this]() { this->MainLoop::run(); });
+      //DBG;
+      auto * th = QThread::create([this]() { this->MainLoop::private_run(); });
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
       th->start();
       #endif
@@ -127,16 +127,26 @@ namespace djnn {
       #endif
     }
 
+    void
+    MainLoop::private_run ()
+    {
+      run();
+    }
 
     void
     MainLoop::run ()
     {//DBG;
+      launch_mutex_unlock();
+      djnn::release_exclusive_access (DBG_REL);
+
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success
         //own_mutex.lock (); // 2nd lock: blocks forever
         while (1) {
           unsigned int duration = 2000;
+
+          // check from time to time if we need to stop
           #if DJNN_USE_SDL_THREAD
           SDL_Delay(duration);
           #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
@@ -162,15 +172,19 @@ namespace djnn {
         
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
-        set_run_for_ever ();
+        set_run_for_ever (); // reset to default forever mode
 
         //DBG;
       }
+
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
 
-      //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
+      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
       launch_mutex_lock (); // reacquire launch mutex
+      //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
+      //djnn::get_exclusive_access (DBG_GET); // prevent external source thread to do anything once mainloop is terminated
+      //launch_mutex_lock (); // reacquire launch mutex
     }
 
 

@@ -54,7 +54,7 @@ namespace djnn {
       static SDLMainloop* _instance;
       static std::once_flag onceFlag;
 
-      bool _wakeup_already_triggered;
+      std::atomic<bool> _wakeup_already_triggered;
 
   };
 

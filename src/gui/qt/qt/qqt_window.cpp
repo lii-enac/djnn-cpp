@@ -45,7 +45,7 @@ namespace djnn
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
-    djnn::get_exclusive_access (DBG_GET);
+    
     bool exec_ = false;
     switch (event->type ())
       {
@@ -53,6 +53,7 @@ namespace djnn
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd:
         {
+          djnn::get_exclusive_access (DBG_GET);
           QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
 
           for (const auto & touchPoint : touchPoints) {
@@ -83,6 +84,7 @@ namespace djnn
           }
           if (exec_)
             QtMainloop::instance ().set_please_exec (true);
+          djnn::release_exclusive_access (DBG_REL);
         }
         break;
 
@@ -90,7 +92,7 @@ namespace djnn
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
       case QEvent::Wheel:
-        djnn::release_exclusive_access (DBG_REL);
+        //djnn::release_exclusive_access (DBG_REL);
         exec_ = MyQWidget::event (event);
         return exec_;
         break;
@@ -106,11 +108,11 @@ namespace djnn
       default:
         {
           /* Event not managed by us */
-          djnn::release_exclusive_access (DBG_REL);
+          //djnn::release_exclusive_access (DBG_REL);
           return MyQWidget::event (event);
         }
       }
-    djnn::release_exclusive_access (DBG_REL);
+    
     //if(exec_) event->accept();
     return exec_;
   }

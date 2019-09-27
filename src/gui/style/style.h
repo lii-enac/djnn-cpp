@@ -646,7 +646,7 @@ namespace djnn {
   private:
     struct raw_props_t { string family; };
     raw_props_t raw_props;
-    Coupling* _cf;
+    //Coupling* _cf;
   };
 /*
   class TextAnchor : public AbstractPropTextAnchor // AbstractStyle

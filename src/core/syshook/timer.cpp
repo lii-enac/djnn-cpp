@@ -84,11 +84,13 @@ namespace djnn
     //DBG;
     set_please_stop (false);
     try {
-         chrono::milliseconds duration (_delay->get_value ());
+        djnn::get_exclusive_access (DBG_GET);
+        chrono::milliseconds duration (_delay->get_value ());
+        djnn::release_exclusive_access (DBG_REL);
         //this_thread::sleep_for (duration); // blocking call
         // std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " before sleep " << _delay->get_value () << std::endl; 
         #if DJNN_USE_SDL_THREAD
-        SDL_Delay(_delay->get_value ()); // blocking call
+        SDL_Delay(duration.count()); // blocking call
         #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
         QThread::currentThread()->wait(duration.count());
         #else

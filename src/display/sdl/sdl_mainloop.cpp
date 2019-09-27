@@ -77,7 +77,7 @@ namespace djnn {
   SDLMainloop::run ()
   {
     //std::cerr << __PRETTY_FUNCTION__ <<std::endl;
-    launch_mutex_unlock();
+    //launch_mutex_unlock();
     //set_please_stop (false);
 #ifdef __EMSCRIPTEN__
     loop = [&]{sdl_run_coop();};
@@ -106,7 +106,9 @@ namespace djnn {
     void
   SDLMainloop::please_stop ()
   {
+    //djnn::get_exclusive_access (DBG_GET);
     ExternalSource::please_stop();
+    //djnn::release_exclusive_access (DBG_REL);
     wakeup(nullptr); // wakeup
   }
 

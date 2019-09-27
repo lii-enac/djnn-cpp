@@ -71,33 +71,36 @@ chrono ?= BOOST
 
 
 ifeq ($(os),Linux)
-lib_suffix=.so
+lib_suffix =.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
 #-lboost_fiber-mt -lboost_context-mt
-DYNLIB=-shared
-CFLAGS ?= -fpic -g -MMD -O0 -Wall
+DYNLIB = -shared
+CFLAGS ?= -fpic -g -MMD -Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
 ifeq ($(os),Darwin)
-lib_suffix=.dylib
+lib_suffix =.dylib
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber-mt -lboost_context-mt
-DYNLIB=-dynamiclib
-CFLAGS ?= -g -MMD #-Wall
-LDFLAGS ?= $(boost_libs) -L$(build_dir)
+DYNLIB = -dynamiclib
+CFLAGS += -g -MMD -Wall
+LDFLAGS += $(boost_libs) -L$(build_dir)
 endif
 
 # for windows with mingwXX
 ifeq ($(os),MinGW)
-lib_suffix=.dll
+lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-DYNLIB =-shared
+DYNLIB = -shared
 CFLAGS ?= -fpic -g -MMD -Wall
 LDFLAGS ?= $(boost_libs) -L$(build_dir)
 endif
 
 CFLAGS += -I$(src_dir)
-	
+
+#CFLAGS += -fsanitize=thread -O1
+#LDFLAGS += -fsanitize=thread
+
 ifeq ($(findstring android,$(cross_prefix)),android)
 os := android
 inc_android =  \
@@ -115,7 +118,7 @@ inc_android =  \
 CFLAGS += $(inc_android)
 CXXFLAGS += $(inc_android)
 
-LDFLAGS := -L../ext-libs/android/libexpat/expat/lib/.libs \
+LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 -L../ext-libs/android/curl/lib/.libs \
 --sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
 

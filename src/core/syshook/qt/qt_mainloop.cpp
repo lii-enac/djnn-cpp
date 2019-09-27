@@ -50,6 +50,7 @@ namespace djnn
   QtMainloop::QtMainloop (MainLoop * ml) :
       _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     //MainLoop::instance ()
     (*ml)
     .set_another_source_wants_to_be_mainloop (this);
@@ -65,12 +66,14 @@ namespace djnn
 
   QtMainloop::~QtMainloop ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     _qapp->quit ();
   }
 
   void
   QtMainloop::please_stop ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     if (_qapp)
       _qapp->quit ();
     /* SL+MM : l'appel à please_stop demande l'interruption du thread via interrupt
@@ -87,11 +90,12 @@ namespace djnn
   //QtMainloop::activate_from_mainloop ()
   QtMainloop::run ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     //set_please_stop (false);
     
     /* slot_about_to_block will be called ASA qapp->exec */
     
-    launch_mutex_unlock();
+    //launch_mutex_unlock();
 
     _qapp->exec ();
   }

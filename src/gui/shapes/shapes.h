@@ -238,7 +238,7 @@ namespace djnn
   private:
     struct raw_props_t { double x1,y1,x2,y2,x,y; };
     raw_props_t raw_props;
-    DoublePropertyProxy *_x1, *_y1, *_x2, *_y2, *_x, *_y;
+    //DoublePropertyProxy *_x1, *_y1, *_x2, *_y2, *_x, *_y;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2, *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
@@ -368,7 +368,8 @@ namespace djnn
   private:
     struct raw_props_t { double x,y,width,height; string path; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath, *_cwatcher;
+    //Coupling *_cx, *_cy, *_cwidth, *_cheight, *_cpath;
+    Coupling *_cwatcher;
     ImageWatcher *_watcher;
     void impl_activate () override;
     void impl_deactivate () override;

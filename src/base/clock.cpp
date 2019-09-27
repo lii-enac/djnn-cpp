@@ -75,6 +75,7 @@ namespace djnn
   void
   Clock::impl_activate ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     if ( get_activation_state () == ACTIVATED )
       return;
     start_thread();
@@ -96,14 +97,16 @@ namespace djnn
     try {
       //std::cerr << this << " >> run" << std::endl;
       while (!get_please_stop ()) {
+        djnn::get_exclusive_access (DBG_GET);
         chrono::milliseconds duration (_period->get_value ());
+        djnn::release_exclusive_access (DBG_REL);
         //std::cerr << this << "  >> sleep " << duration.count() << std::endl;
         //std
         get_monotonic_time(&before);
         //this_thread::sleep_for (chrono::milliseconds(duration)); // blocking call
 
         #if DJNN_USE_SDL_THREAD
-        SDL_Delay(_period->get_value ()); // blocking call
+        SDL_Delay(duration.count()); // blocking call
         #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
         QThread::currentThread()->wait(duration.count());
         #else

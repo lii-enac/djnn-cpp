@@ -67,6 +67,7 @@ namespace djnn
 
   Coupling::~Coupling ()
   {
+    //cerr << __PRETTY_FUNCTION__  << " - " << this << std::endl;
     if (_src == nullptr)
       return;
     switch(get_src_activation_flag ()) {

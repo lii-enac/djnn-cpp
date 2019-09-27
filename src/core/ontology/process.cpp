@@ -42,6 +42,9 @@ namespace djnn
     }
 
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
+
+    //debug
+    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;;
   }
 
   Process::Process (bool model) :
@@ -52,8 +55,7 @@ namespace djnn
   void
   Process::finalize_construction (Process* parent, Process* state_dep) /* called by SubProcess to link to parent */
   {
-    if (parent){
-
+    if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
       if (state_dep == nullptr)
         _state_dependency = parent->state_dependency ();
@@ -67,7 +69,7 @@ namespace djnn
   Process::~Process ()
   {
     //debug
-    //cerr << __FUNCTION__  << " - " <<  (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;;
+    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;
 
     /* note: 
        this code is to prevent bugs 

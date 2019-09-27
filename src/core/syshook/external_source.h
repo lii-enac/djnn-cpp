@@ -32,8 +32,8 @@ namespace djnn
 
     void private_run();
 
-    static thread_local bool thread_local_cancelled;
-    bool *cancelled;
+    static thread_local std::atomic<bool> thread_local_cancelled;
+    std::atomic<bool> *cancelled;
 
   protected:
     //virtual void set_please_stop (bool v) { _please_stop.store (v); }
@@ -64,8 +64,8 @@ namespace djnn
     Impl * _impl;
 
   private:
-  //std::atomic_bool _please_stop; // do not compile on linux
-    bool _please_stop;
+    std::atomic<bool> _please_stop; // does not compile on linux
+    //bool _please_stop;
     
   };
 

@@ -48,9 +48,10 @@ namespace djnn
     MARKED
   };
 
-  Vertex::Vertex (Process* c) :
-      _process (c), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
+  Vertex::Vertex (Process* p) :
+      _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " vertex:" << this << " process:" << p << " " << (p->get_parent() ? p->get_parent()->get_name () + "/"  : "") << p->get_name() << std::endl; 
   }
 
   Vertex::~Vertex () {
@@ -98,10 +99,9 @@ namespace djnn
     auto result = _map_edges.find(dst);
 
     /* remove duplicate */
-    if (result != _map_edges.end () && result->second > 1)
+    if (result != _map_edges.end () && result->second > 1) {
       result->second = --result->second;
-    
-    else {
+    } else {
       
       /* NOTE: 
          for now we keep this complicated way to erase instead of 
@@ -118,16 +118,16 @@ namespace djnn
         /* erase them from _edges */
         _edges.erase(newend, _edges.end ());
         _map_edges.erase(dst); 
-        dst->_count_edges_in--;
+        --dst->_count_edges_in;
 
-        // print debug
-        // cerr << "remove_edge : " << "\t between " << 
-        // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
-        // this->_process->get_name () << " - " <<
-        // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
-        // dst->_process->get_name () << endl;
       }
     }
+    // print debug
+    // cerr << "remove_edge : " << "\t between " << 
+    // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
+    // this->_process->get_name () << " - " <<
+    // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
+    // dst->_process->get_name () << " _count_edges_in: " << dst->_count_edges_in << endl;
   }
 
   void
@@ -329,7 +329,7 @@ namespace djnn
   {
 
     // skip invalid vertex
-    //FIXME: we shound use this code anymore - check with coverage result
+    //FIXME: we should not use this code anymore - check with coverage result
     if (v->is_invalid ()) {
       //assert (0);
       warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");

@@ -8,109 +8,6 @@
 
 namespace djnn {
 
-	class ExternalSource::Impl {
-	public:
-        #if DJNN_THREAD_IS_POINTER
-        djnn_thread_t * _thread;
-        #else
-        djnn_thread_t _thread;
-        #endif
-	};
-
-	ExternalSource::ExternalSource ()
-    : cancelled(nullptr), _impl(new ExternalSource::Impl), _please_stop (false)
-    {
-        #if DJNN_THREAD_IS_POINTER
-        _impl->_thread = nullptr;
-        #endif
-    }
-
-    ExternalSource::~ExternalSource () {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        thread_local_cancelled = true;
-        please_stop ();
-
-        #if DJNN_THREAD_IS_POINTER
-        if(_impl->_thread) {
-        #else
-        if(_impl->_thread.joinable()) {
-        #endif
-            
-            #if DJNN_USE_QT_THREAD
-            //_impl->_thread->wait();
-
-            #elif DJNN_USE_SDL_THREAD
-            //int threadReturnValue;
-            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
-            SDL_DetachThread(_impl->_thread);
-
-            #else
-            #if DJNN_THREAD_IS_POINTER
-            if ( _impl->_thread->joinable() ) _impl->_thread->join();
-            #else
-            if ( (_impl->_thread).joinable() ) (_impl->_thread).join();
-            #endif
-            #endif
-        }
-        delete _impl;
-    }
-
-
-    static djnn_mutex_t * launch_mutex;
-
-    void
-    ExternalSource::init()
-    {
-        #if DJNN_USE_SDL_THREAD
-        launch_mutex = SDL_CreateMutex();
-        #else
-        launch_mutex = new djnn_mutex_t();
-        #endif
-    }
-
-    void
-    ExternalSource::launch_mutex_lock()
-    {
-        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
-        #if DJNN_USE_SDL_THREAD
-        SDL_LockMutex(launch_mutex);
-        #else
-        launch_mutex->lock();
-        #endif
-    }
-    void
-    ExternalSource::launch_mutex_unlock()
-    {
-        //std::cerr << __PRETTY_FUNCTION__ << std::endl;
-        #if DJNN_USE_SDL_THREAD
-        SDL_UnlockMutex(launch_mutex);
-        #else
-        launch_mutex->unlock();
-        #endif
-    }
-
-    thread_local bool ExternalSource::thread_local_cancelled;
-
-	void
-	ExternalSource::please_stop ()
-	{
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        if(_please_stop) return;
-
-        if(cancelled) *cancelled = true;
-		set_please_stop(true);
-
-        #if DJNN_USE_BOOST_THREAD
-		_impl->_thread.interrupt();
-        #endif
-
-        #if DJNN_USE_QT_THREAD
-        if(_impl &&_impl->_thread) {
-           _impl->_thread->requestInterruption();
-        }
-        #endif
-	}
-
     #if DJNN_USE_SDL_THREAD
     static int SDL_ThreadFunction(void* data)
     {
@@ -121,51 +18,186 @@ namespace djnn {
     }
     #endif
 
-	void
-	ExternalSource::start_thread ()
-	{
+    class ExternalSource::Impl {
+    public:
+      ExternalSource * _es;
+
+      Impl(ExternalSource* es) : _es(es) {
+        #if DJNN_THREAD_IS_POINTER
+        _thread = nullptr;
+        #endif
+      }
+
+      ~Impl() {
+        #if DJNN_THREAD_IS_POINTER
+        if(_thread) {
+        #else
+        if(_thread.joinable()) {
+        #endif
+            
+            #if DJNN_USE_QT_THREAD
+            //_impl->_thread->wait();
+
+            #elif DJNN_USE_SDL_THREAD
+            //int threadReturnValue;
+            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
+            SDL_DetachThread(_thread);
+
+            #else
+            #if DJNN_THREAD_IS_POINTER
+            if ( _impl->_thread->joinable() ) _thread->join();
+            #else
+            if ( (_impl->_thread).joinable() ) (_thread).join();
+            #endif
+            #endif
+        }
+
+      }
+
+      void start() {
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_STD_THREAD
         if(_impl->_thread.joinable()) _impl->_thread.detach();
         #endif
 
-		_impl->_thread = 
+        _thread = 
 
         #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-    	djnn_thread_t (&ExternalSource::private_run, this);
+        djnn_thread_t (&ExternalSource::private_run, this);
         #endif
 
         #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
-        QThread::create([this]() { this->ExternalSource::private_run(); })
+        QThread::create([this]() { this->_es->ExternalSource::private_run(); })
         ;
         //QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
-        _impl->_thread->start();
+        _thread->start();
         #endif
 
         #if DJNN_USE_SDL_THREAD
         //SDL_CreateThread(this->ExternalSource::private_run(), "djnn thread", this);
-        SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this);
+        SDL_CreateThread(SDL_ThreadFunction, "djnn thread", _es);
         #endif
 
 
 #if 0
-    	auto native_thread = _impl->_thread.native_handle();
+        auto native_thread = _impl->_thread.native_handle();
 #if defined(__WIN32__)
-    	//DBG;
-    	auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
-    	if(!b) {
-    		std::cerr << "fail to SetPriorityClass " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
-    	}
+        //DBG;
+        auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
+        if(!b) {
+            std::cerr << "fail to SetPriorityClass " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
+        }
 #else
-    	sched_param sch;
-    	int policy; 
-    	pthread_getschedparam(native_thread, &policy, &sch);
-    	sch.sched_priority = 20;
-    	if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
-        	std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
-    	}
+        sched_param sch;
+        int policy; 
+        pthread_getschedparam(native_thread, &policy, &sch);
+        sch.sched_priority = 20;
+        if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
+            std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
+        }
 #endif
 #endif
+      }
+
+      void please_stop() {
+        #if DJNN_USE_BOOST_THREAD
+        _impl->_thread.interrupt();
+        #endif
+
+        #if DJNN_USE_QT_THREAD
+        if(_thread) {
+           _thread->requestInterruption();
+        }
+        #endif
+      }
+
+      void thread_terminated() {
+        #if DJNN_THREAD_IS_POINTER
+        _thread = nullptr;
+        #endif
+      }
+
+    private:
+        #if DJNN_THREAD_IS_POINTER
+        djnn_thread_t * _thread;
+        #else
+        djnn_thread_t _thread;
+        #endif
+	};
+
+	ExternalSource::ExternalSource ()
+    : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _please_stop (false)
+    {
+    }
+
+    ExternalSource::~ExternalSource ()
+    {
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        thread_local_cancelled = true;
+        please_stop ();
+        delete _impl;
+    }
+
+
+    static djnn_mutex_t * launch_mutex;
+
+    void
+    ExternalSource::init()
+    {
+        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        #if DJNN_USE_SDL_THREAD
+        launch_mutex = SDL_CreateMutex();
+        #else
+        launch_mutex = new djnn_mutex_t();
+        //std::cerr << launch_mutex << std::endl;
+        #endif
+    }
+
+    void
+    ExternalSource::launch_mutex_lock()
+    {
+        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        #if DJNN_USE_SDL_THREAD
+        SDL_LockMutex(launch_mutex);
+        #else
+        //std::cerr << launch_mutex << std::endl;
+        launch_mutex->lock();
+        #endif
+        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+    }
+    void
+    ExternalSource::launch_mutex_unlock()
+    {
+        //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+        #if DJNN_USE_SDL_THREAD
+        SDL_UnlockMutex(launch_mutex);
+        #else
+        //std::cerr << launch_mutex << std::endl;
+        launch_mutex->unlock();
+        #endif
+        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+    }
+
+    thread_local std::atomic<bool> ExternalSource::thread_local_cancelled;
+
+	void
+	ExternalSource::please_stop ()
+	{
+        if(get_please_stop ()) return;
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+
+        if(cancelled) *cancelled = true;
+		set_please_stop (true);
+
+        _impl->please_stop ();
+	}
+
+    
+
+	void
+	ExternalSource::start_thread ()
+	{
+        _impl->start();
     	
 	}
 
@@ -233,9 +265,8 @@ static const char* th_err(int errmsg)
     ExternalSource::thread_terminated ()
     {
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-#if DJNN_THREAD_IS_POINTER
-        _impl->_thread = nullptr;
-#endif
+
+        _impl->thread_terminated();
     }
 
 	void

@@ -57,7 +57,7 @@ namespace djnn
 
     void external_run_for_qt5_9_fixme() { run(); }
 
-    void private_run () { run(); }
+    void private_run ();
   protected:
 
     // Process
