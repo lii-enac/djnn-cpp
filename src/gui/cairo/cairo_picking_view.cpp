@@ -18,6 +18,8 @@
 #include <assert.h>
 #include "cairo_picking_view.h"
 
+#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+
 namespace djnn
 {
 
@@ -29,11 +31,15 @@ namespace djnn
 
   CairoPickingView::~CairoPickingView ()
   {
+    //DBG;
   }
 
   int
   CairoPickingView::get_pixel (unsigned int x, unsigned int y)
   {
+    if (_cur_data == nullptr)
+      return 0;
+
     if (x < 0 || y < 0 || x > _w || y > _h)
       return 0;
 

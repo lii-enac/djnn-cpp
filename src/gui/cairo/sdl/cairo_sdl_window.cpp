@@ -54,8 +54,6 @@ namespace djnn
   SDLWindow(win, title, x,y,w,h),
       _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _picking_data (nullptr), _my_cairo_surface (nullptr)
   {
-    _picking_view = new CairoPickingView (win);
-    WinImpl::set_picking_view (_picking_view);
 
 #if PICKING_DBG
     _pick_sdl_renderer = nullptr;
@@ -74,6 +72,7 @@ namespace djnn
   void
   CairoSDLWindow::impl_activate ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     double x, y, w, h;
     x = _window->pos_x ()->get_value ();
     y = _window->pos_y ()->get_value ();
@@ -112,12 +111,19 @@ namespace djnn
 #endif
 
     SDLMainloop::instance ().add_window (this);
+
+    _picking_view = new CairoPickingView (_window);
+    WinImpl::set_picking_view (_picking_view);
+
     is_activated = true;
   }
 
   void
   CairoSDLWindow::impl_deactivate ()
   {
+    delete _picking_view;
+    WinImpl::set_picking_view (nullptr);
+
     SDLMainloop::instance ().remove_window (this);
     delete _my_cairo_surface;
     if (_sdl_surface)
@@ -133,6 +139,7 @@ namespace djnn
     delete _picking_data;
     _picking_data = nullptr;
     is_activated = false;
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
   }
 
 
@@ -247,6 +254,7 @@ namespace djnn
   void
   CairoSDLWindow::redraw ()
   {
+    //DBG;
     #if _PERF_TEST
       t1();
     #endif
