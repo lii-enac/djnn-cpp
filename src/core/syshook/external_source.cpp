@@ -94,9 +94,9 @@ namespace djnn {
 	void
 	ExternalSource::please_stop ()
 	{
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(_please_stop) return;
 
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(cancelled) *cancelled = true;
 		set_please_stop(true);
 
@@ -124,6 +124,7 @@ namespace djnn {
 	void
 	ExternalSource::start_thread ()
 	{
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_STD_THREAD
         if(_impl->_thread.joinable()) _impl->_thread.detach();
         #endif
@@ -231,6 +232,7 @@ static const char* th_err(int errmsg)
     void
     ExternalSource::thread_terminated ()
     {
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
 #if DJNN_THREAD_IS_POINTER
         _impl->_thread = nullptr;
 #endif
@@ -238,7 +240,8 @@ static const char* th_err(int errmsg)
 
 	void
 	ExternalSource::private_run ()
-	{	
+	{
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         //set_thread_priority();
         cancelled = &ExternalSource::thread_local_cancelled;
         *cancelled = false;

@@ -32,6 +32,7 @@ namespace djnn
 
   Picking::~Picking ()
   {
+    //DBG;
   }
 
   void
