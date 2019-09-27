@@ -274,13 +274,14 @@ static const char* th_err(int errmsg)
 	{
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         //set_thread_priority();
+        launch_mutex_lock();
+        launch_mutex_unlock();
+
         cancelled = &ExternalSource::thread_local_cancelled;
         *cancelled = false;
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
         //DBG;
-        launch_mutex_lock();
-        launch_mutex_unlock();
-		run();
+        run();
 	}
 	
 }
