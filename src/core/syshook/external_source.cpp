@@ -34,7 +34,6 @@ namespace djnn {
         #else
         if(_thread.joinable()) {
         #endif
-            
             #if DJNN_USE_QT_THREAD
             //_impl->_thread->wait();
 
@@ -112,6 +111,12 @@ namespace djnn {
       }
 
       void thread_terminated() {
+        #if DJNN_USE_SDL_THREAD
+            //int threadReturnValue;
+            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
+            SDL_DetachThread(_thread);
+        #endif
+
         #if DJNN_THREAD_IS_POINTER
         _thread = nullptr;
         #endif
