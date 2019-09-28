@@ -24,7 +24,7 @@
 #include <QEvent>
 #include <QTouchEvent>
 
-#define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
 
 #define _PERF_TEST 0
@@ -142,7 +142,6 @@ namespace djnn
   void
   MyQQWidget::mousePressEvent (QMouseEvent *event)
   {
-//DBG;
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
 
@@ -188,8 +187,6 @@ namespace djnn
   void
   MyQQWidget::paintEvent (QPaintEvent *event)
   {
-    DBG;
-
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
     QPainter painter (this);

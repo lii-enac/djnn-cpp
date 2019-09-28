@@ -15,9 +15,9 @@
 
 #include "timer.h"
 #include "syshook.h"
-#include "../tree/int_property.h"
-#include "../execution/graph.h"
-#include "../serializer/serializer.h"
+#include "core/tree/int_property.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
 
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
@@ -27,21 +27,6 @@
 
 namespace djnn
 {
-  Timer::Timer (chrono::milliseconds period)
-  : Timer(period.count())
-  {
-    //_delay = new IntProperty (this, "delay", period.count ());
-    //_end = new Blank (this, "end");
-  }
-
-  Timer::Timer (Process *p, const std::string& n, chrono::milliseconds period) :
-      //Process (n)
-    Timer(p, n, period.count())
-  {
-    //_delay = new IntProperty (this, "delay", period.count ());
-    //_end = new Blank (this, "end");
-    //Process::finalize_construction (p);
-  }
 
   Timer::Timer (int period)
   {
@@ -49,13 +34,23 @@ namespace djnn
     _end = new Blank (this, "end");
   }
 
-  Timer::Timer (Process *p, const std::string& n, int period) :
-      Process (n)
+  Timer::Timer (Process *p, const std::string& n, int period)
+  : Process (n)
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
     _delay = new IntProperty (this, "delay", period);
     _end = new Blank (this, "end");
     Process::finalize_construction (p);
+  }
+
+  Timer::Timer (chrono::milliseconds period)
+  : Timer(period.count())
+  {
+  }
+
+  Timer::Timer (Process *p, const std::string& n, chrono::milliseconds period)
+  : Timer(p, n, period.count())
+  {
   }
 
   Timer::~Timer ()
@@ -87,7 +82,7 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET);
         chrono::milliseconds duration (_delay->get_value ());
         djnn::release_exclusive_access (DBG_REL);
-        //this_thread::sleep_for (duration); // blocking call
+
         // std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " before sleep " << _delay->get_value () << std::endl; 
         #if DJNN_USE_SDL_THREAD
         SDL_Delay(duration.count()); // blocking call
@@ -96,9 +91,6 @@ namespace djnn
         #else
         this_thread::sleep_for (duration); // blocking call
         #endif
-
-        //launch_mutex_lock();
-        //launch_mutex_unlock();
         
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(thread_local_cancelled) {
@@ -108,18 +100,17 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if(thread_local_cancelled) {
             //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-            return;
-        }
+            //djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+            //return;
+        } else
         if (!get_please_stop ()) {
           set_activation_state (DEACTIVATED);
           //std::cerr << this << " " << get_name () << " end notify_activation" << std::endl;
           _end->notify_activation (); // propagating
-          
-          thread_terminated ();
           GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+        thread_terminated ();
     } catch (exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }

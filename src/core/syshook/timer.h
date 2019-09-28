@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../tree/blank.h"
+#include "core/ontology/process.h"
+#include "core/tree/blank.h"
 #include "external_source.h"
 
 #include "cpp-chrono.h"

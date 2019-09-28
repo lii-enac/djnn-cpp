@@ -15,11 +15,9 @@
  */
 
 #pragma once
-//#include "../backend.h"
 
-//#include "qt_window.h"
-#include "../external_source.h"
-#include "../../execution/graph.h"
+#include "core/syshook/external_source.h"
+#include "core/execution/graph.h"
 
 
 #include <QtCore/QAbstractEventDispatcher>

@@ -106,6 +106,7 @@ namespace djnn
   {
   }
 
+#if 0
   static mouse_button
   get_button (Uint8 n)
   {
@@ -126,7 +127,7 @@ namespace djnn
       }
     return button_id;
   }
-
+#endif
   void
   SDLWindow::handle_event (SDL_Event& e)
   {

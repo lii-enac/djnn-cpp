@@ -49,18 +49,7 @@ namespace djnn {
     virtual void mouseMoveEvent (QMouseEvent *event) override;
     virtual void wheelEvent (QWheelEvent *event) override;
     virtual void paintEvent (QPaintEvent *event) override;
-    #if 0
-    virtual void moveEvent (QMoveEvent *event) override;
-    virtual void resizeEvent (QResizeEvent * event) override;
-    virtual void keyPressEvent (QKeyEvent *event) override;
-    virtual void keyReleaseEvent (QKeyEvent *event) override;
-    virtual void closeEvent (QCloseEvent *event) override;
     
-  #endif
-    //Window * _window;
-    //QtWindow * _qtwindow;
     QtPickingView *_picking_view;
-    //int mouse_pos_x, mouse_pos_y;
-    //bool _updating;
   };
 }

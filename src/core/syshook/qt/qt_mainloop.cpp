@@ -14,12 +14,9 @@
  *
  */
 
-//#include "../backend.h"
 
-#include "../main_loop.h"
+#include "core/syshook/main_loop.h"
 #include "qt_mainloop.h"
-
-//#include <QThread>
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
@@ -74,8 +71,8 @@ namespace djnn
   QtMainloop::please_stop ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
-    if (_qapp)
-      _qapp->quit ();
+    //if (_qapp)
+    _qapp->quit ();
     /* SL+MM : l'appel à please_stop demande l'interruption du thread via interrupt
      * ce qui est susceptible suivant les versions de l'OS de plus ou moins bien
      * se passer. A creuser, en attendant on demande à qt de quitter et ça résoud
@@ -90,13 +87,9 @@ namespace djnn
   //QtMainloop::activate_from_mainloop ()
   QtMainloop::run ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
-    //set_please_stop (false);
-    
-    /* slot_about_to_block will be called ASA qapp->exec */
-    
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;    
+    /* slot_about_to_block will / *might* be called ASA qapp->exec */  
     //launch_mutex_unlock();
-
     _qapp->exec ();
   }
 
@@ -113,7 +106,6 @@ namespace djnn
   QtMainloop::slot_for_about_to_block ()
   {
     //DBG;
-
     if (_please_exec) {
       /* protect access on graph execeution */
       djnn::get_exclusive_access (DBG_GET);
@@ -123,10 +115,6 @@ namespace djnn
     }
 
     for (auto mll : _mlls) mll->slot_for_about_to_block();
-
-    //for (auto w : _windows) {
-    //  w->check_for_update ();
-    //}
 
     already_awake = false;
   }
@@ -146,7 +134,6 @@ namespace djnn
     if (!get_please_stop ()) {
       // now qt can call event method on windows
       already_awake = true;
-
     } else
       _qapp->quit ();
 

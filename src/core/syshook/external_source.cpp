@@ -8,6 +8,10 @@
 
 namespace djnn {
 
+    static djnn_mutex_t * launch_mutex;
+    thread_local std::atomic<bool> ExternalSource::thread_local_cancelled;
+
+
     #if DJNN_USE_SDL_THREAD
     static int SDL_ThreadFunction(void* data)
     {
@@ -66,36 +70,14 @@ namespace djnn {
         #endif
 
         #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
-        QThread::create([this]() { this->_es->ExternalSource::private_run(); })
-        ;
-        //QObject::connect(_impl->_thread, SIGNAL(finished()), _impl->_thread, SLOT(deleteLater()));
+        QThread::create([this]() { this->_es->ExternalSource::private_run(); });
+        QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
         _thread->start();
         #endif
 
         #if DJNN_USE_SDL_THREAD
-        //SDL_CreateThread(this->ExternalSource::private_run(), "djnn thread", this);
         SDL_CreateThread(SDL_ThreadFunction, "djnn thread", _es);
         #endif
-
-
-#if 0
-        auto native_thread = _impl->_thread.native_handle();
-#if defined(__WIN32__)
-        //DBG;
-        auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
-        if(!b) {
-            std::cerr << "fail to SetPriorityClass " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
-        }
-#else
-        sched_param sch;
-        int policy; 
-        pthread_getschedparam(native_thread, &policy, &sch);
-        sch.sched_priority = 20;
-        if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
-            std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
-        }
-#endif
-#endif
       }
 
       void please_stop() {
@@ -112,9 +94,9 @@ namespace djnn {
 
       void thread_terminated() {
         #if DJNN_USE_SDL_THREAD
-            //int threadReturnValue;
-            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
-            SDL_DetachThread(_thread);
+        //int threadReturnValue;
+        //SDL_WaitThread(_impl->_thread, &threadReturnValue);
+        SDL_DetachThread(_thread);
         #endif
 
         #if DJNN_THREAD_IS_POINTER
@@ -124,7 +106,7 @@ namespace djnn {
 
     private:
         #if DJNN_THREAD_IS_POINTER
-        djnn_thread_t * _thread;
+        std::atomic<djnn_thread_t*> _thread;
         #else
         djnn_thread_t _thread;
         #endif
@@ -142,9 +124,6 @@ namespace djnn {
         please_stop ();
         delete _impl;
     }
-
-
-    static djnn_mutex_t * launch_mutex;
 
     void
     ExternalSource::init()
@@ -183,8 +162,6 @@ namespace djnn {
         //std::cerr << __PRETTY_FUNCTION__<< std::endl;
     }
 
-    thread_local std::atomic<bool> ExternalSource::thread_local_cancelled;
-
 	void
 	ExternalSource::please_stop ()
 	{
@@ -197,14 +174,35 @@ namespace djnn {
         _impl->please_stop ();
 	}
 
-    
-
 	void
 	ExternalSource::start_thread ()
 	{
-        _impl->start();
-    	
+        _impl->start();	
 	}
+
+    void
+    ExternalSource::thread_terminated ()
+    {
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        _impl->thread_terminated();
+    }
+
+	void
+	ExternalSource::private_run ()
+	{
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        //set_thread_priority();
+        launch_mutex_lock();
+        launch_mutex_unlock();
+
+        cancelled = &ExternalSource::thread_local_cancelled;
+        *cancelled = false;
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
+        //DBG;
+        run();
+	}
+	
+}
 
 #if 0
 #if 0
@@ -266,27 +264,21 @@ static const char* th_err(int errmsg)
 #endif
 #endif
 
-    void
-    ExternalSource::thread_terminated ()
-    {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-
-        _impl->thread_terminated();
-    }
-
-	void
-	ExternalSource::private_run ()
-	{
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        //set_thread_priority();
-        launch_mutex_lock();
-        launch_mutex_unlock();
-
-        cancelled = &ExternalSource::thread_local_cancelled;
-        *cancelled = false;
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
+#if 0
+        auto native_thread = _impl->_thread.native_handle();
+#if defined(__WIN32__)
         //DBG;
-        run();
-	}
-	
-}
+        auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
+        if(!b) {
+            std::cerr << "fail to SetPriorityClass " << GetLastError() << " " << __FILE__ << ":" << __LINE__ << std::endl;
+        }
+#else
+        sched_param sch;
+        int policy; 
+        pthread_getschedparam(native_thread, &policy, &sch);
+        sch.sched_priority = 20;
+        if (pthread_setschedparam(native_thread, SCHED_FIFO, &sch)) {
+            std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
+        }
+#endif
+#endif

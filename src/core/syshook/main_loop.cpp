@@ -46,6 +46,7 @@ namespace djnn {
     MainLoop::MainLoop ()
     : _another_source_wants_to_be_mainloop (nullptr)
     {//DBG;
+      //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
       set_run_for_ever (); // default mode is forever
       //std::cerr <<"mainloop::lock"<<std::endl;
       djnn::get_exclusive_access (DBG_GET);

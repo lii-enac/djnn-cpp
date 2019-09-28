@@ -45,12 +45,11 @@ namespace djnn
 #endif
 
 #if !DJNN_USE_BOOST_FIBER
-        #if DJNN_USE_SDL_THREAD
-        SDL_LockMutex(global_mutex);
-        #else
-        global_mutex->lock();
-        #endif
-    //global_mutex->lock ();
+    #if DJNN_USE_SDL_THREAD
+    SDL_LockMutex(global_mutex);
+    #else
+    global_mutex->lock();
+    #endif
 #endif
     
 #if DBG_MUTEX
@@ -68,12 +67,11 @@ namespace djnn
 #endif
 
 #if !DJNN_USE_BOOST_FIBER
-        #if DJNN_USE_SDL_THREAD
-        SDL_UnlockMutex(global_mutex);
-        #else
-        global_mutex->unlock();
-        #endif
-    //global_mutex->unlock ();
+    #if DJNN_USE_SDL_THREAD
+    SDL_UnlockMutex(global_mutex);
+    #else
+    global_mutex->unlock();
+    #endif
 #endif
 
 #if DBG_MUTEX

@@ -18,14 +18,14 @@
 #include "qt_window.h"
 #include "qt_display.h"
 
-#include "../../core/syshook/qt/qt_mainloop.h"
-#include "../display.h"
-#include "../display-dev.h"
-#include "../abstract_display.h"
+#include "core/syshook/qt/qt_mainloop.h"
+#include "displaylay/display.h"
+#include "display/display-dev.h"
+#include "display/abstract_display.h"
 
-#include "../../core/syshook/main_loop.h"
-#include "../../core/syshook/syshook.h"
-#include "../../core/execution/graph.h"
+#include "core/syshook/main_loop.h"
+#include "core/syshook/syshook.h"
+#include "core/execution/graph.h"
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
@@ -34,7 +34,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 
-#define DBG //std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
 
 #define _PERF_TEST 0
@@ -50,6 +50,7 @@ namespace djnn
   QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
   }
 
   QtWindow::~QtWindow ()
@@ -63,10 +64,8 @@ namespace djnn
   void
   QtWindow::impl_activate ()
   {
-    //QtMainloop::instance ().add_window (this);
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     QtDisplayBackend::instance ()->add_window (this);
-    
-    //_qwidget = new MyQQWidget (_window, this);
     _qwidget = dynamic_cast<QtDisplayBackend*>(DisplayBackend::instance())->create_qwidget(_window, this);
     WinImpl::set_picking_view(_qwidget->get_picking_view());
 
@@ -79,9 +78,12 @@ namespace djnn
 
     QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
                 _window->height ()->get_value ());
+
+    _qwidget->set_building(true);
     _qwidget->setGeometry (rect);
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->show ();
+    _qwidget->set_building(false);
   }
 
   void
@@ -96,8 +98,6 @@ namespace djnn
   void
   QtWindow::update ()
   {
-    DBG
-    ;
     if (_qwidget == nullptr)
       return;
     //_qwidget->update (); // won't work since qt is blocked in mainloop
@@ -122,6 +122,12 @@ namespace djnn
     }
   }
 
+  void
+  MyQWidget::set_building(bool v)
+  {
+    _building = v;
+  }
+
   bool
   MyQWidget::event (QEvent *event)
   {
@@ -130,53 +136,10 @@ namespace djnn
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
-    //djnn::get_exclusive_access (DBG_GET);
+    if(!_building) djnn::get_exclusive_access (DBG_GET);
     bool exec_ = false;
     switch (event->type ())
-      {
-        #if 0
-      case QEvent::TouchBegin:
-      case QEvent::TouchUpdate:
-      case QEvent::TouchEnd:
-        {
-          QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
-
-          for (const auto & touchPoint : touchPoints) {
-            const int &id = touchPoint.id ();
-            const double &x = touchPoint.pos ().x ();
-            const double &y = touchPoint.pos ().y ();
-            const double &pressure = touchPoint.pressure ();
-            switch (touchPoint.state ())
-              {
-              case Qt::TouchPointStationary:
-                continue;
-              case Qt::TouchPointPressed:
-                {
-                  exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
-                  break;
-                }
-              case Qt::TouchPointMoved:
-                {
-                  exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
-                  break;
-                }
-              case Qt::TouchPointReleased:
-                {
-                  exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
-                  break;
-                }
-              }
-          }
-          if (exec_)
-            QtMainloop::instance ().set_please_exec (true);
-        }
-        break;
-      case QEvent::MouseButtonPress:
-      case QEvent::MouseMove:
-      case QEvent::MouseButtonRelease:
-      case QEvent::Wheel:
-  #endif
-
+    {
       case QEvent::KeyPress:
       case QEvent::KeyRelease:
       case QEvent::Move:
@@ -190,11 +153,11 @@ namespace djnn
       default:
         {
           /* Event not managed by us */
-          //djnn::release_exclusive_access (DBG_REL);
+          if(!_building) djnn::release_exclusive_access (DBG_REL);
           return QWidget::event (event);
         }
       }
-    //djnn::release_exclusive_access (DBG_REL);
+    if(!_building) djnn::release_exclusive_access (DBG_REL);
     //if(exec_) event->accept();
     return exec_;
   }

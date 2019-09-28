@@ -18,7 +18,6 @@
 
 namespace djnn
 {
-  //extern thread_local bool _please_stop;
 
   class ExternalSource
   {
@@ -26,9 +25,7 @@ namespace djnn
     ExternalSource ();
     virtual ~ExternalSource ();
 
-    //virtual void please_stop () { set_please_stop (true); }
-    virtual void please_stop (); //{ _please_stop = true; _thread.interrupt(); }
-    //virtual void activate_from_mainloop () {}
+    virtual void please_stop ();
 
     void private_run();
 
@@ -36,12 +33,7 @@ namespace djnn
     std::atomic<bool> *cancelled;
 
   protected:
-    //virtual void set_please_stop (bool v) { _please_stop.store (v); }
-    //virtual bool get_please_stop () const { return _please_stop.load (); }
     virtual void set_please_stop (bool v) { _please_stop = v; }
-    //virtual bool get_please_stop () const { return _please_stop; }
-    //virtual void set_please_stop (bool v) { _thread.stop(); }
-    //virtual bool get_please_stop () const { return _thread.stopping(); }
     virtual bool get_please_stop () const { return _please_stop; }
 
     virtual void start_thread();
@@ -49,10 +41,6 @@ namespace djnn
     friend class MainLoop;
 
     static void init();
-
-    //std::thread _thread;
-
-    //interruptible_thread _thread;
 
   protected:
     static void launch_mutex_lock();
@@ -64,9 +52,7 @@ namespace djnn
     Impl * _impl;
 
   private:
-    std::atomic<bool> _please_stop; // does not compile on linux
-    //bool _please_stop;
-    
+    std::atomic<bool> _please_stop;
   };
 
 }
