@@ -40,11 +40,16 @@ namespace djnn
   bool
   MyQQWidget::event (QEvent *event)
   {
-
+    //std::cerr << ">> " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
     /* note:
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
+
+    if(_building) std::cerr << "building" << std::endl;
+
+    if(!_building)
+    djnn::get_exclusive_access (DBG_GET);
     
     bool exec_ = false;
     switch (event->type ())
@@ -53,7 +58,8 @@ namespace djnn
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd:
         {
-          djnn::get_exclusive_access (DBG_GET);
+          //if(!_building)
+          //  djnn::get_exclusive_access (DBG_GET);
           QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
 
           for (const auto & touchPoint : touchPoints) {
@@ -82,9 +88,9 @@ namespace djnn
                 }
               }
           }
-          if (exec_)
-            QtMainloop::instance ().set_please_exec (true);
-          djnn::release_exclusive_access (DBG_REL);
+          if (exec_) QtMainloop::instance ().set_please_exec (true);
+          //if(!_building)
+          //  djnn::release_exclusive_access (DBG_REL);
         }
         break;
 
@@ -92,9 +98,14 @@ namespace djnn
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
       case QEvent::Wheel:
-        //djnn::release_exclusive_access (DBG_REL);
+      case QEvent::Paint:
+      //case QEvent::UpdateRequest:
+        //if(!_building)
+        //  djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
-        return exec_;
+        //if(!_building)
+        //  djnn::release_exclusive_access (DBG_REL);
+        //return exec_;
         break;
 
       // case QEvent::KeyPress:
@@ -109,11 +120,19 @@ namespace djnn
         {
           /* Event not managed by us */
           //djnn::release_exclusive_access (DBG_REL);
-          return MyQWidget::event (event);
+          //if(!_building)
+          //djnn::get_exclusive_access (DBG_GET);
+          exec_ = MyQWidget::event (event);
+          //if(!_building)
+          //djnn::release_exclusive_access (DBG_REL);
+          break;
         }
       }
-    
+
+    if(!_building)
+    djnn::release_exclusive_access (DBG_REL);
     //if(exec_) event->accept();
+    //std::cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
     return exec_;
   }
 
@@ -155,6 +174,7 @@ namespace djnn
   {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
+
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_)
       QtMainloop::instance ().set_please_exec (true);

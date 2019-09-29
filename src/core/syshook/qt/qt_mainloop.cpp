@@ -88,8 +88,7 @@ namespace djnn
   QtMainloop::run ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;    
-    /* slot_about_to_block will / *might* be called ASA qapp->exec */  
-    //launch_mutex_unlock();
+    /* slot_about_to_block will / *might* be called ASA qapp->exec */
     _qapp->exec ();
   }
 

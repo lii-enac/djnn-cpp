@@ -124,9 +124,10 @@ LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 
 endif
 
-ifeq ($(graphics),QT)
+ifeq ($(display),QT)
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-else ifneq (,$(filter $(graphics),CAIRO GL))
+#else ifneq (,$(filter $(graphics),CAIRO GL))
+else ifeq ($(display),SDL)
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 else
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1

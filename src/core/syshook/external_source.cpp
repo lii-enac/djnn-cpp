@@ -48,9 +48,9 @@ namespace djnn {
 
             #else
             #if DJNN_THREAD_IS_POINTER
-            if ( _impl->_thread->joinable() ) _thread->join();
+            if ( _thread->joinable() ) _thread->join();
             #else
-            if ( (_impl->_thread).joinable() ) (_thread).join();
+            if ( (_thread).joinable() ) (_thread).join();
             #endif
             #endif
         }
@@ -60,19 +60,20 @@ namespace djnn {
       void start() {
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_STD_THREAD
-        if(_impl->_thread.joinable()) _impl->_thread.detach();
+        if(_thread.joinable()) _thread.detach();
         #endif
 
         _thread = 
 
         #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-        djnn_thread_t (&ExternalSource::private_run, this);
+        //djnn_thread_t (&ExternalSource::private_run, this);
+        djnn_thread_t ([this]() {this->_es->ExternalSource::private_run();});
         #endif
 
         #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
         QThread::create([this]() { this->_es->ExternalSource::private_run(); });
         QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
-        _thread->start();
+        (*_thread).start();
         #endif
 
         #if DJNN_USE_SDL_THREAD
@@ -87,7 +88,7 @@ namespace djnn {
 
         #if DJNN_USE_QT_THREAD
         if(_thread) {
-           _thread->requestInterruption();
+           (*_thread).requestInterruption();
         }
         #endif
       }

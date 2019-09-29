@@ -49,7 +49,7 @@ namespace djnn {
   private:
     MyQWidget * _qwidget;
     Window* _window;
-    bool _please_update;
+    std::atomic<bool> _please_update;
     friend class MyQWidget;
   };
 

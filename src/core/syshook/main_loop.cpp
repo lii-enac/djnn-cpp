@@ -48,9 +48,10 @@ namespace djnn {
     {//DBG;
       //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
       set_run_for_ever (); // default mode is forever
-      //std::cerr <<"mainloop::lock"<<std::endl;
-      djnn::get_exclusive_access (DBG_GET);
+      //std::cerr <<"mainloop::lock "<< __LINE__ <<std::endl;
       launch_mutex_lock ();
+      djnn::get_exclusive_access (DBG_GET);
+      
     }
 
     MainLoop::~MainLoop ()
@@ -137,8 +138,10 @@ namespace djnn {
     void
     MainLoop::run ()
     {//DBG;
-      launch_mutex_unlock();
+      //std::cerr <<"mainloop::unlock "<< __LINE__ <<std::endl;
       djnn::release_exclusive_access (DBG_REL);
+      launch_mutex_unlock();
+      
 
       if (is_run_forever ()) {
         //DBG;
@@ -150,8 +153,12 @@ namespace djnn {
           // check from time to time if we need to stop
           #if DJNN_USE_SDL_THREAD
           SDL_Delay(duration);
-          #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+          #elif DJNN_USE_QT_THREAD
+            #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
           QThread::currentThread()->wait(duration);
+            #else
+          this_thread::sleep_for(chrono::seconds(duration));
+            #endif
           #else
           this_thread::sleep_for(chrono::seconds(duration));
           #endif
@@ -165,8 +172,12 @@ namespace djnn {
         //boost::
         #if DJNN_USE_SDL_THREAD
         SDL_Delay(_duration.count());
-        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+        #elif DJNN_USE_QT_THREAD
+          #if  (QT_VERSION < QT_VERSION_CHECK(5,10,0))
         QThread::currentThread()->wait(_duration.count());
+          #else
+        this_thread::sleep_for (_duration);
+          #endif
         #else
         this_thread::sleep_for (_duration);
         #endif
@@ -181,8 +192,10 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
 
-      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
+      //std::cerr <<"mainloop::lock "<< __LINE__ << std::endl;
       launch_mutex_lock (); // reacquire launch mutex
+      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
+      
       //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
       //djnn::get_exclusive_access (DBG_GET); // prevent external source thread to do anything once mainloop is terminated
       //launch_mutex_lock (); // reacquire launch mutex

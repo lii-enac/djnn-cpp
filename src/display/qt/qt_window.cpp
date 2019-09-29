@@ -19,7 +19,7 @@
 #include "qt_display.h"
 
 #include "core/syshook/qt/qt_mainloop.h"
-#include "displaylay/display.h"
+#include "display/display.h"
 #include "display/display-dev.h"
 #include "display/abstract_display.h"
 
@@ -136,7 +136,7 @@ namespace djnn
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
-    if(!_building) djnn::get_exclusive_access (DBG_GET);
+    
     bool exec_ = false;
     switch (event->type ())
     {
@@ -144,21 +144,23 @@ namespace djnn
       case QEvent::KeyRelease:
       case QEvent::Move:
       case QEvent::Resize:
-      
       case QEvent::Close:
-      case QEvent::Paint:
-        exec_ = QWidget::event (event);
+      //case QEvent::Paint:
+        //if(!_building)
+        //  djnn::get_exclusive_access (DBG_GET);
+        exec_ = QWidget::event (event); // should call our callback methods
+        //if(!_building)
+        //  djnn::release_exclusive_access (DBG_REL);
         break;
 
       default:
         {
-          /* Event not managed by us */
-          if(!_building) djnn::release_exclusive_access (DBG_REL);
-          return QWidget::event (event);
+          /* Event not managed by us */      
+          exec_ = QWidget::event (event);
+          break;
         }
       }
-    if(!_building) djnn::release_exclusive_access (DBG_REL);
-    //if(exec_) event->accept();
+    
     return exec_;
   }
 

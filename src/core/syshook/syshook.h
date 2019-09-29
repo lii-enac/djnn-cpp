@@ -21,7 +21,7 @@
 #define LINE_STRING STRINGIZE(__LINE__)
 
 #define DBG_GET (">> GET " __FILE__ ":" LINE_STRING)
-#define DBG_REL (">> REL " __FILE__ ":" LINE_STRING)
+#define DBG_REL ("<< REL " __FILE__ ":" LINE_STRING)
 
 
 namespace djnn

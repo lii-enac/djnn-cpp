@@ -63,6 +63,7 @@ namespace djnn
   void
   Timer::impl_activate ()
   {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     start_thread();
   }
 
@@ -86,8 +87,12 @@ namespace djnn
         // std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " before sleep " << _delay->get_value () << std::endl; 
         #if DJNN_USE_SDL_THREAD
         SDL_Delay(duration.count()); // blocking call
-        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-        QThread::currentThread()->wait(duration.count());
+        #elif DJNN_USE_QT_THREAD
+          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+          QThread::currentThread()->wait(duration.count());
+          #else
+          this_thread::sleep_for (duration); // blocking call
+          #endif
         #else
         this_thread::sleep_for (duration); // blocking call
         #endif
@@ -98,6 +103,7 @@ namespace djnn
           return;
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        //std::cerr << this << " " << get_name () << " just got mutex" << std::endl; 
         if(thread_local_cancelled) {
             //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
             //djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
@@ -109,6 +115,7 @@ namespace djnn
           _end->notify_activation (); // propagating
           GRAPH_EXEC; // executing
         }
+        //std::cerr << this << " " << get_name () << " about to release mutex" << std::endl; 
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
         thread_terminated ();
     } catch (exception& e) {

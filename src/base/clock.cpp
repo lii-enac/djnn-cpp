@@ -107,8 +107,12 @@ namespace djnn
 
         #if DJNN_USE_SDL_THREAD
         SDL_Delay(duration.count()); // blocking call
-        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-        QThread::currentThread()->wait(duration.count());
+        #elif DJNN_USE_QT_THREAD
+          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+          QThread::currentThread()->wait(duration.count());
+          #else
+          this_thread::sleep_for (duration); // blocking call
+          #endif
         #else
         this_thread::sleep_for (duration); // blocking call
         #endif

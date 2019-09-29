@@ -20,6 +20,8 @@
 #include <chrono>
 #include <iostream>
 
+#include <thread>
+
 #define DBG_MUTEX 0
 
 namespace djnn
@@ -41,7 +43,7 @@ namespace djnn
   get_exclusive_access (const char * debug)
   {
 #if DBG_MUTEX
-    std::cerr << debug << std::flush;
+    std::cerr << debug << " thread:" << std::this_thread::get_id() << std::flush;
 #endif
 
 #if !DJNN_USE_BOOST_FIBER
