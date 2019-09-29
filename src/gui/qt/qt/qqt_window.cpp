@@ -46,7 +46,7 @@ namespace djnn
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
 
-    if(_building) std::cerr << "building" << std::endl;
+    //if(_building) std::cerr << "building" << std::endl;
 
     //if(!_building)
     //djnn::get_exclusive_access (DBG_GET);
