@@ -48,8 +48,8 @@ namespace djnn
 
     if(_building) std::cerr << "building" << std::endl;
 
-    if(!_building)
-    djnn::get_exclusive_access (DBG_GET);
+    //if(!_building)
+    //djnn::get_exclusive_access (DBG_GET);
     
     bool exec_ = false;
     switch (event->type ())
@@ -59,7 +59,7 @@ namespace djnn
       case QEvent::TouchEnd:
         {
           //if(!_building)
-          //  djnn::get_exclusive_access (DBG_GET);
+          djnn::get_exclusive_access (DBG_GET);
           QList < QTouchEvent::TouchPoint > touchPoints = static_cast<QTouchEvent *> (event)->touchPoints ();
 
           for (const auto & touchPoint : touchPoints) {
@@ -90,7 +90,7 @@ namespace djnn
           }
           if (exec_) QtMainloop::instance ().set_please_exec (true);
           //if(!_building)
-          //  djnn::release_exclusive_access (DBG_REL);
+          djnn::release_exclusive_access (DBG_REL);
         }
         break;
 
@@ -101,10 +101,10 @@ namespace djnn
       case QEvent::Paint:
       //case QEvent::UpdateRequest:
         //if(!_building)
-        //  djnn::get_exclusive_access (DBG_GET);
+        djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
         //if(!_building)
-        //  djnn::release_exclusive_access (DBG_REL);
+        djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;
 
@@ -129,8 +129,8 @@ namespace djnn
         }
       }
 
-    if(!_building)
-    djnn::release_exclusive_access (DBG_REL);
+    //if(!_building)
+    //djnn::release_exclusive_access (DBG_REL);
     //if(exec_) event->accept();
     //std::cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
     return exec_;

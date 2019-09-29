@@ -146,11 +146,11 @@ namespace djnn
       case QEvent::Resize:
       case QEvent::Close:
       //case QEvent::Paint:
-        //if(!_building)
-        //  djnn::get_exclusive_access (DBG_GET);
+        if(!_building)
+        djnn::get_exclusive_access (DBG_GET);
         exec_ = QWidget::event (event); // should call our callback methods
-        //if(!_building)
-        //  djnn::release_exclusive_access (DBG_REL);
+        if(!_building)
+        djnn::release_exclusive_access (DBG_REL);
         break;
 
       default:
