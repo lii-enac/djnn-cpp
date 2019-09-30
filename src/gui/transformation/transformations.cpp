@@ -1208,7 +1208,7 @@ namespace djnn
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
 
-    _acca->set_value (_acca->get_value () + da, true);
+    _acca->set_value (_acca->get_value () + angle, true);
   }
 
   void
@@ -1224,7 +1224,7 @@ namespace djnn
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
 
-    _acca->set_value (_acca->get_value () + da, true);
+    _acca->set_value (_acca->get_value () + angle, true);
   }
 
   void
