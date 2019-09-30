@@ -38,7 +38,7 @@ namespace djnn
   {
     _added = new RefProperty (nullptr);
     _removed = new RefProperty (nullptr);
-    _size = new IntProperty (0);
+    _size = new IntProperty (nullptr, "size", 0);
     Process::finalize_construction (parent);
   }
 
