@@ -767,7 +767,8 @@ namespace djnn
   {
     rightTranslate2d (dx, dy);
     // Hack to propagate the matrix modification after complete calculation FIXME
-    m11 ()->set_value (m11 ()->get_value (), true);
+    m14 ()->set_value (m14 ()->get_value (), true);
+    m24 ()->set_value (m24 ()->get_value (), true);
   }
 
   void 
@@ -859,7 +860,8 @@ namespace djnn
   {
     leftTranslate2d (dx, dy);
     // Hack to propagate the matrix modification after complete calculation FIXME
-    m11 ()->set_value (m11 ()->get_value (), true);
+    m14 ()->set_value (m14 ()->get_value (), true);
+    m24 ()->set_value (m24 ()->get_value (), true);
   }
 
   void
@@ -882,6 +884,9 @@ namespace djnn
     rightScale2d (sx, sy);
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _accsx->set_value (_accsx->get_value () * sx, true);
+    _accsy->set_value (_accsy->get_value () * sy, true);
   }
 
   void
@@ -896,6 +901,9 @@ namespace djnn
     }
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _accsx->set_value (_accsx->get_value () * sx, true);
+    _accsy->set_value (_accsy->get_value () * sy, true);
   }
 
   void
@@ -957,6 +965,9 @@ namespace djnn
     leftScale2d (sx, sy);
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _accsx->set_value (_accsx->get_value () * sx, true);
+    _accsy->set_value (_accsy->get_value () * sy, true);
   }
 
   void
@@ -971,6 +982,9 @@ namespace djnn
     }
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _accsx->set_value (_accsx->get_value () * sx, true);
+    _accsy->set_value (_accsy->get_value () * sy, true);
   }
 
   void
@@ -1076,6 +1090,8 @@ namespace djnn
     rightRotate2d (da);
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _acca->set_value (_acca->get_value () + da, true);
   }
 
   void
@@ -1090,6 +1106,8 @@ namespace djnn
     }
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _acca->set_value (_acca->get_value () + da, true);
   }
 
   void
@@ -1189,6 +1207,8 @@ namespace djnn
     leftRotate2d(angle);
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _acca->set_value (_acca->get_value () + da, true);
   }
 
   void
@@ -1203,6 +1223,8 @@ namespace djnn
     }
     // Hack to propagate the matrix modification after complete calculation FIXME
     m11 ()->set_value (m11 ()->get_value (), true);
+
+    _acca->set_value (_acca->get_value () + da, true);
   }
 
   void
@@ -1520,8 +1542,9 @@ namespace djnn
 
     _h->rightScale (sx, sy, cx, cy);
 
-    _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
-    _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
+     // moved in left/rightScale
+    // _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
+    // _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
     _h->_rightScaleBy_sx->set_value (1, false);
     _h->_rightScaleBy_sy->set_value (1, false);
   }
@@ -1536,8 +1559,9 @@ namespace djnn
 
     _h->leftScale (sx, sy, cx, cy);
 
-    _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
-    _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
+    // moved in left/rightScale
+    // _h->_accsx->set_value (_h->_accsx->get_value () * sx, true);
+    // _h->_accsy->set_value (_h->_accsy->get_value () * sy, true);
     _h->_leftScaleBy_sx->set_value (1, false);
     _h->_leftScaleBy_sy->set_value (1, false);
   }
@@ -1551,7 +1575,8 @@ namespace djnn
 
     _h->rightRotate (da, cx, cy);
 
-    _h->_acca->set_value (_h->_acca->get_value () + da, true);
+    // moved in left/rightRotate
+    //_h->_acca->set_value (_h->_acca->get_value () + da, true);
     _h->_rightRotateBy_da->set_value (0, false);
   }
 
@@ -1564,7 +1589,8 @@ namespace djnn
 
     _h->leftRotate (da, cx, cy);
 
-    _h->_acca->set_value (_h->_acca->get_value () + da, true);
+    // moved in left/rightRotate
+    //_h->_acca->set_value (_h->_acca->get_value () + da, true);
     _h->_leftRotateBy_da->set_value (0, false);
   }
 
