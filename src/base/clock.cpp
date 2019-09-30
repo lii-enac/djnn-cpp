@@ -14,17 +14,16 @@
  */
 
 #include "clock.h"
-#include "../core/syshook/syshook.h"
-#include "../core/tree/int_property.h"
-#include "../core/execution/graph.h"
-#include "../core/serializer/serializer.h"
-#include "../core/utils/utils-dev.h"
+#include "core/syshook/syshook.h"
+#include "core/tree/int_property.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/utils-dev.h"
+#include "core/syshook/cpp-thread.h"
+
 #include <sys/time.h>
 
-#include "../core/syshook/cpp-thread.h"
-
 #include <iostream>
-
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
@@ -57,7 +56,7 @@ namespace djnn
   Clock::Clock (Process *p, const std::string& n, int period) :
       Process (n)
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl; 
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << (p ? p->get_name() : "") << "/" << get_name() << std::endl; 
     _period = new IntProperty (this, "period", period);
     _elapsed = new DoubleProperty (this, "elapsed", 0);
     _tick = new Spike (this, "tick");
@@ -76,8 +75,6 @@ namespace djnn
   Clock::impl_activate ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
-    if ( get_activation_state () == ACTIVATED )
-      return;
     start_thread();
   }
 
@@ -90,60 +87,44 @@ namespace djnn
 
   void
   Clock::run ()
-  { //DBG;
+  {
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     struct timespec before;
     struct timespec after;
     set_please_stop (false);
+
     try {
-      //std::cerr << this << " >> run" << std::endl;
       while (!get_please_stop ()) {
         djnn::get_exclusive_access (DBG_GET);
-        chrono::milliseconds duration (_period->get_value ());
+        if(thread_local_cancelled) break;
+        int duration = _period->get_value ();
         djnn::release_exclusive_access (DBG_REL);
-        //std::cerr << this << "  >> sleep " << duration.count() << std::endl;
-        //std
+
         get_monotonic_time(&before);
-        //this_thread::sleep_for (chrono::milliseconds(duration)); // blocking call
 
-        #if DJNN_USE_SDL_THREAD
-        SDL_Delay(duration.count()); // blocking call
-        #elif DJNN_USE_QT_THREAD
-          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-          QThread::currentThread()->wait(duration.count());
-          #else
-          this_thread::sleep_for (duration); // blocking call
-          #endif
-        #else
-        this_thread::sleep_for (duration); // blocking call
-        #endif
+        //std::cerr << "entering sleep" << std::endl;
+        djnn::sleep(duration);
+        //std::cerr << "exit sleep" << std::endl;
 
-        //launch_mutex_lock();
-        //launch_mutex_unlock();
+        if(thread_local_cancelled) break;
 
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        if(thread_local_cancelled) {
-          //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-          break;
-        }
-
-        //std::cerr << this << "  << sleep end" << std::endl;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         
         if(thread_local_cancelled) {
-            //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-            break;
-          }
+          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+          break;
+        }
 
-        //std::cerr << this << "  ** sleep GOT " << this->get_name () << std::endl;
         if (!get_please_stop ()) {
           get_monotonic_time(&after);
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
           _elapsed->set_value (elapsedTime, true);
-          //std::cerr << this << " " << get_name () << " tick activate" << std::endl;
           _tick->activate (); // propagating
           
           GRAPH_EXEC; // executing
+        } else {
+          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+          break;
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
@@ -152,6 +133,13 @@ namespace djnn
     } catch (exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
+#if DJNN_USE_BOOST_THREAD
+    catch(boost::thread_interrupted const& ) {
+        //clean resources
+        //std::cout << "thread interrupted" << std::endl;
+    }
+#endif
+    thread_terminated ();
   }
 
   void
@@ -173,7 +161,22 @@ namespace djnn
 
 
 
+#if 0
 
+        chrono::milliseconds duration (_delay->get_value ());
+        #if DJNN_USE_SDL_THREAD
+        //std::cerr << duration.count() << std::endl;
+        SDL_Delay(duration.count()); // blocking call
+        #elif DJNN_USE_QT_THREAD
+          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+          QThread::currentThread()->wait(duration.count());
+          #else
+          this_thread::sleep_for (duration); // blocking call
+          #endif
+        #else
+        this_thread::sleep_for (duration); // blocking call
+        #endif
+#endif
 
 
 

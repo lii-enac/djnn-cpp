@@ -95,7 +95,6 @@ namespace djnn {
     void
     MainLoop::run_in_main_thread ()
     {
-      //std::cerr <<"mainloop::unlock"<<std::endl;
       private_run ();
     }
 
@@ -138,11 +137,10 @@ namespace djnn {
     void
     MainLoop::run ()
     {//DBG;
-      //std::cerr <<"mainloop::unlock "<< __LINE__ <<std::endl;
+      ///std::cerr <<"mainloop::unlock "<< __LINE__ <<std::endl;
       djnn::release_exclusive_access (DBG_REL);
       launch_mutex_unlock();
       
-
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success

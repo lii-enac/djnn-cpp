@@ -53,6 +53,18 @@ namespace djnn
   {
   }
 
+#if !DJNN_USE_STD_CHRONO
+  Timer::Timer (std::chrono::milliseconds period)
+  : Timer(period.count())
+  {
+  }
+
+  Timer::Timer (Process *p, const std::string& n, std::chrono::milliseconds period)
+  : Timer(p, n, period.count())
+  {
+  }
+#endif
+
   Timer::~Timer ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
@@ -81,46 +93,40 @@ namespace djnn
     set_please_stop (false);
     try {
         djnn::get_exclusive_access (DBG_GET);
-        chrono::milliseconds duration (_delay->get_value ());
-        djnn::release_exclusive_access (DBG_REL);
-
-        // std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " before sleep " << _delay->get_value () << std::endl; 
-        #if DJNN_USE_SDL_THREAD
-        SDL_Delay(duration.count()); // blocking call
-        #elif DJNN_USE_QT_THREAD
-          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-          QThread::currentThread()->wait(duration.count());
-          #else
-          this_thread::sleep_for (duration); // blocking call
-          #endif
-        #else
-        this_thread::sleep_for (duration); // blocking call
-        #endif
-        
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name () << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         if(thread_local_cancelled) {
-          //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
+          thread_terminated ();
           return;
         }
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        //std::cerr << this << " " << get_name () << " just got mutex" << std::endl; 
+        int duration = _delay->get_value ();
+        djnn::release_exclusive_access (DBG_REL);
+
+        //std::cerr << "entering sleep" << std::endl;
+        djnn::sleep(duration);
+        //std::cerr << "exit sleep" << std::endl;
+
         if(thread_local_cancelled) {
-            //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-            //djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-            //return;
-        } else
-        if (!get_please_stop ()) {
-          set_activation_state (DEACTIVATED);
-          //std::cerr << this << " " << get_name () << " end notify_activation" << std::endl;
-          _end->notify_activation (); // propagating
-          GRAPH_EXEC; // executing
+          //thread_terminated ();
+          //return;
+        } else {
+          djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+          // the previous call my take some time, check if we have been cancelled meanwhile
+          if(!thread_local_cancelled && !get_please_stop ()) {
+            set_activation_state (DEACTIVATED);
+            _end->notify_activation (); // propagating
+            GRAPH_EXEC; // executing
+          }
+          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
         }
-        //std::cerr << this << " " << get_name () << " about to release mutex" << std::endl; 
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-        thread_terminated ();
     } catch (exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
+#if DJNN_USE_BOOST_THREAD
+    catch(boost::thread_interrupted const& ) {
+        //clean resources
+        //std::cout << "thread interrupted" << std::endl;
+    }
+#endif
+    thread_terminated ();
     //deactivate ();
   }
 

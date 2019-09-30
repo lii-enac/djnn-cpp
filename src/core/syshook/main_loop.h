@@ -50,6 +50,15 @@ namespace djnn
       _duration = chrono::duration_cast<chrono::milliseconds>(d);
     }
 
+#if !DJNN_USE_STD_CHRONO
+    void set_run_for (std::chrono::milliseconds d) {
+      _duration = chrono::milliseconds(d.count());
+    }
+
+    void set_run_for (std::chrono::seconds d) {
+      _duration = chrono::seconds(d.count());
+    }
+#endif
     void set_another_source_wants_to_be_mainloop (ExternalSource *);
     ExternalSource * _another_source_wants_to_be_mainloop;
     

@@ -11,10 +11,10 @@ namespace djnn {
     static djnn_mutex_t * launch_mutex;
     thread_local std::atomic<bool> ExternalSource::thread_local_cancelled;
 
-
     #if DJNN_USE_SDL_THREAD
     static int SDL_ThreadFunction(void* data)
     {
+        //std::cerr << "start of thread " << __PRETTY_FUNCTION__ << " " << ExternalSource::thread_local_cancelled << " " << &ExternalSource::thread_local_cancelled << std::endl;
         ExternalSource * es = (ExternalSource*) data;
         es->private_run ();
         //std::cerr << "end of thread " << __PRETTY_FUNCTION__ << " " << ExternalSource::thread_local_cancelled << " " << &ExternalSource::thread_local_cancelled << std::endl;
@@ -33,6 +33,12 @@ namespace djnn {
       }
 
       ~Impl() {
+        #if DJNN_USE_QT_THREAD
+        if(_thread) {
+            delete _thread;
+        }
+        #endif
+#if 0
         #if DJNN_THREAD_IS_POINTER
         if(_thread) {
         #else
@@ -53,8 +59,10 @@ namespace djnn {
             if ( (_thread).joinable() ) (_thread).join();
             #endif
             #endif
+        } else {
+            std::cerr << "nothing" << std::endl; 
         }
-
+#endif
       }
 
       void start() {
@@ -70,10 +78,14 @@ namespace djnn {
         djnn_thread_t ([this]() {this->_es->ExternalSource::private_run();});
         #endif
 
-        #if DJNN_USE_QT_THREAD //&& (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
+        #if DJNN_USE_QT_THREAD
+            #if (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
         QThread::create([this]() { this->_es->ExternalSource::private_run(); });
-        QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
+        //QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
         (*_thread).start();
+            #else
+        #error dont remember
+            #endif
         #endif
 
         #if DJNN_USE_SDL_THREAD
@@ -83,7 +95,8 @@ namespace djnn {
 
       void please_stop() {
         #if DJNN_USE_BOOST_THREAD
-        _impl->_thread.interrupt();
+        //DBG;
+        _thread.interrupt();
         #endif
 
         #if DJNN_USE_QT_THREAD
@@ -91,13 +104,25 @@ namespace djnn {
            (*_thread).requestInterruption();
         }
         #endif
+
+        terminate_thread ();
       }
 
       void thread_terminated() {
+      }
+
+      void terminate_thread() {
+        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_SDL_THREAD
         //int threadReturnValue;
         //SDL_WaitThread(_impl->_thread, &threadReturnValue);
         SDL_DetachThread(_thread);
+        #endif
+
+        #if DJNN_USE_BOOST_THREAD
+        //std::cerr << _thread.joinable() << std::endl;
+        _thread.detach();
+        //std::cerr << _thread.joinable() << std::endl;
         #endif
 
         #if DJNN_THREAD_IS_POINTER
@@ -108,6 +133,7 @@ namespace djnn {
     private:
         #if DJNN_THREAD_IS_POINTER
         std::atomic<djnn_thread_t*> _thread;
+        //djnn_thread_t* _thread;
         #else
         djnn_thread_t _thread;
         #endif
@@ -141,26 +167,26 @@ namespace djnn {
     void
     ExternalSource::launch_mutex_lock()
     {
-        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        //std::cerr << __PRETTY_FUNCTION__ << " " << &launch_mutex << std::flush;
         #if DJNN_USE_SDL_THREAD
         SDL_LockMutex(launch_mutex);
         #else
         //std::cerr << launch_mutex << std::endl;
         launch_mutex->lock();
         #endif
-        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        //std::cerr << __PRETTY_FUNCTION__ << "got" << std::endl;
     }
     void
     ExternalSource::launch_mutex_unlock()
     {
-        //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+        //std::cerr << __PRETTY_FUNCTION__ << " " << &launch_mutex << std::flush;
         #if DJNN_USE_SDL_THREAD
         SDL_UnlockMutex(launch_mutex);
         #else
         //std::cerr << launch_mutex << std::endl;
         launch_mutex->unlock();
         #endif
-        //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        //std::cerr << __PRETTY_FUNCTION__ << "rel" << std::endl;
     }
 
 	void
@@ -192,10 +218,11 @@ namespace djnn {
 	ExternalSource::private_run ()
 	{
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+        //DBG;
         //set_thread_priority();
         launch_mutex_lock();
         launch_mutex_unlock();
-
+        //DBG;
         cancelled = &ExternalSource::thread_local_cancelled;
         *cancelled = false;
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;

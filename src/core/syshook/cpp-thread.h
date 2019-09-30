@@ -15,6 +15,9 @@
 	namespace djnn {
 		namespace this_thread = boost::this_thread;
 		typedef boost::thread djnn_thread_t;
+    inline void sleep(int ms) {
+      this_thread::sleep_for (ms);
+    }
 	}
 	#define DJNN_THREAD_IS_POINTER 0
 
@@ -41,6 +44,9 @@
 	#include <QThread>
 	namespace djnn {
 		typedef QThread djnn_thread_t;
+    inline void sleep(int ms) {
+      QThread::currentThread()->usleep(1000*ms);
+    }
 	}
 	#define DJNN_THREAD_IS_POINTER 1
 
@@ -50,6 +56,9 @@
 
 	namespace djnn {
     typedef SDL_Thread djnn_thread_t;
+    inline void sleep(int ms) {
+      SDL_Delay(ms);
+    }
 	}
 
 #endif

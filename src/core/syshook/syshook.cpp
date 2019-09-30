@@ -32,6 +32,7 @@ namespace djnn
 
   void
   init_global_mutex() {
+    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
     #if DJNN_USE_SDL_THREAD
     global_mutex = SDL_CreateMutex();
     #else
