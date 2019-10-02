@@ -8,8 +8,9 @@
  *
  *
  *  Contributors:
- *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
@@ -53,7 +54,7 @@ namespace djnn {
       //std::cerr <<"mainloop::lock "<< __LINE__ <<std::endl;
       launch_mutex_lock ();
       //DBG;
-      djnn::get_exclusive_access (DBG_GET);
+      djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
     }
 
     MainLoop::~MainLoop ()
@@ -148,23 +149,17 @@ namespace djnn {
     void
     MainLoop::run ()
     {//DBG;
-      ///std::cerr <<"mainloop::unlock "<< __LINE__ <<std::endl;
-      
       if (is_run_forever ()) {
         //DBG;
         //own_mutex.lock (); // 1st lock: success
         //own_mutex.lock (); // 2nd lock: blocks forever
         while (1) {
-          unsigned int duration = 2000;
-
-          // check from time to time if we need to stop
+          unsigned int duration = 2000; // check from time to time if we need to stop
           djnn::sleep(duration);
-
           if(get_please_stop()) {
             break;
           }
         }
-        
       } else { /* mainloop run for _duration time */
         //std::
         //boost::
@@ -173,15 +168,12 @@ namespace djnn {
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
         set_run_for_ever (); // reset to default forever mode
-
         //DBG;
       }
 
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
 
-      
-      
       //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
       //djnn::get_exclusive_access (DBG_GET); // prevent external source thread to do anything once mainloop is terminated
       //launch_mutex_lock (); // reacquire launch mutex

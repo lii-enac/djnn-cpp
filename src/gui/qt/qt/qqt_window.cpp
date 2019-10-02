@@ -47,10 +47,9 @@ namespace djnn
      */
 
     //if(_building) std::cerr << "building" << std::endl;
-
     //if(!_building)
     //djnn::get_exclusive_access (DBG_GET);
-    
+
     bool exec_ = false;
     switch (event->type ())
       {
@@ -107,14 +106,6 @@ namespace djnn
         djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;
-
-      // case QEvent::KeyPress:
-      // case QEvent::KeyRelease:
-      // case QEvent::Close:
-      // case QEvent::Paint:
-      //   exec_ = QWidget::event (event);
-      //   break;
-
 
       default:
         {
