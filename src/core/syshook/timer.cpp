@@ -54,6 +54,20 @@ namespace djnn
   {
   }
 
+#if DJNN_USE_BOOST_CHRONO
+  Timer::Timer (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000))
+  : Timer(p, n, period.count())
+  {
+  }
+  
+  Timer::Timer (boost::chrono::milliseconds period = boost::chrono::milliseconds(1000))
+  : Timer(period.count())
+  {
+  }
+#endif
+
+
+
   Timer::~Timer ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;

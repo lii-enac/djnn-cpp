@@ -38,31 +38,6 @@ namespace djnn {
             delete _thread;
         }
         #endif
-#if 0
-        #if DJNN_THREAD_IS_POINTER
-        if(_thread) {
-        #else
-        if(_thread.joinable()) {
-        #endif
-            #if DJNN_USE_QT_THREAD
-            //_impl->_thread->wait();
-
-            #elif DJNN_USE_SDL_THREAD
-            //int threadReturnValue;
-            //SDL_WaitThread(_impl->_thread, &threadReturnValue);
-            SDL_DetachThread(_thread);
-
-            #else
-            #if DJNN_THREAD_IS_POINTER
-            if ( _thread->joinable() ) _thread->join();
-            #else
-            if ( (_thread).joinable() ) (_thread).join();
-            #endif
-            #endif
-        } else {
-            std::cerr << "nothing" << std::endl; 
-        }
-#endif
       }
 
       void start() {

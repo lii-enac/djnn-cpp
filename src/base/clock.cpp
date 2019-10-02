@@ -32,19 +32,11 @@ namespace djnn
   Clock::Clock (milliseconds period)
   : Clock(period.count ())
   {
-    //_period = new IntProperty (this, "period", period.count ());
-    //_elapsed = new DoubleProperty (this, "elapsed", 0);
-    //_tick = new Spike (this, "tick");
   }
 
-  Clock::Clock (Process *p, const std::string& n, milliseconds period) :
-      Clock(p, n, period.count ())
-      //Process (n)
+  Clock::Clock (Process *p, const std::string& n, milliseconds period)
+  : Clock(p, n, period.count ())
   {
-    //_period = new IntProperty (this, "period", period.count ());
-    //_elapsed = new DoubleProperty (this, "elapsed", 0);
-    //_tick = new Spike (this, "tick");
-    //Process::finalize_construction (p);
   }
 
   Clock::Clock (int period)
@@ -170,25 +162,6 @@ namespace djnn
 
 }
 
-
-
-
-#if 0
-
-        chrono::milliseconds duration (_delay->get_value ());
-        #if DJNN_USE_SDL_THREAD
-        //std::cerr << duration.count() << std::endl;
-        SDL_Delay(duration.count()); // blocking call
-        #elif DJNN_USE_QT_THREAD
-          #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-          QThread::currentThread()->wait(duration.count());
-          #else
-          this_thread::sleep_for (duration); // blocking call
-          #endif
-        #else
-        this_thread::sleep_for (duration); // blocking call
-        #endif
-#endif
 
 
 
