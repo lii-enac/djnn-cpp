@@ -27,12 +27,12 @@ namespace djnn
   void
   init_core ()
   {
+      //std::cerr << __PRETTY_FUNCTION__ << std::endl;
     if (__module_initialized == false) {
       
       __module_initialized = true;
 
       djnn::loadedModules.push_back("core");
-
       MainLoop::instance ();
      
       setlocale(LC_NUMERIC, "C");

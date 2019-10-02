@@ -52,6 +52,7 @@ namespace djnn
       {
         /* if reset occured wew send _init else (_output + _delta ) */
         if (*_reset_occurred) {
+          //std::cerr << __PRETTY_FUNCTION__ << " reset occured " << std::endl;
           _output->set_value (_init->get_value (), true);
           *_reset_occurred = false;
         }

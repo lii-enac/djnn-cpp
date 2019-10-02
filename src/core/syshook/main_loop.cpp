@@ -31,7 +31,9 @@ namespace djnn {
     MainLoop&
     MainLoop::instance ()
     {
+      //DBG;
       std::call_once (MainLoop::onceFlag, [] () {
+        //DBG;
         init_global_mutex();
         ExternalSource::init();
         _instance = new MainLoop();
@@ -50,8 +52,8 @@ namespace djnn {
       set_run_for_ever (); // default mode is forever
       //std::cerr <<"mainloop::lock "<< __LINE__ <<std::endl;
       launch_mutex_lock ();
+      //DBG;
       djnn::get_exclusive_access (DBG_GET);
-      
     }
 
     MainLoop::~MainLoop ()
@@ -63,6 +65,9 @@ namespace djnn {
     MainLoop::impl_activate ()
     {
       //std::cerr << std::endl << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
+      djnn::release_exclusive_access (DBG_REL);
+      launch_mutex_unlock();
+
       for (auto p: _background_processes) {
         p->activate ();
       }
@@ -73,6 +78,11 @@ namespace djnn {
       } else {
         run_in_main_thread ();
       }
+
+      //std::cerr <<"mainloop::lock "<< __LINE__ << std::endl;
+      launch_mutex_lock (); // reacquire launch mutex
+      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
+
     }
     void
     MainLoop::impl_deactivate ()
@@ -112,8 +122,8 @@ namespace djnn {
     MainLoop::run_in_own_thread ()
     {
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      //auto * th =
-      new djnn_thread_t (&MainLoop::private_run, this);
+      auto * th = new djnn_thread_t (&MainLoop::private_run, this); // FIXME: leak
+      th->detach(); // FIXME: could be properly joined
       #endif
 
       #if DJNN_USE_QT_THREAD
@@ -124,7 +134,8 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_SDL_THREAD
-      SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this);
+      auto * th = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
+      SDL_DetachThread(th); // // FIXME: could be properly joined
       #endif
     }
 
@@ -138,8 +149,6 @@ namespace djnn {
     MainLoop::run ()
     {//DBG;
       ///std::cerr <<"mainloop::unlock "<< __LINE__ <<std::endl;
-      djnn::release_exclusive_access (DBG_REL);
-      launch_mutex_unlock();
       
       if (is_run_forever ()) {
         //DBG;
@@ -149,17 +158,8 @@ namespace djnn {
           unsigned int duration = 2000;
 
           // check from time to time if we need to stop
-          #if DJNN_USE_SDL_THREAD
-          SDL_Delay(duration);
-          #elif DJNN_USE_QT_THREAD
-            #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-          QThread::currentThread()->wait(duration);
-            #else
-          this_thread::sleep_for(chrono::seconds(duration));
-            #endif
-          #else
-          this_thread::sleep_for(chrono::seconds(duration));
-          #endif
+          djnn::sleep(duration);
+
           if(get_please_stop()) {
             break;
           }
@@ -168,17 +168,7 @@ namespace djnn {
       } else { /* mainloop run for _duration time */
         //std::
         //boost::
-        #if DJNN_USE_SDL_THREAD
-        SDL_Delay(_duration.count());
-        #elif DJNN_USE_QT_THREAD
-          #if  (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-        QThread::currentThread()->wait(_duration.count());
-          #else
-        this_thread::sleep_for (_duration);
-          #endif
-        #else
-        this_thread::sleep_for (_duration);
-        #endif
+        djnn::sleep(_duration.count());
         
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
@@ -190,9 +180,7 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
 
-      //std::cerr <<"mainloop::lock "<< __LINE__ << std::endl;
-      launch_mutex_lock (); // reacquire launch mutex
-      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
+      
       
       //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
       //djnn::get_exclusive_access (DBG_GET); // prevent external source thread to do anything once mainloop is terminated

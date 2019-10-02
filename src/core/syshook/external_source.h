@@ -46,8 +46,6 @@ namespace djnn
     static void launch_mutex_lock();
     static void launch_mutex_unlock();
 
-    void thread_terminated();
-
     class Impl;
     Impl * _impl;
 

@@ -35,10 +35,10 @@ namespace djnn
     
     Timer (std::chrono::milliseconds period = std::chrono::milliseconds(1000));
 
-#if !DJNN_USE_STD_CHRONO
-    Timer (Process* p, const std::string& n, chrono::milliseconds period = chrono::milliseconds(1000));
-    Timer (chrono::milliseconds period = chrono::milliseconds(1000));
-#endif
+//#if !DJNN_USE_STD_CHRONO
+//    Timer (Process* p, const std::string& n, chrono::milliseconds period = chrono::milliseconds(1000));
+//    Timer (chrono::milliseconds period = chrono::milliseconds(1000));
+//#endif
 
     Timer (int period = 1000);
     virtual ~Timer ();

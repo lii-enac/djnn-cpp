@@ -16,7 +16,7 @@
 		namespace this_thread = boost::this_thread;
 		typedef boost::thread djnn_thread_t;
     inline void sleep(int ms) {
-      this_thread::sleep_for (ms);
+      this_thread::sleep_for (boost::chrono::milliseconds(ms));
     }
 	}
 	#define DJNN_THREAD_IS_POINTER 0

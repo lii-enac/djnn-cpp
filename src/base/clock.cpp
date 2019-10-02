@@ -24,7 +24,8 @@
 #include <sys/time.h>
 
 #include <iostream>
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+#define __FL__ __FILE__ ":" << __LINE__
+#define DBG std::cerr << " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
 {
@@ -105,13 +106,17 @@ namespace djnn
         //std::cerr << "entering sleep" << std::endl;
         djnn::sleep(duration);
         //std::cerr << "exit sleep" << std::endl;
-
-        if(thread_local_cancelled) break;
+        
+        if(thread_local_cancelled) {
+          //std::cerr << " cancelled" << __FL__ << std::endl;
+          break;
+        }
 
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         
         if(thread_local_cancelled) {
           djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+          //std::cerr << " cancelled" << __FL__ << std::endl;
           break;
         }
 
@@ -122,6 +127,11 @@ namespace djnn
           _tick->activate (); // propagating
           
           GRAPH_EXEC; // executing
+          if(thread_local_cancelled) {
+            djnn::release_exclusive_access (DBG_REL); 
+            //std::cerr << " cancelled" << __FL__ << std::endl;
+            break;
+          }
         } else {
           djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
           break;
@@ -139,7 +149,9 @@ namespace djnn
         //std::cout << "thread interrupted" << std::endl;
     }
 #endif
-    thread_terminated ();
+    //std::cout << "clock thread terminating..." << std::endl;
+    //thread_terminated ();
+    //cancelled = nullptr;
   }
 
   void

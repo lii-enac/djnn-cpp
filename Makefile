@@ -33,6 +33,8 @@ include config.default.mk
 
 src_dir ?= src
 build_dir ?= build
+display ?= QT
+#options: QT SDL
 graphics ?= QT
 #options: QT CAIRO GL
 
@@ -57,10 +59,6 @@ endif
 ifeq ($(findstring MINGW,$(os)),MINGW)
 os := MinGW
 endif
-#osmingw := MINGW64_NT-6.3-9600-WOW64
-#osmingw := MINGW64_NT-10.0
-#osmingw := MINGW64_NT-6.1
-#osmingw := MINGW32_NT-6.1
 
 GPERF ?= gperf
 
@@ -69,6 +67,16 @@ thread ?= BOOST
 chrono ?= BOOST
 #options: QT FIBER STD
 
+CFLAGS += -I$(src_dir)
+
+#CFLAGS += -fsanitize=thread -O1
+#LDFLAGS += -fsanitize=thread
+
+#CFLAGS += -fsanitize=address -O1
+#LDFLAGS += -fsanitize=address
+
+#CFLAGS += -fsanitize=memory -O1
+#LDFLAGS += -fsanitize=memory
 
 ifeq ($(os),Linux)
 lib_suffix =.so
@@ -76,7 +84,7 @@ boost_libs = -lboost_thread -lboost_chrono -lboost_system
 #-lboost_fiber-mt -lboost_context-mt
 DYNLIB = -shared
 CFLAGS ?= -fpic -g -MMD -Wall
-LDFLAGS ?= $(boost_libs) -L$(build_dir)
+LDFLAGS ?= -L$(build_dir)
 endif
 
 ifeq ($(os),Darwin)
@@ -84,7 +92,7 @@ lib_suffix =.dylib
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber-mt -lboost_context-mt
 DYNLIB = -dynamiclib
 CFLAGS += -g -MMD -Wall
-LDFLAGS += $(boost_libs) -L$(build_dir)
+LDFLAGS += -L$(build_dir)
 endif
 
 # for windows with mingwXX
@@ -93,13 +101,8 @@ lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB = -shared
 CFLAGS ?= -fpic -g -MMD -Wall
-LDFLAGS ?= $(boost_libs) -L$(build_dir)
+LDFLAGS ?= -L$(build_dir)
 endif
-
-CFLAGS += -I$(src_dir)
-
-#CFLAGS += -fsanitize=thread -O1
-#LDFLAGS += -fsanitize=thread
 
 ifeq ($(findstring android,$(cross_prefix)),android)
 os := android
@@ -121,17 +124,22 @@ CXXFLAGS += $(inc_android)
 LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 -L../ext-libs/android/curl/lib/.libs \
 --sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
-
 endif
 
 ifeq ($(display),QT)
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+#CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+#LDFLAGS += $(boost_libs)
 else ifeq ($(display),SDL)
-CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
-#CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1 #SDL mutex does not work anymore?!
+#CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1 #SDL mutex does not work anymore?!
 else
+$(error "unknown display (choose among: QT, SDL)")
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+LDFLAGS += $(boost_libs)
 endif
+
+
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
 

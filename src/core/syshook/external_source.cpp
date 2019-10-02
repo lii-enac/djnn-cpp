@@ -76,10 +76,12 @@ namespace djnn {
         #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
         //djnn_thread_t (&ExternalSource::private_run, this);
         djnn_thread_t ([this]() {this->_es->ExternalSource::private_run();});
+        //DBG;
         #endif
 
         #if DJNN_USE_QT_THREAD
             #if (QT_VERSION>= QT_VERSION_CHECK(5,10,0))
+        //DBG;
         QThread::create([this]() { this->_es->ExternalSource::private_run(); });
         //QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
         (*_thread).start();
@@ -108,9 +110,6 @@ namespace djnn {
         terminate_thread ();
       }
 
-      void thread_terminated() {
-      }
-
       void terminate_thread() {
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_SDL_THREAD
@@ -126,6 +125,7 @@ namespace djnn {
         #endif
 
         #if DJNN_THREAD_IS_POINTER
+        //_thread.detach ();
         _thread = nullptr;
         #endif
       }
@@ -207,12 +207,12 @@ namespace djnn {
         _impl->start();	
 	}
 
-    void
-    ExternalSource::thread_terminated ()
-    {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        _impl->thread_terminated();
-    }
+    // void
+    // ExternalSource::thread_terminated ()
+    // {
+    //     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+    //     _impl->thread_terminated();
+    // }
 
 	void
 	ExternalSource::private_run ()

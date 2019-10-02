@@ -100,10 +100,10 @@ namespace djnn
       case QEvent::Wheel:
       case QEvent::Paint:
       //case QEvent::UpdateRequest:
-        //if(!_building)
+        if(!_building)
         djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
-        //if(!_building)
+        if(!_building)
         djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;

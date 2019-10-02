@@ -21,15 +21,17 @@ namespace djnn
 {
 
 
-  typedef struct djnXMLDumpContext {
+  struct djnXMLDumpContext {
     struct djnXMLDumpContext* parent;
     int haschildren;
     //const char* classname;
     std::string classname;
-  } __XMLDumpContext;
+  };// __XMLDumpContext;
 
   static int __XMLDumpNumAttrs;
-  static __XMLDumpContext* __curXMLDumpContext = 0;
+  //static __XMLDumpContext* __curXMLDumpContext = 0;
+  static djnXMLDumpContext* __curXMLDumpContext = 0;
+
   static int __XMLLevel = 0;
 
   void
@@ -37,7 +39,8 @@ namespace djnn
 
   
     int i;
-    __XMLDumpContext* c;
+    //__XMLDumpContext* c;
+    djnXMLDumpContext *c;
 
     if (__curXMLDumpContext && !__curXMLDumpContext->haschildren) {
       if (__XMLDumpNumAttrs > 0)
@@ -66,7 +69,8 @@ namespace djnn
       }
     }
 
-    c = (djnXMLDumpContext*) malloc (sizeof (djnXMLDumpContext));
+    //c = (djnXMLDumpContext*) malloc (sizeof (djnXMLDumpContext));
+    c = new djnXMLDumpContext;
     c->haschildren = 0;
     //c->classname = name.c_str();
     c->classname = name;
@@ -97,7 +101,8 @@ namespace djnn
   void
   XMLSerializer::end (){
 
-    __XMLDumpContext* c;
+    //__XMLDumpContext* c;
+    djnXMLDumpContext* c;
 
     if (__curXMLDumpContext->haschildren) {
       int i;

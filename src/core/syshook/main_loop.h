@@ -42,6 +42,7 @@ namespace djnn
       _duration = chrono::milliseconds(milliseconds);
     }
 
+#if 0
     void set_run_for (chrono::milliseconds d) {
       _duration = d;
     }
@@ -49,8 +50,8 @@ namespace djnn
     void set_run_for (chrono::seconds d) {
       _duration = chrono::duration_cast<chrono::milliseconds>(d);
     }
-
-#if !DJNN_USE_STD_CHRONO
+#endif
+//#if !DJNN_USE_STD_CHRONO
     void set_run_for (std::chrono::milliseconds d) {
       _duration = chrono::milliseconds(d.count());
     }
@@ -58,7 +59,7 @@ namespace djnn
     void set_run_for (std::chrono::seconds d) {
       _duration = chrono::seconds(d.count());
     }
-#endif
+//#endif
     void set_another_source_wants_to_be_mainloop (ExternalSource *);
     ExternalSource * _another_source_wants_to_be_mainloop;
     
@@ -98,6 +99,7 @@ namespace djnn
   private:
     static MainLoop *_instance;
     static std::once_flag onceFlag;
+    //djnn_thread_t _own_thread;
     // MainLoop should be created *before* any other external-source (is activated ?) -- or not ?
     MainLoop ();
     vector<Process*> _background_processes;
