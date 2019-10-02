@@ -357,10 +357,11 @@ IvyAccess::find_component (const string& key)
 
       /* build the substring */
       int nb_subexp, len = 0;
-      const char* re_end = _skim_regex (key.substr (3).c_str(), &nb_subexp);
       string full_exp = key.substr (3);
+      const char* re_end = _skim_regex (full_exp.c_str(), &nb_subexp);
+      
       string regexp = full_exp;
-      if(*re_end != '\0'){
+      if(re_end && *re_end != '\0'){
         len = key.find (re_end, 3);
         regexp = key.substr (3, len-3);
       }

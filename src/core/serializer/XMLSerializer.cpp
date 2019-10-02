@@ -24,7 +24,8 @@ namespace djnn
   typedef struct djnXMLDumpContext {
     struct djnXMLDumpContext* parent;
     int haschildren;
-    const char* classname;
+    //const char* classname;
+    std::string classname;
   } __XMLDumpContext;
 
   static int __XMLDumpNumAttrs;
@@ -67,7 +68,8 @@ namespace djnn
 
     c = (djnXMLDumpContext*) malloc (sizeof (djnXMLDumpContext));
     c->haschildren = 0;
-    c->classname = name.c_str();
+    //c->classname = name.c_str();
+    c->classname = name;
     c->parent = __curXMLDumpContext;
     __curXMLDumpContext = c;
     __XMLDumpNumAttrs = 0;
