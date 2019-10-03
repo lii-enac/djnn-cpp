@@ -35,12 +35,19 @@ namespace djnn {
       //DBG;
       std::call_once (MainLoop::onceFlag, [] () {
         //DBG;
-        init_global_mutex();
-        ExternalSource::init();
         _instance = new MainLoop();
+      
         #if DJNN_USE_QT_MAINLOOP
         QtMainloop::build_instance(_instance);
         #endif
+
+        init_global_mutex();
+        ExternalSource::init();
+
+        launch_mutex_lock ();
+        //DBG;
+        djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
+        
       });
 
       return *(_instance);
@@ -52,9 +59,7 @@ namespace djnn {
       //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
       set_run_for_ever (); // default mode is forever
       //std::cerr <<"mainloop::lock "<< __LINE__ <<std::endl;
-      launch_mutex_lock ();
-      //DBG;
-      djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
+      
     }
 
     MainLoop::~MainLoop ()
