@@ -6,6 +6,7 @@ lib_srcs += $(shell find src/gui/shapes -name "*.cpp")
 lib_srcs += $(shell find src/gui/style -name "*.cpp")
 lib_srcs += $(shell find src/gui/transformation -name "*.cpp")
 lib_srcs += $(shell find src/gui/XML -name "*.cpp")
+lib_srcs += $(shell find src/gui/widgets -name "*.cpp")
 
 ifeq ($(graphics),QT)
 include src/gui/qt/djnn-lib.mk

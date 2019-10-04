@@ -1,6 +1,6 @@
 display := QT
 #options: QT SDL
-graphics := CAIRO
+graphics := QT
 #options: QT CAIRO
 physics := # set to ODE
 phidgets := # set to PHIDGETS

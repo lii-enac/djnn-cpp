@@ -21,10 +21,12 @@
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "../../display/qt/qt_window.h"
-
+#include "../../display/qt/my_qwindow.h"
 #include "../../display/display.h"
 #include "../../display/abstract_display.h"
 
+#include <QFontMetrics>
+#include <QPicture>
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>
 #include <QtCore/QtMath>
@@ -131,7 +133,6 @@ namespace djnn
     double posX = x + (dx * dxfactor);
     double posY = y + (dy * dyfactor);
     QPointF p (posX, posY);
-
     QString s;
     switch (encoding)
       {
@@ -164,6 +165,11 @@ namespace djnn
     QFontMetrics fm = _painter->fontMetrics ();
     QRect rect = fm.boundingRect (s);
 
+    /* hack to enable the use of a correct FontMetrics for future cursor positioning*/
+    QFontMetrics *last_fm = (QFontMetrics*) t->get_font_metrics ();
+    delete last_fm;
+    t->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
+
     /* applying alignment attribute */
     switch (cur_context->textAnchor)
       {
@@ -191,6 +197,76 @@ namespace djnn
       load_pick_context (t);
       _picking_view->painter ()->drawRect (rect);
     }
+  }
+
+  double
+  QtBackend::get_cursor_from_index (Text *t, int i)
+  {
+    string text = t->get_raw_text ().substr (0, i);
+    QString s (text.c_str ());
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+    int w = ((QFontMetrics*)t->get_font_metrics())->width (s);
+#else
+    int w = ((QFontMetrics*)t->get_font_metrics())->horizontalAdvance (s);
+#endif
+    return w;
+}
+
+  static int
+  next_index (int i, string &str)
+  {
+    if (i > str.size ())
+      return i;
+    int offset = 1;
+    auto cp = str.data () + i;
+    while (++cp <= (str.data () + str.size ()) && ((*cp & 0b10000000) && !(*cp & 0b01000000))) {
+     offset++;
+    }
+    return i + offset;
+  }
+
+  std::pair<double,int>
+  QtBackend::get_cursor_from_local_x (Text *t, double loc_x)
+  {
+    string text = t->get_raw_text ();
+    if (text.length() == 0)
+      return std::pair<double,int>(0,0);
+    QString s (text.c_str ());
+    QFontMetrics *fm = (QFontMetrics*)(t->get_font_metrics());
+
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+    int end = fm->width (s);
+#else
+    int end = fm->horizontalAdvance (s);
+#endif
+
+    if (loc_x > end)
+      return std::pair<double,int>(end, text.length());
+    if (loc_x < 0) {
+      return std::pair<double,int>(-1, 0);
+    }
+
+    for (int i = 0; i < text.size (); i = next_index (i, text)) {
+      int i2 = next_index (i, text);
+      string s1 = text.substr (0, i);
+      string s2 = text.substr (0, i2);
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+      int r1 = fm->width (QString (s1.c_str ()));
+      int r2 = fm->width (QString (s2.c_str ()));
+#else
+      int r1 = fm->horizontalAdvance (QString (s1.c_str ()));
+      int r2 = fm->horizontalAdvance (QString (s2.c_str ()));
+#endif
+      if (loc_x >= r1) {
+        if (loc_x <= r2) {
+          if (loc_x - r1 <= r2 - loc_x)
+            return std::pair<double, int>(r1, i);
+          return std::pair<double, int>(r2, i2);
+        }
+      }
+    }
+    // this should never happen
+    return std::pair<double, int>(0, 0);
   }
 
   void

@@ -32,6 +32,7 @@ namespace djnn
     Process* clone () override;
     Process* find_component (const string &path) override;
     void set_gobj (Process* gobj) { _gobj = gobj; }
+    Process* get_gobj () { return _gobj; }
   private:
     Process* _gobj;
   };

@@ -37,17 +37,18 @@ namespace djnn
         .encoding=djnUtf8, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
 
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
-      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
-      
+      _cupdate_size (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr),
+      _fm (nullptr)
   {
     set_origin (x, y);
-    
+
+    _update_size = new TextSizeAction (this, "size_action", this);
+
     /* populate : text, width, height */
     this->text();
     this->width();
     this->height();
 
-    _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
     Process::finalize_construction (p);
   }
@@ -60,17 +61,19 @@ namespace djnn
         .encoding=0, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
 
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
-      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
+      _cupdate_size (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr),
+      _fm (nullptr)
       
   {
     set_origin (x, y);
+
+    _update_size = new TextSizeAction (this, "size_action", this);
 
     /* populate : text, width, height */
     this->text();
     this->width();
     this->height();
 
-    _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
     Process::finalize_construction (p);
   }
@@ -82,17 +85,19 @@ namespace djnn
         .encoding=0, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
 
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
-      _cwidth (nullptr), _cheight (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr)
+      _cupdate_size (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr),
+      _fm (nullptr)
       
   {
     set_origin (x, y);
+
+    _update_size = new TextSizeAction (this, "size_action", this);
 
     /* populate : text, width, height */
     this->text();
     this->width();
     this->height();
 
-    _update_size = new TextSizeAction (this, "size_action", this);
     Graph::instance ().add_edge (this->text(), _update_size);
   }
 
@@ -126,11 +131,8 @@ namespace djnn
     delete _cdy;
     delete _cdxU;
     delete _cdyU;
-    delete _cwidth;
-    delete _cheight;
+    delete _cupdate_size;
     delete _cencoding;
-
-    
 
     if (_symtable.empty () == false) {
       std::map<std::string, Process*>::iterator it;
@@ -263,17 +265,13 @@ namespace djnn
       rawpi=&raw_props.dyU;
       notify_mask = notify_damaged_transform;
     } else
-    if(name=="width") {
-      propi = true;
-      coupling=&_cwidth;
-      rawpi=&raw_props.width;
-      notify_mask = notify_damaged_geometry;
-    } else
-    if(name=="height") {
-      propi = true;
-      coupling=&_cheight;
-      rawpi=&raw_props.height;
-      notify_mask = notify_damaged_geometry;
+    if(name=="width" || name == "height") {
+      if (!_cupdate_size)
+        _cupdate_size = new Coupling (find_component ("text"), ACTIVATION, _update_size, ACTIVATION, true);
+      if (name=="width")
+        res = new IntPropertyProxy (this, name, raw_props.width, notify_damaged_geometry);
+      else
+        res = new IntPropertyProxy (this, name, raw_props.height, notify_damaged_geometry);
     } else
     if(name=="encoding") {
       propi = true;
@@ -416,8 +414,7 @@ namespace djnn
     if (_cdy) _cdy->enable (_frame);
     if (_cdxU) _cdxU->enable (_frame);
     if (_cdyU) _cdyU->enable (_frame);
-    if (_cwidth) _cwidth->enable (_frame);
-    if (_cheight) _cheight->enable (_frame);
+    if (_cupdate_size) _cupdate_size->enable (_frame);
     if (_cencoding) _cencoding->enable (_frame);
     
     if (_cffamily) _cffamily->enable (_frame);
@@ -438,8 +435,7 @@ namespace djnn
     if (_cdy) _cdy->disable ();
     if (_cdxU) _cdxU->disable ();
     if (_cdyU) _cdyU->disable ();
-    if (_cwidth) _cwidth->disable ();
-    if (_cheight) _cheight->disable ();
+    if (_cupdate_size) _cupdate_size->disable ();
     if (_cencoding) _cencoding->disable ();
 
     if (_cffamily) _cffamily->disable ();
@@ -456,6 +452,18 @@ namespace djnn
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
         Backend::instance ()->draw_text (this);
     }
+  }
+
+  double
+  Text::get_cursor_from_index (int index)
+  {
+    return Backend::instance ()->get_cursor_from_index (this, index);
+  }
+
+  std::pair<double, int>
+  Text::get_cursor_from_local_x (double pos)
+  {
+    return Backend::instance ()->get_cursor_from_local_x (this, pos);
   }
 
   Process*

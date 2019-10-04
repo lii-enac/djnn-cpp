@@ -60,6 +60,10 @@ namespace djnn
     draw_line (Line *s) override;
     void
     draw_text (Text *t) override;
+    double
+    get_cursor_from_index (Text*, int) override;
+    std::pair<double,int>
+    get_cursor_from_local_x (Text*, double) override;
     void
     draw_poly (Poly* p) override;
     void

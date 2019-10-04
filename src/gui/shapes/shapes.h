@@ -33,6 +33,7 @@
 
 namespace djnn
 {
+  typedef void* FontMetricsImpl ;
 
   class Text : public AbstractGShape
   {
@@ -77,17 +78,21 @@ namespace djnn
     AbstractTextProperty*   ffamily () { return (AbstractTextProperty*) find_component("ffamily"); }
     void set_width (double width) { this->width ()->set_value (width, true); }
     void set_height (double height) { this->height ()->set_value (height, true); }
+    const string& get_raw_text () { return raw_props.text; }
+    double get_cursor_from_index (int index);
+    std::pair<double,int> get_cursor_from_local_x (double pos);
+    FontMetricsImpl get_font_metrics () { return _fm; };
+    void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (Process* p) override;
     struct raw_props_t { double x, y, dx, dy, fsize; int dxU, dyU, width, height, encoding, fstyle, fweight; string text, ffamily;};
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
-      *_cdxU, *_cdyU, *_cwidth, *_cheight, *_cencoding,
+      *_cdxU, *_cdyU, *_cupdate_size, *_cencoding,
       *_cfstyle, *_cfweight,
       *_ctext, *_cffamily;
-
+    FontMetricsImpl _fm;
     TextSizeAction *_update_size;
-    
     void init_text (double x, double y, double dx, double dy, int dxu, int dyu,
               const std::string &encoding, const std::string &text);
     void impl_activate () override;

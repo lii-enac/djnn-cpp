@@ -221,27 +221,43 @@ namespace djnn
   void
   QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
   {
-    QFont qfont;
-    if (ff) {
-      QString val (ff->family()->get_value ().c_str ());
-      qfont.setFamily (val);
+    int width, height;
+    QFontMetrics *fm = (QFontMetrics*) (text->get_font_metrics ());
+    if (fm) {
+      QString str (text->get_raw_text ().c_str ());
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+      width = fm->width (str);
+#else
+      width = fm->horizontalAdvance (str);
+#endif
+      height = fm->height ();
+    } else {
+      QFont qfont;
+      if (ff) {
+        QString val (ff->family ()->get_value ().c_str ());
+        qfont.setFamily (val);
+      }
+      if (fsz) {
+        qfont.setPixelSize (fsz->size ()->get_value ());
+      }
+      if (fs) {
+        int i = fs->style ()->get_value ();
+        if (i >= 0 && i <= 3)
+          qfont.setStyle (fontStyleArray[i]);
+      }
+      if (fw) {
+        qfont.setWeight (fw->weight ()->get_value ());
+      }
+      QString str (text->text ()->get_value ().c_str ());
+      QFontMetrics fm (qfont);
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+      width = fm.width (str);
+#else
+      width = fm.horizontalAdvance (str);
+#endif
+      height = fm.height ();
     }
-    if (fsz) {
-      qfont.setPixelSize (fsz->size ()->get_value ());
-    }
-    if (fs) {
-      int i = fs->style ()->get_value ();
-      if (i >= 0 && i <= 3)
-        qfont.setStyle (fontStyleArray [i]);
-    }
-    if (fw) {
-      qfont.setWeight (fw->weight ()->get_value ());
-    }
-    QString str (text->text ()->get_value().c_str ());
-    QFontMetrics fm (qfont);
-    int width = fm.width (str);  // for qt 5.9 
-    //int width = fm.horizontalAdvance (str); // for qt 5.12
-    int height = fm.height ();
+
     text->set_width (width);
     text->set_height (height);
   }
