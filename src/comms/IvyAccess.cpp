@@ -174,8 +174,10 @@ namespace djnn
 
  void
   IvyAccess::IvyOutAction::coupling_activation_hook ()
-  {  
-     IvySendMsg ("%s", _out->get_value ().c_str ());
+  {
+    //djnn::get_exclusive_access (DBG_GET);
+    IvySendMsg ("%s", _out->get_value ().c_str ());
+    //djnn::release_exclusive_access (DBG_REL);
   }
 
 
@@ -212,18 +214,18 @@ IvyAccess::~IvyAccess ()
   Graph::instance().remove_edge(_out, _out_a);
   remove_state_dependency (_parent, _out_a);
 
- delete _out;
- delete _out_c;
- delete _out_a;
+  delete _out;
+  delete _out_c;
+  delete _out_a;
 
- delete _arriving;
- delete _leaving;
+  delete _arriving;
+  delete _leaving;
 
- // TODO: Clean MAP
- //while (!_in.empty()) {
- // delete _in.back();
- // _in.pop_back();
- //}
+  // TODO: Clean MAP
+  //while (!_in.empty()) {
+  // delete _in.back();
+  // _in.pop_back();
+  //}
 }
 
 void
@@ -240,17 +242,15 @@ IvyAccess::set_parent (Process* p)
 }
 
 void IvyAccess::set_arriving(string v) {
-  _arriving->set_value (v, true);
-
   djnn::get_exclusive_access (DBG_GET);
+  _arriving->set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
 
 void IvyAccess::set_leaving(string v) {
-  _leaving->set_value (v, true);
-
   djnn::get_exclusive_access (DBG_GET);
+  _leaving->set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
@@ -307,7 +307,9 @@ IvyAccess::run ()
   try {
 
       /* enable coupling */
+    djnn::get_exclusive_access (DBG_GET);
     _out_c->enable();
+    djnn::release_exclusive_access (DBG_REL);
 
     IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
 
@@ -326,11 +328,14 @@ IvyAccess::run ()
     */
     while (!get_please_stop ()) {
       /* start Ivy mainloop */
+      if(thread_local_cancelled) break;
       IvyMainLoop ();
     }
     
     /* disable coupling */
+    djnn::get_exclusive_access (DBG_GET);
     _out_c->disable();
+    djnn::release_exclusive_access (DBG_REL);
 
   } catch (exception& e) {
     warning (nullptr, e.what());
