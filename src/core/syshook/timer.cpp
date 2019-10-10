@@ -93,33 +93,36 @@ namespace djnn
   Timer::run ()
   {
     //DBG;
+    int duration;
+    djnn::get_exclusive_access (DBG_GET);
+    if(thread_local_cancelled) {
+      djnn::release_exclusive_access (DBG_REL);
+      return;
+    } else {
+      duration = _delay->get_value ();
+      djnn::release_exclusive_access (DBG_REL);
+    }
+
     set_please_stop (false);
     try {
-        djnn::get_exclusive_access (DBG_GET);
-        if(thread_local_cancelled) {
-          djnn::release_exclusive_access (DBG_REL);
-        } else {
-          int duration = _delay->get_value ();
-          djnn::release_exclusive_access (DBG_REL);
+      djnn::sleep(duration);
 
-          djnn::sleep(duration);
-
-          if(thread_local_cancelled) {
-            //thread_terminated ();
-            //return;
-          } else {
-            djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-            // the previous call my take some time, check if we have been cancelled meanwhile
-            if(!thread_local_cancelled && !get_please_stop ()) {
-              set_activation_state (DEACTIVATED);
-              _end->notify_activation (); // propagating
-              GRAPH_EXEC; // executing
-              if(!thread_local_cancelled)
-                cancelled = nullptr;
-            }
-            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+      if(thread_local_cancelled) {
+        //thread_terminated ();
+        //return;
+      } else {
+        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        // the previous call my take some time, check if we have been cancelled meanwhile
+        if(!thread_local_cancelled && !get_please_stop ()) {
+          set_activation_state (DEACTIVATED);
+          _end->notify_activation (); // propagating
+          GRAPH_EXEC; // executing
+          if(!thread_local_cancelled) { // let's finish properly if we were not cancelled
+            cancelled = nullptr; // make our external source aware that we are finised
           }
         }
+        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+      }
     } catch (exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }

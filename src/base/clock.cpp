@@ -82,17 +82,19 @@ namespace djnn
   Clock::run ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
-    struct timespec before;
-    struct timespec after;
     set_please_stop (false);
+
+    djnn::get_exclusive_access (DBG_GET);
+    if(thread_local_cancelled) {
+      djnn::release_exclusive_access (DBG_REL);
+      return;
+    }
+    int duration = _period->get_value ();
+    djnn::release_exclusive_access (DBG_REL);
 
     try {
       while (!get_please_stop ()) {
-        djnn::get_exclusive_access (DBG_GET);
-        if(thread_local_cancelled) break;
-        int duration = _period->get_value ();
-        djnn::release_exclusive_access (DBG_REL);
-
+        struct timespec before;
         get_monotonic_time(&before);
 
         //std::cerr << "entering sleep" << std::endl;
@@ -105,14 +107,16 @@ namespace djnn
         }
 
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        
         if(thread_local_cancelled) {
           djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
           //std::cerr << " cancelled" << __FL__ << std::endl;
           break;
         }
-
-        if (!get_please_stop ()) {
+        if (get_please_stop ()) {
+          djnn::release_exclusive_access (DBG_REL); 
+          break;
+        } else {
+          struct timespec after;
           get_monotonic_time(&after);
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
           _elapsed->set_value (elapsedTime, true);
@@ -124,11 +128,10 @@ namespace djnn
             //std::cerr << " cancelled" << __FL__ << std::endl;
             break;
           }
-        } else {
-          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-          break;
+          duration = _period->get_value ();
+          djnn::release_exclusive_access (DBG_REL); 
         }
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+          
       }
       //std::cerr << this << " << stop" << std::endl;
 
