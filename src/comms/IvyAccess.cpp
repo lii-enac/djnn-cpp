@@ -151,8 +151,6 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   cout << "---------------------" << endl << endl;
 #endif
  
-  //GRAPH_EXEC;
-
   djnn::release_exclusive_access (DBG_REL);
 }
 

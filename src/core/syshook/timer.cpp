@@ -152,55 +152,7 @@ namespace djnn
 
 #if 0
 
-  void
-  Timer::activate ()
-  {
-    //if (_activation_state == activated)
-    if ( is_activated() )
-      return;
-    set_please_stop (false);
-    start_thread();
-  }
-
-  void
-  Timer::deactivate ()
-  {
-    if ( !is_activated() )
-      return;
-    please_stop ();
-  }
-
-
-  void
-  Timer::run ()
-  {
-    //DBG;
-    try {
-        chrono::milliseconds duration (_delay->get_value ());
-        //this_thread::sleep_for (duration); // blocking call
-        #if DJNN_USE_SDL_THREAD
-        SDL_Delay(_delay->get_value ()); // blocking call
-        #elif DJNN_USE_QT_THREAD && (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-        QThread::currentThread()->wait(duration.count());
-        #else
-        this_thread::sleep_for (duration); // blocking call
-        #endif
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        if (!get_please_stop ()) {
-          set_deactivated ();
-          _end->notify_activation (); // propagating
-          thread_terminated ();
-          GRAPH_EXEC; // executing
-        }
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-    } catch (exception& e) {
-      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
-    }
-  }
-#endif
-
-
-#if 0
+// PLEASE DO NOT REMOVE, FOR FUTURE INCLUSION
 
 #include <list>
 
