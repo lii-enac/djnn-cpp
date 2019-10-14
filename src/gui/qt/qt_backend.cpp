@@ -218,6 +218,7 @@ namespace djnn
 
   static QFont::Style fontStyleArray[3] =
       { QFont::StyleNormal, QFont::StyleItalic, QFont::StyleOblique };
+
   void
   QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
   {
@@ -225,7 +226,7 @@ namespace djnn
     QFontMetrics *fm = (QFontMetrics*) (text->get_font_metrics ());
     if (fm) {
       QString str (text->get_raw_text ().c_str ());
-#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5,11,0))
       width = fm->width (str);
 #else
       width = fm->horizontalAdvance (str);
@@ -250,15 +251,15 @@ namespace djnn
       }
       QString str (text->text ()->get_value ().c_str ());
       QFontMetrics fm (qfont);
-#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5,11,0))
       width = fm.width (str);
 #else
       width = fm.horizontalAdvance (str);
 #endif
       height = fm.height ();
     }
-
     text->set_width (width);
     text->set_height (height);
+    
   }
 } /* namespace djnn */
