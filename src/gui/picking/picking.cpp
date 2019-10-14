@@ -119,8 +119,10 @@ namespace djnn
     if (s) {
       if (s != _hovered_shape) {
         if (_hovered_shape != nullptr) {
-          _hovered_shape->get_ui()->leave->notify_activation ();
-          _hovered_shape->get_ui()->mouse_leave->notify_activation ();
+          Process* p1 = _hovered_shape->get_ui ()->leave;
+          Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
+          p1->notify_activation ();
+          p2->notify_activation ();
         }
         s->get_ui ()->enter->notify_activation ();
         s->get_ui ()->mouse_enter->notify_activation ();
@@ -132,8 +134,10 @@ namespace djnn
       }    
     } 
     else if (_hovered_shape != nullptr) {
-        _hovered_shape->get_ui ()->leave->notify_activation ();
-        _hovered_shape->get_ui ()->mouse_leave->notify_activation ();
+        Process* p1 = _hovered_shape->get_ui ()->leave;
+        Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
+        p1->notify_activation ();
+        p2->notify_activation ();
         
         /* reset */
         _hovered_shape = nullptr;
@@ -337,18 +341,24 @@ namespace djnn
 
        /* setting */
       if (x != old_x) {
-        _catched_shape->get_ui()->move_x->set_value (x, true);
-        _catched_shape->get_ui()->mouse_move_x->set_value (x, true);
+        DoubleProperty* p1 = _catched_shape->get_ui()->move_x;
+        DoubleProperty* p2 = _catched_shape->get_ui()->mouse_move_x;
+        p1->set_value (x, true);
+        p2->set_value (x, true);
       }
       if (y != old_y) {
-        _catched_shape->get_ui()->move_y->set_value (y, true);
-        _catched_shape->get_ui()->mouse_move_y->set_value (y, true);
+        DoubleProperty* p1 = _catched_shape->get_ui()->move_y;
+        DoubleProperty* p2 = _catched_shape->get_ui()->mouse_move_y;
+        p1->set_value (y, true);
+        p2->set_value (y, true);
       }
       set_local_coords (_catched_shape, nullptr, x, y, true);
 
        /* event */
-      _catched_shape->get_ui()->move->notify_activation ();
-      _catched_shape->get_ui()->mouse_move->notify_activation ();
+      Process* p1 = _catched_shape->get_ui ()->move;
+      Process* p2 = _catched_shape->get_ui ()->mouse_move;
+      p1->notify_activation ();
+      p2->notify_activation ();
 
       exec_ = true;
     }
@@ -437,6 +447,7 @@ namespace djnn
     AbstractGShape *s = this->pick (x, y);
     if (s) {
       /* event */
+
       s->get_ui ()->release->notify_activation ();
       s->get_ui ()->mouse_release->notify_activation ();
       /* event if no mouse tracking */
@@ -455,8 +466,10 @@ namespace djnn
 
     /* reset _catched_shape */
     if (_catched_shape && _catched_shape != s) {
-      _catched_shape->get_ui ()->release->notify_activation ();
-      _catched_shape->get_ui ()->mouse_release->notify_activation ();
+      Process* p1 = _catched_shape->get_ui ()->release;
+      Process* p2 = _catched_shape->get_ui ()->mouse_release;
+      p1->notify_activation ();
+      p2->notify_activation ();
       exec_ = true;
     }
     _catched_shape = nullptr;
