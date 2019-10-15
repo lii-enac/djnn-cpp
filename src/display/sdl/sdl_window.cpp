@@ -131,10 +131,21 @@ namespace djnn
   void
   SDLWindow::handle_event (SDL_Event& e)
   {
+    //std::cerr << e.type << __FL__;
     switch (e.type)
       {
-      case SDL_KEYDOWN:
+      case SDL_TEXTINPUT:
+        _window->key_pressed ()->set_value (e.key.keysym.sym, 1);
+        _window->key_pressed_text ()->set_value (e.text.text, 1);
         break;
+      case SDL_KEYDOWN:
+      //   //DBG;
+      //   _window->key_pressed ()->set_value (e.key.keysym.sym, 1);
+      //   //if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
+      //     _window->key_pressed_text ()->set_value (SDL_GetKeyName(e.key.keysym.sym), 1);
+      //   //}
+      //   //redraw ();
+      break;
       
       case SDL_USEREVENT:
         {

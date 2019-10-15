@@ -94,6 +94,7 @@ namespace djnn {
     SDLMainloop::instance ();
     //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
     #endif
+    SDL_StartTextInput ();
   }
 
 
