@@ -116,6 +116,9 @@ namespace djnn {
   SDLMainloop::sdl_run ()
   {
     set_please_stop (false);
+    
+    SDL_StartTextInput ();
+
     while (!get_please_stop ()) {
       _wakeup_already_triggered=false;
       SDL_Event e;
@@ -126,6 +129,8 @@ namespace djnn {
       handle_events(e);
       djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
+
+    SDL_StopTextInput ();
 
     ////MainLoop::instance().please_stop();
     ////MainLoop::instance().join();
