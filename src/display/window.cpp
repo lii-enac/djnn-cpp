@@ -42,12 +42,12 @@ namespace djnn
     _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
     _key_released_text = new TextProperty (this, "key-released_text", "");
     _hidpi_scale = new DoubleProperty (this, "hidpi_scale", 1);
-    _close = new Spike;
+    _close = new Spike (nullptr, "close");
     add_symbol ("close", _close);
-    _press = new Spike;
-    _release = new Spike;
-    _move = new Spike;
-    _wheel = new Spike;
+    _press = new Spike (nullptr, "press");
+    _release = new Spike (nullptr, "release");
+    _move = new Spike (nullptr, "move");
+    _wheel = new Spike (nullptr, "wheel");
     _touches = new List (this, "touches");
     _touches->set_activation_state (ACTIVATED);
     _press_x = new DoubleProperty (0);
