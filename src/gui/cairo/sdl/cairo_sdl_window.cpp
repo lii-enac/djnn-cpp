@@ -160,6 +160,7 @@ namespace djnn
         break;
       default:
         button_id = BUTTON_LEFT;
+        break;
       }
     return button_id;
   }
