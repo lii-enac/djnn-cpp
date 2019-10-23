@@ -22,7 +22,7 @@ namespace djnn
   bool
   Spike::pre_activate ()
   {
-    if (_parent == 0 || _parent->get_activation_state () == ACTIVATED) {
+    if (get_parent () == 0 || get_parent ()->get_activation_state () == ACTIVATED) {
       set_activation_state (ACTIVATING);
       return true;
     }
@@ -47,7 +47,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:spike");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

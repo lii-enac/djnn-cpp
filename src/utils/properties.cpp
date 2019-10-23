@@ -26,7 +26,7 @@ namespace djnn
   void
   Properties::PropertiesAction::impl_activate ()
   {
-    ((Properties*)_parent)->add_property ();
+    ((Properties*)get_parent ())->add_property ();
   }
 
   Properties::Properties (Process *p, const string &n, const string &filename) : Process (n)
@@ -90,7 +90,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("utils:properties");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);

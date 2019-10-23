@@ -60,7 +60,7 @@ namespace djnn
 #ifdef DEBUG
     for (int space = 0; space < nb_space; space++ ) cerr << "\t";
     ++nb_space ;
-    cerr << "--- " << _name << " :" << endl;
+    cerr << "--- " << get_name () << " :" << endl;
 #endif
 
     /* delete and remove children from this container */
@@ -180,12 +180,12 @@ namespace djnn
   void
   Container::remove_child (const std::string& name)
   {
-    std::map<std::string, Process*>::iterator it = _symtable.find (name);
-    if (it != _symtable.end ()) {
+    std::map<std::string, Process*>::iterator it = symtable ().find (name);
+    if (it != symtable ().end ()) {
       Process* c = it->second;
       Container::remove_child(c);
     } else
-      warning (nullptr,  " symbol " + name + " not found in Component " + _name + "\n");
+      warning (nullptr,  " symbol " + name + " not found in Component " + get_name () + "\n");
   }
 
   void
@@ -255,7 +255,7 @@ namespace djnn
   void
   Container::print_children ()
   {
-    cout << _name << "'s children:\n";
+    cout << get_name () << "'s children:\n";
     for (auto c : _children) {
       cout << c->get_name () << endl;
     }
@@ -279,7 +279,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:component");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)
         c->serialize (format);
@@ -337,7 +337,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:assignmentsequence");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)
         c->serialize (format);

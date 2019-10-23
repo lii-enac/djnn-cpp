@@ -55,7 +55,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:activator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _action, buf);
     AbstractSerializer::serializer->text_attribute ("action", buf);
     AbstractSerializer::serializer->end ();

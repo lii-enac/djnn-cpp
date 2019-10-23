@@ -40,7 +40,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:logprinter");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("label", ((TextProperty*)this->find_component ("label"))->get_value ());
     AbstractSerializer::serializer->end ();
 

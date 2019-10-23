@@ -53,7 +53,7 @@ namespace djnn {
 
   LinuxMouse::~LinuxMouse ()
   {
-    _parent->remove_child (this);
+    get_parent ()->remove_child (this);
 
     delete _wheel_dx;
     delete _wheel_dy;

@@ -53,12 +53,12 @@ namespace djnn
   Set::add_child (Process* c, const std::string& name)
   {
     /* test if the child is already in the set
-     * it == _symtable.end () if the element is not find 
+     * it == symtable ().end () if the element is not find 
      * only then we add it in the symtable to avoid duplicate
      */
     map<string, Process*>::iterator it;
-    it = _symtable.find(name);
-    if (it == _symtable.end ()) {
+    it = symtable ().find(name);
+    if (it == symtable ().end ()) {
       Process::add_child (c, name);
       c->set_parent (this);
 
@@ -79,7 +79,7 @@ namespace djnn
     bool found = false;
     std::map<std::string, Process*>::iterator it;
     string symbol;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second == c) {
         symbol = it->first;
         found = true;
@@ -98,7 +98,7 @@ namespace djnn
   {
     Process *found = nullptr;
     std::map<std::string, Process*>::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second->get_name ().compare (name) == 0) {
         remove_symbol (it->first);
         found = it->second;
@@ -115,7 +115,7 @@ namespace djnn
   Set::impl_activate ()
   {
     std::map<std::string, Process*>::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->activate ();
     }
   }
@@ -124,7 +124,7 @@ namespace djnn
   Set::impl_deactivate ()
   {
     std::map<std::string, Process*>::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->deactivate ();
     }
   }
@@ -147,7 +147,7 @@ namespace djnn
   void
   Set::dump (int level)
   {
-    cout << (_parent ? _parent->find_component_name(this) : _name)  << " [ cardinality=" << _size->get_value () << " ]" << endl ;
+    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ cardinality=" << _size->get_value () << " ]" << endl ;
   }
 
   void
@@ -157,10 +157,10 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("core:set");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     std::map<std::string, Process*>::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it)
+    for (it = symtable ().begin (); it != symtable ().end (); ++it)
       it->second->serialize (type);
 
     AbstractSerializer::serializer->end ();

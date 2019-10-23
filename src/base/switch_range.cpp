@@ -45,7 +45,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:switch-range-branch");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("lower", _lower->get_value ());
     AbstractSerializer::serializer->float_attribute ("upper", _upper->get_value ());
     AbstractSerializer::serializer->int_attribute ("left-open", _left_open);
@@ -83,7 +83,7 @@ namespace djnn
   SwitchRange::SwitchRange (double initial)
   {
     init_switch_range (initial);
-    _state_dependency = _action;
+    set_state_dependency (_action);
   }
 
   void
@@ -102,7 +102,7 @@ namespace djnn
 
   SwitchRange::~SwitchRange ()
   {
-    remove_state_dependency (_parent, _state_dependency);
+    remove_state_dependency (get_parent (), state_dependency ());
 
     /* note:
      * We have to delete all content BEFORE deleting _action and _branch_name
@@ -124,12 +124,12 @@ namespace djnn
   SwitchRange::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _state_dependency);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, _state_dependency);
-    _parent = p; 
+    add_state_dependency (p, state_dependency ());
+    Process::set_parent (p); 
   }
 
   void
@@ -199,7 +199,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:switch-range");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("initial", _initial);
 
     for (auto c : _children)

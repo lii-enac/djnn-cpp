@@ -94,14 +94,14 @@ namespace djnn
   Binding::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent && _dst) {
-       remove_state_dependency (_parent, _dst);
+    if (get_parent () && _dst) {
+       remove_state_dependency (get_parent (), _dst);
     }
 
     if (_dst)
       add_state_dependency (p, _dst);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -152,7 +152,7 @@ namespace djnn
   Binding::~Binding ()
   {
 
-    remove_state_dependency (_parent, _dst);
+    remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _c_src;
@@ -176,7 +176,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:binding");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();

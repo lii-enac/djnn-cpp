@@ -95,12 +95,12 @@ namespace djnn
     auto _frame = frame ();
     if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
-       *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent) and go through its
+       *  on the left side of the current object (cur_child). For this, we take its parent (curget_parent ()) and go through its
        *  children in order to find a frame. If no frame is found when the list iteration process arrived to (cur_child),
-       *  then we set (cur_child) to its parent (cur_parent), and (cur_parent) is set to (cur_parent->parent).
+       *  then we set (cur_child) to its parent (curget_parent ()), and (curget_parent ()) is set to (curget_parent ()->parent).
        *  May be there is a place for simplification */
       bool found = false;
-      Process *cur_parent = _parent;
+      Process *cur_parent = get_parent ();
       Process *cur_child = this;
 
       Window * frame = nullptr;

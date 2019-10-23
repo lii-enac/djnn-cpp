@@ -45,7 +45,7 @@ namespace djnn {
       ChangeRateAction (Process *p, const string &n) : Action (p, n) {}
       virtual ~ChangeRateAction () {}
     protected:
-      void impl_activate () override { ((VoltageInputChannel*)_parent)->update_rate (); }
+      void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
       void impl_deactivate () override {}
     };
     class ChangeTriggerAction : public Action {
@@ -53,7 +53,7 @@ namespace djnn {
       ChangeTriggerAction (Process *p, const string &n) : Action (p, n) {}
       virtual ~ChangeTriggerAction () {}
     protected:
-      void impl_activate () override { ((VoltageInputChannel*)_parent)->update_trigger (); }
+      void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_trigger (); }
       void impl_deactivate () override {}
     };
   public:

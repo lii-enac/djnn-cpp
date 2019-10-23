@@ -49,7 +49,7 @@ namespace djnn
   void
   AbstractList::dump (int level)
   {
-    cout << (_parent ? _parent->find_component_name(this) : _name)  << " [ index=" << _children.size () << " ]" << endl ;
+    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
 
     //FIXME: indent problem
     //for (auto c : _children)
@@ -116,7 +116,7 @@ namespace djnn
       goto label_error;
     }
     label_error: 
-      warning (this, "invalid specification '" + spec + "' for insertion in list '" + _name + "'");
+      warning (this, "invalid specification '" + spec + "' for insertion in list '" + get_name () + "'");
   }
 
   void
@@ -158,11 +158,11 @@ namespace djnn
         remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
-         warning (this, "index " + std::to_string(index+1) + " is out of bound for list '" + _name + "'");
+         warning (this, "index " + std::to_string(index+1) + " is out of bound for list '" + get_name () + "'");
       }
     }
     catch (invalid_argument& arg) {
-      warning (this, "invalid child name '" + name + "' for list '" +_name + "'");
+      warning (this, "invalid child name '" + name + "' for list '" + get_name () + "'");
     }
   }
 
@@ -219,11 +219,11 @@ namespace djnn
             return c;
         } else {
           /* we have to dispay index as the API user index */
-          warning (this,  "index " + std::to_string(index+1) + " is out of bound for list \'" + _name + "\'");
+          warning (this,  "index " + std::to_string(index+1) + " is out of bound for list \'" + get_name () + "\'");
         }
       }
       catch (invalid_argument& arg) {
-        warning (this, "invalid child path '" + path + "' for list '" + _name + "'");
+        warning (this, "invalid child path '" + path + "' for list '" + get_name () + "'");
       }
     }
     return nullptr;
@@ -244,7 +244,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("core:list");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)
         c->serialize (type);
@@ -264,7 +264,7 @@ namespace djnn
   void
   BidirectionalListIterator::IterAction::impl_activate ()
   {
-    if (_parent->somehow_deactivating () )
+    if (get_parent ()->somehow_deactivating () )
       return;
     int index = _index->get_value ();
     if (_forward) {
@@ -289,7 +289,7 @@ namespace djnn
   void
   BidirectionalListIterator::ResetAction::impl_activate ()
   {
-    if (_parent->somehow_deactivating ())
+    if (get_parent ()->somehow_deactivating ())
       return;
     _index->set_value (1, true);
   }
@@ -325,9 +325,9 @@ namespace djnn
 
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
-    remove_state_dependency (_parent, _next_action);
-    remove_state_dependency (_parent, _previous_action);
-    remove_state_dependency (_parent, _reset_action);
+    remove_state_dependency (get_parent (), _next_action);
+    remove_state_dependency (get_parent (), _previous_action);
+    remove_state_dependency (get_parent (), _reset_action);
     Graph::instance ().remove_edge (_next, _next_action);
     Graph::instance ().remove_edge (_previous, _previous_action);
     Graph::instance ().remove_edge (_reset, _reset_action);
@@ -349,17 +349,17 @@ namespace djnn
   BidirectionalListIterator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _next_action);
-       remove_state_dependency (_parent, _previous_action);
-       remove_state_dependency (_parent, _reset_action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _next_action);
+       remove_state_dependency (get_parent (), _previous_action);
+       remove_state_dependency (get_parent (), _reset_action);
     }
     
     add_state_dependency (p, _next_action);
     add_state_dependency (p, _previous_action);
     add_state_dependency (p, _reset_action);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -386,7 +386,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("core:bidirectionallistiterator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _list, buf);
     AbstractSerializer::serializer->text_attribute ("list", buf);
 

@@ -35,7 +35,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:exp");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();
@@ -59,7 +59,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:log");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();
@@ -83,7 +83,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:log10");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();
@@ -108,7 +108,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:pow");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("base", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("exponent", dynamic_cast<DoubleProperty*> (_right)->get_value ());
    
@@ -133,7 +133,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:sqrt");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();
@@ -157,7 +157,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:abs");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();
@@ -182,7 +182,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:min");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("min", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_right)->get_value ());
 
@@ -208,7 +208,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:max");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("max", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_right)->get_value ());
 
@@ -238,7 +238,7 @@ namespace djnn
 
   BoundedValue::~BoundedValue ()
   {
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_action, _result);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_min, _action);
@@ -258,13 +258,13 @@ namespace djnn
   BoundedValue::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -273,7 +273,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:boundedvalue");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("min", dynamic_cast<DoubleProperty*> (_min)->get_value ());
     AbstractSerializer::serializer->int_attribute ("max", dynamic_cast<DoubleProperty*> (_max)->get_value ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());

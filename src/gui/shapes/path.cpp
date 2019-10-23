@@ -56,15 +56,15 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -196,23 +196,23 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -322,31 +322,31 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("x2");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x2");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y2");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y2");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -471,35 +471,35 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("rotx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("rotx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fl");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fl");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("swfl");
-      if (it != _symtable.end ())
+      it = symtable ().find ("swfl");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("rx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("rx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("ry");
-      if (it != _symtable.end ())
+      it = symtable ().find ("ry");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }

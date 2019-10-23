@@ -67,15 +67,15 @@ namespace djnn
     delete _ctx;
     delete _cty;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("tx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("tx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("ty");
-      if (it != _symtable.end ())
+      it = symtable ().find ("ty");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -214,19 +214,19 @@ namespace djnn
     delete _ccx;
     delete _ccy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("a");
-      if (it != _symtable.end ())
+      it = symtable ().find ("a");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("cx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("cy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cy");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -375,23 +375,23 @@ namespace djnn
     delete _ccx;
     delete _ccy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("sx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("sx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("sy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("sy");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("cx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("cy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cy");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -544,11 +544,11 @@ namespace djnn
   {
     delete _ca;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("a");
-      if (it != _symtable.end ())
+      it = symtable ().find ("a");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1667,7 +1667,7 @@ namespace djnn
     Graph::instance().add_edge(_rightTranslateBy_action, m21 ());
     Graph::instance().add_edge(_rightTranslateBy_action, m22 ());
     Graph::instance().add_edge(_rightTranslateBy_action, m24 ());
-    add_state_dependency (_parent, _rightTranslateBy_action);
+    add_state_dependency (get_parent (), _rightTranslateBy_action);
   }
 
   void
@@ -1692,7 +1692,7 @@ namespace djnn
     Graph::instance().add_edge(_leftTranslateBy_action, m21 ());
     Graph::instance().add_edge(_leftTranslateBy_action, m22 ());
     Graph::instance().add_edge(_leftTranslateBy_action, m24 ());
-    add_state_dependency (_parent, _leftTranslateBy_action);
+    add_state_dependency (get_parent (), _leftTranslateBy_action);
   }
 
   void
@@ -1729,7 +1729,7 @@ namespace djnn
     Graph::instance().add_edge(_rightScaleBy_action, m21 ());
     Graph::instance().add_edge(_rightScaleBy_action, m22 ());
     Graph::instance().add_edge(_rightScaleBy_action, m24 ());
-    add_state_dependency (_parent, _rightScaleBy_action);
+    add_state_dependency (get_parent (), _rightScaleBy_action);
   }
 
   void
@@ -1766,7 +1766,7 @@ namespace djnn
     Graph::instance().add_edge(_leftScaleBy_action, m21 ());
     Graph::instance().add_edge(_leftScaleBy_action, m22 ());
     Graph::instance().add_edge(_leftScaleBy_action, m24 ());
-    add_state_dependency (_parent, _leftScaleBy_action);
+    add_state_dependency (get_parent (), _leftScaleBy_action);
   }
 
   void
@@ -1797,7 +1797,7 @@ namespace djnn
     Graph::instance().add_edge(_rightRotateBy_action, m21 ());
     Graph::instance().add_edge(_rightRotateBy_action, m22 ());
     Graph::instance().add_edge(_rightRotateBy_action, m24 ());
-    add_state_dependency (_parent, _rightRotateBy_action);
+    add_state_dependency (get_parent (), _rightRotateBy_action);
   }
 
   void
@@ -1828,7 +1828,7 @@ namespace djnn
     Graph::instance().add_edge(_leftRotateBy_action, m21 ());
     Graph::instance().add_edge(_leftRotateBy_action, m22 ());
     Graph::instance().add_edge(_leftRotateBy_action, m24 ());
-    add_state_dependency (_parent, _leftRotateBy_action);
+    add_state_dependency (get_parent (), _leftRotateBy_action);
   }
 
   void
@@ -1858,7 +1858,7 @@ namespace djnn
     Graph::instance().add_edge(_rightSkew_X_By_action, m21 ());
     Graph::instance().add_edge(_rightSkew_X_By_action, m22 ());
     Graph::instance().add_edge(_rightSkew_X_By_action, m24 ());
-    add_state_dependency (_parent, _rightSkew_X_By_action);
+    add_state_dependency (get_parent (), _rightSkew_X_By_action);
   }
 
   void
@@ -1888,7 +1888,7 @@ namespace djnn
     Graph::instance().add_edge(_leftSkew_X_By_action, m21 ());
     Graph::instance().add_edge(_leftSkew_X_By_action, m22 ());
     Graph::instance().add_edge(_leftSkew_X_By_action, m24 ());
-    add_state_dependency (_parent, _leftSkew_X_By_action);
+    add_state_dependency (get_parent (), _leftSkew_X_By_action);
   }
 
   void
@@ -1918,7 +1918,7 @@ namespace djnn
     Graph::instance().add_edge(_rightSkew_Y_By_action, m21 ());
     Graph::instance().add_edge(_rightSkew_Y_By_action, m22 ());
     Graph::instance().add_edge(_rightSkew_Y_By_action, m24 ());
-    add_state_dependency (_parent, _rightSkew_Y_By_action);
+    add_state_dependency (get_parent (), _rightSkew_Y_By_action);
   }
 
   void
@@ -1948,7 +1948,7 @@ namespace djnn
     Graph::instance().add_edge(_leftSkew_Y_By_action, m21 ());
     Graph::instance().add_edge(_leftSkew_Y_By_action, m22 ());
     Graph::instance().add_edge(_leftSkew_Y_By_action, m24 ());
-    add_state_dependency (_parent, _leftSkew_Y_By_action);
+    add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
   AbstractHomography::AbstractHomography (Process *p, const string &n, 
@@ -2028,7 +2028,7 @@ namespace djnn
   AbstractHomography::~AbstractHomography ()
   {
     if (_rightTranslateBy_action){
-      remove_state_dependency (_parent, _rightTranslateBy_action);
+      remove_state_dependency (get_parent (), _rightTranslateBy_action);
       Graph::instance().remove_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
       Graph::instance().remove_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
       Graph::instance().remove_edge(_rightTranslateBy_action, this->m11 ());
@@ -2046,7 +2046,7 @@ namespace djnn
     }
 
     if (_leftTranslateBy_action){
-      remove_state_dependency (_parent, _leftTranslateBy_action);
+      remove_state_dependency (get_parent (), _leftTranslateBy_action);
       Graph::instance().remove_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
       Graph::instance().remove_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
       Graph::instance().remove_edge(_leftTranslateBy_action, this->m11 ());
@@ -2064,7 +2064,7 @@ namespace djnn
     }
 
     if (_rightScaleBy_action) {
-      remove_state_dependency (_parent, _rightScaleBy_action);
+      remove_state_dependency (get_parent (), _rightScaleBy_action);
       Graph::instance().remove_edge(_rightScaleBy_cx, _rightScaleBy_action);
       Graph::instance().remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
       Graph::instance().remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
@@ -2090,7 +2090,7 @@ namespace djnn
     }
 
     if (_leftScaleBy_action) {
-      remove_state_dependency (_parent, _leftScaleBy_action);
+      remove_state_dependency (get_parent (), _leftScaleBy_action);
       Graph::instance().remove_edge(_leftScaleBy_cx, _leftScaleBy_action);
       Graph::instance().remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
       Graph::instance().remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
@@ -2116,7 +2116,7 @@ namespace djnn
     }
 
     if (_rightRotateBy_action) {
-      remove_state_dependency (_parent, _rightRotateBy_action);
+      remove_state_dependency (get_parent (), _rightRotateBy_action);
       Graph::instance().remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
       Graph::instance().remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
       Graph::instance().remove_edge(_rightRotateBy_da, _rightRotateBy_action);
@@ -2138,7 +2138,7 @@ namespace djnn
     }
 
     if (_leftRotateBy_action) {
-      remove_state_dependency (_parent, _leftRotateBy_action);
+      remove_state_dependency (get_parent (), _leftRotateBy_action);
       Graph::instance().remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
       Graph::instance().remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
       Graph::instance().remove_edge(_leftRotateBy_da, _leftRotateBy_action);
@@ -2160,7 +2160,7 @@ namespace djnn
     }
 
     if (_rightSkew_X_By_action) {
-      remove_state_dependency (_parent, _rightSkew_X_By_action);
+      remove_state_dependency (get_parent (), _rightSkew_X_By_action);
       Graph::instance().remove_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
       Graph::instance().remove_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
       Graph::instance().remove_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
@@ -2181,7 +2181,7 @@ namespace djnn
     }
 
     if (_leftSkew_X_By_action) {
-      remove_state_dependency (_parent, _leftSkew_X_By_action);
+      remove_state_dependency (get_parent (), _leftSkew_X_By_action);
       Graph::instance().remove_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
       Graph::instance().remove_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
       Graph::instance().remove_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
@@ -2202,7 +2202,7 @@ namespace djnn
     }
 
     if (_rightSkew_Y_By_action) {
-      remove_state_dependency (_parent, _rightSkew_Y_By_action);
+      remove_state_dependency (get_parent (), _rightSkew_Y_By_action);
       Graph::instance().remove_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
       Graph::instance().remove_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
       Graph::instance().remove_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
@@ -2223,7 +2223,7 @@ namespace djnn
     }
 
     if (_leftSkew_Y_By_action) {
-      remove_state_dependency (_parent, _leftSkew_Y_By_action);
+      remove_state_dependency (get_parent (), _leftSkew_Y_By_action);
       Graph::instance().remove_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
       Graph::instance().remove_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
       Graph::instance().remove_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
@@ -2243,71 +2243,71 @@ namespace djnn
       delete _leftSkew_Y_By_spike;
     }
 /*
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("m11");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m11");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m12");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m12");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m13");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m13");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m14");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m14");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m21");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m21");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m22");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m22");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m23");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m23");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m24");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m24");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m31");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m31");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m32");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m32");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m33");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m33");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m34");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m34");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m41");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m41");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m42");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m42");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m43");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m43");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("m44");
-      if (it != _symtable.end ())
+      it = symtable ().find ("m44");
+      if (it != symtable ().end ())
         delete it->second;
     }
 */

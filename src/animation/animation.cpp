@@ -43,7 +43,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("animation:slowInslowoutinterpolator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);

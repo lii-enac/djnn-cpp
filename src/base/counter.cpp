@@ -45,8 +45,8 @@ namespace djnn
     Graph::instance ().add_edge (_step, _action_step);
     Graph::instance ().add_edge (_action_step, _output);
 
-    add_state_dependency (_parent, _action_reset);
-    add_state_dependency (_parent, _action_step);
+    add_state_dependency (get_parent (), _action_reset);
+    add_state_dependency (get_parent (), _action_step);
     
     Process::finalize_construction (p);
   }
@@ -76,8 +76,8 @@ namespace djnn
   }
 
   Counter::~Counter () {
-    remove_state_dependency (_parent, _action_reset);
-    remove_state_dependency (_parent, _action_step);
+    remove_state_dependency (get_parent (), _action_reset);
+    remove_state_dependency (get_parent (), _action_step);
     Graph::instance ().remove_edge (_reset, _action_reset);
     Graph::instance ().remove_edge (_action_reset, _output);
     Graph::instance ().remove_edge (_step, _action_step);
@@ -98,15 +98,15 @@ namespace djnn
   Counter::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _action_reset);
-       remove_state_dependency (_parent, _action_step);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), _action_reset);
+       remove_state_dependency (get_parent (), _action_step);
     }
 
     add_state_dependency (p, _action_reset);
     add_state_dependency (p, _action_step);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -128,7 +128,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:counter");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("init", _init->get_value ());
     AbstractSerializer::serializer->float_attribute ("delta", _delta->get_value ());
     AbstractSerializer::serializer->end ();

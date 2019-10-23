@@ -34,7 +34,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:and");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("left", dynamic_cast<BoolProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("right", dynamic_cast<BoolProperty*> (_right)->get_value ());
    
@@ -60,7 +60,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:or");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("left", dynamic_cast<BoolProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("right", dynamic_cast<BoolProperty*> (_right)->get_value ());
    
@@ -86,7 +86,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:xor");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("left", dynamic_cast<BoolProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("right", dynamic_cast<BoolProperty*> (_right)->get_value ());
    
@@ -111,7 +111,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:not");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("input", dynamic_cast<BoolProperty*> (_input)->get_value ());
    
     AbstractSerializer::serializer->end ();

@@ -39,7 +39,7 @@ namespace djnn {
     bool is_activable () {
       return get_parent () == 0 || get_parent ()->somehow_activating ();
     }
-    void notify_parent () { if (_notify_mask != notify_none && _parent) _parent->notify_change (_notify_mask ); }
+    void notify_parent () { if (_notify_mask != notify_none && get_parent ()) get_parent ()->notify_change (_notify_mask ); }
     virtual void set_value (int v, bool propagate) = 0;
     virtual void set_value (double v, bool propagate) = 0;
     virtual void set_value (bool v, bool propagate) = 0;

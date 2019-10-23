@@ -15,13 +15,13 @@
 
 #pragma once
 
-#include "../utils/error.h"
+#include "core/utils/error.h"
 #include "abstract_property.h"
+
 #include <string>
 
 namespace djnn {
   using namespace std;
-
 
   class AbstractTextProperty : public AbstractProperty {
   public:

@@ -64,7 +64,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:textprinter");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
    
     AbstractSerializer::serializer->end ();
 
@@ -87,7 +87,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:textcatenator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
    
     AbstractSerializer::serializer->end ();
 
@@ -110,7 +110,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:textcomparator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("left", dynamic_cast<TextProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->text_attribute ("right", dynamic_cast<TextProperty*> (_right)->get_value ());
     
@@ -137,7 +137,7 @@ namespace djnn
 
   DoubleFormatter::~DoubleFormatter ()
   {
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_decimal, _action);
     Graph::instance ().remove_edge (_action, _output);
@@ -154,13 +154,13 @@ namespace djnn
   DoubleFormatter::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   DoubleFormatter::DoubleFormatter (Process* parent, const string &name, double initial, int decimal) :
@@ -198,7 +198,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:doubleformatter");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("initial", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->int_attribute ("decimal", dynamic_cast<IntProperty*> (_decimal)->get_value ());
     
@@ -226,8 +226,8 @@ namespace djnn
   }
 
   TextAccumulator::~TextAccumulator () {    
-    remove_state_dependency (_parent, _acc_action);
-    remove_state_dependency (_parent, _del_action);
+    remove_state_dependency (get_parent (), _acc_action);
+    remove_state_dependency (get_parent (), _del_action);
     Graph::instance ().remove_edge (_input, _acc_action);
     Graph::instance ().remove_edge (_del, _del_action);
     Graph::instance ().remove_edge (_acc_action, _state);
@@ -246,15 +246,15 @@ namespace djnn
   TextAccumulator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _acc_action);
-       remove_state_dependency (_parent, _del_action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _acc_action);
+       remove_state_dependency (get_parent (), _del_action);
     }
 
     add_state_dependency (p, _acc_action);
     add_state_dependency (p, _del_action);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -277,7 +277,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:text-accumulator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("initial", _state->get_value ());
 
     AbstractSerializer::serializer->end ();

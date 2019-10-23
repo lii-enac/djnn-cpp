@@ -210,7 +210,7 @@ namespace djnn
 IvyAccess::~IvyAccess ()
 {
   Graph::instance().remove_edge(_out, _out_a);
-  remove_state_dependency (_parent, _out_a);
+  remove_state_dependency (get_parent (), _out_a);
 
   delete _out;
   delete _out_c;
@@ -230,13 +230,13 @@ void
 IvyAccess::set_parent (Process* p)
 { 
   /* in case of re-parenting remove edge dependency in graph */
-  if (_parent) {
-      remove_state_dependency (_parent, _out_a);
+  if (get_parent ()) {
+      remove_state_dependency (get_parent (), _out_a);
   }
 
   add_state_dependency (p, _out_a);
     
-  _parent = p; 
+  Process::set_parent (p); 
 }
 
 void IvyAccess::set_arriving(string v) {
@@ -350,8 +350,8 @@ IvyAccess::find_component (const string& key)
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
 
-    map<string, Process*>::iterator it = _symtable.find (key.substr (3));
-    if (it != _symtable.end ()) {
+    map<string, Process*>::iterator it = symtable ().find (key.substr (3));
+    if (it != symtable ().end ()) {
         /* key exist  - return */
       return it->second;
     }

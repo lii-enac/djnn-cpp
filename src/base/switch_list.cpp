@@ -123,7 +123,7 @@ namespace djnn
       AbstractList (), _cur_item (nullptr)
   {
     init (loop);
-    _state_dependency = _change_index_action;
+    set_state_dependency (_change_index_action);
   }
 
   SwitchList::SwitchList (Process* parent, const string& name, bool loop) :
@@ -137,19 +137,19 @@ namespace djnn
   SwitchList::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _state_dependency);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, _state_dependency);
-    _parent = p; 
+    add_state_dependency (p, state_dependency ());
+    Process::set_parent (p); 
   }
 
   SwitchList::~SwitchList ()
   {
     Container::clean_up_content ();
 
-    remove_state_dependency (_parent, _state_dependency);
+    remove_state_dependency (get_parent (), state_dependency ());
 
     delete _c_index;
     delete _c_previous;
@@ -226,7 +226,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:switch-list");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("loop", _loop ? "true" : "false");
 
     for (auto c : _children)

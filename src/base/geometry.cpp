@@ -29,8 +29,8 @@ namespace djnn
   void
   HermiteCurve::HermiteCurveAction::impl_activate ()
   {
-    //if (_parent->get_state () > activated)
-    if (!_parent->somehow_activating ())
+    //if (get_parent ()->get_state () > activated)
+    if (!get_parent ()->somehow_activating ())
       return;
     double p1 = ((DoubleProperty*) _p1)->get_value ();
     double p2 = ((DoubleProperty*) _p2)->get_value ();
@@ -78,7 +78,7 @@ namespace djnn
 
   HermiteCurve::~HermiteCurve ()
   {
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_p1, _action);
     Graph::instance ().remove_edge (_p2, _action);
@@ -104,13 +104,13 @@ namespace djnn
   HermiteCurve::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -139,7 +139,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:hermitecurve");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("p1", dynamic_cast<DoubleProperty*> (_p1)->get_value ());
     AbstractSerializer::serializer->float_attribute ("p2", dynamic_cast<DoubleProperty*> (_p2)->get_value ());
     AbstractSerializer::serializer->float_attribute ("t1", dynamic_cast<DoubleProperty*> (_t1)->get_value ());

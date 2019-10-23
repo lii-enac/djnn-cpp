@@ -19,8 +19,6 @@
 #include <map>
 #include <string>
 
-#include <iostream>
-
 namespace djnn {
 
   // process types
@@ -90,7 +88,7 @@ namespace djnn {
     void remove_deactivation_coupling (Coupling* c);
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
     Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
-    void state_dependency (Process* s) { _state_dependency = s; }
+    void set_state_dependency (Process* s) { _state_dependency = s; }
 
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -103,16 +101,17 @@ namespace djnn {
     // execution graph
     void     set_vertex (Vertex *v) 
     { 
-      if (_vertex && v && _vertex != v) std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ; 
+      if (_vertex && v && _vertex != v) print_set_vertex_err_msg (v);
       _vertex = v; 
     }
+    void print_set_vertex_err_msg (Vertex *v);
     Vertex*  vertex () { return _vertex; };
 
     // actions to be redefined by subclasses
     virtual     void draw () {}
     virtual     void pick () {}
-    virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
-    virtual Process* clone (); // { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+    virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
+    virtual Process* clone (); // { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void     set_activation_source (Process* src) {}
@@ -132,8 +131,8 @@ namespace djnn {
 
     typedef map<string, Process*> symtable_t;
     symtable_t& symtable () { return _symtable; }
-    const string& get_name () const;
-    Process* get_parent ();
+    const string& get_name () const { return _name; }
+    Process* get_parent () { return _parent; }
     
     void     set_data (Process* data);
     Process* get_data ();
@@ -167,7 +166,8 @@ namespace djnn {
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
 
-  protected:
+  //protected:
+  private:
     symtable_t _symtable;
     string _name;
     Process *_parent;

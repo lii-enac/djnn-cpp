@@ -59,19 +59,19 @@ namespace djnn
     delete _cg;
     delete _cb;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("r");
-      if (it != _symtable.end ())
+      it = symtable ().find ("r");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("g");
-      if (it != _symtable.end ())
+      it = symtable ().find ("g");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("b");
-      if (it != _symtable.end ())
+      it = symtable ().find ("b");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -201,11 +201,11 @@ namespace djnn
   {
     delete _cr;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("rule");
-      if (it != _symtable.end ())
+      it = symtable ().find ("rule");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -321,11 +321,11 @@ namespace djnn
   {
     delete _cp;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("path");
-      if (it != _symtable.end ())
+      it = symtable ().find ("path");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -410,11 +410,11 @@ namespace djnn
   {
     delete _ca;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("a");
-      if (it != _symtable.end ())
+      it = symtable ().find ("a");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -515,11 +515,11 @@ namespace djnn
   {
     delete _cw;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("width");
-      if (it != _symtable.end ())
+      it = symtable ().find ("width");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -618,11 +618,11 @@ namespace djnn
   {
     delete _cc;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("cap");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cap");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -721,11 +721,11 @@ namespace djnn
   {
     delete _cj;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("join");
-      if (it != _symtable.end ())
+      it = symtable ().find ("join");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -807,11 +807,11 @@ namespace djnn
   {
     delete _cl;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("limit");
-      if (it != _symtable.end ())
+      it = symtable ().find ("limit");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -932,11 +932,11 @@ namespace djnn
   {
     delete _co;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("offset");
-      if (it != _symtable.end ())
+      it = symtable ().find ("offset");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1042,27 +1042,27 @@ namespace djnn
     delete _ca;
     delete _co;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("r");
-      if (it != _symtable.end ())
+      it = symtable ().find ("r");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("g");
-      if (it != _symtable.end ())
+      it = symtable ().find ("g");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("b");
-      if (it != _symtable.end ())
+      it = symtable ().find ("b");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("a");
-      if (it != _symtable.end ())
+      it = symtable ().find ("a");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("offset");
-      if (it != _symtable.end ())
+      it = symtable ().find ("offset");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1178,15 +1178,15 @@ namespace djnn
     delete _transforms;
     delete _stops;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("spread");
-      if (it != _symtable.end ())
+      it = symtable ().find ("spread");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("coords");
-      if (it != _symtable.end ())
+      it = symtable ().find ("coords");
+      if (it != symtable ().end ())
         delete it->second;
     }
     */
@@ -1306,23 +1306,23 @@ namespace djnn
     delete _cy1;
     delete _cy2;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y1");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y1");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("x2");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x2");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y2");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y2");
+      if (it != symtable ().end ())
         delete it->second;
     }
 
@@ -1508,27 +1508,27 @@ namespace djnn
     delete _cfx;
     delete _cfy;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("cx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("cy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("cy");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("r");
-      if (it != _symtable.end ())
+      it = symtable ().find ("r");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fy");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1734,15 +1734,15 @@ namespace djnn
     delete _cu;
     delete _cs;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("unit");
-      if (it != _symtable.end ())
+      it = symtable ().find ("unit");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("size");
-      if (it != _symtable.end ())
+      it = symtable ().find ("size");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1797,7 +1797,7 @@ namespace djnn
     AbstractPropFontSize::impl_activate ();
     //if (_cu) _cu->enable (frame);
     //if (_cs) _cs->enable (frame);
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c) {
       c->add_to_context ("FontSize", this);
     }
@@ -1845,11 +1845,11 @@ namespace djnn
   {
     delete _cw;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("weight");
-      if (it != _symtable.end ())
+      it = symtable ().find ("weight");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1888,7 +1888,7 @@ namespace djnn
   {
     AbstractPropFontWeight::impl_activate ();
     //if (_cw) _cw->enable (_frame);
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontWeight", this);
   }
@@ -1949,11 +1949,11 @@ namespace djnn
   {
     delete _cs;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("style");
-      if (it != _symtable.end ())
+      it = symtable ().find ("style");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -1992,7 +1992,7 @@ namespace djnn
   {
     AbstractPropFontStyle::impl_activate ();
     //if (_cs) _cs->enable (_frame);
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontStyle", this);
   }
@@ -2038,11 +2038,11 @@ namespace djnn
   {
     delete _cf;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("family");
-      if (it != _symtable.end ())
+      it = symtable ().find ("family");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -2081,7 +2081,7 @@ namespace djnn
   {
     AbstractPropFontFamily::impl_activate ();
     //if (_cf) _cf->enable (_frame);
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontFamily", this);
   }
@@ -2145,11 +2145,11 @@ namespace djnn
   {
     delete _ca;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("anchor");
-      if (it != _symtable.end ())
+      it = symtable ().find ("anchor");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -2188,7 +2188,7 @@ namespace djnn
   {
     AbstractPropTextAnchor::impl_activate ();
     //if (_ca) _ca->enable (_frame);
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontFamily", this);
   }

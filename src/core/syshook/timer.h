@@ -16,9 +16,10 @@
 #pragma once
 
 #include "core/ontology/process.h"
+#include "core/tree/int_property.h"
 #include "core/tree/blank.h"
-#include "external_source.h"
 
+#include "external_source.h"
 #include "cpp-chrono.h"
 
 namespace djnn
@@ -29,17 +30,13 @@ namespace djnn
   class Timer : public Process, public ExternalSource
   {
   public:
-    
     Timer (Process* p, const std::string& n, std::chrono::milliseconds period = std::chrono::milliseconds(1000));
     Timer (Process* p, const std::string& n, int period = 1000);
-    
     Timer (std::chrono::milliseconds period = std::chrono::milliseconds(1000));
-
 #if DJNN_USE_BOOST_CHRONO
     Timer (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
     Timer (boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
 #endif
-
     Timer (int period = 1000);
     virtual ~Timer ();
 
@@ -50,10 +47,13 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
-    IntProperty *_delay;
-    Blank *_end;
-
+    // ExternalSource
     void run() override;
+
+  private:
+    IntProperty _delay;
+    Blank _end;
+
   };
 
 }

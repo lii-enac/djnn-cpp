@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../ontology/coupling.h"
-#include "../control/action.h"
-#include "../control/assignment.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/control/assignment.h"
 
 namespace djnn {
   using namespace std;
@@ -33,12 +33,12 @@ namespace djnn {
       BindingAction (Process* parent, const string &name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override {
-      	((Binding*)_parent)->_dst->set_activation_source (((Binding*)_parent)->_src);
+      	((Binding*)get_parent ())->_dst->set_activation_source (((Binding*)get_parent ())->_src);
       	if (get_binding_action()) {
-      	  ((Binding*)_parent)->_dst->activate ();
+      	  ((Binding*)get_parent ())->_dst->activate ();
       	}
       	else
-      	  ((Binding*)_parent)->_dst->deactivate ();
+      	  ((Binding*)get_parent ())->_dst->deactivate ();
       }
       void impl_deactivate () override {}
 

@@ -87,7 +87,7 @@ namespace djnn {
 
   LinuxTouchPanel::~LinuxTouchPanel ()
   {
-    _parent->remove_child (this);
+    get_parent ()->remove_child (this);
 
     // destroy all touches and clear
     for (std::vector<LinuxTouch*>::iterator it = _v_touches.begin () ; it != _v_touches.end(); ++it)

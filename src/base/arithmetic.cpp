@@ -36,7 +36,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:adder");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -61,7 +61,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:subtractor");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -86,7 +86,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:multiplier");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -113,7 +113,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:divider");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -140,7 +140,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:modulo");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("left", dynamic_cast<IntProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->int_attribute ("right",dynamic_cast<IntProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -165,7 +165,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:ascendingcomparator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -191,7 +191,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:strictascendingcomparator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -216,7 +216,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:equalitycomparator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("left", dynamic_cast<DoubleProperty*> (_left)->get_value ());
     AbstractSerializer::serializer->float_attribute ("right", dynamic_cast<DoubleProperty*> (_right)->get_value ());
     AbstractSerializer::serializer->end ();
@@ -240,7 +240,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:signinverter");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->end ();
 
@@ -263,7 +263,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:previous");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->end ();
 
@@ -295,7 +295,7 @@ namespace djnn
 
   Incr::~Incr ()
   { 
-    remove_state_dependency (_parent, _state);
+    remove_state_dependency (get_parent (), _state);
     Graph::instance ().remove_edge (this, _state);
 
     delete _state;
@@ -306,12 +306,12 @@ namespace djnn
   Incr::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _state);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), _state);
     }
 
     add_state_dependency (p, _state);
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -327,7 +327,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:incr");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
     AbstractSerializer::serializer->end ();
 
@@ -348,7 +348,7 @@ namespace djnn
   void
   AdderAccumulator::AdderAccumulatorAction::impl_activate ()
   {
-    if (!_parent->somehow_activating ())
+    if (!get_parent ()->somehow_activating ())
       return;
     double input = ((DoubleProperty*) _input)->get_value ();
     double clamp_min = ((DoubleProperty*) _clamp_min)->get_value ();
@@ -385,7 +385,7 @@ namespace djnn
 
   AdderAccumulator::~AdderAccumulator ()
   {
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_input, _action);
     Graph::instance ().remove_edge (_action, _result);
 
@@ -401,12 +401,12 @@ namespace djnn
   AdderAccumulator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -427,7 +427,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:adderaccumulator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("input", dynamic_cast<DoubleProperty*> (_input)->get_value ());
     AbstractSerializer::serializer->float_attribute ("clamp_min", dynamic_cast<DoubleProperty*> (_clamp_min)->get_value ());
     AbstractSerializer::serializer->float_attribute ("clamp_max", dynamic_cast<DoubleProperty*> (_clamp_max)->get_value ());

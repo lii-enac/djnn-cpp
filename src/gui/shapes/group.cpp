@@ -37,7 +37,7 @@ namespace djnn
     Process::finalize_construction (parent);
 
     /* and set state_dependency here AFTER setting the parent to "this" */
-    _gobj->state_dependency (this->state_dependency ());
+    _gobj->set_state_dependency (this->state_dependency ());
   }
 
   Group::Group () :
@@ -47,7 +47,7 @@ namespace djnn
     /* AbstractGObj do not have a call to finalize_construction */
     /* we have to add_child it here */
     _gobj->set_parent (this);
-    _gobj->state_dependency (this->state_dependency ());
+    _gobj->set_state_dependency (this->state_dependency ());
   }
 
   Group::~Group ()

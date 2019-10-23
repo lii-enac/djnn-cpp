@@ -22,6 +22,8 @@
 
 #include <algorithm>
 
+#include <iostream>
+
 namespace djnn
 {
   using namespace std;
@@ -49,7 +51,7 @@ namespace djnn
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
 
     //debug
-    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;;
+    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;;
   }
 
   Process::Process (bool model) :
@@ -67,14 +69,14 @@ namespace djnn
       else
         _state_dependency = state_dep;
 
-      parent->add_child (this, _name);
+      parent->add_child (this, get_name ());
     }
   }
 
   Process::~Process ()
   {
     //debug
-    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (_parent ? _parent->get_name () + "/"  : "") << _name  << endl;
+    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;
 
     /* note: 
        this code is to prevent bugs 
@@ -90,11 +92,11 @@ namespace djnn
     }
     if (_vertex != nullptr){
        _vertex->invalidate ();
-       warning ( nullptr, " Process::~Process - " +  (_parent ? _parent->get_name () + "/"  : "parent_NULL") + _name  + " - _vertex is NOT NULL and it should\n");
+       warning ( nullptr, " Process::~Process - " +  (get_parent () ? get_parent ()->get_name () + "/"  : "parent_NULL") + get_name ()  + " - _vertex is NOT NULL and it should\n");
     }
 
     /* make sure everything is wiped out the symtable */
-    _symtable.clear ();
+    symtable ().clear ();
   }
 
 
@@ -126,7 +128,7 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (get_activation_state () != DEACTIVATED || (_parent != 0 && !_parent->somehow_activating() ))
+    if (get_activation_state () != DEACTIVATED || (get_parent () != 0 && !get_parent ()->somehow_activating() ))
       return false;
     set_activation_state (ACTIVATING);
     return true;
@@ -143,7 +145,7 @@ namespace djnn
   bool
   Process::pre_deactivate ()
   {
-    if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (_parent != 0 && !_parent->somehow_deactivating() )) like pre_activate ? => OK
+    if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (get_parent () != 0 && !get_parent ()->somehow_deactivating() )) like pre_activate ? => OK
       return false;
     set_activation_state (DEACTIVATING);
     return true;
@@ -267,8 +269,8 @@ namespace djnn
       Process* found = find_component (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
-        auto it = _symtable.begin ();
-        while ( it != _symtable.end ()) {
+        auto it = symtable ().begin ();
+        while ( it != symtable ().end ()) {
           found = it->second->find_component (key); // with "/*""
           if (found) return found;
           ++it;
@@ -281,10 +283,10 @@ namespace djnn
     //FIXME: improved with c++20 if (key.starts_with("//")
     if (key.length () > 2 && key[0] == '/' && key[1] == '/') {
         Process* current_cpnt = this;
-        Process* current_parent = current_cpnt->_parent;
+        Process* current_parent = current_cpnt->get_parent ();
         while (current_parent != nullptr) {
           current_cpnt = current_parent;
-          current_parent = current_cpnt->_parent;
+          current_parent = current_cpnt->get_parent ();
         }
         //DEBUG
         //cout << "root found: " << current_cpnt->_name << endl;
@@ -296,20 +298,20 @@ namespace djnn
       string newKey = key.substr (0, found);
       string path = key.substr (found + 1);
       if (newKey[0] == '.' && newKey[1] == '.') {
-        if (_parent)
-          return _parent->find_component (path);
+        if (get_parent ())
+          return get_parent ()->find_component (path);
         else
           return nullptr;
       }
-      map<string, Process*>::iterator it = _symtable.find (newKey);
-      if (it != _symtable.end ()) {
+      map<string, Process*>::iterator it = symtable ().find (newKey);
+      if (it != symtable ().end ()) {
         return (it->second)->find_component (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
-      return _parent;
-    map<string, Process*>::iterator it = _symtable.find (key);
-    if (it != _symtable.end ()) {
+      return get_parent ();
+    map<string, Process*>::iterator it = symtable ().find (key);
+    if (it != symtable ().end ()) {
       return it->second;
     }
     return 0;
@@ -330,7 +332,7 @@ namespace djnn
 
     symtable_t::iterator it;
 
-    for (it = _symtable.begin(); it != _symtable.end(); ++it)
+    for (it = symtable ().begin(); it != symtable ().end(); ++it)
     {
       if (it->second == symbol)
       {
@@ -347,9 +349,9 @@ namespace djnn
   void
   Process::remove_symbol (const string& name)
   {
-    symtable_t::iterator it = _symtable.find (name);
-    if (it != _symtable.end ())
-      _symtable.erase (it);
+    symtable_t::iterator it = symtable ().find (name);
+    if (it != symtable ().end ())
+      symtable ().erase (it);
     else
       warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");
   }
@@ -358,9 +360,9 @@ namespace djnn
   Process::remove_child (Process* c)
   {
     symtable_t::iterator it;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second == c) {
-        _symtable.erase (it->first);
+        symtable ().erase (it->first);
         return;
       }
     }
@@ -386,23 +388,24 @@ namespace djnn
   void
   Process::add_symbol (const string &name, Process* c)
   {
-    /* if ((_symtable.insert (std::pair<string, Process*> (name, c))).second == false) {
-     cerr << "Duplicate name " << name << " in component " << _name << endl;
+    /* if ((symtable ().insert (std::pair<string, Process*> (name, c))).second == false) {
+     cerr << "Duplicate name " << name << " in component " << get_name () << endl;
      }*/
     _symtable[name] = c;
   }
 
-  Process*
+  /*Process*
   Process::get_parent ()
   {
-    return _parent;
-  }
+    return get_parent ();
+  }*/
 
+  /*
   const string&
   Process::get_name () const
   {
     return _name;
-  }
+  }*/
 
   void
   Process::set_data (Process* data)
@@ -414,6 +417,12 @@ namespace djnn
   Process::get_data ()
   {
     return _data;
+  }
+
+  void
+  Process::print_set_vertex_err_msg (Vertex* v)
+  {
+    std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ;
   }
 
   void
@@ -471,19 +480,19 @@ namespace djnn
 
 
   void
-  Process::serialize (const string& format) { cout << "serialize is not yet implemented for '" << _name << "'" << endl; }
+  Process::serialize (const string& format) { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
   
   Process*
-  Process::clone () { cout << "clone not implemented for " << _name << "\n"; return nullptr; };
+  Process::clone () { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
 
   static int indent = -1;
   void
   Process::dump (int level)
   {
-    cout << (_parent ? _parent->find_component_name(this) : _name) << ": ";
+    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/
-    if (_symtable.empty ()) {
+    if (symtable ().empty ()) {
       cout << "<EMPTY>" << endl;
       return;
     }
@@ -496,7 +505,7 @@ namespace djnn
     indent++;
     symtable_t::iterator it;
     int i = 0;
-    for (it = _symtable.begin (); it != _symtable.end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       for (int j = 0; j < indent; j++)
         cout << "|\t";
       cout << " +" << i++ << " ";

@@ -174,7 +174,7 @@ namespace djnn {
       GPIOLineWriteAction (Process *p, const string &n) : Action (p, n) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
-      void impl_activate () override { ((GPIOLine*)_parent)->write_value (); }
+      void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
       void impl_deactivate () override {}
     };
     class GPIOLineReadAction : public Action {
@@ -182,7 +182,7 @@ namespace djnn {
       GPIOLineReadAction (Process *p, const string &n) : Action (p, n) {}
       virtual ~GPIOLineReadAction () {}
     protected:
-      void impl_activate () override { ((GPIOLine*)_parent)->read_value (); }
+      void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
       void impl_deactivate () override {}
     };
   public:

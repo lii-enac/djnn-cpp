@@ -106,7 +106,7 @@ namespace djnn
 
   Text::~Text ()
   {
-    remove_state_dependency (_parent, _update_size);
+    remove_state_dependency (get_parent (), _update_size);
     Graph::instance ().remove_edge (this->text(), _update_size);
     
     if (_cffamily) {
@@ -137,63 +137,63 @@ namespace djnn
     delete _cupdate_size;
     delete _cencoding;
 
-    if (_symtable.empty () == false) {
+    if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("x");
-      if (it != _symtable.end ())
+      it = symtable ().find ("x");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("y");
-      if (it != _symtable.end ())
+      it = symtable ().find ("y");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("dx");
-      if (it != _symtable.end ())
+      it = symtable ().find ("dx");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("dy");
-      if (it != _symtable.end ())
+      it = symtable ().find ("dy");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fsize");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fsize");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("dxU");
-      if (it != _symtable.end ())
+      it = symtable ().find ("dxU");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("dyU");
-      if (it != _symtable.end ())
+      it = symtable ().find ("dyU");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("width");
-      if (it != _symtable.end ())
+      it = symtable ().find ("width");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("height");
-      if (it != _symtable.end ())
+      it = symtable ().find ("height");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("encoding");
-      if (it != _symtable.end ())
+      it = symtable ().find ("encoding");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fstyle");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fstyle");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("fweight");
-      if (it != _symtable.end ())
+      it = symtable ().find ("fweight");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("text");
-      if (it != _symtable.end ())
+      it = symtable ().find ("text");
+      if (it != symtable ().end ())
         delete it->second;
 
-      it = _symtable.find ("ffamily");
-      if (it != _symtable.end ())
+      it = symtable ().find ("ffamily");
+      if (it != symtable ().end ())
         delete it->second;
     }
   }
@@ -202,13 +202,13 @@ namespace djnn
   Text::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _update_size);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _update_size);
     }
 
     add_state_dependency (p, _update_size);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   Process*
@@ -348,7 +348,7 @@ namespace djnn
   Text::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    Container *c = dynamic_cast<Container*> (_parent);
+    Container *c = dynamic_cast<Container*> (get_parent ());
     if (c) {
       Process* ff = c->get_from_context ("FontFamily");
       if (ff && ((FontFamily*) ff)->family ()->get_value () != raw_props.ffamily) {

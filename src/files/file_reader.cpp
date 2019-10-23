@@ -23,7 +23,7 @@ namespace djnn
   void
   FileReader::FileReaderAction::impl_activate ()
   {
-    ((FileReader*)_parent)->read ();
+    ((FileReader*)get_parent ())->read ();
   }
 
   FileReader::FileReader (Process *p, const string &n, const string& filename) : Process (n)
@@ -76,7 +76,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("files:file-reader");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);

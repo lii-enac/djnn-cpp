@@ -128,7 +128,7 @@ namespace djnn
 
   void
   Cursor::UpdateCursorAction::impl_activate () {
-    ((Cursor*) _parent)->update_cursor ();
+    ((Cursor*) get_parent ())->update_cursor ();
   }
 
   Cursor::Cursor (Process *p, const string &n, const string &path, int hotX, int hotY) :
@@ -170,7 +170,7 @@ namespace djnn
       _c_path->enable ();
     if (_win == nullptr || _win->somehow_deactivating ()) {
       bool found = false;
-      Process *cur_parent = _parent;
+      Process *cur_parent = get_parent ();
       Process *cur_child = this;
       while (!found && cur_parent != nullptr) {
         if (cur_parent->get_cpnt_type () == COMPONENT_T) {
@@ -190,7 +190,7 @@ namespace djnn
         } while (cur_parent != nullptr && cur_parent->get_cpnt_type () != COMPONENT_T);
       }
       if (!found) {
-        std::cout << "Warning no running frame found for cursor " << _name << endl;
+        std::cout << "Warning no running frame found for cursor " << get_name () << endl;
         return;
       }
     }

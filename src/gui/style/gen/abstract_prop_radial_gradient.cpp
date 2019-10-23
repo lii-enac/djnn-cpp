@@ -54,27 +54,27 @@ namespace djnn
 		delete _cfy;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (_symtable.size () > 2) {
+    if (symtable ().size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("cx");
-			if (it != _symtable.end ())
+      it = symtable ().find ("cx");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("cy");
-			if (it != _symtable.end ())
+			it = symtable ().find ("cy");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("r");
-			if (it != _symtable.end ())
+			it = symtable ().find ("r");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("fx");
-			if (it != _symtable.end ())
+			it = symtable ().find ("fx");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("fy");
-			if (it != _symtable.end ())
+			it = symtable ().find ("fy");
+			if (it != symtable ().end ())
 				delete it->second;
     }
   }

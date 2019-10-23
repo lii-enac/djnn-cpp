@@ -68,7 +68,7 @@ namespace djnn
       t->activate ();
     }
     Container::impl_activate ();
-    _parent_fsm->update_state (this, _name);
+    _parent_fsm->update_state (this, get_name ());
   }
 
   void
@@ -86,7 +86,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:fsmstate");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)
         c->serialize (type);
@@ -219,7 +219,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:fsmtransition");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("from", buf);
@@ -250,7 +250,7 @@ namespace djnn
   FSM::FSM () : Process ()
   {
     init_FSM ();
-    _state_dependency = _fsm_state;  
+    set_state_dependency (_fsm_state);  
   }
 
   FSM::FSM (Process *p, const string &n) : 
@@ -264,7 +264,7 @@ namespace djnn
 
   FSM::~FSM ()
   {
-    remove_state_dependency (_parent, _state_dependency);
+    remove_state_dependency (get_parent (), state_dependency ());
 
     for (FSMTransition* t : _transitions) {
         delete t;
@@ -281,12 +281,12 @@ namespace djnn
   FSM::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _state_dependency);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, _state_dependency);
-    _parent = p; 
+    add_state_dependency (p, state_dependency ());
+    Process::set_parent (p); 
   }
 
   void
@@ -334,7 +334,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:fsm");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto st : _states)
         st->serialize (type);

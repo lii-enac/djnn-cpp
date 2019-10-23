@@ -29,7 +29,7 @@ namespace djnn
   void
   Finder::FinderAction::impl_activate ()
   {
-    Finder* f = (Finder*) _parent;
+    Finder* f = (Finder*) get_parent ();
     string path = f->_path->get_value ();
     string key = f->_key->get_value ();
     if (key.empty())
@@ -119,7 +119,7 @@ namespace djnn
 
   Finder::~Finder ()
   {
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_key, _action);
     Graph::instance ().remove_edge (_action, _result);
     delete _cfind;
@@ -134,12 +134,12 @@ namespace djnn
   Finder::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -161,7 +161,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:finder");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("path", _path->get_value ());
     AbstractSerializer::serializer->end ();
 

@@ -37,7 +37,7 @@ namespace djnn
   Switch::Switch (const string &initial)
   {
     init_switch (initial);
-    _state_dependency = _action;
+    set_state_dependency (_action);
   }
 
   void
@@ -60,7 +60,7 @@ namespace djnn
 
   Switch::~Switch ()
   {
-    remove_state_dependency (_parent, _state_dependency);
+    remove_state_dependency (get_parent (), state_dependency ());
 
     /* note:
      * We have to delete all content BEFORE deleting _action and _branch_name
@@ -116,20 +116,20 @@ namespace djnn
   Switch::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _state_dependency);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, _state_dependency);
-    _parent = p; 
+    add_state_dependency (p, state_dependency ());
+    Process::set_parent (p); 
   }
 
   void
   Switch::change_branch ()
   {
     string key = _branch_name->get_value ();
-    map<string, Process*>::iterator it = _symtable.find (key);
-    if (it != _symtable.end ()) {
+    map<string, Process*>::iterator it = symtable ().find (key);
+    if (it != symtable ().end ()) {
       if (_cur_branch == it->second) {
         if (_cur_branch->get_activation_state () == DEACTIVATED)
           _cur_branch->activate ();
@@ -157,7 +157,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:switch");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("initial", _initial);
 
     for (auto c : _children)

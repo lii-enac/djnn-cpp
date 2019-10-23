@@ -111,7 +111,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override { _damaged |= nm; _parent->get_parent()->notify_change (nm); }
+    void notify_change (unsigned int nm) override { _damaged |= nm; get_parent ()->get_parent()->notify_change (nm); }
   protected:
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;
@@ -168,7 +168,7 @@ namespace djnn
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
     void draw () override = 0;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override { _damaged |= nm; _parent->get_parent()->notify_change (nm); }
+    void notify_change (unsigned int nm) override { _damaged |= nm; get_parent ()->get_parent()->notify_change (nm); }
   protected:
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;

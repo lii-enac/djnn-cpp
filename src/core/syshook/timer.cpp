@@ -30,17 +30,22 @@ namespace djnn
 {
 
   Timer::Timer (int period)
+  :
+  _delay (this, "delay", period),
+  _end (this, "end")
   {
-    _delay = new IntProperty (this, "delay", period);
-    _end = new Blank (this, "end");
+    //_delay = new IntProperty (this, "delay", period);
+    //_end = new Blank (this, "end");
   }
 
   Timer::Timer (Process *p, const std::string& n, int period)
-  : Process (n)
+  : Process (n),
+  _delay (this, "delay", period),
+  _end (this, "end")
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
-    _delay = new IntProperty (this, "delay", period);
-    _end = new Blank (this, "end");
+    //_delay = new IntProperty (this, "delay", period);
+    //_end = new Blank (this, "end");
     Process::finalize_construction (p);
   }
 
@@ -71,8 +76,8 @@ namespace djnn
   Timer::~Timer ()
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
-    delete _end;
-    delete _delay;
+    //delete _end;
+    //delete _delay;
   }
 
   void
@@ -99,7 +104,7 @@ namespace djnn
       djnn::release_exclusive_access (DBG_REL);
       return;
     } else {
-      duration = _delay->get_value ();
+      duration = _delay.get_value ();
       djnn::release_exclusive_access (DBG_REL);
     }
 
@@ -115,7 +120,7 @@ namespace djnn
         // the previous call my take some time, check if we have been cancelled meanwhile
         if(!thread_local_cancelled && !get_please_stop ()) {
           set_activation_state (DEACTIVATED);
-          _end->notify_activation (); // propagating
+          _end.notify_activation (); // propagating
           GRAPH_EXEC; // executing
           if(!thread_local_cancelled) { // let's finish properly if we were not cancelled
             cancelled = nullptr; // make our external source aware that we are finised
@@ -142,8 +147,8 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("core:timer");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
-    AbstractSerializer::serializer->int_attribute ("delay", _delay->get_value ());
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->int_attribute ("delay", _delay.get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

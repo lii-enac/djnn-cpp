@@ -33,8 +33,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~CosineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (cos (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -56,8 +56,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~SineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (sin (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -79,8 +79,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~TangentAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (tan (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -102,8 +102,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~ArcCosineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (acos (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -125,8 +125,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~ArcSineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (asin (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -148,8 +148,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~ArcTangentAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (atan (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -171,8 +171,8 @@ namespace djnn
           BinaryOperatorAction (p, n, y, x, result) { Process::finalize_construction (p); }
         virtual ~ArcTangent2Action () {}
         void impl_activate () {
-          //if (_parent->get_state () > activated)
-          if (!_parent->somehow_activating ())
+          //if (get_parent ()->get_state () > activated)
+          if (!get_parent ()->somehow_activating ())
             return;
           _result->set_value (atan2 (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
@@ -194,8 +194,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicCosineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (cosh (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -217,8 +217,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicSineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (sinh (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -240,8 +240,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicTangentAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (tanh (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -263,8 +263,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicArcCosineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (acosh (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -286,8 +286,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicArcSineAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (asinh (((DoubleProperty*) _input)->get_value ()), true);
       }
@@ -309,8 +309,8 @@ namespace djnn
         UnaryOperatorAction (p, n, input, output) { Process::finalize_construction (p); }
       virtual ~HyperbolicArcTangentAction () {}
       void impl_activate () {
-        //if (_parent->get_state () > activated)
-        if (!_parent->somehow_activating ())
+        //if (get_parent ()->get_state () > activated)
+        if (!get_parent ()->somehow_activating ())
           return;
         _output->set_value (atanh (((DoubleProperty*) _input)->get_value ()), true);
       }

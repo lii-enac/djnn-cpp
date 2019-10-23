@@ -58,7 +58,7 @@ namespace djnn
 
   Oscillator::~Oscillator ()
   { 
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_step, _action);
     Graph::instance ().remove_edge (_action, _output);
     
@@ -77,12 +77,12 @@ namespace djnn
   Oscillator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -104,7 +104,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("animation:oscillator");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);

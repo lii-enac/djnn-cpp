@@ -48,7 +48,7 @@ namespace djnn
     Process* v = _prop->get_value ();
     if (!v) {
       *_to_update = nullptr;
-      ((SrcToDstLink*) _parent)->update_graph ();
+      ((SrcToDstLink*) get_parent ())->update_graph ();
       return;
     }
     Process *res = v->find_component (_spec);
@@ -56,7 +56,7 @@ namespace djnn
       warning (this, "Source or destination not found dynamic link structure");
     }
     *_to_update = res;
-   ((SrcToDstLink*) _parent)->update_graph ();
+   ((SrcToDstLink*) get_parent ())->update_graph ();
   }
 
   void
@@ -65,13 +65,13 @@ namespace djnn
     if (src == 0) {
       error (
           this,
-          "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+          "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + get_name () + ", src spec: " + ispec
               + ", dst spec:" + dspec + ")\n");
     }
     if (dst == 0) {
       error (
           this,
-          "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+          "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + get_name () + ", src spec: " + ispec
               + ", dst spec:" + dspec + ")\n");
     }
 
@@ -86,7 +86,7 @@ namespace djnn
       if (f == 0) {
         error (
             this,
-            "SOURCE not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec + ", dst spec:"
+            "SOURCE not found in (Paused)assignment creation ( name: " + get_name () + ", src spec: " + ispec + ", dst spec:"
                 + dspec + ")\n");
       }
       _src = f; 
@@ -104,14 +104,14 @@ namespace djnn
       if (f == 0) {
         error (
             this,
-            "DESTINATION not found in (Paused)assignment creation ( name: " + _name + ", src spec: " + ispec
+            "DESTINATION not found in (Paused)assignment creation ( name: " + get_name () + ", src spec: " + ispec
                 + ", dst spec:" + dspec + ")\n");
       }
       _dst = dynamic_cast<AbstractProperty*> (f);
       if (_dst == nullptr) {
         warning (
             this,
-            "the DESTINATION of an (Paused)assignment must be a property ( name: " + _name + ", src spec: " + ispec
+            "the DESTINATION of an (Paused)assignment must be a property ( name: " + get_name () + ", src spec: " + ispec
                 + ", dst spec:" + dspec + ")\n");
       }
     }
@@ -121,11 +121,11 @@ namespace djnn
   AbstractAssignment::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
+    if (get_parent ()) {
       if (_update_dst)
-        remove_state_dependency (_parent, _update_dst);
+        remove_state_dependency (get_parent (), _update_dst);
       if (_dst)
-        remove_state_dependency (_parent, _dst);
+        remove_state_dependency (get_parent (), _dst);
     }
 
    /* add new */
@@ -134,7 +134,7 @@ namespace djnn
     if (_dst)
       add_state_dependency (p, _dst);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -165,7 +165,7 @@ namespace djnn
       delete _update_src;
     }
     if (_update_dst) {
-      remove_state_dependency (_parent, _update_dst);
+      remove_state_dependency (get_parent (), _update_dst);
       Graph::instance ().remove_edge (_ref_dst, _update_dst);
 
       delete _c_dst;
@@ -265,7 +265,7 @@ namespace djnn
 
   Assignment::~Assignment ()
   {
-    remove_state_dependency (_parent, _dst);
+    remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
@@ -280,7 +280,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:assignment");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();
@@ -298,7 +298,7 @@ namespace djnn
     _action = new AssignmentAction (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false);
     Graph::instance ().add_edge (_src, _dst);
     if (_src && _dst) {
-      add_state_dependency (_parent, _dst);
+      add_state_dependency (get_parent (), _dst);
     }
   }
 
@@ -330,7 +330,7 @@ namespace djnn
 
   PausedAssignment::~PausedAssignment ()
   {
-    remove_state_dependency (_parent, _dst);
+    remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _action;
@@ -345,7 +345,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:pausedassignment");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();

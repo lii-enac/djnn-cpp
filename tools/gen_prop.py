@@ -86,7 +86,7 @@ namespace djnn
     %(DELETE_COUPLINGS)s;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (_symtable.size () > 2) {
+    if (symtable ().size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
       %(DELETE_DYN_PROPS)s

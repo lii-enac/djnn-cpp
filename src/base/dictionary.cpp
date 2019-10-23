@@ -25,7 +25,7 @@ namespace djnn
   void
   Dictionary::FindAction::impl_activate ()
   {
-    Dictionary* d = (Dictionary*)_parent;
+    Dictionary* d = (Dictionary*)get_parent ();
     Process* key = d->key ()->get_value ();
     auto it = d->get_map ().find (key);
     if (it != d->get_map ().end()) {
@@ -38,7 +38,7 @@ namespace djnn
   void
   Dictionary::DelEntryAction::impl_activate ()
   {
-    Dictionary* d = (Dictionary*)_parent;
+    Dictionary* d = (Dictionary*)get_parent ();
     Process* key = d->key ()->get_value ();
     auto it = d->get_map ().find (key);
     if (it != d->get_map ().end()) {
@@ -52,7 +52,7 @@ namespace djnn
   void
   Dictionary::AddEntryAction::impl_activate ()
   {
-    Dictionary* d = (Dictionary*)_parent;
+    Dictionary* d = (Dictionary*)get_parent ();
     Process* key = d->key ()->get_value ();
     Process* value = d->value ()->get_value ();
     d->get_map ()[key] = value;

@@ -80,7 +80,7 @@ namespace djnn
 
   void
   AbstractTextProperty::dump (int level) {
-    cout << (_parent ? _parent->find_component_name(this) : _name) << " [ " << get_ref_value() << " ]" ;
+    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
   }
 
 
@@ -90,7 +90,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:textproperty");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("value", get_value ());
     AbstractSerializer::serializer->end ();
 
@@ -109,7 +109,7 @@ namespace djnn
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:textproperty");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("value", get_value ());
     AbstractSerializer::serializer->end ();
 

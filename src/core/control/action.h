@@ -31,7 +31,7 @@ namespace djnn {
        * so they has to be deleted manualy from destructor
        */ 
        if (parent) {
-        _state_dependency = parent->state_dependency ();
+        set_state_dependency (parent->state_dependency ());
         Process::set_parent (parent);
       }
     }
@@ -39,7 +39,7 @@ namespace djnn {
 
   protected:
     virtual bool pre_activate () override {
-      if (_parent != 0 && !_parent->somehow_activating () )
+      if (get_parent () != 0 && !get_parent ()->somehow_activating () )
         return false;
       set_activation_state(ACTIVATING);
       return true;

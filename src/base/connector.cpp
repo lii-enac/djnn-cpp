@@ -34,7 +34,7 @@ namespace djnn
   Connector::ConnectorAction::impl_activate ()
   {
     /* do we have to check if the source is activable? */
-    if (_parent->somehow_activating () && *_src && *_dst)
+    if (get_parent ()->somehow_activating () && *_src && *_dst)
       AbstractAssignment::do_assignment (*_src, *_dst, _propagate);
   }
 
@@ -146,14 +146,14 @@ namespace djnn
   Connector::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent && _dst){
-       remove_state_dependency (_parent, _dst);
+    if (get_parent () && _dst){
+       remove_state_dependency (get_parent (), _dst);
     }
 
     if (_dst)
       add_state_dependency (p, _dst);
 
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -178,7 +178,7 @@ namespace djnn
 
   Connector::~Connector ()
   {
-    remove_state_dependency (_parent, _dst);
+    remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _c_src;
@@ -201,7 +201,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("base:connector");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();
@@ -283,7 +283,7 @@ namespace djnn
 
   PausedConnector::~PausedConnector ()
   {
-    remove_state_dependency (_parent, _dst);
+    remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
     delete _c_src;
@@ -294,12 +294,12 @@ namespace djnn
   PausedConnector::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent){
-       remove_state_dependency (_parent, _dst);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), _dst);
     }
 
     add_state_dependency (p, _dst);
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -311,7 +311,7 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("base:pausedconnector");
-    AbstractSerializer::serializer->text_attribute ("id", _name);
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), _src, buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();

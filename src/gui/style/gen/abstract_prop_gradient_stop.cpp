@@ -54,27 +54,27 @@ namespace djnn
 		delete _coffset;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (_symtable.size () > 2) {
+    if (symtable ().size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = _symtable.find ("r");
-			if (it != _symtable.end ())
+      it = symtable ().find ("r");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("g");
-			if (it != _symtable.end ())
+			it = symtable ().find ("g");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("b");
-			if (it != _symtable.end ())
+			it = symtable ().find ("b");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("a");
-			if (it != _symtable.end ())
+			it = symtable ().find ("a");
+			if (it != symtable ().end ())
 				delete it->second;
 
-			it = _symtable.find ("offset");
-			if (it != _symtable.end ())
+			it = symtable ().find ("offset");
+			if (it != symtable ().end ())
 				delete it->second;
     }
   }

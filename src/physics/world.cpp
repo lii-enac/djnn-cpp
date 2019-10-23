@@ -27,7 +27,7 @@ namespace djnn
   {
     double dt;
 
-    World* w = (World*) _parent;
+    World* w = (World*) get_parent ();
     w->get_dt (dt);
 
     w->get_impl ()->step (dt);
@@ -49,16 +49,16 @@ namespace djnn
     Graph::instance ().add_edge (_step, _step_action);
 
     _world_impl = PhysicsBackend::instance ()->create_world (this, x, y, z);
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (_parent->state_dependency (), _step_action);
+    if (get_parent () && get_parent ()->state_dependency () != nullptr)
+      Graph::instance ().add_edge (get_parent ()->state_dependency (), _step_action);
 
     Process::finalize_construction (p);
   }
 
   World::~World ()
   {
-    if (_parent && _parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (_parent->state_dependency (), _step_action);
+    if (get_parent () && get_parent ()->state_dependency () != nullptr)
+      Graph::instance ().remove_edge (get_parent ()->state_dependency (), _step_action);
     Graph::instance ().remove_edge (_step, _step_action);
     delete _cstep;
     delete _step_action;
@@ -176,18 +176,18 @@ namespace djnn
   {
     if (_world == nullptr || _world->somehow_deactivating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running world
-       *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent) and go through its
+       *  on the left side of the current object (cur_child). For this, we take its parent (curget_parent ()) and go through its
        *  children in order to find a world. If no world is found when the list iteration process arrived to (cur_child),
-       *  then we set (cur_child) to its parent (cur_parent), and (cur_parent) is set to (cur_parent->parent).
+       *  then we set (cur_child) to its parent (curget_parent ()), and (curget_parent ()) is set to (curget_parent ()->parent).
        *  May be there is a place for simplification */
       if (_world)
         _world->remove_phy_object (this);
       bool found = false;
-      Process *cur_parent = _parent;
+      Process *cur_parent = get_parent ();
       Process *cur_child = this;
       while (!found && cur_parent != nullptr) {
-        if (cur_parent->get_cpnt_type () == COMPONENT_T) {
-          Container *cont = dynamic_cast<Container*> (cur_parent);
+        if (curget_parent ()->get_cpnt_type () == COMPONENT_T) {
+          Container *cont = dynamic_cast<Container*> (curget_parent ());
           for (auto c : cont->children ()) {
             if (c == cur_child)
               break;
@@ -198,9 +198,9 @@ namespace djnn
           }
         }
         do {
-          cur_child = cur_parent;
-          cur_parent = cur_parent->get_parent ();
-        } while (cur_parent != nullptr && cur_parent->get_cpnt_type () != COMPONENT_T);
+          cur_child = curget_parent ();
+          cur_parent = curget_parent ()->get_parent ();
+        } while (cur_parent != nullptr && curget_parent ()->get_cpnt_type () != COMPONENT_T);
       }
       if (!found) {
         std::cout << "Warning no running world found\n";
@@ -290,7 +290,7 @@ namespace djnn
   void
   PhyObj::D3PhyObjUpdatePosition::impl_activate ()
   {
-    PhyObj* o = (PhyObj*) _parent;
+    PhyObj* o = (PhyObj*) get_parent ();
     if (o->update_from_engine ())
       return;
     PhysicsBackend::instance ()->update_position (o);
@@ -299,7 +299,7 @@ namespace djnn
   void
   PhyObj::D3PhyObjUpdateVelocity::impl_activate ()
   {
-    PhyObj* o = (PhyObj*) _parent;
+    PhyObj* o = (PhyObj*) get_parent ();
     if (o->update_from_engine ())
       return;
     PhysicsBackend::instance ()->update_velocity (o);

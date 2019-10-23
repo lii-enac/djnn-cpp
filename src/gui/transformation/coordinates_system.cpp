@@ -81,7 +81,7 @@ namespace djnn
   ScreenToLocal::~ScreenToLocal () 
   {
 
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance().remove_edge(_inX, _action);
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);
@@ -100,13 +100,13 @@ namespace djnn
   ScreenToLocal::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void
@@ -177,7 +177,7 @@ namespace djnn
   LocalToScreen::~LocalToScreen () 
   {
 
-    remove_state_dependency (_parent, _action);
+    remove_state_dependency (get_parent (), _action);
     Graph::instance().remove_edge(_inX, _action);
     Graph::instance().remove_edge(_inY, _action);
     Graph::instance().remove_edge(_action, _outX);
@@ -196,13 +196,13 @@ namespace djnn
   LocalToScreen::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (_parent) {
-       remove_state_dependency (_parent, _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (p, _action);
     
-    _parent = p; 
+    Process::set_parent (p); 
   }
 
   void

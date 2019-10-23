@@ -32,8 +32,8 @@ namespace djnn {
       SynchronizerAction (Process* parent, const string &name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
-        if (_parent->somehow_activating ())
-          ((Synchronizer*) _parent)->propagate ();
+        if (get_parent ()->somehow_activating ())
+          ((Synchronizer*) get_parent ())->propagate ();
       }
       void impl_deactivate () override {}
     };
