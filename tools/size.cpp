@@ -5,6 +5,9 @@
 #include "gui/shapes/gen/rectangle.h"
 
 #include <iostream>
+#include <vector>
+#include <map>
+#include <string>
 
 using namespace std;
 using namespace djnn;
@@ -20,6 +23,10 @@ main(int argc, char* argv[])
 	PSIZE(int);
 	PSIZE(double);
 	PSIZE(void*);
+	PSIZE(vector<void*>);
+	PSIZE(string);
+	typedef map<string, void*> symtable_t;
+	PSIZE(symtable_t);
 	PSIZE(Process);
 	PSIZE(Coupling);
 	PSIZE(IntProperty);

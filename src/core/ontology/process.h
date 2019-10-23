@@ -166,7 +166,6 @@ namespace djnn {
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
-    string _dbg_info;
 
   protected:
     symtable_t _symtable;
@@ -174,6 +173,12 @@ namespace djnn {
     Process *_parent;
     Process *_state_dependency;
     Process *_data;
+
+#ifdef DEBUG
+    string _dbg_info;
+#else
+    static string _dbg_info;
+#endif
 
   protected:
     unsigned int _bitset;

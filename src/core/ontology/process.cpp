@@ -28,6 +28,11 @@ namespace djnn
 
   int Process::_nb_anonymous = 0;
 
+#ifndef DEBUG
+  string Process::_dbg_info = "no dbg info";
+#endif
+
+
   Process::Process (const string& name, bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
   {
