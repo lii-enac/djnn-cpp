@@ -106,7 +106,7 @@ namespace djnn
 
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;
-    std::vector<Process*> _scheduled_processes;
+    std::vector<Process*> _scheduled_activation_processes;
     int _cur_date;
     bool _sorted;
   };

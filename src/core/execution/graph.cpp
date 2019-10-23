@@ -409,7 +409,7 @@ namespace djnn
   void
   Graph::schedule_activation (Process *p)
   {
-    _scheduled_processes.push_back(p);
+    _scheduled_activation_processes.push_back(p);
   }
 
   void
@@ -423,13 +423,13 @@ namespace djnn
     //graph_mutex.lock ();
    
     /* pre_execution 
-        - removed duplicates from _scheduled_processes
-        - and notify_activation on_scheduled_processes before real graph execution 
+        - removed duplicates from _scheduled_activation_processes
+        - and notify_activation _scheduled_activation_processes before real graph execution 
     */
     {
       map<Process*, int> toto;
 
-      for (auto p: _scheduled_processes) {
+      for (auto p: _scheduled_activation_processes) {
         if (toto.find (p) == toto.end ())
           p->notify_activation ();
         /* DEBUG DUPLICATES */
@@ -464,7 +464,7 @@ namespace djnn
     _to_delete.clear ();
    }
 
-   _scheduled_processes.clear ();
+   _scheduled_activation_processes.clear ();
 
    //graph_mutex.unlock ();
 
