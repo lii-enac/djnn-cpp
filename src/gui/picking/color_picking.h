@@ -34,6 +34,7 @@ namespace djnn {
     AbstractGShape* pick (double x, double y);
     void add_gobj (AbstractGShape* gobj);
     virtual int get_pixel(unsigned int x, unsigned int y) = 0;
+    virtual void object_deactivated (AbstractGShape* gobj);
 
     // ColorPicking
     unsigned int pick_color () { return _pick_color; }
