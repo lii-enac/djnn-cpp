@@ -86,6 +86,7 @@ namespace djnn
     void exec ();
     void clear ();
     void add_process_to_delete (Process *p) { _to_delete.push_back (p); }
+    void schedule_activation (Process* p);
     const Vertex::vertices_t& get_sorted () const { return _sorted_vertices; }
 
     void print_graph  () const;
@@ -105,6 +106,7 @@ namespace djnn
 
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;
+    std::vector<Process*> _scheduled_processes;
     int _cur_date;
     bool _sorted;
   };
