@@ -87,13 +87,13 @@ namespace djnn
     Picking::object_deactivated (gobj);
     
     // FIXME : should we delete object from picking_view when deactivated
-    // auto it = _color_map.begin ();
-    // for ( ; it != _color_map.end () ; ++it) {
-    //   if (it->second == gobj)
-    //     break;
-    // }
-    // if (it != _color_map.end ())
-    //   _color_map.erase (it);
+    auto it = _color_map.begin ();
+    for ( ; it != _color_map.end () ; ++it) {
+      if (it->second == gobj)
+        break;
+    }
+    if (it != _color_map.end ())
+      _color_map.erase (it);
 
   }
 
