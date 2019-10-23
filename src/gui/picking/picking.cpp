@@ -112,8 +112,9 @@ namespace djnn
   }
 
   bool
-  Picking::genericEnterLeave (AbstractGShape* picked) {
-    
+  Picking::genericEnterLeave (AbstractGShape* picked) 
+  {
+
     auto s = picked;
     bool exec_ = false;
 
@@ -122,11 +123,11 @@ namespace djnn
         if (_hovered_shape != nullptr) {
           Process* p1 = _hovered_shape->get_ui ()->leave;
           Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
-          p1->notify_activation ();
-          p2->notify_activation ();
+          p1->schedule_activation ();
+          p2->schedule_activation ();
         }
-        s->get_ui ()->enter->notify_activation ();
-        s->get_ui ()->mouse_enter->notify_activation ();
+        s->get_ui ()->enter->schedule_activation ();
+        s->get_ui ()->mouse_enter->schedule_activation ();
         
         /* new _hovered_shape */
         _hovered_shape = s;
@@ -137,8 +138,8 @@ namespace djnn
     else if (_hovered_shape != nullptr) {
         Process* p1 = _hovered_shape->get_ui ()->leave;
         Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
-        p1->notify_activation ();
-        p2->notify_activation ();
+        p1->schedule_activation ();
+        p2->schedule_activation ();
         
         /* reset */
         _hovered_shape = nullptr;
@@ -171,8 +172,8 @@ namespace djnn
           set_local_coords (s, nullptr, x, y, true);
         }
       } 
-      s->get_ui ()->move->notify_activation ();
-      s->get_ui ()->mouse_move->notify_activation ();
+      s->get_ui ()->move->schedule_activation ();
+      s->get_ui ()->mouse_move->schedule_activation ();
     }
 
     exec_ |= genericEnterLeave(s);
@@ -193,8 +194,8 @@ namespace djnn
   Picking::common_press_notify (AbstractGShape *s)
   {
     if (s != _hovered_shape)
-      s->get_ui()->enter->notify_activation ();
-    s->get_ui()->press->notify_activation ();
+      s->get_ui()->enter->schedule_activation ();
+    s->get_ui()->press->schedule_activation ();
 
     /* reset _hovered_shape and _catched_shape */
     _catched_shape = s;
@@ -213,7 +214,7 @@ namespace djnn
     _win->move_x ()->set_value (x, true);
     _win->move_y ()->set_value (y, true);
     /* windows event */
-    _win->press ()->notify_activation ();
+    _win->press ()->schedule_activation ();
     if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
       exec_ = true;
     }
@@ -232,8 +233,8 @@ namespace djnn
 
       /* event */
       if (s != _hovered_shape)
-        s->get_ui()->mouse_enter->notify_activation ();
-      s->get_ui()->mouse_press->notify_activation ();
+        s->get_ui()->mouse_enter->schedule_activation ();
+      s->get_ui()->mouse_press->schedule_activation ();
       common_press_notify (s);
 
       exec_ = true;
@@ -309,7 +310,7 @@ namespace djnn
     if (y != old_y)
       _win->move_y ()->set_value (y, true);
     /* windows event */
-    _win->move ()->notify_activation ();
+    _win->move ()->schedule_activation ();
     if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
       exec_ = true;
     }
@@ -331,8 +332,8 @@ namespace djnn
       set_local_coords (s, nullptr, x, y, true);
 
       /* event */
-      s->get_ui()->move->notify_activation ();
-      s->get_ui()->mouse_move->notify_activation ();
+      s->get_ui()->move->schedule_activation ();
+      s->get_ui()->mouse_move->schedule_activation ();
 
       exec_ = true;
     }
@@ -358,8 +359,8 @@ namespace djnn
        /* event */
       Process* p1 = _catched_shape->get_ui ()->move;
       Process* p2 = _catched_shape->get_ui ()->mouse_move;
-      p1->notify_activation ();
-      p2->notify_activation ();
+      p1->schedule_activation ();
+      p2->schedule_activation ();
 
       exec_ = true;
     }
@@ -413,13 +414,13 @@ namespace djnn
         set_local_coords (s, t, x, y, true);
 
         /* touch and shape event */
-        s->get_ui ()->move->notify_activation ();
+        s->get_ui ()->move->schedule_activation ();
         t->enter ();
         
       }
 
       /* touch event */
-      t->get_move ()->notify_activation ();
+      t->get_move ()->schedule_activation ();
       genericEnterLeave (s);
 
     } 
@@ -439,7 +440,7 @@ namespace djnn
 
     /* windows event */
     if (_win->release ()->has_coupling ()) {
-      _win->release ()->notify_activation ();
+      _win->release ()->schedule_activation ();
 
       exec_ = true;
     }
@@ -449,12 +450,12 @@ namespace djnn
     if (s) {
       /* event */
 
-      s->get_ui ()->release->notify_activation ();
-      s->get_ui ()->mouse_release->notify_activation ();
+      s->get_ui ()->release->schedule_activation ();
+      s->get_ui ()->mouse_release->schedule_activation ();
       /* event if no mouse tracking */
       if (mouse_tracking == 0) {
-        s->get_ui ()->leave->notify_activation ();
-        s->get_ui ()->mouse_leave->notify_activation ();
+        s->get_ui ()->leave->schedule_activation ();
+        s->get_ui ()->mouse_leave->schedule_activation ();
       }
 
       exec_ = true;
@@ -469,8 +470,8 @@ namespace djnn
     if (_catched_shape && _catched_shape != s) {
       Process* p1 = _catched_shape->get_ui ()->release;
       Process* p2 = _catched_shape->get_ui ()->mouse_release;
-      p1->notify_activation ();
-      p2->notify_activation ();
+      p1->schedule_activation ();
+      p2->schedule_activation ();
       exec_ = true;
     }
     _catched_shape = nullptr;
@@ -544,13 +545,13 @@ namespace djnn
 
     /* common shape event */
     if (s) {
-      s->get_ui ()->release->notify_activation ();
-      s->get_ui ()->leave->notify_activation ();
+      s->get_ui ()->release->schedule_activation ();
+      s->get_ui ()->leave->schedule_activation ();
     }
 
     /* reset _catched_shape */
     if (_catched_shape && _catched_shape != s) {
-      _catched_shape->get_ui ()->release->notify_activation ();
+      _catched_shape->get_ui ()->release->schedule_activation ();
     }
     _catched_shape = nullptr;
 
@@ -569,7 +570,7 @@ namespace djnn
     _win->wheel_dx ()->set_value (x, true);
     _win->wheel_dy ()->set_value (y, true);
     /* window event */
-    _win->wheel ()->notify_activation ();
+    _win->wheel ()->schedule_activation ();
     if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
       exec_ = true;
     }
