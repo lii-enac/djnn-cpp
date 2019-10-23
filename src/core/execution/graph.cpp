@@ -415,29 +415,24 @@ namespace djnn
   void
   Graph::exec ()
   {
-
     #if _PERF_TEST
     t1 ();
     #endif
 
-    //graph_mutex.lock ();
-   
-    /* pre_execution 
-        - removed duplicates from _scheduled_activation_processes
-        - and notify_activation _scheduled_activation_processes before real graph execution 
-    */
+    //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     {
-      map<Process*, int> toto;
+      map<Process*, int> already_done;
 
       for (auto p: _scheduled_activation_processes) {
-        if (toto.find (p) == toto.end ())
+        if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();
+          already_done[p];
+        }
         /* DEBUG DUPLICATES */
         //else
         //  cerr << "DUPLICATES " << (p->get_parent () ? p->get_parent ()->get_name () : "NUUULL") << "/" << p->get_name () << endl;
-
-        toto[p] = 0;
       }
+      _scheduled_activation_processes.clear ();
     }
 
     bool is_end = false;
@@ -454,19 +449,14 @@ namespace djnn
         sort ();
         is_end = false;
       }
-   }
+    }
 
-   /* them execute delayed delete on processes*/ 
-   if (!_scheduled_delete_processes.empty ()) {
+    /* then execute delayed delete on processes*/ 
     for (auto p: _scheduled_delete_processes) {
       delete p;
     }
     _scheduled_delete_processes.clear ();
-   }
-
-   _scheduled_activation_processes.clear ();
-
-   //graph_mutex.unlock ();
+   
 
     #if _PERF_TEST
     // print in GREEN
