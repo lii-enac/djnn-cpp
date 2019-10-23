@@ -1,11 +1,13 @@
 #pragma once
 
-#include "../core/ontology/process.h"
-#include "../core/ontology/coupling.h"
-#include "../core/control/action.h"
-#include "../core/tree/bool_property.h"
-#include "../core/tree/spike.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/tree/bool_property.h"
+#include "core/tree/spike.h"
 #include "window.h"
+
+#include <mutex> // for once_flag
 
 namespace djnn {
 
