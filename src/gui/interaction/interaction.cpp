@@ -14,8 +14,13 @@
  */
 
 #include "interaction.h"
-#include "../../core/tree/list.h"
-#include "../transformation/transformations.h"
+
+#include "core/execution/graph.h"
+#include "core/tree/list.h"
+#include "gui/transformation/transformations.h"
+
+
+
 #include <cmath>
 #include <iostream>
 

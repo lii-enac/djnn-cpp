@@ -1,7 +1,8 @@
 #include "update_drawing.h"
 
-#include "../core/control/action.h"
-#include "../core/tree/bool_property.h"
+#include "core/control/action.h"
+#include "core/execution/graph.h"
+#include "core/tree/bool_property.h"
 
 #include <algorithm>
 

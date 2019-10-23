@@ -13,13 +13,16 @@
  *
  */
 
+#include "shapes.h"
+
 #include "../backend.h"
 #include "../abstract_backend.h"
 #include "../../display/display.h"
 #include "../../display/abstract_display.h"
 #include "../../display/window.h"
-#include "shapes.h"
-#include "../../core/ontology/coupling.h"
+
+#include "core/ontology/coupling.h"
+#include "core/execution/graph.h"
 
 namespace djnn
 {

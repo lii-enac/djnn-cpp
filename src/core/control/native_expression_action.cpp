@@ -13,6 +13,7 @@
  */
 
 #include "native_expression_action.h"
+#include "core/execution/graph.h"
 
 #include <cassert>
 

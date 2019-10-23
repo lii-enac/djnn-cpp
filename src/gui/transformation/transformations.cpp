@@ -24,6 +24,9 @@
 #include "../../display/abstract_display.h"
 #include "../../display/window.h"
 
+#include "core/execution/graph.h"
+
+
 #include <array>
 #include <cmath>
 

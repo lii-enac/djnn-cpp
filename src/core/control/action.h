@@ -16,8 +16,7 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../execution/graph.h"
+#include "core/ontology/process.h"
 
 namespace djnn {
 
@@ -27,9 +26,9 @@ namespace djnn {
     Action (Process *parent, const std::string &n, bool model = false) : Process (n, model) 
     {
       /* note:
-       * finaliaze_constructor for action 
+       * finalize_constructor for action 
        * they add a symbol process but do not appear in _children Component
-       * so they has to be delete manualy from destructor
+       * so they has to be deleted manualy from destructor
        */ 
        if (parent) {
         _state_dependency = parent->state_dependency ();

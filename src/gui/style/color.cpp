@@ -17,6 +17,9 @@
 #include "../../core/tree/int_property.h"
 #include "../../core/ontology/coupling.h"
 
+#include "core/execution/graph.h"
+
+
 namespace djnn
 {
 

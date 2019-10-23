@@ -19,6 +19,9 @@
 #include "../../display/display.h"
 #include "../../display/abstract_display.h"
 
+#include "core/execution/graph.h"
+
+
 namespace djnn
 {
   Group::Group (Process* parent, const string &n) :

@@ -23,6 +23,9 @@
 #include "../../core/tree/blank.h"
 #include "shapes.h"
 
+#include "core/execution/graph.h"
+
+
 #include <iostream>
 
 namespace djnn

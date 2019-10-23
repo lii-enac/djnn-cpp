@@ -20,6 +20,9 @@
 #include "../backend.h"
 #include "../abstract_backend.h"
 
+#include "core/execution/graph.h"
+
+
 #include <array>
 #include <cmath>
 
