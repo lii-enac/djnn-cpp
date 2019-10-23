@@ -177,6 +177,12 @@ namespace djnn
   }
 
   void
+  Process::schedule_delete ()
+  {
+    Graph::instance().schedule_delete (this);
+  }
+
+  void
   Process::notify_deactivation ()
   {
     /* WARNING: disputable choice.

@@ -96,6 +96,7 @@ namespace djnn {
     virtual void coupling_deactivation_hook () {};
     void         notify_activation ();
     void         schedule_activation ();
+    void         schedule_delete ();
     void         notify_deactivation ();
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
   

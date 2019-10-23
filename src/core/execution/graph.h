@@ -85,7 +85,7 @@ namespace djnn
     void sort ();
     void exec ();
     void clear ();
-    void add_process_to_delete (Process *p) { _to_delete.push_back (p); }
+    void schedule_delete (Process *p) { _scheduled_delete_processes.push_back (p); }
     void schedule_activation (Process* p);
     const Vertex::vertices_t& get_sorted () const { return _sorted_vertices; }
 
@@ -95,7 +95,6 @@ namespace djnn
   private:
     static Graph* _instance;
     static std::once_flag onceFlag;
-    std::vector<Process*> _to_delete;
     Graph ();
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);
@@ -106,6 +105,7 @@ namespace djnn
 
     Vertex::vertices_t _sorted_vertices;
     Vertex::vertices_t _output_nodes;
+    std::vector<Process*> _scheduled_delete_processes;
     std::vector<Process*> _scheduled_activation_processes;
     int _cur_date;
     bool _sorted;

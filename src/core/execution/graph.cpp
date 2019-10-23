@@ -455,13 +455,13 @@ namespace djnn
         is_end = false;
       }
    }
-   /* use for touch */ 
-   if (!_to_delete.empty ()) {
-    for (auto p: _to_delete) {
+
+   /* them execute delayed delete on processes*/ 
+   if (!_scheduled_delete_processes.empty ()) {
+    for (auto p: _scheduled_delete_processes) {
       delete p;
-      //p = nullptr;
     }
-    _to_delete.clear ();
+    _scheduled_delete_processes.clear ();
    }
 
    _scheduled_activation_processes.clear ();
