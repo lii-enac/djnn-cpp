@@ -277,7 +277,7 @@ namespace djnn
         t->leave ();
       }
       _active_touches.erase (it);
-      Graph::instance().add_process_to_delete (t);
+      t->schedule_delete ();
     }
     t = new Touch (_win->touches (), to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
@@ -540,7 +540,7 @@ namespace djnn
       _active_touches.erase (it);
 
       /* delay touch delete */
-      Graph::instance().add_process_to_delete (t);
+      t->schedule_delete ();
     }
 
     /* common shape event */
