@@ -55,6 +55,22 @@
 
 namespace djnn
 {
+  // new, plain objects
+  Timer::Timer (int period)
+  :
+  _delay (this, "delay", period),
+  _end (this, "end")
+  {
+  }
+
+  Timer::Timer (Process *p, const std::string& n, int period)
+  : Process (n),
+  _delay (this, "delay", period),
+  _end (this, "end")
+  {
+    Process::finalize_construction (p);
+  }
+
   /*
   // old pointer-based
   Timer::Timer (int period)
@@ -63,15 +79,6 @@ namespace djnn
     _end = new Blank (this, "end");
   }
   */
-
-  
-  // new, plain objects
-  Timer::Timer (int period)
-  :
-  _delay (this, "delay", period),
-  _end (this, "end")
-  {
-  }
 
   /*
   // configurable
@@ -82,14 +89,6 @@ namespace djnn
   END_CAI
   }
   */
-
-  Timer::Timer (Process *p, const std::string& n, int period)
-  : Process (n),
-  _delay (this, "delay", period),
-  _end (this, "end")
-  {
-    Process::finalize_construction (p);
-  }
 
   Timer::Timer (std::chrono::milliseconds period)
   : Timer(period.count())
@@ -113,6 +112,10 @@ namespace djnn
   }
 #endif
 
+  // new destructor, plain objects
+  Timer::~Timer ()
+  {
+  }
 
   /*
   // old destructor, pointer based
@@ -122,14 +125,7 @@ namespace djnn
     delete _delay;
   }
   */
-
   
-  // new destructor, plain objects
-  Timer::~Timer ()
-  {
-  }
-  
-
   /*
   // configurable
   Timer::~Timer ()
