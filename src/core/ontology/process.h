@@ -154,8 +154,8 @@ namespace djnn {
 
   private:
     typedef vector<Coupling*> couplings_t;
-    const couplings_t& get_activation_couplings () const;
-    const couplings_t& get_deactivation_couplings () const;
+    const couplings_t& get_activation_couplings () const { return _activation_couplings; }
+    const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
 
   private:
     static int _nb_anonymous;
@@ -165,25 +165,21 @@ namespace djnn {
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
     Vertex *_vertex;
-
-  //protected:
-  private:
     symtable_t _symtable;
     string _name;
     Process *_parent;
     Process *_state_dependency;
     Process *_data;
+    unsigned int _bitset;
 
 #ifdef DEBUG
     string _dbg_info;
 #else
     static string _dbg_info;
 #endif
-
-  protected:
-    unsigned int _bitset;
 // <<instance fields end here
-    
+
+  public:
     enum bit_shift {
         MODEL_SHIFT            = 0 ,
         ACTIVATION_FLAG_SHIFT  = 1 ,

@@ -239,7 +239,7 @@ namespace djnn
       _deactivation_couplings.end ()
     );
   }
-
+/*
   const Process::couplings_t&
   Process::get_activation_couplings () const
   {
@@ -251,7 +251,7 @@ namespace djnn
   {
     return _deactivation_couplings;
   }
-
+*/
 
   // tree, component, symtable 
 
