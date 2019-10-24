@@ -26,26 +26,68 @@
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 
+#ifdef __cplusplus // C++
+
+#if 1 // plain objects
+
+#define BEG_CAI :
+#define ALLOC_AND_INIT(type, name, ...) name (__VA_ARGS__)
+#define END_CAI {
+#define UNINIT_AND_DEALLOC(type, name, ...)
+
+#else // pointers
+
+#define BEG_CAI {
+#define ALLOC_AND_INIT(type, name, ...) name = new type (__VA_ARGS__)
+#define END_CAI
+#define UNINIT_AND_DEALLOC (type, name, ...) delete name;
+
+#endif
+
+#else // C // not tested
+
+#define BEG_CAI {
+#define ALLOC_AND_INIT(type, name, ...) name = (type*)malloc(sizeof(type)); type#_init(__VA_ARGS__);
+#define END_CAI
+#define UNINIT_AND_DEALLOC (type, name, ...) free(name);
+
+#endif
+
 namespace djnn
 {
+  /*
+  // old pointer-based
+  Timer::Timer (int period)
+  {
+    _delay = new IntProperty (this, "delay", period);
+    _end = new Blank (this, "end");
+  }
+  */
 
+  
+  // new, plain objects
   Timer::Timer (int period)
   :
   _delay (this, "delay", period),
   _end (this, "end")
   {
-    //_delay = new IntProperty (this, "delay", period);
-    //_end = new Blank (this, "end");
   }
+
+  /*
+  // configurable
+  Timer::Timer (int period)
+  BEG_CAI
+  ALLOC_AND_INIT(IntProperty, _delay, this, "delay", period),
+  ALLOC_AND_INIT(Blank, _end, this, "end")
+  END_CAI
+  }
+  */
 
   Timer::Timer (Process *p, const std::string& n, int period)
   : Process (n),
   _delay (this, "delay", period),
   _end (this, "end")
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
-    //_delay = new IntProperty (this, "delay", period);
-    //_end = new Blank (this, "end");
     Process::finalize_construction (p);
   }
 
@@ -72,13 +114,30 @@ namespace djnn
 #endif
 
 
-
+  /*
+  // old destructor, pointer based
   Timer::~Timer ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
-    //delete _end;
-    //delete _delay;
+    delete _end;
+    delete _delay;
   }
+  */
+
+  
+  // new destructor, plain objects
+  Timer::~Timer ()
+  {
+  }
+  
+
+  /*
+  // configurable
+  Timer::~Timer ()
+  {
+    UNINIT_AND_DEALLOC(IntProperty, _delay);
+    UNINIT_AND_DEALLOC(Blank, _end);
+  }
+  */
 
   void
   Timer::impl_activate ()
