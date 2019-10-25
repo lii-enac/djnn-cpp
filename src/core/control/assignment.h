@@ -46,9 +46,6 @@ namespace djnn {
   };
 
   class AbstractAssignment : public SrcToDstLink {
-   struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec); };
-   friend struct Init;
-   
    friend class Assignment;
    friend class PausedAssignment;
    /* PRIVATE CLASS */
@@ -68,10 +65,7 @@ namespace djnn {
     AbstractProperty** _dst;
     bool _propagate;
   };
-
-  private:
-    //void init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec);
-    void check_init(const string& ispec, const string& dspec);
+    
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
@@ -82,19 +76,24 @@ namespace djnn {
   protected:
     void set_parent (Process* p) override;
 
+    struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec); };
+    friend struct Init;
+    void check_init(const string& ispec, const string& dspec);
+
     struct ref_info {
       ref_info() : _ref(nullptr) {}
+      bool is_ref() const { return _ref != nullptr; }
       RefProperty * _ref;
       string _name;
     };
     struct ref_update {
-        ref_update() {}
-        ref_update(Process *p, const ref_info& ri, Process* to_update) :
-          _update(p, "update_src_action", ri._ref, ri._name, &to_update),
-          _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
-          { _update.impl_activate(); }
-        UpdateSrcOrDst _update;
-        Coupling _c;
+      ref_update() {}
+      ref_update(Process *p, const ref_info& ri, Process* to_update) :
+        _update(p, "update_src_action", ri._ref, ri._name, &to_update),
+        _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
+        { _update.impl_activate(); }
+      UpdateSrcOrDst _update;
+      Coupling _c;
     };
 
     ref_info _ref_info_src, _ref_info_dst;

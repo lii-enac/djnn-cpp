@@ -118,10 +118,7 @@ namespace djnn
       }
     }
 
-    if(_ref_info_dst._ref) {
-      Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
-    }
-    else {
+    if(!_ref_info_dst._ref) {
       if (_dst == 0) {
         error (
             this,
@@ -135,11 +132,14 @@ namespace djnn
   :
   SrcToDstLink (isModel),
   _init(this, "", src, ispec, dst, dspec),
-  _ref_update_src(_ref_info_src._ref ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
-  _ref_update_dst(_ref_info_dst._ref ? ref_update(this, _ref_info_dst, dst) : ref_update()),
-  _src(!_ref_info_src._ref && src ? src->find_component (ispec) : nullptr),
-  _dst(!_ref_info_dst._ref && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
+  _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
+  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
   {
+    if(_ref_info_dst._ref) {
+      Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
+    }
     check_init(ispec, dspec);
   }
 
@@ -148,11 +148,14 @@ namespace djnn
   :
   SrcToDstLink (p, n, isModel),
   _init(this, n, src, ispec, dst, dspec),
-  _ref_update_src(_ref_info_src._ref ? ref_update(this, _ref_info_src, src) : ref_update()),
-  _ref_update_dst(_ref_info_dst._ref ? ref_update(this, _ref_info_dst, dst) : ref_update()),
-  _src(!_ref_info_src._ref && src ? src->find_component (ispec) : nullptr),
-  _dst(!_ref_info_dst._ref && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()),
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
+  _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
+  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
   {
+    if(_ref_info_dst._ref) {
+      Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
+    }
     check_init(ispec, dspec);
   }
 

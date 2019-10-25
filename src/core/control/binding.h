@@ -53,19 +53,44 @@ namespace djnn {
     Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate);
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
-    void impl_activate () override {  if (_update_src) _update_src->impl_activate (); if (_c_src) _c_src->enable(); };
-    void impl_deactivate () override { if (_c_src) _c_src->disable (); }
+    void impl_activate () override { 
+      if(_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+      _c_src.enable();
+    };
+    void impl_deactivate () override {
+      _c_src.disable ();
+    }
     void update_graph () override;
     void serialize (const string& format) override;
   private:
     void set_parent (Process* p) override;
-    void init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate);
+
+    struct Init { Init(Binding *, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate); };
+    friend struct Init;
+    void check_init(const string& ispec, const string& dspec);
+
+    struct ref_info {
+      ref_info() : _ref(nullptr) {}
+      bool is_ref() const { return _ref != nullptr; }
+      RefProperty * _ref;
+      string _name;
+    };
+    struct ref_update {
+      ref_update() {}
+      ref_update(Process *p, const ref_info& ri, Process* to_update) :
+        _update(p, "update_src_action", ri._ref, ri._name, &to_update),
+        _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
+        { _update.impl_activate(); }
+      UpdateSrcOrDst _update;
+      Coupling _c;
+    };
+
+    ref_info _ref_info_src, _ref_info_dst;
+    Init _init; // will be "created" third
     Process *_src, *_dst;
-    RefProperty *_ref_src, *_ref_dst;
-    Coupling *_c_src;
-    BindingAction *_action;
-    UpdateSrcOrDst* _update_src, *_update_dst;
-    Coupling *_c_update_src, *_c_update_dst;
-    bool _has_coupling;
+    BindingAction _action;
+    Coupling _c_src;
+    ref_update _ref_update_src, _ref_update_dst;
+    bool _has_coupling;    
   };
 }

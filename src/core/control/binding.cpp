@@ -31,18 +31,32 @@ namespace djnn
     set_binding_action (activate); 
   }
 
+  Binding::Init::Init(Binding * b, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate)
+  {
+    if (src == 0) {
+      error (b,
+       "src argument cannot be null in binding creation (" + b->get_name () + ", " + ispec + ", " + dspec + ")");
+    }
+    if (dst == 0) {
+      error (b,
+       "dst argument cannot be null in binding creation (" + b->get_name () + ", " + ispec + ", " + dspec + ")");
+    }
+
+    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
+    b->_ref_info_src._ref = ref_src_pair.first;
+    b->_ref_info_src._name = ref_src_pair.second;
+
+    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
+    b->_ref_info_dst._ref = ref_dst_pair.first;
+    b->_ref_info_dst._name = ref_dst_pair.second;
+  }
+
+#if 0
   void
   Binding::init_binding (Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec,
 			 bool to_activate)
   {
-    if (src == 0) {
-      error (this,
-	     "src argument cannot be null in binding creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
-    }
-    if (dst == 0) {
-      error (this,
-	     "dst argument cannot be null in binding creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
-    }
+    
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     if (ref_src_pair.first != nullptr) {
       _ref_src = ref_src_pair.first;
@@ -74,6 +88,7 @@ namespace djnn
     string src_name = _src ? _src->get_name () : "";
     string dst_name = _dst ? _dst->get_name () : "";
     _action = new BindingAction (this, "binding_" + src_name + "_to_" + dst_name + "_action", to_activate);
+    //_action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
 
     if (_src) {
       if (on_activation)
@@ -89,6 +104,7 @@ namespace djnn
     if (_update_src) _update_src->impl_activate ();
     if (_update_dst) _update_dst->impl_activate ();
   }
+#endif
 
   void
   Binding::set_parent (Process* p)
@@ -107,55 +123,110 @@ namespace djnn
   void
   Binding::update_graph ()
   {
-    if (_has_coupling) {
-      delete _c_src;
-      _c_src = nullptr;
-    }
+    // if (_has_coupling) {
+    //   delete _c_src;
+    //   _c_src = nullptr;
+    // }
+    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
     if (_src && _dst) {
-      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
+      //_c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
+      _c_src.change_source(_src);
       _has_coupling = true;
       if (get_activation_state() != ACTIVATED ) {
-        _c_src->disable ();
+        _c_src.disable ();
       }
     } else {
       _has_coupling = false;
     }
   }
 
-  Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec) :
-      _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _action (nullptr), _update_src (
-          nullptr), _update_dst (nullptr), _c_update_src (nullptr), _c_update_dst (nullptr), _has_coupling (false)
+  void
+  Binding::check_init(const string& ispec, const string& dspec)
   {
-    init_binding (src, ispec, true, dst, dspec, true);
+    if(!_ref_info_src._ref) {
+      if (_src == 0) {
+        error (this, "source not found in binding creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      }
+    }
+    if(!_ref_info_dst._ref) {
+      if (_dst == 0) {
+        error (
+            this,
+            "DESTINATION not found in (Paused)assignment creation or the DESTINATION of an (Paused)assignment must be a property ( name: " + get_name () + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n");
+      }
+    }
+  }
+
+  Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec) :
+      _init(this, src, ispec, true, dst, dspec, true),
+      _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
+      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
+      _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
+      _has_coupling (false)
+  {
+    check_init(ispec, dspec);
+
+    if (_src && _dst) {
+      Graph::instance ().add_edge (_src, _dst);
+      _c_src.disable ();
+      _has_coupling = true;
+    }
   }
 
   Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst,
                     const string & dspec) :
-      SrcToDstLink (parent, name), _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (
-          nullptr), _action (nullptr), _update_src (nullptr), _update_dst (nullptr), _c_update_src (nullptr), _c_update_dst (
-          nullptr), _has_coupling (false)
+      SrcToDstLink (parent, name),
+      _init(this, src, ispec, true, dst, dspec, true),
+      _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
+      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
+      _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
+      _has_coupling (false)
   {
-    init_binding (src, ispec, true, dst, dspec, true);
+    check_init(ispec, dspec);
+
+    if (_src && _dst) {
+      Graph::instance ().add_edge (_src, _dst);
+      _c_src.disable ();
+      _has_coupling = true;
+    }
     Process::finalize_construction (parent);
   }
 
   Binding::Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation,
                     Process* dst, const string & dspec, bool activate) :
-      SrcToDstLink (parent, name), _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (
-          nullptr), _action (nullptr), _update_src (nullptr), _update_dst (nullptr), _c_update_src (nullptr), _c_update_dst (
-          nullptr), _has_coupling (false)
+      SrcToDstLink (parent, name),
+      _init(this, src, ispec, on_activation, dst, dspec, activate),
+      _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
+      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", activate),
+      _c_src(_src ? Coupling(_src, on_activation ? ACTIVATION : DEACTIVATION, &_action, ACTIVATION, true) : Coupling()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
+      _has_coupling (false)
   {
-    init_binding (src, ispec, on_activation, dst, dspec, activate);
+    check_init(ispec, dspec);
+
+    if (_src && _dst) {
+      Graph::instance ().add_edge (_src, _dst);
+      _c_src.disable ();
+      _has_coupling = true;
+    }
     Process::finalize_construction (parent);
   }
 
   Binding::~Binding ()
   {
-
     remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
 
-    delete _c_src;
+    /*delete _c_src;
     delete _action;
     if (_update_src) {
       delete _c_update_src;
@@ -164,7 +235,7 @@ namespace djnn
     if (_update_dst) {
       delete _c_update_dst;
       delete _update_dst;
-    }
+    }*/
   }
 
   void
