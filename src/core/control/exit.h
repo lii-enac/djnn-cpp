@@ -15,13 +15,12 @@
 
 #pragma once
 
-#include "../ontology/process.h"
+#include "core/ontology/process.h"
+#include "core/tree/int_property.h"
 
 #include <string>
 
 namespace djnn {
-
-  class IntProperty;
 
   class Exit : public Process
   {
@@ -32,7 +31,7 @@ namespace djnn {
     void impl_deactivate () override {}
     void serialize (const string& format) override;
   private:
-    IntProperty *_value;
+    IntProperty _value;
   };
 
 }

@@ -47,8 +47,12 @@ namespace djnn {
     
   private:
     void propagate ();
+
+    struct Init { Init(Synchronizer *, Process *p, const string &n, Process* dst, const string & dspec); };
+    friend struct Init;
     Process *_dst;
+    Init _init;
     std::vector<Coupling*> _c_list;
-    SynchronizerAction *_action;
+    SynchronizerAction _action;
   };
 }
