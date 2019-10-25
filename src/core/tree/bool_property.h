@@ -24,7 +24,7 @@ namespace djnn {
   class AbstractBoolProperty : public AbstractProperty {
   public:
     AbstractBoolProperty () : AbstractProperty () {};
-    AbstractBoolProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize_construction (p); };
+    AbstractBoolProperty (Process* p, const string &name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () override { return Boolean; }
 
@@ -42,33 +42,31 @@ namespace djnn {
     bool get_value () { return get_ref_value(); };
   protected:
     virtual bool& get_ref_value() = 0;
-    Process *_true, *_false;
+    Spike _true, _false;
   };
 
   class BoolProperty : public AbstractBoolProperty {
   public:
-    BoolProperty (bool v) : AbstractBoolProperty (), value(v) { init_BoolProperty (); }
-    BoolProperty (Process* p, const string &name, bool v) : AbstractBoolProperty (p, name), value(v) { init_BoolProperty (); }
+    BoolProperty (bool v) : AbstractBoolProperty (), value(v) {}
+    BoolProperty (Process* p, const string &name, bool v) : AbstractBoolProperty (p, name), value(v) { Process::finalize_construction (p); }
     void serialize (const string& format) override;
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
   private:
     bool value;
-    void init_BoolProperty ();
   };  
 
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
-    BoolPropertyProxy (bool &v) : AbstractBoolProperty (), value(v) { init_BoolProperty (); }
-    BoolPropertyProxy (Process* p, const string &name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (p, name, notify_mask), value(v) { init_BoolProperty (); }
+    BoolPropertyProxy (bool &v) : AbstractBoolProperty (), value(v) {}
+    BoolPropertyProxy (Process* p, const string &name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (p, name, notify_mask), value(v) { Process::finalize_construction (p); }
     void serialize (const string& format) override;
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
   private:
     bool& value;
-    void init_BoolProperty ();
   };
 
   bool getBool (Process *p);

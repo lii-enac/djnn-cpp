@@ -23,9 +23,9 @@
 namespace djnn {
 
   IOFD::IOFD(int readfd)
-  : _readfd(readfd)
+  : _readfd(readfd),
+  _readable (this, "readable")
   {
-    _readable = new Spike (this, "readable");
   }
 
   void
@@ -60,7 +60,7 @@ namespace djnn {
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!thread_local_cancelled && !get_please_stop ()) {
-          _readable->activate (); // propagating
+          _readable.activate (); // propagating
          GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!

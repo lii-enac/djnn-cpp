@@ -14,9 +14,9 @@
  */
 
 #include "bool_property.h"
-#include "../serializer/serializer.h"
-#include "../utils/error.h"
-#include "../execution/graph.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/error.h"
+#include "core/execution/graph.h"
 
 #include <iostream>
 
@@ -45,34 +45,19 @@ namespace djnn
       warning (p, "setBool only works on boolean properties");
   }
 
-  void
-  BoolProperty::init_BoolProperty ()
+  AbstractBoolProperty::AbstractBoolProperty (Process* p, const string &name, int notify_mask)
+  : AbstractProperty (p, name, notify_mask),
+    _true (this, "true"),
+    _false (this, "false")
   {
-    _true = new Spike (this, "true");
-    _false = new Spike (this, "false");
-    Graph::instance ().add_edge (this, _true);
-    Graph::instance ().add_edge (this, _false);
-  }
-
-  void
-  BoolPropertyProxy::init_BoolProperty ()
-  {
-    _true = new Spike (this, "true");
-    _false = new Spike (this, "false");
-    Graph::instance ().add_edge (this, _true);
-    Graph::instance ().add_edge (this, _false);
-  }
+    Graph::instance ().add_edge (this, &_true);
+    Graph::instance ().add_edge (this, &_false);
+  };
 
   AbstractBoolProperty::~AbstractBoolProperty ()
   {
-    if(_false) {
-      Graph::instance ().remove_edge (this, _false);
-      delete _false;
-    }
-    if(_true) {
-      Graph::instance ().remove_edge (this, _true);
-      delete _true;
-    }
+    Graph::instance ().remove_edge (this, &_false);
+    Graph::instance ().remove_edge (this, &_true);
   }
 
   void
@@ -94,9 +79,9 @@ namespace djnn
     if (is_activable () && propagate) {
       notify_activation ();
       if (v)
-        _true->notify_activation ();
+        _true.notify_activation ();
       else
-        _false->notify_activation ();
+        _false.notify_activation ();
     }
   }
 

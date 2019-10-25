@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include "../external_source.h"
-#include "../../ontology/process.h"
+#include "core/ontology/process.h"
+#include "core/syshook/external_source.h"
+#include "core/tree/spike.h"
 
 namespace djnn {
 	class IOFD : public Process, public ExternalSource {
@@ -25,14 +26,14 @@ namespace djnn {
 		int readfd() const { return _readfd; }
 
 	protected:
-		// abstract_component
+		// Process
 		virtual void impl_activate () override;
     	virtual void impl_deactivate () override;
 	private:
-
+		// ExternalSource
 		void run () override;
-
-		Process *_readable;
+		
 		int _readfd;
+		Spike _readable;
 	};
 }
