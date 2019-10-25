@@ -16,6 +16,8 @@
 
 #include "core-dev.h"
 
+#include <locale.h>
+
 namespace djnn
 {
 

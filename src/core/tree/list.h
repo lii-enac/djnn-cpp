@@ -18,9 +18,7 @@
 #include "component.h"
 #include "ref_property.h"
 #include "int_property.h"
-#include "../control/action.h"
-
-#include <list>
+#include "core/control/action.h"
 
 namespace djnn {
   using namespace std;

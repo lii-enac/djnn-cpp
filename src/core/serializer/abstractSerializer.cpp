@@ -12,10 +12,11 @@
  *
  */
 
-#include "../core-dev.h"
-#include "../utils/error.h"
+#include "core/core-dev.h"
+#include "core/utils/error.h"
 #include "serializer.h"
 
+#include <iostream>
 
 namespace djnn
 {

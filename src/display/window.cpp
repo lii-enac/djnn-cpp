@@ -26,6 +26,7 @@
 #include "../core/tree/component.h"
 #include "../core/tree/set.h"
 
+#include <iostream>
 
 namespace djnn
 {

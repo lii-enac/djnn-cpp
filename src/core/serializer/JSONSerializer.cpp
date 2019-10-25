@@ -15,6 +15,8 @@
 #include "../core-dev.h"
 #include "serializer.h"
 
+#include <iostream>
+
 using namespace std;
 
 namespace djnn

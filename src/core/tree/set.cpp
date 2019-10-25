@@ -21,32 +21,33 @@
 
 #include <algorithm>
 
+#include <iostream>
+
 namespace djnn
 {
   using namespace std;
 
-  Set::Set () :
-      Process ()
+  Set::Set ()
+  :
+    Process (),
+    _added (nullptr),
+    _removed (nullptr),
+    _size (0)
   {
-    _added = new RefProperty (nullptr);
-    _removed = new RefProperty (nullptr);
-    _size = new IntProperty (0);
   }
 
-  Set::Set (Process* parent, const string& name) :
-      Process (name)
+  Set::Set (Process* parent, const string& name)
+  :
+    Process (name),
+    _added (nullptr),
+    _removed (nullptr),
+    _size (nullptr, "size", 0)
   {
-    _added = new RefProperty (nullptr);
-    _removed = new RefProperty (nullptr);
-    _size = new IntProperty (nullptr, "size", 0);
     Process::finalize_construction (parent);
   }
 
   Set::~Set ()
   {
-    delete _size;
-    delete _removed;
-    delete _added;
   }
 
   void
@@ -67,8 +68,8 @@ namespace djnn
       } else if (c->get_activation_state () == ACTIVATED) {
         c->deactivate ();
       }
-      _added->set_value (c, true);
-      _size->set_value (_size->get_value () + 1, true);
+      _added.set_value (c, true);
+      _size.set_value (_size.get_value () + 1, true);
     }
 
   }
@@ -88,8 +89,8 @@ namespace djnn
     }
     if (found) {
       remove_symbol (symbol);
-      _removed->set_value (c, true);
-      _size->set_value (_size->get_value () - 1, true);
+      _removed.set_value (c, true);
+      _size.set_value (_size.get_value () - 1, true);
     }
   }
 
@@ -106,8 +107,8 @@ namespace djnn
       }
     }
     if (found) {
-      _removed->set_value (found, true);
-      _size->set_value (_size->get_value () - 1, true);
+      _removed.set_value (found, true);
+      _size.set_value (_size.get_value () - 1, true);
     }
   }
 
@@ -133,11 +134,11 @@ namespace djnn
   Set::find_component (const string& path)
   {
     if (path.compare ("$added") == 0)
-      return _added;
+      return &_added;
     else if (path.compare ("$removed") == 0)
-      return _removed;
+      return &_removed;
     else if (path.compare ("size") == 0)
-      return _size;
+      return &_size;
     else {
       return Process::find_component (path);
     }
@@ -147,13 +148,12 @@ namespace djnn
   void
   Set::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ cardinality=" << _size->get_value () << " ]" << endl ;
+    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
   }
 
   void
   Set::serialize (const string& type)
   {
-
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("core:set");

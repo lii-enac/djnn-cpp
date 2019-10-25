@@ -16,8 +16,6 @@
 #pragma once
 
 #include "component.h"
-#include <list>
-#include <iostream>
 #include "ref_property.h"
 #include "int_property.h"
 
@@ -52,7 +50,7 @@ namespace djnn {
     void serialize (const string& type) override;
     void dump(int level=0) override;
   private:
-    RefProperty *_added, *_removed;
-    IntProperty *_size;
+    RefProperty _added, _removed;
+    IntProperty _size;
   };
 }

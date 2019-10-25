@@ -24,7 +24,8 @@
 #include "../core.h"
 
 #include <algorithm>
-
+//#include <list>
+#include <iostream>
 
 namespace djnn
 {
