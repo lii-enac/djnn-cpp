@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../ontology/coupling.h"
-#include "../control/action.h"
-#include "../tree/ref_property.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/tree/ref_property.h"
 
 namespace djnn {
 
@@ -26,6 +26,8 @@ namespace djnn {
   {
     public:
       UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process **to_update);
+      UpdateSrcOrDst () {} // needed for pointer-less zombie initialization
+      
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -44,11 +46,14 @@ namespace djnn {
   };
 
   class AbstractAssignment : public SrcToDstLink {
-
+   struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec); };
+   friend struct Init;
+   
    friend class Assignment;
    friend class PausedAssignment;
    /* PRIVATE CLASS */
   private:
+   
    class AssignmentAction : public Action
    {
    public:
@@ -65,21 +70,39 @@ namespace djnn {
   };
 
   private:
-    void init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec);
+    //void init_AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec);
+    void check_init(const string& ispec, const string& dspec);
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     void update_graph () override;
     virtual ~AbstractAssignment ();
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
+  
   protected:
     void set_parent (Process* p) override;
+
+    struct ref_info {
+      ref_info() : _ref(nullptr) {}
+      RefProperty * _ref;
+      string _name;
+    };
+    struct ref_update {
+        ref_update() {}
+        ref_update(Process *p, const ref_info& ri, Process* to_update) :
+          _update(p, "update_src_action", ri._ref, ri._name, &to_update),
+          _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
+          { _update.impl_activate(); }
+        UpdateSrcOrDst _update;
+        Coupling _c;
+    };
+
+    ref_info _ref_info_src, _ref_info_dst;
+    Init _init; // will be "created" third
+    ref_update _ref_update_src, _ref_update_dst;
     Process* _src;
     AbstractProperty* _dst;
-    RefProperty *_ref_src, *_ref_dst;
-    AssignmentAction* _action;
-    UpdateSrcOrDst* _update_src, *_update_dst;
-    Coupling *_c_src, *_c_dst;
+
     bool _has_coupling;
   };
 
@@ -94,6 +117,9 @@ namespace djnn {
     void impl_deactivate () override {}
     void serialize (const string& format) override;
     virtual ~Assignment ();
+
+  private:
+    AssignmentAction _action;
   };
 
   class PausedAssignment : public AbstractAssignment {
@@ -107,6 +133,9 @@ namespace djnn {
     void impl_deactivate () override {}
     void serialize (const string& format) override;
     virtual ~PausedAssignment ();
+
+  private:
+    AssignmentAction _action;
   };
 
 }

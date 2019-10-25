@@ -23,6 +23,7 @@ namespace djnn {
   public:
     Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, Process* data, bool immediate_propagation = false);
+    Coupling () : _src(nullptr) {} // needed for pointer-less zombie initialization
     virtual ~Coupling();
     void set_data (Process* data) { _data = data; }
     
