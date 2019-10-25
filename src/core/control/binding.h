@@ -69,28 +69,13 @@ namespace djnn {
     friend struct Init;
     void check_init(const string& ispec, const string& dspec);
 
-    struct ref_info {
-      ref_info() : _ref(nullptr) {}
-      bool is_ref() const { return _ref != nullptr; }
-      RefProperty * _ref;
-      string _name;
-    };
-    struct ref_update {
-      ref_update() {}
-      ref_update(Process *p, const ref_info& ri, Process* to_update) :
-        _update(p, "update_src_action", ri._ref, ri._name, &to_update),
-        _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
-        { _update.impl_activate(); }
-      UpdateSrcOrDst _update;
-      Coupling _c;
-    };
-
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
+    ref_update _ref_update_src, _ref_update_dst;
     Process *_src, *_dst;
     BindingAction _action;
     Coupling _c_src;
-    ref_update _ref_update_src, _ref_update_dst;
+    
     bool _has_coupling;    
   };
 }

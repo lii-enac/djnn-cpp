@@ -137,10 +137,10 @@ namespace djnn
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
   {
+    check_init(ispec, dspec);
     if(_ref_info_dst._ref) {
       Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
     }
-    check_init(ispec, dspec);
   }
 
   AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
@@ -153,10 +153,10 @@ namespace djnn
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
   {
+    check_init(ispec, dspec);
     if(_ref_info_dst._ref) {
       Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
-    }
-    check_init(ispec, dspec);
+    } 
   }
 
   AbstractAssignment::~AbstractAssignment ()
