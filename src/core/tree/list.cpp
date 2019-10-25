@@ -24,27 +24,29 @@
 #include "../core.h"
 
 #include <algorithm>
-//#include <list>
+
 #include <iostream>
 
 namespace djnn
 {
   using namespace std;
 
-  AbstractList::AbstractList () :
-      Container ()
+  AbstractList::AbstractList ()
+  :
+    Container (),
+    _added (nullptr),
+    _removed (nullptr),
+    _size (0)
   {
-    _added = new RefProperty (nullptr);
-    _removed = new RefProperty (nullptr);
-    _size = new IntProperty (0);
   }
 
-  AbstractList::AbstractList (Process* parent, const string& name) :
-    Container (parent, name)
+  AbstractList::AbstractList (Process* parent, const string& name)
+  :
+    Container (parent, name),
+    _added (nullptr),
+    _removed (nullptr),
+    _size (0)
   {
-    _added = new RefProperty (nullptr);
-    _removed = new RefProperty (nullptr);
-    _size = new IntProperty (0);
   }
 
   void
@@ -125,7 +127,7 @@ namespace djnn
   {
     /* empty _children without calling delete on each element IF they are pointers */
     _children.clear ();
-    _size->set_value (0, true);
+    _size.set_value (0, true);
   }
 
   void
@@ -142,8 +144,8 @@ namespace djnn
     /* check if end has changed and erase if necessary */
     if (newend != _children.end ()){
       _children.erase(newend, _children.end ());
-       _removed->set_value (c, true);
-      _size->set_value (_size->get_value () - 1, true);
+       _removed.set_value (c, true);
+      _size.set_value (_size.get_value () - 1, true);
     }
   }
 
@@ -167,47 +169,15 @@ namespace djnn
     }
   }
 
-  List::List () :
-      AbstractList ()
-  {
-  }
-
-  List::List (Process* parent, const string& name) :
-    AbstractList (parent, name)
-  {
-    Process::finalize_construction (parent);
-  }
-
-  List::~List ()
-  {
-    delete _added; 
-    delete _removed;
-    delete _size;
-  }
-
-  void
-  List::finalize_child_insertion (Process *c)
-  {
-    c->set_parent (this);
-
-    if (get_activation_state () == ACTIVATED && c->get_activation_state () == DEACTIVATED) {
-      c->activate ();
-    } else if (get_activation_state () == DEACTIVATED && c->get_activation_state () == ACTIVATED) {
-      c->deactivate ();
-    }
-    _added->set_value (c, true);
-    _size->set_value (_size->get_value () + 1, true);
-  }
-
   Process*
   AbstractList::find_component (const string& path)
   {
     if (path.compare ("$added") == 0)
-      return _added;
+      return &_added;
     else if (path.compare ("$removed") == 0)
-      return _removed;
+      return &_removed;
     else if (path.compare ("size") == 0)
-      return _size;
+      return &_size;
     else {
       try {
         string::size_type sz;
@@ -228,6 +198,35 @@ namespace djnn
       }
     }
     return nullptr;
+  }
+
+  List::List () :
+      AbstractList ()
+  {
+  }
+
+  List::List (Process* parent, const string& name) :
+    AbstractList (parent, name)
+  {
+    Process::finalize_construction (parent);
+  }
+
+  List::~List ()
+  {
+  }
+
+  void
+  List::finalize_child_insertion (Process *c)
+  {
+    c->set_parent (this);
+
+    if (get_activation_state () == ACTIVATED && c->get_activation_state () == DEACTIVATED) {
+      c->activate ();
+    } else if (get_activation_state () == DEACTIVATED && c->get_activation_state () == ACTIVATED) {
+      c->deactivate ();
+    }
+    _added.set_value (c, true);
+    _size.set_value (_size.get_value () + 1, true);
   }
 
   Process*
@@ -253,6 +252,34 @@ namespace djnn
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);
+  }
+
+  ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model)
+  :
+    Process (name, model),
+    _action (action)
+  {
+    Container *l = dynamic_cast<Container*> (list);
+    if (l == nullptr)
+      error (this, "The list argument must be a List component in list iterator " + name);
+    _list = l;
+    Process::finalize_construction (parent);
+  }
+
+  void
+  ListIterator::impl_activate ()
+  {
+    for (auto p : _list->children ()) {
+      _action->set_data (p);
+      _action->activate ();
+    }
+    notify_activation ();
+  }
+
+  void
+  ListIterator::post_activate ()
+  {
+    set_activation_state (DEACTIVATED);
   }
 
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
@@ -296,54 +323,46 @@ namespace djnn
   }
 
   BidirectionalListIterator::BidirectionalListIterator (Process *parent, const string& name,
-                                                        Process* list) :
-      Process (name)
+                                                        Process* list)
+  :
+  Process (name),
+  _list (dynamic_cast<List*> (list)),
+  _next (this, "next"),
+  _previous (this, "previous"),
+  _reset (this, "reset"),
+  _iter (this, "iter", nullptr),
+  _index (this, "index", 1),
+  _next_action (this, name + "_next_action", _list, &_iter, &_index, true),
+  _c_next (&_next, ACTIVATION, &_next_action, ACTIVATION),
+  _previous_action (this, name + "_previous_action", _list, &_iter, &_index, false),
+  _c_previous (&_previous, ACTIVATION, &_previous_action, ACTIVATION),
+  _reset_action (this, name + "_reset_action", &_index),
+
+  _c_reset (&_reset, ACTIVATION, &_reset_action, ACTIVATION)
   {
-    _list = dynamic_cast<List*> (list);
+    
     if (_list == nullptr) {
       warning (this, "list iterator must take a List as its third argument\n");
       return;
     }
-    _next = new Spike (this, "next");
-    _previous = new Spike (this, "previous");
-    _reset = new Spike (this, "reset");
-    _iter = new RefProperty (this, "iter", nullptr);
-    _index = new IntProperty (this, "index", 1);
-    _next_action = new IterAction (this, name + "_next_action", _list, _iter, _index, true);
-    _previous_action = new IterAction (this, name + "_previous_action", _list, _iter, _index, false);
-    _reset_action = new ResetAction (this, name + "_reset_action", _index);
-    _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION);
-    _c_next->disable ();
-    _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION);
-    _c_previous->disable ();
-    _c_reset = new Coupling (_reset, ACTIVATION, _reset_action, ACTIVATION);
-    _c_next->disable ();
-    Graph::instance ().add_edge (_next, _next_action);
-    Graph::instance ().add_edge (_previous, _previous_action);
-    Graph::instance ().add_edge (_reset, _reset_action);
+    
+    _c_next.disable ();
+    _c_previous.disable ();
+    _c_reset.disable ();
+    Graph::instance ().add_edge (&_next, &_next_action);
+    Graph::instance ().add_edge (&_previous, &_previous_action);
+    Graph::instance ().add_edge (&_reset, &_reset_action);
     Process::finalize_construction (parent);
   }
 
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
-    remove_state_dependency (get_parent (), _next_action);
-    remove_state_dependency (get_parent (), _previous_action);
-    remove_state_dependency (get_parent (), _reset_action);
-    Graph::instance ().remove_edge (_next, _next_action);
-    Graph::instance ().remove_edge (_previous, _previous_action);
-    Graph::instance ().remove_edge (_reset, _reset_action);
-
-    delete _c_reset;
-    delete _c_previous;
-    delete _c_next;
-    delete _reset_action;
-    delete _previous_action;
-    delete _next_action;
-    delete _index;
-    delete _iter;
-    delete _reset;
-    delete _previous;
-    delete _next;
+    remove_state_dependency (get_parent (), &_next_action);
+    remove_state_dependency (get_parent (), &_previous_action);
+    remove_state_dependency (get_parent (), &_reset_action);
+    Graph::instance ().remove_edge (&_next, &_next_action);
+    Graph::instance ().remove_edge (&_previous, &_previous_action);
+    Graph::instance ().remove_edge (&_reset, &_reset_action);
   }
 
   void
@@ -351,14 +370,14 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _next_action);
-       remove_state_dependency (get_parent (), _previous_action);
-       remove_state_dependency (get_parent (), _reset_action);
+       remove_state_dependency (get_parent (), &_next_action);
+       remove_state_dependency (get_parent (), &_previous_action);
+       remove_state_dependency (get_parent (), &_reset_action);
     }
     
-    add_state_dependency (p, _next_action);
-    add_state_dependency (p, _previous_action);
-    add_state_dependency (p, _reset_action);
+    add_state_dependency (p, &_next_action);
+    add_state_dependency (p, &_previous_action);
+    add_state_dependency (p, &_reset_action);
 
     Process::set_parent (p); 
   }
@@ -366,17 +385,17 @@ namespace djnn
   void
   BidirectionalListIterator::impl_activate ()
   {
-    _c_next->enable ();
-    _c_previous->enable ();
-    _c_reset->enable ();
+    _c_next.enable ();
+    _c_previous.enable ();
+    _c_reset.enable ();
   }
 
   void
   BidirectionalListIterator::impl_deactivate ()
   {
-    _c_next->disable ();
-    _c_previous->disable ();
-    _c_reset->disable ();
+    _c_next.disable ();
+    _c_previous.disable ();
+    _c_reset.disable ();
   }
 
   void
@@ -397,30 +416,5 @@ namespace djnn
 
   }
 
-  ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model) :
-      Process (name, model), _action (action)
-  {
-    Container *l = dynamic_cast<Container*> (list);
-    if (l == nullptr)
-      error (this, "The list argument must be a List component in list iterator " + name);
-    _list = l;
-    Process::finalize_construction (parent);
-  }
-
-  void
-  ListIterator::impl_activate ()
-  {
-    for (auto p : _list->children ()) {
-      _action->set_data (p);
-      _action->activate ();
-    }
-    notify_activation ();
-  }
-
-  void
-  ListIterator::post_activate ()
-  {
-    set_activation_state (DEACTIVATED);
-  }
 }
 

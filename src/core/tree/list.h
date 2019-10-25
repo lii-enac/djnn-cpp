@@ -15,9 +15,12 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 #include "component.h"
 #include "ref_property.h"
 #include "int_property.h"
+#include "spike.h"
 #include "core/control/action.h"
 
 namespace djnn {
@@ -36,11 +39,11 @@ namespace djnn {
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
     Process* find_component (const string &path) override;
     virtual ~AbstractList () {};
-    int size () { return _size->get_value (); }
+    int size () { return _size.get_value (); }
   protected:
     virtual void finalize_child_insertion (Process *child) = 0;
-    RefProperty *_added, *_removed;
-    IntProperty *_size;
+    RefProperty _added, _removed;
+    IntProperty _size;
   };
 
   class List : public AbstractList
@@ -103,10 +106,15 @@ namespace djnn {
   private:
     void set_parent (Process* p) override;
     List* _list;
-    Process *_next, *_previous, *_reset;
-    RefProperty *_iter;
-    IntProperty *_index;
-    Coupling *_c_next, *_c_reset, *_c_previous;
-    Process  *_next_action, *_previous_action, *_reset_action;
+    Spike _next, _previous, _reset;
+    RefProperty _iter;
+    IntProperty _index;
+
+    IterAction  _next_action;
+    Coupling _c_next;
+    IterAction _previous_action;
+    Coupling _c_previous;
+    ResetAction _reset_action;
+    Coupling _c_reset; 
   };
 }

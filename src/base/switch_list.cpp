@@ -190,8 +190,8 @@ namespace djnn
   SwitchList::finalize_child_insertion (Process *c)
   {
     c->set_parent (this);
-    _added->set_value (c, true);
-    _size->set_value (_size->get_value () + 1, true);
+    _added.set_value (c, true);
+    _size.set_value (_size.get_value () + 1, true);
   }
 
   Process*
