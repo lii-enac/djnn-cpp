@@ -14,10 +14,11 @@
  */
 
 #include "connector.h"
-#include "../core/execution/graph.h"
-#include "../core/utils/error.h"
-#include "../core/serializer/serializer.h"
-#include "../core/utils/utils-dev.h"
+#include "core/control/assignment.h"
+#include "core/execution/graph.h"
+#include "core/utils/error.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/utils-dev.h"
 
 #include <iostream>
 
@@ -38,41 +39,61 @@ namespace djnn
       AbstractAssignment::do_assignment (*_src, *_dst, _propagate);
   }
 
-  Connector::Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec,
-			bool copy_on_activation) :
-      SrcToDstLink (p, n), _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (
-	  nullptr), _update_dst (nullptr), _copy_on_activation (copy_on_activation)
+#if NEW
+  Connector::Init::Init(Connector * c, Process* src, const string & ispec, Process* dst, const string & dspec)
   {
-    init_connector (src, ispec, dst, dspec);
-    Process::finalize_construction (p);
-  }
+    if (src == 0) {
+      error (c,
+       "src argument cannot be null in connector creation (" + c->get_name () + ", " + ispec + ", " + dspec + ")");
+    }
+    if (dst == 0) {
+      error (c,
+       "dst argument cannot be null in connector creation (" + c->get_name () + ", " + ispec + ", " + dspec + ")");
+    }
 
-  Connector::Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation) :
-    _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (nullptr), _update_dst (nullptr), _copy_on_activation (copy_on_activation)
-  {
-    init_connector (src, ispec, dst, dspec);
-  }
+    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
+    c->_ref_info_src._ref = ref_src_pair.first;
+    c->_ref_info_src._name = ref_src_pair.second;
 
-  void
-  Connector::impl_activate ()
-  {
-    /* when an connector is in a deactivate fsm branch and src has changed. it is not aware of it.
-       we have to re-evaluate it */
-    if (_update_src)
-      _update_src->impl_activate ();
-    if (_c_src)
-      _c_src->enable ();
-    if (_copy_on_activation)
-      _action->activate ();
+    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
+    c->_ref_info_dst._ref = ref_dst_pair.first;
+    c->_ref_info_dst._name = ref_dst_pair.second;
   }
 
   void
-  Connector::impl_deactivate ()
+  Connector::check_init(const string& ispec, const string& dspec)
   {
-    if (_c_src)
-      _c_src->disable ();
-    _action->deactivate ();
+    if(!_ref_info_src._ref) {
+      if (_src == 0) {
+        error (this, "source not found in connector creation or source is not a property (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      }
+    }
+
+    if(!_ref_info_dst._ref) {
+      if (_dst == 0) {
+        error (
+            this,
+            "DESTINATION not found in (Paused)assignment creation or the DESTINATION of an (Paused)assignment must be a property ( name: " + get_name () + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n");
+      }
+    }
+    
+    if(_src) {
+      std::cout << "_src:" << _src->get_name () << std::endl;
+    }
+    if(_ref_info_src._ref) {
+      std::cout << "_refsrc:" << _ref_info_src._name << std::endl;
+    }
+    if(_dst) {
+      std::cout << "_dst:" << _dst->get_name () << std::endl;
+    }
+    if(_ref_info_dst._ref) {
+      std::cout << "_refdst:" << _ref_info_dst._name << std::endl;
+    }
+
   }
+
+#else
 
   void
   Connector::init_connector (Process *src, string ispec, Process *dst, string dspec)
@@ -93,7 +114,6 @@ namespace djnn
     if (ref_src_pair.first != nullptr) {
       _ref_src = ref_src_pair.first;
       _update_src = new UpdateSrcOrDst (this, "update_src_action", ref_src_pair.first, ref_src_pair.second, (Process**)&_src);
-
       _c_update_src = new Coupling (ref_src_pair.first, ACTIVATION, _update_src, ACTIVATION, true);
     } else {
       Process* c_src = src->find_component (ispec);
@@ -112,7 +132,6 @@ namespace djnn
     if (ref_dst_pair.first != nullptr) {
       _ref_dst = ref_dst_pair.first;
       _update_dst = new UpdateSrcOrDst (this, "update_dst_action", ref_dst_pair.first, ref_dst_pair.second, (Process**)&_dst);
-
       _c_update_dst = new Coupling (ref_dst_pair.first, ACTIVATION, _update_dst, ACTIVATION, true);
     } else {
       Process* c_dst = dst->find_component (dspec);
@@ -128,8 +147,8 @@ namespace djnn
 
     string src_name = _src ? _src->get_name () : "";
     string dst_name = _dst ? _dst->get_name () : "";
-    _action = new ConnectorAction (this, "connector_" + src_name + "_to_" + dst_name + "_action", &_src, &_dst,
-                                   true);
+    _action = new ConnectorAction (this, "connector_" + src_name + "_to_" + dst_name + "_action", &_src, &_dst, true);
+
     if (_src) {
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _c_src->disable ();
@@ -138,15 +157,135 @@ namespace djnn
         _has_coupling = true;
       }
     }
-    if (_update_src) _update_src->impl_activate ();
-    if (_update_dst) _update_dst->impl_activate ();
+    if (_update_src) {
+      _update_src->impl_activate ();
+    }
+    if (_update_dst) {
+      _update_dst->impl_activate ();
+    }
+
+    
+    if(_src) {
+      std::cout << "_src:" << _src->get_name () << std::endl;
+    }
+    if(_update_src) {
+      std::cout << "_refsrc:" << ref_src_pair.second << std::endl;
+    }
+    if(_dst) {
+      std::cout << "_dst:" << _dst->get_name () << std::endl;
+    }
+    if(_update_dst) {
+      std::cout << "_refdst:" << ref_dst_pair.second << std::endl;
+    }
+    
   }
+#endif
+  Connector::Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation)
+  :
+    SrcToDstLink (p, n),
+#if NEW
+    _init(this, src, ispec, dst, dspec),
+    _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
+    _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
+    _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()), // uses copy constructor
+    _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update()),
+    _action(this, "connector_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true),
+    _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
+#else
+    _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (nullptr), _update_dst (nullptr),
+#endif
+    _has_coupling (false),
+    _copy_on_activation (copy_on_activation)
+  {
+#if NEW
+    if (_src) {
+      _c_src.disable ();
+      if(_dst) {
+        Graph::instance ().add_edge (_src, _dst);
+        _has_coupling = true;
+      }
+    }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
+    check_init(ispec, dspec);
+#else
+    init_connector (src, ispec, dst, dspec);
+#endif
+    Process::finalize_construction (p);
+  }
+
+  Connector::Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation)
+  :
+#if NEW
+    _init(this, src, ispec, dst, dspec),
+    _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
+    _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
+    _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()), // uses copy constructor
+    _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update()),
+    _action(this, "connector_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true),
+    _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
+#else
+    _src (nullptr), _dst (nullptr), _ref_src (nullptr), _ref_dst (nullptr), _c_src (nullptr), _update_src (nullptr), _update_dst (nullptr),
+#endif
+    _has_coupling (false),
+    _copy_on_activation (copy_on_activation)
+  {
+#if NEW
+    if (_src) {
+      _c_src.disable ();
+      if(_dst) {
+        Graph::instance ().add_edge (_src, _dst);
+        _has_coupling = true;
+      }
+    }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
+    check_init(ispec, dspec);
+#else
+    init_connector (src, ispec, dst, dspec);
+#endif
+  }
+
+  void
+  Connector::impl_activate ()
+  {
+    /* when an connector is in a deactivate fsm branch and src has changed. it is not aware of it.
+       we have to re-evaluate it */
+#if NEW
+    if(_ref_info_src.is_ref())
+      _ref_update_src._update.impl_activate ();
+    _c_src.enable();
+    if (_copy_on_activation)
+      _action.activate ();
+#else
+    if (_update_src)
+      _update_src->impl_activate ();
+    if (_c_src)
+      _c_src->enable ();
+    if (_copy_on_activation)
+      _action->activate ();
+#endif
+  }
+
+  void
+  Connector::impl_deactivate ()
+  {
+#if NEW
+    _c_src.disable ();
+    _action.deactivate ();
+#else
+    _c_src->disable ();
+    _action->deactivate ();
+#endif
+  }
+
+
 
   void
   Connector::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent () && _dst){
+    if (get_parent () && _dst) {
        remove_state_dependency (get_parent (), _dst);
     }
 
@@ -159,6 +298,20 @@ namespace djnn
   void
   Connector::update_graph ()
   {
+#if NEW    
+    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+    if (_src && _dst) {
+      _c_src.change_source(_src);
+      _has_coupling = true;
+      if ( get_activation_state()==ACTIVATED ) {
+        _action.activate ();
+      } else {
+        _c_src.disable ();
+      }
+    } else {
+      _has_coupling = false;
+    }
+#else
     if (_has_coupling) {
       delete _c_src;
       _c_src = nullptr;
@@ -174,13 +327,14 @@ namespace djnn
     } else {
       _has_coupling = false;
     }
+#endif
   }
 
   Connector::~Connector ()
   {
     remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
-
+#if !NEW
     delete _c_src;
     delete _action;
     if (_update_src) {
@@ -191,6 +345,7 @@ namespace djnn
       delete _c_update_dst;
       delete _update_dst;
     }
+#endif
   }
 
   void
@@ -305,7 +460,6 @@ namespace djnn
   void
   PausedConnector::serialize (const string& format)
   {
-
     string buf;
 
     AbstractSerializer::pre_serialize (this, format);

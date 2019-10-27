@@ -15,10 +15,8 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
+#include "core/control/src_to_dst_link.h"
 #include "core/ontology/coupling.h"
-#include "core/control/action.h"
-#include "core/control/assignment.h"
 
 namespace djnn {
   using namespace std;
@@ -54,7 +52,8 @@ namespace djnn {
     Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
     virtual ~Binding ();
     void impl_activate () override { 
-      if(_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+      if(_ref_info_src.is_ref())
+        _ref_update_src._update.impl_activate ();
       _c_src.enable();
     };
     void impl_deactivate () override {
@@ -71,8 +70,8 @@ namespace djnn {
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
-    ref_update _ref_update_src, _ref_update_dst;
     Process *_src, *_dst;
+    ref_update _ref_update_src, _ref_update_dst;
     BindingAction _action;
     Coupling _c_src;
     

@@ -38,7 +38,7 @@
 #else // pointers
 
 #define BEG_CAI {
-#define ALLOC_AND_INIT(type, name, ...) name = new type (__VA_ARGS__)
+#define ALLOC_AND_INIT(type, name, ...) name = ne_w type (__VA_ARGS__)
 #define END_CAI
 #define UNINIT_AND_DEALLOC (type, name, ...) delete name;
 
@@ -75,8 +75,8 @@ namespace djnn
   // old pointer-based
   Timer::Timer (int period)
   {
-    _delay = new IntProperty (this, "delay", period);
-    _end = new Blank (this, "end");
+    _delay = ne_w IntProperty (this, "delay", period);
+    _end = ne_w Blank (this, "end");
   }
   */
 

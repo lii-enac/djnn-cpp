@@ -68,13 +68,13 @@ namespace djnn
   void
   Binding::update_graph ()
   {
-    // if (_has_coupling) {
+    //if (_has_coupling) {
     //   delete _c_src;
     //   _c_src = nullptr;
     // }
     //std::cerr << __PRETTY_FUNCTION__ << std::endl;
     if (_src && _dst) {
-      //_c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
+      //_c_src = ne_w Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _c_src.change_source(_src);
       _has_coupling = true;
       if (get_activation_state() != ACTIVATED ) {
@@ -105,10 +105,10 @@ namespace djnn
 
   Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec) :
       _init(this, src, ispec, true, dst, dspec, true),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
       _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
@@ -119,26 +119,32 @@ namespace djnn
       _c_src.disable ();
       _has_coupling = true;
     }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst,
                     const string & dspec) :
       SrcToDstLink (parent, name),
       _init(this, src, ispec, true, dst, dspec, true),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
       _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
   {
     check_init(ispec, dspec);
-    if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
+    if (_src) {
       _c_src.disable ();
-      _has_coupling = true;
+      if(_dst) {
+        Graph::instance ().add_edge (_src, _dst);
+        _has_coupling = true;
+      }
     }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
     Process::finalize_construction (parent);
   }
 
@@ -146,19 +152,21 @@ namespace djnn
                     Process* dst, const string & dspec, bool activate) :
       SrcToDstLink (parent, name),
       _init(this, src, ispec, on_activation, dst, dspec, activate),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", activate),
       _c_src(_src ? Coupling(_src, on_activation ? ACTIVATION : DEACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
   {
     check_init(ispec, dspec);
-    if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
+    if (_src) {
       _c_src.disable ();
-      _has_coupling = true;
+      if(_dst) {
+        Graph::instance ().add_edge (_src, _dst);
+        _has_coupling = true;
+      }
     }
     Process::finalize_construction (parent);
   }

@@ -15,13 +15,9 @@
 
 #pragma once
 
-#include "../core/ontology/process.h"
-#include "../core/ontology/coupling.h"
-#include "../core/control/action.h"
-#include "../core/tree/abstract_property.h"
-#include "../core/control/assignment.h"
-#include "../core/control/action.h"
-
+#include "core/control/src_to_dst_link.h"
+#include "core/ontology/coupling.h"
+#include "core/tree/abstract_property.h"
 
 namespace djnn {
   using namespace std;
@@ -46,8 +42,8 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
-    Connector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
+    Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
+    Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
     void impl_activate () override;
     void impl_deactivate () override;
     void update_graph () override;
@@ -56,6 +52,21 @@ namespace djnn {
 
   protected:
     void set_parent (Process* p) override;
+
+#define NEW 0
+
+#if NEW
+    struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec); };
+    friend struct Init;
+    void check_init(const string& ispec, const string& dspec);
+
+    ref_info _ref_info_src, _ref_info_dst;
+    Init _init; // will be "created" third
+    AbstractProperty *_src, *_dst;
+    ref_update _ref_update_src, _ref_update_dst;
+    ConnectorAction _action;
+    Coupling _c_src;
+#else
     void init_connector (Process *src, string ispec, Process *dst, string dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
@@ -64,6 +75,7 @@ namespace djnn {
     Process *_action;
     UpdateSrcOrDst* _update_src, *_update_dst;
     Coupling *_c_update_src, *_c_update_dst;
+#endif
     bool _has_coupling;
     bool _copy_on_activation;
   };

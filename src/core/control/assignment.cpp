@@ -35,53 +35,6 @@ namespace djnn
 {
   using namespace std;
 
-
-  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const string &n, RefProperty* prop, const string &spec, Process **to_update) : 
-    Action (parent, n), _to_update (to_update), _prop (prop), _spec (spec) 
-  { 
-  }
-
-  void
-  UpdateSrcOrDst::impl_activate ()
-  {
-    Process* v = _prop->get_value ();
-    if (!v) {
-      *_to_update = nullptr;
-      ((SrcToDstLink*) get_parent ())->update_graph ();
-      return;
-    }
-    Process *res = v->find_component (_spec);
-    if (!res) {
-      warning (this, "Source or destination not found dynamic link structure");
-    }
-    *_to_update = res;
-   ((SrcToDstLink*) get_parent ())->update_graph ();
-  }
-
-  
-  AbstractAssignment::Init::Init (AbstractAssignment *p, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec)
-  {
-    if (src == 0) {
-      error (
-          p,
-          "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + name + ", src spec: " + ispec
-              + ", dst spec:" + dspec + ")\n");
-    }
-    if (dst == 0) {
-      error (
-          p,
-          "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + name + ", src spec: " + ispec
-              + ", dst spec:" + dspec + ")\n");
-    }
-    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
-    p->_ref_info_src._ref = ref_src_pair.first;
-    p->_ref_info_src._name = ref_src_pair.second;
-
-    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
-    p->_ref_info_dst._ref = ref_dst_pair.first;
-    p->_ref_info_dst._name = ref_dst_pair.second;
-  }
-
   void
   AbstractAssignment::set_parent (Process* p)
   { 
@@ -128,19 +81,44 @@ namespace djnn
     }
   }
 
+  AbstractAssignment::Init::Init (AbstractAssignment *p, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec)
+  {
+    if (src == 0) {
+      error (
+          p,
+          "SOURCE argument cannot be null in (Paused)assignment creation ( name: " + name + ", src spec: " + ispec
+              + ", dst spec:" + dspec + ")\n");
+    }
+    if (dst == 0) {
+      error (
+          p,
+          "DESTINATION argument cannot be null in (Paused)assignment creation ( name: " + name + ", src spec: " + ispec
+              + ", dst spec:" + dspec + ")\n");
+    }
+    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
+    p->_ref_info_src._ref = ref_src_pair.first;
+    p->_ref_info_src._name = ref_src_pair.second;
+
+    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
+    p->_ref_info_dst._ref = ref_dst_pair.first;
+    p->_ref_info_dst._name = ref_dst_pair.second;
+  }
+
   AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel)
   :
   SrcToDstLink (isModel),
   _init(this, "", src, ispec, dst, dspec),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()), // uses copy constructor
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
-  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
+  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()), // uses copy constructor
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
     if(_ref_info_dst._ref) {
       Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
     }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
@@ -148,15 +126,17 @@ namespace djnn
   :
   SrcToDstLink (p, n, isModel),
   _init(this, n, src, ispec, dst, dspec),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src) : ref_update()),
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst) : ref_update()),
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
-  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr)
+  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()),
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
     if(_ref_info_dst._ref) {
       Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
     } 
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   AbstractAssignment::~AbstractAssignment ()
