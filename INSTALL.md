@@ -39,12 +39,13 @@ ivy bus -> https://www.eei.cena.fr/products/ivy/
 
 Windows:
 ```
-pacman -S subversion
+pacman -S subversion patch
 svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
-cd ivy-c/src
-make -f Makefile.mingw static-libs shared-libs
-(you may modify Makefile.mingw to not install:  libxtivy.* libtclivy.*, libgtkivy.*)
-make -f Makefile.mingw installlibs includes
+cd ivy-c
+patch -p0 -i ../djnn-cpp/tools/ivy-C-patch-windows.diff
+cd src
+make -j4 -f Makefile.mingw static-libs shared-libs
+make -j4 -f Makefile.mingw installlibs
 ```
 
 Linux/Ubuntu:
