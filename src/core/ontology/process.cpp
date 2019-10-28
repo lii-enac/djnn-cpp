@@ -16,9 +16,9 @@
 #include "process.h"
 #include "coupling.h"
 
-#include "../execution/graph.h"
-#include "../utils/uri.h"
-#include "../utils/error.h"
+#include "core/execution/graph.h"
+#include "core/utils/uri.h"
+#include "core/utils/error.h"
 
 #include <algorithm>
 
