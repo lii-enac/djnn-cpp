@@ -87,12 +87,12 @@ namespace djnn
     if (src != nullptr) {
       switch(get_src_activation_flag ()) {
         case ACTIVATION:
-          if (_src!= nullptr) _src->remove_activation_coupling (this);
-          src->add_activation_coupling (this);
+          if (_src != nullptr) _src->remove_activation_coupling (this);
+          /*if ( src != nullptr)*/ src->add_activation_coupling (this);
         break;
         case DEACTIVATION:
-          if (_src!=nullptr) _src->remove_deactivation_coupling (this);
-          src->add_deactivation_coupling (this);
+          if (_src !=nullptr) _src->remove_deactivation_coupling (this);
+          /*if ( src !=nullptr)*/ src->add_deactivation_coupling (this);
         break;
         default: break;
       }

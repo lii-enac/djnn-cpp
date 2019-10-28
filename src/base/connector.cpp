@@ -35,8 +35,9 @@ namespace djnn
   Connector::ConnectorAction::impl_activate ()
   {
     /* do we have to check if the source is activable? */
-    if (get_parent ()->somehow_activating () && *_src && *_dst)
+    if (get_parent ()->somehow_activating () && *_src && *_dst) {
       AbstractAssignment::do_assignment (*_src, *_dst, _propagate);
+    }
   }
 
 #if NEW
@@ -78,21 +79,30 @@ namespace djnn
       }
     }
     
-    /*
+    /*    
     if(_src) {
-      std::cout << "_src:" << _src->get_name () << std::endl;
+      std::cout << "_src: " << _src->get_name () << std::endl;
+    } else {
+      std::cout << "_src: (null)" << std::endl;
     }
     if(_ref_info_src._ref) {
-      std::cout << "_refsrc:" << _ref_info_src._name << std::endl;
+      std::cout << "_refsrc: " << _ref_info_src._name << std::endl;
+    } else {
+      std::cout << "_refsrc: (null)" << std::endl;
     }
     if(_dst) {
-      std::cout << "_dst:" << _dst->get_name () << std::endl;
+      std::cout << "_dst: " << _dst->get_name () << std::endl;
+    } else {
+      std::cout << "_dst: (null)" << std::endl;
     }
     if(_ref_info_dst._ref) {
-      std::cout << "_refdst:" << _ref_info_dst._name << std::endl;
+      std::cout << "_refdst :" << _ref_info_dst._name << std::endl;
+    } else {
+      std::cout << "_refdst: (null)" << std::endl;
     }
+    
+    std::cout << "coupling: from " << _c_src.get_src() << " to " << _c_src.get_dst() << std::endl;
     */
-
   }
 
 #else
@@ -168,21 +178,33 @@ namespace djnn
 
     /*
     if(_src) {
-      std::cout << "_src:" << _src->get_name () << std::endl;
+      std::cout << "_src: " << _src->get_name () << std::endl;
+    } else {
+      std::cout << "_src: (null)" << std::endl;
     }
     if(_update_src) {
-      std::cout << "_refsrc:" << ref_src_pair.second << std::endl;
+      std::cout << "_refsrc: " << ref_src_pair.second << std::endl;
+    } else {
+      std::cout << "_refsrc: (null)" << std::endl;
     }
     if(_dst) {
-      std::cout << "_dst:" << _dst->get_name () << std::endl;
+      std::cout << "_dst: " << _dst->get_name () << std::endl;
+    } else {
+      std::cout << "_dst: (null)" << std::endl;
     }
     if(_update_dst) {
-      std::cout << "_refdst:" << ref_dst_pair.second << std::endl;
+      std::cout << "_refdst: " << ref_dst_pair.second << std::endl;
+    } else {
+      std::cout << "_refdst: (null)" << std::endl;
     }
+
+    std::cout << "coupling: from " << _c_src->get_src() << " to " << _c_src->get_dst() << std::endl;
     */
     
   }
 #endif
+
+
   Connector::Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation)
   :
     SrcToDstLink (p, n),
@@ -202,6 +224,7 @@ namespace djnn
   {
 #if NEW
     if (_src) {
+      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);
       _c_src.disable ();
       if(_dst) {
         Graph::instance ().add_edge (_src, _dst);
@@ -214,6 +237,7 @@ namespace djnn
 #else
     init_connector (src, ispec, dst, dspec);
 #endif
+    
     Process::finalize_construction (p);
   }
 
@@ -301,8 +325,12 @@ namespace djnn
   void
   Connector::update_graph ()
   {
-#if NEW    
     //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+#if NEW
+    if (_has_coupling) {
+      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
+      _has_coupling = false;
+    }
     if (_src && _dst) {
       _c_src.change_source(_src);
       _has_coupling = true;
@@ -311,9 +339,8 @@ namespace djnn
       } else {
         _c_src.disable ();
       }
-    } else {
-      _has_coupling = false;
     }
+
 #else
     if (_has_coupling) {
       delete _c_src;
