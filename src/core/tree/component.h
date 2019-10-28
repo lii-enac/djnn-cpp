@@ -14,9 +14,7 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-
-//#include <list>
+#include "core/ontology/process.h"
 
 namespace djnn {
   using namespace std;
@@ -43,14 +41,14 @@ namespace djnn {
     virtual ~Container ();
     children_t children () { return _children; }
     void
-    add_to_context (string k, Process *v)
+    add_to_context (const string& k, Process *v)
     {
       std::map<string, Process*>::iterator it = _cur_context.find (k);
       if (it != _cur_context.end ()) it->second = v;
       else _cur_context.insert (std::make_pair (k, v));
     }
     Process*
-    get_from_context (string k)
+    get_from_context (const string& k)
     {
       std::map<string, Process*>::iterator it = _cur_context.find (k);
       if (it != _cur_context.end ()) return it->second;
