@@ -348,8 +348,6 @@ namespace djnn
   void
   AdderAccumulator::AdderAccumulatorAction::impl_activate ()
   {
-    if (!get_parent ()->somehow_activating ())
-      return;
     double input = ((DoubleProperty*) _input)->get_value ();
     double clamp_min = ((DoubleProperty*) _clamp_min)->get_value ();
     double clamp_max = ((DoubleProperty*) _clamp_max)->get_value ();

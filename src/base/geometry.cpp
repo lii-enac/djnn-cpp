@@ -29,9 +29,6 @@ namespace djnn
   void
   HermiteCurve::HermiteCurveAction::impl_activate ()
   {
-    //if (get_parent ()->get_state () > activated)
-    if (!get_parent ()->somehow_activating ())
-      return;
     double p1 = ((DoubleProperty*) _p1)->get_value ();
     double p2 = ((DoubleProperty*) _p2)->get_value ();
     double t1 = ((DoubleProperty*) _t1)->get_value ();

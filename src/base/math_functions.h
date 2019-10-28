@@ -34,9 +34,6 @@ namespace djnn
       virtual ~ExpAction () {}
       void impl_activate ()
       {
-        //if (get_parent ()->get_state () > activated)
-        if (!get_parent ()->somehow_activating ())
-          return;
         _output->set_value (exp (((DoubleProperty*)_input)->get_value ()), true);
       }
       void impl_deactivate () {}
@@ -58,9 +55,6 @@ namespace djnn
         virtual ~LogAction () {}
         void impl_activate ()
         {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           _output->set_value (log (((DoubleProperty*)_input)->get_value ()), true);
         }
         void impl_deactivate () {}
@@ -82,9 +76,6 @@ namespace djnn
         virtual ~Log10Action () {}
         void impl_activate ()
         {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           _output->set_value (log10 (((DoubleProperty*)_input)->get_value ()), true);
         }
         void impl_deactivate () {}
@@ -105,9 +96,6 @@ namespace djnn
           BinaryOperatorAction (p, n, base, exp, result) {}
         virtual ~PowAction () {}
         void impl_activate () {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           _result->set_value (pow (((DoubleProperty*) _left)->get_value (), ((DoubleProperty*) _right)->get_value ()), true);
         }
          void impl_deactivate () {}
@@ -129,9 +117,6 @@ namespace djnn
         virtual ~SqrtAction () {}
         void impl_activate ()
         {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           _output->set_value (sqrt (((DoubleProperty*)_input)->get_value ()), true);
         }
         void impl_deactivate () {}
@@ -153,9 +138,6 @@ namespace djnn
         virtual ~AbsAction () {}
         void impl_activate ()
         {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           _output->set_value (abs (((DoubleProperty*)_input)->get_value ()), true);
         }
         void impl_deactivate () {}
@@ -176,9 +158,6 @@ namespace djnn
           BinaryOperatorAction (p, n, min, input, result) {}
         virtual ~MinAction () {}
         void impl_activate () {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           double min = ((DoubleProperty*) _left)->get_value ();
           double input = ((DoubleProperty*) _right)->get_value ();
           _result->set_value ((min <= input ? input : min), true);
@@ -201,9 +180,6 @@ namespace djnn
           BinaryOperatorAction (p, n, max, input, result) {}
         virtual ~MaxAction () {}
         void impl_activate () {
-          //if (get_parent ()->get_state () > activated)
-          if (!get_parent ()->somehow_activating ())
-            return;
           double max = ((DoubleProperty*) _left)->get_value ();
           double input = ((DoubleProperty*) _right)->get_value ();
           _result->set_value ((max >= input ? input : max), true);
