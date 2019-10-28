@@ -78,6 +78,7 @@ namespace djnn
       }
     }
     
+    /*
     if(_src) {
       std::cout << "_src:" << _src->get_name () << std::endl;
     }
@@ -90,6 +91,7 @@ namespace djnn
     if(_ref_info_dst._ref) {
       std::cout << "_refdst:" << _ref_info_dst._name << std::endl;
     }
+    */
 
   }
 
@@ -164,7 +166,7 @@ namespace djnn
       _update_dst->impl_activate ();
     }
 
-    
+    /*
     if(_src) {
       std::cout << "_src:" << _src->get_name () << std::endl;
     }
@@ -177,6 +179,7 @@ namespace djnn
     if(_update_dst) {
       std::cout << "_refdst:" << ref_dst_pair.second << std::endl;
     }
+    */
     
   }
 #endif
