@@ -67,7 +67,7 @@ namespace djnn
   {
     if(!_ref_info_src._ref) {
       if (_src == 0) {
-        error (this, "source not found in connector creation or source is not a property (" + get_name () + ", " + ispec + ", " + dspec + ")");
+        error (this, "SOURCE not found in connector creation or SOURCE is not a property (" + get_name () + ", " + ispec + ", " + dspec + ")");
       }
     }
 
