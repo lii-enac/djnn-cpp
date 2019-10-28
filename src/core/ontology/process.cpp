@@ -30,7 +30,7 @@ namespace djnn
 
   int Process::_nb_anonymous = 0;
 
-#ifndef DEBUG
+#ifndef DJNN_DEBUG
   string Process::_dbg_info = "no dbg info";
 #endif
 
@@ -45,7 +45,7 @@ namespace djnn
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else {
-      _dbg_info = "no debug info";
+      _dbg_info = "no debug info from smala";
     }
 
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);

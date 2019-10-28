@@ -172,7 +172,7 @@ namespace djnn {
     Process *_data;
     unsigned int _bitset;
 
-#ifdef DEBUG
+#ifdef DJNN_DEBUG
     string _dbg_info;
 #else
     static string _dbg_info;
