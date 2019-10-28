@@ -35,6 +35,8 @@ namespace djnn {
       ref_info() : _ref(nullptr) {}
       bool is_ref() const { return _ref != nullptr; }
       RefProperty * _ref;
+
+      // FIXME: name should not be stored, useless loss of memory!! use string tmp_refname1 = string(), tmp_refname2 = string() in constructors to have tmp variable
       string _name;
     };
     struct ref_update {

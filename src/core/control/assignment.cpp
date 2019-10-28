@@ -121,8 +121,7 @@ namespace djnn
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
-  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst,
-					  const string &dspec, bool isModel)
+  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel)
   :
   SrcToDstLink (p, n, isModel),
   _init(this, n, src, ispec, dst, dspec),
