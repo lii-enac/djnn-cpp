@@ -20,6 +20,8 @@
 #include "../../core/utils/error.h"
 #include "../../core/execution/graph.h"
 #include <string.h>
+#include <iostream>
+
 
 #include <fcntl.h>
 
@@ -29,6 +31,8 @@
 #ifndef DEBUG
 #define DEBUG 1
 #endif
+
+using namespace std;
 
 namespace djnn {
 
