@@ -40,28 +40,25 @@ namespace djnn
   }
 
   Clock::Clock (int period)
+  :
+    _period (this, "period", period),
+    _elapsed (this, "elapsed", 0),
+    _tick (this, "tick")
   {
-    _period = new IntProperty (this, "period", period);
-    _elapsed = new DoubleProperty (this, "elapsed", 0);
-    _tick = new Spike (this, "tick");
   }
 
-  Clock::Clock (Process *p, const std::string& n, int period) :
-      Process (n)
+  Clock::Clock (Process *p, const std::string& n, int period)
+  :
+    Process (n),
+    _period (this, "period", period),
+    _elapsed (this, "elapsed", 0),
+    _tick (this, "tick")
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << (p ? p->get_name() : "") << "/" << get_name() << std::endl; 
-    _period = new IntProperty (this, "period", period);
-    _elapsed = new DoubleProperty (this, "elapsed", 0);
-    _tick = new Spike (this, "tick");
     Process::finalize_construction (p);
   }
 
   Clock::~Clock ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
-    delete _tick;
-    delete _elapsed;
-    delete _period;
   }
 
   void
@@ -89,7 +86,7 @@ namespace djnn
       djnn::release_exclusive_access (DBG_REL);
       return;
     }
-    int duration = _period->get_value ();
+    int duration = _period.get_value ();
     djnn::release_exclusive_access (DBG_REL);
 
     try {
@@ -119,8 +116,8 @@ namespace djnn
           struct timespec after;
           get_monotonic_time(&after);
           double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
-          _elapsed->set_value (elapsedTime, true);
-          _tick->activate (); // propagating
+          _elapsed.set_value (elapsedTime, true);
+          _tick.activate (); // propagating
           
           GRAPH_EXEC; // executing
           if(thread_local_cancelled) {
@@ -128,7 +125,7 @@ namespace djnn
             //std::cerr << " cancelled" << __FL__ << std::endl;
             break;
           }
-          duration = _period->get_value ();
+          duration = _period.get_value ();
           djnn::release_exclusive_access (DBG_REL); 
         }
           
@@ -156,7 +153,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:clock");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->int_attribute ("period", _period->get_value ());
+    AbstractSerializer::serializer->int_attribute ("period", _period.get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

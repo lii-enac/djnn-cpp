@@ -15,10 +15,13 @@
 
 #pragma once
 
-#include "../core/ontology/process.h"
-#include "../core/syshook/external_source.h"
+#include "core/ontology/process.h"
+#include "core/syshook/external_source.h"
+#include "core/tree/int_property.h"
+#include "core/tree/double_property.h"
+#include "core/tree/spike.h"
 
-#include "../core/syshook/cpp-chrono.h"
+#include "core/syshook/cpp-chrono.h"
 
 namespace djnn
 {
@@ -44,9 +47,9 @@ namespace djnn
     void serialize (const string& type) override;
 
   private:
-    IntProperty *_period;
-    DoubleProperty *_elapsed;
-    Process *_tick;
+    IntProperty _period;
+    DoubleProperty _elapsed;
+    Spike _tick;
 
     void run() override;
   };
