@@ -140,6 +140,7 @@ namespace djnn {
     // debug
     virtual  void dump (int level=0);
     const string& debug_info () { return _dbg_info; }
+    //const string& debug_info () { return ""; }
 
   protected:
     void finalize_construction (Process* parent, Process* state=nullptr );
@@ -162,21 +163,23 @@ namespace djnn {
 
 // >>instance fields start here
   private:
+    Vertex *_vertex;
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
-    Vertex *_vertex;
-    symtable_t _symtable;
-    string _name;
     Process *_parent;
     Process *_state_dependency;
     Process *_data;
     unsigned int _bitset;
+    symtable_t _symtable;
+    string _name;
+
 
 #ifdef DJNN_DEBUG
     string _dbg_info;
 #else
     static string _dbg_info;
 #endif
+
 // <<instance fields end here
 
   public:

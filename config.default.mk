@@ -11,3 +11,5 @@ cross_prefix := g
 #options: /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 
 build_dir := build
+
+#CFLAGS += -DDJNN_DEBUG

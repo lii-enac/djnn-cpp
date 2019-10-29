@@ -41,13 +41,14 @@ namespace djnn
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
-   
+  
+#ifdef DJNN_DEBUG
     if (Context::instance ()->line () != -1) {
       _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
     } else {
-      _dbg_info = "no debug info from smala";
+      _dbg_info = "no dbg info";
     }
-
+#endif
     _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
 
     //debug
