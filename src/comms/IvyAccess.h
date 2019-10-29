@@ -68,11 +68,11 @@ namespace djnn
     string _ready_message;
 
     map<string, vector<pair<int, TextProperty*>>> _in_map;   
-    TextProperty* _out;
-    Coupling*  _out_c;
-    IvyOutAction*    _out_a;
-    TextProperty* _arriving;
-    TextProperty* _leaving;
+    TextProperty _out;
+    IvyOutAction _out_a;
+    Coupling _out_c;
+    TextProperty _arriving;
+    TextProperty _leaving;
 
     // thread source
     void run () override;

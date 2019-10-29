@@ -182,48 +182,30 @@ namespace djnn
   /**** IVY ACCESS ****/
 
  IvyAccess::IvyAccess (Process *p, const std::string& n, 
-  const std::string& bus, const std::string& appname, const std::string& ready, bool isModel) :
- Process (n, isModel)
+  const std::string& bus, const std::string& appname, const std::string& ready, bool isModel)
+ : Process (n, isModel),
+ _out ( this, "out", ""),
+ _out_a (this, "out_action", &_out),
+ _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION ),
+ _arriving ( this,  "arriving", ""),
+ _leaving ( this,  "leaving", "")
  {
   _bus =  bus;
   _appname =  appname;
   _ready_message = ready;
 
-    /* OUT child */
-  _out = new TextProperty ( this, "out", "");
-  _out_a = new IvyOutAction (this, "out_action", _out);
-  _out_c = new Coupling (_out , ACTIVATION, _out_a, ACTIVATION );
-  _out_c->disable();
-  Graph::instance().add_edge(_out, _out_a);
+  _out_c.disable ();
+  Graph::instance().add_edge (&_out, &_out_a);
 
-    /* ARRIVING child */
-  _arriving = new TextProperty ( this,  "arriving", "");
-
-    /* LEAVING child */
-  _leaving = new TextProperty ( this,  "leaving", "");
-
-    /* IN is a special child build in IvyAccess::find_component */
+  /* IN is a special child build in IvyAccess::find_component */
 
   Process::finalize_construction (p);
 }
 
 IvyAccess::~IvyAccess ()
 {
-  Graph::instance().remove_edge(_out, _out_a);
-  remove_state_dependency (get_parent (), _out_a);
-
-  delete _out;
-  delete _out_c;
-  delete _out_a;
-
-  delete _arriving;
-  delete _leaving;
-
-  // TODO: Clean MAP
-  //while (!_in.empty()) {
-  // delete _in.back();
-  // _in.pop_back();
-  //}
+  Graph::instance().remove_edge (&_out, &_out_a);
+  remove_state_dependency (get_parent (), &_out_a);
 }
 
 void
@@ -231,24 +213,24 @@ IvyAccess::set_parent (Process* p)
 { 
   /* in case of re-parenting remove edge dependency in graph */
   if (get_parent ()) {
-      remove_state_dependency (get_parent (), _out_a);
+      remove_state_dependency (get_parent (), &_out_a);
   }
 
-  add_state_dependency (p, _out_a);
+  add_state_dependency (p, &_out_a);
     
   Process::set_parent (p); 
 }
 
 void IvyAccess::set_arriving(string v) {
   djnn::get_exclusive_access (DBG_GET);
-  _arriving->set_value (v, true);
+  _arriving.set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
 
 void IvyAccess::set_leaving(string v) {
   djnn::get_exclusive_access (DBG_GET);
-  _leaving->set_value (v, true);
+  _leaving.set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
@@ -306,7 +288,7 @@ IvyAccess::run ()
 
       /* enable coupling */
     djnn::get_exclusive_access (DBG_GET);
-    _out_c->enable();
+    _out_c.enable();
     djnn::release_exclusive_access (DBG_REL);
 
     IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
@@ -332,7 +314,7 @@ IvyAccess::run ()
     
     /* disable coupling */
     djnn::get_exclusive_access (DBG_GET);
-    _out_c->disable();
+    _out_c.disable();
     djnn::release_exclusive_access (DBG_REL);
 
   } catch (exception& e) {
@@ -399,13 +381,13 @@ IvyAccess::find_component (const string& key)
   }
 
   else if (key.compare ("out") == 0)
-    return _out;
+    return &_out;
 
   else if (key.compare ("arriving") == 0)
-    return _arriving;
+    return &_arriving;
 
   else if (key.compare ("leaving") == 0)
-    return _leaving; 
+    return &_leaving; 
 
   else
     return 0;
