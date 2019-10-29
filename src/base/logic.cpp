@@ -14,10 +14,11 @@
  */
 
 #include "logic.h"
-#include "../core/serializer/serializer.h"
+#include "core/serializer/serializer.h"
 
 namespace djnn
 {
+#if !NEW_OP
   And::And (Process *parent, const string &n, int l_val, int r_val) :
       BinaryOperator (parent, n)
   {
@@ -95,6 +96,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   Not::Not (Process *parent, const string &n, int in_val) :
       UnaryOperator (parent, n)
@@ -119,5 +121,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+
 }
 

@@ -15,12 +15,15 @@
 
 #include "arithmetic.h"
 
-#include "../core/execution/graph.h"
-#include "../core/serializer/serializer.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
 
 namespace djnn
 {
-  Adder::Adder (Process *p, const string &n, double l_val, double r_val) :
+
+#if !NEW_OP
+
+  OldAdder::OldAdder (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -31,7 +34,7 @@ namespace djnn
   }
 
   void
-  Adder::serialize (const string& type) {
+  OldAdder::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -45,7 +48,7 @@ namespace djnn
 
   }
 
-  Subtractor::Subtractor (Process *p, const string &n, double l_val, double r_val) :
+  OldSubtractor::OldSubtractor (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -56,7 +59,7 @@ namespace djnn
   }
 
   void
-  Subtractor::serialize (const string& type) {
+  OldSubtractor::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -70,7 +73,7 @@ namespace djnn
 
   }
 
-  Multiplier::Multiplier (Process *p, const string &n, double l_val, double r_val) :
+  OldMultiplier::OldMultiplier (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -81,7 +84,7 @@ namespace djnn
   }
 
   void
-  Multiplier::serialize (const string& type) {
+  OldMultiplier::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -95,7 +98,7 @@ namespace djnn
 
   }
 
-  Divider::Divider (Process *p, const string &n, double l_val, double r_val) :
+  OldDivider::OldDivider (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -108,7 +111,7 @@ namespace djnn
   }
 
   void
-  Divider::serialize (const string& type) {
+  OldDivider::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -122,7 +125,7 @@ namespace djnn
 
   }
 
-  Modulo::Modulo (Process *p, const string &n, int l_val, int r_val) :
+  OldModulo::OldModulo (Process *p, const string &n, int l_val, int r_val) :
       BinaryOperator (p, n)
   {
     _left = new IntProperty (this, "left", l_val);
@@ -135,7 +138,7 @@ namespace djnn
   }
 
   void
-  Modulo::serialize (const string& type) {
+  OldModulo::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -149,7 +152,7 @@ namespace djnn
 
   }
 
-  AscendingComparator::AscendingComparator (Process *p, const string &n, double l_val, double r_val) :
+  OldAscendingComparator::OldAscendingComparator (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -160,7 +163,7 @@ namespace djnn
   }
 
   void
-  AscendingComparator::serialize (const string& type) {
+  OldAscendingComparator::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -174,7 +177,7 @@ namespace djnn
 
   }
 
-  StrictAscendingComparator::StrictAscendingComparator (Process *p, const string &n, double l_val,
+  OldStrictAscendingComparator::OldStrictAscendingComparator (Process *p, const string &n, double l_val,
                                                         double r_val) :
       BinaryOperator (p, n)
   {
@@ -186,7 +189,7 @@ namespace djnn
   }
 
   void
-  StrictAscendingComparator::serialize (const string& type) {
+  OldStrictAscendingComparator::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -200,7 +203,7 @@ namespace djnn
 
   }
 
-  EqualityComparator::EqualityComparator (Process *p, const string &n, double l_val, double r_val) :
+  OldEqualityComparator::OldEqualityComparator (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
   {
     _left = new DoubleProperty (this, "left", l_val);
@@ -211,7 +214,7 @@ namespace djnn
   }
 
   void
-  EqualityComparator::serialize (const string& type) {
+  OldEqualityComparator::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -224,6 +227,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   SignInverter::SignInverter (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)

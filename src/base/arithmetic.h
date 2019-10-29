@@ -17,11 +17,41 @@
 
 #include "operators.h"
 
+#include <functional>
+
 namespace djnn
 {
   using namespace std;
 
-  class Adder : public BinaryOperator
+#if NEW_OP
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> AdderAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> NewAdder;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> SubtractorAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> NewSubtractor;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> MultiplierAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> NewMultiplier;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> DividerAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> NewDivider;
+
+  typedef NewBinaryOperatorAction<IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> ModuloAction;
+  typedef NewBinaryOperator      <IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> NewModulo;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> StrictAscendingComparatorAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> NewStrictAscendingComparator;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> AscendingComparatorAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> NewAscendingComparator;
+
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> EqualityComparatorAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> NewEqualityComparator;
+
+#else
+
+  class OldAdder : public BinaryOperator
   {
   private:
     class AdderAction : public BinaryOperatorAction
@@ -38,13 +68,13 @@ namespace djnn
       void impl_deactivate () {}
     };
   public:
-    Adder (Process *p, const string &name, double l_val, double r_val);
-    virtual ~Adder () {}
+    OldAdder (Process *p, const string &name, double l_val, double r_val);
+    virtual ~OldAdder () {}
   protected:
     void serialize (const string& type) override;  
   };
 
-  class Subtractor : public BinaryOperator
+  class OldSubtractor : public BinaryOperator
   {
   private:
     class SubtractorAction : public BinaryOperatorAction
@@ -61,14 +91,14 @@ namespace djnn
       void impl_deactivate () {}
     };
   public:
-    Subtractor (Process *p, const string &name, double l_val, double r_val);
+    OldSubtractor (Process *p, const string &name, double l_val, double r_val);
     virtual
-    ~Subtractor () {}
+    ~OldSubtractor () {}
   protected:
     void serialize (const string& type) override; 
   };
 
-  class Multiplier : public BinaryOperator
+  class OldMultiplier : public BinaryOperator
   {
   private:
     class MultiplierAction : public BinaryOperatorAction
@@ -85,13 +115,13 @@ namespace djnn
       void impl_deactivate () {}
     };
   public:
-    Multiplier (Process *p, const string &name, double l_val, double r_val);
-    virtual ~Multiplier () {}
+    OldMultiplier (Process *p, const string &name, double l_val, double r_val);
+    virtual ~OldMultiplier () {}
   protected:
     void serialize (const string& type) override;
   };
 
-  class Divider : public BinaryOperator
+  class OldDivider : public BinaryOperator
   {
   private:
     class DividerAction : public BinaryOperatorAction
@@ -112,13 +142,13 @@ namespace djnn
     void impl_deactivate () {}
   };
   public:
-  Divider (Process *p, const string &name, double l_val, double r_val);
-  virtual ~Divider () {}
+  OldDivider (Process *p, const string &name, double l_val, double r_val);
+  virtual ~OldDivider () {}
   protected:
     void serialize (const string& type) override;
   };
 
-class Modulo : public BinaryOperator
+class OldModulo : public BinaryOperator
 {
 private:
   class ModuloAction : public BinaryOperatorAction
@@ -141,13 +171,13 @@ private:
   void impl_deactivate () {}
 };
 public:
-  Modulo (Process *p, const string &name, int l_val, int r_val);
-  virtual ~Modulo () {}
+  OldModulo (Process *p, const string &name, int l_val, int r_val);
+  virtual ~OldModulo () {}
 protected:
     void serialize (const string& type) override;
 };
 
-class AscendingComparator : public BinaryOperator
+class OldAscendingComparator : public BinaryOperator
 {
 private:
   class AscendingComparatorAction : public BinaryOperatorAction
@@ -164,13 +194,13 @@ private:
     void impl_deactivate () {}
   };
 public:
-  AscendingComparator (Process *p, const string &name, double l_val, double r_val);
-  virtual ~AscendingComparator () {}
+  OldAscendingComparator (Process *p, const string &name, double l_val, double r_val);
+  virtual ~OldAscendingComparator () {}
 protected:
     void serialize (const string& type) override;
 };
 
-class StrictAscendingComparator : public BinaryOperator
+class OldStrictAscendingComparator : public BinaryOperator
 {
 private:
   class StrictAscendingComparatorAction : public BinaryOperatorAction
@@ -188,13 +218,13 @@ private:
     void impl_deactivate () {}
   };
 public:
-  StrictAscendingComparator (Process *p, const string &name, double l_val, double r_val);
-  virtual ~StrictAscendingComparator () {}
+  OldStrictAscendingComparator (Process *p, const string &name, double l_val, double r_val);
+  virtual ~OldStrictAscendingComparator () {}
 protected:
     void serialize (const string& type) override;
 };
 
-class EqualityComparator : public BinaryOperator
+class OldEqualityComparator : public BinaryOperator
 {
 private:
   class EqualityComparatorAction : public BinaryOperatorAction
@@ -211,11 +241,13 @@ private:
     void impl_deactivate () {}
   };
 public:
-  EqualityComparator (Process *p, const string &name, double l_val, double r_val);
-  virtual ~EqualityComparator () {}
+  OldEqualityComparator (Process *p, const string &name, double l_val, double r_val);
+  virtual ~OldEqualityComparator () {}
 protected:
   void serialize (const string& type) override;
 };
+
+#endif
 
 class SignInverter : public UnaryOperator
 {
@@ -310,4 +342,23 @@ private:
   Process *_action;
 };
 
+#if NEW_OP
+  typedef NewAdder Adder;
+  typedef NewSubtractor Subtractor;
+  typedef NewMultiplier Multiplier;
+  typedef NewDivider Divider;
+  typedef NewModulo Modulo;
+  typedef NewAscendingComparator AscendingComparator;
+  typedef NewStrictAscendingComparator StrictAscendingComparator;
+  typedef NewEqualityComparator EqualityComparator;
+#else
+  typedef OldAdder Adder;
+  typedef OldSubtractor Subtractor;
+  typedef OldMultiplier Multiplier;
+  typedef OldDivider Divider;
+  typedef OldModulo Modulo;
+  typedef OldAscendingComparator AscendingComparator;
+  typedef OldStrictAscendingComparator StrictAscendingComparator;
+  typedef OldEqualityComparator EqualityComparator;
+#endif
 }

@@ -329,11 +329,12 @@ namespace djnn
     //std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #if NEW
     if (_has_coupling) {
-      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
+      _c_src = Coupling();//_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
       _has_coupling = false;
     }
     if (_src && _dst) {
-      _c_src.change_source(_src);
+      //_c_src.change_source(_src);
+      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
         _action.activate ();

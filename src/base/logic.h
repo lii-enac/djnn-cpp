@@ -21,6 +21,19 @@ namespace djnn
 {
   using namespace std;
 
+#if NEW_OP
+
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_and<double>, double, double> AndAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_and<double>, double, double> And;
+
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_or<double>, double, double> OrAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_or<double>, double, double> Or;
+
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<double>, double, double> XOrAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<double>, double, double> XOr;
+
+#else
+
   class And : public BinaryOperator
   {
   private:
@@ -86,6 +99,7 @@ namespace djnn
     virtual ~XOr () {}
     void serialize (const string& type) override;
   };
+#endif
 
   class Not : public UnaryOperator
   {
