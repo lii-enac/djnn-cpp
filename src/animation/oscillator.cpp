@@ -38,39 +38,29 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (Process *p, const string &n) :
-      Process (n)
+  Oscillator::Oscillator (Process *p, const string &n)
+  : Process (n),
+  _m (this, "m", 1),
+  _k (this, "k", 1),
+  _damping (this, "damping", 0),
+  _v (this, "v", 0),
+  _output (this, "output", 1),
+  _dt (this, "dt", 0.001),
+  _step (this, "step"),
+  _c_step (&_step, ACTIVATION, &_action, ACTIVATION),
+  _action (this, "action", &_m, &_k, &_damping, &_v, &_output, &_dt)
   {
-    _m = new DoubleProperty (this, "m", 1);
-    _k = new DoubleProperty (this, "k", 1);
-    _damping = new DoubleProperty (this, "damping", 0);
-    _v = new DoubleProperty (this, "v", 0);
-    _output = new DoubleProperty (this, "output", 1);
-    _dt = new DoubleProperty (this, "dt", 0.001);
-    _step = new Spike (this, "step");
-    _action = new OscillatorAction (this, "action", _m, _k, _damping, _v, _output, _dt);
-    _c_step = new Coupling (_step, ACTIVATION, _action, ACTIVATION);
-    _c_step->disable ();
-    Graph::instance ().add_edge (_step, _action);
-    Graph::instance ().add_edge (_action, _output);
+    _c_step.disable ();
+    Graph::instance ().add_edge (&_step, &_action);
+    Graph::instance ().add_edge (&_action, &_output);
     Process::finalize_construction (p);
   }
 
   Oscillator::~Oscillator ()
   { 
-    remove_state_dependency (get_parent (), _action);
-    Graph::instance ().remove_edge (_step, _action);
-    Graph::instance ().remove_edge (_action, _output);
-    
-    delete _c_step;
-    delete _action;
-    delete _step;
-    delete _dt;
-    delete _v;
-    delete _output;
-    delete _damping;
-    delete _k;
-    delete _m;
+    remove_state_dependency (get_parent (), &_action);
+    Graph::instance ().remove_edge (&_step, &_action);
+    Graph::instance ().remove_edge (&_action, &_output);
   }
 
   void
@@ -78,23 +68,23 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+       remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, _action);
+    add_state_dependency (p, &_action);
     Process::set_parent (p); 
   }
 
   void
   Oscillator::impl_activate ()
   {
-    _c_step->enable ();
+    _c_step.enable ();
   }
 
   void
   Oscillator::impl_deactivate ()
   {
-    _c_step->disable ();
+    _c_step.disable ();
   }
 
   void

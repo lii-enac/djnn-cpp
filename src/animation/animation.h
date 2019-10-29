@@ -52,9 +52,9 @@ namespace djnn
       void serialize (const string& type) override;
     private:
       void set_parent (Process* p) override;
-      DoubleProperty *_m, *_k, *_damping, *_v, *_output, *_dt;
-      Process* _step;
-      Coupling* _c_step;
-      OscillatorAction* _action;
+      DoubleProperty _m, _k, _damping, _v, _output, _dt;
+      Spike _step;
+      Coupling _c_step;
+      OscillatorAction _action;
   };
 }
