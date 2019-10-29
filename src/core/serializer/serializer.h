@@ -32,6 +32,9 @@ namespace djnn {
   	virtual void text_attribute (const string& name, const string& value) = 0;
   	virtual void int_attribute (const string& name, int value) = 0;
   	virtual void float_attribute (const string& name, double value) = 0;
+    void cpptype_attribute(const string& name, const string& value) { text_attribute(name, value); }
+    void cpptype_attribute(const string& name, int value) { int_attribute(name, value); }
+    void cpptype_attribute(const string& name, double value) { float_attribute(name, value); }
   	virtual void end () = 0;
   
   public:
