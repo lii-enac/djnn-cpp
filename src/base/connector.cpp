@@ -80,7 +80,7 @@ namespace djnn
       }
     }
     
-    /*    
+    /*
     if(_src) {
       std::cout << "_src: " << _src->get_name () << std::endl;
     } else {
@@ -163,6 +163,7 @@ namespace djnn
     _action = new ConnectorAction (this, "connector_" + src_name + "_to_" + dst_name + "_action", &_src, &_dst, true);
 
     if (_src) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _c_src->disable ();
       if (_dst) {
@@ -279,19 +280,28 @@ namespace djnn
   {
     /* when an connector is in a deactivate fsm branch and src has changed. it is not aware of it.
        we have to re-evaluate it */
+    //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
 #if NEW
-    if(_ref_info_src.is_ref())
+    if(_ref_info_src.is_ref()) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _ref_update_src._update.impl_activate ();
+    }
     _c_src.enable();
-    if (_copy_on_activation)
+    if (_copy_on_activation) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _action.activate ();
+    }
 #else
-    if (_update_src)
+    if (_update_src) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _update_src->impl_activate ();
+    }
     if (_c_src)
       _c_src->enable ();
-    if (_copy_on_activation)
+    if (_copy_on_activation) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _action->activate ();
+    }
 #endif
   }
 
@@ -326,32 +336,36 @@ namespace djnn
   void
   Connector::update_graph ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+    //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
+    //std::cerr << "_src:" << _src << " _dst:" << _dst << std::endl;
 #if NEW
     if (_has_coupling) {
       _c_src = Coupling();//_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
       _has_coupling = false;
     }
     if (_src && _dst) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       //_c_src.change_source(_src);
-      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);
+      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);    
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
+        //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
         _action.activate ();
       } else {
         _c_src.disable ();
       }
     }
-
 #else
     if (_has_coupling) {
       delete _c_src;
       _c_src = nullptr;
     }
     if (_src && _dst) {
+      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
+        //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
         _action->activate ();
       } else {
         _c_src->disable ();

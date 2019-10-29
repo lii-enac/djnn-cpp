@@ -65,6 +65,12 @@ namespace djnn
     _data = data;
   }
 
+  Coupling::Coupling ()
+  : _src(nullptr), _dst(nullptr)
+  {
+    //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
+  }
+
   Coupling::~Coupling ()
   {
     //cerr << __PRETTY_FUNCTION__  << " - " << this << std::endl;

@@ -12,8 +12,10 @@ namespace djnn {
   class UpdateSrcOrDst : public Action
   {
     public:
-      UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process **to_update);
-      UpdateSrcOrDst () {} // needed for pointer-less zombie initialization
+      UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process** to_update);
+      UpdateSrcOrDst () // needed for pointer-less zombie initialization
+      //: _to_update(zombie)
+      {} 
       
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
@@ -22,6 +24,8 @@ namespace djnn {
       Process** _to_update;
       RefProperty* _prop;
       string _spec;
+
+    //static Process* zombie;
   };
 
   class SrcToDstLink : public Process {
@@ -41,7 +45,7 @@ namespace djnn {
     };
     struct ref_update {
       ref_update() {}
-      ref_update(Process *p, const ref_info& ri, Process **to_update) :
+      ref_update(Process *p, const ref_info& ri, Process** to_update) :
         _update(p, "update_src_action", ri._ref, ri._name, to_update),
         _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
         { //_update.impl_activate();
