@@ -96,8 +96,6 @@ namespace djnn {
       AbstractSerializer::post_serialize(this);
     }
 
-    
-
   protected:
     void set_parent (Process* p) override {
       // in case of re-parenting remove edge dependency in graph
