@@ -14,10 +14,11 @@
 
 #pragma once
 
-#include "../core/ontology/process.h"
-#include "../core/control/action.h"
-#include "../core/tree/spike.h"
-#include "../core/tree/double_property.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/tree/spike.h"
+#include "core/tree/double_property.h"
 
 namespace djnn
 {
@@ -78,10 +79,12 @@ namespace djnn
   private:
     void set_parent (Process* p) override;
     bool _reset_occurred;
-    Spike *_reset, *_step;
-    DoubleProperty *_output, *_init, *_delta;
-    Coupling *_c_reset, *_c_step;
-    Process *_action_reset, *_action_step;
+    Spike _reset, _step;
+    DoubleProperty _output, _init, _delta;
+    CounterResetAction _action_reset;
+    Coupling _c_reset;
+    CounterStepAction _action_step;
+    Coupling _c_step;
   };
 
 }
