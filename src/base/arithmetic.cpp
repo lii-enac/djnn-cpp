@@ -21,7 +21,193 @@
 namespace djnn
 {
 
-#if !NEW_OP
+#if NEW_OP
+
+  template <> std::string serialize_info<std::plus<double>>::name = "adder";
+  template <> std::string serialize_info<std::minus<double>>::name = "subtractor";
+  template <> std::string serialize_info<std::multiplies<double>>::name = "multiplier";
+  template <> std::string serialize_info<std::divides<double>>::name = "divider";
+  template <> std::string serialize_info<std::modulus<int>>::name = "modulo";
+  template <> std::string serialize_info<std::greater<double>>::name = "ascendingcomparator";
+  template <> std::string serialize_info<std::greater_equal<double>>::name = "strictascendingcomparator";
+  template <> std::string serialize_info<std::equal_to<double>>::name = "equalitycomparator";
+  template <> std::string serialize_info<std::negate<double>>::name = "signinverter";
+
+  
+  NewPrevious::NewPrevious (Process *p, const string &n, double i_val)
+  : Process (n),
+    _input(this, "input", i_val),
+    _output(this, "output", i_val),
+    _action(this, "action", *this, i_val),
+    _coupling(&_input, ACTIVATION, &_action, ACTIVATION)
+  {
+    init_unary_couplings(_input, _output, _action, _coupling);
+    Process::finalize_construction (p);
+  }
+
+  void
+  NewPrevious::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:previous");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->float_attribute ("input", _input.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
+  int
+  NewIncr::init_incr (bool isModel)
+  {
+    Graph::instance ().add_edge (this, &_state);
+    set_is_model (isModel);
+    return 1;
+  }
+
+  NewIncr::NewIncr (bool isModel)
+  : _delta (this, "delta", 1),
+    _state (this, "state", 0)
+  {
+    init_incr (isModel);
+  }
+
+  NewIncr::NewIncr (Process *parent, const string& name, bool isModel) :
+      Process (name),
+      _delta (this, "delta", 1),
+      _state (this, "state", 0)
+  {
+    init_incr (isModel);
+    Process::finalize_construction (parent);
+  }
+
+  NewIncr::~NewIncr ()
+  { 
+    remove_state_dependency (get_parent (), &_state);
+    Graph::instance ().remove_edge (this, &_state);
+  }
+
+  void
+  NewIncr::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), &_state);
+    }
+
+    add_state_dependency (p, &_state);
+    Process::set_parent (p); 
+  }
+
+  void
+  NewIncr::impl_activate ()
+  {
+    _state.set_value (_state.get_value () + _delta.get_value (), true);
+  }
+
+  void
+  NewIncr::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:incr");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
+  NewAdderAccumulator::NewAdderAccumulatorAction::NewAdderAccumulatorAction (Process* parent, const string &name,
+                                                                    NewAdderAccumulator& aa) :
+      Action (parent, name), _aa(aa)
+  {
+    Process::finalize_construction (parent);
+  }
+
+  void
+  NewAdderAccumulator::NewAdderAccumulatorAction::impl_activate ()
+  {
+    double input = _aa._input.get_value ();
+    double clamp_min = _aa._clamp_min.get_value ();
+    double clamp_max = _aa._clamp_max.get_value ();
+    double value = _aa._result.get_value ();
+    value += input;
+    if (clamp_min < clamp_max) {
+      value = value < clamp_min ? clamp_min : value;
+      value = value > clamp_max ? clamp_max : value;
+    }
+    _aa._result.set_value (value, true);
+  }
+
+  NewAdderAccumulator::NewAdderAccumulator (Process* parent, const string &name, double input, double clamp_min,
+                                      double clamp_max)
+  : Process (name),
+    _input (this, "input", input),
+    _clamp_min (this, "clamp_min", clamp_min),
+    _clamp_max (this, "clamp_max", clamp_max),
+
+    _result (this, "result", clamp_min >= clamp_max ? input : input < clamp_min ? clamp_min : input > clamp_max ? clamp_max : input),
+    _action (this, name + "_action", *this),
+    _c_input (&_input, ACTIVATION, &_action, ACTIVATION)
+  {
+    _c_input.disable ();
+    Graph::instance ().add_edge (&_input, &_action);
+    Graph::instance ().add_edge (&_action, &_result);
+    Process::finalize_construction (parent);
+  }
+
+  NewAdderAccumulator::~NewAdderAccumulator ()
+  {
+    remove_state_dependency (get_parent (), &_action);
+    Graph::instance ().remove_edge (&_input, &_action);
+    Graph::instance ().remove_edge (&_action, &_result);
+  }
+
+  void
+  NewAdderAccumulator::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), &_action);
+    }
+
+    add_state_dependency (p, &_action);
+    Process::set_parent (p); 
+  }
+
+  void
+  NewAdderAccumulator::impl_activate ()
+  {
+    _c_input.enable ();
+  }
+
+  void
+  NewAdderAccumulator::impl_deactivate ()
+  {
+    _c_input.disable ();
+  }
+
+  void
+  NewAdderAccumulator::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:adderaccumulator");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->float_attribute ("input", _input.get_value ());
+    AbstractSerializer::serializer->float_attribute ("clamp_min", _clamp_min.get_value ());
+    AbstractSerializer::serializer->float_attribute ("clamp_max", _clamp_max.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
+#else
 
   OldAdder::OldAdder (Process *p, const string &n, double l_val, double r_val) :
       BinaryOperator (p, n)
@@ -227,19 +413,18 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-#endif
 
-  SignInverter::SignInverter (Process *p, const string &n, double i_val) :
+  OldSignInverter::OldSignInverter (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", -(i_val));
-    init_couplings (new SignInverterAction (this, "action", _input, _output));
+    init_couplings (new OldSignInverterAction (this, "action", _input, _output));
     Process::finalize_construction (p);
   }
 
   void
-  SignInverter::serialize (const string& type) {
+  OldSignInverter::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -252,17 +437,17 @@ namespace djnn
 
   }
 
-  Previous::Previous (Process *p, const string &n, double i_val) :
+  OldPrevious::OldPrevious (Process *p, const string &n, double i_val) :
       UnaryOperator (p, n)
   {
     _input = new DoubleProperty (this, "input", i_val);
     _output = new DoubleProperty (this, "output", 0);
-    init_couplings (new PreviousAction (this, "action", _input, _output, i_val));
+    init_couplings (new OldPreviousAction (this, "action", _input, _output, i_val));
     Process::finalize_construction (p);
   }
 
   void
-  Previous::serialize (const string& type) {
+  OldPrevious::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -276,7 +461,7 @@ namespace djnn
   }
 
   int
-  Incr::init_incr (bool isModel)
+  OldIncr::init_incr (bool isModel)
   {
     _delta = new DoubleProperty (this, "delta", 1);
     _state = new DoubleProperty (this, "state", 0);
@@ -285,19 +470,19 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (bool isModel)
+  OldIncr::OldIncr (bool isModel)
   {
     init_incr (isModel);
   }
 
-  Incr::Incr (Process *parent, string name, bool isModel) :
+  OldIncr::OldIncr (Process *parent, string name, bool isModel) :
       Process (name)
   {
     init_incr (isModel);
     Process::finalize_construction (parent);
   }
 
-  Incr::~Incr ()
+  OldIncr::~OldIncr ()
   { 
     remove_state_dependency (get_parent (), _state);
     Graph::instance ().remove_edge (this, _state);
@@ -307,7 +492,7 @@ namespace djnn
   }
 
   void
-  Incr::set_parent (Process* p)
+  OldIncr::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -319,14 +504,14 @@ namespace djnn
   }
 
   void
-  Incr::impl_activate ()
+  OldIncr::impl_activate ()
   {
     _state->set_value (
         ((DoubleProperty*) _state)->get_value () + ((DoubleProperty*) _delta)->get_value (), true);
   }
 
   void
-  Incr::serialize (const string& type) {
+  OldIncr::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -339,7 +524,7 @@ namespace djnn
 
   }
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const string &name,
+  OldAdderAccumulator::OldAdderAccumulatorAction::OldAdderAccumulatorAction (Process* parent, const string &name,
                                                                     AbstractProperty* input,
                                                                     AbstractProperty* clamp_min,
                                                                     AbstractProperty* clamp_max,
@@ -350,7 +535,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::AdderAccumulatorAction::impl_activate ()
+  OldAdderAccumulator::OldAdderAccumulatorAction::impl_activate ()
   {
     double input = ((DoubleProperty*) _input)->get_value ();
     double clamp_min = ((DoubleProperty*) _clamp_min)->get_value ();
@@ -364,7 +549,7 @@ namespace djnn
     _result->set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (Process* parent, const string &name, double input, double clamp_min,
+  OldAdderAccumulator::OldAdderAccumulator (Process* parent, const string &name, double input, double clamp_min,
                                       double clamp_max) :
       Process (name)
   {
@@ -377,7 +562,7 @@ namespace djnn
       input = input > clamp_max ? clamp_max : input;
     }
     _result = new DoubleProperty (this, "result", input);
-    _action = new AdderAccumulatorAction (this, name + "_action", _input, _clamp_min, _clamp_max, _result);
+    _action = new OldAdderAccumulatorAction (this, name + "_action", _input, _clamp_min, _clamp_max, _result);
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
     _c_input->disable ();
     Graph::instance ().add_edge (_input, _action);
@@ -385,7 +570,7 @@ namespace djnn
     Process::finalize_construction (parent);
   }
 
-  AdderAccumulator::~AdderAccumulator ()
+  OldAdderAccumulator::~OldAdderAccumulator ()
   {
     remove_state_dependency (get_parent (), _action);
     Graph::instance ().remove_edge (_input, _action);
@@ -400,7 +585,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::set_parent (Process* p)
+  OldAdderAccumulator::set_parent (Process* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -412,19 +597,19 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::impl_activate ()
+  OldAdderAccumulator::impl_activate ()
   {
     _c_input->enable ();
   }
 
   void
-  AdderAccumulator::impl_deactivate ()
+  OldAdderAccumulator::impl_deactivate ()
   {
     _c_input->disable ();
   }
 
   void
-  AdderAccumulator::serialize (const string& type) {
+  OldAdderAccumulator::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -438,6 +623,8 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+
+#endif
 
 }
 

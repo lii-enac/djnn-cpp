@@ -25,30 +25,131 @@ namespace djnn
 
 #if NEW_OP
 
+  template <> std::string serialize_info<std::plus<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> AdderAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> NewAdder;
 
+  template <> std::string serialize_info<std::minus<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> SubtractorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> NewSubtractor;
 
+  template <> std::string serialize_info<std::multiplies<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> MultiplierAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> NewMultiplier;
 
+  template <> std::string serialize_info<std::divides<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> DividerAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> NewDivider;
 
+  template <> std::string serialize_info<std::modulus<int>>::name;
   typedef NewBinaryOperatorAction<IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> ModuloAction;
   typedef NewBinaryOperator      <IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> NewModulo;
 
+  template <> std::string serialize_info<std::greater<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> StrictAscendingComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> NewStrictAscendingComparator;
 
+  template <> std::string serialize_info<std::greater_equal<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> AscendingComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> NewAscendingComparator;
 
+  template <> std::string serialize_info<std::equal_to<double>>::name;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> EqualityComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> NewEqualityComparator;
 
+  template <> std::string serialize_info<std::negate<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverterAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  std::negate<double>, double> NewSignInverter;
+
+  /*template<typename Input, typename Output>
+  struct sign_inverter {
+    void operator() (Input& input, Output& output) {
+      output.set_value (-input.get_value (), true);
+    }
+  };
+
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  sign_inverter<DoubleProperty, DoubleProperty>, double> SignInverterAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  sign_inverter<DoubleProperty, DoubleProperty>, double> NewSignInverter;*/
+
+
+  class NewPrevious : public Process
+  {
+  private:
+    class NewPreviousAction : public Action
+    {
+    public:
+      NewPreviousAction (Process* parent, const string &name, NewPrevious& np, double init_val)
+      : Action(parent, name),
+      _np(np),
+       _prev (init_val) { Process::finalize_construction (parent); }
+      virtual ~NewPreviousAction () {}
+      void impl_activate ()
+      {
+        _np._output.set_value (_prev, true);
+        _prev = _np._input.get_value ();
+      }
+      void impl_deactivate () {}
+    private:
+      NewPrevious &_np;
+      double _prev;
+    };
+  public:
+    NewPrevious (Process *p, const string &name, double i_val);
+    virtual ~NewPrevious () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
+    void impl_activate () override { _coupling.enable (); _action.activate (); }
+    void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
+  protected:
+    void serialize (const string& type) override;
+    DoubleProperty _input;
+    DoubleProperty _output;
+    NewPreviousAction _action;
+    Coupling _coupling;
+  };
+
+  class NewIncr : public Process
+  {
+  public:
+    NewIncr (Process *parent, const string& name, bool is_model);
+    NewIncr (bool is_model);
+    void impl_activate () override;
+    void impl_deactivate () override {}
+    void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
+    virtual ~NewIncr ();
+  private:
+    int init_incr (bool isModel);
+    DoubleProperty _delta, _state;
+  protected:
+    void set_parent (Process* p) override;
+    void serialize (const string& type) override;
+  };
+
+  class NewAdderAccumulator : public Process
+  {
+  private:
+    class NewAdderAccumulatorAction : public Action
+    {
+    public:
+      NewAdderAccumulatorAction (Process* parent, const string &name, NewAdderAccumulator& aa);
+      void impl_activate () override;
+      void impl_deactivate () override {}
+    private:
+      NewAdderAccumulator& _aa;
+    };
+  public:
+    NewAdderAccumulator (Process* parent, const string &name, double input, double clamp_min, double clamp_max);
+    virtual ~NewAdderAccumulator ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+  protected:
+    void set_parent (Process* p) override;
+    void serialize (const string& type) override;
+  private:
+    friend class NewAdderAccumulatorAction;
+    DoubleProperty _input, _clamp_min, _clamp_max, _result;
+    NewAdderAccumulatorAction _action;
+    Coupling _c_input;
+  };
+  
 #else
 
   class OldAdder : public BinaryOperator
@@ -247,17 +348,15 @@ protected:
   void serialize (const string& type) override;
 };
 
-#endif
-
-class SignInverter : public UnaryOperator
+class OldSignInverter : public UnaryOperator
 {
 private:
-  class SignInverterAction : public UnaryOperatorAction
+  class OldSignInverterAction : public UnaryOperatorAction
   {
   public:
-    SignInverterAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
+    OldSignInverterAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output) :
     UnaryOperatorAction (parent, name, input, output) { Process::finalize_construction (parent); }
-    virtual ~SignInverterAction () {}
+    virtual ~OldSignInverterAction () {}
     void impl_activate ()
     {
       _output->set_value (-(((DoubleProperty*)_input)->get_value ()), true);
@@ -265,21 +364,21 @@ private:
     void impl_deactivate () {}
   };
 public:
-  SignInverter (Process *p, const string &name, double i_val);
-  virtual ~SignInverter () {}
+  OldSignInverter (Process *p, const string &name, double i_val);
+  virtual ~OldSignInverter () {}
 protected:
   void serialize (const string& type) override;
 };
 
-class Previous : public UnaryOperator
+class OldPrevious : public UnaryOperator
 {
 private:
-  class PreviousAction : public UnaryOperatorAction
+  class OldPreviousAction : public UnaryOperatorAction
   {
   public:
-    PreviousAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output, double init_val) :
+    OldPreviousAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output, double init_val) :
     UnaryOperatorAction (parent, name, input, output), _prev (init_val) { Process::finalize_construction (parent); }
-    virtual ~PreviousAction () {}
+    virtual ~OldPreviousAction () {}
     void impl_activate ()
     {
       _output->set_value (_prev, true);
@@ -290,21 +389,21 @@ private:
     double _prev;
   };
 public:
-  Previous (Process *p, const string &name, double i_val);
-  virtual ~Previous () {}
+  OldPrevious (Process *p, const string &name, double i_val);
+  virtual ~OldPrevious () {}
 protected:
   void serialize (const string& type) override;
 };
 
-class Incr : public Process
+class OldIncr : public Process
 {
 public:
-  Incr (Process *parent, string name, bool is_model);
-  Incr (bool is_model);
+  OldIncr (Process *parent, string name, bool is_model);
+  OldIncr (bool is_model);
   void impl_activate () override;
   void impl_deactivate () override {}
   void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
-  virtual ~Incr ();
+  virtual ~OldIncr ();
 private:
   int
   init_incr (bool isModel);
@@ -314,13 +413,13 @@ protected:
   void serialize (const string& type) override;
 };
 
-class AdderAccumulator : public Process
+class OldAdderAccumulator : public Process
 {
 private:
-  class AdderAccumulatorAction : public Action
+  class OldAdderAccumulatorAction : public Action
   {
   public:
-    AdderAccumulatorAction (Process* parent, const string &name, AbstractProperty* input,
+    OldAdderAccumulatorAction (Process* parent, const string &name, AbstractProperty* input,
       AbstractProperty* clamp_min, AbstractProperty* clamp_max,
       AbstractProperty* result);
     void impl_activate () override;
@@ -329,8 +428,8 @@ private:
     AbstractProperty  *_input, *_clamp_min, *_clamp_max, *_result;
   };
 public:
-  AdderAccumulator (Process* parent, const string &name, double input, double clamp_min, double clamp_max);
-  virtual ~AdderAccumulator ();
+  OldAdderAccumulator (Process* parent, const string &name, double input, double clamp_min, double clamp_max);
+  virtual ~OldAdderAccumulator ();
   void impl_activate () override;
   void impl_deactivate () override;
 protected:
@@ -341,6 +440,7 @@ private:
   Coupling *_c_input;
   Process *_action;
 };
+#endif
 
 #if NEW_OP
   typedef NewAdder Adder;
@@ -351,6 +451,10 @@ private:
   typedef NewAscendingComparator AscendingComparator;
   typedef NewStrictAscendingComparator StrictAscendingComparator;
   typedef NewEqualityComparator EqualityComparator;
+  typedef NewSignInverter SignInverter;
+  typedef NewPrevious Previous;
+  typedef NewIncr Incr;
+  typedef NewAdderAccumulator AdderAccumulator;
 #else
   typedef OldAdder Adder;
   typedef OldSubtractor Subtractor;
@@ -360,5 +464,9 @@ private:
   typedef OldAscendingComparator AscendingComparator;
   typedef OldStrictAscendingComparator StrictAscendingComparator;
   typedef OldEqualityComparator EqualityComparator;
+  typedef OldSignInverter SignInverter;
+  typedef OldPrevious Previous;
+  typedef OldIncr Incr;
+  typedef OldAdderAccumulator OldAdderAccumulator;
 #endif
 }

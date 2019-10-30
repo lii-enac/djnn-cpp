@@ -46,6 +46,21 @@ namespace djnn
     Graph::instance ().remove_edge (&_action, &_result);
   }
 
+  void
+  init_unary_couplings (Process& _input, Process& _output, Process& _action, Coupling& _coupling)
+  {
+    _coupling.disable ();
+    Graph::instance ().add_edge (&_input, &_action);
+    Graph::instance ().add_edge (&_action, &_output);
+  }
+
+  void
+  uninit_unary_couplings (Process* this_, Process& _input, Process& _output, Process& _action, Coupling& _coupling)
+  {
+    remove_state_dependency (this_->get_parent (), &_action);
+    Graph::instance ().remove_edge (&_input, &_action);
+    Graph::instance ().remove_edge (&_action, &_output);
+  }
 //#if !NEW_OP
 
   BinaryOperatorAction::BinaryOperatorAction (Process* parent, const string &name, 

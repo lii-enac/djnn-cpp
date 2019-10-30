@@ -18,7 +18,16 @@
 
 namespace djnn
 {
-#if !NEW_OP
+
+#if NEW_OP
+
+  template <> std::string serialize_info<std::logical_and<bool>>::name = "and";
+  template <> std::string serialize_info<std::logical_or<bool>>::name = "or";
+  template <> std::string serialize_info<std::not_equal_to<bool>>::name = "xor";
+  template <> std::string serialize_info<std::logical_not<bool>>::name = "not";
+
+#else
+
   And::And (Process *parent, const string &n, int l_val, int r_val) :
       BinaryOperator (parent, n)
   {
@@ -96,7 +105,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-#endif
 
   Not::Not (Process *parent, const string &n, int in_val) :
       UnaryOperator (parent, n)
@@ -121,6 +129,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-
+#endif
 }
 

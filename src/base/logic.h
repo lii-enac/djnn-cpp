@@ -23,14 +23,21 @@ namespace djnn
 
 #if NEW_OP
 
-  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_and<double>, double, double> AndAction;
-  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_and<double>, double, double> And;
+  template <> std::string serialize_info<std::logical_and<bool>>::name;
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_and<bool>, bool, bool> AndAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_and<bool>, bool, bool> And;
 
-  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_or<double>, double, double> OrAction;
-  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_or<double>, double, double> Or;
+  template <> std::string serialize_info<std::logical_or<bool>>::name;
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_or<bool>, bool, bool> OrAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_or<bool>, bool, bool> Or;
 
-  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<double>, double, double> XOrAction;
-  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<double>, double, double> XOr;
+  template <> std::string serialize_info<std::not_equal_to<bool>>::name;
+  typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<bool>, bool, bool> XOrAction;
+  typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<bool>, bool, bool> XOr;
+
+  template <> std::string serialize_info<std::logical_not<bool>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> NotAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> Not;
 
 #else
 
@@ -99,7 +106,6 @@ namespace djnn
     virtual ~XOr () {}
     void serialize (const string& type) override;
   };
-#endif
 
   class Not : public UnaryOperator
   {
@@ -120,4 +126,6 @@ namespace djnn
     virtual ~Not () {}
     void serialize (const string& type) override;
   };
+#endif
+
 }
