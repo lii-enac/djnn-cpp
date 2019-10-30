@@ -18,6 +18,25 @@
 
 namespace djnn
 {
+
+#if NEW_OP
+
+  template <> std::string serialize_info<my_cos<double>>::name = "cosine";
+  template <> std::string serialize_info<my_sin<double>>::name = "sine";
+  template <> std::string serialize_info<my_tan<double>>::name = "tangent";
+  template <> std::string serialize_info<my_acos<double>>::name = "arccosine";
+  template <> std::string serialize_info<my_asin<double>>::name = "arcsine";
+  template <> std::string serialize_info<my_atan<double>>::name = "arctangent";
+  template <> std::string serialize_info<my_atan2<double>>::name = "arctangent2";
+  template <> std::string serialize_info<my_cosh<double>>::name = "hyperboliccosine";
+  template <> std::string serialize_info<my_sinh<double>>::name = "hyperbolicsine";
+  template <> std::string serialize_info<my_tanh<double>>::name = "hyperbolictangent";
+  template <> std::string serialize_info<my_acosh<double>>::name = "hyperbolicarccosine";
+  template <> std::string serialize_info<my_asinh<double>>::name = "hyperbolicarcsine";
+  template <> std::string serialize_info<my_atanh<double>>::name = "hyperbolicarctangent";
+  
+#else
+
   Cosine::Cosine (Process *p, const string &n, double in_val) :
       UnaryOperator (p, n)
   {
@@ -317,5 +336,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 }
 

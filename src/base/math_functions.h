@@ -18,10 +18,87 @@
 #include "operators.h"
 
 #include <cmath>
+#include <algorithm>
 
 namespace djnn
 {
   using namespace std;
+
+#if NEW_OP
+  template <typename T> struct my_exp { T operator() (T t1) { return ::exp(t1);} };
+  template <> std::string serialize_info<my_exp<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_exp<double>, double> ExpAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_exp<double>, double> Exp;
+
+  template <typename T> struct my_log { T operator() (T t1) { return ::log(t1);} };
+  template <> std::string serialize_info<my_log<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_log<double>, double> LogAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_log<double>, double> Log;
+
+  template <typename T> struct my_log10 { T operator() (T t1) { return ::log10(t1);} };
+  template <> std::string serialize_info<my_log10<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_log<double>, double> Log10Action;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_log<double>, double> Log10;
+
+  template <typename T> struct my_sqrt { T operator() (T t1) { return ::sqrt(t1);} };
+  template <> std::string serialize_info<my_sqrt<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_sqrt<double>, double> SqrtAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_sqrt<double>, double> Sqrt;
+
+  template <typename T> struct my_abs { T operator() (T t1) { return ::abs(t1);} };
+  template <> std::string serialize_info<my_abs<double>>::name;
+  typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_abs<double>, double> AbsAction;
+  typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_abs<double>, double> Abs;
+
+
+  template <typename T> struct my_pow { T operator() (T t1, T t2) { return ::pow(t1, t2);} };
+  template <> std::string serialize_info<my_pow<double>>::name;
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> PowAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> Pow;
+
+  template <typename T> struct my_min { T operator() (T t1, T t2) { return std::min(t1, t2);} };
+  template <> std::string serialize_info<my_min<double>>::name;
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> MinAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> Min;
+
+  template <typename T> struct my_max { T operator() (T t1, T t2) { return std::max(t1, t2);} };
+  template <> std::string serialize_info<my_max<double>>::name;
+  typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> MaxAction;
+  typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> Max;
+
+  class BoundedValue : public Process
+  {
+  private:
+    class BoundedValueAction : public Action
+    {
+    public:
+      BoundedValueAction (Process *p, const string &n, BoundedValue& bv) : Action (p, n), _bv(bv) {}
+    virtual ~BoundedValueAction () {}
+      void impl_activate () override {
+        double max = _bv._max.get_value ();
+        double min = _bv._min.get_value ();
+        double input = _bv._input.get_value ();
+        double r = input < min ? min : (input > max ? max : input);
+        _bv._result.set_value (r, true);
+      }
+      void impl_deactivate () override {}
+    private:
+      BoundedValue& _bv;
+    };
+  public:
+    BoundedValue (Process *p, const string &n, double min, double max, double init_val);
+    void impl_activate () override { _c_min.enable(); _c_max.enable (); _c_input.enable (); _action.activate (); };
+    void impl_deactivate () override { _c_min.disable (); _c_max.disable (); _c_input.disable (); _action.deactivate ();};
+    virtual ~BoundedValue ();
+    void serialize (const string& type) override;
+  protected:
+    void set_parent (Process* p) override;
+    DoubleProperty _min, _max, _input, _result;
+    BoundedValueAction _action;
+    Coupling _c_min, _c_max, _c_input;
+  };
+
+#else
 
   class Exp : public UnaryOperator
   {
@@ -228,4 +305,6 @@ namespace djnn
     Coupling *_c_min, *_c_max, *_c_input;
     Process *_action;
   };
+#endif
+
 }
