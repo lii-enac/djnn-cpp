@@ -41,7 +41,7 @@ namespace djnn
     }
   }
 
-#if NEW
+#if NEW_CON
   Connector::Init::Init(Connector * c, Process* src, const string & ispec, Process* dst, const string & dspec)
   {
     if (src == 0) {
@@ -210,7 +210,7 @@ namespace djnn
   Connector::Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation)
   :
     SrcToDstLink (p, n),
-#if NEW
+#if NEW_CON
     _init(this, src, ispec, dst, dspec),
     _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
     _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
@@ -224,7 +224,7 @@ namespace djnn
     _has_coupling (false),
     _copy_on_activation (copy_on_activation)
   {
-#if NEW
+#if NEW_CON
     if (_src) {
       _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);
       _c_src.disable ();
@@ -245,7 +245,7 @@ namespace djnn
 
   Connector::Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation)
   :
-#if NEW
+#if NEW_CON
     _init(this, src, ispec, dst, dspec),
     _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
     _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
@@ -259,7 +259,7 @@ namespace djnn
     _has_coupling (false),
     _copy_on_activation (copy_on_activation)
   {
-#if NEW
+#if NEW_CON
     if (_src) {
       _c_src.disable ();
       if(_dst) {
@@ -281,7 +281,7 @@ namespace djnn
     /* when an connector is in a deactivate fsm branch and src has changed. it is not aware of it.
        we have to re-evaluate it */
     //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
-#if NEW
+#if NEW_CON
     if(_ref_info_src.is_ref()) {
       //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
       _ref_update_src._update.impl_activate ();
@@ -308,7 +308,7 @@ namespace djnn
   void
   Connector::impl_deactivate ()
   {
-#if NEW
+#if NEW_CON
     _c_src.disable ();
     _action.deactivate ();
 #else
@@ -338,7 +338,7 @@ namespace djnn
   {
     //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
     //std::cerr << "_src:" << _src << " _dst:" << _dst << std::endl;
-#if NEW
+#if NEW_CON
     if (_has_coupling) {
       _c_src = Coupling();//_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
       _has_coupling = false;
@@ -380,7 +380,7 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), _dst);
     Graph::instance ().remove_edge (_src, _dst);
-#if !NEW
+#if !NEW_CON
     delete _c_src;
     delete _action;
     if (_update_src) {
