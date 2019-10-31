@@ -23,23 +23,37 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<my_exp<double>>::serialize = "exp";
-  template <> std::string serialize_info<my_log<double>>::serialize = "log";
-  template <> std::string serialize_info<my_log10<double>>::serialize = "log10";
-  template <> std::string serialize_info<my_sqrt<double>>::serialize = "sqrt";
-  template <> std::string serialize_info<my_abs<double>>::serialize = "abs";
+  template <> const char name_info<my_exp<double>>::left[] = "left";
+  template <> const char name_info<my_exp<double>>::right[] = "right";
+  template <> const char name_info<my_exp<double>>::serialize[] = "exp";
 
-  template <> std::string serialize_info<my_pow<double>>::left = "base";
-  template <> std::string serialize_info<my_pow<double>>::right = "exponent";
-  template <> std::string serialize_info<my_pow<double>>::serialize = "pow";
+  template <> const char name_info<my_log<double>>::left[] = "left";
+  template <> const char name_info<my_log<double>>::right[] = "right";
+  template <> const char name_info<my_log<double>>::serialize[] = "log";
 
-  template <> std::string serialize_info<my_min<double>>::left = "min";
-  template <> std::string serialize_info<my_min<double>>::right = "input";
-  template <> std::string serialize_info<my_min<double>>::serialize = "min";
+  template <> const char name_info<my_log10<double>>::left[] = "left";
+  template <> const char name_info<my_log10<double>>::right[] = "right";
+  template <> const char name_info<my_log10<double>>::serialize[] = "log10";
 
-  template <> std::string serialize_info<my_max<double>>::left = "max";
-  template <> std::string serialize_info<my_max<double>>::right = "input";
-  template <> std::string serialize_info<my_max<double>>::serialize = "max";
+  template <> const char name_info<my_sqrt<double>>::left[] = "left";
+  template <> const char name_info<my_sqrt<double>>::right[] = "right";
+  template <> const char name_info<my_sqrt<double>>::serialize[] = "sqrt";
+  
+  template <> const char name_info<my_abs<double>>::left[] = "left";
+  template <> const char name_info<my_abs<double>>::right[] = "right";
+  template <> const char name_info<my_abs<double>>::serialize[] = "abs";
+
+  template <> const char name_info<my_pow<double>>::left[] = "base";
+  template <> const char name_info<my_pow<double>>::right[] = "exponent";
+  template <> const char name_info<my_pow<double>>::serialize[] = "pow";
+
+  template <> const char name_info<my_min<double>>::left[] = "min";
+  template <> const char name_info<my_min<double>>::right[] = "input";
+  template <> const char name_info<my_min<double>>::serialize[] = "min";
+
+  template <> const char name_info<my_max<double>>::left[] = "max";
+  template <> const char name_info<my_max<double>>::right[] = "input";
+  template <> const char name_info<my_max<double>>::serialize[] = "max";
   
   BoundedValue::BoundedValue (Process *p, const string &n, double min, double max, double init_val)
   :

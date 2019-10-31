@@ -21,10 +21,21 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::logical_and<bool>>::serialize = "and";
-  template <> std::string serialize_info<std::logical_or<bool>>::serialize = "or";
-  template <> std::string serialize_info<std::not_equal_to<bool>>::serialize = "xor";
-  template <> std::string serialize_info<std::logical_not<bool>>::serialize = "not";
+  template <> const char name_info<std::logical_and<bool>>::left[] = "left";
+  template <> const char name_info<std::logical_and<bool>>::right[] = "right";
+  template <> const char name_info<std::logical_and<bool>>::serialize[] = "and";
+  
+  template <> const char name_info<std::logical_or<bool>>::left[] = "left";
+  template <> const char name_info<std::logical_or<bool>>::right[] = "right";
+  template <> const char name_info<std::logical_or<bool>>::serialize[] = "or";
+  
+  template <> const char name_info<std::not_equal_to<bool>>::left[] = "left";
+  template <> const char name_info<std::not_equal_to<bool>>::right[] = "right";
+  template <> const char name_info<std::not_equal_to<bool>>::serialize[] = "xor";
+  
+  template <> const char name_info<std::logical_not<bool>>::left[] = "left";
+  template <> const char name_info<std::logical_not<bool>>::right[] = "right";
+  template <> const char name_info<std::logical_not<bool>>::serialize[] = "not";
 
 #else
 

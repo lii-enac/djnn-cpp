@@ -23,19 +23,27 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::logical_and<bool>>::serialize;
+  template <> const char name_info<std::logical_and<bool>>::left[];
+  template <> const char name_info<std::logical_and<bool>>::right[];
+  template <> const char name_info<std::logical_and<bool>>::serialize[];
   typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_and<bool>, bool, bool> AndAction;
   typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_and<bool>, bool, bool> And;
 
-  template <> std::string serialize_info<std::logical_or<bool>>::serialize;
+  template <> const char name_info<std::logical_or<bool>>::left[];
+  template <> const char name_info<std::logical_or<bool>>::right[];
+  template <> const char name_info<std::logical_or<bool>>::serialize[];
   typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::logical_or<bool>, bool, bool> OrAction;
   typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::logical_or<bool>, bool, bool> Or;
 
-  template <> std::string serialize_info<std::not_equal_to<bool>>::serialize;
+  template <> const char name_info<std::not_equal_to<bool>>::left[];
+  template <> const char name_info<std::not_equal_to<bool>>::right[];
+  template <> const char name_info<std::not_equal_to<bool>>::serialize[];
   typedef NewBinaryOperatorAction<BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<bool>, bool, bool> XOrAction;
   typedef NewBinaryOperator      <BoolProperty, BoolProperty, BoolProperty, std::not_equal_to<bool>, bool, bool> XOr;
 
-  template <> std::string serialize_info<std::logical_not<bool>>::serialize;
+  template <> const char name_info<std::logical_not<bool>>::left[];
+  template <> const char name_info<std::logical_not<bool>>::right[];
+  template <> const char name_info<std::logical_not<bool>>::serialize[];
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> NotAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> Not;
 

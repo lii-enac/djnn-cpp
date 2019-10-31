@@ -23,15 +23,41 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::plus<double>>::serialize = "adder";
-  template <> std::string serialize_info<std::minus<double>>::serialize = "subtractor";
-  template <> std::string serialize_info<std::multiplies<double>>::serialize = "multiplier";
-  template <> std::string serialize_info<std::divides<double>>::serialize = "divider";
-  template <> std::string serialize_info<std::modulus<int>>::serialize = "modulo";
-  template <> std::string serialize_info<std::greater<double>>::serialize = "ascendingcomparator";
-  template <> std::string serialize_info<std::greater_equal<double>>::serialize = "strictascendingcomparator";
-  template <> std::string serialize_info<std::equal_to<double>>::serialize = "equalitycomparator";
-  template <> std::string serialize_info<std::negate<double>>::serialize = "signinverter";
+  template <> const char name_info<std::plus<double>>::left[] = "left";
+  template <> const char name_info<std::plus<double>>::right[] = "right";
+  template <> const char name_info<std::plus<double>>::serialize[] = "adder";
+
+  template <> const char name_info<std::minus<double>>::left[] = "left";
+  template <> const char name_info<std::minus<double>>::right[] = "right";
+  template <> const char name_info<std::minus<double>>::serialize[] = "subtractor";
+
+  template <> const char name_info<std::multiplies<double>>::left[] = "left";
+  template <> const char name_info<std::multiplies<double>>::right[] = "right";
+  template <> const char name_info<std::multiplies<double>>::serialize[] = "multiplier";
+
+  template <> const char name_info<std::divides<double>>::left[] = "left";
+  template <> const char name_info<std::divides<double>>::right[] = "right";
+  template <> const char name_info<std::divides<double>>::serialize[] = "divider";
+
+  template <> const char name_info<std::modulus<int>>::left[] = "left";
+  template <> const char name_info<std::modulus<int>>::right[] = "right";
+  template <> const char name_info<std::modulus<int>>::serialize[] = "modulo";
+
+  template <> const char name_info<std::greater<double>>::left[] = "left";
+  template <> const char name_info<std::greater<double>>::right[] = "right";
+  template <> const char name_info<std::greater<double>>::serialize[] = "ascendingcomparator";
+
+  template <> const char name_info<std::greater_equal<double>>::left[] = "left";
+  template <> const char name_info<std::greater_equal<double>>::right[] = "right";
+  template <> const char name_info<std::greater_equal<double>>::serialize[] = "strictascendingcomparator";
+
+  template <> const char name_info<std::equal_to<double>>::left[] = "left";
+  template <> const char name_info<std::equal_to<double>>::right[] = "right";
+  template <> const char name_info<std::equal_to<double>>::serialize[] = "equalitycomparator";
+
+  template <> const char name_info<std::negate<double>>::left[] = "left";
+  template <> const char name_info<std::negate<double>>::right[] = "right";
+  template <> const char name_info<std::negate<double>>::serialize[] = "signinverter";
 
   
   NewPrevious::NewPrevious (Process *p, const string &n, double i_val)

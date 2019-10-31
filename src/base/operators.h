@@ -60,7 +60,7 @@ namespace djnn {
 
   template <typename Function>
   struct name_info {
-    static std::string serialize, left="left", right="right";
+    static const char left[], right[], serialize[];
   };
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
@@ -71,8 +71,8 @@ namespace djnn {
 
     NewBinaryOperator (Process *p, const string &n, const Left_init& l_val, const Right_init& r_val)
     : Process (n),
-      _left(this, name_info<BinaryFunction>::serialize::left, l_val),
-      _right(this, name_info<BinaryFunction>::serialize::right, r_val),
+      _left(this, name_info<BinaryFunction>::left, l_val),
+      _right(this, name_info<BinaryFunction>::right, r_val),
       _result(this, "result", BinaryFunction()(l_val,r_val)),
       _action(this, n+"action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
@@ -88,7 +88,7 @@ namespace djnn {
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
     void serialize (const string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + name_info<BinaryFunction>::serialize);
+      AbstractSerializer::serializer->start ("base:" + std::string(name_info<BinaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
       AbstractSerializer::serializer->cpptype_attribute ("left", _left.get_value ());
       AbstractSerializer::serializer->cpptype_attribute ("right", _right.get_value ());
@@ -168,7 +168,7 @@ namespace djnn {
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
     void serialize (const string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base" + serialize_info<UnaryFunction>::serialize);
+      AbstractSerializer::serializer->start ("base:" + std::string(name_info<UnaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
       AbstractSerializer::serializer->cpptype_attribute ("input", _input.get_value ());
       AbstractSerializer::serializer->end ();

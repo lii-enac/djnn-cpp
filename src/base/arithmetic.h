@@ -25,39 +25,57 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::plus<double>>::serialize;
+  template <> const char name_info<std::plus<double>>::left[];
+  template <> const char name_info<std::plus<double>>::right[];
+  template <> const char name_info<std::plus<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> AdderAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::plus<double>, double, double> NewAdder;
 
-  template <> std::string serialize_info<std::minus<double>>::serialize;
+  template <> const char name_info<std::minus<double>>::left[];
+  template <> const char name_info<std::minus<double>>::right[];
+  template <> const char name_info<std::minus<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> SubtractorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::minus<double>, double, double> NewSubtractor;
 
-  template <> std::string serialize_info<std::multiplies<double>>::serialize;
+  template <> const char name_info<std::multiplies<double>>::left[];
+  template <> const char name_info<std::multiplies<double>>::right[];
+  template <> const char name_info<std::multiplies<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> MultiplierAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::multiplies<double>, double, double> NewMultiplier;
 
-  template <> std::string serialize_info<std::divides<double>>::serialize;
+  template <> const char name_info<std::divides<double>>::left[];
+  template <> const char name_info<std::divides<double>>::right[];
+  template <> const char name_info<std::divides<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> DividerAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, std::divides<double>, double, double> NewDivider;
 
-  template <> std::string serialize_info<std::modulus<int>>::serialize;
+  template <> const char name_info<std::modulus<int>>::left[];
+  template <> const char name_info<std::modulus<int>>::right[];
+  template <> const char name_info<std::modulus<int>>::serialize[];
   typedef NewBinaryOperatorAction<IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> ModuloAction;
   typedef NewBinaryOperator      <IntProperty,    IntProperty,    IntProperty,    std::modulus<int>, int, int> NewModulo;
 
-  template <> std::string serialize_info<std::greater<double>>::serialize;
+  template <> const char name_info<std::greater<double>>::left[];
+  template <> const char name_info<std::greater<double>>::right[];
+  template <> const char name_info<std::greater<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> StrictAscendingComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater<double>, double, double> NewStrictAscendingComparator;
 
-  template <> std::string serialize_info<std::greater_equal<double>>::serialize;
+  template <> const char name_info<std::greater_equal<double>>::left[];
+  template <> const char name_info<std::greater_equal<double>>::right[];
+  template <> const char name_info<std::greater_equal<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> AscendingComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::greater_equal<double>, double, double> NewAscendingComparator;
 
-  template <> std::string serialize_info<std::equal_to<double>>::serialize;
+  template <> const char name_info<std::equal_to<double>>::left[];
+  template <> const char name_info<std::equal_to<double>>::right[];
+  template <> const char name_info<std::equal_to<double>>::serialize[];
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> EqualityComparatorAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, BoolProperty,   std::equal_to<double>, double, double> NewEqualityComparator;
 
-  template <> std::string serialize_info<std::negate<double>>::serialize;
+  template <> const char name_info<std::negate<double>>::left[];
+  template <> const char name_info<std::negate<double>>::right[];
+  template <> const char name_info<std::negate<double>>::serialize[];
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverterAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  std::negate<double>, double> NewSignInverter;
 
@@ -467,6 +485,6 @@ private:
   typedef OldSignInverter SignInverter;
   typedef OldPrevious Previous;
   typedef OldIncr Incr;
-  typedef OldAdderAccumulator OldAdderAccumulator;
+  typedef OldAdderAccumulator AdderAccumulator;
 #endif
 }
