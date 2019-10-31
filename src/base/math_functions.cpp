@@ -23,14 +23,16 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<my_exp<double>>::name = "exp";
-  template <> std::string serialize_info<my_log<double>>::name = "log";
-  template <> std::string serialize_info<my_log10<double>>::name = "log10";
-  template <> std::string serialize_info<my_sqrt<double>>::name = "sqrt";
-  template <> std::string serialize_info<my_abs<double>>::name = "abs";
-  template <> std::string serialize_info<my_pow<double>>::name = "pow";
-  template <> std::string serialize_info<my_min<double>>::name = "min";
-  template <> std::string serialize_info<my_max<double>>::name = "max";
+  template <> std::string serialize_info<my_exp<double>>::serialize = "exp";
+  template <> std::string serialize_info<my_log<double>>::serialize = "log";
+  template <> std::string serialize_info<my_log10<double>>::serialize = "log10";
+  template <> std::string serialize_info<my_sqrt<double>>::serialize = "sqrt";
+  template <> std::string serialize_info<my_abs<double>>::serialize = "abs";
+  template <> std::string serialize_info<my_pow<double>>::left = "base";
+  template <> std::string serialize_info<my_pow<double>>::right = "exponent";
+  template <> std::string serialize_info<my_pow<double>>::serialize = "pow";
+  template <> std::string serialize_info<my_min<double>>::serialize = "min";
+  template <> std::string serialize_info<my_max<double>>::serialize = "max";
   
   BoundedValue::BoundedValue (Process *p, const string &n, double min, double max, double init_val)
   :

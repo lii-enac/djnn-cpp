@@ -21,10 +21,10 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::logical_and<bool>>::name = "and";
-  template <> std::string serialize_info<std::logical_or<bool>>::name = "or";
-  template <> std::string serialize_info<std::not_equal_to<bool>>::name = "xor";
-  template <> std::string serialize_info<std::logical_not<bool>>::name = "not";
+  template <> std::string serialize_info<std::logical_and<bool>>::serialize = "and";
+  template <> std::string serialize_info<std::logical_or<bool>>::serialize = "or";
+  template <> std::string serialize_info<std::not_equal_to<bool>>::serialize = "xor";
+  template <> std::string serialize_info<std::logical_not<bool>>::serialize = "not";
 
 #else
 

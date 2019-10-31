@@ -26,43 +26,43 @@ namespace djnn
 
 #if NEW_OP
   template <typename T> struct my_exp { T operator() (T t1) { return ::exp(t1);} };
-  template <> std::string serialize_info<my_exp<double>>::name;
+  template <> std::string serialize_info<my_exp<double>>::serialize;
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_exp<double>, double> ExpAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_exp<double>, double> Exp;
 
   template <typename T> struct my_log { T operator() (T t1) { return ::log(t1);} };
-  template <> std::string serialize_info<my_log<double>>::name;
+  template <> std::string serialize_info<my_log<double>>::serialize;
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_log<double>, double> LogAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_log<double>, double> Log;
 
   template <typename T> struct my_log10 { T operator() (T t1) { return ::log10(t1);} };
-  template <> std::string serialize_info<my_log10<double>>::name;
+  template <> std::string serialize_info<my_log10<double>>::serialize;
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_log<double>, double> Log10Action;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_log<double>, double> Log10;
 
   template <typename T> struct my_sqrt { T operator() (T t1) { return ::sqrt(t1);} };
-  template <> std::string serialize_info<my_sqrt<double>>::name;
+  template <> std::string serialize_info<my_sqrt<double>>::serialize;
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_sqrt<double>, double> SqrtAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_sqrt<double>, double> Sqrt;
 
   template <typename T> struct my_abs { T operator() (T t1) { return ::abs(t1);} };
-  template <> std::string serialize_info<my_abs<double>>::name;
+  template <> std::string serialize_info<my_abs<double>>::serialize;
   typedef NewUnaryOperatorAction<DoubleProperty, DoubleProperty,  my_abs<double>, double> AbsAction;
   typedef NewUnaryOperator      <DoubleProperty, DoubleProperty,  my_abs<double>, double> Abs;
 
 
   template <typename T> struct my_pow { T operator() (T t1, T t2) { return ::pow(t1, t2);} };
-  template <> std::string serialize_info<my_pow<double>>::name;
+  template <> std::string serialize_info<my_pow<double>>::serialize;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> PowAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> Pow;
 
   template <typename T> struct my_min { T operator() (T t1, T t2) { return std::min(t1, t2);} };
-  template <> std::string serialize_info<my_min<double>>::name;
+  template <> std::string serialize_info<my_min<double>>::serialize;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> MinAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> Min;
 
   template <typename T> struct my_max { T operator() (T t1, T t2) { return std::max(t1, t2);} };
-  template <> std::string serialize_info<my_max<double>>::name;
+  template <> std::string serialize_info<my_max<double>>::serialize;
   typedef NewBinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> MaxAction;
   typedef NewBinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> Max;
 

@@ -23,15 +23,15 @@ namespace djnn
 
 #if NEW_OP
 
-  template <> std::string serialize_info<std::plus<double>>::name = "adder";
-  template <> std::string serialize_info<std::minus<double>>::name = "subtractor";
-  template <> std::string serialize_info<std::multiplies<double>>::name = "multiplier";
-  template <> std::string serialize_info<std::divides<double>>::name = "divider";
-  template <> std::string serialize_info<std::modulus<int>>::name = "modulo";
-  template <> std::string serialize_info<std::greater<double>>::name = "ascendingcomparator";
-  template <> std::string serialize_info<std::greater_equal<double>>::name = "strictascendingcomparator";
-  template <> std::string serialize_info<std::equal_to<double>>::name = "equalitycomparator";
-  template <> std::string serialize_info<std::negate<double>>::name = "signinverter";
+  template <> std::string serialize_info<std::plus<double>>::serialize = "adder";
+  template <> std::string serialize_info<std::minus<double>>::serialize = "subtractor";
+  template <> std::string serialize_info<std::multiplies<double>>::serialize = "multiplier";
+  template <> std::string serialize_info<std::divides<double>>::serialize = "divider";
+  template <> std::string serialize_info<std::modulus<int>>::serialize = "modulo";
+  template <> std::string serialize_info<std::greater<double>>::serialize = "ascendingcomparator";
+  template <> std::string serialize_info<std::greater_equal<double>>::serialize = "strictascendingcomparator";
+  template <> std::string serialize_info<std::equal_to<double>>::serialize = "equalitycomparator";
+  template <> std::string serialize_info<std::negate<double>>::serialize = "signinverter";
 
   
   NewPrevious::NewPrevious (Process *p, const string &n, double i_val)
