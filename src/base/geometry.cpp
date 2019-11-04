@@ -44,57 +44,44 @@ namespace djnn
     _output->set_value (out, true);
   }
 
-  HermiteCurve::HermiteCurve (Process *p, const string &n, double p1, double p2, double t1, double t2) :
-      Process (n)
+  HermiteCurve::HermiteCurve (Process *p, const string &n, double p1, double p2, double t1, double t2) 
+  : Process (n),
+  _input (this, "input", 0),
+  _p1 (this, "p1", p1),
+  _p2 (this, "p2", p2),
+  _t1 (this, "t1", t1),
+  _t2 (this, "t2", t2),
+  _output (this, "output", 0),
+  _action (this, "action", &_input, &_p1, &_p2, &_t1, &_t2, &_output),
+  _c_input (&_input, ACTIVATION, &_action, ACTIVATION),
+  _c_p1 (&_p1, ACTIVATION, &_action, ACTIVATION),
+  _c_p2 (&_p2, ACTIVATION, &_action, ACTIVATION),
+  _c_t1 (&_t1, ACTIVATION, &_action, ACTIVATION),
+  _c_t2 (&_t2, ACTIVATION, &_action, ACTIVATION)
   {
-    _input = new DoubleProperty (this, "input", 0);
-    _p1 = new DoubleProperty (this, "p1", p1);
-    _p2 = new DoubleProperty (this, "p2", p2);
-    _t1 = new DoubleProperty (this, "t1", t1);
-    _t2 = new DoubleProperty (this, "t2", t2);
-    _output = new DoubleProperty (this, "output", 0);
-    _action = new HermiteCurveAction (this, "action", _input, _p1, _p2, _t1, _t2, _output);
-    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
-    _c_input->disable ();
-    _c_p1 = new Coupling (_p1, ACTIVATION, _action, ACTIVATION);
-    _c_p1->disable ();
-    _c_p2 = new Coupling (_p2, ACTIVATION, _action, ACTIVATION);
-    _c_p2->disable ();
-    _c_t1 = new Coupling (_t1, ACTIVATION, _action, ACTIVATION);
-    _c_t1->disable ();
-    _c_t2 = new Coupling (_t2, ACTIVATION, _action, ACTIVATION);
-    _c_t2->disable ();
-    Graph::instance ().add_edge (_input, _action);
-    Graph::instance ().add_edge (_p1, _action);
-    Graph::instance ().add_edge (_p2, _action);
-    Graph::instance ().add_edge (_t1, _action);
-    Graph::instance ().add_edge (_t2, _action);
-    Graph::instance ().add_edge (_action, _output);
+    _c_input.disable ();
+    _c_p1.disable ();
+    _c_p2.disable ();
+    _c_t1.disable ();
+    _c_t2.disable ();
+    Graph::instance ().add_edge (&_input, &_action);
+    Graph::instance ().add_edge (&_p1, &_action);
+    Graph::instance ().add_edge (&_p2, &_action);
+    Graph::instance ().add_edge (&_t1, &_action);
+    Graph::instance ().add_edge (&_t2, &_action);
+    Graph::instance ().add_edge (&_action, &_output);
     Process::finalize_construction (p);
   }
 
   HermiteCurve::~HermiteCurve ()
   {
-    remove_state_dependency (get_parent (), _action);
-    Graph::instance ().remove_edge (_input, _action);
-    Graph::instance ().remove_edge (_p1, _action);
-    Graph::instance ().remove_edge (_p2, _action);
-    Graph::instance ().remove_edge (_t1, _action);
-    Graph::instance ().remove_edge (_t2, _action);
-    Graph::instance ().remove_edge (_action, _output);
-
-    delete _c_t2;
-    delete _c_t1;
-    delete _c_p2;
-    delete _c_p1;
-    delete _c_input;
-    delete _action;
-    delete _output;
-    delete _t2;
-    delete _t1;
-    delete _p2;
-    delete _p1;
-    delete _input;
+    remove_state_dependency (get_parent (), &_action);
+    Graph::instance ().remove_edge (&_input, &_action);
+    Graph::instance ().remove_edge (&_p1, &_action);
+    Graph::instance ().remove_edge (&_p2, &_action);
+    Graph::instance ().remove_edge (&_t1, &_action);
+    Graph::instance ().remove_edge (&_t2, &_action);
+    Graph::instance ().remove_edge (&_action, &_output);
   }
 
   void
@@ -102,10 +89,10 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+       remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, _action);
+    add_state_dependency (p, &_action);
 
     Process::set_parent (p); 
   }
@@ -113,21 +100,21 @@ namespace djnn
   void
   HermiteCurve::impl_activate ()
   {
-    _c_input->enable ();
-    _c_p1->enable ();
-    _c_p2->enable ();
-    _c_t1->enable ();
-    _c_t2->enable ();
+    _c_input.enable ();
+    _c_p1.enable ();
+    _c_p2.enable ();
+    _c_t1.enable ();
+    _c_t2.enable ();
   }
 
   void
   HermiteCurve::impl_deactivate ()
   {
-    _c_input->disable ();
-    _c_p1->disable ();
-    _c_p2->disable ();
-    _c_t1->disable ();
-    _c_t2->disable ();
+    _c_input.disable ();
+    _c_p1.disable ();
+    _c_p2.disable ();
+    _c_t1.disable ();
+    _c_t2.disable ();
   }
 
   void
@@ -137,10 +124,10 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:hermitecurve");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->float_attribute ("p1", dynamic_cast<DoubleProperty*> (_p1)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("p2", dynamic_cast<DoubleProperty*> (_p2)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("t1", dynamic_cast<DoubleProperty*> (_t1)->get_value ());
-    AbstractSerializer::serializer->float_attribute ("t2", dynamic_cast<DoubleProperty*> (_t2)->get_value ());
+    AbstractSerializer::serializer->float_attribute ("p1", _p1.get_value ());
+    AbstractSerializer::serializer->float_attribute ("p2", _p2.get_value ());
+    AbstractSerializer::serializer->float_attribute ("t1", _t1.get_value ());
+    AbstractSerializer::serializer->float_attribute ("t2", _t2.get_value ());
 
     AbstractSerializer::serializer->end ();
 
