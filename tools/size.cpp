@@ -1,10 +1,14 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+
 #include "core/tree/int_property.h"
 #include "core/control/assignment.h"
 #include "core/control/binding.h"
+
 #include "base/arithmetic.h"
 #include "base/connector.h"
+#include "base/fsm.h"
+
 #include "gui/abstract_gshape.h"
 #include "gui/shapes/gen/rectangle.h"
 
@@ -33,11 +37,20 @@ main(int argc, char* argv[])
 	PSIZE(symtable_t);
 	PSIZE(Process);
 	PSIZE(Coupling);
+
 	PSIZE(IntProperty);
+
 	PSIZE(Binding);
 	PSIZE(Connector);
 	PSIZE(Assignment);
+
 	PSIZE(Adder);
+
+	PSIZE(FSM);
+	PSIZE(FSMState);
+	PSIZE(FSMTransition);
+
 	PSIZE(Rectangle);
+
 	return 0;
 }
