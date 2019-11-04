@@ -19,6 +19,7 @@
 #include "../core/tree/spike.h"
 #include "../core/tree/text_property.h"
 #include "../core/tree/ref_property.h"
+#include "../core/ontology/coupling.h"
 
 namespace djnn
 {
@@ -42,11 +43,11 @@ namespace djnn
       void serialize (const string& type) override;
     private:
       void set_parent (Process* p) override;
-      Container* _container;
-      TextProperty *_path, *_key;
-      RefProperty *_result;
-      Spike *_found, *_not_found;
-      FinderAction *_action;
-      Coupling *_cfind;
+      Container *_container;
+      TextProperty _path, _key;
+      RefProperty _result;
+      Spike _found, _not_found;
+      FinderAction _action;
+      Coupling _cfind;
   };
 }

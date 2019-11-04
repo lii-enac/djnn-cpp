@@ -30,8 +30,8 @@ namespace djnn
   Finder::FinderAction::impl_activate ()
   {
     Finder* f = (Finder*) get_parent ();
-    string path = f->_path->get_value ();
-    string key = f->_key->get_value ();
+    string path = f->_path.get_value ();
+    string key = f->_key.get_value ();
     if (key.empty())
       return;
     Process *res;
@@ -39,8 +39,8 @@ namespace djnn
       res = c->find_component (path);
       if (res) {
         if (res->get_cpnt_type () != PROPERTY_T) {
-          f->_result->set_value (c, true);
-          f->_found->activate ();
+          f->_result.set_value (c, true);
+          f->_found.activate ();
           return;
         } else {
           switch (((AbstractProperty*) res)->get_prop_type ())
@@ -49,8 +49,8 @@ namespace djnn
               try {
                 int v = (int) stoi (key);
                 if (v == ((IntProperty*) res)->get_value ()) {
-                  f->_result->set_value (c, true);
-                  f->_found->activate ();
+                  f->_result.set_value (c, true);
+                  f->_found.activate ();
                   return;
                 }
               }
@@ -61,8 +61,8 @@ namespace djnn
             case Boolean:
               if ((key.compare ("true") == 0 && ((BoolProperty*) res)->get_value () == 1)
                   || (key.compare ("false") == 0 && ((BoolProperty*) res)->get_value () == 0)) {
-                f->_result->set_value (c, true);
-                f->_found->activate ();
+                f->_result.set_value (c, true);
+                f->_found.activate ();
                 return;
               }
               break;
@@ -70,8 +70,8 @@ namespace djnn
               try {
                 double v = (double) stof (key);
                 if (v == ((DoubleProperty*) res)->get_value ()) {
-                  f->_result->set_value (c, true);
-                  f->_found->activate ();
+                  f->_result.set_value (c, true);
+                  f->_found.activate ();
                   return;
                 }
               }
@@ -81,8 +81,8 @@ namespace djnn
               break;
             case String:
               if (key.compare (((TextProperty*) res)->get_value ()) == 0) {
-                f->_result->set_value (c, true);
-                f->_found->activate ();
+                f->_result.set_value (c, true);
+                f->_found.activate ();
                 return;
               }
               break;
@@ -92,42 +92,36 @@ namespace djnn
         }
       }
     }
-    f->_not_found->activate ();
+    f->_not_found.activate ();
   }
 
-  Finder::Finder (Process *p, const string &n, Process *container, const string &path) :
-      Process (n)
+  Finder::Finder (Process *p, const string &n, Process *container, const string &path)
+  : Process (n),
+  _path (this, "path", path),
+  _key (this, "key", ""),
+  _result (this, "result", nullptr),
+  _found (this, "found"),
+  _not_found (this, "notFound"),
+  _action (this, "action"),
+  _cfind (&_key, ACTIVATION, &_action, ACTIVATION)
   {
     _container = dynamic_cast<Container*> (container);
     if (_container == nullptr) {
       warning (this, "Finder is only applicable to Containers");
       return;
     }
-    _path = new TextProperty (this, "path", path);
-    _key = new TextProperty (this, "key", "");
-    _result = new RefProperty (this, "result", nullptr);
-    _found = new Spike (this, "found");
-    _not_found = new Spike (this, "notFound");
-    _action = new FinderAction (this, "action");
-    _cfind = new Coupling (_key, ACTIVATION, _action, ACTIVATION);
-    _cfind->disable ();
-    Graph::instance ().add_edge (_key, _action);
-    Graph::instance ().add_edge (_action, _result);
+    _cfind.disable ();
+    Graph::instance ().add_edge (&_key, &_action);
+    Graph::instance ().add_edge (&_action, &_result);
 
     Process::finalize_construction (p);
   }
 
   Finder::~Finder ()
   {
-    remove_state_dependency (get_parent (), _action);
-    Graph::instance ().remove_edge (_key, _action);
-    Graph::instance ().remove_edge (_action, _result);
-    delete _cfind;
-    delete _path;
-    delete _key;
-    delete _found;
-    delete _not_found;
-    delete _action;
+    remove_state_dependency (get_parent (), &_action);
+    Graph::instance ().remove_edge (&_key, &_action);
+    Graph::instance ().remove_edge (&_action, &_result);
   }
 
   void
@@ -135,23 +129,23 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+       remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, _action);
+    add_state_dependency (p, &_action);
     Process::set_parent (p); 
   }
 
   void
   Finder::impl_activate ()
   {
-    _cfind->enable ();
+    _cfind.enable ();
   }
 
   void
   Finder::impl_deactivate ()
   {
-    _cfind->disable ();
+    _cfind.disable ();
   }
 
   void
@@ -162,7 +156,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:finder");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("path", _path->get_value ());
+    AbstractSerializer::serializer->text_attribute ("path", _path.get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
