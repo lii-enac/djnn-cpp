@@ -61,17 +61,17 @@ namespace djnn {
     void add_entry (Process* key, Process *value);
     Process* get_value (Process* key);
     void del_entry (Process* key);
-    void set_value (Process* value) { _value->set_value (value, true); }
+    void set_value (Process* value) { _value.set_value (value, true); }
     map<Process*,Process*>& get_map () { return _map; }
-    RefProperty* key () { return _key; }
-    RefProperty* value () { return _value; }
+    RefProperty* key () { return &_key; }
+    RefProperty* value () { return &_value; }
   private:
-    RefProperty* _key, *_value;
-    Spike *_add, *_del;
-    Coupling *_c_add, *_c_del, *_c_find;
-    FindAction* _find_action;
-    AddEntryAction* _add_action;
-    DelEntryAction* _del_action;
+    RefProperty _key, _value;
+    Spike _add, _del;
+    FindAction _find_action;
+    AddEntryAction _add_action;
+    DelEntryAction _del_action;
+    Coupling _c_add, _c_del, _c_find;
     map<Process*,Process*> _map;
   };
 }

@@ -58,39 +58,41 @@ namespace djnn
     d->get_map ()[key] = value;
   }
 
-  Dictionary::Dictionary (Process *parent, const string &name) : Process (name)
+  Dictionary::Dictionary (Process *parent, const string &name)
+  : Process (name), 
+    _key (this, "key", nullptr),
+    _value (this, "value", nullptr),
+     _add (this, "add"),
+    _del (this, "delete"),
+    _find_action (this, "find_action"),
+     _add_action (this, "add_action"),
+    _del_action (this, "del_action"),
+    _c_add (&_add, ACTIVATION, &_add_action, ACTIVATION, true),
+    _c_del (&_del, ACTIVATION, &_del_action, ACTIVATION, true),
+    _c_find (&_key, ACTIVATION, &_find_action, ACTIVATION, true)
+
   {
-    _key = new RefProperty (this, "key", nullptr);
-    _value = new RefProperty (this, "value", nullptr);
-    _find_action = new FindAction (this, "find_action");
-    _del_action = new DelEntryAction (this, "del_action");
-    _add_action = new AddEntryAction (this, "add_action");
-    _add = new Spike (this, "add");
-    _del = new Spike (this, "delete");
-    _c_add = new Coupling (_add, ACTIVATION, _add_action, ACTIVATION, true);
-    _c_add->disable ();
-    _c_del = new Coupling (_del, ACTIVATION, _del_action, ACTIVATION, true);
-    _c_del->disable ();
-    _c_find = new Coupling (_key, ACTIVATION, _find_action, ACTIVATION, true);
-    _c_find->disable ();
-    Graph::instance ().add_edge (_add, _add_action);
-    Graph::instance ().add_edge (_del, _del_action);
-    Graph::instance ().add_edge (_key, _find_action);
+    _c_add.disable ();
+    _c_del.disable ();
+    _c_find.disable ();
+    Graph::instance ().add_edge (&_add, &_add_action);
+    Graph::instance ().add_edge (&_del, &_del_action);
+    Graph::instance ().add_edge (&_key, &_find_action);
     Process::finalize_construction (parent);
   }
   void
   Dictionary::impl_activate ()
   {
-    _c_add->enable ();
-    _c_del->enable ();
-    _c_find->enable ();
+    _c_add.enable ();
+    _c_del.enable ();
+    _c_find.enable ();
   }
   void
   Dictionary::impl_deactivate ()
   {
-    _c_add->disable ();
-    _c_del->disable ();
-    _c_find->disable ();
+    _c_add.disable ();
+    _c_del.disable ();
+    _c_find.disable ();
   }
   void
   Dictionary::add_entry (Process* key, Process *value)
@@ -118,18 +120,8 @@ namespace djnn
   }
 
   Dictionary::~Dictionary () {
-    Graph::instance ().remove_edge (_add, _add_action);
-    Graph::instance ().remove_edge (_del, _del_action);
-    Graph::instance ().remove_edge (_key, _find_action);
-    delete _c_add;
-    delete _c_find;
-    delete _c_del;
-    delete _key;
-    delete _value;
-    delete _find_action;
-    delete _del_action;
-    delete _add_action;
-    delete _add;
-    delete _del;
+    Graph::instance ().remove_edge (&_add, &_add_action);
+    Graph::instance ().remove_edge (&_del, &_del_action);
+    Graph::instance ().remove_edge (&_key, &_find_action);
   }
 }
