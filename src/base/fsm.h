@@ -63,7 +63,7 @@ namespace djnn {
     };
   public:
     FSMTransition (Process *p, const string &n, Process* from, Process* to,
-		   Process *src, const string &spec, Process *action = 0, const string &aspec = "");
+		   Process *trigger, const string &tspec, Process *action = 0, const string &aspec = "");
     FSMTransition (Process *p, const string &n, Process* from, Process* to,
        Process *trigger, Process *action = 0);
     ~FSMTransition ();
@@ -71,13 +71,19 @@ namespace djnn {
     void impl_deactivate () override;
     void serialize (const string& type) override;
     int priority () { return _priority; }
-    Process* fsm_action () { return _fsm_action; }
+    Process* fsm_action () { return &_fsm_action; }
+  protected:
+    struct Init { Init (FSMTransition* t, Process* p, 
+                        const string &tspec, const string &aspec); };
+    friend struct Init;
+    
   private:
     void init_FSMTransition ();
-    FSMState* _src, *_dst;
-    Process *_action, *_trigger;
-    Process *_fsm_action;
-    Coupling *_c_src;
+    FSMState* _from_state, *_to_state;
+    Process *_trigger, *_action;
+    Init _init;
+    FSMTransitionAction _fsm_action;
+    Coupling _c_src;
     int _priority;
   };
 
@@ -89,7 +95,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_cpnt_type () const override { return FSM_T; }
-    void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state->set_value (name, true); };
+    void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state.set_value (name, true); };
     void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;
     void pick () override;
@@ -101,13 +107,12 @@ namespace djnn {
     void set_parent (Process* p) override;
     void serialize (const string& type) override;
   private:
-    void init_FSM (); 
+    int _priority;
     string _str_initial;
-    TextProperty *_fsm_state, *_initial;
-    FSMState* _cur_state;
+    FSMState *_cur_state;
+    TextProperty _fsm_state, _initial;
     list<FSMState*> _states;
     list<FSMTransition*> _transitions;
-    int _priority;
   };
 
 }

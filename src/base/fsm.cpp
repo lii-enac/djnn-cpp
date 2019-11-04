@@ -97,103 +97,81 @@ namespace djnn
 
   }
 
-  void
-  FSMTransition::init_FSMTransition () 
-  {
-    _fsm_action = new FSMTransitionAction (this, "transition_action_" + _src->get_name () + "_" + _dst->get_name (), _src, _dst, _action);
-    _c_src = new Coupling (_trigger, ACTIVATION, _fsm_action, ACTIVATION, true);
-    _c_src->disable ();
-  }
-
-  FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
-                                Process *src, const string &spec, Process *action,
-                                const string &aspec) :
-      Process (n)
+  FSMTransition::Init::Init (FSMTransition* t, Process* p, 
+                            const string &tspec, const string &aspec) 
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
-      warning (this, "only a FSM can be the parent of a FSM Transition\n");
+      warning (t, "only a FSM can be the parent of a FSM Transition\n");
       return;
     }
-    _priority = fsm->priority ();
+    t->_priority = fsm->priority ();
     fsm->increase_priority ();
 
-    _src = dynamic_cast<FSMState*> (from);
-    _dst = dynamic_cast<FSMState*> (to);
-    if (_src == nullptr || _dst == nullptr) {
-      warning (this, "only FSM states can be connected in a FSM transition\n");
+    if (t->_from_state == nullptr || t->_to_state == nullptr) {
+      warning (t, "only FSM states can be connected in a FSM transition\n");
       return;
     }
 
-    _src->add_transition (this);
-    _trigger = src->find_component (spec);
-    if (_trigger == nullptr) {
-      warning (this, "invalid SOURCE in transition ( name: " + n + ", src spec: " + spec + ", action spec:" + aspec + ")\n");
-      _c_src = nullptr;
-      return;
+    t->_from_state->add_transition (t);
+    if (t->_trigger == nullptr) {
+      warning (t, "invalid TRIGGER in transition ( name: " + t->get_name () + ", trigger spec: " + tspec + ", action spec:" + aspec + ")\n");
     }
+  }
 
-    if (action != 0)
-      _action = action->find_component (aspec);
-    else
-      _action = 0;
 
-    init_FSMTransition ();
+  FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
+                                Process *trigger, const string &tspec, Process *action,
+                                const string &aspec) 
+  : Process (n),
+  _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
+  _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
+  _trigger( trigger ? dynamic_cast<Process*>(trigger->find_component (tspec)) : nullptr),
+  _action( action ? dynamic_cast<Process*>(action->find_component (aspec)) : nullptr),
+  _init(this, p, tspec, aspec),
+  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
+  _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
+  {
+    
+    _c_src.disable ();
     
     Process::finalize_construction (p);
+    FSM *fsm = dynamic_cast<FSM*> (p);
     fsm->FSM::add_transition(this);
   }
 
   FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
-                                Process *trigger, Process *action) :
-      Process (n)
+                                Process *trigger, Process *action) 
+  : Process (n),
+  _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
+  _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
+  _trigger (trigger),
+  _action (action),
+  _init(this, p, "NO spec for trigger", "NO spec for action"),
+  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
+  _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
-    FSM *fsm = dynamic_cast<FSM*> (p);
-    if (fsm == nullptr) {
-      warning (this, "only a FSM can be the parent of a FSM Transition\n");
-      return;
-    }
-    _priority = fsm->priority ();
-    fsm->increase_priority ();
-
-    _src = dynamic_cast<FSMState*> (from);
-    _dst = dynamic_cast<FSMState*> (to);
-    if (_src == nullptr || _dst == nullptr) {
-      warning (this, "only FSM states can be connected in a FSM transition\n");
-      return;
-    }
-
-    _src->add_transition (this);
-    _trigger = trigger;
-    _action = action;
-    if (_trigger == nullptr) {
-      warning (this, "invalid source in transition " + n + "\n");
-      _c_src = nullptr;
-      return;
-    }
-  
-    init_FSMTransition ();
+     _c_src.disable ();
     
     Process::finalize_construction (p);
+    FSM *fsm = dynamic_cast<FSM*> (p);
     fsm->FSM::add_transition(this);
   }
 
   FSMTransition::~FSMTransition ()
   {
-    delete _fsm_action;
-    delete _c_src;
   }
 
   void
   FSMTransition::impl_activate ()
   {
-    _c_src->enable ();
+    _c_src.enable ();
   }
 
   void
   FSMTransition::impl_deactivate ()
   {
-    _c_src->disable ();
+    _c_src.disable ();
   }
 
   void
@@ -221,10 +199,10 @@ namespace djnn
     AbstractSerializer::serializer->start ("base:fsmtransition");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
-    AbstractSerializer::compute_path (get_parent (), _src, buf);
+    AbstractSerializer::compute_path (get_parent (), _from_state, buf);
     AbstractSerializer::serializer->text_attribute ("from", buf);
     buf.clear ();
-    AbstractSerializer::compute_path (get_parent (), _dst, buf);
+    AbstractSerializer::compute_path (get_parent (), _to_state, buf);
     AbstractSerializer::serializer->text_attribute ("to", buf);
     buf.clear ();
     AbstractSerializer::compute_path (get_parent (), _trigger, buf);
@@ -239,27 +217,25 @@ namespace djnn
 
   }
 
-  void
-  FSM::init_FSM ()
+  FSM::FSM () 
+  : Process (),
+  _fsm_state (this, "state", ""),
+  _initial (this, "initial", "")
   {
-    _fsm_state = new TextProperty (this, "state", "");
-    _initial = new TextProperty (this, "initial", "");
-    
+    set_state_dependency (&_fsm_state);  
   }
 
-  FSM::FSM () : Process ()
-  {
-    init_FSM ();
-    set_state_dependency (_fsm_state);  
-  }
-
-  FSM::FSM (Process *p, const string &n) : 
-    Process (n), _cur_state (nullptr), _priority (0) 
+  FSM::FSM (Process *p, const string &n) 
+  : Process (n), 
+  _priority (0),
+  _cur_state (nullptr),
+  _fsm_state (this, "state", ""),
+  _initial (this, "initial", "")
   { 
-    init_FSM ();
+    set_state_dependency (&_fsm_state); 
 
     /* with state_dependency */
-    Process::finalize_construction (p, _fsm_state);
+    Process::finalize_construction (p, &_fsm_state);
   }
 
   FSM::~FSM ()
@@ -272,9 +248,6 @@ namespace djnn
     for (FSMState* s : _states) {
         delete s;
     }
-
-    delete _initial;
-    delete _fsm_state;
   }
 
   void
@@ -292,9 +265,9 @@ namespace djnn
   void
   FSM::impl_activate ()
   {
-    _fsm_state->activate ();
-    _initial->activate ();
-    _initial->set_value (_str_initial, true);
+    _fsm_state.activate ();
+    _initial.activate ();
+    _initial.set_value (_str_initial, true);
 
     if (_str_initial.length () != 0) {
       FSMState* init_state = dynamic_cast<FSMState*> (find_component (_str_initial));
