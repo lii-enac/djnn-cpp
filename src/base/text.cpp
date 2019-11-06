@@ -72,8 +72,8 @@ namespace djnn
 
 #if NEW_TEXT
 
-  template <> const char name_info<TextCatenatorAction>::serialize = "textcatenator";
-  template <> const char name_info<TextComparatorAction>::serialize = "textcomparator";
+  template <> const char name_info<TextCatenatorAction>::serialize [] = "textcatenator";
+  template <> const char name_info<TextComparatorAction>::serialize [] = "textcomparator";
 
 #else
   TextCatenator::TextCatenator (Process *p, const string &n) :

@@ -57,8 +57,8 @@ namespace djnn
 
   class TextCatenatorAction;
   class TextComparatorAction;
-  template <> const char name_info<TextCatenatorAction>::serialize;
-  template <> const char name_info<TextComparatorAction>::serialize;
+  template <> const char name_info<TextCatenatorAction>::serialize [];
+  template <> const char name_info<TextComparatorAction>::serialize [];
 
   template <typename Action>
   class TextBinaryOperator : public Process
@@ -95,7 +95,7 @@ namespace djnn
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
     void serialize (const string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + name_info<Action>::serialize);
+      AbstractSerializer::serializer->start ("base:" + string(name_info<Action>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
       AbstractSerializer::serializer->cpptype_attribute ("left", _left.get_value ());
       AbstractSerializer::serializer->cpptype_attribute ("right", _right.get_value ());
