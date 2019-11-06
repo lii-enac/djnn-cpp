@@ -99,7 +99,7 @@ namespace djnn
     dSpaceID _space_id = w->get_space ();
     dGeomID geom = dCreatePlane (_space_id, a, b, c, d);
     dGeomSetData (geom, phy_obj);
-    ODEPhyObj *obj = new ODEPhyObj (nullptr, geom);
+    new ODEPhyObj (nullptr, geom);
   }
 
   void

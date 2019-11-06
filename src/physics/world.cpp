@@ -31,7 +31,6 @@ namespace djnn
     w->get_dt (dt);
 
     w->get_impl ()->step (dt);
-    int sz = w->get_phy_objects ().size ();
     for (auto p : w->get_phy_objects ()) {
       p->update ();
     }
