@@ -26,8 +26,8 @@ namespace djnn
   using std::cerr;
 
   void
-  Coupling::init_coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                           activation_flag_e dst_flag)
+  Coupling::init (Process* src, activation_flag_e src_flag, Process* dst,
+                           activation_flag_e dst_flag, bool immediate_propagation)
   {
     if (src == 0) {
       cerr << "Warning: the source of a coupling cannot be null\n";
@@ -37,6 +37,8 @@ namespace djnn
       cerr << "Warning: the destination of a coupling cannot be null\n";
       return;
     }
+
+    set_immediate_propagation (immediate_propagation);
 
     set_is_enabled(true);
 
@@ -48,32 +50,13 @@ namespace djnn
     }
 
     set_dst_activation_flag (dst_flag);
+    _src = src;
+    _dst = dst;
   }
 
-  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                      activation_flag_e dst_flag, bool immediate_propagation) :
-      _src (src), _dst (dst), _data (nullptr)
+  void
+  Coupling::uninit ()
   {
-    set_immediate_propagation (immediate_propagation);
-    init_coupling (src, src_flag, dst, dst_flag);
-  }
-
-  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                      activation_flag_e dst_flag, Process* data, bool immediate_propagation) :
-    Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
-  {
-    _data = data;
-  }
-
-  Coupling::Coupling ()
-  : _src(nullptr), _dst(nullptr)
-  {
-    //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
-  }
-
-  Coupling::~Coupling ()
-  {
-    //cerr << __PRETTY_FUNCTION__  << " - " << this << std::endl;
     if (_src == nullptr)
       return;
     switch(get_src_activation_flag ()) {
@@ -87,22 +70,46 @@ namespace djnn
     }
   }
 
+  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
+                      activation_flag_e dst_flag, bool immediate_propagation) :
+      _src (src), _dst (dst), _data (nullptr)
+  {
+    init (src, src_flag, dst, dst_flag, immediate_propagation);
+  }
+
+  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
+                      activation_flag_e dst_flag, Process* data, bool immediate_propagation) :
+    Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
+  {
+    _data = data;
+  }
+
+  Coupling::Coupling ()
+  : _src(nullptr), _dst(nullptr)
+  {
+  }
+
+  Coupling::~Coupling ()
+  {
+    uninit ();
+  }
+
   void
   Coupling::change_source (Process *src, Process* data)
   {
-    if (src != nullptr) {
+    //if (src != nullptr) {
       switch(get_src_activation_flag ()) {
         case ACTIVATION:
           if (_src != nullptr) _src->remove_activation_coupling (this);
-          /*if ( src != nullptr)*/ src->add_activation_coupling (this);
+          if ( src != nullptr) src->add_activation_coupling (this);
         break;
         case DEACTIVATION:
           if (_src !=nullptr) _src->remove_deactivation_coupling (this);
-          /*if ( src !=nullptr)*/ src->add_deactivation_coupling (this);
+          if ( src !=nullptr) src->add_deactivation_coupling (this);
         break;
         default: break;
       }
-    }
+    //}
     _src = src;
     _data = data;
   }

@@ -24,7 +24,7 @@
 
 #include <string>
 
-#define NEW_OP 0
+#define NEW_OP 1
 
 namespace djnn {
   using namespace std;

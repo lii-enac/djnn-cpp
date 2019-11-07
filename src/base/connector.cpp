@@ -336,20 +336,18 @@ namespace djnn
   void
   Connector::update_graph ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
-    //std::cerr << "_src:" << _src << " _dst:" << _dst << std::endl;
 #if NEW_CON
     if (_has_coupling) {
-      _c_src = Coupling();//_src, ACTIVATION, &_action, ACTIVATION, true);//.change_source(nullptr);
-      _has_coupling = false;
+      _c_src.uninit ();
     }
     if (_src && _dst) {
-      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
-      //_c_src.change_source(_src);
-      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);    
+      if(_has_coupling) {
+        _c_src.change_source(_src);
+      } else {
+        _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
+      } 
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
-        //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
         _action.activate ();
       } else {
         _c_src.disable ();
@@ -357,15 +355,16 @@ namespace djnn
     }
 #else
     if (_has_coupling) {
-      delete _c_src;
-      _c_src = nullptr;
+      _c_src->uninit ();
     }
     if (_src && _dst) {
-      //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
-      _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
+      if(_has_coupling) {
+        _c_src->change_source(_src);
+      } else {
+        _c_src = new Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
+      }
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
-        //std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << std::endl;
         _action->activate ();
       } else {
         _c_src->disable ();

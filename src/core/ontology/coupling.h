@@ -30,7 +30,8 @@ namespace djnn {
     
     void propagate_activation ();
     void propagate_deactivation ();
-    void change_source (Process *src, Process *data = nullptr);
+    void change_source (Process *src, Process *data);
+    void change_source (Process *src) { change_source (src, _data); }
 
     // process
     Process* get_src ()  { return _src; }
@@ -45,8 +46,9 @@ namespace djnn {
 
     void about_to_delete_src () { _src = nullptr; }
 
+    void init (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
+    void uninit ();
   private:
-    void init_coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag);
     void propagate_immediately ();
 
     Process *_src, *_dst, *_data;
