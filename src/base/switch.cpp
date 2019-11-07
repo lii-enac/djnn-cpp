@@ -27,35 +27,40 @@ namespace djnn
   {
   }
 
-  Switch::Switch (Process *parent, const string &name, const string &initial) :
-      Container (parent, name)
-  {
-    init_switch (initial);
-    Process::finalize_construction (parent, _action);
-  }
-
-  Switch::Switch (const string &initial)
-  {
-    init_switch (initial);
-    set_state_dependency (_action);
-  }
-
-  void
-  Switch::init_switch (const string &initial)
-  {
-    _initial = initial;
-    /*  be carefull :
+   /*  be carefull :
         we have to add branch_name in the process symTable but NOT in the container _children list 
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-    _branch_name = new TextProperty (nullptr, "switch_state", initial);
-    add_symbol ("state", _branch_name);
-    _action = new SwitchAction (this, "switch_action");
-    _c_branch = new Coupling (_branch_name, ACTIVATION, _action, ACTIVATION, true);
-    _c_branch->disable ();
-
-    _cur_branch = nullptr;
+  Switch::Switch (Process *parent, const string &name, const string &initial) 
+  : Container (parent, name),
+  _initial (initial),
+  _branch_name (nullptr, "switch_state", initial),
+  _action (this, "switch_action"),
+  _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION, true),
+  _cur_branch (nullptr)
+  {
+    add_symbol ("state", &_branch_name);
+    _c_branch.disable ();
+    Process::finalize_construction (parent, &_action);
+  }
+  
+  /*  be carefull :
+        we have to add branch_name in the process symTable but NOT in the container _children list 
+        so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
+        then added to symtable with his real name
+    */
+  Switch::Switch (const string &initial)
+  : 
+  _initial (initial),
+  _branch_name (nullptr, "switch_state", initial),
+  _action (this, "switch_action"),
+  _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION, true),
+  _cur_branch (nullptr)
+  {
+    add_symbol ("state", &_branch_name);
+    _c_branch.disable ();
+    set_state_dependency (&_action);
   }
 
   Switch::~Switch ()
@@ -63,25 +68,17 @@ namespace djnn
     remove_state_dependency (get_parent (), state_dependency ());
 
     /* note:
-     * We have to delete all content BEFORE deleting _action and _branch_name
+     * We have to delete all content BEFORE deleting _action and _branch_name call by this destructor
      * especially all the state_dependency
      */
     Container::clean_up_content ();
    
-    delete _c_branch;
-    /* note :
-     * Here, we can delete _action because is has not been add into _children
-     * avoid to add the action in Container::_children list
-     * otherwise there is a side effect on ~switch which 
-     * occured after ~container which already deleted _children */
-    delete _action;
-    delete _branch_name;
   }
 
   void
   Switch::impl_activate ()
   {
-    _c_branch->enable ();
+    _c_branch.enable ();
     change_branch ();
     set_activation_state (ACTIVATED);
   }
@@ -89,7 +86,7 @@ namespace djnn
   void
   Switch::impl_deactivate ()
   {
-    _c_branch->disable ();
+    _c_branch.disable ();
     if (_cur_branch != nullptr)
       _cur_branch->deactivate ();
   }
@@ -127,7 +124,7 @@ namespace djnn
   void
   Switch::change_branch ()
   {
-    string key = _branch_name->get_value ();
+    string key = _branch_name.get_value ();
     map<string, Process*>::iterator it = symtable ().find (key);
     if (it != symtable ().end ()) {
       if (_cur_branch == it->second) {

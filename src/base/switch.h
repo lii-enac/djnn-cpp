@@ -49,13 +49,12 @@ namespace djnn {
     void serialize (const string& type) override;
   private:
     void set_parent (Process* p) override;
-    void init_switch (const string &initial);
     void change_branch ();
     friend void SwitchAction::impl_activate ();
     string _initial;
-    Coupling* _c_branch;
-    TextProperty* _branch_name;
-    Process* _action;
+    TextProperty _branch_name;
+    SwitchAction _action;
+    Coupling _c_branch;
     Process* _cur_branch;
   };
 
