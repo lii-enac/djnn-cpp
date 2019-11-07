@@ -20,7 +20,11 @@
 #include "../core/ontology/process.h"
 #include "window.h"
 
+#define MACRO(key) extern const int DJN_Key_ ## key;
+
 namespace djnn {
+
+  #include "const_keys.h"
 
   extern int mouse_tracking;
   extern int full_screen;
