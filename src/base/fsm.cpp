@@ -219,6 +219,8 @@ namespace djnn
 
   FSM::FSM () 
   : Process (),
+  _priority (0),
+  _cur_state (nullptr),
   _fsm_state (this, "state", ""),
   _initial (this, "initial", "")
   {
@@ -232,8 +234,6 @@ namespace djnn
   _fsm_state (this, "state", ""),
   _initial (this, "initial", "")
   { 
-    set_state_dependency (&_fsm_state); 
-
     /* with state_dependency */
     Process::finalize_construction (p, &_fsm_state);
   }
