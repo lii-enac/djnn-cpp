@@ -95,42 +95,54 @@ namespace djnn
     }
   }
 
-  void
-  SwitchList::init (bool loop)
+  /* 
+   * note:
+   * do not add directly Property, spikes and actions into the symbol switchlist's table 
+   * switchlist sympbol table should only containt branch
+   */
+  SwitchList::SwitchList (bool loop)
+  : AbstractList (), 
+  _cur_item (nullptr),
+  _loop (nullptr, "_loop", loop),
+  _index (nullptr, "_index", 1),
+  _next (nullptr, "_next"),
+  _previous (nullptr, "_previous"),
+  _next_action (this),
+  _previous_action (this),
+  _change_index_action (this),
+  _c_next (&_next, ACTIVATION, &_next_action, ACTIVATION, true),
+  _c_previous (&_previous, ACTIVATION, &_previous_action, ACTIVATION, true),
+  _c_index (&_index, ACTIVATION, &_change_index_action, ACTIVATION, true)
   {
-    /* 
-     * note:
-     * do not add directly Property, spikes and actions into the symbol switchlist's table 
-     * switchlist sympbol table should only containt branch
-     */
-    _loop = new BoolProperty (nullptr, "_loop", loop);
-    _index = new IntProperty (nullptr, "_index", 1);
-    _next = new Spike (nullptr, "_next");
-    _previous = new Spike (nullptr, "_previous");
-    _next_action = new Next (this);
-    _previous_action = new Previous (this);
-    _change_index_action = new ChangeIndex (this);
-
-    _c_next = new Coupling (_next, ACTIVATION, _next_action, ACTIVATION, true);
-    _c_previous = new Coupling (_previous, ACTIVATION, _previous_action, ACTIVATION, true);
-    _c_index = new Coupling (_index, ACTIVATION, _change_index_action, ACTIVATION, true);
-    _c_next->disable ();
-    _c_previous->disable ();
-    _c_index->disable ();
+    _c_next.disable ();
+    _c_previous.disable ();
+    _c_index.disable ();
+    set_state_dependency (&_change_index_action);
   }
 
-  SwitchList::SwitchList (bool loop) :
-      AbstractList (), _cur_item (nullptr)
+  /* 
+   * note:
+   * do not add directly Property, spikes and actions into the symbol switchlist's table 
+   * switchlist sympbol table should only containt branch
+   */
+  SwitchList::SwitchList (Process* parent, const string& name, bool loop) 
+  : AbstractList (parent, name),
+  _cur_item (nullptr),
+  _loop (nullptr, "_loop", loop),
+  _index (nullptr, "_index", 1),
+  _next (nullptr, "_next"),
+  _previous (nullptr, "_previous"),
+  _next_action (this),
+  _previous_action (this),
+  _change_index_action (this),
+  _c_next (&_next, ACTIVATION, &_next_action, ACTIVATION, true),
+  _c_previous (&_previous, ACTIVATION, &_previous_action, ACTIVATION, true),
+  _c_index (&_index, ACTIVATION, &_change_index_action, ACTIVATION, true)
   {
-    init (loop);
-    set_state_dependency (_change_index_action);
-  }
-
-  SwitchList::SwitchList (Process* parent, const string& name, bool loop) :
-      AbstractList (parent, name), _cur_item (nullptr)
-  {
-    init (loop);
-    Process::finalize_construction (parent, _change_index_action);
+    _c_next.disable ();
+    _c_previous.disable ();
+    _c_index.disable ();
+    Process::finalize_construction (parent, &_change_index_action);
   }
 
   void
@@ -150,25 +162,14 @@ namespace djnn
     Container::clean_up_content ();
 
     remove_state_dependency (get_parent (), state_dependency ());
-
-    delete _c_index;
-    delete _c_previous;
-    delete _c_next;
-    delete _change_index_action;
-    delete _previous_action;
-    delete _next_action;
-    delete _previous;
-    delete _next;
-    delete _index;
-    delete _loop;
   }
 
   void
   SwitchList::impl_activate ()
   {
-    _c_next->enable ();
-    _c_previous->enable ();
-    _c_index->enable ();
+    _c_next.enable ();
+    _c_previous.enable ();
+    _c_index.enable ();
     if (_children.empty ())
       return;
     if (_cur_item == nullptr)
@@ -179,9 +180,9 @@ namespace djnn
   void
   SwitchList::impl_deactivate ()
   {
-    _c_next->disable ();
-    _c_previous->disable ();
-    _c_index->disable ();
+    _c_next.disable ();
+    _c_previous.disable ();
+    _c_index.disable ();
     if (_cur_item)
       _cur_item->deactivate ();
   }
@@ -198,13 +199,13 @@ namespace djnn
   SwitchList::find_component (const string& path)
   {
     if (path.compare ("next") == 0)
-      return _next;
+      return &_next;
     else if (path.compare ("previous") == 0)
-      return _previous;
+      return &_previous;
     else if (path.compare ("index") == 0)
-      return _index;
+      return &_index;
     else if (path.compare ("loop") == 0)
-      return (Process *) _loop;
+      return &_loop;
     else
       return AbstractList::find_component (path);
   }
@@ -227,7 +228,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:switch-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("loop", _loop ? "true" : "false");
+    AbstractSerializer::serializer->text_attribute ("loop", _loop.get_value () ? "true" : "false");
 
     for (auto c : _children)
       c->serialize (type);

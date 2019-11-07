@@ -17,6 +17,7 @@
 #include "../core/control/action.h"
 #include "../core/tree/list.h"
 #include "../core/tree/spike.h"
+#include "../core/tree/bool_property.h"
 
 #include <list>
 
@@ -69,18 +70,19 @@ namespace djnn {
     void serialize (const string& type) override;
     Process* item () { return _cur_item; }
     void set_item (Process *item) { _cur_item = item; }
-    IntProperty* index () { return _index; }
-    BoolProperty* loop () { return _loop; }
+    IntProperty* index () { return &_index; }
+    BoolProperty* loop () { return &_loop; }
     void set_parent (Process* p) override;
     
   private:
-    void init (bool loop);
     void finalize_child_insertion (Process *child) override;
-    Spike *_next, *_previous;
-    IntProperty *_index;
-    BoolProperty *_loop;
-    Coupling *_c_next, *_c_previous, *_c_index;
-    Process *_next_action, *_previous_action, *_change_index_action;
     Process* _cur_item;
+    BoolProperty _loop;
+    IntProperty _index;
+    Spike _next, _previous;
+    Next _next_action;
+    Previous _previous_action;
+    ChangeIndex _change_index_action;
+    Coupling _c_next, _c_previous, _c_index;
   };
 }
