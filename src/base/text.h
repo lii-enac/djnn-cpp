@@ -51,13 +51,18 @@ namespace djnn
     Coupling c_input;
   };
 
-#define NEW_TEXT 0
+#define NEW_TEXT 1
 
 #if NEW_TEXT
 
   class TextCatenatorAction;
   class TextComparatorAction;
+  template <> const char name_info<TextCatenatorAction>::left [];
+  template <> const char name_info<TextCatenatorAction>::right [];
   template <> const char name_info<TextCatenatorAction>::serialize [];
+
+  template <> const char name_info<TextComparatorAction>::left [];
+  template <> const char name_info<TextComparatorAction>::right [];
   template <> const char name_info<TextComparatorAction>::serialize [];
 
   template <typename Action>
@@ -66,9 +71,9 @@ namespace djnn
   public:
     TextBinaryOperator (Process *p, const string &n, const string& l_val, const string& r_val)
     : Process (n),
-      _left(this, "left", l_val),
-      _right(this, "right", r_val),
-      _result(this, "result", l_val+r_val),
+      _left(this, name_info<Action>::left, l_val),
+      _right(this, name_info<Action>::right, r_val),
+      _result(this, "output", l_val+r_val),
       _action(this, "action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
@@ -78,9 +83,9 @@ namespace djnn
     }
     TextBinaryOperator (Process *p, const string &n)
     : Process (n),
-      _left(this, "left", ""),
-      _right(this, "right", ""),
-      _result(this, "result", ""),
+      _left(this, name_info<Action>::left, ""),
+      _right(this, name_info<Action>::right, ""),
+      _result(this, "output", ""),
       _action(this, "action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)

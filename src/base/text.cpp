@@ -72,7 +72,12 @@ namespace djnn
 
 #if NEW_TEXT
 
+  template <> const char name_info<TextCatenatorAction>::left [] = "head";
+  template <> const char name_info<TextCatenatorAction>::right [] = "tail";
   template <> const char name_info<TextCatenatorAction>::serialize [] = "textcatenator";
+
+  template <> const char name_info<TextComparatorAction>::left [] = "left";
+  template <> const char name_info<TextComparatorAction>::right [] = "right";
   template <> const char name_info<TextComparatorAction>::serialize [] = "textcomparator";
 
 #else

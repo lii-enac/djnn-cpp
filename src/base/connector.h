@@ -53,7 +53,7 @@ namespace djnn {
   protected:
     void set_parent (Process* p) override;
 
-#define NEW_CON 0
+#define NEW_CON 1
 
 #if NEW_CON
     struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec); };
