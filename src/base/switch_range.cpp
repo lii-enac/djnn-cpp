@@ -23,20 +23,20 @@ namespace djnn
   using namespace std;
 
   SwitchRangeBranch::SwitchRangeBranch (Process *parent, const string &name, double lower, bool left_open, double upper,
-                                        bool right_open) :
-      Container (parent, name), _left_open (left_open), _right_open (right_open)
+                                        bool right_open) 
+  : Container (parent, name),
+  _left_open (left_open),
+  _right_open (right_open),
+  _lower (nullptr, "_lower", lower),
+  _upper (nullptr, "_upper", upper)
   {
-    _lower = new DoubleProperty (nullptr, "_lower", lower);
-    _upper = new DoubleProperty (nullptr, "_upper", upper);
-    add_symbol ("lower", _lower);
-    add_symbol ("upper", _upper);
+    add_symbol ("lower", &_lower);
+    add_symbol ("upper", &_upper);
     Process::finalize_construction (parent);
   }
 
   SwitchRangeBranch::~SwitchRangeBranch ()
   {
-    delete _lower;
-    delete _upper;
   }
 
   void
@@ -46,8 +46,8 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:switch-range-branch");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->float_attribute ("lower", _lower->get_value ());
-    AbstractSerializer::serializer->float_attribute ("upper", _upper->get_value ());
+    AbstractSerializer::serializer->float_attribute ("lower", _lower.get_value ());
+    AbstractSerializer::serializer->float_attribute ("upper", _upper.get_value ());
     AbstractSerializer::serializer->int_attribute ("left-open", _left_open);
     AbstractSerializer::serializer->int_attribute ("right-open", _right_open);
     for (auto c : _children)
@@ -62,8 +62,8 @@ namespace djnn
   bool
   SwitchRangeBranch::is_in_range (double v)
   {
-    bool l = _left_open ? v > _lower->get_value () : v >= _lower->get_value ();
-    bool u = _right_open ? v < _upper->get_value () : v <= _upper->get_value ();
+    bool l = _left_open ? v > _lower.get_value () : v >= _lower.get_value ();
+    bool u = _right_open ? v < _upper.get_value () : v <= _upper.get_value ();
     return l && u;
   }
 
@@ -73,31 +73,35 @@ namespace djnn
   {
   }
 
-  SwitchRange::SwitchRange (Process *parent, const string &name, double initial) :
-      Container (parent, name)
+  /* note:
+   * added _branch_range to symTable but not in _children 
+   */
+  SwitchRange::SwitchRange (Process *parent, const string &name, double initial) 
+  : Container (parent, name),
+  _initial (initial),
+  _branch_range (nullptr, "switch_state", initial),
+  _action (this, "switch_range_action"),
+  _c_branch (&_branch_range, ACTIVATION, &_action, ACTIVATION, true),
+  _cur_branch (nullptr)
   {
-    init_switch_range (initial);
-    Process::finalize_construction (parent, _action);
+    add_symbol ("state", &_branch_range);
+    _c_branch.disable ();
+    Process::finalize_construction (parent, &_action);
   }
 
+  /* note:
+   * added _branch_range to symTable but not in _children 
+   */
   SwitchRange::SwitchRange (double initial)
+  : _initial (initial),
+  _branch_range (nullptr, "switch_state", initial),
+  _action (this, "switch_range_action"),
+  _c_branch (&_branch_range, ACTIVATION, &_action, ACTIVATION, true),
+  _cur_branch (nullptr)
   {
-    init_switch_range (initial);
-    set_state_dependency (_action);
-  }
-
-  void
-  SwitchRange::init_switch_range (double initial)
-  {
-    _initial = initial;
-    /*  added to symTable but not in _children */
-    _branch_range = new DoubleProperty (nullptr, "switch_state", initial);
-    add_symbol ("state", _branch_range);
-    _action = new SwitchRangeAction (this, "switch_range_action");
-    _c_branch = new Coupling (_branch_range, ACTIVATION, _action, ACTIVATION, true);
-    _c_branch->disable ();
-
-    _cur_branch = nullptr;
+    add_symbol ("state", &_branch_range);
+    _c_branch.disable ();
+    set_state_dependency (&_action);
   }
 
   SwitchRange::~SwitchRange ()
@@ -110,14 +114,11 @@ namespace djnn
      */
     Container::clean_up_content ();
 
-    delete _c_branch;
     /* note :
      * Here, we can delete _action because is has not been add into _children
      * avoid to add the action in Container::_children list
      * otherwise there is a side effect on ~switch which 
      * occured after ~container which already deleted _children */
-    delete _action;
-    delete _branch_range;
   }
 
   void
@@ -135,7 +136,7 @@ namespace djnn
   void
   SwitchRange::impl_activate ()
   {
-    _c_branch->enable ();
+    _c_branch.enable ();
     change_branch ();
     //set_activated ();
     set_activation_state (ACTIVATED);
@@ -144,7 +145,7 @@ namespace djnn
   void
   SwitchRange::impl_deactivate ()
   {
-    _c_branch->disable ();
+    _c_branch.disable ();
     if (_cur_branch != nullptr)
       _cur_branch->deactivate ();
   }
@@ -170,7 +171,7 @@ namespace djnn
   void
   SwitchRange::change_branch ()
   {
-    double v = _branch_range->get_value ();
+    double v = _branch_range.get_value ();
     for (auto c: _children) {
       if (((SwitchRangeBranch*)c)->is_in_range (v)) {
         if (_cur_branch == c) {

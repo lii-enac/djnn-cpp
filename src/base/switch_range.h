@@ -31,8 +31,8 @@ namespace djnn {
     bool is_in_range (double v);
     void serialize (const string& type) override;
   private:
-    DoubleProperty *_lower, *_upper;
     bool _left_open, _right_open;
+    DoubleProperty _lower, _upper;
   };
 
   class SwitchRange : public Container
@@ -61,13 +61,12 @@ namespace djnn {
     void serialize (const string& type) override;
   private:
     void set_parent (Process* p) override;
-    void init_switch_range (double initial);
     void change_branch ();
     friend void SwitchRangeAction::impl_activate ();
     double _initial;
-    Coupling* _c_branch;
-    DoubleProperty* _branch_range;
-    Process* _action;
+    DoubleProperty _branch_range;
+    SwitchRangeAction _action;
+    Coupling _c_branch;
     Process* _cur_branch;
   };
 
