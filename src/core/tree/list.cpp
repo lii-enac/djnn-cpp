@@ -221,7 +221,7 @@ namespace djnn
   List::List (Process* parent, const string& name) :
     AbstractList (parent, name)
   {
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   List::~List ()
@@ -276,7 +276,7 @@ namespace djnn
     if (l == nullptr)
       error (this, "The list argument must be a List component in list iterator " + name);
     _list = l;
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   void
@@ -365,7 +365,7 @@ namespace djnn
     Graph::instance ().add_edge (&_next, &_next_action);
     Graph::instance ().add_edge (&_previous, &_previous_action);
     Graph::instance ().add_edge (&_reset, &_reset_action);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   BidirectionalListIterator::~BidirectionalListIterator ()

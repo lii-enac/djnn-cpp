@@ -26,8 +26,8 @@ namespace djnn
 {
   using namespace std;
 
-  Connector::ConnectorAction::ConnectorAction (Process* parent, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
-        Action (parent, n), _src (src), _dst (dst), _propagate (propagate) 
+  Connector::ConnectorAction::ConnectorAction (Process* parent, const string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+        Action (parent, name), _src (src), _dst (dst), _propagate (propagate) 
   {
   }
 
@@ -82,10 +82,13 @@ namespace djnn
     }
   }
 
-  Connector::Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation,
+
+
+
+  Connector::Connector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation,
     string src_ref_spec, string dst_ref_spec)
   :
-    SrcToDstLink (p, n),
+    SrcToDstLink (parent, name),
     _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
     _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
     _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
@@ -107,7 +110,7 @@ namespace djnn
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
     check_init(ispec, dspec);
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Connector::Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation,
@@ -230,15 +233,15 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
   }
 
-  PausedConnector::PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec,
+  PausedConnector::PausedConnector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec,
                                     bool copy_on_activation) :
-      Process (n), _c_src (nullptr), _copy_on_activation (copy_on_activation)
+      Process (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
-  PausedConnector::PausedConnector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation) :
+  PausedConnector::PausedConnector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation) :
       _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
@@ -260,7 +263,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::init_pausedconnector (Process *src, string ispec, Process *dst, string dspec)
+  PausedConnector::init_pausedconnector (Process *src, const string& ispec, Process *dst, const string& dspec)
   {
     if (src == 0) {
       error ( this, "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");

@@ -26,7 +26,7 @@ namespace djnn {
   class AbstractTextProperty : public AbstractProperty {
   public:
     AbstractTextProperty () : AbstractProperty () { };
-    AbstractTextProperty (Process* p, const string &name, int notify_mask=notify_none) : AbstractProperty (p, name, notify_mask) { Process::finalize_construction (p); };
+    AbstractTextProperty (Process* parent, const string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
     virtual int get_prop_type () override { return String; }
 
     // AbstractProperty interface
@@ -57,7 +57,7 @@ namespace djnn {
   class TextProperty : public AbstractTextProperty {
   public:
     TextProperty (string v) : AbstractTextProperty (), value(v) { }
-    TextProperty (Process* p, const string &name, string v) : AbstractTextProperty (p, name), value(v) { }
+    TextProperty (Process* parent, const string &name, string v) : AbstractTextProperty (parent, name), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;
   protected:
@@ -69,7 +69,7 @@ namespace djnn {
   class TextPropertyProxy : public AbstractTextProperty {
   public:
     TextPropertyProxy (string &v) : AbstractTextProperty (), value(v) { }
-    TextPropertyProxy (Process* p, const string &name, string &v, int notify_mask=notify_none) : AbstractTextProperty (p, name, notify_mask), value(v) { }
+    TextPropertyProxy (Process* parent, const string &name, string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;
   protected:

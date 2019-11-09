@@ -38,18 +38,18 @@ namespace djnn {
   {
   }
 
-  PolyPoint::PolyPoint (Process* p, const string &n, double x, double y) :
-      AbstractGObj (p,n),
+  PolyPoint::PolyPoint (Process* parent, const string &name, double x, double y) :
+      AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
   {
-    Poly *poly = dynamic_cast<Poly*> (p);
+    Poly *poly = dynamic_cast<Poly*> (parent);
     if (poly == nullptr) {
       cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
       return;
     }
     poly->points ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   PolyPoint::~PolyPoint ()
@@ -144,8 +144,8 @@ namespace djnn {
     _bounding_box->add_symbol ("height", _bbh);
   }
 
-  Poly::Poly (Process* p, const string &n, int closed) :
-      AbstractGShape (p, n), _closed (closed)
+  Poly::Poly (Process* parent, const string &name, int closed) :
+      AbstractGShape (parent, name), _closed (closed)
   {
     _points = new List (this, "points");
     _bounding_box = new Blank (this, "bounding_box");
@@ -157,7 +157,7 @@ namespace djnn {
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Poly::~Poly ()

@@ -40,8 +40,8 @@ namespace djnn
       return (KAPPA * v + 16) / 116;
   }
 
-  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *p, const std::string &n) :
-      Action (p, n), _p (p)
+  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *parent, const std::string &name) :
+      Action (parent, name), _p (parent)
   {
   }
 
@@ -83,8 +83,8 @@ namespace djnn
     _p->_h->set_value (H, true);
   }
 
-  RGBToLCHConverter::RGBToLCHConverter (Process *p, const std::string &n) :
-      Process (n)
+  RGBToLCHConverter::RGBToLCHConverter (Process *parent, const std::string &name) :
+      Process (name)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);
@@ -106,7 +106,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _l);
     Graph::instance ().add_edge (_action, _c);
     Graph::instance ().add_edge (_action, _h);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   RGBToLCHConverter::~RGBToLCHConverter ()
@@ -160,8 +160,8 @@ namespace djnn
     _cb->disable ();
   }
 
-  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *p, const std::string &n) :
-      Action (p, n), _p (p)
+  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *parent, const std::string &name) :
+      Action (parent, name), _p (parent)
   {
   }
 
@@ -210,8 +210,8 @@ namespace djnn
     _p->_b->set_value (B < 0 ? 0 : (B > 255) ? 255 : B, true);
   }
 
-  LCHToRGBConverter::LCHToRGBConverter (Process *p, const std::string &n) :
-      Process (n)
+  LCHToRGBConverter::LCHToRGBConverter (Process *parent, const std::string &name) :
+      Process (name)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);
@@ -233,7 +233,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _r);
     Graph::instance ().add_edge (_action, _g);
     Graph::instance ().add_edge (_action, _b);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   void

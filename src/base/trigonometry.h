@@ -112,6 +112,7 @@ namespace djnn
   template <> const char name_info<my_atanh<double>>::left[];
   template <> const char name_info<my_atanh<double>>::right[];
   template <> const char name_info<my_atanh<double>>::serialize[];
+
   typedef UnaryOperatorAction<DoubleProperty, DoubleProperty,  my_atanh<double>, double> HyperbolicArcTanAction;
   typedef UnaryOperator      <DoubleProperty, DoubleProperty,  my_atanh<double>, double> HyperbolicArcTangent;
 

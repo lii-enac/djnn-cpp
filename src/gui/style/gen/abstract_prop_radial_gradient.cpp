@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractPropRadialGradient::AbstractPropRadialGradient (Process *p, const std::string& n, double cx, double cy, double r, double fx, double fy, int spread, int coords) :
-    AbstractGradient (p, n, spread, coords),
+  AbstractPropRadialGradient::AbstractPropRadialGradient (Process *parent, const std::string& name, double cx, double cy, double r, double fx, double fy, int spread, int coords) :
+    AbstractGradient (parent, name, spread, coords),
     raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {

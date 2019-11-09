@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractImage::AbstractImage (Process *p, const std::string& n, std::string path, double x, double y, double width, double height) :
-    AbstractGShape (p, n),
+  AbstractImage::AbstractImage (Process *parent, const std::string& name, std::string path, double x, double y, double width, double height) :
+    AbstractGShape (parent, name),
     raw_props{.path=path, .x=x, .y=y, .width=width, .height=height},
     _cpath (nullptr), _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {

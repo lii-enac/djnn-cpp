@@ -42,7 +42,7 @@ namespace djnn
   {
     add_symbol ("state", &_branch_name);
     _c_branch.disable ();
-    Process::finalize_construction (parent, &_action);
+    Process::finalize_construction (parent, name, &_action);
   }
   
   /*  be carefull :

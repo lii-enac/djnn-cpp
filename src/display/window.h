@@ -68,7 +68,7 @@ namespace djnn
   {
   public:
     Window (const std::string& title, double x, double y, double w, double h);
-    Window (Process *p, const std::string& n, const std::string& title, double x, double y, double w, double h);
+    Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_cpnt_type () const override { return WINDOW_T; }
 
@@ -145,13 +145,13 @@ namespace djnn
    class Cursor : public Process {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (Process *p, const string &n) : Action (p, n) {}
+      UpdateCursorAction (Process *parent, const string &name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };
    public:
-    Cursor (Process *p, const string &n, const string &path, int hotX, int hotY);
+    Cursor (Process *parent, const string &name, const string &path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;

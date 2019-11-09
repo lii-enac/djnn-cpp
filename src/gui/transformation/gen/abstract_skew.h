@@ -22,7 +22,7 @@ namespace djnn
   class AbstractSkew : public AbstractTransformation
   {
   public:
-    AbstractSkew (Process *p, const std::string& n, double a);
+    AbstractSkew (Process *parent, const std::string& name, double a);
     AbstractSkew (double a);
     virtual ~AbstractSkew ();
     

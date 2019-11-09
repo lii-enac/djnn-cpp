@@ -142,7 +142,7 @@ namespace djnn
     _c_next.disable ();
     _c_previous.disable ();
     _c_index.disable ();
-    Process::finalize_construction (parent, &_change_index_action);
+    Process::finalize_construction (parent, name, &_change_index_action);
   }
 
   void

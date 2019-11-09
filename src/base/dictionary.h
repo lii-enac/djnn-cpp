@@ -29,8 +29,8 @@ namespace djnn {
     class FindAction : public Action
     {
     public:
-      FindAction (Process* p, const string &n) :
-        Action (p, n) {};
+      FindAction (Process* parent, const string &name) :
+        Action (parent, name) {};
       virtual ~FindAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
@@ -38,8 +38,8 @@ namespace djnn {
     class AddEntryAction : public Action
     {
     public:
-      AddEntryAction (Process* p, const string &n) :
-        Action (p, n) {};
+      AddEntryAction (Process* parent, const string &name) :
+        Action (parent, name) {};
       virtual ~AddEntryAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
@@ -47,8 +47,8 @@ namespace djnn {
     class DelEntryAction : public Action
     {
     public:
-      DelEntryAction (Process* p, const string &n) :
-        Action (p, n) {};
+      DelEntryAction (Process* parent, const string &name) :
+        Action (parent, name) {};
       virtual ~DelEntryAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};

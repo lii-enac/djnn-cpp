@@ -36,8 +36,8 @@ namespace djnn
     }
   }
 
-  World::World (Process *p, const string& n, double x, double y, double z) :
-      Process (n), raw_props
+  World::World (Process *parent, const string& name, double x, double y, double z) :
+      Process (name), raw_props
         { .x = x, .y = y, .z = z, .dt = 0.016 }, _dt (nullptr)
 
   {
@@ -51,7 +51,7 @@ namespace djnn
     if (get_parent () && get_parent ()->state_dependency () != nullptr)
       Graph::instance ().add_edge (get_parent ()->state_dependency (), _step_action);
 
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   World::~World ()
@@ -117,8 +117,8 @@ namespace djnn
    }
    */
 
-  PhyObj::PhyObj (Process *p, const string& n, double x, double y, double z, double mass) :
-      Process (n), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
+  PhyObj::PhyObj (Process *parent, const string& name, double x, double y, double z, double mass) :
+      Process (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
           nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr), _cx (
           nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _update_from_engine (
           false), raw_props
@@ -334,11 +334,11 @@ namespace djnn
     _update_from_engine = false;
   }
 
-  Plane::Plane (Process *p, const string &n, double a, double b, double c, double d) :
-      PhyObj (p, n, 0, 0, 0, 0), _plane_props
+  Plane::Plane (Process *parent, const string &name, double a, double b, double c, double d) :
+      PhyObj (parent, name, 0, 0, 0, 0), _plane_props
         { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Plane::~Plane ()
@@ -389,10 +389,10 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (Process *p, const string &n, double x, double y, double z, double w, double h, double d, double mass) :
-      PhyObj (p, n, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
+  Box::Box (Process *parent, const string &name, double x, double y, double z, double w, double h, double d, double mass) :
+      PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Box::~Box ()
@@ -436,10 +436,10 @@ namespace djnn
     return res;
   }
 
-  Sphere::Sphere (Process *p, const string &n, double x, double y, double z, double radius, double mass) :
-      PhyObj (p, n, x, y, z, mass), radius (radius), _radius (nullptr)
+  Sphere::Sphere (Process *parent, const string &name, double x, double y, double z, double radius, double mass) :
+      PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Sphere::~Sphere ()

@@ -24,12 +24,12 @@ namespace djnn
 {
   using namespace std;
 
-  Exit::Exit (Process* p, const string &name, int value, bool isModel)
+  Exit::Exit (Process* parent, const string &name, int value, bool isModel)
   : Process (name),
   _value (this, "value", value)
   {
     set_is_model (isModel);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Exit::~Exit ()

@@ -34,8 +34,8 @@
 
 namespace djnn
 {
-  AbstractTransformation::AbstractTransformation (Process *p, const string &n) :
-      AbstractGObj (p, n)
+  AbstractTransformation::AbstractTransformation (Process *parent, const string &name) :
+      AbstractGObj (parent, name)
   {
   }
 
@@ -48,8 +48,8 @@ namespace djnn
   }
 
 /*
-  AbstractTranslation::AbstractTranslation (Process *p, const string &n, double tx, double ty) :
-      AbstractTransformation (p, n),
+  AbstractTranslation::AbstractTranslation (Process *parent, const string &name, double tx, double ty) :
+      AbstractTransformation (parent, name),
       raw_props{.tx=tx, .ty=ty},
       _ctx (nullptr), _cty (nullptr)
   {
@@ -132,10 +132,10 @@ namespace djnn
   }
 */
 
-  Translation::Translation (Process *p, const string &n, double tx, double ty) :
-      AbstractTranslation (p, n, tx, ty)
+  Translation::Translation (Process *parent, const string &name, double tx, double ty) :
+      AbstractTranslation (parent, name, tx, ty)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Translation::Translation (double tx, double ty) :
@@ -162,10 +162,10 @@ namespace djnn
     return new Translation (raw_props.tx, raw_props.ty);
   }
 
-  GradientTranslation::GradientTranslation (Process *p, const string &n, double tx, double ty) :
-      AbstractTranslation (p, n, tx, ty)
+  GradientTranslation::GradientTranslation (Process *parent, const string &name, double tx, double ty) :
+      AbstractTranslation (parent, name, tx, ty)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient translation must be <LinearGradient|RadialGradient>\n";
       return;
@@ -194,8 +194,8 @@ namespace djnn
     return new GradientTranslation (raw_props.tx, raw_props.ty);
   }
 /*
-  AbstractRotation::AbstractRotation (Process *p, const string &n, double a, double cx, double cy) :
-      AbstractTransformation (p, n),
+  AbstractRotation::AbstractRotation (Process *parent, const string &name, double a, double cx, double cy) :
+      AbstractTransformation (parent, name),
       raw_props{.a=a, .cx=cx, .cy=cy},
       _ca(nullptr), _ccx (nullptr), _ccy (nullptr)
   {
@@ -291,10 +291,10 @@ namespace djnn
     if(_ccy) _ccy->disable ();
   }
 */
-  Rotation::Rotation (Process *p, const string &n, double a, double cx, double cy) :
-      AbstractRotation (p, n, a, cx, cy)
+  Rotation::Rotation (Process *parent, const string &name, double a, double cx, double cy) :
+      AbstractRotation (parent, name, a, cx, cy)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Rotation::Rotation (double a, double cx, double cy) :
@@ -321,10 +321,10 @@ namespace djnn
     return new Rotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
 
-  GradientRotation::GradientRotation (Process *p, const string &n, double a, double cx, double cy) :
-      AbstractRotation (p, n, a, cx, cy)
+  GradientRotation::GradientRotation (Process *parent, const string &name, double a, double cx, double cy) :
+      AbstractRotation (parent, name, a, cx, cy)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient rotation must be <LinearGradient|RadialGradient>\n";
       return;
@@ -353,8 +353,8 @@ namespace djnn
     return new GradientRotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
 /*
-  AbstractScaling::AbstractScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
-      AbstractTransformation (p, n),
+  AbstractScaling::AbstractScaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
+      AbstractTransformation (parent, name),
       raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
       _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
   {
@@ -463,10 +463,10 @@ namespace djnn
     if(_ccy) _ccy->disable ();
   }
 */
-  Scaling::Scaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
-      AbstractScaling (p, n, sx, sy, cx, cy)
+  Scaling::Scaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
+      AbstractScaling (parent, name, sx, sy, cx, cy)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Scaling::Scaling (double sx, double sy, double cx, double cy) :
@@ -494,10 +494,10 @@ namespace djnn
     return new Scaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
-  GradientScaling::GradientScaling (Process *p, const string &n, double sx, double sy, double cx, double cy) :
-      AbstractScaling (p, n, sx, sy, cx, cy)
+  GradientScaling::GradientScaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
+      AbstractScaling (parent, name, sx, sy, cx, cy)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient scaling must be <LinearGradient|RadialGradient>\n";
       return;
@@ -526,8 +526,8 @@ namespace djnn
     return new GradientScaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 /*
-  AbstractSkew::AbstractSkew (Process *p, const string &n, double a) :
-      AbstractTransformation (p, n), 
+  AbstractSkew::AbstractSkew (Process *parent, const string &name, double a) :
+      AbstractTransformation (parent, name), 
       raw_props{ .a=a },
       _ca (nullptr)
   {
@@ -596,10 +596,10 @@ namespace djnn
     if (_ca) _ca->disable ();
   }
 */
-  SkewX::SkewX (Process *p, const string &n, double a) :
-      AbstractSkew (p, n, a)
+  SkewX::SkewX (Process *parent, const string &name, double a) :
+      AbstractSkew (parent, name, a)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   SkewX::SkewX (double a) :
@@ -626,10 +626,10 @@ namespace djnn
     return new SkewX (raw_props.a);
   }
 
-  GradientSkewX::GradientSkewX (Process *p, const string &n, double a) :
-      AbstractSkew (p, n, a)
+  GradientSkewX::GradientSkewX (Process *parent, const string &name, double a) :
+      AbstractSkew (parent, name, a)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient skewX must be <LinearGradient|RadialGradient>\n";
       return;
@@ -658,10 +658,10 @@ namespace djnn
     return new GradientSkewX (raw_props.a);
   }
 
-  SkewY::SkewY (Process *p, const string &n, double a) :
-      AbstractSkew (p, n, a)
+  SkewY::SkewY (Process *parent, const string &name, double a) :
+      AbstractSkew (parent, name, a)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   SkewY::SkewY (double a) :
@@ -688,10 +688,10 @@ namespace djnn
     return new SkewY (raw_props.a);
   }
 
-  GradientSkewY::GradientSkewY (Process *p, const string &n, double a) :
-      AbstractSkew (p, n, a)
+  GradientSkewY::GradientSkewY (Process *parent, const string &name, double a) :
+      AbstractSkew (parent, name, a)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient skewY must be <LinearGradient|RadialGradient>\n";
       return;
@@ -1951,18 +1951,18 @@ namespace djnn
     add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
-  AbstractHomography::AbstractHomography (Process *p, const string &n, 
+  AbstractHomography::AbstractHomography (Process *parent, const string &name, 
                                           double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
                                           double m41, double m42, double m43, double m44) :
-      AbstractPropHomography (p, n,
+      AbstractPropHomography (parent, name,
                                           m11, m12, m13, m14,
                                           m21, m22, m23, m24, 
                                           m31, m32, m33, m34, 
                                           m41, m42, m43, m44),
       raw_props(AbstractPropHomography::raw_props),
-      // AbstractTransformation (p, n),
+      // AbstractTransformation (parent, name),
       // raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
       //           .m21=m21, .m22=m22, .m23=m23, .m24=m24,
       //           .m31=m31, .m32=m32, .m33=m33, .m34=m34,
@@ -2632,12 +2632,12 @@ namespace djnn
     AbstractPropHomography::impl_deactivate ();
   }
 
-  Homography::Homography (Process *p, const string &n, double m11, double m12, double m13, double m14, double m21,
+  Homography::Homography (Process *parent, const string &name, double m11, double m12, double m13, double m14, double m21,
                           double m22, double m23, double m24, double m31, double m32, double m33, double m34,
                           double m41, double m42, double m43, double m44) :
-      AbstractHomography (p, n, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
+      AbstractHomography (parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Homography::Homography (double m11, double m12, double m13, double m14, double m21,
@@ -2670,11 +2670,11 @@ namespace djnn
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
   }
 
-  GradientHomography::GradientHomography (Process *p, const string &n, double m11, double m12, double m13, double m21,
+  GradientHomography::GradientHomography (Process *parent, const string &name, double m11, double m12, double m13, double m21,
                                           double m22, double m23, double m31, double m32, double m33) :
-      AbstractHomography (p, n, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
+      AbstractHomography (parent, name, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient homography must be <LinearGradient|RadialGradient>\n";
       return;
@@ -2706,11 +2706,11 @@ namespace djnn
                                     raw_props.m31, raw_props.m32, raw_props.m33);
   }
 
-  SimpleGradientTransform::SimpleGradientTransform (Process *p, const string &n, double a, double b, double c, double d,
+  SimpleGradientTransform::SimpleGradientTransform (Process *parent, const string &name, double a, double b, double c, double d,
                                                     double e, double f) :
-      AbstractHomography (p, n, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
+      AbstractHomography (parent, name, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
   {
-    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (p);
+    AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of simple gradient transform must be <LinearGradient|RadialGradient>\n";
       return;

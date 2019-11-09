@@ -95,8 +95,8 @@ namespace djnn
     f->_not_found.activate ();
   }
 
-  Finder::Finder (Process *p, const string &n, Process *container, const string &path)
-  : Process (n),
+  Finder::Finder (Process *parent, const string &name, Process *container, const string &path)
+  : Process (name),
   _path (this, "path", path),
   _key (this, "key", ""),
   _result (this, "result", nullptr),
@@ -114,7 +114,7 @@ namespace djnn
     Graph::instance ().add_edge (&_key, &_action);
     Graph::instance ().add_edge (&_action, &_result);
 
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Finder::~Finder ()

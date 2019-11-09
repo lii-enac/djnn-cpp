@@ -30,13 +30,13 @@ namespace djnn
     class FinderAction : public Action
     {
     public:
-      FinderAction (Process *p, const string &n) : Action (p, n) {}
+      FinderAction (Process *parent, const string &name) : Action (parent, name) {}
       virtual ~FinderAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };
     public:
-      Finder (Process *p, const string &n, Process *container, const string& path);
+      Finder (Process *parent, const string &name, Process *container, const string& path);
       virtual ~Finder ();
       void impl_activate () override;
       void impl_deactivate () override;

@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractColor::AbstractColor (Process *p, const std::string& n, double r, double g, double b) :
-    AbstractStyle (p, n),
+  AbstractColor::AbstractColor (Process *parent, const std::string& name, double r, double g, double b) :
+    AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr)
   {

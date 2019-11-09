@@ -99,7 +99,7 @@ namespace djnn {
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (Process *p, const string &n) : Action (p, n) {}
+      ScaleRotateTranslateAction (Process *parent, const string &name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
       void impl_deactivate () override {};
@@ -108,7 +108,7 @@ namespace djnn {
     class TouchMoveAction : public Action
     {
     public:
-      TouchMoveAction (Process *p, const string &n) : Action (p, n) {}
+      TouchMoveAction (Process *parent, const string &name) : Action (parent, name) {}
       ~TouchMoveAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->touch_move ((Touch*)get_data ()); };
       void impl_deactivate () override {};
@@ -117,7 +117,7 @@ namespace djnn {
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (Process *p, const string &n) : Action (p, n) {}
+      AddTouchAction (Process *parent, const string &name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
       void impl_deactivate () override {};
@@ -125,13 +125,13 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (Process *p, const string &n) : Action (p, n) {}
+      RemoveTouchAction (Process *parent, const string &name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
       void impl_deactivate () override {};
     };
   public:
-    ScaleRotateTranslate (Process *p, const string &n, Process* shape, Process* matrix);
+    ScaleRotateTranslate (Process *parent, const string &name, Process* shape, Process* matrix);
     virtual ~ScaleRotateTranslate ();
     void impl_activate () override;
     void impl_deactivate () override;

@@ -40,14 +40,14 @@ namespace djnn
     std::cout << _input->get_value () << std::endl;
   }
 
-  TextPrinter::TextPrinter (Process *p, const string &n)
-  : Process (n),
+  TextPrinter::TextPrinter (Process *parent, const string &name)
+  : Process (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
     c_input (&_input, ACTIVATION, &_action, ACTIVATION, true)
   {
     init ();
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   TextPrinter::TextPrinter ()
@@ -119,7 +119,7 @@ namespace djnn
     _c_decimal (&_decimal, ACTIVATION, &_action, ACTIVATION)
   {
     init (initial, decimal);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   DoubleFormatter::DoubleFormatter (double initial, int decimal) :
@@ -164,8 +164,8 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  TextAccumulator::TextAccumulator (Process *p, const string &n, const string &init)
-  : Process (n),
+  TextAccumulator::TextAccumulator (Process *parent, const string &name, const string &init)
+  : Process (name),
     _input (this, "input", ""),
     _state (this, "state", init),
     _del (this, "delete"),
@@ -180,7 +180,7 @@ namespace djnn
     Graph::instance ().add_edge (&_del, &_del_action);
     Graph::instance ().add_edge (&_acc_action, &_state);
     Graph::instance ().add_edge (&_del_action, &_state);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   TextAccumulator::~TextAccumulator ()

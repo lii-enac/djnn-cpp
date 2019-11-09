@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractOpacity::AbstractOpacity (Process *p, const std::string& n, double alpha) :
-    AbstractStyle (p, n),
+  AbstractOpacity::AbstractOpacity (Process *parent, const std::string& name, double alpha) :
+    AbstractStyle (parent, name),
     raw_props{.alpha=alpha},
     _calpha (nullptr)
   {

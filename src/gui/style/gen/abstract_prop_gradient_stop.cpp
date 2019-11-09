@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractPropGradientStop::AbstractPropGradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset) :
-    AbstractStyle (p, n),
+  AbstractPropGradientStop::AbstractPropGradientStop (Process *parent, const std::string& name, double r, double g, double b, double a, double offset) :
+    AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
   {

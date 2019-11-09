@@ -79,14 +79,14 @@ namespace djnn
     init_ui (title, x, y, w, h);
   }
 
-  Window::Window (Process *p, const std::string &n, const std::string &title, double x, double y, double w,
+  Window::Window (Process *parent, const std::string &name, const std::string &title, double x, double y, double w,
 		  double h) :
-      Process (n),
+      Process (name),
       //_self_shared_ptr(this),
       _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   // std::weak_ptr<Window>
@@ -132,13 +132,13 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (Process *p, const string &n, const string &path, int hotX, int hotY) :
-      Process (n), raw_props
+  Cursor::Cursor (Process *parent, const string &name, const string &path, int hotX, int hotY) :
+      Process (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
   {
     _action = new UpdateCursorAction (this, "action");
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Process*

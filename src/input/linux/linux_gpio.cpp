@@ -84,7 +84,7 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (Process *p, const string &n, int pin, direction_e dir) : _pin (pin), _dir (dir), _iofd (nullptr), _action (nullptr), _c_action (nullptr)
+  GPIOLine::GPIOLine (Process *parent, const string &name, int pin, direction_e dir) : _pin (pin), _dir (dir), _iofd (nullptr), _action (nullptr), _c_action (nullptr)
   {
     if (pin < 0 || pin > num_gpios)
       error (this, "no gpio " + to_string (pin));
@@ -127,7 +127,7 @@ namespace djnn {
       _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
       Graph::instance().add_edge (_value, _action);
     }
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   GPIOLine::~GPIOLine()

@@ -22,7 +22,7 @@ namespace djnn
   class AbstractPropLinearGradient : public AbstractGradient
   {
   public:
-    AbstractPropLinearGradient (Process *p, const std::string& n, double x1, double y1, double x2, double y2, int spread, int coords);
+    AbstractPropLinearGradient (Process *parent, const std::string& name, double x1, double y1, double x2, double y2, int spread, int coords);
     AbstractPropLinearGradient (double x1, double y1, double x2, double y2, int spread, int coords);
     virtual ~AbstractPropLinearGradient ();
     

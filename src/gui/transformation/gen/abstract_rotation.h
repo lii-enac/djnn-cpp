@@ -22,7 +22,7 @@ namespace djnn
   class AbstractRotation : public AbstractTransformation
   {
   public:
-    AbstractRotation (Process *p, const std::string& n, double a, double cx, double cy);
+    AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy);
     AbstractRotation (double a, double cx, double cy);
     virtual ~AbstractRotation ();
     

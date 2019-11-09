@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  Ellipse::Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry) :
-    AbstractGShape (p, n),
+  Ellipse::Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry) :
+    AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
   {
     set_origin (cx,cy);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Ellipse::Ellipse (double cx, double cy, double rx, double ry) :

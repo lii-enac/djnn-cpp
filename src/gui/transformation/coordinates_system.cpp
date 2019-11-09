@@ -50,8 +50,8 @@ namespace djnn
       
   }
 
-  ScreenToLocal::ScreenToLocal (Process *p, const string &n, Process* shape) :
-  Process (n)
+  ScreenToLocal::ScreenToLocal (Process *parent, const string &name, Process* shape) :
+  Process (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)
@@ -75,7 +75,7 @@ namespace djnn
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
 
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   ScreenToLocal::~ScreenToLocal () 
@@ -146,8 +146,8 @@ namespace djnn
       
   }
 
-  LocalToScreen::LocalToScreen (Process *p, const string &n, Process* shape) :
-  Process (n)
+  LocalToScreen::LocalToScreen (Process *parent, const string &name, Process* shape) :
+  Process (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)
@@ -171,7 +171,7 @@ namespace djnn
     Graph::instance().add_edge(_action, _outX);
     Graph::instance().add_edge(_action, _outY);
 
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   LocalToScreen::~LocalToScreen () 

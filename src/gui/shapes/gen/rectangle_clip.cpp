@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  RectangleClip::RectangleClip (Process *p, const std::string& n, double x, double y, double width, double height) :
-    AbstractGShape (p, n),
+  RectangleClip::RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height) :
+    AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
     set_origin (x, y);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   RectangleClip::RectangleClip (double x, double y, double width, double height) :

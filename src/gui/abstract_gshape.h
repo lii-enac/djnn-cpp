@@ -26,7 +26,7 @@ namespace djnn
   class SVGHolder : public Container
   {
   public:
-    SVGHolder (Process *p, const std::string& n) : Container (p, n), _gobj (nullptr) { Process::finalize_construction (p); }
+    SVGHolder (Process *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { Process::finalize_construction (parent, name); }
     SVGHolder () : Container (), _gobj (nullptr) {}
     virtual ~SVGHolder () {}
     Process* clone () override;
@@ -53,7 +53,7 @@ namespace djnn
   class AbstractGShape : public AbstractGObj
   {
   public:
-    AbstractGShape (Process *p, const std::string& n);
+    AbstractGShape (Process *parent, const std::string& name);
     AbstractGShape ();
     virtual ~AbstractGShape ();
     Process* matrix () { return _matrix; }
@@ -79,7 +79,7 @@ namespace djnn
   class Touch : public Process
   {
   public:
-    Touch (Process *p, const std::string &n, int id, double init_x, double init_y, double init_pressure);
+    Touch (Process *parent, const std::string &name, int id, double init_x, double init_y, double init_pressure);
     Touch ();
     void impl_activate () override {};
     void impl_deactivate () override {};

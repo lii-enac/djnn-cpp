@@ -61,4 +61,5 @@ namespace djnn
     Graph::instance ().remove_edge (&_input, &_action);
     Graph::instance ().remove_edge (&_action, &_output);
   }
-}
+
+} /* namespace djnn */

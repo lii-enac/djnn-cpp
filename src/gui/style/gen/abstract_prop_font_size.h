@@ -22,7 +22,7 @@ namespace djnn
   class AbstractPropFontSize : public AbstractStyle
   {
   public:
-    AbstractPropFontSize (Process *p, const std::string& n, int unit, double size);
+    AbstractPropFontSize (Process *parent, const std::string& name, int unit, double size);
     AbstractPropFontSize (int unit, double size);
     virtual ~AbstractPropFontSize ();
     

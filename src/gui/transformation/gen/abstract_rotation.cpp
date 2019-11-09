@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractRotation::AbstractRotation (Process *p, const std::string& n, double a, double cx, double cy) :
-    AbstractTransformation (p, n),
+  AbstractRotation::AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy) :
+    AbstractTransformation (parent, name),
     raw_props{.a=a, .cx=cx, .cy=cy},
     _ca (nullptr), _ccx (nullptr), _ccy (nullptr)
   {

@@ -33,8 +33,8 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  Text::Text (Process *p, const std::string& n, double x, double y, const std::string &text) :
-      AbstractGShape (p, n),
+  Text::Text (Process *parent, const std::string& name, double x, double y, const std::string &text) :
+      AbstractGShape (parent, name),
 
       raw_props{.x=x, .y=y, .dx=0, .dy=0, .fsize=12, .dxU=0, .dyU=0, .width=0, .height=0,
         .encoding=djnUtf8, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
@@ -53,12 +53,12 @@ namespace djnn
     this->height();
 
     Graph::instance ().add_edge (this->text(), _update_size);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
-  Text::Text (Process *p, const std::string& n, double x, double y, double dx, double dy, int dxU, int dyU,
+  Text::Text (Process *parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
               const std::string &encoding, const std::string &text) :
-      AbstractGShape (p, n),
+      AbstractGShape (parent, name),
 
       raw_props{.x=x, .y=y, .dx=dx, .dy=dy, .fsize=12, .dxU=dxU, .dyU=dyU, .width=0, .height=0,
         .encoding=0, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
@@ -78,7 +78,7 @@ namespace djnn
     this->height();
 
     Graph::instance ().add_edge (this->text(), _update_size);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Text::Text (double x, double y, const std::string &text) :

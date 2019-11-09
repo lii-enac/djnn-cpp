@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  DashOffset::DashOffset (Process *p, const std::string& n, double offset) :
-    AbstractStyle (p, n),
+  DashOffset::DashOffset (Process *parent, const std::string& name, double offset) :
+    AbstractStyle (parent, name),
     raw_props{.offset=offset},
     _coffset (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   DashOffset::DashOffset (double offset) :

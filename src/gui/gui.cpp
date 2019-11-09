@@ -218,14 +218,16 @@ namespace djnn
       it_cont->second->remove_gui_child (c);
   }
 
-  GUIMouseButton::GUIMouseButton (Process *p, const string &n) : Process (n)
+  GUIMouseButton::GUIMouseButton (Process *parent, const string &name)
+  : Process (name)
   {
     _press = new Spike (this, "press");
     _release = new Spike (this, "release");
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
-  GUIMouse::GUIMouse (Process *p, const string &n) : Process (n)
+  GUIMouse::GUIMouse (Process *parent, const string &name)
+  : Process (name)
   {
     _left = new GUIMouseButton (this, "left");
     _right = new GUIMouseButton (this, "right");

@@ -126,13 +126,16 @@ namespace djnn {
     virtual Process* find_component (const string&); // FIXME: should be find_child
     virtual Process* find_component (int index) { return nullptr; }
     static  Process* find_component (Process* p, const string &path);
-    virtual string   find_component_name (Process* child); // FIXME : low efficiency function cause by linear search. use with care !
+    virtual const string&   find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
     void    add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
 
     typedef map<string, Process*> symtable_t;
     symtable_t& symtable () { return _symtable; }
-    const string& get_name () const { return _name; }
+    const symtable_t& symtable () const { return _symtable; }
+    //const string& get_name () const { return _name; }
+    static string default_name;
+    const string& get_name () const { return (_parent ? _parent->find_component_name(this) : default_name); }
     Process* get_parent () { return _parent; }
     
     void     set_data (Process* data);
@@ -144,7 +147,7 @@ namespace djnn {
     //const string& debug_info () { return ""; }
 
   protected:
-    void finalize_construction (Process* parent, Process* state=nullptr );
+    void finalize_construction (Process* parent, const string& name="", Process* state=nullptr);
 
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;
@@ -172,7 +175,7 @@ namespace djnn {
     Process *_data;
     unsigned int _bitset;
     symtable_t _symtable;
-    string _name;
+    //string _name;
 
 
 #ifdef DJNN_DEBUG
@@ -230,7 +233,7 @@ namespace djnn {
   };
 
   void alias_children (Process *p, Process *to);
-  void alias (Process *p, const string &name, Process* from);
+  void alias (Process *parent, const string &name, Process* from);
   void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);

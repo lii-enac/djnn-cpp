@@ -30,7 +30,7 @@ namespace djnn {
     class ConnectorAction : public Action
     {
     public:
-      ConnectorAction (Process* p, const string &n, AbstractProperty** src, AbstractProperty** dst, bool propagate);
+      ConnectorAction (Process* parent, const string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
@@ -42,7 +42,7 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
+    Connector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
@@ -74,8 +74,8 @@ namespace djnn {
   class PausedConnector : public Process
   {
   public:
-    PausedConnector (Process *p, string n, Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
-    PausedConnector (Process *src, string ispec, Process *dst, string dspec, bool copy_on_activation=true);
+    PausedConnector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
+    PausedConnector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
     void impl_activate () override;
     void impl_deactivate () override;
     void serialize (const string& type) override;
@@ -83,7 +83,7 @@ namespace djnn {
 
   protected:
     void set_parent (Process* p) override;
-    void init_pausedconnector (Process *src, string ispec, Process *dst, string dspec);
+    void init_pausedconnector (Process *src, const string& ispec, Process *dst, const string& dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
     Coupling *_c_src;

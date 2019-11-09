@@ -22,7 +22,7 @@ namespace djnn
   class Ellipse : public AbstractGShape
   {
   public:
-    Ellipse (Process *p, const std::string& n, double cx, double cy, double rx, double ry);
+    Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
     Ellipse (double cx, double cy, double rx, double ry);
     virtual ~Ellipse ();
     void draw () override;

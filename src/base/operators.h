@@ -44,8 +44,8 @@ namespace djnn {
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
     BinaryOperatorAction (BinOperator& binop) : _binop(binop) {}
-    BinaryOperatorAction (Process* p, const string& n, BinOperator& binop) : Action(p,n), _binop(binop) {
-      Process::finalize_construction (p);
+    BinaryOperatorAction (Process* parent, const string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
+      Process::finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
     void impl_activate () override {
@@ -67,17 +67,17 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (Process *p, const string &n, const Left_init& l_val, const Right_init& r_val)
-    : Process (n),
+    BinaryOperator (Process *parent, const string &name, const Left_init& l_val, const Right_init& r_val)
+    : Process (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
       _result(this, "result", BinaryFunction()(l_val,r_val)),
-      _action(this, n+"action", *this),
+      _action(this, name+"action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
     {
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
-      Process::finalize_construction (p);
+      Process::finalize_construction (parent, name);
     }
     virtual ~BinaryOperator () {
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
@@ -130,8 +130,8 @@ namespace djnn {
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    UnaryOperatorAction (Process* p, const string& n, UnOperator& unop) : Action(p,n), _unop(unop) {
-      Process::finalize_construction (p);
+    UnaryOperatorAction (Process* parent, const string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
+      Process::finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
     void impl_activate () override {
@@ -149,15 +149,15 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (Process *p, const string &n, const Input_init& i_val)
-    : Process (n),
+    UnaryOperator (Process *parent, const string &name, const Input_init& i_val)
+    : Process (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
       _action(this, "action", *this),
       _coupling(&_input, ACTIVATION, &_action, ACTIVATION)
     {
       init_unary_couplings(_input, _output, _action, _coupling);
-      Process::finalize_construction (p);
+      Process::finalize_construction (parent, name);
     }
     virtual ~UnaryOperator () {
       uninit_unary_couplings(this, _input, _output, _action, _coupling);
@@ -188,4 +188,5 @@ namespace djnn {
     Action _action;
     Coupling _coupling;
   };
+
 }

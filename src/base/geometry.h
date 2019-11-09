@@ -42,7 +42,7 @@ namespace djnn
       AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };
   public:
-    HermiteCurve (Process *p, const string &name, double p1, double p2, double t1, double t2);
+    HermiteCurve (Process *parent, const string &name, double p1, double p2, double t1, double t2);
     virtual ~HermiteCurve ();
     void impl_activate () override;
     void impl_deactivate () override;

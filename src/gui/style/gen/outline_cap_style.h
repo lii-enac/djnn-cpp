@@ -22,7 +22,7 @@ namespace djnn
   class OutlineCapStyle : public AbstractStyle
   {
   public:
-    OutlineCapStyle (Process *p, const std::string& n, int cap);
+    OutlineCapStyle (Process *parent, const std::string& name, int cap);
     OutlineCapStyle (int cap);
     virtual ~OutlineCapStyle ();
     void draw () override;

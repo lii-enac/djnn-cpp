@@ -71,6 +71,6 @@ namespace djnn
   template <> const char name_info<my_atanh<double>>::left[] = "left";
   template <> const char name_info<my_atanh<double>>::right[] = "right";
   template <> const char name_info<my_atanh<double>>::serialize[] = "hyperbolicarctangent";
-  
+
 }
 

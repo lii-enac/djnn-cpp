@@ -290,11 +290,11 @@ namespace djnn
   }
 
 
-  AssignmentSequence::AssignmentSequence (Process *p, const string &n, bool isModel) :
-      Container (p, n)
+  AssignmentSequence::AssignmentSequence (Process *parent, const string &name, bool isModel) :
+      Container (parent, name)
   {
     set_is_model (isModel);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   AssignmentSequence::AssignmentSequence () :

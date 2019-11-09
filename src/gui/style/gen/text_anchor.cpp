@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  TextAnchor::TextAnchor (Process *p, const std::string& n, int anchor) :
-    AbstractStyle (p, n),
+  TextAnchor::TextAnchor (Process *parent, const std::string& name, int anchor) :
+    AbstractStyle (parent, name),
     raw_props{.anchor=anchor},
     _canchor (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   TextAnchor::TextAnchor (int anchor) :

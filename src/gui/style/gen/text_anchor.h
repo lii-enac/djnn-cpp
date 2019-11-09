@@ -22,7 +22,7 @@ namespace djnn
   class TextAnchor : public AbstractStyle
   {
   public:
-    TextAnchor (Process *p, const std::string& n, int anchor);
+    TextAnchor (Process *parent, const std::string& name, int anchor);
     TextAnchor (int anchor);
     virtual ~TextAnchor ();
     void draw () override;

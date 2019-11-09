@@ -54,9 +54,9 @@ namespace djnn
   template <> const char name_info<my_max<double>>::right[] = "input";
   template <> const char name_info<my_max<double>>::serialize[] = "max";
   
-  BoundedValue::BoundedValue (Process *p, const string &n, double min, double max, double init_val)
+  BoundedValue::BoundedValue (Process *parent, const string &name, double min, double max, double init_val)
   :
-    Process (n),
+    Process (name),
     _min (this, "min", min),
     _max (this, "max", max),
     _input (this, "input", init_val),
@@ -70,7 +70,7 @@ namespace djnn
     Graph::instance ().add_edge (&_max, &_action);
     Graph::instance ().add_edge (&_input, &_action);
     Graph::instance ().add_edge (&_action, &_result);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   BoundedValue::~BoundedValue ()

@@ -45,7 +45,7 @@ namespace djnn
     typedef std::vector<PhyObj*> phy_obj_list;
     class StepAction : public Action {
     public:
-      StepAction (Process *p, const string &n) : Action (p, n) {}
+      StepAction (Process *parent, const string &name) : Action (parent, name) {}
 
       virtual ~StepAction () {}
     private:
@@ -54,7 +54,7 @@ namespace djnn
     };
 
   public:
-    World (Process *p, const string& n, double x, double y, double z = 0);
+    World (Process *parent, const string& name, double x, double y, double z = 0);
     virtual ~World ();
     WorldImpl* get_impl () { return _world_impl; }
     void get_gravity (double &x, double &y);
@@ -78,20 +78,20 @@ namespace djnn
   class PhyObj : public Process {
     class D3PhyObjUpdatePosition : public Action {
         public:
-          D3PhyObjUpdatePosition (Process *p, const string &n) : Action (p, n) {}
+          D3PhyObjUpdatePosition (Process *parent, const string &name) : Action (parent, name) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
-          D3PhyObjUpdateVelocity (Process *p, const string &n) : Action (p, n) {}
+          D3PhyObjUpdateVelocity (Process *parent, const string &name) : Action (parent, name) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
   public:
-    PhyObj (Process *p, const string& n, double x, double y, double z, double mass);
+    PhyObj (Process *parent, const string& name, double x, double y, double z, double mass);
     virtual ~PhyObj ();
     Process* find_component (const string& name) override;
     void impl_activate () override;
@@ -125,7 +125,7 @@ namespace djnn
 
   class Box : public PhyObj {
   public:
-    Box (Process *p, const string& n, double x, double y, double z, double w, double h, double d, double mass);
+    Box (Process *parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -137,7 +137,7 @@ namespace djnn
 
   class Plane : public PhyObj {
   public:
-    Plane (Process *p, const string& n, double a, double b, double c, double d);
+    Plane (Process *parent, const string& name, double a, double b, double c, double d);
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -151,7 +151,7 @@ namespace djnn
 
   class Sphere : public PhyObj {
   public:
-    Sphere (Process *p, const string& n, double x, double y, double z, double radius, double mass);
+    Sphere (Process *parent, const string& name, double x, double y, double z, double radius, double mass);
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;

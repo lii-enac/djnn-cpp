@@ -22,7 +22,7 @@ namespace djnn
   class AbstractPropRadialGradient : public AbstractGradient
   {
   public:
-    AbstractPropRadialGradient (Process *p, const std::string& n, double cx, double cy, double r, double fx, double fy, int spread, int coords);
+    AbstractPropRadialGradient (Process *parent, const std::string& name, double cx, double cy, double r, double fx, double fy, int spread, int coords);
     AbstractPropRadialGradient (double cx, double cy, double r, double fx, double fy, int spread, int coords);
     virtual ~AbstractPropRadialGradient ();
     

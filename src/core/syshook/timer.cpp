@@ -63,12 +63,12 @@ namespace djnn
   {
   }
 
-  Timer::Timer (Process *p, const std::string& n, int period)
-  : Process (n),
+  Timer::Timer (Process *parent, const std::string& name, int period)
+  : Process (name),
   _delay (this, "delay", period),
   _end (this, "end")
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   /*
@@ -91,18 +91,18 @@ namespace djnn
   */
 
   Timer::Timer (std::chrono::milliseconds period)
-  : Timer(period.count())
+  : Timer (period.count())
   {
   }
 
-  Timer::Timer (Process *p, const std::string& n, std::chrono::milliseconds period)
-  : Timer(p, n, period.count())
+  Timer::Timer (Process *parent, const std::string& name, std::chrono::milliseconds period)
+  : Timer (parent, name, period.count())
   {
   }
 
 #if DJNN_USE_BOOST_CHRONO
-  Timer::Timer (Process* p, const std::string& n, boost::chrono::milliseconds period)
-  : Timer(p, n, period.count())
+  Timer::Timer (Process* parent, const std::string& name, boost::chrono::milliseconds period)
+  : Timer(parent, name, period.count())
   {
   }
   

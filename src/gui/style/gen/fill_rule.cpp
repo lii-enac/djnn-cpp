@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  FillRule::FillRule (Process *p, const std::string& n, int rule) :
-    AbstractStyle (p, n),
+  FillRule::FillRule (Process *parent, const std::string& name, int rule) :
+    AbstractStyle (parent, name),
     raw_props{.rule=rule},
     _crule (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   FillRule::FillRule (int rule) :

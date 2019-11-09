@@ -115,11 +115,11 @@ namespace djnn
     check_init(ispec, dspec);
   }
 
-  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+  AbstractAssignment::AbstractAssignment (Process *parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
     string src_ref_spec, string dst_ref_spec)
   :
-  SrcToDstLink (p, n, isModel),
-  _init(this, n, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
+  SrcToDstLink (parent, name, isModel),
+  _init(this, name, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
   _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()),
@@ -223,7 +223,7 @@ namespace djnn
     init_Assignment ();
     if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   void
@@ -296,7 +296,7 @@ namespace djnn
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
   {
     init_PausedAssignment ();
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   void

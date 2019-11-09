@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  OutlineCapStyle::OutlineCapStyle (Process *p, const std::string& n, int cap) :
-    AbstractStyle (p, n),
+  OutlineCapStyle::OutlineCapStyle (Process *parent, const std::string& name, int cap) :
+    AbstractStyle (parent, name),
     raw_props{.cap=cap},
     _ccap (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   OutlineCapStyle::OutlineCapStyle (int cap) :

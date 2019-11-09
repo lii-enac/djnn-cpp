@@ -27,7 +27,7 @@ namespace djnn
   class SlowInSlowOutInterpolator : public HermiteCurve
   {
   public:
-    SlowInSlowOutInterpolator (Process *p, const string &n);
+    SlowInSlowOutInterpolator (Process *parent, const string &name);
     void serialize (const string& type) override;
   };
 
@@ -36,7 +36,7 @@ namespace djnn
   private:
     class OscillatorAction : public Action {
     public:
-      OscillatorAction (Process *p, const string &n, DoubleProperty* m, DoubleProperty* k,
+      OscillatorAction (Process *parent, const string &name, DoubleProperty* m, DoubleProperty* k,
                         DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,
                         DoubleProperty* dt);
       void impl_activate () override;
@@ -45,7 +45,7 @@ namespace djnn
         DoubleProperty *_m, *_k, *_b, *_v, *_output, *_dt;
     };
     public:
-      Oscillator (Process *p, const string &n);
+      Oscillator (Process *parent, const string &name);
       virtual ~Oscillator ();
       void impl_activate () override;
       void impl_deactivate () override;

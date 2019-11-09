@@ -26,13 +26,14 @@ namespace djnn
     ((FileReader*)get_parent ())->read ();
   }
 
-  FileReader::FileReader (Process *p, const string &n, const string& filename) : Process (n)
+  FileReader::FileReader (Process *parent, const string &name, const string& filename)
+  : Process (name)
   {
     _input = new TextProperty (this, "input", filename);
     _output = new TextProperty (this, "output", "");
     _action = new FileReaderAction (this, "action");
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   FileReader::~FileReader ()

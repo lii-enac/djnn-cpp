@@ -32,7 +32,7 @@ namespace djnn
   {
     add_symbol ("lower", &_lower);
     add_symbol ("upper", &_upper);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
 
   SwitchRangeBranch::~SwitchRangeBranch ()
@@ -86,7 +86,7 @@ namespace djnn
   {
     add_symbol ("state", &_branch_range);
     _c_branch.disable ();
-    Process::finalize_construction (parent, &_action);
+    Process::finalize_construction (parent, name, &_action);
   }
 
   /* note:

@@ -26,17 +26,17 @@ namespace djnn
 {
   using namespace std;
 
-  FSMState::FSMState (Process *p, const string &n) :
-      Container (p, n)
+  FSMState::FSMState (Process *parent, const string &name) :
+      Container (parent, name)
   {
-    FSM *fsm = dynamic_cast<FSM*> (p);
+    FSM *fsm = dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
       warning (this, "only a FSM can be the parent of a FSM State\n");
       return;
     }
-    fsm->set_initial (n);
+    fsm->set_initial (name);
     _parent_fsm = fsm;
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
     _parent_fsm->FSM::add_state(this);
   }
 
@@ -120,41 +120,41 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
+  FSMTransition::FSMTransition (Process *parent, const string &name, Process* from, Process* to,
                                 Process *trigger, const string &tspec, Process *action,
                                 const string &aspec) 
-  : Process (n),
+  : Process (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger( trigger ? dynamic_cast<Process*>(trigger->find_component (tspec)) : nullptr),
   _action( action ? dynamic_cast<Process*>(action->find_component (aspec)) : nullptr),
-  _init(this, p, tspec, aspec),
+  _init(this, parent, tspec, aspec),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
     
     _c_src.disable ();
     
-    Process::finalize_construction (p);
-    FSM *fsm = dynamic_cast<FSM*> (p);
+    Process::finalize_construction (parent, name);
+    FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (Process *p, const string &n, Process* from, Process* to,
+  FSMTransition::FSMTransition (Process *parent, const string &name, Process* from, Process* to,
                                 Process *trigger, Process *action) 
-  : Process (n),
+  : Process (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger (trigger),
   _action (action),
-  _init(this, p, "NO spec for trigger", "NO spec for action"),
+  _init(this, parent, "NO spec for trigger", "NO spec for action"),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
      _c_src.disable ();
     
-    Process::finalize_construction (p);
-    FSM *fsm = dynamic_cast<FSM*> (p);
+    Process::finalize_construction (parent, name);
+    FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }
 
@@ -227,15 +227,15 @@ namespace djnn
     set_state_dependency (&_fsm_state);  
   }
 
-  FSM::FSM (Process *p, const string &n) 
-  : Process (n), 
+  FSM::FSM (Process *parent, const string &name) 
+  : Process (name), 
   _priority (0),
   _cur_state (nullptr),
   _fsm_state (this, "state", ""),
   _initial (this, "initial", "")
   { 
     /* with state_dependency */
-    Process::finalize_construction (p, &_fsm_state);
+    Process::finalize_construction (parent, name, &_fsm_state);
   }
 
   FSM::~FSM ()

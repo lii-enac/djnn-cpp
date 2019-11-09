@@ -45,8 +45,8 @@ namespace djnn
       warning (p, "setBool only works on boolean properties");
   }
 
-  AbstractBoolProperty::AbstractBoolProperty (Process* p, const string &name, int notify_mask)
-  : AbstractProperty (p, name, notify_mask),
+  AbstractBoolProperty::AbstractBoolProperty (Process* parent, const string &name, int notify_mask)
+  : AbstractProperty (parent, name, notify_mask),
     _true (this, "true"),
     _false (this, "false")
   {

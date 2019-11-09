@@ -88,7 +88,7 @@ namespace djnn
     class BoundedValueAction : public Action
     {
     public:
-      BoundedValueAction (Process *p, const string &n, BoundedValue& bv) : Action (p, n), _bv(bv) {}
+      BoundedValueAction (Process *parent, const string &name, BoundedValue& bv) : Action (parent, name), _bv(bv) {}
     virtual ~BoundedValueAction () {}
       void impl_activate () override {
         double max = _bv._max.get_value ();
@@ -102,7 +102,7 @@ namespace djnn
       BoundedValue& _bv;
     };
   public:
-    BoundedValue (Process *p, const string &n, double min, double max, double init_val);
+    BoundedValue (Process *parent, const string &name, double min, double max, double init_val);
     void impl_activate () override { _c_min.enable(); _c_max.enable (); _c_input.enable (); _action.activate (); };
     void impl_deactivate () override { _c_min.disable (); _c_max.disable (); _c_input.disable (); _action.deactivate ();};
     virtual ~BoundedValue ();
@@ -113,4 +113,5 @@ namespace djnn
     BoundedValueAction _action;
     Coupling _c_min, _c_max, _c_input;
   };
+
 }

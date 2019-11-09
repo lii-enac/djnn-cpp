@@ -22,7 +22,7 @@ namespace djnn
   class Circle : public AbstractGShape
   {
   public:
-    Circle (Process *p, const std::string& n, double cx, double cy, double r);
+    Circle (Process *parent, const std::string& name, double cx, double cy, double r);
     Circle (double cx, double cy, double r);
     virtual ~Circle ();
     void draw () override;

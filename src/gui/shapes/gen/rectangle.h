@@ -22,7 +22,7 @@ namespace djnn
   class Rectangle : public AbstractGShape
   {
   public:
-    Rectangle (Process *p, const std::string& n, double x, double y, double width, double height, double rx=0, double ry=0);
+    Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
     Rectangle (double x, double y, double width, double height, double rx=0, double ry=0);
     virtual ~Rectangle ();
     void draw () override;

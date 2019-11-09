@@ -16,7 +16,7 @@ namespace djnn {
   private:
     class RedrawAction : public Action {
       public:
-        RedrawAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) {}
+        RedrawAction (UpdateDrawing *parent, const string &name) : Action (parent, name), _ud (parent) {}
         virtual ~RedrawAction () {}
         void impl_activate () override ;
         void impl_deactivate () override {}
@@ -26,7 +26,7 @@ namespace djnn {
     class UndelayedSpike : public Process
     {
     public:
-      UndelayedSpike (UpdateDrawing *p, const string &n)  : Process (n), _ud (p) { set_is_model (true); Process::finalize_construction (p); }
+      UndelayedSpike (UpdateDrawing *parent, const string &name)  : Process (name), _ud (parent) { set_is_model (true); Process::finalize_construction (parent, name); }
       virtual ~UndelayedSpike () {}
       void post_activate () override { set_activation_state (DEACTIVATED); }
       void impl_activate () override {};
@@ -38,7 +38,7 @@ namespace djnn {
     class AutoRefreshAction : public Action
     {
     public:
-      AutoRefreshAction (UpdateDrawing *p, const string &n) : Action (p, n), _ud (p) {}
+      AutoRefreshAction (UpdateDrawing *parent, const string &name) : Action (parent, name), _ud (parent) {}
       virtual ~AutoRefreshAction () {}
       void impl_activate () override { _ud->update_auto_refresh (); };
       void impl_deactivate () override {}

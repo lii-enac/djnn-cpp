@@ -31,7 +31,7 @@ namespace djnn {
   class FSMState : public Container
   {
   public:
-    FSMState (Process *p, const string &n);
+    FSMState (Process *parent, const string &name);
     ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
@@ -50,8 +50,8 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (Process *p, const string &n, FSMState* src, FSMState* dst, Process* action) :
-	       Action (p, n), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (p); }
+      FSMTransitionAction (Process *parent, const string &name, FSMState* src, FSMState* dst, Process* action) :
+	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
       void impl_deactivate () {};
@@ -62,9 +62,9 @@ namespace djnn {
       Process* _action;
     };
   public:
-    FSMTransition (Process *p, const string &n, Process* from, Process* to,
+    FSMTransition (Process *parent, const string &name, Process* from, Process* to,
 		   Process *trigger, const string &tspec, Process *action = 0, const string &aspec = "");
-    FSMTransition (Process *p, const string &n, Process* from, Process* to,
+    FSMTransition (Process *parent, const string &name, Process* from, Process* to,
        Process *trigger, Process *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
@@ -91,7 +91,7 @@ namespace djnn {
   {
   public:
     FSM ();
-    FSM (Process *p, const string &n);
+    FSM (Process *parent, const string &name);
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_cpnt_type () const override { return FSM_T; }

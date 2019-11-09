@@ -48,7 +48,7 @@ namespace djnn {
   private:
     void propagate ();
 
-    struct Init { Init(Synchronizer *, Process *p, const string &n, Process* dst, const string & dspec); };
+    struct Init { Init(Synchronizer *, Process *parent, const string &name, Process* dst, const string & dspec); };
     friend struct Init;
     Process *_dst;
     Init _init;

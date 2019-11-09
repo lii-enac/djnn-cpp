@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (Process *p, const std::string& n, double width) :
-    AbstractStyle (p, n),
+  OutlineWidth::OutlineWidth (Process *parent, const std::string& name, double width) :
+    AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   OutlineWidth::OutlineWidth (double width) :

@@ -23,7 +23,7 @@ namespace djnn
 {
 
 #if NEW_LOG
-  LogPrinter::LogPrinter (Process *p, const std::string& n, const std::string& label) 
+  LogPrinter::LogPrinter (Process *parent, const std::string& name, const std::string& label) 
   : Component (p, n),
   _tc (this, "catenator"),
   _tp (this, "printer"),
@@ -34,8 +34,9 @@ namespace djnn
     ((TextProperty*)this->find_component ("label"))->set_value (label, false);
   }
 #else
-  LogPrinter::LogPrinter (Process *p, const std::string& n, const std::string& label) 
-  : Component (p, n)
+
+  LogPrinter::LogPrinter (Process *parent, const std::string& name, const std::string& label)
+  : Component (parent, name)
   {
     _tc = new TextCatenator (this, "catenator");
     _tp = new TextPrinter (this, "printer");

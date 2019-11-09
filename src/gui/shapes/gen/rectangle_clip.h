@@ -22,7 +22,7 @@ namespace djnn
   class RectangleClip : public AbstractGShape
   {
   public:
-    RectangleClip (Process *p, const std::string& n, double x, double y, double width, double height);
+    RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
     RectangleClip (double x, double y, double width, double height);
     virtual ~RectangleClip ();
     void draw () override;

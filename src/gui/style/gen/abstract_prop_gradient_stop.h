@@ -22,7 +22,7 @@ namespace djnn
   class AbstractPropGradientStop : public AbstractStyle
   {
   public:
-    AbstractPropGradientStop (Process *p, const std::string& n, double r, double g, double b, double a, double offset);
+    AbstractPropGradientStop (Process *parent, const std::string& name, double r, double g, double b, double a, double offset);
     AbstractPropGradientStop (double r, double g, double b, double a, double offset);
     virtual ~AbstractPropGradientStop ();
     

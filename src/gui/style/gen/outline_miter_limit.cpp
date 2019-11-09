@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  OutlineMiterLimit::OutlineMiterLimit (Process *p, const std::string& n, int limit) :
-    AbstractStyle (p, n),
+  OutlineMiterLimit::OutlineMiterLimit (Process *parent, const std::string& name, int limit) :
+    AbstractStyle (parent, name),
     raw_props{.limit=limit},
     _climit (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   OutlineMiterLimit::OutlineMiterLimit (int limit) :

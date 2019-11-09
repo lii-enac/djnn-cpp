@@ -26,16 +26,16 @@
 
 namespace djnn
 {
-  Image::Image (Process *p, const std::string& n, std::string path, double x, double y, double w,
+  Image::Image (Process *parent, const std::string& name, std::string path, double x, double y, double w,
     double h) :
-      AbstractImage (p, n, path, x, y, w, h),
+      AbstractImage (parent, name, path, x, y, w, h),
       //raw_props{.x=x, .y=y, .width=w, .height=h, .path=path},
       //_cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _cpath (nullptr),
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Image::Image (std::string path, double x, double y, double w, double h) :

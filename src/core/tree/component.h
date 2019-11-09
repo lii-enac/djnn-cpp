@@ -68,7 +68,7 @@ namespace djnn {
   {
   public:
     Component () : Container () {}
-    Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize_construction (parent); }
+    Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize_construction (parent, name); }
     Process* clone () override;
     void serialize (const string& format) override;
   };
@@ -77,7 +77,7 @@ namespace djnn {
   {
   public:
     AssignmentSequence ();
-    AssignmentSequence (Process *p, const string &n, bool is_model);
+    AssignmentSequence (Process *parent, const string &name, bool is_model);
     virtual ~AssignmentSequence () {};
     void add_child (Process* c, const string& name) override;
     void draw () override {}

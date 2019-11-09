@@ -32,7 +32,8 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(Process *p, const string &n, Process* shape, Process* matrix) : Process (n)
+  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const string &name, Process* shape, Process* matrix)
+  : Process (name)
   {
     if (shape == nullptr || matrix == nullptr) {
       error (this, "Shape or Matrix cannot be null in ScaleRotateTranslate constructor");
@@ -61,7 +62,7 @@ namespace djnn
     _c_move = new Coupling (_t_move1, ACTIVATION, _update_action, ACTIVATION);
     Graph::instance().add_edge (_t_move1, _update_action);
 
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   ScaleRotateTranslate::~ScaleRotateTranslate ()

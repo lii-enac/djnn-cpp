@@ -22,7 +22,7 @@ namespace djnn
   class AbstractPropHomography : public AbstractTransformation
   {
   public:
-    AbstractPropHomography (Process *p, const std::string& n, double m11=1, double m12=0, double m13=0, double m14=0, double m21=0, double m22=1, double m23=0, double m24=0, double m31=0, double m32=0, double m33=1, double m34=0, double m41=0, double m42=0, double m43=0, double m44=1);
+    AbstractPropHomography (Process *parent, const std::string& name, double m11=1, double m12=0, double m13=0, double m14=0, double m21=0, double m22=1, double m23=0, double m24=0, double m31=0, double m32=0, double m33=1, double m34=0, double m41=0, double m42=0, double m43=0, double m44=1);
     AbstractPropHomography (double m11=1, double m12=0, double m13=0, double m14=0, double m21=0, double m22=1, double m23=0, double m24=0, double m31=0, double m32=0, double m33=1, double m34=0, double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractPropHomography ();
     

@@ -19,11 +19,11 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (Process *p, const string &n, DoubleProperty* m,
+  Oscillator::OscillatorAction::OscillatorAction (Process *parent, const string &name, DoubleProperty* m,
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
-      Action (p, n), _m (m), _k (k), _b (b), _v (v), _output (output), _dt (dt)
+      Action (parent, name), _m (m), _k (k), _b (b), _v (v), _output (output), _dt (dt)
   {
   }
 
@@ -38,8 +38,8 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (Process *p, const string &n)
-  : Process (n),
+  Oscillator::Oscillator (Process *parent, const string &name)
+  : Process (name),
   _m (this, "m", 1),
   _k (this, "k", 1),
   _damping (this, "damping", 0),
@@ -53,7 +53,7 @@ namespace djnn
     _c_step.disable ();
     Graph::instance ().add_edge (&_step, &_action);
     Graph::instance ().add_edge (&_action, &_output);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Oscillator::~Oscillator ()

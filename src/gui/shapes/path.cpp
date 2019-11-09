@@ -37,18 +37,18 @@ namespace djnn
   {
   }
 
-  PathPoint::PathPoint (Process* p, const string &n, double x, double y) :
-      AbstractGObj (p,n),
+  PathPoint::PathPoint (Process* parent, const string &name, double x, double y) :
+      AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
   {
-    Path *path = dynamic_cast<Path*> (p);
+    Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
       return;
     }
     path->items ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   PathPoint::~PathPoint ()
@@ -144,16 +144,16 @@ namespace djnn
     return new PathMove (raw_props.x, raw_props.y);
   }
 
-  PathClosure::PathClosure (Process* p, const string &n) :
-    AbstractGObj (p, n)
+  PathClosure::PathClosure (Process* parent, const string &name) :
+    AbstractGObj (parent, name)
   {
-    Path *path = dynamic_cast<Path*> (p);
+    Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path closure must be Path\n";
       return;
     }
     path->items ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   void
@@ -168,18 +168,18 @@ namespace djnn
     return new PathClosure ();
   }
 
-  PathQuadratic::PathQuadratic (Process* p, const string &n, double x1, double y1, double x, double y) :
-      AbstractGObj (p, n),
+  PathQuadratic::PathQuadratic (Process* parent, const string &name, double x1, double y1, double x, double y) :
+      AbstractGObj (parent, name),
       raw_props{ .x1=x1, .y1=y1, .x=x, .y=y },
       _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
   {
-    Path *path = dynamic_cast<Path*> (p);
+    Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path quadratic must be Path\n";
       return;
     }
     path->items ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   PathQuadratic::PathQuadratic (double x1, double y1, double x, double y) :
@@ -292,18 +292,18 @@ namespace djnn
   }
 
 
-  PathCubic::PathCubic (Process* p, const string &n, double x1, double y1, double x2, double y2, double x, double y) :
-      AbstractGObj (p, n),
+  PathCubic::PathCubic (Process* parent, const string &name, double x1, double y1, double x2, double y2, double x, double y) :
+      AbstractGObj (parent, name),
       raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
   {
-    Path *path = dynamic_cast<Path*> (p);
+    Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path cubic must be Path\n";
       return;
     }
     path->items ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   PathCubic::PathCubic (double x1, double y1, double x2, double y2, double x, double y) :
@@ -439,19 +439,19 @@ namespace djnn
     return new PathCubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
   }
 
-  PathArc::PathArc (Process* p, const string &n, double rx, double ry, double rotx, double fl, double swfl, double x,
+  PathArc::PathArc (Process* parent, const string &name, double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y) :
-      AbstractGObj (p, n),
+      AbstractGObj (parent, name),
       raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
       _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl(nullptr), _cx (nullptr), _cy (nullptr)
   {
-    Path *path = dynamic_cast<Path*> (p);
+    Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path arc must be Path\n";
       return;
     }
     path->items ()->add_child (this, "");
-    p->add_symbol(n, this);
+    parent->add_symbol(name, this);
   }
 
   PathArc::PathArc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) :
@@ -614,8 +614,8 @@ namespace djnn
     _bounding_box->add_symbol ("height", _bbh);
   }
 
-  Path::Path (Process* p, const string &n) :
-      AbstractGShape (p, n)
+  Path::Path (Process* parent, const string &name) :
+      AbstractGShape (parent, name)
   {
     _items = new List (this, "items");
     _bounding_box = new Blank (this, "bounding_box");
@@ -627,7 +627,7 @@ namespace djnn
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Path::~Path ()

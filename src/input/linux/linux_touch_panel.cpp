@@ -54,7 +54,7 @@ namespace djnn {
     delete _x;
   }
 
-  LinuxTouchPanel::LinuxTouchPanel (Process *p, const string &n, const struct libevdev *dev) : LinuxDevice (p, n, TOUCH_PANEL)
+  LinuxTouchPanel::LinuxTouchPanel (Process *parent, const string &name, const struct libevdev *dev) : LinuxDevice (parent, name, TOUCH_PANEL)
   {
     _touches = new Set (this, "touches");
     set_activation_state (ACTIVATED);
@@ -82,7 +82,7 @@ namespace djnn {
       LinuxTouch *lt = new LinuxTouch (_fieldmap);
       _v_touches.push_back (lt);
     }
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   LinuxTouchPanel::~LinuxTouchPanel ()

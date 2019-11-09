@@ -78,7 +78,7 @@ namespace djnn
     Graph::instance ().add_edge (&_add, &_add_action);
     Graph::instance ().add_edge (&_del, &_del_action);
     Graph::instance ().add_edge (&_key, &_find_action);
-    Process::finalize_construction (parent);
+    Process::finalize_construction (parent, name);
   }
   void
   Dictionary::impl_activate ()

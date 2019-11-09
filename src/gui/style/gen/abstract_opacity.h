@@ -22,7 +22,7 @@ namespace djnn
   class AbstractOpacity : public AbstractStyle
   {
   public:
-    AbstractOpacity (Process *p, const std::string& n, double alpha);
+    AbstractOpacity (Process *parent, const std::string& name, double alpha);
     AbstractOpacity (double alpha);
     virtual ~AbstractOpacity ();
     

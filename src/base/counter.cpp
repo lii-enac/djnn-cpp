@@ -22,16 +22,16 @@
 
 namespace djnn
 {
-  Counter::Counter (Process *p, const std::string& n, double init, double delta)
-  : Process (n),
+  Counter::Counter (Process *parent, const std::string& name, double init, double delta)
+  : Process (name),
     _reset (this, "reset"),
     _step (this, "step"),
     _output (this, "output", init),
     _init (this, "init", init),
     _delta (this, "delta", delta),
-    _action_reset (this, n + "_action_reset", &_reset_occurred),
+    _action_reset (this, name + "_action_reset", &_reset_occurred),
     _c_reset (&_reset, ACTIVATION, &_action_reset, ACTIVATION),
-    _action_step (this, n + "_action_step", &_init, &_delta, &_output, &_reset_occurred),
+    _action_step (this, name + "_action_step", &_init, &_delta, &_output, &_reset_occurred),
     _c_step (&_step, ACTIVATION, &_action_step, ACTIVATION)
   {
     _c_reset.disable (),
@@ -46,8 +46,8 @@ namespace djnn
     add_state_dependency (get_parent (), &_action_reset);
     add_state_dependency (get_parent (), &_action_step);
     
-    if(p)
-      Process::finalize_construction (p);
+    if(parent)
+      Process::finalize_construction (parent, name);
   }
 
   Counter::Counter (double init, double delta)

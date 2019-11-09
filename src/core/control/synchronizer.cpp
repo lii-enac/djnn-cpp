@@ -23,7 +23,7 @@ namespace djnn
 {
   using namespace std;
 
-  Synchronizer::Init::Init(Synchronizer * s, Process *p, const string &n, Process* dst, const string & dspec)
+  Synchronizer::Init::Init(Synchronizer * s, Process *parent, const string &name, Process* dst, const string & dspec)
   {
     if (dst == nullptr) {
       error (s, "dst argument cannot be null in synchronizer creation (" + n + ", " + dspec + ")");
@@ -36,15 +36,15 @@ namespace djnn
     }
   }
 
-  Synchronizer::Synchronizer (Process *p, const string &n, Process* dst, const string & dspec)
+  Synchronizer::Synchronizer (Process *parent, const string &name, Process* dst, const string & dspec)
   :
-    Process (n),
+    Process (name),
     _dst(nullptr),
-    _init (this, p, n, dst, dspec),
+    _init (this, parent, name, dst, dspec),
     _action (this, "synchronizer_" + _dst->get_name () + "_action")
   {
     Graph::instance ().add_edge (&_action, _dst);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Synchronizer::~Synchronizer ()

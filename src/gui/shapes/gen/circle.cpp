@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  Circle::Circle (Process *p, const std::string& n, double cx, double cy, double r) :
-    AbstractGShape (p, n),
+  Circle::Circle (Process *parent, const std::string& name, double cx, double cy, double r) :
+    AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
     set_origin (cx,cy);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Circle::Circle (double cx, double cy, double r) :

@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  Texture::Texture (Process *p, const std::string& n, std::string path) :
-    AbstractStyle (p, n),
+  Texture::Texture (Process *parent, const std::string& name, std::string path) :
+    AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Texture::Texture (std::string path) :

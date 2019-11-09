@@ -87,7 +87,7 @@ namespace djnn
       PreviousAction (Process* parent, const string &name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
-       _prev (init_val) { Process::finalize_construction (parent); }
+       _prev (init_val) { Process::finalize_construction (parent, name); }
       virtual ~PreviousAction () {}
       void impl_activate ()
       {
@@ -100,7 +100,7 @@ namespace djnn
       double _prev;
     };
   public:
-    Previous (Process *p, const string &name, double i_val);
+    Previous (Process *parent, const string &name, double i_val);
     virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
@@ -155,17 +155,4 @@ namespace djnn
     AdderAccumulatorAction _action;
     Coupling _c_input;
   };
-  
-  typedef Adder Adder;
-  typedef Subtractor Subtractor;
-  typedef Multiplier Multiplier;
-  typedef Divider Divider;
-  typedef Modulo Modulo;
-  typedef AscendingComparator AscendingComparator;
-  typedef StrictAscendingComparator StrictAscendingComparator;
-  typedef EqualityComparator EqualityComparator;
-  typedef SignInverter SignInverter;
-  typedef Previous Previous;
-  typedef Incr Incr;
-  typedef AdderAccumulator AdderAccumulator;
 }

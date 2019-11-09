@@ -34,8 +34,8 @@ namespace djnn
   {
   }
 
-  Clock::Clock (Process *p, const std::string& n, milliseconds period)
-  : Clock(p, n, period.count ())
+  Clock::Clock (Process *parent, const std::string& name, milliseconds period)
+  : Clock(parent, name, period.count ())
   {
   }
 
@@ -47,14 +47,14 @@ namespace djnn
   {
   }
 
-  Clock::Clock (Process *p, const std::string& n, int period)
+  Clock::Clock (Process *parent, const std::string& name, int period)
   :
-    Process (n),
+    Process (name),
     _period (this, "period", period),
     _elapsed (this, "elapsed", 0),
     _tick (this, "tick")
   {
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Clock::~Clock ()

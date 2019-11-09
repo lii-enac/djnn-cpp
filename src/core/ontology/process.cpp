@@ -34,6 +34,7 @@ namespace djnn
   string Process::_dbg_info = "no dbg info";
 #endif
 
+  string Process::default_name = "noname";
 
   Process::Process (const string& name, bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
@@ -49,7 +50,7 @@ namespace djnn
       _dbg_info = "no dbg info";
     }
 #endif
-    _name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
+    //_name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
 
     //debug
     //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;;
@@ -61,7 +62,7 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction (Process* parent, Process* state_dep) /* called by SubProcess to link to parent */
+  Process::finalize_construction (Process* parent, const string& name, Process* state_dep) /* called by SubProcess to link to parent */
   {
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
@@ -70,7 +71,8 @@ namespace djnn
       else
         _state_dependency = state_dep;
 
-      parent->add_child (this, get_name ());
+      //parent->add_child (this, get_name ());
+      parent->add_child (this, name);
     }
   }
 
@@ -326,12 +328,12 @@ namespace djnn
     return p->find_component (path);
   }
 
-  string
-  Process::find_component_name (Process* symbol)
+  const string&
+  Process::find_component_name (const Process* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
-    symtable_t::iterator it;
+    symtable_t::const_iterator it;
 
     for (it = symtable ().begin(); it != symtable ().end(); ++it)
     {
@@ -343,8 +345,9 @@ namespace djnn
       }
     }
 
-    string key = "name_not_found";
-    return key;
+    //string key = "name_not_found";
+    //return key;
+    return default_name;
   }
 
   void

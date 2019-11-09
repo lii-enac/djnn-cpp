@@ -43,6 +43,7 @@ namespace djnn
   template <> const char name_info<std::logical_not<bool>>::left[];
   template <> const char name_info<std::logical_not<bool>>::right[];
   template <> const char name_info<std::logical_not<bool>>::serialize[];
+
   typedef UnaryOperatorAction<DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> NotAction;
   typedef UnaryOperator      <DoubleProperty, DoubleProperty,  std::logical_not<bool>, bool> Not;
 

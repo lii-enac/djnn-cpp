@@ -22,7 +22,7 @@ namespace djnn
   class OutlineWidth : public AbstractStyle
   {
   public:
-    OutlineWidth (Process *p, const std::string& n, double width);
+    OutlineWidth (Process *parent, const std::string& name, double width);
     OutlineWidth (double width);
     virtual ~OutlineWidth ();
     void draw () override;

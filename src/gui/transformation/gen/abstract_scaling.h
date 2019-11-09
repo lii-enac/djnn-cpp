@@ -22,7 +22,7 @@ namespace djnn
   class AbstractScaling : public AbstractTransformation
   {
   public:
-    AbstractScaling (Process *p, const std::string& n, double sx, double sy, double cx, double cy);
+    AbstractScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
     AbstractScaling (double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     

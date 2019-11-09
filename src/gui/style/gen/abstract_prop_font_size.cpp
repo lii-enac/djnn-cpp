@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractPropFontSize::AbstractPropFontSize (Process *p, const std::string& n, int unit, double size) :
-    AbstractStyle (p, n),
+  AbstractPropFontSize::AbstractPropFontSize (Process *parent, const std::string& name, int unit, double size) :
+    AbstractStyle (parent, name),
     raw_props{.unit=unit, .size=size},
     _cunit (nullptr), _csize (nullptr)
   {

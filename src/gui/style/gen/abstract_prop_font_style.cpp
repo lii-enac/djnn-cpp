@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractPropFontStyle::AbstractPropFontStyle (Process *p, const std::string& n, int style) :
-    AbstractStyle (p, n),
+  AbstractPropFontStyle::AbstractPropFontStyle (Process *parent, const std::string& name, int style) :
+    AbstractStyle (parent, name),
     raw_props{.style=style},
     _cstyle (nullptr)
   {

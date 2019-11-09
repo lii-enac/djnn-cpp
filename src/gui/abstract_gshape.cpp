@@ -78,12 +78,12 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (Process *p, const string &n, int id, double init_x, double init_y, double init_pressure) :
-      Process (n), _shape (nullptr)
+  Touch::Touch (Process *parent, const string &name, int id, double init_x, double init_y, double init_pressure) :
+      Process (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   Touch::Touch () :
@@ -268,8 +268,8 @@ namespace djnn
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
-  AbstractGShape::AbstractGShape (Process *p, const std::string& n) :
-    AbstractGObj (p, n), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
+  AbstractGShape::AbstractGShape (Process *parent, const std::string& name) :
+    AbstractGObj (parent, name), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);

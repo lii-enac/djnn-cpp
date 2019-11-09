@@ -22,7 +22,7 @@ namespace djnn {
   class Spike: public Process {
   public:
     Spike () : Process () { set_is_model (true); };
-    Spike (Process* parent, string name) : Process (name) { set_is_model (true); Process::finalize_construction (parent); };
+    Spike (Process* parent, const string& name) : Process (name) { set_is_model (true); Process::finalize_construction (parent, name); };
     virtual ~Spike () {};
     void serialize (const string& format) override;
     Process* clone () override;

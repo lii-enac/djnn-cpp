@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractPropGradient::AbstractPropGradient (Process *p, const std::string& n, int spread, int coords) :
-    AbstractStyle (p, n),
+  AbstractPropGradient::AbstractPropGradient (Process *parent, const std::string& name, int spread, int coords) :
+    AbstractStyle (parent, name),
     raw_props{.spread=spread, .coords=coords},
     _cspread (nullptr), _ccoords (nullptr)
   {

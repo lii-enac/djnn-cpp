@@ -23,7 +23,7 @@ namespace djnn {
 class NativeExpressionAction : public Action {
   public:
     NativeExpressionAction (bool model = false) : Action (model), _src(nullptr) {}
-    NativeExpressionAction (Process *p, const std::string &n, bool model = false) : Action (p, n, model), _src(nullptr) {}
+    NativeExpressionAction (Process *parent, const std::string &name, bool model = false) : Action (parent, name, model), _src(nullptr) {}
     virtual ~NativeExpressionAction ();
 
     void add_native_edge (Process * src, Process * dst);

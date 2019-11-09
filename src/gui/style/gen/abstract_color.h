@@ -22,7 +22,7 @@ namespace djnn
   class AbstractColor : public AbstractStyle
   {
   public:
-    AbstractColor (Process *p, const std::string& n, double r, double g, double b);
+    AbstractColor (Process *parent, const std::string& name, double r, double g, double b);
     AbstractColor (double r, double g, double b);
     virtual ~AbstractColor ();
     

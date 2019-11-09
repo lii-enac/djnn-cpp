@@ -44,8 +44,8 @@ namespace djnn
     _output->set_value (out, true);
   }
 
-  HermiteCurve::HermiteCurve (Process *p, const string &n, double p1, double p2, double t1, double t2) 
-  : Process (n),
+  HermiteCurve::HermiteCurve (Process *parent, const string &name, double p1, double p2, double t1, double t2) 
+  : Process (name),
   _input (this, "input", 0),
   _p1 (this, "p1", p1),
   _p2 (this, "p2", p2),
@@ -70,7 +70,7 @@ namespace djnn
     Graph::instance ().add_edge (&_t1, &_action);
     Graph::instance ().add_edge (&_t2, &_action);
     Graph::instance ().add_edge (&_action, &_output);
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   HermiteCurve::~HermiteCurve ()

@@ -170,20 +170,20 @@ namespace djnn
 
   /****  IVY OUT ACTIONS ****/
 
- void
-  IvyAccess::IvyOutAction::coupling_activation_hook ()
-  {
-    //djnn::get_exclusive_access (DBG_GET);
-    IvySendMsg ("%s", _out->get_value ().c_str ());
-    //djnn::release_exclusive_access (DBG_REL);
-  }
+void
+IvyAccess::IvyOutAction::coupling_activation_hook ()
+{
+  //djnn::get_exclusive_access (DBG_GET);
+  IvySendMsg ("%s", _out->get_value ().c_str ());
+  //djnn::release_exclusive_access (DBG_REL);
+}
 
 
   /**** IVY ACCESS ****/
 
- IvyAccess::IvyAccess (Process *p, const std::string& n, 
+ IvyAccess::IvyAccess (Process *parent, const std::string& name, 
   const std::string& bus, const std::string& appname, const std::string& ready, bool isModel)
- : Process (n, isModel),
+ : Process (name, isModel),
  _out ( this, "out", ""),
  _out_a (this, "out_action", &_out),
  _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION ),
@@ -199,7 +199,7 @@ namespace djnn
 
   /* IN is a special child build in IvyAccess::find_component */
 
-  Process::finalize_construction (p);
+  Process::finalize_construction (parent, name);
 }
 
 IvyAccess::~IvyAccess ()

@@ -28,13 +28,13 @@
 
 namespace djnn
 {
-  OutlineJoinStyle::OutlineJoinStyle (Process *p, const std::string& n, int join) :
-    AbstractStyle (p, n),
+  OutlineJoinStyle::OutlineJoinStyle (Process *parent, const std::string& name, int join) :
+    AbstractStyle (parent, name),
     raw_props{.join=join},
     _cjoin (nullptr)
   {
     
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   OutlineJoinStyle::OutlineJoinStyle (int join) :

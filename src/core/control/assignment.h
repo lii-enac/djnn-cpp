@@ -30,7 +30,7 @@ namespace djnn {
    class AssignmentAction : public Action
    {
    public:
-    AssignmentAction (Process* p, const string &n, Process** src, AbstractProperty** dst, bool propagate) : Action (p, n), _src (src), _dst (dst), _propagate (propagate) {}
+    AssignmentAction (Process* parent, const string &name, Process** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void impl_deactivate () override {}
@@ -45,8 +45,9 @@ namespace djnn {
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
-    AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+    AbstractAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    void update_graph () override;
     virtual ~AbstractAssignment ();
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
   

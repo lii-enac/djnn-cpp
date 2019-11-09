@@ -22,7 +22,7 @@ namespace djnn
   class DashOffset : public AbstractStyle
   {
   public:
-    DashOffset (Process *p, const std::string& n, double offset);
+    DashOffset (Process *parent, const std::string& name, double offset);
     DashOffset (double offset);
     virtual ~DashOffset ();
     void draw () override;

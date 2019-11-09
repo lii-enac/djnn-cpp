@@ -12,7 +12,7 @@ namespace djnn {
   class UpdateSrcOrDst : public Action
   {
     public:
-      UpdateSrcOrDst (Process* p, const string &n, RefProperty* prop, const string &spec, Process** to_update);
+      UpdateSrcOrDst (Process* parent, const string &name, RefProperty* prop, const string &spec, Process** to_update);
       UpdateSrcOrDst () // needed for pointer-less zombie initialization
       //: _to_update(zombie)
       {} 
@@ -31,7 +31,7 @@ namespace djnn {
   class SrcToDstLink : public Process {
   public:
     SrcToDstLink (bool is_model = false) : Process (is_model) {}
-    SrcToDstLink (Process* p, const string &n, bool is_model = false) : Process (n, is_model) {}
+    SrcToDstLink (Process* parent, const string &name, bool is_model = false) : Process (name, is_model) {}
     virtual ~SrcToDstLink () {}
     virtual void about_to_update_graph () = 0;
     virtual void update_graph () = 0;

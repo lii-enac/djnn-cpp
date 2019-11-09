@@ -42,7 +42,7 @@ namespace djnn
     AbstractGObj () : Process(), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
-    AbstractGObj (Process *p, const std::string& n) : Process (n), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
+    AbstractGObj (Process *parent, const std::string& name) : Process (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};

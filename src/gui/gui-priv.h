@@ -47,7 +47,7 @@ namespace djnn {
     class GUIMouseButton : public Process
     {
     public:
-      GUIMouseButton (Process *p, const string &n);
+      GUIMouseButton (Process *parent, const string &name);
       ~GUIMouseButton () { delete _press; delete _release; }
       Process* press () { return _press; }
       Process* release () { return _release; }
@@ -59,7 +59,7 @@ namespace djnn {
 
     class GUIMouse : public Process {
     public:
-      GUIMouse (Process *p, const string &n);
+      GUIMouse (Process *parent, const string &name);
       ~GUIMouse ();
       void impl_activate () { _left->activate (); _right->activate (); _middle->activate ();}
       void impl_deactivate () {}

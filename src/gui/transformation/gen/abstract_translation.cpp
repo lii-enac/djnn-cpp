@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (Process *p, const std::string& n, double tx, double ty) :
-    AbstractTransformation (p, n),
+  AbstractTranslation::AbstractTranslation (Process *parent, const std::string& name, double tx, double ty) :
+    AbstractTransformation (parent, name),
     raw_props{.tx=tx, .ty=ty},
     _ctx (nullptr), _cty (nullptr)
   {

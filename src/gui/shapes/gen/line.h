@@ -22,7 +22,7 @@ namespace djnn
   class Line : public AbstractGShape
   {
   public:
-    Line (Process *p, const std::string& n, double x1, double y1, double x2, double y2);
+    Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2);
     Line (double x1, double y1, double x2, double y2);
     virtual ~Line ();
     void draw () override;

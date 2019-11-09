@@ -28,8 +28,8 @@
 
 namespace djnn
 {
-  AbstractSkew::AbstractSkew (Process *p, const std::string& n, double a) :
-    AbstractTransformation (p, n),
+  AbstractSkew::AbstractSkew (Process *parent, const std::string& name, double a) :
+    AbstractTransformation (parent, name),
     raw_props{.a=a},
     _ca (nullptr)
   {
