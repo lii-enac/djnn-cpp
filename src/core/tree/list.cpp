@@ -203,12 +203,12 @@ namespace djnn
   Process*
   AbstractList::find_component (int index)
   {
-    if (index < _children.size ()) {
-      return _children.at (index);
+    if ((index - 1) < _children.size ()) {
+      return _children.at (index - 1);
 
     } else {
       /* we have to dispay index as the API user index */
-      warning (this, "index " + std::to_string (index + 1) + " is out of bound for list \'" + get_name () + "\'");
+      warning (this, "index " + std::to_string (index) + " is out of bound for list \'" + get_name () + "\'");
     }
     return nullptr;
   }
