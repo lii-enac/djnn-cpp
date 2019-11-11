@@ -200,6 +200,19 @@ namespace djnn
     return nullptr;
   }
 
+  Process*
+  AbstractList::find_component (int index)
+  {
+    if (index < _children.size ()) {
+      return _children.at (index);
+
+    } else {
+      /* we have to dispay index as the API user index */
+      warning (this, "index " + std::to_string (index + 1) + " is out of bound for list \'" + get_name () + "\'");
+    }
+    return nullptr;
+  }
+
   List::List () :
       AbstractList ()
   {

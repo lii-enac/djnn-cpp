@@ -38,6 +38,7 @@ namespace djnn {
     void dump(int level=0) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
     Process* find_component (const string &path) override;
+    Process* find_component (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
   protected:

@@ -124,6 +124,7 @@ namespace djnn {
     virtual void   remove_child (const string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
     virtual Process* find_component (const string&); // FIXME: should be find_child
+    virtual Process* find_component (int index) { return nullptr; }
     static  Process* find_component (Process* p, const string &path);
     virtual string   find_component_name (Process* child); // FIXME : low efficiency function cause by linear search. use with care !
     void    add_symbol (const string &name, Process* c);
