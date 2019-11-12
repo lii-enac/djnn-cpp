@@ -11,7 +11,8 @@ namespace djnn
 
   void
   UpdateSrcOrDst::impl_activate ()
-  {
+  { 
+    ((SrcToDstLink*) get_parent ())->about_to_update_graph();
     Process* v = _prop->get_value ();
     if (!v) {
       *_to_update = nullptr;

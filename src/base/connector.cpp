@@ -226,7 +226,6 @@ namespace djnn
   {
 #if NEW_CON
     if (_src) {
-      _c_src = Coupling(_src, ACTIVATION, &_action, ACTIVATION, true);
       _c_src.disable ();
       if(_dst) {
         Graph::instance ().add_edge (_src, _dst);
@@ -338,6 +337,7 @@ namespace djnn
   {
 #if NEW_CON
     if (_has_coupling) {
+      /* remove_edge is made before in about_to_update_graph hook */
       _c_src.uninit ();
     }
     if (_src && _dst) {
@@ -345,7 +345,8 @@ namespace djnn
         _c_src.change_source(_src);
       } else {
         _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
-      } 
+      }
+      Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
         _action.activate ();
@@ -373,6 +374,16 @@ namespace djnn
       _has_coupling = false;
     }
 #endif
+  }
+
+  void 
+  Connector::about_to_update_graph ()
+  {
+    if (_src && _dst) {
+      //cerr << endl << "about_to_update_graph old _src: "<<  _src->get_name () << endl;
+      //cerr << "about_to_update_graph  remove old edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      Graph::instance ().remove_edge (_src, _dst);
+    }
   }
 
   Connector::~Connector ()

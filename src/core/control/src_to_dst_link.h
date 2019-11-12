@@ -33,6 +33,7 @@ namespace djnn {
     SrcToDstLink (bool is_model = false) : Process (is_model) {}
     SrcToDstLink (Process* p, const string &n, bool is_model = false) : Process (n, is_model) {}
     virtual ~SrcToDstLink () {}
+    virtual void about_to_update_graph () = 0;
     virtual void update_graph () = 0;
   protected:
     struct ref_info {

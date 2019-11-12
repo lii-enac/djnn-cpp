@@ -47,6 +47,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     void update_graph () override;
+    void about_to_update_graph () override;
     void serialize (const string& type) override;
     virtual ~Connector ();
 
