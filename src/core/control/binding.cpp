@@ -68,20 +68,35 @@ namespace djnn
   void
   Binding::update_graph ()
   {
-    //if (_has_coupling) {
-    //   delete _c_src;
-    //   _c_src = nullptr;
-    // }
-    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
+    if (_has_coupling) {
+      /* remove_edge is made before in about_to_update_graph hook */
+      _c_src.uninit ();
+    }
     if (_src && _dst) {
-      //_c_src = ne_w Coupling (_src, ACTIVATION, _action, ACTIVATION, true);
-      _c_src.change_source(_src);
+      if(_has_coupling) {
+        _c_src.change_source(_src);
+      } else {
+        _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
+      }
+      //cerr << "update_graph  add edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
-      if (get_activation_state() != ACTIVATED ) {
+      if ( get_activation_state()==ACTIVATED ) {
+        _action.activate ();
+      } else {
         _c_src.disable ();
       }
-    } else {
-      _has_coupling = false;
+
+    }
+  }
+
+  void 
+  Binding::about_to_update_graph ()
+  {
+    if (_src && _dst) {
+      //cerr << endl << "about_to_update_graph old _src: "<<  _src->get_name () << endl;
+      //cerr << "about_to_update_graph  remove old edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      Graph::instance ().remove_edge (_src, _dst);
     }
   }
 
@@ -114,10 +129,12 @@ namespace djnn
       _has_coupling (false)
   {
     check_init(ispec, dspec);
-    if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
+    if (_src) {
       _c_src.disable ();
-      _has_coupling = true;
+      if(_dst) {
+        Graph::instance ().add_edge (_src, _dst);
+        _has_coupling = true;
+      }
     }
     if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
@@ -168,6 +185,8 @@ namespace djnn
         _has_coupling = true;
       }
     }
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
     Process::finalize_construction (parent);
   }
 

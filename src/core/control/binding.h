@@ -60,7 +60,7 @@ namespace djnn {
       _c_src.disable ();
     }
     void update_graph () override;
-    void about_to_update_graph () override {};
+    void about_to_update_graph () override;
     void serialize (const string& format) override;
   private:
     void set_parent (Process* p) override;
