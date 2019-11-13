@@ -45,8 +45,6 @@ namespace djnn {
   public:
     AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
     AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    void update_graph () override;
-    void about_to_update_graph () override {};
     virtual ~AbstractAssignment ();
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
   
@@ -77,6 +75,8 @@ namespace djnn {
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
     void serialize (const string& format) override;
+    void update_graph () override;
+    void about_to_update_graph () override ;
     virtual ~Assignment ();
 
   private:
@@ -93,6 +93,8 @@ namespace djnn {
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
     void serialize (const string& format) override;
+    void update_graph () override {};
+    void about_to_update_graph () override {};
     virtual ~PausedAssignment ();
 
   private:

@@ -55,11 +55,6 @@ namespace djnn
   }
 
   void
-  AbstractAssignment::update_graph ()
-  {
-  }
-
-  void
   AbstractAssignment::check_init(const string& ispec, const string& dspec)
   {
     if(!_ref_info_src._ref) {
@@ -114,11 +109,6 @@ namespace djnn
   _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
-    if(_ref_info_dst._ref) {
-      Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
-    }
-    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
-    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel)
@@ -131,11 +121,6 @@ namespace djnn
   _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
-    if(_ref_info_dst._ref) {
-      Graph::instance ().add_edge (_ref_info_dst._ref, &_ref_update_dst._update);
-    } 
-    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
-    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   AbstractAssignment::~AbstractAssignment ()
@@ -191,12 +176,29 @@ namespace djnn
   }
 
   void
-  Assignment::init_Assignment ()
+  Assignment::update_graph ()
+  {
+    /* remove edge has been made in about_to_update_graph */
+    if (_src && _dst) {
+      //cerr << __FUNCTION__ << " add new src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      Graph::instance ().add_edge (_src, _dst);
+    }
+  }
+
+  void 
+  Assignment::about_to_update_graph ()
   {
     if (_src && _dst) {
-      Graph::instance ().add_edge (_src, _dst);
-      _has_coupling = true;
+      //cerr << endl << "Assignment::"<< __FUNCTION__ <<  " remove old src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      Graph::instance ().remove_edge (_src, _dst);
     }
+  }
+
+  void
+  Assignment::init_Assignment ()
+  {
+    if (_src && _dst)
+      Graph::instance ().add_edge (_src, _dst);
   }
 
   Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel) :
@@ -204,6 +206,8 @@ namespace djnn
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
   {
     init_Assignment ();
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
   Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst,
@@ -212,16 +216,23 @@ namespace djnn
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
   {
     init_Assignment ();
+    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
+    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
     Process::finalize_construction (parent);
   }
 
   void
   Assignment::impl_activate ()
   {
-    /* when an assignment is in a deactivate fsm branch and src has changed. it is not aware of it.
-       we have to re-evaluate it */
+    //FIXME : 
+    /* when an assignment is in a deactivate fsm branch and src/dst has changed. it is not aware of it.
+       we have to re-evaluate them */
+    /* BUT : calling update on scr and dst each time make update_graph twice (so add egde and remove edge for nothing) */
     if (_ref_info_src._ref)
       _ref_update_src._update.impl_activate ();
+
+    if (_ref_info_dst._ref)
+      _ref_update_dst._update.impl_activate ();
 
     /* here we have an activation issue, an assignment must do its action when activated, but
      * when the left side of an assignment is the result of an expression, we have to wait
