@@ -55,11 +55,11 @@ namespace djnn
 
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     c->_ref_info_src._ref = ref_src_pair.first;
-    c->_ref_info_src._name = ref_src_pair.second;
+    c->_ref_info_src._spec = ref_src_pair.second;
 
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     c->_ref_info_dst._ref = ref_dst_pair.first;
-    c->_ref_info_dst._name = ref_dst_pair.second;
+    c->_ref_info_dst._spec = ref_dst_pair.second;
   }
 
   void
@@ -346,6 +346,7 @@ namespace djnn
       } else {
         _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
       }
+      //cerr << __FUNCTION__ << " add new src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
       Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {

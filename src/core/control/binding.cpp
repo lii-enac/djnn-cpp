@@ -44,11 +44,11 @@ namespace djnn
 
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     b->_ref_info_src._ref = ref_src_pair.first;
-    b->_ref_info_src._name = ref_src_pair.second;
+    b->_ref_info_src._spec = ref_src_pair.second;
 
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     b->_ref_info_dst._ref = ref_dst_pair.first;
-    b->_ref_info_dst._name = ref_dst_pair.second;
+    b->_ref_info_dst._spec = ref_dst_pair.second;
   }
 
   void

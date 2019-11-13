@@ -42,12 +42,12 @@ namespace djnn {
       RefProperty * _ref;
 
       // FIXME: name should not be stored, useless loss of memory!! use string tmp_refname1 = string(), tmp_refname2 = string() in constructors to have tmp variable
-      string _name;
+      string _spec;
     };
     struct ref_update {
       ref_update() {}
       ref_update(Process *p, const ref_info& ri, Process** to_update) :
-        _update(p, "update_src_action", ri._ref, ri._name, to_update),
+        _update(p, "update_src_action", ri._ref, ri._spec, to_update),
         _c(ri._ref, ACTIVATION, &_update, ACTIVATION, true)
         { //_update.impl_activate();
         }
