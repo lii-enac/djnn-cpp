@@ -436,7 +436,7 @@ dc.props.append(Prop('path', 'text', None, "style"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractOpacity", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('alpha', 'double', None, "style"))
+dc.props.append(Prop('a', 'double', None, "style"))
 dcs.append(dc)
 
 dc = DjnnClass("OutlineWidth", "AbstractStyle", "../src/gui/style", origin=None)

@@ -53,7 +53,7 @@ namespace djnn
     if (symtable ().size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = symtable ().find ("alpha");
+      it = symtable ().find ("a");
 			if (it != symtable ().end ())
 				delete it->second;
     }
@@ -73,7 +73,7 @@ namespace djnn
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
-    if(name=="alpha") {
+    if(name=="a") {
       coupling=&_calpha;
       rawp_Double=&raw_props.alpha;
       notify_mask = notify_damaged_style;
