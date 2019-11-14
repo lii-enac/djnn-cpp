@@ -16,23 +16,35 @@
 #include "../core/tree/component.h"
 #include "../core/serializer/serializer.h"
 #include "log.h"
-#include "text.h"
-#include "connector.h"
 
 #include <iostream>
 
 namespace djnn
 {
-  LogPrinter::LogPrinter (Process *p, const std::string& n, const std::string& label) :
-      Component (p, n)
+
+#if NEW_LOG
+  LogPrinter::LogPrinter (Process *p, const std::string& n, const std::string& label) 
+  : Component (p, n),
+  _tc (this, "catenator"),
+  _tp (this, "printer"),
+  _c (this, "logprinter_connector", &_tc, "output", &_tp, "input", false)
   {
-    Process* tc = new TextCatenator (this, "catenator");
-    Process* tp = new TextPrinter (this, "printer");
-    alias (this, "label", tc->find_component("head"));
-    alias (this, "input", tc->find_component("tail"));
+    alias (this, "label", _tc.find_component("head"));
+    alias (this, "input", _tc.find_component("tail"));
     ((TextProperty*)this->find_component ("label"))->set_value (label, false);
-    new Connector (this, "", tc, "output", tp, "input", false);
   }
+#else
+  LogPrinter::LogPrinter (Process *p, const std::string& n, const std::string& label) 
+  : Component (p, n)
+  {
+    _tc = new TextCatenator (this, "catenator");
+    _tp = new TextPrinter (this, "printer");
+    _c = new Connector (this, "logprinter_connector", _tc, "output", _tp, "input", false);
+    alias (this, "label", _tc->find_component("head"));
+    alias (this, "input", _tc->find_component("tail"));
+    ((TextProperty*)this->find_component ("label"))->set_value (label, false);
+  }
+#endif
 
   void
   LogPrinter::serialize (const string& type) {
