@@ -70,8 +70,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-#if NEW_TEXT
-
   template <> const char name_info<TextCatenatorAction>::left [] = "head";
   template <> const char name_info<TextCatenatorAction>::right [] = "tail";
   template <> const char name_info<TextCatenatorAction>::serialize [] = "textcatenator";
@@ -79,57 +77,6 @@ namespace djnn
   template <> const char name_info<TextComparatorAction>::left [] = "left";
   template <> const char name_info<TextComparatorAction>::right [] = "right";
   template <> const char name_info<TextComparatorAction>::serialize [] = "textcomparator";
-
-#else
-  TextCatenator::TextCatenator (Process *p, const string &n) :
-      BinaryOperator (p, n)
-  {
-    _left = new TextProperty (this, "head", "");
-    _right = new TextProperty (this, "tail", "");
-    _result = new TextProperty (this, "output", "");
-    init_couplings (new TextCatenatorAction (this, n + "_action", _left, _right, _result));
-    Process::finalize_construction (p);
-  }
-
-  void
-  TextCatenator::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
-
-    AbstractSerializer::serializer->start ("base:textcatenator");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-   
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-  }
-
-  TextComparator::TextComparator (Process *p, const string &n, const string &left, const string &right) :
-      BinaryOperator (p, n)
-  {
-    _left = new TextProperty (this, "left", left);
-    _right = new TextProperty (this, "right", right);
-    _result = new BoolProperty (this, "output", left.compare (right) == 0);
-    init_couplings (new TextComparatorAction (this, n + "_action", _left, _right, _result));
-    Process::finalize_construction (p);
-  }
-
-  void
-  TextComparator::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
-
-    AbstractSerializer::serializer->start ("base:textcomparator");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("left", dynamic_cast<TextProperty*> (_left)->get_value ());
-    AbstractSerializer::serializer->text_attribute ("right", dynamic_cast<TextProperty*> (_right)->get_value ());
-    
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-  }
-
-#endif
 
   void
   DoubleFormatter::init (double initial, int decimal)

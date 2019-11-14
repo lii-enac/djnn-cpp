@@ -51,10 +51,6 @@ namespace djnn
     Coupling c_input;
   };
 
-#define NEW_TEXT 1
-
-#if NEW_TEXT
-
   class TextCatenatorAction;
   class TextComparatorAction;
   template <> const char name_info<TextCatenatorAction>::left [];
@@ -163,58 +159,6 @@ namespace djnn
   typedef TextBinaryOperator<TextCatenatorAction> TextCatenator;
   typedef TextBinaryOperator<TextComparatorAction> TextComparator;
 
-
-#else
-
-  class TextCatenator : public BinaryOperator
-  {
-  private:
-    class TextCatenatorAction : public BinaryOperatorAction
-    {
-    public:
-      TextCatenatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
-                           AbstractProperty* result) :
-		  BinaryOperatorAction (parent, name, left, right, result) {}
-      virtual ~TextCatenatorAction () {}
-      void impl_activate () override
-      {
-        string head = ((TextProperty*)_left)->get_value ();
-        string tail = ((TextProperty*)_right)->get_value ();
-        string out = head + tail;
-        _result->set_value (out, true);
-      }
-      void impl_deactivate () override {}
-    };
-  public:
-    TextCatenator (Process *p, const string &name);
-    virtual ~TextCatenator () {}
-    void serialize (const string& type) override;
-  };
-
-  class TextComparator : public BinaryOperator
-  {
-  private:
-    class TextComparatorAction : public BinaryOperatorAction
-    {
-    public:
-      TextComparatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
-                           AbstractProperty* result) :
-      BinaryOperatorAction (parent, name, left, right, result) {}
-      virtual ~TextComparatorAction () {}
-      void impl_activate ()
-      {
-        string left = ((TextProperty*)_left)->get_value ();
-        string right = ((TextProperty*)_right)->get_value ();
-        _result->set_value (left.compare (right) == 0, true);
-      }
-      void impl_deactivate () {}
-    };
-  public:
-    TextComparator (Process *p, const string &name, const string &left, const string &right);
-    virtual ~TextComparator () {}
-    void serialize (const string& type) override;
-  };
-#endif
 
   class TextAccumulator : public Process
   {

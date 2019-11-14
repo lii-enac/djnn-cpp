@@ -78,7 +78,7 @@ namespace djnn
       } else {
         _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
       }
-      //cerr << "update_graph  add edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      //cerr << "Binding::"<< __FUNCTION__ << " add src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
       Graph::instance ().add_edge (_src, _dst);
       _has_coupling = true;
       if ( get_activation_state()==ACTIVATED ) {
@@ -94,8 +94,7 @@ namespace djnn
   Binding::about_to_update_graph ()
   {
     if (_src && _dst) {
-      //cerr << endl << "about_to_update_graph old _src: "<<  _src->get_name () << endl;
-      //cerr << "about_to_update_graph  remove old edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      //cerr << endl << "Binding::"<< __FUNCTION__ <<  " remove old src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
       Graph::instance ().remove_edge (_src, _dst);
     }
   }

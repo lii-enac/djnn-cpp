@@ -180,7 +180,7 @@ namespace djnn
   {
     /* remove edge has been made in about_to_update_graph */
     if (_src && _dst) {
-      //cerr << __FUNCTION__ << " add new src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
+      //cerr "Assignment::"<< __FUNCTION__ << " add src/dst edge:" << _src->get_name () << " - "  << _dst->get_name () << endl;
       Graph::instance ().add_edge (_src, _dst);
     }
   }

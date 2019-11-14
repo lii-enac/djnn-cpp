@@ -2,13 +2,15 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -24,12 +26,8 @@
 
 #include <string>
 
-#define NEW_OP 1
-
 namespace djnn {
   using namespace std;
-
-#if NEW_OP
 
   void
   init_binary_couplings (Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right);
@@ -37,19 +35,19 @@ namespace djnn {
   uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right);
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
-  class NewBinaryOperator;
+  class BinaryOperator;
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
-  class NewBinaryOperatorAction : public Action
+  class BinaryOperatorAction : public Action
   {
   public:
-    typedef NewBinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
+    typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    NewBinaryOperatorAction (BinOperator& binop) : _binop(binop) {}
-    NewBinaryOperatorAction (Process* p, const string& n, BinOperator& binop) : Action(p,n), _binop(binop) {
+    BinaryOperatorAction (BinOperator& binop) : _binop(binop) {}
+    BinaryOperatorAction (Process* p, const string& n, BinOperator& binop) : Action(p,n), _binop(binop) {
       Process::finalize_construction (p);
     }
-    virtual ~NewBinaryOperatorAction () {};
+    virtual ~BinaryOperatorAction () {};
     void impl_activate () override {
       _binop._result.set_value (BinaryFunction()(_binop._left.get_value (), _binop._right.get_value ()), true);
     }
@@ -64,12 +62,12 @@ namespace djnn {
   };
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
-  class NewBinaryOperator : public Process
+  class BinaryOperator : public Process
   {
   public:
-    typedef NewBinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
+    typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    NewBinaryOperator (Process *p, const string &n, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (Process *p, const string &n, const Left_init& l_val, const Right_init& r_val)
     : Process (n),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
@@ -81,7 +79,7 @@ namespace djnn {
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
       Process::finalize_construction (p);
     }
-    virtual ~NewBinaryOperator () {
+    virtual ~BinaryOperator () {
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
     }
     void impl_activate () override { _c_left.enable(); _c_right.enable (); _action.activate (); }
@@ -123,19 +121,19 @@ namespace djnn {
 
 
   template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
-  class NewUnaryOperator;
+  class UnaryOperator;
 
   template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
-  class NewUnaryOperatorAction : public Action
+  class UnaryOperatorAction : public Action
   {
   public:
-    typedef NewUnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
+    typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
-    NewUnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    NewUnaryOperatorAction (Process* p, const string& n, UnOperator& unop) : Action(p,n), _unop(unop) {
+    UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
+    UnaryOperatorAction (Process* p, const string& n, UnOperator& unop) : Action(p,n), _unop(unop) {
       Process::finalize_construction (p);
     }
-    virtual ~NewUnaryOperatorAction () {};
+    virtual ~UnaryOperatorAction () {};
     void impl_activate () override {
       _unop._output.set_value (UnaryFunction()(_unop._input.get_value ()), true);
       //UnaryFunction()(_unop.input, _unop.output);
@@ -146,12 +144,12 @@ namespace djnn {
   };
 
   template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
-  class NewUnaryOperator : public Process
+  class UnaryOperator : public Process
   {
   public:
-    typedef NewUnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
+    typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    NewUnaryOperator (Process *p, const string &n, const Input_init& i_val)
+    UnaryOperator (Process *p, const string &n, const Input_init& i_val)
     : Process (n),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
@@ -161,7 +159,7 @@ namespace djnn {
       init_unary_couplings(_input, _output, _action, _coupling);
       Process::finalize_construction (p);
     }
-    virtual ~NewUnaryOperator () {
+    virtual ~UnaryOperator () {
       uninit_unary_couplings(this, _input, _output, _action, _coupling);
     }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
@@ -189,58 +187,5 @@ namespace djnn {
     Output _output;
     Action _action;
     Coupling _coupling;
-  };
-
-#endif
-
-  class BinaryOperatorAction : public Action
-  {
-  public:
-    BinaryOperatorAction (Process* parent, const string &name, AbstractProperty* left, AbstractProperty* right,
-                          AbstractProperty* result);
-    virtual ~BinaryOperatorAction () {};
-  protected:
-    AbstractProperty* _left;
-    AbstractProperty* _right;
-    AbstractProperty* _result;
-  };
-
-  class BinaryOperator : public Process
-  {
-  public:
-    BinaryOperator (Process *p, const string &n);
-    void impl_activate () { _c_left->enable(); _c_right->enable (); _action->activate (); };
-    void impl_deactivate () { _c_left->disable (); _c_right->disable (); _action->deactivate ();};
-    virtual ~BinaryOperator ();
-  protected:
-    void init_couplings (Process* action);
-    void set_parent (Process* p);
-    AbstractProperty *_left, *_right, *_result;
-    Coupling *_c_left, *_c_right;
-    Process *_action;
-  };
-
-  class UnaryOperatorAction : public Action
-  {
-  public:
-    UnaryOperatorAction (Process* parent, const string &name, AbstractProperty* input, AbstractProperty* output);
-    virtual ~UnaryOperatorAction () {};
-  protected:
-    AbstractProperty* _input;
-    AbstractProperty* _output;
-  };
-
-  class UnaryOperator : public Process
-  {
-  public:
-    UnaryOperator (Process *p, const string &n);
-    void impl_activate () { _c_input->enable (); _action->activate ();}
-    void impl_deactivate () { _c_input->disable (); _action->deactivate ();}
-    virtual ~UnaryOperator ();
-  protected:
-    void init_couplings (Process* action);
-    AbstractProperty* _input, *_output;
-    Coupling *_c_input;
-    Process *_action;
   };
 }

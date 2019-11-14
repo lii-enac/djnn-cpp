@@ -54,9 +54,7 @@ namespace djnn {
   protected:
     void set_parent (Process* p) override;
 
-#define NEW_CON 1
 
-#if NEW_CON
     struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec); };
     friend struct Init;
     void check_init(const string& ispec, const string& dspec);
@@ -67,16 +65,6 @@ namespace djnn {
     ref_update _ref_update_src, _ref_update_dst;
     ConnectorAction _action;
     Coupling _c_src;
-#else
-    void init_connector (Process *src, string ispec, Process *dst, string dspec);
-    AbstractProperty* _src;
-    AbstractProperty* _dst;
-    RefProperty *_ref_src, *_ref_dst;
-    Coupling *_c_src;
-    Process *_action;
-    UpdateSrcOrDst* _update_src, *_update_dst;
-    Coupling *_c_update_src, *_c_update_dst;
-#endif
     bool _has_coupling;
     bool _copy_on_activation;
   };
