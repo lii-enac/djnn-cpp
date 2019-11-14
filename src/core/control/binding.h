@@ -47,9 +47,12 @@ namespace djnn {
 
     };
   public:
-    Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst, const string & dspec);
-    Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate);
-    Binding (Process* src, const string & ispec, Process* dst, const string & dspec);
+    Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst,
+      const string & dspec, string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    Binding (Process* src, const string & ispec, Process* dst, const string & dspec,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     virtual ~Binding ();
     void impl_activate () override { 
       if(_ref_info_src.is_ref())
@@ -65,7 +68,8 @@ namespace djnn {
   private:
     void set_parent (Process* p) override;
 
-    struct Init { Init(Binding *, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate); };
+    struct Init { Init(Binding *, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate,
+      string& src_ref_spec, string& dst_ref_spec); };
     friend struct Init;
     void check_init(const string& ispec, const string& dspec);
 

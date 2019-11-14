@@ -31,7 +31,8 @@ namespace djnn
     set_binding_action (activate); 
   }
 
-  Binding::Init::Init(Binding * b, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate)
+  Binding::Init::Init(Binding * b, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate,
+    string& src_ref_spec, string& dst_ref_spec)
   {
     if (src == 0) {
       error (b,
@@ -44,11 +45,11 @@ namespace djnn
 
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     b->_ref_info_src._ref = ref_src_pair.first;
-    b->_ref_info_src._spec = ref_src_pair.second;
+    src_ref_spec = ref_src_pair.second;
 
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     b->_ref_info_dst._ref = ref_dst_pair.first;
-    b->_ref_info_dst._spec = ref_dst_pair.second;
+    dst_ref_spec = ref_dst_pair.second;
   }
 
   void
@@ -117,12 +118,14 @@ namespace djnn
     }
   }
 
-  Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec) :
-      _init(this, src, ispec, true, dst, dspec, true),
+  Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec,
+    string src_ref_spec, string dst_ref_spec)
+  :
+      _init(this, src, ispec, true, dst, dspec, true, src_ref_spec, dst_ref_spec),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
       _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
@@ -139,14 +142,15 @@ namespace djnn
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
   }
 
-  Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst,
-                    const string & dspec) :
+  Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst, const string & dspec,
+    string src_ref_spec, string dst_ref_spec)
+  :
       SrcToDstLink (parent, name),
-      _init(this, src, ispec, true, dst, dspec, true),
+      _init(this, src, ispec, true, dst, dspec, true, src_ref_spec, dst_ref_spec),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
       _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
@@ -165,13 +169,15 @@ namespace djnn
   }
 
   Binding::Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation,
-                    Process* dst, const string & dspec, bool activate) :
+                    Process* dst, const string & dspec, bool activate,
+                    string src_ref_spec, string dst_ref_spec)
+  :
       SrcToDstLink (parent, name),
-      _init(this, src, ispec, on_activation, dst, dspec, activate),
+      _init(this, src, ispec, on_activation, dst, dspec, activate, src_ref_spec, dst_ref_spec),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, &_dst) : ref_update()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", activate),
       _c_src(_src ? Coupling(_src, on_activation ? ACTIVATION : DEACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)

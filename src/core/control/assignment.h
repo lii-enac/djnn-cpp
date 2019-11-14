@@ -43,15 +43,18 @@ namespace djnn {
   };
     
   public:
-    AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
+    AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    AbstractAssignment (Process* p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     virtual ~AbstractAssignment ();
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
   
   protected:
     void set_parent (Process* p) override;
 
-    struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec); };
+    struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec,
+      string& src_ref_spec, string& dst_ref_spec); };
     friend struct Init;
     void check_init(const string& ispec, const string& dspec);
 
@@ -61,7 +64,6 @@ namespace djnn {
     AbstractProperty* _dst;
     ref_update _ref_update_src, _ref_update_dst;
     
-
     bool _has_coupling;
   };
 

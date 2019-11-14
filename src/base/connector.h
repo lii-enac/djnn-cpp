@@ -42,8 +42,10 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
-    Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
+    Connector (Process *p, const string& n, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
+      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     void impl_activate () override;
     void impl_deactivate () override;
     void update_graph () override;
@@ -54,8 +56,8 @@ namespace djnn {
   protected:
     void set_parent (Process* p) override;
 
-
-    struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec); };
+    struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec,
+      string& src_ref_spec, string& dst_ref_spec); };
     friend struct Init;
     void check_init(const string& ispec, const string& dspec);
 

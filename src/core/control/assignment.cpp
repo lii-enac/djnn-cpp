@@ -76,7 +76,8 @@ namespace djnn
     }
   }
 
-  AbstractAssignment::Init::Init (AbstractAssignment *p, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec)
+  AbstractAssignment::Init::Init (AbstractAssignment *p, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec,
+    string& src_ref_spec, string& dst_ref_spec)
   {
     if (src == 0) {
       error (
@@ -92,33 +93,37 @@ namespace djnn
     }
     pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
     p->_ref_info_src._ref = ref_src_pair.first;
-    p->_ref_info_src._spec = ref_src_pair.second;
+    //p->_ref_info_src._spec = ref_src_pair.second;
+    src_ref_spec = ref_src_pair.second;
 
     pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
     p->_ref_info_dst._ref = ref_dst_pair.first;
-    p->_ref_info_dst._spec = ref_dst_pair.second;
+    //p->_ref_info_dst._spec = ref_dst_pair.second;
+    dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel)
+  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+    string src_ref_spec, string dst_ref_spec)
   :
   SrcToDstLink (isModel),
-  _init(this, "", src, ispec, dst, dspec),
+  _init(this, "", src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()), // uses copy constructor
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()), // uses copy constructor
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst,dst_ref_spec, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
   }
 
-  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel)
+  AbstractAssignment::AbstractAssignment (Process *p, const string &n, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
+    string src_ref_spec, string dst_ref_spec)
   :
   SrcToDstLink (p, n, isModel),
-  _init(this, n, src, ispec, dst, dspec),
+  _init(this, n, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
   _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, (Process**)&_src) : ref_update()),
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, (Process**)&_dst) : ref_update())
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()),
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (Process**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
   }
