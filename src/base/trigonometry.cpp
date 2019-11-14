@@ -44,8 +44,8 @@ namespace djnn
   template <> const char name_info<my_atan<double>>::right[] = "right";
   template <> const char name_info<my_atan<double>>::serialize[] = "arctangent";
 
-  template <> const char name_info<my_atan2<double>>::left[] = "left";
-  template <> const char name_info<my_atan2<double>>::right[] = "right";
+  template <> const char name_info<my_atan2<double>>::left[] = "y";
+  template <> const char name_info<my_atan2<double>>::right[] = "x";
   template <> const char name_info<my_atan2<double>>::serialize[] = "arctangent2";
 
   template <> const char name_info<my_cosh<double>>::left[] = "left";
