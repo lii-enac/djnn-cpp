@@ -37,7 +37,9 @@ namespace djnn
     ts->tv_sec = mts.tv_sec;
     ts->tv_nsec = mts.tv_nsec;
 #else
+#ifndef DJNN_USE_FREERTOS
     clock_gettime(CLOCK_MONOTONIC, ts);
+#endif
 #endif
   }
 

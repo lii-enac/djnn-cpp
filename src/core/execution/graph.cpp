@@ -15,6 +15,8 @@
 #include "graph.h"
 
 #include <algorithm>
+//#include <mutex>
+
 #include <iostream>
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -36,7 +38,7 @@ namespace djnn
   Graph* Graph::_instance;
   //std::once_flag Graph::onceFlag;
 
-  static std::mutex graph_mutex;
+  //static std::mutex graph_mutex;
 
   using std::cout;
   using std::cerr;

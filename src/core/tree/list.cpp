@@ -203,7 +203,7 @@ namespace djnn
   Process*
   AbstractList::find_component (int index)
   {
-    if ((index - 1) < _children.size ()) {
+    if ((index - 1) < (int)_children.size ()) {
       return _children.at (index - 1);
 
     } else {

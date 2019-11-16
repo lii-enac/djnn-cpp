@@ -104,6 +104,14 @@ CFLAGS ?= -fpic -g -MMD -Wall
 LDFLAGS ?= -L$(build_dir)
 endif
 
+ifeq ($(os),FreeRTOS)
+lib_suffix =.so
+boost_libs =
+DYNLIB = -shared
+CFLAGS += -fpic -g -MMD -Wall
+LDFLAGS += -L$(build_dir)
+endif
+
 ifeq ($(findstring android,$(cross_prefix)),android)
 os := android
 inc_android =  \
@@ -407,7 +415,7 @@ distclean clear:
 .PHONY: distclean clear
 
 dbg:
-	@echo $(gui_lib_cppflags)
+	@echo $(os)
 .PHONY: dbg
 
 ifeq ($(os),Linux)

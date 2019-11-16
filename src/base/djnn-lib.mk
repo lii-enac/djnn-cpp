@@ -8,3 +8,8 @@ endif
 ifneq (,$(filter $(graphics),CAIRO GL))
 include src/display/sdl/djnn-lib-flags.mk
 endif
+
+ifeq ($(os),FreeRTOS)
+include src/core/syshook/freertos-cxx11/djnn-lib-flags.mk
+endif
+
