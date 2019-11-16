@@ -126,6 +126,7 @@ LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 --sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
 endif
 
+
 ifeq ($(display),QT)
 ifneq ($(os),Darwin)
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
@@ -136,10 +137,12 @@ endif
 else ifeq ($(display),SDL)
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 #CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+else ifeq ($(display),)
+#CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+#LDFLAGS += $(boost_libs)
+CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 else
-$(error "unknown display (choose among: QT, SDL)")
-CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
-LDFLAGS += $(boost_libs)
+$(warning "unknown display (choose among: QT, SDL, (none))")
 endif
 
 
@@ -205,7 +208,7 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-djnn_libs := core base comms display gui input animation utils files
+djnn_libs ?= core base comms display gui input animation utils files
 
 ifeq ($(cross_prefix),em)
 djnn_libs := core base display gui animation

@@ -31,7 +31,7 @@ namespace djnn
   static djnn_mutex_t* ios_mutex;
 
   
-  inline djnn_mutex_t* create_lock() {
+  djnn_mutex_t* create_lock() {
     #if DJNN_USE_BOOST_FIBER
     return nullptr;
     #elif DJNN_USE_SDL_THREAD

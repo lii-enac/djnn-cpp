@@ -101,12 +101,12 @@ namespace djnn
   }
 
 #if DJNN_USE_BOOST_CHRONO
-  Timer::Timer (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000))
+  Timer::Timer (Process* p, const std::string& n, boost::chrono::milliseconds period)
   : Timer(p, n, period.count())
   {
   }
   
-  Timer::Timer (boost::chrono::milliseconds period = boost::chrono::milliseconds(1000))
+  Timer::Timer (boost::chrono::milliseconds period)
   : Timer(period.count())
   {
   }

@@ -19,6 +19,7 @@
 #include "syshook.h"
 #include "external_source.h"
 #include "cpp-chrono.h"
+#include "cpp-mutex.h"
 
 namespace djnn
 {
@@ -76,7 +77,6 @@ namespace djnn
     void run_in_own_thread ();
     void run () override;
 
-    std::mutex own_mutex;
     chrono::milliseconds _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
@@ -85,7 +85,7 @@ namespace djnn
 
   private:
     static MainLoop *_instance;
-    static std::once_flag onceFlag;
+    //static std::once_flag onceFlag;
     //djnn_thread_t _own_thread; // FIXME: for thread object leak...
 
     // MainLoop should be created *before* any other external-source

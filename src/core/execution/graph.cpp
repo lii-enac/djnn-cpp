@@ -34,7 +34,7 @@ static double sorted_average = 0.0;
 namespace djnn
 {
   Graph* Graph::_instance;
-  std::once_flag Graph::onceFlag;
+  //std::once_flag Graph::onceFlag;
 
   static std::mutex graph_mutex;
 
@@ -153,9 +153,10 @@ namespace djnn
   Graph&
   Graph::instance ()
   {
-    std::call_once (Graph::onceFlag, [] () {
+    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
+    if(!onceFlag.test_and_set()) {
       _instance = new Graph();
-    });
+    }
 
     return *(_instance);
   }
