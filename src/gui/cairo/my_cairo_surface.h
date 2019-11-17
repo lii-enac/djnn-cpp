@@ -20,7 +20,7 @@
 
 #include <string>
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 namespace djnn {
 

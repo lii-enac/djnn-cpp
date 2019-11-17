@@ -20,7 +20,7 @@
 #include "../abstract_backend.h"
 #include "../backend.h"
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
 #include <functional>
