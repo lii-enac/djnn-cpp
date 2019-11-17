@@ -39,7 +39,7 @@
 #endif
 
 #if DJNN_USE_SDL_THREAD
-	#include <SDL2/SDL_mutex.h>
+	#include <SDL_mutex.h>
 	namespace djnn {
 		typedef SDL_mutex djnn_mutex_t;
 	}

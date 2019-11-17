@@ -28,6 +28,7 @@ endif
 
 
 ifeq ($(display),SDL)
+include src/display/sdl/djnn-lib-flags.mk
 include src/gui/cairo/sdl/djnn-lib.mk
 endif
 

@@ -55,7 +55,7 @@
 	#define DJNN_THREAD_IS_POINTER 1
 
 #elif DJNN_USE_SDL_THREAD
-	#include <SDL2/SDL.h>
+	#include <SDL.h>
   #define DJNN_THREAD_IS_POINTER 1
 
 	namespace djnn {

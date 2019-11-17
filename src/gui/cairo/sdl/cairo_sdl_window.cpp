@@ -25,7 +25,7 @@
 #include "../../../core/execution/graph.h"
 #include "../../../core/syshook/main_loop.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <stdio.h>
 #include <stdlib.h>

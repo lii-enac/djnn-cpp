@@ -5,7 +5,7 @@
 #include "gl_dbg.h"
 
 // cairo gl
-#include <SDL2/SDL_syswm.h>
+#include <SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
 

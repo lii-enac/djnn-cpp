@@ -24,7 +24,7 @@
 #include "cairo_sdl_window.h"
 //#endif
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 
 #include <iostream>

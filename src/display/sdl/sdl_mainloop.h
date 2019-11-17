@@ -16,7 +16,7 @@
 
 #include "../../core/syshook/external_source.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <memory>
 #include <map>
 #include <mutex>
