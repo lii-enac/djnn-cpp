@@ -17,7 +17,7 @@
 
 #include "main_loop.h"
 #include "cpp-thread.h"
-
+#include "cpp-mutex-priv.h"
 
 #if DJNN_USE_QT_MAINLOOP
 #include "qt/qt_mainloop.h"
@@ -28,10 +28,7 @@
 
 namespace djnn {
 
-    extern djnn_mutex_t* create_lock();
-
     MainLoop* MainLoop::_instance;
-    //std::once_flag MainLoop::onceFlag;
     static djnn_mutex_t* own_mutex;
 
     
@@ -102,7 +99,7 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop) {
         _another_source_wants_to_be_mainloop->please_stop ();
       } else {
-        own_mutex->unlock ();
+        release (own_mutex);
       }
     }
 

@@ -78,6 +78,8 @@ CFLAGS += -I$(src_dir)
 #CFLAGS += -fsanitize=memory -O1
 #LDFLAGS += -fsanitize=memory
 
+lib_static_suffix = .a
+
 ifeq ($(os),Linux)
 lib_suffix =.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
@@ -245,6 +247,7 @@ endif
 srcs :=
 objs :=
 libs :=
+libs_static :=
 deps :=
 cov :=
 
@@ -263,7 +266,6 @@ lib_djnn_deps :=
 
 # default
 $1_gperf_srcs :=
-#$$(shell find src/$1 -name "*.gperf")
 $1_cpp_srcs := $$(filter %.cpp,$$(lib_srcs))
 $1_c_srcs := $$(filter %.c,$$(lib_srcs))
 $1_objs := $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
@@ -277,6 +279,8 @@ $1_objs += $$(lib_objs)
 $1_deps := $$($1_objs:.o=.d)
 $1_libname := libdjnn-$1$$(lib_suffix)
 $1_lib := $$(build_dir)/$$($1_libname)
+$1_libname_static := libdjnn-$1$$(lib_static_suffix)
+$1_lib_static := $$(build_dir)/$$($1_libname_static)
 $1_lib_cppflags := $$(lib_cppflags)
 $1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
@@ -303,6 +307,11 @@ $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 
+$$($1_lib_static): $$($1_objs)
+	@mkdir -p $$(dir $$@)
+	#ar rU $$@ $$($1_objs)
+	/usr/bin/ar -r -u $$@ $$($1_objs)
+
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 
@@ -328,6 +337,7 @@ srcgens += $$($1_srcgens)
 objs += $$($1_objs)
 deps += $$($1_deps)
 libs += $$($1_lib)
+libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
@@ -344,6 +354,17 @@ headers: $(headers)
 
 djnn: $(libs) $(headers)
 .PHONY: djnn
+
+static: $(libs_static) $(headers)
+.PHONY: static
+
+size:
+	size -t $(libs_static)
+.PHONY: size
+
+strip:
+	strip $(libs_static)
+
 
 # config_header_files := $(build_dir)/src/core/syshook/cpp-thread-config.h $(build_dir)/src/core/syshook/cpp-chrono-config.h
 # config_headers: $(config_header_files)

@@ -20,6 +20,7 @@
 #include <iostream>
 #include <cmath>
 #include <locale.h>
+#include <atomic>
 
 #if DJNN_SDL
 #include "sdl/cairo_sdl_window.h"
@@ -29,7 +30,7 @@
 namespace djnn
 {
   CairoBackend *CairoBackend::_instance;
-  std::once_flag CairoBackend::onceFlag;
+  //std::once_flag CairoBackend::onceFlag;
 
   cairo_t* cur_cairo_state = nullptr;
   cairo_t* cur_cairo_picking_state = nullptr;
@@ -40,9 +41,10 @@ namespace djnn
   CairoBackend*
   CairoBackend::instance ()
   {
-    std::call_once (CairoBackend::onceFlag, [] () {
+    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
+    if(!onceFlag.test_and_set()) {
       _instance = new CairoBackend();
-    });
+    }
 
     // workaround : because Cairo rewrite LC_NUMERIC and after that our parser can't parse any double
     setlocale(LC_NUMERIC, "C");

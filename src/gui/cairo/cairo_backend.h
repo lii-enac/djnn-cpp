@@ -202,7 +202,7 @@ namespace djnn
     set_picking_view (CairoPickingView *pick_view) { _pick_view = pick_view; }
   private:
     static CairoBackend *_instance;
-    static std::once_flag onceFlag;
+    //static std::once_flag onceFlag;
     cairo_pattern_t *_cur_cairo_pattern;
     CairoBackend ();
     void
