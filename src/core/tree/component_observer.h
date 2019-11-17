@@ -15,7 +15,6 @@
 #pragma once
 
 #include <vector>
-//#include <mutex>
 
 namespace djnn
 {
@@ -38,8 +37,7 @@ namespace djnn
   private:
     ComponentObserver (const ComponentObserver&) = delete;
     ComponentObserver & operator=(const ComponentObserver&) = delete;
-    static ComponentObserver *_instance;
-    //static std::once_flag onceFlag;
+    static ComponentObserver _instance;
     ComponentObserver ();
     vector<ContextManager*> _manager_list;
     vector<ContextManager*> _draw_manager_list;

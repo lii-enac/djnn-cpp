@@ -18,8 +18,8 @@
 #include "core/ontology/process.h"
 #include "syshook.h"
 #include "external_source.h"
-#include "cpp-chrono.h"
-#include "cpp-mutex.h"
+//#include "cpp-chrono.h"
+//#include "cpp-mutex.h"
 
 namespace djnn
 {
@@ -84,9 +84,7 @@ namespace djnn
     bool pre_activate () override { return true; }
 
   private:
-    static MainLoop *_instance;
-    //static std::once_flag onceFlag;
-    //djnn_thread_t _own_thread; // FIXME: for thread object leak...
+    static MainLoop _instance;
 
     // MainLoop should be created *before* any other external-source
     MainLoop ();

@@ -21,6 +21,7 @@
 #include "../abstract_backend.h"
 
 #include <QtGui/QPainterPath>
+#include <mutex>
 
 class QWidget;
 class QPainter;

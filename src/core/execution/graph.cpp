@@ -35,11 +35,6 @@ static double sorted_average = 0.0;
 
 namespace djnn
 {
-  Graph* Graph::_instance;
-  //std::once_flag Graph::onceFlag;
-
-  //static std::mutex graph_mutex;
-
   using std::cout;
   using std::cerr;
   using std::endl;
@@ -152,15 +147,18 @@ namespace djnn
     }
   }
 
+  Graph Graph::_instance;
+
   Graph&
   Graph::instance ()
   {
-    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
+    /*static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
     if(!onceFlag.test_and_set()) {
       _instance = new Graph();
     }
 
-    return *(_instance);
+    return *(_instance);*/
+    return _instance;
   }
 
   Graph::Graph () :

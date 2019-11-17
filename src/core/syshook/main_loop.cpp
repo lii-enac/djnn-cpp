@@ -17,62 +17,55 @@
 
 #include "main_loop.h"
 #include "cpp-thread.h"
-#include "cpp-mutex-priv.h"
+//#include "cpp-mutex.h"
+//#include "cpp-mutex-priv.h"
 
 #if DJNN_USE_QT_MAINLOOP
 #include "qt/qt_mainloop.h"
 #endif
 
-#include <iostream>
+//#include <iostream>
 #define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 namespace djnn {
 
-    MainLoop* MainLoop::_instance;
-    static djnn_mutex_t* own_mutex;
-
+    MainLoop MainLoop::_instance;
+    //static djnn_mutex_t* own_mutex;
     
     MainLoop&
     MainLoop::instance ()
     {
       static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
       if(!onceFlag.test_and_set()) {
-        _instance = new MainLoop();
-      
+
         #if DJNN_USE_QT_MAINLOOP
-        QtMainloop::build_instance(_instance);
+        QtMainloop::build_instance(&_instance);
         #endif
 
         init_global_mutex();
         ExternalSource::init();
 
-
-        own_mutex = create_lock();
+        //own_mutex = create_lock();
 
         launch_mutex_lock ();
         djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
       }
-      return *(_instance);
+      return _instance;
     }
 
     MainLoop::MainLoop ()
     : _another_source_wants_to_be_mainloop (nullptr)
-    {//DBG;
-      //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
+    {
       set_run_for_ever (); // default mode is forever
-      //std::cerr <<"mainloop::lock "<< __LINE__ <<std::endl;
-      
     }
 
     MainLoop::~MainLoop ()
     {
-      //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
     }
 
     void
     MainLoop::impl_activate ()
     {
-      //std::cerr << std::endl << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl;
       djnn::release_exclusive_access (DBG_REL);
       launch_mutex_unlock();
 
@@ -87,7 +80,6 @@ namespace djnn {
         run_in_main_thread ();
       }
 
-      //std::cerr <<"mainloop::lock "<< __LINE__ << std::endl;
       launch_mutex_lock (); // reacquire launch mutex
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
 
@@ -95,11 +87,10 @@ namespace djnn {
     void
     MainLoop::impl_deactivate ()
     {
-      //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << this->get_name() << std::endl << std::endl;
       if (_another_source_wants_to_be_mainloop) {
         _another_source_wants_to_be_mainloop->please_stop ();
       } else {
-        release (own_mutex);
+        //release (own_mutex);
       }
     }
 
@@ -135,7 +126,6 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_QT_THREAD
-      //DBG;
       auto * th = QThread::create([this]() { this->MainLoop::private_run(); });
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
       th->start();
@@ -155,11 +145,8 @@ namespace djnn {
 
     void
     MainLoop::run ()
-    {//DBG;
+    {
       if (is_run_forever ()) {
-        //DBG;
-        //own_mutex.lock (); // 1st lock: success
-        //own_mutex.lock (); // 2nd lock: blocks forever
         while (1) {
           unsigned int duration = 2000; // check from time to time if we need to stop
           djnn::sleep(duration);
@@ -168,23 +155,15 @@ namespace djnn {
           }
         }
       } else { /* mainloop run for _duration time */
-        //std::
-        //boost::
         djnn::sleep(_duration.count());
         
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
         set_run_for_ever (); // reset to default forever mode
-        //DBG;
       }
 
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
-
-      //std::cerr <<"mainloop finished running, mainloop::lock"<<std::endl;
-      //djnn::get_exclusive_access (DBG_GET); // prevent external source thread to do anything once mainloop is terminated
-      //launch_mutex_lock (); // reacquire launch mutex
     }
-
 
 }

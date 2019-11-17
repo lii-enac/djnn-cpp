@@ -16,7 +16,6 @@
 
 #include "core/ontology/process.h"
 
-//#include <mutex>
 #include <vector>
 #include <list>
 #include <memory>
@@ -93,8 +92,7 @@ namespace djnn
     void print_sorted () const; 
 
   private:
-    static Graph* _instance;
-    //static std::once_flag onceFlag;
+    static Graph _instance;
     Graph ();
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);

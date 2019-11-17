@@ -14,17 +14,15 @@
 
 #include "component_observer.h"
 
-#include <atomic>
 #include <algorithm>
 
-#include <iostream>
-#define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+//#include <iostream>
+//#define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 namespace djnn
 {
 
-  ComponentObserver* ComponentObserver::_instance;
-  //std::once_flag ComponentObserver::onceFlag;
+  ComponentObserver ComponentObserver::_instance;
 
   ComponentObserver::ComponentObserver ()
   {
@@ -38,12 +36,7 @@ namespace djnn
   ComponentObserver&
   ComponentObserver::instance ()
   {
-    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
-    if(!onceFlag.test_and_set()) {
-      _instance = new ComponentObserver();
-    }
-
-    return *(_instance) ;
+    return _instance;
   }
 
    void

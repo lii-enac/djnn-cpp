@@ -23,6 +23,7 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 #include <vector>
+#include <mutex>
 
 
 namespace djnn {
