@@ -12,6 +12,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 #--------------------------------------------
 
+## [1.7.0] - 2019-11-18
+### NEW
+    - NEW text field component
+    - NEW implement schedule_activation processes and use it in picking, mouse and touch events
+    - NEW implement schedule_delete processes
+    - NEW core, base, comms, animation component use plain objects for subchildren.
+    - NEW Macro for constant keys (QT >= 5.12)
+    - NEW find_component (index) : simplify list use
+    - NEW support for FreeRTOS (just start) : add static lib
+
+### Added
+    - Added graphics option in config.mk
+    - Added CAIRO text input
+    - Added tools : size.cpp for size measuring of component
+    - Added tools : ivy-c patch to apply for windows
+    - Added getter/stter on Process component
+
+### Changed
+    - Important code refactoring in base and core module
+    - Imporved Mainloop and thread management
+        - timer and clock leave their thread if they are dead
+        - add protection against thread destruction
+        - use thread sanitizer
+        - fixed dead lock in Qt ans use boost thread with qt
+    - Improved UI event management
+    - Cleaned color_picking when object are deactivated
+    - Changed transform homography propagation 
+    - Reorganized constructors and destructors
+    - Cleaned code
+
+### Removed
+    - Removed use of std::onceFlag and change all unique instances to plain objects
+
+### Fixed
+    - Fixed the use of refproperty/$value in assignment, binding and connector
+    - Fixed IvyAccess thread
+    - Fixed and removes unnecessary string copy
+    - Fixed sanitizer address
+    - Fixed pointer leaks
+    - Fixed Linux/windows compilation
+    - Fixed move include in .cpp file
+    - Fixed typo
+
+#--------------------------------------------
+
 ## [1.6.0] - 2019-09-17
 ### NEW
  - New physics module (optional)
