@@ -36,7 +36,7 @@ namespace djnn {
     void impl_deactivate () override {}
     void set_src (Process** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
-  private:
+   private:
     Process** _src;
     AbstractProperty** _dst;
     bool _propagate;
@@ -47,8 +47,8 @@ namespace djnn {
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     AbstractAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
-    void update_graph () override;
     virtual ~AbstractAssignment ();
+    //void update_graph () override;
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
   
   protected:
