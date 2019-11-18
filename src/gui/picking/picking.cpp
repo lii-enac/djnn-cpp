@@ -213,11 +213,7 @@ namespace djnn
     _win->press_y ()->set_value (y, true);
     _win->move_x ()->set_value (x, true);
     _win->move_y ()->set_value (y, true);
-    /* windows event */
-    _win->press ()->schedule_activation ();
-    if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
-      exec_ = true;
-    }
+    
 
     /* shape */ 
     AbstractGShape *s = this->pick (x, y);
@@ -257,6 +253,12 @@ namespace djnn
       }
     if (((GUIMouse*)GenericMouse)->left ()->press ()->has_coupling () || ((GUIMouse*)GenericMouse)->right ()->press ()->has_coupling ()
         || ((GUIMouse*)GenericMouse)->middle ()->press ()->has_coupling ()) {
+      exec_ = true;
+    }
+
+    /* windows event schedule event After shape event*/
+    _win->press ()->schedule_activation ();
+    if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
       exec_ = true;
     }
 
@@ -309,11 +311,7 @@ namespace djnn
       _win->move_x ()->set_value (x, true);
     if (y != old_y)
       _win->move_y ()->set_value (y, true);
-    /* windows event */
-    _win->move ()->schedule_activation ();
-    if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
-      exec_ = true;
-    }
+    
 
     /* shape */
     AbstractGShape *s = this->pick (x, y);
@@ -371,6 +369,12 @@ namespace djnn
     /* generic mouse event */
     ((GUIMouse*)GenericMouse)->move ()->activate ();
     if (((GUIMouse*)GenericMouse)->move ()->has_coupling() || ((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
+      exec_ = true;
+    }
+
+    /* windows event schedule event After shape event*/
+    _win->move ()->schedule_activation ();
+    if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
       exec_ = true;
     }
 
@@ -438,13 +442,6 @@ namespace djnn
     _mouse_released = true;
     bool exec_ = false;
 
-    /* windows event */
-    if (_win->release ()->has_coupling ()) {
-      _win->release ()->schedule_activation ();
-
-      exec_ = true;
-    }
-
     /* shape */
     AbstractGShape *s = this->pick (x, y);
     if (s) {
@@ -494,6 +491,12 @@ namespace djnn
     if (((GUIMouse*) GenericMouse)->left ()->release ()->has_coupling ()
         || ((GUIMouse*) GenericMouse)->right ()->release ()->has_coupling ()
         || ((GUIMouse*) GenericMouse)->middle ()->release ()->has_coupling ()) {
+      exec_ = true;
+    }
+
+    /* windows event schedule event After shape event*/
+    if (_win->release ()->has_coupling ()) {
+      _win->release ()->schedule_activation ();
       exec_ = true;
     }
 
@@ -569,11 +572,7 @@ namespace djnn
     /* window setting */
     _win->wheel_dx ()->set_value (x, true);
     _win->wheel_dy ()->set_value (y, true);
-    /* window event */
-    _win->wheel ()->schedule_activation ();
-    if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
-      exec_ = true;
-    }
+    
 
     /* reset for delta with no propagation */
     _win->wheel_dx ()->set_value (0, false);
@@ -591,6 +590,12 @@ namespace djnn
     /* reset for delta with no propagation */
     ((GUIMouse*)GenericMouse)->dx ()->set_value (0, false);
     ((GUIMouse*)GenericMouse)->dy ()->set_value (0, false);
+
+    /* windows event schedule event After shape event*/
+    _win->wheel ()->schedule_activation ();
+    if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
+      exec_ = true;
+    }
 
     return exec_;
   }
