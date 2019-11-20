@@ -112,7 +112,7 @@ path_compute (Process* from, Process* to,
       }
       /* continue on the 'from' chain to add the right number of '..', */
       insert_slash = 0;
-      while (fc->f) {
+      while (fc && fc->f) {
         buf += "..";
         if (fc->prev->f)
           buf += "/";

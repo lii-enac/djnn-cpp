@@ -318,7 +318,7 @@ static int ParseFontStyle(Process** e, const char* v) {
 }
 
 static int ParseFontWeight(Process** e, const char* v) {
-	int val;
+	int val = 50; //normal
 	unsigned int i;
 	int isANumber = 1;
 	if (!*e)

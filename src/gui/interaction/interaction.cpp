@@ -36,15 +36,18 @@ namespace djnn
   {
     if (shape == nullptr || matrix == nullptr) {
       error (this, "Shape or Matrix cannot be null in ScaleRotateTranslate constructor");
+      return;
     }
     _shape = shape;
     _matrix = dynamic_cast<AbstractHomography*> (matrix);
     if (!_matrix) {
       error (this, "Wrong type of Process for matrix provided to ScaleRotateTranslate constructor");
+      return;
     }
     _touches = shape->find_component ("touches");
     if (!_touches) {
       error (this, "Wrong interface for Shape provided to ScaleRotateTranslate constructor");
+      return;
     }
 
     _added = _touches->find_component ("$added");

@@ -27,10 +27,12 @@ namespace djnn
   {
     if (dst == nullptr) {
       error (s, "dst argument cannot be null in synchronizer creation (" + n + ", " + dspec + ")");
+      return;
     }
     s->_dst = dst->find_component (dspec);
     if (s->_dst == nullptr) {
       error (s, "destination child " + dspec + " not found in synchronizer (" + s->get_name () + ", " + dspec + ")");
+      return;
     }
   }
 
