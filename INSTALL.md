@@ -58,7 +58,7 @@ sudo make installlibs includes
 ```
 MacOS:  
 ```
-brew install subversion pcre  
+brew install subversion pcre pkg-config  
 svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
 cd ivy-c/src  
 make -f Makefile.osx static-libs shared-libs  
