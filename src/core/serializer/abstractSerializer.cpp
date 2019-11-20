@@ -106,7 +106,7 @@ path_compute (Process* from, Process* to,
       __path_context *fc = pc->f == AbstractSerializer::serializationRoot ? ec : &c;
       __path_context *tc = pc->t == AbstractSerializer::serializationRoot ? ec : &c;
       /* then go to where these chains diverge, */
-      while (fc->f == tc->t) {
+      while (fc && (fc->f == tc->t)) {
         fc = fc->prev;
         tc = tc->prev;
       }
@@ -124,7 +124,7 @@ path_compute (Process* from, Process* to,
     }
 
     /* 1.2 in all cases, we create the remaining path to the target. */
-    while (pc->t) {
+    while (pc && pc->t) {
       if (insert_slash)
         buf += "/";
       else
