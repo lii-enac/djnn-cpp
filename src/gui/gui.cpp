@@ -114,9 +114,6 @@ namespace djnn
           }
         }
       }
-    //((AbstractGObj*) c)->frame ()->update ();
-    auto _frame = ((AbstractGObj*) c)->frame ();
-    _frame->update ();
   }
 
   void
