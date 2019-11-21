@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update and improvement GUI backend.
     - Update and improvement on memory performance.
 
+## [1.7.1] - 2019-11-21 [YANKED]
+### Changed
+    - Added instructons for Ivy in INSTALL.md
+
+### Fixed
+    - Remove potential null pointer access
+    - Fixed a bug in children reordering
+
 
 ## [1.7.0] - 2019-11-18
 ### NEW
