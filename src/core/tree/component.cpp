@@ -122,14 +122,14 @@ namespace djnn
   {
     if (child2 == 0) {
       if (spec == FIRST) {
-        remove_child (child_to_move);
+        Container::remove_child (child_to_move);
         _children.insert (_children.begin (), child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, 0);
         }
         return;
       } else if (spec == LAST) {
-        remove_child (child_to_move);
+        Container::remove_child (child_to_move);
         _children.push_back (child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, _children.size () - 1);
@@ -143,13 +143,13 @@ namespace djnn
     } else {
       auto index = std::distance (_children.begin (), it);
       if (spec == BEFORE) {
-        remove_child (child_to_move);
+        Container::remove_child (child_to_move);
         _children.insert (_children.begin () + index, child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else if (spec == AFTER) {
-        remove_child (child_to_move);
+        Container::remove_child (child_to_move);
         _children.insert (_children.begin () + index + 1, child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, index, spec, index + 1);
