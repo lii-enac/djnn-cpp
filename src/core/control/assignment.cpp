@@ -142,31 +142,31 @@ namespace djnn
         case Integer:
           {
             AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
-            dst_p->set_value (ip->get_value (), propagate);
+            if (ip) dst_p->set_value (ip->get_value (), propagate);
             break;
           }
         case Boolean:
           {
             AbstractBoolProperty* bp = dynamic_cast<AbstractBoolProperty*> (src_p);
-            dst_p->set_value (bp->get_value (), propagate);
+            if (bp) dst_p->set_value (bp->get_value (), propagate);
             break;
           }
         case Double:
           {
             AbstractDoubleProperty* dp = dynamic_cast<AbstractDoubleProperty*> (src_p);
-            dst_p->set_value (dp->get_value (), propagate);
+            if (dp) dst_p->set_value (dp->get_value (), propagate);
             break;
           }
         case String:
           {
             AbstractTextProperty* tp = dynamic_cast<AbstractTextProperty*> (src_p);
-            dst_p->set_value (string (tp->get_value ()), propagate);
+            if (tp) dst_p->set_value (string (tp->get_value ()), propagate);
             break;
           }
         case Reference:
           {
             RefProperty* rp = dynamic_cast<RefProperty*> (src_p);
-            dst_p->set_value (rp->get_value (), propagate);
+            if (rp) dst_p->set_value (rp->get_value (), propagate);
             break;
           }
         default:

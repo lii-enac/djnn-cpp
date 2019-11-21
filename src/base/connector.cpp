@@ -264,16 +264,19 @@ namespace djnn
   {
     if (src == 0) {
       error ( this, "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      return;
     }
 
     if (dst == 0) {
       error ( this, "dst argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      return;
     }
 
     Process* c_src = src->find_component (ispec);
 
     if (c_src == 0) {
       error (this, "source not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      return;
     }
 
     Process* c_dst = dst->find_component (dspec);
@@ -281,6 +284,7 @@ namespace djnn
     if (c_dst == 0) {
       error (this,
        "destination not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      return;
     }
 
     _src = dynamic_cast<AbstractProperty*> (c_src);
