@@ -27,6 +27,7 @@
 #include "log.h"
 #include "counter.h"
 #include "finder.h"
+#include "algorithm.h"
 #include "switch_list.h"
 #include "switch_range.h"
 #include "dictionary.h"
