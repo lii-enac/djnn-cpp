@@ -26,7 +26,7 @@ namespace djnn
   Synchronizer::Init::Init(Synchronizer * s, Process *parent, const string &name, Process* dst, const string & dspec)
   {
     if (dst == nullptr) {
-      error (s, "dst argument cannot be null in synchronizer creation (" + n + ", " + dspec + ")");
+      error (s, "dst argument cannot be null in synchronizer creation (" + s->get_name () + ", " + dspec + ")");
       return;
     }
     s->_dst = dst->find_component (dspec);
