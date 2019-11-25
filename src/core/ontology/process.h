@@ -108,6 +108,7 @@ namespace djnn {
     Vertex*  vertex () { return _vertex; };
 
     // actions to be redefined by subclasses
+    virtual     void update_drawing () {}
     virtual     void draw () {}
     virtual     void pick () {}
     virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }

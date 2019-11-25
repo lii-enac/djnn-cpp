@@ -135,6 +135,13 @@ namespace djnn
   }
 
   void
+  AbstractGObj::update_drawing ()
+  {
+    if (_frame)
+      UpdateDrawing::instance()->add_window_for_refresh (_frame);
+  }
+
+  void
   AbstractGObj::impl_activate ()
   {
     //std::cerr << __FILE__ << __LINE__ << std::endl;

@@ -217,6 +217,16 @@ namespace djnn
   }
 
   void
+  Container::update_drawing ()
+  {
+    if (get_activation_flag () == DEACTIVATION)
+      return;
+    for (auto c : _children) {
+      c->update_drawing ();
+    }
+  }
+
+  void
   Container::draw ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;

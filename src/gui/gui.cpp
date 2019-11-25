@@ -171,6 +171,7 @@ namespace djnn
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child (c, index);
     }
+    cont->update_drawing ();
   }
 
   void
@@ -190,6 +191,7 @@ namespace djnn
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
     }
+    cont->update_drawing ();
   }
 
   void
@@ -208,6 +210,7 @@ namespace djnn
       if (it_cont != _structure_map.end ())
         it_cont->second->move_child_to (c, neighboor_index, spec, new_index);
     }
+    cont->update_drawing ();
   }
 
   void
@@ -216,6 +219,7 @@ namespace djnn
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ())
       it_cont->second->remove_gui_child (c);
+    cont->update_drawing ();
   }
 
   GUIMouseButton::GUIMouseButton (Process *parent, const string &name)

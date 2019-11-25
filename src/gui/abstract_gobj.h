@@ -50,6 +50,7 @@ namespace djnn
     Window*& frame () { return _frame; } 
     //std::weak_ptr<Window>
     //auto frame () { return &*AbstractGObj::_frame.lock (); }
+    void update_drawing () override;
     void impl_activate () override;
     void impl_deactivate () override;
     void notify_change (unsigned int nm) override { _damaged |= nm; }
