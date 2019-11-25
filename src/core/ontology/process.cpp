@@ -35,6 +35,7 @@ namespace djnn
 #endif
 
   string Process::default_name = "noname";
+  static map<const Process*, string> parentless_names;
 
   Process::Process (const string& name, bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
@@ -73,6 +74,8 @@ namespace djnn
 
       //parent->add_child (this, get_name ());
       parent->add_child (this, name);
+    } else {
+      parentless_names[this] = name;
     }
   }
 
@@ -256,7 +259,23 @@ namespace djnn
   }
 */
 
-  // tree, component, symtable 
+  // tree, component, symtable
+
+  void
+  Process::set_parent (Process* p)
+  {
+    if (p == nullptr) {
+      if(_parent)
+          parentless_names[this] = _parent->find_component_name (this);
+    }
+    _parent = p;
+  }
+
+  const string&
+  Process::get_name () const
+  {
+    return (_parent ? _parent->find_component_name(this) : parentless_names[this]);
+  }
 
   Process*
   Process::find_component (const string& key)
@@ -381,9 +400,12 @@ namespace djnn
   void
   Process::add_child (Process* child, const string& name)
   {
-
     if (child == nullptr)
       return;
+
+    if(child->get_parent ()==nullptr) {
+      parentless_names.erase(this);
+    }
 
     child->set_parent (this);
     add_symbol (name, child);

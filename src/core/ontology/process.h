@@ -118,7 +118,7 @@ namespace djnn {
     virtual Process* get_activation_source () { return nullptr; }
 
     // tree, component, symtable 
-    virtual void   set_parent (Process* p) { _parent = p; }
+    virtual void   set_parent (Process* p); // { _parent = p; }
     virtual void   add_child (Process* c, const string& name);
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const string& name);
@@ -135,7 +135,7 @@ namespace djnn {
     const symtable_t& symtable () const { return _symtable; }
     //const string& get_name () const { return _name; }
     static string default_name;
-    const string& get_name () const { return (_parent ? _parent->find_component_name(this) : default_name); }
+    const string& get_name () const; // { return (_parent ? _parent->find_component_name(this) : default_name); }
     Process* get_parent () { return _parent; }
     
     void     set_data (Process* data);

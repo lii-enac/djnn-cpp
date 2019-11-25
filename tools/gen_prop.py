@@ -64,8 +64,8 @@ def_string = """
 
 namespace djnn
 {
-  %(CLASS)s::%(CLASS)s (Process *p, const std::string& n, %(DECL_PROPS_CALL_DEF)s) :
-    %(INHERITS)s (p, n%(FOLLOW_PARENT_PROPS_CALL)s),
+  %(CLASS)s::%(CLASS)s (Process *parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
+    %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
     raw_props{%(RAW_PROPS_INIT)s},
     %(COUPLINGS_INIT)s
   {
@@ -315,7 +315,7 @@ def just_do_it(dc, finalize_construction=True):
       
     FINALIZE_CONSTRUCTION = ''
     if(dc.finalize_construction):
-        FINALIZE_CONSTRUCTION = "Process::finalize_construction (p);"
+        FINALIZE_CONSTRUCTION = "Process::finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
     DECL_CLONE = ''
