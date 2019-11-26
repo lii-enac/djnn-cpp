@@ -21,9 +21,10 @@ namespace djnn {
 
   class Container : public Process
   {
-  typedef std::vector<Process*> children_t;
+
   typedef std::map<string, Process*> context_t;
   public:
+    typedef std::vector<Process*> children_t;
     Container ();
     Container (Process* parent, const string& name);
     virtual process_type_e get_cpnt_type () const override { return COMPONENT_T; }
