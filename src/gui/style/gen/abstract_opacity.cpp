@@ -28,29 +28,29 @@
 
 namespace djnn
 {
-  AbstractOpacity::AbstractOpacity (Process *parent, const std::string& name, double alpha) :
+  AbstractOpacity::AbstractOpacity (Process *parent, const std::string& name, double a) :
     AbstractStyle (parent, name),
-    raw_props{.alpha=alpha},
-    _calpha (nullptr)
+    raw_props{.a=a},
+    _ca (nullptr)
   {
     
     
   }
 
-  AbstractOpacity::AbstractOpacity (double alpha) :
+  AbstractOpacity::AbstractOpacity (double a) :
     AbstractStyle (), 
-    raw_props{.alpha=alpha},
-    _calpha (nullptr)
+    raw_props{.a=a},
+    _ca (nullptr)
   {
     
   }
 
   AbstractOpacity::~AbstractOpacity ()
   {
-    delete _calpha;
+    delete _ca;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 2) {
+    if (symtable ().size () > 0) {
       std::map<std::string, Process*>::iterator it;
 
       it = symtable ().find ("a");
@@ -74,8 +74,8 @@ namespace djnn
     int notify_mask = notify_none;
     
     if(name=="a") {
-      coupling=&_calpha;
-      rawp_Double=&raw_props.alpha;
+      coupling=&_ca;
+      rawp_Double=&raw_props.a;
       notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
@@ -98,9 +98,9 @@ namespace djnn
   }
 
   void
-  AbstractOpacity::get_properties_values (double& alpha)
+  AbstractOpacity::get_properties_values (double& a)
   {
-    alpha = raw_props.alpha;
+    a = raw_props.a;
   }
 
   void
@@ -108,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_calpha) _calpha->enable (_frame);
+    if(_ca) _ca->enable (_frame);
   }
 
   void
   AbstractOpacity::impl_deactivate ()
   {
-    if(_calpha) _calpha->disable ();
+    if(_ca) _ca->disable ();
     AbstractStyle::impl_deactivate ();
   }
 

@@ -65,7 +65,7 @@ namespace djnn
 		delete _cm44;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 2) {
+    if (symtable ().size () > 0) {
       std::map<std::string, Process*>::iterator it;
 
       it = symtable ().find ("m11");

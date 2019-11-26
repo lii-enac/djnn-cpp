@@ -22,19 +22,19 @@ namespace djnn
   class AbstractOpacity : public AbstractStyle
   {
   public:
-    AbstractOpacity (Process *parent, const std::string& name, double alpha);
-    AbstractOpacity (double alpha);
+    AbstractOpacity (Process *parent, const std::string& name, double a);
+    AbstractOpacity (double a);
     virtual ~AbstractOpacity ();
     
     
-    void get_properties_values (double& alpha);
+    void get_properties_values (double& a);
     virtual Process* find_component (const string&) override;
-		AbstractDoubleProperty* alpha () { return (AbstractDoubleProperty*) find_component ("alpha"); }
+		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component ("a"); }
 
   protected:
-    struct raw_props_t { double alpha; };
+    struct raw_props_t { double a; };
     raw_props_t raw_props;
-    Coupling *_calpha;
+    Coupling *_ca;
     void impl_activate () override;
     void impl_deactivate () override;
   };

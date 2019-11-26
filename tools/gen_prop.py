@@ -30,7 +30,7 @@ namespace djnn
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
-    %(CLASS)s (Process *p, const std::string& n, %(DECL_PROPS_CALL_DECL)s);
+    %(CLASS)s (Process *parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
     %(CLASS)s (%(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
@@ -86,7 +86,7 @@ namespace djnn
     %(DELETE_COUPLINGS)s;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 2) {
+    if (symtable ().size () > %(ORIGIN_IN_SYMTABLE)s) {
       std::map<std::string, Process*>::iterator it;
 
       %(DELETE_DYN_PROPS)s
@@ -296,7 +296,7 @@ def just_do_it(dc, finalize_construction=True):
     # print (COUPLINGS_INIT)
     DELETE_COUPLINGS = (';'+join_str).join(['delete _c' + p.name for p in dc.props])
     # print (DELETE_COUPLINGS)
-    DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = _symtable.find ("' + p.name + '");\n\t\t\tif (it != _symtable.end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
+    DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = symtable ().find ("' + p.name + '");\n\t\t\tif (it != symtable ().end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
     #print (DELETE_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)
@@ -308,10 +308,12 @@ def just_do_it(dc, finalize_construction=True):
     # print (RAW_PROP_PARAMS)
 
     SET_ORIGIN = ''
+    ORIGIN_IN_SYMTABLE = '0'
     #if(len(dc.props)>2):
     #    SET_ORIGIN = "set_origin (" + dc.props[0].name + ', ' + dc.props[1].name + ');'
     if(dc.origin):
       SET_ORIGIN = "set_origin (" + dc.origin + ');'
+      ORIGIN_IN_SYMTABLE = '2'
       
     FINALIZE_CONSTRUCTION = ''
     if(dc.finalize_construction):
@@ -349,6 +351,7 @@ def just_do_it(dc, finalize_construction=True):
         'DEF_COUPLINGS_DISABLE': DEF_COUPLINGS_DISABLE,
         'RAW_PROP_PARAMS': RAW_PROP_PARAMS,
         'SET_ORIGIN': SET_ORIGIN,
+        'ORIGIN_IN_SYMTABLE': ORIGIN_IN_SYMTABLE,
         'FINALIZE_CONSTRUCTION': FINALIZE_CONSTRUCTION,
         'DECL_CLONE': DECL_CLONE,
         'DECL_DRAW': DECL_DRAW,

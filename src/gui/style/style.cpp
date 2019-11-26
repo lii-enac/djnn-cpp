@@ -476,7 +476,7 @@ namespace djnn
   Process*
   OutlineOpacity::clone ()
   {
-    return new OutlineOpacity (raw_props.alpha);
+    return new OutlineOpacity (raw_props.a);
   }
 
   void
@@ -491,7 +491,7 @@ namespace djnn
   Process*
   FillOpacity::clone ()
   {
-    return new FillOpacity (raw_props.alpha);
+    return new FillOpacity (raw_props.a);
   }
 
 /*
