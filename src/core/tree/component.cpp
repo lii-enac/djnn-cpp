@@ -189,6 +189,17 @@ namespace djnn
   }
 
   void
+  Container::swap_children (int i, int j)
+  {
+    Process *buff = _children[j];
+    _children[j] = _children[i];
+    _children[i] = buff;
+    for (auto s: structure_observer_list) {
+      s->swap_children (this, i, j);
+    }
+  }
+
+  void
   Container::impl_activate ()
   {
     ComponentObserver::instance ().start_component ();

@@ -32,7 +32,8 @@ namespace djnn {
     void move_child (Process *child_to_move, child_position_e spec, Process *child = 0) override;
     void remove_child (Process* c) override;
     void remove_child (const string& name) override;
-    void update_drawing () override ();
+    void swap_children (int i, int j);
+    void update_drawing () override;
     void draw () override;
     void pick () override; 
     Process* clone () override;
