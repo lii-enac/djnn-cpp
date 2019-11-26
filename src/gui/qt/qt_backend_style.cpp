@@ -297,6 +297,7 @@ namespace djnn
     string family;
     ff->get_properties_values(family);
     QtContext *cur_context = _context_manager->get_current ();
+    //FIXME: is there really a leak with QString - we have tested family.c_str () and it doesn't seems to be in cause
     QString val (family.c_str ());
     cur_context->font.setFamily (val);
     cur_context->update_relative_units ();
