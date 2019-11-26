@@ -2242,6 +2242,10 @@ namespace djnn
       delete _leftSkew_Y_By_da;
       delete _leftSkew_Y_By_spike;
     }
+
+    delete _acca;
+    delete _accsx;
+    delete _accsy;
 /*
     if (symtable ().empty () == false) {
       std::map<std::string, Process*>::iterator it;
