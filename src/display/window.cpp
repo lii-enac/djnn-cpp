@@ -107,6 +107,7 @@ namespace djnn
     delete _width;
     delete _height;
     delete _title;
+    delete _hidpi_scale;
     delete _key_pressed;
     delete _key_released;
     delete _key_pressed_text;
