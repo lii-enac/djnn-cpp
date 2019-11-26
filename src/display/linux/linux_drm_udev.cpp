@@ -36,7 +36,7 @@ using namespace std;
 
 namespace djnn {
 
-  DRMConnector::DRMConnector (Process *p, const string& name, int id, bool connected) : Process (name),
+  DRMConnector::DRMConnector (Process *parent, const string& name, int id, bool connected) : Process (name),
     _display (nullptr), _id (id)
   {
     new BoolProperty (this, "connected", connected);
@@ -48,7 +48,7 @@ namespace djnn {
     delete find_component ("connected");
   }
 
-  DRMDevice::DRMDevice (Process *p, const string& name, int fd, int min_width, int max_width, int min_height, int max_height) : Process (name), _fd (fd)
+  DRMDevice::DRMDevice (Process *parent, const string& name, int fd, int min_width, int max_width, int min_height, int max_height) : Process (name), _fd (fd)
   {
     new IntProperty (this, "min_width", min_width);
     new IntProperty (this, "max_width", max_width);
