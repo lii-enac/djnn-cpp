@@ -23,6 +23,7 @@ namespace djnn {
       void add_gui_child_at (Process *c, int neighboor_index, int spec, int new_index);
       void move_child_to (Process *c, int neighboor_index, int spec, int new_index);
       void remove_gui_child (Process *c);
+      void swap_children (int i, int j);
       void draw () override;
       void impl_activate () override {}
       void impl_deactivate () override {}
@@ -40,6 +41,7 @@ namespace djnn {
       void add_child_at (Process *cont, Process *c, int neighboor_index, int spec, int new_index) override;
       void move_child_to (Process *cont, Process *c, int neighboor_index, int spec, int new_index) override;
       void remove_child_from_container (Process *cont, Process *c) override;
+      void swap_children (Process *cont, int i, int j) override;
     private:
       std::map<Process*, GUIStructureHolder*> _structure_map;
     };
