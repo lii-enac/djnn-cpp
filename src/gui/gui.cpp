@@ -304,7 +304,7 @@ namespace djnn
 
       Backend::init ();
       
-      GenericMouse = new GUIMouse (nullptr, "");
+      GenericMouse = new GUIMouse (nullptr, "GenericMouse");
       GenericMouse->activate ();
       MainLoop::instance ().add_background_process (DrawingRefreshManager);
       init_svg_parser ();
