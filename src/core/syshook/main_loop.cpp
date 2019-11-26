@@ -117,22 +117,26 @@ namespace djnn {
     }
     #endif
 
+    djnn_thread_t * own_thread;
+
     void
     MainLoop::run_in_own_thread ()
     {
+      delete own_thread;
+      //auto *
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      auto * th = new djnn_thread_t (&MainLoop::private_run, this); // FIXME: leak
-      th->detach(); // FIXME: could be properly joined
+      own_thread = new djnn_thread_t (&MainLoop::private_run, this); // FIXME: leak
+      own_thread->detach(); // FIXME: could be properly joined
       #endif
 
       #if DJNN_USE_QT_THREAD
-      auto * th = QThread::create([this]() { this->MainLoop::private_run(); });
+      own_thread = QThread::create([this]() { this->MainLoop::private_run(); });
       QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
-      th->start();
+      own_thread->start();
       #endif
 
       #if DJNN_USE_SDL_THREAD
-      auto * th = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
+      own_thread = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
       SDL_DetachThread(th); // // FIXME: could be properly joined
       #endif
     }

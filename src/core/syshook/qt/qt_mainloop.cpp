@@ -18,7 +18,10 @@
 #include "core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
+//#include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+
+//#include <unistd.h>
 
 namespace djnn
 {
@@ -84,11 +87,11 @@ namespace djnn
   }
 
   void
-  //QtMainloop::activate_from_mainloop ()
   QtMainloop::run ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;    
+    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     /* slot_about_to_block will / *might* be called ASA qapp->exec */
+    //usleep(10000000); // QObject::startTimer: Timers can only be used with threads started with QThread FIXME
     _qapp->exec ();
   }
 
