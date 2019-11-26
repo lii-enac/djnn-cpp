@@ -318,7 +318,20 @@ namespace djnn
   void
   clear_gui ()
   {
+   
     clear_svg_parser ();
+
+    // FIXME delete object_in_structre_observer ?
+    // actually it should only have the Root component
+
+    /* remove container from structure_observer_list */
+    structure_observer_list.erase (
+      remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer), 
+      structure_observer_list.end ()
+    );
+    delete gui_structure_observer;
+    delete GenericMouse;
+
     __module_initialized = false;
   }
 
