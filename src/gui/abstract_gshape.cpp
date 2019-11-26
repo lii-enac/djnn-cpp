@@ -95,24 +95,25 @@ namespace djnn
 
   Touch::~Touch ()
   {
-    delete _init_x;
-    delete _init_y;
-    delete _local_init_x;
-    delete _local_init_y;
+    delete _last_shape;
+    delete _release;
+    delete _leave;
+    delete _enter;
     _move->remove_symbol ("local_x");
     _move->remove_symbol ("local_y");
     _move->remove_symbol ("x");
     _move->remove_symbol ("y");
-    delete _move_x;
-    delete _move_y;
-    delete _local_move_x;
-    delete _local_move_y;
     delete _move;
-    delete _enter;
-    delete _leave;
-    delete _pressure;
     delete _id;
-    delete _last_shape;
+    delete _pressure;
+    delete _local_move_y;
+    delete _local_move_x;
+    delete _move_y;
+    delete _move_x;
+    delete _local_init_y;
+    delete _local_init_x;
+    delete _init_y;
+    delete _init_x;
   }
 
   UI::UI (Process *p) : parent (p)
