@@ -87,9 +87,6 @@ namespace djnn {
     void    add_deactivation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
-    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
-    void set_state_dependency (Process* s) { _state_dependency = s; }
-
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
     void         notify_activation ();
@@ -97,7 +94,12 @@ namespace djnn {
     void         schedule_delete ();
     void         notify_deactivation ();
     virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
-  
+    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
+    void set_state_dependency (Process* s) { _state_dependency = s; }
+    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
+    virtual void     set_activation_source (Process* src) {}
+    virtual Process* get_activation_source () { return nullptr; }
+
     // execution graph
     void     set_vertex (Vertex *v) 
     { 
@@ -114,16 +116,14 @@ namespace djnn {
     virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
     virtual Process* clone (); // { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
 
-    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
-    virtual void     set_activation_source (Process* src) {}
-    virtual Process* get_activation_source () { return nullptr; }
-
     // tree, component, symtable 
+    Process* get_parent () { return _parent; }
     virtual void   set_parent (Process* p); // { _parent = p; }
     virtual void   add_child (Process* c, const string& name);
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
+    friend  void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2); // strange, only used in gradient...
     virtual Process* find_component (const string&); // FIXME: should be find_child
     virtual Process* find_component (int index) { return nullptr; }
     static  Process* find_component (Process* p, const string &path);
@@ -137,8 +137,8 @@ namespace djnn {
     //const string& get_name () const { return _name; }
     static string default_name;
     const string& get_name () const; // { return (_parent ? _parent->find_component_name(this) : default_name); }
-    Process* get_parent () { return _parent; }
     
+    // data
     void     set_data (Process* data);
     Process* get_data ();
 
@@ -164,7 +164,7 @@ namespace djnn {
     const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
 
   private:
-    static int _nb_anonymous;
+    static long int _nb_anonymous;
 
 // >>instance fields start here
   private:
@@ -177,7 +177,6 @@ namespace djnn {
     unsigned int _bitset;
     symtable_t _symtable;
     //string _name;
-
 
 #ifdef DJNN_DEBUG
     string _dbg_info;
@@ -228,9 +227,6 @@ namespace djnn {
           case DEACTIVATION:    deactivate (); break;
         }
     }
-
-    // strange, only used in gradient...
-    friend void merge_children (Process *p1, const string &sy1, Process *p2, const string &sy2);
   };
 
   void alias_children (Process *p, Process *to);

@@ -28,7 +28,7 @@ namespace djnn
 {
   using namespace std;
 
-  int Process::_nb_anonymous = 0;
+  long int Process::_nb_anonymous = 0;
 
 #ifndef DJNN_DEBUG
   string Process::_dbg_info = "no dbg info";
