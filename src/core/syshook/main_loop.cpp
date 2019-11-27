@@ -131,13 +131,13 @@ namespace djnn {
 
       #if DJNN_USE_QT_THREAD
       own_thread = QThread::create([this]() { this->MainLoop::private_run(); });
-      QObject::connect(th, SIGNAL(finished()), th, SLOT(deleteLater()));
+      QObject::connect(own_thread, SIGNAL(finished()), own_thread, SLOT(deleteLater()));
       own_thread->start();
       #endif
 
       #if DJNN_USE_SDL_THREAD
       own_thread = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
-      SDL_DetachThread(th); // // FIXME: could be properly joined
+      SDL_DetachThread(own_thread); // // FIXME: could be properly joined
       #endif
     }
 
