@@ -14,10 +14,12 @@
 
 #pragma once
 
-#include "../core/ontology/process.h"
-#include "../core/ontology/coupling.h"
-#include "../core/tree/text_property.h"
-#include "../core/control/action.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/tree/text_property.h"
+#include "core/control/action.h"
+
+#include <functional>
 
 namespace djnn
 {
@@ -49,4 +51,15 @@ namespace djnn
     Coupling* _c_input;
     PropertiesAction* _action;
   };
+
+  inline
+  void
+  depth_first_traverse(Process *p, std::function<void(Process*)> f)
+  {
+    f(p);
+    for (auto child: p->symtable ()) depth_first_traverse(child.second, f);
+  }
+
+  void run_stats(Process *p);
+
 }

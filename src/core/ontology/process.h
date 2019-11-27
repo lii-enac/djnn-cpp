@@ -86,6 +86,9 @@ namespace djnn {
     void remove_activation_coupling (Coupling* c);
     void    add_deactivation_coupling (Coupling* c);
     void remove_deactivation_coupling (Coupling* c);
+    typedef vector<Coupling*> couplings_t;
+    const couplings_t& get_activation_couplings () const { return _activation_couplings; }
+    const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
     virtual void coupling_activation_hook () {};
     virtual void coupling_deactivation_hook () {};
@@ -159,9 +162,7 @@ namespace djnn {
     virtual void post_deactivate ();
 
   private:
-    typedef vector<Coupling*> couplings_t;
-    const couplings_t& get_activation_couplings () const { return _activation_couplings; }
-    const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
+    
 
   private:
     static long int _nb_anonymous;
