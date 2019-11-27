@@ -21,8 +21,6 @@
 //#include <iostream>
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
-//#include <unistd.h>
-
 namespace djnn
 {
 
@@ -38,22 +36,13 @@ namespace djnn
   QtMainloop&
   QtMainloop::instance ()
   {
-    // std::call_once (QtMainloop::onceFlag, [ml] () {
-    //   DBG;
-    //   _instance = new QtMainloop (ml);
-    //   DBG;
-    // });
-
     return *(_instance);
   }
 
   QtMainloop::QtMainloop (MainLoop * ml) :
       _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
-    //MainLoop::instance ()
-    (*ml)
-    .set_another_source_wants_to_be_mainloop (this);
+    (*ml).set_another_source_wants_to_be_mainloop (this);
     argc = 0;
     argv = 0;
     _qapp = new QApplication (argc, argv);
@@ -124,14 +113,9 @@ namespace djnn
   void
   QtMainloop::slot_for_awake ()
   {
-    //DBG;
-
     if(already_awake) {
       return;
     }
-
-    //QThread::currentThread()->setPriority(QThread::HighPriority);
-    //QThread::currentThread()->setPriority(QThread::LowestPriority);
     
     if (!get_please_stop ()) {
       // now qt can call event method on windows

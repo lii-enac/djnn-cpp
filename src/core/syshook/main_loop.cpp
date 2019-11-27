@@ -17,8 +17,6 @@
 
 #include "main_loop.h"
 #include "cpp-thread.h"
-//#include "cpp-mutex.h"
-//#include "cpp-mutex-priv.h"
 
 #if DJNN_USE_QT_MAINLOOP
 #include "qt/qt_mainloop.h"
@@ -30,7 +28,6 @@
 namespace djnn {
 
     MainLoop MainLoop::_instance;
-    //static djnn_mutex_t* own_mutex;
     
     MainLoop&
     MainLoop::instance ()
@@ -44,8 +41,6 @@ namespace djnn {
 
         init_global_mutex();
         ExternalSource::init();
-
-        //own_mutex = create_lock();
 
         launch_mutex_lock ();
         djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
@@ -90,7 +85,6 @@ namespace djnn {
       if (_another_source_wants_to_be_mainloop) {
         _another_source_wants_to_be_mainloop->please_stop ();
       } else {
-        //release (own_mutex);
       }
     }
 
@@ -117,25 +111,24 @@ namespace djnn {
     }
     #endif
 
-    djnn_thread_t * own_thread;
-
     void
     MainLoop::run_in_own_thread ()
     {
-      delete own_thread;
-      //auto *
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      own_thread = new djnn_thread_t (&MainLoop::private_run, this); // FIXME: leak
-      own_thread->detach(); // FIXME: could be properly joined
+      auto own_thread = djnn_thread_t (&MainLoop::private_run, this);
+      own_thread.detach(); // FIXME: could be properly joined
+      // since the thread is detached, own_thread object does not own it anymore and can be safely destroyed
       #endif
 
       #if DJNN_USE_QT_THREAD
+      auto *
       own_thread = QThread::create([this]() { this->MainLoop::private_run(); });
       QObject::connect(own_thread, SIGNAL(finished()), own_thread, SLOT(deleteLater()));
       own_thread->start();
       #endif
 
       #if DJNN_USE_SDL_THREAD
+      auto *
       own_thread = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
       SDL_DetachThread(own_thread); // // FIXME: could be properly joined
       #endif

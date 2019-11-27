@@ -138,19 +138,19 @@ endif
 
 
 ifeq ($(display),QT)
-ifneq ($(os),Darwin)
-CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-else
+ifeq ($(os),Darwin)
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 LDFLAGS += $(boost_libs)
+else
+CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 endif
+
 else ifeq ($(display),SDL)
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-#CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
+
 else ifeq ($(display),)
-#CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_BOOST_CHRONO=1
-#LDFLAGS += $(boost_libs)
 CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+
 else
 $(warning "unknown display (choose among: QT, SDL, (none))")
 endif
