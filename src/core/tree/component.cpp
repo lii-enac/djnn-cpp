@@ -77,12 +77,8 @@ namespace djnn
       _children.pop_back();
     }
 
-    /* remove container from structure_observer_list */
-    for (auto s: structure_observer_list)
-      s->remove_container (this);
-
 #ifdef DEBUG
-      --nb_space ;
+    --nb_space ;
 #endif
   }
 
@@ -90,6 +86,10 @@ namespace djnn
   {
     if (!_children.empty ())
       clean_up_content ();
+
+    /* remove container from structure_observer_list */
+    for (auto s: structure_observer_list)
+      s->remove_container (this);
   }
 
   void

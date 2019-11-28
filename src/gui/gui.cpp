@@ -141,12 +141,6 @@ namespace djnn
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
     if (it_cont == _structure_map.end ()) {
       GUIStructureHolder *holder = new GUIStructureHolder ();
-      /*    if (p) {
-       std::map<Process*, GUIStructureHolder*>::iterator it = _structure_map.find (p);
-       if (it != _structure_map.end ())
-       it->second->add_gui_child (holder);
-       }
-       */
       _structure_map.insert (std::pair<Process*, GUIStructureHolder*> (cont, holder));
     }
   }
@@ -154,21 +148,17 @@ namespace djnn
   void
   GUIStructureObserver::remove_container (Process *cont)
   {
-    //std::map<Process*, GUIStructureHolder*>::iterator it_p = _structure_map.find (p);
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ()) {
-      //if (it_p != _structure_map.end ())
-      //it_p->second->remove_gui_child (it_cont->second);
-      GUIStructureHolder *holder = it_cont->second;
+      delete it_cont->second;
       _structure_map.erase (it_cont);
-      delete holder;
+      
     }
   }
 
   void
   GUIStructureObserver::add_child_to_container (Process *cont, Process *c, int index)
   {
-    //AbstractGObj *obj = dynamic_cast<AbstractGObj*> (c);
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
     if (c->get_cpnt_type () == GOBJ_T) {
       if (it_cont != _structure_map.end ())
@@ -321,15 +311,14 @@ namespace djnn
    
     clear_svg_parser ();
 
-    // FIXME delete object_in_structre_observer ?
-    // actually it should only have the Root component
-
     /* remove container from structure_observer_list */
     structure_observer_list.erase (
       remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer), 
       structure_observer_list.end ()
     );
+    /* and delete it */
     delete gui_structure_observer;
+
     delete GenericMouse;
 
     __module_initialized = false;
