@@ -38,6 +38,9 @@ namespace djnn {
             delete _thread;
         }
         #endif
+        #if DJNN_USE_STD_THREAD
+        if(_thread.joinable()) _thread.detach();
+        #endif
       }
 
       void start() {
