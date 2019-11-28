@@ -36,7 +36,7 @@
 		namespace this_thread = std::this_thread;
 		typedef std::thread djnn_thread_t;
     inline void sleep(int ms) {
-      ::sleep(1000*ms);
+      ::usleep(1000*ms);
     }
 	}
 	#define DJNN_THREAD_IS_POINTER 0
