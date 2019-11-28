@@ -14,15 +14,10 @@
 
 #pragma once
 
-//#include "../backend.h"
-
-#include "../../core/syshook/external_source.h"
-#include "../../display/window.h"
-//#include "qt_picking_view.h"
+#include "core/syshook/external_source.h"
+#include "display/window.h"
 
 #include <string>
-
-
 
 namespace djnn {
 

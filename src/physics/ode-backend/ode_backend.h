@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../abstract_physics_backend.h"
+#include "abstract_physics_backend.h"
 #include <ode/ode.h>
 
 namespace djnn

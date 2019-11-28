@@ -12,9 +12,9 @@
  *
  */
 
-#include "../../core/tree/int_property.h"
-#include "../../core/tree/text_property.h"
-#include "../../core/tree/spike.h"
+#include "core/tree/int_property.h"
+#include "core/tree/text_property.h"
+#include "core/tree/spike.h"
 
 #include "linux_input.h"
 #include <linux/input.h>

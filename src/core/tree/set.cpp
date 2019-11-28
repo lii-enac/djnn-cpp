@@ -15,9 +15,9 @@
 
 #include "set.h"
 
-#include "../execution/graph.h"
-#include "../serializer/serializer.h"
-#include "../utils/error.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
 #include <algorithm>
 

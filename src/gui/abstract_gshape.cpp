@@ -15,13 +15,13 @@
 
 #include "abstract_gshape.h"
 #include "transformation/transformations.h"
-#include "../core/tree/spike.h"
-#include "../core/tree/set.h"
-#include "../display/window.h"
+#include "core/tree/spike.h"
+#include "core/tree/set.h"
+#include "display/window.h"
 #include "backend.h"
 #include "abstract_backend.h"
-#include "../display/display.h"
-#include "../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 #include "picking/picking.h"
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;

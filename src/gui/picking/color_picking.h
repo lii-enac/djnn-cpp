@@ -17,8 +17,7 @@
 #pragma once
 
 #include "picking.h"
-#include "../../display/window.h"
-//#include "../abstract_gshape.h"
+#include "display/window.h"
 
 namespace djnn {
   class AbstractGShape;

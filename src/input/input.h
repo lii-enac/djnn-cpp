@@ -13,7 +13,8 @@
  */
 
 #pragma once
-#include "../core/ontology/process.h"
+
+#include "core/ontology/process.h"
 
 namespace djnn {
 

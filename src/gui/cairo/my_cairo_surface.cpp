@@ -13,10 +13,10 @@
  */
 
 #include "my_cairo_surface.h"
-#include "../backend.h"
+#include "gui/backend.h"
 #include "cairo_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DEBUG_PICKING  0
@@ -26,7 +26,7 @@
 #endif
 #define _PERF_TEST 0
 #if _PERF_TEST
-#include "../../core/utils/utils-dev.h"
+#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;

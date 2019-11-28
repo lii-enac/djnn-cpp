@@ -14,10 +14,10 @@
  */
 
 #include "binding.h"
-#include "../execution/graph.h"
-#include "../utils/error.h"
-#include "../serializer/serializer.h"
-#include "../utils/utils-dev.h"
+#include "core/execution/graph.h"
+#include "core/utils/error.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/utils-dev.h"
 
 #include <iostream>
 

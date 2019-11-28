@@ -12,10 +12,10 @@
  *
  */
 
-#include "../../core/tree/int_property.h"
-#include "../../core/tree/set.h"
-#include "../../core/utils/error.h"
-#include "../../core/utils/utils-dev.h"
+#include "core/tree/int_property.h"
+#include "core/tree/set.h"
+#include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
 #include "linux_input.h"
 
 #include <linux/input.h>

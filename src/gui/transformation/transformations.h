@@ -16,12 +16,12 @@
 
 #pragma once
 
-#include "../abstract_gobj.h"
-#include "../../core/ontology/process.h"
-#include "../../core/ontology/coupling.h"
-#include "../../core/control/action.h"
-#include "../../core/tree/double_property.h"
-#include "../shapes/shapes.h"
+#include "gui/abstract_gobj.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/tree/double_property.h"
+#include "gui/shapes/shapes.h"
 
 namespace djnn
 {

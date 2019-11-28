@@ -14,9 +14,9 @@
  */
 
 #include "exit.h"
-#include "../syshook/main_loop.h"
-//#include "../ontology/process.h"
-#include "../serializer/serializer.h"
+#include "core/syshook/main_loop.h"
+//#include "ontology/process.h"
+#include "core/serializer/serializer.h"
 
 //#include <iostream>
 

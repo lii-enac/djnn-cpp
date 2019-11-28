@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../core/tree/component.h"
+#include "core/tree/component.h"
 #include "text.h"
 #include "connector.h"
 

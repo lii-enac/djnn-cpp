@@ -14,9 +14,10 @@
  */
 
 #include "activator.h"
-#include "../utils/error.h"
-#include "../serializer/serializer.h"
-#include <iostream>
+#include "core/utils/error.h"
+#include "core/serializer/serializer.h"
+
+//#include <iostream>
 
 namespace djnn
 {

@@ -12,7 +12,7 @@
  *
  */
 
-#include "../core-dev.h"
+#include "core/core-dev.h"
 #include "serializer.h"
 
 #include <iostream>

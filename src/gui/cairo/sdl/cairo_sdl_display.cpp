@@ -12,11 +12,11 @@
  *
  */
 
-#include "../../../display/display.h"
-#include "../../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
-#include "../../../display/sdl/sdl_window.h"
-#include "../../../display/sdl/sdl_mainloop.h"
+#include "display/sdl/sdl_window.h"
+#include "display/sdl/sdl_mainloop.h"
 
 #define DJNN_GRAPHICS_GL 1
 

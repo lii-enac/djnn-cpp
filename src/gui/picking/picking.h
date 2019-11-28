@@ -16,10 +16,8 @@
 
 #pragma once
 
-//#include "../abstract_gshape.h"
-
-#include "../gui-priv.h"
-#include "../../display/display-dev.h" // mouse_button
+#include "gui/gui-priv.h"
+#include "display/display-dev.h" // mouse_button
 
 namespace djnn {
 

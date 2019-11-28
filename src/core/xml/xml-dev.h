@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../utils/utils-dev.h"
+#include "core/ontology/process.h"
+#include "core/utils/utils-dev.h"
 #include "xml.h"
 
 using namespace djnn;

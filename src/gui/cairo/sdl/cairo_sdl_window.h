@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "../../../display/sdl/sdl_window.h"
-#include "../my_cairo_surface.h"
+#include "display/sdl/sdl_window.h"
+#include "gui/cairo/my_cairo_surface.h"
 
 namespace djnn {
 

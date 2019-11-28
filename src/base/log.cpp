@@ -13,8 +13,8 @@
  */
 
 
-#include "../core/tree/component.h"
-#include "../core/serializer/serializer.h"
+#include "core/tree/component.h"
+#include "core/serializer/serializer.h"
 #include "log.h"
 
 #include <iostream>

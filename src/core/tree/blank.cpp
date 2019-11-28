@@ -13,7 +13,8 @@
  */
 
 #include "blank.h"
-#include "../serializer/serializer.h"
+#include "core/serializer/serializer.h"
+
 #include <iostream>
 #include <string>
 

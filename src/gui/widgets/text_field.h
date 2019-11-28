@@ -13,13 +13,13 @@
 
 #pragma once
 
-#include "../../core/ontology/process.h"
-#include "../../core/control/action.h"
-#include "../../core/tree/text_property.h"
-#include "../../core/tree/double_property.h"
-#include "../../core/tree/int_property.h"
-#include "../shapes/shapes.h"
-#include "../transformation/transformations.h"
+#include "core/ontology/process.h"
+#include "core/control/action.h"
+#include "core/tree/text_property.h"
+#include "core/tree/double_property.h"
+#include "core/tree/int_property.h"
+#include "gui/shapes/shapes.h"
+#include "gui/transformation/transformations.h"
 
 namespace djnn {
 

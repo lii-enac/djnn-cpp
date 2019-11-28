@@ -13,12 +13,12 @@
  *
  */
 
-#include "../transformation/transformations.h"
-#include "../../core/tree/spike.h"
-#include "../../core/utils/error.h"
+#include "gui/transformation/transformations.h"
+#include "core/tree/spike.h"
+#include "core/utils/error.h"
 
-#include "../backend.h"
-#include "../abstract_backend.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
 
 #include "core/execution/graph.h"
 

@@ -13,9 +13,9 @@
  */
 #pragma once
 
+#include "core/utils/utils-dev.h"
+#include "core/ontology/process.h"
 
-#include "../utils/utils-dev.h"
-#include "../ontology/process.h"
 #include <map>
 
 typedef char XML_Char; // FIXME should not be public, and avoid including expat.h (maybe in xml-dev.h)

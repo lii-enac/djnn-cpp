@@ -1,5 +1,5 @@
 #include "gl_sdl_window.h"
-#include "../sdl/sdl_mainloop.h"
+#include "sdl/sdl_mainloop.h"
 
 #include "opengl.h"
 #include "gl_dbg.h"
@@ -13,7 +13,7 @@
 
 #define _PERF_TEST 0
 #if _PERF_TEST
-#include "../../core/utils/utils-dev.h"
+#include "../core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;

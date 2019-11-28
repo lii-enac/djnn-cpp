@@ -16,13 +16,10 @@
 
 #pragma once
 
-//#include "../backend.h"
-//#include "../backend.h"
-//#include "../window.h"
-#include "../window.h"
-#include "../../gui/picking/picking.h"
-#include "../../core/ontology/process.h"
-#include "../../core/syshook/external_source.h"
+#include "display/window.h"
+#include "gui/picking/picking.h"
+#include "core/ontology/process.h"
+#include "core/syshook/external_source.h"
 
 #include <string>
 

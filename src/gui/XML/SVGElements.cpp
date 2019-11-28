@@ -38,10 +38,10 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <map>
-#include "../../core/core.h"
-#include "../../core/xml/xml-dev.h"
-#include "../gui-dev.h"
-#include "../abstract_gshape.h"
+#include "core/core.h"
+#include "core/xml/xml-dev.h"
+#include "gui/gui-dev.h"
+#include "gui/abstract_gshape.h"
 
 #define register 
 

@@ -12,13 +12,13 @@
  *
  */
 
-#include "../backend.h"
+#include "gui/backend.h"
 
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
 #include "qt_backend.h"
-#include "../../core/syshook/qt/qt_mainloop.h"
+#include "core/syshook/qt/qt_mainloop.h"
 
 namespace djnn
 {

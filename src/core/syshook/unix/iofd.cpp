@@ -14,9 +14,9 @@
 
 #include "iofd.h"
 
-#include "../syshook.h"
-#include "../../utils/error.h"
-#include "../../execution/graph.h"
+#include "core/syshook/syshook.h"
+#include "core/utils/error.h"
+#include "core/execution/graph.h"
 
 #include <sys/select.h>
 

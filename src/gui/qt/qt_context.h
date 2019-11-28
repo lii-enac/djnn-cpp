@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "../style/style_types.h"
-#include "../../core/tree/component_observer.h"
+#include "gui/style/style_types.h"
+#include "core/tree/component_observer.h"
 
 #include <QtGui/QPen>
 #include <QtGui/QBrush>

@@ -18,14 +18,14 @@
 #include <linux/input.h>
 #include <libevdev/libevdev.h>
 
-#include "../input-priv.h"
-#include "../../core/control/action.h"
-#include "../../core/ontology/coupling.h"
-#include "../../core/tree/int_property.h"
-#include "../../core/tree/text_property.h"
-#include "../../core/tree/set.h"
-#include "../../core/tree/spike.h"
-#include "../../core/syshook/unix/iofd.h"
+#include "input-priv.h"
+#include "core/control/action.h"
+#include "core/ontology/coupling.h"
+#include "core/tree/int_property.h"
+#include "core/tree/text_property.h"
+#include "core/tree/set.h"
+#include "core/tree/spike.h"
+#include "core/syshook/unix/iofd.h"
 
 namespace djnn {
   enum dev_type {

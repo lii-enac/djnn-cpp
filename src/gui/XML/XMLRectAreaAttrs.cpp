@@ -34,8 +34,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "../../core/core.h"
-#include "../gui-dev.h"
+#include "core/core.h"
+#include "gui/gui-dev.h"
 
 #define register
 	using namespace std;

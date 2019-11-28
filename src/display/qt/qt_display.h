@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../abstract_display.h"
-#include <mutex>
+#include "display/abstract_display.h"
+
 #include <vector>
 #include <algorithm>
 
@@ -29,9 +29,6 @@ class QtDisplayBackend : public AbstractDisplay {
 
     void add_window (QtWindow* win) { _windows.push_back (win); }
     void remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
-
-    //static std::shared_ptr<QtDisplayBackend> _instance;
-    //static std::once_flag onceFlag;
 
 private:
     std::vector<QtWindow*> _windows;

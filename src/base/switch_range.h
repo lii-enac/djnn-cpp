@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "../core/ontology/coupling.h"
-#include "../core/control/action.h"
-#include "../core/tree/component.h"
-#include "../core/tree/double_property.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/tree/component.h"
+#include "core/tree/double_property.h"
 
 namespace djnn {
   using namespace std;

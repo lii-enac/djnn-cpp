@@ -35,8 +35,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "../../core/core.h"
-#include "../gui-dev.h"
+#include "core/core.h"
+#include "gui/gui-dev.h"
 
 #define register
 

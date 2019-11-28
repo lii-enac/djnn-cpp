@@ -13,7 +13,7 @@
  */
 
 #include "spike.h"
-#include "../serializer/serializer.h"
+#include "core/serializer/serializer.h"
 
 namespace djnn
 {

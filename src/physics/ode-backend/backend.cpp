@@ -12,7 +12,7 @@
  *
  */
 
-#include "../physics_backend.h"
+#include "physics_backend.h"
 #include "ode_backend.h"
 
 namespace djnn

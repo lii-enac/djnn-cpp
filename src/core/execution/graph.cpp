@@ -21,10 +21,11 @@
 
 #define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
-#include "../utils/error.h"
+#include "core/utils/error.h"
+
 #define _PERF_TEST 0
 #if _PERF_TEST
-#include "../utils/utils-dev.h"
+#include "core/utils/utils-dev.h"
 static int graph_counter = 0;
 static double graph_total = 0.0;
 static double graph_average = 0.0;

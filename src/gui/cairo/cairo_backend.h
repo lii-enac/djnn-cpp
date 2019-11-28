@@ -17,8 +17,8 @@
 
 #include "cairo_context.h"
 #include "cairo_picking_view.h"
-#include "../abstract_backend.h"
-#include "../backend.h"
+#include "gui/abstract_backend.h"
+#include "gui/backend.h"
 
 #include <cairo.h>
 #include <pango/pango.h>

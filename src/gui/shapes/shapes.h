@@ -16,12 +16,12 @@
 
 #pragma once
 
-#include "../../core/tree/list.h"
-#include "../abstract_gshape.h"
+#include "core/tree/list.h"
+#include "gui/abstract_gshape.h"
 
-#include "../../core/tree/int_property.h"
-#include "../../core/tree/text_property.h"
-#include "../style/style.h"
+#include "core/tree/int_property.h"
+#include "core/tree/text_property.h"
+#include "gui/style/style.h"
 
 #include "gen/rectangle.h"
 #include "gen/rectangle_clip.h"

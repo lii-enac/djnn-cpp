@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "../abstract_gshape.h"
-#include "../transformation/transformations.h"
-#include "../../core/control/synchronizer.h"
+#include "gui/abstract_gshape.h"
+#include "gui/transformation/transformations.h"
+#include "core/control/synchronizer.h"
 
 namespace djnn {
 

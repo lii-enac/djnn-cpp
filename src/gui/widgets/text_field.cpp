@@ -12,7 +12,7 @@
  */
 
 #include "text_field.h"
-#include "../../core/utils/error.h"
+#include "core/utils/error.h"
 
 namespace djnn
 {

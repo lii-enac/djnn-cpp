@@ -12,7 +12,7 @@
  *
  */
 
- #include "../gui-priv.h"
+ #include "gui/gui-priv.h"
 
 namespace djnn {
 

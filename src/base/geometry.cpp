@@ -14,8 +14,8 @@
  */
 
 #include "geometry.h"
-#include "../core/execution/graph.h"
-#include "../core/serializer/serializer.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
 
 namespace djnn
 {

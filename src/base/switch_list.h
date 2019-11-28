@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "../core/control/action.h"
-#include "../core/tree/list.h"
-#include "../core/tree/spike.h"
-#include "../core/tree/bool_property.h"
+#include "core/control/action.h"
+#include "core/tree/list.h"
+#include "core/tree/spike.h"
+#include "core/tree/bool_property.h"
 
 #include <list>
 

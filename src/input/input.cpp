@@ -13,8 +13,8 @@
  */
 
 #include "input-priv.h"
-#include "../core/tree/set.h"
-#include "../core/utils/uri.h"
+#include "core/tree/set.h"
+#include "core/utils/uri.h"
 
 namespace djnn {
 

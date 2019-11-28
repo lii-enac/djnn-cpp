@@ -14,8 +14,8 @@
 
 
 #include "display-priv.h"
-#include "../core/tree/set.h"
-#include "../core/utils/uri.h"
+#include "core/tree/set.h"
+#include "core/utils/uri.h"
 #include "update_drawing.h"
 
 namespace djnn

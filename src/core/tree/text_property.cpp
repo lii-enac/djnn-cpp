@@ -14,7 +14,8 @@
  */
 
 #include "text_property.h"
-#include "../serializer/serializer.h"
+#include "core/serializer/serializer.h"
+
 #include <iostream>
 
 namespace djnn

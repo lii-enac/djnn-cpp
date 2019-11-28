@@ -18,7 +18,7 @@
 #include "qt_context.h"
 
 #include "qt/qt_picking_view.h"
-#include "../abstract_backend.h"
+#include "gui/abstract_backend.h"
 
 #include <QtGui/QPainterPath>
 #include <mutex>

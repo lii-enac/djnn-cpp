@@ -13,15 +13,15 @@
  *
  */
 
-#include "../sdl/sdl_mainloop.h"
-#include "../../gui/gui-priv.h"
+#include "sdl_mainloop.h"
+#include "gui/gui-priv.h"
 #include "sdl_window.h"
-//#include "../backend.h"
-#include "../display.h"
+//#include "backend.h"
+#include "display/display.h"
 
-#include "../../core/syshook/syshook.h"
-#include "../../core/execution/graph.h"
-#include "../../core/syshook/main_loop.h"
+#include "core/syshook/syshook.h"
+#include "core/execution/graph.h"
+#include "core/syshook/main_loop.h"
 
 #include <SDL.h>
 #include <SDL_image.h>

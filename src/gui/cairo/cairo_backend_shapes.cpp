@@ -13,12 +13,12 @@
  *
  */
 
-#include "../backend.h"
+#include "gui/backend.h"
 
 #include "cairo_context.h"
 #include "cairo_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
 #include <iostream>
 #include <cmath>

@@ -12,12 +12,12 @@
  *
  */
 
-#include "../../../display/display.h"
-#include "../../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
-#include "../../../display/qt/qt_display.h"
-#include "../../../display/qt/qt_window.h"
-#include "../../../core/syshook/qt/qt_mainloop.h"
+#include "display/qt/qt_display.h"
+#include "display/qt/qt_window.h"
+#include "core/syshook/qt/qt_mainloop.h"
 
 #include "my_qqwindow.h"
 

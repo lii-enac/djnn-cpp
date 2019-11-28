@@ -15,7 +15,7 @@
  *
  */
 
-#include "../backend.h"
+#include "backend.h"
 
 #include "gl_sdl_picking_view.h"
 #include "gl_sdl_window.h"

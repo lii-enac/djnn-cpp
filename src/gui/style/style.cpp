@@ -13,13 +13,13 @@
  *
  */
 
-#include "../backend.h"
-#include "../abstract_backend.h"
-#include "../../display/display.h"
-#include "../../display/abstract_display.h"
-#include "../../display/window.h"
 #include "style.h"
-#include "../../core/ontology/coupling.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
+#include "display/window.h"
+#include "core/ontology/coupling.h"
 
 #include <iostream>
 

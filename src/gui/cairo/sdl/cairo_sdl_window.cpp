@@ -13,17 +13,17 @@
  *
  */
 
-#include "../../../display/sdl/sdl_mainloop.h"
+#include "display/sdl/sdl_mainloop.h"
 #include "cairo_sdl_window.h"
-#include "../my_cairo_surface.h"
-#include "../../backend.h"
+#include "gui/cairo/my_cairo_surface.h"
+#include "gui/backend.h"
 
-#include "../../../display/display.h"
-#include "../../../display/abstract_display.h"
+#include "display/display.h"
+#include "display/abstract_display.h"
 
-#include "../../../core/syshook/syshook.h"
-#include "../../../core/execution/graph.h"
-#include "../../../core/syshook/main_loop.h"
+#include "core/syshook/syshook.h"
+#include "core/execution/graph.h"
+#include "core/syshook/main_loop.h"
 
 #include <SDL.h>
 
@@ -39,7 +39,7 @@
 #define attr(a) #a ":" << a << " "
 #define _PERF_TEST 0
 #if _PERF_TEST
-#include "../../core/utils/utils-dev.h"
+#include "../core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;

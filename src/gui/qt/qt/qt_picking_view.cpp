@@ -14,7 +14,7 @@
  *
  */
 
-//#include "../backend.h"
+//#include "backend.h"
 
 #include "qt_picking_view.h"
 #include <QtGui/QImage>

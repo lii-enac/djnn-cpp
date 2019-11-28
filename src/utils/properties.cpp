@@ -19,7 +19,7 @@
 
 #include "utils.h"
 
-#include "../core/serializer/serializer.h"
+#include "core/serializer/serializer.h"
 
 namespace djnn
 {

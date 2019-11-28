@@ -12,7 +12,7 @@
  *
  */
 
-#include "../phidgets-priv.h"
+#include "phidgets-priv.h"
 
 namespace djnn {
   void

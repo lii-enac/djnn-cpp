@@ -17,11 +17,11 @@
 #include <ctype.h>
 #include <phidget22.h>
 
-#include "../phidgets-priv.h"
-#include "../../core/syshook/external_source.h"
-#include "../../core/tree/double_property.h"
-#include "../../core/tree/list.h"
-#include "../../core/control/action.h"
+#include "phidgets-priv.h"
+#include "core/syshook/external_source.h"
+#include "core/tree/double_property.h"
+#include "core/tree/list.h"
+#include "core/control/action.h"
 
 namespace djnn {
 

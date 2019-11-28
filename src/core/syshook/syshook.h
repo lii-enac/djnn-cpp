@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../core.h"
+#include "core/core.h"
 
 #define STRINGIZE(x) STRINGIZE2(x)
 #define STRINGIZE2(x) #x

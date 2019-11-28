@@ -14,11 +14,11 @@
  *
  */
 
-#include "../ontology/process.h"
+#include "core/ontology/process.h"
 #include "xml.h"
 #include "xml-dev.h"
-#include "../tree/text_property.h"
-#include "../utils/error.h"
+#include "core/tree/text_property.h"
+#include "core/utils/error.h"
 
 
 #include <expat.h>

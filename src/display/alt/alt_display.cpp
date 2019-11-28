@@ -1,4 +1,4 @@
-#include "../display-priv.h"
+#include "display-priv.h"
 
 namespace djnn {
   void

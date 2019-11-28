@@ -13,10 +13,10 @@
  *
  */
 
-#include "../backend.h"
+#include "gui/backend.h"
+#include "cairo_picking_view.h"
 
 #include <assert.h>
-#include "cairo_picking_view.h"
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 

@@ -15,7 +15,7 @@
 #pragma once
 
 #include "widgets/text_field.h"
-#include "../core/core.h"
+#include "core/core.h"
 //#include "window.h"
 #include "interaction/interaction.h"
 #include "style/style.h"

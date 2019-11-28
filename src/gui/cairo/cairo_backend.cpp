@@ -15,8 +15,9 @@
 #include "my_cairo_surface.h"
 #include "cairo_context.h"
 #include "cairo_backend.h"
-#include "../backend.h"
-#include "../transformation/transformations.h"
+#include "gui/backend.h"
+#include "gui/transformation/transformations.h"
+
 #include <iostream>
 #include <cmath>
 #include <locale.h>

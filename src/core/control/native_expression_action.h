@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../control/action.h"
+#include "core/ontology/process.h"
+#include "core/control/action.h"
 
 namespace djnn {
   using namespace std;

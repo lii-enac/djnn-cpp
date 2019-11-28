@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "../core/control/action.h"
-#include "../base/geometry.h"
+#include "core/control/action.h"
+#include "base/geometry.h"
 
 namespace djnn
 {

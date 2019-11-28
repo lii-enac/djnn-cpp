@@ -12,8 +12,7 @@
  *
  */
 
-#include "../backend.h"
-
+#include "gui/backend.h"
 #include "cairo_backend.h"
 
 #include <iostream>

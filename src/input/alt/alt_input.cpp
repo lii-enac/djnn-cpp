@@ -12,8 +12,8 @@
  *
  */
 
-#include "../input-priv.h"
-#include "../../core/utils/error.h"
+#include "input/input-priv.h"
+#include "core/utils/error.h"
 
 namespace djnn {
   void

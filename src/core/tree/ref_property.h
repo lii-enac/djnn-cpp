@@ -15,7 +15,7 @@
 #pragma once
 
 #include "abstract_property.h"
-#include "../utils/error.h"
+#include "core/utils/error.h"
 
 #include <string>
 

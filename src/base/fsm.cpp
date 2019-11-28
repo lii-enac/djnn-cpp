@@ -15,10 +15,10 @@
 
 #include "fsm.h"
 
-#include "../core/core.h"
-#include "../core/execution/graph.h"
-#include "../core/serializer/serializer.h"
-#include "../core/utils/error.h"
+#include "core/core.h"
+#include "core/execution/graph.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
 #include <iostream>
 

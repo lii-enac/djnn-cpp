@@ -14,8 +14,8 @@
 
 
 #include "physics_backend.h"
-#include "../core/core.h"
-#include "../core/serializer/serializer.h"
+#include "core/core.h"
+#include "core/serializer/serializer.h"
 
 
 namespace djnn

@@ -13,7 +13,7 @@
  */
 
 #include "algorithm.h"
-#include "../core/utils/error.h"
+#include "core/utils/error.h"
 #include <iostream>
 #include <algorithm>
 

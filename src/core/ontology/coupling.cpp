@@ -15,7 +15,7 @@
 
 #include "coupling.h"
 #include "process.h"
-#include "../execution/graph.h"
+#include "core/execution/graph.h"
 
 #include <cassert>
 #include <iostream>

@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "../core/ontology/process.h"
+#include "core/ontology/process.h"
 #include "window.h"
 
 #define MACRO(key) extern const int DJN_Key_ ## key;

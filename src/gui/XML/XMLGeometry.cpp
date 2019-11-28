@@ -13,7 +13,7 @@
  *
  */
 
-#include "../gui-dev.h"
+#include "gui/gui-dev.h"
 
 #include <stdlib.h>
 #include <string.h>

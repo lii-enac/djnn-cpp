@@ -13,7 +13,8 @@
  */
 
 #include "ref_property.h"
-#include "../serializer/serializer.h"
+#include "core/serializer/serializer.h"
+
 #include <sstream>
 #include <iostream>
 

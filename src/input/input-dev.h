@@ -13,9 +13,10 @@
  */
 
 #pragma once
+
 #include "input.h"
-#include "../core/ontology/process.h"
-#include "../core/tree/bool_property.h"
+#include "core/ontology/process.h"
+#include "core/tree/bool_property.h"
 
 namespace djnn {
   typedef enum direction_e {

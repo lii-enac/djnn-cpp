@@ -14,8 +14,9 @@
  */
 
 #include "int_property.h"
-#include "../serializer/serializer.h"
-#include "../utils/error.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/error.h"
+
 #include <iostream>
 
 namespace djnn

@@ -13,7 +13,8 @@
  */
 
 #include "linux_input.h"
-#include "../../core/utils/error.h"
+#include "core/utils/error.h"
+
 #include <linux/input.h>
 #include <libevdev/libevdev.h>
 

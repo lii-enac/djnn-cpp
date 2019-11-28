@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "../ontology/process.h"
-#include "../ontology/coupling.h"
-#include "../control/native_expression_action.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/native_expression_action.h"
 
 
 namespace djnn {

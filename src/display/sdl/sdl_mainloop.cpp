@@ -12,13 +12,13 @@
  *
  */
 
-//#include "../backend.h"
+//#include "backend.h"
 
 #include "sdl_mainloop.h"
-#include "../sdl/sdl_window.h"
+#include "sdl_window.h"
 
-#include "../../core/syshook/syshook.h"
-#include "../../core/syshook/main_loop.h"
+#include "core/syshook/syshook.h"
+#include "core/syshook/main_loop.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>

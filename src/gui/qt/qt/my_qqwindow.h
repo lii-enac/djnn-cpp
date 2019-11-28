@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "../../../core/syshook/external_source.h"
-#include "../../../display/window.h"
-#include "../../../display/qt/qt_window.h"
-#include "../../../display/qt/my_qwindow.h"
+#include "core/syshook/external_source.h"
+#include "display/window.h"
+#include "display/qt/qt_window.h"
+#include "display/qt/my_qwindow.h"
 
 #include "qt_picking_view.h"
 
