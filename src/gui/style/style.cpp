@@ -1171,7 +1171,9 @@ namespace djnn
 
   AbstractGradient::~AbstractGradient ()
   {
-    // FIXME delete _transforms and _stops ???
+    delete _transforms;
+    delete _stops;
+
 
 /*    delete _cs;
     delete _cc;
