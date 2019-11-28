@@ -196,6 +196,8 @@ namespace djnn
       if (it != symtable ().end ())
         delete it->second;
     }
+
+    //FIXME: how to delete _fm
   }
 
   void
