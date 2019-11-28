@@ -30,7 +30,7 @@ namespace djnn
 
   long int Process::_nb_anonymous = 0;
 
-#ifndef DJNN_DEBUG
+#ifdef DJNN_NO_DEBUG
   string Process::_dbg_info = "no dbg info";
 #endif
 
@@ -44,9 +44,11 @@ namespace djnn
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
   
-#ifdef DJNN_DEBUG
+#ifdef DJNN_NO_DEBUG
+#else
     if (Context::instance ()->line () != -1) {
-      _dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
+      //_dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
+      _dbg_info = Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + " dfdf";
     } else {
       _dbg_info = "no dbg info";
     }

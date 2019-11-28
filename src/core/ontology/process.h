@@ -179,10 +179,10 @@ namespace djnn {
     symtable_t _symtable;
     //string _name;
 
-#ifdef DJNN_DEBUG
-    string _dbg_info;
-#else
+#ifdef DJNN_NO_DEBUG
     static string _dbg_info;
+#else
+    string _dbg_info;
 #endif
 
 // <<instance fields end here

@@ -12,4 +12,4 @@ cross_prefix := g
 
 build_dir := build
 
-#CFLAGS += -DDJNN_DEBUG
+#CFLAGS += -DDJNN_NO_DEBUG
