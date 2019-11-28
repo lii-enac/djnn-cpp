@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update and improvement GUI backend.
     - Update and improvement on memory performance.
 
+## [1.7.2] - 2019-11-28 [YANKED]
+### Fixed
+    - Fixed thread for Qt < 5.10
+
 ## [1.7.1] - 2019-11-21 [YANKED]
 ### Changed
     - Added instructons for Ivy in INSTALL.md
