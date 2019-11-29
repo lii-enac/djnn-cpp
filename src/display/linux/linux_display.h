@@ -17,7 +17,7 @@
 #include <libudev.h>
 
 
-#include "display-priv.h"
+#include "display/display-priv.h"
 #include "core/syshook/unix/iofd.h"
 
 namespace djnn {
