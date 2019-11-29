@@ -14,6 +14,7 @@
 
 #include "algorithm.h"
 #include "core/utils/error.h"
+#include "core/serializer/serializer.h"
 #include <iostream>
 #include <algorithm>
 
@@ -134,6 +135,13 @@ namespace djnn
   void
   Sorter::serialize (const std::string& type)
   {
+    AbstractSerializer::pre_serialize(this, type);
 
+    AbstractSerializer::serializer->start ("base:sort");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
   }
 }
