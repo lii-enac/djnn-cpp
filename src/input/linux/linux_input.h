@@ -18,7 +18,7 @@
 #include <linux/input.h>
 #include <libevdev/libevdev.h>
 
-#include "input-priv.h"
+#include "input/input-priv.h"
 #include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
