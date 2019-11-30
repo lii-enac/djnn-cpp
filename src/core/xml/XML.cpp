@@ -130,6 +130,7 @@ namespace djnn {
       len = fread (buf, 1, BUFFSIZE, f);
       if (ferror (stdin)) {
         fprintf (stderr, "Read error\n");
+        XML_ParserFree (p);
         return 0;
       }
       done = feof (f);
@@ -137,9 +138,12 @@ namespace djnn {
       if (!XML_Parse (p, buf, len, done)) {
         fprintf (stderr, "Parse error at line %d:\n%s\n", (int) XML_GetCurrentLineNumber (p),
                  XML_ErrorString (XML_GetErrorCode (p)));
+        XML_ParserFree (p);
         return 0;
       }
     }
+
+    XML_ParserFree (p);
     return curComponent;
   }
 
