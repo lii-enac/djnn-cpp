@@ -262,4 +262,15 @@ namespace djnn
     text->set_height (height);
     
   }
+
+  void 
+  QtBackend::delete_text_impl (Text* text) {
+    delete (QFontMetrics*)text->get_font_metrics();
+  }
+
+  void
+  QtBackend::delete_image_impl (Image* image) {
+    cout << __FUNCTION__ << endl;
+    delete (QPixmap*)image->cache ();
+  }
 } /* namespace djnn */

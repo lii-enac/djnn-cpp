@@ -168,6 +168,10 @@ namespace djnn
     load_gradient_homography (AbstractHomography* h) override;
     void
     update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
+    void
+    delete_text_impl (Text* text) override;
+    void
+    delete_image_impl (Image* image) override;
 
   private:
     static QtBackend *_instance;

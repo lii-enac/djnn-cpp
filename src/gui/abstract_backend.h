@@ -293,6 +293,16 @@ namespace djnn
     }
 
     virtual void
+    delete_text_impl (Text* text)
+    {
+    }
+
+    virtual void
+    delete_image_impl (Image* image)
+    {
+    }
+
+    virtual void
     activate_gobj (AbstractGObj*)
     {   
     }

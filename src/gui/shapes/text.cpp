@@ -197,7 +197,7 @@ namespace djnn
         delete it->second;
     }
 
-    //FIXME: how to delete _fm
+    Backend::instance ()->delete_text_impl (this);
   }
 
   void

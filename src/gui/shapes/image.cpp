@@ -53,6 +53,8 @@ namespace djnn
     }
     delete _watcher;
 
+    Backend::instance ()->delete_image_impl (this);
+
   }
 
   Process*
