@@ -238,6 +238,7 @@ extern struct djn_ImgArgs
   double w;
   double h;
   const char *path;
+  std::string data;
 } djn_ImgArgs;
 
 extern struct djn_CircleArgs

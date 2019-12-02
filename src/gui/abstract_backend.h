@@ -131,7 +131,10 @@ namespace djnn
     draw_image (Image *i)
     {
     }
-
+    virtual void
+    draw_data_image (DataImage *i)
+    {
+    }
     virtual void
     pick_gshape (AbstractGShape *s)
     {

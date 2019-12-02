@@ -42,4 +42,28 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
   };
+
+  class AbstractDataImage : public AbstractGShape
+  {
+  public:
+    AbstractDataImage (Process *parent, const std::string& name, std::string data, double x, double y, double width, double height);
+    AbstractDataImage (std::string data, double x, double y, double width, double height);
+    virtual ~AbstractDataImage ();
+
+
+    void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
+    virtual Process* find_component (const string&) override;
+		AbstractTextProperty* data () { return (AbstractTextProperty*) find_component ("data"); }
+		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component ("x"); }
+		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component ("y"); }
+		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
+		AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component ("height"); }
+
+  protected:
+    struct raw_props_t { std::string data; double x; double y; double width; double height; };
+    raw_props_t raw_props;
+    Coupling *_cdata, *_cx, *_cy, *_cwidth, *_cheight;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
 }

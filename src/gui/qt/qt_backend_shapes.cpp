@@ -526,4 +526,37 @@ namespace djnn
       _picking_view->painter ()->drawRect (rect);
     }
   }
+
+  void
+  QtBackend::draw_data_image (DataImage *i)
+    {
+      double x,y,w,h;
+      string data;
+      i->get_properties_values(data, x,y,w,h);
+      load_drawing_context (i, x, y, w, h);
+      QRect rect (x, y, w, h);
+      QPixmap *pm;
+      if (i->invalid_cache ()) {
+        if (i->cache () != nullptr) {
+          pm = (QPixmap*) (i->cache ());
+          delete (pm); pm = nullptr;
+        }
+        QByteArray qb (data.c_str (), data.length());
+
+        pm = new QPixmap ();
+        pm->loadFromData(qb);
+
+        i->set_cache (pm);
+        i->set_invalid_cache (false);
+      } else {
+        pm = (QPixmap*) (i->cache ());
+      }
+      _painter->setRenderHint(QPainter::SmoothPixmapTransform);
+      _painter->drawPixmap (rect, *pm);
+
+      if (is_in_picking_view (i)) {
+        load_pick_context (i);
+        _picking_view->painter ()->drawRect (rect);
+      }
+    }
 } /* namespace djnn */

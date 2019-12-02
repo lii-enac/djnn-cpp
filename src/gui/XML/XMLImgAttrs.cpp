@@ -130,7 +130,7 @@ XMLImgAttrs_Hash::djn_XMLImgAttrsLookup (register const char *str, register unsi
 #line 42 "src/gui/XML/XMLImgAttrs.gperf"
 
 
-struct djn_ImgArgs djn_ImgArgs = {0., 0., 0., 0., 0};
+struct djn_ImgArgs djn_ImgArgs = {0., 0., 0., 0., 0, std::string("")};
 
 static int ParseX(Process** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.x, v);
@@ -148,6 +148,50 @@ static int ParseHeight(Process** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.h, v);
 }
 
+std::string
+b64decode(const void* p, const size_t len)
+{
+  unsigned char* data = (unsigned char*) p;
+  unsigned int buf = 0;
+  int nbits = 0;
+  int sz = (len * 3) /4;
+  unsigned char tmp[sz];
+  int offset = 0;
+  for (int i = 0; i < len; ++i) {
+    int ch = data[i];
+    int d;
+    if (ch >= 'A' && ch <= 'Z')
+      d = ch - 'A';
+    else if (ch >= 'a' && ch <= 'z')
+      d = ch - 'a' + 26;
+    else if (ch >= '0' && ch <= '9')
+      d = ch - '0' + 52;
+    else if (ch == '+')
+      d = 62;
+   else if (ch == '-')
+      d = 62;
+   else if (ch == '/')
+      d = 63;
+   else if (ch == '_')
+      d = 63;
+   else
+      d = -1;
+
+   if (d != -1) {
+      buf = (buf << 6) | d;
+      nbits += 6;
+      if (nbits >= 8) {
+        nbits -= 8;
+        tmp[offset++] = buf >> nbits;
+        buf &= (1 << nbits) - 1;
+      }
+    }
+  }
+
+  std::string str ((const char*)tmp, offset);
+  return str;
+}
+
 static int ParseHref(Process** e, const char* v) {
   char *result;
   char *start = strstr ( (char*) v, "file://");
@@ -157,8 +201,22 @@ static int ParseHref(Process** e, const char* v) {
     strcpy (result, v);
     djn_ImgArgs.path = result;
   } else {
+  	start = strstr ( (char*) v, "data:");
+  	if (start == v) {
+      char* data = strchr ( (char*) v, ',');
+      if (data != 0) {
+      	data++;
+      	int i = 0;
+      	while (data[i] != '\0') {
+      	  i++;
+      	}
+      	const size_t sz = i * sizeof (data[0]);
+      	djn_ImgArgs.data = b64decode (data, sz);
+      }
+  	}
     djn_ImgArgs.path = v;
   }
 
   return 1; 
 }
+

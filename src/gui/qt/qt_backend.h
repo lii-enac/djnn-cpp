@@ -91,6 +91,8 @@ namespace djnn
     draw_path_clip (Path *p) override;
     void
     draw_image (Image *i) override;
+    void
+    draw_data_image (DataImage *i) override;
 
     //style
     void

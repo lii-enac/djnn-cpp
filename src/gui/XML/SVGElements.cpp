@@ -357,47 +357,47 @@ StartRect(const char** attrs, Process* current) {
 }
 
 static Process*
-StartImage(const char** attrs, Process* current) {
+StartImage (const char** attrs, Process* current)
+{
+  Process *holder = 0;
+  Process* e;
+  djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+  djn_ImgArgs.x = 0.;
+  djn_ImgArgs.y = 0.;
+  djn_ImgArgs.w = 0.;
+  djn_ImgArgs.h = 0.;
+  djn_ImgArgs.path = 0;
+  djn_ImgArgs.data = std::string ("");
 
+  /* FIXME: should manage optional, mandatory and duplicate attributes */
+  while (*attrs) {
 #ifdef DEBUG
-		fprintf (stderr, "startImage\n");
+    int ret =
 #endif
-
-	Process *holder = 0;
-	Process* e;
-	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
-	djn_ImgArgs.x = 0.;
-	djn_ImgArgs.y = 0.;
-	djn_ImgArgs.w = 0.;
-	djn_ImgArgs.h = 0.;
-	djn_ImgArgs.path = 0;
-
-	/* FIXME: should manage optional, mandatory and duplicate attributes */
-	while (*attrs) {
+    XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
+			    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
 #ifdef DEBUG
-		int ret =
+    if (!ret)
+    fprintf (stderr, "unknown attribute '%s' in img element\n", *attrs);
 #endif
-		XML::djn_XMLHandleAttr(&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
-#ifdef DEBUG
-		if (!ret)
-		fprintf (stderr, "unknown attribute '%s' in img element\n", *attrs);
-#endif
-		attrs++;
-		attrs++;
-	}
+    attrs++;
+    attrs++;
+  }
 
-	if (holder)
-		djn__CheckStroke(holder);
-
-	e = new Image(holder ? holder : current, djn_GraphicalShapeArgs.id,
-			djn_ImgArgs.path, djn_ImgArgs.x, djn_ImgArgs.y, djn_ImgArgs.w,
-			djn_ImgArgs.h);
-	if (holder) {
-		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		((SVGHolder*) holder)->set_gobj (e);
-	}
-	return holder ? holder : e;
+  if (holder)
+    djn__CheckStroke (holder);
+  if (djn_ImgArgs.data.empty ()) {
+    e = new Image (holder ? holder : current, djn_GraphicalShapeArgs.id, djn_ImgArgs.path, djn_ImgArgs.x, djn_ImgArgs.y,
+		   djn_ImgArgs.w, djn_ImgArgs.h);
+  } else {
+    e = new DataImage (holder ? holder : current, djn_GraphicalShapeArgs.id, djn_ImgArgs.data, djn_ImgArgs.x,
+		       djn_ImgArgs.y, djn_ImgArgs.w, djn_ImgArgs.h);
+  }
+  if (holder) {
+    current->add_child (holder, djn_GraphicalShapeArgs.id);
+    ((SVGHolder*) holder)->set_gobj (e);
+  }
+  return holder ? holder : e;
 }
 
 static Process*

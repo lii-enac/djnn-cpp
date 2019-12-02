@@ -100,5 +100,77 @@ namespace djnn
   Image::clone () 
   {
     return new Image (raw_props.path, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
-  } 
+  }
+
+  DataImage::DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w,
+    double h) :
+      AbstractDataImage (parent, name, data, x, y, w, h),
+      _cwatcher(nullptr),
+      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
+  {
+    set_origin (x, y);
+    Process::finalize_construction (parent, name);
+  }
+
+  DataImage::DataImage (std::string path, double x, double y, double w, double h) :
+        AbstractDataImage (path, x, y, w, h),
+        _cwatcher(nullptr),
+        _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
+  {
+    set_origin (x, y);
+  }
+  DataImage::~DataImage ()
+  {
+    if (_cwatcher) {
+      Graph::instance ().remove_edge ( this->data (), _watcher);
+      delete _cwatcher;
+    }
+    delete _watcher;
+
+  }
+
+  Process*
+  DataImage::find_component (const string& name)
+  {
+    Process* res = AbstractDataImage::find_component(name);
+    if(res) return res;
+
+    if( name=="data" ) {
+      _watcher = new DataImageWatcher (this);
+      _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
+      _cwatcher->disable ();
+      Graph::instance ().add_edge (res, _watcher);
+    }
+
+    return res;
+  }
+
+  void
+  DataImage::impl_activate ()
+  {
+    AbstractDataImage::impl_activate ();
+    if (_cwatcher) _cwatcher->enable();
+  }
+
+  void
+  DataImage::impl_deactivate ()
+  {
+    if (_cwatcher) _cwatcher->disable();
+    AbstractDataImage::impl_deactivate ();
+  }
+
+  void
+  DataImage::draw ()
+  {
+    auto _frame = frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->draw_data_image (this);
+    }
+  }
+
+  Process*
+  DataImage::clone ()
+  {
+    return new DataImage (raw_props.data, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+  }
 }

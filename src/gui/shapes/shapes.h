@@ -350,6 +350,36 @@ namespace djnn
     bool _invalid_cache;
   };
 
+  class DataImageWatcher;
+  class DataImage : public AbstractDataImage
+    {
+    public:
+      DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w, double h);
+      DataImage (std::string path, double x, double y, double w, double h);
+      virtual ~DataImage ();
+      void draw () override;
+      Process* clone () override;
+      virtual Process* find_component (const string&) override;
+      AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
+      AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
+      AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
+      AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
+      AbstractTextProperty* data () { return (AbstractTextProperty*) find_component("data"); }
+      void* cache () { return _cache;}
+      void set_cache (void * cache) { _cache = cache;}
+      bool invalid_cache () { return _invalid_cache;}
+      void set_invalid_cache (bool v) { _invalid_cache = v;}
+    private:
+      struct raw_props_t { double x,y,width,height; string data; };
+      raw_props_t raw_props;
+      Coupling *_cwatcher;
+      DataImageWatcher *_watcher;
+      void impl_activate () override;
+      void impl_deactivate () override;
+      void *_cache;
+      bool _invalid_cache;
+    };
+
   class ImageWatcher : public Process
   {
   public:
@@ -364,6 +394,21 @@ namespace djnn
   private:
     Image * _img;
   };
+
+  class DataImageWatcher : public Process
+    {
+    public:
+      DataImageWatcher (DataImage *i) :
+          Process (), _img (i) {}
+      virtual ~DataImageWatcher () {}
+      void impl_activate () override
+      {
+        _img->set_invalid_cache (true);
+      }
+      void impl_deactivate () override {};
+    private:
+      DataImage * _img;
+    };
 
   class Group : public Container
   {
