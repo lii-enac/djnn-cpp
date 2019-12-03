@@ -57,15 +57,15 @@ namespace djnn
   {
     alpha = 1;
     fillRule = Qt::OddEvenFill;
-    textAnchor = djnStartAnchor;
+    textAnchor = DJN_START_ANCHOR;
     DEFAULT_DPI_RES = 96;
     for (int i = 0; i < 10; i++)
       factor[i] = 1.;
-    factor[djnInLength] = DEFAULT_DPI_RES; /* pixels by inch */
-    factor[djnCmLength] = DEFAULT_DPI_RES * 2.54; /* pixels by cm */
-    factor[djnMmLength] = DEFAULT_DPI_RES * 25.4; /* pixels by mm */
-    factor[djnPtLength] = DEFAULT_DPI_RES / 72; /* pixels by point (given that 1pt = 1/72 inch) */
-    factor[djnPcLength] = (DEFAULT_DPI_RES / 72) * 12; /* pixels by pica (given that 1pc = 12pt) */
+    factor[DJN_IN] = DEFAULT_DPI_RES; /* pixels by inch */
+    factor[DJN_CM] = DEFAULT_DPI_RES * 2.54; /* pixels by cm */
+    factor[DJN_MM] = DEFAULT_DPI_RES * 25.4; /* pixels by mm */
+    factor[DJN_PT] = DEFAULT_DPI_RES / 72; /* pixels by point (given that 1pt = 1/72 inch) */
+    factor[DJN_PC] = (DEFAULT_DPI_RES / 72) * 12; /* pixels by pica (given that 1pc = 12pt) */
     //update_relative_units (); Fail at startup
   }
 
@@ -92,8 +92,8 @@ namespace djnn
   QtContext::update_relative_units ()
   {
     QFontInfo fi (font);
-    factor[djnEmLength] = fi.pixelSize ();
-    factor[djnExLength] = fi.pixelSize () / 2.; /* rough approximation */
+    factor[DJN_EM] = fi.pixelSize ();
+    factor[DJN_EX] = fi.pixelSize () / 2.; /* rough approximation */
   }
 
   double

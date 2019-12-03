@@ -616,8 +616,8 @@ StartText(const char** attrs, Process* current) {
 	djn_TextArgs.data = 0;
 	djn_TextArgs.dx = 0;
 	djn_TextArgs.dy = 0;
-	djn_TextArgs.dxUnit = djnNoLengthUnit;
-	djn_TextArgs.dyUnit = djnNoLengthUnit;
+	djn_TextArgs.dxUnit = DJN_NO_UNIT;
+	djn_TextArgs.dyUnit = DJN_NO_UNIT;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
@@ -678,8 +678,8 @@ StartTspan(const char** attrs, Process* current) {
 		djnUnloadTextBuf(current);
 	} else {
 		djn_TextArgs.data = 0;
-		djn_TextArgs.dxUnit = djnNoLengthUnit;
-		djn_TextArgs.dyUnit = djnNoLengthUnit;
+		djn_TextArgs.dxUnit = DJN_NO_UNIT;
+		djn_TextArgs.dyUnit = DJN_NO_UNIT;
 	}
 
 	holder = new SVGHolder;
@@ -836,8 +836,8 @@ StartLinearGradient(const char** attrs, Process* current) {
 	djn_LinearGradientArgs.y2 = 0.;
 	djn_GradientArgs.id = 0;
 	djn_GradientArgs.transform = 0;
-	djn_GradientArgs.spread = djnPadFill;
-	djn_GradientArgs.coords = djnLocalCoords;
+	djn_GradientArgs.spread = DJN_PAD_FILL;
+	djn_GradientArgs.coords = DJN_LOCAL_COORDS;
 	djn_GradientArgs.inherited = 1 << djn_GradientCoords
 			| 1 << djn_GradientSpread | 1 << djn_GradientStopPoints
 			| 1 << djn_GradientX1 | 1 << djn_GradientY1 | 1 << djn_GradientX2
@@ -902,8 +902,8 @@ StartRadialGradient(const char** attrs, Process* current) {
 	djn_RadialGradientArgs.fy = 0.;
 	djn_GradientArgs.id = 0;
 	djn_GradientArgs.transform = 0;
-	djn_GradientArgs.spread = djnPadFill;
-	djn_GradientArgs.coords = djnLocalCoords;
+	djn_GradientArgs.spread = DJN_PAD_FILL;
+	djn_GradientArgs.coords = DJN_LOCAL_COORDS;
 	djn_GradientArgs.inherited = 1 << djn_GradientCoords
 			| 1 << djn_GradientSpread | 1 << djn_GradientStopPoints
 			| 1 << djn_GradientCx | 1 << djn_GradientCy | 1 << djn_GradientR
@@ -1099,6 +1099,6 @@ static void djnUnloadTextBuf(Process *e) {
 	djn_TextArgs.data = 0;
 	djn_TextArgs.dx = 0;
 	djn_TextArgs.dy = 0;
-	djn_TextArgs.dxUnit = djnNoLengthUnit;
-	djn_TextArgs.dyUnit = djnNoLengthUnit;
+	djn_TextArgs.dxUnit = DJN_NO_UNIT;
+	djn_TextArgs.dyUnit = DJN_NO_UNIT;
 }

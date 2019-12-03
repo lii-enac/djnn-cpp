@@ -19,56 +19,56 @@ namespace djnn
 
   enum djnCapStyle
   {
-    djnButtCap, djnRoundCap, djnSquareCap
+    DJN_BUTT_CAP, DJN_ROUND_CAP, DJN_SQUARE_CAP
   };
 
   enum djnJoinStyle
   {
-    djnMiterJoin, djnRoundCapJoin, djnBevelJoin
+    DJN_MITER_JOIN, DJN_ROUNDCAP_JOIN, DJN_BEVEL_JOIN
   };
 
   enum djnFillCoords
   {
-    djnRenderingCoords, djnLocalCoords
+    DJN_RENDERING_COORDS, DJN_LOCAL_COORDS
   };
 
   enum djnFillSpread
   {
-    djnPadFill, djnRepeatFill, djnReflectFill
+    DJN_PAD_FILL, DJN_REPEAT_FILL, DJN_REFLECT_FILL
   };
 
   enum djnTextEncoding
   {
-    djnUtf8, djnLatin1, djnAscii
+    DJN_UTF8, DJN_LATIN1, DJN_ASCII
   };
 
   enum djnLengthUnit
   {
-    djnNoLengthUnit,
-    djnEmLength,
-    djnExLength,
-    djnPcLength,
-    djnPtLength,
-    djnPxLength,
-    djnCmLength,
-    djnMmLength,
-    djnInLength,
-    djnPercentLength
+    DJN_NO_UNIT,
+    DJN_EM,
+    DJN_EX,
+    DJN_PC,
+    DJN_PT,
+    DJN_PX,
+    DJN_CM,
+    DJN_MM,
+    DJN_IN,
+    DJN_PERCENT
   };
 
   enum djnFontSlope
   {
-    djnNormalFont, djnItalicFont, djnObliqueFont
+    DJN_NORMAL_FONT, DJN_ITALIC_FONT, DJN_OBLIQUE_FONT
   };
 
   enum djnAnchorType
   {
-    djnStartAnchor, djnMiddleAnchor, djnEndAnchor
+    DJN_START_ANCHOR, DJN_MIDDLE_ANCHOR, DJN_END_ANCHOR
   };
 
   enum djnFillRuleType
   {
-    djnNonZeroFill, djnEvenOddFill
+    DJN_NON_ZERO_FILL, DJN_EVENT_ODD_FILL
   };
 
 }

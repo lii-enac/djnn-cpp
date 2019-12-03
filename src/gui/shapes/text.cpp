@@ -37,7 +37,7 @@ namespace djnn
       AbstractGShape (parent, name),
 
       raw_props{.x=x, .y=y, .dx=0, .dy=0, .fsize=12, .dxU=0, .dyU=0, .width=0, .height=0,
-        .encoding=djnUtf8, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
+        .encoding=DJN_UTF8, .fstyle=0, .fweight=400, .text=text, .ffamily="sans"},
 
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
       _cupdate_size (nullptr), _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _ctext (nullptr), _cffamily (nullptr),

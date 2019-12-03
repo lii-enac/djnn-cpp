@@ -306,11 +306,11 @@ namespace djnn
       CairoContext *cur_context = _context_manager->get_current ();
       double dxfactor = factor[dxU];
       double dyfactor = factor[dyU];
-      if (dxU == djnPercentLength) {
+      if (dxU == DJN_PERCENT) {
         int v = DisplayBackend::instance()->window()->width ()->get_value ();
         dx = v * dx / 100;
       }
-      if (dyU == djnPercentLength) {
+      if (dyU == DJN_PERCENT) {
         int v = DisplayBackend::instance()->window()->height ()->get_value ();
         dy = v * dy / 100;
       }
@@ -334,10 +334,10 @@ namespace djnn
       /* applying alignment attribute */
       switch (cur_context->_textAnchor)
         {
-        case djnMiddleAnchor:
+        case DJN_MIDDLE_ANCHOR:
           posX = posX - (width / 2.0);
           break;
-        case djnEndAnchor:
+        case DJN_END_ANCHOR:
           posX = posX - width;
           break;
         }

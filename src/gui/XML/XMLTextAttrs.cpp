@@ -155,7 +155,7 @@ XMLTextAttrs_Hash::djn_XMLTextAttrsLookup (register const char *str, register un
 #line 59 "src/gui/XML/XMLTextAttrs.gperf"
 
 
-struct djn_TextArgs djn_TextArgs = {0., 0., 0., 0., djnNoLengthUnit, djnNoLengthUnit, "Utf8", 0};
+struct djn_TextArgs djn_TextArgs = {0., 0., 0., 0., DJN_NO_UNIT, DJN_NO_UNIT, "Utf8", 0};
 
 static int Ignore(Process** e, const char* v) {
 	return 0;
@@ -269,26 +269,26 @@ SVG_Utils::djn__SVGParseUnitAndValue(djnLengthUnit *unit, double *value,
 		return 0;
 	end = str + len - 1;
 
-	*unit = djnNoLengthUnit;
+	*unit = DJN_NO_UNIT;
 	if (*end == '%')
-		*unit = djnPercentLength;
+		*unit = DJN_PERCENT;
 	end--;
 	if (strcmp(end, "em") == 0)
-		*unit = djnEmLength;
+		*unit = DJN_EM;
 	if (strcmp(end, "ex") == 0)
-		*unit = djnExLength;
+		*unit = DJN_EX;
 	if (strcmp(end, "pc") == 0)
-		*unit = djnPcLength;
+		*unit = DJN_PC;
 	if (strcmp(end, "pt") == 0)
-		*unit = djnPtLength;
+		*unit = DJN_PT;
 	if (strcmp(end, "px") == 0)
-		*unit = djnPxLength;
+		*unit = DJN_PX;
 	if (strcmp(end, "cm") == 0)
-		*unit = djnCmLength;
+		*unit = DJN_CM;
 	if (strcmp(end, "mm") == 0)
-		*unit = djnMmLength;
+		*unit = DJN_MM;
 	if (strcmp(end, "in") == 0)
-		*unit = djnInLength;
+		*unit = DJN_IN;
 
 	*value = atof(str);
 	return 1;
@@ -303,14 +303,14 @@ static int ParseFontFamily(Process** e, const char* v) {
 }
 
 static int ParseFontStyle(Process** e, const char* v) {
-	djnFontSlope style = djnNormalFont;
+	djnFontSlope style = DJN_NORMAL_FONT;
 	if (!*e)
 		*e = new SVGHolder;
 
 	if (strcmp(v, "italic") == 0)
-		style = djnItalicFont;
+		style = DJN_ITALIC_FONT;
 	if (strcmp(v, "oblique") == 0)
-		style = djnObliqueFont;
+		style = DJN_OBLIQUE_FONT;
 
 	new FontStyle(*e, "font-style", style);
 
@@ -352,7 +352,7 @@ static int ParseFontWeight(Process** e, const char* v) {
 
 static int ParseFontSize(Process** e, const char* v) {
 	double sz = 0;
-	djnLengthUnit unit = djnNoLengthUnit;
+	djnLengthUnit unit = DJN_NO_UNIT;
 	if (!*e)
 		*e = new SVGHolder;
 

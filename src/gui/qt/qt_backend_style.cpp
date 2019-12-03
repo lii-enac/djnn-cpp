@@ -255,7 +255,7 @@ namespace djnn
     double size;
     fs->get_properties_values(unit, size);
     QtContext *cur_context = _context_manager->get_current ();
-    if (unit == djnPxLength)
+    if (unit == DJN_PX)
       cur_context->font.setPixelSize (size);
     else
       cur_context->font.setPointSizeF (size * cur_context->get_unit_factor ((djnn::djnLengthUnit)unit));

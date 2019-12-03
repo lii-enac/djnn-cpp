@@ -386,9 +386,9 @@ static int ParseFill(Process** e, const char* v) {
 
 static int ParseFillRule(Process** e, const char* v) {
 	if (strncmp(v, "nonzero", 7) == 0) {
-		new FillRule(*e, "fill-rule", djnNonZeroFill);
+		new FillRule(*e, "fill-rule", DJN_NON_ZERO_FILL);
 	} else if (strncmp(v, "evenodd", 7) == 0) {
-		new FillRule(*e, "fill-rule", djnEvenOddFill);
+		new FillRule(*e, "fill-rule", DJN_EVENT_ODD_FILL);
 	} else {
 		fprintf(stderr, "unknown fill rule value %s\n", v);
 		return 0;
@@ -647,15 +647,15 @@ static int ParseTranslate(Process** el, const char* v) {
 }
 
 static int ParseLineJoin(Process** e, const char* v) {
-	djnJoinStyle join = djnMiterJoin; /* SVG default value */
+	djnJoinStyle join = DJN_MITER_JOIN; /* SVG default value */
 
 	if (!*e)
 		*e = new SVGHolder;
 
 	if (!strcmp(v, "round"))
-		join = djnRoundCapJoin;
+		join = DJN_ROUNDCAP_JOIN;
 	else if (!strcmp(v, "bevel"))
-		join = djnBevelJoin;
+		join = DJN_BEVEL_JOIN;
 
 	new OutlineJoinStyle(*e, "stroke-linejoin", join);
 
@@ -663,15 +663,15 @@ static int ParseLineJoin(Process** e, const char* v) {
 }
 
 static int ParseLineCap(Process** e, const char* v) {
-	djnCapStyle cap = djnButtCap; /* SVG default value */
+	djnCapStyle cap = DJN_BUTT_CAP; /* SVG default value */
 
 	if (!*e)
 		*e = new SVGHolder;
 
 	if (!strcmp(v, "round"))
-		cap = djnRoundCap;
+		cap = DJN_ROUND_CAP;
 	else if (!strcmp(v, "square"))
-		cap = djnSquareCap;
+		cap = DJN_SQUARE_CAP;
 
 	new OutlineCapStyle(*e, "stroke-linecap", cap);
 
@@ -821,14 +821,14 @@ static int ParseStyle(Process **e, const char *v) {
 }
 
 static int ParseTextAnchor(Process** e, const char* v) {
-	djnAnchorType anchor = djnStartAnchor;
+	djnAnchorType anchor = DJN_START_ANCHOR;
 	if (!*e)
 		*e = new SVGHolder;
 
 	if (strcmp(v, "end") == 0)
-		anchor = djnEndAnchor;
+		anchor = DJN_END_ANCHOR;
 	else if (strcmp(v, "middle") == 0)
-		anchor = djnMiddleAnchor;
+		anchor = DJN_MIDDLE_ANCHOR;
 
 	new TextAnchor(*e, "text-anchor", anchor);
 

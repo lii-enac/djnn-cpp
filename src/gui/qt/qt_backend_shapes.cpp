@@ -115,11 +115,11 @@ namespace djnn
     double dxfactor = cur_context->factor[dxU];
     double dyfactor = cur_context->factor[dyU];
 
-    if (dxU == djnPercentLength) {
+    if (dxU == DJN_PERCENT) {
       int v = DisplayBackend::instance()->window()->width ()->get_value ();
       dx = v * dx / 100;
     }
-    if (dyU == djnPercentLength) {
+    if (dyU == DJN_PERCENT) {
       int v = DisplayBackend::instance()->window()->height ()->get_value ();
       dy = v * dy / 100;
     }
@@ -136,11 +136,11 @@ namespace djnn
     QString s;
     switch (encoding)
       {
-      case djnLatin1:
-      case djnAscii:
+      case DJN_LATIN1:
+      case DJN_ASCII:
         s = QString::fromLatin1 (text.c_str ());
         break;
-      case djnUtf8:
+      case DJN_UTF8:
       default:
         s = QString::fromUtf8 (text.c_str ());
       }
@@ -173,11 +173,11 @@ namespace djnn
     /* applying alignment attribute */
     switch (cur_context->textAnchor)
       {
-      case djnMiddleAnchor:
+      case DJN_MIDDLE_ANCHOR:
         posX = posX - (rect.width () / 2.0);
         p.setX (posX);
         break;
-      case djnEndAnchor:
+      case DJN_END_ANCHOR:
         posX = posX - rect.width ();
         p.setX (posX);
         break;

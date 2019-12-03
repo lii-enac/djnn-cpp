@@ -73,7 +73,7 @@ SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (register const char *str, reg
 }
 #line 43 "src/gui/XML/SVGGradientAttrs.gperf"
 
-struct djn_GradientArgs djn_GradientArgs = {"", 0, djnLocalCoords, djnPadFill};
+struct djn_GradientArgs djn_GradientArgs = {"", 0, DJN_LOCAL_COORDS, DJN_PAD_FILL};
 
 static int ParseId(Process** e, const char* v) {
 	djn_GradientArgs.id = v;
@@ -87,11 +87,11 @@ static int ParseGradientTransform(Process** e, const char* v) {
 
 static int ParseSpreadMethod(Process** e, const char* v) {
 	if (strcmp(v, "repeat") == 0) {
-		djn_GradientArgs.spread = djnRepeatFill;
+		djn_GradientArgs.spread = DJN_REPEAT_FILL;
 	} else if (strcmp(v, "reflect") == 0) {
-		djn_GradientArgs.spread = djnReflectFill;
+		djn_GradientArgs.spread = DJN_REFLECT_FILL;
 	} else if (strcmp(v, "pad") == 0) {
-		djn_GradientArgs.spread = djnPadFill;
+		djn_GradientArgs.spread = DJN_PAD_FILL;
 	} else {
 		fprintf(stderr, "unkown spread method %s\n", v);
 		return 0;
@@ -106,9 +106,9 @@ static int ParseGradientUnits(Process** e, const char* v) {
 	 and adding a transformation matrix to the gradient for objectBoundingBox */
 
 	if (strcmp(v, "userSpaceOnUse") == 0) {
-		djn_GradientArgs.coords = djnRenderingCoords;
+		djn_GradientArgs.coords = DJN_RENDERING_COORDS;
 	} else if (strcmp(v, "objectBoundingBox") == 0) {
-		djn_GradientArgs.coords = djnLocalCoords;
+		djn_GradientArgs.coords = DJN_LOCAL_COORDS;
 	} else {
 		fprintf(stderr, "unkown gradient units %s\n", v);
 		return 0;

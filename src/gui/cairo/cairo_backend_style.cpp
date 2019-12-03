@@ -30,7 +30,7 @@ namespace djnn
   static double factor[] =
     { .75, 1., 1., 12, 1., .75, 182.88, 1828.8, 72., 1. };
 
-  static djnFillSpread spread_types[] = {djnPadFill, djnRepeatFill, djnReflectFill};
+  static djnFillSpread spread_types[] = {DJN_PAD_FILL, DJN_REPEAT_FILL, DJN_REFLECT_FILL};
 
   static PangoStyle fontStyleArray[3] =
     { PANGO_STYLE_NORMAL, PANGO_STYLE_ITALIC, PANGO_STYLE_OBLIQUE };
@@ -296,13 +296,13 @@ namespace djnn
     djnFillSpread spread = spread_types[g->spread ()->get_value ()];
     switch (spread)
       {
-      case djnPadFill:
+      case DJN_PAD_FILL:
         cairo_pattern_set_extend (_cur_cairo_pattern, CAIRO_EXTEND_PAD);
         break;
-      case djnRepeatFill:
+      case DJN_REPEAT_FILL:
         cairo_pattern_set_extend (_cur_cairo_pattern, CAIRO_EXTEND_REPEAT);
         break;
-      case djnReflectFill:
+      case DJN_REFLECT_FILL:
         cairo_pattern_set_extend (_cur_cairo_pattern, CAIRO_EXTEND_REFLECT);
         break;
       }
