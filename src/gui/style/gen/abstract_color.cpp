@@ -41,7 +41,6 @@ namespace djnn
 
   AbstractColor::AbstractColor (Process *parent, const std::string& name, int v) :
     AbstractStyle (parent, name),
-    raw_props{.value=v},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),
     _toRGB (this, "toRGB"),
@@ -50,6 +49,7 @@ namespace djnn
     raw_props.r = (v >> 16) & 0xFF;
     raw_props.g = (v >> 8) & 0xFF;
     raw_props.b = v & 0xFF;
+    raw_props.value = v;
   }
 
   AbstractColor::AbstractColor (int r, int g, int b) :
