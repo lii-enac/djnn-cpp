@@ -83,9 +83,11 @@ namespace djnn
   class FillColor : public AbstractColor
   {
   public:
-    FillColor (Process *parent, const std::string& name, double r, double g, double b) :
+    FillColor (Process *parent, const std::string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
-    FillColor (double r, double g, double b) :
+    FillColor (Process *parent, const std::string& name, int v) :
+        AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
+    FillColor (int r, int g, int b) :
         AbstractColor (r, g, b) {}
     virtual ~FillColor () {}
     void draw () override;
@@ -95,9 +97,11 @@ namespace djnn
   class OutlineColor : public AbstractColor
   {
   public:
-    OutlineColor (Process *parent, const std::string& name, double r, double g, double b) :
+    OutlineColor (Process *parent, const std::string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
-    OutlineColor (double r, double g, double b) :
+    OutlineColor (Process *parent, const std::string& name, int v) :
+         AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
+    OutlineColor (int r, int g, int b) :
         AbstractColor (r, g, b) {}
     virtual ~OutlineColor () {}
     void draw () override;

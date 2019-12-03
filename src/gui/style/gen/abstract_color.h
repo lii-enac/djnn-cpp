@@ -21,23 +21,49 @@ namespace djnn
 {
   class AbstractColor : public AbstractStyle
   {
+  private:
+    class ToValueAction : public Action {
+    public:
+      ToValueAction (Process *p, const string& n) : Action (p, n) { Process::finalize_construction (p); };
+      ~ToValueAction () {}
+      void impl_activate () override {
+        ((AbstractColor*) get_parent())->update_hex_from_rvb ();
+      }
+      void impl_deactivate () override {}
+    };
+    class ToRGBAction : public Action {
+    public:
+      ToRGBAction (Process *p, const string& n) : Action (p, n) { Process::finalize_construction (p); };
+      ~ToRGBAction () {}
+      void impl_activate () override {
+        ((AbstractColor*) get_parent())->update_rvb_from_hex ();
+      }
+      void impl_deactivate () override {}
+    };
   public:
-    AbstractColor (Process *parent, const std::string& name, double r, double g, double b);
-    AbstractColor (double r, double g, double b);
+    AbstractColor (Process *parent, const std::string& name, int r, int g, int b);
+    AbstractColor (Process *parent, const std::string& name, int v);
+    AbstractColor (int r, int g, int b);
     virtual ~AbstractColor ();
     
     
     void get_properties_values (double& r, double& g, double& b);
     virtual Process* find_component (const string&) override;
-		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component ("r"); }
-		AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component ("g"); }
-		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component ("b"); }
+		AbstractIntProperty* r () { return (AbstractIntProperty*) find_component ("r"); }
+		AbstractIntProperty* g () { return (AbstractIntProperty*) find_component ("g"); }
+		AbstractIntProperty* b () { return (AbstractIntProperty*) find_component ("b"); }
+		AbstractIntProperty* value () { return (AbstractIntProperty*) find_component ("value"); }
 
   protected:
-    struct raw_props_t { double r; double g; double b; };
+    struct raw_props_t { int r; int g; int b; int value; };
     raw_props_t raw_props;
-    Coupling *_cr, *_cg, *_cb;
+    Coupling *_cr, *_cg, *_cb, *_cv, *_c_rv, *_c_gv, *_c_bv, *_c_vrgb;
+    ToValueAction _toValue;
+    ToRGBAction _toRGB;
+    bool _is_updating;
     void impl_activate () override;
     void impl_deactivate () override;
+    void update_rvb_from_hex ();
+    void update_hex_from_rvb ();
   };
 }
