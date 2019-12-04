@@ -13,7 +13,8 @@ lib_srcs += src/core/syshook/external_source.cpp src/core/syshook/syshook.cpp \
 			src/core/syshook/main_loop.cpp \
 			src/core/syshook/timer.cpp
 
-ifneq ($(os),FreeRTOS)
+#ifneq ($(os),FreeRTOS)
+ifneq ($(os),$(filter $(os),FreeRTOS em))
 lib_srcs += $(shell find src/core/xml -name "*.cpp")
 lib_ldflags += -lexpat -lcurl
 endif
