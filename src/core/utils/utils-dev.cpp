@@ -106,4 +106,20 @@ namespace djnn
      /* we did not found $value */
      return pair<RefProperty*, string> (nullptr, spec);
    }
+
+  const string&
+  get_parent_name (Process *p, int up)
+  {
+    while(up && p) { p=p->get_parent(); --up; }
+    if(p) return p->get_name();
+    else return Process::default_name;
+  }
+
+  const string
+  get_hierarchy_name (Process *p, int up)
+  {
+    string res;
+    while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
+    return res;
+  }
  }

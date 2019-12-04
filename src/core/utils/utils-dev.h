@@ -29,4 +29,7 @@ typedef size_t gperf_t;
 #else
 typedef unsigned gperf_t;
 #endif
+
+  const string& get_parent_name (Process *p, int up);
+  const string get_hierarchy_name (Process *p, int up=-1);
 }
