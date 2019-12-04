@@ -184,10 +184,10 @@ EMFLAGS := -Wall -Oz -s USE_SDL=2 -s USE_FREETYPE=1 \
 #CXX := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CXX)
 
 EMCFLAGS += $(EMFLAGS) \
-	-I../ext-libs/libexpat/expat/lib \
-	-I../ext-libs/curl/include \
-	-I../ext-libs/boost_1_68_0 \
-	-I../ext-libs/fontconfig \
+	-I../ext-libs/emscripten/libexpat/expat/lib \
+	-I../ext-libs/emscripten/curl/include \
+	-I../ext-libs/emscripten/boost_1_68_0 \
+	-I../ext-libs/emscripten/fontconfig \
 	-I/usr/local/include #glm
 
 CFLAGS += $(EMCFLAGS)
