@@ -60,41 +60,43 @@ namespace djnn
     virtual ~Text ();
     void draw () override;
     Process* clone () override;
-    void get_properties_values (double &x, double &y, double &dx, double &dy, double &fsize, int &dxU, int &dyU, int &width, int &height, int &encoding, int &fstyle, int &fweight, string &text, string &ffamily);
+    void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text);
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_component("dx"); }
     AbstractDoubleProperty* dy () { return (AbstractDoubleProperty*) find_component("dy"); }
-    AbstractDoubleProperty* fsize () { return (AbstractDoubleProperty*) find_component("fsize"); }
     AbstractIntProperty*    dxU () { return (AbstractIntProperty*) find_component("dxU"); }
     AbstractIntProperty*    dyU () { return (AbstractIntProperty*) find_component("dyU"); }
-    AbstractIntProperty*    width () { return (AbstractIntProperty*) find_component("width"); }
-    AbstractIntProperty*    height () { return (AbstractIntProperty*) find_component("height"); }
     AbstractIntProperty*    encoding () { return (AbstractIntProperty*) find_component("encoding"); }
-    AbstractIntProperty*    fweight () { return (AbstractIntProperty*) find_component("fweight"); }
-    AbstractIntProperty*    fstyle () { return (AbstractIntProperty*) find_component("fstyle");}
-    AbstractTextProperty*   text () { return (AbstractTextProperty*) find_component("text"); }
-    AbstractTextProperty*   ffamily () { return (AbstractTextProperty*) find_component("ffamily"); }
-    void set_width (double width) { this->width ()->set_value (width, true); }
-    void set_height (double height) { this->height ()->set_value (height, true); }
-    const string& get_raw_text () { return raw_props.text; }
+    IntProperty*  width () { return &_width; }
+    IntProperty*  height () { return &_height; }
+    TextProperty* text () { return &_text;}
+    void set_width (double width) { _width.set_value (width, true); }
+    void set_height (double height) { _height.set_value (height, true); }
+    const string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
     std::pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (Process* p) override;
-    struct raw_props_t { double x, y, dx, dy, fsize; int dxU, dyU, width, height, encoding, fstyle, fweight; string text, ffamily;};
+    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding, fstyle, fweight;};
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
-      *_cdxU, *_cdyU, *_cupdate_size, *_cencoding,
-      *_cfstyle, *_cfweight,
-      *_ctext, *_cffamily;
+      *_cdxU, *_cdyU, *_cencoding,
+      *_cfstyle, *_cfweight, *_cffamily;
+
+    /* implementation */
     FontMetricsImpl _fm;
-    TextSizeAction *_update_size;
-    void init_text (double x, double y, double dx, double dy, int dxu, int dyu,
-              const std::string &encoding, const std::string &text);
+
+    /* no need proxy because always create */
+    TextSizeAction _update_size;
+    IntProperty _width;
+    IntProperty _height;
+    TextProperty _text;
+    Coupling _cupdate_size, _ctext;
+
     void impl_activate () override;
     void impl_deactivate () override;
   };
