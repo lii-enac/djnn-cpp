@@ -24,49 +24,45 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "outline_width.h"
-
-#include "gui/picking/analytical_picking.h"
-
-#include <iostream>
+#include "abstract_path_image.h"
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (Process *parent, const std::string& name, double width) :
-    AbstractStyle (parent, name),
-    raw_props{.width=width},
-    _cwidth (nullptr)
+  AbstractPathImage::AbstractPathImage (Process *parent, const std::string& name, std::string path, double x, double y, double width, double height) :
+    AbstractImage (parent, name, x, y, width, height),
+    raw_props{.path=path},
+    _cpath (nullptr)
   {
-    
-    Process::finalize_construction (parent, name);
-  }
-
-  OutlineWidth::OutlineWidth (double width) :
-    AbstractStyle (), 
-    raw_props{.width=width},
-    _cwidth (nullptr)
-  {
+    set_origin (x, y);
     
   }
 
-  OutlineWidth::~OutlineWidth ()
+  AbstractPathImage::AbstractPathImage (std::string path, double x, double y, double width, double height) :
+    AbstractImage (x, y, width, height), 
+    raw_props{.path=path},
+    _cpath (nullptr)
   {
-    delete _cwidth;
+    set_origin (x, y);
+  }
+
+  AbstractPathImage::~AbstractPathImage ()
+  {
+    delete _cpath;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 0) {
+    if (symtable ().size () > 2) {
       std::map<std::string, Process*>::iterator it;
 
-      it = symtable ().find ("width");
+      it = symtable ().find ("path");
 			if (it != symtable ().end ())
 				delete it->second;
     }
   }
  
   Process*
-  OutlineWidth::find_component (const string& name)
+  AbstractPathImage::find_component (const string& name)
   {
-    Process* res = AbstractStyle::find_component(name);
+    Process* res = AbstractImage::find_component(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -77,11 +73,11 @@ namespace djnn
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
-    if(name=="width") {
-      coupling=&_cwidth;
-      rawp_Double=&raw_props.width;
+    if(name=="path") {
+      coupling=&_cpath;
+      rawp_Text=&raw_props.path;
       notify_mask = notify_damaged_geometry;
-      prop_Double=true;
+      prop_Text=true;
     } else
     return nullptr;
     
@@ -102,50 +98,28 @@ namespace djnn
   }
 
   void
-  OutlineWidth::get_properties_values (double& width)
+  AbstractPathImage::get_properties_values (std::string& path, double& x, double& y, double& width, double& height)
   {
-    width = raw_props.width;
+    path = raw_props.path;
   }
 
   void
-  OutlineWidth::impl_activate ()
+  AbstractPathImage::impl_activate ()
   {
-    AbstractStyle::impl_activate ();
+    AbstractImage::impl_activate ();
     auto _frame = frame ();
-    if(_cwidth) _cwidth->enable (_frame);
+    if(_cpath) _cpath->enable (_frame);
   }
 
   void
-  OutlineWidth::impl_deactivate ()
+  AbstractPathImage::impl_deactivate ()
   {
-    if(_cwidth) _cwidth->disable ();
-    AbstractStyle::impl_deactivate ();
+    if(_cpath) _cpath->disable ();
+    AbstractImage::impl_deactivate ();
   }
 
   
-  void
-  OutlineWidth::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->load_outline_width (this);
-    }
-  }
 
-  AbstractGShape*
-  OutlineWidth::pick_analytical (PickAnalyticalContext& pac)
-  {
-    //std::cerr << "OutlineWidth::pick_analytical " << pac.half_outline_width << std::endl;
-    //std::cerr << raw_props.width << std::endl;
-    pac.half_outline_width = raw_props.width / 2;
-    return nullptr;
-  }
   
-  Process*
-  OutlineWidth::clone ()
-  {
-    return new OutlineWidth (raw_props.width);
-  }
-
   
 } /* namespace djnn */

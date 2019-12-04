@@ -67,6 +67,7 @@ namespace djnn
     Translation (double tx, double ty);
     virtual ~Translation ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 
@@ -117,6 +118,7 @@ namespace djnn {
     Rotation (double a, double cx, double cy);
     virtual ~Rotation ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 
@@ -163,6 +165,7 @@ namespace djnn {
     Scaling (double sx, double sy, double cx, double cy);
     virtual ~Scaling ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 
@@ -206,6 +209,7 @@ namespace djnn {
     SkewX (double a);
     virtual ~SkewX ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 
@@ -226,6 +230,7 @@ namespace djnn {
     SkewY (double a);
     virtual ~SkewY ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 
@@ -395,34 +400,10 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    // void get_properties_values (double &m11, double &m12, double &m13, double &m14, 
-    //                             double &m21, double &m22, double &m23, double &m24,
-    //                             double &m31, double &m32, double &m33, double &m34,
-    //                             double &m41, double &m42, double &m43, double &m44);
     virtual Process* find_component (const string&) override;
-    // AbstractDoubleProperty* m11 () { return (AbstractDoubleProperty*) find_component("m11"); }
-    // AbstractDoubleProperty* m12 () { return (AbstractDoubleProperty*) find_component("m12"); }
-    // AbstractDoubleProperty* m13 () { return (AbstractDoubleProperty*) find_component("m13"); }
-    // AbstractDoubleProperty* m14 () { return (AbstractDoubleProperty*) find_component("m14"); }
-    // AbstractDoubleProperty* m21 () { return (AbstractDoubleProperty*) find_component("m21"); }
-    // AbstractDoubleProperty* m22 () { return (AbstractDoubleProperty*) find_component("m22"); }
-    // AbstractDoubleProperty* m23 () { return (AbstractDoubleProperty*) find_component("m23"); }
-    // AbstractDoubleProperty* m24 () { return (AbstractDoubleProperty*) find_component("m24"); }
-    // AbstractDoubleProperty* m31 () { return (AbstractDoubleProperty*) find_component("m31"); }
-    // AbstractDoubleProperty* m32 () { return (AbstractDoubleProperty*) find_component("m32"); }
-    // AbstractDoubleProperty* m33 () { return (AbstractDoubleProperty*) find_component("m33"); }
-    // AbstractDoubleProperty* m34 () { return (AbstractDoubleProperty*) find_component("m34"); }
-    // AbstractDoubleProperty* m41 () { return (AbstractDoubleProperty*) find_component("m41"); }
-    // AbstractDoubleProperty* m42 () { return (AbstractDoubleProperty*) find_component("m42"); }
-    // AbstractDoubleProperty* m43 () { return (AbstractDoubleProperty*) find_component("m43"); }
-    // AbstractDoubleProperty* m44 () { return (AbstractDoubleProperty*) find_component("m44"); }
     void impl_activate () override;
     void impl_deactivate () override;
-    // virtual void draw () override = 0;
-    // struct raw_props_t { double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44; };
-    // raw_props_t raw_props;
-
-    //raw_props_t& raw_props() { return AbstractPropHomography::raw_props; }
+    
     raw_props_t raw_props;
     
     /* accumulators (rotation angle + scaling coefficients) */
@@ -593,6 +574,7 @@ namespace djnn {
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~Homography ();
     void draw () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
   };
 

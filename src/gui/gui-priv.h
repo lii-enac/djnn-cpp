@@ -25,6 +25,7 @@ namespace djnn {
       void remove_gui_child (Process *c);
       void swap_children (int i, int j);
       void draw () override;
+      AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
       void impl_deactivate () override {}
     private:

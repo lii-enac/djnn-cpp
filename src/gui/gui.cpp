@@ -20,6 +20,7 @@
 #include "core/tree/component_observer.h"
 
 #include <algorithm>
+#include <boost/range/adaptor/reversed.hpp>
 
 
 #include <iostream>
@@ -93,6 +94,20 @@ namespace djnn
     cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << endl;
     cerr << "\033[0m";
 #endif
+  }
+
+  AbstractGShape* 
+  GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
+  {
+    //ComponentObserver::instance ().start_draw ();
+    //for (auto p : boost::adaptors::reverse(_children)) {
+    AbstractGShape * picked = nullptr;
+    for (auto p : _children) {
+      AbstractGShape * picked_ = p.first->pick_analytical (pac);
+      if(picked_) picked = picked_;
+    }
+    //ComponentObserver::instance ().end_draw ();
+    return picked;
   }
 
   void

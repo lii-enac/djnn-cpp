@@ -19,6 +19,7 @@
 
 #include <assert.h>
 
+#include <iostream>
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
@@ -218,6 +219,7 @@ namespace djnn
 
     /* shape */ 
     AbstractGShape *s = this->pick (x, y);
+    //std::cerr << s << " " << typeid(s).name() << std::endl;
     if (s != nullptr) {
      
       /* setting */

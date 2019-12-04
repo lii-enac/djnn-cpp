@@ -19,23 +19,22 @@
 
 namespace djnn
 {
-  class OutlineWidth : public AbstractStyle
+  class AbstractPathImage : public AbstractImage
   {
   public:
-    OutlineWidth (Process *parent, const std::string& name, double width);
-    OutlineWidth (double width);
-    virtual ~OutlineWidth ();
-    void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
-    void get_properties_values (double& width);
+    AbstractPathImage (Process *parent, const std::string& name, std::string path, double x, double y, double width, double height);
+    AbstractPathImage (std::string path, double x, double y, double width, double height);
+    virtual ~AbstractPathImage ();
+    
+    
+    void get_properties_values (std::string& path, double& x, double& y, double& width, double& height);
     virtual Process* find_component (const string&) override;
-		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
+		AbstractTextProperty* path () { return (AbstractTextProperty*) find_component ("path"); }
 
   protected:
-    struct raw_props_t { double width; };
+    struct raw_props_t { std::string path; };
     raw_props_t raw_props;
-    Coupling *_cwidth;
+    Coupling *_cpath;
     void impl_activate () override;
     void impl_deactivate () override;
   };

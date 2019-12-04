@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "rectangle.h"
+#include "abstract_prop_rectangle.h"
 
 namespace djnn
 {
-  Rectangle::Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
+  AbstractPropRectangle::AbstractPropRectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
   {
     set_origin (x, y);
-    Process::finalize_construction (parent, name);
+    
   }
 
-  Rectangle::Rectangle (double x, double y, double width, double height, double rx, double ry) :
+  AbstractPropRectangle::AbstractPropRectangle (double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (), 
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     set_origin (x, y);
   }
 
-  Rectangle::~Rectangle ()
+  AbstractPropRectangle::~AbstractPropRectangle ()
   {
     delete _cx;
 		delete _cy;
@@ -85,7 +85,7 @@ namespace djnn
   }
  
   Process*
-  Rectangle::find_component (const string& name)
+  AbstractPropRectangle::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -153,7 +153,7 @@ namespace djnn
   }
 
   void
-  Rectangle::get_properties_values (double& x, double& y, double& width, double& height, double& rx, double& ry)
+  AbstractPropRectangle::get_properties_values (double& x, double& y, double& width, double& height, double& rx, double& ry)
   {
     x = raw_props.x;
 		y = raw_props.y;
@@ -164,7 +164,7 @@ namespace djnn
   }
 
   void
-  Rectangle::impl_activate ()
+  AbstractPropRectangle::impl_activate ()
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
@@ -177,7 +177,7 @@ namespace djnn
   }
 
   void
-  Rectangle::impl_deactivate ()
+  AbstractPropRectangle::impl_deactivate ()
   {
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
@@ -189,21 +189,12 @@ namespace djnn
   }
 
   
-  void
-  Rectangle::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_rectangle (this);
-    }
-  }
-
 
   
   Process*
-  Rectangle::clone ()
+  AbstractPropRectangle::clone ()
   {
-    return new Rectangle (raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
+    return new AbstractPropRectangle (raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
   }
 
   

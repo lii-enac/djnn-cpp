@@ -23,6 +23,10 @@
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "picking/picking.h"
+#include "gui/picking/analytical_picking.h"
+
+#include <math.h>
+#include <float.h>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
@@ -349,6 +353,49 @@ namespace djnn
     if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }
+  }
+
+  void
+  AbstractGShape::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    x = -1;
+    y = -1;
+    w = -1;
+    h = -1;
+  }
+
+  double
+  AbstractGShape::sdf (double x, double y) const
+  {
+    return DBL_MAX;
+  }
+
+  AbstractGShape*
+  AbstractGShape::pick_analytical (PickAnalyticalContext& pac)
+  {
+    // fast culling with bounding box
+    double x,y,w,h;
+    get_bounding_box (x,y,w,h);
+    if( !( (x - pac.half_outline_width) <= pac.x &&
+            pac.x <= (x + w + pac.half_outline_width*2) &&
+           (y - pac.half_outline_width) <= pac.y &&
+            pac.y <= (y + h + pac.half_outline_width*2)))
+          return nullptr;
+
+    // distance function
+    double d = sdf (pac.x, pac.y);
+
+    if(pac.filled) {
+      if (d<1.0)
+        return this;
+    }
+    if(pac.outlined) {
+      float t = pac.half_outline_width;
+      d = abs(d) - t;
+      if (d<1.0)
+        return this;
+    } 
+    return nullptr;
   }
 
 } /* namespace djnn */

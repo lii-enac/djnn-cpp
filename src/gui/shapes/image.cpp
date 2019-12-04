@@ -29,7 +29,7 @@ namespace djnn
 {
   Image::Image (Process *parent, const std::string& name, std::string path, double x, double y, double w,
     double h) :
-      AbstractImage (parent, name, path, x, y, w, h),
+      AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
@@ -38,7 +38,7 @@ namespace djnn
   }
 
   Image::Image (std::string path, double x, double y, double w, double h) :
-      AbstractImage (path, x, y, w, h),
+      AbstractPathImage (path, x, y, w, h),
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
@@ -52,15 +52,13 @@ namespace djnn
       delete _cwatcher;
     }
     delete _watcher;
-
     Backend::instance ()->delete_image_impl (this);
-
   }
 
   Process*
   Image::find_component (const string& name)
   {
-    Process* res = AbstractImage::find_component(name);
+    Process* res = AbstractPathImage::find_component(name);
     if(res) return res;
 
     if( name=="path" ) {
@@ -76,7 +74,7 @@ namespace djnn
   void
   Image::impl_activate ()
   {
-    AbstractImage::impl_activate ();
+    AbstractPathImage::impl_activate ();
     if (_cwatcher) _cwatcher->enable();
   }
 
@@ -84,7 +82,7 @@ namespace djnn
   Image::impl_deactivate ()
   {
     if (_cwatcher) _cwatcher->disable();
-    AbstractImage::impl_deactivate ();
+    AbstractPathImage::impl_deactivate ();
   }
 
   void
@@ -99,7 +97,7 @@ namespace djnn
   Process*
   Image::clone () 
   {
-    return new Image (raw_props.path, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    return new Image (raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
   DataImage::DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w,
@@ -171,6 +169,6 @@ namespace djnn
   Process*
   DataImage::clone ()
   {
-    return new DataImage (raw_props.data, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    return new DataImage (raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 }

@@ -19,13 +19,13 @@
 
 namespace djnn
 {
-  class Circle : public AbstractGShape
+  class AbstractPropCircle : public AbstractGShape
   {
   public:
-    Circle (Process *parent, const std::string& name, double cx, double cy, double r);
-    Circle (double cx, double cy, double r);
-    virtual ~Circle ();
-    void draw () override;
+    AbstractPropCircle (Process *parent, const std::string& name, double cx, double cy, double r);
+    AbstractPropCircle (double cx, double cy, double r);
+    virtual ~AbstractPropCircle ();
+    
     Process* clone () override;
     void get_properties_values (double& cx, double& cy, double& r);
     virtual Process* find_component (const string&) override;

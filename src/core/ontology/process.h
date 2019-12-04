@@ -69,6 +69,9 @@ namespace djnn {
   using std::vector;
   using std::map;
 
+  class AbstractGShape;
+  class PickAnalyticalContext;
+
   class Process
   {
   public:
@@ -116,6 +119,7 @@ namespace djnn {
     virtual     void update_drawing () {}
     virtual     void draw () {}
     virtual     void pick () {}
+    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; } // hws: half stroke width
     virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
     virtual Process* clone (); // { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
 

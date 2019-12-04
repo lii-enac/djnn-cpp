@@ -21,7 +21,11 @@
 #include "core/tree/component_observer.h"
 #include "core/serializer/serializer.h"
 
+#include "gui/picking/analytical_picking_context.h"
+
 #include <algorithm>
+//#include <boost/range/adaptor/reversed.hpp>
+
 #include <iostream>
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
@@ -262,6 +266,22 @@ namespace djnn
     }
     //ComponentObserver::instance ().end_pick ();
   }
+
+  AbstractGShape*
+  Container::pick_analytical (PickAnalyticalContext& pac)
+  {
+    PickAnalyticalContext pac_stacked = pac;
+    if (get_activation_flag () == DEACTIVATION) {
+      return nullptr;
+    }
+    AbstractGShape * picked = nullptr;
+    for (auto p : _children) {
+      AbstractGShape * picked_ = p->pick_analytical (pac_stacked);
+      if(picked_) picked = picked_;
+    }
+    return picked;
+  }
+
 
   Process*
   Container::clone ()

@@ -67,6 +67,9 @@ namespace djnn
     void impl_deactivate () override;
 
     void pick () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void get_bounding_box (double& x, double& y, double& w, double& h) const;
+    virtual double sdf (double x, double y) const;
 
   private:
     void init_ui ();

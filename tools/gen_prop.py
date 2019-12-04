@@ -208,7 +208,7 @@ class DjnnClass:
     parent_prop_pos_beg = 0
     parent_prop_pos_end = 1
 
-    def __init__(self, name, inherits, path, origin="x, y", finalize_construction=True, parent_prop=None, parent_prop_pos=parent_prop_pos_beg):
+    def __init__(self, name, inherits, path, origin="x, y", finalize_construction=True, parent_prop=None, parent_prop_pos=parent_prop_pos_beg, emit_clone=None):
         self.name = name
         self.inherits = inherits
         self.props = []
@@ -218,6 +218,10 @@ class DjnnClass:
         self.finalize_construction = finalize_construction
         self.parent_prop = parent_prop
         self.parent_prop_pos = parent_prop_pos
+        if emit_clone == None:
+          self.emit_clone = finalize_construction
+        else:
+          self.emit_clone = emit_clone
 
     def get_parent_prop_list(self):
       res = []
@@ -321,7 +325,7 @@ def just_do_it(dc, finalize_construction=True):
     # print (SET_ORIGIN)
 
     DECL_CLONE = ''
-    if(dc.finalize_construction):
+    if(dc.emit_clone):
       DECL_CLONE = "Process* clone () override;"
 
     DECL_DRAW = ''
@@ -359,7 +363,7 @@ def just_do_it(dc, finalize_construction=True):
     }
 
     d['DEF_CLONE'] = ''
-    if(dc.finalize_construction):
+    if(dc.emit_clone):
       d['DEF_CLONE'] = def_clone % d
     d['DEF_DRAW'] = ''
     if(dc.finalize_construction):
@@ -380,7 +384,9 @@ def just_do_it(dc, finalize_construction=True):
 
 dcs = []
 
-dc = DjnnClass("Rectangle", "AbstractGShape", "../src/gui/shapes")
+# -- shapes
+
+dc = DjnnClass("AbstractPropRectangle", "AbstractGShape", "../src/gui/shapes", finalize_construction=False, emit_clone=True)
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
@@ -389,17 +395,17 @@ dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
 dcs.append(dc)
 
+dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False, emit_clone=True)
+dc.props.append(Prop('cx', 'double', None, "transform"))
+dc.props.append(Prop('cy', 'double', None, "transform"))
+dc.props.append(Prop('r', 'double', None, "geometry"))
+dcs.append(dc)
+
 dc = DjnnClass("Ellipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy')
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('rx', 'double', None, "geometry"))
 dc.props.append(Prop('ry', 'double', None, "geometry"))
-dcs.append(dc)
-
-dc = DjnnClass("Circle", "AbstractGShape", "../src/gui/shapes", origin='cx,cy')
-dc.props.append(Prop('cx', 'double', None, "transform"))
-dc.props.append(Prop('cy', 'double', None, "transform"))
-dc.props.append(Prop('r', 'double', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("Line", "AbstractGShape", "../src/gui/shapes", origin='x1,y1')
@@ -417,18 +423,30 @@ dc.props.append(Prop('height', 'double', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractImage", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
-dc.props.append(Prop('path', 'text', None, "geometry"))
+#dc.props.append(Prop('path', 'text', None, "geometry"))
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
 dcs.append(dc)
+apg = dc
 
-dc = DjnnClass("AbstractColor", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('r', 'double', None, "style"))
-dc.props.append(Prop('g', 'double', None, "style"))
-dc.props.append(Prop('b', 'double', None, "style"))
+dc = DjnnClass("AbstractPathImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
+dc.props.append(Prop('path', 'text', None, "geometry"))
 dcs.append(dc)
+
+dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
+dc.props.append(Prop('data', 'text', None, "geometry"))
+dcs.append(dc)
+
+
+# -- styles
+
+# dc = DjnnClass("AbstractColor", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+# dc.props.append(Prop('r', 'double', None, "style"))
+# dc.props.append(Prop('g', 'double', None, "style"))
+# dc.props.append(Prop('b', 'double', None, "style"))
+# dcs.append(dc)
 
 dc = DjnnClass("FillRule", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('rule', 'int', None, "geometry"))
@@ -442,7 +460,7 @@ dc = DjnnClass("AbstractOpacity", "AbstractStyle", "../src/gui/style", origin=No
 dc.props.append(Prop('a', 'double', None, "style"))
 dcs.append(dc)
 
-dc = DjnnClass("OutlineWidth", "AbstractStyle", "../src/gui/style", origin=None)
+dc = DjnnClass("AbstractPropOutlineWidth", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dcs.append(dc)
 

@@ -23,17 +23,38 @@
 #include "core/tree/text_property.h"
 #include "gui/style/style.h"
 
-#include "gen/rectangle.h"
+#include "gen/abstract_prop_rectangle.h"
+#include "gen/abstract_prop_circle.h"
 #include "gen/rectangle_clip.h"
-#include "gen/circle.h"
 #include "gen/ellipse.h"
 #include "gen/line.h"
 #include "gen/abstract_image.h"
-
+#include "gen/abstract_path_image.h"
+#include "gen/abstract_data_image.h"
 
 namespace djnn
 {
   typedef void* FontMetricsImpl ;
+
+  class Rectangle : public AbstractPropRectangle
+  {
+  public:
+    Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
+    Rectangle (double x, double y, double width, double height, double rx=0, double ry=0);
+    void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
+  };
+
+  class Circle : public AbstractPropCircle
+  {
+  public:
+    Circle (Process *parent, const std::string& name, double cx, double cy, double r);
+    Circle (double cx, double cy, double r);
+    void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
+  };
 
   class Text : public AbstractGShape
   {
@@ -240,7 +261,6 @@ namespace djnn
   private:
     struct raw_props_t { double x1,y1,x2,y2,x,y; };
     raw_props_t raw_props;
-    //DoublePropertyProxy *_x1, *_y1, *_x2, *_y2, *_x, *_y;
     Coupling *_cx1, *_cy1, *_cx2, *_cy2, *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
@@ -321,9 +341,10 @@ namespace djnn
     Process* clone () override;
   };
 
+
   class ImageWatcher;
 
-  class Image : public AbstractImage
+  class Image : public AbstractPathImage
   {
   public:
     Image (Process *parent, const std::string& name, std::string path, double x, double y, double w, double h);
@@ -332,18 +353,11 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     virtual Process* find_component (const string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
-    AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
-    AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
-    AbstractTextProperty* path () { return (AbstractTextProperty*) find_component("path"); }
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
     void set_invalid_cache (bool v) { _invalid_cache = v;}
   private:
-    struct raw_props_t { double x,y,width,height; string path; };
-    raw_props_t raw_props;
     Coupling *_cwatcher;
     ImageWatcher *_watcher;
     void impl_activate () override;
@@ -362,18 +376,11 @@ namespace djnn
       void draw () override;
       Process* clone () override;
       virtual Process* find_component (const string&) override;
-      AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-      AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
-      AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component("width"); }
-      AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component("height"); }
-      AbstractTextProperty* data () { return (AbstractTextProperty*) find_component("data"); }
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}
       void set_invalid_cache (bool v) { _invalid_cache = v;}
     private:
-      struct raw_props_t { double x,y,width,height; string data; };
-      raw_props_t raw_props;
       Coupling *_cwatcher;
       DataImageWatcher *_watcher;
       void impl_activate () override;

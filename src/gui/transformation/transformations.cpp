@@ -25,6 +25,7 @@
 #include "display/window.h"
 
 #include "core/execution/graph.h"
+#include "gui/picking/analytical_picking.h"
 
 
 #include <array>
@@ -47,90 +48,6 @@ namespace djnn
   {
   }
 
-/*
-  AbstractTranslation::AbstractTranslation (Process *parent, const string &name, double tx, double ty) :
-      AbstractTransformation (parent, name),
-      raw_props{.tx=tx, .ty=ty},
-      _ctx (nullptr), _cty (nullptr)
-  {
-  }
-
-  AbstractTranslation::AbstractTranslation (double tx, double ty) :
-      AbstractTransformation (),
-      raw_props{.tx=tx, .ty=ty},
-      _ctx (nullptr), _cty (nullptr)
-  {
-  }
-
-  AbstractTranslation::~AbstractTranslation ()
-  {
-    delete _ctx;
-    delete _cty;
-
-    if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
-
-      it = symtable ().find ("tx");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("ty");
-      if (it != symtable ().end ())
-        delete it->second;
-    }
-  }
-
-  Process*
-  AbstractTranslation::find_component (const string& name)
-  {
-    Process* res = AbstractGObj::find_component(name);
-    if(res) return res;
-
-    Coupling ** coupling;
-    double* rawp;
-    int notify_mask = notify_none;
-
-    if(name=="tx") {
-      coupling=&_ctx;
-      rawp=&raw_props.tx;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="ty") {
-      coupling=&_cty;
-      rawp=&raw_props.ty;
-      notify_mask = notify_damaged_transform;
-    } else
-    return nullptr;
-    
-    DoublePropertyProxy* prop = nullptr; // do not cache
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
-
-    return res;
-  }
-
-  void
-  AbstractTranslation::get_properties_values (double &tx, double &ty)
-  {
-    tx = raw_props.tx;
-    ty = raw_props.ty;
-  }
-
-  void
-  AbstractTranslation::impl_activate ()
-  {
-    AbstractGObj::impl_activate ();
-    if(_ctx) _ctx->enable (_frame);
-    if(_cty) _cty->enable (_frame);
-  }
-
-  void
-  AbstractTranslation::impl_deactivate ()
-  {
-    AbstractGObj::impl_deactivate ();
-    if(_ctx)_ctx->disable ();
-    if(_cty) _cty->disable ();
-  }
-*/
 
   Translation::Translation (Process *parent, const string &name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
@@ -156,11 +73,20 @@ namespace djnn
     }
   }
 
+  AbstractGShape*
+  Translation::pick_analytical (PickAnalyticalContext& pac)
+  {
+    pac.x -= raw_props.tx;
+    pac.y -= raw_props.ty;
+    return nullptr;
+  }
+
   Process*
   Translation::clone ()
   {
     return new Translation (raw_props.tx, raw_props.ty);
   }
+
 
   GradientTranslation::GradientTranslation (Process *parent, const string &name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
@@ -193,104 +119,8 @@ namespace djnn
   {
     return new GradientTranslation (raw_props.tx, raw_props.ty);
   }
-/*
-  AbstractRotation::AbstractRotation (Process *parent, const string &name, double a, double cx, double cy) :
-      AbstractTransformation (parent, name),
-      raw_props{.a=a, .cx=cx, .cy=cy},
-      _ca(nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
-  }
-
-  AbstractRotation::AbstractRotation (double a, double cx, double cy) :
-      AbstractTransformation (),
-      raw_props{.a=a, .cx=cx, .cy=cy},
-      _ca(nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
-  }
-
-  AbstractRotation::~AbstractRotation ()
-  {
-    delete _ca;
-    delete _ccx;
-    delete _ccy;
-
-    if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
-
-      it = symtable ().find ("a");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("cx");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("cy");
-      if (it != symtable ().end ())
-        delete it->second;
-    }
-  }
-
-  Process*
-  AbstractRotation::find_component (const string& name)
-  {
-    Process* res = AbstractGObj::find_component(name);
-    if(res) return res;
-
-    Coupling ** coupling;
-    double* rawp;
-    int notify_mask = notify_none;
-
-    if(name=="a") {
-      coupling=&_ca;
-      rawp=&raw_props.a;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="cx") {
-      coupling=&_ccx;
-      rawp=&raw_props.cx;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="cy") {
-      coupling=&_ccy;
-      rawp=&raw_props.cy;
-      notify_mask = notify_damaged_transform;
-    } else
-    return nullptr;
-    
-    DoublePropertyProxy* prop = nullptr; // do not cache
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
-
-    return res;
-  }
-
-  void
-  AbstractRotation::get_properties_values (double &a, double &cx, double &cy)
-  {
-    a = raw_props.a;
-    cx = raw_props.cx;
-    cy = raw_props.cy;
-  }
 
 
-  void
-  AbstractRotation::impl_activate ()
-  {
-    AbstractGObj::impl_activate ();
-    if(_ca) _ca->enable (_frame);
-    if(_ccx) _ccx->enable (_frame);
-    if(_ccy) _ccy->enable (_frame);
-  }
-
-  void
-  AbstractRotation::impl_deactivate ()
-  {
-    AbstractGObj::impl_deactivate ();
-    if(_ca) _ca->disable ();
-    if(_ccx) _ccx->disable ();
-    if(_ccy) _ccy->disable ();
-  }
-*/
   Rotation::Rotation (Process *parent, const string &name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
@@ -315,11 +145,31 @@ namespace djnn
     }
   }
 
+  AbstractGShape*
+  Rotation::pick_analytical (PickAnalyticalContext& pac)
+  {
+    pac.x -= raw_props.cx;
+    pac.y -= raw_props.cy;
+
+    double cosa =  cos(- raw_props.a * M_PI / 180.),
+           sina =  sin(- raw_props.a * M_PI / 180.);
+    double
+    pacx =   cosa * pac.x - sina * pac.y;
+    pac.y =  sina * pac.x + cosa * pac.y;
+    pac.x =  pacx;
+
+    pac.x += raw_props.cx;
+    pac.y += raw_props.cy;
+
+    return nullptr;
+  }
+
   Process*
   Rotation::clone ()
   {
     return new Rotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
+
 
   GradientRotation::GradientRotation (Process *parent, const string &name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
@@ -352,117 +202,8 @@ namespace djnn
   {
     return new GradientRotation (raw_props.a, raw_props.cx, raw_props.cy);
   }
-/*
-  AbstractScaling::AbstractScaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
-      AbstractTransformation (parent, name),
-      raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
-      _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
 
-  }
 
-  AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
-      AbstractTransformation (),
-      raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
-      _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
-  }
-
-  AbstractScaling::~AbstractScaling ()
-  {
-    delete _csx;
-    delete _csy;
-    delete _ccx;
-    delete _ccy;
-
-    if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
-
-      it = symtable ().find ("sx");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("sy");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("cx");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("cy");
-      if (it != symtable ().end ())
-        delete it->second;
-    }
-  }
-
-  Process*
-  AbstractScaling::find_component (const string& name)
-  {
-    Process* res = AbstractGObj::find_component(name);
-    if(res) return res;
-
-    Coupling ** coupling;
-    double* rawp;
-    int notify_mask = notify_none;
-
-    if(name=="sx") {
-      coupling=&_csx;
-      rawp=&raw_props.sx;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="sy") {
-      coupling=&_csy;
-      rawp=&raw_props.sy;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="cx") {
-      coupling=&_ccx;
-      rawp=&raw_props.cx;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="cy") {
-      coupling=&_ccy;
-      rawp=&raw_props.cy;
-      notify_mask = notify_damaged_transform;
-    } else
-    return nullptr;
-    
-    DoublePropertyProxy* prop = nullptr; // do not cache
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
-
-    return res;
-  }
-
-  void
-  AbstractScaling::get_properties_values (double &sx, double &sy, double &cx, double &cy)
-  {
-    sx = raw_props.sx;
-    sy = raw_props.sy;
-    cx = raw_props.cx;
-    cy = raw_props.cy;
-  }
-
-  void
-  AbstractScaling::impl_activate ()
-  {
-    AbstractGObj::impl_activate ();
-    if(_csx) _csx->enable (_frame);
-    if(_csy) _csy->enable (_frame);
-    if(_ccx) _ccx->enable (_frame);
-    if(_ccy) _ccy->enable (_frame);
-  }
-
-  void
-  AbstractScaling::impl_deactivate ()
-  {
-    AbstractGObj::impl_deactivate ();
-    if(_csx) _csx->disable ();
-    if(_csy) _csy->disable ();
-    if(_ccx) _ccx->disable ();
-    if(_ccy) _ccy->disable ();
-  }
-*/
   Scaling::Scaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
@@ -472,7 +213,6 @@ namespace djnn
   Scaling::Scaling (double sx, double sy, double cx, double cy) :
       AbstractScaling (sx, sy, cx, cy)
   {
-    
   }
 
   Scaling::~Scaling ()
@@ -488,11 +228,20 @@ namespace djnn
     }
   }
 
+  AbstractGShape*
+  Scaling::pick_analytical (PickAnalyticalContext& pac)
+  {
+    pac.x /= raw_props.sx;
+    pac.y /= raw_props.sy;
+    return nullptr;
+  }
+
   Process*
   Scaling::clone ()
   {
     return new Scaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
+
 
   GradientScaling::GradientScaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
@@ -525,77 +274,8 @@ namespace djnn
   {
     return new GradientScaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
-/*
-  AbstractSkew::AbstractSkew (Process *parent, const string &name, double a) :
-      AbstractTransformation (parent, name), 
-      raw_props{ .a=a },
-      _ca (nullptr)
-  {
-  }
 
-  AbstractSkew::AbstractSkew (double a) :
-      AbstractTransformation (), 
-      raw_props{ .a=a },
-      _ca (nullptr)
-  {
-  }
 
-  AbstractSkew::~AbstractSkew ()
-  {
-    delete _ca;
-
-    if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
-
-      it = symtable ().find ("a");
-      if (it != symtable ().end ())
-        delete it->second;
-    }
-  }
-
-  Process*
-  AbstractSkew::find_component (const string& name)
-  {
-    Process* res = AbstractGObj::find_component(name);
-    if(res) return res;
-
-    Coupling ** coupling;
-    double* rawp;
-    int notify_mask = notify_none;
-
-    if(name=="a") {
-      coupling=&_ca;
-      rawp=&raw_props.a;
-      notify_mask = notify_damaged_transform;
-    } else
-    return nullptr;
-    
-    DoublePropertyProxy* prop = nullptr; // do not cache
-    res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
-
-    return res;
-  }
-
-  void
-  AbstractSkew::get_properties_values (double &a)
-  {
-    a = raw_props.a;
-  }
-
-  void
-  AbstractSkew::impl_activate ()
-  {
-    AbstractGObj::impl_activate ();
-    if (_ca) _ca->enable (_frame);
-  }
-
-  void
-  AbstractSkew::impl_deactivate ()
-  {
-    AbstractGObj::impl_deactivate ();
-    if (_ca) _ca->disable ();
-  }
-*/
   SkewX::SkewX (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
   {
@@ -620,11 +300,21 @@ namespace djnn
     }
   }
 
+  AbstractGShape*
+  SkewX::pick_analytical (PickAnalyticalContext& pac)
+  {
+    double tana = tan(- raw_props.a * M_PI / 180.);
+    pac.x += pac.x + tana * pac.y;
+
+    return nullptr;
+  }
+
   Process*
   SkewX::clone ()
   {
     return new SkewX (raw_props.a);
   }
+
 
   GradientSkewX::GradientSkewX (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
@@ -658,6 +348,7 @@ namespace djnn
     return new GradientSkewX (raw_props.a);
   }
 
+
   SkewY::SkewY (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
   {
@@ -680,6 +371,15 @@ namespace djnn
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_y (this);
     }
+  }
+
+  AbstractGShape*
+  SkewY::pick_analytical (PickAnalyticalContext& pac)
+  {
+    double tana = tan(- raw_props.a * M_PI / 180.);
+    pac.y += tana * pac.x;
+
+    return nullptr;
   }
 
   Process*
@@ -2246,75 +1946,6 @@ namespace djnn
     delete _acca;
     delete _accsx;
     delete _accsy;
-/*
-    if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
-
-      it = symtable ().find ("m11");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m12");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m13");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m14");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m21");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m22");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m23");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m24");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m31");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m32");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m33");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m34");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m41");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m42");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m43");
-      if (it != symtable ().end ())
-        delete it->second;
-
-      it = symtable ().find ("m44");
-      if (it != symtable ().end ())
-        delete it->second;
-    }
-*/
   }
 
   Process*
@@ -2322,92 +1953,7 @@ namespace djnn
   {
     Process* res = AbstractPropHomography::find_component(name);
     if(res) return res;
-/*
-    Coupling ** coupling;
-    double* rawp;
-    int notify_mask = notify_none;
 
-    if(name=="m11") {
-      coupling=&_cm11;
-      rawp=&raw_props.m11;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m12") {
-      coupling=&_cm12;
-      rawp=&raw_props.m12;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m13") {
-      coupling=&_cm13;
-      rawp=&raw_props.m13;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m14") {
-      coupling=&_cm14;
-      rawp=&raw_props.m14;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m21") {
-      coupling=&_cm21;
-      rawp=&raw_props.m21;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m22") {
-      coupling=&_cm22;
-      rawp=&raw_props.m22;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m23") {
-      coupling=&_cm23;
-      rawp=&raw_props.m23;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m24") {
-      coupling=&_cm24;
-      rawp=&raw_props.m24;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m31") {
-      coupling=&_cm31;
-      rawp=&raw_props.m31;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m32") {
-      coupling=&_cm32;
-      rawp=&raw_props.m32;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m33") {
-      coupling=&_cm33;
-      rawp=&raw_props.m33;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m34") {
-      coupling=&_cm34;
-      rawp=&raw_props.m34;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m41") {
-      coupling=&_cm41;
-      rawp=&raw_props.m41;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m42") {
-      coupling=&_cm42;
-      rawp=&raw_props.m42;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m43") {
-      coupling=&_cm43;
-      rawp=&raw_props.m43;
-      notify_mask = notify_damaged_transform;
-    } else
-    if(name=="m44") {
-      coupling=&_cm44;
-      rawp=&raw_props.m44;
-      notify_mask = notify_damaged_transform;
-    } else
-    */
     if (name.find ("rightTranslateBy") != std::string::npos) {
       init_rightTranslateBy();
       return AbstractGObj::find_component(name);
@@ -2450,62 +1996,14 @@ namespace djnn
     } else
     return nullptr;
     
-    //DoublePropertyProxy* prop = nullptr; // do not cache
-    //res = create_GObj_prop(&prop, coupling, rawp, name, notify_mask);
-
     return res;
   }
-/*
-  void
-  AbstractHomography::get_properties_values (double &m11, double &m12, double &m13, double &m14, 
-                                           double &m21, double &m22, double &m23, double &m24,
-                                           double &m31, double &m32, double &m33, double &m34,
-                                           double &m41, double &m42, double &m43, double &m44)
-  {
-    m11 = raw_props.m11;
-    m12 = raw_props.m12;
-    m13 = raw_props.m13;
-    m14 = raw_props.m14;
 
-    m21 = raw_props.m21;
-    m22 = raw_props.m22;
-    m23 = raw_props.m23;
-    m24 = raw_props.m24;
-
-    m31 = raw_props.m31;
-    m32 = raw_props.m32;
-    m33 = raw_props.m33;
-    m34 = raw_props.m34;
-
-    m41 = raw_props.m41;
-    m42 = raw_props.m42;
-    m43 = raw_props.m43;
-    m44 = raw_props.m44;
-  }
-*/
   void
   AbstractHomography::impl_activate ()
   {
     AbstractPropHomography::impl_activate ();
-    // if (_cm11) _cm11->enable (_frame);
-    // if (_cm12) _cm12->enable (_frame);
-    // if (_cm13) _cm13->enable (_frame);
-    // if (_cm14) _cm14->enable (_frame);
-
-    // if (_cm21) _cm21->enable (_frame);
-    // if (_cm22) _cm22->enable (_frame);
-    // if (_cm23) _cm23->enable (_frame);
-    // if (_cm24) _cm24->enable (_frame);
-
-    // if (_cm31) _cm31->enable (_frame);
-    // if (_cm32) _cm32->enable (_frame);
-    // if (_cm33) _cm33->enable (_frame);
-    // if (_cm34) _cm34->enable (_frame);
-
-    // if (_cm41) _cm41->enable (_frame);
-    // if (_cm42) _cm42->enable (_frame);
-    // if (_cm43) _cm43->enable (_frame);
-    // if (_cm44) _cm44->enable (_frame);
+    
     auto _frame = frame ();
 
     if (_rightTranslateBy_action) {
@@ -2563,26 +2061,6 @@ namespace djnn
   void
   AbstractHomography::impl_deactivate ()
   {
-    // if (_cm11) _cm11->disable ();
-    // if (_cm12) _cm12->disable ();
-    // if (_cm13) _cm13->disable ();
-    // if (_cm14) _cm14->disable ();
-
-    // if (_cm21) _cm21->disable ();
-    // if (_cm22) _cm22->disable ();
-    // if (_cm23) _cm23->disable ();
-    // if (_cm24) _cm24->disable ();
-
-    // if (_cm31) _cm31->disable ();
-    // if (_cm32) _cm32->disable ();
-    // if (_cm33) _cm33->disable ();
-    // if (_cm34) _cm34->disable ();
-
-    // if (_cm41) _cm41->disable ();
-    // if (_cm42) _cm42->disable ();
-    // if (_cm43) _cm43->disable ();
-    // if (_cm44) _cm44->disable ();
-
     if (_rightTranslateBy_action) {
       _rightTranslateBy_dx_coupling->disable ();
       _rightTranslateBy_dy_coupling->disable ();
@@ -2663,6 +2141,24 @@ namespace djnn
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_homography (this);
     }
+  }
+
+  AbstractGShape*
+  Homography::pick_analytical (PickAnalyticalContext& pac)
+  {
+    double
+      a = raw_props.m11, b = raw_props.m12,
+      c = raw_props.m21, d = raw_props.m22;
+    double
+    pacx = d * pac.x - b * pac.y;
+    pac.y = -c * pac.x + a * pac.y;
+    pac.x = pacx;
+
+    double det = 1/(a*d-b*c);
+    pac.x *= det;
+    pac.y *= det;
+
+    return nullptr;
   }
 
   Process*

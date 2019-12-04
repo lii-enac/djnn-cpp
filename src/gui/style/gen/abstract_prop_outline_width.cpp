@@ -24,24 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "outline_width.h"
-
-#include "gui/picking/analytical_picking.h"
-
-#include <iostream>
+#include "abstract_prop_outline_width.h"
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (Process *parent, const std::string& name, double width) :
+  AbstractPropOutlineWidth::AbstractPropOutlineWidth (Process *parent, const std::string& name, double width) :
     AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    
   }
 
-  OutlineWidth::OutlineWidth (double width) :
+  AbstractPropOutlineWidth::AbstractPropOutlineWidth (double width) :
     AbstractStyle (), 
     raw_props{.width=width},
     _cwidth (nullptr)
@@ -49,7 +45,7 @@ namespace djnn
     
   }
 
-  OutlineWidth::~OutlineWidth ()
+  AbstractPropOutlineWidth::~AbstractPropOutlineWidth ()
   {
     delete _cwidth;
 
@@ -64,7 +60,7 @@ namespace djnn
   }
  
   Process*
-  OutlineWidth::find_component (const string& name)
+  AbstractPropOutlineWidth::find_component (const string& name)
   {
     Process* res = AbstractStyle::find_component(name);
     if(res) return res;
@@ -102,13 +98,13 @@ namespace djnn
   }
 
   void
-  OutlineWidth::get_properties_values (double& width)
+  AbstractPropOutlineWidth::get_properties_values (double& width)
   {
     width = raw_props.width;
   }
 
   void
-  OutlineWidth::impl_activate ()
+  AbstractPropOutlineWidth::impl_activate ()
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
@@ -116,36 +112,14 @@ namespace djnn
   }
 
   void
-  OutlineWidth::impl_deactivate ()
+  AbstractPropOutlineWidth::impl_deactivate ()
   {
     if(_cwidth) _cwidth->disable ();
     AbstractStyle::impl_deactivate ();
   }
 
   
-  void
-  OutlineWidth::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->load_outline_width (this);
-    }
-  }
 
-  AbstractGShape*
-  OutlineWidth::pick_analytical (PickAnalyticalContext& pac)
-  {
-    //std::cerr << "OutlineWidth::pick_analytical " << pac.half_outline_width << std::endl;
-    //std::cerr << raw_props.width << std::endl;
-    pac.half_outline_width = raw_props.width / 2;
-    return nullptr;
-  }
   
-  Process*
-  OutlineWidth::clone ()
-  {
-    return new OutlineWidth (raw_props.width);
-  }
-
   
 } /* namespace djnn */

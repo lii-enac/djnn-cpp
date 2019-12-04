@@ -35,7 +35,8 @@ namespace djnn {
     void swap_children (int i, int j);
     void update_drawing () override;
     void draw () override;
-    void pick () override; 
+    void pick () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
     void impl_activate () override;
     void impl_deactivate () override;

@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "circle.h"
+#include "abstract_prop_circle.h"
 
 namespace djnn
 {
-  Circle::Circle (Process *parent, const std::string& name, double cx, double cy, double r) :
+  AbstractPropCircle::AbstractPropCircle (Process *parent, const std::string& name, double cx, double cy, double r) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
   {
     set_origin (cx,cy);
-    Process::finalize_construction (parent, name);
+    
   }
 
-  Circle::Circle (double cx, double cy, double r) :
+  AbstractPropCircle::AbstractPropCircle (double cx, double cy, double r) :
     AbstractGShape (), 
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     set_origin (cx,cy);
   }
 
-  Circle::~Circle ()
+  AbstractPropCircle::~AbstractPropCircle ()
   {
     delete _ccx;
 		delete _ccy;
@@ -70,7 +70,7 @@ namespace djnn
   }
  
   Process*
-  Circle::find_component (const string& name)
+  AbstractPropCircle::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -120,7 +120,7 @@ namespace djnn
   }
 
   void
-  Circle::get_properties_values (double& cx, double& cy, double& r)
+  AbstractPropCircle::get_properties_values (double& cx, double& cy, double& r)
   {
     cx = raw_props.cx;
 		cy = raw_props.cy;
@@ -128,7 +128,7 @@ namespace djnn
   }
 
   void
-  Circle::impl_activate ()
+  AbstractPropCircle::impl_activate ()
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
@@ -138,7 +138,7 @@ namespace djnn
   }
 
   void
-  Circle::impl_deactivate ()
+  AbstractPropCircle::impl_deactivate ()
   {
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
@@ -147,21 +147,12 @@ namespace djnn
   }
 
   
-  void
-  Circle::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_circle (this);
-    }
-  }
-
 
   
   Process*
-  Circle::clone ()
+  AbstractPropCircle::clone ()
   {
-    return new Circle (raw_props.cx, raw_props.cy, raw_props.r);
+    return new AbstractPropCircle (raw_props.cx, raw_props.cy, raw_props.r);
   }
 
   

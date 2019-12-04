@@ -19,15 +19,14 @@
 
 namespace djnn
 {
-  class OutlineWidth : public AbstractStyle
+  class AbstractPropOutlineWidth : public AbstractStyle
   {
   public:
-    OutlineWidth (Process *parent, const std::string& name, double width);
-    OutlineWidth (double width);
-    virtual ~OutlineWidth ();
-    void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    AbstractPropOutlineWidth (Process *parent, const std::string& name, double width);
+    AbstractPropOutlineWidth (double width);
+    virtual ~AbstractPropOutlineWidth ();
+    
+    
     void get_properties_values (double& width);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
