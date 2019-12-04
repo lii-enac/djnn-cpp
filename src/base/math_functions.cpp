@@ -46,13 +46,21 @@ namespace djnn
   template <> const char name_info<my_pow<double>>::right[] = "exponent";
   template <> const char name_info<my_pow<double>>::serialize[] = "pow";
 
-  template <> const char name_info<my_min<double>>::left[] = "min";
-  template <> const char name_info<my_min<double>>::right[] = "input";
+  template <> const char name_info<my_min<double>>::left[] = "left";
+  template <> const char name_info<my_min<double>>::right[] = "right";
   template <> const char name_info<my_min<double>>::serialize[] = "min";
 
-  template <> const char name_info<my_max<double>>::left[] = "max";
-  template <> const char name_info<my_max<double>>::right[] = "input";
+  template <> const char name_info<my_max<double>>::left[] = "left";
+  template <> const char name_info<my_max<double>>::right[] = "right";
   template <> const char name_info<my_max<double>>::serialize[] = "max";
+
+  template <> const char name_info<my_clamp_min<double>>::left[] = "min";
+  template <> const char name_info<my_clamp_min<double>>::right[] = "input";
+  template <> const char name_info<my_clamp_min<double>>::serialize[] = "clamp_min";
+
+  template <> const char name_info<my_clamp_max<double>>::left[] = "max";
+  template <> const char name_info<my_clamp_max<double>>::right[] = "input";
+  template <> const char name_info<my_clamp_max<double>>::serialize[] = "clamp_max";
   
   BoundedValue::BoundedValue (Process *parent, const string &name, double min, double max, double init_val)
   :
