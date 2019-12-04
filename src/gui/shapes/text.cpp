@@ -213,7 +213,7 @@ namespace djnn
       coupling=&_cencoding;
       rawpi=&raw_props.encoding;
       notify_mask = notify_damaged_geometry;
-    }
+    } else
     return nullptr;
     
     if (propd) {
