@@ -298,10 +298,11 @@ namespace djnn
     if (cache == nullptr || (t->get_damaged () & (notify_damaged_geometry | notify_damaged_transform))) {
       if (cache)
         delete cache;
-      double x, y, dx, dy, fsize;
-      int dxU, dyU, width, height, encoding, fstyle, fweight;
+      double x, y, dx, dy;
+      int dxU, dyU, width, height, encoding;
       string text, ffamily;
-      t->get_properties_values (x, y, dx, dy, fsize, dxU, dyU, width, height, encoding, fstyle, fweight, text, ffamily);
+      t->get_properties_values(x, y, dx, dy, dxU, dyU, width, height, encoding, text);
+
       PangoLayout *layout;
       CairoContext *cur_context = _context_manager->get_current ();
       double dxfactor = factor[dxU];
