@@ -14,10 +14,6 @@
 
 #include "window.h"
 
-#include "gui/abstract_gobj.h"
-#include "gui/backend.h"
-#include "gui/abstract_backend.h"
-
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "display/update_drawing.h"
@@ -25,6 +21,7 @@
 #include "core/tree/spike.h"
 #include "core/tree/component.h"
 #include "core/tree/set.h"
+#include "core/tree/list.h"
 
 #include <iostream>
 

@@ -14,9 +14,7 @@
  */
 
 #include "sdl_mainloop.h"
-#include "gui/gui-priv.h"
 #include "sdl_window.h"
-//#include "backend.h"
 #include "display/display.h"
 
 #include "core/syshook/syshook.h"

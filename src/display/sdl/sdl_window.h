@@ -17,7 +17,6 @@
 #pragma once
 
 #include "display/window.h"
-#include "gui/picking/picking.h"
 #include "core/ontology/process.h"
 #include "core/syshook/external_source.h"
 

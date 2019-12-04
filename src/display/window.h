@@ -43,27 +43,6 @@ namespace djnn
     Picking *_picking_view;
   };
 
-  // template<typename T>
-  // class valid_ptr
-  // {
-  // public:
-  //     valid_ptr() = delete;
-  //     valid_ptr(valid_ptr const&) = delete;
-  //     valid_ptr(T data) : ptr_(new T{data}) {}
-  //     void operator=(valid_ptr const&) = delete;
-  //     ~valid_ptr() {delete ptr_;}
-
-  //     T* operator->() {return ptr_;};
-  //     void reset(T data) {this->~valid_ptr(); ptr_ = new T{data};}
-  //     void set(T value) {*ptr_ = value;}
-  //     T get() {return *ptr_;}
-  //     bool is_valid () const { return ptr_ != nullptr; }
-  //     void invalidate () { ptr_ = nullptr; }
-
-  // private:
-  //     T* ptr_;
-  // };
-
   class Window : public Process
   {
   public:
