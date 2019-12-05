@@ -168,6 +168,16 @@ namespace djnn
       _cur_branch->pick ();
   }
 
+  AbstractGShape*
+  SwitchRange::pick_analytical (PickAnalyticalContext& pac)
+  {
+    if (get_activation_flag() == DEACTIVATION)
+      return nullptr;
+    if (_cur_branch != nullptr)
+      return _cur_branch->pick_analytical (pac);
+    return nullptr;
+  }  
+
   void
   SwitchRange::change_branch ()
   {

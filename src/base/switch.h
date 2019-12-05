@@ -45,6 +45,7 @@ namespace djnn {
     void impl_deactivate () override;
     void draw () override;
     void pick () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~Switch ();
     void serialize (const string& type) override;
   private:

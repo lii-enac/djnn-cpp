@@ -99,6 +99,7 @@ namespace djnn {
     void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;
     void pick () override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     void add_state (FSMState* st) { _states.push_back(st); };
     void add_transition (FSMTransition* tr) { _transitions.push_back(tr); };
     virtual ~FSM ();

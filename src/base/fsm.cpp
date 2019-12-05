@@ -301,6 +301,16 @@ namespace djnn
       _cur_state->pick ();
   }
 
+  AbstractGShape*
+  FSM::pick_analytical (PickAnalyticalContext& pac)
+  {
+    if (get_activation_flag() == DEACTIVATION)
+      return nullptr;
+    if (_cur_state != nullptr)
+      return _cur_state->pick_analytical (pac);
+    return nullptr;
+  }
+
   void
   FSM::serialize (const string& type) {
    
