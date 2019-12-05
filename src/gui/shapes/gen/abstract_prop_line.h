@@ -19,13 +19,13 @@
 
 namespace djnn
 {
-  class Line : public AbstractGShape
+  class AbstractPropLine : public AbstractGShape
   {
   public:
-    Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2);
-    Line (double x1, double y1, double x2, double y2);
-    virtual ~Line ();
-    void draw () override;
+    AbstractPropLine (Process *parent, const std::string& name, double x1, double y1, double x2, double y2);
+    AbstractPropLine (double x1, double y1, double x2, double y2);
+    virtual ~AbstractPropLine ();
+    
     Process* clone () override;
     void get_properties_values (double& x1, double& y1, double& x2, double& y2);
     virtual Process* find_component (const string&) override;

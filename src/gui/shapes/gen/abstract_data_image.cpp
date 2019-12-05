@@ -101,6 +101,7 @@ namespace djnn
   AbstractDataImage::get_properties_values (std::string& data, double& x, double& y, double& width, double& height)
   {
     data = raw_props.data;
+    AbstractImage::get_properties_values (x,y,width,height);
   }
 
   void

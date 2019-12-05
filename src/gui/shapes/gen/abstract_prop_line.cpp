@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "line.h"
+#include "abstract_prop_line.h"
 
 namespace djnn
 {
-  Line::Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2) :
+  AbstractPropLine::AbstractPropLine (Process *parent, const std::string& name, double x1, double y1, double x2, double y2) :
     AbstractGShape (parent, name),
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
   {
     set_origin (x1,y1);
-    Process::finalize_construction (parent, name);
+    
   }
 
-  Line::Line (double x1, double y1, double x2, double y2) :
+  AbstractPropLine::AbstractPropLine (double x1, double y1, double x2, double y2) :
     AbstractGShape (), 
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     set_origin (x1,y1);
   }
 
-  Line::~Line ()
+  AbstractPropLine::~AbstractPropLine ()
   {
     delete _cx1;
 		delete _cy1;
@@ -75,7 +75,7 @@ namespace djnn
   }
  
   Process*
-  Line::find_component (const string& name)
+  AbstractPropLine::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -131,7 +131,7 @@ namespace djnn
   }
 
   void
-  Line::get_properties_values (double& x1, double& y1, double& x2, double& y2)
+  AbstractPropLine::get_properties_values (double& x1, double& y1, double& x2, double& y2)
   {
     x1 = raw_props.x1;
 		y1 = raw_props.y1;
@@ -140,7 +140,7 @@ namespace djnn
   }
 
   void
-  Line::impl_activate ()
+  AbstractPropLine::impl_activate ()
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
@@ -151,7 +151,7 @@ namespace djnn
   }
 
   void
-  Line::impl_deactivate ()
+  AbstractPropLine::impl_deactivate ()
   {
     if(_cx1) _cx1->disable ();
 		if(_cy1) _cy1->disable ();
@@ -161,21 +161,12 @@ namespace djnn
   }
 
   
-  void
-  Line::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_line (this);
-    }
-  }
-
 
   
   Process*
-  Line::clone ()
+  AbstractPropLine::clone ()
   {
-    return new Line (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+    return new AbstractPropLine (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
   }
 
   

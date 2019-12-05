@@ -101,6 +101,7 @@ namespace djnn
   AbstractPathImage::get_properties_values (std::string& path, double& x, double& y, double& width, double& height)
   {
     path = raw_props.path;
+    AbstractImage::get_properties_values (x,y,width,height);
   }
 
   void

@@ -23,6 +23,7 @@ namespace djnn {
   struct vec2 {
     double x,y;
     vec2(double x_, double y_) : x(x_), y(y_) {}
+    vec2(double v) : x(v), y(v) {}
   };
 
   inline
@@ -90,6 +91,28 @@ namespace djnn {
     if (v>0) return 1.0;
     else if(v<0) return -1.0;
     else return 0.0;
+  }
+
+  inline
+  const vec2 normalize(const vec2& v)
+  {
+    auto h = length(v);
+    return vec2(v.x/h, v.y/h);
+  }
+
+  inline
+  int dot(const vec2& v1, const vec2& v2)
+  {
+    return v1.x*v2.x + v1.y*v2.y;
+  }
+
+
+  inline
+  float SDF_plane(vec2 p, vec2 p0, vec2 p1)
+  {
+    vec2 T = p1 - p0;
+    vec2 O = normalize(vec2(T.y, -T.x));
+    return dot(O, p0 - p);
   }
 
   inline
