@@ -424,7 +424,7 @@ dc.props.append(Prop('x2', 'double', None, "geometry"))
 dc.props.append(Prop('y2', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("RectangleClip", "AbstractGShape", "../src/gui/shapes")
+dc = DjnnClass("AbstractPropRectangleClip", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))

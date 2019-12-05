@@ -28,8 +28,6 @@
 #include "shapes.h"
 #include "gui/shapes/sdf.h"
 
-#include <iostream>
-
 namespace djnn
 {
 

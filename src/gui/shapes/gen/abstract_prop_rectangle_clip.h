@@ -19,14 +19,14 @@
 
 namespace djnn
 {
-  class RectangleClip : public AbstractGShape
+  class AbstractPropRectangleClip : public AbstractGShape
   {
   public:
-    RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
-    RectangleClip (double x, double y, double width, double height);
-    virtual ~RectangleClip ();
-    void draw () override;
-    Process* clone () override;
+    AbstractPropRectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
+    AbstractPropRectangleClip (double x, double y, double width, double height);
+    virtual ~AbstractPropRectangleClip ();
+    
+    
     void get_properties_values (double& x, double& y, double& width, double& height);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component ("x"); }

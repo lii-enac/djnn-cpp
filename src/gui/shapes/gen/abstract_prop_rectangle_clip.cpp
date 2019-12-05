@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "rectangle_clip.h"
+#include "abstract_prop_rectangle_clip.h"
 
 namespace djnn
 {
-  RectangleClip::RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height) :
+  AbstractPropRectangleClip::AbstractPropRectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height) :
     AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
   {
     set_origin (x, y);
-    Process::finalize_construction (parent, name);
+    
   }
 
-  RectangleClip::RectangleClip (double x, double y, double width, double height) :
+  AbstractPropRectangleClip::AbstractPropRectangleClip (double x, double y, double width, double height) :
     AbstractGShape (), 
     raw_props{.x=x, .y=y, .width=width, .height=height},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     set_origin (x, y);
   }
 
-  RectangleClip::~RectangleClip ()
+  AbstractPropRectangleClip::~AbstractPropRectangleClip ()
   {
     delete _cx;
 		delete _cy;
@@ -75,7 +75,7 @@ namespace djnn
   }
  
   Process*
-  RectangleClip::find_component (const string& name)
+  AbstractPropRectangleClip::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -131,7 +131,7 @@ namespace djnn
   }
 
   void
-  RectangleClip::get_properties_values (double& x, double& y, double& width, double& height)
+  AbstractPropRectangleClip::get_properties_values (double& x, double& y, double& width, double& height)
   {
     x = raw_props.x;
 		y = raw_props.y;
@@ -141,7 +141,7 @@ namespace djnn
   }
 
   void
-  RectangleClip::impl_activate ()
+  AbstractPropRectangleClip::impl_activate ()
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
@@ -152,7 +152,7 @@ namespace djnn
   }
 
   void
-  RectangleClip::impl_deactivate ()
+  AbstractPropRectangleClip::impl_deactivate ()
   {
     if(_cx) _cx->disable ();
 		if(_cy) _cy->disable ();
@@ -162,22 +162,7 @@ namespace djnn
   }
 
   
-  void
-  RectangleClip::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_rectangle_clip (this);
-    }
-  }
-
 
   
-  Process*
-  RectangleClip::clone ()
-  {
-    return new RectangleClip (raw_props.x, raw_props.y, raw_props.width, raw_props.height);
-  }
-
   
 } /* namespace djnn */

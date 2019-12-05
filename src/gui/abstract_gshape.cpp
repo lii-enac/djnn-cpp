@@ -23,7 +23,7 @@
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "picking/picking.h"
-#include "gui/picking/analytical_picking.h"
+#include "gui/picking/analytical_picking_context.h"
 
 #include <math.h>
 #include <float.h>

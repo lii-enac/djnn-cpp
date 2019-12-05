@@ -1,4 +1,5 @@
 #include "analytical_picking.h"
+#include "analytical_picking_context.h"
 
 #include <iostream>
 
@@ -24,10 +25,11 @@ namespace djnn {
       PickAnalyticalContext pac;
       pac.x = x;
       pac.y = y;
-      pac.filled = true;
-      pac.outlined = false;
       pac.half_outline_width=0; // FIXME should be default value
-
+      pac.filled = true; 
+      pac.outlined = false;
+      pac.clipped = false;
+      
 	    return p->pick_analytical (pac);
    	}
 

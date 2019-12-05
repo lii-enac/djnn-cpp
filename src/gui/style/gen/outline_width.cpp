@@ -26,7 +26,7 @@
 
 #include "outline_width.h"
 
-#include "gui/picking/analytical_picking.h"
+#include "gui/picking/analytical_picking_context.h"
 
 #include <iostream>
 

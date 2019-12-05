@@ -25,7 +25,7 @@
 #include "display/window.h"
 
 #include "core/execution/graph.h"
-#include "gui/picking/analytical_picking.h"
+#include "gui/picking/analytical_picking_context.h"
 
 
 #include <array>

@@ -26,7 +26,7 @@
 #include "gen/abstract_prop_rectangle.h"
 #include "gen/abstract_prop_circle.h"
 #include "gen/abstract_prop_ellipse.h"
-#include "gen/rectangle_clip.h"
+#include "gen/abstract_prop_rectangle_clip.h"
 #include "gen/abstract_prop_line.h"
 #include "gen/abstract_image.h"
 #include "gen/abstract_path_image.h"
@@ -78,6 +78,18 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
+  };
+
+  class RectangleClip : public AbstractPropRectangleClip
+  {
+  public:
+    RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
+    RectangleClip (double x, double y, double width, double height);
+    Process* clone () override;
+    void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
   };
 
   class Text : public AbstractGShape

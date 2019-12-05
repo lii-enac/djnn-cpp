@@ -8,5 +8,6 @@ namespace djnn {
 		double half_outline_width;
 		bool filled;
 		bool outlined;
+		bool clipped;
 	};
 }

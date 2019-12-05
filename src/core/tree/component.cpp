@@ -277,6 +277,9 @@ namespace djnn
     AbstractGShape * picked = nullptr;
     for (auto p : _children) {
       AbstractGShape * picked_ = p->pick_analytical (pac_stacked);
+      if(pac_stacked.clipped) {
+        return picked;
+      }
       if(picked_) picked = picked_;
     }
     return picked;
