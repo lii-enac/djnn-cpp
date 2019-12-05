@@ -41,7 +41,7 @@
 #include "core/core.h"
 #include "core/xml/xml-dev.h"
 #include "gui/gui-dev.h"
-#include "gui/abstract_gshape.h"
+#include "gui/shapes/abstract_gshape.h"
 
 #define register 
 

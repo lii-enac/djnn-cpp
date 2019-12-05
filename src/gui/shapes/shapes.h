@@ -17,7 +17,7 @@
 #pragma once
 
 #include "core/tree/list.h"
-#include "gui/abstract_gshape.h"
+#include "gui/shapes/abstract_gshape.h"
 
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"

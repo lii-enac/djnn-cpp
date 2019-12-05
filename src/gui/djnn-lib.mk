@@ -1,4 +1,4 @@
-lib_srcs += src/gui/abstract_gobj.cpp src/gui/abstract_gshape.cpp src/gui/gui.cpp
+lib_srcs += src/gui/abstract_gobj.cpp src/gui/gui.cpp
 #src/gui/window.cpp
 lib_srcs += $(shell find src/gui/interaction -name "*.cpp")
 lib_srcs += $(shell find src/gui/picking -name "*.cpp")

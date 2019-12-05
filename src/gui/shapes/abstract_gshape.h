@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "abstract_gobj.h"
+#include "gui/abstract_gobj.h"
 
 #include "core/ontology/process.h"
 #include "core/tree/ref_property.h"
