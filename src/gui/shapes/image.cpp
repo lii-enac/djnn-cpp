@@ -59,9 +59,9 @@ namespace djnn
   Image::find_component (const string& name)
   {
     Process* res = AbstractPathImage::find_component(name);
-    if(res) return res;
+    //if(res) return res;
 
-    if( name=="path" ) {
+    if( name=="path" && _watcher == nullptr) {
       _watcher = new ImageWatcher (this);
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       _cwatcher->disable ();
@@ -131,9 +131,9 @@ namespace djnn
   DataImage::find_component (const string& name)
   {
     Process* res = AbstractDataImage::find_component(name);
-    if(res) return res;
+    //if(res) return res;
 
-    if( name=="data" ) {
+    if( name=="data" && _watcher == nullptr) {
       _watcher = new DataImageWatcher (this);
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       _cwatcher->disable ();
