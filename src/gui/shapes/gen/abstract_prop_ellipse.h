@@ -26,7 +26,7 @@ namespace djnn
     AbstractPropEllipse (double cx, double cy, double rx, double ry);
     virtual ~AbstractPropEllipse ();
     
-    Process* clone () override;
+    
     void get_properties_values (double& cx, double& cy, double& rx, double& ry);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component ("cx"); }

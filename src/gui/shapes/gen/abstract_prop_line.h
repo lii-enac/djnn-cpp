@@ -26,7 +26,7 @@ namespace djnn
     AbstractPropLine (double x1, double y1, double x2, double y2);
     virtual ~AbstractPropLine ();
     
-    Process* clone () override;
+    
     void get_properties_values (double& x1, double& y1, double& x2, double& y2);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component ("x1"); }

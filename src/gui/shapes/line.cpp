@@ -39,6 +39,12 @@ namespace djnn
   : AbstractPropLine (x1, y1, x2, y2)
   {
   }
+
+  Process*
+  Line::clone ()
+  {
+    return new Line (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+  }
  
   void
   Line::draw ()

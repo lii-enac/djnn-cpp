@@ -149,11 +149,5 @@ namespace djnn
   
 
   
-  Process*
-  AbstractPropCircle::clone ()
-  {
-    return new AbstractPropCircle (raw_props.cx, raw_props.cy, raw_props.r);
-  }
-
   
 } /* namespace djnn */

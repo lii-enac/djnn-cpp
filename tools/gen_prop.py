@@ -386,7 +386,7 @@ dcs = []
 
 # -- shapes
 
-dc = DjnnClass("AbstractPropRectangle", "AbstractGShape", "../src/gui/shapes", finalize_construction=False, emit_clone=True)
+dc = DjnnClass("AbstractPropRectangle", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
@@ -395,20 +395,20 @@ dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False, emit_clone=True)
+dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False, emit_clone=True)
+dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('rx', 'double', None, "geometry"))
 dc.props.append(Prop('ry', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropLine", "AbstractGShape", "../src/gui/shapes", origin='x1,y1', finalize_construction=False, emit_clone=True)
+dc = DjnnClass("AbstractPropLine", "AbstractGShape", "../src/gui/shapes", origin='x1,y1', finalize_construction=False)
 dc.props.append(Prop('x1', 'double', None, "transform"))
 dc.props.append(Prop('y1', 'double', None, "transform"))
 dc.props.append(Prop('x2', 'double', None, "geometry"))

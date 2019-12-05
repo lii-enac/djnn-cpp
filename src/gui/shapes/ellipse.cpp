@@ -39,6 +39,12 @@ namespace djnn
   : AbstractPropEllipse (cx, cy, rx, ry)
   {
   }
+
+  Process*
+  Ellipse::clone ()
+  {
+    return new Ellipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
+  }
  
   void
   Ellipse::draw ()

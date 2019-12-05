@@ -39,6 +39,12 @@ namespace djnn
   : AbstractPropCircle (cx, cy, r)
   {
   }
+
+  Process*
+  Circle::clone ()
+  {
+    return new Circle (raw_props.cx, raw_props.cy, raw_props.r);
+  }
  
   void
   Circle::draw ()

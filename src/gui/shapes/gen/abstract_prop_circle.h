@@ -26,7 +26,7 @@ namespace djnn
     AbstractPropCircle (double cx, double cy, double r);
     virtual ~AbstractPropCircle ();
     
-    Process* clone () override;
+    
     void get_properties_values (double& cx, double& cy, double& r);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component ("cx"); }

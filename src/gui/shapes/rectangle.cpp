@@ -44,6 +44,12 @@ namespace djnn
   {
   }
 
+  Process*
+  Rectangle::clone ()
+  {
+    return new Rectangle (raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
+  }
+
   void
   Rectangle::draw ()
   {

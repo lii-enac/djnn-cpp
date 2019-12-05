@@ -163,11 +163,5 @@ namespace djnn
   
 
   
-  Process*
-  AbstractPropLine::clone ()
-  {
-    return new AbstractPropLine (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
-  }
-
   
 } /* namespace djnn */

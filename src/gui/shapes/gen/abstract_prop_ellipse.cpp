@@ -163,11 +163,5 @@ namespace djnn
   
 
   
-  Process*
-  AbstractPropEllipse::clone ()
-  {
-    return new AbstractPropEllipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
-  }
-
   
 } /* namespace djnn */

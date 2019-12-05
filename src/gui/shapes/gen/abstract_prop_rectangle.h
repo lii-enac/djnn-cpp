@@ -26,7 +26,7 @@ namespace djnn
     AbstractPropRectangle (double x, double y, double width, double height, double rx=0, double ry=0);
     virtual ~AbstractPropRectangle ();
     
-    Process* clone () override;
+    
     void get_properties_values (double& x, double& y, double& width, double& height, double& rx, double& ry);
     virtual Process* find_component (const string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component ("x"); }

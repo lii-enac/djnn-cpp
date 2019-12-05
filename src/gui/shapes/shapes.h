@@ -41,6 +41,7 @@ namespace djnn
   public:
     Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
     Rectangle (double x, double y, double width, double height, double rx=0, double ry=0);
+    Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -51,6 +52,7 @@ namespace djnn
   public:
     Circle (Process *parent, const std::string& name, double cx, double cy, double r);
     Circle (double cx, double cy, double r);
+    Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -61,6 +63,7 @@ namespace djnn
   public:
     Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
     Ellipse (double cx, double cy, double rx, double ry);
+    Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -71,6 +74,7 @@ namespace djnn
   public:
     Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2);
     Line (double x1, double y1, double x2, double y2);
+    Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
