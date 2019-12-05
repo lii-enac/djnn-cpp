@@ -149,6 +149,7 @@ namespace djnn
 		b = raw_props.b;
 		a = raw_props.a;
 		offset = raw_props.offset;
+    
   }
 
   void

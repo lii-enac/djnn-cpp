@@ -101,6 +101,7 @@ namespace djnn
   TextAnchor::get_properties_values (int& anchor)
   {
     anchor = raw_props.anchor;
+    
   }
 
   void

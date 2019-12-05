@@ -101,6 +101,7 @@ namespace djnn
   AbstractPropFontWeight::get_properties_values (int& weight)
   {
     weight = raw_props.weight;
+    
   }
 
   void

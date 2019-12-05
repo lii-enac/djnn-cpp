@@ -137,6 +137,7 @@ namespace djnn
 		cy = raw_props.cy;
 		rx = raw_props.rx;
 		ry = raw_props.ry;
+    
   }
 
   void

@@ -101,6 +101,7 @@ namespace djnn
   AbstractPropOutlineWidth::get_properties_values (double& width)
   {
     width = raw_props.width;
+    
   }
 
   void

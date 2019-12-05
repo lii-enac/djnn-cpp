@@ -101,6 +101,7 @@ namespace djnn
   OutlineMiterLimit::get_properties_values (int& limit)
   {
     limit = raw_props.limit;
+    
   }
 
   void

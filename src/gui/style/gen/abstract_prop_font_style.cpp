@@ -101,6 +101,7 @@ namespace djnn
   AbstractPropFontStyle::get_properties_values (int& style)
   {
     style = raw_props.style;
+    
   }
 
   void

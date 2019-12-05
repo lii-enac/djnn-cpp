@@ -113,6 +113,7 @@ namespace djnn
   {
     tx = raw_props.tx;
 		ty = raw_props.ty;
+    
   }
 
   void

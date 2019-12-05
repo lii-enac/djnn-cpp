@@ -101,6 +101,7 @@ namespace djnn
   Texture::get_properties_values (std::string& path)
   {
     path = raw_props.path;
+    
   }
 
   void

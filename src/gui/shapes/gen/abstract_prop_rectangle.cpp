@@ -161,6 +161,7 @@ namespace djnn
 		height = raw_props.height;
 		rx = raw_props.rx;
 		ry = raw_props.ry;
+    
   }
 
   void

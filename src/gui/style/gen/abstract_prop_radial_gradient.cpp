@@ -149,6 +149,7 @@ namespace djnn
 		r = raw_props.r;
 		fx = raw_props.fx;
 		fy = raw_props.fy;
+    AbstractGradient::get_properties_values(spread, coords);
   }
 
   void

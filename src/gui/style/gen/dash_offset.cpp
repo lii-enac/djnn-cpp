@@ -101,6 +101,7 @@ namespace djnn
   DashOffset::get_properties_values (double& offset)
   {
     offset = raw_props.offset;
+    
   }
 
   void

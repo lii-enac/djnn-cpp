@@ -281,6 +281,7 @@ namespace djnn
 		m42 = raw_props.m42;
 		m43 = raw_props.m43;
 		m44 = raw_props.m44;
+    
   }
 
   void

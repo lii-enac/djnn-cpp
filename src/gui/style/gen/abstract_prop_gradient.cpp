@@ -113,6 +113,7 @@ namespace djnn
   {
     spread = raw_props.spread;
 		coords = raw_props.coords;
+    
   }
 
   void

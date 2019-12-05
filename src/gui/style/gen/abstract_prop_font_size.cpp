@@ -113,6 +113,7 @@ namespace djnn
   {
     unit = raw_props.unit;
 		size = raw_props.size;
+    
   }
 
   void

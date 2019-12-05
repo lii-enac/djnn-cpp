@@ -101,6 +101,7 @@ namespace djnn
   FillRule::get_properties_values (int& rule)
   {
     rule = raw_props.rule;
+    
   }
 
   void

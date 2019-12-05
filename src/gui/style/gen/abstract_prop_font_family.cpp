@@ -101,6 +101,7 @@ namespace djnn
   AbstractPropFontFamily::get_properties_values (std::string& family)
   {
     family = raw_props.family;
+    
   }
 
   void

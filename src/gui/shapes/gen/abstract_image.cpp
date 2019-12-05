@@ -137,6 +137,7 @@ namespace djnn
 		y = raw_props.y;
 		width = raw_props.width;
 		height = raw_props.height;
+    
   }
 
   void

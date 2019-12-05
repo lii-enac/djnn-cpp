@@ -101,6 +101,7 @@ namespace djnn
   AbstractSkew::get_properties_values (double& a)
   {
     a = raw_props.a;
+    
   }
 
   void

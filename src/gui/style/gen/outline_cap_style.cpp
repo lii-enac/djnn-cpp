@@ -101,6 +101,7 @@ namespace djnn
   OutlineCapStyle::get_properties_values (int& cap)
   {
     cap = raw_props.cap;
+    
   }
 
   void

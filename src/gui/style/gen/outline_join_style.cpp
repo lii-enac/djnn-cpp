@@ -101,6 +101,7 @@ namespace djnn
   OutlineJoinStyle::get_properties_values (int& join)
   {
     join = raw_props.join;
+    
   }
 
   void

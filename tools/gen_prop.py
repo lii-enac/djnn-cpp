@@ -129,6 +129,7 @@ namespace djnn
   %(CLASS)s::get_properties_values (%(DECL_PROPS_REF_CALL)s)
   {
     %(DEF_PROPS_REF_SET)s;
+    %(GET_PROPS_FROM_PARENT)s
   }
 
   void
@@ -293,6 +294,7 @@ def just_do_it(dc, finalize_construction=True):
     # print (CREATE_PROPERTIES)
 
     DECL_PROPS_CALL_DEF = ', '.join([p.as_cpp_type_str() + ' ' + p.name for p in all_props])
+    
     RAW_PROPS_INIT = ', '.join(['.' + p.name + '=' + p.name for p in dc.props])
     # print (RAW_PROPS_INIT)
     join_str = '\n\t\t'
@@ -304,6 +306,12 @@ def just_do_it(dc, finalize_construction=True):
     #print (DELETE_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)
+    if(dc.inherits and dc.get_parent_prop_list() != []):
+      DECL_PROPS_CALL = ', '.join([p.name for p in dc.get_parent_prop_list()])
+      GET_PROPS_FROM_PARENT = dc.inherits+"::get_properties_values("+DECL_PROPS_CALL+");"
+    else:
+      GET_PROPS_FROM_PARENT = ""
+    #
     DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (_frame)' for p in dc.props])
     #DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (&*frame_sp)' for p in dc.props])
     # print (DEF_COUPLINGS_ENABLE)
@@ -351,6 +359,7 @@ def just_do_it(dc, finalize_construction=True):
         'DELETE_COUPLINGS': DELETE_COUPLINGS,
         'DELETE_DYN_PROPS': DELETE_DYN_PROPS,
         'DEF_PROPS_REF_SET': DEF_PROPS_REF_SET,
+        'GET_PROPS_FROM_PARENT': GET_PROPS_FROM_PARENT,
         'DEF_COUPLINGS_ENABLE': DEF_COUPLINGS_ENABLE,
         'DEF_COUPLINGS_DISABLE': DEF_COUPLINGS_DISABLE,
         'RAW_PROP_PARAMS': RAW_PROP_PARAMS,
