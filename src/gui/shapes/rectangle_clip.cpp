@@ -85,7 +85,7 @@ namespace djnn
   AbstractGShape*
   RectangleClip::pick_analytical (PickAnalyticalContext& pac)
   {
-    // reversed semantics: if it's in returns null
+    // reversed semantics: if it's in let the enclosing container know
     double x,y,w,h;
     get_bounding_box (x,y,w,h);
     if( ( (x - pac.half_outline_width) <= pac.x &&
