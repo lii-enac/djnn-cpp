@@ -401,7 +401,7 @@ dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("Ellipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy')
+dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False, emit_clone=True)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('rx', 'double', None, "geometry"))

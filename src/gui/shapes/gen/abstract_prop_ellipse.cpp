@@ -24,20 +24,20 @@
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
-#include "ellipse.h"
+#include "abstract_prop_ellipse.h"
 
 namespace djnn
 {
-  Ellipse::Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry) :
+  AbstractPropEllipse::AbstractPropEllipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
   {
     set_origin (cx,cy);
-    Process::finalize_construction (parent, name);
+    
   }
 
-  Ellipse::Ellipse (double cx, double cy, double rx, double ry) :
+  AbstractPropEllipse::AbstractPropEllipse (double cx, double cy, double rx, double ry) :
     AbstractGShape (), 
     raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
@@ -45,7 +45,7 @@ namespace djnn
     set_origin (cx,cy);
   }
 
-  Ellipse::~Ellipse ()
+  AbstractPropEllipse::~AbstractPropEllipse ()
   {
     delete _ccx;
 		delete _ccy;
@@ -75,7 +75,7 @@ namespace djnn
   }
  
   Process*
-  Ellipse::find_component (const string& name)
+  AbstractPropEllipse::find_component (const string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -131,7 +131,7 @@ namespace djnn
   }
 
   void
-  Ellipse::get_properties_values (double& cx, double& cy, double& rx, double& ry)
+  AbstractPropEllipse::get_properties_values (double& cx, double& cy, double& rx, double& ry)
   {
     cx = raw_props.cx;
 		cy = raw_props.cy;
@@ -140,7 +140,7 @@ namespace djnn
   }
 
   void
-  Ellipse::impl_activate ()
+  AbstractPropEllipse::impl_activate ()
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
@@ -151,7 +151,7 @@ namespace djnn
   }
 
   void
-  Ellipse::impl_deactivate ()
+  AbstractPropEllipse::impl_deactivate ()
   {
     if(_ccx) _ccx->disable ();
 		if(_ccy) _ccy->disable ();
@@ -161,21 +161,12 @@ namespace djnn
   }
 
   
-  void
-  Ellipse::draw ()
-  {
-    auto _frame = frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      Backend::instance ()->draw_ellipse (this);
-    }
-  }
-
 
   
   Process*
-  Ellipse::clone ()
+  AbstractPropEllipse::clone ()
   {
-    return new Ellipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
+    return new AbstractPropEllipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
   }
 
   

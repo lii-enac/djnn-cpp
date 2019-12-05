@@ -25,8 +25,8 @@
 
 #include "gen/abstract_prop_rectangle.h"
 #include "gen/abstract_prop_circle.h"
+#include "gen/abstract_prop_ellipse.h"
 #include "gen/rectangle_clip.h"
-#include "gen/ellipse.h"
 #include "gen/line.h"
 #include "gen/abstract_image.h"
 #include "gen/abstract_path_image.h"
@@ -51,6 +51,16 @@ namespace djnn
   public:
     Circle (Process *parent, const std::string& name, double cx, double cy, double r);
     Circle (double cx, double cy, double r);
+    void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
+  };
+
+  class Ellipse : public AbstractPropEllipse
+  {
+  public:
+    Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
+    Ellipse (double cx, double cy, double rx, double ry);
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;

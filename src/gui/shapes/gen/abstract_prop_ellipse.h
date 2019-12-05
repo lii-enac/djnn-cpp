@@ -19,13 +19,13 @@
 
 namespace djnn
 {
-  class Ellipse : public AbstractGShape
+  class AbstractPropEllipse : public AbstractGShape
   {
   public:
-    Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
-    Ellipse (double cx, double cy, double rx, double ry);
-    virtual ~Ellipse ();
-    void draw () override;
+    AbstractPropEllipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
+    AbstractPropEllipse (double cx, double cy, double rx, double ry);
+    virtual ~AbstractPropEllipse ();
+    
     Process* clone () override;
     void get_properties_values (double& cx, double& cy, double& rx, double& ry);
     virtual Process* find_component (const string&) override;
