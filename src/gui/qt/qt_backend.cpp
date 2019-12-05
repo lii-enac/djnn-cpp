@@ -76,6 +76,12 @@ namespace djnn
     _picking_view = p;
   }
 
+  // void
+  // QtBackend::set_picking_view (Picking* p)
+  // {
+  //   _picking_view = p;
+  // }
+
   /* Qt context management is imported from djnn v1 */
   void
   QtBackend::load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height)
@@ -182,6 +188,7 @@ namespace djnn
   void
   QtBackend::load_pick_context (AbstractGShape *s)
   {
+    #if 1
     QtContext *cur_context = _context_manager->get_current ();
     QBrush pickBrush (_picking_view->pick_color ());
     QPen pickPen;
@@ -197,6 +204,7 @@ namespace djnn
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
     _picking_view->add_gobj (s);
+    #endif
   }
 
   /*

@@ -21,6 +21,7 @@
 #include "display/qt/my_qwindow.h"
 
 #include "qt_picking_view.h"
+#include "gui/picking/analytical_picking.h"
 
 #include <QtWidgets/QWidget>
 
@@ -36,6 +37,7 @@ namespace djnn {
     MyQQWidget(Window *w, QtWindow * qtw) : MyQWidget(w,qtw) {
       setAttribute(Qt::WA_AcceptTouchEvents, true);
       _picking_view = new QtPickingView (w);
+      //_picking_view = new AnalyticalPicking (w);
     }
     virtual Picking* get_picking_view() override { return _picking_view; }
     virtual ~MyQQWidget () { 
@@ -51,5 +53,6 @@ namespace djnn {
     virtual void paintEvent (QPaintEvent *event) override;
     
     QtPickingView *_picking_view;
+    //AnalyticalPicking *_picking_view;
   };
 }

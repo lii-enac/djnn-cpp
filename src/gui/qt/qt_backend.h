@@ -43,8 +43,8 @@ namespace djnn
     restore_context ();
     void
     set_painter (QPainter* p);
-    void
-    set_picking_view (QtPickingView *p);
+    void set_picking_view (QtPickingView *p);
+    //void set_picking_view (Picking *p);
     QPainter *painter () { return _painter; }
     /*
     WinImpl*
@@ -189,6 +189,7 @@ namespace djnn
     is_in_picking_view (AbstractGShape *s);
     QPainter *_painter;
     QtPickingView *_picking_view;
+    //Picking * _picking_view;
     QtContextManager *_context_manager;
     QPolygonF cur_poly;
     QPainterPath cur_path;

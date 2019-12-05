@@ -48,7 +48,7 @@ namespace djnn
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      //_picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
+      _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
     }
   }
 
@@ -65,7 +65,7 @@ namespace djnn
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      //_picking_view->painter ()->drawEllipse (rect);
+      _picking_view->painter ()->drawEllipse (rect);
     }
   }
 
@@ -82,7 +82,7 @@ namespace djnn
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      //_picking_view->painter ()->drawEllipse (rect);
+      _picking_view->painter ()->drawEllipse (rect);
     }
   }
 
@@ -99,7 +99,7 @@ namespace djnn
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      //_picking_view->painter ()->drawLine (line);
+      _picking_view->painter ()->drawLine (line);
     }
   }
 
@@ -200,7 +200,7 @@ namespace djnn
 
     if (is_in_picking_view (t)) {
       load_pick_context (t);
-      //_picking_view->painter ()->drawRect (rect);
+      _picking_view->painter ()->drawRect (rect);
     }
   }
 
@@ -291,7 +291,7 @@ namespace djnn
     _painter->drawPath (path);
     if (is_in_picking_view (p)) {
       load_pick_context (p);
-      //_picking_view->painter ()->drawPath (path);
+      _picking_view->painter ()->drawPath (path);
     }
   }
 
@@ -314,7 +314,7 @@ namespace djnn
 
     if (is_in_picking_view (p)) {
       load_pick_context (p);
-      //_picking_view->painter ()->drawPath (cur_path);
+      _picking_view->painter ()->drawPath (cur_path);
     }
   }
 
@@ -472,7 +472,7 @@ namespace djnn
     _painter->setClipRect (x, y, w, h);
     if (is_in_picking_view (s)) {
       load_pick_context (s);
-      //_picking_view->painter ()->setClipRect (x, y, w, h);
+      _picking_view->painter ()->setClipRect (x, y, w, h);
     }
   }
 
@@ -490,7 +490,7 @@ namespace djnn
 
     if (is_in_picking_view (p)) {
       load_pick_context (p);
-      //_picking_view->painter ()->setClipPath (cur_path);
+      _picking_view->painter ()->setClipPath (cur_path);
     }
   }
 
@@ -525,7 +525,7 @@ namespace djnn
 
     if (is_in_picking_view (i)) {
       load_pick_context (i);
-      //_picking_view->painter ()->drawRect (rect);
+      _picking_view->painter ()->drawRect (rect);
     }
   }
 
@@ -558,7 +558,7 @@ namespace djnn
 
       if (is_in_picking_view (i)) {
         load_pick_context (i);
-        //_picking_view->painter ()->drawRect (rect);
+        _picking_view->painter ()->drawRect (rect);
       }
     }
 } /* namespace djnn */
