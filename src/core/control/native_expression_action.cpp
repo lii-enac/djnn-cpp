@@ -46,6 +46,7 @@ namespace djnn
       for (auto dst: _dsts ) {
         Graph::instance ().remove_edge (_src, dst);
       }
+      _dsts.clear();
     }
   }
 
