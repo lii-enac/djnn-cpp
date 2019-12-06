@@ -1,37 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_SVGElementsLookup -Z SVGElements_Hash src/gui/XML/SVGElements.gperf  */
-/* Computed positions: -k'1,4' */
-
-#if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
-      && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
-      && (')' == 41) && ('*' == 42) && ('+' == 43) && (',' == 44) \
-      && ('-' == 45) && ('.' == 46) && ('/' == 47) && ('0' == 48) \
-      && ('1' == 49) && ('2' == 50) && ('3' == 51) && ('4' == 52) \
-      && ('5' == 53) && ('6' == 54) && ('7' == 55) && ('8' == 56) \
-      && ('9' == 57) && (':' == 58) && (';' == 59) && ('<' == 60) \
-      && ('=' == 61) && ('>' == 62) && ('?' == 63) && ('A' == 65) \
-      && ('B' == 66) && ('C' == 67) && ('D' == 68) && ('E' == 69) \
-      && ('F' == 70) && ('G' == 71) && ('H' == 72) && ('I' == 73) \
-      && ('J' == 74) && ('K' == 75) && ('L' == 76) && ('M' == 77) \
-      && ('N' == 78) && ('O' == 79) && ('P' == 80) && ('Q' == 81) \
-      && ('R' == 82) && ('S' == 83) && ('T' == 84) && ('U' == 85) \
-      && ('V' == 86) && ('W' == 87) && ('X' == 88) && ('Y' == 89) \
-      && ('Z' == 90) && ('[' == 91) && ('\\' == 92) && (']' == 93) \
-      && ('^' == 94) && ('_' == 95) && ('a' == 97) && ('b' == 98) \
-      && ('c' == 99) && ('d' == 100) && ('e' == 101) && ('f' == 102) \
-      && ('g' == 103) && ('h' == 104) && ('i' == 105) && ('j' == 106) \
-      && ('k' == 107) && ('l' == 108) && ('m' == 109) && ('n' == 110) \
-      && ('o' == 111) && ('p' == 112) && ('q' == 113) && ('r' == 114) \
-      && ('s' == 115) && ('t' == 116) && ('u' == 117) && ('v' == 118) \
-      && ('w' == 119) && ('x' == 120) && ('y' == 121) && ('z' == 122) \
-      && ('{' == 123) && ('|' == 124) && ('}' == 125) && ('~' == 126))
-/* The character set is not based on ISO-646.  */
-#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
-#endif
-
-//#define DEBUG
-
-#line 18 "src/gui/XML/SVGElements.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -43,183 +24,76 @@
 #include "gui/gui-dev.h"
 #include "gui/shapes/abstract_gshape.h"
 
-#define register 
-
-	using namespace djnn;
+using namespace djnn;
 
 	/* all the specific tag handling procedures defined in this file */
-	static Process* StartSVG (const char**, Process*);
-	static Process* EndElement (Process*);
-	static Process* StartRect (const char**, Process*);
-	static Process* StartImage (const char**, Process*);
-	static Process* StartEllipse (const char**, Process*);
-	static Process* StartCircle (const char**, Process*);
-	static Process* StartLine (const char**, Process*);
-	static Process* StartPolygon (const char**, Process*);
-	static Process* StartPolyline (const char**, Process*);
-	static Process* StartText (const char**, Process*);
-	static Process* EndText (Process*);
-	static Process* TextData (const char*, int, Process*);
-	static Process* StartTspan (const char**, Process*);
-	static Process* EndTspan (Process*);
-	static Process* StartPath (const char**, Process*);
-	static Process* StartGroup (const char**, Process*);
-	static Process* StartLinearGradient (const char**, Process*);
-	static Process* StartRadialGradient (const char**, Process*);
-	static Process* StartGradientStop (const char**, Process*);
-	static Process* EndGradient (Process*);
-	static Process* StartPathClip (const char**, Process*);
-	static Process* EndPathClip (Process*);
-	static Process* StartTmp (const char**, Process*);
-	static Process* EndTmp (Process*);
-	static Process* StartIgnored (const char**, Process*);
-	static Process* EndIgnored (Process*);
-	static Process* DataIgnored (const char*, int, Process*);
-	static void djnUnloadTextBuf (Process *);
-	static void djn__CheckStroke (Process *);
+static Process* StartSVG (const char**, Process*);
+static Process* EndElement (Process*);
+static Process* StartRect (const char**, Process*);
+static Process* StartImage (const char**, Process*);
+static Process* StartEllipse (const char**, Process*);
+static Process* StartCircle (const char**, Process*);
+static Process* StartLine (const char**, Process*);
+static Process* StartPolygon (const char**, Process*);
+static Process* StartPolyline (const char**, Process*);
+static Process* StartText (const char**, Process*);
+static Process* EndText (Process*);
+static Process* TextData (const char*, int, Process*);
+static Process* StartTspan (const char**, Process*);
+static Process* EndTspan (Process*);
+static Process* StartPath (const char**, Process*);
+static Process* StartGroup (const char**, Process*);
+static Process* StartLinearGradient (const char**, Process*);
+static Process* StartRadialGradient (const char**, Process*);
+static Process* StartGradientStop (const char**, Process*);
+static Process* EndGradient (Process*);
+static Process* StartPathClip (const char**, Process*);
+static Process* EndPathClip (Process*);
+static Process* StartTmp (const char**, Process*);
+static Process* EndTmp (Process*);
+static Process* StartIgnored (const char**, Process*);
+static Process* EndIgnored (Process*);
+static Process* DataIgnored (const char*, int, Process*);
+static void djnUnloadTextBuf (Process *);
+static void djn__CheckStroke (Process *);
 
-	/* the attribute name lookup procedures defined in other source files */
-#line 67 "src/gui/XML/SVGElements.gperf"
+static std::map <std::string, djn_XMLTagHandler> handlers={
+  {"g",{&StartGroup, &EndElement, &DataIgnored}},
+  {"use",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"text",{&StartText, &EndText, &TextData}},
+  {"pattern",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"textPath",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"rect",{&StartRect, &EndElement, &DataIgnored}},
+  {"image",{&StartImage, &EndElement, &DataIgnored}},
+  {"ellipse",{&StartEllipse, &EndElement, &DataIgnored}},
+  {"clipPath",{&StartPathClip, &EndPathClip, &DataIgnored}},
+  {"path",{&StartPath, &EndElement, &DataIgnored}},
+  {"circle",{&StartCircle, &EndElement, &DataIgnored}},
+  {"desc", {&StartIgnored, &EndIgnored, &DataIgnored}},
+  {"svg",{&StartSVG, &EndElement, &DataIgnored}},
+  {"stop",{&StartGradientStop, &EndElement, &DataIgnored}},
+  {"polygon",{&StartPolygon, &EndElement, &DataIgnored}},
+  {"polyline",{&StartPolyline, &EndElement, &DataIgnored}},
+  {"radialGradient",{&StartRadialGradient, &EndGradient, &DataIgnored}},
+  {"tspan",{&StartTspan, &EndTspan, &TextData}},
+  {"defs",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"metadata",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"line",{&StartLine, &EndElement, &DataIgnored}},
+  {"tref",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"mask",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"marker",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"linearGradient",{&StartLinearGradient, &EndGradient, &DataIgnored}}
+};
 
-#define TOTAL_KEYWORDS 25
-#define MIN_WORD_LENGTH 1
-#define MAX_WORD_LENGTH 14
-#define MIN_HASH_VALUE 1
-#define MAX_HASH_VALUE 39
-/* maximum key range = 39, duplicates = 0 */
-
-inline unsigned int
-SVGElements_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLTagHandler*
+SVGElements_Hash::djn_SVGElementsLookup (const char *str, unsigned int len)
 {
-  static unsigned char asso_values[] =
-    {
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 20, 40,  5,
-       8,  0, 28,  0, 10,  5, 40, 30, 25,  0,
-      40, 40,  0, 40,  5, 15,  0,  0, 40, 40,
-      40, 15, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-      40, 40, 40, 40, 40, 40
-    };
-  register unsigned int hval = len;
-
-  switch (hval)
-    {
-      default:
-        hval += asso_values[(unsigned char)str[3]];
-      /*FALLTHROUGH*/
-      case 3:
-      case 2:
-      case 1:
-        hval += asso_values[(unsigned char)str[0]];
-        break;
-    }
-  return hval;
-}
-
-djn_XMLTagHandler *
-SVGElements_Hash::djn_SVGElementsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLTagHandler wordlist[] =
-    {
-      {""},
-#line 81 "src/gui/XML/SVGElements.gperf"
-      {"g", &StartGroup, &EndElement, &DataIgnored},
-      {""},
-#line 73 "src/gui/XML/SVGElements.gperf"
-      {"use", &StartTmp, &EndTmp, &DataIgnored},
-#line 90 "src/gui/XML/SVGElements.gperf"
-      {"text", &StartText, &EndText, &TextData},
-      {""}, {""},
-#line 77 "src/gui/XML/SVGElements.gperf"
-      {"pattern", &StartTmp, &EndTmp, &DataIgnored},
-#line 91 "src/gui/XML/SVGElements.gperf"
-      {"textPath", &StartTmp, &EndTmp, &DataIgnored},
-#line 83 "src/gui/XML/SVGElements.gperf"
-      {"rect", &StartRect, &EndElement, &DataIgnored},
-#line 89 "src/gui/XML/SVGElements.gperf"
-      {"image", &StartImage, &EndElement, &DataIgnored},
-      {""},
-#line 82 "src/gui/XML/SVGElements.gperf"
-      {"ellipse", &StartEllipse, &EndElement, &DataIgnored},
-#line 79 "src/gui/XML/SVGElements.gperf"
-      {"clipPath", &StartPathClip, &EndPathClip, &DataIgnored},
-#line 88 "src/gui/XML/SVGElements.gperf"
-      {"path", &StartPath, &EndElement, &DataIgnored},
-      {""},
-#line 84 "src/gui/XML/SVGElements.gperf"
-      {"circle", &StartCircle, &EndElement, &DataIgnored},
-#line 71 "src/gui/XML/SVGElements.gperf"
-      {"desc", &StartIgnored, &EndIgnored, &DataIgnored},
-#line 70 "src/gui/XML/SVGElements.gperf"
-      {"svg", &StartSVG, &EndElement, &DataIgnored},
-#line 76 "src/gui/XML/SVGElements.gperf"
-      {"stop", &StartGradientStop, &EndElement, &DataIgnored},
-      {""}, {""},
-#line 87 "src/gui/XML/SVGElements.gperf"
-      {"polygon", &StartPolygon, &EndElement, &DataIgnored},
-#line 86 "src/gui/XML/SVGElements.gperf"
-      {"polyline", &StartPolyline, &EndElement, &DataIgnored},
-#line 75 "src/gui/XML/SVGElements.gperf"
-      {"radialGradient", &StartRadialGradient, &EndGradient, &DataIgnored},
-#line 92 "src/gui/XML/SVGElements.gperf"
-      {"tspan", &StartTspan, &EndTspan, &TextData},
-      {""},
-#line 72 "src/gui/XML/SVGElements.gperf"
-      {"defs", &StartTmp, &EndTmp, &DataIgnored},
-#line 94 "src/gui/XML/SVGElements.gperf"
-      {"metadata", &StartTmp, &EndTmp, &DataIgnored},
-#line 85 "src/gui/XML/SVGElements.gperf"
-      {"line", &StartLine, &EndElement, &DataIgnored},
-      {""}, {""},
-#line 93 "src/gui/XML/SVGElements.gperf"
-      {"tref", &StartTmp, &EndTmp, &DataIgnored},
-      {""},
-#line 80 "src/gui/XML/SVGElements.gperf"
-      {"mask", &StartTmp, &EndTmp, &DataIgnored},
-      {""},
-#line 78 "src/gui/XML/SVGElements.gperf"
-      {"marker", &StartTmp, &EndTmp, &DataIgnored},
-      {""}, {""},
-#line 74 "src/gui/XML/SVGElements.gperf"
-      {"linearGradient", &StartLinearGradient, &EndGradient, &DataIgnored}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLTagHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 95 "src/gui/XML/SVGElements.gperf"
-
 
 int djn__GrphIsInClip = 0;
 

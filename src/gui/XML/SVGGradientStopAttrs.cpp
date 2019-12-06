@@ -1,8 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_SVGGradientStopAttrsLookup -Z SVGGradientStopAttrs_Hash src/gui/XML/SVGGradientStopAttrs.gperf  */
-/* Computed positions: -k'' */
-
-#line 17 "src/gui/XML/SVGGradientStopAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,66 +20,29 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace djnn;
 
-	using namespace djnn;
+static int ParseStopColor (Process**, const char*);
+static int ParseStopOpacity (Process**, const char*);
+static int ParseOffset (Process**, const char*);
+static int ParseStopStyle (Process**, const char*);
 
-	extern struct djn_NamedColor* djn_SVGColorsLookup (const char*, gperf_t);
+std::map <std::string, djn_XMLAttrHandler> handlers = {
+  {"style",{&ParseStopStyle}},
+  {"offset",{&ParseOffset}},
+  {"stop-color",{&ParseStopColor}},
+  {"stop-opacity",{&ParseStopOpacity}}
+};
 
-	static int ParseStopColor (Process**, const char*);
-	static int ParseStopOpacity (Process**, const char*);
-	static int ParseOffset (Process**, const char*);
-	static int ParseStopStyle (Process**, const char*);
-#line 36 "src/gui/XML/SVGGradientStopAttrs.gperf"
-
-#define TOTAL_KEYWORDS 4
-#define MIN_WORD_LENGTH 5
-#define MAX_WORD_LENGTH 12
-#define MIN_HASH_VALUE 5
-#define MAX_HASH_VALUE 12
-/* maximum key range = 8, duplicates = 0 */
-
-inline /*ARGSUSED*/
-unsigned int
-SVGGradientStopAttrs_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLAttrHandler*
+SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup (const char *str, unsigned int len)
 {
-  return len;
-}
-
-djn_XMLAttrHandler *
-SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""}, {""}, {""}, {""}, {""},
-#line 42 "src/gui/XML/SVGGradientStopAttrs.gperf"
-      {"style", &ParseStopStyle},
-#line 41 "src/gui/XML/SVGGradientStopAttrs.gperf"
-      {"offset", &ParseOffset},
-      {""}, {""}, {""},
-#line 39 "src/gui/XML/SVGGradientStopAttrs.gperf"
-      {"stop-color", &ParseStopColor},
-      {""},
-#line 40 "src/gui/XML/SVGGradientStopAttrs.gperf"
-      {"stop-opacity", &ParseStopOpacity}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 43 "src/gui/XML/SVGGradientStopAttrs.gperf"
-
 
 struct djn_GradientStopArgs djn_GradientStopArgs = {0, 0, 0, 1.0, 0.};
 

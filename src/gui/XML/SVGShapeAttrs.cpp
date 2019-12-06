@@ -1,35 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_SVGShapeAttrsLookup -Z SVGShapeAttrs_Hash src/gui/XML/SVGShapeAttrs.gperf  */
-/* Computed positions: -k'2,5,8' */
-
-#if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
-      && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
-      && (')' == 41) && ('*' == 42) && ('+' == 43) && (',' == 44) \
-      && ('-' == 45) && ('.' == 46) && ('/' == 47) && ('0' == 48) \
-      && ('1' == 49) && ('2' == 50) && ('3' == 51) && ('4' == 52) \
-      && ('5' == 53) && ('6' == 54) && ('7' == 55) && ('8' == 56) \
-      && ('9' == 57) && (':' == 58) && (';' == 59) && ('<' == 60) \
-      && ('=' == 61) && ('>' == 62) && ('?' == 63) && ('A' == 65) \
-      && ('B' == 66) && ('C' == 67) && ('D' == 68) && ('E' == 69) \
-      && ('F' == 70) && ('G' == 71) && ('H' == 72) && ('I' == 73) \
-      && ('J' == 74) && ('K' == 75) && ('L' == 76) && ('M' == 77) \
-      && ('N' == 78) && ('O' == 79) && ('P' == 80) && ('Q' == 81) \
-      && ('R' == 82) && ('S' == 83) && ('T' == 84) && ('U' == 85) \
-      && ('V' == 86) && ('W' == 87) && ('X' == 88) && ('Y' == 89) \
-      && ('Z' == 90) && ('[' == 91) && ('\\' == 92) && (']' == 93) \
-      && ('^' == 94) && ('_' == 95) && ('a' == 97) && ('b' == 98) \
-      && ('c' == 99) && ('d' == 100) && ('e' == 101) && ('f' == 102) \
-      && ('g' == 103) && ('h' == 104) && ('i' == 105) && ('j' == 106) \
-      && ('k' == 107) && ('l' == 108) && ('m' == 109) && ('n' == 110) \
-      && ('o' == 111) && ('p' == 112) && ('q' == 113) && ('r' == 114) \
-      && ('s' == 115) && ('t' == 116) && ('u' == 117) && ('v' == 118) \
-      && ('w' == 119) && ('x' == 120) && ('y' == 121) && ('z' == 122) \
-      && ('{' == 123) && ('|' == 124) && ('}' == 125) && ('~' == 126))
-/* The character set is not based on ISO-646.  */
-#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
-#endif
-
-#line 18 "src/gui/XML/SVGShapeAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,250 +21,100 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace djnn;
 
-	using namespace djnn;
+static char* djn_ParseURL (const char *);
 
-	static char* djn_ParseURL (const char *);
+static int Ignore (Process**, const char*);
+static int ParseId (Process**, const char*);
+static int ParseStroke (Process**, const char*);
+static int ParseFill (Process**, const char*);
+static int ParseFillRule (Process**, const char*);
+static int ParseOpacity (Process**, const char*);
+static int ParseFillOpacity (Process**, const char*);
+static int ParseStrokeOpacity (Process**, const char*);
+static int ParseStrokeWidth (Process**, const char*);
+static int ParseLineJoin (Process**, const char*);
+static int ParseLineCap (Process**, const char*);
+static int ParseMatrix (Process**, const char*);
+static int ParseMiterLimit (Process**, const char*);
+static int ParseRotate (Process**, const char*);
+static int ParseScale (Process**, const char*);
+static int ParseSkewX (Process**, const char*);
+static int ParseSkewY (Process**, const char*);
+static int ParseStrokeDashArray (Process**, const char*);
+static int ParseStrokeDashOffset (Process**, const char*);
+static int ParseStyle (Process**, const char*);
+static int ParseTranslate (Process**, const char*);
+static int ParseTransform (Process**, const char*);
+static int ParseTextAnchor (Process**, const char*);
+static int ParsePathClip (Process**, const char*);
 
-	static int Ignore (Process**, const char*);
-	static int ParseId (Process**, const char*);
-	static int ParseStroke (Process**, const char*);
-	static int ParseFill (Process**, const char*);
-	static int ParseFillRule (Process**, const char*);
-	static int ParseOpacity (Process**, const char*);
-	static int ParseFillOpacity (Process**, const char*);
-	static int ParseStrokeOpacity (Process**, const char*);
-	static int ParseStrokeWidth (Process**, const char*);
-	static int ParseLineJoin (Process**, const char*);
-	static int ParseLineCap (Process**, const char*);
-	static int ParseMatrix (Process**, const char*);
-	static int ParseMiterLimit (Process**, const char*);
-	static int ParseRotate (Process**, const char*);
-	static int ParseScale (Process**, const char*);
-	static int ParseSkewX (Process**, const char*);
-	static int ParseSkewY (Process**, const char*);
-	static int ParseStrokeDashArray (Process**, const char*);
-	static int ParseStrokeDashOffset (Process**, const char*);
-	static int ParseStyle (Process**, const char*);
-	static int ParseTranslate (Process**, const char*);
-	static int ParseTransform (Process**, const char*);
-	static int ParseTextAnchor (Process**, const char*);
-	static int ParsePathClip (Process**, const char*);
-#line 58 "src/gui/XML/SVGShapeAttrs.gperf"
-
-#define TOTAL_KEYWORDS 54
-#define MIN_WORD_LENGTH 2
-#define MAX_WORD_LENGTH 25
-#define MIN_HASH_VALUE 2
-#define MAX_HASH_VALUE 109
-/* maximum key range = 108, duplicates = 0 */
-
-inline unsigned int
-SVGShapeAttrs_Hash::hash (register const char *str, register unsigned int len)
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+  {"id",{&ParseId}},
+  {"style",{&ParseStyle}},
+  {"stroke",{&ParseStroke}},
+  {"fill",{&ParseFill}},
+  {"skewY",{&ParseSkewY}},
+  {"filter",{&Ignore}},
+  {"stroke-width",{&ParseStrokeWidth}},
+  {"shape-rendering",{&Ignore}},
+  {"stroke-dasharray",{&ParseStrokeDashArray}},
+  {"stroke-dashoffset",{&ParseStrokeDashOffset}},
+  {"mask",{&Ignore}},
+  {"requiredFeatures",{&Ignore}},
+  {"display",{&Ignore}},
+  {"requiredExtensions",{&Ignore}},
+  {"stroke-linecap",{&ParseLineCap}},
+  {"stroke-linejoin",{&ParseLineJoin}},
+  {"matrix",{&ParseMatrix}},
+  {"clip-path",{&ParsePathClip}},
+  {"image-rendering",{&Ignore}},
+  {"stroke-miterlimit",{&ParseMiterLimit}},
+  {"xml:lang",{&Ignore}},
+  {"fill-rule",{&ParseFillRule}},
+  {"scale",{&ParseScale}},
+  {"rotate",{&ParseRotate}},
+  {"opacity",{&ParseOpacity}},
+  {"clip-rule",{&Ignore}},
+  {"color",{&Ignore}},
+  {"fill-opacity",{ParseFillOpacity}},
+  {"stroke-opacity",{&ParseStrokeOpacity}},
+  {"visibility",{&Ignore}},
+  {"cursor",{&Ignore}},
+  {"onclick",{&Ignore}},
+  {"xml:base",{&Ignore}},
+  {"color-rendering",{&Ignore}},
+  {"text-anchor",{&ParseTextAnchor}},
+  {"pointer-events",{&Ignore}},
+  {"systemLanguage",{&Ignore}},
+  {"onmousedown",{&Ignore}},
+  {"onload",{&Ignore}},
+  {"text-rendering",{&Ignore}},
+  {"externalResourcesRequired",{&Ignore}},
+  {"onactivate",{&Ignore}},
+  {"onmouseup",{&Ignore}},
+  {"skewX",{&ParseSkewX}},
+  {"translate",{&ParseTranslate}},
+  {"class",{&Ignore}},
+  {"onmousemove",{&Ignore}},
+  {"transform",{&ParseTransform}},
+  {"onfocusin",{&Ignore}},
+  {"onmouseout",{&Ignore}},
+  {"onmouseover",{&Ignore}},
+  {"color-interpolation",{&Ignore}},
+  {"onfocusout",{&Ignore}},
+  {"xml:space",{&Ignore}}
+};
+djn_XMLAttrHandler*
+SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (const char *str, unsigned int len)
 {
-  static unsigned char asso_values[] =
-    {
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110,  10, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110,  60,   5,
-      110, 110, 110, 110, 110, 110, 110,  16,  25,  30,
-        0,   0, 110,   0,   0,   5, 110,   0,  10,  15,
-       35,  30,  25, 110,   5,  55,   0,  10, 110,   0,
-       20,  25, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
-      110, 110, 110, 110, 110, 110
-    };
-  register unsigned int hval = len;
-
-  switch (hval)
-    {
-      default:
-        hval += asso_values[(unsigned char)str[7]];
-      /*FALLTHROUGH*/
-      case 7:
-      case 6:
-      case 5:
-        hval += asso_values[(unsigned char)str[4]];
-      /*FALLTHROUGH*/
-      case 4:
-      case 3:
-      case 2:
-        hval += asso_values[(unsigned char)str[1]];
-        break;
-    }
-  return hval;
-}
-
-djn_XMLAttrHandler *
-SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""}, {""},
-#line 74 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"id", &ParseId},
-      {""}, {""},
-#line 105 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"style", &ParseStyle},
-#line 97 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke", &ParseStroke},
-      {""}, {""},
-#line 70 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"fill", &ParseFill},
-#line 96 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"skewY", &ParseSkewY},
-#line 73 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"filter", &Ignore},
-#line 104 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-width", &ParseStrokeWidth},
-      {""}, {""},
-#line 93 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"shape-rendering", &Ignore},
-#line 98 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-dasharray", &ParseStrokeDashArray},
-#line 99 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-dashoffset", &ParseStrokeDashOffset},
-      {""}, {""},
-#line 76 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"mask", &Ignore},
-#line 91 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"requiredFeatures", &Ignore},
-#line 68 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"display", &Ignore},
-#line 90 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"requiredExtensions", &Ignore},
-#line 101 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-linecap", &ParseLineCap},
-#line 100 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-linejoin", &ParseLineJoin},
-      {""},
-#line 77 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"matrix", &ParseMatrix},
-      {""},
-#line 62 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"clip-path", &ParsePathClip},
-#line 75 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"image-rendering", &Ignore},
-      {""},
-#line 102 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-miterlimit", &ParseMiterLimit},
-#line 113 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"xml:lang", &Ignore},
-#line 72 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"fill-rule", &ParseFillRule},
-#line 94 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"scale", &ParseScale},
-#line 92 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"rotate", &ParseRotate},
-#line 88 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"opacity", &ParseOpacity},
-      {""},
-#line 63 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"clip-rule", &Ignore},
-#line 64 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"color", &Ignore},
-      {""}, {""},
-#line 71 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"fill-opacity", &ParseFillOpacity},
-#line 103 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"stroke-opacity", &ParseStrokeOpacity},
-#line 111 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"visibility", &Ignore},
-#line 67 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"cursor", &Ignore},
-#line 79 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onclick", &Ignore},
-#line 112 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"xml:base", &Ignore},
-      {""},
-#line 66 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"color-rendering", &Ignore},
-#line 107 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"text-anchor", &ParseTextAnchor},
-      {""}, {""},
-#line 89 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"pointer-events", &Ignore},
-#line 106 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"systemLanguage", &Ignore},
-#line 83 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onmousedown", &Ignore},
-#line 82 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onload", &Ignore},
-      {""},
-#line 108 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"text-rendering", &Ignore},
-#line 69 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"externalResourcesRequired", &Ignore},
-#line 78 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onactivate", &Ignore},
-      {""}, {""},
-#line 87 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onmouseup", &Ignore},
-#line 95 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"skewX", &ParseSkewX},
-      {""}, {""}, {""},
-#line 109 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"translate", &ParseTranslate},
-#line 61 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"class", &Ignore},
-#line 84 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onmousemove", &Ignore},
-      {""}, {""},
-#line 110 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"transform", &ParseTransform},
-      {""}, {""}, {""}, {""},
-#line 80 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onfocusin", &Ignore},
-      {""}, {""}, {""}, {""}, {""},
-#line 85 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onmouseout", &Ignore},
-#line 86 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onmouseover", &Ignore},
-      {""}, {""},
-#line 65 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"color-interpolation", &Ignore},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-      {""}, {""}, {""}, {""}, {""}, {""},
-#line 81 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"onfocusout", &Ignore},
-      {""}, {""}, {""},
-#line 114 "src/gui/XML/SVGShapeAttrs.gperf"
-      {"xml:space", &Ignore}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 115 "src/gui/XML/SVGShapeAttrs.gperf"
 
 
 struct djn_GraphicalShapeArgs djn_GraphicalShapeArgs = {"", djnStrokeUndef};

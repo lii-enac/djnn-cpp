@@ -19,6 +19,8 @@
 #include "core/core-dev.h"
 #include "core/xml/xml-dev.h"
 
+typedef int named_color_t;
+
 class XMLRectAttrs_Hash
 {
 private:
@@ -34,7 +36,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static struct djn_NamedColor *
+  static named_color_t
   djn_SVGColorsLookup (const char *str, unsigned int len);
 };
 class SVGElements_Hash
@@ -447,9 +449,3 @@ extern struct djn_RectAreaArgs
   double height;
   const char* title;
 } djn_RectAreaArgs;
-
-struct djn_NamedColor
-{
-  const char* name;
-  unsigned int rgb;
-};

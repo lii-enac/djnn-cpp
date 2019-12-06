@@ -27,12 +27,8 @@ class DJNComponentAttrs_Hash
 private:
   static inline unsigned int hash (const char *str, unsigned int len);
 public:
-  static djnn::djn_XMLAttrHandler *djn_DJNComponentAttrsLookup (const char *str, unsigned int len);
+  static djnn::djn_XMLAttrHandler* djn_DJNComponentAttrsLookup (const char *str, unsigned int len);
 };
-
-extern djnn::djn_XMLAttrHandler*
-djn_DJNComponentAttrsLookup (const char*, djnn::gperf_t);
-
 
 typedef struct djn_ComponentArgs_t
 {

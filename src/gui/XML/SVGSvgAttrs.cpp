@@ -1,8 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_SVGSvgAttrsLookup -Z SVGSvgAttrs_Hash src/gui/XML/SVGSvgAttrs.gperf  */
-/* Computed positions: -k'' */
-
-#line 16 "src/gui/XML/SVGSvgAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,61 +20,26 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace djnn;
 
-	using namespace djnn;
+static int IgnoreAttr (Process**, const char*);
 
-	static int IgnoreAttr (Process**, const char*);
-#line 30 "src/gui/XML/SVGSvgAttrs.gperf"
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+  {"viewBox",{&IgnoreAttr}},
+  {"contentStyleType",{&IgnoreAttr}},
+  {"contentScriptType",{&IgnoreAttr}},
+  {"preserveAspectRatio",{&IgnoreAttr}}
+};
 
-#define TOTAL_KEYWORDS 4
-#define MIN_WORD_LENGTH 7
-#define MAX_WORD_LENGTH 19
-#define MIN_HASH_VALUE 7
-#define MAX_HASH_VALUE 19
-/* maximum key range = 13, duplicates = 0 */
-
-inline /*ARGSUSED*/
-unsigned int
-SVGSvgAttrs_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLAttrHandler*
+SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char *str, unsigned int len)
 {
-  return len;
-}
-
-djn_XMLAttrHandler *
-SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""}, {""}, {""}, {""}, {""}, {""}, {""},
-#line 36 "src/gui/XML/SVGSvgAttrs.gperf"
-      {"viewBox", &IgnoreAttr},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-#line 35 "src/gui/XML/SVGSvgAttrs.gperf"
-      {"contentStyleType", &IgnoreAttr},
-#line 34 "src/gui/XML/SVGSvgAttrs.gperf"
-      {"contentScriptType", &IgnoreAttr},
-      {""},
-#line 33 "src/gui/XML/SVGSvgAttrs.gperf"
-      {"preserveAspectRatio", &IgnoreAttr}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 37 "src/gui/XML/SVGSvgAttrs.gperf"
-
 
 static int
 IgnoreAttr (Process** e, const char* v)

@@ -1,8 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_XMLPathAttrsLookup -Z XMLPathAttrs_Hash src/gui/XML/XMLPathAttrs.gperf  */
-/* Computed positions: -k'' */
-
-#line 16 "src/gui/XML/XMLPathAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,56 +20,26 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace djnn;
 
-	using namespace djnn;
+typedef void (djn_PathPointProc) (Process*, double, double);
+typedef void (djn_PathCoordProc) (Process*, double);
 
-	typedef void (djn_PathPointProc) (Process*, double, double);
-	typedef void (djn_PathCoordProc) (Process*, double);
+static int ParseData (Process**, const char*);
 
-	static int ParseData (Process**, const char*);
-#line 33 "src/gui/XML/XMLPathAttrs.gperf"
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+    {"d",{&ParseData}}
+};
 
-#define TOTAL_KEYWORDS 1
-#define MIN_WORD_LENGTH 1
-#define MAX_WORD_LENGTH 1
-#define MIN_HASH_VALUE 1
-#define MAX_HASH_VALUE 1
-/* maximum key range = 1, duplicates = 0 */
-
-inline /*ARGSUSED*/
-unsigned int
-XMLPathAttrs_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLAttrHandler*
+XMLPathAttrs_Hash::djn_XMLPathAttrsLookup (const char *str, unsigned int len)
 {
-  return len;
-}
-
-djn_XMLAttrHandler *
-XMLPathAttrs_Hash::djn_XMLPathAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""},
-#line 36 "src/gui/XML/XMLPathAttrs.gperf"
-      {"d", &ParseData}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 37 "src/gui/XML/XMLPathAttrs.gperf"
-
 
 struct djn_PathArgs djn_PathArgs = {0};
 

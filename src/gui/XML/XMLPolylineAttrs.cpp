@@ -1,8 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_XMLPolylineAttrsLookup -Z XMLPolylineAttrs_Hash src/gui/XML/XMLPolylineAttrs.gperf  */
-/* Computed positions: -k'' */
-
-#line 16 "src/gui/XML/XMLPolylineAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,52 +20,22 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace std;
+static int ParsePoints (Process**, const char*);
 
-	using namespace std;
-	static int ParsePoints (Process**, const char*);
-#line 29 "src/gui/XML/XMLPolylineAttrs.gperf"
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+    {"points",{&ParsePoints}}
+};
 
-#define TOTAL_KEYWORDS 1
-#define MIN_WORD_LENGTH 6
-#define MAX_WORD_LENGTH 6
-#define MIN_HASH_VALUE 6
-#define MAX_HASH_VALUE 6
-/* maximum key range = 1, duplicates = 0 */
-
-inline /*ARGSUSED*/
-unsigned int
-XMLPolylineAttrs_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLAttrHandler*
+XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup (const char *str, unsigned int len)
 {
-  return len;
-}
-
-djn_XMLAttrHandler *
-XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""}, {""}, {""}, {""}, {""}, {""},
-#line 32 "src/gui/XML/XMLPolylineAttrs.gperf"
-      {"points", &ParsePoints}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 33 "src/gui/XML/XMLPolylineAttrs.gperf"
-
 
 struct djn_PolyArgs djn_PolyArgs = {0, 0};
 

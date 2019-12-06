@@ -1,8 +1,18 @@
-/* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -t -N djn_SVGGradientAttrsLookup -Z SVGGradientAttrs_Hash src/gui/XML/SVGGradientAttrs.gperf  */
-/* Computed positions: -k'' */
-
-#line 17 "src/gui/XML/SVGGradientAttrs.gperf"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,68 +20,30 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-#define register
+using namespace djnn;
+static int ParseId (Process**, const char*);
+static int ParseGradientTransform (Process**, const char*);
+static int ParseGradientUnits (Process**, const char*);
+static int ParseSpreadMethod (Process**, const char*);
+static int ParseHRef (Process** e, const char* v);
 
-	using namespace djnn;
-	static int ParseId (Process**, const char*);
-	static int ParseGradientTransform (Process**, const char*);
-	static int ParseGradientUnits (Process**, const char*);
-	static int ParseSpreadMethod (Process**, const char*);
-	static int ParseHRef (Process** e, const char* v);
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+  {"id", {&ParseId}},
+  {"spreadMethod",{&ParseSpreadMethod}},
+  {"gradientUnits",{&ParseGradientUnits}},
+  {"gradientTransform",{&ParseGradientTransform}},
+  {"http://www.w3.org/1999/xlink*href",{&ParseHRef}}
+};
 
-#line 35 "src/gui/XML/SVGGradientAttrs.gperf"
-
-#define TOTAL_KEYWORDS 5
-#define MIN_WORD_LENGTH 2
-#define MAX_WORD_LENGTH 33
-#define MIN_HASH_VALUE 2
-#define MAX_HASH_VALUE 33
-/* maximum key range = 32, duplicates = 0 */
-
-inline /*ARGSUSED*/
-unsigned int
-SVGGradientAttrs_Hash::hash (register const char *str, register unsigned int len)
+djn_XMLAttrHandler*
+SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (const char *str, unsigned int len)
 {
-  return len;
-}
-
-djn_XMLAttrHandler *
-SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (register const char *str, register unsigned int len)
-{
-  static djn_XMLAttrHandler wordlist[] =
-    {
-      {""}, {""},
-#line 38 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"id", &ParseId},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-#line 39 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"spreadMethod", &ParseSpreadMethod},
-#line 40 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"gradientUnits", &ParseGradientUnits},
-      {""}, {""}, {""},
-#line 41 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"gradientTransform", &ParseGradientTransform},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-      {""}, {""}, {""}, {""}, {""}, {""},
-#line 42 "src/gui/XML/SVGGradientAttrs.gperf"
-      {"http://www.w3.org/1999/xlink*href", &ParseHRef}
-    };
-
-  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
-    {
-      unsigned int key = hash (str, len);
-
-      if (key <= MAX_HASH_VALUE)
-        {
-          register const char *s = wordlist[key].name;
-
-          if (*str == *s && !strcmp (str + 1, s + 1))
-            return &wordlist[key];
-        }
-    }
+  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(std::string(str));
+  if (it != handlers.end())
+    return &it->second;
   return 0;
 }
-#line 43 "src/gui/XML/SVGGradientAttrs.gperf"
 
 struct djn_GradientArgs djn_GradientArgs = {"", 0, DJN_LOCAL_COORDS, DJN_PAD_FILL};
 

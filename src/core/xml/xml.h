@@ -35,13 +35,11 @@ namespace djnn
 
   typedef struct
   {
-    const char* name;
     djn_XMLAttrProc handle_attr;
   } djn_XMLAttrHandler;
 
   typedef struct
   {
-    const char* name;
     djn_XMLTagStartProc start;
     djn_XMLTagEndProc end;
     djn_XMLTagDataProc data;
