@@ -470,4 +470,15 @@ namespace djnn
   protected:
     AbstractGObj *_gobj;
   };
+
+  class Defs : public Container
+  {
+  public:
+    Defs (Process *parent, const string &name);
+    Defs ();
+    virtual ~Defs () override;
+    void impl_activate () override;
+    void impl_deactivate () override;
+    Process* clone () override;
+  };
 } /* namespace djnn */

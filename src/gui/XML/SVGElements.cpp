@@ -42,6 +42,7 @@ static Process* TextData (const char*, int, Process*);
 static Process* StartTspan (const char**, Process*);
 static Process* EndTspan (Process*);
 static Process* StartPath (const char**, Process*);
+static Process* StartDefs (const char**, Process*);
 static Process* StartGroup (const char**, Process*);
 static Process* StartLinearGradient (const char**, Process*);
 static Process* StartRadialGradient (const char**, Process*);
@@ -76,7 +77,7 @@ static std::map <std::string, djn_XMLTagHandler> handlers={
   {"polyline",{&StartPolyline, &EndElement, &DataIgnored}},
   {"radialGradient",{&StartRadialGradient, &EndGradient, &DataIgnored}},
   {"tspan",{&StartTspan, &EndTspan, &TextData}},
-  {"defs",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"defs",{&StartDefs, &EndElement, &DataIgnored}},
   {"metadata",{&StartTmp, &EndTmp, &DataIgnored}},
   {"line",{&StartLine, &EndElement, &DataIgnored}},
   {"tref",{&StartTmp, &EndTmp, &DataIgnored}},
@@ -662,6 +663,33 @@ StartGroup(const char** attrs, Process* current) {
 	}
 	current->add_child(e, djn_GraphicalShapeArgs.id);
 	return e;
+}
+
+static Process*
+StartDefs(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+    fprintf (stderr, "StartGroup\n");
+#endif
+
+  Process* e = new Defs(0, "");
+
+  /* FIXME: should manage optional, mandatory and duplicate attributes */
+  while (*attrs) {
+#ifdef DEBUG
+    int ret =
+#endif
+    XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup,
+        XMLTextAttrs_Hash::djn_XMLTextAttrsLookup, 0);
+#ifdef DEBUG
+    if (!ret)
+    fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
+#endif
+    attrs++;
+    attrs++;
+  }
+  current->add_child(e, djn_GraphicalShapeArgs.id);
+  return e;
 }
 
 static int parseGradientTransform(Process **e, char *v) {
