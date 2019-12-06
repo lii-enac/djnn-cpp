@@ -27,6 +27,8 @@ class NativeExpressionAction : public Action {
     virtual ~NativeExpressionAction ();
 
     void add_native_edge (Process * src, Process * dst);
+    void remove_native_edge (Process * src, Process * dst);
+    void remove_all_native_edges ();
 
   private:
     Process *_src;

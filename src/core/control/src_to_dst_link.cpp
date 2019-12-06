@@ -6,7 +6,7 @@ namespace djnn
 
   UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const string &n, RefProperty* prop, const string &spec, Process** to_update) : 
     Action (parent, n), _to_update (to_update), _prop (prop), _spec (spec) 
-  { 
+  {
   }
 
   void

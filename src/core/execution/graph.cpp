@@ -19,8 +19,7 @@
 
 #include <iostream>
 
-#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-
+#include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
 
 #define _PERF_TEST 0
@@ -273,11 +272,12 @@ namespace djnn
     */
     if (vs == nullptr || vd == nullptr) {
 
-      std::cerr << "remove_edge: " <<
-      ( p_src->get_parent () ? p_src->get_parent ()->get_name () + "/" : "" ) << p_src->get_name () << "  " << vs << " - " << 
-      ( p_dst->get_parent () ? p_dst->get_parent ()->get_name () + "/" : "" ) << p_dst->get_name () << "  " << vd << endl;
-
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
+
+      std::cerr << "Graph remove_edge: " <<
+      get_hierarchy_name (p_src) << "  " << vs << " - " << 
+      get_hierarchy_name (p_dst) << "  " << vd << endl;
+      
       //assert(0);
       return;
     }

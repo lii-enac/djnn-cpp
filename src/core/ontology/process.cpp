@@ -19,6 +19,8 @@
 #include "core/execution/graph.h"
 #include "core/utils/uri.h"
 #include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
+#include "utils/debug.h"
 
 #include <algorithm>
 
@@ -99,8 +101,10 @@ namespace djnn
       c->about_to_delete_src ();
     }
     if (_vertex != nullptr){
+       warning ( nullptr, " Process::~Process - " +  get_hierarchy_name (this)  + " - _vertex is NOT NULL and it should\n");
+       for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
+       for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
        _vertex->invalidate ();
-       warning ( nullptr, " Process::~Process - " +  (get_parent () ? get_parent ()->get_name () + "/"  : "parent_NULL") + get_name ()  + " - _vertex is NOT NULL and it should\n");
     }
 
     /* make sure everything is wiped out the symtable */

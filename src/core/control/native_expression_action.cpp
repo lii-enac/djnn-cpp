@@ -23,11 +23,7 @@ namespace djnn
 
   NativeExpressionAction::~NativeExpressionAction ()
   {
-    if(_src) {
-      for (auto dst: _dsts ) {
-        Graph::instance ().remove_edge (_src, dst);
-      }
-    }
+      remove_all_native_edges ();
   }
 
   void
@@ -40,5 +36,27 @@ namespace djnn
     else _src = src;
     Graph::instance ().add_edge (src, dst);
     _dsts.push_back(dst);
+  }
+
+  void
+  NativeExpressionAction::remove_all_native_edges ()
+  {
+    if(_src) {
+      for (auto dst: _dsts ) {
+        Graph::instance ().remove_edge (_src, dst);
+      }
+    }
+  }
+
+  void
+  NativeExpressionAction::remove_native_edge (Process * src, Process * dst)
+  {
+    assert (src);
+    assert (dst);
+    // there may be multiple output to a native expression, but with a single _src
+    //if(_src) assert (src==_src);
+    //else _src = src;
+    Graph::instance ().remove_edge (src, dst);
+    _dsts.erase(find(_dsts.begin(), _dsts.end(), dst));
   }
 }

@@ -49,12 +49,16 @@ namespace djnn
 
   Synchronizer::~Synchronizer ()
   {
-    for (auto c : _c_list) {
+    _action.remove_all_native_edges ();
+    Graph::instance ().remove_edge (&_action, _dst);
+    //for (auto c : _c_list) {
+    int sz = _c_list.size ();
+    for (int i = sz - 1; i >= 0; i--) {
+      auto * c = _c_list[i];
       Process* src = c->get_src ();
       Graph::instance ().remove_edge (src, &_action);
       delete c;
     }
-    Graph::instance ().remove_edge (&_action, _dst);
   }
 
   void
@@ -93,7 +97,7 @@ namespace djnn
       if the synchronizer is not activated => cpl->disable (it will be enable by synchronizer::impl_activate () function)
     */
     if (!this->somehow_activating ())
-    cpl->disable ();
+      cpl->disable ();
     Graph::instance ().add_edge (_src, &_action);
 
     _c_list.push_back (cpl);
