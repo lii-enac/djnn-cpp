@@ -15,6 +15,7 @@
 #include "native_expression_action.h"
 #include "core/execution/graph.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace djnn
@@ -57,6 +58,6 @@ namespace djnn
     //if(_src) assert (src==_src);
     //else _src = src;
     Graph::instance ().remove_edge (src, dst);
-    _dsts.erase(find(_dsts.begin(), _dsts.end(), dst));
+    _dsts.erase(std::find(_dsts.begin(), _dsts.end(), dst));
   }
 }

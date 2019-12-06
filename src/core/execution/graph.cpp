@@ -281,8 +281,8 @@ namespace djnn
       //assert(0);
       return;
     }
-    vs->remove_edge (vd);
 
+    vs->remove_edge (vd);
 
     /* 
       note :
