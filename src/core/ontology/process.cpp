@@ -50,7 +50,7 @@ namespace djnn
 #else
     if (Context::instance ()->line () != -1) {
       //_dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
-      _dbg_info = Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + " dfdf";
+      _dbg_info = Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ());
     } else {
       _dbg_info = "no dbg info";
     }
