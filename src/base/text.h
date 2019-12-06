@@ -81,7 +81,7 @@ namespace djnn
     : Process (name),
       _left(this, name_info<Action>::left, ""),
       _right(this, name_info<Action>::right, ""),
-      _result(this, "output", 0),
+      _result(this, "output", Action::default_value()),
       _action(this, "action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
@@ -137,6 +137,7 @@ namespace djnn
       }
       void impl_deactivate () override {}
       static string perform(const string& l, const string& r) { return l+r; }
+      static string default_value () {return "";}
 
     private:
       TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
@@ -157,6 +158,8 @@ namespace djnn
       }
       void impl_deactivate () {}
       static bool perform(const string& l, const string& r) { return l.compare(r) ==0; }
+      static bool default_value () {return false;}
+
       private:
       TextBinaryOperator<TextComparatorAction, BoolProperty>& _tbo;
     };
