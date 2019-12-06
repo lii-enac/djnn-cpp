@@ -61,7 +61,7 @@ namespace djnn
   template <> const char name_info<TextComparatorAction>::right [];
   template <> const char name_info<TextComparatorAction>::serialize [];
 
-  template <typename Action>
+  template <typename Action, typename Result>
   class TextBinaryOperator : public Process
   {
   public:
@@ -69,7 +69,7 @@ namespace djnn
     : Process (name),
       _left(this, name_info<Action>::left, l_val),
       _right(this, name_info<Action>::right, r_val),
-      _result(this, "output", l_val+r_val),
+      _result(this, "output", Action::perform(l_val,r_val)),
       _action(this, "action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
@@ -81,7 +81,7 @@ namespace djnn
     : Process (name),
       _left(this, name_info<Action>::left, ""),
       _right(this, name_info<Action>::right, ""),
-      _result(this, "output", ""),
+      _result(this, "output", 0),
       _action(this, "action", *this),
       _c_left(&_left, ACTIVATION, &_action, ACTIVATION),
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
@@ -116,7 +116,7 @@ namespace djnn
   public:
     TextProperty _left;
     TextProperty _right;
-    TextProperty _result;
+    Result _result;
     Action _action;
     Coupling _c_left, _c_right;
   };
@@ -124,40 +124,45 @@ namespace djnn
   class TextCatenatorAction : public Action
     {
     public:
-      TextCatenatorAction (Process* parent, const string &name, TextBinaryOperator<TextCatenatorAction>& tbo) :
+      TextCatenatorAction (Process* parent, const string &name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent); }
       virtual ~TextCatenatorAction () {}
       void impl_activate () override
       {
         const string& head = _tbo._left.get_value ();
         const string& tail = _tbo._right.get_value ();
-        string out = head + tail;
-        _tbo._result.set_value (out, true);
+        //string out = head + tail;
+        //_tbo._result.set_value (out, true);
+        _tbo._result.set_value (perform(head, tail), true);
       }
       void impl_deactivate () override {}
+      static string perform(const string& l, const string& r) { return l+r; }
+
     private:
-      TextBinaryOperator<TextCatenatorAction>& _tbo;
+      TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
     };
 
   class TextComparatorAction : public Action
     {
     public:
-      TextComparatorAction (Process* parent, const string &name, TextBinaryOperator<TextComparatorAction>& tbo) :
+      TextComparatorAction (Process* parent, const string &name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent); }
       virtual ~TextComparatorAction () {}
       void impl_activate ()
       {
         const string& left = _tbo._left.get_value ();
         const string& right = _tbo._right.get_value ();
-        _tbo._result.set_value (left.compare (right) == 0, true);
+        //_tbo._result.set_value (left.compare (right) == 0, true);
+        _tbo._result.set_value (perform(left, right), true);
       }
       void impl_deactivate () {}
+      static bool perform(const string& l, const string& r) { return l.compare(r) ==0; }
       private:
-      TextBinaryOperator<TextComparatorAction>& _tbo;
+      TextBinaryOperator<TextComparatorAction, BoolProperty>& _tbo;
     };
 
-  typedef TextBinaryOperator<TextCatenatorAction> TextCatenator;
-  typedef TextBinaryOperator<TextComparatorAction> TextComparator;
+  typedef TextBinaryOperator<TextCatenatorAction, TextProperty> TextCatenator;
+  typedef TextBinaryOperator<TextComparatorAction, BoolProperty> TextComparator;
 
 
   class TextAccumulator : public Process
