@@ -310,8 +310,12 @@ namespace djnn
     cur->_fillPattern = _cur_cairo_pattern;
     cur->_fillType = PATTERN;
     cur->_gradientCoordinateMode = g->coords ()->get_value ();
-    g->stops ()->draw ();
-    g->transforms ()->draw ();
+    for (auto s: g->stops ()->children()) {
+      s->draw ();
+    }
+    for (auto t: g->transforms ()->children()) {
+      t->draw ();
+    }
     _context_manager->get_current ()->is_fill_builder ();
   }
 

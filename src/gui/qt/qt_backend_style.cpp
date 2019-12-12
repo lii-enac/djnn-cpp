@@ -220,8 +220,12 @@ namespace djnn
     cur_gradient->setCoordinateMode (coordMode[g->coords ()->get_value ()]);
     cur_gradient->setSpread (spreadMethod[g->spread ()->get_value ()]);
     _context_manager->get_current ()->gradientTransform = QTransform ();
-    g->stops ()->draw ();
-    g->transforms ()->draw ();
+    for (auto s: g->stops ()->children()) {
+      s->draw ();
+    }
+    for (auto t: g->transforms ()->children()) {
+      t->draw ();
+    }
     QBrush brush (*cur_gradient);
     _context_manager->get_current ()->brush = brush;
   }
