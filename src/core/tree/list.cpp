@@ -194,7 +194,8 @@ namespace djnn
         }
       }
       catch (invalid_argument& arg) {
-        warning (this, "invalid child path '" + path + "' for list '" + get_name () + "'");
+        //FIXME: comment the warning for now because it polluted the find_component ("//*")
+        //warning (this, "invalid child path '" + path + "' for list '" + get_name () + "'");
       }
     }
     return nullptr;
