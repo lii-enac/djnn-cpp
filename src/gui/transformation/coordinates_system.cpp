@@ -82,10 +82,11 @@ namespace djnn
   {
 
     remove_state_dependency (get_parent (), _action);
-    Graph::instance().remove_edge(_inX, _action);
-    Graph::instance().remove_edge(_inY, _action);
-    Graph::instance().remove_edge(_action, _outX);
     Graph::instance().remove_edge(_action, _outY);
+    Graph::instance().remove_edge(_action, _outX);
+    Graph::instance().remove_edge(_inY, _action);
+    Graph::instance().remove_edge(_inX, _action);
+ 
     delete _cinY;
     delete _cinX;
     delete _action;
