@@ -37,7 +37,7 @@ namespace djnn
   {
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
+      cerr << "Parent of PathPoint must be <Path>\n";
       return;
     }
     path->items ()->add_child (this, "");
