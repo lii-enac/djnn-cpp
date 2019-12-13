@@ -164,6 +164,10 @@ namespace djnn
   GradientStop::GradientStop (Process *parent, const std::string &name, double r, double g, double b, double a, double offset) :
       AbstractPropGradientStop (parent, name, r, g, b, a, offset)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient stop must be <LinearGradient|RadialGradient>\n";

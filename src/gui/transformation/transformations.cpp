@@ -82,6 +82,10 @@ namespace djnn
   GradientTranslation::GradientTranslation (Process *parent, const string &name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient translation must be <LinearGradient|RadialGradient>\n";
@@ -155,6 +159,10 @@ namespace djnn
   GradientRotation::GradientRotation (Process *parent, const string &name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient rotation must be <LinearGradient|RadialGradient>\n";
@@ -217,6 +225,10 @@ namespace djnn
   GradientScaling::GradientScaling (Process *parent, const string &name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient scaling must be <LinearGradient|RadialGradient>\n";
@@ -279,6 +291,10 @@ namespace djnn
   GradientSkewX::GradientSkewX (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient skewX must be <LinearGradient|RadialGradient>\n";
@@ -341,6 +357,10 @@ namespace djnn
   GradientSkewY::GradientSkewY (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient skewY must be <LinearGradient|RadialGradient>\n";
@@ -2097,6 +2117,10 @@ namespace djnn
                                           double m22, double m23, double m31, double m32, double m33) :
       AbstractHomography (parent, name, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of gradient homography must be <LinearGradient|RadialGradient>\n";
@@ -2128,6 +2152,10 @@ namespace djnn
                                                     double e, double f) :
       AbstractHomography (parent, name, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
       cerr << "Parent of simple gradient transform must be <LinearGradient|RadialGradient>\n";

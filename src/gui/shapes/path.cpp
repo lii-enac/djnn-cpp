@@ -35,6 +35,10 @@ namespace djnn
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of PathPoint must be <Path>\n";
@@ -140,6 +144,10 @@ namespace djnn
   PathClosure::PathClosure (Process* parent, const string &name) :
     AbstractGObj (parent, name)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path closure must be Path\n";
@@ -166,6 +174,10 @@ namespace djnn
       raw_props{ .x1=x1, .y1=y1, .x=x, .y=y },
       _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path quadratic must be Path\n";
@@ -283,6 +295,10 @@ namespace djnn
       raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path cubic must be Path\n";
@@ -424,6 +440,10 @@ namespace djnn
       raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
       _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl(nullptr), _cx (nullptr), _cy (nullptr)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
       cerr << "Parent of path arc must be Path\n";

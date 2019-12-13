@@ -36,6 +36,10 @@ namespace djnn {
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
   {
+    /* avoid dynamic_cast for cloning */
+    if (parent == nullptr) return ;
+
+    /* if not cloning we test parent with dynamic_cast */
     Poly *poly = dynamic_cast<Poly*> (parent);
     if (poly == nullptr) {
       cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
