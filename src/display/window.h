@@ -46,7 +46,6 @@ namespace djnn
   class Window : public Process
   {
   public:
-    Window (const std::string& title, double x, double y, double w, double h);
     Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_cpnt_type () const override { return WINDOW_T; }

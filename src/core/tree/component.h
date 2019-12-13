@@ -25,7 +25,6 @@ namespace djnn {
   typedef std::map<string, Process*> context_t;
   public:
     typedef std::vector<Process*> children_t;
-    Container ();
     Container (Process* parent, const string& name);
     virtual process_type_e get_cpnt_type () const override { return COMPONENT_T; }
     void add_child (Process* c, const string& name) override;
@@ -71,7 +70,6 @@ namespace djnn {
   class Component : public Container
   {
   public:
-    Component () : Container () {}
     Component (Process* parent, const string& name) : Container (parent, name) { Process::finalize_construction (parent, name); }
     Process* clone () override;
     void serialize (const string& format) override;

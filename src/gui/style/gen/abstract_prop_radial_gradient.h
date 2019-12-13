@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropRadialGradient (Process *parent, const std::string& name, double cx, double cy, double r, double fx, double fy, int spread, int coords);
-    AbstractPropRadialGradient (double cx, double cy, double r, double fx, double fy, int spread, int coords);
     virtual ~AbstractPropRadialGradient ();
     
     

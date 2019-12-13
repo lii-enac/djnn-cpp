@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy);
-    AbstractRotation (double a, double cx, double cy);
     virtual ~AbstractRotation ();
     
     

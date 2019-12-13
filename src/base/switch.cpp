@@ -45,24 +45,6 @@ namespace djnn
     Process::finalize_construction (parent, name, &_action);
   }
   
-  /*  be carefull :
-        we have to add branch_name in the process symTable but NOT in the container _children list 
-        so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
-        then added to symtable with his real name
-    */
-  Switch::Switch (const string &initial)
-  : 
-  _initial (initial),
-  _branch_name (nullptr, "switch_state", initial),
-  _action (this, "switch_action"),
-  _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION, true),
-  _cur_branch (nullptr)
-  {
-    add_symbol ("state", &_branch_name);
-    _c_branch.disable ();
-    set_state_dependency (&_action);
-  }
-
   Switch::~Switch ()
   {
     remove_state_dependency (get_parent (), state_dependency ());

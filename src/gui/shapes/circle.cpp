@@ -35,15 +35,10 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Circle::Circle (double cx, double cy, double r)
-  : AbstractPropCircle (cx, cy, r)
-  {
-  }
-
   Process*
   Circle::clone ()
   {
-    return new Circle (raw_props.cx, raw_props.cy, raw_props.r);
+    return new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);
   }
  
   void

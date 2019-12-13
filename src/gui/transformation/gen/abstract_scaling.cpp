@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
   {
     
-    
-  }
-
-  AbstractScaling::AbstractScaling (double sx, double sy, double cx, double cy) :
-    AbstractTransformation (), 
-    raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
-    _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
     
   }
 

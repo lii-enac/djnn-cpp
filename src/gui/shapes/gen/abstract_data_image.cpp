@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     set_origin (x, y);
     
-  }
-
-  AbstractDataImage::AbstractDataImage (std::string data, double x, double y, double width, double height) :
-    AbstractImage (x, y, width, height), 
-    raw_props{.data=data},
-    _cdata (nullptr)
-  {
-    set_origin (x, y);
   }
 
   AbstractDataImage::~AbstractDataImage ()

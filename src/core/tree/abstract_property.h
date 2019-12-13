@@ -32,7 +32,6 @@ namespace djnn {
   {
   public:
     AbstractProperty (Process* parent, const string &name, int nm=notify_none) : Process (name), _notify_mask (nm) {}
-    AbstractProperty () : Process (), _notify_mask (notify_none) {}
     virtual ~AbstractProperty () {};
     virtual process_type_e get_cpnt_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () = 0;

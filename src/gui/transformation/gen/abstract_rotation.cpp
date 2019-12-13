@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _ca (nullptr), _ccx (nullptr), _ccy (nullptr)
   {
     
-    
-  }
-
-  AbstractRotation::AbstractRotation (double a, double cx, double cy) :
-    AbstractTransformation (), 
-    raw_props{.a=a, .cx=cx, .cy=cy},
-    _ca (nullptr), _ccx (nullptr), _ccy (nullptr)
-  {
     
   }
 

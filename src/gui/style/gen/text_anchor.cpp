@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  TextAnchor::TextAnchor (int anchor) :
-    AbstractStyle (), 
-    raw_props{.anchor=anchor},
-    _canchor (nullptr)
-  {
-    
   }
 
   TextAnchor::~TextAnchor ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   TextAnchor::clone ()
   {
-    return new TextAnchor (raw_props.anchor);
+    return new TextAnchor (nullptr, get_name (), raw_props.anchor);
   }
 
   

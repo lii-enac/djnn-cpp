@@ -25,7 +25,6 @@ namespace djnn {
   {
   public:
     NativeAction (Process* parent, const string &name, NativeCode *action, void* data, bool isModel);
-    NativeAction (NativeCode *action, void* data, bool isModel);
     virtual ~NativeAction ();
     void impl_activate () override;
     void impl_deactivate () override {}

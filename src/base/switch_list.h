@@ -59,7 +59,6 @@ namespace djnn {
       SwitchList* _sw;
     };
   public:
-    SwitchList (bool loop=false);
     SwitchList (Process *parent, const string& name, bool loop=false);
     virtual ~SwitchList ();
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }

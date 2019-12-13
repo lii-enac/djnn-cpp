@@ -43,8 +43,6 @@ namespace djnn {
   };
     
   public:
-    AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
-      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     AbstractAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     virtual ~AbstractAssignment ();

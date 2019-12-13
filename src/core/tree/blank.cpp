@@ -37,6 +37,6 @@ namespace djnn
   Process* 
   Blank::clone () 
   {
-  	return new Blank ();
+  	return new Blank (nullptr, get_name ());
   }
 }

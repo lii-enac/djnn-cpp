@@ -119,12 +119,12 @@ namespace djnn
   Process*
   DoubleProperty::clone ()
   {
-    return new DoubleProperty (get_value());
+    return new DoubleProperty (nullptr, get_name (), get_value());
   }
 
   Process*
   DoublePropertyProxy::clone ()
   {
-    return new DoublePropertyProxy (get_ref_value()); // FIXME
+    return new DoublePropertyProxy (nullptr, get_name (), get_ref_value());
   }
 }

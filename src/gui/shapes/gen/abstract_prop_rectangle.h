@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropRectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
-    AbstractPropRectangle (double x, double y, double width, double height, double rx=0, double ry=0);
     virtual ~AbstractPropRectangle ();
     
     

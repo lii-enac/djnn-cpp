@@ -31,21 +31,12 @@ namespace djnn
 {
   using namespace std;
 
-  AbstractList::AbstractList ()
-  :
-    Container (),
-    _added (nullptr),
-    _removed (nullptr),
-    _size (0)
-  {
-  }
-
   AbstractList::AbstractList (Process* parent, const string& name)
   :
     Container (parent, name),
-    _added (nullptr),
-    _removed (nullptr),
-    _size (0)
+    _added (nullptr, "_added", nullptr),
+    _removed (nullptr, "_removed", nullptr),
+    _size (nullptr, "_size", 0)
   {
   }
 
@@ -214,11 +205,6 @@ namespace djnn
     return nullptr;
   }
 
-  List::List () :
-      AbstractList ()
-  {
-  }
-
   List::List (Process* parent, const string& name) :
     AbstractList (parent, name)
   {
@@ -245,7 +231,7 @@ namespace djnn
 
   Process*
   List::clone () {
-    List* clone = new List ();
+    List* clone = new List (nullptr, get_name ());
     for (auto c: _children) {
       clone->add_child (c->clone (), "");
     }

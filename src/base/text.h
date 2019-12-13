@@ -38,7 +38,6 @@ namespace djnn
       TextProperty* _input;
     };
   public:
-    TextPrinter ();
     TextPrinter (Process *parent, const string &name);
     void impl_activate () override { c_input.enable(); };
     void impl_deactivate () override { c_input.disable (); };

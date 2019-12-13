@@ -22,7 +22,7 @@ namespace djnn
 {
 
 // NOTE: NEW_LOG can't not be used now because of the delete in ~container/~process
-#define NEW_LOG 0
+#define NEW_LOG_PLAIN_OBJ 0
 
   class LogPrinter : public Component
   {
@@ -30,7 +30,7 @@ namespace djnn
     LogPrinter (Process* p, const std::string& n, const std::string &label);
     void serialize (const string& type) override;
   private:
-#if NEW_LOG
+#if NEW_LOG_PLAIN_OBJ
     TextCatenator _tc;
     TextPrinter _tp;
     Connector _c;

@@ -35,15 +35,10 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Ellipse::Ellipse (double cx, double cy, double rx, double ry)
-  : AbstractPropEllipse (cx, cy, rx, ry)
-  {
-  }
-
   Process*
   Ellipse::clone ()
   {
-    return new Ellipse (raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
+    return new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
   }
  
   void

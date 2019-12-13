@@ -31,13 +31,6 @@ using namespace std;
 
 namespace djnn {
 
-  PolyPoint::PolyPoint (double x, double y) :
-      AbstractGObj (),
-      raw_props{.x=x, .y=y},
-      _cx(nullptr), _cy(nullptr)
-  {
-  }
-
   PolyPoint::PolyPoint (Process* parent, const string &name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
@@ -126,22 +119,7 @@ namespace djnn {
 
   Process*
   PolyPoint::clone () {
-    return new PolyPoint (raw_props.x, raw_props.y);
-  }
-
-  Poly::Poly (int closed) :
-      AbstractGShape (), _closed (closed)
-  {
-    _points = new List (this, "points");
-    _bounding_box = new Blank (this, "bounding_box");
-    _bbx = new DoubleProperty (0);
-    _bby = new DoubleProperty (0);
-    _bbw = new DoubleProperty (0);
-    _bbh = new DoubleProperty (0);
-    _bounding_box->add_symbol ("x", _bbx);
-    _bounding_box->add_symbol ("y", _bby);
-    _bounding_box->add_symbol ("width", _bbw);
-    _bounding_box->add_symbol ("height", _bbh);
+    return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
   Poly::Poly (Process* parent, const string &name, int closed) :
@@ -149,10 +127,10 @@ namespace djnn {
   {
     _points = new List (this, "points");
     _bounding_box = new Blank (this, "bounding_box");
-    _bbx = new DoubleProperty (0);
-    _bby = new DoubleProperty (0);
-    _bbw = new DoubleProperty (0);
-    _bbh = new DoubleProperty (0);
+    _bbx = new DoubleProperty (nullptr, "bbx", 0);
+    _bby = new DoubleProperty (nullptr, "bby", 0);
+    _bbw = new DoubleProperty (nullptr, "bbw", 0);
+    _bbh = new DoubleProperty (nullptr, "bbh", 0);
     _bounding_box->add_symbol ("x", _bbx);
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
@@ -205,7 +183,7 @@ namespace djnn {
   Process*
   Poly::clone ()
   {  
-    Poly* newp = new Poly (_closed);
+    Poly* newp = new Poly (nullptr, get_name (), _closed);
     for (auto p: _points->children ()) {
       newp->_points->add_child (p->clone (), "");
     }

@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropLinearGradient (Process *parent, const std::string& name, double x1, double y1, double x2, double y2, int spread, int coords);
-    AbstractPropLinearGradient (double x1, double y1, double x2, double y2, int spread, int coords);
     virtual ~AbstractPropLinearGradient ();
     
     

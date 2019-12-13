@@ -34,7 +34,8 @@ namespace djnn {
   UpdateDrawing *UpdateDrawing::_instance;
   std::once_flag UpdateDrawing::onceFlag;
 
-  UpdateDrawing::UpdateDrawing ()
+  UpdateDrawing::UpdateDrawing () :
+    Process ("UpdateDrawing")
   {
     _auto_refresh = new BoolProperty (this, "auto_refresh", true);
     _draw_sync = new Spike (this, "draw_sync");

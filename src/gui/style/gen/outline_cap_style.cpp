@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  OutlineCapStyle::OutlineCapStyle (int cap) :
-    AbstractStyle (), 
-    raw_props{.cap=cap},
-    _ccap (nullptr)
-  {
-    
   }
 
   OutlineCapStyle::~OutlineCapStyle ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   OutlineCapStyle::clone ()
   {
-    return new OutlineCapStyle (raw_props.cap);
+    return new OutlineCapStyle (nullptr, get_name (), raw_props.cap);
   }
 
   

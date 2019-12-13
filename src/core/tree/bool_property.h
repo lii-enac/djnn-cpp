@@ -23,7 +23,6 @@ namespace djnn {
 
   class AbstractBoolProperty : public AbstractProperty {
   public:
-    AbstractBoolProperty () : AbstractProperty () {};
     AbstractBoolProperty (Process* parent, const string &name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () override { return Boolean; }
@@ -47,7 +46,6 @@ namespace djnn {
 
   class BoolProperty : public AbstractBoolProperty {
   public:
-    BoolProperty (bool v) : AbstractBoolProperty (), value(v) {}
     BoolProperty (Process* parent, const string &name, bool v) : AbstractBoolProperty (parent, name), value(v) { Process::finalize_construction (parent, name); }
     void serialize (const string& format) override;
     Process* clone () override;
@@ -59,7 +57,6 @@ namespace djnn {
 
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
-    BoolPropertyProxy (bool &v) : AbstractBoolProperty (), value(v) {}
     BoolPropertyProxy (Process* parent, const string &name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { Process::finalize_construction (parent, name); }
     void serialize (const string& format) override;
     Process* clone () override;

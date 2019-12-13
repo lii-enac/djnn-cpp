@@ -217,16 +217,6 @@ namespace djnn
 
   }
 
-  FSM::FSM () 
-  : Process (),
-  _priority (0),
-  _cur_state (nullptr),
-  _fsm_state (this, "state", ""),
-  _initial (this, "initial", "")
-  {
-    set_state_dependency (&_fsm_state);  
-  }
-
   FSM::FSM (Process *parent, const string &name) 
   : Process (name), 
   _priority (0),

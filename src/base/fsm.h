@@ -90,7 +90,6 @@ namespace djnn {
   class FSM : public Process
   {
   public:
-    FSM ();
     FSM (Process *parent, const string &name);
     void impl_activate () override;
     void impl_deactivate () override;

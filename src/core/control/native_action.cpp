@@ -18,12 +18,6 @@ namespace djnn
 {
   using namespace std;
 
-  NativeAction::NativeAction (NativeCode *action, void* data, bool isModel) :
-      Action (), _data (data), _action (action), _activation_source (nullptr)
-  {
-    set_is_model (isModel);
-  }
-
   NativeAction::NativeAction (Process* parent, const string &name, NativeCode *action, void* data,
                               bool isModel) :
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)

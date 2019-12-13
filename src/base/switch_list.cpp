@@ -100,31 +100,6 @@ namespace djnn
    * do not add directly Property, spikes and actions into the symbol switchlist's table 
    * switchlist sympbol table should only containt branch
    */
-  SwitchList::SwitchList (bool loop)
-  : AbstractList (), 
-  _cur_item (nullptr),
-  _loop (nullptr, "_loop", loop),
-  _index (nullptr, "_index", 1),
-  _next (nullptr, "_next"),
-  _previous (nullptr, "_previous"),
-  _next_action (this),
-  _previous_action (this),
-  _change_index_action (this),
-  _c_next (&_next, ACTIVATION, &_next_action, ACTIVATION, true),
-  _c_previous (&_previous, ACTIVATION, &_previous_action, ACTIVATION, true),
-  _c_index (&_index, ACTIVATION, &_change_index_action, ACTIVATION, true)
-  {
-    _c_next.disable ();
-    _c_previous.disable ();
-    _c_index.disable ();
-    set_state_dependency (&_change_index_action);
-  }
-
-  /* 
-   * note:
-   * do not add directly Property, spikes and actions into the symbol switchlist's table 
-   * switchlist sympbol table should only containt branch
-   */
   SwitchList::SwitchList (Process* parent, const string& name, bool loop) 
   : AbstractList (parent, name),
   _cur_item (nullptr),
@@ -213,7 +188,7 @@ namespace djnn
   Process*
   SwitchList::clone ()
   {
-    SwitchList* clone = new SwitchList ();
+    SwitchList* clone = new SwitchList (nullptr, get_name());
     for (auto c : _children) {
       clone->add_child (c->clone (), c->get_name ());
     }

@@ -56,6 +56,6 @@ namespace djnn
   Process* 
   Spike::clone ()
   {
-    return new Spike ();
+    return new Spike (nullptr, get_name ());
   }
 }

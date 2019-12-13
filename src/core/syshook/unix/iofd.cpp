@@ -23,7 +23,8 @@
 namespace djnn {
 
   IOFD::IOFD(int readfd)
-  : _readfd(readfd),
+  : Process ("IOFD"+to_string(readfd)),
+  _readfd(readfd),
   _readable (this, "readable")
   {
   }

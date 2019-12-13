@@ -37,15 +37,10 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Rectangle::Rectangle (double x, double y, double width, double height, double rx, double ry) :
-    AbstractPropRectangle (x, y, width, height, rx, ry)
-  {
-  }
-
   Process*
   Rectangle::clone ()
   {
-    return new Rectangle (raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
+    return new Rectangle (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
   }
 
   void

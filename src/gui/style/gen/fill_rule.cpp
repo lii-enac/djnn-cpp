@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  FillRule::FillRule (int rule) :
-    AbstractStyle (), 
-    raw_props{.rule=rule},
-    _crule (nullptr)
-  {
-    
   }
 
   FillRule::~FillRule ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   FillRule::clone ()
   {
-    return new FillRule (raw_props.rule);
+    return new FillRule (nullptr, get_name (), raw_props.rule);
   }
 
   

@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropCircle (Process *parent, const std::string& name, double cx, double cy, double r);
-    AbstractPropCircle (double cx, double cy, double r);
     virtual ~AbstractPropCircle ();
     
     

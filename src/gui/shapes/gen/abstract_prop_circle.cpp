@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     set_origin (cx,cy);
     
-  }
-
-  AbstractPropCircle::AbstractPropCircle (double cx, double cy, double r) :
-    AbstractGShape (), 
-    raw_props{.cx=cx, .cy=cy, .r=r},
-    _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
-  {
-    set_origin (cx,cy);
   }
 
   AbstractPropCircle::~AbstractPropCircle ()

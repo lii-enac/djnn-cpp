@@ -18,7 +18,7 @@
 namespace djnn {
   class GUIStructureHolder : public Process {
     public:
-      GUIStructureHolder () : Process () {}
+      GUIStructureHolder () : Process ("GUIStructureHolder") {}
       void add_gui_child (Process *c, int index) ;
       void add_gui_child_at (Process *c, int neighboor_index, int spec, int new_index);
       void move_child_to (Process *c, int neighboor_index, int spec, int new_index);

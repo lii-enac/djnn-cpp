@@ -40,7 +40,6 @@ namespace djnn
   {
   public:
     Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
-    Rectangle (double x, double y, double width, double height, double rx=0, double ry=0);
     Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -51,7 +50,6 @@ namespace djnn
   {
   public:
     Circle (Process *parent, const std::string& name, double cx, double cy, double r);
-    Circle (double cx, double cy, double r);
     Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -62,7 +60,6 @@ namespace djnn
   {
   public:
     Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
-    Ellipse (double cx, double cy, double rx, double ry);
     Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -73,7 +70,6 @@ namespace djnn
   {
   public:
     Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2);
-    Line (double x1, double y1, double x2, double y2);
     Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -84,7 +80,6 @@ namespace djnn
   {
   public:
     RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
-    RectangleClip (double x, double y, double width, double height);
     Process* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -113,7 +108,6 @@ namespace djnn
     Text (Process *parent, const std::string& name, double x, double y, const std::string &text);
     Text (Process *parent, const std::string& name, double x, double y, double dx, double dy, int dxu, int dyu,
           const std::string &encoding, const std::string &text);
-    Text (double x, double y, const std::string &text);
     virtual ~Text ();
     void draw () override;
     Process* clone () override;
@@ -161,7 +155,6 @@ namespace djnn
   class PolyPoint : public AbstractGObj
   {
   public:
-    PolyPoint (double x, double y);
     PolyPoint (Process* parent, const string &name, double x, double y);
     virtual ~PolyPoint ();
     virtual Process* find_component (const string&) override;
@@ -182,7 +175,6 @@ namespace djnn
   class Poly : public AbstractGShape
   {
   public:
-    Poly (int closed);
     Poly (Process* parent, const string &name, int closed);
     virtual ~Poly ();
     Process* points () { return _points;}
@@ -203,7 +195,6 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon () : Poly (1) {};
     Polygon (Process* parent, const string &name) : Poly (parent, name, 1) {};
     virtual ~Polygon () {};
   };
@@ -211,7 +202,6 @@ namespace djnn
   class Polyline : public Poly
   {
   public:
-    Polyline () : Poly (0) {};
     Polyline (Process* parent, const string &name) : Poly (parent, name, 0) {};
     virtual ~Polyline () {};
   };
@@ -219,7 +209,6 @@ namespace djnn
   class PathPoint : public AbstractGObj
   {
   public:
-    PathPoint (double x, double y);
     PathPoint (Process* parent, const string &name, double x, double y);
     virtual ~PathPoint ();
     virtual Process* find_component (const string&) override;
@@ -241,8 +230,6 @@ namespace djnn
   public:
     PathMove (Process* parent, const string &name, double x, double y) :
         PathPoint (parent, name, x, y) {}
-    PathMove (double x, double y) :
-            PathPoint (x, y) {}
     void draw () override;
     Process* clone () override;
   };
@@ -252,8 +239,6 @@ namespace djnn
   public:
     PathLine (Process* parent, const string &name, double x, double y) :
         PathPoint (parent, name, x, y) {}
-    PathLine (double x, double y) :
-        PathPoint (x, y) {}
     void draw () override;
     Process* clone () override;
   };
@@ -262,7 +247,6 @@ namespace djnn
   {
   public:
     PathQuadratic (Process* parent, const string &name, double x1, double y1, double x, double y);
-    PathQuadratic (double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
@@ -283,7 +267,6 @@ namespace djnn
   {
   public:
     PathCubic (Process* parent, const string &name, double x1, double y1, double x2, double y2, double x, double y);
-    PathCubic (double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
     virtual Process* find_component (const string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
@@ -306,8 +289,6 @@ namespace djnn
   {
   public:
     PathArc (Process* parent, const string &name,  double rx, double ry, double rotx, double fl, double swfl, double x,
-                    double y);
-    PathArc ( double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
     virtual Process* find_component (const string&) override;
@@ -332,7 +313,6 @@ namespace djnn
   {
   public:
     PathClosure (Process* parent, const string &name);
-    PathClosure () : AbstractGObj () {};
     virtual ~PathClosure () {}
     void draw () override;
     Process* clone () override;
@@ -350,7 +330,6 @@ namespace djnn
   class Path : public AbstractGShape
   {
   public:
-    Path ();
     Path (Process* parent, const string &name);
     virtual ~Path ();
     Process* items () { return _items;}
@@ -370,8 +349,6 @@ namespace djnn
   public:
     PathClip (Process* parent, const string &name) :
         Path (parent, name) {}
-    PathClip () : 
-        Path () {}
     virtual ~PathClip () {}
     void draw () override;
     Process* clone () override;
@@ -384,7 +361,6 @@ namespace djnn
   {
   public:
     Image (Process *parent, const std::string& name, std::string path, double x, double y, double w, double h);
-    Image (std::string path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
     Process* clone () override;
@@ -407,7 +383,6 @@ namespace djnn
     {
     public:
       DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w, double h);
-      DataImage (std::string path, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       Process* clone () override;
@@ -429,7 +404,7 @@ namespace djnn
   {
   public:
     ImageWatcher (Image *i) :
-        Process (), _img (i) {}
+        Process ("ImageWatcher"), _img (i) {}
     virtual ~ImageWatcher () {}
     void impl_activate () override
     {
@@ -444,7 +419,7 @@ namespace djnn
     {
     public:
       DataImageWatcher (DataImage *i) :
-          Process (), _img (i) {}
+          Process ("DataImageWatcher"), _img (i) {}
       virtual ~DataImageWatcher () {}
       void impl_activate () override
       {
@@ -459,7 +434,6 @@ namespace djnn
   {
   public:
     Group (Process *parent, const string &name);
-    Group ();
     virtual ~Group () override;
     auto
       frame () { return _gobj->frame ();}
@@ -475,7 +449,6 @@ namespace djnn
   {
   public:
     Defs (Process *parent, const string &name);
-    Defs ();
     virtual ~Defs () override;
     void impl_activate () override;
     void impl_deactivate () override;

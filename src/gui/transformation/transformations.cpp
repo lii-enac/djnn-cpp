@@ -40,10 +40,6 @@ namespace djnn
   {
   }
 
-  AbstractTransformation::AbstractTransformation ()
-  {
-  }
-
   AbstractTransformation::~AbstractTransformation ()
   {
   }
@@ -53,11 +49,6 @@ namespace djnn
       AbstractTranslation (parent, name, tx, ty)
   {
     Process::finalize_construction (parent, name);
-  }
-
-  Translation::Translation (double tx, double ty) :
-      AbstractTranslation (tx, ty)
-  {
   }
 
   Translation::~Translation ()
@@ -84,7 +75,7 @@ namespace djnn
   Process*
   Translation::clone ()
   {
-    return new Translation (raw_props.tx, raw_props.ty);
+    return new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
   }
 
 
@@ -97,11 +88,6 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
-  }
-
-  GradientTranslation::GradientTranslation (double tx, double ty) :
-      AbstractTranslation (tx, ty)
-  {
   }
 
   GradientTranslation::~GradientTranslation ()
@@ -117,7 +103,7 @@ namespace djnn
   Process*
   GradientTranslation::clone ()
   {
-    return new GradientTranslation (raw_props.tx, raw_props.ty);
+    return new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
   }
 
 
@@ -125,11 +111,6 @@ namespace djnn
       AbstractRotation (parent, name, a, cx, cy)
   {
     Process::finalize_construction (parent, name);
-  }
-
-  Rotation::Rotation (double a, double cx, double cy) :
-      AbstractRotation (a, cx, cy)
-  {
   }
 
   Rotation::~Rotation ()
@@ -167,7 +148,7 @@ namespace djnn
   Process*
   Rotation::clone ()
   {
-    return new Rotation (raw_props.a, raw_props.cx, raw_props.cy);
+    return new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
   }
 
 
@@ -180,11 +161,6 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
-  }
-
-  GradientRotation::GradientRotation (double a, double cx, double cy) :
-      AbstractRotation (a, cx, cy)
-  {
   }
 
   GradientRotation::~GradientRotation ()
@@ -200,7 +176,7 @@ namespace djnn
   Process*
   GradientRotation::clone ()
   {
-    return new GradientRotation (raw_props.a, raw_props.cx, raw_props.cy);
+    return new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
   }
 
 
@@ -208,11 +184,6 @@ namespace djnn
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     Process::finalize_construction (parent, name);
-  }
-
-  Scaling::Scaling (double sx, double sy, double cx, double cy) :
-      AbstractScaling (sx, sy, cx, cy)
-  {
   }
 
   Scaling::~Scaling ()
@@ -239,7 +210,7 @@ namespace djnn
   Process*
   Scaling::clone ()
   {
-    return new Scaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    return new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
 
@@ -252,11 +223,6 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
-  }
-
-  GradientScaling::GradientScaling (double sx, double sy, double cx, double cy) :
-      AbstractScaling (sx, sy, cx, cy)
-  {
   }
 
   GradientScaling::~GradientScaling ()
@@ -272,19 +238,13 @@ namespace djnn
   Process*
   GradientScaling::clone ()
   {
-    return new GradientScaling (raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    return new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
-
 
   SkewX::SkewX (Process *parent, const string &name, double a) :
       AbstractSkew (parent, name, a)
   {
     Process::finalize_construction (parent, name);
-  }
-
-  SkewX::SkewX (double a) :
-      AbstractSkew (a)
-  {
   }
 
   SkewX::~SkewX ()
@@ -312,7 +272,7 @@ namespace djnn
   Process*
   SkewX::clone ()
   {
-    return new SkewX (raw_props.a);
+    return new SkewX (nullptr, get_name (), raw_props.a);
   }
 
 
@@ -325,11 +285,6 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
-  }
-
-  GradientSkewX::GradientSkewX (double a) :
-      AbstractSkew (a)
-  {
   }
 
   GradientSkewX::~GradientSkewX ()
@@ -345,7 +300,7 @@ namespace djnn
   Process*
   GradientSkewX::clone ()
   {
-    return new GradientSkewX (raw_props.a);
+    return new GradientSkewX (nullptr, get_name (), raw_props.a);
   }
 
 
@@ -353,11 +308,6 @@ namespace djnn
       AbstractSkew (parent, name, a)
   {
     Process::finalize_construction (parent, name);
-  }
-
-  SkewY::SkewY (double a) :
-      AbstractSkew (a)
-  {
   }
 
   SkewY::~SkewY ()
@@ -385,7 +335,7 @@ namespace djnn
   Process*
   SkewY::clone ()
   {
-    return new SkewY (raw_props.a);
+    return new SkewY (nullptr, get_name (), raw_props.a);
   }
 
   GradientSkewY::GradientSkewY (Process *parent, const string &name, double a) :
@@ -397,11 +347,6 @@ namespace djnn
       return;
     }
     grad->transforms ()->add_child (this, "");
-  }
-
-  GradientSkewY::GradientSkewY (double a) :
-      AbstractSkew (a)
-  {
   }
 
   GradientSkewY::~GradientSkewY ()
@@ -417,7 +362,7 @@ namespace djnn
   Process*
   GradientSkewY::clone ()
   {
-    return new GradientSkewY (raw_props.a);
+    return new GradientSkewY (nullptr, get_name (), raw_props.a);
   }
 
 
@@ -1350,8 +1295,8 @@ namespace djnn
   {
     auto _frame = frame ();
     _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
-    _rightTranslateBy_dx = new DoubleProperty (0);
-    _rightTranslateBy_dy = new DoubleProperty (0);
+    _rightTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
+    _rightTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
     _rightTranslateBy_spike->add_symbol( "dx", _rightTranslateBy_dx);
     _rightTranslateBy_spike->add_symbol( "dy", _rightTranslateBy_dy);
     _rightTranslateBy_action = new RightTranslateByAction (this, "action_right_translate_by", this);
@@ -1375,8 +1320,8 @@ namespace djnn
   {
     auto _frame = frame ();
     _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
-    _leftTranslateBy_dx = new DoubleProperty (0);
-    _leftTranslateBy_dy = new DoubleProperty (0);
+    _leftTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
+    _leftTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
     _leftTranslateBy_spike->add_symbol( "dx", _leftTranslateBy_dx);
     _leftTranslateBy_spike->add_symbol( "dy", _leftTranslateBy_dy);
     _leftTranslateBy_action = new LeftTranslateByAction (this, "action_left_translate_by", this);
@@ -1400,10 +1345,10 @@ namespace djnn
   {
     auto _frame = frame ();
     _rightScaleBy_spike = new Spike (this, "rightScaleBy");
-    _rightScaleBy_cx = new DoubleProperty (0);
-    _rightScaleBy_cy = new DoubleProperty (0);
-    _rightScaleBy_sx = new DoubleProperty (1);
-    _rightScaleBy_sy = new DoubleProperty (1);
+    _rightScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
+    _rightScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
+    _rightScaleBy_sx = new DoubleProperty (nullptr, "sx", 1);
+    _rightScaleBy_sy = new DoubleProperty (nullptr, "sy", 1);
     _rightScaleBy_spike->add_symbol ("cx", _rightScaleBy_cx);
     _rightScaleBy_spike->add_symbol ("cy", _rightScaleBy_cy);
     _rightScaleBy_spike->add_symbol ("sx", _rightScaleBy_sx);
@@ -1437,10 +1382,10 @@ namespace djnn
   {
     auto _frame = frame ();
     _leftScaleBy_spike = new Spike (this, "leftScaleBy");
-    _leftScaleBy_cx = new DoubleProperty (0);
-    _leftScaleBy_cy = new DoubleProperty (0);
-    _leftScaleBy_sx = new DoubleProperty (1);
-    _leftScaleBy_sy = new DoubleProperty (1);
+    _leftScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
+    _leftScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
+    _leftScaleBy_sx = new DoubleProperty (nullptr, "sx", 1);
+    _leftScaleBy_sy = new DoubleProperty (nullptr, "sy", 1);;
     _leftScaleBy_spike->add_symbol ("cx", _leftScaleBy_cx);
     _leftScaleBy_spike->add_symbol ("cy", _leftScaleBy_cy);
     _leftScaleBy_spike->add_symbol ("sx", _leftScaleBy_sx);
@@ -1474,9 +1419,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _rightRotateBy_spike = new Spike (this, "rightRotateBy");
-    _rightRotateBy_cx = new DoubleProperty (0);
-    _rightRotateBy_cy = new DoubleProperty (0);
-    _rightRotateBy_da = new DoubleProperty (0);
+    _rightRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
+    _rightRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
+    _rightRotateBy_da = new DoubleProperty (nullptr, "da", 0);
     _rightRotateBy_spike->add_symbol ("cx", _rightRotateBy_cx);
     _rightRotateBy_spike->add_symbol ("cy", _rightRotateBy_cy);
     _rightRotateBy_spike->add_symbol ("da", _rightRotateBy_da);
@@ -1505,9 +1450,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _leftRotateBy_spike = new Spike (this, "leftRotateBy");
-    _leftRotateBy_cx = new DoubleProperty (0);
-    _leftRotateBy_cy = new DoubleProperty (0);
-    _leftRotateBy_da = new DoubleProperty (0);
+    _leftRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
+    _leftRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
+    _leftRotateBy_da = new DoubleProperty (nullptr, "da", 0);
     _leftRotateBy_spike->add_symbol ("cx", _leftRotateBy_cx);
     _leftRotateBy_spike->add_symbol ("cy", _leftRotateBy_cy);
     _leftRotateBy_spike->add_symbol ("da", _leftRotateBy_da);
@@ -1536,9 +1481,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
-    _rightSkew_X_By_cx = new DoubleProperty (0);
-    _rightSkew_X_By_cy = new DoubleProperty (0);
-    _rightSkew_X_By_da = new DoubleProperty (0);
+    _rightSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
+    _rightSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
+    _rightSkew_X_By_da = new DoubleProperty (nullptr, "da", 0);
     _rightSkew_X_By_spike->add_symbol ("cx", _rightSkew_X_By_cx);
     _rightSkew_X_By_spike->add_symbol ("cy", _rightSkew_X_By_cy);
     _rightSkew_X_By_spike->add_symbol ("da", _rightSkew_X_By_da);
@@ -1566,9 +1511,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
-    _leftSkew_X_By_cx = new DoubleProperty (0);
-    _leftSkew_X_By_cy = new DoubleProperty (0);
-    _leftSkew_X_By_da = new DoubleProperty (0);
+    _leftSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
+    _leftSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
+    _leftSkew_X_By_da = new DoubleProperty (nullptr, "da", 0);
     _leftSkew_X_By_spike->add_symbol ("cx", _leftSkew_X_By_cx);
     _leftSkew_X_By_spike->add_symbol ("cy", _leftSkew_X_By_cy);
     _leftSkew_X_By_spike->add_symbol ("da", _leftSkew_X_By_da);
@@ -1596,9 +1541,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
-    _rightSkew_Y_By_cx = new DoubleProperty (0);
-    _rightSkew_Y_By_cy = new DoubleProperty (0);
-    _rightSkew_Y_By_da = new DoubleProperty (0);
+    _rightSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
+    _rightSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
+    _rightSkew_Y_By_da = new DoubleProperty (nullptr, "da", 0);
     _rightSkew_Y_By_spike->add_symbol ("cx", _rightSkew_Y_By_cx);
     _rightSkew_Y_By_spike->add_symbol ("cy", _rightSkew_Y_By_cy);
     _rightSkew_Y_By_spike->add_symbol ("da", _rightSkew_Y_By_da);
@@ -1626,9 +1571,9 @@ namespace djnn
   {
     auto _frame = frame ();
     _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
-    _leftSkew_Y_By_cx = new DoubleProperty (0);
-    _leftSkew_Y_By_cy = new DoubleProperty (0);
-    _leftSkew_Y_By_da = new DoubleProperty (0);
+    _leftSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
+    _leftSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
+    _leftSkew_Y_By_da = new DoubleProperty (nullptr, "da", 0);
     _leftSkew_Y_By_spike->add_symbol ("cx", _leftSkew_Y_By_cx);
     _leftSkew_Y_By_spike->add_symbol ("cy", _leftSkew_Y_By_cy);
     _leftSkew_Y_By_spike->add_symbol ("da", _leftSkew_Y_By_da);
@@ -1662,15 +1607,6 @@ namespace djnn
                                           m31, m32, m33, m34, 
                                           m41, m42, m43, m44),
       raw_props(AbstractPropHomography::raw_props),
-      // AbstractTransformation (parent, name),
-      // raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14,
-      //           .m21=m21, .m22=m22, .m23=m23, .m24=m24,
-      //           .m31=m31, .m32=m32, .m33=m33, .m34=m34,
-      //           .m41=m41, .m42=m42, .m43=m43, .m44=m44,},
-      // _cm11(nullptr), _cm12(nullptr), _cm13(nullptr), _cm14(nullptr),
-      // _cm21(nullptr), _cm22(nullptr), _cm23(nullptr), _cm24(nullptr),
-      // _cm31(nullptr), _cm32(nullptr), _cm33(nullptr), _cm34(nullptr),
-      // _cm41(nullptr), _cm42(nullptr), _cm43(nullptr), _cm44(nullptr),
 
       /* rightTranslateBy ptr */
       _rightTranslateBy_spike(nullptr), _rightTranslateBy_action(nullptr),
@@ -1718,12 +1654,6 @@ namespace djnn
     _accsx = new DoubleProperty (this, "accsx", 1);
     _accsy = new DoubleProperty (this, "accsy", 1);
   }
-
-  AbstractHomography::AbstractHomography (double m11, double m12, double m13, double m14,
-                                          double m21, double m22, double m23, double m24,
-                                          double m31, double m32, double m33, double m34,
-                                          double m41, double m42, double m43, double m44) : 
-      AbstractHomography(nullptr, "", m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44) {}
 
   AbstractHomography::~AbstractHomography ()
   {
@@ -2122,14 +2052,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Homography::Homography (double m11, double m12, double m13, double m14, double m21,
-                          double m22, double m23, double m24, double m31, double m32, double m33, double m34,
-                          double m41, double m42, double m43, double m44) :
-      AbstractHomography (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
-  {
-
-  }
-
   Homography::~Homography ()
   {
   }
@@ -2164,7 +2086,8 @@ namespace djnn
   Process*
   Homography::clone ()
   {
-    return new Homography (raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
+    return new Homography (nullptr, get_name (),
+                           raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
                            raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
                            raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
@@ -2182,12 +2105,6 @@ namespace djnn
     grad->transforms ()->add_child (this, "");
   }
 
-  GradientHomography::GradientHomography (double m11, double m12, double m13, double m21, double m22, double m23,
-                                          double m31, double m32, double m33) :
-      AbstractHomography (m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
-  {
-  }
-
   GradientHomography::~GradientHomography ()
   {
   }
@@ -2201,7 +2118,8 @@ namespace djnn
   Process*
   GradientHomography::clone ()
   {
-    return new GradientHomography ( raw_props.m11, raw_props.m12, raw_props.m13,
+    return new GradientHomography ( nullptr, get_name (), 
+                                    raw_props.m11, raw_props.m12, raw_props.m13,
                                     raw_props.m21, raw_props.m22, raw_props.m23,
                                     raw_props.m31, raw_props.m32, raw_props.m33);
   }
@@ -2218,11 +2136,6 @@ namespace djnn
     grad->transforms ()->add_child (this, "");
   }
 
-  SimpleGradientTransform::SimpleGradientTransform (double a, double b, double c, double d, double e, double f) :
-      AbstractHomography (a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
-  {
-  }
-
   SimpleGradientTransform::~SimpleGradientTransform ()
   {
   }
@@ -2230,27 +2143,14 @@ namespace djnn
   void
   SimpleGradientTransform::draw ()
   {
-    // double m11 = new_m11->get_value ();
-    // double m12 = new_m12->get_value ();
-    // //double m13 = new_m13->get_value ();
-
-    // double m21 = new_m21->get_value ();
-    // double m22 = new_m22->get_value ();
-    // //double m23 = new_m23->get_value ();
-
-    // double m31 = _m31->get_value ();
-    // double m32 = _m32->get_value ();
-    // //double m33 = _m33->get_value ();
-
-    //Backend::instance ()->load_gradient_homography (this, m11, m12, m13, m21, m22, m23, m31, m32, m33);
-    //a, b, 0, c, d, 0, e, f, 1)
     Backend::instance ()->load_simple_gradient_transform (this);
   }
 
   Process*
   SimpleGradientTransform::clone ()
   {
-    return new GradientHomography (raw_props.m11, raw_props.m12, raw_props.m13,
+    return new GradientHomography (nullptr, get_name (), 
+                                   raw_props.m11, raw_props.m12, raw_props.m13,
                                    raw_props.m21, raw_props.m22, raw_props.m23,
                                    raw_props.m31, raw_props.m32, raw_props.m33);
   }

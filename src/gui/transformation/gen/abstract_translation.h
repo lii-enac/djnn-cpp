@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractTranslation (Process *parent, const std::string& name, double tx, double ty);
-    AbstractTranslation (double tx, double ty);
     virtual ~AbstractTranslation ();
     
     

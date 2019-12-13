@@ -70,7 +70,6 @@ namespace djnn
   /* COUNTER ACTION */
   public:
     Counter (Process* p, const std::string& n, double init, double delta);
-    Counter (double init, double delta);
     ~Counter();
     void impl_activate () override;
     void impl_deactivate () override;

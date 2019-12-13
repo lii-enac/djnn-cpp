@@ -120,12 +120,12 @@ namespace djnn
   Process*
   IntProperty::clone ()
   {
-    return new IntProperty (get_value());
+    return new IntProperty (nullptr, get_name (), get_value());
   }
 
   Process*
   IntPropertyProxy::clone ()
   {
-    return new IntPropertyProxy (get_ref_value()); // FIXME
+    return new IntPropertyProxy (nullptr, get_name (), get_ref_value());
   }
 }

@@ -29,21 +29,9 @@
 
 namespace djnn
 {
-  Clock::Clock (milliseconds period)
-  : Clock(period.count ())
-  {
-  }
 
   Clock::Clock (Process *parent, const std::string& name, milliseconds period)
   : Clock(parent, name, period.count ())
-  {
-  }
-
-  Clock::Clock (int period)
-  :
-    _period (this, "period", period),
-    _elapsed (this, "elapsed", 0),
-    _tick (this, "tick")
   {
   }
 

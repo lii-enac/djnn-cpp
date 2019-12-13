@@ -41,14 +41,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  OutlineWidth::OutlineWidth (double width) :
-    AbstractStyle (), 
-    raw_props{.width=width},
-    _cwidth (nullptr)
-  {
-    
-  }
-
   OutlineWidth::~OutlineWidth ()
   {
     delete _cwidth;
@@ -144,7 +136,7 @@ namespace djnn
   Process*
   OutlineWidth::clone ()
   {
-    return new OutlineWidth (raw_props.width);
+    return new OutlineWidth (nullptr, get_name (), raw_props.width);
   }
 
   

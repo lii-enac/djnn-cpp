@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _cunit (nullptr), _csize (nullptr)
   {
     
-    
-  }
-
-  AbstractPropFontSize::AbstractPropFontSize (int unit, double size) :
-    AbstractStyle (), 
-    raw_props{.unit=unit, .size=size},
-    _cunit (nullptr), _csize (nullptr)
-  {
     
   }
 

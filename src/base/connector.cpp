@@ -113,31 +113,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Connector::Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation,
-    string src_ref_spec, string dst_ref_spec)
-  :
-    _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-    _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
-    _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
-    _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()), // uses copy constructor
-    _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (Process**)&_dst) : ref_update()),
-    _action(this, "connector_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true),
-    _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
-    _has_coupling (false),
-    _copy_on_activation (copy_on_activation)
-  {
-    if (_src) {
-      _c_src.disable ();
-      if(_dst) {
-        Graph::instance ().add_edge (_src, _dst);
-        _has_coupling = true;
-      }
-    }
-    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
-    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-    check_init(ispec, dspec);
-  }
-
   void
   Connector::impl_activate ()
   {
@@ -239,12 +214,6 @@ namespace djnn
   {
     init_pausedconnector (src, ispec, dst, dspec);
     Process::finalize_construction (parent, name);
-  }
-
-  PausedConnector::PausedConnector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation) :
-      _c_src (nullptr), _copy_on_activation (copy_on_activation)
-  {
-    init_pausedconnector (src, ispec, dst, dspec);
   }
 
   void

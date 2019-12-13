@@ -16,9 +16,6 @@
 
 #include <algorithm>
 
-//#include <iostream>
-//#define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-
 namespace djnn
 {
 

@@ -89,21 +89,6 @@ namespace djnn
     Process::finalize_construction (parent, name, &_action);
   }
 
-  /* note:
-   * added _branch_range to symTable but not in _children 
-   */
-  SwitchRange::SwitchRange (double initial)
-  : _initial (initial),
-  _branch_range (nullptr, "switch_state", initial),
-  _action (this, "switch_range_action"),
-  _c_branch (&_branch_range, ACTIVATION, &_action, ACTIVATION, true),
-  _cur_branch (nullptr)
-  {
-    add_symbol ("state", &_branch_range);
-    _c_branch.disable ();
-    set_state_dependency (&_action);
-  }
-
   SwitchRange::~SwitchRange ()
   {
     remove_state_dependency (get_parent (), state_dependency ());

@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     set_origin (x, y);
     
-  }
-
-  AbstractPropRectangleClip::AbstractPropRectangleClip (double x, double y, double width, double height) :
-    AbstractGShape (), 
-    raw_props{.x=x, .y=y, .width=width, .height=height},
-    _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
-  {
-    set_origin (x, y);
   }
 
   AbstractPropRectangleClip::~AbstractPropRectangleClip ()

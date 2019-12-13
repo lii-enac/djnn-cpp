@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
-    AbstractScaling (double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     
     

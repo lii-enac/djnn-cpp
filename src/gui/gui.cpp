@@ -264,8 +264,8 @@ namespace djnn
     _wheel = new Spike (this, "wheel");
     _pos_x = new DoubleProperty (this, "x", 0);
     _pos_y = new DoubleProperty (this, "y", 0);
-    _dx = new DoubleProperty (0);
-    _dy = new DoubleProperty (0);
+    _dx = new DoubleProperty (nullptr, "dx", 0);
+    _dy = new DoubleProperty (nullptr, "dy", 0);
     _wheel->add_symbol ("dx", _dx);
     _wheel->add_symbol ("dy", _dy);
   }

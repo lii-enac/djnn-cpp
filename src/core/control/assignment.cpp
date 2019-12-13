@@ -102,19 +102,6 @@ namespace djnn
     dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
-    string src_ref_spec, string dst_ref_spec)
-  :
-  SrcToDstLink (isModel),
-  _init(this, "", src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-  _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
-  _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()), // uses copy constructor
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst,dst_ref_spec, (Process**)&_dst) : ref_update())
-  {
-    check_init(ispec, dspec);
-  }
-
   AbstractAssignment::AbstractAssignment (Process *parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
     string src_ref_spec, string dst_ref_spec)
   :
@@ -206,15 +193,6 @@ namespace djnn
       Graph::instance ().add_edge (_src, _dst);
   }
 
-  Assignment::Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel) :
-      AbstractAssignment (src, ispec, dst, dspec, isModel),
-      _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
-  {
-    init_Assignment ();
-    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
-    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-  }
-
   Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst,
                           const string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
@@ -280,14 +258,6 @@ namespace djnn
     if (_src && _dst) {
       add_state_dependency (get_parent (), _dst);
     }
-  }
-
-  PausedAssignment::PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec,
-                                      bool isModel) :
-      AbstractAssignment (src, ispec, dst, dspec, isModel),
-      _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
-  {
-    init_PausedAssignment ();
   }
 
   PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec,

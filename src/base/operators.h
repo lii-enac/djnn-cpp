@@ -43,7 +43,6 @@ namespace djnn {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (BinOperator& binop) : _binop(binop) {}
     BinaryOperatorAction (Process* parent, const string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
       Process::finalize_construction (parent, name);
     }

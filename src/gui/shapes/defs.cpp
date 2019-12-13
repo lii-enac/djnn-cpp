@@ -30,11 +30,6 @@ namespace djnn
     Process::finalize_construction (parent, n);
   }
 
-  Defs::Defs () :
-      Container ()
-  {
-  }
-
   Defs::~Defs ()
   {
   }
@@ -54,7 +49,7 @@ namespace djnn
   Process* 
   Defs::clone ()
   {
-    Defs* newd = new Defs ();
+    Defs* newd = new Defs (nullptr, get_name ());
 
     for (auto c : _children) {
       newd->add_child (c->clone (), this->find_component_name(c));

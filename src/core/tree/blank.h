@@ -21,7 +21,6 @@ namespace djnn {
 
   class Blank: public Process {
   public:
-    Blank () : Process () {}
     Blank (Process* parent, string name) : Process (name) { Process::finalize_construction (parent, name); }
     virtual ~Blank () {};
     Process* clone () override;

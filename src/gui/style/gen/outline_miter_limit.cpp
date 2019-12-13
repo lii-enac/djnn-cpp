@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  OutlineMiterLimit::OutlineMiterLimit (int limit) :
-    AbstractStyle (), 
-    raw_props{.limit=limit},
-    _climit (nullptr)
-  {
-    
   }
 
   OutlineMiterLimit::~OutlineMiterLimit ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   OutlineMiterLimit::clone ()
   {
-    return new OutlineMiterLimit (raw_props.limit);
+    return new OutlineMiterLimit (nullptr, get_name (), raw_props.limit);
   }
 
   

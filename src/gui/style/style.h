@@ -2,13 +2,15 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -30,7 +32,6 @@ namespace djnn
   {
   public:
     AbstractStyle (Process *parent, const string &name);
-    AbstractStyle ();
     virtual ~AbstractStyle ();
   };
 }
@@ -64,8 +65,6 @@ namespace djnn
         AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
     FillColor (Process *parent, const std::string& name, int v) :
         AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
-    FillColor (int r, int g, int b) :
-        AbstractColor (r, g, b) {}
     virtual ~FillColor () {}
     void draw () override;
     Process* clone () override;
@@ -78,8 +77,6 @@ namespace djnn
         AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
     OutlineColor (Process *parent, const std::string& name, int v) :
          AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
-    OutlineColor (int r, int g, int b) :
-        AbstractColor (r, g, b) {}
     virtual ~OutlineColor () {}
     void draw () override;
     Process* clone () override;
@@ -90,8 +87,6 @@ namespace djnn
   public:
     NoOutline (Process *parent, const std::string &name) :
         AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
-    NoOutline () :
-        AbstractStyle () {}    
     virtual ~NoOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
@@ -104,8 +99,6 @@ namespace djnn
   public:
     NoFill (Process *parent, const std::string &name) :
         AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
-    NoFill () :
-        AbstractStyle () {}
     virtual ~NoFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
@@ -118,8 +111,6 @@ namespace djnn
   public:
     OutlineOpacity (Process *parent, const std::string &name, double alpha) :
         AbstractOpacity (parent, name, alpha) { Process::finalize_construction (parent, name); }
-    OutlineOpacity (double alpha) :
-        AbstractOpacity (alpha) {}
     virtual ~OutlineOpacity () {}
     void draw () override;
     Process* clone () override;
@@ -130,8 +121,6 @@ namespace djnn
   public:
     FillOpacity (Process *parent, const std::string &name, double alpha) :
         AbstractOpacity (parent, name, alpha) { Process::finalize_construction (parent, name); }
-    FillOpacity (double alpha) :
-        AbstractOpacity (alpha) {}
     virtual ~FillOpacity () {}
     void draw () override;
     Process* clone () override;
@@ -143,8 +132,6 @@ namespace djnn
   public:
     DashArray (Process *parent, const std::string &name) :
         AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
-    DashArray () :
-        AbstractStyle () {}
     virtual ~DashArray () { _dash_array.clear ();}
     const vector<double>& dash_array () const { return _dash_array;}
     void add_sub_pattern (double dash, double space)
@@ -165,8 +152,6 @@ namespace djnn
   public:
     NoDashArray (Process *parent, const std::string &name) :
         AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
-    NoDashArray () :
-        AbstractStyle () {}
     virtual ~NoDashArray () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
@@ -183,7 +168,6 @@ namespace djnn {
   {
   public:
     GradientStop (Process *parent, const std::string &name, double r, double g, double b, double a, double offset);
-    GradientStop (double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
     void draw () override;
     Process* clone () override;
@@ -199,7 +183,6 @@ namespace djnn {
   {
   public:
     AbstractGradient (Process *parent, const std::string &name, int spread, int coords);
-    AbstractGradient (int spread, int coords);
     AbstractGradient (Process *parent, const std::string &name);
     virtual ~AbstractGradient ();
     virtual void update ();
@@ -225,7 +208,6 @@ namespace djnn {
                     djnFillSpread s, djnFillCoords fc);
     LinearGradient (Process *parent, const std::string &name, double x1, double y1, double x2, double y2,
                     int s, int fc);
-    LinearGradient (double x1, double y1, double x2, double y2, int s, int fc);
     LinearGradient (Process *parent, const std::string &name, LinearGradient *lg);
     virtual ~LinearGradient ();
     void draw () override;
@@ -237,7 +219,6 @@ namespace djnn {
   {
   public:
     RefLinearGradient (Process *parent, const std::string &name, LinearGradient *lg);
-    RefLinearGradient (LinearGradient *lg);
     virtual ~RefLinearGradient () {};
     void impl_activate () override;
     void impl_deactivate () override;
@@ -257,7 +238,6 @@ namespace djnn {
                     djnFillSpread s, djnFillCoords fc);
     RadialGradient (Process *parent, const std::string &name, double cx, double cy, double r, double fx, double fy,
                         int s, int fc);
-    RadialGradient (double cx, double cy, double r, double fx, double fy, int s, int fc);
     RadialGradient (Process *parent, const std::string &name, RadialGradient *rg);
     virtual ~RadialGradient ();
     void draw () override;
@@ -269,7 +249,6 @@ namespace djnn {
   {
   public:
     RefRadialGradient (Process *parent, const std::string &name, RadialGradient *rg);
-    RefRadialGradient (RadialGradient *rg);
     virtual ~RefRadialGradient () {};
     void impl_activate () override;
     void impl_deactivate () override;
@@ -285,9 +264,7 @@ namespace djnn {
   {
   public:
     FontSize (Process *parent, const std::string &name, djnLengthUnit unit, double size);
-    FontSize (djnLengthUnit unit, double size);
     FontSize (Process *parent, const std::string &name, int unit, double size);
-    FontSize (int unit, double size);
     void impl_activate () override;
     void draw () override;
     Process* clone () override;
@@ -298,7 +275,6 @@ namespace djnn {
   {
   public:
     FontWeight (Process *parent, const std::string &name, int weight);
-    FontWeight (int weight);
     void impl_activate () override;
     void draw () override;
     Process* clone () override;
@@ -308,9 +284,7 @@ namespace djnn {
   {
   public:
     FontStyle (Process *parent, const std::string &name, djnFontSlope style);
-    FontStyle (djnFontSlope style);
     FontStyle (Process *parent, const std::string &name, int style);
-    FontStyle (int style);
     void impl_activate () override;
     void draw () override;
     Process* clone () override;
@@ -320,7 +294,6 @@ namespace djnn {
   {
   public:
     FontFamily (Process *parent, const std::string &name, const std::string &family);
-    FontFamily (const std::string &family);
     void impl_activate () override;
     void draw () override;
     Process* clone () override;

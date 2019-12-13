@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
   {
     
-    
-  }
-
-  AbstractPropRadialGradient::AbstractPropRadialGradient (double cx, double cy, double r, double fx, double fy, int spread, int coords) :
-    AbstractGradient (spread, coords), 
-    raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
-    _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
-  {
     
   }
 

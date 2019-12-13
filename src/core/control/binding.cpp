@@ -118,30 +118,6 @@ namespace djnn
     }
   }
 
-  Binding::Binding (Process* src, const string & ispec, Process* dst, const string & dspec,
-    string src_ref_spec, string dst_ref_spec)
-  :
-      _init(this, src, ispec, true, dst, dspec, true, src_ref_spec, dst_ref_spec),
-      _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
-      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
-      _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
-      _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
-      _has_coupling (false)
-  {
-    check_init(ispec, dspec);
-    if (_src) {
-      _c_src.disable ();
-      if(_dst) {
-        Graph::instance ().add_edge (_src, _dst);
-        _has_coupling = true;
-      }
-    }
-    if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
-    if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-  }
-
   Binding::Binding (Process* parent, const string & name, Process* src, const string & ispec, Process* dst, const string & dspec,
     string src_ref_spec, string dst_ref_spec)
   :
@@ -149,8 +125,8 @@ namespace djnn
       _init(this, src, ispec, true, dst, dspec, true, src_ref_spec, dst_ref_spec),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update ()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update ()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
       _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)
@@ -176,8 +152,8 @@ namespace djnn
       _init(this, src, ispec, on_activation, dst, dspec, activate, src_ref_spec, dst_ref_spec),
       _src(!_ref_info_src.is_ref() && src ? src->find_component (ispec) : nullptr),
       _dst(!_ref_info_dst.is_ref() && dst ? dst->find_component (dspec) : nullptr),
-      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update()), // uses copy constructor
-      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update()),
+      _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update ()), // uses copy constructor
+      _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update ()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", activate),
       _c_src(_src ? Coupling(_src, on_activation ? ACTIVATION : DEACTIVATION, &_action, ACTIVATION, true) : Coupling()),
       _has_coupling (false)

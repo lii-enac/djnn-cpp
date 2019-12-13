@@ -101,7 +101,7 @@ namespace djnn
   Process* 
   TextProperty::clone ()
   {
-    return new TextProperty (value);
+    return new TextProperty (nullptr, get_name (), value);
   }
 
   void
@@ -120,6 +120,6 @@ namespace djnn
   Process* 
   TextPropertyProxy::clone ()
   {
-    return new TextPropertyProxy (value);
+    return new TextPropertyProxy (nullptr, get_name (), value);
   }
 }

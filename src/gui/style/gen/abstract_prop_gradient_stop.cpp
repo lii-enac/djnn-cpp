@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
   {
     
-    
-  }
-
-  AbstractPropGradientStop::AbstractPropGradientStop (double r, double g, double b, double a, double offset) :
-    AbstractStyle (), 
-    raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
-    _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
-  {
     
   }
 

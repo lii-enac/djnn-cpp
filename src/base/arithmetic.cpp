@@ -92,13 +92,6 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (bool isModel)
-  : _delta (this, "delta", 1),
-    _state (this, "state", 0)
-  {
-    init_incr (isModel);
-  }
-
   Incr::Incr (Process *parent, const string& name, bool isModel) :
       Process (name),
       _delta (this, "delta", 1),

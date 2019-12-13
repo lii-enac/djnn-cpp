@@ -22,7 +22,7 @@
 namespace djnn
 {
 
-#if NEW_LOG
+#if NEW_LOG_PLAIN_OBJ
   LogPrinter::LogPrinter (Process *parent, const std::string& name, const std::string& label) 
   : Component (p, n),
   _tc (this, "catenator"),

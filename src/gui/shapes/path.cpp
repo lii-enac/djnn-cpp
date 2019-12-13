@@ -30,13 +30,6 @@
 
 namespace djnn
 {
-  PathPoint::PathPoint (double x, double y) :
-      AbstractGObj (),
-      raw_props{.x=x, .y=y},
-      _cx(nullptr), _cy(nullptr)
-  {
-  }
-
   PathPoint::PathPoint (Process* parent, const string &name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
@@ -126,7 +119,7 @@ namespace djnn
   Process*
   PathLine::clone ()
   {
-    return new PathLine (raw_props.x, raw_props.y);
+    return new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
   void
@@ -141,7 +134,7 @@ namespace djnn
   Process*
   PathMove::clone ()
   {
-    return new PathMove (raw_props.x, raw_props.y);
+    return new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
   PathClosure::PathClosure (Process* parent, const string &name) :
@@ -165,7 +158,7 @@ namespace djnn
   Process*
   PathClosure::clone ()
   {
-    return new PathClosure ();
+    return new PathClosure (nullptr, get_name ());
   }
 
   PathQuadratic::PathQuadratic (Process* parent, const string &name, double x1, double y1, double x, double y) :
@@ -180,13 +173,6 @@ namespace djnn
     }
     path->items ()->add_child (this, "");
     parent->add_symbol(name, this);
-  }
-
-  PathQuadratic::PathQuadratic (double x1, double y1, double x, double y) :
-      AbstractGObj (),
-      raw_props{.x1=x1, .y1=y1, .x=x, .y=y},
-      _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
-  {
   }
 
   PathQuadratic::~PathQuadratic ()
@@ -288,7 +274,7 @@ namespace djnn
   Process*
   PathQuadratic::clone ()
   {
-    return new PathQuadratic (raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
+    return new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
   }
 
 
@@ -304,13 +290,6 @@ namespace djnn
     }
     path->items ()->add_child (this, "");
     parent->add_symbol(name, this);
-  }
-
-  PathCubic::PathCubic (double x1, double y1, double x2, double y2, double x, double y) :
-      AbstractGObj (),
-      raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
-      _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
-  {
   }
 
   PathCubic::~PathCubic ()
@@ -436,7 +415,7 @@ namespace djnn
   Process*
   PathCubic::clone ()
   {
-    return new PathCubic (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
+    return new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
   }
 
   PathArc::PathArc (Process* parent, const string &name, double rx, double ry, double rotx, double fl, double swfl, double x,
@@ -452,13 +431,6 @@ namespace djnn
     }
     path->items ()->add_child (this, "");
     parent->add_symbol(name, this);
-  }
-
-  PathArc::PathArc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) :
-      AbstractGObj (),
-      raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
-      _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl(nullptr), _cx (nullptr), _cy (nullptr)
-  {
   }
 
   PathArc::~PathArc ()
@@ -596,22 +568,7 @@ namespace djnn
   Process*
   PathArc::clone ()
   {
-    return new PathArc (raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
-  }
-
-  Path::Path () :
-      AbstractGShape ()
-  {
-    _items = new List (this, "items");
-    _bounding_box = new Blank (this, "bounding_box");
-    _bbx = new DoubleProperty (0);
-    _bby = new DoubleProperty (0);
-    _bbw = new DoubleProperty (0);
-    _bbh = new DoubleProperty (0);
-    _bounding_box->add_symbol ("x", _bbx);
-    _bounding_box->add_symbol ("y", _bby);
-    _bounding_box->add_symbol ("width", _bbw);
-    _bounding_box->add_symbol ("height", _bbh);
+    return new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
   }
 
   Path::Path (Process* parent, const string &name) :
@@ -619,10 +576,10 @@ namespace djnn
   {
     _items = new List (this, "items");
     _bounding_box = new Blank (this, "bounding_box");
-    _bbx = new DoubleProperty (0);
-    _bby = new DoubleProperty (0);
-    _bbw = new DoubleProperty (0);
-    _bbh = new DoubleProperty (0);
+    _bbx = new DoubleProperty (nullptr, "bbx", 0);
+    _bby = new DoubleProperty (nullptr, "bby", 0);
+    _bbw = new DoubleProperty (nullptr, "bbw", 0);
+    _bbh = new DoubleProperty (nullptr, "bbh", 0); 
     _bounding_box->add_symbol ("x", _bbx);
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
@@ -667,7 +624,7 @@ namespace djnn
   Process*
   Path::clone ()
   {
-    Path* clone = new Path ();
+    Path* clone = new Path (nullptr, get_name ());
     for (auto p: _items->children ()) {
       clone->items ()->add_child (p->clone (), "");
     }
@@ -686,7 +643,7 @@ namespace djnn
   Process*
   PathClip::clone ()
   {
-    PathClip* clone = new PathClip ();
+    PathClip* clone = new PathClip (nullptr, get_name ());
     for (auto p: _items->children ()) {
       clone->items ()->add_child (p->clone (), "");
     }

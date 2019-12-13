@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _cspread (nullptr), _ccoords (nullptr)
   {
     
-    
-  }
-
-  AbstractPropGradient::AbstractPropGradient (int spread, int coords) :
-    AbstractStyle (), 
-    raw_props{.spread=spread, .coords=coords},
-    _cspread (nullptr), _ccoords (nullptr)
-  {
     
   }
 

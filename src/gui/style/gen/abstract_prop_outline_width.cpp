@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _cwidth (nullptr)
   {
     
-    
-  }
-
-  AbstractPropOutlineWidth::AbstractPropOutlineWidth (double width) :
-    AbstractStyle (), 
-    raw_props{.width=width},
-    _cwidth (nullptr)
-  {
     
   }
 

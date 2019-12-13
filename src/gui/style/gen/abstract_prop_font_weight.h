@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropFontWeight (Process *parent, const std::string& name, int weight);
-    AbstractPropFontWeight (int weight);
     virtual ~AbstractPropFontWeight ();
     
     

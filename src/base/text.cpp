@@ -50,14 +50,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  TextPrinter::TextPrinter ()
-  : _input (this, "input", ""),
-    _action (this, get_name () + "_action", &_input),
-    c_input (&_input, ACTIVATION, &_action, ACTIVATION, true)
-  {
-    init ();
-  }
-
   void
   TextPrinter::serialize (const string& type) {
    
@@ -120,18 +112,6 @@ namespace djnn
   {
     init (initial, decimal);
     Process::finalize_construction (parent, name);
-  }
-
-  DoubleFormatter::DoubleFormatter (double initial, int decimal) :
-    Process (),
-    _input (this, "input", initial),
-    _decimal (this, "decimal", decimal),
-    _output (this, "output", ""),
-    _action (this, "action", *this),
-    _c_input (&_input, ACTIVATION, &_action, ACTIVATION),
-    _c_decimal (&_decimal, ACTIVATION, &_action, ACTIVATION)
-  {
-    init (initial, decimal);
   }
 
   void

@@ -50,35 +50,6 @@ namespace djnn
       Process::finalize_construction (parent, name);
   }
 
-  Counter::Counter (double init, double delta)
-  : Counter(nullptr, " ", init, delta)
-  {}
-
-  /*Counter::Counter (double init, double delta)
-  : Process (),
-    _reset (this, "reset"),
-    _step (this, "step"),
-    _output (this, "output", init),
-    _init (this, "init", init),
-    _delta (this, "delta", delta),
-    _action_reset (this, "counter_action_reset", &_reset_occurred),
-    _c_reset (&_reset, ACTIVATION, &_action_reset, ACTIVATION),
-    _action_step (this, "counter_action_step", &_init, &_delta, &_output, &_reset_occurred),
-    _c_step (&_step, ACTIVATION, &_action_step, ACTIVATION)
-  {
-    _c_reset.disable (),
-    _c_step.disable ();
-
-    Graph::instance ().add_edge (&_reset, &_action_reset);
-    Graph::instance ().add_edge (&_action_reset, &_output);
-    
-    Graph::instance ().add_edge (&_step, &_action_step);
-    Graph::instance ().add_edge (&_action_step, &_output);
-
-    add_state_dependency (get_parent (), &_action_reset);
-    add_state_dependency (get_parent (), &_action_step);
-  }*/
-
   Counter::~Counter () {
     remove_state_dependency (get_parent (), &_action_reset);
     remove_state_dependency (get_parent (), &_action_step);
@@ -114,7 +85,6 @@ namespace djnn
     _c_reset.disable ();
     _c_step.disable ();
   }
-
 
   void
   Counter::serialize (const string& type) {

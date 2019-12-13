@@ -22,7 +22,6 @@ namespace djnn {
 
   class Action : public Process {
   public:
-    Action (bool model = false) : Process (model) {}
     Action (Process *parent, const std::string &n, bool model = false) : Process (n, model) 
     {
       /* note:

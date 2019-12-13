@@ -44,8 +44,8 @@ static int ParsePoints(Process** e, const char* v) {
 	double x, y;
 	char *vv = (char*) v;
 
-	if (djn_PolyArgs.isPolygon) djn_PolyArgs.e = new djnn::Polygon;
-	else djn_PolyArgs.e = new djnn::Polyline;
+	if (djn_PolyArgs.isPolygon) djn_PolyArgs.e = new djnn::Polygon (nullptr, "polygon");
+	else djn_PolyArgs.e = new djnn::Polyline (nullptr, "polyline");
 
 	/* read a list of coordinate pairs */
 	while (*vv) {

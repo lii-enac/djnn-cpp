@@ -136,12 +136,12 @@ namespace djnn
   Process*
   BoolProperty::clone ()
   {
-    return new BoolProperty (get_value());
+    return new BoolProperty (nullptr, get_name (), get_value());
   }
 
   Process*
   BoolPropertyProxy::clone ()
   {
-    return new BoolPropertyProxy (get_ref_value()); // FIXME
+    return new BoolPropertyProxy (nullptr, get_name (), get_ref_value());
   }
 }

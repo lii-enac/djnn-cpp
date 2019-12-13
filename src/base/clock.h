@@ -36,8 +36,6 @@ namespace djnn
   public:
     Clock (Process* p, const std::string& n, milliseconds period = seconds(1));
     Clock (Process* p, const std::string& n, int period = 1000);
-    Clock (milliseconds period = seconds(1));
-    Clock (int period = 1000);
     virtual ~Clock ();
 
   protected:

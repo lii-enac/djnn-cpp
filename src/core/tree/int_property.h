@@ -22,7 +22,6 @@ namespace djnn {
 
   class AbstractIntProperty : public AbstractProperty {
   public:
-    AbstractIntProperty () : AbstractProperty () { };
     AbstractIntProperty (Process* parent, const string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
     virtual int get_prop_type () override { return Integer; }
 
@@ -44,7 +43,6 @@ namespace djnn {
 
   class IntProperty : public AbstractIntProperty {
   public:
-    IntProperty (int v) : AbstractIntProperty (), value(v) { }
     IntProperty (Process* parent, const string &name, int v) : AbstractIntProperty (parent, name), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;
@@ -56,7 +54,6 @@ namespace djnn {
 
   class IntPropertyProxy : public AbstractIntProperty {
   public:
-    IntPropertyProxy (int &v) : AbstractIntProperty (), value(v) { }
     IntPropertyProxy (Process* parent, const string &name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;

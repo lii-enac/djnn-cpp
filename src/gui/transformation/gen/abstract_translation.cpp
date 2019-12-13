@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -34,14 +36,6 @@ namespace djnn
     _ctx (nullptr), _cty (nullptr)
   {
     
-    
-  }
-
-  AbstractTranslation::AbstractTranslation (double tx, double ty) :
-    AbstractTransformation (), 
-    raw_props{.tx=tx, .ty=ty},
-    _ctx (nullptr), _cty (nullptr)
-  {
     
   }
 

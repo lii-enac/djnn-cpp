@@ -18,6 +18,8 @@ copyright = """/*
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 """
@@ -31,7 +33,6 @@ namespace djnn
   {
   public:
     %(CLASS)s (Process *parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
-    %(CLASS)s (%(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
     %(DECL_CLONE)s
@@ -71,14 +72,6 @@ namespace djnn
   {
     %(SET_ORIGIN)s
     %(FINALIZE_CONSTRUCTION)s
-  }
-
-  %(CLASS)s::%(CLASS)s (%(DECL_PROPS_CALL_DEF)s) :
-    %(INHERITS)s (%(PARENT_PROPS_CALL)s), 
-    raw_props{%(RAW_PROPS_INIT)s},
-    %(COUPLINGS_INIT)s
-  {
-    %(SET_ORIGIN)s
   }
 
   %(CLASS)s::~%(CLASS)s ()
@@ -169,7 +162,7 @@ def_clone = """
   Process*
   %(CLASS)s::clone ()
   {
-    return new %(CLASS)s (%(RAW_PROP_PARAMS)s);
+    return new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
   }
 """
 

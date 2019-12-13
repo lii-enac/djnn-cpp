@@ -37,13 +37,6 @@ namespace djnn
 {
   using namespace std;
 
-  Container::Container ()
-  {
-    for (auto s: structure_observer_list) {
-      s->add_container (this);
-    }
-  }
-
   Container::Container (Process* parent, const string& name) :
       Process (name)
   {
@@ -289,7 +282,7 @@ namespace djnn
   Process*
   Container::clone ()
   {
-    Process* clone = new Container ();
+    Process* clone = new Container (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), this->find_component_name(c));
     }
@@ -309,7 +302,7 @@ namespace djnn
   Process*
   Component::clone ()
   {
-    Process* clone = new Component ();
+    Process* clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), this->find_component_name(c));
     }
@@ -339,11 +332,6 @@ namespace djnn
   {
     set_is_model (isModel);
     Process::finalize_construction (parent, name);
-  }
-
-  AssignmentSequence::AssignmentSequence () :
-      Container ()
-  {
   }
 
   void

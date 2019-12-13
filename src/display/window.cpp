@@ -2,13 +2,15 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
@@ -66,14 +68,6 @@ namespace djnn
     add_symbol ("wheel", _wheel);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
-  }
-
-  Window::Window (const std::string &title, double x, double y, double w, double h) :
-    Process(),
-    //_self_shared_ptr(this),
-    _refresh (false), _holder (nullptr)
-  {
-    init_ui (title, x, y, w, h);
   }
 
   Window::Window (Process *parent, const std::string &name, const std::string &title, double x, double y, double w,

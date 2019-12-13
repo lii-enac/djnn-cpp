@@ -61,11 +61,6 @@ namespace djnn
     //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;;
   }
 
-  Process::Process (bool model) :
-      Process("  ", model)
-  {
-  }
-
   void
   Process::finalize_construction (Process* parent, const string& name, Process* state_dep) /* called by SubProcess to link to parent */
   {

@@ -126,6 +126,6 @@ namespace djnn
   Process* 
   RefProperty::clone ()
   {
-    return new RefProperty (value);
+    return new RefProperty (nullptr, get_name (), value);
   }
 }

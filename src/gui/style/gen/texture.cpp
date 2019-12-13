@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  Texture::Texture (std::string path) :
-    AbstractStyle (), 
-    raw_props{.path=path},
-    _cpath (nullptr)
-  {
-    
   }
 
   Texture::~Texture ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   Texture::clone ()
   {
-    return new Texture (raw_props.path);
+    return new Texture (nullptr, get_name (), raw_props.path);
   }
 
   

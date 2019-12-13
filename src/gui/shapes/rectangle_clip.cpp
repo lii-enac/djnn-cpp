@@ -39,15 +39,10 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  RectangleClip::RectangleClip (double x, double y, double width, double height) :
-    AbstractPropRectangleClip (x, y, width, height)
-  {
-  }
-
   Process*
   RectangleClip::clone ()
   {
-    return new RectangleClip (raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    return new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);
   }
 
   void

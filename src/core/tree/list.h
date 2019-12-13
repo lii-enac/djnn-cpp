@@ -29,7 +29,6 @@ namespace djnn {
   class AbstractList : public Container
   {
   public:
-    AbstractList ();
     AbstractList (Process *parent, const string& name);
     void add_child (Process* c, const string& name) override;
     void insert (Process* c, const string& spec);
@@ -50,7 +49,6 @@ namespace djnn {
   class List : public AbstractList
   {
   public:
-    List ();
     List (Process *parent, const string& name);
     virtual ~List ();
     void serialize (const string& type) override;

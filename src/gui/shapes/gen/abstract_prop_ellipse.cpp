@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     set_origin (cx,cy);
     
-  }
-
-  AbstractPropEllipse::AbstractPropEllipse (double cx, double cy, double rx, double ry) :
-    AbstractGShape (), 
-    raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
-    _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
-  {
-    set_origin (cx,cy);
   }
 
   AbstractPropEllipse::~AbstractPropEllipse ()

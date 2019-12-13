@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractPropGradientStop (Process *parent, const std::string& name, double r, double g, double b, double a, double offset);
-    AbstractPropGradientStop (double r, double g, double b, double a, double offset);
     virtual ~AbstractPropGradientStop ();
     
     

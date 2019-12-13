@@ -47,7 +47,7 @@ namespace djnn
   Process*
   SVGHolder::clone ()
   {
-    SVGHolder* newh = new SVGHolder ();
+    SVGHolder* newh = new SVGHolder (nullptr, "SVGHolder");
 
     for (auto c : _children) {
       newh->add_child (c->clone (), this->find_component_name(c));
@@ -88,13 +88,6 @@ namespace djnn
     init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
     Process::finalize_construction (parent, name);
-  }
-
-  Touch::Touch () :
-      Process (), _shape (nullptr)
-  {
-    init_touch (0, 0, 0, 0);
-    set_activation_state (ACTIVATED);
   }
 
   Touch::~Touch ()
@@ -264,13 +257,6 @@ namespace djnn
       _inverted_matrix->set_activation_state (ACTIVATED);
     }
 
-  }
-
-  AbstractGShape::AbstractGShape () :
-    AbstractGObj (), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
-  {
-    _origin_x = new DoubleProperty (this, "origin_x", 0);
-    _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
   AbstractGShape::AbstractGShape (Process *parent, const std::string& name) :

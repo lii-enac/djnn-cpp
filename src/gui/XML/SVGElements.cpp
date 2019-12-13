@@ -483,7 +483,7 @@ StartText(const char** attrs, Process* current) {
 	 * without this, and for a not yet elucidated reason,
 	 * the graphical context is not correctly managed
 	 */
-	Process *holder = new SVGHolder;
+	Process *holder = new SVGHolder (nullptr, "SVGHolder");
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_TextArgs.x = 0.;
 	djn_TextArgs.y = 0.;
@@ -557,7 +557,7 @@ StartTspan(const char** attrs, Process* current) {
 		djn_TextArgs.dyUnit = DJN_NO_UNIT;
 	}
 
-	holder = new SVGHolder;
+	holder = new SVGHolder (nullptr, "SVGHolder");
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
@@ -936,7 +936,7 @@ StartPathClip(const char** attrs, Process* current) {
 		attrs++;
 		attrs++;
 	}
-	e = new Component;
+	e = new Component (nullptr, "pathclip");
 	if (strlen (djn_GraphicalShapeArgs.id) != 0) {
 		djn__IdClipManager.insert(
 				pair<string, Process*>(djn_GraphicalShapeArgs.id, e));

@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,7 +25,6 @@ namespace djnn
   {
   public:
     AbstractDataImage (Process *parent, const std::string& name, std::string data, double x, double y, double width, double height);
-    AbstractDataImage (std::string data, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
     
     

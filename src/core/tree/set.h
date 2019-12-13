@@ -38,7 +38,6 @@ namespace djnn {
   class Set : public Process
   {
   public:
-    Set ();
     Set (Process *parent, const string& name);
     void add_child (Process* c, const string& name) override;
     void remove_child (Process* c) override;

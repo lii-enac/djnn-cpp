@@ -39,9 +39,6 @@ namespace djnn
   class AbstractGObj : public Process
   {
   public:
-    AbstractGObj () : Process(), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
-      if (!gui_initialized) warning (this, "Module GUI not initialized");
-    }
     AbstractGObj (Process *parent, const std::string& name) : Process (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }

@@ -40,16 +40,6 @@ namespace djnn
     _gobj->set_state_dependency (this->state_dependency ());
   }
 
-  Group::Group () :
-      Container (), _gobj (nullptr)
-  {
-    _gobj = new AbstractGObj (this, "_gobj");
-    /* AbstractGObj do not have a call to finalize_construction */
-    /* we have to add_child it here */
-    _gobj->set_parent (this);
-    _gobj->set_state_dependency (this->state_dependency ());
-  }
-
   Group::~Group ()
   {
     delete _gobj;
@@ -81,7 +71,7 @@ namespace djnn
   Process* 
   Group::clone () 
   {
-    Group* newg = new Group ();
+    Group* newg = new Group (nullptr, get_name ());
 
     for (auto c : _children) {
       newg->add_child (c->clone (), this->find_component_name(c));

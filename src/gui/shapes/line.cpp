@@ -35,15 +35,10 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Line::Line (double x1, double y1, double x2, double y2)
-  : AbstractPropLine (x1, y1, x2, y2)
-  {
-  }
-
   Process*
   Line::clone ()
   {
-    return new Line (raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+    return new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
   }
  
   void

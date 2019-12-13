@@ -43,7 +43,6 @@ namespace djnn
   public:
     AbstractColor (Process *parent, const std::string& name, int r, int g, int b);
     AbstractColor (Process *parent, const std::string& name, int v);
-    AbstractColor (int r, int g, int b);
     virtual ~AbstractColor ();
     
     

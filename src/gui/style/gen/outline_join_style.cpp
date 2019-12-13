@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  OutlineJoinStyle::OutlineJoinStyle (int join) :
-    AbstractStyle (), 
-    raw_props{.join=join},
-    _cjoin (nullptr)
-  {
-    
   }
 
   OutlineJoinStyle::~OutlineJoinStyle ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   OutlineJoinStyle::clone ()
   {
-    return new OutlineJoinStyle (raw_props.join);
+    return new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
   }
 
   

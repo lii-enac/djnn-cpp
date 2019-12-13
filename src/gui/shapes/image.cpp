@@ -37,14 +37,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Image::Image (std::string path, double x, double y, double w, double h) :
-      AbstractPathImage (path, x, y, w, h),
-      _cwatcher(nullptr),
-      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
-  {
-    set_origin (x, y);
-  }
-
   Image::~Image ()
   {
     if (_cwatcher) {
@@ -97,7 +89,7 @@ namespace djnn
   Process*
   Image::clone () 
   {
-    return new Image (raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
   DataImage::DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w,
@@ -110,13 +102,6 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  DataImage::DataImage (std::string path, double x, double y, double w, double h) :
-        AbstractDataImage (path, x, y, w, h),
-        _cwatcher(nullptr),
-        _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
-  {
-    set_origin (x, y);
-  }
   DataImage::~DataImage ()
   {
     if (_cwatcher) {
@@ -169,6 +154,6 @@ namespace djnn
   Process*
   DataImage::clone ()
   {
-    return new DataImage (raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    return new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 }

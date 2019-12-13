@@ -51,7 +51,6 @@ namespace djnn {
     };
   public:
     SwitchRange (Process *parent, const string &name, double initial);
-    SwitchRange (double initial);
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;

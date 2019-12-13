@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -35,14 +37,6 @@ namespace djnn
   {
     
     Process::finalize_construction (parent, name);
-  }
-
-  DashOffset::DashOffset (double offset) :
-    AbstractStyle (), 
-    raw_props{.offset=offset},
-    _coffset (nullptr)
-  {
-    
   }
 
   DashOffset::~DashOffset ()
@@ -134,7 +128,7 @@ namespace djnn
   Process*
   DashOffset::clone ()
   {
-    return new DashOffset (raw_props.offset);
+    return new DashOffset (nullptr, get_name (), raw_props.offset);
   }
 
   

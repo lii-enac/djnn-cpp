@@ -24,7 +24,6 @@ namespace djnn {
 
   class AbstractDoubleProperty : public AbstractProperty {
   public:
-    AbstractDoubleProperty () : AbstractProperty () {};
     AbstractDoubleProperty (Process* parent, const string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
     virtual int get_prop_type () override { return Double; }
 
@@ -46,7 +45,6 @@ namespace djnn {
 
   class DoubleProperty : public AbstractDoubleProperty {
   public:
-    DoubleProperty (double v) : AbstractDoubleProperty (), value(v) { }
     DoubleProperty (Process* parent, const string &name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;
@@ -58,7 +56,6 @@ namespace djnn {
 
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
-    DoublePropertyProxy (double& v) : AbstractDoubleProperty (), value(v) { }
     DoublePropertyProxy (Process* parent, const string &name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
     void serialize (const string& format) override;
     Process* clone () override;

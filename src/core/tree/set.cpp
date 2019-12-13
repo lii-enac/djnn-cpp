@@ -27,20 +27,11 @@ namespace djnn
 {
   using namespace std;
 
-  Set::Set ()
-  :
-    Process (),
-    _added (nullptr),
-    _removed (nullptr),
-    _size (0)
-  {
-  }
-
   Set::Set (Process* parent, const string& name)
   :
     Process (name),
-    _added (nullptr),
-    _removed (nullptr),
+    _added (nullptr, "_added", nullptr),
+    _removed (nullptr, "_removed", nullptr),
     _size (nullptr, "size", 0)
   {
     Process::finalize_construction (parent, name);
