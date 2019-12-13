@@ -23,7 +23,7 @@
 
 namespace djnn {
 
-  LinuxTouch::LinuxTouch (unsigned int fieldmap) : Process ()
+  LinuxTouch::LinuxTouch (unsigned int fieldmap) : Process ("LinuxTouch")
   {
     set_activation_state (ACTIVATED);
     _used = UNUSED;

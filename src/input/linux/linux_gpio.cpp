@@ -84,7 +84,13 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (Process *parent, const string &name, int pin, direction_e dir) : _pin (pin), _dir (dir), _iofd (nullptr), _action (nullptr), _c_action (nullptr)
+  GPIOLine::GPIOLine (Process *parent, const string &name, int pin, direction_e dir)
+   : Process (name),
+   _pin (pin),
+   _dir (dir),
+   _iofd (nullptr),
+   _action (nullptr),
+   _c_action (nullptr)
   {
     if (pin < 0 || pin > num_gpios)
       error (this, "no gpio " + to_string (pin));

@@ -54,10 +54,10 @@ namespace djnn {
 
   class Evdev {
     private:
-    class EvdevAction: public Process {
+    class EvdevAction: public Action {
       public:
         EvdevAction (Evdev* evdev) :
-        Process (), _evdev (evdev) {}
+        Action (nullptr, "EvdevAction"), _evdev (evdev) {}
         virtual ~EvdevAction () {}
         void impl_activate ()
         {
@@ -85,10 +85,10 @@ namespace djnn {
 
 	class Udev {
   private:
-    class UdevAction: public Process {
+    class UdevAction: public Action {
       public:
         UdevAction (Udev* udev) :
-        Process (), _udev (udev) {}
+        Action (nullptr, "UdevAction"), _udev (udev) {}
         virtual ~UdevAction () {}
         void impl_activate ()
         {
@@ -201,7 +201,7 @@ namespace djnn {
     int _fd;
     IOFD *_iofd;
     BoolProperty *_value;
-    Process *_action;
+    Action*_action;
     Coupling *_c_action;
   };
 }
