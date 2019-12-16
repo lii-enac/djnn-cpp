@@ -232,11 +232,16 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), state_dependency ());
 
-    for (FSMTransition* t : _transitions) {
-        delete t;
+    /* inverse delete of _transition */
+    int sz = _transitions.size ();
+    for (int i = sz - 1; i >= 0; i--) {
+        delete _transitions[i];
     }
-    for (FSMState* s : _states) {
-        delete s;
+
+    /* inverse delete of _states */
+    sz = _states.size ();
+    for (int i = sz - 1; i >= 0; i--) {
+        delete _states[i];
     }
   }
 

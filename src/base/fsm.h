@@ -111,8 +111,8 @@ namespace djnn {
     string _str_initial;
     FSMState *_cur_state;
     TextProperty _fsm_state, _initial;
-    list<FSMState*> _states;
-    list<FSMTransition*> _transitions;
+    vector<FSMState*> _states;
+    vector<FSMTransition*> _transitions;
   };
 
 }
