@@ -278,7 +278,6 @@ namespace djnn
 
   void
   QtBackend::delete_image_impl (Image* image) {
-    cout << __FUNCTION__ << endl;
     delete (QPixmap*)image->cache ();
   }
 } /* namespace djnn */
