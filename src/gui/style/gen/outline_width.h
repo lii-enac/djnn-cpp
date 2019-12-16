@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -23,10 +25,8 @@ namespace djnn
   {
   public:
     OutlineWidth (Process *parent, const std::string& name, double width);
-    OutlineWidth (double width);
     virtual ~OutlineWidth ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     Process* clone () override;
     void get_properties_values (double& width);
     virtual Process* find_component (const string&) override;

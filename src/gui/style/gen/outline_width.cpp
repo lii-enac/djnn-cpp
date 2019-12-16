@@ -12,6 +12,8 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
  */
 
 
@@ -25,10 +27,6 @@
 #include "core/ontology/coupling.h"
 
 #include "outline_width.h"
-
-#include "gui/picking/analytical_picking_context.h"
-
-#include <iostream>
 
 namespace djnn
 {
@@ -97,6 +95,7 @@ namespace djnn
   OutlineWidth::get_properties_values (double& width)
   {
     width = raw_props.width;
+    
   }
 
   void
@@ -124,14 +123,7 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  OutlineWidth::pick_analytical (PickAnalyticalContext& pac)
-  {
-    //std::cerr << "OutlineWidth::pick_analytical " << pac.half_outline_width << std::endl;
-    //std::cerr << raw_props.width << std::endl;
-    pac.half_outline_width = raw_props.width / 2;
-    return nullptr;
-  }
+
   
   Process*
   OutlineWidth::clone ()
