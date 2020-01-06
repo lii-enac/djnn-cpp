@@ -25,6 +25,9 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 
+#include "shapes.h"
+#include "gui/shapes/sdf.h"
+
 namespace djnn
 {
   Image::Image (Process *parent, const std::string& name, std::string path, double x, double y, double w,
@@ -88,13 +91,36 @@ namespace djnn
     }
   }
 
+  void
+  Image::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    x = AbstractImage::raw_props.x;
+    y = AbstractImage::raw_props.y;
+    w = AbstractImage::raw_props.width;
+    h = AbstractImage::raw_props.height;
+  }
+
+  double
+  Image::sdf (double x, double y) const
+  {
+    auto & rectangle = AbstractImage::raw_props;
+    vec2 p = vec2(x + rectangle.x, y + rectangle.y);
+    double d;
+
+    vec2 size = vec2(rectangle.width, rectangle.height)/2.; // /2. why oh why?
+    size      = floor(size);
+    vec2 p1   = p-size;
+    d = SDF_box(p1, size); // FIXME ry
+    return d;
+  }
+
   Process*
   Image::clone () 
   {
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
-  DataImage::DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w,
+  DataImage::DataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, x, y, w, h),
       _cwatcher(nullptr),

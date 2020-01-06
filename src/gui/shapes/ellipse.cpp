@@ -57,15 +57,15 @@ namespace djnn
   {
     x = raw_props.cx - raw_props.rx;
     y = raw_props.cy - raw_props.ry;
-    w = raw_props.rx  + raw_props.rx;
-    h = raw_props.ry  + raw_props.ry;
+    w = raw_props.rx + raw_props.rx;
+    h = raw_props.ry + raw_props.ry;
   }
 
   double
   Ellipse::sdf (double x, double y) const
   {
     auto & ellipse = raw_props;
-    vec2 p = vec2(x + ellipse.cx, y + ellipse.cy);
+    vec2 p = vec2(x - ellipse.cx, y - ellipse.cy);
     double d;
     d = SDF_ellipse(p, vec2(ellipse.rx, ellipse.ry));
     return d;

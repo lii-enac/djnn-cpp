@@ -26,10 +26,12 @@
 #include "gui/picking/picking.h"
 #include "gui/picking/analytical_picking_context.h"
 
+#include <iostream>
+#include "utils/debug.h"
+
 #include <math.h>
 #include <float.h>
 
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
 {
@@ -388,6 +390,8 @@ namespace djnn
   AbstractGShape*
   AbstractGShape::pick_analytical (PickAnalyticalContext& pac)
   {
+    if ( !is_pickable (this) ) return nullptr;
+
     // fast culling with bounding box
     double x,y,w,h;
     get_bounding_box (x,y,w,h);
@@ -399,6 +403,7 @@ namespace djnn
 
     // distance function
     double d = sdf (pac.x, pac.y);
+    //std::cerr << this << " x:" << pac.x << " y:" << pac.y << " d:" << d << __FL__;
 
     if(pac.filled) {
       if (d<1.0)

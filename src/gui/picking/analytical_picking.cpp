@@ -1,7 +1,8 @@
 #include "analytical_picking.h"
 #include "analytical_picking_context.h"
 
-#include <iostream>
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn {
   	AnalyticalPicking::AnalyticalPicking (Window *win)
@@ -30,7 +31,9 @@ namespace djnn {
       pac.outlined = false;
       pac.clipped = false;
       
-	    return p->pick_analytical (pac);
+      AbstractGShape * picked = p->pick_analytical (pac);
+      //std::cerr << picked << __FL__;
+	    return picked;
    	}
 
     void

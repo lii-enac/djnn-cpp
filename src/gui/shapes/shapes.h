@@ -110,6 +110,8 @@ namespace djnn
           const std::string &encoding, const std::string &text);
     virtual ~Text ();
     void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
     Process* clone () override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text);
     virtual Process* find_component (const string&) override;
@@ -180,6 +182,8 @@ namespace djnn
     Process* points () { return _points;}
     bool closed () { return _closed;}
     void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
     Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
@@ -334,6 +338,8 @@ namespace djnn
     virtual ~Path ();
     Process* items () { return _items;}
     void draw () override;
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
     Process* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
@@ -369,6 +375,8 @@ namespace djnn
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
     void set_invalid_cache (bool v) { _invalid_cache = v;}
+    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double sdf (double x, double y) const override;
   private:
     Coupling *_cwatcher;
     ImageWatcher *_watcher;
@@ -382,7 +390,7 @@ namespace djnn
   class DataImage : public AbstractDataImage
     {
     public:
-      DataImage (Process *parent, const std::string& name, std::string data, double x, double y, double w, double h);
+      DataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       Process* clone () override;
@@ -391,6 +399,8 @@ namespace djnn
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}
       void set_invalid_cache (bool v) { _invalid_cache = v;}
+      //void get_bounding_box (double& x, double& y, double& w, double& h) const override;
+      //double sdf (double x, double y) const override;
     private:
       Coupling *_cwatcher;
       DataImageWatcher *_watcher;

@@ -25,5 +25,12 @@ ifeq ($(graphics),CAIRO)
 include src/gui/cairo/djnn-lib.mk
 endif
 
-lib_djnn_deps = display core base
+ifeq ($(graphics),GL)
+include src/gui/gl/djnn-lib.mk
+endif
 
+ifeq ($(graphics),EGL)
+include src/gui/egl/djnn-lib.mk
+endif
+
+lib_djnn_deps = display base core

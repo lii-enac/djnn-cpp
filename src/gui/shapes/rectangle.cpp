@@ -67,7 +67,7 @@ namespace djnn
   Rectangle::sdf (double x, double y) const
   {
     auto & rectangle = raw_props;
-    vec2 p = vec2(x + rectangle.x, y + rectangle.y);
+    vec2 p = vec2(x - rectangle.x, y - rectangle.y);
     double d;
 
     vec2 r    = vec2(rectangle.rx, rectangle.ry);

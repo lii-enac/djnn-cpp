@@ -24,8 +24,8 @@
 #include "shapes.h"
 #include "core/execution/graph.h"
 
-
 #include <iostream>
+#include "utils/debug.h"
 
 using namespace std;
 
@@ -175,6 +175,19 @@ namespace djnn {
       Backend::instance ()->draw_poly (this);
       AbstractGShape::post_draw ();
     }
+  }
+
+  void
+  Poly::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    UNIMPL;
+  }
+
+  double
+  Poly::sdf (double x, double y) const
+  {
+    UNIMPL;
+    return 0;
   }
 
   void

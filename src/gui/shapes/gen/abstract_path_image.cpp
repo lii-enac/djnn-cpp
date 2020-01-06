@@ -30,7 +30,7 @@
 
 namespace djnn
 {
-  AbstractPathImage::AbstractPathImage (Process *parent, const std::string& name, std::string path, double x, double y, double width, double height) :
+  AbstractPathImage::AbstractPathImage (Process *parent, const std::string& name, const std::string& path, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.path=path},
     _cpath (nullptr)

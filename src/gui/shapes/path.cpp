@@ -25,8 +25,9 @@
 
 #include "core/execution/graph.h"
 
-
 #include <iostream>
+#include "utils/debug.h"
+
 
 namespace djnn
 {
@@ -118,6 +119,19 @@ namespace djnn
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_path_line (raw_props.x, raw_props.y);
     }
+  }
+
+  void
+  Path::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    UNIMPL;
+  }
+
+  double
+  Path::sdf (double x, double y) const
+  {
+    UNIMPL;
+    return 0;
   }
 
   Process*

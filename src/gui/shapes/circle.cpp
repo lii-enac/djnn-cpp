@@ -65,7 +65,7 @@ namespace djnn
   Circle::sdf (double x, double y) const
   {
     auto & circle = raw_props;
-    vec2 p = vec2(x + circle.cx, y + circle.cy);
+    vec2 p = vec2(x - circle.cx, y - circle.cy);
     double d;
     d = SDF_circle(p, circle.r);
     return d;

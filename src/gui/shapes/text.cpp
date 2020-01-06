@@ -26,6 +26,10 @@
 
 #include "core/execution/graph.h"
 
+#include <iostream>
+#include "utils/debug.h"
+
+
 namespace djnn
 {
   void
@@ -369,6 +373,19 @@ namespace djnn
       Backend::instance ()->draw_text (this);
       AbstractGShape::post_draw ();
     }
+  }
+
+  void
+  Text::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    UNIMPL;
+  }
+
+  double
+  Text::sdf (double x, double y) const
+  {
+    UNIMPL;
+    return 0;
   }
 
   double
