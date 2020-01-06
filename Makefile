@@ -159,6 +159,8 @@ endif
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
 
+$(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
+
 ifeq ($(cross_prefix),em)
 # compiles but does not work yet since SDL and threads are not compatible in emscripten
 # see: https://github.com/emscripten-core/emscripten/issues/6009
