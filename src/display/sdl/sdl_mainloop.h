@@ -36,15 +36,16 @@ namespace djnn {
       // ExternalSource
       virtual void please_stop () override;
       virtual void wakeup(SDLWindow * requestingWin);
+
+      void sdl_run_coop () ;
     
     protected:
       // ExternalSource
-      //virtual void activate_from_mainloop () override;
       virtual void run () override;
 
     private:
       void sdl_run () ;
-      void sdl_run_coop () ;
+      
       void handle_events(SDL_Event&) ;
       void handle_single_event(SDL_Event&) ;
 

@@ -22,6 +22,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include "core/syshook/djnn_time_manager.h"
 #endif
 
 #include <iostream>
@@ -69,7 +70,21 @@ namespace djnn {
   //typedef void(*mainloop_fun_t) (void);
   //mainloop_fun_t loop;
   std::function<void()> loop;
-  static void main_loop() { loop(); }
+  static void main_loop() {
+    loop();
+  }
+
+  Uint32 my_callbackfunc(Uint32 interval, void *param)
+  //void my_callbackfunc(void*)
+  {
+    //DBG;
+    djnn::get_exclusive_access (DBG_GET);
+    DjnnTimeManager::instance ().run_for_emscripten();
+    djnn::release_exclusive_access (DBG_REL);
+    SDLMainloop::instance().sdl_run_coop();
+    return interval;
+  }
+
 #endif
 
 
@@ -77,14 +92,29 @@ namespace djnn {
   SDLMainloop::run ()
   {
     //std::cerr << __PRETTY_FUNCTION__ <<std::endl;
-    //launch_mutex_unlock();
-    //set_please_stop (false);
 #ifdef __EMSCRIPTEN__
     loop = [&]{sdl_run_coop();};
-    emscripten_set_main_loop(main_loop, 0, true);
+    SDL_AddTimer(10, my_callbackfunc, nullptr);
+    //emscripten_set_main_loop_timing(EM_TIMING_RAF,1);
+    //emscripten_async_call (my_callbackfunc, nullptr, 10);
+    emscripten_set_main_loop (main_loop, 0, true);
 #else
     sdl_run();
 #endif
+  }
+
+  void
+  SDLMainloop::sdl_run_coop ()
+  {
+    SDL_Event e;
+    _wakeup_already_triggered=false;
+    bool ev = SDL_PollEvent (&e); // non-blocking call
+    if (ev) {
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+      handle_events(e);
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
+    }
+    SDL_Delay( 1 ); // for emscripten
   }
 
   void
@@ -137,18 +167,6 @@ namespace djnn {
 
     _windows.clear ();
     //SDL_Quit();
-  }
-
-  void
-  SDLMainloop::sdl_run_coop ()
-  {
-    SDL_Event e;
-    _wakeup_already_triggered=false;
-    SDL_PollEvent (&e); // non-blocking call
-    djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-    handle_events(e);
-    djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-    SDL_Delay( 1 ); // for emscripten
   }
 
   const char*
