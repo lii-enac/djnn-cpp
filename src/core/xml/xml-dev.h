@@ -59,8 +59,7 @@ extern struct djn_ModuleArgs
   const char *name;
 } djn_ModuleArgs;
 
-extern std::map<std::string, djnn::Process*> djn__IdFillManager;
-extern std::map<std::string, djnn::Process*> djn__IdClipManager;
+extern std::map<std::string, djnn::Process*> djn__id_to_process;
 
 extern void
 djn__InitXMLLoaders ();

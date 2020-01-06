@@ -30,7 +30,8 @@ namespace djnn {
     SWITCH_T,
     WINDOW_T,
     GOBJ_T,
-    WORLD_T
+    WORLD_T,
+    DEFS_T
   };
 
   // activation types

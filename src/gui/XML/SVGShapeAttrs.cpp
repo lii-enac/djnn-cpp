@@ -14,6 +14,7 @@
  *
  */
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,7 @@
 
 using namespace djnn;
 
-static char* djn_ParseURL (const char *);
+static string djn_ParseURL (const char *);
 
 static int Ignore (Process**, const char*);
 static int ParseId (Process**, const char*);
@@ -153,21 +154,17 @@ static int ParsePathClip(Process** e, const char* v) {
 		*e = new SVGHolder (nullptr, "SVGHolder");
 
 	if (strncmp(v, "url(", 4) == 0) {
-		char *url = djn_ParseURL(v);
-		map<string, Process*>::iterator it = djn__IdClipManager.find (url);
-		if (it != djn__IdClipManager.end ()) {
+		string url = djn_ParseURL(v);
+		map<string, Process*>::iterator it = djn__id_to_process.find (url);
+		if (it != djn__id_to_process.end ()) {
 			Container* clip = (Container*) it->second;
 			/* we iterate over the children of clip and add each child to *e */
 			for (auto child: clip->children ())
 			  ((Container*)*e)->add_child (child->clone (), "");
 		} else {
 			fprintf(stderr, "unknown URL %s for clip\n", v);
-			if (url)
-				free(url);
 			return 0;
 		}
-		if (url)
-			free(url);
 	} else
 		return 0;
 
@@ -185,28 +182,24 @@ static int ParseFill(Process** e, const char* v) {
 		return 1;
 
 	} else if (strncmp(v, "url(", 4) == 0) {
-		char *url = djn_ParseURL(v);
-		map<string, Process*>::iterator it = djn__IdFillManager.find (url);
-		if (it != djn__IdFillManager.end ()) {
+		string url = djn_ParseURL(v);
+		map<string, Process*>::iterator it = djn__id_to_process.find (url);
+		if (it != djn__id_to_process.end ()) {
 			AbstractGradient* ag = dynamic_cast<AbstractGradient*> (it->second);
 			if (ag->is_linear ()) {
 			  LinearGradient* lg = dynamic_cast<LinearGradient*> (ag);
 			  new RefLinearGradient ((*e), "", lg);
-			  (*e)->add_symbol (string (url), lg);
+			  (*e)->add_symbol (url, lg);
 			} else {
 			  RadialGradient* rg = dynamic_cast<RadialGradient*> (ag);
 			  new RefRadialGradient ((*e), "", rg);
-			  (*e)->add_symbol (string (url), rg);
+			  (*e)->add_symbol (url, rg);
 			}
 		}
 		else {
 			fprintf(stderr, "unknown URL %s for fill value\n", v);
-			if (url)
-				free(url);
 			return 0;
 		}
-		if (url)
-			free(url);
 	} else {
 		if (!SVG_Utils::djn__SVGParseColor(&r, &g, &b, v))
 			return 0;
@@ -606,20 +599,17 @@ static int ParseStrokeDashOffset(Process** e, const char* v) {
 	return 1;
 }
 
-static char*
+static string
 djn_ParseURL(const char * url) {
 	/* We make the (rather strong?) hypothesis that the url has the following syntax: url(#{url}) */
-	int i;
-	int j = 5;
-	int l = strlen(url);
-	char *new_s = (char *)malloc(l - j);
-
-	for (i = 0; j < l - 1; i++) {
-		new_s[i] = url[j++];
-	}
-	new_s[i] = '\0';
-
-	return new_s;
+  string str (url);
+  // remove possible quotes
+  str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
+  //then remove the prefix url and the brackets
+  std::size_t start = str.find ('#') + 1;
+  std::size_t end = str.find (')');
+  str = str.substr (start, end - start);
+  return str;
 }
 
 static int ParseStyle(Process **e, const char *v) {

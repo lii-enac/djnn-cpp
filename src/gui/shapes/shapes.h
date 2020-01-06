@@ -452,6 +452,7 @@ namespace djnn
     virtual ~Defs () override;
     void impl_activate () override;
     void impl_deactivate () override;
+    virtual process_type_e get_cpnt_type () const override { return DEFS_T; }
     Process* clone () override;
   };
 } /* namespace djnn */

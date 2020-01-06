@@ -44,6 +44,7 @@ static Process* EndTspan (Process*);
 static Process* StartPath (const char**, Process*);
 static Process* StartDefs (const char**, Process*);
 static Process* StartGroup (const char**, Process*);
+static Process* StartUse (const char**, Process*);
 static Process* StartLinearGradient (const char**, Process*);
 static Process* StartRadialGradient (const char**, Process*);
 static Process* StartGradientStop (const char**, Process*);
@@ -60,7 +61,7 @@ static void djn__CheckStroke (Process *);
 
 static std::map <std::string, djn_XMLTagHandler> handlers={
   {"g",{&StartGroup, &EndElement, &DataIgnored}},
-  {"use",{&StartTmp, &EndTmp, &DataIgnored}},
+  {"use",{&StartUse, &EndElement, &DataIgnored}},
   {"text",{&StartText, &EndText, &TextData}},
   {"pattern",{&StartTmp, &EndTmp, &DataIgnored}},
   {"textPath",{&StartTmp, &EndTmp, &DataIgnored}},
@@ -100,8 +101,7 @@ int djn__GrphIsInClip = 0;
 
 /* SVG parser initialisation*/
 
-map<string, Process*> djn__IdFillManager;
-map<string, Process*> djn__IdClipManager;
+map<string, Process*> djn__id_to_process;
 
 void djnn::init_svg_parser () {
 	XML::djn_RegisterXMLParser("http://www.w3.org/2000/svg", &SVGElements_Hash::djn_SVGElementsLookup,
@@ -128,8 +128,7 @@ StartSVG(const char** attrs, Process* current) {
 		fprintf (stderr, "startSVG\n");
 #endif
 
-	djn__IdFillManager.clear ();
-	djn__IdClipManager.clear ();
+	djn__id_to_process.clear ();
 	Process* g = new Group(current, "SVG");
 	//Process* f;
 	djn_RectAreaArgs.x = 0.;
@@ -227,6 +226,11 @@ StartRect(const char** attrs, Process* current) {
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
 		((SVGHolder*) holder)->set_gobj (e);
+		djn__id_to_process.insert(
+		        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+	              pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 	}
 	return holder ? holder : e;
 }
@@ -271,6 +275,11 @@ StartImage (const char** attrs, Process* current)
   if (holder) {
     current->add_child (holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+  } else {
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
   }
   return holder ? holder : e;
 }
@@ -312,8 +321,13 @@ StartEllipse(const char** attrs, Process* current) {
 			djn_EllipseArgs.cx, djn_EllipseArgs.cy, djn_EllipseArgs.rx,
 			djn_EllipseArgs.ry);
 	if (holder) {
-		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		((SVGHolder*) holder)->set_gobj (e);
+    current->add_child(holder, djn_GraphicalShapeArgs.id);
+    ((SVGHolder*) holder)->set_gobj (e);
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 	}
 	return holder ? holder : e;
 }
@@ -355,8 +369,12 @@ StartCircle(const char** attrs, Process* current) {
 			djn_CircleArgs.cx, djn_CircleArgs.cy, djn_CircleArgs.r);
 
 	if (holder) {
-		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		((SVGHolder*) holder)->set_gobj (e);
+    current->add_child(holder, djn_GraphicalShapeArgs.id);
+    ((SVGHolder*) holder)->set_gobj (e);djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+	      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 	}
 
 	return holder ? holder : e;
@@ -399,8 +417,13 @@ StartLine(const char** attrs, Process* current) {
 			djn_LineArgs.x1, djn_LineArgs.y1, djn_LineArgs.x2, djn_LineArgs.y2);
 
 	if (holder) {
-		current->add_child(holder, djn_GraphicalShapeArgs.id);
-		((SVGHolder*) holder)->set_gobj (e);
+    current->add_child(holder, djn_GraphicalShapeArgs.id);
+    ((SVGHolder*) holder)->set_gobj (e);
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+	      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 	}
 
 	return holder ? holder : e;
@@ -443,8 +466,13 @@ StartPoly(const char** attrs, Process* current) {
 			current->add_child(djn_PolyArgs.e, djn_GraphicalShapeArgs.id);
 	}
 	if (holder) {
-		((SVGHolder*) holder)->set_gobj (djn_PolyArgs.e);
-		current->add_child(holder, djn_GraphicalShapeArgs.id);
+    ((SVGHolder*) holder)->set_gobj (djn_PolyArgs.e);
+    current->add_child(holder, djn_GraphicalShapeArgs.id);
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+	      pair<string, Process*>(djn_GraphicalShapeArgs.id, djn_PolyArgs.e));
 	}
 
 	return holder ? holder : djn_PolyArgs.e ? djn_PolyArgs.e : current;
@@ -652,8 +680,7 @@ StartGroup(const char** attrs, Process* current) {
 #ifdef DEBUG
 		int ret =
 #endif
-		XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup,
-				XMLTextAttrs_Hash::djn_XMLTextAttrsLookup, 0);
+		XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
@@ -662,6 +689,8 @@ StartGroup(const char** attrs, Process* current) {
 		attrs++;
 	}
 	current->add_child(e, djn_GraphicalShapeArgs.id);
+	djn__id_to_process.insert(
+	    pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 	return e;
 }
 
@@ -669,7 +698,7 @@ static Process*
 StartDefs(const char** attrs, Process* current) {
 
 #ifdef DEBUG
-    fprintf (stderr, "StartGroup\n");
+    fprintf (stderr, "StartDefs\n");
 #endif
 
   Process* e = new Defs(0, "");
@@ -679,8 +708,7 @@ StartDefs(const char** attrs, Process* current) {
 #ifdef DEBUG
     int ret =
 #endif
-    XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup,
-        XMLTextAttrs_Hash::djn_XMLTextAttrsLookup, 0);
+    XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
 #ifdef DEBUG
     if (!ret)
     fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
@@ -689,7 +717,59 @@ StartDefs(const char** attrs, Process* current) {
     attrs++;
   }
   current->add_child(e, djn_GraphicalShapeArgs.id);
+  djn__id_to_process.insert(
+      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
   return e;
+}
+
+static Process*
+StartUse(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+    fprintf (stderr, "StartUse\n");
+#endif
+
+  djn_UseArgs.height = 0;
+  djn_UseArgs.width = 0;
+  djn_UseArgs.x = 0;
+  djn_UseArgs.y = 0;
+  djn_UseArgs.href = "";
+  djn_GraphicalShapeArgs.id = "";
+
+  Process *holder = new SVGHolder;
+
+  /* FIXME: should manage optional, mandatory and duplicate attributes */
+  while (*attrs) {
+#ifdef DEBUG
+    int ret =
+#endif
+    XML::djn_XMLHandleAttr(&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup,
+        XMLUseAttrs_Hash::djn_XMLUseAttrsLookup, 0);
+#ifdef DEBUG
+    if (!ret)
+    fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
+#endif
+    attrs++;
+    attrs++;
+  }
+  Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
+  alias (holder, "x", pos->find_component ("tx"));
+  alias (holder, "y", pos->find_component ("ty"));
+  map<string, Process*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
+  if (it != djn__id_to_process.end ()) {
+    Process* clone = it->second->clone();
+    if (clone->get_cpnt_type() == DEFS_T) {
+      for (auto c : ((Defs*)clone)->children()) {
+        holder->add_child (c, c->get_name());
+      }
+      delete clone;
+    } else {
+      holder->add_child (clone, "");
+      ((SVGHolder*)holder)->set_gobj (clone);
+    }
+  }
+  current->add_child (holder, djn_GraphicalShapeArgs.id);
+  return holder;
 }
 
 static int parseGradientTransform(Process **e, char *v) {
@@ -768,10 +848,10 @@ StartLinearGradient(const char** attrs, Process* current) {
 	e->set_parent(current);
 
 	if (djn_GradientArgs.id != 0) {
-		djn__IdFillManager.insert(
+		djn__id_to_process.insert(
 				pair<string, Process*>(djn_GradientArgs.id, e));
 #ifdef DEBUG
-		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.id);
+		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.href);
 #endif
 	}
 
@@ -834,10 +914,10 @@ StartRadialGradient(const char** attrs, Process* current) {
 	e->set_parent(current);
 
 	if (djn_GradientArgs.id != 0) {
-		djn__IdFillManager.insert(
+		djn__id_to_process.insert(
 				pair<string, Process*>(djn_GradientArgs.id, e));
 #ifdef DEBUG
-		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.id);
+		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.href);
 #endif
 	}
 
@@ -938,10 +1018,10 @@ StartPathClip(const char** attrs, Process* current) {
 	}
 	e = new Component (nullptr, "pathclip");
 	if (strlen (djn_GraphicalShapeArgs.id) != 0) {
-		djn__IdClipManager.insert(
+		djn__id_to_process.insert(
 				pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
 #ifdef DEBUG
-		fprintf (stderr, "new entry added: %s\n", djn_GraphicalShapeArgs.id);
+		fprintf (stderr, "new entry added: %s\n", djn_GraphicalShapeArgs.href);
 #endif
 	}
 	e->set_parent(current);

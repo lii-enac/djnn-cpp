@@ -92,8 +92,8 @@ static int ParseGradientUnits(Process** e, const char* v) {
 
 static int ParseHRef(Process** e, const char* v) {
 	string id(v + sizeof(char));
-	map<string, Process*>::iterator it = djn__IdFillManager.find (id);
-	if (it == djn__IdFillManager.end()) {
+	map<string, Process*>::iterator it = djn__id_to_process.find (id);
+	if (it == djn__id_to_process.end()) {
 		fprintf (stderr, "unknown gradient %s\n", v);
 		return 0;
 	}

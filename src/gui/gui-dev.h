@@ -174,6 +174,15 @@ public:
   static djn_XMLAttrHandler *
   djn_XMLRectAreaAttrsLookup (const char *str, unsigned int len);
 };
+class XMLUseAttrs_Hash
+{
+private:
+  static inline unsigned int
+  hash (const char *str, unsigned int len);
+public:
+  static djn_XMLAttrHandler *
+  djn_XMLUseAttrsLookup (const char *str, unsigned int len);
+};
 class XMLTextAttrs_Hash
 {
 private:
@@ -449,3 +458,12 @@ extern struct djn_RectAreaArgs
   double height;
   const char* title;
 } djn_RectAreaArgs;
+
+extern struct djn_UseArgs
+{
+  double x;
+  double y;
+  double width;
+  double height;
+  string href;
+} djn_UseArgs;
