@@ -30,7 +30,7 @@
 #undef yyFlexLexer
 #endif
 
-#include "parser.h"
+#include "parser.hpp"
 
 namespace css
 {

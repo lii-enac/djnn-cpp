@@ -87,6 +87,7 @@ boost_libs = -lboost_thread -lboost_chrono -lboost_system
 DYNLIB = -shared
 CFLAGS += -fpic -g -MMD -Wall
 LDFLAGS += -L$(build_dir)
+YACC = bison -d
 endif
 
 ifeq ($(os),Darwin)
@@ -95,6 +96,10 @@ boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber
 DYNLIB = -dynamiclib
 CFLAGS += -g -MMD -Wall
 LDFLAGS += -L$(build_dir)
+YACC = /usr/local/opt/bison/bin/bison -d
+LEX = /usr/local/opt/flex/bin/flex
+CXXFLAGS += -I/usr/local/opt/flex/include
+LDFLAGS += -L/usr/local/opt/flex/lib
 endif
 
 # for windows with mingwXX
@@ -102,8 +107,9 @@ ifeq ($(os),MinGW)
 lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB = -shared
-CFLAGS ?= -fpic -g -MMD -Wall
-LDFLAGS ?= -L$(build_dir)
+CFLAGS = -fpic -g -MMD -Wall
+LDFLAGS = -L$(build_dir)
+YACC = bison -d
 endif
 
 ifeq ($(os),FreeRTOS)
@@ -397,6 +403,14 @@ $(build_dir)/%.o: %.c
 $(build_dir)/%.o: $(build_dir)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
+	@mkdir -p $(dir $@)
+	$(YACC) -v -o $@ $<
+
+$(build_dir)/%.cpp: %.l
+	@mkdir -p $(dir $@)
+	$(LEX) -o $@ $<
 
 $(build_dir)/include/djnn/%.h: src/*/%.h
 	@mkdir -p $(dir $@)
