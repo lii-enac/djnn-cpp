@@ -159,62 +159,32 @@ CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 
 else
 $(warning "unknown display (choose among: QT, SDL, (none))")
+
 endif
 
-
-
-CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -std=c++14
+CXXFLAGS += -std=c++14
+CXXFLAGS += $(CFLAGS)
 
 $(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
 
 ifeq ($(cross_prefix),em)
-# compiles but does not work yet since SDL and threads are not compatible in emscripten
-# see: https://github.com/emscripten-core/emscripten/issues/6009
-# it's being worked on though
-# see: https://github.com/emscripten-ports/SDL2/pull/77
-
 os := em
 DYNLIB=
 lib_suffix=.bc
 
-EMFLAGS := -Wall -Oz -s USE_SDL=2 -s USE_FREETYPE=1 \
--s EXPORT_ALL=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 \
+EMFLAGS := -Wall -Wno-unused-variable -Oz \
+-s USE_BOOST_HEADERS -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_FREETYPE=1 -s USE_WEBGL2=1 \
 -DSDL_DISABLE_IMMINTRIN_H \
+-s EXPORT_ALL=1 -s DISABLE_EXCEPTION_CATCHING=0 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
--s USE_WEBGL2=1
+-s ASSERTIONS=2
 
-#-s USE_WEBGL2=1
-#-s FULL_ES2=1
-#-s FULL_ES3=1
-#-s USE_PTHREADS=1 -s PROXY_TO_PTHREAD=1 \
-
-#CC := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CC)
-#CXX := env EMCC_LOCAL_PORTS='sdl2=/Users/conversy/recherche/istar/code/attic/2d_rendering/SDL2-emscripten-port' $(CXX)
-
-EMCFLAGS += $(EMFLAGS) \
-	-I../ext-libs/emscripten/libexpat/expat/lib \
-	-I../ext-libs/emscripten/curl/include \
-	-I../ext-libs/emscripten/boost_1_68_0 \
-	-I../ext-libs/emscripten/fontconfig \
-	-I/usr/local/include #glm
+EMLOCAL:=/Users/conversy/recherche/istar/code/ext-libs/emscripten/local
+EMCFLAGS += $(EMFLAGS) -I$(EMLOCAL)/include -I/usr/local/include #glm
 
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
 LDFLAGS = $(EMFLAGS) --emrun
-
-	# ../ext-libs/libexpat/expat/lib/.libs/libexpat.dylib \
-	# ../ext-libs/curl/lib/.libs/libcurl.dylib \
-	# ../ext-libs/fontconfig/src/.libs/libfontconfig.dylib \
-	# ../ext-libs/boost_1_68_0/bin.v2/libs/chrono/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/libboost_chrono.bc \
-	# ../ext-libs/boost_1_68_0/bin.v2/libs/system/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/libboost_system.bc \
-#see smala Makefile
-#	../ext-libs/boost_1_68_0/bin.v2/libs/thread/build/emscripten-1.38.21/debug/cxxstd-14-iso/link-static/threadapi-pthread/threading-multi/libboost_thread.bc \
-
-#https://stackoverflow.com/questions/15724357/using-boost-with-emscripten
-# ./bootstrap.sh
-# emacs project-config.jam
-# using darwin : : em++ ;
-# ./b2 cxxstd=14 toolset=emscripten link=static thread chrono system
 
 endif
 
@@ -226,10 +196,10 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-djnn_libs ?= core base comms display gui input animation utils files
+djnn_libs ?= core base comms display gui input animation utils files #audio
 
 ifeq ($(cross_prefix),em)
-djnn_libs := core base display gui animation
+djnn_libs := core base display gui animation utils #audio
 # comms input
 endif
 
@@ -301,7 +271,9 @@ $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps)) $$(foreach lib,$$(
 endif
 endif
 
+ifneq ($(os), em)
 $1_lib_rpath := -Wl,-rpath,$$($1_libname)
+endif
 ifeq ($(os), Darwin)
 $1_lib_rpath := -Wl,-install_name,$$($1_libname),
 endif
@@ -457,11 +429,18 @@ dbg:
 
 ifeq ($(os),Linux)
 pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
+pkgcmd := apt install -y
 ifeq ($(display),QT)
 pkgdeps += qt5-default
 endif
 ifeq ($(display),SDL)
+pkgdeps += libfontconfig1-dev
+ifeq ($(specialtarget),raspberry-ua-netinst)
+# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+#pkgdeps += libraspberrypi-dev
+else
 pkgdeps += libsdl2-dev libsdl2-image-dev
+endif
 endif
 ifeq ($(display),DRM)
 pkgdeps += libdrm-dev
@@ -472,8 +451,6 @@ endif
 ifeq ($(graphics),GL)
 pkgdeps += libfreetype6-dev libglm-dev
 endif
-#pkgdeps += libraspberrypi-dev
-pkgcmd := apt install -y
 endif
 
 ifeq ($(os),Darwin)
