@@ -28,8 +28,6 @@
 
 #include <iostream>
 
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-
 //#define DEBUG
 //#define DEBUG_DEACTIVATE
 

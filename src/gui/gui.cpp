@@ -22,11 +22,8 @@
 #include <algorithm>
 #include <boost/range/adaptor/reversed.hpp>
 
-
 #include <iostream>
-#define __FL__ " " __FILE__ ":" << __LINE__ << std::endl;
-#define __EFL__ std::cerr << __FUNCTION__ << " " << __FILE__ ":" << __LINE__ << std::endl;
-#define DBG __EFL__
+#include "utils/debug.h"
 
 #define _PERF_TEST 0
 #if _PERF_TEST

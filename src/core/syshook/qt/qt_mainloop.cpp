@@ -18,9 +18,6 @@
 #include "core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
-//#include <iostream>
-#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
-
 namespace djnn
 {
 

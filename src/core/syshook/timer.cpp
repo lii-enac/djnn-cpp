@@ -23,8 +23,8 @@
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-//#include <iostream>
-//#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+// #include <iostream>
+// #include "utils/debug.h"
 
 namespace djnn
 {
@@ -75,8 +75,9 @@ namespace djnn
   {
     //DBG;
     //_elapsed.set_value (actualtime, true);
-    _end.activate (); // propagating
-    //DjnnTimeManager::instance().after(this, _period.get_value ());
+    set_activation_state (DEACTIVATED);
+    _end.notify_activation (); // propagating
+    //_end.activate (); // propagating
   }
 
 #if 0

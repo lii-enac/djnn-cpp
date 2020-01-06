@@ -34,7 +34,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+//#include <iostream>
+//#include "utils/debug.h"
 #define DEBUG_PICKING  0
 
 #define _PERF_TEST 0

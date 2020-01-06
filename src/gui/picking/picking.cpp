@@ -19,8 +19,8 @@
 
 #include <assert.h>
 
-#include <iostream>
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {

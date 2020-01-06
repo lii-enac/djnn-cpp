@@ -24,9 +24,6 @@
 
 #include <sys/time.h>
 
-// #include <iostream>
-// #define __FL__ __FILE__ ":" << __LINE__
-// #define DBG std::cerr << " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
 namespace djnn
 {
@@ -79,7 +76,9 @@ namespace djnn
     //DBG;
     _elapsed.set_value (actualtime, true);
     _tick.activate (); // propagating
-    DjnnTimeManager::instance().after(this, _period.get_value ());
+    // OR ?? _tick.notify_activation (); // propagating
+    //DjnnTimeManager::instance().after(this, _period.get_value ()); // reschedule
+    impl_activate (); // reschedule
   }
 
 #if 0
