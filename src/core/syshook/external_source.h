@@ -29,7 +29,11 @@ namespace djnn
 
     void private_run();
 
-    static thread_local std::atomic<bool> thread_local_cancelled;
+    static
+#ifndef __EMSCRIPTEN__
+    thread_local
+#endif
+    std::atomic<bool> thread_local_cancelled;
     std::atomic<bool> *cancelled;
 
   protected:

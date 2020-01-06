@@ -22,20 +22,25 @@
 #include "core/tree/spike.h"
 
 #include "core/syshook/cpp-chrono.h"
+#include "core/syshook/time_manager.h"
+
 
 namespace djnn
 {
-  using namespace std::chrono;
+  //using namespace std::chrono;
   //using namespace boost::chrono;
 
   class IntProperty;
   class DoubleProperty;
 
-  class Clock : public Process, public ExternalSource
+  class Clock : public Process, public djnn_internal::Time::Timer //ExternalSource
   {
   public:
-    Clock (Process* p, const std::string& n, milliseconds period = seconds(1));
+    Clock (Process* p, const std::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
     Clock (Process* p, const std::string& n, int period = 1000);
+#if DJNN_USE_BOOST_CHRONO
+    Clock (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
+#endif
     virtual ~Clock ();
 
   protected:
@@ -44,12 +49,16 @@ namespace djnn
     void impl_deactivate () override;
     void serialize (const string& type) override;
 
+    // djnn_internal::Time::Timer
+    virtual void doit(const djnn_internal::Time::Unit& actualtime) override;
+
   private:
     IntProperty _period;
     DoubleProperty _elapsed;
     Spike _tick;
 
-    void run() override;
+    // ExternalSource
+    //void run() override;
   };
 
 }

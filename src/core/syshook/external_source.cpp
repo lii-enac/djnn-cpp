@@ -1,5 +1,4 @@
 #include "external_source.h"
-
 #include "cpp-thread.h"
 #include "cpp-mutex.h"
 
@@ -9,7 +8,10 @@
 namespace djnn {
 
     static djnn_mutex_t * launch_mutex;
-    thread_local std::atomic<bool> ExternalSource::thread_local_cancelled;
+#ifndef __EMSCRIPTEN__
+    thread_local
+#endif
+    std::atomic<bool> ExternalSource::thread_local_cancelled;
 
     #if DJNN_USE_SDL_THREAD
     static int SDL_ThreadFunction(void* data)
@@ -67,7 +69,6 @@ namespace djnn {
         #error dont remember
             #endif
         #endif
-
         #if DJNN_USE_SDL_THREAD
         SDL_CreateThread(SDL_ThreadFunction, "djnn thread", _es);
         #endif

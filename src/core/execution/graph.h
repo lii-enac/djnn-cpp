@@ -23,7 +23,7 @@
 //#include <iostream>
 #define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 
-#define GRAPH_EXEC { Graph::instance ().exec (); }
+#define GRAPH_EXEC { djnn::Graph::instance ().exec (); }
 
 namespace djnn
 {
