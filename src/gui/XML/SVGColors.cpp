@@ -173,6 +173,16 @@ static std::map<std::string, int> color_map = {
     {"white",0xFFFFFF}
 };
 
+int
+SVG_Utils::djn__get_color_from_name (const std::string& name)
+{
+  std::map<std::string, int>::iterator it = color_map.find (name);
+  if (it != color_map.end())
+    return it->second;
+  else
+    return -1;
+}
+
 named_color_t
 SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
 {
