@@ -13,6 +13,7 @@
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
+#include <algorithm>
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>

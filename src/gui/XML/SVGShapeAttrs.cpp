@@ -14,6 +14,7 @@
  *
  */
 
+#include <algorithm>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -605,6 +606,7 @@ djn_ParseURL(const char * url) {
 	/* We make the (rather strong?) hypothesis that the url has the following syntax: url(#{url}) */
   string str (url);
   // remove possible quotes
+
   str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
   //then remove the prefix url and the brackets
   std::size_t start = str.find ('#') + 1;

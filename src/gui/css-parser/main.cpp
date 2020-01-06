@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
   bool result = driver.parse_stream(infile, argv[1], &root);
   Rectangle r (&root, "r", 50, 50, 100, 100, 5, 5);
-  r.add_style_class (".st0");
+  r.add_style_class ("st0");
   root.activate ();
   MainLoop::instance ().activate ();
   return result;

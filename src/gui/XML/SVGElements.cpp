@@ -14,6 +14,7 @@
  *
  */
 
+#include <algorithm>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>

@@ -36,7 +36,7 @@ using namespace djnn;
 
 %define api.prefix {css}
 
-%define api.parser.class { Parser }
+%define parser_class_name { Parser }
 
 %locations
 %initial-action
