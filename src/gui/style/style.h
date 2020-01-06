@@ -34,6 +34,21 @@ namespace djnn
     AbstractStyle (Process *parent, const string &name);
     virtual ~AbstractStyle ();
   };
+
+  class StyleSheet : public Container
+  {
+  public:
+    StyleSheet (Process *parent, const string &name);
+    virtual ~StyleSheet () override {}
+    Process* clone () override;
+    const string& classname () { return _classname; }
+    int id () { return _id; }
+    static int get_id (const string& classname);
+    static void draw_style (vector<int> classes);
+  private:
+    string _classname;
+    int _id;
+  };
 }
 
 

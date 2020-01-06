@@ -17,6 +17,7 @@
 #include "gui/transformation/transformations.h"
 #include "core/tree/spike.h"
 #include "core/tree/set.h"
+#include "core/tree/component_observer.h"
 #include "display/window.h"
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
@@ -316,6 +317,17 @@ namespace djnn
     AbstractGObj::impl_deactivate ();
   }
 
+  void
+  AbstractGShape::add_style_class (const string &classname)
+  {
+    int id = StyleSheet::get_id(classname);
+    if (id != -1)
+      _classes.push_back(id);
+    else {
+      warning (this, "Style " + classname + " not found");
+    }
+  }
+
   AbstractGShape::~AbstractGShape ()
   {
 
@@ -339,6 +351,23 @@ namespace djnn
     if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }
+  }
+
+  void
+  AbstractGShape::pre_draw ()
+  {
+    if (_classes.empty())
+      return;
+    ComponentObserver::instance ().start_draw ();
+
+    StyleSheet::draw_style (_classes);
+  }
+  void
+  AbstractGShape::post_draw ()
+  {
+    if (_classes.empty())
+      return;
+    ComponentObserver::instance ().end_draw ();
   }
 
   void

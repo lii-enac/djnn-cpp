@@ -637,7 +637,9 @@ namespace djnn
   {
     auto _frame = frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      AbstractGShape::pre_draw ();
       Backend::instance ()->draw_path (this);
+      AbstractGShape::post_draw ();
     }
   }
 

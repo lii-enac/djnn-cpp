@@ -217,6 +217,8 @@ public:
   djn__SVGParseNumber (double*, const char**);
   static int
   djn__SVGParseUnitAndValue (djnLengthUnit*, double*, const char*);
+  static int
+  djn__get_color_from_name (const std::string& name);
 };
 
 extern int djn__GrphIsInClip;
@@ -229,6 +231,7 @@ typedef enum
 extern struct djn_GraphicalShapeArgs
 {
   const char* id;
+  std::string classname;
   djnStrokeType strokeType;
 } djn_GraphicalShapeArgs;
 

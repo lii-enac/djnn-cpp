@@ -14,6 +14,7 @@
  *
  */
 
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
@@ -23,6 +24,7 @@
 #include "core/xml/xml-dev.h"
 #include "gui/gui-dev.h"
 #include "gui/shapes/abstract_gshape.h"
+#include "gui/css-parser/driver.h"
 
 using namespace djnn;
 
@@ -37,6 +39,8 @@ static Process* StartLine (const char**, Process*);
 static Process* StartPolygon (const char**, Process*);
 static Process* StartPolyline (const char**, Process*);
 static Process* StartText (const char**, Process*);
+static Process* StartStyle (const char**, Process*);
+static Process* StyleData (const char*, int, Process*);
 static Process* EndText (Process*);
 static Process* TextData (const char*, int, Process*);
 static Process* StartTspan (const char**, Process*);
@@ -84,7 +88,8 @@ static std::map <std::string, djn_XMLTagHandler> handlers={
   {"tref",{&StartTmp, &EndTmp, &DataIgnored}},
   {"mask",{&StartTmp, &EndTmp, &DataIgnored}},
   {"marker",{&StartTmp, &EndTmp, &DataIgnored}},
-  {"linearGradient",{&StartLinearGradient, &EndGradient, &DataIgnored}}
+  {"linearGradient",{&StartLinearGradient, &EndGradient, &DataIgnored}},
+  {"style",{&StartStyle, &EndElement, &StyleData}},
 };
 
 djn_XMLTagHandler*
@@ -176,6 +181,24 @@ static void djn__CheckStroke(Process* holder) {
 	}
 }
 
+static std::vector<string>
+get_classes (const string& classnames)
+{
+  vector<string> tokens;
+  string cur_str (classnames);
+  std::replace( cur_str.begin(), cur_str.end(), ',', ' ');
+  const char* str = cur_str.c_str ();
+  do
+  {
+    const char *begin = str;
+    while(!isspace (*str) && *str)
+      str++;
+      tokens.push_back(string(begin, str));
+  } while (0 != *str++);
+
+  return tokens;
+}
+
 static Process*
 StartRect(const char** attrs, Process* current) {
 
@@ -186,6 +209,7 @@ StartRect(const char** attrs, Process* current) {
 	Process* holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_RectArgs.x = 0.;
 	djn_RectArgs.y = 0.;
 	djn_RectArgs.w = 0.;
@@ -223,6 +247,12 @@ StartRect(const char** attrs, Process* current) {
 	e = new djnn::Rectangle(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_RectArgs.x, djn_RectArgs.y, djn_RectArgs.w, djn_RectArgs.h,
 			djn_RectArgs.rx, djn_RectArgs.ry);
+	if (!djn_GraphicalShapeArgs.classname.empty ()) {
+	  std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+	  for (auto cl: classes) {
+	    ((AbstractGShape*)e)->add_style_class (cl);
+	  }
+	}
 	if (holder) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
 		((SVGHolder*) holder)->set_gobj (e);
@@ -241,6 +271,7 @@ StartImage (const char** attrs, Process* current)
   Process *holder = 0;
   Process* e;
   djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+  djn_GraphicalShapeArgs.classname = "";
   djn_ImgArgs.x = 0.;
   djn_ImgArgs.y = 0.;
   djn_ImgArgs.w = 0.;
@@ -272,6 +303,12 @@ StartImage (const char** attrs, Process* current)
     e = new DataImage (holder ? holder : current, djn_GraphicalShapeArgs.id, djn_ImgArgs.data, djn_ImgArgs.x,
 		       djn_ImgArgs.y, djn_ImgArgs.w, djn_ImgArgs.h);
   }
+  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    for (auto cl: classes) {
+      ((AbstractGShape*)e)->add_style_class (cl);
+    }
+  }
   if (holder) {
     current->add_child (holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
@@ -294,6 +331,7 @@ StartEllipse(const char** attrs, Process* current) {
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_EllipseArgs.cx = 0.;
 	djn_EllipseArgs.cy = 0.;
 	djn_EllipseArgs.rx = 0.;
@@ -320,6 +358,12 @@ StartEllipse(const char** attrs, Process* current) {
 	e = new djnn::Ellipse(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_EllipseArgs.cx, djn_EllipseArgs.cy, djn_EllipseArgs.rx,
 			djn_EllipseArgs.ry);
+  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    for (auto cl: classes) {
+      ((AbstractGShape*)e)->add_style_class (cl);
+    }
+  }
 	if (holder) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
@@ -343,6 +387,7 @@ StartCircle(const char** attrs, Process* current) {
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_CircleArgs.cx = 0.;
 	djn_CircleArgs.cy = 0.;
 	djn_CircleArgs.r = 0.;
@@ -367,7 +412,12 @@ StartCircle(const char** attrs, Process* current) {
 
 	e = new Circle(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_CircleArgs.cx, djn_CircleArgs.cy, djn_CircleArgs.r);
-
+  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    for (auto cl: classes) {
+      ((AbstractGShape*)e)->add_style_class (cl);
+    }
+  }
 	if (holder) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);djn__id_to_process.insert(
@@ -390,6 +440,7 @@ StartLine(const char** attrs, Process* current) {
 	Process *holder = 0;
 	Process* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_LineArgs.x1 = 0.;
 	djn_LineArgs.y1 = 0.;
 	djn_LineArgs.x2 = 0.;
@@ -415,7 +466,12 @@ StartLine(const char** attrs, Process* current) {
 
 	e = new Line(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_LineArgs.x1, djn_LineArgs.y1, djn_LineArgs.x2, djn_LineArgs.y2);
-
+  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    for (auto cl: classes) {
+      ((AbstractGShape*)e)->add_style_class (cl);
+    }
+  }
 	if (holder) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
@@ -438,6 +494,7 @@ StartPoly(const char** attrs, Process* current) {
 
 	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_PolyArgs.e = 0;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -464,6 +521,12 @@ StartPoly(const char** attrs, Process* current) {
 			holder->add_child(djn_PolyArgs.e, djn_GraphicalShapeArgs.id);
 		else
 			current->add_child(djn_PolyArgs.e, djn_GraphicalShapeArgs.id);
+	  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+	    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+	    for (auto cl: classes) {
+	      ((AbstractGShape*)djn_PolyArgs.e)->add_style_class (cl);
+	    }
+	  }
 	}
 	if (holder) {
     ((SVGHolder*) holder)->set_gobj (djn_PolyArgs.e);
@@ -513,6 +576,7 @@ StartText(const char** attrs, Process* current) {
 	 */
 	Process *holder = new SVGHolder (nullptr, "SVGHolder");
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_TextArgs.x = 0.;
 	djn_TextArgs.y = 0.;
 	djn_TextArgs.encoding = "UTF-8";
@@ -623,6 +687,7 @@ StartPath(const char** attrs, Process* current) {
 
 	Process *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
+	djn_GraphicalShapeArgs.classname = "";
 	djn_PathArgs.e = 0;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -653,6 +718,12 @@ StartPath(const char** attrs, Process* current) {
 		djn__CheckStroke(holder);
 
 	if (djn_PathArgs.e) {
+    if (!djn_GraphicalShapeArgs.classname.empty ()) {
+      std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+      for (auto cl: classes) {
+        ((AbstractGShape*)djn_PathArgs.e)->add_style_class (cl);
+      }
+    }
 		if (holder)
 			holder->add_child(djn_PathArgs.e, djn_GraphicalShapeArgs.id);
 		else
@@ -736,7 +807,7 @@ StartUse(const char** attrs, Process* current) {
   djn_UseArgs.href = "";
   djn_GraphicalShapeArgs.id = "";
 
-  Process *holder = new SVGHolder;
+  Process *holder = new SVGHolder (nullptr, "");
 
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
@@ -1074,6 +1145,12 @@ static void djnUnloadTextBuf(Process *e) {
 			djn_TextArgs.x, djn_TextArgs.y, djn_TextArgs.dx, djn_TextArgs.dy,
 			djn_TextArgs.dxUnit, djn_TextArgs.dyUnit, djn_TextArgs.encoding,
 			djn_TextArgs.data);
+  if (!djn_GraphicalShapeArgs.classname.empty ()) {
+    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    for (auto cl: classes) {
+      ((AbstractGShape*)t)->add_style_class (cl);
+    }
+  }
 	((SVGHolder*) e)->set_gobj (t);
 	free(djn_TextArgs.data);
 	djn_TextArgs.x = -1;
@@ -1083,4 +1160,40 @@ static void djnUnloadTextBuf(Process *e) {
 	djn_TextArgs.dy = 0;
 	djn_TextArgs.dxUnit = DJN_NO_UNIT;
 	djn_TextArgs.dyUnit = DJN_NO_UNIT;
+}
+
+static Process*
+StartStyle(const char** attrs, Process* current) {
+
+#ifdef DEBUG
+    fprintf (stderr, "StartStyle\n");
+#endif
+    djn_GraphicalShapeArgs.id = "";
+    Process* e = new Component (0, "");
+
+    /* FIXME: should manage optional, mandatory and duplicate attributes */
+    while (*attrs) {
+  #ifdef DEBUG
+      int ret =
+  #endif
+      XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+  #ifdef DEBUG
+      if (!ret)
+      fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
+  #endif
+      attrs++;
+      attrs++;
+    }
+    current->add_child(e, djn_GraphicalShapeArgs.id);
+    djn__id_to_process.insert(
+        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+    return e;
+}
+
+static Process*
+StyleData(const char* data, int len, Process* current) {
+  std::string str (data, len);
+  css::Driver driver;
+  driver.parse_string (str, "svg file", current);
+  return current;
 }

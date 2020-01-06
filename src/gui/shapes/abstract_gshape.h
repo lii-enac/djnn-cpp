@@ -63,8 +63,10 @@ namespace djnn
     UI* get_ui () { return ui; }
     Process* find_component (const string &n) override;
     void impl_deactivate () override;
-
+    void add_style_class (const string& classname);
     void pick () override;
+    void pre_draw ();
+    void post_draw ();
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual void get_bounding_box (double& x, double& y, double& w, double& h) const;
     virtual double sdf (double x, double y) const;
@@ -75,6 +77,7 @@ namespace djnn
     DoubleProperty *_origin_x, *_origin_y;
     static vector<string> _ui;
     UI *ui;
+    vector<int> _classes;
   };
 
   class Touch : public Process
