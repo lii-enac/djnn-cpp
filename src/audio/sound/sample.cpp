@@ -39,7 +39,7 @@ namespace djnn {
 	    alBufferData(bufferid, format, data, size, sampleRate); CHKAL;
 	    alGenSources(1, &sourceid); CHKAL;
 
-	    finalize_construction(parent);
+	    finalize_construction(parent, name);
 	}
 
 	Sample::~Sample ()
