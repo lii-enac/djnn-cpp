@@ -406,9 +406,10 @@ pre_cov : djnn
 
 cov:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
-	lcov --remove $(lcov_file) '*/ext/*' -o $(lcov_file) 
+	# remove .cpp from css-parser which are destroy after compilation
+	lcov --remove $(lcov_file) '*/css-parser/*.cpp' -o $(lcov_file)
 	# convert lcov report to gcov report
-	gcovr --xml-pretty -o $(build_dir)/gcov_report.xml -s
+	# gcovr --xml-pretty -o $(build_dir)/gcov_report.xml -s
 	genhtml -o $(lcov_output_dir) $(lcov_file)
 	cd $(lcov_output_dir) ; open index.html
 .PHONY: cov
