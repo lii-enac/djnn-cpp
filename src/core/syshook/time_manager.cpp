@@ -1,9 +1,11 @@
 #include "time_manager.h"
 
 #include <iostream>
-// #include "utils/debug.h"
+//#include "utils/debug.h"
 // #include <boost/core/demangle.hpp>
 // #include <typeinfo>
+
+#define DBGTIMERS for(Timers::iterator iii = _timers.begin(); iii!=_timers.end(); ++iii) { std::cerr << *iii << "(" << (*iii)->getDelta() << ") ";} std::cerr << std::endl;
 
 namespace djnn_internal {
   
@@ -18,6 +20,7 @@ namespace djnn_internal {
     Manager::after(Timer* timer, Unit t) //throw (TimerAlreadyScheduled)
     {
       //DBG;
+      //DBGTIMERS;
       Unit dt=t;
       Timers::iterator i = _timers.begin();
       bool firstchanged=false;
@@ -33,7 +36,7 @@ namespace djnn_internal {
         Timers::iterator j = _timers.begin();
         while(j!=_timers.end()) {
           if((*j)==timer) {
-            std::cerr << "Timer " << std::hex << timer << std::dec << "already scheduled" << std::endl;
+            std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
             throw TimerAlreadyScheduled();
           }
           ++j;
@@ -69,14 +72,20 @@ namespace djnn_internal {
     void
     Manager::cancel(Timer* timer)
     {
+      //DBG;
+      //DBGTIMERS;
+
       Timers::iterator i = _timers.begin();
       
       // find the position of the timer
       while( i!=_timers.end() && (*i)!=timer)
         ++i;
       
-      if( i==_timers.end() )
+      if( i==_timers.end() ) {
+        //DBG;
+        //throw 1;
         return;
+      }
       
       bool firstchanged=false;
       Unit dt=0;
@@ -116,7 +125,9 @@ namespace djnn_internal {
     void
     Manager::timeElapsed(Unit dt)
     {
-      //DBGMETH
+      //DBG;
+      //DBGTIMERS;
+      
       if(_timers.empty())
         return;
       

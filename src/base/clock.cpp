@@ -78,7 +78,8 @@ namespace djnn
     _tick.activate (); // propagating
     // OR ?? _tick.notify_activation (); // propagating
     //DjnnTimeManager::instance().after(this, _period.get_value ()); // reschedule
-    impl_activate (); // reschedule
+    if(somehow_activating())
+      impl_activate (); // reschedule
   }
 
 #if 0
