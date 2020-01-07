@@ -155,7 +155,7 @@ namespace djnn {
     //const string& debug_info () { return ""; }
 
   protected:
-    void finalize_construction (Process* parent, const string& name="", Process* state=nullptr);
+    void finalize_construction (Process* parent, const string& name, Process* state=nullptr);
 
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;

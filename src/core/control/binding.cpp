@@ -112,7 +112,7 @@ namespace djnn
       if (_dst == 0) {
         error (
             this,
-            "DESTINATION not found in (Paused)assignment creation or the DESTINATION of an (Paused)assignment must be a property ( name: " + get_name () + ", src spec: " + ispec
+            "DESTINATION not found in Binding creation ( name: " + get_name () + ", src spec: " + ispec
                 + ", dst spec:" + dspec + ")\n");
       }
     }

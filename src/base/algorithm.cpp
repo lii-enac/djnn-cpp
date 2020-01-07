@@ -21,19 +21,20 @@
 namespace djnn
 {
 
-  Sorter::Sorter (Process *p, const std::string &name, Process *container, const std::string& spec) :
+  Sorter::Sorter (Process *parent, const std::string &name, Process *container, const std::string& spec) :
       Process (name),
-      _ascending (BoolProperty (this, "ascending", true)),
-      _spec (TextProperty (this, "spec", spec)),
-      _action (SortAction (this, "sort")),
-      _sort (Spike (this, "sort")),
-      _c_sort_action (Coupling (&_sort, ACTIVATION, &_action, ACTIVATION, true)),
-      _c_spec_action (Coupling (&_spec, ACTIVATION, &_action, ACTIVATION, true))
+      _ascending (this, "ascending", true),
+      _spec (this, "spec", spec),
+      _action (this, "sort"),
+      _sort (this, "sort"),
+      _c_sort_action (&_sort, ACTIVATION, &_action, ACTIVATION, true),
+      _c_spec_action (&_spec, ACTIVATION, &_action, ACTIVATION, true)
   {
+
     _container = dynamic_cast<Container*> (container);
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be sorted");
-    Process::finalize_construction (p);
+    Process::finalize_construction (parent, name);
   }
 
   void

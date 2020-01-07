@@ -124,7 +124,7 @@ namespace djnn
     {
     public:
       TextCatenatorAction (Process* parent, const string &name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
-      Action (parent, name), _tbo(tbo) { finalize_construction(parent); }
+      Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextCatenatorAction () {}
       void impl_activate () override
       {
@@ -146,7 +146,7 @@ namespace djnn
     {
     public:
       TextComparatorAction (Process* parent, const string &name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
-      Action (parent, name), _tbo(tbo) { finalize_construction(parent); }
+      Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextComparatorAction () {}
       void impl_activate ()
       {

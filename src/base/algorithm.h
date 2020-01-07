@@ -31,14 +31,14 @@ namespace djnn
     class SortAction : public Action
     {
     public:
-      SortAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent); }
+      SortAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
       void impl_deactivate () {}
     };
   public:
     Sorter (Process *p, const std::string &name, Process *container, const std::string& spec);
-    virtual ~Sorter () { }
+    virtual ~Sorter () {}
     void impl_activate () override;
     void impl_deactivate () override;
     void sort ();

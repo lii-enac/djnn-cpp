@@ -24,7 +24,7 @@ namespace djnn
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (Process *p, const string& n) : Action (p, n) { Process::finalize_construction (p); };
+      ToValueAction (Process *parent, const string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
@@ -33,7 +33,7 @@ namespace djnn
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (Process *p, const string& n) : Action (p, n) { Process::finalize_construction (p); };
+      ToRGBAction (Process *parent, const string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
