@@ -124,7 +124,7 @@ namespace djnn
       }
 
       if (!found) {
-        std::cout << "Warning no running frame found\n";
+        warning ( nullptr, " no running frame found for graphic_obj " + get_name () + "\n" );
         return;
       }
 

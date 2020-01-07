@@ -24,6 +24,7 @@
 #include "core/tree/component.h"
 #include "core/tree/set.h"
 #include "core/tree/list.h"
+#include "core/utils/error.h"
 
 #include <iostream>
 
@@ -183,7 +184,7 @@ namespace djnn
         } while (cur_parent != nullptr && cur_parent->get_cpnt_type () != COMPONENT_T);
       }
       if (!found) {
-        std::cout << "Warning no running frame found for cursor " << get_name () << endl;
+        warning ( nullptr, " no running frame found for cursor " + get_name () + "\n" );
         return;
       }
     }

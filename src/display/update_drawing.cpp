@@ -102,6 +102,9 @@ namespace djnn {
   void 
   UpdateDrawing::add_window_for_refresh (Window* w) 
   {
+    if (w == nullptr)
+      return;
+    
     _win_list.push_back (w);
     w->set_refresh (true); 
   }
