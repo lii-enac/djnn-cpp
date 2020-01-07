@@ -53,7 +53,9 @@ namespace djnn {
   {
     set_please_stop (false);
     cancel_mutex.lock();
+    djnn::get_exclusive_access (DBG_GET);
     int duration = getFirstDelta ();
+    djnn::release_exclusive_access (DBG_REL);
     
     try {
       while (!get_please_stop ()) {
@@ -67,22 +69,14 @@ namespace djnn {
         //std::cerr << "exit sleep " << DBGVAR(cancelled) << std::endl;
 
         if(thread_local_cancelled) {
-          djnn::release_exclusive_access (DBG_REL);
           break;
         }
         if (get_please_stop ()) {
-          djnn::release_exclusive_access (DBG_REL);
           break;
         }
 
-        if(cancelled) {
-          duration = getFirstDelta ();
-          continue;
-        }
-        if(duration==-1) continue;
+        djnn::get_exclusive_access (DBG_GET);
 
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        
         if(thread_local_cancelled) {
           djnn::release_exclusive_access (DBG_REL);
           break;
@@ -91,6 +85,17 @@ namespace djnn {
           djnn::release_exclusive_access (DBG_REL); 
           break;
         }
+
+        if(cancelled) {
+          duration = getFirstDelta ();
+          djnn::release_exclusive_access (DBG_REL);
+          continue;
+        }
+        if(duration==-1) {
+          djnn::release_exclusive_access (DBG_REL);
+          continue;
+        }
+
 
         {
           struct timespec after;
