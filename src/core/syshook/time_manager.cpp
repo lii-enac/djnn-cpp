@@ -15,7 +15,7 @@ namespace djnn_internal {
     }
     
     void
-    Manager::after(Timer* timer, Unit t) throw (TimerAlreadyScheduled)
+    Manager::after(Timer* timer, Unit t) //throw (TimerAlreadyScheduled)
     {
       //DBG;
       Unit dt=t;

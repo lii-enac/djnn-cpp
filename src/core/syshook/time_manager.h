@@ -20,7 +20,7 @@ namespace djnn_internal {
       struct TimerAlreadyScheduled : exc {};
       struct TimerListEmpty : exc {};
 
-      void after(Timer* timer, Unit) throw(TimerAlreadyScheduled);
+      void after(Timer* timer, Unit) ; //throw(TimerAlreadyScheduled);
       void cancel(Timer* timer);
       void timeElapsed(Unit);
 
