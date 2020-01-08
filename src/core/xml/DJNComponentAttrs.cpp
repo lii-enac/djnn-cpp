@@ -8,12 +8,14 @@ using namespace djnn;
 static int HandleId (Process**, const char*);
 static int HandleModel (Process**, const char*);
 
+static std::map <std::string, djn_XMLAttrHandler> handlers = {
+  {"id",{.handle_attr = &HandleId}},
+  {"model",{.handle_attr = &HandleModel}}
+};
+
 djn_XMLAttrHandler*
 DJNComponentAttrs_Hash::djn_DJNComponentAttrsLookup (const char *str, unsigned int len)
 {
-  std::map <std::string, djn_XMLAttrHandler> handlers;
-  handlers["id"] = {.handle_attr = &HandleId};
-  handlers["model"] = {.handle_attr = &HandleModel};
   std::map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
