@@ -5,7 +5,7 @@
 // #include <boost/core/demangle.hpp>
 // #include <typeinfo>
 
-#define DBGTIMERS for(Timers::iterator iii = _timers.begin(); iii!=_timers.end(); ++iii) { std::cerr << *iii << "(" << (*iii)->getDelta() << ") ";} std::cerr << std::endl;
+#define DBGTIMERS for(Timers::iterator iii = _timers.begin(); iii!=_timers.end(); ++iii) { std::cerr << *iii << "(" << (*iii)->getDelta() << "ms) ";} std::cerr << std::endl;
 
 namespace djnn_internal {
   
@@ -15,12 +15,26 @@ namespace djnn_internal {
     :_precision(precision), _dontCallTimerHasChanged(0)
     {     
     }
+
+    bool
+    Manager::already_scheduled(Timer * timer)
+    {
+      Timers::iterator j = _timers.begin();
+      while(j!=_timers.end()) {
+        if((*j)==timer) {
+          //std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
+          return true;
+        }
+        ++j;
+      }
+      return false;
+    }
     
     void
     Manager::after(Timer* timer, Unit t) //throw (TimerAlreadyScheduled)
     {
       //DBG;
-      //DBGTIMERS;
+      //std::cerr << ">> "; DBGTIMERS;
       Unit dt=t;
       Timers::iterator i = _timers.begin();
       bool firstchanged=false;
@@ -32,7 +46,11 @@ namespace djnn_internal {
       }
       
       // check if it's not here already
-      {
+      if(already_scheduled(timer)) {
+        std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
+        throw TimerAlreadyScheduled();
+      }
+      /*{
         Timers::iterator j = _timers.begin();
         while(j!=_timers.end()) {
           if((*j)==timer) {
@@ -41,7 +59,7 @@ namespace djnn_internal {
           }
           ++j;
         }
-      }
+      }*/
       
       timer->setDelta(dt);
       timer->setTime(t);
@@ -66,14 +84,14 @@ namespace djnn_internal {
       if(firstchanged && !_dontCallTimerHasChanged) {
         firstTimerHasChanged();
       }
-      //std::cerr << "<-- Time::Manager::after" << __FL__;
+      //std::cerr << "<< "; DBGTIMERS;
     }
     
     void
     Manager::cancel(Timer* timer)
     {
       //DBG;
-      //DBGTIMERS;
+      //std::cerr << ">> "; DBGTIMERS;
 
       Timers::iterator i = _timers.begin();
       
@@ -84,6 +102,8 @@ namespace djnn_internal {
       if( i==_timers.end() ) {
         //DBG;
         //throw 1;
+
+        //std::cerr << "<< "; DBGTIMERS;
         return;
       }
       
@@ -119,6 +139,8 @@ namespace djnn_internal {
       if(firstchanged) {
         firstTimerHasChanged();
       }
+
+      std::cerr << "<< "; DBGTIMERS;
   }
     
     
@@ -126,7 +148,7 @@ namespace djnn_internal {
     Manager::timeElapsed(Unit dt)
     {
       //DBG;
-      //DBGTIMERS;
+      //std::cerr << ">> "; DBGTIMERS;
       
       if(_timers.empty())
         return;
@@ -176,13 +198,16 @@ namespace djnn_internal {
         Unit t = (*j)->getTime();
         Unit actualtime = t-newdelta;
         //std::cerr << DBGVAR(t) << " " << DBGVAR(actualtime) << " " << boost::core::demangle(typeid(*j).name()) << __FL__;
+        //std::cerr << ">> doit" << std::endl;
         (*j)->doit(actualtime);
+        //std::cerr << "<< doit" << std::endl;
       }
 
       _dontCallTimerHasChanged=0;
       // dont call firstTimerHasChanged if it was call by after during doit...
       firstTimerHasChanged();
       //std::cerr << DBGVAR(_timers.size()) << __FL__;
+      //std::cerr << "<< "; DBGTIMERS;
     }
     
     void

@@ -22,6 +22,7 @@ namespace djnn_internal {
 
       void after(Timer* timer, Unit) ; //throw(TimerAlreadyScheduled);
       void cancel(Timer* timer);
+      bool already_scheduled(Timer* timer);
       void timeElapsed(Unit);
 
     //protected:

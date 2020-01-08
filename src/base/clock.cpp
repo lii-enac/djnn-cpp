@@ -24,8 +24,8 @@
 
 #include <sys/time.h>
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn
 {
@@ -62,6 +62,7 @@ namespace djnn
   Clock::impl_activate ()
   {
     //DBGPROC;
+    //__builtin_trap();
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     _c_update.enable ();
     DjnnTimeManager::instance().after(this, _period.get_value ());
@@ -78,20 +79,31 @@ namespace djnn
   void
   Clock::update_period()
   {
+    //DBGPROC;
+    //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     DjnnTimeManager::instance().cancel(this);
     if(somehow_activating())
-      impl_activate (); // reschedule
+      DjnnTimeManager::instance().after(this, _period.get_value ());
+      //impl_activate (); // reschedule
   }
 
   void
   Clock::doit(const djnn_internal::Time::Unit& actualtime)
   {
-    //DBG;
+    //DBGPROC;
     _elapsed.set_value (actualtime, true);
+    auto sav_period = _period.get_value ();
     _tick.activate (); // propagating
     // OR ?? _tick.notify_activation (); // propagating
-    if(somehow_activating())
+    if(somehow_activating() &&
+        //!DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period
+      // FIXME costly
+      sav_period == _period.get_value ()
+    )
+    {
       impl_activate (); // reschedule
+    }
+
   }
 
   void

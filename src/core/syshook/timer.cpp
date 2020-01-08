@@ -23,8 +23,8 @@
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-// #include <iostream>
-// #include "utils/debug.h"
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {
@@ -59,26 +59,33 @@ namespace djnn
   void
   Timer::impl_activate ()
   {
+    //DBG;
+    _c_update.enable ();
     DjnnTimeManager::instance().after(this, _delay.get_value ());
   }
 
   void
   Timer::impl_deactivate ()
   {
+    //DBG;
+    _c_update.disable ();
     DjnnTimeManager::instance().cancel(this);
   }
 
   void
   Timer::update_period()
   {
+    //DBG;
     DjnnTimeManager::instance().cancel(this);
     if(somehow_activating())
-      impl_activate (); // reschedule
+      //impl_activate (); // reschedule
+      DjnnTimeManager::instance().after(this, _delay.get_value ());
   }
 
   void
   Timer::doit(const djnn_internal::Time::Unit& actualtime)
   {
+    //DBG;
     set_activation_state (DEACTIVATED);
     _end.notify_activation (); // propagating
   }

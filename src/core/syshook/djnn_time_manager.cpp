@@ -24,6 +24,7 @@ namespace djnn {
   struct timespec before;
   void DjnnTimeManager::firstTimerHasChanged()
   {
+    //DBG;
     djnn::get_monotonic_time(&before);
     cancel_mutex.unlock ();
   }
@@ -47,6 +48,7 @@ namespace djnn {
   void
   DjnnTimeManager::run ()
   {
+    //DBG;
     set_please_stop (false);
     cancel_mutex.lock();
     djnn::get_exclusive_access (DBG_GET);

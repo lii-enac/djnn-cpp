@@ -2,8 +2,8 @@
 #include "cpp-thread.h"
 #include "cpp-mutex.h"
 
-#include <iostream>
-#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+//#include <iostream>
+//#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
 
 namespace djnn {
 
