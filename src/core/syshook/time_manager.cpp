@@ -140,7 +140,7 @@ namespace djnn_internal {
         firstTimerHasChanged();
       }
 
-      std::cerr << "<< "; DBGTIMERS;
+      //std::cerr << "<< "; DBGTIMERS;
   }
     
     
