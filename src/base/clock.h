@@ -29,13 +29,10 @@
 
 namespace djnn
 {
-  //using namespace std::chrono;
-  //using namespace boost::chrono;
-
   class IntProperty;
   class DoubleProperty;
 
-  class Clock : public Process, public djnn_internal::Time::Timer //ExternalSource
+  class Clock : public Process, public djnn_internal::Time::Timer
   {
     class ClockAction : public Action
     {
@@ -70,9 +67,6 @@ namespace djnn
     Spike _tick;
     ClockAction _action;
     Coupling _c_update;
-
-    // ExternalSource
-    //void run() override;
   };
 
 }

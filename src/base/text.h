@@ -18,7 +18,7 @@
 #include "operators.h"
 #include "core/tree/text_property.h"
 
-#include <iostream>
+//#include <iostream>
 
 namespace djnn
 {

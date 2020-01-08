@@ -22,7 +22,6 @@ namespace djnn {
 
 
   struct timespec before;
-  // djnn_internal::Time::Manager
   void DjnnTimeManager::firstTimerHasChanged()
   {
     djnn::get_monotonic_time(&before);
@@ -37,17 +36,14 @@ namespace djnn {
     struct timespec after;
     djnn::get_monotonic_time(&after);
     double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
-    //_acc_duration += elapsedTime;
 
     if(elapsedTime >= duration) {
-      //_acc_duration = 0;
       before = after;
       timeElapsed (elapsedTime);
       GRAPH_EXEC;
     }
   }
 
-  // ExternalSource
   void
   DjnnTimeManager::run ()
   {
@@ -115,8 +111,7 @@ namespace djnn {
             break;
           }
           
-          duration = getFirstDelta (); //_period.get_value ();
-          //cancel_mutex.lock();
+          duration = getFirstDelta ();
           djnn::release_exclusive_access (DBG_REL);
         }
           

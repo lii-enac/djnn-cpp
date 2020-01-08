@@ -21,7 +21,6 @@
 #include "core/tree/blank.h"
 #include "core/control/action.h"
 
-//#include "external_source.h"
 #include "core/syshook/time_manager.h"
 #include "cpp-chrono.h"
 
@@ -30,7 +29,7 @@ namespace djnn
   class IntProperty;
   class Blank;
 
-  class Timer : public Process, public djnn_internal::Time::Timer //ExternalSource
+  class Timer : public Process, public djnn_internal::Time::Timer
   {
     class TimerAction : public Action
     {
@@ -43,10 +42,10 @@ namespace djnn
       void impl_deactivate () override {}
     };
   public:
-    Timer (Process* p, const std::string& n, std::chrono::milliseconds period = std::chrono::milliseconds(1000));
+    Timer (Process* p, const std::string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
     Timer (Process* p, const std::string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Timer (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
+    Timer (Process* p, const std::string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Timer ();
 
@@ -61,15 +60,10 @@ namespace djnn
     void update_period ();
 
   private:
-    // ExternalSource
-    //void run() override;
-
-  private:
     IntProperty _delay;
     Blank _end;
     TimerAction _action;
     Coupling _c_update;
-
   };
 
 }

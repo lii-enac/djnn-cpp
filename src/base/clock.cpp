@@ -63,7 +63,6 @@ namespace djnn
   {
     //DBGPROC;
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
-    //start_thread();
     _c_update.enable ();
     DjnnTimeManager::instance().after(this, _period.get_value ());
   }
@@ -72,7 +71,6 @@ namespace djnn
   Clock::impl_deactivate ()
   {
     //DBGPROC;
-    //please_stop ();
      _c_update.disable ();
     DjnnTimeManager::instance().cancel(this);
   }
@@ -92,10 +90,30 @@ namespace djnn
     _elapsed.set_value (actualtime, true);
     _tick.activate (); // propagating
     // OR ?? _tick.notify_activation (); // propagating
-    //DjnnTimeManager::instance().after(this, _period.get_value ()); // reschedule
     if(somehow_activating())
       impl_activate (); // reschedule
   }
+
+  void
+  Clock::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:clock");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->int_attribute ("period", _period.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+
+  }
+
+}
+
+
+
+
+
 
 #if 0
   void
@@ -169,22 +187,6 @@ namespace djnn
     //cancelled = nullptr;
   }
 #endif
-
-  void
-  Clock::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
-
-    AbstractSerializer::serializer->start ("base:clock");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->int_attribute ("period", _period.get_value ());
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-
-  }
-
-}
 
 
 

@@ -119,13 +119,13 @@ namespace djnn {
     virtual     void update_drawing () {}
     virtual     void draw () {}
     virtual     void pick () {}
-    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; } // hws: half stroke width
-    virtual     void serialize (const string& format); // { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
-    virtual Process* clone (); // { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
+    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
+    virtual     void serialize (const string& format);
+    virtual Process* clone ();
 
     // tree, component, symtable 
     Process* get_parent () { return _parent; }
-    virtual void   set_parent (Process* p); // { _parent = p; }
+    virtual void   set_parent (Process* p);
     virtual void   add_child (Process* c, const string& name);
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const string& name);
@@ -134,16 +134,15 @@ namespace djnn {
     virtual Process* find_component (const string&); // FIXME: should be find_child
     virtual Process* find_component (int index) { return nullptr; }
     static  Process* find_component (Process* p, const string &path);
-    virtual const string&   find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
+    virtual const string& find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
     void    add_symbol (const string &name, Process* c);
     void remove_symbol (const string& name);
 
     typedef map<string, Process*> symtable_t;
     symtable_t& symtable () { return _symtable; }
     const symtable_t& symtable () const { return _symtable; }
-    //const string& get_name () const { return _name; }
     static string default_name;
-    const string& get_name () const; // { return (_parent ? _parent->find_component_name(this) : default_name); }
+    const string& get_name () const;
     
     // data
     void     set_data (Process* data);
@@ -152,7 +151,6 @@ namespace djnn {
     // debug
     virtual  void dump (int level=0);
     const string& debug_info () { return _dbg_info; }
-    //const string& debug_info () { return ""; }
 
   protected:
     void finalize_construction (Process* parent, const string& name, Process* state=nullptr);
