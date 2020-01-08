@@ -24,6 +24,8 @@
 
 #include <sys/time.h>
 
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {
@@ -38,7 +40,9 @@ namespace djnn
     Process (name),
     _period (this, "period", period),
     _elapsed (this, "elapsed", 0),
-    _tick (this, "tick")
+    _tick (this, "tick"),
+    _action (this, "action"),
+    _c_update (&_period, ACTIVATION, &_action, ACTIVATION, true)
   {
     Process::finalize_construction (parent, name);
   }
@@ -57,17 +61,28 @@ namespace djnn
   void
   Clock::impl_activate ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
+    //DBGPROC;
+    //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     //start_thread();
+    _c_update.enable ();
     DjnnTimeManager::instance().after(this, _period.get_value ());
   }
 
   void
   Clock::impl_deactivate ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
+    //DBGPROC;
     //please_stop ();
+     _c_update.disable ();
     DjnnTimeManager::instance().cancel(this);
+  }
+
+  void
+  Clock::update_period()
+  {
+    DjnnTimeManager::instance().cancel(this);
+    if(somehow_activating())
+      impl_activate (); // reschedule
   }
 
   void

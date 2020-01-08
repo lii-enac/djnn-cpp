@@ -32,7 +32,9 @@ namespace djnn
   Timer::Timer (Process *parent, const std::string& name, int period)
   : Process (name),
   _delay (this, "delay", period),
-  _end (this, "end")
+  _end (this, "end"),
+  _action (this, "action"),
+  _c_update (&_delay, ACTIVATION, &_action, ACTIVATION, true)
   {
     Process::finalize_construction (parent, name);
   }
@@ -68,6 +70,14 @@ namespace djnn
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
     //please_stop ();
     DjnnTimeManager::instance().cancel(this);
+  }
+
+  void
+  Timer::update_period()
+  {
+    DjnnTimeManager::instance().cancel(this);
+    if(somehow_activating())
+      impl_activate (); // reschedule
   }
 
   void

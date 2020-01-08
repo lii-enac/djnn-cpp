@@ -16,8 +16,10 @@
 #pragma once
 
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
 #include "core/tree/blank.h"
+#include "core/control/action.h"
 
 //#include "external_source.h"
 #include "core/syshook/time_manager.h"
@@ -30,6 +32,16 @@ namespace djnn
 
   class Timer : public Process, public djnn_internal::Time::Timer //ExternalSource
   {
+    class TimerAction : public Action
+    {
+    public:
+      TimerAction (Process* parent, const string &name) :
+        Action (parent, name){};
+    
+      virtual ~TimerAction () {}
+      void impl_activate () override { ((Timer*)get_parent())->update_period (); }
+      void impl_deactivate () override {}
+    };
   public:
     Timer (Process* p, const std::string& n, std::chrono::milliseconds period = std::chrono::milliseconds(1000));
     Timer (Process* p, const std::string& n, int period = 1000);
@@ -46,6 +58,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void serialize (const string& type) override;
+    void update_period ();
 
   private:
     // ExternalSource
@@ -54,6 +67,8 @@ namespace djnn
   private:
     IntProperty _delay;
     Blank _end;
+    TimerAction _action;
+    Coupling _c_update;
 
   };
 
