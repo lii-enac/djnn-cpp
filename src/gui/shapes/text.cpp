@@ -47,14 +47,14 @@ namespace djnn
 
   Text::Text (Process *parent, const std::string& name, double x, double y, const std::string &text) :
       AbstractGShape (parent, name),
-      raw_props{.x=x, .y=y, .dx=0, .dy=0, .dxU=0, .dyU=0, .encoding=DJN_UTF8},
+      raw_props{.x=x, .y=y, .dx=0, .dy=0, .dxU=0, .dyU=0, .encoding=DJN_UTF8, .text=text},
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
       _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _cffamily (nullptr),
       _fm (nullptr),
       _update_size (this, "size_action", this),
       _width (this, "width", 0),
       _height (this, "height", 0),
-      _text (this, "text", text),
+      _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
       _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
@@ -64,18 +64,21 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
+  //Text::Text (Process *parent, const std::string& name, double x, double y, const std::string &text) :
+  //Text(parent, name, 0,0,0,0,0,0,DJN_UTF8, text);
+
   Text::Text (Process *parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
               const std::string &encoding, const std::string &text) :
       AbstractGShape (parent, name),
       /* FIXME: encoding - should be string or convert in Int  from Enum? */
-      raw_props{.x=x, .y=y, .dx=dx, .dy=dy, .dxU=dxU, .dyU=dyU, .encoding=0},
+      raw_props{.x=x, .y=y, .dx=dx, .dy=dy, .dxU=dxU, .dyU=dyU, .encoding=0, .text=text},
       _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
       _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _cffamily (nullptr),
       _fm (nullptr),
       _update_size (this, "size_action", this),
       _width (this, "width", 0),
       _height (this, "height", 0),
-      _text (this, "text", text),
+      _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
       _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {

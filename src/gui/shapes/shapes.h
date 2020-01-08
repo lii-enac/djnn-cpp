@@ -124,7 +124,7 @@ namespace djnn
     AbstractIntProperty*    encoding () { return (AbstractIntProperty*) find_component("encoding"); }
     IntProperty*  width () { return &_width; }
     IntProperty*  height () { return &_height; }
-    TextProperty* text () { return &_text;}
+    AbstractTextProperty* text () { return &_text;}
     void set_width (double width) { _width.set_value (width, true); }
     void set_height (double height) { _height.set_value (height, true); }
     const string& get_raw_text () { return _text.get_value (); }
@@ -134,7 +134,7 @@ namespace djnn
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (Process* p) override;
-    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding, fstyle, fweight;};
+    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding, fstyle, fweight; string text; };
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
       *_cdxU, *_cdyU, *_cencoding,
@@ -147,7 +147,7 @@ namespace djnn
     TextSizeAction _update_size;
     IntProperty _width;
     IntProperty _height;
-    TextProperty _text;
+    TextPropertyProxy _text; // text must notify_geometry when changed
     Coupling _cupdate_size, _ctext;
 
     void impl_activate () override;
