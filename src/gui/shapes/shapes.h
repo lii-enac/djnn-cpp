@@ -134,21 +134,23 @@ namespace djnn
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (Process* p) override;
-    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding, fstyle, fweight; string text; };
+    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; string text; };
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
-      *_cdxU, *_cdyU, *_cencoding,
-      *_cfstyle, *_cfweight, *_cffamily;
+      *_cdxU, *_cdyU, *_cencoding, *_cfstyle, *_cfweight,
+      *_cffamily;
 
     /* implementation */
     FontMetricsImpl _fm;
 
-    /* no need proxy because always create */
+    /* no proxy needed because those are always created */
     TextSizeAction _update_size;
     IntProperty _width;
     IntProperty _height;
-    TextPropertyProxy _text; // text must notify_geometry when changed
-    Coupling _cupdate_size, _ctext;
+
+    // text must notify_geometry when changed
+    TextPropertyProxy _text; 
+    Coupling _cupdate_size; //, _ctext;
 
     void impl_activate () override;
     void impl_deactivate () override;

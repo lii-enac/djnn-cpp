@@ -55,8 +55,8 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
-      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION)//,
+      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
     set_origin (x, y);
 
@@ -79,8 +79,8 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
-      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION) //,
+      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
     set_origin (x, y);
 
@@ -331,7 +331,7 @@ namespace djnn
     
     if (_cx) _cx->enable (_frame);
     if (_cy) _cy->enable (_frame);
-    _ctext.enable (_frame);
+    //_ctext.enable (_frame);
     if (_cdx) _cdx->enable (_frame);
     if (_cdy) _cdy->enable (_frame);
     if (_cdxU) _cdxU->enable (_frame);
@@ -352,7 +352,7 @@ namespace djnn
   {
     if (_cx) _cx->disable ();
     if (_cy) _cy->disable ();
-    _ctext.disable ();
+    //_ctext.disable ();
     if (_cdx) _cdx->disable ();
     if (_cdy) _cdy->disable ();
     if (_cdxU) _cdxU->disable ();
