@@ -49,7 +49,7 @@ namespace djnn {
   inline
   const vec2 abs(vec2& v)
   {
-    vec2 res = {::abs(v.x), ::abs(v.y)};
+    vec2 res = {::fabs(v.x), ::fabs(v.y)};
     return res;
   }
 
