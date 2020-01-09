@@ -190,6 +190,12 @@ class Prop:
         else:
           return self.type
 
+    def as_cpp_type_str_for_function_signature(self):
+        if self.type == 'text':
+          return 'const std::string&'
+        else:
+          return self.type
+
     def __str__(self):
       return "prop " + self.as_cpp_type_str() + " " + self.name
 
@@ -286,7 +292,7 @@ def just_do_it(dc, finalize_construction=True):
 
     # print (CREATE_PROPERTIES)
 
-    DECL_PROPS_CALL_DEF = ', '.join([p.as_cpp_type_str() + ' ' + p.name for p in all_props])
+    DECL_PROPS_CALL_DEF = ', '.join([p.as_cpp_type_str_for_function_signature() + ' ' + p.name for p in all_props])
     
     RAW_PROPS_INIT = ', '.join(['.' + p.name + '=' + p.name for p in dc.props])
     # print (RAW_PROPS_INIT)
