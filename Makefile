@@ -429,7 +429,7 @@ dbg:
 .PHONY: dbg
 
 ifeq ($(os),Linux)
-pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev #libboost-fiber-dev
+pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
 pkgcmd := apt install -y
 ifeq ($(display),QT)
 pkgdeps += qt5-default
