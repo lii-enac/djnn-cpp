@@ -304,7 +304,7 @@ namespace djnn
 
     /* special case find from root - using find_component ("//johndoe") */
     //FIXME: improved with c++20 if (key.starts_with("//")
-    if (key.length () > 2 && key[0] == '/' && key[1] == '/') {
+    if (key.length () >= 2 && key[0] == '/' && key[1] == '/') {
         Process* current_cpnt = this;
         Process* current_parent = current_cpnt->get_parent ();
         while (current_parent != nullptr) {
