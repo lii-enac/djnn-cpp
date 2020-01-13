@@ -211,6 +211,12 @@ namespace djnn_internal {
     }
     
     void
+    Manager::cleanup ()
+    {
+      _timers.clear ();
+    }
+
+    void
     Manager::reschedule()
     {
       firstTimerHasChanged();

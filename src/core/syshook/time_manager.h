@@ -24,6 +24,7 @@ namespace djnn_internal {
       void cancel(Timer* timer);
       bool already_scheduled(Timer* timer);
       void timeElapsed(Unit);
+      void cleanup ();
 
     //protected:
       virtual void firstTimerHasChanged()=0;

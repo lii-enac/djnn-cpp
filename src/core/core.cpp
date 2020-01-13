@@ -40,6 +40,7 @@ namespace djnn
      
       setlocale(LC_NUMERIC, "C");
     }
+    DjnnTimeManager::instance().cleanup ();
   }
 
   void
