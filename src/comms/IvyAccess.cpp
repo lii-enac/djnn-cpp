@@ -115,9 +115,13 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
 {
   djnn::get_exclusive_access (DBG_GET);
 
-  pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = (pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>*) user_data;
+  //pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = 
+    //(pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> *) user_data;
+  djnn::IvyAccess::regexp_keypair_t * keypair = reinterpret_cast<djnn::IvyAccess::regexp_keypair_t*>(user_data);
   string regexp = keypair->first;
-  map<string, vector<pair<int, djnn::TextProperty*>>>* in_map =  keypair->second;
+  //map<string, vector<pair<int, djnn::TextProperty*>>>*
+  djnn::IvyAccess::in_map_t*
+    in_map =  keypair->second;
 
 #ifdef __IVY_DEBUG__
   cout <<  endl <<"_on_ivy_message" << endl;
@@ -125,16 +129,21 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   _ivy_debug_mapping (*in_map);
 #endif
 
-  map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
-  mit = in_map->find(regexp);
+  //map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
+  //::iterator mit;
+  auto mit = in_map->find(regexp);
 
   if (mit != in_map->end ()){
     /* the regexp exist in map */
-    vector<pair<int, djnn::TextProperty*>>::iterator vit;
-    for (vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
+    //vector<pair<int, djnn::TextProperty*>>::iterator vit;
+    for (auto vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
       /* pair */
       djnn::TextProperty* txtprop = (*vit).second;
-      string msg =  argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
+      if((*vit).first - 1 >= argc) {
+        std::cerr << "Ivy err: regexp position is greater or equal to argc " << (*vit).first << " " << argc << std::endl;
+        continue;
+      }
+      string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
     }
 
@@ -361,7 +370,11 @@ IvyAccess::find_component (const string& key)
       mit = _in_map.find(regexp);
       if (mit == _in_map.end ()) {
         /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
-        pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* regexp_keypair = new pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> (regexp, &_in_map);
+        auto * regexp_keypair =
+          new
+          //pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>
+          regexp_keypair_t
+          (regexp, &_in_map);
         IvyBindMsg(_on_ivy_message, regexp_keypair, "%s", regexp.c_str() );
       }
 

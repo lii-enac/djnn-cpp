@@ -56,6 +56,10 @@ namespace djnn
 
     void set_arriving(string v);
     void set_leaving(string v);
+
+    typedef map<string, vector<pair<int, TextProperty*>>> in_map_t;
+    typedef pair<string, in_map_t*> regexp_keypair_t;
+
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
@@ -67,7 +71,8 @@ namespace djnn
     string _appname;
     string _ready_message;
 
-    map<string, vector<pair<int, TextProperty*>>> _in_map;   
+    in_map_t _in_map; 
+      
     TextProperty _out;
     IvyOutAction _out_a;
     Coupling _out_c;
