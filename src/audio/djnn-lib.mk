@@ -13,6 +13,10 @@ ifeq ($(os),em)
 lib_ldflags += -lopenal
 endif
 
+ifeq ($(os),MinGW)
+lib_ldflags += -lopenal
+endif
+
 
 #lib_ldflags += `pkg-config --libs portaudio-2.0`
 #lib_cppflags += `pkg-config --cflags portaudio-2.0`

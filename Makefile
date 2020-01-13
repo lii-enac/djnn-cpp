@@ -210,7 +210,7 @@ djnn_libs := core base display gui animation utils audio
 endif
 
 ifeq ($(os),MinGW)
-djnn_libs := core base comms display gui animation utils files
+djnn_libs := core base comms display gui animation utils files audio
 # input
 endif
 
