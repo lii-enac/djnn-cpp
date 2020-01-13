@@ -78,6 +78,13 @@ CFLAGS += -I$(src_dir)
 #CFLAGS += -fsanitize=memory -O1
 #LDFLAGS += -fsanitize=memory
 
+# scan_build: static analizer
+# 1. download the latest llvm (+9.0.0) release from your platform using "Pre-Built Binaries" on http://releases.llvm.org/download.html
+# 2. launch the CLI on this Makefile wih: 
+#	/path/to/llvm/bin/scan-build -o build/scan-report/htmldir make -j
+# 3. vizualize report with CLI (this command is given at the end of the above command: 
+#	/path/to/llvm/bin/scan-view build/scan-report/htmldir/xxxx-xx-xx-xxxxx-xxxxx-x 
+
 lib_static_suffix = .a
 
 ifeq ($(os),Linux)
