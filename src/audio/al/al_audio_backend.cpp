@@ -26,33 +26,36 @@ namespace djnn {
 	void init_audio_openal ()
 	{
 		//CHKAL;
-		int major, minor;
-		alcGetIntegerv(NULL, ALC_MAJOR_VERSION, 1, &major);
-		alcGetIntegerv(NULL, ALC_MINOR_VERSION, 1, &minor);
 
-		//assert(major == 1);
-
-		printf("ALC version: %i.%i\n", major, minor);
-		printf("Default device: %s\n", alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER));
-
-		device = alcOpenDevice(NULL); CHKAL;
+		device = alcOpenDevice(NULL); //CHKAL;
 	    if (device == NULL)
 	    {
-	        std::cout << "cannot open sound card" << std::endl;
+	        std::cerr << "cannot open sound card" << std::endl;
 	 		return;
 	    }
-	    context = alcCreateContext(device, NULL); CHKAL;
+
+		context = alcCreateContext(device, NULL); //CHKAL;
 	    if (context == NULL)
 	    {
-	        std::cout << "cannot open context" << std::endl;
+	        std::cerr << "cannot open context" << std::endl;
 	        return;
 	    }
+
 	    alcMakeContextCurrent(context); CHKAL;
+
+	    std::cout << "Default device:" << alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER) << std::endl; CHKAL;
+
+	    int major, minor;
+		alcGetIntegerv(NULL, ALC_MAJOR_VERSION, 1, &major); CHKAL;
+		alcGetIntegerv(NULL, ALC_MINOR_VERSION, 1, &minor); CHKAL;
+
+		std::cout << "ALC version: " << major << " " << minor << std::endl;
+		std::cout << std::flush;
 	}
 
 	void clear_audio_openal ()
 	{
-		alcDestroyContext(context); CHKAL;
-    	alcCloseDevice(device); CHKAL;
+		alcDestroyContext(context); //CHKAL;
+    	alcCloseDevice(device); //CHKAL;
 	}
 }

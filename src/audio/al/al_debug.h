@@ -1,9 +1,5 @@
 #pragma once
 
-// #ifndef __FL__
-// #define __FL__ " " __FILE__ ":" << __LINE__ << std::endl;
-// #endif
-
 #include "utils/debug.h"
 
 #define CHKAL {int err = alGetError(); if(err) { std::cerr << alErrorString(err) << __FL__; }}
