@@ -33,6 +33,10 @@
 
 #include <iostream>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 namespace djnn
 {
   AbstractTransformation::AbstractTransformation (Process *parent, const string &name) :

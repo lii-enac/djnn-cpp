@@ -107,8 +107,8 @@ ifeq ($(os),MinGW)
 lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB = -shared
-CFLAGS = -fpic -g -MMD -Wall
-LDFLAGS = -L$(build_dir)
+CFLAGS += -fpic -g -MMD -Wall
+LDFLAGS += -L$(build_dir)
 YACC = bison -d
 endif
 
@@ -135,7 +135,6 @@ inc_android =  \
 #/usr/local/include for glm
 
 CFLAGS += $(inc_android)
-CXXFLAGS += $(inc_android)
 
 LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 -L../ext-libs/android/curl/lib/.libs \
@@ -345,24 +344,6 @@ size:
 strip:
 	strip $(libs_static)
 
-
-# config_header_files := $(build_dir)/src/core/syshook/cpp-thread-config.h $(build_dir)/src/core/syshook/cpp-chrono-config.h
-# config_headers: $(config_header_files)
-# .PHONY: config_headers
-# #.PHONY: $(config_header_files)
-
-# $(build_dir)/src/core/syshook/cpp-thread-config.h: $(FORCE)
-# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
-# 	@echo "#define DJNN_USE_"$(thread)"_THREAD 1" > $(config.h)
-# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@; fi
-# 	@rm $(config.h)
-# $(build_dir)/src/core/syshook/cpp-chrono-config.h: $(FORCE)
-# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
-# 	@echo "#define DJNN_USE_"$(chrono)"_CHRONO 1" > $(config.h)
-# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@;  fi
-# 	@rm $(config.h)
-
-
 $(build_dir)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -425,11 +406,14 @@ distclean clear:
 .PHONY: distclean clear
 
 dbg:
-	@echo $(os)
+	@echo $(src_dir)
+
 .PHONY: dbg
 
+pkgdeps := bison flex
+
 ifeq ($(os),Linux)
-pkgdeps := libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
+pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
 pkgcmd := apt install -y
 ifeq ($(display),QT)
 pkgdeps += qt5-default
@@ -456,7 +440,7 @@ endif
 
 ifeq ($(os),Darwin)
 #https://brew.sh/
-pkgdeps := expat curl boost
+pkgdeps += expat curl boost
 pkgdeps += qt5
 pkgdeps += cairo pango
 pkgdeps += sdl2 sdl2_image
@@ -466,10 +450,11 @@ endif
 ifeq ($(os), MinGW)
 #https://www.msys2.org/
 #pkgdeps := git make pkg-config
-pkgdeps := gcc boost expat curl qt5
+pkgdeps += gcc boost expat curl qt5
 pkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
 pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S --needed
+CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 endif
 
 install-pkgdeps:
@@ -480,4 +465,20 @@ install-pkgdeps:
 # mingw on mac:
 #brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
 #add -Imingw-std-threads to CXXFLAGS
+
+# config_header_files := $(build_dir)/src/core/syshook/cpp-thread-config.h $(build_dir)/src/core/syshook/cpp-chrono-config.h
+# config_headers: $(config_header_files)
+# .PHONY: config_headers
+# #.PHONY: $(config_header_files)
+
+# $(build_dir)/src/core/syshook/cpp-thread-config.h: $(FORCE)
+# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
+# 	@echo "#define DJNN_USE_"$(thread)"_THREAD 1" > $(config.h)
+# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@; fi
+# 	@rm $(config.h)
+# $(build_dir)/src/core/syshook/cpp-chrono-config.h: $(FORCE)
+# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
+# 	@echo "#define DJNN_USE_"$(chrono)"_CHRONO 1" > $(config.h)
+# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@;  fi
+# 	@rm $(config.h)
 
