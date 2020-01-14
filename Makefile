@@ -185,8 +185,8 @@ EMFLAGS := -Wall -Wno-unused-variable -Oz \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
 -s ASSERTIONS=2
 
-EMLOCAL:=/Users/conversy/recherche/istar/code/ext-libs/emscripten/local
-EMCFLAGS += $(EMFLAGS) -I$(EMLOCAL)/include -I/usr/local/include #glm
+em_ext_libs_path ?= ../djnn-emscripten-ext-libs
+EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
