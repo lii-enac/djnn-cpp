@@ -199,7 +199,6 @@ CXXFLAGS += $(EMCFLAGS)
 LDFLAGS += $(EMFLAGS) \
 	--emrun
 #$(ext_libs) # to add in application makefile
-endif
 
 endif
 
