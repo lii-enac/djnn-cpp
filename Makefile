@@ -183,14 +183,23 @@ EMFLAGS := -Wall -Wno-unused-variable -Oz \
 -DSDL_DISABLE_IMMINTRIN_H \
 -s EXPORT_ALL=1 -s DISABLE_EXCEPTION_CATCHING=0 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
--s ASSERTIONS=2
+-s ASSERTIONS=2 \
+-s ERROR_ON_UNDEFINED_SYMBOLS=0
 
 em_ext_libs_path ?= ../djnn-emscripten-ext-libs
-EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 
+##idn2 expat curl fontconfig unistring psl
+# to add in application makefile:
+#ext_libs := expat curl
+#ext_libs := $(addprefix $(em_ext_libs_path)/lib/lib,$(addsuffix .a, $(ext_libs))) -lopenal
+
+EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
-LDFLAGS = $(EMFLAGS) --emrun
+LDFLAGS += $(EMFLAGS) \
+	--emrun
+#$(ext_libs) # to add in application makefile
+endif
 
 endif
 
