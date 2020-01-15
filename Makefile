@@ -115,6 +115,7 @@ lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB = -shared
 CFLAGS += -fpic -g -MMD -Wall
+CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 LDFLAGS += -L$(build_dir)
 YACC = bison -d
 endif
@@ -426,11 +427,13 @@ dbg:
 
 .PHONY: dbg
 
-pkgdeps := bison flex
+pkgdeps += bison flex
 
 ifeq ($(os),Linux)
-pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
 pkgcmd := apt install -y
+pkgupg := apt upgrade -y
+
+pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
 ifeq ($(display),QT)
 pkgdeps += qt5-default
 endif
@@ -456,27 +459,34 @@ endif
 
 ifeq ($(os),Darwin)
 #https://brew.sh/
+pkgcmd := brew install
+pkgupg := brew upgrade
+
 pkgdeps += expat curl boost
 pkgdeps += qt5
 pkgdeps += cairo pango
 pkgdeps += sdl2 sdl2_image
-pkgcmd := brew install
 endif
 
 ifeq ($(os), MinGW)
 #https://www.msys2.org/
 #pkgdeps := git make pkg-config
-pkgdeps += gcc boost expat curl qt5
-pkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
-pkgdeps := $(addprefix mingw-w64-x86_64-, $(pkgdeps))
 pkgcmd := pacman -S --needed
-CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
+pkgupg := pacman -Syu
+
+mgwpkgdeps += gcc boost expat curl qt5
+mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
+mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+pkgdeps += $(mgwpkgdeps)
 endif
 
 install-pkgdeps:
-	echo $(os)
 	$(pkgcmd) $(pkgdeps)
-.PHONY: install-pkgdeps
+
+update-pkgdeps:
+	$(pkgupg) $(pkgdeps)
+
+.PHONY: install-pkgdeps update-pkgdeps
 
 # mingw on mac:
 #brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
