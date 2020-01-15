@@ -18,4 +18,7 @@ cross_prefix := g
 
 build_dir := build
 
+#picking := COLOR
+#option: color analytical
+
 #CFLAGS += -DDJNN_NO_DEBUG
