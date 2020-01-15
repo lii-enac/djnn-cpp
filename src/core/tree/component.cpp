@@ -117,14 +117,14 @@ namespace djnn
   {
     if (child2 == 0) {
       if (spec == FIRST) {
-        Container::remove_child (child_to_move);
+        Container::remove_child_from_children_only (child_to_move);
         _children.insert (_children.begin (), child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, 0);
         }
         return;
       } else if (spec == LAST) {
-        Container::remove_child (child_to_move);
+        Container::remove_child_from_children_only (child_to_move);
         _children.push_back (child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, _children.size () - 1);
@@ -138,21 +138,30 @@ namespace djnn
     } else {
       auto index = std::distance (_children.begin (), it);
       if (spec == BEFORE) {
-        Container::remove_child (child_to_move);
+        Container::remove_child_from_children_only (child_to_move);
         _children.insert (_children.begin () + index, child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else if (spec == AFTER) {
-        Container::remove_child (child_to_move);
-        _children.insert (_children.begin () + index + 1, child_to_move);
+        Container::remove_child_from_children_only (child_to_move);
+        _children.insert (_children.begin () + index, child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index, spec, index + 1);
+          s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else {
         cout << "spec = " << spec << endl;
         warning (this, "Undefined spec to move child " + child_to_move->get_name ());
       }
+    }
+  }
+
+  void
+  Container::remove_child_from_children_only (Process* c)
+  {
+    _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
+    for (auto s: structure_observer_list) {
+      s->remove_child_from_container (this, c);
     }
   }
 
@@ -163,10 +172,7 @@ namespace djnn
   Container::remove_child (Process* c)
   {
     Process::remove_child (c);
-    _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
-    for (auto s: structure_observer_list) {
-      s->remove_child_from_container (this, c);
-    }
+    remove_child_from_children_only (c);
   }
 
   /* note: 
