@@ -210,7 +210,7 @@ namespace djnn
     double a, offset;
     gs->get_properties_values(r, g, b, a, offset);
     QColor color (r, g, b);
-    color.setAlphaF (a);
+    color.setAlphaF (a * _context_manager->get_current ()->brush.color ().alphaF ());
     cur_gradient->setColorAt (offset, color);
   }
 
