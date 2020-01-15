@@ -201,8 +201,18 @@ LDFLAGS += $(EMFLAGS) \
 	--emrun
 #$(ext_libs) # to add in application makefile
 
+picking ?= ANALYTICAL
 endif
 
+ifeq ($(picking),ANALYTICAL)
+CXXFLAGS += -DDJNN_USE_ANALYTICAL_PICKING
+else ifeq ($(picking),COLOR)
+CXXFLAGS += -DDJNN_USE_COLOR_PICKING
+else ifeq ($(picking),)
+CXXFLAGS += -DDJNN_USE_COLOR_PICKING
+else
+$(warning("unkown picking method"))
+endif
 
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
