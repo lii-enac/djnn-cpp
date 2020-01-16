@@ -476,6 +476,9 @@ pkgdeps += expat curl boost
 pkgdeps += qt5
 pkgdeps += cairo pango
 pkgdeps += sdl2 sdl2_image
+ifeq ($(graphics),GL)
+pkgdeps += glm
+endif
 endif
 
 ifeq ($(os), MinGW)
@@ -486,6 +489,9 @@ pkgupg := pacman -Syu
 
 mgwpkgdeps += gcc boost expat curl qt5
 mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
+ifeq ($(graphics),GL)
+mgwpkgdeps += glm
+endif
 mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
 pkgdeps += $(mgwpkgdeps)
 endif
