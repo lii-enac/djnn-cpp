@@ -6,6 +6,7 @@
 #include "core/execution/graph.h"
 
 #include <iostream>
+#include <cassert>
 #include "utils/debug.h"
 
 namespace djnn {
