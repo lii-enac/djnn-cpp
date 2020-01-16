@@ -6,7 +6,7 @@
 #include "core/execution/graph.h"
 
 #include <iostream>
-//#include "utils/debug.h"
+#include "utils/debug.h"
 
 namespace djnn {
 
@@ -59,6 +59,8 @@ namespace djnn {
       while (!get_please_stop ()) {
         struct timespec before;
         djnn::get_monotonic_time(&before);
+
+        assert(duration>=-1);
 
         //std::cerr << "entering sleep " << DBGVAR(duration) << std::endl;
         std::chrono::milliseconds ddd(duration);

@@ -158,7 +158,8 @@ namespace djnn_internal {
       Unit newdelta = delta-dt;
       
       //std::cerr << DBGVAR(dt) << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << DBGVAR(_precision) << __FL__;
-      
+
+      if(newdelta<=0) newdelta=0;
       (*i)->setDelta(newdelta);
       
       if(newdelta>_precision) {
@@ -187,8 +188,7 @@ namespace djnn_internal {
         Timers::iterator i = _timers.begin();
         Unit delta = (*i)->getDelta();
         Unit d = delta+newdelta;
-        if(d<0)
-          d=0;
+        if(d<0) d=0;
         (*i)->setDelta(d);
         //std::cerr << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << __FL__;
       }
