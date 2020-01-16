@@ -1,11 +1,10 @@
 lib_djnn_deps = core
 lib_srcs += src/display/display.cpp src/display/window.cpp src/display/update_drawing.cpp
-#lib_srcs += $(shell find src/display/picking -name "*.cpp")
 
 ifeq ($(os),Linux)
 lib_srcs += $(shell find src/display/linux -name "*.cpp")
+lib_cflags += `pkg-config --cflags libdrm`
 lib_ldflags += `pkg-config --libs libdrm libudev`
-lib_cppflags += `pkg-config --cflags libdrm`
 endif
 
 ifeq ($(display),QT)
@@ -19,8 +18,4 @@ endif
 ifeq ($(display),ALT)
 lib_srcs += src/display/alt/alt_display.cpp
 endif
-
-#ifeq ($(graphics),GL)
-#include src/display/gl/djnn-lib.mk
-#endif
 
