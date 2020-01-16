@@ -493,7 +493,7 @@ endif
 install-pkgdeps:
 	$(pkgcmd) $(pkgdeps)
 
-update-pkgdeps:
+upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
 
 .PHONY: install-pkgdeps update-pkgdeps
