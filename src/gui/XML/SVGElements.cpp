@@ -14,6 +14,7 @@
  *
  */
 
+#include <numeric>
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
@@ -949,11 +950,11 @@ StartRadialGradient(const char** attrs, Process* current) {
 
 	Process* e;
 
-	djn_RadialGradientArgs.cx = 0.;
-	djn_RadialGradientArgs.cy = 0.;
-	djn_RadialGradientArgs.r = 1.;
-	djn_RadialGradientArgs.fx = 0.;
-	djn_RadialGradientArgs.fy = 0.;
+	djn_RadialGradientArgs.cx = 0.5;
+	djn_RadialGradientArgs.cy = 0.5;
+	djn_RadialGradientArgs.r = 0.5;
+	djn_RadialGradientArgs.fx = std::numeric_limits<double>::infinity();
+	djn_RadialGradientArgs.fy = std::numeric_limits<double>::infinity();
 	djn_GradientArgs.id = 0;
 	djn_GradientArgs.transform = 0;
 	djn_GradientArgs.spread = DJN_PAD_FILL;
@@ -977,6 +978,10 @@ StartRadialGradient(const char** attrs, Process* current) {
 		attrs++;
 	}
 
+	if (djn_RadialGradientArgs.fx == std::numeric_limits<double>::infinity())
+	  djn_RadialGradientArgs.fx = djn_RadialGradientArgs.cx;
+  if (djn_RadialGradientArgs.fy == std::numeric_limits<double>::infinity())
+    djn_RadialGradientArgs.fy = djn_RadialGradientArgs.cy;
 	e = new RadialGradient(0, djn_GradientArgs.id, djn_RadialGradientArgs.cx,
 			djn_RadialGradientArgs.cy, djn_RadialGradientArgs.r,
 			djn_RadialGradientArgs.fx, djn_RadialGradientArgs.fy,
