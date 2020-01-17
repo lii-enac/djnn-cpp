@@ -6,8 +6,8 @@ cairo_backend ?= pixmap
 #/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/
 
 ifeq ($(cairo_backend),pixmap)
-lib_cppflags += -I. `env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
-lib_ldflags += `env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig pkg-config --libs cairo pango pangocairo`
+lib_cppflags += -I. `pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
+lib_ldflags += `pkg-config --libs cairo pango pangocairo`
 endif
 
 ifeq ($(cairo_backend),gl)
