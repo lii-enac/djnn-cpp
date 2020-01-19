@@ -19,11 +19,11 @@
 #include "cpp-mutex-priv.h"
 
 #include <chrono>
-#include <iostream>
 
 #include <thread>
 
 #define DBG_MUTEX 0
+//#include <iostream>
 
 namespace djnn
 {

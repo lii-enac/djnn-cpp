@@ -34,8 +34,9 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
+
 #define DEBUG_PICKING  0
 
 #define _PERF_TEST 0
@@ -98,7 +99,7 @@ namespace djnn
 
   void
   QtWindow::update ()
-  {
+  { //DBG;
     if (_qwidget == nullptr)
       return;
     //_qwidget->update (); // won't work since qt is blocked in mainloop
@@ -167,7 +168,7 @@ namespace djnn
 
   void
   MyQWidget::keyPressEvent (QKeyEvent *event)
-  {
+  { //DBG;
     _window->key_pressed ()->set_value (event->key (), 1);
     if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
       _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);

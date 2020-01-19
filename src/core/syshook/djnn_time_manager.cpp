@@ -5,8 +5,9 @@
 #include "core/syshook/cpp-thread.h"
 #include "core/execution/graph.h"
 
-#include <iostream>
 #include <cassert>
+
+#include <iostream>
 #include "utils/debug.h"
 
 namespace djnn {
@@ -51,7 +52,6 @@ namespace djnn {
   {
     //DBG;
     set_please_stop (false);
-    cancel_mutex.lock();
     djnn::get_exclusive_access (DBG_GET);
     int duration = getFirstDelta ();
     djnn::release_exclusive_access (DBG_REL);
@@ -66,8 +66,10 @@ namespace djnn {
         //std::cerr << "entering sleep " << DBGVAR(duration) << std::endl;
         std::chrono::milliseconds ddd(duration);
         if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max();
+        cancel_mutex.lock();
         bool cancelled = cancel_mutex.try_lock_for(ddd);
         //std::cerr << "exit sleep " << DBGVAR(cancelled) << std::endl;
+        cancel_mutex.unlock();
 
         if(thread_local_cancelled) {
           break;
@@ -97,7 +99,6 @@ namespace djnn {
           continue;
         }
 
-
         {
           struct timespec after;
           djnn::get_monotonic_time(&after);
@@ -117,6 +118,7 @@ namespace djnn {
           }
           
           duration = getFirstDelta ();
+          //cancel_mutex.lock();
           djnn::release_exclusive_access (DBG_REL);
         }
           

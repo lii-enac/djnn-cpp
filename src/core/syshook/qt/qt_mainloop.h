@@ -65,7 +65,7 @@ namespace djnn {
     void slot_for_about_to_block ();
     //vector<QtWindow*> _windows;
     vector<QtMainloopListener*> _mlls;
-    bool already_awake;
+    bool already_awaken;
     int argc;
     char **argv;
   };

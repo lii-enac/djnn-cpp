@@ -9,6 +9,9 @@
 
 #include <mutex> // for once_flag
 
+//#include <iostream>
+//#include "utils/debug.h"
+
 namespace djnn {
 
   class UpdateDrawing : public Process
@@ -25,26 +28,26 @@ namespace djnn {
     };
     class UndelayedSpike : public Process
     {
-    public:
-      UndelayedSpike (UpdateDrawing *parent, const string &name)  : Process (name), _ud (parent) { set_is_model (true); Process::finalize_construction (parent, name); }
-      virtual ~UndelayedSpike () {}
-      void post_activate () override { set_activation_state (DEACTIVATED); }
-      void impl_activate () override {};
-      void impl_deactivate () override {};
-      void coupling_activation_hook () override;
-    private:
-      UpdateDrawing* _ud;
+      public:
+        UndelayedSpike (UpdateDrawing *parent, const string &name)  : Process (name), _ud (parent) { set_is_model (true); Process::finalize_construction (parent, name); }
+        virtual ~UndelayedSpike () {}
+        void post_activate () override { set_activation_state (DEACTIVATED); }
+        void impl_activate () override {};
+        void impl_deactivate () override {};
+        void coupling_activation_hook () override;
+      private:
+        UpdateDrawing* _ud;
     };
     class AutoRefreshAction : public Action
     {
-    public:
-      AutoRefreshAction (UpdateDrawing *parent, const string &name) : Action (parent, name), _ud (parent) {}
-      virtual ~AutoRefreshAction () {}
-      void impl_activate () override { _ud->update_auto_refresh (); };
-      void impl_deactivate () override {}
-    private:
-      UpdateDrawing *_ud;
-    };
+      public:
+        AutoRefreshAction (UpdateDrawing *parent, const string &name) : Action (parent, name), _ud (parent) {}
+        virtual ~AutoRefreshAction () {}
+        void impl_activate () override { _ud->update_auto_refresh (); };
+        void impl_deactivate () override {}
+      private:
+        UpdateDrawing *_ud;
+      };
   public:
     static UpdateDrawing* instance ();
     ~UpdateDrawing ();
@@ -54,8 +57,12 @@ namespace djnn {
     void add_window_for_refresh (Window* w);
     void remove_window_for_refresh (Window* w);
     void update_auto_refresh () {
-      if (_auto_refresh->get_value()) _redraw_when_damaged->enable ();
-      else _redraw_when_damaged->disable ();
+      if (_auto_refresh->get_value()) {
+        _redraw_when_damaged->enable ();
+      }
+      else {
+        _redraw_when_damaged->disable ();
+      }
     }
     std::vector<Window*>& get_win_list () { return _win_list; };
     Process* get_damaged () { return _damaged; }

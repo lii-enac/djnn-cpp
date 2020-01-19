@@ -18,6 +18,9 @@
 #include "core/syshook/main_loop.h"
 #include "qt_mainloop.h"
 
+#include <iostream>
+#include "utils/debug.h"
+
 namespace djnn
 {
 
@@ -37,7 +40,7 @@ namespace djnn
   }
 
   QtMainloop::QtMainloop (MainLoop * ml) :
-      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awake(false)
+      _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awaken(false)
   {
     (*ml).set_another_source_wants_to_be_mainloop (this);
     argc = 0;
@@ -83,7 +86,7 @@ namespace djnn
 
   void
   QtMainloop::wakeup ()
-  {
+  { //DBG;
     _qevtdispatcher->wakeUp ();
   }
 
@@ -95,7 +98,7 @@ namespace djnn
   {
     //DBG;
     if (_please_exec) {
-      /* protect access on graph execeution */
+      //DBG;
       djnn::get_exclusive_access (DBG_GET);
       GRAPH_EXEC;
       djnn::release_exclusive_access (DBG_REL);
@@ -104,21 +107,20 @@ namespace djnn
 
     for (auto mll : _mlls) mll->slot_for_about_to_block();
 
-    already_awake = false;
+    already_awaken = false;
   }
 
   void
   QtMainloop::slot_for_awake ()
   {
-    if(already_awake) {
+    if(already_awaken) {
       return;
     }
     
     if (!get_please_stop ()) {
       // now qt can call event method on windows
-      already_awake = true;
+      already_awaken = true;
     } else
       _qapp->quit ();
-
   }
 }

@@ -6,11 +6,14 @@
 
 #include <algorithm>
 
+//#include <iostream>
+//#include "utils/debug.h"
+
 namespace djnn {
 
   void 
   UpdateDrawing::RedrawAction::impl_activate () 
-  {
+  { //DBG;
     for (auto& w : _ud->get_win_list ()) {
       if (w != nullptr) {
         w->update ();
@@ -22,7 +25,7 @@ namespace djnn {
 
   void 
   UpdateDrawing::UndelayedSpike::coupling_activation_hook () 
-  {
+  { //DBG;
     Window *frame = dynamic_cast<Window*> (get_data ());
     if (frame && !frame->refresh ()) {
       _ud->add_window_for_refresh (frame);
@@ -80,7 +83,7 @@ namespace djnn {
 
   void
   UpdateDrawing::impl_activate ()
-  {
+  { //DBG;
     if (_auto_refresh->get_value ())
       _redraw_when_damaged->enable ();
     else
@@ -89,7 +92,7 @@ namespace djnn {
 
   void
   UpdateDrawing::coupling_activation_hook ()
-  {
+  { //DBG;
     Window *frame = dynamic_cast<Window*> (get_data ());
     if (frame == nullptr)
       return;

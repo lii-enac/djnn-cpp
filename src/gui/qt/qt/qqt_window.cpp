@@ -25,7 +25,7 @@
 #include <QTouchEvent>
 
 #include <iostream>
-//#include "utils/debug.h"
+#include "utils/debug.h"
 
 #define DEBUG_PICKING  0
 
@@ -102,10 +102,10 @@ namespace djnn
       case QEvent::Paint:
       //case QEvent::UpdateRequest:
         if(!_building)
-        djnn::get_exclusive_access (DBG_GET);
+          djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
         if(!_building)
-        djnn::release_exclusive_access (DBG_REL);
+          djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;
 
@@ -199,7 +199,7 @@ namespace djnn
 
   void
   MyQQWidget::paintEvent (QPaintEvent *event)
-  {
+  { //DBG;
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
     QPainter painter (this);
