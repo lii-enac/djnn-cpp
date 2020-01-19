@@ -34,8 +34,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 
-#include <iostream>
-#include "utils/debug.h"
+//#include <iostream>
+//#include "utils/debug.h"
 
 #define DEBUG_PICKING  0
 

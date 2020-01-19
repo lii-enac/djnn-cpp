@@ -6,8 +6,8 @@
 
 #include <algorithm>
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn {
 
@@ -46,9 +46,9 @@ namespace djnn {
     _redraw_action = new RedrawAction (this, "redraw_action");
     _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action");
     Graph::instance ().add_output_node (_redraw_action);
-    _redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION);
+    _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION);
     Graph::instance ().add_edge (_damaged, _draw_sync);
-    _redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION);
+    _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION);
     _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION);
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
     set_activation_state (ACTIVATED);
@@ -60,8 +60,8 @@ namespace djnn {
     Graph::instance ().remove_edge (_auto_refresh, _update_auto_refresh_action);
     Graph::instance ().remove_output_node (_redraw_action);
     
-    delete _redraw_when_draw_sync;
-    delete _redraw_when_damaged;
+    delete _c_redraw_when_draw_sync;
+    delete _c_redraw_when_damaged;
     delete _redraw_action;
     delete _c_update_auto_refresh;
 
@@ -76,18 +76,39 @@ namespace djnn {
   {
     std::call_once (UpdateDrawing::onceFlag, [] () {
       _instance = new UpdateDrawing ();
+      //_instance->update_auto_refresh ();
+      _instance->impl_activate ();
     });
 
     return _instance;
   }
 
   void
+  UpdateDrawing::update_auto_refresh ()
+  {
+    //DBG;
+    if (_auto_refresh->get_value()) {
+      //DBG;
+      _c_redraw_when_damaged->enable ();
+    }
+    else {
+      //DBG;
+      _c_redraw_when_damaged->disable ();
+    }
+  }
+
+  void
   UpdateDrawing::impl_activate ()
-  { //DBG;
-    if (_auto_refresh->get_value ())
-      _redraw_when_damaged->enable ();
-    else
-      _redraw_when_damaged->disable ();
+  { DBG;
+    update_auto_refresh ();
+    // if (_auto_refresh->get_value ()) {
+    //   DBG;
+    //   _redraw_when_damaged->enable ();
+    // }
+    // else {
+    //   DBG;
+    //   _redraw_when_damaged->disable ();
+    // }
   }
 
   void

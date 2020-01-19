@@ -56,14 +56,7 @@ namespace djnn {
     void coupling_activation_hook () override;
     void add_window_for_refresh (Window* w);
     void remove_window_for_refresh (Window* w);
-    void update_auto_refresh () {
-      if (_auto_refresh->get_value()) {
-        _redraw_when_damaged->enable ();
-      }
-      else {
-        _redraw_when_damaged->disable ();
-      }
-    }
+    void update_auto_refresh ();
     std::vector<Window*>& get_win_list () { return _win_list; };
     Process* get_damaged () { return _damaged; }
     void clear_list () {_win_list.clear (); }
@@ -80,7 +73,7 @@ namespace djnn {
     UndelayedSpike *_damaged;
     RedrawAction *_redraw_action;
     AutoRefreshAction *_update_auto_refresh_action;
-    Coupling *_redraw_when_damaged, *_redraw_when_draw_sync, *_c_update_auto_refresh;
+    Coupling *_c_redraw_when_damaged, *_c_redraw_when_draw_sync, *_c_update_auto_refresh;
     UpdateDrawing ();
   };
 }
