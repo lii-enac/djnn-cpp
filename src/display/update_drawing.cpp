@@ -99,7 +99,7 @@ namespace djnn {
 
   void
   UpdateDrawing::impl_activate ()
-  { DBG;
+  { //DBG;
     update_auto_refresh ();
     // if (_auto_refresh->get_value ()) {
     //   DBG;
