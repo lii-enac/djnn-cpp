@@ -22,8 +22,10 @@
 #include "qt/qt_mainloop.h"
 #endif
 
-//#include <iostream>
-#define DBG std::cerr << __PRETTY_FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+#include <iostream>
+#include "utils/debug.h"
+
+#include "core/syshook/djnn_time_manager.h"
 
 namespace djnn {
 
@@ -65,6 +67,10 @@ namespace djnn {
       djnn::release_exclusive_access (DBG_REL);
       launch_mutex_unlock();
 
+      //std::cerr << "-----------" << __FL__;
+      //DjnnTimeManager::instance().debug();
+      //std::cerr << "starting mainloop with TimeManager firstDelta " << DjnnTimeManager::instance().getFirstDelta() << __FL__; 
+
       for (auto p: _background_processes) {
         p->activate ();
       }
@@ -80,6 +86,7 @@ namespace djnn {
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
 
     }
+
     void
     MainLoop::impl_deactivate ()
     {
@@ -153,7 +160,9 @@ namespace djnn {
           }
         }
       } else { /* mainloop run for _duration time */
+        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << std::endl;
         djnn::sleep(_duration.count());
+        //std::cerr << "<< mainloop exit sleep " << DBGVAR(_duration.count()) << std::endl;
         
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set

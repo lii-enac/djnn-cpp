@@ -33,6 +33,7 @@ namespace djnn_internal {
       typedef std::list<Timer*> Timers;
       const Timers& getTimers() const { return _timers; }
       Unit getFirstDelta() const;// throw(TimerListEmpty);
+      void debug () const;
 
     private:
 

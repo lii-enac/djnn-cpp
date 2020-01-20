@@ -1,7 +1,7 @@
 #include "time_manager.h"
 
 #include <iostream>
-//#include "utils/debug.h"
+#include "utils/debug.h"
 // #include <boost/core/demangle.hpp>
 // #include <typeinfo>
 
@@ -37,34 +37,25 @@ namespace djnn_internal {
       //std::cerr << ">> "; DBGTIMERS;
       Unit dt=t;
       Timers::iterator i = _timers.begin();
-      bool firstchanged=false;
       
-      // find the timer position
+      // find the timer position and accumulate its dt
       while( i!=_timers.end() && dt > (*i)->getDelta() ) {
         dt -= (*i)->getDelta();
         ++i;
       }
+      //std::cerr << dt << __FL__;
       
       // check if it's not here already
       if(already_scheduled(timer)) {
         std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
         throw TimerAlreadyScheduled();
       }
-      /*{
-        Timers::iterator j = _timers.begin();
-        while(j!=_timers.end()) {
-          if((*j)==timer) {
-            std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
-            throw TimerAlreadyScheduled();
-          }
-          ++j;
-        }
-      }*/
       
       timer->setDelta(dt);
       timer->setTime(t);
       i = _timers.insert(i, timer);
       
+      bool firstchanged=false;
       if(i==_timers.begin()) {
         firstchanged=true;
       }
@@ -73,13 +64,7 @@ namespace djnn_internal {
       if(i!=_timers.end()) {
         // update next timers' delta
         Unit nextdt = (*i)->getDelta();
-#if 0
-        while(i!=_timers.end() && (*i)->getDelta()==nextdt) {
-          (*i)->setDelta(nextdt-dt);
-        }
-#else
         (*i)->setDelta(nextdt-dt);
-#endif
       }
       if(firstchanged && !_dontCallTimerHasChanged) {
         firstTimerHasChanged();
@@ -154,58 +139,47 @@ namespace djnn_internal {
         return;
       
       Timers::iterator i = _timers.begin();
-      Unit delta = (*i)->getDelta();
-      Unit newdelta = delta-dt;
+      Unit requested_delta = (*i)->getDelta();
+      Unit actual_delta = requested_delta-dt;
       
       //std::cerr << DBGVAR(dt) << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << DBGVAR(_precision) << __FL__;
 
-      if(newdelta<=0) newdelta=0;
-      (*i)->setDelta(newdelta);
+      if(actual_delta<=0) actual_delta=0;
+      (*i)->setDelta(actual_delta);
       
-      if(newdelta>_precision) {
+      if(actual_delta>_precision) {
         reschedule();
         return;
       }
 
       Timers toCall;
-#if 0
-      while( i!=_timers.end() && (*i)->getDelta()==delta) {
-        (*i)->setDelta(newdelta);
-        toCall.push_back(*i);
-        ++i;
-      }
-#else
       toCall.push_back(*i);
       ++i;
-      while( i!=_timers.end() && ((*i)->getDelta()==0)) {
+      while( i!=_timers.end() && ((*i)->getDelta()<_precision)) {
         toCall.push_back(*i);
         ++i;
       }
-#endif
 
       _timers.erase(_timers.begin(), i);
       if(!_timers.empty()) {
         Timers::iterator i = _timers.begin();
-        Unit delta = (*i)->getDelta();
-        Unit d = delta+newdelta;
+        Unit next_requested_delta = (*i)->getDelta();
+        Unit d = next_requested_delta + actual_delta;
         if(d<0) d=0;
         (*i)->setDelta(d);
         //std::cerr << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << __FL__;
       }
       
+      // dont call firstTimerHasChanged if it is called by 'after' during 'doit'...
       _dontCallTimerHasChanged=1;
       for(Timers::iterator j=toCall.begin(); j!=toCall.end(); ++j) {
         Unit t = (*j)->getTime();
-        Unit actualtime = t-newdelta;
-        //std::cerr << DBGVAR(t) << " " << DBGVAR(actualtime) << " " << boost::core::demangle(typeid(*j).name()) << __FL__;
-        //std::cerr << ">> doit" << std::endl;
-        (*j)->doit(actualtime);
-        //std::cerr << "<< doit" << std::endl;
+        Unit actual_time = t-actual_delta;
+        (*j)->doit(actual_time);
       }
-
       _dontCallTimerHasChanged=0;
-      // dont call firstTimerHasChanged if it was call by after during doit...
       firstTimerHasChanged();
+
       //std::cerr << DBGVAR(_timers.size()) << __FL__;
       //std::cerr << "<< "; DBGTIMERS;
     }
@@ -232,6 +206,16 @@ namespace djnn_internal {
       }
       return -1;
       //throw TimerListEmpty();
+    }
+
+    void
+    Manager::debug() const
+    {
+      std::cerr << "timer queue: ";
+      for (auto it = _timers.begin(); it != _timers.end(); ++it ) {
+        std::cerr << (*it)->getDelta() << "ms ";
+      }
+      std::cerr << __FL__;
     }
 
     

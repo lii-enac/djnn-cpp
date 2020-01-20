@@ -23,8 +23,8 @@
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn
 {
@@ -85,7 +85,7 @@ namespace djnn
   void
   Timer::doit(const djnn_internal::Time::Unit& actualtime)
   {
-    //DBG;
+    //std::cerr << get_name () << " with delta " << _delay.get_value () - actualtime << __FL__;
     set_activation_state (DEACTIVATED);
     _end.notify_activation (); // propagating
   }

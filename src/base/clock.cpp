@@ -90,7 +90,7 @@ namespace djnn
   void
   Clock::doit(const djnn_internal::Time::Unit& actualtime)
   {
-    //DBGPROC;
+    //std::cerr << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
     _elapsed.set_value (actualtime, true);
     auto sav_period = _period.get_value ();
     _tick.activate (); // propagating
