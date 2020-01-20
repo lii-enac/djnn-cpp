@@ -148,7 +148,7 @@ namespace djnn
     IntProperty _width;
     IntProperty _height;
 
-    // text must notify_geometry when changed
+    // text must notify_geometry when changed, hence it's a proxy
     TextPropertyProxy _text; 
     Coupling _cupdate_size, _ctext;
 

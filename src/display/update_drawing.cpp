@@ -55,7 +55,7 @@ namespace djnn {
   }
 
   UpdateDrawing::~UpdateDrawing ()
-  {
+  { //DBG;
     Graph::instance ().remove_edge (_damaged, _draw_sync);
     Graph::instance ().remove_edge (_auto_refresh, _update_auto_refresh_action);
     Graph::instance ().remove_output_node (_redraw_action);

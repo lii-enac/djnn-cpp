@@ -60,9 +60,9 @@ namespace djnn
   {
     set_origin (x, y);
 
-    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     Graph::instance ().add_edge (&_text, &_update_size);
-    
+    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
+
     Process::finalize_construction (parent, name);
   }
 
@@ -86,8 +86,9 @@ namespace djnn
   {
     set_origin (x, y);
 
-    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     Graph::instance ().add_edge (&_text, &_update_size);
+    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
+
     Process::finalize_construction (parent, name);
   }
 
