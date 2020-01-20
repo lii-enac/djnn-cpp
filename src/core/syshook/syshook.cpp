@@ -22,7 +22,7 @@
 
 #include <thread>
 
-#define DBG_MUTEX 0
+//#define DBG_MUTEX 1
 //#include <iostream>
 
 namespace djnn

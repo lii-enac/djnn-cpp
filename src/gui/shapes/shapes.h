@@ -150,7 +150,7 @@ namespace djnn
 
     // text must notify_geometry when changed
     TextPropertyProxy _text; 
-    Coupling _cupdate_size; //, _ctext;
+    Coupling _cupdate_size, _ctext;
 
     void impl_activate () override;
     void impl_deactivate () override;

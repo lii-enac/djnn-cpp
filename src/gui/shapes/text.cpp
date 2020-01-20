@@ -55,12 +55,14 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION)//,
-      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
+      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
     set_origin (x, y);
 
+    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     Graph::instance ().add_edge (&_text, &_update_size);
+    
     Process::finalize_construction (parent, name);
   }
 
@@ -79,17 +81,20 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION) //,
-      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
+      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
     set_origin (x, y);
 
+    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     Graph::instance ().add_edge (&_text, &_update_size);
     Process::finalize_construction (parent, name);
   }
 
   Text::~Text ()
   {
+    //remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
+    Graph::instance ().remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     remove_state_dependency (get_parent (), &_update_size);
     Graph::instance ().remove_edge (&_text, &_update_size);
     
@@ -344,12 +349,16 @@ namespace djnn
     if (_cfstyle) _cfstyle->enable (_frame);
     if (_cfweight) _cfweight->enable (_frame);
 
+    _ctext.enable(_frame);
+
     _update_size.activate ();
   }
 
   void
   Text::impl_deactivate ()
   {
+    _ctext.disable();
+
     if (_cx) _cx->disable ();
     if (_cy) _cy->disable ();
     //_ctext.disable ();
