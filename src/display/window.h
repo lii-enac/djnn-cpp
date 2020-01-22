@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -21,6 +21,7 @@
 #include "core/tree/int_property.h"
 #include "core/tree/double_property.h"
 #include "core/tree/text_property.h"
+#include "core/tree/ref_property.h"
 
 #include <memory>
 
@@ -81,6 +82,8 @@ namespace djnn
     DoubleProperty* press_y () { return _press_y; }
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
+    Process* get_display () { return _display->get_value (); }
+    void init_display (Process *conn) { _display->set_value (conn, false); }
     void set_frame ();
     Process* holder () { return _holder; }
     void set_holder (Process *p) { _holder = p; }
@@ -100,6 +103,7 @@ namespace djnn
     TextProperty* _title;
     DoubleProperty* _hidpi_scale;
     DoubleProperty* _mspf;
+    RefProperty *_display;
     Process *_close;
     Process* _press;
     Process* _move;

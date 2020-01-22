@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -79,6 +79,7 @@ namespace djnn
       _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
+    _display = new RefProperty (this, "display", nullptr);
     Process::finalize_construction (parent, name);
   }
 
@@ -118,7 +119,8 @@ namespace djnn
     delete _move_y;
     delete _w_dx;
     delete _w_dy;
-    
+    delete _display;
+
     delete _win_impl;
   }
 

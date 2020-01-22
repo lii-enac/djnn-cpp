@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -52,7 +52,7 @@ namespace djnn
       URI::add_uri ("gpu", GPUs);
       URI::add_uri ("display", Displays);
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
-      //p_init_display ();
+      p_init_display ();
       djnn::loadedModules.push_back("display");
       __module_initialized = true;
     }
@@ -61,6 +61,7 @@ namespace djnn
   void
   clear_display () {
     UpdateDrawing::clear ();
+    p_clear_display ();
   }
 
 }

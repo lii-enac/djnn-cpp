@@ -1,5 +1,5 @@
 display := QT
-#options: QT SDL
+#options: QT SDL DRM
 
 graphics := QT
 #options: QT CAIRO

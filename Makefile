@@ -1,7 +1,7 @@
 #	djnn cpp
 #
 #	The copyright holders for the contents of this file are:
-#		Ecole Nationale de l'Aviation Civile, France (2017-2019)
+#		Ecole Nationale de l'Aviation Civile, France (2017-2020)
 #	See file "license.terms" for the rights and conditions
 #	defined by copyright holders.
 #
@@ -164,6 +164,9 @@ endif
 
 else ifeq ($(display),SDL)
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+
+else ifeq ($(display),DRM)
+CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 
 else ifeq ($(display),)
 CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1

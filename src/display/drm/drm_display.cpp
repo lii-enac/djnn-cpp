@@ -12,17 +12,13 @@
  *
  */
 
- #include "display/display-priv.h"
+#include "display/drm/drm_display.h"
 
 namespace djnn {
+  static DRMUdev *udev;
+
   void
-  p_init_display ()
-  {
-
-  }
-    void
-  p_clear_display ()
-  {
-
+  p_init_display () {
+    udev = new DRMUdev ();
   }
 }

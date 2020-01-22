@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2019-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -46,7 +46,7 @@ namespace djnn
   }
 
   void
-  MyCairoSurface::update (cairo_surface_t* drawing_surface, cairo_surface_t* picking_surface)
+  MyCairoSurface::update (cairo_surface_t* drawing_surface, cairo_surface_t* picking_surface, int width, int height)
   {
     if (!drawing_surface)
       return;
@@ -58,8 +58,8 @@ namespace djnn
       t1();
 #endif
 
-      int w =  (int) _window->width ()->get_value();
-      int h = (int) _window->height ()->get_value();
+      int w =  width == 0 ? (int) _window->width ()->get_value() : width;
+      int h = height == 0 ? (int) _window->height ()->get_value() : height;
       cairo_surface_t* draw_dest;
       //cairo_surface_t* pick_dest =  cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
 #if DOUBLE_BUFFER
@@ -73,7 +73,11 @@ namespace djnn
 #endif
       cur_cairo_state = cairo_create (draw_dest);
       cur_cairo_picking_state = cairo_create (picking_surface);
-      cairo_set_source_rgb (cur_cairo_state, 0.6, 0.6, 0.6);
+      if (width == 0 && height == 0) {
+        cairo_set_source_rgb (cur_cairo_state, 0.6, 0.6, 0.6);
+      } else {
+        cairo_set_source_rgb (cur_cairo_state, 0, 0, 0);
+      }
       cairo_paint (cur_cairo_state);
       p->draw ();
       cairo_destroy (cur_cairo_state);
