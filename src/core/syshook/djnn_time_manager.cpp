@@ -68,7 +68,8 @@ namespace djnn {
         std::chrono::milliseconds ddd(duration);
         if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max();
         cancel_mutex.lock();
-        bool cancelled = cancel_mutex.try_lock_for(ddd);
+        //bool cancelled =
+        cancel_mutex.try_lock_for(ddd);
         //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(cancelled) << std::endl;
         cancel_mutex.unlock();
 
