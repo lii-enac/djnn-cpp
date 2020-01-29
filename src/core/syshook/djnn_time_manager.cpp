@@ -25,11 +25,18 @@ namespace djnn {
 
   struct timespec before;
   void DjnnTimeManager::firstTimerHasChanged()
-  {
-    //DBG;
+  { //DBG;
     djnn::get_monotonic_time(&before);
     cancel_mutex.unlock ();
   }
+
+  void
+  DjnnTimeManager::please_stop ()
+  {
+    ExternalSource::please_stop ();
+    cancel_mutex.unlock ();
+  }
+
 
   void
   DjnnTimeManager::run_for_emscripten ()
@@ -49,8 +56,7 @@ namespace djnn {
 
   void
   DjnnTimeManager::run ()
-  {
-    //DBG;
+  { //DBG;
     set_please_stop (false);
     djnn::get_exclusive_access (DBG_GET);
     int duration = getFirstDelta ();
@@ -83,11 +89,11 @@ namespace djnn {
         djnn::get_exclusive_access (DBG_GET);
 
         if(thread_local_cancelled) {
-          djnn::release_exclusive_access (DBG_REL);
+          //djnn::release_exclusive_access (DBG_REL);
           break;
         }
         if (get_please_stop ()) {
-          djnn::release_exclusive_access (DBG_REL); 
+          //djnn::release_exclusive_access (DBG_REL);
           break;
         }
 
@@ -114,12 +120,12 @@ namespace djnn {
           GRAPH_EXEC; // executing
 
           if(thread_local_cancelled) {
-            djnn::release_exclusive_access (DBG_REL);
+            //djnn::release_exclusive_access (DBG_REL);
             ExternalSource::cancelled = nullptr; // make our external source aware that we are finised
             break;
           }
           if (get_please_stop ()) {
-            djnn::release_exclusive_access (DBG_REL); 
+            //djnn::release_exclusive_access (DBG_REL); 
             break;
           }
           
@@ -133,6 +139,8 @@ namespace djnn {
     } catch (djnn::exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
+    //cleanup (); // DBG;
+    djnn::release_exclusive_access (DBG_REL);
   }
 
 }

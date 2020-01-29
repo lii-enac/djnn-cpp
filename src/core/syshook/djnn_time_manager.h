@@ -7,13 +7,12 @@ namespace djnn {
 
 class DjnnTimeManager : public djnn_internal::Time::Manager, public djnn::ExternalSource {
     public:
-        DjnnTimeManager(); // : _acc_duration(0) {}
+        DjnnTimeManager();
 
         static DjnnTimeManager& instance ();
-        //static std::once_flag onceFlag;
         static DjnnTimeManager _instance;
 
-        void activate () { start_thread (); }
+        virtual void please_stop () override;
       
         // djnn_internal::Time::Manager
         virtual void firstTimerHasChanged() override;

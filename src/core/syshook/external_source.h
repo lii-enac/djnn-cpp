@@ -25,6 +25,7 @@ namespace djnn
     ExternalSource ();
     virtual ~ExternalSource ();
 
+    virtual void start ();
     virtual void please_stop ();
 
     void private_run();

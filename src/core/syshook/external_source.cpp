@@ -3,7 +3,7 @@
 #include "cpp-mutex.h"
 
 //#include <iostream>
-//#define DBG std::cerr << __FUNCTION__ << " " << __FILE__ << ":" << __LINE__ << std::endl;
+//#include "utils/debug.h"
 
 namespace djnn {
 
@@ -121,6 +121,7 @@ namespace djnn {
 	ExternalSource::ExternalSource ()
     : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _please_stop (false)
     {
+        //MainLoop::add_external_source(this);
     }
 
     ExternalSource::~ExternalSource ()
@@ -168,9 +169,16 @@ namespace djnn {
         //std::cerr << __PRETTY_FUNCTION__ << "rel" << std::endl;
     }
 
+    void
+    ExternalSource::start()
+    {
+        set_please_stop (false);
+        start_thread ();
+    }
+
 	void
 	ExternalSource::please_stop ()
-	{
+	{ //DBG;
         if(get_please_stop ()) return;
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
 

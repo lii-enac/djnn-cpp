@@ -62,6 +62,9 @@ namespace djnn
 
     void set_another_source_wants_to_be_mainloop (ExternalSource *);
     ExternalSource * _another_source_wants_to_be_mainloop;
+
+    void add_external_source (ExternalSource*);
+    void remove_external_source (ExternalSource*);
     
     void add_background_process (Process *p) { _background_processes.push_back (p); }
 
@@ -89,6 +92,7 @@ namespace djnn
     // MainLoop should be created *before* any other external-source
     MainLoop ();
     vector<Process*> _background_processes;
+    vector<ExternalSource*> _external_sources;
   };
 
 }

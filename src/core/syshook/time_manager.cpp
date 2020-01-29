@@ -194,7 +194,7 @@ namespace djnn_internal {
     
     void
     Manager::cleanup ()
-    {
+    { // DBG;
       _timers.clear ();
     }
 

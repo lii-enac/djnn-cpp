@@ -65,6 +65,9 @@ namespace djnn {
     MainLoop::impl_activate ()
     {
       djnn::release_exclusive_access (DBG_REL);
+
+      for (auto es: _external_sources) es->start ();
+
       launch_mutex_unlock();
 
       //std::cerr << "-----------" << __FL__;
@@ -83,6 +86,9 @@ namespace djnn {
       }
 
       launch_mutex_lock (); // reacquire launch mutex
+
+      for (auto es: _external_sources) es->please_stop ();
+
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
 
     }
@@ -171,6 +177,18 @@ namespace djnn {
 
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
+    }
+
+    void
+    MainLoop::add_external_source (ExternalSource* es)
+    {
+      _external_sources.push_back(es);
+    }
+
+    void
+    MainLoop::remove_external_source (ExternalSource* es)
+    {
+      _external_sources.erase(std::find(std::begin(_external_sources), std::end(_external_sources), es));
     }
 
 }

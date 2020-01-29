@@ -36,7 +36,8 @@ namespace djnn
 
       djnn::loadedModules.push_back("core");
       MainLoop::instance ();
-      DjnnTimeManager::instance().activate ();
+      //DjnnTimeManager::instance().activate ();
+      MainLoop::instance ().add_external_source(&DjnnTimeManager::instance());
      
       setlocale(LC_NUMERIC, "C");
     }
