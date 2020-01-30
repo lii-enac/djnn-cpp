@@ -9,6 +9,10 @@ lib_cppflags += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.pl
 lib_ldflags += -framework OpenAL
 endif
 
+ifeq ($(os),Linux)
+lib_ldflags += -lopenal
+endif
+
 ifeq ($(os),em)
 lib_ldflags += -lopenal
 endif
