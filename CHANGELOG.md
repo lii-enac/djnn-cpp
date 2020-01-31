@@ -7,8 +7,59 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added
     - Update the Docs !
-    - Update and improvement GUI backend.
     - Update and improvement on memory performance.
+
+## [1.8.0] - 2020-01-31
+### NEW
+    - NEW sorter component
+    - NEW audio Module (possibility to play wave sound)
+    - NEW support for incorporated images in svg files
+    - NEW defs components to enhance SVG support
+    - NEW a field « value » in colors and  method to get value from is name
+    - NEW clamp_min and clamp_max component
+
+### Added
+    - Added implementation of a timemanager (internal component)
+    - Added the use of sanitizer=(Address, memory) option in Makefile
+    - Added the use of scan-build (llvm) option in Makefile
+    - Added an update drawing method to be triggered on tree restructuring
+    - Added swap_children in container
+    - Start working on emscripten compilation
+    - Start working on analytical picking
+    - Added partial support for USE and DEFS in SVG parsing
+    - Added a partial implementation of a CSS parser
+    - Added debug MACROS
+    - Added Picking method choice in Makefile
+
+### Changed
+    - Changed gradient default values to fit with SVG spec
+    - Removed all default constructors and especially process ()
+    - Changed some constant names to be usable from Smala
+    - Improved makefile rule: install-pkgdeps and add upgrade-pkgdeps rule
+    - Better gen_prop.py code
+    - Moved abstract_gshape to shapes/
+    - clean-up includes 
+
+### Removed
+    - Get rid of gperf
+    - Removed _name in proc, and make parenting code consistent in constructors
+
+### Fixed
+    - Fixed container method move_child() - child are now correctly moved.
+    - Fixed IvyAccess - preventing overflow error
+    - Fixed return value for TextComparator
+    - Fixed a bug in gradient management
+    - Fixed gradient a now aware of the current opacity
+    - Fixed delete on fsm : reverse delete of _transition and _states
+    - Fixed the use of find_component ('//') --> returning the root tree
+    - Fixed bug on native_expression_action (delete / clean-up graph)
+    - Fixed Clock with negative duration
+    - Fixed thread on exit and thread race
+    - Fixed leaks on threads
+    - Fixed a lot of memory leaks
+    - Fixed typos
+    - Fixed compilation
+
 
 ## [1.7.2] - 2019-11-28 [YANKED]
 ### Fixed
@@ -308,8 +359,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
     - Memory leak and performances on execution graph.
     - Makefile for Linux.
-
-#--------------------------------------------
 
 ## [1.0.0] - 2018-12-17
     note: debut on changelog. This section has to be completed, if we have time. 
