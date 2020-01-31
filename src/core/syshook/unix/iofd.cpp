@@ -15,6 +15,7 @@
 #include "iofd.h"
 
 #include "core/syshook/syshook.h"
+#include "core/syshook/main_loop.h"
 #include "core/utils/error.h"
 #include "core/execution/graph.h"
 
@@ -27,12 +28,18 @@ namespace djnn {
   _readfd(readfd),
   _readable (this, "readable")
   {
+    MainLoop::instance().add_external_source(this);
+  }
+
+  IOFD::~IOFD()
+  {
+    MainLoop::instance().remove_external_source(this);
   }
 
   void
   IOFD::impl_activate ()
   {
-    please_stop ();
+    //please_stop ();
     start_thread ();
   }
 

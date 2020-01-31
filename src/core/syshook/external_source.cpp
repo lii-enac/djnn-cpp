@@ -121,7 +121,7 @@ namespace djnn {
 	ExternalSource::ExternalSource ()
     : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _please_stop (false)
     {
-        //MainLoop::add_external_source(this);
+        //MainLoop::instance().add_external_source(this); // on a per-ExternalSource basis according to idiosyncraties
     }
 
     ExternalSource::~ExternalSource ()

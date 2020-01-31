@@ -21,6 +21,8 @@
 //#include "cpp-chrono.h"
 //#include "cpp-mutex.h"
 
+#include <atomic>
+
 namespace djnn
 {
   class MainLoop : public Process, ExternalSource
@@ -35,7 +37,7 @@ namespace djnn
     }
 
     bool is_run_forever () const {
-      return _duration == chrono::milliseconds(-1);
+      return chrono::milliseconds(_duration) == chrono::milliseconds(-1);
     }
     
     void set_run_for (int milliseconds) {
@@ -80,7 +82,7 @@ namespace djnn
     void run_in_own_thread ();
     void run () override;
 
-    chrono::milliseconds _duration;
+    std::atomic<chrono::milliseconds> _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
     //        djnn application only has one mainloop.

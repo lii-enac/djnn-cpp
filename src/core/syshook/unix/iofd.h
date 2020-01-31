@@ -22,6 +22,7 @@ namespace djnn {
 	class IOFD : public Process, public ExternalSource {
 	public:
 		IOFD(int readfd);
+		virtual ~IOFD() override;
 
 		int readfd() const { return _readfd; }
 

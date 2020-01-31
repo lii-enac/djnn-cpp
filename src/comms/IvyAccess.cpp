@@ -17,7 +17,8 @@
 
 #include "ivy.h" //FIXME
 #include "ivyloop.h" // FIXME
-#include "core/syshook/../utils/error.h"
+#include "core/utils/error.h"
+#include "core/syshook/main_loop.h"
 
 #include <iostream>
 #include <string>
@@ -205,8 +206,9 @@ IvyAccess::IvyOutAction::coupling_activation_hook ()
 
   _out_c.disable ();
   Graph::instance().add_edge (&_out, &_out_a);
-
   /* IN is a special child build in IvyAccess::find_component */
+
+  //MainLoop::instance().add_external_source(this); // FIXME TODO
 
   Process::finalize_construction (parent, name);
 }
@@ -215,6 +217,7 @@ IvyAccess::~IvyAccess ()
 {
   Graph::instance().remove_edge (&_out, &_out_a);
   remove_state_dependency (get_parent (), &_out_a);
+  MainLoop::instance().remove_external_source(this); // FIXME TODO
 }
 
 void

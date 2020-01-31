@@ -62,7 +62,7 @@ namespace djnn
   void
   QtMainloop::please_stop ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
+    //DBG;
     //if (_qapp)
     _qapp->quit ();
     /* SL+MM : l'appel à please_stop demande l'interruption du thread via interrupt

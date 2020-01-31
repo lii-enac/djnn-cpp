@@ -67,7 +67,6 @@ namespace djnn {
       djnn::release_exclusive_access (DBG_REL);
 
       for (auto es: _external_sources) es->start ();
-
       launch_mutex_unlock();
 
       //std::cerr << "-----------" << __FL__;
@@ -86,11 +85,8 @@ namespace djnn {
       }
 
       launch_mutex_lock (); // reacquire launch mutex
-
       for (auto es: _external_sources) es->please_stop ();
-
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
-
     }
 
     void
@@ -160,15 +156,18 @@ namespace djnn {
       if (is_run_forever ()) {
         while (1) {
           unsigned int duration = 2000; // check from time to time if we need to stop
+          //std::cerr << ">> mainloop ****forever***** entering sleep " << chrono::milliseconds(_duration).count() << "ms " << __FL__;
           djnn::sleep(duration);
+          //std::cerr << "<< mainloop forever exit sleep " << chrono::milliseconds(_duration).count() << "ms " <<  __FL__;
           if(get_please_stop()) {
             break;
           }
         }
       } else { /* mainloop run for _duration time */
-        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << std::endl;
-        djnn::sleep(_duration.count());
-        //std::cerr << "<< mainloop exit sleep " << DBGVAR(_duration.count()) << std::endl;
+        auto ddd = chrono::milliseconds(_duration);
+        //std::cerr << ">> mainloop duration entering sleep " << ddd.count () << "ms " <<  __FL__;
+        djnn::sleep(ddd.count ());
+        //std::cerr << "<< mainloop duration exit sleep " << ddd.count() << "ms " <<  __FL__;
         
         // FIXME : should be removed : with mainloop deactivation
         // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
