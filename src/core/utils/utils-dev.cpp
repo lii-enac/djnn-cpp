@@ -55,13 +55,14 @@ namespace djnn
   }
 
   double
-  t2 (const std::string &msg)
+  t2 (const std::string &msg, bool display_stderr)
   {
     if (!init)
       return 0.0;
     get_monotonic_time (&after);
     double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
-    std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
+    if(display_stderr)
+      std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
     init = 0;
     return elapsedTime;
   }

@@ -30,16 +30,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <sys/select.h>
 
 #include <iostream>
 
-#define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define attr(a) #a ":" << a << " "
-#define _PERF_TEST 0
+#define _PERF_TEST 1
 #if _PERF_TEST
-#include "../core/utils/utils-dev.h"
+#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;
@@ -297,13 +293,14 @@ namespace djnn
 
     #if _PERF_TEST
       // print in RED
-      cerr << "\033[1;31m";
+      //cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
       draw_counter = draw_counter + 1;
       draw_total = draw_total + time ;
       draw_average = draw_total / draw_counter;
-      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
-      cerr << "\033[0m"  << endl;
+      _window->mspf ()->set_value(time, true);
+      //cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
+      //cerr << "\033[0m"  << endl;
 #endif
   }
 
