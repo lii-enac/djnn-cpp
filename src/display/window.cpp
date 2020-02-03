@@ -43,6 +43,7 @@ namespace djnn
     _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
     _key_released_text = new TextProperty (this, "key-released_text", "");
     _hidpi_scale = new DoubleProperty (this, "hidpi_scale", 1);
+    _mspf = new DoubleProperty (this, "mspf", 1);
     _close = new Spike (nullptr, "close");
     add_symbol ("close", _close);
     _press = new Spike (nullptr, "press");
@@ -100,6 +101,7 @@ namespace djnn
     delete _height;
     delete _title;
     delete _hidpi_scale;
+    delete _mspf;
     delete _key_pressed;
     delete _key_released;
     delete _key_pressed_text;

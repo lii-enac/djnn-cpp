@@ -29,7 +29,7 @@
 
 #define DEBUG_PICKING  0
 
-#define _PERF_TEST 0
+#define _PERF_TEST 1
 #if _PERF_TEST
 #include "core/utils/utils-dev.h"
 static int draw_counter = 0;
@@ -214,13 +214,14 @@ namespace djnn
       p->draw ();
 #if _PERF_TEST
       // print in RED
-      cerr << "\033[1;31m";
+      //cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
       draw_counter = draw_counter + 1;
       draw_total = draw_total + time;
       draw_average = draw_total / draw_counter;
-      cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
-      cerr << "\033[0m" << endl;
+      _window->mspf ()->set_value(time, true);
+      //cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
+      //cerr << "\033[0m" << endl;
 #endif
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
