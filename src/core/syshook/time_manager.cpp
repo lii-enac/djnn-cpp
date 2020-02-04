@@ -71,6 +71,7 @@ namespace djnn_internal {
       }
       //std::cerr << "<< "; DBGTIMERS;
     }
+
     
     void
     Manager::cancel(Timer* timer)
@@ -126,7 +127,14 @@ namespace djnn_internal {
       }
 
       //std::cerr << "<< "; DBGTIMERS;
-  }
+    }
+
+    void
+    Manager::reset(Timer* timer)
+    {
+      cancel(timer);
+      after(timer, timer->getTime());
+    }
     
     
     void

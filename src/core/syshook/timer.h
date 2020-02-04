@@ -19,6 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
 #include "core/tree/blank.h"
+#include "core/tree/spike.h"
 #include "core/control/action.h"
 
 #include "core/syshook/time_manager.h"
@@ -26,9 +27,6 @@
 
 namespace djnn
 {
-  class IntProperty;
-  class Blank;
-
   class Timer : public Process, public djnn_internal::Time::Timer
   {
     class TimerAction : public Action
@@ -38,6 +36,16 @@ namespace djnn
         Action (parent, name){};
     
       virtual ~TimerAction () {}
+      void impl_activate () override { ((Timer*)get_parent())->update_period (); }
+      void impl_deactivate () override {}
+    };
+    class ResetAction : public Action
+    {
+    public:
+      ResetAction (Process* parent, const string &name) :
+        Action (parent, name){};
+    
+      virtual ~ResetAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
       void impl_deactivate () override {}
     };
@@ -64,6 +72,9 @@ namespace djnn
     Blank _end;
     TimerAction _action;
     Coupling _c_update;
+    Spike _reset;
+    ResetAction _reset_action;
+    Coupling _c_reset;
   };
 
 }

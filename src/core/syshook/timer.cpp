@@ -34,7 +34,10 @@ namespace djnn
   _delay (this, "delay", delay),
   _end (this, "end"),
   _action (this, "action"),
-  _c_update (&_delay, ACTIVATION, &_action, ACTIVATION, true)
+  _c_update (&_delay, ACTIVATION, &_action, ACTIVATION, true),
+  _reset (this, "reset"),
+  _reset_action (this, "reset_action"),
+  _c_reset (&_reset, ACTIVATION, &_reset_action, ACTIVATION, true)
   {
     Process::finalize_construction (parent, name);
   }
@@ -61,6 +64,7 @@ namespace djnn
   {
     //DBG;
     _c_update.enable ();
+    _c_reset.enable ();
     DjnnTimeManager::instance().after(this, _delay.get_value ());
   }
 
@@ -69,6 +73,7 @@ namespace djnn
   {
     //DBG;
     _c_update.disable ();
+    _c_reset.disable ();
     DjnnTimeManager::instance().cancel(this);
   }
 
