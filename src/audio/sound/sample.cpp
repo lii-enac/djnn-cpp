@@ -12,9 +12,9 @@ char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size);
 namespace djnn {
 
 	Sample::Sample(Process* parent, const string& name, const string& path)
-	: Sound(parent, name)
+	: Sound(parent, name),
+	_end (this, "end")
 	{
-		//int channel, sampleRate, bps, size;
 		char* data = loadWAV(path.c_str(), channel, sampleRate, bps, size);
 		if (channel == 1)
 	    {
@@ -25,8 +25,7 @@ namespace djnn {
 	        else {
 	            format = AL_FORMAT_MONO16;
 	        }
-	    }
-	    else {
+	    } else {
 	        if (bps == 8)
 	        {
 	            format = AL_FORMAT_STEREO8;
@@ -54,6 +53,8 @@ namespace djnn {
 	{
 		alSourcei(sourceid, AL_BUFFER, bufferid); CHKAL;
     	alSourcePlay(sourceid); CHKAL;
+    	auto duration = 1000.*((size/channel)/2)/sampleRate;
+    	DjnnTimeManager::instance().after(this, duration);
 	}
 
 	void
@@ -61,5 +62,16 @@ namespace djnn {
 	{
 		alSourceStop(sourceid); CHKAL;
 	}
+
+	// djnn_internal::Time::Timer
+	void
+  	Sample::doit(const djnn_internal::Time::Unit& actualtime)
+  	{
+    	if(somehow_activating()) {
+      		set_activation_state (DEACTIVATED);
+      		Sample::impl_deactivate ();
+      		_end.notify_activation (); // propagating
+    	}
+  	}
 
 }
