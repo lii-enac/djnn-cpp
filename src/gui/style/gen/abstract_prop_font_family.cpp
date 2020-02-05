@@ -30,7 +30,7 @@
 
 namespace djnn
 {
-  AbstractPropFontFamily::AbstractPropFontFamily (Process *parent, const std::string& name, std::string family) :
+  AbstractPropFontFamily::AbstractPropFontFamily (Process *parent, const std::string& name, const std::string& family) :
     AbstractStyle (parent, name),
     raw_props{.family=family},
     _cfamily (nullptr)
@@ -74,7 +74,7 @@ namespace djnn
       prop_Text=true;
     } else
     return nullptr;
-    
+
     if(prop_Double) {
       DoublePropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
@@ -116,5 +116,5 @@ namespace djnn
   
 
   
-  
+
 } /* namespace djnn */

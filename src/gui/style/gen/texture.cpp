@@ -30,7 +30,7 @@
 
 namespace djnn
 {
-  Texture::Texture (Process *parent, const std::string& name, std::string path) :
+  Texture::Texture (Process *parent, const std::string& name, const std::string& path) :
     AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -74,7 +74,7 @@ namespace djnn
       prop_Text=true;
     } else
     return nullptr;
-    
+
     if(prop_Double) {
       DoublePropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
@@ -131,5 +131,5 @@ namespace djnn
     return new Texture (nullptr, get_name (), raw_props.path);
   }
 
-  
+
 } /* namespace djnn */

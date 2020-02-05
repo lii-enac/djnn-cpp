@@ -101,7 +101,7 @@ namespace djnn
     int notify_mask = notify_none;
     %(CREATE_PROPERTIES)s
     return nullptr;
-    
+
     if(prop_Double) {
       DoublePropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
@@ -143,7 +143,7 @@ namespace djnn
   %(DEF_DRAW)s
 
   %(DEF_CLONE)s
-  
+
 } /* namespace djnn */
 """
 
@@ -269,7 +269,7 @@ def just_do_it(dc, finalize_construction=True):
 
     PARENT_PROPS_CALL = ', '.join([p.name for p in parent_props])
 
-    DECL_PROPS_CALL_DECL = ', '.join([p.as_cpp_type_str() + ' ' + p.name + (("=" + p.default_value) if p.default_value != None else "") for p in all_props])
+    DECL_PROPS_CALL_DECL = ', '.join([p.as_cpp_type_str_for_function_signature() + ' ' + p.name + (("=" + p.default_value) if p.default_value != None else "") for p in all_props])
     # print (DECL_PROPS_CALL)
     DECL_PROPS_REF_CALL = ', '.join([p.as_cpp_type_str() + '& ' + p.name for p in all_props])
     # print (DECL_PROPS_REF_CALL)
@@ -293,7 +293,7 @@ def just_do_it(dc, finalize_construction=True):
     # print (CREATE_PROPERTIES)
 
     DECL_PROPS_CALL_DEF = ', '.join([p.as_cpp_type_str_for_function_signature() + ' ' + p.name for p in all_props])
-    
+  
     RAW_PROPS_INIT = ', '.join(['.' + p.name + '=' + p.name for p in dc.props])
     # print (RAW_PROPS_INIT)
     join_str = '\n\t\t'
