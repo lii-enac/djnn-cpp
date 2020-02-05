@@ -87,12 +87,15 @@ namespace djnn
       DjnnTimeManager::instance().after(this, _delay.get_value ());
   }
 
+  // djnn_internal::Time::Timer
   void
   Timer::doit(const djnn_internal::Time::Unit& actualtime)
   {
     //std::cerr << get_name () << " with delta " << _delay.get_value () - actualtime << __FL__;
-    set_activation_state (DEACTIVATED);
-    _end.notify_activation (); // propagating
+    if(somehow_activating()) {
+      set_activation_state (DEACTIVATED);
+      _end.notify_activation (); // propagating
+    }
   }
 
 
