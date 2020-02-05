@@ -30,42 +30,37 @@
 #include "audio/style/audio_style.h"
 
 
-#include "abstract_translation.h"
+#include "abstract_volume.h"
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (Process *parent, const std::string& name, double tx, double ty) :
-    AbstractTransformation (parent, name),
-    raw_props{.tx=tx, .ty=ty},
-    _ctx (nullptr), _cty (nullptr)
+  AbstractVolume::AbstractVolume (Process *parent, const std::string& name, double volume) :
+    AbstractAudioStyle (parent, name),
+    raw_props{.volume=volume},
+    _cvolume (nullptr)
   {
     
     
   }
 
-  AbstractTranslation::~AbstractTranslation ()
+  AbstractVolume::~AbstractVolume ()
   {
-    delete _ctx;
-		delete _cty;
+    delete _cvolume;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (symtable ().size () > 0) {
       std::map<std::string, Process*>::iterator it;
 
-      it = symtable ().find ("tx");
-			if (it != symtable ().end ())
-				delete it->second;
-
-			it = symtable ().find ("ty");
+      it = symtable ().find ("volume");
 			if (it != symtable ().end ())
 				delete it->second;
     }
   }
  
   Process*
-  AbstractTranslation::find_component (const string& name)
+  AbstractVolume::find_component (const string& name)
   {
-    Process* res = AbstractTransformation::find_component(name);
+    Process* res = AbstractAudioStyle::find_component(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -76,16 +71,10 @@ namespace djnn
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
-    if(name=="tx") {
-      coupling=&_ctx;
-      rawp_Double=&raw_props.tx;
-      notify_mask = notify_damaged_transform;
-      prop_Double=true;
-    } else
-    if(name=="ty") {
-      coupling=&_cty;
-      rawp_Double=&raw_props.ty;
-      notify_mask = notify_damaged_transform;
+    if(name=="volume") {
+      coupling=&_cvolume;
+      rawp_Double=&raw_props.volume;
+      notify_mask = notify_damaged_style;
       prop_Double=true;
     } else
     return nullptr;
@@ -107,28 +96,25 @@ namespace djnn
   }
 
   void
-  AbstractTranslation::get_properties_values (double& tx, double& ty)
+  AbstractVolume::get_properties_values (double& volume)
   {
-    tx = raw_props.tx;
-		ty = raw_props.ty;
+    volume = raw_props.volume;
     
   }
 
   void
-  AbstractTranslation::impl_activate ()
+  AbstractVolume::impl_activate ()
   {
-    AbstractTransformation::impl_activate ();
-    auto _frame = frame ();
-    if(_ctx) _ctx->enable (_frame);
-		if(_cty) _cty->enable (_frame);
+    AbstractAudioStyle::impl_activate ();
+    //auto _frame = frame ();
+    //if(_cvolume) _cvolume->enable (_frame);
   }
 
   void
-  AbstractTranslation::impl_deactivate ()
+  AbstractVolume::impl_deactivate ()
   {
-    if(_ctx) _ctx->disable ();
-		if(_cty) _cty->disable ();
-    AbstractTransformation::impl_deactivate ();
+    if(_cvolume) _cvolume->disable ();
+    AbstractAudioStyle::impl_deactivate ();
   }
 
   

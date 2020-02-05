@@ -24,7 +24,11 @@
 #include "display/window.h"
 #include "gui/shapes/shapes.h"
 #include "gui/style/style.h"
+#include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+
+#include "audio/style/audio_style.h"
+
 
 #include "abstract_prop_line.h"
 

@@ -59,7 +59,11 @@ def_string = """
 #include "display/window.h"
 #include "gui/shapes/shapes.h"
 #include "gui/style/style.h"
+#include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+
+#include "audio/style/audio_style.h"
+
 
 #include "%(CLASS_LOWER)s.h"
 
@@ -564,6 +568,10 @@ dc = DjnnClass("AbstractPropHomography", "AbstractTransformation", "../src/gui/t
 for i in range(1,5):
   for j in range(1,5):
     dc.props.append(Prop('m'+str(i)+str(j), 'double', str(1 if i==j else 0), "transform"))
+dcs.append(dc)
+
+dc = DjnnClass("AbstractVolume", "AbstractAudioStyle", "../src/audio/style", origin=None, finalize_construction=False)
+dc.props.append(Prop('volume', 'double', None, "style"))
 dcs.append(dc)
 
 
