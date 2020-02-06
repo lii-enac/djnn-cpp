@@ -187,7 +187,10 @@ namespace djnn {
     void
     MainLoop::remove_external_source (ExternalSource* es)
     {
-      _external_sources.erase(std::find(std::begin(_external_sources), std::end(_external_sources), es));
+       auto i = std::find(_external_sources.begin (), _external_sources.end (), es);
+       /* if found */
+       if (i != _external_sources.end ())
+          _external_sources.erase(i);
     }
 
 }
