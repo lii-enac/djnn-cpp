@@ -96,6 +96,7 @@ namespace djnn
         break;
 
       case QEvent::MouseButtonPress:
+      case QEvent::MouseButtonDblClick:
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
       case QEvent::Wheel:
