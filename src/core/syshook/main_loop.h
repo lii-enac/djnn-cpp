@@ -81,6 +81,7 @@ namespace djnn
 
     void run_in_main_thread ();
     void run_in_own_thread ();
+    void join_own_thread ();
     void run () override;
 
     std::atomic<chrono::milliseconds> _duration;

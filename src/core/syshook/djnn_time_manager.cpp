@@ -32,7 +32,7 @@ namespace djnn {
 
   void
   DjnnTimeManager::please_stop ()
-  {
+  { //DBG;
     ExternalSource::please_stop ();
     cancel_mutex.unlock ();
   }
@@ -56,7 +56,7 @@ namespace djnn {
 
   void
   DjnnTimeManager::run ()
-  { //DBG;
+  {
     set_please_stop (false);
     djnn::get_exclusive_access (DBG_GET);
     int duration = getFirstDelta ();
@@ -70,14 +70,14 @@ namespace djnn {
         //std::cerr << DBGVAR(duration) << __FL__;
         assert(duration>=-1);
 
-        //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << std::endl;
         std::chrono::milliseconds ddd(duration);
         if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max();
-        cancel_mutex.lock();
+        cancel_mutex.lock(); // lock once, get it
+        //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << std::endl;
         //bool cancelled =
-        cancel_mutex.try_lock_for(ddd);
+        cancel_mutex.try_lock_for(ddd); // lock twice, should block for ddd ms unless it's unlocked elsewhere
         //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(cancelled) << std::endl;
-        cancel_mutex.unlock();
+        cancel_mutex.unlock(); // unlock first time
 
         if(thread_local_cancelled) {
           break;
@@ -96,20 +96,6 @@ namespace djnn {
           //djnn::release_exclusive_access (DBG_REL);
           break;
         }
-
-        /*if(cancelled) {
-          struct timespec after;
-          djnn::get_monotonic_time(&after);
-          double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
-          timeElapsed(elapsedTime);
-          duration = getFirstDelta ();
-          djnn::release_exclusive_access (DBG_REL);
-          continue;
-        }
-        if(duration==-1) {
-          djnn::release_exclusive_access (DBG_REL);
-          continue;
-        }*/
 
         {
           struct timespec after;

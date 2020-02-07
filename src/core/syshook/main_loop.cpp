@@ -60,17 +60,8 @@ namespace djnn {
 
     MainLoop::~MainLoop ()
     {
-      //djnn::get_exclusive_access (DBG_GET);
       please_stop ();
       for(auto es: _external_sources) es->please_stop ();
-      //djnn::release_exclusive_access (DBG_REL);
-
-      
-      /*while (true) {
-        djnn::get_exclusive_access (DBG_GET); 
-        if (!_external_sources.size()) break;
-        djnn::release_exclusive_access (DBG_REL);         
-      }*/
     }
 
     void
@@ -81,10 +72,6 @@ namespace djnn {
       for (auto es: _external_sources) es->start ();
       launch_mutex_unlock();
 
-      //std::cerr << "-----------" << __FL__;
-      //DjnnTimeManager::instance().debug();
-      //std::cerr << "starting mainloop with TimeManager firstDelta " << DjnnTimeManager::instance().getFirstDelta() << __FL__; 
-
       for (auto p: _background_processes) {
         p->activate ();
       }
@@ -93,29 +80,22 @@ namespace djnn {
         run_in_own_thread ();
         //djnn::release_exclusive_access (DBG_REL);
         set_activation_state (ACTIVATED);
-        _another_source_wants_to_be_mainloop->run ();
+        _another_source_wants_to_be_mainloop->run (); // should block
       } else {
-        run_in_main_thread ();
+        run_in_main_thread (); // should block
       }
+
+      // starting from here, the mainloop has exited
 
       launch_mutex_lock (); // reacquire launch mutex
 
-      please_stop ();
       for (auto es: _external_sources) es->please_stop ();
+      
+      if (_another_source_wants_to_be_mainloop) {
+        //please_stop ();
+        join_own_thread ();
+      }
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
-
-      #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      own_thread.join(); // FIXME: could be properly joined
-      // since the thread is detached, own_thread object does not own it anymore and can be safely destroyed
-      #endif
-
-      #if DJNN_USE_QT_THREAD
-      own_thread->wait();
-      #endif
-
-      #if DJNN_USE_SDL_THREAD
-      SDL_WaitThread(own_thread, nullptr); // // FIXME: could be properly joined
-      #endif
 
     }
 
@@ -171,7 +151,23 @@ namespace djnn {
       #if DJNN_USE_SDL_THREAD
       //auto *
       own_thread = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
-      SDL_DetachThread(own_thread); // // FIXME: could be properly joined
+      //SDL_DetachThread(own_thread); // // FIXME: could be properly joined
+      #endif
+    }
+
+    void
+    MainLoop::join_own_thread ()
+    {
+      #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
+      own_thread.join();
+      #endif
+
+      #if DJNN_USE_QT_THREAD
+      own_thread->wait();
+      #endif
+
+      #if DJNN_USE_SDL_THREAD
+      SDL_WaitThread(own_thread, nullptr);
       #endif
     }
 
@@ -219,7 +215,6 @@ namespace djnn {
     MainLoop::remove_external_source (ExternalSource* es)
     {
        auto i = std::find(_external_sources.begin (), _external_sources.end (), es);
-       /* if found */
        if (i != _external_sources.end ())
           _external_sources.erase(i);
     }
