@@ -18,6 +18,7 @@
 #include "core/ontology/process.h"
 #include "syshook.h"
 #include "external_source.h"
+#include "cpp-thread.h"
 //#include "cpp-chrono.h"
 //#include "cpp-mutex.h"
 
@@ -90,6 +91,19 @@ namespace djnn
 
   private:
     static MainLoop _instance;
+
+    #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
+    djnn_thread_t own_thread;
+    #endif
+
+    #if DJNN_USE_QT_THREAD
+    QThread* own_thread;
+    #endif
+
+    #if DJNN_USE_SDL_THREAD
+    SDL_Thread * own_thread; 
+    #endif
+
 
     // MainLoop should be created *before* any other external-source
     MainLoop ();

@@ -24,4 +24,21 @@ lib_cppflags = -I/usr/include
 lib_ldflags = -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 
+# library-specific thread support
+ifeq ($(display),QT)
+include src/display/qt/djnn-lib-flags.mk
+lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
+endif
+
+ifeq ($(display),SDL)
+include src/display/sdl/djnn-lib-flags.mk
+endif
+
+ifeq ($(os),FreeRTOS)
+include src/core/syshook/freertos-cxx11/djnn-lib-flags.mk
+lib_srcs += $(shell find src/core/syshook/freertos-cxx11 -name "*.cpp")
+endif
+
+
+
 lib_srcs := $(shell find src/comms -name "*.cpp")

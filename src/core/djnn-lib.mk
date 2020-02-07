@@ -30,7 +30,7 @@ include src/display/qt/djnn-lib-flags.mk
 lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
 endif
 
-ifneq (,$(filter $(graphics),CAIRO GL))
+ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib-flags.mk
 endif
 
