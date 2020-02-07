@@ -23,6 +23,7 @@
 #endif
 
 #include <iostream>
+#include <algorithm>
 #include "utils/debug.h"
 
 #include "core/syshook/djnn_time_manager.h"
