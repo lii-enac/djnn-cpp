@@ -92,11 +92,10 @@ namespace djnn {
       for (auto es: _external_sources) es->please_stop ();
       
       if (_another_source_wants_to_be_mainloop) {
-        //please_stop ();
+        please_stop ();
         join_own_thread ();
       }
       djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
-
     }
 
     void
