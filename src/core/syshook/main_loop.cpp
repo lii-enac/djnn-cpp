@@ -110,7 +110,7 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_QT_THREAD
-      own_thread->join();
+      own_thread->wait();
       #endif
 
       #if DJNN_USE_SDL_THREAD
