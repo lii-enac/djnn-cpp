@@ -21,6 +21,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "core/core.h"
+#include "base/base.h"
 #include "gui/gui-dev.h"
 
 using namespace djnn;
@@ -234,11 +235,16 @@ static int ParseOpacity(Process**e, const char* v) {
 		return 1;
 	}
 
-	/* svg group opacity is a known issue in djnn. It is preferable not to give
-	 * an access to these non-equivalent components => name = 0
+	/* SVG group opacity is a known issue in djnn. For now, we create
+	 * a fake property that is connected to a fill and an outline opacities.
+	 * Ultimately, this should be replaced by a full-fledged property that
+	 * handles properly the semantics of a group opacity.
 	 */
-	new FillOpacity(*e, "", alpha);
-	new OutlineOpacity(*e, "", alpha);
+	Process *c1 = new FillOpacity(*e, "", alpha);
+	Process *c2 = new OutlineOpacity(*e, "", alpha);
+	Process *op = new DoubleProperty(*e, "opacity", alpha);
+	new Connector (*e, "", op, "", c1, "a");
+	new Connector (*e, "", op, "", c2, "a");
 
 	return 1;
 }
