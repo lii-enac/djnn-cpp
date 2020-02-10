@@ -18,6 +18,7 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/text_property.h"
 #include "core/control/action.h"
+#include "files/file_writer.h"
 
 namespace djnn
 {
