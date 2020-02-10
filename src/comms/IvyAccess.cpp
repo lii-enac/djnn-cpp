@@ -24,6 +24,7 @@
 #include <string>
 #include <unistd.h>
 
+//#define __IVY_DEBUG__
 
 using namespace std;
 
@@ -339,7 +340,7 @@ IvyAccess::find_component (const string& key)
 {
   
 #ifdef __IVY_DEBUG__
-  cout << "Ivy find_component key : " << key << endl ;
+  cout << "---- Ivy find_component key : " << key << "------" <<  endl ;
 #endif
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
@@ -349,20 +350,43 @@ IvyAccess::find_component (const string& key)
         /* key exist  - return */
       return it->second;
     }
-    else {
-        /* key don't exist - create*/
+    
+    /* key do not exist - maybe use internal string as regexp */
 
-      /* build the substring */
-      int nb_subexp, len = 0;
-      string full_exp = key.substr (3);
-      const char* re_end = _skim_regex (full_exp.c_str(), &nb_subexp);
+    /* 
+       get sub_string = ...... : in/....../1
+       and save index : 1
+    */
+    int nb_subexp, len = 0;
+    string full_exp = key.substr (3);
+    const char* re_end = _skim_regex (full_exp.c_str(), &nb_subexp);
       
-      string regexp = full_exp;
-      if(re_end && *re_end != '\0'){
-        len = key.find (re_end, 3);
-        regexp = key.substr (3, len-3);
-      }
-      int index = stoi (re_end+1);
+    string regexp = full_exp;
+    if(re_end && *re_end != '\0'){
+      len = key.find (re_end, 3);
+       regexp = key.substr (3, len-3);
+    }
+    int index = stoi (re_end+1);
+
+#ifdef __IVY_DEBUG__
+    cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
+#endif
+
+    TextProperty* tmp = dynamic_cast<TextProperty*>(Process::find_component (regexp));
+    if (tmp){
+
+      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + to_string(index);
+
+#ifdef __IVY_DEBUG__
+      cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
+      cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
+#endif
+
+      /* key do not exist - but use internal string as regexp --- return*/
+      return this->find_component (new_regexp_to_found);
+    }
+    else {
+      /* key don't exist at all - create it */
 
       /* add as a new _in child */
       /* and keep track of "/number" */
@@ -373,11 +397,7 @@ IvyAccess::find_component (const string& key)
       mit = _in_map.find(regexp);
       if (mit == _in_map.end ()) {
         /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
-        auto * regexp_keypair =
-          new
-          //pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>
-          regexp_keypair_t
-          (regexp, &_in_map);
+        auto * regexp_keypair = new regexp_keypair_t (regexp, &_in_map);
         IvyBindMsg(_on_ivy_message, regexp_keypair, "%s", regexp.c_str() );
       }
 
@@ -391,7 +411,7 @@ IvyAccess::find_component (const string& key)
       cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif
 
-    
+      /* key don't exist at all - return */
       return newin;
     }
   }
