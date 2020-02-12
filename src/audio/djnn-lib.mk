@@ -5,7 +5,7 @@ lib_srcs += $(shell find src/audio -name "*.cpp")
 lib_cppflags += -DUSE_OPENAL
 
 ifeq ($(os),Darwin)
-lib_cppflags += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenAL.framework/Headers
+#lib_cppflags += -framework OpenAL
 lib_ldflags += -framework OpenAL
 endif
 
