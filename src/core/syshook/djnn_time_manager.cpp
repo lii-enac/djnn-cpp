@@ -74,11 +74,11 @@ namespace djnn {
         //djnn::release_exclusive_access (DBG_REL);
         
         std::chrono::milliseconds ddd(duration);
-        if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max();
+        if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max(); // 'infinite' duration
         cancel_mutex.lock(); // lock once, get it
+
         //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << std::endl;
-        bool timer_cancelled =
-        cancel_mutex.try_lock_for(ddd); // lock twice, should block for ddd ms unless it's unlocked elsewhere
+        bool timer_cancelled = cancel_mutex.try_lock_for(ddd); // lock twice, should block for ddd ms unless it's unlocked elsewhere
         //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(timer_cancelled) << std::endl;
         cancel_mutex.unlock(); // unlock first time
 
@@ -86,46 +86,32 @@ namespace djnn {
 
         if(timer_cancelled) {
           // either 'infinite duration' has run out or there is a new timer
-          djnn::get_exclusive_access (DBG_GET);
-          if(thread_local_cancelled || get_please_stop ()) break;
+          djnn::get_exclusive_access (DBG_GET); if(thread_local_cancelled || get_please_stop ()) break;
           duration = getFirstDelta ();
           djnn::release_exclusive_access (DBG_REL);
           continue;
         }
 
-        djnn::get_exclusive_access (DBG_GET);
-        if(thread_local_cancelled || get_please_stop ()) break;
+        djnn::get_exclusive_access (DBG_GET); if(thread_local_cancelled || get_please_stop ()) break;
 
         struct timespec after;
         djnn::get_monotonic_time(&after);
         double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
         //std::cerr << "executing after TimeManager::Timer " <<  DBGVAR(elapsedTime) << __FL__;
         timeElapsed(elapsedTime);
-        //
+
         GRAPH_EXEC; // executing
 
-        if(thread_local_cancelled) {
-          //djnn::release_exclusive_access (DBG_REL);
-          ExternalSource::cancelled = nullptr; // make our external source aware that we are finised
-          break;
-        }
-        if (get_please_stop ()) {
-          //djnn::release_exclusive_access (DBG_REL); 
-          break;
-        }
+        if(thread_local_cancelled || get_please_stop ()) break;
         
         duration = getFirstDelta ();
-        //std::cerr << DBGVAR(duration) << __FL__;
-        //cancel_mutex.lock();
         djnn::release_exclusive_access (DBG_REL);
-        
-          
       }
-      //std::cerr << this << " << stop" << std::endl;
     } catch (djnn::exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
-    //cleanup (); // DBG;
+
+    ExternalSource::cancelled = nullptr; // make our external source aware that we are finished
     djnn::release_exclusive_access (DBG_REL);
   }
 

@@ -49,11 +49,8 @@ namespace djnn_internal {
         dt -= (*i)->getDelta();
         ++i;
       }
-      //std::cerr << "ok" << __FL__;
-      //std::cerr << DBGVAR(dt) << __FL__;
       
       // check if it's not here already
-      // if(already_scheduled(timer)) {
       for(auto j = i; j!=_timers.end(); ++j) {
         if(*j==timer) {
           std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
@@ -72,12 +69,13 @@ namespace djnn_internal {
       
       ++i;
       if(i!=_timers.end()) {
-        // update next timers' delta
+        // update next timer's delta
         Unit nextdt = (*i)->getDelta();
         Unit newdt = nextdt-dt;
         //std::cerr << DBGVAR(newdt) << __FL__;
         (*i)->setDelta(newdt);
       }
+
       if(firstchanged && !_dontCallTimerHasChanged) {
         firstTimerHasChanged();
       }
@@ -197,6 +195,7 @@ namespace djnn_internal {
         (*j)->doit(actual_time);
       }
       _dontCallTimerHasChanged=0;
+
       firstTimerHasChanged();
 
       //std::cerr << DBGVAR(_timers.size()) << __FL__;
