@@ -23,10 +23,10 @@ namespace djnn {
   DjnnTimeManager DjnnTimeManager::_instance;
 
 
-  struct timespec before;
+  struct timespec before_emscripten;
   void DjnnTimeManager::firstTimerHasChanged()
   { //DBG;
-    djnn::get_monotonic_time(&before);
+    //djnn::get_monotonic_time(&before);
     cancel_mutex.unlock ();
   }
 
@@ -45,10 +45,10 @@ namespace djnn {
 
     struct timespec after;
     djnn::get_monotonic_time(&after);
-    double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
+    double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before_emscripten.tv_sec * 1000 + before_emscripten.tv_nsec * 1e-6);
 
     if(elapsedTime >= duration) {
-      before = after;
+      before_emscripten = after;
       timeElapsed (elapsedTime);
       GRAPH_EXEC;
     }
@@ -69,13 +69,17 @@ namespace djnn {
 
         assert(duration>=-1);
 
+        //djnn::get_exclusive_access (DBG_GET);
+        //debug();
+        //djnn::release_exclusive_access (DBG_REL);
+        
         std::chrono::milliseconds ddd(duration);
         if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max();
         cancel_mutex.lock(); // lock once, get it
         //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << std::endl;
-        //bool cancelled =
+        //bool timer_cancelled =
         cancel_mutex.try_lock_for(ddd); // lock twice, should block for ddd ms unless it's unlocked elsewhere
-        //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(cancelled) << std::endl;
+        //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(timer_cancelled) << std::endl;
         cancel_mutex.unlock(); // unlock first time
 
         if(thread_local_cancelled) {

@@ -157,6 +157,7 @@ namespace djnn {
     void
     MainLoop::join_own_thread ()
     {
+      //std::cerr << ">> " << __FL__;
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
       own_thread.join();
       #endif
@@ -168,6 +169,7 @@ namespace djnn {
       #if DJNN_USE_SDL_THREAD
       SDL_WaitThread(own_thread, nullptr);
       #endif
+      //std::cerr << "<< " << __FL__;
     }
 
     void

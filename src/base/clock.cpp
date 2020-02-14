@@ -61,9 +61,9 @@ namespace djnn
   void
   Clock::impl_activate ()
   {
-    //DBGPROC;
     //__builtin_trap();
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
+    //std::cerr << "activate " << get_name () << __FL__;
     _c_update.enable ();
     DjnnTimeManager::instance().after(this, _period.get_value ());
   }
@@ -71,7 +71,6 @@ namespace djnn
   void
   Clock::impl_deactivate ()
   {
-    //DBGPROC;
      _c_update.disable ();
     DjnnTimeManager::instance().cancel(this);
   }
@@ -79,7 +78,6 @@ namespace djnn
   void
   Clock::update_period()
   {
-    //DBGPROC;
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     DjnnTimeManager::instance().cancel(this);
     if(somehow_activating())
@@ -90,7 +88,7 @@ namespace djnn
   void
   Clock::doit(const djnn_internal::Time::Unit& actualtime)
   {
-    //std::cerr << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
+    //std::cerr << "doit " << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
     _elapsed.set_value (actualtime, true);
     auto sav_period = _period.get_value ();
     _tick.activate (); // propagating
