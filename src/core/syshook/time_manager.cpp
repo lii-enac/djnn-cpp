@@ -162,8 +162,8 @@ namespace djnn_internal {
 
       if(actual_delta<0) actual_delta=0;
 
-      if(actual_delta>_precision) { DBG;
-        std::cerr << DBGVAR(actual_delta) << " " << DBGVAR(_precision) << __FL__;
+      if(actual_delta>_precision) { //DBG;
+        //std::cerr << DBGVAR(actual_delta) << " " << DBGVAR(_precision) << __FL__;
         (*i)->setDelta(actual_delta);
         reschedule();
         return;
@@ -184,8 +184,8 @@ namespace djnn_internal {
 
       if(!_timers.empty()) {
         Timers::iterator i = _timers.begin();
-        Unit next_requested_delta = (*i)->getDelta();
-        Unit d = next_requested_delta + actual_delta;
+        Unit next_requested_delta = (*i)->getDelta()-dt;
+        Unit d = next_requested_delta; // + actual_delta;
         if(d<0) d=0;
         (*i)->setDelta(d);
         //std::cerr << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << __FL__;
