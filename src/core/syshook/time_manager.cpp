@@ -35,6 +35,7 @@ namespace djnn_internal {
     {
       //DBG;
       //std::cerr << ">> "; DBGTIMERS;
+      //std::cerr << DBGVAR(t) << __FL__;
       Unit dt=t;
       Timers::iterator i = _timers.begin();
       
@@ -43,7 +44,7 @@ namespace djnn_internal {
         dt -= (*i)->getDelta();
         ++i;
       }
-      //std::cerr << dt << __FL__;
+      //std::cerr << DBGVAR(dt) << __FL__;
       
       // check if it's not here already
       if(already_scheduled(timer)) {
@@ -64,7 +65,9 @@ namespace djnn_internal {
       if(i!=_timers.end()) {
         // update next timers' delta
         Unit nextdt = (*i)->getDelta();
-        (*i)->setDelta(nextdt-dt);
+        Unit newdt = nextdt-dt;
+        //std::cerr << DBGVAR(newdt) << __FL__;
+        (*i)->setDelta(newdt);
       }
       if(firstchanged && !_dontCallTimerHasChanged) {
         firstTimerHasChanged();
@@ -100,6 +103,7 @@ namespace djnn_internal {
         dt = (*i)->getDelta();
         _timers.erase(i);
         i = _timers.begin();
+        ++i;
       }
       else {
         Timers::iterator j = i;

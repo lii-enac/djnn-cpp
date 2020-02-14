@@ -67,7 +67,6 @@ namespace djnn {
         struct timespec before;
         djnn::get_monotonic_time(&before);
 
-        //std::cerr << DBGVAR(duration) << __FL__;
         assert(duration>=-1);
 
         std::chrono::milliseconds ddd(duration);
@@ -116,6 +115,7 @@ namespace djnn {
           }
           
           duration = getFirstDelta ();
+          //std::cerr << DBGVAR(duration) << __FL__;
           //cancel_mutex.lock();
           djnn::release_exclusive_access (DBG_REL);
         }
