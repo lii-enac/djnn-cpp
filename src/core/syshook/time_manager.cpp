@@ -32,8 +32,7 @@ namespace djnn_internal {
     
     void
     Manager::after(Timer* timer, Unit t) //throw (TimerAlreadyScheduled)
-    { //DBG;
-      //std::cerr << "after  " << DBGVAR(timer) << " " << DBGVAR(t) << __FL__;
+    { //std::cerr << "after  " << DBGVAR(timer) << " " << DBGVAR(t) << __FL__;
       //std::cerr << "  >> "; // << __FL__;
       //debug();
 
@@ -86,8 +85,7 @@ namespace djnn_internal {
     
     void
     Manager::cancel(Timer* timer)
-    { //DBG;
-      //std::cerr << "cancel " << DBGVAR(timer) << __FL__;
+    { //std::cerr << "cancel " << DBGVAR(timer) << __FL__;
       //std::cerr << "  >> ";
       //debug();
 
@@ -115,6 +113,7 @@ namespace djnn_internal {
         //++i;
       }
       else {
+        dt = (*i)->getDelta();
         Timers::iterator j = i;
         --j;
         _timers.erase(i);
@@ -149,7 +148,7 @@ namespace djnn_internal {
     
     void
     Manager::timeElapsed(Unit dt)
-    { //std::cerr << DBGVAR(dt) << __FL__;
+    { //std::cerr << "timeElapsed " << DBGVAR(dt) << __FL__;
       //std::cerr << ">> "; DBGTIMERS;
       
       if(_timers.empty())
@@ -161,8 +160,10 @@ namespace djnn_internal {
       
       //std::cerr << DBGVAR(dt) << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << DBGVAR(_precision) << __FL__;
 
-      if(actual_delta<=0) actual_delta=0;
-      if(actual_delta>_precision) { //DBG;
+      if(actual_delta<0) actual_delta=0;
+
+      if(actual_delta>_precision) { DBG;
+        std::cerr << DBGVAR(actual_delta) << " " << DBGVAR(_precision) << __FL__;
         (*i)->setDelta(actual_delta);
         reschedule();
         return;
@@ -171,12 +172,16 @@ namespace djnn_internal {
       Timers toCall;
       toCall.push_back(*i);
       ++i;
+
+      dt -= requested_delta;
       while( i!=_timers.end() && ( ((*i)->getDelta()-dt)<_precision) ) {
         toCall.push_back(*i);
+        dt -= (*i)->getDelta();
         ++i;
       }
 
       _timers.erase(_timers.begin(), i);
+
       if(!_timers.empty()) {
         Timers::iterator i = _timers.begin();
         Unit next_requested_delta = (*i)->getDelta();
@@ -199,7 +204,7 @@ namespace djnn_internal {
       firstTimerHasChanged();
 
       //std::cerr << DBGVAR(_timers.size()) << __FL__;
-      //std::cerr << "<< "; DBGTIMERS;
+      //debug();
     }
     
     void
