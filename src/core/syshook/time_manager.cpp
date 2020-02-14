@@ -32,10 +32,11 @@ namespace djnn_internal {
     
     void
     Manager::after(Timer* timer, Unit t) //throw (TimerAlreadyScheduled)
-    {
-      //DBG;
-      //std::cerr << ">> "; DBGTIMERS;
-      //std::cerr << DBGVAR(timer) << " " << DBGVAR(t) << __FL__;
+    { //DBG;
+      //std::cerr << "after  " << DBGVAR(timer) << " " << DBGVAR(t) << __FL__;
+      //std::cerr << "  >> "; // << __FL__;
+      //debug();
+
       Unit dt=t;
       Timers::iterator i = _timers.begin();
       
@@ -80,14 +81,17 @@ namespace djnn_internal {
       if(firstchanged && !_dontCallTimerHasChanged) {
         firstTimerHasChanged();
       }
-      //std::cerr << "<< "; DBGTIMERS;
+      //std::cerr << "  << ";
+      //debug();
     }
 
     
     void
     Manager::cancel(Timer* timer)
     { //DBG;
-      //std::cerr << ">> "; DBGTIMERS;
+      //std::cerr << "cancel " << DBGVAR(timer) << __FL__;
+      //std::cerr << "  >> ";
+      //debug();
 
       Timers::iterator i = _timers.begin();
       
@@ -96,9 +100,8 @@ namespace djnn_internal {
         ++i;
       
       if( i==_timers.end() ) {
-        //DBG;
-        //throw 1;
-        //std::cerr << "<< "; DBGTIMERS;
+        //std::cerr << "  << ";
+        //debug();
         return;
       }
       
@@ -134,7 +137,8 @@ namespace djnn_internal {
         firstTimerHasChanged();
       }
 
-      //std::cerr << "<< "; DBGTIMERS;
+      //std::cerr << "  << ";
+      //debug();
     }
 
     void
@@ -147,8 +151,7 @@ namespace djnn_internal {
     
     void
     Manager::timeElapsed(Unit dt)
-    {
-      //DBG;
+    { //std::cerr << DBGVAR(dt) << __FL__;
       //std::cerr << ">> "; DBGTIMERS;
       
       if(_timers.empty())
@@ -161,7 +164,7 @@ namespace djnn_internal {
       //std::cerr << DBGVAR(dt) << DBGVAR(delta) << DBGVAR(newdelta) << DBGVAR(_timers.size()) << DBGVAR(_precision) << __FL__;
 
       if(actual_delta<=0) actual_delta=0;
-      if(actual_delta>_precision) {
+      if(actual_delta>_precision) { //DBG;
         (*i)->setDelta(actual_delta);
         reschedule();
         return;
@@ -190,6 +193,7 @@ namespace djnn_internal {
       for(Timers::iterator j=toCall.begin(); j!=toCall.end(); ++j) {
         Unit t = (*j)->getTime();
         Unit actual_time = t-actual_delta;
+        //DBG;
         (*j)->doit(actual_time);
       }
       _dontCallTimerHasChanged=0;
@@ -230,7 +234,7 @@ namespace djnn_internal {
       for (auto it = _timers.begin(); it != _timers.end(); ++it ) {
         std::cerr << (*it)->getDelta() << "ms ";
       }
-      std::cerr << __FL__;
+      std::cerr << std::endl; //__FL__;
     }
 
     
