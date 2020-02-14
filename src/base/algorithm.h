@@ -18,6 +18,7 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/spike.h"
 #include "core/tree/component.h"
+#include "core/tree/double_property.h"
 #include "core/tree/text_property.h"
 #include "core/tree/bool_property.h"
 #include "core/control/action.h"
@@ -55,5 +56,91 @@ namespace djnn
     SortAction _action;
     Spike _sort;
     Coupling _c_sort_action, _c_spec_action;
+  };
+
+  class ListOperator : public Process
+  {
+  private:
+    class ListOperatorAction : public Action
+    {
+    public:
+      ListOperatorAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      virtual ~ListOperatorAction () {}
+      void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
+      void impl_deactivate () {}
+    };
+    class UpdateListOperatorAction : public Action
+    {
+    public:
+      UpdateListOperatorAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      virtual ~UpdateListOperatorAction () {}
+      void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
+      void impl_deactivate () {}
+    };
+  public:
+    ListOperator (Process *p, const std::string &name, Process *container, const std::string& spec);
+    virtual ~ListOperator ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+    virtual void do_action () = 0;
+    void update_list ();
+  private:
+
+  protected:
+    TextProperty _spec;
+    Container *_container;
+    UpdateListOperatorAction _update_list;
+    ListOperatorAction _action;
+    Coupling _c_spec_action;
+    Coupling *_c_update_list_action;
+    std::vector<Coupling*> _coupling_list;
+  };
+
+  class SumList : public ListOperator
+  {
+  public:
+    SumList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    virtual ~SumList () {}
+    void do_action () override;
+  protected:
+    void serialize (const std::string& type) override;
+  private:
+    DoubleProperty _output;
+  };
+
+  class ProductList : public ListOperator
+  {
+  public:
+    ProductList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    virtual ~ProductList () {}
+    void do_action () override;
+  protected:
+    void serialize (const std::string& type) override;
+  private:
+    DoubleProperty _output;
+  };
+
+  class MaxList : public ListOperator
+  {
+  public:
+    MaxList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    virtual ~MaxList () {}
+    void do_action () override;
+  protected:
+    void serialize (const std::string& type) override;
+  private:
+    DoubleProperty _output;
+  };
+
+  class MinList : public ListOperator
+  {
+  public:
+    MinList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    virtual ~MinList () {}
+    void do_action () override;
+  protected:
+    void serialize (const std::string& type) override;
+  private:
+    DoubleProperty _output;
   };
 }

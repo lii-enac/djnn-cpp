@@ -13,6 +13,7 @@
  */
 
 #include "algorithm.h"
+#include "core/execution/graph.h"
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
 #include <iostream>
@@ -140,6 +141,175 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:sort");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
+  ListOperator::ListOperator (Process *parent, const std::string &name, Process *container, const std::string& spec) :
+      Process (name),
+      _spec (this, "spec", spec),
+      _update_list (this, "updateListAction"),
+      _action (this, "action"),
+      _c_spec_action (&_spec, ACTIVATION, &_action, ACTIVATION, true)
+  {
+
+    _container = dynamic_cast<Container*> (container);
+    if (_container == nullptr)
+      error (this, "Wrong argument: only containers can be used on List Operator");
+    _c_update_list_action = new Coupling (container->find_component ("size"), ACTIVATION, &_update_list, ACTIVATION);
+    Graph::instance ().add_edge (container->find_component ("size"), &_update_list);
+    Process::finalize_construction (parent, name);
+  }
+
+  ListOperator::~ListOperator()
+  {
+    Graph::instance ().remove_edge (_container->find_component ("size"), &_action);
+    delete _c_update_list_action;
+  }
+
+  void
+  ListOperator::impl_activate ()
+  {
+    update_list ();
+    _c_update_list_action->enable ();
+    _c_spec_action.enable ();
+    for (auto c: _coupling_list) {
+      c->enable ();
+    }
+  }
+
+  void
+  ListOperator::impl_deactivate ()
+  {
+    _c_update_list_action->disable ();
+    _c_spec_action.disable ();
+    for (auto c: _coupling_list) {
+      c->disable ();
+    }
+  }
+
+  void
+  ListOperator::update_list ()
+  {
+    for (auto c: _coupling_list) {
+      Process *s = c->get_src();
+      Graph::instance ().remove_edge (s, &_action);
+      delete c;
+    }
+    _coupling_list.clear ();
+    for (auto c: _container->children ()) {
+      AbstractProperty *s = dynamic_cast<AbstractProperty*> (c->find_component (_spec.get_value ()));
+      if (s == nullptr) {
+        warning (this, "Wrong property in ListOperator " + get_name ());
+        continue;
+      }
+      Coupling *cpl = new Coupling (s, ACTIVATION, &_action, ACTIVATION);
+      Graph::instance ().add_edge (s, &_action);
+      _coupling_list.push_back (cpl);
+    }
+    do_action ();
+  }
+
+  void
+  SumList::do_action ()
+  {
+    double sum = 0;
+    for (auto c: _container->children ()) {
+      sum += ((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value();
+    }
+    _output.set_value (sum, true);
+  }
+
+  void
+  SumList::serialize (const std::string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:sum-list");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    string buf;
+    AbstractSerializer::compute_path (get_parent (), _container, buf);
+    AbstractSerializer::serializer->text_attribute ("container", buf);
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
+  void
+  ProductList::do_action ()
+  {
+    double product = 0;
+    for (auto c: _container->children ()) {
+      product *= ((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value();
+    }
+    _output.set_value (product, true);
+  }
+
+  void
+  ProductList::serialize (const std::string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:product-list");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    string buf;
+    AbstractSerializer::compute_path (get_parent (), _container, buf);
+    AbstractSerializer::serializer->text_attribute ("container", buf);
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
+  void
+  MaxList::do_action ()
+  {
+    double vmax = 0;
+    for (auto c: _container->children ()) {
+      vmax = max (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmax);
+    }
+    _output.set_value (vmax, true);
+  }
+
+  void
+  MaxList::serialize (const std::string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:max-list");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    string buf;
+    AbstractSerializer::compute_path (get_parent (), _container, buf);
+    AbstractSerializer::serializer->text_attribute ("container", buf);
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize(this);
+  }
+
+  void
+  MinList::do_action ()
+  {
+    double vmin = 0;
+    for (auto c: _container->children ()) {
+      vmin = min (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmin);
+    }
+    _output.set_value (vmin, true);
+  }
+
+  void
+  MinList::serialize (const std::string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
+
+    AbstractSerializer::serializer->start ("base:min-list");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    string buf;
+    AbstractSerializer::compute_path (get_parent (), _container, buf);
+    AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
