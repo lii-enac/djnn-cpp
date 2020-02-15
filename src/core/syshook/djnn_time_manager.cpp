@@ -111,7 +111,7 @@ namespace djnn {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
     }
 
-    ExternalSource::cancelled = nullptr; // make our external source aware that we are finished
+    //ExternalSource::cancelled = nullptr; // make our external source aware that we are finished
     djnn::release_exclusive_access (DBG_REL);
   }
 

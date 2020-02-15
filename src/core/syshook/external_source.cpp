@@ -210,11 +210,16 @@ namespace djnn {
         launch_mutex_lock();
         launch_mutex_unlock();
         //DBG;
-        cancelled = &ExternalSource::thread_local_cancelled;
+
+        //cancelled.store(&thread_local_cancelled);
+        cancelled = &thread_local_cancelled;
         *cancelled = false;
+        
         //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
         //DBG;
         run();
+
+        cancelled = nullptr; 
 	}
 	
 }

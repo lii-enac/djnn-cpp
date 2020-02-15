@@ -35,7 +35,7 @@ namespace djnn
     thread_local
 #endif
     std::atomic<bool> thread_local_cancelled;
-    std::atomic<bool> *cancelled;
+    std::atomic<std::atomic<bool>*> cancelled;
 
   protected:
     virtual void set_please_stop (bool v) { _please_stop = v; }
