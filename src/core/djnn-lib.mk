@@ -13,6 +13,10 @@ lib_srcs += src/core/syshook/external_source.cpp src/core/syshook/syshook.cpp \
 			src/core/syshook/main_loop.cpp \
 			src/core/syshook/timer.cpp src/core/syshook/time_manager.cpp src/core/syshook/djnn_time_manager.cpp
 
+ifeq ($(cross_prefix),g)
+lib_ldflags += -latomic
+endif
+
 ifneq ($(os),FreeRTOS)
 lib_srcs += $(shell find src/core/xml -name "*.cpp")
 endif
