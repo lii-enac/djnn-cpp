@@ -82,5 +82,6 @@ namespace djnn {
     };
 
   void p_init_gui ();
+  void p_clear_gui ();
   extern GUIStructureObserver* gui_structure_observer;
 }

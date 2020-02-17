@@ -19,4 +19,8 @@ namespace djnn {
   void
   p_init_gui () {
   }
+
+  void
+  p_clear_gui () {
+  }
 }

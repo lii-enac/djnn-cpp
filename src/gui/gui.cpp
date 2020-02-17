@@ -287,7 +287,6 @@ namespace djnn
   void
   init_gui ()
   {
-
     bool found_display = false;
     for(auto it = djnn::loadedModules.rbegin(); it != djnn::loadedModules.rend(); ++it) {
       if (*it == "display"){
@@ -319,9 +318,10 @@ namespace djnn
 
   void
   clear_gui ()
-  {
-   
+  {   
     clear_svg_parser ();
+
+    p_clear_gui ();
 
     /* remove container from structure_observer_list */
     structure_observer_list.erase (
@@ -330,7 +330,6 @@ namespace djnn
     );
     /* and delete it */
     delete gui_structure_observer;
-
     delete GenericMouse;
 
     __module_initialized = false;
