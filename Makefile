@@ -40,7 +40,7 @@ graphics ?= QT
 
 # cross-compile support
 ifndef cross_prefix
-cross_prefix := g
+cross_prefix := c
 #options: g llvm-g i686-w64-mingw32- arm-none-eabi- em
 #/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
