@@ -149,7 +149,7 @@ StartSVG(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&g, attrs, XMLRectAreaAttrs_Hash::djn_XMLRectAreaAttrsLookup,
-				SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup, 0);
+				SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in svg element\n", *attrs);
@@ -225,7 +225,7 @@ StartRect(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLRectAttrs_Hash::djn_XMLRectAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in rect element\n", *attrs);
@@ -287,7 +287,7 @@ StartImage (const char** attrs, Process* current)
     int ret =
 #endif
     XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
-			    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+			    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
     if (!ret)
     fprintf (stderr, "unknown attribute '%s' in img element\n", *attrs);
@@ -345,7 +345,7 @@ StartEllipse(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in ellipse element\n", *attrs);
@@ -400,7 +400,7 @@ StartCircle(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in circle element\n", *attrs);
@@ -454,7 +454,7 @@ StartLine(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLLineAttrs_Hash::djn_XMLLineAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in line element\n", *attrs);
@@ -505,7 +505,7 @@ StartPoly(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in poly%s element\n",
@@ -594,7 +594,7 @@ StartText(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in text element\n", *attrs);
@@ -659,7 +659,7 @@ StartTspan(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in tspan element\n", *attrs);
@@ -698,7 +698,7 @@ StartPath(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(&holder, attrs, XMLPathAttrs_Hash::djn_XMLPathAttrsLookup,
-				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+				SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in path element\n",
@@ -753,7 +753,7 @@ StartGroup(const char** attrs, Process* current) {
 #ifdef DEBUG
 		int ret =
 #endif
-		XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+		XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
@@ -781,7 +781,7 @@ StartDefs(const char** attrs, Process* current) {
 #ifdef DEBUG
     int ret =
 #endif
-    XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+    XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
     if (!ret)
     fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
@@ -817,7 +817,7 @@ StartUse(const char** attrs, Process* current) {
     int ret =
 #endif
     XML::djn_XMLHandleAttr(&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup,
-        XMLUseAttrs_Hash::djn_XMLUseAttrsLookup, 0);
+        XMLUseAttrs_Hash::djn_XMLUseAttrsLookup, nullptr);
 #ifdef DEBUG
     if (!ret)
     fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
@@ -903,7 +903,7 @@ StartLinearGradient(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(0, attrs, SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup,
-				SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup, 0);
+				SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in linearGradient element\n", *attrs);
@@ -969,7 +969,7 @@ StartRadialGradient(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(0, attrs, SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup,
-				SVGRadialGradientAttrs_Hash::djn_SVGRadialGradientAttrsLookup, 0);
+				SVGRadialGradientAttrs_Hash::djn_SVGRadialGradientAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in radialGradient element\n", *attrs);
@@ -1031,7 +1031,7 @@ StartGradientStop(const char** attrs, Process* current) {
 		int ret =
 #endif
 		XML::djn_XMLHandleAttr(0, attrs, DJNComponentAttrs_Hash::djn_DJNComponentAttrsLookup,
-				SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup, 0);
+				SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in stop gradient element\n", *attrs);
@@ -1085,7 +1085,7 @@ StartPathClip(const char** attrs, Process* current) {
 #ifdef DEBUG
 		int ret =
 #endif
-		XML::djn_XMLHandleAttr(&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+		XML::djn_XMLHandleAttr(&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 #ifdef DEBUG
 		if (!ret)
 		fprintf (stderr, "unknown attribute '%s' in pathClip element\n", *attrs);
@@ -1182,7 +1182,7 @@ StartStyle(const char** attrs, Process* current) {
   #ifdef DEBUG
       int ret =
   #endif
-      XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, 0);
+      XML::djn_XMLHandleAttr(&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
   #ifdef DEBUG
       if (!ret)
       fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
