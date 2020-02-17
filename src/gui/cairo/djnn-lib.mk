@@ -4,6 +4,7 @@ cairo_backend ?= pixmap
 #cairo_backend ?= gl
 
 #/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/
+#env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig 
 
 ifeq ($(cairo_backend),pixmap)
 lib_cppflags += -I. `pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
