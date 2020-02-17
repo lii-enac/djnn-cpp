@@ -74,7 +74,7 @@ namespace djnn
     if(name=="style") {
       coupling=&_cstyle;
       rawp_Int=&raw_props.style;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_geometry;
       prop_Int=true;
     } else
     return nullptr;

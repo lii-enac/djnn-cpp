@@ -74,7 +74,7 @@ namespace djnn
     if(name=="weight") {
       coupling=&_cweight;
       rawp_Int=&raw_props.weight;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_geometry;
       prop_Int=true;
     } else
     return nullptr;

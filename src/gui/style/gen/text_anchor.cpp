@@ -74,7 +74,7 @@ namespace djnn
     if(name=="anchor") {
       coupling=&_canchor;
       rawp_Int=&raw_props.anchor;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_transform;
       prop_Int=true;
     } else
     return nullptr;

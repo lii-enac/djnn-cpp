@@ -522,16 +522,16 @@ dc.props.append(Prop('fy', 'double', None, "style"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontSize", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('unit', 'int', None, "style"))
-dc.props.append(Prop('size', 'double', None, "style"))
+dc.props.append(Prop('unit', 'int', None, "geometry"))
+dc.props.append(Prop('size', 'double', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontWeight", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('weight', 'int', None, "style"))
+dc.props.append(Prop('weight', 'int', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontStyle", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('style', 'int', None, "style"))
+dc.props.append(Prop('style', 'int', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontFamily", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
@@ -539,7 +539,7 @@ dc.props.append(Prop('family', 'text', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("TextAnchor", "AbstractStyle", "../src/gui/style", origin=None)
-dc.props.append(Prop('anchor', 'int', None, "style"))
+dc.props.append(Prop('anchor', 'int', None, "transform"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractTranslation", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)

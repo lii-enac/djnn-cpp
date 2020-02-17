@@ -79,13 +79,13 @@ namespace djnn
     if(name=="unit") {
       coupling=&_cunit;
       rawp_Int=&raw_props.unit;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_geometry;
       prop_Int=true;
     } else
     if(name=="size") {
       coupling=&_csize;
       rawp_Double=&raw_props.size;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_geometry;
       prop_Double=true;
     } else
     return nullptr;
