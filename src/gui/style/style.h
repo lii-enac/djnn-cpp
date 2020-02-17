@@ -312,9 +312,6 @@ namespace djnn {
     void impl_activate () override;
     void draw () override;
     Process* clone () override;
-  private:
-    struct raw_props_t { string family; };
-    raw_props_t raw_props;
   };
 
   class RGBToLCHConverter : public Process

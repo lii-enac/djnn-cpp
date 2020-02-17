@@ -74,7 +74,7 @@ namespace djnn
     if(name=="family") {
       coupling=&_cfamily;
       rawp_Text=&raw_props.family;
-      notify_mask = notify_damaged_style;
+      notify_mask = notify_damaged_geometry;
       prop_Text=true;
     } else
     return nullptr;

@@ -535,7 +535,7 @@ dc.props.append(Prop('style', 'int', None, "style"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontFamily", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('family', 'text', None, "style"))
+dc.props.append(Prop('family', 'text', None, "geometry"))
 dcs.append(dc)
 
 dc = DjnnClass("TextAnchor", "AbstractStyle", "../src/gui/style", origin=None)
