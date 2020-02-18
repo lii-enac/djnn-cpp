@@ -168,9 +168,6 @@ else ifeq ($(display),DRM)
 thread ?= STD
 chrono ?= STD
 
-else ifeq ($(display),DRM)
-CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-
 else ifeq ($(display),)
 thread ?= STD
 chrono ?= STD
