@@ -412,11 +412,11 @@ namespace djnn
       bool _invalid_cache;
     };
 
-  class ImageWatcher : public Process
+  class ImageWatcher : public Action
   {
   public:
     ImageWatcher (Image *i) :
-        Process ("ImageWatcher"), _img (i) {}
+        Action (i, "ImageWatcher"), _img (i) {}
     virtual ~ImageWatcher () {}
     void impl_activate () override
     {
@@ -427,11 +427,11 @@ namespace djnn
     Image * _img;
   };
 
-  class DataImageWatcher : public Process
+  class DataImageWatcher : public Action
     {
     public:
       DataImageWatcher (DataImage *i) :
-          Process ("DataImageWatcher"), _img (i) {}
+          Action (i, "DataImageWatcher"), _img (i) {}
       virtual ~DataImageWatcher () {}
       void impl_activate () override
       {
