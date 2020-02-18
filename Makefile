@@ -66,10 +66,6 @@ endif
 
 GPERF ?= gperf
 
-thread ?= BOOST
-#options: QT FIBER STD
-chrono ?= BOOST
-#options: QT FIBER STD
 
 CFLAGS += -I$(src_dir)
 
@@ -155,26 +151,94 @@ endif
 
 
 ifeq ($(display),QT)
+
 ifeq ($(os),Darwin)
-CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-LDFLAGS += $(boost_libs)
+thread ?= BOOST
+chrono ?= STD
 else
-CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+thread ?= QT
+chrono ?= STD
 endif
 
 else ifeq ($(display),SDL)
-CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+thread ?= SDL
+chrono ?= STD
+
+else ifeq ($(display),DRM)
+thread ?= STD
+chrono ?= STD
 
 else ifeq ($(display),DRM)
 CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
 
 else ifeq ($(display),)
-CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+thread ?= STD
+chrono ?= STD
 
 else
-$(warning "unknown display (choose among: QT, SDL, (none))")
+$(warning "unknown display (choose among: QT, SDL, DRM, (none))")
 
 endif
+
+thread ?= BOOST
+#options: QT SDL STD FIBER
+chrono ?= STD
+#options: QT FIBER STD
+
+ifeq ($(thread),BOOST)
+CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1
+ifeq ($(os),Darwin)
+CXXFLAGS += -I/usr/local/include
+endif
+LDFLAGS += $(boost_libs)
+
+else ifeq ($(thread),QT)
+CXXFLAGS += -DDJNN_USE_QT_THREAD=1
+
+else ifeq ($(thread),SDL)
+CXXFLAGS += -DDJNN_USE_SDL_THREAD=1
+endif
+
+
+ifeq ($(chrono),BOOST)
+CXXFLAGS += -DDJNN_USE_BOOST_CHRONO=1
+ifneq ($(thread),BOOST)
+ifeq ($(os),Darwin)
+CXXFLAGS += -I/usr/local/include
+endif
+LDFLAGS += $(boost_libs)
+endif
+
+else ifeq ($(chrono),STD)
+CXXFLAGS += -DDJNN_USE_STD_CHRONO=1
+
+else ifeq ($(chrono),SDL)
+CXXFLAGS += -DDJNN_USE_SDL_CHRONO=1
+endif
+
+#is chrono useless now?
+
+
+# ifeq ($(display),QT)
+# ifeq ($(os),Darwin)
+# CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+# LDFLAGS += $(boost_libs)
+# else
+# CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+# endif
+
+# else ifeq ($(display),SDL)
+# CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+
+# else ifeq ($(display),)
+# CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
+
+# else
+# $(warning "unknown display (choose among: QT, SDL, (none))")
+
+# endif
+
+
 
 CXXFLAGS += -std=c++14
 CXXFLAGS += $(CFLAGS)
