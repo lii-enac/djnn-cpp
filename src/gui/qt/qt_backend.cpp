@@ -199,7 +199,8 @@ namespace djnn
     }
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width());
-    _picking_view->painter ()->setRenderHint (QPainter::Antialiasing, true);
+    /* no antialiasing in Color Picking otherwise it will modified a given color */
+    //_picking_view->painter ()->setRenderHint (QPainter::Antialiasing, true);
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
