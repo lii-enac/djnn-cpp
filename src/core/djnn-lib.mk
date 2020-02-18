@@ -8,6 +8,9 @@ lib_srcs += $(shell find src/core/tree -name "*.cpp")
 lib_srcs += $(shell find src/core/execution -name "*.cpp")
 lib_srcs += $(shell find src/core/serializer -name "*.cpp")
 lib_srcs += $(shell find src/core/utils -name "*.cpp")
+lib_srcs += $(shell find src/core/utils/ext/remotery -name "*.c")
+
+lib_cflags += -DRMT_ENABLED=0 -DRMT_USE_OPENGL=0
 
 lib_srcs += src/core/syshook/external_source.cpp src/core/syshook/syshook.cpp \
 			src/core/syshook/main_loop.cpp \

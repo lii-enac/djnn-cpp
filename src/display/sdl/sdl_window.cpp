@@ -21,6 +21,8 @@
 #include "core/execution/graph.h"
 #include "core/syshook/main_loop.h"
 
+#include "core/utils/ext/remotery/Remotery.h"
+
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -156,7 +158,9 @@ namespace djnn
             float _refresh_rate=120.f;
             if(tick - lastTick > 1000/_refresh_rate) {
               lastTick = tick;
+              //rmt_BeginCPUSample(redraw, 0);
               redraw();
+              //rmt_EndCPUSample();
             }
 #else
             redraw ();

@@ -25,6 +25,8 @@
 #include "core/syshook/djnn_time_manager.h"
 #endif
 
+#include "core/utils/ext/remotery/Remotery.h"
+
 #include <iostream>
 #define __FL__ __FILE__ << ":" << __LINE__ << std::endl;
 #define DBG std::cerr << __FUNCTION__ << " " << __FL__;
@@ -182,11 +184,12 @@ namespace djnn {
     }
   }
 
-
   void
   SDLMainloop::handle_events(SDL_Event& first_event)
   {
-    #if 1 
+    //rmt_BeginCPUSample(handle_events, 0);
+    //rmt_LogText(">> logging");
+  #if 1
     // slightly more efficient loop: handle all events in the queue
     if (!get_please_stop ()) { handle_single_event (first_event); }
 
@@ -221,12 +224,20 @@ namespace djnn {
     // simple loop: handle one event at a time, might be costly to acquire mutex each time
     if (!get_please_stop ()) handle_event (e);
   #endif
+    //rmt_LogText("<< logging");
+    //rmt_EndCPUSample();
   }
 
   void
   SDLMainloop::handle_single_event (SDL_Event& e)
   {
+<<<<<<< HEAD
     //std::cerr << sdl_event_to_char(e.type) << __FL__; 
+=======
+    //std::cerr << sdl_event_to_char(e.type) << __FL__;
+    //rmt_BeginCPUSample(handle_single_event, 0);
+    //rmt_LogText(">> logging single");
+>>>>>>> 85f70260... add remotery
     switch (e.type)
     {
       //case Expose:
@@ -297,6 +308,8 @@ namespace djnn {
           //std::cout << "do nothing " << sdl_event_to_char(e.type) << __FL__;
           break;
     }
+    //rmt_LogText("<< logging single");
+    //rmt_EndCPUSample();
   }
 
 }
