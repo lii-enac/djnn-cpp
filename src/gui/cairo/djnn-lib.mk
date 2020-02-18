@@ -1,9 +1,14 @@
 lib_srcs += $(shell find src/gui/cairo -name "*.cpp"  -not -path "*sdl*" -not -path "*drm*")
 
-#cairo_backend ?= pixmap
-cairo_backend ?= drm
+ifndef cairo_backend
+ifeq ($(display),SDL)
+cairo_backend = pixmap
+endif
+ifeq ($(display),DRM)
+cairo_backend = drm
+endif
+endif
 #cairo_backend ?= gl
-
 
 #/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/
 #env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig 
