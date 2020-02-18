@@ -50,8 +50,13 @@ ifeq ($(cross_prefix),g)
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
-CC := $(cross_prefix)cc
+ifdef ($(cross_prefix))
+CC := $(cross_prefix)c
 CXX := $(cross_prefix)++
+else
+CC := cc
+CXX := c++
+endif
 
 ifndef os
 os := $(shell uname -s)
@@ -397,13 +402,17 @@ $1_dbg:
 	@echo $$($1_lib_ldflags)
 
 $1_tructruc:
-	#@echo $1_dbg
-	#@echo $$($1_cpp_srcs)
-	#@echo $$($1_c_srcs)
-	#@echo $$($1_objs)
+	@echo $$($1_c_srcs)
+	@echo $$($1_objs)
+
+$1_atchoum:
+	@echo $1_dbg
+	@echo $$($1_cpp_srcs)
+	@echo $$($1_c_srcs)
+	@echo $$($1_objs)
 	@echo $$($1_lib_all_ldflags)
-	#@echo $$($1_cov_gcno)
-	#@echo $$($1_cov_gcda)
+	@echo $$($1_cov_gcno)
+	@echo $$($1_cov_gcda)
 
 srcs += $$($1_srcs)
 srcgens += $$($1_srcgens)
