@@ -231,13 +231,10 @@ namespace djnn {
   void
   SDLMainloop::handle_single_event (SDL_Event& e)
   {
-<<<<<<< HEAD
-    //std::cerr << sdl_event_to_char(e.type) << __FL__; 
-=======
     //std::cerr << sdl_event_to_char(e.type) << __FL__;
     //rmt_BeginCPUSample(handle_single_event, 0);
     //rmt_LogText(">> logging single");
->>>>>>> 85f70260... add remotery
+
     switch (e.type)
     {
       //case Expose:
