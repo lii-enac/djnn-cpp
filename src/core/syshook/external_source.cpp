@@ -2,12 +2,15 @@
 #include "cpp-thread.h"
 #include "cpp-mutex.h"
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn {
 
-    static djnn_mutex_t * launch_mutex;
+    //static djnn_mutex_t * launch_mutex;
+    static std::mutex * launch_mutex;
+
+
 #ifndef __EMSCRIPTEN__
     thread_local
 #endif
@@ -65,6 +68,7 @@ namespace djnn {
         QThread::create([this]() { this->_es->ExternalSource::private_run(); });
         //QObject::connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
         (*_thread).start();
+        //DBG;
             #else
         #error dont remember
             #endif
@@ -74,9 +78,22 @@ namespace djnn {
         #endif
       }
 
+      void join () {
+        #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
+        _thread.join();
+        #endif
+
+        #if DJNN_USE_QT_THREAD
+        (*_thread).wait();
+        #endif
+
+        #if DJNN_USE_SDL_THREAD
+        SDL_WaitThread(_thread, nullptr);
+        #endif
+      }
+
       void please_stop() {
         #if DJNN_USE_BOOST_THREAD
-        //DBG;
         _thread.interrupt();
         #endif
 
@@ -136,11 +153,15 @@ namespace djnn {
     ExternalSource::init()
     {
         //std::cerr << __PRETTY_FUNCTION__<< std::endl;
+        #if 1
+        launch_mutex = new std::mutex;
+        #else
         #if DJNN_USE_SDL_THREAD
         launch_mutex = SDL_CreateMutex();
         #else
         launch_mutex = new djnn_mutex_t();
         //std::cerr << launch_mutex << std::endl;
+        #endif
         #endif
     }
 
@@ -148,7 +169,7 @@ namespace djnn {
     ExternalSource::launch_mutex_lock()
     {
         //std::cerr << __PRETTY_FUNCTION__ << " " << &launch_mutex << std::flush;
-        #if DJNN_USE_SDL_THREAD
+        #if 0 //DJNN_USE_SDL_THREAD
         SDL_LockMutex(launch_mutex);
         #else
         //std::cerr << launch_mutex << std::endl;
@@ -160,7 +181,7 @@ namespace djnn {
     ExternalSource::launch_mutex_unlock()
     {
         //std::cerr << __PRETTY_FUNCTION__ << " " << &launch_mutex << std::flush;
-        #if DJNN_USE_SDL_THREAD
+        #if 0 //DJNN_USE_SDL_THREAD
         SDL_UnlockMutex(launch_mutex);
         #else
         //std::cerr << launch_mutex << std::endl;
@@ -176,11 +197,16 @@ namespace djnn {
         start_thread ();
     }
 
+    void
+    ExternalSource::join()
+    {
+        _impl->join ();
+    }
+
 	void
 	ExternalSource::please_stop ()
-	{ //DBG;
+	{
         if(get_please_stop ()) return;
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
 
         if(cancelled) *cancelled = true;
 		set_please_stop (true);
@@ -194,29 +220,15 @@ namespace djnn {
         _impl->start();	
 	}
 
-    // void
-    // ExternalSource::thread_terminated ()
-    // {
-    //     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-    //     _impl->thread_terminated();
-    // }
-
 	void
 	ExternalSource::private_run ()
 	{
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        //DBG;
-        //set_thread_priority();
         launch_mutex_lock();
         launch_mutex_unlock();
-        //DBG;
-
-        //cancelled.store(&thread_local_cancelled);
+        
         cancelled = &thread_local_cancelled;
         *cancelled = false;
         
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << cancelled << " " << *cancelled << std::endl;
-        //DBG;
         run();
 
         cancelled = nullptr; 
@@ -225,6 +237,15 @@ namespace djnn {
 }
 
 #if 0
+
+ // void
+    // ExternalSource::thread_terminated ()
+    // {
+    //     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
+    //     _impl->thread_terminated();
+    // }
+
+
 #if 0
 static const char* th_err(int errmsg)
 {

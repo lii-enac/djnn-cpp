@@ -19,6 +19,7 @@
 #include "syshook.h"
 #include "external_source.h"
 #include "cpp-thread.h"
+#include <mutex>
 //#include "cpp-chrono.h"
 //#include "cpp-mutex.h"
 
@@ -73,6 +74,7 @@ namespace djnn
 
     void external_run_for_qt5_9_fixme() { run(); }
     void private_run ();
+    void please_stop () override;
   protected:
 
     // Process
@@ -110,6 +112,7 @@ namespace djnn
     MainLoop ();
     vector<Process*> _background_processes;
     vector<ExternalSource*> _external_sources;
+    std::timed_mutex cancel_mutex;
   };
 
 }

@@ -25,15 +25,15 @@ namespace djnn {
 
   struct timespec before_emscripten;
   void DjnnTimeManager::firstTimerHasChanged()
-  { //DBG;
-    //djnn::get_monotonic_time(&before);
+  {
     cancel_mutex.unlock ();
   }
 
   void
   DjnnTimeManager::please_stop ()
-  { //DBG;
-    ExternalSource::please_stop ();
+  {
+    if(get_please_stop ()) return;
+    set_please_stop (true);
     cancel_mutex.unlock ();
   }
 
@@ -61,7 +61,7 @@ namespace djnn {
     djnn::get_exclusive_access (DBG_GET);
     int duration = getFirstDelta ();
     djnn::release_exclusive_access (DBG_REL);
-    
+
     try {
       while (!get_please_stop ()) {
         struct timespec before;
@@ -72,17 +72,28 @@ namespace djnn {
         //djnn::get_exclusive_access (DBG_GET);
         //debug();
         //djnn::release_exclusive_access (DBG_REL);
-        
-        std::chrono::milliseconds ddd(duration);
-        if(duration < 0) ddd=std::chrono::milliseconds(2000000); //std::chrono::milliseconds::max(); // 'infinite' duration
-        cancel_mutex.lock(); // lock once, get it
 
-        //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << std::endl;
-        bool timer_cancelled = cancel_mutex.try_lock_for(ddd); // lock twice, should block for ddd ms unless it's unlocked elsewhere
-        //std::cerr << "<< djnntimemanager exit sleep " << DBGVAR(timer_cancelled) << std::endl;
-        cancel_mutex.unlock(); // unlock first time
+        bool timer_cancelled =false;
 
-        if(thread_local_cancelled || get_please_stop ()) break;
+        if (duration<0) {
+          cancel_mutex.lock(); // first lock, get it
+          //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
+          cancel_mutex.lock(); // second lock, blocks until another thread calls please_stop of firstTimerHasChanged
+          //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
+          cancel_mutex.unlock(); // unlock first lock
+        } else {
+          cancel_mutex.lock(); // first lock, get it
+          //std::cerr << ">> djnntimemanager entering sleep " << DBGVAR(duration) << __FL__;
+          timer_cancelled =
+          cancel_mutex.try_lock_for(std::chrono::milliseconds(duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
+          //std::cerr << "<< djnntimemanager exited sleep " << DBGVAR(timer_cancelled) << __FL__;
+          cancel_mutex.unlock(); // unlock first time
+        }
+
+        if(thread_local_cancelled || get_please_stop ()) {
+          djnn::get_exclusive_access (DBG_GET); // since we release it at exit
+          break;
+        }
 
         if(timer_cancelled) {
           // either 'infinite duration' has run out or there is a new timer
@@ -113,6 +124,7 @@ namespace djnn {
 
     //ExternalSource::cancelled = nullptr; // make our external source aware that we are finished
     djnn::release_exclusive_access (DBG_REL);
+    //DBG;
   }
 
 }

@@ -22,8 +22,9 @@
 
 #include <thread>
 
-//#define DBG_MUTEX 1
-//#include <iostream>
+#define DBG_MUTEX 0
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn
 {
@@ -33,7 +34,6 @@ namespace djnn
 
   void
   init_global_mutex() {
-    //std::cerr << __PRETTY_FUNCTION__ << std::endl;
     global_mutex = create_lock();
     ios_mutex = create_lock();
   }
@@ -43,7 +43,7 @@ namespace djnn
   {
 #if DBG_MUTEX
     lock(ios_mutex);
-    std::cerr << debug << " thread:" << std::this_thread::get_id() << std::flush;
+    std::cerr << debug << " thread:" << std::this_thread::get_id() << " global mutex: " << global_mutex << std::flush;
     release(ios_mutex);
 #endif
 
@@ -63,7 +63,7 @@ namespace djnn
   {
 #if DBG_MUTEX
     lock(ios_mutex);
-    std::cerr << debug << std::flush;
+    std::cerr << debug << " thread:" << std::this_thread::get_id() << " global mutex: " << global_mutex << std::flush;
     release(ios_mutex);
 #endif
 

@@ -27,6 +27,7 @@ namespace djnn
 
     virtual void start ();
     virtual void please_stop ();
+    virtual void join();
 
     void private_run();
 

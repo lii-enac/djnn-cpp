@@ -37,16 +37,11 @@ namespace djnn {
     {
       static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
       if(!onceFlag.test_and_set()) {
-
         #if DJNN_USE_QT_MAINLOOP
         QtMainloop::build_instance(&_instance);
         #endif
-
-        init_global_mutex();
         ExternalSource::init();
-
         launch_mutex_lock ();
-        djnn::get_exclusive_access (DBG_GET); // prevent other external sources from accessing the shared data
       }
       return _instance;
     }
@@ -61,58 +56,90 @@ namespace djnn {
     MainLoop::~MainLoop ()
     {
       please_stop ();
-      for(auto es: _external_sources) es->please_stop ();
     }
 
     void
     MainLoop::impl_activate ()
     {
-      djnn::release_exclusive_access (DBG_REL);
-
       for (auto es: _external_sources) es->start ();
-      launch_mutex_unlock();
-
       for (auto p: _background_processes) {
         p->activate ();
       }
+      
       if (_another_source_wants_to_be_mainloop) {
-        //djnn::get_exclusive_access (DBG_GET);
         run_in_own_thread ();
-        //djnn::release_exclusive_access (DBG_REL);
         set_activation_state (ACTIVATED);
+        launch_mutex_unlock();
         _another_source_wants_to_be_mainloop->run (); // should block
       } else {
+        launch_mutex_unlock();
         run_in_main_thread (); // should block
       }
+      // up here, the mainloop is blocking
 
       // starting from here, the mainloop has exited
-
       launch_mutex_lock (); // reacquire launch mutex
 
-      for (auto es: _external_sources) es->please_stop ();
-      
+
       if (_another_source_wants_to_be_mainloop) {
         please_stop ();
         join_own_thread ();
       }
-      djnn::get_exclusive_access (DBG_GET); // prevent external source threads to do anything once mainloop is terminated
+    }
+
+    void
+    MainLoop::run ()
+    {
+      if (is_run_forever ()) {
+        cancel_mutex.lock(); // first lock, get it
+        //std::cerr << ">> mainloop entering sleep forever" << __FL__;
+        cancel_mutex.lock(); // second lock, blocks until another thread calls pleaseStop
+        //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
+        cancel_mutex.unlock(); //unlock first lock
+      } else {
+        cancel_mutex.lock(); // first lock, get it
+        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.load().count()) << __FL__;
+        //bool timer_cancelled =
+        cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
+        //std::cerr << "<< mainloop exited sleep " << DBGVAR(timer_cancelled) << __FL__;
+        cancel_mutex.unlock(); // unlock first lock
+      }
+
+      // fist tell all external sources to stop...
+      for (auto es: _external_sources) {
+        es->please_stop ();
+      }
+      // ...then join them
+      for (auto es: _external_sources) {
+        es->join ();
+      }
+
+      if (_another_source_wants_to_be_mainloop)
+        _another_source_wants_to_be_mainloop->please_stop ();
     }
 
     void
     MainLoop::impl_deactivate ()
     {
-      if (_another_source_wants_to_be_mainloop) {
-        _another_source_wants_to_be_mainloop->please_stop ();
-      } else {
-      }
+      please_stop ();
     }
 
-    void 
-    MainLoop::set_another_source_wants_to_be_mainloop (ExternalSource *source)
+    void
+    MainLoop::please_stop()
     {
-      _another_source_wants_to_be_mainloop = source;
+      if(get_please_stop ()) return;
+      set_please_stop (true);
+      cancel_mutex.unlock();
     }
 
+    
+
+
+    void
+    MainLoop::private_run () // FIXME: useless?
+    {
+      run();
+    }
 
     void
     MainLoop::run_in_main_thread ()
@@ -172,38 +199,10 @@ namespace djnn {
       //std::cerr << "<< " << __FL__;
     }
 
-    void
-    MainLoop::private_run ()
+    void 
+    MainLoop::set_another_source_wants_to_be_mainloop (ExternalSource *source)
     {
-      run();
-    }
-
-    void
-    MainLoop::run ()
-    {
-      if (is_run_forever ()) {
-        while (1) {
-          unsigned int duration = 2000; // check from time to time if we need to stop
-          //std::cerr << ">> mainloop ****forever***** entering sleep " << chrono::milliseconds(_duration).count() << "ms " << __FL__;
-          djnn::sleep(duration);
-          //std::cerr << "<< mainloop forever exit sleep " << chrono::milliseconds(_duration).count() << "ms " <<  __FL__;
-          if(get_please_stop()) {
-            break;
-          }
-        }
-      } else { /* mainloop run for _duration time */
-        auto ddd = chrono::milliseconds(_duration);
-        //std::cerr << ">> mainloop duration entering sleep " << ddd.count () << "ms " <<  __FL__;
-        djnn::sleep(ddd.count ());
-        //std::cerr << "<< mainloop duration exit sleep " << ddd.count() << "ms " <<  __FL__;
-        
-        // FIXME : should be removed : with mainloop deactivation
-        // reset _duration at set_run_for_ever () to avoid mainloop re-activation with _duration already set
-        set_run_for_ever (); // reset to default forever mode
-      }
-
-      if (_another_source_wants_to_be_mainloop)
-        _another_source_wants_to_be_mainloop->please_stop ();
+      _another_source_wants_to_be_mainloop = source;
     }
 
     void

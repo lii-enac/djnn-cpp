@@ -15,6 +15,7 @@
 
 
 #include "core-dev.h"
+#include "core/syshook/syshook.h"
 #include "core/syshook/djnn_time_manager.h"
 
 #include <locale.h>
@@ -30,8 +31,9 @@ namespace djnn
   void
   init_core ()
   {
+    
     if (__module_initialized == false) {
-      
+      init_global_mutex();
       __module_initialized = true;
 
       djnn::loadedModules.push_back("core");
