@@ -39,13 +39,13 @@ namespace djnn {
 	    alGenSources(1, &sourceid); CHKAL;
 
 	    finalize_construction(parent, name);
+	    delete [] data;
 	}
 
 	Sample::~Sample ()
 	{
 		alDeleteSources(1, &sourceid); CHKAL;
 	    alDeleteBuffers(1, &bufferid); CHKAL;
-		delete [] data;
 	}
 
 	void

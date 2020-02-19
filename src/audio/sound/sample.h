@@ -20,7 +20,6 @@ namespace djnn {
 	    int channel, sampleRate, bps;
 	    unsigned int sourceid;
 	    int size;
-	    char * data;
 
 	    // djnn_internal::Time::Timer
     	virtual void doit(const djnn_internal::Time::Unit& actualtime) override;
