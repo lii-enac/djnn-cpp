@@ -50,7 +50,7 @@ ifeq ($(cross_prefix),g)
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
-ifdef ($(cross_prefix))
+ifdef cross_prefix
 CC := $(cross_prefix)c
 CXX := $(cross_prefix)++
 else
