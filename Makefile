@@ -46,16 +46,18 @@ cross_prefix := c
 #/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
 endif
 
-ifeq ($(cross_prefix),g)
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+CXX := $(cross_prefix)++
+
+ifeq ($(cross_prefix),c)
+CC := $(cross_prefix)c
+else ifeq ($(cross_prefix),g)
+CC := $(cross_prefix)cc
+else
+CC := $(cross_prefix)	
 endif
 
-ifdef cross_prefix
-CC := $(cross_prefix)c
-CXX := $(cross_prefix)++
-else
-CC := cc
-CXX := c++
+ifeq ($(cross_prefix),g)
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
 ifndef os
@@ -68,6 +70,7 @@ endif
 ifeq ($(findstring MINGW,$(os)),MINGW)
 os := MinGW
 endif
+
 
 GPERF ?= gperf
 
