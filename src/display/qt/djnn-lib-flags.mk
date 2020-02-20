@@ -3,11 +3,9 @@ lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
 ifeq ($(os),Darwin)
 QTLIBS = -framework QtWidgets -framework QtOpenGL \
 		-framework QtGui -framework QtCore
-ifneq ("$(wildcard /opt/local/libexec/qt5/lib/*)","")
-FRAMEWORKDIR = /opt/local/libexec/qt5/lib
-else ifneq ("$(wildcard /usr/local/Cellar/qt/*)","")
+ifneq ("$(wildcard /usr/local/Cellar/qt/*)","")
 FRAMEWORKDIR = $(shell ls -dt1 /usr/local/Cellar/qt/* | head -1)/Frameworks
-moc := /usr/local/Cellar/qt/*/bin/moc
+moc := moc
 else
 FRAMEWORKDIR = ~/Qt/Frameworks
 endif
