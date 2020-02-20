@@ -47,12 +47,12 @@ namespace djnn {
     virtual void redraw ();
     
   protected:
-    
     djnn::Window* _window;
     SDL_Window *_sdl_window;
     SDL_Cursor *_cursor;
     SDL_Surface *_cursor_surface;
     bool is_activated;
+    float _refresh_rate;
   };
 
 }

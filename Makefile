@@ -41,7 +41,7 @@ graphics ?= QT
 # cross-compile support
 ifndef cross_prefix
 cross_prefix := c
-#options: g llvm-g i686-w64-mingw32- arm-none-eabi- em
+#options: c g llvm-g i686-w64-mingw32- arm-none-eabi- em
 #/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
 endif
@@ -304,10 +304,9 @@ djnn_libs := core base display gui animation utils audio
 # comms input
 endif
 
-ifeq ($(os),MinGW)
-djnn_libs := core base comms display gui animation utils files audio
-# input
-endif
+#ifeq ($(os),MinGW)
+#djnn_libs := core base comms display gui input animation utils files audio
+#endif
 
 ifeq ($(physics), ODE)
 djnn_libs += physics

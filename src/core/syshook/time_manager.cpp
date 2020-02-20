@@ -148,7 +148,7 @@ namespace djnn_internal {
     
     void
     Manager::timeElapsed(Unit dt)
-    { //std::cerr << "timeElapsed " << DBGVAR(dt) << __FL__;
+    { //std::cerr << "timeElapsed " << DBGVAR(dt) << " " << DBGVAR(_timers.size()) << __FL__;
       //std::cerr << ">> "; DBGTIMERS;
       
       if(_timers.empty())
