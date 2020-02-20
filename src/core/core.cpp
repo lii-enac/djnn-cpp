@@ -17,7 +17,7 @@
 #include "core-dev.h"
 #include "core/syshook/syshook.h"
 #include "core/syshook/djnn_time_manager.h"
-#include "core/utils/ext/remotery/Remotery.h"
+//#include "core/utils/ext/remotery/Remotery.h"
 
 #include <locale.h>
 
@@ -29,7 +29,7 @@ namespace djnn
 
   static bool __module_initialized = false;
 
-  Remotery* rmt;
+  //Remotery* rmt;
 
   void
   init_core ()
@@ -47,7 +47,7 @@ namespace djnn
       setlocale(LC_NUMERIC, "C");
     }
 
-    rmt_CreateGlobalInstance(&rmt);
+    //rmt_CreateGlobalInstance(&rmt);
     DjnnTimeManager::instance().cleanup ();
   }
 
@@ -55,6 +55,6 @@ namespace djnn
   clear_core ()
   {
     XML::clear_xml_parser ();
-    rmt_DestroyGlobalInstance(rmt);
+    //rmt_DestroyGlobalInstance(rmt);
   }
 }
