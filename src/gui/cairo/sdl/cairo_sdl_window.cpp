@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include <iostream>
+#include "utils/debug.h"
 
 #define _PERF_TEST 1
 #if _PERF_TEST
@@ -88,6 +89,20 @@ namespace djnn
       std::cerr << "Window could not be created! SDL_Error:" << SDL_GetError () << std::endl;
       return;
     }
+
+    SDL_DisplayMode mode;
+    SDL_GetWindowDisplayMode(_sdl_window, &mode);
+    static int msg_written;
+    if(!msg_written) {
+      std::cout << "SDL " << mode.refresh_rate << "hz"<< __FL__;
+    }
+    _refresh_rate = mode.refresh_rate;
+    if(_refresh_rate==0) {
+      _refresh_rate=60;
+      std::cout << "since SDL says " << mode.refresh_rate << "hz, we guess " << _refresh_rate << "hz" << __FL__;
+    }
+    msg_written = true;
+
     _sdl_surface = SDL_CreateRGBSurface (0, w, h, 32, 0, 0, 0, 0);
     _sdl_renderer = SDL_CreateRenderer (_sdl_window, -1, SDL_RENDERER_TARGETTEXTURE);
     _my_cairo_surface = new MyCairoSurface (_window);
