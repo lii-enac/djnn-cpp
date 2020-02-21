@@ -5,7 +5,7 @@ QTLIBS = -framework QtWidgets -framework QtOpenGL \
 		-framework QtGui -framework QtCore
 ifneq ("$(wildcard /usr/local/Cellar/qt/*)","")
 FRAMEWORKDIR = $(shell ls -dt1 /usr/local/Cellar/qt/* | head -1)/Frameworks
-moc := moc
+moc := /usr/local/opt/qt/bin/moc
 else
 FRAMEWORKDIR = ~/Qt/Frameworks
 endif
