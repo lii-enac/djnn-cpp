@@ -520,8 +520,18 @@ namespace djnn
     } else {
       pm = (QPixmap*) (i->cache ());
     }
-    _painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+    /* manage opacity on image */
+    qreal old_opacity = _painter->opacity ();
+    QtContext *cur_context = _context_manager->get_current ();
+    QColor c = cur_context->pen.color ();
+    _painter->setOpacity (c.alphaF ());
+
+    _painter->setRenderHint (QPainter::SmoothPixmapTransform);
     _painter->drawPixmap (rect, *pm);
+
+    /* reset opacity */
+    _painter->setOpacity (old_opacity);
 
     if (is_in_picking_view (i)) {
       load_pick_context (i);
@@ -553,8 +563,18 @@ namespace djnn
       } else {
         pm = (QPixmap*) (i->cache ());
       }
-      _painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+      /* manage opacity on image */
+      qreal old_opacity = _painter->opacity ();
+      QtContext *cur_context = _context_manager->get_current ();
+      QColor c = cur_context->pen.color ();
+      _painter->setOpacity (c.alphaF ());
+
+      _painter->setRenderHint (QPainter::SmoothPixmapTransform);
       _painter->drawPixmap (rect, *pm);
+
+      /* reset opacity */
+      _painter->setOpacity (old_opacity);
 
       if (is_in_picking_view (i)) {
         load_pick_context (i);
