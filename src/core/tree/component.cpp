@@ -23,6 +23,8 @@
 
 #include "gui/picking/analytical_picking_context.h"
 
+#include "core/utils/ext/remotery/Remotery.h"
+
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
@@ -244,11 +246,13 @@ namespace djnn
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
     if (get_activation_flag () == DEACTIVATION)
       return;
+    rmt_BeginCPUSample(container_draw, RMTSF_Recursive);
     ComponentObserver::instance ().start_draw ();
     for (auto c : _children) {
       c->draw ();
     }
     ComponentObserver::instance ().end_draw ();
+    rmt_EndCPUSample();
   }
 
   void

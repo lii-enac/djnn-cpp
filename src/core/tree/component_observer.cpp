@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+#include "core/utils/ext/remotery/Remotery.h"
+
 namespace djnn
 {
 
@@ -55,9 +57,11 @@ namespace djnn
  void
   ComponentObserver::start_draw ()
   {
+    rmt_BeginCPUSample(start_draw, RMTSF_Aggregate);
     for (auto m : _draw_manager_list) {
       m->push ();
     }
+    rmt_EndCPUSample();
   }
 
   void
