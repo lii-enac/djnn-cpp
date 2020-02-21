@@ -43,7 +43,7 @@ namespace djnn_internal {
       while( i!=_timers.end() && dt > (*i)->getDelta() ) {
         if(*i==timer) {
           std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
-          throw TimerAlreadyScheduled();
+          //throw TimerAlreadyScheduled();
         }
         dt -= (*i)->getDelta();
         ++i;
@@ -53,7 +53,7 @@ namespace djnn_internal {
       for(auto j = i; j!=_timers.end(); ++j) {
         if(*j==timer) {
           std::cerr << "Timer " << std::hex << timer << std::dec << " already scheduled" << std::endl;
-          throw TimerAlreadyScheduled();
+          //throw TimerAlreadyScheduled();
         }
       }
       
