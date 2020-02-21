@@ -48,7 +48,7 @@ namespace djnn
     }
 
     rmtSettings* settings = rmt_Settings();
-    settings->reuse_open_port = RMT_TRUE;
+    if(settings) settings->reuse_open_port = RMT_TRUE;
     rmt_CreateGlobalInstance(&rmt);
     DjnnTimeManager::instance().cleanup ();
   }
