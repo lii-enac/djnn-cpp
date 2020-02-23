@@ -66,15 +66,18 @@ namespace djnn
   double
   Rectangle::sdf (double x, double y) const
   {
+    // SVG Rectangle sdf, code by Stéphane Conversy... 
     auto & rectangle = raw_props;
     vec2 p = vec2(x - rectangle.x, y - rectangle.y);
-    double d;
-
     vec2 r    = vec2(rectangle.rx, rectangle.ry);
     vec2 size = vec2(rectangle.width, rectangle.height)/2.-r; // /2. why oh why?
     size      = floor(size);
     vec2 p1   = p-size-r;
-    d = SDF_round_box(p1, size, r.x); // FIXME ry
+
+     //... adapted from N. Rougier, https://www.labri.fr/perso/nrougier/python-opengl/#geometrical-primitives
+    //itself adapted from Inigo Quilez, https://www.shadertoy.com/view/4llXD7
+    double d = SDF_round_box(p1, size, r.x); // FIXME ry
+
     return d;
   }
   
