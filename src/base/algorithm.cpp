@@ -195,12 +195,81 @@ namespace djnn
     }
   }
 
+  bool
+  compare_number (const std::pair<double, int> &l, const std::pair<double, int> &r)
+  {
+    return l.first < r.first;
+  }
+
+  bool
+  compare_string (const std::pair<string, int> &l, const std::pair<string, int> &r)
+  {
+    return l.first < r.first;
+  }
+
   void
   Sorter::sort ()
   {
     Container::children_t children = _container->children ();
+    int sz = children.size ();
+    if (sz == 0)
+      return;
+    vector<Process*> cpy (children);
+    AbstractProperty* p = get_and_check (children[0]);
+    int type = p->get_prop_type ();
+    switch (type)
+      {
+      case Boolean:
+      case Integer:
+      case Double:
+	{
+	  vector<std::pair<double, int>> to_sort;
+	  int i = 0;
+	  for (auto c : children) {
+	    AbstractProperty* prop = get_and_check (c);
+	    if (prop->get_prop_type () != type) {
+	      error (this, "Cannot compare properties of different types");
+	    }
+	    to_sort.push_back (std::pair<double, int> (prop->get_double_value (), i++));
+	  }
+	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
+	  i = 0;
+	  for (auto v : to_sort) {
+	    if (_ascending.get_value ())
+	      _container->set_child (cpy[v.second], i);
+	    else
+	      _container->set_child (cpy[v.second], sz - i - 1);
+	    i++;
+	  }
+	  break;
+	}
+      case String:
+	{
+	  vector<std::pair<string, int>> to_sort;
+	  int i = 0;
+	  for (auto c : children) {
+	    AbstractProperty* prop = get_and_check (c);
+	    if (prop->get_prop_type () != type) {
+	      error (this, "Cannot compare properties of different types");
+	    }
+	    to_sort.push_back (std::pair<string, int> (prop->get_string_value (), i++));
+	  }
+	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
+	  i = 0;
+	  for (auto v : to_sort) {
+	    if (_ascending.get_value ())
+	      _container->set_child (cpy[v.second], i);
+	    else
+	      _container->set_child (cpy[v.second], sz - i - 1);
+	    i++;
+	  }
+	  break;
+	}
+      default:
+	return;
+      }
     //quick_sort (0, children.size () - 1);
-    merge_sort (0, children.size () - 1);
+    //merge_sort (0, children.size () - 1);
   }
 
   void
