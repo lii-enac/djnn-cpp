@@ -77,6 +77,19 @@ namespace djnn
   }
 
   void
+  GUIStructureHolder::set_child (Process *child, int i)
+  {
+    if (i < _children.size ()) {
+      for (auto p : _children) {
+        if (p.second == i) {
+          p.first = child;
+          break;
+        }
+      }
+    }
+  }
+
+  void
   GUIStructureHolder::draw ()
   {
 
@@ -240,6 +253,15 @@ namespace djnn
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ())
       it_cont->second->swap_children (i, j);
+    cont->update_drawing ();
+  }
+
+  void
+  GUIStructureObserver::set_child (Process *cont, Process *child, int  i)
+  {
+    std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
+    if (it_cont != _structure_map.end ())
+      it_cont->second->set_child (child, i);
     cont->update_drawing ();
   }
 

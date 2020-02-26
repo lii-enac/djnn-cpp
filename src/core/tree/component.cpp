@@ -203,6 +203,15 @@ namespace djnn
   }
 
   void
+  Container::set_child (Process *child, int i)
+    {
+      _children[i] = child;
+      for (auto s: structure_observer_list) {
+        s->set_child (this, child, i);
+      }
+    }
+
+  void
   Container::impl_activate ()
   {
     ComponentObserver::instance ().start_component ();

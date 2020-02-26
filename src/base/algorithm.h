@@ -46,8 +46,11 @@ namespace djnn
   private:
     int partition (int i, int j);
     void quick_sort (int i_first, int i_last);
+    void merge_sort (int p, int r);
+    void merge (int p, int q, int r);
     bool compare (AbstractProperty* left, AbstractProperty* right);
     AbstractProperty* get_and_check (int i);
+    AbstractProperty* get_and_check (Process* i);
   protected:
     void serialize (const std::string& type) override;
     BoolProperty _ascending;

@@ -99,6 +99,17 @@ namespace djnn
     return p;
   }
 
+  AbstractProperty*
+  Sorter::get_and_check (Process *p)
+  {
+    AbstractProperty* r = dynamic_cast<AbstractProperty*> (p->find_component (_spec.get_value ()));
+    if (r == nullptr) {
+      error (this, "Unable to sort children: properties not found or with incorrect type");
+      return nullptr;
+    }
+    return r;
+  }
+
   int
   Sorter::partition (int i_first, int i_last) {
     AbstractProperty* pivot = get_and_check (i_first + (i_last - i_first)/2);
@@ -128,10 +139,68 @@ namespace djnn
   }
 
   void
+  Sorter::merge (int p, int q, int r)
+  {
+    int n1 = q - p + 1, i , j ,k;
+    int n2 = r - q;
+    Container::children_t children = _container->children ();
+    Process* L[n1];
+    Process* R[n2];
+    for (i = 0; i < n1; i++)
+    {
+      L[i] = children[p+i];
+    }
+    for (j = 0; j < n2; j++)
+    {
+      R[j] = children [q+j+1];
+    }
+    i=0,j=0;
+
+    for (k = p; i < n1 && j < n2; k++)
+    {
+      if(compare (get_and_check (L[i]), get_and_check (R[j])))
+      {
+        _container->set_child (L[i], k);
+        i++;
+      }
+      else
+      {
+        _container->set_child (R[j], k);
+        j++;
+      }
+    }
+    while (i < n1)
+    {
+      _container->set_child (L[i], k);
+      i++; k++;
+    }
+    while(j<n2)
+    {
+      _container->set_child (R[j], k);
+      j++; k++;
+    }
+  }
+
+  void
+  Sorter::merge_sort (int p, int r)
+  {
+    int q;
+
+    if (p < r)
+    {
+      q = (p + r) / 2;
+      merge_sort (p, q);
+      merge_sort (q + 1, r);
+      merge (p, q, r);
+    }
+  }
+
+  void
   Sorter::sort ()
   {
     Container::children_t children = _container->children ();
-    quick_sort (0, children.size () - 1);
+    //quick_sort (0, children.size () - 1);
+    merge_sort (0, children.size () - 1);
   }
 
   void

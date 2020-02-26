@@ -24,6 +24,7 @@ namespace djnn {
       void move_child_to (Process *c, int neighboor_index, int spec, int new_index);
       void remove_gui_child (Process *c);
       void swap_children (int i, int j);
+      void set_child (Process *child, int i);
       void draw () override;
       AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
@@ -43,6 +44,7 @@ namespace djnn {
       void move_child_to (Process *cont, Process *c, int neighboor_index, int spec, int new_index) override;
       void remove_child_from_container (Process *cont, Process *c) override;
       void swap_children (Process *cont, int i, int j) override;
+      void set_child (Process *cont, Process *child, int i) override;
     private:
       std::map<Process*, GUIStructureHolder*> _structure_map;
     };
