@@ -25,9 +25,10 @@
 #include <iostream>
 #include "utils/debug.h"
 
-#define _PERF_TEST 0
+#define _PERF_TEST 1
 #if _PERF_TEST
-static int __nb_Drawing_object = 0;
+int __nb_Drawing_object = 0;
+int __nb_Drawing_object_picking = 0;
 #endif
 
 namespace djnn
@@ -41,29 +42,15 @@ namespace djnn
   void
   GUIStructureHolder::add_gui_child (Process *c, int index)
   {
-
-#if _PERF_TEST
-    __nb_Drawing_object++;
-#endif
     _children.push_back (std::pair<Process*, int> (c, index));
   }
 
   void
   GUIStructureHolder::remove_gui_child (Process *c)
   {
-
-#if _PERF_TEST
-    /* substract __nb_Drawing_object only if 'c' was a GOBJ (was in GUIStructureHolder::_children) */
-    std::vector<std::pair<Process*, int>>::iterator new_end = std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p) {return p.first == c;});
-    if (new_end != _children.end ()) {
-      _children.erase (new_end, _children.end ());
-      __nb_Drawing_object--;
-    }
-#else
     _children.erase (
         std::remove_if (_children.begin (), _children.end (), [c](std::pair<Process*, int> p) {return p.first == c;}),
         _children.end ());
-#endif
   }
 
   void
@@ -92,6 +79,12 @@ namespace djnn
   void
   GUIStructureHolder::draw ()
   {
+    
+#if _PERF_TEST
+    /* reset  */
+    __nb_Drawing_object = 0 ;
+    __nb_Drawing_object_picking = 0 ;
+#endif
 
     ComponentObserver::instance ().start_draw ();
     for (auto p : _children) {
@@ -100,8 +93,10 @@ namespace djnn
     ComponentObserver::instance ().end_draw ();
 
 #if _PERF_TEST
+    /* result  */
     cerr << "\033[1;31m" << endl;
     cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << endl;
+    cerr << "NB DRAWING OBJS PICKING VIEW: " << __nb_Drawing_object_picking << endl;
     cerr << "\033[0m";
 #endif
   }

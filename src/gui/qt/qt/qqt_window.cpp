@@ -217,9 +217,9 @@ namespace djnn
       // print in RED
       //cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");
-      draw_counter = draw_counter + 1;
-      draw_total = draw_total + time;
-      draw_average = draw_total / draw_counter;
+      //draw_counter = draw_counter + 1;
+      //draw_total = draw_total + time;
+      //draw_average = draw_total / draw_counter;
       _window->mspf ()->set_value(time, true);
       //cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
       //cerr << "\033[0m" << endl;

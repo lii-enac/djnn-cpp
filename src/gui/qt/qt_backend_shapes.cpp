@@ -34,6 +34,13 @@
 #include <iostream>
 #include <cmath>
 
+#define _PERF_TEST 1
+#if _PERF_TEST
+/* define in gui.cpp */
+extern int __nb_Drawing_object;
+extern int __nb_Drawing_object_picking;
+#endif
+
 namespace djnn
 {
   void
@@ -46,9 +53,16 @@ namespace djnn
     load_drawing_context (s, x, y, w, h);
     _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -63,9 +77,16 @@ namespace djnn
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -80,9 +101,16 @@ namespace djnn
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -96,10 +124,16 @@ namespace djnn
     QLineF line (x1, y1, x2, y2);
     load_drawing_context (s, x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
     _painter->drawLine (line);
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawLine (line);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -194,6 +228,9 @@ namespace djnn
     curTextY = rect.y () + fm.height ();
 
     _painter->drawText (p, s);
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
 
     /* Don't forget to reset the old pen color */
     _painter->setPen (oldPen);
@@ -201,6 +238,9 @@ namespace djnn
     if (is_in_picking_view (t)) {
       load_pick_context (t);
       _picking_view->painter ()->drawRect (rect);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -289,9 +329,17 @@ namespace djnn
     load_drawing_context (p, path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
                           path.boundingRect ().height ());
     _painter->drawPath (path);
+
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->drawPath (path);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -312,9 +360,17 @@ namespace djnn
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->drawPath (cur_path);
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->drawPath (cur_path);
+
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -470,9 +526,17 @@ namespace djnn
     s->get_properties_values(x,y,w,h);
     load_drawing_context (s, x, y, w, h);
     _painter->setClipRect (x, y, w, h);
+
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->setClipRect (x, y, w, h);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -488,9 +552,16 @@ namespace djnn
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->setClipPath (cur_path, Qt::ReplaceClip); // could be Qt::UniteClip
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->setClipPath (cur_path);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -530,12 +601,19 @@ namespace djnn
     _painter->setRenderHint (QPainter::SmoothPixmapTransform);
     _painter->drawPixmap (rect, *pm);
 
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
+
     /* reset opacity */
     _painter->setOpacity (old_opacity);
 
     if (is_in_picking_view (i)) {
       load_pick_context (i);
       _picking_view->painter ()->drawRect (rect);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
     }
   }
 
@@ -572,6 +650,9 @@ namespace djnn
 
       _painter->setRenderHint (QPainter::SmoothPixmapTransform);
       _painter->drawPixmap (rect, *pm);
+#if _PERF_TEST
+    __nb_Drawing_object++;
+#endif
 
       /* reset opacity */
       _painter->setOpacity (old_opacity);
@@ -579,6 +660,9 @@ namespace djnn
       if (is_in_picking_view (i)) {
         load_pick_context (i);
         _picking_view->painter ()->drawRect (rect);
+#if _PERF_TEST
+    __nb_Drawing_object_picking++;
+#endif
       }
     }
 } /* namespace djnn */
