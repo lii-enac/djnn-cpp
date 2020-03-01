@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -17,17 +17,7 @@
 #include <iostream>
 #include "utils/debug.h"
 #include "core/utils/error.h"
-//#include "utils/ext/debugbreak.h"
-// #include <boost/core/demangle.hpp>
-// #include <typeinfo>
 
-#define DBGTIMERS for(Timers::iterator iii = _timers.begin(); iii!=_timers.end(); ++iii) { std::cerr << *iii << "(" << (*iii)->getDelta() << "ms) ";} std::cerr << std::endl;
-
-namespace djnn
-{
-  void
-  get_monotonic_time (struct timespec *ts);
-}
 
 namespace djnn_internal {
   

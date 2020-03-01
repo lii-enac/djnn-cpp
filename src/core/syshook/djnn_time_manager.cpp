@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -80,17 +80,13 @@ namespace djnn {
     set_please_stop (false);
 
     djnn::get_exclusive_access (DBG_GET);
-    
     bool empty;
     djnn_internal::Time::time_point next_time;
-
     empty = getTimers().empty();;
     if( !empty ) {
       next_time = get_next()->getEndTime();
     }
-
     update_ref_now();
-    
     djnn::release_exclusive_access (DBG_REL);
 
     try {
@@ -123,10 +119,6 @@ namespace djnn {
 
         /*if(timer_cancelled) {
           // either 'infinite duration' has run out or there is a new timer
-          djnn::get_exclusive_access (DBG_GET); if(thread_local_cancelled || get_please_stop ()) break;
-          duration = getFirstDelta ();
-          djnn::release_exclusive_access (DBG_REL);
-          continue;
         }*/
 
         djnn::get_exclusive_access (DBG_GET); if(thread_local_cancelled || get_please_stop ()) break;
@@ -137,13 +129,8 @@ namespace djnn {
         update_ref_now();
         djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast(get_ref_now());
         //std::cerr << "executing after TimeManager::Timer " <<  DBGVAR(elapsedTime) << __FL__;
-        timeElapsed(now);
-
-        if(thread_local_cancelled || get_please_stop ()) break;
-
-        GRAPH_EXEC; // executing
-
-        if(thread_local_cancelled || get_please_stop ()) break;
+        timeElapsed(now); if(thread_local_cancelled || get_please_stop ()) break;
+        GRAPH_EXEC; if(thread_local_cancelled || get_please_stop ()) break;
 
         empty = getTimers().empty();
         if( !empty ) {

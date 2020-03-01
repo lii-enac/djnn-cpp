@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -11,6 +11,28 @@
  *      Stéphane Conversy <stephane.conversy@enac.fr>
  *
  */
+
+/*
+
+Requirements: the time manager should
+- schedule actions associated to timers and clocks in the future
+- schedule multiple timers and clocks even with the same execution time
+- schedule actions in a sync manner when multiple timers and clocks are scheduled in a chunk/slice of time in the callback execution of a single external source
+- schedule actions with a delay that does not depend on the time taken to execute the associated actions
+- execute actions when timers and clocks have elapsed
+- deactivate timers once they completed
+- reset timers as long as they have not completed
+- reschedule clocks so as to repeat the associated action regularly
+- cancel timers and clocks when requested externally, presumably inside another external source handling
+- modify timers and clocks delays/periods during runtime
+- allow for delays/periods modification and activation/deactivation, inside associated actions
+- sleep as long as no timer/clock has elapsed
+- awake only when the next timer has elapsed
+
+- adapt schedule time according to execution time measurements (with a PID?)
+
+*/
+
 
 #pragma once
 
@@ -32,8 +54,6 @@ namespace djnn_internal {
       return std::chrono::time_point_cast<std::chrono::microseconds>(tp);
     }
 
-    class Manager;
-    class Timer;
 
     class Timer {
     public:
@@ -56,6 +76,7 @@ namespace djnn_internal {
         return t1->getEndTime() < t2->getEndTime();
       }
     };
+
 
     class Manager {
     public:
