@@ -59,7 +59,7 @@ namespace djnn
     void serialize (const string& type) override;
     void update_period ();
     // djnn_internal::Time::Timer
-    virtual void doit(const djnn_internal::Time::Unit& actualtime) override;
+    virtual void doit(const djnn_internal::Time::duration& actualduration) override;
 
   private:
     IntProperty _period;

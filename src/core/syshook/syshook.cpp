@@ -18,8 +18,9 @@
 #include "cpp-mutex.h"
 #include "cpp-mutex-priv.h"
 
-#include <chrono>
+#include "core/syshook/djnn_time_manager.h"
 
+#include <chrono>
 #include <thread>
 
 #define DBG_MUTEX 0
@@ -48,6 +49,8 @@ namespace djnn
 #endif
 
     lock(global_mutex);
+
+    DjnnTimeManager::instance().update_ref_now();
     
 #if DBG_MUTEX
     lock(ios_mutex);

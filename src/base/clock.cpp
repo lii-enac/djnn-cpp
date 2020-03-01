@@ -61,11 +61,11 @@ namespace djnn
   void
   Clock::impl_activate ()
   {
-    //__builtin_trap();
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     //std::cerr << "activate " << get_name () << __FL__;
     _c_update.enable ();
-    DjnnTimeManager::instance().after(this, _period.get_value ());
+    djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+    DjnnTimeManager::instance().schedule(this, d);
   }
 
   void
@@ -80,16 +80,18 @@ namespace djnn
   {
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     DjnnTimeManager::instance().cancel(this);
-    if(somehow_activating())
-      DjnnTimeManager::instance().after(this, _period.get_value ());
+    if(somehow_activating()) {
+      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+      DjnnTimeManager::instance().schedule(this, d);
+    }
       //impl_activate (); // reschedule
   }
 
   void
-  Clock::doit(const djnn_internal::Time::Unit& actualtime)
+  Clock::doit(const djnn_internal::Time::duration& actualduration)
   {
     //std::cerr << "doit " << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
-    _elapsed.set_value (actualtime, true);
+    _elapsed.set_value ((double)actualduration.count()/1000, true);
     auto sav_period = _period.get_value ();
     _tick.activate (); // propagating
     // OR ?? _tick.notify_activation (); // propagating
@@ -99,7 +101,9 @@ namespace djnn
       sav_period == _period.get_value ()
     )
     {
-      impl_activate (); // reschedule
+      //impl_activate (); // reschedule
+      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+      DjnnTimeManager::instance().schedule(this, d, getEndTime());
     }
 
   }
@@ -119,86 +123,3 @@ namespace djnn
   }
 
 }
-
-
-
-
-
-
-#if 0
-  void
-  Clock::run ()
-  {
-    std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << get_name() << std::endl;
-    set_please_stop (false);
-
-    djnn::get_exclusive_access (DBG_GET);
-    if(thread_local_cancelled) {
-      djnn::release_exclusive_access (DBG_REL);
-      return;
-    }
-    int duration = _period.get_value ();
-    djnn::release_exclusive_access (DBG_REL);
-
-    try {
-      while (!get_please_stop ()) {
-        struct timespec before;
-        get_monotonic_time(&before);
-
-        //std::cerr << "entering sleep" << std::endl;
-        djnn::sleep(duration);
-        //std::cerr << "exit sleep" << std::endl;
-        
-        if(thread_local_cancelled) {
-          //std::cerr << " cancelled" << __FL__ << std::endl;
-          break;
-        }
-
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        if(thread_local_cancelled) {
-          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-          //std::cerr << " cancelled" << __FL__ << std::endl;
-          break;
-        }
-        if (get_please_stop ()) {
-          djnn::release_exclusive_access (DBG_REL); 
-          break;
-        } else {
-          struct timespec after;
-          get_monotonic_time(&after);
-          double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
-          _elapsed.set_value (elapsedTime, true);
-          _tick.activate (); // propagating
-          
-          GRAPH_EXEC; // executing
-          if(thread_local_cancelled) {
-            djnn::release_exclusive_access (DBG_REL); 
-            //std::cerr << " cancelled" << __FL__ << std::endl;
-            break;
-          }
-          duration = _period.get_value ();
-          djnn::release_exclusive_access (DBG_REL); 
-        }
-          
-      }
-      //std::cerr << this << " << stop" << std::endl;
-
-    } catch (exception& e) {
-      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
-    }
-#if DJNN_USE_BOOST_THREAD
-    catch(boost::thread_interrupted const& ) {
-        //clean resources
-        //std::cout << "thread interrupted" << std::endl;
-    }
-#endif
-    //std::cout << "clock thread terminating..." << std::endl;
-    //thread_terminated ();
-    //cancelled = nullptr;
-  }
-#endif
-
-
-
-
-

@@ -10,7 +10,6 @@
  *  Contributors:
  *      Stéphane Conversy <stephane.conversy@enac.fr>
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
-
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
@@ -60,7 +59,9 @@ namespace djnn {
 
     void
     MainLoop::impl_activate ()
-    {
+    { //DBG;
+      DjnnTimeManager::instance().update_ref_now();
+
       for (auto es: _external_sources) es->start ();
       for (auto p: _background_processes) {
         p->activate ();
@@ -131,9 +132,6 @@ namespace djnn {
       set_please_stop (true);
       cancel_mutex.unlock();
     }
-
-    
-
 
     void
     MainLoop::private_run () // FIXME: useless?

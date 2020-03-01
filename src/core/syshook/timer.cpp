@@ -55,49 +55,50 @@ namespace djnn
 #endif
 
   Timer::~Timer ()
-  {
+  { //std::cerr << __FUNCTION__ << " " << get_name () << " with delta " << _delay.get_value () << __FL__;
   }
 
   
+  // Process
   void
   Timer::impl_activate ()
   {
-    //DBG;
+    //std::cerr << DBGVAR(_delay.get_value()) << __FL__;
     _c_update.enable ();
     _c_reset.enable ();
-    DjnnTimeManager::instance().after(this, _delay.get_value ());
+    djnn_internal::Time::duration d = std::chrono::milliseconds(_delay.get_value ());
+    DjnnTimeManager::instance().schedule(this, d);
   }
 
   void
   Timer::impl_deactivate ()
   {
-    //DBG;
+    //std::cerr << DBGVAR(_delay.get_value()) << __FL__;
     _c_update.disable ();
     _c_reset.disable ();
     DjnnTimeManager::instance().cancel(this);
   }
 
-  void
-  Timer::update_period()
-  {
-    //DBG;
-    DjnnTimeManager::instance().cancel(this);
-    if(somehow_activating())
-      //impl_activate (); // reschedule
-      DjnnTimeManager::instance().after(this, _delay.get_value ());
-  }
-
   // djnn_internal::Time::Timer
   void
-  Timer::doit(const djnn_internal::Time::Unit& actualtime)
+  Timer::doit(const djnn_internal::Time::duration & actualduration)
   {
-    //std::cerr << get_name () << " with delta " << _delay.get_value () - actualtime << __FL__;
+    //std::cerr << get_name () << " with delta " << actualduration.count() - _delay.get_value () << __FL__;
     if(somehow_activating()) {
       set_activation_state (DEACTIVATED);
       _end.notify_activation (); // propagating
     }
   }
 
+  void
+  Timer::update_period()
+  {
+    DjnnTimeManager::instance().cancel(this);
+    if(somehow_activating()) {
+      djnn_internal::Time::duration d = std::chrono::milliseconds(_delay.get_value ());
+      DjnnTimeManager::instance().schedule(this, d);
+    }
+  }
 
 
   void
@@ -113,119 +114,5 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-
-
-
-#if 0
-  void
-  Timer::run ()
-  {
-    //DBG;
-    int duration;
-    djnn::get_exclusive_access (DBG_GET);
-    if(thread_local_cancelled) {
-      djnn::release_exclusive_access (DBG_REL);
-      return;
-    } else {
-      duration = _delay.get_value ();
-      djnn::release_exclusive_access (DBG_REL);
-    }
-
-    set_please_stop (false);
-    try {
-      djnn::sleep(duration);
-
-      if(thread_local_cancelled) {
-        //thread_terminated ();
-        //return;
-      } else {
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        // the previous call my take some time, check if we have been cancelled meanwhile
-        if(!thread_local_cancelled && !get_please_stop ()) {
-          set_activation_state (DEACTIVATED);
-          _end.notify_activation (); // propagating
-          GRAPH_EXEC; // executing
-          if(!thread_local_cancelled) { // let's finish properly if we were not cancelled
-            cancelled = nullptr; // make our external source aware that we are finised
-          }
-        }
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-      }
-    } catch (exception& e) {
-      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
-    }
-#if DJNN_USE_BOOST_THREAD
-    catch(boost::thread_interrupted const& ) {
-        //std::cout << "thread interrupted" << std::endl;
-    }
-#endif
-  }
-#endif
-
-#if 0
-#ifdef __cplusplus // C++
-
-#if 1 // plain objects
-
-#define BEG_CAI :
-#define ALLOC_AND_INIT(type, name, ...) name (__VA_ARGS__)
-#define END_CAI {
-#define UNINIT_AND_DEALLOC(type, name, ...)
-
-#else // pointers
-
-#define BEG_CAI {
-#define ALLOC_AND_INIT(type, name, ...) name = ne_w type (__VA_ARGS__)
-#define END_CAI
-#define UNINIT_AND_DEALLOC (type, name, ...) delete name;
-
-#endif
-
-#else // C // not tested
-
-#define BEG_CAI {
-#define ALLOC_AND_INIT(type, name, ...) name = (type*)malloc(sizeof(type)); type#_init(__VA_ARGS__);
-#define END_CAI
-#define UNINIT_AND_DEALLOC (type, name, ...) free(name);
-
-#endif
-  /*
-  // old pointer-based
-  Timer::Timer (int period)
-  {
-    _delay = ne_w IntProperty (this, "delay", period);
-    _end = ne_w Blank (this, "end");
-  }
-  */
-
-  /*
-  // configurable
-  Timer::Timer (int period)
-  BEG_CAI
-  ALLOC_AND_INIT(IntProperty, _delay, this, "delay", period),
-  ALLOC_AND_INIT(Blank, _end, this, "end")
-  END_CAI
-  }
-  */
-  /*
-  // old destructor, pointer based
-  Timer::~Timer ()
-  {
-    delete _end;
-    delete _delay;
-  }
-  */
-  
-  /*
-  // configurable
-  Timer::~Timer ()
-  {
-    UNINIT_AND_DEALLOC(IntProperty, _delay);
-    UNINIT_AND_DEALLOC(Blank, _end);
-  }
-  */
-#endif
-
-
 
 }

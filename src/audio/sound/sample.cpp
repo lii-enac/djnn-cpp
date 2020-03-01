@@ -53,8 +53,8 @@ namespace djnn {
 	{
 		alSourcei(sourceid, AL_BUFFER, bufferid); CHKAL;
     	alSourcePlay(sourceid); CHKAL;
-    	auto duration = 1000.*((size/channel)/2)/sampleRate;
-    	DjnnTimeManager::instance().after(this, duration);
+    	djnn_internal::Time::duration d = std::chrono::milliseconds(1000*((size/channel)/2)/sampleRate);
+    	DjnnTimeManager::instance().schedule(this, d);
 	}
 
 	void
@@ -66,7 +66,7 @@ namespace djnn {
 
 	// djnn_internal::Time::Timer
 	void
-  	Sample::doit(const djnn_internal::Time::Unit& actualtime)
+  	Sample::doit(const djnn_internal::Time::duration& actualduration)
   	{
     	if(somehow_activating()) {
       		set_activation_state (DEACTIVATED);

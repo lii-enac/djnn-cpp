@@ -232,7 +232,7 @@ namespace djnn {
         
         run();
 
-        cancelled = nullptr; 
+        cancelled = nullptr;
 	}
 	
 }

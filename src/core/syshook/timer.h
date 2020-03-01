@@ -58,7 +58,7 @@ namespace djnn
     virtual ~Timer ();
 
     // djnn_internal::Time::Timer
-    virtual void doit(const djnn_internal::Time::Unit& actualtime) override;
+    virtual void doit(const djnn_internal::Time::duration& actualduration) override;
 
   protected:
     // Process

@@ -22,7 +22,7 @@ namespace djnn {
 	    int size;
 
 	    // djnn_internal::Time::Timer
-    	virtual void doit(const djnn_internal::Time::Unit& actualtime) override;
+    	virtual void doit(const djnn_internal::Time::duration& actualduration) override;
 
 	    Blank _end;
     	
