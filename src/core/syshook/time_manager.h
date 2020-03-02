@@ -73,7 +73,9 @@ namespace djnn_internal {
       bool
       operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const
       {
-        return t1->getEndTime() < t2->getEndTime();
+        return
+            t1->getEndTime()  < t2->getEndTime()
+        || (t1->getEndTime() == t2->getEndTime() ? t1<t2 : false); // need to distinguish between Timer*
       }
     };
 
@@ -88,6 +90,7 @@ namespace djnn_internal {
       struct TimerListEmpty : exc {};
 
       void update_ref_now();
+      void update_ref_now(time_point now);
       const time_point& get_ref_now () const { return _ref_now; } 
 
       virtual void schedule(Timer* timer, duration) ; //throw(TimerAlreadyScheduled);
@@ -101,8 +104,10 @@ namespace djnn_internal {
 
       void timeElapsed(time_point now);
 
-      typedef std::multiset<Timer*, lesser> Timers;      
-      const Timers& getTimers() const { return _timers; }
+      //typedef std::multiset<Timer*, lesser> Timers;      
+      typedef std::set<Timer*, lesser> Timers;      
+      //const Timers& getTimers() const { return _timers; }
+      bool empty() const { return _timers.empty(); }
       void cleanup ();
       void debug () const;
 

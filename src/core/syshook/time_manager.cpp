@@ -32,7 +32,13 @@ namespace djnn_internal {
     void
     Manager::update_ref_now ()
     {
-      _ref_now = time_point_cast(clock::now());
+      update_ref_now(time_point_cast(clock::now()));
+    }
+
+    void
+    Manager::update_ref_now (time_point now)
+    {
+      _ref_now = now;
     }
 
     void
@@ -44,15 +50,17 @@ namespace djnn_internal {
     void
     Manager::schedule(Timer* timer, duration t, time_point start_time) //throw (TimerAlreadyScheduled)
     {
+      //debug(); std::cerr << __FL__;
       if(already_scheduled(timer)) {
-        djnn::warning(dynamic_cast<djnn::Process*>(timer), "timer scheduled but has already been scheduled");
+        djnn::warning(dynamic_cast<djnn::Process*>(timer), "timer has already been scheduled");
+        //std::cerr << timer << __FL__;
         cancel(timer);
       }
 
       timer->setStartTime(start_time);
       timer->setEndTime(start_time + t);
       Timer * previous_first = nullptr;
-      if(!_timers.empty()) {
+      if(!empty()) {
         previous_first = get_next();
       }
       _timers.emplace(timer);
@@ -89,6 +97,8 @@ namespace djnn_internal {
     bool
     Manager::already_scheduled(Timer * timer)
     {
+      //std::cerr << "find: " << (_timers.find(timer)) << __FL__;
+      //std::cerr << "end: " << &(_timers.end()) << __FL__;
       return _timers.find(timer) != _timers.end();
     }
 
@@ -108,20 +118,21 @@ namespace djnn_internal {
     void
     Manager::timeElapsed(time_point now)
     { 
-      if(_timers.empty())
+      if(empty())
         return;
 
       Timer * previous_first = get_next();
       
       _dontCallTimerHasChanged=1;
-      while ( _timers.empty()==false && (get_next()->getEndTime() - now) < _precision) {
+      //std::cerr << (now - (get_next()->getEndTime() - _precision)).count()/1000 << __FL__;
+      while ( empty()==false && (now > (get_next()->getEndTime() - _precision))) {
         auto * t = get_next();
-        _timers.erase(_timers.begin());
+        pop_next();
         t->doit(now-t->getEndTime());
       }
       _dontCallTimerHasChanged=0;
 
-      if (_timers.empty() || previous_first != get_next()) {
+      if (empty() || previous_first != get_next()) {
         firstTimerHasChanged ();
       }
     }
@@ -133,18 +144,18 @@ namespace djnn_internal {
       assert(_timers.empty());
     }
 
-    /*
+    
     void
     Manager::debug() const
     {
       std::cerr << "timer queue: ";
       for (auto it = _timers.begin(); it != _timers.end(); ++it ) {
         //std::cerr << (*it)->getEndTime () << "ms (" << (*it)->getDuration() << "ms) - ";
-        std::cerr << (*it)->getDuration().count() << "us - ";
+        std::cerr << *it << " " << (*it)->getDuration().count() << "us - ";
       }
       //std::cerr << std::endl; //__FL__;
     }
-    */
+    
     
 } // time
 } // djnn_internal

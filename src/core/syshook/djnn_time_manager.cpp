@@ -80,10 +80,10 @@ namespace djnn {
     set_please_stop (false);
 
     djnn::get_exclusive_access (DBG_GET);
-    bool empty;
+    bool empty_;
     djnn_internal::Time::time_point next_time;
-    empty = getTimers().empty();;
-    if( !empty ) {
+    empty_ = empty();
+    if( !empty_ ) {
       next_time = get_next()->getEndTime();
     }
     update_ref_now();
@@ -95,7 +95,7 @@ namespace djnn {
         //bool timer_cancelled =false;
         //auto before_lock = djnn_internal::Time::time_point_cast(djnn_internal::Time::clock::now());
 
-        if (empty) {
+        if (empty_) {
           cancel_mutex.lock(); // first lock, get it
           //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
           cancel_mutex.lock(); // second lock, blocks until another thread calls please_stop of firstTimerHasChanged
@@ -132,8 +132,8 @@ namespace djnn {
         timeElapsed(now); if(thread_local_cancelled || get_please_stop ()) break;
         GRAPH_EXEC; if(thread_local_cancelled || get_please_stop ()) break;
 
-        empty = getTimers().empty();
-        if( !empty ) {
+        empty_ = empty();
+        if( !empty_ ) {
           next_time = get_next()->getEndTime();
         }
         djnn::release_exclusive_access (DBG_REL);
