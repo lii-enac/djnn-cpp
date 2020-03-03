@@ -74,9 +74,12 @@ namespace djnn
   Timer::impl_deactivate ()
   {
     //std::cerr << DBGVAR(_delay.get_value()) << __FL__;
+    if(somehow_activating()) { // if it's still activated, we need to cancel
+      DjnnTimeManager::instance().cancel(this);
+    }
     _c_update.disable ();
     _c_reset.disable ();
-    DjnnTimeManager::instance().cancel(this);
+    
   }
 
   // djnn_internal::Time::Timer

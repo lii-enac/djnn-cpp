@@ -78,13 +78,11 @@ namespace djnn
   void
   Clock::update_period()
   {
-    //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     DjnnTimeManager::instance().cancel(this);
     if(somehow_activating()) {
       djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
       DjnnTimeManager::instance().schedule(this, d);
     }
-      //impl_activate (); // reschedule
   }
 
   void
@@ -92,16 +90,13 @@ namespace djnn
   {
     //std::cerr << "doit " << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
     _elapsed.set_value ((double)actualduration.count()/1000, true);
-    auto sav_period = _period.get_value ();
-    _tick.activate (); // propagating
-    // OR ?? _tick.notify_activation (); // propagating
-    if(somehow_activating() &&
-        //!DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period
-      // FIXME costly
-      sav_period == _period.get_value ()
+    //auto sav_period = _period.get_value ();
+    _tick.activate (); // OR ?? _tick.notify_activation ();
+    if(somehow_activating()
+      //&& !DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period // FIXME costly
+      //&& sav_period == _period.get_value ()
     )
     {
-      //impl_activate (); // reschedule
       djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
       DjnnTimeManager::instance().schedule(this, d, getEndTime());
     }
