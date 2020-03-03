@@ -42,13 +42,13 @@ namespace djnn_internal {
     }
 
     void
-    Manager::schedule(Timer* timer, duration t)
+    Manager::schedule (Timer* timer, duration t)
     {
       schedule(timer, t, get_ref_now());
     }
     
     void
-    Manager::schedule(Timer* timer, duration t, time_point start_time) //throw (TimerAlreadyScheduled)
+    Manager::schedule (Timer* timer, duration t, time_point start_time) //throw (TimerAlreadyScheduled)
     {
       //debug(); std::cerr << __FL__;
       if(already_scheduled(timer)) {
@@ -70,7 +70,7 @@ namespace djnn_internal {
     }
 
     void
-    Manager::cancel(Timer* timer)
+    Manager::cancel (Timer* timer)
     { 
       if(!already_scheduled(timer)) {
         djnn::warning(dynamic_cast<djnn::Process*>(timer), "timer cancelled but not previously scheduled");
@@ -87,21 +87,19 @@ namespace djnn_internal {
     }
 
     void
-    Manager::reset(Timer* timer)
+    Manager::reset (Timer* timer)
     {
       cancel(timer);
       duration d = timer->getEndTime () - timer->getStartTime ();
       schedule(timer, d, get_ref_now());
     }
 
-    bool
-    Manager::already_scheduled(Timer * timer)
+    void
+    Manager::cleanup ()
     {
-      //std::cerr << "find: " << (_timers.find(timer)) << __FL__;
-      //std::cerr << "end: " << &(_timers.end()) << __FL__;
-      return _timers.find(timer) != _timers.end();
+      _timers.clear ();
+      assert(_timers.empty());
     }
-
 
     Timer*
     Manager::get_next()
@@ -137,13 +135,21 @@ namespace djnn_internal {
       }
     }
     
-    void
-    Manager::cleanup ()
+    
+    // debug
+
+    const Timer*
+    Manager::find(Timer * timer) const
     {
-      _timers.clear ();
-      assert(_timers.empty());
+      return *(_timers.find(timer));
     }
 
+
+    bool
+    Manager::already_scheduled(Timer * timer) const
+    {
+      return _timers.find(timer) != _timers.end();
+    }
     
     void
     Manager::debug() const

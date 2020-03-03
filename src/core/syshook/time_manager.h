@@ -75,43 +75,42 @@ namespace djnn_internal {
       {
         return
             t1->getEndTime()  < t2->getEndTime()
-        || (t1->getEndTime() == t2->getEndTime() ? t1<t2 : false); // need to distinguish between Timer*
+        || (t1->getEndTime() == t2->getEndTime() ? t1<t2 : false); // need to distinguish between Timer*'s
       }
     };
 
 
     class Manager {
     public:
-      Manager(duration precision=std::chrono::microseconds(100));
+      Manager (duration precision=std::chrono::microseconds(100));
       virtual ~Manager() {}
 
-      struct exc {};
-      struct TimerAlreadyScheduled : exc {};
-      struct TimerListEmpty : exc {};
+      //struct exc {};
+      //struct TimerAlreadyScheduled : exc {};
+      //struct TimerListEmpty : exc {};
 
-      void update_ref_now();
-      void update_ref_now(time_point now);
+      void update_ref_now ();
+      void update_ref_now (time_point now);
       const time_point& get_ref_now () const { return _ref_now; } 
 
-      virtual void schedule(Timer* timer, duration) ; //throw(TimerAlreadyScheduled);
-      virtual void schedule(Timer* timer, duration, time_point start_time) ; //throw(TimerAlreadyScheduled);
-      virtual void cancel(Timer* timer);
-      void reset(Timer* timer);      
-      bool already_scheduled(Timer* timer);
-      Timer* get_next ();
-      void pop_next ();
+      void schedule(Timer* timer, duration) ; //throw(TimerAlreadyScheduled);
+      void schedule(Timer* timer, duration, time_point start_time) ; //throw(TimerAlreadyScheduled);
+      void cancel  (Timer* timer);
+      void reset   (Timer* timer);
+      void cleanup ();
+      bool empty   () const { return _timers.empty(); }
+      Timer*  get_next ();
+      void    pop_next ();
+      void timeElapsed (time_point now);
       virtual void firstTimerHasChanged()=0;
 
-      void timeElapsed(time_point now);
-
-      //typedef std::multiset<Timer*, lesser> Timers;      
-      typedef std::set<Timer*, lesser> Timers;      
-      //const Timers& getTimers() const { return _timers; }
-      bool empty() const { return _timers.empty(); }
-      void cleanup ();
+      // debug
+      const Timer* find (Timer *) const;
+      bool already_scheduled (Timer* timer) const;
       void debug () const;
 
     private:
+      typedef std::set<Timer*, lesser> Timers;
       Timers _timers;
       duration _precision;
       bool _dontCallTimerHasChanged;
