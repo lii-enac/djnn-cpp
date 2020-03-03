@@ -19,6 +19,7 @@
 #include "core/control/action.h"
 #include "core/tree/component.h"
 #include "core/tree/double_property.h"
+#include "core/tree/text_property.h"
 
 namespace djnn {
   using namespace std;
@@ -64,7 +65,8 @@ namespace djnn {
     void change_branch ();
     friend void SwitchRangeAction::impl_activate ();
     double _initial;
-    DoubleProperty _branch_range;
+    DoubleProperty _input;
+    TextProperty _branch_name;
     SwitchRangeAction _action;
     Coupling _c_branch;
     Process* _cur_branch;

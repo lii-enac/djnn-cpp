@@ -79,12 +79,14 @@ namespace djnn
   SwitchRange::SwitchRange (Process *parent, const string &name, double initial) 
   : Container (parent, name),
   _initial (initial),
-  _branch_range (nullptr, "switch_state", initial),
+  _input (nullptr, "input", initial),
+  _branch_name (nullptr, "state", "(out of range)"),
   _action (this, "switch_range_action"),
-  _c_branch (&_branch_range, ACTIVATION, &_action, ACTIVATION, true),
+  _c_branch (&_input, ACTIVATION, &_action, ACTIVATION, true),
   _cur_branch (nullptr)
   {
-    add_symbol ("state", &_branch_range);
+    add_symbol ("input", &_input); // FIXME should be value?
+    add_symbol ("state", &_branch_name); // FIXME should ne state for the sake of consistency with other switches
     _c_branch.disable ();
     Process::finalize_construction (parent, name, &_action);
   }
@@ -136,6 +138,37 @@ namespace djnn
   }
 
   void
+  SwitchRange::change_branch ()
+  {
+    double v = _input.get_value ();
+    for (auto c: _children) {
+      if (((SwitchRangeBranch*)c)->is_in_range (v)) {
+        if (_cur_branch == c) {
+          if (_cur_branch->get_activation_state () == DEACTIVATED) {
+             _cur_branch->activate ();
+             _branch_name.set_value(_cur_branch->get_name(), 1);
+           }
+        } else {
+          if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
+            _cur_branch->deactivate ();
+          _cur_branch = c;
+          _cur_branch->activate ();
+          _branch_name.set_value(_cur_branch->get_name(), 1);
+        }
+        return;
+      }
+    }
+    /* note:
+     * if the value is out of any ranges of the switch range
+     * the _cur_branch is deactivated
+     */
+     if (_cur_branch) {
+       _cur_branch->deactivate ();
+       _branch_name.set_value("(out of range)", 1);
+     }
+  }
+
+  void
   SwitchRange::draw ()
   {
     if (get_activation_flag () == DEACTIVATION)
@@ -162,32 +195,6 @@ namespace djnn
       return _cur_branch->pick_analytical (pac);
     return nullptr;
   }  
-
-  void
-  SwitchRange::change_branch ()
-  {
-    double v = _branch_range.get_value ();
-    for (auto c: _children) {
-      if (((SwitchRangeBranch*)c)->is_in_range (v)) {
-        if (_cur_branch == c) {
-          if (_cur_branch->get_activation_state () == DEACTIVATED)
-             _cur_branch->activate ();
-        } else {
-          if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
-            _cur_branch->deactivate ();
-          _cur_branch = c;
-          c->activate ();
-        }
-        return;
-      }
-    }
-    /* note:
-     * if the value is out of any ranges of the switch range
-     * the _cur_branch is deactivated
-     */
-     if (_cur_branch)
-       _cur_branch->deactivate ();
-  }
 
   void
   SwitchRange::serialize (const string& type) {
