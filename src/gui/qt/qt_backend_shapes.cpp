@@ -34,7 +34,7 @@
 #include <iostream>
 #include <cmath>
 
-#define _PERF_TEST 1
+#define _PERF_TEST 0
 #if _PERF_TEST
 /* define in gui.cpp */
 extern int __nb_Drawing_object;

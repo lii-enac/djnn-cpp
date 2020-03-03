@@ -25,7 +25,7 @@
 #include <iostream>
 #include "utils/debug.h"
 
-#define _PERF_TEST 1
+#define _PERF_TEST 0
 #if _PERF_TEST
 int __nb_Drawing_object = 0;
 int __nb_Drawing_object_picking = 0;
