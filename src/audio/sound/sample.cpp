@@ -1,5 +1,19 @@
-#include "sample.h"
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *
+ */
 
+#include "sample.h"
 #include "audio/al/openal.h"
 
 #include <iostream>
@@ -48,6 +62,7 @@ namespace djnn {
 	    alDeleteBuffers(1, &bufferid); CHKAL;
 	}
 
+	// Process
 	void
 	Sample::impl_activate ()
 	{
@@ -61,19 +76,19 @@ namespace djnn {
 	Sample::impl_deactivate ()
 	{
 		alSourceStop(sourceid); CHKAL;
-		if(somehow_activating()) { // if it's still activated, we need to cancel
+		if(somehow_activating()) {
       		DjnnTimeManager::instance().cancel(this);
     	}
 	}
 
 	// djnn_internal::Time::Timer
 	void
-  	Sample::doit(const djnn_internal::Time::duration& actualduration)
+  	Sample::do_it(const djnn_internal::Time::duration& actualduration)
   	{
     	if(somehow_activating()) {
       		set_activation_state (DEACTIVATED);
       		Sample::impl_deactivate ();
-      		_end.notify_activation (); // propagating
+      		_end.notify_activation ();
     	}
   	}
 

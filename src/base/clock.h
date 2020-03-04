@@ -17,7 +17,6 @@
 
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
-#include "core/syshook/external_source.h"
 #include "core/tree/int_property.h"
 #include "core/tree/double_property.h"
 #include "core/tree/spike.h"
@@ -59,7 +58,7 @@ namespace djnn
     void serialize (const string& type) override;
     void update_period ();
     // djnn_internal::Time::Timer
-    virtual void doit(const djnn_internal::Time::duration& actualduration) override;
+    virtual void do_it(const djnn_internal::Time::duration& actualduration) override;
 
   private:
     IntProperty _period;

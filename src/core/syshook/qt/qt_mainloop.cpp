@@ -78,7 +78,7 @@ namespace djnn
   {
     //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     /* slot_about_to_block will / *might* be called ASA qapp->exec */
-    //usleep(10000000); // QObject::startTimer: Timers can only be used with threads started with QThread FIXME
+    //usleep(10000000); // QObject::_start_timer: Timers can only be used with threads started with QThread FIXME
     _qapp->exec ();
   }
 

@@ -14,17 +14,14 @@
  */
 
 #include "timer.h"
-#include "syshook.h"
-#include "core/tree/int_property.h"
-#include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 #include "core/syshook/djnn_time_manager.h"
 
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-#include <iostream>
-#include "utils/debug.h"
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {
@@ -55,7 +52,7 @@ namespace djnn
 #endif
 
   Timer::~Timer ()
-  { //std::cerr << __FUNCTION__ << " " << get_name () << " with delta " << _delay.get_value () << __FL__;
+  {
   }
 
   
@@ -63,7 +60,6 @@ namespace djnn
   void
   Timer::impl_activate ()
   {
-    //std::cerr << DBGVAR(_delay.get_value()) << __FL__;
     _c_update.enable ();
     _c_reset.enable ();
     djnn_internal::Time::duration d = std::chrono::milliseconds(_delay.get_value ());
@@ -73,8 +69,7 @@ namespace djnn
   void
   Timer::impl_deactivate ()
   {
-    //std::cerr << DBGVAR(_delay.get_value()) << __FL__;
-    if(somehow_activating()) { // if it's still activated, we need to cancel
+    if(somehow_activating()) {
       DjnnTimeManager::instance().cancel(this);
     }
     _c_update.disable ();
@@ -84,12 +79,11 @@ namespace djnn
 
   // djnn_internal::Time::Timer
   void
-  Timer::doit(const djnn_internal::Time::duration & actualduration)
+  Timer::do_it(const djnn_internal::Time::duration & actualduration)
   {
-    //std::cerr << get_name () << " with delta " << actualduration.count() - _delay.get_value () << __FL__;
     if(somehow_activating()) {
       set_activation_state (DEACTIVATED);
-      _end.notify_activation (); // propagating
+      _end.notify_activation ();
     }
   }
 

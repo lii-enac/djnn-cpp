@@ -29,6 +29,7 @@ Requirements: the time manager should
 - sleep as long as no timer/clock has elapsed
 - awake only when the next timer has elapsed
 
+TODO:?
 - adapt schedule time according to execution time measurements (with a PID?)
 
 */
@@ -36,7 +37,6 @@ Requirements: the time manager should
 
 #pragma once
 
-#include <list>
 #include <chrono>
 #include <set>
 
@@ -50,7 +50,7 @@ namespace djnn_internal {
     
     template <typename xxx>
     time_point
-    time_point_cast(const xxx& tp)  {
+    time_point_cast (const xxx& tp)  {
       return std::chrono::time_point_cast<std::chrono::microseconds>(tp);
     }
 
@@ -58,12 +58,12 @@ namespace djnn_internal {
     class Timer {
     public:
       virtual ~Timer() {}
-      virtual void doit(const duration& actualduration)=0;
-      const time_point& getStartTime() const { return _start; }
-      const time_point& getEndTime() const { return _end; }
-      void setStartTime(time_point d) { _start=d; }
-      void setEndTime(time_point d) { _end=d; }
-      duration getDuration() const { return _end-_start;}
+      virtual void do_it(const duration& actualduration)=0;
+      const time_point& get_start_time () const { return _start; }
+      const time_point& get_end_time () const { return _end; }
+      void set_start_time (time_point d) { _start=d; }
+      void set_end_time (time_point d) { _end=d; }
+      duration get_duration () const { return _end-_start;}
       
     private:
       time_point _start, _end;
@@ -74,8 +74,8 @@ namespace djnn_internal {
       operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const
       {
         return
-            t1->getEndTime()  < t2->getEndTime()
-        || (t1->getEndTime() == t2->getEndTime() ? t1<t2 : false); // need to distinguish between Timer*'s
+            t1->get_end_time()  < t2->get_end_time()
+        || (t1->get_end_time() == t2->get_end_time() ? t1<t2 : false); // need to distinguish between Timer*'s
       }
     };
 
@@ -90,7 +90,7 @@ namespace djnn_internal {
       //struct TimerListEmpty : exc {};
 
       void update_ref_now ();
-      void update_ref_now (time_point now);
+      void set_ref_now (time_point now);
       const time_point& get_ref_now () const { return _ref_now; } 
 
       void schedule(Timer* timer, duration) ; //throw(TimerAlreadyScheduled);
@@ -102,16 +102,17 @@ namespace djnn_internal {
       Timer*  get_next ();
       void    pop_next ();
       void timeElapsed (time_point now);
-      virtual void firstTimerHasChanged()=0;
 
       // debug
       const Timer* find (Timer *) const;
       bool already_scheduled (Timer* timer) const;
       void debug () const;
 
-    private:
+    protected:
+      virtual void firstTimerHasChanged()=0;
       typedef std::set<Timer*, lesser> Timers;
       Timers _timers;
+    private:
       duration _precision;
       bool _dontCallTimerHasChanged;
       time_point _ref_now;

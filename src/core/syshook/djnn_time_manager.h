@@ -28,10 +28,13 @@ namespace djnn {
 
         virtual void please_stop () override;
 
-        // djnn_internal::Time::Manager
-        virtual void firstTimerHasChanged() override;
+        void update_ref_now_in_scheduled_timers ();
 
         void run_for_emscripten ();
+
+    protected:
+        // djnn_internal::Time::Manager
+        virtual void firstTimerHasChanged() override;
     private:
         // ExternalSource
         void run () override;

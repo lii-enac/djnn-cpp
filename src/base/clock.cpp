@@ -14,18 +14,11 @@
  */
 
 #include "clock.h"
-#include "core/syshook/syshook.h"
-#include "core/tree/int_property.h"
-#include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
-#include "core/utils/utils-dev.h"
-#include "core/syshook/cpp-thread.h"
 #include "core/syshook/djnn_time_manager.h"
 
-#include <sys/time.h>
-
-#include <iostream>
-#include "utils/debug.h"
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {
@@ -58,6 +51,7 @@ namespace djnn
   {
   }
 
+  // Process
   void
   Clock::impl_activate ()
   {
@@ -75,18 +69,9 @@ namespace djnn
     DjnnTimeManager::instance().cancel(this);
   }
 
+  // djnn_internal::Time::Timer
   void
-  Clock::update_period()
-  {
-    DjnnTimeManager::instance().cancel(this);
-    if(somehow_activating()) {
-      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-      DjnnTimeManager::instance().schedule(this, d);
-    }
-  }
-
-  void
-  Clock::doit(const djnn_internal::Time::duration& actualduration)
+  Clock::do_it(const djnn_internal::Time::duration& actualduration)
   {
     //std::cerr << "doit " << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
     _elapsed.set_value ((double)actualduration.count()/1000, true);
@@ -98,10 +83,21 @@ namespace djnn
     )
     {
       djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-      DjnnTimeManager::instance().schedule(this, d, getEndTime());
+      DjnnTimeManager::instance().schedule(this, d, get_end_time());
     }
 
   }
+
+  void
+  Clock::update_period()
+  {
+    DjnnTimeManager::instance().cancel(this);
+    if(somehow_activating()) {
+      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+      DjnnTimeManager::instance().schedule(this, d);
+    }
+  }
+
 
   void
   Clock::serialize (const string& type) {
