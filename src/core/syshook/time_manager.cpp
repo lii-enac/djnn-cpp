@@ -17,6 +17,7 @@
 //#include <iostream>
 //#include "utils/debug.h"
 #include "core/utils/error.h"
+#include <cassert>
 
 
 namespace djnn_internal {
