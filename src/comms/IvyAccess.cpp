@@ -241,6 +241,12 @@ IvyAccess::~IvyAccess ()
 {
   Graph::instance().remove_edge (&_out, &_out_a);
   remove_state_dependency (get_parent (), &_out_a);
+
+  // TODO: Clean MAP before leaving
+  //while (!_in.empty()) {
+  // delete _in.back();
+  // _in.pop_back();
+  //}
 }
 
 void
