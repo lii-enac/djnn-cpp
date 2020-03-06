@@ -30,6 +30,12 @@ namespace djnn {
   {
   }
 
+  DjnnTimeManager::~DjnnTimeManager()
+  {
+    djnn::get_exclusive_access (DBG_GET);
+    djnn::release_exclusive_access (DBG_REL);
+  }
+
   DjnnTimeManager& DjnnTimeManager::instance () {
     return (_instance);
   }
@@ -90,51 +96,34 @@ namespace djnn {
     set_please_stop (false);
 
     djnn::get_exclusive_access (DBG_GET);
-    update_ref_now_in_scheduled_timers (); // we are about to begin but we took some time to init, so pretend that "now" is now.
-    bool empty_;
-    djnn_internal::Time::time_point next_time;
-    empty_ = empty(); // get it here to avoid another lock acquisition before sleeping
-    if( !empty_ ) {
-      next_time = get_next()->get_end_time();
-    }
-    update_ref_now();
-    djnn::release_exclusive_access (DBG_REL);
 
+    update_ref_now_in_scheduled_timers (); // we are about to begin but we took some time to init, so pretend that "now" is now.
     try {
       while (!get_please_stop ()) {        
         //bool timer_cancelled =false;
-        if (empty_) {
-          cancel_mutex.lock(); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
+        cancel_mutex.lock(); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
+        if (empty()) {
+          djnn::release_exclusive_access (DBG_REL);
           cancel_mutex.lock(); // second lock, blocks until another thread calls please_stop of firstTimerHasChanged //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
-          cancel_mutex.unlock(); // unlock first lock
         } else {
-          cancel_mutex.lock(); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep " << (next_time - before_lock).count() << "us " << __FL__;
+          auto next_time = get_next()->get_end_time();
+          djnn::release_exclusive_access (DBG_REL);
           //timer_cancelled =
           cancel_mutex.try_lock_until(next_time); //std::cerr << "<< djnntimemanager exited sleep " << DBGVAR(timer_cancelled) << __FL__;
-          cancel_mutex.unlock(); // unlock first time
         }
-
-        if(thread_local_cancelled || get_please_stop ()) {
-          djnn::get_exclusive_access (DBG_GET); // since we release it at exit of this method
-          break;
-        }
-        /*if(timer_cancelled) {
-          // either 'infinite duration' has run out or there is a new timer
-        }*/
-
-        djnn::get_exclusive_access (DBG_GET); if(thread_local_cancelled || get_please_stop ()) break;
+        djnn::get_exclusive_access (DBG_GET);
+        cancel_mutex.unlock(); // unlock first lock
+        if(thread_local_cancelled || get_please_stop ()) break;
+        //if(timer_cancelled) {} // either 'infinite duration' has run out or there is a new timer
 
         update_ref_now(); // set the default 'now' -- FIXME useless in a time manager external source?
         djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast(get_ref_now());
-        timeElapsed(now); if(thread_local_cancelled || get_please_stop ()) break;
+        timeElapsed(now);
+        if(thread_local_cancelled || get_please_stop ()) break;
 
-        GRAPH_EXEC; if(thread_local_cancelled || get_please_stop ()) break;
+        GRAPH_EXEC;
 
-        empty_ = empty(); // get it here to avoid another lock acquisition before sleeping
-        if( !empty_ ) {
-          next_time = get_next()->get_end_time();
-        }
-        djnn::release_exclusive_access (DBG_REL);
+        if(thread_local_cancelled || get_please_stop ()) break;
       }
     } catch (djnn::exception& e) {
       std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
@@ -144,3 +133,16 @@ namespace djnn {
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

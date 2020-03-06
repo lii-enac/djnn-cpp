@@ -22,6 +22,7 @@ namespace djnn {
     class DjnnTimeManager : public djnn_internal::Time::Manager, public djnn::ExternalSource {
     public:
         DjnnTimeManager();
+        ~DjnnTimeManager();
 
         static DjnnTimeManager& instance ();
         static DjnnTimeManager _instance;

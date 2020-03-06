@@ -59,6 +59,9 @@ namespace djnn
     typedef map<string, vector<pair<int, TextProperty*>>> in_map_t;
     typedef pair<string, in_map_t*> regexp_keypair_t;
 
+    // make it public
+    bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
+
   protected:
     void impl_activate () override;
     void impl_deactivate () override;

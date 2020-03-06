@@ -19,10 +19,12 @@
 #include "ivyloop.h" // FIXME
 #include "core/utils/error.h"
 #include "core/syshook/main_loop.h"
+#include "utils/debug.h"
 
 #include <iostream>
 #include <string>
 #include <unistd.h>
+
 
 //#define __IVY_DEBUG__
 
@@ -113,13 +115,31 @@ _ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
 /** IVY CALLBACK **/
 
+#define STOP_IVY djnn::MainLoop::instance().is_stopping() || djnn::ExternalSource::thread_local_cancelled || access->get_please_stop ()
+
+
+struct msg_callback_user_data {
+  djnn::IvyAccess * access;
+  djnn::IvyAccess::regexp_keypair_t * keypair;
+};
+
 static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
+  msg_callback_user_data * mcud = reinterpret_cast<msg_callback_user_data *>(user_data);
+
+  djnn::IvyAccess * access = mcud->access; //reinterpret_cast<djnn::IvyAccess*>(user_data);
+  if(STOP_IVY) return;
+
   djnn::get_exclusive_access (DBG_GET);
+
+  if(STOP_IVY) {
+    djnn::release_exclusive_access (DBG_REL);
+    return;
+  }
 
   //pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = 
     //(pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> *) user_data;
-  djnn::IvyAccess::regexp_keypair_t * keypair = reinterpret_cast<djnn::IvyAccess::regexp_keypair_t*>(user_data);
+  djnn::IvyAccess::regexp_keypair_t * keypair = mcud->keypair; //reinterpret_cast<djnn::IvyAccess::regexp_keypair_t*>(user_data);
   string regexp = keypair->first;
   //map<string, vector<pair<int, djnn::TextProperty*>>>*
   djnn::IvyAccess::in_map_t*
@@ -147,6 +167,10 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
       }
       string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
+      //if(djnn::ExternalSource::thread_local_cancelled || access->get_please_stop ()) {
+      //  djnn::release_exclusive_access (DBG_REL);
+      //  return;
+      //}
     }
 
   }
@@ -167,12 +191,13 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
 
 static void _on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, IvyApplicationEvent event )
 {
-  djnn::IvyAccess* ivy = (djnn::IvyAccess*) user_data;
+  djnn::IvyAccess* access = reinterpret_cast<djnn::IvyAccess*>(user_data);
+  if(STOP_IVY) return;
 
   if (event == IvyApplicationConnected)
-    ivy->set_arriving (IvyGetApplicationName(app));
+    access->set_arriving (IvyGetApplicationName(app));
   else if (event == IvyApplicationDisconnected)
-    ivy->set_leaving (IvyGetApplicationName(app));
+    access->set_leaving (IvyGetApplicationName(app));
 }
 
 
@@ -209,8 +234,6 @@ IvyAccess::IvyOutAction::coupling_activation_hook ()
   Graph::instance().add_edge (&_out, &_out_a);
   /* IN is a special child build in IvyAccess::find_component */
 
-  //MainLoop::instance().add_external_source(this); // FIXME TODO
-
   Process::finalize_construction (parent, name);
 }
 
@@ -218,7 +241,6 @@ IvyAccess::~IvyAccess ()
 {
   Graph::instance().remove_edge (&_out, &_out_a);
   remove_state_dependency (get_parent (), &_out_a);
-  MainLoop::instance().remove_external_source(this); // FIXME TODO
 }
 
 void
@@ -235,14 +257,25 @@ IvyAccess::set_parent (Process* p)
 }
 
 void IvyAccess::set_arriving(string v) {
+  //lock l(mutex);
+  djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
+  if(STOP_IVY) {
+    djnn::release_exclusive_access (DBG_REL);
+    return;
+  }
   _arriving.set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
 
 void IvyAccess::set_leaving(string v) {
+  djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
+  if(STOP_IVY) {
+    djnn::release_exclusive_access (DBG_REL);
+    return;
+  }
   _leaving.set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
@@ -251,19 +284,21 @@ void IvyAccess::set_leaving(string v) {
 void
 IvyAccess::impl_activate ()
 {
-
-  if ( get_activation_state () == ACTIVATED )
+  //if ( somehow_activating() )
     /* should never happen for IvyAccess */
-    return;
-
-  /* launche thread */
-  start_thread ();
+  //  return;
+  //DBG;
+  //MainLoop::instance().add_external_source(this); // FIXME TODO
+  ExternalSource::start ();
+  ///* launch thread */
+  //start_thread ();
 }
 
 void
 IvyAccess::impl_deactivate ()
 {
   please_stop();
+  //MainLoop::instance().remove_external_source(this); // FIXME TODO
 
   /* requeste Ivy to stop */
   /* note:
@@ -275,21 +310,16 @@ IvyAccess::impl_deactivate ()
   
 }
 
-static void  _before_select (void *data){
-  if(ExternalSource::thread_local_cancelled) {
-    //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-    return;
-  }
+static void  _before_select (void *data) {
+  IvyAccess * access = reinterpret_cast<IvyAccess*>(data);
+  if(STOP_IVY) return;
   djnn::get_exclusive_access (DBG_GET);
-  if(ExternalSource::thread_local_cancelled) {
-    //std::cerr << this << " " << get_name () << " cancelled" << std::endl;
-    return;
-  }
-  GRAPH_EXEC;    
+  if(ExternalSource::thread_local_cancelled || access->get_please_stop ()) return;
+  GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
 
-static void  _after_select (void *data){
+static void  _after_select (void *data) {
   //djnn::get_exclusive_access (DBG_REL);
 }
 
@@ -298,32 +328,33 @@ IvyAccess::run ()
 {
   set_please_stop (false);
   try {
+    IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
 
-      /* enable coupling */
+    /* get exclusive_access - before select */
+    IvySetBeforeSelectHook(_before_select, this);
+    /* release exclusive_access - after select */
+    IvySetAfterSelectHook(_after_select, this);
+
+    IvyStart(_bus.c_str());
+
+    /* enable coupling */
     djnn::get_exclusive_access (DBG_GET);
     _out_c.enable();
     djnn::release_exclusive_access (DBG_REL);
-
-    IvyInit (_appname.c_str(), _ready_message.c_str(), _on_ivy_arriving_leaving_agent, this, 0, 0);
-
-      /* get exclusive_access - before select */
-    IvySetBeforeSelectHook(_before_select,0);
-      /* release exclusive_access - after select */
-    IvySetAfterSelectHook(_after_select,0);
-
-    IvyStart(_bus.c_str());
     
     /* note :
     * for now,
     * We can NOT get out of IvyMainLoop:
-    * IvyStop has never been implemented
+    * IvyStop has never been implemented...
     * 
     */
-    while (!get_please_stop ()) {
+    while ( !thread_local_cancelled && !get_please_stop ()) {
       /* start Ivy mainloop */
-      if(thread_local_cancelled) break;
+      //if(thread_local_cancelled) break;
       IvyMainLoop ();
     }
+
+    // ... hence we will never reach this point...
     
     /* disable coupling */
     djnn::get_exclusive_access (DBG_GET);
@@ -398,7 +429,8 @@ IvyAccess::find_component (const string& key)
       if (mit == _in_map.end ()) {
         /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
         auto * regexp_keypair = new regexp_keypair_t (regexp, &_in_map);
-        IvyBindMsg(_on_ivy_message, regexp_keypair, "%s", regexp.c_str() );
+        msg_callback_user_data * mcud = new msg_callback_user_data{this, regexp_keypair};
+        IvyBindMsg(_on_ivy_message, mcud, "%s", regexp.c_str() );
       }
 
       /* register in _in_map */  

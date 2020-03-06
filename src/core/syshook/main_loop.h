@@ -75,6 +75,7 @@ namespace djnn
     void external_run_for_qt5_9_fixme() { run(); }
     void private_run ();
     void please_stop () override;
+    bool is_stopping () const { return _is_stopping; }
   protected:
 
     // Process
@@ -113,6 +114,7 @@ namespace djnn
     vector<Process*> _background_processes;
     vector<ExternalSource*> _external_sources;
     std::timed_mutex cancel_mutex;
+    static std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy 
   };
 
 }

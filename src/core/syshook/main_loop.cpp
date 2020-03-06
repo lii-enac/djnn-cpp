@@ -62,6 +62,8 @@ namespace djnn {
     { //DBG;
       DjnnTimeManager::instance().update_ref_now();
 
+      _is_stopping = false;
+
       for (auto es: _external_sources) es->start ();
       for (auto p: _background_processes) {
         p->activate ();
@@ -78,15 +80,17 @@ namespace djnn {
       }
       // up here, the mainloop is blocking
 
+      _is_stopping = true;
       // starting from here, the mainloop has exited
       launch_mutex_lock (); // reacquire launch mutex
-
 
       if (_another_source_wants_to_be_mainloop) {
         please_stop ();
         join_own_thread ();
       }
     }
+
+    atomic<bool> MainLoop::_is_stopping;
 
     void
     MainLoop::run ()
