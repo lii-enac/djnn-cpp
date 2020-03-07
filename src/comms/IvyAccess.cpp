@@ -209,9 +209,7 @@ namespace djnn
 void
 IvyAccess::IvyOutAction::coupling_activation_hook ()
 {
-  //djnn::get_exclusive_access (DBG_GET);
   IvySendMsg ("%s", _out->get_value ().c_str ());
-  //djnn::release_exclusive_access (DBG_REL);
 }
 
 
@@ -312,12 +310,14 @@ IvyAccess::impl_deactivate ()
   */
   warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n\t\t solution: do not give parent to your IvyAccess (or nullptr)) and manage it separently from your main root \n\t\t and to not delete it - it will block");
   //IvyStop();
-  
+  IvySendMsg ("%s", ""); // should eventually call _after_select and raise 1;
 }
 
 static void  _before_select (void *data) {
   IvyAccess * access = reinterpret_cast<IvyAccess*>(data);
-  if(STOP_IVY) return;
+  if(STOP_IVY) {
+    return;
+  }
   djnn::get_exclusive_access (DBG_GET);
   if(ExternalSource::thread_local_cancelled || access->get_please_stop ()) return;
   GRAPH_EXEC;
@@ -325,7 +325,10 @@ static void  _before_select (void *data) {
 }
 
 static void  _after_select (void *data) {
-  //djnn::get_exclusive_access (DBG_REL);
+  IvyAccess * access = reinterpret_cast<IvyAccess*>(data);
+  if(STOP_IVY) {
+    //throw 1; thread leak, to be continued...
+  }
 }
 
 void
@@ -353,10 +356,12 @@ IvyAccess::run ()
     * IvyStop has never been implemented...
     * 
     */
-    while ( !thread_local_cancelled && !get_please_stop ()) {
+    try {
       /* start Ivy mainloop */
-      //if(thread_local_cancelled) break;
       IvyMainLoop ();
+    }
+    catch (int) {
+      DBG;
     }
 
     // ... hence we will never reach this point...
