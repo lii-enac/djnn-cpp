@@ -17,7 +17,7 @@
 
 #include "display/drm/drm_window.h"
 #include "gui/cairo/drm/cairo_drm_window.h"
-#include <mutex>
+#include <mutex> // std::call_once
 #include <iostream>
 
 namespace djnn {

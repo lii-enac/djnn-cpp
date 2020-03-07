@@ -95,20 +95,20 @@ namespace djnn {
     void
     MainLoop::run ()
     {
+      cancel_mutex.lock(); // first lock, get it
       if (is_run_forever ()) {
-        cancel_mutex.lock(); // first lock, get it
         //std::cerr << ">> mainloop entering sleep forever" << __FL__;
-        cancel_mutex.lock(); // second lock, blocks until another thread calls pleaseStop
+        //cancel_mutex.lock(); // second lock, blocks until another thread calls pleaseStop
+        cv.wait(cancel_mutex);
         //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
-        cancel_mutex.unlock(); //unlock first lock
       } else {
-        cancel_mutex.lock(); // first lock, get it
         //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.load().count()) << __FL__;
         //bool timer_cancelled =
-        cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
+        //cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
+        cv.wait_for(cancel_mutex, std::chrono::milliseconds (_duration));
         //std::cerr << "<< mainloop exited sleep " << DBGVAR(timer_cancelled) << __FL__;
-        cancel_mutex.unlock(); // unlock first lock
       }
+      cancel_mutex.unlock(); // unlock first lock
 
       // fist tell all external sources to stop...
       for (auto es: _external_sources) {
@@ -134,7 +134,8 @@ namespace djnn {
     {
       if(get_please_stop ()) return;
       set_please_stop (true);
-      cancel_mutex.unlock();
+      //cancel_mutex.unlock();
+      cv.notify_one ();
     }
 
     void

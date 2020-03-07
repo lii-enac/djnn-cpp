@@ -16,6 +16,7 @@
 #include "core/syshook/external_source.h"
 
 #include <mutex>
+#include <condition_variable>
 
 namespace djnn {
 
@@ -40,5 +41,10 @@ namespace djnn {
         // ExternalSource
         void run () override;
         std::timed_mutex cancel_mutex;
+        
+        // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough
+        // The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock
+        // If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
+        std::condition_variable_any cv;
     };
 }

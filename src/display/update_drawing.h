@@ -22,7 +22,7 @@
 #include "core/tree/spike.h"
 #include "window.h"
 
-#include <mutex> // for once_flag
+#include <mutex> // std::call_once
 
 //#include <iostream>
 //#include "utils/debug.h"

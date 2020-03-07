@@ -99,9 +99,12 @@ namespace djnn_internal {
       void reset   (Timer* timer);
       void cleanup ();
       bool empty   () const { return _timers.empty(); }
-      Timer*  get_next ();
+      Timer*  get_next () const;
       void    pop_next ();
-      void timeElapsed (time_point now);
+      void time_has_elapsed (time_point now);
+      bool has_time_elapsed () const;
+
+      duration get_precision () const { return _precision; }
 
       // debug
       const Timer* find (Timer *) const;

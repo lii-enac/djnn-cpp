@@ -105,7 +105,7 @@ namespace djnn_internal {
     }
 
     Timer*
-    Manager::get_next()
+    Manager::get_next() const
     {
       return *(_timers.begin ());
     }
@@ -117,7 +117,7 @@ namespace djnn_internal {
     }
         
     void
-    Manager::timeElapsed(time_point now)
+    Manager::time_has_elapsed(time_point now)
     { 
       if(empty())
         return;
@@ -142,7 +142,12 @@ namespace djnn_internal {
         firstTimerHasChanged ();
       }
     }
-    
+
+    bool
+    Manager::has_time_elapsed() const
+    {
+      return !empty() && (djnn_internal::Time::clock::now() + get_precision ()) < get_next()->get_end_time();
+    }
     
     // debug
 

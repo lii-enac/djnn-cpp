@@ -19,7 +19,7 @@
 #include <SDL.h>
 #include <memory>
 #include <map>
-#include <mutex>
+#include <mutex> // std::call_once
 
 namespace djnn {
 

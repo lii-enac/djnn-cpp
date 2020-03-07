@@ -263,7 +263,6 @@ IvyAccess::set_parent (Process* p)
 }
 
 void IvyAccess::set_arriving(string v) {
-  //lock l(mutex);
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
