@@ -10,6 +10,6 @@ endif
 
 ifeq ($(physics),ODE)
 lib_srcs += $(shell find src/physics/ode-backend -name "*.cpp")
-lib_cppflags += -Isrc/physics `pkg-config --cflags ode`
-lib_ldflags += `pkg-config --libs ode ccd`
+lib_cppflags += -Isrc/physics
+lib_pkg += ode ccd
 endif

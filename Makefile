@@ -338,6 +338,7 @@ lib_cppflags :=
 lib_cflags :=
 lib_ldflags :=
 lib_djnn_deps := 
+lib_pkg :=
 
 # possibly override default
 -include $$(src_dir)/$1/djnn-lib.mk
@@ -350,10 +351,12 @@ $1_objs := $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 $1_cov_gcno  := $$($1_objs:.o=.gcno)
 $1_cov_gcda  := $$($1_objs:.o=.gcda)
+$1_lib_pkg := $$(lib_pkg)
 
 $1_srcgens := $$(lib_srcgens)
 $1_objs += $$(lib_objs)
 
+$1_pkg_deps :=
 $1_deps := $$($1_objs:.o=.d)
 $1_libname := libdjnn-$1$$(lib_suffix)
 $1_lib := $$(build_dir)/$$($1_libname)
@@ -362,6 +365,12 @@ $1_lib_static := $$(build_dir)/$$($1_libname_static)
 $1_lib_cppflags := $$(lib_cppflags)
 $1_lib_cflags := $$(lib_cflags)
 $1_lib_ldflags := $$(lib_ldflags)
+
+ifneq ($$($1_lib_pkg),)
+$1_lib_cflags += $$(shell pkg-config --cflags $$($1_lib_pkg))
+$1_lib_ldflags += $$(shell pkg-config --libs $$($1_lib_pkg))
+endif
+
 $1_lib_all_ldflags := $$($1_lib_ldflags)
 
 ifeq ($(os),$(filter $(os),Darwin MinGW))
@@ -404,8 +413,9 @@ $1_dbg:
 	@echo $$($1_lib_ldflags)
 
 $1_tructruc:
-	@echo $$($1_c_srcs)
-	@echo $$($1_objs)
+	@echo $$($1_lib_pkg)
+	@echo $$($1_lib_ldflags)
+
 
 $1_atchoum:
 	@echo $1_dbg

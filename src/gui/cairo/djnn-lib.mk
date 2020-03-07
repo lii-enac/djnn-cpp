@@ -14,14 +14,14 @@ endif
 #env PKG_CONFIG_PATH=/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig 
 
 ifeq ($(cairo_backend),pixmap)
-lib_cppflags += -I. `pkg-config --cflags cairo pango pangocairo` -DDJNN_SDL
-lib_ldflags += `pkg-config --libs cairo pango pangocairo`
+lib_cppflags += -I.
+lib_pkg += cairo pango pangocairo
 endif
 
 ifeq ($(cairo_backend),drm)
 lib_srcs += $(shell find src/gui/cairo/drm -name "*.cpp")
-lib_cppflags += -I. `pkg-config --cflags cairo pango pangocairo`
-lib_ldflags += `pkg-config --libs cairo pango pangocairo`
+lib_cppflags += -I.
+lib_pkg += cairo pango pangocairo
 endif
 
 ifeq ($(cairo_backend),gl)
@@ -29,10 +29,10 @@ cairo_path ?= /Users/conversy/tmp/cairo-1.16.0
 # #cairo_path ?= /home/lii/Documents/cairo
 cairo_lib_path := $(cairo_path)/src/.libs
 lib_srcs += src/gui/cairo/cairo_gl_sdl_window.cpp
-lib_cppflags += -I$(cairo_path) -I$(cairo_path)/cairo `pkg-config --cflags pangocairo` `pkg-config --cflags pango` -DUSE_GL_ES_VERSION_2_0=1 -Isrc/gui/gl_
+lib_cppflags += -I$(cairo_path) -I$(cairo_path)/cairo -DUSE_GL_ES_VERSION_2_0=1 -Isrc/gui/gl_
 lib_ldflags += -L$(cairo_lib_path) -lcairo -L/usr/local/Cellar/pango/1.42.4/lib -L/usr/local/Cellar/glib/2.58.3/lib -L/usr/local/opt/gettext/lib \
           -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0
-
+lib_pkg += pango pangocairo
 ifeq ($(os),Darwin)
 lib_ldflags += -lintl -Wl,-framework -Wl,CoreFoundation -L/Users/conversy/src-ext/SwiftShader/build -lEGL
 endif

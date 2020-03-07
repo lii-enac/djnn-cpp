@@ -27,14 +27,13 @@ endif
 ifeq ($(os),Linux)
 QTLIBS = Qt5OpenGL Qt5Gui
 moc := moc
-lib_cppflags += -I. -I$(LOCALDIR)/include `pkg-config --cflags $(QTLIBS)`
-lib_ldflags += `pkg-config --libs $(QTLIBS)`
+lib_cppflags += -I. -I$(LOCALDIR)/include
+lib_pkg += $(QTLIBS)
 endif
-
 
 ifeq ($(os),MinGW)
 QTLIBS = Qt5OpenGL Qt5Core
 moc := moc
-lib_cppflags += -I. -I$(LOCALDIR)/include $(shell pkg-config --cflags $(QTLIBS))
-lib_ldflags += $(shell pkg-config --libs $(QTLIBS)) 
+lib_cppflags += -I. -I$(LOCALDIR)/include
+lib_pkg += $(QTLIBS))
 endif
