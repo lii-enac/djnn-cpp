@@ -35,5 +35,5 @@ ifeq ($(os),MinGW)
 QTLIBS = Qt5OpenGL Qt5Core
 moc := moc
 lib_cppflags += -I. -I$(LOCALDIR)/include
-lib_pkg += $(QTLIBS))
+lib_pkg += $(QTLIBS)
 endif
