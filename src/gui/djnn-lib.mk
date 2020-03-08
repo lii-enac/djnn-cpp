@@ -1,3 +1,5 @@
+lib_djnn_deps = display base syshook core
+
 lib_srcs += src/gui/abstract_gobj.cpp src/gui/gui.cpp
 lib_srcs += $(shell find src/gui/interaction -name "*.cpp")
 lib_srcs += $(shell find src/gui/picking -name "*.cpp")
@@ -33,4 +35,3 @@ ifeq ($(graphics),EGL)
 include src/gui/egl/djnn-lib.mk
 endif
 
-lib_djnn_deps = display base core

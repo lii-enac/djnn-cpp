@@ -17,12 +17,12 @@
 #include "sdl_mainloop.h"
 #include "sdl_window.h"
 
-#include "core/syshook/syshook.h"
-#include "core/syshook/main_loop.h"
+#include "syshook/global_mutex.h"
+#include "syshook/main_loop.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#include "core/syshook/djnn_time_manager.h"
+#include "syshook/djnn_time_manager.h"
 #endif
 
 #include "core/utils/ext/remotery/Remotery.h"

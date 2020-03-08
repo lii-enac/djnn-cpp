@@ -8,15 +8,19 @@
  *
  *
  *  Contributors:
- *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stéphane Conversy <stephane.conversy@enac.fr>
  *
  */
+
 #pragma once
 
-#include "core.h"
 
-#include "ontology/process.h"
-#include "ontology/coupling.h"
-#include "execution/graph.h"
-#include "syshook/global_mutex.h"
-#include "syshook/main_loop.h"
+namespace djnn
+{
+  void init_syshook();
+  void clear_syshook();
+}
+
+
+#include "syshook/exit.h"
+

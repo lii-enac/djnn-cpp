@@ -14,9 +14,9 @@
 
 #include "djnn_time_manager.h"
 
-#include "core/syshook/syshook.h"
+#include "syshook/global_mutex.h"
 #include "core/tree/int_property.h"
-#include "core/syshook/cpp-thread.h"
+#include "syshook/cpp-thread.h"
 #include "core/execution/graph.h"
 
 #include <cassert>

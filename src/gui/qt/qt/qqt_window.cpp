@@ -19,7 +19,7 @@
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "display/qt/my_qwindow.h"
-#include "core/syshook/qt/qt_mainloop.h"
+#include "syshook/qt/qt_mainloop.h"
 
 #include <QEvent>
 #include <QTouchEvent>

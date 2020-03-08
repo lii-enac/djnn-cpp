@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 #include "display/window.h"
 #include "display/qt/qt_window.h"
 

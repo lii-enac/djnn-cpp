@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 
 #include <SDL.h>
 #include <memory>

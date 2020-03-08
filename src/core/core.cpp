@@ -15,8 +15,6 @@
 
 
 #include "core-dev.h"
-#include "core/syshook/syshook.h"
-#include "core/syshook/djnn_time_manager.h"
 #include "core/utils/ext/remotery/Remotery.h"
 
 #include <locale.h>
@@ -33,24 +31,16 @@ namespace djnn
 
   void
   init_core ()
-  {
-    
+  {    
     if (__module_initialized == false) {
-      init_global_mutex();
       __module_initialized = true;
-
       djnn::loadedModules.push_back("core");
-      MainLoop::instance ();
-      //DjnnTimeManager::instance().activate ();
-      MainLoop::instance ().add_external_source(&DjnnTimeManager::instance());
-     
       setlocale(LC_NUMERIC, "C");
     }
 
     rmtSettings* settings = rmt_Settings();
     if(settings) settings->reuse_open_port = RMT_TRUE;
     rmt_CreateGlobalInstance(&rmt);
-    DjnnTimeManager::instance().cleanup ();
   }
 
   void

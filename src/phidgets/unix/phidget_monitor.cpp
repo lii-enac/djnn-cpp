@@ -14,7 +14,7 @@
 
 #include "unix_phidgets.h"
 #include "core/utils/error.h"
-#include "core/syshook/syshook.h"
+#include "syshook/global_mutex.h"
 #include "core/execution/graph.h"
 
 namespace djnn

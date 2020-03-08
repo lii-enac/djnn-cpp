@@ -18,7 +18,7 @@
 #include "ivy.h" //FIXME
 #include "ivyloop.h" // FIXME
 #include "core/utils/error.h"
-#include "core/syshook/main_loop.h"
+#include "syshook/main_loop.h"
 #include "utils/debug.h"
 
 #include <iostream>

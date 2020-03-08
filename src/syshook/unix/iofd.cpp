@@ -14,8 +14,8 @@
 
 #include "iofd.h"
 
-#include "core/syshook/syshook.h"
-#include "core/syshook/main_loop.h"
+#include "syshook/global_mutex.h"
+#include "syshook/main_loop.h"
 #include "core/utils/error.h"
 #include "core/execution/graph.h"
 

@@ -13,7 +13,7 @@
  */
 
 #include "time_manager.h"
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 
 #include <mutex>
 #include <condition_variable>

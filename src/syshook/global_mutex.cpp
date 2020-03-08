@@ -1,35 +1,11 @@
-/*
- *  djnn v2
- *
- *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
- *  See file "license.terms" for the rights and conditions
- *  defined by copyright holders.
- *
- *
- *  Contributors:
- *      Stéphane Conversy <stephane.conversy@enac.fr>
- *      Mathieu Poirier <mathieu.poirier@enac.fr>
- *
- */
-
-#include "syshook.h"
-
+#include "global_mutex.h"
 #include "cpp-mutex.h"
 #include "cpp-mutex-priv.h"
+#include "syshook/djnn_time_manager.h"
 
-#include "core/syshook/djnn_time_manager.h"
-
-#include <chrono>
-#include <thread>
-
-#define DBG_MUTEX 0
-#include <iostream>
-#include "utils/debug.h"
 
 namespace djnn
 {
-
   static djnn_mutex_t* global_mutex;
   static djnn_mutex_t* ios_mutex;
 
@@ -79,5 +55,4 @@ namespace djnn
     release(ios_mutex);
 #endif
   }
-
 }

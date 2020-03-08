@@ -1,4 +1,4 @@
-lib_djnn_deps = core
+lib_djnn_deps = syshook core
 lib_srcs += src/display/display.cpp src/display/window.cpp src/display/update_drawing.cpp
 
 ifeq ($(display),DRM)

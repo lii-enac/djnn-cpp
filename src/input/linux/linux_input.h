@@ -25,7 +25,7 @@
 #include "core/tree/text_property.h"
 #include "core/tree/set.h"
 #include "core/tree/spike.h"
-#include "core/syshook/unix/iofd.h"
+#include "syshook/unix/iofd.h"
 
 namespace djnn {
   enum dev_type {

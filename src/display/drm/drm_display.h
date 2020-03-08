@@ -19,7 +19,7 @@
 #include <xf86drmMode.h>
 
 #include "display/display-priv.h"
-#include "core/syshook/unix/iofd.h"
+#include "syshook/unix/iofd.h"
 #include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
 #include "core/tree/bool_property.h"

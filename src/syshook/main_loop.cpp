@@ -25,7 +25,7 @@
 #include <algorithm>
 #include "utils/debug.h"
 
-#include "core/syshook/djnn_time_manager.h"
+#include "syshook/djnn_time_manager.h"
 
 namespace djnn {
 
@@ -90,7 +90,7 @@ namespace djnn {
       }
     }
 
-    atomic<bool> MainLoop::_is_stopping;
+    std::atomic<bool> MainLoop::_is_stopping;
 
     void
     MainLoop::run ()

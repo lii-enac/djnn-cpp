@@ -1,5 +1,5 @@
-lib_djnn_deps = core
-
+lib_djnn_deps = syshook core
+lib_srcs := $(shell find src/comms -name "*.cpp")
 
 # Ivy dependancy
 # svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
@@ -27,7 +27,7 @@ endif
 # library-specific thread support
 ifeq ($(display),QT)
 include src/display/qt/djnn-lib-flags.mk
-lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
+#lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
 endif
 
 ifeq ($(display),SDL)
@@ -41,4 +41,3 @@ endif
 
 
 
-lib_srcs := $(shell find src/comms -name "*.cpp")

@@ -17,7 +17,7 @@
 
 #include "display/qt/qt_display.h"
 #include "display/qt/qt_window.h"
-#include "core/syshook/qt/qt_mainloop.h"
+#include "syshook/qt/qt_mainloop.h"
 
 #include "my_qqwindow.h"
 

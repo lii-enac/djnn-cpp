@@ -297,10 +297,10 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-djnn_libs ?= core base comms display gui input animation utils files audio
+djnn_libs ?= core syshook base comms display gui input animation utils files audio
 
 ifeq ($(cross_prefix),em)
-djnn_libs := core base display gui animation utils audio
+djnn_libs := core syshook base display gui animation utils audio
 # comms input
 endif
 

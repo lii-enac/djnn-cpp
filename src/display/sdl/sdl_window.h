@@ -18,7 +18,7 @@
 
 #include "display/window.h"
 #include "core/ontology/process.h"
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 
 #include <string>
 

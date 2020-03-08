@@ -17,9 +17,9 @@
 #include "sdl_window.h"
 #include "display/display.h"
 
-#include "core/syshook/syshook.h"
+#include "syshook/global_mutex.h"
 #include "core/execution/graph.h"
-#include "core/syshook/main_loop.h"
+#include "syshook/main_loop.h"
 
 #include "core/utils/ext/remotery/Remotery.h"
 

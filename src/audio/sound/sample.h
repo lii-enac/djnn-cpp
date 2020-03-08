@@ -16,7 +16,7 @@
 #pragma once
 
 #include "sound.h"
-#include "core/syshook/djnn_time_manager.h"
+#include "syshook/djnn_time_manager.h"
 #include "core/tree/blank.h"
 
 namespace djnn {

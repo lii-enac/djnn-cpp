@@ -15,7 +15,7 @@
 #pragma once
 
 #include "cairo_backend.h"
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 #include "display/window.h"
 
 #include <string>

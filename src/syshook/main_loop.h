@@ -19,6 +19,7 @@
 #include "syshook.h"
 #include "external_source.h"
 #include "cpp-thread.h"
+#include "cpp-chrono.h"
 
 #include <mutex>
 #include <condition_variable>

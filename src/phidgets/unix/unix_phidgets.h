@@ -18,7 +18,7 @@
 #include <phidget22.h>
 
 #include "phidgets-priv.h"
-#include "core/syshook/external_source.h"
+#include "syshook/external_source.h"
 #include "core/tree/double_property.h"
 #include "core/tree/list.h"
 #include "core/control/action.h"
