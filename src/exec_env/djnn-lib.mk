@@ -17,8 +17,11 @@ include src/display/qt/djnn-lib-flags.mk
 lib_srcs += $(shell find src/exec_env/qt -name "*.cpp")
 endif
 
+ifeq ($(display),SDL)
+include src/display/sdl/djnn-lib-flags.mk
+endif
+
 ifeq ($(os),FreeRTOS)
 include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
 lib_srcs += $(shell find src/exec_env/freertos-cxx11 -name "*.cpp")
 endif
-

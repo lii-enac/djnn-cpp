@@ -18,18 +18,6 @@ ifneq ($(os),$(filter $(os),FreeRTOS em))
 lib_ldflags += -lexpat -lcurl
 endif
 
-
-# library-specific thread support
-ifeq ($(display),QT)
-include src/display/qt/djnn-lib-flags.mk
-#lib_srcs += $(shell find src/core/exec_env/qt -name "*.cpp")
-endif
-
-ifeq ($(display),SDL)
-include src/display/sdl/djnn-lib-flags.mk
-endif
-
-
 src/core/djnn-srcs.mk:
 	srcs=""
 	srcs+=`find src/core -name "*.cpp"`

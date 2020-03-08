@@ -20,6 +20,7 @@
 #include "display/abstract_display.h"
 #include "display/qt/my_qwindow.h"
 #include "exec_env/qt/qt_mainloop.h"
+#include "exec_env/global_mutex.h"
 
 #include <QEvent>
 #include <QTouchEvent>

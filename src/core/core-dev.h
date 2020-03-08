@@ -18,5 +18,3 @@
 #include "ontology/process.h"
 #include "ontology/coupling.h"
 #include "execution/graph.h"
-#include "exec_env/global_mutex.h"
-#include "exec_env/main_loop.h"

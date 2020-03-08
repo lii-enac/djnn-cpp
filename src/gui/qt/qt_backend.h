@@ -22,6 +22,8 @@
 
 #include <QtGui/QPainterPath>
 
+#include <mutex> // std::once_flag
+
 class QWidget;
 class QPainter;
 
