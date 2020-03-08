@@ -22,7 +22,7 @@
 #include "core/tree/spike.h"
 #include "core/control/action.h"
 
-#include "syshook/time_manager.h"
+#include "exec_env/time_manager.h"
 #include "cpp-chrono.h"
 
 namespace djnn

@@ -15,7 +15,7 @@
 
 #include "timer.h"
 #include "core/serializer/serializer.h"
-#include "syshook/djnn_time_manager.h"
+#include "exec_env/djnn_time_manager.h"
 
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
@@ -103,7 +103,7 @@ namespace djnn
    
     AbstractSerializer::pre_serialize(this, type);
 
-    AbstractSerializer::serializer->start ("syshook:timer");
+    AbstractSerializer::serializer->start ("exec_env:timer");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("delay", _delay.get_value ());
     AbstractSerializer::serializer->end ();

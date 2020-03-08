@@ -18,7 +18,7 @@
 #include "display/abstract_display.h"
 
 #include "qt_backend.h"
-#include "syshook/qt/qt_mainloop.h"
+#include "exec_env/qt/qt_mainloop.h"
 
 namespace djnn
 {

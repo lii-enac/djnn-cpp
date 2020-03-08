@@ -18,5 +18,5 @@
 #include "ontology/process.h"
 #include "ontology/coupling.h"
 #include "execution/graph.h"
-#include "syshook/global_mutex.h"
-#include "syshook/main_loop.h"
+#include "exec_env/global_mutex.h"
+#include "exec_env/main_loop.h"

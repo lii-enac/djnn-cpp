@@ -13,10 +13,10 @@
  *
  */
 
-#include "syshook/syshook.h"
-#include "syshook/global_mutex.h"
-#include "syshook/main_loop.h"
-#include "syshook/djnn_time_manager.h"
+#include "exec_env/exec_env.h"
+#include "exec_env/global_mutex.h"
+#include "exec_env/main_loop.h"
+#include "exec_env/djnn_time_manager.h"
 
 #define DBG_MUTEX 0
 #include <iostream>
@@ -28,21 +28,22 @@ namespace djnn
   static bool __module_initialized = false;
 
   void
-  init_syshook()
+  init_exec_env()
   {
     if (__module_initialized == false) {
       __module_initialized = true;
-      djnn::loadedModules.push_back ("syshook");
+      djnn::loadedModules.push_back ("exec_env");
       init_global_mutex();
       MainLoop::instance ();
       //DjnnTimeManager::instance().activate ();
       MainLoop::instance ().add_external_source(&DjnnTimeManager::instance());
+      setlocale(LC_NUMERIC, "C");
     }
     DjnnTimeManager::instance().cleanup ();
   }
 
   void
-  clear_syshook()
+  clear_exec_env()
   {
   }
 

@@ -15,7 +15,7 @@
 #include "gui-priv.h"
 #include "abstract_gobj.h"
 #include "backend.h"
-#include "syshook/main_loop.h"
+#include "exec_env/main_loop.h"
 #include "display/window.h"
 #include "core/tree/component_observer.h"
 

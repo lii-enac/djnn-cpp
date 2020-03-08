@@ -1,4 +1,4 @@
-lib_djnn_deps = syshook core
+lib_djnn_deps = exec_env core
 lib_srcs += $(shell find src/audio -name "*.cpp")
 #src/audio/audio.cpp src/audio/sound/sound.cpp src/audio/sound/sample.cpp src/audio/al/al_audio_backend.cpp src/audio/sound/load_wav.cpp
 

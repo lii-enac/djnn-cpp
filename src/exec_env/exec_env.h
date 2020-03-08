@@ -17,10 +17,10 @@
 
 namespace djnn
 {
-  void init_syshook();
-  void clear_syshook();
+  void init_exec_env();
+  void clear_exec_env();
 }
 
 
-#include "syshook/exit.h"
+#include "exec_env/exit.h"
 

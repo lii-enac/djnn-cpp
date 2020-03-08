@@ -14,7 +14,7 @@
  */
 
 #include "exit.h"
-#include "syshook/main_loop.h"
+#include "exec_env/main_loop.h"
 //#include "ontology/process.h"
 #include "core/serializer/serializer.h"
 
@@ -47,7 +47,7 @@ namespace djnn
 
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("syshook:exit");
+    AbstractSerializer::serializer->start ("exec_env:exit");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("value", _value.get_value ());
     AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");

@@ -1,4 +1,4 @@
-lib_djnn_deps = syshook core
+lib_djnn_deps = exec_env core
 lib_srcs := $(shell find src/comms -name "*.cpp")
 
 # Ivy dependancy
@@ -27,7 +27,7 @@ endif
 # library-specific thread support
 ifeq ($(display),QT)
 include src/display/qt/djnn-lib-flags.mk
-#lib_srcs += $(shell find src/core/syshook/qt -name "*.cpp")
+#lib_srcs += $(shell find src/core/exec_env/qt -name "*.cpp")
 endif
 
 ifeq ($(display),SDL)
@@ -35,8 +35,8 @@ include src/display/sdl/djnn-lib-flags.mk
 endif
 
 ifeq ($(os),FreeRTOS)
-include src/core/syshook/freertos-cxx11/djnn-lib-flags.mk
-lib_srcs += $(shell find src/core/syshook/freertos-cxx11 -name "*.cpp")
+include src/core/exec_env/freertos-cxx11/djnn-lib-flags.mk
+lib_srcs += $(shell find src/core/exec_env/freertos-cxx11 -name "*.cpp")
 endif
 
 

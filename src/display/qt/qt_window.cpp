@@ -18,13 +18,13 @@
 #include "qt_window.h"
 #include "qt_display.h"
 
-#include "syshook/qt/qt_mainloop.h"
+#include "exec_env/qt/qt_mainloop.h"
 #include "display/display.h"
 #include "display/display-dev.h"
 #include "display/abstract_display.h"
 
-#include "syshook/main_loop.h"
-#include "syshook/global_mutex.h"
+#include "exec_env/main_loop.h"
+#include "exec_env/global_mutex.h"
 #include "core/execution/graph.h"
 
 #include <QtCore/QAbstractEventDispatcher>

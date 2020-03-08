@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "syshook/global_mutex.h"
+#include "exec_env/global_mutex.h"
 #include "core/execution/graph.h"
 #include "core/ontology/process.h"
-#include "syshook/external_source.h"
+#include "exec_env/external_source.h"
 
 //#define __IVY_DEBUG__
 

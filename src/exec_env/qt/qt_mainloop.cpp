@@ -15,8 +15,8 @@
  */
 
 
-#include "syshook/main_loop.h"
-#include "syshook/global_mutex.h"
+#include "exec_env/main_loop.h"
+#include "exec_env/global_mutex.h"
 
 #include "qt_mainloop.h"
 
