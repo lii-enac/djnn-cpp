@@ -167,6 +167,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
       }
       string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
+      GRAPH_EXEC;
       //if(djnn::ExternalSource::thread_local_cancelled || access->get_please_stop ()) {
       //  djnn::release_exclusive_access (DBG_REL);
       //  return;
