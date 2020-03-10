@@ -82,6 +82,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
 
+    void post_activate () override {};
     void run_in_main_thread ();
     void run_in_own_thread ();
     void join_own_thread ();

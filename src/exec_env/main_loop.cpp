@@ -73,9 +73,11 @@ namespace djnn {
         run_in_own_thread ();
         set_activation_state (ACTIVATED);
         launch_mutex_unlock();
+        notify_activation();
         _another_source_wants_to_be_mainloop->run (); // should block
       } else {
         launch_mutex_unlock();
+        notify_activation();
         run_in_main_thread (); // should block
       }
       // up here, the mainloop is blocking
