@@ -110,7 +110,16 @@ namespace djnn
           djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;
-
+      case QEvent::Close:
+      {
+        djnn::get_exclusive_access (DBG_GET);
+        event->ignore ();
+        Process *p = _window->close();
+        if (p != nullptr)
+          p->activate ();
+        djnn::release_exclusive_access (DBG_REL);
+      }
+      break;
       default:
         {
           /* Event not managed by us */
