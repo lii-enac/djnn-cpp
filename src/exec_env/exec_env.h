@@ -14,9 +14,11 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
 
 namespace djnn
 {
+  extern Process *mainloop;
   void init_exec_env();
   void clear_exec_env();
 }

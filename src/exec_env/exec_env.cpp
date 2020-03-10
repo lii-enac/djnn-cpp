@@ -26,6 +26,7 @@ namespace djnn
 {
 
   static bool __module_initialized = false;
+  Process* mainloop;
 
   void
   init_exec_env()
@@ -34,7 +35,7 @@ namespace djnn
       __module_initialized = true;
       djnn::loadedModules.push_back ("exec_env");
       init_global_mutex();
-      MainLoop::instance ();
+      mainloop = &MainLoop::instance ();
       //DjnnTimeManager::instance().activate ();
       MainLoop::instance ().add_external_source(&DjnnTimeManager::instance());
       setlocale(LC_NUMERIC, "C");
