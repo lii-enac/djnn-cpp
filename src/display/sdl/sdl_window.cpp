@@ -149,23 +149,28 @@ namespace djnn
       
       case SDL_USEREVENT:
         {
+          rmt_BeginCPUSample(SDL_USEREVENT, 0);
           if (e.user.code == user_event_awake) {
             // awake
-#if 0
+#if 1
             //std::cerr << "SDL awake" << __FL__;
             static Uint32 lastTick=0;
             Uint32 tick = SDL_GetTicks();
-            float _refresh_rate=120.f;
-            if(tick - lastTick > 1000/_refresh_rate) {
+            //float _refresh_rate=120.f;
+            //DBG;
+            //std::cerr << (tick - lastTick) << " " << 1000/_refresh_rate <<  __FL__;
+            if( (tick - lastTick) > 1000/_refresh_rate) {
+              //DBG;
               lastTick = tick;
               //rmt_BeginCPUSample(redraw, 0);
               redraw();
               //rmt_EndCPUSample();
-            }
+            } //else DBG;
 #else
             redraw ();
 #endif
           }
+          rmt_EndCPUSample();
           //redraw(_window);
           break;
         }

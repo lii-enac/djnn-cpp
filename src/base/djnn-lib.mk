@@ -5,8 +5,8 @@ ifeq ($(display),QT)
 include src/display/qt/djnn-lib-flags.mk #already included in core
 endif
 
-ifneq (,$(filter $(graphics),CAIRO GL))
-include src/display/sdl/djnn-lib-flags.mk
+ifeq ($(display),SDL)
+include src/display/sdl/djnn-lib-flags.mk #already included in core, because of clock FIXME
 endif
 
 ifeq ($(os),FreeRTOS)

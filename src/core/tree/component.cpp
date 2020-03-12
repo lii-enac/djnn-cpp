@@ -270,11 +270,13 @@ namespace djnn
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
     if (get_activation_flag () == DEACTIVATION)
       return;
+    rmt_BeginCPUSample(container_pick, RMTSF_Recursive);
     //ComponentObserver::instance ().start_pick ();
     for (auto c : _children) {
       c->pick ();
     }
     //ComponentObserver::instance ().end_pick ();
+    rmt_EndCPUSample();
   }
 
   AbstractGShape*

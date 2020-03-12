@@ -51,18 +51,25 @@ namespace djnn {
   {
     //djnn_internal::Time::duration duration = getFirstDelta ();
 
-    //struct timespec after;
-    //djnn::get_monotonic_time(&after);
-    //double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before_emscripten.tv_sec * 1000 + before_emscripten.tv_nsec * 1e-6);
 
-    UNIMPL;
-    /*
-    if(elapsedTime >= duration) {
-      before_emscripten = after;
-      timeElapsed (elapsedTime);
-      GRAPH_EXEC;
+    if(!empty()) {
+
+      //djnn_internal::Time::duration duration = getFirstDelta ();
+
+      //struct timespec after;
+      //djnn::get_monotonic_time(&after);
+      //double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before_emscripten.tv_sec * 1000 + before_emscripten.tv_nsec * 1e-6);
+      djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast(djnn_internal::Time::clock::now());
+
+      //UNIMPL;
+      
+      if(now >= get_next () -> get_end_time ()) {
+        update_ref_now();
+        before_emscripten = now;
+        time_has_elapsed (now);
+        GRAPH_EXEC;
+      }
     }
-    */
   }
 
   void

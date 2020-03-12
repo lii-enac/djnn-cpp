@@ -52,6 +52,8 @@ ifeq ($(cross_prefix),c)
 CC := $(cross_prefix)c
 else ifeq ($(cross_prefix),g)
 CC := $(cross_prefix)cc
+else ifeq ($(cross_prefix),em)
+CC := $(cross_prefix)cc
 else
 CC := $(cross_prefix)	
 endif
@@ -192,10 +194,10 @@ chrono ?= STD
 
 ifeq ($(thread),BOOST)
 CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1
+LDFLAGS += $(boost_libs)
 ifeq ($(os),Darwin)
 CXXFLAGS += -I/usr/local/include
 endif
-LDFLAGS += $(boost_libs)
 
 else ifeq ($(thread),QT)
 CXXFLAGS += -DDJNN_USE_QT_THREAD=1
@@ -222,28 +224,6 @@ CXXFLAGS += -DDJNN_USE_SDL_CHRONO=1
 endif
 
 #is chrono useless now?
-
-
-# ifeq ($(display),QT)
-# ifeq ($(os),Darwin)
-# CXXFLAGS += -DDJNN_USE_BOOST_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-# LDFLAGS += $(boost_libs)
-# else
-# CXXFLAGS += -DDJNN_USE_QT_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-# endif
-
-# else ifeq ($(display),SDL)
-# CXXFLAGS += -DDJNN_USE_SDL_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-
-# else ifeq ($(display),)
-# CXXFLAGS += -DDJNN_USE_STD_THREAD=1 -DDJNN_USE_STD_CHRONO=1
-
-# else
-# $(warning "unknown display (choose among: QT, SDL, (none))")
-
-# endif
-
-
 
 CXXFLAGS += -std=c++14
 CXXFLAGS += $(CFLAGS)
@@ -300,7 +280,7 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 djnn_libs ?= core exec_env base comms display gui input animation utils files audio
 
 ifeq ($(cross_prefix),em)
-djnn_libs := core exec_env base display gui animation utils audio
+djnn_libs := core exec_env base display gui animation utils audio input
 # comms input
 endif
 
@@ -502,7 +482,7 @@ pre_cov : djnn
 
 cov_jenkins:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
-	# remove .cpp from css-parser which are destroy after compilation
+	# remove .cpp from css-parser which are destroyed after compilation
 	lcov --remove $(lcov_file) '*/css-parser/*.cpp' -o $(lcov_file)
 	# convert lcov report to gcov report
 	# gcovr --xml-pretty -o $(build_dir)/gcov_report.xml -s

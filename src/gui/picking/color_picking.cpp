@@ -15,6 +15,9 @@
  */
 #include "color_picking.h"
 
+#include "utils/debug.h"
+#include <iostream>
+
 namespace djnn
 {
 
@@ -31,7 +34,8 @@ namespace djnn
   void
   ColorPickingView::init ()
   {
-    _pick_color = 0xff000000;
+    _pick_color = 0xff000000; // production
+    //_pick_color = 0xff203040; // for debugging
     seed = 0;
     next_color();
     //if (!_color_map.empty ())
@@ -59,7 +63,7 @@ namespace djnn
     int b = 100+myrandom()*155;
     _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
 #endif
-    //std::cerr << hex << _pick_color << dec << std::endl;
+    //std::cerr << hex << _pick_color << dec << __FL__;
   }
 
   void

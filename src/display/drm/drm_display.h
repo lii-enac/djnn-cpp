@@ -61,6 +61,7 @@ namespace djnn {
     bool is_connected () { return _connected.get_value (); }
     Process* get_vblank () { return &_vblank; }
     buff* get_next_buff ();
+    int fd () { return _fd; }
 
   private:
     int get_crtc (drmModeRes *res, drmModeConnector *drm_conn);

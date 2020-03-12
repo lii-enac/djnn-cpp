@@ -93,7 +93,7 @@ namespace djnn {
   void
   SDLMainloop::run ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ <<std::endl;
+    //DBG;
 #ifdef __EMSCRIPTEN__
     loop = [&]{sdl_run_coop();};
     SDL_AddTimer(10, my_callbackfunc, nullptr);

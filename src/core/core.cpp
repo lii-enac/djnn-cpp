@@ -18,6 +18,8 @@
 #include "core/utils/ext/remotery/Remotery.h"
 
 #include <locale.h>
+#include "utils/debug.h"
+#include <iostream>
 
 namespace djnn
 {
@@ -40,13 +42,16 @@ namespace djnn
 
     rmtSettings* settings = rmt_Settings();
     if(settings) settings->reuse_open_port = RMT_TRUE;
-    rmt_CreateGlobalInstance(&rmt);
+    enum rmtError err = rmt_CreateGlobalInstance(&rmt);
+    if(err) {
+      std::cerr << "rmt error " << err << __FL__;
+    }
   }
 
   void
   clear_core ()
   {
     XML::clear_xml_parser ();
-    rmt_DestroyGlobalInstance(rmt);
+    //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
   }
 }
