@@ -90,7 +90,7 @@ namespace djnn
     djn__XMLNamespaceStart (void*, const XML_Char*, const XML_Char*);
     static void
     djn__XMLNamespaceEnd (void*, const XML_Char*);
-    static map<string, djn__XMLParser*> *djn__NamespaceTable;
+    static map<string, djn__XMLParser*> djn__NamespaceTable;
     static Process *curComponent;
     static djn__XMLTagHandlerList *handlerStack;
   };

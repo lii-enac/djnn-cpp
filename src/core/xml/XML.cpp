@@ -37,7 +37,7 @@ namespace djnn {
 
   #define BUFFSIZE 8192
   static char buf[BUFFSIZE];
-  map<string, djn__XMLParser*> *XML::djn__NamespaceTable = new map<string, djn__XMLParser*>;
+  map<string, djn__XMLParser*> XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   Process *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
 
@@ -157,8 +157,8 @@ namespace djnn {
   {
     djn__XMLParser *h;
     map<string, djn__XMLParser*>::iterator it;
-    it = djn__NamespaceTable->find (uri);
-    if (it != djn__NamespaceTable->end ()) {
+    it = djn__NamespaceTable.find (uri);
+    if (it != djn__NamespaceTable.end ()) {
       cerr << "conflict of XML parsers on namespace " << uri << endl;
       return 0;
     }
@@ -167,7 +167,7 @@ namespace djnn {
     h->lookup = l;
     h->format = f;
 
-    djn__NamespaceTable->insert (pair<string, djn__XMLParser*> (uri, h));
+    djn__NamespaceTable.insert (pair<string, djn__XMLParser*> (uri, h));
     //cerr << "XML registered " << uri << endl;
     return 1;
   }
@@ -177,8 +177,8 @@ namespace djnn {
   {
     //djn__XMLParser *h;
     map<string, djn__XMLParser*>::iterator it;
-    it = djn__NamespaceTable->find (uri);
-    if (it == djn__NamespaceTable->end ()) {
+    it = djn__NamespaceTable.find (uri);
+    if (it == djn__NamespaceTable.end ()) {
       cerr << "unregister warning: no registered XML parsers on namespace " << uri << endl;
       return 0;
     }
@@ -187,7 +187,7 @@ namespace djnn {
     //h->lookup = l;
     //h->format = f;
     free(it->second);
-    djn__NamespaceTable->erase (it);
+    djn__NamespaceTable.erase (it);
     //cerr << "XML unregistered " << uri << endl;
     return 1;
   }
@@ -195,7 +195,7 @@ namespace djnn {
 
   void
   XML::clear_xml_parser () {
-    djn__NamespaceTable->clear ();
+    djn__NamespaceTable.clear ();
   }
 
   int
@@ -273,8 +273,8 @@ namespace djnn {
       /* find a parser for this name space */
       map<string, djn__XMLParser*>::iterator it;
 
-      it = djn__NamespaceTable->find (name);
-      if (it != djn__NamespaceTable->end ()) {
+      it = djn__NamespaceTable.find (name);
+      if (it != djn__NamespaceTable.end ()) {
         /* if found, get the associated parser data */
         p = it->second;
       } else {
