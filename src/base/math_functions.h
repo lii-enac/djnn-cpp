@@ -53,7 +53,7 @@ namespace djnn
   typedef UnaryOperatorAction<DoubleProperty, DoubleProperty,  my_sqrt<double>, double> SqrtAction;
   typedef UnaryOperator      <DoubleProperty, DoubleProperty,  my_sqrt<double>, double> Sqrt;
 
-  template <typename T> struct my_abs { T operator() (T t1) { return ::abs(t1);} };
+  template <typename T> struct my_abs { T operator() (T t1) { return ::fabs(t1);} };
   template <> const char name_info<my_abs<double>>::left[];
   template <> const char name_info<my_abs<double>>::right[];
   template <> const char name_info<my_abs<double>>::serialize[];
