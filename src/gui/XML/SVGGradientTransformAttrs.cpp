@@ -127,7 +127,7 @@ static int ParseScale(Process** el, const char* v) {
 	if (!XML_Utils::djn_XMLParseDouble(&sx, &vv))
 		goto invalid;
 	while (*vv == ' ' || *vv == '\t' || *vv == '\n' || *vv == '\r')
-		v++;
+		vv++;
 	if (*vv == ')') {
 		new GradientScaling(*el, "", sx, sx, 0, 0);
 		return 1;
