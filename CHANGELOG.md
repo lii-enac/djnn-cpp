@@ -9,6 +9,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - Update and improvement on memory performance.
 
+## [1.9.0] - 2020-03-13
+    note: debut on changelog. This section has to be completed, if we have time. 
+
+### NEW
+    - NEW backend: kms_drm
+    - NEW FileWriter Component
+    - SVG opacity is now a property that can be changed
+
+### Added
+    - Added new sort algorithms: merge_sort, stable_quick_sort
+    - Added few operators over lists: Sum, Product, Max, Min
+    - Added 'mspf' child to windows component: millisecond per frame informations
+    - Added 'reset' child to Timer component
+    - Added 'end' child to Sample (audio) component
+    - Added audio style: Volume, gain
+    - Added clear_gui ()
+    - Added remotery option compilation
+    - Added _refresh_rate on Cairo backend
+    - Added opacity for image on Qt backend
+    - Notify mainloop start
+    - Notify frame closed
+
+### Changed
+    - Remaded Timemanager
+    - Updated gen_prop.py to current status
+    - Improved multi_plateform compilation
+    - Improved use of IvyAccess (through smala)
+    - Improved Makefile: change default C compiler depend on platform, cross_prefix
+    - Improved debug info on nb_drawing_objects
+    - Changed syshook is now a module and become exec_env
+    - IvyAccess: execute GRAPH_EXEC on each message
+
+### Removed
+    - Removed Antialiasing on color_picking
+    - Removed reference to macport in compilation (macOs)
+
+### Fixed
+    - Fixed Timemanager bugs: cancel, reset, precision
+    - Fixed thread races: thread join, MouseButttonDblClick
+    - Fixed audio headers
+    - Fixed bug on font family
+
+
 ## [1.8.0] - 2020-01-31
 ### NEW
     - NEW sorter component
@@ -369,6 +412,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Deprecated
 ### Removed
 ### Fixed
-### Security
 
 
