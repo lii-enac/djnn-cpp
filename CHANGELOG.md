@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed thread races: thread join, MouseButttonDblClick
     - Fixed audio headers
     - Fixed bug on font family
+    - Fixed a bug on gradient transform parsing
 
 
 ## [1.8.0] - 2020-01-31
