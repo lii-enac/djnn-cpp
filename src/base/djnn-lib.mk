@@ -10,6 +10,6 @@ include src/display/sdl/djnn-lib-flags.mk #already included in core, because of 
 endif
 
 ifeq ($(os),FreeRTOS)
-include src/core/exec_env/freertos-cxx11/djnn-lib-flags.mk
+include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
 endif
 

@@ -28,9 +28,11 @@
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define attr(a) #a ":" << a << " "
+
+#include "exec_env/exec_env-dev.h"
 #define _PERF_TEST 0
 #if _PERF_TEST
-#include "core/utils/utils-dev.h"
+//#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;
