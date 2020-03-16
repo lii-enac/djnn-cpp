@@ -335,7 +335,7 @@ namespace djnn
     double cx, cy, r, fx, fy;
     int spread, coords;
     g->get_properties_values (cx, cy, r, fx, fy, spread, coords);
-    _cur_cairo_pattern = cairo_pattern_create_radial (cx, cy, r, fx, fy, 0);
+    _cur_cairo_pattern = cairo_pattern_create_radial (cx, cy, 0, fx, fy, r);
     prepare_gradient (g);
   }
 
