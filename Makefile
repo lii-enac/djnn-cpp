@@ -277,7 +277,7 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-djnn_libs ?= core exec_env base comms display gui input animation utils files audio
+djnn_libs ?= core exec_env base comms display gui input animation utils files audio extra
 
 ifeq ($(cross_prefix),em)
 djnn_libs := core exec_env base display gui animation utils audio input
@@ -290,10 +290,6 @@ endif
 
 ifeq ($(physics), ODE)
 djnn_libs += physics
-endif
-
-ifeq ($(phidgets), PHIDGETS)
-djnn_libs += phidgets
 endif
 
 ifeq ($(findstring avr,$(cross_prefix)),avr)
