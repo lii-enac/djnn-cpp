@@ -92,15 +92,42 @@ namespace djnn
   }
 
   void
-  CairoBackend::fill_and_stroke ()
+  CairoBackend::fill_and_stroke (AbstractGShape *s)
   {
     CairoContext *cur = _context_manager->get_current ();
+
+
+    Homography *h = dynamic_cast<Homography*> (s->matrix ());
+    Homography *hi = dynamic_cast<Homography*> (s->inverted_matrix ());
+    if (h || hi) {
+      cairo_matrix_t buff;
+      cairo_get_matrix (cur_cairo_state, &buff);
+      if (h) {
+
+        h->raw_props.m11 = buff.xx;
+        h->raw_props.m12 = buff.xy;
+        h->raw_props.m14 = buff.x0;
+
+        h->raw_props.m21 = buff.yx;
+        h->raw_props.m22 = buff.yy;
+        h->raw_props.m24 = buff.y0;
+      }
+      if (cairo_matrix_invert (&buff) == CAIRO_STATUS_SUCCESS && hi) {
+        hi->raw_props.m11 = buff.xx;
+        hi->raw_props.m12 = buff.xy;
+        hi->raw_props.m14 = buff.x0;
+        hi->raw_props.m21 = buff.yx;
+        hi->raw_props.m22 = buff.yy;
+        hi->raw_props.m24 = buff.y0;
+      }
+    }
+
     if (cur->_fillType != NO_SOURCE) {
       set_fill_source ();
       if (cur->_fillType == PATTERN) {
-        cairo_matrix_t m;
+   	    cairo_matrix_t m;
         cairo_matrix_init (&m, cur->_gradientMatrix->xx, cur->_gradientMatrix->yx, cur->_gradientMatrix->xy,
-                           cur->_gradientMatrix->yy, cur->_gradientMatrix->x0, cur->_gradientMatrix->y0);
+                                     cur->_gradientMatrix->yy, cur->_gradientMatrix->x0, cur->_gradientMatrix->y0);
         if (cur->_gradientCoordinateMode == 1) {
           double x1, y1, x2, y2;
           cairo_fill_extents (cur_cairo_state, &x1, &y1, &x2, &y2);

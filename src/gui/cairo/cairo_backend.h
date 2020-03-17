@@ -80,7 +80,7 @@ namespace djnn
     void
     set_stroke_source ();
     void
-    fill_and_stroke ();
+    fill_and_stroke (AbstractGShape *s);
     void
     pick_fill_and_stroke ();
     //WinImpl*
@@ -121,6 +121,10 @@ namespace djnn
     draw_path_clip (Path *p) override;
     void
     draw_image (Image *i) override;
+    double
+    get_cursor_from_index (Text*, int) override;
+    std::pair<double,int>
+    get_cursor_from_local_x (Text*, double) override;
 
     //style
     void

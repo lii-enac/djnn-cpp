@@ -105,7 +105,7 @@ namespace djnn
 
     cairo_push_group (cur_cairo_state); // FIXME should use surface directly
     draw();
-    fill_and_stroke ();
+    fill_and_stroke (s);
 
     cairo_pattern_t * pattern;
     pattern = cairo_pop_group (cur_cairo_state);
@@ -161,7 +161,7 @@ namespace djnn
     #else
     s->get_properties_values (x, y, w, h, rx, ry);
     draw_cairo_rect (x, y, w, h, rx, ry, cur_cairo_state);
-    fill_and_stroke ();
+    fill_and_stroke (s);
     #endif
 
     if (is_in_picking_view (s)) {
@@ -194,7 +194,7 @@ namespace djnn
     #else
     s->get_properties_values (cx, cy, r);
     cairo_arc (cur_cairo_state, cx, cy, r, 0., 2 * 3.14159265);
-    fill_and_stroke ();
+    fill_and_stroke (s);
     #endif
 
     if (is_in_picking_view (s)) {
@@ -237,7 +237,7 @@ namespace djnn
     #else
     s->get_properties_values (cx, cy, rx, ry);
     draw_cairo_ellipse (cx, cy, rx, ry, cur_cairo_state);
-    fill_and_stroke ();
+    fill_and_stroke (s);
     #endif
 
     if (is_in_picking_view (s)) {
@@ -273,7 +273,7 @@ namespace djnn
     s->get_properties_values (x1, y1, x2, y2);
     cairo_move_to (cur_cairo_state, x1, y1);
     cairo_line_to (cur_cairo_state, x2, y2);
-    fill_and_stroke ();
+    fill_and_stroke (s);
     #endif
 
     if (is_in_picking_view (s)) {
@@ -283,6 +283,68 @@ namespace djnn
       pick_fill_and_stroke ();
       _pick_view->add_gobj (s);
     }
+  }
+
+  double
+  CairoBackend::get_cursor_from_index (Text *t, int i)
+  {
+    PangoLayout *layout = (PangoLayout*)(t->get_font_metrics());
+    int width, height;
+    pango_layout_set_text (layout, t->get_raw_text ().c_str (), -1);
+    pango_layout_get_pixel_size (layout, &width, &height);
+    return width;
+  }
+
+  static int
+  next_index (int i, string &str)
+  {
+    if (i > str.size ())
+      return i;
+    int offset = 1;
+    auto cp = str.data () + i;
+    while (++cp <= (str.data () + str.size ()) && ((*cp & 0b10000000) && !(*cp & 0b01000000))) {
+      offset++;
+    }
+    return i + offset;
+  }
+
+  std::pair<double,int>
+  CairoBackend::get_cursor_from_local_x (Text* t, double loc_x)
+  {
+    string text = t->get_raw_text ();
+    if (text.length() == 0)
+      return std::pair<double,int>(0,0);
+
+    PangoLayout *layout = (PangoLayout*)(t->get_font_metrics());
+    int end, height;
+    pango_layout_set_text (layout, text.c_str (), -1);
+    pango_layout_get_pixel_size (layout, &end, &height);
+	if (loc_x > end)
+      return std::pair<double,int>(end, text.length());
+	if (loc_x < 0) {
+      return std::pair<double,int>(-1, 0);
+	}
+    for (int i = 0; i < text.size (); i = next_index (i, text)) {
+      int i2 = next_index (i, text);
+      string s1 = text.substr (0, i);
+      string s2 = text.substr (0, i2);
+      pango_layout_set_text (layout, s1.c_str (), -1);
+      int r1;
+      pango_layout_get_pixel_size (layout, &r1, &height);
+      pango_layout_set_text (layout, s2.c_str (), -1);
+      int r2;
+      pango_layout_get_pixel_size (layout, &r2, &height);
+      pango_layout_set_text (layout, text.c_str (), -1);
+      if (loc_x >= r1) {
+        if (loc_x <= r2) {
+          if (loc_x - r1 <= r2 - loc_x)
+            return std::pair<double, int>(r1, i);
+          return std::pair<double, int>(r2, i2);
+        }
+      }
+    }
+    // this should never happen
+    return std::pair<double, int>(0, 0);
   }
 
   static double factor[] =
@@ -329,7 +391,7 @@ namespace djnn
       pango_layout_set_text (layout, text.c_str (), -1);
       pango_layout_set_font_description (layout, cur_context->_font);
       pango_layout_get_pixel_size (layout, &width, &height);
-
+      t->set_font_metrics ((FontMetricsImpl*)layout);
       int b = (int) (pango_layout_get_baseline (layout) / PANGO_SCALE);
 
       /* applying alignment attribute */
@@ -347,12 +409,38 @@ namespace djnn
       t->set_impl (cache);
     }
 
+    Homography *h = dynamic_cast<Homography*> (t->matrix ());
+    Homography *hi = dynamic_cast<Homography*> (t->inverted_matrix ());
+    if (h || hi) {
+      cairo_matrix_t buff;
+      cairo_get_matrix (cur_cairo_state, &buff);
+      if (h) {
+
+        h->raw_props.m11 = buff.xx;
+        h->raw_props.m12 = buff.xy;
+        h->raw_props.m14 = buff.x0;
+
+        h->raw_props.m21 = buff.yx;
+        h->raw_props.m22 = buff.yy;
+        h->raw_props.m24 = buff.y0;
+      }
+      if (cairo_matrix_invert (&buff) == CAIRO_STATUS_SUCCESS && hi) {
+        hi->raw_props.m11 = buff.xx;
+        hi->raw_props.m12 = buff.xy;
+        hi->raw_props.m14 = buff.x0;
+        hi->raw_props.m21 = buff.yx;
+        hi->raw_props.m22 = buff.yy;
+        hi->raw_props.m24 = buff.y0;
+      }
+    }
+
     cairo_save (cur_cairo_state);
     //pango_cairo_update_layout (cur_cairo_state, cache->layout ()); // souhld we update de the layout?
     cairo_move_to (cur_cairo_state, cache->_posX, cache->_posY - cache->_b);
     curTextX = cache->_posX + cache->_width;
     curTextY = cache->_posY;
     set_fill_source ();
+
     pango_cairo_show_layout (cur_cairo_state, cache->_layout);
     cairo_restore (cur_cairo_state);
 
@@ -420,7 +508,7 @@ namespace djnn
     int w = x2 - x1;
     int h = y2 - y1;
     s->set_bounding_box (x1, y1, w, h);
-    fill_and_stroke ();
+    fill_and_stroke (s);
     #endif
     
     if (is_in_picking_view (s)) {
@@ -454,7 +542,7 @@ namespace djnn
     double x1, y1, x2, y2;
     cairo_path_extents (cur_cairo_state, &x1, &y1, &x2, &y2);
     p->set_bounding_box (x1, y1, x2 - x1, y2 - y1);
-    fill_and_stroke ();
+    fill_and_stroke (p);
 
     if (in_picking_view) {
       pick_fill_and_stroke ();

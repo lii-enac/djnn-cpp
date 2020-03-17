@@ -14,6 +14,8 @@
 #include "text_field.h"
 #include "core/utils/error.h"
 
+#include <iostream>
+
 namespace djnn
 {
   TextField::TextField (Process *parent, const string &name, Process* text, Process* shape) :
