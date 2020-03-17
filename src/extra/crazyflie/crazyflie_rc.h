@@ -5,13 +5,13 @@
 #include "core/tree/text_property.h"
 
 
-#include "Crazyflie.h"
+#include "extra/crazyflie/ext/crazyflie_cpp/include/crazyflie_cpp/Crazyflie.h"
 
 namespace djnn {
 
 	class CrazyflieRC : public Process {
 	public:
-		CrazyflieRC (Process * parent, const string& name);
+		CrazyflieRC (Process * parent, const string& name, const string& uri);
 
 		class TakeoffAction : public Action
 	    {
@@ -38,7 +38,7 @@ namespace djnn {
 	private:
 		Crazyflie * _crazyflie;
 
-		TextProperty _url;
+		TextProperty _uri;
 		//void update_url ();
 
 		Spike _takeoff;
