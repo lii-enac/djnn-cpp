@@ -76,7 +76,7 @@ namespace djnn {
 	Sample::impl_deactivate ()
 	{
 		alSourceStop(sourceid); CHKAL;
-		if(somehow_activating()) {
+		if(is_already_scheduled ()) {
       		DjnnTimeManager::instance().cancel(this);
     	}
 	}

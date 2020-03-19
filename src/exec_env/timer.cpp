@@ -69,7 +69,7 @@ namespace djnn
   void
   Timer::impl_deactivate ()
   {
-    if(somehow_activating()) {
+    if(is_already_scheduled()) {
       DjnnTimeManager::instance().cancel(this);
     }
     _c_update.disable ();
