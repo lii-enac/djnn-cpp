@@ -62,6 +62,7 @@ ifeq ($(cross_prefix),g)
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
+
 ifndef os
 os := $(shell uname -s)
 endif
@@ -117,6 +118,7 @@ YACC = /usr/local/opt/bison/bin/bison -d
 LEX = /usr/local/opt/flex/bin/flex
 CXXFLAGS += -I/usr/local/opt/flex/include
 LDFLAGS += -L/usr/local/opt/flex/lib
+#AR ?= /usr/bin/ar
 endif
 
 # for windows with mingwXX
@@ -158,6 +160,9 @@ LDFLAGS = -L../ext-libs/android/libexpat/expat/lib/.libs \
 -L../ext-libs/android/curl/lib/.libs \
 --sysroot=/usr/local/Cellar/android-ndk/r14/platforms/android-24/arch-arm
 endif
+
+AR = $(cross_prefix)ar
+RANLIB = $(cross_prefix)ranlib
 
 
 ifeq ($(display),QT)
@@ -204,6 +209,10 @@ CXXFLAGS += -DDJNN_USE_QT_THREAD=1
 
 else ifeq ($(thread),SDL)
 CXXFLAGS += -DDJNN_USE_SDL_THREAD=1
+
+else ifeq ($(thread),STD)
+CXXFLAGS += -DDJNN_USE_STD_THREAD=1
+
 endif
 
 
@@ -283,10 +292,6 @@ ifeq ($(cross_prefix),em)
 djnn_libs := core exec_env base display gui animation utils audio input
 # comms input
 endif
-
-#ifeq ($(os),MinGW)
-#djnn_libs := core base comms display gui input animation utils files audio
-#endif
 
 ifeq ($(physics), ODE)
 djnn_libs += physics
@@ -374,8 +379,8 @@ $$($1_lib): $$($1_objs)
 
 $$($1_lib_static): $$($1_objs)
 	@mkdir -p $$(dir $$@)
-	#ar rU $$@ $$($1_objs)
-	/usr/bin/ar -r -u $$@ $$($1_objs)
+	$$(AR) -r -u $$@ $$($1_objs)
+	ranlib $$@ 
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)

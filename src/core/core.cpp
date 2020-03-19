@@ -55,3 +55,8 @@ namespace djnn
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
   }
 }
+
+extern "C" {
+  void djnn_init_core () { djnn::init_core (); }
+  void djnn_clear_core () { djnn::clear_core (); }
+}
