@@ -143,7 +143,7 @@ ifeq ($(os),FreeRTOS)
 lib_suffix =.so
 boost_libs =
 DYNLIB = -shared
-CFLAGS += -fpic -g -MMD -Wall
+CFLAGS += -fpic -g -MMD -Wall -D_GCC_MULTITHREAD_FREERTOS_ENABLE
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 LDFLAGS += -L$(build_dir)
 endif

@@ -89,6 +89,7 @@ namespace djnn
     void run () override;
 
     std::atomic<chrono::milliseconds> _duration;
+    //chrono::milliseconds _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
     //        djnn application only has one mainloop.
@@ -119,7 +120,8 @@ namespace djnn
     // If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
     std::condition_variable_any cv;
 
-    static std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy 
+    static std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy
+    //static bool _is_stopping; // for external sources that can't be stopped easily eg Ivy 
   };
 
 }
