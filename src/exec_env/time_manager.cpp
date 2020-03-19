@@ -51,12 +51,12 @@ namespace djnn_internal {
     void
     Manager::schedule (Timer* timer, duration t, time_point start_time) //throw (TimerAlreadyScheduled)
     {
-#if !DJNN_NO_DEBUG // should be assert
-      if(already_scheduled(timer)) {
+//#if !DJNN_NO_DEBUG // should be assert
+      if(is_already_scheduled(timer)) {
         djnn::warning(dynamic_cast<djnn::Process*>(timer), "timer has already been scheduled");
         cancel(timer);
       }
-#endif
+//#endif
 
       timer->set_start_time(start_time);
       timer->set_end_time(start_time + t);
@@ -65,6 +65,7 @@ namespace djnn_internal {
         previous_first = get_next();
       }
       _timers.emplace(timer);
+      timer->set_scheduled(true);
       if(previous_first != get_next()) {      
         firstTimerHasChanged ();
       }
@@ -73,18 +74,19 @@ namespace djnn_internal {
     void
     Manager::cancel (Timer* timer)
     { 
-#if !DJNN_NO_DEBUG // should be assert
-      if(!already_scheduled(timer)) {
+//#if !DJNN_NO_DEBUG // should be assert
+      if(!is_already_scheduled(timer)) {
         djnn::warning(dynamic_cast<djnn::Process*>(timer), "timer cancelled but not previously scheduled");
         return;
       }
-#endif
+//#endif
 
       auto it = _timers.find(timer);
       if(it != _timers.end()) {
         bool firsthaschanged = false;
         if (it==_timers.begin()) firsthaschanged = true;
         _timers.erase(it);
+        (*it)->set_scheduled(false);
         if(firsthaschanged) firstTimerHasChanged();
       }
     }
@@ -132,9 +134,9 @@ namespace djnn_internal {
         // req : sync between timers, do not loose time because of delays
         auto sav_now = get_ref_now (); // save default 'now'
         set_ref_now (t->get_end_time()); // use the expected End Time and pretend it's the default 'now' for the next activations
+        t->set_scheduled(false);
         t->do_it(now-t->get_end_time());
         set_ref_now (sav_now); // restore default 'now'
-
       }
       _dontCallTimerHasChanged=0;
 
@@ -159,9 +161,10 @@ namespace djnn_internal {
 
 
     bool
-    Manager::already_scheduled(Timer * timer) const
+    Manager::is_already_scheduled(Timer * timer) const
     {
-      return _timers.find(timer) != _timers.end();
+      //return _timers.find(timer) != _timers.end();
+      return timer->is_already_scheduled ();
     }
     
     void

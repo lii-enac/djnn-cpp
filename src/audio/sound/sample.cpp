@@ -87,7 +87,7 @@ namespace djnn {
   	{
     	if(somehow_activating()) {
       		set_activation_state (DEACTIVATED);
-      		Sample::impl_deactivate ();
+      		alSourceStop(sourceid); CHKAL;
       		_end.notify_activation ();
     	}
   	}

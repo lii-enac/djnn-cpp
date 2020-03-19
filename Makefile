@@ -38,29 +38,34 @@ display ?= QT
 graphics ?= QT
 #options: QT CAIRO GL
 
+#ifeq (g++,$(findstring g++,$(shell which $(CXX) | xargs realpath | xargs basename)))
+#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#endif
+
 # cross-compile support
-ifndef cross_prefix
-cross_prefix := c
+ifdef cross_prefix
+#cross_prefix := c
 #options: c g llvm-g i686-w64-mingw32- arm-none-eabi- em
 #/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
+
+CC := $(cross_prefix)$(CC)
+CXX := $(cross_prefix)$(CXX)
+AR := $(cross_prefix)$(AR)
+
 endif
 
-CXX := $(cross_prefix)++
+#CXX := $(cross_prefix)++
 
-ifeq ($(cross_prefix),c)
-CC := $(cross_prefix)c
-else ifeq ($(cross_prefix),g)
-CC := $(cross_prefix)cc
-else ifeq ($(cross_prefix),em)
-CC := $(cross_prefix)cc
-else
-CC := $(cross_prefix)	
-endif
-
-ifeq ($(cross_prefix),g)
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
-endif
+# ifeq ($(cross_prefix),c)
+# CC := $(cross_prefix)c
+# else ifeq ($(cross_prefix),g)
+# CC := $(cross_prefix)cc
+# else ifeq ($(cross_prefix),em)
+# CC := $(cross_prefix)cc
+# else
+# CC := $(cross_prefix)
+# endif
 
 
 ifndef os
@@ -104,6 +109,7 @@ boost_libs = -lboost_thread -lboost_chrono -lboost_system
 #-lboost_fiber-mt -lboost_context-mt
 DYNLIB = -shared
 CFLAGS += -fpic -g -MMD -Wall
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 LDFLAGS += -L$(build_dir)
 YACC = bison -d
 endif
@@ -128,6 +134,7 @@ boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 DYNLIB = -shared
 CFLAGS += -fpic -g -MMD -Wall
 CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 LDFLAGS += -L$(build_dir)
 YACC = bison -d
 endif
@@ -137,6 +144,7 @@ lib_suffix =.so
 boost_libs =
 DYNLIB = -shared
 CFLAGS += -fpic -g -MMD -Wall
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 LDFLAGS += -L$(build_dir)
 endif
 

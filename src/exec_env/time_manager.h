@@ -57,6 +57,7 @@ namespace djnn_internal {
 
     class Timer {
     public:
+      Timer () : _scheduled(false) {}
       virtual ~Timer() {}
       virtual void do_it(const duration& actualduration)=0;
       const time_point& get_start_time () const { return _start; }
@@ -64,9 +65,12 @@ namespace djnn_internal {
       void set_start_time (time_point d) { _start=d; }
       void set_end_time (time_point d) { _end=d; }
       duration get_duration () const { return _end-_start;}
+      bool is_already_scheduled () const { return _scheduled; }
+      void set_scheduled(bool s) { _scheduled = s; }
       
     private:
       time_point _start, _end;
+      bool _scheduled;
     };
 
     struct lesser {
@@ -108,7 +112,7 @@ namespace djnn_internal {
 
       // debug
       const Timer* find (Timer *) const;
-      bool already_scheduled (Timer* timer) const;
+      bool is_already_scheduled (Timer* timer) const;
       void debug () const;
 
     protected:
