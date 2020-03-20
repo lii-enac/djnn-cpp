@@ -12,7 +12,6 @@
  *
  */
 
-//#include "backend.h"
 
 #include "sdl_mainloop.h"
 #include "sdl_window.h"
@@ -28,8 +27,7 @@
 #include "core/utils/ext/remotery/Remotery.h"
 
 #include <iostream>
-#define __FL__ __FILE__ << ":" << __LINE__ << std::endl;
-#define DBG std::cerr << __FUNCTION__ << " " << __FL__;
+
 
 namespace djnn {
 

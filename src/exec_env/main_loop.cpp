@@ -30,6 +30,19 @@
 namespace djnn {
 
     MainLoop MainLoop::_instance;
+
+    // MainLoop is a singleton, put this filed in a static variable, and do not include "djnn-thread.h" in mainloop.h
+    #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
+    static djnn_thread_t own_thread;
+    #endif
+
+    #if DJNN_USE_QT_THREAD
+    static QThread* own_thread;
+    #endif
+
+    #if DJNN_USE_SDL_THREAD
+    static SDL_Thread * own_thread; 
+    #endif
     
     MainLoop&
     MainLoop::instance ()

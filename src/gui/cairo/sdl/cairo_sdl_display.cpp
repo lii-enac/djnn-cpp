@@ -18,14 +18,9 @@
 #include "display/sdl/sdl_window.h"
 #include "display/sdl/sdl_mainloop.h"
 
-#define DJNN_GRAPHICS_GL 1
-
-//#ifdef DJNN_GRAPHICS_GL
 #include "cairo_sdl_window.h"
-//#endif
 
 #include <SDL.h>
-
 
 #include <iostream>
 

@@ -13,8 +13,8 @@
  *
  */
 
-#include "display/sdl/sdl_mainloop.h"
 #include "cairo_sdl_window.h"
+#include "display/sdl/sdl_mainloop.h"
 #include "gui/cairo/my_cairo_surface.h"
 #include "gui/backend.h"
 

@@ -14,15 +14,16 @@ CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
 ifneq ($(os),FreeRTOS)
 lib_srcs += $(shell find src/core/xml -name "*.cpp")
 endif
+
 ifneq ($(os),$(filter $(os),FreeRTOS em))
 lib_ldflags += -lexpat -lcurl
 endif
 
-src/core/djnn-srcs.mk:
-	srcs=""
-	srcs+=`find src/core -name "*.cpp"`
-	echo $$srcs
-	echo `find src/core -name "*.cpp"`
-	echo lib_srcs := $$srcs > $@
+# src/core/djnn-srcs.mk:
+# 	srcs=""
+# 	srcs+=`find src/core -name "*.cpp"`
+# 	echo $$srcs
+# 	echo `find src/core -name "*.cpp"`
+# 	echo lib_srcs := $$srcs > $@
 
-.PHONY: src/core/djnn-srcs.mk
+# .PHONY: src/core/djnn-srcs.mk
