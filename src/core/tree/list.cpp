@@ -31,7 +31,7 @@ namespace djnn
 {
   using namespace std;
 
-  AbstractList::AbstractList (Process* parent, const string& name)
+  AbstractList::AbstractList (Process* parent, const std::string& name)
   :
     Container (parent, name),
     _added (nullptr, "_added", nullptr),
@@ -161,7 +161,7 @@ namespace djnn
   }
 
   Process*
-  AbstractList::find_component (const string& path)
+  AbstractList::find_component (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -205,7 +205,7 @@ namespace djnn
     return nullptr;
   }
 
-  List::List (Process* parent, const string& name) :
+  List::List (Process* parent, const std::string& name) :
     AbstractList (parent, name)
   {
     Process::finalize_construction (parent, name);
@@ -239,7 +239,7 @@ namespace djnn
   }
 
   void
-  List::serialize (const string& type) {
+  List::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -254,7 +254,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  ListIterator::ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model)
+  ListIterator::ListIterator (Process *parent, const std::string &name, Process *list, Process *action, bool model)
   :
     Process (name, model),
     _action (action)
@@ -282,7 +282,7 @@ namespace djnn
     set_activation_state (DEACTIVATED);
   }
 
-  BidirectionalListIterator::IterAction::IterAction (Process *parent, const string& name, List *list,
+  BidirectionalListIterator::IterAction::IterAction (Process *parent, const std::string& name, List *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Action (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
@@ -308,7 +308,7 @@ namespace djnn
     }
   }
 
-  BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const string& name,
+  BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const std::string& name,
                                                        IntProperty *index) :
       Action (parent, name), _index (index)
   {
@@ -322,7 +322,7 @@ namespace djnn
     _index->set_value (1, true);
   }
 
-  BidirectionalListIterator::BidirectionalListIterator (Process *parent, const string& name,
+  BidirectionalListIterator::BidirectionalListIterator (Process *parent, const std::string& name,
                                                         Process* list)
   :
   Process (name),
@@ -399,7 +399,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::serialize (const string& type) {
+  BidirectionalListIterator::serialize (const std::string& type) {
    
     string buf;
 

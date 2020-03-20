@@ -37,7 +37,7 @@ namespace djnn
   static int __XMLLevel = 0;
 
   void
-  XMLSerializer::start (const string& name) {
+  XMLSerializer::start (const std::string& name) {
 
   
     int i;
@@ -83,19 +83,19 @@ namespace djnn
   }
 
   void
-  XMLSerializer::text_attribute (const string& name, const string& value){
+  XMLSerializer::text_attribute (const std::string& name, const std::string& value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
-  XMLSerializer::int_attribute (const string& name, int value){
+  XMLSerializer::int_attribute (const std::string& name, int value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
-  XMLSerializer::float_attribute (const string& name, double value){
+  XMLSerializer::float_attribute (const std::string& name, double value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }

@@ -21,6 +21,8 @@
 
 #include "core/serializer/serializer.h"
 
+using namespace std;
+
 namespace djnn
 {
   void
@@ -29,7 +31,7 @@ namespace djnn
     ((Properties*)get_parent ())->add_property ();
   }
 
-  Properties::Properties (Process *parent, const string &name, const string &filename)
+  Properties::Properties (Process *parent, const std::string &name, const std::string &filename)
   : Process (name)
   {
     _input = new TextProperty (this, "input", "");
@@ -86,7 +88,7 @@ namespace djnn
   }
 
   void
-  Properties::serialize (const string &type)
+  Properties::serialize (const std::string &type)
   {
     AbstractSerializer::pre_serialize (this, type);
 

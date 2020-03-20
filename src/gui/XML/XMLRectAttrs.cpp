@@ -20,7 +20,8 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-	
+
+namespace djnn {
 using namespace std;
 
 static int ParseX (Process**, const char*);
@@ -91,4 +92,5 @@ ParseRy (Process** e, const char* v)
   if (r && djn_RectArgs.rx == -1)
     djn_RectArgs.rx = djn_RectArgs.ry;
   return r;
+}
 }

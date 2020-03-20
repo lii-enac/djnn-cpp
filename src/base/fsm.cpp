@@ -26,7 +26,7 @@ namespace djnn
 {
   using namespace std;
 
-  FSMState::FSMState (Process *parent, const string &name) :
+  FSMState::FSMState (Process *parent, const std::string &name) :
       Container (parent, name)
   {
     FSM *fsm = dynamic_cast<FSM*> (parent);
@@ -81,7 +81,7 @@ namespace djnn
   }
 
   void
-  FSMState::serialize (const string& type) {
+  FSMState::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -98,7 +98,7 @@ namespace djnn
   }
 
   FSMTransition::Init::Init (FSMTransition* t, Process* p, 
-                            const string &tspec, const string &aspec) 
+                            const std::string &tspec, const std::string &aspec) 
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
     if (fsm == nullptr) {
@@ -120,9 +120,9 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (Process *parent, const string &name, Process* from, Process* to,
-                                Process *trigger, const string &tspec, Process *action,
-                                const string &aspec) 
+  FSMTransition::FSMTransition (Process *parent, const std::string &name, Process* from, Process* to,
+                                Process *trigger, const std::string &tspec, Process *action,
+                                const std::string &aspec) 
   : Process (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
@@ -140,7 +140,7 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (Process *parent, const string &name, Process* from, Process* to,
+  FSMTransition::FSMTransition (Process *parent, const std::string &name, Process* from, Process* to,
                                 Process *trigger, Process *action) 
   : Process (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
@@ -190,7 +190,7 @@ namespace djnn
   }
 
   void
-  FSMTransition::serialize (const string& type) {
+  FSMTransition::serialize (const std::string& type) {
    
     string buf;
 
@@ -217,7 +217,7 @@ namespace djnn
 
   }
 
-  FSM::FSM (Process *parent, const string &name) 
+  FSM::FSM (Process *parent, const std::string &name) 
   : Process (name), 
   _priority (0),
   _cur_state (nullptr),
@@ -307,7 +307,7 @@ namespace djnn
   }
 
   void
-  FSM::serialize (const string& type) {
+  FSM::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

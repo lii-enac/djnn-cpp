@@ -32,7 +32,7 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const string &name, Process* shape, Process* matrix)
+  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const std::string &name, Process* shape, Process* matrix)
   : Process (name)
   {
     if (shape == nullptr || matrix == nullptr) {
@@ -71,7 +71,7 @@ namespace djnn
     Graph::instance().remove_edge (_t_move1, _update_action);
     delete _c_move;
 
-    map<int, TouchAlive*>::iterator it;
+    std::map<int, TouchAlive*>::iterator it;
     for ( it = touches.begin (); it != touches.end (); ++it ) {
       delete it->second;
       touches.erase (it);
@@ -117,25 +117,25 @@ namespace djnn
   ScaleRotateTranslate::remove_touch ()
   {
     Touch *t = (Touch*) getRef (_removed);
-    map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
+    std::map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
     if (it != touches.end ()) {
       delete it->second;
       touches.erase (it);
     } else {
-      cout << "touch not found on remove\n";
+      std::cout << "touch not found on remove\n";
     }
   }
 
   void
   ScaleRotateTranslate::touch_move (Touch *t)
   {
-    map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
+    std::map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
     if (it != touches.end ()) {
       TouchAlive *ta = it->second;
       ta->_last_pt->set_values (ta->_new_pt);
       ta->_new_pt->set_values (t->get_move_x (), t->get_move_y ());
     } else {
-      cout << "touch not found on move\n";
+      std::cout << "touch not found on move\n";
     }
   }
 

@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (Process *parent, const string &name, DoubleProperty* m,
+  Oscillator::OscillatorAction::OscillatorAction (Process *parent, const std::string &name, DoubleProperty* m,
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
@@ -38,7 +38,7 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (Process *parent, const string &name)
+  Oscillator::Oscillator (Process *parent, const std::string &name)
   : Process (name),
   _m (this, "m", 1),
   _k (this, "k", 1),
@@ -88,7 +88,7 @@ namespace djnn
   }
 
   void
-  Oscillator::serialize (const string& type)
+  Oscillator::serialize (const std::string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

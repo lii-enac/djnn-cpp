@@ -48,7 +48,7 @@ namespace djnn
 #endif
 
   void
-  LogPrinter::serialize (const string& type) {
+  LogPrinter::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

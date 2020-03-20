@@ -46,7 +46,7 @@ namespace djnn
     depth_first_traverse(p, [&i](Process* p){++i;});
     std::cerr << "count " << i << std::endl;
 
-    map<std::string,int> num_by_type;
+    std::map<std::string,int> num_by_type;
     int num_no_coupling=0;
     int num_one_coupling=0;
     int num_more_than_one_coupling=0;

@@ -32,7 +32,7 @@ namespace djnn
     class TimerAction : public Action
     {
     public:
-      TimerAction (Process* parent, const string &name) :
+      TimerAction (Process* parent, const std::string &name) :
         Action (parent, name) {};
       virtual ~TimerAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
@@ -42,7 +42,7 @@ namespace djnn
     class ResetAction : public Action
     {
     public:
-      ResetAction (Process* parent, const string &name) :
+      ResetAction (Process* parent, const std::string &name) :
         Action (parent, name) {};
       virtual ~ResetAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
@@ -65,7 +65,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
 
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     void update_period ();
 
   private:

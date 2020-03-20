@@ -20,7 +20,7 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace std;
+namespace djnn {
 
 static int djn__ParseX (Process**, const char*);
 static int djn__ParseY (Process**, const char*);
@@ -62,4 +62,4 @@ static int djn__ParseWidth(Process** e, const char* v) {
 static int djn__ParseHeight(Process** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_RectAreaArgs.height, v);
 }
-
+}

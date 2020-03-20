@@ -46,7 +46,7 @@ namespace djnn {
       void impl_deactivate () {}
     };
   public:
-    DRMConnector (Process *p, const string& name, int fd, drmModeRes *res, drmModeConnector *conn);
+    DRMConnector (Process *p, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
@@ -94,7 +94,7 @@ namespace djnn {
       void impl_deactivate () {}
     };
   public:
-    DRMDevice (Process *p, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (Process *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}

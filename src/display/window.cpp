@@ -129,7 +129,7 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (Process *parent, const string &name, const string &path, int hotX, int hotY) :
+  Cursor::Cursor (Process *parent, const std::string &name, const std::string &path, int hotX, int hotY) :
       Process (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
@@ -139,7 +139,7 @@ namespace djnn
   }
 
   Process*
-  Cursor::find_component (const string &name)
+  Cursor::find_component (const std::string &name)
   {
     Process* res = Process::find_component (name);
     if (res)

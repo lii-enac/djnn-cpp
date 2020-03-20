@@ -55,7 +55,7 @@ namespace djnn
   }
 
   void
-  AbstractAssignment::check_init(const string& ispec, const string& dspec)
+  AbstractAssignment::check_init(const std::string& ispec, const std::string& dspec)
   {
     if(!_ref_info_src._ref) {
       if (_src == 0) {
@@ -76,8 +76,8 @@ namespace djnn
     }
   }
 
-  AbstractAssignment::Init::Init (AbstractAssignment *p, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec,
-    string& src_ref_spec, string& dst_ref_spec)
+  AbstractAssignment::Init::Init (AbstractAssignment *p, const std::string& name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec,
+    std::string src_ref_spec, std::string dst_ref_spec)
   {
     if (src == 0) {
       error (
@@ -102,8 +102,8 @@ namespace djnn
     dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (Process *parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
-    string src_ref_spec, string dst_ref_spec)
+  AbstractAssignment::AbstractAssignment (Process *parent, const std::string &name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel,
+    std::string src_ref_spec, std::string dst_ref_spec)
   :
   SrcToDstLink (parent, name, isModel),
   _init(this, name, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
@@ -193,8 +193,8 @@ namespace djnn
       Graph::instance ().add_edge (_src, _dst);
   }
 
-  Assignment::Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst,
-                          const string &dspec, bool isModel) :
+  Assignment::Assignment (Process* parent, const std::string &name, Process* src, const std::string &ispec, Process* dst,
+                          const std::string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
   {
@@ -232,7 +232,7 @@ namespace djnn
   }
 
   void
-  Assignment::serialize (const string& format)
+  Assignment::serialize (const std::string& format)
   {
     string buf;
 
@@ -260,8 +260,8 @@ namespace djnn
     }
   }
 
-  PausedAssignment::PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec,
-                                      Process* dst, const string &dspec, bool isModel) :
+  PausedAssignment::PausedAssignment (Process* parent, const std::string &name, Process* src, const std::string &ispec,
+                                      Process* dst, const std::string &dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
   {
@@ -287,7 +287,7 @@ namespace djnn
   }
 
   void
-  PausedAssignment::serialize (const string& format)
+  PausedAssignment::serialize (const std::string& format)
   {
     string buf;
 

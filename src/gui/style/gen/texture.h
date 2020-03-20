@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (std::string& path);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_component ("path"); }
 
   protected:

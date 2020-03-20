@@ -50,7 +50,7 @@ namespace djnn {
     void set_parent (Process* p) override;
     void change_branch ();
     friend void SwitchAction::impl_activate ();
-    string _initial;
+    std::string _initial;
     TextProperty _branch_name;
     SwitchAction _action;
     Coupling _c_branch;

@@ -21,7 +21,7 @@
 #include "gui/gui-dev.h"
 
 
-using namespace djnn;
+namespace djnn {
 
 static int ParseX1 (Process**, const char*);
 static int ParseY1 (Process**, const char*);
@@ -63,3 +63,4 @@ static int ParseY2(Process** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_LineArgs.y2, v);
 }
 
+}

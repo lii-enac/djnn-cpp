@@ -99,7 +99,7 @@ namespace djnn {
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (Process *parent, const string &name) : Action (parent, name) {}
+      ScaleRotateTranslateAction (Process *parent, const std::string &name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
       void impl_deactivate () override {};
@@ -108,7 +108,7 @@ namespace djnn {
     class TouchMoveAction : public Action
     {
     public:
-      TouchMoveAction (Process *parent, const string &name) : Action (parent, name) {}
+      TouchMoveAction (Process *parent, const std::string &name) : Action (parent, name) {}
       ~TouchMoveAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->touch_move ((Touch*)get_data ()); };
       void impl_deactivate () override {};
@@ -117,7 +117,7 @@ namespace djnn {
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (Process *parent, const string &name) : Action (parent, name) {}
+      AddTouchAction (Process *parent, const std::string &name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
       void impl_deactivate () override {};
@@ -125,13 +125,13 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (Process *parent, const string &name) : Action (parent, name) {}
+      RemoveTouchAction (Process *parent, const std::string &name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
       void impl_deactivate () override {};
     };
   public:
-    ScaleRotateTranslate (Process *parent, const string &name, Process* shape, Process* matrix);
+    ScaleRotateTranslate (Process *parent, const std::string &name, Process* shape, Process* matrix);
     virtual ~ScaleRotateTranslate ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -142,12 +142,12 @@ namespace djnn {
   private:
     Process *_shape, *_touches, *_added, *_removed;
     AbstractHomography *_matrix;
-    map <int, TouchAlive*> touches;
+    std::map <int, TouchAlive*> touches;
     Coupling *_c_on_add, *_c_on_del, *_c_move;
     ScaleRotateTranslateAction *_update_action;
     AddTouchAction *_add_touch_action;
     RemoveTouchAction *_remove_touch_action;
     TouchMoveAction *_t_move1;
   };
-  bool estimateTSR (map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
+  bool estimateTSR (std::map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
 }

@@ -82,7 +82,7 @@ namespace djnn
     class PreviousAction : public Action
     {
     public:
-      PreviousAction (Process* parent, const string &name, Previous& np, double init_val)
+      PreviousAction (Process* parent, const std::string &name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
        _prev (init_val) { Process::finalize_construction (parent, name); }
@@ -98,12 +98,12 @@ namespace djnn
       double _prev;
     };
   public:
-    Previous (Process *parent, const string &name, double i_val);
+    Previous (Process *parent, const std::string &name, double i_val);
     virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
   protected:
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     DoubleProperty _input;
     DoubleProperty _output;
     PreviousAction _action;
@@ -113,7 +113,7 @@ namespace djnn
   class Incr : public Process
   {
   public:
-    Incr (Process *parent, const string& name, bool is_model);
+    Incr (Process *parent, const std::string& name, bool is_model);
     void impl_activate () override;
     void impl_deactivate () override {}
     void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
@@ -123,7 +123,7 @@ namespace djnn
     DoubleProperty _delta, _state;
   protected:
     void set_parent (Process* p) override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   };
 
   class AdderAccumulator : public Process
@@ -132,20 +132,20 @@ namespace djnn
     class AdderAccumulatorAction : public Action
     {
     public:
-      AdderAccumulatorAction (Process* parent, const string &name, AdderAccumulator& aa);
+      AdderAccumulatorAction (Process* parent, const std::string &name, AdderAccumulator& aa);
       void impl_activate () override;
       void impl_deactivate () override {}
     private:
       AdderAccumulator& _aa;
     };
   public:
-    AdderAccumulator (Process* parent, const string &name, double input, double clamp_min, double clamp_max);
+    AdderAccumulator (Process* parent, const std::string &name, double input, double clamp_min, double clamp_max);
     virtual ~AdderAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
   protected:
     void set_parent (Process* p) override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     friend class AdderAccumulatorAction;
     DoubleProperty _input, _clamp_min, _clamp_max, _result;

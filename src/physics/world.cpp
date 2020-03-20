@@ -38,7 +38,7 @@ namespace djnn
     }
   }
 
-  World::World (Process *parent, const string& name, double x, double y, double z) :
+  World::World (Process *parent, const std::string& name, double x, double y, double z) :
       Process (name), raw_props
         { .x = x, .y = y, .z = z, .dt = 0.016 }, _dt (nullptr)
 
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   Process*
-  World::find_component (const string &n)
+  World::find_component (const std::string &n)
   {
     Process* res = Process::find_component (n);
     if (res)
@@ -107,7 +107,7 @@ namespace djnn
 
   /* static Process*
    create_double_prop (Process *p, DoublePropertyProxy **prop, Coupling **cprop, Process *dest, double *rawp,
-   const string& name)
+   const std::string& name)
    {
    *prop = new DoublePropertyProxy (p, name, *rawp, notify_none);
    *cprop = new Coupling (*prop, ACTIVATION, dest, ACTIVATION);
@@ -119,7 +119,7 @@ namespace djnn
    }
    */
 
-  PhyObj::PhyObj (Process *parent, const string& name, double x, double y, double z, double mass) :
+  PhyObj::PhyObj (Process *parent, const std::string& name, double x, double y, double z, double mass) :
       Process (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
           nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr), _cx (
           nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _update_from_engine (
@@ -214,7 +214,7 @@ namespace djnn
   }
 
   Process*
-  PhyObj::find_component (const string &n)
+  PhyObj::find_component (const std::string &n)
   {
     Process *res = Process::find_component (n);
     if (res)
@@ -336,7 +336,7 @@ namespace djnn
     _update_from_engine = false;
   }
 
-  Plane::Plane (Process *parent, const string &name, double a, double b, double c, double d) :
+  Plane::Plane (Process *parent, const std::string &name, double a, double b, double c, double d) :
       PhyObj (parent, name, 0, 0, 0, 0), _plane_props
         { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
@@ -352,7 +352,7 @@ namespace djnn
   }
 
   Process*
-  Plane::find_component (const string &n)
+  Plane::find_component (const std::string &n)
   {
     Process *res = PhyObj::find_component (n);
     if (res)
@@ -391,7 +391,7 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (Process *parent, const string &name, double x, double y, double z, double w, double h, double d, double mass) :
+  Box::Box (Process *parent, const std::string &name, double x, double y, double z, double w, double h, double d, double mass) :
       PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
     Process::finalize_construction (parent, name);
@@ -419,7 +419,7 @@ namespace djnn
   }
 
   Process*
-  Box::find_component (const string &n)
+  Box::find_component (const std::string &n)
   {
     Process* res = PhyObj::find_component (n);
     if (res)
@@ -438,7 +438,7 @@ namespace djnn
     return res;
   }
 
-  Sphere::Sphere (Process *parent, const string &name, double x, double y, double z, double radius, double mass) :
+  Sphere::Sphere (Process *parent, const std::string &name, double x, double y, double z, double radius, double mass) :
       PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
     Process::finalize_construction (parent, name);
@@ -464,7 +464,7 @@ namespace djnn
   }
 
   Process*
-  Sphere::find_component (const string &n)
+  Sphere::find_component (const std::string &n)
   {
     Process* res = PhyObj::find_component (n);
     if (res)

@@ -94,7 +94,7 @@ namespace djnn
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
     void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + string(name_info<Action>::serialize));
+      AbstractSerializer::serializer->start ("base:" + std::string(name_info<Action>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
       AbstractSerializer::serializer->cpptype_attribute ("left", _left.get_value ());
       AbstractSerializer::serializer->cpptype_attribute ("right", _right.get_value ());
@@ -134,8 +134,8 @@ namespace djnn
         _tbo._result.set_value (perform(head, tail), true);
       }
       void impl_deactivate () override {}
-      static string perform(const std::string& l, const std::string& r) { return l+r; }
-      static string default_value () {return "";}
+      static std::string perform(const std::string& l, const std::string& r) { return l+r; }
+      static std::string default_value () {return "";}
 
     private:
       TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
@@ -222,9 +222,9 @@ namespace djnn
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();
         double value = _df._input.get_value();
-        string res = to_string (value);
+        std::string res = std::to_string (value);
         std::size_t found = res.find('.');
-        if (found != string::npos) {
+        if (found != std::string::npos) {
           if (decimal == 0) {
             res = res.substr (0, found);
           } else {

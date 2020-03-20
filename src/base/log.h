@@ -28,7 +28,7 @@ namespace djnn
   {
   public:
     LogPrinter (Process* p, const std::string& n, const std::string &label);
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
 #if NEW_LOG_PLAIN_OBJ
     TextCatenator _tc;

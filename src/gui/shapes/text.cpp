@@ -173,7 +173,7 @@ namespace djnn
   }
 
   Process*
-  Text::find_component (const string& name)
+  Text::find_component (const std::string& name)
   {
     Process* res = AbstractGShape::find_component(name);
     if(res) return res;
@@ -242,7 +242,7 @@ namespace djnn
   }
 
   void
-  Text::get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text)
+  Text::get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text)
   {
     x = raw_props.x;
     y = raw_props.y;

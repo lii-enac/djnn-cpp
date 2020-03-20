@@ -272,7 +272,7 @@ namespace djnn
   Picking::genericTouchPress (double x, double y, int id, float pressure)
   {
     /* touch management */
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    std::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     if (it != _active_touches.end ()) {
       t = it->second;
@@ -284,7 +284,7 @@ namespace djnn
       _active_touches.erase (it);
       t->schedule_delete ();
     }
-    t = new Touch (_win->touches (), to_string (id), id, x, y, pressure);
+    t = new Touch (_win->touches (), std::to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
 
     /* picking/shape management */
@@ -296,7 +296,7 @@ namespace djnn
       set_local_coords (s, t, x, y, false);
       common_press_notify (s);
       /* press event on touch is replace by touches/$added */
-      s->get_ui()->touches->add_child (t, to_string (id));
+      s->get_ui()->touches->add_child (t, std::to_string (id));
       t->enter ();
     }
     return true;
@@ -387,7 +387,7 @@ namespace djnn
   bool
   Picking::genericTouchMove (double x, double y, int id, float pressure)
   {
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    std::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {
@@ -413,7 +413,7 @@ namespace djnn
       else if (s != nullptr && s != cur_shape) {
         if (cur_shape != nullptr && cur_shape != init_shape)
           cur_shape->get_ui ()->touches->remove_child (t);
-        s->get_ui ()->touches->add_child (t, to_string (id));
+        s->get_ui ()->touches->add_child (t, std::to_string (id));
         t->set_current_shape (s);
         /* setting */
         s->get_ui ()->move_x->set_value (x, true);
@@ -511,7 +511,7 @@ namespace djnn
   {
     
     AbstractGShape *s = this->pick (x, y);
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    std::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {

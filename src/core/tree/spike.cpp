@@ -43,7 +43,7 @@ namespace djnn
   }
 
   void
-  Spike::serialize (const string& format) {
+  Spike::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:spike");

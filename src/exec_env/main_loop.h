@@ -19,6 +19,7 @@
 #include "exec_env.h"
 #include "external_source.h"
 //#include "cpp-thread.h"
+#include "cpp-chrono.h"
 
 #include <mutex>
 #include <condition_variable>
@@ -112,8 +113,8 @@ namespace djnn
 
     // MainLoop should be created *before* any other external-source
     MainLoop ();
-    vector<Process*> _background_processes;
-    vector<ExternalSource*> _external_sources;
+    std::vector<Process*> _background_processes;
+    std::vector<ExternalSource*> _external_sources;
     std::timed_mutex cancel_mutex;
     // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough
     // The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock

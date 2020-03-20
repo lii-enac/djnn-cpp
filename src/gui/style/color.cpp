@@ -396,7 +396,7 @@ namespace djnn
   }
 
   Process*
-  AbstractColor::find_component (const string& name)
+  AbstractColor::find_component (const std::string& name)
   {
     Process* res = AbstractStyle::find_component(name);
     if(res) return res;

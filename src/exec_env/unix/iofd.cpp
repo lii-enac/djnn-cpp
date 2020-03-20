@@ -24,7 +24,7 @@
 namespace djnn {
 
   IOFD::IOFD(int readfd)
-  : Process ("IOFD"+to_string(readfd)),
+  : Process ("IOFD"+std::to_string(readfd)),
   _readfd(readfd),
   _readable (this, "readable")
   {
@@ -53,7 +53,7 @@ namespace djnn {
   IOFD::run ()
   {
     set_please_stop (false);
-    try {
+    // try {
       while (!thread_local_cancelled && !get_please_stop ()) {
         fd_set reads;
         FD_ZERO (&reads);
@@ -73,8 +73,8 @@ namespace djnn {
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
-    } catch (exception& e) {
-      warning (nullptr, e.what());
-    }
+    // } catch (exception& e) {
+    //   warning (nullptr, e.what());
+    // }
   }
 }

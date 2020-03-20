@@ -40,7 +40,7 @@ namespace djnn {
     void disable_transitions (FSMTransition *t);
     void add_transition (FSMTransition *t) { FSMTransition* pt = t; _transitions.push_front (pt); };
   private:
-    list<FSMTransition*> _transitions;
+    std::list<FSMTransition*> _transitions;
     FSM* _parent_fsm;
   };
 
@@ -108,11 +108,11 @@ namespace djnn {
     void serialize (const std::string& type) override;
   private:
     int _priority;
-    string _str_initial;
+    std::string _str_initial;
     FSMState *_cur_state;
     TextProperty _fsm_state, _initial;
-    vector<FSMState*> _states;
-    vector<FSMTransition*> _transitions;
+    std::vector<FSMState*> _states;
+    std::vector<FSMTransition*> _transitions;
   };
 
 }

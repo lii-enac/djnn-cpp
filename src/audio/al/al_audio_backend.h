@@ -12,7 +12,7 @@ namespace djnn {
   public:
     virtual ~ALSoundImpl() {}
 
-    /*void load_wav(const string& path);
+    /*void load_wav(const std::string& path);
     unsigned int bufferid, format;
     int channel, sampleRate, bps;
     unsigned int sourceid;

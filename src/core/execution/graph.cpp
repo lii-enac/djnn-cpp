@@ -422,7 +422,7 @@ namespace djnn
 
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     {
-      map<Process*, int> already_done;
+      std::map<Process*, int> already_done;
 
       for (auto p: _scheduled_activation_processes) {
         if (already_done.find (p) == already_done.end ()) {

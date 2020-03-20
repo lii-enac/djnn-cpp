@@ -20,7 +20,7 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+namespace djnn {
 
 static int ParseCX (Process**, const char*);
 static int ParseCY (Process**, const char*);
@@ -71,4 +71,5 @@ static int ParseFX(Process** e, const char* v) {
 static int ParseFY(Process** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientFy);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.fy, v);
+}
 }

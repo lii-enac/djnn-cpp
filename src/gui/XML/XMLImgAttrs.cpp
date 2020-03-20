@@ -20,7 +20,7 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+namespace djnn {
 
 static int ParseX (Process**, const char*);
 static int ParseY (Process**, const char*);
@@ -135,5 +135,7 @@ static int ParseHref(Process** e, const char* v) {
   }
 
   return 1; 
+}
+
 }
 

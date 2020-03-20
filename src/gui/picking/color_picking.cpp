@@ -69,7 +69,7 @@ namespace djnn
   void
   ColorPickingView::add_gobj (AbstractGShape *gobj)
   {
-    _color_map.insert (pair<unsigned int, AbstractGShape*> (_pick_color, gobj));
+    _color_map.insert (std::pair<unsigned int, AbstractGShape*> (_pick_color, gobj));
     next_color();
   }
 

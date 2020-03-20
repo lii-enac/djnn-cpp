@@ -21,7 +21,6 @@
 #include "base/base.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
 %}
 
 %require "2.3"
@@ -46,6 +45,8 @@ using namespace djnn;
 
 %code
 {
+  using namespace djnn;
+
   std::string cur_property;
   Process *cur_parent;
 

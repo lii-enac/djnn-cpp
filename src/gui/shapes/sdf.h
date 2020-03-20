@@ -60,6 +60,19 @@ namespace djnn {
   }
 
   inline
+  double min(double d1, double d2)
+  {
+    return d1 < d2 ? d1 : d2;
+  }
+
+  inline
+  const vec2 min(const vec2& v, double m)
+  {
+    vec2 res = {min(v.x, m), min(v.y, m)};
+    return res;
+  }
+
+  inline
   double max(double d1, double d2)
   {
     return d1 > d2 ? d1 : d2;
@@ -148,8 +161,8 @@ namespace djnn {
 
       p = abs( p ); if( p.x > p.y ) {
         //p=p.yx; ab=ab.yx;
-        swap(p.x,p.y);
-        swap(ab.x, ab.y);
+        std::swap(p.x,p.y);
+        std::swap(ab.x, ab.y);
       }
       float l = ab.y*ab.y - ab.x*ab.x;
       float m = ab.x*p.x/l;

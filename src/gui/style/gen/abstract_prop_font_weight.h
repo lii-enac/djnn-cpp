@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (int& weight);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_component ("weight"); }
 
   protected:

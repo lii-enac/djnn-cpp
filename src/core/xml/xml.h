@@ -67,8 +67,8 @@ namespace djnn
   public:
     static Process* djnLoadFromXML (const std::string &uri);
     static Process* djnParseXML (FILE* f);
-    static int djn_RegisterXMLParser (const string &uri, djn_XMLTagLookupProc l, const char* format);
-    static int djn_UnregisterXMLParser (const string &uri);
+    static int djn_RegisterXMLParser (const std::string &uri, djn_XMLTagLookupProc l, const char* format);
+    static int djn_UnregisterXMLParser (const std::string &uri);
     static void clear_xml_parser ();
     static int djn_XMLHandleAttr (Process** e, const char** attrs, djn_XMLSymLookupProc lookup, ...);
   private:
@@ -90,7 +90,7 @@ namespace djnn
     djn__XMLNamespaceStart (void*, const XML_Char*, const XML_Char*);
     static void
     djn__XMLNamespaceEnd (void*, const XML_Char*);
-    static map<string, djn__XMLParser*> djn__NamespaceTable;
+    static std::map<std::string, djn__XMLParser*> djn__NamespaceTable;
     static Process *curComponent;
     static djn__XMLTagHandlerList *handlerStack;
   };

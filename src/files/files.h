@@ -23,7 +23,7 @@
 namespace djnn
 {
 
-  extern std::vector<string> loadedModules; 
+  extern std::vector<std::string> loadedModules; 
 
   void init_files ();
 
@@ -33,16 +33,16 @@ namespace djnn
     class FileReaderAction : public Action
     {
     public:
-      FileReaderAction (Process *parent, const string &name) : Action (parent, name) {}
+      FileReaderAction (Process *parent, const std::string &name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    FileReader (Process *parent, const string &name, const string &filename);
+    FileReader (Process *parent, const std::string &name, const std::string &filename);
     virtual ~FileReader ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     void read ();
   private:
     TextProperty *_input, *_output;

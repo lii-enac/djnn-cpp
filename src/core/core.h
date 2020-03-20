@@ -56,7 +56,7 @@ namespace djnn {
     virtual void swap_children (Process *cont, int i, int j) = 0;
     virtual void set_child (Process *cont, Process *child, int i) = 0;
   };
-  extern std::vector<string> loadedModules;
+  extern std::vector<std::string> loadedModules;
   extern std::vector<StructureObserver*> structure_observer_list;
   void init_core ();
   void clear_core ();

@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (int& unit, double& size);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_component ("unit"); }
 		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_component ("size"); }
 

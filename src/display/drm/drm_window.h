@@ -30,7 +30,7 @@ namespace djnn {
     virtual ~DRMWindow ();
     buff* get_next_buff ();
     void page_flip ();
-    void set_cursor (const string &path, int hotX, int hotY) {}
+    void set_cursor (const std::string &path, int hotX, int hotY) {}
     Process* get_vblank () {
       if (_conn == nullptr)
         return nullptr;

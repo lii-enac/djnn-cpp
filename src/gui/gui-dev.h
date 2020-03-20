@@ -19,6 +19,8 @@
 #include "core/core-dev.h"
 #include "core/xml/xml-dev.h"
 
+namespace djnn {
+
 typedef int named_color_t;
 
 class XMLRectAttrs_Hash
@@ -27,7 +29,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLRectAttrsLookup (const char *str, unsigned int len);
 };
 class SVGColors_Hash
@@ -45,7 +47,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLTagHandler *
+  static djnn::djn_XMLTagHandler *
   djn_SVGElementsLookup (const char *str, unsigned int len);
 };
 class SVGGradientAttrs_Hash
@@ -54,7 +56,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGGradientAttrsLookup (const char *str, unsigned int len);
 };
 class SVGGradientStopAttrs_Hash
@@ -63,7 +65,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGGradientStopAttrsLookup (const char *str, unsigned int len);
 };
 class SVGGradientTransformAttrs_Hash
@@ -72,7 +74,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGGradientTransformAttrsLookup (const char *str, unsigned int len);
 };
 class SVGLinearGradientAttrs_Hash
@@ -81,7 +83,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGLinearGradientAttrsLookup (const char *str, unsigned int len);
 };
 class SVGRadialGradientAttrs_Hash
@@ -90,7 +92,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGRadialGradientAttrsLookup (const char *str, unsigned int len);
 };
 class SVGShapeAttrs_Hash
@@ -99,7 +101,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGShapeAttrsLookup (const char *str, unsigned int len);
 };
 class SVGSvgAttrs_Hash
@@ -108,7 +110,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_SVGSvgAttrsLookup (const char *str, unsigned int len);
 };
 class XMLCircleAttrs_Hash
@@ -117,7 +119,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLCircleAttrsLookup (const char *str, unsigned int len);
 };
 class XMLEllipseAttrs_Hash
@@ -126,7 +128,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLEllipseAttrsLookup (const char *str, unsigned int len);
 };
 class XMLImgAttrs_Hash
@@ -135,7 +137,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLImgAttrsLookup (const char *str, unsigned int len);
 };
 class XMLLineAttrs_Hash
@@ -144,7 +146,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLLineAttrsLookup (const char *str, unsigned int len);
 };
 class XMLPathAttrs_Hash
@@ -153,7 +155,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLPathAttrsLookup (const char *str, unsigned int len);
 };
 class XMLPolylineAttrs_Hash
@@ -162,7 +164,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLPolylineAttrsLookup (const char *str, unsigned int len);
 };
 class XMLRectAreaAttrs_Hash
@@ -171,7 +173,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLRectAreaAttrsLookup (const char *str, unsigned int len);
 };
 class XMLUseAttrs_Hash
@@ -180,7 +182,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLUseAttrsLookup (const char *str, unsigned int len);
 };
 class XMLTextAttrs_Hash
@@ -189,7 +191,7 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
-  static djn_XMLAttrHandler *
+  static djnn::djn_XMLAttrHandler *
   djn_XMLTextAttrsLookup (const char *str, unsigned int len);
 };
 
@@ -468,5 +470,7 @@ extern struct djn_UseArgs
   double y;
   double width;
   double height;
-  string href;
+  std::string href;
 } djn_UseArgs;
+
+}

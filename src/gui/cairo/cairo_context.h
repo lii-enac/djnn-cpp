@@ -82,7 +82,7 @@ namespace djnn
     CairoContext* get_current ();
 
   private:
-    vector<CairoContext*> _context_list;
+    std::vector<CairoContext*> _context_list;
   };
 
 } /* namespace djnn */

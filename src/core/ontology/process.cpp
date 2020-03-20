@@ -39,7 +39,7 @@ namespace djnn
   string Process::default_name = "noname";
   static map<const Process*, string> parentless_names;
 
-  Process::Process (const string& name, bool model) :
+  Process::Process (const std::string& name, bool model) :
       _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
   {
     set_is_model (model);
@@ -62,7 +62,7 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction (Process* parent, const string& name, Process* state_dep) /* called by SubProcess to link to parent */
+  Process::finalize_construction (Process* parent, const std::string& name, Process* state_dep) /* called by SubProcess to link to parent */
   {
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
@@ -272,14 +272,14 @@ namespace djnn
     _parent = p;
   }
 
-  const string&
+  const std::string&
   Process::get_name () const
   {
     return (_parent ? _parent->find_component_name(this) : parentless_names[this]);
   }
 
   Process*
-  Process::find_component (const string& key)
+  Process::find_component (const std::string& key)
   {
     //DEBUG
     //cout << "key: " << key << endl;
@@ -341,14 +341,14 @@ namespace djnn
   }
 
   Process*
-  Process::find_component (Process *p, const string &path)
+  Process::find_component (Process *p, const std::string &path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
     return p->find_component (path);
   }
 
-  const string&
+  const std::string&
   Process::find_component_name (const Process* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
@@ -371,7 +371,7 @@ namespace djnn
   }
 
   void
-  Process::remove_symbol (const string& name)
+  Process::remove_symbol (const std::string& name)
   {
     symtable_t::iterator it = symtable ().find (name);
     if (it != symtable ().end ())
@@ -393,13 +393,13 @@ namespace djnn
   }
 
   void
-  Process::remove_child (const string& name)
+  Process::remove_child (const std::string& name)
   {
     remove_symbol (name);
   }
 
   void
-  Process::add_child (Process* child, const string& name)
+  Process::add_child (Process* child, const std::string& name)
   {
     if (child == nullptr)
       return;
@@ -413,7 +413,7 @@ namespace djnn
   }
 
   void
-  Process::add_symbol (const string &name, Process* c)
+  Process::add_symbol (const std::string &name, Process* c)
   {
     /* if ((symtable ().insert (std::pair<string, Process*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
@@ -428,7 +428,7 @@ namespace djnn
   }*/
 
   /*
-  const string&
+  const std::string&
   Process::get_name () const
   {
     return _name;
@@ -462,13 +462,13 @@ namespace djnn
   }
 
   void
-  alias (Process *p, const string &name, Process* from)
+  alias (Process *p, const std::string &name, Process* from)
   {
     p->add_symbol (name, from);
   }
 
   void
-  merge_children (Process *p1, const string &sy1, Process* p2, const string &sy2)
+  merge_children (Process *p1, const std::string &sy1, Process* p2, const std::string &sy2)
   {
     Process* x2 = p2->find_component (sy2);
     if (x2 == nullptr) {
@@ -507,7 +507,7 @@ namespace djnn
 
 
   void
-  Process::serialize (const string& format) { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
+  Process::serialize (const std::string& format) { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
   
   Process*
   Process::clone () { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };

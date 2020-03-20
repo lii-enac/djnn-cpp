@@ -24,7 +24,7 @@ namespace djnn {
 	class Sample : public Sound, public djnn_internal::Time::Timer
 	{
 	public:
-		Sample (Process* parent, const string& name, const string& path);
+		Sample (Process* parent, const std::string& name, const std::string& path);
 		virtual ~Sample ();
 	protected:
 		// Process

@@ -31,22 +31,22 @@ namespace djnn
   class AbstractStyle : public AbstractGObj
   {
   public:
-    AbstractStyle (Process *parent, const string &name);
+    AbstractStyle (Process *parent, const std::string &name);
     virtual ~AbstractStyle ();
   };
 
   class StyleSheet : public Container
   {
   public:
-    StyleSheet (Process *parent, const string &name);
+    StyleSheet (Process *parent, const std::string &name);
     virtual ~StyleSheet () override {}
     Process* clone () override;
-    const string& classname () { return _classname; }
+    const std::string& classname () { return _classname; }
     int id () { return _id; }
-    static int get_id (const string& classname);
-    static void draw_style (vector<int> classes);
+    static int get_id (const std::string& classname);
+    static void draw_style (const std::vector<int>& classes);
   private:
-    string _classname;
+    std::string _classname;
     int _id;
   };
 }
@@ -148,7 +148,7 @@ namespace djnn
     DashArray (Process *parent, const std::string &name) :
         AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
     virtual ~DashArray () { _dash_array.clear ();}
-    const vector<double>& dash_array () const { return _dash_array;}
+    const std::vector<double>& dash_array () const { return _dash_array;}
     void add_sub_pattern (double dash, double space)
     {
       _dash_array.push_back (dash);
@@ -159,7 +159,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
   private:
-    vector<double> _dash_array;
+    std::vector<double> _dash_array;
   };
 
   class NoDashArray : public AbstractStyle

@@ -31,7 +31,7 @@ namespace djnn
   */
 
   void
-  JSONSerializer::start (const string& classname) {
+  JSONSerializer::start (const std::string& classname) {
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)
@@ -42,7 +42,7 @@ namespace djnn
   }
 
   void
-  JSONSerializer::text_attribute (const string& name, const string& value){
+  JSONSerializer::text_attribute (const std::string& name, const std::string& value){
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)
@@ -52,7 +52,7 @@ namespace djnn
   }
 
   void
-  JSONSerializer::int_attribute (const string& name, int value){
+  JSONSerializer::int_attribute (const std::string& name, int value){
  
     int i;
     for (i = 0; i < __JSONLevel; ++i)
@@ -62,7 +62,7 @@ namespace djnn
   }
 
   void
-  JSONSerializer::float_attribute (const string& name, double value){
+  JSONSerializer::float_attribute (const std::string& name, double value){
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)

@@ -25,7 +25,7 @@ char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size);
 
 namespace djnn {
 
-	Sample::Sample(Process* parent, const string& name, const string& path)
+	Sample::Sample(Process* parent, const std::string& name, const std::string& path)
 	: Sound(parent, name),
 	_end (this, "end")
 	{

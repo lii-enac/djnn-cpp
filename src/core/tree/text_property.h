@@ -34,7 +34,7 @@ namespace djnn {
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
     void set_value (const std::string &v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); };
+    void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate); };
     double get_double_value () override {
       try {
         double r = stof (get_ref_value());
@@ -45,36 +45,36 @@ namespace djnn {
         return 0;
       }
     }
-    string get_string_value () override { return get_ref_value (); }
+    std::string get_string_value () override { return get_ref_value (); }
     void dump (int level=0) override;
 
-    string& get_value () { return get_ref_value(); };
+    std::string& get_value () { return get_ref_value(); };
   protected:
-    virtual string& get_ref_value() = 0;
+    virtual std::string& get_ref_value() = 0;
   };
 
   class TextProperty : public AbstractTextProperty {
   public:
-    TextProperty (Process* parent, const std::string &name, string v) : AbstractTextProperty (parent, name), value(v) { }
+    TextProperty (Process* parent, const std::string &name, std::string v) : AbstractTextProperty (parent, name), value(v) { }
     void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
-    virtual string& get_ref_value() override { return value; }
+    virtual std::string& get_ref_value() override { return value; }
   private:
-    string value;
+    std::string value;
   };
 
   class TextPropertyProxy : public AbstractTextProperty {
   public:
-    TextPropertyProxy (Process* parent, const std::string &name, string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
+    TextPropertyProxy (Process* parent, const std::string &name, std::string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
     void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
-    virtual string& get_ref_value() override { return value; }
+    virtual std::string& get_ref_value() override { return value; }
   private:
-    string& value;
+    std::string& value;
   };
 
-  string& getString (Process* p);
-  void setString (Process *p, string &v);
+  std::string& getString (Process* p);
+  void setString (Process *p, std::string &v);
 }

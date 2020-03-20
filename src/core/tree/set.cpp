@@ -27,7 +27,7 @@ namespace djnn
 {
   using namespace std;
 
-  Set::Set (Process* parent, const string& name)
+  Set::Set (Process* parent, const std::string& name)
   :
     Process (name),
     _added (nullptr, "_added", nullptr),
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   Process*
-  Set::find_component (const string& path)
+  Set::find_component (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -143,7 +143,7 @@ namespace djnn
   }
 
   void
-  Set::serialize (const string& type)
+  Set::serialize (const std::string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 
@@ -159,7 +159,7 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
   }
 
-  SetIterator::SetIterator (Process *parent, const string &name, Process *set, Process *action, bool model) :
+  SetIterator::SetIterator (Process *parent, const std::string &name, Process *set, Process *action, bool model) :
       Process (name, model), _set (set), _action (action)
   {
     Set *s = dynamic_cast<Set*> (set);

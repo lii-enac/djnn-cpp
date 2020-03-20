@@ -50,7 +50,7 @@ namespace djnn
       
   }
 
-  ScreenToLocal::ScreenToLocal (Process *parent, const string &name, Process* shape) :
+  ScreenToLocal::ScreenToLocal (Process *parent, const std::string &name, Process* shape) :
   Process (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
@@ -147,7 +147,7 @@ namespace djnn
       
   }
 
-  LocalToScreen::LocalToScreen (Process *parent, const string &name, Process* shape) :
+  LocalToScreen::LocalToScreen (Process *parent, const std::string &name, Process* shape) :
   Process (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);

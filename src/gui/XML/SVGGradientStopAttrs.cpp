@@ -20,7 +20,8 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+
+namespace djnn {
 
 static int ParseStopColor (Process**, const char*);
 static int ParseStopOpacity (Process**, const char*);
@@ -93,4 +94,5 @@ static int ParseStopStyle(Process **e, const char *v) {
 		v = semicolon + 1;
 	}
 	return success;
+}
 }

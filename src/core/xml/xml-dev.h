@@ -18,9 +18,11 @@
 #include "core/utils/utils-dev.h"
 #include "xml.h"
 
-using namespace djnn;
+//using namespace djnn;
 
 #include <map>
+
+
 
 class DJNComponentAttrs_Hash
 {
@@ -59,7 +61,11 @@ extern struct djn_ModuleArgs
   const char *name;
 } djn_ModuleArgs;
 
+namespace djnn {
 extern std::map<std::string, djnn::Process*> djn__id_to_process;
+}
 
 extern void
 djn__InitXMLLoaders ();
+
+

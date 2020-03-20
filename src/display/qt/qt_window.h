@@ -30,7 +30,7 @@ namespace djnn {
     virtual ~QtWindow ();
     void update () override;
     void check_for_update ();
-    void set_cursor (const string &path, int hotX, int hotY) override;
+    void set_cursor (const std::string &path, int hotX, int hotY) override;
     //void set_qwidget(MyQWidget* q) { _qwidget = q; }
     MyQWidget* qwidget() { return _qwidget; }
 

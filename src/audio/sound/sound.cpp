@@ -1,7 +1,7 @@
 #include "sound.h"
 
 namespace djnn {
-	Sound::Sound(Process* parent, const string& name)
+	Sound::Sound(Process* parent, const std::string& name)
 	: AbstractSObj(parent, name)
 	{
 	    

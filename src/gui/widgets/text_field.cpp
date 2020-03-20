@@ -16,9 +16,11 @@
 
 #include <iostream>
 
+using namespace std;
+
 namespace djnn
 {
-  TextField::TextField (Process *parent, const string &name, Process* text, Process* shape) :
+  TextField::TextField (Process *parent, const std::string &name, Process* text, Process* shape) :
       Process (name), _start_select (0), _end_select (0), _is_selecting (false)
   {
     _press_x = dynamic_cast<DoubleProperty*>(shape->find_component ("press/x"));

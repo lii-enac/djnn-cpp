@@ -37,7 +37,7 @@ namespace djnn
 {
   using namespace std;
 
-  Container::Container (Process* parent, const string& name) :
+  Container::Container (Process* parent, const std::string& name) :
       Process (name)
   {
     Container* c = dynamic_cast<Container*> (parent);
@@ -330,7 +330,7 @@ namespace djnn
 
 
   void
-  Component::serialize (const string& format) {
+  Component::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
@@ -346,7 +346,7 @@ namespace djnn
   }
 
 
-  AssignmentSequence::AssignmentSequence (Process *parent, const string &name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (Process *parent, const std::string &name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);
@@ -383,7 +383,7 @@ namespace djnn
   }
 
   void
-  AssignmentSequence::serialize (const string& format) {
+  AssignmentSequence::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

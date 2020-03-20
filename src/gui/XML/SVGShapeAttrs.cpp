@@ -24,9 +24,11 @@
 #include "base/base.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+namespace djnn {
 
-static string djn_ParseURL (const char *);
+using namespace std;
+
+static std::string djn_ParseURL (const char *);
 
 static int Ignore (Process**, const char*);
 static int ParseId (Process**, const char*);
@@ -672,4 +674,5 @@ int ParseClass (Process** e, const char* v)
 {
   djn_GraphicalShapeArgs.classname = std::string (v);
   return 1;
+}
 }

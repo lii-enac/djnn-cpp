@@ -18,19 +18,19 @@
 
 namespace djnn
 {
-  static map <string, int> name_to_id;
-  static vector<StyleSheet*> style_array;
+  static std::map <std::string, int> name_to_id;
+  static std::vector<StyleSheet*> style_array;
 
-  StyleSheet::StyleSheet (Process* parent, const string &n) :
+  StyleSheet::StyleSheet (Process* parent, const std::string &n) :
       Container (parent, n), _classname (n)
   {
-    std::map<string,int>::iterator it = name_to_id.find(n);
+    std::map<std::string,int>::iterator it = name_to_id.find(n);
     if (it != name_to_id.end()) {
       error(this, "Style " + n + " already defined");
     }
     style_array.push_back (this);
     _id = style_array.size () - 1;
-    name_to_id.insert (std::pair<string, int> (n, _id));
+    name_to_id.insert (std::pair<std::string, int> (n, _id));
     Process::finalize_construction (parent, n);
   }
 
@@ -47,9 +47,9 @@ namespace djnn
   }
 
   int
-  StyleSheet::get_id (const string &classname)
+  StyleSheet::get_id (const std::string &classname)
   {
-    std::map<string,int>::iterator it = name_to_id.find(classname);
+    std::map<std::string,int>::iterator it = name_to_id.find(classname);
     if (it != name_to_id.end()) {
       return it->second;
     }
@@ -57,7 +57,7 @@ namespace djnn
   }
 
   void
-  StyleSheet::draw_style (vector<int> classes)
+  StyleSheet::draw_style (const std::vector<int>& classes)
   {
     for (auto i: classes) {
       StyleSheet *s = style_array.at (i);

@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractTextProperty* data () { return (AbstractTextProperty*) find_component ("data"); }
 
   protected:

@@ -21,7 +21,7 @@
 #include "gui/gui-dev.h"
 
 
-using namespace djnn;
+namespace djnn {
 
 static int ParseCx (Process**, const char*);
 static int ParseCy (Process**, const char*);
@@ -64,3 +64,4 @@ static int ParseRy(Process** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.ry, v);
 }
 
+}

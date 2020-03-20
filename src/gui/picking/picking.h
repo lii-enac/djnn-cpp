@@ -55,7 +55,7 @@ namespace djnn {
 
     Window *_win;
     AbstractGShape *_catched_shape, *_hovered_shape;
-    map <int, Touch*> _active_touches;
+    std::map <int, Touch*> _active_touches;
     bool _mouse_released;
   };
 }

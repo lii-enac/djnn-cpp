@@ -117,7 +117,7 @@ namespace djnn {
     djnn::get_exclusive_access (DBG_GET);
 
     update_ref_now_in_scheduled_timers (); // we are about to begin but we took some time to init, so pretend that "now" is now.
-    try {
+    // try {
       while (!get_please_stop ()) {        
         //bool timer_cancelled =false;
         cancel_mutex.lock(); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
@@ -152,9 +152,9 @@ namespace djnn {
 
         if(thread_local_cancelled || get_please_stop ()) break;
       }
-    } catch (djnn::exception& e) {
-      std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
-    }
+    // } catch (djnn::exception& e) {
+    //   std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;
+    // }
 
     djnn::release_exclusive_access (DBG_REL);
   }

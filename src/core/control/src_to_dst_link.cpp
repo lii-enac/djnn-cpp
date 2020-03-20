@@ -5,12 +5,12 @@ namespace djnn
   using namespace std;
 
 
-  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const string &n) : 
+  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const std::string &n) : 
     Action (parent, n), _to_update (nullptr), _prop (nullptr), _spec ("") 
   {
   }
 
-  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const string &n, RefProperty* prop, const string &spec, Process** to_update) : 
+  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const std::string &n, RefProperty* prop, const std::string &spec, Process** to_update) : 
     Action (parent, n), _to_update (to_update), _prop (prop), _spec (spec) 
   {
   }

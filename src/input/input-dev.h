@@ -25,9 +25,9 @@ namespace djnn {
 
   class GPIOProxy : public Process {
   public:
-    GPIOProxy (Process *p, const string& n) : Process (n) { set_activation_state (ACTIVATED); }
+    GPIOProxy (Process *p, const std::string& n) : Process (n) { set_activation_state (ACTIVATED); }
     virtual ~GPIOProxy () {}
-    Process* find_component (const string& path) override;
+    Process* find_component (const std::string& path) override;
   protected:
     void impl_activate () override {}
     void impl_deactivate () override {}

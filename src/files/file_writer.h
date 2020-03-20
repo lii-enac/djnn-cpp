@@ -28,19 +28,19 @@ namespace djnn
     class FileWriterAction : public Action
     {
     public:
-      FileWriterAction (Process *parent, const string &name) : Action (parent, name) {}
+      FileWriterAction (Process *parent, const std::string &name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
     class FileNameAction : public Action
     {
     public:
-      FileNameAction (Process *parent, const string &name) : Action (parent, name) {}
+      FileNameAction (Process *parent, const std::string &name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    FileWriter (Process *parent, const string &name, const string &filename);
+    FileWriter (Process *parent, const std::string &name, const std::string &filename);
     virtual ~FileWriter ();
     void impl_activate () override;
     void impl_deactivate () override;

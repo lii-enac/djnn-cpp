@@ -48,7 +48,7 @@ namespace djnn {
 
   }
   Process*
-  GPIOProxy::find_component (const string &path)
+  GPIOProxy::find_component (const std::string &path)
   {
     int pos = 0;
     if (path.rfind("in/", 0) == 0) {
@@ -59,7 +59,7 @@ namespace djnn {
       return nullptr;
     }
     //string::size_type sz;
-    const string buff = path.substr (pos);
+    const std::string buff = path.substr (pos);
     Process *c = nullptr;
     if (pos == 3) {
       c = p_find_gpio (buff, IN);

@@ -100,7 +100,7 @@ namespace djnn
 
 
   void
-  Clock::serialize (const string& type) {
+  Clock::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

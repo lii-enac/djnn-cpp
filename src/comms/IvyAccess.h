@@ -50,11 +50,11 @@ namespace djnn
       const std::string& bus="224.1.2.3:2010", const std::string& appname="NO_NAME", const std::string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
-    void set_arriving(string v);
-    void set_leaving(string v);
+    void set_arriving(const std::string& v);
+    void set_leaving(const std::string& v);
 
-    typedef map<string, vector<pair<int, TextProperty*>>> in_map_t;
-    typedef pair<string, in_map_t*> regexp_keypair_t;
+    typedef std::map<std::string, std::vector<std::pair<int, TextProperty*>>> in_map_t;
+    typedef std::pair<std::string, in_map_t*> regexp_keypair_t;
 
     // make it public
     bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
@@ -66,9 +66,9 @@ namespace djnn
     void set_parent (Process* p) override;
 
   private:
-    string _bus;
-    string _appname;
-    string _ready_message;
+    std::string _bus;
+    std::string _appname;
+    std::string _ready_message;
 
     in_map_t _in_map; 
       

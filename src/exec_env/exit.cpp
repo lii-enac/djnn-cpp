@@ -24,7 +24,7 @@ namespace djnn
 {
   using namespace std;
 
-  Exit::Exit (Process* parent, const string &name, int value, bool isModel)
+  Exit::Exit (Process* parent, const std::string &name, int value, bool isModel)
   : Process (name),
   _value (this, "value", value)
   {
@@ -43,7 +43,7 @@ namespace djnn
   }
 
   void
-  Exit::serialize (const string& format) {
+  Exit::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

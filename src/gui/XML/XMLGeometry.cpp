@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+namespace djnn {
+
 int
 XML_Utils::djn_XMLParseLength (double *len, const char *s)
 {
@@ -114,3 +116,5 @@ XML_Utils::djn_XMLRemoveSpacesAndComma (char **vv)
   *vv = end;
   return i > 1 ? 0 : 1;
 }
+}
+

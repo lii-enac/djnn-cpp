@@ -24,7 +24,7 @@
 namespace djnn
 {
 
-  extern std::vector<string> loadedModules; 
+  extern std::vector<std::string> loadedModules; 
 
   void init_utils ();
   std::string strTrim (std::string s);
@@ -35,16 +35,16 @@ namespace djnn
     class PropertiesAction : public Action
     {
     public:
-      PropertiesAction (Process *parent, const string &name) : Action (parent, name) {}
+      PropertiesAction (Process *parent, const std::string &name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    Properties (Process *parent, const string &name, const string& filename = "");
+    Properties (Process *parent, const std::string &name, const std::string& filename = "");
     virtual ~Properties ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     void add_property ();
   private:
     TextProperty *_input;

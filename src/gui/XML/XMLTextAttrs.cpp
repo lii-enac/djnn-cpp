@@ -24,6 +24,8 @@
 
 using namespace std;
 
+namespace djnn {
+
 static int Ignore (Process**, const char*);
 static int ParseX (Process**, const char*);
 static int ParseY (Process**, const char*);
@@ -271,4 +273,5 @@ static int ParseFontSize(Process** e, const char* v) {
 	}
 
 	return 0;
+}
 }

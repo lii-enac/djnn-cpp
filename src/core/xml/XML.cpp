@@ -67,7 +67,7 @@ namespace djnn {
 
   /* should add handling of '-' to denote stdin, until a URI is defined for that */
   Process*
-  XML::djnLoadFromXML (const string &uri)
+  XML::djnLoadFromXML (const std::string &uri)
   {
     string uri_ = uri;
     std::size_t found = uri.find("://");
@@ -153,7 +153,7 @@ namespace djnn {
 
 
   int
-  XML::djn_RegisterXMLParser (const string &uri, djn_XMLTagLookupProc l, const char* f)
+  XML::djn_RegisterXMLParser (const std::string &uri, djn_XMLTagLookupProc l, const char* f)
   {
     djn__XMLParser *h;
     map<string, djn__XMLParser*>::iterator it;
@@ -173,7 +173,7 @@ namespace djnn {
   }
 
   int
-  XML::djn_UnregisterXMLParser (const string &uri)
+  XML::djn_UnregisterXMLParser (const std::string &uri)
   {
     //djn__XMLParser *h;
     map<string, djn__XMLParser*>::iterator it;

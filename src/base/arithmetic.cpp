@@ -59,7 +59,7 @@ namespace djnn
 
   
 
-  Previous::Previous (Process *parent, const string &name, double i_val)
+  Previous::Previous (Process *parent, const std::string &name, double i_val)
   : Process (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),
@@ -71,7 +71,7 @@ namespace djnn
   }
 
   void
-  Previous::serialize (const string& type) {
+  Previous::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -92,7 +92,7 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (Process *parent, const string& name, bool isModel) :
+  Incr::Incr (Process *parent, const std::string& name, bool isModel) :
       Process (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0)
@@ -126,7 +126,7 @@ namespace djnn
   }
 
   void
-  Incr::serialize (const string& type) {
+  Incr::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -139,7 +139,7 @@ namespace djnn
 
   }
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const string &name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const std::string &name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -161,7 +161,7 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (Process* parent, const string &name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (Process* parent, const std::string &name, double input, double clamp_min,
                                       double clamp_max)
   : Process (name),
     _input (this, "input", input),
@@ -210,7 +210,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::serialize (const string& type) {
+  AdderAccumulator::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

@@ -25,6 +25,8 @@
 #include <vector>
 #include <cmath>
 
+using namespace std;
+
 namespace djnn
 {
   static Qt::PenCapStyle capStyleArray[3] =

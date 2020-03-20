@@ -23,7 +23,7 @@ namespace djnn
   using namespace std;
 
   void
-  Blank::serialize (const string& format) {
+  Blank::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

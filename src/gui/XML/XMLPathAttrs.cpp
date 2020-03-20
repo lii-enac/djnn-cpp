@@ -20,7 +20,7 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+namespace djnn {
 
 typedef void (djn_PathPointProc) (Process*, double, double);
 typedef void (djn_PathCoordProc) (Process*, double);
@@ -311,3 +311,4 @@ static int ParseData(Process** e, const char* v) {
 	return 0;
 }
 
+}

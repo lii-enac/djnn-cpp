@@ -64,7 +64,7 @@ namespace djnn
   }
 
   void
-  AbstractTextProperty::set_value (const string &v, bool propagate)
+  AbstractTextProperty::set_value (const std::string &v, bool propagate)
   {
     get_ref_value() = v;
     if (is_activable () && propagate) {
@@ -86,7 +86,7 @@ namespace djnn
 
 
   void
-  TextProperty::serialize (const string& format) {
+  TextProperty::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
@@ -105,7 +105,7 @@ namespace djnn
   }
 
   void
-  TextPropertyProxy::serialize (const string& format) {
+  TextPropertyProxy::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

@@ -62,7 +62,7 @@ namespace djnn
   template <> const char name_info<my_clamp_max<double>>::right[] = "input";
   template <> const char name_info<my_clamp_max<double>>::serialize[] = "clamp_max";
   
-  BoundedValue::BoundedValue (Process *parent, const string &name, double min, double max, double init_val)
+  BoundedValue::BoundedValue (Process *parent, const std::string &name, double min, double max, double init_val)
   :
     Process (name),
     _min (this, "min", min),
@@ -104,7 +104,7 @@ namespace djnn
   }
 
   void
-  BoundedValue::serialize (const string& type)
+  BoundedValue::serialize (const std::string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 

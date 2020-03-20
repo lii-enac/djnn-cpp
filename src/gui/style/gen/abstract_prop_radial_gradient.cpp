@@ -78,7 +78,7 @@ namespace djnn
   }
  
   Process*
-  AbstractPropRadialGradient::find_component (const string& name)
+  AbstractPropRadialGradient::find_component (const std::string& name)
   {
     Process* res = AbstractGradient::find_component(name);
     if(res) return res;
@@ -87,7 +87,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef string text;
+    typedef std::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     

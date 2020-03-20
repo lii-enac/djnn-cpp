@@ -25,11 +25,11 @@ namespace djnn {
   class Exit : public Process
   {
   public:
-    Exit (Process* parent, const string &name, int value, bool is_model);
+    Exit (Process* parent, const std::string &name, int value, bool is_model);
     virtual ~Exit ();
     void impl_activate () override;
     void impl_deactivate () override {}
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
   private:
     IntProperty _value;
   };

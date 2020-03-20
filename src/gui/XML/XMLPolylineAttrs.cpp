@@ -20,6 +20,8 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
+namespace djnn {
+
 using namespace std;
 static int ParsePoints (Process**, const char*);
 
@@ -90,4 +92,4 @@ static int ParsePoints(Process** e, const char* v) {
 	fprintf(stderr, "SVG parser: error in polyline or polygon coordinates\n");
 	return 0;
 }
-
+}

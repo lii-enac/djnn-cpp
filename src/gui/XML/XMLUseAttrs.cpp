@@ -23,6 +23,8 @@
 
 using namespace std;
 
+namespace djnn {
+
 static int djn__ParseX (Process**, const char*);
 static int djn__ParseY (Process**, const char*);
 static int djn__ParseWidth (Process**, const char*);
@@ -76,4 +78,4 @@ static int djn__ParseHref(Process** e, const char* v) {
   djn_UseArgs.href = str;
   return 1;
 }
-
+}

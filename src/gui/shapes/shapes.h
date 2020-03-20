@@ -93,7 +93,7 @@ namespace djnn
     {
       friend Text;
       public:
-        TextSizeAction (Process *parent, const string &name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        TextSizeAction (Process *parent, const std::string &name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
         void impl_deactivate () override {};
@@ -113,8 +113,8 @@ namespace djnn
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
     Process* clone () override;
-    void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text);
-    virtual Process* find_component (const string&) override;
+    void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text);
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_component("dx"); }
@@ -127,14 +127,14 @@ namespace djnn
     AbstractTextProperty* text () { return &_text;}
     void set_width (double width) { _width.set_value (width, true); }
     void set_height (double height) { _height.set_value (height, true); }
-    const string& get_raw_text () { return _text.get_value (); }
+    const std::string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
     std::pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (Process* p) override;
-    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; string text; };
+    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; std::string text; };
     raw_props_t raw_props;    
     Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
       *_cdxU, *_cdyU, *_cencoding, *_cfstyle, *_cfweight,
@@ -159,9 +159,9 @@ namespace djnn
   class PolyPoint : public AbstractGObj
   {
   public:
-    PolyPoint (Process* parent, const string &name, double x, double y);
+    PolyPoint (Process* parent, const std::string &name, double x, double y);
     virtual ~PolyPoint ();
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
     void draw () override;
@@ -179,7 +179,7 @@ namespace djnn
   class Poly : public AbstractGShape
   {
   public:
-    Poly (Process* parent, const string &name, int closed);
+    Poly (Process* parent, const std::string &name, int closed);
     virtual ~Poly ();
     Process* points () { return _points;}
     bool closed () { return _closed;}
@@ -201,23 +201,23 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon (Process* parent, const string &name) : Poly (parent, name, 1) {};
+    Polygon (Process* parent, const std::string &name) : Poly (parent, name, 1) {};
     virtual ~Polygon () {};
   };
 
   class Polyline : public Poly
   {
   public:
-    Polyline (Process* parent, const string &name) : Poly (parent, name, 0) {};
+    Polyline (Process* parent, const std::string &name) : Poly (parent, name, 0) {};
     virtual ~Polyline () {};
   };
 
   class PathPoint : public AbstractGObj
   {
   public:
-    PathPoint (Process* parent, const string &name, double x, double y);
+    PathPoint (Process* parent, const std::string &name, double x, double y);
     virtual ~PathPoint ();
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
     void draw () override = 0;
@@ -234,7 +234,7 @@ namespace djnn
   class PathMove : public PathPoint
   {
   public:
-    PathMove (Process* parent, const string &name, double x, double y) :
+    PathMove (Process* parent, const std::string &name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     Process* clone () override;
@@ -243,7 +243,7 @@ namespace djnn
   class PathLine : public PathPoint
   {
   public:
-    PathLine (Process* parent, const string &name, double x, double y) :
+    PathLine (Process* parent, const std::string &name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     Process* clone () override;
@@ -252,9 +252,9 @@ namespace djnn
   class PathQuadratic : public AbstractGObj
   {
   public:
-    PathQuadratic (Process* parent, const string &name, double x1, double y1, double x, double y);
+    PathQuadratic (Process* parent, const std::string &name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_component("x"); }
@@ -272,9 +272,9 @@ namespace djnn
   class PathCubic : public AbstractGObj
   {
   public:
-    PathCubic (Process* parent, const string &name, double x1, double y1, double x2, double y2, double x, double y);
+    PathCubic (Process* parent, const std::string &name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
     AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_component("x2"); }
@@ -294,10 +294,10 @@ namespace djnn
   class PathArc : public AbstractGObj
   {
   public:
-    PathArc (Process* parent, const string &name,  double rx, double ry, double rotx, double fl, double swfl, double x,
+    PathArc (Process* parent, const std::string &name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_component("rotx"); }
     AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_component("fl"); }
     AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_component("swfl"); }
@@ -318,7 +318,7 @@ namespace djnn
   class PathClosure : public AbstractGObj
   {
   public:
-    PathClosure (Process* parent, const string &name);
+    PathClosure (Process* parent, const std::string &name);
     virtual ~PathClosure () {}
     void draw () override;
     Process* clone () override;
@@ -336,7 +336,7 @@ namespace djnn
   class Path : public AbstractGShape
   {
   public:
-    Path (Process* parent, const string &name);
+    Path (Process* parent, const std::string &name);
     virtual ~Path ();
     Process* items () { return _items;}
     void draw () override;
@@ -355,7 +355,7 @@ namespace djnn
   class PathClip : public Path
   {
   public:
-    PathClip (Process* parent, const string &name) :
+    PathClip (Process* parent, const std::string &name) :
         Path (parent, name) {}
     virtual ~PathClip () {}
     void draw () override;
@@ -372,7 +372,7 @@ namespace djnn
     virtual ~Image ();
     void draw () override;
     Process* clone () override;
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -396,7 +396,7 @@ namespace djnn
       virtual ~DataImage ();
       void draw () override;
       Process* clone () override;
-      virtual Process* find_component (const string&) override;
+      virtual Process* find_component (const std::string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}
@@ -445,7 +445,7 @@ namespace djnn
   class Group : public Container
   {
   public:
-    Group (Process *parent, const string &name);
+    Group (Process *parent, const std::string &name);
     virtual ~Group () override;
     auto
       frame () { return _gobj->frame ();}
@@ -460,7 +460,7 @@ namespace djnn
   class Defs : public Container
   {
   public:
-    Defs (Process *parent, const string &name);
+    Defs (Process *parent, const std::string &name);
     virtual ~Defs () override;
     void impl_activate () override;
     void impl_deactivate () override;

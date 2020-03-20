@@ -37,7 +37,7 @@ namespace djnn
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -91,7 +91,7 @@ namespace djnn
   }
  
   Process*
-  %(CLASS)s::find_component (const string& name)
+  %(CLASS)s::find_component (const std::string& name)
   {
     Process* res = %(INHERITS)s::find_component(name);
     if(res) return res;
@@ -100,7 +100,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef string text;
+    typedef std::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     %(CREATE_PROPERTIES)s

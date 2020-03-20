@@ -87,7 +87,7 @@ namespace djnn
   }
 
   void
-  Counter::serialize (const string& type) {
+  Counter::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

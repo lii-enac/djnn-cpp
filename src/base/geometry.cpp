@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  HermiteCurve::HermiteCurveAction::HermiteCurveAction (Process* parent, const string &name,
+  HermiteCurve::HermiteCurveAction::HermiteCurveAction (Process* parent, const std::string &name,
                                                         AbstractProperty *input, AbstractProperty *p1, AbstractProperty *p2,
                                                         AbstractProperty *t1, AbstractProperty *t2, AbstractProperty *output) :
       Action (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
@@ -44,7 +44,7 @@ namespace djnn
     _output->set_value (out, true);
   }
 
-  HermiteCurve::HermiteCurve (Process *parent, const string &name, double p1, double p2, double t1, double t2) 
+  HermiteCurve::HermiteCurve (Process *parent, const std::string &name, double p1, double p2, double t1, double t2) 
   : Process (name),
   _input (this, "input", 0),
   _p1 (this, "p1", p1),
@@ -118,7 +118,7 @@ namespace djnn
   }
 
   void
-  HermiteCurve::serialize (const string& type) {
+  HermiteCurve::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

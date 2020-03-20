@@ -20,13 +20,14 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+
+namespace djnn {
 static int ParseX1 (Process**, const char*);
 static int ParseY1 (Process**, const char*);
 static int ParseX2 (Process**, const char*);
 static int ParseY2 (Process**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static std::map <std::string, djnn::djn_XMLAttrHandler> handlers = {
   {"y2",{&ParseY2}},
   {"y1",{&ParseY1}},
   {"x2",{&ParseX2}},
@@ -63,4 +64,5 @@ static int ParseX2(Process** e, const char* v) {
 static int ParseY2(Process** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientY2);
 	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.y2, v);
+}
 }

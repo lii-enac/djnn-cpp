@@ -51,7 +51,7 @@ namespace djnn
   }
 
   Process*
-  Image::find_component (const string& name)
+  Image::find_component (const std::string& name)
   {
     Process* res = AbstractPathImage::find_component(name);
     //if(res) return res;
@@ -141,7 +141,7 @@ namespace djnn
   }
 
   Process*
-  DataImage::find_component (const string& name)
+  DataImage::find_component (const std::string& name)
   {
     Process* res = AbstractDataImage::find_component(name);
     //if(res) return res;

@@ -29,7 +29,7 @@ namespace djnn
     SVGHolder (Process *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { Process::finalize_construction (parent, name); }
     virtual ~SVGHolder () {}
     Process* clone () override;
-    Process* find_component (const string &path) override;
+    Process* find_component (const std::string &path) override;
     void set_gobj (Process* gobj) { _gobj = gobj; }
     Process* get_gobj () { return _gobj; }
   private:
@@ -61,9 +61,9 @@ namespace djnn
     DoubleProperty* origin_y () { return _origin_y; }
     bool has_ui () { return ui != nullptr; }
     UI* get_ui () { return ui; }
-    Process* find_component (const string &n) override;
+    Process* find_component (const std::string &n) override;
     void impl_deactivate () override;
-    void add_style_class (const string& classname);
+    void add_style_class (const std::string& classname);
     void pick () override;
     void pre_draw ();
     void post_draw ();
@@ -75,9 +75,9 @@ namespace djnn
     void init_ui ();
     Process* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
-    static vector<string> _ui;
+    static std::vector<std::string> _ui;
     UI *ui;
-    vector<int> _classes;
+    std::vector<int> _classes;
   };
 
   class Touch : public Process

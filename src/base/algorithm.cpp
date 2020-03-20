@@ -69,8 +69,8 @@ namespace djnn
         else
           return left->get_double_value () > right->get_double_value();
       case String: {
-        string s_left = left->get_string_value ();
-        string s_right = right->get_string_value ();
+        std::string s_left = left->get_string_value ();
+        std::string s_right = right->get_string_value ();
         int sz = s_left.length() <= s_right.length() ? s_left.length() : s_right.length();
         for (int i = 0; i < sz; i++) {
           if (s_left[i] < s_right[i])
@@ -202,7 +202,7 @@ namespace djnn
   }
 
   bool
-  compare_string (const std::pair<string, int> &l, const std::pair<string, int> &r)
+  compare_string (const std::pair<std::string, int> &l, const std::pair<std::string, int> &r)
   {
     return l.first < r.first;
   }
@@ -214,7 +214,7 @@ namespace djnn
     int sz = children.size ();
     if (sz == 0)
       return;
-    vector<Process*> cpy (children);
+    std::vector<Process*> cpy (children);
     AbstractProperty* p = get_and_check (children[0]);
     int type = p->get_prop_type ();
     switch (type)
@@ -223,7 +223,7 @@ namespace djnn
       case Integer:
       case Double:
 	{
-	  vector<std::pair<double, int>> to_sort;
+	  std::vector<std::pair<double, int>> to_sort;
 	  int i = 0;
 	  for (auto c : children) {
 	    AbstractProperty* prop = get_and_check (c);
@@ -245,14 +245,14 @@ namespace djnn
 	}
       case String:
 	{
-	  vector<std::pair<string, int>> to_sort;
+	  std::vector<std::pair<std::string, int>> to_sort;
 	  int i = 0;
 	  for (auto c : children) {
 	    AbstractProperty* prop = get_and_check (c);
 	    if (prop->get_prop_type () != type) {
 	      error (this, "Cannot compare properties of different types");
 	    }
-	    to_sort.push_back (std::pair<string, int> (prop->get_string_value (), i++));
+	    to_sort.push_back (std::pair<std::string, int> (prop->get_string_value (), i++));
 	  }
 	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
 	  i = 0;
@@ -367,7 +367,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:sum-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    string buf;
+    std::string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -393,7 +393,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:product-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    string buf;
+    std::string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -407,7 +407,7 @@ namespace djnn
   {
     double vmax = 0;
     for (auto c: _container->children ()) {
-      vmax = max (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmax);
+      vmax = std::max (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
   }
@@ -419,7 +419,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:max-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    string buf;
+    std::string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -433,7 +433,7 @@ namespace djnn
   {
     double vmin = 0;
     for (auto c: _container->children ()) {
-      vmin = min (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmin);
+      vmin = std::min (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
   }
@@ -445,7 +445,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:min-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    string buf;
+    std::string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());

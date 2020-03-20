@@ -20,7 +20,8 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
-using namespace djnn;
+namespace djnn {
+
 static int ParseId (Process**, const char*);
 static int ParseGradientTransform (Process**, const char*);
 static int ParseGradientUnits (Process**, const char*);
@@ -91,8 +92,8 @@ static int ParseGradientUnits(Process** e, const char* v) {
 }
 
 static int ParseHRef(Process** e, const char* v) {
-	string id(v + sizeof(char));
-	map<string, Process*>::iterator it = djn__id_to_process.find (id);
+	std::string id(v + sizeof(char));
+	std::map<std::string, Process*>::iterator it = djn__id_to_process.find (id);
 	if (it == djn__id_to_process.end()) {
 		fprintf (stderr, "unknown gradient %s\n", v);
 		return 0;
@@ -100,4 +101,5 @@ static int ParseHRef(Process** e, const char* v) {
 
 	djn_GradientArgs.ancestor = it->second;
 	return 1;
+}
 }

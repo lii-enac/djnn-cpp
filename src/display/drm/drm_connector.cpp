@@ -189,7 +189,7 @@ namespace djnn {
     }
   }
 
-  DRMConnector::DRMConnector (Process *parent, const string& name, int fd, drmModeRes *res, drmModeConnector *drm_conn) : Process (name),
+  DRMConnector::DRMConnector (Process *parent, const std::string& name, int fd, drmModeRes *res, drmModeConnector *drm_conn) : Process (name),
      _fd (fd), _crtc_id (-1), _cur_buff (0), _conn (drm_conn->connector_id), _waiting_vblank (false),  _saved_crtc (nullptr),
     _width (this, "width", 0), _height (this, "height", 0), _x (this, "x", 0), _y (this, "y", 0), _connected (this, "connected", false),
     _pos_action (this, "pos_action"), _vblank (this, "_vblank"),

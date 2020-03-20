@@ -22,7 +22,7 @@ namespace djnn
 {
   using namespace std;
 
-  SwitchRangeBranch::SwitchRangeBranch (Process *parent, const string &name, double lower, bool left_open, double upper,
+  SwitchRangeBranch::SwitchRangeBranch (Process *parent, const std::string &name, double lower, bool left_open, double upper,
                                         bool right_open) 
   : Container (parent, name),
   _left_open (left_open),
@@ -40,7 +40,7 @@ namespace djnn
   }
 
   void
-  SwitchRangeBranch::serialize (const string& type) {
+  SwitchRangeBranch::serialize (const std::string& type) {
 
     AbstractSerializer::pre_serialize(this, type);
 
@@ -68,7 +68,7 @@ namespace djnn
   }
 
 
-  SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange *parent, const string &name) :
+  SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange *parent, const std::string &name) :
       Action (parent, name),  _sw (parent) 
   {
   }
@@ -76,7 +76,7 @@ namespace djnn
   /* note:
    * added _branch_range to symTable but not in _children 
    */
-  SwitchRange::SwitchRange (Process *parent, const string &name, double initial) 
+  SwitchRange::SwitchRange (Process *parent, const std::string &name, double initial) 
   : Container (parent, name),
   _initial (initial),
   _input (nullptr, "input", initial),
@@ -197,7 +197,7 @@ namespace djnn
   }  
 
   void
-  SwitchRange::serialize (const string& type) {
+  SwitchRange::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

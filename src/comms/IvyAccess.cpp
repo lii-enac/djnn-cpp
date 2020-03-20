@@ -261,7 +261,7 @@ IvyAccess::set_parent (Process* p)
   Process::set_parent (p); 
 }
 
-void IvyAccess::set_arriving(string v) {
+void IvyAccess::set_arriving(const std::string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -273,7 +273,7 @@ void IvyAccess::set_arriving(string v) {
   djnn::release_exclusive_access (DBG_REL);
 }
 
-void IvyAccess::set_leaving(string v) {
+void IvyAccess::set_leaving(const std::string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -378,7 +378,7 @@ IvyAccess::run ()
 }
 
 Process*
-IvyAccess::find_component (const string& key)
+IvyAccess::find_component (const std::string& key)
 {
   
 #ifdef __IVY_DEBUG__

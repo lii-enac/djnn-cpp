@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (int& limit);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_component ("limit"); }
 
   protected:

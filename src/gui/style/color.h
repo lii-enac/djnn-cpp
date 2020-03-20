@@ -24,7 +24,7 @@ namespace djnn
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (Process *parent, const string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
+      ToValueAction (Process *parent, const std::string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
@@ -33,7 +33,7 @@ namespace djnn
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (Process *parent, const string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
+      ToRGBAction (Process *parent, const std::string& name) : Action (parent, name) { Process::finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
@@ -47,7 +47,7 @@ namespace djnn
     
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractIntProperty* r () { return (AbstractIntProperty*) find_component ("r"); }
 		AbstractIntProperty* g () { return (AbstractIntProperty*) find_component ("g"); }
 		AbstractIntProperty* b () { return (AbstractIntProperty*) find_component ("b"); }

@@ -99,7 +99,7 @@ namespace djnn
 
 
   void
-  Timer::serialize (const string& type) {
+  Timer::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

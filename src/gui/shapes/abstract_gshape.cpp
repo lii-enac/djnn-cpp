@@ -35,11 +35,11 @@
 
 namespace djnn
 {
-  vector<string> AbstractGShape::_ui =
+  std::vector<std::string> AbstractGShape::_ui =
     { "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
   Process*
-  SVGHolder::find_component (const string &path)
+  SVGHolder::find_component (const std::string &path)
   {
     Process *p = Container::find_component (path);
     if (p == nullptr && _gobj != nullptr)
@@ -87,7 +87,7 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (Process *parent, const string &name, int id, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (Process *parent, const std::string &name, int id, double init_x, double init_y, double init_pressure) :
       Process (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
@@ -272,14 +272,14 @@ namespace djnn
   }
 
   Process*
-  AbstractGShape::find_component (const string &path)
+  AbstractGShape::find_component (const std::string &path)
   {
     if (ui)
       return Process::find_component (path);
     else {
       size_t found = path.find_first_of ('/');
-      string key = path;
-      if (found != string::npos) {
+      std::string key = path;
+      if (found != std::string::npos) {
         key = path.substr (0, found);
       }
       if (key.compare ("matrix") == 0) {
@@ -292,7 +292,7 @@ namespace djnn
       }
       else {
         /*  "press", "release", "move", "enter", "leave", "touches" */
-        vector<string>::iterator it = _ui.begin ();
+        std::vector<std::string>::iterator it = _ui.begin ();
         found = false;
         while (!found && it != _ui.end ()) {
           if (key.compare (*it) == 0) {
@@ -322,7 +322,7 @@ namespace djnn
   }
 
   void
-  AbstractGShape::add_style_class (const string &classname)
+  AbstractGShape::add_style_class (const std::string &classname)
   {
     int id = StyleSheet::get_id(classname);
     if (id != -1)

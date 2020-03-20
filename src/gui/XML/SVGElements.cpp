@@ -28,9 +28,11 @@
 #include "gui/shapes/abstract_gshape.h"
 #include "gui/css-parser/driver.h"
 
-using namespace djnn;
+using namespace std;
 
+namespace djnn {
 	/* all the specific tag handling procedures defined in this file */
+
 static Process* StartSVG (const char**, Process*);
 static Process* EndElement (Process*);
 static Process* StartRect (const char**, Process*);
@@ -110,7 +112,7 @@ int djn__GrphIsInClip = 0;
 
 map<string, Process*> djn__id_to_process;
 
-void djnn::init_svg_parser () {
+void init_svg_parser () {
 	XML::djn_RegisterXMLParser("http://www.w3.org/2000/svg", &SVGElements_Hash::djn_SVGElementsLookup,
 			"SVG");
 
@@ -120,7 +122,7 @@ void djnn::init_svg_parser () {
 
 }
 
-void djnn::clear_svg_parser () {
+void clear_svg_parser () {
 	XML::djn_UnregisterXMLParser("http://www.w3.org/2000/svg");
 }
 
@@ -184,7 +186,7 @@ static void djn__CheckStroke(Process* holder) {
 }
 
 static std::vector<string>
-get_classes (const string& classnames)
+get_classes (const std::string& classnames)
 {
   vector<string> tokens;
   string cur_str (classnames);
@@ -1202,4 +1204,5 @@ StyleData(const char* data, int len, Process* current) {
   css::Driver driver;
   driver.parse_string (str, "svg file", current);
   return current;
+}
 }

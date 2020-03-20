@@ -101,7 +101,7 @@ namespace djnn
   }
 
   void
-  QtWindow::set_cursor (const string &path, int hotX, int hotY) {
+  QtWindow::set_cursor (const std::string &path, int hotX, int hotY) {
     if (_qwidget == nullptr)
       return;
     QBitmap bmp (path.c_str ());

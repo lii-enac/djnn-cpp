@@ -36,7 +36,7 @@ using namespace std;
 namespace djnn {
 
 
-  DRMDevice::DRMDevice (Process *parent, const string& name, int fd, int min_width, int max_width,
+  DRMDevice::DRMDevice (Process *parent, const std::string& name, int fd, int min_width, int max_width,
                         int min_height, int max_height) : Process (name), _fd (fd),
                         _iofd (fd), _vblank_action (this, "vblank_action"),
                         _c_vblank (_iofd.find_component("readable"), ACTIVATION, &_vblank_action, ACTIVATION, true)

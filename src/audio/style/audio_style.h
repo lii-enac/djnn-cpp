@@ -27,7 +27,7 @@ namespace djnn
   class AbstractAudioStyle : public AbstractSObj
   {
   public:
-    AbstractAudioStyle (Process *parent, const string &name) : AbstractSObj(parent, name) {}
+    AbstractAudioStyle (Process *parent, const std::string &name) : AbstractSObj(parent, name) {}
     virtual ~AbstractAudioStyle () {};
     virtual void impl_activate () override {}
     virtual void impl_deactivate () override {}
@@ -41,7 +41,7 @@ namespace djnn
   class Volume : public AbstractVolume
   {
   public:
-  	Volume(Process* parent, const string& name, double volume)
+  	Volume(Process* parent, const std::string& name, double volume)
   	: AbstractVolume(parent, name, volume)
   	{
   		Process::finalize_construction (parent, name);

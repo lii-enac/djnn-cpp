@@ -35,7 +35,7 @@ namespace djnn
   static string __cur_format;
   
   void
-  AbstractSerializer::pre_serialize (Process* root, const string& format) {
+  AbstractSerializer::pre_serialize (Process* root, const std::string& format) {
      
      if (AbstractSerializer::serializationRoot == 0) {
 

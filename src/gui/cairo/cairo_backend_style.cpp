@@ -19,6 +19,8 @@
 #include <vector>
 #include <cmath>
 
+using namespace std;
+
 namespace djnn
 {
   static cairo_line_cap_t capStyleArray[3] =

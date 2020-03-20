@@ -19,16 +19,16 @@ namespace djnn
 {
   
 
-  pair<RefProperty*, string>
-  check_for_ref (Process* src, const string &spec)
+  ref_info_t
+  check_for_ref (Process* src, const std::string &spec)
   {
     /* spec is empty */
     if (spec.empty ()) 
-      return pair<RefProperty*, string> (nullptr, spec);
+      return ref_info_t (nullptr, spec);
     
     size_t found = spec.find ("$value");
     /* we found §value */
-    if (found != string::npos) {
+    if (found != std::string::npos) {
       
       Process *prop = src;
       
@@ -38,13 +38,13 @@ namespace djnn
       
       /* prop == src (not null) OR the new element find by find_component */
       if (!prop) 
-        return pair<RefProperty*, string> (nullptr, spec);
+        return ref_info_t (nullptr, spec);
 
 
       RefProperty *ref = dynamic_cast<RefProperty*> (prop);
       /* ref is a refproperty */
       if (ref != nullptr ) {
-        string new_spec = "";
+        std::string new_spec = "";
         /* spec is more than juste $value, eg : boo/bar/$value/toto */
         if ( spec.size () > 6) {
           new_spec = spec.substr (found + 6);
@@ -52,15 +52,15 @@ namespace djnn
             new_spec = new_spec.substr (1);
         }
 
-        return pair<RefProperty*, string> (ref, new_spec);
+        return ref_info_t (ref, new_spec);
        }
      }
 
      /* we did not found $value */
-     return pair<RefProperty*, string> (nullptr, spec);
+     return ref_info_t (nullptr, spec);
    }
 
-  const string&
+  const std::string&
   get_parent_name (Process *p, int up)
   {
     while(up && p) { p=p->get_parent(); --up; }
@@ -68,10 +68,10 @@ namespace djnn
     else return Process::default_name;
   }
 
-  const string
+  const std::string
   get_hierarchy_name (Process *p, int up)
   {
-    string res;
+    std::string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;
   }

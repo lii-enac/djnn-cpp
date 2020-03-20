@@ -26,7 +26,7 @@
 namespace djnn
 {
 
-  AbstractStyle::AbstractStyle (Process *parent, const string &name) :
+  AbstractStyle::AbstractStyle (Process *parent, const std::string &name) :
       AbstractGObj (parent, name)
   {
   }
@@ -170,7 +170,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      cerr << "Parent of gradient stop must be <LinearGradient|RadialGradient>\n";
+      std::cerr << "Parent of gradient stop must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->stops ()->add_child (this, "");
@@ -249,7 +249,7 @@ namespace djnn
     }
   }
 
-  RefLinearGradient::RefLinearGradient (Process *parent, const string &name, LinearGradient *lg) :
+  RefLinearGradient::RefLinearGradient (Process *parent, const std::string &name, LinearGradient *lg) :
       AbstractStyle (parent, name), _lg (lg)
   {
     activate_children ();
@@ -336,7 +336,7 @@ namespace djnn
     }
   }
 
-  RefRadialGradient::RefRadialGradient (Process *parent, const string &name, RadialGradient *rg) :
+  RefRadialGradient::RefRadialGradient (Process *parent, const std::string &name, RadialGradient *rg) :
       AbstractStyle (parent, name), _rg (rg)
   {
     activate_children ();

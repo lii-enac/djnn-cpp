@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (int& spread, int& coords);
-    virtual Process* find_component (const string&) override;
+    virtual Process* find_component (const std::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_component ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_component ("coords"); }
 

@@ -67,7 +67,7 @@ namespace djnn
   }
 
   void
-  AbstractIntProperty::set_value (const string &v, bool propagate)
+  AbstractIntProperty::set_value (const std::string &v, bool propagate)
   {
     int oldVal = get_value();
     try {
@@ -94,7 +94,7 @@ namespace djnn
   }
 
   void
-  IntProperty::serialize (const string& format) {
+  IntProperty::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:IntProperty");
@@ -106,7 +106,7 @@ namespace djnn
   }
 
   void
-  IntPropertyProxy::serialize (const string& format) {
+  IntPropertyProxy::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:IntProperty");

@@ -30,7 +30,7 @@ namespace djnn {
    class AssignmentAction : public Action
    {
    public:
-    AssignmentAction (Process* parent, const string &name, Process** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
+    AssignmentAction (Process* parent, const std::string &name, Process** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void impl_deactivate () override {}
@@ -43,8 +43,8 @@ namespace djnn {
   };
     
   public:
-    AbstractAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel,
-      string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    AbstractAssignment (Process* parent, const std::string &name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel,
+      const std::string src_ref_spec = std::string(), const std::string dst_ref_spec = std::string()); // hack to create temporary const std::string objects for init of refs
     virtual ~AbstractAssignment ();
     //void update_graph () override;
     static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
@@ -52,10 +52,10 @@ namespace djnn {
   protected:
     void set_parent (Process* p) override;
 
-    struct Init { Init(AbstractAssignment *, const string& name, Process* src, const string &ispec, Process* dst, const string &dspec,
-      string& src_ref_spec, string& dst_ref_spec); };
+    struct Init { Init(AbstractAssignment *, const std::string& name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec,
+      const std::string src_ref_spec, const std::string dst_ref_spec); };
     friend struct Init;
-    void check_init(const string& ispec, const string& dspec);
+    void check_init(const std::string& ispec, const std::string& dspec);
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
@@ -70,12 +70,12 @@ namespace djnn {
   private:
     void init_Assignment ();
   public:
-    Assignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    Assignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
+    Assignment (Process* parent, const std::string &name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel);
+    Assignment (Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
     void update_graph () override;
     void about_to_update_graph () override ;
     virtual ~Assignment ();
@@ -88,12 +88,12 @@ namespace djnn {
   private:
     void init_PausedAssignment ();
   public:
-    PausedAssignment (Process* parent, const string &name, Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
-    PausedAssignment (Process* src, const string &ispec, Process* dst, const string &dspec, bool isModel);
+    PausedAssignment (Process* parent, const std::string &name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel);
+    PausedAssignment (Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
     void update_graph () override {};
     void about_to_update_graph () override {};
     virtual ~PausedAssignment ();

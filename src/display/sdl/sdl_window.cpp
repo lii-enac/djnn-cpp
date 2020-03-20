@@ -63,7 +63,7 @@ namespace djnn
   }
 
   void
-  SDLWindow::set_cursor (const string &path, int hotX, int hotY)
+  SDLWindow::set_cursor (const std::string &path, int hotX, int hotY)
   {
     if (_cursor)
       SDL_FreeCursor (_cursor);

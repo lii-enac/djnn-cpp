@@ -56,7 +56,7 @@ namespace djnn {
   
   private:
     static QtMainloop* _instance;
-    static once_flag onceFlag;
+    static std::once_flag onceFlag;
     QtMainloop (MainLoop*);
     bool _please_exec;
     QApplication* _qapp;
@@ -64,7 +64,7 @@ namespace djnn {
     void slot_for_awake ();
     void slot_for_about_to_block ();
     //vector<QtWindow*> _windows;
-    vector<QtMainloopListener*> _mlls;
+    std::vector<QtMainloopListener*> _mlls;
     bool already_awaken;
     int argc;
     char **argv;

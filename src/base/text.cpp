@@ -40,7 +40,7 @@ namespace djnn
     std::cout << _input->get_value () << std::endl;
   }
 
-  TextPrinter::TextPrinter (Process *parent, const string &name)
+  TextPrinter::TextPrinter (Process *parent, const std::string &name)
   : Process (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
@@ -51,7 +51,7 @@ namespace djnn
   }
 
   void
-  TextPrinter::serialize (const string& type) {
+  TextPrinter::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -101,7 +101,7 @@ namespace djnn
     Process::set_parent (p); 
   }
 
-  DoubleFormatter::DoubleFormatter (Process* parent, const string &name, double initial, int decimal) :
+  DoubleFormatter::DoubleFormatter (Process* parent, const std::string &name, double initial, int decimal) :
     Process (name),
     _input (this, "input", initial),
     _decimal (this, "decimal", decimal),
@@ -131,7 +131,7 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::serialize (const string& type) {
+  DoubleFormatter::serialize (const std::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -144,7 +144,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  TextAccumulator::TextAccumulator (Process *parent, const string &name, const string &init)
+  TextAccumulator::TextAccumulator (Process *parent, const std::string &name, const std::string &init)
   : Process (name),
     _input (this, "input", ""),
     _state (this, "state", init),
@@ -203,7 +203,7 @@ namespace djnn
   }
 
   void
-  TextAccumulator::serialize (const string &type)
+  TextAccumulator::serialize (const std::string &type)
   {
     AbstractSerializer::pre_serialize (this, type);
 

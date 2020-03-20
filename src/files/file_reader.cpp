@@ -18,6 +18,8 @@
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 
+using namespace std;
+
 namespace djnn
 {
   void
@@ -26,7 +28,7 @@ namespace djnn
     ((FileReader*)get_parent ())->read ();
   }
 
-  FileReader::FileReader (Process *parent, const string &name, const string& filename)
+  FileReader::FileReader (Process *parent, const std::string &name, const std::string& filename)
   : Process (name)
   {
     _input = new TextProperty (this, "input", filename);
@@ -72,7 +74,7 @@ namespace djnn
   }
 
   void
-  FileReader::serialize (const string &type)
+  FileReader::serialize (const std::string &type)
   {
     AbstractSerializer::pre_serialize (this, type);
 

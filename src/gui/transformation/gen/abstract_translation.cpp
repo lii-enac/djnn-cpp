@@ -63,7 +63,7 @@ namespace djnn
   }
  
   Process*
-  AbstractTranslation::find_component (const string& name)
+  AbstractTranslation::find_component (const std::string& name)
   {
     Process* res = AbstractTransformation::find_component(name);
     if(res) return res;
@@ -72,7 +72,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef string text;
+    typedef std::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     

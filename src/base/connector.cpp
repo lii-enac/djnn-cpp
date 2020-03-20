@@ -50,12 +50,12 @@ namespace djnn
        "dst argument cannot be null in connector creation (" + c->get_name () + ", " + ispec + ", " + dspec + ")");
     }
 
-    pair<RefProperty*, string> ref_src_pair = check_for_ref (src, ispec);
+    std::pair<RefProperty*, std::string> ref_src_pair = check_for_ref (src, ispec);
     c->_ref_info_src._ref = ref_src_pair.first;
     //c->_ref_info_src._spec = ref_src_pair.second;
     src_ref_spec = ref_src_pair.second;
 
-    pair<RefProperty*, string> ref_dst_pair = check_for_ref (dst, dspec);
+    std::pair<RefProperty*, std::string> ref_dst_pair = check_for_ref (dst, dspec);
     c->_ref_info_dst._ref = ref_dst_pair.first;
     //c->_ref_info_dst._spec = ref_dst_pair.second;
     dst_ref_spec = ref_dst_pair.second;
@@ -190,7 +190,7 @@ namespace djnn
   void
   Connector::serialize (const std::string& format)
   {
-    string buf;
+    std::string buf;
 
     AbstractSerializer::pre_serialize (this, format);
 
@@ -297,7 +297,7 @@ namespace djnn
   void
   PausedConnector::serialize (const std::string& format)
   {
-    string buf;
+    std::string buf;
 
     AbstractSerializer::pre_serialize (this, format);
 

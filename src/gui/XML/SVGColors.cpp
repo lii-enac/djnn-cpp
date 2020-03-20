@@ -22,6 +22,9 @@
 #include "core/core.h"
 #include "gui/gui-dev.h"
 
+
+namespace djnn {
+
 static std::map<std::string, int> color_map = {
     {"black",0x000000},
     {"navy",0x000080},
@@ -190,7 +193,7 @@ SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
   std::string key (str);
   std::transform(key.begin(), key.end(), key.begin(),
       [](unsigned char c){ return std::tolower(c); });
-  it = color_map.find(string(str));
+  it = color_map.find(std::string(str));
   if (it != color_map.end())
     return it->second;
 
@@ -279,3 +282,4 @@ SVG_Utils::djn__SVGParseAlpha (double *alpha, const char *v)
   return 1;
 }
 
+}

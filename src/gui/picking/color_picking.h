@@ -40,7 +40,7 @@ namespace djnn {
 
   protected:
     unsigned int _pick_color;
-    map<unsigned int, AbstractGShape*> _color_map;
+    std::map<unsigned int, AbstractGShape*> _color_map;
 
     int seed;
     double myrandom();

@@ -36,7 +36,7 @@ namespace djnn
     virtual void impl_activate () = 0;
     virtual void impl_deactivate () = 0;
     virtual void update () = 0;
-    virtual void set_cursor (const string &path, int hotX, int hotY) = 0;
+    virtual void set_cursor (const std::string &path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
      
@@ -87,7 +87,7 @@ namespace djnn
     void set_frame ();
     Process* holder () { return _holder; }
     void set_holder (Process *p) { _holder = p; }
-    void set_cursor (const string &path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
+    void set_cursor (const std::string &path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
     //std::weak_ptr<Window> get_weak_ptr();
     //std::shared_ptr<Window> _self_shared_ptr;
@@ -129,21 +129,21 @@ namespace djnn
    class Cursor : public Process {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (Process *parent, const string &name) : Action (parent, name) {}
+      UpdateCursorAction (Process *parent, const std::string &name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };
    public:
-    Cursor (Process *parent, const string &name, const string &path, int hotX, int hotY);
+    Cursor (Process *parent, const std::string &name, const std::string &path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
-    Process* find_component (const string &n) override;
+    Process* find_component (const std::string &n) override;
    private:
-    struct raw_props_t { int hot_x; int hot_y; string path; };
+    struct raw_props_t { int hot_x; int hot_y; std::string path; };
     raw_props_t raw_props;
     Coupling *_c_x, *_c_y, *_c_path;
     UpdateCursorAction *_action;

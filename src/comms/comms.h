@@ -18,7 +18,7 @@
 
 namespace djnn {
 
-	extern std::vector<string> loadedModules; 
+	extern std::vector<std::string> loadedModules; 
 
 	void init_comms ();
 
