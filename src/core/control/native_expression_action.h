@@ -18,7 +18,7 @@
 #include "core/control/action.h"
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
 class NativeExpressionAction : public Action {
   public:

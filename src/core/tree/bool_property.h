@@ -19,11 +19,11 @@
 #include "spike.h"
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class AbstractBoolProperty : public AbstractProperty {
   public:
-    AbstractBoolProperty (Process* parent, const string &name, int notify_mask=notify_none);
+    AbstractBoolProperty (Process* parent, const std::string &name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () override { return Boolean; }
 
@@ -32,7 +32,7 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
-    void set_value (const string &v, bool propagate) override;
+    void set_value (const std::string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     string get_string_value () override { return std::to_string (get_ref_value ()); }
@@ -46,8 +46,8 @@ namespace djnn {
 
   class BoolProperty : public AbstractBoolProperty {
   public:
-    BoolProperty (Process* parent, const string &name, bool v) : AbstractBoolProperty (parent, name), value(v) { Process::finalize_construction (parent, name); }
-    void serialize (const string& format) override;
+    BoolProperty (Process* parent, const std::string &name, bool v) : AbstractBoolProperty (parent, name), value(v) { Process::finalize_construction (parent, name); }
+    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
@@ -57,8 +57,8 @@ namespace djnn {
 
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
-    BoolPropertyProxy (Process* parent, const string &name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { Process::finalize_construction (parent, name); }
-    void serialize (const string& format) override;
+    BoolPropertyProxy (Process* parent, const std::string &name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { Process::finalize_construction (parent, name); }
+    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }

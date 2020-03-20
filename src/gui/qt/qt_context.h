@@ -66,7 +66,7 @@ namespace djnn
     QtContext* get_current ();
 
   private:
-    vector<QtContext*> _context_list;
+    std::vector<QtContext*> _context_list;
   };
 
 } /* namespace djnn */

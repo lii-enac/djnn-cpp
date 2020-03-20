@@ -20,22 +20,22 @@
 
 namespace djnn {
 
-  using namespace std;  
+  //using namespace std;  
 
   class AbstractSerializer
   {
   
   public:
-  	static void pre_serialize (Process* root, const string& format);
+  	static void pre_serialize (Process* root, const std::string& format);
   	static void post_serialize (Process* root);
-    static  void compute_path (Process* from, Process* to, string& buf);
-  	virtual void start (const string& name) = 0;
-  	virtual void text_attribute (const string& name, const string& value) = 0;
-  	virtual void int_attribute (const string& name, int value) = 0;
-  	virtual void float_attribute (const string& name, double value) = 0;
-    void cpptype_attribute(const string& name, const string& value) { text_attribute(name, value); }
-    void cpptype_attribute(const string& name, int value) { int_attribute(name, value); }
-    void cpptype_attribute(const string& name, double value) { float_attribute(name, value); }
+    static  void compute_path (Process* from, Process* to, std::string& buf);
+  	virtual void start (const std::string& name) = 0;
+  	virtual void text_attribute (const std::string& name, const std::string& value) = 0;
+  	virtual void int_attribute (const std::string& name, int value) = 0;
+  	virtual void float_attribute (const std::string& name, double value) = 0;
+    void cpptype_attribute(const std::string& name, const std::string& value) { text_attribute(name, value); }
+    void cpptype_attribute(const std::string& name, int value) { int_attribute(name, value); }
+    void cpptype_attribute(const std::string& name, double value) { float_attribute(name, value); }
   	virtual void end () = 0;
   
   public:
@@ -48,10 +48,10 @@ namespace djnn {
   class XMLSerializer : public AbstractSerializer 
   {
   public:
-  	void start (const string& classname) override;
-  	void text_attribute (const string& name, const string& value) override;
-  	void int_attribute (const string& name, int value) override;
-  	void float_attribute (const string& name, double value) override;
+  	void start (const std::string& classname) override;
+  	void text_attribute (const std::string& name, const std::string& value) override;
+  	void int_attribute (const std::string& name, int value) override;
+  	void float_attribute (const std::string& name, double value) override;
   	void end () override;
   };
 
@@ -59,10 +59,10 @@ namespace djnn {
   class JSONSerializer : public AbstractSerializer 
   {
   public:
-  	void start (const string& classname) override;
-  	void text_attribute (const string& name, const string& value) override;
-  	void int_attribute (const string& name, int value) override;
-  	void float_attribute (const string& name, double value) override;
+  	void start (const std::string& classname) override;
+  	void text_attribute (const std::string& name, const std::string& value) override;
+  	void int_attribute (const std::string& name, int value) override;
+  	void float_attribute (const std::string& name, double value) override;
   	void end () override;
   };
 

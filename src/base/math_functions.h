@@ -23,7 +23,6 @@
 
 namespace djnn
 {
-  using namespace std;
 
   template <typename T> struct my_exp { T operator() (T t1) { return ::exp(t1);} };
   template <> const char name_info<my_exp<double>>::left[];

@@ -22,8 +22,6 @@
 
 namespace djnn
 {
-  using namespace std;
-
   template <> const char name_info<std::plus<double>>::left[];
   template <> const char name_info<std::plus<double>>::right[];
   template <> const char name_info<std::plus<double>>::serialize[];

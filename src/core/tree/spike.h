@@ -17,13 +17,13 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class Spike: public Process {
   public:
-    Spike (Process* parent, const string& name) : Process (name) { set_is_model (true); Process::finalize_construction (parent, name); };
+    Spike (Process* parent, const std::string& name) : Process (name) { set_is_model (true); Process::finalize_construction (parent, name); };
     virtual ~Spike () {};
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     bool pre_activate () override;

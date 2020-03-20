@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  //using namespace std;
 
   class ODEBackend : public AbstractPhysicsBackend
   {

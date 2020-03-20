@@ -20,7 +20,6 @@
 #include "core/tree/abstract_property.h"
 
 namespace djnn {
-  using namespace std;
 
   class Connector : public SrcToDstLink
   {
@@ -30,7 +29,7 @@ namespace djnn {
     class ConnectorAction : public Action
     {
     public:
-      ConnectorAction (Process* parent, const string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
+      ConnectorAction (Process* parent, const std::string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
@@ -42,24 +41,24 @@ namespace djnn {
     };
 
   public:
-    Connector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
+    Connector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation=true,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
-    Connector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true,
+    Connector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation=true,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     void impl_activate () override;
     void impl_deactivate () override;
     void update_graph () override;
     void about_to_update_graph () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     virtual ~Connector ();
 
   protected:
     void set_parent (Process* p) override;
 
-    struct Init { Init(Connector *, Process *src, const string& ispec, Process *dst, const string& dspec,
+    struct Init { Init(Connector *, Process *src, const std::string& ispec, Process *dst, const std::string& dspec,
       string& src_ref_spec, string& dst_ref_spec); };
     friend struct Init;
-    void check_init(const string& ispec, const string& dspec);
+    void check_init(const std::string& ispec, const std::string& dspec);
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
@@ -74,16 +73,16 @@ namespace djnn {
   class PausedConnector : public Process
   {
   public:
-    PausedConnector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
-    PausedConnector (Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation=true);
+    PausedConnector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation=true);
+    PausedConnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation=true);
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     virtual ~PausedConnector ();
 
   protected:
     void set_parent (Process* p) override;
-    void init_pausedconnector (Process *src, const string& ispec, Process *dst, const string& dspec);
+    void init_pausedconnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;
     Coupling *_c_src;

@@ -39,7 +39,7 @@ namespace djnn
     void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
-    map< Vertex*, int>& get_map_edges () { return _map_edges; }
+    std::map< Vertex*, int>& get_map_edges () { return _map_edges; }
     int get_count_edges_in () { return _count_edges_in; }
     int get_count_edges_out () { return _edges.size ();}
     void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
@@ -65,7 +65,7 @@ namespace djnn
     std::list< Vertex* >::iterator _pos;
     int _mark, _timestamp;
     int _count_edges_in;
-    map< Vertex*, int> _map_edges; /* try to deal with duplicate */
+    std::map< Vertex*, int> _map_edges; /* try to deal with duplicate */
     bool _is_invalid;
   };
 

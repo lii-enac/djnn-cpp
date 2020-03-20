@@ -28,7 +28,7 @@
 
 namespace djnn {
 
-  using namespace std;
+  //using namespace std;
 
   class QtMainloopListener {
   public:

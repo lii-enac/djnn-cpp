@@ -27,7 +27,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  //using namespace std;
   extern cairo_t* cur_cairo_state, *cur_cairo_picking_state;
 
   class TextImpl : public AbstractGObjImpl {

@@ -17,11 +17,11 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class Blank: public Process {
   public:
-    Blank (Process* parent, string name) : Process (name) { Process::finalize_construction (parent, name); }
+    Blank (Process* parent, const std::string& name) : Process (name) { Process::finalize_construction (parent, name); }
     virtual ~Blank () {};
     Process* clone () override;
   protected:
@@ -31,7 +31,7 @@ namespace djnn {
     bool pre_deactivate () override { return true;}
     void impl_deactivate () override { set_activation_state(DEACTIVATED); }
     void post_deactivate () override {}
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
   };
 
 }

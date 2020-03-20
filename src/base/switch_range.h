@@ -22,15 +22,14 @@
 #include "core/tree/text_property.h"
 
 namespace djnn {
-  using namespace std;
 
   class SwitchRangeBranch : public Container
   {
   public:
-    SwitchRangeBranch (Process *parent, const string& name, double lower, bool left_open, double upper, bool right_open);
+    SwitchRangeBranch (Process *parent, const std::string& name, double lower, bool left_open, double upper, bool right_open);
     ~SwitchRangeBranch ();
     bool is_in_range (double v);
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     bool _left_open, _right_open;
     DoubleProperty _lower, _upper;
@@ -42,16 +41,16 @@ namespace djnn {
     class SwitchRangeAction : public Action
     {
     public:
-      SwitchRangeAction (SwitchRange *parent, const string &name);
+      SwitchRangeAction (SwitchRange *parent, const std::string &name);
       virtual ~SwitchRangeAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
-      void serialize (const string& type) override {};
+      void serialize (const std::string& type) override {};
     private:
       SwitchRange* _sw;
     };
   public:
-    SwitchRange (Process *parent, const string &name, double initial);
+    SwitchRange (Process *parent, const std::string &name, double initial);
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -59,7 +58,7 @@ namespace djnn {
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~SwitchRange ();
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     void set_parent (Process* p) override;
     void change_branch ();

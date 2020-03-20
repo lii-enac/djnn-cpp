@@ -19,7 +19,6 @@
 #include "core/ontology/coupling.h"
 
 namespace djnn {
-  using namespace std;
 
   class Binding : public SrcToDstLink
   {
@@ -28,7 +27,7 @@ namespace djnn {
     class BindingAction : public Action
     {
     public:
-      BindingAction (Process* parent, const string &name, bool activate);
+      BindingAction (Process* parent, const std::string &name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override {
       	((Binding*)get_parent ())->_dst->set_activation_source (((Binding*)get_parent ())->_src);
@@ -47,9 +46,9 @@ namespace djnn {
 
     };
   public:
-    Binding (Process* parent, const string &name, Process* src, const string & ispec, Process* dst,
-      const string & dspec, string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
-    Binding (Process* parent, const string &name, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool activate,
+    Binding (Process* parent, const std::string &name, Process* src, const std::string & ispec, Process* dst,
+      const std::string & dspec, string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
+    Binding (Process* parent, const std::string &name, Process* src, const std::string & ispec, bool on_activation, Process* dst, const std::string & dspec, bool activate,
       string src_ref_spec = string(), string dst_ref_spec = string()); // hack to create temporary string objects for init of refs
     virtual ~Binding ();
     void impl_activate () override { 
@@ -62,14 +61,14 @@ namespace djnn {
     }
     void update_graph () override;
     void about_to_update_graph () override;
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
   private:
     void set_parent (Process* p) override;
 
-    struct Init { Init(Binding *, Process* src, const string & ispec, bool on_activation, Process* dst, const string & dspec, bool to_activate,
+    struct Init { Init(Binding *, Process* src, const std::string & ispec, bool on_activation, Process* dst, const std::string & dspec, bool to_activate,
       string& src_ref_spec, string& dst_ref_spec); };
     friend struct Init;
-    void check_init(const string& ispec, const string& dspec);
+    void check_init(const std::string& ispec, const std::string& dspec);
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third

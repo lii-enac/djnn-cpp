@@ -27,7 +27,6 @@
 #include <string>
 
 namespace djnn {
-  using namespace std;
 
   void
   init_binary_couplings (Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right);
@@ -43,7 +42,7 @@ namespace djnn {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (Process* parent, const string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
+    BinaryOperatorAction (Process* parent, const std::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
       Process::finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
@@ -66,7 +65,7 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (Process *parent, const string &name, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (Process *parent, const std::string &name, const Left_init& l_val, const Right_init& r_val)
     : Process (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
@@ -83,7 +82,7 @@ namespace djnn {
     }
     void impl_activate () override { _c_left.enable(); _c_right.enable (); _action.activate (); }
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
-    void serialize (const string& type) override {
+    void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<BinaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -129,7 +128,7 @@ namespace djnn {
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    UnaryOperatorAction (Process* parent, const string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
+    UnaryOperatorAction (Process* parent, const std::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
       Process::finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
@@ -148,7 +147,7 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (Process *parent, const string &name, const Input_init& i_val)
+    UnaryOperator (Process *parent, const std::string &name, const Input_init& i_val)
     : Process (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
@@ -163,7 +162,7 @@ namespace djnn {
     }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
-    void serialize (const string& type) override {
+    void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<UnaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());

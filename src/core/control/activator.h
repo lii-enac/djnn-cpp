@@ -20,17 +20,16 @@
 #include <string>
 
 namespace djnn {
-  using namespace std;
 
   class Activator : public Process
   {
   public:
-    Activator (Process* parent, const string &name, Process* src);
-    Activator (Process* parent, const string &name, Process* src, const string &spec);
+    Activator (Process* parent, const std::string &name, Process* src);
+    Activator (Process* parent, const std::string &name, Process* src, const std::string &spec);
     virtual ~Activator ();
     void impl_activate () override { _action->activate (); };
     void impl_deactivate () override {}
-    void serialize (const string& format) override;
+    void serialize (const std::string& format) override;
   private:
     Process *_action;
   };

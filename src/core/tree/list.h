@@ -24,19 +24,19 @@
 #include "core/control/action.h"
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class AbstractList : public Container
   {
   public:
-    AbstractList (Process *parent, const string& name);
-    void add_child (Process* c, const string& name) override;
-    void insert (Process* c, const string& spec);
+    AbstractList (Process *parent, const std::string& name);
+    void add_child (Process* c, const std::string& name) override;
+    void insert (Process* c, const std::string& spec);
     void remove_child (Process* c) override;
-    void remove_child (const string &name) override;
+    void remove_child (const std::string &name) override;
     void dump(int level=0) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
-    Process* find_component (const string &path) override;
+    Process* find_component (const std::string &path) override;
     Process* find_component (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
@@ -49,9 +49,9 @@ namespace djnn {
   class List : public AbstractList
   {
   public:
-    List (Process *parent, const string& name);
+    List (Process *parent, const std::string& name);
     virtual ~List ();
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     Process* clone () override;
   private:
     void finalize_child_insertion (Process *child) override;
@@ -60,7 +60,7 @@ namespace djnn {
   class ListIterator : public Process
   {
   public:
-    ListIterator (Process *parent, const string &name, Process *list, Process *action, bool model = true);
+    ListIterator (Process *parent, const std::string &name, Process *list, Process *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};
@@ -76,7 +76,7 @@ namespace djnn {
     class IterAction : public Action
     {
     public:
-      IterAction (Process *parent, const string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
+      IterAction (Process *parent, const std::string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -89,7 +89,7 @@ namespace djnn {
     class ResetAction : public Action
     {
     public:
-      ResetAction (Process *parent, const string& name, IntProperty *index);
+      ResetAction (Process *parent, const std::string& name, IntProperty *index);
       virtual ~ResetAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -97,11 +97,11 @@ namespace djnn {
       IntProperty *_index;
     };
   public:
-    BidirectionalListIterator (Process *parent, const string& name, Process* list);
+    BidirectionalListIterator (Process *parent, const std::string& name, Process* list);
     virtual ~BidirectionalListIterator ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     void set_parent (Process* p) override;
     List* _list;

@@ -18,7 +18,7 @@
 #include "core/tree/spike.h"
 #include "core/tree/double_property.h"
 
-using namespace std;
+//using namespace std;
 
 namespace djnn
 {
@@ -44,7 +44,7 @@ namespace djnn
     typedef std::vector<PhyObj*> phy_obj_list;
     class StepAction : public Action {
     public:
-      StepAction (Process *parent, const string &name) : Action (parent, name) {}
+      StepAction (Process *parent, const std::string &name) : Action (parent, name) {}
 
       virtual ~StepAction () {}
     private:
@@ -53,12 +53,12 @@ namespace djnn
     };
 
   public:
-    World (Process *parent, const string& name, double x, double y, double z = 0);
+    World (Process *parent, const std::string& name, double x, double y, double z = 0);
     virtual ~World ();
     WorldImpl* get_impl () { return _world_impl; }
     void get_gravity (double &x, double &y);
     void get_dt (double &dt);
-    Process* find_component (const string& n) override;
+    Process* find_component (const std::string& n) override;
     virtual process_type_e get_cpnt_type () const override { return WORLD_T; }
     void add_phy_object (PhyObj* p) { _phy_objs.push_back (p); }
     void remove_phy_object (PhyObj* p) { _phy_objs.erase (std::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
@@ -77,22 +77,22 @@ namespace djnn
   class PhyObj : public Process {
     class D3PhyObjUpdatePosition : public Action {
         public:
-          D3PhyObjUpdatePosition (Process *parent, const string &name) : Action (parent, name) {}
+          D3PhyObjUpdatePosition (Process *parent, const std::string &name) : Action (parent, name) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
-          D3PhyObjUpdateVelocity (Process *parent, const string &name) : Action (parent, name) {}
+          D3PhyObjUpdateVelocity (Process *parent, const std::string &name) : Action (parent, name) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
   public:
-    PhyObj (Process *parent, const string& name, double x, double y, double z, double mass);
+    PhyObj (Process *parent, const std::string& name, double x, double y, double z, double mass);
     virtual ~PhyObj ();
-    Process* find_component (const string& name) override;
+    Process* find_component (const std::string& name) override;
     void impl_activate () override;
     void impl_deactivate () override;
     void set_impl (PhyObjImpl* impl) { _impl = impl; }
@@ -124,11 +124,11 @@ namespace djnn
 
   class Box : public PhyObj {
   public:
-    Box (Process *parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
+    Box (Process *parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass);
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const string &n) override;
+    Process* find_component (const std::string &n) override;
   private:
     double w, h, d;
     DoublePropertyProxy *_w, *_h, *_d;
@@ -136,11 +136,11 @@ namespace djnn
 
   class Plane : public PhyObj {
   public:
-    Plane (Process *parent, const string& name, double a, double b, double c, double d);
+    Plane (Process *parent, const std::string& name, double a, double b, double c, double d);
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const string &n) override;
+    Process* find_component (const std::string &n) override;
     void update () override {};
   protected:
     struct plane_raw_props_t { double a, b, c, d ;};
@@ -150,11 +150,11 @@ namespace djnn
 
   class Sphere : public PhyObj {
   public:
-    Sphere (Process *parent, const string& name, double x, double y, double z, double radius, double mass);
+    Sphere (Process *parent, const std::string& name, double x, double y, double z, double radius, double mass);
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const string &n) override;
+    Process* find_component (const std::string &n) override;
   private:
     double radius;
     DoublePropertyProxy *_radius;

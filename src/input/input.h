@@ -18,7 +18,7 @@
 
 namespace djnn {
 
-	extern std::vector<string> loadedModules;
+	extern std::vector<std::string> loadedModules;
 	extern Process *InputDevices, *Mice, *TouchPanels, *GPIOs;
  	
  	void init_input ();

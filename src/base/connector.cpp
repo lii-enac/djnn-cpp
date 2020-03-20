@@ -24,9 +24,7 @@
 
 namespace djnn
 {
-  using namespace std;
-
-  Connector::ConnectorAction::ConnectorAction (Process* parent, const string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+  Connector::ConnectorAction::ConnectorAction (Process* parent, const std::string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
         Action (parent, name), _src (src), _dst (dst), _propagate (propagate) 
   {
   }
@@ -40,8 +38,8 @@ namespace djnn
     }
   }
 
-  Connector::Init::Init(Connector * c, Process* src, const string & ispec, Process* dst, const string & dspec,
-    string& src_ref_spec, string& dst_ref_spec)
+  Connector::Init::Init(Connector * c, Process* src, const std::string & ispec, Process* dst, const std::string & dspec,
+    std::string& src_ref_spec, std::string& dst_ref_spec)
   {
     if (src == 0) {
       error (c,
@@ -64,7 +62,7 @@ namespace djnn
   }
 
   void
-  Connector::check_init(const string& ispec, const string& dspec)
+  Connector::check_init(const std::string& ispec, const std::string& dspec)
   {
     if(!_ref_info_src._ref) {
       if (_src == 0) {
@@ -85,8 +83,8 @@ namespace djnn
 
 
 
-  Connector::Connector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec, bool copy_on_activation,
-    string src_ref_spec, string dst_ref_spec)
+  Connector::Connector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation,
+    std::string src_ref_spec, std::string dst_ref_spec)
   :
     SrcToDstLink (parent, name),
     _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
@@ -190,7 +188,7 @@ namespace djnn
   }
 
   void
-  Connector::serialize (const string& format)
+  Connector::serialize (const std::string& format)
   {
     string buf;
 
@@ -208,7 +206,7 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
   }
 
-  PausedConnector::PausedConnector (Process *parent, const string& name, Process *src, const string& ispec, Process *dst, const string& dspec,
+  PausedConnector::PausedConnector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec,
                                     bool copy_on_activation) :
       Process (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
@@ -232,7 +230,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::init_pausedconnector (Process *src, const string& ispec, Process *dst, const string& dspec)
+  PausedConnector::init_pausedconnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec)
   {
     if (src == 0) {
       error ( this, "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
@@ -297,7 +295,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::serialize (const string& format)
+  PausedConnector::serialize (const std::string& format)
   {
     string buf;
 

@@ -21,11 +21,11 @@
 #include <string>
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class AbstractTextProperty : public AbstractProperty {
   public:
-    AbstractTextProperty (Process* parent, const string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
+    AbstractTextProperty (Process* parent, const std::string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
     virtual int get_prop_type () override { return String; }
 
     // AbstractProperty interface
@@ -33,7 +33,7 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
-    void set_value (const string &v, bool propagate) override;
+    void set_value (const std::string &v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); };
     double get_double_value () override {
       try {
@@ -55,8 +55,8 @@ namespace djnn {
 
   class TextProperty : public AbstractTextProperty {
   public:
-    TextProperty (Process* parent, const string &name, string v) : AbstractTextProperty (parent, name), value(v) { }
-    void serialize (const string& format) override;
+    TextProperty (Process* parent, const std::string &name, string v) : AbstractTextProperty (parent, name), value(v) { }
+    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual string& get_ref_value() override { return value; }
@@ -66,8 +66,8 @@ namespace djnn {
 
   class TextPropertyProxy : public AbstractTextProperty {
   public:
-    TextPropertyProxy (Process* parent, const string &name, string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
-    void serialize (const string& format) override;
+    TextPropertyProxy (Process* parent, const std::string &name, string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
+    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual string& get_ref_value() override { return value; }

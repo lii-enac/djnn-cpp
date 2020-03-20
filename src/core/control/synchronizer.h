@@ -20,7 +20,7 @@
 
 
 namespace djnn {
-  using namespace std;
+  //using namespace std;
 
   class Synchronizer : public Process
   {
@@ -29,7 +29,7 @@ namespace djnn {
     class SynchronizerAction : public NativeExpressionAction
     {
     public:
-      SynchronizerAction (Process* parent, const string &name) : NativeExpressionAction (parent, name) {}
+      SynchronizerAction (Process* parent, const std::string &name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
         if (get_parent ()->somehow_activating ())
@@ -38,9 +38,9 @@ namespace djnn {
       void impl_deactivate () override {}
     };
   public:
-    Synchronizer (Process* parent, const string &name, Process* dst, const string & dspec);
+    Synchronizer (Process* parent, const std::string &name, Process* dst, const std::string & dspec);
     virtual ~Synchronizer ();
-    void add_source (Process* src, const string &spec);
+    void add_source (Process* src, const std::string &spec);
     void impl_activate () override;
     void impl_deactivate () override;
     void add_native_edge (Process *src, Process* dst);
@@ -48,7 +48,7 @@ namespace djnn {
   private:
     void propagate ();
 
-    struct Init { Init(Synchronizer *, Process *parent, const string &name, Process* dst, const string & dspec); };
+    struct Init { Init(Synchronizer *, Process *parent, const std::string &name, Process* dst, const std::string & dspec); };
     friend struct Init;
     Process *_dst;
     Init _init;

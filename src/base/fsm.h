@@ -23,7 +23,7 @@
 #include <list>
 
 namespace djnn {
-  using namespace std;
+
   class FSM;
   class FSMState;
   class FSMTransition;
@@ -31,11 +31,11 @@ namespace djnn {
   class FSMState : public Container
   {
   public:
-    FSMState (Process *parent, const string &name);
+    FSMState (Process *parent, const std::string &name);
     ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
     void add_transition (FSMTransition *t) { FSMTransition* pt = t; _transitions.push_front (pt); };
@@ -50,7 +50,7 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (Process *parent, const string &name, FSMState* src, FSMState* dst, Process* action) :
+      FSMTransitionAction (Process *parent, const std::string &name, FSMState* src, FSMState* dst, Process* action) :
 	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
@@ -62,19 +62,19 @@ namespace djnn {
       Process* _action;
     };
   public:
-    FSMTransition (Process *parent, const string &name, Process* from, Process* to,
-		   Process *trigger, const string &tspec, Process *action = 0, const string &aspec = "");
-    FSMTransition (Process *parent, const string &name, Process* from, Process* to,
+    FSMTransition (Process *parent, const std::string &name, Process* from, Process* to,
+		   Process *trigger, const std::string &tspec, Process *action = 0, const std::string &aspec = "");
+    FSMTransition (Process *parent, const std::string &name, Process* from, Process* to,
        Process *trigger, Process *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     int priority () { return _priority; }
     Process* fsm_action () { return &_fsm_action; }
   protected:
     struct Init { Init (FSMTransition* t, Process* p, 
-                        const string &tspec, const string &aspec); };
+                        const std::string &tspec, const std::string &aspec); };
     friend struct Init;
     
   private:
@@ -90,12 +90,12 @@ namespace djnn {
   class FSM : public Process
   {
   public:
-    FSM (Process *parent, const string &name);
+    FSM (Process *parent, const std::string &name);
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_cpnt_type () const override { return FSM_T; }
-    void update_state (FSMState *s, const string &name) { _cur_state = s; _fsm_state.set_value (name, true); };
-    void set_initial (const string &n) { if (_str_initial.length() == 0) _str_initial = n; };
+    void update_state (FSMState *s, const std::string &name) { _cur_state = s; _fsm_state.set_value (name, true); };
+    void set_initial (const std::string &n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
@@ -105,7 +105,7 @@ namespace djnn {
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
     void set_parent (Process* p) override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     int _priority;
     string _str_initial;

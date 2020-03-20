@@ -22,7 +22,6 @@
 
 namespace djnn
 {
-  using namespace std;
 
   template <typename T> struct my_cos { T operator() (T t1) { return ::cos(t1);} };
   template <> const char name_info<my_cos<double>>::left[];

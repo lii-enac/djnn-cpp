@@ -20,7 +20,6 @@
 
 namespace djnn
 {
-  using namespace std;
 
   template <> const char name_info<std::logical_and<bool>>::left[];
   template <> const char name_info<std::logical_and<bool>>::right[];

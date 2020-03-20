@@ -23,7 +23,6 @@
 
 
 namespace djnn {
-  using namespace std;
 
   class IntProperty;
   class BoolProperty;
@@ -59,14 +58,14 @@ namespace djnn {
       SwitchList* _sw;
     };
   public:
-    SwitchList (Process *parent, const string& name, bool loop=false);
+    SwitchList (Process *parent, const std::string& name, bool loop=false);
     virtual ~SwitchList ();
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
-    Process* find_component (const string &path) override;
+    Process* find_component (const std::string &path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     Process* clone () override;
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
     Process* item () { return _cur_item; }
     void set_item (Process *item) { _cur_item = item; }
     IntProperty* index () { return &_index; }

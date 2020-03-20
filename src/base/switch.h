@@ -21,7 +21,6 @@
 #include "core/tree/text_property.h"
 
 namespace djnn {
-  using namespace std;
 
   class Switch : public Container
   {
@@ -29,16 +28,16 @@ namespace djnn {
     class SwitchAction : public Action
     {
     public:
-      SwitchAction (Switch *parent, const string &name);
+      SwitchAction (Switch *parent, const std::string &name);
       virtual ~SwitchAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
-      void serialize (const string& type) override {};
+      void serialize (const std::string& type) override {};
     private:
       Switch* _sw;
     };
   public:
-    Switch (Process *parent, const string &name, const string &initial);
+    Switch (Process *parent, const std::string &name, const std::string &initial);
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -46,7 +45,7 @@ namespace djnn {
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~Switch ();
-    void serialize (const string& type) override;
+    void serialize (const std::string& type) override;
   private:
     void set_parent (Process* p) override;
     void change_branch ();

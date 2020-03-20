@@ -24,9 +24,6 @@
 namespace djnn
 {
 
-  using namespace std;
-  
-
   class IvyAccess : public Process, public ExternalSource
   {
 
@@ -35,7 +32,7 @@ namespace djnn
      class IvyOutAction : public Action
     {
     public:
-      IvyOutAction (Process* parent, const string &name, TextProperty* out) :
+      IvyOutAction (Process* parent, const std::string &name, TextProperty* out) :
       Action (parent, name), _out (out) { Process::finalize_construction (parent, name); } 
       virtual ~IvyOutAction () {}
       void coupling_activation_hook () override;
@@ -65,7 +62,7 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const string&) override;
+    Process* find_component (const std::string&) override;
     void set_parent (Process* p) override;
 
   private:

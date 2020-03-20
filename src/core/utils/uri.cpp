@@ -31,7 +31,7 @@ namespace djnn
     std::size_t found = uri.find("://");
     if (found == std::string::npos)
       return nullptr;
-    map<std::string, Process*>::iterator it;
+    std::map<std::string, Process*>::iterator it;
     it = uri_manager.find (uri.substr (0, found));
     if (it == uri_manager.end ())
       return nullptr;
