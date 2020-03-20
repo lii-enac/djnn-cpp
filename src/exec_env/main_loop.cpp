@@ -92,7 +92,7 @@ namespace djnn {
       }
     }
 
-    std::atomic<bool> MainLoop::_is_stopping;
+    djnn_atomic<bool>::atomic MainLoop::_is_stopping;
     //bool MainLoop::_is_stopping;
 
     void

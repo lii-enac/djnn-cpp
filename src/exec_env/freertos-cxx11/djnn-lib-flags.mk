@@ -1,7 +1,6 @@
 local_dir := $(src_dir)/exec_env
 
 lib_cppflags += \
-	-DDJNN_USE_FREERTOS=1 \
 	-include $(local_dir)/freertos-cxx11/freertos-cxx11-macros.h \
 	-I$(local_dir)/freertos-cxx11 \
 	-I$(freertos_dir)/include \

@@ -17,10 +17,10 @@
 
 #include <iostream>
 
-using namespace std;
 
 namespace djnn
 {
+  using namespace std;
 
   static int __JSONLevel = 0;
 

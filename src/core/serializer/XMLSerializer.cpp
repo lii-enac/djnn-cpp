@@ -17,11 +17,11 @@
 
 #include <iostream>
 
-using namespace std;
 
 namespace djnn
 {
 
+  using namespace std;
 
   struct djnXMLDumpContext {
     struct djnXMLDumpContext* parent;

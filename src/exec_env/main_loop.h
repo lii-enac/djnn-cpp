@@ -27,6 +27,16 @@
 
 namespace djnn
 {
+    // temporyary hack
+    template<typename T>
+    struct djnn_atomic {
+        #if DJNN_USE_FREERTOS
+        using atomic=T;
+        #else
+        using atomic=std::atomic<T>;
+        #endif
+    };
+
   class MainLoop : public Process, ExternalSource
   {
 
@@ -88,8 +98,9 @@ namespace djnn
     void join_own_thread ();
     void run () override;
 
-    std::atomic<chrono::milliseconds> _duration;
+    //atomic<chrono::milliseconds> _duration;
     //chrono::milliseconds _duration;
+    djnn_atomic<chrono::milliseconds>::atomic _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
     //        djnn application only has one mainloop.
@@ -120,8 +131,9 @@ namespace djnn
     // If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
     std::condition_variable_any cv;
 
-    static std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy
-    //static bool _is_stopping; // for external sources that can't be stopped easily eg Ivy 
+    //std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy
+    //static bool _is_stopping; // for external sources that can't be stopped easily eg Ivy
+    static djnn_atomic<bool>::atomic _is_stopping; // for external sources that can't be stopped easily eg Ivy
   };
 
 }

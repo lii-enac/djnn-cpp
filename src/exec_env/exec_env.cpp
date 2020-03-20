@@ -105,13 +105,6 @@ extern "C" {
   void djnn_clear_exec_env () { djnn::clear_exec_env (); }
 }
 
-// temporyary hack
-#if DJNN_USE_FREERTOS
-#include "core/xml/xml.h"
 
-namespace djnn {
-  void XML::clear_xml_parser () {}
-}
-#endif
 
 

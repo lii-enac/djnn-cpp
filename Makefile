@@ -143,7 +143,7 @@ ifeq ($(os),FreeRTOS)
 lib_suffix =.so
 boost_libs =
 DYNLIB = -shared
-CFLAGS += -fpic -g -MMD -Wall -D_GCC_MULTITHREAD_FREERTOS_ENABLE
+CFLAGS += -fpic -g -MMD -Wall -DDJNN_USE_FREERTOS=1 -D_GCC_MULTITHREAD_FREERTOS_ENABLE
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 LDFLAGS += -L$(build_dir)
 endif
@@ -323,11 +323,11 @@ define lib_makerule
 lib_srcs :=
 lib_srcgens :=
 lib_objs :=
-lib_cppflags :=
 lib_cflags :=
+lib_cppflags :=
 lib_ldflags :=
-lib_djnn_deps := 
 lib_pkg :=
+lib_djnn_deps := 
 
 # possibly override default
 -include $$(src_dir)/$1/djnn-lib.mk

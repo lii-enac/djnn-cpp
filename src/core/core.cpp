@@ -60,3 +60,12 @@ extern "C" {
   void djnn_init_core () { djnn::init_core (); }
   void djnn_clear_core () { djnn::clear_core (); }
 }
+
+// temporyary hack
+#if DJNN_USE_FREERTOS
+#include "core/xml/xml.h"
+
+namespace djnn {
+  void XML::clear_xml_parser () {}
+}
+#endif
