@@ -18,7 +18,6 @@ lib_suffix =.dylib
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber-mt -lboost_context-mt
 endif
 
-# for windows with mingwXX
 ifeq ($(os),MinGW)
 lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
