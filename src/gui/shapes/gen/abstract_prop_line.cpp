@@ -52,22 +52,22 @@ namespace djnn
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (symtable ().size () > 2) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x1");
-			if (it != symtable ().end ())
+      it = find_child_iterator ("x1");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("y1");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("y1");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("x2");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("x2");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("y2");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("y2");
+			if (it != children_end ())
 				delete it->second;
     }
   }

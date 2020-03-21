@@ -48,11 +48,11 @@ namespace djnn
     delete _climit;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 0) {
-      std::map<std::string, Process*>::iterator it;
+    if (get_num_children () > 0) {
+      symtable_t::iterator it;
 
-      it = symtable ().find ("limit");
-			if (it != symtable ().end ())
+      it = find_child_iterator ("limit");
+			if (it != children_end ())
 				delete it->second;
     }
   }

@@ -55,14 +55,14 @@ namespace djnn
     delete _cy;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
     }
   }
@@ -209,22 +209,22 @@ namespace djnn
     delete _cy;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x1");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x1");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y1");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y1");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
     }
   }
@@ -332,30 +332,30 @@ namespace djnn
     delete _cy;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x1");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x1");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y1");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y1");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("x2");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x2");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y2");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y2");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
     }
   }
@@ -478,34 +478,34 @@ namespace djnn
     delete _cy;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("rotx");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("rotx");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("fl");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("fl");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("swfl");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("swfl");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("rx");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("rx");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("ry");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("ry");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
     }
   }

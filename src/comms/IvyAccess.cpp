@@ -387,8 +387,8 @@ IvyAccess::find_child (const std::string& key)
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
 
-    map<string, Process*>::iterator it = symtable ().find (key.substr (3));
-    if (it != symtable ().end ()) {
+    map<string, Process*>::iterator it = find_child_iterator (key.substr (3));
+    if (it != children_end ()) {
         /* key exist  - return */
       return it->second;
     }

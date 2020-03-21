@@ -140,6 +140,10 @@ namespace djnn {
     symtable_t& symtable () { return _symtable; }
     const symtable_t& symtable () const { return _symtable; }
 
+    size_t get_num_children () const { return _symtable.size(); }
+    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
+    symtable_t::iterator children_end () { return _symtable.end (); }
+
   public:
     static std::string default_name;
     const std::string& get_name () const;

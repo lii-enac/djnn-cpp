@@ -183,8 +183,8 @@ namespace djnn
   void
   Container::remove_child (const std::string& name)
   {
-    std::map<std::string, Process*>::iterator it = symtable ().find (name);
-    if (it != symtable ().end ()) {
+    symtable_t::iterator it = find_child_iterator (name);
+    if (it != children_end ()) {
       Process* c = it->second;
       Container::remove_child(c);
     } else

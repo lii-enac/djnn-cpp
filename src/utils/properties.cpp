@@ -56,7 +56,7 @@ namespace djnn
     delete _c_input;
     delete _input;
     delete _action;
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     std::map<std::string, Process*>& map = symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
       delete it->second;

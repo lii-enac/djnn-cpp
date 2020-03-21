@@ -69,7 +69,7 @@ namespace djnn
   Set::remove_child (Process* c)
   {
     bool found = false;
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     string symbol;
     for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second == c) {
@@ -89,7 +89,7 @@ namespace djnn
   Set::remove_child (const std::string& name)
   {
     Process *found = nullptr;
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second->get_name ().compare (name) == 0) {
         remove_symbol (it->first);
@@ -106,7 +106,7 @@ namespace djnn
   void
   Set::impl_activate ()
   {
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->activate ();
     }
@@ -115,7 +115,7 @@ namespace djnn
   void
   Set::impl_deactivate ()
   {
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->deactivate ();
     }
@@ -150,7 +150,7 @@ namespace djnn
     AbstractSerializer::serializer->start ("core:set");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     for (it = symtable ().begin (); it != symtable ().end (); ++it)
       it->second->serialize (type);
 
@@ -171,7 +171,7 @@ namespace djnn
   void
   SetIterator::impl_activate ()
   {
-    std::map<std::string, Process*>::iterator it;
+    symtable_t::iterator it;
     std::map<std::string, Process*>& map = _set->symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);

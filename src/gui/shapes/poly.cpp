@@ -55,14 +55,14 @@ namespace djnn {
     delete _cy;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
     }
   }

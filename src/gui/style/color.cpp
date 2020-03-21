@@ -337,24 +337,24 @@ namespace djnn
 		  delete _c_bv;
 		}
 		delete _c_vrgb;
-    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 0) {
-      std::map<std::string, Process*>::iterator it;
+  
+    if (get_num_children () > 0) {
+      symtable_t::iterator it;
 
-      it = symtable ().find ("r");
-			if (it != symtable ().end ())
+      it = find_child_iterator ("r");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("g");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("g");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("b");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("b");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("value");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("value");
+			if (it != children_end ())
 			  delete it->second;
     }
   }

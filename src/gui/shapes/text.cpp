@@ -125,34 +125,34 @@ namespace djnn
     delete _cencoding;
 
     if (symtable ().empty () == false) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
-      it = symtable ().find ("x");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("x");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("y");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("y");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("dx");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("dx");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("dy");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("dy");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("dxU");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("dxU");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("dyU");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("dyU");
+      if (it != children_end ())
         delete it->second;
 
-      it = symtable ().find ("encoding");
-      if (it != symtable ().end ())
+      it = find_child_iterator ("encoding");
+      if (it != children_end ())
         delete it->second;
     }
 

@@ -63,71 +63,71 @@ namespace djnn
 		delete _cm44;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 0) {
-      std::map<std::string, Process*>::iterator it;
+    if (get_num_children () > 0) {
+      symtable_t::iterator it;
 
-      it = symtable ().find ("m11");
-			if (it != symtable ().end ())
+      it = find_child_iterator ("m11");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m12");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m12");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m13");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m13");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m14");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m14");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m21");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m21");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m22");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m22");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m23");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m23");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m24");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m24");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m31");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m31");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m32");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m32");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m33");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m33");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m34");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m34");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m41");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m41");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m42");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m42");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m43");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m43");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("m44");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("m44");
+			if (it != children_end ())
 				delete it->second;
     }
   }

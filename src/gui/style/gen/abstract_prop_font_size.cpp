@@ -49,15 +49,15 @@ namespace djnn
 		delete _csize;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 0) {
-      std::map<std::string, Process*>::iterator it;
+    if (get_num_children () > 0) {
+      symtable_t::iterator it;
 
-      it = symtable ().find ("unit");
-			if (it != symtable ().end ())
+      it = find_child_iterator ("unit");
+			if (it != children_end ())
 				delete it->second;
 
-			it = symtable ().find ("size");
-			if (it != symtable ().end ())
+			it = find_child_iterator ("size");
+			if (it != children_end ())
 				delete it->second;
     }
   }

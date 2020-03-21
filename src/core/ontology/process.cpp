@@ -327,15 +327,15 @@ namespace djnn
         else
           return nullptr;
       }
-      map<string, Process*>::iterator it = symtable ().find (newKey);
-      if (it != symtable ().end ()) {
+      map<string, Process*>::iterator it = find_child_iterator (newKey);
+      if (it != children_end ()) {
         return (it->second)->find_child (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
       return get_parent ();
-    map<string, Process*>::iterator it = symtable ().find (key);
-    if (it != symtable ().end ()) {
+    map<string, Process*>::iterator it = find_child_iterator (key);
+    if (it != children_end ()) {
       return it->second;
     }
     return 0;
@@ -374,8 +374,8 @@ namespace djnn
   void
   Process::remove_symbol (const std::string& name)
   {
-    symtable_t::iterator it = symtable ().find (name);
-    if (it != symtable ().end ())
+    symtable_t::iterator it = find_child_iterator (name);
+    if (it != children_end ())
       symtable ().erase (it);
     else
       warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");

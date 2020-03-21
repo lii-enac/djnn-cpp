@@ -84,7 +84,7 @@ namespace djnn
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (symtable ().size () > %(ORIGIN_IN_SYMTABLE)s) {
-      std::map<std::string, Process*>::iterator it;
+      symtable_t::iterator it;
 
       %(DELETE_DYN_PROPS)s
     }
@@ -305,7 +305,7 @@ def just_do_it(dc, finalize_construction=True):
     # print (COUPLINGS_INIT)
     DELETE_COUPLINGS = (';'+join_str).join(['delete _c' + p.name for p in dc.props])
     # print (DELETE_COUPLINGS)
-    DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = symtable ().find ("' + p.name + '");\n\t\t\tif (it != symtable ().end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
+    DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = find_child_iterator ("' + p.name + '");\n\t\t\tif (it != children_end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
     #print (DELETE_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)

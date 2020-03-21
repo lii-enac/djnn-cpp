@@ -117,8 +117,8 @@ namespace djnn
   Switch::change_branch ()
   {
     string key = _branch_name.get_value ();
-    map<string, Process*>::iterator it = symtable ().find (key);
-    if (it != symtable ().end ()) {
+    map<string, Process*>::iterator it = find_child_iterator (key);
+    if (it != children_end ()) {
       if (_cur_branch == it->second) {
         if (_cur_branch->get_activation_state () == DEACTIVATED)
           _cur_branch->activate ();
