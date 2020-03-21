@@ -23,9 +23,8 @@ namespace djnn {
   public:
     Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, Process* data, bool immediate_propagation = false);
-    //Coupling () : _src(nullptr) {} // needed for pointer-less zombie initialization
-    Coupling ();
-    virtual ~Coupling();
+    Coupling (); // needed for pointer-less zombie initialization
+    ~Coupling();
     void set_data (Process* data) { _data = data; }
     
     void propagate_activation ();
@@ -43,6 +42,7 @@ namespace djnn {
     void disable ()             { set_is_enabled (false); };
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
+    bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }
 
     void about_to_delete_src () { _src = nullptr; }
 
