@@ -33,7 +33,7 @@ namespace djnn
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << msg << std::endl << std::endl;
     
     if (p) 
-      std::cerr << p->debug_info () << std::endl;
+      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
     
     exit (0);
   }
@@ -44,7 +44,7 @@ namespace djnn
     std::cerr << std::endl << std::endl << "djnn - WARNING: " << msg << std::endl << std::endl;
     
     if (p) 
-      std::cerr << p->debug_info () << std::endl;
+      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
     
   }
 }

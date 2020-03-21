@@ -132,7 +132,7 @@ namespace djnn {
     virtual Process* find_component (int index) { return nullptr; }
     static  Process* find_component (Process* p, const std::string &path);
     virtual const std::string& find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
-    void    add_symbol (const std::string &name, Process* c);
+    void    add_symbol (const std::string &name, Process* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
 
     typedef std::map<std::string, Process*> symtable_t;
@@ -144,10 +144,6 @@ namespace djnn {
     // data
     void     set_data (Process* data);
     Process* get_data ();
-
-    // debug
-    virtual  void dump (int level=0);
-    const std::string& debug_info () { return _dbg_info; }
 
   protected:
     void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
@@ -161,10 +157,15 @@ namespace djnn {
     virtual void post_deactivate ();
 
   private:
-    
-
-  private:
     static long int _nb_anonymous;
+
+  public:
+    struct DebugInfo {
+      std::string filepath;
+      int lineno;
+    };
+    virtual  void dump (int level=0);
+    const DebugInfo& debug_info () { return _dbg_info; }
 
 // >>instance fields start here
   private:
@@ -179,9 +180,9 @@ namespace djnn {
     //string _name;
 
 #ifdef DJNN_NO_DEBUG
-    static string _dbg_info;
+    static DebugInfo _dbg_info;
 #else
-    std::string _dbg_info;
+    DebugInfo _dbg_info;
 #endif
 
 // <<instance fields end here
