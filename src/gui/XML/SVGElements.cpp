@@ -833,7 +833,7 @@ StartUse(const char** attrs, Process* current) {
   map<string, Process*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
     Process* clone = it->second->clone();
-    if (clone->get_cpnt_type() == DEFS_T) {
+    if (clone->get_process_type() == DEFS_T) {
       for (auto c : ((Defs*)clone)->children()) {
         holder->add_child (c, c->get_name());
       }

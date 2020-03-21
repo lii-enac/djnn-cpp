@@ -38,7 +38,7 @@ namespace djnn {
     };
   public:
     Switch (Process *parent, const std::string& name, const std::string& initial);
-    virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
+    virtual process_type_e get_process_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;

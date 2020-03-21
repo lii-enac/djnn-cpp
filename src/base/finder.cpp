@@ -38,7 +38,7 @@ namespace djnn
     for (auto c : f->_container->children ()) {
       res = c->find_child (path);
       if (res) {
-        if (res->get_cpnt_type () != PROPERTY_T) {
+        if (res->get_process_type () != PROPERTY_T) {
           f->_result.set_value (c, true);
           f->_found.activate ();
           return;

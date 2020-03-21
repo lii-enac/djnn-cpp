@@ -43,7 +43,7 @@ namespace djnn
       if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
-    virtual process_type_e get_cpnt_type () const override { return GOBJ_T; }
+    virtual process_type_e get_process_type () const override { return GOBJ_T; }
     Window*& frame () { return _frame; } 
     //std::weak_ptr<Window>
     //auto frame () { return &*AbstractGObj::_frame.lock (); }

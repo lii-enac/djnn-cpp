@@ -75,7 +75,7 @@ namespace djnn {
   public:
     Process (const std::string& name, bool model = false);
     virtual ~Process ();
-    virtual process_type_e get_cpnt_type () const { return UNDEFINED_T; }
+    virtual process_type_e get_process_type () const { return UNDEFINED_T; }
 
     // main public API
     void activate ();
@@ -128,10 +128,10 @@ namespace djnn {
     virtual void   remove_child (const std::string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
     friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual Process* find_child (const std::string&); // FIXME: should be find_child
+    virtual Process* find_child (const std::string&);
     virtual Process* find_child (int index) { return nullptr; }
     static  Process* find_child (Process* p, const std::string& path);
-    virtual const std::string& find_child_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
+    virtual const std::string& find_child_name (const Process* child) const; // WARNING : low efficiency function cause by linear search. use with care !
     
     typedef std::map<std::string, Process*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }

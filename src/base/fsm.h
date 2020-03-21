@@ -93,7 +93,7 @@ namespace djnn {
     FSM (Process *parent, const std::string& name);
     void impl_activate () override;
     void impl_deactivate () override;
-    virtual process_type_e get_cpnt_type () const override { return FSM_T; }
+    virtual process_type_e get_process_type () const override { return FSM_T; }
     void update_state (FSMState *s, const std::string& name) { _cur_state = s; _fsm_state.set_value (name, true); };
     void set_initial (const std::string& n) { if (_str_initial.length() == 0) _str_initial = n; };
     void draw () override;

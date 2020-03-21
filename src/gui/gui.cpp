@@ -180,13 +180,13 @@ namespace djnn
   GUIStructureObserver::add_child_to_container (Process *cont, Process *c, int index)
   {
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
-    if (c->get_cpnt_type () == GOBJ_T) {
+    if (c->get_process_type () == GOBJ_T) {
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child (c, index);
-    } else if (c->get_cpnt_type () == WINDOW_T) {
+    } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_cpnt_type () == COMPONENT_T || c->get_cpnt_type () == FSM_T || c->get_cpnt_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child (c, index);
@@ -199,14 +199,14 @@ namespace djnn
   {
     //AbstractGObj *obj = dynamic_cast<AbstractGObj*> (c);
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
-    if (c->get_cpnt_type () == GOBJ_T) {
+    if (c->get_process_type () == GOBJ_T) {
       if (it_cont != _structure_map.end ()) {
         it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
       }
-    } else if (c->get_cpnt_type () == WINDOW_T) {
+    } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_cpnt_type () == COMPONENT_T || c->get_cpnt_type () == FSM_T || c->get_cpnt_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
@@ -218,14 +218,14 @@ namespace djnn
   GUIStructureObserver::move_child_to (Process *cont, Process *c, int neighboor_index, int spec, int new_index)
   {
     std::map<Process*, GUIStructureHolder*>::iterator it_cont = _structure_map.find (cont);
-    if (c->get_cpnt_type () == GOBJ_T) {
+    if (c->get_process_type () == GOBJ_T) {
       if (it_cont != _structure_map.end ()) {
         it_cont->second->move_child_to (c, neighboor_index, spec, new_index);
       }
-    } else if (c->get_cpnt_type () == WINDOW_T) {
+    } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_cpnt_type () == COMPONENT_T || c->get_cpnt_type () == FSM_T || c->get_cpnt_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->move_child_to (c, neighboor_index, spec, new_index);

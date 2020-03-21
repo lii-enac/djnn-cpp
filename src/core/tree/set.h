@@ -27,7 +27,7 @@ namespace djnn {
   public:
     SetIterator (Process *parent, const std::string& name, Process *set, Process *action, bool model = true);
     virtual ~SetIterator () {}
-    virtual process_type_e get_cpnt_type () const override { return COMPONENT_T; }
+    virtual process_type_e get_process_type () const override { return COMPONENT_T; }
     void impl_activate () override;
     void impl_deactivate () override {};
     void post_activate () override;

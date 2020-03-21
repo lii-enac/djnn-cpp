@@ -340,7 +340,7 @@ namespace djnn
     }
 
     // add vertex if it's not a property
-    if ( v->get_process ()->get_cpnt_type() != PROPERTY_T)
+    if ( v->get_process ()->get_process_type() != PROPERTY_T)
       _sorted_vertices.push_back (v);
 
     v->set_mark (BROWSING);

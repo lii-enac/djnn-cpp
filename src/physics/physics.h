@@ -59,7 +59,7 @@ namespace djnn
     void get_gravity (double &x, double &y);
     void get_dt (double &dt);
     Process* find_child (const std::string& n) override;
-    virtual process_type_e get_cpnt_type () const override { return WORLD_T; }
+    virtual process_type_e get_process_type () const override { return WORLD_T; }
     void add_phy_object (PhyObj* p) { _phy_objs.push_back (p); }
     void remove_phy_object (PhyObj* p) { _phy_objs.erase (std::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
     phy_obj_list& get_phy_objects  () { return _phy_objs; }
