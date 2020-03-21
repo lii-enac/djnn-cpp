@@ -11,8 +11,7 @@
 #include "base/connector.h"
 #include "base/fsm.h"
 
-#include "gui/abstract_gshape.h"
-#include "gui/shapes/gen/rectangle.h"
+#include "gui/shapes/shapes.h"
 
 #include <iostream>
 #include <vector>
