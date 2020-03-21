@@ -16,7 +16,10 @@ namespace chrono = std::chrono;
 
 #if DJNN_USE_BOOST_CHRONO
 namespace chrono = boost::chrono;
-
 #endif
+
+// import literal such as "1s" etc
+using namespace std::chrono_literals;
+
 
 }
