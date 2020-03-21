@@ -58,9 +58,9 @@ namespace djnn
   }
  
   Process*
-  AbstractPathImage::find_component (const std::string& name)
+  AbstractPathImage::find_child (const std::string& name)
   {
-    Process* res = AbstractImage::find_component(name);
+    Process* res = AbstractImage::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

@@ -73,9 +73,9 @@ namespace djnn
   }
  
   Process*
-  AbstractPropLinearGradient::find_component (const std::string& name)
+  AbstractPropLinearGradient::find_child (const std::string& name)
   {
-    Process* res = AbstractGradient::find_component(name);
+    Process* res = AbstractGradient::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

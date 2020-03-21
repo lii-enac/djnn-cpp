@@ -106,7 +106,7 @@ namespace djnn
   void
   AbstractBoolProperty::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << " [ " << get_value() << " ]";
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
   }
 
   void

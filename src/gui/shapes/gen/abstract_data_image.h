@@ -29,8 +29,8 @@ namespace djnn
     
     
     void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
-    virtual Process* find_component (const std::string&) override;
-		AbstractTextProperty* data () { return (AbstractTextProperty*) find_component ("data"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child ("data"); }
 
   protected:
     struct raw_props_t { std::string data; };

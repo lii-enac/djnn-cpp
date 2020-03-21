@@ -36,7 +36,7 @@ namespace djnn
       return;
     Process *res;
     for (auto c : f->_container->children ()) {
-      res = c->find_component (path);
+      res = c->find_child (path);
       if (res) {
         if (res->get_cpnt_type () != PROPERTY_T) {
           f->_result.set_value (c, true);

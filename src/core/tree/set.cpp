@@ -122,7 +122,7 @@ namespace djnn
   }
 
   Process*
-  Set::find_component (const std::string& path)
+  Set::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -131,7 +131,7 @@ namespace djnn
     else if (path.compare ("size") == 0)
       return &_size;
     else {
-      return Process::find_component (path);
+      return Process::find_child (path);
     }
     return nullptr;
   }
@@ -139,7 +139,7 @@ namespace djnn
   void
   Set::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
   }
 
   void

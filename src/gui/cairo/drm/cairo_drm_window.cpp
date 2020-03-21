@@ -66,7 +66,7 @@ namespace djnn
     WinImpl::set_picking_view (_picking_view);
     _my_cairo_surface = new MyCairoSurface (_window);
     is_activated = true;
-    _c_display = new Coupling (_window->find_component ("display"), ACTIVATION, &_change_dpy_action, ACTIVATION, true);
+    _c_display = new Coupling (_window->find_child ("display"), ACTIVATION, &_change_dpy_action, ACTIVATION, true);
     if (_window->get_display () != nullptr && _window->get_display () != _conn)
       update_dpy_connection();
     else {
@@ -118,7 +118,7 @@ namespace djnn
     #if _PERF_TEST
       t1();
     #endif
-    if (!getBool(_conn->find_component ("connected")))
+    if (!getBool(_conn->find_child ("connected")))
       return;
     if (is_waiting_vblank()) {
       _c_vblank->enable ();

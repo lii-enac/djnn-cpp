@@ -29,9 +29,9 @@ namespace djnn
   _tp (this, "printer"),
   _c (this, "logprinter_connector", &_tc, "output", &_tp, "input", false)
   {
-    alias (this, "label", _tc.find_component("head"));
-    alias (this, "input", _tc.find_component("tail"));
-    ((TextProperty*)this->find_component ("label"))->set_value (label, false);
+    alias (this, "label", _tc.find_child("head"));
+    alias (this, "input", _tc.find_child("tail"));
+    ((TextProperty*)this->find_child ("label"))->set_value (label, false);
   }
 #else
 
@@ -41,9 +41,9 @@ namespace djnn
     _tc = new TextCatenator (this, "catenator");
     _tp = new TextPrinter (this, "printer");
     _c = new Connector (this, "logprinter_connector", _tc, "output", _tp, "input", false);
-    alias (this, "label", _tc->find_component("head"));
-    alias (this, "input", _tc->find_component("tail"));
-    ((TextProperty*)this->find_component ("label"))->set_value (label, false);
+    alias (this, "label", _tc->find_child("head"));
+    alias (this, "input", _tc->find_child("tail"));
+    ((TextProperty*)this->find_child ("label"))->set_value (label, false);
   }
 #endif
 
@@ -54,7 +54,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:logprinter");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("label", ((TextProperty*)this->find_component ("label"))->get_value ());
+    AbstractSerializer::serializer->text_attribute ("label", ((TextProperty*)this->find_child ("label"))->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

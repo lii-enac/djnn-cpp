@@ -68,9 +68,9 @@ namespace djnn {
   }
 
   Process*
-  PolyPoint::find_component (const std::string& name)
+  PolyPoint::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     Coupling ** coupling;

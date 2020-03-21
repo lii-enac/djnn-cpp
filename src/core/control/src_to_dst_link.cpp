@@ -25,7 +25,7 @@ namespace djnn
       ((SrcToDstLink*) get_parent ())->update_graph ();
       return;
     }
-    Process *res = v->find_component (_spec);
+    Process *res = v->find_child (_spec);
     if (!res) {
       warning (this, "Source or destination not found dynamic link structure");
     }

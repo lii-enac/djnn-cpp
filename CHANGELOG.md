@@ -95,7 +95,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed a bug in gradient management
     - Fixed gradient a now aware of the current opacity
     - Fixed delete on fsm : reverse delete of _transition and _states
-    - Fixed the use of find_component ('//') --> returning the root tree
+    - Fixed the use of find_child ('//') --> returning the root tree
     - Fixed bug on native_expression_action (delete / clean-up graph)
     - Fixed Clock with negative duration
     - Fixed thread on exit and thread race
@@ -125,7 +125,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW implement schedule_delete processes
     - NEW core, base, comms, animation component use plain objects for subchildren.
     - NEW Macro for constant keys (QT >= 5.12)
-    - NEW find_component (index) : simplify list use
+    - NEW find_child (index) : simplify list use
     - NEW support for FreeRTOS (just start) : add static lib
 
 ### Added
@@ -296,10 +296,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.3.0] - 2019-03-15
 ### NEW
     - NEW component - BASE - Finder - raise "found"/"not found" if the property of a component (path) is equal to "something"
-    - NEW machanism for find_component: '//' to start research from ROOT. 
-        eg: find_component ("//foo")  from ROOT give me 'foo' component.
-    - NEW machanism for find_component: '*' research recursively to find the first corresponding element. 
-        eg: find_component ("foo/*/bar") from 'foo' component give me the first 'bar' component you found.
+    - NEW machanism for find_child: '//' to start research from ROOT. 
+        eg: find_child ("//foo")  from ROOT give me 'foo' component.
+    - NEW machanism for find_child: '*' research recursively to find the first corresponding element. 
+        eg: find_child ("foo/*/bar") from 'foo' component give me the first 'bar' component you found.
     - NEW experimental backend: SDL/Cairo
         eg: in config.mk change line : "graphics := QT" -> "graphics := CAIRO"
 

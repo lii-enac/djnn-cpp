@@ -387,13 +387,13 @@ namespace djnn
   void
   AbstractGradient::update ()
   {
-    if ( stops () != (List*) find_component ("stops")) {
+    if ( stops () != (List*) find_child ("stops")) {
       delete _stops;
-      _stops = (List*) find_component ("stops");
+      _stops = (List*) find_child ("stops");
     }
-    if (_transforms != (List*) find_component ("transforms")) {
+    if (_transforms != (List*) find_child ("transforms")) {
       delete _transforms;
-      _transforms = (List*) find_component ("transforms");
+      _transforms = (List*) find_child ("transforms");
      }
   }
 

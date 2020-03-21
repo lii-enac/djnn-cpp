@@ -29,23 +29,23 @@ namespace djnn
     
     
     void get_properties_values (double& m11, double& m12, double& m13, double& m14, double& m21, double& m22, double& m23, double& m24, double& m31, double& m32, double& m33, double& m34, double& m41, double& m42, double& m43, double& m44);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* m11 () { return (AbstractDoubleProperty*) find_component ("m11"); }
-		AbstractDoubleProperty* m12 () { return (AbstractDoubleProperty*) find_component ("m12"); }
-		AbstractDoubleProperty* m13 () { return (AbstractDoubleProperty*) find_component ("m13"); }
-		AbstractDoubleProperty* m14 () { return (AbstractDoubleProperty*) find_component ("m14"); }
-		AbstractDoubleProperty* m21 () { return (AbstractDoubleProperty*) find_component ("m21"); }
-		AbstractDoubleProperty* m22 () { return (AbstractDoubleProperty*) find_component ("m22"); }
-		AbstractDoubleProperty* m23 () { return (AbstractDoubleProperty*) find_component ("m23"); }
-		AbstractDoubleProperty* m24 () { return (AbstractDoubleProperty*) find_component ("m24"); }
-		AbstractDoubleProperty* m31 () { return (AbstractDoubleProperty*) find_component ("m31"); }
-		AbstractDoubleProperty* m32 () { return (AbstractDoubleProperty*) find_component ("m32"); }
-		AbstractDoubleProperty* m33 () { return (AbstractDoubleProperty*) find_component ("m33"); }
-		AbstractDoubleProperty* m34 () { return (AbstractDoubleProperty*) find_component ("m34"); }
-		AbstractDoubleProperty* m41 () { return (AbstractDoubleProperty*) find_component ("m41"); }
-		AbstractDoubleProperty* m42 () { return (AbstractDoubleProperty*) find_component ("m42"); }
-		AbstractDoubleProperty* m43 () { return (AbstractDoubleProperty*) find_component ("m43"); }
-		AbstractDoubleProperty* m44 () { return (AbstractDoubleProperty*) find_component ("m44"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* m11 () { return (AbstractDoubleProperty*) find_child ("m11"); }
+		AbstractDoubleProperty* m12 () { return (AbstractDoubleProperty*) find_child ("m12"); }
+		AbstractDoubleProperty* m13 () { return (AbstractDoubleProperty*) find_child ("m13"); }
+		AbstractDoubleProperty* m14 () { return (AbstractDoubleProperty*) find_child ("m14"); }
+		AbstractDoubleProperty* m21 () { return (AbstractDoubleProperty*) find_child ("m21"); }
+		AbstractDoubleProperty* m22 () { return (AbstractDoubleProperty*) find_child ("m22"); }
+		AbstractDoubleProperty* m23 () { return (AbstractDoubleProperty*) find_child ("m23"); }
+		AbstractDoubleProperty* m24 () { return (AbstractDoubleProperty*) find_child ("m24"); }
+		AbstractDoubleProperty* m31 () { return (AbstractDoubleProperty*) find_child ("m31"); }
+		AbstractDoubleProperty* m32 () { return (AbstractDoubleProperty*) find_child ("m32"); }
+		AbstractDoubleProperty* m33 () { return (AbstractDoubleProperty*) find_child ("m33"); }
+		AbstractDoubleProperty* m34 () { return (AbstractDoubleProperty*) find_child ("m34"); }
+		AbstractDoubleProperty* m41 () { return (AbstractDoubleProperty*) find_child ("m41"); }
+		AbstractDoubleProperty* m42 () { return (AbstractDoubleProperty*) find_child ("m42"); }
+		AbstractDoubleProperty* m43 () { return (AbstractDoubleProperty*) find_child ("m43"); }
+		AbstractDoubleProperty* m44 () { return (AbstractDoubleProperty*) find_child ("m44"); }
 
   protected:
     struct raw_props_t { double m11; double m12; double m13; double m14; double m21; double m22; double m23; double m24; double m31; double m32; double m33; double m34; double m41; double m42; double m43; double m44; };

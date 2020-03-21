@@ -29,8 +29,8 @@ namespace djnn
     
     
     void get_properties_values (int& style);
-    virtual Process* find_component (const std::string&) override;
-		AbstractIntProperty* style () { return (AbstractIntProperty*) find_component ("style"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractIntProperty* style () { return (AbstractIntProperty*) find_child ("style"); }
 
   protected:
     struct raw_props_t { int style; };

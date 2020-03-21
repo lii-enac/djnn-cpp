@@ -29,11 +29,11 @@ namespace djnn
     
     
     void get_properties_values (double& sx, double& sy, double& cx, double& cy);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_component ("sx"); }
-		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_component ("sy"); }
-		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component ("cx"); }
-		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component ("cy"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child ("sx"); }
+		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child ("sy"); }
+		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child ("cx"); }
+		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child ("cy"); }
 
   protected:
     struct raw_props_t { double sx; double sy; double cx; double cy; };

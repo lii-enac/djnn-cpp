@@ -29,8 +29,8 @@ namespace djnn
     
     
     void get_properties_values (double& a);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component ("a"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child ("a"); }
 
   protected:
     struct raw_props_t { double a; };

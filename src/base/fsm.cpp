@@ -126,8 +126,8 @@ namespace djnn
   : Process (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger( trigger ? dynamic_cast<Process*>(trigger->find_component (tspec)) : nullptr),
-  _action( action ? dynamic_cast<Process*>(action->find_component (aspec)) : nullptr),
+  _trigger( trigger ? dynamic_cast<Process*>(trigger->find_child (tspec)) : nullptr),
+  _action( action ? dynamic_cast<Process*>(action->find_child (aspec)) : nullptr),
   _init(this, parent, tspec, aspec),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
@@ -265,7 +265,7 @@ namespace djnn
     _initial.set_value (_str_initial, true);
 
     if (_str_initial.length () != 0) {
-      FSMState* init_state = dynamic_cast<FSMState*> (find_component (_str_initial));
+      FSMState* init_state = dynamic_cast<FSMState*> (find_child (_str_initial));
       if (init_state)
         init_state->activate ();
     }

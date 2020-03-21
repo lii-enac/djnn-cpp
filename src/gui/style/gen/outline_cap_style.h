@@ -29,8 +29,8 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (int& cap);
-    virtual Process* find_component (const std::string&) override;
-		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_component ("cap"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child ("cap"); }
 
   protected:
     struct raw_props_t { int cap; };

@@ -62,7 +62,7 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string&) override;
+    Process* find_child (const std::string&) override;
     void set_parent (Process* p) override;
 
   private:

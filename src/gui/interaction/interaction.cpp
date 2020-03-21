@@ -45,14 +45,14 @@ namespace djnn
       error (this, "Wrong type of Process for matrix provided to ScaleRotateTranslate constructor");
       return;
     }
-    _touches = shape->find_component ("touches");
+    _touches = shape->find_child ("touches");
     if (!_touches) {
       error (this, "Wrong interface for Shape provided to ScaleRotateTranslate constructor");
       return;
     }
 
-    _added = _touches->find_component ("$added");
-    _removed = _touches->find_component ("$removed");
+    _added = _touches->find_child ("$added");
+    _removed = _touches->find_child ("$removed");
     _add_touch_action = new AddTouchAction (this, "add_touch_action");
     _remove_touch_action = new RemoveTouchAction (this, "remove_touch_action");
     _t_move1 = new TouchMoveAction (this, "touch_move1_action");

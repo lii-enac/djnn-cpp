@@ -63,9 +63,9 @@ namespace djnn
   }
  
   Process*
-  AbstractPropFontSize::find_component (const std::string& name)
+  AbstractPropFontSize::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_component(name);
+    Process* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

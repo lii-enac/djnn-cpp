@@ -29,13 +29,13 @@ namespace djnn
     
     
     void get_properties_values (double& x, double& y, double& width, double& height, double& rx, double& ry);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component ("x"); }
-		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component ("y"); }
-		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
-		AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_component ("height"); }
-		AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_component ("rx"); }
-		AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_component ("ry"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child ("x"); }
+		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child ("y"); }
+		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }
+		AbstractDoubleProperty* height () { return (AbstractDoubleProperty*) find_child ("height"); }
+		AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_child ("rx"); }
+		AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_child ("ry"); }
 
   protected:
     struct raw_props_t { double x; double y; double width; double height; double rx; double ry; };

@@ -29,8 +29,8 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (int& anchor);
-    virtual Process* find_component (const std::string&) override;
-		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_component ("anchor"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_child ("anchor"); }
 
   protected:
     struct raw_props_t { int anchor; };

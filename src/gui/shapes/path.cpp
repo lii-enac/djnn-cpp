@@ -68,9 +68,9 @@ namespace djnn
   }
 
   Process*
-  PathPoint::find_component (const std::string& name)
+  PathPoint::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     Coupling ** coupling;
@@ -230,9 +230,9 @@ namespace djnn
   }
 
   Process*
-  PathQuadratic::find_component (const std::string& name)
+  PathQuadratic::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     Coupling ** coupling;
@@ -361,9 +361,9 @@ namespace djnn
   }
 
   Process*
-  PathCubic::find_component (const std::string& name)
+  PathCubic::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     Coupling ** coupling;
@@ -511,9 +511,9 @@ namespace djnn
   }
 
   Process*
-  PathArc::find_component (const std::string& name)
+  PathArc::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_component(name);
+    Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     Coupling ** coupling;

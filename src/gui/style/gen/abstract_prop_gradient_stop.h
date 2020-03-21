@@ -29,12 +29,12 @@ namespace djnn
     
     
     void get_properties_values (double& r, double& g, double& b, double& a, double& offset);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_component ("r"); }
-		AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_component ("g"); }
-		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_component ("b"); }
-		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component ("a"); }
-		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component ("offset"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_child ("r"); }
+		AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_child ("g"); }
+		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_child ("b"); }
+		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child ("a"); }
+		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child ("offset"); }
 
   protected:
     struct raw_props_t { double r; double g; double b; double a; double offset; };

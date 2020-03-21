@@ -29,8 +29,8 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (int& limit);
-    virtual Process* find_component (const std::string&) override;
-		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_component ("limit"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child ("limit"); }
 
   protected:
     struct raw_props_t { int limit; };

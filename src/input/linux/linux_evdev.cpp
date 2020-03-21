@@ -68,15 +68,15 @@ namespace djnn {
     _iofd = new IOFD (_fd);
     _iofd->activate ();
     _action = new EvdevAction (this);
-    _readable_cpl = new Coupling (_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
-    Graph::instance().add_edge (_iofd->find_component ("readable"), _action);
+    _readable_cpl = new Coupling (_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);
+    Graph::instance().add_edge (_iofd->find_child ("readable"), _action);
   }
 
   Evdev::~Evdev ()
   {
     if (_aborted)
       return;
-    Graph::instance().remove_edge (_iofd->find_component ("readable"), _action);
+    Graph::instance().remove_edge (_iofd->find_child ("readable"), _action);
     _iofd->deactivate ();
 
     delete _readable_cpl;

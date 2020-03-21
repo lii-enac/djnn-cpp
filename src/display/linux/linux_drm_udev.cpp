@@ -45,7 +45,7 @@ namespace djnn {
 
   DRMConnector::~DRMConnector ()
   {
-    delete find_component ("connected");
+    delete find_child ("connected");
   }
 
   DRMDevice::DRMDevice (Process *parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height) : Process (name), _fd (fd)
@@ -60,11 +60,11 @@ namespace djnn {
 
   DRMDevice::~DRMDevice ()
   {
-    delete find_component ("min_width");
-    delete find_component ("max_width");
-    delete find_component ("min_height");
-    delete find_component ("max_height");
-    delete find_component ("connectors");
+    delete find_child ("min_width");
+    delete find_child ("max_width");
+    delete find_child ("min_height");
+    delete find_child ("max_height");
+    delete find_child ("connectors");
   }
 
   DRMUdev::DRMUdev ()
@@ -107,8 +107,8 @@ namespace djnn {
     _udev_iofd = new IOFD (udev_monitor_get_fd (_udev_mon));
     _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
-    _readable_cpl = new Coupling (_udev_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
-    Graph::instance().add_edge (_udev_iofd->find_component ("readable"), _action);
+    _readable_cpl = new Coupling (_udev_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);
+    Graph::instance().add_edge (_udev_iofd->find_child ("readable"), _action);
   }
 
   DRMUdev::~DRMUdev ()
@@ -117,7 +117,7 @@ namespace djnn {
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
 
-    Graph::instance().remove_edge (_udev_iofd->find_component ("readable"), _action);
+    Graph::instance().remove_edge (_udev_iofd->find_child ("readable"), _action);
 
     delete _readable_cpl;
     delete _action;
@@ -176,7 +176,7 @@ namespace djnn {
         uint32_t id = res->connectors[i];
         con = drmModeGetConnector (fd, id);
         string con_name = build_name (con);
-        new DRMConnector (drm_dev->find_component ("connectors"), con_name, id, con->connection == DRM_MODE_CONNECTED);
+        new DRMConnector (drm_dev->find_child ("connectors"), con_name, id, con->connection == DRM_MODE_CONNECTED);
 #if DEBUG
         cout << "New connector found " << con_name;
         if (con->connection == DRM_MODE_CONNECTED)
@@ -197,7 +197,7 @@ namespace djnn {
     if (!name)
       return;
 
-    DRMDevice* drm_dev = (DRMDevice*) GPUs->find_component (name);
+    DRMDevice* drm_dev = (DRMDevice*) GPUs->find_child (name);
     if (!dev)
       return;
 
@@ -214,14 +214,14 @@ namespace djnn {
         continue;
       string con_name = build_name (con);
       bool is_connected = con->connection == DRM_MODE_CONNECTED;
-      Process *drm_con = drm_dev->find_component ("connectors/" + con_name);
+      Process *drm_con = drm_dev->find_child ("connectors/" + con_name);
       if (drm_con == nullptr) {
         cout << "drm_con not found\n";
         drmModeFreeConnector (con);
         continue;
       }
-      if (((BoolProperty*) drm_con->find_component ("connected"))->get_value () != is_connected) {
-        ((BoolProperty*) drm_con->find_component ("connected"))->set_value (is_connected, 1);
+      if (((BoolProperty*) drm_con->find_child ("connected"))->get_value () != is_connected) {
+        ((BoolProperty*) drm_con->find_child ("connected"))->set_value (is_connected, 1);
 #if DEBUG
         cout << "Connector " << con_name << " is now";
         if (con->connection == DRM_MODE_CONNECTED)

@@ -1903,50 +1903,50 @@ namespace djnn
   }
 
   Process*
-  AbstractHomography::find_component (const std::string& name)
+  AbstractHomography::find_child (const std::string& name)
   {
-    Process* res = AbstractPropHomography::find_component(name);
+    Process* res = AbstractPropHomography::find_child(name);
     if(res) return res;
 
     if (name.find ("rightTranslateBy") != std::string::npos) {
       init_rightTranslateBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("leftTranslateBy") != std::string::npos) {
       init_leftTranslateBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("rightScaleBy") != std::string::npos) {
       init_rightScaleBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("leftScaleBy") != std::string::npos) {
       init_leftScaleBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("rightRotateBy") != std::string::npos) {
       init_rightRotateBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("leftRotateBy") != std::string::npos) {
       init_leftRotateBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("rightSkewXBy") != std::string::npos) {
       init_rightSkewXBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("leftSkewXBy") != std::string::npos) {
       init_leftSkewXBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("rightSkewYBy") != std::string::npos) {
       init_rightSkewYBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     if (name.find ("leftSkewYBy") != std::string::npos) {
       init_leftSkewYBy();
-      return AbstractGObj::find_component(name);
+      return AbstractGObj::find_child(name);
     } else
     return nullptr;
     

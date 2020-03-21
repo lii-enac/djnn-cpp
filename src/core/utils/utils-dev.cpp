@@ -34,9 +34,9 @@ namespace djnn
       
       /* $value is not the first element, eg : foo/bar/$value */
       if (found > 0) 
-        prop = src->find_component (spec.substr (0, found - 1));
+        prop = src->find_child (spec.substr (0, found - 1));
       
-      /* prop == src (not null) OR the new element find by find_component */
+      /* prop == src (not null) OR the new element find by find_child */
       if (!prop) 
         return ref_info_t (nullptr, spec);
 

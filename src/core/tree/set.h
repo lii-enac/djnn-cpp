@@ -42,7 +42,7 @@ namespace djnn {
     void add_child (Process* c, const std::string& name) override;
     void remove_child (Process* c) override;
     void remove_child (const std::string& name) override;
-    Process* find_component (const std::string& path) override;
+    Process* find_child (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();

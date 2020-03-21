@@ -73,9 +73,9 @@ namespace djnn
   }
  
   Process*
-  AbstractPropEllipse::find_component (const std::string& name)
+  AbstractPropEllipse::find_child (const std::string& name)
   {
-    Process* res = AbstractGShape::find_component(name);
+    Process* res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

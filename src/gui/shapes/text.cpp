@@ -173,9 +173,9 @@ namespace djnn
   }
 
   Process*
-  Text::find_component (const std::string& name)
+  Text::find_child (const std::string& name)
   {
-    Process* res = AbstractGShape::find_component(name);
+    Process* res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool propd = false;

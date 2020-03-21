@@ -39,11 +39,11 @@ namespace djnn
     { "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
   Process*
-  SVGHolder::find_component (const std::string& path)
+  SVGHolder::find_child (const std::string& path)
   {
-    Process *p = Container::find_component (path);
+    Process *p = Container::find_child (path);
     if (p == nullptr && _gobj != nullptr)
-      p = _gobj->find_component (path);
+      p = _gobj->find_child (path);
     return p;
   }
 
@@ -55,7 +55,7 @@ namespace djnn
     for (auto c : _children) {
       Process* child = c->clone ();
       if (child != nullptr)
-        newh->add_child (child, this->find_component_name(c));
+        newh->add_child (child, this->find_child_name(c));
     }
 
     newh->_gobj = newh->_children.back ();
@@ -272,10 +272,10 @@ namespace djnn
   }
 
   Process*
-  AbstractGShape::find_component (const std::string& path)
+  AbstractGShape::find_child (const std::string& path)
   {
     if (ui)
-      return Process::find_component (path);
+      return Process::find_child (path);
     else {
       size_t found = path.find_first_of ('/');
       std::string key = path;
@@ -302,7 +302,7 @@ namespace djnn
           it++;
         }
       }
-      return Process::find_component (path);
+      return Process::find_child (path);
     }
   }
 

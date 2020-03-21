@@ -51,9 +51,9 @@ namespace djnn
   }
 
   Process*
-  Image::find_component (const std::string& name)
+  Image::find_child (const std::string& name)
   {
-    Process* res = AbstractPathImage::find_component(name);
+    Process* res = AbstractPathImage::find_child(name);
     //if(res) return res;
 
     if( name=="path" && _watcher == nullptr) {
@@ -141,9 +141,9 @@ namespace djnn
   }
 
   Process*
-  DataImage::find_component (const std::string& name)
+  DataImage::find_child (const std::string& name)
   {
-    Process* res = AbstractDataImage::find_component(name);
+    Process* res = AbstractDataImage::find_child(name);
     //if(res) return res;
 
     if( name=="data" && _watcher == nullptr) {

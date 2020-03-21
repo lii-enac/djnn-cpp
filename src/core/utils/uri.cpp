@@ -35,6 +35,6 @@ namespace djnn
     it = uri_manager.find (uri.substr (0, found));
     if (it == uri_manager.end ())
       return nullptr;
-    return it->second->find_component (uri.substr (found + 3, std::string::npos));
+    return it->second->find_child (uri.substr (found + 3, std::string::npos));
   }
 }

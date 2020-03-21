@@ -36,8 +36,8 @@ namespace djnn {
     void remove_child (const std::string& name) override;
     void dump(int level=0) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
-    Process* find_component (const std::string& path) override;
-    Process* find_component (int index)  override;
+    Process* find_child (const std::string& path) override;
+    Process* find_child (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
   protected:

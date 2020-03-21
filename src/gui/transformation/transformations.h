@@ -48,9 +48,9 @@ namespace djnn
     AbstractTranslation (double tx, double ty);
     virtual ~AbstractTranslation ();
     void get_properties_values (double &tx, double &ty);
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_component("tx"); }
-    AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_component("ty"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child("tx"); }
+    AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child("ty"); }
     void impl_activate () override;
     void impl_deactivate () override;
     virtual void draw () override = 0;
@@ -93,15 +93,15 @@ namespace djnn {
     AbstractRotation (double a, double cx, double cy);
     virtual ~AbstractRotation ();
     void get_properties_values (double &a, double &cx, double &cy);
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
     // TODO Rot by (u,v)
-    // AbstractDoubleProperty* ux () { return (AbstractDoubleProperty*) find_component("ux"); }
-    // AbstractDoubleProperty* uy () { return (AbstractDoubleProperty*) find_component("uy"); }
-    // AbstractDoubleProperty* vx () { return (AbstractDoubleProperty*) find_component("vx"); }
-    // AbstractDoubleProperty* vy () { return (AbstractDoubleProperty*) find_component("vy"); }
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
+    // AbstractDoubleProperty* ux () { return (AbstractDoubleProperty*) find_child("ux"); }
+    // AbstractDoubleProperty* uy () { return (AbstractDoubleProperty*) find_child("uy"); }
+    // AbstractDoubleProperty* vx () { return (AbstractDoubleProperty*) find_child("vx"); }
+    // AbstractDoubleProperty* vy () { return (AbstractDoubleProperty*) find_child("vy"); }
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child("cy"); }
     void impl_activate () override;
     void impl_deactivate () override;
     virtual void draw () override = 0;
@@ -144,11 +144,11 @@ namespace djnn {
     AbstractScaling (double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     void get_properties_values (double &sx, double &sy, double &cx, double &cy);
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_component("sx"); }
-    AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_component("sy"); }
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_component("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_component("cy"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child("sx"); }
+    AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child("sy"); }
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child("cy"); }
     void impl_activate () override;
     void impl_deactivate () override;
     virtual void draw () override = 0;
@@ -191,8 +191,8 @@ namespace djnn {
     AbstractSkew (double a);
     virtual ~AbstractSkew ();
     void get_properties_values (double &a);
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_component("a"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
     void impl_activate () override;
     void impl_deactivate () override;
     virtual void draw () override = 0;
@@ -400,7 +400,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    virtual Process* find_component (const std::string&) override;
+    virtual Process* find_child (const std::string&) override;
     void impl_activate () override;
     void impl_deactivate () override;
     

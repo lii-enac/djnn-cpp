@@ -284,6 +284,6 @@ namespace djnn {
     clean ();
     Graph::instance ().remove_edge (&_x, &_pos_action);
     Graph::instance ().remove_edge (&_y, &_pos_action);
-    delete find_component ("connected");
+    delete find_child ("connected");
   }
 }

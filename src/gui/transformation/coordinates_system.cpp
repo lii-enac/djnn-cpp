@@ -58,7 +58,7 @@ namespace djnn
       warning (this, "screenToLocal - shape has to be a graphical shape Rectangle|Circle ..." );
 
     //hack to create inverted_matrix
-    _shape->find_component("inverted_matrix");
+    _shape->find_child("inverted_matrix");
 
     _inX = new DoubleProperty (this, "inX", 0);
     _inY = new DoubleProperty (this, "inY", 0);
@@ -155,7 +155,7 @@ namespace djnn
       warning (this, "LocalToScreen - shape has to be a graphical shape Rectangle|Circle ..." );
 
     //hack to create matrix
-    _shape->find_component("matrix");
+    _shape->find_child("matrix");
 
     _inX = new DoubleProperty (this, "inX", 0);
     _inY = new DoubleProperty (this, "inY", 0);

@@ -128,10 +128,10 @@ namespace djnn {
     virtual void   remove_child (const std::string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
     friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual Process* find_component (const std::string&); // FIXME: should be find_child
-    virtual Process* find_component (int index) { return nullptr; }
-    static  Process* find_component (Process* p, const std::string& path);
-    virtual const std::string& find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
+    virtual Process* find_child (const std::string&); // FIXME: should be find_child
+    virtual Process* find_child (int index) { return nullptr; }
+    static  Process* find_child (Process* p, const std::string& path);
+    virtual const std::string& find_child_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
     void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
 
@@ -239,8 +239,8 @@ namespace djnn {
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);
   inline Process* find (Process *p) { return p; }
-  inline Process* find (Process *p, const std::string& path) { return p->find_component (path); }
-  inline Process* find (const std::string& path) { return Process::find_component (nullptr, path); }
+  inline Process* find (Process *p, const std::string& path) { return p->find_child (path); }
+  inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
   inline Process* clone (Process *p) { return p->clone (); }
 
 }

@@ -29,8 +29,8 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (double& offset);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_component ("offset"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child ("offset"); }
 
   protected:
     struct raw_props_t { double offset; };

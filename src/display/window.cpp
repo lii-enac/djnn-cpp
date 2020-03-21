@@ -139,9 +139,9 @@ namespace djnn
   }
 
   Process*
-  Cursor::find_component (const std::string& name)
+  Cursor::find_child (const std::string& name)
   {
-    Process* res = Process::find_component (name);
+    Process* res = Process::find_child (name);
     if (res)
       return res;
     else if (name == "hotX") {
@@ -215,17 +215,17 @@ namespace djnn
   Cursor::~Cursor ()
   {
     if (_c_x) {
-      Process* x = find_component ("x");
+      Process* x = find_child ("x");
       delete _c_x;
       delete x;
     }
     if (_c_y) {
-      Process* y = find_component ("y");
+      Process* y = find_child ("y");
       delete _c_y;
       delete y;
     }
     if (_c_path) {
-      Process* path = find_component ("path");
+      Process* path = find_child ("path");
       delete _c_path;
       delete path;
     }

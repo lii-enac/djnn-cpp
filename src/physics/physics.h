@@ -58,7 +58,7 @@ namespace djnn
     WorldImpl* get_impl () { return _world_impl; }
     void get_gravity (double &x, double &y);
     void get_dt (double &dt);
-    Process* find_component (const std::string& n) override;
+    Process* find_child (const std::string& n) override;
     virtual process_type_e get_cpnt_type () const override { return WORLD_T; }
     void add_phy_object (PhyObj* p) { _phy_objs.push_back (p); }
     void remove_phy_object (PhyObj* p) { _phy_objs.erase (std::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
@@ -92,7 +92,7 @@ namespace djnn
   public:
     PhyObj (Process *parent, const std::string& name, double x, double y, double z, double mass);
     virtual ~PhyObj ();
-    Process* find_component (const std::string& name) override;
+    Process* find_child (const std::string& name) override;
     void impl_activate () override;
     void impl_deactivate () override;
     void set_impl (PhyObjImpl* impl) { _impl = impl; }
@@ -128,7 +128,7 @@ namespace djnn
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string& n) override;
+    Process* find_child (const std::string& n) override;
   private:
     double w, h, d;
     DoublePropertyProxy *_w, *_h, *_d;
@@ -140,7 +140,7 @@ namespace djnn
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string& n) override;
+    Process* find_child (const std::string& n) override;
     void update () override {};
   protected:
     struct plane_raw_props_t { double a, b, c, d ;};
@@ -154,7 +154,7 @@ namespace djnn
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string& n) override;
+    Process* find_child (const std::string& n) override;
   private:
     double radius;
     DoublePropertyProxy *_radius;

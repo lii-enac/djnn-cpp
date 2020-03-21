@@ -76,7 +76,7 @@ namespace djnn
     for (auto c : _children) {
       Process* child = c->clone ();
       if (child != nullptr)
-        newg->add_child (child, this->find_component_name(c));
+        newg->add_child (child, this->find_child_name(c));
     }
 
     return newg;

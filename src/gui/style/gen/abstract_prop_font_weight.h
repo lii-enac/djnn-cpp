@@ -29,8 +29,8 @@ namespace djnn
     
     
     void get_properties_values (int& weight);
-    virtual Process* find_component (const std::string&) override;
-		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_component ("weight"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child ("weight"); }
 
   protected:
     struct raw_props_t { int weight; };

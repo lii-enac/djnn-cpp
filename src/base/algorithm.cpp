@@ -91,7 +91,7 @@ namespace djnn
   AbstractProperty*
   Sorter::get_and_check (int i) {
     Container::children_t children = _container->children ();
-    AbstractProperty* p = dynamic_cast<AbstractProperty*>(children[i]->find_component (_spec.get_value()));
+    AbstractProperty* p = dynamic_cast<AbstractProperty*>(children[i]->find_child (_spec.get_value()));
     if (p == nullptr) {
       error (this, "Unable to sort children: properties not found or with incorrect type");
       return nullptr;
@@ -102,7 +102,7 @@ namespace djnn
   AbstractProperty*
   Sorter::get_and_check (Process *p)
   {
-    AbstractProperty* r = dynamic_cast<AbstractProperty*> (p->find_component (_spec.get_value ()));
+    AbstractProperty* r = dynamic_cast<AbstractProperty*> (p->find_child (_spec.get_value ()));
     if (r == nullptr) {
       error (this, "Unable to sort children: properties not found or with incorrect type");
       return nullptr;
@@ -296,14 +296,14 @@ namespace djnn
     _container = dynamic_cast<Container*> (container);
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be used on List Operator");
-    _c_update_list_action = new Coupling (container->find_component ("size"), ACTIVATION, &_update_list, ACTIVATION);
-    Graph::instance ().add_edge (container->find_component ("size"), &_update_list);
+    _c_update_list_action = new Coupling (container->find_child ("size"), ACTIVATION, &_update_list, ACTIVATION);
+    Graph::instance ().add_edge (container->find_child ("size"), &_update_list);
     Process::finalize_construction (parent, name);
   }
 
   ListOperator::~ListOperator()
   {
-    Graph::instance ().remove_edge (_container->find_component ("size"), &_action);
+    Graph::instance ().remove_edge (_container->find_child ("size"), &_action);
     delete _c_update_list_action;
   }
 
@@ -338,7 +338,7 @@ namespace djnn
     }
     _coupling_list.clear ();
     for (auto c: _container->children ()) {
-      AbstractProperty *s = dynamic_cast<AbstractProperty*> (c->find_component (_spec.get_value ()));
+      AbstractProperty *s = dynamic_cast<AbstractProperty*> (c->find_child (_spec.get_value ()));
       if (s == nullptr) {
         warning (this, "Wrong property in ListOperator " + get_name ());
         continue;
@@ -355,7 +355,7 @@ namespace djnn
   {
     double sum = 0;
     for (auto c: _container->children ()) {
-      sum += ((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value();
+      sum += ((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (sum, true);
   }
@@ -381,7 +381,7 @@ namespace djnn
   {
     double product = 0;
     for (auto c: _container->children ()) {
-      product *= ((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value();
+      product *= ((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (product, true);
   }
@@ -407,7 +407,7 @@ namespace djnn
   {
     double vmax = 0;
     for (auto c: _container->children ()) {
-      vmax = std::max (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmax);
+      vmax = std::max (((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
   }
@@ -433,7 +433,7 @@ namespace djnn
   {
     double vmin = 0;
     for (auto c: _container->children ()) {
-      vmin = std::min (((AbstractProperty*)(c->find_component (_spec.get_value ())))->get_double_value(), vmin);
+      vmin = std::min (((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
   }

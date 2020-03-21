@@ -268,7 +268,7 @@ namespace djnn
   {
     if (p == nullptr) {
       if(_parent)
-          parentless_names[this] = _parent->find_component_name (this);
+          parentless_names[this] = _parent->find_child_name (this);
     }
     _parent = p;
   }
@@ -276,11 +276,11 @@ namespace djnn
   const std::string&
   Process::get_name () const
   {
-    return (_parent ? _parent->find_component_name(this) : parentless_names[this]);
+    return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
   }
 
   Process*
-  Process::find_component (const std::string& key)
+  Process::find_child (const std::string& key)
   {
     //DEBUG
     //cout << "key: " << key << endl;
@@ -290,12 +290,12 @@ namespace djnn
 
     /* special case find '*' */ 
     if (key[0] == '*') {
-      Process* found = find_component (key.substr(2)); // without "/*""
+      Process* found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
         auto it = symtable ().begin ();
         while ( it != symtable ().end ()) {
-          found = it->second->find_component (key); // with "/*""
+          found = it->second->find_child (key); // with "/*""
           if (found) return found;
           ++it;
         }
@@ -303,7 +303,7 @@ namespace djnn
       return found;
     }
 
-    /* special case find from root - using find_component ("//johndoe") */
+    /* special case find from root - using find_child ("//johndoe") */
     //FIXME: improved with c++20 if (key.starts_with("//")
     if (key.length () >= 2 && key[0] == '/' && key[1] == '/') {
         Process* current_cpnt = this;
@@ -314,7 +314,7 @@ namespace djnn
         }
         //DEBUG
         //cout << "root found: " << current_cpnt->_name << endl;
-        return current_cpnt->find_component (key.substr(2));
+        return current_cpnt->find_child (key.substr(2));
       }
 
     size_t found = key.find_first_of ('/');
@@ -323,13 +323,13 @@ namespace djnn
       string path = key.substr (found + 1);
       if (newKey[0] == '.' && newKey[1] == '.') {
         if (get_parent ())
-          return get_parent ()->find_component (path);
+          return get_parent ()->find_child (path);
         else
           return nullptr;
       }
       map<string, Process*>::iterator it = symtable ().find (newKey);
       if (it != symtable ().end ()) {
-        return (it->second)->find_component (path);
+        return (it->second)->find_child (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
@@ -342,15 +342,15 @@ namespace djnn
   }
 
   Process*
-  Process::find_component (Process *p, const std::string& path)
+  Process::find_child (Process *p, const std::string& path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
-    return p->find_component (path);
+    return p->find_child (path);
   }
 
   const std::string&
-  Process::find_component_name (const Process* symbol) const
+  Process::find_child_name (const Process* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
@@ -471,12 +471,12 @@ namespace djnn
   void
   merge_children (Process *p1, const std::string& sy1, Process* p2, const std::string& sy2)
   {
-    Process* x2 = p2->find_component (sy2);
+    Process* x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
       cerr << "trying to merge unknown child " << sy2 << endl;
       return;
     }
-    Process* x1 = p1->find_component (sy1);
+    Process* x1 = p1->find_child (sy1);
     if (x1 == nullptr) {
       cerr << "trying to merge unknown child " << sy1 << endl;
       return;
@@ -517,7 +517,7 @@ namespace djnn
   void
   Process::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << ": ";
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/
     if (symtable ().empty ()) {

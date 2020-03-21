@@ -29,7 +29,7 @@ namespace djnn
     SVGHolder (Process *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { Process::finalize_construction (parent, name); }
     virtual ~SVGHolder () {}
     Process* clone () override;
-    Process* find_component (const std::string& path) override;
+    Process* find_child (const std::string& path) override;
     void set_gobj (Process* gobj) { _gobj = gobj; }
     Process* get_gobj () { return _gobj; }
   private:
@@ -61,7 +61,7 @@ namespace djnn
     DoubleProperty* origin_y () { return _origin_y; }
     bool has_ui () { return ui != nullptr; }
     UI* get_ui () { return ui; }
-    Process* find_component (const std::string& n) override;
+    Process* find_child (const std::string& n) override;
     void impl_deactivate () override;
     void add_style_class (const std::string& classname);
     void pick () override;

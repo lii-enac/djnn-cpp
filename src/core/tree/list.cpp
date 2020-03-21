@@ -43,7 +43,7 @@ namespace djnn
   void
   AbstractList::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
 
     //FIXME: indent problem
     //for (auto c : _children)
@@ -161,7 +161,7 @@ namespace djnn
   }
 
   Process*
-  AbstractList::find_component (const std::string& path)
+  AbstractList::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -176,7 +176,7 @@ namespace djnn
         if (index < _children.size ()) {
           Process* c = _children.at (index);
           if (path.length () > sz) {
-            return c->find_component (path.substr (sz + 1));
+            return c->find_child (path.substr (sz + 1));
           } else
             return c;
         } else {
@@ -185,7 +185,7 @@ namespace djnn
         }
       }
       catch (invalid_argument& arg) {
-        //FIXME: comment the warning for now because it polluted the find_component ("//*")
+        //FIXME: comment the warning for now because it polluted the find_child ("//*")
         //warning (this, "invalid child path '" + path + "' for list '" + get_name () + "'");
       }
     }
@@ -193,7 +193,7 @@ namespace djnn
   }
 
   Process*
-  AbstractList::find_component (int index)
+  AbstractList::find_child (int index)
   {
     if ((index - 1) < (int)_children.size ()) {
       return _children.at (index - 1);

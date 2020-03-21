@@ -81,7 +81,7 @@ namespace djnn
 
   void
   AbstractTextProperty::dump (int level) {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
   }
 
 

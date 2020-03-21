@@ -303,7 +303,7 @@ namespace djnn
   {
     Process* clone = new Container (nullptr, get_name ());
     for (auto c : _children) {
-      clone->add_child (c->clone (), this->find_component_name(c));
+      clone->add_child (c->clone (), this->find_child_name(c));
     }
     return clone;
   }
@@ -323,7 +323,7 @@ namespace djnn
   {
     Process* clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
-      clone->add_child (c->clone (), this->find_component_name(c));
+      clone->add_child (c->clone (), this->find_child_name(c));
     }
     return clone;
   }

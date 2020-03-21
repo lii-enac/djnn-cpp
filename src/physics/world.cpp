@@ -68,9 +68,9 @@ namespace djnn
   }
 
   Process*
-  World::find_component (const std::string& n)
+  World::find_child (const std::string& n)
   {
-    Process* res = Process::find_component (n);
+    Process* res = Process::find_child (n);
     if (res)
       return res;
     if (n == "dt") {
@@ -214,9 +214,9 @@ namespace djnn
   }
 
   Process*
-  PhyObj::find_component (const std::string& n)
+  PhyObj::find_child (const std::string& n)
   {
-    Process *res = Process::find_component (n);
+    Process *res = Process::find_child (n);
     if (res)
       return res;
     if (n == "x") {
@@ -352,9 +352,9 @@ namespace djnn
   }
 
   Process*
-  Plane::find_component (const std::string& n)
+  Plane::find_child (const std::string& n)
   {
-    Process *res = PhyObj::find_component (n);
+    Process *res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "a") {
@@ -419,9 +419,9 @@ namespace djnn
   }
 
   Process*
-  Box::find_component (const std::string& n)
+  Box::find_child (const std::string& n)
   {
-    Process* res = PhyObj::find_component (n);
+    Process* res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "width") {
@@ -464,9 +464,9 @@ namespace djnn
   }
 
   Process*
-  Sphere::find_component (const std::string& n)
+  Sphere::find_child (const std::string& n)
   {
-    Process* res = PhyObj::find_component (n);
+    Process* res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "r") {

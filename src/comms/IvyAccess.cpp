@@ -231,7 +231,7 @@ IvyAccess::IvyOutAction::coupling_activation_hook ()
 
   _out_c.disable ();
   Graph::instance().add_edge (&_out, &_out_a);
-  /* IN is a special child build in IvyAccess::find_component */
+  /* IN is a special child build in IvyAccess::find_child */
 
   Process::finalize_construction (parent, name);
 }
@@ -378,11 +378,11 @@ IvyAccess::run ()
 }
 
 Process*
-IvyAccess::find_component (const std::string& key)
+IvyAccess::find_child (const std::string& key)
 {
   
 #ifdef __IVY_DEBUG__
-  cout << "---- Ivy find_component key : " << key << "------" <<  endl ;
+  cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
 #endif
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
@@ -414,7 +414,7 @@ IvyAccess::find_component (const std::string& key)
     cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
-    TextProperty* tmp = dynamic_cast<TextProperty*>(Process::find_component (regexp));
+    TextProperty* tmp = dynamic_cast<TextProperty*>(Process::find_child (regexp));
     if (tmp){
 
       string new_regexp_to_found = "in/" + tmp->get_value () + "/" + to_string(index);
@@ -425,7 +425,7 @@ IvyAccess::find_component (const std::string& key)
 #endif
 
       /* key do not exist - but use internal string as regexp --- return*/
-      return this->find_component (new_regexp_to_found);
+      return this->find_child (new_regexp_to_found);
     }
     else {
       /* key don't exist at all - create it */

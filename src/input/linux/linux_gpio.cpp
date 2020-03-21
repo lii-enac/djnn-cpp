@@ -74,7 +74,7 @@ namespace djnn {
         line->activate ();
       }
       if (path.length() > (sz + 1))
-          return line->find_component (path.substr ((sz + 1)));
+          return line->find_child (path.substr ((sz + 1)));
         else
           return line;
       }
@@ -126,8 +126,8 @@ namespace djnn {
       _iofd = new IOFD (_fd);
       _iofd->activate ();
       _action = new GPIOLineReadAction (this, "read");
-      _c_action = new Coupling (_iofd->find_component ("readable"), ACTIVATION, _action, ACTIVATION);
-      Graph::instance().add_edge (_iofd->find_component ("readable"), _action);
+      _c_action = new Coupling (_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);
+      Graph::instance().add_edge (_iofd->find_child ("readable"), _action);
     } else {
       _action = new GPIOLineWriteAction (this, "write");
       _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
@@ -140,7 +140,7 @@ namespace djnn {
   {
     if (_dir == IN) {
       _iofd->deactivate ();
-      Graph::instance().remove_edge (_iofd->find_component ("readable"), _action);
+      Graph::instance().remove_edge (_iofd->find_child ("readable"), _action);
       delete _c_action;
       delete _action;
       delete _iofd;

@@ -63,9 +63,9 @@ namespace djnn
   }
  
   Process*
-  AbstractTranslation::find_component (const std::string& name)
+  AbstractTranslation::find_child (const std::string& name)
   {
-    Process* res = AbstractTransformation::find_component(name);
+    Process* res = AbstractTransformation::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

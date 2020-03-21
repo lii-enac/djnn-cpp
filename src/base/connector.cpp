@@ -88,8 +88,8 @@ namespace djnn
   :
     SrcToDstLink (parent, name),
     _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-    _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_component (ispec)) : nullptr),
-    _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_component (dspec)) : nullptr),
+    _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_child (ispec)) : nullptr),
+    _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_child (dspec)) : nullptr),
     _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()), // uses copy constructor
     _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (Process**)&_dst) : ref_update()),
     _action(this, "connector_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true),
@@ -242,14 +242,14 @@ namespace djnn
       return;
     }
 
-    Process* c_src = src->find_component (ispec);
+    Process* c_src = src->find_child (ispec);
 
     if (c_src == 0) {
       error (this, "source not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
       return;
     }
 
-    Process* c_dst = dst->find_component (dspec);
+    Process* c_dst = dst->find_child (dspec);
 
     if (c_dst == 0) {
       error (this,

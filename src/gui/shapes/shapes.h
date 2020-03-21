@@ -114,14 +114,14 @@ namespace djnn
     double sdf (double x, double y) const override;
     Process* clone () override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text);
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
-    AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_component("dx"); }
-    AbstractDoubleProperty* dy () { return (AbstractDoubleProperty*) find_component("dy"); }
-    AbstractIntProperty*    dxU () { return (AbstractIntProperty*) find_component("dxU"); }
-    AbstractIntProperty*    dyU () { return (AbstractIntProperty*) find_component("dyU"); }
-    AbstractIntProperty*    encoding () { return (AbstractIntProperty*) find_component("encoding"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
+    AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_child("dx"); }
+    AbstractDoubleProperty* dy () { return (AbstractDoubleProperty*) find_child("dy"); }
+    AbstractIntProperty*    dxU () { return (AbstractIntProperty*) find_child("dxU"); }
+    AbstractIntProperty*    dyU () { return (AbstractIntProperty*) find_child("dyU"); }
+    AbstractIntProperty*    encoding () { return (AbstractIntProperty*) find_child("encoding"); }
     IntProperty*  width () { return &_width; }
     IntProperty*  height () { return &_height; }
     AbstractTextProperty* text () { return &_text;}
@@ -161,9 +161,9 @@ namespace djnn
   public:
     PolyPoint (Process* parent, const std::string& name, double x, double y);
     virtual ~PolyPoint ();
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
     Process* clone () override;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
@@ -217,9 +217,9 @@ namespace djnn
   public:
     PathPoint (Process* parent, const std::string& name, double x, double y);
     virtual ~PathPoint ();
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_component("y"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override = 0;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
     void notify_change (unsigned int nm) override { _damaged |= nm; get_parent ()->get_parent()->notify_change (nm); }
@@ -254,11 +254,11 @@ namespace djnn
   public:
     PathQuadratic (Process* parent, const std::string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
-    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
-    AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_component("y"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
+    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
+    AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
     Process* clone () override;
   private:
@@ -274,13 +274,13 @@ namespace djnn
   public:
     PathCubic (Process* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_component("x1"); }
-    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_component("y1"); }
-    AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_component("x2"); }
-    AbstractDoubleProperty* y2 () { return (AbstractDoubleProperty*) find_component("y2"); }
-    AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_component("y"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
+    AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
+    AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child("x2"); }
+    AbstractDoubleProperty* y2 () { return (AbstractDoubleProperty*) find_child("y2"); }
+    AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
     Process* clone () override;
   private:
@@ -297,14 +297,14 @@ namespace djnn
     PathArc (Process* parent, const std::string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
-    virtual Process* find_component (const std::string&) override;
-    AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_component("rotx"); }
-    AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_component("fl"); }
-    AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_component("swfl"); }
-    AbstractDoubleProperty* rx ()   { return (AbstractDoubleProperty*) find_component("rx"); }
-    AbstractDoubleProperty* ry ()   { return (AbstractDoubleProperty*) find_component("ry"); }
-    AbstractDoubleProperty* x ()    { return (AbstractDoubleProperty*) find_component("x"); }
-    AbstractDoubleProperty* y ()    { return (AbstractDoubleProperty*) find_component("y"); }
+    virtual Process* find_child (const std::string&) override;
+    AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_child("rotx"); }
+    AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_child("fl"); }
+    AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_child("swfl"); }
+    AbstractDoubleProperty* rx ()   { return (AbstractDoubleProperty*) find_child("rx"); }
+    AbstractDoubleProperty* ry ()   { return (AbstractDoubleProperty*) find_child("ry"); }
+    AbstractDoubleProperty* x ()    { return (AbstractDoubleProperty*) find_child("x"); }
+    AbstractDoubleProperty* y ()    { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
     Process* clone () override;
   private:
@@ -372,7 +372,7 @@ namespace djnn
     virtual ~Image ();
     void draw () override;
     Process* clone () override;
-    virtual Process* find_component (const std::string&) override;
+    virtual Process* find_child (const std::string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -396,7 +396,7 @@ namespace djnn
       virtual ~DataImage ();
       void draw () override;
       Process* clone () override;
-      virtual Process* find_component (const std::string&) override;
+      virtual Process* find_child (const std::string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}

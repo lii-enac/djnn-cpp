@@ -29,8 +29,8 @@ namespace djnn
     void draw () override;
     Process* clone () override;
     void get_properties_values (double& width);
-    virtual Process* find_component (const std::string&) override;
-		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_component ("width"); }
+    virtual Process* find_child (const std::string&) override;
+		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }
 
   protected:
     struct raw_props_t { double width; };

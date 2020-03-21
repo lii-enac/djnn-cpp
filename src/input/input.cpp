@@ -48,7 +48,7 @@ namespace djnn {
 
   }
   Process*
-  GPIOProxy::find_component (const std::string& path)
+  GPIOProxy::find_child (const std::string& path)
   {
     int pos = 0;
     if (path.rfind("in/", 0) == 0) {

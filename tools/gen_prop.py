@@ -37,7 +37,7 @@ namespace djnn
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    virtual Process* find_component (const std::string&) override;
+    virtual Process* find_child (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -49,7 +49,7 @@ namespace djnn
 }
 """
 
-getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_component ("%(PROP_NAME)s"); }"""
+getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_child ("%(PROP_NAME)s"); }"""
 
 def_string = """
 #include "gui/backend.h"
@@ -91,9 +91,9 @@ namespace djnn
   }
  
   Process*
-  %(CLASS)s::find_component (const std::string& name)
+  %(CLASS)s::find_child (const std::string& name)
   {
-    Process* res = %(INHERITS)s::find_component(name);
+    Process* res = %(INHERITS)s::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

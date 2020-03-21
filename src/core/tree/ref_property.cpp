@@ -102,7 +102,7 @@ namespace djnn
   }
 
   Process*
-  RefProperty::find_component (const std::string& path)
+  RefProperty::find_child (const std::string& path)
   {
     if (path.empty ())
       return this;
@@ -114,13 +114,13 @@ namespace djnn
       subpath = path.substr (found + 1, path.size () - 1);
     }
     if (key.compare ("$value") == 0)
-      return value->find_component (subpath);
+      return value->find_child (subpath);
     return nullptr;
   }
 
   void
   RefProperty::dump (int level) {
-    cout << (get_parent () ? get_parent ()->find_component_name(this) : get_name ()) << " [ " << value << " ]" ;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << value << " ]" ;
   }
 
   Process* 

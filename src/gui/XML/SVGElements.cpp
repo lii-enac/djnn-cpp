@@ -176,7 +176,7 @@ EndElement(Process* e) {
 static void djn__CheckStroke(Process* holder) {
 	if (djn_GraphicalShapeArgs.strokeType == djnStrokeNone) {
 		/* if it exists, ensure that no-stroke is at the end of the list */
-		Process* e = holder->find_component("no-stroke");
+		Process* e = holder->find_child("no-stroke");
 		holder->remove_child(e);
 		holder->add_child(e, "no-stroke");
 	} else if (djn_GraphicalShapeArgs.strokeType == djnStrokeUndef) {
@@ -828,8 +828,8 @@ StartUse(const char** attrs, Process* current) {
     attrs++;
   }
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
-  alias (holder, "x", pos->find_component ("tx"));
-  alias (holder, "y", pos->find_component ("ty"));
+  alias (holder, "x", pos->find_child ("tx"));
+  alias (holder, "y", pos->find_child ("ty"));
   map<string, Process*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
     Process* clone = it->second->clone();
