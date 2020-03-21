@@ -22,7 +22,7 @@ using namespace std;
 using namespace djnn;
 
 
-// c++ -o build/size -std=c++14 -Isrc -Ibuild tools/size.cpp && build/size
+// c++ -o build/size -std=c++14 -Isrc -Ibuild -DDJNN_NO_DEBUG tools/size.cpp && build/size
 
 #define PSIZE(type) cout << #type ": \t" << sizeof(type) << " " << "bytes" << endl; 
 
