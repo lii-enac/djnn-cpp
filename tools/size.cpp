@@ -4,6 +4,7 @@
 
 #include "core/tree/int_property.h"
 #include "core/tree/component.h"
+#include "core/control/action.h"
 #include "core/control/assignment.h"
 #include "core/control/binding.h"
 
@@ -47,9 +48,12 @@ main(int argc, char* argv[])
 	PSIZE(Component);
 	cout << endl;
 
+	PSIZE(Action);
 	PSIZE(Binding);
+	PSIZE(SimpleBinding);
 	PSIZE(Connector);
 	PSIZE(Assignment);
+	PSIZE(SimpleAssignment);
 	cout << endl;
 
 	PSIZE(Adder);

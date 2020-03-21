@@ -35,6 +35,7 @@ namespace djnn {
       }
     }
     virtual ~Action ();
+    void impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:
     virtual bool pre_activate () override {

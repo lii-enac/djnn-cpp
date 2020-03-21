@@ -89,4 +89,8 @@ namespace djnn {
     Process *_action;
     bool _copy_on_activation;
   };
+
+
+  // TODO SimpleConnector, with a much smaller size!
+
 }

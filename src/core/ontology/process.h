@@ -135,9 +135,12 @@ namespace djnn {
     void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
 
+  //private:
     typedef std::map<std::string, Process*> symtable_t;
     symtable_t& symtable () { return _symtable; }
     const symtable_t& symtable () const { return _symtable; }
+
+  public:
     static std::string default_name;
     const std::string& get_name () const;
     
