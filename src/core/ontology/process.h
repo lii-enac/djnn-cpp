@@ -132,17 +132,22 @@ namespace djnn {
     virtual Process* find_child (int index) { return nullptr; }
     static  Process* find_child (Process* p, const std::string& path);
     virtual const std::string& find_child_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
+    
+    typedef std::map<std::string, Process*> symtable_t;
+    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
+    symtable_t::iterator children_end () { return _symtable.end (); }
+    bool children_empty () { return _symtable.empty (); }
+    size_t children_size () const { return _symtable.size(); }
+    symtable_t& children () { return _symtable; }
+    const symtable_t& children () const { return _symtable; } 
+    
     void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
 
-  //private:
-    typedef std::map<std::string, Process*> symtable_t;
+  private:
+    
     symtable_t& symtable () { return _symtable; }
-    const symtable_t& symtable () const { return _symtable; }
-
-    size_t get_num_children () const { return _symtable.size(); }
-    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
-    symtable_t::iterator children_end () { return _symtable.end (); }
+    const symtable_t& symtable () const { return _symtable; }  
 
   public:
     static std::string default_name;
@@ -240,11 +245,12 @@ namespace djnn {
   void alias_children (Process *p, Process *to);
   void alias (Process *parent, const std::string& name, Process* from);
   void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2);
-  void add_state_dependency (Process *_parent, Process *p);
-  void remove_state_dependency (Process *_parent, Process *p);
   inline Process* find (Process *p) { return p; }
   inline Process* find (Process *p, const std::string& path) { return p->find_child (path); }
   inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
+
+  void add_state_dependency (Process *_parent, Process *p);
+  void remove_state_dependency (Process *_parent, Process *p);
   inline Process* clone (Process *p) { return p->clone (); }
 
 }

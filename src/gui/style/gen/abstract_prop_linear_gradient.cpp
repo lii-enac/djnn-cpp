@@ -51,7 +51,7 @@ namespace djnn
 		delete _cy2;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (get_num_children () > 0) {
+    if (children_size () > 0) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("x1");

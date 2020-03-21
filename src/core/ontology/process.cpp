@@ -72,7 +72,6 @@ namespace djnn
       else
         _state_dependency = state_dep;
 
-      //parent->add_child (this, get_name ());
       parent->add_child (this, name);
     } else {
       parentless_names[this] = name;
@@ -104,7 +103,7 @@ namespace djnn
     }
 
     /* make sure everything is wiped out the symtable */
-    symtable ().clear ();
+    children ().clear ();
   }
 
 
@@ -247,19 +246,6 @@ namespace djnn
       _deactivation_couplings.end ()
     );
   }
-/*
-  const Process::couplings_t&
-  Process::get_activation_couplings () const
-  {
-    return _activation_couplings;
-  }
-
-  const Process::couplings_t&
-  Process::get_deactivation_couplings () const
-  {
-    return _deactivation_couplings;
-  }
-*/
 
   // tree, component, symtable
 
@@ -273,10 +259,36 @@ namespace djnn
     _parent = p;
   }
 
-  const std::string&
-  Process::get_name () const
+  void
+  Process::add_child (Process* child, const std::string& name)
   {
-    return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
+    if (child == nullptr)
+      return;
+
+    if(child->get_parent ()==nullptr) {
+      parentless_names.erase(this);
+    }
+
+    child->set_parent (this);
+    add_symbol (name, child);
+  }
+
+  void
+  Process::remove_child (Process* c)
+  {
+    symtable_t::iterator it;
+    for (it = children ().begin (); it != children ().end (); ++it) {
+      if (it->second == c) {
+        children ().erase (it->first);
+        return;
+      }
+    }
+  }
+
+  void
+  Process::remove_child (const std::string& name)
+  {
+    remove_symbol (name);
   }
 
   Process*
@@ -293,8 +305,8 @@ namespace djnn
       Process* found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
-        auto it = symtable ().begin ();
-        while ( it != symtable ().end ()) {
+        auto it = children ().begin ();
+        while ( it != children ().end ()) {
           found = it->second->find_child (key); // with "/*""
           if (found) return found;
           ++it;
@@ -356,7 +368,7 @@ namespace djnn
 
     symtable_t::const_iterator it;
 
-    for (it = symtable ().begin(); it != symtable ().end(); ++it)
+    for (it = children ().begin(); it != children ().end(); ++it)
     {
       if (it->second == symbol)
       {
@@ -372,68 +384,32 @@ namespace djnn
   }
 
   void
-  Process::remove_symbol (const std::string& name)
-  {
-    symtable_t::iterator it = find_child_iterator (name);
-    if (it != children_end ())
-      symtable ().erase (it);
-    else
-      warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");
-  }
-
-  void
-  Process::remove_child (Process* c)
-  {
-    symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
-      if (it->second == c) {
-        symtable ().erase (it->first);
-        return;
-      }
-    }
-  }
-
-  void
-  Process::remove_child (const std::string& name)
-  {
-    remove_symbol (name);
-  }
-
-  void
-  Process::add_child (Process* child, const std::string& name)
-  {
-    if (child == nullptr)
-      return;
-
-    if(child->get_parent ()==nullptr) {
-      parentless_names.erase(this);
-    }
-
-    child->set_parent (this);
-    add_symbol (name, child);
-  }
-
-  void
   Process::add_symbol (const std::string& name, Process* c)
   {
-    /* if ((symtable ().insert (std::pair<string, Process*> (name, c))).second == false) {
+    /* if ((children ().insert (std::pair<string, Process*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
      }*/
     _symtable[name] = c;
   }
 
-  /*Process*
-  Process::get_parent ()
+  void
+  Process::remove_symbol (const std::string& name)
   {
-    return get_parent ();
-  }*/
+    symtable_t::iterator it = find_child_iterator (name);
+    if (it != children_end ())
+      children ().erase (it);
+    else
+      warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");
+  }
 
-  /*
   const std::string&
   Process::get_name () const
   {
-    return _name;
-  }*/
+    return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
+  }
+
+
+  // data
 
   void
   Process::set_data (Process* data)
@@ -456,7 +432,7 @@ namespace djnn
   void
   alias_children (Process* p, Process* from)
   {
-    Process::symtable_t& symtable = from->symtable ();
+    Process::symtable_t& symtable = from->children ();
     for (auto& sym : symtable) {
       p->add_symbol (sym.first, sym.second);
     }
@@ -520,7 +496,7 @@ namespace djnn
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/
-    if (symtable ().empty ()) {
+    if (children_empty ()) {
       cout << "<EMPTY>" << endl;
       return;
     }
@@ -533,7 +509,7 @@ namespace djnn
     indent++;
     symtable_t::iterator it;
     int i = 0;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (it = children ().begin (); it != children ().end (); ++it) {
       for (int j = 0; j < indent; j++)
         cout << "|\t";
       cout << " +" << i++ << " ";

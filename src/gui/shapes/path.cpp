@@ -54,7 +54,7 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (symtable ().empty () == false) {
+    if (children_empty () == false) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("x");
@@ -208,7 +208,7 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (symtable ().empty () == false) {
+    if (children_empty () == false) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("x1");
@@ -331,7 +331,7 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (symtable ().empty () == false) {
+    if (children_empty () == false) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("x1");
@@ -477,7 +477,7 @@ namespace djnn
     delete _cx;
     delete _cy;
 
-    if (symtable ().empty () == false) {
+    if (children_empty () == false) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("rotx");

@@ -57,7 +57,7 @@ namespace djnn
   depth_first_traverse(Process *p, std::function<void(Process*)> f)
   {
     f(p);
-    for (auto child: p->symtable ()) depth_first_traverse(child.second, f);
+    for (auto child: p->children ()) depth_first_traverse(child.second, f);
   }
 
   void run_stats(Process *p);

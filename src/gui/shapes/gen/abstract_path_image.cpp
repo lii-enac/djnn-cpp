@@ -48,7 +48,7 @@ namespace djnn
     delete _cpath;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > 2) {
+    if (children_size () > 2) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("path");

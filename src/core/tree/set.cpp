@@ -45,12 +45,12 @@ namespace djnn
   Set::add_child (Process* c, const std::string& name)
   {
     /* test if the child is already in the set
-     * it == symtable ().end () if the element is not find 
+     * it == children ().end () if the element is not find 
      * only then we add it in the symtable to avoid duplicate
      */
     map<string, Process*>::iterator it;
-    it = symtable ().find(name);
-    if (it == symtable ().end ()) {
+    it = children ().find(name);
+    if (it == children ().end ()) {
       Process::add_child (c, name);
       c->set_parent (this);
 
@@ -71,7 +71,7 @@ namespace djnn
     bool found = false;
     symtable_t::iterator it;
     string symbol;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (it = children ().begin (); it != children ().end (); ++it) {
       if (it->second == c) {
         symbol = it->first;
         found = true;
@@ -90,7 +90,7 @@ namespace djnn
   {
     Process *found = nullptr;
     symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (it = children ().begin (); it != children ().end (); ++it) {
       if (it->second->get_name ().compare (name) == 0) {
         remove_symbol (it->first);
         found = it->second;
@@ -107,7 +107,7 @@ namespace djnn
   Set::impl_activate ()
   {
     symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (it = children ().begin (); it != children ().end (); ++it) {
       it->second->activate ();
     }
   }
@@ -116,7 +116,7 @@ namespace djnn
   Set::impl_deactivate ()
   {
     symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (it = children ().begin (); it != children ().end (); ++it) {
       it->second->deactivate ();
     }
   }
@@ -151,7 +151,7 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it)
+    for (it = children ().begin (); it != children ().end (); ++it)
       it->second->serialize (type);
 
     AbstractSerializer::serializer->end ();
@@ -172,7 +172,7 @@ namespace djnn
   SetIterator::impl_activate ()
   {
     symtable_t::iterator it;
-    std::map<std::string, Process*>& map = _set->symtable ();
+    std::map<std::string, Process*>& map = _set->children ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
       _action->activate ();

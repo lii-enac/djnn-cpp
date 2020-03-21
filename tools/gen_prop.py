@@ -83,7 +83,7 @@ namespace djnn
     %(DELETE_COUPLINGS)s;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (symtable ().size () > %(ORIGIN_IN_SYMTABLE)s) {
+    if (get_num_children () > %(ORIGIN_IN_SYMTABLE)s) {
       symtable_t::iterator it;
 
       %(DELETE_DYN_PROPS)s
