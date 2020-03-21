@@ -33,12 +33,12 @@ namespace djnn
     class FileReaderAction : public Action
     {
     public:
-      FileReaderAction (Process *parent, const std::string &name) : Action (parent, name) {}
+      FileReaderAction (Process *parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    FileReader (Process *parent, const std::string &name, const std::string &filename);
+    FileReader (Process *parent, const std::string& name, const std::string& filename);
     virtual ~FileReader ();
     void impl_activate () override;
     void impl_deactivate () override;

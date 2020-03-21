@@ -95,7 +95,7 @@ namespace djnn
     f->_not_found.activate ();
   }
 
-  Finder::Finder (Process *parent, const std::string &name, Process *container, const std::string &path)
+  Finder::Finder (Process *parent, const std::string& name, Process *container, const std::string& path)
   : Process (name),
   _path (this, "path", path),
   _key (this, "key", ""),

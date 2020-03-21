@@ -21,7 +21,7 @@ namespace djnn
   static std::map <std::string, int> name_to_id;
   static std::vector<StyleSheet*> style_array;
 
-  StyleSheet::StyleSheet (Process* parent, const std::string &n) :
+  StyleSheet::StyleSheet (Process* parent, const std::string& n) :
       Container (parent, n), _classname (n)
   {
     std::map<std::string,int>::iterator it = name_to_id.find(n);
@@ -47,7 +47,7 @@ namespace djnn
   }
 
   int
-  StyleSheet::get_id (const std::string &classname)
+  StyleSheet::get_id (const std::string& classname)
   {
     std::map<std::string,int>::iterator it = name_to_id.find(classname);
     if (it != name_to_id.end()) {

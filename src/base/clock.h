@@ -35,7 +35,7 @@ namespace djnn
     class ClockAction : public Action
     {
     public:
-      ClockAction (Process* parent, const std::string &name) :
+      ClockAction (Process* parent, const std::string& name) :
         Action (parent, name){};
     
       virtual ~ClockAction () {}

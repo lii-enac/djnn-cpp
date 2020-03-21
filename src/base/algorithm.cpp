@@ -22,7 +22,7 @@
 namespace djnn
 {
 
-  Sorter::Sorter (Process *parent, const std::string &name, Process *container, const std::string& spec) :
+  Sorter::Sorter (Process *parent, const std::string& name, Process *container, const std::string& spec) :
       Process (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
@@ -285,7 +285,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  ListOperator::ListOperator (Process *parent, const std::string &name, Process *container, const std::string& spec) :
+  ListOperator::ListOperator (Process *parent, const std::string& name, Process *container, const std::string& spec) :
       Process (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),

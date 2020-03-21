@@ -12,8 +12,8 @@ namespace djnn {
   class UpdateSrcOrDst : public Action
   {
     public:
-      UpdateSrcOrDst (Process* parent, const std::string &name, RefProperty* prop, const std::string &spec, Process** to_update);
-      UpdateSrcOrDst (Process* parent, const std::string &name);
+      UpdateSrcOrDst (Process* parent, const std::string& name, RefProperty* prop, const std::string& spec, Process** to_update);
+      UpdateSrcOrDst (Process* parent, const std::string& name);
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -26,7 +26,7 @@ namespace djnn {
 
   class SrcToDstLink : public Process {
   public:
-    SrcToDstLink (Process* parent, const std::string &name, bool is_model = false) : Process (name, is_model) {}
+    SrcToDstLink (Process* parent, const std::string& name, bool is_model = false) : Process (name, is_model) {}
     virtual ~SrcToDstLink () {}
     virtual void about_to_update_graph () = 0;
     virtual void update_graph () = 0;

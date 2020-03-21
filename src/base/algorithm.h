@@ -32,13 +32,13 @@ namespace djnn
     class SortAction : public Action
     {
     public:
-      SortAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      SortAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
       void impl_deactivate () {}
     };
   public:
-    Sorter (Process *p, const std::string &name, Process *container, const std::string& spec);
+    Sorter (Process *p, const std::string& name, Process *container, const std::string& spec);
     virtual ~Sorter () {}
     void impl_activate () override;
     void impl_deactivate () override;
@@ -67,7 +67,7 @@ namespace djnn
     class ListOperatorAction : public Action
     {
     public:
-      ListOperatorAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      ListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
       virtual ~ListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
       void impl_deactivate () {}
@@ -75,13 +75,13 @@ namespace djnn
     class UpdateListOperatorAction : public Action
     {
     public:
-      UpdateListOperatorAction (Process* parent, const std::string &name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      UpdateListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
       virtual ~UpdateListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
       void impl_deactivate () {}
     };
   public:
-    ListOperator (Process *p, const std::string &name, Process *container, const std::string& spec);
+    ListOperator (Process *p, const std::string& name, Process *container, const std::string& spec);
     virtual ~ListOperator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -102,7 +102,7 @@ namespace djnn
   class SumList : public ListOperator
   {
   public:
-    SumList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    SumList (Process *p, const std::string& name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
     virtual ~SumList () {}
     void do_action () override;
   protected:
@@ -114,7 +114,7 @@ namespace djnn
   class ProductList : public ListOperator
   {
   public:
-    ProductList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    ProductList (Process *p, const std::string& name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
     virtual ~ProductList () {}
     void do_action () override;
   protected:
@@ -126,7 +126,7 @@ namespace djnn
   class MaxList : public ListOperator
   {
   public:
-    MaxList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    MaxList (Process *p, const std::string& name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
     virtual ~MaxList () {}
     void do_action () override;
   protected:
@@ -138,7 +138,7 @@ namespace djnn
   class MinList : public ListOperator
   {
   public:
-    MinList (Process *p, const std::string &name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
+    MinList (Process *p, const std::string& name, Process *container, const std::string& spec) : ListOperator (p, name, container, spec), _output (this, "output", 0) {}
     virtual ~MinList () {}
     void do_action () override;
   protected:

@@ -28,7 +28,7 @@ namespace djnn
   }
 
   void
-  error (Process* p, const std::string &msg)
+  error (Process* p, const std::string& msg)
   {
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << msg << std::endl << std::endl;
     
@@ -39,7 +39,7 @@ namespace djnn
   }
 
   void
-  warning (Process *p, const std::string &msg)
+  warning (Process *p, const std::string& msg)
   {
     std::cerr << std::endl << std::endl << "djnn - WARNING: " << msg << std::endl << std::endl;
     

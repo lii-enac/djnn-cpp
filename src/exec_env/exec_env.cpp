@@ -87,7 +87,7 @@ namespace djnn
   }
 
   double
-  t2 (const std::string &msg, bool display_stderr)
+  t2 (const std::string& msg, bool display_stderr)
   {
     if (!init)
       return 0.0;

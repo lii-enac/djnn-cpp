@@ -56,14 +56,14 @@ namespace djnn
     return 0;
   }
 
-  SDLWindow::SDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
+  SDLWindow::SDLWindow (djnn::Window* win, const std::string& title, double x, double y, double w, double h) :
       _window (win), _sdl_window (nullptr), _cursor (nullptr), _cursor_surface (nullptr), is_activated (false)
   {
     SDL_AddEventWatch (resizingEventWatcher, this);
   }
 
   void
-  SDLWindow::set_cursor (const std::string &path, int hotX, int hotY)
+  SDLWindow::set_cursor (const std::string& path, int hotX, int hotY)
   {
     if (_cursor)
       SDL_FreeCursor (_cursor);

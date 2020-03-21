@@ -23,7 +23,7 @@ namespace djnn
 {
   using namespace std;
 
-  Activator::Activator (Process* parent, const std::string &name, Process* action) :
+  Activator::Activator (Process* parent, const std::string& name, Process* action) :
       Process (name), _action (action)
   {
     if (_action == nullptr) {
@@ -33,7 +33,7 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Activator::Activator (Process* parent, const std::string &name, Process* action, const std::string &spec) :
+  Activator::Activator (Process* parent, const std::string& name, Process* action, const std::string& spec) :
       Process (name)
   {
     _action = action->find_component (spec);

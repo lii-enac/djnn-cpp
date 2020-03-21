@@ -82,7 +82,7 @@ namespace djnn
     class PreviousAction : public Action
     {
     public:
-      PreviousAction (Process* parent, const std::string &name, Previous& np, double init_val)
+      PreviousAction (Process* parent, const std::string& name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
        _prev (init_val) { Process::finalize_construction (parent, name); }
@@ -98,7 +98,7 @@ namespace djnn
       double _prev;
     };
   public:
-    Previous (Process *parent, const std::string &name, double i_val);
+    Previous (Process *parent, const std::string& name, double i_val);
     virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
@@ -132,14 +132,14 @@ namespace djnn
     class AdderAccumulatorAction : public Action
     {
     public:
-      AdderAccumulatorAction (Process* parent, const std::string &name, AdderAccumulator& aa);
+      AdderAccumulatorAction (Process* parent, const std::string& name, AdderAccumulator& aa);
       void impl_activate () override;
       void impl_deactivate () override {}
     private:
       AdderAccumulator& _aa;
     };
   public:
-    AdderAccumulator (Process* parent, const std::string &name, double input, double clamp_min, double clamp_max);
+    AdderAccumulator (Process* parent, const std::string& name, double input, double clamp_min, double clamp_max);
     virtual ~AdderAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;

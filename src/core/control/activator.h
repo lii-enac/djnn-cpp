@@ -24,8 +24,8 @@ namespace djnn {
   class Activator : public Process
   {
   public:
-    Activator (Process* parent, const std::string &name, Process* src);
-    Activator (Process* parent, const std::string &name, Process* src, const std::string &spec);
+    Activator (Process* parent, const std::string& name, Process* src);
+    Activator (Process* parent, const std::string& name, Process* src, const std::string& spec);
     virtual ~Activator ();
     void impl_activate () override { _action->activate (); };
     void impl_deactivate () override {}

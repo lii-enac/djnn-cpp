@@ -254,7 +254,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 
-  ListIterator::ListIterator (Process *parent, const std::string &name, Process *list, Process *action, bool model)
+  ListIterator::ListIterator (Process *parent, const std::string& name, Process *list, Process *action, bool model)
   :
     Process (name, model),
     _action (action)

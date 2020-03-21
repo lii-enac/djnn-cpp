@@ -65,7 +65,7 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (Process *parent, const std::string &name, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (Process *parent, const std::string& name, const Left_init& l_val, const Right_init& r_val)
     : Process (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
@@ -147,7 +147,7 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (Process *parent, const std::string &name, const Input_init& i_val)
+    UnaryOperator (Process *parent, const std::string& name, const Input_init& i_val)
     : Process (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),

@@ -24,7 +24,7 @@ namespace djnn
 {
   using namespace std;
 
-  Exit::Exit (Process* parent, const std::string &name, int value, bool isModel)
+  Exit::Exit (Process* parent, const std::string& name, int value, bool isModel)
   : Process (name),
   _value (this, "value", value)
   {

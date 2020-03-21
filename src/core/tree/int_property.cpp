@@ -67,7 +67,7 @@ namespace djnn
   }
 
   void
-  AbstractIntProperty::set_value (const std::string &v, bool propagate)
+  AbstractIntProperty::set_value (const std::string& v, bool propagate)
   {
     int oldVal = get_value();
     try {

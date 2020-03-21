@@ -160,7 +160,7 @@ namespace djnn
     PhidgetManager_delete (&_handle);
   }
 
-  IFaceKit888::IFaceKit888 (Process *parent, const std::string &name) :
+  IFaceKit888::IFaceKit888 (Process *parent, const std::string& name) :
       Process (n)
   {
     _inputs = new List (this, "inputs");

@@ -27,7 +27,7 @@ namespace djnn
   class AbstractAudioStyle : public AbstractSObj
   {
   public:
-    AbstractAudioStyle (Process *parent, const std::string &name) : AbstractSObj(parent, name) {}
+    AbstractAudioStyle (Process *parent, const std::string& name) : AbstractSObj(parent, name) {}
     virtual ~AbstractAudioStyle () {};
     virtual void impl_activate () override {}
     virtual void impl_deactivate () override {}

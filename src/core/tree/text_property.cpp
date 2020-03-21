@@ -64,7 +64,7 @@ namespace djnn
   }
 
   void
-  AbstractTextProperty::set_value (const std::string &v, bool propagate)
+  AbstractTextProperty::set_value (const std::string& v, bool propagate)
   {
     get_ref_value() = v;
     if (is_activable () && propagate) {

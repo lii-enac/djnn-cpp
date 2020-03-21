@@ -23,7 +23,7 @@ namespace djnn {
 class CairoGLSDLWindow : public SDLWindow
 {
   public:
-    CairoGLSDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
+    CairoGLSDLWindow (Window *win, const std::string& title, double x, double y, double w, double h);
     virtual ~CairoGLSDLWindow ();
 
     void update () override;

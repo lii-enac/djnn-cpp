@@ -76,7 +76,7 @@ namespace djnn
     }
   }
 
-  AbstractAssignment::Init::Init (AbstractAssignment *p, const std::string& name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec,
+  AbstractAssignment::Init::Init (AbstractAssignment *p, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec,
     std::string src_ref_spec, std::string dst_ref_spec)
   {
     if (src == 0) {
@@ -102,7 +102,7 @@ namespace djnn
     dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (Process *parent, const std::string &name, Process* src, const std::string &ispec, Process* dst, const std::string &dspec, bool isModel,
+  AbstractAssignment::AbstractAssignment (Process *parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel,
     std::string src_ref_spec, std::string dst_ref_spec)
   :
   SrcToDstLink (parent, name, isModel),
@@ -193,8 +193,8 @@ namespace djnn
       Graph::instance ().add_edge (_src, _dst);
   }
 
-  Assignment::Assignment (Process* parent, const std::string &name, Process* src, const std::string &ispec, Process* dst,
-                          const std::string &dspec, bool isModel) :
+  Assignment::Assignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst,
+                          const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
   {
@@ -260,8 +260,8 @@ namespace djnn
     }
   }
 
-  PausedAssignment::PausedAssignment (Process* parent, const std::string &name, Process* src, const std::string &ispec,
-                                      Process* dst, const std::string &dspec, bool isModel) :
+  PausedAssignment::PausedAssignment (Process* parent, const std::string& name, Process* src, const std::string& ispec,
+                                      Process* dst, const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
   {

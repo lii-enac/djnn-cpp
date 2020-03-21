@@ -50,7 +50,7 @@ namespace djnn {
     dev_type _type;
   };
 
-  LinuxDevice* map_device (const struct libevdev *_dev, const std::string &n);
+  LinuxDevice* map_device (const struct libevdev *_dev, const std::string& n);
 
   class Evdev {
     private:
@@ -115,7 +115,7 @@ namespace djnn {
   class LinuxMouse : public LinuxDevice
   {
   public:
-    LinuxMouse (Process *parent, const std::string &name, const struct libevdev *dev);
+    LinuxMouse (Process *parent, const std::string& name, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
     void impl_activate () override {}
@@ -154,7 +154,7 @@ namespace djnn {
   class LinuxTouchPanel : public LinuxDevice
   {
   public:
-    LinuxTouchPanel (Process *parent, const std::string &name, const struct libevdev *dev);
+    LinuxTouchPanel (Process *parent, const std::string& name, const struct libevdev *dev);
     ~LinuxTouchPanel ();
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -171,7 +171,7 @@ namespace djnn {
   class GPIOLine: public Process {
     class GPIOLineWriteAction : public Action {
     public:
-      GPIOLineWriteAction (Process *parent, const std::string &name) : Action (parent, name) {}
+      GPIOLineWriteAction (Process *parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
@@ -179,14 +179,14 @@ namespace djnn {
     };
     class GPIOLineReadAction : public Action {
     public:
-      GPIOLineReadAction (Process *parent, const std::string &name) : Action (parent, name) {}
+      GPIOLineReadAction (Process *parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
       void impl_deactivate () override {}
     };
   public:
-    GPIOLine (Process *parent, const std::string &name, int pin, direction_e dir);
+    GPIOLine (Process *parent, const std::string& name, int pin, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int get_pin () { return _pin; }

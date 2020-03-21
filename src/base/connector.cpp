@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Connector::ConnectorAction::ConnectorAction (Process* parent, const std::string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+  Connector::ConnectorAction::ConnectorAction (Process* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
         Action (parent, name), _src (src), _dst (dst), _propagate (propagate) 
   {
   }
@@ -38,7 +38,7 @@ namespace djnn
     }
   }
 
-  Connector::Init::Init(Connector * c, Process* src, const std::string & ispec, Process* dst, const std::string & dspec,
+  Connector::Init::Init(Connector * c, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec,
     std::string& src_ref_spec, std::string& dst_ref_spec)
   {
     if (src == 0) {

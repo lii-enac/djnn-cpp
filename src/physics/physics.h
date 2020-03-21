@@ -44,7 +44,7 @@ namespace djnn
     typedef std::vector<PhyObj*> phy_obj_list;
     class StepAction : public Action {
     public:
-      StepAction (Process *parent, const std::string &name) : Action (parent, name) {}
+      StepAction (Process *parent, const std::string& name) : Action (parent, name) {}
 
       virtual ~StepAction () {}
     private:
@@ -77,14 +77,14 @@ namespace djnn
   class PhyObj : public Process {
     class D3PhyObjUpdatePosition : public Action {
         public:
-          D3PhyObjUpdatePosition (Process *parent, const std::string &name) : Action (parent, name) {}
+          D3PhyObjUpdatePosition (Process *parent, const std::string& name) : Action (parent, name) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
           void impl_deactivate () override {}
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
-          D3PhyObjUpdateVelocity (Process *parent, const std::string &name) : Action (parent, name) {}
+          D3PhyObjUpdateVelocity (Process *parent, const std::string& name) : Action (parent, name) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
           void impl_deactivate () override {}
@@ -128,7 +128,7 @@ namespace djnn
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string &n) override;
+    Process* find_component (const std::string& n) override;
   private:
     double w, h, d;
     DoublePropertyProxy *_w, *_h, *_d;
@@ -140,7 +140,7 @@ namespace djnn
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string &n) override;
+    Process* find_component (const std::string& n) override;
     void update () override {};
   protected:
     struct plane_raw_props_t { double a, b, c, d ;};
@@ -154,7 +154,7 @@ namespace djnn
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_component (const std::string &n) override;
+    Process* find_component (const std::string& n) override;
   private:
     double radius;
     DoublePropertyProxy *_radius;

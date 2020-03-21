@@ -68,7 +68,7 @@ namespace djnn
   }
 
   Process*
-  World::find_component (const std::string &n)
+  World::find_component (const std::string& n)
   {
     Process* res = Process::find_component (n);
     if (res)
@@ -214,7 +214,7 @@ namespace djnn
   }
 
   Process*
-  PhyObj::find_component (const std::string &n)
+  PhyObj::find_component (const std::string& n)
   {
     Process *res = Process::find_component (n);
     if (res)
@@ -336,7 +336,7 @@ namespace djnn
     _update_from_engine = false;
   }
 
-  Plane::Plane (Process *parent, const std::string &name, double a, double b, double c, double d) :
+  Plane::Plane (Process *parent, const std::string& name, double a, double b, double c, double d) :
       PhyObj (parent, name, 0, 0, 0, 0), _plane_props
         { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
@@ -352,7 +352,7 @@ namespace djnn
   }
 
   Process*
-  Plane::find_component (const std::string &n)
+  Plane::find_component (const std::string& n)
   {
     Process *res = PhyObj::find_component (n);
     if (res)
@@ -391,7 +391,7 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (Process *parent, const std::string &name, double x, double y, double z, double w, double h, double d, double mass) :
+  Box::Box (Process *parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
       PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
     Process::finalize_construction (parent, name);
@@ -419,7 +419,7 @@ namespace djnn
   }
 
   Process*
-  Box::find_component (const std::string &n)
+  Box::find_component (const std::string& n)
   {
     Process* res = PhyObj::find_component (n);
     if (res)
@@ -438,7 +438,7 @@ namespace djnn
     return res;
   }
 
-  Sphere::Sphere (Process *parent, const std::string &name, double x, double y, double z, double radius, double mass) :
+  Sphere::Sphere (Process *parent, const std::string& name, double x, double y, double z, double radius, double mass) :
       PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
     Process::finalize_construction (parent, name);
@@ -464,7 +464,7 @@ namespace djnn
   }
 
   Process*
-  Sphere::find_component (const std::string &n)
+  Sphere::find_component (const std::string& n)
   {
     Process* res = PhyObj::find_component (n);
     if (res)

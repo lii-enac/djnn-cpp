@@ -70,7 +70,7 @@ namespace djnn
   }
 
   void
-  RefProperty::set_value (const std::string &v, bool propagate)
+  RefProperty::set_value (const std::string& v, bool propagate)
   {
     cerr << "Warning: undefined conversion from Text to Component\n";
   }
@@ -102,7 +102,7 @@ namespace djnn
   }
 
   Process*
-  RefProperty::find_component (const std::string &path)
+  RefProperty::find_component (const std::string& path)
   {
     if (path.empty ())
       return this;

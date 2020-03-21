@@ -27,7 +27,7 @@ namespace djnn {
     class BindingAction : public Action
     {
     public:
-      BindingAction (Process* parent, const std::string &name, bool activate);
+      BindingAction (Process* parent, const std::string& name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override {
       	((Binding*)get_parent ())->_dst->set_activation_source (((Binding*)get_parent ())->_src);
@@ -46,9 +46,9 @@ namespace djnn {
 
     };
   public:
-    Binding (Process* parent, const std::string &name, Process* src, const std::string & ispec, Process* dst,
-      const std::string & dspec, std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
-    Binding (Process* parent, const std::string &name, Process* src, const std::string & ispec, bool on_activation, Process* dst, const std::string & dspec, bool activate,
+    Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, Process* dst,
+      const std::string&  dspec, std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
+    Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, bool on_activation, Process* dst, const std::string&  dspec, bool activate,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
     virtual ~Binding ();
     void impl_activate () override { 
@@ -65,7 +65,7 @@ namespace djnn {
   private:
     void set_parent (Process* p) override;
 
-    struct Init { Init(Binding *, Process* src, const std::string & ispec, bool on_activation, Process* dst, const std::string & dspec, bool to_activate,
+    struct Init { Init(Binding *, Process* src, const std::string&  ispec, bool on_activation, Process* dst, const std::string&  dspec, bool to_activate,
       std::string& src_ref_spec, std::string& dst_ref_spec); };
     friend struct Init;
     void check_init(const std::string& ispec, const std::string& dspec);

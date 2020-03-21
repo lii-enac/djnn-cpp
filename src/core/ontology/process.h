@@ -127,12 +127,12 @@ namespace djnn {
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const std::string& name);
     virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
-    friend  void merge_children (Process *p1, const std::string &sy1, Process *p2, const std::string &sy2); // strange, only used in gradient...
+    friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
     virtual Process* find_component (const std::string&); // FIXME: should be find_child
     virtual Process* find_component (int index) { return nullptr; }
-    static  Process* find_component (Process* p, const std::string &path);
+    static  Process* find_component (Process* p, const std::string& path);
     virtual const std::string& find_component_name (const Process* child) const; // FIXME : low efficiency function cause by linear search. use with care !
-    void    add_symbol (const std::string &name, Process* c); // FIXME: should be alias
+    void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
 
     typedef std::map<std::string, Process*> symtable_t;
@@ -231,8 +231,8 @@ namespace djnn {
   };
 
   void alias_children (Process *p, Process *to);
-  void alias (Process *parent, const std::string &name, Process* from);
-  void merge_children (Process *p1, const std::string &sy1, Process *p2, const std::string &sy2);
+  void alias (Process *parent, const std::string& name, Process* from);
+  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2);
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);
   inline Process* find (Process *p) { return p; }

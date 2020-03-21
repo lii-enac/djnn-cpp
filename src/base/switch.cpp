@@ -22,7 +22,7 @@ namespace djnn
 {
   using namespace std;
 
-  Switch::SwitchAction::SwitchAction (Switch *parent, const std::string &name) :
+  Switch::SwitchAction::SwitchAction (Switch *parent, const std::string& name) :
         Action (parent, name),  _sw (parent) 
   {
   }
@@ -32,7 +32,7 @@ namespace djnn
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-  Switch::Switch (Process *parent, const std::string &name, const std::string &initial) 
+  Switch::Switch (Process *parent, const std::string& name, const std::string& initial) 
   : Container (parent, name),
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),

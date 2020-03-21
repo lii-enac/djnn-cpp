@@ -26,11 +26,11 @@ namespace djnn {
   class DRMWindow : public WinImpl
   {
   public:
-    DRMWindow (Window *win, const std::string &title, double x, double y, double w, double h);
+    DRMWindow (Window *win, const std::string& title, double x, double y, double w, double h);
     virtual ~DRMWindow ();
     buff* get_next_buff ();
     void page_flip ();
-    void set_cursor (const std::string &path, int hotX, int hotY) {}
+    void set_cursor (const std::string& path, int hotX, int hotY) {}
     Process* get_vblank () {
       if (_conn == nullptr)
         return nullptr;

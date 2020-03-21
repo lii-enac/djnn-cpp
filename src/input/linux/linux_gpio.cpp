@@ -60,7 +60,7 @@ namespace djnn {
   }
 
   Process*
-  p_find_gpio (const std::string &path, direction_e dir)
+  p_find_gpio (const std::string& path, direction_e dir)
   {
     try {
       string::size_type sz;
@@ -84,7 +84,7 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (Process *parent, const std::string &name, int pin, direction_e dir)
+  GPIOLine::GPIOLine (Process *parent, const std::string& name, int pin, direction_e dir)
    : Process (name),
    _pin (pin),
    _dir (dir),

@@ -59,7 +59,7 @@ namespace djnn
 
   
 
-  Previous::Previous (Process *parent, const std::string &name, double i_val)
+  Previous::Previous (Process *parent, const std::string& name, double i_val)
   : Process (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),
@@ -139,7 +139,7 @@ namespace djnn
 
   }
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const std::string &name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const std::string& name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -161,7 +161,7 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (Process* parent, const std::string &name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (Process* parent, const std::string& name, double input, double clamp_min,
                                       double clamp_max)
   : Process (name),
     _input (this, "input", input),

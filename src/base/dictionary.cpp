@@ -58,7 +58,7 @@ namespace djnn
     d->get_map ()[key] = value;
   }
 
-  Dictionary::Dictionary (Process *parent, const std::string &name)
+  Dictionary::Dictionary (Process *parent, const std::string& name)
   : Process (name), 
     _key (this, "key", nullptr),
     _value (this, "value", nullptr),

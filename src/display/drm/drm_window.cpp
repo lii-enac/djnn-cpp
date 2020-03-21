@@ -29,7 +29,7 @@ namespace djnn
 {
 
 
-  DRMWindow::DRMWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
+  DRMWindow::DRMWindow (djnn::Window* win, const std::string& title, double x, double y, double w, double h) :
       _window (win), _conn (nullptr), is_activated (false)
   {
     for (auto c: conn_list) {

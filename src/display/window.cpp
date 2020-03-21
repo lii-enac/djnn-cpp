@@ -31,7 +31,7 @@
 namespace djnn
 {
   void
-  Window::init_ui (const std::string &title, double x, double y, double w, double h)
+  Window::init_ui (const std::string& title, double x, double y, double w, double h)
   {
     _pos_x = new DoubleProperty (this, "x", x);
     _pos_y = new DoubleProperty (this, "y", y);
@@ -72,7 +72,7 @@ namespace djnn
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
-  Window::Window (Process *parent, const std::string &name, const std::string &title, double x, double y, double w,
+  Window::Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w,
 		  double h) :
       Process (name),
       //_self_shared_ptr(this),
@@ -129,7 +129,7 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (Process *parent, const std::string &name, const std::string &path, int hotX, int hotY) :
+  Cursor::Cursor (Process *parent, const std::string& name, const std::string& path, int hotX, int hotY) :
       Process (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
@@ -139,7 +139,7 @@ namespace djnn
   }
 
   Process*
-  Cursor::find_component (const std::string &name)
+  Cursor::find_component (const std::string& name)
   {
     Process* res = Process::find_component (name);
     if (res)

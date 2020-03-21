@@ -20,7 +20,7 @@ namespace djnn
   
 
   ref_info_t
-  check_for_ref (Process* src, const std::string &spec)
+  check_for_ref (Process* src, const std::string& spec)
   {
     /* spec is empty */
     if (spec.empty ()) 

@@ -66,7 +66,7 @@ namespace djnn
   }
 
   void
-  AbstractDoubleProperty::set_value (const std::string &v, bool propagate)
+  AbstractDoubleProperty::set_value (const std::string& v, bool propagate)
   {
     double oldVal = get_value();
     try {

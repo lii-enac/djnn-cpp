@@ -23,7 +23,7 @@ namespace djnn
 {
   using namespace std;
 
-  Synchronizer::Init::Init(Synchronizer * s, Process *parent, const std::string &name, Process* dst, const std::string & dspec)
+  Synchronizer::Init::Init(Synchronizer * s, Process *parent, const std::string& name, Process* dst, const std::string&  dspec)
   {
     if (dst == nullptr) {
       error (s, "dst argument cannot be null in synchronizer creation (" + s->get_name () + ", " + dspec + ")");
@@ -36,7 +36,7 @@ namespace djnn
     }
   }
 
-  Synchronizer::Synchronizer (Process *parent, const std::string &name, Process* dst, const std::string & dspec)
+  Synchronizer::Synchronizer (Process *parent, const std::string& name, Process* dst, const std::string&  dspec)
   :
     Process (name),
     _dst(nullptr),
@@ -84,7 +84,7 @@ namespace djnn
   }
 
   void
-  Synchronizer::add_source (Process *src, const std::string &ispec)
+  Synchronizer::add_source (Process *src, const std::string& ispec)
   {
     if (src == nullptr) {
       error (this,

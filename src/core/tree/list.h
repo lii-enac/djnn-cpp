@@ -33,10 +33,10 @@ namespace djnn {
     void add_child (Process* c, const std::string& name) override;
     void insert (Process* c, const std::string& spec);
     void remove_child (Process* c) override;
-    void remove_child (const std::string &name) override;
+    void remove_child (const std::string& name) override;
     void dump(int level=0) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
-    Process* find_component (const std::string &path) override;
+    Process* find_component (const std::string& path) override;
     Process* find_component (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
@@ -60,7 +60,7 @@ namespace djnn {
   class ListIterator : public Process
   {
   public:
-    ListIterator (Process *parent, const std::string &name, Process *list, Process *action, bool model = true);
+    ListIterator (Process *parent, const std::string& name, Process *list, Process *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};

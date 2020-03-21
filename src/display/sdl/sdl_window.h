@@ -33,10 +33,10 @@ namespace djnn {
   class SDLWindow : public WinImpl
   {
   public:
-    SDLWindow (Window *win, const std::string &title, double x, double y, double w, double h);
+    SDLWindow (Window *win, const std::string& title, double x, double y, double w, double h);
     virtual ~SDLWindow ();
     SDL_Window * sdl_window() { return _sdl_window; }
-    void set_cursor (const std::string &path, int hotX, int hotY) override;
+    void set_cursor (const std::string& path, int hotX, int hotY) override;
     enum {
       user_event_awake
     };

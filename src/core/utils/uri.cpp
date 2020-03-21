@@ -20,13 +20,13 @@ namespace djnn
   std::map<std::string, Process*> URI::uri_manager;
 
   void
-  URI::add_uri (const std::string &prefix, Process* p)
+  URI::add_uri (const std::string& prefix, Process* p)
   {
     uri_manager.insert (std::pair<std::string, Process*> (prefix, p));
   }
 
   Process*
-  URI::find_by_uri (const std::string &uri)
+  URI::find_by_uri (const std::string& uri)
   {
     std::size_t found = uri.find("://");
     if (found == std::string::npos)

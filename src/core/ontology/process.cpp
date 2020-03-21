@@ -342,7 +342,7 @@ namespace djnn
   }
 
   Process*
-  Process::find_component (Process *p, const std::string &path)
+  Process::find_component (Process *p, const std::string& path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
@@ -414,7 +414,7 @@ namespace djnn
   }
 
   void
-  Process::add_symbol (const std::string &name, Process* c)
+  Process::add_symbol (const std::string& name, Process* c)
   {
     /* if ((symtable ().insert (std::pair<string, Process*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
@@ -463,13 +463,13 @@ namespace djnn
   }
 
   void
-  alias (Process *p, const std::string &name, Process* from)
+  alias (Process *p, const std::string& name, Process* from)
   {
     p->add_symbol (name, from);
   }
 
   void
-  merge_children (Process *p1, const std::string &sy1, Process* p2, const std::string &sy2)
+  merge_children (Process *p1, const std::string& sy1, Process* p2, const std::string& sy2)
   {
     Process* x2 = p2->find_component (sy2);
     if (x2 == nullptr) {

@@ -27,7 +27,7 @@ static int glad_inited=0;
 
 namespace djnn {
 
-  CairoGLSDLWindow::CairoGLSDLWindow (djnn::Window* win, const std::string &title, double x, double y, double w, double h) :
+  CairoGLSDLWindow::CairoGLSDLWindow (djnn::Window* win, const std::string& title, double x, double y, double w, double h) :
   SDLWindow(win, title, x,y,w,h),
   _my_cairo_surface (nullptr)
   {
@@ -69,7 +69,7 @@ namespace djnn {
     y = _window->pos_y ()->get_value ();
     w = _window->width ()->get_value ();
     h = _window->height ()->get_value ();
-    const std::string &title = _window->title ()->get_value ();
+    const std::string& title = _window->title ()->get_value ();
 
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, 1 );

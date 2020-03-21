@@ -33,7 +33,7 @@ namespace djnn
     }
   }
   
-  SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (Process *parent, const std::string &name) :
+  SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (Process *parent, const std::string& name) :
         HermiteCurve (parent, name, 0, 1, 0, 0) {}
 
   void

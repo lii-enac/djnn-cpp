@@ -47,7 +47,7 @@ namespace djnn
       return (KAPPA * v + 16) / 116;
   }
 
-  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *parent, const std::string &name) :
+  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *parent, const std::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -90,7 +90,7 @@ namespace djnn
     _p->_h->set_value (H, true);
   }
 
-  RGBToLCHConverter::RGBToLCHConverter (Process *parent, const std::string &name) :
+  RGBToLCHConverter::RGBToLCHConverter (Process *parent, const std::string& name) :
       Process (name)
   {
     _r = new IntProperty (this, "r", 0);
@@ -167,7 +167,7 @@ namespace djnn
     _cb->disable ();
   }
 
-  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *parent, const std::string &name) :
+  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *parent, const std::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -217,7 +217,7 @@ namespace djnn
     _p->_b->set_value (B < 0 ? 0 : (B > 255) ? 255 : B, true);
   }
 
-  LCHToRGBConverter::LCHToRGBConverter (Process *parent, const std::string &name) :
+  LCHToRGBConverter::LCHToRGBConverter (Process *parent, const std::string& name) :
       Process (name)
   {
     _r = new IntProperty (this, "r", 0);

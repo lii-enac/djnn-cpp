@@ -22,7 +22,7 @@ namespace djnn {
 
   class AbstractIntProperty : public AbstractProperty {
   public:
-    AbstractIntProperty (Process* parent, const std::string &name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
+    AbstractIntProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
     virtual int get_prop_type () override { return Integer; }
 
     // AbstractProperty interface
@@ -30,7 +30,7 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (Process* v, bool propagate) override;
-    void set_value (const std::string &v, bool propagate) override;
+    void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     std::string get_string_value () override { return std::to_string (get_ref_value ()); }
@@ -43,7 +43,7 @@ namespace djnn {
 
   class IntProperty : public AbstractIntProperty {
   public:
-    IntProperty (Process* parent, const std::string &name, int v) : AbstractIntProperty (parent, name), value(v) { }
+    IntProperty (Process* parent, const std::string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
     void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
@@ -54,7 +54,7 @@ namespace djnn {
 
   class IntPropertyProxy : public AbstractIntProperty {
   public:
-    IntPropertyProxy (Process* parent, const std::string &name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
+    IntPropertyProxy (Process* parent, const std::string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
     void serialize (const std::string& format) override;
     Process* clone () override;
   protected:

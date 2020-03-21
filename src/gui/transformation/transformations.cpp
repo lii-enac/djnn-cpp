@@ -39,7 +39,7 @@
 
 namespace djnn
 {
-  AbstractTransformation::AbstractTransformation (Process *parent, const std::string &name) :
+  AbstractTransformation::AbstractTransformation (Process *parent, const std::string& name) :
       AbstractGObj (parent, name)
   {
   }
@@ -49,7 +49,7 @@ namespace djnn
   }
 
 
-  Translation::Translation (Process *parent, const std::string &name, double tx, double ty) :
+  Translation::Translation (Process *parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     Process::finalize_construction (parent, name);
@@ -83,7 +83,7 @@ namespace djnn
   }
 
 
-  GradientTranslation::GradientTranslation (Process *parent, const std::string &name, double tx, double ty) :
+  GradientTranslation::GradientTranslation (Process *parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     /* avoid dynamic_cast for cloning */
@@ -115,7 +115,7 @@ namespace djnn
   }
 
 
-  Rotation::Rotation (Process *parent, const std::string &name, double a, double cx, double cy) :
+  Rotation::Rotation (Process *parent, const std::string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     Process::finalize_construction (parent, name);
@@ -160,7 +160,7 @@ namespace djnn
   }
 
 
-  GradientRotation::GradientRotation (Process *parent, const std::string &name, double a, double cx, double cy) :
+  GradientRotation::GradientRotation (Process *parent, const std::string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -192,7 +192,7 @@ namespace djnn
   }
 
 
-  Scaling::Scaling (Process *parent, const std::string &name, double sx, double sy, double cx, double cy) :
+  Scaling::Scaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     Process::finalize_construction (parent, name);
@@ -226,7 +226,7 @@ namespace djnn
   }
 
 
-  GradientScaling::GradientScaling (Process *parent, const std::string &name, double sx, double sy, double cx, double cy) :
+  GradientScaling::GradientScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -257,7 +257,7 @@ namespace djnn
     return new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
-  SkewX::SkewX (Process *parent, const std::string &name, double a) :
+  SkewX::SkewX (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     Process::finalize_construction (parent, name);
@@ -292,7 +292,7 @@ namespace djnn
   }
 
 
-  GradientSkewX::GradientSkewX (Process *parent, const std::string &name, double a) :
+  GradientSkewX::GradientSkewX (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -324,7 +324,7 @@ namespace djnn
   }
 
 
-  SkewY::SkewY (Process *parent, const std::string &name, double a) :
+  SkewY::SkewY (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     Process::finalize_construction (parent, name);
@@ -358,7 +358,7 @@ namespace djnn
     return new SkewY (nullptr, get_name (), raw_props.a);
   }
 
-  GradientSkewY::GradientSkewY (Process *parent, const std::string &name, double a) :
+  GradientSkewY::GradientSkewY (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -1620,7 +1620,7 @@ namespace djnn
     add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
-  AbstractHomography::AbstractHomography (Process *parent, const std::string &name, 
+  AbstractHomography::AbstractHomography (Process *parent, const std::string& name, 
                                           double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
@@ -2068,7 +2068,7 @@ namespace djnn
     AbstractPropHomography::impl_deactivate ();
   }
 
-  Homography::Homography (Process *parent, const std::string &name, double m11, double m12, double m13, double m14, double m21,
+  Homography::Homography (Process *parent, const std::string& name, double m11, double m12, double m13, double m14, double m21,
                           double m22, double m23, double m24, double m31, double m32, double m33, double m34,
                           double m41, double m42, double m43, double m44) :
       AbstractHomography (parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
@@ -2117,7 +2117,7 @@ namespace djnn
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
   }
 
-  GradientHomography::GradientHomography (Process *parent, const std::string &name, double m11, double m12, double m13, double m21,
+  GradientHomography::GradientHomography (Process *parent, const std::string& name, double m11, double m12, double m13, double m21,
                                           double m22, double m23, double m31, double m32, double m33) :
       AbstractHomography (parent, name, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
   {
@@ -2152,7 +2152,7 @@ namespace djnn
                                     raw_props.m31, raw_props.m32, raw_props.m33);
   }
 
-  SimpleGradientTransform::SimpleGradientTransform (Process *parent, const std::string &name, double a, double b, double c, double d,
+  SimpleGradientTransform::SimpleGradientTransform (Process *parent, const std::string& name, double a, double b, double c, double d,
                                                     double e, double f) :
       AbstractHomography (parent, name, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
   {

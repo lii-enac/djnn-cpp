@@ -41,7 +41,7 @@ namespace djnn {
     class SwitchRangeAction : public Action
     {
     public:
-      SwitchRangeAction (SwitchRange *parent, const std::string &name);
+      SwitchRangeAction (SwitchRange *parent, const std::string& name);
       virtual ~SwitchRangeAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
@@ -50,7 +50,7 @@ namespace djnn {
       SwitchRange* _sw;
     };
   public:
-    SwitchRange (Process *parent, const std::string &name, double initial);
+    SwitchRange (Process *parent, const std::string& name, double initial);
     virtual process_type_e get_cpnt_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;

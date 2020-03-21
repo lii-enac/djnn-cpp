@@ -29,7 +29,7 @@ namespace djnn
     class TextPrinterAction : public Action
     {
     public:
-      TextPrinterAction (Process *parent, const std::string &name, TextProperty* input) : Action (parent, name), _input (input) {}
+      TextPrinterAction (Process *parent, const std::string& name, TextProperty* input) : Action (parent, name), _input (input) {}
       virtual ~TextPrinterAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -37,7 +37,7 @@ namespace djnn
       TextProperty* _input;
     };
   public:
-    TextPrinter (Process *parent, const std::string &name);
+    TextPrinter (Process *parent, const std::string& name);
     void impl_activate () override { c_input.enable(); };
     void impl_deactivate () override { c_input.disable (); };
     virtual ~TextPrinter ();
@@ -63,7 +63,7 @@ namespace djnn
   class TextBinaryOperator : public Process
   {
   public:
-    TextBinaryOperator (Process *parent, const std::string &name, const std::string& l_val, const std::string& r_val)
+    TextBinaryOperator (Process *parent, const std::string& name, const std::string& l_val, const std::string& r_val)
     : Process (name),
       _left(this, name_info<Action>::left, l_val),
       _right(this, name_info<Action>::right, r_val),
@@ -75,7 +75,7 @@ namespace djnn
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
       Process::finalize_construction (parent, name);
     }
-    TextBinaryOperator (Process *parent, const std::string &name)
+    TextBinaryOperator (Process *parent, const std::string& name)
     : Process (name),
       _left(this, name_info<Action>::left, ""),
       _right(this, name_info<Action>::right, ""),
@@ -122,7 +122,7 @@ namespace djnn
   class TextCatenatorAction : public Action
     {
     public:
-      TextCatenatorAction (Process* parent, const std::string &name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
+      TextCatenatorAction (Process* parent, const std::string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextCatenatorAction () {}
       void impl_activate () override
@@ -144,7 +144,7 @@ namespace djnn
   class TextComparatorAction : public Action
     {
     public:
-      TextComparatorAction (Process* parent, const std::string &name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
+      TextComparatorAction (Process* parent, const std::string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextComparatorAction () {}
       void impl_activate ()
@@ -171,7 +171,7 @@ namespace djnn
   private:
     class AccumulateAction : public Action {
       public:
-        AccumulateAction (Process *parent, const std::string &name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+        AccumulateAction (Process *parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
         virtual ~AccumulateAction () {}
         void impl_activate () override {
           std::string new_state = _ta._state.get_value () + _ta._input.get_value ();
@@ -183,7 +183,7 @@ namespace djnn
     };
     class DeleteAction : public Action {
     public:
-      DeleteAction (Process *parent, const std::string &name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+      DeleteAction (Process *parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
       virtual ~DeleteAction () {}
       void impl_activate () override {
         int sz = _ta._state.get_value ().size ();
@@ -197,11 +197,11 @@ namespace djnn
       TextAccumulator& _ta;
     };
   public:
-    TextAccumulator (Process *parent, const std::string &name, const std::string &init = "");
+    TextAccumulator (Process *parent, const std::string& name, const std::string& init = "");
     virtual ~TextAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string &type) override;
+    void serialize (const std::string& type) override;
   private:
     void set_parent (Process* p) override;
     TextProperty _input, _state;
@@ -217,7 +217,7 @@ namespace djnn
     class DoubleFormatterAction : public Action
     {
     public:
-      DoubleFormatterAction (Process* parent, const std::string &name, DoubleFormatter& df) : Action (parent, name), _df(df) { Process::finalize_construction (parent, name); }
+      DoubleFormatterAction (Process* parent, const std::string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { Process::finalize_construction (parent, name); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();
@@ -239,7 +239,7 @@ namespace djnn
     };
   public:
     DoubleFormatter (double initial, int decimal);
-    DoubleFormatter (Process* parent, const std::string &name, double initial, int decimal);
+    DoubleFormatter (Process* parent, const std::string& name, double initial, int decimal);
     virtual ~DoubleFormatter ();
     void impl_activate () override;
     void impl_deactivate () override;

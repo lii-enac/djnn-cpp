@@ -31,7 +31,7 @@ namespace djnn
     class HermiteCurveAction : public Action
     {
     public:
-      HermiteCurveAction (Process* parent, const std::string &name, AbstractProperty *input, AbstractProperty *p1,
+      HermiteCurveAction (Process* parent, const std::string& name, AbstractProperty *input, AbstractProperty *p1,
                           AbstractProperty *p2, AbstractProperty *t1, AbstractProperty *t2,
                           AbstractProperty *output);
       virtual ~HermiteCurveAction () {}
@@ -41,7 +41,7 @@ namespace djnn
       AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };
   public:
-    HermiteCurve (Process *parent, const std::string &name, double p1, double p2, double t1, double t2);
+    HermiteCurve (Process *parent, const std::string& name, double p1, double p2, double t1, double t2);
     virtual ~HermiteCurve ();
     void impl_activate () override;
     void impl_deactivate () override;

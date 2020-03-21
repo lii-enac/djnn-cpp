@@ -346,7 +346,7 @@ namespace djnn
   }
 
 
-  AssignmentSequence::AssignmentSequence (Process *parent, const std::string &name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (Process *parent, const std::string& name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);

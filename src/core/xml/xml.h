@@ -65,10 +65,10 @@ namespace djnn
 
   class XML {
   public:
-    static Process* djnLoadFromXML (const std::string &uri);
+    static Process* djnLoadFromXML (const std::string& uri);
     static Process* djnParseXML (FILE* f);
-    static int djn_RegisterXMLParser (const std::string &uri, djn_XMLTagLookupProc l, const char* format);
-    static int djn_UnregisterXMLParser (const std::string &uri);
+    static int djn_RegisterXMLParser (const std::string& uri, djn_XMLTagLookupProc l, const char* format);
+    static int djn_UnregisterXMLParser (const std::string& uri);
     static void clear_xml_parser ();
     static int djn_XMLHandleAttr (Process** e, const char** attrs, djn_XMLSymLookupProc lookup, ...);
   private:
@@ -96,5 +96,5 @@ namespace djnn
   };
   void
   init_xml ();
-  inline Process* loadFromXML (const std::string &uri) { return XML::djnLoadFromXML (uri); }
+  inline Process* loadFromXML (const std::string& uri) { return XML::djnLoadFromXML (uri); }
 }

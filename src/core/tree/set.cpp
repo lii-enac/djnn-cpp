@@ -159,7 +159,7 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
   }
 
-  SetIterator::SetIterator (Process *parent, const std::string &name, Process *set, Process *action, bool model) :
+  SetIterator::SetIterator (Process *parent, const std::string& name, Process *set, Process *action, bool model) :
       Process (name, model), _set (set), _action (action)
   {
     Set *s = dynamic_cast<Set*> (set);

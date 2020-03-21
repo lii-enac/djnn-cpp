@@ -32,7 +32,7 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const std::string &name, Process* shape, Process* matrix)
+  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const std::string& name, Process* shape, Process* matrix)
   : Process (name)
   {
     if (shape == nullptr || matrix == nullptr) {

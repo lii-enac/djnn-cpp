@@ -20,13 +20,13 @@
 
 namespace djnn
 {
-  void error (Process *p, const std::string &msg);
-  void warning (Process *p, const std::string &msg);
+  void error (Process *p, const std::string& msg);
+  void warning (Process *p, const std::string& msg);
 
   class Context {
   public:
     static Context* instance ();
-    void new_line (int line, const std::string &filename) { _line = line; _filename = filename; };
+    void new_line (int line, const std::string& filename) { _line = line; _filename = filename; };
     int line () { return _line; }
     const std::string& filename () { return _filename; }
   private:

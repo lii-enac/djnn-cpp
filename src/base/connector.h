@@ -29,7 +29,7 @@ namespace djnn {
     class ConnectorAction : public Action
     {
     public:
-      ConnectorAction (Process* parent, const std::string &name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
+      ConnectorAction (Process* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};

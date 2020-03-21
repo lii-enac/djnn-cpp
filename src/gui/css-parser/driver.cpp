@@ -41,7 +41,7 @@ namespace css
   }
 
   bool
-  Driver::parse_file (const std::string &filename, Process *p)
+  Driver::parse_file (const std::string& filename, Process *p)
   {
     std::ifstream in (filename.c_str ());
     if (!in.good ())
@@ -50,7 +50,7 @@ namespace css
   }
 
   bool
-  Driver::parse_string (const std::string &input, const std::string& sname, Process *p)
+  Driver::parse_string (const std::string& input, const std::string& sname, Process *p)
   {
     std::istringstream iss (input);
     return parse_stream (iss, sname, p);

@@ -25,13 +25,13 @@ namespace djnn
 {
   using namespace std;
 
-  Binding::BindingAction::BindingAction (Process* parent, const std::string &name, bool activate) : 
+  Binding::BindingAction::BindingAction (Process* parent, const std::string& name, bool activate) : 
     Action (parent, name) 
   { 
     set_binding_action (activate); 
   }
 
-  Binding::Init::Init(Binding * b, Process* src, const std::string & ispec, bool on_activation, Process* dst, const std::string & dspec, bool to_activate,
+  Binding::Init::Init(Binding * b, Process* src, const std::string&  ispec, bool on_activation, Process* dst, const std::string&  dspec, bool to_activate,
     string& src_ref_spec, string& dst_ref_spec)
   {
     if (src == 0) {
@@ -118,7 +118,7 @@ namespace djnn
     }
   }
 
-  Binding::Binding (Process* parent, const std::string & name, Process* src, const std::string & ispec, Process* dst, const std::string & dspec,
+  Binding::Binding (Process* parent, const std::string&  name, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec,
     string src_ref_spec, string dst_ref_spec)
   :
       SrcToDstLink (parent, name),
@@ -144,8 +144,8 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
-  Binding::Binding (Process* parent, const std::string &name, Process* src, const std::string & ispec, bool on_activation,
-                    Process* dst, const std::string & dspec, bool activate,
+  Binding::Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, bool on_activation,
+                    Process* dst, const std::string&  dspec, bool activate,
                     string src_ref_spec, string dst_ref_spec)
   :
       SrcToDstLink (parent, name),

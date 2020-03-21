@@ -39,7 +39,7 @@ namespace djnn
     { "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
   Process*
-  SVGHolder::find_component (const std::string &path)
+  SVGHolder::find_component (const std::string& path)
   {
     Process *p = Container::find_component (path);
     if (p == nullptr && _gobj != nullptr)
@@ -87,7 +87,7 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (Process *parent, const std::string &name, int id, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (Process *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure) :
       Process (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
@@ -272,7 +272,7 @@ namespace djnn
   }
 
   Process*
-  AbstractGShape::find_component (const std::string &path)
+  AbstractGShape::find_component (const std::string& path)
   {
     if (ui)
       return Process::find_component (path);
@@ -322,7 +322,7 @@ namespace djnn
   }
 
   void
-  AbstractGShape::add_style_class (const std::string &classname)
+  AbstractGShape::add_style_class (const std::string& classname)
   {
     int id = StyleSheet::get_id(classname);
     if (id != -1)
