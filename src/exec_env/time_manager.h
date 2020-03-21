@@ -103,7 +103,8 @@ namespace djnn_internal {
       void reset   (Timer* timer);
       void cleanup ();
       bool empty   () const { return _timers.empty(); }
-      Timer*  get_next () const;
+      Timer*  get_next ();
+      const Timer*   get_next () const;
       void    pop_next ();
       void time_has_elapsed (time_point now);
       bool has_time_elapsed () const;

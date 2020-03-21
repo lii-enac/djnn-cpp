@@ -55,9 +55,10 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void serialize (const std::string& type) override;
-    void update_period ();
     // djnn_internal::Time::Timer
     virtual void do_it(const djnn_internal::Time::duration& actualduration) override;
+
+    void update_period ();
 
   private:
     IntProperty _period;

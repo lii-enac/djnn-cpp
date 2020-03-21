@@ -73,7 +73,6 @@ namespace djnn
   void
   Clock::do_it(const djnn_internal::Time::duration& actualduration)
   {
-    //std::cerr << "doit " << get_name () <<" with delta " << _period.get_value () - actualtime << __FL__;
     _elapsed.set_value ((double)actualduration.count()/1000, true);
     //auto sav_period = _period.get_value ();
     _tick.activate (); // OR ?? _tick.notify_activation ();
@@ -82,16 +81,18 @@ namespace djnn
       //&& sav_period == _period.get_value ()
     )
     {
-      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-      DjnnTimeManager::instance().schedule(this, d, get_end_time());
+      if(!is_already_scheduled ()) {// _tick.activate() below might have alread scheduled it
+        djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+        DjnnTimeManager::instance().schedule(this, d, get_end_time());
+      }
     }
-
   }
 
   void
   Clock::update_period()
   {
-    DjnnTimeManager::instance().cancel(this);
+    if(is_already_scheduled ())
+      DjnnTimeManager::instance().cancel(this);
     if(somehow_activating()) {
       djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
       DjnnTimeManager::instance().schedule(this, d);

@@ -14,9 +14,10 @@
 
 #include "time_manager.h"
 
-//#include <iostream>
-//#include "utils/debug.h"
 #include "core/utils/error.h"
+#include <iostream>
+#include "utils/debug.h"
+
 #include <cassert>
 
 
@@ -107,6 +108,12 @@ namespace djnn_internal {
     }
 
     Timer*
+    Manager::get_next()
+    {
+      return *(_timers.begin ());
+    }
+
+    const Timer*
     Manager::get_next() const
     {
       return *(_timers.begin ());
@@ -124,11 +131,11 @@ namespace djnn_internal {
       if(empty())
         return;
 
-      Timer * previous_first = get_next();
+      const Timer* previous_first = get_next();
       
       _dontCallTimerHasChanged=1;
       while ( empty()==false && (now > (get_next()->get_end_time() - _precision))) {
-        auto * t = get_next();
+        Timer* t = get_next();
         pop_next();
 
         // req : sync between timers, do not loose time because of delays
