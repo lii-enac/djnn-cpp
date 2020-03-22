@@ -20,8 +20,12 @@
 
 namespace djnn
 {
-  void error (Process *p, const std::string& msg);
-  void warning (Process *p, const std::string& msg);
+
+  #define error(p,msg) __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__))
+  #define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+std::to_string(__LINE__))
+
+  void __error (Process *p, const std::string& msg);
+  void __warning (Process *p, const std::string& msg);
 
   class Context {
   public:

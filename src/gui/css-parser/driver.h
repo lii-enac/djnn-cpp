@@ -15,6 +15,10 @@
 #include <string>
 #include "core/core-dev.h"
 
+// core/utils/error.h macros clash with Driver::error
+#undef error
+#undef warning
+
 namespace css {
 
 class Scanner;

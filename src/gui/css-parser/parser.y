@@ -21,6 +21,10 @@
 #include "base/base.h"
 #include "gui/gui-dev.h"
 
+// core/utils/error.h macros clash with Driver::error
+#undef error
+#undef warning
+
 %}
 
 %require "2.3"
