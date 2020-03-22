@@ -183,7 +183,7 @@ namespace djnn {
       std::string dev_name = str.substr (found + 1);
       DRMDevice* drm_dev = new DRMDevice (GPUs, dev_name, fd, res->min_width, res->max_width, res->min_height, res->max_height);
 #if DEBUG
-      cout << "New device found: " << dev_name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
+      cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
 #endif
       drmModeConnector *drm_conn;
       for (int i = 0; i < res->count_connectors; ++i)

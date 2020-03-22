@@ -169,23 +169,23 @@ namespace djnn {
 
     int ret = get_crtc(res, drm_conn);
     if (!ret) {
-      error (this, "no valid crtc for connector " +
-      drm_conn->connector_id);
+      error (this, string("no valid crtc for connector ") + to_string(
+      drm_conn->connector_id));
     }
 
     ret = init_fb(&_buffs[0]);
     ret &= init_fb(&_buffs[1]);
     if (!ret) {
-      error (this, "Cannot create framebuffer for connector " +
-        drm_conn->connector_id);
+      error (this, string("Cannot create framebuffer for connector ") + to_string(
+        drm_conn->connector_id));
     }
 
     _saved_crtc = drmModeGetCrtc (_fd, _crtc_id);
     buff *b = &_buffs[0];
     ret = drmModeSetCrtc (_fd, _crtc_id, b->fb, 0, 0, &_conn, 1, &_mode);
     if (ret) {
-      error (this, "failed to set crtc for connector " +
-        drm_conn->connector_id);
+      error (this, string("failed to set crtc for connector ") + to_string(
+        drm_conn->connector_id));
     }
   }
 
