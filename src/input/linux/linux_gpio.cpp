@@ -21,9 +21,11 @@
 #include <unistd.h>
 #include <cstring>
 
+using namespace std;
+
 namespace djnn {
   static int num_gpios = 0;
-  static map<int,GPIOLine*> gpio_lines;
+  static std::map<int,GPIOLine*> gpio_lines;
 
   void
   p_init_gpios ()

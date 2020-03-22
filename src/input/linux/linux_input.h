@@ -77,7 +77,7 @@ namespace djnn {
     IOFD *_iofd;
     LinuxDevice *_djn_dev;
     Coupling *_readable_cpl;
-    string _name;
+    std::string _name;
     struct libevdev *_dev;
     int _fd;
     bool _aborted;
@@ -107,7 +107,7 @@ namespace djnn {
 		IOFD* _udev_iofd;
     struct udev *_udev_connection;
     struct udev_monitor *_udev_mon;
-    map<string, Evdev*> _sysname_to_dev;
+    std::map<std::string, Evdev*> _sysname_to_dev;
     UdevAction *_action;
     Coupling *_readable_cpl;
 	};

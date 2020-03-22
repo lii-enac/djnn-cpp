@@ -19,6 +19,8 @@
 
 #include <string.h>
 
+using namespace std;
+
 namespace djnn {
 
   Udev::Udev ()

@@ -24,6 +24,8 @@
 #include <sys/ioctl.h>
 #include <libevdev/libevdev.h>
 
+using namespace std;
+
 namespace djnn {
 	Evdev::Evdev (const char* node) : _action (nullptr), _aborted (false)
   {
