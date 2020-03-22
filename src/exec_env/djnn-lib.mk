@@ -98,8 +98,8 @@ endif
 
 
 
-ifeq ($(CXX),g++)
-lib_lib_ldflags += -latomic
+ifeq (g++,$(findstring g++,$(CXX)))
+lib_ldflags += -latomic
 endif
 
 ifeq ($(os),$(filter $(os),Darwin Linux))
