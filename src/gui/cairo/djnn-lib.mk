@@ -19,6 +19,7 @@ lib_pkg += cairo pango pangocairo
 endif
 
 ifeq ($(cairo_backend),drm)
+include src/display/drm/djnn-lib-flags.mk
 lib_srcs += $(shell find src/gui/cairo/drm -name "*.cpp")
 lib_cppflags += -I.
 lib_pkg += cairo pango pangocairo
