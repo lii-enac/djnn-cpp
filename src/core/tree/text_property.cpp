@@ -15,6 +15,7 @@
 
 #include "text_property.h"
 #include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
 #include <iostream>
 
@@ -43,6 +44,19 @@ namespace djnn
       tp->set_value (v, true);
     else
       warning (p, "setString only works on text/string properties");
+  }
+
+  double
+  AbstractTextProperty::get_double_value ()
+  {
+    try {
+      double r = stof (get_ref_value());
+      return r;
+    }
+    catch (const std::invalid_argument& ia) {
+      warning (this, "undefined double value for text property");
+      return 0;
+    }
   }
 
   void

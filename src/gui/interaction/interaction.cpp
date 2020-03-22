@@ -19,7 +19,7 @@
 #include "core/tree/list.h"
 #include "gui/transformation/transformations.h"
 
-
+#include "core/utils/error.h"
 
 #include <cmath>
 #include <iostream>

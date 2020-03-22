@@ -15,7 +15,6 @@
 
 #pragma once
 
-#include "core/utils/error.h"
 #include "abstract_property.h"
 
 #include <string>
@@ -35,16 +34,7 @@ namespace djnn {
     void set_value (Process* v, bool propagate) override;
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate); };
-    double get_double_value () override {
-      try {
-        double r = stof (get_ref_value());
-        return r;
-      }
-      catch (const std::invalid_argument& ia) {
-        warning (this, "undefined double value for text property");
-        return 0;
-      }
-    }
+    double get_double_value () override;
     std::string get_string_value () override { return get_ref_value (); }
     void dump (int level=0) override;
 
@@ -78,3 +68,4 @@ namespace djnn {
   std::string& getString (Process* p);
   void setString (Process *p, std::string &v);
 }
+

@@ -1,4 +1,5 @@
 #include "src_to_dst_link.h"
+#include "core/utils/error.h"
 
 namespace djnn
 {

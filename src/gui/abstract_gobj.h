@@ -40,7 +40,7 @@ namespace djnn
   {
   public:
     AbstractGObj (Process *parent, const std::string& name) : Process (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
-      if (!gui_initialized) warning (this, "Module GUI not initialized");
+      //if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
     virtual process_type_e get_process_type () const override { return GOBJ_T; }

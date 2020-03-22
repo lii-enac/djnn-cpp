@@ -38,7 +38,7 @@
 #include "tree/text_property.h"
 #include "tree/ref_property.h"
 #include "tree/set.h"
-#include "utils/error.h"
+//#include "utils/error.h"
 
 
 namespace djnn {

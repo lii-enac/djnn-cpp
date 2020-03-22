@@ -19,6 +19,8 @@
 #include "display/window.h"
 #include "core/tree/component_observer.h"
 
+#include "core/utils/error.h"
+
 #include <algorithm>
 #include <boost/range/adaptor/reversed.hpp>
 

@@ -26,6 +26,8 @@
 #include "gui/picking/picking.h"
 #include "gui/picking/analytical_picking_context.h"
 
+#include "core/utils/error.h"
+
 #include <iostream>
 #include "utils/debug.h"
 

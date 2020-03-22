@@ -14,6 +14,7 @@
 
 #include "ref_property.h"
 #include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
 #include <sstream>
 #include <iostream>
@@ -49,6 +50,13 @@ namespace djnn
     std::ostringstream address;
     address << (void const *) value;
     return address.str ();
+  }
+
+  double
+  RefProperty::get_double_value ()
+  {
+    warning (this, "undefined double value for ref property");
+    return 0;
   }
 
   void

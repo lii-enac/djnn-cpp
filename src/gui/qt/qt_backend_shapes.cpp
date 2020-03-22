@@ -13,9 +13,6 @@
  *
  */
 
-
-#include "core/utils/error.h"
-
 #include "gui/backend.h"
 
 #include "qt_context.h"
@@ -33,6 +30,9 @@
 #include <QtCore/QFileInfo>
 #include <iostream>
 #include <cmath>
+
+#include "core/utils/error.h"
+
 
 #include "exec_env/exec_env-dev.h"
 #define _PERF_TEST 0
