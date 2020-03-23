@@ -29,18 +29,28 @@ namespace djnn {
 		finalize_construction(parent, name);
 	}
 
+}
+
+#include "core/utils/error.h"
+
+namespace djnn {
+
 	DjnnLogger djnnLogger;
 
 	void
 	CrazyflieRC::impl_activate()
-	{ DBG;
-		_crazyflie = new Crazyflie (_uri.get_string_value (), djnnLogger);
-		std::cout << "firmware version: " << _crazyflie->getFirmwareVersion() << std::endl;
-    	std::cout << "protocol version: " << _crazyflie->getProtocolVersion() << std::endl;
-    	//_crazyflie->sendSetpoint(0,0,0,0); // unlock
-    	_crazyflie->setParamByName("commander", "enHighLevel", (unsigned char)1);
-    	//_crazyflie->syson();
-    	//std::cout << "device type name: " << _crazyflie->getDeviceTypeName() << std::endl;
+	{
+		try {
+			_crazyflie = new Crazyflie (_uri.get_string_value (), djnnLogger);
+			std::cout << "firmware version: " << _crazyflie->getFirmwareVersion() << std::endl;
+    		std::cout << "protocol version: " << _crazyflie->getProtocolVersion() << std::endl;
+	    	//_crazyflie->sendSetpoint(0,0,0,0); // unlock
+	    	_crazyflie->setParamByName("commander", "enHighLevel", (unsigned char)1);
+	    	//_crazyflie->syson();
+	    	//std::cout << "device type name: " << _crazyflie->getDeviceTypeName() << std::endl;
+    	} catch (std::runtime_error& exc) {
+    		warning(this, exc.what());
+    	}
 	}
 
 	void
