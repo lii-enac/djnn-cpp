@@ -56,13 +56,19 @@ ifdef cross_prefix
 #options: c g llvm-g i686-w64-mingw32- arm-none-eabi- em
 #/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 #/usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
-
+ifneq ($(cross_prefix),g)
 CC := $(cross_prefix)$(CC)
 CXX := $(cross_prefix)$(CXX)
 AR := $(cross_prefix)$(AR)
 RANLIB := $(cross_prefix)ranlib
+else
+#temporary covid hack
+CC := gcc
+CXX := g++
+#AR := $(cross_prefix)$(AR)
+RANLIB := ranlib
 endif
-
+endif
 
 # ---------------------------------------
 # os and compiler specifics
