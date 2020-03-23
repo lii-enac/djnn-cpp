@@ -20,11 +20,11 @@
 
 namespace djnn
 {
-
-  #define error(p,msg) __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__))
+  inline int __exit(int ret) { exit(ret); return 1; }
+  #define error(p,msg) __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__)) && __exit(-0);
   #define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+std::to_string(__LINE__))
 
-  void __error (Process *p, const std::string& msg);
+  int __error (Process *p, const std::string& msg);
   void __warning (Process *p, const std::string& msg);
 
   class Context {

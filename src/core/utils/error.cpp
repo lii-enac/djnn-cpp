@@ -27,7 +27,7 @@ namespace djnn
     return _instance;
   }
 
-  void
+  int
   __error (Process* p, const std::string& msg)
   {
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << (p ? p->get_name () : "") << " - " << msg << std::endl << std::endl;
@@ -35,7 +35,8 @@ namespace djnn
     if (p) 
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
     
-    exit (0);
+    return 1;
+    //exit (0);
   }
 
   void
