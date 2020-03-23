@@ -326,6 +326,9 @@ headers := $(djnn_libs)
 headers := $(addsuffix .h,$(headers)) $(addsuffix -dev.h,$(headers))
 headers := $(addprefix $(build_dir)/include/djnn/,$(headers))
 
+uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
+all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
+
 
 # ---------------------------------------
 # rules
@@ -409,7 +412,7 @@ distclean clear:
 .PHONY: distclean clear
 
 dbg:
-	@echo $(src_dir)
+	@echo $(all_pkg)
 
 .PHONY: dbg
 
