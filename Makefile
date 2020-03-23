@@ -262,8 +262,8 @@ $1_cov_gcda  := $$($1_objs:.o=.gcda)
 
 ifneq ($$($1_lib_pkg),)
 $1_lib_pkgpath = $$(addsuffix :,$$(lib_pkgpath))
-$1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
-$1_lib_ldflags += $$(shell env PKG_CONFIG_PATH=$$($1_lib_pkgpath) pkg-config --libs $$($1_lib_pkg))
+$1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
+$1_lib_ldflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --libs $$($1_lib_pkg))
 endif
 
 $1_lib_all_ldflags := $$($1_lib_ldflags)
