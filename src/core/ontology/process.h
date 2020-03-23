@@ -247,7 +247,7 @@ namespace djnn {
   void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2);
   inline Process* find (Process *p) { return p; }
   inline Process* find (Process *p, const std::string& path) { return p->find_child (path); }
-  inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
+  // inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
 
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);
