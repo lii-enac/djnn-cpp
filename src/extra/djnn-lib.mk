@@ -1,3 +1,6 @@
+#temporary hack during lockdown
+crazyflie ?= CRAZYFLIE
+
 ifeq ($(crazyflie), CRAZYFLIE)
 include src/extra/crazyflie/djnn-lib.mk
 endif
