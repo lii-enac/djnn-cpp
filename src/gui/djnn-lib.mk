@@ -8,7 +8,9 @@ lib_srcs += $(shell find src/gui/style -name "*.cpp")
 lib_srcs += $(shell find src/gui/transformation -name "*.cpp")
 lib_srcs += $(shell find src/gui/XML -name "*.cpp")
 lib_srcs += $(shell find src/gui/widgets -name "*.cpp")
-lib_srcs += src/gui/css-parser/parser.cpp src/gui/css-parser/scanner.cpp src/gui/css-parser/driver.cpp 
+lib_srcs += src/gui/css-parser/parser.cpp src/gui/css-parser/scanner.cpp src/gui/css-parser/driver.cpp
+
+lib_headers += $(shell find src/gui -name "*.h")
 
 $(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
 #$(build_dir)/src/gui/css-parser/%.o: $(build_dir)/src/gui/css-parser/parser.hpp

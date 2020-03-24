@@ -6,6 +6,8 @@ lib_srcs += $(shell find src/core/execution -name "*.cpp")
 lib_srcs += $(shell find src/core/serializer -name "*.cpp")
 lib_srcs += $(shell find src/core/utils -name "*.cpp")
 
+lib_headers += $(shell find src/core -name "*.h")
+
 #lib_srcs += $(shell find src/core/utils/ext/remotery -name "*.c")
 #lib_cflags += -DRMT_ENABLED=1 -DRMT_USE_OPENGL=0
 CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call

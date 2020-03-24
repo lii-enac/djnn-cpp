@@ -1,5 +1,7 @@
 local_dir := $(src_dir)/extra/crazyflie
 
+lib_headers := $(shell find src/extra/crazyflie -name "*.h")
+
 lib_djnn_deps = core
 
 lib_srcs += $(shell find $(local_dir))

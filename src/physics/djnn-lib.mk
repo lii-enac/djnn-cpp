@@ -2,6 +2,8 @@ lib_djnn_deps = core base
 
 lib_srcs := src/physics/physics.cpp src/physics/world.cpp
 
+lib_headers := $(shell find src/physics -name "*.h")
+
 ifeq ($(physics),BOX2D)
 lib_cppflags = -Isrc/physics
 lib_srcs += $(shell find src/physics/Box2D -name "*.cpp")

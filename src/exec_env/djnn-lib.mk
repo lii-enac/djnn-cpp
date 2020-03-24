@@ -4,6 +4,8 @@ lib_srcs += src/exec_env/external_source.cpp src/exec_env/exec_env.cpp \
 			src/exec_env/global_mutex.cpp src/exec_env/main_loop.cpp src/exec_env/exit.cpp \
 			src/exec_env/timer.cpp src/exec_env/time_manager.cpp src/exec_env/djnn_time_manager.cpp
 
+lib_headers += $(shell find src/exec_env -name "*.h")
+
 
 ifeq ($(os),Linux)
 lib_suffix =.so

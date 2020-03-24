@@ -87,8 +87,10 @@ ifeq ($(findstring MINGW,$(os)),MINGW)
 os := MinGW
 endif
 
+build_lib_dir := $(build_dir)/lib
 CFLAGS += -I$(src_dir)
-LDFLAGS += -L$(build_dir)
+build_incl_dir := $(build_dir)/include/djnn-cpp
+LDFLAGS += -L$(build_lib_dir)
 lib_static_suffix = .a
 
 ifeq ($(os),Linux)
@@ -216,7 +218,7 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 CXXFLAGS += -std=c++14
 CXXFLAGS += $(CFLAGS)
 
-djnn_libs ?= core exec_env base comms display gui input animation utils files audio
+djnn_libs ?= core exec_env base display comms gui input animation utils files audio
 djnn_libs += $(djnn_libs_extra)
 #extra
 
@@ -240,6 +242,7 @@ cov :=
 define lib_makerule
 
 lib_srcs :=
+lib_headers :=
 lib_srcgens :=
 lib_cflags :=
 lib_cppflags :=
@@ -256,6 +259,7 @@ $1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
 $1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
 $1_objs ?= $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
+$1_headers := $$(filter %.h,$$(lib_headers))
 
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
@@ -263,9 +267,9 @@ $1_objs += $$(lib_objs)
 $1_pkg_deps :=
 $1_deps := $$($1_objs:.o=.d)
 $1_libname := libdjnn-$1$$(lib_suffix)
-$1_lib := $$(build_dir)/$$($1_libname)
+$1_lib := $$(build_lib_dir)/$$($1_libname)
 $1_libname_static := libdjnn-$1$$(lib_static_suffix)
-$1_lib_static := $$(build_dir)/$$($1_libname_static)
+$1_lib_static := $$(build_lib_dir)/$$($1_libname_static)
 $1_lib_cflags := $$(lib_cflags)
 $1_lib_cppflags := $$(lib_cppflags)
 $1_lib_ldflags := $$(lib_ldflags)
@@ -285,7 +289,7 @@ $1_lib_all_ldflags := $$($1_lib_ldflags)
 
 ifeq ($(os),$(filter $(os),Darwin MinGW))
 ifdef lib_djnn_deps
-$1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_dir)/libdjnn-,$$(lib_djnn_deps)))
+$1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_lib_dir)/libdjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps))
 #$1_lib_all_ldflags += $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
 endif
@@ -304,7 +308,7 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
-$$($1_lib): $$($1_objs)
+$$($1_lib): $$($1_objs) $1_headers_cp  
 	@mkdir -p $$(dir $$@)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 
@@ -325,9 +329,15 @@ $1_tidy: $$($1_tidy_srcs)
 .PHONY: $1_tidy
 
 $1_dbg:
-	@echo $$($1_objs)
-	@echo $$($1_djnn_deps)
-	@echo $$($1_lib_ldflags)
+	@echo $$($1_headers)
+#	@echo $$($1_objs)
+#	@echo $$($1_djnn_deps)
+#	@echo $$($1_lib_ldflags)
+
+$1_headers_cp: $$($1_headers)
+	@echo "==> copy all $1 .h into $(build_incl_dir)/$1"
+	$$(foreach var,$$($1_headers), mkdir -p $$(dir $$(patsubst src%, $(build_incl_dir)%, $$(var))) ; cp $$(var) $$(patsubst src%, $(build_incl_dir)%, $$(var)) ;)
+.PHONY: $1_headers_cp
 
 
 srcs += $$($1_srcs)
@@ -343,11 +353,6 @@ endef
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
-#headers := $(foreach a,$(djnn_libs),$a/$a)
-headers := $(djnn_libs)
-headers := $(addsuffix .h,$(headers)) $(addsuffix -dev.h,$(headers))
-headers := $(addprefix $(build_dir)/include/djnn/,$(headers))
-
 uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
@@ -355,13 +360,10 @@ all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 # ---------------------------------------
 # rules
 
-headers: $(headers)
-.PHONY: headers
-
-djnn: $(libs) $(headers)
+djnn: $(libs)
 .PHONY: djnn
 
-static: $(libs_static) $(headers)
+static: $(libs_static)
 .PHONY: static
 
 size: $(libs_static)
@@ -392,10 +394,6 @@ $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
 $(build_dir)/%.cpp: %.l
 	@mkdir -p $(dir $@)
 	$(LEX) -o $@ $<
-
-$(build_dir)/include/djnn/%.h: src/*/%.h
-	@mkdir -p $(dir $@)
-	cp $< $@
 
 %_tidy: %
 	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)

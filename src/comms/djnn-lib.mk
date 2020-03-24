@@ -1,6 +1,8 @@
 lib_djnn_deps = exec_env core
 lib_srcs := $(shell find src/comms -name "*.cpp")
 
+lib_headers := $(shell find src/comms -name "*.h")
+
 # Ivy dependancy
 # svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
 # cd ivy-c/src
