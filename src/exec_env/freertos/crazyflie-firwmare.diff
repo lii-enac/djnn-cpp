@@ -1,22 +1,25 @@
 diff --git a/Makefile b/Makefile
-index 0b80973..526fa74 100644
+index 0b80973..99443fd 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -269,7 +269,8 @@ OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(CRT0)
+@@ -269,7 +269,11 @@ OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(CRT0)
  ############### Compilation configuration ################
  AS = $(CROSS_COMPILE)as
  CC = $(CROSS_COMPILE)gcc
--LD = $(CROSS_COMPILE)gcc
-+#LD = $(CROSS_COMPILE)gcc
++ifneq ($(djnn),1)
+ LD = $(CROSS_COMPILE)gcc
++else
 +LD = $(CROSS_COMPILE)g++
++endif
  SIZE = $(CROSS_COMPILE)size
  OBJCOPY = $(CROSS_COMPILE)objcopy
  GDB = $(CROSS_COMPILE)gdb
-@@ -336,6 +337,18 @@ ifeq ($(LTO), 1)
+@@ -336,6 +340,21 @@ ifeq ($(LTO), 1)
    LDFLAGS += -Os -flto -fuse-linker-plugin
  endif
  
 +# djnn
++ifeq ($(djnn),1)
 +djnn_path := ../djnn-cpp
 +djnn_include_path := $(djnn_path)/src
 +djnn_lib_path := $(djnn_path)/build
@@ -24,9 +27,11 @@ index 0b80973..526fa74 100644
 +FREERTOS_OBJ += event_groups.o
 +
 +INCLUDES += -I$(djnn_path)/src
++CFLAGS += -DUSE_DJNN=1
 +CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
 +LDFLAGS += -L$(djnn_lib_path)
-+LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core
++LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core -static-libstdc++
++endif
 +
  #Program name
  PROG = $(PLATFORM)
@@ -46,46 +51,46 @@ index 63d5dba..2d01c93 100644
   * Schedule a function for execution by the worker loop
   * The function will be executed as soon as possible by the worker loop.
 diff --git a/src/modules/src/system.c b/src/modules/src/system.c
-index fcc5712..8d71af0 100644
+index fcc5712..50126f2 100644
 --- a/src/modules/src/system.c
 +++ b/src/modules/src/system.c
-@@ -67,6 +67,11 @@
+@@ -67,6 +67,13 @@
  #include "app.h"
  #include "static_mem.h"
  
++#ifdef USE_DJNN 
 +// djnn
 +#include "core/core-c.h"
 +#include "exec_env/exec_env-c.h"
 +#include "base/base-c.h"
++#endif
 +
  /* Private variable */
  static bool selftestPassed;
  static bool canFly;
-@@ -183,6 +188,13 @@ void systemTask(void *arg)
+@@ -183,6 +190,13 @@ void systemTask(void *arg)
    proximityInit();
  #endif
  
-+  //
-+  djnn_init_core();
++#ifdef USE_DJNN
++  //djnn_init_core();
 +  djnn_init_exec_env();
-+  djnn_init_base();
-+
-+  DEBUG_PRINT("YES %p", djnn_init_core);
++  //djnn_init_base();
++  //DEBUG_PRINT("YES %p", djnn_init_core);*/
++#endif
 +
    //Test the modules
    pass &= systemTest();
    pass &= configblockTest();
-@@ -230,7 +242,9 @@ void systemTask(void *arg)
+@@ -230,6 +244,8 @@ void systemTask(void *arg)
    }
    DEBUG_PRINT("Free heap: %d bytes\n", xPortGetFreeHeapSize());
  
--  workerLoop();
-+  djnn_launch_mainloop ();
++  //djnn_launch_mainloop ();
 +
-+  //workerLoop();
+   workerLoop();
  
    //Should never reach this point!
-   while(1)
 diff --git a/src/modules/src/worker.c b/src/modules/src/worker.c
 index 289ddec..c48928f 100644
 --- a/src/modules/src/worker.c
