@@ -66,13 +66,14 @@ namespace djnn
   Clock::impl_deactivate ()
   {
      _c_update.disable ();
-    DjnnTimeManager::instance().cancel(this);
+    if(is_already_scheduled ())
+      DjnnTimeManager::instance().cancel(this);
   }
 
   // djnn_internal::Time::Timer
   void
   Clock::do_it(const djnn_internal::Time::duration& actualduration)
-  {
+  { //DBG;
     _elapsed.set_value ((double)actualduration.count()/1000, true);
     //auto sav_period = _period.get_value ();
     _tick.activate (); // OR ?? _tick.notify_activation ();
@@ -90,7 +91,7 @@ namespace djnn
 
   void
   Clock::update_period()
-  {
+  { //DBG
     if(is_already_scheduled ())
       DjnnTimeManager::instance().cancel(this);
     if(somehow_activating()) {
