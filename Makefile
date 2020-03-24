@@ -15,10 +15,14 @@
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
+MAJOR = 1
+MINOR = 9
+MINOR2 = 0 
+
 default: all
 .PHONY: default
 
-all: config.mk djnn
+all: config.mk djnn pkgconf install
 .PHONY: all
 
 help:
@@ -436,6 +440,31 @@ dbg:
 	@echo $(all_pkg)
 
 .PHONY: dbg
+
+# ---------------------------------------
+# package config
+
+djnn_prefix ?= $(shell pwd)/build
+
+pkgconf:
+	@echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
+	@for f in *.pc.in ; do \
+		sed -e 's,@PREFIX@,$(djnn_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $$f > $$(echo $$f | cut -f 1,2 -d .); \
+		mkdir -p $(build_dir) ; \
+		mv $$(echo $$f | cut -f 1,2 -d .) $(build_dir)/ ; \
+	done
+
+install_prefix ?= /usr/local
+
+installpkgconf: 
+	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
+	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
+	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
+
+#----------------------------------------
+# install 
+
+install: installpkgconf
 
 
 # ---------------------------------------

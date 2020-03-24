@@ -1,0 +1,11 @@
+prefix=@PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/djnn-cpp
+
+Name: djnn-cpp
+Description: The djnn-cpp library
+Version: @MAJOR@.@MINOR@.@MINOR2@
+#Libs.private:
+Cflags: -I${includedir}
+Libs: -L${libdir} -ldjnn-core -ldjnn-base -ldjnn-animation -ldjnn-audio -ldjnn-comms -ldjnn-display -ldjnn-exec_env -ldjnn-files -ldjnn-gui -ldjnn-input -ldjnn-utils
