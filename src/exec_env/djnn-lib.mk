@@ -120,5 +120,6 @@ ifeq ($(os),FreeRTOS)
 include src/exec_env/freertos/djnn-lib-flags.mk
 lib_cppflags += -DDJNN_USE_FREERTOS_MAINLOOP=1
 lib_srcs += src/exec_env/freertos/freertos_mainloop.cpp
+lib_srcs += src/exec_env/crazyflie/crazyflie.cpp
 lib_srcs += $(shell find src/exec_env/freertos/ext/freertos-cxx11 -name "*.cpp")
 endif

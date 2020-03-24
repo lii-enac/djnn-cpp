@@ -35,6 +35,8 @@ namespace djnn
 {
   using namespace std;
 
+  SimpleAssignment::~SimpleAssignment () {}
+
   void
   SimpleAssignment::perform_action () {
       get_dst()->set_activation_source (get_src());

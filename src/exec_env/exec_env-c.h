@@ -4,6 +4,7 @@
 extern void djnn_init_exec_env ();
 extern void djnn_clear_exec_env ();
 extern void djnn_launch_mainloop ();
+extern void djnn_init_prog ();
 
 #ifdef DJNN_USE_FREERTOS
 extern void * timer_thread_local;

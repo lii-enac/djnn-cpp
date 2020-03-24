@@ -101,6 +101,7 @@ namespace djnn
     //atomic<chrono::milliseconds> _duration;
     //chrono::milliseconds _duration;
     djnn_atomic<chrono::milliseconds>::atomic _duration;
+    //djnn_atomic<chrono::duration<int,std::milli>>::atomic _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
     //        djnn application only has one mainloop.

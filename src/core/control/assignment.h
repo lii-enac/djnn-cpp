@@ -113,25 +113,26 @@ namespace djnn {
     public:
       AssignmentAction (Process* parent, const std::string& name)
       : Action(parent, name) { finalize_construction(parent, name); }
-      virtual ~AssignmentAction () {};
+      //virtual ~AssignmentAction () {};
       void impl_activate () override { dynamic_cast<SimpleAssignment*>(get_parent ()) -> perform_action (); }
     };
   public:
     SimpleAssignment (Process* parent, const std::string& name, Process* src, Process* dst, bool propagate)
     : Process (name), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate) {}
+    virtual ~SimpleAssignment ();
 
     void impl_activate   () override { _c_src.enable  (); };
     void impl_deactivate () override { _c_src.disable (); }
 
     void perform_action ();
     
-    void serialize (const std::string& format) override;
+    //void serialize (const std::string& format) override;
 
     Process* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
     Process* get_dst() { return _dst; }
 
   private:
-    void set_parent (Process* p) override;
+    //void set_parent (Process* p) override;
 
     Process *_src;
     Process *_dst;
