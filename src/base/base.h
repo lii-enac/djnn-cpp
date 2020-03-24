@@ -31,6 +31,7 @@
 #include "switch_list.h"
 #include "switch_range.h"
 #include "dictionary.h"
+#include "deref.h"
 
 namespace djnn {
 
