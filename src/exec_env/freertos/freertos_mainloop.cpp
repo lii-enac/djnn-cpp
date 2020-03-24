@@ -5,6 +5,7 @@
 #include <mutex>
 
 extern "C" {
+	// specific to crazyflie?
 	void workerBlock();
 	void workerHandleOneEvent();
 }
@@ -54,39 +55,5 @@ namespace djnn {
 	FreeRTOSMainloop::wakeup ()
 	{ //DBG;
 	}
-
-	/*void
-	FreeRTOSMainloopListener::slot_for_about_to_block () {}
-
-	void
-	FreeRTOSMainloop::slot_for_about_to_block ()
-	{
-		//DBG;
-		if (_please_exec) {
-		  //DBG;
-		  djnn::get_exclusive_access (DBG_GET);
-		  GRAPH_EXEC;
-		  djnn::release_exclusive_access (DBG_REL);
-		  _please_exec = false;
-		}
-
-		for (auto mll : _mlls) mll->slot_for_about_to_block();
-
-		already_awaken = false;
-	}*/
-
-	void
-	FreeRTOSMainloop::slot_for_awake ()
-	{
-		if(already_awaken) {
-		  return;
-		}
-
-		if (!get_please_stop ()) {
-		  // now qt can call event method on windows
-		  already_awaken = true;
-		} else {
-		  //_qapp->quit ();
-		}
-	}
 }
+

@@ -1,0 +1,129 @@
+diff --git a/Makefile b/Makefile
+index 0b80973..526fa74 100644
+--- a/Makefile
++++ b/Makefile
+@@ -269,7 +269,8 @@ OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(CRT0)
+ ############### Compilation configuration ################
+ AS = $(CROSS_COMPILE)as
+ CC = $(CROSS_COMPILE)gcc
+-LD = $(CROSS_COMPILE)gcc
++#LD = $(CROSS_COMPILE)gcc
++LD = $(CROSS_COMPILE)g++
+ SIZE = $(CROSS_COMPILE)size
+ OBJCOPY = $(CROSS_COMPILE)objcopy
+ GDB = $(CROSS_COMPILE)gdb
+@@ -336,6 +337,18 @@ ifeq ($(LTO), 1)
+   LDFLAGS += -Os -flto -fuse-linker-plugin
+ endif
+ 
++# djnn
++djnn_path := ../djnn-cpp
++djnn_include_path := $(djnn_path)/src
++djnn_lib_path := $(djnn_path)/build
++
++FREERTOS_OBJ += event_groups.o
++
++INCLUDES += -I$(djnn_path)/src
++CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
++LDFLAGS += -L$(djnn_lib_path)
++LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core
++
+ #Program name
+ PROG = $(PLATFORM)
+ #Where to compile the .o
+diff --git a/src/modules/interface/worker.h b/src/modules/interface/worker.h
+index 63d5dba..2d01c93 100644
+--- a/src/modules/interface/worker.h
++++ b/src/modules/interface/worker.h
+@@ -40,6 +40,9 @@ bool workerTest();
+  */
+ void workerLoop();
+ 
++void workerBlock();
++void workerHandleOneEvent();
++
+ /**
+  * Schedule a function for execution by the worker loop
+  * The function will be executed as soon as possible by the worker loop.
+diff --git a/src/modules/src/system.c b/src/modules/src/system.c
+index fcc5712..8d71af0 100644
+--- a/src/modules/src/system.c
++++ b/src/modules/src/system.c
+@@ -67,6 +67,11 @@
+ #include "app.h"
+ #include "static_mem.h"
+ 
++// djnn
++#include "core/core-c.h"
++#include "exec_env/exec_env-c.h"
++#include "base/base-c.h"
++
+ /* Private variable */
+ static bool selftestPassed;
+ static bool canFly;
+@@ -183,6 +188,13 @@ void systemTask(void *arg)
+   proximityInit();
+ #endif
+ 
++  //
++  djnn_init_core();
++  djnn_init_exec_env();
++  djnn_init_base();
++
++  DEBUG_PRINT("YES %p", djnn_init_core);
++
+   //Test the modules
+   pass &= systemTest();
+   pass &= configblockTest();
+@@ -230,7 +242,9 @@ void systemTask(void *arg)
+   }
+   DEBUG_PRINT("Free heap: %d bytes\n", xPortGetFreeHeapSize());
+ 
+-  workerLoop();
++  djnn_launch_mainloop ();
++
++  //workerLoop();
+ 
+   //Should never reach this point!
+   while(1)
+diff --git a/src/modules/src/worker.c b/src/modules/src/worker.c
+index 289ddec..c48928f 100644
+--- a/src/modules/src/worker.c
++++ b/src/modules/src/worker.c
+@@ -75,6 +75,23 @@ void workerLoop()
+   }
+ }
+ 
++struct worker_work work;
++
++void workerBlock()
++{
++  if (!workerQueue)
++    return;
++  work.function = NULL;
++  xQueueReceive(workerQueue, &work, portMAX_DELAY);
++}
++
++void workerHandleOneEvent()
++{
++  if (work.function)
++    work.function(work.arg);
++}
++
++
+ int workerSchedule(void (*function)(void*), void *arg)
+ {
+   struct worker_work work;
+diff --git a/tools/make/targets.mk b/tools/make/targets.mk
+index 52bc7a7..acc3cc1 100644
+--- a/tools/make/targets.mk
++++ b/tools/make/targets.mk
+@@ -32,7 +32,7 @@ CCS_COMMAND_SILENT="  CCS   $@"
+ 	@$(if $(QUIET), ,echo $(CCS_COMMAND$(VERBOSE)) )
+ 	@$(CCS_COMMAND)
+ 
+-LD_COMMAND=$(LD) $(LDFLAGS) $(foreach o,$(OBJ),$(BIN)/$(o)) -lm -o $@
++LD_COMMAND=$(LD) $(LDFLAGS) $(foreach o,$(OBJ),$(BIN)/$(o)) -lm -o $@ $(LIBS)
+ LD_COMMAND_SILENT="  LD    $@"
+ $(PROG).elf: $(OBJ)
+ 	@$(if $(QUIET), ,echo $(LD_COMMAND$(VERBOSE)) )
