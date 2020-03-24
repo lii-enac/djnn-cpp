@@ -21,7 +21,9 @@
 namespace djnn
 {
   inline int __exit(int ret) { exit(ret); return 1; }
-  #define error(p,msg) __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__)) & __exit(0);
+  /** Turn off -Wunused-result for a specific function call */
+  #define __ignore_unused(M) if(1==((int)M)){;}
+  #define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__)) & __exit(0))
   #define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+std::to_string(__LINE__))
 
   int __error (Process *p, const std::string& msg);
