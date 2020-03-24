@@ -26,10 +26,6 @@
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 
-#ifndef M_PI
-#define M_PI 3.141592653
-#endif
-
 namespace djnn
 {
   ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const std::string& name, Process* shape, Process* matrix)
