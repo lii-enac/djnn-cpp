@@ -339,7 +339,7 @@ namespace djnn
       return;
     }
 
-    // add vertex if it's not a property
+    // add vertex if it's not a property: its timestamp is taken into account anyway
     if ( v->get_process ()->get_process_type() != PROPERTY_T)
       _sorted_vertices.push_back (v);
 
