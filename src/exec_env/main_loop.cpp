@@ -21,6 +21,10 @@
 #include "qt/qt_mainloop.h"
 #endif
 
+#if DJNN_USE_FREERTOS_MAINLOOP
+#include "freertos/freertos_mainloop.h"
+#endif
+
 #include <iostream>
 #include <algorithm>
 #include "utils/debug.h"
@@ -51,6 +55,9 @@ namespace djnn {
       if(!onceFlag.test_and_set()) {
         #if DJNN_USE_QT_MAINLOOP
         QtMainloop::build_instance(&_instance);
+        #endif
+        #if DJNN_USE_FREERTOS_MAINLOOP
+        FreeRTOSMainloop::build_instance(&_instance);
         #endif
         ExternalSource::init();
         launch_mutex_lock ();

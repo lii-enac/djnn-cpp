@@ -105,6 +105,7 @@ endif
 
 ifeq ($(os),MinGW)
 CFLAGS += -fpic -g -MMD -Wall
+CXXFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll

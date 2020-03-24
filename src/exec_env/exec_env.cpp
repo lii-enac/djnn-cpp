@@ -103,6 +103,8 @@ namespace djnn
 extern "C" {
   void djnn_init_exec_env () { djnn::init_exec_env (); }
   void djnn_clear_exec_env () { djnn::clear_exec_env (); }
+  void djnn_launch_mainloop () { djnn::MainLoop::instance().activate(); }
+
 }
 
 
