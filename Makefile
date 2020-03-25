@@ -103,7 +103,8 @@ ifeq ($(os),Darwin)
 CFLAGS += -g -MMD -Wall
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
-AR ?= /usr/bin/ar
+#AR ?= /usr/bin/ar
+#ARFLAGS ?= -r
 endif
 
 ifeq ($(os),MinGW)
@@ -179,6 +180,8 @@ djnn_libs := core base
 CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include
 #https://github.com/andysworkshop/avr-stl/releases
 endif
+
+ARFLAGS ?= -r -u
 
 
 # ---------------------------------------
@@ -307,7 +310,7 @@ $$($1_lib): $$($1_objs)
 
 $$($1_lib_static): $$($1_objs)
 	@mkdir -p $$(dir $$@)
-	$$(AR) -r -u $$@ $$($1_objs)
+	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
 
 $1_size: $$($1_lib_static)
