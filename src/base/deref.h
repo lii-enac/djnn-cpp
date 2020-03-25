@@ -41,7 +41,9 @@ namespace djnn
       void impl_activate () override;
       void impl_deactivate () override;
       void update_src ();
+#ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
+#endif
     private:
       void set_parent (Process* p) override;
       TextProperty _path;

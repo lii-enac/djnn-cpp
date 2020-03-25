@@ -90,6 +90,7 @@ namespace djnn
     _cactivation.disable ();;
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Deref::serialize (const std::string& type)
   {
@@ -104,4 +105,5 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+#endif
 }
