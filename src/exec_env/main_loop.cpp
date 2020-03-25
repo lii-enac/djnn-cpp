@@ -27,7 +27,7 @@
 
 #include "exec_env/djnn_time_manager.h"
 
-//#include <algorithm>
+#include <algorithm>
 
 //#include <iostream>
 //#include "utils/debug.h"

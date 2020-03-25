@@ -36,6 +36,7 @@ namespace djnn
   SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (Process *parent, const std::string& name) :
         HermiteCurve (parent, name, 0, 1, 0, 0) {}
 
+#ifndef DJNN_NO_SERIALIZE
   void
   SlowInSlowOutInterpolator::serialize (const std::string& type)
   {
@@ -49,5 +50,6 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+#endif
 
 }

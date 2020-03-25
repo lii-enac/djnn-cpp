@@ -12,7 +12,6 @@
  *
  */
 
-#include "core/core-dev.h"
 #include "serializer.h"
 
 #if !defined(DJNN_NO_SERIALIZE)

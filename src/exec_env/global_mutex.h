@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "core/core.h"
-
 #define STRINGIZE(x) STRINGIZE2(x)
 #define STRINGIZE2(x) #x
 #define LINE_STRING STRINGIZE(__LINE__)
@@ -13,7 +11,7 @@ namespace djnn
 {
 
 	class Process;
-	
+
 	void init_global_mutex ();
 
 	void get_exclusive_access(const char* debug);

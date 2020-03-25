@@ -87,6 +87,7 @@ namespace djnn
     _c_step.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Oscillator::serialize (const std::string& type)
   {
@@ -100,5 +101,7 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+#endif
+
 }
 

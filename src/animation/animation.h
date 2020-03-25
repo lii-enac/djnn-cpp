@@ -28,7 +28,9 @@ namespace djnn
   {
   public:
     SlowInSlowOutInterpolator (Process *parent, const std::string& name);
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override;
+#endif
   };
 
   class Oscillator : public Process
@@ -49,7 +51,9 @@ namespace djnn
       virtual ~Oscillator ();
       void impl_activate () override;
       void impl_deactivate () override;
+#ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
+#endif
     private:
       void set_parent (Process* p) override;
       DoubleProperty _m, _k, _damping, _v, _output, _dt;

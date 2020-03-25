@@ -14,7 +14,6 @@
 
 #include "component.h"
 
-//#include "core/core.h"
 #include "core/control/assignment.h"
 #include "core/utils/error.h"
 #include "core/execution/graph.h"

@@ -44,8 +44,12 @@ namespace djnn
     virtual ~Properties ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
     void add_property ();
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& type) override;
+#endif
+
   private:
     TextProperty *_input;
     Coupling* _c_input;

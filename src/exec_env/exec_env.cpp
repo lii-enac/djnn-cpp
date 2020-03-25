@@ -20,6 +20,7 @@
 
 #include <sys/time.h>
 #include <stdio.h>
+#include <locale.h>
 
 #ifdef __MACH__
 #include <mach/clock.h>

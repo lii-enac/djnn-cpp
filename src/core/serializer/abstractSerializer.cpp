@@ -12,7 +12,6 @@
  *
  */
 
-#include "core/core-dev.h"
 #include "core/utils/error.h"
 #include "serializer.h"
 

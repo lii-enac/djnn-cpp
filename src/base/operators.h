@@ -81,7 +81,9 @@ namespace djnn {
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
     }
     void impl_activate () override { _c_left.enable(); _c_right.enable (); _action.activate (); }
-    void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
+    void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();}
+
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<BinaryFunction>::serialize));
@@ -91,7 +93,7 @@ namespace djnn {
       AbstractSerializer::serializer->end ();
       AbstractSerializer::post_serialize(this);
     }
-
+#endif
   protected:
     void set_parent (Process* p) override {
       // in case of re-parenting remove edge dependency in graph
@@ -161,7 +163,9 @@ namespace djnn {
       uninit_unary_couplings(this, _input, _output, _action, _coupling);
     }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
-    void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
+    void impl_deactivate () override { _coupling.disable (); _action.deactivate ();}
+
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<UnaryFunction>::serialize));
@@ -170,6 +174,7 @@ namespace djnn {
       AbstractSerializer::serializer->end ();
       AbstractSerializer::post_serialize(this);
     }
+#endif
 
   protected:
     void set_parent (Process* p) override {
