@@ -7,6 +7,8 @@ graphics := QT
 physics := # set to ODE
 phidgets := # set to PHIDGETS
 
+djnn_libs_extra :=
+
 # cross-compile support
 #cross_prefix :=
 #options: g llvm-g arm-none-eabi- em

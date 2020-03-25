@@ -213,7 +213,9 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 CXXFLAGS += -std=c++14
 CXXFLAGS += $(CFLAGS)
 
-djnn_libs ?= core exec_env base comms display gui input animation utils files audio extra
+djnn_libs ?= core exec_env base comms display gui input animation utils files audio
+djnn_libs += $(djnn_libs_extra)
+#extra
 
 ifeq ($(cross_prefix),em)
 djnn_libs := core exec_env base display gui input animation utils files audio
