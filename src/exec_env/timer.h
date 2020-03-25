@@ -75,10 +75,12 @@ namespace djnn
     Spike _reset;
     ResetAction _reset_action;
     Coupling _c_reset;
-  };
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override;
 #endif
+  };
+
+
 
 }
