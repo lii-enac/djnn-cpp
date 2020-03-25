@@ -170,10 +170,6 @@ namespace djnn {
   private:
     static long int _nb_anonymous;
 
-  public:
-
-
-
 // >>instance fields start here
   private:
     Vertex *_vertex;
@@ -187,8 +183,7 @@ namespace djnn {
     //string _name;
   // <<instance fields end here
 
-
-    public:
+  public:
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
 #endif
