@@ -38,6 +38,8 @@ namespace djnn
   static bool __module_initialized = false;
   Process* mainloop;
 
+  extern std::vector<std::string> loadedModules;
+
   void
   init_exec_env()
   {

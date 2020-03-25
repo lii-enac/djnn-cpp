@@ -14,10 +14,16 @@
 
 #pragma once
 
-#include "exec_env/global_mutex.h"
-#include "core/execution/graph.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/execution/graph.h"
+#include "core/tree/text_property.h"
+
+#include "exec_env/global_mutex.h"
 #include "exec_env/external_source.h"
+
+
 
 //#define __IVY_DEBUG__
 

@@ -14,7 +14,7 @@
  */
 
 #include "switch.h"
-#include "core/core.h"
+//#include "core/core.h"
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 

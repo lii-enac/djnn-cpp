@@ -20,8 +20,9 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
+#include "core/tree/structure_observer.h"
 #include "core/utils/error.h"
-#include "core/core.h"
+
 
 #include <algorithm>
 

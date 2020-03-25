@@ -14,6 +14,7 @@
 
 #pragma once
 #include "gui-dev.h"
+#include "core/tree/structure_observer.h"
 
 namespace djnn {
   class GUIStructureHolder : public Process {

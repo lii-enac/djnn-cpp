@@ -14,11 +14,13 @@
 
 #include "component.h"
 
-#include "core/core.h"
+//#include "core/core.h"
 #include "core/control/assignment.h"
 #include "core/utils/error.h"
 #include "core/execution/graph.h"
 #include "core/tree/component_observer.h"
+#include "core/tree/structure_observer.h"
+
 #include "core/serializer/serializer.h"
 
 #include "gui/picking/analytical_picking_context.h"

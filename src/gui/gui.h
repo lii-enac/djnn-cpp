@@ -15,7 +15,7 @@
 #pragma once
 
 #include "widgets/text_field.h"
-#include "core/core.h"
+//#include "core/core.h"
 //#include "window.h"
 #include "interaction/interaction.h"
 #include "style/style.h"
@@ -23,6 +23,8 @@
 #include "transformation/transformations.h"
 
 namespace djnn {
+
+  class Process;
 
   extern std::vector<std::string> loadedModules;
   // extern int mouse_tracking;

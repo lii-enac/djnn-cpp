@@ -37,27 +37,20 @@
 #include "tree/text_property.h"
 #include "tree/ref_property.h"
 #include "tree/set.h"
+
+// timer should be available in core, not only in exec_env
+// include it here to prevent 'use exec_env in smala'
+#include "exec_env/timer.h"
+
 //#include "utils/error.h"
 
 
 namespace djnn {
 
-  class StructureObserver {
-  public:
-    StructureObserver () {};
-    virtual ~StructureObserver () {};
-    virtual void add_container (Process *cont) = 0;
-    virtual void remove_container (Process *cont) = 0;
-    virtual void add_child_to_container (Process *cont, Process *c, int index) = 0;
-    virtual void add_child_at (Process *cont, Process *c, int neighboor_index, int spec, int new_index) = 0;
-    virtual void move_child_to (Process *cont, Process *c, int neighboor_index, int spec, int new_index) = 0;
-    virtual void remove_child_from_container (Process *cont, Process *c) = 0;
-    virtual void swap_children (Process *cont, int i, int j) = 0;
-    virtual void set_child (Process *cont, Process *child, int i) = 0;
-  };
   extern std::vector<std::string> loadedModules;
   //void module_loaded(const char* name);
 
+  class StructureObserver;
   extern std::vector<StructureObserver*> structure_observer_list;
   void init_core ();
   void clear_core ();

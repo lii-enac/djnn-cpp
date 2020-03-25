@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/core.h"
+//#include "core/core.h"
 
 #define STRINGIZE(x) STRINGIZE2(x)
 #define STRINGIZE2(x) #x
@@ -11,11 +11,14 @@
 
 namespace djnn
 {
-  void init_global_mutex ();
 
-  void get_exclusive_access(const char* debug);
-  void release_exclusive_access(const char* debug);
+	class Process;
+	
+	void init_global_mutex ();
 
-  void start (Process *c);
-  void stop (Process *c);
+	void get_exclusive_access(const char* debug);
+	void release_exclusive_access(const char* debug);
+
+	void start (Process *c);
+	void stop (Process *c);
 }
