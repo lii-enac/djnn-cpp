@@ -33,9 +33,9 @@ ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib-flags.mk
 endif
 
-ifeq ($(os),FreeRTOS)
-include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
-endif
+#ifeq ($(os),FreeRTOS)
+#include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
+#endif
 
 
 

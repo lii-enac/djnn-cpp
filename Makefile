@@ -42,6 +42,7 @@ graphics ?= QT #options: QT CAIRO GL
 
 RANLIB ?= ranlib
 GPERF ?= gperf
+SIZE ?= size
 
 #ifeq (g++,$(findstring g++,$(shell which $(CXX) | xargs realpath | xargs basename)))
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
@@ -60,13 +61,15 @@ ifneq ($(cross_prefix),g)
 CC := $(cross_prefix)$(CC)
 CXX := $(cross_prefix)$(CXX)
 AR := $(cross_prefix)$(AR)
-RANLIB := $(cross_prefix)ranlib
+RANLIB := $(cross_prefix)$(RANLIB)
+SIZE := $(cross_prefix)$(SIZE)
 else
 #temporary covid hack
 CC := gcc
 CXX := g++
 #AR := $(cross_prefix)$(AR)
 RANLIB := ranlib
+SIZE ?=
 endif
 endif
 
@@ -303,7 +306,12 @@ $$($1_lib): $$($1_objs)
 $$($1_lib_static): $$($1_objs)
 	@mkdir -p $$(dir $$@)
 	$$(AR) -r -u $$@ $$($1_objs)
-	ranlib $$@ 
+	$$(RANLIB) $$@
+
+$1_size: $$($1_lib_static)
+	@ls -l $$^
+	@$$(SIZE) -t $$^
+
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
@@ -349,8 +357,9 @@ djnn: $(libs) $(headers)
 static: $(libs_static) $(headers)
 .PHONY: static
 
-size:
-	size -t $(libs_static)
+size: $(libs_static)
+	ls -l $(libs_static)
+	$(SIZE) -t $(libs_static)
 .PHONY: size
 
 strip:

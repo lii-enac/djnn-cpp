@@ -30,6 +30,8 @@ namespace djnn
     struct __path_context* prev;
   } __path_context;
 
+#if !defined(DJNN_NO_SERIALIZE)
+
   /* init static variable */
   Process* AbstractSerializer::serializationRoot = nullptr;
   AbstractSerializer* AbstractSerializer::serializer = nullptr;
@@ -38,7 +40,6 @@ namespace djnn
   
   void
   AbstractSerializer::pre_serialize (Process* root, const std::string& format) {
-#if !defined(DJNN_NO_SERIALIZE)
      if (AbstractSerializer::serializationRoot == 0) {
 
         AbstractSerializer::serializationRoot = root;
@@ -55,12 +56,10 @@ namespace djnn
         else
           warning (nullptr, format + " is not a valid serializer format (XML|JSON) " );
      }
-#endif
   }
 
   void
   AbstractSerializer::post_serialize (Process* root) {
-#if !defined(DJNN_NO_SERIALIZE)
     if (AbstractSerializer::serializationRoot == root) {
       AbstractSerializer::serializationRoot = nullptr;
       AbstractSerializer::serializer = nullptr;
@@ -68,7 +67,6 @@ namespace djnn
       if (__cur_format.compare("JSON") == 0) 
       cout << "}\n";
     }
-#endif
   }
 
 
@@ -161,5 +159,6 @@ path_compute (Process* from, Process* to,
 
     path_compute (from, to, &c, 0, buf);
   }
+#endif
 
 }
