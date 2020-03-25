@@ -50,7 +50,7 @@ namespace djnn {
     void update_graph () override;
     void about_to_update_graph () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     virtual ~Connector ();
 
@@ -80,7 +80,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     virtual ~PausedConnector ();
 

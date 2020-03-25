@@ -122,7 +122,7 @@ namespace djnn
     void impl_deactivate () override { _c_min.disable (); _c_max.disable (); _c_input.disable (); _action.deactivate ();};
     virtual ~BoundedValue ();
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   protected:
     void set_parent (Process* p) override;

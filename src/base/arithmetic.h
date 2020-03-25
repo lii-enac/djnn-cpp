@@ -104,7 +104,7 @@ namespace djnn
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     DoubleProperty _input;
     DoubleProperty _output;
@@ -126,7 +126,7 @@ namespace djnn
   protected:
     void set_parent (Process* p) override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   };
 
@@ -150,7 +150,7 @@ namespace djnn
   protected:
     void set_parent (Process* p) override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     friend class AdderAccumulatorAction;

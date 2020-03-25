@@ -66,7 +66,7 @@ namespace djnn {
     void impl_deactivate () override;
     Process* clone () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     Process* item () { return _cur_item; }
     void set_item (Process *item) { _cur_item = item; }

@@ -42,7 +42,7 @@ namespace djnn
     void impl_deactivate () override { c_input.disable (); };
     virtual ~TextPrinter ();
 #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     void init ();
@@ -206,7 +206,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     void set_parent (Process* p) override;
@@ -250,7 +250,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     void set_parent (Process* p) override;

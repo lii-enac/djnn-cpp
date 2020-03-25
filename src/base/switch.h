@@ -48,7 +48,7 @@ namespace djnn {
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~Switch ();
 #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     void set_parent (Process* p) override;

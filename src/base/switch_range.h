@@ -30,7 +30,7 @@ namespace djnn {
     ~SwitchRangeBranch ();
     bool is_in_range (double v);
 #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     bool _left_open, _right_open;
@@ -63,7 +63,7 @@ namespace djnn {
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~SwitchRange ();
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     void set_parent (Process* p) override;

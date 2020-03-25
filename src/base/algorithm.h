@@ -53,7 +53,7 @@ namespace djnn
     AbstractProperty* get_and_check (Process* i);
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     BoolProperty _ascending;
     TextProperty _spec;
@@ -109,7 +109,7 @@ namespace djnn
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -123,7 +123,7 @@ namespace djnn
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -137,7 +137,7 @@ namespace djnn
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -151,7 +151,7 @@ namespace djnn
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
   private:
     DoubleProperty _output;

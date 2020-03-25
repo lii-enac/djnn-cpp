@@ -55,7 +55,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format);
+    virtual void serialize (const std::string& format) override;
 #endif
     // djnn_internal::Time::Timer
     virtual void do_it(const djnn_internal::Time::duration& actualduration) override;
