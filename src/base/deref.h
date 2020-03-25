@@ -41,15 +41,13 @@ namespace djnn
       void impl_activate () override;
       void impl_deactivate () override;
       void update_src ();
-#ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
-#endif
+      void serialize (const std::string& type) override;
     private:
       void set_parent (Process* p) override;
       TextProperty _path;
       RefProperty* _ref;
       Spike _activation;
       DerefAction _action;
-      Coupling *_cref, *_cpath, *_cactivation;
+      Coupling _cref, _cpath, _cactivation;
   };
 }

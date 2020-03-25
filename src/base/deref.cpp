@@ -27,15 +27,15 @@ namespace djnn
   _path (this, "path", path),
   _activation (this, "activation"),
   _action (this, "action"),
-  _cactivation (nullptr)
+  _cref (ref, ACTIVATION, &_action, ACTIVATION),
+  _cpath (&_path, ACTIVATION, &_action, ACTIVATION),
+  _cactivation ()
   {
     _ref = dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
       warning (this, "Deref is only applicable to RefProperty");
       return;
     }
-    _cref = new Coupling (_ref, ACTIVATION, &_action, ACTIVATION);
-    _cpath = new Coupling (&_path, ACTIVATION, &_action, ACTIVATION);
     Graph::instance ().add_edge (_ref, &_action);
     Graph::instance ().add_edge (&_path, &_action);
 
@@ -48,20 +48,17 @@ namespace djnn
     remove_state_dependency (get_parent (), &_action);
     Graph::instance ().remove_edge (_ref, &_action);
     Graph::instance ().remove_edge (&_path, &_action);
-    delete _cref;
-    delete _cpath;
-    delete _cactivation;
   }
 
   void
   Deref::update_src ()
   {
-    delete _cactivation;
     Process* unref = _ref->get_value ();
     if (unref != nullptr) {
       Process* dst = unref->find_child (_path.get_value());
       if (dst != nullptr) {
-        _cactivation = new Coupling (dst, ACTIVATION, &_activation, ACTIVATION, true);
+        _cactivation.uninit();
+        _cactivation.init (dst, ACTIVATION, &_activation, ACTIVATION, true);
       }
     }
   }
@@ -80,22 +77,19 @@ namespace djnn
   void
   Deref::impl_activate ()
   {
-    _cref->enable ();
-    _cpath->enable ();
-    if (_cactivation)
-      _cactivation->enable ();
+    _cref.enable ();
+    _cpath.enable ();
+    _cactivation.enable ();
   }
 
   void
   Deref::impl_deactivate ()
   {
-    _cref->disable ();
-    _cpath->disable ();
-    if (_cactivation)
-      _cactivation->disable ();;
+    _cref.disable ();
+    _cpath.disable ();
+    _cactivation.disable ();;
   }
 
-#ifndef DJNN_NO_SERIALIZE
   void
   Deref::serialize (const std::string& type)
   {
@@ -110,6 +104,4 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
-#endif
-
 }
