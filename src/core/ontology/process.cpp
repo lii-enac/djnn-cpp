@@ -33,7 +33,7 @@ namespace djnn
   long int Process::_nb_anonymous = 0;
 
 #ifdef DJNN_NO_DEBUG
-  string Process::_dbg_info{"no dbg info",0};
+  Process::DebugInfo Process::_dbg_info{"no dbg info",0};
 #endif
 
   string Process::default_name = "noname";
