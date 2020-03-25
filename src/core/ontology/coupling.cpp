@@ -19,8 +19,6 @@
 
 #include "core/utils/error.h"
 
-//#include <cassert>
-
 namespace djnn
 {
 

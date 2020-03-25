@@ -14,14 +14,12 @@
 
 #include "graph.h"
 
-#include <algorithm>
-
-
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
 
 #include "exec_env/exec_env-dev.h"
 
+#include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
