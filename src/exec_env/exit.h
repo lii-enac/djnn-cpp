@@ -29,9 +29,13 @@ namespace djnn {
     virtual ~Exit ();
     void impl_activate () override;
     void impl_deactivate () override {}
-    void serialize (const std::string& format) override;
   private:
     IntProperty _value;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
 }

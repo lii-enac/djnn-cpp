@@ -18,8 +18,6 @@
 //#include "ontology/process.h"
 #include "core/serializer/serializer.h"
 
-//#include <iostream>
-
 namespace djnn
 {
   using namespace std;
@@ -42,6 +40,7 @@ namespace djnn
     MainLoop::instance ().deactivate ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Exit::serialize (const std::string& format) {
 
@@ -55,5 +54,5 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
-
+#endif
 }

@@ -2,7 +2,6 @@
 #include "exec_env/main_loop.h"
 #include "exec_env/global_mutex.h"
 
-#include <mutex>
 
 extern "C" {
 	// specific to crazyflie?

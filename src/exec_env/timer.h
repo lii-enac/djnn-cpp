@@ -65,7 +65,6 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
 
-    void serialize (const std::string& type) override;
     void update_period ();
 
   private:
@@ -77,5 +76,9 @@ namespace djnn
     ResetAction _reset_action;
     Coupling _c_reset;
   };
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& type) override;
+#endif
 
 }
