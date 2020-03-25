@@ -30,7 +30,6 @@ namespace djnn {
       _please_exec (false), already_awaken(false)
 	{
 		(*ml).set_another_source_wants_to_be_mainloop (this);
-
 	}
 
 	void
@@ -41,7 +40,6 @@ namespace djnn {
 	void
 	FreeRTOSMainloop::run ()
 	{
-	//	_qapp->exec ();
 		while(true) {
 			workerBlock ();
 			djnn::get_exclusive_access (DBG_GET);
