@@ -140,6 +140,7 @@ namespace djnn
     }
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Switch::serialize (const std::string& type) {
    
@@ -157,5 +158,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
 }

@@ -72,7 +72,9 @@ namespace djnn
     ~Counter();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
 
   private:
     void set_parent (Process* p) override;

@@ -70,6 +70,7 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Previous::serialize (const std::string& type) {
    
@@ -83,6 +84,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   int
   Incr::init_incr (bool isModel)
@@ -125,6 +127,7 @@ namespace djnn
     _state.set_value (_state.get_value () + _delta.get_value (), true);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Incr::serialize (const std::string& type) {
    
@@ -138,6 +141,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const std::string& name,
                                                                     AdderAccumulator& aa) :
@@ -209,6 +213,7 @@ namespace djnn
     _c_input.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   AdderAccumulator::serialize (const std::string& type) {
    
@@ -224,6 +229,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
 }
 

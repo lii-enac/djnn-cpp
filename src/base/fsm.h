@@ -35,7 +35,9 @@ namespace djnn {
     ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
     void add_transition (FSMTransition *t) { FSMTransition* pt = t; _transitions.push_front (pt); };
@@ -69,7 +71,9 @@ namespace djnn {
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     int priority () { return _priority; }
     Process* fsm_action () { return &_fsm_action; }
   protected:
@@ -105,7 +109,9 @@ namespace djnn {
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
     void set_parent (Process* p) override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     int _priority;
     std::string _str_initial;

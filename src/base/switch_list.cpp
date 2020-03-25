@@ -195,6 +195,7 @@ namespace djnn
     return clone;
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   SwitchList::serialize (const std::string& type)
   {
@@ -212,5 +213,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
 
 }

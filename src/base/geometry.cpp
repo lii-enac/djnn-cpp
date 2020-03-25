@@ -117,6 +117,7 @@ namespace djnn
     _c_t2.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   HermiteCurve::serialize (const std::string& type) {
    
@@ -134,5 +135,6 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 }
 

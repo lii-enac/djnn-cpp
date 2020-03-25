@@ -49,7 +49,9 @@ namespace djnn {
     void impl_deactivate () override;
     void update_graph () override;
     void about_to_update_graph () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     virtual ~Connector ();
 
   protected:
@@ -77,7 +79,9 @@ namespace djnn {
     PausedConnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation=true);
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     virtual ~PausedConnector ();
 
   protected:

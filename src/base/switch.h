@@ -32,7 +32,9 @@ namespace djnn {
       virtual ~SwitchAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
+#ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override {};
+#endif
     private:
       Switch* _sw;
     };
@@ -45,7 +47,9 @@ namespace djnn {
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~Switch ();
-    void serialize (const std::string& type) override;
+#ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void set_parent (Process* p) override;
     void change_branch ();

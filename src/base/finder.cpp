@@ -148,6 +148,7 @@ namespace djnn
     _cfind.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Finder::serialize (const std::string& type)
   {
@@ -162,4 +163,6 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+#endif
+
 }

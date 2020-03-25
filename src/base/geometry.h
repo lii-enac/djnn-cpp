@@ -45,7 +45,9 @@ namespace djnn
     virtual ~HermiteCurve ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void set_parent (Process* p) override;
     DoubleProperty _input, _p1, _p2, _t1, _t2, _output;

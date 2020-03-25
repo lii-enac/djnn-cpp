@@ -41,7 +41,9 @@ namespace djnn
     void impl_activate () override { c_input.enable(); };
     void impl_deactivate () override { c_input.disable (); };
     virtual ~TextPrinter ();
-    void serialize (const std::string& type) override;
+#ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void init ();
     TextProperty _input;
@@ -91,7 +93,9 @@ namespace djnn
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
     }
     void impl_activate () override { _c_left.enable(); _c_right.enable (); _action.activate (); }
-    void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();};
+    void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate (); }
+
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<Action>::serialize));
@@ -101,7 +105,7 @@ namespace djnn
       AbstractSerializer::serializer->end ();
       AbstractSerializer::post_serialize(this);
     }
-
+#endif
   protected:
     void set_parent (Process* p) override {
       // in case of re-parenting remove edge dependency in graph
@@ -201,7 +205,9 @@ namespace djnn
     virtual ~TextAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void set_parent (Process* p) override;
     TextProperty _input, _state;
@@ -243,7 +249,9 @@ namespace djnn
     virtual ~DoubleFormatter ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void set_parent (Process* p) override;
     void init (double initial, int decimal);

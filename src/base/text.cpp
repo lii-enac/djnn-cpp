@@ -50,6 +50,7 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   TextPrinter::serialize (const std::string& type) {
    
@@ -61,6 +62,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   template <> const char name_info<TextCatenatorAction>::left [] = "head";
   template <> const char name_info<TextCatenatorAction>::right [] = "tail";
@@ -130,6 +132,7 @@ namespace djnn
     _action.deactivate ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   DoubleFormatter::serialize (const std::string& type) {
    
@@ -143,6 +146,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   TextAccumulator::TextAccumulator (Process *parent, const std::string& name, const std::string& init)
   : Process (name),
@@ -202,6 +206,7 @@ namespace djnn
     _c_del.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   TextAccumulator::serialize (const std::string& type)
   {
@@ -214,5 +219,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
+
 }
 

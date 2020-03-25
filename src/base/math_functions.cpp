@@ -103,6 +103,7 @@ namespace djnn
     Process::set_parent (p); 
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   BoundedValue::serialize (const std::string& type)
   {
@@ -118,5 +119,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 }
 

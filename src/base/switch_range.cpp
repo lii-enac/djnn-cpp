@@ -39,6 +39,7 @@ namespace djnn
   {
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   SwitchRangeBranch::serialize (const std::string& type) {
 
@@ -58,6 +59,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   bool
   SwitchRangeBranch::is_in_range (double v)
@@ -196,6 +198,7 @@ namespace djnn
     return nullptr;
   }  
 
+#ifndef DJNN_NO_SERIALIZE
   void
   SwitchRange::serialize (const std::string& type) {
    
@@ -213,5 +216,5 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-
+#endif
 }

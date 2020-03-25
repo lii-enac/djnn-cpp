@@ -121,7 +121,9 @@ namespace djnn
     void impl_activate () override { _c_min.enable(); _c_max.enable (); _c_input.enable (); _action.activate (); };
     void impl_deactivate () override { _c_min.disable (); _c_max.disable (); _c_input.disable (); _action.deactivate ();};
     virtual ~BoundedValue ();
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   protected:
     void set_parent (Process* p) override;
     DoubleProperty _min, _max, _input, _result;

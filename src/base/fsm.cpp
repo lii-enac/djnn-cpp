@@ -80,6 +80,7 @@ namespace djnn
     Container::impl_deactivate ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   FSMState::serialize (const std::string& type) {
    
@@ -96,6 +97,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   FSMTransition::Init::Init (FSMTransition* t, Process* p, 
                             const std::string& tspec, const std::string& aspec) 
@@ -189,6 +191,7 @@ namespace djnn
     }
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   FSMTransition::serialize (const std::string& type) {
    
@@ -216,6 +219,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
   FSM::FSM (Process *parent, const std::string& name) 
   : Process (name), 
@@ -306,6 +310,7 @@ namespace djnn
     return nullptr;
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   FSM::serialize (const std::string& type) {
    
@@ -323,4 +328,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
+
 }

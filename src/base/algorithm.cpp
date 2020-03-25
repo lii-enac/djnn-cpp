@@ -272,6 +272,7 @@ namespace djnn
     //merge_sort (0, children.size () - 1);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Sorter::serialize (const std::string& type)
   {
@@ -284,6 +285,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   ListOperator::ListOperator (Process *parent, const std::string& name, Process *container, const std::string& spec) :
       Process (name),
@@ -360,6 +362,7 @@ namespace djnn
     _output.set_value (sum, true);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   SumList::serialize (const std::string& type)
   {
@@ -375,6 +378,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   void
   ProductList::do_action ()
@@ -386,6 +390,7 @@ namespace djnn
     _output.set_value (product, true);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   ProductList::serialize (const std::string& type)
   {
@@ -401,6 +406,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   void
   MaxList::do_action ()
@@ -412,6 +418,7 @@ namespace djnn
     _output.set_value (vmax, true);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   MaxList::serialize (const std::string& type)
   {
@@ -427,6 +434,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   void
   MinList::do_action ()
@@ -438,6 +446,7 @@ namespace djnn
     _output.set_value (vmin, true);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   MinList::serialize (const std::string& type)
   {
@@ -453,4 +462,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
+
 }

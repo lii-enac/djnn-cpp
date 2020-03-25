@@ -47,6 +47,7 @@ namespace djnn
   }
 #endif
 
+#ifndef DJNN_NO_SERIALIZE
   void
   LogPrinter::serialize (const std::string& type) {
    
@@ -60,7 +61,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
-
+#endif
 }
 
 

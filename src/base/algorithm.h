@@ -52,7 +52,9 @@ namespace djnn
     AbstractProperty* get_and_check (int i);
     AbstractProperty* get_and_check (Process* i);
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     BoolProperty _ascending;
     TextProperty _spec;
     Container *_container;
@@ -106,7 +108,9 @@ namespace djnn
     virtual ~SumList () {}
     void do_action () override;
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     DoubleProperty _output;
   };
@@ -118,7 +122,9 @@ namespace djnn
     virtual ~ProductList () {}
     void do_action () override;
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     DoubleProperty _output;
   };
@@ -130,7 +136,9 @@ namespace djnn
     virtual ~MaxList () {}
     void do_action () override;
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     DoubleProperty _output;
   };
@@ -142,7 +150,9 @@ namespace djnn
     virtual ~MinList () {}
     void do_action () override;
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     DoubleProperty _output;
   };

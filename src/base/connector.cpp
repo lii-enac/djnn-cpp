@@ -186,6 +186,7 @@ namespace djnn
     Graph::instance ().remove_edge (_src, _dst);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Connector::serialize (const std::string& format)
   {
@@ -204,6 +205,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
 
   PausedConnector::PausedConnector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec,
                                     bool copy_on_activation) :
@@ -237,14 +239,14 @@ namespace djnn
     }
 
     if (dst == 0) {
-      error ( this, (std::string("dst argument cannot be null in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
+      error ( this, (std::string("dst argument cannot be null in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
     Process* c_src = src->find_child (ispec);
 
     if (c_src == 0) {
-      error (this, (std::string("source not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
+      error (this, (std::string("source not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
@@ -252,7 +254,7 @@ namespace djnn
 
     if (c_dst == 0) {
       error (this,
-       (std::string("destination not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
+       (std::string("destination not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
@@ -260,7 +262,7 @@ namespace djnn
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
       warning (this,
-       (std::string("invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")")).c_str());
+       (std::string("invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")").c_str()));
     }
 
     _action = new Connector::ConnectorAction (
@@ -293,6 +295,7 @@ namespace djnn
     Process::set_parent (p); 
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   PausedConnector::serialize (const std::string& format)
   {
@@ -311,5 +314,5 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
-
+#endif
 }

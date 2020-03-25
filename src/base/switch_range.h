@@ -29,7 +29,9 @@ namespace djnn {
     SwitchRangeBranch (Process *parent, const std::string& name, double lower, bool left_open, double upper, bool right_open);
     ~SwitchRangeBranch ();
     bool is_in_range (double v);
-    void serialize (const std::string& type) override;
+#ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     bool _left_open, _right_open;
     DoubleProperty _lower, _upper;
@@ -45,7 +47,9 @@ namespace djnn {
       virtual ~SwitchRangeAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
+#ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override {};
+#endif
     private:
       SwitchRange* _sw;
     };
@@ -58,7 +62,9 @@ namespace djnn {
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~SwitchRange ();
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     void set_parent (Process* p) override;
     void change_branch ();

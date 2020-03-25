@@ -103,7 +103,9 @@ namespace djnn
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
   protected:
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
     DoubleProperty _input;
     DoubleProperty _output;
     PreviousAction _action;
@@ -123,7 +125,9 @@ namespace djnn
     DoubleProperty _delta, _state;
   protected:
     void set_parent (Process* p) override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   };
 
   class AdderAccumulator : public Process
@@ -145,7 +149,9 @@ namespace djnn
     void impl_deactivate () override;
   protected:
     void set_parent (Process* p) override;
-    void serialize (const std::string& type) override;
+ #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
+#endif
   private:
     friend class AdderAccumulatorAction;
     DoubleProperty _input, _clamp_min, _clamp_max, _result;
