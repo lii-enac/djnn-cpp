@@ -446,60 +446,61 @@ dbg:
 pkgdeps += bison flex
 
 ifeq ($(os),Linux)
-pkgcmd := apt install -y
-pkgupg := apt upgrade -y
+	pkgcmd := apt install -y
+	pkgupg := apt upgrade -y
 
-pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
-ifeq ($(display),QT)
-pkgdeps += qt5-default
-endif
-ifeq ($(display),SDL)
-pkgdeps += libfontconfig1-dev
-ifeq ($(specialtarget),raspberry-ua-netinst)
-# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
-#pkgdeps += libraspberrypi-dev
-else
-pkgdeps += libsdl2-dev libsdl2-image-dev
-endif
-endif
-ifeq ($(display),DRM)
-pkgdeps += libdrm-dev
-endif
-ifeq ($(graphics),CAIRO)
-pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
-endif
-ifeq ($(graphics),GL)
-pkgdeps += libfreetype6-dev libglm-dev
-endif
+	pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
+	ifeq ($(display),QT)
+		pkgdeps += qt5-default
+	endif
+	ifeq ($(display),SDL)
+		pkgdeps += libfontconfig1-dev
+		ifeq ($(specialtarget),raspberry-ua-netinst)
+			# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+			#pkgdeps += libraspberrypi-dev
+		else
+			pkgdeps += libsdl2-dev libsdl2-image-dev
+		endif
+	endif
+	ifeq ($(display),DRM)
+		pkgdeps += libdrm-dev
+	endif
+	ifeq ($(graphics),CAIRO)
+		pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
+	endif
+	ifeq ($(graphics),GL)
+		pkgdeps += libfreetype6-dev libglm-dev
+	endif
 endif
 
 ifeq ($(os),Darwin)
-#https://brew.sh/
-pkgcmd := brew install
-pkgupg := brew upgrade
+	#https://brew.sh/
+	pkgcmd := brew install
+	pkgupg := brew upgrade
 
-pkgdeps += expat curl boost
-pkgdeps += qt5
-pkgdeps += cairo pango
-pkgdeps += sdl2 sdl2_image
-ifeq ($(graphics),GL)
-pkgdeps += glm
-endif
+	pkgdeps += expat curl boost
+	pkgdeps += qt5
+	pkgdeps += cairo pango
+	pkgdeps += sdl2 sdl2_image
+	pkgdeps += libusb
+	ifeq ($(graphics),GL)
+		pkgdeps += glm
+	endif
 endif
 
 ifeq ($(os), MinGW)
-#https://www.msys2.org/
-#pkgdeps := git make pkg-config
-pkgcmd := pacman -S --needed
-pkgupg := pacman -Syu
+	#https://www.msys2.org/
+	#pkgdeps := git make pkg-config
+	pkgcmd := pacman -S --needed
+	pkgupg := pacman -Syu
 
-mgwpkgdeps += gcc boost expat curl qt5
-mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig
-ifeq ($(graphics),GL)
-mgwpkgdeps += glm
-endif
-mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-pkgdeps += $(mgwpkgdeps)
+	mgwpkgdeps += gcc boost expat curl qt5
+	mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
+	ifeq ($(graphics),GL)
+		mgwpkgdeps += glm
+	endif
+	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+	pkgdeps += $(mgwpkgdeps)
 endif
 
 install-pkgdeps:
