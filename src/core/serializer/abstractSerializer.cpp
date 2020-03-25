@@ -16,7 +16,9 @@
 #include "core/utils/error.h"
 #include "serializer.h"
 
+#if !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -36,7 +38,7 @@ namespace djnn
   
   void
   AbstractSerializer::pre_serialize (Process* root, const std::string& format) {
-     
+#if !defined(DJNN_NO_SERIALIZE)
      if (AbstractSerializer::serializationRoot == 0) {
 
         AbstractSerializer::serializationRoot = root;
@@ -53,11 +55,12 @@ namespace djnn
         else
           warning (nullptr, format + " is not a valid serializer format (XML|JSON) " );
      }
+#endif
   }
 
   void
   AbstractSerializer::post_serialize (Process* root) {
-
+#if !defined(DJNN_NO_SERIALIZE)
     if (AbstractSerializer::serializationRoot == root) {
       AbstractSerializer::serializationRoot = nullptr;
       AbstractSerializer::serializer = nullptr;
@@ -65,7 +68,7 @@ namespace djnn
       if (__cur_format.compare("JSON") == 0) 
       cout << "}\n";
     }
-
+#endif
   }
 
 

@@ -15,13 +15,11 @@
 #include "blank.h"
 #include "core/serializer/serializer.h"
 
-#include <iostream>
 #include <string>
 
 namespace djnn
 {
-  using namespace std;
-
+#if !defined(DJNN_NO_SERIALIZE)
   void
   Blank::serialize (const std::string& format) {
 
@@ -33,6 +31,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process* 
   Blank::clone () 

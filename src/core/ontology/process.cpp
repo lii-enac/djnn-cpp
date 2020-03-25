@@ -24,7 +24,9 @@
 
 #include <algorithm>
 
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -97,8 +99,10 @@ namespace djnn
     }
     if (_vertex != nullptr){
        warning ( nullptr, " Process::~Process - " +  get_hierarchy_name (this)  + " - _vertex is NOT NULL and it should\n");
+#ifndef DJNN_NO_DEBUG
        for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
        for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
+#endif
        _vertex->invalidate ();
     }
 
@@ -426,7 +430,9 @@ namespace djnn
   void
   Process::print_set_vertex_err_msg (Vertex* v)
   {
+#ifndef DJNN_NO_DEBUG
     std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ;
+#endif
   }
 
   void
@@ -449,12 +455,16 @@ namespace djnn
   {
     Process* x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
+#ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy2 << endl;
+#endif
       return;
     }
     Process* x1 = p1->find_child (sy1);
     if (x1 == nullptr) {
+#ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy1 << endl;
+#endif
       return;
     }
     for (auto& c : x2->get_activation_couplings ()) {
@@ -483,13 +493,25 @@ namespace djnn
   }
 
 
+#ifndef DJNN_NO_SERIALIZE
   void
-  Process::serialize (const std::string& format) { cout << "serialize is not yet implemented for '" << get_name () << "'" << endl; }
+  Process::serialize (const std::string& format) {
+    cout << "serialize is not yet implemented for '" << get_name () << "'" << endl;
+  }
+#endif
   
   Process*
-  Process::clone () { cout << "clone not implemented for " << get_name () << "\n"; return nullptr; };
+  Process::clone () {
+#ifndef DJNN_NO_DEBUG
+    cout << "clone not implemented for " << get_name () << "\n";
+#endif
+    return nullptr;
+  };
 
+#ifndef DJNN_NO_DEBUG
   static int indent = -1;
+
+
   void
   Process::dump (int level)
   {
@@ -519,4 +541,5 @@ namespace djnn
     }
     indent--;
   }
+#endif
 }

@@ -18,7 +18,9 @@
 #include "core/utils/error.h"
 #include "core/execution/graph.h"
 
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -93,8 +95,11 @@ namespace djnn
       set_value (true, propagate);
     } else if (v.compare ("false") == 0) {
       set_value (false, propagate);
-    } else
+    } else {
+#ifndef DJNN_NO_DEBUG
       cerr << "Warning: failed to convert " << v << " into a boolean value";
+#endif
+    }
   }
 
   void
@@ -103,12 +108,16 @@ namespace djnn
     warning (this, "undefined conversion from Component to Boolean\n");
   }
 
+#ifndef DJNN_NO_DEBUG
   void
   AbstractBoolProperty::dump (int level)
   {
+
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
   }
+#endif
 
+#ifndef DJNN_NO_SERIALIZE
   void
   BoolProperty::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
@@ -132,6 +141,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process*
   BoolProperty::clone ()

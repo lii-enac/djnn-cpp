@@ -34,7 +34,6 @@ namespace djnn {
     void insert (Process* c, const std::string& spec);
     void remove_child (Process* c) override;
     void remove_child (const std::string& name) override;
-    void dump(int level=0) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
     Process* find_child (const std::string& path) override;
     Process* find_child (int index)  override;
@@ -44,6 +43,11 @@ namespace djnn {
     virtual void finalize_child_insertion (Process *child) = 0;
     RefProperty _added, _removed;
     IntProperty _size;
+
+  public:
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
   };
 
   class List : public AbstractList
@@ -51,10 +55,13 @@ namespace djnn {
   public:
     List (Process *parent, const std::string& name);
     virtual ~List ();
-    void serialize (const std::string& type) override;
     Process* clone () override;
   private:
     void finalize_child_insertion (Process *child) override;
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class ListIterator : public Process
@@ -101,7 +108,6 @@ namespace djnn {
     virtual ~BidirectionalListIterator ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void serialize (const std::string& type) override;
   private:
     void set_parent (Process* p) override;
     List* _list;
@@ -115,5 +121,10 @@ namespace djnn {
     Coupling _c_previous;
     ResetAction _reset_action;
     Coupling _c_reset; 
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 }

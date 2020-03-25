@@ -29,8 +29,12 @@ namespace djnn {
     virtual ~Activator ();
     void impl_activate () override { _action->activate (); };
     void impl_deactivate () override {}
-    void serialize (const std::string& format) override;
   private:
     Process *_action;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 }

@@ -17,7 +17,10 @@
 #include "core/utils/error.h"
 
 #include <sstream>
+
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -62,25 +65,25 @@ namespace djnn
   void
   RefProperty::set_value (int v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Int to Component\n";
+    warning (this, "undefined conversion from Int to Component");
   }
 
   void
   RefProperty::set_value (double v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Double to Component\n";
+    warning (this, "undefined conversion from Double to Component");
   }
 
   void
   RefProperty::set_value (bool v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Bool to Component\n";
+    warning (this, "undefined conversion from Bool to Component");
   }
 
   void
   RefProperty::set_value (const std::string& v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Text to Component\n";
+    warning (this, "undefined conversion from Text to Component");
   }
 
   void
@@ -93,6 +96,7 @@ namespace djnn
     }
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   RefProperty::serialize (const std::string& format) {
 
@@ -108,6 +112,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process*
   RefProperty::find_child (const std::string& path)
@@ -126,10 +131,12 @@ namespace djnn
     return nullptr;
   }
 
+#if !defined(DJNN_NO_DEBUG)
   void
   RefProperty::dump (int level) {
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << value << " ]" ;
   }
+#endif
 
   Process* 
   RefProperty::clone ()

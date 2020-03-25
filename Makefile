@@ -114,7 +114,7 @@ YACC = bison -d
 endif
 
 ifeq ($(os),FreeRTOS)
-CFLAGS += -fpic -g -MMD -Wall
+CFLAGS += -fpic -g -MMD -Wall -Os -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
 CFLAGS += -DDJNN_USE_FREERTOS=1
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so

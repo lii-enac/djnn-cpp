@@ -74,7 +74,9 @@ namespace djnn {
   public:
     Component (Process* parent, const std::string& name) : Container (parent, name) { Process::finalize_construction (parent, name); }
     Process* clone () override;
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
+#endif
   };
 
   class AssignmentSequence : public Container
@@ -88,6 +90,9 @@ namespace djnn {
     void impl_activate () override;
     void post_activate () override;
     void impl_deactivate () override {};
+
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
+#endif
   };
 }

@@ -36,33 +36,42 @@ namespace djnn {
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     std::string get_string_value () override { return std::to_string (get_ref_value ()); }
-    void dump (int level=0) override;
 
     double get_value () { return get_ref_value(); };
   protected:
     virtual double& get_ref_value() = 0;
+
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
   };
 
   class DoubleProperty : public AbstractDoubleProperty {
   public:
     DoubleProperty (Process* parent, const std::string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
-    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }
   private:
     double value;
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
     DoublePropertyProxy (Process* parent, const std::string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
-    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }
   private:
     double& value;
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   double getDouble (Process *p);

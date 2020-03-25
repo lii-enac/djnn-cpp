@@ -75,13 +75,16 @@ namespace djnn {
     void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
-    void serialize (const std::string& format) override;
     void update_graph () override;
     void about_to_update_graph () override ;
     virtual ~Assignment ();
 
   private:
     AssignmentAction _action;
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class PausedAssignment : public AbstractAssignment {
@@ -93,13 +96,16 @@ namespace djnn {
     void impl_activate () override;
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_deactivate () override {}
-    void serialize (const std::string& format) override;
     void update_graph () override {};
     void about_to_update_graph () override {};
     virtual ~PausedAssignment ();
 
   private:
     AssignmentAction _action;
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
 
@@ -139,6 +145,11 @@ namespace djnn {
     AssignmentAction _action;
     Coupling _c_src;
     bool _propagate;
+
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
 }

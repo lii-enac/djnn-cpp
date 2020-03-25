@@ -21,7 +21,9 @@
 
 #include <algorithm>
 
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -136,12 +138,15 @@ namespace djnn
     return nullptr;
   }
 
+#if !defined(DJNN_NO_DEBUG)
   void
   Set::dump (int level)
   {
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
   }
+#endif
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   Set::serialize (const std::string& type)
   {
@@ -158,6 +163,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
 
   SetIterator::SetIterator (Process *parent, const std::string& name, Process *set, Process *action, bool model) :
       Process (name, model), _set (set), _action (action)

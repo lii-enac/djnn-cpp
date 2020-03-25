@@ -29,7 +29,9 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/utils-dev.h"
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -42,7 +44,9 @@ namespace djnn
       get_dst()->set_activation_source (get_src());
       bool propagate = _propagate;
       AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (get_src()); // FIXME should be done once and for all
+      if(!src_p) { warning (src_p, "not a property"); return; }
       AbstractProperty *dst_p = dynamic_cast<AbstractProperty*> (get_dst());
+      if(!dst_p) { warning (dst_p, "not a property"); return; }
       switch (src_p->get_prop_type ())
         {
         case Integer:
@@ -76,11 +80,33 @@ namespace djnn
             break;
           }
         default:
-          cout << "Unknown property type\n";
+          warning (src_p, "Unknown property type\n");
           return;
         }
       get_dst()->activate ();
-    }
+  }
+
+  #if !defined(DJNN_NO_SERIALIZE)
+  void
+  SimpleAssignment::serialize (const std::string& format)
+  {
+    string buf;
+
+    AbstractSerializer::pre_serialize (this, format);
+
+    AbstractSerializer::serializer->start ("core:pausedassignment");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::compute_path (get_parent (), get_src (), buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), get_dst (), buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
+#endif
 
   void
   AbstractAssignment::set_parent (Process* p)
@@ -204,7 +230,7 @@ namespace djnn
             break;
           }
         default:
-          cout << "Unknown property type\n";
+          warning (src, "Unknown property type");
           return;
         }
     } else if (dst_p->get_prop_type () == Reference) {
@@ -278,6 +304,7 @@ namespace djnn
     Graph::instance ().remove_edge (_src, _dst);
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   Assignment::serialize (const std::string& format)
   {
@@ -297,6 +324,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
 
   void
   PausedAssignment::init_PausedAssignment ()
@@ -333,6 +361,7 @@ namespace djnn
     Graph::instance ().remove_edge (_src, _dst);
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   PausedAssignment::serialize (const std::string& format)
   {
@@ -352,5 +381,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
+
 }
 

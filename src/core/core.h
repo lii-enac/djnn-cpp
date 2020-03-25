@@ -29,7 +29,7 @@
 #include "tree/list.h"
 #include "xml/xml.h"
 #include "serializer/serializer.h"
-#include "exec_env/timer.h"
+//#include "exec_env/timer.h"
 #include "tree/abstract_property.h"
 #include "tree/blank.h"
 #include "tree/bool_property.h"
@@ -57,6 +57,8 @@ namespace djnn {
     virtual void set_child (Process *cont, Process *child, int i) = 0;
   };
   extern std::vector<std::string> loadedModules;
+  //void module_loaded(const char* name);
+
   extern std::vector<StructureObserver*> structure_observer_list;
   void init_core ();
   void clear_core ();

@@ -35,11 +35,18 @@ namespace djnn {
     double get_double_value () override;
     std::string get_string_value () override;
     Process* find_child (const std::string& path) override;
-    void dump (int level=0) override;
-    void serialize (const std::string& format) override;
     Process* clone () override;
+
   private:
     Process* value;
+
+  public:
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
 };
 
   Process* getRef (Process *p);

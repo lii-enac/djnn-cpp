@@ -34,35 +34,48 @@ namespace djnn {
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     std::string get_string_value () override { return std::to_string (get_ref_value ()); }
-    void dump (int level=0) override;
 
     int get_value () { return get_ref_value(); };
   protected:
     virtual int& get_ref_value() = 0;
+
+  public:
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
   };
 
   class IntProperty : public AbstractIntProperty {
   public:
     IntProperty (Process* parent, const std::string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
-    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }
   private:
     int value;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class IntPropertyProxy : public AbstractIntProperty {
   public:
     IntPropertyProxy (Process* parent, const std::string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
-    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }
   private:
     int& value;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   int getInt (Process *p);
   void setInt (Process *p, int v);
+
 }

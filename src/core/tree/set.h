@@ -20,7 +20,6 @@
 #include "int_property.h"
 
 namespace djnn {
-  //using namespace std;
 
   class SetIterator : public Process
   {
@@ -46,10 +45,16 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();
-    void serialize (const std::string& type) override;
-    void dump(int level=0) override;
   private:
     RefProperty _added, _removed;
     IntProperty _size;
+
+  public:
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 }

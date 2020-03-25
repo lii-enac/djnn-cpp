@@ -117,7 +117,6 @@ namespace djnn {
     virtual     void draw () {}
     virtual     void pick () {}
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
-    virtual     void serialize (const std::string& format);
     virtual Process* clone ();
 
     // tree, component, symtable 
@@ -172,12 +171,8 @@ namespace djnn {
     static long int _nb_anonymous;
 
   public:
-    struct DebugInfo {
-      std::string filepath;
-      int lineno;
-    };
-    virtual  void dump (int level=0);
-    const DebugInfo& debug_info () { return _dbg_info; }
+
+
 
 // >>instance fields start here
   private:
@@ -190,15 +185,29 @@ namespace djnn {
     unsigned int _bitset;
     symtable_t _symtable;
     //string _name;
+  // <<instance fields end here
 
-#ifdef DJNN_NO_DEBUG
-    static DebugInfo _dbg_info;
-#else
-    DebugInfo _dbg_info;
+
+    public:
+#ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const std::string& format);
 #endif
 
-// <<instance fields end here
+    struct DebugInfo {
+      std::string filepath;
+      int lineno;
+    };
 
+#ifndef DJNN_NO_DEBUG
+    virtual  void dump (int level=0);
+    const DebugInfo& debug_info () { return _dbg_info; }
+    DebugInfo _dbg_info;
+#else
+    static DebugInfo _dbg_info;
+#endif
+
+
+  // bitfield
   public:
     enum bit_shift {
         MODEL_SHIFT            = 0 ,

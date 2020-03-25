@@ -17,7 +17,9 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -90,15 +92,17 @@ namespace djnn
   void
   AbstractTextProperty::set_value (Process* v, bool propagate)
   {
-    cerr << "Warning: undefined conversion from Component to Text\n";
+    warning(this, "undefined conversion from Component to Text");
   }
 
+#if !defined(DJNN_NO_DEBUG)
   void
   AbstractTextProperty::dump (int level) {
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
   }
+#endif
 
-
+#if !defined(DJNN_NO_SERIALIZE)
   void
   TextProperty::serialize (const std::string& format) {
 
@@ -111,13 +115,14 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process* 
   TextProperty::clone ()
   {
     return new TextProperty (nullptr, get_name (), value);
   }
-
+#if !defined(DJNN_NO_SERIALIZE)
   void
   TextPropertyProxy::serialize (const std::string& format) {
 
@@ -130,6 +135,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process* 
   TextPropertyProxy::clone ()

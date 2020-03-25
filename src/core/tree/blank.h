@@ -17,7 +17,6 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-  //using namespace std;
 
   class Blank: public Process {
   public:
@@ -31,7 +30,11 @@ namespace djnn {
     bool pre_deactivate () override { return true;}
     void impl_deactivate () override { set_activation_state(DEACTIVATED); }
     void post_deactivate () override {}
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
+#endif
   };
 
 }

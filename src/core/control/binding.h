@@ -71,7 +71,6 @@ namespace djnn {
 
     void update_graph () override;
     void about_to_update_graph () override;
-    void serialize (const std::string& format) override;
 
     Process* get_src() { return _src; }
     Process* get_dst() { return _dst; }
@@ -92,6 +91,10 @@ namespace djnn {
     
     bool _has_coupling;
     bool has_coupling () const { return _has_coupling; }
+
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
 
@@ -117,13 +120,13 @@ namespace djnn {
   public:
     SimpleBinding (Process* parent, const std::string& name, Process* src, Process* dst)
     : Process (name), //_action(this, "action", true), /*_c_src(src, ACTIVATION, &_action, ACTIVATION)
-    _c_src(src, ACTIVATION, dst, ACTIVATION) {}
+    _c(src, ACTIVATION, dst, ACTIVATION) {}
     SimpleBinding (Process* parent, const std::string& name, Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag)
     : Process (name), //_action(this, "action", activate), _c_src(src, ACTIVATION, &_action, activate)
-    _c_src(src, src_flag, dst, dst_flag) {}
+    _c(src, src_flag, dst, dst_flag) {}
 
-    void impl_activate   () override { _c_src.enable  (); };
-    void impl_deactivate () override { _c_src.disable (); }
+    void impl_activate   () override { _c.enable  (); };
+    void impl_deactivate () override { _c.disable (); }
 
     /*void perform_action (bool activate) {
       get_dst()->set_activation_source (get_src());
@@ -133,8 +136,6 @@ namespace djnn {
         get_dst()->deactivate ();
     }*/
     
-    void serialize (const std::string& format) override;
-
     //Process* get_src() { return _c_src.get_src(); } // delegate to coupling to save space
     //Process* get_dst() { return _dst; }
 
@@ -144,6 +145,11 @@ namespace djnn {
     //Process *_src
     //Process *_dst;
     //BindingAction _action;
-    Coupling _c_src;
+    Coupling _c;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 }

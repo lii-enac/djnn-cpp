@@ -15,12 +15,19 @@
 #include "graph.h"
 
 #include <algorithm>
-#include <iostream>
+
 
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
 
 #include "exec_env/exec_env-dev.h"
+
+
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+#include <iostream>
+#endif
+
+#ifndef DJNN_NO_DEBUG
 #define _PERF_TEST 0
 #if _PERF_TEST
 //#include "core/utils/utils-dev.h"
@@ -31,12 +38,15 @@ static int sorted_counter = 0;
 static double sorted_total = 0.0;
 static double sorted_average = 0.0;
 #endif
+#endif
 
 namespace djnn
 {
+#ifndef DJNN_NO_DEBUG
   using std::cout;
   using std::cerr;
   using std::endl;
+#endif
 
   enum mark_e {
     NOT_MARKED,
@@ -129,6 +139,7 @@ namespace djnn
   void
   Vertex::print_vertex () const
   {
+#ifndef DJNN_NO_DEBUG
     std::cout << "vertex (" <<
     ( _process->get_parent () ? _process->get_parent ()->get_name () + "/" : "") <<
     _process->get_name () << ") - [" << 
@@ -144,6 +155,7 @@ namespace djnn
       }
       std::cout << std::endl;
     }
+#endif
   }
 
   Graph Graph::_instance;
@@ -273,10 +285,11 @@ namespace djnn
 
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
 
+#ifndef DJNN_NO_DEBUG
       std::cerr << "Graph remove_edge: " <<
       get_hierarchy_name (p_src) << "  " << vs << " - " << 
       get_hierarchy_name (p_dst) << "  " << vd << endl;
-      
+#endif
       //assert(0);
       return;
     }
@@ -308,21 +321,25 @@ namespace djnn
   void
   Graph::print_graph () const
   {
+#ifndef DJNN_NO_DEBUG
     cout << " --- GRAPH --- " << endl ;
     for (auto v : _vertices) {
       v->print_vertex ();
     }
     cout << " --- END GRAPH --- " << endl << endl;
+#endif
   }
 
   void
   Graph::print_sorted () const
   {
+#ifndef DJNN_NO_DEBUG
     for (auto v : _sorted_vertices) {
       if (v->get_process ()->get_parent())
         cerr << v->get_process ()->get_parent()->get_name () << "/";
       cerr << v->get_process  ()->get_name () << " (" << v->get_timestamp () << ")\n";
     }
+#endif
   }
 
   void
@@ -334,7 +351,9 @@ namespace djnn
     if (v->is_invalid ()) {
       //assert (0);
       warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+#ifndef DJNN_NO_DEBUG
       cerr << "vertex: " << v << "- v->process " << v->get_process ();
+#endif
       v->set_mark (MARKED);
       return;
     }

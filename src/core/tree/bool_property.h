@@ -36,34 +36,45 @@ namespace djnn {
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     std::string get_string_value () override { return std::to_string (get_ref_value ()); }
-    void dump (int level=0) override;
-
     bool get_value () { return get_ref_value(); };
+
   protected:
     virtual bool& get_ref_value() = 0;
     Spike _true, _false;
+
+  public:
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
   };
 
   class BoolProperty : public AbstractBoolProperty {
   public:
-    BoolProperty (Process* parent, const std::string& name, bool v) : AbstractBoolProperty (parent, name), value(v) { Process::finalize_construction (parent, name); }
-    void serialize (const std::string& format) override;
+    BoolProperty (Process* parent, const std::string& name, bool v) : AbstractBoolProperty (parent, name), value(v) { Process::finalize_construction (parent, name); }    
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
   private:
     bool value;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };  
 
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
     BoolPropertyProxy (Process* parent, const std::string& name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { Process::finalize_construction (parent, name); }
-    void serialize (const std::string& format) override;
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
   private:
     bool& value;
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   bool getBool (Process *p);

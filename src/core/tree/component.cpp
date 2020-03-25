@@ -28,10 +28,14 @@
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
 
 //#define DEBUG
 //#define DEBUG_DEACTIVATE
+
+#endif
+
 
 namespace djnn
 {
@@ -152,8 +156,10 @@ namespace djnn
           s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else {
+#ifndef DJNN_NO_DEBUG
         cout << "spec = " << spec << endl;
-        warning (this, "Undefined spec to move child " + child_to_move->get_name ());
+#endif
+        warning (this, (std::string("Undefined spec to move child ") + child_to_move->get_name ()).c_str());
       }
     }
   }
@@ -311,11 +317,13 @@ namespace djnn
   void
   Container::print_children ()
   {
+#ifndef DJNN_NO_DEBUG
     cout << get_name () << "'s children:\n";
     for (auto c : _children) {
       cout << c->get_name () << endl;
     }
     cout << endl;
+#endif
   }
 
   Process*
@@ -328,7 +336,7 @@ namespace djnn
     return clone;
   }
 
-
+#ifndef DJNN_NO_SERIALIZE
   void
   Component::serialize (const std::string& format) {
 
@@ -344,6 +352,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
 
   AssignmentSequence::AssignmentSequence (Process *parent, const std::string& name, bool isModel) :
@@ -382,6 +391,7 @@ namespace djnn
     set_activation_state (DEACTIVATED);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   AssignmentSequence::serialize (const std::string& format) {
 
@@ -397,5 +407,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 }
 

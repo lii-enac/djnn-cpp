@@ -42,6 +42,7 @@ namespace djnn
     set_activation_state (DEACTIVATED);
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   Spike::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
@@ -52,6 +53,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   Process* 
   Spike::clone ()

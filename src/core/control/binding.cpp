@@ -19,7 +19,9 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/utils-dev.h"
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -179,6 +181,7 @@ namespace djnn
     Graph::instance ().remove_edge (_src, _dst);
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   Binding::serialize (const std::string& format)
   {
@@ -197,5 +200,25 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+
+  void
+  SimpleBinding::serialize (const std::string& format)
+  {
+    string buf;
+
+    AbstractSerializer::pre_serialize (this, format);
+
+    AbstractSerializer::serializer->start ("core:simplebinding");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::compute_path (get_parent (), _c.get_src (), buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _c.get_dst (), buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
+#endif
 
 }

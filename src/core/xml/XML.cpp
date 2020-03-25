@@ -28,13 +28,16 @@
 #include <map>
 #include <string.h>
 #include <stdlib.h>
-#include <iostream>
 #include <stdarg.h>
+
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+#include <iostream>
+#endif
 
 namespace djnn {
   using namespace std;
 
-
+#if !defined(DJNN_NO_SERIALIZE)
   #define BUFFSIZE 8192
   static char buf[BUFFSIZE];
   map<string, djn__XMLParser*> XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
@@ -357,4 +360,5 @@ namespace djnn {
   XML::djn__XMLNamespaceEnd (void* userData, const XML_Char *prefix)
   {
   }
+#endif
 }

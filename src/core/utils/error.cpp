@@ -13,7 +13,10 @@
  */
 
 #include "error.h"
+
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -30,11 +33,12 @@ namespace djnn
   int
   __error (Process* p, const std::string& msg)
   {
+#ifndef DJNN_NO_DEBUG
     std::cerr << std::endl << std::endl << "djnn - ERROR: " << (p ? p->get_name () : "") << " - " << msg << std::endl << std::endl;
     
     if (p) 
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
-    
+#endif
     return 1;
     //exit (0);
   }
@@ -42,10 +46,11 @@ namespace djnn
   void
   __warning (Process *p, const std::string& msg)
   {
+#ifndef DJNN_NO_DEBUG
     std::cerr << std::endl << std::endl << "djnn - WARNING: " << (p ? p->get_name () : "") << " - " << msg << std::endl << std::endl;
     
     if (p) 
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
-    
+#endif
   }
 }

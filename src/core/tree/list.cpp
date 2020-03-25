@@ -25,7 +25,9 @@
 
 #include <algorithm>
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -40,6 +42,7 @@ namespace djnn
   {
   }
 
+#if !defined(DJNN_NO_DEBUG)
   void
   AbstractList::dump (int level)
   {
@@ -49,6 +52,7 @@ namespace djnn
     //for (auto c : _children)
     //  c->dump(level);
   }
+#endif
 
   void
   AbstractList::add_child (Process* c, const std::string& name)
@@ -238,6 +242,7 @@ namespace djnn
     return clone;
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   List::serialize (const std::string& type) {
    
@@ -253,6 +258,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
   ListIterator::ListIterator (Process *parent, const std::string& name, Process *list, Process *action, bool model)
   :
@@ -398,6 +404,7 @@ namespace djnn
     _c_reset.disable ();
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   BidirectionalListIterator::serialize (const std::string& type) {
    
@@ -415,6 +422,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
 }
 

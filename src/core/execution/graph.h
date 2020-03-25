@@ -20,9 +20,11 @@
 #include <list>
 #include <memory>
 
-//#include <iostream>
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+#include <iostream>
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBGG
+#endif
 
 #define GRAPH_EXEC { DBGG; djnn::Graph::instance ().exec (); }
 

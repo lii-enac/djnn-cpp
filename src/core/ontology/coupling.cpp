@@ -17,24 +17,23 @@
 #include "process.h"
 #include "core/execution/graph.h"
 
-#include <cassert>
-#include <iostream>
+#include "core/utils/error.h"
+
+//#include <cassert>
 
 namespace djnn
 {
-  //using namespace std;
-  using std::cerr;
 
   void
   Coupling::init (Process* src, activation_flag_e src_flag, Process* dst,
                            activation_flag_e dst_flag, bool immediate_propagation)
   {
     if (src == 0) {
-      cerr << "Warning: the source of a coupling cannot be null\n";
+      warning(src, "the source of a coupling cannot be null");
       return;
     }
     if (dst == 0) {
-      cerr << "Warning: the destination of a coupling cannot be null\n";
+      warning(dst, "the destination of a coupling cannot be null");
       return;
     }
 

@@ -17,8 +17,6 @@
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
 
-//#include <iostream>
-
 namespace djnn
 {
   using namespace std;
@@ -48,6 +46,7 @@ namespace djnn
   {
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Activator::serialize (const std::string& format) {
 
@@ -63,5 +62,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
 }

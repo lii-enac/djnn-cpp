@@ -17,7 +17,9 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -87,12 +89,27 @@ namespace djnn
     warning (this, "undefined conversion from Component to Int\n");
   }
 
+  Process*
+  IntProperty::clone ()
+  {
+    return new IntProperty (nullptr, get_name (), get_value());
+  }
+
+  Process*
+  IntPropertyProxy::clone ()
+  {
+    return new IntPropertyProxy (nullptr, get_name (), get_ref_value());
+  }
+
+#ifndef DJNN_NO_DEBUG
   void
   AbstractIntProperty::dump (int level)
   {
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
   }
+#endif
 
+#ifndef DJNN_NO_SERIALIZE
   void
   IntProperty::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
@@ -116,16 +133,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
 
-  Process*
-  IntProperty::clone ()
-  {
-    return new IntProperty (nullptr, get_name (), get_value());
-  }
-
-  Process*
-  IntPropertyProxy::clone ()
-  {
-    return new IntPropertyProxy (nullptr, get_name (), get_ref_value());
-  }
 }

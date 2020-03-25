@@ -15,20 +15,23 @@
 #include "core/core-dev.h"
 #include "serializer.h"
 
+#if !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
-
+#endif
 
 namespace djnn
 {
-  using namespace std;
 
-  static int __JSONLevel = 0;
+  using namespace std;
 
   /* FIXME:
   we don't know when is the end on the componant so there is problem with the last ","
   one of the solution, for djnn developpers only is to add the number of attributes in the start.
   save it and compare to __JSONLevel.
   */
+
+#if !defined(DJNN_NO_SERIALIZE)
+  static int __JSONLevel = 0;
 
   void
   JSONSerializer::start (const std::string& classname) {
@@ -81,5 +84,6 @@ namespace djnn
    --__JSONLevel;
 
   }
+#endif
 
 }

@@ -15,8 +15,9 @@
 #include "core/core-dev.h"
 #include "serializer.h"
 
+#if !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
-
+#endif
 
 namespace djnn
 {
@@ -29,6 +30,8 @@ namespace djnn
     //const char* classname;
     std::string classname;
   };// __XMLDumpContext;
+
+#if !defined(DJNN_NO_SERIALIZE)
 
   static int __XMLDumpNumAttrs;
   //static __XMLDumpContext* __curXMLDumpContext = 0;
@@ -122,5 +125,5 @@ namespace djnn
     free (__curXMLDumpContext);
     __curXMLDumpContext = c;
   }
-
+#endif
 }
