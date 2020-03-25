@@ -20,7 +20,6 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/utils-dev.h"
 
-#include <iostream>
 
 namespace djnn
 {
@@ -43,11 +42,11 @@ namespace djnn
   {
     if (src == 0) {
       error (c,
-       "src argument cannot be null in connector creation (" + c->get_name () + ", " + ispec + ", " + dspec + ")");
+       (std::string("src argument cannot be null in connector creation (") + c->get_name () + ", " + ispec + ", " + dspec + ")").c_str());
     }
     if (dst == 0) {
       error (c,
-       "dst argument cannot be null in connector creation (" + c->get_name () + ", " + ispec + ", " + dspec + ")");
+       (std::string("dst argument cannot be null in connector creation (") + c->get_name () + ", " + ispec + ", " + dspec + ")").c_str());
     }
 
     std::pair<RefProperty*, std::string> ref_src_pair = check_for_ref (src, ispec);
@@ -66,7 +65,7 @@ namespace djnn
   {
     if(!_ref_info_src._ref) {
       if (_src == 0) {
-        error (this, "SOURCE not found in connector creation or SOURCE is not a property (" + get_name () + ", " + ispec + ", " + dspec + ")");
+        error (this, (std::string("SOURCE not found in connector creation or SOURCE is not a property (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       }
     }
 
@@ -74,8 +73,8 @@ namespace djnn
       if (_dst == 0) {
         error (
             this,
-            "DESTINATION not found in (Paused)assignment creation or the DESTINATION of an (Paused)assignment must be a property ( name: " + get_name () + ", src spec: " + ispec
-                + ", dst spec:" + dspec + ")\n");
+            (std::string("DESTINATION not found in (Paused)assignment creation or the DESTINATION of an (Paused)assignment must be a property ( name: ") + get_name () + ", src spec: " + ispec
+                + ", dst spec:" + dspec + ")\n").c_str());
       }
     }
   }
@@ -233,19 +232,19 @@ namespace djnn
   PausedConnector::init_pausedconnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec)
   {
     if (src == 0) {
-      error ( this, "src argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      error ( this, (std::string("src argument cannot be null in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
     if (dst == 0) {
-      error ( this, "dst argument cannot be null in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      error ( this, (std::string("dst argument cannot be null in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
       return;
     }
 
     Process* c_src = src->find_child (ispec);
 
     if (c_src == 0) {
-      error (this, "source not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+      error (this, (std::string("source not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
       return;
     }
 
@@ -253,7 +252,7 @@ namespace djnn
 
     if (c_dst == 0) {
       error (this,
-       "destination not found in pausedconnector creation (" + get_name () + ", " + ispec + ", " + dspec + ")");
+       (std::string("destination not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")")).c_str();
       return;
     }
 
@@ -261,7 +260,7 @@ namespace djnn
     _dst = dynamic_cast<AbstractProperty*> (c_dst);
     if (!_src || !_dst) {
       warning (this,
-       "invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")");
+       (std::string("invalid source or destination in pausedconnector (" + get_name () + "," + ispec + " " + dspec + ")")).c_str());
     }
 
     _action = new Connector::ConnectorAction (

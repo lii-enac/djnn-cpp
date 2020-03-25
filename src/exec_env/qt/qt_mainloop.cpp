@@ -20,8 +20,8 @@
 
 #include "qt_mainloop.h"
 
-#include <iostream>
-#include "utils/debug.h"
+//#include <iostream>
+//#include "utils/debug.h"
 
 namespace djnn
 {

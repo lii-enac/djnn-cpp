@@ -67,7 +67,6 @@ namespace djnn
       bool *_reset_occurred;
     };
 
-  /* COUNTER ACTION */
   public:
     Counter (Process* p, const std::string& n, double init, double delta);
     ~Counter();

@@ -18,7 +18,6 @@
 #include "exec_env/main_loop.h"
 #include "exec_env/djnn_time_manager.h"
 
-#include <iostream>
 #include <sys/time.h>
 #include <stdio.h>
 
@@ -27,9 +26,11 @@
 #include <mach/mach.h>
 #endif
 
-#define DBG_MUTEX 0
+#ifndef DJNN_NO_DEBUG
 #include <iostream>
-#include "utils/debug.h"
+//#include "utils/debug.h"
+#endif
+
 
 namespace djnn
 {
@@ -93,8 +94,10 @@ namespace djnn
       return 0.0;
     get_monotonic_time (&after);
     double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
+#ifndef DJNN_NO_DEBUG
     if(display_stderr)
       std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
+#endif
     init = 0;
     return elapsedTime;
   }

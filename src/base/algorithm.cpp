@@ -16,8 +16,8 @@
 #include "core/execution/graph.h"
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
-#include <iostream>
 #include <algorithm>
+
 
 namespace djnn
 {

@@ -25,11 +25,13 @@
 #include "freertos/freertos_mainloop.h"
 #endif
 
-#include <iostream>
-#include <algorithm>
-#include "utils/debug.h"
-
 #include "exec_env/djnn_time_manager.h"
+
+//#include <algorithm>
+
+//#include <iostream>
+//#include "utils/debug.h"
+
 
 namespace djnn {
 

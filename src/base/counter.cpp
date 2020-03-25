@@ -18,8 +18,6 @@
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 
-#include <iostream>
-
 namespace djnn
 {
   Counter::Counter (Process *parent, const std::string& name, double init, double delta)
@@ -86,6 +84,7 @@ namespace djnn
     _c_step.disable ();
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Counter::serialize (const std::string& type) {
    
@@ -100,6 +99,7 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
 
   }
+#endif
 
 }
 
