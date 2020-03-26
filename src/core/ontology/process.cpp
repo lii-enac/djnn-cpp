@@ -139,7 +139,7 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    /*if (
+    if (
            get_activation_state () != DEACTIVATED
         || (
              get_parent () != nullptr
@@ -147,7 +147,7 @@ namespace djnn
            )
        )
       return false;
-    set_activation_state (ACTIVATING);*/
+    set_activation_state (ACTIVATING);
     return true;
   }
 
