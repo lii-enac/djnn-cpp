@@ -7,8 +7,8 @@ namespace djnn {
 	{
 		IntProperty i(nullptr, "", 5);
 		IntProperty j(nullptr, "", 2);
-		SimpleAssignment a(nullptr, "", &i, &j, true);
-		a.activate ();
+		//SimpleAssignment a(nullptr, "", &i, &j, true);
+		//a.activate ();
 		j.get_value () == 5;
 	}
 }
