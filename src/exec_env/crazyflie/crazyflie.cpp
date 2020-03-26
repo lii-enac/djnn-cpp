@@ -7,11 +7,11 @@ namespace djnn {
 	init_prog()
 	{
 		IntProperty i(nullptr, "", 5);
-		IntProperty j(nullptr, "", 2);
-		SimpleBinding a(nullptr, "", &i, &j);
+		//IntProperty j(nullptr, "", 2);
+		//SimpleBinding a(nullptr, "", &i, &j);
 		//SimpleAssignment a(nullptr, "", &i, &j, true);
-		//a.activate ();
-		j.get_value () == 5;
+		i.activate ();
+		//j.get_value () == 5;
 	}
 }
 

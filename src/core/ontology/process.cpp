@@ -117,8 +117,8 @@ namespace djnn
   Process::activate ()
   {
     if (pre_activate ()) {
-    //   impl_activate ();
-    //   post_activate ();
+       impl_activate ();
+       post_activate ();
     }
   }
 
