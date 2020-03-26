@@ -10,7 +10,9 @@ namespace djnn {
 		//IntProperty j(nullptr, "", 2);
 		//SimpleBinding a(nullptr, "", &i, &j);
 		//SimpleAssignment a(nullptr, "", &i, &j, true);
-		i.activate ();
+		i.is_activated ();
+		i.get_process_type ();
+		//i.activate ();
 		//j.get_value () == 5;
 	}
 }
