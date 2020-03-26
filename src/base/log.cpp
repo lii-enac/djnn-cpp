@@ -17,7 +17,6 @@
 #include "core/serializer/serializer.h"
 #include "log.h"
 
-#include <iostream>
 
 namespace djnn
 {

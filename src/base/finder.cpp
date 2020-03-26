@@ -22,7 +22,6 @@
 #include "core/execution/graph.h"
 #include "core/utils/error.h"
 
-#include <iostream>
 
 namespace djnn
 {

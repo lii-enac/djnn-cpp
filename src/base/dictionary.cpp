@@ -16,12 +16,8 @@
 
 #include "core/execution/graph.h"
 
-#include <iostream>
-
 namespace djnn
 {
-  using namespace std;
-
   void
   Dictionary::FindAction::impl_activate ()
   {

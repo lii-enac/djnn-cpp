@@ -19,11 +19,9 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
-#include <iostream>
 
 namespace djnn
 {
-  using namespace std;
 
   FSMState::FSMState (Process *parent, const std::string& name) :
       Container (parent, name)
