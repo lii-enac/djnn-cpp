@@ -41,10 +41,6 @@ namespace djnn {
     void impl_deactivate () override { _c_src.disable (); }
 
     void perform_action ();
-    
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
 
     Process* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
     Process* get_dst() { return _dst; }
