@@ -22,6 +22,7 @@
 
 namespace djnn
 {
+  using std::string;
 
   FSMState::FSMState (Process *parent, const std::string& name) :
       Container (parent, name)
