@@ -34,7 +34,7 @@ namespace djnn {
     };
   public:
     SimpleAssignment (Process* parent, const std::string& name, Process* src, Process* dst, bool propagate)
-    : Process (name), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate) {}
+    : Process (name), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate) { finalize_construction (parent, name); }
     virtual ~SimpleAssignment ();
 
     void impl_activate   () override { _c_src.enable  (); };

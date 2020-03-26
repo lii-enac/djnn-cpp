@@ -117,8 +117,8 @@ namespace djnn
   Process::activate ()
   {
     if (pre_activate ()) {
-      impl_activate ();
-      post_activate ();
+    //   impl_activate ();
+    //   post_activate ();
     }
   }
 
@@ -139,9 +139,15 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (get_activation_state () != DEACTIVATED || (get_parent () != 0 && !get_parent ()->somehow_activating() ))
+    /*if (
+           get_activation_state () != DEACTIVATED
+        || (
+             get_parent () != nullptr
+             && !get_parent ()->somehow_activating()
+           )
+       )
       return false;
-    set_activation_state (ACTIVATING);
+    set_activation_state (ACTIVATING);*/
     return true;
   }
 

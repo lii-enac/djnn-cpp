@@ -42,10 +42,10 @@ namespace djnn {
   public:
     SimpleBinding (Process* parent, const std::string& name, Process* src, Process* dst)
     : Process (name), //_action(this, "action", true), /*_c_src(src, ACTIVATION, &_action, ACTIVATION)
-    _c(src, ACTIVATION, dst, ACTIVATION) {}
+    _c(src, ACTIVATION, dst, ACTIVATION) { finalize_construction (parent, name); }
     SimpleBinding (Process* parent, const std::string& name, Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag)
     : Process (name), //_action(this, "action", activate), _c_src(src, ACTIVATION, &_action, activate)
-    _c(src, src_flag, dst, dst_flag) {}
+    _c(src, src_flag, dst, dst_flag) { finalize_construction (parent, name); }
 
     void impl_activate   () override { _c.enable  (); };
     void impl_deactivate () override { _c.disable (); }
