@@ -329,6 +329,7 @@ $1_dbg:
 	@echo $$($1_djnn_deps)
 	@echo $$($1_lib_ldflags)
 
+
 srcs += $$($1_srcs)
 srcgens += $$($1_srcgens)
 objs += $$($1_objs)
@@ -338,6 +339,7 @@ libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
+
 
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
