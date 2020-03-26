@@ -336,7 +336,7 @@ $1_dbg:
 
 $1_headers_cp: $$($1_headers)
 	@echo "==> copy all $1 .h into $(build_incl_dir)/$1"
-	$$(foreach var,$$($1_headers), mkdir -p $$(dir $$(patsubst src%, $(build_incl_dir)%, $$(var))) ; cp $$(var) $$(patsubst src%, $(build_incl_dir)%, $$(var)) ;)
+	@$$(foreach var,$$($1_headers), mkdir -p $$(dir $$(patsubst src%, $(build_incl_dir)%, $$(var))) ; cp $$(var) $$(patsubst src%, $(build_incl_dir)%, $$(var)) ;)
 .PHONY: $1_headers_cp
 
 
