@@ -241,23 +241,23 @@ define lib_makerule
 
 lib_srcs :=
 lib_srcgens :=
-lib_objs :=
 lib_cflags :=
 lib_cppflags :=
+lib_objs :=
+lib_djnn_deps :=
 lib_ldflags :=
 lib_pkg :=
 lib_pkgpath :=
-lib_djnn_deps :=
 
 -include $$(src_dir)/$1/djnn-lib.mk
 
 # default
-$1_c_srcs := $$(filter %.c,$$(lib_srcs))
-$1_cpp_srcs := $$(filter %.cpp,$$(lib_srcs))
-$1_objs := $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
+$1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
+$1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
+$1_objs ?= $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 
-$1_srcgens := $$(lib_srcgens)
+$1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
 
 $1_pkg_deps :=
