@@ -1,5 +1,6 @@
 #include "core/tree/int_property.h"
-#include "core/control/assignment.h"
+#include "core/control/simple_binding.h"
+#include "core/control/simple_assignment.h"
 
 namespace djnn {
 	void
@@ -7,6 +8,7 @@ namespace djnn {
 	{
 		IntProperty i(nullptr, "", 5);
 		IntProperty j(nullptr, "", 2);
+		SimpleBinding a(nullptr, "", &i, &j);
 		//SimpleAssignment a(nullptr, "", &i, &j, true);
 		//a.activate ();
 		j.get_value () == 5;
