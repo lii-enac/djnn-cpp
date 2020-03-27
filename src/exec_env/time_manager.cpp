@@ -104,6 +104,7 @@ namespace djnn_internal {
     void
     Manager::cleanup ()
     {
+      for (auto * t: _timers) t->set_scheduled(false);
       _timers.clear ();
       assert(_timers.empty());
     }
