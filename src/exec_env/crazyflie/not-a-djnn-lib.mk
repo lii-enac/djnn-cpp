@@ -26,12 +26,11 @@ thread = STD
 
 CFLAGS += -DDJNN_NO_DEBUG
 CFLAGS += -DDJNN_NO_SERIALIZE
-CFLAGS += -pie
 
-
-CFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -pie -fexceptions
 CFLAGS += -ffunction-sections -fdata-sections
-CFLAGS += -fno-strict-aliasing -Wdouble-promotion
+CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 #LDFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 #LDFLAGS += -z now -z relro
 

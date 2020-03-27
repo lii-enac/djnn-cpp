@@ -186,36 +186,56 @@ namespace djnn {
 	void
 	init_prog()
 	{
-		//toto(50000000);
-		int * p = new int;
-		delete p;
-		char sss[255];
-		sprintf(sss,"%d",__LINE__);
+		std::set_terminate([](){ DJNN_DEBUG_PRINT( "Unhandled exception\n"); }); // useless?
 
-		std::string __s("yep");
-		dbg = std::string("sco ")+sss+"\n"; // this works
-		//std::to_string(12); // ********* does not work: VERY SUSPECT (call to vsnprintf)
-		
-		stefA* pa;
-		pa = new stefB;
-		pa->f();
-		//std::ostringstream out;
-		//out << 12;
-		//DJNN_DEBUG_PRINT( (out.str() + "\n").c_str()); // works
+		DJNN_DEBUG_PRINT( "enter init_prog\n" );
+		try {
+			//toto(50000000);
+			int * p = new int;
+			delete p;
+			//char sss[255];
+			//sprintf(sss,"%d",__LINE__);
 
-		//dbg = std::string("sco ") + std::to_string(__LINE__)+"\n"; // does not work
-		DJNN_DEBUG_PRINT( dbg.c_str() );
-		//DJNN_DEBUG_PRINT( "TtTTTTTTT\n");
+			//std::string __s("yep");
+			//dbg = std::string("sco ")+sss+"\n"; // this works
+			//DJNN_DEBUG_PRINT( dbg.c_str() );
+			//std::to_string(12); // ********* does not work: VERY SUSPECT (call to vsnprintf)
+			//DJNN_DEBUG_PRINT( dbg.c_str() );
 
-		IntProperty ii(nullptr, "", i); // works
-		IntProperty j(nullptr, "", 2); // works
-		SimpleBinding a(nullptr, "", &ii, &j); // works
-		//SimpleAssignment a(nullptr, "", &i, &j, true);
-		//i.set_parent(nullptr);
-		ii.is_activated (); // works
-		ii.get_process_type (); // works
-		//ii.activate (); // ******* does not work
-		//j.get_value () == 5;
+			DJNN_DEBUG_PRINT( "sco 1\n" );
+			//throw 1; // does not work
+
+			/*stefA* pa;
+			pa = new stefB;
+			pa->f();
+			//std::ostringstream out;
+			//out << 12;
+			//DJNN_DEBUG_PRINT( (out.str() + "\n").c_str()); // works
+
+			//dbg = std::string("sco ") + std::to_string(__LINE__)+"\n"; // does not work
+			//DJNN_DEBUG_PRINT( dbg.c_str() );
+			//DJNN_DEBUG_PRINT( "TtTTTTTTT\n");
+
+			DJNN_DEBUG_PRINT( "sco 2\n" );
+			*/
+			IntProperty ii(nullptr, "", i); // works
+			IntProperty j(nullptr, "", 2); // works
+			SimpleBinding a(nullptr, "", &ii, &j); // works
+			//SimpleAssignment a(nullptr, "", &i, &j, true);
+			//i.set_parent(nullptr);
+			ii.is_activated (); // works
+			ii.get_process_type (); // works
+			DJNN_DEBUG_PRINT( "activating\n" );
+			//ii.activate (); // ******* does not work
+			//j.get_value () == 5;
+			DJNN_DEBUG_PRINT( "end init_prog\n" );
+		} catch (std::exception& e) {
+			dbg = std::string(e.what()) + "\n";
+			DJNN_DEBUG_PRINT( dbg.c_str() );
+		} catch (...) {
+			DJNN_DEBUG_PRINT( "unknown c++ exception\n" );
+		}
+		DJNN_DEBUG_PRINT( "exit init_prog\n" );
 	}
 }
 
