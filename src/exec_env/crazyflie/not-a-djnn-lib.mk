@@ -30,8 +30,10 @@ CFLAGS += -pie
 
 
 CFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-LDFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-LDFLAGS += -z now -z relro
+CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -fno-strict-aliasing -Wdouble-promotion
+#LDFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+#LDFLAGS += -z now -z relro
 
 #include src/exec_env/freertos/djnn-lib-flags.mk
 #CFLAGS += $(lib_cppflags)
@@ -54,14 +56,17 @@ trtr:
 	@echo $(CFLAGS)
 	@echo $(tototo)
 
-# IntProperty
+# minimum
 crazyflie_objs := \
-	src/exec_env/crazyflie/crazyflie.o src/core/core.o
+	src/exec_env/crazyflie/crazyflie.o \
+	src/core/core.o \
 
-# 	src/core/core.o src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
-# 	src/core/utils/error.o src/core/utils/uri.o \
-# 	src/core/tree/int_property.o
 
+# IntProperty
+crazyflie_objs += \
+	src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
+	src/core/utils/error.o src/core/utils/uri.o \
+	src/core/tree/int_property.o
 # graph: for state_dependency
 # uri: for find_by_uri
 

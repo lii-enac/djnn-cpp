@@ -8,7 +8,11 @@ extern "C" {
 	void vPortFree( void *pv );
 }
 
-#if 0
+#include <exception>
+
+#if 1
+#define USE_FREERTOS 1
+
 // Define the ‘new’ operator for C++ to use the freeRTOS memory management
 // functions. THIS IS NOT OPTIONAL!
 //
@@ -66,8 +70,7 @@ void *operator new[](size_t size){
 }
 
 //
-// Define the ‘delete’ operator for C++ to use the freeRTOS memory
-management
+// Define the ‘delete’ operator for C++ to use the freeRTOS memory management
 // functions. THIS IS NOT OPTIONAL!
 //
 void operator delete[](void *p){
@@ -88,11 +91,11 @@ void operator delete[](void *p){
    rather than just eliminate exceptions.
  */
 
-void* operator new(std::sizet size, const std::nothrowt&) {
+void* operator new(std::size_t size, const std::nothrow_t&) {
     return malloc(size);
 }
 
-void* operator new[](std::sizet size, const std::nothrowt&) {
+void* operator new[](std::size_t size, const std::nothrow_t&) {
     return malloc(size);
 }
 
@@ -133,8 +136,8 @@ void operator delete(void *p) _GLIBCXX_USE_NOEXCEPT
 #include <string>
 #include <sstream>
 
-// #include "core/tree/int_property.h"
-// #include "core/control/simple_binding.h"
+#include "core/tree/int_property.h"
+#include "core/control/simple_binding.h"
 // #include "core/control/simple_assignment.h"
 
 // crazyflie firmware
@@ -167,6 +170,17 @@ namespace djnn {
 			titi(3);
 	}
 
+
+	struct stefA {
+		virtual ~stefA() {}
+		virtual void f() {}
+	};
+
+	struct stefB : stefA {
+		virtual ~stefB() {}
+		virtual void f() {}	
+	};
+
 	std::string dbg;
 
 	void
@@ -179,23 +193,28 @@ namespace djnn {
 		sprintf(sss,"%d",__LINE__);
 
 		std::string __s("yep");
-		//dbg = std::string("sco ")+sss+"\n"; // this works
-		std::to_string(12); // does not work: VERY SUSPECT
+		dbg = std::string("sco ")+sss+"\n"; // this works
+		//std::to_string(12); // ********* does not work: VERY SUSPECT (call to vsnprintf)
+		
+		stefA* pa;
+		pa = new stefB;
+		pa->f();
 		//std::ostringstream out;
 		//out << 12;
-		//DJNN_DEBUG_PRINT( (out.str() + "\n").c_str());
+		//DJNN_DEBUG_PRINT( (out.str() + "\n").c_str()); // works
 
-		//dbg = std::string("sco ") + std::to_string(__LINE__)+"\n"; // this does not work
-		//DJNN_DEBUG_PRINT( dbg.c_str() );
+		//dbg = std::string("sco ") + std::to_string(__LINE__)+"\n"; // does not work
+		DJNN_DEBUG_PRINT( dbg.c_str() );
 		//DJNN_DEBUG_PRINT( "TtTTTTTTT\n");
-		//IntProperty ii(nullptr, "", i);
-		//IntProperty j(nullptr, "", 2);
-		//SimpleBinding a(nullptr, "", &i, &j);
+
+		IntProperty ii(nullptr, "", i); // works
+		IntProperty j(nullptr, "", 2); // works
+		SimpleBinding a(nullptr, "", &ii, &j); // works
 		//SimpleAssignment a(nullptr, "", &i, &j, true);
 		//i.set_parent(nullptr);
-		//i.is_activated ();
-		//i.get_process_type ();
-		//ii.activate ();
+		ii.is_activated (); // works
+		ii.get_process_type (); // works
+		//ii.activate (); // ******* does not work
 		//j.get_value () == 5;
 	}
 }

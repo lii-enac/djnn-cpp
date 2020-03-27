@@ -1,20 +1,31 @@
 diff --git a/Makefile b/Makefile
-index 0b80973..99443fd 100644
+index 0b80973..3abe13a 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -269,7 +269,11 @@ OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(CRT0)
  ############### Compilation configuration ################
  AS = $(CROSS_COMPILE)as
  CC = $(CROSS_COMPILE)gcc
-+ifneq ($(djnn),1)
- LD = $(CROSS_COMPILE)gcc
-+else
++ifeq ($(djnn),1)
 +LD = $(CROSS_COMPILE)g++
++else
+ LD = $(CROSS_COMPILE)gcc
 +endif
  SIZE = $(CROSS_COMPILE)size
  OBJCOPY = $(CROSS_COMPILE)objcopy
  GDB = $(CROSS_COMPILE)gdb
-@@ -336,6 +340,21 @@ ifeq ($(LTO), 1)
+@@ -310,7 +314,9 @@ CFLAGS += -DBOARD_REV_$(REV) -DESTIMATOR_NAME=$(ESTIMATOR)Estimator -DCONTROLLER
+ CFLAGS += $(PROCESSOR) $(INCLUDES)
+ 
+ 
+-CFLAGS += -Wall -Wmissing-braces -fno-strict-aliasing $(C_PROFILE) -std=gnu11
++CFLAGS += -Wall
++#CFLAGS += -Wno-error=address-of-packed-member
++CFLAGS += -Wmissing-braces -fno-strict-aliasing $(C_PROFILE) -std=gnu11
+ # Compiler flags to generate dependency files:
+ CFLAGS += -MD -MP -MF $(BIN)/dep/$(@).d -MQ $(@)
+ #Permits to remove un-used functions and global variables from output file
+@@ -336,6 +342,29 @@ ifeq ($(LTO), 1)
    LDFLAGS += -Os -flto -fuse-linker-plugin
  endif
  
@@ -29,8 +40,16 @@ index 0b80973..99443fd 100644
 +INCLUDES += -I$(djnn_path)/src
 +CFLAGS += -DUSE_DJNN=1
 +CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
-+LDFLAGS += -L$(djnn_lib_path)
-+LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core -static-libstdc++
++#CXXFLAGS += -ffunction-sections -fdata-sections
++#CXXFLAGS += -std=c++14
++LDFLAGS += -Wl,-z,now -Wl,-z,relro -Wl,-Bstatic
++#LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections
++#-L$(djnn_lib_path)
++#LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core -static-libstdc++
++#LIBS += -ldjnn-crazyflie
++LIBS += $(djnn_lib_path)/libdjnn-crazyflie.a
++#LIBS += ../djnn-cpp/build/src/exec_env/crazyflie/crazyflie.o ../djnn-cpp/build/src/core/core.o
++LIBS += -Wl,--start-group -static-libstdc++ -static-libgcc -lsupc++ -lstdc++ -lc -Wl,--end-group
 +endif
 +
  #Program name
@@ -51,7 +70,7 @@ index 63d5dba..2d01c93 100644
   * Schedule a function for execution by the worker loop
   * The function will be executed as soon as possible by the worker loop.
 diff --git a/src/modules/src/system.c b/src/modules/src/system.c
-index fcc5712..50126f2 100644
+index fcc5712..1af34c6 100644
 --- a/src/modules/src/system.c
 +++ b/src/modules/src/system.c
 @@ -67,6 +67,13 @@
@@ -68,21 +87,40 @@ index fcc5712..50126f2 100644
  /* Private variable */
  static bool selftestPassed;
  static bool canFly;
-@@ -183,6 +190,13 @@ void systemTask(void *arg)
+@@ -144,6 +151,12 @@ bool systemTest()
+ 
+ /* Private functions implementation */
+ 
++void DJNN_DEBUG_PRINT(const char* fff)
++{
++  DEBUG_PRINT("coucou\n");
++  DEBUG_PRINT("%s",fff);
++}
++
+ void systemTask(void *arg)
+ {
+   bool pass = true;
+@@ -183,6 +196,19 @@ void systemTask(void *arg)
    proximityInit();
  #endif
  
++  DEBUG_PRINT("SCOOOOO\n");
++
 +#ifdef USE_DJNN
-+  //djnn_init_core();
-+  djnn_init_exec_env();
++  DEBUG_PRINT("USE_DJNN\n");
++  djnn_init_core();
++  //djnn_init_exec_env();
 +  //djnn_init_base();
-+  //DEBUG_PRINT("YES %p", djnn_init_core);*/
++
++  djnn_init_prog();
++  DEBUG_PRINT("djnn_init_prog done\n");
 +#endif
++  
 +
    //Test the modules
    pass &= systemTest();
    pass &= configblockTest();
-@@ -230,6 +244,8 @@ void systemTask(void *arg)
+@@ -230,6 +256,8 @@ void systemTask(void *arg)
    }
    DEBUG_PRINT("Free heap: %d bytes\n", xPortGetFreeHeapSize());
  
