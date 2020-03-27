@@ -9,6 +9,9 @@
 #	make -j static
 # in crazyflie-firmware/ :
 #	make -j V=1 djnn=1 && make cload
+# in cfclient :
+# 	menu View > Tabs > Console
+# 	press 'clear' and 'connect'
 
 # -------------------------------------
 
