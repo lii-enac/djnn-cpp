@@ -456,7 +456,7 @@ pkgconf:
 
 install_prefix ?= /usr/local
 
-installpkgconf: 
+installpkgconf: pkgconf
 	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
