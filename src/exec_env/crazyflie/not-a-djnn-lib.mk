@@ -26,16 +26,42 @@ thread = STD
 
 CFLAGS += -DDJNN_NO_DEBUG
 CFLAGS += -DDJNN_NO_SERIALIZE
+CFLAGS += -pie
+
 
 CFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 LDFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+LDFLAGS += -z now -z relro
+
+#include src/exec_env/freertos/djnn-lib-flags.mk
+#CFLAGS += $(lib_cppflags)
+# CFLAGS += -I$(freertos_layers_dir) -I$(freertos_config_dir)
+# CFLAGS += \
+# 	-D_GCC_MULTITHREAD_FREERTOS_ENABLE \
+# 	-include $(src_dir)/exec_env/freertos/ext/freertos-cxx11/freertos-cxx11-macros.h \
+# 	-I$(src_dir)/exec_env/freertos/ext/freertos-cxx11 \
+# 	-I$(freertos_dir)/include \
+# 	-I$(freertos_dir)/portable/GCC/ARM_CM4F \
+# 	-I$(freertos_config_dir) \
+# 	-I$(freertos_layers_dir)/drivers/interface \
+# 	-I$(freertos_layers_dir)/hal/interface \
+# 	-I$(freertos_layers_dir)/utils/interface \
+# 	-I$(freertos_layers_dir)/modules/interface
+
+
+trtr:
+	@echo $(lib_cppflags)
+	@echo $(CFLAGS)
+	@echo $(tototo)
 
 # IntProperty
 crazyflie_objs := \
-	src/exec_env/crazyflie/crazyflie.o \
-	src/core/core.o src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
-	src/core/utils/error.o src/core/utils/uri.o \
-	src/core/tree/int_property.o \
+	src/exec_env/crazyflie/crazyflie.o src/core/core.o
+
+# 	src/core/core.o src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
+# 	src/core/utils/error.o src/core/utils/uri.o \
+# 	src/core/tree/int_property.o
+
 # graph: for state_dependency
 # uri: for find_by_uri
 
