@@ -35,7 +35,7 @@ namespace djnn {
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () = 0;
     bool is_activable () {
-      return get_parent () == 0 || get_parent ()->somehow_activating ();
+      return get_parent () == nullptr || get_parent ()->somehow_activating ();
     }
     void notify_parent () { if (_notify_mask != notify_none && get_parent ()) get_parent ()->notify_change (_notify_mask ); }
     virtual void set_value (int v, bool propagate) = 0;

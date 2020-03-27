@@ -24,6 +24,7 @@
 
 #include <algorithm>
 
+
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
 #endif

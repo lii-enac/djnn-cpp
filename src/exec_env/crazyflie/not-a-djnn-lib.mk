@@ -59,10 +59,12 @@ trtr:
 	@echo $(tototo)
 
 # minimum
-crazyflie_objs := \
-	src/exec_env/crazyflie/crazyflie.o \
-	src/core/core.o \
+# crazyflie_objs := \
+# 	src/exec_env/crazyflie/crazyflie.o \
+# 	src/core/core.o \
 
+crazyflie_objs := \
+	src/core/core.o
 
 # IntProperty
 crazyflie_objs += \
@@ -76,10 +78,10 @@ crazyflie_objs += \
 crazyflie_objs +=
 
 # Assignment
-# crazyflie_objs += \
-# 	src/core/control/action.o src/core/control/simple_assignment.o \
-# 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
-# 	src/core/tree/spike.o
+crazyflie_objs += \
+	src/core/control/action.o src/core/control/simple_assignment.o \
+	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
+	src/core/tree/spike.o
 # spike : for bool
 
 .PHONY: $(build_dir)/include/djnn/crazyflie.h $(build_dir)/include/djnn/crazyflie-dev.h

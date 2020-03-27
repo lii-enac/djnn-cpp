@@ -257,4 +257,10 @@ namespace djnn {
   void remove_state_dependency (Process *_parent, Process *p);
   inline Process* clone (Process *p) { return p->clone (); }
 
+  /*template <typename X>
+  djnn_dynamic_cast(Process* p)
+  {
+    return dynamic_cast<X>(p);
+  }*/
+
 }
