@@ -177,10 +177,12 @@ Serial::run ()
         buf[i] = b[0];
         i++;
       } while( b[0] != '\n' && i < _buf_max);
-      if (i > 0) {
+      if (i > 2) {
+        buf[i-1] = 0;
         buf[i] = 0;
         djnn::get_exclusive_access (DBG_GET);
-        _in.set_value (string (buf), true);
+        string res (buf, i - 2);
+        _in.set_value (res, true);
         GRAPH_EXEC;
         djnn::release_exclusive_access (DBG_REL);
       }
