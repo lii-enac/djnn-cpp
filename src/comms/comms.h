@@ -15,6 +15,7 @@
 #pragma once
 
 #include "IvyAccess.h"
+#include "serial.h"
 
 namespace djnn {
 

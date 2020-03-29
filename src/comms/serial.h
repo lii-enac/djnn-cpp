@@ -70,7 +70,7 @@ namespace djnn
     IntProperty _baudrate;
     SerialOutAction _out_a;
     Coupling _out_c;
-    int _buf_max, _timeout;
+    int _buf_max;
     int _fd;
 
     // thread source

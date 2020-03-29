@@ -41,7 +41,7 @@ namespace djnn
          _baudrate (this, "baudrate", baudrate),
          _out_a (this, "out_action"),
          _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
-		 _buf_max (256), _timeout (5000), _fd (-1)
+		     _buf_max (256), _fd (-1)
  {
 
   _out_c.disable ();
@@ -159,32 +159,31 @@ Serial::run ()
 {
   set_please_stop (false);
   try {
-
+    char buf[_buf_max];
+    char b[1];
+    int i = 0;
     while (!get_please_stop ()) {
-      char buf[_buf_max];
       memset (buf, 0, _buf_max);
-      char b[1];
-      int i = 0, timeout = _timeout;
+      i = 0;
+      b[0] = 0;
       do {
         int n = read (_fd, b, 1);  // read a char at a time
         if (n == -1)
           error (this, "Unable to read on serial port");    // couldn't read
         if (n == 0) {
-    	  usleep (1 * 1000);  // wait 1 msec try again
-          timeout--;
-    	  if (timeout == 0)
-    	    error (this, "Failed to read on serial port");
-    	  continue;
-    	}
+          usleep (1 * 1000);  // wait 1 msec try again
+          continue;
+        }
         buf[i] = b[0];
         i++;
-      } while( b[0] != '\n' && i < _buf_max && timeout>0 );
-      buf[i] = 0;
-	  /* enable coupling */
-    djnn::get_exclusive_access (DBG_GET);
-    _out.set_value (string (buf), true);
-    GRAPH_EXEC;
-    djnn::release_exclusive_access (DBG_REL);
+      } while( b[0] != '\n' && i < _buf_max);
+      if (i > 0) {
+        buf[i] = 0;
+        djnn::get_exclusive_access (DBG_GET);
+        _in.set_value (string (buf), true);
+        GRAPH_EXEC;
+        djnn::release_exclusive_access (DBG_REL);
+      }
     }
   } catch (exception& e) {
     warning (nullptr, e.what());
