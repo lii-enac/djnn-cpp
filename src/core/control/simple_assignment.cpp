@@ -24,23 +24,28 @@ namespace djnn
   void
   SimpleAssignment::perform_action () {
       //DJNN_DEBUG_PRINT(__FILE__":"); DJNN_DEBUG_PRINT("26\n"); //return;
+      //_DBG;
       get_dst()->set_activation_source (get_src());
       bool propagate = _propagate;
       AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (get_src()); // FIXME should be done once and for all
-      //AbstractProperty *src_p = (AbstractProperty*) (get_src());
+      //AbstractProperty *src_p = static_cast<AbstractProperty*> (get_src());
       if(!src_p) { warning (src_p, "not a property"); return; }
-      AbstractProperty *dst_p = dynamic_cast<AbstractProperty*> (get_dst());
-      //AbstractProperty *dst_p = (AbstractProperty*) (get_dst());
+      //if(!src_p) { DJNN_DEBUG_PRINT (std::string("not a property").c_str()); return; }
+      //AbstractProperty *dst_p = dynamic_cast<AbstractProperty*> (get_dst());
+      AbstractProperty *dst_p = static_cast<AbstractProperty*> (get_dst());
       if(!dst_p) { warning (dst_p, "not a property"); return; }
+      //DJNN_DEBUG_PRINT(__FILE__":"); DJNN_DEBUG_PRINT("35\n"); //return;
       switch (src_p->get_prop_type ())
         {
         case Integer:
           {
             AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
-            //AbstractIntProperty* ip = (AbstractIntProperty*) (src_p);//dynamic_cast<AbstractIntProperty*> (src_p);
+            //AbstractIntProperty* ip = static_cast<AbstractIntProperty*> (src_p);
+            _DBG;
             if (ip) {
-              //DJNN_DEBUG_PRINT(__FILE__":"); DJNN_DEBUG_PRINT("41\n"); 
+              _DBG;
               dst_p->set_value (ip->get_value (), propagate);
+              get_dst()->activate ();
             }
             break;
           }
@@ -72,7 +77,7 @@ namespace djnn
           warning (src_p, "Unknown property type");
           return;
         }
-      get_dst()->activate ();
+      
   }
 
   #if !defined(DJNN_NO_SERIALIZE)

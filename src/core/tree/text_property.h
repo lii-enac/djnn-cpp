@@ -25,7 +25,8 @@ namespace djnn {
   class AbstractTextProperty : public AbstractProperty {
   public:
     AbstractTextProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
-    virtual int get_prop_type () override { return String; }
+    virtual int get_prop_type () const override { return String; }
+    //virtual process_type_e get_process_type () const override { return TEXT_PROPERTY_T; }
 
     // AbstractProperty interface
     void set_value (int newValue, bool propagate) override;

@@ -27,18 +27,23 @@ freertos_layers_dir := $(crazyflie_firmware_dir)/src
 cross_prefix := arm-none-eabi-
 thread = STD
 
-CFLAGS += -DDJNN_NO_DEBUG
-CFLAGS += -DDJNN_NO_SERIALIZE
+lib_cflags += -DDJNN_CRAZYFLIE
+lib_cflags += -DDJNN_NO_DEBUG
+lib_cflags += -DDJNN_NO_SERIALIZE
 
-CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-CFLAGS += -pie -fexceptions
-CFLAGS += -ffunction-sections -fdata-sections
-CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
+lib_cflags += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+lib_cflags += -pie -fexceptions --rtti #--rtti_data
+lib_cflags += -ffunction-sections -fdata-sections
+lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
+
+
+#CXXFLAGS += -fno-rtti
+
 #LDFLAGS += -fno-math-errno -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 #LDFLAGS += -z now -z relro
 
 #include src/exec_env/freertos/djnn-lib-flags.mk
-#CFLAGS += $(lib_cppflags)
+#CFLAGS += $(lib_cflags)
 # CFLAGS += -I$(freertos_layers_dir) -I$(freertos_config_dir)
 # CFLAGS += \
 # 	-D_GCC_MULTITHREAD_FREERTOS_ENABLE \
@@ -54,7 +59,7 @@ CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 
 
 trtr:
-	@echo $(lib_cppflags)
+	@echo $(lib_cflags)
 	@echo $(CFLAGS)
 	@echo $(tototo)
 

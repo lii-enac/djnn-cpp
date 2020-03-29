@@ -25,6 +25,11 @@ namespace djnn {
   enum process_type_e {
     UNDEFINED_T,
     PROPERTY_T,
+    // BOOL_PROPERTY_T,
+    // INT_PROPERTY_T,
+    // DOUBLE_PROPERTY_T,
+    // TEXT_PROPERTY_T,
+    // REF_PROPERTY_T,
     COMPONENT_T,
     FSM_T,
     SWITCH_T,
@@ -256,11 +261,5 @@ namespace djnn {
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);
   inline Process* clone (Process *p) { return p->clone (); }
-
-  /*template <typename X>
-  djnn_dynamic_cast(Process* p)
-  {
-    return dynamic_cast<X>(p);
-  }*/
 
 }

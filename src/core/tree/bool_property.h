@@ -25,7 +25,8 @@ namespace djnn {
   public:
     AbstractBoolProperty (Process* parent, const std::string& name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
-    virtual int get_prop_type () override { return Boolean; }
+    virtual int get_prop_type () const override { return Boolean; }
+    //virtual process_type_e get_process_type () const override { return BOOL_PROPERTY_T; }
 
     // AbstractProperty interface
     void set_value (int newValue, bool propagate) override;

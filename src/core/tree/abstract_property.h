@@ -33,7 +33,7 @@ namespace djnn {
     AbstractProperty (Process* parent, const std::string& name, int nm=notify_none) : Process (name), _notify_mask (nm) {}
     virtual ~AbstractProperty () {};
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
-    virtual int get_prop_type () = 0;
+    virtual int get_prop_type () const = 0;
     bool is_activable () {
       return get_parent () == nullptr || get_parent ()->somehow_activating ();
     }

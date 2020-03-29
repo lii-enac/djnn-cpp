@@ -18,16 +18,22 @@
 
 #include <string>
 
+
 namespace djnn
 {
+
+  std::string __to_string(int x);
+
   inline int __exit(int ret) { exit(ret); return 1; }
   /** Turn off -Wunused-result for a specific function call */
   #define __ignore_unused(M) if(1==((int)M)){;}
-  #define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+std::to_string(__LINE__)) & __exit(0))
-  #define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+std::to_string(__LINE__))
+  #define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
+  #define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
+  #define _DBG __debug(std::string(__FILE__)+":"+djnn::__to_string(__LINE__));
 
   int __error (Process *p, const std::string& msg);
   void __warning (Process *p, const std::string& msg);
+  void __debug (const std::string& msg);
 
   class Context {
   public:
