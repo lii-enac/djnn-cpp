@@ -78,6 +78,8 @@ Serial::impl_activate ()
 void
 Serial::impl_deactivate ()
 {
+  if (_fd)
+    close (_fd);
   _out_c.disable ();
   please_stop();
 }
@@ -91,7 +93,7 @@ void
 Serial::init_comm ()
 {
   struct termios toptions;
-  _fd = open (_port.c_str (), O_RDWR | O_NONBLOCK );
+  _fd = open (_port.c_str (), O_RDWR);
 
   if (_fd == -1)  {
     error (this, "serial port_init: Unable to open port ");
@@ -117,26 +119,26 @@ Serial::init_comm ()
   cfsetispeed (&toptions, brate);
   cfsetospeed (&toptions, brate);
 
-  // 8N1
-  toptions.c_cflag &= ~PARENB;
-  toptions.c_cflag &= ~CSTOPB;
+  toptions.c_cflag |= CLOCAL | CREAD;
   toptions.c_cflag &= ~CSIZE;
-  toptions.c_cflag |= CS8;
-  // no flow control
-  toptions.c_cflag &= ~CRTSCTS;
+  toptions.c_cflag |= CS8;         /* 8-bit characters */
+  toptions.c_cflag &= ~PARENB;     /* no parity bit */
+  toptions.c_cflag &= ~CSTOPB;     /* only need 1 stop bit */
+  toptions.c_cflag &= ~CRTSCTS;    /* no hardware flowcontrol */
 
-  //toptions.c_cflag &= ~HUPCL; // disable hang-up-on-close to avoid reset
+  toptions.c_lflag |= ICANON | ISIG;  /* canonical input */
+  toptions.c_lflag &= ~(ECHO | ECHOE | ECHONL | IEXTEN);
 
-  toptions.c_cflag |= CREAD | CLOCAL;  // turn on READ & ignore ctrl lines
-  toptions.c_iflag &= ~(IXON | IXOFF | IXANY); // turn off s/w flow ctrl
+  toptions.c_iflag &= ~IGNCR;  /* preserve carriage return */
+  toptions.c_iflag &= ~INPCK;
+  toptions.c_iflag &= ~(INLCR | ICRNL | IMAXBEL);
+  toptions.c_iflag &= ~(IXON | IXOFF | IXANY);   /* no SW flowcontrol */
 
-  toptions.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); // make raw
-  toptions.c_oflag &= ~OPOST; // make raw
+  toptions.c_oflag &= ~OPOST;
 
-  // see: http://unixwiz.net/techtips/termios-vmin-vtime.html
-  toptions.c_cc[VMIN]  = 0;
-  toptions.c_cc[VTIME] = 0;
-  //toptions.c_cc[VTIME] = 20;
+  toptions.c_cc[VEOL] = 0;
+  toptions.c_cc[VEOL2] = 0;
+  toptions.c_cc[VEOF] = 0x04;
 
   tcsetattr (_fd, TCSANOW, &toptions);
   if (tcsetattr (_fd, TCSAFLUSH, &toptions) < 0) {
@@ -167,13 +169,9 @@ Serial::run ()
       i = 0;
       b[0] = 0;
       do {
-        int n = read (_fd, b, 1);  // read a char at a time
+        int n = read (_fd, b, 1);
         if (n == -1)
-          error (this, "Unable to read on serial port");    // couldn't read
-        if (n == 0) {
-          usleep (1 * 1000);  // wait 1 msec try again
-          continue;
-        }
+          error (this, "Unable to read on serial port");
         buf[i] = b[0];
         i++;
       } while( b[0] != _eol && i < _buf_max);
