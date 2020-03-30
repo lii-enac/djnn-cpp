@@ -156,18 +156,19 @@ namespace djnn
 #endif
   }
 
-  Graph Graph::_instance;
+  //Graph Graph::_instance;
+  Graph * Graph::_instance;
 
   Graph&
   Graph::instance ()
   {
-    /*static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
+    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
     if(!onceFlag.test_and_set()) {
       _instance = new Graph();
     }
 
-    return *(_instance);*/
-    return _instance;
+    return *(_instance);
+    //return _instance;
   }
 
   Graph::Graph () :
@@ -387,15 +388,14 @@ namespace djnn
     #if _PERF_TEST
     t1 ();
     #endif
-
     _cur_date = 0;
     _sorted_vertices.clear ();
+    //warning(nullptr, std::string("num vertices: ")+__to_string(_vertices.size()));
 
     // set every vertex as NOT_MARKED before sorting them
     for (auto v : _vertices) {
       v->set_mark (NOT_MARKED);
     }
-
     // traverse
     for (auto v : _vertices) {
       if (v->get_mark () == NOT_MARKED)
@@ -436,17 +436,16 @@ namespace djnn
     #if _PERF_TEST
     t1 ();
     #endif
-
+    
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     {
       std::map<Process*, int> already_done;
-
       for (auto p: _scheduled_activation_processes) {
         if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();
           already_done[p];
         }
-        /* DEBUG DUPLICATES */
+        // DEBUG DUPLICATES
         //else
         //  cerr << "DUPLICATES " << (p->get_parent () ? p->get_parent ()->get_name () : "NUUULL") << "/" << p->get_name () << endl;
       }
@@ -468,13 +467,14 @@ namespace djnn
         is_end = false;
       }
     }
-
-    /* then execute delayed delete on processes*/ 
+    /*
+    // then execute delayed delete on processes 
     for (auto p: _scheduled_delete_processes) {
       delete p;
     }
     _scheduled_delete_processes.clear ();
    
+    */
 
     #if _PERF_TEST
     // print in GREEN
@@ -488,6 +488,7 @@ namespace djnn
     cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
     cerr << "\033[0m"  << endl;
     #endif
+
   }
 
 }

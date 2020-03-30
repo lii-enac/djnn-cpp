@@ -17,6 +17,8 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
 #endif
@@ -30,7 +32,7 @@ namespace djnn
   string&
   getString (Process* p)
   {
-    TextProperty *tp = dynamic_cast<TextProperty*> (p);
+    TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
       return tp->get_value();
     else
@@ -41,7 +43,7 @@ namespace djnn
   void
   setString (Process* p, string& v)
   {
-    TextProperty *tp = dynamic_cast<TextProperty*> (p);
+    TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
       tp->set_value (v, true);
     else

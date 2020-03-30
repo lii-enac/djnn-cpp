@@ -18,7 +18,6 @@
 #include "core/control/action.h"
 
 namespace djnn {
-  //using namespace std;
 
   typedef void (NativeCode) (Process*);
   class NativeAction : public Action
@@ -26,6 +25,7 @@ namespace djnn {
   public:
     NativeAction (Process* parent, const std::string& name, NativeCode *action, void* data, bool isModel);
     virtual ~NativeAction ();
+    virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
     void impl_activate () override;
     void impl_deactivate () override {}
     void* data ();

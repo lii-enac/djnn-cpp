@@ -35,6 +35,7 @@ namespace djnn {
       }
     }
     virtual ~Action ();
+    virtual process_type_e get_process_type () const override { return ACTION_T; }
     void impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:

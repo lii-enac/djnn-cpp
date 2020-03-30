@@ -14,6 +14,8 @@
 
 #include "utils-dev.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 
 namespace djnn
 {
@@ -26,9 +28,15 @@ namespace djnn
     tab[i]=0;
     --i;
     tab[i]='0';
-    while (x) {
+    bool neg = x<0;
+    if(neg) x=-x;
+    while (x && i>1) {
       tab[i] = '0'+(x%10);
       x/=10;
+      --i;
+    }
+    if(neg) {
+      tab[i] = '-';
       --i;
     }
     return std::string(&tab[i+1]); 
@@ -57,7 +65,7 @@ namespace djnn
         return ref_info_t (nullptr, spec);
 
 
-      RefProperty *ref = dynamic_cast<RefProperty*> (prop);
+      RefProperty *ref = djnn_dynamic_cast<RefProperty*> (prop);
       /* ref is a refproperty */
       if (ref != nullptr ) {
         std::string new_spec = "";

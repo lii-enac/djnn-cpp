@@ -14,6 +14,8 @@
 
 #include "native_action.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 namespace djnn
 {
   using namespace std;
@@ -45,7 +47,7 @@ namespace djnn
   void*
   get_native_user_data (Process* native_action)
   {
-    NativeAction *na = dynamic_cast<NativeAction*> (native_action);
+    NativeAction *na = djnn_dynamic_cast<NativeAction*> (native_action);
     if (na == nullptr)
       return nullptr;
     return na->data ();

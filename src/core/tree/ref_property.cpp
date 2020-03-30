@@ -16,6 +16,8 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 //#include <sstream>
 //#include <boost/lexical_cast.hpp>
 
@@ -30,7 +32,7 @@ namespace djnn
   Process*
   getRef (Process* p)
   {
-    RefProperty *rp = dynamic_cast<RefProperty*> (p);
+    RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)
       return rp->get_value();
     else
@@ -41,7 +43,7 @@ namespace djnn
   void
   setRef (Process* p, Process *v)
   {
-    RefProperty *rp = dynamic_cast<RefProperty*> (p);
+    RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)
       rp->set_value (v, true);
     else

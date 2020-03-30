@@ -17,6 +17,8 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
 #endif
@@ -28,7 +30,7 @@ namespace djnn
   double
   getDouble (Process* p)
   {
-    DoubleProperty *dp = dynamic_cast<DoubleProperty*> (p);
+    DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
       return dp->get_value();
     else
@@ -39,7 +41,7 @@ namespace djnn
   void
   setDouble (Process* p, double v)
   {
-    DoubleProperty *dp = dynamic_cast<DoubleProperty*> (p);
+    DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
       dp->set_value(v, true);
     else

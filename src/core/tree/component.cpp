@@ -29,6 +29,9 @@
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
+#include "core/utils/djnn_dynamic_cast.h"
+
+
 #if !defined(DJNN_NO_DEBUG)
 #include <iostream>
 
@@ -45,7 +48,7 @@ namespace djnn
   Container::Container (Process* parent, const std::string& name) :
       Process (name)
   {
-    Container* c = dynamic_cast<Container*> (parent);
+    Container* c = djnn_dynamic_cast<Container*> (parent);
     if (c)
       c->init_context (_cur_context);
     for (auto s: structure_observer_list) {

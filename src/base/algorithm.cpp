@@ -222,51 +222,51 @@ namespace djnn
       case Boolean:
       case Integer:
       case Double:
-	{
-	  std::vector<std::pair<double, int>> to_sort;
-	  int i = 0;
-	  for (auto c : children) {
-	    AbstractProperty* prop = get_and_check (c);
-	    if (prop->get_prop_type () != type) {
-	      error (this, "Cannot compare properties of different types");
-	    }
-	    to_sort.push_back (std::pair<double, int> (prop->get_double_value (), i++));
-	  }
-	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
-	  i = 0;
-	  for (auto v : to_sort) {
-	    if (_ascending.get_value ())
-	      _container->set_child (cpy[v.second], i);
-	    else
-	      _container->set_child (cpy[v.second], sz - i - 1);
-	    i++;
-	  }
-	  break;
-	}
+    	{
+    	  std::vector<std::pair<double, int>> to_sort;
+    	  int i = 0;
+    	  for (auto c : children) {
+    	    AbstractProperty* prop = get_and_check (c);
+    	    if (prop->get_prop_type () != type) {
+    	      error (this, "Cannot compare properties of different types");
+    	    }
+    	    to_sort.push_back (std::pair<double, int> (prop->get_double_value (), i++));
+    	  }
+    	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
+    	  i = 0;
+    	  for (auto v : to_sort) {
+    	    if (_ascending.get_value ())
+    	      _container->set_child (cpy[v.second], i);
+    	    else
+    	      _container->set_child (cpy[v.second], sz - i - 1);
+    	    i++;
+    	  }
+    	  break;
+    	}
       case String:
-	{
-	  std::vector<std::pair<std::string, int>> to_sort;
-	  int i = 0;
-	  for (auto c : children) {
-	    AbstractProperty* prop = get_and_check (c);
-	    if (prop->get_prop_type () != type) {
-	      error (this, "Cannot compare properties of different types");
-	    }
-	    to_sort.push_back (std::pair<std::string, int> (prop->get_string_value (), i++));
-	  }
-	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
-	  i = 0;
-	  for (auto v : to_sort) {
-	    if (_ascending.get_value ())
-	      _container->set_child (cpy[v.second], i);
-	    else
-	      _container->set_child (cpy[v.second], sz - i - 1);
-	    i++;
-	  }
-	  break;
-	}
+    	{
+    	  std::vector<std::pair<std::string, int>> to_sort;
+    	  int i = 0;
+    	  for (auto c : children) {
+    	    AbstractProperty* prop = get_and_check (c);
+    	    if (prop->get_prop_type () != type) {
+    	      error (this, "Cannot compare properties of different types");
+    	    }
+    	    to_sort.push_back (std::pair<std::string, int> (prop->get_string_value (), i++));
+    	  }
+    	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
+    	  i = 0;
+    	  for (auto v : to_sort) {
+    	    if (_ascending.get_value ())
+    	      _container->set_child (cpy[v.second], i);
+    	    else
+    	      _container->set_child (cpy[v.second], sz - i - 1);
+    	    i++;
+    	  }
+    	  break;
+    	}
       default:
-	return;
+	       return;
       }
     //quick_sort (0, children.size () - 1);
     //merge_sort (0, children.size () - 1);

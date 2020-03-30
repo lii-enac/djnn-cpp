@@ -18,6 +18,7 @@
 
 //#include <locale.h>
 //#include "core/utils/error.h"
+#include "core/execution/graph.h"
 
 //#include "utils/debug.h"
 //#include <iostream>
@@ -52,6 +53,7 @@ namespace djnn
       __module_initialized = true;
       //djnn::loadedModules.push_back("core");
 //      setlocale(LC_NUMERIC, "C");
+      Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
 /*    rmtSettings* settings = rmt_Settings();

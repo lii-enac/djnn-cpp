@@ -18,6 +18,8 @@
 #include "core/utils/error.h"
 #include "core/execution/graph.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
 #endif
@@ -29,7 +31,7 @@ namespace djnn
   bool
   getBool (Process* p)
   {
-    BoolProperty *bp = dynamic_cast<BoolProperty*> (p);
+    AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
       return bp->get_value();
     else
@@ -40,7 +42,7 @@ namespace djnn
   void
   setBool (Process* p, bool v)
   {
-    BoolProperty *bp = dynamic_cast<BoolProperty*> (p);
+    AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
       bp->set_value(v, true);
     else

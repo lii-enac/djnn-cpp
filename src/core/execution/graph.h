@@ -96,7 +96,8 @@ namespace djnn
     void print_sorted () const; 
 
   private:
-    static Graph _instance;
+    //static Graph _instance;
+    static Graph *_instance;
     Graph ();
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (Process* c);
