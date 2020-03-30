@@ -50,7 +50,7 @@ namespace djnn
 
   public:
     Serial (Process *parent, const std::string& name,
-      const std::string& port, int baudrate=9600);
+      const std::string& port, int baudrate=9600, char eol='\n');
     
     virtual ~Serial ();
     void serial_write ();
@@ -72,6 +72,7 @@ namespace djnn
     Coupling _out_c;
     int _buf_max;
     int _fd;
+    char _eol;
 
     // thread source
     void run () override;

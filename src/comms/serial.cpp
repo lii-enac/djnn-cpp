@@ -34,14 +34,14 @@ using namespace std;
 namespace djnn
 {
 
- Serial::Serial (Process *parent, const std::string& name, const std::string& port, int baudrate) :
+ Serial::Serial (Process *parent, const std::string& name, const std::string& port, int baudrate, char eol) :
          Process (name), _port (port),
          _out ( this, "out", ""),
          _in (this, "in", ""),
          _baudrate (this, "baudrate", baudrate),
          _out_a (this, "out_action"),
          _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
-		     _buf_max (256), _fd (-1)
+         _buf_max (256), _fd (-1), _eol (eol)
  {
 
   _out_c.disable ();
@@ -176,10 +176,8 @@ Serial::run ()
         }
         buf[i] = b[0];
         i++;
-      } while( b[0] != '\n' && i < _buf_max);
+      } while( b[0] != _eol && i < _buf_max);
       if (i > 2) {
-        buf[i-1] = 0;
-        buf[i] = 0;
         djnn::get_exclusive_access (DBG_GET);
         string res (buf, i - 2);
         _in.set_value (res, true);
