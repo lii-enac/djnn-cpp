@@ -15,15 +15,13 @@
 #pragma once
 
 #include "core/ontology/process.h"
+#include "core/utils/utils-dev.h" // __to_string
 
 #include <string>
 
 
 namespace djnn
 {
-
-  std::string __to_string(int x);
-
   inline int __exit(int ret) { exit(ret); return 1; }
   /** Turn off -Wunused-result for a specific function call */
   #define __ignore_unused(M) if(1==((int)M)){;}

@@ -27,14 +27,15 @@ freertos_layers_dir := $(crazyflie_firmware_dir)/src
 cross_prefix := arm-none-eabi-
 thread = STD
 
-lib_cflags += -DDJNN_CRAZYFLIE
-lib_cflags += -DDJNN_NO_DEBUG
-lib_cflags += -DDJNN_NO_SERIALIZE
+CFLAGS += -DDJNN_CRAZYFLIE
+CFLAGS += -DDJNN_NO_DEBUG
+CFLAGS += -DDJNN_NO_SERIALIZE
+CFLAGS += -DDJNN_NO_DYNAMIC_CAST
 
-lib_cflags += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-lib_cflags += -pie -fexceptions --rtti #--rtti_data
-lib_cflags += -ffunction-sections -fdata-sections
-lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
+CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -pie -fexceptions --rtti #--rtti_data
+CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 
 
 #CXXFLAGS += -fno-rtti
@@ -43,7 +44,7 @@ lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 #LDFLAGS += -z now -z relro
 
 #include src/exec_env/freertos/djnn-lib-flags.mk
-#CFLAGS += $(lib_cflags)
+#CFLAGS += $(CFLAGS)
 # CFLAGS += -I$(freertos_layers_dir) -I$(freertos_config_dir)
 # CFLAGS += \
 # 	-D_GCC_MULTITHREAD_FREERTOS_ENABLE \
@@ -59,7 +60,7 @@ lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 
 
 trtr:
-	@echo $(lib_cflags)
+	@echo $(CFLAGS)
 	@echo $(CFLAGS)
 	@echo $(tototo)
 
@@ -74,7 +75,7 @@ crazyflie_objs := \
 # IntProperty
 crazyflie_objs += \
 	src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
-	src/core/utils/error.o src/core/utils/uri.o \
+	src/core/utils/error.o src/core/utils/uri.o src/core/utils/utils-dev.o \
 	src/core/tree/int_property.o
 # graph: for state_dependency
 # uri: for find_by_uri

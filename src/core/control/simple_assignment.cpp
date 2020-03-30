@@ -7,8 +7,13 @@
 #include "core/tree/text_property.h"
 #include "core/tree/ref_property.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
+
+//#include "utils/debug.h"
+//#include <iostream>
 
 //#include <stdarg.h>
 extern "C" {
@@ -23,53 +28,42 @@ namespace djnn
 
   void
   SimpleAssignment::perform_action () {
-      //DJNN_DEBUG_PRINT(__FILE__":"); DJNN_DEBUG_PRINT("26\n"); //return;
       //_DBG;
       get_dst()->set_activation_source (get_src());
       bool propagate = _propagate;
-      AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (get_src()); // FIXME should be done once and for all
-      //AbstractProperty *src_p = static_cast<AbstractProperty*> (get_src());
+      AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (get_src()); // FIXME should be done once and for all
       if(!src_p) { warning (src_p, "not a property"); return; }
-      //if(!src_p) { DJNN_DEBUG_PRINT (std::string("not a property").c_str()); return; }
-      //AbstractProperty *dst_p = dynamic_cast<AbstractProperty*> (get_dst());
-      AbstractProperty *dst_p = static_cast<AbstractProperty*> (get_dst());
+      AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (get_dst());
       if(!dst_p) { warning (dst_p, "not a property"); return; }
-      //DJNN_DEBUG_PRINT(__FILE__":"); DJNN_DEBUG_PRINT("35\n"); //return;
       switch (src_p->get_prop_type ())
         {
         case Integer:
           {
-            AbstractIntProperty* ip = dynamic_cast<AbstractIntProperty*> (src_p);
-            //AbstractIntProperty* ip = static_cast<AbstractIntProperty*> (src_p);
-            _DBG;
-            if (ip) {
-              _DBG;
-              dst_p->set_value (ip->get_value (), propagate);
-              get_dst()->activate ();
-            }
+            AbstractIntProperty* ip = djnn_dynamic_cast<AbstractIntProperty*> (src_p);
+            if (ip) dst_p->set_value (ip->get_value (), propagate);
             break;
           }
         case Boolean:
           {
-            AbstractBoolProperty* bp = dynamic_cast<AbstractBoolProperty*> (src_p);
+            AbstractBoolProperty* bp = djnn_dynamic_cast<AbstractBoolProperty*> (src_p);
             if (bp) dst_p->set_value (bp->get_value (), propagate);
             break;
           }
         case Double:
           {
-            AbstractDoubleProperty* dp = dynamic_cast<AbstractDoubleProperty*> (src_p);
+            AbstractDoubleProperty* dp = djnn_dynamic_cast<AbstractDoubleProperty*> (src_p);
             if (dp) dst_p->set_value (dp->get_value (), propagate);
             break;
           }
         case String:
           {
-            AbstractTextProperty* tp = dynamic_cast<AbstractTextProperty*> (src_p);
+            AbstractTextProperty* tp = djnn_dynamic_cast<AbstractTextProperty*> (src_p);
             if (tp) dst_p->set_value (string (tp->get_value ()), propagate);
             break;
           }
         case Reference:
           {
-            RefProperty* rp = dynamic_cast<RefProperty*> (src_p);
+            RefProperty* rp = djnn_dynamic_cast<RefProperty*> (src_p);
             if (rp) dst_p->set_value (rp->get_value (), propagate);
             break;
           }
@@ -77,7 +71,7 @@ namespace djnn
           warning (src_p, "Unknown property type");
           return;
         }
-      
+      get_dst()->activate ();
   }
 
   #if !defined(DJNN_NO_SERIALIZE)

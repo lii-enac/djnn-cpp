@@ -17,6 +17,22 @@
 
 namespace djnn
 {
+
+  std::string
+  __to_string(long x)
+  {
+    char tab[256];
+    int i=255;
+    tab[i]=0;
+    --i;
+    tab[i]='0';
+    while (x) {
+      tab[i] = '0'+(x%10);
+      x/=10;
+      --i;
+    }
+    return std::string(&tab[i+1]); 
+  }
   
 
   ref_info_t

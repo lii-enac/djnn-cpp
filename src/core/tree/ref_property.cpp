@@ -16,7 +16,8 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
-#include <sstream>
+//#include <sstream>
+//#include <boost/lexical_cast.hpp>
 
 #if !defined(DJNN_NO_DEBUG)
 #include <iostream>
@@ -50,9 +51,13 @@ namespace djnn
   string
   RefProperty::get_string_value ()
   {
-    std::ostringstream address;
-    address << (void const *) value;
-    return address.str ();
+    // std::ostringstream address;
+    // address << (void const *) value;
+    // return address.str ();
+
+    //return boost::lexical_cast<string>(value);
+    
+    return __to_string(reinterpret_cast<long>(value));
   }
 
   double
