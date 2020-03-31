@@ -25,8 +25,7 @@ namespace djnn {
   public:
     typedef std::vector<Process*> children_t;
     Container (Process* parent, const std::string& name);
-    //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    virtual process_type_e get_process_type () const override { return COMPONENT_T; }
+    virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void add_child (Process* c, const std::string& name) override;
     void move_child (Process *child_to_move, child_position_e spec, Process *child = 0) override;
     void remove_child_from_children_only (Process* c);
@@ -73,7 +72,7 @@ namespace djnn {
   {
   public:
     Component (Process* parent, const std::string& name) : Container (parent, name) { Process::finalize_construction (parent, name); }
-    //virtual process_type_e get_process_type () const override { return COMPONENT_T; }
+    //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     Process* clone () override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;

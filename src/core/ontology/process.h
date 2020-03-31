@@ -33,7 +33,6 @@ namespace djnn {
     ACTION_T,
     NATIVE_ACTION_T,
     CONTAINER_T,
-    COMPONENT_T,
     FSM_T,
     //SWITCH_T,
     WINDOW_T,

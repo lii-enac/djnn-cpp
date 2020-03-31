@@ -543,7 +543,7 @@ namespace djnn
         cout << "|\t";
       cout << " +" << i++ << " ";
       it->second->dump (level);
-      if (it->second->get_process_type() != COMPONENT_T || indent == level - 1)
+      if (it->second->get_process_type() != CONTAINER_T || indent == level - 1)
         cout << endl;
     }
     indent--;

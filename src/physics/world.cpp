@@ -187,7 +187,7 @@ namespace djnn
       Process *cur_parent = get_parent ();
       Process *cur_child = this;
       while (!found && cur_parent != nullptr) {
-        if (cur_parent->get_process_type () == COMPONENT_T) {
+        if (cur_parent->get_process_type () == CONTAINER_T) {
           Container *cont = dynamic_cast<Container*> (cur_parent);
           for (auto c : cont->children ()) {
             if (c == cur_child)
@@ -201,7 +201,7 @@ namespace djnn
         do {
           cur_child = cur_parent;
           cur_parent = cur_parent->get_parent ();
-        } while (cur_parent != nullptr && cur_parent->get_process_type () != COMPONENT_T);
+        } while (cur_parent != nullptr && cur_parent->get_process_type () != CONTAINER_T);
       }
       if (!found) {
         std::cout << "Warning no running world found\n";

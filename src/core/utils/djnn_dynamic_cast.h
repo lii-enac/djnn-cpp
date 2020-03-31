@@ -123,7 +123,7 @@ namespace djnn {
 
   template <> inline Component* djnn_dynamic_cast(Process* p)
   {
-    if(p->get_process_type() == COMPONENT_T) {
+    if(p->get_process_type() == CONTAINER_T) {
       return static_cast<Component*>(p);
     }
     return nullptr;
