@@ -1,3 +1,6 @@
+#verbose build
+#V=1
+
 display := QT
 #options: QT SDL DRM
 
@@ -8,6 +11,7 @@ physics := # set to ODE
 phidgets := # set to PHIDGETS
 
 djnn_libs_extra :=
+
 
 # cross-compile support
 #cross_prefix :=

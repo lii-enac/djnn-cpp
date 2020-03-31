@@ -61,9 +61,9 @@ rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffi
 all_srcs = $(call rwildcard,src/,*)
 all_dirs = $(call uniq,$(dir $(all_srcs)))
 
-stylized_target = "\\033[1m$(notdir $@)\\033[0m"
+stylized_target = "\\033[1m$(notdir $@)\\033[0m" \(older than $(notdir $?)\)
 #in case it doesn't work on some terminals:
-#stylized_target = $(notdir $@)
+#stylized_target = $(notdir $@) \(older than $(notdir $?)\)
 
 
 tototo:
@@ -341,15 +341,22 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs) #$1_headers_cp  
-	@#mkdir -p $$(dir $$@)
-	@echo linking $$(stylized_target) \(older than $$(notdir $$?)\)
+ifeq ($$V,1)
+	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
+else
+	@echo linking $$(stylized_target)
 	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
+endif
 
 $$($1_lib_static): $$($1_objs)
-	@#mkdir -p $$(dir $$@)
-	@echo linking $$(stylized_target) \(older than $$(notdir $$?)\)
+ifeq ($$V,1)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
+else
+	@echo linking $$(stylized_target)
+	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
+	@$$(RANLIB) $$@
+endif
 
 $1_size: $$($1_lib_static)
 	@ls -l $$^
@@ -408,32 +415,48 @@ size: $(libs_static)
 strip:
 	strip $(libs_static)
 
-$(build_dir)/%.o: %.cpp
-	@#mkdir -p $(dir $@)
-	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
+#@#mkdir -p $(dir $@)
 
+$(build_dir)/%.o: %.cpp
+ifeq ($V,1)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+else
+	@echo compiling $(stylized_target)
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+endif
 
 $(build_dir)/%.o: %.c
-	@#mkdir -p $(dir $@)
-	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+ifeq ($V,1)
+	$(CC) $(CFLAGS) -c $< -o $@
+else
+	@echo compiling $(stylized_target)
 	@$(CC) $(CFLAGS) -c $< -o $@
+endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
-	@#mkdir -p $(dir $@)
-	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+ifeq ($V,1)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+else
+	@echo compiling $(stylized_target)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
+endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
-	@#mkdir -p $(dir $@)
-	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+ifeq ($V,1)
+	$(YACC) -v -o $@ $<
+else
+	@echo compiling $(stylized_target)
 	@$(YACC) -v -o $@ $<
+endif
 
 $(build_dir)/%.cpp: %.l
-	@#mkdir -p $(dir $@)
-	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+ifeq ($V,1)
+	$(LEX) -o $@ $<
+else
+	@echo compiling $(stylized_target)
 	@$(LEX) -o $@ $<
+endif
 
 %_tidy: %
 	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
