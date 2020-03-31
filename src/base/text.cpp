@@ -221,5 +221,111 @@ namespace djnn
   }
 #endif
 
+  void 
+  Regex::RegexAction::impl_activate () 
+  {
+    std::smatch match;
+    if (std::regex_search(_reg._input.get_value(), match, _reg._regex) && match.size() > 1) {
+
+      std::map<int, TextProperty*>::iterator it;
+      for (int i = 0 ; i < match.size(); i++)
+      {
+        it = _reg._in_map.find (i);
+        if (it != _reg._in_map.end () && !match.str(i).empty ()){
+          it->second->set_value (match.str(i), true);
+        }
+      }
+    }
+  }
+
+  Regex::Regex (Process *parent, const std::string& name, const std::string& reg)
+  : Process (name),
+    _input (this, "input", ""),
+    _init (reg),
+    _regex (reg),
+    _reg_action (this, "reg_action", *this),
+    _c_reg (&_input, ACTIVATION, &_reg_action, ACTIVATION)
+  {
+    _c_reg.disable ();
+    Graph::instance ().add_edge (&_input, &_reg_action);
+    Process::finalize_construction (parent, name);
+  }
+
+  Regex::~Regex ()
+  {
+    remove_state_dependency (get_parent (), &_reg_action);
+    Graph::instance ().remove_edge (&_input, &_reg_action);
+  }
+
+
+  Process*
+  Regex::find_child (const std::string& key)
+  {
+
+    if (key.compare ("input") == 0)
+      return &_input;
+
+    try {
+      int i = stoi (key, nullptr);
+
+      std::map<int, TextProperty*>::iterator it = _in_map.find (i);
+      if (it != _in_map.end ()) {
+        /* key exist  - return */
+        return it->second;
+      }
+      else {
+        /* key doesn't exist */
+        TextProperty* newin = new TextProperty ( this, key, "");
+        _in_map[i] = newin;
+        return newin;
+      }
+
+    }
+    catch (const std::invalid_argument& ia) {
+    // std::cerr << "Regex - find_child - Invalid argument (not \"input\" or NAN): " << key << std::endl;
+      return nullptr;
+    }
+  }
+
+  void
+  Regex::set_parent (Process* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), &_reg_action);
+    }
+
+    add_state_dependency (p, &_reg_action);
+    
+    Process::set_parent (p); 
+  }
+
+  void
+  Regex::impl_activate ()
+  {
+    _c_reg.enable ();
+  }
+
+  void
+  Regex::impl_deactivate ()
+  {
+    _c_reg.disable ();
+  }
+
+#ifndef DJNN_NO_SERIALIZE
+  void
+  Regex::serialize (const std::string& type)
+  {
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:regex");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("regex", _init);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
+#endif
+
 }
 
