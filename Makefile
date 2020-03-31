@@ -48,9 +48,21 @@ RANLIB ?= ranlib
 GPERF ?= gperf
 SIZE ?= size
 
-#ifeq (g++,$(findstring g++,$(shell which $(CXX) | xargs realpath | xargs basename)))
-#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
-#endif
+# ---------------------------------------
+# utils
+
+# https://stackoverflow.com/a/16151140
+uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
+
+# recursive wildcard https://stackoverflow.com/a/12959694
+rwildcard=$(wildcard $1$2)$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+rwildcardmul=$(wildcard $(addsuffix $2, $1))$(foreach d,$(wildcard $(addsuffix *, $1)),$(call rwildcard,$d/,$2))
+
+#all_srcs := $(call rwildcard,src/,*)
+#all_dirs := $(call uniq,$(dir $(all_srcs)))
+#tototo:
+#	@echo $(srcs)
+#	@echo $(all_dirs)
 
 
 # ---------------------------------------
@@ -99,7 +111,7 @@ lib_static_suffix = .a
 
 ifeq ($(os),Linux)
 CFLAGS += -fpic -g -MMD -Wall
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB = -shared
 YACC = bison -d
@@ -117,7 +129,7 @@ ifeq ($(os),MinGW)
 CFLAGS += -fpic -g -MMD -Wall
 CXXFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll
 DYNLIB = -shared
 YACC = bison -d
@@ -126,7 +138,7 @@ endif
 ifeq ($(os),FreeRTOS)
 CFLAGS += -fpic -g -MMD -Wall -Os -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
 CFLAGS += -DDJNN_USE_FREERTOS=1
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB = -shared
 endif
@@ -189,6 +201,9 @@ endif
 
 ARFLAGS ?= -r -u
 
+ifeq (g++,$(findstring g++,$(CXX)))
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+endif
 
 # ---------------------------------------
 # debug, analysis
