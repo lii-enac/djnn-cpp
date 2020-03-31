@@ -15,6 +15,7 @@
 #include "utils-dev.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
+#include <cstdint>
 
 
 namespace djnn
@@ -22,7 +23,7 @@ namespace djnn
   std::string
   __to_string(void*p)
   {
-    return __to_string((unsigned long)p);
+    return __to_string((uintptr_t)p);
   }
 
   std::string
