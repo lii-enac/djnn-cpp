@@ -21,6 +21,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <cstring> // strlen
 
 #include <fcntl.h>
 #include <errno.h>
