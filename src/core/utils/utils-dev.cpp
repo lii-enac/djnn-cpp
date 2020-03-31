@@ -22,7 +22,7 @@ namespace djnn
   std::string
   __to_string(void*p)
   {
-    return __to_string((long)p);
+    return __to_string((unsigned long)p);
   }
 
   std::string

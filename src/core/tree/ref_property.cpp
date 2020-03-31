@@ -59,7 +59,7 @@ namespace djnn
 
     //return boost::lexical_cast<string>(value);
     
-    return __to_string(reinterpret_cast<long>(value));
+    return __to_string(value);
   }
 
   double
