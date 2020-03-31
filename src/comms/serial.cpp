@@ -25,9 +25,11 @@
 
 #include <fcntl.h>
 #include <errno.h>
-#include <termios.h>
 #include <sys/ioctl.h>
 
+#ifndef _WIN32
+#include <termios.h>
+#endif
 
 using namespace std;
 
