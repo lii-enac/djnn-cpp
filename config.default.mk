@@ -1,5 +1,5 @@
 #verbose build
-#V=1
+#V= , 0, 1, 2, 3
 
 display := QT
 #options: QT SDL DRM

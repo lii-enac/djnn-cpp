@@ -61,7 +61,22 @@ rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffi
 all_srcs = $(call rwildcard,src/,*)
 all_dirs = $(call uniq,$(dir $(all_srcs)))
 
+#
+ifeq ($V,0)
+rule_message =
+else
+rule_message = echo $1 $2
+endif
+
+ifeq ($V,)
+stylized_target = "\\033[1m$(notdir $@)\\033[0m"
+else ifeq ($V,0)
+#stylized_target = "\\033[1m$(notdir $@)\\033[0m"
+else ifeq ($V,1)
+stylized_target = "\\033[1m$(notdir $@)\\033[0m"
+else ifeq ($V,2)
 stylized_target = "\\033[1m$(notdir $@)\\033[0m" \(older than $(notdir $?)\)
+endif
 #in case it doesn't work on some terminals:
 #stylized_target = $(notdir $@) \(older than $(notdir $?)\)
 
@@ -341,19 +356,19 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs) #$1_headers_cp  
-ifeq ($$V,1)
+ifeq ($$V,3)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 else
-	@echo linking $$(stylized_target)
+	@$(call rule_message,linking,$$(stylized_target))
 	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 endif
 
 $$($1_lib_static): $$($1_objs)
-ifeq ($$V,1)
+ifeq ($$V,3)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
 else
-	@echo linking $$(stylized_target)
+	@$(call rule_message,linking,$$(stylized_target))
 	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	@$$(RANLIB) $$@
 endif
@@ -417,44 +432,45 @@ strip:
 
 #@#mkdir -p $(dir $@)
 
+
 $(build_dir)/%.o: %.cpp
-ifeq ($V,1)
+ifeq ($V,3)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 else
-	@echo compiling $(stylized_target)
+	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
 
 $(build_dir)/%.o: %.c
-ifeq ($V,1)
+ifeq ($V,3)
 	$(CC) $(CFLAGS) -c $< -o $@
 else
-	@echo compiling $(stylized_target)
+	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
 endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
-ifeq ($V,1)
+ifeq ($V,3)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 else
-	@echo compiling $(stylized_target)
+	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
-ifeq ($V,1)
+ifeq ($V,3)
 	$(YACC) -v -o $@ $<
 else
-	@echo compiling $(stylized_target)
+	@$(call rule_message,compiling,$(stylized_target))
 	@$(YACC) -v -o $@ $<
 endif
 
 $(build_dir)/%.cpp: %.l
-ifeq ($V,1)
+ifeq ($V,3)
 	$(LEX) -o $@ $<
 else
-	@echo compiling $(stylized_target)
+	@$(call rule_message,compiling,$(stylized_target))
 	@$(LEX) -o $@ $<
 endif
 
