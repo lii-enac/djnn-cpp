@@ -15,16 +15,14 @@
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
-MAJOR = 1
-MINOR = 9
-MINOR2 = 0 
+# ---------------------------------------
+# default
 
 default: all
 .PHONY: default
 
 all: config.mk dirs djnn pkgconf
 #install
-.PHONY: all
 
 help:
 	@echo "default: djnn ; all: djnn"
@@ -33,9 +31,9 @@ help:
 config.mk:
 	cp config.default.mk config.mk
 
-
-# ---------------------------------------
-# default
+MAJOR = 1
+MINOR = 9
+MINOR2 = 0 
 
 include config.default.mk
 -include config.mk
@@ -62,6 +60,9 @@ rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffi
 all_srcs = $(call rwildcard,src/,*)
 all_dirs = $(call uniq,$(dir $(all_srcs)))
 
+# ---------------------------------------
+# directory structure
+
 $(build_dir)/%/: %/
 	@mkdir -p $@
 
@@ -71,14 +72,12 @@ $(build_dir)/lib:
 $(build_dir)/include/djnn-cpp:
 	@mkdir -p $@
 
-dirs: $(build_dir)/lib $(addprefix $(build_dir)/,$(all_dirs)) $(build_dir)/include/djnn-cpp
+dirs: $(build_dir)/lib $(build_dir)/include/djnn-cpp $(addprefix $(build_dir)/,$(all_dirs)) 
 
-tototo:
-	@#echo $(all_srcs)
-	@#echo $(all_dirs)
-	@echo $(addprefix $(build_dir)/,$(all_dirs))
 
-#
+# ---------------------------------------
+# stylized actions
+
 ifeq ($V,0)
 rule_message =
 else
@@ -264,8 +263,12 @@ endif
 tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
-lcov_file ?= $(build_dir)/djnn_cov.info
-lcov_output_dir ?= $(build_dir)/coverage_html
+%_tidy: %
+	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
+.PHONY: %_tidy
+
+all_tidy := $(addsuffix _tidy,$(srcs))
+tidy: $(all_tidy)
 
 
 # ---------------------------------------
@@ -312,11 +315,15 @@ lib_pkgpath :=
 # default
 $1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
 $1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
+$1_srcs = $$($1_cpp_srcs) $$($1_c_srcs) 
 $1_objs ?= $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
+
+# fix srcs
+$1_srcs := $$($1_srcs)
 
 $1_pkg_deps :=
 $1_deps := $$($1_objs:.o=.d)
@@ -334,7 +341,7 @@ $1_cov_gcno  := $$($1_objs:.o=.gcno)
 $1_cov_gcda  := $$($1_objs:.o=.gcda)
 
 ifneq ($$($1_lib_pkg),)
-$1_lib_pkgpath = $$(addsuffix :,$$(lib_pkgpath))
+$1_lib_pkgpath = $$(subst $$() $$(),:,$$(lib_pkgpath))
 $1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
 $1_lib_ldflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --libs $$($1_lib_pkg))
 endif
@@ -388,7 +395,11 @@ $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 
 $1_tidy: $$($1_tidy_srcs)
-.PHONY: $1_tidy
+
+$1: $$($1_lib)
+
+$1_clean:
+	rm -f $$($1_objs)
 
 $1_dbg:
 #	@echo $$($1_objs)
@@ -405,32 +416,24 @@ cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
 
-
 $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 
 uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
-
-# ---------------------------------------
-# rules
-
 djnn: $(libs)
-.PHONY: djnn
-
 static: $(libs_static)
-.PHONY: static
 
 size: $(libs_static)
 	ls -l $(libs_static)
 	$(SIZE) -t $(libs_static)
-.PHONY: size
 
 strip:
 	strip $(libs_static)
 
-#@#mkdir -p $(dir $@)
 
+# ---------------------------------------
+# rules
 
 $(build_dir)/%.o: %.cpp
 ifeq ($V,max)
@@ -473,15 +476,14 @@ else
 	@$(LEX) -o $@ $<
 endif
 
-%_tidy: %
-	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
-.PHONY: %_tidy
-
-all_tidy := $(addsuffix _tidy,$(srcs))
-tidy: $(all_tidy)
-.PHONY: tidy
-
 -include $(deps)
+
+# ---------------------------------------
+# coverage tests
+
+lcov_file ?= $(build_dir)/djnn_cov.info
+lcov_output_dir ?= $(build_dir)/coverage_html
+
 
 pre_cov: CXXFLAGS += --coverage
 pre_cov: LDFLAGS += --coverage
@@ -500,20 +502,20 @@ cov: cov_jenkins
 	cd $(lcov_output_dir) ; open index.html
 .PHONY: cov
 
+
+# ---------------------------------------
+# clean
+
 clean:
 	rm -f $(deps) $(objs) $(libs) $(srcgens) $(cov)
 	rm -rf $(lcov_output_dir) > /dev/null 2>&1 || true
 	rmdir $(build_dir) > /dev/null 2>&1 || true
-.PHONY: clean
 
 distclean clear:
 	rm -rf $(build_dir)
-.PHONY: distclean clear
 
 dbg:
 	@echo $(all_pkg)
-
-.PHONY: dbg
 
 
 # ---------------------------------------
@@ -550,33 +552,6 @@ headers: $(addprefix $(build_dir)/include/djnn-cpp/,$(all_headers_no_src))
 install_prefix ?= /usr/local
 
 install: installpkgconf headers
-.PHONE: install
-
-
-# # ---------------------------------------
-# # package config
-
-# djnn_prefix ?= $(shell pwd)/build
-
-# pkgconf:
-# 	@#echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
-# 	@for f in *.pc.in ; do \
-# 		sed -e 's,@PREFIX@,$(djnn_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $$f > $$(echo $$f | cut -f 1,2 -d .); \
-# 		mkdir -p $(build_dir) ; \
-# 		mv $$(echo $$f | cut -f 1,2 -d .) $(build_dir)/ ; \
-# 	done
-
-# install_prefix ?= /usr/local
-
-# installpkgconf: pkgconf
-# 	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
-# 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
-# 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
-
-# #----------------------------------------
-# # install 
-
-# install: installpkgconf
 
 
 # ---------------------------------------
@@ -647,31 +622,3 @@ install-pkgdeps:
 
 upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
-
-.PHONY: install-pkgdeps update-pkgdeps
-
-
-
-# ---------------------------------------
-# attic
-
-# mingw on mac:
-#brew install mingw-w64, git clone https://github.com/meganz/mingw-std-threads, https://bitbucket.org/skunkos/qt5-minimalistic-builds/downloads/
-#add -Imingw-std-threads to CXXFLAGS
-
-# config_header_files := $(build_dir)/src/core/syshook/cpp-thread-config.h $(build_dir)/src/core/syshook/cpp-chrono-config.h
-# config_headers: $(config_header_files)
-# .PHONY: config_headers
-# #.PHONY: $(config_header_files)
-
-# $(build_dir)/src/core/syshook/cpp-thread-config.h: $(FORCE)
-# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
-# 	@echo "#define DJNN_USE_"$(thread)"_THREAD 1" > $(config.h)
-# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@; fi
-# 	@rm $(config.h)
-# $(build_dir)/src/core/syshook/cpp-chrono-config.h: $(FORCE)
-# 	@$(eval config.h = $(shell mktemp /tmp/config.h.XXXXX))
-# 	@echo "#define DJNN_USE_"$(chrono)"_CHRONO 1" > $(config.h)
-# 	@if ! diff -q $(config.h) $@ &>/dev/null; then echo "cp $(config.h) $@"; cp $(config.h) $@;  fi
-# 	@rm $(config.h)
-
