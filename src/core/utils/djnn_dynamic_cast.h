@@ -93,11 +93,13 @@ namespace djnn {
     else return nullptr;
   }
 
-  // untested
+
+  // ************  untested  ***************
+
   template <> inline Action* djnn_dynamic_cast(Process* p)
   {
     auto t = p->get_process_type();
-    if(t == ACTION_T || t == NATIVE_ACTION_T) {
+    if(t == ACTION_T || t == ACTION_T) {
       return static_cast<Action*>(p);
     }
     return nullptr;
@@ -111,20 +113,10 @@ namespace djnn {
     return nullptr;
   }
 
-  /*
   template <> inline Container* djnn_dynamic_cast(Process* p)
   {
-    auto t = p->get_process_type();
-    if(t == CONTAINER_T || t == LIST_T || t == SET_T) {
-      return static_cast<Container*>(p);
-    }
-    return nullptr;
-  }*/
-
-  template <> inline Component* djnn_dynamic_cast(Process* p)
-  {
     if(p->get_process_type() == CONTAINER_T) {
-      return static_cast<Component*>(p);
+      return static_cast<Container*>(p);
     }
     return nullptr;
   }

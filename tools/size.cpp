@@ -7,6 +7,8 @@
 #include "core/control/action.h"
 #include "core/control/assignment.h"
 #include "core/control/binding.h"
+#include "core/control/simple_assignment.h"
+#include "core/control/simple_binding.h"
 
 #include "base/arithmetic.h"
 #include "base/connector.h"
