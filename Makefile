@@ -22,7 +22,7 @@ MINOR2 = 0
 default: all
 .PHONY: default
 
-all: config.mk djnn pkgconf install
+all: config.mk dirs djnn pkgconf install
 .PHONY: all
 
 help:
@@ -55,15 +55,28 @@ SIZE ?= size
 uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 
 # recursive wildcard https://stackoverflow.com/a/12959694
-rwildcard=$(wildcard $1$2)$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
-rwildcardmul=$(wildcard $(addsuffix $2, $1))$(foreach d,$(wildcard $(addsuffix *, $1)),$(call rwildcard,$d/,$2))
+rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffix *, $1)),$(call rwildcard,$d/,$2))
 
-#all_srcs := $(call rwildcard,src/,*)
-#all_dirs := $(call uniq,$(dir $(all_srcs)))
-#tototo:
-#	@echo $(srcs)
-#	@echo $(all_dirs)
+all_srcs = $(call rwildcard,src/,*)
+all_dirs = $(call uniq,$(dir $(all_srcs)))
 
+stylized_target = "\\033[1m$(notdir $@)\\033[0m"
+#in case it doesn't work on some terminals:
+#stylized_target = $(notdir $@)
+
+
+tototo:
+	@#echo $(all_srcs)
+	@echo $(all_dirs)
+
+$(build_dir)/%/: %/
+	@mkdir -p $@
+
+$(build_dir)/lib/:
+	@mkdir -p $@
+
+dirs: $(build_dir)/lib/ $(addprefix $(build_dir)/,$(all_dirs))
 
 # ---------------------------------------
 # cross-compile support
@@ -327,12 +340,14 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
-$$($1_lib): $$($1_objs) $1_headers_cp  
-	@mkdir -p $$(dir $$@)
-	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
+$$($1_lib): $$($1_objs) #$1_headers_cp  
+	@#mkdir -p $$(dir $$@)
+	@echo linking $$(stylized_target) \(older than $$(notdir $$?)\)
+	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 
 $$($1_lib_static): $$($1_objs)
-	@mkdir -p $$(dir $$@)
+	@#mkdir -p $$(dir $$@)
+	@echo linking $$(stylized_target) \(older than $$(notdir $$?)\)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
 
@@ -354,7 +369,7 @@ $1_dbg:
 #	@echo $$($1_lib_ldflags)
 
 $1_headers_cp: $$($1_headers)
-	@echo "==> copy all $1 .h into $(build_incl_dir)/$1"
+	@#echo "==> copy all $1 .h into $(build_incl_dir)/$1"
 	@$$(foreach var,$$($1_headers), mkdir -p $$(dir $$(patsubst src%, $(build_incl_dir)%, $$(var))) ; cp $$(var) $$(patsubst src%, $(build_incl_dir)%, $$(var)) ;)
 .PHONY: $1_headers_cp
 
@@ -394,25 +409,31 @@ strip:
 	strip $(libs_static)
 
 $(build_dir)/%.o: %.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@#mkdir -p $(dir $@)
+	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+
 
 $(build_dir)/%.o: %.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@#mkdir -p $(dir $@)
+	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@#mkdir -p $(dir $@)
+	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
-	@mkdir -p $(dir $@)
-	$(YACC) -v -o $@ $<
+	@#mkdir -p $(dir $@)
+	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+	@$(YACC) -v -o $@ $<
 
 $(build_dir)/%.cpp: %.l
-	@mkdir -p $(dir $@)
-	$(LEX) -o $@ $<
+	@#mkdir -p $(dir $@)
+	@echo compiling $(stylized_target) \(older than $(notdir $?)\)
+	@$(LEX) -o $@ $<
 
 %_tidy: %
 	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
@@ -462,7 +483,7 @@ dbg:
 djnn_prefix ?= $(shell pwd)/build
 
 pkgconf:
-	@echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
+	@#echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
 	@for f in *.pc.in ; do \
 		sed -e 's,@PREFIX@,$(djnn_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $$f > $$(echo $$f | cut -f 1,2 -d .); \
 		mkdir -p $(build_dir) ; \
