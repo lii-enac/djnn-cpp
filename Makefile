@@ -81,7 +81,7 @@ tototo:
 ifeq ($V,0)
 rule_message =
 else
-rule_message = echo $1 $2
+rule_message = $(echo) $1 $2
 endif
 
 ifeq ($V,)
@@ -92,6 +92,8 @@ else ifeq ($V,1)
 stylized_target = "\\033[1m$(notdir $@)\\033[0m"
 else ifeq ($V,2)
 stylized_target = "\\033[1m$(notdir $@)\\033[0m" \(older than $(notdir $?)\)
+else ifeq ($V,3)
+stylized_target = "\\033[1m$@\\033[0m" \(older than $?\)
 endif
 #in case it doesn't work on some terminals:
 #stylized_target = $(notdir $@) \(older than $(notdir $?)\)
@@ -140,6 +142,7 @@ CFLAGS += -I$(src_dir)
 build_incl_dir := $(build_dir)/include/djnn-cpp
 LDFLAGS += -L$(build_lib_dir)
 lib_static_suffix = .a
+echo = echo -e
 
 ifeq ($(os),Linux)
 CFLAGS += -fpic -g -MMD -Wall
@@ -153,6 +156,7 @@ ifeq ($(os),Darwin)
 CFLAGS += -g -MMD -Wall
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
+echo = echo
 #AR ?= /usr/bin/ar
 #ARFLAGS ?= -r
 endif
@@ -360,7 +364,7 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs) #$1_headers_cp 
-ifeq ($$V,3)
+ifeq ($$V,max)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 else
 	@$(call rule_message,linking,$$(stylized_target))
@@ -368,7 +372,7 @@ else
 endif
 
 $$($1_lib_static): $$($1_objs)
-ifeq ($$V,3)
+ifeq ($$V,max)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
 else
@@ -438,7 +442,7 @@ strip:
 
 
 $(build_dir)/%.o: %.cpp
-ifeq ($V,3)
+ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -446,7 +450,7 @@ else
 endif
 
 $(build_dir)/%.o: %.c
-ifeq ($V,3)
+ifeq ($V,max)
 	$(CC) $(CFLAGS) -c $< -o $@
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -455,7 +459,7 @@ endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
-ifeq ($V,3)
+ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -463,7 +467,7 @@ else
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
-ifeq ($V,3)
+ifeq ($V,max)
 	$(YACC) -v -o $@ $<
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -471,7 +475,7 @@ else
 endif
 
 $(build_dir)/%.cpp: %.l
-ifeq ($V,3)
+ifeq ($V,max)
 	$(LEX) -o $@ $<
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -545,10 +549,11 @@ headers__ := $(shell find src -type f -name "*.h")
 headers__ := $(patsubst src/%,%,$(headers__))
 
 $(build_dir)/include/djnn-cpp/%.h: src/%.h
-	@mkdir -p $(dir $@)
 	ln -fs $< $@
 
 headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
+	@$(call rule_message,headering,$(stylized_target))
+.PHONY: headers_
 
 #----------------------------------------
 # install 
@@ -556,7 +561,7 @@ headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
 install_prefix ?= /usr/local
 
 install: installpkgconf
-.PHONE: install
+.PHONY: install
 
 # # ---------------------------------------
 # # package config
