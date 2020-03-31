@@ -1,5 +1,8 @@
 lib_djnn_deps = exec_env core
-lib_srcs := $(shell find src/comms -name "*.cpp")
+local_dir := $(src_dir)/comms
+#lib_srcs := $(shell find src/comms -name "*.cpp")
+lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
+
 
 lib_headers := $(shell find src/comms -name "*.h")
 
@@ -16,10 +19,12 @@ lib_headers := $(shell find src/comms -name "*.h")
 ifeq ($(os),Darwin)
 lib_cppflags = -I/opt/local/include/Ivy
 lib_ldflags = -L/opt/local/lib -livy
+lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),Linux)
 lib_cppflags = -I/usr/local/include/Ivy
 lib_ldflags = -L/usr/local/lib64 -livy -lpcre
+lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),MinGW)
 lib_cppflags = -I/usr/include
