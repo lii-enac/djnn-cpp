@@ -65,17 +65,18 @@ all_dirs = $(call uniq,$(dir $(all_srcs)))
 $(build_dir)/%/: %/
 	@mkdir -p $@
 
-$(build_dir)/lib/:
+$(build_dir)/lib:
 	@mkdir -p $@
 
-$(build_dir)/include/:
+$(build_dir)/include/djnn-cpp:
 	@mkdir -p $@
 
-dirs: $(build_dir)/lib/ $(build_dir)/include/ $(addprefix $(build_dir)/,$(all_dirs))
+dirs: $(build_dir)/lib $(addprefix $(build_dir)/,$(all_dirs)) $(build_dir)/include/djnn-cpp
 
 tototo:
 	@#echo $(all_srcs)
-	@echo $(all_dirs)
+	@#echo $(all_dirs)
+	@echo $(addprefix $(build_dir)/,$(all_dirs))
 
 #
 ifeq ($V,0)
@@ -534,22 +535,21 @@ installpkgconf: pkgconf
 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
 
-headers__ := $(shell find src -type f -name "*.h")
-headers__ := $(patsubst src/%,%,$(headers__))
+all_headers = $(shell find src -type f -name "*.h")
+all_headers_no_src = $(patsubst src/%,%,$(all_headers))
 
 $(build_dir)/include/djnn-cpp/%.h: src/%.h
+	@mkdir -p $(dir $@)
 	cp $< $@
 
-headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
-	@$(call rule_message,headering,$(stylized_target))
-.PHONY: headers_
+headers: $(addprefix $(build_dir)/include/djnn-cpp/,$(all_headers_no_src))
 
 #----------------------------------------
 # install 
 
 install_prefix ?= /usr/local
 
-install: installpkgconf headers_
+install: installpkgconf headers
 .PHONE: install
 
 
