@@ -3,9 +3,6 @@ local_dir := $(src_dir)/comms
 #lib_srcs := $(shell find src/comms -name "*.cpp")
 lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 
-
-lib_headers := $(shell find src/comms -name "*.h")
-
 # Ivy dependancy
 # svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
 # cd ivy-c/src

@@ -1,8 +1,6 @@
 lib_djnn_deps = exec_env core
 lib_srcs += $(shell find src/audio -name "*.cpp")
 
-lib_headers += $(shell find src/audio -name "*.h")
-
 lib_cppflags += -DUSE_OPENAL
 
 ifeq ($(os),Darwin)

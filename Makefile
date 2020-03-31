@@ -297,7 +297,6 @@ cov :=
 define lib_makerule
 
 lib_srcs :=
-lib_headers :=
 lib_srcgens :=
 lib_cflags :=
 lib_cppflags :=
@@ -314,7 +313,6 @@ $1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
 $1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
 $1_objs ?= $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
-$1_headers := $$(filter %.h,$$(lib_headers))
 
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
@@ -363,7 +361,7 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
-$$($1_lib): $$($1_objs) #$1_headers_cp 
+$$($1_lib): $$($1_objs)
 ifeq ($$V,max)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 else
@@ -385,7 +383,6 @@ $1_size: $$($1_lib_static)
 	@ls -l $$^
 	@$$(SIZE) -t $$^
 
-
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 
@@ -393,16 +390,9 @@ $1_tidy: $$($1_tidy_srcs)
 .PHONY: $1_tidy
 
 $1_dbg:
-	@echo $$($1_headers)
 #	@echo $$($1_objs)
 #	@echo $$($1_djnn_deps)
 #	@echo $$($1_lib_ldflags)
-
-$1_headers_cp: $$($1_headers)
-	@#echo "==> copy all $1 .h into $(build_incl_dir)/$1"
-	@$$(foreach var,$$($1_headers), mkdir -p $$(dir $$(patsubst src%, $(build_incl_dir)%, $$(var))) ; cp $$(var) $$(patsubst src%, $(build_incl_dir)%, $$(var)) ;)
-.PHONY: $1_headers_cp
-
 
 srcs += $$($1_srcs)
 srcgens += $$($1_srcgens)
@@ -537,19 +527,18 @@ pkgconf: $(pkgconfig_targets)
 
 $(djnn_install_prefix)/%.pc: %.pc.in
 	@mkdir -p $(dir $@)
-	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
+	@sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
 installpkgconf: pkgconf
 	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
 
-
 headers__ := $(shell find src -type f -name "*.h")
 headers__ := $(patsubst src/%,%,$(headers__))
 
 $(build_dir)/include/djnn-cpp/%.h: src/%.h
-	ln -fs $< $@
+	cp $< $@
 
 headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
 	@$(call rule_message,headering,$(stylized_target))
@@ -560,8 +549,9 @@ headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
 
 install_prefix ?= /usr/local
 
-install: installpkgconf
-.PHONY: install
+install: installpkgconf headers_
+.PHONE: install
+
 
 # # ---------------------------------------
 # # package config
