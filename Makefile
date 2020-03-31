@@ -22,7 +22,8 @@ MINOR2 = 0
 default: all
 .PHONY: default
 
-all: config.mk dirs djnn pkgconf install
+all: config.mk dirs djnn pkgconf
+#install
 .PHONY: all
 
 help:
@@ -45,7 +46,7 @@ display ?= QT #options: QT SDL
 graphics ?= QT #options: QT CAIRO GL
 
 RANLIB ?= ranlib
-GPERF ?= gperf
+#GPERF ?= gperf
 SIZE ?= size
 
 # ---------------------------------------
@@ -60,6 +61,21 @@ rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffi
 
 all_srcs = $(call rwildcard,src/,*)
 all_dirs = $(call uniq,$(dir $(all_srcs)))
+
+$(build_dir)/%/: %/
+	@mkdir -p $@
+
+$(build_dir)/lib/:
+	@mkdir -p $@
+
+$(build_dir)/include/:
+	@mkdir -p $@
+
+dirs: $(build_dir)/lib/ $(build_dir)/include/ $(addprefix $(build_dir)/,$(all_dirs))
+
+tototo:
+	@#echo $(all_srcs)
+	@echo $(all_dirs)
 
 #
 ifeq ($V,0)
@@ -80,18 +96,6 @@ endif
 #in case it doesn't work on some terminals:
 #stylized_target = $(notdir $@) \(older than $(notdir $?)\)
 
-
-tototo:
-	@#echo $(all_srcs)
-	@echo $(all_dirs)
-
-$(build_dir)/%/: %/
-	@mkdir -p $@
-
-$(build_dir)/lib/:
-	@mkdir -p $@
-
-dirs: $(build_dir)/lib/ $(addprefix $(build_dir)/,$(all_dirs))
 
 # ---------------------------------------
 # cross-compile support
@@ -355,7 +359,7 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
-$$($1_lib): $$($1_objs) #$1_headers_cp  
+$$($1_lib): $$($1_objs) #$1_headers_cp 
 ifeq ($$V,3)
 	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
 else
@@ -516,30 +520,68 @@ dbg:
 
 .PHONY: dbg
 
+
 # ---------------------------------------
 # package config
 
-djnn_prefix ?= $(shell pwd)/build
+djnn_install_prefix ?= $(abspath $(build_dir))
 
-pkgconf:
-	@#echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
-	@for f in *.pc.in ; do \
-		sed -e 's,@PREFIX@,$(djnn_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $$f > $$(echo $$f | cut -f 1,2 -d .); \
-		mkdir -p $(build_dir) ; \
-		mv $$(echo $$f | cut -f 1,2 -d .) $(build_dir)/ ; \
-	done
+pkgconfig_targets = djnn-cpp-dev.pc djnn-cpp.pc
+pkgconfig_targets := $(addprefix $(djnn_install_prefix)/, $(pkgconfig_targets))
 
-install_prefix ?= /usr/local
+pkgconf: $(pkgconfig_targets)
+
+$(djnn_install_prefix)/%.pc: %.pc.in
+	@mkdir -p $(dir $@)
+	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
 installpkgconf: pkgconf
 	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
 
+
+headers__ := $(shell find src -type f -name "*.h")
+headers__ := $(patsubst src/%,%,$(headers__))
+
+$(build_dir)/include/djnn-cpp/%.h: src/%.h
+	@mkdir -p $(dir $@)
+	ln -fs $< $@
+
+headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
+
 #----------------------------------------
 # install 
 
+install_prefix ?= /usr/local
+
 install: installpkgconf
+.PHONE: install
+
+# # ---------------------------------------
+# # package config
+
+# djnn_prefix ?= $(shell pwd)/build
+
+# pkgconf:
+# 	@#echo "==> create djnn-cpp-dev.pc and djnn-cpp.pc"
+# 	@for f in *.pc.in ; do \
+# 		sed -e 's,@PREFIX@,$(djnn_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $$f > $$(echo $$f | cut -f 1,2 -d .); \
+# 		mkdir -p $(build_dir) ; \
+# 		mv $$(echo $$f | cut -f 1,2 -d .) $(build_dir)/ ; \
+# 	done
+
+# install_prefix ?= /usr/local
+
+# installpkgconf: pkgconf
+# 	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
+# 	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
+# 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
+
+# #----------------------------------------
+# # install 
+
+# install: installpkgconf
 
 
 # ---------------------------------------

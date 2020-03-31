@@ -1,5 +1,6 @@
 lib_srcs := src/core/core.cpp
-lib_srcs += $(shell find src/core/ontology -name "*.cpp")
+lib_srcs += $(call rwildcard,src/core/ontology/,*.cpp)
+#lib_srcs += $(shell find src/core/ontology -name "*.cpp")
 lib_srcs += $(shell find src/core/control -name "*.cpp")
 lib_srcs += $(shell find src/core/tree -name "*.cpp")
 lib_srcs += $(shell find src/core/execution -name "*.cpp")
