@@ -535,7 +535,8 @@ headers__ := $(patsubst src/%,%,$(headers__))
 
 $(build_dir)/include/djnn-cpp/%.h: src/%.h
 	@mkdir -p $(dir $@)
-	ln -fs $< $@
+	cp $< $@
+#	ln -fs $< $@
 
 headers_: $(addprefix $(build_dir)/include/djnn-cpp/,$(headers__))
 
