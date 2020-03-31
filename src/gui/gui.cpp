@@ -188,7 +188,7 @@ namespace djnn
     } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T /*|| c->get_process_type () == SWITCH_T*/) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child (c, index);
@@ -208,7 +208,7 @@ namespace djnn
     } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T /*|| c->get_process_type () == SWITCH_T*/) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
@@ -227,7 +227,7 @@ namespace djnn
     } else if (c->get_process_type () == WINDOW_T) {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T || c->get_process_type () == SWITCH_T) {
+    } else if (c->get_process_type () == COMPONENT_T || c->get_process_type () == FSM_T /*|| c->get_process_type () == SWITCH_T*/) {
       add_container (c);
       if (it_cont != _structure_map.end ())
         it_cont->second->move_child_to (c, neighboor_index, spec, new_index);

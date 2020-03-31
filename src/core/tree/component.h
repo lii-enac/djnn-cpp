@@ -66,7 +66,7 @@ namespace djnn {
     }
   protected:
     children_t _children;
-    context_t _cur_context;
+    context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!!
   };
 
   class Component : public Container
