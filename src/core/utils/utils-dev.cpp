@@ -19,6 +19,11 @@
 
 namespace djnn
 {
+  std::string
+  __to_string(void*p)
+  {
+    return __to_string((long)p);
+  }
 
   std::string
   __to_string(long x)
