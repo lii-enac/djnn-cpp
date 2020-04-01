@@ -22,7 +22,7 @@ default: all
 .PHONY: default
 
 all: config.mk dirs djnn pkgconf
-#install
+
 
 help:
 	@echo "default: djnn ; all: djnn"
@@ -396,7 +396,7 @@ $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 
 $1_tidy: $$($1_tidy_srcs)
 
-$1: $$($1_lib)
+$1: dirs $$($1_lib)
 
 $1_clean:
 	rm -f $$($1_objs)
@@ -521,38 +521,56 @@ dbg:
 # ---------------------------------------
 # package config
 
-djnn_install_prefix ?= $(abspath $(build_dir))
+ifeq ($(prefix),)
+# dev install
+djnn_install_prefix :=  $(abspath $(build_dir))
+pkg_config_install_prefix := /usr/local
+else
+# pkg install (brew, deb, arch)
+djnn_install_prefix := $(abspath $(prefix))
+pkg_config_install_prefix := $(abspath $(prefix))
+endif
 
 pkgconfig_targets = djnn-cpp-dev.pc djnn-cpp.pc
-pkgconfig_targets := $(addprefix $(djnn_install_prefix)/, $(pkgconfig_targets))
+pkgconfig_targets := $(addprefix $(build_dir)/, $(pkgconfig_targets))
 
 pkgconf: $(pkgconfig_targets)
 
-$(djnn_install_prefix)/%.pc: %.pc.in
+$(build_dir)/%.pc: %.pc.in
 	@mkdir -p $(dir $@)
 	@sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
-
-installpkgconf: pkgconf
-	test -d $(install_prefix)/lib/pkgconfig || mkdir -p $(install_prefix)/lib/pkgconfig
-	install -m 644 $(build_dir)/djnn-cpp.pc	$(install_prefix)/lib/pkgconfig
-	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(install_prefix)/lib/pkgconfig
-
-all_headers = $(shell find src -type f -name "*.h")
-all_headers_no_src = $(patsubst src/%,%,$(all_headers))
-
-$(build_dir)/include/djnn-cpp/%.h: src/%.h
-	@mkdir -p $(dir $@)
-	cp $< $@
-
-headers: $(addprefix $(build_dir)/include/djnn-cpp/,$(all_headers_no_src))
 
 #----------------------------------------
 # install 
 
-install_prefix ?= /usr/local
+install_pkgconf: pkgconf
+	test -d $(pkg_config_install_prefix)/lib/pkgconfig || mkdir -p $(pkg_config_install_prefix)/lib/pkgconfig
+	install -m 644 $(build_dir)/djnn-cpp.pc	$(pkg_config_install_prefix)/lib/pkgconfig
+	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(pkg_config_install_prefix)/lib/pkgconfig
 
-install: installpkgconf headers
+all_headers = $(shell find src -type f -name "*.h")
+all_headers_no_src = $(patsubst src/%,%,$(all_headers))
 
+all_libs_no_build_dir = $(patsubst $(build_dir)/lib/%,%,$(libs))
+
+install_headers: $(addprefix $(djnn_install_prefix)/include/djnn-cpp/,$(all_headers_no_src))
+
+install_libs: $(addprefix $(djnn_install_prefix)/lib/,$(all_libs_no_build_dir))
+
+$(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
+	@mkdir -p $(dir $@)
+	install -m 644 $< $@
+
+$(djnn_install_prefix)/lib/%.dylib: $(build_dir)/lib/%.dylib
+	@mkdir -p $(dir $@)
+ifneq ($(prefix),)
+	install -m 644 $< $@
+endif
+
+install: all install_pkgconf install_headers install_libs
+
+install_clear:
+	rm -rf $(djnn_install_prefix)
 
 # ---------------------------------------
 # package dependency installation
