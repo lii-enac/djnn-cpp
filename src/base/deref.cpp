@@ -30,7 +30,8 @@ namespace djnn
   _set_src (this, "set_src"),
   _cref (ref, ACTIVATION, &_action, ACTIVATION),
   _cpath (&_path, ACTIVATION, &_action, ACTIVATION),
-  _csrc_to_dst ()
+  _csrc_to_dst (),
+  _propagating (false)
   {
     _ref = dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
