@@ -253,6 +253,9 @@ endif
 #CFLAGS += -fsanitize=memory -O1
 #LDFLAGS += -fsanitize=memory
 
+#CFLAGS += -fsanitize=undefined
+#LDFLAGS += -fsanitize=undefined
+
 # scan_build: static analizer
 # 1. download the latest llvm (+9.0.0) release from your platform using "Pre-Built Binaries" on http://releases.llvm.org/download.html
 # 2. launch the CLI on this Makefile wih: 

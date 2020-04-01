@@ -7,8 +7,9 @@
 #include "utils/debug.h"
 #endif
 
-#include <iostream>
+#include "abstract_sobj.h"
 
+#include <iostream>
 
 namespace djnn {
 
@@ -50,5 +51,7 @@ namespace djnn {
 		alListenerf(AL_GAIN, gain); CHKAL;
 		#endif
 	}
+
+	AbstractSObjImpl::~AbstractSObjImpl() {}
 
 }
