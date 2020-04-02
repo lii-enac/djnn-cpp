@@ -32,7 +32,7 @@ config.mk:
 	cp config.default.mk config.mk
 
 MAJOR = 1
-MINOR = 9
+MINOR = 10
 MINOR2 = 0 
 
 include config.default.mk
@@ -565,6 +565,7 @@ $(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
 	install -m 644 $< $@
 
 $(djnn_install_prefix)/lib/%.dylib: $(build_dir)/lib/%.dylib
+#$(djnn_install_prefix)/lib/%.$(lib_suffix): $(build_dir)/lib/%.$(lib_suffix)
 	@mkdir -p $(dir $@)
 ifneq ($(prefix),)
 	install -m 644 $< $@
