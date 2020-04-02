@@ -15,8 +15,8 @@
 
 #include "IvyAccess.h"
 
-#include "ivy.h" //FIXME
-#include "ivyloop.h" // FIXME
+#include "Ivy/ivy.h"
+#include "Ivy/ivyloop.h"
 #include "core/utils/error.h"
 #include "exec_env/main_loop.h"
 #include "utils/debug.h"

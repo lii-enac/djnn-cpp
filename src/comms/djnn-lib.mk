@@ -1,29 +1,41 @@
 lib_djnn_deps = exec_env core
 local_dir := $(src_dir)/comms
-#lib_srcs := $(shell find src/comms -name "*.cpp")
+
 lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 
 # Ivy dependancy
 # svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
 # cd ivy-c/src
+# ----------------
 # MACOS
+# brew tap lii-enac/repo
+# brew install libivy
+# or -- from source
 # make -f Makefile.osx static-libs shared-libs
-# sudo make -f Makefile.osx installlibs includes
+# sudo make -f Makefile.osx install
+# ----------------
 # linux
+# dpkg -i libivy.deb
+# or -- from source
 # make static-libs shared-libs
-# sudo make installlibs includes
+# sudo make install
+
+lib_cppflags = $(shell pkg-config ivy-c --cflags)
+lib_ldflags = $(shell pkg-config ivy-c --libs)
 
 ifeq ($(os),Darwin)
-lib_cppflags = -I/opt/local/include/Ivy
-lib_ldflags = -L/opt/local/lib -livy
+# lib_cppflags = -I/opt/local/include/Ivy
+# lib_ldflags = -L/opt/local/lib -livy
 lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),Linux)
+# ODO: remove once .pkg made 
 lib_cppflags = -I/usr/local/include/Ivy
 lib_ldflags = -L/usr/local/lib64 -livy -lpcre
 lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),MinGW)
+# TODO: remove once .pkg made 
 lib_cppflags = -I/usr/include
 lib_ldflags = -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
