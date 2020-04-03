@@ -56,7 +56,7 @@ namespace djnn {
     _udev_mon = udev_monitor_new_from_netlink (_udev_connection, "udev");
     udev_monitor_filter_add_match_subsystem_devtype (_udev_mon, "input", 0);
     udev_monitor_enable_receiving (_udev_mon);
-    _udev_iofd = new IOFD (udev_monitor_get_fd (_udev_mon));
+    _udev_iofd = new IOFD (nullptr, "input-udev-iofd", udev_monitor_get_fd (_udev_mon));
     _udev_iofd->activate ();
     _action = new UdevAction (this);
     _readable_cpl = new Coupling (_udev_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);

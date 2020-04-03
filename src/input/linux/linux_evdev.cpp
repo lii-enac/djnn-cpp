@@ -67,7 +67,7 @@ namespace djnn {
       return;
     }
     // FIXME: this should be done lazily
-    _iofd = new IOFD (_fd);
+    _iofd = new IOFD (nullptr, "evdevfd", _fd);
     _iofd->activate ();
     _action = new EvdevAction (this);
     _readable_cpl = new Coupling (_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);

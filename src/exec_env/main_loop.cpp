@@ -69,6 +69,7 @@ namespace djnn {
 
     MainLoop::MainLoop ()
     : Process ("Mainloop"),
+      ExternalSource ("Mainloop"),
       _another_source_wants_to_be_mainloop (nullptr)
     {
       set_run_for_ever (); // default mode is forever

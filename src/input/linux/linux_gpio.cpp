@@ -125,7 +125,7 @@ namespace djnn {
       error (this, "cannot open GPIO " + to_string (pin));
     }
     if (dir == IN) {
-      _iofd = new IOFD (_fd);
+      _iofd = new IOFD (nullptr, "gpiofd", _fd);
       _iofd->activate ();
       _action = new GPIOLineReadAction (this, "read");
       _c_action = new Coupling (_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);

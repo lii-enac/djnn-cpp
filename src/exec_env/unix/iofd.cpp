@@ -21,25 +21,33 @@
 
 #include <sys/select.h>
 
+// dbg
+// #include <iostream>
+// #include "utils/debug.h"
+// #include "utils/utils-dev.h"
+//#include "utils/ext/debugbreak.h"
+
 namespace djnn {
 
-  IOFD::IOFD(int readfd)
-  : Process ("IOFD"+std::to_string(readfd)),
+  IOFD::IOFD(Process *parent, const std::string& name, int readfd)
+  : Process (name),
+  ExternalSource(name),
   _readfd(readfd),
   _readable (this, "readable")
   {
-    MainLoop::instance().add_external_source(this);
+    //MainLoop::instance().add_external_source(this);
+    finalize_construction(parent, name);
+    //"IOFD"+std::to_string(readfd)
   }
 
   IOFD::~IOFD()
   {
-    MainLoop::instance().remove_external_source(this);
+    //MainLoop::instance().remove_external_source(this);
   }
 
   void
   IOFD::impl_activate ()
   {
-    //please_stop ();
     start_thread ();
   }
 
@@ -69,7 +77,7 @@ namespace djnn {
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!thread_local_cancelled && !get_please_stop ()) {
           _readable.activate (); // propagating
-         GRAPH_EXEC; // executing
+          GRAPH_EXEC; // executing
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }

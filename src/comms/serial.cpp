@@ -35,7 +35,9 @@ namespace djnn
 {
 
  Serial::Serial (Process *parent, const std::string& name, const std::string& port, int baudrate, char eol) :
-         Process (name), _port (port),
+         Process (name),
+         ExternalSource (name),
+         _port (port),
          _out ( this, "out", ""),
          _in (this, "in", ""),
          _baudrate (this, "baudrate", baudrate),

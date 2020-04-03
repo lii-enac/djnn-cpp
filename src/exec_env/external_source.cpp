@@ -3,8 +3,9 @@
 #include "cpp-mutex.h"
 #include <mutex>
 
-//#include <iostream>
-//#include "utils/debug.h"
+// #include <iostream>
+// #include "utils/debug.h"
+// #include <thread>
 
 namespace djnn {
 
@@ -136,8 +137,8 @@ namespace djnn {
         #endif
 	};
 
-	ExternalSource::ExternalSource ()
-    : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _please_stop (false)
+	ExternalSource::ExternalSource (const std::string& name)
+    : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _name(name), _please_stop (false)
     {
         //MainLoop::instance().add_external_source(this); // on a per-ExternalSource basis according to idiosyncraties
     }
@@ -224,6 +225,7 @@ namespace djnn {
 	void
 	ExternalSource::private_run ()
 	{
+        //std::cerr << "thread created " << _name << " " << std::this_thread::get_id() << __FL__;
         launch_mutex_lock();
         launch_mutex_unlock();
         

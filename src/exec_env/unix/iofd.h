@@ -21,7 +21,7 @@
 namespace djnn {
 	class IOFD : public Process, public ExternalSource {
 	public:
-		IOFD(int readfd);
+		IOFD(Process *parent, const std::string& name, int readfd);
 		virtual ~IOFD() override;
 
 		int readfd() const { return _readfd; }

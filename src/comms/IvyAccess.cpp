@@ -219,6 +219,7 @@ IvyAccess::IvyOutAction::coupling_activation_hook ()
  IvyAccess::IvyAccess (Process *parent, const std::string& name, 
   const std::string& bus, const std::string& appname, const std::string& ready, bool isModel)
  : Process (name, isModel),
+ ExternalSource(name),
  _out ( this, "out", ""),
  _out_a (this, "out_action", &_out),
  _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION ),

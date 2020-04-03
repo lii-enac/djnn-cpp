@@ -15,6 +15,7 @@
 #pragma once
 
 #include <atomic>
+#include <string>
 
 namespace djnn
 {
@@ -22,7 +23,7 @@ namespace djnn
   class ExternalSource
   {
   public:
-    ExternalSource ();
+    ExternalSource (const std::string& name);
     virtual ~ExternalSource ();
 
     virtual void start ();
@@ -54,6 +55,8 @@ namespace djnn
 
     class Impl;
     Impl * _impl;
+
+    std::string _name;
 
   private:
     std::atomic<bool> _please_stop;
