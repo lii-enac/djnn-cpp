@@ -98,7 +98,9 @@ endif
 
 
 ifeq (g++,$(findstring g++,$(CXX)))
-lib_ldflags += -latomic
+	ifneq (clang++,$(CXX))
+	lib_ldflags += -latomic
+	endif
 endif
 
 ifeq ($(os),$(filter $(os),Darwin Linux))
