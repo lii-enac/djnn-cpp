@@ -15,6 +15,9 @@
 #include "spike.h"
 #include "core/serializer/serializer.h"
 
+#include <iostream>
+#include "utils/debug.h"
+
 namespace djnn
 {
   using namespace std;
@@ -22,7 +25,7 @@ namespace djnn
   bool
   Spike::pre_activate ()
   {
-    if (get_parent () == 0 || get_parent ()->get_activation_state () == ACTIVATED) {
+    if (get_parent () == 0 || get_parent ()->somehow_activating ()) {
       set_activation_state (ACTIVATING);
       return true;
     }
@@ -32,7 +35,7 @@ namespace djnn
   void
   Spike::impl_activate ()
   {
-    if ( get_activation_state () == ACTIVATING)
+    if (get_activation_state () == ACTIVATING)
       notify_activation ();
   }
 
