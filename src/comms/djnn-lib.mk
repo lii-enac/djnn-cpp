@@ -20,12 +20,13 @@ lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 # make static-libs shared-libs
 # sudo make install
 
-lib_cppflags = $(shell pkg-config ivy-c --cflags)
-lib_ldflags = $(shell pkg-config ivy-c --libs)
+#TODO : activate after confinement
+#lib_cppflags = $(shell pkg-config ivy-c --cflags)
+#lib_ldflags = $(shell pkg-config ivy-c --libs)
 
 ifeq ($(os),Darwin)
-# lib_cppflags = -I/opt/local/include/Ivy
-# lib_ldflags = -L/opt/local/lib -livy
+lib_cppflags = -I/opt/local/include $(shell pkg-config ivy-c --cflags) 
+lib_ldflags = -L/opt/local/lib -livy $(shell pkg-config ivy-c --libs)
 lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),Linux)
