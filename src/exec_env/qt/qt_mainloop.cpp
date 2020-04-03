@@ -42,6 +42,7 @@ namespace djnn
   }
 
   QtMainloop::QtMainloop (MainLoop * ml) :
+    ExternalSource ("Qt"),
       _please_exec (false), _qapp (nullptr), _qevtdispatcher (nullptr), already_awaken(false)
   {
     (*ml).set_another_source_wants_to_be_mainloop (this);

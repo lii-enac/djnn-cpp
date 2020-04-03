@@ -26,6 +26,7 @@ namespace djnn {
 	}
 
 	FreeRTOSMainloop::FreeRTOSMainloop (MainLoop * ml) :
+	ExternalSource ("FreeRTOS"),
       _please_exec (false), already_awaken(false)
 	{
 		(*ml).set_another_source_wants_to_be_mainloop (this);
