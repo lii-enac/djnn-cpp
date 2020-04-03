@@ -15,6 +15,11 @@ install homebrew (https://brew.sh/)
 then in a Terminal:
 ```
 brew install git make pkg-config
+brew tap lii-enac/repo
+brew install djnn-cpp
+
+or using sources
+
 git clone https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
@@ -58,7 +63,12 @@ sudo make installlibs includes
 ```
 MacOS:  
 ```
-brew install subversion pcre pkg-config  
+brew install subversion pcre pkg-config
+brew tap lii-enac/repo
+brew install libivy
+
+or using sources
+
 svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
 cd ivy-c/src  
 make -f Makefile.osx static-libs shared-libs  

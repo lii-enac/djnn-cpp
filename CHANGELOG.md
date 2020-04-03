@@ -9,6 +9,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - Update and improvement on memory performance.
 
+
+## [1.10.0] - 2020-04-03
+
+### NEW
+    - Created extra module : phidgets, crazyflie
+    - New module crazyflie
+    - New Deref component in Base module: dereferencement use in binding, connector, assignment
+    - New DerefString component 
+    - NEw Regex component: use of regular expression.
+    - New serial communication component in comms module
+    - New config.default.mk: Please remove your config.mk
+    - New Simple_binding component
+    - New Simple_assignement Component
+
+### Added
+    - Makefile: control verbosity with level: V= 0, 1, 2, 3, max
+    - Makefile: support for pkg-config
+    - Makefile: "make install" rules and "make install prefix="
+    - Makefile: ARFLAGS
+    - Makefile: new tree architecture in build_dir
+    - Makefile: depend on ivy-c pkgconfig (libivy-3.15)
+    - Makefile: stylized messages
+    - Makefile: add sanitizer undifined flags
+    - Added more support for FreeRTOS
+    - Added Cairo matrix, inverted_matrix for graphical shapes
+
+### Changed
+    - Changed find_component -> find_child
+    - Changed get_cpnt_type -> get_process_type
+    - Changed COMPONENT_T -> CONTAINER_T
+    - A lot of work on reducing size memory component, dynamic_cast
+    - Remade dependancy on symtable mechanism
+    - Remade error and warning messages
+    - Improved code, independence between modules
+    - Cleaned cade, namespaces and headers for compilation perf
+    - Improved Makefile and compilation
+    - Changed INSTALL.md
+
+### Fixed
+    - Fixed timer scheduling warning
+    - Fixed clock cancel warning
+    - Fixed radial gradient for Cairo
+    - Fixed exit on error macro
+
+
 ## [1.9.0] - 2020-03-13
     note: debut on changelog. This section has to be completed, if we have time. 
 
