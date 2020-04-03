@@ -29,7 +29,7 @@ namespace djnn {
     DRMWindow (Window *win, const std::string& title, double x, double y, double w, double h);
     virtual ~DRMWindow ();
     buff* get_next_buff ();
-    void page_flip ();
+    void flip_page ();
     void set_cursor (const std::string& path, int hotX, int hotY) {}
     Process* get_vblank () {
       if (_conn == nullptr)
@@ -37,14 +37,7 @@ namespace djnn {
       else
         return _conn->get_vblank ();
     }
-    bool is_waiting_vblank () {
-      if (_conn != nullptr)
-        return _conn->is_waiting_vblank ();
-      else {
-        error (nullptr, "Bad DRMWindow initialization");
-        return 0;
-      }
-    }
+    bool is_waiting_for_vblank () const;
     int set_dpy_connection ();
    protected:
     djnn::Window* _window;

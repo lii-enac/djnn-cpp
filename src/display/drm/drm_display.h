@@ -24,6 +24,10 @@
 #include "core/tree/int_property.h"
 #include "core/tree/bool_property.h"
 
+// dbg
+//#include <iostream>
+//#include "utils/debug.h"
+
 namespace djnn {
   typedef struct buff {
     uint32_t width;
@@ -50,18 +54,20 @@ namespace djnn {
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
-    int crtc () { return _crtc_id; }
+    int get_crtc () { return _crtc_id; }
     void set_crtc (int crtc) { _crtc_id = crtc; }
     void clean ();
     void update_pos ();
-    void page_flip ();
-    void vblank_event ();
+    void flip_page ();
+    void handle_vblank ();
     void init_connection (drmModeRes *res, drmModeConnector *drm_conn);
-    bool is_waiting_vblank () { return _waiting_vblank; }
+    int init_connection_crtc(uint32_t fb);
+    bool is_waiting_for_vblank () const { return _waiting_vblank; }
     bool is_connected () { return _connected.get_value (); }
     Process* get_vblank () { return &_vblank; }
     buff* get_next_buff ();
-    int fd () { return _fd; }
+    int get_fd () { return _fd; }
+    int cur_buff_id () { return _cur_buff; }
 
   private:
     int get_crtc (drmModeRes *res, drmModeConnector *drm_conn);
@@ -90,7 +96,7 @@ namespace djnn {
     public:
       VBlankAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
-      void impl_activate () { ((DRMDevice*) get_parent())->vblank (); }
+      void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
       void impl_deactivate () {}
     };
   public:
@@ -98,13 +104,13 @@ namespace djnn {
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}
-    int fd () { return _fd; }
-    void vblank ();
+    int get_fd () { return _fd; }
+    void read_vblank ();
   private:
     int _fd;
     IOFD _iofd;
-    VBlankAction _vblank_action;
-    Coupling _c_vblank;
+    VBlankAction _read_vblank_action;
+    Coupling _c_read_vblank;
   };
 
   class DRMUdev {

@@ -23,11 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <iostream>
-
-#define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define attr(a) #a ":" << a << " "
+//#include <iostream>
 
 #include "exec_env/exec_env-dev.h"
 #define _PERF_TEST 0
@@ -108,7 +104,7 @@ namespace djnn
   void
   CairoDRMWindow::ask_refresh ()
   {
-    UpdateDrawing::instance ()->add_window_for_refresh (_window);
+    //UpdateDrawing::instance ()->add_window_for_refresh (_window);
   }
 
   void
@@ -118,40 +114,40 @@ namespace djnn
     #if _PERF_TEST
       t1();
     #endif
+    
     if (!getBool(_conn->find_child ("connected")))
       return;
-    if (is_waiting_vblank()) {
+    if (is_waiting_for_vblank()) {
       _c_vblank->enable ();
-      return;
     }
     _c_vblank->disable ();
 
-    cairo_surface_t *drawing_surface, *picking_surface;
-    unsigned char *picking_data;
     CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
-
     auto dbackend = DisplayBackend::instance();
     dbackend->set_window (_window);
-
     backend->set_picking_view (_picking_view);
     _picking_view->init ();
+        
     buff* surface = get_next_buff ();
+
+    cairo_surface_t *drawing_surface, *picking_surface;
     drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) surface->map, CAIRO_FORMAT_ARGB32,
                                                            surface->width, surface->height, surface->stride);
-
     picking_surface = cairo_image_surface_create_for_data ((unsigned char*) _picking_data, CAIRO_FORMAT_ARGB32,
                                                            surface->width, surface->height, surface->stride);
-
     _my_cairo_surface->update (drawing_surface, picking_surface, surface->width, surface->height);
     cairo_surface_flush (drawing_surface);
     cairo_surface_flush (picking_surface);
-    picking_data = cairo_image_surface_get_data (picking_surface);
+
+    unsigned char *picking_data = cairo_image_surface_get_data (picking_surface);
     _picking_view->set_data (picking_data, surface->width, surface->height,
                              cairo_image_surface_get_stride (picking_surface));
 
-    page_flip ();
+    flip_page ();
+
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
+
     #if _PERF_TEST
       // print in RED
       cerr << "\033[1;31m";
@@ -161,6 +157,6 @@ namespace djnn
       draw_average = draw_total / draw_counter;
       cerr << "DRAW : " << draw_counter << " - avg: " << draw_average << endl;
       cerr << "\033[0m"  << endl;
-#endif
+    #endif
   }
 }

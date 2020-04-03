@@ -27,8 +27,13 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+// dbg
+// #include <iostream>
+// #include "utils/debug.h"
+// #include <thread> // this_thread
+
 #ifndef DEBUG
-#define DEBUG 1
+//#define DEBUG 1
 #endif
 
 using namespace std;
@@ -38,18 +43,22 @@ namespace djnn {
 
   DRMDevice::DRMDevice (Process *parent, const std::string& name, int fd, int min_width, int max_width,
                         int min_height, int max_height) : Process (name), _fd (fd),
-                        _iofd (fd), _vblank_action (this, "vblank_action"),
-                        _c_vblank (_iofd.find_child("readable"), ACTIVATION, &_vblank_action, ACTIVATION, true)
+                        _iofd (this, "vblank_fd", fd), _read_vblank_action (this, "read_vblank_action"),
+                        _c_read_vblank (_iofd.find_child("readable"), ACTIVATION, &_read_vblank_action, ACTIVATION, true)
   {
     new IntProperty (this, "min_width", min_width);
     new IntProperty (this, "max_width", max_width);
     new IntProperty (this, "min_height", min_height);
     new IntProperty (this, "max_height", max_height);
     new Set (this, "connectors");
-    _iofd.activate ();
     set_activation_state (ACTIVATED);
-    Graph::instance ().add_edge (_iofd.find_child("readable"), &_vblank_action);
+    _iofd.activate ();
+    //_read_vblank_action.set_activation_state (ACTIVATED);
+    //_c_read_vblank.enable ();
+    
+    Graph::instance ().add_edge (_iofd.find_child("readable"), &_read_vblank_action);
     Process::finalize_construction (parent, name);
+    //activate ();
   }
 
   DRMDevice::~DRMDevice ()
@@ -59,7 +68,7 @@ namespace djnn {
     delete find_child ("min_height");
     delete find_child ("max_height");
     delete find_child ("connectors");
-    Graph::instance ().remove_edge (_iofd.find_child("readable"), &_vblank_action);
+    Graph::instance ().remove_edge (_iofd.find_child("readable"), &_read_vblank_action);
     close (_fd);
   }
 
@@ -67,17 +76,17 @@ namespace djnn {
   page_flip_event (int fd, unsigned int frame, unsigned int sec, unsigned int usec, void *data)
   {
     DRMConnector* conn = (DRMConnector*) data;
-    conn->vblank_event ();
+    conn->handle_vblank ();
   }
 
   void
-  DRMDevice::vblank ()
+  DRMDevice::read_vblank ()
   {
     drmEventContext ev;
     memset (&ev, 0, sizeof (ev));
     ev.version = DRM_EVENT_CONTEXT_VERSION;
     ev.page_flip_handler = page_flip_event;
-    drmHandleEvent (_fd, &ev);
+    drmHandleEvent (_fd, &ev);    
   }
 
   DRMUdev::DRMUdev ()
@@ -117,7 +126,7 @@ namespace djnn {
     _udev_mon = udev_monitor_new_from_netlink (_udev_connection, "udev");
     udev_monitor_filter_add_match_subsystem_devtype (_udev_mon, "drm", 0);
     udev_monitor_enable_receiving (_udev_mon);
-    _udev_iofd = new IOFD (udev_monitor_get_fd (_udev_mon));
+    _udev_iofd = new IOFD (nullptr, "udev_iofd", udev_monitor_get_fd (_udev_mon));
     _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
     _readable_cpl = new Coupling (_udev_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);
@@ -211,7 +220,7 @@ namespace djnn {
     if (!drm_dev)
       return;
 
-    int fd = drm_dev->fd ();
+    int fd = drm_dev->get_fd ();
     drmModeRes *res = drmModeGetResources (fd);
     if (!res)
       return;

@@ -31,6 +31,9 @@
 #define DEBUG 0
 #endif
 
+// #include <iostream>
+// #include "utils/debug.h"
+
 using namespace std;
 
 namespace djnn {
@@ -57,7 +60,7 @@ namespace djnn {
         crtc = enc->crtc_id;
         /* check that crtc is not already in use by a previously initialized connector */
         for (auto c: conn_list) {
-          if (c->crtc() == crtc) {
+          if (c->get_crtc() == crtc) {
             crtc = -1;
             break;
           }
@@ -79,7 +82,7 @@ namespace djnn {
           continue;
         crtc = res->crtcs[j];
         for (auto c: conn_list) {
-          if (c->crtc() == crtc) {
+          if (c->get_crtc() == crtc) {
             crtc = -1;
             break;
           }
@@ -182,11 +185,17 @@ namespace djnn {
 
     _saved_crtc = drmModeGetCrtc (_fd, _crtc_id);
     buff *b = &_buffs[0];
-    ret = drmModeSetCrtc (_fd, _crtc_id, b->fb, 0, 0, &_conn, 1, &_mode);
+    ret = init_connection_crtc(b->fb);
     if (ret) {
-      error (this, string("failed to set crtc for connector ") + to_string(
+      error (this, string("failed to set mode for connector ") + to_string(
         drm_conn->connector_id));
     }
+  }
+
+  int
+  DRMConnector::init_connection_crtc(uint32_t fb)
+  {
+    return drmModeSetCrtc (_fd, _crtc_id, fb, 0, 0, &_conn, 1, &_mode);
   }
 
   DRMConnector::DRMConnector (Process *parent, const std::string& name, int fd, drmModeRes *res, drmModeConnector *drm_conn) : Process (name),
@@ -215,7 +224,7 @@ namespace djnn {
     Graph::instance ().add_edge (&_y, &_pos_action);
     _c_update_pos_x.enable ();
     _c_update_pos_y.enable ();
-     conn_list.push_back (this);
+    conn_list.push_back (this);
     Process::finalize_construction (parent, name);
     set_activation_state (ACTIVATED);
   }
@@ -227,7 +236,7 @@ namespace djnn {
   }
 
   void
-  DRMConnector::page_flip ()
+  DRMConnector::flip_page ()
   {
     buff* b = &_buffs[_cur_buff^1];
     drmModePageFlip (_fd, _crtc_id, b->fb, DRM_MODE_PAGE_FLIP_EVENT, this);
@@ -236,7 +245,7 @@ namespace djnn {
   }
 
   void
-  DRMConnector::vblank_event ()
+  DRMConnector::handle_vblank ()
   {
     _vblank.activate ();
     _waiting_vblank = false;

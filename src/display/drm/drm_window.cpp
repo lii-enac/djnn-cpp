@@ -19,15 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <iostream>
-
-#define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define attr(a) #a ":" << a << " "
-
 namespace djnn
 {
-
 
   DRMWindow::DRMWindow (djnn::Window* win, const std::string& title, double x, double y, double w, double h) :
       _window (win), _conn (nullptr), is_activated (false)
@@ -72,10 +65,21 @@ namespace djnn
   }
 
   void
-  DRMWindow::page_flip ()
+  DRMWindow::flip_page ()
   {
     if (_conn == nullptr)
       error (nullptr, "invalid connector");
-    _conn->page_flip ();
+    _conn->flip_page ();
   }
+
+  bool
+  DRMWindow::is_waiting_for_vblank () const {
+    if (_conn != nullptr)
+      return _conn->is_waiting_for_vblank ();
+    else {
+      error (nullptr, "Bad DRMWindow initialization");
+      return 0;
+    }
+  }
+
 }
