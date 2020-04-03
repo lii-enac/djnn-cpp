@@ -15,8 +15,8 @@
 
 #include "IvyAccess.h"
 
-#include "Ivy/ivy.h"
-#include "Ivy/ivyloop.h"
+#include "ivy.h" //TODO add Ivy/ after confinement
+#include "ivyloop.h" //TODO add Ivy/ after confinement
 #include "core/utils/error.h"
 #include "exec_env/main_loop.h"
 #include "utils/debug.h"
