@@ -17,6 +17,7 @@
 #include "core/serializer/serializer.h"
 #include "exec_env/djnn_time_manager.h"
 
+// dbg
 //#include <iostream>
 //#include "utils/debug.h"
 
@@ -73,7 +74,7 @@ namespace djnn
   // djnn_internal::Time::Timer
   void
   Clock::do_it(const djnn_internal::Time::duration& actualduration)
-  { //DBG;
+  {
     _elapsed.set_value ((double)actualduration.count()/1000, true);
     //auto sav_period = _period.get_value ();
     _tick.activate (); // OR ?? _tick.notify_activation ();

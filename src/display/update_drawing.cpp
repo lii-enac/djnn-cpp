@@ -6,14 +6,14 @@
 
 #include <algorithm>
 
-//#include <iostream>
-//#include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 namespace djnn {
 
   void 
   UpdateDrawing::RedrawAction::impl_activate () 
-  { //DBG;
+  {
     for (auto& w : _ud->get_win_list ()) {
       if (w != nullptr) {
         w->update ();
