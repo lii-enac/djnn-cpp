@@ -20,18 +20,14 @@ lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 # make static-libs shared-libs
 # sudo make install
 
-#TODO : activate after confinement
-#lib_cppflags = $(shell pkg-config ivy-c --cflags)
-#lib_ldflags = $(shell pkg-config ivy-c --libs)
-
 ifeq ($(os),Darwin)
-lib_cppflags = -I/opt/local/include $(shell pkg-config ivy-c --cflags) 
-lib_ldflags = -L/opt/local/lib -livy $(shell pkg-config ivy-c --libs)
+lib_cppflags = -I/opt/local/include
+lib_ldflags = -L/opt/local/lib -livy
 lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),Linux)
 # ODO: remove once .pkg made 
-lib_cppflags = -I/usr/local/include/Ivy
+lib_cppflags = -I/usr/local/include
 lib_ldflags = -L/usr/local/lib64 -livy -lpcre
 lib_srcs += $(local_dir)/serial.cpp
 endif
@@ -49,6 +45,10 @@ endif
 ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib-flags.mk
 endif
+
+#TODO : activate after confinement and put above
+lib_cppflags += $(shell pkg-config ivy-c --cflags)
+lib_ldflags += $(shell pkg-config ivy-c --libs)
 
 #ifeq ($(os),FreeRTOS)
 #include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
