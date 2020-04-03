@@ -568,8 +568,7 @@ $(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
 	@mkdir -p $(dir $@)
 	install -m 644 $< $@
 
-$(djnn_install_prefix)/lib/%.dylib: $(build_dir)/lib/%.dylib
-#$(djnn_install_prefix)/lib/%.$(lib_suffix): $(build_dir)/lib/%.$(lib_suffix)
+$(djnn_install_prefix)/lib/%$(lib_suffix): $(build_dir)/lib/%$(lib_suffix)
 	@mkdir -p $(dir $@)
 ifneq ($(prefix),)
 	install -m 644 $< $@
