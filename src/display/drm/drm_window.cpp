@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "core/utils/error.h"
+
 namespace djnn
 {
 
