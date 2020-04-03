@@ -153,7 +153,7 @@ YACC = bison -d
 endif
 
 ifeq ($(os),Darwin)
-CFLAGS += -g -MMD -Wall
+CFLAGS += -g -MMD -Wall -Wno-deprecated-declarations
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
