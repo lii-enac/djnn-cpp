@@ -23,6 +23,10 @@ lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 ifeq ($(os),Darwin)
 lib_cppflags = -I/opt/local/include/Ivy
 lib_ldflags = -L/opt/local/lib -livy
+#TODO : activate after confinement and put above AND REMOVE /ivy
+lib_cppflags += $(shell pkg-config ivy-c --cflags)/Ivy
+lib_ldflags += $(shell pkg-config ivy-c --libs)
+
 lib_srcs += $(local_dir)/serial.cpp
 endif
 ifeq ($(os),Linux)
@@ -46,9 +50,7 @@ ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib-flags.mk
 endif
 
-#TODO : activate after confinement and put above AND REMOVE /ivy
-lib_cppflags += $(shell pkg-config ivy-c --cflags)/Ivy
-lib_ldflags += $(shell pkg-config ivy-c --libs)
+
 
 #ifeq ($(os),FreeRTOS)
 #include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
