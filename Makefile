@@ -547,9 +547,13 @@ $(build_dir)/%.pc: %.pc.in
 # install 
 
 install_pkgconf: pkgconf
-	test -d $(pkg_config_install_prefix)/lib/pkgconfig || mkdir -p $(pkg_config_install_prefix)/lib/pkgconfig
-	install -m 644 $(build_dir)/djnn-cpp.pc	$(pkg_config_install_prefix)/lib/pkgconfig
+	test -d $(pkg_config_install_prefix)/lib/pkgconfig || mkdir -p $(pkg_config_install_prefix)/lib/pkgconfig	
+ifeq ($(prefix),)
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(pkg_config_install_prefix)/lib/pkgconfig
+else
+	install -m 644 $(build_dir)/djnn-cpp.pc	$(pkg_config_install_prefix)/lib/pkgconfig
+endif
+
 
 all_headers = $(shell find src -type f -name "*.h")
 all_headers_no_src = $(patsubst src/%,%,$(all_headers))
