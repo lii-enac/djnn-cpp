@@ -43,7 +43,11 @@ namespace djnn
   #define warning(p,msg) __warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
 
   #ifndef DBG
+  #ifdef DJNN_CRAZYFLIE
+  #define DBG DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");
+  #else
   #define DBG __debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
+  #endif
   #endif
 
   int __error (Process *p, const char* msg, const char* ctxinfo=nullptr);

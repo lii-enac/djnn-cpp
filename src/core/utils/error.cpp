@@ -99,8 +99,7 @@ namespace djnn
     std::cerr <<  file << ":" << function << ":" << line << std::endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
-    DJNN_DEBUG_PRINT( msg ) ;
-    DJNN_DEBUG_PRINT( "\n" ) ;
+    //DJNN_DEBUG_PRINT( std::string(file, function, line) ;
 #endif
   }
 }
