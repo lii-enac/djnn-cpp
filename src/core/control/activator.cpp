@@ -25,7 +25,7 @@ namespace djnn
       Process (name), _action (action)
   {
     if (_action == nullptr) {
-      error  (this, "action not found in activator " + name);
+      error  (this, std::string("action not found in activator ") + name);
       return;
     }
     Process::finalize_construction (parent, name);
@@ -36,7 +36,7 @@ namespace djnn
   {
     _action = action->find_child (spec);
     if (_action == nullptr) {
-      error  (this, "action not found in activator " + name);
+      error  (this, std::string("action not found in activator ") + name);
       return;
     }
     Process::finalize_construction (parent, name);

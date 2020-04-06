@@ -37,43 +37,70 @@ namespace djnn
   }
 
   int
-  __error (Process* p, const std::string& msg)
+  //__error (Process* p, const std::string& msg, const char* ctxinfo)
+  __error (Process* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    std::cerr << std::endl << std::endl << "djnn - ERROR: " << (p ? p->get_name () : "") << " - " << msg << std::endl << std::endl;
+    std::cerr << std::endl << std::endl;
+    if (p && p->debug_info ().lineno) 
+      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
+    if(ctxinfo)
+      std::cerr << ctxinfo << ":";
+    std::cerr << "djnn - ERROR: " << (p ? p->get_name () : "") << " - " << msg;
     
-    if (p) 
-      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
+    std::cerr << std::endl << std::endl;
+    
+    
 #endif
 #ifdef DJNN_CRAZYFLIE
-    DJNN_DEBUG_PRINT((msg+"\n").c_str());
+    DJNN_DEBUG_PRINT( msg ) ;
+    DJNN_DEBUG_PRINT( "\n" ) ;
 #endif
     return 1;
     //exit (0);
   }
+  
+  int
+  __error (Process* p, const std::string& msg, const char* ctxinfo)
+  {
+    return __error(p, msg.c_str(), ctxinfo);
+  }
 
   void
-  __warning (Process *p, const std::string& msg)
+  __warning (Process *p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    std::cerr << std::endl << std::endl << "djnn - WARNING: " << (p ? p->get_name () : "") << " - " << msg << std::endl << std::endl;
-    
-    if (p) 
-      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << std::endl;
+    auto & out = std::cerr;
+    out << std::endl << std::endl;
+    if (p && p->debug_info ().lineno) 
+      out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
+    if(ctxinfo)
+      out << ctxinfo << ":";
+    out << "djnn - WARNING: " << (p ? p->get_name () : "") << " - " << msg;
+    out << std::endl << std::endl;
+
 #endif
 #ifdef DJNN_CRAZYFLIE
-    DJNN_DEBUG_PRINT( (msg+"\n").c_str());
+    DJNN_DEBUG_PRINT( msg ) ;
+    DJNN_DEBUG_PRINT( "\n" ) ;
 #endif
   }
 
   void
-  __debug (const std::string& msg)
+  __warning (Process* p, const std::string& msg, const char* ctxinfo)
+  {
+    __warning(p, msg.c_str(), ctxinfo);
+  }
+
+  void
+  __debug (const char* file, const char* function, const char* line)
   {
 #ifndef DJNN_NO_DEBUG
-    std::cerr <<  msg << std::endl;
+    std::cerr <<  file << ":" << function << ":" << line << std::endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
-    DJNN_DEBUG_PRINT( (msg+"\n").c_str());
+    DJNN_DEBUG_PRINT( msg ) ;
+    DJNN_DEBUG_PRINT( "\n" ) ;
 #endif
   }
 }
