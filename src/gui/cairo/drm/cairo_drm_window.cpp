@@ -20,8 +20,6 @@
 #include "display/abstract_display.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 //#include <iostream>
 
@@ -61,6 +59,7 @@ namespace djnn
     _picking_view = new CairoPickingView (_window);
     WinImpl::set_picking_view (_picking_view);
     _my_cairo_surface = new MyCairoSurface (_window);
+
     is_activated = true;
     _c_display = new Coupling (_window->find_child ("display"), ACTIVATION, &_change_dpy_action, ACTIVATION, true);
     if (_window->get_display () != nullptr && _window->get_display () != _conn)
