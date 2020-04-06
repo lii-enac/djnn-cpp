@@ -74,6 +74,14 @@ namespace djnn
     _conn->flip_page ();
   }
 
+  void
+  DRMWindow::flip_page_fb (uint32_t fb)
+  {
+    if (_conn == nullptr)
+      error (nullptr, "invalid connector");
+    _conn->flip_page_fb (fb);
+  }
+
   bool
   DRMWindow::is_waiting_for_vblank () const {
     if (_conn != nullptr)

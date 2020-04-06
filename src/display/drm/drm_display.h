@@ -58,7 +58,9 @@ namespace djnn {
     void set_crtc (int crtc) { _crtc_id = crtc; }
     void clean ();
     void update_pos ();
+    void update_pos_fb (uint32_t fb);
     void flip_page ();
+    void flip_page_fb (uint32_t fb);
     void handle_vblank ();
     void init_connection (drmModeRes *res, drmModeConnector *drm_conn);
     int init_connection_crtc(uint32_t fb);
@@ -67,7 +69,8 @@ namespace djnn {
     Process* get_vblank () { return &_vblank; }
     buff* get_next_buff ();
     int get_fd () { return _fd; }
-    int cur_buff_id () { return _cur_buff; }
+    int get_cur_buff_id () { return _cur_buff; }
+    int get_next_buff_id () { return _cur_buff^1; }
 
   private:
     int get_crtc (drmModeRes *res, drmModeConnector *drm_conn);

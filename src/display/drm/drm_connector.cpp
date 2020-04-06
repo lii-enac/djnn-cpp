@@ -31,8 +31,8 @@
 #define DEBUG 0
 #endif
 
-// #include <iostream>
-// #include "utils/debug.h"
+#include <iostream>
+#include "utils/debug.h"
 
 using namespace std;
 
@@ -239,7 +239,18 @@ namespace djnn {
   DRMConnector::flip_page ()
   {
     buff* b = &_buffs[_cur_buff^1];
-    drmModePageFlip (_fd, _crtc_id, b->fb, DRM_MODE_PAGE_FLIP_EVENT, this);
+    /*drmModePageFlip (_fd, _crtc_id, b->fb, DRM_MODE_PAGE_FLIP_EVENT, this);
+    _cur_buff ^= 1;
+    _waiting_vblank = true;*/
+    flip_page_fb(b->fb);
+  }
+
+  void
+  DRMConnector::flip_page_fb (uint32_t fb)
+  {
+    //DBG;
+    //buff* b = &_buffs[_cur_buff^1];
+    drmModePageFlip (_fd, _crtc_id, fb, DRM_MODE_PAGE_FLIP_EVENT, this);
     _cur_buff ^= 1;
     _waiting_vblank = true;
   }
@@ -247,6 +258,7 @@ namespace djnn {
   void
   DRMConnector::handle_vblank ()
   {
+    //DBG;
     _vblank.activate ();
     _waiting_vblank = false;
   }
@@ -255,6 +267,15 @@ namespace djnn {
   DRMConnector::update_pos () {
     buff *b = &_buffs[0];
     int ret = drmModeSetCrtc (_fd, _crtc_id, b->fb, _x.get_value (), _y.get_value (), &_conn, 1, &_mode);
+    if (ret) {
+      error (this, "failed to set crtc for connector");
+    }
+  }
+
+  void
+  DRMConnector::update_pos_fb (uint32_t fb) {
+    //buff *b = &_buffs[0];
+    int ret = drmModeSetCrtc (_fd, _crtc_id, fb, _x.get_value (), _y.get_value (), &_conn, 1, &_mode);
     if (ret) {
       error (this, "failed to set crtc for connector");
     }

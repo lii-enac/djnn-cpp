@@ -111,8 +111,7 @@ namespace djnn {
 
     udev_list_entry_foreach (dev_list_entry, dev_list) {
       syspath = udev_list_entry_get_name (dev_list_entry);
-      dev = udev_device_new_from_syspath (_udev_connection,
-       syspath);
+      dev = udev_device_new_from_syspath (_udev_connection, syspath);
       filename = udev_device_get_devnode (dev);
       if (dev) {
         handle_drm_device (filename, dev);
