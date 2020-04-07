@@ -175,6 +175,50 @@ namespace djnn
     _cdst_to_src.disable ();
   }
 
+  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path) :
+      AbstractDeref (parent, name, ref, path),
+      _value (this, "value", 0),
+      _src (nullptr),
+      _cdst_to_src (&_value, ACTIVATION, &_set_src, ACTIVATION, true)
+  {
+    AbstractDeref::update_src ();
+    Process::finalize_construction (parent, name);
+  }
+
+  void
+  DerefDouble::set_to_dst ()
+  {
+    if (_src)
+      _value.set_value (_src->get_double_value (), true);
+  }
+  void
+  DerefDouble::set_to_src ()
+  {
+    if (_src)
+      _src->set_value (_value.get_value (), true);
+  }
+
+  void
+  DerefDouble::change_src (Process *src)
+  {
+    _src = dynamic_cast<AbstractProperty*> (src);
+  }
+
+  void
+  DerefDouble::impl_activate ()
+  {
+    AbstractDeref::impl_activate ();
+    _cdst_to_src.enable ();
+  }
+
+  void
+  DerefDouble::impl_deactivate ()
+  {
+    AbstractDeref::impl_deactivate ();
+    _cdst_to_src.disable ();
+  }
+
+
 #ifndef DJNN_NO_SERIALIZE
   void
   Deref::serialize (const std::string& type)
@@ -197,6 +241,20 @@ namespace djnn
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:deref-string");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("path", _path.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+
+  }
+  void
+  DerefDouble::serialize (const std::string& type)
+  {
+
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:deref-double");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("path", _path.get_value ());
     AbstractSerializer::serializer->end ();

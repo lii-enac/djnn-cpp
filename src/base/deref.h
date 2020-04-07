@@ -20,6 +20,7 @@
 #include "core/tree/spike.h"
 #include "core/tree/ref_property.h"
 #include "core/tree/text_property.h"
+#include "core/tree/double_property.h"
 #include "core/ontology/coupling.h"
 
 namespace djnn
@@ -125,4 +126,22 @@ namespace djnn
       AbstractProperty *_src;
       Coupling _cdst_to_src;
   };
+  class DerefDouble : public AbstractDeref
+    {
+      public:
+        DerefDouble (Process *parent, const std::string& name, Process *ref_prop, const std::string& path);
+        virtual ~DerefDouble () {}
+        void impl_activate () override;
+        void impl_deactivate () override;
+        void set_to_src () override;
+        void set_to_dst () override;
+        void change_src (Process* src) override;
+  #ifndef DJNN_NO_SERIALIZE
+        void serialize (const std::string& type) override;
+  #endif
+      private:
+        DoubleProperty _value;
+        AbstractProperty *_src;
+        Coupling _cdst_to_src;
+    };
 }
