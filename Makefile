@@ -33,7 +33,7 @@ config.mk:
 
 MAJOR = 1
 MINOR = 12
-MINOR2 = 0 
+MINOR2 = 0
 
 include config.default.mk
 -include config.mk
@@ -578,6 +578,36 @@ install: all install_pkgconf install_headers install_libs
 
 install_clear:
 	rm -rf $(djnn_install_prefix)
+
+#----------------------------------------
+# package builder
+
+#deb
+
+#note: 
+# use dpkg-depcheck -d make to find out all dependency on djnn
+# last tryon ubuntu 18_04: 
+#      	qtbase5-dev-tools, pkg-config, bison, qtchooser, flex, m4
+# install with:
+#		sudo dpkg -i djnn-cpp_x.x.x.deb
+# remove with:
+#		sudo dpkg -r djnn-cpp
+deb_prefix_version = build/deb/djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
+deb_prefix = $(deb_prefix_version)/usr
+deb:	
+	make -j6  install prefix=$(deb_prefix)
+	test -d $(deb_prefix_version)/DEBIAN || mkdir -p $(deb_prefix_version)/DEBIAN
+	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' deb/control > $(deb_prefix_version)/DEBIAN/control
+# remove debug symbol from library
+	cd $(deb_prefix)/lib ; strip --strip-debug --strip-unneeded *.so
+# remove rpath from library
+	cd $(deb_prefix)/lib ; chrpath -d *.so
+# build package with fakeroot
+	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
+# check integrity of the build package. We still have error
+#	cd "build/deb" ; lintian djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).deb
+.PHONY: deb
+
 
 # ---------------------------------------
 # package dependency installation

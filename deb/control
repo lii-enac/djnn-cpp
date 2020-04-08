@@ -1,0 +1,9 @@
+Package: djnn-cpp
+Version: @MAJOR@.@MINOR@.@MINOR2@
+Section: libs
+Priority: optional
+Architecture: amd64
+Depends:  qtbase5-dev-tools, pkg-config, bison, flex,  m4
+Maintainer: Mathieu Poirier <mathieu.poirier@enac.fr>
+Description:
+ Library for interactive programming
