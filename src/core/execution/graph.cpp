@@ -103,7 +103,7 @@ namespace djnn
     MARKED
   };
 
-  Vertex::Vertex (Process* p) :
+  Vertex::Vertex (CoreProcess* p) :
       _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
   {
     //std::cerr << __PRETTY_FUNCTION__ << " vertex:" << this << " process:" << p << " " << (p->get_parent() ? p->get_parent()->get_name () + "/"  : "") << p->get_name() << std::endl; 
@@ -188,9 +188,10 @@ namespace djnn
   Vertex::print_vertex () const
   {
 #ifndef DJNN_NO_DEBUG
+    auto * pp = dynamic_cast<Process*>(_process);
     std::cout << "vertex (" <<
-    ( _process->get_parent () ? _process->get_parent ()->get_name () + "/" : "") <<
-    _process->get_name () << ") - [" << 
+    ( pp->get_parent () ? pp->get_parent ()->get_name () + "/" : "") <<
+    pp->get_name () << ") - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
@@ -198,7 +199,8 @@ namespace djnn
     else {
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
-         std::cout << ( e->_process->get_parent () ?  e->_process->get_parent ()->get_name () + "/" : "" ) << e->_process->get_name () << " [x"
+         auto * ppe = dynamic_cast<Process*>(e->_process);
+         if(ppe) std::cout << ( ppe->get_parent () ?  ppe->get_parent ()->get_name () + "/" : "" ) << ppe->get_name () << " [x"
          << result->second << "] \t" ;
       }
       std::cout << std::endl;
@@ -248,7 +250,7 @@ namespace djnn
   }
 
   Vertex*
-  Graph::add_vertex (Process* c)
+  Graph::add_vertex (CoreProcess* c)
   {
     Vertex* v = new Vertex (c);
     _vertices.push_back (v);
@@ -258,7 +260,7 @@ namespace djnn
   }
 
   void
-  Graph::add_output_node (Process* c)
+  Graph::add_output_node (CoreProcess* c)
   {
     /* check if c is already in the graph */
     for (auto v : _output_nodes) {
@@ -270,7 +272,7 @@ namespace djnn
   }
 
   void
-  Graph::remove_output_node (Process* c)
+  Graph::remove_output_node (CoreProcess* c)
   {
     //remove_if 
     Vertex::vertices_t::iterator new_end = _output_nodes.end ();
@@ -289,7 +291,7 @@ namespace djnn
   }
 
   void
-  Graph::add_edge (Process* src, Process* dst)
+  Graph::add_edge (CoreProcess* src, CoreProcess* dst)
   {
 
     // std::cerr << "add_edge: " <<
@@ -313,7 +315,7 @@ namespace djnn
   }
 
   void
-  Graph::remove_edge (Process* p_src, Process* p_dst)
+  Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
   {
 
     // std::cerr << "remove_edge: " <<
@@ -334,9 +336,11 @@ namespace djnn
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
 
 #ifndef DJNN_NO_DEBUG
+      auto * ppsrc = dynamic_cast<Process*>(p_src); 
+      auto * ppdst = dynamic_cast<Process*>(p_src);
       std::cerr << "Graph remove_edge: " <<
-      get_hierarchy_name (p_src) << "  " << vs << " - " << 
-      get_hierarchy_name (p_dst) << "  " << vd << endl;
+      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << 
+      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
 #endif
       //assert(0);
       return;
@@ -383,9 +387,10 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     for (auto v : _sorted_vertices) {
-      if (v->get_process ()->get_parent())
-        cerr << v->get_process ()->get_parent()->get_name () << "/";
-      cerr << v->get_process  ()->get_name () << " (" << v->get_timestamp () << ")\n";
+      auto * pp = dynamic_cast<Process*>(v->get_process ());
+      if (pp && pp->get_parent())
+        cerr << pp->get_parent()->get_name () << "/";
+      cerr << pp->get_name () << " (" << v->get_timestamp () << ")\n";
     }
 #endif
   }
@@ -478,7 +483,7 @@ namespace djnn
   }
 
   void
-  Graph::schedule_activation (Process *p)
+  Graph::schedule_activation (CoreProcess *p)
   {
     _scheduled_activation_processes.push_back(p);
   }
@@ -492,7 +497,7 @@ namespace djnn
     
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     {
-      std::map<Process*, int> already_done;
+      std::map<CoreProcess*, int> already_done;
       for (auto p: _scheduled_activation_processes) {
         if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();

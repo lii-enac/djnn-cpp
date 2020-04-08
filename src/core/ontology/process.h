@@ -80,12 +80,10 @@ namespace djnn {
   class AbstractGShape;
   class PickAnalyticalContext;
 
-  class Process
-  {
-  public:
-    Process (const std::string& name, bool model = false);
-    virtual ~Process ();
-    virtual process_type_e get_process_type () const { return UNDEFINED_T; }
+  class CoreProcess {
+    public:
+    CoreProcess (bool model = false);
+    virtual ~CoreProcess ();
 
     // main public API
     void activate ();
@@ -103,69 +101,17 @@ namespace djnn {
     virtual void coupling_activation_hook () {}
     virtual void coupling_deactivation_hook () {}
     void         notify_activation ();
-    void         schedule_activation ();
-    void         schedule_delete ();
     void         notify_deactivation ();
-    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
-    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
-    void set_state_dependency (Process* s) { _state_dependency = s; }
-    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
-    virtual void     set_activation_source (Process*) {}
-    virtual Process* get_activation_source () { return nullptr; }
+    void         schedule_activation (); // for gui picking only: why is there a problem?
+    void         schedule_delete ();
 
     // execution graph
-    void     set_vertex (Vertex *v) 
-    { 
-      if (_vertex && v && _vertex != v) print_set_vertex_err_msg (v);
-      _vertex = v; 
-    }
-    void print_set_vertex_err_msg (Vertex *v);
     Vertex*  vertex () { return _vertex; }
-
-    // actions to be redefined by subclasses
-    virtual     void update_drawing () {}
-    virtual     void draw () {}
-    virtual     void pick () {}
-    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
-    virtual Process* clone ();
-
-    // tree, component, symtable 
-    Process* get_parent () { return _parent; }
-    const Process* get_parent () const { return _parent; }
-    virtual void   set_parent (Process* p);
-    virtual void   add_child (Process* c, const std::string& name);
-    virtual void   remove_child (Process* c);
-    virtual void   remove_child (const std::string& name);
-    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
-    friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual Process* find_child (const std::string&);
-    virtual Process* find_child (int /*index*/) { return nullptr; }
-    static  Process* find_child (Process* p, const std::string& path);
-    virtual const std::string& find_child_name (const Process* child) const; // WARNING : low efficiency function cause by linear search. use with care !
-    
-    typedef std::map<std::string, Process*> symtable_t;
-    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
-    symtable_t::iterator children_end () { return _symtable.end (); }
-    bool children_empty () { return _symtable.empty (); }
-    size_t children_size () const { return _symtable.size(); }
-    symtable_t& children () { return _symtable; }
-    const symtable_t& children () const { return _symtable; } 
-    
-    void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
-    void remove_symbol (const std::string& name);
-
-  private:
-    
-    symtable_t& symtable () { return _symtable; }
-    const symtable_t& symtable () const { return _symtable; }  
-
-  public:
-    static std::string default_name;
-    const std::string& get_name () const;
-    
-    // data
-    void     set_data (Process* data);
-    Process* get_data ();
+#ifdef DJNN_NO_DEBUG
+    void     set_vertex (Vertex *v) { _vertex = v; }
+#else
+    void     set_vertex (Vertex *v);
+#endif
 
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
      std::pair<int, int> __nb_activation;
@@ -175,8 +121,6 @@ namespace djnn {
     #endif
 
   protected:
-    void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
-
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;
     virtual void post_activate ();
@@ -186,22 +130,17 @@ namespace djnn {
     virtual void post_deactivate ();
 
   private:
-    static long int _nb_anonymous;
-
-// >>instance fields start here
-  private:
+    // >>instance fields start here
     Vertex *_vertex;
     couplings_t _activation_couplings;
     couplings_t _deactivation_couplings;
-    Process *_parent;
-    Process *_state_dependency;
-    Process *_data;
     unsigned int _bitset;
-    symtable_t _symtable;
-    //string _name;
-  // <<instance fields end here
+    // <<instance fields end here
 
   public:
+    virtual CoreProcess* clone ();
+    virtual process_type_e get_process_type () const { return UNDEFINED_T; }
+
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
 #endif
@@ -218,7 +157,6 @@ namespace djnn {
 #else
     static DebugInfo _dbg_info;
 #endif
-
 
   // bitfield
   public:
@@ -262,6 +200,90 @@ namespace djnn {
           case DEACTIVATION:    deactivate (); break;
         }
     }
+
+  };
+
+  class Process : public CoreProcess
+  {
+  public:
+    Process (const std::string& name, bool model = false);
+    virtual ~Process ();
+    virtual Process* clone () override { CoreProcess::clone (); return nullptr; }
+    
+    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
+    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
+    void set_state_dependency (Process* s) { _state_dependency = s; }
+    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
+    virtual void     set_activation_source (Process*) {}
+    virtual Process* get_activation_source () { return nullptr; }
+    
+    // actions to be redefined by subclasses
+    virtual     void update_drawing () {}
+    virtual     void draw () {}
+    virtual     void pick () {}
+    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
+    
+    // tree, component, symtable 
+    Process* get_parent () { return _parent; }
+    virtual void   set_parent (Process* p);
+    virtual void   add_child (Process* c, const std::string& name);
+    virtual void   remove_child (Process* c);
+    virtual void   remove_child (const std::string& name);
+    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
+    friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
+    virtual Process* find_child (const std::string&);
+    virtual Process* find_child (int /*index*/) { return nullptr; }
+    static  Process* find_child (Process* p, const std::string& path);
+    virtual const std::string& find_child_name (const Process* child) const; // WARNING : low efficiency function cause by linear search. use with care !
+    
+    typedef std::map<std::string, Process*> symtable_t;
+    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
+    symtable_t::iterator children_end () { return _symtable.end (); }
+    bool children_empty () { return _symtable.empty (); }
+    size_t children_size () const { return _symtable.size(); }
+    symtable_t& children () { return _symtable; }
+    const symtable_t& children () const { return _symtable; } 
+    
+    void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
+    void remove_symbol (const std::string& name);
+  
+  protected:
+    virtual bool pre_activate () override;
+
+  private:
+    
+    symtable_t& symtable () { return _symtable; }
+    const symtable_t& symtable () const { return _symtable; }  
+
+  public:
+    static std::string default_name;
+    const std::string& get_name () const;
+
+    #ifndef DJNN_NO_DEBUG
+    virtual  void dump (int level=0) override;
+    #endif
+    
+    // data
+    void     set_data (Process* data);
+    Process* get_data ();
+
+  protected:
+    void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
+
+  private:
+    static long int _nb_anonymous;
+
+// >>instance fields start here
+  private:
+    
+    Process *_parent;
+    Process *_state_dependency;
+    Process *_data;
+    symtable_t _symtable;
+    //string _name;
+  // <<instance fields end here
+
+
   };
 
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE
@@ -281,6 +303,6 @@ namespace djnn {
 
   void add_state_dependency (Process *_parent, Process *p);
   void remove_state_dependency (Process *_parent, Process *p);
-  inline Process* clone (Process *p) { return p->clone (); }
+  inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 }

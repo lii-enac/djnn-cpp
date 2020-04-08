@@ -27,6 +27,8 @@
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
+#include <boost/core/demangle.hpp>
+#include <typeinfo>
 #endif
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
@@ -55,18 +57,15 @@ namespace djnn
   string Process::default_name = "noname";
   static map<const Process*, string> parentless_names;
 
-  Process::Process (const std::string& name, bool model) :
-      _vertex (nullptr), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
+  CoreProcess::CoreProcess (bool model)
+  : _vertex (nullptr)
   {
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
   
-#ifdef DJNN_NO_DEBUG
-#else
+#ifndef DJNN_NO_DEBUG
     if (Context::instance ()->line () != -1) {
-      //_dbg_info = std::string ("File: ") + Context::instance ()->filename () + " line: " + std::to_string (Context::instance ()->line ());
-      //_dbg_info = Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ());
       _dbg_info = {Context::instance ()->filename (), Context::instance ()->line ()};
     } else {
       _dbg_info = {"no dbg info",0};
@@ -77,6 +76,11 @@ namespace djnn
     __creation_stat_order.push_back (std::make_pair(this, __creation_num++));
     __position_in_creation = std::prev(__creation_stat_order.end ());
     #endif
+  }
+
+  Process::Process (const std::string& name, bool model)
+  : CoreProcess(model), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
+  {
   }
 
   void
@@ -97,7 +101,7 @@ namespace djnn
     }
   }
 
-  Process::~Process ()
+  CoreProcess::~CoreProcess ()
   {
     
     for (auto c : _activation_couplings) {
@@ -115,21 +119,27 @@ namespace djnn
     */
     if (_vertex != nullptr){
 #ifndef DJNN_NO_DEBUG
-       warning ( nullptr, " Process::~Process - " +  get_hierarchy_name (this)  + " - _vertex is NOT NULL and it should\n");
+       auto * pp = dynamic_cast<Process*>(this);
+       warning ( nullptr, " Process::~Process - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
        for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
        for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
 #endif
        _vertex->invalidate ();
     }
 
-    #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
        " - " + (this->get_parent () ? this->get_parent ()->get_name () : "") + "/" + this->get_name ();
 
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);
-    #endif
+#endif
+  }
 
+   
+
+  Process::~Process ()
+  {
     /* make sure everything is wiped out the symtable */
     children ().clear ();
   }
@@ -138,7 +148,7 @@ namespace djnn
   // main activation API
 
   void
-  Process::activate ()
+  CoreProcess::activate ()
   {
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     __nb_activation.first++;
@@ -153,7 +163,7 @@ namespace djnn
   }
 
   void
-  Process::deactivate ()
+  CoreProcess::deactivate ()
   {
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     __nb_activation.second++;
@@ -167,7 +177,7 @@ namespace djnn
   }
 
   bool
-  Process::pre_activate ()
+  CoreProcess::pre_activate ()
   {
     /* no activation if :
      * 1 - already activated
@@ -176,18 +186,31 @@ namespace djnn
      */
     if (
            get_activation_state () != DEACTIVATED
-        || (
-             get_parent () != nullptr
-             && !get_parent ()->somehow_activating()
-           )
        )
       return false;
     set_activation_state (ACTIVATING);
     return true;
   }
 
+  bool
+  Process::pre_activate ()
+  {
+    /* no activation if :
+     * 1 - already activated
+     * 2 - is activating
+     * 3 - the parent exists and is stopped
+     */
+    if ((
+             get_parent () != nullptr
+             && !get_parent ()->somehow_activating()
+           )
+       )
+       return false;
+    return CoreProcess::pre_activate ();
+  }
+
   void
-  Process::post_activate ()
+  CoreProcess::post_activate ()
   {
     notify_activation ();
     set_activation_state (ACTIVATED);
@@ -195,15 +218,15 @@ namespace djnn
   }
 
   void 
-  Process::post_activate_auto_deactivate ()
+  CoreProcess::post_activate_auto_deactivate ()
   {
     //TODO: inline function in process.h
-    Process::post_activate ();
+    post_activate ();
     deactivate ();
   }
 
   bool
-  Process::pre_deactivate ()
+  CoreProcess::pre_deactivate ()
   {
     if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (get_parent () != 0 && !get_parent ()->somehow_deactivating() )) like pre_activate ? => OK
       return false;
@@ -212,7 +235,7 @@ namespace djnn
   }
 
   void
-  Process::post_deactivate ()
+  CoreProcess::post_deactivate ()
   {
     notify_deactivation ();
     set_activation_state (DEACTIVATED);
@@ -220,7 +243,7 @@ namespace djnn
   }
 
   void
-  Process::notify_activation ()
+  CoreProcess::notify_activation ()
   {
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
@@ -238,19 +261,19 @@ namespace djnn
   }
 
   void
-  Process::schedule_activation ()
+  CoreProcess::schedule_activation ()
   {
     Graph::instance().schedule_activation (this);
   }
 
   void
-  Process::schedule_delete ()
+  CoreProcess::schedule_delete ()
   {
     Graph::instance().schedule_delete (this);
   }
 
   void
-  Process::notify_deactivation ()
+  CoreProcess::notify_deactivation ()
   {
     /* WARNING: disputable choice.
      * The immediate propagation could disable some couplings.
@@ -271,19 +294,19 @@ namespace djnn
   // coupling
 
   void
-  Process::add_activation_coupling (Coupling* c)
+  CoreProcess::add_activation_coupling (Coupling* c)
   {
     _activation_couplings.push_back (c);
   }
 
   void
-  Process::add_deactivation_coupling (Coupling* c)
+  CoreProcess::add_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.push_back (c);
   }
 
   void
-  Process::remove_activation_coupling (Coupling* c)
+  CoreProcess::remove_activation_coupling (Coupling* c)
   {
     _activation_couplings.erase (
       std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
@@ -292,13 +315,30 @@ namespace djnn
   }
 
   void
-  Process::remove_deactivation_coupling (Coupling* c)
+  CoreProcess::remove_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.erase (
       std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),
       _deactivation_couplings.end ()
     );
   }
+
+#ifndef DJNN_NO_DEBUG
+  void
+  CoreProcess::set_vertex (Vertex *v) 
+  { 
+    if (_vertex && v && _vertex != v)
+      std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ;
+    //print_set_vertex_err_msg (v);
+    _vertex = v; 
+  }
+  /*void
+  Process::print_set_vertex_err_msg (Vertex* v)
+  {
+    
+  }*/
+#endif
+
 
   // tree, component, symtable
 
@@ -477,14 +517,6 @@ namespace djnn
   }
 
   void
-  Process::print_set_vertex_err_msg (Vertex* v)
-  {
-#ifndef DJNN_NO_DEBUG
-    std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ;
-#endif
-  }
-
-  void
   alias_children (Process* p, Process* from)
   {
     Process::symtable_t& symtable = from->children ();
@@ -544,15 +576,18 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Process::serialize (const std::string& format) {
-    cout << "serialize is not yet implemented for '" << get_name () << "'" << endl;
+  CoreProcess::serialize (const std::string& format) {
+    auto * pp = dynamic_cast<Process*>(this);
+    cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
   }
 #endif
   
-  Process*
-  Process::clone () {
+  CoreProcess*
+  CoreProcess::clone () {
 #ifndef DJNN_NO_DEBUG
-    cout << "clone not implemented for " << get_name () << "\n";
+    auto * pp = dynamic_cast<Process*>(this);
+    cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
+
 #endif
     return nullptr;
   };
@@ -560,10 +595,16 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
   static int indent = -1;
 
+  void
+  CoreProcess::dump (int level)
+  {
+      cout << "CoreProcess " << this << endl;
+  }
 
   void
   Process::dump (int level)
   {
+    //Process *pp = dynamic_cast<Process*>(this);
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/

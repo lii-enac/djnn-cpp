@@ -16,6 +16,14 @@
             }
         },
         {
+            "label": "core",
+            "type": "shell",
+            "command": "make -j core",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
             "label": "static",
             "type": "shell",
             "command": "make -j static",

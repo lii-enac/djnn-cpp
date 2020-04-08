@@ -50,10 +50,10 @@ namespace djnn
   #endif
   #endif
 
-  int __error (Process *p, const char* msg, const char* ctxinfo=nullptr);
-  int __error (Process *p, const std::string& msg, const char* ctxinfo=nullptr);
-  void __warning (Process *p, const char* msg, const char* ctxinfo=nullptr);
-  void __warning (Process *p, const std::string& msg, const char* ctxinfo=nullptr);
+  int __error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  int __error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
+  void __warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  void __warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
 
   void __debug (const char* file, const char* function, const char* lineno);
 
