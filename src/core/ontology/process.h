@@ -97,17 +97,17 @@ namespace djnn {
     const couplings_t& get_activation_couplings () const { return _activation_couplings; }
     const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
     bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
-    virtual void coupling_activation_hook () {};
-    virtual void coupling_deactivation_hook () {};
+    virtual void coupling_activation_hook () {}
+    virtual void coupling_deactivation_hook () {}
     void         notify_activation ();
     void         schedule_activation ();
     void         schedule_delete ();
     void         notify_deactivation ();
-    virtual void notify_change ( unsigned int notify_mask_ ) {} // pseudo, graph-less coupling for efficiency reasons
+    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
     Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
     void set_state_dependency (Process* s) { _state_dependency = s; }
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
-    virtual void     set_activation_source (Process* src) {}
+    virtual void     set_activation_source (Process*) {}
     virtual Process* get_activation_source () { return nullptr; }
 
     // execution graph
@@ -117,7 +117,7 @@ namespace djnn {
       _vertex = v; 
     }
     void print_set_vertex_err_msg (Vertex *v);
-    Vertex*  vertex () { return _vertex; };
+    Vertex*  vertex () { return _vertex; }
 
     // actions to be redefined by subclasses
     virtual     void update_drawing () {}
@@ -132,10 +132,10 @@ namespace djnn {
     virtual void   add_child (Process* c, const std::string& name);
     virtual void   remove_child (Process* c);
     virtual void   remove_child (const std::string& name);
-    virtual void     move_child (Process *child_to_move, child_position_e spec, Process *child = 0) {}
+    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
     friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
     virtual Process* find_child (const std::string&);
-    virtual Process* find_child (int index) { return nullptr; }
+    virtual Process* find_child (int /*index*/) { return nullptr; }
     static  Process* find_child (Process* p, const std::string& path);
     virtual const std::string& find_child_name (const Process* child) const; // WARNING : low efficiency function cause by linear search. use with care !
     
@@ -226,7 +226,7 @@ namespace djnn {
     };
 
     int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
-    void set_bitset (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
+    void set_bitset (bit_mask MASK, bit_shift SHIFT, unsigned int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
 
   public:
     bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }

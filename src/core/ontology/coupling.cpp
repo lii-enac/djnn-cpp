@@ -26,11 +26,11 @@ namespace djnn
   Coupling::init (Process* src, activation_flag_e src_flag, Process* dst,
                            activation_flag_e dst_flag, bool immediate_propagation)
   {
-    if (src == 0) {
+    if (src == nullptr) {
       warning(src, "the source of a coupling cannot be null");
       return;
     }
-    if (dst == 0) {
+    if (dst == nullptr) {
       warning(dst, "the destination of a coupling cannot be null");
       return;
     }
@@ -63,7 +63,8 @@ namespace djnn
     case DEACTIVATION:
       _src->remove_deactivation_coupling (this);
       break;
-    default: break;
+    case NONE_ACTIVATION:
+      break;
     }
   }
 
@@ -104,7 +105,8 @@ namespace djnn
           if (_src !=nullptr) _src->remove_deactivation_coupling (this);
           if ( src !=nullptr) src->add_deactivation_coupling (this);
         break;
-        default: break;
+        case NONE_ACTIVATION:
+        break;
       }
     //}
     _src = src;

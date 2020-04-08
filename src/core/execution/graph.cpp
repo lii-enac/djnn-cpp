@@ -123,7 +123,6 @@ namespace djnn
         _edges.erase(newend, _edges.end ());
         _map_edges.erase(dst); 
         --dst->_count_edges_in;
-
       }
     }
     // print debug

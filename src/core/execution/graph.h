@@ -43,8 +43,8 @@ namespace djnn
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
     std::map< Vertex*, int>& get_map_edges () { return _map_edges; }
-    int get_count_edges_in () { return _count_edges_in; }
-    int get_count_edges_out () { return _edges.size ();}
+    size_t get_count_edges_in () { return _count_edges_in; }
+    size_t get_count_edges_out () { return _edges.size ();}
     void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
     std::list< Vertex* >::iterator get_position_in_vertices () { return _pos; }
 
@@ -54,7 +54,7 @@ namespace djnn
     void set_mark (int m)  { _mark = m; }
     int  get_mark () const { return _mark; }
 
-    void set_timestamp (int date) { _timestamp = date; };
+    void set_timestamp (int date) { _timestamp = date; }
     int  get_timestamp () const   { return _timestamp; }
 
     Process*       get_process ()       { return _process; }
@@ -67,7 +67,7 @@ namespace djnn
     vertices_t _edges;
     std::list< Vertex* >::iterator _pos;
     int _mark, _timestamp;
-    int _count_edges_in;
+    size_t _count_edges_in;
     std::map< Vertex*, int> _map_edges; /* try to deal with duplicate */
     bool _is_invalid;
   };
@@ -84,7 +84,7 @@ namespace djnn
     void add_output_node (Process* c);
     void remove_output_node (Process* c);
 
-    int  size () {return _vertices.size ();}
+    size_t  size () {return _vertices.size ();}
     void sort ();
     void exec ();
     void clear ();

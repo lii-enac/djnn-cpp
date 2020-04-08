@@ -37,9 +37,9 @@ namespace djnn {
     Process* get_dst ()  { return _dst; }
     Process* get_data () { return _data; }
 
-    void enable ()              { set_is_enabled (true); };
-    void enable (Process* data) { set_is_enabled (true); _data = data; };
-    void disable ()             { set_is_enabled (false); };
+    void enable ()              { set_is_enabled (true); }
+    void enable (Process* data) { set_is_enabled (true); _data = data; }
+    void disable ()             { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
     bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }
@@ -59,7 +59,7 @@ namespace djnn {
         ENABLED_SHIFT             = 0 ,
         IMMEDIATE_SHIFT           = 1 ,
         SRC_ACTIVATION_FLAG_SHIFT = 2 , // FIXME: NONE is never used? if so, 1 bit is enough
-        DST_ACTIVATION_FLAG_SHIFT = 4 , // FIXME: NONE is never used? if so, 1 bit is enough
+        DST_ACTIVATION_FLAG_SHIFT = 4   // FIXME: NONE is never used? if so, 1 bit is enough
     };
 
     enum bit_mask {
@@ -69,7 +69,7 @@ namespace djnn {
         DST_ACTIVATION_FLAG_MASK  = 0b11 << DST_ACTIVATION_FLAG_SHIFT
     };
 
-    void set_bitset (bit_mask MASK, bit_shift SHIFT, int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
+    void set_bitset (bit_mask MASK, bit_shift SHIFT, unsigned int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
     int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
 
     bool get_is_enabled () const           { return get_bitset (ENABLED_MASK, ENABLED_SHIFT); }

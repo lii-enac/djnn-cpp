@@ -30,8 +30,8 @@ namespace djnn {
   class AbstractProperty : public Process
   {
   public:
-    AbstractProperty (Process* parent, const std::string& name, int nm=notify_none) : Process (name), _notify_mask (nm) {}
-    virtual ~AbstractProperty () {};
+    AbstractProperty (Process* parent, const std::string& name, unsigned int nm=notify_none) : Process (name), _notify_mask (nm) {}
+    virtual ~AbstractProperty () override {}
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () const = 0;
     bool is_activable () {
@@ -50,7 +50,7 @@ namespace djnn {
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_activate () override {}
     void impl_deactivate () override {}
-    int _notify_mask;
+    unsigned int _notify_mask;
   };
 
 }
