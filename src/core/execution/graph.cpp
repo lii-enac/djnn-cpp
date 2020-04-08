@@ -466,14 +466,12 @@ namespace djnn
         is_end = false;
       }
     }
-    /*
+    
     // then execute delayed delete on processes 
     for (auto p: _scheduled_delete_processes) {
       delete p;
     }
     _scheduled_delete_processes.clear ();
-   
-    */
 
     #if _PERF_TEST
     // print in GREEN
