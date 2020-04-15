@@ -91,7 +91,7 @@ namespace djnn
    }
 
   const std::string&
-  get_parent_name (Process *p, int up)
+  get_parent_name (const Process *p, int up)
   {
     while(up && p) { p=p->get_parent(); --up; }
     if(p) return p->get_name();
@@ -99,7 +99,7 @@ namespace djnn
   }
 
   const std::string
-  get_hierarchy_name (Process *p, int up)
+  get_hierarchy_name (const Process *p, int up)
   {
     std::string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }

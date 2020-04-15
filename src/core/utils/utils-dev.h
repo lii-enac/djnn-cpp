@@ -31,6 +31,6 @@ typedef size_t gperf_t;
 typedef unsigned gperf_t;
 #endif
 
-  const std::string& get_parent_name (Process *p, int up);
-  const std::string get_hierarchy_name (Process *p, int up=-1);
+  const std::string& get_parent_name (const Process *p, int up);
+  const std::string get_hierarchy_name (const Process *p, int up=-1);
 }

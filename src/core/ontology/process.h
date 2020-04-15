@@ -128,6 +128,7 @@ namespace djnn {
 
     // tree, component, symtable 
     Process* get_parent () { return _parent; }
+    const Process* get_parent () const { return _parent; }
     virtual void   set_parent (Process* p);
     virtual void   add_child (Process* c, const std::string& name);
     virtual void   remove_child (Process* c);
