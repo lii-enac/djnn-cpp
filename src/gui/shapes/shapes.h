@@ -393,6 +393,7 @@ namespace djnn
     {
     public:
       DataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double w, double h);
+      DataImage (Process *parent, const std::string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       Process* clone () override;

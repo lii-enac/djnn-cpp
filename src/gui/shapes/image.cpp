@@ -130,6 +130,11 @@ namespace djnn
     Process::finalize_construction (parent, name);
   }
 
+  DataImage::DataImage (Process *parent, const std::string& name, double x, double y, double w, double h)
+  : DataImage(parent, name, std::string(), x, y, w, h)
+  {
+  }
+
   DataImage::~DataImage ()
   {
     if (_cwatcher) {
@@ -137,7 +142,6 @@ namespace djnn
       delete _cwatcher;
     }
     delete _watcher;
-
   }
 
   Process*

@@ -625,24 +625,18 @@ namespace djnn
     {
       double x,y,w,h;
       string data;
-      i->get_properties_values(data, x,y,w,h);
+      i->get_properties_values (data, x,y,w,h);
       load_drawing_context (i, x, y, w, h);
       QRect rect (x, y, w, h);
-      QPixmap *pm;
-      if (i->invalid_cache ()) {
-        if (i->cache () != nullptr) {
-          pm = (QPixmap*) (i->cache ());
-          delete (pm); pm = nullptr;
-        }
-        QByteArray qb (data.c_str (), data.length());
-
+      QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
+      if(pm == nullptr) {
         pm = new QPixmap ();
-        pm->loadFromData(qb);
-
         i->set_cache (pm);
+        i->set_invalid_cache (true);
+      }
+      if (i->invalid_cache ()) {
+        pm->loadFromData (reinterpret_cast<const uchar*>(data.c_str ()), data.length());
         i->set_invalid_cache (false);
-      } else {
-        pm = (QPixmap*) (i->cache ());
       }
 
       /* manage opacity on image */
