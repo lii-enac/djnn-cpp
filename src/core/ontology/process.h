@@ -76,6 +76,7 @@ namespace djnn {
 
   class Coupling;
   class Vertex;
+  class Process;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -141,6 +142,11 @@ namespace djnn {
     virtual CoreProcess* clone ();
     virtual process_type_e get_process_type () const { return UNDEFINED_T; }
 
+    //static std::string default_name;
+    //virtual const std::string& get_name () const { return default_name; }
+    const std::string& get_name (Process* parent) const;
+    virtual Process* get_parent() { return nullptr; }
+
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
 #endif
@@ -200,7 +206,6 @@ namespace djnn {
           case DEACTIVATION:    deactivate (); break;
         }
     }
-
   };
 
   class Process : public CoreProcess
@@ -224,7 +229,7 @@ namespace djnn {
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
     
     // tree, component, symtable 
-    Process* get_parent () { return _parent; }
+    Process* get_parent () override { return _parent; }
     virtual void   set_parent (Process* p);
     virtual void   add_child (Process* c, const std::string& name);
     virtual void   remove_child (Process* c);
@@ -234,7 +239,7 @@ namespace djnn {
     virtual Process* find_child (const std::string&);
     virtual Process* find_child (int /*index*/) { return nullptr; }
     static  Process* find_child (Process* p, const std::string& path);
-    virtual const std::string& find_child_name (const Process* child) const; // WARNING : low efficiency function cause by linear search. use with care !
+    virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
     
     typedef std::map<std::string, Process*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
@@ -282,8 +287,6 @@ namespace djnn {
     symtable_t _symtable;
     //string _name;
   // <<instance fields end here
-
-
   };
 
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE

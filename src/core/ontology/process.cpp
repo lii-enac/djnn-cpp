@@ -78,6 +78,12 @@ namespace djnn
     #endif
   }
 
+  const std::string&
+  CoreProcess::get_name (Process * parent) const
+  {
+    return parent->find_child_name(this);
+  }
+
   Process::Process (const std::string& name, bool model)
   : CoreProcess(model), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
   {
@@ -455,7 +461,7 @@ namespace djnn
   }
 
   const std::string&
-  Process::find_child_name (const Process* symbol) const
+  Process::find_child_name (const CoreProcess* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
