@@ -35,6 +35,49 @@ static double graph_average = 0.0;
 static int sorted_counter = 0;
 static double sorted_total = 0.0;
 static double sorted_average = 0.0;
+
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
+  static void
+  _get_monotonic_time (struct timespec *ts)
+  {
+#ifdef __MACH__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service (mach_host_self (), SYSTEM_CLOCK, &cclock);
+    clock_get_time (cclock, &mts);
+    mach_port_deallocate (mach_task_self(), cclock);
+    ts->tv_sec = mts.tv_sec;
+    ts->tv_nsec = mts.tv_nsec;
+#endif
+  }
+
+  static struct timespec before;
+  static struct timespec after;
+  static int init = 0;
+
+  static void
+  _t1 ()
+  {
+    _get_monotonic_time (&before);
+    init = 1;
+  }
+
+  static double
+  _t2 (const std::string& msg, bool display_stderr)
+  {
+    if (!init)
+      return 0.0;
+    _get_monotonic_time (&after);
+    double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
+    if(display_stderr)
+      std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
+    init = 0;
+    return elapsedTime;
+  }
 #endif
 #endif
 
@@ -385,7 +428,7 @@ namespace djnn
       return;
 
     #if _PERF_TEST
-    t1 ();
+    _t1 ();
     #endif
     _cur_date = 0;
     _sorted_vertices.clear ();
@@ -412,7 +455,7 @@ namespace djnn
     #if _PERF_TEST
     // print in YELLOW
     cerr << "\033[1;33m" << endl;
-    double time = t2 ("SORT_GRAPH : ");
+    double time = _t2 ("SORT_GRAPH : ", true);
     sorted_counter = sorted_counter + 1;
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
@@ -433,7 +476,7 @@ namespace djnn
   Graph::exec ()
   {
     #if _PERF_TEST
-    t1 ();
+    _t1 ();
     #endif
     
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
@@ -476,7 +519,7 @@ namespace djnn
     #if _PERF_TEST
     // print in GREEN
     cerr << "\033[1;32m" << endl;
-    double time = t2 ("GRAPH_EXEC : ");
+    double time = _t2 ("GRAPH_EXEC : ", true);
     graph_counter = graph_counter + 1;
     graph_total = graph_total + time ;
     graph_average = graph_total / graph_counter;
