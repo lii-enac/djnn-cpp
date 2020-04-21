@@ -44,7 +44,7 @@ namespace djnn
   {
   	int i=0;
     depth_first_traverse(p, [&i](Process* p){++i;});
-    std::cerr << "count " << i << std::endl;
+    std::cerr << std::endl << "count items: " << i << std::endl;
 
     std::map<std::string,int> num_by_type;
     int num_no_coupling=0;
@@ -61,10 +61,10 @@ namespace djnn
     for (auto item: num_by_type) {
         std::cerr << "type: " << item.first << " count: " << item.second << std::endl;
     }
-    std::cerr << "num_no_coupling: " << num_no_coupling << std::endl;
-    std::cerr << "num_one_couplings: " << num_one_coupling << std::endl;
-    std::cerr << "num_more_than_one_couplings: " << num_more_than_one_coupling << std::endl;
-    std::cerr << "size: " << size << std::endl;
+    std::cerr << "num_no_coupling: " << num_no_coupling << " - " << (num_no_coupling * 100) / i << "%" << std::endl;
+    std::cerr << "num_one_couplings: " << num_one_coupling << " - " << (num_one_coupling * 100) / i << "%" << std::endl;
+    std::cerr << "num_more_than_one_couplings: " << num_more_than_one_coupling << " - " << (num_more_than_one_coupling * 100) / i << "%" << std::endl;
+    std::cerr << "total mem size (*p): " << size << std::endl << std::endl;
   }
 
 }
