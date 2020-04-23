@@ -38,10 +38,15 @@ namespace djnn
 
   class UI {
   public:
-    UI (Process *p);
+    UI (Process *p, Process *f);
+    bool is_pickable () { return pickable->get_value (); }
+    void activate (Process* frame) { cpick->enable (frame); }
+    void deactivate () { cpick->disable (); }
     virtual ~UI ();
     friend class Picking;
   private:
+    BoolProperty *pickable;
+    Coupling *cpick;
     DoubleProperty *move_x, *move_y, *press_x, *press_y, *local_move_x, *local_move_y, *local_press_x, *local_press_y;
     DoubleProperty *mouse_press_x, *mouse_press_y, *mouse_move_x, *mouse_move_y;
     DoubleProperty *mouse_local_press_x, *mouse_local_press_y, *mouse_local_move_x, *mouse_local_move_y;
@@ -63,6 +68,7 @@ namespace djnn
     UI* get_ui () { return ui; }
     Process* find_child (const std::string& n) override;
     void impl_deactivate () override;
+    void impl_activate () override;
     void add_style_class (const std::string& classname);
     void pick () override;
     void pre_draw ();
@@ -118,7 +124,7 @@ namespace djnn
   };
 
   inline bool is_pickable (AbstractGShape * s) {
-      return s->has_ui ();
+      return s->has_ui () && s->get_ui ()->is_pickable ();
   }
 
 } /* namespace djnn */

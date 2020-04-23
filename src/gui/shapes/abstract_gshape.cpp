@@ -23,6 +23,7 @@
 #include "gui/abstract_backend.h"
 #include "display/display.h"
 #include "display/abstract_display.h"
+#include "display/update_drawing.h"
 #include "gui/picking/picking.h"
 #include "gui/picking/analytical_picking_context.h"
 
@@ -38,7 +39,7 @@
 namespace djnn
 {
   std::vector<std::string> AbstractGShape::_ui =
-    { "press", "release", "move", "enter", "leave", "touches", "mouse" };
+    { "pickable", "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
   Process*
   SVGHolder::find_child (const std::string& path)
@@ -120,8 +121,13 @@ namespace djnn
     delete _init_x;
   }
 
-  UI::UI (Process *p) : parent (p)
+  UI::UI (Process *p, Process *f) : parent (p)
   {
+    pickable = new BoolProperty (p, "pickable", true);
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    cpick = new Coupling (pickable, ACTIVATION, update, ACTIVATION);
+    if (f != nullptr)
+      cpick->enable (f);
     press = new Spike (p, "press");
     move = new Spike (p, "move");
     release = new Spike (p, "release");
@@ -241,6 +247,8 @@ namespace djnn
     ((List*) touches)->clear ();
     delete touches;
     
+    delete cpick;
+    delete pickable;
     delete press;
     delete release;
     delete move;
@@ -257,7 +265,7 @@ namespace djnn
   void
   AbstractGShape::init_ui ()
   {
-    ui = new UI (this);
+    ui = new UI (this, frame ());
 
     if( !_inverted_matrix) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
@@ -311,16 +319,28 @@ namespace djnn
   void
   AbstractGShape::impl_deactivate ()
   {
+    UI *ui = get_ui();
+    if (ui)
+      ui->deactivate ();
     // remove from picking_view if is the current object
-    if (is_pickable(this)) {
+    /*if (is_pickable(this)) {
       if (this->frame ()) {
         if(this->frame ()->picking_view ()) {
           this->frame ()->picking_view ()->object_deactivated (this);
         }
       }
-    }
+    }*/
 
     AbstractGObj::impl_deactivate ();
+  }
+
+  void
+  AbstractGShape::impl_activate ()
+  {
+   AbstractGObj::impl_activate ();
+   UI *ui = get_ui();
+   if (ui)
+     ui->activate (frame());
   }
 
   void
