@@ -17,6 +17,7 @@
 #pragma once
 
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 
 namespace djnn {
 
@@ -26,12 +27,12 @@ namespace djnn {
     {
       /* note:
        * finalize_constructor for action 
-       * they add a symbol process but do not appear in _children Component
-       * so they has to be deleted manualy from destructor
+       * they add a symbol process but do not appear in the _children of its parent
+       * so they have to be deleted manually from destructor // FIXME: not done??
        */ 
-       if (parent) {
+      if (parent) {
         set_state_dependency (parent->state_dependency ());
-        Process::set_parent (parent);
+        set_parent (parent);
       }
     }
     virtual ~Action ();
@@ -40,7 +41,7 @@ namespace djnn {
 
   protected:
     virtual bool pre_activate () override {
-      if (get_parent () != 0 && !get_parent ()->somehow_activating () )
+      if (get_parent () != nullptr && !get_parent ()->somehow_activating () )
         return false;
       set_activation_state(ACTIVATING);
       return true;
