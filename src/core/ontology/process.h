@@ -146,6 +146,7 @@ namespace djnn {
     //virtual const std::string& get_name () const { return default_name; }
     const std::string& get_name (Process* parent) const;
     virtual Process* get_parent() { return nullptr; }
+    virtual const Process* get_parent() const { return nullptr; }
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
@@ -230,6 +231,7 @@ namespace djnn {
     
     // tree, component, symtable 
     Process* get_parent () override { return _parent; }
+    const Process* get_parent () const override { return _parent; }
     virtual void   set_parent (Process* p);
     virtual void   add_child (Process* c, const std::string& name);
     virtual void   remove_child (Process* c);
