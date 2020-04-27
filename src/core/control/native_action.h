@@ -40,5 +40,5 @@ namespace djnn {
     NativeCode *_action;
     CoreProcess *_activation_source;
   };
-  void* get_native_user_data (Process* native_action);
+  void* get_native_user_data (NativeAction* native_action);
 }
