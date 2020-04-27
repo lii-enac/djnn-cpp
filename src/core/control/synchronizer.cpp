@@ -59,7 +59,7 @@ namespace djnn
     int sz = _c_list.size ();
     for (int i = sz - 1; i >= 0; i--) {
       auto * c = _c_list[i];
-      Process* src = c->get_src ();
+      auto * src = c->get_src ();
       Graph::instance ().remove_edge (src, &_action);
       delete c;
     }

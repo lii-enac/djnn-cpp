@@ -334,7 +334,7 @@ namespace djnn
   ListOperator::update_list ()
   {
     for (auto c: _coupling_list) {
-      Process *s = c->get_src();
+      auto * s = c->get_src();
       Graph::instance ().remove_edge (s, &_action);
       delete c;
     }

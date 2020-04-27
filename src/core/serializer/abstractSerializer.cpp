@@ -24,11 +24,6 @@ namespace djnn
 
   using namespace std;
 
-  typedef struct __path_context {
-    Process *f, *t;
-    struct __path_context* prev;
-  } __path_context;
-
 #if !defined(DJNN_NO_SERIALIZE)
 
   /* init static variable */
@@ -73,8 +68,15 @@ namespace djnn
  * recursive helper function that computes the simplest path from an origin
  * to a target while staying within the tree defined by a root node.
  */
+
+typedef struct __path_context {
+    Process *f;
+    CoreProcess *t;
+    struct __path_context* prev;
+} __path_context;
+
 static void
-path_compute (Process* from, Process* to,
+path_compute (Process* from, CoreProcess* to,
        __path_context* pc,  __path_context* ec, string& buf)
 {
 #ifdef DEBUG
@@ -129,7 +131,11 @@ path_compute (Process* from, Process* to,
         buf += "/";
       else
         insert_slash = 1;
-      buf +=  !(pc->t->get_name ().empty ()) ? pc->t->get_name () : "<anonymous>";
+      auto * pt = dynamic_cast<Process*>(pc->t);
+      std::string name;
+      if(pt)
+        name = pt->get_name();
+      buf +=  !(name.empty ()) ? name : "<anonymous>";
       pc = pc->prev;
     }
     return;
@@ -147,7 +153,7 @@ path_compute (Process* from, Process* to,
 
 
   void
-  AbstractSerializer::compute_path (Process* from, Process* to, string& buf)
+  AbstractSerializer::compute_path (Process* from, CoreProcess* to, string& buf)
   {
     __path_context c = { 0, 0, 0 };
 

@@ -225,12 +225,12 @@ namespace djnn {
     //static std::string default_name;
     //virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
   
-    virtual void     set_data (CoreProcess* data);
-    virtual CoreProcess* get_data ();
+    virtual void     set_data (CoreProcess* data) {}
+    virtual CoreProcess* get_data () { return nullptr; }
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void     set_activation_source (CoreProcess*) {}
-    virtual Process* get_activation_source () { return nullptr; }
+    virtual CoreProcess* get_activation_source () { return nullptr; }
   
   };
 
