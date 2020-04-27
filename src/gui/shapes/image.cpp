@@ -37,7 +37,7 @@ namespace djnn
       _watcher(nullptr), _pixel (this, "pixel", 0), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Image::~Image ()
@@ -143,7 +143,7 @@ namespace djnn
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DataImage::DataImage (Process *parent, const std::string& name, double x, double y, double w, double h)

@@ -32,7 +32,7 @@ namespace djnn
   Ellipse::Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry)
   : AbstractPropEllipse (parent, name, cx, cy, rx, ry)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Process*

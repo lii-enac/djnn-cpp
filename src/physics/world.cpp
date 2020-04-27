@@ -53,7 +53,7 @@ namespace djnn
     if (get_parent () && get_parent ()->state_dependency () != nullptr)
       Graph::instance ().add_edge (get_parent ()->state_dependency (), _step_action);
 
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   World::~World ()
@@ -340,7 +340,7 @@ namespace djnn
       PhyObj (parent, name, 0, 0, 0, 0), _plane_props
         { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Plane::~Plane ()
@@ -394,7 +394,7 @@ namespace djnn
   Box::Box (Process *parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
       PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Box::~Box ()
@@ -441,7 +441,7 @@ namespace djnn
   Sphere::Sphere (Process *parent, const std::string& name, double x, double y, double z, double radius, double mass) :
       PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Sphere::~Sphere ()

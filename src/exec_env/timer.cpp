@@ -36,7 +36,7 @@ namespace djnn
   _reset_action (this, "reset_action"),
   _c_reset (&_reset, ACTIVATION, &_reset_action, ACTIVATION, true)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Timer::Timer (Process *parent, const std::string& name, std::chrono::milliseconds delay)

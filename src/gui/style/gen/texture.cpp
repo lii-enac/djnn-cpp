@@ -40,7 +40,7 @@ namespace djnn
     _cpath (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Texture::~Texture ()

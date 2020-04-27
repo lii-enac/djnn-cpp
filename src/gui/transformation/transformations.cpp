@@ -48,7 +48,7 @@ namespace djnn
   Translation::Translation (Process *parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Translation::~Translation ()
@@ -114,7 +114,7 @@ namespace djnn
   Rotation::Rotation (Process *parent, const std::string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Rotation::~Rotation ()
@@ -191,7 +191,7 @@ namespace djnn
   Scaling::Scaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Scaling::~Scaling ()
@@ -256,7 +256,7 @@ namespace djnn
   SkewX::SkewX (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   SkewX::~SkewX ()
@@ -323,7 +323,7 @@ namespace djnn
   SkewY::SkewY (Process *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   SkewY::~SkewY ()
@@ -2069,7 +2069,7 @@ namespace djnn
                           double m41, double m42, double m43, double m44) :
       AbstractHomography (parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Homography::~Homography ()

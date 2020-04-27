@@ -34,7 +34,7 @@ namespace djnn
     }
     fsm->set_initial (name);
     _parent_fsm = fsm;
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
     _parent_fsm->FSM::add_state(this);
   }
 
@@ -230,7 +230,7 @@ namespace djnn
   _initial (this, "initial", "")
   { 
     /* with state_dependency */
-    Process::finalize_construction (parent, name, &_fsm_state);
+    finalize_construction (parent, name, &_fsm_state);
   }
 
   FSM::~FSM ()

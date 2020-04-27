@@ -67,7 +67,7 @@ namespace djnn
     _coupling(&_input, ACTIVATION, &_action, ACTIVATION)
   {
     init_unary_couplings(_input, _output, _action, _coupling);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
 #ifndef DJNN_NO_SERIALIZE
@@ -100,7 +100,7 @@ namespace djnn
       _state (this, "state", 0)
   {
     init_incr (isModel);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Incr::~Incr ()
@@ -147,7 +147,7 @@ namespace djnn
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void
@@ -179,7 +179,7 @@ namespace djnn
     _c_input.disable ();
     Graph::instance ().add_edge (&_input, &_action);
     Graph::instance ().add_edge (&_action, &_result);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   AdderAccumulator::~AdderAccumulator ()

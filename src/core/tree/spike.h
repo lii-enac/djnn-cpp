@@ -20,7 +20,7 @@ namespace djnn {
 
   class Spike: public Process {
   public:
-    Spike (Process* parent, const std::string& name) : Process (name) { set_is_model (true); Process::finalize_construction (parent, name); };
+    Spike (Process* parent, const std::string& name) : Process (name) { set_is_model (true); finalize_construction (parent, name); };
     virtual ~Spike () {};
     Process* clone () override;
   protected:

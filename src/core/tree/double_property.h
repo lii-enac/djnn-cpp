@@ -24,7 +24,7 @@ namespace djnn {
 
   class AbstractDoubleProperty : public AbstractProperty {
   public:
-    AbstractDoubleProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
+    AbstractDoubleProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Double; }
     //virtual process_type_e get_process_type () const override { return DOUBLE_PROPERTY_T; }
 

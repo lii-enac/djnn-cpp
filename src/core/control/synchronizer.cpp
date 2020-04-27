@@ -46,7 +46,7 @@ namespace djnn
     _action (this, "synchronizer_" + _dst->get_name () + "_action")
   {
     Graph::instance ().add_edge (&_action, _dst);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Synchronizer::~Synchronizer ()

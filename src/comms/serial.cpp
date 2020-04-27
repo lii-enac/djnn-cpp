@@ -48,7 +48,7 @@ namespace djnn
 
   _out_c.disable ();
 
-  Process::finalize_construction (parent, name);
+  finalize_construction (parent, name);
 }
 
  Serial::~Serial ()

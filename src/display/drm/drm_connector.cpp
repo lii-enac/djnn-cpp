@@ -225,7 +225,7 @@ namespace djnn {
     _c_update_pos_x.enable ();
     _c_update_pos_y.enable ();
     conn_list.push_back (this);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
     set_activation_state (ACTIVATED);
   }
 

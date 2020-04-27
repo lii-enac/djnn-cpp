@@ -113,7 +113,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _l);
     Graph::instance ().add_edge (_action, _c);
     Graph::instance ().add_edge (_action, _h);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   RGBToLCHConverter::~RGBToLCHConverter ()
@@ -240,7 +240,7 @@ namespace djnn
     Graph::instance ().add_edge (_action, _r);
     Graph::instance ().add_edge (_action, _g);
     Graph::instance ().add_edge (_action, _b);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void

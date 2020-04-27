@@ -40,7 +40,7 @@ namespace djnn
     _cjoin (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   OutlineJoinStyle::~OutlineJoinStyle ()

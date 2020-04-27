@@ -234,7 +234,7 @@ IvyAccess::IvyOutAction::coupling_activation_hook ()
   Graph::instance().add_edge (&_out, &_out_a);
   /* IN is a special child build in IvyAccess::find_child */
 
-  Process::finalize_construction (parent, name);
+  finalize_construction (parent, name);
 }
 
 IvyAccess::~IvyAccess ()

@@ -23,7 +23,7 @@ namespace djnn
 {
 
   void
-  Coupling::init (Process* src, activation_flag_e src_flag, Process* dst,
+  Coupling::init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
                            activation_flag_e dst_flag, bool immediate_propagation)
   {
     if (src == nullptr) {
@@ -68,15 +68,15 @@ namespace djnn
     }
   }
 
-  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
+  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
                       activation_flag_e dst_flag, bool immediate_propagation) :
       _src (src), _dst (dst), _data (nullptr)
   {
     init (src, src_flag, dst, dst_flag, immediate_propagation);
   }
 
-  Coupling::Coupling (Process* src, activation_flag_e src_flag, Process* dst,
-                      activation_flag_e dst_flag, Process* data, bool immediate_propagation) :
+  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
+                      activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation) :
     Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
   {
     _data = data;
@@ -93,7 +93,7 @@ namespace djnn
   }
 
   void
-  Coupling::change_source (Process *src, Process* data)
+  Coupling::change_source (CoreProcess *src, CoreProcess* data)
   {
     //if (src != nullptr) {
       switch(get_src_activation_flag ()) {

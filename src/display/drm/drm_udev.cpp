@@ -57,7 +57,7 @@ namespace djnn {
     //_c_read_vblank.enable ();
     
     Graph::instance ().add_edge (_iofd.find_child("readable"), &_read_vblank_action);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
     //activate ();
   }
 

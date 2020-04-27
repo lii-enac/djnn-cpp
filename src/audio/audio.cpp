@@ -40,7 +40,7 @@ namespace djnn {
 	_gain_action (this, "gain_action"),
   	_c_gain_action (&_gain, ACTIVATION, &_gain_action, ACTIVATION, true)
 	{
-		Process::finalize_construction (parent, name);
+		finalize_construction (parent, name);
 	}
 
 	void

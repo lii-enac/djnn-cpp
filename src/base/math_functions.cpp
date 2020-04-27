@@ -78,7 +78,7 @@ namespace djnn
     Graph::instance ().add_edge (&_max, &_action);
     Graph::instance ().add_edge (&_input, &_action);
     Graph::instance ().add_edge (&_action, &_result);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   BoundedValue::~BoundedValue ()

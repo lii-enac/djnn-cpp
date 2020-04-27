@@ -36,7 +36,7 @@ namespace djnn
     _removed (nullptr, "_removed", nullptr),
     _size (nullptr, "size", 0)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Set::~Set ()
@@ -171,7 +171,7 @@ namespace djnn
     Set *s = dynamic_cast<Set*> (set);
     if (s == nullptr)
       error (this, "The set argument must be a Set component in set iterator " + name);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void

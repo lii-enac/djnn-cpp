@@ -40,7 +40,7 @@ namespace djnn {
     _display (nullptr), _id (id)
   {
     new BoolProperty (this, "connected", connected);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DRMConnector::~DRMConnector ()
@@ -55,7 +55,7 @@ namespace djnn {
     new IntProperty (this, "min_height", min_height);
     new IntProperty (this, "max_height", max_height);
     new Set (this, "connectors");
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DRMDevice::~DRMDevice ()

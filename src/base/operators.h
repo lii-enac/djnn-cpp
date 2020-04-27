@@ -43,7 +43,7 @@ namespace djnn {
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
     BinaryOperatorAction (Process* parent, const std::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
     void impl_activate () override {
@@ -81,7 +81,7 @@ namespace djnn {
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
     {
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     virtual ~BinaryOperator () {
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
@@ -137,7 +137,7 @@ namespace djnn {
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
     UnaryOperatorAction (Process* parent, const std::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
     void impl_activate () override {
@@ -169,7 +169,7 @@ namespace djnn {
       _coupling(&_input, ACTIVATION, &_action, ACTIVATION)
     {
       init_unary_couplings(_input, _output, _action, _coupling);
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     virtual ~UnaryOperator () {
       uninit_unary_couplings(this, _input, _output, _action, _coupling);

@@ -107,7 +107,7 @@ namespace djnn
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
     check_init(ispec, dspec);
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void
@@ -212,7 +212,7 @@ namespace djnn
       Process (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void

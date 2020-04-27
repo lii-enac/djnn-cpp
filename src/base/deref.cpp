@@ -95,7 +95,7 @@ namespace djnn
     Graph::instance ().add_edge (&_activation, &_set);
     Graph::instance ().add_edge (&_get, &_activation);
 	  AbstractDeref::update_src ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Deref::~Deref ()
@@ -137,7 +137,7 @@ namespace djnn
     Graph::instance ().add_edge (&_value, &_set);
     Graph::instance ().add_edge (&_get, &_value);
     AbstractDeref::update_src ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DerefString::~DerefString ()
@@ -186,7 +186,7 @@ namespace djnn
     Graph::instance ().add_edge (&_value, &_set);
     Graph::instance ().add_edge (&_get, &_value);
     AbstractDeref::update_src ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DerefDouble::~DerefDouble()

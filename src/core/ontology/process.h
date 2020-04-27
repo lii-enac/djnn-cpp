@@ -130,6 +130,8 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
+    virtual void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr) {}
+
   private:
     // >>instance fields start here
     Vertex *_vertex;
@@ -207,6 +209,29 @@ namespace djnn {
           case DEACTIVATION:    deactivate (); break;
         }
     }
+
+
+  public:
+  // tree, component, symtable 
+    virtual void   set_parent (Process* p) {}
+    virtual void   add_child (Process* c, const std::string& name) {}
+    virtual void   remove_child (Process* c) {}
+    virtual void   remove_child (const std::string& name) {}
+    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
+    //friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2) {} // strange, only used in gradient...
+    virtual Process* find_child (const std::string&) { return nullptr; }
+    virtual Process* find_child (int /*index*/) { return nullptr; }
+    static  Process* find_child (Process* p, const std::string& path) { return nullptr; }
+    //static std::string default_name;
+    //virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
+  
+    virtual void     set_data (CoreProcess* data);
+    virtual CoreProcess* get_data ();
+
+    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
+    virtual void     set_activation_source (CoreProcess*) {}
+    virtual Process* get_activation_source () { return nullptr; }
+  
   };
 
   class Process : public CoreProcess
@@ -219,9 +244,7 @@ namespace djnn {
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
     Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
     void set_state_dependency (Process* s) { _state_dependency = s; }
-    // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
-    virtual void     set_activation_source (Process*) {}
-    virtual Process* get_activation_source () { return nullptr; }
+    
     
     // actions to be redefined by subclasses
     virtual     void update_drawing () {}
@@ -232,14 +255,14 @@ namespace djnn {
     // tree, component, symtable 
     Process* get_parent () override { return _parent; }
     const Process* get_parent () const override { return _parent; }
-    virtual void   set_parent (Process* p);
-    virtual void   add_child (Process* c, const std::string& name);
-    virtual void   remove_child (Process* c);
-    virtual void   remove_child (const std::string& name);
-    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
+    virtual void   set_parent (Process* p) override;
+    virtual void   add_child (Process* c, const std::string& name) override;
+    virtual void   remove_child (Process* c) override;
+    virtual void   remove_child (const std::string& name) override;
+    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) override {}
     friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual Process* find_child (const std::string&);
-    virtual Process* find_child (int /*index*/) { return nullptr; }
+    virtual Process* find_child (const std::string&) override;
+    virtual Process* find_child (int /*index*/) override { return nullptr; }
     static  Process* find_child (Process* p, const std::string& path);
     virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
     
@@ -271,11 +294,11 @@ namespace djnn {
     #endif
     
     // data
-    void     set_data (Process* data);
-    Process* get_data ();
+    void     set_data (CoreProcess* data) override;
+    CoreProcess* get_data () override;
 
   protected:
-    void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
+    void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr) override;
 
   private:
     static long int _nb_anonymous;
@@ -285,7 +308,7 @@ namespace djnn {
     
     Process *_parent;
     Process *_state_dependency;
-    Process *_data;
+    CoreProcess *_data;
     symtable_t _symtable;
     //string _name;
   // <<instance fields end here
@@ -306,8 +329,8 @@ namespace djnn {
   inline Process* find (Process *p, const std::string& path) { return p->find_child (path); }
   // inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
 
-  void add_state_dependency (Process *_parent, Process *p);
-  void remove_state_dependency (Process *_parent, Process *p);
+  void add_state_dependency (Process *_parent, CoreProcess *p);
+  void remove_state_dependency (Process *_parent, CoreProcess *p);
   inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 }

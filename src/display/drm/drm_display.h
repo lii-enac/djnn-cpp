@@ -44,7 +44,7 @@ namespace djnn {
     class UpdatePosAction : public Action
     {
     public:
-      UpdatePosAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      UpdatePosAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdatePosAction () {}
       void impl_activate () { ((DRMConnector*) get_parent())->update_pos (); }
       void impl_deactivate () {}
@@ -97,7 +97,7 @@ namespace djnn {
     class VBlankAction : public Action
     {
     public:
-      VBlankAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      VBlankAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
       void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
       void impl_deactivate () {}

@@ -171,7 +171,7 @@ namespace djnn
       _digitalOut.push_back (new DoubleProperty (_outputs, "", 0));
       _analogIn.push_back (new VoltageInputChannel (_sensors, ""));
     }
-    Process::finalize_construction (parent, name, nullptr);
+    finalize_construction (parent, name, nullptr);
   }
 
   IFaceKit888::~IFaceKit888 ()
@@ -223,7 +223,7 @@ namespace djnn
     _c_trigger = new Coupling (_trigger, ACTIVATION, _trigger_action, ACTIVATION, true);
     Graph::instance ().add_edge (_trigger, _trigger_action);
     _sw_ch = nullptr;
-    Process::finalize_construction (parent, name, nullptr);
+    finalize_construction (parent, name, nullptr);
   }
 
   VoltageInputChannel::~VoltageInputChannel ()

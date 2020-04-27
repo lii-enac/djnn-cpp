@@ -39,7 +39,7 @@ namespace djnn
     {
     public:
       SerialOutAction (Process* parent, const std::string& name) :
-      Action (parent, name) { Process::finalize_construction (parent, name); }
+      Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SerialOutAction () {}
       void impl_activate () override { ((Serial*)get_parent())->serial_write (); };
       void impl_deactivate () override {}

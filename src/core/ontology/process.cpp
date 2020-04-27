@@ -511,12 +511,12 @@ namespace djnn
   // data
 
   void
-  Process::set_data (Process* data)
+  Process::set_data (CoreProcess* data)
   {
     _data = data;
   }
 
-  Process*
+  CoreProcess*
   Process::get_data ()
   {
     return _data;
@@ -566,14 +566,14 @@ namespace djnn
   }
 
   void
-  add_state_dependency (Process *parent, Process *p)
+  add_state_dependency (Process *parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (parent->state_dependency (), p); 
   }
 
   void
-  remove_state_dependency (Process *parent, Process *p)
+  remove_state_dependency (Process *parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (parent->state_dependency (), p);

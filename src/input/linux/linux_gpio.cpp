@@ -135,7 +135,7 @@ namespace djnn {
       _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
       Graph::instance().add_edge (_value, _action);
     }
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   GPIOLine::~GPIOLine()

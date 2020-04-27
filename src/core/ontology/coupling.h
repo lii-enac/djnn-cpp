@@ -21,21 +21,21 @@ namespace djnn {
 
   class Coupling {
   public:
-    Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
-    Coupling (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, Process* data, bool immediate_propagation = false);
+    Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
+    Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation = false);
     Coupling (); // needed for pointer-less zombie initialization
     ~Coupling();
     void set_data (Process* data) { _data = data; }
     
     void propagate_activation ();
     void propagate_deactivation ();
-    void change_source (Process *src, Process *data);
-    void change_source (Process *src) { change_source (src, _data); }
+    void change_source (CoreProcess *src, CoreProcess *data);
+    void change_source (CoreProcess *src) { change_source (src, _data); }
 
     // process
-    Process* get_src ()  { return _src; }
-    Process* get_dst ()  { return _dst; }
-    Process* get_data () { return _data; }
+    CoreProcess* get_src ()  { return _src; }
+    CoreProcess* get_dst ()  { return _dst; }
+    CoreProcess* get_data () { return _data; }
 
     void enable ()              { set_is_enabled (true); }
     void enable (Process* data) { set_is_enabled (true); _data = data; }
@@ -46,12 +46,12 @@ namespace djnn {
 
     void about_to_delete_src () { _src = nullptr; }
 
-    void init (Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
+    void init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     void uninit ();
   private:
     void propagate_immediately ();
 
-    Process *_src, *_dst, *_data;
+    CoreProcess *_src, *_dst, *_data;
 
     unsigned int _bitset;
     

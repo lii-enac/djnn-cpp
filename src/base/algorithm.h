@@ -32,7 +32,7 @@ namespace djnn
     class SortAction : public Action
     {
     public:
-      SortAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      SortAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
       void impl_deactivate () {}
@@ -69,7 +69,7 @@ namespace djnn
     class ListOperatorAction : public Action
     {
     public:
-      ListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      ListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~ListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
       void impl_deactivate () {}
@@ -77,7 +77,7 @@ namespace djnn
     class UpdateListOperatorAction : public Action
     {
     public:
-      UpdateListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { Process::finalize_construction (parent, name); }
+      UpdateListOperatorAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdateListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
       void impl_deactivate () {}

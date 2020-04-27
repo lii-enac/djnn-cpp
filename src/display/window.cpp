@@ -80,7 +80,7 @@ namespace djnn
   {
     init_ui (title, x, y, w, h);
     _display = new RefProperty (this, "display", nullptr);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   // std::weak_ptr<Window>
@@ -135,7 +135,7 @@ namespace djnn
 
   {
     _action = new UpdateCursorAction (this, "action");
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Process*

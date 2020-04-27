@@ -32,7 +32,7 @@ namespace djnn
   Circle::Circle (Process *parent, const std::string& name, double cx, double cy, double r)
   : AbstractPropCircle (parent, name, cx, cy, r)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Process*

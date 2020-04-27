@@ -40,7 +40,7 @@ namespace djnn
     _cwidth (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   OutlineWidth::~OutlineWidth ()

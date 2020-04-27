@@ -27,7 +27,7 @@ namespace djnn
   _value (this, "value", value)
   {
     set_is_model (isModel);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Exit::~Exit ()

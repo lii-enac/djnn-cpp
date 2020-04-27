@@ -35,7 +35,7 @@ namespace djnn
     _container = dynamic_cast<Container*> (container);
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be sorted");
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void
@@ -300,7 +300,7 @@ namespace djnn
       error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child ("size"), ACTIVATION, &_update_list, ACTIVATION);
     Graph::instance ().add_edge (container->find_child ("size"), &_update_list);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   ListOperator::~ListOperator()

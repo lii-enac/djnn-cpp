@@ -22,7 +22,7 @@ namespace djnn {
 
   class AbstractIntProperty : public AbstractProperty {
   public:
-    AbstractIntProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { Process::finalize_construction (parent, name); };
+    AbstractIntProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Integer; }
     //virtual process_type_e get_process_type () const override { return INT_PROPERTY_T; }
 

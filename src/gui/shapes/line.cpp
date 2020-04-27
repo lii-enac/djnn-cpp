@@ -32,7 +32,7 @@ namespace djnn
   Line::Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2)
   : AbstractPropLine (parent, name, x1, y1, x2, y2)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Process*

@@ -63,7 +63,7 @@ namespace djnn
     Graph::instance ().add_edge (&_text, &_update_size);
     Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
 
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }*/
 
   Text::Text (Process *parent, const std::string& name, double x, double y, const std::string& text) :
@@ -89,7 +89,7 @@ namespace djnn
     //Graph::instance ().add_edge (&_text, &_update_size);
     Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
 
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Text::~Text ()

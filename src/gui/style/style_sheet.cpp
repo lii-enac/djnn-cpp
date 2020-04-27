@@ -31,7 +31,7 @@ namespace djnn
     style_array.push_back (this);
     _id = style_array.size () - 1;
     name_to_id.insert (std::pair<std::string, int> (n, _id));
-    Process::finalize_construction (parent, n);
+    finalize_construction (parent, n);
   }
 
   Process*

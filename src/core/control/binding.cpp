@@ -145,7 +145,7 @@ namespace djnn
     }
     if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Binding::Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, bool on_activation,
@@ -172,7 +172,7 @@ namespace djnn
     }
     if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Binding::~Binding ()

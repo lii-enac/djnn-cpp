@@ -45,7 +45,7 @@ namespace djnn
     add_state_dependency (get_parent (), &_action_step);
     
     if(parent)
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
   }
 
   Counter::~Counter () {

@@ -28,7 +28,7 @@ namespace djnn
       error  (this, std::string("action not found in activator ") + name);
       return;
     }
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Activator::Activator (Process* parent, const std::string& name, Process* action, const std::string& spec) :
@@ -39,7 +39,7 @@ namespace djnn
       error  (this, std::string("action not found in activator ") + name);
       return;
     }
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Activator::~Activator ()

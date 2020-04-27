@@ -203,7 +203,7 @@ namespace djnn
     init_Assignment ();
     if (_ref_info_src.is_ref()) _ref_update_src._update.impl_activate ();
     if (_ref_info_dst.is_ref()) _ref_update_dst._update.impl_activate ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void
@@ -270,7 +270,7 @@ namespace djnn
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
   {
     init_PausedAssignment ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void

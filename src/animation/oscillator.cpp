@@ -53,7 +53,7 @@ namespace djnn
     _c_step.disable ();
     Graph::instance ().add_edge (&_step, &_action);
     Graph::instance ().add_edge (&_action, &_output);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Oscillator::~Oscillator ()

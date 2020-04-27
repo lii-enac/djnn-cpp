@@ -23,7 +23,8 @@ namespace djnn {
 
   class RefProperty: public AbstractProperty {
   public:
-    RefProperty (Process* parent, const std::string& name, Process* v, unsigned int nm = notify_none) : AbstractProperty (parent, name, nm), value (v) { Process::finalize_construction (parent, name); }
+    RefProperty (Process* parent, const std::string& name, Process* v, unsigned int nm = notify_none) 
+    : AbstractProperty (parent, name, nm), value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }
 

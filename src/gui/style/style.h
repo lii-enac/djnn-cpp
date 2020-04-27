@@ -77,9 +77,9 @@ namespace djnn
   {
   public:
     FillColor (Process *parent, const std::string& name, int r, int g, int b) :
-        AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
+        AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
     FillColor (Process *parent, const std::string& name, int v) :
-        AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
+        AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~FillColor () {}
     void draw () override;
     Process* clone () override;
@@ -89,9 +89,9 @@ namespace djnn
   {
   public:
     OutlineColor (Process *parent, const std::string& name, int r, int g, int b) :
-        AbstractColor (parent, name, r, g, b) { Process::finalize_construction (parent, name); }
+        AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
     OutlineColor (Process *parent, const std::string& name, int v) :
-         AbstractColor (parent, name, v) { Process::finalize_construction (parent, name); }
+         AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~OutlineColor () {}
     void draw () override;
     Process* clone () override;
@@ -101,7 +101,7 @@ namespace djnn
   {
   public:
     NoOutline (Process *parent, const std::string& name) :
-        AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
+        AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
@@ -113,7 +113,7 @@ namespace djnn
   {
   public:
     NoFill (Process *parent, const std::string& name) :
-        AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
+        AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
@@ -125,7 +125,7 @@ namespace djnn
   {
   public:
     OutlineOpacity (Process *parent, const std::string& name, double alpha) :
-        AbstractOpacity (parent, name, alpha) { Process::finalize_construction (parent, name); }
+        AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~OutlineOpacity () {}
     void draw () override;
     Process* clone () override;
@@ -135,7 +135,7 @@ namespace djnn
   {
   public:
     FillOpacity (Process *parent, const std::string& name, double alpha) :
-        AbstractOpacity (parent, name, alpha) { Process::finalize_construction (parent, name); }
+        AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~FillOpacity () {}
     void draw () override;
     Process* clone () override;
@@ -146,7 +146,7 @@ namespace djnn
   {
   public:
     DashArray (Process *parent, const std::string& name) :
-        AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
+        AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~DashArray () { _dash_array.clear ();}
     const std::vector<double>& dash_array () const { return _dash_array;}
     void add_sub_pattern (double dash, double space)
@@ -166,7 +166,7 @@ namespace djnn
   {
   public:
     NoDashArray (Process *parent, const std::string& name) :
-        AbstractStyle (parent, name) { Process::finalize_construction (parent, name); }
+        AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoDashArray () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}

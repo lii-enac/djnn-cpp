@@ -266,7 +266,7 @@ namespace djnn
   {
     _press = new Spike (this, "press");
     _release = new Spike (this, "release");
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   GUIMouse::GUIMouse (Process *parent, const std::string& name)

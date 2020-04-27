@@ -86,7 +86,7 @@ namespace djnn
     _c_end_sel    = new Coupling (_end_selection, ACTIVATION, _end_selection_action, ACTIVATION, true);
     _c_select_all = new Coupling (_select_all, ACTIVATION, _select_all_action, ACTIVATION, true);
 
-    Process::finalize_construction (parent, name, nullptr);
+    finalize_construction (parent, name, nullptr);
   }
 
   TextField::~TextField ()

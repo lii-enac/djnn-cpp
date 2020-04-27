@@ -70,7 +70,7 @@ namespace djnn
     Graph::instance ().add_edge (&_t1, &_action);
     Graph::instance ().add_edge (&_t2, &_action);
     Graph::instance ().add_edge (&_action, &_output);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   HermiteCurve::~HermiteCurve ()

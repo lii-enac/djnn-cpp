@@ -25,7 +25,7 @@ namespace djnn
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {
     set_is_model (isModel);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   NativeAction::~NativeAction ()

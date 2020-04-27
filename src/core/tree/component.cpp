@@ -363,7 +363,7 @@ namespace djnn
       Container (parent, name)
   {
     set_is_model (isModel);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void

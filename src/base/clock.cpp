@@ -38,7 +38,7 @@ namespace djnn
     _updateaction (this, "action"),
     _c_update (&_period, ACTIVATION, &_updateaction, ACTIVATION, true)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
 

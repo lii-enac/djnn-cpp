@@ -85,7 +85,7 @@ namespace djnn
       PreviousAction (Process* parent, const std::string& name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
-       _prev (init_val) { Process::finalize_construction (parent, name); }
+       _prev (init_val) { finalize_construction (parent, name); }
       virtual ~PreviousAction () {}
       void impl_activate ()
       {

@@ -76,7 +76,7 @@ namespace djnn
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
     {
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     TextBinaryOperator (Process *parent, const std::string& name)
     : Process (name),
@@ -88,7 +88,7 @@ namespace djnn
       _c_right(&_right, ACTIVATION, &_action, ACTIVATION)
     {
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
     virtual ~TextBinaryOperator () {
       uninit_binary_couplings(this, _left, _right, _result, _action, _c_left, _c_right);
@@ -257,7 +257,7 @@ namespace djnn
     class DoubleFormatterAction : public Action
     {
     public:
-      DoubleFormatterAction (Process* parent, const std::string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { Process::finalize_construction (parent, name); }
+      DoubleFormatterAction (Process* parent, const std::string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { finalize_construction (parent, name); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();

@@ -40,7 +40,7 @@ namespace djnn
     _canchor (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   TextAnchor::~TextAnchor ()

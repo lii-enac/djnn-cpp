@@ -40,7 +40,7 @@ namespace djnn
     _coffset (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   DashOffset::~DashOffset ()

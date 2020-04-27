@@ -41,7 +41,7 @@ namespace djnn
   {
     add_symbol ("state", &_branch_name);
     _c_branch.disable ();
-    Process::finalize_construction (parent, name, &_action);
+    finalize_construction (parent, name, &_action);
   }
   
   Switch::~Switch ()

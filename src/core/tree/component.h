@@ -71,7 +71,7 @@ namespace djnn {
   class Component : public Container
   {
   public:
-    Component (Process* parent, const std::string& name) : Container (parent, name) { Process::finalize_construction (parent, name); }
+    Component (Process* parent, const std::string& name) : Container (parent, name) { finalize_construction (parent, name); }
     //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     Process* clone () override;
 #ifndef DJNN_NO_SERIALIZE

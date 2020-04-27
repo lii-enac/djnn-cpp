@@ -44,7 +44,7 @@ namespace djnn
   	Volume(Process* parent, const std::string& name, double volume)
   	: AbstractVolume(parent, name, volume)
   	{
-  		Process::finalize_construction (parent, name);
+  		finalize_construction (parent, name);
   	}
 
   	/*

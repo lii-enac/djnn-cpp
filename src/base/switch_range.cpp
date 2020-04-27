@@ -31,7 +31,7 @@ namespace djnn
   {
     add_symbol ("lower", &_lower);
     add_symbol ("upper", &_upper);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   SwitchRangeBranch::~SwitchRangeBranch ()
@@ -89,7 +89,7 @@ namespace djnn
     add_symbol ("input", &_input); // FIXME should be value?
     add_symbol ("state", &_branch_name); // FIXME should ne state for the sake of consistency with other switches
     _c_branch.disable ();
-    Process::finalize_construction (parent, name, &_action);
+    finalize_construction (parent, name, &_action);
   }
 
   SwitchRange::~SwitchRange ()

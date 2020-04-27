@@ -26,7 +26,7 @@ namespace djnn {
     class RefreshAction : public Action
     {
     public:
-      RefreshAction (CairoDRMWindow* win, const std::string& name) : Action (nullptr, name), _win (win) { Process::finalize_construction (nullptr, name); }
+      RefreshAction (CairoDRMWindow* win, const std::string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
       virtual ~RefreshAction () {}
       void impl_activate () { _win->ask_refresh (); }
       void impl_deactivate () {}
@@ -36,7 +36,7 @@ namespace djnn {
     class ChangeDpyAction : public Action
     {
     public:
-      ChangeDpyAction (CairoDRMWindow* win, const std::string& name) : Action (nullptr, name), _win (win) { Process::finalize_construction (nullptr, name); }
+      ChangeDpyAction (CairoDRMWindow* win, const std::string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
       virtual ~ChangeDpyAction () {}
       void impl_activate () { _win->update_dpy_connection (); _win->ask_refresh (); }
       void impl_deactivate () {_win->update_dpy_connection (); }

@@ -27,7 +27,7 @@ namespace djnn
   Defs::Defs (Process* parent, const std::string& n) :
       Container (parent, n)
   {
-    Process::finalize_construction (parent, n);
+    finalize_construction (parent, n);
   }
 
   Defs::~Defs ()

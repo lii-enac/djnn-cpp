@@ -40,7 +40,7 @@ namespace djnn
     _climit (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   OutlineMiterLimit::~OutlineMiterLimit ()

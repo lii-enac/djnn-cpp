@@ -32,13 +32,13 @@ namespace djnn {
     void impl_deactivate () override {}
     void* data ();
 
-    virtual void set_activation_source (Process* src) override { _activation_source = src; }
-    virtual Process* get_activation_source () override { return _activation_source; }
+    virtual void set_activation_source (CoreProcess* src) override { _activation_source = src; }
+    virtual CoreProcess* get_activation_source () override { return _activation_source; }
 
   private:
     void *_data;
     NativeCode *_action;
-    Process *_activation_source;
+    CoreProcess *_activation_source;
   };
   void* get_native_user_data (Process* native_action);
 }

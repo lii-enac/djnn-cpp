@@ -47,7 +47,7 @@ namespace djnn
     c_input (&_input, ACTIVATION, &_action, ACTIVATION, true)
   {
     init ();
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
 #ifndef DJNN_NO_SERIALIZE
@@ -113,7 +113,7 @@ namespace djnn
     _c_decimal (&_decimal, ACTIVATION, &_action, ACTIVATION)
   {
     init (initial, decimal);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   void
@@ -164,7 +164,7 @@ namespace djnn
     Graph::instance ().add_edge (&_del, &_del_action);
     Graph::instance ().add_edge (&_acc_action, &_state);
     Graph::instance ().add_edge (&_del_action, &_state);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   TextAccumulator::~TextAccumulator ()
@@ -248,7 +248,7 @@ namespace djnn
   {
     _c_reg.disable ();
     Graph::instance ().add_edge (&_input, &_reg_action);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   Regex::~Regex ()

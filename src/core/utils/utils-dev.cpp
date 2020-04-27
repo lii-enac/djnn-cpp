@@ -91,16 +91,20 @@ namespace djnn
    }
 
   const std::string&
-  get_parent_name (const Process *p, int up)
+  get_parent_name (const CoreProcess *cp, int up)
   {
+    const auto * p = dynamic_cast<const Process*>(cp);
+    if(!p) return Process::default_name;
     while(up && p) { p=p->get_parent(); --up; }
     if(p) return p->get_name();
     else return Process::default_name;
   }
 
   const std::string
-  get_hierarchy_name (const Process *p, int up)
+  get_hierarchy_name (const CoreProcess *cp, int up)
   {
+    const auto * p = dynamic_cast<const Process*>(cp);
+    if(!p) return Process::default_name;
     std::string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;

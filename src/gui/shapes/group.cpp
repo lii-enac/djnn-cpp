@@ -34,7 +34,7 @@ namespace djnn
     _gobj->set_parent (this);
     
 
-    Process::finalize_construction (parent, n);
+    finalize_construction (parent, n);
 
     /* and set state_dependency here AFTER setting the parent to "this" */
     _gobj->set_state_dependency (this->state_dependency ());

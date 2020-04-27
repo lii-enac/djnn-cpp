@@ -42,7 +42,7 @@ namespace djnn
   _c_filename (&_filename, ACTIVATION, &_fn_action, ACTIVATION, true),
   _fs (filename, std::ofstream::out | std::ofstream::trunc)
   {
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   FileWriter::~FileWriter ()

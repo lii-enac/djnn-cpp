@@ -27,10 +27,12 @@ namespace djnn {
     Reference
   };
 
-  class AbstractProperty : public Process
+  class AbstractProperty : public CoreProcess
   {
   public:
-    AbstractProperty (Process* parent, const std::string& name, unsigned int nm=notify_none) : Process (name), _notify_mask (nm) {}
+    AbstractProperty (Process* parent, const std::string& name, unsigned int nm=notify_none) :
+      //Process (name),
+      _notify_mask (nm) {}
     virtual ~AbstractProperty () override {}
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () const = 0;

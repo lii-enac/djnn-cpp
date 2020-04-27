@@ -40,7 +40,7 @@ namespace djnn
     _ccap (nullptr)
   {
     
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   OutlineCapStyle::~OutlineCapStyle ()
