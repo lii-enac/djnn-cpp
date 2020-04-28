@@ -323,13 +323,13 @@ namespace djnn
     if (ui)
       ui->deactivate ();
     // remove from picking_view if is the current object
-    /*if (is_pickable(this)) {
+    if (is_pickable(this)) {
       if (this->frame ()) {
         if(this->frame ()->picking_view ()) {
           this->frame ()->picking_view ()->object_deactivated (this);
         }
       }
-    }*/
+    }
 
     AbstractGObj::impl_deactivate ();
   }
