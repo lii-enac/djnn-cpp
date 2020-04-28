@@ -25,7 +25,6 @@ namespace djnn {
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation = false);
     Coupling (); // needed for pointer-less zombie initialization
     ~Coupling();
-    void set_data (Process* data) { _data = data; }
     
     void propagate_activation ();
     void propagate_deactivation ();
@@ -35,11 +34,12 @@ namespace djnn {
     // process
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
-    CoreProcess* get_data () { return _data; }
+    //CoreProcess* get_data () { return _data; }
+    //void set_data (CoreProcess* data) { _data = data; }
 
-    void enable ()              { set_is_enabled (true); }
-    void enable (Process* data) { set_is_enabled (true); _data = data; }
-    void disable ()             { set_is_enabled (false); }
+    void enable ()                  { set_is_enabled (true); }
+    void enable (CoreProcess* data) { set_is_enabled (true); _data = data; }
+    void disable ()                 { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
     bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }

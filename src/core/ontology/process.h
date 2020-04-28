@@ -256,7 +256,7 @@ namespace djnn {
     virtual ~Process ();
     virtual Process* clone () override { CoreProcess::clone (); return nullptr; }
     
-    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
+    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 
     // actions to be redefined by subclasses
     virtual     void update_drawing () {}
