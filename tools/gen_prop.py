@@ -83,7 +83,7 @@ namespace djnn
     %(DELETE_COUPLINGS)s;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (get_num_children () > %(ORIGIN_IN_SYMTABLE)s) {
+    if (children_size () > %(ORIGIN_IN_SYMTABLE)s) {
       symtable_t::iterator it;
 
       %(DELETE_DYN_PROPS)s
@@ -332,7 +332,7 @@ def just_do_it(dc, finalize_construction=True):
       
     FINALIZE_CONSTRUCTION = ''
     if(dc.finalize_construction):
-        FINALIZE_CONSTRUCTION = "Process::finalize_construction (parent, name);"
+        FINALIZE_CONSTRUCTION = "finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
     DECL_CLONE = ''
