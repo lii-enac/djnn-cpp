@@ -23,7 +23,8 @@ namespace djnn {
 
   class Action : public Process {
   public:
-    Action (Process *parent, const std::string& n, bool model = false) : Process (n, model) 
+    Action (Process *parent, const std::string& n, bool model = false)
+    : Process (n, model)
     {
       /* note:
        * finalize_constructor for action 
