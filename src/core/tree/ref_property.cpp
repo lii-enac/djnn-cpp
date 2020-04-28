@@ -62,10 +62,21 @@ namespace djnn
     return __to_string(value);
   }
 
+  string
+  RefProperty::get_string_value () const
+  {
+    return __to_string(value);
+  }
+
   double
   RefProperty::get_double_value ()
   {
     warning (this, "undefined double value for ref property");
+    return 0;
+  }
+  double
+  RefProperty::get_double_value () const
+  {
     return 0;
   }
 

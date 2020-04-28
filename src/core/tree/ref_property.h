@@ -35,7 +35,9 @@ namespace djnn {
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);}
     double get_double_value () override;
+    double get_double_value () const override;
     std::string get_string_value () override;
+    std::string get_string_value () const override;
     Process* find_child (const std::string& path) override;
     Process* clone () override;
 

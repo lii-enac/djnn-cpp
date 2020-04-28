@@ -45,12 +45,15 @@ namespace djnn {
     virtual void set_value (const std::string& v, bool propagate) = 0;
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;
+    virtual double get_double_value () const = 0;
     virtual std::string get_string_value () = 0;
+    virtual std::string get_string_value () const = 0;
   protected:
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_activate () override {}
     void impl_deactivate () override {}
     unsigned int _notify_mask;
   };
-
 }
+
+#include "core/tree/operators.h"

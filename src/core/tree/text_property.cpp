@@ -29,6 +29,18 @@ namespace djnn
 
   static string null_string = "null string";
 
+  string
+  toString(const AbstractProperty& x)
+  {
+      return x.get_string_value();
+  }
+
+  string&
+  toString(Process* p)
+  {
+      return getString (p);
+  }
+
   string&
   getString (Process* p)
   {
@@ -59,6 +71,18 @@ namespace djnn
     }
     catch (const std::invalid_argument& ia) {
       warning (this, "undefined double value for text property");
+      return 0;
+    }
+  }
+
+  double
+  AbstractTextProperty::get_double_value () const
+  {
+    try {
+      double r = stof (get_ref_value());
+      return r;
+    }
+    catch (const std::invalid_argument& ia) {
       return 0;
     }
   }

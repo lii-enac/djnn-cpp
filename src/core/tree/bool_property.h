@@ -36,11 +36,14 @@ namespace djnn {
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
+    double get_double_value () const override { return get_ref_value(); }
     std::string get_string_value () override { return std::to_string (get_ref_value ()); }
+    std::string get_string_value () const override { return std::to_string (get_ref_value ()); }
     bool get_value () { return get_ref_value(); };
 
   protected:
     virtual bool& get_ref_value() = 0;
+    virtual const bool& get_ref_value() const = 0;
     Spike _true, _false;
 
   public:
@@ -55,6 +58,7 @@ namespace djnn {
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
+    virtual const bool& get_ref_value() const override { return value; }
   private:
     bool value;
 
@@ -70,6 +74,7 @@ namespace djnn {
     Process* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
+    virtual const bool& get_ref_value() const override { return value; }
   private:
     bool& value;
   public:
