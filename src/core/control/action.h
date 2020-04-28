@@ -25,6 +25,7 @@ namespace djnn {
   public:
     Action (Process *parent, const std::string& n, bool model = false)
     : Process (n, model)
+    //: ChildProcess (model)
     {
       /* note:
        * finalize_constructor for action 
