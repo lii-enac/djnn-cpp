@@ -130,7 +130,7 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr) {}
+    virtual void finalize_construction (Process* parent, const std::string& name, CoreProcess* state=nullptr) {}
 
   private:
     // >>instance fields start here
@@ -234,7 +234,22 @@ namespace djnn {
   
   };
 
-  class Process : public CoreProcess
+  class ChildProcess : public CoreProcess
+  {
+  public:
+    ChildProcess (bool model = false) : CoreProcess(model), _parent(nullptr), _state_dependency(nullptr) {}
+    virtual void set_parent(Process* p); // { _parent = p; }
+    Process* get_parent() { return _parent; }
+    const Process* get_parent () const { return _parent; }
+    CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
+    void set_state_dependency (CoreProcess* s) { _state_dependency = s; }
+  protected:
+    //void finalize_construction (Process* parent, const std::string& name);
+    Process *_parent;
+    CoreProcess *_state_dependency;
+  };
+
+  class Process : public ChildProcess
   {
   public:
     Process (const std::string& name, bool model = false);
@@ -242,10 +257,7 @@ namespace djnn {
     virtual Process* clone () override { CoreProcess::clone (); return nullptr; }
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons
-    Process* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
-    void set_state_dependency (Process* s) { _state_dependency = s; }
-    
-    
+
     // actions to be redefined by subclasses
     virtual     void update_drawing () {}
     virtual     void draw () {}
@@ -253,9 +265,9 @@ namespace djnn {
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
     
     // tree, component, symtable 
-    Process* get_parent () override { return _parent; }
-    const Process* get_parent () const override { return _parent; }
-    virtual void   set_parent (Process* p) override;
+    //Process* get_parent () override { return _parent; }
+    //const Process* get_parent () const override { return _parent; }
+    //virtual void   set_parent (Process* p) override;
     virtual void   add_child (Process* c, const std::string& name) override;
     virtual void   remove_child (Process* c) override;
     virtual void   remove_child (const std::string& name) override;
@@ -298,7 +310,7 @@ namespace djnn {
     CoreProcess* get_data () override;
 
   protected:
-    void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr) override;
+    void finalize_construction (Process* parent, const std::string& name, CoreProcess* state=nullptr) override;
 
   private:
     static long int _nb_anonymous;
@@ -306,8 +318,8 @@ namespace djnn {
 // >>instance fields start here
   private:
     
-    Process *_parent;
-    Process *_state_dependency;
+    //Process *_parent;
+    //Process *_state_dependency;
     CoreProcess *_data;
     symtable_t _symtable;
     //string _name;

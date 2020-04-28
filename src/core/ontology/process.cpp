@@ -55,7 +55,7 @@ namespace djnn
 #endif
 
   string Process::default_name = "noname";
-  static map<const Process*, string> parentless_names;
+  static map<const ChildProcess*, string> parentless_names;
 
   CoreProcess::CoreProcess (bool model)
   : _vertex (nullptr)
@@ -85,12 +85,15 @@ namespace djnn
   }
 
   Process::Process (const std::string& name, bool model)
-  : CoreProcess(model), _parent (nullptr), _state_dependency (nullptr), _data (nullptr)
+  : ChildProcess(model),
+  //_parent (nullptr),
+  //_state_dependency (nullptr),
+  _data (nullptr)
   {
   }
 
   void
-  Process::finalize_construction (Process* parent, const std::string& name, Process* state_dep) /* called by SubProcess to link to parent */
+  Process::finalize_construction (Process* parent, const std::string& name, CoreProcess* state_dep) /* called by SubProcess to link to parent */
   {
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
@@ -349,7 +352,7 @@ namespace djnn
   // tree, component, symtable
 
   void
-  Process::set_parent (Process* p)
+  ChildProcess::set_parent (Process* p)
   {
     if (p == nullptr) {
       if(_parent)
