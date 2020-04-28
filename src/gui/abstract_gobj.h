@@ -59,10 +59,10 @@ namespace djnn
     void set_impl(AbstractGObjImpl* i) { _impl=i; }
     
   protected:
-    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, Coupling  **cprop, bool *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (IntPropertyProxy **prop, Coupling  **cprop, int *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, Coupling  **cprop, double *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (TextPropertyProxy **prop, Coupling  **cprop, std::string *rawp, const std::string& name, int notify_mask);
+    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask);
+    virtual Process* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask);
+    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask);
+    virtual Process* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask);
 
   protected:
     void update_frame_if_necessary ();

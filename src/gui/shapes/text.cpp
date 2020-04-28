@@ -180,7 +180,7 @@ namespace djnn
 
     bool propd = false;
     bool propi = false;
-    Coupling ** coupling;
+    CouplingWithData ** coupling;
     double* rawpd;
     int* rawpi;
     int notify_mask = notify_none;
@@ -277,7 +277,7 @@ namespace djnn
 
         /* update value */
         _update_size._ff = ff;
-        _cffamily = new Coupling (ff->family (), ACTIVATION, &_update_size, ACTIVATION);
+        _cffamily = new CouplingWithData (ff->family (), ACTIVATION, &_update_size, ACTIVATION);
         Graph::instance ().add_edge (ff->family (), &_update_size);
       }
 
@@ -294,7 +294,7 @@ namespace djnn
 
         /* update value */
         _update_size._fsz = fsz;
-        _cfsize = new Coupling (fsz->size (), ACTIVATION, &_update_size, ACTIVATION);
+        _cfsize = new CouplingWithData (fsz->size (), ACTIVATION, &_update_size, ACTIVATION);
         Graph::instance ().add_edge (fsz->size (), &_update_size);
       }
 
@@ -311,7 +311,7 @@ namespace djnn
 
         /* update value */
         _update_size._fs = fs;
-        _cfstyle = new Coupling (fs->style (), ACTIVATION, &_update_size, ACTIVATION);
+        _cfstyle = new CouplingWithData (fs->style (), ACTIVATION, &_update_size, ACTIVATION);
         Graph::instance ().add_edge (fs->style (), &_update_size);
       }
 
@@ -328,7 +328,7 @@ namespace djnn
 
         /* update value */
         _update_size._fw = fw;
-        _cfweight = new Coupling (fw->weight (), ACTIVATION, &_update_size, ACTIVATION);
+        _cfweight = new CouplingWithData (fw->weight (), ACTIVATION, &_update_size, ACTIVATION);
         Graph::instance ().add_edge (fw->weight (), &_update_size);
       }
     }

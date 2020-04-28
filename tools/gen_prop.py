@@ -42,7 +42,7 @@ namespace djnn
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
     raw_props_t raw_props;
-    Coupling %(DECL_PROPS_COUPLING_POINTER)s;
+    CouplingWithData %(DECL_PROPS_COUPLING_POINTER)s;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -97,7 +97,7 @@ namespace djnn
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    Coupling ** coupling = nullptr;
+    CouplingWithData ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef std::string text;

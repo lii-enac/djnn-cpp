@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int limit; };
     raw_props_t raw_props;
-    Coupling *_climit;
+    CouplingWithData *_climit;
     void impl_activate () override;
     void impl_deactivate () override;
   };

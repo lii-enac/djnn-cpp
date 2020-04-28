@@ -70,17 +70,17 @@ namespace djnn
 
   Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
                       activation_flag_e dst_flag, bool immediate_propagation) :
-      _src (src), _dst (dst), _data (nullptr)
+      _src (src), _dst (dst)
   {
     init (src, src_flag, dst, dst_flag, immediate_propagation);
   }
 
-  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
-                      activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation) :
-    Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
+  /*void
+  Coupling::change_source (CoreProcess *src, CoreProcess* data)
   {
+    change_source(src);
     _data = data;
-  }
+  }*/
 
   Coupling::Coupling ()
   : _src(nullptr), _dst(nullptr)
@@ -93,7 +93,7 @@ namespace djnn
   }
 
   void
-  Coupling::change_source (CoreProcess *src, CoreProcess* data)
+  Coupling::change_source (CoreProcess *src) //, CoreProcess* data)
   {
     //if (src != nullptr) {
       switch(get_src_activation_flag ()) {
@@ -110,14 +110,14 @@ namespace djnn
       }
     //}
     _src = src;
-    _data = data;
+    //_data = data;
   }
 
   void
   Coupling::propagate_activation ()
   {
     _dst->set_activation_source (_src);
-    _dst->set_data (_data);
+    //_dst->set_data (_data);
     if (is_immediate ()) {
       propagate_immediately ();
     }
@@ -131,7 +131,7 @@ namespace djnn
   Coupling::propagate_deactivation ()
   {
     _dst->set_activation_source (_src);
-    _dst->set_data (_data);
+    //_dst->set_data (_data);
     if (is_immediate ()) {
       propagate_immediately ();
     }
@@ -155,6 +155,28 @@ namespace djnn
       _dst->coupling_deactivation_hook ();
       break;
     }
+  }
+
+
+  CouplingWithData::CouplingWithData (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
+                      activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation)
+  : Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
+  {
+    _data = data;
+  }
+
+  void
+  CouplingWithData::propagate_activation ()
+  {
+    _dst->set_data (_data);
+    Coupling::propagate_activation ();
+  }
+
+  void
+  CouplingWithData::propagate_deactivation ()
+  {
+    _dst->set_data (_data);
+    Coupling::propagate_deactivation ();
   }
 
 }

@@ -22,23 +22,18 @@ namespace djnn {
   class Coupling {
   public:
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
-    Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation = false);
     Coupling (); // needed for pointer-less zombie initialization
-    ~Coupling();
+    virtual ~Coupling(); // FIXME: get rid of virtual to save 8 bytes
     
-    void propagate_activation ();
-    void propagate_deactivation ();
-    void change_source (CoreProcess *src, CoreProcess *data);
-    void change_source (CoreProcess *src) { change_source (src, _data); }
-
+    virtual void propagate_activation (); // FIXME: get rid of virtual to save 8 bytes
+    virtual void propagate_deactivation (); // FIXME: get rid of virtual to save 8 bytes
+    void change_source (CoreProcess *src);
+    
     // process
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
-    //CoreProcess* get_data () { return _data; }
-    //void set_data (CoreProcess* data) { _data = data; }
 
     void enable ()                  { set_is_enabled (true); }
-    void enable (CoreProcess* data) { set_is_enabled (true); _data = data; }
     void disable ()                 { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
@@ -48,11 +43,11 @@ namespace djnn {
 
     void init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     void uninit ();
-  private:
+
+  protected:
     void propagate_immediately ();
 
-    CoreProcess *_src, *_dst, *_data;
-
+    CoreProcess *_src, *_dst;
     unsigned int _bitset;
     
     enum bit_shift {
@@ -84,6 +79,28 @@ namespace djnn {
     activation_flag_e get_dst_activation_flag () const { return static_cast<activation_flag_e>(get_bitset (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_SHIFT)); }
     void set_dst_activation_flag (activation_flag_e VALUE) {                                   set_bitset (DST_ACTIVATION_FLAG_MASK, DST_ACTIVATION_FLAG_SHIFT, VALUE); }
     
+  };
+
+  // FIXME: get rid of CouplingWithData
+  //    on créé un couplage entre les propriétés d'un shape et UpdateDrawing::_damaged (un spike), à chaque demande d'un proxy de propriété AbstractGObj::create_GObj_prop
+	// 		on enable le couplage avec un user_data pour la frame: on fait transiter la _frame de l'objet par ce couplage à coup de void* data
+	// 		UpdateDrawing utilise un coupling_activation_hook pour dire à ladite frame de ser refresher...
+
+	// 		pourrait être remplacé en théorie par :
+	// 			un binding de shape::prop vers un shape::_frame
+	// 			un connecteur de _frame entre shape::_frame => UpdateDrawing::_frame
+	// 			un binding entre UpdateDrawing::_frame et une action qui dit à la frame "refresh"
+
+  class CouplingWithData : public Coupling {
+  public:
+    CouplingWithData (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data=nullptr, bool immediate_propagation = false);
+    ~CouplingWithData() {}
+
+    void enable (CoreProcess* data) { set_is_enabled (true); _data = data; }
+    void propagate_activation () override;
+    void propagate_deactivation () override;
+  private:
+    CoreProcess *_data;
   };
 
 }

@@ -84,7 +84,7 @@ namespace djnn
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    Coupling ** coupling = nullptr;
+    CouplingWithData ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef std::string text;

@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { double width; };
     raw_props_t raw_props;
-    Coupling *_cwidth;
+    CouplingWithData *_cwidth;
     void impl_activate () override;
     void impl_deactivate () override;
   };

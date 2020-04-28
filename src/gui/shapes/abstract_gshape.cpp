@@ -125,7 +125,7 @@ namespace djnn
   {
     pickable = new BoolProperty (p, "pickable", true);
     Process *update = UpdateDrawing::instance ()->get_damaged ();
-    cpick = new Coupling (pickable, ACTIVATION, update, ACTIVATION);
+    cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
     if (f != nullptr)
       cpick->enable (f);
     press = new Spike (p, "press");

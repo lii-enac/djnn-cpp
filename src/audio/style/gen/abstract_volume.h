@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { double volume; };
     raw_props_t raw_props;
-    Coupling *_cvolume;
+    CouplingWithData *_cvolume;
     void impl_activate () override;
     void impl_deactivate () override;
   };

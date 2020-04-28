@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int style; };
     raw_props_t raw_props;
-    Coupling *_cstyle;
+    CouplingWithData *_cstyle;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -417,52 +417,52 @@ namespace djnn {
     Spike  *_rightTranslateBy_spike;
     Action *_rightTranslateBy_action;
     DoubleProperty *_rightTranslateBy_dx, *_rightTranslateBy_dy;
-    Coupling *_rightTranslateBy_dx_coupling, *_rightTranslateBy_dy_coupling;
+    CouplingWithData *_rightTranslateBy_dx_coupling, *_rightTranslateBy_dy_coupling;
     /* leftTranslateBy ptr */
     Spike  *_leftTranslateBy_spike;
     Action *_leftTranslateBy_action;
     DoubleProperty *_leftTranslateBy_dx, *_leftTranslateBy_dy;
-    Coupling *_leftTranslateBy_dx_coupling, *_leftTranslateBy_dy_coupling;
+    CouplingWithData *_leftTranslateBy_dx_coupling, *_leftTranslateBy_dy_coupling;
     /* rightScaleBy ptr */
     Spike  *_rightScaleBy_spike;
     Action *_rightScaleBy_action;
     DoubleProperty *_rightScaleBy_cx, *_rightScaleBy_cy ,*_rightScaleBy_sx, *_rightScaleBy_sy;
-    Coupling *_rightScaleBy_cx_coupling, *_rightScaleBy_cy_coupling, *_rightScaleBy_sx_coupling, *_rightScaleBy_sy_coupling;
+    CouplingWithData *_rightScaleBy_cx_coupling, *_rightScaleBy_cy_coupling, *_rightScaleBy_sx_coupling, *_rightScaleBy_sy_coupling;
     /* leftScaleBy ptr */
     Spike  *_leftScaleBy_spike;
     Action *_leftScaleBy_action;
     DoubleProperty *_leftScaleBy_cx, *_leftScaleBy_cy ,*_leftScaleBy_sx, *_leftScaleBy_sy;
-    Coupling *_leftScaleBy_cx_coupling, *_leftScaleBy_cy_coupling, *_leftScaleBy_sx_coupling, *_leftScaleBy_sy_coupling;
+    CouplingWithData *_leftScaleBy_cx_coupling, *_leftScaleBy_cy_coupling, *_leftScaleBy_sx_coupling, *_leftScaleBy_sy_coupling;
     /* rightRotateBy ptr */
     Spike *_rightRotateBy_spike;
     Action *_rightRotateBy_action;
     DoubleProperty *_rightRotateBy_cx, *_rightRotateBy_cy, *_rightRotateBy_da;
-    Coupling *_rightRotateBy_cx_coupling, *_rightRotateBy_cy_coupling, *_rightRotateBy_da_coupling;
+    CouplingWithData *_rightRotateBy_cx_coupling, *_rightRotateBy_cy_coupling, *_rightRotateBy_da_coupling;
     /* leftRotateBy ptr */
     Spike *_leftRotateBy_spike;
     Action *_leftRotateBy_action;
     DoubleProperty *_leftRotateBy_cx, *_leftRotateBy_cy, *_leftRotateBy_da;
-    Coupling *_leftRotateBy_cx_coupling, *_leftRotateBy_cy_coupling, *_leftRotateBy_da_coupling;
+    CouplingWithData *_leftRotateBy_cx_coupling, *_leftRotateBy_cy_coupling, *_leftRotateBy_da_coupling;
     /* rightSkewXBy ptr */
     Spike *_rightSkew_X_By_spike;
     Action *_rightSkew_X_By_action;
     DoubleProperty *_rightSkew_X_By_cx, *_rightSkew_X_By_cy, *_rightSkew_X_By_da;
-    Coupling *_rightSkew_X_By_cx_coupling, *_rightSkew_X_By_cy_coupling, *_rightSkew_X_By_da_coupling;
+    CouplingWithData *_rightSkew_X_By_cx_coupling, *_rightSkew_X_By_cy_coupling, *_rightSkew_X_By_da_coupling;
     /* leftSkewXBy ptr */
     Spike *_leftSkew_X_By_spike;
     Action *_leftSkew_X_By_action;
     DoubleProperty *_leftSkew_X_By_cx, *_leftSkew_X_By_cy, *_leftSkew_X_By_da;
-    Coupling *_leftSkew_X_By_cx_coupling, *_leftSkew_X_By_cy_coupling, *_leftSkew_X_By_da_coupling;
+    CouplingWithData *_leftSkew_X_By_cx_coupling, *_leftSkew_X_By_cy_coupling, *_leftSkew_X_By_da_coupling;
     /* rightSkewXBy ptr */
     Spike *_rightSkew_Y_By_spike;
     Action *_rightSkew_Y_By_action;
     DoubleProperty *_rightSkew_Y_By_cx, *_rightSkew_Y_By_cy, *_rightSkew_Y_By_da;
-    Coupling *_rightSkew_Y_By_cx_coupling, *_rightSkew_Y_By_cy_coupling, *_rightSkew_Y_By_da_coupling;
+    CouplingWithData *_rightSkew_Y_By_cx_coupling, *_rightSkew_Y_By_cy_coupling, *_rightSkew_Y_By_da_coupling;
     /* leftSkewXBy ptr */
     Spike *_leftSkew_Y_By_spike;
     Action *_leftSkew_Y_By_action;
     DoubleProperty *_leftSkew_Y_By_cx, *_leftSkew_Y_By_cy, *_leftSkew_Y_By_da;
-    Coupling *_leftSkew_Y_By_cx_coupling, *_leftSkew_Y_By_cy_coupling, *_leftSkew_Y_By_da_coupling;
+    CouplingWithData *_leftSkew_Y_By_cx_coupling, *_leftSkew_Y_By_cy_coupling, *_leftSkew_Y_By_da_coupling;
 
     /* Coordinate calculations */
 

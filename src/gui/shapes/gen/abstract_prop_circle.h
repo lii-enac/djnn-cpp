@@ -37,7 +37,7 @@ namespace djnn
   protected:
     struct raw_props_t { double cx; double cy; double r; };
     raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_cr;
+    CouplingWithData *_ccx, *_ccy, *_cr;
     void impl_activate () override;
     void impl_deactivate () override;
   };

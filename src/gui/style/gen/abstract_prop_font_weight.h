@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int weight; };
     raw_props_t raw_props;
-    Coupling *_cweight;
+    CouplingWithData *_cweight;
     void impl_activate () override;
     void impl_deactivate () override;
   };

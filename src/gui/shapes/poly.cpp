@@ -73,7 +73,7 @@ namespace djnn {
     Process* res = AbstractGObj::find_child(name);
     if(res) return res;
 
-    Coupling ** coupling;
+    CouplingWithData ** coupling;
     double* rawp;
     int notify_mask = notify_none;
 

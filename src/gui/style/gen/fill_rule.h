@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int rule; };
     raw_props_t raw_props;
-    Coupling *_crule;
+    CouplingWithData *_crule;
     void impl_activate () override;
     void impl_deactivate () override;
   };

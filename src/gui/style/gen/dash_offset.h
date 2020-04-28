@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { double offset; };
     raw_props_t raw_props;
-    Coupling *_coffset;
+    CouplingWithData *_coffset;
     void impl_activate () override;
     void impl_deactivate () override;
   };

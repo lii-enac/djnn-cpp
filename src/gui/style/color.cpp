@@ -401,7 +401,7 @@ namespace djnn
     Process* res = AbstractStyle::find_child(name);
     if(res) return res;
 
-    Coupling ** coupling = nullptr;
+    CouplingWithData ** coupling = nullptr;
     int* rawp_Int = nullptr;
     int notify_mask = notify_none;
     IntPropertyProxy* prop = nullptr; // do not cache
@@ -412,7 +412,7 @@ namespace djnn
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
-      _c_rv = new Coupling (res, ACTIVATION, &_toValue, ACTIVATION);
+      _c_rv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
     } else
     if(name=="g") {
       coupling=&_cg;
@@ -420,7 +420,7 @@ namespace djnn
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
-      _c_gv = new Coupling (res, ACTIVATION, &_toValue, ACTIVATION);
+      _c_gv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
     } else
     if(name=="b") {
       coupling=&_cb;
@@ -428,14 +428,14 @@ namespace djnn
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
-      _c_bv = new Coupling (res, ACTIVATION, &_toValue, ACTIVATION);
+      _c_bv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
     } else
     if(name=="value") {
       coupling=&_cv;
       rawp_Int=&raw_props.value;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      _c_vrgb = new Coupling (res, ACTIVATION, &_toRGB, ACTIVATION, true);
+      _c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, nullptr, true);
     } else
     return nullptr;
     

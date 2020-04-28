@@ -56,7 +56,8 @@ namespace djnn
   protected:
     struct raw_props_t { int r; int g; int b; int value; };
     raw_props_t raw_props;
-    Coupling *_cr, *_cg, *_cb, *_cv, *_c_rv, *_c_gv, *_c_bv, *_c_vrgb;
+    CouplingWithData *_cr, *_cg, *_cb, *_cv;
+    Coupling *_c_rv, *_c_gv, *_c_bv, *_c_vrgb;
     ToValueAction _toValue;
     ToRGBAction _toRGB;
     bool _is_updating;

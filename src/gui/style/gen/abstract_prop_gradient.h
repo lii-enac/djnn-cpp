@@ -36,7 +36,7 @@ namespace djnn
   protected:
     struct raw_props_t { int spread; int coords; };
     raw_props_t raw_props;
-    Coupling *_cspread, *_ccoords;
+    CouplingWithData *_cspread, *_ccoords;
     void impl_activate () override;
     void impl_deactivate () override;
   };

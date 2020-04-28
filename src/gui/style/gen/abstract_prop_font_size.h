@@ -36,7 +36,7 @@ namespace djnn
   protected:
     struct raw_props_t { int unit; double size; };
     raw_props_t raw_props;
-    Coupling *_cunit, *_csize;
+    CouplingWithData *_cunit, *_csize;
     void impl_activate () override;
     void impl_deactivate () override;
   };

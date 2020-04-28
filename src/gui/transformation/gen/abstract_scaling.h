@@ -38,7 +38,7 @@ namespace djnn
   protected:
     struct raw_props_t { double sx; double sy; double cx; double cy; };
     raw_props_t raw_props;
-    Coupling *_csx, *_csy, *_ccx, *_ccy;
+    CouplingWithData *_csx, *_csy, *_ccx, *_ccy;
     void impl_activate () override;
     void impl_deactivate () override;
   };

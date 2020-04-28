@@ -87,10 +87,10 @@ namespace djnn {
 
   class TouchAlive {
     public:
-      TouchAlive (Point *last_pt, Point *new_pt, Coupling *cpl) :  _last_pt (last_pt), _new_pt (new_pt), _cpl (cpl) {}
+      TouchAlive (Point *last_pt, Point *new_pt, CouplingWithData *cpl) :  _last_pt (last_pt), _new_pt (new_pt), _cpl (cpl) {}
       virtual ~TouchAlive () { delete _cpl; delete _last_pt; delete _new_pt;}
     Point *_last_pt, *_new_pt;
-    Coupling *_cpl;
+    CouplingWithData *_cpl;
   };
 
   class ScaleRotateTranslate : public Process

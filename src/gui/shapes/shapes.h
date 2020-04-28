@@ -136,7 +136,7 @@ namespace djnn
     void set_parent (Process* p) override;
     struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; std::string text; };
     raw_props_t raw_props;    
-    Coupling *_cx, *_cy, *_cdx, *_cdy, *_cfsize, 
+    CouplingWithData *_cx, *_cy, *_cdx, *_cdy, *_cfsize,
       *_cdxU, *_cdyU, *_cencoding, *_cfstyle, *_cfweight,
       *_cffamily;
 
@@ -150,7 +150,7 @@ namespace djnn
 
     // text must notify_geometry when changed, hence it's a proxy
     TextPropertyProxy _text; 
-    Coupling _cupdate_size, _ctext;
+    CouplingWithData _cupdate_size, _ctext;
 
     void impl_activate () override;
     void impl_deactivate () override;
@@ -171,7 +171,7 @@ namespace djnn
   protected:
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy;
+    CouplingWithData *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -226,7 +226,7 @@ namespace djnn
   protected:
     struct raw_props_t { double x,y; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy;
+    CouplingWithData *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -264,7 +264,7 @@ namespace djnn
   private:
     struct raw_props_t { double x1,y1,x,y; };
     raw_props_t raw_props;
-    Coupling *_cx1, *_cy1, *_cx, *_cy;
+    CouplingWithData *_cx1, *_cy1, *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -286,7 +286,7 @@ namespace djnn
   private:
     struct raw_props_t { double x1,y1,x2,y2,x,y; };
     raw_props_t raw_props;
-    Coupling *_cx1, *_cy1, *_cx2, *_cy2, *_cx, *_cy;
+    CouplingWithData *_cx1, *_cy1, *_cx2, *_cy2, *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -310,7 +310,7 @@ namespace djnn
   private:
     struct raw_props_t { double rx,ry,rotx,fl,swfl,x,y; };
     raw_props_t raw_props;
-    Coupling *_crx, *_cry, *_crotx, *_cfl, *_cswfl, *_cx, *_cy;
+    CouplingWithData *_crx, *_cry, *_crotx, *_cfl, *_cswfl, *_cx, *_cy;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int anchor; };
     raw_props_t raw_props;
-    Coupling *_canchor;
+    CouplingWithData *_canchor;
     void impl_activate () override;
     void impl_deactivate () override;
   };

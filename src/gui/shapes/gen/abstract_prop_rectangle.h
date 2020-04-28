@@ -40,7 +40,7 @@ namespace djnn
   protected:
     struct raw_props_t { double x; double y; double width; double height; double rx; double ry; };
     raw_props_t raw_props;
-    Coupling *_cx, *_cy, *_cwidth, *_cheight, *_crx, *_cry;
+    CouplingWithData *_cx, *_cy, *_cwidth, *_cheight, *_crx, *_cry;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { int join; };
     raw_props_t raw_props;
-    Coupling *_cjoin;
+    CouplingWithData *_cjoin;
     void impl_activate () override;
     void impl_deactivate () override;
   };

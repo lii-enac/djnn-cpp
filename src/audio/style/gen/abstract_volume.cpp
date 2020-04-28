@@ -64,7 +64,7 @@ namespace djnn
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    Coupling ** coupling = nullptr;
+    CouplingWithData ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef std::string text;
@@ -106,8 +106,8 @@ namespace djnn
   AbstractVolume::impl_activate ()
   {
     AbstractAudioStyle::impl_activate ();
-    //auto _frame = frame ();
-    //if(_cvolume) _cvolume->enable (_frame);
+    auto _frame = nullptr;//frame ();
+    if(_cvolume) _cvolume->enable (_frame);
   }
 
   void

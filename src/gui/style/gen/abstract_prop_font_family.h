@@ -35,7 +35,7 @@ namespace djnn
   protected:
     struct raw_props_t { std::string family; };
     raw_props_t raw_props;
-    Coupling *_cfamily;
+    CouplingWithData *_cfamily;
     void impl_activate () override;
     void impl_deactivate () override;
   };
