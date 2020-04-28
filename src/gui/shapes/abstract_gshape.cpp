@@ -247,19 +247,19 @@ namespace djnn
     ((List*) touches)->clear ();
     delete touches;
     
-    delete cpick;
-    delete pickable;
-    delete press;
+    delete mouse_leave;
+    delete mouse_enter;
+    delete mouse_move;
+    delete mouse_release;
+    delete mouse_press;
+    delete mouse;
+    delete leave;
+    delete enter;
     delete release;
     delete move;
-    delete enter;
-    delete leave;
-    delete mouse_press;
-    delete mouse_release;
-    delete mouse_move;
-    delete mouse_enter;
-    delete mouse_leave;
-    delete mouse;
+    delete press;
+    delete cpick;
+    delete pickable;
   }
 
   void
