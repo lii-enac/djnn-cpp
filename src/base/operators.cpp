@@ -14,6 +14,7 @@
 
 #include "operators.h"
 
+#include "core/control/action.h"
 #include "core/tree/bool_property.h"
 #include "core/tree/int_property.h"
 #include "core/tree/double_property.h"
@@ -28,7 +29,7 @@ namespace djnn
   using namespace std;
 
   void
-  init_binary_couplings (Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right)
+  init_binary_couplings (Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right)
   {
     _c_left.disable ();
     _c_right.disable ();
@@ -38,7 +39,7 @@ namespace djnn
   }
 
   void
-  uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right)
+  uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right)
   {
     remove_state_dependency (this_->get_parent (), &_action);
     Graph::instance ().remove_edge (&_left, &_action);
@@ -47,7 +48,7 @@ namespace djnn
   }
 
   void
-  init_unary_couplings (Process& _input, Process& _output, Process& _action, Coupling& _coupling)
+  init_unary_couplings (Process& _input, Process& _output, Action& _action, Coupling& _coupling)
   {
     _coupling.disable ();
     Graph::instance ().add_edge (&_input, &_action);
@@ -55,7 +56,7 @@ namespace djnn
   }
 
   void
-  uninit_unary_couplings (Process* this_, Process& _input, Process& _output, Process& _action, Coupling& _coupling)
+  uninit_unary_couplings (Process* this_, Process& _input, Process& _output, Action& _action, Coupling& _coupling)
   {
     remove_state_dependency (this_->get_parent (), &_action);
     Graph::instance ().remove_edge (&_input, &_action);

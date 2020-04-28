@@ -84,7 +84,8 @@ namespace djnn {
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
-    Process *_src, *_dst;
+    Process *_src;
+    Process *_dst;
     ref_update _ref_update_src, _ref_update_dst;
     BindingAction _action;
     Coupling _c_src;

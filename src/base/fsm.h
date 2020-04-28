@@ -76,7 +76,7 @@ namespace djnn {
     virtual void serialize (const std::string& format) override;
 #endif
     int priority () { return _priority; }
-    Process* fsm_action () { return &_fsm_action; }
+    Action* fsm_action () { return &_fsm_action; }
   protected:
     struct Init { Init (FSMTransition* t, Process* p, 
                         const std::string& tspec, const std::string& aspec); };

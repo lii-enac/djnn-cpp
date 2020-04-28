@@ -90,7 +90,7 @@ namespace djnn {
     AbstractProperty* _src;
     AbstractProperty* _dst;
     Coupling *_c_src;
-    Process *_action;
+    Action *_action;
     bool _copy_on_activation;
   };
 

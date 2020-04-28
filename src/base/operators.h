@@ -29,9 +29,9 @@
 namespace djnn {
 
   void
-  init_binary_couplings (Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right);
+  init_binary_couplings (Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
   void
-  uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Process& _action, Coupling& _c_left, Coupling& _c_right);
+  uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
   class BinaryOperator;
@@ -121,9 +121,9 @@ namespace djnn {
 
 
   void
-  init_unary_couplings (Process& _input, Process& _output, Process& _action, Coupling& _coupling);
+  init_unary_couplings (Process& _input, Process& _output, Action& _action, Coupling& _coupling);
   void
-  uninit_unary_couplings (Process * this_, Process& _input, Process& _output, Process& _action, Coupling& _coupling);
+  uninit_unary_couplings (Process * this_, Process& _input, Process& _output, Action& _action, Coupling& _coupling);
 
 
   template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
