@@ -22,7 +22,7 @@
 
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (Process *parent, const std::string& name, Process *ref, const std::string& path)
+  AbstractDeref::AbstractDeref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
   : Process (name),
   _path (this, "path", path),
   _action (this, "action"),
@@ -31,7 +31,8 @@ namespace djnn
   _cref (ref, ACTIVATION, &_action, ACTIVATION),
   _cpath (&_path, ACTIVATION, &_action, ACTIVATION),
   _csrc_to_dst (),
-  _propagating (false)
+  _propagating (false),
+  _dir (dir)
   {
     _ref = dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
@@ -90,13 +91,13 @@ namespace djnn
     _csrc_to_dst.enable ();
   }
 
-  Deref::Deref (Process *parent, const std::string& name, Process *ref, const std::string& path)
-  : AbstractDeref (parent, name, ref, path),
+  Deref::Deref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
+  : AbstractDeref (parent, name, ref, path, dir),
   _activation (this, "activation"),
   _src (nullptr),
   _cdst_to_src (&_activation, ACTIVATION, &_set_src, ACTIVATION, true)
   {
-	AbstractDeref::update_src ();
+	  AbstractDeref::update_src ();
     Process::finalize_construction (parent, name);
   }
 
@@ -132,8 +133,8 @@ namespace djnn
     _src = src;
   }
 
-  DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path)
-  : AbstractDeref (parent, name, ref, path),
+  DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
+  : AbstractDeref (parent, name, ref, path, dir),
   _value (this, "value", ""),
   _src (nullptr),
   _cdst_to_src (&_value, ACTIVATION, &_set_src, ACTIVATION, true)
@@ -159,6 +160,17 @@ namespace djnn
   DerefString::change_src(Process *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
+    switch (_dir)
+      {
+      case DJNN_SET_ON_CHANGE:
+        set_to_src ();
+        break;
+      case DJNN_GET_ON_CHANGE:
+        set_to_dst ();
+        break;
+      case DJNN_IGNORE:
+        break;
+      }
   }
 
   void
@@ -175,8 +187,8 @@ namespace djnn
     _cdst_to_src.disable ();
   }
 
-  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path) :
-      AbstractDeref (parent, name, ref, path),
+  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path, djnn_direction dir) :
+      AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
       _src (nullptr),
       _cdst_to_src (&_value, ACTIVATION, &_set_src, ACTIVATION, true)
@@ -202,6 +214,17 @@ namespace djnn
   DerefDouble::change_src (Process *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
+    switch (_dir)
+      {
+      case DJNN_SET_ON_CHANGE:
+        set_to_src ();
+        break;
+      case DJNN_GET_ON_CHANGE:
+        set_to_dst ();
+        break;
+      case DJNN_IGNORE:
+        break;
+      }
   }
 
   void

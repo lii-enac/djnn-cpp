@@ -25,6 +25,12 @@
 
 namespace djnn
 {
+  typedef enum djnn_direction {
+    DJNN_GET_ON_CHANGE,
+    DJNN_SET_ON_CHANGE,
+    DJNN_IGNORE
+  } djnn_direction;
+
   class AbstractDeref : public Process
   {
   private:
@@ -67,7 +73,7 @@ namespace djnn
       void impl_deactivate () override {};
     };
     public:
-      AbstractDeref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path);
+      AbstractDeref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
       virtual ~AbstractDeref ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -86,13 +92,14 @@ namespace djnn
       SetToSrcAction _set_src;
       Coupling _cref, _cpath, _csrc_to_dst;
       bool _propagating;
+      djnn_direction _dir;
   };
 
   class Deref : public AbstractDeref
   {
   private:
     public:
-      Deref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path);
+      Deref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
       virtual ~Deref () {}
       void impl_activate () override;
       void impl_deactivate () override;
@@ -111,7 +118,7 @@ namespace djnn
   class DerefString : public AbstractDeref
   {
     public:
-      DerefString (Process *parent, const std::string& name, Process *ref_prop, const std::string& path);
+      DerefString (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
       virtual ~DerefString () {}
       void impl_activate () override;
       void impl_deactivate () override;
@@ -129,7 +136,7 @@ namespace djnn
   class DerefDouble : public AbstractDeref
     {
       public:
-        DerefDouble (Process *parent, const std::string& name, Process *ref_prop, const std::string& path);
+        DerefDouble (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
         virtual ~DerefDouble () {}
         void impl_activate () override;
         void impl_deactivate () override;
