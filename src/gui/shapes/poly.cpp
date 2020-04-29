@@ -51,6 +51,8 @@ namespace djnn {
 
   PolyPoint::~PolyPoint ()
   {
+    remove_edge (_cx);
+    remove_edge (_cy);
     delete _cx;
     delete _cy;
 
@@ -99,16 +101,16 @@ namespace djnn {
   PolyPoint::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto _frame = frame ();
-    if(_cx) _cx->enable (_frame);
-    if(_cy) _cy->enable (_frame);
+    auto * damaged = frame ()->damaged ();
+    enable (_cx, damaged);
+    enable (_cy, damaged);
   }
 
   void
   PolyPoint::impl_deactivate ()
   {
-    if(_cx) _cx->disable ();
-    if(_cy) _cy->disable ();
+    disable (_cx);
+    disable (_cy);
     AbstractGObj::impl_deactivate ();
   }
 

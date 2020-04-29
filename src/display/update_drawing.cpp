@@ -40,17 +40,19 @@ namespace djnn {
   UpdateDrawing::UpdateDrawing () :
     Process ("UpdateDrawing")
   {
-    _auto_refresh = new BoolProperty (this, "auto_refresh", true);
-    _draw_sync = new Spike (this, "draw_sync");
-    _damaged = new UndelayedSpike (this, "damaged");
-    _redraw_action = new RedrawAction (this, "redraw_action");
-    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action");
+    _auto_refresh = new BoolProperty (this, "auto_refresh", true); // Bool _auto_refresh (true)
+    _draw_sync = new Spike (this, "draw_sync"); // Spike _draw_sync
+    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
+    _redraw_action = new RedrawAction (this, "redraw_action"); // Action _redraw_action
+    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
+
     Graph::instance ().add_output_node (_redraw_action);
-    _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION);
+    _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION); // _damaged -> _draw_sync
     Graph::instance ().add_edge (_damaged, _draw_sync);
-    _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION);
-    _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION);
+    _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
+    _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
+
     set_activation_state (ACTIVATED);
   }
 

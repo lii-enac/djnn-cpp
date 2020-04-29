@@ -45,6 +45,8 @@ namespace djnn
 
   AbstractPropGradient::~AbstractPropGradient ()
   {
+    //remove_edge (_cspread) //don't know why it should not be done;
+		//remove_edge (_ccoords) //don't know why it should not be done;
     delete _cspread;
 		delete _ccoords;
 
@@ -119,15 +121,15 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cspread) _cspread->enable (_frame);
-		if(_ccoords) _ccoords->enable (_frame);
+    enable(_cspread, _frame->damaged ());
+		enable(_ccoords, _frame->damaged ());
   }
 
   void
   AbstractPropGradient::impl_deactivate ()
   {
-    if(_cspread) _cspread->disable ();
-		if(_ccoords) _ccoords->disable ();
+    disable(_cspread);
+		disable(_ccoords);
     AbstractStyle::impl_deactivate ();
   }
 

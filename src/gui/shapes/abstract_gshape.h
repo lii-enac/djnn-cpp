@@ -40,7 +40,8 @@ namespace djnn
   public:
     UI (Process *p, Process *f);
     bool is_pickable () { return pickable->get_value (); }
-    void activate (Process* frame) { cpick->enable (frame); }
+    //void activate (Process* frame) { cpick->enable (frame); }
+    void activate (Process* frame) { cpick->enable (); }
     void deactivate () { cpick->disable (); }
     virtual ~UI ();
     friend class Picking;

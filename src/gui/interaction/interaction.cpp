@@ -103,7 +103,7 @@ namespace djnn
     Touch *t = (Touch*) getRef (_added);
     touches[t->get_id ()] = new TouchAlive (new Point (t->get_move_x (), t->get_move_y ()), 
                                             new Point (t->get_move_x (), t->get_move_y ()),
-                                            new CouplingWithData (t->get_move (), ACTIVATION, _t_move1, ACTIVATION, t, true));
+                                            new CouplingWithData2 (t->get_move (), ACTIVATION, _t_move1, ACTIVATION, t, true));
   }
 
   void

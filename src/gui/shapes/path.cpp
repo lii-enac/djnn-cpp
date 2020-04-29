@@ -51,6 +51,9 @@ namespace djnn
 
   PathPoint::~PathPoint ()
   {
+    remove_edge (_cx);
+    remove_edge (_cy);
+
     delete _cx;
     delete _cy;
 
@@ -99,16 +102,16 @@ namespace djnn
   PathPoint::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto _frame = frame ();
-    if(_cx) _cx->enable (_frame);
-    if(_cy) _cy->enable (_frame);
+    auto * damaged = frame ()->damaged ();
+    enable (_cx, damaged);
+    enable (_cy, damaged);
   }
 
   void
   PathPoint::impl_deactivate ()
   {
-    if(_cx) _cx->disable ();
-    if(_cy) _cy->disable ();
+    disable (_cx);
+    disable (_cy);
     AbstractGObj::impl_deactivate ();
   }
 
@@ -203,6 +206,11 @@ namespace djnn
 
   PathQuadratic::~PathQuadratic ()
   {
+    remove_edge (_cx1);
+    remove_edge (_cy1);
+    remove_edge (_cx);
+    remove_edge (_cy);
+
     delete _cx1;
     delete _cy1;
     delete _cx;
@@ -271,20 +279,22 @@ namespace djnn
   PathQuadratic::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto _frame = frame ();
-    if (_cx1) _cx1->enable (_frame);
-    if (_cy1) _cy1->enable (_frame);
-    if (_cx)  _cx->enable (_frame);
-    if (_cy)  _cy->enable (_frame);
+    //auto _frame = frame ();
+    auto * damaged = frame ()->damaged ();
+    enable (_cx1, damaged);
+    enable (_cy1, damaged);
+    enable (_cx, damaged);
+    enable (_cy, damaged);
   }
 
   void
   PathQuadratic::impl_deactivate ()
   {
-    if(_cx1) _cx1->disable ();
-    if(_cy1) _cy1->disable ();
-    if(_cx)  _cx->disable ();
-    if(_cy)  _cy->disable ();
+    disable (_cx1);
+    disable (_cy1);
+    disable (_cx);
+    disable (_cy);
+
     AbstractGObj::impl_deactivate ();
   }
 
@@ -324,6 +334,13 @@ namespace djnn
 
   PathCubic::~PathCubic ()
   {
+    remove_edge (_cx1);
+    remove_edge (_cy1);
+    remove_edge (_cx2);
+    remove_edge (_cy2);
+    remove_edge (_cx);
+    remove_edge (_cy);
+
     delete _cx1;
     delete _cy1;
     delete _cx2;
@@ -412,24 +429,25 @@ namespace djnn
   PathCubic::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto _frame = frame ();
-    if (_cx1) _cx1->enable (_frame);
-    if (_cy1) _cy1->enable (_frame);
-    if (_cx2) _cx2->enable (_frame);
-    if (_cy2) _cy2->enable (_frame);
-    if (_cx)  _cx ->enable (_frame);
-    if (_cy)  _cy ->enable (_frame);
+    //auto _frame = frame ();
+    auto * damaged = frame ()->damaged ();
+    enable (_cx1, damaged);
+    enable (_cy1, damaged);
+    enable (_cx2, damaged);
+    enable (_cy2, damaged);
+    enable (_cx, damaged);
+    enable (_cy, damaged);
   }
 
   void
   PathCubic::impl_deactivate ()
   {
-    if(_cx1) _cx1->disable ();
-    if(_cy1) _cy1->disable ();
-    if(_cx2) _cx2->disable ();
-    if(_cy2) _cy2->disable ();
-    if(_cx)  _cx ->disable ();
-    if(_cy)  _cy ->disable ();
+    disable (_cx1);
+    disable (_cy1);
+    disable (_cx2);
+    disable (_cy2);
+    disable (_cx);
+    disable (_cy);
     AbstractGObj::impl_deactivate ();
   }
 
@@ -469,6 +487,14 @@ namespace djnn
 
   PathArc::~PathArc ()
   {
+    remove_edge (_crotx);
+    remove_edge (_cfl);
+    remove_edge (_cswfl);
+    remove_edge (_crx);
+    remove_edge (_cry);
+    remove_edge (_cx);
+    remove_edge (_cy);
+
     delete _crotx;
     delete _cfl;
     delete _cswfl;
@@ -567,26 +593,27 @@ namespace djnn
   PathArc::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto _frame = frame ();
-    if(_crotx) _crotx->enable (_frame);
-    if(_cfl) _cfl->enable (_frame);
-    if(_cswfl) _cswfl->enable (_frame);
-    if(_crx) _crx->enable (_frame);
-    if(_cry) _cry->enable (_frame);
-    if(_cx) _cx->enable (_frame);
-    if(_cx) _cy->enable (_frame);
+    //auto _frame = frame ();
+    auto * damaged = frame ()->damaged ();
+    enable (_crotx, damaged);
+    enable (_cfl, damaged);
+    enable (_cswfl, damaged);
+    enable (_crx, damaged);
+    enable (_cry, damaged);
+    enable (_cx, damaged);
+    enable (_cy, damaged);
   }
 
   void
   PathArc::impl_deactivate ()
   {
-    if(_crotx) _crotx->disable ();
-    if(_cfl) _cfl->disable ();
-    if(_cswfl) _cswfl->disable ();
-    if(_crx) _crx->disable ();
-    if(_cry) _cry->disable ();
-    if(_cx) _cx->disable ();
-    if(_cy) _cy->disable ();
+    disable (_crotx);
+    disable (_cfl);
+    disable (_cswfl);
+    disable (_crx);
+    disable (_cry);
+    disable (_cx);
+    disable (_cy);
     AbstractGObj::impl_deactivate ();
   }
 

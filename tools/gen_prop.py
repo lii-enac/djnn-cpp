@@ -80,6 +80,7 @@ namespace djnn
 
   %(CLASS)s::~%(CLASS)s ()
   {
+    %(COUPLINGS_REMOVE_EDGE)s;
     %(DELETE_COUPLINGS)s;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -212,12 +213,13 @@ class DjnnClass:
     parent_prop_pos_beg = 0
     parent_prop_pos_end = 1
 
-    def __init__(self, name, inherits, path, origin="x, y", finalize_construction=True, parent_prop=None, parent_prop_pos=parent_prop_pos_beg, emit_clone=None):
+    def __init__(self, name, inherits, path, origin="x, y", remove_edge=True, finalize_construction=True, parent_prop=None, parent_prop_pos=parent_prop_pos_beg, emit_clone=None):
         self.name = name
         self.inherits = inherits
         self.props = []
         self.path = path
         self.origin = origin
+        self.remove_edge = remove_edge
         self.draw_method = "draw" if self.origin else "load"
         self.finalize_construction = finalize_construction
         self.parent_prop = parent_prop
@@ -315,10 +317,18 @@ def just_do_it(dc, finalize_construction=True):
     else:
       GET_PROPS_FROM_PARENT = ""
     #
-    DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (_frame)' for p in dc.props])
-    #DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (&*frame_sp)' for p in dc.props])
+    #DEF_COUPLINGS_ENABLE = (''+join_str).join([ 'if(_c' + p.name + ' && _c' + p.name + '->get_dst ()==nullptr) { _c'+p.name+'->set_dst(_frame); }' for p in dc.props])
+    #DEF_COUPLINGS_ENABLE += (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable ()' for p in dc.props])
+    DEF_COUPLINGS_ENABLE = (';'+join_str).join([ 'enable(_c'+p.name+', _frame->damaged ())' for p in dc.props])
+    #DEF_COUPLINGS_ENABLE += (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->enable (_frame)' for p in dc.props])
     # print (DEF_COUPLINGS_ENABLE)
-    DEF_COUPLINGS_DISABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->disable ()' for p in dc.props])
+    #DEF_COUPLINGS_DISABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->disable ()' for p in dc.props])
+    DEF_COUPLINGS_DISABLE = (';'+join_str).join([ 'disable(_c'+p.name+')' for p in dc.props])
+    COUPLINGS_REMOVE_EDGE = ''
+    if(dc.remove_edge):
+      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ 'remove_edge (_c'+p.name+')' for p in dc.props])
+    else:
+      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ "//remove_edge (_c"+p.name+") //don't know why it should not be done" for p in dc.props])
     RAW_PROP_PARAMS = ', '.join(['raw_props.' + p.name for p in dc.props])
     # print (RAW_PROP_PARAMS)
 
@@ -365,6 +375,7 @@ def just_do_it(dc, finalize_construction=True):
         'GET_PROPS_FROM_PARENT': GET_PROPS_FROM_PARENT,
         'DEF_COUPLINGS_ENABLE': DEF_COUPLINGS_ENABLE,
         'DEF_COUPLINGS_DISABLE': DEF_COUPLINGS_DISABLE,
+        'COUPLINGS_REMOVE_EDGE': COUPLINGS_REMOVE_EDGE,
         'RAW_PROP_PARAMS': RAW_PROP_PARAMS,
         'SET_ORIGIN': SET_ORIGIN,
         'ORIGIN_IN_SYMTABLE': ORIGIN_IN_SYMTABLE,
@@ -500,7 +511,7 @@ dc.props.append(Prop('a', 'double', None, "style"))
 dc.props.append(Prop('offset', 'double', None, "style"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropGradient", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc = DjnnClass("AbstractPropGradient", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('spread', 'int', None, "style"))
 dc.props.append(Prop('coords', 'int', None, "style"))
 dcs.append(dc)
@@ -521,20 +532,20 @@ dc.props.append(Prop('fx', 'double', None, "style"))
 dc.props.append(Prop('fy', 'double', None, "style"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropFontSize", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc = DjnnClass("AbstractPropFontSize", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('unit', 'int', None, "geometry"))
 dc.props.append(Prop('size', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropFontWeight", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc = DjnnClass("AbstractPropFontWeight", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('weight', 'int', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropFontStyle", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc = DjnnClass("AbstractPropFontStyle", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('style', 'int', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropFontFamily", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc = DjnnClass("AbstractPropFontFamily", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('family', 'text', None, "geometry"))
 dcs.append(dc)
 

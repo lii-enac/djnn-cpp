@@ -45,6 +45,9 @@ namespace djnn
 
   AbstractPropCircle::~AbstractPropCircle ()
   {
+    remove_edge (_ccx);
+		remove_edge (_ccy);
+		remove_edge (_cr);
     delete _ccx;
 		delete _ccy;
 		delete _cr;
@@ -131,17 +134,17 @@ namespace djnn
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
-    if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
-		if(_cr) _cr->enable (_frame);
+    enable(_ccx, _frame->damaged ());
+		enable(_ccy, _frame->damaged ());
+		enable(_cr, _frame->damaged ());
   }
 
   void
   AbstractPropCircle::impl_deactivate ()
   {
-    if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
-		if(_cr) _cr->disable ();
+    disable(_ccx);
+		disable(_ccy);
+		disable(_cr);
     AbstractGShape::impl_deactivate ();
   }
 

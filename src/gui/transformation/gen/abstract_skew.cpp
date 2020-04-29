@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractSkew::~AbstractSkew ()
   {
+    remove_edge (_ca);
     delete _ca;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractTransformation::impl_activate ();
     auto _frame = frame ();
-    if(_ca) _ca->enable (_frame);
+    enable(_ca, _frame->damaged ());
   }
 
   void
   AbstractSkew::impl_deactivate ()
   {
-    if(_ca) _ca->disable ();
+    disable(_ca);
     AbstractTransformation::impl_deactivate ();
   }
 

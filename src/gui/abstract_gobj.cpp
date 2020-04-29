@@ -21,6 +21,8 @@
 #include "display/window.h"
 #include "display/update_drawing.h"
 
+#include "core/execution/graph.h"
+
 #include "core/utils/error.h"
 
 #include <iostream>
@@ -31,11 +33,15 @@ namespace djnn
   AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    Process *update = frame ();
+    if (update) update = frame ()->damaged ();
+    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      auto _frame = frame ();
-      (*cprop)->enable(_frame);
+      //auto _frame = frame ();
+      //(*cprop)->enable(_frame);
+      (*cprop)->enable ();
     }
     else
       (*cprop)->disable ();
@@ -46,11 +52,15 @@ namespace djnn
   AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    Process *update = frame ();
+    if (update) update = frame ()->damaged ();
+    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      auto _frame = frame ();
-      (*cprop)->enable(_frame);
+      //auto _frame = frame ();
+      //(*cprop)->enable(_frame);
+      (*cprop)->enable ();
     }
     else
       (*cprop)->disable ();
@@ -61,11 +71,15 @@ namespace djnn
   AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    Process *update = frame ();
+    if (update) update = frame ()->damaged ();
+    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      auto _frame = frame ();
-      (*cprop)->enable(_frame);
+      //auto _frame = frame ();
+      //(*cprop)->enable(_frame);
+      (*cprop)->enable ();
     }
     else
       (*cprop)->disable ();
@@ -76,18 +90,49 @@ namespace djnn
   AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    Process *update = frame ();
+    if (update) update = frame ()->damaged ();
+    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      auto _frame = frame ();
-      (*cprop)->enable(_frame);
+      //auto _frame = frame ();
+      //(*cprop)->enable(_frame);
+      (*cprop)->enable ();
     }
     else
       (*cprop)->disable ();
     return *prop;
   }
 
-  
+  void
+  enable (Coupling* c, CoreProcess* dst)
+  {
+    if(c) {
+      if(c->get_dst() == nullptr) {
+        c->set_dst(dst);
+        Graph::instance().add_edge(c->get_src(), c->get_dst());
+      }
+      c->enable();
+    }
+  }
+
+  void
+  remove_edge (Coupling *c)
+  {
+    if (c) {
+      if (c->get_src () && c->get_dst ()) Graph::instance ().remove_edge (c->get_src (), c->get_dst ());
+    }
+  }
+
+  void
+  disable (Coupling *c)
+  {
+    if (c) {
+      c->disable();
+    }
+  }
+
 
   AbstractGObjImpl::~AbstractGObjImpl() {}
 

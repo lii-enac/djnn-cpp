@@ -45,6 +45,11 @@ namespace djnn
 
   AbstractPropGradientStop::~AbstractPropGradientStop ()
   {
+    remove_edge (_cr);
+		remove_edge (_cg);
+		remove_edge (_cb);
+		remove_edge (_ca);
+		remove_edge (_coffset);
     delete _cr;
 		delete _cg;
 		delete _cb;
@@ -155,21 +160,21 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cr) _cr->enable (_frame);
-		if(_cg) _cg->enable (_frame);
-		if(_cb) _cb->enable (_frame);
-		if(_ca) _ca->enable (_frame);
-		if(_coffset) _coffset->enable (_frame);
+    enable(_cr, _frame->damaged ());
+		enable(_cg, _frame->damaged ());
+		enable(_cb, _frame->damaged ());
+		enable(_ca, _frame->damaged ());
+		enable(_coffset, _frame->damaged ());
   }
 
   void
   AbstractPropGradientStop::impl_deactivate ()
   {
-    if(_cr) _cr->disable ();
-		if(_cg) _cg->disable ();
-		if(_cb) _cb->disable ();
-		if(_ca) _ca->disable ();
-		if(_coffset) _coffset->disable ();
+    disable(_cr);
+		disable(_cg);
+		disable(_cb);
+		disable(_ca);
+		disable(_coffset);
     AbstractStyle::impl_deactivate ();
   }
 

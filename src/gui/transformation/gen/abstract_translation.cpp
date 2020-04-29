@@ -45,6 +45,8 @@ namespace djnn
 
   AbstractTranslation::~AbstractTranslation ()
   {
+    remove_edge (_ctx);
+		remove_edge (_cty);
     delete _ctx;
 		delete _cty;
 
@@ -119,15 +121,15 @@ namespace djnn
   {
     AbstractTransformation::impl_activate ();
     auto _frame = frame ();
-    if(_ctx) _ctx->enable (_frame);
-		if(_cty) _cty->enable (_frame);
+    enable(_ctx, _frame->damaged ());
+		enable(_cty, _frame->damaged ());
   }
 
   void
   AbstractTranslation::impl_deactivate ()
   {
-    if(_ctx) _ctx->disable ();
-		if(_cty) _cty->disable ();
+    disable(_ctx);
+		disable(_cty);
     AbstractTransformation::impl_deactivate ();
   }
 

@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractPropFontStyle::~AbstractPropFontStyle ()
   {
+    //remove_edge (_cstyle) //don't know why it should not be done;
     delete _cstyle;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cstyle) _cstyle->enable (_frame);
+    enable(_cstyle, _frame->damaged ());
   }
 
   void
   AbstractPropFontStyle::impl_deactivate ()
   {
-    if(_cstyle) _cstyle->disable ();
+    disable(_cstyle);
     AbstractStyle::impl_deactivate ();
   }
 

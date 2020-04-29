@@ -45,6 +45,7 @@ namespace djnn
 
   OutlineJoinStyle::~OutlineJoinStyle ()
   {
+    remove_edge (_cjoin);
     delete _cjoin;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cjoin) _cjoin->enable (_frame);
+    enable(_cjoin, _frame->damaged ());
   }
 
   void
   OutlineJoinStyle::impl_deactivate ()
   {
-    if(_cjoin) _cjoin->disable ();
+    disable(_cjoin);
     AbstractStyle::impl_deactivate ();
   }
 

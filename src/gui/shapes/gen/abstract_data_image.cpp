@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractDataImage::~AbstractDataImage ()
   {
+    remove_edge (_cdata);
     delete _cdata;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractImage::impl_activate ();
     auto _frame = frame ();
-    if(_cdata) _cdata->enable (_frame);
+    enable(_cdata, _frame->damaged ());
   }
 
   void
   AbstractDataImage::impl_deactivate ()
   {
-    if(_cdata) _cdata->disable ();
+    disable(_cdata);
     AbstractImage::impl_deactivate ();
   }
 

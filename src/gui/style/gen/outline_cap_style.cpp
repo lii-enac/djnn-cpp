@@ -45,6 +45,7 @@ namespace djnn
 
   OutlineCapStyle::~OutlineCapStyle ()
   {
+    remove_edge (_ccap);
     delete _ccap;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_ccap) _ccap->enable (_frame);
+    enable(_ccap, _frame->damaged ());
   }
 
   void
   OutlineCapStyle::impl_deactivate ()
   {
-    if(_ccap) _ccap->disable ();
+    disable(_ccap);
     AbstractStyle::impl_deactivate ();
   }
 

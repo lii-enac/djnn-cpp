@@ -14,6 +14,12 @@ namespace djnn {
     	virtual ~AbstractSObjImpl();
   	};
 
+	// place holder fo gen_prop
+	class AudioScene : public CoreProcess {
+		public:
+		CoreProcess* damaged() { return nullptr; }
+	};
+
 	class AbstractSObj : public Process {
 	public:
 		AbstractSObj (Process* parent, const std::string& name) : Process(name), _impl(nullptr) {}
@@ -22,7 +28,7 @@ namespace djnn {
 		AbstractSObjImpl* impl() { return _impl; }
     	void set_impl(AbstractSObjImpl* i) { _impl=i; }
 
-    	//AudioScene * frame ();
+    	AudioScene * frame () { return nullptr; } // FIXME
 
     protected:
 	    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);

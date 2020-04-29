@@ -45,6 +45,22 @@ namespace djnn
 
   AbstractPropHomography::~AbstractPropHomography ()
   {
+    remove_edge (_cm11);
+		remove_edge (_cm12);
+		remove_edge (_cm13);
+		remove_edge (_cm14);
+		remove_edge (_cm21);
+		remove_edge (_cm22);
+		remove_edge (_cm23);
+		remove_edge (_cm24);
+		remove_edge (_cm31);
+		remove_edge (_cm32);
+		remove_edge (_cm33);
+		remove_edge (_cm34);
+		remove_edge (_cm41);
+		remove_edge (_cm42);
+		remove_edge (_cm43);
+		remove_edge (_cm44);
     delete _cm11;
 		delete _cm12;
 		delete _cm13;
@@ -287,43 +303,43 @@ namespace djnn
   {
     AbstractTransformation::impl_activate ();
     auto _frame = frame ();
-    if(_cm11) _cm11->enable (_frame);
-		if(_cm12) _cm12->enable (_frame);
-		if(_cm13) _cm13->enable (_frame);
-		if(_cm14) _cm14->enable (_frame);
-		if(_cm21) _cm21->enable (_frame);
-		if(_cm22) _cm22->enable (_frame);
-		if(_cm23) _cm23->enable (_frame);
-		if(_cm24) _cm24->enable (_frame);
-		if(_cm31) _cm31->enable (_frame);
-		if(_cm32) _cm32->enable (_frame);
-		if(_cm33) _cm33->enable (_frame);
-		if(_cm34) _cm34->enable (_frame);
-		if(_cm41) _cm41->enable (_frame);
-		if(_cm42) _cm42->enable (_frame);
-		if(_cm43) _cm43->enable (_frame);
-		if(_cm44) _cm44->enable (_frame);
+    enable(_cm11, _frame->damaged ());
+		enable(_cm12, _frame->damaged ());
+		enable(_cm13, _frame->damaged ());
+		enable(_cm14, _frame->damaged ());
+		enable(_cm21, _frame->damaged ());
+		enable(_cm22, _frame->damaged ());
+		enable(_cm23, _frame->damaged ());
+		enable(_cm24, _frame->damaged ());
+		enable(_cm31, _frame->damaged ());
+		enable(_cm32, _frame->damaged ());
+		enable(_cm33, _frame->damaged ());
+		enable(_cm34, _frame->damaged ());
+		enable(_cm41, _frame->damaged ());
+		enable(_cm42, _frame->damaged ());
+		enable(_cm43, _frame->damaged ());
+		enable(_cm44, _frame->damaged ());
   }
 
   void
   AbstractPropHomography::impl_deactivate ()
   {
-    if(_cm11) _cm11->disable ();
-		if(_cm12) _cm12->disable ();
-		if(_cm13) _cm13->disable ();
-		if(_cm14) _cm14->disable ();
-		if(_cm21) _cm21->disable ();
-		if(_cm22) _cm22->disable ();
-		if(_cm23) _cm23->disable ();
-		if(_cm24) _cm24->disable ();
-		if(_cm31) _cm31->disable ();
-		if(_cm32) _cm32->disable ();
-		if(_cm33) _cm33->disable ();
-		if(_cm34) _cm34->disable ();
-		if(_cm41) _cm41->disable ();
-		if(_cm42) _cm42->disable ();
-		if(_cm43) _cm43->disable ();
-		if(_cm44) _cm44->disable ();
+    disable(_cm11);
+		disable(_cm12);
+		disable(_cm13);
+		disable(_cm14);
+		disable(_cm21);
+		disable(_cm22);
+		disable(_cm23);
+		disable(_cm24);
+		disable(_cm31);
+		disable(_cm32);
+		disable(_cm33);
+		disable(_cm34);
+		disable(_cm41);
+		disable(_cm42);
+		disable(_cm43);
+		disable(_cm44);
     AbstractTransformation::impl_deactivate ();
   }
 

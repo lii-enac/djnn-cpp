@@ -45,6 +45,7 @@ namespace djnn
 
   FillRule::~FillRule ()
   {
+    remove_edge (_crule);
     delete _crule;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_crule) _crule->enable (_frame);
+    enable(_crule, _frame->damaged ());
   }
 
   void
   FillRule::impl_deactivate ()
   {
-    if(_crule) _crule->disable ();
+    disable(_crule);
     AbstractStyle::impl_deactivate ();
   }
 

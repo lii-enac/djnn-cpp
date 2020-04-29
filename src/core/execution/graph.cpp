@@ -21,6 +21,9 @@
 
 #include "exec_env/exec_env-dev.h"
 
+#include <boost/core/demangle.hpp>
+#include <typeinfo>
+
 #include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
@@ -337,9 +340,9 @@ namespace djnn
 
 #ifndef DJNN_NO_DEBUG
       auto * ppsrc = dynamic_cast<Process*>(p_src); 
-      auto * ppdst = dynamic_cast<Process*>(p_src);
-      std::cerr << "Graph remove_edge: " <<
-      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << 
+      auto * ppdst = dynamic_cast<Process*>(p_dst);
+      std::cerr << "Graph remove_edge: " << boost::core::demangle(typeid(*p_src).name()) + ":" + 
+      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << boost::core::demangle(typeid(*p_dst).name()) + ":" +
       (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
 #endif
       //assert(0);

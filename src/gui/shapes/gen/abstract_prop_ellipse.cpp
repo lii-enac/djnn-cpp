@@ -45,6 +45,10 @@ namespace djnn
 
   AbstractPropEllipse::~AbstractPropEllipse ()
   {
+    remove_edge (_ccx);
+		remove_edge (_ccy);
+		remove_edge (_crx);
+		remove_edge (_cry);
     delete _ccx;
 		delete _ccy;
 		delete _crx;
@@ -143,19 +147,19 @@ namespace djnn
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
-    if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
-		if(_crx) _crx->enable (_frame);
-		if(_cry) _cry->enable (_frame);
+    enable(_ccx, _frame->damaged ());
+		enable(_ccy, _frame->damaged ());
+		enable(_crx, _frame->damaged ());
+		enable(_cry, _frame->damaged ());
   }
 
   void
   AbstractPropEllipse::impl_deactivate ()
   {
-    if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
-		if(_crx) _crx->disable ();
-		if(_cry) _cry->disable ();
+    disable(_ccx);
+		disable(_ccy);
+		disable(_crx);
+		disable(_cry);
     AbstractGShape::impl_deactivate ();
   }
 

@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractPropFontWeight::~AbstractPropFontWeight ()
   {
+    //remove_edge (_cweight) //don't know why it should not be done;
     delete _cweight;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cweight) _cweight->enable (_frame);
+    enable(_cweight, _frame->damaged ());
   }
 
   void
   AbstractPropFontWeight::impl_deactivate ()
   {
-    if(_cweight) _cweight->disable ();
+    disable(_cweight);
     AbstractStyle::impl_deactivate ();
   }
 

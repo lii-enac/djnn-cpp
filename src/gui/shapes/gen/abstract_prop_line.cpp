@@ -45,6 +45,10 @@ namespace djnn
 
   AbstractPropLine::~AbstractPropLine ()
   {
+    remove_edge (_cx1);
+		remove_edge (_cy1);
+		remove_edge (_cx2);
+		remove_edge (_cy2);
     delete _cx1;
 		delete _cy1;
 		delete _cx2;
@@ -143,19 +147,19 @@ namespace djnn
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
-    if(_cx1) _cx1->enable (_frame);
-		if(_cy1) _cy1->enable (_frame);
-		if(_cx2) _cx2->enable (_frame);
-		if(_cy2) _cy2->enable (_frame);
+    enable(_cx1, _frame->damaged ());
+		enable(_cy1, _frame->damaged ());
+		enable(_cx2, _frame->damaged ());
+		enable(_cy2, _frame->damaged ());
   }
 
   void
   AbstractPropLine::impl_deactivate ()
   {
-    if(_cx1) _cx1->disable ();
-		if(_cy1) _cy1->disable ();
-		if(_cx2) _cx2->disable ();
-		if(_cy2) _cy2->disable ();
+    disable(_cx1);
+		disable(_cy1);
+		disable(_cx2);
+		disable(_cy2);
     AbstractGShape::impl_deactivate ();
   }
 

@@ -156,7 +156,7 @@ namespace djnn
     }
     if (_src && _dst) {
       if(_has_coupling) {
-        _c_src.change_source(_src);
+        _c_src.set_src(_src);
       } else {
         _c_src.init(_src, ACTIVATION, &_action, ACTIVATION, true);
       }

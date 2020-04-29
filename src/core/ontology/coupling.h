@@ -27,13 +27,16 @@ namespace djnn {
     
     virtual void propagate_activation (); // FIXME: get rid of virtual to save 8 bytes
     virtual void propagate_deactivation (); // FIXME: get rid of virtual to save 8 bytes
-    void change_source (CoreProcess *src);
     
     // process
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
 
+    void set_src (CoreProcess *src);
+    void set_dst (CoreProcess* dst) { _dst = dst; }
+
     void enable ()                  { set_is_enabled (true); }
+    //void enable (CoreProcess*)      { enable (); } // to be removed 
     void disable ()                 { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
@@ -91,10 +94,12 @@ namespace djnn {
 	// 			un connecteur de _frame entre shape::_frame => UpdateDrawing::_frame
 	// 			un binding entre UpdateDrawing::_frame et une action qui dit à la frame "refresh"
 
-  class CouplingWithData : public Coupling {
+  using CouplingWithData = Coupling;
+
+  class CouplingWithData2 : public Coupling {
   public:
-    CouplingWithData (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data=nullptr, bool immediate_propagation = false);
-    ~CouplingWithData() {}
+    CouplingWithData2 (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data=nullptr, bool immediate_propagation = false);
+    ~CouplingWithData2() {}
 
     void enable (CoreProcess* data) { set_is_enabled (true); _data = data; }
     void propagate_activation () override;

@@ -45,6 +45,9 @@ namespace djnn
 
   AbstractRotation::~AbstractRotation ()
   {
+    remove_edge (_ca);
+		remove_edge (_ccx);
+		remove_edge (_ccy);
     delete _ca;
 		delete _ccx;
 		delete _ccy;
@@ -131,17 +134,17 @@ namespace djnn
   {
     AbstractTransformation::impl_activate ();
     auto _frame = frame ();
-    if(_ca) _ca->enable (_frame);
-		if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
+    enable(_ca, _frame->damaged ());
+		enable(_ccx, _frame->damaged ());
+		enable(_ccy, _frame->damaged ());
   }
 
   void
   AbstractRotation::impl_deactivate ()
   {
-    if(_ca) _ca->disable ();
-		if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
+    disable(_ca);
+		disable(_ccx);
+		disable(_ccy);
     AbstractTransformation::impl_deactivate ();
   }
 

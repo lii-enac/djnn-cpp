@@ -71,4 +71,8 @@ namespace djnn
     unsigned int _damaged;
     AbstractGObjImpl *_impl;
   };
+
+  void enable (Coupling* c, CoreProcess* dst);
+  void remove_edge (Coupling *c);
+  void disable (Coupling *c);
 }

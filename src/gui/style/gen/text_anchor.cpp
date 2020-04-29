@@ -45,6 +45,7 @@ namespace djnn
 
   TextAnchor::~TextAnchor ()
   {
+    remove_edge (_canchor);
     delete _canchor;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_canchor) _canchor->enable (_frame);
+    enable(_canchor, _frame->damaged ());
   }
 
   void
   TextAnchor::impl_deactivate ()
   {
-    if(_canchor) _canchor->disable ();
+    disable(_canchor);
     AbstractStyle::impl_deactivate ();
   }
 

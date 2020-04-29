@@ -45,6 +45,10 @@ namespace djnn
 
   AbstractImage::~AbstractImage ()
   {
+    remove_edge (_cx);
+		remove_edge (_cy);
+		remove_edge (_cwidth);
+		remove_edge (_cheight);
     delete _cx;
 		delete _cy;
 		delete _cwidth;
@@ -143,19 +147,19 @@ namespace djnn
   {
     AbstractGShape::impl_activate ();
     auto _frame = frame ();
-    if(_cx) _cx->enable (_frame);
-		if(_cy) _cy->enable (_frame);
-		if(_cwidth) _cwidth->enable (_frame);
-		if(_cheight) _cheight->enable (_frame);
+    enable(_cx, _frame->damaged ());
+		enable(_cy, _frame->damaged ());
+		enable(_cwidth, _frame->damaged ());
+		enable(_cheight, _frame->damaged ());
   }
 
   void
   AbstractImage::impl_deactivate ()
   {
-    if(_cx) _cx->disable ();
-		if(_cy) _cy->disable ();
-		if(_cwidth) _cwidth->disable ();
-		if(_cheight) _cheight->disable ();
+    disable(_cx);
+		disable(_cy);
+		disable(_cwidth);
+		disable(_cheight);
     AbstractGShape::impl_deactivate ();
   }
 

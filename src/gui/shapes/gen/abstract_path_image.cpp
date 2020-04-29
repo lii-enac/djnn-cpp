@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractPathImage::~AbstractPathImage ()
   {
+    remove_edge (_cpath);
     delete _cpath;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractImage::impl_activate ();
     auto _frame = frame ();
-    if(_cpath) _cpath->enable (_frame);
+    enable(_cpath, _frame->damaged ());
   }
 
   void
   AbstractPathImage::impl_deactivate ()
   {
-    if(_cpath) _cpath->disable ();
+    disable(_cpath);
     AbstractImage::impl_deactivate ();
   }
 

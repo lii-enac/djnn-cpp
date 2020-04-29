@@ -26,14 +26,14 @@ namespace djnn
   Coupling::init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
                            activation_flag_e dst_flag, bool immediate_propagation)
   {
-    if (src == nullptr) {
+    /*if (src == nullptr) {
       warning(src, "the source of a coupling cannot be null");
       return;
     }
     if (dst == nullptr) {
       warning(dst, "the destination of a coupling cannot be null");
       return;
-    }
+    }*/
 
     set_immediate_propagation (immediate_propagation);
 
@@ -75,13 +75,6 @@ namespace djnn
     init (src, src_flag, dst, dst_flag, immediate_propagation);
   }
 
-  /*void
-  Coupling::change_source (CoreProcess *src, CoreProcess* data)
-  {
-    change_source(src);
-    _data = data;
-  }*/
-
   Coupling::Coupling ()
   : _src(nullptr), _dst(nullptr)
   {
@@ -93,22 +86,20 @@ namespace djnn
   }
 
   void
-  Coupling::change_source (CoreProcess *src) //, CoreProcess* data)
+  Coupling::set_src (CoreProcess *src) //, CoreProcess* data)
   {
-    //if (src != nullptr) {
-      switch(get_src_activation_flag ()) {
-        case ACTIVATION:
-          if (_src != nullptr) _src->remove_activation_coupling (this);
-          if ( src != nullptr) src->add_activation_coupling (this);
-        break;
-        case DEACTIVATION:
-          if (_src !=nullptr) _src->remove_deactivation_coupling (this);
-          if ( src !=nullptr) src->add_deactivation_coupling (this);
-        break;
-        case NONE_ACTIVATION:
-        break;
-      }
-    //}
+    switch(get_src_activation_flag ()) {
+      case ACTIVATION:
+        if (_src != nullptr) _src->remove_activation_coupling (this);
+        if ( src != nullptr)  src->add_activation_coupling    (this);
+      break;
+      case DEACTIVATION:
+        if (_src != nullptr) _src->remove_deactivation_coupling (this);
+        if ( src != nullptr)  src->add_deactivation_coupling    (this);
+      break;
+      case NONE_ACTIVATION:
+      break;
+    }
     _src = src;
     //_data = data;
   }
@@ -158,7 +149,7 @@ namespace djnn
   }
 
 
-  CouplingWithData::CouplingWithData (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
+  CouplingWithData2::CouplingWithData2 (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
                       activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation)
   : Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
   {
@@ -166,14 +157,14 @@ namespace djnn
   }
 
   void
-  CouplingWithData::propagate_activation ()
+  CouplingWithData2::propagate_activation ()
   {
     _dst->set_data (_data);
     Coupling::propagate_activation ();
   }
 
   void
-  CouplingWithData::propagate_deactivation ()
+  CouplingWithData2::propagate_deactivation ()
   {
     _dst->set_data (_data);
     Coupling::propagate_deactivation ();

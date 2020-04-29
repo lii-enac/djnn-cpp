@@ -45,6 +45,7 @@ namespace djnn
 
   AbstractVolume::~AbstractVolume ()
   {
+    remove_edge (_cvolume);
     delete _cvolume;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -106,14 +107,14 @@ namespace djnn
   AbstractVolume::impl_activate ()
   {
     AbstractAudioStyle::impl_activate ();
-    auto _frame = nullptr;//frame ();
-    if(_cvolume) _cvolume->enable (_frame);
+    auto _frame = frame ();
+    enable(_cvolume, _frame->damaged ());
   }
 
   void
   AbstractVolume::impl_deactivate ()
   {
-    if(_cvolume) _cvolume->disable ();
+    disable(_cvolume);
     AbstractAudioStyle::impl_deactivate ();
   }
 

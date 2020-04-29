@@ -320,6 +320,10 @@ namespace djnn
 
   AbstractColor::~AbstractColor ()
   {
+    remove_edge (_cr);
+		remove_edge (_cg);
+		remove_edge (_cb);
+		remove_edge (_cv);
     delete _cr;
 		delete _cg;
 		delete _cb;
@@ -435,7 +439,8 @@ namespace djnn
       rawp_Int=&raw_props.value;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      _c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, nullptr, true);
+      //_c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, nullptr, true);
+      _c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, true);
     } else
     return nullptr;
     
@@ -454,11 +459,13 @@ namespace djnn
   AbstractColor::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
-    if(_cr) _cr->enable (_frame);
-		if(_cg) _cg->enable (_frame);
-		if(_cb) _cb->enable (_frame);
-		if(_cv) _cv->enable (_frame);
+    //auto _frame = frame ();
+    auto * damaged = frame ()->damaged ();
+    enable (_cr, damaged);
+    enable (_cg, damaged);
+    enable (_cb, damaged);
+    enable (_cv, damaged);
+
 		if (_c_rv) _c_rv->enable ();
 		if (_c_gv) _c_gv->enable ();
 		if (_c_bv) _c_bv->enable ();
@@ -468,10 +475,10 @@ namespace djnn
   void
   AbstractColor::impl_deactivate ()
   {
-    if(_cr) _cr->disable ();
-    if(_cg) _cg->disable ();
-    if(_cb) _cb->disable ();
-    if(_cv) _cv->disable ();
+    disable (_cr);
+		disable (_cg);
+		disable (_cb);
+		disable (_cv);
     if (_c_rv) _c_rv->disable ();
     if (_c_gv) _c_gv->disable ();
     if (_c_bv) _c_bv->disable ();

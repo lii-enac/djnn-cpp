@@ -45,6 +45,11 @@ namespace djnn
 
   AbstractPropRadialGradient::~AbstractPropRadialGradient ()
   {
+    remove_edge (_ccx);
+		remove_edge (_ccy);
+		remove_edge (_cr);
+		remove_edge (_cfx);
+		remove_edge (_cfy);
     delete _ccx;
 		delete _ccy;
 		delete _cr;
@@ -155,21 +160,21 @@ namespace djnn
   {
     AbstractGradient::impl_activate ();
     auto _frame = frame ();
-    if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
-		if(_cr) _cr->enable (_frame);
-		if(_cfx) _cfx->enable (_frame);
-		if(_cfy) _cfy->enable (_frame);
+    enable(_ccx, _frame->damaged ());
+		enable(_ccy, _frame->damaged ());
+		enable(_cr, _frame->damaged ());
+		enable(_cfx, _frame->damaged ());
+		enable(_cfy, _frame->damaged ());
   }
 
   void
   AbstractPropRadialGradient::impl_deactivate ()
   {
-    if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
-		if(_cr) _cr->disable ();
-		if(_cfx) _cfx->disable ();
-		if(_cfy) _cfy->disable ();
+    disable(_ccx);
+		disable(_ccy);
+		disable(_cr);
+		disable(_cfx);
+		disable(_cfy);
     AbstractGradient::impl_deactivate ();
   }
 

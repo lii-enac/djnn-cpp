@@ -45,6 +45,7 @@ namespace djnn
 
   OutlineWidth::~OutlineWidth ()
   {
+    remove_edge (_cwidth);
     delete _cwidth;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cwidth) _cwidth->enable (_frame);
+    enable(_cwidth, _frame->damaged ());
   }
 
   void
   OutlineWidth::impl_deactivate ()
   {
-    if(_cwidth) _cwidth->disable ();
+    disable(_cwidth);
     AbstractStyle::impl_deactivate ();
   }
 

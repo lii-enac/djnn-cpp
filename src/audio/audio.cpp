@@ -9,6 +9,8 @@
 
 #include "abstract_sobj.h"
 
+#include "core/execution/graph.h" // for enable
+
 #include <iostream>
 
 namespace djnn {
@@ -53,5 +55,35 @@ namespace djnn {
 	}
 
 	AbstractSObjImpl::~AbstractSObjImpl() {}
+
+	// warning: duplicate in gui
+	void
+ 	enable(Coupling* c, CoreProcess* dst)
+  	{
+		if(c) {
+		if(c->get_dst() == nullptr) {
+			c->set_dst(dst);
+			Graph::instance().add_edge(c->get_src(), c->get_dst());
+		}
+		c->enable();
+		}
+  	}
+
+	void
+	disable (Coupling *c)
+	{
+		if (c) {
+		if (c->get_dst ()) Graph::instance ().remove_edge (c->get_src (), c->get_dst ());
+		c->disable();
+		}
+	}
+
+	void
+	remove_edge (Coupling *c)
+	{
+		if (c) {
+			if (c->get_dst ()) Graph::instance ().remove_edge (c->get_src (), c->get_dst ());
+		}
+	}
 
 }

@@ -25,6 +25,7 @@
 #include "core/tree/set.h"
 #include "core/tree/list.h"
 #include "core/utils/error.h"
+#include "core/execution/graph.h"
 
 #include <iostream>
 
@@ -69,6 +70,12 @@ namespace djnn
     add_symbol ("release", _release);
     add_symbol ("wheel", _wheel);
 
+    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
+    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    _c_damaged_update_drawing_damaged = new CouplingWithData2 (_damaged, ACTIVATION, update, ACTIVATION);
+    Graph::instance ().add_edge (_damaged, update);
+    _c_damaged_update_drawing_damaged->enable(this);
+
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
@@ -93,6 +100,10 @@ namespace djnn
   Window::~Window ()
   {
     UpdateDrawing::instance ()->remove_window_for_refresh(this);
+
+    Graph::instance ().remove_edge (_damaged, UpdateDrawing::instance ()->get_damaged ());
+    delete _c_damaged_update_drawing_damaged;
+    delete _damaged;
 
     //_self_shared_ptr.reset ();
     
@@ -122,6 +133,16 @@ namespace djnn
     delete _display;
 
     delete _win_impl;
+  }
+
+  void 
+  Window::UndelayedSpike::coupling_activation_hook () 
+  {
+    //Window *frame = dynamic_cast<Window*> (get_data ());
+    //if (frame && !frame->refresh ()) {
+    //  _ud->add_window_for_refresh (frame);
+    //}
+    notify_activation (); 
   }
 
   void

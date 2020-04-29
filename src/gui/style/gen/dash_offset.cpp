@@ -45,6 +45,7 @@ namespace djnn
 
   DashOffset::~DashOffset ()
   {
+    remove_edge (_coffset);
     delete _coffset;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_coffset) _coffset->enable (_frame);
+    enable(_coffset, _frame->damaged ());
   }
 
   void
   DashOffset::impl_deactivate ()
   {
-    if(_coffset) _coffset->disable ();
+    disable(_coffset);
     AbstractStyle::impl_deactivate ();
   }
 

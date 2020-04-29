@@ -124,10 +124,13 @@ namespace djnn
   UI::UI (Process *p, Process *f) : parent (p)
   {
     pickable = new BoolProperty (p, "pickable", true);
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
-    cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
-    if (f != nullptr)
-      cpick->enable (f);
+    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
+    //if (f != nullptr)
+    //  cpick->enable (f);
+    Process *update = f;
+    cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
+    cpick->enable ();
     press = new Spike (p, "press");
     move = new Spike (p, "move");
     release = new Spike (p, "release");

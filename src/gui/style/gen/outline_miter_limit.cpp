@@ -45,6 +45,7 @@ namespace djnn
 
   OutlineMiterLimit::~OutlineMiterLimit ()
   {
+    remove_edge (_climit);
     delete _climit;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
@@ -107,13 +108,13 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_climit) _climit->enable (_frame);
+    enable(_climit, _frame->damaged ());
   }
 
   void
   OutlineMiterLimit::impl_deactivate ()
   {
-    if(_climit) _climit->disable ();
+    disable(_climit);
     AbstractStyle::impl_deactivate ();
   }
 

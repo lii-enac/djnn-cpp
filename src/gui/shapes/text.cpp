@@ -45,27 +45,6 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  /*Text::Text (Process *parent, const std::string& name, double x, double y, const std::string& text) :
-      AbstractGShape (parent, name),
-      raw_props{.x=x, .y=y, .dx=0, .dy=0, .dxU=0, .dyU=0, .encoding=DJN_UTF8, .text=text},
-      _cx (nullptr), _cy (nullptr), _cdx (nullptr), _cdy (nullptr), _cfsize (nullptr), _cdxU (nullptr), _cdyU (nullptr),
-      _cencoding (nullptr), _cfstyle (nullptr), _cfweight (nullptr), _cffamily (nullptr),
-      _fm (nullptr),
-      _update_size (this, "size_action", this),
-      _width (this, "width", 0),
-      _height (this, "height", 0),
-      _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
-      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
-  {
-    set_origin (x, y);
-
-    Graph::instance ().add_edge (&_text, &_update_size);
-    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
-
-    finalize_construction (parent, name);
-  }*/
-
   Text::Text (Process *parent, const std::string& name, double x, double y, const std::string& text) :
   Text(parent, name, x,y,0,0,0,0,"utf8", text) {}
 
@@ -81,41 +60,57 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION, true),
-      _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
+      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
+      _ctext (&_text, ACTIVATION, nullptr, ACTIVATION )
   {
     set_origin (x, y);
 
     //Graph::instance ().add_edge (&_text, &_update_size);
-    Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
+    //Graph:instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
 
     finalize_construction (parent, name);
   }
 
   Text::~Text ()
   {
-    //remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
-    Graph::instance ().remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
+    ////remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
+    //Graph::instance ().remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     remove_state_dependency (get_parent (), &_update_size);
     //Graph::instance ().remove_edge (&_text, &_update_size);
     
     if (_cffamily) {
       Graph::instance ().remove_edge ( _update_size._ff->family (), &_update_size);
-      delete _cffamily;
     }
     if (_cfsize) {
       Graph::instance ().remove_edge ( _update_size._fsz->size (), &_update_size);
-      delete _cfsize;
     }
     if (_cfstyle) {
       Graph::instance ().remove_edge ( _update_size._fs->style (), &_update_size);
-      delete _cfstyle;
     }
     if (_cfweight) {
       Graph::instance ().remove_edge ( _update_size._fw->weight (), &_update_size);
-      delete _cfweight;
     }
 
+    remove_edge (_cx);
+    remove_edge (_cy);
+    remove_edge (_cdx);
+    remove_edge (_cdy);
+    remove_edge (_cdxU);
+    remove_edge (_cdyU);
+    remove_edge (_cencoding);
+    //remove_edge (_cffamily);
+    //remove_edge (_cfsize);
+    //remove_edge (_cfstyle);
+    //remove_edge (_cfweight);
+    //remove_edge (_cfweight);
+    remove_edge (&_cupdate_size);
+    remove_edge (&_ctext);
+
+    delete _cffamily;
+    delete _cfsize;
+    delete _cfstyle;
+    delete _cfweight;
     delete _cx;
     delete _cy;
     delete _cdx;
@@ -255,7 +250,6 @@ namespace djnn
     encoding = raw_props.encoding;
     text = _text.get_value ();
   }
-    
 
   void
   Text::impl_activate ()
@@ -333,24 +327,21 @@ namespace djnn
       }
     }
 
-    auto _frame = frame ();
-    
-    if (_cx) _cx->enable (_frame);
-    if (_cy) _cy->enable (_frame);
-    //_ctext.enable (_frame);
-    if (_cdx) _cdx->enable (_frame);
-    if (_cdy) _cdy->enable (_frame);
-    if (_cdxU) _cdxU->enable (_frame);
-    if (_cdyU) _cdyU->enable (_frame);
-    _cupdate_size.enable (_frame);
-    if (_cencoding) _cencoding->enable (_frame);
-    
-    if (_cffamily) _cffamily->enable (_frame);
-    if (_cfsize) _cfsize->enable (_frame);
-    if (_cfstyle) _cfstyle->enable (_frame);
-    if (_cfweight) _cfweight->enable (_frame);
+    auto * damaged = frame ()->damaged ();
 
-    _ctext.enable(_frame);
+    enable (_cx, damaged);
+    enable (_cy, damaged);
+    enable (_cdx, damaged);
+    enable (_cdy, damaged);
+    enable (_cdxU, damaged);
+    enable (_cdyU, damaged);
+    enable (_cencoding, damaged);
+    //enable (_cffamily, damaged);
+    //enable (_cfsize, damaged);
+    //enable (_cfstyle, damaged);
+    //enable (_cfweight, damaged);
+    enable (&_cupdate_size, damaged);
+    enable (&_ctext, damaged);
 
     _update_size.activate ();
   }
@@ -358,9 +349,23 @@ namespace djnn
   void
   Text::impl_deactivate ()
   {
-    _ctext.disable();
+    //_ctext.disable();
 
-    if (_cx) _cx->disable ();
+    disable (_cx);
+    disable (_cy);
+    disable (_cdx);
+    disable (_cdy);
+    disable (_cdxU);
+    disable (_cdyU);
+    disable (_cencoding);
+    // disable (_cffamily);
+    // disable (_cfsize);
+    // disable (_cfstyle);
+    // disable (_cfweight);
+    disable (&_cupdate_size);
+    disable (&_ctext);
+
+    /*if (_cx) _cx->disable ();
     if (_cy) _cy->disable ();
     //_ctext.disable ();
     if (_cdx) _cdx->disable ();
@@ -368,12 +373,13 @@ namespace djnn
     if (_cdxU) _cdxU->disable ();
     if (_cdyU) _cdyU->disable ();
     _cupdate_size.disable ();
-    if (_cencoding) _cencoding->disable ();
+    if (_cencoding) _cencoding->disable ();*/
 
-    if (_cffamily) _cffamily->disable ();
+    /*if (_cffamily) _cffamily->disable ();
     if (_cfsize) _cfsize->disable ();
     if (_cfstyle) _cfstyle->disable ();
-    if (_cfweight) _cfweight->disable ();
+    if (_cfweight) _cfweight->disable ();*/
+  
     AbstractGShape::impl_deactivate ();
   }
 

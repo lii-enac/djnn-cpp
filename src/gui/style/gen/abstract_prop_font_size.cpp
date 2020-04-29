@@ -45,6 +45,8 @@ namespace djnn
 
   AbstractPropFontSize::~AbstractPropFontSize ()
   {
+    //remove_edge (_cunit) //don't know why it should not be done;
+		//remove_edge (_csize) //don't know why it should not be done;
     delete _cunit;
 		delete _csize;
 
@@ -119,15 +121,15 @@ namespace djnn
   {
     AbstractStyle::impl_activate ();
     auto _frame = frame ();
-    if(_cunit) _cunit->enable (_frame);
-		if(_csize) _csize->enable (_frame);
+    enable(_cunit, _frame->damaged ());
+		enable(_csize, _frame->damaged ());
   }
 
   void
   AbstractPropFontSize::impl_deactivate ()
   {
-    if(_cunit) _cunit->disable ();
-		if(_csize) _csize->disable ();
+    disable(_cunit);
+		disable(_csize);
     AbstractStyle::impl_deactivate ();
   }
 

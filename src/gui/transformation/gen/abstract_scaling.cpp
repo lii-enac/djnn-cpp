@@ -45,6 +45,10 @@ namespace djnn
 
   AbstractScaling::~AbstractScaling ()
   {
+    remove_edge (_csx);
+		remove_edge (_csy);
+		remove_edge (_ccx);
+		remove_edge (_ccy);
     delete _csx;
 		delete _csy;
 		delete _ccx;
@@ -143,19 +147,19 @@ namespace djnn
   {
     AbstractTransformation::impl_activate ();
     auto _frame = frame ();
-    if(_csx) _csx->enable (_frame);
-		if(_csy) _csy->enable (_frame);
-		if(_ccx) _ccx->enable (_frame);
-		if(_ccy) _ccy->enable (_frame);
+    enable(_csx, _frame->damaged ());
+		enable(_csy, _frame->damaged ());
+		enable(_ccx, _frame->damaged ());
+		enable(_ccy, _frame->damaged ());
   }
 
   void
   AbstractScaling::impl_deactivate ()
   {
-    if(_csx) _csx->disable ();
-		if(_csy) _csy->disable ();
-		if(_ccx) _ccx->disable ();
-		if(_ccy) _ccy->disable ();
+    disable(_csx);
+		disable(_csy);
+		disable(_ccx);
+		disable(_ccy);
     AbstractTransformation::impl_deactivate ();
   }
 
