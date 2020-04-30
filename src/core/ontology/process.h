@@ -98,13 +98,11 @@ namespace djnn {
     typedef std::vector<Coupling*> couplings_t;
     const couplings_t& get_activation_couplings () const { return _activation_couplings; }
     const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
-    bool    has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
-    virtual void coupling_activation_hook () {}
-    virtual void coupling_deactivation_hook () {}
-    void         notify_activation ();
-    void         notify_deactivation ();
-    void         schedule_activation (); // for gui picking only: why is there a problem?
-    void         schedule_delete ();
+    bool  has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
+    void  notify_activation ();
+    void  notify_deactivation ();
+    void  schedule_activation (); // for gui picking only: why is there a problem?
+    void  schedule_delete ();
 
     // execution graph
     Vertex*  vertex () { return _vertex; }

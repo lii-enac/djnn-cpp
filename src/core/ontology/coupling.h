@@ -83,6 +83,6 @@ namespace djnn {
     
   };
 
-  using CouplingWithData = Coupling;
+  using CouplingWithData = Coupling; // FIXME to be removed when dust settle
 
 }

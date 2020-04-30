@@ -29,17 +29,16 @@ namespace djnn
     /*if (src == nullptr) {
       warning(src, "the source of a coupling cannot be null");
       return;
-    }
-    if (dst == nullptr) {
+    }*/
+    /*if (dst == nullptr) {
       warning(dst, "the destination of a coupling cannot be null");
       return;
     }*/
 
     set_immediate_propagation (immediate_propagation);
-
     set_is_enabled(true);
-
     set_src_activation_flag (src_flag);
+
     if (src_flag == ACTIVATION) {
       src->add_activation_coupling (this);
     } else if (src_flag == DEACTIVATION) {
@@ -54,8 +53,7 @@ namespace djnn
   void
   Coupling::uninit ()
   {
-    if (_src == nullptr)
-      return;
+    if (_src == nullptr) return;
     switch(get_src_activation_flag ()) {
     case ACTIVATION:
       _src->remove_activation_coupling (this);
@@ -113,7 +111,6 @@ namespace djnn
     else {
       _dst->set_activation_flag (get_dst_activation_flag());
     }
-    _dst->coupling_activation_hook (); // FIXME is it necessary?
   }
 
   void
@@ -126,7 +123,6 @@ namespace djnn
     else {
       _dst->set_activation_flag (get_dst_activation_flag());
     }
-    _dst->coupling_deactivation_hook ();
   }
 
   void
@@ -136,11 +132,9 @@ namespace djnn
     case NONE_ACTIVATION: break;
     case ACTIVATION:
       _dst->activate ();
-      _dst->coupling_activation_hook (); // FIXME is it necessary?
       break;
     case DEACTIVATION:
       _dst->deactivate ();
-      _dst->coupling_deactivation_hook (); // FIXME is it necessary?
       break;
     }
   }
