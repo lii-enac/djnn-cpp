@@ -15,7 +15,6 @@
 
 #include "coupling.h"
 #include "process.h"
-#include "core/execution/graph.h"
 
 #include "core/utils/error.h"
 
@@ -23,8 +22,8 @@ namespace djnn
 {
 
   void
-  Coupling::init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
-                           activation_flag_e dst_flag, bool immediate_propagation)
+  Coupling::init (CoreProcess* src, activation_flag_e src_flag,
+                  CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
   {
     /*if (src == nullptr) {
       warning(src, "the source of a coupling cannot be null");
@@ -66,9 +65,9 @@ namespace djnn
     }
   }
 
-  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
-                      activation_flag_e dst_flag, bool immediate_propagation) :
-      _src (src), _dst (dst)
+  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
+                      CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
+  : _src (src), _dst (dst)
   {
     init (src, src_flag, dst, dst_flag, immediate_propagation);
   }
@@ -107,8 +106,7 @@ namespace djnn
     _dst->set_activation_source (_src);
     if (is_immediate ()) {
       propagate_immediately ();
-    }
-    else {
+    } else {
       _dst->set_activation_flag (get_dst_activation_flag());
     }
   }
@@ -119,8 +117,7 @@ namespace djnn
     _dst->set_activation_source (_src);
     if (is_immediate ()) {
       propagate_immediately ();
-    }
-    else {
+    } else {
       _dst->set_activation_flag (get_dst_activation_flag());
     }
   }
@@ -130,12 +127,8 @@ namespace djnn
   {
     switch(get_dst_activation_flag ()) {
     case NONE_ACTIVATION: break;
-    case ACTIVATION:
-      _dst->activate ();
-      break;
-    case DEACTIVATION:
-      _dst->deactivate ();
-      break;
+    case      ACTIVATION: _dst->activate ();   break;
+    case    DEACTIVATION: _dst->deactivate (); break;
     }
   }
 

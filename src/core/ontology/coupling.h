@@ -22,21 +22,19 @@ namespace djnn {
   class Coupling {
   public:
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
-    Coupling (); // needed for pointer-less zombie initialization
+    Coupling (); // needed for pointer-less zombie initialization in Binding, Assignment, Connector
     ~Coupling();
     
     void propagate_activation ();
     void propagate_deactivation ();
-    
-    // process
+
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
-
-    void set_src (CoreProcess *src);
+    void set_src (CoreProcess* src);
     void set_dst (CoreProcess* dst) { _dst = dst; }
 
-    void enable ()                  { set_is_enabled (true); }
-    void disable ()                 { set_is_enabled (false); }
+    void enable ()              { set_is_enabled (true); }
+    void disable ()             { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
     bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }
@@ -67,10 +65,10 @@ namespace djnn {
     };
 
     void set_bitset (bit_mask MASK, bit_shift SHIFT, unsigned int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
-    int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
+    int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return ( _bitset &  MASK) >> SHIFT; }
 
-    bool get_is_enabled () const           { return get_bitset (ENABLED_MASK, ENABLED_SHIFT); }
-    void set_is_enabled (bool VALUE)       {        set_bitset (ENABLED_MASK, ENABLED_SHIFT, VALUE); }
+    bool get_is_enabled () const            { return get_bitset (ENABLED_MASK, ENABLED_SHIFT); }
+    void set_is_enabled (bool VALUE)        {        set_bitset (ENABLED_MASK, ENABLED_SHIFT, VALUE); }
 
     bool get_immediate_propagation () const { return get_bitset (IMMEDIATE_MASK, IMMEDIATE_SHIFT); }
     void set_immediate_propagation (bool VALUE) {    set_bitset (IMMEDIATE_MASK, IMMEDIATE_SHIFT, VALUE); }
