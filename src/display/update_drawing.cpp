@@ -85,6 +85,7 @@ namespace djnn {
       }
     }
     _ud->clear_windows_for_refresh ();
+    dynamic_cast<UpdateDrawing*>(get_parent())->get_damaged()->set_data(nullptr);
   }
 
   void 
@@ -101,13 +102,10 @@ namespace djnn {
   void
   UpdateDrawing::update_auto_refresh ()
   {
-    //DBG;
     if (_auto_refresh->get_value()) {
-      //DBG;
       _c_redraw_when_damaged->enable ();
     }
     else {
-      //DBG;
       _c_redraw_when_damaged->disable ();
     }
   }
@@ -116,14 +114,6 @@ namespace djnn {
   UpdateDrawing::impl_activate ()
   { //DBG;
     update_auto_refresh ();
-    // if (_auto_refresh->get_value ()) {
-    //   DBG;
-    //   _redraw_when_damaged->enable ();
-    // }
-    // else {
-    //   DBG;
-    //   _redraw_when_damaged->disable ();
-    // }
   }
 
   void
