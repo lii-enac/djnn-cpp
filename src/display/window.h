@@ -78,8 +78,8 @@ namespace djnn
     void set_refresh (bool r) { _refresh = r; }
     bool refresh () { return _refresh; }
     void update () { _win_impl->update (); };
-    void impl_activate () override { _win_impl->impl_activate (); }
-    void impl_deactivate () override { _win_impl->impl_deactivate (); }
+    void impl_activate () override;
+    void impl_deactivate () override;
     Picking* picking_view () { return _win_impl->picking_view ();}
     void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
     Process* press () { return _press; }

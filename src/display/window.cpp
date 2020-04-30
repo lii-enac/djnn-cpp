@@ -70,11 +70,10 @@ namespace djnn
     add_symbol ("release", _release);
     add_symbol ("wheel", _wheel);
 
-    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
+    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged, connected to UpdateDrawing::damaged, the frame pointer is passed with the action
     Process *update = UpdateDrawing::instance ()->get_damaged ();
     _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION);
     Graph::instance ().add_edge (_damaged, update);
-    _c_damaged_update_drawing_damaged->enable();
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
@@ -82,12 +81,25 @@ namespace djnn
   Window::Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w,
 		  double h) :
       Process (name),
-      //_self_shared_ptr(this),
       _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
     _display = new RefProperty (this, "display", nullptr);
     finalize_construction (parent, name);
+  }
+
+  void
+  Window::impl_activate ()
+  {
+    _c_damaged_update_drawing_damaged->enable();
+    _win_impl->impl_activate ();
+  }
+  
+  void
+  Window::impl_deactivate ()
+  {
+    _c_damaged_update_drawing_damaged->disable();
+    _win_impl->impl_deactivate ();
   }
 
   Window::~Window ()
@@ -127,7 +139,8 @@ namespace djnn
 
   void 
   Window::UndelayedSpike::impl_activate ()
-  { //DBG;
+  {
+    // pass the frame pointer to UpdateDrawing before notifying synchronously 
     UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
     notify_activation ();
   }
