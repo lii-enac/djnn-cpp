@@ -52,9 +52,9 @@ namespace djnn
         UndelayedSpike (Window *parent, const std::string& name)  : Process (name), _w (parent) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { set_activation_state (DEACTIVATED); }
-        void impl_activate () override {};
+        void impl_activate () override;
         void impl_deactivate () override {};
-        void coupling_activation_hook () override;
+        //void coupling_activation_hook () override;
       private:
         Window* _w;
     };
@@ -102,9 +102,6 @@ namespace djnn
     void set_holder (Process *p) { _holder = p; }
     void set_cursor (const std::string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
-    //std::weak_ptr<Window> get_weak_ptr();
-    //std::shared_ptr<Window> _self_shared_ptr;
-
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
     void set_frame_to_component (Process* c);
@@ -136,7 +133,8 @@ namespace djnn
     IntProperty *_key_released;
     WinImpl *_win_impl;
     UndelayedSpike *_damaged;
-    CouplingWithData2 *_c_damaged_update_drawing_damaged;
+    //CouplingWithData2 *_c_damaged_update_drawing_damaged;
+    Coupling *_c_damaged_update_drawing_damaged;
     bool _refresh;
     Process* _holder;
   };

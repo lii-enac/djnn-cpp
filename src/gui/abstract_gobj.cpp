@@ -33,14 +33,10 @@ namespace djnn
   AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
-    //Process *update = UpdateDrawing::instance ()->get_damaged ();
     Process *update = frame ();
     if (update) update = frame ()->damaged ();
-    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
-      //(*cprop)->enable(_frame);
       (*cprop)->enable ();
     }
     else
@@ -52,14 +48,10 @@ namespace djnn
   AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
-    //Process *update = UpdateDrawing::instance ()->get_damaged ();
     Process *update = frame ();
     if (update) update = frame ()->damaged ();
-    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
-      //(*cprop)->enable(_frame);
       (*cprop)->enable ();
     }
     else
@@ -71,14 +63,10 @@ namespace djnn
   AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
-    //Process *update = UpdateDrawing::instance ()->get_damaged ();
     Process *update = frame ();
     if (update) update = frame ()->damaged ();
-    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
-      //(*cprop)->enable(_frame);
       (*cprop)->enable ();
     }
     else
@@ -90,14 +78,10 @@ namespace djnn
   AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
-    //Process *update = UpdateDrawing::instance ()->get_damaged ();
     Process *update = frame ();
     if (update) update = frame ()->damaged ();
-    //assert(frame());
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
-      //(*cprop)->enable(_frame);
       (*cprop)->enable ();
     }
     else
@@ -185,7 +169,8 @@ namespace djnn
   AbstractGObj::update_drawing ()
   {
     if (_frame)
-      UpdateDrawing::instance()->add_window_for_refresh (_frame);
+      //UpdateDrawing::instance()->add_window_for_refresh (_frame);
+      _frame->damaged ()->notify_activation ();
   }
 
   void
@@ -194,8 +179,9 @@ namespace djnn
     //std::cerr << __FILE__ << __LINE__ << std::endl;
     update_frame_if_necessary ();
     auto _frame = frame ();
-    UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-    UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+    //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+    //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+    _frame->damaged ()->notify_activation ();
     Backend::instance()->activate_gobj(this);
   }
 
@@ -204,9 +190,10 @@ namespace djnn
   {
     auto _frame = frame ();
     if (_frame != nullptr) {
-      UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-      UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
-      UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
+      //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+      //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
+      //UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
+      _frame->damaged ()->notify_activation ();
       //UpdateDrawing::instance ()->request_activation ();
       Backend::instance()->deactivate_gobj(this);
       _frame = nullptr;

@@ -11,28 +11,6 @@
 
 namespace djnn {
 
-  void 
-  UpdateDrawing::RedrawAction::impl_activate () 
-  {
-    for (auto& w : _ud->get_win_list ()) {
-      if (w != nullptr) {
-        w->update ();
-        w->set_refresh (false);
-      }
-    }
-    _ud->clear_list ();
-  }
-
-  void 
-  UpdateDrawing::UndelayedSpike::coupling_activation_hook () 
-  { //DBG;
-    Window *frame = dynamic_cast<Window*> (get_data ());
-    if (frame && !frame->refresh ()) {
-      _ud->add_window_for_refresh (frame);
-    }
-    notify_activation (); 
-  }
-
   bool gui_initialized = false;
   UpdateDrawing *UpdateDrawing::_instance;
   std::once_flag UpdateDrawing::onceFlag;
@@ -40,16 +18,28 @@ namespace djnn {
   UpdateDrawing::UpdateDrawing () :
     Process ("UpdateDrawing")
   {
-    _auto_refresh = new BoolProperty (this, "auto_refresh", true); // Bool _auto_refresh (true)
-    _draw_sync = new Spike (this, "draw_sync"); // Spike _draw_sync
-    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
-    _redraw_action = new RedrawAction (this, "redraw_action"); // Action _redraw_action
-    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
+    // UndelayedSpike _damaged
+    // Bool _auto_refresh (true)
+    // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
+    // Spike _draw_sync
+    // Action _redraw_action
 
+    // _damaged -> _draw_sync
+    // _draw_sync -> _redraw_action
+    // _auto_refresh -> _update_auto_refresh_action
+
+    _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
+    _auto_refresh = new BoolProperty (this, "auto_refresh", true); // Bool _auto_refresh (true)
+    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
+    _draw_sync = new Spike (this, "draw_sync"); // Spike _draw_sync
+    _redraw_action = new RedrawAction (this, "redraw_action"); // Action _redraw_action
+  
     Graph::instance ().add_output_node (_redraw_action);
+  
     _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION); // _damaged -> _draw_sync
     Graph::instance ().add_edge (_damaged, _draw_sync);
     _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
+  
     _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
 
@@ -83,6 +73,29 @@ namespace djnn {
     });
 
     return _instance;
+  }
+
+  void 
+  UpdateDrawing::RedrawAction::impl_activate () 
+  {
+    for (auto& w : _ud->get_windows_for_refresh ()) {
+      if (w != nullptr) {
+        w->update ();
+        w->set_refresh (false);
+      }
+    }
+    _ud->clear_windows_for_refresh ();
+  }
+
+  void 
+  UpdateDrawing::UndelayedSpike::coupling_activation_hook () 
+  { //DBG;
+    Window *frame = dynamic_cast<Window*> (get_data ());
+    //std::cerr << frame << __FL__;
+    if (frame && !frame->refresh ()) {
+      _ud->add_window_for_refresh (frame);
+    }
+    notify_activation (); 
   }
 
   void

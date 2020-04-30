@@ -72,9 +72,9 @@ namespace djnn
 
     _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
     Process *update = UpdateDrawing::instance ()->get_damaged ();
-    _c_damaged_update_drawing_damaged = new CouplingWithData2 (_damaged, ACTIVATION, update, ACTIVATION);
+    _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION);
     Graph::instance ().add_edge (_damaged, update);
-    _c_damaged_update_drawing_damaged->enable(this);
+    _c_damaged_update_drawing_damaged->enable();
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
@@ -90,23 +90,13 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  // std::weak_ptr<Window>
-  // Window::get_weak_ptr()
-  // {
-  //   return _self_shared_ptr;
-  // }
-
-
   Window::~Window ()
   {
     UpdateDrawing::instance ()->remove_window_for_refresh(this);
-
     Graph::instance ().remove_edge (_damaged, UpdateDrawing::instance ()->get_damaged ());
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
 
-    //_self_shared_ptr.reset ();
-    
     delete _pos_x;
     delete _pos_y;
     delete _width;
@@ -136,14 +126,18 @@ namespace djnn
   }
 
   void 
-  Window::UndelayedSpike::coupling_activation_hook () 
-  {
-    //Window *frame = dynamic_cast<Window*> (get_data ());
-    //if (frame && !frame->refresh ()) {
-    //  _ud->add_window_for_refresh (frame);
-    //}
-    notify_activation (); 
+  Window::UndelayedSpike::impl_activate ()
+  { //DBG;
+    UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
+    notify_activation ();
   }
+
+  // void 
+  // Window::UndelayedSpike::coupling_activation_hook () 
+  // { //DBG;
+  //   UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
+  //   notify_activation ();
+  // }
 
   void
   Cursor::UpdateCursorAction::impl_activate () {

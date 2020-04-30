@@ -69,12 +69,12 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override {}
     void coupling_activation_hook () override;
+    void update_auto_refresh ();
     void add_window_for_refresh (Window* w);
     void remove_window_for_refresh (Window* w);
-    void update_auto_refresh ();
-    std::vector<Window*>& get_win_list () { return _win_list; };
+    std::vector<Window*>& get_windows_for_refresh () { return _win_list; };
+    void clear_windows_for_refresh () {_win_list.clear (); }
     Process* get_damaged () { return _damaged; }
-    void clear_list () {_win_list.clear (); }
     static void init ();
     static void clear ();
   private:
