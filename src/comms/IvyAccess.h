@@ -41,8 +41,8 @@ namespace djnn
       IvyOutAction (Process* parent, const std::string& name, TextProperty* out) :
       Action (parent, name), _out (out) { finalize_construction (parent, name); } 
       virtual ~IvyOutAction () {}
-      void coupling_activation_hook () override;
-      void impl_activate () override {};
+      //void coupling_activation_hook () override;
+      void impl_activate () override;
       void impl_deactivate () override {}
     private:
       TextProperty* _out;

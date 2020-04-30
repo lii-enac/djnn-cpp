@@ -208,7 +208,7 @@ namespace djnn
   /****  IVY OUT ACTIONS ****/
 
 void
-IvyAccess::IvyOutAction::coupling_activation_hook ()
+IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 {
   IvySendMsg ("%s", _out->get_value ().c_str ());
 }
