@@ -81,12 +81,12 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION, true),
       _ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
   {
     set_origin (x, y);
 
-    Graph::instance ().add_edge (&_text, &_update_size);
+    //Graph::instance ().add_edge (&_text, &_update_size);
     Graph::instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
 
     Process::finalize_construction (parent, name);
@@ -97,7 +97,7 @@ namespace djnn
     //remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
     Graph::instance ().remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     remove_state_dependency (get_parent (), &_update_size);
-    Graph::instance ().remove_edge (&_text, &_update_size);
+    //Graph::instance ().remove_edge (&_text, &_update_size);
     
     if (_cffamily) {
       Graph::instance ().remove_edge ( _update_size._ff->family (), &_update_size);
