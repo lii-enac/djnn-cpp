@@ -60,7 +60,7 @@ namespace djnn
       _width (this, "width", 0),
       _height (this, "height", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
-      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION),
+      _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION, true),
       //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
       _ctext (&_text, ACTIVATION, nullptr, ACTIVATION )
   {
@@ -104,7 +104,7 @@ namespace djnn
     //remove_edge (_cfstyle);
     //remove_edge (_cfweight);
     //remove_edge (_cfweight);
-    remove_edge (&_cupdate_size);
+    //remove_edge (&_cupdate_size);
     remove_edge (&_ctext);
 
     delete _cffamily;
