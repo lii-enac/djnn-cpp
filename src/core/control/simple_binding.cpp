@@ -17,7 +17,8 @@ namespace djnn {
     AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:simplebinding");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("id", get_name ()); // Process
+    //AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
     AbstractSerializer::compute_path (get_parent (), _c.get_src (), buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();
