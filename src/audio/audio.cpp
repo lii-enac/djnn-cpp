@@ -73,8 +73,7 @@ namespace djnn {
 	disable (Coupling *c)
 	{
 		if (c) {
-		if (c->get_dst ()) Graph::instance ().remove_edge (c->get_src (), c->get_dst ());
-		c->disable();
+			c->disable();
 		}
 	}
 
