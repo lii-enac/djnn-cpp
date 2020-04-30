@@ -185,10 +185,10 @@ namespace djnn
     a1 = b1 = c1 = d1 = a2 = b2 = ad = bc = ac = bd = 0;
     int sz = 0;
     for (std::map<int, TouchAlive*>::iterator it = pts.begin () ; it != pts.end (); ++it) {
-      a = it->second->_last_pt->x();
-      b = it->second->_last_pt->y();
-      c = it->second->_new_pt->x();
-      d = it->second->_new_pt->y();
+      a = it->second->_last_pt.x();
+      b = it->second->_last_pt.y();
+      c = it->second->_new_pt.x();
+      d = it->second->_new_pt.y();
       a1 += a;
       b1 += b;
       c1 += c;

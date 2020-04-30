@@ -44,25 +44,27 @@ namespace djnn
       return;
     }
 
-    _added = _touches->find_child ("$added");
-    _removed = _touches->find_child ("$removed");
     _add_touch_action = new AddTouchAction (this, "add_touch_action");
     _remove_touch_action = new RemoveTouchAction (this, "remove_touch_action");
-    _t_move1 = new TouchMoveAction (this, "touch_move1_action");
-    _c_on_add = new Coupling (_added, ACTIVATION, _add_touch_action, ACTIVATION, true);
-    _c_on_del = new Coupling (_removed, ACTIVATION, _remove_touch_action, ACTIVATION, true);
+    //_move_touch_action = new MoveTouchAction (this, "touch_move1_action");
     _update_action = new ScaleRotateTranslateAction (this, "srt_action");
-    _c_move = new Coupling (_t_move1, ACTIVATION, _update_action, ACTIVATION);
-    Graph::instance().add_edge (_t_move1, _update_action);
+  
+    _added = _touches->find_child ("$added");
+    _c_on_add = new Coupling (_added, ACTIVATION, _add_touch_action, ACTIVATION, true);
+    
+    _removed = _touches->find_child ("$removed");
+    _c_on_del = new Coupling (_removed, ACTIVATION, _remove_touch_action, ACTIVATION, true);
+  
+    //_c_move = new Coupling (_move_touch_action, ACTIVATION, _update_action, ACTIVATION);
+    //Graph::instance().add_edge (_move_touch_action, _update_action);
 
     finalize_construction (parent, name);
   }
 
   ScaleRotateTranslate::~ScaleRotateTranslate ()
   {
-
-    Graph::instance().remove_edge (_t_move1, _update_action);
-    delete _c_move;
+    //Graph::instance().remove_edge (_move_touch_action, _update_action);
+    //delete _c_move;
 
     std::map<int, TouchAlive*>::iterator it;
     for ( it = touches.begin (); it != touches.end (); ++it ) {
@@ -75,7 +77,7 @@ namespace djnn
     delete _c_on_del;
     delete _c_on_add;
 
-    delete _t_move1;
+    //delete _move_touch_action;
     
     delete _remove_touch_action;
     delete _add_touch_action;
@@ -86,7 +88,7 @@ namespace djnn
   {
     _c_on_add->enable ();
     _c_on_del->enable ();
-    _c_move->enable ();
+    //_c_move->enable ();
   }
 
   void
@@ -94,16 +96,52 @@ namespace djnn
   {
     _c_on_add->disable ();
     _c_on_del->disable ();
-    _c_move->disable ();
+    //_c_move->disable ();
+  }
+
+  TouchAlive::TouchAlive (ScaleRotateTranslate* srt, Touch* t)//, Action* action)
+  : _last_pt (t->get_move_x(), t->get_move_y()),
+    _new_pt (_last_pt),
+    _t (t),
+    //_srt(srt),
+    _move_touch_action(srt, "", this),
+    //_cpl (t->get_move (), ACTIVATION, action, ACTIVATION, t, true)
+    //_cpl (t->get_move (), ACTIVATION, &_move_touch_action, ACTIVATION, t, true),
+    _cpl (t->get_move (), ACTIVATION, &_move_touch_action, ACTIVATION, true),
+    _c_update(&_move_touch_action, ACTIVATION, srt->get_update_action (), ACTIVATION)
+  {
+    //_c_move = new Coupling (_move_touch_action, ACTIVATION, srt->_update_action, ACTIVATION);
+    Graph::instance().add_edge (&_move_touch_action, srt->get_update_action ());
+    _cpl.enable ();
+    _c_update.enable ();
+  }
+
+  TouchAlive::~TouchAlive ()
+  {
+    _c_update.disable ();
+    _cpl.disable ();
+    remove_edge(&_c_update);
+  }
+
+  void
+  TouchAlive::MoveTouchAction::impl_activate ()
+  {
+    //((ScaleRotateTranslate*)get_parent ())->move_touch ((Touch*)get_data ());
+    ((ScaleRotateTranslate*)get_parent ())->move_touch (_ta->_t);
   }
 
   void
   ScaleRotateTranslate::add_touch ()
   {
-    Touch *t = (Touch*) getRef (_added);
-    touches[t->get_id ()] = new TouchAlive (new Point (t->get_move_x (), t->get_move_y ()), 
-                                            new Point (t->get_move_x (), t->get_move_y ()),
-                                            new CouplingWithData2 (t->get_move (), ACTIVATION, _t_move1, ACTIVATION, t, true));
+    Touch *added_touch = (Touch*) getRef (_added);
+    touches[added_touch->get_id ()] = new TouchAlive(this, added_touch);
+
+    // touches[added_touch->get_id ()] = new TouchAlive (
+    //   new Point (added_touch->get_move_x (), added_touch->get_move_y ()), 
+    //   new Point (added_touch->get_move_x (), added_touch->get_move_y ()),
+    //   new CouplingWithData2 (added_touch->get_move (), ACTIVATION, _move_touch_action, ACTIVATION, added_touch, true));
+    
+    // touches[added_touch->get_id ()] = new TouchAlive(added_touch, _move_touch_action);
   }
 
   void
@@ -119,14 +157,20 @@ namespace djnn
     }
   }
 
+  /*void
+  ScaleRotateTranslate::MoveTouchAction::impl_activate ()
+  {
+    ((ScaleRotateTranslate*)get_parent ())->move_touch ((Touch*)get_data ());
+  }*/
+
   void
-  ScaleRotateTranslate::touch_move (Touch *t)
+  ScaleRotateTranslate::move_touch (Touch *t)
   {
     std::map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
     if (it != touches.end ()) {
       TouchAlive *ta = it->second;
-      ta->_last_pt->set_values (ta->_new_pt);
-      ta->_new_pt->set_values (t->get_move_x (), t->get_move_y ());
+      ta->_last_pt.set_values (ta->_new_pt);
+      ta->_new_pt.set_values (t->get_move_x (), t->get_move_y ());
     } else {
       std::cout << "touch not found on move\n";
     }
