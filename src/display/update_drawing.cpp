@@ -89,7 +89,7 @@ namespace djnn {
   }
 
   void 
-  UpdateDrawing::UndelayedSpike::coupling_activation_hook () 
+  UpdateDrawing::UndelayedSpike::impl_activate () 
   { //DBG;
     Window *frame = dynamic_cast<Window*> (get_data ());
     //std::cerr << frame << __FL__;
@@ -116,17 +116,18 @@ namespace djnn {
     update_auto_refresh ();
   }
 
-  void
-  UpdateDrawing::coupling_activation_hook ()
-  { //DBG;
-    Window *frame = dynamic_cast<Window*> (get_data ());
-    if (frame == nullptr)
-      return;
-    if (!frame->refresh ()) {
-      _win_list.push_back (frame);
-      frame->set_refresh (true);
-    }
-  }
+  // useless ?? there is no binding or coupling or whatsoever directly on UpdateDrawing ?!
+  // void
+  // UpdateDrawing::coupling_activation_hook ()
+  // { DBG;
+  //   Window *frame = dynamic_cast<Window*> (get_data ());
+  //   if (frame == nullptr)
+  //     return;
+  //   if (!frame->refresh ()) {
+  //     _win_list.push_back (frame);
+  //     frame->set_refresh (true);
+  //   }
+  // }
 
   void 
   UpdateDrawing::add_window_for_refresh (Window* w) 

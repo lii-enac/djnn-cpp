@@ -47,9 +47,8 @@ namespace djnn {
         UndelayedSpike (UpdateDrawing *parent, const std::string& name)  : Process (name), _ud (parent) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { set_activation_state (DEACTIVATED); }
-        void impl_activate () override {};
+        void impl_activate () override;
         void impl_deactivate () override {};
-        void coupling_activation_hook () override;
       private:
         UpdateDrawing* _ud;
     };
@@ -68,7 +67,7 @@ namespace djnn {
     ~UpdateDrawing ();
     void impl_activate () override;
     void impl_deactivate () override {}
-    void coupling_activation_hook () override;
+    //void coupling_activation_hook () override;
     void update_auto_refresh ();
     void add_window_for_refresh (Window* w);
     void remove_window_for_refresh (Window* w);
