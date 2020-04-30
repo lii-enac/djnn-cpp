@@ -86,7 +86,7 @@ namespace djnn
   }
 
   void
-  Coupling::set_src (CoreProcess *src) //, CoreProcess* data)
+  Coupling::set_src (CoreProcess *src)
   {
     switch(get_src_activation_flag ()) {
       case ACTIVATION:
@@ -101,28 +101,25 @@ namespace djnn
       break;
     }
     _src = src;
-    //_data = data;
   }
 
   void
   Coupling::propagate_activation ()
   {
     _dst->set_activation_source (_src);
-    //_dst->set_data (_data);
     if (is_immediate ()) {
       propagate_immediately ();
     }
     else {
       _dst->set_activation_flag (get_dst_activation_flag());
     }
-    _dst->coupling_activation_hook ();
+    _dst->coupling_activation_hook (); // FIXME is it necessary?
   }
 
   void
   Coupling::propagate_deactivation ()
   {
     _dst->set_activation_source (_src);
-    //_dst->set_data (_data);
     if (is_immediate ()) {
       propagate_immediately ();
     }
@@ -139,35 +136,13 @@ namespace djnn
     case NONE_ACTIVATION: break;
     case ACTIVATION:
       _dst->activate ();
-      _dst->coupling_activation_hook ();
+      _dst->coupling_activation_hook (); // FIXME is it necessary?
       break;
     case DEACTIVATION:
       _dst->deactivate ();
-      _dst->coupling_deactivation_hook ();
+      _dst->coupling_deactivation_hook (); // FIXME is it necessary?
       break;
     }
-  }
-
-
-  CouplingWithData2::CouplingWithData2 (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst,
-                      activation_flag_e dst_flag, CoreProcess* data, bool immediate_propagation)
-  : Coupling(src, src_flag, dst, dst_flag, immediate_propagation)
-  {
-    _data = data;
-  }
-
-  void
-  CouplingWithData2::propagate_activation ()
-  {
-    _dst->set_data (_data);
-    Coupling::propagate_activation ();
-  }
-
-  void
-  CouplingWithData2::propagate_deactivation ()
-  {
-    _dst->set_data (_data);
-    Coupling::propagate_deactivation ();
   }
 
 }

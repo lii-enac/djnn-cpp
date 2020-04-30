@@ -23,10 +23,10 @@ namespace djnn {
   public:
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     Coupling (); // needed for pointer-less zombie initialization
-    virtual ~Coupling(); // FIXME: get rid of virtual to save 8 bytes
+    ~Coupling();
     
-    virtual void propagate_activation (); // FIXME: get rid of virtual to save 8 bytes
-    virtual void propagate_deactivation (); // FIXME: get rid of virtual to save 8 bytes
+    void propagate_activation ();
+    void propagate_deactivation ();
     
     // process
     CoreProcess* get_src ()  { return _src; }
@@ -36,7 +36,6 @@ namespace djnn {
     void set_dst (CoreProcess* dst) { _dst = dst; }
 
     void enable ()                  { set_is_enabled (true); }
-    //void enable (CoreProcess*)      { enable (); } // to be removed 
     void disable ()                 { set_is_enabled (false); }
     bool is_enabled () const    { return get_is_enabled (); }
     bool is_immediate () const  { return get_immediate_propagation (); }
@@ -84,28 +83,6 @@ namespace djnn {
     
   };
 
-  // FIXME: get rid of CouplingWithData
-  //    on créé un couplage entre les propriétés d'un shape et UpdateDrawing::_damaged (un spike), à chaque demande d'un proxy de propriété AbstractGObj::create_GObj_prop
-	// 		on enable le couplage avec un user_data pour la frame: on fait transiter la _frame de l'objet par ce couplage à coup de void* data
-	// 		UpdateDrawing utilise un coupling_activation_hook pour dire à ladite frame de ser refresher...
-
-	// 		pourrait être remplacé en théorie par :
-	// 			un binding de shape::prop vers un shape::_frame
-	// 			un connecteur de _frame entre shape::_frame => UpdateDrawing::_frame
-	// 			un binding entre UpdateDrawing::_frame et une action qui dit à la frame "refresh"
-
   using CouplingWithData = Coupling;
-
-  class CouplingWithData2 : public Coupling {
-  public:
-    CouplingWithData2 (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, CoreProcess* data=nullptr, bool immediate_propagation = false);
-    ~CouplingWithData2() {}
-
-    void enable (CoreProcess* data) { set_is_enabled (true); _data = data; }
-    void propagate_activation () override;
-    void propagate_deactivation () override;
-  private:
-    CoreProcess *_data;
-  };
 
 }
