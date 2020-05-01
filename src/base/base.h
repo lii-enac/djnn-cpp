@@ -20,6 +20,7 @@
 #include "math_functions.h"
 #include "clock.h"
 #include "connector.h"
+#include "simple_connector.h"
 #include "fsm.h"
 #include "switch.h"
 #include "text.h"

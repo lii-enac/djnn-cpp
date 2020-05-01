@@ -12,8 +12,8 @@
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
 
-//#include "utils/debug.h"
-//#include <iostream>
+#include "utils/debug.h"
+#include <iostream>
 
 //#include <stdarg.h>
 extern "C" {
@@ -23,8 +23,6 @@ extern "C" {
 namespace djnn
 {
   using std::string;
-
-  SimpleAssignment::~SimpleAssignment () {}
 
   void
   SimpleAssignment::perform_action () {

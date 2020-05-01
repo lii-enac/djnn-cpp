@@ -18,6 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
+#include "core/execution/graph.h"
 
 namespace djnn { 
 
@@ -36,11 +37,17 @@ namespace djnn {
   public:
     SimpleAssignment (Process* parent, const std::string& name, Process* src, Process* dst, bool propagate)
     : Process (name), _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
-    { finalize_construction (parent, name); }
-    virtual ~SimpleAssignment ();
+    {
+      Graph::instance ().add_edge (src, dst);
+      finalize_construction (parent, name);
+    }
+    virtual ~SimpleAssignment () {
+      Graph::instance ().remove_edge (get_src(), get_dst());
+    }
 
     void impl_activate   () override { _c_src.enable  (); _action.activate(); };
     void impl_deactivate () override { _c_src.disable (); _action.deactivate(); }
+    void post_activate   () override { set_activation_state (DEACTIVATED); }
 
     void perform_action ();
 
