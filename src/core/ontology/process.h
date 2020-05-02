@@ -76,7 +76,11 @@ namespace djnn {
 
   class Coupling;
   class Vertex;
+  class ChildProcess;
   class FatProcess;
+
+  typedef FatProcess FatChildProcess;
+  //typedef ChildProcess FatChildProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -128,7 +132,10 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) {}
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state) {}
+    virtual void finalize_construction (FatProcess* parent, const std::string& name) { // For native action in current smalac, to be removed
+      finalize_construction (parent, name, nullptr);
+    }
 
   private:
     // >>instance fields start here
@@ -142,11 +149,13 @@ namespace djnn {
     virtual CoreProcess* clone ();
     virtual process_type_e get_process_type () const { return UNDEFINED_T; }
 
-    //static std::string default_name;
-    //virtual const std::string& get_name () const { return default_name; }
-    const std::string& get_name (FatProcess* parent) const;
     virtual FatProcess* get_parent() { return nullptr; }
     virtual const FatProcess* get_parent() const { return nullptr; }
+    virtual void   set_parent (FatProcess* p) {}
+
+    //static std::string default_name;
+    //virtual const std::string& get_name () const { return default_name; }
+    const std::string& get_name (FatProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
@@ -211,38 +220,34 @@ namespace djnn {
 
   public:
   // tree, component, symtable 
-    virtual void   set_parent (FatProcess* p) {}
-    virtual void   add_child (FatProcess* c, const std::string& name) {}
-    virtual void   remove_child (FatProcess* c) {}
+    virtual void   add_child (FatChildProcess* c, const std::string& name) {}
+    virtual void   remove_child (FatChildProcess* c) {}
     virtual void   remove_child (const std::string& name) {}
-    virtual void     move_child (FatProcess */*child_to_move*/, child_position_e /*spec*/, FatProcess */*child*/ = nullptr) {}
-    //friend  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2) {} // strange, only used in gradient...
-    virtual FatProcess* find_child (const std::string&) { return nullptr; }
-    virtual FatProcess* find_child (int /*index*/) { return nullptr; }
-    static  FatProcess* find_child (FatProcess* p, const std::string& path) { return nullptr; }
-    //static std::string default_name;
-    //virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
-  
+    virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) {}
+    virtual FatChildProcess* find_child (const std::string&) { return nullptr; }
+    virtual FatChildProcess* find_child (int /*index*/) { return nullptr; }
+    static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path) { return nullptr; }
+
     virtual void     set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
     virtual void     set_activation_source (CoreProcess*) {}
     virtual CoreProcess* get_activation_source () { return nullptr; }
-  
   };
 
   class ChildProcess : public CoreProcess
   {
   public:
     ChildProcess (bool model = false) : CoreProcess(model), _parent(nullptr), _state_dependency(nullptr) {}
-    virtual void set_parent(FatProcess* p); // { _parent = p; }
-    FatProcess* get_parent() { return _parent; }
-    const FatProcess* get_parent () const { return _parent; }
+    virtual void set_parent(FatProcess* p) override; // { _parent = p; }
+    FatProcess* get_parent() override { return _parent; }
+    const FatProcess* get_parent () const override { return _parent; }
+
     CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
     void set_state_dependency (CoreProcess* s) { _state_dependency = s; }
   protected:
-    //void finalize_construction (FatProcess* parent, const std::string& name);
+    //void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
     FatProcess *_parent;
     CoreProcess *_state_dependency;
   };
@@ -262,21 +267,23 @@ namespace djnn {
     virtual     void pick () {}
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
     
-    // tree, component, symtable 
-    //FatProcess* get_parent () override { return _parent; }
-    //const FatProcess* get_parent () const override { return _parent; }
-    //virtual void   set_parent (FatProcess* p) override;
-    virtual void   add_child (FatProcess* c, const std::string& name) override;
-    virtual void   remove_child (FatProcess* c) override;
+    // tree, component, symtable
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state) override; // to be moved in ChildProcess
+    virtual void finalize_construction (FatProcess* parent, const std::string& name) override { // For native action in current smalac, to be removed
+      finalize_construction (parent, name, nullptr);
+    }
+
+    virtual void   add_child (FatChildProcess* c, const std::string& name) override;
+    virtual void   remove_child (FatChildProcess* c) override;
     virtual void   remove_child (const std::string& name) override;
-    virtual void     move_child (FatProcess */*child_to_move*/, child_position_e /*spec*/, FatProcess */*child*/ = nullptr) override {}
-    friend  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual FatProcess* find_child (const std::string&) override;
-    virtual FatProcess* find_child (int /*index*/) override { return nullptr; }
-    static  FatProcess* find_child (FatProcess* p, const std::string& path);
+    virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) override {}
+    friend  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2); // strange, only used in gradient...
+    virtual FatChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
+    static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path);
     virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
-    
-    typedef std::map<std::string, FatProcess*> symtable_t;
+
+    typedef std::map<std::string, FatChildProcess*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
     symtable_t::iterator children_end () { return _symtable.end (); }
     bool children_empty () { return _symtable.empty (); }
@@ -284,7 +291,7 @@ namespace djnn {
     symtable_t& children () { return _symtable; }
     const symtable_t& children () const { return _symtable; } 
     
-    void    add_symbol (const std::string& name, FatProcess* c); // FIXME: should be alias
+    void    add_symbol (const std::string& name, FatChildProcess* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
   
   protected:
@@ -302,45 +309,39 @@ namespace djnn {
     #ifndef DJNN_NO_DEBUG
     virtual  void dump (int level=0) override;
     #endif
-    
+
     // data
     void     set_data (CoreProcess* data) override;
     CoreProcess* get_data () override;
 
-  protected:
-    void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
-
   private:
     static long int _nb_anonymous;
 
-// >>instance fields start here
+
   private:
-    
-    //FatProcess *_parent;
-    //FatProcess *_state_dependency;
+    // >>instance fields start here
     CoreProcess *_data;
     symtable_t _symtable;
-    //string _name;
-  // <<instance fields end here
+    // <<instance fields end here
   };
 
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-   typedef std::pair<bool , Process*> __stat_exec;
+   typedef std::pair<bool , CoreProcess*> __stat_exec;
    extern std::vector<__stat_exec> __activation_order;
   #endif
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-   extern std::list<std::pair<Process*, long int>> __creation_stat_order;
+   extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
+  
+  void alias_children (FatChildProcess *p, FatChildProcess *to);
+  void alias (FatChildProcess *parent, const std::string& name, FatChildProcess* from);
+  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2);
+  inline FatChildProcess* find (FatChildProcess *p) { return p; }
+  inline FatChildProcess* find (FatChildProcess *p, const std::string& path) { return p->find_child (path); }
+  // inline FatChildProcess* find (const std::string& path) { return FatChildProcess::find_child (nullptr, path); }
 
-  void alias_children (FatProcess *p, FatProcess *to);
-  void alias (FatProcess *parent, const std::string& name, FatProcess* from);
-  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2);
-  inline FatProcess* find (FatProcess *p) { return p; }
-  inline FatProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
-  // inline FatProcess* find (const std::string& path) { return FatProcess::find_child (nullptr, path); }
-
-  void add_state_dependency (FatProcess *_parent, CoreProcess *p);
-  void remove_state_dependency (FatProcess *_parent, CoreProcess *p);
+  void add_state_dependency (FatChildProcess *_parent, CoreProcess *p);
+  void remove_state_dependency (FatChildProcess *_parent, CoreProcess *p);
   inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 }

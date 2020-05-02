@@ -360,7 +360,7 @@ namespace djnn
   }
 
   void
-  FatProcess::add_child (FatProcess* child, const std::string& name)
+  FatProcess::add_child (FatChildProcess* child, const std::string& name)
   {
     if (child == nullptr)
       return;
@@ -374,7 +374,7 @@ namespace djnn
   }
 
   void
-  FatProcess::remove_child (FatProcess* c)
+  FatProcess::remove_child (FatChildProcess* c)
   {
     symtable_t::iterator it;
     for (it = children ().begin (); it != children ().end (); ++it) {
@@ -391,7 +391,7 @@ namespace djnn
     remove_symbol (name);
   }
 
-  FatProcess*
+  FatChildProcess*
   FatProcess::find_child (const std::string& key)
   {
     //DEBUG
@@ -402,7 +402,7 @@ namespace djnn
 
     /* special case find '*' */ 
     if (key[0] == '*') {
-      FatProcess* found = find_child (key.substr(2)); // without "/*""
+      auto * found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
         auto it = children ().begin ();
@@ -439,22 +439,22 @@ namespace djnn
         else
           return nullptr;
       }
-      map<string, FatProcess*>::iterator it = find_child_iterator (newKey);
+      symtable_t::iterator it = find_child_iterator (newKey);
       if (it != children_end ()) {
         return (it->second)->find_child (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
       return get_parent ();
-    map<string, FatProcess*>::iterator it = find_child_iterator (key);
+    symtable_t::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
       return it->second;
     }
     return 0;
   }
 
-  FatProcess*
-  FatProcess::find_child (FatProcess *p, const std::string& path)
+  FatChildProcess*
+  FatProcess::find_child (FatChildProcess *p, const std::string& path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
@@ -484,7 +484,7 @@ namespace djnn
   }
 
   void
-  FatProcess::add_symbol (const std::string& name, FatProcess* c)
+  FatProcess::add_symbol (const std::string& name, FatChildProcess* c)
   {
     /* if ((children ().insert (std::pair<string, FatProcess*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
@@ -541,14 +541,14 @@ namespace djnn
   void
   merge_children (FatProcess *p1, const std::string& sy1, FatProcess* p2, const std::string& sy2)
   {
-    FatProcess* x2 = p2->find_child (sy2);
+    auto * x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
 #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy2 << endl;
 #endif
       return;
     }
-    FatProcess* x1 = p1->find_child (sy1);
+    auto * x1 = p1->find_child (sy1);
     if (x1 == nullptr) {
 #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy1 << endl;
