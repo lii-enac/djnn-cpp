@@ -23,9 +23,9 @@ namespace djnn {
 
   class Action : public FatProcess {
   public:
-    Action (FatProcess *parent, const std::string& n, bool model = false)
-    : FatProcess (n, model)
-    //: ChildProcess (model)
+    Action (FatProcess *parent, const std::string& n, bool model = false) :
+    //ChildProcess (model)
+    FatProcess (n, model)
     {
       /* note:
        * finalize_constructor for action 

@@ -30,13 +30,16 @@ namespace djnn {
     {
     public:
       AssignmentAction (FatProcess* parent, const std::string& name)
-      : Action(parent, name) { finalize_construction(parent, name); }
+      : Action (parent, name) { finalize_construction (parent, name); }
       //void impl_activate () override { dynamic_cast<SimpleAssignment*>(get_parent ()) -> perform_action (); }
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
     SimpleAssignment (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool propagate)
-    : FatProcess (name), _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
+    :
+    //CoreProcess (),
+    FatProcess (name),
+     _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);

@@ -17,28 +17,28 @@
 
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
-//#include "core/execution/graph.h"
 #include "core/control/action.h"
 #include "core/control/simple_binding.h"
 #include "core/control/simple_assignment.h"
 
 namespace djnn { 
 
-  class SimpleConnector : public FatProcess
+  class SimpleConnector :
+    //public CoreProcess
+    public FatProcess
   {
   public:
     SimpleConnector (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool copy_on_activation=true)
-    : FatProcess (name),
+    :
+    //CoreProcess (),
+    FatProcess (name),
       _assignment (this, "", src, dst, true),
       _binding (this, "", src, &_assignment),
       _copy_on_activation (copy_on_activation)
       {
-        //Graph::instance ().add_edge (src, dst); // no need, assignment already did it
+        // no need to add edge to graph, assignment already did it
         finalize_construction (parent, name);
       }
-    ~SimpleConnector () {
-        //Graph::instance ().remove_edge (_binding.get_src(), _assignment.get_dst());
-    }
 
     void impl_activate   () override { _assignment.activate (); _binding.activate(); if(_copy_on_activation) _assignment.notify_activation (); }
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
