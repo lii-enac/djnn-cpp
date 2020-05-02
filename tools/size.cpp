@@ -12,6 +12,7 @@
 
 #include "base/arithmetic.h"
 #include "base/connector.h"
+#include "base/simple_connector.h"
 #include "base/fsm.h"
 
 #include "gui/shapes/shapes.h"
@@ -53,9 +54,10 @@ main(int argc, char* argv[])
 	PSIZE(Action);
 	PSIZE(Binding);
 	PSIZE(SimpleBinding);
-	PSIZE(Connector);
 	PSIZE(Assignment);
 	PSIZE(SimpleAssignment);
+	PSIZE(Connector);
+	PSIZE(SimpleConnector);
 	cout << endl;
 
 	PSIZE(Adder);
