@@ -59,13 +59,13 @@ namespace djnn
 
     //return boost::lexical_cast<string>(value);
     
-    return __to_string(value);
+    return __to_string(_value);
   }
 
   string
   RefProperty::get_string_value () const
   {
-    return __to_string(value);
+    return __to_string(_value);
   }
 
   double
@@ -109,11 +109,17 @@ namespace djnn
   void
   RefProperty::set_value (FatProcess* v, bool propagate)
   {
-    value = v;
+    _value = v;
     if (is_activable () && propagate) {
       notify_activation ();
       notify_parent ();
     }
+  }
+
+  void
+  RefProperty::set_value (CoreProcess* v, bool propagate)
+  {
+    set_value(dynamic_cast<FatProcess*>(v), propagate);
   }
 
 #ifndef DJNN_NO_SERIALIZE
@@ -134,7 +140,7 @@ namespace djnn
   }
 #endif
 
-  FatProcess*
+  FatChildProcess*
   RefProperty::find_child (const std::string& path)
   {
     if (path.empty ())
@@ -146,21 +152,24 @@ namespace djnn
       key = path.substr (0, found);
       subpath = path.substr (found + 1, path.size () - 1);
     }
-    if (key.compare ("$value") == 0)
-      return value->find_child (subpath);
+    if (key.compare ("$value") == 0) {
+      auto * fpv = dynamic_cast<FatProcess*>(_value);
+      if(fpv)
+        return fpv->find_child (subpath);
+    }
     return nullptr;
   }
 
 #if !defined(DJNN_NO_DEBUG)
   void
   RefProperty::dump (int level) {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << value << " ]" ;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << _value << " ]" ;
   }
 #endif
 
-  FatProcess* 
+  RefProperty* 
   RefProperty::clone ()
   {
-    return new RefProperty (nullptr, get_name (), value);
+    return new RefProperty (nullptr, get_name (), _value);
   }
 }

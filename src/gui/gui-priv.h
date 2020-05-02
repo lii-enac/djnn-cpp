@@ -20,18 +20,19 @@ namespace djnn {
   class GUIStructureHolder : public FatProcess {
     public:
       GUIStructureHolder () : FatProcess ("GUIStructureHolder") {}
-      void add_gui_child (FatProcess *c, int index) ;
-      void add_gui_child_at (FatProcess *c, int neighboor_index, int spec, int new_index);
-      void move_child_to (FatProcess *c, int neighboor_index, int spec, int new_index);
-      void remove_gui_child (FatProcess *c);
+      void add_gui_child (FatChildProcess *c, int index) ;
+      void add_gui_child_at (FatChildProcess *c, int neighboor_index, int spec, int new_index);
+      void remove_gui_child (FatChildProcess *c);
+      void move_child_to (FatChildProcess *c, int neighboor_index, int spec, int new_index);
       void swap_children (int i, int j);
-      void set_child (FatProcess *child, int i);
+      void set_child (FatChildProcess *child, int i);
       void draw () override;
       AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
       void impl_deactivate () override {}
     private:
-      std::vector<std::pair<FatProcess*, int>> _children;
+      typedef std::vector<std::pair<FatChildProcess*, int>> children_t;
+      children_t _children;
     };
 
     class GUIStructureObserver : public StructureObserver {
@@ -40,14 +41,15 @@ namespace djnn {
       virtual ~GUIStructureObserver () {}
       void add_container (FatProcess *cont) override;
       void remove_container (FatProcess *cont) override;
-      void add_child_to_container (FatProcess *cont, FatProcess *c, int index) override;
-      void add_child_at (FatProcess *cont, FatProcess *c, int neighboor_index, int spec, int new_index) override;
-      void move_child_to (FatProcess *cont, FatProcess *c, int neighboor_index, int spec, int new_index) override;
-      void remove_child_from_container (FatProcess *cont, FatProcess *c) override;
+      void add_child_to_container (FatProcess *cont, FatChildProcess *c, int index) override;
+      void add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index) override;
+      void move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index) override;
+      void remove_child_from_container (FatProcess *cont, FatChildProcess *c) override;
       void swap_children (FatProcess *cont, int i, int j) override;
-      void set_child (FatProcess *cont, FatProcess *child, int i) override;
+      void set_child (FatProcess *cont, FatChildProcess *child, int i) override;
     private:
-      std::map<FatProcess*, GUIStructureHolder*> _structure_map;
+      typedef std::map<FatChildProcess*, GUIStructureHolder*> structures_t;
+      structures_t _structure_map;
     };
 
     class GUIMouseButton : public FatProcess

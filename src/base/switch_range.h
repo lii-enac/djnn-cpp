@@ -74,7 +74,7 @@ namespace djnn {
     TextProperty _branch_name;
     SwitchRangeAction _action;
     Coupling _c_branch;
-    FatProcess* _cur_branch;
+    FatChildProcess* _cur_branch;
   };
 
 }

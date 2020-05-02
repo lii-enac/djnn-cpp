@@ -533,7 +533,7 @@ namespace djnn
   }
 
   void
-  alias (FatProcess *p, const std::string& name, FatProcess* from)
+  alias (FatProcess *p, const std::string& name, FatChildProcess* from)
   {
     p->add_symbol (name, from);
   }

@@ -60,10 +60,12 @@ namespace djnn
 
   inline
   void
-  depth_first_traverse(FatProcess *p, std::function<void(FatProcess*)> f)
+  depth_first_traverse(CoreProcess *p, std::function<void(FatProcess*)> f)
   {
-    f(p);
-    for (auto child: p->children ()) depth_first_traverse(child.second, f);
+    auto * fp = dynamic_cast<FatProcess*>(p);
+    if(!fp) return;
+    f(fp);
+    for (auto child: fp->children ()) depth_first_traverse(child.second, f);
   }
 
   void run_stats(FatProcess *p);

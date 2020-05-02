@@ -26,7 +26,7 @@ namespace djnn
       ((SrcToDstLink*) get_parent ())->update_graph ();
       return;
     }
-    FatProcess *res = v->find_child (_spec);
+    auto * res = dynamic_cast<FatProcess*>(v->find_child (_spec));
     if (!res) {
       warning (this, "Source or destination not found dynamic link structure");
     }

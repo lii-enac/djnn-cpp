@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (double& tx, double& ty);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child ("tx"); }
 		AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child ("ty"); }
 

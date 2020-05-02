@@ -70,10 +70,10 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  ChildProcess*
   PathPoint::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -137,7 +137,7 @@ namespace djnn
     return 0;
   }
 
-  FatProcess*
+  PathLine*
   PathLine::clone ()
   {
     return new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
@@ -152,7 +152,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  PathMove*
   PathMove::clone ()
   {
     return new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
@@ -180,7 +180,7 @@ namespace djnn
     Backend::instance ()->draw_path_closure ();
   }
 
-  FatProcess*
+  PathClosure*
   PathClosure::clone ()
   {
     return new PathClosure (nullptr, get_name ());
@@ -237,10 +237,10 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  ChildProcess*
   PathQuadratic::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -307,7 +307,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  PathQuadratic*
   PathQuadratic::clone ()
   {
     return new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
@@ -377,10 +377,10 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  ChildProcess*
   PathCubic::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -460,7 +460,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  PathCubic*
   PathCubic::clone ()
   {
     return new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
@@ -536,10 +536,10 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  ChildProcess*
   PathArc::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -626,7 +626,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  PathArc*
   PathArc::clone ()
   {
     return new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
@@ -684,7 +684,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  Path*
   Path::clone ()
   {
     Path* clone = new Path (nullptr, get_name ());
@@ -703,7 +703,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  PathClip*
   PathClip::clone ()
   {
     PathClip* clone = new PathClip (nullptr, get_name ());

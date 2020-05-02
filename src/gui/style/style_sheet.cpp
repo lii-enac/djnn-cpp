@@ -34,7 +34,7 @@ namespace djnn
     finalize_construction (parent, n);
   }
 
-  FatProcess*
+  StyleSheet*
   StyleSheet::clone ()
   {
     StyleSheet* newd = new StyleSheet (nullptr, get_name ());

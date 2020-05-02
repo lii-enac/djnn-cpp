@@ -58,7 +58,7 @@ namespace djnn {
     TextProperty _branch_name;
     SwitchAction _action;
     Coupling _c_branch;
-    FatProcess* _cur_branch;
+    CoreProcess* _cur_branch;
   };
 
 }

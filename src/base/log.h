@@ -16,7 +16,7 @@
 
 #include "core/tree/component.h"
 #include "text.h"
-#include "connector.h"
+#include "simple_connector.h"
 
 namespace djnn
 {
@@ -39,7 +39,7 @@ namespace djnn
 #else
     TextCatenator* _tc;
     TextPrinter* _tp;
-    Connector* _c;
+    SimpleConnector* _c;
 #endif
   };
 

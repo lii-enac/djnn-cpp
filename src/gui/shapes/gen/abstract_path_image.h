@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (std::string& path, double& x, double& y, double& width, double& height);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child ("path"); }
 
   protected:

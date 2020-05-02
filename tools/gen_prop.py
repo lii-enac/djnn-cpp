@@ -37,7 +37,7 @@ namespace djnn
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -91,10 +91,10 @@ namespace djnn
     }
   }
  
-  FatProcess*
+  ChildProcess*
   %(CLASS)s::find_child (const std::string& name)
   {
-    FatProcess* res = %(INHERITS)s::find_child(name);
+    auto * res = %(INHERITS)s::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -164,7 +164,7 @@ def_draw = """
 """
 
 def_clone = """
-  FatProcess*
+  %(CLASS)s*
   %(CLASS)s::clone ()
   {
     return new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
@@ -345,9 +345,7 @@ def just_do_it(dc, finalize_construction=True):
         FINALIZE_CONSTRUCTION = "finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
-    DECL_CLONE = ''
-    if(dc.emit_clone):
-      DECL_CLONE = "FatProcess* clone () override;"
+    decl_clone = "%(CLASS)s* clone () override;"
 
     DECL_DRAW = ''
     if(dc.finalize_construction):
@@ -380,14 +378,18 @@ def just_do_it(dc, finalize_construction=True):
         'SET_ORIGIN': SET_ORIGIN,
         'ORIGIN_IN_SYMTABLE': ORIGIN_IN_SYMTABLE,
         'FINALIZE_CONSTRUCTION': FINALIZE_CONSTRUCTION,
-        'DECL_CLONE': DECL_CLONE,
+        #'DECL_CLONE': DECL_CLONE,
         'DECL_DRAW': DECL_DRAW,
         'DRAW_METHOD': dc.draw_method,
     }
 
     d['DEF_CLONE'] = ''
+    d['DECL_CLONE'] = ''
     if(dc.emit_clone):
       d['DEF_CLONE'] = def_clone % d
+      d['DECL_CLONE'] = decl_clone % d
+    
+    
     d['DEF_DRAW'] = ''
     if(dc.finalize_construction):
       d['DEF_DRAW'] = def_draw % d

@@ -109,7 +109,7 @@ namespace djnn
   :
   SrcToDstLink (parent, name, isModel),
   _init(this, name, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-  _src(!_ref_info_src.is_ref() && src ? src->find_child (ispec) : nullptr),
+  _src(!_ref_info_src.is_ref() && src ? dynamic_cast<FatProcess*>(src->find_child (ispec)) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_child (dspec)) : nullptr),
   _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (FatProcess**)&_src) : ref_update()),
   _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (FatProcess**)&_dst) : ref_update())
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   void
-  AbstractAssignment::do_assignment (FatProcess* src, AbstractProperty* dst_p, bool propagate)
+  AbstractAssignment::do_assignment (CoreProcess* src, AbstractProperty* dst_p, bool propagate)
   {
     AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (src);
     if (src_p) {

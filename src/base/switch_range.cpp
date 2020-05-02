@@ -147,14 +147,14 @@ namespace djnn
         if (_cur_branch == c) {
           if (_cur_branch->get_activation_state () == DEACTIVATED) {
              _cur_branch->activate ();
-             _branch_name.set_value(_cur_branch->get_name(), 1);
+             _branch_name.set_value (_cur_branch->get_name (this), 1);
            }
         } else {
           if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
             _cur_branch->deactivate ();
           _cur_branch = c;
           _cur_branch->activate ();
-          _branch_name.set_value(_cur_branch->get_name(), 1);
+          _branch_name.set_value (_cur_branch->get_name (this), 1);
         }
         return;
       }

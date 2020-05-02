@@ -102,7 +102,9 @@ namespace djnn
   AbstractProperty*
   Sorter::get_and_check (FatProcess *p)
   {
-    AbstractProperty* r = dynamic_cast<AbstractProperty*> (p->find_child (_spec.get_value ()));
+    AbstractProperty* r = nullptr;
+    if(p)
+      r = dynamic_cast<AbstractProperty*> (p->find_child (_spec.get_value ()));
     if (r == nullptr) {
       error (this, "Unable to sort children: properties not found or with incorrect type");
       return nullptr;
@@ -144,15 +146,15 @@ namespace djnn
     int n1 = q - p + 1, i , j ,k;
     int n2 = r - q;
     Container::children_t children = _container->children ();
-    FatProcess* L[n1];
-    FatProcess* R[n2];
+    FatProcess * L[n1];
+    FatProcess * R[n2];
     for (i = 0; i < n1; i++)
     {
-      L[i] = children[p+i];
+      L[i] = dynamic_cast<FatProcess*>(children[p+i]);
     }
     for (j = 0; j < n2; j++)
     {
-      R[j] = children [q+j+1];
+      R[j] = dynamic_cast<FatProcess*>(children [q+j+1]);
     }
     i=0,j=0;
 
@@ -214,8 +216,8 @@ namespace djnn
     int sz = children.size ();
     if (sz == 0)
       return;
-    std::vector<FatProcess*> cpy (children);
-    AbstractProperty* p = get_and_check (children[0]);
+    Container::children_t cpy (children);
+    AbstractProperty* p = get_and_check (dynamic_cast<FatProcess*>(children[0]));
     int type = p->get_prop_type ();
     switch (type)
       {
@@ -226,7 +228,7 @@ namespace djnn
     	  std::vector<std::pair<double, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
-    	    AbstractProperty* prop = get_and_check (c);
+    	    AbstractProperty* prop = get_and_check (dynamic_cast<FatProcess*>(c));
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
@@ -248,7 +250,7 @@ namespace djnn
     	  std::vector<std::pair<std::string, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
-    	    AbstractProperty* prop = get_and_check (c);
+    	    AbstractProperty* prop = get_and_check (dynamic_cast<FatProcess*>(c));
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }

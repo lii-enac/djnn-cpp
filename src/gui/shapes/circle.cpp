@@ -35,7 +35,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  Circle*
   Circle::clone ()
   {
     return new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);

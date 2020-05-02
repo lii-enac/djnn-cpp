@@ -60,20 +60,21 @@ namespace djnn
   void
   AbstractDeref::update_src ()
   {
-    FatProcess* unref = _ref->get_value ();
-    FatProcess *old_src = _cget.get_src ();
+    auto* unref = _ref->get_value ();
+    auto *old_src = _cget.get_src ();
     if (old_src) {
       Graph::instance().remove_edge (&_set, old_src);
     }
     _cget.uninit ();
     _cget.change_source (nullptr);
     if (unref != nullptr) {
-      FatProcess* src = unref->find_child (_path.get_value ());
+      auto* src = unref->find_child (_path.get_value ());
       if (src != nullptr) {
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
         Graph::instance().add_edge (&_set, src);
       }
-      change_src (src);
+      auto * fpsrc = dynamic_cast<FatProcess*>(src);
+      change_src (fpsrc);
     }
   }
 

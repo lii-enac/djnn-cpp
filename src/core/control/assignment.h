@@ -48,7 +48,7 @@ namespace djnn {
       const std::string src_ref_spec = std::string(), const std::string dst_ref_spec = std::string()); // hack to create temporary const std::string objects for init of refs
     virtual ~AbstractAssignment ();
     //void update_graph () override;
-    static void do_assignment (FatProcess* src, AbstractProperty* dst, bool propagate);
+    static void do_assignment (CoreProcess* src, AbstractProperty* dst, bool propagate);
   
   protected:
     void set_parent (FatProcess* p) override;

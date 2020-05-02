@@ -50,10 +50,10 @@ namespace djnn
     Backend::instance ()->delete_image_impl (this);
   }
 
-  FatProcess*
+  ChildProcess*
   Image::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractPathImage::find_child(name);
+    auto * res = AbstractPathImage::find_child(name);
     //if(res) return res;
     if (name == "pixel" && !has_ui()) {
       init_ui ();
@@ -130,7 +130,7 @@ namespace djnn
     return d;
   }
 
-  FatProcess*
+  Image*
   Image::clone () 
   {
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
@@ -160,10 +160,10 @@ namespace djnn
     delete _watcher;
   }
 
-  FatProcess*
+  ChildProcess*
   DataImage::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractDataImage::find_child(name);
+    auto * res = AbstractDataImage::find_child(name);
     //if(res) return res;
 
     if( name=="data" && _watcher == nullptr) {
@@ -199,7 +199,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  DataImage*
   DataImage::clone ()
   {
     return new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);

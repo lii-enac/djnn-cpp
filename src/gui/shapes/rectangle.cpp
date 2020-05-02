@@ -37,7 +37,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  Rectangle*
   Rectangle::clone ()
   {
     return new Rectangle (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);

@@ -127,8 +127,8 @@ namespace djnn
   :
       SrcToDstLink (parent, name),
       _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-      _src(!_ref_info_src.is_ref() && src ? src->find_child (ispec) : nullptr),
-      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_child (dspec) : nullptr),
+      _src(!_ref_info_src.is_ref() && src ? dynamic_cast<FatProcess*>(src->find_child (ispec)) : nullptr),
+      _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<FatProcess*>(dst->find_child (dspec)) : nullptr),
       _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update ()), // uses copy constructor
       _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update ()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", true),
@@ -154,8 +154,8 @@ namespace djnn
   :
       SrcToDstLink (parent, name),
       _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
-      _src(!_ref_info_src.is_ref() && src ? src->find_child (ispec) : nullptr),
-      _dst(!_ref_info_dst.is_ref() && dst ? dst->find_child (dspec) : nullptr),
+      _src(!_ref_info_src.is_ref() && src ? dynamic_cast<FatProcess*>(src->find_child (ispec)) : nullptr),
+      _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<FatProcess*>(dst->find_child (dspec)) : nullptr),
       _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, &_src) : ref_update ()), // uses copy constructor
       _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, &_dst) : ref_update ()),
       _action(this, "binding_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", activate),

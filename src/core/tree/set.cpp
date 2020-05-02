@@ -44,13 +44,13 @@ namespace djnn
   }
 
   void
-  Set::add_child (FatProcess* c, const std::string& name)
+  Set::add_child (FatChildProcess* c, const std::string& name)
   {
     /* test if the child is already in the set
      * it == children ().end () if the element is not find 
      * only then we add it in the symtable to avoid duplicate
      */
-    map<string, FatProcess*>::iterator it;
+    symtable_t::iterator it;
     it = children ().find(name);
     if (it == children ().end ()) {
       FatProcess::add_child (c, name);
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   void
-  Set::remove_child (FatProcess* c)
+  Set::remove_child (FatChildProcess* c)
   {
     bool found = false;
     symtable_t::iterator it;
@@ -90,10 +90,11 @@ namespace djnn
   void
   Set::remove_child (const std::string& name)
   {
-    FatProcess *found = nullptr;
+    FatChildProcess *found = nullptr;
     symtable_t::iterator it;
     for (it = children ().begin (); it != children ().end (); ++it) {
-      if (it->second->get_name ().compare (name) == 0) {
+      //if (it->second->get_name ().compare (name) == 0) {
+      if (it->first.compare (name) == 0) {
         remove_symbol (it->first);
         found = it->second;
         continue;
@@ -123,7 +124,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FatChildProcess*
   Set::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
@@ -178,7 +179,7 @@ namespace djnn
   SetIterator::impl_activate ()
   {
     symtable_t::iterator it;
-    std::map<std::string, FatProcess*>& map = _set->children ();
+    symtable_t& map = _set->children ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
       _action->activate ();

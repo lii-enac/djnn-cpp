@@ -70,10 +70,10 @@ namespace djnn
     }
   }
  
-  FatProcess*
+  ChildProcess*
   AbstractPropCircle::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGShape::find_child(name);
+    auto * res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

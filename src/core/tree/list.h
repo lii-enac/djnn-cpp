@@ -24,23 +24,22 @@
 #include "core/control/action.h"
 
 namespace djnn {
-  //using namespace std;
 
   class AbstractList : public Container
   {
   public:
     AbstractList (FatProcess *parent, const std::string& name);
-    void add_child (FatProcess* c, const std::string& name) override;
-    void insert (FatProcess* c, const std::string& spec);
-    void remove_child (FatProcess* c) override;
+    void add_child (FatChildProcess* c, const std::string& name) override;
+    void insert (FatChildProcess* c, const std::string& spec);
+    void remove_child (FatChildProcess* c) override;
     void remove_child (const std::string& name) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
-    FatProcess* find_child (const std::string& path) override;
-    FatProcess* find_child (int index)  override;
+    FatChildProcess* find_child (const std::string& path) override;
+    FatChildProcess* find_child (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
   protected:
-    virtual void finalize_child_insertion (FatProcess *child) = 0;
+    virtual void finalize_child_insertion (FatChildProcess *child) = 0;
     RefProperty _added, _removed;
     IntProperty _size;
 
@@ -55,9 +54,9 @@ namespace djnn {
   public:
     List (FatProcess *parent, const std::string& name);
     virtual ~List ();
-    FatProcess* clone () override;
+    List* clone () override;
   private:
-    void finalize_child_insertion (FatProcess *child) override;
+    void finalize_child_insertion (FatChildProcess *child) override;
   public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
@@ -67,14 +66,14 @@ namespace djnn {
   class ListIterator : public FatProcess
   {
   public:
-    ListIterator (FatProcess *parent, const std::string& name, FatProcess *list, FatProcess *action, bool model = true);
+    ListIterator (FatProcess *parent, const std::string& name, List *list, FatProcess *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};
     void post_activate () override;
   private:
     FatProcess *_action;
-    Container *_list;
+    List *_list;
   };
 
   class BidirectionalListIterator : public FatProcess
@@ -104,7 +103,7 @@ namespace djnn {
       IntProperty *_index;
     };
   public:
-    BidirectionalListIterator (FatProcess *parent, const std::string& name, FatProcess* list);
+    BidirectionalListIterator (FatProcess *parent, const std::string& name, List* list);
     virtual ~BidirectionalListIterator ();
     void impl_activate () override;
     void impl_deactivate () override;

@@ -28,7 +28,7 @@ namespace djnn
   }
 
   void
-  NativeExpressionAction::add_native_edge (FatProcess * src, FatProcess * dst)
+  NativeExpressionAction::add_native_edge (CoreProcess * src, CoreProcess * dst)
   {
     assert (src);
     assert (dst);
@@ -51,7 +51,7 @@ namespace djnn
   }
 
   void
-  NativeExpressionAction::remove_native_edge (FatProcess * src, FatProcess * dst)
+  NativeExpressionAction::remove_native_edge (CoreProcess * src, CoreProcess * dst)
   {
     assert (src);
     assert (dst);

@@ -120,13 +120,13 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
-                                FatProcess *trigger, const std::string& tspec, FatProcess *action,
+  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+                                CoreProcess *trigger, const std::string& tspec, FatProcess *action,
                                 const std::string& aspec) 
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger( trigger ? dynamic_cast<FatProcess*>(trigger->find_child (tspec)) : nullptr),
+  _trigger( dynamic_cast<FatProcess*>(trigger) ? dynamic_cast<FatProcess*>(trigger->find_child (tspec)) : nullptr),
   _action( action ? dynamic_cast<FatProcess*>(action->find_child (aspec)) : nullptr),
   _init(this, parent, tspec, aspec),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
@@ -141,12 +141,12 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
-                                FatProcess *trigger, FatProcess *action) 
+  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+                                CoreProcess *trigger, FatProcess *action) 
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger (trigger),
+  _trigger (dynamic_cast<FatProcess*>(trigger)),
   _action (action),
   _init(this, parent, "NO spec for trigger", "NO spec for action"),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),

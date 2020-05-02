@@ -27,9 +27,9 @@ namespace djnn
     OutlineCapStyle (FatProcess *parent, const std::string& name, int cap);
     virtual ~OutlineCapStyle ();
     void draw () override;
-    FatProcess* clone () override;
+    OutlineCapStyle* clone () override;
     void get_properties_values (int& cap);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child ("cap"); }
 
   protected:

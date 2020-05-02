@@ -27,9 +27,9 @@ namespace djnn
     FillRule (FatProcess *parent, const std::string& name, int rule);
     virtual ~FillRule ();
     void draw () override;
-    FatProcess* clone () override;
+    FillRule* clone () override;
     void get_properties_values (int& rule);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child ("rule"); }
 
   protected:

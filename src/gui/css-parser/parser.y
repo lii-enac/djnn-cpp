@@ -144,7 +144,8 @@
     if (property == "opacity") {
       new FillOpacity (cur_parent, "opacity", arg);
       new OutlineOpacity (cur_parent, "stroke-opacity", arg);
-      new Connector (cur_parent, "", cur_parent, "opacity/a", cur_parent, "stroke-opacity/a");
+      //new Connector (cur_parent, "", cur_parent, "opacity/a", cur_parent, "stroke-opacity/a");
+      new SimpleConnector (cur_parent, "", cur_parent->find_child("opacity/a"), cur_parent->find_child("stroke-opacity/a"));
       return;
     }
     if (property == "stroke-opacity") {

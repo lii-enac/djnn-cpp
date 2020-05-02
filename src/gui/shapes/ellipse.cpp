@@ -35,7 +35,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  Ellipse*
   Ellipse::clone ()
   {
     return new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);

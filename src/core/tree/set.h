@@ -38,10 +38,10 @@ namespace djnn {
   {
   public:
     Set (FatProcess *parent, const std::string& name);
-    void add_child (FatProcess* c, const std::string& name) override;
-    void remove_child (FatProcess* c) override;
+    void add_child (FatChildProcess* c, const std::string& name) override;
+    void remove_child (FatChildProcess* c) override;
     void remove_child (const std::string& name) override;
-    FatProcess* find_child (const std::string& path) override;
+    FatChildProcess* find_child (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();

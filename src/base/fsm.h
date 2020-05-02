@@ -62,13 +62,13 @@ namespace djnn {
       FSMTransition *_t;
       FSMState* _src;
       FSMState* _dst;
-      FatProcess* _action;
+      CoreProcess* _action;
     };
   public:
-    FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
-		   FatProcess *trigger, const std::string& tspec, FatProcess *action = 0, const std::string& aspec = "");
-    FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
-       FatProcess *trigger, FatProcess *action = 0);
+    FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+		   CoreProcess *trigger, const std::string& tspec, FatProcess *action = 0, const std::string& aspec = "");
+    FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+       CoreProcess *trigger, FatProcess *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;

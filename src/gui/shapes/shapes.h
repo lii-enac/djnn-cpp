@@ -40,7 +40,7 @@ namespace djnn
   {
   public:
     Rectangle (FatProcess *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
-    FatProcess* clone () override;
+    Rectangle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -50,7 +50,7 @@ namespace djnn
   {
   public:
     Circle (FatProcess *parent, const std::string& name, double cx, double cy, double r);
-    FatProcess* clone () override;
+    Circle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -60,7 +60,7 @@ namespace djnn
   {
   public:
     Ellipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry);
-    FatProcess* clone () override;
+    Ellipse* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -70,7 +70,7 @@ namespace djnn
   {
   public:
     Line (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2);
-    FatProcess* clone () override;
+    Line* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -80,7 +80,7 @@ namespace djnn
   {
   public:
     RectangleClip (FatProcess *parent, const std::string& name, double x, double y, double width, double height);
-    FatProcess* clone () override;
+    RectangleClip* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -112,9 +112,9 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    FatProcess* clone () override;
+    Text* clone () override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_child("dx"); }
@@ -161,11 +161,11 @@ namespace djnn
   public:
     PolyPoint (FatProcess* parent, const std::string& name, double x, double y);
     virtual ~PolyPoint ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
-    FatProcess* clone () override;
+    PolyPoint* clone () override;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
     void notify_change (unsigned int nm) override { _damaged |= nm; get_parent ()->get_parent()->notify_change (nm); }
   protected:
@@ -186,7 +186,7 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    FatProcess* clone () override;
+    Poly* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
     void impl_activate () override;
@@ -217,7 +217,7 @@ namespace djnn
   public:
     PathPoint (FatProcess* parent, const std::string& name, double x, double y);
     virtual ~PathPoint ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override = 0;
@@ -237,7 +237,7 @@ namespace djnn
     PathMove (FatProcess* parent, const std::string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
-    FatProcess* clone () override;
+    PathMove* clone () override;
   };
 
   class PathLine : public PathPoint
@@ -246,7 +246,7 @@ namespace djnn
     PathLine (FatProcess* parent, const std::string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
-    FatProcess* clone () override;
+    PathLine* clone () override;
   };
 
   class PathQuadratic : public AbstractGObj
@@ -254,13 +254,13 @@ namespace djnn
   public:
     PathQuadratic (FatProcess* parent, const std::string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
-    FatProcess* clone () override;
+    PathQuadratic* clone () override;
   private:
     struct raw_props_t { double x1,y1,x,y; };
     raw_props_t raw_props;
@@ -274,7 +274,7 @@ namespace djnn
   public:
     PathCubic (FatProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
     AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child("x2"); }
@@ -282,7 +282,7 @@ namespace djnn
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
-    FatProcess* clone () override;
+    PathCubic* clone () override;
   private:
     struct raw_props_t { double x1,y1,x2,y2,x,y; };
     raw_props_t raw_props;
@@ -297,7 +297,7 @@ namespace djnn
     PathArc (FatProcess* parent, const std::string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_child("rotx"); }
     AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_child("fl"); }
     AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_child("swfl"); }
@@ -306,7 +306,7 @@ namespace djnn
     AbstractDoubleProperty* x ()    { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y ()    { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
-    FatProcess* clone () override;
+    PathArc* clone () override;
   private:
     struct raw_props_t { double rx,ry,rotx,fl,swfl,x,y; };
     raw_props_t raw_props;
@@ -321,7 +321,7 @@ namespace djnn
     PathClosure (FatProcess* parent, const std::string& name);
     virtual ~PathClosure () {}
     void draw () override;
-    FatProcess* clone () override;
+    PathClosure* clone () override;
   private:
     void impl_activate () override
     {
@@ -342,7 +342,7 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    FatProcess* clone () override;
+    Path* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
     void impl_activate () override;
@@ -359,7 +359,7 @@ namespace djnn
         Path (parent, name) {}
     virtual ~PathClip () {}
     void draw () override;
-    FatProcess* clone () override;
+    PathClip* clone () override;
   };
 
 
@@ -371,8 +371,8 @@ namespace djnn
     Image (FatProcess *parent, const std::string& name, std::string path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
-    FatProcess* clone () override;
-    virtual FatProcess* find_child (const std::string&) override;
+    Image* clone () override;
+    virtual ChildProcess* find_child (const std::string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -399,8 +399,8 @@ namespace djnn
       DataImage (FatProcess *parent, const std::string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
-      FatProcess* clone () override;
-      virtual FatProcess* find_child (const std::string&) override;
+      DataImage* clone () override;
+      virtual ChildProcess* find_child (const std::string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}
@@ -456,7 +456,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;
-    FatProcess* clone () override;
+    Group* clone () override;
   protected:
     AbstractGObj *_gobj;
   };
@@ -469,6 +469,6 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return DEFS_T; }
-    FatProcess* clone () override;
+    Defs* clone () override;
   };
 } /* namespace djnn */

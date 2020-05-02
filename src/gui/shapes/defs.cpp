@@ -46,7 +46,7 @@ namespace djnn
     // No deactivation propagation;
   }
 
-  FatProcess* 
+  Defs* 
   Defs::clone ()
   {
     Defs* newd = new Defs (nullptr, get_name ());

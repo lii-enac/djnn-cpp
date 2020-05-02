@@ -27,9 +27,9 @@ namespace djnn
     DashOffset (FatProcess *parent, const std::string& name, double offset);
     virtual ~DashOffset ();
     void draw () override;
-    FatProcess* clone () override;
+    DashOffset* clone () override;
     void get_properties_values (double& offset);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child ("offset"); }
 
   protected:

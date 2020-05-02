@@ -33,7 +33,7 @@ namespace djnn
     std::string key = f->_key.get_value ();
     if (key.empty())
       return;
-    FatProcess *res;
+    FatChildProcess *res;
     for (auto c : f->_container->children ()) {
       res = c->find_child (path);
       if (res) {

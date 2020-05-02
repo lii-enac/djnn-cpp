@@ -79,8 +79,8 @@ namespace djnn {
   class ChildProcess;
   class FatProcess;
 
-  typedef FatProcess FatChildProcess;
-  //typedef ChildProcess FatChildProcess;
+  //typedef FatProcess FatChildProcess;
+  typedef ChildProcess FatChildProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -116,12 +116,19 @@ namespace djnn {
     void     set_vertex (Vertex *v);
 #endif
 
+
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
      std::pair<int, int> __nb_activation;
     #endif
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-     std::list<std::pair<Process*, long int>>::iterator __position_in_creation;
+     std::list<std::pair<CoreProcess*, long int>>::iterator __position_in_creation;
     #endif
+
+    // actions to be redefined by subclasses
+    virtual     void update_drawing () {}
+    virtual     void draw () {}
+    virtual     void pick () {}
+    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
 
   protected:
     virtual bool pre_activate ();
@@ -243,6 +250,8 @@ namespace djnn {
 
     CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
     void set_state_dependency (CoreProcess* s) { _state_dependency = s; }
+
+    virtual ChildProcess* clone () override { return nullptr; }
   protected:
     //void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
     FatProcess *_parent;
@@ -258,11 +267,7 @@ namespace djnn {
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 
-    // actions to be redefined by subclasses
-    virtual     void update_drawing () {}
-    virtual     void draw () {}
-    virtual     void pick () {}
-    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
+
     
     // tree, component, symtable
     virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
@@ -327,15 +332,14 @@ namespace djnn {
    extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
   
-  void alias_children (FatChildProcess *p, FatChildProcess *to);
-  void alias (FatChildProcess *parent, const std::string& name, FatChildProcess* from);
-  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2);
-  inline FatChildProcess* find (FatChildProcess *p) { return p; }
-  inline FatChildProcess* find (FatChildProcess *p, const std::string& path) { return p->find_child (path); }
-  // inline FatChildProcess* find (const std::string& path) { return FatChildProcess::find_child (nullptr, path); }
+  void alias_children (FatProcess *p, FatProcess *to);
+  void alias (FatProcess *parent, const std::string& name, FatChildProcess* from);
+  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2);
+  inline FatProcess* find (FatProcess *p) { return p; } // helper for smalac
+  inline FatChildProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
 
-  void add_state_dependency (FatChildProcess *_parent, CoreProcess *p);
-  void remove_state_dependency (FatChildProcess *_parent, CoreProcess *p);
+  void add_state_dependency (FatProcess *_parent, CoreProcess *p);
+  void remove_state_dependency (FatProcess *_parent, CoreProcess *p);
   inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 }

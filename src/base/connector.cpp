@@ -243,14 +243,14 @@ namespace djnn
       return;
     }
 
-    FatProcess* c_src = src->find_child (ispec);
+    auto * c_src = src->find_child (ispec);
 
     if (c_src == 0) {
       error (this, (std::string("source not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
-    FatProcess* c_dst = dst->find_child (dspec);
+    auto * c_dst = dst->find_child (dspec);
 
     if (c_dst == 0) {
       error (this,

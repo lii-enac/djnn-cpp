@@ -27,9 +27,9 @@ namespace djnn
     OutlineMiterLimit (FatProcess *parent, const std::string& name, int limit);
     virtual ~OutlineMiterLimit ();
     void draw () override;
-    FatProcess* clone () override;
+    OutlineMiterLimit* clone () override;
     void get_properties_values (int& limit);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child ("limit"); }
 
   protected:

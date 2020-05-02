@@ -25,14 +25,14 @@ namespace djnn {
   class SimpleBinding : public FatProcess
   {
   public:
-    SimpleBinding (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst)
+    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
     : FatProcess (name), _c(src, ACTIVATION, dst, ACTIVATION)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
     }
 
-    SimpleBinding (FatProcess* parent, const std::string& name, FatProcess* src, activation_flag_e src_flag, FatProcess* dst, activation_flag_e dst_flag)
+    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : FatProcess (name), _c(src, src_flag, dst, dst_flag) {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);

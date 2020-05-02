@@ -167,10 +167,10 @@ namespace djnn
     FatProcess::set_parent (p); 
   }
 
-  FatProcess*
+  ChildProcess*
   Text::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGShape::find_child(name);
+    auto * res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool propd = false;
@@ -419,7 +419,7 @@ namespace djnn
     return Backend::instance ()->get_cursor_from_local_x (this, pos);
   }
 
-  FatProcess*
+  Text*
   Text::clone ()
   {
     return new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());

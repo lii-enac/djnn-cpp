@@ -151,7 +151,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
-    FatProcess* find_child (const std::string& n) override;
+    FatChildProcess* find_child (const std::string& n) override;
    private:
     struct raw_props_t { int hot_x; int hot_y; std::string path; };
     raw_props_t raw_props;

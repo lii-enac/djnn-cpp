@@ -41,27 +41,27 @@ namespace djnn
   std::vector<std::string> AbstractGShape::_ui =
     { "pickable", "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
-  FatProcess*
+  ChildProcess*
   SVGHolder::find_child (const std::string& path)
   {
-    FatProcess *p = Container::find_child (path);
+    auto * p = Container::find_child (path);
     if (p == nullptr && _gobj != nullptr)
       p = _gobj->find_child (path);
     return p;
   }
 
-  FatProcess*
+  SVGHolder*
   SVGHolder::clone ()
   {
     SVGHolder* newh = new SVGHolder (nullptr, "SVGHolder");
 
     for (auto c : _children) {
-      FatProcess* child = c->clone ();
+      auto * child = c->clone ();
       if (child != nullptr)
         newh->add_child (child, this->find_child_name(c));
     }
 
-    newh->_gobj = newh->_children.back ();
+    newh->_gobj = dynamic_cast<FatProcess*>(newh->_children.back ());
 
     return newh;
   }
@@ -284,7 +284,7 @@ namespace djnn
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
-  FatProcess*
+  ChildProcess*
   AbstractGShape::find_child (const std::string& path)
   {
     if (ui)

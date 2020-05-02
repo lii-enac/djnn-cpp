@@ -400,7 +400,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
     void impl_activate () override;
     void impl_deactivate () override;
     

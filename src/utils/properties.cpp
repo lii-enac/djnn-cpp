@@ -57,7 +57,7 @@ namespace djnn
     delete _input;
     delete _action;
     symtable_t::iterator it;
-    std::map<std::string, FatProcess*>& map = children ();
+    auto& map = children ();
     for (it = map.begin (); it != map.end (); ++it) {
       delete it->second;
     }

@@ -61,22 +61,22 @@ namespace djnn {
     SwitchList (FatProcess *parent, const std::string& name, bool loop=false);
     virtual ~SwitchList ();
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
-    FatProcess* find_child (const std::string& path) override;
+    FatChildProcess* find_child (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
-    FatProcess* clone () override;
+    SwitchList* clone () override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif
-    FatProcess* item () { return _cur_item; }
-    void set_item (FatProcess *item) { _cur_item = item; }
+    FatChildProcess* item () { return _cur_item; }
+    void set_item (FatChildProcess *item) { _cur_item = item; }
     IntProperty* index () { return &_index; }
     BoolProperty* loop () { return &_loop; }
     void set_parent (FatProcess* p) override;
     
   private:
-    void finalize_child_insertion (FatProcess *child) override;
-    FatProcess* _cur_item;
+    void finalize_child_insertion (FatChildProcess *child) override;
+    FatChildProcess* _cur_item;
     BoolProperty _loop;
     IntProperty _index;
     Spike _next, _previous;

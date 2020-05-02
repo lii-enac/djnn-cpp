@@ -68,7 +68,7 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    FatProcess* find_child (const std::string&) override;
+    FatChildProcess* find_child (const std::string&) override;
     void set_parent (FatProcess* p) override;
 
   private:

@@ -38,20 +38,20 @@ namespace djnn {
       void impl_deactivate () override {}
     };
   public:
-    Synchronizer (FatProcess* parent, const std::string& name, FatProcess* dst, const std::string&  dspec);
+    Synchronizer (FatProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec);
     virtual ~Synchronizer ();
-    void add_source (FatProcess* src, const std::string& spec);
+    void add_source (CoreProcess* src, const std::string& spec);
     void impl_activate () override;
     void impl_deactivate () override;
-    void add_native_edge (FatProcess *src, FatProcess* dst);
+    void add_native_edge (CoreProcess *src, CoreProcess* dst);
     
   private:
     void propagate ();
 
     void set_parent (FatProcess* p) override;
-    struct Init { Init(Synchronizer *, FatProcess *parent, const std::string& name, FatProcess* dst, const std::string&  dspec); };
+    struct Init { Init(Synchronizer *, FatProcess *parent, const std::string& name, CoreProcess* dst, const std::string&  dspec); };
     friend struct Init;
-    FatProcess *_dst;
+    CoreProcess *_dst;
     Init _init;
     std::vector<Coupling*> _c_list;
     SynchronizerAction _action;

@@ -116,7 +116,7 @@ namespace djnn
   Switch::change_branch ()
   {
     string key = _branch_name.get_value ();
-    map<string, FatProcess*>::iterator it = find_child_iterator (key);
+    symtable_t::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
       if (_cur_branch == it->second) {
         if (_cur_branch->get_activation_state () == DEACTIVATED)

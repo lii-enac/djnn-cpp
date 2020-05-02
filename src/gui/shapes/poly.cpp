@@ -69,10 +69,10 @@ namespace djnn {
     }
   }
 
-  FatProcess*
+  ChildProcess*
   PolyPoint::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -123,7 +123,7 @@ namespace djnn {
     }
   }
 
-  FatProcess*
+  PolyPoint*
   PolyPoint::clone () {
     return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
   }
@@ -201,7 +201,7 @@ namespace djnn {
     _bbh->set_value (h, true);
   }
 
-  FatProcess*
+  Poly*
   Poly::clone ()
   {  
     Poly* newp = new Poly (nullptr, get_name (), _closed);

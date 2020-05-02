@@ -86,7 +86,7 @@ namespace djnn
      */
     unsigned int i = _sw->index ()->get_value ();
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
-      FatProcess* next = _sw->children ()[i - 1];
+      auto * next = _sw->children ()[i - 1];
       if (_sw->item () && _sw->item () != next) {
         _sw->item ()->deactivate ();
         _sw->set_item (next);
@@ -163,14 +163,14 @@ namespace djnn
   }
 
   void
-  SwitchList::finalize_child_insertion (FatProcess *c)
+  SwitchList::finalize_child_insertion (FatChildProcess *c)
   {
     c->set_parent (this);
     _added.set_value (c, true);
     _size.set_value (_size.get_value () + 1, true);
   }
 
-  FatProcess*
+  FatChildProcess*
   SwitchList::find_child (const std::string& path)
   {
     if (path.compare ("next") == 0)
@@ -185,12 +185,12 @@ namespace djnn
       return AbstractList::find_child (path);
   }
 
-  FatProcess*
+  SwitchList*
   SwitchList::clone ()
   {
     SwitchList* clone = new SwitchList (nullptr, get_name());
     for (auto c : _children) {
-      clone->add_child (c->clone (), c->get_name ());
+      clone->add_child (c->clone (), c->get_name (this));
     }
     return clone;
   }

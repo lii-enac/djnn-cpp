@@ -27,9 +27,9 @@ namespace djnn
     OutlineWidth (FatProcess *parent, const std::string& name, double width);
     virtual ~OutlineWidth ();
     void draw () override;
-    FatProcess* clone () override;
+    OutlineWidth* clone () override;
     void get_properties_values (double& width);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }
 
   protected:

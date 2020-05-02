@@ -27,9 +27,9 @@ namespace djnn
     TextAnchor (FatProcess *parent, const std::string& name, int anchor);
     virtual ~TextAnchor ();
     void draw () override;
-    FatProcess* clone () override;
+    TextAnchor* clone () override;
     void get_properties_values (int& anchor);
-    virtual FatProcess* find_child (const std::string&) override;
+    virtual ChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_child ("anchor"); }
 
   protected:

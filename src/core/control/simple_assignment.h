@@ -35,7 +35,7 @@ namespace djnn {
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    SimpleAssignment (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool propagate)
+    SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
     :
     //CoreProcess (),
     FatProcess (name),
@@ -54,12 +54,12 @@ namespace djnn {
 
     void perform_action ();
 
-    FatProcess* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
-    FatProcess* get_dst() { return _dst; }
+    CoreProcess* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
+    CoreProcess* get_dst() { return _dst; }
 
   private:
-    FatProcess *_src;
-    FatProcess *_dst;
+    CoreProcess *_src;
+    CoreProcess *_dst;
     AssignmentAction _action;
     Coupling _c_src;
     bool _propagate;

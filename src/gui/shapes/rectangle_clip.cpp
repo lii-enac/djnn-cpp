@@ -39,7 +39,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  RectangleClip*
   RectangleClip::clone ()
   {
     return new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);

@@ -22,9 +22,10 @@
 namespace djnn {
   class URI {
   public:
-    static FatProcess* find_by_uri (const std::string& uri);
+    static FatChildProcess* find_by_uri (const std::string& uri);
     static void add_uri (const std::string& prefix, FatProcess* p);
   private:
-    static std::map<std::string, FatProcess*> uri_manager;
+    typedef std::map<std::string, FatChildProcess*> uris_t;
+    static uris_t uri_manager;
   };
 }

@@ -44,7 +44,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FillColor*
   FillColor::clone ()
   {
     return new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  OutlineColor*
   OutlineColor::clone ()
   {
     return new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
@@ -74,7 +74,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  NoOutline*
   NoOutline::clone ()
   {
     return new NoOutline (nullptr, get_name ());
@@ -89,7 +89,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  NoFill*
   NoFill::clone ()
   {
     return new NoFill (nullptr, get_name ());
@@ -104,7 +104,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  OutlineOpacity*
   OutlineOpacity::clone ()
   {
     return new OutlineOpacity (nullptr, get_name (), raw_props.a);
@@ -119,7 +119,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FillOpacity*
   FillOpacity::clone ()
   {
     return new FillOpacity (nullptr, get_name (), raw_props.a);
@@ -134,7 +134,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  DashArray*
   DashArray::clone ()
   {
     DashArray* newda = new DashArray (nullptr, get_name ());
@@ -155,7 +155,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  NoDashArray*
   NoDashArray::clone ()
   {
     return new NoDashArray (nullptr, get_name ());
@@ -180,7 +180,7 @@ namespace djnn
   {
   }
 
-  FatProcess*
+  GradientStop*
   GradientStop::clone ()
   {
     return new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
@@ -222,16 +222,16 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  LinearGradient*
   LinearGradient::clone ()
   {
     LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
 					    AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto s : _stops->children ()) {
-      g->stops ()->add_child (s->clone (), s->get_name ());
+      g->stops ()->add_child (s->clone (), s->get_name (_stops));
     }
     for (auto t : _transforms->children ()) {
-      g->transforms ()->add_child (t->clone (), t->get_name ());
+      g->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
     return g;
   }
@@ -291,7 +291,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  RefLinearGradient*
   RefLinearGradient::clone ()
   {
     return new RefLinearGradient (nullptr, get_name (), _lg);
@@ -313,16 +313,16 @@ namespace djnn
 
   RadialGradient::~RadialGradient () {}
 
-  FatProcess*
+  RadialGradient*
   RadialGradient::clone ()
   {
     RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
 					     raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto s : _stops->children ()) {
-      rg->stops ()->add_child (s->clone (), s->get_name ());
+      rg->stops ()->add_child (s->clone (), s->get_name (_stops));
     }
     for (auto t : _transforms->children ()) {
-      rg->transforms ()->add_child (t->clone (), t->get_name ());
+      rg->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
     return rg;
   }
@@ -378,7 +378,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  RefRadialGradient*
   RefRadialGradient::clone ()
   {
     return new RefRadialGradient (nullptr, get_name (), _rg);
@@ -429,7 +429,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FontSize*
   FontSize::clone ()
   {
     return new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
@@ -459,7 +459,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FontWeight*
   FontWeight::clone ()
   {
     return new FontWeight (nullptr, get_name (), raw_props.weight);
@@ -495,7 +495,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FontStyle*
   FontStyle::clone ()
   {
     return new FontStyle (nullptr, get_name (), raw_props.style);
@@ -525,7 +525,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FontFamily*
   FontFamily::clone ()
   {
     return new FontFamily (nullptr, get_name (), raw_props.family);

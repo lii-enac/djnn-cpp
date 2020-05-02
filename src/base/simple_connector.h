@@ -28,7 +28,7 @@ namespace djnn {
     public FatProcess
   {
   public:
-    SimpleConnector (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool copy_on_activation=true)
+    SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     :
     //CoreProcess (),
     FatProcess (name),

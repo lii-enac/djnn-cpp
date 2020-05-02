@@ -35,7 +35,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  Line*
   Line::clone ()
   {
     return new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);

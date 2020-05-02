@@ -1898,10 +1898,10 @@ namespace djnn
     delete _accsy;
   }
 
-  FatProcess*
+  ChildProcess*
   AbstractHomography::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractPropHomography::find_child(name);
+    auto * res = AbstractPropHomography::find_child(name);
     if(res) return res;
 
     if (name.find ("rightTranslateBy") != std::string::npos) {

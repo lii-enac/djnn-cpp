@@ -148,10 +148,10 @@ namespace djnn
     }
   }
  
-  FatProcess*
+  ChildProcess*
   AbstractPropHomography::find_child (const std::string& name)
   {
-    FatProcess* res = AbstractTransformation::find_child(name);
+    auto * res = AbstractTransformation::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

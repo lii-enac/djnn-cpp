@@ -24,26 +24,27 @@ namespace djnn {
   class RefProperty: public AbstractProperty {
   public:
     RefProperty (FatProcess* parent, const std::string& name, FatProcess* v, unsigned int nm = notify_none) 
-    : AbstractProperty (parent, name, nm), value (v) { finalize_construction (parent, name); }
+    : AbstractProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }
 
-    FatProcess* get_value () { return value; }
+    FatProcess* get_value () { return _value; }
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (FatProcess* v, bool propagate) override;
+    void set_value (CoreProcess* v, bool propagate); // FIXME
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);}
     double get_double_value () override;
     double get_double_value () const override;
     std::string get_string_value () override;
     std::string get_string_value () const override;
-    FatProcess* find_child (const std::string& path) override;
-    FatProcess* clone () override;
+    FatChildProcess* find_child (const std::string& path) override;
+    RefProperty* clone () override;
 
   private:
-    FatProcess* value;
+    FatProcess* _value;
 
   public:
 #ifndef DJNN_NO_DEBUG

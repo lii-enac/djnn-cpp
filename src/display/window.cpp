@@ -166,10 +166,10 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  FatProcess*
+  FatChildProcess*
   Cursor::find_child (const std::string& name)
   {
-    FatProcess* res = FatProcess::find_child (name);
+    auto * res = FatProcess::find_child (name);
     if (res)
       return res;
     else if (name == "hotX") {
@@ -243,17 +243,17 @@ namespace djnn
   Cursor::~Cursor ()
   {
     if (_c_x) {
-      FatProcess* x = find_child ("x");
+      auto * x = find_child ("x");
       delete _c_x;
       delete x;
     }
     if (_c_y) {
-      FatProcess* y = find_child ("y");
+      auto * y = find_child ("y");
       delete _c_y;
       delete y;
     }
     if (_c_path) {
-      FatProcess* path = find_child ("path");
+      auto * path = find_child ("path");
       delete _c_path;
       delete path;
     }

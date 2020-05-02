@@ -56,7 +56,7 @@ namespace djnn
 #endif
 
   void
-  AbstractList::add_child (FatProcess* c, const std::string& name)
+  AbstractList::add_child (FatChildProcess* c, const std::string& name)
   {
     if (c == nullptr)
       return;
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   void
-  AbstractList::insert (FatProcess* c, const std::string& spec)
+  AbstractList::insert (FatChildProcess* c, const std::string& spec)
   {
     int index = _children.size () - 1;
     if (spec.compare (">") == 0) {
@@ -78,7 +78,7 @@ namespace djnn
       }
       return;
     }
-    std::vector<FatProcess*>::iterator it;
+    children_t::iterator it;
     if (spec.compare ("<") == 0) {
       it = _children.begin ();
       it = _children.insert (it, c);
@@ -127,15 +127,15 @@ namespace djnn
   }
 
   void
-  AbstractList::remove_child (FatProcess* c)
+  AbstractList::remove_child (FatChildProcess* c)
   {
-    std::vector<FatProcess*>::iterator newend = _children.end ();
+    children_t::iterator newend = _children.end ();
     for (auto s: structure_observer_list) {
       s->remove_child_from_container (this, c);
     }
     /* remove if 'c' is found in the vector */
     newend = std::remove_if (_children.begin (), _children.end (), 
-        [c](std::vector<FatProcess*>::iterator::value_type v) { return v == c; });
+        [c](children_t::iterator::value_type v) { return v == c; });
 
     /* check if end has changed and erase if necessary */
     if (newend != _children.end ()){
@@ -153,7 +153,7 @@ namespace djnn
       /* from user index to internal index : -1 */
       index = std::stoi (name, nullptr) - 1;
       if (index < _children.size ()) {
-        FatProcess* c = _children.at (index);
+        auto * c = _children.at (index);
         remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
@@ -165,7 +165,7 @@ namespace djnn
     }
   }
 
-  FatProcess*
+  FatChildProcess*
   AbstractList::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
@@ -179,7 +179,7 @@ namespace djnn
         string::size_type sz;
         size_t index = std::stoi (path, &sz) - 1;
         if (index < _children.size ()) {
-          FatProcess* c = _children.at (index);
+          auto * c = _children.at (index);
           if (path.length () > sz) {
             return c->find_child (path.substr (sz + 1));
           } else
@@ -197,7 +197,7 @@ namespace djnn
     return nullptr;
   }
 
-  FatProcess*
+  FatChildProcess*
   AbstractList::find_child (int index)
   {
     if ((index - 1) < (int)_children.size ()) {
@@ -221,7 +221,7 @@ namespace djnn
   }
 
   void
-  List::finalize_child_insertion (FatProcess *c)
+  List::finalize_child_insertion (FatChildProcess *c)
   {
     c->set_parent (this);
 
@@ -230,11 +230,11 @@ namespace djnn
     } else if (get_activation_state () == DEACTIVATED && c->get_activation_state () == ACTIVATED) {
       c->deactivate ();
     }
-    _added.set_value (c, true);
+    _added.set_value (c, true); // fixme
     _size.set_value (_size.get_value () + 1, true);
   }
 
-  FatProcess*
+  List*
   List::clone () {
     List* clone = new List (nullptr, get_name ());
     for (auto c: _children) {
@@ -261,12 +261,12 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (FatProcess *parent, const std::string& name, FatProcess *list, FatProcess *action, bool model)
+  ListIterator::ListIterator (FatProcess *parent, const std::string& name, List *list, FatProcess *action, bool model)
   :
     FatProcess (name, model),
     _action (action)
   {
-    Container *l = dynamic_cast<Container*> (list);
+    List *l = dynamic_cast<List*> (list);
     if (l == nullptr)
       error (this, "The list argument must be a List component in list iterator " + name);
     _list = l;
@@ -330,7 +330,7 @@ namespace djnn
   }
 
   BidirectionalListIterator::BidirectionalListIterator (FatProcess *parent, const std::string& name,
-                                                        FatProcess* list)
+                                                        List* list)
   :
   FatProcess (name),
   _list (dynamic_cast<List*> (list)),

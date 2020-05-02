@@ -68,13 +68,13 @@ namespace djnn
     }
   }
 
-  FatProcess* 
+  Group* 
   Group::clone () 
   {
     Group* newg = new Group (nullptr, get_name ());
 
     for (auto c : _children) {
-      FatProcess* child = c->clone ();
+      auto * child = c->clone ();
       if (child != nullptr)
         newg->add_child (child, this->find_child_name(c));
     }

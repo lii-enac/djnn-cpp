@@ -176,7 +176,7 @@ EndElement(FatProcess* e) {
 static void djn__CheckStroke(FatProcess* holder) {
 	if (djn_GraphicalShapeArgs.strokeType == djnStrokeNone) {
 		/* if it exists, ensure that no-stroke is at the end of the list */
-		FatProcess* e = holder->find_child("no-stroke");
+		auto * e = holder->find_child("no-stroke");
 		holder->remove_child(e);
 		holder->add_child(e, "no-stroke");
 	} else if (djn_GraphicalShapeArgs.strokeType == djnStrokeUndef) {
@@ -830,12 +830,12 @@ StartUse(const char** attrs, FatProcess* current) {
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
   alias (holder, "x", pos->find_child ("tx"));
   alias (holder, "y", pos->find_child ("ty"));
-  map<string, FatProcess*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
+  auto it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
     FatProcess* clone = it->second->clone();
     if (clone->get_process_type() == DEFS_T) {
       for (auto c : ((Defs*)clone)->children()) {
-        holder->add_child (c, c->get_name());
+        holder->add_child (c, c->get_name (clone));
       }
       delete clone;
     } else {
