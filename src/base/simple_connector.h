@@ -23,29 +23,55 @@
 
 namespace djnn { 
 
-  class SimpleConnector :
-    //public CoreProcess
-    public FatProcess
+  class CoreConnector :
+    public CoreProcess
   {
   public:
-    SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    CoreConnector (CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     :
-    //CoreProcess (),
-    FatProcess (name),
-      _assignment (this, "", src, dst, true),
-      _binding (this, "", src, &_assignment),
+      _assignment (src, dst, true),
+      _binding (src, &_assignment),
       _copy_on_activation (copy_on_activation)
       {
         // no need to add edge to graph, assignment already did it
-        finalize_construction (parent, name);
       }
 
     void impl_activate   () override { _assignment.activate (); _binding.activate(); if(_copy_on_activation) _assignment.notify_activation (); }
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
 
   private:
-    SimpleAssignment _assignment;
-    SimpleBinding _binding;
+    CoreAssignment _assignment;
+    CoreBinding _binding;
+    bool _copy_on_activation;
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
+  };
+
+  class SimpleConnector :
+    public FatProcess
+  {
+  public:
+    SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    :
+    FatProcess (name),
+      //_assignment (this, "", src, dst, true),
+      _assignment (src, dst, true),
+      _binding (src, &_assignment),
+      _copy_on_activation (copy_on_activation)
+      {
+        // no need to add edge to graph, assignment already did it
+        finalize_construction (parent, name);
+      }
+
+    void impl_activate   () override { _assignment.activate (); _binding.activate(); if (_copy_on_activation) _assignment.notify_activation (); }
+    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
+
+  private:
+    //SimpleAssignment _assignment;
+    CoreAssignment _assignment;
+    CoreBinding _binding;
     bool _copy_on_activation;
 public:
 #ifndef DJNN_NO_SERIALIZE

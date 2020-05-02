@@ -22,6 +22,38 @@
 
 namespace djnn { 
 
+  class CoreAssignment : public CoreProcess
+  {
+  public:
+    CoreAssignment (CoreProcess* src, CoreProcess* dst, bool propagate)
+    : _src(src), _dst(dst), _propagate(propagate)
+    {
+      Graph::instance ().add_edge (src, dst);
+    }
+    ~CoreAssignment () {
+      Graph::instance ().remove_edge (get_src (), get_dst ());
+    }
+
+    void impl_activate   () override { perform_action (); }
+    void impl_deactivate () override {}
+    void post_activate   () override { set_activation_state (DEACTIVATED); }
+
+    void perform_action ();
+
+    CoreProcess* get_src () { return _src; }
+    CoreProcess* get_dst () { return _dst; }
+
+  private:    
+    CoreProcess *_src, *_dst;
+    bool _propagate;
+
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
+  };
+
+
   class SimpleAssignment : public FatProcess
   {
     friend class AssignmentAction;
@@ -37,9 +69,9 @@ namespace djnn {
   public:
     SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
     :
-    //CoreProcess (),
     FatProcess (name),
-     _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
+     _src(src), _dst(dst),
+    _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
@@ -48,7 +80,7 @@ namespace djnn {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
 
-    void impl_activate   () override { _c_src.enable  (); _action.activate(); };
+    void impl_activate   () override { _c_src.enable  (); _action.activate(); }
     void impl_deactivate () override { _c_src.disable (); _action.deactivate(); }
     void post_activate   () override { post_activate_auto_deactivate (); }
 

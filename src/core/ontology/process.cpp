@@ -57,6 +57,8 @@ namespace djnn
   string FatProcess::default_name = "noname";
   static map<const ChildProcess*, string> parentless_names;
 
+  CoreProcess::couplings_t CoreProcess::default_couplings;
+
   CoreProcess::CoreProcess (bool model)
   : _vertex (nullptr)
   {
@@ -112,21 +114,13 @@ namespace djnn
 
   CoreProcess::~CoreProcess ()
   {
-    
-    for (auto c : _activation_couplings) {
-      c->about_to_delete_src ();
-    }
-    for (auto c : _deactivation_couplings) {
-      c->about_to_delete_src ();
-    }
-
     /* note: 
        this code is to prevent bugs 
        this should NEVER happen
        _vertex should be nullptr at this place
-       if not, something (FatProcess)  IS NOT well deleted
+       if not, something IS NOT deleted correctly
     */
-    if (_vertex != nullptr){
+    if (_vertex != nullptr) {
 #ifndef DJNN_NO_DEBUG
        auto * pp = dynamic_cast<FatProcess*>(this);
        warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
@@ -143,6 +137,16 @@ namespace djnn
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);
 #endif
+  }
+
+  CouplingProcess::~CouplingProcess ()
+  {
+    for (auto * c : get_activation_couplings ()) {
+      c->about_to_delete_src ();
+    }
+    for (auto * c : get_deactivation_couplings ()) {
+      c->about_to_delete_src ();
+    }
   }
 
   FatProcess::~FatProcess ()
@@ -258,7 +262,7 @@ namespace djnn
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : _activation_couplings) {
+    for (auto& coupling : get_activation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
@@ -288,7 +292,7 @@ namespace djnn
      * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
      * */
     std::vector<Coupling*> to_propagate;
-    for (auto& coupling : _deactivation_couplings) {
+    for (auto& coupling : get_deactivation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
@@ -301,19 +305,19 @@ namespace djnn
   // coupling
 
   void
-  CoreProcess::add_activation_coupling (Coupling* c)
+  CouplingProcess::add_activation_coupling (Coupling* c)
   {
     _activation_couplings.push_back (c);
   }
 
   void
-  CoreProcess::add_deactivation_coupling (Coupling* c)
+  CouplingProcess::add_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.push_back (c);
   }
 
   void
-  CoreProcess::remove_activation_coupling (Coupling* c)
+  CouplingProcess::remove_activation_coupling (Coupling* c)
   {
     _activation_couplings.erase (
       std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
@@ -322,7 +326,7 @@ namespace djnn
   }
 
   void
-  CoreProcess::remove_deactivation_coupling (Coupling* c)
+  CouplingProcess::remove_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.erase (
       std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),

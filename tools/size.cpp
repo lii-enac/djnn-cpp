@@ -42,7 +42,11 @@ main(int argc, char* argv[])
 	PSIZE(symtable_t);
 	cout << endl;
 
+	PSIZE(CoreProcess);
+	PSIZE(CouplingProcess);
 	PSIZE(FatProcess);
+	cout << endl;
+
 	PSIZE(Coupling);
 	PSIZE(Vertex);
 	cout << endl;
@@ -51,13 +55,22 @@ main(int argc, char* argv[])
 	PSIZE(Component);
 	cout << endl;
 
-	PSIZE(Action);
-	PSIZE(Binding);
+	PSIZE(CoreBinding);
 	PSIZE(SimpleBinding);
-	PSIZE(Assignment);
+	PSIZE(Binding);
+	cout << endl;
+
+	PSIZE(Action);
+	cout << endl;
+
+	PSIZE(CoreAssignment);
 	PSIZE(SimpleAssignment);
-	PSIZE(Connector);
+	PSIZE(Assignment);
+	cout << endl;
+
+	PSIZE(CoreConnector);
 	PSIZE(SimpleConnector);
+	PSIZE(Connector);
 	cout << endl;
 
 	PSIZE(Adder);

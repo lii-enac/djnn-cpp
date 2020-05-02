@@ -22,23 +22,21 @@
 
 namespace djnn {
 
-  class SimpleBinding : public FatProcess
+  class CoreBinding : public CoreProcess
   {
   public:
-    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : FatProcess (name), _c(src, ACTIVATION, dst, ACTIVATION)
+    CoreBinding (CoreProcess* src, CoreProcess* dst)
+    : _c (src, ACTIVATION, dst, ACTIVATION)
     {
       Graph::instance ().add_edge (src, dst);
-      finalize_construction (parent, name);
     }
 
-    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    : FatProcess (name), _c(src, src_flag, dst, dst_flag) {
+    CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    : _c (src, src_flag, dst, dst_flag) {
       Graph::instance ().add_edge (src, dst);
-      finalize_construction (parent, name);
     }
     
-    ~SimpleBinding () {
+    ~CoreBinding () {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
 
@@ -50,6 +48,41 @@ namespace djnn {
 
   private:
     Coupling _c;
+
+  public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
+  };
+
+
+  // we could have used virtual inheritance, but thus forces qualification of activate(): too cumbersome
+  // use composition instead, simpler, but we loose a few bytes 
+
+  class SimpleBinding : public FatProcess //, virtual CoreBinding 
+  {
+  public:
+    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    :
+    FatProcess (name),
+    _b (src, dst)
+    {
+      CouplingProcess::finalize_construction (parent, name);
+    }
+
+    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    :
+    FatProcess (name),
+    _b (src, dst)
+    {  
+      CouplingProcess::finalize_construction (parent, name);
+    }
+
+    void impl_activate   () override { _b.impl_activate (); };
+    void impl_deactivate () override { _b.impl_deactivate (); }
+
+  private:
+    CoreBinding _b;
 
   public:
 #ifndef DJNN_NO_SERIALIZE

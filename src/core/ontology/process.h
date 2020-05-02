@@ -95,14 +95,14 @@ namespace djnn {
     void deactivate ();
 
     // coupling
-    void    add_activation_coupling (Coupling* c);
-    void remove_activation_coupling (Coupling* c);
-    void    add_deactivation_coupling (Coupling* c);
-    void remove_deactivation_coupling (Coupling* c);
+    virtual void    add_activation_coupling (Coupling* c) {}
+    virtual void remove_activation_coupling (Coupling* c) {}
+    virtual void    add_deactivation_coupling (Coupling* c) {}
+    virtual void remove_deactivation_coupling (Coupling* c) {}
     typedef std::vector<Coupling*> couplings_t;
-    const couplings_t& get_activation_couplings () const { return _activation_couplings; }
-    const couplings_t& get_deactivation_couplings () const { return _deactivation_couplings; }
-    bool  has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
+    virtual const couplings_t& get_activation_couplings () const { return default_couplings; }
+    virtual const couplings_t& get_deactivation_couplings () const { return default_couplings; }
+    bool  has_coupling () const { return false; }
     void  notify_activation ();
     void  notify_deactivation ();
     void  schedule_activation (); // for gui picking only: why is there a problem?
@@ -144,10 +144,10 @@ namespace djnn {
   private:
     // >>instance fields start here
     Vertex *_vertex;
-    couplings_t _activation_couplings;
-    couplings_t _deactivation_couplings;
     unsigned int _bitset;
     // <<instance fields end here
+
+    static couplings_t default_couplings;
 
   public:
     virtual CoreProcess* clone ();
@@ -240,10 +240,29 @@ namespace djnn {
     virtual CoreProcess* get_activation_source () { return nullptr; }
   };
 
-  class ChildProcess : public CoreProcess
+
+  class CouplingProcess : public CoreProcess {
+  public:
+    CouplingProcess (bool model = false) : CoreProcess(model) {}
+    virtual ~CouplingProcess ();
+    // coupling
+    void    add_activation_coupling (Coupling* c) override;
+    void remove_activation_coupling (Coupling* c) override;
+    void    add_deactivation_coupling (Coupling* c) override;
+    void remove_deactivation_coupling (Coupling* c) override;
+    bool  has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
+    
+    const couplings_t& get_activation_couplings () const override { return _activation_couplings; }
+    const couplings_t& get_deactivation_couplings () const override { return _deactivation_couplings; }
+  private:
+    couplings_t _activation_couplings;
+    couplings_t _deactivation_couplings;
+  };
+
+  class ChildProcess : public CouplingProcess
   {
   public:
-    ChildProcess (bool model = false) : CoreProcess(model), _parent(nullptr), _state_dependency(nullptr) {}
+    ChildProcess (bool model = false) : CouplingProcess (model), _parent(nullptr), _state_dependency(nullptr) {}
     virtual void set_parent(FatProcess* p) override; // { _parent = p; }
     FatProcess* get_parent() override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }

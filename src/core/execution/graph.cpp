@@ -193,8 +193,8 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     auto * pp = dynamic_cast<FatProcess*>(_process);
     std::cout << "vertex (" <<
-    ( pp->get_parent () ? pp->get_parent ()->get_name () + "/" : "") <<
-    pp->get_name () << ") - [" << 
+    ( pp && pp->get_parent () ? pp->get_parent ()->get_name () + "/" : "") <<
+    ( pp ? pp->get_name () : "") << ") - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
@@ -203,7 +203,7 @@ namespace djnn
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
          auto * ppe = dynamic_cast<FatProcess*>(e->_process);
-         if(ppe) std::cout << ( ppe->get_parent () ?  ppe->get_parent ()->get_name () + "/" : "" ) << ppe->get_name () << " [x"
+         if (ppe) std::cout << ( ppe->get_parent () ?  ppe->get_parent ()->get_name () + "/" : "" ) << ppe->get_name () << " [x"
          << result->second << "] \t" ;
       }
       std::cout << std::endl;

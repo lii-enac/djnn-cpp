@@ -27,13 +27,13 @@ namespace djnn
 #if !defined(DJNN_NO_SERIALIZE)
 
   /* init static variable */
-  CoreProcess* AbstractSerializer::serializationRoot = nullptr;
+  const CoreProcess* AbstractSerializer::serializationRoot = nullptr;
   AbstractSerializer* AbstractSerializer::serializer = nullptr;
 
   static string __cur_format;
   
   void
-  AbstractSerializer::pre_serialize (CoreProcess* root, const std::string& format) {
+  AbstractSerializer::pre_serialize (const CoreProcess* root, const std::string& format) {
      if (AbstractSerializer::serializationRoot == 0) {
 
         AbstractSerializer::serializationRoot = root;
@@ -53,7 +53,7 @@ namespace djnn
   }
 
   void
-  AbstractSerializer::post_serialize (CoreProcess* root) {
+  AbstractSerializer::post_serialize (const CoreProcess* root) {
     if (AbstractSerializer::serializationRoot == root) {
       AbstractSerializer::serializationRoot = nullptr;
       AbstractSerializer::serializer = nullptr;
