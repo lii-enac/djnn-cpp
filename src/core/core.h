@@ -10,6 +10,7 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *		  Mathieu Poirier <mathieu.poirier@enac.fr>
+ *		  Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
 
