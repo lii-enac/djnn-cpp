@@ -132,10 +132,7 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state) {}
-    virtual void finalize_construction (FatProcess* parent, const std::string& name) { // For native action in current smalac, to be removed
-      finalize_construction (parent, name, nullptr);
-    }
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) {}
 
   private:
     // >>instance fields start here
@@ -268,10 +265,7 @@ namespace djnn {
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
     
     // tree, component, symtable
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state) override; // to be moved in ChildProcess
-    virtual void finalize_construction (FatProcess* parent, const std::string& name) override { // For native action in current smalac, to be removed
-      finalize_construction (parent, name, nullptr);
-    }
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
 
     virtual void   add_child (FatChildProcess* c, const std::string& name) override;
     virtual void   remove_child (FatChildProcess* c) override;

@@ -21,19 +21,19 @@
 
 
 namespace djnn {
-	// this is what could a SimpleBinding ressemble, which a much smaller size: TODO use it in smala!
-  class SimpleBinding : public Process
+
+  class SimpleBinding : public FatProcess
   {
   public:
-    SimpleBinding (Process* parent, const std::string& name, Process* src, Process* dst)
-    : Process (name), _c(src, ACTIVATION, dst, ACTIVATION)
+    SimpleBinding (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst)
+    : FatProcess (name), _c(src, ACTIVATION, dst, ACTIVATION)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
     }
 
-    SimpleBinding (Process* parent, const std::string& name, Process* src, activation_flag_e src_flag, Process* dst, activation_flag_e dst_flag)
-    : Process (name), _c(src, src_flag, dst, dst_flag) {
+    SimpleBinding (FatProcess* parent, const std::string& name, FatProcess* src, activation_flag_e src_flag, FatProcess* dst, activation_flag_e dst_flag)
+    : FatProcess (name), _c(src, src_flag, dst, dst_flag) {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
     }
@@ -45,15 +45,10 @@ namespace djnn {
     void impl_activate   () override { _c.enable  (); };
     void impl_deactivate () override { _c.disable (); }
 
-    Process* get_src() { return _c.get_src (); } // delegate to coupling to save space
-    Process* get_dst() { return _c.get_dst (); }
+    CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space
+    CoreProcess * get_dst() { return _c.get_dst (); }
 
   private:
-    //void set_parent (Process* p) override;
-
-    //Process *_src
-    //Process *_dst;
-    //BindingAction _action;
     Coupling _c;
 
   public:
