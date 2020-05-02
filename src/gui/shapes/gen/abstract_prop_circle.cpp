@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropCircle::AbstractPropCircle (Process *parent, const std::string& name, double cx, double cy, double r) :
+  AbstractPropCircle::AbstractPropCircle (FatProcess *parent, const std::string& name, double cx, double cy, double r) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
@@ -70,10 +70,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractPropCircle::find_child (const std::string& name)
   {
-    Process* res = AbstractGShape::find_child(name);
+    FatProcess* res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

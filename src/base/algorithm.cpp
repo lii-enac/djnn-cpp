@@ -22,8 +22,8 @@
 namespace djnn
 {
 
-  Sorter::Sorter (Process *parent, const std::string& name, Process *container, const std::string& spec) :
-      Process (name),
+  Sorter::Sorter (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& spec) :
+      FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
       _action (this, "sort"),
@@ -100,7 +100,7 @@ namespace djnn
   }
 
   AbstractProperty*
-  Sorter::get_and_check (Process *p)
+  Sorter::get_and_check (FatProcess *p)
   {
     AbstractProperty* r = dynamic_cast<AbstractProperty*> (p->find_child (_spec.get_value ()));
     if (r == nullptr) {
@@ -144,8 +144,8 @@ namespace djnn
     int n1 = q - p + 1, i , j ,k;
     int n2 = r - q;
     Container::children_t children = _container->children ();
-    Process* L[n1];
-    Process* R[n2];
+    FatProcess* L[n1];
+    FatProcess* R[n2];
     for (i = 0; i < n1; i++)
     {
       L[i] = children[p+i];
@@ -214,7 +214,7 @@ namespace djnn
     int sz = children.size ();
     if (sz == 0)
       return;
-    std::vector<Process*> cpy (children);
+    std::vector<FatProcess*> cpy (children);
     AbstractProperty* p = get_and_check (children[0]);
     int type = p->get_prop_type ();
     switch (type)
@@ -287,8 +287,8 @@ namespace djnn
   }
 #endif
 
-  ListOperator::ListOperator (Process *parent, const std::string& name, Process *container, const std::string& spec) :
-      Process (name),
+  ListOperator::ListOperator (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& spec) :
+      FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),
       _action (this, "action"),

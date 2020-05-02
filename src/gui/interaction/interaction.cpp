@@ -25,8 +25,8 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(Process *parent, const std::string& name, Process* shape, Process* matrix)
-  : Process (name)
+  ScaleRotateTranslate::ScaleRotateTranslate(FatProcess *parent, const std::string& name, FatProcess* shape, FatProcess* matrix)
+  : FatProcess (name)
   {
     if (shape == nullptr || matrix == nullptr) {
       error (this, "Shape or Matrix cannot be null in ScaleRotateTranslate constructor");
@@ -35,7 +35,7 @@ namespace djnn
     _shape = shape;
     _matrix = dynamic_cast<AbstractHomography*> (matrix);
     if (!_matrix) {
-      error (this, "Wrong type of Process for matrix provided to ScaleRotateTranslate constructor");
+      error (this, "Wrong type of FatProcess for matrix provided to ScaleRotateTranslate constructor");
       return;
     }
     _touches = shape->find_child ("touches");

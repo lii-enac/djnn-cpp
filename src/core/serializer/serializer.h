@@ -28,7 +28,7 @@ namespace djnn {
   public:
   	static void pre_serialize (CoreProcess* root, const std::string& format);
   	static void post_serialize (CoreProcess* root);
-    static  void compute_path (Process* from, CoreProcess* to, std::string& buf);
+    static  void compute_path (FatProcess* from, CoreProcess* to, std::string& buf);
   	virtual void start (const std::string& name) = 0;
   	virtual void text_attribute (const std::string& name, const std::string& value) = 0;
   	virtual void int_attribute (const std::string& name, int value) = 0;

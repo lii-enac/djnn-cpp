@@ -30,7 +30,7 @@
 namespace djnn
 {
 
-  class Serial : public Process, public ExternalSource
+  class Serial : public FatProcess, public ExternalSource
   {
 
   /*** private Class Serial Out Actions ***/
@@ -38,7 +38,7 @@ namespace djnn
      class SerialOutAction : public Action
     {
     public:
-      SerialOutAction (Process* parent, const std::string& name) :
+      SerialOutAction (FatProcess* parent, const std::string& name) :
       Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SerialOutAction () {}
       void impl_activate () override { ((Serial*)get_parent())->serial_write (); };
@@ -49,7 +49,7 @@ namespace djnn
   /*** Serial Class ***/
 
   public:
-    Serial (Process *parent, const std::string& name,
+    Serial (FatProcess *parent, const std::string& name,
       const std::string& port, int baudrate=9600, char eol='\n');
     
     virtual ~Serial ();
@@ -61,7 +61,7 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
 
   private:
     const std::string& _port;

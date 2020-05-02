@@ -71,16 +71,16 @@ namespace djnn
     add_symbol ("wheel", _wheel);
 
     _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged, connected to UpdateDrawing::damaged, the frame pointer is passed with the action
-    Process *update = UpdateDrawing::instance ()->get_damaged ();
+    FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION);
     Graph::instance ().add_edge (_damaged, update);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
-  Window::Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w,
+  Window::Window (FatProcess *parent, const std::string& name, const std::string& title, double x, double y, double w,
 		  double h) :
-      Process (name),
+      FatProcess (name),
       _refresh (false), _holder (nullptr)
   {
     init_ui (title, x, y, w, h);
@@ -157,8 +157,8 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (Process *parent, const std::string& name, const std::string& path, int hotX, int hotY) :
-      Process (name), raw_props
+  Cursor::Cursor (FatProcess *parent, const std::string& name, const std::string& path, int hotX, int hotY) :
+      FatProcess (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
   {
@@ -166,10 +166,10 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   Cursor::find_child (const std::string& name)
   {
-    Process* res = Process::find_child (name);
+    FatProcess* res = FatProcess::find_child (name);
     if (res)
       return res;
     else if (name == "hotX") {
@@ -196,8 +196,8 @@ namespace djnn
       _c_path->enable ();
     if (_win == nullptr || _win->somehow_deactivating ()) {
       bool found = false;
-      Process *cur_parent = get_parent ();
-      Process *cur_child = this;
+      FatProcess *cur_parent = get_parent ();
+      FatProcess *cur_child = this;
       while (!found && cur_parent != nullptr) {
         if (cur_parent->get_process_type () == CONTAINER_T) {
           Container *cont = dynamic_cast<Container*> (cur_parent);
@@ -243,17 +243,17 @@ namespace djnn
   Cursor::~Cursor ()
   {
     if (_c_x) {
-      Process* x = find_child ("x");
+      FatProcess* x = find_child ("x");
       delete _c_x;
       delete x;
     }
     if (_c_y) {
-      Process* y = find_child ("y");
+      FatProcess* y = find_child ("y");
       delete _c_y;
       delete y;
     }
     if (_c_path) {
-      Process* path = find_child ("path");
+      FatProcess* path = find_child ("path");
       delete _c_path;
       delete path;
     }

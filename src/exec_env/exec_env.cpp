@@ -37,7 +37,7 @@ namespace djnn
 {
 
   static bool __module_initialized = false;
-  Process* mainloop;
+  FatProcess* mainloop;
 
   extern std::vector<std::string> loadedModules;
 

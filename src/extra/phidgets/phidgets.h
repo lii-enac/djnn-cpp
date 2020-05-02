@@ -18,8 +18,8 @@
 namespace djnn {
 
 	extern std::vector<string> loadedModules;
-	extern Process *Phidgets;
-	extern Process *InterfaceKits;
+	extern FatProcess *Phidgets;
+	extern FatProcess *InterfaceKits;
  	
  	void init_phidgets ();
   

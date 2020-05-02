@@ -24,12 +24,12 @@ namespace djnn
   class OutlineJoinStyle : public AbstractStyle
   {
   public:
-    OutlineJoinStyle (Process *parent, const std::string& name, int join);
+    OutlineJoinStyle (FatProcess *parent, const std::string& name, int join);
     virtual ~OutlineJoinStyle ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
     void get_properties_values (int& join);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child ("join"); }
 
   protected:

@@ -22,8 +22,8 @@ namespace djnn
 {
   using namespace std;
 
-  Exit::Exit (Process* parent, const std::string& name, int value, bool isModel)
-  : Process (name),
+  Exit::Exit (FatProcess* parent, const std::string& name, int value, bool isModel)
+  : FatProcess (name),
   _value (this, "value", value)
   {
     set_is_model (isModel);

@@ -20,8 +20,8 @@
 
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
-  : Process (name),
+  AbstractDeref::AbstractDeref (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
+  : FatProcess (name),
   _path (this, "path", path),
   _action (this, "action"),
   _set (this, "set_action"),
@@ -60,21 +60,33 @@ namespace djnn
   void
   AbstractDeref::update_src ()
   {
-    Process* unref = _ref->get_value ();
-    Process *old_src = _cget.get_src ();
+    FatProcess* unref = _ref->get_value ();
+    FatProcess *old_src = _cget.get_src ();
     if (old_src) {
       Graph::instance().remove_edge (&_set, old_src);
     }
     _cget.uninit ();
     _cget.change_source (nullptr);
     if (unref != nullptr) {
-      Process* src = unref->find_child (_path.get_value ());
+      FatProcess* src = unref->find_child (_path.get_value ());
       if (src != nullptr) {
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
         Graph::instance().add_edge (&_set, src);
       }
       change_src (src);
     }
+  }
+
+  void
+  AbstractDeref::set_parent (FatProcess* p)
+  {
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), &_action);
+    }
+
+    add_state_dependency (p, &_action);
+    FatProcess::set_parent (p);
   }
 
   void
@@ -86,7 +98,7 @@ namespace djnn
     _cget.enable ();
   }
 
-  Deref::Deref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
+  Deref::Deref (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _activation (this, "activation"),
    _src (nullptr)
@@ -123,12 +135,12 @@ namespace djnn
   }
 
   void
-  Deref::change_src (Process *src)
+  Deref::change_src (FatProcess *src)
   {
     _src = src;
   }
 
-  DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
+  DerefString::DerefString (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _value (this, "value", ""),
   _src (nullptr)
@@ -177,7 +189,7 @@ namespace djnn
     }
   }
 
-  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path, djnn_dir_t dir) :
+  DerefDouble::DerefDouble (FatProcess *parent, const std::string &name, FatProcess *ref, const std::string &path, djnn_dir_t dir) :
       AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
       _src (nullptr)
@@ -215,7 +227,7 @@ namespace djnn
   }
 
   void
-  DerefDouble::change_src (Process *src)
+  DerefDouble::change_src (FatProcess *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
     if (_src) {

@@ -32,8 +32,8 @@ namespace djnn {
 
   extern std::vector<std::string> loadedModules;
 
-  extern Process *GPUs;
-  extern Process *Displays;
+  extern FatProcess *GPUs;
+  extern FatProcess *Displays;
   void init_display ();
   void clear_display ();
 

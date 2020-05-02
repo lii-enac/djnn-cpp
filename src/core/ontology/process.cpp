@@ -43,18 +43,18 @@ namespace djnn
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE
   std::vector<__stat_exec> __activation_order;
   #endif
-  std::list<std::pair<Process*, long int>> __creation_stat_order;
+  std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   std::vector<string> __destruction_stat_order;
   long int __creation_num = 0;
 
 
-  long int Process::_nb_anonymous = 0;
+  long int FatProcess::_nb_anonymous = 0;
 
 #ifdef DJNN_NO_DEBUG
-  Process::DebugInfo Process::_dbg_info{"no dbg info",0};
+  FatProcess::DebugInfo FatProcess::_dbg_info{"no dbg info",0};
 #endif
 
-  string Process::default_name = "noname";
+  string FatProcess::default_name = "noname";
   static map<const ChildProcess*, string> parentless_names;
 
   CoreProcess::CoreProcess (bool model)
@@ -79,12 +79,12 @@ namespace djnn
   }
 
   const std::string&
-  CoreProcess::get_name (Process * parent) const
+  CoreProcess::get_name (FatProcess * parent) const
   {
     return parent->find_child_name(this);
   }
 
-  Process::Process (const std::string& name, bool model)
+  FatProcess::FatProcess (const std::string& name, bool model)
   : ChildProcess(model),
   //_parent (nullptr),
   //_state_dependency (nullptr),
@@ -93,7 +93,7 @@ namespace djnn
   }
 
   void
-  Process::finalize_construction (Process* parent, const std::string& name, CoreProcess* state_dep) /* called by SubProcess to link to parent */
+  FatProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
   {
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
@@ -124,12 +124,12 @@ namespace djnn
        this code is to prevent bugs 
        this should NEVER happen
        _vertex should be nullptr at this place
-       if not, something (Process)  IS NOT well deleted
+       if not, something (FatProcess)  IS NOT well deleted
     */
     if (_vertex != nullptr){
 #ifndef DJNN_NO_DEBUG
-       auto * pp = dynamic_cast<Process*>(this);
-       warning ( nullptr, " Process::~Process - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
+       auto * pp = dynamic_cast<FatProcess*>(this);
+       warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
        for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
        for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
 #endif
@@ -145,9 +145,7 @@ namespace djnn
 #endif
   }
 
-   
-
-  Process::~Process ()
+  FatProcess::~FatProcess ()
   {
     /* make sure everything is wiped out the symtable */
     children ().clear ();
@@ -202,7 +200,7 @@ namespace djnn
   }
 
   bool
-  Process::pre_activate ()
+  FatProcess::pre_activate ()
   {
     /* no activation if :
      * 1 - already activated
@@ -342,7 +340,7 @@ namespace djnn
     _vertex = v; 
   }
   /*void
-  Process::print_set_vertex_err_msg (Vertex* v)
+  FatProcess::print_set_vertex_err_msg (Vertex* v)
   {
     
   }*/
@@ -352,7 +350,7 @@ namespace djnn
   // tree, component, symtable
 
   void
-  ChildProcess::set_parent (Process* p)
+  ChildProcess::set_parent (FatProcess* p)
   {
     if (p == nullptr) {
       if(_parent)
@@ -362,7 +360,7 @@ namespace djnn
   }
 
   void
-  Process::add_child (Process* child, const std::string& name)
+  FatProcess::add_child (FatProcess* child, const std::string& name)
   {
     if (child == nullptr)
       return;
@@ -376,7 +374,7 @@ namespace djnn
   }
 
   void
-  Process::remove_child (Process* c)
+  FatProcess::remove_child (FatProcess* c)
   {
     symtable_t::iterator it;
     for (it = children ().begin (); it != children ().end (); ++it) {
@@ -388,13 +386,13 @@ namespace djnn
   }
 
   void
-  Process::remove_child (const std::string& name)
+  FatProcess::remove_child (const std::string& name)
   {
     remove_symbol (name);
   }
 
-  Process*
-  Process::find_child (const std::string& key)
+  FatProcess*
+  FatProcess::find_child (const std::string& key)
   {
     //DEBUG
     //cout << "key: " << key << endl;
@@ -404,7 +402,7 @@ namespace djnn
 
     /* special case find '*' */ 
     if (key[0] == '*') {
-      Process* found = find_child (key.substr(2)); // without "/*""
+      FatProcess* found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
         auto it = children ().begin ();
@@ -420,8 +418,8 @@ namespace djnn
     /* special case find from root - using find_child ("//johndoe") */
     //FIXME: improved with c++20 if (key.starts_with("//")
     if (key.length () >= 2 && key[0] == '/' && key[1] == '/') {
-        Process* current_cpnt = this;
-        Process* current_parent = current_cpnt->get_parent ();
+        FatProcess* current_cpnt = this;
+        FatProcess* current_parent = current_cpnt->get_parent ();
         while (current_parent != nullptr) {
           current_cpnt = current_parent;
           current_parent = current_cpnt->get_parent ();
@@ -441,22 +439,22 @@ namespace djnn
         else
           return nullptr;
       }
-      map<string, Process*>::iterator it = find_child_iterator (newKey);
+      map<string, FatProcess*>::iterator it = find_child_iterator (newKey);
       if (it != children_end ()) {
         return (it->second)->find_child (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
       return get_parent ();
-    map<string, Process*>::iterator it = find_child_iterator (key);
+    map<string, FatProcess*>::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
       return it->second;
     }
     return 0;
   }
 
-  Process*
-  Process::find_child (Process *p, const std::string& path)
+  FatProcess*
+  FatProcess::find_child (FatProcess *p, const std::string& path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
@@ -464,7 +462,7 @@ namespace djnn
   }
 
   const std::string&
-  Process::find_child_name (const CoreProcess* symbol) const
+  FatProcess::find_child_name (const CoreProcess* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
@@ -486,26 +484,26 @@ namespace djnn
   }
 
   void
-  Process::add_symbol (const std::string& name, Process* c)
+  FatProcess::add_symbol (const std::string& name, FatProcess* c)
   {
-    /* if ((children ().insert (std::pair<string, Process*> (name, c))).second == false) {
+    /* if ((children ().insert (std::pair<string, FatProcess*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
      }*/
     _symtable[name] = c;
   }
 
   void
-  Process::remove_symbol (const std::string& name)
+  FatProcess::remove_symbol (const std::string& name)
   {
     symtable_t::iterator it = find_child_iterator (name);
     if (it != children_end ())
       children ().erase (it);
     else
-      warning (nullptr,   "Warning: symbol " + name + " not found in Process " + name + "\n");
+      warning (nullptr,   "Warning: symbol " + name + " not found in FatProcess " + name + "\n");
   }
 
   const std::string&
-  Process::get_name () const
+  FatProcess::get_name () const
   {
     return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
   }
@@ -514,43 +512,43 @@ namespace djnn
   // data
 
   void
-  Process::set_data (CoreProcess* data)
+  FatProcess::set_data (CoreProcess* data)
   {
     _data = data;
   }
 
   CoreProcess*
-  Process::get_data ()
+  FatProcess::get_data ()
   {
     return _data;
   }
 
   void
-  alias_children (Process* p, Process* from)
+  alias_children (FatProcess* p, FatProcess* from)
   {
-    Process::symtable_t& symtable = from->children ();
+    FatProcess::symtable_t& symtable = from->children ();
     for (auto& sym : symtable) {
       p->add_symbol (sym.first, sym.second);
     }
   }
 
   void
-  alias (Process *p, const std::string& name, Process* from)
+  alias (FatProcess *p, const std::string& name, FatProcess* from)
   {
     p->add_symbol (name, from);
   }
 
   void
-  merge_children (Process *p1, const std::string& sy1, Process* p2, const std::string& sy2)
+  merge_children (FatProcess *p1, const std::string& sy1, FatProcess* p2, const std::string& sy2)
   {
-    Process* x2 = p2->find_child (sy2);
+    FatProcess* x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
 #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy2 << endl;
 #endif
       return;
     }
-    Process* x1 = p1->find_child (sy1);
+    FatProcess* x1 = p1->find_child (sy1);
     if (x1 == nullptr) {
 #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy1 << endl;
@@ -569,14 +567,14 @@ namespace djnn
   }
 
   void
-  add_state_dependency (Process *parent, CoreProcess *p)
+  add_state_dependency (FatProcess *parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (parent->state_dependency (), p); 
   }
 
   void
-  remove_state_dependency (Process *parent, CoreProcess *p)
+  remove_state_dependency (FatProcess *parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (parent->state_dependency (), p);
@@ -586,7 +584,7 @@ namespace djnn
 #ifndef DJNN_NO_SERIALIZE
   void
   CoreProcess::serialize (const std::string& format) {
-    auto * pp = dynamic_cast<Process*>(this);
+    auto * pp = dynamic_cast<FatProcess*>(this);
     cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
   }
 #endif
@@ -594,7 +592,7 @@ namespace djnn
   CoreProcess*
   CoreProcess::clone () {
 #ifndef DJNN_NO_DEBUG
-    auto * pp = dynamic_cast<Process*>(this);
+    auto * pp = dynamic_cast<FatProcess*>(this);
     cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
 
 #endif
@@ -611,9 +609,9 @@ namespace djnn
   }
 
   void
-  Process::dump (int level)
+  FatProcess::dump (int level)
   {
-    //Process *pp = dynamic_cast<Process*>(this);
+    //FatProcess *pp = dynamic_cast<FatProcess*>(this);
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/

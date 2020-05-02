@@ -50,8 +50,8 @@ namespace djnn
       
   }
 
-  ScreenToLocal::ScreenToLocal (Process *parent, const std::string& name, Process* shape) :
-  Process (name)
+  ScreenToLocal::ScreenToLocal (FatProcess *parent, const std::string& name, FatProcess* shape) :
+  FatProcess (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)
@@ -98,7 +98,7 @@ namespace djnn
   }
 
   void
-  ScreenToLocal::set_parent (Process* p)
+  ScreenToLocal::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -107,7 +107,7 @@ namespace djnn
 
     add_state_dependency (p, _action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -147,8 +147,8 @@ namespace djnn
       
   }
 
-  LocalToScreen::LocalToScreen (Process *parent, const std::string& name, Process* shape) :
-  Process (name)
+  LocalToScreen::LocalToScreen (FatProcess *parent, const std::string& name, FatProcess* shape) :
+  FatProcess (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
     if (_shape == nullptr)
@@ -194,7 +194,7 @@ namespace djnn
   }
 
   void
-  LocalToScreen::set_parent (Process* p)
+  LocalToScreen::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -203,7 +203,7 @@ namespace djnn
 
     add_state_dependency (p, _action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

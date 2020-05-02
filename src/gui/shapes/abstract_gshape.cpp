@@ -41,22 +41,22 @@ namespace djnn
   std::vector<std::string> AbstractGShape::_ui =
     { "pickable", "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
-  Process*
+  FatProcess*
   SVGHolder::find_child (const std::string& path)
   {
-    Process *p = Container::find_child (path);
+    FatProcess *p = Container::find_child (path);
     if (p == nullptr && _gobj != nullptr)
       p = _gobj->find_child (path);
     return p;
   }
 
-  Process*
+  FatProcess*
   SVGHolder::clone ()
   {
     SVGHolder* newh = new SVGHolder (nullptr, "SVGHolder");
 
     for (auto c : _children) {
-      Process* child = c->clone ();
+      FatProcess* child = c->clone ();
       if (child != nullptr)
         newh->add_child (child, this->find_child_name(c));
     }
@@ -90,8 +90,8 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (Process *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure) :
-      Process (name), _shape (nullptr)
+  Touch::Touch (FatProcess *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure) :
+      FatProcess (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
     set_activation_state (ACTIVATED);
@@ -121,14 +121,14 @@ namespace djnn
     delete _init_x;
   }
 
-  UI::UI (Process *p, Process *f) : parent (p)
+  UI::UI (FatProcess *p, FatProcess *f) : parent (p)
   {
     pickable = new BoolProperty (p, "pickable", true);
-    //Process *update = UpdateDrawing::instance ()->get_damaged ();
+    //FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     //cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
     //if (f != nullptr)
     //  cpick->enable (f);
-    Process *update = f;
+    FatProcess *update = f;
     cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
     cpick->enable ();
     press = new Spike (p, "press");
@@ -277,18 +277,18 @@ namespace djnn
 
   }
 
-  AbstractGShape::AbstractGShape (Process *parent, const std::string& name) :
+  AbstractGShape::AbstractGShape (FatProcess *parent, const std::string& name) :
     AbstractGObj (parent, name), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
-  Process*
+  FatProcess*
   AbstractGShape::find_child (const std::string& path)
   {
     if (ui)
-      return Process::find_child (path);
+      return FatProcess::find_child (path);
     else {
       size_t found = path.find_first_of ('/');
       std::string key = path;
@@ -315,7 +315,7 @@ namespace djnn
           it++;
         }
       }
-      return Process::find_child (path);
+      return FatProcess::find_child (path);
     }
   }
 

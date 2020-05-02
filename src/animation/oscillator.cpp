@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (Process *parent, const std::string& name, DoubleProperty* m,
+  Oscillator::OscillatorAction::OscillatorAction (FatProcess *parent, const std::string& name, DoubleProperty* m,
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
@@ -38,8 +38,8 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (Process *parent, const std::string& name)
-  : Process (name),
+  Oscillator::Oscillator (FatProcess *parent, const std::string& name)
+  : FatProcess (name),
   _m (this, "m", 1),
   _k (this, "k", 1),
   _damping (this, "damping", 0),
@@ -64,7 +64,7 @@ namespace djnn
   }
 
   void
-  Oscillator::set_parent (Process* p)
+  Oscillator::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -72,7 +72,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_action);
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  DashOffset::DashOffset (Process *parent, const std::string& name, double offset) :
+  DashOffset::DashOffset (FatProcess *parent, const std::string& name, double offset) :
     AbstractStyle (parent, name),
     raw_props{.offset=offset},
     _coffset (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   DashOffset::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   DashOffset::clone ()
   {
     return new DashOffset (nullptr, get_name (), raw_props.offset);

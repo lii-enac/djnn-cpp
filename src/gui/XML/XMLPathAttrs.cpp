@@ -22,10 +22,10 @@
 
 namespace djnn {
 
-typedef void (djn_PathPointProc) (Process*, double, double);
-typedef void (djn_PathCoordProc) (Process*, double);
+typedef void (djn_PathPointProc) (FatProcess*, double, double);
+typedef void (djn_PathCoordProc) (FatProcess*, double);
 
-static int ParseData (Process**, const char*);
+static int ParseData (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
     {"d",{&ParseData}}
@@ -69,7 +69,7 @@ ParseCoords(const char* v, int num, double* coord, int *numout) {
 	return v;
 }
 
-static int ParseData(Process** e, const char* v) {
+static int ParseData(FatProcess** e, const char* v) {
 	double initx = 0., inity = 0.;
 	double curx = 0., cury = 0.;
 	double ctrlx = 0., ctrly = 0.;

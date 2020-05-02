@@ -26,7 +26,7 @@ namespace djnn {
   class SwitchRangeBranch : public Container
   {
   public:
-    SwitchRangeBranch (Process *parent, const std::string& name, double lower, bool left_open, double upper, bool right_open);
+    SwitchRangeBranch (FatProcess *parent, const std::string& name, double lower, bool left_open, double upper, bool right_open);
     ~SwitchRangeBranch ();
     bool is_in_range (double v);
 #ifndef DJNN_NO_SERIALIZE
@@ -54,7 +54,7 @@ namespace djnn {
       SwitchRange* _sw;
     };
   public:
-    SwitchRange (Process *parent, const std::string& name, double initial);
+    SwitchRange (FatProcess *parent, const std::string& name, double initial);
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -66,7 +66,7 @@ namespace djnn {
     virtual void serialize (const std::string& format) override;
 #endif
   private:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
     void change_branch ();
     friend void SwitchRangeAction::impl_activate ();
     double _initial;
@@ -74,7 +74,7 @@ namespace djnn {
     TextProperty _branch_name;
     SwitchRangeAction _action;
     Coupling _c_branch;
-    Process* _cur_branch;
+    FatProcess* _cur_branch;
   };
 
 }

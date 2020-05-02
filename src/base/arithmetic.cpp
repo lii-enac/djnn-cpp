@@ -59,8 +59,8 @@ namespace djnn
 
   
 
-  Previous::Previous (Process *parent, const std::string& name, double i_val)
-  : Process (name),
+  Previous::Previous (FatProcess *parent, const std::string& name, double i_val)
+  : FatProcess (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),
     _action(this, "action", *this, i_val),
@@ -94,8 +94,8 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (Process *parent, const std::string& name, bool isModel) :
-      Process (name),
+  Incr::Incr (FatProcess *parent, const std::string& name, bool isModel) :
+      FatProcess (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0)
   {
@@ -110,7 +110,7 @@ namespace djnn
   }
 
   void
-  Incr::set_parent (Process* p)
+  Incr::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -118,7 +118,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_state);
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -143,7 +143,7 @@ namespace djnn
   }
 #endif
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (Process* parent, const std::string& name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (FatProcess* parent, const std::string& name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -165,9 +165,9 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (Process* parent, const std::string& name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (FatProcess* parent, const std::string& name, double input, double clamp_min,
                                       double clamp_max)
-  : Process (name),
+  : FatProcess (name),
     _input (this, "input", input),
     _clamp_min (this, "clamp_min", clamp_min),
     _clamp_max (this, "clamp_max", clamp_max),
@@ -190,7 +190,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::set_parent (Process* p)
+  AdderAccumulator::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -198,7 +198,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_action);
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

@@ -123,8 +123,8 @@ namespace djnn
     if (s) {
       if (s != _hovered_shape) {
         if (_hovered_shape != nullptr) {
-          Process* p1 = _hovered_shape->get_ui ()->leave;
-          Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
+          FatProcess* p1 = _hovered_shape->get_ui ()->leave;
+          FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
           p1->schedule_activation ();
           p2->schedule_activation ();
         }
@@ -138,8 +138,8 @@ namespace djnn
       }    
     } 
     else if (_hovered_shape != nullptr) {
-        Process* p1 = _hovered_shape->get_ui ()->leave;
-        Process* p2 = _hovered_shape->get_ui ()->mouse_leave;
+        FatProcess* p1 = _hovered_shape->get_ui ()->leave;
+        FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
         p1->schedule_activation ();
         p2->schedule_activation ();
         
@@ -359,8 +359,8 @@ namespace djnn
       set_local_coords (_catched_shape, nullptr, x, y, true);
 
        /* event */
-      Process* p1 = _catched_shape->get_ui ()->move;
-      Process* p2 = _catched_shape->get_ui ()->mouse_move;
+      FatProcess* p1 = _catched_shape->get_ui ()->move;
+      FatProcess* p2 = _catched_shape->get_ui ()->mouse_move;
       p1->schedule_activation ();
       p2->schedule_activation ();
 
@@ -469,8 +469,8 @@ namespace djnn
 
     /* reset _catched_shape */
     if (_catched_shape && _catched_shape != s) {
-      Process* p1 = _catched_shape->get_ui ()->release;
-      Process* p2 = _catched_shape->get_ui ()->mouse_release;
+      FatProcess* p1 = _catched_shape->get_ui ()->release;
+      FatProcess* p2 = _catched_shape->get_ui ()->mouse_release;
       p1->schedule_activation ();
       p2->schedule_activation ();
       exec_ = true;

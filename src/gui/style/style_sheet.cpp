@@ -21,7 +21,7 @@ namespace djnn
   static std::map <std::string, int> name_to_id;
   static std::vector<StyleSheet*> style_array;
 
-  StyleSheet::StyleSheet (Process* parent, const std::string& n) :
+  StyleSheet::StyleSheet (FatProcess* parent, const std::string& n) :
       Container (parent, n), _classname (n)
   {
     std::map<std::string,int>::iterator it = name_to_id.find(n);
@@ -34,7 +34,7 @@ namespace djnn
     finalize_construction (parent, n);
   }
 
-  Process*
+  FatProcess*
   StyleSheet::clone ()
   {
     StyleSheet* newd = new StyleSheet (nullptr, get_name ());

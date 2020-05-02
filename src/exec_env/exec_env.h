@@ -18,7 +18,7 @@
 
 namespace djnn
 {
-  extern Process *mainloop;
+  extern FatProcess *mainloop;
   void init_exec_env();
   void clear_exec_env();
 }

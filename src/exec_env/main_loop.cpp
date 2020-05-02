@@ -68,7 +68,7 @@ namespace djnn {
     }
 
     MainLoop::MainLoop ()
-    : Process ("Mainloop"),
+    : FatProcess ("Mainloop"),
       ExternalSource ("Mainloop"),
       _another_source_wants_to_be_mainloop (nullptr)
     {

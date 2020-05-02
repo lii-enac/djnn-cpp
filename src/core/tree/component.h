@@ -18,26 +18,26 @@
 
 namespace djnn {
 
-  class Container : public Process
+  class Container : public FatProcess
   {
 
-  typedef std::map<std::string, Process*> context_t;
+  typedef std::map<std::string, FatProcess*> context_t;
   public:
-    typedef std::vector<Process*> children_t;
-    Container (Process* parent, const std::string& name);
+    typedef std::vector<FatProcess*> children_t;
+    Container (FatProcess* parent, const std::string& name);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    void add_child (Process* c, const std::string& name) override;
-    void move_child (Process *child_to_move, child_position_e spec, Process *child = 0) override;
-    void remove_child_from_children_only (Process* c);
-    void remove_child (Process* c) override;
+    void add_child (FatProcess* c, const std::string& name) override;
+    void move_child (FatProcess *child_to_move, child_position_e spec, FatProcess *child = 0) override;
+    void remove_child_from_children_only (FatProcess* c);
+    void remove_child (FatProcess* c) override;
     void remove_child (const std::string& name) override;
     void swap_children (int i, int j);
-    void set_child (Process *child, int i);
+    void set_child (FatProcess *child, int i);
     void update_drawing () override;
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
     void impl_activate () override;
     void impl_deactivate () override;
     void print_children ();
@@ -45,13 +45,13 @@ namespace djnn {
     virtual ~Container ();
     children_t children () { return _children; }
     void
-    add_to_context (const std::string& k, Process *v)
+    add_to_context (const std::string& k, FatProcess *v)
     {
       context_t::iterator it = _cur_context.find (k);
       if (it != _cur_context.end ()) it->second = v;
       else _cur_context.insert (std::make_pair (k, v));
     }
-    Process*
+    FatProcess*
     get_from_context (const std::string& k)
     {
       context_t::iterator it = _cur_context.find (k);
@@ -71,9 +71,9 @@ namespace djnn {
   class Component : public Container
   {
   public:
-    Component (Process* parent, const std::string& name) : Container (parent, name) { finalize_construction (parent, name); }
+    Component (FatProcess* parent, const std::string& name) : Container (parent, name) { finalize_construction (parent, name); }
     //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    Process* clone () override;
+    FatProcess* clone () override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
 #endif
@@ -83,9 +83,9 @@ namespace djnn {
   {
   public:
     AssignmentSequence ();
-    AssignmentSequence (Process *parent, const std::string& name, bool is_model);
+    AssignmentSequence (FatProcess *parent, const std::string& name, bool is_model);
     virtual ~AssignmentSequence () {};
-    void add_child (Process* c, const std::string& name) override;
+    void add_child (FatProcess* c, const std::string& name) override;
     void draw () override {}
     void impl_activate () override;
     void post_activate () override;

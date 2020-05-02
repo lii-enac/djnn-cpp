@@ -24,12 +24,12 @@ namespace djnn
   class AbstractScaling : public AbstractTransformation
   {
   public:
-    AbstractScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
+    AbstractScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     
     
     void get_properties_values (double& sx, double& sy, double& cx, double& cy);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child ("sx"); }
 		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child ("sy"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child ("cx"); }

@@ -22,7 +22,7 @@ namespace djnn
   Dictionary::FindAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    Process* key = d->key ()->get_value ();
+    FatProcess* key = d->key ()->get_value ();
     auto it = d->get_map ().find (key);
     if (it != d->get_map ().end()) {
       d->set_value (it->second);
@@ -35,12 +35,12 @@ namespace djnn
   Dictionary::DelEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    Process* key = d->key ()->get_value ();
+    FatProcess* key = d->key ()->get_value ();
     auto it = d->get_map ().find (key);
     if (it != d->get_map ().end()) {
       d->get_map ().erase(it);
     }
-    Process *p = nullptr;
+    FatProcess *p = nullptr;
     d->value ()->set_value (p, false);
     d->key ()->set_value (p, false);
   }
@@ -49,13 +49,13 @@ namespace djnn
   Dictionary::AddEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    Process* key = d->key ()->get_value ();
-    Process* value = d->value ()->get_value ();
+    FatProcess* key = d->key ()->get_value ();
+    FatProcess* value = d->value ()->get_value ();
     d->get_map ()[key] = value;
   }
 
-  Dictionary::Dictionary (Process *parent, const std::string& name)
-  : Process (name), 
+  Dictionary::Dictionary (FatProcess *parent, const std::string& name)
+  : FatProcess (name), 
     _key (this, "key", nullptr),
     _value (this, "value", nullptr),
      _add (this, "add"),
@@ -91,13 +91,13 @@ namespace djnn
     _c_find.disable ();
   }
   void
-  Dictionary::add_entry (Process* key, Process *value)
+  Dictionary::add_entry (FatProcess* key, FatProcess *value)
   {
     _map[key] = value;
   }
 
-  Process*
-  Dictionary::get_value (Process* key)
+  FatProcess*
+  Dictionary::get_value (FatProcess* key)
   {
     auto it = _map.find (key);
     if (it != _map.end()) {
@@ -107,7 +107,7 @@ namespace djnn
   }
 
   void
-  Dictionary::del_entry (Process* key)
+  Dictionary::del_entry (FatProcess* key)
   {
     auto it = _map.find (key);
     if (it != _map.end()) {

@@ -22,14 +22,14 @@ namespace djnn
 {
   
   static bool __module_initialized = false;
-  Process *DrawingRefreshManager;
+  FatProcess *DrawingRefreshManager;
 
   int mouse_tracking = 0;
   int full_screen = 0;
   int hide_pointer = 0;
 
-  Process *GPUs = nullptr;
-  Process *Displays = nullptr;
+  FatProcess *GPUs = nullptr;
+  FatProcess *Displays = nullptr;
 
   DisplayBackend::Impl* DisplayBackend::_instance;
 

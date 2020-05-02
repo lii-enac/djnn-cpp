@@ -18,11 +18,11 @@
 
 namespace djnn {
 
-  class Spike: public Process {
+  class Spike: public FatProcess {
   public:
-    Spike (Process* parent, const std::string& name) : Process (name) { set_is_model (true); finalize_construction (parent, name); };
+    Spike (FatProcess* parent, const std::string& name) : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); };
     virtual ~Spike () {};
-    Process* clone () override;
+    FatProcess* clone () override;
   protected:
     bool pre_activate () override;
     void post_activate () override;

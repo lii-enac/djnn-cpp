@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropFontStyle::AbstractPropFontStyle (Process *parent, const std::string& name, int style) :
+  AbstractPropFontStyle::AbstractPropFontStyle (FatProcess *parent, const std::string& name, int style) :
     AbstractStyle (parent, name),
     raw_props{.style=style},
     _cstyle (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractPropFontStyle::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

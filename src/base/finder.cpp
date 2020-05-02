@@ -33,7 +33,7 @@ namespace djnn
     std::string key = f->_key.get_value ();
     if (key.empty())
       return;
-    Process *res;
+    FatProcess *res;
     for (auto c : f->_container->children ()) {
       res = c->find_child (path);
       if (res) {
@@ -94,8 +94,8 @@ namespace djnn
     f->_not_found.activate ();
   }
 
-  Finder::Finder (Process *parent, const std::string& name, Process *container, const std::string& path)
-  : Process (name),
+  Finder::Finder (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& path)
+  : FatProcess (name),
   _path (this, "path", path),
   _key (this, "key", ""),
   _result (this, "result", nullptr),
@@ -124,7 +124,7 @@ namespace djnn
   }
 
   void
-  Finder::set_parent (Process* p)
+  Finder::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -132,7 +132,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_action);
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

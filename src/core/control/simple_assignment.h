@@ -22,21 +22,21 @@
 
 namespace djnn { 
 
-  class SimpleAssignment : public Process
+  class SimpleAssignment : public FatProcess
   {
     friend class AssignmentAction;
   private:
     class AssignmentAction : public Action
     {
     public:
-      AssignmentAction (Process* parent, const std::string& name)
+      AssignmentAction (FatProcess* parent, const std::string& name)
       : Action(parent, name) { finalize_construction(parent, name); }
       //void impl_activate () override { dynamic_cast<SimpleAssignment*>(get_parent ()) -> perform_action (); }
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    SimpleAssignment (Process* parent, const std::string& name, Process* src, Process* dst, bool propagate)
-    : Process (name), _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
+    SimpleAssignment (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool propagate)
+    : FatProcess (name), _src(src), _dst(dst), _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
@@ -51,12 +51,12 @@ namespace djnn {
 
     void perform_action ();
 
-    Process* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
-    Process* get_dst() { return _dst; }
+    FatProcess* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
+    FatProcess* get_dst() { return _dst; }
 
   private:
-    Process *_src;
-    Process *_dst;
+    FatProcess *_src;
+    FatProcess *_dst;
     AssignmentAction _action;
     Coupling _c_src;
     bool _propagate;

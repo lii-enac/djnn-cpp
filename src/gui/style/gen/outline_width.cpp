@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (Process *parent, const std::string& name, double width) :
+  OutlineWidth::OutlineWidth (FatProcess *parent, const std::string& name, double width) :
     AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   OutlineWidth::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   OutlineWidth::clone ()
   {
     return new OutlineWidth (nullptr, get_name (), raw_props.width);

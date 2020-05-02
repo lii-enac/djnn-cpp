@@ -24,12 +24,12 @@ namespace djnn
   class AbstractImage : public AbstractGShape
   {
   public:
-    AbstractImage (Process *parent, const std::string& name, double x, double y, double width, double height);
+    AbstractImage (FatProcess *parent, const std::string& name, double x, double y, double width, double height);
     virtual ~AbstractImage ();
     
     
     void get_properties_values (double& x, double& y, double& width, double& height);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child ("x"); }
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child ("y"); }
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }

@@ -22,15 +22,15 @@ typedef char XML_Char; // FIXME should not be public, and avoid including expat.
 
 namespace djnn
 {
-  typedef Process*
-  (*djn_XMLTagStartProc) (const char**, Process*);
-  typedef Process*
-  (*djn_XMLTagDataProc) (const char*, int, Process*);
-  typedef Process*
-  (*djn_XMLTagEndProc) (Process*);
+  typedef FatProcess*
+  (*djn_XMLTagStartProc) (const char**, FatProcess*);
+  typedef FatProcess*
+  (*djn_XMLTagDataProc) (const char*, int, FatProcess*);
+  typedef FatProcess*
+  (*djn_XMLTagEndProc) (FatProcess*);
 
   typedef int
-  (*djn_XMLAttrProc) (Process**, const char*);
+  (*djn_XMLAttrProc) (FatProcess**, const char*);
 
 
   typedef struct
@@ -65,12 +65,12 @@ namespace djnn
 
   class XML {
   public:
-    static Process* djnLoadFromXML (const std::string& uri);
-    static Process* djnParseXML (FILE* f);
+    static FatProcess* djnLoadFromXML (const std::string& uri);
+    static FatProcess* djnParseXML (FILE* f);
     static int djn_RegisterXMLParser (const std::string& uri, djn_XMLTagLookupProc l, const char* format);
     static int djn_UnregisterXMLParser (const std::string& uri);
     static void clear_xml_parser ();
-    static int djn_XMLHandleAttr (Process** e, const char** attrs, djn_XMLSymLookupProc lookup, ...);
+    static int djn_XMLHandleAttr (FatProcess** e, const char** attrs, djn_XMLSymLookupProc lookup, ...);
   private:
     static void
     djn__XMLPushTagHandler (djn_XMLTagHandler *h);
@@ -91,10 +91,10 @@ namespace djnn
     static void
     djn__XMLNamespaceEnd (void*, const XML_Char*);
     static std::map<std::string, djn__XMLParser*> djn__NamespaceTable;
-    static Process *curComponent;
+    static FatProcess *curComponent;
     static djn__XMLTagHandlerList *handlerStack;
   };
   void
   init_xml ();
-  inline Process* loadFromXML (const std::string& uri) { return XML::djnLoadFromXML (uri); }
+  inline FatProcess* loadFromXML (const std::string& uri) { return XML::djnLoadFromXML (uri); }
 }

@@ -33,39 +33,39 @@ using namespace std;
 namespace djnn {
 	/* all the specific tag handling procedures defined in this file */
 
-static Process* StartSVG (const char**, Process*);
-static Process* EndElement (Process*);
-static Process* StartRect (const char**, Process*);
-static Process* StartImage (const char**, Process*);
-static Process* StartEllipse (const char**, Process*);
-static Process* StartCircle (const char**, Process*);
-static Process* StartLine (const char**, Process*);
-static Process* StartPolygon (const char**, Process*);
-static Process* StartPolyline (const char**, Process*);
-static Process* StartText (const char**, Process*);
-static Process* StartStyle (const char**, Process*);
-static Process* StyleData (const char*, int, Process*);
-static Process* EndText (Process*);
-static Process* TextData (const char*, int, Process*);
-static Process* StartTspan (const char**, Process*);
-static Process* EndTspan (Process*);
-static Process* StartPath (const char**, Process*);
-static Process* StartDefs (const char**, Process*);
-static Process* StartGroup (const char**, Process*);
-static Process* StartUse (const char**, Process*);
-static Process* StartLinearGradient (const char**, Process*);
-static Process* StartRadialGradient (const char**, Process*);
-static Process* StartGradientStop (const char**, Process*);
-static Process* EndGradient (Process*);
-static Process* StartPathClip (const char**, Process*);
-static Process* EndPathClip (Process*);
-static Process* StartTmp (const char**, Process*);
-static Process* EndTmp (Process*);
-static Process* StartIgnored (const char**, Process*);
-static Process* EndIgnored (Process*);
-static Process* DataIgnored (const char*, int, Process*);
-static void djnUnloadTextBuf (Process *);
-static void djn__CheckStroke (Process *);
+static FatProcess* StartSVG (const char**, FatProcess*);
+static FatProcess* EndElement (FatProcess*);
+static FatProcess* StartRect (const char**, FatProcess*);
+static FatProcess* StartImage (const char**, FatProcess*);
+static FatProcess* StartEllipse (const char**, FatProcess*);
+static FatProcess* StartCircle (const char**, FatProcess*);
+static FatProcess* StartLine (const char**, FatProcess*);
+static FatProcess* StartPolygon (const char**, FatProcess*);
+static FatProcess* StartPolyline (const char**, FatProcess*);
+static FatProcess* StartText (const char**, FatProcess*);
+static FatProcess* StartStyle (const char**, FatProcess*);
+static FatProcess* StyleData (const char*, int, FatProcess*);
+static FatProcess* EndText (FatProcess*);
+static FatProcess* TextData (const char*, int, FatProcess*);
+static FatProcess* StartTspan (const char**, FatProcess*);
+static FatProcess* EndTspan (FatProcess*);
+static FatProcess* StartPath (const char**, FatProcess*);
+static FatProcess* StartDefs (const char**, FatProcess*);
+static FatProcess* StartGroup (const char**, FatProcess*);
+static FatProcess* StartUse (const char**, FatProcess*);
+static FatProcess* StartLinearGradient (const char**, FatProcess*);
+static FatProcess* StartRadialGradient (const char**, FatProcess*);
+static FatProcess* StartGradientStop (const char**, FatProcess*);
+static FatProcess* EndGradient (FatProcess*);
+static FatProcess* StartPathClip (const char**, FatProcess*);
+static FatProcess* EndPathClip (FatProcess*);
+static FatProcess* StartTmp (const char**, FatProcess*);
+static FatProcess* EndTmp (FatProcess*);
+static FatProcess* StartIgnored (const char**, FatProcess*);
+static FatProcess* EndIgnored (FatProcess*);
+static FatProcess* DataIgnored (const char*, int, FatProcess*);
+static void djnUnloadTextBuf (FatProcess *);
+static void djn__CheckStroke (FatProcess *);
 
 static std::map <std::string, djn_XMLTagHandler> handlers={
   {"g",{&StartGroup, &EndElement, &DataIgnored}},
@@ -110,7 +110,7 @@ int djn__GrphIsInClip = 0;
 
 /* SVG parser initialisation*/
 
-map<string, Process*> djn__id_to_process;
+map<string, FatProcess*> djn__id_to_process;
 
 void init_svg_parser () {
 	XML::djn_RegisterXMLParser("http://www.w3.org/2000/svg", &SVGElements_Hash::djn_SVGElementsLookup,
@@ -130,16 +130,16 @@ void clear_svg_parser () {
  *  the SVG element start and end handlers
  */
 
-static Process*
-StartSVG(const char** attrs, Process* current) {
+static FatProcess*
+StartSVG(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "startSVG\n");
 #endif
 
 	djn__id_to_process.clear ();
-	Process* g = new Group(current, "SVG");
-	//Process* f;
+	FatProcess* g = new Group(current, "SVG");
+	//FatProcess* f;
 	djn_RectAreaArgs.x = 0.;
 	djn_RectAreaArgs.y = 0.;
 	djn_RectAreaArgs.width = 0.;
@@ -168,15 +168,15 @@ StartSVG(const char** attrs, Process* current) {
 	return g;
 }
 
-static Process*
-EndElement(Process* e) {
+static FatProcess*
+EndElement(FatProcess* e) {
 	return e->get_parent() ? e->get_parent() : e;
 }
 
-static void djn__CheckStroke(Process* holder) {
+static void djn__CheckStroke(FatProcess* holder) {
 	if (djn_GraphicalShapeArgs.strokeType == djnStrokeNone) {
 		/* if it exists, ensure that no-stroke is at the end of the list */
-		Process* e = holder->find_child("no-stroke");
+		FatProcess* e = holder->find_child("no-stroke");
 		holder->remove_child(e);
 		holder->add_child(e, "no-stroke");
 	} else if (djn_GraphicalShapeArgs.strokeType == djnStrokeUndef) {
@@ -203,15 +203,15 @@ get_classes (const std::string& classnames)
   return tokens;
 }
 
-static Process*
-StartRect(const char** attrs, Process* current) {
+static FatProcess*
+StartRect(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "startRect\n");
 #endif
 
-	Process* holder = 0;
-	Process* e;
+	FatProcess* holder = 0;
+	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_RectArgs.x = 0.;
@@ -261,19 +261,19 @@ StartRect(const char** attrs, Process* current) {
 		current->add_child(holder, djn_GraphicalShapeArgs.id);
 		((SVGHolder*) holder)->set_gobj (e);
 		djn__id_to_process.insert(
-		        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+		        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
 	} else {
 	  djn__id_to_process.insert(
-	              pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+	              pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 	}
 	return holder ? holder : e;
 }
 
-static Process*
-StartImage (const char** attrs, Process* current)
+static FatProcess*
+StartImage (const char** attrs, FatProcess* current)
 {
-  Process *holder = 0;
-  Process* e;
+  FatProcess *holder = 0;
+  FatProcess* e;
   djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
   djn_GraphicalShapeArgs.classname = "";
   djn_ImgArgs.x = 0.;
@@ -317,23 +317,23 @@ StartImage (const char** attrs, Process* current)
     current->add_child (holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
   } else {
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
   }
   return holder ? holder : e;
 }
 
-static Process*
-StartEllipse(const char** attrs, Process* current) {
+static FatProcess*
+StartEllipse(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartEllipse\n");
 #endif
 
-	Process *holder = 0;
-	Process* e;
+	FatProcess *holder = 0;
+	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_EllipseArgs.cx = 0.;
@@ -372,24 +372,24 @@ StartEllipse(const char** attrs, Process* current) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
 	} else {
 	  djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 	}
 	return holder ? holder : e;
 }
 
-static Process*
-StartCircle(const char** attrs, Process* current) {
+static FatProcess*
+StartCircle(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartCircle\n");
 #endif
 	
 
-	Process *holder = 0;
-	Process* e;
+	FatProcess *holder = 0;
+	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_CircleArgs.cx = 0.;
@@ -425,24 +425,24 @@ StartCircle(const char** attrs, Process* current) {
 	if (holder) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
 	} else {
 	  djn__id_to_process.insert(
-	      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+	      pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 	}
 
 	return holder ? holder : e;
 }
 
-static Process*
-StartLine(const char** attrs, Process* current) {
+static FatProcess*
+StartLine(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartLine\n");
 #endif
 
-	Process *holder = 0;
-	Process* e;
+	FatProcess *holder = 0;
+	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_LineArgs.x1 = 0.;
@@ -480,23 +480,23 @@ StartLine(const char** attrs, Process* current) {
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     ((SVGHolder*) holder)->set_gobj (e);
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
 	} else {
 	  djn__id_to_process.insert(
-	      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+	      pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 	}
 
 	return holder ? holder : e;
 }
 
-static Process*
-StartPoly(const char** attrs, Process* current) {
+static FatProcess*
+StartPoly(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartPoly\n");
 #endif
 
-	Process *holder = 0;
+	FatProcess *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_PolyArgs.e = 0;
@@ -536,17 +536,17 @@ StartPoly(const char** attrs, Process* current) {
     ((SVGHolder*) holder)->set_gobj (djn_PolyArgs.e);
     current->add_child(holder, djn_GraphicalShapeArgs.id);
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, holder));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
 	} else {
 	  djn__id_to_process.insert(
-	      pair<string, Process*>(djn_GraphicalShapeArgs.id, djn_PolyArgs.e));
+	      pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, djn_PolyArgs.e));
 	}
 
 	return holder ? holder : djn_PolyArgs.e ? djn_PolyArgs.e : current;
 }
 
-static Process*
-StartPolygon(const char** attrs, Process* current) {
+static FatProcess*
+StartPolygon(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartPolygon\n");
@@ -556,8 +556,8 @@ StartPolygon(const char** attrs, Process* current) {
 	return StartPoly(attrs, current);
 }
 
-static Process*
-StartPolyline(const char** attrs, Process* current) {
+static FatProcess*
+StartPolyline(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartPolyline\n");
@@ -567,8 +567,8 @@ StartPolyline(const char** attrs, Process* current) {
 	return StartPoly(attrs, current);
 }
 
-static Process*
-StartText(const char** attrs, Process* current) {
+static FatProcess*
+StartText(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartText\n");
@@ -578,7 +578,7 @@ StartText(const char** attrs, Process* current) {
 	 * without this, and for a not yet elucidated reason,
 	 * the graphical context is not correctly managed
 	 */
-	Process *holder = new SVGHolder (nullptr, "SVGHolder");
+	FatProcess *holder = new SVGHolder (nullptr, "SVGHolder");
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_TextArgs.x = 0.;
@@ -610,16 +610,16 @@ StartText(const char** attrs, Process* current) {
 	return holder ? holder : current;
 }
 
-static Process*
-EndText(Process *e) {
+static FatProcess*
+EndText(FatProcess *e) {
 	if (djn_TextArgs.data != 0) {
 		djnUnloadTextBuf(e);
 	}
 	return e->get_parent() ? e->get_parent() : e;
 }
 
-static Process*
-TextData(const char* data, int len, Process* current) {
+static FatProcess*
+TextData(const char* data, int len, FatProcess* current) {
 #if 0
 	if (!djnXMLHandleData (current, djn_DataFormat (data, len), XMLTextAttrs_Hash::djn_XMLTextAttrsLookup))
 	fprintf (stderr, "unknown attribute _data_ in text element\n");
@@ -636,14 +636,14 @@ TextData(const char* data, int len, Process* current) {
 	return current;
 }
 
-static Process *
-StartTspan(const char** attrs, Process* current) {
+static FatProcess *
+StartTspan(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartTspan\n");
 #endif
 
-	Process *holder;
+	FatProcess *holder;
 
 	if (djn_TextArgs.data != 0) {
 		djnUnloadTextBuf(current);
@@ -674,22 +674,22 @@ StartTspan(const char** attrs, Process* current) {
 	return holder ? holder : current;
 }
 
-static Process *
-EndTspan(Process *e) {
+static FatProcess *
+EndTspan(FatProcess *e) {
 	if (djn_TextArgs.data != 0) {
 		djnUnloadTextBuf(e);
 	}
 	return e->get_parent() ? e->get_parent() : e;
 }
 
-static Process*
-StartPath(const char** attrs, Process* current) {
+static FatProcess*
+StartPath(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartPath\n");
 #endif
 
-	Process *holder = 0;
+	FatProcess *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
 	djn_PathArgs.e = 0;
@@ -741,14 +741,14 @@ StartPath(const char** attrs, Process* current) {
 	return holder ? holder : djn_PathArgs.e ? djn_PathArgs.e : current;
 }
 
-static Process*
-StartGroup(const char** attrs, Process* current) {
+static FatProcess*
+StartGroup(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartGroup\n");
 #endif
 
-	Process* e = new Group(0, "");
+	FatProcess* e = new Group(0, "");
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
@@ -765,18 +765,18 @@ StartGroup(const char** attrs, Process* current) {
 	}
 	current->add_child(e, djn_GraphicalShapeArgs.id);
 	djn__id_to_process.insert(
-	    pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+	    pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 	return e;
 }
 
-static Process*
-StartDefs(const char** attrs, Process* current) {
+static FatProcess*
+StartDefs(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
     fprintf (stderr, "StartDefs\n");
 #endif
 
-  Process* e = new Defs(0, "");
+  FatProcess* e = new Defs(0, "");
 
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
@@ -793,12 +793,12 @@ StartDefs(const char** attrs, Process* current) {
   }
   current->add_child(e, djn_GraphicalShapeArgs.id);
   djn__id_to_process.insert(
-      pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+      pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
   return e;
 }
 
-static Process*
-StartUse(const char** attrs, Process* current) {
+static FatProcess*
+StartUse(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
     fprintf (stderr, "StartUse\n");
@@ -811,7 +811,7 @@ StartUse(const char** attrs, Process* current) {
   djn_UseArgs.href = "";
   djn_GraphicalShapeArgs.id = "";
 
-  Process *holder = new SVGHolder (nullptr, "");
+  FatProcess *holder = new SVGHolder (nullptr, "");
 
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
@@ -830,9 +830,9 @@ StartUse(const char** attrs, Process* current) {
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
   alias (holder, "x", pos->find_child ("tx"));
   alias (holder, "y", pos->find_child ("ty"));
-  map<string, Process*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
+  map<string, FatProcess*>::iterator it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
-    Process* clone = it->second->clone();
+    FatProcess* clone = it->second->clone();
     if (clone->get_process_type() == DEFS_T) {
       for (auto c : ((Defs*)clone)->children()) {
         holder->add_child (c, c->get_name());
@@ -847,7 +847,7 @@ StartUse(const char** attrs, Process* current) {
   return holder;
 }
 
-static int parseGradientTransform(Process **e, char *v) {
+static int parseGradientTransform(FatProcess **e, char *v) {
 	int success = 1;
 	djn_XMLAttrHandler *h;
 	char *openparenthesis, *closeparenthesis;
@@ -879,14 +879,14 @@ static int parseGradientTransform(Process **e, char *v) {
 	return success;
 }
 
-static Process*
-StartLinearGradient(const char** attrs, Process* current) {
+static FatProcess*
+StartLinearGradient(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartLinearGradient\n");
 #endif
 
-	Process* e;
+	FatProcess* e;
 	djn_LinearGradientArgs.x1 = 0.;
 	djn_LinearGradientArgs.y1 = 0.;
 	djn_LinearGradientArgs.x2 = 1.;
@@ -924,7 +924,7 @@ StartLinearGradient(const char** attrs, Process* current) {
 
 	if (djn_GradientArgs.id != 0) {
 		djn__id_to_process.insert(
-				pair<string, Process*>(djn_GradientArgs.id, e));
+				pair<string, FatProcess*>(djn_GradientArgs.id, e));
 #ifdef DEBUG
 		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.href);
 #endif
@@ -940,17 +940,17 @@ StartLinearGradient(const char** attrs, Process* current) {
 	}
 	/* all contained elements are to be stored in the list of stops,
 	 not in the gradient itself */
-	return (Process*) ((AbstractGradient*) e)->stops();
+	return (FatProcess*) ((AbstractGradient*) e)->stops();
 }
 
-static Process*
-StartRadialGradient(const char** attrs, Process* current) {
+static FatProcess*
+StartRadialGradient(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartRadialGradient\n");
 #endif
 
-	Process* e;
+	FatProcess* e;
 
 	djn_RadialGradientArgs.cx = 0.5;
 	djn_RadialGradientArgs.cy = 0.5;
@@ -994,7 +994,7 @@ StartRadialGradient(const char** attrs, Process* current) {
 
 	if (djn_GradientArgs.id != 0) {
 		djn__id_to_process.insert(
-				pair<string, Process*>(djn_GradientArgs.id, e));
+				pair<string, FatProcess*>(djn_GradientArgs.id, e));
 #ifdef DEBUG
 		fprintf (stderr, "new entry added: %s\n", djn_GradientArgs.href);
 #endif
@@ -1010,11 +1010,11 @@ StartRadialGradient(const char** attrs, Process* current) {
 	}
 	/* all contained elements are to be stored in the list of stops,
 	 not in the gradient itself */
-	return (Process*) ((AbstractGradient*) e)->stops();
+	return (FatProcess*) ((AbstractGradient*) e)->stops();
 }
 
-static Process*
-StartGradientStop(const char** attrs, Process* current) {
+static FatProcess*
+StartGradientStop(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartGradientStop\n");
@@ -1051,11 +1051,11 @@ StartGradientStop(const char** attrs, Process* current) {
 static const char* djn_Inherited[] = { "coords", "spread", "stops", "x1", "y1",
 		"x2", "y2", "cx", "cy", "r", "fx", "fy" };
 
-static Process*
-EndGradient(Process* e) {
+static FatProcess*
+EndGradient(FatProcess* e) {
 	/* careful: e is actually the list of stops, not the gradient itself
 	 and e may be freed in djnMergeChildren */
-	Process *gradient = e->get_parent();
+	FatProcess *gradient = e->get_parent();
 
 	if (djn_GradientArgs.ancestor) {
 		int i;
@@ -1071,15 +1071,15 @@ EndGradient(Process* e) {
 	return gradient->get_parent();
 }
 
-static Process*
-StartPathClip(const char** attrs, Process* current) {
+static FatProcess*
+StartPathClip(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartPathClip\n");
 #endif
 
-	Process *holder = 0;
-	Process* e;
+	FatProcess *holder = 0;
+	FatProcess* e;
 	djn__GrphIsInClip = 1;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -1098,7 +1098,7 @@ StartPathClip(const char** attrs, Process* current) {
 	e = new Component (nullptr, "pathclip");
 	if (strlen (djn_GraphicalShapeArgs.id) != 0) {
 		djn__id_to_process.insert(
-				pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+				pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 #ifdef DEBUG
 		fprintf (stderr, "new entry added: %s\n", djn_GraphicalShapeArgs.href);
 #endif
@@ -1107,14 +1107,14 @@ StartPathClip(const char** attrs, Process* current) {
 	return e;
 }
 
-static Process*
-EndPathClip(Process* e) {
+static FatProcess*
+EndPathClip(FatProcess* e) {
 	djn__GrphIsInClip = 0;
 	return e->get_parent() ? e->get_parent() : e;
 }
 
-static Process*
-StartTmp(const char** attrs, Process* current) {
+static FatProcess*
+StartTmp(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartTmp\n");
@@ -1123,13 +1123,13 @@ StartTmp(const char** attrs, Process* current) {
 	return current;
 }
 
-static Process*
-EndTmp(Process* e) {
+static FatProcess*
+EndTmp(FatProcess* e) {
 	return e;
 }
 
-static Process*
-StartIgnored(const char** attrs, Process* current) {
+static FatProcess*
+StartIgnored(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
 		fprintf (stderr, "StartIgnored\n");
@@ -1138,18 +1138,18 @@ StartIgnored(const char** attrs, Process* current) {
 	return current;
 }
 
-static Process*
-EndIgnored(Process* e) {
+static FatProcess*
+EndIgnored(FatProcess* e) {
 	return e;
 }
 
-static Process*
-DataIgnored(const char* data, int len, Process* current) {
+static FatProcess*
+DataIgnored(const char* data, int len, FatProcess* current) {
 	return current;
 }
 
-static void djnUnloadTextBuf(Process *e) {
-	Process *t = new Text(e, djn_GraphicalShapeArgs.id,
+static void djnUnloadTextBuf(FatProcess *e) {
+	FatProcess *t = new Text(e, djn_GraphicalShapeArgs.id,
 			djn_TextArgs.x, djn_TextArgs.y, djn_TextArgs.dx, djn_TextArgs.dy,
 			djn_TextArgs.dxUnit, djn_TextArgs.dyUnit, djn_TextArgs.encoding,
 			djn_TextArgs.data);
@@ -1170,14 +1170,14 @@ static void djnUnloadTextBuf(Process *e) {
 	djn_TextArgs.dyUnit = DJN_NO_UNIT;
 }
 
-static Process*
-StartStyle(const char** attrs, Process* current) {
+static FatProcess*
+StartStyle(const char** attrs, FatProcess* current) {
 
 #ifdef DEBUG
     fprintf (stderr, "StartStyle\n");
 #endif
     djn_GraphicalShapeArgs.id = "";
-    Process* e = new Component (0, "");
+    FatProcess* e = new Component (0, "");
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
@@ -1194,12 +1194,12 @@ StartStyle(const char** attrs, Process* current) {
     }
     current->add_child(e, djn_GraphicalShapeArgs.id);
     djn__id_to_process.insert(
-        pair<string, Process*>(djn_GraphicalShapeArgs.id, e));
+        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
     return e;
 }
 
-static Process*
-StyleData(const char* data, int len, Process* current) {
+static FatProcess*
+StyleData(const char* data, int len, FatProcess* current) {
   std::string str (data, len);
   css::Driver driver;
   driver.parse_string (str, "svg file", current);

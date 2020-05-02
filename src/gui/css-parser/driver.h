@@ -29,17 +29,17 @@ public:
 
     std::string stream;
     bool parse_stream (std::istream& in,
-		      const std::string& name, djnn::Process *p);
+		      const std::string& name, djnn::FatProcess *p);
     bool parse_string (const std::string& input,
-		      const std::string& name, djnn::Process *p);
-    bool parse_file (const std::string& filename, djnn::Process *p);
+		      const std::string& name, djnn::FatProcess *p);
+    bool parse_file (const std::string& filename, djnn::FatProcess *p);
 
     void error (const class location& l, const std::string& m);
 
     void error (const std::string& m);
-    djnn::Process* get_parent ();
+    djnn::FatProcess* get_parent ();
     Scanner* _lexer;
-    djnn::Process* _root;
+    djnn::FatProcess* _root;
 
 };
 

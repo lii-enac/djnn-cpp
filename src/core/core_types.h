@@ -17,7 +17,7 @@
 namespace djnn {
 
   class Graph;
-  class Process;
+  class FatProcess;
   class AbstractProperty;
   class Container;
   class Assignment;

@@ -19,15 +19,15 @@
 #include "core/tree/spike.h"
 
 namespace djnn {
-	class IOFD : public Process, public ExternalSource {
+	class IOFD : public FatProcess, public ExternalSource {
 	public:
-		IOFD(Process *parent, const std::string& name, int readfd);
+		IOFD(FatProcess *parent, const std::string& name, int readfd);
 		virtual ~IOFD() override;
 
 		int readfd() const { return _readfd; }
 
 	protected:
-		// Process
+		// FatProcess
 		virtual void impl_activate () override;
     	virtual void impl_deactivate () override;
 	private:

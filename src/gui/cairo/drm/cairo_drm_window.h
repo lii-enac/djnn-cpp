@@ -50,7 +50,7 @@ namespace djnn {
     void update () override;
     void update_dpy_connection ();
   protected:
-    // Process
+    // FatProcess
     void impl_activate () override;
     void impl_deactivate () override;
 

@@ -9,14 +9,14 @@
 
 namespace djnn {
 
-	class CrazyflieRC : public Process {
+	class CrazyflieRC : public FatProcess {
 	public:
-		CrazyflieRC (Process * parent, const std::string& name, const std::string& uri);
+		CrazyflieRC (FatProcess * parent, const std::string& name, const std::string& uri);
 
 		class TakeoffAction : public Action
 	    {
 	    public:
-	      TakeoffAction (Process* parent, const std::string& name) : Action (parent, name) {};
+	      TakeoffAction (FatProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~TakeoffAction () {}
 	      void impl_activate () override { ((CrazyflieRC*)get_parent())->takeoff (); }
 	      void impl_deactivate () override {}
@@ -25,7 +25,7 @@ namespace djnn {
 	    class LandAction : public Action
 	    {
 	    public:
-	      LandAction (Process* parent, const std::string& name) : Action (parent, name) {};
+	      LandAction (FatProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~LandAction () {}
 	      void impl_activate () override { ((CrazyflieRC*)get_parent())->land (); }
 	      void impl_deactivate () override {}

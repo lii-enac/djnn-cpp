@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropFontSize : public AbstractStyle
   {
   public:
-    AbstractPropFontSize (Process *parent, const std::string& name, int unit, double size);
+    AbstractPropFontSize (FatProcess *parent, const std::string& name, int unit, double size);
     virtual ~AbstractPropFontSize ();
     
     
     void get_properties_values (int& unit, double& size);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child ("unit"); }
 		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child ("size"); }
 

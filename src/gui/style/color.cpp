@@ -90,8 +90,8 @@ namespace djnn
     _p->_h->set_value (H, true);
   }
 
-  RGBToLCHConverter::RGBToLCHConverter (Process *parent, const std::string& name) :
-      Process (name)
+  RGBToLCHConverter::RGBToLCHConverter (FatProcess *parent, const std::string& name) :
+      FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);
@@ -139,7 +139,7 @@ namespace djnn
   }
 
   void
-  RGBToLCHConverter::set_parent (Process* p)
+  RGBToLCHConverter::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -148,7 +148,7 @@ namespace djnn
 
     add_state_dependency (p, _action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -217,8 +217,8 @@ namespace djnn
     _p->_b->set_value (B < 0 ? 0 : (B > 255) ? 255 : B, true);
   }
 
-  LCHToRGBConverter::LCHToRGBConverter (Process *parent, const std::string& name) :
-      Process (name)
+  LCHToRGBConverter::LCHToRGBConverter (FatProcess *parent, const std::string& name) :
+      FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
     _g = new IntProperty (this, "g", 0);
@@ -244,7 +244,7 @@ namespace djnn
   }
 
   void
-  LCHToRGBConverter::set_parent (Process* p)
+  LCHToRGBConverter::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -253,7 +253,7 @@ namespace djnn
 
     add_state_dependency (p, _action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   LCHToRGBConverter::~LCHToRGBConverter ()
@@ -294,7 +294,7 @@ namespace djnn
     _ch->disable ();
   }
 
-  AbstractColor::AbstractColor (Process *parent, const std::string& name, int r, int g, int b) :
+  AbstractColor::AbstractColor (FatProcess *parent, const std::string& name, int r, int g, int b) :
     AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
@@ -305,7 +305,7 @@ namespace djnn
     raw_props.value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
   }
 
-  AbstractColor::AbstractColor (Process *parent, const std::string& name, int v) :
+  AbstractColor::AbstractColor (FatProcess *parent, const std::string& name, int v) :
     AbstractStyle (parent, name),
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),
@@ -399,10 +399,10 @@ namespace djnn
     _is_updating = false;
   }
 
-  Process*
+  FatProcess*
   AbstractColor::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling = nullptr;

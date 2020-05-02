@@ -36,7 +36,7 @@ using namespace std;
 
 namespace djnn {
 
-  DRMConnector::DRMConnector (Process *parent, const std::string& name, int id, bool connected) : Process (name),
+  DRMConnector::DRMConnector (FatProcess *parent, const std::string& name, int id, bool connected) : FatProcess (name),
     _display (nullptr), _id (id)
   {
     new BoolProperty (this, "connected", connected);
@@ -48,7 +48,7 @@ namespace djnn {
     delete find_child ("connected");
   }
 
-  DRMDevice::DRMDevice (Process *parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height) : Process (name), _fd (fd)
+  DRMDevice::DRMDevice (FatProcess *parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height) : FatProcess (name), _fd (fd)
   {
     new IntProperty (this, "min_width", min_width);
     new IntProperty (this, "max_width", max_width);
@@ -214,7 +214,7 @@ namespace djnn {
         continue;
       string con_name = build_name (con);
       bool is_connected = con->connection == DRM_MODE_CONNECTED;
-      Process *drm_con = drm_dev->find_child ("connectors/" + con_name);
+      FatProcess *drm_con = drm_dev->find_child ("connectors/" + con_name);
       if (drm_con == nullptr) {
         cout << "drm_con not found\n";
         drmModeFreeConnector (con);

@@ -45,10 +45,10 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  Text::Text (Process *parent, const std::string& name, double x, double y, const std::string& text) :
+  Text::Text (FatProcess *parent, const std::string& name, double x, double y, const std::string& text) :
   Text(parent, name, x,y,0,0,0,0,"utf8", text) {}
 
-  Text::Text (Process *parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
+  Text::Text (FatProcess *parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
               const std::string& encoding, const std::string& text) :
       AbstractGShape (parent, name),
       /* FIXME: encoding - should be string or convert in Int  from Enum? */
@@ -155,7 +155,7 @@ namespace djnn
   }
 
   void
-  Text::set_parent (Process* p)
+  Text::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -164,13 +164,13 @@ namespace djnn
 
     add_state_dependency (p, &_update_size);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
-  Process*
+  FatProcess*
   Text::find_child (const std::string& name)
   {
-    Process* res = AbstractGShape::find_child(name);
+    FatProcess* res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool propd = false;
@@ -419,7 +419,7 @@ namespace djnn
     return Backend::instance ()->get_cursor_from_local_x (this, pos);
   }
 
-  Process*
+  FatProcess*
   Text::clone ()
   {
     return new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());

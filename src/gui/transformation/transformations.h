@@ -30,7 +30,7 @@ namespace djnn
   class AbstractTransformation : public AbstractGObj
   {
   public:
-    AbstractTransformation (Process *parent, const std::string& name);
+    AbstractTransformation (FatProcess *parent, const std::string& name);
     AbstractTransformation ();
     virtual ~AbstractTransformation ();
   };
@@ -44,11 +44,11 @@ namespace djnn
   class AbstractTranslation : public AbstractTransformation
   {
   public:
-    AbstractTranslation (Process *parent, const std::string& name, double tx, double ty);
+    AbstractTranslation (FatProcess *parent, const std::string& name, double tx, double ty);
     AbstractTranslation (double tx, double ty);
     virtual ~AbstractTranslation ();
     void get_properties_values (double &tx, double &ty);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child("tx"); }
     AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child("ty"); }
     void impl_activate () override;
@@ -63,20 +63,20 @@ namespace djnn
   class Translation : public AbstractTranslation
   {
   public:
-    Translation (Process *parent, const std::string& name, double tx, double ty);
+    Translation (FatProcess *parent, const std::string& name, double tx, double ty);
     Translation (double tx, double ty);
     virtual ~Translation ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientTranslation : public AbstractTranslation
   {
   public:
-    GradientTranslation (Process *parent, const std::string& name, double tx, double ty);
+    GradientTranslation (FatProcess *parent, const std::string& name, double tx, double ty);
     GradientTranslation (double tx, double ty);
-    Process* clone () override;
+    FatProcess* clone () override;
     virtual ~GradientTranslation ();
     void draw () override;
   };
@@ -89,11 +89,11 @@ namespace djnn {
   class AbstractRotation : public AbstractTransformation
   {
   public:
-    AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy);
+    AbstractRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy);
     AbstractRotation (double a, double cx, double cy);
     virtual ~AbstractRotation ();
     void get_properties_values (double &a, double &cx, double &cy);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
     // TODO Rot by (u,v)
     // AbstractDoubleProperty* ux () { return (AbstractDoubleProperty*) find_child("ux"); }
@@ -114,22 +114,22 @@ namespace djnn {
   class Rotation : public AbstractRotation
   {
   public:
-    Rotation (Process *parent, const std::string& name, double a, double cx, double cy);
+    Rotation (FatProcess *parent, const std::string& name, double a, double cx, double cy);
     Rotation (double a, double cx, double cy);
     virtual ~Rotation ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientRotation : public AbstractRotation
   {
   public:
-    GradientRotation (Process *parent, const std::string& name, double a, double cx, double cy);
+    GradientRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy);
     GradientRotation (double a, double cx, double cy);
     virtual ~GradientRotation ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 }
 
@@ -140,11 +140,11 @@ namespace djnn {
   class AbstractScaling : public AbstractTransformation
   {
   public:
-    AbstractScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
+    AbstractScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy);
     AbstractScaling (double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     void get_properties_values (double &sx, double &sy, double &cx, double &cy);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child("sx"); }
     AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child("sy"); }
     AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child("cx"); }
@@ -161,22 +161,22 @@ namespace djnn {
   class Scaling : public AbstractScaling
   {
   public:
-    Scaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
+    Scaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy);
     Scaling (double sx, double sy, double cx, double cy);
     virtual ~Scaling ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientScaling : public AbstractScaling
   {
   public:
-    GradientScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy);
+    GradientScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy);
     GradientScaling (double sx, double sy, double cx, double cy);
     virtual ~GradientScaling ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
 }
@@ -187,11 +187,11 @@ namespace djnn {
   /*class AbstractSkew : public AbstractTransformation
   {
   public:
-    AbstractSkew (Process *parent, const std::string& name, double a);
+    AbstractSkew (FatProcess *parent, const std::string& name, double a);
     AbstractSkew (double a);
     virtual ~AbstractSkew ();
     void get_properties_values (double &a);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -205,43 +205,43 @@ namespace djnn {
   class SkewX : public AbstractSkew
   {
   public:
-    SkewX (Process *parent, const std::string& name, double a);
+    SkewX (FatProcess *parent, const std::string& name, double a);
     SkewX (double a);
     virtual ~SkewX ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientSkewX : public AbstractSkew
   {
   public:
-    GradientSkewX (Process *parent, const std::string& name, double a);
+    GradientSkewX (FatProcess *parent, const std::string& name, double a);
     GradientSkewX (double a);
     virtual ~GradientSkewX ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class SkewY : public AbstractSkew
   {
   public:
-    SkewY (Process *parent, const std::string& name, double a);
+    SkewY (FatProcess *parent, const std::string& name, double a);
     SkewY (double a);
     virtual ~SkewY ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientSkewY : public AbstractSkew
   {
   public:
-    GradientSkewY (Process *parent, const std::string& name, double a);
+    GradientSkewY (FatProcess *parent, const std::string& name, double a);
     GradientSkewY (double a);
     virtual ~GradientSkewY ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 }
 
@@ -255,7 +255,7 @@ namespace djnn {
      class RightTranslateByAction : public Action
     {
     public:
-      RightTranslateByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      RightTranslateByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightTranslateByAction () {}
       void impl_activate () override;
@@ -269,7 +269,7 @@ namespace djnn {
      class LeftTranslateByAction : public Action
     {
     public:
-      LeftTranslateByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      LeftTranslateByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftTranslateByAction () {}
       void impl_activate () override;
@@ -283,7 +283,7 @@ namespace djnn {
      class RightScaleByAction : public Action
     {
     public:
-      RightScaleByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      RightScaleByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightScaleByAction () {}
       void impl_activate () override;
@@ -297,7 +297,7 @@ namespace djnn {
      class LeftScaleByAction : public Action
     {
     public:
-      LeftScaleByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      LeftScaleByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftScaleByAction () {}
       void impl_activate () override;
@@ -311,7 +311,7 @@ namespace djnn {
      class RightRotateByAction : public Action
     {
     public:
-      RightRotateByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      RightRotateByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightRotateByAction () {}
       void impl_activate () override;
@@ -325,7 +325,7 @@ namespace djnn {
      class LeftRotateByAction : public Action
     {
     public:
-      LeftRotateByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      LeftRotateByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftRotateByAction () {}
       void impl_activate () override;
@@ -339,7 +339,7 @@ namespace djnn {
      class Right_Skew_X_ByAction : public Action
     {
     public:
-      Right_Skew_X_ByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      Right_Skew_X_ByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_X_ByAction () {}
       void impl_activate () override;
@@ -353,7 +353,7 @@ namespace djnn {
      class Left_Skew_X_ByAction : public Action
     {
     public:
-      Left_Skew_X_ByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      Left_Skew_X_ByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_X_ByAction () {}
       void impl_activate () override;
@@ -367,7 +367,7 @@ namespace djnn {
      class Right_Skew_Y_ByAction : public Action
     {
     public:
-      Right_Skew_Y_ByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      Right_Skew_Y_ByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_Y_ByAction () {}
       void impl_activate () override;
@@ -381,7 +381,7 @@ namespace djnn {
      class Left_Skew_Y_ByAction : public Action
     {
     public:
-      Left_Skew_Y_ByAction (Process* parent, const std::string& name, AbstractHomography *h) :
+      Left_Skew_Y_ByAction (FatProcess* parent, const std::string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_Y_ByAction () {}
       void impl_activate () override;
@@ -391,7 +391,7 @@ namespace djnn {
     };
 
   public:
-    AbstractHomography (Process *parent, const std::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
+    AbstractHomography (FatProcess *parent, const std::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
      double m21=0, double m22=1, double m23=0, double m24=0,
      double m31=0, double m32=0, double m33=1, double m34=0,
      double m41=0, double m42=0, double m43=0, double m44=1);
@@ -400,7 +400,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
     void impl_activate () override;
     void impl_deactivate () override;
     
@@ -564,7 +564,7 @@ namespace djnn {
   class Homography : public AbstractHomography
   {
   public:
-    Homography (Process *parent, const std::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
+    Homography (FatProcess *parent, const std::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
       double m21=0, double m22=1, double m23=0, double m24=0,
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
@@ -575,13 +575,13 @@ namespace djnn {
     virtual ~Homography ();
     void draw () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class GradientHomography : public AbstractHomography
   {
   public:
-    GradientHomography (Process *parent, const std::string& name, double m11=1, double m12=0, double m13=0, 
+    GradientHomography (FatProcess *parent, const std::string& name, double m11=1, double m12=0, double m13=0, 
       double m21=0,	double m22=1, double m23=0,
       double m31=0, double m32=0, double m33=1);
     GradientHomography (double m11=1, double m12=0, double m13=0, 
@@ -589,29 +589,29 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1);
     virtual ~GradientHomography ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
   class SimpleGradientTransform : public AbstractHomography
   {
   public:
-    SimpleGradientTransform (Process *parent, const std::string& name, double a, double b, double c, double d, double e,
+    SimpleGradientTransform (FatProcess *parent, const std::string& name, double a, double b, double c, double d, double e,
       double f);
     SimpleGradientTransform (double a, double b, double c, double d, double e,
      double f);
     virtual ~SimpleGradientTransform ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
   };
 
-  class ScreenToLocal : public Process 
+  class ScreenToLocal : public FatProcess 
   {
     /*** private Class stl_action Actions ***/ 
     private:
      class stl_action : public Action
     {
     public:
-      stl_action (Process* parent, const std::string& name, ScreenToLocal *stl) :
+      stl_action (FatProcess* parent, const std::string& name, ScreenToLocal *stl) :
       Action (parent, name), _stl(stl) {}
       virtual ~stl_action () {}
       void impl_activate () override;
@@ -621,12 +621,12 @@ namespace djnn {
     };
 
     public:
-      ScreenToLocal (Process* parent, const std::string& name, Process* shape);
+      ScreenToLocal (FatProcess* parent, const std::string& name, FatProcess* shape);
       virtual ~ScreenToLocal () override; 
       void impl_activate () override;
       void impl_deactivate () override;
     private:
-      void set_parent (Process* p) override;
+      void set_parent (FatProcess* p) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;
@@ -634,14 +634,14 @@ namespace djnn {
       Coupling *_cinX, *_cinY;
   };
 
-  class LocalToScreen : public Process 
+  class LocalToScreen : public FatProcess 
   {
     /*** private Class lts_action Actions ***/ 
     private:
      class lts_action : public Action
     {
     public:
-      lts_action (Process* parent, const std::string& name, LocalToScreen *lts) :
+      lts_action (FatProcess* parent, const std::string& name, LocalToScreen *lts) :
       Action (parent, name), _lts(lts) {}
       virtual ~lts_action () {}
       void impl_activate () override;
@@ -651,12 +651,12 @@ namespace djnn {
     };
 
     public:
-      LocalToScreen (Process* parent, const std::string& name, Process* shape);
+      LocalToScreen (FatProcess* parent, const std::string& name, FatProcess* shape);
       virtual ~LocalToScreen () override; 
       void impl_activate () override;
       void impl_deactivate () override;
     private:
-      void set_parent (Process* p) override;
+      void set_parent (FatProcess* p) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;

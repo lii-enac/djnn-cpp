@@ -24,11 +24,11 @@
 
 namespace djnn { 
 
-  class SimpleConnector : public Process
+  class SimpleConnector : public FatProcess
   {
   public:
-    SimpleConnector (Process* parent, const std::string& name, Process* src, Process* dst, bool copy_on_activation=true)
-    : Process (name),
+    SimpleConnector (FatProcess* parent, const std::string& name, FatProcess* src, FatProcess* dst, bool copy_on_activation=true)
+    : FatProcess (name),
       _assignment (this, "", src, dst, true),
       _binding (this, "", src, &_assignment),
       _copy_on_activation (copy_on_activation)

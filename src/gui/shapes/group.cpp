@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Group::Group (Process* parent, const std::string& n) :
+  Group::Group (FatProcess* parent, const std::string& n) :
       Container (parent, n), _gobj (nullptr)
   {
     _gobj = new AbstractGObj (this, "_gobj");
@@ -68,13 +68,13 @@ namespace djnn
     }
   }
 
-  Process* 
+  FatProcess* 
   Group::clone () 
   {
     Group* newg = new Group (nullptr, get_name ());
 
     for (auto c : _children) {
-      Process* child = c->clone ();
+      FatProcess* child = c->clone ();
       if (child != nullptr)
         newg->add_child (child, this->find_child_name(c));
     }

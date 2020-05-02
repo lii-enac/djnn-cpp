@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropFontWeight : public AbstractStyle
   {
   public:
-    AbstractPropFontWeight (Process *parent, const std::string& name, int weight);
+    AbstractPropFontWeight (FatProcess *parent, const std::string& name, int weight);
     virtual ~AbstractPropFontWeight ();
     
     
     void get_properties_values (int& weight);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child ("weight"); }
 
   protected:

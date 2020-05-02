@@ -41,8 +41,8 @@ using namespace std;
 namespace djnn {
 
 
-  DRMDevice::DRMDevice (Process *parent, const std::string& name, int fd, int min_width, int max_width,
-                        int min_height, int max_height) : Process (name), _fd (fd),
+  DRMDevice::DRMDevice (FatProcess *parent, const std::string& name, int fd, int min_width, int max_width,
+                        int min_height, int max_height) : FatProcess (name), _fd (fd),
                         _iofd (this, "vblank_fd", fd), _read_vblank_action (this, "read_vblank_action"),
                         _c_read_vblank (_iofd.find_child("readable"), ACTIVATION, &_read_vblank_action, ACTIVATION, true)
   {

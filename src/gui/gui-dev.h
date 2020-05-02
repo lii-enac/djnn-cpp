@@ -201,7 +201,7 @@ public:
   static int
   djn_XMLParseLength (double*, const char*);
   static int
-  djn_XMLParseLengthProperty (Process *s, const char* v);
+  djn_XMLParseLengthProperty (FatProcess *s, const char* v);
   static int
   djn_XMLParseDouble (double*, char**);
   static int
@@ -295,7 +295,7 @@ extern struct djn_TextArgs
 extern struct djn_PolyArgs
 {
   int isPolygon;
-  Process *e;
+  FatProcess *e;
 } djn_PolyArgs;
 
 extern struct djn_PolylineArg
@@ -311,7 +311,7 @@ extern struct djn_PointArgs
 
 extern struct djn_PathArgs
 {
-  Process *e;
+  FatProcess *e;
 } djn_PathArgs;
 
 extern struct djn_PathItemArgs
@@ -373,7 +373,7 @@ extern struct djn_GradientArgs
   const char *transform;
   djnFillCoords coords;
   djnFillSpread spread;
-  Process *ancestor;
+  FatProcess *ancestor;
   unsigned int inherited;
 } djn_GradientArgs;
 

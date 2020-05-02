@@ -37,7 +37,7 @@ namespace djnn
         #endif
     };
 
-  class MainLoop : public Process, ExternalSource
+  class MainLoop : public FatProcess, ExternalSource
   {
 
   public:
@@ -80,7 +80,7 @@ namespace djnn
     void add_external_source (ExternalSource*);
     void remove_external_source (ExternalSource*);
     
-    void add_background_process (Process *p) { _background_processes.push_back (p); }
+    void add_background_process (FatProcess *p) { _background_processes.push_back (p); }
 
     void external_run_for_qt5_9_fixme() { run(); }
     void private_run ();
@@ -88,7 +88,7 @@ namespace djnn
     bool is_stopping () const { return _is_stopping; }
   protected:
 
-    // Process
+    // FatProcess
     void impl_activate () override;
     void impl_deactivate () override;
 
@@ -114,7 +114,7 @@ namespace djnn
 
     // MainLoop should be created *before* any other external-source
     MainLoop ();
-    std::vector<Process*> _background_processes;
+    std::vector<FatProcess*> _background_processes;
     std::vector<ExternalSource*> _external_sources;
     std::timed_mutex cancel_mutex;
     // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough

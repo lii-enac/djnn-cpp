@@ -22,10 +22,10 @@
 
 namespace djnn {
 
-  class Exit : public Process
+  class Exit : public FatProcess
   {
   public:
-    Exit (Process* parent, const std::string& name, int value, bool is_model);
+    Exit (FatProcess* parent, const std::string& name, int value, bool is_model);
     virtual ~Exit ();
     void impl_activate () override;
     void impl_deactivate () override {}

@@ -29,7 +29,7 @@
 
 namespace djnn {
 
-  class UpdateDrawing : public Process
+  class UpdateDrawing : public FatProcess
   {
   private:
     class RedrawAction : public Action {
@@ -41,10 +41,10 @@ namespace djnn {
       private:
         UpdateDrawing* _ud;
     };
-    class UndelayedSpike : public Process
+    class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (UpdateDrawing *parent, const std::string& name)  : Process (name), _ud (parent) { set_is_model (true); finalize_construction (parent, name); }
+        UndelayedSpike (UpdateDrawing *parent, const std::string& name)  : FatProcess (name), _ud (parent) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { set_activation_state (DEACTIVATED); }
         void impl_activate () override;
@@ -73,7 +73,7 @@ namespace djnn {
     void remove_window_for_refresh (Window* w);
     std::vector<Window*>& get_windows_for_refresh () { return _win_list; };
     void clear_windows_for_refresh () {_win_list.clear (); }
-    Process* get_damaged () { return _damaged; }
+    FatProcess* get_damaged () { return _damaged; }
     static void init ();
     static void clear ();
   private:

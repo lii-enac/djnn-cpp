@@ -31,7 +31,7 @@ namespace djnn
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-  Switch::Switch (Process *parent, const std::string& name, const std::string& initial) 
+  Switch::Switch (FatProcess *parent, const std::string& name, const std::string& initial) 
   : Container (parent, name),
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),
@@ -101,7 +101,7 @@ namespace djnn
   }
 
   void
-  Switch::set_parent (Process* p)
+  Switch::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -109,14 +109,14 @@ namespace djnn
     }
 
     add_state_dependency (p, state_dependency ());
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
   Switch::change_branch ()
   {
     string key = _branch_name.get_value ();
-    map<string, Process*>::iterator it = find_child_iterator (key);
+    map<string, FatProcess*>::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
       if (_cur_branch == it->second) {
         if (_cur_branch->get_activation_state () == DEACTIVATED)

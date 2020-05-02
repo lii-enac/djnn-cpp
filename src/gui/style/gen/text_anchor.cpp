@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  TextAnchor::TextAnchor (Process *parent, const std::string& name, int anchor) :
+  TextAnchor::TextAnchor (FatProcess *parent, const std::string& name, int anchor) :
     AbstractStyle (parent, name),
     raw_props{.anchor=anchor},
     _canchor (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   TextAnchor::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   TextAnchor::clone ()
   {
     return new TextAnchor (nullptr, get_name (), raw_props.anchor);

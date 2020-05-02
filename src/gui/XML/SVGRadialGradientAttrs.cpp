@@ -22,11 +22,11 @@
 
 namespace djnn {
 
-static int ParseCX (Process**, const char*);
-static int ParseCY (Process**, const char*);
-static int ParseR (Process**, const char*);
-static int ParseFX (Process**, const char*);
-static int ParseFY (Process**, const char*);
+static int ParseCX (FatProcess**, const char*);
+static int ParseCY (FatProcess**, const char*);
+static int ParseR (FatProcess**, const char*);
+static int ParseFX (FatProcess**, const char*);
+static int ParseFY (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"r",{&ParseR}},
@@ -48,27 +48,27 @@ SVGRadialGradientAttrs_Hash::djn_SVGRadialGradientAttrsLookup (const char *str, 
 
 struct djn_RadialGradientArgs djn_RadialGradientArgs = {0.5, 0.5, 0.5, 0.5, 0.5};
 
-static int ParseCX(Process** e, const char* v) {
+static int ParseCX(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientCx);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.cx, v);
 }
 
-static int ParseCY(Process** e, const char* v) {
+static int ParseCY(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientCy);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.cy, v);
 }
 
-static int ParseR(Process** e, const char* v) {
+static int ParseR(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientR);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.r, v);
 }
 
-static int ParseFX(Process** e, const char* v) {
+static int ParseFX(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientFx);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.fx, v);
 }
 
-static int ParseFY(Process** e, const char* v) {
+static int ParseFY(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientFy);
 	return XML_Utils::djn_XMLParseLength(&djn_RadialGradientArgs.fy, v);
 }

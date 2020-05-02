@@ -31,7 +31,7 @@ using namespace std;
 
 namespace djnn {
 
-  PolyPoint::PolyPoint (Process* parent, const std::string& name, double x, double y) :
+  PolyPoint::PolyPoint (FatProcess* parent, const std::string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
@@ -69,10 +69,10 @@ namespace djnn {
     }
   }
 
-  Process*
+  FatProcess*
   PolyPoint::find_child (const std::string& name)
   {
-    Process* res = AbstractGObj::find_child(name);
+    FatProcess* res = AbstractGObj::find_child(name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -123,12 +123,12 @@ namespace djnn {
     }
   }
 
-  Process*
+  FatProcess*
   PolyPoint::clone () {
     return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
-  Poly::Poly (Process* parent, const std::string& name, int closed) :
+  Poly::Poly (FatProcess* parent, const std::string& name, int closed) :
       AbstractGShape (parent, name), _closed (closed)
   {
     _points = new List (this, "points");
@@ -201,7 +201,7 @@ namespace djnn {
     _bbh->set_value (h, true);
   }
 
-  Process*
+  FatProcess*
   Poly::clone ()
   {  
     Poly* newp = new Poly (nullptr, get_name (), _closed);

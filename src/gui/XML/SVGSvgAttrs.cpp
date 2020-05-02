@@ -22,7 +22,7 @@
 
 using namespace djnn;
 
-static int IgnoreAttr (Process**, const char*);
+static int IgnoreAttr (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"viewBox",{&IgnoreAttr}},
@@ -42,7 +42,7 @@ SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char *str, unsigned int len)
 }
 
 static int
-IgnoreAttr (Process** e, const char* v)
+IgnoreAttr (FatProcess** e, const char* v)
 {
 	return 1;
 }

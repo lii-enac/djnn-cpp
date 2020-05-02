@@ -24,12 +24,12 @@
 namespace djnn {
 using namespace std;
 
-static int ParseX (Process**, const char*);
-static int ParseY (Process**, const char*);
-static int ParseWidth (Process**, const char*);
-static int ParseHeight (Process**, const char*);
-static int ParseRx (Process**, const char*);
-static int ParseRy (Process**, const char*);
+static int ParseX (FatProcess**, const char*);
+static int ParseY (FatProcess**, const char*);
+static int ParseWidth (FatProcess**, const char*);
+static int ParseHeight (FatProcess**, const char*);
+static int ParseRx (FatProcess**, const char*);
+static int ParseRy (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"x",{&ParseX}},
@@ -53,31 +53,31 @@ XMLRectAttrs_Hash::djn_XMLRectAttrsLookup (const char *str, unsigned int len)
 struct djn_RectArgs djn_RectArgs = {0., 0., 0., 0., -1., -1.};
 
 static int
-ParseX (Process** e, const char* v)
+ParseX (FatProcess** e, const char* v)
 {
   return XML_Utils::djn_XMLParseLength (&djn_RectArgs.x, v);
 }
 
 static int
-ParseY (Process** e, const char* v)
+ParseY (FatProcess** e, const char* v)
 {
   return XML_Utils::djn_XMLParseLength (&djn_RectArgs.y, v);
 }
 
 static int
-ParseWidth (Process** e, const char* v)
+ParseWidth (FatProcess** e, const char* v)
 {
   return XML_Utils::djn_XMLParseLength (&djn_RectArgs.w, v);
 }
 
 static int
-ParseHeight (Process** e, const char* v)
+ParseHeight (FatProcess** e, const char* v)
 {
   return XML_Utils::djn_XMLParseLength (&djn_RectArgs.h, v);
 }
 
 static int
-ParseRx (Process** e, const char* v)
+ParseRx (FatProcess** e, const char* v)
 {
   int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.rx, v);
   if (r && djn_RectArgs.ry == -1)
@@ -86,7 +86,7 @@ ParseRx (Process** e, const char* v)
 }
 
 static int
-ParseRy (Process** e, const char* v)
+ParseRy (FatProcess** e, const char* v)
 {
   int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.ry, v);
   if (r && djn_RectArgs.rx == -1)

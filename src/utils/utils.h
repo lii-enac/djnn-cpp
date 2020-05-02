@@ -31,18 +31,18 @@ namespace djnn
   void init_utils ();
   std::string strTrim (std::string s);
 
-  class Properties : public Process
+  class Properties : public FatProcess
   {
   private:
     class PropertiesAction : public Action
     {
     public:
-      PropertiesAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      PropertiesAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    Properties (Process *parent, const std::string& name, const std::string& filename = "");
+    Properties (FatProcess *parent, const std::string& name, const std::string& filename = "");
     virtual ~Properties ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -60,13 +60,13 @@ namespace djnn
 
   inline
   void
-  depth_first_traverse(Process *p, std::function<void(Process*)> f)
+  depth_first_traverse(FatProcess *p, std::function<void(FatProcess*)> f)
   {
     f(p);
     for (auto child: p->children ()) depth_first_traverse(child.second, f);
   }
 
-  void run_stats(Process *p);
+  void run_stats(FatProcess *p);
 
   void display_creation_stats ();
 

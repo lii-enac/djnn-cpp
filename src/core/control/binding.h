@@ -27,7 +27,7 @@ namespace djnn {
     class BindingAction : public Action
     {
     public:
-      BindingAction (Process* parent, const std::string& name, bool activate);
+      BindingAction (FatProcess* parent, const std::string& name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override { ((Binding*)get_parent ()) -> perform_action (get_binding_action()); }
       /*void impl_activate () override {
@@ -47,9 +47,9 @@ namespace djnn {
 
     };
   public:
-    Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec,
+    Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
-    Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, bool on_activation, Process* dst, const std::string&  dspec, bool activate,
+    Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation, FatProcess* dst, const std::string&  dspec, bool activate,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
     virtual ~Binding ();
     void impl_activate () override { 
@@ -72,20 +72,20 @@ namespace djnn {
     void update_graph () override;
     void about_to_update_graph () override;
 
-    Process* get_src() { return _src; }
-    Process* get_dst() { return _dst; }
+    FatProcess* get_src() { return _src; }
+    FatProcess* get_dst() { return _dst; }
 
   private:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
 
-    struct Init { Init(Binding *, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec, std::string& src_ref_spec, std::string& dst_ref_spec); };
+    struct Init { Init(Binding *, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec, std::string& src_ref_spec, std::string& dst_ref_spec); };
     friend struct Init;
     void check_init(const std::string& ispec, const std::string& dspec);
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
-    Process *_src;
-    Process *_dst;
+    FatProcess *_src;
+    FatProcess *_dst;
     ref_update _ref_update_src, _ref_update_dst;
     BindingAction _action;
     Coupling _c_src;

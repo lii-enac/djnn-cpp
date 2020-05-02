@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropRectangleClip : public AbstractGShape
   {
   public:
-    AbstractPropRectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height);
+    AbstractPropRectangleClip (FatProcess *parent, const std::string& name, double x, double y, double width, double height);
     virtual ~AbstractPropRectangleClip ();
     
     
     void get_properties_values (double& x, double& y, double& width, double& height);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child ("x"); }
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child ("y"); }
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }

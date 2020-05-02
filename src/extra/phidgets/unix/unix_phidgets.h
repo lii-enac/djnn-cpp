@@ -27,9 +27,9 @@ namespace djnn {
 
   extern bool in_init;
 
-  class PhidgetsMonitor : public Process {
+  class PhidgetsMonitor : public FatProcess {
   public:
-    PhidgetsMonitor (Process *p, const std::string& n) : Process (name), _handle (nullptr) {}
+    PhidgetsMonitor (FatProcess *p, const std::string& n) : FatProcess (name), _handle (nullptr) {}
     virtual ~PhidgetsMonitor () {}
   protected:
     virtual void impl_activate () override;
@@ -38,11 +38,11 @@ namespace djnn {
     PhidgetManagerHandle _handle;
   };
 
-  class VoltageInputChannel : public Process {
+  class VoltageInputChannel : public FatProcess {
   private:
     class ChangeRateAction : public Action {
     public:
-      ChangeRateAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      ChangeRateAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~ChangeRateAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
@@ -50,14 +50,14 @@ namespace djnn {
     };
     class ChangeTriggerAction : public Action {
     public:
-      ChangeTriggerAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      ChangeTriggerAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~ChangeTriggerAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_trigger (); }
       void impl_deactivate () override {}
     };
   public:
-    VoltageInputChannel (Process *parent, const std::string& name);
+    VoltageInputChannel (FatProcess *parent, const std::string& name);
     virtual ~VoltageInputChannel ();
     void update_rate ();
     void update_trigger ();
@@ -68,7 +68,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
   private:
-    Process* _end_init;
+    FatProcess* _end_init;
     DoubleProperty *_value;
     IntProperty* _rate;
     DoubleProperty* _trigger;
@@ -77,10 +77,10 @@ namespace djnn {
     Coupling *_c_rate, *_c_trigger;
     PhidgetVoltageInputHandle _sw_ch;
   };
-  class IFaceKit888 : public Process {
+  class IFaceKit888 : public FatProcess {
     friend PhidgetsMonitor;
   public:
-    IFaceKit888 (Process *parent, const std::string& name);
+    IFaceKit888 (FatProcess *parent, const std::string& name);
     virtual ~IFaceKit888 ();
     vector<DoubleProperty*>& get_inputs () { return _digitalIn; }
     vector<DoubleProperty*>& get_outputs () { return _digitalOut; }

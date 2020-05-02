@@ -22,21 +22,21 @@
 
 namespace djnn {
 
-  class DRMConnector : public Process {
+  class DRMConnector : public FatProcess {
   public:
-    DRMConnector (Process *p, const std::string& name, int id, bool connected);
+    DRMConnector (FatProcess *p, const std::string& name, int id, bool connected);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
-    void set_display (Process* display) { _display = display; }
+    void set_display (FatProcess* display) { _display = display; }
   private:
-    Process* _display;
+    FatProcess* _display;
     int _id;
   };
 
-  class DRMDevice : public Process {
+  class DRMDevice : public FatProcess {
   public:
-    DRMDevice (Process *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (FatProcess *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}

@@ -22,10 +22,10 @@
 
 
 namespace djnn {
-static int ParseX1 (Process**, const char*);
-static int ParseY1 (Process**, const char*);
-static int ParseX2 (Process**, const char*);
-static int ParseY2 (Process**, const char*);
+static int ParseX1 (FatProcess**, const char*);
+static int ParseY1 (FatProcess**, const char*);
+static int ParseX2 (FatProcess**, const char*);
+static int ParseY2 (FatProcess**, const char*);
 
 static std::map <std::string, djnn::djn_XMLAttrHandler> handlers = {
   {"y2",{&ParseY2}},
@@ -46,22 +46,22 @@ SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup (const char *str, 
 
 struct djn_LinearGradientArgs djn_LinearGradientArgs = {0., 0., 1., 0.};
 
-static int ParseX1(Process** e, const char* v) {
+static int ParseX1(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientX1);
 	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.x1, v);
 }
 
-static int ParseY1(Process** e, const char* v) {
+static int ParseY1(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientY1);
 	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.y1, v);
 }
 
-static int ParseX2(Process** e, const char* v) {
+static int ParseX2(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientX2);
 	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.x2, v);
 }
 
-static int ParseY2(Process** e, const char* v) {
+static int ParseY2(FatProcess** e, const char* v) {
 	djn_GradientArgs.inherited &= ~(1 << djn_GradientY2);
 	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.y2, v);
 }

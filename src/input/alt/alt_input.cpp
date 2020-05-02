@@ -19,7 +19,7 @@ namespace djnn {
   void
   p_init_input () {
   }
-  Process* p_find_gpio (const std::string& path, direction_e dir)
+  FatProcess* p_find_gpio (const std::string& path, direction_e dir)
   {
     warning (nullptr, "GPIOs not supported on this platform");
     return nullptr;

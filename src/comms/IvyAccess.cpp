@@ -216,9 +216,9 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   /**** IVY ACCESS ****/
 
- IvyAccess::IvyAccess (Process *parent, const std::string& name, 
+ IvyAccess::IvyAccess (FatProcess *parent, const std::string& name, 
   const std::string& bus, const std::string& appname, const std::string& ready, bool isModel)
- : Process (name, isModel),
+ : FatProcess (name, isModel),
  ExternalSource(name),
  _out ( this, "out", ""),
  _out_a (this, "out_action", &_out),
@@ -250,7 +250,7 @@ IvyAccess::~IvyAccess ()
 }
 
 void
-IvyAccess::set_parent (Process* p)
+IvyAccess::set_parent (FatProcess* p)
 { 
   /* in case of re-parenting remove edge dependency in graph */
   if (get_parent ()) {
@@ -259,7 +259,7 @@ IvyAccess::set_parent (Process* p)
 
   add_state_dependency (p, &_out_a);
     
-  Process::set_parent (p); 
+  FatProcess::set_parent (p); 
 }
 
 void IvyAccess::set_arriving(const std::string& v) {
@@ -378,7 +378,7 @@ IvyAccess::run ()
   }
 }
 
-Process*
+FatProcess*
 IvyAccess::find_child (const std::string& key)
 {
   
@@ -388,7 +388,7 @@ IvyAccess::find_child (const std::string& key)
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
 
-    map<string, Process*>::iterator it = find_child_iterator (key.substr (3));
+    map<string, FatProcess*>::iterator it = find_child_iterator (key.substr (3));
     if (it != children_end ()) {
         /* key exist  - return */
       return it->second;
@@ -415,7 +415,7 @@ IvyAccess::find_child (const std::string& key)
     cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
-    TextProperty* tmp = dynamic_cast<TextProperty*>(Process::find_child (regexp));
+    TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child (regexp));
     if (tmp){
 
       string new_regexp_to_found = "in/" + tmp->get_value () + "/" + to_string(index);

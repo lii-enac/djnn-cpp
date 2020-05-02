@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractDataImage::AbstractDataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double width, double height) :
+  AbstractDataImage::AbstractDataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.data=data},
     _cdata (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractDataImage::find_child (const std::string& name)
   {
-    Process* res = AbstractImage::find_child(name);
+    FatProcess* res = AbstractImage::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

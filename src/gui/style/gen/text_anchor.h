@@ -24,12 +24,12 @@ namespace djnn
   class TextAnchor : public AbstractStyle
   {
   public:
-    TextAnchor (Process *parent, const std::string& name, int anchor);
+    TextAnchor (FatProcess *parent, const std::string& name, int anchor);
     virtual ~TextAnchor ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
     void get_properties_values (int& anchor);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_child ("anchor"); }
 
   protected:

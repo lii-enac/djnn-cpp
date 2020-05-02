@@ -26,22 +26,22 @@ namespace djnn
   class SVGHolder : public Container
   {
   public:
-    SVGHolder (Process *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }
+    SVGHolder (FatProcess *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }
     virtual ~SVGHolder () {}
-    Process* clone () override;
-    Process* find_child (const std::string& path) override;
-    void set_gobj (Process* gobj) { _gobj = gobj; }
-    Process* get_gobj () { return _gobj; }
+    FatProcess* clone () override;
+    FatProcess* find_child (const std::string& path) override;
+    void set_gobj (FatProcess* gobj) { _gobj = gobj; }
+    FatProcess* get_gobj () { return _gobj; }
   private:
-    Process* _gobj;
+    FatProcess* _gobj;
   };
 
   class UI {
   public:
-    UI (Process *p, Process *f);
+    UI (FatProcess *p, FatProcess *f);
     bool is_pickable () { return pickable->get_value (); }
-    //void activate (Process* frame) { cpick->enable (frame); }
-    void activate (Process* frame) { cpick->enable (); }
+    //void activate (FatProcess* frame) { cpick->enable (frame); }
+    void activate (FatProcess* frame) { cpick->enable (); }
     void deactivate () { cpick->disable (); }
     virtual ~UI ();
     friend class Picking;
@@ -51,23 +51,23 @@ namespace djnn
     DoubleProperty *move_x, *move_y, *press_x, *press_y, *local_move_x, *local_move_y, *local_press_x, *local_press_y;
     DoubleProperty *mouse_press_x, *mouse_press_y, *mouse_move_x, *mouse_move_y;
     DoubleProperty *mouse_local_press_x, *mouse_local_press_y, *mouse_local_move_x, *mouse_local_move_y;
-    Process *press, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
-    Process *parent;
+    FatProcess *press, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
+    FatProcess *parent;
   };
 
   class AbstractGShape : public AbstractGObj
   {
   public:
-    AbstractGShape (Process *parent, const std::string& name);
+    AbstractGShape (FatProcess *parent, const std::string& name);
     virtual ~AbstractGShape ();
-    Process* matrix () { return _matrix; }
-    Process* inverted_matrix () { return _inverted_matrix; }
+    FatProcess* matrix () { return _matrix; }
+    FatProcess* inverted_matrix () { return _inverted_matrix; }
     void set_origin (double x, double y) { _origin_x->set_value (x, true); _origin_y->set_value (y, true); }
     DoubleProperty* origin_x () { return _origin_x; }
     DoubleProperty* origin_y () { return _origin_y; }
     bool has_ui () { return ui != nullptr; }
     UI* get_ui () { return ui; }
-    Process* find_child (const std::string& n) override;
+    FatProcess* find_child (const std::string& n) override;
     void impl_deactivate () override;
     void impl_activate () override;
     void add_style_class (const std::string& classname);
@@ -83,17 +83,17 @@ namespace djnn
   protected:
     void init_ui ();
   private:
-    Process* _matrix, *_inverted_matrix;
+    FatProcess* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
     static std::vector<std::string> _ui;
     UI *ui;
     std::vector<int> _classes;
   };
 
-  class Touch : public Process
+  class Touch : public FatProcess
   {
   public:
-    Touch (Process *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure);
+    Touch (FatProcess *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure);
     void impl_activate () override {};
     void impl_deactivate () override {};
     void set_init_x (double v) { _init_x->set_value (v, true); }
@@ -109,7 +109,7 @@ namespace djnn
     int get_id () { return _id->get_value (); }
     double get_move_x () { return _move_x->get_value(); }
     double get_move_y () { return _move_y->get_value(); }
-    Process* get_move () { return _move; }
+    FatProcess* get_move () { return _move; }
     void leave () { _leave->activate (); }
     void release () { _release->activate (); }
     void enter () { _enter->activate (); }
@@ -124,7 +124,7 @@ namespace djnn
     IntProperty *_id;
     RefProperty *_last_shape;
     AbstractGShape* _shape;
-    Process *_move, *_enter, *_leave, *_release;
+    FatProcess *_move, *_enter, *_leave, *_release;
   };
 
   inline bool is_pickable (AbstractGShape * s) {

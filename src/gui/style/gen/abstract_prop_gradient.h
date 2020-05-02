@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropGradient : public AbstractStyle
   {
   public:
-    AbstractPropGradient (Process *parent, const std::string& name, int spread, int coords);
+    AbstractPropGradient (FatProcess *parent, const std::string& name, int spread, int coords);
     virtual ~AbstractPropGradient ();
     
     
     void get_properties_values (int& spread, int& coords);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child ("coords"); }
 

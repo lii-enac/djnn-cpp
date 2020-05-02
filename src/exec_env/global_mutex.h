@@ -10,7 +10,7 @@
 namespace djnn
 {
 
-	class Process;
+	class FatProcess;
 
 	void init_global_mutex ();
 
@@ -20,6 +20,6 @@ namespace djnn
 	void lock_ios_mutex ();
 	void release_ios_mutex ();
 
-	void start (Process *c);
-	void stop (Process *c);
+	void start (FatProcess *c);
+	void stop (FatProcess *c);
 }

@@ -29,8 +29,8 @@ namespace djnn
 {
   using namespace std;
 
-  Process*
-  getRef (Process* p)
+  FatProcess*
+  getRef (FatProcess* p)
   {
     RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)
@@ -41,7 +41,7 @@ namespace djnn
   }
 
   void
-  setRef (Process* p, Process *v)
+  setRef (FatProcess* p, FatProcess *v)
   {
     RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)
@@ -107,7 +107,7 @@ namespace djnn
   }
 
   void
-  RefProperty::set_value (Process* v, bool propagate)
+  RefProperty::set_value (FatProcess* v, bool propagate)
   {
     value = v;
     if (is_activable () && propagate) {
@@ -134,7 +134,7 @@ namespace djnn
   }
 #endif
 
-  Process*
+  FatProcess*
   RefProperty::find_child (const std::string& path)
   {
     if (path.empty ())
@@ -158,7 +158,7 @@ namespace djnn
   }
 #endif
 
-  Process* 
+  FatProcess* 
   RefProperty::clone ()
   {
     return new RefProperty (nullptr, get_name (), value);

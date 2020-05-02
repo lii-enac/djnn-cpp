@@ -23,7 +23,7 @@
 namespace djnn {
 
 using namespace std;
-static int ParsePoints (Process**, const char*);
+static int ParsePoints (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
     {"points",{&ParsePoints}}
@@ -41,7 +41,7 @@ XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup (const char *str, unsigned int
 
 struct djn_PolyArgs djn_PolyArgs = {0, 0};
 
-static int ParsePoints(Process** e, const char* v) {
+static int ParsePoints(FatProcess** e, const char* v) {
 	char* p;
 	double x, y;
 	char *vv = (char*) v;

@@ -24,12 +24,12 @@ namespace djnn
   class AbstractDataImage : public AbstractImage
   {
   public:
-    AbstractDataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double width, double height);
+    AbstractDataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
     
     
     void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child ("data"); }
 
   protected:

@@ -42,7 +42,7 @@ main(int argc, char* argv[])
 	PSIZE(symtable_t);
 	cout << endl;
 
-	PSIZE(Process);
+	PSIZE(FatProcess);
 	PSIZE(Coupling);
 	PSIZE(Vertex);
 	cout << endl;

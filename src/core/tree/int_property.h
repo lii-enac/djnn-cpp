@@ -22,7 +22,7 @@ namespace djnn {
 
   class AbstractIntProperty : public AbstractProperty {
   public:
-    AbstractIntProperty (Process* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractIntProperty (FatProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Integer; }
     //virtual process_type_e get_process_type () const override { return INT_PROPERTY_T; }
 
@@ -30,7 +30,7 @@ namespace djnn {
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
-    void set_value (Process* v, bool propagate) override;
+    void set_value (FatProcess* v, bool propagate) override;
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
@@ -51,8 +51,8 @@ namespace djnn {
 
   class IntProperty : public AbstractIntProperty {
   public:
-    IntProperty (Process* parent, const std::string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
-    Process* clone () override;
+    IntProperty (FatProcess* parent, const std::string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
+    FatProcess* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }
@@ -67,8 +67,8 @@ namespace djnn {
 
   class IntPropertyProxy : public AbstractIntProperty {
   public:
-    IntPropertyProxy (Process* parent, const std::string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
-    Process* clone () override;
+    IntPropertyProxy (FatProcess* parent, const std::string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
+    FatProcess* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }
@@ -81,7 +81,7 @@ namespace djnn {
 #endif
   };
 
-  int getInt (Process *p);
-  void setInt (Process *p, int v);
+  int getInt (FatProcess *p);
+  void setInt (FatProcess *p, int v);
 
 }

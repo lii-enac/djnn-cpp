@@ -19,7 +19,7 @@ namespace djnn {
 
   // simulate dynamic_cast with get_process_type and get_prop_type
 
-  template <typename X> inline X djnn_dynamic_cast(Process* p)
+  template <typename X> inline X djnn_dynamic_cast(FatProcess* p)
   {
     if(p->get_process_type() == PROPERTY_T) {
       return static_cast<X>(p);
@@ -67,26 +67,26 @@ namespace djnn {
     return nullptr;
   }
 
-  // specialization for Process* argument
-  template <> inline AbstractBoolProperty* djnn_dynamic_cast(Process* p)
+  // specialization for FatProcess* argument
+  template <> inline AbstractBoolProperty* djnn_dynamic_cast(FatProcess* p)
   {
     AbstractProperty * ap = djnn_dynamic_cast<AbstractProperty*>(p);
     if(ap) return djnn_dynamic_cast<AbstractBoolProperty*>(ap);
     else return nullptr;
   }
-  template <> inline AbstractIntProperty* djnn_dynamic_cast(Process* p)
+  template <> inline AbstractIntProperty* djnn_dynamic_cast(FatProcess* p)
   {
     AbstractProperty * ap = djnn_dynamic_cast<AbstractProperty*>(p);
     if(ap) return djnn_dynamic_cast<AbstractIntProperty*>(ap);
     else return nullptr;
   }
-    template <> inline AbstractDoubleProperty* djnn_dynamic_cast(Process* p)
+    template <> inline AbstractDoubleProperty* djnn_dynamic_cast(FatProcess* p)
   {
     AbstractProperty * ap = djnn_dynamic_cast<AbstractProperty*>(p);
     if(ap) return djnn_dynamic_cast<AbstractDoubleProperty*>(ap);
     else return nullptr;
   }
-  template <> inline AbstractTextProperty* djnn_dynamic_cast(Process* p)
+  template <> inline AbstractTextProperty* djnn_dynamic_cast(FatProcess* p)
   {
     AbstractProperty * ap = djnn_dynamic_cast<AbstractProperty*>(p);
     if(ap) return djnn_dynamic_cast<AbstractTextProperty*>(ap);
@@ -96,7 +96,7 @@ namespace djnn {
 
   // ************  untested  ***************
 
-  template <> inline Action* djnn_dynamic_cast(Process* p)
+  template <> inline Action* djnn_dynamic_cast(FatProcess* p)
   {
     auto t = p->get_process_type();
     if(t == ACTION_T || t == ACTION_T) {
@@ -105,7 +105,7 @@ namespace djnn {
     return nullptr;
   }
 
-  template <> inline NativeAction* djnn_dynamic_cast(Process* p)
+  template <> inline NativeAction* djnn_dynamic_cast(FatProcess* p)
   {
     if(p->get_process_type() == NATIVE_ACTION_T) {
       return static_cast<NativeAction*>(p);
@@ -113,7 +113,7 @@ namespace djnn {
     return nullptr;
   }
 
-  template <> inline Container* djnn_dynamic_cast(Process* p)
+  template <> inline Container* djnn_dynamic_cast(FatProcess* p)
   {
     if(p->get_process_type() == CONTAINER_T) {
       return static_cast<Container*>(p);
@@ -125,7 +125,7 @@ namespace djnn {
 
 
   /*
-  template <class Res> inline X* djnn_dynamic_cast(Process* p)
+  template <class Res> inline X* djnn_dynamic_cast(FatProcess* p)
   {
     AbstractProperty * ap = djnn_dynamic_cast<AbstractProperty*>(p);
     if(ap) return djnn_dynamic_cast<X*>(ap);

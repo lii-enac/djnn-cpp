@@ -21,12 +21,12 @@
 #include "gui/gui-dev.h"
 
 using namespace djnn;
-static int ParseMatrix (Process**, const char*);
-static int ParseRotate (Process**, const char*);
-static int ParseScale (Process**, const char*);
-static int ParseSkewX (Process**, const char*);
-static int ParseSkewY (Process**, const char*);
-static int ParseTranslate (Process**, const char*);
+static int ParseMatrix (FatProcess**, const char*);
+static int ParseRotate (FatProcess**, const char*);
+static int ParseScale (FatProcess**, const char*);
+static int ParseSkewX (FatProcess**, const char*);
+static int ParseSkewY (FatProcess**, const char*);
+static int ParseTranslate (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"scale",{&ParseScale}},
@@ -49,7 +49,7 @@ SVGGradientTransformAttrs_Hash::djn_SVGGradientTransformAttrsLookup (const char 
   return 0;
 }
 static int
-ParseMatrix (Process** el, const char* v)
+ParseMatrix (FatProcess** el, const char* v)
 {
 	/* XML Matrix (a b c d e f) */
 	/* a c e */
@@ -90,7 +90,7 @@ ParseMatrix (Process** el, const char* v)
 	return 0;
 }
 
-static int ParseRotate(Process** el, const char* v) {
+static int ParseRotate(FatProcess** el, const char* v) {
 	double r, cx, cy;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&r, &vv))
@@ -121,7 +121,7 @@ static int ParseRotate(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseScale(Process** el, const char* v) {
+static int ParseScale(FatProcess** el, const char* v) {
 	double sx, sy;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&sx, &vv))
@@ -149,7 +149,7 @@ static int ParseScale(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseSkewX(Process** el, const char* v) {
+static int ParseSkewX(FatProcess** el, const char* v) {
 	double a;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&a, &vv))
@@ -167,7 +167,7 @@ static int ParseSkewX(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseSkewY(Process** el, const char* v) {
+static int ParseSkewY(FatProcess** el, const char* v) {
 	double a;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&a, &vv))
@@ -185,7 +185,7 @@ static int ParseSkewY(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseTranslate(Process** el, const char* v) {
+static int ParseTranslate(FatProcess** el, const char* v) {
 	double tx, ty;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&tx, &vv))

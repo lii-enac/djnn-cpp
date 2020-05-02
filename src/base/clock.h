@@ -30,12 +30,12 @@ namespace djnn
   class IntProperty;
   class DoubleProperty;
 
-  class Clock : public Process, public djnn_internal::Time::Timer
+  class Clock : public FatProcess, public djnn_internal::Time::Timer
   {
     class ClockUpdateAction : public Action
     {
     public:
-      ClockUpdateAction (Process* parent, const std::string& name) :
+      ClockUpdateAction (FatProcess* parent, const std::string& name) :
         Action (parent, name){};
     
       virtual ~ClockUpdateAction () {}
@@ -43,15 +43,15 @@ namespace djnn
       void impl_deactivate () override {}
     };
   public:
-    Clock (Process* p, const std::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
-    Clock (Process* p, const std::string& n, int period = 1000);
+    Clock (FatProcess* p, const std::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
+    Clock (FatProcess* p, const std::string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Clock (Process* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
+    Clock (FatProcess* p, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Clock ();
 
   protected:
-    // Process
+    // FatProcess
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE

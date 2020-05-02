@@ -70,13 +70,13 @@ namespace djnn
  */
 
 typedef struct __path_context {
-    Process *f;
+    FatProcess *f;
     CoreProcess *t;
     struct __path_context* prev;
 } __path_context;
 
 static void
-path_compute (Process* from, CoreProcess* to,
+path_compute (FatProcess* from, CoreProcess* to,
        __path_context* pc,  __path_context* ec, string& buf)
 {
 #ifdef DEBUG
@@ -131,7 +131,7 @@ path_compute (Process* from, CoreProcess* to,
         buf += "/";
       else
         insert_slash = 1;
-      auto * pt = dynamic_cast<Process*>(pc->t);
+      auto * pt = dynamic_cast<FatProcess*>(pc->t);
       std::string name;
       if(pt)
         name = pt->get_name();
@@ -153,7 +153,7 @@ path_compute (Process* from, CoreProcess* to,
 
 
   void
-  AbstractSerializer::compute_path (Process* from, CoreProcess* to, string& buf)
+  AbstractSerializer::compute_path (FatProcess* from, CoreProcess* to, string& buf)
   {
     __path_context c = { 0, 0, 0 };
 

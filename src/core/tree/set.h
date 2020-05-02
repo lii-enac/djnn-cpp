@@ -21,27 +21,27 @@
 
 namespace djnn {
 
-  class SetIterator : public Process
+  class SetIterator : public FatProcess
   {
   public:
-    SetIterator (Process *parent, const std::string& name, Process *set, Process *action, bool model = true);
+    SetIterator (FatProcess *parent, const std::string& name, FatProcess *set, FatProcess *action, bool model = true);
     virtual ~SetIterator () {}
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void impl_activate () override;
     void impl_deactivate () override {};
     void post_activate () override;
   private:
-    Process *_set, *_action;
+    FatProcess *_set, *_action;
   };
 
-  class Set : public Process
+  class Set : public FatProcess
   {
   public:
-    Set (Process *parent, const std::string& name);
-    void add_child (Process* c, const std::string& name) override;
-    void remove_child (Process* c) override;
+    Set (FatProcess *parent, const std::string& name);
+    void add_child (FatProcess* c, const std::string& name) override;
+    void remove_child (FatProcess* c) override;
     void remove_child (const std::string& name) override;
-    Process* find_child (const std::string& path) override;
+    FatProcess* find_child (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();

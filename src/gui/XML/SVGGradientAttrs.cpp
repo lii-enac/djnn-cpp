@@ -22,11 +22,11 @@
 
 namespace djnn {
 
-static int ParseId (Process**, const char*);
-static int ParseGradientTransform (Process**, const char*);
-static int ParseGradientUnits (Process**, const char*);
-static int ParseSpreadMethod (Process**, const char*);
-static int ParseHRef (Process** e, const char* v);
+static int ParseId (FatProcess**, const char*);
+static int ParseGradientTransform (FatProcess**, const char*);
+static int ParseGradientUnits (FatProcess**, const char*);
+static int ParseSpreadMethod (FatProcess**, const char*);
+static int ParseHRef (FatProcess** e, const char* v);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"id", {&ParseId}},
@@ -48,17 +48,17 @@ SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (const char *str, unsigned int
 
 struct djn_GradientArgs djn_GradientArgs = {"", 0, DJN_LOCAL_COORDS, DJN_PAD_FILL};
 
-static int ParseId(Process** e, const char* v) {
+static int ParseId(FatProcess** e, const char* v) {
 	djn_GradientArgs.id = v;
 	return 1;
 }
 
-static int ParseGradientTransform(Process** e, const char* v) {
+static int ParseGradientTransform(FatProcess** e, const char* v) {
 	djn_GradientArgs.transform = v;
 	return 1;
 }
 
-static int ParseSpreadMethod(Process** e, const char* v) {
+static int ParseSpreadMethod(FatProcess** e, const char* v) {
 	if (strcmp(v, "repeat") == 0) {
 		djn_GradientArgs.spread = DJN_REPEAT_FILL;
 	} else if (strcmp(v, "reflect") == 0) {
@@ -74,7 +74,7 @@ static int ParseSpreadMethod(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseGradientUnits(Process** e, const char* v) {
+static int ParseGradientUnits(FatProcess** e, const char* v) {
 	/* this would actually be better implemented by doing notthing for userSpaceOnUse
 	 and adding a transformation matrix to the gradient for objectBoundingBox */
 
@@ -91,9 +91,9 @@ static int ParseGradientUnits(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseHRef(Process** e, const char* v) {
+static int ParseHRef(FatProcess** e, const char* v) {
 	std::string id(v + sizeof(char));
-	std::map<std::string, Process*>::iterator it = djn__id_to_process.find (id);
+	std::map<std::string, FatProcess*>::iterator it = djn__id_to_process.find (id);
 	if (it == djn__id_to_process.end()) {
 		fprintf (stderr, "unknown gradient %s\n", v);
 		return 0;

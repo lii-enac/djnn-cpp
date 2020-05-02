@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropLinearGradient : public AbstractGradient
   {
   public:
-    AbstractPropLinearGradient (Process *parent, const std::string& name, double x1, double y1, double x2, double y2, int spread, int coords);
+    AbstractPropLinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2, int spread, int coords);
     virtual ~AbstractPropLinearGradient ();
     
     
     void get_properties_values (double& x1, double& y1, double& x2, double& y2, int& spread, int& coords);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child ("x1"); }
 		AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child ("y1"); }
 		AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child ("x2"); }

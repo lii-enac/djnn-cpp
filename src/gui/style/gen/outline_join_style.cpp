@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineJoinStyle::OutlineJoinStyle (Process *parent, const std::string& name, int join) :
+  OutlineJoinStyle::OutlineJoinStyle (FatProcess *parent, const std::string& name, int join) :
     AbstractStyle (parent, name),
     raw_props{.join=join},
     _cjoin (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   OutlineJoinStyle::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   OutlineJoinStyle::clone ()
   {
     return new OutlineJoinStyle (nullptr, get_name (), raw_props.join);

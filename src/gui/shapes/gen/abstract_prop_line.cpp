@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropLine::AbstractPropLine (Process *parent, const std::string& name, double x1, double y1, double x2, double y2) :
+  AbstractPropLine::AbstractPropLine (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2) :
     AbstractGShape (parent, name),
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
@@ -76,10 +76,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractPropLine::find_child (const std::string& name)
   {
-    Process* res = AbstractGShape::find_child(name);
+    FatProcess* res = AbstractGShape::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

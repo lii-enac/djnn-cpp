@@ -22,25 +22,25 @@
 
 namespace djnn
 {
-  class FileWriter : public Process
+  class FileWriter : public FatProcess
   {
   private:
     class FileWriterAction : public Action
     {
     public:
-      FileWriterAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      FileWriterAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
     class FileNameAction : public Action
     {
     public:
-      FileNameAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      FileNameAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    FileWriter (Process *parent, const std::string& name, const std::string& filename);
+    FileWriter (FatProcess *parent, const std::string& name, const std::string& filename);
     virtual ~FileWriter ();
     void impl_activate () override;
     void impl_deactivate () override;

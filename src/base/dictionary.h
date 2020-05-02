@@ -24,11 +24,11 @@
 
 namespace djnn {
 
-  class Dictionary: public Process {
+  class Dictionary: public FatProcess {
     class FindAction : public Action
     {
     public:
-      FindAction (Process* parent, const std::string& name) :
+      FindAction (FatProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~FindAction () {};
       void impl_activate () override;
@@ -37,7 +37,7 @@ namespace djnn {
     class AddEntryAction : public Action
     {
     public:
-      AddEntryAction (Process* parent, const std::string& name) :
+      AddEntryAction (FatProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~AddEntryAction () {};
       void impl_activate () override;
@@ -46,22 +46,22 @@ namespace djnn {
     class DelEntryAction : public Action
     {
     public:
-      DelEntryAction (Process* parent, const std::string& name) :
+      DelEntryAction (FatProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~DelEntryAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
     };
   public:
-    Dictionary (Process* parent, const std::string& name);
+    Dictionary (FatProcess* parent, const std::string& name);
     virtual ~Dictionary ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void add_entry (Process* key, Process *value);
-    Process* get_value (Process* key);
-    void del_entry (Process* key);
-    void set_value (Process* value) { _value.set_value (value, true); }
-    std::map<Process*,Process*>& get_map () { return _map; }
+    void add_entry (FatProcess* key, FatProcess *value);
+    FatProcess* get_value (FatProcess* key);
+    void del_entry (FatProcess* key);
+    void set_value (FatProcess* value) { _value.set_value (value, true); }
+    std::map<FatProcess*,FatProcess*>& get_map () { return _map; }
     RefProperty* key () { return &_key; }
     RefProperty* value () { return &_value; }
   private:
@@ -71,6 +71,6 @@ namespace djnn {
     AddEntryAction _add_action;
     DelEntryAction _del_action;
     Coupling _c_add, _c_del, _c_find;
-    std::map<Process*,Process*> _map;
+    std::map<FatProcess*,FatProcess*> _map;
   };
 }

@@ -24,7 +24,7 @@ namespace djnn
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (Process *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToValueAction (FatProcess *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
@@ -33,7 +33,7 @@ namespace djnn
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (Process *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToRGBAction (FatProcess *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
@@ -41,13 +41,13 @@ namespace djnn
       void impl_deactivate () override {}
     };
   public:
-    AbstractColor (Process *parent, const std::string& name, int r, int g, int b);
-    AbstractColor (Process *parent, const std::string& name, int v);
+    AbstractColor (FatProcess *parent, const std::string& name, int r, int g, int b);
+    AbstractColor (FatProcess *parent, const std::string& name, int v);
     virtual ~AbstractColor ();
     
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* r () { return (AbstractIntProperty*) find_child ("r"); }
 		AbstractIntProperty* g () { return (AbstractIntProperty*) find_child ("g"); }
 		AbstractIntProperty* b () { return (AbstractIntProperty*) find_child ("b"); }

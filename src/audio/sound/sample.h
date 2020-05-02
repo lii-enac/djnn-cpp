@@ -24,10 +24,10 @@ namespace djnn {
 	class Sample : public Sound, public djnn_internal::Time::Timer
 	{
 	public:
-		Sample (Process* parent, const std::string& name, const std::string& path);
+		Sample (FatProcess* parent, const std::string& name, const std::string& path);
 		virtual ~Sample ();
 	protected:
-		// Process
+		// FatProcess
 		virtual void impl_activate () override;
     	virtual void impl_deactivate () override;
 

@@ -29,13 +29,13 @@
 
 namespace djnn
 {
-  Circle::Circle (Process *parent, const std::string& name, double cx, double cy, double r)
+  Circle::Circle (FatProcess *parent, const std::string& name, double cx, double cy, double r)
   : AbstractPropCircle (parent, name, cx, cy, r)
   {
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   Circle::clone ()
   {
     return new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);

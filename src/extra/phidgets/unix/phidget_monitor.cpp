@@ -160,8 +160,8 @@ namespace djnn
     PhidgetManager_delete (&_handle);
   }
 
-  IFaceKit888::IFaceKit888 (Process *parent, const std::string& name) :
-      Process (n)
+  IFaceKit888::IFaceKit888 (FatProcess *parent, const std::string& name) :
+      FatProcess (n)
   {
     _inputs = new List (this, "inputs");
     _outputs = new List (this, "outputs");
@@ -209,8 +209,8 @@ namespace djnn
     _sensors->deactivate ();
   }
 
-  VoltageInputChannel::VoltageInputChannel (Process *p, const std::string& n) :
-      Process (n)
+  VoltageInputChannel::VoltageInputChannel (FatProcess *p, const std::string& n) :
+      FatProcess (n)
   {
     _end_init = new Spike (this, "end_init");
     _value = new DoubleProperty (this, "value", 0.0);

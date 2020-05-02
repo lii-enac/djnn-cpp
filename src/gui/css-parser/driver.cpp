@@ -28,7 +28,7 @@ namespace css
   }
 
   bool
-  Driver::parse_stream (std::istream& in, const std::string& name, Process *p)
+  Driver::parse_stream (std::istream& in, const std::string& name, FatProcess *p)
   {
     _root = p;
     stream = name;
@@ -41,7 +41,7 @@ namespace css
   }
 
   bool
-  Driver::parse_file (const std::string& filename, Process *p)
+  Driver::parse_file (const std::string& filename, FatProcess *p)
   {
     std::ifstream in (filename.c_str ());
     if (!in.good ())
@@ -50,13 +50,13 @@ namespace css
   }
 
   bool
-  Driver::parse_string (const std::string& input, const std::string& sname, Process *p)
+  Driver::parse_string (const std::string& input, const std::string& sname, FatProcess *p)
   {
     std::istringstream iss (input);
     return parse_stream (iss, sname, p);
   }
 
-  Process*
+  FatProcess*
   Driver::get_parent ()
   {
     return _root;

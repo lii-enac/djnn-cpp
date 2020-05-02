@@ -20,9 +20,9 @@ namespace djnn {
 		CoreProcess* damaged() { return nullptr; }
 	};
 
-	class AbstractSObj : public Process {
+	class AbstractSObj : public FatProcess {
 	public:
-		AbstractSObj (Process* parent, const std::string& name) : Process(name), _impl(nullptr) {}
+		AbstractSObj (FatProcess* parent, const std::string& name) : FatProcess(name), _impl(nullptr) {}
 		virtual ~AbstractSObj () { delete _impl; }
 
 		AbstractSObjImpl* impl() { return _impl; }
@@ -31,10 +31,10 @@ namespace djnn {
     	AudioScene * frame () { return nullptr; } // FIXME
 
     protected:
-	    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);
-	    virtual Process* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const std::string& name, int notify_mask);
-	    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const std::string& name, int notify_mask);
-	    virtual Process* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, std::string *rawp, const std::string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const std::string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const std::string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, std::string *rawp, const std::string& name, int notify_mask);
 
 	private:
 		AbstractSObjImpl *_impl;

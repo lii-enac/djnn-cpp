@@ -37,7 +37,7 @@ namespace djnn
   }
 
   int
-  //__error (Process* p, const std::string& msg, const char* ctxinfo)
+  //__error (FatProcess* p, const std::string& msg, const char* ctxinfo)
   __error (CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
@@ -46,7 +46,7 @@ namespace djnn
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       std::cerr << ctxinfo << ":";
-    Process * pp = dynamic_cast<Process*>(p);
+    FatProcess * pp = dynamic_cast<FatProcess*>(p);
     std::cerr << "djnn - ERROR: " << (pp ? pp->get_name () : "") << " - " << msg;
     
     std::cerr << std::endl << std::endl;
@@ -77,7 +77,7 @@ namespace djnn
       out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       out << ctxinfo << ":";
-    Process * pp = dynamic_cast<Process*>(p);
+    FatProcess * pp = dynamic_cast<FatProcess*>(p);
     out << "djnn - WARNING: " << (pp ? pp->get_name () : "") << " - " << msg;
     out << std::endl << std::endl;
 #endif

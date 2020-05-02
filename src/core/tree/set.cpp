@@ -29,9 +29,9 @@ namespace djnn
 {
   using namespace std;
 
-  Set::Set (Process* parent, const std::string& name)
+  Set::Set (FatProcess* parent, const std::string& name)
   :
-    Process (name),
+    FatProcess (name),
     _added (nullptr, "_added", nullptr),
     _removed (nullptr, "_removed", nullptr),
     _size (nullptr, "size", 0)
@@ -44,16 +44,16 @@ namespace djnn
   }
 
   void
-  Set::add_child (Process* c, const std::string& name)
+  Set::add_child (FatProcess* c, const std::string& name)
   {
     /* test if the child is already in the set
      * it == children ().end () if the element is not find 
      * only then we add it in the symtable to avoid duplicate
      */
-    map<string, Process*>::iterator it;
+    map<string, FatProcess*>::iterator it;
     it = children ().find(name);
     if (it == children ().end ()) {
-      Process::add_child (c, name);
+      FatProcess::add_child (c, name);
       c->set_parent (this);
 
       if (get_activation_state () == ACTIVATED) {
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   void
-  Set::remove_child (Process* c)
+  Set::remove_child (FatProcess* c)
   {
     bool found = false;
     symtable_t::iterator it;
@@ -90,7 +90,7 @@ namespace djnn
   void
   Set::remove_child (const std::string& name)
   {
-    Process *found = nullptr;
+    FatProcess *found = nullptr;
     symtable_t::iterator it;
     for (it = children ().begin (); it != children ().end (); ++it) {
       if (it->second->get_name ().compare (name) == 0) {
@@ -123,7 +123,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   Set::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
@@ -133,7 +133,7 @@ namespace djnn
     else if (path.compare ("size") == 0)
       return &_size;
     else {
-      return Process::find_child (path);
+      return FatProcess::find_child (path);
     }
     return nullptr;
   }
@@ -165,8 +165,8 @@ namespace djnn
   }
 #endif
 
-  SetIterator::SetIterator (Process *parent, const std::string& name, Process *set, Process *action, bool model) :
-      Process (name, model), _set (set), _action (action)
+  SetIterator::SetIterator (FatProcess *parent, const std::string& name, FatProcess *set, FatProcess *action, bool model) :
+      FatProcess (name, model), _set (set), _action (action)
   {
     Set *s = dynamic_cast<Set*> (set);
     if (s == nullptr)
@@ -178,7 +178,7 @@ namespace djnn
   SetIterator::impl_activate ()
   {
     symtable_t::iterator it;
-    std::map<std::string, Process*>& map = _set->children ();
+    std::map<std::string, FatProcess*>& map = _set->children ();
     for (it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
       _action->activate ();

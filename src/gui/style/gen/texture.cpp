@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  Texture::Texture (Process *parent, const std::string& name, const std::string& path) :
+  Texture::Texture (FatProcess *parent, const std::string& name, const std::string& path) :
     AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   Texture::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   Texture::clone ()
   {
     return new Texture (nullptr, get_name (), raw_props.path);

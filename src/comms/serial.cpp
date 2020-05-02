@@ -34,8 +34,8 @@ using namespace std;
 namespace djnn
 {
 
- Serial::Serial (Process *parent, const std::string& name, const std::string& port, int baudrate, char eol) :
-         Process (name),
+ Serial::Serial (FatProcess *parent, const std::string& name, const std::string& port, int baudrate, char eol) :
+         FatProcess (name),
          ExternalSource (name),
          _port (port),
          _out ( this, "out", ""),
@@ -57,7 +57,7 @@ namespace djnn
 }
 
 void
-Serial::set_parent (Process* p)
+Serial::set_parent (FatProcess* p)
 { 
   /* in case of re-parenting remove edge dependency in graph */
   if (get_parent ()) {
@@ -66,7 +66,7 @@ Serial::set_parent (Process* p)
 
   add_state_dependency (p, &_out_a);
     
-  Process::set_parent (p); 
+  FatProcess::set_parent (p); 
 }
 
 void

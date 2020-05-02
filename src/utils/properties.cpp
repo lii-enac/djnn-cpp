@@ -31,8 +31,8 @@ namespace djnn
     ((Properties*)get_parent ())->add_property ();
   }
 
-  Properties::Properties (Process *parent, const std::string& name, const std::string& filename)
-  : Process (name)
+  Properties::Properties (FatProcess *parent, const std::string& name, const std::string& filename)
+  : FatProcess (name)
   {
     _input = new TextProperty (this, "input", "");
     _action = new PropertiesAction (this, "action");
@@ -57,7 +57,7 @@ namespace djnn
     delete _input;
     delete _action;
     symtable_t::iterator it;
-    std::map<std::string, Process*>& map = children ();
+    std::map<std::string, FatProcess*>& map = children ();
     for (it = map.begin (); it != map.end (); ++it) {
       delete it->second;
     }

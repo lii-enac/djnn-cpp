@@ -29,11 +29,11 @@
 
 namespace djnn
 {
-  Process*
+  FatProcess*
   AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = frame ();
+    FatProcess *update = frame ();
     if (update) update = frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
@@ -44,11 +44,11 @@ namespace djnn
     return *prop;
   }
 
-  Process*
+  FatProcess*
   AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = frame ();
+    FatProcess *update = frame ();
     if (update) update = frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
@@ -59,11 +59,11 @@ namespace djnn
     return *prop;
   }
 
-  Process*
+  FatProcess*
   AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = frame ();
+    FatProcess *update = frame ();
     if (update) update = frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
@@ -74,11 +74,11 @@ namespace djnn
     return *prop;
   }
 
-  Process*
+  FatProcess*
   AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
-    Process *update = frame ();
+    FatProcess *update = frame ();
     if (update) update = frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
@@ -131,8 +131,8 @@ namespace djnn
        *  then we set (cur_child) to its parent (curget_parent ()), and (curget_parent ()) is set to (curget_parent ()->parent).
        *  May be there is a place for simplification */
       bool found = false;
-      Process *cur_parent = get_parent ();
-      Process *cur_child = this;
+      FatProcess *cur_parent = get_parent ();
+      FatProcess *cur_child = this;
 
       Window * frame = nullptr;
 

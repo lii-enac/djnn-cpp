@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractScaling::AbstractScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
+  AbstractScaling::AbstractScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
     _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
@@ -76,10 +76,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractScaling::find_child (const std::string& name)
   {
-    Process* res = AbstractTransformation::find_child(name);
+    FatProcess* res = AbstractTransformation::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  Connector::ConnectorAction::ConnectorAction (Process* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+  Connector::ConnectorAction::ConnectorAction (FatProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
         Action (parent, name), _src (src), _dst (dst), _propagate (propagate) 
   {
   }
@@ -37,7 +37,7 @@ namespace djnn
     }
   }
 
-  Connector::Init::Init(Connector * c, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec,
+  Connector::Init::Init(Connector * c, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
     std::string& src_ref_spec, std::string& dst_ref_spec)
   {
     if (src == 0) {
@@ -82,15 +82,15 @@ namespace djnn
 
 
 
-  Connector::Connector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec, bool copy_on_activation,
+  Connector::Connector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation,
     std::string src_ref_spec, std::string dst_ref_spec)
   :
     SrcToDstLink (parent, name),
     _init(this, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
     _src(!_ref_info_src.is_ref() && src ? dynamic_cast<AbstractProperty*>(src->find_child (ispec)) : nullptr),
     _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_child (dspec)) : nullptr),
-    _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()), // uses copy constructor
-    _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (Process**)&_dst) : ref_update()),
+    _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (FatProcess**)&_src) : ref_update()), // uses copy constructor
+    _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (FatProcess**)&_dst) : ref_update()),
     _action(this, "connector_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true),
     _c_src(_src ? Coupling(_src, ACTIVATION, &_action, ACTIVATION, true) : Coupling()),
     _has_coupling (false),
@@ -134,7 +134,7 @@ namespace djnn
 
 
   void
-  Connector::set_parent (Process* p)
+  Connector::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
@@ -144,7 +144,7 @@ namespace djnn
     if (_dst)
       add_state_dependency (p, _dst);
 
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -207,9 +207,9 @@ namespace djnn
   }
 #endif
 
-  PausedConnector::PausedConnector (Process *parent, const std::string& name, Process *src, const std::string& ispec, Process *dst, const std::string& dspec,
+  PausedConnector::PausedConnector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec,
                                     bool copy_on_activation) :
-      Process (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
+      FatProcess (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
     init_pausedconnector (src, ispec, dst, dspec);
     finalize_construction (parent, name);
@@ -231,7 +231,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::init_pausedconnector (Process *src, const std::string& ispec, Process *dst, const std::string& dspec)
+  PausedConnector::init_pausedconnector (FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec)
   {
     if (src == 0) {
       error ( this, (std::string("src argument cannot be null in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
@@ -243,14 +243,14 @@ namespace djnn
       return;
     }
 
-    Process* c_src = src->find_child (ispec);
+    FatProcess* c_src = src->find_child (ispec);
 
     if (c_src == 0) {
       error (this, (std::string("source not found in pausedconnector creation (") + get_name () + ", " + ispec + ", " + dspec + ")").c_str());
       return;
     }
 
-    Process* c_dst = dst->find_child (dspec);
+    FatProcess* c_dst = dst->find_child (dspec);
 
     if (c_dst == 0) {
       error (this,
@@ -284,7 +284,7 @@ namespace djnn
   }
 
   void
-  PausedConnector::set_parent (Process* p)
+  PausedConnector::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -292,7 +292,7 @@ namespace djnn
     }
 
     add_state_dependency (p, _dst);
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
 #ifndef DJNN_NO_SERIALIZE

@@ -76,7 +76,7 @@ namespace djnn {
 
   class Coupling;
   class Vertex;
-  class Process;
+  class FatProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -128,7 +128,7 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (Process* parent, const std::string& name, CoreProcess* state=nullptr) {}
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) {}
 
   private:
     // >>instance fields start here
@@ -144,9 +144,9 @@ namespace djnn {
 
     //static std::string default_name;
     //virtual const std::string& get_name () const { return default_name; }
-    const std::string& get_name (Process* parent) const;
-    virtual Process* get_parent() { return nullptr; }
-    virtual const Process* get_parent() const { return nullptr; }
+    const std::string& get_name (FatProcess* parent) const;
+    virtual FatProcess* get_parent() { return nullptr; }
+    virtual const FatProcess* get_parent() const { return nullptr; }
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
@@ -211,15 +211,15 @@ namespace djnn {
 
   public:
   // tree, component, symtable 
-    virtual void   set_parent (Process* p) {}
-    virtual void   add_child (Process* c, const std::string& name) {}
-    virtual void   remove_child (Process* c) {}
+    virtual void   set_parent (FatProcess* p) {}
+    virtual void   add_child (FatProcess* c, const std::string& name) {}
+    virtual void   remove_child (FatProcess* c) {}
     virtual void   remove_child (const std::string& name) {}
-    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) {}
-    //friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2) {} // strange, only used in gradient...
-    virtual Process* find_child (const std::string&) { return nullptr; }
-    virtual Process* find_child (int /*index*/) { return nullptr; }
-    static  Process* find_child (Process* p, const std::string& path) { return nullptr; }
+    virtual void     move_child (FatProcess */*child_to_move*/, child_position_e /*spec*/, FatProcess */*child*/ = nullptr) {}
+    //friend  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2) {} // strange, only used in gradient...
+    virtual FatProcess* find_child (const std::string&) { return nullptr; }
+    virtual FatProcess* find_child (int /*index*/) { return nullptr; }
+    static  FatProcess* find_child (FatProcess* p, const std::string& path) { return nullptr; }
     //static std::string default_name;
     //virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
   
@@ -236,23 +236,23 @@ namespace djnn {
   {
   public:
     ChildProcess (bool model = false) : CoreProcess(model), _parent(nullptr), _state_dependency(nullptr) {}
-    virtual void set_parent(Process* p); // { _parent = p; }
-    Process* get_parent() { return _parent; }
-    const Process* get_parent () const { return _parent; }
+    virtual void set_parent(FatProcess* p); // { _parent = p; }
+    FatProcess* get_parent() { return _parent; }
+    const FatProcess* get_parent () const { return _parent; }
     CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
     void set_state_dependency (CoreProcess* s) { _state_dependency = s; }
   protected:
-    //void finalize_construction (Process* parent, const std::string& name);
-    Process *_parent;
+    //void finalize_construction (FatProcess* parent, const std::string& name);
+    FatProcess *_parent;
     CoreProcess *_state_dependency;
   };
 
-  class Process : public ChildProcess
+  class FatProcess : public ChildProcess
   {
   public:
-    Process (const std::string& name, bool model = false);
-    virtual ~Process ();
-    virtual Process* clone () override { CoreProcess::clone (); return nullptr; }
+    FatProcess (const std::string& name, bool model = false);
+    virtual ~FatProcess ();
+    virtual FatProcess* clone () override { CoreProcess::clone (); return nullptr; }
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 
@@ -263,20 +263,20 @@ namespace djnn {
     virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
     
     // tree, component, symtable 
-    //Process* get_parent () override { return _parent; }
-    //const Process* get_parent () const override { return _parent; }
-    //virtual void   set_parent (Process* p) override;
-    virtual void   add_child (Process* c, const std::string& name) override;
-    virtual void   remove_child (Process* c) override;
+    //FatProcess* get_parent () override { return _parent; }
+    //const FatProcess* get_parent () const override { return _parent; }
+    //virtual void   set_parent (FatProcess* p) override;
+    virtual void   add_child (FatProcess* c, const std::string& name) override;
+    virtual void   remove_child (FatProcess* c) override;
     virtual void   remove_child (const std::string& name) override;
-    virtual void     move_child (Process */*child_to_move*/, child_position_e /*spec*/, Process */*child*/ = nullptr) override {}
-    friend  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual Process* find_child (const std::string&) override;
-    virtual Process* find_child (int /*index*/) override { return nullptr; }
-    static  Process* find_child (Process* p, const std::string& path);
+    virtual void     move_child (FatProcess */*child_to_move*/, child_position_e /*spec*/, FatProcess */*child*/ = nullptr) override {}
+    friend  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2); // strange, only used in gradient...
+    virtual FatProcess* find_child (const std::string&) override;
+    virtual FatProcess* find_child (int /*index*/) override { return nullptr; }
+    static  FatProcess* find_child (FatProcess* p, const std::string& path);
     virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
     
-    typedef std::map<std::string, Process*> symtable_t;
+    typedef std::map<std::string, FatProcess*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
     symtable_t::iterator children_end () { return _symtable.end (); }
     bool children_empty () { return _symtable.empty (); }
@@ -284,7 +284,7 @@ namespace djnn {
     symtable_t& children () { return _symtable; }
     const symtable_t& children () const { return _symtable; } 
     
-    void    add_symbol (const std::string& name, Process* c); // FIXME: should be alias
+    void    add_symbol (const std::string& name, FatProcess* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
   
   protected:
@@ -308,7 +308,7 @@ namespace djnn {
     CoreProcess* get_data () override;
 
   protected:
-    void finalize_construction (Process* parent, const std::string& name, CoreProcess* state=nullptr) override;
+    void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
 
   private:
     static long int _nb_anonymous;
@@ -316,8 +316,8 @@ namespace djnn {
 // >>instance fields start here
   private:
     
-    //Process *_parent;
-    //Process *_state_dependency;
+    //FatProcess *_parent;
+    //FatProcess *_state_dependency;
     CoreProcess *_data;
     symtable_t _symtable;
     //string _name;
@@ -332,15 +332,15 @@ namespace djnn {
    extern std::list<std::pair<Process*, long int>> __creation_stat_order;
   #endif
 
-  void alias_children (Process *p, Process *to);
-  void alias (Process *parent, const std::string& name, Process* from);
-  void merge_children (Process *p1, const std::string& sy1, Process *p2, const std::string& sy2);
-  inline Process* find (Process *p) { return p; }
-  inline Process* find (Process *p, const std::string& path) { return p->find_child (path); }
-  // inline Process* find (const std::string& path) { return Process::find_child (nullptr, path); }
+  void alias_children (FatProcess *p, FatProcess *to);
+  void alias (FatProcess *parent, const std::string& name, FatProcess* from);
+  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2);
+  inline FatProcess* find (FatProcess *p) { return p; }
+  inline FatProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
+  // inline FatProcess* find (const std::string& path) { return FatProcess::find_child (nullptr, path); }
 
-  void add_state_dependency (Process *_parent, CoreProcess *p);
-  void remove_state_dependency (Process *_parent, CoreProcess *p);
+  void add_state_dependency (FatProcess *_parent, CoreProcess *p);
+  void remove_state_dependency (FatProcess *_parent, CoreProcess *p);
   inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 }

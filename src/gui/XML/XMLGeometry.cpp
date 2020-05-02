@@ -77,7 +77,7 @@ XML_Utils::djn_XMLParseLength (double *len, const char *s)
 }
 
 int
-XML_Utils::djn_XMLParseLengthProperty (Process *s, const char* v)
+XML_Utils::djn_XMLParseLengthProperty (FatProcess *s, const char* v)
 {
   double value;
   if (s && djn_XMLParseLength (&value, v)) {

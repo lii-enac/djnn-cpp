@@ -28,8 +28,8 @@ namespace djnn
     ((FileReader*)get_parent ())->read ();
   }
 
-  FileReader::FileReader (Process *parent, const std::string& name, const std::string& filename)
-  : Process (name)
+  FileReader::FileReader (FatProcess *parent, const std::string& name, const std::string& filename)
+  : FatProcess (name)
   {
     _input = new TextProperty (this, "input", filename);
     _output = new TextProperty (this, "output", "");

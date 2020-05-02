@@ -105,7 +105,7 @@ namespace djnn {
       class MoveTouchAction : public Action
       {
       public:
-        MoveTouchAction (Process *parent, const std::string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
+        MoveTouchAction (FatProcess *parent, const std::string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
         ~MoveTouchAction () {}
         void impl_activate () override;
         void impl_deactivate () override {}
@@ -119,13 +119,13 @@ namespace djnn {
       Coupling _c_update;
   };
 
-  class ScaleRotateTranslate : public Process
+  class ScaleRotateTranslate : public FatProcess
   {
   private:
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      ScaleRotateTranslateAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
       void impl_deactivate () override {};
@@ -133,7 +133,7 @@ namespace djnn {
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      AddTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
       void impl_deactivate () override {};
@@ -142,7 +142,7 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      RemoveTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
       void impl_deactivate () override {};
@@ -151,13 +151,13 @@ namespace djnn {
     /*class MoveTouchAction : public Action
     {
     public:
-      MoveTouchAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      MoveTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       ~MoveTouchAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };*/
   public:
-    ScaleRotateTranslate (Process *parent, const std::string& name, Process* shape, Process* matrix);
+    ScaleRotateTranslate (FatProcess *parent, const std::string& name, FatProcess* shape, FatProcess* matrix);
     virtual ~ScaleRotateTranslate ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -167,7 +167,7 @@ namespace djnn {
     void move_touch (Touch *t);
     ScaleRotateTranslateAction * get_update_action() { return _update_action; }
   private:
-    Process *_shape, *_touches, *_added, *_removed;
+    FatProcess *_shape, *_touches, *_added, *_removed;
     AbstractHomography *_matrix;
     std::map <int, TouchAlive*> touches;
     Coupling *_c_on_add, *_c_on_del; //, *_c_move;

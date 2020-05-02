@@ -24,12 +24,12 @@ namespace djnn
   class AbstractTranslation : public AbstractTransformation
   {
   public:
-    AbstractTranslation (Process *parent, const std::string& name, double tx, double ty);
+    AbstractTranslation (FatProcess *parent, const std::string& name, double tx, double ty);
     virtual ~AbstractTranslation ();
     
     
     void get_properties_values (double& tx, double& ty);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child ("tx"); }
 		AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child ("ty"); }
 

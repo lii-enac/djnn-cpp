@@ -22,14 +22,14 @@
 namespace djnn {
   //using namespace std;
 
-  class Synchronizer : public Process
+  class Synchronizer : public FatProcess
   {
     friend class BindingAction;
   private:
     class SynchronizerAction : public NativeExpressionAction
     {
     public:
-      SynchronizerAction (Process* parent, const std::string& name) : NativeExpressionAction (parent, name) {}
+      SynchronizerAction (FatProcess* parent, const std::string& name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
         if (get_parent ()->somehow_activating ())
@@ -38,19 +38,20 @@ namespace djnn {
       void impl_deactivate () override {}
     };
   public:
-    Synchronizer (Process* parent, const std::string& name, Process* dst, const std::string&  dspec);
+    Synchronizer (FatProcess* parent, const std::string& name, FatProcess* dst, const std::string&  dspec);
     virtual ~Synchronizer ();
-    void add_source (Process* src, const std::string& spec);
+    void add_source (FatProcess* src, const std::string& spec);
     void impl_activate () override;
     void impl_deactivate () override;
-    void add_native_edge (Process *src, Process* dst);
+    void add_native_edge (FatProcess *src, FatProcess* dst);
     
   private:
     void propagate ();
-    void set_parent (Process* p) override;
-    struct Init { Init(Synchronizer *, Process *parent, const std::string& name, Process* dst, const std::string&  dspec); };
+
+    void set_parent (FatProcess* p) override;
+    struct Init { Init(Synchronizer *, FatProcess *parent, const std::string& name, FatProcess* dst, const std::string&  dspec); };
     friend struct Init;
-    Process *_dst;
+    FatProcess *_dst;
     Init _init;
     std::vector<Coupling*> _c_list;
     SynchronizerAction _action;

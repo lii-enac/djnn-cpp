@@ -23,7 +23,7 @@
 namespace djnn
 {
 
-  class Counter : public Process
+  class Counter : public FatProcess
   {
   private:
 
@@ -31,7 +31,7 @@ namespace djnn
     class CounterResetAction : public Action
     {
     public:
-      CounterResetAction (Process* parent, const std::string& name, bool* reset_occurred) :
+      CounterResetAction (FatProcess* parent, const std::string& name, bool* reset_occurred) :
         Action (parent, name), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
@@ -45,7 +45,7 @@ namespace djnn
     class CounterStepAction : public Action
     {
     public:
-      CounterStepAction (Process* parent, const std::string& name, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
+      CounterStepAction (FatProcess* parent, const std::string& name, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
         Action (parent, name), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
@@ -68,7 +68,7 @@ namespace djnn
     };
 
   public:
-    Counter (Process* p, const std::string& n, double init, double delta);
+    Counter (FatProcess* p, const std::string& n, double init, double delta);
     ~Counter();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -77,7 +77,7 @@ namespace djnn
 #endif
 
   private:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
     bool _reset_occurred;
     Spike _reset, _step;
     DoubleProperty _output, _init, _delta;

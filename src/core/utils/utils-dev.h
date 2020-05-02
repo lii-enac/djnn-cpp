@@ -21,7 +21,7 @@
 namespace djnn {
   
   typedef std::pair<RefProperty*, std::string> ref_info_t;
-  ref_info_t check_for_ref (Process* src, const std::string& spec);
+  ref_info_t check_for_ref (FatProcess* src, const std::string& spec);
   std::string __to_string(long x);
   std::string __to_string(void *x);
 

@@ -24,12 +24,12 @@ namespace djnn
   class AbstractVolume : public AbstractAudioStyle
   {
   public:
-    AbstractVolume (Process *parent, const std::string& name, double volume);
+    AbstractVolume (FatProcess *parent, const std::string& name, double volume);
     virtual ~AbstractVolume ();
     
     
     void get_properties_values (double& volume);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child ("volume"); }
 
   protected:

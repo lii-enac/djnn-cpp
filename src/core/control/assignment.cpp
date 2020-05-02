@@ -38,7 +38,7 @@ namespace djnn
   using namespace std;
 
   void
-  AbstractAssignment::set_parent (Process* p)
+  AbstractAssignment::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -53,7 +53,7 @@ namespace djnn
     if (_dst)
       add_state_dependency (p, _dst);
 
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -78,7 +78,7 @@ namespace djnn
     }
   }
 
-  AbstractAssignment::Init::Init (AbstractAssignment *p, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec,
+  AbstractAssignment::Init::Init (AbstractAssignment *p, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec,
     std::string src_ref_spec, std::string dst_ref_spec)
   {
     if (src == 0) {
@@ -104,15 +104,15 @@ namespace djnn
     dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (Process *parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel,
+  AbstractAssignment::AbstractAssignment (FatProcess *parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
     std::string src_ref_spec, std::string dst_ref_spec)
   :
   SrcToDstLink (parent, name, isModel),
   _init(this, name, src, ispec, dst, dspec, src_ref_spec, dst_ref_spec),
   _src(!_ref_info_src.is_ref() && src ? src->find_child (ispec) : nullptr),
   _dst(!_ref_info_dst.is_ref() && dst ? dynamic_cast<AbstractProperty*>(dst->find_child (dspec)) : nullptr),
-  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (Process**)&_src) : ref_update()),
-  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (Process**)&_dst) : ref_update())
+  _ref_update_src(_ref_info_src.is_ref() ? ref_update(this, _ref_info_src, src_ref_spec, (FatProcess**)&_src) : ref_update()),
+  _ref_update_dst(_ref_info_dst.is_ref() ? ref_update(this, _ref_info_dst, dst_ref_spec, (FatProcess**)&_dst) : ref_update())
   {
     check_init(ispec, dspec);
   }
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   void
-  AbstractAssignment::do_assignment (Process* src, AbstractProperty* dst_p, bool propagate)
+  AbstractAssignment::do_assignment (FatProcess* src, AbstractProperty* dst_p, bool propagate)
   {
     AbstractProperty *src_p = dynamic_cast<AbstractProperty*> (src);
     if (src_p) {
@@ -195,7 +195,7 @@ namespace djnn
       Graph::instance ().add_edge (_src, _dst);
   }
 
-  Assignment::Assignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst,
+  Assignment::Assignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst,
                           const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
@@ -264,8 +264,8 @@ namespace djnn
     }
   }
 
-  PausedAssignment::PausedAssignment (Process* parent, const std::string& name, Process* src, const std::string& ispec,
-                                      Process* dst, const std::string& dspec, bool isModel) :
+  PausedAssignment::PausedAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec,
+                                      FatProcess* dst, const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)
   {

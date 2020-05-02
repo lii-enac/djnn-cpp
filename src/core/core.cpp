@@ -29,7 +29,7 @@
 
 namespace djnn
 {
-  class Process;
+  class FatProcess;
   class StructureObserver;
 
 

@@ -21,16 +21,16 @@
 
 namespace djnn {
 
-  class Activator : public Process
+  class Activator : public FatProcess
   {
   public:
-    Activator (Process* parent, const std::string& name, Process* src);
-    Activator (Process* parent, const std::string& name, Process* src, const std::string& spec);
+    Activator (FatProcess* parent, const std::string& name, FatProcess* src);
+    Activator (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& spec);
     virtual ~Activator ();
     void impl_activate () override { _action->activate (); };
     void impl_deactivate () override {}
   private:
-    Process *_action;
+    FatProcess *_action;
 
   public:
 #ifndef DJNN_NO_SERIALIZE

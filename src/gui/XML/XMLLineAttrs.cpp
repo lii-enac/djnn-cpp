@@ -23,10 +23,10 @@
 
 namespace djnn {
 
-static int ParseX1 (Process**, const char*);
-static int ParseY1 (Process**, const char*);
-static int ParseX2 (Process**, const char*);
-static int ParseY2 (Process**, const char*);
+static int ParseX1 (FatProcess**, const char*);
+static int ParseY1 (FatProcess**, const char*);
+static int ParseX2 (FatProcess**, const char*);
+static int ParseY2 (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"x1",{&ParseX1}},
@@ -47,19 +47,19 @@ XMLLineAttrs_Hash::djn_XMLLineAttrsLookup (const char *str, unsigned int len)
 
 struct djn_LineArgs djn_LineArgs = {0., 0., 0., 0.};
 
-static int ParseX1(Process** e, const char* v) {
+static int ParseX1(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_LineArgs.x1, v);
 }
 
-static int ParseY1(Process** e, const char* v) {
+static int ParseY1(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_LineArgs.y1, v);
 }
 
-static int ParseX2(Process** e, const char* v) {
+static int ParseX2(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_LineArgs.x2, v);
 }
 
-static int ParseY2(Process** e, const char* v) {
+static int ParseY2(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_LineArgs.y2, v);
 }
 

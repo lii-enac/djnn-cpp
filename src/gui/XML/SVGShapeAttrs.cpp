@@ -30,31 +30,31 @@ using namespace std;
 
 static std::string djn_ParseURL (const char *);
 
-static int Ignore (Process**, const char*);
-static int ParseId (Process**, const char*);
-static int ParseClass (Process**, const char*);
-static int ParseStroke (Process**, const char*);
-static int ParseFill (Process**, const char*);
-static int ParseFillRule (Process**, const char*);
-static int ParseOpacity (Process**, const char*);
-static int ParseFillOpacity (Process**, const char*);
-static int ParseStrokeOpacity (Process**, const char*);
-static int ParseStrokeWidth (Process**, const char*);
-static int ParseLineJoin (Process**, const char*);
-static int ParseLineCap (Process**, const char*);
-static int ParseMatrix (Process**, const char*);
-static int ParseMiterLimit (Process**, const char*);
-static int ParseRotate (Process**, const char*);
-static int ParseScale (Process**, const char*);
-static int ParseSkewX (Process**, const char*);
-static int ParseSkewY (Process**, const char*);
-static int ParseStrokeDashArray (Process**, const char*);
-static int ParseStrokeDashOffset (Process**, const char*);
-static int ParseStyle (Process**, const char*);
-static int ParseTranslate (Process**, const char*);
-static int ParseTransform (Process**, const char*);
-static int ParseTextAnchor (Process**, const char*);
-static int ParsePathClip (Process**, const char*);
+static int Ignore (FatProcess**, const char*);
+static int ParseId (FatProcess**, const char*);
+static int ParseClass (FatProcess**, const char*);
+static int ParseStroke (FatProcess**, const char*);
+static int ParseFill (FatProcess**, const char*);
+static int ParseFillRule (FatProcess**, const char*);
+static int ParseOpacity (FatProcess**, const char*);
+static int ParseFillOpacity (FatProcess**, const char*);
+static int ParseStrokeOpacity (FatProcess**, const char*);
+static int ParseStrokeWidth (FatProcess**, const char*);
+static int ParseLineJoin (FatProcess**, const char*);
+static int ParseLineCap (FatProcess**, const char*);
+static int ParseMatrix (FatProcess**, const char*);
+static int ParseMiterLimit (FatProcess**, const char*);
+static int ParseRotate (FatProcess**, const char*);
+static int ParseScale (FatProcess**, const char*);
+static int ParseSkewX (FatProcess**, const char*);
+static int ParseSkewY (FatProcess**, const char*);
+static int ParseStrokeDashArray (FatProcess**, const char*);
+static int ParseStrokeDashOffset (FatProcess**, const char*);
+static int ParseStyle (FatProcess**, const char*);
+static int ParseTranslate (FatProcess**, const char*);
+static int ParseTransform (FatProcess**, const char*);
+static int ParseTextAnchor (FatProcess**, const char*);
+static int ParsePathClip (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"id",{&ParseId}},
@@ -125,16 +125,16 @@ SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (const char *str, unsigned int len)
 
 struct djn_GraphicalShapeArgs djn_GraphicalShapeArgs = {"", "", djnStrokeUndef};
 
-static int Ignore(Process** e, const char* v) {
+static int Ignore(FatProcess** e, const char* v) {
 	return 0;
 }
 
-static int ParseId(Process** e, const char* v) {
+static int ParseId(FatProcess** e, const char* v) {
 	djn_GraphicalShapeArgs.id = v;
 	return 1;
 }
 
-static int ParseStroke(Process** e, const char* v) {
+static int ParseStroke(FatProcess** e, const char* v) {
 	unsigned r, g, b;
 
 	if (!*e)
@@ -154,13 +154,13 @@ static int ParseStroke(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParsePathClip(Process** e, const char* v) {
+static int ParsePathClip(FatProcess** e, const char* v) {
 	if (!*e)
 		*e = new SVGHolder (nullptr, "SVGHolder");
 
 	if (strncmp(v, "url(", 4) == 0) {
 		string url = djn_ParseURL(v);
-		map<string, Process*>::iterator it = djn__id_to_process.find (url);
+		map<string, FatProcess*>::iterator it = djn__id_to_process.find (url);
 		if (it != djn__id_to_process.end ()) {
 			Container* clip = (Container*) it->second;
 			/* we iterate over the children of clip and add each child to *e */
@@ -176,7 +176,7 @@ static int ParsePathClip(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseFill(Process** e, const char* v) {
+static int ParseFill(FatProcess** e, const char* v) {
 	unsigned r, g, b;
 
 	if (!*e)
@@ -188,7 +188,7 @@ static int ParseFill(Process** e, const char* v) {
 
 	} else if (strncmp(v, "url(", 4) == 0) {
 		string url = djn_ParseURL(v);
-		map<string, Process*>::iterator it = djn__id_to_process.find (url);
+		map<string, FatProcess*>::iterator it = djn__id_to_process.find (url);
 		if (it != djn__id_to_process.end ()) {
 			AbstractGradient* ag = dynamic_cast<AbstractGradient*> (it->second);
 			if (ag->is_linear ()) {
@@ -215,7 +215,7 @@ static int ParseFill(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseFillRule(Process** e, const char* v) {
+static int ParseFillRule(FatProcess** e, const char* v) {
 	if (strncmp(v, "nonzero", 7) == 0) {
 		new FillRule(*e, "fill-rule", DJN_NON_ZERO_FILL);
 	} else if (strncmp(v, "evenodd", 7) == 0) {
@@ -226,7 +226,7 @@ static int ParseFillRule(Process** e, const char* v) {
 	}
 	return 1;
 }
-static int ParseOpacity(Process**e, const char* v) {
+static int ParseOpacity(FatProcess**e, const char* v) {
 	double alpha;
 
 	if (!*e)
@@ -242,16 +242,16 @@ static int ParseOpacity(Process**e, const char* v) {
 	 * Ultimately, this should be replaced by a full-fledged property that
 	 * handles properly the semantics of a group opacity.
 	 */
-	Process *c1 = new FillOpacity(*e, "", alpha);
-	Process *c2 = new OutlineOpacity(*e, "", alpha);
-	Process *op = new DoubleProperty(*e, "opacity", alpha);
+	FatProcess *c1 = new FillOpacity(*e, "", alpha);
+	FatProcess *c2 = new OutlineOpacity(*e, "", alpha);
+	FatProcess *op = new DoubleProperty(*e, "opacity", alpha);
 	new Connector (*e, "", op, "", c1, "a");
 	new Connector (*e, "", op, "", c2, "a");
 
 	return 1;
 }
 
-static int ParseFillOpacity(Process** e, const char* v) {
+static int ParseFillOpacity(FatProcess** e, const char* v) {
 	double alpha;
 
 	if (!*e)
@@ -267,7 +267,7 @@ static int ParseFillOpacity(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseStrokeOpacity(Process** e, const char* v) {
+static int ParseStrokeOpacity(FatProcess** e, const char* v) {
 	double alpha;
 
 	if (!*e)
@@ -283,7 +283,7 @@ static int ParseStrokeOpacity(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseStrokeWidth(Process** e, const char* v) {
+static int ParseStrokeWidth(FatProcess** e, const char* v) {
 	double width;
 	char *end;
 
@@ -300,7 +300,7 @@ static int ParseStrokeWidth(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseTransform(Process** e, const char* v) {
+static int ParseTransform(FatProcess** e, const char* v) {
 	int success = 1;
 	int ret = 0;
 	djn_XMLAttrHandler *h;
@@ -328,7 +328,7 @@ static int ParseTransform(Process** e, const char* v) {
 	return success;
 }
 
-static int ParseMatrix(Process** el, const char* v) {
+static int ParseMatrix(FatProcess** el, const char* v) {
 	double a, b, c, d, e, f;
 	char *vv = (char *) v;
 	if (!XML_Utils::djn_XMLParseDouble(&a, &vv) || !XML_Utils::djn_XMLRemoveSpacesAndComma (&vv))
@@ -362,7 +362,7 @@ static int ParseMatrix(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseRotate(Process** el, const char* v) {
+static int ParseRotate(FatProcess** el, const char* v) {
 	double r, cx, cy;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&r, &vv))
@@ -393,7 +393,7 @@ static int ParseRotate(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseScale(Process** el, const char* v) {
+static int ParseScale(FatProcess** el, const char* v) {
 	double sx, sy;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&sx, &vv))
@@ -421,7 +421,7 @@ static int ParseScale(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseSkewX(Process** el, const char* v) {
+static int ParseSkewX(FatProcess** el, const char* v) {
 	double a;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&a, &vv))
@@ -439,7 +439,7 @@ static int ParseSkewX(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseSkewY(Process** el, const char* v) {
+static int ParseSkewY(FatProcess** el, const char* v) {
 	double a;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&a, &vv))
@@ -457,7 +457,7 @@ static int ParseSkewY(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseTranslate(Process** el, const char* v) {
+static int ParseTranslate(FatProcess** el, const char* v) {
 	double tx, ty;
 	char *vv = (char*) v;
 	if (!XML_Utils::djn_XMLParseDouble(&tx, &vv))
@@ -482,7 +482,7 @@ static int ParseTranslate(Process** el, const char* v) {
 	return 0;
 }
 
-static int ParseLineJoin(Process** e, const char* v) {
+static int ParseLineJoin(FatProcess** e, const char* v) {
 	djnJoinStyle join = DJN_MITER_JOIN; /* SVG default value */
 
 	if (!*e)
@@ -498,7 +498,7 @@ static int ParseLineJoin(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseLineCap(Process** e, const char* v) {
+static int ParseLineCap(FatProcess** e, const char* v) {
 	djnCapStyle cap = DJN_BUTT_CAP; /* SVG default value */
 
 	if (!*e)
@@ -514,7 +514,7 @@ static int ParseLineCap(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseMiterLimit(Process** e, const char* v) {
+static int ParseMiterLimit(FatProcess** e, const char* v) {
 	int miterLimit;
 	char *end;
 
@@ -531,7 +531,7 @@ static int ParseMiterLimit(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseStrokeDashArray(Process** e, const char* v) {
+static int ParseStrokeDashArray(FatProcess** e, const char* v) {
 	int i = 0;
 	int size = 0;
 	int nbBlocks = 1;
@@ -582,7 +582,7 @@ static int ParseStrokeDashArray(Process** e, const char* v) {
 		size *= 2;
 	}
 
-	/* then add the dash subpatterns to the dashArray Process */
+	/* then add the dash subpatterns to the dashArray FatProcess */
 	for (i = 0; i < size - 1; i += 2) {
 		dashArray->add_sub_pattern (values[i], values[i + 1]);
 	}
@@ -592,7 +592,7 @@ static int ParseStrokeDashArray(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseStrokeDashOffset(Process** e, const char* v) {
+static int ParseStrokeDashOffset(FatProcess** e, const char* v) {
 	int offset;
 	char *end;
 
@@ -623,7 +623,7 @@ djn_ParseURL(const char * url) {
   return str;
 }
 
-static int ParseStyle(Process **e, const char *v) {
+static int ParseStyle(FatProcess **e, const char *v) {
 	/* FIXME very incomplete implementation of the style attribute parsing.
 	 * It should be able to manage css style
 	 */
@@ -654,7 +654,7 @@ static int ParseStyle(Process **e, const char *v) {
 	return success;
 }
 
-static int ParseTextAnchor(Process** e, const char* v) {
+static int ParseTextAnchor(FatProcess** e, const char* v) {
 	djnAnchorType anchor = DJN_START_ANCHOR;
 	if (!*e)
 		*e = new SVGHolder (nullptr, "SVGHolder");
@@ -670,7 +670,7 @@ static int ParseTextAnchor(Process** e, const char* v) {
 }
 
 static
-int ParseClass (Process** e, const char* v)
+int ParseClass (FatProcess** e, const char* v)
 {
   djn_GraphicalShapeArgs.classname = std::string (v);
   return 1;

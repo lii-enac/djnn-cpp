@@ -20,10 +20,10 @@ namespace djnn {
 
   static bool __module_initialized = false;
 
-  Process *InputDevices = nullptr;
-  Process *Mice = nullptr;
-  Process *TouchPanels = nullptr;
-  Process *GPIOs = nullptr;
+  FatProcess *InputDevices = nullptr;
+  FatProcess *Mice = nullptr;
+  FatProcess *TouchPanels = nullptr;
+  FatProcess *GPIOs = nullptr;
 
   void
   init_input () {
@@ -47,7 +47,7 @@ namespace djnn {
     }
 
   }
-  Process*
+  FatProcess*
   GPIOProxy::find_child (const std::string& path)
   {
     int pos = 0;
@@ -60,7 +60,7 @@ namespace djnn {
     }
     //string::size_type sz;
     const std::string buff = path.substr (pos);
-    Process *c = nullptr;
+    FatProcess *c = nullptr;
     if (pos == 3) {
       c = p_find_gpio (buff, IN);
     } else {

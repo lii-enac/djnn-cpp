@@ -32,12 +32,12 @@ namespace djnn
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
-    %(CLASS)s (Process *parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
+    %(CLASS)s (FatProcess *parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -69,7 +69,7 @@ def_string = """
 
 namespace djnn
 {
-  %(CLASS)s::%(CLASS)s (Process *parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
+  %(CLASS)s::%(CLASS)s (FatProcess *parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
     %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
     raw_props{%(RAW_PROPS_INIT)s},
     %(COUPLINGS_INIT)s
@@ -91,10 +91,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   %(CLASS)s::find_child (const std::string& name)
   {
-    Process* res = %(INHERITS)s::find_child(name);
+    FatProcess* res = %(INHERITS)s::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -164,7 +164,7 @@ def_draw = """
 """
 
 def_clone = """
-  Process*
+  FatProcess*
   %(CLASS)s::clone ()
   {
     return new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
@@ -347,7 +347,7 @@ def just_do_it(dc, finalize_construction=True):
 
     DECL_CLONE = ''
     if(dc.emit_clone):
-      DECL_CLONE = "Process* clone () override;"
+      DECL_CLONE = "FatProcess* clone () override;"
 
     DECL_DRAW = ''
     if(dc.finalize_construction):

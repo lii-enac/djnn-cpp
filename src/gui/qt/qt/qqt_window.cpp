@@ -115,8 +115,8 @@ namespace djnn
       {
         djnn::get_exclusive_access (DBG_GET);
         event->ignore ();
-        Process *p = _window->close();
-        if (p != nullptr) {
+        FatProcess *p = _window->close();
+        if (p != nullptr)
           p->activate ();
           QtMainloop::instance ().set_please_exec (true);
         }
@@ -219,7 +219,7 @@ namespace djnn
     QPainter painter (this);
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
-    Process *p = _window->holder ();
+    FatProcess *p = _window->holder ();
     _picking_view->init ();
     if (p) {
 

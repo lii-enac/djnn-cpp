@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractSkew::AbstractSkew (Process *parent, const std::string& name, double a) :
+  AbstractSkew::AbstractSkew (FatProcess *parent, const std::string& name, double a) :
     AbstractTransformation (parent, name),
     raw_props{.a=a},
     _ca (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractSkew::find_child (const std::string& name)
   {
-    Process* res = AbstractTransformation::find_child(name);
+    FatProcess* res = AbstractTransformation::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

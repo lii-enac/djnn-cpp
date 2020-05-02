@@ -16,7 +16,7 @@ namespace djnn {
   std::once_flag UpdateDrawing::onceFlag;
 
   UpdateDrawing::UpdateDrawing () :
-    Process ("UpdateDrawing")
+    FatProcess ("UpdateDrawing")
   {
     // UndelayedSpike _damaged
     // Bool _auto_refresh (true)

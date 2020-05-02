@@ -26,8 +26,8 @@
 namespace djnn
 {
 
-  Timer::Timer (Process *parent, const std::string& name, int delay)
-  : Process (name),
+  Timer::Timer (FatProcess *parent, const std::string& name, int delay)
+  : FatProcess (name),
   _delay (this, "delay", delay),
   _end (this, "end"),
   _action (this, "action"),
@@ -39,13 +39,13 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Timer::Timer (Process *parent, const std::string& name, std::chrono::milliseconds delay)
+  Timer::Timer (FatProcess *parent, const std::string& name, std::chrono::milliseconds delay)
   : Timer (parent, name, delay.count())
   {
   }
 
 #if DJNN_USE_BOOST_CHRONO
-  Timer::Timer (Process* parent, const std::string& name, boost::chrono::milliseconds delay)
+  Timer::Timer (FatProcess* parent, const std::string& name, boost::chrono::milliseconds delay)
   : Timer(parent, name, delay.count())
   {
   }
@@ -56,7 +56,7 @@ namespace djnn
   }
 
   
-  // Process
+  // FatProcess
   void
   Timer::impl_activate ()
   {

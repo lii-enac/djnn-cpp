@@ -23,10 +23,10 @@
 
 namespace djnn {
 
-static int ParseStopColor (Process**, const char*);
-static int ParseStopOpacity (Process**, const char*);
-static int ParseOffset (Process**, const char*);
-static int ParseStopStyle (Process**, const char*);
+static int ParseStopColor (FatProcess**, const char*);
+static int ParseStopOpacity (FatProcess**, const char*);
+static int ParseOffset (FatProcess**, const char*);
+static int ParseStopStyle (FatProcess**, const char*);
 
 std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"style",{&ParseStopStyle}},
@@ -47,17 +47,17 @@ SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup (const char *str, unsi
 
 struct djn_GradientStopArgs djn_GradientStopArgs = {0, 0, 0, 1.0, 0.};
 
-static int ParseStopColor(Process** e, const char* v) {
+static int ParseStopColor(FatProcess** e, const char* v) {
 
 	return SVG_Utils::djn__SVGParseColor(&djn_GradientStopArgs.r, &djn_GradientStopArgs.g,
 			&djn_GradientStopArgs.b, v);
 }
 
-static int ParseStopOpacity(Process** e, const char* v) {
+static int ParseStopOpacity(FatProcess** e, const char* v) {
 	return SVG_Utils::djn__SVGParseAlpha(&djn_GradientStopArgs.alpha, v);
 }
 
-static int ParseOffset(Process** e, const char* v) {
+static int ParseOffset(FatProcess** e, const char* v) {
 	double value;
 	int ret = XML_Utils::djn_XMLParseLength(&value, v);
 	if (ret == 2)
@@ -66,7 +66,7 @@ static int ParseOffset(Process** e, const char* v) {
 	return ret;
 }
 
-static int ParseStopStyle(Process **e, const char *v) {
+static int ParseStopStyle(FatProcess **e, const char *v) {
 	/* FIXME very incomplete implementation of the style attribute parsing.
 	 * It should be able to manage css style
 	 */

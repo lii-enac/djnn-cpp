@@ -203,7 +203,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added CAIRO text input
     - Added tools : size.cpp for size measuring of component
     - Added tools : ivy-c patch to apply for windows
-    - Added getter/stter on Process component
+    - Added getter/stter on FatProcess component
 
 ### Changed
     - Important code refactoring in base and core module
@@ -244,7 +244,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - New UI for graphical object working with mouse and touch
     - New ScaleRotateTranslate component behavior for multitouch purpose.
     - Implemented the general concept of dynamic destruction (delete)
-    - Process can only have 1 execution graph vertex associate and vice versa
+    - FatProcess can only have 1 execution graph vertex associate and vice versa
 
 ### Added
     - Added internal enum process_type_e
@@ -260,7 +260,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved execution graph and model for performances : can't reactivate a component already activate, except components made for it.
     - Improved Management of edges duplicates in execution graph.
     - Improved parent setting : made only once in finalize_construction () or in add_child ().
-    - Replaced Process (parent, name) by Process (name)
+    - Replaced FatProcess (parent, name) by FatProcess (name)
     - add_state_dependency are now made in set_parent when the parent is set.
     - Blank component deactivates right after his activation (like a spike component)
     - Moved process and coupling on core/ontology directory
@@ -271,7 +271,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved state dependence mechanism
     - Improved execution flag management
     - Improved the use of auto generation file using gen_prop.py
-    - Replaced Process::finalize by Process::finalize_construction
+    - Replaced FatProcess::finalize by FatProcess::finalize_construction
     - Replaced de/activate () by impl_de/activate ()
     - Replaced de/activation () by de/activate ()
     - Replaced set_activate by set_activation_state
@@ -378,7 +378,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added watcher on image path. You can now bind to path to modify
     - Added tools to generate backend's code more easily : tools/gen_prop.py
     - Remade shape.h and added cicle.h, ellipse.h, line.h, rectangle.h, rectangleclip.h
-    - Added pick() function to Process.
+    - Added pick() function to FatProcess.
 
 ### Changed
     - Improved the execution graph performance : sort, browse_in_depth and remove_properties, _timestamp

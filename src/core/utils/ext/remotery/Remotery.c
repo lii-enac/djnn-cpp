@@ -743,7 +743,7 @@ static rmtError VirtualMirrorBuffer_Constructor(VirtualMirrorBuffer* buffer, rmt
         rmtU8* desired_addr;
 
         // Create a page mapping for pointing to its physical address with multiple virtual pages
-        if (!AllocateTitlePhysicalPages( GetCurrentProcess(), MEM_LARGE_PAGES, &buffer->page_count, buffer->page_mapping ))
+        if (!AllocateTitlePhysicalPages( GetCurrentFatProcess(), MEM_LARGE_PAGES, &buffer->page_count, buffer->page_mapping ))
         {
             free( buffer->page_mapping );
             buffer->page_mapping = NULL;
@@ -769,7 +769,7 @@ static rmtError VirtualMirrorBuffer_Constructor(VirtualMirrorBuffer* buffer, rmt
         }
 
         // Failed to map the virtual pages; cleanup and try again
-        FreeTitlePhysicalPages( GetCurrentProcess(), buffer->page_count, buffer->page_mapping );
+        FreeTitlePhysicalPages( GetCurrentFatProcess(), buffer->page_count, buffer->page_mapping );
         buffer->page_mapping = NULL;
     }
 
@@ -985,7 +985,7 @@ static void VirtualMirrorBuffer_Destructor(VirtualMirrorBuffer* buffer)
         if (buffer->page_mapping != NULL)
         {
             VirtualFree( buffer->ptr, 0, MEM_DECOMMIT );	//needed in conjunction with FreeTitlePhysicalPages
-            FreeTitlePhysicalPages( GetCurrentProcess(), buffer->page_count, buffer->page_mapping );
+            FreeTitlePhysicalPages( GetCurrentFatProcess(), buffer->page_count, buffer->page_mapping );
             free( buffer->page_mapping );
             buffer->page_mapping = NULL;
         }
@@ -4886,7 +4886,7 @@ static rmtError Remotery_ThreadMain(rmtThread* thread)
 
         rmt_EndCPUSample();
 
-        // Process any queue map requests
+        // FatProcess any queue map requests
         if (LoadAcquirePointer((long* volatile*)&rmt->map_message_queue_fn) != NULL)
         {
             Remotery_MapMessageQueue(rmt);
@@ -6006,7 +6006,7 @@ static HRESULT rmtD3D11Finish(ID3D11Device* device, ID3D11DeviceContext* context
             }
         }
         //Give HyperThreading threads a breath on this spinlock.
-        YieldProcessor();
+        YieldFatProcessor();
     }
 
     if (disjoint.Disjoint == FALSE)
@@ -6438,7 +6438,7 @@ static void UpdateD3D11Frame(ThreadSampler* ts)
 
     rmt_BeginCPUSample(rmt_UpdateD3D11Frame, 0);
 
-    // Process all messages in the D3D queue
+    // FatProcess all messages in the D3D queue
     for (;;)
     {
         Msg_SampleTree* sample_tree;
@@ -7049,7 +7049,7 @@ static void UpdateOpenGLFrame(void)
 
     rmt_BeginCPUSample(rmt_UpdateOpenGLFrame, 0);
 
-    // Process all messages in the OpenGL queue
+    // FatProcess all messages in the OpenGL queue
     while (1)
     {
         Msg_SampleTree* sample_tree;
@@ -7365,7 +7365,7 @@ static void UpdateMetalFrame(void)
 
     rmt_BeginCPUSample(rmt_UpdateMetalFrame, 0);
 
-    // Process all messages in the Metal queue
+    // FatProcess all messages in the Metal queue
     while (1)
     {
         Msg_SampleTree* sample_tree;

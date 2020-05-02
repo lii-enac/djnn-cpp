@@ -34,7 +34,7 @@ namespace djnn
 {
   using namespace std;
 
-  AbstractList::AbstractList (Process* parent, const std::string& name)
+  AbstractList::AbstractList (FatProcess* parent, const std::string& name)
   :
     Container (parent, name),
     _added (nullptr, "_added", nullptr),
@@ -56,7 +56,7 @@ namespace djnn
 #endif
 
   void
-  AbstractList::add_child (Process* c, const std::string& name)
+  AbstractList::add_child (FatProcess* c, const std::string& name)
   {
     if (c == nullptr)
       return;
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   void
-  AbstractList::insert (Process* c, const std::string& spec)
+  AbstractList::insert (FatProcess* c, const std::string& spec)
   {
     int index = _children.size () - 1;
     if (spec.compare (">") == 0) {
@@ -78,7 +78,7 @@ namespace djnn
       }
       return;
     }
-    std::vector<Process*>::iterator it;
+    std::vector<FatProcess*>::iterator it;
     if (spec.compare ("<") == 0) {
       it = _children.begin ();
       it = _children.insert (it, c);
@@ -127,15 +127,15 @@ namespace djnn
   }
 
   void
-  AbstractList::remove_child (Process* c)
+  AbstractList::remove_child (FatProcess* c)
   {
-    std::vector<Process*>::iterator newend = _children.end ();
+    std::vector<FatProcess*>::iterator newend = _children.end ();
     for (auto s: structure_observer_list) {
       s->remove_child_from_container (this, c);
     }
     /* remove if 'c' is found in the vector */
     newend = std::remove_if (_children.begin (), _children.end (), 
-        [c](std::vector<Process*>::iterator::value_type v) { return v == c; });
+        [c](std::vector<FatProcess*>::iterator::value_type v) { return v == c; });
 
     /* check if end has changed and erase if necessary */
     if (newend != _children.end ()){
@@ -153,7 +153,7 @@ namespace djnn
       /* from user index to internal index : -1 */
       index = std::stoi (name, nullptr) - 1;
       if (index < _children.size ()) {
-        Process* c = _children.at (index);
+        FatProcess* c = _children.at (index);
         remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
@@ -165,7 +165,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   AbstractList::find_child (const std::string& path)
   {
     if (path.compare ("$added") == 0)
@@ -179,7 +179,7 @@ namespace djnn
         string::size_type sz;
         size_t index = std::stoi (path, &sz) - 1;
         if (index < _children.size ()) {
-          Process* c = _children.at (index);
+          FatProcess* c = _children.at (index);
           if (path.length () > sz) {
             return c->find_child (path.substr (sz + 1));
           } else
@@ -197,7 +197,7 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   AbstractList::find_child (int index)
   {
     if ((index - 1) < (int)_children.size ()) {
@@ -210,7 +210,7 @@ namespace djnn
     return nullptr;
   }
 
-  List::List (Process* parent, const std::string& name) :
+  List::List (FatProcess* parent, const std::string& name) :
     AbstractList (parent, name)
   {
     finalize_construction (parent, name);
@@ -221,7 +221,7 @@ namespace djnn
   }
 
   void
-  List::finalize_child_insertion (Process *c)
+  List::finalize_child_insertion (FatProcess *c)
   {
     c->set_parent (this);
 
@@ -234,7 +234,7 @@ namespace djnn
     _size.set_value (_size.get_value () + 1, true);
   }
 
-  Process*
+  FatProcess*
   List::clone () {
     List* clone = new List (nullptr, get_name ());
     for (auto c: _children) {
@@ -261,9 +261,9 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (Process *parent, const std::string& name, Process *list, Process *action, bool model)
+  ListIterator::ListIterator (FatProcess *parent, const std::string& name, FatProcess *list, FatProcess *action, bool model)
   :
-    Process (name, model),
+    FatProcess (name, model),
     _action (action)
   {
     Container *l = dynamic_cast<Container*> (list);
@@ -289,7 +289,7 @@ namespace djnn
     post_activate_auto_deactivate ();
   }
 
-  BidirectionalListIterator::IterAction::IterAction (Process *parent, const std::string& name, List *list,
+  BidirectionalListIterator::IterAction::IterAction (FatProcess *parent, const std::string& name, List *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Action (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
@@ -315,7 +315,7 @@ namespace djnn
     }
   }
 
-  BidirectionalListIterator::ResetAction::ResetAction (Process *parent, const std::string& name,
+  BidirectionalListIterator::ResetAction::ResetAction (FatProcess *parent, const std::string& name,
                                                        IntProperty *index) :
       Action (parent, name), _index (index)
   {
@@ -329,10 +329,10 @@ namespace djnn
     _index->set_value (1, true);
   }
 
-  BidirectionalListIterator::BidirectionalListIterator (Process *parent, const std::string& name,
-                                                        Process* list)
+  BidirectionalListIterator::BidirectionalListIterator (FatProcess *parent, const std::string& name,
+                                                        FatProcess* list)
   :
-  Process (name),
+  FatProcess (name),
   _list (dynamic_cast<List*> (list)),
   _next (this, "next"),
   _previous (this, "previous"),
@@ -373,7 +373,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::set_parent (Process* p)
+  BidirectionalListIterator::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -386,7 +386,7 @@ namespace djnn
     add_state_dependency (p, &_previous_action);
     add_state_dependency (p, &_reset_action);
 
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

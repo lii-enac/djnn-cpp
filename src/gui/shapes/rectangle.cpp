@@ -31,13 +31,13 @@
 namespace djnn
 {
 
-  Rectangle::Rectangle (Process *parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
+  Rectangle::Rectangle (FatProcess *parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
     AbstractPropRectangle (parent, name, x, y, width, height, rx, ry)
   {
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   Rectangle::clone ()
   {
     return new Rectangle (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);

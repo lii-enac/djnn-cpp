@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractRotation::AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy) :
+  AbstractRotation::AbstractRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.a=a, .cx=cx, .cy=cy},
     _ca (nullptr), _ccx (nullptr), _ccy (nullptr)
@@ -70,10 +70,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractRotation::find_child (const std::string& name)
   {
-    Process* res = AbstractTransformation::find_child(name);
+    FatProcess* res = AbstractTransformation::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

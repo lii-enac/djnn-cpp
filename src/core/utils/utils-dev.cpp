@@ -50,7 +50,7 @@ namespace djnn
   
 
   ref_info_t
-  check_for_ref (Process* src, const std::string& spec)
+  check_for_ref (FatProcess* src, const std::string& spec)
   {
     /* spec is empty */
     if (spec.empty ()) 
@@ -60,7 +60,7 @@ namespace djnn
     /* we found §value */
     if (found != std::string::npos) {
       
-      Process *prop = src;
+      FatProcess *prop = src;
       
       /* $value is not the first element, eg : foo/bar/$value */
       if (found > 0) 
@@ -93,18 +93,18 @@ namespace djnn
   const std::string&
   get_parent_name (const CoreProcess *cp, int up)
   {
-    const auto * p = dynamic_cast<const Process*>(cp);
-    if(!p) return Process::default_name;
+    const auto * p = dynamic_cast<const FatProcess*>(cp);
+    if(!p) return FatProcess::default_name;
     while(up && p) { p=p->get_parent(); --up; }
     if(p) return p->get_name();
-    else return Process::default_name;
+    else return FatProcess::default_name;
   }
 
   const std::string
   get_hierarchy_name (const CoreProcess *cp, int up)
   {
-    const auto * p = dynamic_cast<const Process*>(cp);
-    if(!p) return Process::default_name;
+    const auto * p = dynamic_cast<const FatProcess*>(cp);
+    if(!p) return FatProcess::default_name;
     std::string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;

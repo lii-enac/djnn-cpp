@@ -12,21 +12,21 @@ namespace djnn {
   class UpdateSrcOrDst : public Action
   {
     public:
-      UpdateSrcOrDst (Process* parent, const std::string& name, RefProperty* prop, const std::string& spec, Process** to_update);
-      UpdateSrcOrDst (Process* parent, const std::string& name);
+      UpdateSrcOrDst (FatProcess* parent, const std::string& name, RefProperty* prop, const std::string& spec, FatProcess** to_update);
+      UpdateSrcOrDst (FatProcess* parent, const std::string& name);
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
       void impl_deactivate () override {}
     private:
-      Process** _to_update;
+      FatProcess** _to_update;
       RefProperty* _prop;
       std::string _spec;
 
   };
 
-  class SrcToDstLink : public Process {
+  class SrcToDstLink : public FatProcess {
   public:
-    SrcToDstLink (Process* parent, const std::string& name, bool is_model = false) : Process (name, is_model) {}
+    SrcToDstLink (FatProcess* parent, const std::string& name, bool is_model = false) : FatProcess (name, is_model) {}
     virtual ~SrcToDstLink () {}
     virtual void about_to_update_graph () = 0;
     virtual void update_graph () = 0;
@@ -44,7 +44,7 @@ namespace djnn {
         _update (nullptr, "null_update_src_action") 
         {
         }
-      ref_update (Process *p, const ref_info& ri, const std::string& spec, Process** to_update) :
+      ref_update (FatProcess *p, const ref_info& ri, const std::string& spec, FatProcess** to_update) :
         _update(p, "update_src_action", ri._ref, spec, to_update),
         _c (ri._ref, ACTIVATION, &_update, ACTIVATION, true)
         { //_update.impl_activate();

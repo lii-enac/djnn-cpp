@@ -23,9 +23,9 @@
 	
 namespace djnn {
 
-static int ParseCx (Process**, const char*);
-static int ParseCy (Process**, const char*);
-static int ParseR (Process**, const char*);
+static int ParseCx (FatProcess**, const char*);
+static int ParseCy (FatProcess**, const char*);
+static int ParseR (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"r",{&ParseR}},
@@ -46,15 +46,15 @@ XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup (const char *str, unsigned int len
 
 struct djn_CircleArgs djn_CircleArgs = {0., 0., 0.};
 
-static int ParseCx(Process** e, const char* v) {
+static int ParseCx(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_CircleArgs.cx, v);
 }
 
-static int ParseCy(Process** e, const char* v) {
+static int ParseCy(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_CircleArgs.cy, v);
 }
 
-static int ParseR(Process** e, const char* v) {
+static int ParseR(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_CircleArgs.r, v);
 }
 

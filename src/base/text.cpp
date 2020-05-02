@@ -40,8 +40,8 @@ namespace djnn
     std::cout << _input->get_value () << std::endl;
   }
 
-  TextPrinter::TextPrinter (Process *parent, const std::string& name)
-  : Process (name),
+  TextPrinter::TextPrinter (FatProcess *parent, const std::string& name)
+  : FatProcess (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
     c_input (&_input, ACTIVATION, &_action, ACTIVATION, true)
@@ -91,7 +91,7 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::set_parent (Process* p)
+  DoubleFormatter::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -100,11 +100,11 @@ namespace djnn
 
     add_state_dependency (p, &_action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
-  DoubleFormatter::DoubleFormatter (Process* parent, const std::string& name, double initial, int decimal) :
-    Process (name),
+  DoubleFormatter::DoubleFormatter (FatProcess* parent, const std::string& name, double initial, int decimal) :
+    FatProcess (name),
     _input (this, "input", initial),
     _decimal (this, "decimal", decimal),
     _output (this, "output", ""),
@@ -148,8 +148,8 @@ namespace djnn
   }
 #endif
 
-  TextAccumulator::TextAccumulator (Process *parent, const std::string& name, const std::string& init)
-  : Process (name),
+  TextAccumulator::TextAccumulator (FatProcess *parent, const std::string& name, const std::string& init)
+  : FatProcess (name),
     _input (this, "input", ""),
     _state (this, "state", init),
     _del (this, "delete"),
@@ -178,7 +178,7 @@ namespace djnn
   }
 
   void
-  TextAccumulator::set_parent (Process* p)
+  TextAccumulator::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -189,7 +189,7 @@ namespace djnn
     add_state_dependency (p, &_acc_action);
     add_state_dependency (p, &_del_action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -238,8 +238,8 @@ namespace djnn
     }
   }
 
-  Regex::Regex (Process *parent, const std::string& name, const std::string& reg)
-  : Process (name),
+  Regex::Regex (FatProcess *parent, const std::string& name, const std::string& reg)
+  : FatProcess (name),
     _input (this, "input", ""),
     _init (reg),
     _regex (reg),
@@ -258,7 +258,7 @@ namespace djnn
   }
 
 
-  Process*
+  FatProcess*
   Regex::find_child (const std::string& key)
   {
 
@@ -288,7 +288,7 @@ namespace djnn
   }
 
   void
-  Regex::set_parent (Process* p)
+  Regex::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -297,7 +297,7 @@ namespace djnn
 
     add_state_dependency (p, &_reg_action);
     
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

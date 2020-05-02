@@ -40,9 +40,9 @@ namespace djnn {
 #define MT_CY (1 << 5)
 #define MT_PRESSURE (1 << 6)
 
-  class LinuxDevice : public Process {
+  class LinuxDevice : public FatProcess {
   public:
-    LinuxDevice (Process *parent, const std::string& name, dev_type type) : Process (name), _type (type) {}
+    LinuxDevice (FatProcess *parent, const std::string& name, dev_type type) : FatProcess (name), _type (type) {}
     ~LinuxDevice () {}
     virtual void handle_event (struct input_event *ev) = 0;
     dev_type type () { return _type; }
@@ -70,10 +70,10 @@ namespace djnn {
   public:
     Evdev (const char* node);
     ~Evdev ();
-    Process* action () { return _action; }
+    FatProcess* action () { return _action; }
     void handle_evdev_msg ();
   private:
-    Process *_action;
+    FatProcess *_action;
     IOFD *_iofd;
     LinuxDevice *_djn_dev;
     Coupling *_readable_cpl;
@@ -115,7 +115,7 @@ namespace djnn {
   class LinuxMouse : public LinuxDevice
   {
   public:
-    LinuxMouse (Process *parent, const std::string& name, const struct libevdev *dev);
+    LinuxMouse (FatProcess *parent, const std::string& name, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
     void impl_activate () override {}
@@ -131,7 +131,7 @@ namespace djnn {
     UNUSED, NEW, USED
   };
 
-  class LinuxTouch : public Process {
+  class LinuxTouch : public FatProcess {
     public:
       LinuxTouch (unsigned int fieldmap);
       ~LinuxTouch ();
@@ -154,7 +154,7 @@ namespace djnn {
   class LinuxTouchPanel : public LinuxDevice
   {
   public:
-    LinuxTouchPanel (Process *parent, const std::string& name, const struct libevdev *dev);
+    LinuxTouchPanel (FatProcess *parent, const std::string& name, const struct libevdev *dev);
     ~LinuxTouchPanel ();
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -168,10 +168,10 @@ namespace djnn {
     LinuxTouch *_cur_touch;
   };
 
-  class GPIOLine: public Process {
+  class GPIOLine: public FatProcess {
     class GPIOLineWriteAction : public Action {
     public:
-      GPIOLineWriteAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineWriteAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
@@ -179,14 +179,14 @@ namespace djnn {
     };
     class GPIOLineReadAction : public Action {
     public:
-      GPIOLineReadAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineReadAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
       void impl_deactivate () override {}
     };
   public:
-    GPIOLine (Process *parent, const std::string& name, int pin, direction_e dir);
+    GPIOLine (FatProcess *parent, const std::string& name, int pin, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int get_pin () { return _pin; }

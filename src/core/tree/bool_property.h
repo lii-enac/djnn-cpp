@@ -23,7 +23,7 @@ namespace djnn {
 
   class AbstractBoolProperty : public AbstractProperty {
   public:
-    AbstractBoolProperty (Process* parent, const std::string& name, int notify_mask=notify_none);
+    AbstractBoolProperty (FatProcess* parent, const std::string& name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () const override { return Boolean; }
     //virtual process_type_e get_process_type () const override { return BOOL_PROPERTY_T; }
@@ -32,7 +32,7 @@ namespace djnn {
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
-    void set_value (Process* v, bool propagate) override;
+    void set_value (FatProcess* v, bool propagate) override;
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
@@ -54,8 +54,8 @@ namespace djnn {
 
   class BoolProperty : public AbstractBoolProperty {
   public:
-    BoolProperty (Process* parent, const std::string& name, bool v) : AbstractBoolProperty (parent, name), value(v) { finalize_construction (parent, name); }    
-    Process* clone () override;
+    BoolProperty (FatProcess* parent, const std::string& name, bool v) : AbstractBoolProperty (parent, name), value(v) { finalize_construction (parent, name); }    
+    FatProcess* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
     virtual const bool& get_ref_value() const override { return value; }
@@ -70,8 +70,8 @@ namespace djnn {
 
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
-    BoolPropertyProxy (Process* parent, const std::string& name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { finalize_construction (parent, name); }
-    Process* clone () override;
+    BoolPropertyProxy (FatProcess* parent, const std::string& name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { finalize_construction (parent, name); }
+    FatProcess* clone () override;
   protected:
     virtual bool& get_ref_value() override { return value; }
     virtual const bool& get_ref_value() const override { return value; }
@@ -83,6 +83,6 @@ namespace djnn {
 #endif
   };
 
-  bool getBool (Process *p);
-  void setBool (Process *p, bool v);
+  bool getBool (FatProcess *p);
+  void setBool (FatProcess *p, bool v);
 }

@@ -26,18 +26,18 @@ using namespace std;
 
 namespace djnn {
 
-static int Ignore (Process**, const char*);
-static int ParseX (Process**, const char*);
-static int ParseY (Process**, const char*);
-static int ParseDx (Process**, const char*);
-static int ParseDy (Process**, const char*);
-static int ParseData (Process**, const char*);
-static int ParseSimpleText (Process**, const char*);
-static int ParseEncoding (Process**, const char*);
-static int ParseFontFamily (Process**, const char*);
-static int ParseFontStyle (Process**, const char*);
-static int ParseFontWeight (Process**, const char*);
-static int ParseFontSize (Process**, const char*);
+static int Ignore (FatProcess**, const char*);
+static int ParseX (FatProcess**, const char*);
+static int ParseY (FatProcess**, const char*);
+static int ParseDx (FatProcess**, const char*);
+static int ParseDy (FatProcess**, const char*);
+static int ParseData (FatProcess**, const char*);
+static int ParseSimpleText (FatProcess**, const char*);
+static int ParseEncoding (FatProcess**, const char*);
+static int ParseFontFamily (FatProcess**, const char*);
+static int ParseFontStyle (FatProcess**, const char*);
+static int ParseFontWeight (FatProcess**, const char*);
+static int ParseFontSize (FatProcess**, const char*);
 static char* cleanStr (const char *);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
@@ -68,19 +68,19 @@ XMLTextAttrs_Hash::djn_XMLTextAttrsLookup (const char *str, unsigned int len)
 
 struct djn_TextArgs djn_TextArgs = {0., 0., 0., 0., DJN_NO_UNIT, DJN_NO_UNIT, "Utf8", 0};
 
-static int Ignore(Process** e, const char* v) {
+static int Ignore(FatProcess** e, const char* v) {
 	return 0;
 }
 
-static int ParseX(Process** e, const char* v) {
+static int ParseX(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_TextArgs.x, v);
 }
 
-static int ParseY(Process** e, const char* v) {
+static int ParseY(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_TextArgs.y, v);
 }
 
-static int ParseDx(Process** e, const char* v) {
+static int ParseDx(FatProcess** e, const char* v) {
 	double dx = 0;
 	if (SVG_Utils::djn__SVGParseUnitAndValue(&djn_TextArgs.dxUnit, &dx, v)) {
 		djn_TextArgs.dx = dx;
@@ -89,7 +89,7 @@ static int ParseDx(Process** e, const char* v) {
 	return 0;
 }
 
-static int ParseDy(Process** e, const char* v) {
+static int ParseDy(FatProcess** e, const char* v) {
 	double dy = 0;
 	if (SVG_Utils::djn__SVGParseUnitAndValue(&djn_TextArgs.dyUnit, &dy, v)) {
 		djn_TextArgs.dy = dy;
@@ -98,7 +98,7 @@ static int ParseDy(Process** e, const char* v) {
 	return 0;
 }
 
-static int ParseData(Process** e, const char* v) {
+static int ParseData(FatProcess** e, const char* v) {
 	int l1, l2;
 	char *c = cleanStr(v);
 	if (c == 0)
@@ -127,13 +127,13 @@ static int ParseData(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseSimpleText(Process** e, const char* v) {
+static int ParseSimpleText(FatProcess** e, const char* v) {
 	djn_TextArgs.data = (char*) malloc(strlen(v + 1));
 	strcpy(djn_TextArgs.data, v);
 	return 1;
 }
 
-static int ParseEncoding(Process** e, const char* v) {
+static int ParseEncoding(FatProcess** e, const char* v) {
 	djn_TextArgs.encoding = v;
 	return 1;
 }
@@ -205,7 +205,7 @@ SVG_Utils::djn__SVGParseUnitAndValue(djnLengthUnit *unit, double *value,
 	return 1;
 }
 
-static int ParseFontFamily(Process** e, const char* v) {
+static int ParseFontFamily(FatProcess** e, const char* v) {
 	if (!*e)
 		*e = new SVGHolder (nullptr, "SVGHolder");
 
@@ -213,7 +213,7 @@ static int ParseFontFamily(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseFontStyle(Process** e, const char* v) {
+static int ParseFontStyle(FatProcess** e, const char* v) {
 	djnFontSlope style = DJN_NORMAL_FONT;
 	if (!*e)
 		*e = new SVGHolder (nullptr, "SVGHolder");
@@ -228,7 +228,7 @@ static int ParseFontStyle(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseFontWeight(Process** e, const char* v) {
+static int ParseFontWeight(FatProcess** e, const char* v) {
 	int val = 50; //normal
 	unsigned int i;
 	int isANumber = 1;
@@ -261,7 +261,7 @@ static int ParseFontWeight(Process** e, const char* v) {
 	return 1;
 }
 
-static int ParseFontSize(Process** e, const char* v) {
+static int ParseFontSize(FatProcess** e, const char* v) {
 	double sz = 0;
 	djnLengthUnit unit = DJN_NO_UNIT;
 	if (!*e)

@@ -41,7 +41,7 @@ namespace djnn {
   #define BUFFSIZE 8192
   static char buf[BUFFSIZE];
   map<string, djn__XMLParser*> XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
-  Process *XML::curComponent = nullptr;
+  FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
 
   /*
@@ -69,7 +69,7 @@ namespace djnn {
   }
 
   /* should add handling of '-' to denote stdin, until a URI is defined for that */
-  Process*
+  FatProcess*
   XML::djnLoadFromXML (const std::string& uri)
   {
     string uri_ = uri;
@@ -77,7 +77,7 @@ namespace djnn {
     if (found == std::string::npos) {
       FILE * pFile;
       pFile = fopen (uri.c_str (),"r");
-      Process* res;
+      FatProcess* res;
       if (pFile!=NULL)
         res = djnParseXML (pFile);
       else {
@@ -115,7 +115,7 @@ namespace djnn {
     };
   }
 
-  Process*
+  FatProcess*
   XML::djnParseXML (FILE* f)
   {
     XML_Parser p = XML_ParserCreateNS ("UTF-8", '*');
@@ -202,7 +202,7 @@ namespace djnn {
   }
 
   int
-  XML::djn_XMLHandleAttr (Process** e, const char** attrs, djn_XMLSymLookupProc lookup, ...)
+  XML::djn_XMLHandleAttr (FatProcess** e, const char** attrs, djn_XMLSymLookupProc lookup, ...)
   {
     /* we are passed a list of lookup procedures */
     va_list p;
@@ -310,7 +310,7 @@ namespace djnn {
 
     /* if yes, handle it and push the handler onto the stack */
     if (h) {
-      Process* e = h->start (attrs, curComponent);
+      FatProcess* e = h->start (attrs, curComponent);
       if (e)
         curComponent = e;
       djn__XMLPushTagHandler (h);
@@ -331,7 +331,7 @@ namespace djnn {
 
     /* if yes, handle it and pop the handler from the stack */
     if (h) {
-      Process* e = h->end (curComponent);
+      FatProcess* e = h->end (curComponent);
       if (e)
         curComponent = e;
       old_h = djn__XMLPopTagHandler ();

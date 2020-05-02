@@ -23,11 +23,11 @@ namespace djnn {
     IN, OUT
   } direction_e;
 
-  class GPIOProxy : public Process {
+  class GPIOProxy : public FatProcess {
   public:
-    GPIOProxy (Process *p, const std::string& n) : Process (n) { set_activation_state (ACTIVATED); }
+    GPIOProxy (FatProcess *p, const std::string& n) : FatProcess (n) { set_activation_state (ACTIVATED); }
     virtual ~GPIOProxy () {}
-    Process* find_child (const std::string& path) override;
+    FatProcess* find_child (const std::string& path) override;
   protected:
     void impl_activate () override {}
     void impl_deactivate () override {}

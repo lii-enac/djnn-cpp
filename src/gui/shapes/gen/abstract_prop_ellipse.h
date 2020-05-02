@@ -24,12 +24,12 @@ namespace djnn
   class AbstractPropEllipse : public AbstractGShape
   {
   public:
-    AbstractPropEllipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry);
+    AbstractPropEllipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry);
     virtual ~AbstractPropEllipse ();
     
     
     void get_properties_values (double& cx, double& cy, double& rx, double& ry);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child ("cx"); }
 		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child ("cy"); }
 		AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_child ("rx"); }

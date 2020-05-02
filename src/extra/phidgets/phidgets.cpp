@@ -20,8 +20,8 @@ namespace djnn {
 
   static bool __module_initialized = false;
 
-  Process *Phidgets = nullptr;
-  Process *InterfaceKits = nullptr;
+  FatProcess *Phidgets = nullptr;
+  FatProcess *InterfaceKits = nullptr;
 
   void
   init_phidgets () {

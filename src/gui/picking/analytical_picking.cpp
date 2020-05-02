@@ -22,7 +22,7 @@ namespace djnn {
    	AbstractGShape*
    	AnalyticalPicking::pick (double x, double y)
    	{
-   		Process *p = _win->holder ();
+   		FatProcess *p = _win->holder ();
       PickAnalyticalContext pac;
       pac.x = x;
       pac.y = y;

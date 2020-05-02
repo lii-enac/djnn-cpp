@@ -36,10 +36,10 @@ namespace djnn
     virtual ~AbstractGObjImpl();
   };
 
-  class AbstractGObj : public Process
+  class AbstractGObj : public FatProcess
   {
   public:
-    AbstractGObj (Process *parent, const std::string& name) : Process (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
+    AbstractGObj (FatProcess *parent, const std::string& name) : FatProcess (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       //if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
@@ -59,10 +59,10 @@ namespace djnn
     void set_impl(AbstractGObjImpl* i) { _impl=i; }
     
   protected:
-    virtual Process* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask);
-    virtual Process* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask);
 
   protected:
     void update_frame_if_necessary ();

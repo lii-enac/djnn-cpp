@@ -29,9 +29,9 @@
 namespace djnn {
 
   void
-  init_binary_couplings (Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
+  init_binary_couplings (FatProcess& _left, FatProcess& _right, FatProcess& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
   void
-  uninit_binary_couplings (Process* this_, Process& _left, Process& _right, Process& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
+  uninit_binary_couplings (FatProcess* this_, FatProcess& _left, FatProcess& _right, FatProcess& _result, Action& _action, Coupling& _c_left, Coupling& _c_right);
 
   template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
   class BinaryOperator;
@@ -42,7 +42,7 @@ namespace djnn {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (Process* parent, const std::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
+    BinaryOperatorAction (FatProcess* parent, const std::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
       finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
@@ -59,9 +59,9 @@ namespace djnn {
     static const char left[], right[], serialize[];
   };
 
-  class BinaryOperatorCommon : public Process {
+  class BinaryOperatorCommon : public FatProcess {
     public:
-    BinaryOperatorCommon (const std::string& name) : Process(name) {}
+    BinaryOperatorCommon (const std::string& name) : FatProcess(name) {}
     virtual ~BinaryOperatorCommon () {}
   };
 
@@ -101,13 +101,13 @@ namespace djnn {
     }
 #endif
   protected:
-    void set_parent (Process* p) override {
+    void set_parent (FatProcess* p) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
          remove_state_dependency (get_parent (), &_action);
       }
       add_state_dependency (p, &_action);
-      Process::set_parent (p);
+      FatProcess::set_parent (p);
     }
   public:
     Left _left;
@@ -121,9 +121,9 @@ namespace djnn {
 
 
   void
-  init_unary_couplings (Process& _input, Process& _output, Action& _action, Coupling& _coupling);
+  init_unary_couplings (FatProcess& _input, FatProcess& _output, Action& _action, Coupling& _coupling);
   void
-  uninit_unary_couplings (Process * this_, Process& _input, Process& _output, Action& _action, Coupling& _coupling);
+  uninit_unary_couplings (FatProcess * this_, FatProcess& _input, FatProcess& _output, Action& _action, Coupling& _coupling);
 
 
   template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
@@ -136,7 +136,7 @@ namespace djnn {
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    UnaryOperatorAction (Process* parent, const std::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
+    UnaryOperatorAction (FatProcess* parent, const std::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
       finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
@@ -149,9 +149,9 @@ namespace djnn {
     UnOperator& _unop;
   };
 
-  class UnaryOperatorCommon : public Process {
+  class UnaryOperatorCommon : public FatProcess {
     public:
-    UnaryOperatorCommon (const std::string& name) : Process(name) {}
+    UnaryOperatorCommon (const std::string& name) : FatProcess(name) {}
     virtual ~UnaryOperatorCommon () {}
   };
 
@@ -161,7 +161,7 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (Process *parent, const std::string& name, const Input_init& i_val)
+    UnaryOperator (FatProcess *parent, const std::string& name, const Input_init& i_val)
     : UnaryOperatorCommon (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
@@ -189,13 +189,13 @@ namespace djnn {
 #endif
 
   protected:
-    void set_parent (Process* p) override {
+    void set_parent (FatProcess* p) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
          remove_state_dependency (get_parent (), &_action);
       }
       add_state_dependency (p, &_action);
-      Process::set_parent (p);
+      FatProcess::set_parent (p);
     }
   public:
     Input _input;

@@ -45,8 +45,8 @@ namespace djnn
 {
   using namespace std;
 
-  Container::Container (Process* parent, const std::string& name) :
-      Process (name)
+  Container::Container (FatProcess* parent, const std::string& name) :
+      FatProcess (name)
   {
     Container* c = djnn_dynamic_cast<Container*> (parent);
     if (c)
@@ -98,7 +98,7 @@ namespace djnn
   }
 
   void
-  Container::add_child (Process* child, const std::string& name)
+  Container::add_child (FatProcess* child, const std::string& name)
   {
     if (child == nullptr) {
       error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
@@ -123,7 +123,7 @@ namespace djnn
   }
 
   void
-  Container::move_child (Process *child_to_move, child_position_e spec, Process *child2)
+  Container::move_child (FatProcess *child_to_move, child_position_e spec, FatProcess *child2)
   {
     if (child2 == 0) {
       if (spec == FIRST) {
@@ -169,7 +169,7 @@ namespace djnn
   }
 
   void
-  Container::remove_child_from_children_only (Process* c)
+  Container::remove_child_from_children_only (FatProcess* c)
   {
     _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
     for (auto s: structure_observer_list) {
@@ -181,9 +181,9 @@ namespace djnn
     remove child but do not delete child 
   */
   void
-  Container::remove_child (Process* c)
+  Container::remove_child (FatProcess* c)
   {
-    Process::remove_child (c);
+    FatProcess::remove_child (c);
     remove_child_from_children_only (c);
   }
 
@@ -195,7 +195,7 @@ namespace djnn
   {
     symtable_t::iterator it = find_child_iterator (name);
     if (it != children_end ()) {
-      Process* c = it->second;
+      FatProcess* c = it->second;
       Container::remove_child(c);
     } else
       warning (nullptr,  " symbol " + name + " not found in Component " + get_name () + "\n");
@@ -204,7 +204,7 @@ namespace djnn
   void
   Container::swap_children (int i, int j)
   {
-    Process *buff = _children[j];
+    FatProcess *buff = _children[j];
     _children[j] = _children[i];
     _children[i] = buff;
     for (auto s: structure_observer_list) {
@@ -213,7 +213,7 @@ namespace djnn
   }
 
   void
-  Container::set_child (Process *child, int i)
+  Container::set_child (FatProcess *child, int i)
     {
       _children[i] = child;
       for (auto s: structure_observer_list) {
@@ -308,10 +308,10 @@ namespace djnn
   }
 
 
-  Process*
+  FatProcess*
   Container::clone ()
   {
-    Process* clone = new Container (nullptr, get_name ());
+    FatProcess* clone = new Container (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), this->find_child_name(c));
     }
@@ -330,10 +330,10 @@ namespace djnn
 #endif
   }
 
-  Process*
+  FatProcess*
   Component::clone ()
   {
-    Process* clone = new Component (nullptr, get_name ());
+    FatProcess* clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), this->find_child_name(c));
     }
@@ -359,7 +359,7 @@ namespace djnn
 #endif
 
 
-  AssignmentSequence::AssignmentSequence (Process *parent, const std::string& name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (FatProcess *parent, const std::string& name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);
@@ -375,7 +375,7 @@ namespace djnn
   }
 
   void
-  AssignmentSequence::add_child (Process* c, const std::string& name)
+  AssignmentSequence::add_child (FatProcess* c, const std::string& name)
   {
     if (c == nullptr)
       return;

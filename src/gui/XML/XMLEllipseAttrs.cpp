@@ -23,10 +23,10 @@
 
 namespace djnn {
 
-static int ParseCx (Process**, const char*);
-static int ParseCy (Process**, const char*);
-static int ParseRx (Process**, const char*);
-static int ParseRy (Process**, const char*);
+static int ParseCx (FatProcess**, const char*);
+static int ParseCy (FatProcess**, const char*);
+static int ParseRx (FatProcess**, const char*);
+static int ParseRy (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"ry",{&ParseRy}},
@@ -48,19 +48,19 @@ XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup (const char *str, unsigned int l
 
 struct djn_EllipseArgs djn_EllipseArgs = {0., 0., 0., 0.};
 
-static int ParseCx(Process** e, const char* v) {
+static int ParseCx(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.cx, v);
 }
 
-static int ParseCy(Process** e, const char* v) {
+static int ParseCy(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.cy, v);
 }
 
-static int ParseRx(Process** e, const char* v) {
+static int ParseRx(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.rx, v);
 }
 
-static int ParseRy(Process** e, const char* v) {
+static int ParseRy(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.ry, v);
 }
 

@@ -55,4 +55,8 @@ namespace djnn {
   void init_core ();
   void clear_core ();
 
+  // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
+  // Process should not be used in djnn-cpp until the refactoring dust settles
+  using Process = FatProcess;
+
 }

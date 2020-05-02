@@ -30,7 +30,7 @@
 namespace djnn
 {
 
-  class IvyAccess : public Process, public ExternalSource
+  class IvyAccess : public FatProcess, public ExternalSource
   {
 
   /*** private Class Ivy Out Actions ***/ 
@@ -38,7 +38,7 @@ namespace djnn
      class IvyOutAction : public Action
     {
     public:
-      IvyOutAction (Process* parent, const std::string& name, TextProperty* out) :
+      IvyOutAction (FatProcess* parent, const std::string& name, TextProperty* out) :
       Action (parent, name), _out (out) { finalize_construction (parent, name); } 
       virtual ~IvyOutAction () {}
       //void coupling_activation_hook () override;
@@ -52,7 +52,7 @@ namespace djnn
   /*** Ivy Access Class ***/
 
   public:
-    IvyAccess (Process *parent, const std::string& name, 
+    IvyAccess (FatProcess *parent, const std::string& name, 
       const std::string& bus="224.1.2.3:2010", const std::string& appname="NO_NAME", const std::string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
@@ -68,8 +68,8 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    Process* find_child (const std::string&) override;
-    void set_parent (Process* p) override;
+    FatProcess* find_child (const std::string&) override;
+    void set_parent (FatProcess* p) override;
 
   private:
     std::string _bus;

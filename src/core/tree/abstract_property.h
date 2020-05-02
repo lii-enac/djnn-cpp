@@ -27,11 +27,11 @@ namespace djnn {
     Reference
   };
 
-  class AbstractProperty : public Process
+  class AbstractProperty : public FatProcess
   {
   public:
-    AbstractProperty (Process* parent, const std::string& name, unsigned int nm=notify_none) :
-      Process (name),
+    AbstractProperty (FatProcess* parent, const std::string& name, unsigned int nm=notify_none) :
+      FatProcess (name),
       _notify_mask (nm) {}
     virtual ~AbstractProperty () override {}
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
@@ -43,7 +43,7 @@ namespace djnn {
     virtual void set_value (int v, bool propagate) = 0;
     virtual void set_value (double v, bool propagate) = 0;
     virtual void set_value (bool v, bool propagate) = 0;
-    virtual void set_value (Process* v, bool propagate) = 0;
+    virtual void set_value (FatProcess* v, bool propagate) = 0;
     virtual void set_value (const std::string& v, bool propagate) = 0;
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;

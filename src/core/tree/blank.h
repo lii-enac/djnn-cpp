@@ -23,11 +23,12 @@ namespace djnn {
    * It cannot be used to notify its subscribers from a coupling.
    * But a component, for example an external source, can use it and call explicitly its notify_(de)activate method.
    */
-  class Blank: public Process {
+
+  class Blank: public FatProcess {
   public:
-    Blank (Process* parent, const std::string& name) : Process (name) { finalize_construction (parent, name); }
+    Blank (FatProcess* parent, const std::string& name) : FatProcess (name) { finalize_construction (parent, name); }
     virtual ~Blank () {};
-    Process* clone () override;
+    FatProcess* clone () override;
   protected:
     bool pre_activate () override { return true; }
     void impl_activate () override { set_activation_state(ACTIVATED); }

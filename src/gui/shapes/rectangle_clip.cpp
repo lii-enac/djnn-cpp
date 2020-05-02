@@ -33,13 +33,13 @@
 namespace djnn
 {
 
-  RectangleClip::RectangleClip (Process *parent, const std::string& name, double x, double y, double width, double height) :
+  RectangleClip::RectangleClip (FatProcess *parent, const std::string& name, double x, double y, double width, double height) :
     AbstractPropRectangleClip (parent, name, x, y, width, height)
   {
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   RectangleClip::clone ()
   {
     return new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);

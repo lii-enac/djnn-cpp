@@ -29,13 +29,13 @@
 
 namespace djnn
 {
-  Ellipse::Ellipse (Process *parent, const std::string& name, double cx, double cy, double rx, double ry)
+  Ellipse::Ellipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry)
   : AbstractPropEllipse (parent, name, cx, cy, rx, ry)
   {
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   Ellipse::clone ()
   {
     return new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);

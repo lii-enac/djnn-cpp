@@ -30,7 +30,7 @@
 
 namespace djnn
 {
-  Image::Image (Process *parent, const std::string& name, std::string path, double x, double y, double w,
+  Image::Image (FatProcess *parent, const std::string& name, std::string path, double x, double y, double w,
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
@@ -50,10 +50,10 @@ namespace djnn
     Backend::instance ()->delete_image_impl (this);
   }
 
-  Process*
+  FatProcess*
   Image::find_child (const std::string& name)
   {
-    Process* res = AbstractPathImage::find_child(name);
+    FatProcess* res = AbstractPathImage::find_child(name);
     //if(res) return res;
     if (name == "pixel" && !has_ui()) {
       init_ui ();
@@ -130,13 +130,13 @@ namespace djnn
     return d;
   }
 
-  Process*
+  FatProcess*
   Image::clone () 
   {
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
-  DataImage::DataImage (Process *parent, const std::string& name, const std::string& data, double x, double y, double w,
+  DataImage::DataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, x, y, w, h),
       _cwatcher(nullptr),
@@ -146,7 +146,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  DataImage::DataImage (Process *parent, const std::string& name, double x, double y, double w, double h)
+  DataImage::DataImage (FatProcess *parent, const std::string& name, double x, double y, double w, double h)
   : DataImage(parent, name, std::string(), x, y, w, h)
   {
   }
@@ -160,10 +160,10 @@ namespace djnn
     delete _watcher;
   }
 
-  Process*
+  FatProcess*
   DataImage::find_child (const std::string& name)
   {
-    Process* res = AbstractDataImage::find_child(name);
+    FatProcess* res = AbstractDataImage::find_child(name);
     //if(res) return res;
 
     if( name=="data" && _watcher == nullptr) {
@@ -199,7 +199,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   DataImage::clone ()
   {
     return new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);

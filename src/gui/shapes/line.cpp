@@ -29,13 +29,13 @@
 
 namespace djnn
 {
-  Line::Line (Process *parent, const std::string& name, double x1, double y1, double x2, double y2)
+  Line::Line (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2)
   : AbstractPropLine (parent, name, x1, y1, x2, y2)
   {
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   Line::clone ()
   {
     return new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);

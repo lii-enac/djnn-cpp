@@ -24,12 +24,12 @@ namespace djnn
   class AbstractRotation : public AbstractTransformation
   {
   public:
-    AbstractRotation (Process *parent, const std::string& name, double a, double cx, double cy);
+    AbstractRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy);
     virtual ~AbstractRotation ();
     
     
     void get_properties_values (double& a, double& cx, double& cy);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child ("a"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child ("cx"); }
 		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child ("cy"); }

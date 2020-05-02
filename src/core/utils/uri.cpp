@@ -17,21 +17,21 @@
 namespace djnn
 {
 
-  std::map<std::string, Process*> URI::uri_manager;
+  std::map<std::string, FatProcess*> URI::uri_manager;
 
   void
-  URI::add_uri (const std::string& prefix, Process* p)
+  URI::add_uri (const std::string& prefix, FatProcess* p)
   {
-    uri_manager.insert (std::pair<std::string, Process*> (prefix, p));
+    uri_manager.insert (std::pair<std::string, FatProcess*> (prefix, p));
   }
 
-  Process*
+  FatProcess*
   URI::find_by_uri (const std::string& uri)
   {
     std::size_t found = uri.find("://");
     if (found == std::string::npos)
       return nullptr;
-    std::map<std::string, Process*>::iterator it;
+    std::map<std::string, FatProcess*>::iterator it;
     it = uri_manager.find (uri.substr (0, found));
     if (it == uri_manager.end ())
       return nullptr;

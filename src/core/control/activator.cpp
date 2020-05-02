@@ -21,8 +21,8 @@ namespace djnn
 {
   using namespace std;
 
-  Activator::Activator (Process* parent, const std::string& name, Process* action) :
-      Process (name), _action (action)
+  Activator::Activator (FatProcess* parent, const std::string& name, FatProcess* action) :
+      FatProcess (name), _action (action)
   {
     if (_action == nullptr) {
       error  (this, std::string("action not found in activator ") + name);
@@ -31,8 +31,8 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Activator::Activator (Process* parent, const std::string& name, Process* action, const std::string& spec) :
-      Process (name)
+  Activator::Activator (FatProcess* parent, const std::string& name, FatProcess* action, const std::string& spec) :
+      FatProcess (name)
   {
     _action = action->find_child (spec);
     if (_action == nullptr) {

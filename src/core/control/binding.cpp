@@ -27,14 +27,14 @@ namespace djnn
 {
   using namespace std;
 
-  Binding::BindingAction::BindingAction (Process* parent, const std::string& name, bool activate) : 
+  Binding::BindingAction::BindingAction (FatProcess* parent, const std::string& name, bool activate) : 
     Action (parent, name) 
   { 
     set_binding_action (activate); 
   }
 
-  Binding::Init::Init(Binding * b, Process* src, const std::string&  ispec,
-                                   Process* dst, const std::string&  dspec,
+  Binding::Init::Init(Binding * b, FatProcess* src, const std::string&  ispec,
+                                   FatProcess* dst, const std::string&  dspec,
                                    string& src_ref_spec, string& dst_ref_spec)
   {
     if (src == 0) {
@@ -56,7 +56,7 @@ namespace djnn
   }
 
   void
-  Binding::set_parent (Process* p)
+  Binding::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
@@ -66,7 +66,7 @@ namespace djnn
     if (_dst)
       add_state_dependency (p, _dst);
 
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void
@@ -122,7 +122,7 @@ namespace djnn
     }
   }
 
-  Binding::Binding (Process* parent, const std::string&  name, Process* src, const std::string&  ispec, Process* dst, const std::string&  dspec,
+  Binding::Binding (FatProcess* parent, const std::string&  name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
     string src_ref_spec, string dst_ref_spec)
   :
       SrcToDstLink (parent, name),
@@ -148,8 +148,8 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Binding::Binding (Process* parent, const std::string& name, Process* src, const std::string&  ispec, bool on_activation,
-                    Process* dst, const std::string&  dspec, bool activate,
+  Binding::Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation,
+                    FatProcess* dst, const std::string&  dspec, bool activate,
                     string src_ref_spec, string dst_ref_spec)
   :
       SrcToDstLink (parent, name),

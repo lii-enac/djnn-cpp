@@ -5,8 +5,8 @@
 
 using namespace djnn;
 
-static int HandleId (Process**, const char*);
-static int HandleModel (Process**, const char*);
+static int HandleId (FatProcess**, const char*);
+static int HandleModel (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"id",{.handle_attr = &HandleId}},
@@ -26,14 +26,14 @@ DJNComponentAttrs_Hash::djn_DJNComponentAttrsLookup (const char *str, unsigned i
 struct djn_ComponentArgs_t djn_ComponentArgs = { "", 0 };
 
 static int
-HandleId (Process** e, const char* v)
+HandleId (FatProcess** e, const char* v)
 {
   djn_ComponentArgs.id = v;
   return 1;
 }
 
 static int
-HandleModel (Process** e, const char* v)
+HandleModel (FatProcess** e, const char* v)
 {
   djn_ComponentArgs.model = !!atoi (v);
   return 1;

@@ -76,13 +76,13 @@ namespace djnn
   typedef UnaryOperatorAction<DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverterAction;
   typedef UnaryOperator      <DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverter;
 
-  class Previous : public Process
+  class Previous : public FatProcess
   {
   private:
     class PreviousAction : public Action
     {
     public:
-      PreviousAction (Process* parent, const std::string& name, Previous& np, double init_val)
+      PreviousAction (FatProcess* parent, const std::string& name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
        _prev (init_val) { finalize_construction (parent, name); }
@@ -98,7 +98,7 @@ namespace djnn
       double _prev;
     };
   public:
-    Previous (Process *parent, const std::string& name, double i_val);
+    Previous (FatProcess *parent, const std::string& name, double i_val);
     virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
@@ -112,10 +112,10 @@ namespace djnn
     Coupling _coupling;
   };
 
-  class Incr : public Process
+  class Incr : public FatProcess
   {
   public:
-    Incr (Process *parent, const std::string& name, bool is_model);
+    Incr (FatProcess *parent, const std::string& name, bool is_model);
     void impl_activate () override;
     void impl_deactivate () override {}
     void post_activate () override { post_activate_auto_deactivate (); }
@@ -124,31 +124,31 @@ namespace djnn
     int init_incr (bool isModel);
     DoubleProperty _delta, _state;
   protected:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif
   };
 
-  class AdderAccumulator : public Process
+  class AdderAccumulator : public FatProcess
   {
   private:
     class AdderAccumulatorAction : public Action
     {
     public:
-      AdderAccumulatorAction (Process* parent, const std::string& name, AdderAccumulator& aa);
+      AdderAccumulatorAction (FatProcess* parent, const std::string& name, AdderAccumulator& aa);
       void impl_activate () override;
       void impl_deactivate () override {}
     private:
       AdderAccumulator& _aa;
     };
   public:
-    AdderAccumulator (Process* parent, const std::string& name, double input, double clamp_min, double clamp_max);
+    AdderAccumulator (FatProcess* parent, const std::string& name, double input, double clamp_min, double clamp_max);
     virtual ~AdderAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
   protected:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif

@@ -86,7 +86,7 @@ namespace djnn
      */
     unsigned int i = _sw->index ()->get_value ();
     if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
-      Process* next = _sw->children ()[i - 1];
+      FatProcess* next = _sw->children ()[i - 1];
       if (_sw->item () && _sw->item () != next) {
         _sw->item ()->deactivate ();
         _sw->set_item (next);
@@ -100,7 +100,7 @@ namespace djnn
    * do not add directly Property, spikes and actions into the symbol switchlist's table 
    * switchlist sympbol table should only containt branch
    */
-  SwitchList::SwitchList (Process* parent, const std::string& name, bool loop) 
+  SwitchList::SwitchList (FatProcess* parent, const std::string& name, bool loop) 
   : AbstractList (parent, name),
   _cur_item (nullptr),
   _loop (nullptr, "_loop", loop),
@@ -121,7 +121,7 @@ namespace djnn
   }
 
   void
-  SwitchList::set_parent (Process* p)
+  SwitchList::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -129,7 +129,7 @@ namespace djnn
     }
 
     add_state_dependency (p, state_dependency ());
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   SwitchList::~SwitchList ()
@@ -163,14 +163,14 @@ namespace djnn
   }
 
   void
-  SwitchList::finalize_child_insertion (Process *c)
+  SwitchList::finalize_child_insertion (FatProcess *c)
   {
     c->set_parent (this);
     _added.set_value (c, true);
     _size.set_value (_size.get_value () + 1, true);
   }
 
-  Process*
+  FatProcess*
   SwitchList::find_child (const std::string& path)
   {
     if (path.compare ("next") == 0)
@@ -185,7 +185,7 @@ namespace djnn
       return AbstractList::find_child (path);
   }
 
-  Process*
+  FatProcess*
   SwitchList::clone ()
   {
     SwitchList* clone = new SwitchList (nullptr, get_name());

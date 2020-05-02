@@ -61,7 +61,7 @@ namespace djnn {
       fprintf (stderr, "djnn warning: no GPIO\n");
   }
 
-  Process*
+  FatProcess*
   p_find_gpio (const std::string& path, direction_e dir)
   {
     try {
@@ -86,8 +86,8 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (Process *parent, const std::string& name, int pin, direction_e dir)
-   : Process (name),
+  GPIOLine::GPIOLine (FatProcess *parent, const std::string& name, int pin, direction_e dir)
+   : FatProcess (name),
    _pin (pin),
    _dir (dir),
    _iofd (nullptr),

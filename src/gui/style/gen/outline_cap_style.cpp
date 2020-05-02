@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineCapStyle::OutlineCapStyle (Process *parent, const std::string& name, int cap) :
+  OutlineCapStyle::OutlineCapStyle (FatProcess *parent, const std::string& name, int cap) :
     AbstractStyle (parent, name),
     raw_props{.cap=cap},
     _ccap (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   OutlineCapStyle::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   OutlineCapStyle::clone ()
   {
     return new OutlineCapStyle (nullptr, get_name (), raw_props.cap);

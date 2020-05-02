@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractTransformation::AbstractTransformation (Process *parent, const std::string& name) :
+  AbstractTransformation::AbstractTransformation (FatProcess *parent, const std::string& name) :
       AbstractGObj (parent, name)
   {
   }
@@ -45,7 +45,7 @@ namespace djnn
   }
 
 
-  Translation::Translation (Process *parent, const std::string& name, double tx, double ty) :
+  Translation::Translation (FatProcess *parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     finalize_construction (parent, name);
@@ -72,14 +72,14 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   Translation::clone ()
   {
     return new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
   }
 
 
-  GradientTranslation::GradientTranslation (Process *parent, const std::string& name, double tx, double ty) :
+  GradientTranslation::GradientTranslation (FatProcess *parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     /* avoid dynamic_cast for cloning */
@@ -104,14 +104,14 @@ namespace djnn
     Backend::instance ()->load_gradient_translation (this);
   }
 
-  Process*
+  FatProcess*
   GradientTranslation::clone ()
   {
     return new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
   }
 
 
-  Rotation::Rotation (Process *parent, const std::string& name, double a, double cx, double cy) :
+  Rotation::Rotation (FatProcess *parent, const std::string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     finalize_construction (parent, name);
@@ -149,14 +149,14 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   Rotation::clone ()
   {
     return new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
   }
 
 
-  GradientRotation::GradientRotation (Process *parent, const std::string& name, double a, double cx, double cy) :
+  GradientRotation::GradientRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -181,14 +181,14 @@ namespace djnn
     Backend::instance ()->load_gradient_rotation (this);
   }
 
-  Process*
+  FatProcess*
   GradientRotation::clone ()
   {
     return new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
   }
 
 
-  Scaling::Scaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
+  Scaling::Scaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     finalize_construction (parent, name);
@@ -215,14 +215,14 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   Scaling::clone ()
   {
     return new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
 
-  GradientScaling::GradientScaling (Process *parent, const std::string& name, double sx, double sy, double cx, double cy) :
+  GradientScaling::GradientScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -247,13 +247,13 @@ namespace djnn
     Backend::instance ()->load_gradient_scaling (this);
   }
 
-  Process*
+  FatProcess*
   GradientScaling::clone ()
   {
     return new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
   }
 
-  SkewX::SkewX (Process *parent, const std::string& name, double a) :
+  SkewX::SkewX (FatProcess *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     finalize_construction (parent, name);
@@ -281,14 +281,14 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   SkewX::clone ()
   {
     return new SkewX (nullptr, get_name (), raw_props.a);
   }
 
 
-  GradientSkewX::GradientSkewX (Process *parent, const std::string& name, double a) :
+  GradientSkewX::GradientSkewX (FatProcess *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -313,14 +313,14 @@ namespace djnn
     Backend::instance ()->load_gradient_skew_x (this);
   }
 
-  Process*
+  FatProcess*
   GradientSkewX::clone ()
   {
     return new GradientSkewX (nullptr, get_name (), raw_props.a);
   }
 
 
-  SkewY::SkewY (Process *parent, const std::string& name, double a) :
+  SkewY::SkewY (FatProcess *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     finalize_construction (parent, name);
@@ -348,13 +348,13 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   SkewY::clone ()
   {
     return new SkewY (nullptr, get_name (), raw_props.a);
   }
 
-  GradientSkewY::GradientSkewY (Process *parent, const std::string& name, double a) :
+  GradientSkewY::GradientSkewY (FatProcess *parent, const std::string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -379,7 +379,7 @@ namespace djnn
     Backend::instance ()->load_gradient_skew_y (this);
   }
 
-  Process*
+  FatProcess*
   GradientSkewY::clone ()
   {
     return new GradientSkewY (nullptr, get_name (), raw_props.a);
@@ -1616,7 +1616,7 @@ namespace djnn
     add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
-  AbstractHomography::AbstractHomography (Process *parent, const std::string& name, 
+  AbstractHomography::AbstractHomography (FatProcess *parent, const std::string& name, 
                                           double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
@@ -1898,10 +1898,10 @@ namespace djnn
     delete _accsy;
   }
 
-  Process*
+  FatProcess*
   AbstractHomography::find_child (const std::string& name)
   {
-    Process* res = AbstractPropHomography::find_child(name);
+    FatProcess* res = AbstractPropHomography::find_child(name);
     if(res) return res;
 
     if (name.find ("rightTranslateBy") != std::string::npos) {
@@ -2064,7 +2064,7 @@ namespace djnn
     AbstractPropHomography::impl_deactivate ();
   }
 
-  Homography::Homography (Process *parent, const std::string& name, double m11, double m12, double m13, double m14, double m21,
+  Homography::Homography (FatProcess *parent, const std::string& name, double m11, double m12, double m13, double m14, double m21,
                           double m22, double m23, double m24, double m31, double m32, double m33, double m34,
                           double m41, double m42, double m43, double m44) :
       AbstractHomography (parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
@@ -2103,7 +2103,7 @@ namespace djnn
     return nullptr;
   }
 
-  Process*
+  FatProcess*
   Homography::clone ()
   {
     return new Homography (nullptr, get_name (),
@@ -2113,7 +2113,7 @@ namespace djnn
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
   }
 
-  GradientHomography::GradientHomography (Process *parent, const std::string& name, double m11, double m12, double m13, double m21,
+  GradientHomography::GradientHomography (FatProcess *parent, const std::string& name, double m11, double m12, double m13, double m21,
                                           double m22, double m23, double m31, double m32, double m33) :
       AbstractHomography (parent, name, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
   {
@@ -2139,7 +2139,7 @@ namespace djnn
     Backend::instance ()->load_gradient_homography (this);
   }
 
-  Process*
+  FatProcess*
   GradientHomography::clone ()
   {
     return new GradientHomography ( nullptr, get_name (), 
@@ -2148,7 +2148,7 @@ namespace djnn
                                     raw_props.m31, raw_props.m32, raw_props.m33);
   }
 
-  SimpleGradientTransform::SimpleGradientTransform (Process *parent, const std::string& name, double a, double b, double c, double d,
+  SimpleGradientTransform::SimpleGradientTransform (FatProcess *parent, const std::string& name, double a, double b, double c, double d,
                                                     double e, double f) :
       AbstractHomography (parent, name, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
   {
@@ -2174,7 +2174,7 @@ namespace djnn
     Backend::instance ()->load_simple_gradient_transform (this);
   }
 
-  Process*
+  FatProcess*
   SimpleGradientTransform::clone ()
   {
     return new GradientHomography (nullptr, get_name (), 

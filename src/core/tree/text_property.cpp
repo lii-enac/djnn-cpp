@@ -36,13 +36,13 @@ namespace djnn
   }
 
   string&
-  toString(Process* p)
+  toString(FatProcess* p)
   {
       return getString (p);
   }
 
   string&
-  getString (Process* p)
+  getString (FatProcess* p)
   {
     TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
@@ -53,7 +53,7 @@ namespace djnn
   }
 
   void
-  setString (Process* p, string& v)
+  setString (FatProcess* p, string& v)
   {
     TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
@@ -116,7 +116,7 @@ namespace djnn
   }
 
   void
-  AbstractTextProperty::set_value (Process* v, bool propagate)
+  AbstractTextProperty::set_value (FatProcess* v, bool propagate)
   {
     warning(this, "undefined conversion from Component to Text");
   }
@@ -143,7 +143,7 @@ namespace djnn
   }
 #endif
 
-  Process* 
+  FatProcess* 
   TextProperty::clone ()
   {
     return new TextProperty (nullptr, get_name (), value);
@@ -163,7 +163,7 @@ namespace djnn
   }
 #endif
 
-  Process* 
+  FatProcess* 
   TextPropertyProxy::clone ()
   {
     return new TextPropertyProxy (nullptr, get_name (), value);

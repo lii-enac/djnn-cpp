@@ -55,7 +55,7 @@ namespace djnn
       return;
     //CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
-    Process *p = _window->holder ();
+    FatProcess *p = _window->holder ();
     if (p) {
 #if _DEBUG_SEE_GUI_INFO_PREF
       t1();

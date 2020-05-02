@@ -32,7 +32,7 @@ namespace djnn {
     void flip_page ();
     void flip_page_fb (uint32_t fb);
     void set_cursor (const std::string& path, int hotX, int hotY) {}
-    Process* get_vblank () {
+    FatProcess* get_vblank () {
       if (_conn == nullptr)
         return nullptr;
       else

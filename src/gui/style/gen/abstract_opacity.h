@@ -24,12 +24,12 @@ namespace djnn
   class AbstractOpacity : public AbstractStyle
   {
   public:
-    AbstractOpacity (Process *parent, const std::string& name, double a);
+    AbstractOpacity (FatProcess *parent, const std::string& name, double a);
     virtual ~AbstractOpacity ();
     
     
     void get_properties_values (double& a);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child ("a"); }
 
   protected:

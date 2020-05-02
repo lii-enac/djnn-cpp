@@ -25,7 +25,7 @@ namespace djnn
 {
   using namespace std;
 
-  Synchronizer::Init::Init(Synchronizer * s, Process *parent, const std::string& name, Process* dst, const std::string&  dspec)
+  Synchronizer::Init::Init(Synchronizer * s, FatProcess *parent, const std::string& name, FatProcess* dst, const std::string&  dspec)
   {
     if (dst == nullptr) {
       error (s, "dst argument cannot be null in synchronizer creation (" + s->get_name () + ", " + dspec + ")");
@@ -38,9 +38,9 @@ namespace djnn
     }
   }
 
-  Synchronizer::Synchronizer (Process *parent, const std::string& name, Process* dst, const std::string&  dspec)
+  Synchronizer::Synchronizer (FatProcess *parent, const std::string& name, FatProcess* dst, const std::string&  dspec)
   :
-    Process (name),
+    FatProcess (name),
     _dst(nullptr),
     _init (this, parent, name, dst, dspec),
     _action (this, "synchronizer_" + _dst->get_name () + "_action")
@@ -82,19 +82,19 @@ namespace djnn
   }
 
   void 
-  Synchronizer::add_native_edge (Process *src, Process* dst)
+  Synchronizer::add_native_edge (FatProcess *src, FatProcess* dst)
   {
     _action.add_native_edge (src, dst);
   }
 
   void
-  Synchronizer::add_source (Process *src, const std::string& ispec)
+  Synchronizer::add_source (FatProcess *src, const std::string& ispec)
   {
     if (src == nullptr) {
       error (this,
              "src argument cannot be null in source addition to synchronizer (" + get_name () + ", " + ispec + ")");
     }
-    Process* _src = src->find_child (ispec);
+    FatProcess* _src = src->find_child (ispec);
     Coupling *cpl = new Coupling (_src, ACTIVATION, &_action, ACTIVATION);
     /* 
       if the synchronizer is already activated => cpl->enable (by default)

@@ -19,7 +19,7 @@
 namespace djnn {
 
 	extern std::vector<std::string> loadedModules;
-	extern Process *InputDevices, *Mice, *TouchPanels, *GPIOs;
+	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
  	
  	void init_input ();
   

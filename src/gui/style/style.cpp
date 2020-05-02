@@ -26,7 +26,7 @@
 namespace djnn
 {
 
-  AbstractStyle::AbstractStyle (Process *parent, const std::string& name) :
+  AbstractStyle::AbstractStyle (FatProcess *parent, const std::string& name) :
       AbstractGObj (parent, name)
   {
   }
@@ -44,7 +44,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FillColor::clone ()
   {
     return new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   OutlineColor::clone ()
   {
     return new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
@@ -74,7 +74,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   NoOutline::clone ()
   {
     return new NoOutline (nullptr, get_name ());
@@ -89,7 +89,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   NoFill::clone ()
   {
     return new NoFill (nullptr, get_name ());
@@ -104,7 +104,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   OutlineOpacity::clone ()
   {
     return new OutlineOpacity (nullptr, get_name (), raw_props.a);
@@ -119,7 +119,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FillOpacity::clone ()
   {
     return new FillOpacity (nullptr, get_name (), raw_props.a);
@@ -134,7 +134,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   DashArray::clone ()
   {
     DashArray* newda = new DashArray (nullptr, get_name ());
@@ -155,13 +155,13 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   NoDashArray::clone ()
   {
     return new NoDashArray (nullptr, get_name ());
   }
 
-  GradientStop::GradientStop (Process *parent, const std::string& name, double r, double g, double b, double a, double offset) :
+  GradientStop::GradientStop (FatProcess *parent, const std::string& name, double r, double g, double b, double a, double offset) :
       AbstractPropGradientStop (parent, name, r, g, b, a, offset)
   {
     /* avoid dynamic_cast for cloning */
@@ -180,7 +180,7 @@ namespace djnn
   {
   }
 
-  Process*
+  FatProcess*
   GradientStop::clone ()
   {
     return new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
@@ -192,7 +192,7 @@ namespace djnn
     Backend::instance ()->load_gradient_stop (this);
   }
 
-  AbstractGradient::AbstractGradient (Process *parent, const std::string& name, int spread, int coords) :
+  AbstractGradient::AbstractGradient (FatProcess *parent, const std::string& name, int spread, int coords) :
       AbstractPropGradient (parent, name, spread, coords),
       _g (nullptr), _linear (false)
   {
@@ -206,7 +206,7 @@ namespace djnn
     delete _stops;
   }
 
-  LinearGradient::LinearGradient (Process *parent, const std::string& name, double x1, double y1, double x2, double y2,
+  LinearGradient::LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2,
 				  djnFillSpread s, djnFillCoords fc) :
       AbstractPropLinearGradient (parent, name, x1, y1, x2, y2, s, fc)
   {
@@ -214,7 +214,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  LinearGradient::LinearGradient (Process *parent, const std::string& name, double x1, double y1, double x2, double y2, int s,
+  LinearGradient::LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2, int s,
 				  int fc) :
       AbstractPropLinearGradient (parent, name, x1, y1, x2, y2, s, fc)
   {
@@ -222,7 +222,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Process*
+  FatProcess*
   LinearGradient::clone ()
   {
     LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
@@ -249,7 +249,7 @@ namespace djnn
     }
   }
 
-  RefLinearGradient::RefLinearGradient (Process *parent, const std::string& name, LinearGradient *lg) :
+  RefLinearGradient::RefLinearGradient (FatProcess *parent, const std::string& name, LinearGradient *lg) :
       AbstractStyle (parent, name), _lg (lg)
   {
     activate_children ();
@@ -291,20 +291,20 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   RefLinearGradient::clone ()
   {
     return new RefLinearGradient (nullptr, get_name (), _lg);
   }
 
-  RadialGradient::RadialGradient (Process *parent, const std::string& name, double cx, double cy, double r, double fx,
+  RadialGradient::RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx,
 				  double fy, djnFillSpread s, djnFillCoords fc) :
       AbstractPropRadialGradient (parent, name, cx, cy, r, fx, fy, s, fc)
   {
     finalize_construction (parent, name);
   }
 
-  RadialGradient::RadialGradient (Process *parent, const std::string& name, double cx, double cy, double r, double fx,
+  RadialGradient::RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx,
 				  double fy, int s, int fc) :
       AbstractPropRadialGradient (parent, name, cx, cy, r, fx, fy, s, fc)
   {
@@ -313,7 +313,7 @@ namespace djnn
 
   RadialGradient::~RadialGradient () {}
 
-  Process*
+  FatProcess*
   RadialGradient::clone ()
   {
     RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
@@ -336,7 +336,7 @@ namespace djnn
     }
   }
 
-  RefRadialGradient::RefRadialGradient (Process *parent, const std::string& name, RadialGradient *rg) :
+  RefRadialGradient::RefRadialGradient (FatProcess *parent, const std::string& name, RadialGradient *rg) :
       AbstractStyle (parent, name), _rg (rg)
   {
     activate_children ();
@@ -378,7 +378,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   RefRadialGradient::clone ()
   {
     return new RefRadialGradient (nullptr, get_name (), _rg);
@@ -397,13 +397,13 @@ namespace djnn
      }
   }
 
-  FontSize::FontSize (Process *parent, const std::string& name, djnLengthUnit unit, double size) :
+  FontSize::FontSize (FatProcess *parent, const std::string& name, djnLengthUnit unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
     finalize_construction (parent, name);
   }
 
-  FontSize::FontSize (Process *parent, const std::string& name, int unit, double size) :
+  FontSize::FontSize (FatProcess *parent, const std::string& name, int unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
     finalize_construction (parent, name);
@@ -429,13 +429,13 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FontSize::clone ()
   {
     return new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
   }
 
-  FontWeight::FontWeight (Process* parent, const std::string& name, int weight) :
+  FontWeight::FontWeight (FatProcess* parent, const std::string& name, int weight) :
       AbstractPropFontWeight (parent, name, weight) 
   {
     finalize_construction (parent, name);
@@ -459,19 +459,19 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FontWeight::clone ()
   {
     return new FontWeight (nullptr, get_name (), raw_props.weight);
   }
 
-  FontStyle::FontStyle (Process* parent, const std::string& name, djnFontSlope style) :
+  FontStyle::FontStyle (FatProcess* parent, const std::string& name, djnFontSlope style) :
       AbstractPropFontStyle (parent, name, style)
   {
     finalize_construction (parent, name);
   }
 
-  FontStyle::FontStyle (Process* parent, const std::string& name, int style) :
+  FontStyle::FontStyle (FatProcess* parent, const std::string& name, int style) :
       AbstractPropFontStyle (parent, name, style)
   {
     finalize_construction (parent, name);
@@ -495,13 +495,13 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FontStyle::clone ()
   {
     return new FontStyle (nullptr, get_name (), raw_props.style);
   }
 
-  FontFamily::FontFamily (Process* parent, const std::string& name, const std::string& family) :
+  FontFamily::FontFamily (FatProcess* parent, const std::string& name, const std::string& family) :
       AbstractPropFontFamily (parent, name, family)
   {
     finalize_construction (parent, name);
@@ -525,7 +525,7 @@ namespace djnn
     }
   }
 
-  Process*
+  FatProcess*
   FontFamily::clone ()
   {
     return new FontFamily (nullptr, get_name (), raw_props.family);

@@ -35,7 +35,7 @@ namespace djnn {
     MyQWidget* qwidget() { return _qwidget; }
 
   protected:
-    /* Process */
+    /* FatProcess */
     void impl_activate () override;
     void impl_deactivate () override;
 

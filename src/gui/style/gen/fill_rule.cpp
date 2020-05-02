@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  FillRule::FillRule (Process *parent, const std::string& name, int rule) :
+  FillRule::FillRule (FatProcess *parent, const std::string& name, int rule) :
     AbstractStyle (parent, name),
     raw_props{.rule=rule},
     _crule (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   FillRule::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   FillRule::clone ()
   {
     return new FillRule (nullptr, get_name (), raw_props.rule);

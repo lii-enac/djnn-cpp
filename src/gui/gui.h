@@ -22,14 +22,14 @@
 
 namespace djnn {
 
-  class Process;
+  class FatProcess;
 
   extern std::vector<std::string> loadedModules;
   // extern int mouse_tracking;
   // extern int full_screen;
   // extern int hide_pointer;
-  extern Process* DrawingRefreshManager;
-  extern Process* GenericMouse;
+  extern FatProcess* DrawingRefreshManager;
+  extern FatProcess* GenericMouse;
 
   void init_gui ();
   void init_svg_parser ();

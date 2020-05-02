@@ -25,11 +25,11 @@ using namespace std;
 
 namespace djnn {
 
-static int djn__ParseX (Process**, const char*);
-static int djn__ParseY (Process**, const char*);
-static int djn__ParseWidth (Process**, const char*);
-static int djn__ParseHeight (Process**, const char*);
-static int djn__ParseHref (Process**, const char*);
+static int djn__ParseX (FatProcess**, const char*);
+static int djn__ParseY (FatProcess**, const char*);
+static int djn__ParseWidth (FatProcess**, const char*);
+static int djn__ParseHeight (FatProcess**, const char*);
+static int djn__ParseHref (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"x", {&djn__ParseX}},
@@ -53,23 +53,23 @@ XMLUseAttrs_Hash::djn_XMLUseAttrsLookup (const char *str, unsigned int len)
 
 struct djn_UseArgs djn_UseArgs = {0., 0., 0., 0., ""};
 
-static int djn__ParseX(Process** e, const char* v) {
+static int djn__ParseX(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_UseArgs.x, v);
 }
 
-static int djn__ParseY(Process** e, const char* v) {
+static int djn__ParseY(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_UseArgs.y, v);
 }
 
-static int djn__ParseWidth(Process** e, const char* v) {
+static int djn__ParseWidth(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_UseArgs.width, v);
 }
 
-static int djn__ParseHeight(Process** e, const char* v) {
+static int djn__ParseHeight(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_UseArgs.height, v);
 }
 
-static int djn__ParseHref(Process** e, const char* v) {
+static int djn__ParseHref(FatProcess** e, const char* v) {
   // remove possible quotes
   string str(v);
   str.erase (std::remove(str.begin(), str.end(), '\''), str.end());

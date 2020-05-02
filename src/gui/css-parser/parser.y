@@ -52,7 +52,7 @@
   using namespace djnn;
 
   std::string cur_property;
-  Process *cur_parent;
+  FatProcess *cur_parent;
 
   void
   make_text_property (std::string property, std::string arg)

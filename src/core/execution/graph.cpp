@@ -191,7 +191,7 @@ namespace djnn
   Vertex::print_vertex () const
   {
 #ifndef DJNN_NO_DEBUG
-    auto * pp = dynamic_cast<Process*>(_process);
+    auto * pp = dynamic_cast<FatProcess*>(_process);
     std::cout << "vertex (" <<
     ( pp->get_parent () ? pp->get_parent ()->get_name () + "/" : "") <<
     pp->get_name () << ") - [" << 
@@ -202,7 +202,7 @@ namespace djnn
     else {
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
-         auto * ppe = dynamic_cast<Process*>(e->_process);
+         auto * ppe = dynamic_cast<FatProcess*>(e->_process);
          if(ppe) std::cout << ( ppe->get_parent () ?  ppe->get_parent ()->get_name () + "/" : "" ) << ppe->get_name () << " [x"
          << result->second << "] \t" ;
       }
@@ -332,15 +332,15 @@ namespace djnn
        this code is to prevent bugs 
        this should NEVER happen
        vertex should NOT be nullptr at this place
-       if not, something (Process or edge dependency) IS NOT well deleted
+       if not, something (FatProcess or edge dependency) IS NOT well deleted
     */
     if (vs == nullptr || vd == nullptr) {
 
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
 
 #ifndef DJNN_NO_DEBUG
-      auto * ppsrc = dynamic_cast<Process*>(p_src); 
-      auto * ppdst = dynamic_cast<Process*>(p_dst);
+      auto * ppsrc = dynamic_cast<FatProcess*>(p_src); 
+      auto * ppdst = dynamic_cast<FatProcess*>(p_dst);
       std::cerr << "Graph remove_edge: " << boost::core::demangle(typeid(*p_src).name()) + ":" + 
       (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << boost::core::demangle(typeid(*p_dst).name()) + ":" +
       (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
@@ -390,7 +390,7 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     for (auto v : _sorted_vertices) {
-      auto * pp = dynamic_cast<Process*>(v->get_process ());
+      auto * pp = dynamic_cast<FatProcess*>(v->get_process ());
       if (pp && pp->get_parent())
         cerr << pp->get_parent()->get_name () << "/";
       cerr << pp->get_name () << " (" << v->get_timestamp () << ")\n";

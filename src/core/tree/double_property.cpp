@@ -28,7 +28,7 @@ namespace djnn
   using namespace std;
 
   double
-  getDouble (Process* p)
+  getDouble (FatProcess* p)
   {
     DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
@@ -39,7 +39,7 @@ namespace djnn
   }
 
   void
-  setDouble (Process* p, double v)
+  setDouble (FatProcess* p, double v)
   {
     DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
@@ -85,7 +85,7 @@ namespace djnn
   }
 
   void
-  AbstractDoubleProperty::set_value (Process* v, bool propagate)
+  AbstractDoubleProperty::set_value (FatProcess* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Double\n");
   }
@@ -125,13 +125,13 @@ namespace djnn
   }
 #endif
 
-  Process*
+  FatProcess*
   DoubleProperty::clone ()
   {
     return new DoubleProperty (nullptr, get_name (), get_value());
   }
 
-  Process*
+  FatProcess*
   DoublePropertyProxy::clone ()
   {
     return new DoublePropertyProxy (nullptr, get_name (), get_ref_value());

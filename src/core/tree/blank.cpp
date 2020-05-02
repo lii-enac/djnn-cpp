@@ -33,7 +33,7 @@ namespace djnn
   }
 #endif
 
-  Process* 
+  FatProcess* 
   Blank::clone () 
   {
   	return new Blank (nullptr, get_name ());

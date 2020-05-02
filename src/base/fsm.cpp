@@ -24,7 +24,7 @@ namespace djnn
 {
   using std::string;
 
-  FSMState::FSMState (Process *parent, const std::string& name) :
+  FSMState::FSMState (FatProcess *parent, const std::string& name) :
       Container (parent, name)
   {
     FSM *fsm = dynamic_cast<FSM*> (parent);
@@ -97,7 +97,7 @@ namespace djnn
   }
 #endif
 
-  FSMTransition::Init::Init (FSMTransition* t, Process* p, 
+  FSMTransition::Init::Init (FSMTransition* t, FatProcess* p, 
                             const std::string& tspec, const std::string& aspec) 
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
@@ -120,14 +120,14 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (Process *parent, const std::string& name, Process* from, Process* to,
-                                Process *trigger, const std::string& tspec, Process *action,
+  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
+                                FatProcess *trigger, const std::string& tspec, FatProcess *action,
                                 const std::string& aspec) 
-  : Process (name),
+  : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger( trigger ? dynamic_cast<Process*>(trigger->find_child (tspec)) : nullptr),
-  _action( action ? dynamic_cast<Process*>(action->find_child (aspec)) : nullptr),
+  _trigger( trigger ? dynamic_cast<FatProcess*>(trigger->find_child (tspec)) : nullptr),
+  _action( action ? dynamic_cast<FatProcess*>(action->find_child (aspec)) : nullptr),
   _init(this, parent, tspec, aspec),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
@@ -141,9 +141,9 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (Process *parent, const std::string& name, Process* from, Process* to,
-                                Process *trigger, Process *action) 
-  : Process (name),
+  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, FatProcess* from, FatProcess* to,
+                                FatProcess *trigger, FatProcess *action) 
+  : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger (trigger),
@@ -222,8 +222,8 @@ namespace djnn
   }
 #endif
 
-  FSM::FSM (Process *parent, const std::string& name) 
-  : Process (name), 
+  FSM::FSM (FatProcess *parent, const std::string& name) 
+  : FatProcess (name), 
   _priority (0),
   _cur_state (nullptr),
   _fsm_state (this, "state", ""),
@@ -252,7 +252,7 @@ namespace djnn
   }
 
   void
-  FSM::set_parent (Process* p)
+  FSM::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -260,7 +260,7 @@ namespace djnn
     }
 
     add_state_dependency (p, state_dependency ());
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

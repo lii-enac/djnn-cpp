@@ -24,12 +24,12 @@ namespace djnn
   class Texture : public AbstractStyle
   {
   public:
-    Texture (Process *parent, const std::string& name, const std::string& path);
+    Texture (FatProcess *parent, const std::string& name, const std::string& path);
     virtual ~Texture ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
     void get_properties_values (std::string& path);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child ("path"); }
 
   protected:

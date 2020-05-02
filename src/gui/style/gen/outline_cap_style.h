@@ -24,12 +24,12 @@ namespace djnn
   class OutlineCapStyle : public AbstractStyle
   {
   public:
-    OutlineCapStyle (Process *parent, const std::string& name, int cap);
+    OutlineCapStyle (FatProcess *parent, const std::string& name, int cap);
     virtual ~OutlineCapStyle ();
     void draw () override;
-    Process* clone () override;
+    FatProcess* clone () override;
     void get_properties_values (int& cap);
-    virtual Process* find_child (const std::string&) override;
+    virtual FatProcess* find_child (const std::string&) override;
 		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child ("cap"); }
 
   protected:

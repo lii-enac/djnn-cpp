@@ -31,36 +31,36 @@ namespace djnn {
    class AssignmentAction : public Action
    {
    public:
-    AssignmentAction (Process* parent, const std::string& name, Process** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
+    AssignmentAction (FatProcess* parent, const std::string& name, FatProcess** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void impl_deactivate () override {}
-    void set_src (Process** src) { _src = src; }
+    void set_src (FatProcess** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
    private:
-    Process** _src;
+    FatProcess** _src;
     AbstractProperty** _dst;
     bool _propagate;
   };
     
   public:
-    AbstractAssignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel,
+    AbstractAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
       const std::string src_ref_spec = std::string(), const std::string dst_ref_spec = std::string()); // hack to create temporary const std::string objects for init of refs
     virtual ~AbstractAssignment ();
     //void update_graph () override;
-    static void do_assignment (Process* src, AbstractProperty* dst, bool propagate);
+    static void do_assignment (FatProcess* src, AbstractProperty* dst, bool propagate);
   
   protected:
-    void set_parent (Process* p) override;
+    void set_parent (FatProcess* p) override;
 
-    struct Init { Init(AbstractAssignment *, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec,
+    struct Init { Init(AbstractAssignment *, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec,
       const std::string src_ref_spec, const std::string dst_ref_spec); };
     friend struct Init;
     void check_init(const std::string& ispec, const std::string& dspec);
 
     ref_info _ref_info_src, _ref_info_dst;
     Init _init; // will be "created" third
-    Process* _src;
+    FatProcess* _src;
     AbstractProperty* _dst;
     ref_update _ref_update_src, _ref_update_dst;
     
@@ -71,8 +71,8 @@ namespace djnn {
   private:
     void init_Assignment ();
   public:
-    Assignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
-    Assignment (Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
+    Assignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
+    Assignment (FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { post_activate_auto_deactivate (); }
     void impl_deactivate () override {}
@@ -92,8 +92,8 @@ namespace djnn {
   private:
     void init_PausedAssignment ();
   public:
-    PausedAssignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
-    PausedAssignment (Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
+    PausedAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
+    PausedAssignment (FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { post_activate_auto_deactivate (); }
     void impl_deactivate () override {}

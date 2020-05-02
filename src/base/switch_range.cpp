@@ -21,7 +21,7 @@ namespace djnn
 {
   using namespace std;
 
-  SwitchRangeBranch::SwitchRangeBranch (Process *parent, const std::string& name, double lower, bool left_open, double upper,
+  SwitchRangeBranch::SwitchRangeBranch (FatProcess *parent, const std::string& name, double lower, bool left_open, double upper,
                                         bool right_open) 
   : Container (parent, name),
   _left_open (left_open),
@@ -77,7 +77,7 @@ namespace djnn
   /* note:
    * added _branch_range to symTable but not in _children 
    */
-  SwitchRange::SwitchRange (Process *parent, const std::string& name, double initial) 
+  SwitchRange::SwitchRange (FatProcess *parent, const std::string& name, double initial) 
   : Container (parent, name),
   _initial (initial),
   _input (nullptr, "input", initial),
@@ -110,7 +110,7 @@ namespace djnn
   }
 
   void
-  SwitchRange::set_parent (Process* p)
+  SwitchRange::set_parent (FatProcess* p)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -118,7 +118,7 @@ namespace djnn
     }
 
     add_state_dependency (p, state_dependency ());
-    Process::set_parent (p); 
+    FatProcess::set_parent (p); 
   }
 
   void

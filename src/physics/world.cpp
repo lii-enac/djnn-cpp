@@ -38,8 +38,8 @@ namespace djnn
     }
   }
 
-  World::World (Process *parent, const std::string& name, double x, double y, double z) :
-      Process (name), raw_props
+  World::World (FatProcess *parent, const std::string& name, double x, double y, double z) :
+      FatProcess (name), raw_props
         { .x = x, .y = y, .z = z, .dt = 0.016 }, _dt (nullptr)
 
   {
@@ -67,10 +67,10 @@ namespace djnn
     delete _dt;
   }
 
-  Process*
+  FatProcess*
   World::find_child (const std::string& n)
   {
-    Process* res = Process::find_child (n);
+    FatProcess* res = FatProcess::find_child (n);
     if (res)
       return res;
     if (n == "dt") {
@@ -105,8 +105,8 @@ namespace djnn
     y = raw_props.y;
   }
 
-  /* static Process*
-   create_double_prop (Process *p, DoublePropertyProxy **prop, Coupling **cprop, Process *dest, double *rawp,
+  /* static FatProcess*
+   create_double_prop (FatProcess *p, DoublePropertyProxy **prop, Coupling **cprop, FatProcess *dest, double *rawp,
    const std::string& name)
    {
    *prop = new DoublePropertyProxy (p, name, *rawp, notify_none);
@@ -119,8 +119,8 @@ namespace djnn
    }
    */
 
-  PhyObj::PhyObj (Process *parent, const std::string& name, double x, double y, double z, double mass) :
-      Process (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
+  PhyObj::PhyObj (FatProcess *parent, const std::string& name, double x, double y, double z, double mass) :
+      FatProcess (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
           nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr), _cx (
           nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _update_from_engine (
           false), raw_props
@@ -184,8 +184,8 @@ namespace djnn
       if (_world)
         _world->remove_phy_object (this);
       bool found = false;
-      Process *cur_parent = get_parent ();
-      Process *cur_child = this;
+      FatProcess *cur_parent = get_parent ();
+      FatProcess *cur_child = this;
       while (!found && cur_parent != nullptr) {
         if (cur_parent->get_process_type () == CONTAINER_T) {
           Container *cont = dynamic_cast<Container*> (cur_parent);
@@ -213,10 +213,10 @@ namespace djnn
     PhysicsBackend::instance ()->enable_physical_object (this);
   }
 
-  Process*
+  FatProcess*
   PhyObj::find_child (const std::string& n)
   {
-    Process *res = Process::find_child (n);
+    FatProcess *res = FatProcess::find_child (n);
     if (res)
       return res;
     if (n == "x") {
@@ -336,7 +336,7 @@ namespace djnn
     _update_from_engine = false;
   }
 
-  Plane::Plane (Process *parent, const std::string& name, double a, double b, double c, double d) :
+  Plane::Plane (FatProcess *parent, const std::string& name, double a, double b, double c, double d) :
       PhyObj (parent, name, 0, 0, 0, 0), _plane_props
         { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
@@ -351,10 +351,10 @@ namespace djnn
     delete _d;
   }
 
-  Process*
+  FatProcess*
   Plane::find_child (const std::string& n)
   {
-    Process *res = PhyObj::find_child (n);
+    FatProcess *res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "a") {
@@ -391,7 +391,7 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (Process *parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
+  Box::Box (FatProcess *parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
       PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
     finalize_construction (parent, name);
@@ -418,10 +418,10 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_body (this);
   }
 
-  Process*
+  FatProcess*
   Box::find_child (const std::string& n)
   {
-    Process* res = PhyObj::find_child (n);
+    FatProcess* res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "width") {
@@ -438,7 +438,7 @@ namespace djnn
     return res;
   }
 
-  Sphere::Sphere (Process *parent, const std::string& name, double x, double y, double z, double radius, double mass) :
+  Sphere::Sphere (FatProcess *parent, const std::string& name, double x, double y, double z, double radius, double mass) :
       PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
     finalize_construction (parent, name);
@@ -463,10 +463,10 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_body (this);
   }
 
-  Process*
+  FatProcess*
   Sphere::find_child (const std::string& n)
   {
-    Process* res = PhyObj::find_child (n);
+    FatProcess* res = PhyObj::find_child (n);
     if (res)
       return res;
     if (n == "r") {

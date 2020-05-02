@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineMiterLimit::OutlineMiterLimit (Process *parent, const std::string& name, int limit) :
+  OutlineMiterLimit::OutlineMiterLimit (FatProcess *parent, const std::string& name, int limit) :
     AbstractStyle (parent, name),
     raw_props{.limit=limit},
     _climit (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   OutlineMiterLimit::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
@@ -130,7 +130,7 @@ namespace djnn
 
 
   
-  Process*
+  FatProcess*
   OutlineMiterLimit::clone ()
   {
     return new OutlineMiterLimit (nullptr, get_name (), raw_props.limit);

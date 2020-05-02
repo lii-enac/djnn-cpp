@@ -25,7 +25,7 @@ char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size);
 
 namespace djnn {
 
-	Sample::Sample(Process* parent, const std::string& name, const std::string& path)
+	Sample::Sample(FatProcess* parent, const std::string& name, const std::string& path)
 	: Sound(parent, name),
 	_end (this, "end")
 	{
@@ -62,7 +62,7 @@ namespace djnn {
 	    alDeleteBuffers(1, &bufferid); CHKAL;
 	}
 
-	// Process
+	// FatProcess
 	void
 	Sample::impl_activate ()
 	{

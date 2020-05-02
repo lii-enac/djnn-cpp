@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Defs::Defs (Process* parent, const std::string& n) :
+  Defs::Defs (FatProcess* parent, const std::string& n) :
       Container (parent, n)
   {
     finalize_construction (parent, n);
@@ -46,7 +46,7 @@ namespace djnn
     // No deactivation propagation;
   }
 
-  Process* 
+  FatProcess* 
   Defs::clone ()
   {
     Defs* newd = new Defs (nullptr, get_name ());

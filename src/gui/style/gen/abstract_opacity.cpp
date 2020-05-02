@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractOpacity::AbstractOpacity (Process *parent, const std::string& name, double a) :
+  AbstractOpacity::AbstractOpacity (FatProcess *parent, const std::string& name, double a) :
     AbstractStyle (parent, name),
     raw_props{.a=a},
     _ca (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractOpacity::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

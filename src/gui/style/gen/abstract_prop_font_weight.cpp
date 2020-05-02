@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropFontWeight::AbstractPropFontWeight (Process *parent, const std::string& name, int weight) :
+  AbstractPropFontWeight::AbstractPropFontWeight (FatProcess *parent, const std::string& name, int weight) :
     AbstractStyle (parent, name),
     raw_props{.weight=weight},
     _cweight (nullptr)
@@ -58,10 +58,10 @@ namespace djnn
     }
   }
  
-  Process*
+  FatProcess*
   AbstractPropFontWeight::find_child (const std::string& name)
   {
-    Process* res = AbstractStyle::find_child(name);
+    FatProcess* res = AbstractStyle::find_child(name);
     if(res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;

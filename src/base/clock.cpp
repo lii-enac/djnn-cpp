@@ -24,14 +24,14 @@
 namespace djnn
 {
 
-  Clock::Clock (Process *parent, const std::string& name, std::chrono::milliseconds period)
+  Clock::Clock (FatProcess *parent, const std::string& name, std::chrono::milliseconds period)
   : Clock(parent, name, period.count ())
   {
   }
 
-  Clock::Clock (Process *parent, const std::string& name, int period)
+  Clock::Clock (FatProcess *parent, const std::string& name, int period)
   :
-    Process (name),
+    FatProcess (name),
     _period (this, "period", period),
     _elapsed (this, "elapsed", 0),
     _tick (this, "tick"),
@@ -43,7 +43,7 @@ namespace djnn
 
 
 #if DJNN_USE_BOOST_CHRONO
-  Clock::Clock (Process* parent, const std::string& name, boost::chrono::milliseconds period)
+  Clock::Clock (FatProcess* parent, const std::string& name, boost::chrono::milliseconds period)
   : Clock(parent, name, period.count())
   {
   }
@@ -52,7 +52,7 @@ namespace djnn
   {
   }
 
-  // Process
+  // FatProcess
   void
   Clock::impl_activate ()
   {

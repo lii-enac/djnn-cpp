@@ -39,18 +39,18 @@ namespace djnn {
     uint32_t fb;
   } buff;
 
-  class DRMConnector : public Process {
+  class DRMConnector : public FatProcess {
     private:
     class UpdatePosAction : public Action
     {
     public:
-      UpdatePosAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      UpdatePosAction (FatProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdatePosAction () {}
       void impl_activate () { ((DRMConnector*) get_parent())->update_pos (); }
       void impl_deactivate () {}
     };
   public:
-    DRMConnector (Process *p, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
+    DRMConnector (FatProcess *p, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
@@ -66,7 +66,7 @@ namespace djnn {
     int init_connection_crtc(uint32_t fb);
     bool is_waiting_for_vblank () const { return _waiting_vblank; }
     bool is_connected () { return _connected.get_value (); }
-    Process* get_vblank () { return &_vblank; }
+    FatProcess* get_vblank () { return &_vblank; }
     buff* get_next_buff ();
     int get_fd () { return _fd; }
     int get_cur_buff_id () { return _cur_buff; }
@@ -93,17 +93,17 @@ namespace djnn {
 
   extern  std::vector<DRMConnector*> conn_list;
 
-  class DRMDevice : public Process {
+  class DRMDevice : public FatProcess {
     class VBlankAction : public Action
     {
     public:
-      VBlankAction (Process* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      VBlankAction (FatProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
       void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
       void impl_deactivate () {}
     };
   public:
-    DRMDevice (Process *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (FatProcess *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}

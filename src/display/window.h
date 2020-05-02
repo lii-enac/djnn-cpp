@@ -44,19 +44,19 @@ namespace djnn
     Picking *_picking_view;
   };
 
-  class Window : public Process
+  class Window : public FatProcess
   {
-    class UndelayedSpike : public Process
+    class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (Window *parent, const std::string& name)  : Process (name) { set_is_model (true); finalize_construction (parent, name); }
+        UndelayedSpike (Window *parent, const std::string& name)  : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { set_activation_state (DEACTIVATED); }
         void impl_activate () override;
         void impl_deactivate () override {};
     };
   public:
-    Window (Process *parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
+    Window (FatProcess *parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 
@@ -73,7 +73,7 @@ namespace djnn
     TextProperty* key_released_text () { return _key_released_text; }
     DoubleProperty* hidpi_scale () { return _hidpi_scale; }
     DoubleProperty* mspf () { return _mspf; }
-    Process* close () { return _close; }
+    FatProcess* close () { return _close; }
     WinImpl* win_impl () { return _win_impl; }
     void set_refresh (bool r) { _refresh = r; }
     bool refresh () { return _refresh; }
@@ -82,26 +82,26 @@ namespace djnn
     void impl_deactivate () override;
     Picking* picking_view () { return _win_impl->picking_view ();}
     void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
-    Process* press () { return _press; }
-    Process* move () { return _move; }
-    Process* release () { return _release; }
-    Process* wheel () { return _wheel; }
-    Process* touches () { return _touches; }
+    FatProcess* press () { return _press; }
+    FatProcess* move () { return _move; }
+    FatProcess* release () { return _release; }
+    FatProcess* wheel () { return _wheel; }
+    FatProcess* touches () { return _touches; }
     DoubleProperty* press_x () { return _press_x; }
     DoubleProperty* press_y () { return _press_y; }
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
-    Process* get_display () { return _display->get_value (); }
-    void init_display (Process *conn) { _display->set_value (conn, false); }
+    FatProcess* get_display () { return _display->get_value (); }
+    void init_display (FatProcess *conn) { _display->set_value (conn, false); }
     void set_frame ();
-    Process* damaged () { return _damaged; }
-    Process* holder () { return _holder; }
-    void set_holder (Process *p) { _holder = p; }
+    FatProcess* damaged () { return _damaged; }
+    FatProcess* holder () { return _holder; }
+    void set_holder (FatProcess *p) { _holder = p; }
     void set_cursor (const std::string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
-    void set_frame_to_component (Process* c);
+    void set_frame_to_component (FatProcess* c);
     DoubleProperty* _pos_x;
     DoubleProperty* _pos_y;
     DoubleProperty* _w_dx, *_w_dy;
@@ -111,15 +111,15 @@ namespace djnn
     DoubleProperty* _hidpi_scale;
     DoubleProperty* _mspf;
     RefProperty *_display;
-    Process *_close;
-    Process* _press;
-    Process* _move;
-    Process* _release;
-    Process* _wheel;
-    Process* _left_button;
-    Process* _right_button;
-    Process* _middle_button;
-    Process* _touches;
+    FatProcess *_close;
+    FatProcess* _press;
+    FatProcess* _move;
+    FatProcess* _release;
+    FatProcess* _wheel;
+    FatProcess* _left_button;
+    FatProcess* _right_button;
+    FatProcess* _middle_button;
+    FatProcess* _touches;
     DoubleProperty *_press_x;
     DoubleProperty *_press_y;
     DoubleProperty *_move_x;
@@ -133,25 +133,25 @@ namespace djnn
     //CouplingWithData2 *_c_damaged_update_drawing_damaged;
     Coupling *_c_damaged_update_drawing_damaged;
     bool _refresh;
-    Process* _holder;
+    FatProcess* _holder;
   };
 
-   class Cursor : public Process {
+   class Cursor : public FatProcess {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      UpdateCursorAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };
    public:
-    Cursor (Process *parent, const std::string& name, const std::string& path, int hotX, int hotY);
+    Cursor (FatProcess *parent, const std::string& name, const std::string& path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
-    Process* find_child (const std::string& n) override;
+    FatProcess* find_child (const std::string& n) override;
    private:
     struct raw_props_t { int hot_x; int hot_y; std::string path; };
     raw_props_t raw_props;

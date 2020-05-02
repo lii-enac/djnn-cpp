@@ -51,7 +51,7 @@ namespace djnn
   }
 #endif
 
-  Process* 
+  FatProcess* 
   Spike::clone ()
   {
     return new Spike (nullptr, get_name ());

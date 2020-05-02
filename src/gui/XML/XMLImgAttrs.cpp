@@ -22,11 +22,11 @@
 
 namespace djnn {
 
-static int ParseX (Process**, const char*);
-static int ParseY (Process**, const char*);
-static int ParseWidth (Process**, const char*);
-static int ParseHeight (Process**, const char*);
-static int ParseHref (Process**, const char*);
+static int ParseX (FatProcess**, const char*);
+static int ParseY (FatProcess**, const char*);
+static int ParseWidth (FatProcess**, const char*);
+static int ParseHeight (FatProcess**, const char*);
+static int ParseHref (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {
   {"x",{&ParseX}},
@@ -49,19 +49,19 @@ XMLImgAttrs_Hash::djn_XMLImgAttrsLookup (const char *str, unsigned int len)
 
 struct djn_ImgArgs djn_ImgArgs = {0., 0., 0., 0., 0, std::string("")};
 
-static int ParseX(Process** e, const char* v) {
+static int ParseX(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.x, v);
 }
 
-static int ParseY(Process** e, const char* v) {
+static int ParseY(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.y, v);
 }
 
-static int ParseWidth(Process** e, const char* v) {
+static int ParseWidth(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.w, v);
 }
 
-static int ParseHeight(Process** e, const char* v) {
+static int ParseHeight(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.h, v);
 }
 
@@ -109,7 +109,7 @@ b64decode(const void* p, const size_t len)
   return str;
 }
 
-static int ParseHref(Process** e, const char* v) {
+static int ParseHref(FatProcess** e, const char* v) {
   char *result;
   char *start = strstr ( (char*) v, "file://");
   if (start == v) {

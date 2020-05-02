@@ -6,12 +6,12 @@ namespace djnn
   using namespace std;
 
 
-  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const std::string& n) : 
+  UpdateSrcOrDst::UpdateSrcOrDst (FatProcess* parent, const std::string& n) : 
     Action (parent, n), _to_update (nullptr), _prop (nullptr), _spec ("") 
   {
   }
 
-  UpdateSrcOrDst::UpdateSrcOrDst (Process* parent, const std::string& n, RefProperty* prop, const std::string& spec, Process** to_update) : 
+  UpdateSrcOrDst::UpdateSrcOrDst (FatProcess* parent, const std::string& n, RefProperty* prop, const std::string& spec, FatProcess** to_update) : 
     Action (parent, n), _to_update (to_update), _prop (prop), _spec (spec) 
   {
   }
@@ -20,13 +20,13 @@ namespace djnn
   UpdateSrcOrDst::impl_activate ()
   { 
     ((SrcToDstLink*) get_parent ())->about_to_update_graph();
-    Process* v = _prop->get_value ();
+    FatProcess* v = _prop->get_value ();
     if (!v) {
       *_to_update = nullptr;
       ((SrcToDstLink*) get_parent ())->update_graph ();
       return;
     }
-    Process *res = v->find_child (_spec);
+    FatProcess *res = v->find_child (_spec);
     if (!res) {
       warning (this, "Source or destination not found dynamic link structure");
     }
