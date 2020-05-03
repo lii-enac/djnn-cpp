@@ -88,8 +88,6 @@ namespace djnn
 
   FatProcess::FatProcess (const std::string& name, bool model)
   : ChildProcess(model),
-  //_parent (nullptr),
-  //_state_dependency (nullptr),
   _data (nullptr)
   {
   }

@@ -28,24 +28,17 @@ namespace djnn {
   enum process_type_e {
     UNDEFINED_T,
     PROPERTY_T,
-    // BOOL_PROPERTY_T,
-    // INT_PROPERTY_T,
-    // DOUBLE_PROPERTY_T,
-    // TEXT_PROPERTY_T,
-    // REF_PROPERTY_T,
     ACTION_T,
     NATIVE_ACTION_T,
     CONTAINER_T,
     FSM_T,
-    //SWITCH_T,
     WINDOW_T,
     GOBJ_T,
     WORLD_T,
     DEFS_T
   };
 
-  // activation types
-  enum activation_flag_e { // FIXME DEACTIVATION should be 0, ACTIVATION 1 and NONE 2, would make A/D 1 bit-only
+  enum activation_flag_e {
     NONE_ACTIVATION,
     ACTIVATION,
     DEACTIVATION
@@ -66,7 +59,6 @@ namespace djnn {
     notify_damaged_style      = 1 << 4
   };
 
-  // child position spec
   enum child_position_e {
     FIRST,
     BEFORE,
@@ -208,7 +200,7 @@ namespace djnn {
     void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, VALUE); }
 
   public:
-    bool is_activated ()         const { return get_activation_state () == ACTIVATED; } // kept it for legacy reasons in test suite
+    bool is_activated ()         const { return get_activation_state () == ACTIVATED; }
     bool is_deactivated ()       const { return get_activation_state () == DEACTIVATED; }
     bool somehow_activating ()   const { return get_activation_state () <= ACTIVATED; }
     bool somehow_deactivating () const { return get_activation_state () >= DEACTIVATING; }
@@ -264,7 +256,7 @@ namespace djnn {
   {
   public:
     ChildProcess (bool model = false) : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
-    virtual void set_parent (FatProcess* p) override; // { _parent = p; }
+    virtual void set_parent (FatProcess* p) override;
     FatProcess* get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
 
@@ -273,7 +265,7 @@ namespace djnn {
 
     virtual ChildProcess* clone () override { return nullptr; }
   protected:
-    //void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
+    //void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // should be here
     FatProcess *_parent;
     CoreProcess *_state_dependency;
   };
@@ -293,7 +285,7 @@ namespace djnn {
     virtual void   add_child (FatChildProcess* c, const std::string& name) override;
     virtual void   remove_child (FatChildProcess* c) override;
     virtual void   remove_child (const std::string& name) override;
-    virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) override {}
+    //virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) override {} // ??
     friend  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2); // strange, only used in gradient...
     virtual FatChildProcess* find_child (const std::string&) override;
     virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
@@ -309,7 +301,7 @@ namespace djnn {
     symtable_t& children () { return _symtable; }
     const symtable_t& children () const { return _symtable; } 
     
-    void    add_symbol (const std::string& name, FatChildProcess* c); // FIXME: should be alias
+    void    add_symbol (const std::string& name, FatChildProcess* c);
     void remove_symbol (const std::string& name);
   
   private:
