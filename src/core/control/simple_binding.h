@@ -26,10 +26,7 @@ namespace djnn {
   {
   public:
     CoreBinding (CoreProcess* src, CoreProcess* dst)
-    : _c (src, ACTIVATION, dst, ACTIVATION)
-    {
-      Graph::instance ().add_edge (src, dst);
-    }
+    : CoreBinding (src, ACTIVATION, dst, ACTIVATION) {}
 
     CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : _c (src, src_flag, dst, dst_flag) {
@@ -40,11 +37,13 @@ namespace djnn {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
 
-    void impl_activate   () override { _c.enable  (); };
-    void impl_deactivate () override { _c.disable (); }
-
     CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space
     CoreProcess * get_dst() { return _c.get_dst (); }
+
+  protected:
+    void impl_activate   () override { _c.enable  (); };
+    void impl_deactivate () override { _c.disable (); }
+    friend class SimpleBinding; // access to impl_activate and impl_deactivate
 
   private:
     Coupling _c;
@@ -63,20 +62,16 @@ namespace djnn {
   {
   public:
     SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    :
-    FatProcess (name),
-    _b (src, dst)
-    {
-      CouplingProcess::finalize_construction (parent, name);
-    }
+    : SimpleBinding (parent, name, src, ACTIVATION, dst, ACTIVATION)
+    {}
 
     SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    :
-    FatProcess (name),
-    _b (src, dst)
+    : FatProcess (name), _b (src, dst)
     {  
       CouplingProcess::finalize_construction (parent, name);
     }
+
+  protected:
 
     void impl_activate   () override { _b.impl_activate (); };
     void impl_deactivate () override { _b.impl_deactivate (); }

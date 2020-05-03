@@ -147,7 +147,7 @@ namespace djnn {
     unsigned int _bitset;
     // <<instance fields end here
 
-    static couplings_t default_couplings;
+    static couplings_t default_couplings; // default_couplings is a static empty couplings_t
 
   public:
     virtual CoreProcess* clone ();
@@ -178,7 +178,7 @@ namespace djnn {
     static DebugInfo _dbg_info;
 #endif
 
-  // bitfield
+  // bitfield for various state info: model, activation flag, activation state, binding
   public:
     enum bit_shift {
         MODEL_SHIFT            = 0 ,
@@ -221,9 +221,8 @@ namespace djnn {
         }
     }
 
-
   public:
-  // tree, component, symtable 
+    // tree, component, symtable. Here methods are empty or return nullptr.
     virtual void   add_child (FatChildProcess* c, const std::string& name) {}
     virtual void   remove_child (FatChildProcess* c) {}
     virtual void   remove_child (const std::string& name) {}
@@ -236,6 +235,7 @@ namespace djnn {
     virtual CoreProcess* get_data () { return nullptr; }
 
     // for NativeAction, should be protected or at least raise an exception since it works only for NativeAction
+    // also used by ActiveView
     virtual void     set_activation_source (CoreProcess*) {}
     virtual CoreProcess* get_activation_source () { return nullptr; }
   };
@@ -245,6 +245,7 @@ namespace djnn {
   public:
     CouplingProcess (bool model = false) : CoreProcess(model) {}
     virtual ~CouplingProcess ();
+
     // coupling
     void    add_activation_coupling (Coupling* c) override;
     void remove_activation_coupling (Coupling* c) override;
@@ -262,9 +263,9 @@ namespace djnn {
   class ChildProcess : public CouplingProcess
   {
   public:
-    ChildProcess (bool model = false) : CouplingProcess (model), _parent(nullptr), _state_dependency(nullptr) {}
-    virtual void set_parent(FatProcess* p) override; // { _parent = p; }
-    FatProcess* get_parent() override { return _parent; }
+    ChildProcess (bool model = false) : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
+    virtual void set_parent (FatProcess* p) override; // { _parent = p; }
+    FatProcess* get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
 
     CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
@@ -286,8 +287,6 @@ namespace djnn {
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 
-
-    
     // tree, component, symtable
     virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
 
@@ -301,6 +300,7 @@ namespace djnn {
     static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path);
     virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
 
+    // symbol and children-related methods only used in FatProcess
     typedef std::map<std::string, FatChildProcess*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
     symtable_t::iterator children_end () { return _symtable.end (); }
@@ -312,13 +312,13 @@ namespace djnn {
     void    add_symbol (const std::string& name, FatChildProcess* c); // FIXME: should be alias
     void remove_symbol (const std::string& name);
   
-  protected:
-    virtual bool pre_activate () override;
-
   private:
     
     symtable_t& symtable () { return _symtable; }
-    const symtable_t& symtable () const { return _symtable; }  
+    const symtable_t& symtable () const { return _symtable; }
+
+  protected:
+    virtual bool pre_activate () override;
 
   public:
     static std::string default_name;

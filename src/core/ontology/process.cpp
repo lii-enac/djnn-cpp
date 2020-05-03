@@ -195,9 +195,7 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (
-           get_activation_state () != DEACTIVATED
-       )
+    if (get_activation_state () != DEACTIVATED)
       return false;
     set_activation_state (ACTIVATING);
     return true;
@@ -211,11 +209,7 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if ((
-             get_parent () != nullptr
-             && !get_parent ()->somehow_activating()
-           )
-       )
+    if (get_parent () != nullptr && !get_parent ()->somehow_activating())
        return false;
     return CoreProcess::pre_activate ();
   }
@@ -225,7 +219,6 @@ namespace djnn
   {
     notify_activation ();
     set_activation_state (ACTIVATED);
-    // TOCHECK: why not set_activation_flag (NONE_ACTIVATION); like post_deactivate ?
   }
 
   void 
@@ -239,7 +232,7 @@ namespace djnn
   bool
   CoreProcess::pre_deactivate ()
   {
-    if (get_activation_state() != ACTIVATED) // TOCHECK: why not || (get_parent () != 0 && !get_parent ()->somehow_deactivating() )) like pre_activate ? => OK
+    if (get_activation_state() != ACTIVATED)
       return false;
     set_activation_state (DEACTIVATING);
     return true;

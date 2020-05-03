@@ -23,19 +23,18 @@
 
 namespace djnn { 
 
-  class CoreConnector :
-    public CoreProcess
+  class CoreConnector : public CoreProcess
   {
   public:
     CoreConnector (CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
-    :
-      _assignment (src, dst, true),
+    : _assignment (src, dst, true),
       _binding (src, &_assignment),
       _copy_on_activation (copy_on_activation)
       {
         // no need to add edge to graph, assignment already did it
       }
 
+  protected:
     void impl_activate   () override { _assignment.activate (); _binding.activate(); if(_copy_on_activation) _assignment.notify_activation (); }
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
 
@@ -49,13 +48,11 @@ public:
 #endif
   };
 
-  class SimpleConnector :
-    public FatProcess
+  class SimpleConnector : public FatProcess
   {
   public:
     SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
-    :
-    FatProcess (name),
+    : FatProcess (name),
       //_assignment (this, "", src, dst, true),
       _assignment (src, dst, true),
       _binding (src, &_assignment),
@@ -65,6 +62,7 @@ public:
         finalize_construction (parent, name);
       }
 
+  protected:
     void impl_activate   () override { _assignment.activate (); _binding.activate(); if (_copy_on_activation) _assignment.notify_activation (); }
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
 

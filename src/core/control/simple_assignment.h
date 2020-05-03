@@ -22,6 +22,7 @@
 
 namespace djnn { 
 
+  // CoreAssignment does not follow the process/action model for memory minimization reason
   class CoreAssignment : public CoreProcess
   {
   public:
@@ -34,14 +35,15 @@ namespace djnn {
       Graph::instance ().remove_edge (get_src (), get_dst ());
     }
 
+    CoreProcess* get_src () { return _src; }
+    CoreProcess* get_dst () { return _dst; }
+
+  protected:
     void impl_activate   () override { perform_action (); }
     void impl_deactivate () override {}
     void post_activate   () override { set_activation_state (DEACTIVATED); }
 
     void perform_action ();
-
-    CoreProcess* get_src () { return _src; }
-    CoreProcess* get_dst () { return _dst; }
 
   private:    
     CoreProcess *_src, *_dst;
@@ -54,6 +56,7 @@ public:
   };
 
 
+  // SimpleAssignement follows the process/action model
   class SimpleAssignment : public FatProcess
   {
     friend class AssignmentAction;
@@ -70,7 +73,7 @@ public:
     SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
     :
     FatProcess (name),
-     _src(src), _dst(dst),
+     _dst(dst),
     _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
     {
       Graph::instance ().add_edge (src, dst);
@@ -86,11 +89,10 @@ public:
 
     void perform_action ();
 
-    CoreProcess* get_src() { return _src; } //_c_src.get_src(); } // delegate to coupling to save space
+    CoreProcess* get_src() { return _c_src.get_src(); } // delegate to coupling to save space
     CoreProcess* get_dst() { return _dst; }
 
   private:
-    CoreProcess *_src;
     CoreProcess *_dst;
     AssignmentAction _action;
     Coupling _c_src;
