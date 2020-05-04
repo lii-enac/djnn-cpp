@@ -93,9 +93,33 @@ namespace djnn
   }
 
   void
-  FatProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
+  CoreProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     if (parent) {
+      parent->add_child ((ChildProcess*)this, name); // FIXME
+    } else {
+      parentless_names[(ChildProcess*)this] = name; // FIXME
+    }
+  }
+
+  void
+  ChildProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep)
+  {
+    CoreProcess::finalize_construction (parent, name, state_dep);
+    if (parent) {
+      // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
+      if (state_dep == nullptr)
+        _state_dependency = parent->state_dependency ();
+      else
+        _state_dependency = state_dep;
+    }
+  }
+
+  void
+  FatProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
+  {
+    ChildProcess::finalize_construction (parent, name, state_dep);
+    /*if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
       if (state_dep == nullptr)
         _state_dependency = parent->state_dependency ();
@@ -107,7 +131,7 @@ namespace djnn
       parentless_names[this] = name;
       if (state_dep != nullptr)
         _state_dependency = state_dep;
-    }
+    }*/
   }
 
   CoreProcess::~CoreProcess ()

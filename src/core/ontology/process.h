@@ -131,7 +131,7 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) {}
+    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr);
 
   private:
     // >>instance fields start here
@@ -265,7 +265,7 @@ namespace djnn {
 
     virtual ChildProcess* clone () override { return nullptr; }
   protected:
-    //void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // should be here
+    void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
     FatProcess *_parent;
     CoreProcess *_state_dependency;
   };

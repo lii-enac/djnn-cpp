@@ -25,14 +25,22 @@ namespace djnn {
   class CoreBinding : public CoreProcess
   {
   public:
-    CoreBinding (CoreProcess* src, CoreProcess* dst)
-    : CoreBinding (src, ACTIVATION, dst, ACTIVATION) {}
-
     CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : _c (src, src_flag, dst, dst_flag) {
       Graph::instance ().add_edge (src, dst);
     }
+
+    CoreBinding (CoreProcess* src, CoreProcess* dst)
+    : CoreBinding (src, ACTIVATION, dst, ACTIVATION) {}
+
+    CoreBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    : CoreBinding (src, src_flag, dst, dst_flag) {
+      finalize_construction (parent, name);
+    }
     
+    CoreBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : CoreBinding (parent, name, src, ACTIVATION, dst, ACTIVATION) {}
+
     ~CoreBinding () {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
