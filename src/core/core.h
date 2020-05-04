@@ -20,6 +20,7 @@
 #include "ontology/process.h"
 #include "execution/graph.h"
 #include "control/binding.h"
+#include "control/simple_binding.h"
 #include "control/activator.h"
 #include "control/synchronizer.h"
 #include "tree/component.h"
