@@ -31,6 +31,12 @@ namespace djnn {
     {
       Graph::instance ().add_edge (src, dst);
     }
+    CoreAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
+    : CoreAssignment (src, dst, propagate)
+    {
+      finalize_construction (parent, name);
+    }
+
     ~CoreAssignment () {
       Graph::instance ().remove_edge (get_src (), get_dst ());
     }

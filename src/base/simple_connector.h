@@ -33,6 +33,12 @@ namespace djnn {
       {
         // no need to add edge to graph, assignment already did it
       }
+    
+    CoreConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    : CoreConnector (src, dst, copy_on_activation)
+    {
+      finalize_construction (parent, name);
+    }
 
   protected:
     void impl_activate   () override { _assignment.activate (); _binding.activate(); if(_copy_on_activation) _assignment.notify_activation (); }
