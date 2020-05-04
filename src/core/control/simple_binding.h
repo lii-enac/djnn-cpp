@@ -19,6 +19,8 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 
+#define DJNN_SIMPLE_BINDING_INCLUDED 1
+
 
 namespace djnn {
 

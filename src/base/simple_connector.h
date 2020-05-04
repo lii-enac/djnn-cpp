@@ -21,6 +21,9 @@
 #include "core/control/simple_binding.h"
 #include "core/control/simple_assignment.h"
 
+#define DJNN_SIMPLE_CONNECTOR_INCLUDED 1
+
+
 namespace djnn { 
 
   class CoreConnector : public CoreProcess

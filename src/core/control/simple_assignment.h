@@ -20,6 +20,9 @@
 #include "core/control/action.h"
 #include "core/execution/graph.h"
 
+#define DJNN_SIMPLE_ASSIGNMENT_INCLUDED 1
+
+
 namespace djnn { 
 
   // CoreAssignment does not follow the process/action model for memory minimization reason
