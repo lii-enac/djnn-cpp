@@ -48,6 +48,7 @@ namespace djnn {
     virtual double get_double_value () const = 0;
     virtual std::string get_string_value () = 0;
     virtual std::string get_string_value () const = 0;
+    explicit operator bool () const { return get_double_value () != 0; } // added for the management of ternary operator in Smala
   protected:
     void post_activate () override { set_activation_state (DEACTIVATED); }
     void impl_activate () override {}
