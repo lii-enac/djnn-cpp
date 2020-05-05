@@ -153,7 +153,7 @@ YACC = bison -d
 endif
 
 ifeq ($(os),Darwin)
-CFLAGS += -g -MMD -Wall -Wno-deprecated-declarations
+CFLAGS += -g -MMD -Wall -Wno-deprecated-declarations -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
@@ -273,6 +273,20 @@ tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacO
 all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
 
+
+all_cccmd_json = $(call rwildcard,$(build_dir)/,*.cccmd.json)
+$(build_dir)/compile_commands.json:
+	@echo "[" > $(@)
+	@cat $(all_cccmd_json) >> $(@)
+	@echo "{}]" >> $(@)
+
+cccmd: $(build_dir)/compile_commands.json
+.PHONY: $(build_dir)/compile_commands.json
+
+titi:
+	@echo $(all_cccmd_json)
+	@echo $(all_cccmd_json_content)
+	@echo $(cccmd_json)
 
 # ---------------------------------------
 # djnn modules
@@ -445,6 +459,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.o: %.c
 ifeq ($V,max)
@@ -453,6 +468,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
 endif
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
@@ -462,6 +478,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
 ifeq ($V,max)
@@ -470,6 +487,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(YACC) -v -o $@ $<
 endif
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"@$(YACC) -v -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cpp: %.l
 ifeq ($V,max)
@@ -478,6 +496,8 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(LEX) -o $@ $<
 endif
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"@@$(LEX) -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 
 -include $(deps)
 
