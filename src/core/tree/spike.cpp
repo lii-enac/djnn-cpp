@@ -42,6 +42,7 @@ namespace djnn
   void
   Spike::post_activate ()
   {
+    // notify_activation (); // already done in impl_activate
     set_activation_state (DEACTIVATED);
   }
 

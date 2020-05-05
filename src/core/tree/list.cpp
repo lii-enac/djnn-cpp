@@ -286,6 +286,7 @@ namespace djnn
   void
   ListIterator::post_activate ()
   {
+    notify_activation ();
     set_activation_state (DEACTIVATED);
   }
 

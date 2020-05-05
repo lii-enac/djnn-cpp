@@ -189,6 +189,7 @@ namespace djnn
   void
   SetIterator::post_activate ()
   {
+    notify_activation ();
     set_activation_state (DEACTIVATED);
   }
 }
