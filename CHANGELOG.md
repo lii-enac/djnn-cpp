@@ -9,6 +9,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - Update and improvement on memory performance.
 
+## [1.11.0] - 2020-05-07
+
+### NEW
+    - NEW deref double component
+    - NEW image_data component to prepare graph visualization 
+    - NEW simple_connector component
+
+### Added
+    - Added c++ operators for abstract properties
+    - Added a bool property : pickable for graphical shaps management
+    - Added notify_activation () to all process that deactivate by themselves
+
+### Changed
+    - now update text size before rendering, not on creation
+    - Improved run_stats utility
+    - Imporoved error and warning messages
+    - Spike now active on somehow_activating
+    - Gave name to: mainloop, ExternalSource, to facilitate debugging
+    - Made finalize_construction public and callable for native_expression_action
+    - Improved code
+
+### Fixed
+    - Fixed simple_binding and simple assignment component
+    - Fixed compilation issues
+
 
 ## [1.10.0] - 2020-04-03
 
