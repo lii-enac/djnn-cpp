@@ -135,6 +135,7 @@ namespace djnn
     
     _c_src.disable ();
     
+    Graph::instance().add_edge(_trigger, _to_state);
     Process::finalize_construction (parent, name);
     FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -153,6 +154,7 @@ namespace djnn
   {
      _c_src.disable ();
     
+    Graph::instance().add_edge(_trigger, _to_state);
     Process::finalize_construction (parent, name);
     FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -160,6 +162,7 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
+    Graph::instance().remove_edge (_trigger, _to_state);
   }
 
   void
@@ -243,6 +246,7 @@ namespace djnn
     /* inverse delete of _states */
     sz = _states.size ();
     for (int i = sz - 1; i >= 0; i--) {
+        Graph::instance().remove_edge (_states[i], &_fsm_state);
         delete _states[i];
     }
   }
