@@ -78,6 +78,8 @@ namespace djnn
       parent->add_child (this, name);
     } else {
       parentless_names[this] = name;
+      if (state_dep != nullptr)
+        _state_dependency = state_dep;
     }
   }
 
