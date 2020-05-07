@@ -53,7 +53,9 @@ namespace djnn
   {
     _action.remove_all_native_edges ();
     Graph::instance ().remove_edge (&_action, _dst);
-
+    if (get_parent () && _dst) {
+      remove_state_dependency (get_parent (), &_action);
+    }
     int sz = _c_list.size ();
     for (int i = sz - 1; i >= 0; i--) {
       auto * c = _c_list[i];
