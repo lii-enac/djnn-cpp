@@ -1,7 +1,8 @@
 lib_djnn_deps = exec_env core
 local_dir := $(src_dir)/comms
-
 lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
+
+#lib_pkg += rtmidi
 
 # Ivy dependancy
 # svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c
