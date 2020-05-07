@@ -588,7 +588,7 @@ ifeq ($(os),Linux)
 	pkgcmd := apt install -y
 	pkgupg := apt upgrade -y
 
-	pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev #libboost-fiber-dev
+	pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev librtmidi-dev #libboost-fiber-dev
 	ifeq ($(display),QT)
 		pkgdeps += qt5-default
 	endif
@@ -622,6 +622,7 @@ ifeq ($(os),Darwin)
 	pkgdeps += cairo pango
 	pkgdeps += sdl2 sdl2_image
 	pkgdeps += libusb
+	pkgdeps += rtmidi
 	ifeq ($(graphics),GL)
 		pkgdeps += glm
 	endif
