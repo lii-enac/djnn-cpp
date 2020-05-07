@@ -110,5 +110,18 @@ namespace djnn
   {
     _dst->activate ();
   }
+
+  void
+  Synchronizer::set_parent (Process *p) {
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent () && _dst) {
+      remove_state_dependency (get_parent (), &_action);
+    }
+
+    if (_dst) {
+      add_state_dependency (p, &_action);
+    }
+    Process::set_parent (p);
+  }
 }
 

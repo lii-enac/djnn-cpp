@@ -47,7 +47,7 @@ namespace djnn {
     
   private:
     void propagate ();
-
+    void set_parent (Process* p) override;
     struct Init { Init(Synchronizer *, Process *parent, const std::string& name, Process* dst, const std::string&  dspec); };
     friend struct Init;
     Process *_dst;
