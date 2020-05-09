@@ -33,6 +33,7 @@
 #include "switch_range.h"
 #include "dictionary.h"
 #include "deref.h"
+#include "native_async_action.h"
 
 namespace djnn {
 
