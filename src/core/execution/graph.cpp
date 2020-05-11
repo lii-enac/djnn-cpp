@@ -399,9 +399,13 @@ namespace djnn
       return;
     }
 
+#ifndef DJNN_NO_OPTIM_REMOVE_PROPERTIES_FROM_GRAPH
     // add vertex if it's not a property: its timestamp is taken into account anyway
     if ( v->get_process ()->get_process_type() != PROPERTY_T)
       _sorted_vertices.push_back (v);
+#else
+    _sorted_vertices.push_back (v);
+#endif
 
     v->set_mark (BROWSING);
 
