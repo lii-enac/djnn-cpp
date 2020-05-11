@@ -170,7 +170,7 @@ namespace djnn {
     virtual bool pre_activate ();
     virtual void impl_activate () = 0;
     virtual void post_activate ();
-
+            void post_activate_auto_deactivate ();
     virtual bool pre_deactivate ();
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();

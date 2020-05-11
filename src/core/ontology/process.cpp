@@ -162,6 +162,14 @@ namespace djnn
     // TOCHECK: why not set_activation_flag (NONE_ACTIVATION); like post_deactivate ?
   }
 
+  void 
+  Process::post_activate_auto_deactivate ()
+  {
+    //TODO: inline function in process.h
+    Process::post_activate ();
+    deactivate ();
+  }
+
   bool
   Process::pre_deactivate ()
   {

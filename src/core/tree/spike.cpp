@@ -35,15 +35,13 @@ namespace djnn
   void
   Spike::impl_activate ()
   {
-    if (get_activation_state () == ACTIVATING)
-      notify_activation ();
+    // notify_activation () made in post_activate_auto_deactivate  ()
   }
 
   void
   Spike::post_activate ()
   {
-    // notify_activation (); // already done in impl_activate
-    set_activation_state (DEACTIVATED);
+    Process::post_activate_auto_deactivate ();
   }
 
 #if !defined(DJNN_NO_SERIALIZE)
