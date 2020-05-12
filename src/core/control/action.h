@@ -46,8 +46,7 @@ namespace djnn {
       return true;
     }
     void post_activate () override {
-      notify_activation ();
-      set_activation_state (DEACTIVATED);
+      Process::post_activate_auto_deactivate ();
     }
   };
 }

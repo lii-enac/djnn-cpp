@@ -26,7 +26,7 @@ namespace djnn {
   protected:
     bool pre_activate () override;
     void post_activate () override;
-    void impl_activate () override;
+    void impl_activate () override {};
     void impl_deactivate () override {};
 
 #ifndef DJNN_NO_SERIALIZE

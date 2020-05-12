@@ -118,7 +118,7 @@ namespace djnn
     Incr (Process *parent, const std::string& name, bool is_model);
     void impl_activate () override;
     void impl_deactivate () override {}
-    void post_activate () override { notify_activation (); set_activation_state (DEACTIVATED); }
+    void post_activate () override { Process::post_activate_auto_deactivate (); }
     virtual ~Incr ();
   private:
     int init_incr (bool isModel);

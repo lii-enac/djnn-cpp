@@ -33,12 +33,6 @@ namespace djnn
   }
 
   void
-  Spike::impl_activate ()
-  {
-    // notify_activation () made in post_activate_auto_deactivate  ()
-  }
-
-  void
   Spike::post_activate ()
   {
     Process::post_activate_auto_deactivate ();

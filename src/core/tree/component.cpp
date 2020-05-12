@@ -392,8 +392,7 @@ namespace djnn
   void
   AssignmentSequence::post_activate ()
   {
-    notify_activation ();
-    set_activation_state (DEACTIVATED);
+    Process::post_activate_auto_deactivate ();
   }
 
 #ifndef DJNN_NO_SERIALIZE
