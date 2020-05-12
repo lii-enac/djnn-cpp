@@ -399,18 +399,22 @@ namespace djnn
       return;
     }
 
-#ifndef DJNN_NO_OPTIM_REMOVE_PROPERTIES_FROM_GRAPH
+    if (false
+#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
     // add vertex if it's not a property: its timestamp is taken into account anyway
-    if ( v->get_process ()->get_process_type() != PROPERTY_T)
-      _sorted_vertices.push_back (v);
-#else
-    _sorted_vertices.push_back (v);
+    || (v->get_process ()->get_process_type() != PROPERTY_T)
 #endif
+// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
+//     || (v->get_count_edges_in () > 1)
+// #endif
+    )
+      _sorted_vertices.push_back (v);
 
     v->set_mark (BROWSING);
 
     for (auto& v2 : v->get_edges ()) {
-      if (v2->get_mark () == NOT_MARKED) {
+      if (v2->get_mark () == NOT_MARKED
+      ) {
         traverse_depth_first (v2);
       }
     }
