@@ -18,6 +18,11 @@
 
 namespace djnn {
 
+  /*
+   * WARNING This component does nothing.
+   * It cannot be used to notify its subscribers from a coupling.
+   * But a component, for example an external source, can use it and call explicitly its notify_(de)activate method.
+   */
   class Blank: public Process {
   public:
     Blank (Process* parent, const std::string& name) : Process (name) { Process::finalize_construction (parent, name); }
