@@ -33,7 +33,8 @@ using namespace djnn;
 int
 main(int argc, char* argv[])
 {
-	PSIZE(int);
+	PSIZE(unsigned int);
+	PSIZE(unsigned long);
 	PSIZE(double);
 	PSIZE(void*);
 	PSIZE(string);
