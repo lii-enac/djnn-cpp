@@ -114,7 +114,7 @@ namespace djnn
   }
 
   void
-  Synchronizer::set_parent (Process *p) {
+  Synchronizer::set_parent (FatProcess *p) {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
       remove_state_dependency (get_parent (), &_action);
@@ -123,7 +123,7 @@ namespace djnn
     if (_dst) {
       add_state_dependency (p, &_action);
     }
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
 }
 

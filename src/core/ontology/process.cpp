@@ -247,7 +247,7 @@ namespace djnn
   CoreProcess::post_activate_auto_deactivate ()
   {
     //TODO: inline function in process.h
-    post_activate ();
+    CoreProcess::post_activate ();
     deactivate ();
   }
 
