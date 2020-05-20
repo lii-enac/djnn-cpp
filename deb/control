@@ -5,5 +5,5 @@ Priority: optional
 Architecture: amd64
 Depends:  qtbase5-dev-tools, pkg-config, bison, flex,  m4
 Maintainer: Mathieu Poirier <mathieu.poirier@enac.fr>
-Description:
+Description: interactive programming
  Library for interactive programming

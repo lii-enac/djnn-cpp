@@ -360,10 +360,10 @@ endif
 endif
 
 ifneq ($(os),em)
-$1_lib_rpath := -Wl,-rpath,$$($1_libname)
+$1_lib_soname := -Wl,-soname,$$($1_libname)
 endif
 ifeq ($(os), Darwin)
-$1_lib_rpath := -Wl,-install_name,$$($1_libname),
+$1_lib_soname := -Wl,-install_name,$$($1_libname),
 endif
 
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
@@ -374,10 +374,10 @@ $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
 ifeq ($$V,max)
-	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
+	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_rpath)
+	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
@@ -598,10 +598,12 @@ deb:
 	make -j6  install prefix=$(deb_prefix)
 	test -d $(deb_prefix_version)/DEBIAN || mkdir -p $(deb_prefix_version)/DEBIAN
 	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' deb/control > $(deb_prefix_version)/DEBIAN/control
+# cp triggers file
+	cp deb/triggers $(deb_prefix_version)/DEBIAN/triggers
 # remove debug symbol from library
 	cd $(deb_prefix)/lib ; strip --strip-debug --strip-unneeded *.so
 # remove rpath from library
-	cd $(deb_prefix)/lib ; chrpath -d *.so
+#	cd $(deb_prefix)/lib ; chrpath -d *.so
 # build package with fakeroot
 	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 # check integrity of the build package. We still have error
