@@ -47,7 +47,7 @@ namespace djnn {
 
     void impl_activate   () override { _c_src.enable  (); _action.activate(); };
     void impl_deactivate () override { _c_src.disable (); _action.deactivate(); }
-    void post_activate   () override { Process::post_activate_auto_deactivate (); }
+    void post_activate   () override { post_activate_auto_deactivate (); }
 
     void perform_action ();
 

@@ -189,7 +189,7 @@ namespace djnn
   void
   SetIterator::post_activate ()
   {
-    Process::post_activate_auto_deactivate ();
+    post_activate_auto_deactivate ();
   }
 }
 

@@ -136,7 +136,7 @@ namespace djnn
     _c_src.disable ();
     
     Graph::instance().add_edge(_trigger, _to_state);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
     FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }
@@ -155,7 +155,7 @@ namespace djnn
      _c_src.disable ();
     
     Graph::instance().add_edge(_trigger, _to_state);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
     FSM *fsm = dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }

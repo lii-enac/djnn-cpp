@@ -74,7 +74,7 @@ namespace djnn {
     Assignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
     Assignment (Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
-    void post_activate () override { Process::post_activate_auto_deactivate (); }
+    void post_activate () override { post_activate_auto_deactivate (); }
     void impl_deactivate () override {}
     void update_graph () override;
     void about_to_update_graph () override ;
@@ -95,7 +95,7 @@ namespace djnn {
     PausedAssignment (Process* parent, const std::string& name, Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
     PausedAssignment (Process* src, const std::string& ispec, Process* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
-    void post_activate () override { Process::post_activate_auto_deactivate (); }
+    void post_activate () override { post_activate_auto_deactivate (); }
     void impl_deactivate () override {}
     void update_graph () override {};
     void about_to_update_graph () override {};

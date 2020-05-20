@@ -286,7 +286,7 @@ namespace djnn
   void
   ListIterator::post_activate ()
   {
-    Process::post_activate_auto_deactivate ();
+    post_activate_auto_deactivate ();
   }
 
   BidirectionalListIterator::IterAction::IterAction (Process *parent, const std::string& name, List *list,

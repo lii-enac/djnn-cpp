@@ -35,7 +35,7 @@ namespace djnn
   void
   Spike::post_activate ()
   {
-    Process::post_activate_auto_deactivate ();
+    post_activate_auto_deactivate ();
   }
 
 #if !defined(DJNN_NO_SERIALIZE)

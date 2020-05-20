@@ -50,7 +50,7 @@ namespace djnn {
     virtual std::string get_string_value () const = 0;
     explicit operator bool () const { return get_double_value () != 0; } // added for the management of ternary operator in Smala
   protected:
-    void post_activate () override { Process::post_activate_auto_deactivate (); }
+    void post_activate () override { post_activate_auto_deactivate (); }
     void impl_activate () override {}
     void impl_deactivate () override {}
     unsigned int _notify_mask;
