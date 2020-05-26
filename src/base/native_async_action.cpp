@@ -22,12 +22,12 @@ namespace djnn
 {
   using namespace std;
 
-  NativeAsyncAction::NativeAsyncAction (Process* parent, const std::string& name, NativeCode *action, void* data,
+  NativeAsyncAction::NativeAsyncAction (FatProcess* parent, const std::string& name, NativeCode *action, void* data,
                               bool isModel) :
       Action (parent, name), ExternalSource(name), _data (data), _action (action), _activation_source (nullptr), _end (this, "end")
   {
     set_is_model (isModel);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   NativeAsyncAction::~NativeAsyncAction ()
@@ -71,5 +71,6 @@ namespace djnn
     if (na == nullptr)
       return nullptr;
     return na->data ();
+    //return native_action->data ();
   }
 }

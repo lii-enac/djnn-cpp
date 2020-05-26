@@ -51,5 +51,6 @@ namespace djnn
     if (na == nullptr)
       return nullptr;
     return na->data ();
+    //return native_action->data ();
   }
 }
