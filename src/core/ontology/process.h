@@ -347,6 +347,7 @@ namespace djnn {
   void alias (FatProcess *parent, const std::string& name, FatChildProcess* from);
   void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2);
   inline FatProcess* find (FatProcess *p) { return p; } // helper for smalac
+  inline FatProcess* find (CoreProcess *p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
   inline FatChildProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
 
   void add_state_dependency (FatProcess *_parent, CoreProcess *p);
