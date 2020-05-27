@@ -16,6 +16,7 @@
 
 #include "exec_env/global_mutex.h"
 #include "core/utils/djnn_dynamic_cast.h"
+#include "core/execution/graph.h"
 
 namespace djnn
 {
@@ -53,6 +54,7 @@ namespace djnn
     (_action) (this);
     djnn::get_exclusive_access (DBG_GET);
     _end.notify_activation ();
+    GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
   }
 
