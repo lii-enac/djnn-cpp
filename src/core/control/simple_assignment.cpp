@@ -24,14 +24,14 @@ namespace djnn
 {
   using std::string;
 
-  void
-  CoreAssignment::perform_action () {
-      //_DBG;
-      get_dst()->set_activation_source (get_src());
-      bool propagate = _propagate;
-      AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (get_src()); // FIXME should be done once and for all
+  void perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)
+  {
+    //_DBG;
+      dst->set_activation_source (src);
+      //bool propagate = _propagate;
+      AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src); // FIXME should be done once and for all
       if(!src_p) { warning (src_p, "not a property"); return; }
-      AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (get_dst());
+      AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
       if(!dst_p) { warning (dst_p, "not a property"); return; }
       switch (src_p->get_prop_type ())
         {
@@ -69,9 +69,23 @@ namespace djnn
           warning (src_p, "Unknown property type");
           return;
         }
-      get_dst()->activate ();
+      dst->activate ();
+
   }
 
+  void
+  CoreAssignment::perform_action ()
+  {
+    djnn::perform_action (get_src (), get_dst (), _propagate);    
+  }
+
+  void
+  SimpleAssignment::perform_action ()
+  {
+    djnn::perform_action (get_src (), get_dst (), _propagate);    
+  }
+
+/*
   void
   SimpleAssignment::perform_action () {
       //_DBG;
@@ -119,6 +133,7 @@ namespace djnn
         }
       get_dst()->activate ();
   }
+*/
 
   #if !defined(DJNN_NO_SERIALIZE)
   void

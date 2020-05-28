@@ -64,6 +64,19 @@ public:
 #endif
   };
 
+  class CorePausedAssignment : public CoreAssignment
+  {
+  public:
+    CorePausedAssignment (CoreProcess* src, CoreProcess* dst)
+    : CoreAssignment (src, dst, false)
+    {
+    }
+    CorePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : CoreAssignment (parent, name, src, dst, false)
+    {
+    }
+  };
+
 
   // SimpleAssignement follows the process/action model
   class SimpleAssignment : public FatProcess
@@ -111,6 +124,14 @@ public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
 #endif
+  };
+
+  class SimplePausedAssignment : public SimpleAssignment
+  {
+  public:
+    SimplePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : SimpleAssignment (parent, name, src, dst, false)
+    {}
   };
 
 }

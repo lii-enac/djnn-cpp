@@ -20,13 +20,15 @@ using namespace std;
 
 namespace djnn
 {
-  TextField::TextField (FatProcess *parent, const std::string& name, FatProcess* text, FatProcess* shape) :
+  TextField::TextField (FatProcess *parent, const std::string& name, CoreProcess* text, CoreProcess* shape) :
       FatProcess (name), _start_select (0), _end_select (0), _is_selecting (false)
   {
-    _press_x = dynamic_cast<DoubleProperty*>(shape->find_child ("press/x"));
-    _press_y = dynamic_cast<DoubleProperty*>(shape->find_child ("press/y"));
-    _move_x  = dynamic_cast<DoubleProperty*>(shape->find_child ("move/x"));
-    _move_y  = dynamic_cast<DoubleProperty*>(shape->find_child ("move/y"));
+    auto * fpshape = dynamic_cast<FatProcess*>(shape);
+    if(!fpshape) { error(this, "not a shape"); }
+    _press_x = dynamic_cast<DoubleProperty*>(fpshape->find_child ("press/x"));
+    _press_y = dynamic_cast<DoubleProperty*>(fpshape->find_child ("press/y"));
+    _move_x  = dynamic_cast<DoubleProperty*>(fpshape->find_child ("move/x"));
+    _move_y  = dynamic_cast<DoubleProperty*>(fpshape->find_child ("move/y"));
 
     if (_press_x == nullptr || _press_y == nullptr) {
       error (this, "wrong shape argument in LineEdit constructor");

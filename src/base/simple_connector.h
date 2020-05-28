@@ -57,6 +57,20 @@ public:
 #endif
   };
 
+  class CorePausedConnector : public CoreConnector
+  {
+  public:
+    CorePausedConnector (CoreProcess* src, CoreProcess* dst)
+    : CoreConnector (src, dst, false)
+    {
+    }
+    
+    CorePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : CoreConnector (parent, name, src, dst, false)
+    {
+    }
+  };
+
   class SimpleConnector : public FatProcess
   {
   public:
@@ -85,4 +99,13 @@ public:
     void serialize (const std::string& format) override;
 #endif
   };
+
+  class SimplePausedConnector : public SimpleConnector
+  {
+  public:
+    SimplePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : SimpleConnector (parent, name, src, dst)
+    {}
+  };
+
 }

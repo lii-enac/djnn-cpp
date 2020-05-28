@@ -125,7 +125,7 @@ namespace djnn {
       void impl_deactivate () override {};
   };
   public:
-    TextField (FatProcess *parent, const std::string& name, FatProcess* text, FatProcess* shape);
+    TextField (FatProcess *parent, const std::string& name, CoreProcess* text, CoreProcess* shape);
     virtual ~TextField ();
     void impl_activate () override;
     void impl_deactivate () override;
