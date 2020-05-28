@@ -17,6 +17,9 @@ namespace djnn
 	void get_exclusive_access(const char* debug);
 	void release_exclusive_access(const char* debug);
 
+	void lock_ios_mutex ();
+	void release_ios_mutex ();
+
 	void start (Process *c);
 	void stop (Process *c);
 }

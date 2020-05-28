@@ -18,6 +18,16 @@ namespace djnn
     global_mutex = create_lock();
     ios_mutex = create_lock();
   }
+
+  void
+  lock_ios_mutex () {
+    lock(ios_mutex);
+  }
+
+	void
+  release_ios_mutex () {
+    release(ios_mutex);
+  }
   
   void
   get_exclusive_access (const char * debug)
