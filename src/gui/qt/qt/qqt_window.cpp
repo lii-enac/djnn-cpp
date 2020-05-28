@@ -30,9 +30,10 @@
 #include <iostream>
 
 #include "exec_env/exec_env-dev.h"
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
+using namespace std;
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;
@@ -227,9 +228,8 @@ namespace djnn
       double time = t2 ("");
       _window->mspf ()->set_value(time, true);
 
-#if _PERF_TEST
-      //print in RED
-      cerr << "\033[1;31m";
+#if _DEBUG_SEE_GUI_INFO_PREF
+      cerr << "\033[1;36m";
       cerr << "DRAW: " << time << endl; 
       draw_counter = draw_counter + 1;
       draw_total = draw_total + time;

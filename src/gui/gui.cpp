@@ -27,8 +27,8 @@
 #include <iostream>
 #include "utils/debug.h"
 
-#define _PERF_TEST 0
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
+using namespace std;
 int __nb_Drawing_object = 0;
 int __nb_Drawing_object_picking = 0;
 #endif
@@ -82,7 +82,7 @@ namespace djnn
   GUIStructureHolder::draw ()
   {
     
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     /* reset  */
     __nb_Drawing_object = 0 ;
     __nb_Drawing_object_picking = 0 ;
@@ -94,9 +94,8 @@ namespace djnn
     }
     ComponentObserver::instance ().end_draw ();
 
-#if _PERF_TEST
-    /* result  */
-    cerr << "\033[1;31m" << endl;
+#if _DEBUG_SEE_GUI_INFO_PREF
+    cerr << "\033[1;36m" << endl;
     cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << endl;
     cerr << "NB DRAWING OBJS PICKING VIEW: " << __nb_Drawing_object_picking << endl;
     cerr << "\033[0m";

@@ -1,3 +1,6 @@
+
+#include "utils/debug.h"
+
 #include "cairo_gl_sdl_window.h"
 #include "display/sdl/sdl_mainloop.h"
 
@@ -8,15 +11,14 @@
 #include <SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
-
 #include <iostream>
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define attr(a) #a ":" << a << " "
 
 #include "exec_env/exec_env-dev.h"
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
@@ -202,7 +204,7 @@ namespace djnn {
   void
   CairoGLSDLWindow::redraw ()
   {
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GUI_INFO_PREF
     t1();
     #endif
 
@@ -310,7 +312,7 @@ namespace djnn {
     cairo_surface_destroy (picking_surface);
 #endif
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
       // print in RED
       cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");

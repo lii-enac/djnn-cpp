@@ -11,6 +11,9 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *
  */
+
+#include "utils/debug.h"
+
 #include "gui/cairo/drm/cairo_drm_window.h"
 #include "gui/cairo/my_cairo_surface.h"
 #include "gui/backend.h"
@@ -24,8 +27,8 @@
 //#include <iostream>
 
 #include "exec_env/exec_env-dev.h"
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
@@ -110,7 +113,7 @@ namespace djnn
   CairoDRMWindow::update ()
   {
     //DBG;
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GUI_INFO_PREF
       t1();
     #endif
     
@@ -147,7 +150,7 @@ namespace djnn
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
 
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GUI_INFO_PREF
       // print in RED
       cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");

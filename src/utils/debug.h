@@ -23,4 +23,16 @@
 #endif
 
 /* DEBUG DISPLAY INFORMATION */
+/* 
+  diplayed infos :
+    - a new frame with interactive object beside (right) the main frame
+*/
 #define _DEBUG_SEE_COLOR_PICKING_VIEW  0
+
+/*
+ diplayed infos (LIGHT BLUE) : 
+ - time to draw and average
+ - nb object to draw
+ - nb object in color picking view
+*/
+#define _DEBUG_SEE_GUI_INFO_PREF 1

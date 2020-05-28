@@ -12,6 +12,8 @@
  *
  */
 
+#include "utils/debug.h"
+
 #include "my_cairo_surface.h"
 #include "gui/backend.h"
 #include "cairo_backend.h"
@@ -25,8 +27,8 @@
 #endif
 
 #include "exec_env/exec_env-dev.h"
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
 static int draw_counter = 0;
 static double draw_total = 0.0;
@@ -55,7 +57,7 @@ namespace djnn
     DisplayBackend::instance()->set_window (_window);
     Process *p = _window->holder ();
     if (p) {
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
       t1();
 #endif
 
@@ -93,7 +95,7 @@ namespace djnn
       /* destroy the buffer */
       cairo_surface_destroy (buf);
 #endif
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
       // print in RED
       cerr << "\033[1;31m";
       double time = t2 ("DRAW : ");

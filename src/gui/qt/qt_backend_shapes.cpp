@@ -33,10 +33,11 @@
 
 #include "core/utils/error.h"
 
+#include "utils/debug.h"
 
 #include "exec_env/exec_env-dev.h"
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GUI_INFO_PREF
 /* define in gui.cpp */
 extern int __nb_Drawing_object;
 extern int __nb_Drawing_object_picking;
@@ -56,14 +57,14 @@ namespace djnn
     load_drawing_context (s, x, y, w, h);
     _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -80,14 +81,14 @@ namespace djnn
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -104,14 +105,14 @@ namespace djnn
     load_drawing_context (s, rect.x (), rect.y (), rect.width (), rect.height ());
     _painter->drawEllipse (rect);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -127,14 +128,14 @@ namespace djnn
     QLineF line (x1, y1, x2, y2);
     load_drawing_context (s, x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
     _painter->drawLine (line);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->drawLine (line);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -231,7 +232,7 @@ namespace djnn
     curTextY = rect.y () + fm.height ();
 
     _painter->drawText (p, s);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
@@ -241,7 +242,7 @@ namespace djnn
     if (is_in_picking_view (t)) {
       load_pick_context (t);
       _picking_view->painter ()->drawRect (rect);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -333,14 +334,14 @@ namespace djnn
                           path.boundingRect ().height ());
     _painter->drawPath (path);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->drawPath (path);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -363,7 +364,7 @@ namespace djnn
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->drawPath (cur_path);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
@@ -371,7 +372,7 @@ namespace djnn
       load_pick_context (p);
       _picking_view->painter ()->drawPath (cur_path);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -530,14 +531,14 @@ namespace djnn
     load_drawing_context (s, x, y, w, h);
     _painter->setClipRect (x, y, w, h);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->setClipRect (x, y, w, h);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -555,14 +556,14 @@ namespace djnn
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
     _painter->setClipPath (cur_path, Qt::ReplaceClip); // could be Qt::UniteClip
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->setClipPath (cur_path);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -604,7 +605,7 @@ namespace djnn
     _painter->setRenderHint (QPainter::SmoothPixmapTransform);
     _painter->drawPixmap (rect, *pm);
 
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
@@ -614,7 +615,7 @@ namespace djnn
     if (is_in_picking_view (i)) {
       load_pick_context (i);
       _picking_view->painter ()->drawRect (rect);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
     }
@@ -647,7 +648,7 @@ namespace djnn
 
       _painter->setRenderHint (QPainter::SmoothPixmapTransform);
       _painter->drawPixmap (rect, *pm);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
@@ -657,7 +658,7 @@ namespace djnn
       if (is_in_picking_view (i)) {
         load_pick_context (i);
         _picking_view->painter ()->drawRect (rect);
-#if _PERF_TEST
+#if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
       }
