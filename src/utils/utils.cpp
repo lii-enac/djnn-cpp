@@ -21,7 +21,7 @@
 
 #include <iostream>
 
-//TODO: remove - only for stat
+#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
 #include <boost/core/demangle.hpp>
 #include "core/control/binding.h"
 #include "core/control/native_expression_action.h"
@@ -32,6 +32,7 @@
 #include "gui/style/style.h"
 #include "gui/transformation/transformations.h"
 #include "base/operators.h"
+#endif
 
 namespace djnn
 {
@@ -78,6 +79,9 @@ namespace djnn
     std::cerr << "num_more_than_one_couplings: " << num_more_than_one_coupling << " - " << (num_more_than_one_coupling * 100) / i << "%" << std::endl;
     std::cerr << "total mem size (*p): " << size << std::endl << std::endl;
   }
+
+
+  #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
 
   extern std::list<std::pair<Process*, long int>> __creation_stat_order;
   extern std::vector<std::string> __destruction_stat_order;
@@ -206,4 +210,11 @@ namespace djnn
 
       std::cerr << "\033[0m" ;
     }
+    #else
+    void
+    display_creation_stats()
+    {
+      std::cerr << "WARNING - this is display_creation_stats stub - you maybe forget to activate _DEBUG_SEE_CREATION_DESTRUCTION_ORDER in utils/debug.h" << std::endl;
+    } 
+    #endif //_DEBUG_SEE_CREATION_DESTRUCTION_ORDER
 }

@@ -19,6 +19,8 @@
 #include "core/tree/text_property.h"
 #include "core/control/action.h"
 
+#include "utils/debug.h"
+
 #include <functional>
 
 namespace djnn

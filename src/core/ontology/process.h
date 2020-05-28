@@ -170,7 +170,9 @@ namespace djnn {
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
      std::pair<int, int> __nb_activation;
     #endif
-    std::list<std::pair<Process*, long int>>::iterator __position_in_creation;
+    #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+     std::list<std::pair<Process*, long int>>::iterator __position_in_creation;
+    #endif
 
   protected:
     void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
@@ -262,12 +264,13 @@ namespace djnn {
     }
   };
 
-  //TODO: remove - only for stat
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE
    typedef std::pair<bool , Process*> __stat_exec;
    extern std::vector<__stat_exec> __activation_order;
   #endif
-  extern std::list<std::pair<Process*, long int>> __creation_stat_order;
+  #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+   extern std::list<std::pair<Process*, long int>> __creation_stat_order;
+  #endif
 
   void alias_children (Process *p, Process *to);
   void alias (Process *parent, const std::string& name, Process* from);

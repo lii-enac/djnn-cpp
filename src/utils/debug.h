@@ -52,8 +52,15 @@
 
 /*
  diplayed infos (YELLOW) : 
- - order in which component are activate and dactivate between to GRAPH_EXEC
+ - display order in which component are activated and dactivated between to GRAPH_EXEC
 */
 #define _DEBUG_SEE_ACTIVATION_SEQUENCE 0
+
+/*
+ diplayed infos (PURPLE, RED and GREEN) : 
+ - display order in which component are created or destroyed between to call of utils/display_creation_stats () function
+*/
+#define _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 0
+
 
 #endif

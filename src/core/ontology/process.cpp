@@ -29,9 +29,10 @@
 #include <iostream>
 #endif
 
-//TODO remove - only for stat
+#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
 #include <boost/core/demangle.hpp>
 #include <boost/type_index.hpp>
+#endif
 
 namespace djnn
 {
@@ -71,15 +72,11 @@ namespace djnn
       _dbg_info = {"no dbg info",0};
     }
 #endif
-    //_name = name.length () > 0 ? name : "anonymous_" + to_string (++_nb_anonymous);
 
-    //debug
-    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;;
-
-
-    //TODO: remove - only for stat
+    #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     __creation_stat_order.push_back (std::make_pair(this, __creation_num++));
     __position_in_creation = std::prev(__creation_stat_order.end ());
+    #endif
   }
 
   void
@@ -125,11 +122,13 @@ namespace djnn
        _vertex->invalidate ();
     }
 
-    //TODO: remove - only for stat
+    #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
        " - " + (this->get_parent () ? this->get_parent ()->get_name () : "") + "/" + this->get_name ();
+
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);
+    #endif
 
     /* make sure everything is wiped out the symtable */
     children ().clear ();
