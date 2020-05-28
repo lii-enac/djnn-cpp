@@ -121,7 +121,7 @@ namespace djnn
 
 
   FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
-                                CoreProcess *trigger, const std::string& tspec, FatProcess *action,
+                                CoreProcess *trigger, const std::string& tspec, CoreProcess *action,
                                 const std::string& aspec) 
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
@@ -142,7 +142,7 @@ namespace djnn
   }
 
   FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
-                                CoreProcess *trigger, FatProcess *action) 
+                                CoreProcess *trigger, CoreProcess *action) 
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),

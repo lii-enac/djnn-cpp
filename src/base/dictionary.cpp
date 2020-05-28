@@ -22,9 +22,10 @@ namespace djnn
   Dictionary::FindAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    FatProcess* key = d->key ()->get_value ();
-    auto it = d->get_map ().find (key);
-    if (it != d->get_map ().end()) {
+    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
+    auto & map = d->get_map ();
+    auto it = map.find (key);
+    if (it != map.end()) {
       d->set_value (it->second);
     } else {
       d->set_value (nullptr);
@@ -35,10 +36,11 @@ namespace djnn
   Dictionary::DelEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    FatProcess* key = d->key ()->get_value ();
-    auto it = d->get_map ().find (key);
-    if (it != d->get_map ().end()) {
-      d->get_map ().erase(it);
+    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
+    auto & map = d->get_map ();
+    auto it = map.find (key);
+    if (it != map.end()) {
+      map.erase(it);
     }
     FatProcess *p = nullptr;
     d->value ()->set_value (p, false);
@@ -49,8 +51,8 @@ namespace djnn
   Dictionary::AddEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    FatProcess* key = d->key ()->get_value ();
-    FatProcess* value = d->value ()->get_value ();
+    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
+    auto * value = dynamic_cast<FatProcess*>(d->value ()->get_value ());
     d->get_map ()[key] = value;
   }
 

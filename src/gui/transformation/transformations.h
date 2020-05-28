@@ -621,7 +621,7 @@ namespace djnn {
     };
 
     public:
-      ScreenToLocal (FatProcess* parent, const std::string& name, FatProcess* shape);
+      ScreenToLocal (FatProcess* parent, const std::string& name, CoreProcess* shape);
       virtual ~ScreenToLocal () override; 
       void impl_activate () override;
       void impl_deactivate () override;
@@ -651,7 +651,7 @@ namespace djnn {
     };
 
     public:
-      LocalToScreen (FatProcess* parent, const std::string& name, FatProcess* shape);
+      LocalToScreen (FatProcess* parent, const std::string& name, CoreProcess* shape);
       virtual ~LocalToScreen () override; 
       void impl_activate () override;
       void impl_deactivate () override;

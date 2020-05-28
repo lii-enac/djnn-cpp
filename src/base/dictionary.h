@@ -61,7 +61,8 @@ namespace djnn {
     FatProcess* get_value (FatProcess* key);
     void del_entry (FatProcess* key);
     void set_value (FatProcess* value) { _value.set_value (value, true); }
-    std::map<FatProcess*,FatProcess*>& get_map () { return _map; }
+    typedef std::map<FatProcess*,FatProcess*> map_t; 
+    map_t& get_map () { return _map; }
     RefProperty* key () { return &_key; }
     RefProperty* value () { return &_value; }
   private:
@@ -71,6 +72,6 @@ namespace djnn {
     AddEntryAction _add_action;
     DelEntryAction _del_action;
     Coupling _c_add, _c_del, _c_find;
-    std::map<FatProcess*,FatProcess*> _map;
+    map_t _map;
   };
 }

@@ -91,7 +91,7 @@ namespace djnn
     DoubleProperty* press_y () { return _press_y; }
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
-    FatProcess* get_display () { return _display->get_value (); }
+    CoreProcess* get_display () { return _display->get_value (); }
     void init_display (FatProcess *conn) { _display->set_value (conn, false); }
     void set_frame ();
     FatProcess* damaged () { return _damaged; }

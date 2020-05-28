@@ -20,7 +20,7 @@ namespace djnn
   UpdateSrcOrDst::impl_activate ()
   { 
     ((SrcToDstLink*) get_parent ())->about_to_update_graph();
-    FatProcess* v = _prop->get_value ();
+    auto* v = _prop->get_value ();
     if (!v) {
       *_to_update = nullptr;
       ((SrcToDstLink*) get_parent ())->update_graph ();

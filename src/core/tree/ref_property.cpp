@@ -29,8 +29,8 @@ namespace djnn
 {
   using namespace std;
 
-  FatProcess*
-  getRef (FatProcess* p)
+  CoreProcess*
+  getRef (CoreProcess* p)
   {
     RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)
@@ -41,7 +41,7 @@ namespace djnn
   }
 
   void
-  setRef (FatProcess* p, FatProcess *v)
+  setRef (CoreProcess* p, CoreProcess *v)
   {
     RefProperty *rp = djnn_dynamic_cast<RefProperty*> (p);
     if (rp != nullptr)

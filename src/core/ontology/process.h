@@ -349,9 +349,16 @@ namespace djnn {
   inline FatProcess* find (FatProcess *p) { return p; } // helper for smalac
   inline FatProcess* find (CoreProcess *p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
   inline FatChildProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
+  inline FatChildProcess* find (CoreProcess *p, const std::string& path) {
+    if(auto * fp = dynamic_cast<FatProcess*>(p)) {
+      return fp->find_child (path);
+    }
+    return nullptr;
+  }
 
   void add_state_dependency (FatProcess *_parent, CoreProcess *p);
   void remove_state_dependency (FatProcess *_parent, CoreProcess *p);
-  inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
+  //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
+  template <typename P> P* clone (P *p) { return p->clone (); } // FIXME will make code size grow :-/...
 
 }

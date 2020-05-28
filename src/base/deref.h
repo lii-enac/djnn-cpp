@@ -110,7 +110,7 @@ namespace djnn
       virtual ~DerefString ();
       void set () override;
       void get () override;
-      void change_src (Process* src) override;
+      void change_src (FatProcess* src) override;
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
 #endif

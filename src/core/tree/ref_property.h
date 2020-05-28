@@ -23,12 +23,12 @@ namespace djnn {
 
   class RefProperty: public AbstractProperty {
   public:
-    RefProperty (FatProcess* parent, const std::string& name, FatProcess* v, unsigned int nm = notify_none) 
+    RefProperty (FatProcess* parent, const std::string& name, CoreProcess* v, unsigned int nm = notify_none) 
     : AbstractProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }
 
-    FatProcess* get_value () { return _value; }
+    CoreProcess* get_value () { return _value; }
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
@@ -44,7 +44,7 @@ namespace djnn {
     RefProperty* clone () override;
 
   private:
-    FatProcess* _value;
+    CoreProcess* _value;
 
   public:
 #ifndef DJNN_NO_DEBUG
@@ -55,6 +55,6 @@ namespace djnn {
 #endif
 };
 
-  FatProcess* getRef (FatProcess *p);
-  void setRef (FatProcess *p, FatProcess *v);
+  CoreProcess* getRef (CoreProcess *p);
+  void setRef (CoreProcess *p, CoreProcess *v);
 }

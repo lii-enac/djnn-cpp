@@ -53,7 +53,7 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (FatProcess *parent, const std::string& name, FSMState* src, FSMState* dst, FatProcess* action) :
+      FSMTransitionAction (FatProcess *parent, const std::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
 	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
@@ -66,9 +66,9 @@ namespace djnn {
     };
   public:
     FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
-		   CoreProcess *trigger, const std::string& tspec, FatProcess *action = 0, const std::string& aspec = "");
+		   CoreProcess *trigger, const std::string& tspec, CoreProcess *action = 0, const std::string& aspec = "");
     FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
-       CoreProcess *trigger, FatProcess *action = 0);
+       CoreProcess *trigger, CoreProcess *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -85,7 +85,8 @@ namespace djnn {
   private:
     void init_FSMTransition ();
     FSMState* _from_state, *_to_state;
-    FatProcess *_trigger, *_action;
+    FatProcess *_trigger;
+    CoreProcess *_action;
     Init _init;
     FSMTransitionAction _fsm_action;
     Coupling _c_src;
