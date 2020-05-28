@@ -25,6 +25,21 @@
 #include <iostream>
 #endif
 
+
+//TODO: remove - only for stat
+#include <boost/core/demangle.hpp>
+#include "core/control/binding.h"
+#include "core/control/native_expression_action.h"
+#include "base/connector.h"
+#include "base/switch.h"
+#include "base/fsm.h"
+#include "gui/shapes/abstract_gshape.h"
+#include "gui/style/style.h"
+#include "gui/transformation/transformations.h"
+#include "base/operators.h"
+
+
+
 #ifndef DJNN_NO_DEBUG
 #define _PERF_TEST 0
 #if _PERF_TEST
@@ -467,9 +482,9 @@ namespace djnn
     sorted_counter = sorted_counter + 1;
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
-    cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
-    cerr << "GRAPH size: " << _vertices.size () << endl;
-    cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+    //cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
+    //cerr << "GRAPH size: " << _vertices.size () << endl;
+    //cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
     cerr << "\033[0m"  << endl;
     #endif
   }
@@ -479,6 +494,9 @@ namespace djnn
   {
     _scheduled_activation_processes.push_back(p);
   }
+
+  //TODO : remove - only for stat
+  static int _total_num_exec = 0;
 
   void
   Graph::exec ()
@@ -524,6 +542,11 @@ namespace djnn
     }
     _scheduled_delete_processes.clear ();
 
+    /* ORDER GRAPH */
+    display_exec_stats ();
+
+    init_exec_stats();
+
     #if _PERF_TEST
     // print in GREEN
     cerr << "\033[1;32m" << endl;
@@ -533,10 +556,60 @@ namespace djnn
     graph_average = graph_total / graph_counter;
     cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl;
     cerr << "GRAPH size: " << _vertices.size () << endl;
+    
+    int all_edges = 0;
+    for (auto v : _vertices) {
+      all_edges += v->get_edges ().size ();
+    }
+    cerr << "GRAPH_EDGES: " << all_edges << endl ;
+
     cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+
+    int sorted_edges = 0;
+    for (auto v : _sorted_vertices) {
+      sorted_edges += v->get_edges ().size ();
+    }
+
+    cerr << "SORTED_EDGES: " << sorted_edges << endl ;
+    
+    cerr << "\033[1;33m" << endl;
+    cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
     cerr << "\033[0m"  << endl;
     #endif
 
   }
 
+  void 
+  init_exec_stats(){
+    for (int i=0 ; i < __activation_order.size (); i++){
+      Process* p = __activation_order[i].second;
+      p->__nb_activation.first = 0;
+      p->__nb_activation.second = 0;
+    }
+    __activation_order.clear ();
+  }
+
+  void
+  display_exec_stats (){
+    cerr << "\033[1;33m" << endl;
+    cerr << "EXEC " << _total_num_exec++ << endl;
+    
+    for (int i=0 ; i < __activation_order.size (); i++){
+      Process* p = __activation_order[i].second;
+      cerr << "[" << i << "] \t- " << 
+        (__activation_order[i].first ? "ACT   " : "DEACT ") << "- " <<
+        boost::core::demangle(typeid(*p).name()) << " - " <<
+        (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_name () <<
+        "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ; 
+        if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
+          cerr << "\033[1;31m";
+          cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
+          cerr << "\033[1;33m" << endl;
+        }
+        cerr << endl;
+    }
+
+    cerr << endl << endl;
+    cerr << "\033[0m"  << endl;
+  }
 }

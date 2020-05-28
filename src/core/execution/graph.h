@@ -114,4 +114,9 @@ namespace djnn
     bool _sorted;
   };
 
+
+  //TODO : remove - only for stats
+  void init_exec_stats();
+  void display_exec_stats ();
+
 }

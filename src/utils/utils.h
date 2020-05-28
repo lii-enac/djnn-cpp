@@ -66,4 +66,6 @@ namespace djnn
 
   void run_stats(Process *p);
 
+  void display_creation_stats ();
+
 }

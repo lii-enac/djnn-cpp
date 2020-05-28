@@ -16,6 +16,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include <map>
 #include <string>
 
@@ -164,6 +165,10 @@ namespace djnn {
     void     set_data (Process* data);
     Process* get_data ();
 
+    //TODO: remove only for stats
+    std::pair<int, int> __nb_activation;
+    std::list<std::pair<Process*, long int>>::iterator __position_in_creation;
+
   protected:
     void finalize_construction (Process* parent, const std::string& name, Process* state=nullptr);
 
@@ -253,6 +258,11 @@ namespace djnn {
         }
     }
   };
+
+  //TODO: remove - only for stat
+  typedef std::pair<bool , Process*> __stat_exec;
+  extern std::vector<__stat_exec> __activation_order;
+  extern std::list<std::pair<Process*, long int>> __creation_stat_order;
 
   void alias_children (Process *p, Process *to);
   void alias (Process *parent, const std::string& name, Process* from);

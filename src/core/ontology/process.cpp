@@ -29,9 +29,20 @@
 #include <iostream>
 #endif
 
+//TODO remove - only for stat
+#include <boost/core/demangle.hpp>
+#include <boost/type_index.hpp>
+
 namespace djnn
 {
   using namespace std;
+
+  //TODO : remove - only for stats
+  std::vector<__stat_exec> __activation_order;
+  std::list<std::pair<Process*, long int>> __creation_stat_order;
+  std::vector<string> __destruction_stat_order;
+  long int __creation_num = 0;
+
 
   long int Process::_nb_anonymous = 0;
 
@@ -63,6 +74,11 @@ namespace djnn
 
     //debug
     //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;;
+
+
+    //TODO: remove - only for stat
+    __creation_stat_order.push_back (std::make_pair(this, __creation_num++));
+    __position_in_creation = std::prev(__creation_stat_order.end ());
   }
 
   void
@@ -85,8 +101,13 @@ namespace djnn
 
   Process::~Process ()
   {
-    //debug
-    //cerr << __PRETTY_FUNCTION__  << " - " << this << " - " << (get_parent () ? get_parent ()->get_name () + "/"  : "") << get_name ()  << endl;
+    
+    for (auto c : _activation_couplings) {
+      c->about_to_delete_src ();
+    }
+    for (auto c : _deactivation_couplings) {
+      c->about_to_delete_src ();
+    }
 
     /* note: 
        this code is to prevent bugs 
@@ -94,12 +115,6 @@ namespace djnn
        _vertex should be nullptr at this place
        if not, something (Process)  IS NOT well deleted
     */
-    for (auto c : _activation_couplings) {
-      c->about_to_delete_src ();
-    }
-    for (auto c : _deactivation_couplings) {
-      c->about_to_delete_src ();
-    }
     if (_vertex != nullptr){
 #ifndef DJNN_NO_DEBUG
        warning ( nullptr, " Process::~Process - " +  get_hierarchy_name (this)  + " - _vertex is NOT NULL and it should\n");
@@ -108,6 +123,12 @@ namespace djnn
 #endif
        _vertex->invalidate ();
     }
+
+    //TODO: remove - only for stat
+    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
+       " - " + (this->get_parent () ? this->get_parent ()->get_name () : "") + "/" + this->get_name ();
+    __destruction_stat_order.push_back (data_save);
+    __creation_stat_order.erase (__position_in_creation);
 
     /* make sure everything is wiped out the symtable */
     children ().clear ();
@@ -119,15 +140,22 @@ namespace djnn
   void
   Process::activate ()
   {
+    __nb_activation.first++;
+    __activation_order.push_back(std::make_pair(true, this));
+
     if (pre_activate ()) {
       impl_activate ();
       post_activate ();
     }
+
   }
 
   void
   Process::deactivate ()
   {
+    __nb_activation.second++;
+    __activation_order.push_back(std::make_pair(false, this));
+
     if (pre_deactivate ()) {
       impl_deactivate ();
       post_deactivate ();

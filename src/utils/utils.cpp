@@ -21,6 +21,18 @@
 
 #include <iostream>
 
+//TODO: remove - only for stat
+#include <boost/core/demangle.hpp>
+#include "core/control/binding.h"
+#include "core/control/native_expression_action.h"
+#include "base/connector.h"
+#include "base/switch.h"
+#include "base/fsm.h"
+#include "gui/shapes/abstract_gshape.h"
+#include "gui/style/style.h"
+#include "gui/transformation/transformations.h"
+#include "base/operators.h"
+
 namespace djnn
 {
   
@@ -67,4 +79,131 @@ namespace djnn
     std::cerr << "total mem size (*p): " << size << std::endl << std::endl;
   }
 
+  extern std::list<std::pair<Process*, long int>> __creation_stat_order;
+  extern std::vector<std::string> __destruction_stat_order;
+
+  static std::list<std::pair<Process*, long int>>::iterator last_creation_end;
+  static std::vector<std::string>::iterator last_destruction_end; 
+  static bool init_display_creation_stats = false;
+
+  void
+  display_creation_stats()
+  {
+    if (init_display_creation_stats == false) {
+      last_destruction_end = __destruction_stat_order.begin ();
+      last_creation_end = __creation_stat_order.begin ();
+      init_display_creation_stats = true;
+    }
+
+      int size = __creation_stat_order.size ();
+      
+      std::map<std::string,int> num_by_type;
+      int num_no_coupling=0;
+      int num_one_coupling=0;
+      int num_more_than_one_coupling=0;
+      int num_total_coupling = 0;
+      int num_no_children = 0;
+      int num_propertie = 0;
+      int num_bindings = 0;
+      int num_connectors = 0;
+      int num_math_expr = 0;
+      int num_FSM = 0;
+      int num_FSMState = 0;
+      int num_FSMTransition = 0;
+      int num_switches = 0;
+      int num_switheState = 0; // component dont le parent est un sw.
+      int num_gshapes = 0;
+      int num_gstype = 0;
+      int num_gtransform = 0;
+
+      // new Process ?
+      if (last_creation_end != __creation_stat_order.end ()){
+
+        for (auto it = last_creation_end ; it != __creation_stat_order.end (); it++){
+          long int i = it->second;
+          Process* p = it->first;
+          std::cerr << "\033[1;34m";
+          std::cerr << "[" << i << "] - " << boost::core::demangle(typeid(*p).name()) <<  " - " << 
+            (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_name () << std::endl;
+          std::cerr << "\033[0m" ;
+        }
+
+        last_creation_end = __creation_stat_order.end ();
+      }
+      else
+        std::cerr << "nothing has been created" << std::endl;
+
+
+      //delete Process ?
+      if (last_destruction_end != __destruction_stat_order.end ()){
+        for (auto it = last_destruction_end ; it != __destruction_stat_order.end (); ++it){
+             std::cerr << "\033[1;31m";
+             std::cerr << *it << std::endl;
+             std::cerr << "\033[0m" ;
+        }
+        last_destruction_end = __destruction_stat_order.end ();
+      }
+      else 
+        std::cerr << "nothing has been destroyed" << std::endl;
+
+
+      for (auto pair : __creation_stat_order) { 
+
+         Process* p = pair.first;
+
+         ++num_by_type[boost::core::demangle(typeid(*p).name())];
+         num_no_coupling += !p->has_coupling();
+         num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
+         num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;
+         num_total_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size();
+         num_no_children += p->children ().size () > 0 ? 0 : 1;
+
+         /* categories */
+         num_propertie += (dynamic_cast<AbstractProperty*> (p) != 0) ? 1 : 0;
+         num_bindings += (dynamic_cast<Binding*> (p) != 0) ? 1 : 0;
+         num_connectors += (dynamic_cast<Connector*> (p) != 0) ? 1 : 0;
+         num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
+         num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
+         num_math_expr += (dynamic_cast<NativeExpressionAction*> (p) != 0) ? 1 : 0;
+         num_FSM += (dynamic_cast<FSM*> (p) != 0) ? 1 : 0;
+         num_FSMState += (dynamic_cast<FSMState*> (p) != 0) ? 1 : 0;
+         num_FSMTransition += (dynamic_cast<FSMTransition*> (p) != 0) ? 1 : 0;
+         num_switches += (dynamic_cast<Switch*> (p) != 0) ? 1 : 0;
+         // Component (Container) dont le parent est un sw.
+         num_switheState += (dynamic_cast<Container*> (p) && p->get_parent () && dynamic_cast<Switch*> (p->get_parent ())) ? 1 : 0; 
+         num_gshapes += (dynamic_cast<AbstractGShape*> (p) != 0) ? 1 : 0;
+         num_gstype += (dynamic_cast<AbstractStyle*> (p) != 0) ? 1 : 0;
+         num_gtransform += (dynamic_cast<AbstractTransformation*> (p) != 0) ? 1 : 0;
+      }
+
+      std::cerr << "\033[1;32m";
+      std::cerr << std::endl << "-- ALL TYPE SUMMERY -- " << std::endl;
+      for (auto item: num_by_type) {
+        std::cerr << "type: " << item.first << " count: " << item.second << std::endl;
+      }
+
+      std::cerr << std::endl;
+      std::cerr << "# Process: \t" << size << std::endl;
+      std::cerr << "# Process no_children: \t" << num_no_children << std::endl;
+      std::cerr << "# Properties: \t" << num_propertie << std::endl;
+      std::cerr << "# Bindings: \t" << num_bindings << std::endl;
+      std::cerr << "# Connectors: \t" << num_connectors << std::endl;
+      std::cerr << "# Math+Expr: \t" << num_math_expr << std::endl;
+      std::cerr << "# FSMs: \t" << num_FSM << std::endl;
+      std::cerr << "# FSMStates: \t" << num_FSMState << std::endl;
+      std::cerr << "# FSMTransition: \t"<< num_FSMTransition << std::endl;
+      std::cerr << "# Switches: \t" << num_switches << std::endl;
+      std::cerr << "# SwitchStates: \t" << num_switheState << std::endl; // component dont le parent est un sw.
+      std::cerr << "# Shapes: \t" << num_gshapes << std::endl;
+      std::cerr << "# Styles: \t" << num_gstype << std::endl;
+      std::cerr << "# Transforms: \t" << num_gtransform << std::endl;
+      std::cerr << std::endl;
+      std::cerr << "# Coupling: \t" << num_total_coupling << std::endl; 
+      std::cerr << "#_no_coupling: \t" << num_no_coupling << " - " << (num_no_coupling * 100) / size << "%" << std::endl;
+      std::cerr << "#_one_couplings: \t" << num_one_coupling << " - " << (num_one_coupling * 100) / size << "%" << std::endl;
+      std::cerr << "#_more_than_one_couplings: \t" << num_more_than_one_coupling << " - " << (num_more_than_one_coupling * 100) / size << "%" << std::endl;
+      std::cerr << std::endl << std::endl;
+
+      std::cerr << "\033[0m" ;
+    }
 }
