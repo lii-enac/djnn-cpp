@@ -17,6 +17,8 @@
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
 
+#include "utils/debug.h"
+
 #include "exec_env/exec_env-dev.h"
 
 #include <algorithm>
@@ -41,8 +43,8 @@
 
 
 #ifndef DJNN_NO_DEBUG
-#define _PERF_TEST 0
-#if _PERF_TEST
+
+#if _DEBUG_SEE_GRAPH_INFO_PREF
 //#include "core/utils/utils-dev.h"
 static int graph_counter = 0;
 static double graph_total = 0.0;
@@ -213,7 +215,6 @@ namespace djnn
 #endif
   }
 
-  //Graph Graph::_instance;
   Graph * Graph::_instance;
 
   Graph&
@@ -450,7 +451,7 @@ namespace djnn
     if (_sorted)
       return;
 
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GRAPH_INFO_PREF
     _t1 ();
     #endif
     _cur_date = 0;
@@ -475,16 +476,12 @@ namespace djnn
 
     _sorted = true;
 
-    #if _PERF_TEST
-    // print in YELLOW
+    #if _DEBUG_SEE_GRAPH_INFO_PREF
     cerr << "\033[1;33m" << endl;
     double time = _t2 ("SORT_GRAPH : ", true);
     sorted_counter = sorted_counter + 1;
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
-    //cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
-    //cerr << "GRAPH size: " << _vertices.size () << endl;
-    //cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
     cerr << "\033[0m"  << endl;
     #endif
   }
@@ -501,7 +498,7 @@ namespace djnn
   void
   Graph::exec ()
   {
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GRAPH_INFO_PREF
     _t1 ();
     #endif
     
@@ -547,7 +544,7 @@ namespace djnn
 
     init_exec_stats();
 
-    #if _PERF_TEST
+    #if _DEBUG_SEE_GRAPH_INFO_PREF
     // print in GREEN
     cerr << "\033[1;32m" << endl;
     double time = _t2 ("GRAPH_EXEC : ", true);
@@ -555,24 +552,23 @@ namespace djnn
     graph_total = graph_total + time ;
     graph_average = graph_total / graph_counter;
     cerr << "GRAPH_EXEC : " << graph_counter << " - avg: " << graph_average << endl;
-    cerr << "GRAPH size: " << _vertices.size () << endl;
+    cerr << "GRAPH #vertices : " << _vertices.size () << endl;
     
     int all_edges = 0;
     for (auto v : _vertices) {
       all_edges += v->get_edges ().size ();
     }
-    cerr << "GRAPH_EDGES: " << all_edges << endl ;
+    cerr << "GRAPH #edges: " << all_edges << endl ;
 
-    cerr << "SORTED_GRAPH size: " << _sorted_vertices.size () << endl;
+    cerr << "\033[1;33m";
+    cerr << "SORTED_GRAPH #vertices: " << _sorted_vertices.size () << endl;
 
     int sorted_edges = 0;
     for (auto v : _sorted_vertices) {
       sorted_edges += v->get_edges ().size ();
     }
 
-    cerr << "SORTED_EDGES: " << sorted_edges << endl ;
-    
-    cerr << "\033[1;33m" << endl;
+    cerr << "SORTED_GRAPH #edges: " << sorted_edges << endl ;    
     cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << endl;
     cerr << "\033[0m"  << endl;
     #endif

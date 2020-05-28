@@ -22,6 +22,9 @@
 
 #endif
 
+
+#ifndef DJNN_NO_DEBUG
+
 /* DEBUG DISPLAY INFORMATION */
 /* 
   diplayed infos :
@@ -35,4 +38,15 @@
  - nb object to draw
  - nb object in color picking view
 */
-#define _DEBUG_SEE_GUI_INFO_PREF 1
+#define _DEBUG_SEE_GUI_INFO_PREF 0
+
+/*
+ diplayed infos (GREEN and YELLOW) : 
+ - time to exec graph and average
+ - time to sort graph and average
+ - nb vertices and edges in graph 
+ - nb vertices and edges in sorted_graph 
+*/
+#define _DEBUG_SEE_GRAPH_INFO_PREF 0
+
+#endif
