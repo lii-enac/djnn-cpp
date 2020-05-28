@@ -50,5 +50,5 @@ namespace djnn {
     CoreProcess *_activation_source;
     Blank _end;
   };
-  void* get_native_async_user_data (Process* native_action);
+  void* get_native_async_user_data (CoreProcess* native_action);
 }

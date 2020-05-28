@@ -65,7 +65,7 @@ namespace djnn
   }
 
   void*
-  get_native_async_user_data (Process* native_action)
+  get_native_async_user_data (CoreProcess* native_action)
   {
     NativeAsyncAction *na = djnn_dynamic_cast<NativeAsyncAction*> (native_action);
     if (na == nullptr)
