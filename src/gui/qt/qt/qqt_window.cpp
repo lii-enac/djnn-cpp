@@ -12,6 +12,8 @@
  *
  */
 
+#include "utils/debug.h"
+
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
@@ -26,9 +28,6 @@
 #include <QTouchEvent>
 
 #include <iostream>
-#include "utils/debug.h"
-
-#define DEBUG_PICKING  0
 
 #include "exec_env/exec_env-dev.h"
 #define _PERF_TEST 0
@@ -242,7 +241,7 @@ namespace djnn
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
       QtMainloop::instance ().set_please_exec (true);
 
-#if DEBUG_PICKING 
+#if _DEBUG_SEE_COLOR_PICKING_VIEW 
     _picking_view->display();
 #endif
   }

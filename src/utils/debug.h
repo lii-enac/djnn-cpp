@@ -21,3 +21,6 @@
 #define DBGVAR(x) #x << ":" << x
 
 #endif
+
+/* DEBUG DISPLAY INFORMATION */
+#define _DEBUG_SEE_COLOR_PICKING_VIEW  0

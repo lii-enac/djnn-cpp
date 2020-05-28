@@ -18,6 +18,8 @@
 #include "qt_window.h"
 #include "qt_display.h"
 
+#include "utils/debug.h"
+
 #include "exec_env/qt/qt_mainloop.h"
 #include "display/display.h"
 #include "display/display-dev.h"
@@ -35,9 +37,6 @@
 #include <QtGui/QBitmap>
 
 //#include <iostream>
-//#include "utils/debug.h"
-
-#define DEBUG_PICKING  0
 
 
 namespace djnn

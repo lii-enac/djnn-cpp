@@ -19,7 +19,6 @@
 #include "display/abstract_display.h"
 
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DEBUG_PICKING  0
 
 #ifndef DOUBLE_BUFFER
 #define DOUBLE_BUFFER 1
