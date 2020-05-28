@@ -20,6 +20,8 @@
 #include <map>
 #include <string>
 
+#include "utils/debug.h"
+
 namespace djnn {
 
   // process types
@@ -165,8 +167,9 @@ namespace djnn {
     void     set_data (Process* data);
     Process* get_data ();
 
-    //TODO: remove only for stats
-    std::pair<int, int> __nb_activation;
+    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+     std::pair<int, int> __nb_activation;
+    #endif
     std::list<std::pair<Process*, long int>>::iterator __position_in_creation;
 
   protected:
@@ -260,8 +263,10 @@ namespace djnn {
   };
 
   //TODO: remove - only for stat
-  typedef std::pair<bool , Process*> __stat_exec;
-  extern std::vector<__stat_exec> __activation_order;
+  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+   typedef std::pair<bool , Process*> __stat_exec;
+   extern std::vector<__stat_exec> __activation_order;
+  #endif
   extern std::list<std::pair<Process*, long int>> __creation_stat_order;
 
   void alias_children (Process *p, Process *to);

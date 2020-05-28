@@ -37,8 +37,9 @@ namespace djnn
 {
   using namespace std;
 
-  //TODO : remove - only for stats
+  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
   std::vector<__stat_exec> __activation_order;
+  #endif
   std::list<std::pair<Process*, long int>> __creation_stat_order;
   std::vector<string> __destruction_stat_order;
   long int __creation_num = 0;
@@ -140,8 +141,10 @@ namespace djnn
   void
   Process::activate ()
   {
+    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     __nb_activation.first++;
     __activation_order.push_back(std::make_pair(true, this));
+    #endif
 
     if (pre_activate ()) {
       impl_activate ();
@@ -153,8 +156,10 @@ namespace djnn
   void
   Process::deactivate ()
   {
+    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     __nb_activation.second++;
     __activation_order.push_back(std::make_pair(false, this));
+    #endif
 
     if (pre_deactivate ()) {
       impl_deactivate ();

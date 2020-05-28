@@ -115,8 +115,9 @@ namespace djnn
   };
 
 
-  //TODO : remove - only for stats
+  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
   void init_exec_stats();
   void display_exec_stats ();
+  #endif
 
 }

@@ -28,18 +28,9 @@
 #endif
 
 
-//TODO: remove - only for stat
-#include <boost/core/demangle.hpp>
-#include "core/control/binding.h"
-#include "core/control/native_expression_action.h"
-#include "base/connector.h"
-#include "base/switch.h"
-#include "base/fsm.h"
-#include "gui/shapes/abstract_gshape.h"
-#include "gui/style/style.h"
-#include "gui/transformation/transformations.h"
-#include "base/operators.h"
-
+ #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+#include <boost/core/demangle.hpp> 
+#endif
 
 
 #ifndef DJNN_NO_DEBUG
@@ -492,9 +483,6 @@ namespace djnn
     _scheduled_activation_processes.push_back(p);
   }
 
-  //TODO : remove - only for stat
-  static int _total_num_exec = 0;
-
   void
   Graph::exec ()
   {
@@ -539,10 +527,11 @@ namespace djnn
     }
     _scheduled_delete_processes.clear ();
 
-    /* ORDER GRAPH */
+    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     display_exec_stats ();
 
     init_exec_stats();
+    #endif
 
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     // print in GREEN
@@ -574,6 +563,11 @@ namespace djnn
     #endif
 
   }
+
+  /* ----------- DEBUG ------------- */
+  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+
+  static int _total_num_exec = 0;
 
   void 
   init_exec_stats(){
@@ -608,4 +602,7 @@ namespace djnn
     cerr << endl << endl;
     cerr << "\033[0m"  << endl;
   }
+
+  #endif
+  /* ----------- END DEBUG ------------- */
 }

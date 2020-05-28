@@ -49,4 +49,11 @@
 */
 #define _DEBUG_SEE_GRAPH_INFO_PREF 0
 
+
+/*
+ diplayed infos (YELLOW) : 
+ - order in which component are activate and dactivate between to GRAPH_EXEC
+*/
+#define _DEBUG_SEE_ACTIVATION_SEQUENCE 0
+
 #endif
