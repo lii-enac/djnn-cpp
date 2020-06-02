@@ -116,8 +116,10 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET);
         event->ignore ();
         Process *p = _window->close();
-        if (p != nullptr)
+        if (p != nullptr) {
           p->activate ();
+          QtMainloop::instance ().set_please_exec (true);
+        }
         djnn::release_exclusive_access (DBG_REL);
       }
       break;
