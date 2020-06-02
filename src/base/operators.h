@@ -71,7 +71,7 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (Process *parent, const std::string& name, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (FatProcess *parent, const std::string& name, const Left_init& l_val, const Right_init& r_val)
     : BinaryOperatorCommon (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
