@@ -35,8 +35,8 @@ namespace djnn
     _period (this, "period", period),
     _elapsed (this, "elapsed", 0),
     _tick (this, "tick"),
-    _action (this, "action"),
-    _c_update (&_period, ACTIVATION, &_action, ACTIVATION, true)
+    _updateaction (this, "action"),
+    _c_update (&_period, ACTIVATION, &_updateaction, ACTIVATION, true)
   {
     Process::finalize_construction (parent, name);
   }

@@ -32,13 +32,13 @@ namespace djnn
 
   class Clock : public Process, public djnn_internal::Time::Timer
   {
-    class ClockAction : public Action
+    class ClockUpdateAction : public Action
     {
     public:
-      ClockAction (Process* parent, const std::string& name) :
+      ClockUpdateAction (Process* parent, const std::string& name) :
         Action (parent, name){};
     
-      virtual ~ClockAction () {}
+      virtual ~ClockUpdateAction () {}
       void impl_activate () override { ((Clock*)get_parent())->update_period (); }
       void impl_deactivate () override {}
     };
@@ -66,7 +66,7 @@ namespace djnn
     IntProperty _period;
     DoubleProperty _elapsed;
     Spike _tick;
-    ClockAction _action;
+    ClockUpdateAction _updateaction;
     Coupling _c_update;
   };
 
