@@ -34,6 +34,7 @@
 #include "dictionary.h"
 #include "deref.h"
 #include "native_async_action.h"
+#include "process_handler.h"
 
 namespace djnn {
 
