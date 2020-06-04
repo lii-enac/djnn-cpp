@@ -108,7 +108,18 @@ namespace djnn {
     void     set_vertex (Vertex *v);
 #endif
 
+#ifndef DJNN_NO_DEBUG
+    FatProcess* get_debug_parent () { return _debug_parent; }
+    void set_debug_parent (FatProcess* p) { _debug_parent = p; }
+    const std::string& get_debug_name () { return _debug_name; }
+    void set_debug_name (const std::string& n) { _debug_name = n; }
+    private:
+      FatProcess* _debug_parent;
+      std::string _debug_name;
 
+#endif
+
+    public:
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
      std::pair<int, int> __nb_activation;
     #endif
@@ -116,6 +127,7 @@ namespace djnn {
      std::list<std::pair<CoreProcess*, long int>>::iterator __position_in_creation;
     #endif
 
+    public:
     // actions to be redefined by subclasses
     virtual     void update_drawing () {}
     virtual     void draw () {}
@@ -222,6 +234,7 @@ namespace djnn {
     virtual FatChildProcess* find_child (const std::string&) { return nullptr; }
     virtual FatChildProcess* find_child (int /*index*/) { return nullptr; }
     static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path) { return nullptr; }
+    virtual size_t children_size () const { return 0; }
 
     virtual void     set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
@@ -297,7 +310,7 @@ namespace djnn {
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
     symtable_t::iterator children_end () { return _symtable.end (); }
     bool children_empty () { return _symtable.empty (); }
-    size_t children_size () const { return _symtable.size(); }
+    size_t children_size () const override { return _symtable.size(); }
     symtable_t& children () { return _symtable; }
     const symtable_t& children () const { return _symtable; } 
     

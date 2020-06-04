@@ -83,10 +83,10 @@ namespace djnn
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
 
-  extern std::list<std::pair<Process*, long int>> __creation_stat_order;
+  extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   extern std::vector<std::string> __destruction_stat_order;
 
-  static std::list<std::pair<Process*, long int>>::iterator last_creation_end;
+  static std::list<std::pair<CoreProcess*, long int>>::iterator last_creation_end;
   static std::vector<std::string>::iterator last_destruction_end; 
   static bool init_display_creation_stats = false;
 
@@ -125,10 +125,10 @@ namespace djnn
 
         for (auto it = last_creation_end ; it != __creation_stat_order.end (); it++){
           long int i = it->second;
-          Process* p = it->first;
+          auto * p = it->first;
           std::cerr << "\033[1;34m";
           std::cerr << "[" << i << "] - " << boost::core::demangle(typeid(*p).name()) <<  " - " << 
-            (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_name () << std::endl;
+            (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_debug_name () << std::endl;
           std::cerr << "\033[0m" ;
         }
 
@@ -153,14 +153,14 @@ namespace djnn
 
       for (auto pair : __creation_stat_order) { 
 
-         Process* p = pair.first;
+         auto * p = pair.first;
 
          ++num_by_type[boost::core::demangle(typeid(*p).name())];
          num_no_coupling += !p->has_coupling();
          num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
          num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;
          num_total_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size();
-         num_no_children += p->children ().size () > 0 ? 0 : 1;
+         num_no_children += p->children_size () > 0 ? 0 : 1;
 
          /* categories */
          num_propertie += (dynamic_cast<AbstractProperty*> (p) != 0) ? 1 : 0;

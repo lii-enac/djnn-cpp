@@ -60,7 +60,12 @@ namespace djnn
   CoreProcess::couplings_t CoreProcess::default_couplings;
 
   CoreProcess::CoreProcess (bool model)
-  : _vertex (nullptr)
+  : 
+  #ifndef DJNN_NO_DEBUG
+  _debug_parent (nullptr)
+  , _debug_name (FatProcess::default_name)
+  #endif
+  , _vertex (nullptr)
   {
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);
@@ -100,6 +105,11 @@ namespace djnn
     } else {
       parentless_names[(ChildProcess*)this] = name; // FIXME
     }
+
+    #ifndef DJNN_NO_DEBUG
+    set_debug_parent(parent);
+    set_debug_name (name);
+    #endif
   }
 
   void
@@ -154,7 +164,7 @@ namespace djnn
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
-       " - " + (this->get_parent () ? this->get_parent ()->get_name () : "") + "/" + this->get_name ();
+       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);
