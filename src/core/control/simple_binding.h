@@ -51,7 +51,7 @@ namespace djnn {
     CoreProcess * get_dst() { return _c.get_dst (); }
 
   protected:
-    void impl_activate   () override { _c.enable  (); };
+    void impl_activate   () override { _c.enable  (); }
     void impl_deactivate () override { _c.disable (); }
     friend class SimpleBinding; // access to impl_activate and impl_deactivate
 
@@ -81,9 +81,11 @@ namespace djnn {
       finalize_construction (parent, name);
     }
 
+    void set_parent (FatProcess* p) override;
+
   protected:
 
-    void impl_activate   () override { _b.impl_activate (); };
+    void impl_activate   () override { _b.impl_activate (); }
     void impl_deactivate () override { _b.impl_deactivate (); }
 
   private:

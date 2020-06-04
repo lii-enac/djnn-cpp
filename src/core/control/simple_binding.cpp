@@ -10,6 +10,21 @@ namespace djnn {
   using std::string;
 
   void
+  SimpleBinding::set_parent (FatProcess* p)
+  { 
+    /* in case of re-parenting remove edge dependency in graph */
+    auto * dst = _b.get_dst ();
+    if (get_parent () && dst) {
+       remove_state_dependency (get_parent (), dst);
+    }
+
+    if (dst)
+      add_state_dependency (p, dst);
+
+    FatProcess::set_parent (p); 
+  }
+
+  void
   CoreBinding::serialize (const std::string& format)
   {
     string buf;
