@@ -106,7 +106,7 @@ public:
     }
 
     void impl_activate   () override { _c_src.enable  (); _action.activate(); }
-    void impl_deactivate () override { _c_src.disable (); _action.deactivate(); }
+    void impl_deactivate () override {} // { _c_src.disable (); _action.deactivate(); } // action is auto-activating...
     void post_activate   () override { post_activate_auto_deactivate (); }
 
     void perform_action ();

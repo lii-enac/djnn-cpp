@@ -386,6 +386,9 @@ namespace djnn
           parentless_names[this] = _parent->find_child_name (this);
     }
     _parent = p;
+    #if !DJNN_NO_DEBUG
+    set_debug_parent (p);
+    #endif
   }
 
   void
