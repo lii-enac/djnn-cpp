@@ -108,7 +108,7 @@ namespace djnn
 
     #ifndef DJNN_NO_DEBUG
     set_debug_parent(parent);
-    set_debug_name (name);
+    if (name != "") set_debug_name (name);
     #endif
   }
 
