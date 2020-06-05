@@ -594,19 +594,35 @@ namespace djnn
     
     for (int i=0 ; i < __activation_order.size (); i++){
       auto * p = __activation_order[i].second;
-      cerr << "[" << i << "] \t- " << 
-        (__activation_order[i].first ? "ACT   " : "DEACT ") << "- " <<
-        boost::core::demangle(typeid(*p).name()) << " - " <<
-        (p->get_debug_parent () ? p->get_debug_parent ()->get_name () : "") << "/" << p->get_debug_name () <<
-        "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ;
-        if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
-          cerr << "\033[1;31m";
-          cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
-          cerr << "\033[1;33m" << endl;
-        }
-        cerr << endl;
+      if ( __activation_order[i].first || (p->__nb_activation.first != p->__nb_activation.second) ) {
+        cerr << "[" << i << "] \t- " << 
+          (__activation_order[i].first ? "ACT   " : "DEACT ") << "- " <<
+          boost::core::demangle(typeid(*p).name()) << " - " <<
+          (p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () : "") << "/" << p->get_debug_name () <<
+          "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ;
+          if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
+            cerr << "\033[1;31m";
+            cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
+            cerr << "\033[1;33m";
+          }
+          cerr << endl;
+      }
+      else {
+        cerr << "\033[1;30m";
+        cerr << "[" << i << "] \t- " << 
+          "DEACT - " <<
+          boost::core::demangle(typeid(*p).name()) << " - " <<
+          (p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () : "") << "/" << p->get_debug_name () <<
+          "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ;
+          if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
+            cerr << "\033[1;31m";
+            cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
+            cerr << "\033[1;33m";
+          }
+        cerr << endl << "\033[1;33m";
+      }
     }
-
+    
     cerr << endl << endl;
     cerr << "\033[0m"  << endl;
   }
