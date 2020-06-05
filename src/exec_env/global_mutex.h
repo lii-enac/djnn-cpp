@@ -13,6 +13,7 @@ namespace djnn
 	class FatProcess;
 
 	void init_global_mutex ();
+	bool is_global_mutex_inited ();
 
 	void get_exclusive_access(const char* debug);
 	void release_exclusive_access(const char* debug);

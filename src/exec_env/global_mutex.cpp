@@ -19,6 +19,12 @@ namespace djnn
     ios_mutex = create_lock();
   }
 
+  bool
+  is_global_mutex_inited ()
+  {
+    return global_mutex != nullptr;
+  }
+
   void
   lock_ios_mutex () {
     lock(ios_mutex);
