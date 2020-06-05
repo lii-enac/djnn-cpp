@@ -76,7 +76,7 @@ namespace djnn {
     {}
 
     SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    : FatProcess (name), _b (src, dst)
+    : FatProcess (name), _b (src, src_flag, dst, dst_flag)
     {  
       finalize_construction (parent, name);
     }
