@@ -228,7 +228,8 @@ namespace djnn
       s->get_ui()->mouse_press_y->set_value (y, true);
       s->get_ui()->mouse_move_x->set_value (x, true);
       s->get_ui()->mouse_move_y->set_value (y, true);
-      set_local_coords (s, nullptr, x, y, false);
+      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
+      s->press (coord.first, coord.second);
 
       /* event */
       if (s != _hovered_shape)
@@ -330,8 +331,8 @@ namespace djnn
         s->get_ui()->move_y->set_value (y, true);
         s->get_ui()->mouse_move_y->set_value (y, true);
       }
-      set_local_coords (s, nullptr, x, y, true);
-
+      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
+      s->move (coord.first, coord.second);
       /* event */
       s->get_ui()->move->schedule_activation ();
       s->get_ui()->mouse_move->schedule_activation ();
