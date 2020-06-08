@@ -42,7 +42,7 @@ namespace djnn
   {
   }
 
-  void
+  std::pair<double, double>
   Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y, bool is_move)
   {
     /* compute local coords */
@@ -85,7 +85,7 @@ namespace djnn
     /* we choose to set/init move even on press */
     s->get_ui()->local_move_x->set_value (loc_x, true);
     s->get_ui()->local_move_y->set_value (loc_y, true);
-    
+    return std::pair<double, double> (loc_x, loc_y);
   }
 
   void

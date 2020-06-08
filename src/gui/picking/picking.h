@@ -48,7 +48,7 @@ namespace djnn {
     bool genericTouchMove (double x, double y, int id, float pressure);
     bool genericTouchRelease (double x, double y, int id, float pressure);
 
-    void set_local_coords (AbstractGShape *s, Touch *t, double x, double y, bool is_move);
+    std::pair<double, double> set_local_coords (AbstractGShape *s, Touch *t, double x, double y, bool is_move);
   protected:
 
     bool genericEnterLeave (AbstractGShape* gobj);
