@@ -70,6 +70,8 @@ namespace djnn
     void impl_deactivate () override;
     void impl_activate () override;
     void add_style_class (const std::string& classname);
+    virtual void press (double x, double y) {}
+    virtual void move (double x, double y) {}
     void pick () override;
     void pre_draw ();
     void post_draw ();
