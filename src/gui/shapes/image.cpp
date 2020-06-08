@@ -34,7 +34,7 @@ namespace djnn
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
-      _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
+      _watcher(nullptr), _pixel (this, "pixel", 0), _cache(nullptr), _invalid_cache (true)
   {
     set_origin (x, y);
     Process::finalize_construction (parent, name);
@@ -55,7 +55,9 @@ namespace djnn
   {
     Process* res = AbstractPathImage::find_child(name);
     //if(res) return res;
-
+    if (name == "pixel" && !has_ui()) {
+      init_ui ();
+    }
     if( name=="path" && _watcher == nullptr) {
       _watcher = new ImageWatcher (this);
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
@@ -98,6 +100,20 @@ namespace djnn
     y = AbstractImage::raw_props.y;
     w = AbstractImage::raw_props.width;
     h = AbstractImage::raw_props.height;
+  }
+
+  void
+  Image::press (double x, double y)
+  {
+    if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
+      _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
+  }
+
+  void
+  Image::move (double x, double y)
+  {
+    if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
+      _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
   }
 
   double

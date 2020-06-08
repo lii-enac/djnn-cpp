@@ -384,6 +384,7 @@ namespace djnn
   private:
     Coupling *_cwatcher;
     ImageWatcher *_watcher;
+    IntProperty _pixel;
     void impl_activate () override;
     void impl_deactivate () override;
     void *_cache;
