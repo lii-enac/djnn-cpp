@@ -116,7 +116,7 @@ namespace djnn
         djnn::get_exclusive_access (DBG_GET);
         event->ignore ();
         FatProcess *p = _window->close();
-        if (p != nullptr)
+        if (p != nullptr) {
           p->activate ();
           QtMainloop::instance ().set_please_exec (true);
         }
