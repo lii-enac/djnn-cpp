@@ -79,8 +79,9 @@ namespace djnn
     virtual void get_bounding_box (double& x, double& y, double& w, double& h) const;
     virtual double sdf (double x, double y) const;
 
-  private:
+  protected:
     void init_ui ();
+  private:
     Process* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
     static std::vector<std::string> _ui;
