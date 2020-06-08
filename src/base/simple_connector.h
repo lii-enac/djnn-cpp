@@ -30,12 +30,12 @@ namespace djnn {
   {
   public:
     CoreConnector (CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
-    : _assignment (src, dst, true),
-      _binding (src, &_assignment),
-      _copy_on_activation (copy_on_activation)
-      {
-        // no need to add edge to graph, assignment already did it
-      }
+    : _assignment (src, dst, false)
+    , _binding (src, &_assignment)
+    , _copy_on_activation (copy_on_activation)
+    {
+      // no need to add edge to graph, assignment already did it
+    }
     
     CoreConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : CoreConnector (src, dst, copy_on_activation)
@@ -44,8 +44,8 @@ namespace djnn {
     }
 
   protected:
-    void impl_activate   () override { _assignment.activate (); _binding.activate(); if(_copy_on_activation) _assignment.notify_activation (); }
-    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
+    void impl_activate   () override { _assignment.activate ();   _binding.activate ();   if (_copy_on_activation) _assignment.notify_activation (); }
+    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
 
   private:
     CoreAssignment _assignment;
@@ -75,22 +75,20 @@ public:
   {
   public:
     SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
-    : FatProcess (name),
-      //_assignment (this, "", src, dst, true),
-      _assignment (src, dst, true),
-      _binding (src, &_assignment),
-      _copy_on_activation (copy_on_activation)
-      {
-        // no need to add edge to graph, assignment already did it
-        finalize_construction (parent, name);
-      }
+    : FatProcess (name)
+    , _assignment (src, dst, false)
+    , _binding (src, &_assignment)
+    , _copy_on_activation (copy_on_activation)
+    {
+      // no need to add edge to graph, assignment already did it
+      finalize_construction (parent, name);
+    }
 
   protected:
-    void impl_activate   () override { _assignment.activate (); _binding.activate(); if (_copy_on_activation) _assignment.notify_activation (); }
-    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate(); }
+    void impl_activate   () override { _assignment.activate ();   _binding.activate ();   if (_copy_on_activation) _assignment.notify_activation (); }
+    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
 
   private:
-    //SimpleAssignment _assignment;
     CoreAssignment _assignment;
     CoreBinding _binding;
     bool _copy_on_activation;
