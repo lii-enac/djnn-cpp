@@ -621,6 +621,18 @@ namespace djnn
     }
   }
 
+  int
+  QtBackend::get_pixel (Image *i, double x, double y)
+  {
+    QPixmap *pm = (QPixmap*) (i->cache ());
+    if (pm) {
+      QImage img = pm->toImage();
+      if (!img.isNull ())
+        return img.pixel (x, y);
+    }
+    return 0;
+  }
+
   void
   QtBackend::draw_data_image (DataImage *i)
     {

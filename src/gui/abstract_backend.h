@@ -131,6 +131,11 @@ namespace djnn
     draw_image (Image *i)
     {
     }
+    virtual int
+    get_pixel (Image *i, double x, double y)
+    {
+      return 0;
+    }
     virtual void
     draw_data_image (DataImage *i)
     {
