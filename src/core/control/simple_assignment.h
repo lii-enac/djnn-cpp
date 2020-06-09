@@ -92,11 +92,12 @@ public:
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
-    :
-    FatProcess (name),
-     _dst(dst),
-    _action(this, "action"), _c_src(src, ACTIVATION, &_action, ACTIVATION), _propagate(propagate)
+    SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : FatProcess (name, is_model)
+    , _dst(dst)
+    , _action(this, "action")
+    , _c_src (src, ACTIVATION, &_action, ACTIVATION)
+    , _propagate(true)
     {
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
@@ -118,6 +119,7 @@ public:
     CoreProcess *_dst;
     AssignmentAction _action;
     Coupling _c_src;
+  protected:
     bool _propagate;
 
 public:
@@ -129,9 +131,11 @@ public:
   class SimplePausedAssignment : public SimpleAssignment
   {
   public:
-    SimplePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : SimpleAssignment (parent, name, src, dst, false)
-    {}
+    SimplePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : SimpleAssignment (parent, name, src, dst, is_model)
+    {
+      _propagate = false;
+    }
   };
 
 }
