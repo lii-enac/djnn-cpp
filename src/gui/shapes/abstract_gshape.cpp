@@ -130,7 +130,7 @@ namespace djnn
     //  cpick->enable (f);
     FatProcess *update = f;
     cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
-    cpick->enable ();
+    if (f != nullptr) cpick->enable ();
     press = new Spike (p, "press");
     move = new Spike (p, "move");
     release = new Spike (p, "release");
