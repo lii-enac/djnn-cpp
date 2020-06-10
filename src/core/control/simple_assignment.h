@@ -29,13 +29,14 @@ namespace djnn {
   class CoreAssignment : public CoreProcess
   {
   public:
-    CoreAssignment (CoreProcess* src, CoreProcess* dst, bool propagate)
-    : _src(src), _dst(dst), _propagate(propagate)
+    CoreAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : CoreProcess (is_model)
+    , _src(src), _dst(dst), _propagate(true)
     {
       Graph::instance ().add_edge (src, dst);
     }
-    CoreAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool propagate)
-    : CoreAssignment (src, dst, propagate)
+    CoreAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : CoreAssignment (src, dst, is_model)
     {
       finalize_construction (parent, name);
     }
@@ -56,6 +57,8 @@ namespace djnn {
 
   private:    
     CoreProcess *_src, *_dst;
+  
+  protected:
     bool _propagate;
 
 public:
@@ -67,13 +70,15 @@ public:
   class CorePausedAssignment : public CoreAssignment
   {
   public:
-    CorePausedAssignment (CoreProcess* src, CoreProcess* dst)
-    : CoreAssignment (src, dst, false)
+    CorePausedAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : CoreAssignment (src, dst, is_model)
     {
+      _propagate = false;
     }
-    CorePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : CoreAssignment (parent, name, src, dst, false)
+    CorePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : CoreAssignment (parent, name, src, dst, is_model)
     {
+      _propagate = false;
     }
   };
 
