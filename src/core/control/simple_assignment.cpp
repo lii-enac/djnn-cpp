@@ -29,7 +29,6 @@ namespace djnn
     AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
     if (!dst_p) { warning (dst_p, "dst not a property"); return; }
 
-    dst->set_activation_source (src);
     if (src_p) {
       switch (src_p->get_prop_type ())
       {
@@ -76,7 +75,6 @@ namespace djnn
       warning (nullptr, "incompatible source and destination in (Paused)assignment \n");
 
     }
-    dst->activate ();
   }
 
   void
