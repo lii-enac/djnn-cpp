@@ -101,7 +101,7 @@ public:
     : FatProcess (name, is_model)
     , _dst(dst)
     , _action(this, "action")
-    , _c_src (src, ACTIVATION, &_action, ACTIVATION)
+    , _c_src (src, ACTIVATION, &_action, ACTIVATION, true)
     , _propagate(true)
     {
       Graph::instance ().add_edge (src, dst);
