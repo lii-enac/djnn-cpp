@@ -57,19 +57,36 @@ public:
 #endif
   };
 
-  class CorePausedConnector : public CoreConnector
+  class CorePausedConnector : public CoreProcess
   {
   public:
     CorePausedConnector (CoreProcess* src, CoreProcess* dst)
-    : CoreConnector (src, dst, false)
+    : _paused_assignment (src, dst, false)
+    , _binding (src, &_paused_assignment)
     {
+      // no need to add edge to graph, assignment already did it
     }
     
     CorePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : CoreConnector (parent, name, src, dst, false)
+    : CorePausedConnector (src, dst)
     {
+      finalize_construction (parent, name);
     }
+
+     protected:
+    void impl_activate   () override { _paused_assignment.activate ();   _binding.activate (); }
+    void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
+
+  private:
+    CorePausedAssignment _paused_assignment;
+    CoreBinding _binding;
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
+
+
 
   class SimpleConnector : public FatProcess
   {
@@ -98,12 +115,29 @@ public:
 #endif
   };
 
-  class SimplePausedConnector : public SimpleConnector
+  class SimplePausedConnector : public FatProcess
   {
   public:
     SimplePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : SimpleConnector (parent, name, src, dst)
-    {}
+    : FatProcess (name)
+    , _paused_assignment (src, dst, false)
+    , _binding (src, &_paused_assignment)
+    {
+      // no need to add edge to graph, assignment already did it
+      finalize_construction (parent, name);
+    }
+
+    protected:
+    void impl_activate   () override { _paused_assignment.activate ();   _binding.activate (); }
+    void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
+
+  private:
+    CorePausedAssignment _paused_assignment;
+    CoreBinding _binding;
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
 }
