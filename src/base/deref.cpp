@@ -18,36 +18,34 @@
 #include "core/execution/graph.h"
 #include "core/utils/error.h"
 
-#include <iostream>
-
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
+  AbstractDeref::AbstractDeref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
   : Process (name),
   _path (this, "path", path),
   _action (this, "action"),
-  _set_dst (this, "set_dst"),
-  _set_src (this, "set_src"),
-  _cref (ref, ACTIVATION, &_action, ACTIVATION),
-  _cpath (&_path, ACTIVATION, &_action, ACTIVATION),
-  _csrc_to_dst (),
-  _propagating (false),
-  _dir (dir)
+  _set (this, "set_action"),
+  _get (this, "get_action"),
+  _cref (ref, ACTIVATION, &_action, ACTIVATION, true),
+  _cpath (&_path, ACTIVATION, &_action, ACTIVATION, true),
+  _cget (),
+  _cset (),
+  _dir (dir),
+  _propagating (false)
   {
     _ref = dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
       warning (this, "Deref is only applicable to RefProperty");
       return;
     }
-    Graph::instance ().add_edge (_ref, &_action);
-    Graph::instance ().add_edge (&_path, &_action);
   }
 
   AbstractDeref::~AbstractDeref ()
   {
-    remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (_ref, &_action);
-    Graph::instance ().remove_edge (&_path, &_action);
+    Process *old_src = _cset.get_src();
+    if (old_src) {
+      Graph::instance().remove_edge (old_src, &_get);
+    }
   }
 
   void
@@ -55,32 +53,28 @@ namespace djnn
   {
     _cref.disable ();
     _cpath.disable ();
-    _csrc_to_dst.disable ();
+    _cset.disable ();
+    _cget.disable ();
   }
+
   void
   AbstractDeref::update_src ()
   {
     Process* unref = _ref->get_value ();
+    Process *old_src = _cget.get_src ();
+    if (old_src) {
+      Graph::instance().remove_edge (&_set, old_src);
+    }
+    _cget.uninit ();
+    _cget.change_source (nullptr);
     if (unref != nullptr) {
-      Process* src = unref->find_child (_path.get_value());
+      Process* src = unref->find_child (_path.get_value ());
       if (src != nullptr) {
-        _csrc_to_dst.uninit ();
-        _csrc_to_dst.init (src, ACTIVATION, &_set_dst, ACTIVATION, true);
+        _cget.init (src, ACTIVATION, &_get, ACTIVATION);
+        Graph::instance().add_edge (&_set, src);
       }
       change_src (src);
     }
-  }
-
-  void
-  AbstractDeref::set_parent (Process* p)
-  {
-    /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_action);
-    }
-
-    add_state_dependency (p, &_action);
-    Process::set_parent (p);
   }
 
   void
@@ -88,159 +82,149 @@ namespace djnn
   {
     _cref.enable ();
     _cpath.enable ();
-    _csrc_to_dst.enable ();
+    _cset.enable ();
+    _cget.enable ();
   }
 
-  Deref::Deref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
+  Deref::Deref (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
-  _activation (this, "activation"),
-  _src (nullptr),
-  _cdst_to_src (&_activation, ACTIVATION, &_set_src, ACTIVATION, true)
+    _activation (this, "activation"),
+   _src (nullptr)
   {
+    _cset.init (&_activation, ACTIVATION, &_set, ACTIVATION);
+    Graph::instance ().add_edge (&_activation, &_set);
+    Graph::instance ().add_edge (&_get, &_activation);
 	  AbstractDeref::update_src ();
     Process::finalize_construction (parent, name);
   }
 
-  void
-  Deref::impl_activate ()
+  Deref::~Deref ()
   {
-    AbstractDeref::impl_activate ();
-    _cdst_to_src.enable ();
+    Graph::instance ().remove_edge (&_activation, &_set);
+    Graph::instance ().remove_edge (&_get, &_activation);
   }
 
   void
-  Deref::impl_deactivate ()
+  Deref::set ()
   {
-    AbstractDeref::impl_deactivate ();
-    _cdst_to_src.disable ();
-  }
-
-  void
-  Deref::set_to_src ()
-  {
-    if (_src)
+    if (_src) {
+      _cget.disable ();
       _src->activate ();
+      _cget.enable ();
+    }
   }
 
   void
-  Deref::set_to_dst ()
+  Deref::get ()
   {
+    _cset.disable ();
     _activation.activate();
+    _cset.enable ();
   }
+
   void
   Deref::change_src (Process *src)
   {
     _src = src;
   }
 
-  DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_direction dir)
+  DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
-  _value (this, "value", ""),
-  _src (nullptr),
-  _cdst_to_src (&_value, ACTIVATION, &_set_src, ACTIVATION, true)
+    _value (this, "_value", ""),
+  _src (nullptr)
   {
+    _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
+    Graph::instance ().add_edge (&_value, &_set);
+    Graph::instance ().add_edge (&_get, &_value);
     AbstractDeref::update_src ();
     Process::finalize_construction (parent, name);
   }
 
-  void
-  DerefString::set_to_dst ()
+  DerefString::~DerefString ()
   {
-    if (_src)
+    Graph::instance ().remove_edge (&_value, &_set);
+    Graph::instance ().remove_edge (&_get, &_value);
+  }
+
+  void
+  DerefString::get ()
+  {
+    if (_src) {
+      _cset.disable ();
       _value.set_value (_src->get_string_value (), true);
+      _cset.enable ();
+    }
   }
   void
-  DerefString::set_to_src ()
+  DerefString::set ()
   {
-    if (_src)
-      _src->set_value (_value.get_value(), true);
+    if (_src) {
+      _cget.disable ();
+      _src->set_value (_value.get_value (), true);
+      _cget.enable ();
+    }
   }
 
   void
   DerefString::change_src(Process *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
-    switch (_dir)
-      {
-      case DJNN_SET_ON_CHANGE:
-        set_to_src ();
-        break;
-      case DJNN_GET_ON_CHANGE:
-        set_to_dst ();
-        break;
-      case DJNN_IGNORE:
-        break;
-      }
+    if (_src) {
+      if (_dir == DJNN_GET_ON_CHANGE)
+        get ();
+      else if (_dir == DJNN_SET_ON_CHANGE)
+        set ();
+    }
   }
 
-  void
-  DerefString::impl_activate ()
-  {
-    AbstractDeref::impl_activate ();
-    _cdst_to_src.enable ();
-  }
-
-  void
-  DerefString::impl_deactivate ()
-  {
-    AbstractDeref::impl_deactivate ();
-    _cdst_to_src.disable ();
-  }
-
-  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path, djnn_direction dir) :
+  DerefDouble::DerefDouble (Process *parent, const std::string &name, Process *ref, const std::string &path, djnn_dir_t dir) :
       AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
-      _src (nullptr),
-      _cdst_to_src (&_value, ACTIVATION, &_set_src, ACTIVATION, true)
+      _src (nullptr)
   {
+    _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
+    Graph::instance ().add_edge (&_value, &_set);
+    Graph::instance ().add_edge (&_get, &_value);
     AbstractDeref::update_src ();
     Process::finalize_construction (parent, name);
   }
 
-  void
-  DerefDouble::set_to_dst ()
+  DerefDouble::~DerefDouble()
   {
-    if (_src)
+    Graph::instance ().remove_edge (&_value, &_set);
+    Graph::instance ().remove_edge (&_get, &_value);
+  }
+
+  void
+  DerefDouble::get ()
+  {
+    if (_src) {
+      _cset.disable ();
       _value.set_value (_src->get_double_value (), true);
+      _cset.enable ();
+    }
   }
   void
-  DerefDouble::set_to_src ()
+  DerefDouble::set ()
   {
-    if (_src)
+    if (_src) {
+      _cget.disable ();
       _src->set_value (_value.get_value (), true);
+      _cget.enable ();
+    }
   }
 
   void
   DerefDouble::change_src (Process *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
-    switch (_dir)
-      {
-      case DJNN_SET_ON_CHANGE:
-        set_to_src ();
-        break;
-      case DJNN_GET_ON_CHANGE:
-        set_to_dst ();
-        break;
-      case DJNN_IGNORE:
-        break;
-      }
+    if (_src) {
+      if (_dir == DJNN_GET_ON_CHANGE)
+        get ();
+      else if (_dir == DJNN_SET_ON_CHANGE)
+        set ();
+    }
   }
-
-  void
-  DerefDouble::impl_activate ()
-  {
-    AbstractDeref::impl_activate ();
-    _cdst_to_src.enable ();
-  }
-
-  void
-  DerefDouble::impl_deactivate ()
-  {
-    AbstractDeref::impl_deactivate ();
-    _cdst_to_src.disable ();
-  }
-
 
 #ifndef DJNN_NO_SERIALIZE
   void

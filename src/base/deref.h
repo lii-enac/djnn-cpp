@@ -25,12 +25,11 @@
 
 namespace djnn
 {
-  typedef enum djnn_direction {
+  typedef enum djnn_dir_t {
     DJNN_GET_ON_CHANGE,
     DJNN_SET_ON_CHANGE,
     DJNN_IGNORE
-  } djnn_direction;
-
+  } djnn_dir_t;
   class AbstractDeref : public Process
   {
   private:
@@ -42,69 +41,56 @@ namespace djnn
       void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
       void impl_deactivate () override {};
     };
-    class SetToDstAction : public Action
+    class GetAction : public Action
     {
     public:
-      SetToDstAction (Process *parent, const std::string& name) : Action (parent, name) {}
-      virtual ~SetToDstAction () {}
+      GetAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      virtual ~GetAction () {}
       void impl_activate () override {
-        if (!((AbstractDeref*)get_parent ())->propagating()) {
-          ((AbstractDeref*)get_parent ())->set_propagating (true);
-          ((AbstractDeref*)get_parent ())->set_to_dst ();
-        } else {
-          ((AbstractDeref*)get_parent ())->set_propagating (false);
-        }
+        ((AbstractDeref*)get_parent ())->get ();
       };
       void impl_deactivate () override {};
     };
-    class SetToSrcAction : public Action
+    class SetAction : public Action
     {
     public:
-      SetToSrcAction (Process *parent, const std::string& name) : Action (parent, name) {}
-      virtual ~SetToSrcAction () {}
+      SetAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      virtual ~SetAction () {}
       void impl_activate () override {
-        if (!((AbstractDeref*)get_parent ())->propagating()) {
-          ((AbstractDeref*)get_parent ())->set_propagating (true);
-          ((AbstractDeref*)get_parent ())->set_to_src ();
-        } else {
-          ((AbstractDeref*)get_parent ())->set_propagating (false);
-        }
+        ((AbstractDeref*)get_parent ())->set ();
       };
       void impl_deactivate () override {};
     };
     public:
-      AbstractDeref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
+      AbstractDeref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~AbstractDeref ();
       void impl_activate () override;
       void impl_deactivate () override;
       void update_src ();
       bool propagating () { return _propagating; }
       void set_propagating (bool v) { _propagating = v; }
-      virtual void set_to_src () = 0;
-      virtual void set_to_dst () = 0;
+      virtual void set () = 0;
+      virtual void get () = 0;
       virtual void change_src (Process* src) = 0;
     protected:
-      void set_parent (Process* p) override;
       TextProperty _path;
       RefProperty* _ref;
       DerefAction _action;
-      SetToDstAction _set_dst;
-      SetToSrcAction _set_src;
-      Coupling _cref, _cpath, _csrc_to_dst;
+      SetAction _set;
+      GetAction _get;
+      Coupling _cref, _cpath, _cget, _cset;
+      djnn_dir_t _dir;
       bool _propagating;
-      djnn_direction _dir;
   };
 
   class Deref : public AbstractDeref
   {
   private:
     public:
-      Deref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
-      virtual ~Deref () {}
-      void impl_activate () override;
-      void impl_deactivate () override;
-      void set_to_src () override;
-      void set_to_dst () override;
+      Deref (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      virtual ~Deref ();
+      void set () override;
+      void get () override;
       void change_src (Process* src) override;
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
@@ -112,18 +98,15 @@ namespace djnn
     private:
       Spike _activation;
       Process *_src;
-      Coupling _cdst_to_src;
   };
 
   class DerefString : public AbstractDeref
   {
     public:
-      DerefString (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
-      virtual ~DerefString () {}
-      void impl_activate () override;
-      void impl_deactivate () override;
-      void set_to_src () override;
-      void set_to_dst () override;
+      DerefString (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      virtual ~DerefString ();
+      void set () override;
+      void get () override;
       void change_src (Process* src) override;
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
@@ -131,17 +114,14 @@ namespace djnn
     private:
       TextProperty _value;
       AbstractProperty *_src;
-      Coupling _cdst_to_src;
   };
   class DerefDouble : public AbstractDeref
     {
       public:
-        DerefDouble (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_direction dir = DJNN_IGNORE);
-        virtual ~DerefDouble () {}
-        void impl_activate () override;
-        void impl_deactivate () override;
-        void set_to_src () override;
-        void set_to_dst () override;
+        DerefDouble (Process *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+        virtual ~DerefDouble ();
+        void set () override;
+        void get () override;
         void change_src (Process* src) override;
   #ifndef DJNN_NO_SERIALIZE
         void serialize (const std::string& type) override;
@@ -149,6 +129,5 @@ namespace djnn
       private:
         DoubleProperty _value;
         AbstractProperty *_src;
-        Coupling _cdst_to_src;
     };
 }
