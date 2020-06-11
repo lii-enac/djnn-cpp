@@ -129,8 +129,10 @@ namespace djnn
     //if (f != nullptr)
     //  cpick->enable (f);
     FatProcess *update = f;
+    if (update) update = dynamic_cast<Window*>(f)->damaged ();
     cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
     if (f != nullptr) cpick->enable ();
+
     press = new Spike (p, "press");
     move = new Spike (p, "move");
     release = new Spike (p, "release");

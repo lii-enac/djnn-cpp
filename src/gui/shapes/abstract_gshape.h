@@ -21,6 +21,8 @@
 #include "core/tree/double_property.h"
 #include "core/tree/component.h"
 
+#include "display/window.h"
+
 namespace djnn
 {
   class SVGHolder : public Container
@@ -41,7 +43,17 @@ namespace djnn
     UI (FatProcess *p, FatProcess *f);
     bool is_pickable () { return pickable->get_value (); }
     //void activate (FatProcess* frame) { cpick->enable (frame); }
-    void activate (FatProcess* frame) { cpick->enable (); }
+    void activate (FatProcess* frame) { 
+      /* 
+         if the frame was null in the UI constructor cpick was not correctly initialized
+         we have to re-set the coupling dst to the actual frame.
+      */
+      auto* f = dynamic_cast<Window*> (frame);
+      if (f) {
+        cpick->set_dst (f->damaged ());
+        cpick->enable (); 
+      }
+    }
     void deactivate () { cpick->disable (); }
     virtual ~UI ();
     friend class Picking;
