@@ -18,6 +18,8 @@
 #include "core/execution/graph.h"
 #include "core/utils/error.h"
 
+#include <algorithm>
+
 namespace djnn
 {
   ProcessDeleter::ProcessDeleter (Process *parent, const std::string& name)
