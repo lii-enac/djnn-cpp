@@ -93,15 +93,14 @@ public:
     public:
       AssignmentAction (FatProcess* parent, const std::string& name)
       : Action (parent, name) { finalize_construction (parent, name); }
-      //void impl_activate () override { dynamic_cast<SimpleAssignment*>(get_parent ()) -> perform_action (); }
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
     SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : FatProcess (name, is_model)
+    , _src(src)
     , _dst(dst)
     , _action(this, "action")
-    , _c_src (src, ACTIVATION, &_action, ACTIVATION, true)
     , _propagate(true)
     {
       Graph::instance ().add_edge (src, dst);
@@ -111,19 +110,19 @@ public:
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
 
-    void impl_activate   () override { _c_src.enable  (); _action.activate(); }
-    void impl_deactivate () override {} // { _c_src.disable (); _action.deactivate(); } // action is auto-activating...
+    void impl_activate   () override { _action.activate(); }
+    void impl_deactivate () override {} 
     void post_activate   () override { post_activate_auto_deactivate (); }
 
     void perform_action ();
 
-    CoreProcess* get_src() { return _c_src.get_src(); } // delegate to coupling to save space
+    CoreProcess* get_src() { return _src; }
     CoreProcess* get_dst() { return _dst; }
 
   private:
+    CoreProcess *_src;
     CoreProcess *_dst;
     AssignmentAction _action;
-    Coupling _c_src;
   protected:
     bool _propagate;
 
