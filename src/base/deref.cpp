@@ -130,7 +130,7 @@ namespace djnn
 
   DerefString::DerefString (Process *parent, const std::string& name, Process *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
-    _value (this, "_value", ""),
+    _value (this, "value", ""),
   _src (nullptr)
   {
     _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
