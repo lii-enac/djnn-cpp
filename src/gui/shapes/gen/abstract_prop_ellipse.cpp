@@ -146,7 +146,7 @@ namespace djnn
   AbstractPropEllipse::impl_activate ()
   {
     AbstractGShape::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_ccx, _frame->damaged ());
 		enable(_ccy, _frame->damaged ());
 		enable(_crx, _frame->damaged ());

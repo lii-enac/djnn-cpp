@@ -58,7 +58,7 @@ namespace djnn
   void
   Translation::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_translation (this);
     }
@@ -124,7 +124,7 @@ namespace djnn
   void
   Rotation::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_rotation (this);
     }
@@ -201,7 +201,7 @@ namespace djnn
   void
   Scaling::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_scaling (this);
     }
@@ -266,7 +266,7 @@ namespace djnn
   void
   SkewX::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_x (this);
     }
@@ -333,7 +333,7 @@ namespace djnn
   void
   SkewY::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_skew_y (this);
     }
@@ -1313,7 +1313,7 @@ namespace djnn
   void
   AbstractHomography::init_rightTranslateBy ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
     _rightTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
     _rightTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
@@ -1338,7 +1338,7 @@ namespace djnn
   void
   AbstractHomography::init_leftTranslateBy ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
     _leftTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
     _leftTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
@@ -1363,7 +1363,7 @@ namespace djnn
   void
   AbstractHomography::init_rightScaleBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _rightScaleBy_spike = new Spike (this, "rightScaleBy");
     _rightScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1400,7 +1400,7 @@ namespace djnn
   void
   AbstractHomography::init_leftScaleBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _leftScaleBy_spike = new Spike (this, "leftScaleBy");
     _leftScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1437,7 +1437,7 @@ namespace djnn
   void
   AbstractHomography::init_rightRotateBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _rightRotateBy_spike = new Spike (this, "rightRotateBy");
     _rightRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1468,7 +1468,7 @@ namespace djnn
   void
   AbstractHomography::init_leftRotateBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _leftRotateBy_spike = new Spike (this, "leftRotateBy");
     _leftRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1499,7 +1499,7 @@ namespace djnn
   void
   AbstractHomography::init_rightSkewXBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
     _rightSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1529,7 +1529,7 @@ namespace djnn
   void
   AbstractHomography::init_leftSkewXBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
     _leftSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1559,7 +1559,7 @@ namespace djnn
   void
   AbstractHomography::init_rightSkewYBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
     _rightSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1589,7 +1589,7 @@ namespace djnn
   void
   AbstractHomography::init_leftSkewYBy () 
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
     _leftSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1954,7 +1954,7 @@ namespace djnn
   {
     AbstractPropHomography::impl_activate ();
 
-    auto _frame = frame ();
+    auto _frame = get_frame ();
 
     if (_rightTranslateBy_action) {
       enable (_rightTranslateBy_dx_coupling, _frame->damaged ());
@@ -2079,7 +2079,7 @@ namespace djnn
   void
   Homography::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_homography (this);
     }

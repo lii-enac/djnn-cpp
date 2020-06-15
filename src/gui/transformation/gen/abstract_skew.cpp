@@ -107,7 +107,7 @@ namespace djnn
   AbstractSkew::impl_activate ()
   {
     AbstractTransformation::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_ca, _frame->damaged ());
   }
 

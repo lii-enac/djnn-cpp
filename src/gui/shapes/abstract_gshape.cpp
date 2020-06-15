@@ -270,7 +270,7 @@ namespace djnn
   void
   AbstractGShape::init_ui ()
   {
-    ui = new UI (this, frame ());
+    ui = new UI (this, get_frame ());
 
     if( !_inverted_matrix) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
@@ -329,9 +329,9 @@ namespace djnn
       ui->deactivate ();
     // remove from picking_view if is the current object
     if (is_pickable(this)) {
-      if (this->frame ()) {
-        if(this->frame ()->picking_view ()) {
-          this->frame ()->picking_view ()->object_deactivated (this);
+      if (this->get_frame ()) {
+        if(this->get_frame ()->picking_view ()) {
+          this->get_frame ()->picking_view ()->object_deactivated (this);
         }
       }
     }
@@ -345,7 +345,7 @@ namespace djnn
    AbstractGObj::impl_activate ();
    UI *ui = get_ui();
    if (ui)
-     ui->activate (frame());
+     ui->activate (get_frame());
   }
 
   void
@@ -378,7 +378,7 @@ namespace djnn
   AbstractGShape::pick ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }

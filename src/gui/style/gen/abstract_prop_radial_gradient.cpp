@@ -159,7 +159,7 @@ namespace djnn
   AbstractPropRadialGradient::impl_activate ()
   {
     AbstractGradient::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_ccx, _frame->damaged ());
 		enable(_ccy, _frame->damaged ());
 		enable(_cr, _frame->damaged ());

@@ -120,7 +120,7 @@ namespace djnn
   AbstractTranslation::impl_activate ()
   {
     AbstractTransformation::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_ctx, _frame->damaged ());
 		enable(_cty, _frame->damaged ());
   }

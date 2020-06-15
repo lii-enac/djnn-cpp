@@ -107,7 +107,7 @@ namespace djnn
   AbstractDataImage::impl_activate ()
   {
     AbstractImage::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cdata, _frame->damaged ());
   }
 

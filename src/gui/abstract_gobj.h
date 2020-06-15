@@ -44,7 +44,8 @@ namespace djnn
     }
     virtual ~AbstractGObj () {};
     virtual process_type_e get_process_type () const override { return GOBJ_T; }
-    Window*& frame () { return _frame; } 
+    Window*& get_frame () { return _frame; }
+    void set_frame (Window*& frame) { _frame = frame; }
     //std::weak_ptr<Window>
     //auto frame () { return &*AbstractGObj::_frame.lock (); }
     void update_drawing () override;

@@ -107,7 +107,7 @@ namespace djnn
   OutlineWidth::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cwidth, _frame->damaged ());
   }
 
@@ -122,7 +122,7 @@ namespace djnn
   void
   OutlineWidth::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_width (this);
     }

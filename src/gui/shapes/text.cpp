@@ -327,7 +327,7 @@ namespace djnn
       }
     }
 
-    auto * damaged = frame ()->damaged ();
+    auto * damaged = get_frame ()->damaged ();
 
     enable (_cx, damaged);
     enable (_cy, damaged);
@@ -386,7 +386,7 @@ namespace djnn
   void
   Text::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_text (this);

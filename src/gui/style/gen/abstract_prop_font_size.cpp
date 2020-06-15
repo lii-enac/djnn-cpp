@@ -120,7 +120,7 @@ namespace djnn
   AbstractPropFontSize::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cunit, _frame->damaged ());
 		enable(_csize, _frame->damaged ());
   }

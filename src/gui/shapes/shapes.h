@@ -452,7 +452,7 @@ namespace djnn
     Group (FatProcess *parent, const std::string& name);
     virtual ~Group () override;
     auto
-      frame () { return _gobj->frame ();}
+      get_frame () { return _gobj->get_frame ();}
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;

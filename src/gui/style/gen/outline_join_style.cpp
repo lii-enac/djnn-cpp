@@ -107,7 +107,7 @@ namespace djnn
   OutlineJoinStyle::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cjoin, _frame->damaged ());
   }
 
@@ -122,7 +122,7 @@ namespace djnn
   void
   OutlineJoinStyle::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_outline_join_style (this);
     }

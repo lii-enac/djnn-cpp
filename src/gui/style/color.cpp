@@ -459,8 +459,8 @@ namespace djnn
   AbstractColor::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    //auto _frame = frame ();
-    auto * damaged = frame ()->damaged ();
+    //auto _frame = get_frame ();
+    auto * damaged = get_frame ()->damaged ();
     enable (_cr, damaged);
     enable (_cg, damaged);
     enable (_cb, damaged);

@@ -49,7 +49,7 @@ namespace djnn
 
   	/*
   	void sound () {
-  		auto _frame = frame ();
+  		auto _frame = get_frame ();
     	if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
   			AudioBackend::instance ()->load_volume (this);
   		}

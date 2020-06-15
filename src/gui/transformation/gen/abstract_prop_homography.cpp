@@ -302,7 +302,7 @@ namespace djnn
   AbstractPropHomography::impl_activate ()
   {
     AbstractTransformation::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cm11, _frame->damaged ());
 		enable(_cm12, _frame->damaged ());
 		enable(_cm13, _frame->damaged ());

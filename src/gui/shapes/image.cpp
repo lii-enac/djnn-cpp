@@ -85,7 +85,7 @@ namespace djnn
   void
   Image::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_image (this);
@@ -193,7 +193,7 @@ namespace djnn
   void
   DataImage::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_data_image (this);
     }

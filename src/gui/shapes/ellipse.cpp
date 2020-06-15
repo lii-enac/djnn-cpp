@@ -44,7 +44,7 @@ namespace djnn
   void
   Ellipse::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_ellipse (this);

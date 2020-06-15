@@ -134,7 +134,7 @@ namespace djnn
   %(CLASS)s::impl_activate ()
   {
     %(INHERITS)s::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     %(DEF_COUPLINGS_ENABLE)s;
   }
 
@@ -156,7 +156,7 @@ def_draw = """
   void
   %(CLASS)s::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->%(DRAW_METHOD)s_%(CLASS_LOWER)s (this);
     }

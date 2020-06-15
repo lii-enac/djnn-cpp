@@ -107,7 +107,7 @@ namespace djnn
   AbstractPropFontStyle::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cstyle, _frame->damaged ());
   }
 

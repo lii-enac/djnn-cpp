@@ -159,7 +159,7 @@ namespace djnn
   AbstractPropGradientStop::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cr, _frame->damaged ());
 		enable(_cg, _frame->damaged ());
 		enable(_cb, _frame->damaged ());

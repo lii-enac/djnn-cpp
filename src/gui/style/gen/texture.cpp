@@ -107,7 +107,7 @@ namespace djnn
   Texture::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cpath, _frame->damaged ());
   }
 
@@ -122,7 +122,7 @@ namespace djnn
   void
   Texture::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_texture (this);
     }

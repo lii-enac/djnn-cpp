@@ -120,7 +120,7 @@ namespace djnn
   AbstractPropGradient::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cspread, _frame->damaged ());
 		enable(_ccoords, _frame->damaged ());
   }

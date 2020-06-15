@@ -107,7 +107,7 @@ namespace djnn
   TextAnchor::impl_activate ()
   {
     AbstractStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_canchor, _frame->damaged ());
   }
 
@@ -122,7 +122,7 @@ namespace djnn
   void
   TextAnchor::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->load_text_anchor (this);
     }

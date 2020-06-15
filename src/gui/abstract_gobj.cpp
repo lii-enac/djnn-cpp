@@ -33,8 +33,8 @@ namespace djnn
   AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = frame ();
-    if (update) update = frame ()->damaged ();
+    FatProcess *update = get_frame ();
+    if (update) update = get_frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
@@ -48,8 +48,8 @@ namespace djnn
   AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = frame ();
-    if (update) update = frame ()->damaged ();
+    FatProcess *update = get_frame ();
+    if (update) update = get_frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
@@ -63,8 +63,8 @@ namespace djnn
   AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = frame ();
-    if (update) update = frame ()->damaged ();
+    FatProcess *update = get_frame ();
+    if (update) update = get_frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
@@ -78,8 +78,8 @@ namespace djnn
   AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = frame ();
-    if (update) update = frame ()->damaged ();
+    FatProcess *update = get_frame ();
+    if (update) update = get_frame ()->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
@@ -123,7 +123,7 @@ namespace djnn
   void
   AbstractGObj::update_frame_if_necessary ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (_frame == nullptr || _frame->somehow_activating ()) {
       /*  this algorithm is a little bit tricky. We want to find the closest running frame
        *  on the left side of the current object (cur_child). For this, we take its parent (curget_parent ()) and go through its
@@ -161,7 +161,7 @@ namespace djnn
 
       //_frame = frame;
       //AbstractGObj::_frame = frame->get_weak_ptr ();
-      AbstractGObj::frame () = frame;
+      AbstractGObj::set_frame (frame);
     }
   }
 
@@ -178,7 +178,7 @@ namespace djnn
   {
     //std::cerr << __FILE__ << __LINE__ << std::endl;
     update_frame_if_necessary ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
     //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
     _frame->damaged ()->notify_activation ();
@@ -188,7 +188,7 @@ namespace djnn
   void
   AbstractGObj::impl_deactivate ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (_frame != nullptr) {
       //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
       //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();

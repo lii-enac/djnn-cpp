@@ -101,7 +101,7 @@ namespace djnn {
   PolyPoint::impl_activate ()
   {
     AbstractGObj::impl_activate ();
-    auto * damaged = frame ()->damaged ();
+    auto * damaged = get_frame ()->damaged ();
     enable (_cx, damaged);
     enable (_cy, damaged);
   }
@@ -117,7 +117,7 @@ namespace djnn {
   void
   PolyPoint::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->draw_poly_point (raw_props.x, raw_props.y);
     }
@@ -171,7 +171,7 @@ namespace djnn {
   void
   Poly::draw ()
   {
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_poly (this);

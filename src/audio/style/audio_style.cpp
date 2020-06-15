@@ -32,7 +32,7 @@ namespace djnn
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
+      //auto _frame = get_frame ();
       //(*cprop)->enable(_frame);
     }
     else
@@ -47,7 +47,7 @@ namespace djnn
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
+      //auto _frame = get_frame ();
       //(*cprop)->enable(_frame);
     }
     else
@@ -62,7 +62,7 @@ namespace djnn
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
+      //auto _frame = get_frame ();
       //(*cprop)->enable(_frame);
     }
     else
@@ -77,7 +77,7 @@ namespace djnn
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
-      //auto _frame = frame ();
+      //auto _frame = get_frame ();
       //(*cprop)->enable(_frame);
     }
     else

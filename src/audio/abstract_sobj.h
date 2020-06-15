@@ -28,7 +28,7 @@ namespace djnn {
 		AbstractSObjImpl* impl() { return _impl; }
     	void set_impl(AbstractSObjImpl* i) { _impl=i; }
 
-    	AudioScene * frame () { return nullptr; } // FIXME
+    	AudioScene * get_frame () { return nullptr; } // FIXME
 
     protected:
 	    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);

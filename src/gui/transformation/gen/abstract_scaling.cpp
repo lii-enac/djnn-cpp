@@ -146,7 +146,7 @@ namespace djnn
   AbstractScaling::impl_activate ()
   {
     AbstractTransformation::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_csx, _frame->damaged ());
 		enable(_csy, _frame->damaged ());
 		enable(_ccx, _frame->damaged ());

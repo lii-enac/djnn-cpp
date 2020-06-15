@@ -172,7 +172,7 @@ namespace djnn
   AbstractPropRectangle::impl_activate ()
   {
     AbstractGShape::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cx, _frame->damaged ());
 		enable(_cy, _frame->damaged ());
 		enable(_cwidth, _frame->damaged ());

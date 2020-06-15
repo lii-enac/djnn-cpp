@@ -146,7 +146,7 @@ namespace djnn
   AbstractPropLine::impl_activate ()
   {
     AbstractGShape::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cx1, _frame->damaged ());
 		enable(_cy1, _frame->damaged ());
 		enable(_cx2, _frame->damaged ());

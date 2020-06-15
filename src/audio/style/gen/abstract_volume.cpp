@@ -107,7 +107,7 @@ namespace djnn
   AbstractVolume::impl_activate ()
   {
     AbstractAudioStyle::impl_activate ();
-    auto _frame = frame ();
+    auto _frame = get_frame ();
     enable(_cvolume, _frame->damaged ());
   }
 
