@@ -51,7 +51,7 @@ namespace djnn
       public:
         UndelayedSpike (Window *parent, const std::string& name)  : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
-        void post_activate () override { set_activation_state (DEACTIVATED); }
+        void post_activate () override { post_activate_auto_deactivate (); }
         void impl_activate () override;
         void impl_deactivate () override {};
     };
