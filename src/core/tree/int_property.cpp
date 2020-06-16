@@ -84,7 +84,7 @@ namespace djnn
   }
 
   void
-  AbstractIntProperty::set_value (FatProcess* v, bool propagate)
+  AbstractIntProperty::set_value (CoreProcess* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Int\n");
   }

@@ -60,7 +60,7 @@ namespace djnn {
     void add_entry (FatProcess* key, FatProcess *value);
     FatProcess* get_value (FatProcess* key);
     void del_entry (FatProcess* key);
-    void set_value (FatProcess* value) { _value.set_value (value, true); }
+    void set_value (CoreProcess* value) { _value.set_value (value, true); }
     typedef std::map<FatProcess*,FatProcess*> map_t; 
     map_t& get_map () { return _map; }
     RefProperty* key () { return &_key; }

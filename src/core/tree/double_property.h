@@ -32,7 +32,7 @@ namespace djnn {
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
-    void set_value (FatProcess* v, bool propagate) override;
+    void set_value (CoreProcess* v, bool propagate) override;
     void set_value (const std::string& v, bool propagate) override;
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }

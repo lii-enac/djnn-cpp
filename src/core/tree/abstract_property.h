@@ -43,7 +43,7 @@ namespace djnn {
     virtual void set_value (int v, bool propagate) = 0;
     virtual void set_value (double v, bool propagate) = 0;
     virtual void set_value (bool v, bool propagate) = 0;
-    virtual void set_value (FatProcess* v, bool propagate) = 0;
+    virtual void set_value (CoreProcess* v, bool propagate) = 0;
     virtual void set_value (const std::string& v, bool propagate) = 0;
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;

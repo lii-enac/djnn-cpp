@@ -116,7 +116,7 @@ namespace djnn
   }
 
   void
-  AbstractTextProperty::set_value (FatProcess* v, bool propagate)
+  AbstractTextProperty::set_value (CoreProcess* v, bool propagate)
   {
     warning(this, "undefined conversion from Component to Text");
   }

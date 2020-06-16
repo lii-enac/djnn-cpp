@@ -85,7 +85,7 @@ namespace djnn
   }
 
   void
-  AbstractDoubleProperty::set_value (FatProcess* v, bool propagate)
+  AbstractDoubleProperty::set_value (CoreProcess* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Double\n");
   }

@@ -105,7 +105,7 @@ namespace djnn
   }
 
   void
-  AbstractBoolProperty::set_value (FatProcess* v, bool propagate)
+  AbstractBoolProperty::set_value (CoreProcess* v, bool propagate)
   {
     warning (this, "undefined conversion from Component to Boolean\n");
   }

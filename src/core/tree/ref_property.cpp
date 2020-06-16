@@ -107,19 +107,13 @@ namespace djnn
   }
 
   void
-  RefProperty::set_value (FatProcess* v, bool propagate)
+  RefProperty::set_value (CoreProcess* v, bool propagate)
   {
     _value = v;
     if (is_activable () && propagate) {
       notify_activation ();
       notify_parent ();
     }
-  }
-
-  void
-  RefProperty::set_value (CoreProcess* v, bool propagate)
-  {
-    set_value(dynamic_cast<FatProcess*>(v), propagate);
   }
 
 #ifndef DJNN_NO_SERIALIZE
