@@ -85,7 +85,7 @@ namespace djnn {
       }
     }
     _ud->clear_windows_for_refresh ();
-    dynamic_cast<UpdateDrawing*>(get_parent())->get_damaged()->set_data(nullptr);
+    //dynamic_cast<UpdateDrawing*>(get_parent())->get_damaged()->set_data(nullptr);
   }
 
   void 
