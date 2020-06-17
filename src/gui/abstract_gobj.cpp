@@ -38,6 +38,7 @@ namespace djnn
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
+      Graph::instance().add_edge(*prop, update);
     }
     else
       (*cprop)->disable ();
@@ -53,6 +54,7 @@ namespace djnn
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
+      Graph::instance().add_edge(*prop, update);
     }
     else
       (*cprop)->disable ();
@@ -68,6 +70,7 @@ namespace djnn
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
+      Graph::instance().add_edge(*prop, update);
     }
     else
       (*cprop)->disable ();
@@ -83,6 +86,7 @@ namespace djnn
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (this->somehow_activating ()) {
       (*cprop)->enable ();
+      Graph::instance().add_edge(*prop, update);
     }
     else
       (*cprop)->disable ();
