@@ -45,8 +45,8 @@ namespace djnn
 
   AbstractPropFontSize::~AbstractPropFontSize ()
   {
-    //remove_edge (_cunit) //don't know why it should not be done;
-		//remove_edge (_csize) //don't know why it should not be done;
+    remove_edge (_cunit);
+		remove_edge (_csize);
     delete _cunit;
 		delete _csize;
 

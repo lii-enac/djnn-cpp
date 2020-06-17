@@ -328,7 +328,7 @@ def just_do_it(dc, finalize_construction=True):
     if(dc.remove_edge):
       COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ 'remove_edge (_c'+p.name+')' for p in dc.props])
     else:
-      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ "//remove_edge (_c"+p.name+") //don't know why it should not be done" for p in dc.props])
+      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ "remove_edge (_c"+p.name+")" for p in dc.props])
     RAW_PROP_PARAMS = ', '.join(['raw_props.' + p.name for p in dc.props])
     # print (RAW_PROP_PARAMS)
 

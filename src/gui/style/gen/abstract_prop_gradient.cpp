@@ -45,8 +45,8 @@ namespace djnn
 
   AbstractPropGradient::~AbstractPropGradient ()
   {
-    //remove_edge (_cspread) //don't know why it should not be done;
-		//remove_edge (_ccoords) //don't know why it should not be done;
+    remove_edge (_cspread);
+		remove_edge (_ccoords);
     delete _cspread;
 		delete _ccoords;
 
