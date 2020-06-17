@@ -11,39 +11,75 @@
 
 namespace djnn {
 
-  bool gui_initialized = false;
+  bool update_display_initialized = false;
   UpdateDrawing *UpdateDrawing::_instance;
   std::once_flag UpdateDrawing::onceFlag;
+
+  UpdateDrawing*
+  UpdateDrawing::instance ()
+  {
+    std::call_once (UpdateDrawing::onceFlag, [] () {
+      _instance = new UpdateDrawing ();
+      //_instance->update_auto_refresh ();
+      _instance->impl_activate ();
+      update_display_initialized = true;
+    });
+
+    return _instance;
+  }
+
+  void
+  UpdateDrawing::init ()
+  {
+    //Graph::instance ().add_output_node (instance ());
+    //update_display_initialized = true;
+    instance ();
+  }
+
+  void
+  UpdateDrawing::clear ()
+  {
+    if (update_display_initialized) {
+      _instance->set_data (nullptr);
+      _instance->_win_list.clear ();
+      update_display_initialized = false;
+    }
+  }
 
   UpdateDrawing::UpdateDrawing () :
     FatProcess ("UpdateDrawing")
   {
-    // UndelayedSpike _damaged
-    // Bool _auto_refresh (true)
-    // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
-    // Spike _draw_sync
-    // Action _redraw_action
+    // in smala that would be:
 
+    // UndelayedSpike _damaged
+    // Bool _auto_refresh (true) // true by default, when set will enable or disable the coupling between damaged and draw_sync to offer client-provided, specific redraw policy
+    // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable) // 
+    // Spike _draw_sync      // external API to allow clients to directly trigger draw
+    // Action _redraw_action // actual redraw action, output at the end of the activation vector
+
+    // here '->' denotes a coupling, not a binding...
     // _damaged -> _draw_sync
     // _draw_sync -> _redraw_action
     // _auto_refresh -> _update_auto_refresh_action
 
     _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
     _auto_refresh = new BoolProperty (this, "auto_refresh", true); // Bool _auto_refresh (true)
-    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable)
+    _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en-dis-able)
     _draw_sync = new Spike (this, "draw_sync"); // Spike _draw_sync
     _redraw_action = new RedrawAction (this, "redraw_action"); // Action _redraw_action
-  
     Graph::instance ().add_output_node (_redraw_action);
   
     _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION); // _damaged -> _draw_sync
     Graph::instance ().add_edge (_damaged, _draw_sync);
     _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
+    // no need to add_edge from _draw_sync to _redraw_action since _redraw_action is an output
   
     _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
     Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
 
     set_activation_state (ACTIVATED);
+
+    //finalize_construction (nullptr, "UpdateDrawing");
   }
 
   UpdateDrawing::~UpdateDrawing ()
@@ -63,17 +99,7 @@ namespace djnn {
     delete _update_auto_refresh_action;
   }
 
-  UpdateDrawing*
-  UpdateDrawing::instance ()
-  {
-    std::call_once (UpdateDrawing::onceFlag, [] () {
-      _instance = new UpdateDrawing ();
-      //_instance->update_auto_refresh ();
-      _instance->impl_activate ();
-    });
-
-    return _instance;
-  }
+  
 
   void 
   UpdateDrawing::RedrawAction::impl_activate () 
@@ -95,8 +121,9 @@ namespace djnn {
     //std::cerr << frame << __FL__;
     if (frame && !frame->refresh ()) {
       _ud->add_window_for_refresh (frame);
+      set_data (nullptr);
     }
-    notify_activation (); 
+    notify_activation ();
   }
 
   void
@@ -113,7 +140,7 @@ namespace djnn {
   void
   UpdateDrawing::impl_activate ()
   { //DBG;
-    update_auto_refresh ();
+    //update_auto_refresh ();
   }
 
   // useless ?? there is no binding or coupling or whatsoever directly on UpdateDrawing ?!
@@ -144,22 +171,5 @@ namespace djnn {
   {
     _win_list.erase (std::remove (_win_list.begin (), _win_list.end (), w), _win_list.end ());
     w->set_refresh (false);
-  }
-
-  void
-  UpdateDrawing::init ()
-  {
-    //Graph::instance ().add_output_node (instance ());
-    gui_initialized = true;
-  }
-
-  void
-  UpdateDrawing::clear ()
-  {
-    if (gui_initialized) {
-      _instance->set_data (nullptr);
-      _instance->_win_list.clear ();
-      gui_initialized = false;
-    }
   }
 }

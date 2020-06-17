@@ -185,7 +185,8 @@ namespace djnn
     auto _frame = get_frame ();
     //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
     //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
-    _frame->damaged ()->notify_activation ();
+    //_frame->damaged ()->notify_activation ();
+    _frame->damaged ()->activate ();
     Backend::instance()->activate_gobj(this);
   }
 
@@ -197,7 +198,8 @@ namespace djnn
       //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
       //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
       //UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
-      _frame->damaged ()->notify_activation ();
+      //_frame->damaged ()->notify_activation ();
+      _frame->damaged ()->activate ();
       //UpdateDrawing::instance ()->request_activation ();
       Backend::instance()->deactivate_gobj(this);
       _frame = nullptr;

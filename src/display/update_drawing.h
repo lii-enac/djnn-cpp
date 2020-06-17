@@ -64,6 +64,9 @@ namespace djnn {
       };
   public:
     static UpdateDrawing* instance ();
+    static void init ();
+    static void clear ();
+    
     ~UpdateDrawing ();
     void impl_activate () override;
     void impl_deactivate () override {}
@@ -74,8 +77,7 @@ namespace djnn {
     std::vector<Window*>& get_windows_for_refresh () { return _win_list; };
     void clear_windows_for_refresh () {_win_list.clear (); }
     FatProcess* get_damaged () { return _damaged; }
-    static void init ();
-    static void clear ();
+    
   private:
     UpdateDrawing (const UpdateDrawing&) = delete;
     UpdateDrawing & operator=(const UpdateDrawing&) = delete;

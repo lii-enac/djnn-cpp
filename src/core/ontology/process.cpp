@@ -95,6 +95,9 @@ namespace djnn
   : ChildProcess(model),
   _data (nullptr)
   {
+    #ifndef DJNN_NO_DEBUG
+    if (name != "") set_debug_name (name);
+    #endif
   }
 
   void

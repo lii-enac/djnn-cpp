@@ -42,6 +42,8 @@ namespace djnn
       src->add_activation_coupling (this);
     } else if (src_flag == DEACTIVATION) {
       src->add_deactivation_coupling (this);
+    } else {
+      warning (src, std::string("wrong activation flag in coupling creation") + dst->get_debug_name ());
     }
 
     set_dst_activation_flag (dst_flag);
@@ -67,13 +69,13 @@ namespace djnn
 
   Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
                       CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
-  : _src (src), _dst (dst)
+  : _src (src), _dst (dst), _bitset (0)
   {
     init (src, src_flag, dst, dst_flag, immediate_propagation);
   }
 
   Coupling::Coupling ()
-  : _src(nullptr), _dst(nullptr)
+  : _src(nullptr), _dst(nullptr), _bitset (0)
   {
   }
 

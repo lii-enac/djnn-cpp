@@ -72,7 +72,7 @@ namespace djnn
 
     _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged, connected to UpdateDrawing::damaged, the frame pointer is passed with the action
     FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
-    _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION);
+    _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION, true);
     Graph::instance ().add_edge (_damaged, update);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
@@ -141,7 +141,7 @@ namespace djnn
   Window::UndelayedSpike::impl_activate ()
   {
     // pass the frame pointer to UpdateDrawing before notifying synchronously 
-    UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
+    UpdateDrawing::instance ()->get_damaged ()->set_data (get_parent());
     notify_activation ();
   }
 
