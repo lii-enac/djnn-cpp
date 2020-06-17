@@ -72,15 +72,28 @@ namespace djnn {
   class SimpleBinding : public FatProcess //, virtual CoreBinding 
   {
   public:
+    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    : FatProcess (name), _b (src, src_flag, dst, dst_flag)
+    {
+      finalize_construction (parent, name);
+    }
+
     SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
     : SimpleBinding (parent, name, src, ACTIVATION, dst, ACTIVATION)
     {}
 
-    SimpleBinding (FatProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    : FatProcess (name), _b (src, src_flag, dst, dst_flag)
-    {  
-      finalize_construction (parent, name);
-    }
+    // for legacy reason, to get rid of?
+    SimpleBinding (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec,
+                   CoreProcess* dst, const std::string& dspec)
+    :  SimpleBinding (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    {}
+
+    SimpleBinding (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec, activation_flag_e src_flag,
+                   CoreProcess* dst, const std::string& dspec, activation_flag_e dst_flag)
+    :  SimpleBinding (parent, name, src->find_child (sspec), src_flag, dst->find_child (dspec), dst_flag)
+    {}
 
     void set_parent (FatProcess* p) override;
 

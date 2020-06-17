@@ -19,7 +19,7 @@
 
 #include "ontology/process.h"
 #include "execution/graph.h"
-#include "control/binding.h"
+//#include "control/binding.h"
 #include "control/simple_binding.h"
 #include "control/activator.h"
 #include "control/synchronizer.h"
@@ -58,7 +58,7 @@ namespace djnn {
   void clear_core ();
 
   // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
-  // Process should not be used in djnn-cpp until the refactoring dust settles
-  using Process = FatProcess;
+  using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
+  using Binding = SimpleBinding;
 
 }
