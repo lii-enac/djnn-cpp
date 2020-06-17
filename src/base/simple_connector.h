@@ -128,7 +128,7 @@ public:
     }
 
     protected:
-    void impl_activate   () override { _paused_assignment.activate ();   _binding.activate (); }
+    void impl_activate   () override { _paused_assignment.activate ();  _binding.activate (); }
     void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
 
   private:
