@@ -27,7 +27,8 @@
 #include "control/native_action.h"
 #include "control/native_expression_action.h"
 #include "tree/spike.h"
-#include "control/assignment.h"
+//#include "control/assignment.h"
+#include "control/simple_assignment.h"
 #include "tree/list.h"
 #include "xml/xml.h"
 #include "serializer/serializer.h"
@@ -60,5 +61,7 @@ namespace djnn {
   // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
   using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
   using Binding = SimpleBinding;
+  using Assignment = SimpleAssignment;
+  using PausedAssignment = SimplePausedAssignment;
 
 }

@@ -14,7 +14,8 @@
 
 #pragma once
 
-#include "base/connector.h"
+//#include "base/connector.h"
+#include "base/simple_connector.h"
 #include "core/control/action.h"
 #include "core/ontology/process.h"
 #include "core/tree/spike.h"

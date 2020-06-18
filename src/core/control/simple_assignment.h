@@ -106,6 +106,15 @@ public:
       Graph::instance ().add_edge (src, dst);
       finalize_construction (parent, name);
     }
+
+    // for legacy reason, to get rid of?
+    SimpleAssignment (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec,
+                   CoreProcess* dst, const std::string& dspec,
+                   bool is_model=false)
+    : SimpleAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    {}
+
     virtual ~SimpleAssignment () {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
@@ -140,6 +149,14 @@ public:
     {
       _propagate = false;
     }
+
+    // for legacy reason, to get rid of?
+    SimplePausedAssignment (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec,
+                   CoreProcess* dst, const std::string& dspec,
+                   bool is_model=false)
+    : SimplePausedAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    {}
   };
 
 }

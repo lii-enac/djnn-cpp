@@ -101,6 +101,14 @@ public:
       finalize_construction (parent, name);
     }
 
+    // for legacy reason, to get rid of?
+    SimpleConnector (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec,
+                   CoreProcess* dst, const std::string& dspec,
+                   bool copy_on_activation=true)
+    : SimpleConnector (parent, name, src->find_child (sspec), dst->find_child (dspec), copy_on_activation)
+    {}
+
   protected:
     void impl_activate   () override { _assignment.activate ();   _binding.activate ();   if (_copy_on_activation) _assignment.notify_activation (); }
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
@@ -126,6 +134,13 @@ public:
       // no need to add edge to graph, assignment already did it
       finalize_construction (parent, name);
     }
+
+    // for legacy reason, to get rid of?
+    SimplePausedConnector (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec,
+                   CoreProcess* dst, const std::string& dspec)
+    : SimplePausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    {}
 
     protected:
     void impl_activate   () override { _paused_assignment.activate ();  _binding.activate (); }

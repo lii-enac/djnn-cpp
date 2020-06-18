@@ -19,7 +19,7 @@
 #include "geometry.h"
 #include "math_functions.h"
 #include "clock.h"
-#include "connector.h"
+//#include "connector.h"
 #include "simple_connector.h"
 #include "fsm.h"
 #include "switch.h"
@@ -41,5 +41,8 @@ namespace djnn {
 	extern std::vector<std::string> loadedModules; 
 
 	void init_base ();
+
+    using Connector = SimpleConnector;
+    using PausedConnector = SimplePausedConnector;
 
 }
