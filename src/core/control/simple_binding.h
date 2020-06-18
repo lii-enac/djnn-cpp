@@ -95,6 +95,12 @@ namespace djnn {
     : SimpleBinding (parent, name, src->find_child (sspec), src_flag, dst->find_child (dspec), dst_flag)
     {}
 
+    SimpleBinding (FatProcess* parent, const std::string& name,
+                   CoreProcess* src, const std::string& sspec, bool b_src_flag,
+                   CoreProcess* dst, const std::string& dspec, bool b_dst_flag)
+    : SimpleBinding (parent, name, src->find_child (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
+    {}
+
     void set_parent (FatProcess* p) override;
 
   protected:
