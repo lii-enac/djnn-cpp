@@ -19,7 +19,7 @@
 
 namespace djnn {
 
-  typedef Process ProcessForNative;
+  typedef CoreProcess ProcessForNative;
   typedef void (NativeCode) (ProcessForNative*);
 
   class NativeAction : public Action
