@@ -167,7 +167,7 @@ namespace djnn
     FatProcess::set_parent (p); 
   }
 
-  ChildProcess*
+  FatChildProcess*
   Text::find_child (const std::string& name)
   {
     auto * res = AbstractGShape::find_child(name);

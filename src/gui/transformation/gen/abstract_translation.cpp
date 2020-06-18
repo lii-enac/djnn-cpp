@@ -64,7 +64,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractTranslation::find_child (const std::string& name)
   {
     auto * res = AbstractTransformation::find_child(name);

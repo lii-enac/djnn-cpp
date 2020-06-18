@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPropFontFamily::find_child (const std::string& name)
   {
     auto * res = AbstractStyle::find_child(name);

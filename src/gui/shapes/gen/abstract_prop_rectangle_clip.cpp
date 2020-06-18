@@ -76,7 +76,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPropRectangleClip::find_child (const std::string& name)
   {
     auto * res = AbstractGShape::find_child(name);

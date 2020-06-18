@@ -29,7 +29,7 @@ namespace djnn
     
     
     void get_properties_values (int& spread, int& coords);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child ("coords"); }
 

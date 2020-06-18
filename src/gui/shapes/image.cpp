@@ -50,7 +50,7 @@ namespace djnn
     Backend::instance ()->delete_image_impl (this);
   }
 
-  ChildProcess*
+  FatChildProcess*
   Image::find_child (const std::string& name)
   {
     auto * res = AbstractPathImage::find_child(name);
@@ -160,7 +160,7 @@ namespace djnn
     delete _watcher;
   }
 
-  ChildProcess*
+  FatChildProcess*
   DataImage::find_child (const std::string& name)
   {
     auto * res = AbstractDataImage::find_child(name);

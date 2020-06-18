@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   TextAnchor::find_child (const std::string& name)
   {
     auto * res = AbstractStyle::find_child(name);

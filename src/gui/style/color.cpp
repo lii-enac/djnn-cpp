@@ -399,7 +399,7 @@ namespace djnn
     _is_updating = false;
   }
 
-  ChildProcess*
+  FatChildProcess*
   AbstractColor::find_child (const std::string& name)
   {
     auto * res = AbstractStyle::find_child(name);

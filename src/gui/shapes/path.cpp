@@ -70,7 +70,7 @@ namespace djnn
     }
   }
 
-  ChildProcess*
+  FatChildProcess*
   PathPoint::find_child (const std::string& name)
   {
     auto * res = AbstractGObj::find_child(name);
@@ -237,7 +237,7 @@ namespace djnn
     }
   }
 
-  ChildProcess*
+  FatChildProcess*
   PathQuadratic::find_child (const std::string& name)
   {
     auto * res = AbstractGObj::find_child(name);
@@ -377,7 +377,7 @@ namespace djnn
     }
   }
 
-  ChildProcess*
+  FatChildProcess*
   PathCubic::find_child (const std::string& name)
   {
     auto * res = AbstractGObj::find_child(name);
@@ -536,7 +536,7 @@ namespace djnn
     }
   }
 
-  ChildProcess*
+  FatChildProcess*
   PathArc::find_child (const std::string& name)
   {
     auto * res = AbstractGObj::find_child(name);

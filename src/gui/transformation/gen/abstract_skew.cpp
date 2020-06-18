@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractSkew::find_child (const std::string& name)
   {
     auto * res = AbstractTransformation::find_child(name);

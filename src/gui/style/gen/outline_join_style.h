@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     OutlineJoinStyle* clone () override;
     void get_properties_values (int& join);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child ("join"); }
 
   protected:

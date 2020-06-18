@@ -69,7 +69,7 @@ namespace djnn {
     }
   }
 
-  ChildProcess*
+  FatChildProcess*
   PolyPoint::find_child (const std::string& name)
   {
     auto * res = AbstractGObj::find_child(name);

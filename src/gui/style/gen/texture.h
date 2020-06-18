@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     Texture* clone () override;
     void get_properties_values (std::string& path);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child ("path"); }
 
   protected:

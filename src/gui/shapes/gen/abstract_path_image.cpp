@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPathImage::find_child (const std::string& name)
   {
     auto * res = AbstractImage::find_child(name);

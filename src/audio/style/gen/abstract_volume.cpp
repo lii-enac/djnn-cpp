@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractVolume::find_child (const std::string& name)
   {
     auto * res = AbstractAudioStyle::find_child(name);

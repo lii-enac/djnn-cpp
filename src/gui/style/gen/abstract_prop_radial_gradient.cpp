@@ -82,7 +82,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPropRadialGradient::find_child (const std::string& name)
   {
     auto * res = AbstractGradient::find_child(name);

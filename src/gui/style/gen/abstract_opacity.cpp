@@ -58,7 +58,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractOpacity::find_child (const std::string& name)
   {
     auto * res = AbstractStyle::find_child(name);

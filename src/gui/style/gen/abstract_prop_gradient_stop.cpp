@@ -82,7 +82,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPropGradientStop::find_child (const std::string& name)
   {
     auto * res = AbstractStyle::find_child(name);

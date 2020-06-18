@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     OutlineWidth* clone () override;
     void get_properties_values (double& width);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child ("width"); }
 
   protected:

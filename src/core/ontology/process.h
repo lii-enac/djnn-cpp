@@ -68,11 +68,13 @@ namespace djnn {
 
   class Coupling;
   class Vertex;
+  class CoreProcess;
   class ChildProcess;
   class FatProcess;
 
   //typedef FatProcess FatChildProcess;
-  typedef ChildProcess FatChildProcess;
+  //typedef ChildProcess FatChildProcess;
+  typedef CoreProcess FatChildProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;

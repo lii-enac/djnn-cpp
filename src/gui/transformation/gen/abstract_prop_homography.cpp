@@ -148,7 +148,7 @@ namespace djnn
     }
   }
  
-  ChildProcess*
+  FatChildProcess*
   AbstractPropHomography::find_child (const std::string& name)
   {
     auto * res = AbstractTransformation::find_child(name);

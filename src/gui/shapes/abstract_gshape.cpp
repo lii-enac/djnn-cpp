@@ -41,7 +41,7 @@ namespace djnn
   std::vector<std::string> AbstractGShape::_ui =
     { "pickable", "press", "release", "move", "enter", "leave", "touches", "mouse" };
 
-  ChildProcess*
+  FatChildProcess*
   SVGHolder::find_child (const std::string& path)
   {
     auto * p = Container::find_child (path);
@@ -286,7 +286,7 @@ namespace djnn
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
-  ChildProcess*
+  FatChildProcess*
   AbstractGShape::find_child (const std::string& path)
   {
     if (ui)

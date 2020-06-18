@@ -114,7 +114,7 @@ namespace djnn
     double sdf (double x, double y) const override;
     Text* clone () override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_child("dx"); }
@@ -161,7 +161,7 @@ namespace djnn
   public:
     PolyPoint (FatProcess* parent, const std::string& name, double x, double y);
     virtual ~PolyPoint ();
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override;
@@ -217,7 +217,7 @@ namespace djnn
   public:
     PathPoint (FatProcess* parent, const std::string& name, double x, double y);
     virtual ~PathPoint ();
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child("y"); }
     void draw () override = 0;
@@ -254,7 +254,7 @@ namespace djnn
   public:
     PathQuadratic (FatProcess* parent, const std::string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child("x"); }
@@ -274,7 +274,7 @@ namespace djnn
   public:
     PathCubic (FatProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child("y1"); }
     AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child("x2"); }
@@ -297,7 +297,7 @@ namespace djnn
     PathArc (FatProcess* parent, const std::string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_child("rotx"); }
     AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_child("fl"); }
     AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_child("swfl"); }
@@ -372,7 +372,7 @@ namespace djnn
     virtual ~Image ();
     void draw () override;
     Image* clone () override;
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -400,7 +400,7 @@ namespace djnn
       virtual ~DataImage ();
       void draw () override;
       DataImage* clone () override;
-      virtual ChildProcess* find_child (const std::string&) override;
+      virtual FatChildProcess* find_child (const std::string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}

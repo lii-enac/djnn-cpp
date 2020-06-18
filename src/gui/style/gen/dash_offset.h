@@ -29,7 +29,7 @@ namespace djnn
     void draw () override;
     DashOffset* clone () override;
     void get_properties_values (double& offset);
-    virtual ChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child ("offset"); }
 
   protected:
