@@ -228,7 +228,7 @@ namespace djnn
       s->get_ui()->mouse_press_y->set_value (y, true);
       s->get_ui()->mouse_move_x->set_value (x, true);
       s->get_ui()->mouse_move_y->set_value (y, true);
-      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
+      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, false);
       s->press (coord.first, coord.second);
 
       /* event */
