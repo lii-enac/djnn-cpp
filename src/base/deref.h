@@ -73,7 +73,7 @@ namespace djnn
       void set_propagating (bool v) { _propagating = v; }
       virtual void set () = 0;
       virtual void get () = 0;
-      virtual void change_src (Process* src) = 0;
+      virtual void change_src (CoreProcess* src) = 0;
     protected:
       void set_parent (ParentProcess* parent) override;
       TextProperty _path;
@@ -94,7 +94,7 @@ namespace djnn
       virtual ~Deref ();
       void set () override;
       void get () override;
-      void change_src (FatProcess* src) override;
+      void change_src (CoreProcess* src) override;
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
 #endif
@@ -111,7 +111,7 @@ namespace djnn
       virtual ~DerefString ();
       void set () override;
       void get () override;
-      void change_src (FatProcess* src) override;
+      void change_src (CoreProcess* src) override;
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const std::string& type) override;
 #endif
@@ -126,7 +126,7 @@ namespace djnn
         virtual ~DerefDouble ();
         void set () override;
         void get () override;
-        void change_src (FatProcess* src) override;
+        void change_src (CoreProcess* src) override;
   #ifndef DJNN_NO_SERIALIZE
         void serialize (const std::string& type) override;
   #endif

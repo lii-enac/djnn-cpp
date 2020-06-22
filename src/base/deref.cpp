@@ -42,7 +42,7 @@ namespace djnn
 
   AbstractDeref::~AbstractDeref ()
   {
-    Process *old_src = _cset.get_src();
+    auto *old_src = _cset.get_src();
     if (old_src) {
       Graph::instance().remove_edge (old_src, &_get);
     }
@@ -66,7 +66,7 @@ namespace djnn
       Graph::instance().remove_edge (&_set, old_src);
     }
     _cget.uninit ();
-    _cget.change_source (nullptr);
+    _cget.set_src (nullptr);
     if (unref != nullptr) {
       auto* src = unref->find_child (_path.get_value ());
       if (src != nullptr) {
@@ -136,9 +136,9 @@ namespace djnn
   }
 
   void
-  Deref::change_src (FatProcess *src)
+  Deref::change_src (CoreProcess *src)
   {
-    _src = src;
+    _src = dynamic_cast<FatProcess*>(src);
   }
 
   DerefString::DerefString (ParentProcess* parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
@@ -179,7 +179,7 @@ namespace djnn
   }
 
   void
-  DerefString::change_src(Process *src)
+  DerefString::change_src (CoreProcess *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
     if (_src) {
@@ -228,7 +228,7 @@ namespace djnn
   }
 
   void
-  DerefDouble::change_src (FatProcess *src)
+  DerefDouble::change_src (CoreProcess *src)
   {
     _src = dynamic_cast<AbstractProperty*> (src);
     if (_src) {

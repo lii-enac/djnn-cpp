@@ -25,25 +25,25 @@
 namespace djnn
 {
 
-  class ProcessDeleter : public Process
+  class ProcessDeleter : public FatProcess
   {
   private:
     class DeleteOneAction : public Action
     {
     public:
-      DeleteOneAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      DeleteOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~DeleteOneAction () {}
       void impl_activate () override { ((ProcessDeleter*)get_parent ())->delete_one (); };
       void impl_deactivate () override {};
     };
   public:
-    ProcessDeleter (Process *parent, const std::string& name);
+    ProcessDeleter (ParentProcess *parent, const std::string& name);
     virtual ~ProcessDeleter ();
     void impl_activate () override;
     void impl_deactivate () override;
     void delete_one ();
   protected:
-    void set_parent (Process* p) override;
+    void set_parent (ParentProcess* p) override;
     RefProperty _del;
     DeleteOneAction _del_one;
     Coupling _c_del;
@@ -54,49 +54,49 @@ namespace djnn
   //TODO
   };*/
 
-  class CollectionDeleter : public Process
+  class CollectionDeleter : public FatProcess
   {
   private:
     class DeleteAllAction : public Action
     {
     public:
-      DeleteAllAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      DeleteAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~DeleteAllAction () {}
       void impl_activate () override { ((CollectionDeleter*)get_parent ())->delete_all (); };
       void impl_deactivate () override {};
     };
   public:
-    CollectionDeleter (Process *parent, const std::string& name);
+    CollectionDeleter (ParentProcess *parent, const std::string& name);
     virtual ~CollectionDeleter ();
     void impl_activate () override;
     void impl_deactivate () override;
     void delete_all ();
   private:
-    void set_parent (Process *p) override;
+    void set_parent (ParentProcess *p) override;
     RefProperty _del;
     DeleteAllAction _del_action;
     Coupling _c_del_all;
   };
 
-  class CollectionActivator : public Process
+  class CollectionActivator : public FatProcess
   {
   private:
     class ActivateAllAction : public Action
     {
     public:
-      ActivateAllAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      ActivateAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~ActivateAllAction () {}
       void impl_activate () override { ((CollectionActivator*)get_parent ())->activate_all (); };
       void impl_deactivate () override {};
     };
   public:
-    CollectionActivator (Process *parent, const std::string& name, Process* collection = nullptr, const std::string& path = std::string(""));
+    CollectionActivator (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
     virtual ~CollectionActivator ();
     void impl_activate () override;
     void impl_deactivate () override;
     void activate_all ();
   private:
-    void set_parent (Process *p) override;
+    void set_parent (ParentProcess *p) override;
     Spike _activate;
     RefProperty _collection;
     TextProperty _path;
@@ -104,23 +104,23 @@ namespace djnn
     Coupling _c_act_all;
   };
 
-  class AbstractCollectionSetValue : public Process
+  class AbstractCollectionSetValue : public FatProcess
   {
   private:
     class SetValueAction : public Action
     {
     public:
-      SetValueAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      SetValueAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~SetValueAction () {}
       void impl_activate () override { ((AbstractCollectionSetValue*)get_parent ())->set_value (); };
       void impl_deactivate () override {};
     };
   public:
-    AbstractCollectionSetValue (Process *parent, const std::string& name, Process* collection = nullptr, const std::string& path = std::string(""));
+    AbstractCollectionSetValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
     virtual ~AbstractCollectionSetValue ();
     virtual void set_value () = 0;
   protected:
-    void set_parent (Process *p) override;
+    void set_parent (ParentProcess *p) override;
     RefProperty _collection;
     TextProperty _path;
     SetValueAction _act_set_val;
@@ -129,7 +129,7 @@ namespace djnn
   class CollectionSetDoubleValue : public AbstractCollectionSetValue
   {
   public:
-    CollectionSetDoubleValue (Process *parent, const std::string& name, Process* collection = nullptr, const std::string& path = std::string(""));
+    CollectionSetDoubleValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
     virtual ~CollectionSetDoubleValue ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -142,7 +142,7 @@ namespace djnn
   class CollectionSetStringValue : public AbstractCollectionSetValue
   {
   public:
-    CollectionSetStringValue (Process *parent, const std::string& name, Process* collection = nullptr, const std::string& path = std::string(""));
+    CollectionSetStringValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
     virtual ~CollectionSetStringValue ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -152,13 +152,13 @@ namespace djnn
     Coupling _c_act_set_val;
   };
 
-  class ProcessCollector : public Process
+  class ProcessCollector : public FatProcess
   {
   private:
    class AddOneAction : public Action
    {
    public:
-     AddOneAction (Process *parent, const std::string& name) : Action (parent, name) {}
+     AddOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
      virtual ~AddOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->add_one (); };
      void impl_deactivate () override {};
@@ -166,7 +166,7 @@ namespace djnn
    class RemoveOneAction : public Action
    {
    public:
-     RemoveOneAction (Process *parent, const std::string& name) : Action (parent, name) {}
+     RemoveOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
      virtual ~RemoveOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_one (); };
      void impl_deactivate () override {};
@@ -174,26 +174,26 @@ namespace djnn
     class RemoveAllAction : public Action
     {
     public:
-      RemoveAllAction (Process *parent, const std::string& name) : Action (parent, name) {}
+      RemoveAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~RemoveAllAction () {}
       void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_all (); };
       void impl_deactivate () override {};
     };
   public:
-    ProcessCollector (Process *parent, const std::string& name);
+    ProcessCollector (ParentProcess *parent, const std::string& name);
     virtual ~ProcessCollector ();
     void impl_activate () override;
     void impl_deactivate () override;
     void add_one ();
     void remove_one ();
     void remove_all ();
-    std::vector<Process*> get_list () { return _list; }
+    std::vector<CoreProcess*> get_list () { return _list; }
   protected:
-    void set_parent (Process* p) override;
+    void set_parent (ParentProcess* p) override;
     Spike _s_rm_all;
     RefProperty _add;
     RefProperty _remove;
-    std::vector<Process*> _list;
+    std::vector<CoreProcess*> _list;
     AddOneAction _add_one;
     RemoveOneAction _rm_one;
     RemoveAllAction _rm_all;

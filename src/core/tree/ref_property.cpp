@@ -72,13 +72,13 @@ namespace djnn
   RefProperty::get_double_value ()
   {
     //warning (this, "undefined double value for ref property");
-    auto i = reinterpret_cast<std::uintptr_t>(value);
+    auto i = reinterpret_cast<std::uintptr_t>(_value);
     return i;
   }
   double
   RefProperty::get_double_value () const
   {
-    auto i = reinterpret_cast<std::uintptr_t>(value);
+    auto i = reinterpret_cast<std::uintptr_t>(_value);
     return i;
   }
 

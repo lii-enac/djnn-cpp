@@ -22,15 +22,15 @@
 
 namespace djnn
 {
-  ProcessDeleter::ProcessDeleter (Process *parent, const std::string& name)
-  : Process (name),
+  ProcessDeleter::ProcessDeleter (ParentProcess *parent, const std::string& name)
+  : FatProcess (name),
   _del (this, "del", nullptr),
   _del_one (this, "delete_one_action"),
   _c_del (&_del, ACTIVATION, &_del_one, ACTIVATION)
   {
 
     Graph::instance ().add_edge (&_del, &_del_one);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   ProcessDeleter::~ProcessDeleter ()
@@ -39,7 +39,7 @@ namespace djnn
   }
 
   void
-  ProcessDeleter::set_parent (Process *p)
+  ProcessDeleter::set_parent (ParentProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -47,7 +47,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_del_one);
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
   void
   ProcessDeleter::impl_activate ()
@@ -64,18 +64,18 @@ namespace djnn
   void
   ProcessDeleter::delete_one ()
   {
-    Process *to_del = _del.get_value ();
+    auto *to_del = _del.get_value ();
     if (to_del) {
       to_del->deactivate();
-      Process *p = to_del->get_parent ();
+      auto *p = to_del->get_parent ();
       if (p)
         p->remove_child (to_del);
       to_del->schedule_delete();
     }
   }
 
-  ProcessCollector::ProcessCollector (Process *parent, const std::string& name) :
-      Process (name),
+  ProcessCollector::ProcessCollector (ParentProcess *parent, const std::string& name) :
+      FatProcess (name),
       _s_rm_all (this, "rm_all"),
       _add (this, "add", nullptr),
       _remove (this, "rm", nullptr),
@@ -90,7 +90,7 @@ namespace djnn
     Graph::instance ().add_edge (&_add, &_add_one);
     Graph::instance ().add_edge (&_remove, &_rm_one);
     Graph::instance ().add_edge (&_s_rm_all, &_rm_all);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   ProcessCollector::~ProcessCollector ()
@@ -101,7 +101,7 @@ namespace djnn
   }
 
   void
-  ProcessCollector::set_parent (Process *p)
+  ProcessCollector::set_parent (ParentProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -113,7 +113,7 @@ namespace djnn
     add_state_dependency (p, &_add_one);
     add_state_dependency (p, &_rm_one);
     add_state_dependency (p, &_rm_all);
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
 
   void
@@ -135,7 +135,7 @@ namespace djnn
   void
   ProcessCollector::add_one ()
   {
-    Process *to_add = _add.get_value ();
+    auto *to_add = _add.get_value ();
     if (to_add) {
       _list.push_back (to_add);
     }
@@ -144,7 +144,7 @@ namespace djnn
   void
   ProcessCollector::remove_one ()
   {
-    Process *to_remove = _remove.get_value ();
+    auto *to_remove = _remove.get_value ();
     if (to_remove)
       std::remove (_list.begin (), _list.end (), to_remove);
   }
@@ -155,14 +155,14 @@ namespace djnn
     _list.clear ();
   }
 
-  CollectionDeleter::CollectionDeleter (Process *parent, const std::string& name) :
-      Process (name),
+  CollectionDeleter::CollectionDeleter (ParentProcess *parent, const std::string& name) :
+      FatProcess (name),
       _del (this, "del", nullptr),
       _del_action (this, "del_action"),
       _c_del_all (&_del, ACTIVATION, &_del_action, ACTIVATION)
   {
     Graph::instance ().add_edge (&_del, &_del_action);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   CollectionDeleter::~CollectionDeleter ()
@@ -171,7 +171,7 @@ namespace djnn
   }
 
   void
-  CollectionDeleter::set_parent (Process *p)
+  CollectionDeleter::set_parent (ParentProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -179,7 +179,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_del_action);
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
 
   void
@@ -201,7 +201,7 @@ namespace djnn
     if (coll) {
       for (auto to_del : coll->get_list ()) {
         to_del->deactivate ();
-        Process *p = to_del->get_parent ();
+        auto *p = to_del->get_parent ();
         if (p)
           p->remove_child (to_del);
         to_del->schedule_delete ();
@@ -210,8 +210,8 @@ namespace djnn
     coll->remove_all ();
   }
 
-  CollectionActivator::CollectionActivator (Process *parent, const std::string& name, Process* collection, const std::string &path) :
-      Process (name),
+  CollectionActivator::CollectionActivator (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+      FatProcess (name),
       _activate (this, "activate"),
       _collection (this, "collection", collection),
       _path (this, "path", path),
@@ -221,7 +221,7 @@ namespace djnn
     Graph::instance ().add_edge (&_activate, &_act_all);
     Graph::instance ().add_edge (&_collection, &_act_all);
     Graph::instance ().add_edge (&_path, &_act_all);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   CollectionActivator::~CollectionActivator ()
@@ -232,7 +232,7 @@ namespace djnn
   }
 
   void
-  CollectionActivator::set_parent (Process *p)
+  CollectionActivator::set_parent (ParentProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -240,7 +240,7 @@ namespace djnn
     }
 
     add_state_dependency (p, &_act_all);
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
 
   void
@@ -262,15 +262,15 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        Process *p = to_act->find_child (path);
+        auto *p = to_act->find_child (path);
         if (p)
           p->activate ();
       }
     }
   }
 
-  AbstractCollectionSetValue::AbstractCollectionSetValue (Process *parent, const std::string& name, Process* collection, const std::string &path) :
-    Process (name),
+  AbstractCollectionSetValue::AbstractCollectionSetValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+    FatProcess (name),
     _collection (this, "collection", collection),
     _path (this, "path", path),
     _act_set_val (this, "act_all")
@@ -286,7 +286,7 @@ namespace djnn
   }
 
   void
-  AbstractCollectionSetValue::set_parent (Process *p)
+  AbstractCollectionSetValue::set_parent (ParentProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -294,16 +294,16 @@ namespace djnn
     }
 
     add_state_dependency (p, &_act_set_val);
-    Process::set_parent (p);
+    FatProcess::set_parent (p);
   }
 
-  CollectionSetDoubleValue::CollectionSetDoubleValue (Process *parent, const std::string& name, Process* collection, const std::string &path) :
+  CollectionSetDoubleValue::CollectionSetDoubleValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", 0),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
     {
       Graph::instance ().add_edge (&_value, &_act_set_val);
-      Process::finalize_construction (parent, name);
+      finalize_construction (parent, name);
     }
 
   CollectionSetDoubleValue::~CollectionSetDoubleValue ()
@@ -337,13 +337,13 @@ namespace djnn
     }
   }
 
-  CollectionSetStringValue::CollectionSetStringValue (Process *parent, const std::string& name, Process* collection, const std::string &path) :
+  CollectionSetStringValue::CollectionSetStringValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", ""),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
   {
     Graph::instance ().add_edge (&_value, &_act_set_val);
-    Process::finalize_construction (parent, name);
+    finalize_construction (parent, name);
   }
 
   CollectionSetStringValue::~CollectionSetStringValue ()
