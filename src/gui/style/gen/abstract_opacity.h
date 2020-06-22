@@ -24,7 +24,7 @@ namespace djnn
   class AbstractOpacity : public AbstractStyle
   {
   public:
-    AbstractOpacity (FatProcess *parent, const std::string& name, double a);
+    AbstractOpacity (ParentProcess* parent, const std::string& name, double a);
     virtual ~AbstractOpacity ();
     
     

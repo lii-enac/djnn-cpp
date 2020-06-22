@@ -29,7 +29,7 @@
 
 namespace djnn {
 
-  IOFD::IOFD(FatProcess *parent, const std::string& name, int readfd)
+  IOFD::IOFD(ParentProcess* parent, const std::string& name, int readfd)
   : FatProcess (name),
   ExternalSource(name),
   _readfd(readfd),

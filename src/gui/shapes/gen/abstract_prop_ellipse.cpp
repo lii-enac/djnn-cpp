@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropEllipse::AbstractPropEllipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry) :
+  AbstractPropEllipse::AbstractPropEllipse (ParentProcess* parent, const std::string& name, double cx, double cy, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)

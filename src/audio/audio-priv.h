@@ -12,13 +12,13 @@ namespace djnn {
 		class GainAction : public Action
 	    {
 	    public:
-	      GainAction (FatProcess* parent, const std::string& name) : Action (parent, name) {};
+	      GainAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~GainAction () {}
 	      void impl_activate () override { ((AudioListener*)get_parent())->update_gain (); }
 	      void impl_deactivate () override {}
 	    };
 	public:
-		AudioListener (FatProcess *parent, const std::string& name);
+		AudioListener (ParentProcess* parent, const std::string& name);
 		DoubleProperty* gain () { return &_gain; }
 
 		void impl_activate () override {}

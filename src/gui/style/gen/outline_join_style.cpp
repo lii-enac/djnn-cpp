@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineJoinStyle::OutlineJoinStyle (FatProcess *parent, const std::string& name, int join) :
+  OutlineJoinStyle::OutlineJoinStyle (ParentProcess* parent, const std::string& name, int join) :
     AbstractStyle (parent, name),
     raw_props{.join=join},
     _cjoin (nullptr)

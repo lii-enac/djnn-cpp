@@ -40,7 +40,7 @@ namespace djnn
     std::cout << _input->get_value () << std::endl;
   }
 
-  TextPrinter::TextPrinter (FatProcess *parent, const std::string& name)
+  TextPrinter::TextPrinter (ParentProcess* parent, const std::string& name)
   : FatProcess (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
@@ -91,19 +91,19 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::set_parent (FatProcess* p)
+  DoubleFormatter::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, &_action);
+    add_state_dependency (parent, &_action);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
-  DoubleFormatter::DoubleFormatter (FatProcess* parent, const std::string& name, double initial, int decimal) :
+  DoubleFormatter::DoubleFormatter (ParentProcess* parent, const std::string& name, double initial, int decimal) :
     FatProcess (name),
     _input (this, "input", initial),
     _decimal (this, "decimal", decimal),
@@ -148,7 +148,7 @@ namespace djnn
   }
 #endif
 
-  TextAccumulator::TextAccumulator (FatProcess *parent, const std::string& name, const std::string& init)
+  TextAccumulator::TextAccumulator (ParentProcess* parent, const std::string& name, const std::string& init)
   : FatProcess (name),
     _input (this, "input", ""),
     _state (this, "state", init),
@@ -178,7 +178,7 @@ namespace djnn
   }
 
   void
-  TextAccumulator::set_parent (FatProcess* p)
+  TextAccumulator::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -186,10 +186,10 @@ namespace djnn
        remove_state_dependency (get_parent (), &_del_action);
     }
 
-    add_state_dependency (p, &_acc_action);
-    add_state_dependency (p, &_del_action);
+    add_state_dependency (parent, &_acc_action);
+    add_state_dependency (parent, &_del_action);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -238,7 +238,7 @@ namespace djnn
     }
   }
 
-  Regex::Regex (FatProcess *parent, const std::string& name, const std::string& reg)
+  Regex::Regex (ParentProcess* parent, const std::string& name, const std::string& reg)
   : FatProcess (name),
     _input (this, "input", ""),
     _init (reg),
@@ -288,16 +288,16 @@ namespace djnn
   }
 
   void
-  Regex::set_parent (FatProcess* p)
+  Regex::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_reg_action);
     }
 
-    add_state_dependency (p, &_reg_action);
+    add_state_dependency (parent, &_reg_action);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void

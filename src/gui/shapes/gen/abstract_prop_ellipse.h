@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropEllipse : public AbstractGShape
   {
   public:
-    AbstractPropEllipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry);
+    AbstractPropEllipse (ParentProcess* parent, const std::string& name, double cx, double cy, double rx, double ry);
     virtual ~AbstractPropEllipse ();
     
     

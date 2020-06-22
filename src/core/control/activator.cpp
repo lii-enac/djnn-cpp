@@ -21,7 +21,7 @@ namespace djnn
 {
   using namespace std;
 
-  Activator::Activator (FatProcess* parent, const std::string& name, CoreProcess* action) :
+  Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action) :
       FatProcess (name), _action (action)
   {
     if (_action == nullptr) {
@@ -31,7 +31,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Activator::Activator (FatProcess* parent, const std::string& name, CoreProcess* action, const std::string& spec) :
+  Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action, const std::string& spec) :
       FatProcess (name)
   {
     _action = action->find_child (spec);

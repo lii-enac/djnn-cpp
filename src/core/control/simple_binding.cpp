@@ -10,7 +10,7 @@ namespace djnn {
   using std::string;
 
   void
-  SimpleBinding::set_parent (FatProcess* p)
+  SimpleBinding::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     auto * dst = _b.get_dst ();
@@ -19,9 +19,9 @@ namespace djnn {
     }
 
     if (dst)
-      add_state_dependency (p, dst);
+      add_state_dependency (parent, dst);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void

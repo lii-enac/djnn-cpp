@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropFontFamily::AbstractPropFontFamily (FatProcess *parent, const std::string& name, const std::string& family) :
+  AbstractPropFontFamily::AbstractPropFontFamily (ParentProcess* parent, const std::string& name, const std::string& family) :
     AbstractStyle (parent, name),
     raw_props{.family=family},
     _cfamily (nullptr)

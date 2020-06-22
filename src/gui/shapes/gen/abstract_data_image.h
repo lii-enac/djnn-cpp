@@ -24,7 +24,7 @@ namespace djnn
   class AbstractDataImage : public AbstractImage
   {
   public:
-    AbstractDataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double width, double height);
+    AbstractDataImage (ParentProcess* parent, const std::string& name, const std::string& data, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
     
     

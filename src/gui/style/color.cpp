@@ -47,7 +47,7 @@ namespace djnn
       return (KAPPA * v + 16) / 116;
   }
 
-  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter *parent, const std::string& name) :
+  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter * parent, const std::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -90,7 +90,7 @@ namespace djnn
     _p->_h->set_value (H, true);
   }
 
-  RGBToLCHConverter::RGBToLCHConverter (FatProcess *parent, const std::string& name) :
+  RGBToLCHConverter::RGBToLCHConverter (ParentProcess* parent, const std::string& name) :
       FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
@@ -139,16 +139,16 @@ namespace djnn
   }
 
   void
-  RGBToLCHConverter::set_parent (FatProcess* p)
+  RGBToLCHConverter::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), _action);
     }
 
-    add_state_dependency (p, _action);
+    add_state_dependency (parent, _action);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -167,7 +167,7 @@ namespace djnn
     _cb->disable ();
   }
 
-  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter *parent, const std::string& name) :
+  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter * parent, const std::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -217,7 +217,7 @@ namespace djnn
     _p->_b->set_value (B < 0 ? 0 : (B > 255) ? 255 : B, true);
   }
 
-  LCHToRGBConverter::LCHToRGBConverter (FatProcess *parent, const std::string& name) :
+  LCHToRGBConverter::LCHToRGBConverter (ParentProcess* parent, const std::string& name) :
       FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
@@ -244,16 +244,16 @@ namespace djnn
   }
 
   void
-  LCHToRGBConverter::set_parent (FatProcess* p)
+  LCHToRGBConverter::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), _action);
     }
 
-    add_state_dependency (p, _action);
+    add_state_dependency (parent, _action);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   LCHToRGBConverter::~LCHToRGBConverter ()
@@ -294,7 +294,7 @@ namespace djnn
     _ch->disable ();
   }
 
-  AbstractColor::AbstractColor (FatProcess *parent, const std::string& name, int r, int g, int b) :
+  AbstractColor::AbstractColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
     AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
@@ -305,7 +305,7 @@ namespace djnn
     raw_props.value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
   }
 
-  AbstractColor::AbstractColor (FatProcess *parent, const std::string& name, int v) :
+  AbstractColor::AbstractColor (ParentProcess* parent, const std::string& name, int v) :
     AbstractStyle (parent, name),
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),

@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Group::Group (FatProcess* parent, const std::string& n) :
+  Group::Group (ParentProcess* parent, const std::string& n) :
       Container (parent, n), _gobj (nullptr)
   {
     _gobj = new AbstractGObj (this, "_gobj");

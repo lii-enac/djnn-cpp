@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  FillRule::FillRule (FatProcess *parent, const std::string& name, int rule) :
+  FillRule::FillRule (ParentProcess* parent, const std::string& name, int rule) :
     AbstractStyle (parent, name),
     raw_props{.rule=rule},
     _crule (nullptr)

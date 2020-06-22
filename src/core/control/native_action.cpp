@@ -20,7 +20,7 @@ namespace djnn
 {
   using namespace std;
 
-  NativeAction::NativeAction (FatProcess* parent, const std::string& name, NativeCode *action, void* data,
+  NativeAction::NativeAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data,
                               bool isModel) :
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {

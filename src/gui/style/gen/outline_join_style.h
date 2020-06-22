@@ -24,7 +24,7 @@ namespace djnn
   class OutlineJoinStyle : public AbstractStyle
   {
   public:
-    OutlineJoinStyle (FatProcess *parent, const std::string& name, int join);
+    OutlineJoinStyle (ParentProcess* parent, const std::string& name, int join);
     virtual ~OutlineJoinStyle ();
     void draw () override;
     OutlineJoinStyle* clone () override;

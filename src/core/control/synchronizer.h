@@ -29,7 +29,7 @@ namespace djnn {
     class SynchronizerAction : public NativeExpressionAction
     {
     public:
-      SynchronizerAction (FatProcess* parent, const std::string& name) : NativeExpressionAction (parent, name) {}
+      SynchronizerAction (ParentProcess* parent, const std::string& name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
         if (get_parent ()->somehow_activating ())
@@ -38,7 +38,7 @@ namespace djnn {
       void impl_deactivate () override {}
     };
   public:
-    Synchronizer (FatProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec);
+    Synchronizer (ParentProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec);
     virtual ~Synchronizer ();
     void add_source (CoreProcess* src, const std::string& spec);
     void impl_activate () override;
@@ -48,8 +48,8 @@ namespace djnn {
   private:
     void propagate ();
 
-    void set_parent (FatProcess* p) override;
-    struct Init { Init(Synchronizer *, FatProcess *parent, const std::string& name, CoreProcess* dst, const std::string&  dspec); };
+    void set_parent (ParentProcess* parent) override;
+    struct Init { Init(Synchronizer *, ParentProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec); };
     friend struct Init;
     CoreProcess *_dst;
     Init _init;

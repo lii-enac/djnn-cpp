@@ -27,7 +27,7 @@ namespace djnn {
     class BindingAction : public Action
     {
     public:
-      BindingAction (FatProcess* parent, const std::string& name, bool activate);
+      BindingAction (ParentProcess* parent, const std::string& name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override { ((Binding*)get_parent ()) -> perform_action (get_binding_action()); }
       /*void impl_activate () override {
@@ -47,9 +47,9 @@ namespace djnn {
 
     };
   public:
-    Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
+    Binding (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
-    Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation, FatProcess* dst, const std::string&  dspec, bool activate,
+    Binding (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation, FatProcess* dst, const std::string&  dspec, bool activate,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
     virtual ~Binding ();
     void impl_activate () override { 
@@ -76,7 +76,7 @@ namespace djnn {
     FatProcess* get_dst() { return _dst; }
 
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
 
     struct Init { Init(Binding *, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec, std::string& src_ref_spec, std::string& dst_ref_spec); };
     friend struct Init;

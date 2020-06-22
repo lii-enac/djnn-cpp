@@ -20,7 +20,7 @@ using namespace std;
 
 namespace djnn
 {
-  TextField::TextField (FatProcess *parent, const std::string& name, CoreProcess* text, CoreProcess* shape) :
+  TextField::TextField (ParentProcess* parent, const std::string& name, CoreProcess* text, CoreProcess* shape) :
       FatProcess (name), _start_select (0), _end_select (0), _is_selecting (false)
   {
     auto * fpshape = dynamic_cast<FatProcess*>(shape);

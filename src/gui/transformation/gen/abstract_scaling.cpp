@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractScaling::AbstractScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy) :
+  AbstractScaling::AbstractScaling (ParentProcess* parent, const std::string& name, double sx, double sy, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
     _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)

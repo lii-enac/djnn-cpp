@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropLine::AbstractPropLine (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2) :
+  AbstractPropLine::AbstractPropLine (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2) :
     AbstractGShape (parent, name),
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)

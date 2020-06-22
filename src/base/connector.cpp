@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  Connector::ConnectorAction::ConnectorAction (FatProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
+  Connector::ConnectorAction::ConnectorAction (ParentProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate) :
         Action (parent, name), _src (src), _dst (dst), _propagate (propagate) 
   {
   }
@@ -82,7 +82,7 @@ namespace djnn
 
 
 
-  Connector::Connector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation,
+  Connector::Connector (ParentProcess* parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation,
     std::string src_ref_spec, std::string dst_ref_spec)
   :
     SrcToDstLink (parent, name),
@@ -134,7 +134,7 @@ namespace djnn
 
 
   void
-  Connector::set_parent (FatProcess* p)
+  Connector::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
@@ -142,9 +142,9 @@ namespace djnn
     }
 
     if (_dst)
-      add_state_dependency (p, _dst);
+      add_state_dependency (parent, _dst);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -207,7 +207,7 @@ namespace djnn
   }
 #endif
 
-  PausedConnector::PausedConnector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec,
+  PausedConnector::PausedConnector (ParentProcess* parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec,
                                     bool copy_on_activation) :
       FatProcess (name), _c_src (nullptr), _copy_on_activation (copy_on_activation)
   {
@@ -284,15 +284,15 @@ namespace djnn
   }
 
   void
-  PausedConnector::set_parent (FatProcess* p)
+  PausedConnector::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), _dst);
     }
 
-    add_state_dependency (p, _dst);
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, _dst);
+    FatProcess::set_parent (parent); 
   }
 
 #ifndef DJNN_NO_SERIALIZE

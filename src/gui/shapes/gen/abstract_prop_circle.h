@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropCircle : public AbstractGShape
   {
   public:
-    AbstractPropCircle (FatProcess *parent, const std::string& name, double cx, double cy, double r);
+    AbstractPropCircle (ParentProcess* parent, const std::string& name, double cx, double cy, double r);
     virtual ~AbstractPropCircle ();
     
     

@@ -58,7 +58,7 @@ namespace djnn {
       SwitchList* _sw;
     };
   public:
-    SwitchList (FatProcess *parent, const std::string& name, bool loop=false);
+    SwitchList (ParentProcess* parent, const std::string& name, bool loop=false);
     virtual ~SwitchList ();
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
     FatChildProcess* find_child (const std::string& path) override;
@@ -72,7 +72,7 @@ namespace djnn {
     void set_item (FatChildProcess *item) { _cur_item = item; }
     IntProperty* index () { return &_index; }
     BoolProperty* loop () { return &_loop; }
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     
   private:
     void finalize_child_insertion (FatChildProcess *child) override;

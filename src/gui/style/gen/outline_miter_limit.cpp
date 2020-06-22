@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineMiterLimit::OutlineMiterLimit (FatProcess *parent, const std::string& name, int limit) :
+  OutlineMiterLimit::OutlineMiterLimit (ParentProcess* parent, const std::string& name, int limit) :
     AbstractStyle (parent, name),
     raw_props{.limit=limit},
     _climit (nullptr)

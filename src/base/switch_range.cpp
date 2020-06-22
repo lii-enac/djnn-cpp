@@ -21,7 +21,7 @@ namespace djnn
 {
   using namespace std;
 
-  SwitchRangeBranch::SwitchRangeBranch (FatProcess *parent, const std::string& name, double lower, bool left_open, double upper,
+  SwitchRangeBranch::SwitchRangeBranch (ParentProcess* parent, const std::string& name, double lower, bool left_open, double upper,
                                         bool right_open) 
   : Container (parent, name),
   _left_open (left_open),
@@ -69,7 +69,7 @@ namespace djnn
   }
 
 
-  SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange *parent, const std::string& name) :
+  SwitchRange::SwitchRangeAction::SwitchRangeAction (SwitchRange * parent, const std::string& name) :
       Action (parent, name),  _sw (parent) 
   {
   }
@@ -77,7 +77,7 @@ namespace djnn
   /* note:
    * added _branch_range to symTable but not in _children 
    */
-  SwitchRange::SwitchRange (FatProcess *parent, const std::string& name, double initial) 
+  SwitchRange::SwitchRange (ParentProcess* parent, const std::string& name, double initial) 
   : Container (parent, name),
   _initial (initial),
   _input (nullptr, "input", initial),
@@ -110,15 +110,15 @@ namespace djnn
   }
 
   void
-  SwitchRange::set_parent (FatProcess* p)
+  SwitchRange::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, state_dependency ());
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, state_dependency ());
+    FatProcess::set_parent (parent); 
   }
 
   void

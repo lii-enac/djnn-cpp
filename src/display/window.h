@@ -49,14 +49,14 @@ namespace djnn
     class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (Window *parent, const std::string& name)  : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
+        UndelayedSpike (Window * parent, const std::string& name)  : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { post_activate_auto_deactivate (); }
         void impl_activate () override;
         void impl_deactivate () override {};
     };
   public:
-    Window (FatProcess *parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
+    Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 
@@ -139,13 +139,13 @@ namespace djnn
    class Cursor : public FatProcess {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      UpdateCursorAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };
    public:
-    Cursor (FatProcess *parent, const std::string& name, const std::string& path, int hotX, int hotY);
+    Cursor (ParentProcess* parent, const std::string& name, const std::string& path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;

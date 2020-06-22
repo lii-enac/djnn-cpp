@@ -24,7 +24,7 @@ namespace djnn
   class OutlineMiterLimit : public AbstractStyle
   {
   public:
-    OutlineMiterLimit (FatProcess *parent, const std::string& name, int limit);
+    OutlineMiterLimit (ParentProcess* parent, const std::string& name, int limit);
     virtual ~OutlineMiterLimit ();
     void draw () override;
     OutlineMiterLimit* clone () override;

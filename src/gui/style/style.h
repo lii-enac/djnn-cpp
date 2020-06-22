@@ -31,14 +31,14 @@ namespace djnn
   class AbstractStyle : public AbstractGObj
   {
   public:
-    AbstractStyle (FatProcess *parent, const std::string& name);
+    AbstractStyle (ParentProcess* parent, const std::string& name);
     virtual ~AbstractStyle ();
   };
 
   class StyleSheet : public Container
   {
   public:
-    StyleSheet (FatProcess *parent, const std::string& name);
+    StyleSheet (ParentProcess* parent, const std::string& name);
     virtual ~StyleSheet () override {}
     StyleSheet* clone () override;
     const std::string& classname () { return _classname; }
@@ -76,9 +76,9 @@ namespace djnn
   class FillColor : public AbstractColor
   {
   public:
-    FillColor (FatProcess *parent, const std::string& name, int r, int g, int b) :
+    FillColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
-    FillColor (FatProcess *parent, const std::string& name, int v) :
+    FillColor (ParentProcess* parent, const std::string& name, int v) :
         AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~FillColor () {}
     void draw () override;
@@ -88,9 +88,9 @@ namespace djnn
   class OutlineColor : public AbstractColor
   {
   public:
-    OutlineColor (FatProcess *parent, const std::string& name, int r, int g, int b) :
+    OutlineColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
-    OutlineColor (FatProcess *parent, const std::string& name, int v) :
+    OutlineColor (ParentProcess* parent, const std::string& name, int v) :
          AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~OutlineColor () {}
     void draw () override;
@@ -100,7 +100,7 @@ namespace djnn
   class NoOutline : public AbstractStyle
   {
   public:
-    NoOutline (FatProcess *parent, const std::string& name) :
+    NoOutline (ParentProcess* parent, const std::string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -112,7 +112,7 @@ namespace djnn
   class NoFill : public AbstractStyle
   {
   public:
-    NoFill (FatProcess *parent, const std::string& name) :
+    NoFill (ParentProcess* parent, const std::string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -124,7 +124,7 @@ namespace djnn
   class OutlineOpacity : public AbstractOpacity
   {
   public:
-    OutlineOpacity (FatProcess *parent, const std::string& name, double alpha) :
+    OutlineOpacity (ParentProcess* parent, const std::string& name, double alpha) :
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~OutlineOpacity () {}
     void draw () override;
@@ -134,7 +134,7 @@ namespace djnn
   class FillOpacity : public AbstractOpacity
   {
   public:
-    FillOpacity (FatProcess *parent, const std::string& name, double alpha) :
+    FillOpacity (ParentProcess* parent, const std::string& name, double alpha) :
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~FillOpacity () {}
     void draw () override;
@@ -145,7 +145,7 @@ namespace djnn
   class DashArray : public AbstractStyle
   {
   public:
-    DashArray (FatProcess *parent, const std::string& name) :
+    DashArray (ParentProcess* parent, const std::string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~DashArray () { _dash_array.clear ();}
     const std::vector<double>& dash_array () const { return _dash_array;}
@@ -165,7 +165,7 @@ namespace djnn
   class NoDashArray : public AbstractStyle
   {
   public:
-    NoDashArray (FatProcess *parent, const std::string& name) :
+    NoDashArray (ParentProcess* parent, const std::string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoDashArray () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -182,7 +182,7 @@ namespace djnn {
   class GradientStop : public AbstractPropGradientStop
   {
   public:
-    GradientStop (FatProcess *parent, const std::string& name, double r, double g, double b, double a, double offset);
+    GradientStop (ParentProcess* parent, const std::string& name, double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
     void draw () override;
     GradientStop* clone () override;
@@ -197,8 +197,8 @@ namespace djnn {
   class AbstractGradient : public AbstractPropGradient
   {
   public:
-    AbstractGradient (FatProcess *parent, const std::string& name, int spread, int coords);
-    AbstractGradient (FatProcess *parent, const std::string& name);
+    AbstractGradient (ParentProcess* parent, const std::string& name, int spread, int coords);
+    AbstractGradient (ParentProcess* parent, const std::string& name);
     virtual ~AbstractGradient ();
     virtual void update ();
     List* transforms () { return _transforms;}
@@ -219,11 +219,11 @@ namespace djnn {
   class LinearGradient : public AbstractPropLinearGradient
   {
   public:
-    LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2,
+    LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
                     djnFillSpread s, djnFillCoords fc);
-    LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2,
+    LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
                     int s, int fc);
-    LinearGradient (FatProcess *parent, const std::string& name, LinearGradient *lg);
+    LinearGradient (ParentProcess* parent, const std::string& name, LinearGradient *lg);
     virtual ~LinearGradient ();
     void draw () override;
     LinearGradient* clone () override;
@@ -233,7 +233,7 @@ namespace djnn {
   class RefLinearGradient : public AbstractStyle
   {
   public:
-    RefLinearGradient (FatProcess *parent, const std::string& name, LinearGradient *lg);
+    RefLinearGradient (ParentProcess* parent, const std::string& name, LinearGradient *lg);
     virtual ~RefLinearGradient () {};
     void impl_activate () override;
     void impl_deactivate () override;
@@ -249,11 +249,11 @@ namespace djnn {
   class RadialGradient : public AbstractPropRadialGradient
   {
   public:
-    RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
+    RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
                     djnFillSpread s, djnFillCoords fc);
-    RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
+    RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
                         int s, int fc);
-    RadialGradient (FatProcess *parent, const std::string& name, RadialGradient *rg);
+    RadialGradient (ParentProcess* parent, const std::string& name, RadialGradient *rg);
     virtual ~RadialGradient ();
     void draw () override;
     RadialGradient* clone () override;
@@ -263,7 +263,7 @@ namespace djnn {
   class RefRadialGradient : public AbstractStyle
   {
   public:
-    RefRadialGradient (FatProcess *parent, const std::string& name, RadialGradient *rg);
+    RefRadialGradient (ParentProcess* parent, const std::string& name, RadialGradient *rg);
     virtual ~RefRadialGradient () {};
     void impl_activate () override;
     void impl_deactivate () override;
@@ -278,8 +278,8 @@ namespace djnn {
   class FontSize : public AbstractPropFontSize
   {
   public:
-    FontSize (FatProcess *parent, const std::string& name, djnLengthUnit unit, double size);
-    FontSize (FatProcess *parent, const std::string& name, int unit, double size);
+    FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size);
+    FontSize (ParentProcess* parent, const std::string& name, int unit, double size);
     void impl_activate () override;
     void draw () override;
     FontSize* clone () override;
@@ -289,7 +289,7 @@ namespace djnn {
   class FontWeight : public AbstractPropFontWeight // AbstractStyle
   {
   public:
-    FontWeight (FatProcess *parent, const std::string& name, int weight);
+    FontWeight (ParentProcess* parent, const std::string& name, int weight);
     void impl_activate () override;
     void draw () override;
     FontWeight* clone () override;
@@ -298,8 +298,8 @@ namespace djnn {
   class FontStyle : public AbstractPropFontStyle // AbstractStyle
   {
   public:
-    FontStyle (FatProcess *parent, const std::string& name, djnFontSlope style);
-    FontStyle (FatProcess *parent, const std::string& name, int style);
+    FontStyle (ParentProcess* parent, const std::string& name, djnFontSlope style);
+    FontStyle (ParentProcess* parent, const std::string& name, int style);
     void impl_activate () override;
     void draw () override;
     FontStyle* clone () override;
@@ -308,7 +308,7 @@ namespace djnn {
   class FontFamily : public AbstractPropFontFamily // AbstractStyle
   {
   public:
-    FontFamily (FatProcess *parent, const std::string& name, const std::string& family);
+    FontFamily (ParentProcess* parent, const std::string& name, const std::string& family);
     void impl_activate () override;
     void draw () override;
     FontFamily* clone () override;
@@ -327,12 +327,12 @@ namespace djnn {
         RGBToLCHConverter *_p;
     };
   public:
-    RGBToLCHConverter (FatProcess *parent, const std::string& name);
+    RGBToLCHConverter (ParentProcess* parent, const std::string& name);
     virtual ~RGBToLCHConverter ();
     void impl_activate () override;
     void impl_deactivate () override;
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     IntProperty *_r, *_g, *_b;
     DoubleProperty *_l, *_c, *_h;
     ConverterAction *_action;
@@ -352,12 +352,12 @@ namespace djnn {
         LCHToRGBConverter *_p;
     };
   public:
-    LCHToRGBConverter (FatProcess *parent, const std::string& name);
+    LCHToRGBConverter (ParentProcess* parent, const std::string& name);
     virtual ~LCHToRGBConverter ();
     void impl_activate () override;
     void impl_deactivate () override;
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     IntProperty *_r, *_g, *_b;
     DoubleProperty *_l, *_c, *_h;
     ConverterAction *_action;

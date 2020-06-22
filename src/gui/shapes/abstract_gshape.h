@@ -28,7 +28,7 @@ namespace djnn
   class SVGHolder : public Container
   {
   public:
-    SVGHolder (FatProcess *parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }
+    SVGHolder (ParentProcess* parent, const std::string& name) : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }
     virtual ~SVGHolder () {}
     SVGHolder* clone () override;
     FatChildProcess* find_child (const std::string& path) override;
@@ -40,7 +40,7 @@ namespace djnn
 
   class UI {
   public:
-    UI (FatProcess *p, FatProcess *f);
+    UI (ParentProcess* parent, FatProcess *f);
     bool is_pickable () { return pickable->get_value (); }
     //void activate (FatProcess* frame) { cpick->enable (frame); }
     void activate (FatProcess* frame) { 
@@ -64,13 +64,13 @@ namespace djnn
     DoubleProperty *mouse_press_x, *mouse_press_y, *mouse_move_x, *mouse_move_y;
     DoubleProperty *mouse_local_press_x, *mouse_local_press_y, *mouse_local_move_x, *mouse_local_move_y;
     FatProcess *press, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
-    FatProcess *parent;
+    ParentProcess* parent;
   };
 
   class AbstractGShape : public AbstractGObj
   {
   public:
-    AbstractGShape (FatProcess *parent, const std::string& name);
+    AbstractGShape (ParentProcess* parent, const std::string& name);
     virtual ~AbstractGShape ();
     FatProcess* matrix () { return _matrix; }
     FatProcess* inverted_matrix () { return _inverted_matrix; }
@@ -105,7 +105,7 @@ namespace djnn
   class Touch : public FatProcess
   {
   public:
-    Touch (FatProcess *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure);
+    Touch (ParentProcess* parent, const std::string& name, int id, double init_x, double init_y, double init_pressure);
     void impl_activate () override {};
     void impl_deactivate () override {};
     void set_init_x (double v) { _init_x->set_value (v, true); }

@@ -37,12 +37,12 @@ namespace djnn
     class PropertiesAction : public Action
     {
     public:
-      PropertiesAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      PropertiesAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
       void impl_deactivate () override {}
     };
   public:
-    Properties (FatProcess *parent, const std::string& name, const std::string& filename = "");
+    Properties (ParentProcess* parent, const std::string& name, const std::string& filename = "");
     virtual ~Properties ();
     void impl_activate () override;
     void impl_deactivate () override;

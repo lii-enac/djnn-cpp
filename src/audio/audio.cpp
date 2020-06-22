@@ -37,7 +37,7 @@ namespace djnn {
 		#endif
 	}
 
-	AudioListener::AudioListener (FatProcess *parent, const std::string& name)
+	AudioListener::AudioListener (ParentProcess* parent, const std::string& name)
 	: FatProcess(name), _gain(this, "gain", 1.0),
 	_gain_action (this, "gain_action"),
   	_c_gain_action (&_gain, ACTIVATION, &_gain_action, ACTIVATION, true)

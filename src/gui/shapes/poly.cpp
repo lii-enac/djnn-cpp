@@ -31,7 +31,7 @@ using namespace std;
 
 namespace djnn {
 
-  PolyPoint::PolyPoint (FatProcess* parent, const std::string& name, double x, double y) :
+  PolyPoint::PolyPoint (ParentProcess* parent, const std::string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
@@ -128,7 +128,7 @@ namespace djnn {
     return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
-  Poly::Poly (FatProcess* parent, const std::string& name, int closed) :
+  Poly::Poly (ParentProcess* parent, const std::string& name, int closed) :
       AbstractGShape (parent, name), _closed (closed)
   {
     _points = new List (this, "points");

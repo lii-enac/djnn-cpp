@@ -24,7 +24,7 @@ namespace djnn
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (FatProcess *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToValueAction (ParentProcess* parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
@@ -33,7 +33,7 @@ namespace djnn
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (FatProcess *parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToRGBAction (ParentProcess* parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
@@ -41,8 +41,8 @@ namespace djnn
       void impl_deactivate () override {}
     };
   public:
-    AbstractColor (FatProcess *parent, const std::string& name, int r, int g, int b);
-    AbstractColor (FatProcess *parent, const std::string& name, int v);
+    AbstractColor (ParentProcess* parent, const std::string& name, int r, int g, int b);
+    AbstractColor (ParentProcess* parent, const std::string& name, int v);
     virtual ~AbstractColor ();
     
     

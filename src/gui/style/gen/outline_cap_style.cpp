@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineCapStyle::OutlineCapStyle (FatProcess *parent, const std::string& name, int cap) :
+  OutlineCapStyle::OutlineCapStyle (ParentProcess* parent, const std::string& name, int cap) :
     AbstractStyle (parent, name),
     raw_props{.cap=cap},
     _ccap (nullptr)

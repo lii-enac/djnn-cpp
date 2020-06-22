@@ -45,7 +45,7 @@ namespace djnn
 {
   using namespace std;
 
-  Container::Container (FatProcess* parent, const std::string& name) :
+  Container::Container (ParentProcess* parent, const std::string& name) :
       FatProcess (name)
   {
     Container* c = djnn_dynamic_cast<Container*> (parent);
@@ -359,7 +359,7 @@ namespace djnn
 #endif
 
 
-  AssignmentSequence::AssignmentSequence (FatProcess *parent, const std::string& name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (ParentProcess* parent, const std::string& name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);

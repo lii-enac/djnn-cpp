@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (FatProcess *parent, const std::string& name, double width) :
+  OutlineWidth::OutlineWidth (ParentProcess* parent, const std::string& name, double width) :
     AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)

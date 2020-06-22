@@ -32,7 +32,7 @@ namespace djnn
     class TimerAction : public Action
     {
     public:
-      TimerAction (FatProcess* parent, const std::string& name) :
+      TimerAction (ParentProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~TimerAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
@@ -42,7 +42,7 @@ namespace djnn
     class ResetAction : public Action
     {
     public:
-      ResetAction (FatProcess* parent, const std::string& name) :
+      ResetAction (ParentProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~ResetAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
@@ -50,10 +50,10 @@ namespace djnn
     };
 
   public:
-    Timer (FatProcess* p, const std::string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
-    Timer (FatProcess* p, const std::string& n, int period = 1000);
+    Timer (ParentProcess* parent, const std::string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
+    Timer (ParentProcess* parent, const std::string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Timer (FatProcess* p, const std::string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
+    Timer (ParentProcess* parent, const std::string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Timer ();
 

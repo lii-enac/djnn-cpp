@@ -17,6 +17,8 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
 #endif
@@ -26,9 +28,9 @@ namespace djnn
   using namespace std;
 
   int
-  getInt (FatProcess* p)
+  getInt (CoreProcess* p)
   {
-    IntProperty *ip = dynamic_cast<IntProperty*> (p);
+    IntProperty *ip = djnn_dynamic_cast<IntProperty*> (p);
     if (ip != nullptr)
       return ip->get_value();
     else
@@ -37,9 +39,9 @@ namespace djnn
   }
 
   void
-  setInt (FatProcess* p, int v)
+  setInt (CoreProcess* p, int v)
   {
-    IntProperty *ip = dynamic_cast<IntProperty*> (p);
+    IntProperty *ip = djnn_dynamic_cast<IntProperty*> (p);
     if (ip != nullptr)
       ip->set_value (v, true);
     else
@@ -86,7 +88,7 @@ namespace djnn
   void
   AbstractIntProperty::set_value (CoreProcess* v, bool propagate)
   {
-    warning (this, "undefined conversion from Component to Int\n");
+    warning (this, "undefined conversion from Process to Int\n");
   }
 
   FatProcess*

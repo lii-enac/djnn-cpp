@@ -24,7 +24,7 @@ namespace djnn {
 
   class AbstractDoubleProperty : public AbstractProperty {
   public:
-    AbstractDoubleProperty (FatProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractDoubleProperty (ParentProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Double; }
     //virtual process_type_e get_process_type () const override { return DOUBLE_PROPERTY_T; }
 
@@ -52,7 +52,7 @@ namespace djnn {
 
   class DoubleProperty : public AbstractDoubleProperty {
   public:
-    DoubleProperty (FatProcess* parent, const std::string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
+    DoubleProperty (ParentProcess* parent, const std::string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
 
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
-    DoublePropertyProxy (FatProcess* parent, const std::string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
+    DoublePropertyProxy (ParentProcess* parent, const std::string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }
@@ -81,5 +81,5 @@ namespace djnn {
   };
 
   double getDouble (FatProcess *p);
-  void setDouble (FatProcess *p, double v);
+  void setDouble (ParentProcess* parent, double v);
 }

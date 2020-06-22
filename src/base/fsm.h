@@ -32,7 +32,7 @@ namespace djnn {
   class FSMState : public Container
   {
   public:
-    FSMState (FatProcess *parent, const std::string& name);
+    FSMState (ParentProcess* parent, const std::string& name);
     ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
@@ -53,7 +53,7 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (FatProcess *parent, const std::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
+      FSMTransitionAction (ParentProcess* parent, const std::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
 	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
@@ -65,9 +65,9 @@ namespace djnn {
       CoreProcess* _action;
     };
   public:
-    FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+    FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
 		   CoreProcess *trigger, const std::string& tspec, CoreProcess *action = 0, const std::string& aspec = "");
-    FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+    FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
        CoreProcess *trigger, CoreProcess *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
@@ -78,7 +78,7 @@ namespace djnn {
     int priority () { return _priority; }
     Action* fsm_action () { return &_fsm_action; }
   protected:
-    struct Init { Init (FSMTransition* t, FatProcess* p, 
+    struct Init { Init (FSMTransition* t, ParentProcess* parent, 
                         const std::string& tspec, const std::string& aspec); };
     friend struct Init;
     
@@ -96,7 +96,7 @@ namespace djnn {
   class FSM : public FatProcess
   {
   public:
-    FSM (FatProcess *parent, const std::string& name);
+    FSM (ParentProcess* parent, const std::string& name);
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return FSM_T; }
@@ -110,7 +110,7 @@ namespace djnn {
     virtual ~FSM ();
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif

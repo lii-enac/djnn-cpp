@@ -24,7 +24,7 @@ namespace djnn
   class DashOffset : public AbstractStyle
   {
   public:
-    DashOffset (FatProcess *parent, const std::string& name, double offset);
+    DashOffset (ParentProcess* parent, const std::string& name, double offset);
     virtual ~DashOffset ();
     void draw () override;
     DashOffset* clone () override;

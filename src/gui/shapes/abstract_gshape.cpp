@@ -90,7 +90,7 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (FatProcess *parent, const std::string& name, int id, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (ParentProcess* parent, const std::string& name, int id, double init_x, double init_y, double init_pressure) :
       FatProcess (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
@@ -121,9 +121,9 @@ namespace djnn
     delete _init_x;
   }
 
-  UI::UI (FatProcess *p, FatProcess *f) : parent (p)
+  UI::UI (ParentProcess* parent_, FatProcess *f) : parent (parent_)
   {
-    pickable = new BoolProperty (p, "pickable", true);
+    pickable = new BoolProperty (parent, "pickable", true);
     //FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
     //cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
     //if (f != nullptr)
@@ -133,18 +133,18 @@ namespace djnn
     cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
     if (f != nullptr) cpick->enable ();
 
-    press = new Spike (p, "press");
-    move = new Spike (p, "move");
-    release = new Spike (p, "release");
-    enter = new Spike (p, "enter");
-    leave = new Spike (p, "leave");
-    mouse = new Component (p, "mouse");
+    press = new Spike (parent, "press");
+    move = new Spike (parent, "move");
+    release = new Spike (parent, "release");
+    enter = new Spike (parent, "enter");
+    leave = new Spike (parent, "leave");
+    mouse = new Component (parent, "mouse");
     mouse_press = new Spike (mouse, "press");
     mouse_release = new Spike (mouse, "release");
     mouse_move  = new Spike (mouse, "move");
     mouse_enter = new Spike (mouse, "enter");
     mouse_leave = new Spike (mouse, "leave");
-    touches = new List (p, "touches");
+    touches = new List (parent, "touches");
     touches->set_activation_state (ACTIVATED);
 
     move_x = new DoubleProperty (nullptr, "move_x", 0);
@@ -279,7 +279,7 @@ namespace djnn
 
   }
 
-  AbstractGShape::AbstractGShape (FatProcess *parent, const std::string& name) :
+  AbstractGShape::AbstractGShape (ParentProcess* parent, const std::string& name) :
     AbstractGObj (parent, name), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);

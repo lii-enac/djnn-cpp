@@ -24,7 +24,7 @@ namespace djnn
 {
   using std::string;
 
-  FSMState::FSMState (FatProcess *parent, const std::string& name) :
+  FSMState::FSMState (ParentProcess* parent, const std::string& name) :
       Container (parent, name)
   {
     FSM *fsm = dynamic_cast<FSM*> (parent);
@@ -97,7 +97,7 @@ namespace djnn
   }
 #endif
 
-  FSMTransition::Init::Init (FSMTransition* t, FatProcess* p, 
+  FSMTransition::Init::Init (FSMTransition* t, ParentProcess* p, 
                             const std::string& tspec, const std::string& aspec) 
   {
     FSM *fsm = dynamic_cast<FSM*> (p);
@@ -120,7 +120,7 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+  FSMTransition::FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, const std::string& tspec, CoreProcess *action,
                                 const std::string& aspec) 
   : FatProcess (name),
@@ -141,7 +141,7 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (FatProcess *parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+  FSMTransition::FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, CoreProcess *action) 
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
@@ -222,7 +222,7 @@ namespace djnn
   }
 #endif
 
-  FSM::FSM (FatProcess *parent, const std::string& name) 
+  FSM::FSM (ParentProcess* parent, const std::string& name) 
   : FatProcess (name), 
   _priority (0),
   _cur_state (nullptr),
@@ -252,15 +252,15 @@ namespace djnn
   }
 
   void
-  FSM::set_parent (FatProcess* p)
+  FSM::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, state_dependency ());
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, state_dependency ());
+    FatProcess::set_parent (parent); 
   }
 
   void

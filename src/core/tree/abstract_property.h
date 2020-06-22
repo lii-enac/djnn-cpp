@@ -30,7 +30,7 @@ namespace djnn {
   class AbstractProperty : public FatProcess
   {
   public:
-    AbstractProperty (FatProcess* parent, const std::string& name, unsigned int nm=notify_none) :
+    AbstractProperty (ParentProcess* parent, const std::string& name, unsigned int nm=notify_none) :
       FatProcess (name),
       _notify_mask (nm) {}
     virtual ~AbstractProperty () override {}

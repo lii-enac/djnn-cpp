@@ -24,7 +24,7 @@ namespace djnn
   class TextAnchor : public AbstractStyle
   {
   public:
-    TextAnchor (FatProcess *parent, const std::string& name, int anchor);
+    TextAnchor (ParentProcess* parent, const std::string& name, int anchor);
     virtual ~TextAnchor ();
     void draw () override;
     TextAnchor* clone () override;

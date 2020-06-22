@@ -30,7 +30,7 @@
 
 namespace djnn
 {
-  Image::Image (FatProcess *parent, const std::string& name, std::string path, double x, double y, double w,
+  Image::Image (ParentProcess* parent, const std::string& name, std::string path, double x, double y, double w,
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
@@ -136,7 +136,7 @@ namespace djnn
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
-  DataImage::DataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double w,
+  DataImage::DataImage (ParentProcess* parent, const std::string& name, const std::string& data, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, x, y, w, h),
       _cwatcher(nullptr),
@@ -146,7 +146,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  DataImage::DataImage (FatProcess *parent, const std::string& name, double x, double y, double w, double h)
+  DataImage::DataImage (ParentProcess* parent, const std::string& name, double x, double y, double w, double h)
   : DataImage(parent, name, std::string(), x, y, w, h)
   {
   }

@@ -35,7 +35,7 @@ namespace djnn {
     {
       Graph::instance ().add_edge (src, dst);
     }
-    CoreAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CoreAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreAssignment (src, dst, is_model)
     {
       finalize_construction (parent, name);
@@ -75,7 +75,7 @@ public:
     {
       _propagate = false;
     }
-    CorePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CorePausedAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreAssignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
@@ -91,12 +91,12 @@ public:
     class AssignmentAction : public Action
     {
     public:
-      AssignmentAction (FatProcess* parent, const std::string& name)
+      AssignmentAction (ParentProcess* parent, const std::string& name)
       : Action (parent, name) { finalize_construction (parent, name); }
       void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    SimpleAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    SimpleAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -108,7 +108,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimpleAssignment (FatProcess* parent, const std::string& name,
+    SimpleAssignment (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)
@@ -144,14 +144,14 @@ public:
   class SimplePausedAssignment : public SimpleAssignment
   {
   public:
-    SimplePausedAssignment (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    SimplePausedAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : SimpleAssignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
     }
 
     // for legacy reason, to get rid of?
-    SimplePausedAssignment (FatProcess* parent, const std::string& name,
+    SimplePausedAssignment (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)

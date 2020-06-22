@@ -34,7 +34,7 @@ namespace djnn
 {
   using namespace std;
 
-  AbstractList::AbstractList (FatProcess* parent, const std::string& name)
+  AbstractList::AbstractList (ParentProcess* parent, const std::string& name)
   :
     Container (parent, name),
     _added (nullptr, "_added", nullptr),
@@ -210,7 +210,7 @@ namespace djnn
     return nullptr;
   }
 
-  List::List (FatProcess* parent, const std::string& name) :
+  List::List (ParentProcess* parent, const std::string& name) :
     AbstractList (parent, name)
   {
     finalize_construction (parent, name);
@@ -261,7 +261,7 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (FatProcess *parent, const std::string& name, List *list, FatProcess *action, bool model)
+  ListIterator::ListIterator (ParentProcess* parent, const std::string& name, List *list, FatProcess *action, bool model)
   :
     FatProcess (name, model),
     _action (action)
@@ -289,7 +289,7 @@ namespace djnn
     post_activate_auto_deactivate ();
   }
 
-  BidirectionalListIterator::IterAction::IterAction (FatProcess *parent, const std::string& name, List *list,
+  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const std::string& name, List *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Action (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
@@ -315,7 +315,7 @@ namespace djnn
     }
   }
 
-  BidirectionalListIterator::ResetAction::ResetAction (FatProcess *parent, const std::string& name,
+  BidirectionalListIterator::ResetAction::ResetAction (ParentProcess* parent, const std::string& name,
                                                        IntProperty *index) :
       Action (parent, name), _index (index)
   {
@@ -329,7 +329,7 @@ namespace djnn
     _index->set_value (1, true);
   }
 
-  BidirectionalListIterator::BidirectionalListIterator (FatProcess *parent, const std::string& name,
+  BidirectionalListIterator::BidirectionalListIterator (ParentProcess* parent, const std::string& name,
                                                         List* list)
   :
   FatProcess (name),
@@ -373,7 +373,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::set_parent (FatProcess* p)
+  BidirectionalListIterator::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -381,12 +381,12 @@ namespace djnn
        remove_state_dependency (get_parent (), &_previous_action);
        remove_state_dependency (get_parent (), &_reset_action);
     }
-    
-    add_state_dependency (p, &_next_action);
-    add_state_dependency (p, &_previous_action);
-    add_state_dependency (p, &_reset_action);
 
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, &_next_action);
+    add_state_dependency (parent, &_previous_action);
+    add_state_dependency (parent, &_reset_action);
+
+    FatProcess::set_parent (parent); 
   }
 
   void

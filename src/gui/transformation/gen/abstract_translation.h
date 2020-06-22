@@ -24,7 +24,7 @@ namespace djnn
   class AbstractTranslation : public AbstractTransformation
   {
   public:
-    AbstractTranslation (FatProcess *parent, const std::string& name, double tx, double ty);
+    AbstractTranslation (ParentProcess* parent, const std::string& name, double tx, double ty);
     virtual ~AbstractTranslation ();
     
     

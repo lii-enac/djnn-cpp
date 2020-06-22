@@ -105,7 +105,7 @@ namespace djnn {
       class MoveTouchAction : public Action
       {
       public:
-        MoveTouchAction (FatProcess *parent, const std::string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
+        MoveTouchAction (ParentProcess* parent, const std::string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
         ~MoveTouchAction () {}
         void impl_activate () override;
         void impl_deactivate () override {}
@@ -125,7 +125,7 @@ namespace djnn {
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      ScaleRotateTranslateAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
       void impl_deactivate () override {};
@@ -133,7 +133,7 @@ namespace djnn {
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      AddTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
       void impl_deactivate () override {};
@@ -142,7 +142,7 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      RemoveTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
       void impl_deactivate () override {};
@@ -151,13 +151,13 @@ namespace djnn {
     /*class MoveTouchAction : public Action
     {
     public:
-      MoveTouchAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      MoveTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveTouchAction () {}
       void impl_activate () override;
       void impl_deactivate () override {};
     };*/
   public:
-    ScaleRotateTranslate (FatProcess *parent, const std::string& name, CoreProcess* shape, CoreProcess* matrix);
+    ScaleRotateTranslate (ParentProcess* parent, const std::string& name, CoreProcess* shape, CoreProcess* matrix);
     virtual ~ScaleRotateTranslate ();
     void impl_activate () override;
     void impl_deactivate () override;

@@ -24,7 +24,7 @@ namespace djnn
   class Texture : public AbstractStyle
   {
   public:
-    Texture (FatProcess *parent, const std::string& name, const std::string& path);
+    Texture (ParentProcess* parent, const std::string& name, const std::string& path);
     virtual ~Texture ();
     void draw () override;
     Texture* clone () override;

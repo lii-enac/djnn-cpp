@@ -94,7 +94,7 @@ namespace djnn
     f->_not_found.activate ();
   }
 
-  Finder::Finder (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& path)
+  Finder::Finder (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& path)
   : FatProcess (name),
   _path (this, "path", path),
   _key (this, "key", ""),
@@ -124,15 +124,15 @@ namespace djnn
   }
 
   void
-  Finder::set_parent (FatProcess* p)
+  Finder::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, &_action);
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, &_action);
+    FatProcess::set_parent (parent); 
   }
 
   void

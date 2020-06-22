@@ -24,7 +24,7 @@ namespace djnn
   class AbstractRotation : public AbstractTransformation
   {
   public:
-    AbstractRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy);
+    AbstractRotation (ParentProcess* parent, const std::string& name, double a, double cx, double cy);
     virtual ~AbstractRotation ();
     
     

@@ -26,7 +26,7 @@ namespace djnn {
 
   class Blank: public FatProcess {
   public:
-    Blank (FatProcess* parent, const std::string& name) : FatProcess (name) { finalize_construction (parent, name); }
+    Blank (ParentProcess* parent, const std::string& name) : FatProcess (name) { finalize_construction (parent, name); }
     virtual ~Blank () {};
     FatProcess* clone () override;
   protected:

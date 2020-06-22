@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropFontStyle : public AbstractStyle
   {
   public:
-    AbstractPropFontStyle (FatProcess *parent, const std::string& name, int style);
+    AbstractPropFontStyle (ParentProcess* parent, const std::string& name, int style);
     virtual ~AbstractPropFontStyle ();
     
     

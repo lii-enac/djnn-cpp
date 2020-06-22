@@ -24,7 +24,7 @@ namespace djnn
   class AbstractImage : public AbstractGShape
   {
   public:
-    AbstractImage (FatProcess *parent, const std::string& name, double x, double y, double width, double height);
+    AbstractImage (ParentProcess* parent, const std::string& name, double x, double y, double width, double height);
     virtual ~AbstractImage ();
     
     

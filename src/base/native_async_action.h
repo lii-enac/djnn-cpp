@@ -30,7 +30,7 @@ namespace djnn {
   class NativeAsyncAction : public Action, public ExternalSource
   {
   public:
-    NativeAsyncAction (FatProcess* parent, const std::string& name, NativeCode *action, void* data, bool isModel);
+    NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data, bool isModel);
     virtual ~NativeAsyncAction ();
     virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
     void impl_activate () override;

@@ -22,7 +22,7 @@
 namespace djnn
 {
 
-  Sorter::Sorter (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& spec) :
+  Sorter::Sorter (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec) :
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
@@ -289,7 +289,7 @@ namespace djnn
   }
 #endif
 
-  ListOperator::ListOperator (FatProcess *parent, const std::string& name, FatProcess *container, const std::string& spec) :
+  ListOperator::ListOperator (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec) :
       FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),

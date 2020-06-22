@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Defs::Defs (FatProcess* parent, const std::string& n) :
+  Defs::Defs (ParentProcess* parent, const std::string& n) :
       Container (parent, n)
   {
     finalize_construction (parent, n);

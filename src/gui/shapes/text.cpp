@@ -45,10 +45,10 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  Text::Text (FatProcess *parent, const std::string& name, double x, double y, const std::string& text) :
+  Text::Text (ParentProcess* parent, const std::string& name, double x, double y, const std::string& text) :
   Text(parent, name, x,y,0,0,0,0,"utf8", text) {}
 
-  Text::Text (FatProcess *parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
+  Text::Text (ParentProcess* parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
               const std::string& encoding, const std::string& text) :
       AbstractGShape (parent, name),
       /* FIXME: encoding - should be string or convert in Int  from Enum? */
@@ -155,16 +155,16 @@ namespace djnn
   }
 
   void
-  Text::set_parent (FatProcess* p)
+  Text::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_update_size);
     }
 
-    add_state_dependency (p, &_update_size);
+    add_state_dependency (parent, &_update_size);
     
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   FatChildProcess*

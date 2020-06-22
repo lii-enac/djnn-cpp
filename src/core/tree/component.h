@@ -24,7 +24,7 @@ namespace djnn {
   typedef std::map<std::string, FatChildProcess*> context_t;
   public:
     typedef std::vector<FatChildProcess*> children_t;
-    Container (FatProcess* parent, const std::string& name);
+    Container (ParentProcess* parent, const std::string& name);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void add_child (FatChildProcess* c, const std::string& name) override;
     void move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child = 0) override;
@@ -71,7 +71,7 @@ namespace djnn {
   class Component : public Container
   {
   public:
-    Component (FatProcess* parent, const std::string& name) : Container (parent, name) { finalize_construction (parent, name); }
+    Component (ParentProcess* parent, const std::string& name) : Container (parent, name) { finalize_construction (parent, name); }
     //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     Component* clone () override;
 #ifndef DJNN_NO_SERIALIZE
@@ -83,7 +83,7 @@ namespace djnn {
   {
   public:
     AssignmentSequence ();
-    AssignmentSequence (FatProcess *parent, const std::string& name, bool is_model);
+    AssignmentSequence (ParentProcess* parent, const std::string& name, bool is_model);
     virtual ~AssignmentSequence () {};
     void add_child (FatChildProcess* c, const std::string& name) override;
     void draw () override {}

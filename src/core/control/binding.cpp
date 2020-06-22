@@ -27,7 +27,7 @@ namespace djnn
 {
   using namespace std;
 
-  Binding::BindingAction::BindingAction (FatProcess* parent, const std::string& name, bool activate) : 
+  Binding::BindingAction::BindingAction (ParentProcess* parent, const std::string& name, bool activate) : 
     Action (parent, name) 
   { 
     set_binding_action (activate); 
@@ -56,7 +56,7 @@ namespace djnn
   }
 
   void
-  Binding::set_parent (FatProcess* p)
+  Binding::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
@@ -64,9 +64,9 @@ namespace djnn
     }
 
     if (_dst)
-      add_state_dependency (p, _dst);
+      add_state_dependency (parent, _dst);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -122,7 +122,7 @@ namespace djnn
     }
   }
 
-  Binding::Binding (FatProcess* parent, const std::string&  name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
+  Binding::Binding (ParentProcess* parent, const std::string&  name, FatProcess* src, const std::string&  ispec, FatProcess* dst, const std::string&  dspec,
     string src_ref_spec, string dst_ref_spec)
   :
       SrcToDstLink (parent, name),
@@ -148,7 +148,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Binding::Binding (FatProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation,
+  Binding::Binding (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string&  ispec, bool on_activation,
                     FatProcess* dst, const std::string&  dspec, bool activate,
                     string src_ref_spec, string dst_ref_spec)
   :

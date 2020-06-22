@@ -38,7 +38,7 @@ namespace djnn
   using namespace std;
 
   void
-  AbstractAssignment::set_parent (FatProcess* p)
+  AbstractAssignment::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -49,11 +49,11 @@ namespace djnn
     }
 
     if (_ref_info_dst._ref)
-      add_state_dependency (p, &_ref_update_dst._update);
+      add_state_dependency (parent, &_ref_update_dst._update);
     if (_dst)
-      add_state_dependency (p, _dst);
+      add_state_dependency (parent, _dst);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -104,7 +104,7 @@ namespace djnn
     dst_ref_spec = ref_dst_pair.second;
   }
 
-  AbstractAssignment::AbstractAssignment (FatProcess *parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
+  AbstractAssignment::AbstractAssignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
     std::string src_ref_spec, std::string dst_ref_spec)
   :
   SrcToDstLink (parent, name, isModel),
@@ -195,7 +195,7 @@ namespace djnn
       Graph::instance ().add_edge (_src, _dst);
   }
 
-  Assignment::Assignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst,
+  Assignment::Assignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst,
                           const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "assignment_" + (_src ? _src->get_name () : "") + "_to_" + ( _dst ? _dst->get_name () : "") + "_action", &_src, &_dst, true)
@@ -264,7 +264,7 @@ namespace djnn
     }
   }
 
-  PausedAssignment::PausedAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec,
+  PausedAssignment::PausedAssignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec,
                                       FatProcess* dst, const std::string& dspec, bool isModel) :
       AbstractAssignment (parent, name, src, ispec, dst, dspec, isModel),
       _action (this, "pausedAssignment_" + _src->get_name () + "_to_" + _dst->get_name () + "_action", &_src, &_dst, false)

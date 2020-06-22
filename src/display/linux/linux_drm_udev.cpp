@@ -36,7 +36,7 @@ using namespace std;
 
 namespace djnn {
 
-  DRMConnector::DRMConnector (FatProcess *parent, const std::string& name, int id, bool connected) : FatProcess (name),
+  DRMConnector::DRMConnector (ParentProcess* parent, const std::string& name, int id, bool connected) : FatProcess (name),
     _display (nullptr), _id (id)
   {
     new BoolProperty (this, "connected", connected);
@@ -48,7 +48,7 @@ namespace djnn {
     delete find_child ("connected");
   }
 
-  DRMDevice::DRMDevice (FatProcess *parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height) : FatProcess (name), _fd (fd)
+  DRMDevice::DRMDevice (ParentProcess* parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height) : FatProcess (name), _fd (fd)
   {
     new IntProperty (this, "min_width", min_width);
     new IntProperty (this, "max_width", max_width);

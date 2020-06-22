@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropCircle::AbstractPropCircle (FatProcess *parent, const std::string& name, double cx, double cy, double r) :
+  AbstractPropCircle::AbstractPropCircle (ParentProcess* parent, const std::string& name, double cx, double cy, double r) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)

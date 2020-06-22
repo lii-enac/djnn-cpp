@@ -37,7 +37,7 @@ namespace djnn {
       // no need to add edge to graph, assignment already did it
     }
     
-    CoreConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    CoreConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : CoreConnector (src, dst, copy_on_activation)
     {
       finalize_construction (parent, name);
@@ -67,7 +67,7 @@ public:
       // no need to add edge to graph, assignment already did it
     }
     
-    CorePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    CorePausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
     : CorePausedConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -91,7 +91,7 @@ public:
   class SimpleConnector : public FatProcess
   {
   public:
-    SimpleConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    SimpleConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _assignment (src, dst, false)
     , _binding (src, &_assignment)
@@ -102,7 +102,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimpleConnector (FatProcess* parent, const std::string& name,
+    SimpleConnector (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool copy_on_activation=true)
@@ -126,7 +126,7 @@ public:
   class SimplePausedConnector : public FatProcess
   {
   public:
-    SimplePausedConnector (FatProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    SimplePausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
@@ -136,7 +136,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimplePausedConnector (FatProcess* parent, const std::string& name,
+    SimplePausedConnector (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec)
     : SimplePausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))

@@ -28,7 +28,7 @@ namespace djnn {
   class AbstractList : public Container
   {
   public:
-    AbstractList (FatProcess *parent, const std::string& name);
+    AbstractList (ParentProcess* parent, const std::string& name);
     void add_child (FatChildProcess* c, const std::string& name) override;
     void insert (FatChildProcess* c, const std::string& spec);
     void remove_child (FatChildProcess* c) override;
@@ -52,7 +52,7 @@ namespace djnn {
   class List : public AbstractList
   {
   public:
-    List (FatProcess *parent, const std::string& name);
+    List (ParentProcess* parent, const std::string& name);
     virtual ~List ();
     List* clone () override;
   private:
@@ -66,7 +66,7 @@ namespace djnn {
   class ListIterator : public FatProcess
   {
   public:
-    ListIterator (FatProcess *parent, const std::string& name, List *list, FatProcess *action, bool model = true);
+    ListIterator (ParentProcess* parent, const std::string& name, List *list, FatProcess *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};
@@ -82,7 +82,7 @@ namespace djnn {
     class IterAction : public Action
     {
     public:
-      IterAction (FatProcess *parent, const std::string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
+      IterAction (ParentProcess* parent, const std::string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -95,7 +95,7 @@ namespace djnn {
     class ResetAction : public Action
     {
     public:
-      ResetAction (FatProcess *parent, const std::string& name, IntProperty *index);
+      ResetAction (ParentProcess* parent, const std::string& name, IntProperty *index);
       virtual ~ResetAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -103,12 +103,12 @@ namespace djnn {
       IntProperty *_index;
     };
   public:
-    BidirectionalListIterator (FatProcess *parent, const std::string& name, List* list);
+    BidirectionalListIterator (ParentProcess* parent, const std::string& name, List* list);
     virtual ~BidirectionalListIterator ();
     void impl_activate () override;
     void impl_deactivate () override;
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     List* _list;
     Spike _next, _previous, _reset;
     RefProperty _iter;

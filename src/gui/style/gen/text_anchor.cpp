@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  TextAnchor::TextAnchor (FatProcess *parent, const std::string& name, int anchor) :
+  TextAnchor::TextAnchor (ParentProcess* parent, const std::string& name, int anchor) :
     AbstractStyle (parent, name),
     raw_props{.anchor=anchor},
     _canchor (nullptr)

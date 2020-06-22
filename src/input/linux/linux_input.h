@@ -42,7 +42,7 @@ namespace djnn {
 
   class LinuxDevice : public FatProcess {
   public:
-    LinuxDevice (FatProcess *parent, const std::string& name, dev_type type) : FatProcess (name), _type (type) {}
+    LinuxDevice (ParentProcess* parent, const std::string& name, dev_type type) : FatProcess (name), _type (type) {}
     ~LinuxDevice () {}
     virtual void handle_event (struct input_event *ev) = 0;
     dev_type type () { return _type; }
@@ -115,7 +115,7 @@ namespace djnn {
   class LinuxMouse : public LinuxDevice
   {
   public:
-    LinuxMouse (FatProcess *parent, const std::string& name, const struct libevdev *dev);
+    LinuxMouse (ParentProcess* parent, const std::string& name, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
     void impl_activate () override {}
@@ -154,7 +154,7 @@ namespace djnn {
   class LinuxTouchPanel : public LinuxDevice
   {
   public:
-    LinuxTouchPanel (FatProcess *parent, const std::string& name, const struct libevdev *dev);
+    LinuxTouchPanel (ParentProcess* parent, const std::string& name, const struct libevdev *dev);
     ~LinuxTouchPanel ();
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -171,7 +171,7 @@ namespace djnn {
   class GPIOLine: public FatProcess {
     class GPIOLineWriteAction : public Action {
     public:
-      GPIOLineWriteAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineWriteAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
@@ -179,14 +179,14 @@ namespace djnn {
     };
     class GPIOLineReadAction : public Action {
     public:
-      GPIOLineReadAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineReadAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
       void impl_deactivate () override {}
     };
   public:
-    GPIOLine (FatProcess *parent, const std::string& name, int pin, direction_e dir);
+    GPIOLine (ParentProcess* parent, const std::string& name, int pin, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int get_pin () { return _pin; }

@@ -44,13 +44,13 @@ namespace djnn {
     class UpdatePosAction : public Action
     {
     public:
-      UpdatePosAction (FatProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      UpdatePosAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdatePosAction () {}
       void impl_activate () { ((DRMConnector*) get_parent())->update_pos (); }
       void impl_deactivate () {}
     };
   public:
-    DRMConnector (FatProcess *p, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
+    DRMConnector (ParentProcess* parent, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
@@ -97,13 +97,13 @@ namespace djnn {
     class VBlankAction : public Action
     {
     public:
-      VBlankAction (FatProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      VBlankAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
       void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
       void impl_deactivate () {}
     };
   public:
-    DRMDevice (FatProcess *p, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (ParentProcess* parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}

@@ -24,7 +24,7 @@ namespace djnn
   class AbstractScaling : public AbstractTransformation
   {
   public:
-    AbstractScaling (FatProcess *parent, const std::string& name, double sx, double sy, double cx, double cy);
+    AbstractScaling (ParentProcess* parent, const std::string& name, double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     
     

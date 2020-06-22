@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
+  AbstractDeref::AbstractDeref (ParentProcess *parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
   : FatProcess (name),
   _path (this, "path", path),
   _action (this, "action"),
@@ -79,15 +79,15 @@ namespace djnn
   }
 
   void
-  AbstractDeref::set_parent (FatProcess* p)
+  AbstractDeref::set_parent (ParentProcess* parent)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, &_action);
-    FatProcess::set_parent (p);
+    add_state_dependency (parent, &_action);
+    FatProcess::set_parent (parent);
   }
 
   void
@@ -99,7 +99,7 @@ namespace djnn
     _cget.enable ();
   }
 
-  Deref::Deref (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
+  Deref::Deref (ParentProcess* parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _activation (this, "activation"),
    _src (nullptr)
@@ -141,7 +141,7 @@ namespace djnn
     _src = src;
   }
 
-  DerefString::DerefString (FatProcess *parent, const std::string& name, FatProcess *ref, const std::string& path, djnn_dir_t dir)
+  DerefString::DerefString (ParentProcess* parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _value (this, "value", ""),
   _src (nullptr)
@@ -190,7 +190,7 @@ namespace djnn
     }
   }
 
-  DerefDouble::DerefDouble (FatProcess *parent, const std::string &name, FatProcess *ref, const std::string &path, djnn_dir_t dir) :
+  DerefDouble::DerefDouble (ParentProcess* parent, const std::string &name, CoreProcess *ref, const std::string &path, djnn_dir_t dir) :
       AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
       _src (nullptr)

@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractVolume::AbstractVolume (FatProcess *parent, const std::string& name, double volume) :
+  AbstractVolume::AbstractVolume (ParentProcess* parent, const std::string& name, double volume) :
     AbstractAudioStyle (parent, name),
     raw_props{.volume=volume},
     _cvolume (nullptr)

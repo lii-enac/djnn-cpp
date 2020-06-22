@@ -54,7 +54,7 @@ namespace djnn
   FatProcess::DebugInfo FatProcess::_dbg_info{"no dbg info",0};
 #endif
 
-  string FatProcess::default_name = "noname";
+  string CoreProcess::default_name = "noname";
   static map<const ChildProcess*, string> parentless_names;
 
   CoreProcess::couplings_t CoreProcess::default_couplings;
@@ -86,10 +86,17 @@ namespace djnn
   }
 
   const std::string&
-  CoreProcess::get_name (FatProcess * parent) const
+  CoreProcess::get_name (ParentProcess* parent) const
   {
     return parent->find_child_name(this);
   }
+
+#ifndef DJNN_NO_DEBUG
+  FatProcess* CoreProcess::get_debug_parent ()
+  {
+    return dynamic_cast<FatProcess*>(_debug_parent);
+  }
+#endif
 
   FatProcess::FatProcess (const std::string& name, bool model)
   : ChildProcess(model),
@@ -101,7 +108,7 @@ namespace djnn
   }
 
   void
-  CoreProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep)
+  CoreProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     if (parent) {
       parent->add_child ((ChildProcess*)this, name); // FIXME
@@ -116,7 +123,7 @@ namespace djnn
   }
 
   void
-  ChildProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep)
+  ChildProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     CoreProcess::finalize_construction (parent, name, state_dep);
     if (parent) {
@@ -129,7 +136,7 @@ namespace djnn
   }
 
   void
-  FatProcess::finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
+  FatProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
   {
     ChildProcess::finalize_construction (parent, name, state_dep);
     /*if (parent) {
@@ -382,15 +389,15 @@ namespace djnn
   // tree, component, symtable
 
   void
-  ChildProcess::set_parent (FatProcess* p)
+  ChildProcess::set_parent (ParentProcess* parent)
   {
-    if (p == nullptr) {
+    if (parent == nullptr) {
       if(_parent)
           parentless_names[this] = _parent->find_child_name (this);
     }
-    _parent = p;
+    _parent = dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
-    set_debug_parent (p);
+    set_debug_parent (parent);
     #endif
   }
 
@@ -559,22 +566,22 @@ namespace djnn
   }
 
   void
-  alias_children (FatProcess* p, FatProcess* from)
+  alias_children (ParentProcess* parent, FatProcess* from)
   {
     FatProcess::symtable_t& symtable = from->children ();
     for (auto& sym : symtable) {
-      p->add_symbol (sym.first, sym.second);
+      parent->add_symbol (sym.first, sym.second);
     }
   }
 
   void
-  alias (FatProcess *p, const std::string& name, FatChildProcess* from)
+  alias (ParentProcess* parent, const std::string& name, FatChildProcess* from)
   {
-    p->add_symbol (name, from);
+    parent->add_symbol (name, from);
   }
 
   void
-  merge_children (FatProcess *p1, const std::string& sy1, FatProcess* p2, const std::string& sy2)
+  merge_children (ParentProcess *p1, const std::string& sy1, ParentProcess* p2, const std::string& sy2)
   {
     auto * x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
@@ -602,14 +609,14 @@ namespace djnn
   }
 
   void
-  add_state_dependency (FatProcess *parent, CoreProcess *p)
+  add_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().add_edge (parent->state_dependency (), p); 
   }
 
   void
-  remove_state_dependency (FatProcess *parent, CoreProcess *p)
+  remove_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
       Graph::instance ().remove_edge (parent->state_dependency (), p);

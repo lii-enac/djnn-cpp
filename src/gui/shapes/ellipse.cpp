@@ -29,7 +29,7 @@
 
 namespace djnn
 {
-  Ellipse::Ellipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry)
+  Ellipse::Ellipse (ParentProcess* parent, const std::string& name, double cx, double cy, double rx, double ry)
   : AbstractPropEllipse (parent, name, cx, cy, rx, ry)
   {
     finalize_construction (parent, name);

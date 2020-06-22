@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropRectangle : public AbstractGShape
   {
   public:
-    AbstractPropRectangle (FatProcess *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
+    AbstractPropRectangle (ParentProcess* parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
     virtual ~AbstractPropRectangle ();
     
     

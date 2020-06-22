@@ -21,7 +21,7 @@ namespace djnn
 {
   using namespace std;
 
-  Switch::SwitchAction::SwitchAction (Switch *parent, const std::string& name) :
+  Switch::SwitchAction::SwitchAction (Switch * parent, const std::string& name) :
         Action (parent, name),  _sw (parent) 
   {
   }
@@ -31,7 +31,7 @@ namespace djnn
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-  Switch::Switch (FatProcess *parent, const std::string& name, const std::string& initial) 
+  Switch::Switch (ParentProcess* parent, const std::string& name, const std::string& initial) 
   : Container (parent, name),
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),
@@ -101,15 +101,15 @@ namespace djnn
   }
 
   void
-  Switch::set_parent (FatProcess* p)
+  Switch::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, state_dependency ());
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, state_dependency ());
+    FatProcess::set_parent (parent); 
   }
 
   void

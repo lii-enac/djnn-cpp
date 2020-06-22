@@ -28,7 +28,7 @@ namespace djnn
   using namespace std;
 
   double
-  getDouble (FatProcess* p)
+  getDouble (CoreProcess* p)
   {
     DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
@@ -39,7 +39,7 @@ namespace djnn
   }
 
   void
-  setDouble (FatProcess* p, double v)
+  setDouble (CoreProcess* p, double v)
   {
     DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
@@ -87,7 +87,7 @@ namespace djnn
   void
   AbstractDoubleProperty::set_value (CoreProcess* v, bool propagate)
   {
-    warning (this, "undefined conversion from Component to Double\n");
+    warning (this, "undefined conversion from Process to Double\n");
   }
 
 #ifndef DJNN_NO_DEBUG

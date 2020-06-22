@@ -29,7 +29,7 @@ namespace djnn {
     class CutAction : public Action
     {
      public:
-       CutAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+       CutAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~CutAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->cut (); };
        void impl_deactivate () override {};
@@ -37,7 +37,7 @@ namespace djnn {
     class PointerMoveAction : public Action
     {
      public:
-       PointerMoveAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+       PointerMoveAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~PointerMoveAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->pointer_move (); };
        void impl_deactivate () override {};
@@ -45,7 +45,7 @@ namespace djnn {
     class ClearAction : public Action
     {
      public:
-       ClearAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+       ClearAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~ClearAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->clear (); };
        void impl_deactivate () override {};
@@ -53,7 +53,7 @@ namespace djnn {
     class DeleteAction : public Action
     {
     public:
-      DeleteAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      DeleteAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~DeleteAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->del ();};
       void impl_deactivate () override {};
@@ -62,7 +62,7 @@ namespace djnn {
     class SupprAction : public Action
     {
     public:
-      SupprAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      SupprAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~SupprAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->suppr (); };
       void impl_deactivate () override {};
@@ -71,7 +71,7 @@ namespace djnn {
     class AddStringAction : public Action
     {
     public:
-      AddStringAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      AddStringAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~AddStringAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->add_string (); };
       void impl_deactivate () override {};
@@ -79,7 +79,7 @@ namespace djnn {
     class MoveLeftAction : public Action
     {
     public:
-      MoveLeftAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      MoveLeftAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveLeftAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->move_left ();};
       void impl_deactivate () override {};
@@ -87,7 +87,7 @@ namespace djnn {
     class MoveRightAction : public Action
     {
     public:
-      MoveRightAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      MoveRightAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveRightAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->move_right ();};
       void impl_deactivate () override {};
@@ -95,7 +95,7 @@ namespace djnn {
     class UpdateCursorPositionAction : public Action
     {
     public:
-      UpdateCursorPositionAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      UpdateCursorPositionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~UpdateCursorPositionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->update_cursor_pos_from_press ();};
       void impl_deactivate () override {};
@@ -103,7 +103,7 @@ namespace djnn {
     class StartSelectionAction : public Action
     {
     public:
-      StartSelectionAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      StartSelectionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~StartSelectionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->start_selection ();};
       void impl_deactivate () override {};
@@ -111,7 +111,7 @@ namespace djnn {
     class EndSelectionAction : public Action
     {
     public:
-      EndSelectionAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      EndSelectionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~EndSelectionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->end_selection ();};
       void impl_deactivate () override {};
@@ -119,13 +119,13 @@ namespace djnn {
     class SelectAllAction : public Action
     {
     public:
-      SelectAllAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      SelectAllAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~SelectAllAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->select_all ();};
       void impl_deactivate () override {};
   };
   public:
-    TextField (FatProcess *parent, const std::string& name, CoreProcess* text, CoreProcess* shape);
+    TextField (ParentProcess* parent, const std::string& name, CoreProcess* text, CoreProcess* shape);
     virtual ~TextField ();
     void impl_activate () override;
     void impl_deactivate () override;

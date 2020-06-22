@@ -24,7 +24,7 @@ namespace djnn
   class FillRule : public AbstractStyle
   {
   public:
-    FillRule (FatProcess *parent, const std::string& name, int rule);
+    FillRule (ParentProcess* parent, const std::string& name, int rule);
     virtual ~FillRule ();
     void draw () override;
     FillRule* clone () override;

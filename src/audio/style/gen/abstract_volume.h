@@ -24,7 +24,7 @@ namespace djnn
   class AbstractVolume : public AbstractAudioStyle
   {
   public:
-    AbstractVolume (FatProcess *parent, const std::string& name, double volume);
+    AbstractVolume (ParentProcess* parent, const std::string& name, double volume);
     virtual ~AbstractVolume ();
     
     

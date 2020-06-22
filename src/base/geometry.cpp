@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  HermiteCurve::HermiteCurveAction::HermiteCurveAction (FatProcess* parent, const std::string& name,
+  HermiteCurve::HermiteCurveAction::HermiteCurveAction (ParentProcess* parent, const std::string& name,
                                                         AbstractProperty *input, AbstractProperty *p1, AbstractProperty *p2,
                                                         AbstractProperty *t1, AbstractProperty *t2, AbstractProperty *output) :
       Action (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
@@ -44,7 +44,7 @@ namespace djnn
     _output->set_value (out, true);
   }
 
-  HermiteCurve::HermiteCurve (FatProcess *parent, const std::string& name, double p1, double p2, double t1, double t2) 
+  HermiteCurve::HermiteCurve (ParentProcess* parent, const std::string& name, double p1, double p2, double t1, double t2) 
   : FatProcess (name),
   _input (this, "input", 0),
   _p1 (this, "p1", p1),
@@ -85,16 +85,16 @@ namespace djnn
   }
 
   void
-  HermiteCurve::set_parent (FatProcess* p)
+  HermiteCurve::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
        remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, &_action);
+    add_state_dependency (parent, &_action);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void

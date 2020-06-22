@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropGradientStop::AbstractPropGradientStop (FatProcess *parent, const std::string& name, double r, double g, double b, double a, double offset) :
+  AbstractPropGradientStop::AbstractPropGradientStop (ParentProcess* parent, const std::string& name, double r, double g, double b, double a, double offset) :
     AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)

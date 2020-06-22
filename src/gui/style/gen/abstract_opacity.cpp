@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractOpacity::AbstractOpacity (FatProcess *parent, const std::string& name, double a) :
+  AbstractOpacity::AbstractOpacity (ParentProcess* parent, const std::string& name, double a) :
     AbstractStyle (parent, name),
     raw_props{.a=a},
     _ca (nullptr)

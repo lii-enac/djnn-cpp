@@ -29,7 +29,7 @@ namespace djnn {
     class ConnectorAction : public Action
     {
     public:
-      ConnectorAction (FatProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
+      ConnectorAction (ParentProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
@@ -41,7 +41,7 @@ namespace djnn {
     };
 
   public:
-    Connector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true,
+    Connector (ParentProcess* parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
     Connector (FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true,
       std::string src_ref_spec = std::string(), std::string dst_ref_spec = std::string()); // hack to create temporary string objects for init of refs
@@ -55,7 +55,7 @@ namespace djnn {
     virtual ~Connector ();
 
   protected:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
 
     struct Init { Init(Connector *, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec,
       std::string& src_ref_spec, std::string& dst_ref_spec); };
@@ -75,7 +75,7 @@ namespace djnn {
   class PausedConnector : public FatProcess
   {
   public:
-    PausedConnector (FatProcess *parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true);
+    PausedConnector (ParentProcess* parent, const std::string& name, FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true);
     PausedConnector (FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec, bool copy_on_activation=true);
     void impl_activate () override;
     void impl_deactivate () override;
@@ -85,7 +85,7 @@ namespace djnn {
     virtual ~PausedConnector ();
 
   protected:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     void init_pausedconnector (FatProcess *src, const std::string& ispec, FatProcess *dst, const std::string& dspec);
     AbstractProperty* _src;
     AbstractProperty* _dst;

@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropGradient : public AbstractStyle
   {
   public:
-    AbstractPropGradient (FatProcess *parent, const std::string& name, int spread, int coords);
+    AbstractPropGradient (ParentProcess* parent, const std::string& name, int spread, int coords);
     virtual ~AbstractPropGradient ();
     
     

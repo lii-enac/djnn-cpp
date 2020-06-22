@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  DashOffset::DashOffset (FatProcess *parent, const std::string& name, double offset) :
+  DashOffset::DashOffset (ParentProcess* parent, const std::string& name, double offset) :
     AbstractStyle (parent, name),
     raw_props{.offset=offset},
     _coffset (nullptr)

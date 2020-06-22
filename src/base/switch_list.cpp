@@ -25,7 +25,7 @@ namespace djnn
 {
   using namespace std;
 
-  SwitchList::Next::Next  (SwitchList *parent) : 
+  SwitchList::Next::Next  (SwitchList * parent) : 
     Action (parent, "_next_action"), _sw (parent)
   {
   }
@@ -48,7 +48,7 @@ namespace djnn
     _sw->index ()->set_value ((int)inext, true);
   }
 
-  SwitchList::Previous::Previous  (SwitchList *parent) : 
+  SwitchList::Previous::Previous  (SwitchList * parent) : 
     Action (parent, "_previous_action"), _sw (parent)
   {
   }
@@ -71,7 +71,7 @@ namespace djnn
     _sw->index ()->set_value (iprev, true);
   }
 
-  SwitchList::ChangeIndex::ChangeIndex  (SwitchList *parent) : 
+  SwitchList::ChangeIndex::ChangeIndex  (SwitchList * parent) : 
     Action (parent, "_change_index_action"), _sw (parent)
   {
   }
@@ -100,7 +100,7 @@ namespace djnn
    * do not add directly Property, spikes and actions into the symbol switchlist's table 
    * switchlist sympbol table should only containt branch
    */
-  SwitchList::SwitchList (FatProcess* parent, const std::string& name, bool loop) 
+  SwitchList::SwitchList (ParentProcess* parent, const std::string& name, bool loop) 
   : AbstractList (parent, name),
   _cur_item (nullptr),
   _loop (nullptr, "_loop", loop),
@@ -121,15 +121,15 @@ namespace djnn
   }
 
   void
-  SwitchList::set_parent (FatProcess* p)
+  SwitchList::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    add_state_dependency (p, state_dependency ());
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, state_dependency ());
+    FatProcess::set_parent (parent); 
   }
 
   SwitchList::~SwitchList ()

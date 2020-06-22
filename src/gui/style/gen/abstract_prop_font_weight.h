@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropFontWeight : public AbstractStyle
   {
   public:
-    AbstractPropFontWeight (FatProcess *parent, const std::string& name, int weight);
+    AbstractPropFontWeight (ParentProcess* parent, const std::string& name, int weight);
     virtual ~AbstractPropFontWeight ();
     
     

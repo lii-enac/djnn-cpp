@@ -29,7 +29,7 @@ namespace djnn
   using namespace std;
 
   bool
-  getBool (FatProcess* p)
+  getBool (CoreProcess* p)
   {
     AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
@@ -40,7 +40,7 @@ namespace djnn
   }
 
   void
-  setBool (FatProcess* p, bool v)
+  setBool (CoreProcess* p, bool v)
   {
     AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
@@ -49,7 +49,7 @@ namespace djnn
       warning (p, "setBool only works on boolean properties");
   }
 
-  AbstractBoolProperty::AbstractBoolProperty (FatProcess* parent, const std::string& name, int notify_mask)
+  AbstractBoolProperty::AbstractBoolProperty (ParentProcess* parent, const std::string& name, int notify_mask)
   : AbstractProperty (parent, name, notify_mask),
     _true (this, "true"),
     _false (this, "false")
@@ -107,7 +107,7 @@ namespace djnn
   void
   AbstractBoolProperty::set_value (CoreProcess* v, bool propagate)
   {
-    warning (this, "undefined conversion from Component to Boolean\n");
+    warning (this, "undefined conversion from Process to Boolean\n");
   }
 
 #ifndef DJNN_NO_DEBUG

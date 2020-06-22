@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  Texture::Texture (FatProcess *parent, const std::string& name, const std::string& path) :
+  Texture::Texture (ParentProcess* parent, const std::string& name, const std::string& path) :
     AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)

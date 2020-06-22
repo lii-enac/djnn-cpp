@@ -8,7 +8,7 @@ namespace djnn {
 	class Sound : public AbstractSObj
 	{
 	public:
-		Sound (FatProcess* parent, const std::string& name);
+		Sound (ParentProcess* parent, const std::string& name);
 		virtual ~Sound ();
 	protected:
 

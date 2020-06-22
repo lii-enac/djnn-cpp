@@ -29,7 +29,7 @@ namespace djnn {
 
   class PhidgetsMonitor : public FatProcess {
   public:
-    PhidgetsMonitor (FatProcess *p, const std::string& n) : FatProcess (name), _handle (nullptr) {}
+    PhidgetsMonitor (ParentProcess* parent, const std::string& n) : FatProcess (name), _handle (nullptr) {}
     virtual ~PhidgetsMonitor () {}
   protected:
     virtual void impl_activate () override;
@@ -42,7 +42,7 @@ namespace djnn {
   private:
     class ChangeRateAction : public Action {
     public:
-      ChangeRateAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      ChangeRateAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~ChangeRateAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
@@ -50,14 +50,14 @@ namespace djnn {
     };
     class ChangeTriggerAction : public Action {
     public:
-      ChangeTriggerAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      ChangeTriggerAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~ChangeTriggerAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_trigger (); }
       void impl_deactivate () override {}
     };
   public:
-    VoltageInputChannel (FatProcess *parent, const std::string& name);
+    VoltageInputChannel (ParentProcess* parent, const std::string& name);
     virtual ~VoltageInputChannel ();
     void update_rate ();
     void update_trigger ();
@@ -80,7 +80,7 @@ namespace djnn {
   class IFaceKit888 : public FatProcess {
     friend PhidgetsMonitor;
   public:
-    IFaceKit888 (FatProcess *parent, const std::string& name);
+    IFaceKit888 (ParentProcess* parent, const std::string& name);
     virtual ~IFaceKit888 ();
     vector<DoubleProperty*>& get_inputs () { return _digitalIn; }
     vector<DoubleProperty*>& get_outputs () { return _digitalOut; }

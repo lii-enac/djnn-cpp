@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractRotation::AbstractRotation (FatProcess *parent, const std::string& name, double a, double cx, double cy) :
+  AbstractRotation::AbstractRotation (ParentProcess* parent, const std::string& name, double a, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.a=a, .cx=cx, .cy=cy},
     _ca (nullptr), _ccx (nullptr), _ccy (nullptr)

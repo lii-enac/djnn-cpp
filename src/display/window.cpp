@@ -78,7 +78,7 @@ namespace djnn
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
-  Window::Window (FatProcess *parent, const std::string& name, const std::string& title, double x, double y, double w,
+  Window::Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w,
 		  double h) :
       FatProcess (name),
       _refresh (false), _holder (nullptr)
@@ -157,7 +157,7 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (FatProcess *parent, const std::string& name, const std::string& path, int hotX, int hotY) :
+  Cursor::Cursor (ParentProcess* parent, const std::string& name, const std::string& path, int hotX, int hotY) :
       FatProcess (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 

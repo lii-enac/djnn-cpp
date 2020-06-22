@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  Counter::Counter (FatProcess *parent, const std::string& name, double init, double delta)
+  Counter::Counter (ParentProcess* parent, const std::string& name, double init, double delta)
   : FatProcess (name),
     _reset (this, "reset"),
     _step (this, "step"),
@@ -58,7 +58,7 @@ namespace djnn
   }
 
   void
-  Counter::set_parent (FatProcess* p)
+  Counter::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -66,10 +66,10 @@ namespace djnn
        remove_state_dependency (get_parent (), &_action_step);
     }
 
-    add_state_dependency (p, &_action_reset);
-    add_state_dependency (p, &_action_step);
+    add_state_dependency (parent, &_action_reset);
+    add_state_dependency (parent, &_action_step);
 
-    FatProcess::set_parent (p); 
+    FatProcess::set_parent (parent); 
   }
 
   void

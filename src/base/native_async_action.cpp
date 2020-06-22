@@ -22,7 +22,7 @@ namespace djnn
 {
   using namespace std;
 
-  NativeAsyncAction::NativeAsyncAction (FatProcess* parent, const std::string& name, NativeCode *action, void* data,
+  NativeAsyncAction::NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data,
                               bool isModel) :
       Action (parent, name), ExternalSource(name), _data (data), _action (action), _activation_source (nullptr), _end (this, "end")
   {

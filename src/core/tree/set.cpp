@@ -29,7 +29,7 @@ namespace djnn
 {
   using namespace std;
 
-  Set::Set (FatProcess* parent, const std::string& name)
+  Set::Set (ParentProcess* parent, const std::string& name)
   :
     FatProcess (name),
     _added (nullptr, "_added", nullptr),
@@ -166,7 +166,7 @@ namespace djnn
   }
 #endif
 
-  SetIterator::SetIterator (FatProcess *parent, const std::string& name, FatProcess *set, FatProcess *action, bool model) :
+  SetIterator::SetIterator (ParentProcess* parent, const std::string& name, FatProcess *set, FatProcess *action, bool model) :
       FatProcess (name, model), _set (set), _action (action)
   {
     Set *s = dynamic_cast<Set*> (set);

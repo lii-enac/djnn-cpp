@@ -39,7 +39,7 @@ namespace djnn
   class AbstractGObj : public FatProcess
   {
   public:
-    AbstractGObj (FatProcess *parent, const std::string& name) : FatProcess (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
+    AbstractGObj (ParentProcess* parent, const std::string& name) : FatProcess (name), _frame (nullptr), _damaged(notify_none), _impl(nullptr) {
       //if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};

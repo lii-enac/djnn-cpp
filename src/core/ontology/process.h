@@ -75,6 +75,8 @@ namespace djnn {
   //typedef FatProcess FatChildProcess;
   //typedef ChildProcess FatChildProcess;
   typedef CoreProcess FatChildProcess;
+  //typedef FatProcess ParentProcess;
+  typedef CoreProcess ParentProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -111,14 +113,13 @@ namespace djnn {
 #endif
 
 #ifndef DJNN_NO_DEBUG
-    FatProcess* get_debug_parent () { return _debug_parent; }
-    void set_debug_parent (FatProcess* p) { _debug_parent = p; }
+    FatProcess* get_debug_parent ();
+    void set_debug_parent (ParentProcess* parent) { _debug_parent = parent; }
     const std::string& get_debug_name () { return _debug_name; }
     void set_debug_name (const std::string& n) { _debug_name = n; }
     private:
-      FatProcess* _debug_parent;
+      ParentProcess* _debug_parent;
       std::string _debug_name;
-
 #endif
 
     public:
@@ -145,7 +146,7 @@ namespace djnn {
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
 
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr);
+    virtual void finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state=nullptr);
 
   private:
     // >>instance fields start here
@@ -161,11 +162,14 @@ namespace djnn {
 
     virtual FatProcess* get_parent() { return nullptr; }
     virtual const FatProcess* get_parent() const { return nullptr; }
-    virtual void   set_parent (FatProcess* p) {}
+    virtual void   set_parent (ParentProcess* p) {}
+
+    virtual CoreProcess* state_dependency () { return nullptr; } // for control flow change and execution scheduling
+    virtual void set_state_dependency (CoreProcess* s) {}
 
     //static std::string default_name;
     //virtual const std::string& get_name () const { return default_name; }
-    const std::string& get_name (FatProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
+    const std::string& get_name (ParentProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
@@ -236,8 +240,11 @@ namespace djnn {
     virtual FatChildProcess* find_child (const std::string&) { return nullptr; }
     virtual FatChildProcess* find_child (int /*index*/) { return nullptr; }
     static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path) { return nullptr; }
+    static std::string default_name;
+    virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
     virtual size_t children_size () const { return 0; }
-
+    virtual void add_symbol (const std::string& name, FatChildProcess* c) {}
+    
     virtual void     set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
 
@@ -271,16 +278,16 @@ namespace djnn {
   {
   public:
     ChildProcess (bool model = false) : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
-    virtual void set_parent (FatProcess* p) override;
+    virtual void set_parent (ParentProcess* p) override;
     FatProcess* get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
 
-    CoreProcess* state_dependency () { return _state_dependency; } // for control flow change and execution scheduling
-    void set_state_dependency (CoreProcess* s) { _state_dependency = s; }
+    virtual CoreProcess* state_dependency () override { return _state_dependency; } // for control flow change and execution scheduling
+    virtual void set_state_dependency (CoreProcess* s) override { _state_dependency = s; }
 
     virtual ChildProcess* clone () override { return nullptr; }
   protected:
-    void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
+    void finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state=nullptr) override;
     FatProcess *_parent;
     CoreProcess *_state_dependency;
   };
@@ -295,7 +302,7 @@ namespace djnn {
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 
     // tree, component, symtable
-    virtual void finalize_construction (FatProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
+    virtual void finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
 
     virtual void   add_child (FatChildProcess* c, const std::string& name) override;
     virtual void   remove_child (FatChildProcess* c) override;
@@ -305,7 +312,7 @@ namespace djnn {
     virtual FatChildProcess* find_child (const std::string&) override;
     virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
     static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path);
-    virtual const std::string& find_child_name (const CoreProcess* child) const; // WARNING : low efficiency function cause by linear search. use with care !
+    virtual const std::string& find_child_name (const CoreProcess* child) const override; // WARNING : low efficiency function cause by linear search. use with care !
 
     // symbol and children-related methods only used in FatProcess
     typedef std::map<std::string, FatChildProcess*> symtable_t;
@@ -316,8 +323,8 @@ namespace djnn {
     symtable_t& children () { return _symtable; }
     const symtable_t& children () const { return _symtable; } 
     
-    void    add_symbol (const std::string& name, FatChildProcess* c);
-    void remove_symbol (const std::string& name);
+    virtual void add_symbol (const std::string& name, FatChildProcess* c) override;
+    void      remove_symbol (const std::string& name);
   
   private:
     
@@ -328,7 +335,6 @@ namespace djnn {
     virtual bool pre_activate () override;
 
   public:
-    static std::string default_name;
     const std::string& get_name () const;
 
     #ifndef DJNN_NO_DEBUG
@@ -358,21 +364,21 @@ namespace djnn {
    extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
   
-  void alias_children (FatProcess *p, FatProcess *to);
-  void alias (FatProcess *parent, const std::string& name, FatChildProcess* from);
-  void merge_children (FatProcess *p1, const std::string& sy1, FatProcess *p2, const std::string& sy2);
-  inline FatProcess* find (FatProcess *p) { return p; } // helper for smalac
-  inline FatProcess* find (CoreProcess *p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
-  inline FatChildProcess* find (FatProcess *p, const std::string& path) { return p->find_child (path); }
-  inline FatChildProcess* find (CoreProcess *p, const std::string& path) {
-    if(auto * fp = dynamic_cast<FatProcess*>(p)) {
+  void alias_children (ParentProcess* parent, FatProcess *to);
+  void alias (ParentProcess* parent, const std::string& name, FatChildProcess* from);
+  void merge_children (ParentProcess* parent1, const std::string& sy1, ParentProcess* parent2, const std::string& sy2);
+  inline FatProcess* find (FatProcess* p) { return p; } // helper for smalac
+  inline FatProcess* find (CoreProcess* p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
+  inline FatChildProcess* find (ParentProcess* parent, const std::string& path) { return parent->find_child (path); }
+  /*inline FatChildProcess* find (CoreProcess* parent, const std::string& path) {
+    if(auto * fp = dynamic_cast<FatProcess*>(parent)) {
       return fp->find_child (path);
     }
     return nullptr;
-  }
+  }*/
 
-  void add_state_dependency (FatProcess *_parent, CoreProcess *p);
-  void remove_state_dependency (FatProcess *_parent, CoreProcess *p);
+  void add_state_dependency (ParentProcess* parent, CoreProcess *p);
+  void remove_state_dependency (ParentProcess* parent, CoreProcess *p);
   //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
   template <typename P> P* clone (P *p) { return p->clone (); } // FIXME will make code size grow :-/...
 

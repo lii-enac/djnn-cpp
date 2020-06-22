@@ -24,7 +24,7 @@ namespace djnn
   class OutlineWidth : public AbstractStyle
   {
   public:
-    OutlineWidth (FatProcess *parent, const std::string& name, double width);
+    OutlineWidth (ParentProcess* parent, const std::string& name, double width);
     virtual ~OutlineWidth ();
     void draw () override;
     OutlineWidth* clone () override;

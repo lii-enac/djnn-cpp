@@ -24,7 +24,7 @@ namespace djnn {
 
   class AbstractTextProperty : public AbstractProperty {
   public:
-    AbstractTextProperty (FatProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractTextProperty (ParentProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return String; }
     //virtual process_type_e get_process_type () const override { return TEXT_PROPERTY_T; }
 
@@ -52,7 +52,7 @@ namespace djnn {
 
   class TextProperty : public AbstractTextProperty {
   public:
-    TextProperty (FatProcess* parent, const std::string& name, std::string v) : AbstractTextProperty (parent, name), value(v) { }
+    TextProperty (ParentProcess* parent, const std::string& name, std::string v) : AbstractTextProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual std::string& get_ref_value() override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
 
   class TextPropertyProxy : public AbstractTextProperty {
   public:
-    TextPropertyProxy (FatProcess* parent, const std::string& name, std::string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
+    TextPropertyProxy (ParentProcess* parent, const std::string& name, std::string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual std::string& get_ref_value() override { return value; }
@@ -85,6 +85,6 @@ namespace djnn {
   std::string& toString(FatProcess* p);
 
   std::string& getString (FatProcess* p);
-  void setString (FatProcess *p, std::string &v);
+  void setString (FatProcess* p, std::string &v);
 }
 

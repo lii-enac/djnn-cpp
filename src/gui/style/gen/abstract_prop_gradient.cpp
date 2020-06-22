@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractPropGradient::AbstractPropGradient (FatProcess *parent, const std::string& name, int spread, int coords) :
+  AbstractPropGradient::AbstractPropGradient (ParentProcess* parent, const std::string& name, int spread, int coords) :
     AbstractStyle (parent, name),
     raw_props{.spread=spread, .coords=coords},
     _cspread (nullptr), _ccoords (nullptr)

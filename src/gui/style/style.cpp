@@ -26,7 +26,7 @@
 namespace djnn
 {
 
-  AbstractStyle::AbstractStyle (FatProcess *parent, const std::string& name) :
+  AbstractStyle::AbstractStyle (ParentProcess* parent, const std::string& name) :
       AbstractGObj (parent, name)
   {
   }
@@ -161,7 +161,7 @@ namespace djnn
     return new NoDashArray (nullptr, get_name ());
   }
 
-  GradientStop::GradientStop (FatProcess *parent, const std::string& name, double r, double g, double b, double a, double offset) :
+  GradientStop::GradientStop (ParentProcess* parent, const std::string& name, double r, double g, double b, double a, double offset) :
       AbstractPropGradientStop (parent, name, r, g, b, a, offset)
   {
     /* avoid dynamic_cast for cloning */
@@ -192,7 +192,7 @@ namespace djnn
     Backend::instance ()->load_gradient_stop (this);
   }
 
-  AbstractGradient::AbstractGradient (FatProcess *parent, const std::string& name, int spread, int coords) :
+  AbstractGradient::AbstractGradient (ParentProcess* parent, const std::string& name, int spread, int coords) :
       AbstractPropGradient (parent, name, spread, coords),
       _g (nullptr), _linear (false)
   {
@@ -206,7 +206,7 @@ namespace djnn
     delete _stops;
   }
 
-  LinearGradient::LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2,
+  LinearGradient::LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
 				  djnFillSpread s, djnFillCoords fc) :
       AbstractPropLinearGradient (parent, name, x1, y1, x2, y2, s, fc)
   {
@@ -214,7 +214,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  LinearGradient::LinearGradient (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2, int s,
+  LinearGradient::LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, int s,
 				  int fc) :
       AbstractPropLinearGradient (parent, name, x1, y1, x2, y2, s, fc)
   {
@@ -249,7 +249,7 @@ namespace djnn
     }
   }
 
-  RefLinearGradient::RefLinearGradient (FatProcess *parent, const std::string& name, LinearGradient *lg) :
+  RefLinearGradient::RefLinearGradient (ParentProcess* parent, const std::string& name, LinearGradient *lg) :
       AbstractStyle (parent, name), _lg (lg)
   {
     activate_children ();
@@ -297,14 +297,14 @@ namespace djnn
     return new RefLinearGradient (nullptr, get_name (), _lg);
   }
 
-  RadialGradient::RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx,
+  RadialGradient::RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx,
 				  double fy, djnFillSpread s, djnFillCoords fc) :
       AbstractPropRadialGradient (parent, name, cx, cy, r, fx, fy, s, fc)
   {
     finalize_construction (parent, name);
   }
 
-  RadialGradient::RadialGradient (FatProcess *parent, const std::string& name, double cx, double cy, double r, double fx,
+  RadialGradient::RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx,
 				  double fy, int s, int fc) :
       AbstractPropRadialGradient (parent, name, cx, cy, r, fx, fy, s, fc)
   {
@@ -336,7 +336,7 @@ namespace djnn
     }
   }
 
-  RefRadialGradient::RefRadialGradient (FatProcess *parent, const std::string& name, RadialGradient *rg) :
+  RefRadialGradient::RefRadialGradient (ParentProcess* parent, const std::string& name, RadialGradient *rg) :
       AbstractStyle (parent, name), _rg (rg)
   {
     activate_children ();
@@ -397,13 +397,13 @@ namespace djnn
      }
   }
 
-  FontSize::FontSize (FatProcess *parent, const std::string& name, djnLengthUnit unit, double size) :
+  FontSize::FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
     finalize_construction (parent, name);
   }
 
-  FontSize::FontSize (FatProcess *parent, const std::string& name, int unit, double size) :
+  FontSize::FontSize (ParentProcess* parent, const std::string& name, int unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
     finalize_construction (parent, name);
@@ -435,7 +435,7 @@ namespace djnn
     return new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
   }
 
-  FontWeight::FontWeight (FatProcess* parent, const std::string& name, int weight) :
+  FontWeight::FontWeight (ParentProcess* parent, const std::string& name, int weight) :
       AbstractPropFontWeight (parent, name, weight) 
   {
     finalize_construction (parent, name);
@@ -465,13 +465,13 @@ namespace djnn
     return new FontWeight (nullptr, get_name (), raw_props.weight);
   }
 
-  FontStyle::FontStyle (FatProcess* parent, const std::string& name, djnFontSlope style) :
+  FontStyle::FontStyle (ParentProcess* parent, const std::string& name, djnFontSlope style) :
       AbstractPropFontStyle (parent, name, style)
   {
     finalize_construction (parent, name);
   }
 
-  FontStyle::FontStyle (FatProcess* parent, const std::string& name, int style) :
+  FontStyle::FontStyle (ParentProcess* parent, const std::string& name, int style) :
       AbstractPropFontStyle (parent, name, style)
   {
     finalize_construction (parent, name);
@@ -501,7 +501,7 @@ namespace djnn
     return new FontStyle (nullptr, get_name (), raw_props.style);
   }
 
-  FontFamily::FontFamily (FatProcess* parent, const std::string& name, const std::string& family) :
+  FontFamily::FontFamily (ParentProcess* parent, const std::string& name, const std::string& family) :
       AbstractPropFontFamily (parent, name, family)
   {
     finalize_construction (parent, name);

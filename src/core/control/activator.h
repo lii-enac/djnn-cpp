@@ -24,8 +24,8 @@ namespace djnn {
   class Activator : public FatProcess
   {
   public:
-    Activator (FatProcess* parent, const std::string& name, CoreProcess* src);
-    Activator (FatProcess* parent, const std::string& name, CoreProcess* src, const std::string& spec);
+    Activator (ParentProcess* parent, const std::string& name, CoreProcess* src);
+    Activator (ParentProcess* parent, const std::string& name, CoreProcess* src, const std::string& spec);
     virtual ~Activator ();
     void impl_activate () override { _action->activate (); };
     void impl_deactivate () override {}

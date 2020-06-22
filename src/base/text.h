@@ -30,7 +30,7 @@ namespace djnn
     class TextPrinterAction : public Action
     {
     public:
-      TextPrinterAction (FatProcess *parent, const std::string& name, TextProperty* input) : Action (parent, name), _input (input) {}
+      TextPrinterAction (ParentProcess* parent, const std::string& name, TextProperty* input) : Action (parent, name), _input (input) {}
       virtual ~TextPrinterAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}
@@ -38,7 +38,7 @@ namespace djnn
       TextProperty* _input;
     };
   public:
-    TextPrinter (FatProcess *parent, const std::string& name);
+    TextPrinter (ParentProcess* parent, const std::string& name);
     void impl_activate () override { c_input.enable(); };
     void impl_deactivate () override { c_input.disable (); };
     virtual ~TextPrinter ();
@@ -66,7 +66,7 @@ namespace djnn
   class TextBinaryOperator : public FatProcess
   {
   public:
-    TextBinaryOperator (FatProcess *parent, const std::string& name, const std::string& l_val, const std::string& r_val)
+    TextBinaryOperator (ParentProcess* parent, const std::string& name, const std::string& l_val, const std::string& r_val)
     : FatProcess (name),
       _left(this, name_info<Action>::left, l_val),
       _right(this, name_info<Action>::right, r_val),
@@ -78,7 +78,7 @@ namespace djnn
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
       finalize_construction (parent, name);
     }
-    TextBinaryOperator (FatProcess *parent, const std::string& name)
+    TextBinaryOperator (ParentProcess* parent, const std::string& name)
     : FatProcess (name),
       _left(this, name_info<Action>::left, ""),
       _right(this, name_info<Action>::right, ""),
@@ -108,13 +108,13 @@ namespace djnn
     }
 #endif
   protected:
-    void set_parent (FatProcess* p) override {
+    void set_parent (ParentProcess* parent) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
          remove_state_dependency (get_parent (), &_action);
       }
-      add_state_dependency (p, &_action);
-      FatProcess::set_parent (p);
+      add_state_dependency (parent, &_action);
+      FatProcess::set_parent (parent);
     }
   public:
     TextProperty _left;
@@ -127,7 +127,7 @@ namespace djnn
   class TextCatenatorAction : public Action
     {
     public:
-      TextCatenatorAction (FatProcess* parent, const std::string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
+      TextCatenatorAction (ParentProcess* parent, const std::string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextCatenatorAction () {}
       void impl_activate () override
@@ -149,7 +149,7 @@ namespace djnn
   class TextComparatorAction : public Action
     {
     public:
-      TextComparatorAction (FatProcess* parent, const std::string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
+      TextComparatorAction (ParentProcess* parent, const std::string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextComparatorAction () {}
       void impl_activate ()
@@ -176,7 +176,7 @@ namespace djnn
   private:
     class AccumulateAction : public Action {
       public:
-        AccumulateAction (FatProcess *parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+        AccumulateAction (ParentProcess* parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
         virtual ~AccumulateAction () {}
         void impl_activate () override {
           std::string new_state = _ta._state.get_value () + _ta._input.get_value ();
@@ -188,7 +188,7 @@ namespace djnn
     };
     class DeleteAction : public Action {
     public:
-      DeleteAction (FatProcess *parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+      DeleteAction (ParentProcess* parent, const std::string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
       virtual ~DeleteAction () {}
       void impl_activate () override {
         int sz = _ta._state.get_value ().size ();
@@ -202,7 +202,7 @@ namespace djnn
       TextAccumulator& _ta;
     };
   public:
-    TextAccumulator (FatProcess *parent, const std::string& name, const std::string& init = "");
+    TextAccumulator (ParentProcess* parent, const std::string& name, const std::string& init = "");
     virtual ~TextAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -210,7 +210,7 @@ namespace djnn
     virtual void serialize (const std::string& format) override;
 #endif
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     TextProperty _input, _state;
     Spike _del;
     AccumulateAction _acc_action;
@@ -223,7 +223,7 @@ namespace djnn
   private:
     class RegexAction : public Action {
       public:
-        RegexAction (FatProcess *parent, const std::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+        RegexAction (ParentProcess* parent, const std::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
         virtual ~RegexAction () {}
         void impl_activate () override;
         void impl_deactivate () override {}
@@ -231,7 +231,7 @@ namespace djnn
         Regex& _reg;
     };
   public:
-    Regex (FatProcess *parent, const std::string& name, const std::string& Regex = "");
+    Regex (ParentProcess* parent, const std::string& name, const std::string& Regex = "");
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -242,7 +242,7 @@ namespace djnn
   protected:
     FatProcess* find_child (const std::string&) override;
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     TextProperty _input;
     std::string _init;
     std::regex _regex;
@@ -257,7 +257,7 @@ namespace djnn
     class DoubleFormatterAction : public Action
     {
     public:
-      DoubleFormatterAction (FatProcess* parent, const std::string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { finalize_construction (parent, name); }
+      DoubleFormatterAction (ParentProcess* parent, const std::string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { finalize_construction (parent, name); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();
@@ -279,7 +279,7 @@ namespace djnn
     };
   public:
     DoubleFormatter (double initial, int decimal);
-    DoubleFormatter (FatProcess* parent, const std::string& name, double initial, int decimal);
+    DoubleFormatter (ParentProcess* parent, const std::string& name, double initial, int decimal);
     virtual ~DoubleFormatter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -287,7 +287,7 @@ namespace djnn
     virtual void serialize (const std::string& format) override;
 #endif
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     void init (double initial, int decimal);
     DoubleProperty _input;
     IntProperty _decimal;

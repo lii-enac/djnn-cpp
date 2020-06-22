@@ -55,7 +55,7 @@ namespace djnn {
     class GUIMouseButton : public FatProcess
     {
     public:
-      GUIMouseButton (FatProcess *parent, const std::string& name);
+      GUIMouseButton (ParentProcess* parent, const std::string& name);
       ~GUIMouseButton () { delete _press; delete _release; }
       FatProcess* press () { return _press; }
       FatProcess* release () { return _release; }
@@ -67,7 +67,7 @@ namespace djnn {
 
     class GUIMouse : public FatProcess {
     public:
-      GUIMouse (FatProcess *parent, const std::string& name);
+      GUIMouse (ParentProcess* parent, const std::string& name);
       ~GUIMouse ();
       void impl_activate () { _left->activate (); _right->activate (); _middle->activate ();}
       void impl_deactivate () {}

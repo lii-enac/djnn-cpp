@@ -31,7 +31,7 @@
 namespace djnn
 {
 
-  Rectangle::Rectangle (FatProcess *parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
+  Rectangle::Rectangle (ParentProcess* parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
     AbstractPropRectangle (parent, name, x, y, width, height, rx, ry)
   {
     finalize_construction (parent, name);

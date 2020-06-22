@@ -28,7 +28,7 @@ namespace djnn {
     class FindAction : public Action
     {
     public:
-      FindAction (FatProcess* parent, const std::string& name) :
+      FindAction (ParentProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~FindAction () {};
       void impl_activate () override;
@@ -37,7 +37,7 @@ namespace djnn {
     class AddEntryAction : public Action
     {
     public:
-      AddEntryAction (FatProcess* parent, const std::string& name) :
+      AddEntryAction (ParentProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~AddEntryAction () {};
       void impl_activate () override;
@@ -46,14 +46,14 @@ namespace djnn {
     class DelEntryAction : public Action
     {
     public:
-      DelEntryAction (FatProcess* parent, const std::string& name) :
+      DelEntryAction (ParentProcess* parent, const std::string& name) :
         Action (parent, name) {};
       virtual ~DelEntryAction () {};
       void impl_activate () override;
       void impl_deactivate () override {};
     };
   public:
-    Dictionary (FatProcess* parent, const std::string& name);
+    Dictionary (ParentProcess* parent, const std::string& name);
     virtual ~Dictionary ();
     void impl_activate () override;
     void impl_deactivate () override;

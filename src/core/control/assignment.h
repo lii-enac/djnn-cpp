@@ -31,7 +31,7 @@ namespace djnn {
    class AssignmentAction : public Action
    {
    public:
-    AssignmentAction (FatProcess* parent, const std::string& name, FatProcess** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
+    AssignmentAction (ParentProcess* parent, const std::string& name, FatProcess** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
     void impl_deactivate () override {}
@@ -44,14 +44,14 @@ namespace djnn {
   };
     
   public:
-    AbstractAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
+    AbstractAssignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel,
       const std::string src_ref_spec = std::string(), const std::string dst_ref_spec = std::string()); // hack to create temporary const std::string objects for init of refs
     virtual ~AbstractAssignment ();
     //void update_graph () override;
     static void do_assignment (CoreProcess* src, AbstractProperty* dst, bool propagate);
   
   protected:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
 
     struct Init { Init(AbstractAssignment *, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec,
       const std::string src_ref_spec, const std::string dst_ref_spec); };
@@ -71,7 +71,7 @@ namespace djnn {
   private:
     void init_Assignment ();
   public:
-    Assignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
+    Assignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     Assignment (FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { post_activate_auto_deactivate (); }
@@ -92,7 +92,7 @@ namespace djnn {
   private:
     void init_PausedAssignment ();
   public:
-    PausedAssignment (FatProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
+    PausedAssignment (ParentProcess* parent, const std::string& name, FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     PausedAssignment (FatProcess* src, const std::string& ispec, FatProcess* dst, const std::string& dspec, bool isModel);
     void impl_activate () override;
     void post_activate () override { post_activate_auto_deactivate (); }

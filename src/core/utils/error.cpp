@@ -37,7 +37,7 @@ namespace djnn
   }
 
   int
-  //__error (FatProcess* p, const std::string& msg, const char* ctxinfo)
+  //__error (ParentProcess* parent, const std::string& msg, const char* ctxinfo)
   __error (CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG

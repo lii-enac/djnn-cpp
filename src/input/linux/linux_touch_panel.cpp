@@ -54,7 +54,7 @@ namespace djnn {
     delete _x;
   }
 
-  LinuxTouchPanel::LinuxTouchPanel (FatProcess *parent, const std::string& name, const struct libevdev *dev) : LinuxDevice (parent, name, TOUCH_PANEL)
+  LinuxTouchPanel::LinuxTouchPanel (ParentProcess* parent, const std::string& name, const struct libevdev *dev) : LinuxDevice (parent, name, TOUCH_PANEL)
   {
     _touches = new Set (this, "touches");
     set_activation_state (ACTIVATED);

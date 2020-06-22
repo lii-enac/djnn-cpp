@@ -28,7 +28,7 @@ namespace djnn
     ((FileReader*)get_parent ())->read ();
   }
 
-  FileReader::FileReader (FatProcess *parent, const std::string& name, const std::string& filename)
+  FileReader::FileReader (ParentProcess* parent, const std::string& name, const std::string& filename)
   : FatProcess (name)
   {
     _input = new TextProperty (this, "input", filename);

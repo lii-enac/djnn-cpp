@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractDataImage::AbstractDataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double width, double height) :
+  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const std::string& name, const std::string& data, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.data=data},
     _cdata (nullptr)

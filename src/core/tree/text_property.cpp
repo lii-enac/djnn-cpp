@@ -118,7 +118,7 @@ namespace djnn
   void
   AbstractTextProperty::set_value (CoreProcess* v, bool propagate)
   {
-    warning(this, "undefined conversion from Component to Text");
+    warning(this, "undefined conversion from Process to Text");
   }
 
 #if !defined(DJNN_NO_DEBUG)

@@ -103,7 +103,7 @@ namespace djnn
     class BoundedValueAction : public Action
     {
     public:
-      BoundedValueAction (FatProcess *parent, const std::string& name, BoundedValue& bv) : Action (parent, name), _bv(bv) {}
+      BoundedValueAction (ParentProcess* parent, const std::string& name, BoundedValue& bv) : Action (parent, name), _bv(bv) {}
     virtual ~BoundedValueAction () {}
       void impl_activate () override {
         double max = _bv._max.get_value ();
@@ -117,7 +117,7 @@ namespace djnn
       BoundedValue& _bv;
     };
   public:
-    BoundedValue (FatProcess *parent, const std::string& name, double min, double max, double init_val);
+    BoundedValue (ParentProcess* parent, const std::string& name, double min, double max, double init_val);
     void impl_activate () override { _c_min.enable(); _c_max.enable (); _c_input.enable (); _action.activate (); };
     void impl_deactivate () override { _c_min.disable (); _c_max.disable (); _c_input.disable (); _action.deactivate ();};
     virtual ~BoundedValue ();
@@ -125,7 +125,7 @@ namespace djnn
     virtual void serialize (const std::string& format) override;
 #endif
   protected:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     DoubleProperty _min, _max, _input, _result;
     BoundedValueAction _action;
     Coupling _c_min, _c_max, _c_input;

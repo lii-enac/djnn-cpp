@@ -38,7 +38,7 @@ namespace djnn
     class DerefAction : public Action
     {
     public:
-      DerefAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      DerefAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~DerefAction () {}
       void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
       void impl_deactivate () override {};
@@ -46,7 +46,7 @@ namespace djnn
     class GetAction : public Action
     {
     public:
-      GetAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      GetAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~GetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->get ();
@@ -56,7 +56,7 @@ namespace djnn
     class SetAction : public Action
     {
     public:
-      SetAction (FatProcess *parent, const std::string& name) : Action (parent, name) {}
+      SetAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~SetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->set ();
@@ -64,7 +64,7 @@ namespace djnn
       void impl_deactivate () override {};
     };
     public:
-      AbstractDeref (FatProcess *parent, const std::string& name, Process *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      AbstractDeref (ParentProcess* parent, const std::string& name, CoreProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~AbstractDeref ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -75,7 +75,7 @@ namespace djnn
       virtual void get () = 0;
       virtual void change_src (Process* src) = 0;
     protected:
-      void set_parent (FatProcess* p) override;
+      void set_parent (ParentProcess* parent) override;
       TextProperty _path;
       RefProperty* _ref;
       DerefAction _action;
@@ -90,7 +90,7 @@ namespace djnn
   {
   private:
     public:
-      Deref (FatProcess *parent, const std::string& name, FatProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      Deref (ParentProcess* parent, const std::string& name, CoreProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~Deref ();
       void set () override;
       void get () override;
@@ -107,7 +107,7 @@ namespace djnn
   class DerefString : public AbstractDeref
   {
     public:
-      DerefString (FatProcess *parent, const std::string& name, FatProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      DerefString (ParentProcess* parent, const std::string& name, CoreProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~DerefString ();
       void set () override;
       void get () override;
@@ -122,7 +122,7 @@ namespace djnn
   class DerefDouble : public AbstractDeref
     {
       public:
-        DerefDouble (FatProcess *parent, const std::string& name, FatProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
+        DerefDouble (ParentProcess* parent, const std::string& name, CoreProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);
         virtual ~DerefDouble ();
         void set () override;
         void get () override;

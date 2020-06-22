@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPathImage : public AbstractImage
   {
   public:
-    AbstractPathImage (FatProcess *parent, const std::string& name, const std::string& path, double x, double y, double width, double height);
+    AbstractPathImage (ParentProcess* parent, const std::string& name, const std::string& path, double x, double y, double width, double height);
     virtual ~AbstractPathImage ();
     
     

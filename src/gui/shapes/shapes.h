@@ -39,7 +39,7 @@ namespace djnn
   class Rectangle : public AbstractPropRectangle
   {
   public:
-    Rectangle (FatProcess *parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
+    Rectangle (ParentProcess* parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
     Rectangle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -49,7 +49,7 @@ namespace djnn
   class Circle : public AbstractPropCircle
   {
   public:
-    Circle (FatProcess *parent, const std::string& name, double cx, double cy, double r);
+    Circle (ParentProcess* parent, const std::string& name, double cx, double cy, double r);
     Circle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -59,7 +59,7 @@ namespace djnn
   class Ellipse : public AbstractPropEllipse
   {
   public:
-    Ellipse (FatProcess *parent, const std::string& name, double cx, double cy, double rx, double ry);
+    Ellipse (ParentProcess* parent, const std::string& name, double cx, double cy, double rx, double ry);
     Ellipse* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -69,7 +69,7 @@ namespace djnn
   class Line : public AbstractPropLine
   {
   public:
-    Line (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2);
+    Line (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2);
     Line* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -79,7 +79,7 @@ namespace djnn
   class RectangleClip : public AbstractPropRectangleClip
   {
   public:
-    RectangleClip (FatProcess *parent, const std::string& name, double x, double y, double width, double height);
+    RectangleClip (ParentProcess* parent, const std::string& name, double x, double y, double width, double height);
     RectangleClip* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -93,7 +93,7 @@ namespace djnn
     {
       friend Text;
       public:
-        TextSizeAction (FatProcess *parent, const std::string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        TextSizeAction (ParentProcess* parent, const std::string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
         void impl_deactivate () override {};
@@ -105,8 +105,8 @@ namespace djnn
         Text* _text;
     };
   public:
-    Text (FatProcess *parent, const std::string& name, double x, double y, const std::string& text);
-    Text (FatProcess *parent, const std::string& name, double x, double y, double dx, double dy, int dxu, int dyu,
+    Text (ParentProcess* parent, const std::string& name, double x, double y, const std::string& text);
+    Text (ParentProcess* parent, const std::string& name, double x, double y, double dx, double dy, int dxu, int dyu,
           const std::string& encoding, const std::string& text);
     virtual ~Text ();
     void draw () override;
@@ -133,7 +133,7 @@ namespace djnn
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; std::string text; };
     raw_props_t raw_props;    
     CouplingWithData *_cx, *_cy, *_cdx, *_cdy, *_cfsize,
@@ -159,7 +159,7 @@ namespace djnn
   class PolyPoint : public AbstractGObj
   {
   public:
-    PolyPoint (FatProcess* parent, const std::string& name, double x, double y);
+    PolyPoint (ParentProcess* parent, const std::string& name, double x, double y);
     virtual ~PolyPoint ();
     virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
@@ -179,7 +179,7 @@ namespace djnn
   class Poly : public AbstractGShape
   {
   public:
-    Poly (FatProcess* parent, const std::string& name, int closed);
+    Poly (ParentProcess* parent, const std::string& name, int closed);
     virtual ~Poly ();
     FatProcess* points () { return _points;}
     bool closed () { return _closed;}
@@ -201,21 +201,21 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon (FatProcess* parent, const std::string& name) : Poly (parent, name, 1) {};
+    Polygon (ParentProcess* parent, const std::string& name) : Poly (parent, name, 1) {};
     virtual ~Polygon () {};
   };
 
   class Polyline : public Poly
   {
   public:
-    Polyline (FatProcess* parent, const std::string& name) : Poly (parent, name, 0) {};
+    Polyline (ParentProcess* parent, const std::string& name) : Poly (parent, name, 0) {};
     virtual ~Polyline () {};
   };
 
   class PathPoint : public AbstractGObj
   {
   public:
-    PathPoint (FatProcess* parent, const std::string& name, double x, double y);
+    PathPoint (ParentProcess* parent, const std::string& name, double x, double y);
     virtual ~PathPoint ();
     virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child("x"); }
@@ -234,7 +234,7 @@ namespace djnn
   class PathMove : public PathPoint
   {
   public:
-    PathMove (FatProcess* parent, const std::string& name, double x, double y) :
+    PathMove (ParentProcess* parent, const std::string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     PathMove* clone () override;
@@ -243,7 +243,7 @@ namespace djnn
   class PathLine : public PathPoint
   {
   public:
-    PathLine (FatProcess* parent, const std::string& name, double x, double y) :
+    PathLine (ParentProcess* parent, const std::string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     PathLine* clone () override;
@@ -252,7 +252,7 @@ namespace djnn
   class PathQuadratic : public AbstractGObj
   {
   public:
-    PathQuadratic (FatProcess* parent, const std::string& name, double x1, double y1, double x, double y);
+    PathQuadratic (ParentProcess* parent, const std::string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
     virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
@@ -272,7 +272,7 @@ namespace djnn
   class PathCubic : public AbstractGObj
   {
   public:
-    PathCubic (FatProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y);
+    PathCubic (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
     virtual FatChildProcess* find_child (const std::string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child("x1"); }
@@ -294,7 +294,7 @@ namespace djnn
   class PathArc : public AbstractGObj
   {
   public:
-    PathArc (FatProcess* parent, const std::string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
+    PathArc (ParentProcess* parent, const std::string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
     virtual FatChildProcess* find_child (const std::string&) override;
@@ -318,7 +318,7 @@ namespace djnn
   class PathClosure : public AbstractGObj
   {
   public:
-    PathClosure (FatProcess* parent, const std::string& name);
+    PathClosure (ParentProcess* parent, const std::string& name);
     virtual ~PathClosure () {}
     void draw () override;
     PathClosure* clone () override;
@@ -336,7 +336,7 @@ namespace djnn
   class Path : public AbstractGShape
   {
   public:
-    Path (FatProcess* parent, const std::string& name);
+    Path (ParentProcess* parent, const std::string& name);
     virtual ~Path ();
     FatProcess* items () { return _items;}
     void draw () override;
@@ -355,7 +355,7 @@ namespace djnn
   class PathClip : public Path
   {
   public:
-    PathClip (FatProcess* parent, const std::string& name) :
+    PathClip (ParentProcess* parent, const std::string& name) :
         Path (parent, name) {}
     virtual ~PathClip () {}
     void draw () override;
@@ -368,7 +368,7 @@ namespace djnn
   class Image : public AbstractPathImage
   {
   public:
-    Image (FatProcess *parent, const std::string& name, std::string path, double x, double y, double w, double h);
+    Image (ParentProcess* parent, const std::string& name, std::string path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
     Image* clone () override;
@@ -395,8 +395,8 @@ namespace djnn
   class DataImage : public AbstractDataImage
     {
     public:
-      DataImage (FatProcess *parent, const std::string& name, const std::string& data, double x, double y, double w, double h);
-      DataImage (FatProcess *parent, const std::string& name, double x, double y, double w, double h);
+      DataImage (ParentProcess* parent, const std::string& name, const std::string& data, double x, double y, double w, double h);
+      DataImage (ParentProcess* parent, const std::string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       DataImage* clone () override;
@@ -449,7 +449,7 @@ namespace djnn
   class Group : public Container
   {
   public:
-    Group (FatProcess *parent, const std::string& name);
+    Group (ParentProcess* parent, const std::string& name);
     virtual ~Group () override;
     auto
       get_frame () { return _gobj->get_frame ();}
@@ -464,7 +464,7 @@ namespace djnn
   class Defs : public Container
   {
   public:
-    Defs (FatProcess *parent, const std::string& name);
+    Defs (ParentProcess* parent, const std::string& name);
     virtual ~Defs () override;
     void impl_activate () override;
     void impl_deactivate () override;

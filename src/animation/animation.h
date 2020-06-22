@@ -27,7 +27,7 @@ namespace djnn
   class SlowInSlowOutInterpolator : public HermiteCurve
   {
   public:
-    SlowInSlowOutInterpolator (FatProcess *parent, const std::string& name);
+    SlowInSlowOutInterpolator (ParentProcess* parent, const std::string& name);
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& type) override;
 #endif
@@ -38,7 +38,7 @@ namespace djnn
   private:
     class OscillatorAction : public Action {
     public:
-      OscillatorAction (FatProcess *parent, const std::string& name, DoubleProperty* m, DoubleProperty* k,
+      OscillatorAction (ParentProcess* parent, const std::string& name, DoubleProperty* m, DoubleProperty* k,
                         DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,
                         DoubleProperty* dt);
       void impl_activate () override;
@@ -47,7 +47,7 @@ namespace djnn
         DoubleProperty *_m, *_k, *_b, *_v, *_output, *_dt;
     };
     public:
-      Oscillator (FatProcess *parent, const std::string& name);
+      Oscillator (ParentProcess* parent, const std::string& name);
       virtual ~Oscillator ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -55,7 +55,7 @@ namespace djnn
       void serialize (const std::string& type) override;
 #endif
     private:
-      void set_parent (FatProcess* p) override;
+      void set_parent (ParentProcess* parent) override;
       DoubleProperty _m, _k, _damping, _v, _output, _dt;
       Spike _step;
       Coupling _c_step;

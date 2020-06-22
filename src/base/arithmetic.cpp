@@ -59,7 +59,7 @@ namespace djnn
 
   
 
-  Previous::Previous (FatProcess *parent, const std::string& name, double i_val)
+  Previous::Previous (ParentProcess* parent, const std::string& name, double i_val)
   : FatProcess (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),
@@ -94,7 +94,7 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (FatProcess *parent, const std::string& name, bool isModel) :
+  Incr::Incr (ParentProcess* parent, const std::string& name, bool isModel) :
       FatProcess (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0)
@@ -110,15 +110,15 @@ namespace djnn
   }
 
   void
-  Incr::set_parent (FatProcess* p)
+  Incr::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), &_state);
     }
 
-    add_state_dependency (p, &_state);
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, &_state);
+    FatProcess::set_parent (parent); 
   }
 
   void
@@ -143,7 +143,7 @@ namespace djnn
   }
 #endif
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (FatProcess* parent, const std::string& name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (ParentProcess* parent, const std::string& name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -165,7 +165,7 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (FatProcess* parent, const std::string& name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (ParentProcess* parent, const std::string& name, double input, double clamp_min,
                                       double clamp_max)
   : FatProcess (name),
     _input (this, "input", input),
@@ -190,15 +190,15 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::set_parent (FatProcess* p)
+  AdderAccumulator::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
        remove_state_dependency (get_parent (), &_action);
     }
 
-    add_state_dependency (p, &_action);
-    FatProcess::set_parent (p); 
+    add_state_dependency (parent, &_action);
+    FatProcess::set_parent (parent); 
   }
 
   void

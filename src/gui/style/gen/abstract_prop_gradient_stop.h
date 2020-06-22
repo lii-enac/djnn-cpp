@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropGradientStop : public AbstractStyle
   {
   public:
-    AbstractPropGradientStop (FatProcess *parent, const std::string& name, double r, double g, double b, double a, double offset);
+    AbstractPropGradientStop (ParentProcess* parent, const std::string& name, double r, double g, double b, double a, double offset);
     virtual ~AbstractPropGradientStop ();
     
     

@@ -34,7 +34,7 @@
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (FatProcess *parent, const std::string& name, double tx, double ty) :
+  AbstractTranslation::AbstractTranslation (ParentProcess* parent, const std::string& name, double tx, double ty) :
     AbstractTransformation (parent, name),
     raw_props{.tx=tx, .ty=ty},
     _ctx (nullptr), _cty (nullptr)

@@ -28,7 +28,7 @@ namespace djnn {
     class SwitchAction : public Action
     {
     public:
-      SwitchAction (Switch *parent, const std::string& name);
+      SwitchAction (Switch * parent, const std::string& name);
       virtual ~SwitchAction () {};
       void impl_activate () override { _sw->change_branch(); };
       void impl_deactivate () override {};
@@ -39,7 +39,7 @@ namespace djnn {
       Switch* _sw;
     };
   public:
-    Switch (FatProcess *parent, const std::string& name, const std::string& initial);
+    Switch (ParentProcess* parent, const std::string& name, const std::string& initial);
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -51,7 +51,7 @@ namespace djnn {
     virtual void serialize (const std::string& format) override;
 #endif
   private:
-    void set_parent (FatProcess* p) override;
+    void set_parent (ParentProcess* parent) override;
     void change_branch ();
     friend void SwitchAction::impl_activate ();
     std::string _initial;

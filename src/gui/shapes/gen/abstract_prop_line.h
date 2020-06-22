@@ -24,7 +24,7 @@ namespace djnn
   class AbstractPropLine : public AbstractGShape
   {
   public:
-    AbstractPropLine (FatProcess *parent, const std::string& name, double x1, double y1, double x2, double y2);
+    AbstractPropLine (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2);
     virtual ~AbstractPropLine ();
     
     
