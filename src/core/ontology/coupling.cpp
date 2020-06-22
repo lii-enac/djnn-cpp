@@ -43,7 +43,11 @@ namespace djnn
     } else if (src_flag == DEACTIVATION) {
       src->add_deactivation_coupling (this);
     } else {
-      warning (src, std::string("wrong activation flag in coupling creation") + dst->get_debug_name ());
+      warning (src, std::string("wrong activation flag in coupling creation ")
+      #ifndef DJNN_NO_DEBUG
+      + dst->get_debug_name ()
+      #endif
+      );
     }
 
     set_dst_activation_flag (dst_flag);

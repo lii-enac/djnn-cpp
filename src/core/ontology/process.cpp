@@ -51,7 +51,7 @@ namespace djnn
   long int FatProcess::_nb_anonymous = 0;
 
 #ifdef DJNN_NO_DEBUG
-  FatProcess::DebugInfo FatProcess::_dbg_info{"no dbg info",0};
+  CoreProcess::DebugInfo CoreProcess::_dbg_info{"no dbg info",0};
 #endif
 
   string CoreProcess::default_name = "noname";
@@ -64,8 +64,9 @@ namespace djnn
   #ifndef DJNN_NO_DEBUG
   _debug_parent (nullptr)
   , _debug_name (FatProcess::default_name)
+  ,
   #endif
-  , _vertex (nullptr)
+  _vertex (nullptr)
   {
     set_is_model (model);
     set_activation_flag (NONE_ACTIVATION);

@@ -439,7 +439,7 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
 djnn: $(libs)
-static: $(libs_static)
+static: dirs $(libs_static)
 
 size: $(libs_static)
 	ls -l $(libs_static)
