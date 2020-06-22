@@ -261,7 +261,7 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (ParentProcess* parent, const std::string& name, List *list, FatProcess *action, bool model)
+  ListIterator::ListIterator (ParentProcess* parent, const std::string& name, CoreProcess *list, CoreProcess *action, bool model)
   :
     FatProcess (name, model),
     _action (action)
@@ -289,11 +289,13 @@ namespace djnn
     post_activate_auto_deactivate ();
   }
 
-  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const std::string& name, List *list,
+  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const std::string& name, CoreProcess *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
-      Action (parent, name), _list (list), _iter (iter), _index (index), _forward (forward)
+      Action (parent, name), _list (dynamic_cast<List*>(list)), _iter (iter), _index (index), _forward (forward)
   {
+    if (_list == nullptr)
+      error (this, "The set argument must be a List component in set iterator " + name);
   }
 
   void

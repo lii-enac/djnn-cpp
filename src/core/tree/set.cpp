@@ -166,11 +166,10 @@ namespace djnn
   }
 #endif
 
-  SetIterator::SetIterator (ParentProcess* parent, const std::string& name, FatProcess *set, FatProcess *action, bool model) :
-      FatProcess (name, model), _set (set), _action (action)
+  SetIterator::SetIterator (ParentProcess* parent, const std::string& name, CoreProcess *set, CoreProcess *action, bool model) :
+      FatProcess (name, model), _set (dynamic_cast<Set*> (set)), _action (action)
   {
-    Set *s = dynamic_cast<Set*> (set);
-    if (s == nullptr)
+    if (_set == nullptr)
       error (this, "The set argument must be a Set component in set iterator " + name);
     finalize_construction (parent, name);
   }

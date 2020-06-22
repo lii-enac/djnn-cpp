@@ -22,7 +22,7 @@
 namespace djnn
 {
 
-  Sorter::Sorter (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec) :
+  Sorter::Sorter (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) :
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),

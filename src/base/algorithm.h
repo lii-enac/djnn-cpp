@@ -38,7 +38,7 @@ namespace djnn
       void impl_deactivate () {}
     };
   public:
-    Sorter (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec);
+    Sorter (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
     virtual ~Sorter () {}
     void impl_activate () override;
     void impl_deactivate () override;

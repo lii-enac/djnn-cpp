@@ -66,13 +66,13 @@ namespace djnn {
   class ListIterator : public FatProcess
   {
   public:
-    ListIterator (ParentProcess* parent, const std::string& name, List *list, FatProcess *action, bool model = true);
+    ListIterator (ParentProcess* parent, const std::string& name, CoreProcess *list, CoreProcess *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};
     void post_activate () override;
   private:
-    FatProcess *_action;
+    CoreProcess *_action;
     List *_list;
   };
 
@@ -82,7 +82,7 @@ namespace djnn {
     class IterAction : public Action
     {
     public:
-      IterAction (ParentProcess* parent, const std::string& name, List *list, RefProperty *iter, IntProperty *index, bool forward);
+      IterAction (ParentProcess* parent, const std::string& name, CoreProcess *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void impl_activate () override;
       void impl_deactivate () override {}

@@ -59,7 +59,8 @@ namespace djnn {
   void clear_core ();
 
   // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
-  using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
+  //using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
+  using Process = CoreProcess;
   using Binding = SimpleBinding;
   using Assignment = SimpleAssignment;
   using PausedAssignment = SimplePausedAssignment;
