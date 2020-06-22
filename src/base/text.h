@@ -239,8 +239,9 @@ namespace djnn
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif
-  protected:
+    
     FatProcess* find_child (const std::string&) override;
+
   private:
     void set_parent (ParentProcess* parent) override;
     TextProperty _input;
