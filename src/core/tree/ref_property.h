@@ -39,7 +39,7 @@ namespace djnn {
     double get_double_value () const override;
     std::string get_string_value () override;
     std::string get_string_value () const override;
-    FatChildProcess* find_child (const std::string& path) override;
+    CoreProcess* find_child (const std::string& path) override;
     RefProperty* clone () override;
 
   private:

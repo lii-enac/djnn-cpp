@@ -134,7 +134,7 @@ namespace djnn
   }
 #endif
 
-  FatChildProcess*
+  CoreProcess*
   RefProperty::find_child (const std::string& path)
   {
     if (path.empty ())
