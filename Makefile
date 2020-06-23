@@ -137,10 +137,11 @@ ifeq ($(findstring MINGW,$(os)),MINGW)
 os := MinGW
 endif
 
+
 build_lib_dir := $(build_dir)/lib
-CFLAGS += -I$(src_dir)
+CFLAGS += $(PRE_COV_CFLAGS) -I$(src_dir)
 build_incl_dir := $(build_dir)/include/djnn-cpp
-LDFLAGS += -L$(build_lib_dir)
+LDFLAGS += $(PRE_COV_LDFLAGS) -L$(build_lib_dir)
 lib_static_suffix = .a
 echo = echo -e
 
@@ -508,8 +509,8 @@ lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
 
-pre_cov: CXXFLAGS += --coverage
-pre_cov: LDFLAGS += --coverage
+pre_cov: PRE_COV_CFLAGS += --coverage
+pre_cov: PRE_COV_LDFLAGS += --coverage
 pre_cov : djnn
 	lcov -d $(build_dir) -b . --zerocounters
 .PHONY: pre_cov
