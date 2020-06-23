@@ -511,7 +511,7 @@ lcov_output_dir ?= $(build_dir)/coverage_html
 
 pre_cov: PRE_COV_CFLAGS += --coverage
 pre_cov: PRE_COV_LDFLAGS += --coverage
-pre_cov : djnn
+pre_cov: dirs djnn
 	lcov -d $(build_dir) -b . --zerocounters
 .PHONY: pre_cov
 
