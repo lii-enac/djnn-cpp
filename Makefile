@@ -23,7 +23,6 @@ default: all
 
 all: config.mk dirs djnn pkgconf
 
-
 help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
@@ -198,8 +197,7 @@ em_ext_libs_path ?= ../djnn-emscripten-ext-libs
 EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
-LDFLAGS += $(EMFLAGS) \
-	--emrun
+LDFLAGS += $(EMFLAGS) --emrun
 #   $(ext_libs) # to add in application makefile
 ##idn2 expat curl fontconfig unistring psl
 # to add in application makefile:
@@ -283,11 +281,6 @@ $(build_dir)/compile_commands.json:
 
 cccmd: $(build_dir)/compile_commands.json
 .PHONY: $(build_dir)/compile_commands.json
-
-titi:
-	@echo $(all_cccmd_json)
-	@echo $(all_cccmd_json_content)
-	@echo $(cccmd_json)
 
 # ---------------------------------------
 # djnn modules
@@ -469,7 +462,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
@@ -508,7 +501,6 @@ endif
 lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
-
 pre_cov: PRE_COV_CFLAGS += --coverage
 pre_cov: PRE_COV_LDFLAGS += --coverage
 pre_cov: dirs djnn
@@ -537,10 +529,6 @@ clean:
 
 distclean clear:
 	rm -rf $(build_dir)
-
-dbg:
-	@echo $(all_pkg)
-
 
 # ---------------------------------------
 # package config
@@ -701,3 +689,10 @@ install-pkgdeps:
 
 upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
+
+#--
+
+dbg:
+	@echo $(all_pkg)
+
+# end of the ultimate Makefile
