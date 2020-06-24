@@ -47,7 +47,7 @@ namespace djnn {
     }
 
   }
-  FatProcess*
+  CoreProcess*
   GPIOProxy::find_child (const std::string& path)
   {
     int pos = 0;
@@ -60,7 +60,7 @@ namespace djnn {
     }
     //string::size_type sz;
     const std::string buff = path.substr (pos);
-    FatProcess *c = nullptr;
+    CoreProcess *c = nullptr;
     if (pos == 3) {
       c = p_find_gpio (buff, IN);
     } else {

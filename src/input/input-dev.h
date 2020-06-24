@@ -27,7 +27,7 @@ namespace djnn {
   public:
     GPIOProxy (ParentProcess* parent, const std::string& n) : FatProcess (n) { set_activation_state (ACTIVATED); }
     virtual ~GPIOProxy () {}
-    FatProcess* find_child (const std::string& path) override;
+    CoreProcess* find_child (const std::string& path) override;
   protected:
     void impl_activate () override {}
     void impl_deactivate () override {}
