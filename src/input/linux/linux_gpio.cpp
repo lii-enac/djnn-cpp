@@ -61,7 +61,7 @@ namespace djnn {
       fprintf (stderr, "djnn warning: no GPIO\n");
   }
 
-  FatProcess*
+  Process*
   p_find_gpio (const std::string& path, direction_e dir)
   {
     try {
