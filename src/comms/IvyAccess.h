@@ -43,7 +43,6 @@ namespace djnn
       virtual ~IvyOutAction () {}
       //void coupling_activation_hook () override;
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       TextProperty* _out;
     };

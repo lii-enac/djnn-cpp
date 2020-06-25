@@ -33,7 +33,6 @@ namespace djnn
       TextPrinterAction (ParentProcess* parent, const std::string& name, TextProperty* input) : Action (parent, name), _input (input) {}
       virtual ~TextPrinterAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       TextProperty* _input;
     };
@@ -138,7 +137,6 @@ namespace djnn
         //_tbo._result.set_value (out, true);
         _tbo._result.set_value (perform(head, tail), true);
       }
-      void impl_deactivate () override {}
       static std::string perform(const std::string& l, const std::string& r) { return l+r; }
       static std::string default_value () {return "";}
 
@@ -159,7 +157,6 @@ namespace djnn
         //_tbo._result.set_value (left.compare (right) == 0, true);
         _tbo._result.set_value (perform(left, right), true);
       }
-      void impl_deactivate () {}
       static bool perform(const std::string& l, const std::string& r) { return l.compare(r) ==0; }
       static bool default_value () {return false;}
 
@@ -182,7 +179,6 @@ namespace djnn
           std::string new_state = _ta._state.get_value () + _ta._input.get_value ();
           _ta._state.set_value (new_state, true);
         }
-        void impl_deactivate () override {}
       private:
         TextAccumulator& _ta;
     };
@@ -197,7 +193,6 @@ namespace djnn
           new_state = _ta._state.get_value ().substr (0, sz - 1);
         _ta._state.set_value (new_state, true);
       }
-      void impl_deactivate () override {}
     private:
       TextAccumulator& _ta;
     };
@@ -226,7 +221,6 @@ namespace djnn
         RegexAction (ParentProcess* parent, const std::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
         virtual ~RegexAction () {}
         void impl_activate () override;
-        void impl_deactivate () override {}
       private:
         Regex& _reg;
     };
@@ -274,7 +268,6 @@ namespace djnn
         }
         _df._output.set_value (res, true);
       }
-      void impl_deactivate () override {}
     private:
       DoubleFormatter& _df;
     };

@@ -36,7 +36,6 @@ namespace djnn
         Action (parent, name) {};
       virtual ~TimerAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
-      void impl_deactivate () override {}
     };
 
     class ResetAction : public Action
@@ -46,7 +45,6 @@ namespace djnn
         Action (parent, name) {};
       virtual ~ResetAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
-      void impl_deactivate () override {}
     };
 
   public:

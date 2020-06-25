@@ -42,7 +42,6 @@ namespace djnn
       Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SerialOutAction () {}
       void impl_activate () override { ((Serial*)get_parent())->serial_write (); };
-      void impl_deactivate () override {}
     };
 
 

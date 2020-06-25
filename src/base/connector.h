@@ -32,7 +32,6 @@ namespace djnn {
       ConnectorAction (ParentProcess* parent, const std::string& name, AbstractProperty** src, AbstractProperty** dst, bool propagate);
       virtual ~ConnectorAction () {};
       void impl_activate () override;
-      void impl_deactivate () override {};
       
     private:
       AbstractProperty** _src;

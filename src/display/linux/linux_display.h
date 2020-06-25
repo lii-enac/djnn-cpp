@@ -56,7 +56,6 @@ namespace djnn {
           {
             _udev->handle_udev_msg ();
           }
-          void impl_deactivate () {}
         private:
           DRMUdev* _udev;
       };

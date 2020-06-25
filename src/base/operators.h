@@ -49,7 +49,6 @@ namespace djnn {
     void impl_activate () override {
       _binop._result.set_value (BinaryFunction()(_binop._left.get_value (), _binop._right.get_value ()), true);
     }
-    void impl_deactivate () override {}
   protected:
     BinOperator& _binop;
   };
@@ -144,7 +143,6 @@ namespace djnn {
       _unop._output.set_value (UnaryFunction()(_unop._input.get_value ()), true);
       //UnaryFunction()(_unop.input, _unop.output);
     }
-    void impl_deactivate () override {}
   protected:
     UnOperator& _unop;
   };

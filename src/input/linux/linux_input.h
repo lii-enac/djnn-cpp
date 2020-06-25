@@ -63,7 +63,6 @@ namespace djnn {
         {
           _evdev->handle_evdev_msg ();
         }
-        void impl_deactivate () {}
       private:
         Evdev* _evdev;
     };
@@ -94,7 +93,6 @@ namespace djnn {
         {
           _udev->handle_udev_msg ();
         }
-        void impl_deactivate () {}
       private:
         Udev* _udev;
     };
@@ -175,7 +173,6 @@ namespace djnn {
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
-      void impl_deactivate () override {}
     };
     class GPIOLineReadAction : public Action {
     public:
@@ -183,7 +180,6 @@ namespace djnn {
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
-      void impl_deactivate () override {}
     };
   public:
     GPIOLine (ParentProcess* parent, const std::string& name, int pin, direction_e dir);

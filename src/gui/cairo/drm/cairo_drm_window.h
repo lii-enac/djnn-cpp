@@ -29,7 +29,6 @@ namespace djnn {
       RefreshAction (CairoDRMWindow* win, const std::string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
       virtual ~RefreshAction () {}
       void impl_activate () { _win->ask_refresh (); }
-      void impl_deactivate () {}
     private:
       CairoDRMWindow *_win;
     };

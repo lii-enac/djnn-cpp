@@ -259,7 +259,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~RightTranslateByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -273,7 +272,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~LeftTranslateByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -287,7 +285,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~RightScaleByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -301,7 +298,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~LeftScaleByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -315,7 +311,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~RightRotateByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -329,7 +324,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~LeftRotateByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -343,7 +337,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_X_ByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -357,7 +350,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_X_ByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -371,7 +363,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_Y_ByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -385,7 +376,6 @@ namespace djnn {
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_Y_ByAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractHomography *_h;
     };
@@ -615,7 +605,6 @@ namespace djnn {
       Action (parent, name), _stl(stl) {}
       virtual ~stl_action () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       ScreenToLocal *_stl;
     };
@@ -645,7 +634,6 @@ namespace djnn {
       Action (parent, name), _lts(lts) {}
       virtual ~lts_action () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       LocalToScreen *_lts;
     };

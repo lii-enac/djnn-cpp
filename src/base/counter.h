@@ -36,7 +36,6 @@ namespace djnn
     
       virtual ~CounterResetAction () {}
       void impl_activate () override { *_reset_occurred = true; }
-      void impl_deactivate () override {}
     private:
       bool *_reset_occurred;
     };
@@ -59,7 +58,6 @@ namespace djnn
         else
           _output->set_value (_output->get_value () +  _delta->get_value (), true);
       }
-      void impl_deactivate () override {}
     private:
       DoubleProperty *_init;
     	DoubleProperty *_delta;

@@ -34,7 +34,6 @@ namespace djnn {
     AssignmentAction (ParentProcess* parent, const std::string& name, FatProcess** src, AbstractProperty** dst, bool propagate) : Action (parent, name), _src (src), _dst (dst), _propagate (propagate) {}
     virtual ~AssignmentAction () {}
     void impl_activate () override { if (_src && _dst) AbstractAssignment::do_assignment(*_src, *_dst, _propagate); };
-    void impl_deactivate () override {}
     void set_src (FatProcess** src) { _src = src; }
     void set_dst (AbstractProperty** dst) { _dst = dst; }
    private:

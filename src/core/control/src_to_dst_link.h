@@ -16,7 +16,6 @@ namespace djnn {
       UpdateSrcOrDst (ParentProcess* parent, const std::string& name);
       virtual ~UpdateSrcOrDst () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       FatProcess** _to_update;
       RefProperty* _prop;

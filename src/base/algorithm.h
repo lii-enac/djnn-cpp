@@ -35,7 +35,6 @@ namespace djnn
       SortAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
-      void impl_deactivate () {}
     };
   public:
     Sorter (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
@@ -72,7 +71,6 @@ namespace djnn
       ListOperatorAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~ListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
-      void impl_deactivate () {}
     };
     class UpdateListOperatorAction : public Action
     {
@@ -80,7 +78,6 @@ namespace djnn
       UpdateListOperatorAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdateListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
-      void impl_deactivate () {}
     };
   public:
     ListOperator (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec);

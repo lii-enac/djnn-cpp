@@ -32,7 +32,6 @@ namespace djnn {
        CutAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~CutAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->cut (); };
-       void impl_deactivate () override {};
     };
     class PointerMoveAction : public Action
     {
@@ -40,7 +39,6 @@ namespace djnn {
        PointerMoveAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~PointerMoveAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->pointer_move (); };
-       void impl_deactivate () override {};
     };
     class ClearAction : public Action
     {
@@ -48,7 +46,6 @@ namespace djnn {
        ClearAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
        ~ClearAction () {}
        void impl_activate () override { ((TextField*)get_parent ())->clear (); };
-       void impl_deactivate () override {};
     };
     class DeleteAction : public Action
     {
@@ -56,7 +53,6 @@ namespace djnn {
       DeleteAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~DeleteAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->del ();};
-      void impl_deactivate () override {};
     };
 
     class SupprAction : public Action
@@ -65,7 +61,6 @@ namespace djnn {
       SupprAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~SupprAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->suppr (); };
-      void impl_deactivate () override {};
     };
 
     class AddStringAction : public Action
@@ -74,7 +69,6 @@ namespace djnn {
       AddStringAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~AddStringAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->add_string (); };
-      void impl_deactivate () override {};
     };
     class MoveLeftAction : public Action
     {
@@ -82,7 +76,6 @@ namespace djnn {
       MoveLeftAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveLeftAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->move_left ();};
-      void impl_deactivate () override {};
     };
     class MoveRightAction : public Action
     {
@@ -90,7 +83,6 @@ namespace djnn {
       MoveRightAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveRightAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->move_right ();};
-      void impl_deactivate () override {};
     };
     class UpdateCursorPositionAction : public Action
     {
@@ -98,7 +90,6 @@ namespace djnn {
       UpdateCursorPositionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~UpdateCursorPositionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->update_cursor_pos_from_press ();};
-      void impl_deactivate () override {};
     };
     class StartSelectionAction : public Action
     {
@@ -106,7 +97,6 @@ namespace djnn {
       StartSelectionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~StartSelectionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->start_selection ();};
-      void impl_deactivate () override {};
     };
     class EndSelectionAction : public Action
     {
@@ -114,7 +104,6 @@ namespace djnn {
       EndSelectionAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~EndSelectionAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->end_selection ();};
-      void impl_deactivate () override {};
     };
     class SelectAllAction : public Action
     {
@@ -122,7 +111,6 @@ namespace djnn {
       SelectAllAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~SelectAllAction () {}
       void impl_activate () override { ((TextField*)get_parent ())->select_all ();};
-      void impl_deactivate () override {};
   };
   public:
     TextField (ParentProcess* parent, const std::string& name, CoreProcess* text, CoreProcess* shape);

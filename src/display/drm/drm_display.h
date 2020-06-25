@@ -47,7 +47,6 @@ namespace djnn {
       UpdatePosAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdatePosAction () {}
       void impl_activate () { ((DRMConnector*) get_parent())->update_pos (); }
-      void impl_deactivate () {}
     };
   public:
     DRMConnector (ParentProcess* parent, const std::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
@@ -100,7 +99,6 @@ namespace djnn {
       VBlankAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
       void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
-      void impl_deactivate () {}
     };
   public:
     DRMDevice (ParentProcess* parent, const std::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
@@ -127,7 +125,6 @@ namespace djnn {
           {
             _udev->handle_udev_msg ();
           }
-          void impl_deactivate () {}
         private:
           DRMUdev* _udev;
       };

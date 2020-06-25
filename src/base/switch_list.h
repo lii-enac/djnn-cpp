@@ -35,7 +35,6 @@ namespace djnn {
       Next (SwitchList *p);
       virtual ~Next () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };
@@ -44,7 +43,6 @@ namespace djnn {
       Previous (SwitchList *p);
       virtual ~Previous () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };
@@ -53,7 +51,6 @@ namespace djnn {
       ChangeIndex (SwitchList *p);
       virtual ~ChangeIndex () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       SwitchList* _sw;
     };

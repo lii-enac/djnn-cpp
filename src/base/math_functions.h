@@ -112,7 +112,6 @@ namespace djnn
         double r = input < min ? min : (input > max ? max : input);
         _bv._result.set_value (r, true);
       }
-      void impl_deactivate () override {}
     private:
       BoundedValue& _bv;
     };

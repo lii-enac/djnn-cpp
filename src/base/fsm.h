@@ -57,7 +57,6 @@ namespace djnn {
 	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
-      void impl_deactivate () {};
     private:
       FSMTransition *_t;
       FSMState* _src;

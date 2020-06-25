@@ -15,7 +15,6 @@ namespace djnn {
 	      GainAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~GainAction () {}
 	      void impl_activate () override { ((AudioListener*)get_parent())->update_gain (); }
-	      void impl_deactivate () override {}
 	    };
 	public:
 		AudioListener (ParentProcess* parent, const std::string& name);

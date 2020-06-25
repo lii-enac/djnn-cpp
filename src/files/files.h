@@ -35,7 +35,6 @@ namespace djnn
     public:
       FileReaderAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     };
   public:
     FileReader (ParentProcess* parent, const std::string& name, const std::string& filename);

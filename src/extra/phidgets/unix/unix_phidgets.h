@@ -46,7 +46,6 @@ namespace djnn {
       virtual ~ChangeRateAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
-      void impl_deactivate () override {}
     };
     class ChangeTriggerAction : public Action {
     public:
@@ -54,7 +53,6 @@ namespace djnn {
       virtual ~ChangeTriggerAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_trigger (); }
-      void impl_deactivate () override {}
     };
   public:
     VoltageInputChannel (ParentProcess* parent, const std::string& name);

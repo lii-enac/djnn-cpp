@@ -322,7 +322,6 @@ namespace djnn {
         ConverterAction (RGBToLCHConverter *p, const std::string& n);
         virtual ~ConverterAction () {}
         void impl_activate () override;
-        void impl_deactivate () override {};
       private:
         RGBToLCHConverter *_p;
     };
@@ -347,7 +346,6 @@ namespace djnn {
         ConverterAction (LCHToRGBConverter *p, const std::string& n);
         virtual ~ConverterAction () {}
         void impl_activate () override;
-        void impl_deactivate () override {};
       private:
         LCHToRGBConverter *_p;
     };

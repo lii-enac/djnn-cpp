@@ -33,7 +33,6 @@ namespace djnn
       FinderAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~FinderAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {};
     };
     public:
       Finder (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& path);

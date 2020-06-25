@@ -96,7 +96,6 @@ namespace djnn
         TextSizeAction (ParentProcess* parent, const std::string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
-        void impl_deactivate () override {};
       private:
         FontFamily*_ff;
         FontSize* _fsz;
@@ -426,7 +425,6 @@ namespace djnn
     {
       _img->set_invalid_cache (true);
     }
-    void impl_deactivate () override {};
   private:
     Image * _img;
   };
@@ -441,7 +439,6 @@ namespace djnn
       {
         _img->set_invalid_cache (true);
       }
-      void impl_deactivate () override {};
     private:
       DataImage * _img;
     };

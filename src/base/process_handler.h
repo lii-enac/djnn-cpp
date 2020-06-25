@@ -34,7 +34,6 @@ namespace djnn
       DeleteOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~DeleteOneAction () {}
       void impl_activate () override { ((ProcessDeleter*)get_parent ())->delete_one (); };
-      void impl_deactivate () override {};
     };
   public:
     ProcessDeleter (ParentProcess *parent, const std::string& name);
@@ -63,7 +62,6 @@ namespace djnn
       DeleteAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~DeleteAllAction () {}
       void impl_activate () override { ((CollectionDeleter*)get_parent ())->delete_all (); };
-      void impl_deactivate () override {};
     };
   public:
     CollectionDeleter (ParentProcess *parent, const std::string& name);
@@ -87,7 +85,6 @@ namespace djnn
       ActivateAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~ActivateAllAction () {}
       void impl_activate () override { ((CollectionActivator*)get_parent ())->activate_all (); };
-      void impl_deactivate () override {};
     };
   public:
     CollectionActivator (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
@@ -113,7 +110,6 @@ namespace djnn
       SetValueAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~SetValueAction () {}
       void impl_activate () override { ((AbstractCollectionSetValue*)get_parent ())->set_value (); };
-      void impl_deactivate () override {};
     };
   public:
     AbstractCollectionSetValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
@@ -161,7 +157,6 @@ namespace djnn
      AddOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
      virtual ~AddOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->add_one (); };
-     void impl_deactivate () override {};
    };
    class RemoveOneAction : public Action
    {
@@ -169,7 +164,6 @@ namespace djnn
      RemoveOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
      virtual ~RemoveOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_one (); };
-     void impl_deactivate () override {};
     };
     class RemoveAllAction : public Action
     {
@@ -177,7 +171,6 @@ namespace djnn
       RemoveAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
       virtual ~RemoveAllAction () {}
       void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_all (); };
-      void impl_deactivate () override {};
     };
   public:
     ProcessCollector (ParentProcess *parent, const std::string& name);

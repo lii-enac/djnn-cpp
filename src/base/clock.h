@@ -40,7 +40,6 @@ namespace djnn
     
       virtual ~ClockUpdateAction () {}
       void impl_activate () override { ((Clock*)get_parent())->update_period (); }
-      void impl_deactivate () override {}
     };
   public:
     Clock (ParentProcess* parent, const std::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));

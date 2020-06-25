@@ -42,7 +42,6 @@ namespace djnn
                         DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,
                         DoubleProperty* dt);
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
         DoubleProperty *_m, *_k, *_b, *_v, *_output, *_dt;
     };

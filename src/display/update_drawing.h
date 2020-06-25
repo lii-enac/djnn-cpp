@@ -37,7 +37,6 @@ namespace djnn {
         RedrawAction (UpdateDrawing * parent, const std::string& name) : Action (parent, name), _ud (parent) { finalize_construction (parent, name); }
         virtual ~RedrawAction () {}
         void impl_activate () override ;
-        void impl_deactivate () override {}
       private:
         UpdateDrawing* _ud;
     };
@@ -58,7 +57,6 @@ namespace djnn {
         AutoRefreshAction (UpdateDrawing * parent, const std::string& name) : Action (parent, name), _ud (parent) {}
         virtual ~AutoRefreshAction () {}
         void impl_activate () override { _ud->update_auto_refresh (); };
-        void impl_deactivate () override {}
       private:
         UpdateDrawing *_ud;
       };

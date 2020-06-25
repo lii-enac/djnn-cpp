@@ -92,7 +92,6 @@ namespace djnn
         _np._output.set_value (_prev, true);
         _prev = _np._input.get_value ();
       }
-      void impl_deactivate () {}
     private:
       Previous &_np;
       double _prev;
@@ -138,7 +137,6 @@ namespace djnn
     public:
       AdderAccumulatorAction (ParentProcess* parent, const std::string& name, AdderAccumulator& aa);
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AdderAccumulator& _aa;
     };

@@ -29,7 +29,6 @@ namespace djnn {
     virtual ~NativeAction ();
     virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
     void impl_activate () override;
-    void impl_deactivate () override {}
     void* data ();
 
     virtual void set_activation_source (CoreProcess* src) override { _activation_source = src; }

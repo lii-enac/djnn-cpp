@@ -41,7 +41,6 @@ namespace djnn
       DerefAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       virtual ~DerefAction () {}
       void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
-      void impl_deactivate () override {};
     };
     class GetAction : public Action
     {
@@ -51,7 +50,6 @@ namespace djnn
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->get ();
       };
-      void impl_deactivate () override {};
     };
     class SetAction : public Action
     {
@@ -61,7 +59,6 @@ namespace djnn
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->set ();
       };
-      void impl_deactivate () override {};
     };
     public:
       AbstractDeref (ParentProcess* parent, const std::string& name, CoreProcess *ref_prop, const std::string& path, djnn_dir_t dir = DJNN_IGNORE);

@@ -85,7 +85,6 @@ namespace djnn {
       IterAction (ParentProcess* parent, const std::string& name, CoreProcess *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       List* _list;
       RefProperty *_iter;
@@ -98,7 +97,6 @@ namespace djnn {
       ResetAction (ParentProcess* parent, const std::string& name, IntProperty *index);
       virtual ~ResetAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       IntProperty *_index;
     };

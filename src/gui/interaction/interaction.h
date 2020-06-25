@@ -108,7 +108,6 @@ namespace djnn {
         MoveTouchAction (ParentProcess* parent, const std::string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
         ~MoveTouchAction () {}
         void impl_activate () override;
-        void impl_deactivate () override {}
         TouchAlive * _ta;
       };
       friend class MoveTouchAction;
@@ -128,7 +127,6 @@ namespace djnn {
       ScaleRotateTranslateAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
-      void impl_deactivate () override {};
     };
     class AddTouchAction : public Action
     {
@@ -136,7 +134,6 @@ namespace djnn {
       AddTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
-      void impl_deactivate () override {};
     };
 
     class RemoveTouchAction : public Action
@@ -145,7 +142,6 @@ namespace djnn {
       RemoveTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
-      void impl_deactivate () override {};
     };
 
     /*class MoveTouchAction : public Action
@@ -154,7 +150,6 @@ namespace djnn {
       MoveTouchAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~MoveTouchAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {};
     };*/
   public:
     ScaleRotateTranslate (ParentProcess* parent, const std::string& name, CoreProcess* shape, CoreProcess* matrix);

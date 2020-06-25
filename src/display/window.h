@@ -142,7 +142,6 @@ namespace djnn
       UpdateCursorAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {};
     };
    public:
     Cursor (ParentProcess* parent, const std::string& name, const std::string& path, int hotX, int hotY);

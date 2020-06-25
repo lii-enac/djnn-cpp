@@ -19,7 +19,6 @@ namespace djnn {
 	      TakeoffAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~TakeoffAction () {}
 	      void impl_activate () override { ((CrazyflieRC*)get_parent())->takeoff (); }
-	      void impl_deactivate () override {}
 	    };
 
 	    class LandAction : public Action
@@ -28,7 +27,6 @@ namespace djnn {
 	      LandAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {};
 	      virtual ~LandAction () {}
 	      void impl_activate () override { ((CrazyflieRC*)get_parent())->land (); }
-	      void impl_deactivate () override {}
 	    };
 
 	protected:

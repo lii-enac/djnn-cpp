@@ -49,7 +49,6 @@ namespace djnn
       virtual ~StepAction () {}
     private:
       void impl_activate () override;
-      void impl_deactivate () override {};
     };
 
   public:
@@ -80,14 +79,12 @@ namespace djnn
           D3PhyObjUpdatePosition (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
-          void impl_deactivate () override {}
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
           D3PhyObjUpdateVelocity (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
-          void impl_deactivate () override {}
         };
   public:
     PhyObj (ParentProcess* parent, const std::string& name, double x, double y, double z, double mass);

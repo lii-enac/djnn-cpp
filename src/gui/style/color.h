@@ -29,7 +29,6 @@ namespace djnn
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
       }
-      void impl_deactivate () override {}
     };
     class ToRGBAction : public Action {
     public:
@@ -38,7 +37,6 @@ namespace djnn
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
       }
-      void impl_deactivate () override {}
     };
   public:
     AbstractColor (ParentProcess* parent, const std::string& name, int r, int g, int b);

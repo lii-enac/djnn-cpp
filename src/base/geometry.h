@@ -36,7 +36,6 @@ namespace djnn
                           AbstractProperty *output);
       virtual ~HermiteCurveAction () {}
       void impl_activate () override;
-      void impl_deactivate () override {}
     private:
       AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };

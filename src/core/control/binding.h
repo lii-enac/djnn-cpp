@@ -30,15 +30,6 @@ namespace djnn {
       BindingAction (ParentProcess* parent, const std::string& name, bool activate);
       virtual ~BindingAction () {};
       void impl_activate () override { ((Binding*)get_parent ()) -> perform_action (get_binding_action()); }
-      /*void impl_activate () override {
-      	((SimpleBinding*)get_parent ())->get_dst()->set_activation_source (((SimpleBinding*)get_parent ())->get_src());
-        if (get_binding_action()) {
-          ((SimpleBinding*)get_parent ())->get_dst()->activate ();
-        }
-        else
-          ((SimpleBinding*)get_parent ())->get_dst()->deactivate ();
-      }
-      void impl_deactivate () override {}*/
 
     private:
       
