@@ -7,7 +7,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added
     - Update the Docs !
-    - Update and improvement on memory performance.
+
+## [1.12.0] - 2020-06-25
+
+### NEW
+    - Main NEWS: General improvement of all the code by separation of Process's code into 3 kind of processes.
+     A lot of change has been made for this and really detailed explanation will be useless. 
+     We'll just point API change if necessary. For now, Process is used as CoreProcess.
+
+    - NEW rtmidi in comms module
+    - NEW able to generate .deb package for ubuntu/debian
+    - NEW NativeAsyncAction component: Natives Action asynchronous
+    - NEW process handler : new components designed to ease process management : ProcessDeleter , CollectionDeleter, CollectionActivator, ProcessCollector
+
+
+### Added
+    - Added in debug.h several options to displau debug informations  :
+        - _DEBUG_SEE_COLOR_PICKING_VIEW: to view picking view debug
+        - _DEBUG_SEE_GUI_INFO_PREF: to view time informations on display
+        - _DEBUG_SEE_GRAPH_INFO_PREF: to view time information on graph execution
+        - _DEBUG_SEE_CREATION_DESTRUCTION_ORDER: to display order component creatation
+        - _DEBUG_SEE_ACTIVATION_SEQUENCE: to display activation/deactivation sequence per graph execution.
+    - Added method get_pixel () on Qt backend. 
+    - Managed state dependency in synchronizer
+    - Added missing edges into fsm code.
+    - Added press and move methods on Graphical object
+
+
+### Changed
+    - Picking now call press and move methods on graphical objects.
+    - Spike, action, incr, assignment, properties, assignmentsequence, list, set components now use post_activation_auto_deactivation
+    - Improved code optimisaton
+
+### Removed
+    - Removed useless function redefinition.
+
+### Fixed
+    - Fixed the activation coupling if the coupling is created in find_child method
+    - Fixed coverage test
+    - Fixed compilation on window : mingw64
+    - Fixed ref_property get_double () function
+
 
 ## [1.11.0] - 2020-05-07
 
