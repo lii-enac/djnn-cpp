@@ -31,10 +31,6 @@ namespace djnn {
       SwitchAction (Switch * parent, const std::string& name);
       virtual ~SwitchAction () {};
       void impl_activate () override { _sw->change_branch(); };
-      void impl_deactivate () override {};
-#ifndef DJNN_NO_SERIALIZE
-      void serialize (const std::string& type) override {};
-#endif
     private:
       Switch* _sw;
     };
