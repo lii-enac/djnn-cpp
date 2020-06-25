@@ -16,7 +16,8 @@ $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-pars
 
 # for initial make -j
 # find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
-#$(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
+$(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
+$(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
 
 ifeq ($(os),Linux)
 YACC = bison -d
