@@ -170,7 +170,8 @@ namespace djnn
     if( name=="data" && _watcher == nullptr) {
       _watcher = new DataImageWatcher (this);
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
-      _cwatcher->disable ();
+      if (!somehow_activating())
+        _cwatcher->disable ();
       Graph::instance ().add_edge (res, _watcher);
     }
 

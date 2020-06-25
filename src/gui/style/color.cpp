@@ -417,6 +417,8 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
       _c_rv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
+      if (!somehow_activating())
+        _c_rv->disable ();
     } else
     if(name=="g") {
       coupling=&_cg;
@@ -425,6 +427,8 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
       _c_gv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
+      if (!somehow_activating())
+        _c_gv->disable ();
     } else
     if(name=="b") {
       coupling=&_cb;
@@ -433,6 +437,8 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       Graph::instance ().add_edge (res, &_toValue);
       _c_bv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
+      if (!somehow_activating())
+        _c_bv->disable ();
     } else
     if(name=="value") {
       coupling=&_cv;
@@ -441,6 +447,8 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
       //_c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, nullptr, true);
       _c_vrgb = new CouplingWithData (res, ACTIVATION, &_toRGB, ACTIVATION, true);
+      if (!somehow_activating())
+        _c_vrgb->disable ();
     } else
     return nullptr;
     

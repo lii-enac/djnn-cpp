@@ -175,12 +175,18 @@ namespace djnn
     else if (name == "hotX") {
       res = new IntPropertyProxy (this, "hotX", raw_props.hot_x);
       _c_x = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+      if (!somehow_activating())
+        _c_x->disable ();
     } else if (name == "hotY") {
       res = new IntPropertyProxy (this, "hotY", raw_props.hot_y);
       _c_y = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+      if (!somehow_activating())
+        _c_y->disable ();
     } else if (name == "path") {
       res = new TextPropertyProxy (this, "path", raw_props.path);
       _c_path = new Coupling (res, ACTIVATION, _action, ACTIVATION);
+      if (!somehow_activating())
+        _c_path->disable ();
     }
     return res;
   }
