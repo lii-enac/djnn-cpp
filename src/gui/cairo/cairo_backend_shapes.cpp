@@ -462,14 +462,14 @@ namespace djnn
 
     #if CACHE_GEOMETRY
     if(test_cache(s)) {
-      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->ordered_children ()[0];
       build_cache (s,
         [&](bounding_box& bbox) {
           double minx = first_pt->x ()->get_value ();
           double miny = first_pt->y ()->get_value ();
           double maxx = minx;
           double maxy = maxy;
-          for (auto pt : ((Container*) s->points ())->children ()) {
+          for (auto pt : ((Container*) s->points ())->ordered_children ()) {
             double x = ((PolyPoint*) pt)->x ()->get_value ();
             double y = ((PolyPoint*) pt)->y ()->get_value ();
             if (x < minx)
@@ -496,7 +496,7 @@ namespace djnn
     }
     draw_cache(s);
     #else
-    PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
+    PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->ordered_children ()[0];
     double init_x = first_pt->x ()->get_value ();
     double init_y = first_pt->y ()->get_value ();
     cairo_move_to (cur_cairo_state, init_x, init_y);
@@ -514,10 +514,10 @@ namespace djnn
     #endif
     
     if (is_in_picking_view (s)) {
-      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->children ()[0];
+      PolyPoint* first_pt = (PolyPoint*) ((Container*) s->points ())->ordered_children ()[0];
       cairo_move_to (cur_cairo_picking_state, first_pt->x ()->get_value (), first_pt->y ()->get_value ());
-      for (int i = 1; i < ((Container*) s->points ())->children ().size (); ++i) {
-        PolyPoint* polypoint = (PolyPoint*) ((Container*) s->points ())->children ()[i];
+      for (int i = 1; i < ((Container*) s->points ())->ordered_children ().size (); ++i) {
+        PolyPoint* polypoint = (PolyPoint*) ((Container*) s->points ())->ordered_children ()[i];
         cairo_line_to (cur_cairo_picking_state, polypoint->x ()->get_value (), polypoint->y ()->get_value ());
       }
       if (s->closed ())
