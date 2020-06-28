@@ -78,9 +78,8 @@ namespace djnn
       }
       return;
     }
-    children_t::iterator it;
     if (spec.compare ("<") == 0) {
-      it = _children.begin ();
+      auto it = _children.begin ();
       it = _children.insert (it, c);
       finalize_child_insertion (c);
       index = 0;
@@ -92,7 +91,7 @@ namespace djnn
     try {
       index = std::stoi (spec.substr (1, string::npos)) - 1;
       if (spec.at (0) == '<') {
-        it = _children.begin () + index;
+        auto it = _children.begin () + index;
         it = _children.insert (it, c);
         finalize_child_insertion (c);
         for (auto s: structure_observer_list) {
@@ -100,7 +99,7 @@ namespace djnn
         }
         return;
       } else if (spec.at (0) == '>') {
-        it = _children.begin () + index + 1;
+        auto it = _children.begin () + index + 1;
         it = _children.insert (it, c);
         finalize_child_insertion (c);
         for (auto s: structure_observer_list) {
@@ -129,13 +128,13 @@ namespace djnn
   void
   AbstractList::remove_child (FatChildProcess* c)
   {
-    children_t::iterator newend = _children.end ();
+    auto newend = ordered_children ().end ();
     for (auto s: structure_observer_list) {
       s->remove_child_from_container (this, c);
     }
     /* remove if 'c' is found in the vector */
     newend = std::remove_if (_children.begin (), _children.end (), 
-        [c](children_t::iterator::value_type v) { return v == c; });
+        [c](ordered_children_t::iterator::value_type v) { return v == c; });
 
     /* check if end has changed and erase if necessary */
     if (newend != _children.end ()){
@@ -276,7 +275,7 @@ namespace djnn
   void
   ListIterator::impl_activate ()
   {
-    for (auto p : _list->children ()) {
+    for (auto p : _list->ordered_children ()) {
       _action->set_data (p);
       _action->activate ();
     }
@@ -306,12 +305,12 @@ namespace djnn
     int index = _index->get_value ();
     if (_forward) {
       if (_list->size () > index) {
-        _iter->set_value (_list->children ().at (index - 1), true);
+        _iter->set_value (_list->ordered_children ().at (index - 1), true);
         _index->set_value (index + 1, true);
       }
     } else {
       if (index >= 1) {
-        _iter->set_value (_list->children ().at (index - 1), true);
+        _iter->set_value (_list->ordered_children ().at (index - 1), true);
         _index->set_value (index - 1, true);
       }
     }

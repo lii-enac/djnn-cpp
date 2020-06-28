@@ -205,7 +205,7 @@ namespace djnn {
   Poly::clone ()
   {  
     Poly* newp = new Poly (nullptr, get_name (), _closed);
-    for (auto p: _points->children ()) {
+    for (auto p: _points->ordered_children ()) {
       newp->_points->add_child (p->clone (), "");
     }
     return newp;

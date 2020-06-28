@@ -85,8 +85,8 @@ namespace djnn
      * index is different from the current one.
      */
     unsigned int i = _sw->index ()->get_value ();
-    if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
-      auto * next = _sw->children ()[i - 1];
+    if ((i - 1) < _sw->ordered_children ().size () && (i - 1) >= 0) {
+      auto * next = _sw->ordered_children ()[i - 1];
       if (_sw->item () && _sw->item () != next) {
         _sw->item ()->deactivate ();
         _sw->set_item (next);

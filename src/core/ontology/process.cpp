@@ -54,10 +54,12 @@ namespace djnn
   CoreProcess::DebugInfo CoreProcess::_dbg_info{"no dbg info",0};
 #endif
 
-  string CoreProcess::default_name = "noname";
+                    string CoreProcess::default_name = "noname";
+  CoreProcess::couplings_t CoreProcess::default_couplings;
+  CoreProcess::symtable_t  CoreProcess::default_symtable;
+
   static map<const ChildProcess*, string> parentless_names;
 
-  CoreProcess::couplings_t CoreProcess::default_couplings;
 
   CoreProcess::CoreProcess (bool model)
   : 

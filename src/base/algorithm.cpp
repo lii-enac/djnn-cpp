@@ -90,7 +90,7 @@ namespace djnn
 
   AbstractProperty*
   Sorter::get_and_check (int i) {
-    Container::children_t children = _container->children ();
+    auto & children = _container->ordered_children ();
     AbstractProperty* p = dynamic_cast<AbstractProperty*>(children[i]->find_child (_spec.get_value()));
     if (p == nullptr) {
       error (this, "Unable to sort children: properties not found or with incorrect type");
@@ -145,7 +145,7 @@ namespace djnn
   {
     int n1 = q - p + 1, i , j ,k;
     int n2 = r - q;
-    Container::children_t children = _container->children ();
+    auto & children = _container->ordered_children ();
     FatProcess * L[n1];
     FatProcess * R[n2];
     for (i = 0; i < n1; i++)
@@ -154,7 +154,7 @@ namespace djnn
     }
     for (j = 0; j < n2; j++)
     {
-      R[j] = dynamic_cast<FatProcess*>(children [q+j+1]);
+      R[j] = dynamic_cast<FatProcess*>(children[q+j+1]);
     }
     i=0,j=0;
 
@@ -212,11 +212,11 @@ namespace djnn
   void
   Sorter::sort ()
   {
-    Container::children_t children = _container->children ();
+    auto & children = _container->ordered_children ();
     int sz = children.size ();
     if (sz == 0)
       return;
-    Container::children_t cpy (children);
+    Container::ordered_children_t cpy (children);
     AbstractProperty* p = get_and_check (dynamic_cast<FatProcess*>(children[0]));
     int type = p->get_prop_type ();
     switch (type)
@@ -341,7 +341,7 @@ namespace djnn
       delete c;
     }
     _coupling_list.clear ();
-    for (auto c: _container->children ()) {
+    for (auto c: _container->ordered_children ()) {
       AbstractProperty *s = dynamic_cast<AbstractProperty*> (c->find_child (_spec.get_value ()));
       if (s == nullptr) {
         warning (this, "Wrong property in ListOperator " + get_name ());
@@ -358,7 +358,7 @@ namespace djnn
   SumList::do_action ()
   {
     double sum = 0;
-    for (auto c: _container->children ()) {
+    for (auto c: _container->ordered_children ()) {
       sum += ((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (sum, true);
@@ -386,7 +386,7 @@ namespace djnn
   ProductList::do_action ()
   {
     double product = 0;
-    for (auto c: _container->children ()) {
+    for (auto c: _container->ordered_children ()) {
       product *= ((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (product, true);
@@ -414,7 +414,7 @@ namespace djnn
   MaxList::do_action ()
   {
     double vmax = 0;
-    for (auto c: _container->children ()) {
+    for (auto c: _container->ordered_children ()) {
       vmax = std::max (((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
@@ -442,7 +442,7 @@ namespace djnn
   MinList::do_action ()
   {
     double vmin = 0;
-    for (auto c: _container->children ()) {
+    for (auto c: _container->ordered_children ()) {
       vmin = std::min (((AbstractProperty*)(c->find_child (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);

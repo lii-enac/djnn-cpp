@@ -244,6 +244,10 @@ namespace djnn {
     virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
     virtual size_t children_size () const { return 0; }
     virtual void add_symbol (const std::string& name, FatChildProcess* c) {}
+
+    typedef std::map<std::string, FatChildProcess*> symtable_t;
+    static symtable_t default_symtable;
+    virtual const symtable_t& children () const { return default_symtable; }
     
     virtual void     set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
@@ -315,13 +319,13 @@ namespace djnn {
     virtual const std::string& find_child_name (const CoreProcess* child) const override; // WARNING : low efficiency function cause by linear search. use with care !
 
     // symbol and children-related methods only used in FatProcess
-    typedef std::map<std::string, FatChildProcess*> symtable_t;
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
     symtable_t::iterator children_end () { return _symtable.end (); }
     bool children_empty () { return _symtable.empty (); }
     size_t children_size () const override { return _symtable.size(); }
+    
     symtable_t& children () { return _symtable; }
-    const symtable_t& children () const { return _symtable; } 
+    const symtable_t& children () const override { return _symtable; }
     
     virtual void add_symbol (const std::string& name, FatChildProcess* c) override;
     void      remove_symbol (const std::string& name);

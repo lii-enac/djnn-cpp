@@ -67,7 +67,8 @@ namespace djnn
     for (auto child: fp->children ()) depth_first_traverse(child.second, f);
   }
 
-  /*
+
+ /*
   inline
   void
   depth_first_traverse(CoreProcess *p, std::function<void(CoreProcess*)> f)
@@ -78,7 +79,7 @@ namespace djnn
   }
   */
 
-  void run_stats(FatProcess *p);
+  void run_stats(CoreProcess *p);
 
   void display_creation_stats ();
 

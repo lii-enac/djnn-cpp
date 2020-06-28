@@ -688,7 +688,7 @@ namespace djnn
   Path::clone ()
   {
     Path* clone = new Path (nullptr, get_name ());
-    for (auto p: _items->children ()) {
+    for (auto p: _items->ordered_children ()) {
       clone->items ()->add_child (p->clone (), "");
     }
     return clone;
@@ -707,7 +707,7 @@ namespace djnn
   PathClip::clone ()
   {
     PathClip* clone = new PathClip (nullptr, get_name ());
-    for (auto p: _items->children ()) {
+    for (auto p: _items->ordered_children ()) {
       clone->items ()->add_child (p->clone (), "");
     }
     return clone;

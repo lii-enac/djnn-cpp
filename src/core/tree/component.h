@@ -23,7 +23,7 @@ namespace djnn {
 
   typedef std::map<std::string, FatChildProcess*> context_t;
   public:
-    typedef std::vector<FatChildProcess*> children_t;
+    typedef std::vector<FatChildProcess*> ordered_children_t;
     Container (ParentProcess* parent, const std::string& name);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void add_child (FatChildProcess* c, const std::string& name) override;
@@ -43,7 +43,7 @@ namespace djnn {
     void print_children ();
     void clean_up_content ();
     virtual ~Container ();
-    children_t children () { return _children; }
+    const ordered_children_t& ordered_children () const { return _children; }
     void
     add_to_context (const std::string& k, FatChildProcess *v)
     {
@@ -64,7 +64,7 @@ namespace djnn {
       }
     }
   protected:
-    children_t _children;
+    ordered_children_t _children;
     context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!!
   };
 

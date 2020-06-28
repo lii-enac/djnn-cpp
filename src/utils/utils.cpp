@@ -53,10 +53,10 @@ namespace djnn
 
 
   void
-  run_stats(FatProcess *p)
+  run_stats(CoreProcess *p)
   {
   	int i=0;
-    depth_first_traverse(p, [&i](FatProcess* p){++i;});
+    depth_first_traverse(p, [&i](CoreProcess* p){++i;});
     std::cerr << std::endl << "count items: " << i << std::endl;
 
     std::map<std::string,int> num_by_type;
@@ -64,7 +64,7 @@ namespace djnn
     int num_one_coupling=0;
     int num_more_than_one_coupling=0;
     int size=0;
-    depth_first_traverse(p, [&](FatProcess* p) -> void {
+    depth_first_traverse(p, [&](CoreProcess* p) -> void {
         ++num_by_type[boost::core::demangle(typeid(*p).name())];
         num_no_coupling += !p->has_coupling();
         num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;

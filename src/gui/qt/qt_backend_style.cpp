@@ -222,10 +222,10 @@ namespace djnn
     cur_gradient->setCoordinateMode (coordMode[g->coords ()->get_value ()]);
     cur_gradient->setSpread (spreadMethod[g->spread ()->get_value ()]);
     _context_manager->get_current ()->gradientTransform = QTransform ();
-    for (auto s: g->stops ()->children()) {
+    for (auto s: g->stops ()->ordered_children()) {
       s->draw ();
     }
-    for (auto t: g->transforms ()->children()) {
+    for (auto t: g->transforms ()->ordered_children()) {
       t->draw ();
     }
     QBrush brush (*cur_gradient);
