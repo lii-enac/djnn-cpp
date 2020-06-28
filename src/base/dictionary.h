@@ -54,11 +54,11 @@ namespace djnn {
     virtual ~Dictionary ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void add_entry (FatProcess* key, FatProcess *value);
-    FatProcess* get_value (FatProcess* key);
-    void del_entry (FatProcess* key);
+    void add_entry (CoreProcess* key, CoreProcess *value);
+    CoreProcess* get_value (CoreProcess* key);
+    void del_entry (CoreProcess* key);
     void set_value (CoreProcess* value) { _value.set_value (value, true); }
-    typedef std::map<FatProcess*,FatProcess*> map_t; 
+    typedef std::map<CoreProcess*,CoreProcess*> map_t; 
     map_t& get_map () { return _map; }
     RefProperty* key () { return &_key; }
     RefProperty* value () { return &_value; }

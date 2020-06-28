@@ -191,7 +191,8 @@ namespace djnn
   Vertex::print_vertex () const
   {
 #ifndef DJNN_NO_DEBUG
-    auto * pp = dynamic_cast<FatProcess*>(_process);
+    //auto * pp = dynamic_cast<FatProcess*>(_process);
+    auto * pp = _process;
     std::cout << "vertex (" <<
     boost::core::demangle(typeid(*pp).name()) << ":" << 
     ( pp && pp->get_debug_parent () ? pp->get_debug_parent ()->get_debug_name () + "/" : "") <<
@@ -203,7 +204,8 @@ namespace djnn
     else {
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
-         auto * ppe = dynamic_cast<FatProcess*>(e->_process);
+         //auto * ppe = dynamic_cast<FatProcess*>(e->_process);
+         auto * ppe = e->_process;
          if (ppe) {
           std::cout << boost::core::demangle(typeid(*ppe).name()) << ":" << 
           ( ppe->get_debug_parent () ?  ppe->get_debug_parent ()->get_debug_name () + "/" : "" ) << ppe->get_debug_name () << " [x"
@@ -243,7 +245,7 @@ namespace djnn
   Graph::clear ()
   {
     /* nothing to delete because vertices are own by _vertices. */
-    _sorted_vertices.clear ();
+    _activation_vector.clear ();
 
     /* delete vertices from _vertices and clear.*/
     for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
@@ -343,8 +345,10 @@ namespace djnn
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
 
 #ifndef DJNN_NO_DEBUG
-      auto * ppsrc = dynamic_cast<FatProcess*>(p_src); 
-      auto * ppdst = dynamic_cast<FatProcess*>(p_dst);
+      //auto * ppsrc = dynamic_cast<FatProcess*>(p_src);
+      auto * ppsrc = p_src;
+      //auto * ppdst = dynamic_cast<FatProcess*>(p_dst);
+      auto * ppdst = p_dst;
       std::cerr << "Graph remove_edge: " << boost::core::demangle(typeid(*p_src).name()) + ":" + 
       (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << boost::core::demangle(typeid(*p_dst).name()) + ":" +
       (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
@@ -393,11 +397,12 @@ namespace djnn
   Graph::print_sorted () const
   {
 #ifndef DJNN_NO_DEBUG
-    for (auto v : _sorted_vertices) {
-      auto * pp = dynamic_cast<FatProcess*>(v->get_process ());
-      if (pp && pp->get_parent())
-        cerr << pp->get_parent()->get_name () << "/";
-      cerr << pp->get_name () << " (" << v->get_timestamp () << ")\n";
+    for (auto v : _activation_vector) {
+      //auto * pp = dynamic_cast<FatProcess*>(v->get_process ());
+      auto * pp = v->get_process ();
+      if (pp && pp->get_debug_parent())
+        cerr << pp->get_debug_parent()->get_debug_name () << "/";
+      cerr << pp->get_debug_name () << " (" << v->get_timestamp () << ")\n";
     }
 #endif
   }
@@ -427,7 +432,7 @@ namespace djnn
 //     || (v->get_count_edges_in () > 1)
 // #endif
     )
-      _sorted_vertices.push_back (v);
+      _activation_vector.push_back (v);
 
     v->set_mark (BROWSING);
 
@@ -458,7 +463,7 @@ namespace djnn
     _t1 ();
     #endif
     _cur_date = 0;
-    _sorted_vertices.clear ();
+    _activation_vector.clear ();
     //warning(nullptr, std::string("num vertices: ")+__to_string(_vertices.size()));
 
     // set every vertex as NOT_MARKED before sorting them
@@ -472,10 +477,10 @@ namespace djnn
     }
 
     // sort
-    std::sort (_sorted_vertices.begin (), _sorted_vertices.end (), cmp_vertices);
+    std::sort (_activation_vector.begin (), _activation_vector.end (), cmp_vertices);
 
     // append ouptut nodes
-    _sorted_vertices.insert (_sorted_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
+    _activation_vector.insert (_activation_vector.end (), _output_nodes.begin (), _output_nodes.end ());
 
     _sorted = true;
 
@@ -520,7 +525,7 @@ namespace djnn
     bool is_end = false;
     while (!is_end) {
       is_end = true;
-      for (auto v : _sorted_vertices) {
+      for (auto v : _activation_vector) {
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
         auto * p = v->get_process ();

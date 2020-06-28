@@ -97,10 +97,10 @@ namespace djnn
   }
 #endif
 
-  FSMTransition::Init::Init (FSMTransition* t, ParentProcess* p, 
+  FSMTransition::Init::Init (FSMTransition* t, ParentProcess* parent, 
                             const std::string& tspec, const std::string& aspec) 
   {
-    FSM *fsm = dynamic_cast<FSM*> (p);
+    FSM *fsm = dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
       warning (t, "only a FSM can be the parent of a FSM Transition\n");
       return;
@@ -126,8 +126,9 @@ namespace djnn
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger( dynamic_cast<FatProcess*>(trigger) ? dynamic_cast<FatProcess*>(trigger->find_child (tspec)) : nullptr),
-  _action( action ? dynamic_cast<FatProcess*>(action->find_child (aspec)) : nullptr),
+  //_trigger( dynamic_cast<FatProcess*>(trigger) ? dynamic_cast<FatProcess*>(trigger->find_child (tspec)) : nullptr),
+  _trigger(trigger ? trigger->find_child (tspec) : nullptr),
+  _action(action ? action->find_child (aspec) : nullptr),
   _init(this, parent, tspec, aspec),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
@@ -146,7 +147,8 @@ namespace djnn
   : FatProcess (name),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
-  _trigger (dynamic_cast<FatProcess*>(trigger)),
+  //_trigger (dynamic_cast<FatProcess*>(trigger)),
+  _trigger (trigger),
   _action (action),
   _init(this, parent, "NO spec for trigger", "NO spec for action"),
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),

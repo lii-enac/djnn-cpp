@@ -96,7 +96,7 @@ namespace djnn
 #endif
     private:
       Spike _activation;
-      FatProcess *_src;
+      CoreProcess *_src;
       Coupling _cdst_to_src;
   };
 

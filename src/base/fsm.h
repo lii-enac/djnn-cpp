@@ -84,7 +84,7 @@ namespace djnn {
   private:
     void init_FSMTransition ();
     FSMState* _from_state, *_to_state;
-    FatProcess *_trigger;
+    CoreProcess *_trigger;
     CoreProcess *_action;
     Init _init;
     FSMTransitionAction _fsm_action;

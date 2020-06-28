@@ -16,6 +16,7 @@
 
 #include "core/serializer/serializer.h"
 #include "core/execution/graph.h"
+#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
 namespace djnn
@@ -33,7 +34,7 @@ namespace djnn
   _dir (dir),
   _propagating (false)
   {
-    _ref = dynamic_cast<RefProperty*> (ref);
+    _ref = djnn_dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
       warning (this, "Deref is only applicable to RefProperty");
       return;
@@ -73,8 +74,7 @@ namespace djnn
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
         Graph::instance().add_edge (&_set, src);
       }
-      auto * fpsrc = dynamic_cast<FatProcess*>(src);
-      change_src (fpsrc);
+      change_src (src);
     }
   }
 
@@ -138,7 +138,7 @@ namespace djnn
   void
   Deref::change_src (CoreProcess *src)
   {
-    _src = dynamic_cast<FatProcess*>(src);
+    _src = src;
   }
 
   DerefString::DerefString (ParentProcess* parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
@@ -181,7 +181,7 @@ namespace djnn
   void
   DerefString::change_src (CoreProcess *src)
   {
-    _src = dynamic_cast<AbstractProperty*> (src);
+    _src = djnn_dynamic_cast<AbstractProperty*> (src);
     if (_src) {
       if (_dir == DJNN_GET_ON_CHANGE)
         get ();

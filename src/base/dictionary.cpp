@@ -22,7 +22,7 @@ namespace djnn
   Dictionary::FindAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
+    auto * key = d->key ()->get_value ();
     auto & map = d->get_map ();
     auto it = map.find (key);
     if (it != map.end()) {
@@ -36,7 +36,7 @@ namespace djnn
   Dictionary::DelEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
+    auto * key = d->key ()->get_value ();
     auto & map = d->get_map ();
     auto it = map.find (key);
     if (it != map.end()) {
@@ -51,8 +51,8 @@ namespace djnn
   Dictionary::AddEntryAction::impl_activate ()
   {
     Dictionary* d = (Dictionary*)get_parent ();
-    auto * key = dynamic_cast<FatProcess*>(d->key ()->get_value ());
-    auto * value = dynamic_cast<FatProcess*>(d->value ()->get_value ());
+    auto * key = d->key ()->get_value ();
+    auto * value = d->value ()->get_value ();
     d->get_map ()[key] = value;
   }
 
@@ -93,13 +93,13 @@ namespace djnn
     _c_find.disable ();
   }
   void
-  Dictionary::add_entry (FatProcess* key, FatProcess *value)
+  Dictionary::add_entry (CoreProcess* key, CoreProcess *value)
   {
     _map[key] = value;
   }
 
-  FatProcess*
-  Dictionary::get_value (FatProcess* key)
+  CoreProcess*
+  Dictionary::get_value (CoreProcess* key)
   {
     auto it = _map.find (key);
     if (it != _map.end()) {
@@ -109,7 +109,7 @@ namespace djnn
   }
 
   void
-  Dictionary::del_entry (FatProcess* key)
+  Dictionary::del_entry (CoreProcess* key)
   {
     auto it = _map.find (key);
     if (it != _map.end()) {

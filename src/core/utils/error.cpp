@@ -46,8 +46,9 @@ namespace djnn
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       std::cerr << ctxinfo << ":";
-    FatProcess * pp = dynamic_cast<FatProcess*>(p);
-    std::cerr << "djnn - ERROR: " << (pp ? pp->get_name () : "") << " - " << msg;
+    //FatProcess * pp = dynamic_cast<FatProcess*>(p);
+    auto * pp = p;
+    std::cerr << "djnn - ERROR: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     
     std::cerr << std::endl << std::endl;
     
@@ -77,8 +78,9 @@ namespace djnn
       out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       out << ctxinfo << ":";
-    FatProcess * pp = dynamic_cast<FatProcess*>(p);
-    out << "djnn - WARNING: " << (pp ? pp->get_name () : "") << " - " << msg;
+    //FatProcess * pp = dynamic_cast<FatProcess*>(p);
+    auto * pp = p;
+    out << "djnn - WARNING: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     out << std::endl << std::endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
