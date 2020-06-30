@@ -70,7 +70,7 @@ namespace djnn {
   }
 
   void
-  SimplePausedConnector::serialize (const std::string& format)
+  PausedConnector::serialize (const std::string& format)
   {
     string buf;
 

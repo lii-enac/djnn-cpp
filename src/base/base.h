@@ -40,8 +40,4 @@ namespace djnn {
 	extern std::vector<std::string> loadedModules; 
 
 	void init_base ();
-
-    using Connector = Connector;
-    using PausedConnector = SimplePausedConnector;
-
 }

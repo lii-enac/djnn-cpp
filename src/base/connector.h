@@ -123,10 +123,10 @@ public:
 #endif
   };
 
-  class SimplePausedConnector : public FatProcess
+  class PausedConnector : public FatProcess
   {
   public:
-    SimplePausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    PausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
@@ -137,10 +137,10 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimplePausedConnector (ParentProcess* parent, const std::string& name,
+    PausedConnector (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec)
-    : SimplePausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    : PausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))
     {}
 
     protected:

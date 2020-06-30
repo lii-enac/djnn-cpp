@@ -141,21 +141,21 @@ public:
 #endif
   };
 
-  class SimplePausedAssignment : public Assignment
+  class PausedAssignment : public Assignment
   {
   public:
-    SimplePausedAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    PausedAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : Assignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
     }
 
     // for legacy reason, to get rid of?
-    SimplePausedAssignment (ParentProcess* parent, const std::string& name,
+    PausedAssignment (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)
-    : SimplePausedAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    : PausedAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
     {}
   };
 
