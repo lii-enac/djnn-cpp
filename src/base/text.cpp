@@ -255,6 +255,11 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), &_reg_action);
     Graph::instance ().remove_edge (&_input, &_reg_action);
+
+    for (auto p : _in_map){
+      Graph::instance ().remove_edge (&_reg_action, p.second);
+      delete p.second;
+    }
   }
 
 
@@ -276,6 +281,7 @@ namespace djnn
       else {
         /* key doesn't exist */
         TextProperty* newin = new TextProperty ( this, key, "");
+        Graph::instance ().add_edge (&_reg_action, newin);
         _in_map[i] = newin;
         return newin;
       }
