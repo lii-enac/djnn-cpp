@@ -44,7 +44,7 @@ namespace djnn {
     }
 
   protected:
-    void impl_activate   () override { _assignment.activate ();   _binding.activate ();   if (_copy_on_activation) _assignment.notify_activation (); }
+    void impl_activate   () override {  if (_copy_on_activation)  _assignment.activate ();   _binding.activate ();}
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
 
   private:
@@ -74,7 +74,7 @@ public:
     }
 
      protected:
-    void impl_activate   () override { _paused_assignment.activate ();   _binding.activate (); }
+    void impl_activate   () override { _paused_assignment.activate ();  _binding.activate (); }
     void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
 
   private:
@@ -110,7 +110,7 @@ public:
     {}
 
   protected:
-    void impl_activate   () override { _assignment.activate ();   _binding.activate ();   if (_copy_on_activation) _assignment.notify_activation (); }
+    void impl_activate   () override { if (_copy_on_activation) _assignment.activate (); _binding.activate ();}
     void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
 
   private:
@@ -126,10 +126,11 @@ public:
   class SimplePausedConnector : public FatProcess
   {
   public:
-    SimplePausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    SimplePausedConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
+    , _copy_on_activation (copy_on_activation)
     {
       // no need to add edge to graph, assignment already did it
       finalize_construction (parent, name);
@@ -143,12 +144,13 @@ public:
     {}
 
     protected:
-    void impl_activate   () override { _paused_assignment.activate ();  _binding.activate (); }
+    void impl_activate   () override { if (_copy_on_activation)  _paused_assignment.activate ();  _binding.activate ();}
     void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
 
   private:
     CorePausedAssignment _paused_assignment;
     CoreBinding _binding;
+    bool _copy_on_activation;
 public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
