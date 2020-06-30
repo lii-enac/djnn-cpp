@@ -25,8 +25,7 @@
 #include <boost/core/demangle.hpp>
 #include "core/control/binding.h"
 #include "core/control/native_expression_action.h"
-//#include "base/connector.h"
-#include "base/simple_connector.h"
+#include "base/connector.h"
 #include "base/switch.h"
 #include "base/fsm.h"
 #include "gui/shapes/abstract_gshape.h"

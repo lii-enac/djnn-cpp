@@ -40,7 +40,7 @@ namespace djnn
     _tc = new TextCatenator (this, "catenator");
     _tp = new TextPrinter (this, "printer");
     //_c = new Connector (this, "logprinter_connector", _tc, "output", _tp, "input", false);
-    _c = new SimpleConnector (this, "logprinter_connector", _tc->find_child("output"), _tp->find_child("input"), false);
+    _c = new Connector (this, "logprinter_connector", _tc->find_child("output"), _tp->find_child("input"), false);
     alias (this, "label", _tc->find_child("head"));
     alias (this, "input", _tc->find_child("tail"));
     ((TextProperty*)this->find_child ("label"))->set_value (label, false);

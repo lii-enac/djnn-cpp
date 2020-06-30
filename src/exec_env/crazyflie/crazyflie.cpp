@@ -137,8 +137,8 @@ void operator delete(void *p) _GLIBCXX_USE_NOEXCEPT
 #include <sstream>
 
 #include "core/tree/int_property.h"
-#include "core/control/simple_binding.h"
-// #include "core/control/simple_assignment.h"
+#include "core/control/binding.h"
+// #include "core/control/assignment.h"
 
 // crazyflie firmware
 //#include "utils/interface/debug.h"
@@ -220,8 +220,8 @@ namespace djnn {
 			*/
 			IntProperty ii(nullptr, "", i); // works
 			IntProperty j(nullptr, "", 2); // works
-			SimpleBinding a(nullptr, "", &ii, &j); // works
-			//SimpleAssignment a(nullptr, "", &i, &j, true);
+			Binding a(nullptr, "", &ii, &j); // works
+			//Assignment a(nullptr, "", &i, &j, true);
 			//i.set_parent(nullptr);
 			ii.is_activated (); // works
 			ii.get_process_type (); // works

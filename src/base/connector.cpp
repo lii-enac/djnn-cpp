@@ -1,4 +1,4 @@
-#include "simple_connector.h"
+#include "connector.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
 #include "core/serializer/serializer.h"
@@ -50,13 +50,13 @@ namespace djnn {
   }
 
   void
-  SimpleConnector::serialize (const std::string& format)
+  Connector::serialize (const std::string& format)
   {
     string buf;
 
     AbstractSerializer::pre_serialize (this, format);
 
-    AbstractSerializer::serializer->start ("base:simpleconnector");
+    AbstractSerializer::serializer->start ("base:Connector");
     AbstractSerializer::serializer->text_attribute ("id", get_name ()); // FatProcess
     //AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
     AbstractSerializer::compute_path (get_parent (), _binding.get_src (), buf);
@@ -76,7 +76,7 @@ namespace djnn {
 
     AbstractSerializer::pre_serialize (this, format);
 
-    AbstractSerializer::serializer->start ("base:simpleconnector");
+    AbstractSerializer::serializer->start ("base:Connector");
     AbstractSerializer::serializer->text_attribute ("id", get_name ()); // FatProcess
     //AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
     AbstractSerializer::compute_path (get_parent (), _binding.get_src (), buf);

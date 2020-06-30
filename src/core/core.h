@@ -19,16 +19,14 @@
 
 #include "ontology/process.h"
 #include "execution/graph.h"
-//#include "control/binding.h"
-#include "control/simple_binding.h"
+#include "control/binding.h"
 #include "control/activator.h"
 #include "control/synchronizer.h"
 #include "tree/component.h"
 #include "control/native_action.h"
 #include "control/native_expression_action.h"
 #include "tree/spike.h"
-//#include "control/assignment.h"
-#include "control/simple_assignment.h"
+#include "control/assignment.h"
 #include "tree/list.h"
 #include "xml/xml.h"
 #include "serializer/serializer.h"
@@ -61,8 +59,5 @@ namespace djnn {
   // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
   //using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
   using Process = CoreProcess;
-  using Binding = SimpleBinding;
-  using Assignment = SimpleAssignment;
-  using PausedAssignment = SimplePausedAssignment;
 
 }

@@ -19,8 +19,7 @@
 #include "geometry.h"
 #include "math_functions.h"
 #include "clock.h"
-//#include "connector.h"
-#include "simple_connector.h"
+#include "connector.h"
 #include "fsm.h"
 #include "switch.h"
 #include "text.h"
@@ -42,7 +41,7 @@ namespace djnn {
 
 	void init_base ();
 
-    using Connector = SimpleConnector;
+    using Connector = Connector;
     using PausedConnector = SimplePausedConnector;
 
 }

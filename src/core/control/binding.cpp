@@ -1,4 +1,4 @@
-#include "simple_binding.h"
+#include "binding.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
 #include "core/serializer/serializer.h"
@@ -10,7 +10,7 @@ namespace djnn {
   using std::string;
 
   void
-  SimpleBinding::set_parent (ParentProcess* parent)
+  Binding::set_parent (ParentProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     auto * dst = _b.get_dst ();
@@ -44,13 +44,13 @@ namespace djnn {
   }
 
   void
-  SimpleBinding::serialize (const std::string& format)
+  Binding::serialize (const std::string& format)
   {
     string buf;
   
     AbstractSerializer::pre_serialize (this, format);
 
-    AbstractSerializer::serializer->start ("core:simplebinding");
+    AbstractSerializer::serializer->start ("core:Binding");
     //AbstractSerializer::serializer->text_attribute ("id", get_name ()); // FatProcess
     AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
     AbstractSerializer::compute_path (CouplingProcess::get_parent (), _b.get_src (), buf);

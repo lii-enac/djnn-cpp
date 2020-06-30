@@ -19,7 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 
-#define DJNN_SIMPLE_BINDING_INCLUDED 1
+#define DJNN_binding_INCLUDED 1
 
 
 namespace djnn {
@@ -54,7 +54,7 @@ namespace djnn {
   protected:
     void impl_activate   () override { _c.enable  (); }
     void impl_deactivate () override { _c.disable (); }
-    friend class SimpleBinding; // access to impl_activate and impl_deactivate
+    friend class Binding; // access to impl_activate and impl_deactivate
 
   private:
     Coupling _c;
@@ -69,36 +69,36 @@ namespace djnn {
   // we could have used virtual inheritance, but thus forces qualification of activate(): too cumbersome
   // use composition instead, simpler, but we loose a few bytes 
 
-  class SimpleBinding : public FatProcess //, virtual CoreBinding 
+  class Binding : public FatProcess //, virtual CoreBinding 
   {
   public:
-    SimpleBinding (ParentProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    Binding (ParentProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : FatProcess (name), _b (src, src_flag, dst, dst_flag)
     {
       finalize_construction (parent, name);
     }
 
-    SimpleBinding (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
-    : SimpleBinding (parent, name, src, ACTIVATION, dst, ACTIVATION)
+    Binding (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    : Binding (parent, name, src, ACTIVATION, dst, ACTIVATION)
     {}
 
     // for legacy reason, to get rid of?
-    SimpleBinding (ParentProcess* parent, const std::string& name,
+    Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec)
-    : SimpleBinding (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    : Binding (parent, name, src->find_child (sspec), dst->find_child (dspec))
     {}
 
-    SimpleBinding (ParentProcess* parent, const std::string& name,
+    Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec, activation_flag_e src_flag,
                    CoreProcess* dst, const std::string& dspec, activation_flag_e dst_flag)
-    : SimpleBinding (parent, name, src->find_child (sspec), src_flag, dst->find_child (dspec), dst_flag)
+    : Binding (parent, name, src->find_child (sspec), src_flag, dst->find_child (dspec), dst_flag)
     {}
 
-    SimpleBinding (ParentProcess* parent, const std::string& name,
+    Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec, bool b_src_flag,
                    CoreProcess* dst, const std::string& dspec, bool b_dst_flag)
-    : SimpleBinding (parent, name, src->find_child (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
+    : Binding (parent, name, src->find_child (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
     {}
 
     void set_parent (ParentProcess* parent) override;

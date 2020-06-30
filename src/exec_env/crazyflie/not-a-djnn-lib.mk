@@ -85,7 +85,7 @@ crazyflie_objs +=
 
 # Assignment
 crazyflie_objs += \
-	src/core/control/action.o src/core/control/simple_assignment.o \
+	src/core/control/action.o src/core/control/assignment.o \
 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
 	src/core/tree/spike.o
 # spike : for bool

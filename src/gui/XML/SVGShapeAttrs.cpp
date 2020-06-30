@@ -247,8 +247,8 @@ static int ParseOpacity(FatProcess**e, const char* v) {
 	FatProcess *op = new DoubleProperty(*e, "opacity", alpha);
 	//new Connector (*e, "", op, "", c1, "a");
 	//new Connector (*e, "", op, "", c2, "a");
-	new SimpleConnector (*e, "", op, c1->find_child("a"));
-	new SimpleConnector (*e, "", op, c2->find_child("a"));
+	new Connector (*e, "", op, c1->find_child("a"));
+	new Connector (*e, "", op, c2->find_child("a"));
 
 	return 1;
 }

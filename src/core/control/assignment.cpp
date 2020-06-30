@@ -1,4 +1,4 @@
-#include "simple_assignment.h"
+#include "assignment.h"
 
 #include "core/tree/abstract_property.h"
 #include "core/tree/bool_property.h"
@@ -84,7 +84,7 @@ namespace djnn
   }
 
   void
-  SimpleAssignment::perform_action ()
+  Assignment::perform_action ()
   {
     djnn::perform_action (get_src (), get_dst (), _propagate);    
   }
@@ -112,13 +112,13 @@ namespace djnn
   }
 
   void
-  SimpleAssignment::serialize (const std::string& format)
+  Assignment::serialize (const std::string& format)
   {
     string buf;
 
     AbstractSerializer::pre_serialize (this, format);
 
-    AbstractSerializer::serializer->start ("core:simpleassignment");
+    AbstractSerializer::serializer->start ("core:Assignment");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::compute_path (get_parent (), get_src (), buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);

@@ -20,7 +20,7 @@
 #include "core/control/action.h"
 #include "core/execution/graph.h"
 
-#define DJNN_SIMPLE_ASSIGNMENT_INCLUDED 1
+#define DJNN_assignment_INCLUDED 1
 
 
 namespace djnn { 
@@ -84,7 +84,7 @@ public:
 
 
   // SimpleAssignement follows the process/action model
-  class SimpleAssignment : public FatProcess
+  class Assignment : public FatProcess
   {
     friend class AssignmentAction;
   private:
@@ -93,10 +93,10 @@ public:
     public:
       AssignmentAction (ParentProcess* parent, const std::string& name)
       : Action (parent, name) { finalize_construction (parent, name); }
-      void impl_activate () override { (static_cast<SimpleAssignment*>(get_parent ())) -> perform_action (); }
+      void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    SimpleAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    Assignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -108,14 +108,14 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimpleAssignment (ParentProcess* parent, const std::string& name,
+    Assignment (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)
-    : SimpleAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    : Assignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
     {}
 
-    virtual ~SimpleAssignment () {
+    virtual ~Assignment () {
       Graph::instance ().remove_edge (get_src(), get_dst());
     }
 
@@ -141,11 +141,11 @@ public:
 #endif
   };
 
-  class SimplePausedAssignment : public SimpleAssignment
+  class SimplePausedAssignment : public Assignment
   {
   public:
     SimplePausedAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
-    : SimpleAssignment (parent, name, src, dst, is_model)
+    : Assignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
     }

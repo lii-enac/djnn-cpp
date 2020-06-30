@@ -18,10 +18,10 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
-#include "core/control/simple_binding.h"
-#include "core/control/simple_assignment.h"
+#include "core/control/binding.h"
+#include "core/control/assignment.h"
 
-#define DJNN_SIMPLE_CONNECTOR_INCLUDED 1
+#define DJNN_connector_INCLUDED 1
 
 
 namespace djnn { 
@@ -88,10 +88,10 @@ public:
 
 
 
-  class SimpleConnector : public FatProcess
+  class Connector : public FatProcess
   {
   public:
-    SimpleConnector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    Connector (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _assignment (src, dst, false)
     , _binding (src, &_assignment)
@@ -102,11 +102,11 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    SimpleConnector (ParentProcess* parent, const std::string& name,
+    Connector (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool copy_on_activation=true)
-    : SimpleConnector (parent, name, src->find_child (sspec), dst->find_child (dspec), copy_on_activation)
+    : Connector (parent, name, src->find_child (sspec), dst->find_child (dspec), copy_on_activation)
     {}
 
   protected:
