@@ -28,7 +28,7 @@ namespace djnn {
   {
   public:
     CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    : _c (src, src_flag, dst, dst_flag, true) {
+    : _c (src, src_flag, dst, dst_flag, false) {
       _c.disable ();
       Graph::instance ().add_edge (src, dst);
     }
