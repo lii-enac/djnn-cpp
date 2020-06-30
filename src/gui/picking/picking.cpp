@@ -577,11 +577,6 @@ namespace djnn
     _win->wheel_dx ()->set_value (x, true);
     _win->wheel_dy ()->set_value (y, true);
     
-
-    /* reset for delta with no propagation */
-    _win->wheel_dx ()->set_value (0, false);
-    _win->wheel_dy ()->set_value (0, false);
-
     /* generic mouse setting */
     ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->dy ()->set_value (y, true);
@@ -590,10 +585,6 @@ namespace djnn
     if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() || ((GUIMouse*)GenericMouse)->dx ()->has_coupling() || ((GUIMouse*)GenericMouse)->dy ()->has_coupling()) {
       exec_ = true;
      }
-
-    /* reset for delta with no propagation */
-    ((GUIMouse*)GenericMouse)->dx ()->set_value (0, false);
-    ((GUIMouse*)GenericMouse)->dy ()->set_value (0, false);
 
     /* windows event schedule event After shape event*/
     _win->wheel ()->schedule_activation ();
