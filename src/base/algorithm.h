@@ -49,7 +49,7 @@ namespace djnn
     void merge (int p, int q, int r);
     bool compare (AbstractProperty* left, AbstractProperty* right);
     AbstractProperty* get_and_check (int i);
-    AbstractProperty* get_and_check (FatProcess* i);
+    AbstractProperty* get_and_check (CoreProcess* i);
   protected:
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;

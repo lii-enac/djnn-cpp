@@ -230,7 +230,7 @@ namespace djnn
   void
   DerefDouble::change_src (CoreProcess *src)
   {
-    _src = dynamic_cast<AbstractProperty*> (src);
+    _src = djnn_dynamic_cast<AbstractProperty*> (src);
     if (_src) {
       if (_dir == DJNN_GET_ON_CHANGE)
         get ();

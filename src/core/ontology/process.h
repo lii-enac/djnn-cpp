@@ -132,10 +132,10 @@ namespace djnn {
 
     public:
     // actions to be redefined by subclasses
-    virtual     void update_drawing () {}
-    virtual     void draw () {}
-    virtual     void pick () {}
-    virtual     AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
+    virtual void update_drawing () {}
+    virtual void draw () {}
+    virtual void pick () {}
+    virtual AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
 
   protected:
     virtual bool pre_activate ();
@@ -167,8 +167,6 @@ namespace djnn {
     virtual CoreProcess* state_dependency () { return nullptr; } // for control flow change and execution scheduling
     virtual void set_state_dependency (CoreProcess* s) {}
 
-    //static std::string default_name;
-    //virtual const std::string& get_name () const { return default_name; }
     const std::string& get_name (ParentProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
 
 #ifndef DJNN_NO_SERIALIZE
@@ -311,7 +309,6 @@ namespace djnn {
     virtual void   add_child (FatChildProcess* c, const std::string& name) override;
     virtual void   remove_child (FatChildProcess* c) override;
     virtual void   remove_child (const std::string& name) override;
-    //virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) override {} // ??
     friend  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2); // strange, only used in gradient...
     virtual FatChildProcess* find_child (const std::string&) override;
     virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
@@ -329,11 +326,6 @@ namespace djnn {
     
     virtual void add_symbol (const std::string& name, FatChildProcess* c) override;
     void      remove_symbol (const std::string& name);
-  
-  private:
-    
-    //symtable_t& symtable () { return _symtable; }
-    //const symtable_t& symtable () const override { return _symtable; }
 
   protected:
     virtual bool pre_activate () override;
@@ -348,10 +340,6 @@ namespace djnn {
     // data
     void     set_data (CoreProcess* data) override;
     CoreProcess* get_data () override;
-
-  private:
-    static long int _nb_anonymous;
-
 
   private:
     // >>instance fields start here

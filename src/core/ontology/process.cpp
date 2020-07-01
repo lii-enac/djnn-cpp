@@ -47,13 +47,9 @@ namespace djnn
   std::vector<string> __destruction_stat_order;
   long int __creation_num = 0;
 
-
-  long int FatProcess::_nb_anonymous = 0;
-
 #ifdef DJNN_NO_DEBUG
-  CoreProcess::DebugInfo CoreProcess::_dbg_info{"no dbg info",0};
+  CoreProcess::DebugInfo   CoreProcess::_dbg_info{"no dbg info",0};
 #endif
-
                     string CoreProcess::default_name = "noname";
   CoreProcess::couplings_t CoreProcess::default_couplings;
   CoreProcess::symtable_t  CoreProcess::default_symtable;
@@ -74,17 +70,44 @@ namespace djnn
     set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
   
-#ifndef DJNN_NO_DEBUG
+    #ifndef DJNN_NO_DEBUG
     if (Context::instance ()->line () != -1) {
       _dbg_info = {Context::instance ()->filename (), Context::instance ()->line ()};
     } else {
       _dbg_info = {"no dbg info",0};
     }
-#endif
+    #endif
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     __creation_stat_order.push_back (std::make_pair(this, __creation_num++));
     __position_in_creation = std::prev(__creation_stat_order.end ());
+    #endif
+  }
+
+  CoreProcess::~CoreProcess ()
+  {
+    /* note: 
+       this code is to prevent bugs 
+       this should NEVER happen
+       _vertex should be nullptr at this place
+       if not, something IS NOT deleted correctly
+    */
+    if (_vertex != nullptr) {
+      #ifndef DJNN_NO_DEBUG
+      auto * pp = this;
+      warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
+      for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
+      for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
+      #endif
+      _vertex->invalidate ();
+    }
+
+    #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
+       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
+
+    __destruction_stat_order.push_back (data_save);
+    __creation_stat_order.erase (__position_in_creation);
     #endif
   }
 
@@ -94,13 +117,23 @@ namespace djnn
     return parent->find_child_name(this);
   }
 
-#ifndef DJNN_NO_DEBUG
+  #ifndef DJNN_NO_DEBUG
   FatProcess*
   CoreProcess::get_debug_parent ()
   {
     return dynamic_cast<FatProcess*>(_debug_parent);
   }
-#endif
+  #endif
+
+  CouplingProcess::~CouplingProcess ()
+  {
+    for (auto * c : get_activation_couplings ()) {
+      c->about_to_delete_src ();
+    }
+    for (auto * c : get_deactivation_couplings ()) {
+      c->about_to_delete_src ();
+    }
+  }
 
   FatProcess::FatProcess (const std::string& name, bool model)
   : ChildProcess(model),
@@ -111,7 +144,16 @@ namespace djnn
     #endif
   }
 
+  FatProcess::~FatProcess ()
+  {
+    /* make sure everything is wiped out the symtable */
+    symtable ().clear ();
+  }
   void
+
+
+  // finalize_construction
+
   CoreProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     if (parent) {
@@ -143,62 +185,6 @@ namespace djnn
   FatProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
   {
     ChildProcess::finalize_construction (parent, name, state_dep);
-    /*if (parent) {
-      // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
-      if (state_dep == nullptr)
-        _state_dependency = parent->state_dependency ();
-      else
-        _state_dependency = state_dep;
-
-      parent->add_child (this, name);
-    } else {
-      parentless_names[this] = name;
-      if (state_dep != nullptr)
-        _state_dependency = state_dep;
-    }*/
-  }
-
-  CoreProcess::~CoreProcess ()
-  {
-    /* note: 
-       this code is to prevent bugs 
-       this should NEVER happen
-       _vertex should be nullptr at this place
-       if not, something IS NOT deleted correctly
-    */
-    if (_vertex != nullptr) {
-#ifndef DJNN_NO_DEBUG
-       auto * pp = this;
-       warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
-       for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
-       for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
-#endif
-       _vertex->invalidate ();
-    }
-
-#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
-       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
-
-    __destruction_stat_order.push_back (data_save);
-    __creation_stat_order.erase (__position_in_creation);
-#endif
-  }
-
-  CouplingProcess::~CouplingProcess ()
-  {
-    for (auto * c : get_activation_couplings ()) {
-      c->about_to_delete_src ();
-    }
-    for (auto * c : get_deactivation_couplings ()) {
-      c->about_to_delete_src ();
-    }
-  }
-
-  FatProcess::~FatProcess ()
-  {
-    /* make sure everything is wiped out the symtable */
-    symtable ().clear ();
   }
 
 
@@ -373,7 +359,7 @@ namespace djnn
     );
   }
 
-#ifndef DJNN_NO_DEBUG
+  #ifndef DJNN_NO_DEBUG
   void
   CoreProcess::set_vertex (Vertex *v) 
   { 
@@ -382,12 +368,7 @@ namespace djnn
     //print_set_vertex_err_msg (v);
     _vertex = v; 
   }
-  /*void
-  FatProcess::print_set_vertex_err_msg (Vertex* v)
-  {
-    
-  }*/
-#endif
+  #endif
 
 
   // tree, component, symtable
@@ -512,9 +493,7 @@ namespace djnn
   {
     // FIXME : low efficiency function cause by linear search. use with care !
 
-    symtable_t::const_iterator it;
-
-    for (it = symtable ().begin(); it != symtable ().end(); ++it)
+    for (auto it = symtable ().begin(); it != symtable ().end(); ++it)
     {
       if (it->second == symbol)
       {
@@ -523,9 +502,7 @@ namespace djnn
         return it->first;
       }
     }
-
-    //string key = "name_not_found";
-    //return key;
+  
     return default_name;
   }
 
@@ -541,7 +518,7 @@ namespace djnn
   void
   FatProcess::remove_symbol (const std::string& name)
   {
-    symtable_t::iterator it = find_child_iterator (name);
+    auto it = find_child_iterator (name);
     if (it != children_end ())
       symtable ().erase (it);
     else
@@ -589,16 +566,16 @@ namespace djnn
   {
     auto * x2 = p2->find_child (sy2);
     if (x2 == nullptr) {
-#ifndef DJNN_NO_DEBUG
+      #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy2 << endl;
-#endif
+      #endif
       return;
     }
     auto * x1 = p1->find_child (sy1);
     if (x1 == nullptr) {
-#ifndef DJNN_NO_DEBUG
+      #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy1 << endl;
-#endif
+      #endif
       return;
     }
     for (auto& c : x2->get_activation_couplings ()) {
@@ -627,21 +604,21 @@ namespace djnn
   }
 
 
-#ifndef DJNN_NO_SERIALIZE
+  #ifndef DJNN_NO_SERIALIZE
   void
   CoreProcess::serialize (const std::string& format) {
     auto * pp = this;
     cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
   }
-#endif
+  #endif
   
   CoreProcess*
   CoreProcess::clone () {
-#ifndef DJNN_NO_DEBUG
+    #ifndef DJNN_NO_DEBUG
     auto * pp = this;
     cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
-
-#endif
+    #endif
+  
     return nullptr;
   };
 
@@ -651,13 +628,12 @@ namespace djnn
   void
   CoreProcess::dump (int level)
   {
-      cout << "CoreProcess " << this << endl;
+    cout << "CoreProcess " << this << endl;
   }
 
   void
   FatProcess::dump (int level)
   {
-    //FatProcess *pp = dynamic_cast<FatProcess*>(this);
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
 
     /* check if the component is empty - should be ?*/
@@ -684,5 +660,5 @@ namespace djnn
     }
     indent--;
   }
-#endif
+  #endif
 }
