@@ -147,9 +147,10 @@ namespace djnn
       subpath = path.substr (found + 1, path.size () - 1);
     }
     if (key.compare ("$value") == 0) {
-      auto * fpv = dynamic_cast<FatProcess*>(_value);
-      if(fpv)
-        return fpv->find_child (subpath);
+      return _value->find_child (subpath);
+      // auto * fpv = dynamic_cast<FatProcess*>(_value);
+      // if(fpv)
+      //   return fpv->find_child (subpath);
     }
     return nullptr;
   }
