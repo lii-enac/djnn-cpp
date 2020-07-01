@@ -834,7 +834,7 @@ StartUse(const char** attrs, FatProcess* current) {
   if (it != djn__id_to_process.end ()) {
     FatProcess* clone = it->second->clone();
     if (clone->get_process_type() == DEFS_T) {
-      for (auto c : ((Defs*)clone)->ordered_children()) {
+      for (auto c : ((Defs*)clone)->children ()) {
         holder->add_child (c, c->get_name (clone));
       }
       delete clone;

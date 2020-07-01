@@ -164,7 +164,7 @@ static int ParsePathClip(FatProcess** e, const char* v) {
 		if (it != djn__id_to_process.end ()) {
 			Container* clip = (Container*) it->second;
 			/* we iterate over the children of clip and add each child to *e */
-			for (auto child: clip->ordered_children ())
+			for (auto child: clip->children ())
 			  ((Container*)*e)->add_child (child->clone (), "");
 		} else {
 			fprintf(stderr, "unknown URL %s for clip\n", v);

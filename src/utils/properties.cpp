@@ -57,7 +57,7 @@ namespace djnn
     delete _input;
     delete _action;
     symtable_t::iterator it;
-    auto& map = children ();
+    auto& map = symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
       delete it->second;
     }

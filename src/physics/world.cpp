@@ -189,7 +189,7 @@ namespace djnn
       while (!found && cur_parent != nullptr) {
         if (cur_parent->get_process_type () == CONTAINER_T) {
           Container *cont = dynamic_cast<Container*> (cur_parent);
-          for (auto c : cont->ordered_children ()) {
+          for (auto c : cont->children ()) {
             if (c == cur_child)
               break;
             else if (c->get_process_type () == WORLD_T && c->somehow_activating ()) {

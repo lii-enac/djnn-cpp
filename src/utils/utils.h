@@ -64,7 +64,7 @@ namespace djnn
     auto * fp = dynamic_cast<FatProcess*>(p);
     if(!fp) return;
     f(fp);
-    for (auto child: fp->children ()) depth_first_traverse(child.second, f);
+    for (auto child: fp->symtable ()) depth_first_traverse(child.second, f);
   }
 
 

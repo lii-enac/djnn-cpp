@@ -95,7 +95,8 @@ namespace djnn
   }
 
 #ifndef DJNN_NO_DEBUG
-  FatProcess* CoreProcess::get_debug_parent ()
+  FatProcess*
+  CoreProcess::get_debug_parent ()
   {
     return dynamic_cast<FatProcess*>(_debug_parent);
   }
@@ -167,7 +168,7 @@ namespace djnn
     */
     if (_vertex != nullptr) {
 #ifndef DJNN_NO_DEBUG
-       auto * pp = dynamic_cast<FatProcess*>(this);
+       auto * pp = this;
        warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
        for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
        for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
@@ -197,7 +198,7 @@ namespace djnn
   FatProcess::~FatProcess ()
   {
     /* make sure everything is wiped out the symtable */
-    children ().clear ();
+    symtable ().clear ();
   }
 
 
@@ -422,9 +423,9 @@ namespace djnn
   FatProcess::remove_child (FatChildProcess* c)
   {
     symtable_t::iterator it;
-    for (it = children ().begin (); it != children ().end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second == c) {
-        children ().erase (it->first);
+        symtable ().erase (it->first);
         return;
       }
     }
@@ -450,8 +451,8 @@ namespace djnn
       auto * found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
-        auto it = children ().begin ();
-        while ( it != children ().end ()) {
+        auto it = symtable ().begin ();
+        while ( it != symtable ().end ()) {
           found = it->second->find_child (key); // with "/*""
           if (found) return found;
           ++it;
@@ -513,7 +514,7 @@ namespace djnn
 
     symtable_t::const_iterator it;
 
-    for (it = children ().begin(); it != children ().end(); ++it)
+    for (it = symtable ().begin(); it != symtable ().end(); ++it)
     {
       if (it->second == symbol)
       {
@@ -531,7 +532,7 @@ namespace djnn
   void
   FatProcess::add_symbol (const std::string& name, FatChildProcess* c)
   {
-    /* if ((children ().insert (std::pair<string, FatProcess*> (name, c))).second == false) {
+    /* if ((symtable ().insert (std::pair<string, FatProcess*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
      }*/
     _symtable[name] = c;
@@ -542,7 +543,7 @@ namespace djnn
   {
     symtable_t::iterator it = find_child_iterator (name);
     if (it != children_end ())
-      children ().erase (it);
+      symtable ().erase (it);
     else
       warning (nullptr,   "Warning: symbol " + name + " not found in FatProcess " + name + "\n");
   }
@@ -571,7 +572,7 @@ namespace djnn
   void
   alias_children (ParentProcess* parent, FatProcess* from)
   {
-    FatProcess::symtable_t& symtable = from->children ();
+    FatProcess::symtable_t& symtable = from->symtable ();
     for (auto& sym : symtable) {
       parent->add_symbol (sym.first, sym.second);
     }
@@ -629,16 +630,16 @@ namespace djnn
 #ifndef DJNN_NO_SERIALIZE
   void
   CoreProcess::serialize (const std::string& format) {
-    auto * pp = dynamic_cast<FatProcess*>(this);
-    cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
+    auto * pp = this;
+    cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
   }
 #endif
   
   CoreProcess*
   CoreProcess::clone () {
 #ifndef DJNN_NO_DEBUG
-    auto * pp = dynamic_cast<FatProcess*>(this);
-    cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_name ():"") << "'" << endl;
+    auto * pp = this;
+    cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
 
 #endif
     return nullptr;
@@ -673,7 +674,7 @@ namespace djnn
     indent++;
     symtable_t::iterator it;
     int i = 0;
-    for (it = children ().begin (); it != children ().end (); ++it) {
+    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
       for (int j = 0; j < indent; j++)
         cout << "|\t";
       cout << " +" << i++ << " ";

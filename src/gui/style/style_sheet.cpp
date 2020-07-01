@@ -61,7 +61,7 @@ namespace djnn
   {
     for (auto i: classes) {
       StyleSheet *s = style_array.at (i);
-      for (auto c: s->ordered_children ()) {
+      for (auto c: s->children ()) {
         c->draw ();
       }
     }

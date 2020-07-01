@@ -191,7 +191,6 @@ namespace djnn
   Vertex::print_vertex () const
   {
 #ifndef DJNN_NO_DEBUG
-    //auto * pp = dynamic_cast<FatProcess*>(_process);
     auto * pp = _process;
     std::cout << "vertex (" <<
     boost::core::demangle(typeid(*pp).name()) << ":" << 
@@ -204,7 +203,6 @@ namespace djnn
     else {
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
-         //auto * ppe = dynamic_cast<FatProcess*>(e->_process);
          auto * ppe = e->_process;
          if (ppe) {
           std::cout << boost::core::demangle(typeid(*ppe).name()) << ":" << 
@@ -345,9 +343,7 @@ namespace djnn
       warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
 
 #ifndef DJNN_NO_DEBUG
-      //auto * ppsrc = dynamic_cast<FatProcess*>(p_src);
       auto * ppsrc = p_src;
-      //auto * ppdst = dynamic_cast<FatProcess*>(p_dst);
       auto * ppdst = p_dst;
       std::cerr << "Graph remove_edge: " << boost::core::demangle(typeid(*p_src).name()) + ":" + 
       (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << boost::core::demangle(typeid(*p_dst).name()) + ":" +
@@ -398,7 +394,6 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     for (auto v : _activation_vector) {
-      //auto * pp = dynamic_cast<FatProcess*>(v->get_process ());
       auto * pp = v->get_process ();
       if (pp && pp->get_debug_parent())
         cerr << pp->get_debug_parent()->get_debug_name () << "/";

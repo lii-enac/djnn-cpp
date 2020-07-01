@@ -43,7 +43,7 @@ namespace djnn {
     void print_children ();
     void clean_up_content ();
     virtual ~Container ();
-    const ordered_children_t& ordered_children () const { return _children; }
+    const ordered_children_t& children () const { return _children; }
     void
     add_to_context (const std::string& k, FatChildProcess *v)
     {

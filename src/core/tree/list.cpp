@@ -128,7 +128,7 @@ namespace djnn
   void
   AbstractList::remove_child (FatChildProcess* c)
   {
-    auto newend = ordered_children ().end ();
+    auto newend = children ().end ();
     for (auto s: structure_observer_list) {
       s->remove_child_from_container (this, c);
     }
@@ -275,7 +275,7 @@ namespace djnn
   void
   ListIterator::impl_activate ()
   {
-    for (auto p : _list->ordered_children ()) {
+    for (auto p : _list->children ()) {
       _action->set_data (p);
       _action->activate ();
     }
@@ -305,12 +305,12 @@ namespace djnn
     int index = _index->get_value ();
     if (_forward) {
       if (_list->size () > index) {
-        _iter->set_value (_list->ordered_children ().at (index - 1), true);
+        _iter->set_value (_list->children ().at (index - 1), true);
         _index->set_value (index + 1, true);
       }
     } else {
       if (index >= 1) {
-        _iter->set_value (_list->ordered_children ().at (index - 1), true);
+        _iter->set_value (_list->children ().at (index - 1), true);
         _index->set_value (index - 1, true);
       }
     }

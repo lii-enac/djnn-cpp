@@ -46,7 +46,6 @@ namespace djnn
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       std::cerr << ctxinfo << ":";
-    //FatProcess * pp = dynamic_cast<FatProcess*>(p);
     auto * pp = p;
     std::cerr << "djnn - ERROR: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     
@@ -78,7 +77,6 @@ namespace djnn
       out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     if(ctxinfo)
       out << ctxinfo << ":";
-    //FatProcess * pp = dynamic_cast<FatProcess*>(p);
     auto * pp = p;
     out << "djnn - WARNING: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     out << std::endl << std::endl;

@@ -120,10 +120,7 @@ namespace djnn
       remove_state_dependency (get_parent (), &_action);
     }
 
-    //auto * fp = dynamic_cast<FatProcess*>(parent);
-
     if (_dst) {
-      //add_state_dependency (fp, &_action);
       add_state_dependency (parent, &_action);
     }
     FatProcess::set_parent (parent);

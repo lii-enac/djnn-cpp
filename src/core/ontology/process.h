@@ -247,7 +247,7 @@ namespace djnn {
 
     typedef std::map<std::string, FatChildProcess*> symtable_t;
     static symtable_t default_symtable;
-    virtual const symtable_t& children () const { return default_symtable; }
+    virtual const symtable_t& symtable () const { return default_symtable; }
     
     virtual void     set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
@@ -324,16 +324,16 @@ namespace djnn {
     bool children_empty () { return _symtable.empty (); }
     size_t children_size () const override { return _symtable.size(); }
     
-    symtable_t& children () { return _symtable; }
-    const symtable_t& children () const override { return _symtable; }
+    symtable_t& symtable () { return _symtable; }
+    const symtable_t& symtable () const override { return _symtable; }
     
     virtual void add_symbol (const std::string& name, FatChildProcess* c) override;
     void      remove_symbol (const std::string& name);
   
   private:
     
-    symtable_t& symtable () { return _symtable; }
-    const symtable_t& symtable () const { return _symtable; }
+    //symtable_t& symtable () { return _symtable; }
+    //const symtable_t& symtable () const override { return _symtable; }
 
   protected:
     virtual bool pre_activate () override;
@@ -374,12 +374,6 @@ namespace djnn {
   inline FatProcess* find (FatProcess* p) { return p; } // helper for smalac
   inline FatProcess* find (CoreProcess* p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
   inline FatChildProcess* find (ParentProcess* parent, const std::string& path) { return parent->find_child (path); }
-  /*inline FatChildProcess* find (CoreProcess* parent, const std::string& path) {
-    if(auto * fp = dynamic_cast<FatProcess*>(parent)) {
-      return fp->find_child (path);
-    }
-    return nullptr;
-  }*/
 
   void add_state_dependency (ParentProcess* parent, CoreProcess *p);
   void remove_state_dependency (ParentProcess* parent, CoreProcess *p);

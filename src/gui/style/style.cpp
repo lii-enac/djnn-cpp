@@ -227,10 +227,10 @@ namespace djnn
   {
     LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
 					    AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
-    for (auto s : _stops->ordered_children ()) {
+    for (auto s : _stops->children ()) {
       g->stops ()->add_child (s->clone (), s->get_name (_stops));
     }
-    for (auto t : _transforms->ordered_children ()) {
+    for (auto t : _transforms->children ()) {
       g->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
     return g;
@@ -261,11 +261,11 @@ namespace djnn
   {
     _lg->set_activation_flag (ACTIVATION);
     _lg->transforms ()->set_activation_flag (ACTIVATION);
-    for (auto t : _lg->transforms ()->ordered_children ()) {
+    for (auto t : _lg->transforms ()->children ()) {
       t->set_activation_flag (ACTIVATION);
     }
     _lg->stops ()->set_activation_flag (ACTIVATION);
-    for (auto s : _lg->stops ()->ordered_children ()) {
+    for (auto s : _lg->stops ()->children ()) {
       s->set_activation_flag (ACTIVATION);
     }
   }
@@ -318,10 +318,10 @@ namespace djnn
   {
     RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
 					     raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
-    for (auto s : _stops->ordered_children ()) {
+    for (auto s : _stops->children ()) {
       rg->stops ()->add_child (s->clone (), s->get_name (_stops));
     }
-    for (auto t : _transforms->ordered_children ()) {
+    for (auto t : _transforms->children ()) {
       rg->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
     return rg;
@@ -348,11 +348,11 @@ namespace djnn
   {
     _rg->set_activation_flag (ACTIVATION);
     _rg->transforms ()->set_activation_flag (ACTIVATION);
-    for (auto t : _rg->transforms ()->ordered_children ()) {
+    for (auto t : _rg->transforms ()->children ()) {
       t->set_activation_flag (ACTIVATION);
     }
     _rg->stops ()->set_activation_flag (ACTIVATION);
-    for (auto s : _rg->stops ()->ordered_children ()) {
+    for (auto s : _rg->stops ()->children ()) {
       s->set_activation_flag (ACTIVATION);
     }
   }

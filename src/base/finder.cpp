@@ -34,7 +34,7 @@ namespace djnn
     if (key.empty())
       return;
     FatChildProcess *res;
-    for (auto c : f->_container->ordered_children ()) {
+    for (auto c : f->_container->children ()) {
       res = c->find_child (path);
       if (res) {
         if (res->get_process_type () != PROPERTY_T) {

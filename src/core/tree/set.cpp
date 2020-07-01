@@ -47,11 +47,11 @@ namespace djnn
   Set::add_child (FatChildProcess* c, const std::string& name)
   {
     /* test if the child is already in the set
-     * it == children ().end () if the element is not find 
+     * it == symtable ().end () if the element is not find 
      * only then we add it in the symtable to avoid duplicate
      */
-    auto it = children ().find(name);
-    if (it == children ().end ()) {
+    auto it = symtable ().find(name);
+    if (it == symtable ().end ()) {
       FatProcess::add_child (c, name);
       c->set_parent (this);
 
@@ -72,7 +72,7 @@ namespace djnn
     bool found = false;
     //symtable_t::iterator it;
     string symbol;
-    for (auto it = children ().begin (); it != children ().end (); ++it) {
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       if (it->second == c) {
         symbol = it->first;
         found = true;
@@ -90,7 +90,7 @@ namespace djnn
   Set::remove_child (const std::string& name)
   {
     FatChildProcess *found = nullptr;
-    for (auto it = children ().begin (); it != children ().end (); ++it) {
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       //if (it->second->get_name ().compare (name) == 0) {
       if (it->first.compare (name) == 0) {
         remove_symbol (it->first);
@@ -107,7 +107,7 @@ namespace djnn
   void
   Set::impl_activate ()
   {
-    for (auto it = children ().begin (); it != children ().end (); ++it) {
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->activate ();
     }
   }
@@ -115,7 +115,7 @@ namespace djnn
   void
   Set::impl_deactivate ()
   {
-    for (auto it = children ().begin (); it != children ().end (); ++it) {
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       it->second->deactivate ();
     }
   }
@@ -152,7 +152,7 @@ namespace djnn
     AbstractSerializer::serializer->start ("core:set");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
-    for (auto it = children ().begin (); it != children ().end (); ++it)
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it)
       it->second->serialize (type);
 
     AbstractSerializer::serializer->end ();
@@ -172,7 +172,7 @@ namespace djnn
   void
   SetIterator::impl_activate ()
   {
-    auto & map = _set->children ();
+    auto & map = _set->symtable ();
     for (auto it = map.begin (); it != map.end (); ++it) {
       _action->set_data (it->second);
       _action->activate ();
