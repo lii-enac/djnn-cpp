@@ -95,17 +95,6 @@ namespace djnn
     void impl_activate () override { _c_left.enable(); _c_right.enable (); _action.activate (); }
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate (); }
 
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& type) override {
-      AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + std::string(name_info<Action>::serialize));
-      AbstractSerializer::serializer->text_attribute ("id", get_name ());
-      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<Action>::left), _left.get_value ());
-      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<Action>::right), _right.get_value ());
-      AbstractSerializer::serializer->end ();
-      AbstractSerializer::post_serialize(this);
-    }
-#endif
   protected:
     void set_parent (ParentProcess* parent) override {
       // in case of re-parenting remove edge dependency in graph
@@ -157,7 +146,7 @@ namespace djnn
         //_tbo._result.set_value (left.compare (right) == 0, true);
         _tbo._result.set_value (perform(left, right), true);
       }
-      static bool perform(const std::string& l, const std::string& r) { return l.compare(r) ==0; }
+      static bool perform(const std::string& l, const std::string& r) { return l.compare(r) == 0; }
       static bool default_value () {return false;}
 
       private:
