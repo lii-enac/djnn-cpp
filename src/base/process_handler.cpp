@@ -16,6 +16,7 @@
 
 #include "core/serializer/serializer.h"
 #include "core/execution/graph.h"
+#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
 #include <algorithm>
@@ -330,7 +331,7 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = dynamic_cast<AbstractProperty*>(to_act->find_child (path));
+        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*>(to_act->find_child (path));
         if (p)
           p->set_value (_value.get_value(), true);
       }
@@ -370,7 +371,7 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = dynamic_cast<AbstractProperty*> (to_act->find_child (path));
+        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*> (to_act->find_child (path));
         if (p)
           p->set_value (_value.get_value (), true);
       }

@@ -299,7 +299,7 @@ namespace djnn
       _c_spec_action (&_spec, ACTIVATION, &_action, ACTIVATION, true)
   {
 
-    _container = dynamic_cast<Container*> (container);
+    _container = djnn_dynamic_cast<Container*> (container);
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child ("size"), ACTIVATION, &_update_list, ACTIVATION);
@@ -344,7 +344,7 @@ namespace djnn
     }
     _coupling_list.clear ();
     for (auto c: _container->children ()) {
-      AbstractProperty *s = dynamic_cast<AbstractProperty*> (c->find_child (_spec.get_value ()));
+      AbstractProperty *s = djnn_dynamic_cast<AbstractProperty*> (c->find_child (_spec.get_value ()));
       if (s == nullptr) {
         warning (this, "Wrong property in ListOperator " + get_name ());
         continue;

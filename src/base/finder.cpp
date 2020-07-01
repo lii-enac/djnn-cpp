@@ -20,6 +20,7 @@
 #include "core/tree/bool_property.h"
 #include "core/tree/double_property.h"
 #include "core/execution/graph.h"
+#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
 
@@ -104,7 +105,7 @@ namespace djnn
   _action (this, "action"),
   _cfind (&_key, ACTIVATION, &_action, ACTIVATION)
   {
-    _container = dynamic_cast<Container*> (container);
+    _container = djnn_dynamic_cast<Container*> (container);
     if (_container == nullptr) {
       warning (this, "Finder is only applicable to Containers");
       return;

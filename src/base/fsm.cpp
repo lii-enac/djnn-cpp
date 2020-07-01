@@ -17,6 +17,7 @@
 
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
+#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
 
@@ -27,7 +28,7 @@ namespace djnn
   FSMState::FSMState (ParentProcess* parent, const std::string& name) :
       Container (parent, name)
   {
-    FSM *fsm = dynamic_cast<FSM*> (parent);
+    FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
       warning (this, "only a FSM can be the parent of a FSM State\n");
       return;
@@ -100,7 +101,7 @@ namespace djnn
   FSMTransition::Init::Init (FSMTransition* t, ParentProcess* parent, 
                             const std::string& tspec, const std::string& aspec) 
   {
-    FSM *fsm = dynamic_cast<FSM*> (parent);
+    FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
       warning (t, "only a FSM can be the parent of a FSM Transition\n");
       return;
@@ -137,7 +138,7 @@ namespace djnn
     
     Graph::instance().add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
-    FSM *fsm = dynamic_cast<FSM*> (parent);
+    FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }
 
@@ -156,7 +157,7 @@ namespace djnn
     
     Graph::instance().add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
-    FSM *fsm = dynamic_cast<FSM*> (parent);
+    FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
   }
 
