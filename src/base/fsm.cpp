@@ -25,8 +25,8 @@ namespace djnn
 {
   using std::string;
 
-  FSMState::FSMState (ParentProcess* parent, const std::string& name) :
-      Container (parent, name)
+  FSMState::FSMState (ParentProcess* parent, const std::string& name)
+  : Container (parent, name)
   {
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
@@ -133,9 +133,7 @@ namespace djnn
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
-    
-    _c_src.disable ();
-    
+    _c_src.disable (); 
     Graph::instance().add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
@@ -153,8 +151,7 @@ namespace djnn
   _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
-     _c_src.disable ();
-    
+    _c_src.disable ();
     Graph::instance().add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
