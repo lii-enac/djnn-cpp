@@ -32,14 +32,8 @@ namespace djnn
   }
 
   Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action, const std::string& spec) :
-      FatProcess (name)
+      Activator (parent, name, action->find_child (spec))
   {
-    _action = action->find_child (spec);
-    if (_action == nullptr) {
-      error  (this, std::string("action not found in activator ") + name);
-      return;
-    }
-    finalize_construction (parent, name);
   }
 
   Activator::~Activator ()
