@@ -100,8 +100,8 @@ namespace djnn
       AbstractSerializer::pre_serialize(this, type);
       AbstractSerializer::serializer->start ("base:" + std::string(name_info<Action>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
-      AbstractSerializer::serializer->cpptype_attribute ("left", _left.get_value ());
-      AbstractSerializer::serializer->cpptype_attribute ("right", _right.get_value ());
+      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<Action>::left), _left.get_value ());
+      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<Action>::right), _right.get_value ());
       AbstractSerializer::serializer->end ();
       AbstractSerializer::post_serialize(this);
     }
