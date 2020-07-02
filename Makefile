@@ -501,7 +501,7 @@ endif
 lcov_file ?= $(build_dir)/djnn_cov.info
 lcov_output_dir ?= $(build_dir)/coverage_html
 
-pre_cov: PRE_COV_CFLAGS += --coverage
+pre_cov: PRE_COV_CFLAGS += --coverage -O1
 pre_cov: PRE_COV_LDFLAGS += --coverage
 pre_cov: dirs djnn
 	lcov -d $(build_dir) -b . --zerocounters
