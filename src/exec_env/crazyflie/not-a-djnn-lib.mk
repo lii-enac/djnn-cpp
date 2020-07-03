@@ -19,7 +19,7 @@ display :=
 graphics :=
 os := FreeRTOS
 
-djnn_libs := core base crazyflie
+djnn_libs := crazyflie
 
 freertos_dir := $(crazyflie_firmware_dir)/vendor/FreeRTOS
 freertos_config_dir := $(crazyflie_firmware_dir)/src/config
