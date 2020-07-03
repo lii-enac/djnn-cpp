@@ -27,7 +27,7 @@ namespace djnn {
 #ifdef DJNN_NO_DYNAMIC_CAST
 
   // simulate dynamic_cast with get_process_type and get_prop_type
-
+  /*
   template <typename X> inline X djnn_dynamic_cast(CoreProcess* p)
   {
     // if(p->get_process_type() == PROPERTY_T) {
@@ -36,7 +36,7 @@ namespace djnn {
     error (p, "unknown djnn_dynamic_cast");
     return nullptr;
   }
-
+  */
   template <> inline AbstractIntProperty* djnn_dynamic_cast(AbstractProperty* p)
   {
     if(p->get_prop_type() == Integer) {

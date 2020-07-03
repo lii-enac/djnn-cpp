@@ -30,7 +30,7 @@ thread = STD
 CFLAGS += -DDJNN_CRAZYFLIE
 CFLAGS += -DDJNN_NO_DEBUG
 CFLAGS += -DDJNN_NO_SERIALIZE
-CFLAGS += -DDJNN_NO_DYNAMIC_CAST
+#CFLAGS += -DDJNN_NO_DYNAMIC_CAST
 
 CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CFLAGS += -pie -fexceptions --rtti #--rtti_data
