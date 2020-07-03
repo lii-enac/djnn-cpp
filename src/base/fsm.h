@@ -21,6 +21,8 @@
 #include "core/tree/text_property.h"
 #include "core/execution/graph.h"
 
+#include "core/utils/djnn_dynamic_cast.h"
+
 #include <list>
 
 namespace djnn {
@@ -121,5 +123,25 @@ namespace djnn {
     std::vector<FSMState*> _states;
     std::vector<FSMTransition*> _transitions;
   };
+
+#ifdef DJNN_NO_DYNAMIC_CAST
+  template <> inline FSM* djnn_dynamic_cast(CoreProcess* p)
+  {
+    if(p->get_process_type() == FSM_T) {
+      return static_cast<FSM*>(p);
+    }
+    return nullptr;
+  }
+
+  /*
+  template <> inline FSMState* djnn_dynamic_cast(CoreProcess* p)
+  {
+    if(p->get_process_type() == FSM_T) {
+      return static_cast<FSM*>(p);
+    }
+    return nullptr;
+  }
+  */
+#endif
 
 }

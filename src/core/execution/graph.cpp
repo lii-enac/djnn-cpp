@@ -21,9 +21,6 @@
 
 #include "exec_env/exec_env-dev.h"
 
-#include <boost/core/demangle.hpp>
-#include <typeinfo>
-
 #include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
@@ -33,6 +30,7 @@
 
  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
 #include <boost/core/demangle.hpp> 
+#include <typeinfo>
 #endif
 
 

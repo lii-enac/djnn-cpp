@@ -1,3 +1,6 @@
+#pragma once
+
+#ifdef DJNN_NO_DYNAMIC_CAST
 #include "core/tree/abstract_property.h"
 #include "core/tree/bool_property.h"
 #include "core/tree/int_property.h"
@@ -7,18 +10,19 @@
 #include "core/control/action.h"
 #include "core/control/native_action.h"
 #include "core/tree/component.h"
-
+#include "core/utils/error.h"
+#endif
 
 namespace djnn {
 
-#ifndef DJNN_NO_DYNAMIC_CAST
+//#ifndef DJNN_NO_DYNAMIC_CAST
 
   template <typename X, typename P> inline X djnn_dynamic_cast(P p)
   {
     return dynamic_cast<X> (p);
   }
 
-#endif
+//#endif
 
 #ifdef DJNN_NO_DYNAMIC_CAST
 
@@ -127,23 +131,7 @@ namespace djnn {
     return nullptr;
   }
 
-  template <> inline FSM* djnn_dynamic_cast(CoreProcess* p)
-  {
-    if(p->get_process_type() == FSM_T) {
-      return static_cast<FSM*>(p);
-    }
-    return nullptr;
-  }
 
-  /*
-  template <> inline FSMState* djnn_dynamic_cast(CoreProcess* p)
-  {
-    if(p->get_process_type() == FSM_T) {
-      return static_cast<FSM*>(p);
-    }
-    return nullptr;
-  }
-  */
 
   /*
   template <class Res> inline X* djnn_dynamic_cast(CoreProcess* p)
