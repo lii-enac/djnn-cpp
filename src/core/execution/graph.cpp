@@ -28,7 +28,7 @@
 #endif
 
 
- #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+ #if _DEBUG_SEE_ACTIVATION_SEQUENCE || !defined(DJNN_NO_DEBUG)
 #include <boost/core/demangle.hpp> 
 #include <typeinfo>
 #endif
