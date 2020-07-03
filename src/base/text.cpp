@@ -228,7 +228,7 @@ namespace djnn
     if (std::regex_search(_reg._input.get_value(), match, _reg._regex) && match.size() > 1) {
 
       std::map<int, TextProperty*>::iterator it;
-      for (int i = 0 ; i < match.size(); i++)
+      for (size_t i = 0 ; i < match.size(); i++)
       {
         it = _reg._in_map.find (i);
         if (it != _reg._in_map.end () && !match.str(i).empty ()){

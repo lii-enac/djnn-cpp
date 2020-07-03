@@ -37,6 +37,8 @@ CFLAGS += -pie -fexceptions --rtti #--rtti_data
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+
 
 #CXXFLAGS += -fno-rtti
 
