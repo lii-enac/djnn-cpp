@@ -130,7 +130,7 @@ namespace djnn
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  TextProperty::serialize (const std::string& format) {
+  AbstractTextProperty::serialize (const std::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
@@ -148,20 +148,6 @@ namespace djnn
   {
     return new TextProperty (nullptr, get_name (), value);
   }
-#if !defined(DJNN_NO_SERIALIZE)
-  void
-  TextPropertyProxy::serialize (const std::string& format) {
-
-    AbstractSerializer::pre_serialize(this, format);
-
-    AbstractSerializer::serializer->start ("core:textproperty");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("value", get_value ());
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-  }
-#endif
 
   FatProcess* 
   TextPropertyProxy::clone ()

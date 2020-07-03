@@ -29,7 +29,7 @@ namespace djnn
   using namespace std;
 
   bool
-  getBool (CoreProcess* p)
+  getBool (FatProcess *p)
   {
     AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
@@ -121,19 +121,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  BoolProperty::serialize (const std::string& format) {
-    AbstractSerializer::pre_serialize(this, format);
-
-    AbstractSerializer::serializer->start ("core:BoolProperty");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("value", get_value () ? "true" : "false");
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-  }
-
-  void
-  BoolPropertyProxy::serialize (const std::string& format) {
+  AbstractBoolProperty::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:BoolProperty");

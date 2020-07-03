@@ -50,6 +50,9 @@ namespace djnn {
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
 #endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class BoolProperty : public AbstractBoolProperty {
@@ -61,11 +64,6 @@ namespace djnn {
     virtual const bool& get_ref_value() const override { return value; }
   private:
     bool value;
-
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };  
 
   class BoolPropertyProxy : public AbstractBoolProperty {
@@ -77,12 +75,9 @@ namespace djnn {
     virtual const bool& get_ref_value() const override { return value; }
   private:
     bool& value;
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
-  bool getBool (FatProcess *p);
+  
   void setBool (ParentProcess* parent, bool v);
+  bool getBool (FatProcess *p);
 }

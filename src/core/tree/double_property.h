@@ -45,8 +45,12 @@ namespace djnn {
     virtual double& get_ref_value() = 0;
     virtual const double& get_ref_value() const = 0;
 
+  public:
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
+#endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
 #endif
   };
 
@@ -59,10 +63,6 @@ namespace djnn {
     virtual const double& get_ref_value() const override { return value; }
   private:
     double value;
-
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
   class DoublePropertyProxy : public AbstractDoubleProperty {
@@ -74,10 +74,6 @@ namespace djnn {
     virtual const double& get_ref_value() const override { return value; }
   private:
     double& value;
-
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
   double getDouble (FatProcess *p);

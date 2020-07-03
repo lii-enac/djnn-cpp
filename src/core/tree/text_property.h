@@ -48,6 +48,9 @@ namespace djnn {
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
 #endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class TextProperty : public AbstractTextProperty {
@@ -59,10 +62,6 @@ namespace djnn {
     virtual const std::string& get_ref_value() const override { return value; }
   private:
     std::string value;
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
   class TextPropertyProxy : public AbstractTextProperty {
@@ -74,10 +73,6 @@ namespace djnn {
     virtual const std::string& get_ref_value() const override { return value; }
   private:
     std::string& value;
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
 

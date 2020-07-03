@@ -47,6 +47,9 @@ namespace djnn {
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
 #endif
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const std::string& format) override;
+#endif
   };
 
   class IntProperty : public AbstractIntProperty {
@@ -58,11 +61,6 @@ namespace djnn {
     virtual const int& get_ref_value() const override { return value; }
   private:
     int value;
-
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
   class IntPropertyProxy : public AbstractIntProperty {
@@ -74,11 +72,6 @@ namespace djnn {
     virtual const int& get_ref_value() const override { return value; }
   private:
     int& value;
-
-  public:
-#ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
-#endif
   };
 
   int getInt (FatProcess *p);

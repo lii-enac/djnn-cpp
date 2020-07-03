@@ -101,19 +101,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  DoubleProperty::serialize (const std::string& format) {
-    AbstractSerializer::pre_serialize(this, format);
-
-    AbstractSerializer::serializer->start ("core:doubleproperty");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->float_attribute ("value", get_value ());
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-  }
-
-  void
-  DoublePropertyProxy::serialize (const std::string& format) {
+  AbstractDoubleProperty::serialize (const std::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:doubleproperty");
