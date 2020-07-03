@@ -55,7 +55,7 @@ namespace djnn_internal {
     {
 //#if !DJNN_NO_DEBUG // should be assert
       if(is_already_scheduled(timer)) {
-        djnn::warning(dynamic_cast<djnn::FatProcess*>(timer), "timer has already been scheduled");
+        warning(dynamic_cast<djnn::FatProcess*>(timer), "timer has already been scheduled");
         cancel(timer);
       }
 //#endif
@@ -78,7 +78,7 @@ namespace djnn_internal {
     { 
 //#if !DJNN_NO_DEBUG // should be assert
       if(!is_already_scheduled(timer)) {
-        djnn::warning(dynamic_cast<djnn::FatProcess*>(timer), "timer cancelled but not previously scheduled");
+        warning(dynamic_cast<djnn::FatProcess*>(timer), "timer cancelled but not previously scheduled");
         return;
       }
 //#endif

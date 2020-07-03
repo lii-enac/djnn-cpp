@@ -19,9 +19,21 @@
 
 #include <string>
 
+#ifdef DJNN_CRAZYFLIE
+extern "C" {
+  void DJNN_DEBUG_PRINT(const char* fmt);
+}
+#endif
+
 namespace djnn
 {
+  int __error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  int __error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
+  void __warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  void __warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
+  void __debug (const char* file, const char* function, const char* lineno);
   inline int __exit(int ret) { exit(ret); return 1; }
+
   /** Turn off -Wunused-result for a specific function call */
   #define __ignore_unused(M) if(1==((int)M)){;}
 
@@ -37,25 +49,20 @@ namespace djnn
   #endif
 
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
-  #define error(p,msg) __ignore_unused( __error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & __exit(0))
+  #define error(p,msg) __ignore_unused( djnn::__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::__exit(0))
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
-  #define warning(p,msg) __warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
+  #define warning(p,msg) djnn::__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
 
-  #ifndef DBG
   #ifdef DJNN_CRAZYFLIE
   #define DBG DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");
   #else
-  #define DBG __debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
+  #ifndef DBG
+  #define DBG djnn::__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
   #endif
   #endif
 
-  int __error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  int __error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
-  void __warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  void __warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
-
-  void __debug (const char* file, const char* function, const char* lineno);
+  
 
   class Context {
   public:

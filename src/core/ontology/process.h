@@ -20,8 +20,6 @@
 #include <map>
 #include <string>
 
-#include "utils/debug.h"
-
 namespace djnn {
 
   // process types

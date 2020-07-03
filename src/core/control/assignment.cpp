@@ -1,3 +1,4 @@
+
 #include "assignment.h"
 
 #include "core/tree/abstract_property.h"
@@ -14,10 +15,6 @@
 
 //#include "utils/debug.h"
 //#include <iostream>
-
-extern "C" {
-  void DJNN_DEBUG_PRINT(const char* fmt);
-}
 
 namespace djnn
 {

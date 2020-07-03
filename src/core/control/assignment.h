@@ -20,8 +20,7 @@
 #include "core/control/action.h"
 #include "core/execution/graph.h"
 
-#define DJNN_assignment_INCLUDED 1
-
+//#include "core/utils/error.h"
 
 namespace djnn { 
 

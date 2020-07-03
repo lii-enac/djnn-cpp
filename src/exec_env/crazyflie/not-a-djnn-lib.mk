@@ -30,13 +30,14 @@ thread = STD
 CFLAGS += -DDJNN_CRAZYFLIE
 CFLAGS += -DDJNN_NO_DEBUG
 CFLAGS += -DDJNN_NO_SERIALIZE
-#CFLAGS += -DDJNN_NO_DYNAMIC_CAST
 
 CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CFLAGS += -pie -fexceptions --rtti #--rtti_data
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
 
+#CXXFLAGS += $(CFLAGS)
+CXXFLAGS += -DDJNN_NO_DYNAMIC_CAST
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 
 
@@ -63,7 +64,7 @@ CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 
 trtr:
 	@echo $(CFLAGS)
-	@echo $(CFLAGS)
+	@echo $(CXXFLAGS)
 	@echo $(tototo)
 
 # minimum
