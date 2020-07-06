@@ -37,7 +37,6 @@ namespace djnn {
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    Container* clone () override;
     void impl_activate () override;
     void impl_deactivate () override;
     void print_children ();
@@ -82,7 +81,6 @@ namespace djnn {
   class AssignmentSequence : public Container
   {
   public:
-    AssignmentSequence ();
     AssignmentSequence (ParentProcess* parent, const std::string& name, bool is_model);
     virtual ~AssignmentSequence () {};
     void add_child (FatChildProcess* c, const std::string& name) override;

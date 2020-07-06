@@ -308,16 +308,6 @@ namespace djnn
   }
 
 
-  Container*
-  Container::clone ()
-  {
-    auto * clone = new Container (nullptr, get_name ());
-    for (auto c : _children) {
-      clone->add_child (c->clone (), this->find_child_name(c));
-    }
-    return clone;
-  }
-
   void
   Container::print_children ()
   {
