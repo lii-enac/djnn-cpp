@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -69,7 +69,7 @@ namespace djnn
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    void set_parent (ParentProcess* parent) override;
+    //void set_parent (ParentProcess* parent) override;
 
   private:
     std::string _bus;

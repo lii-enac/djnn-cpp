@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -222,7 +222,7 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
  ExternalSource(name),
  _out ( this, "out", ""),
  _out_a (this, "out_action", &_out),
- _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION ),
+ _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
  _arriving ( this,  "arriving", ""),
  _leaving ( this,  "leaving", "")
  {
@@ -231,7 +231,13 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
   _ready_message = ready;
 
   _out_c.disable ();
-  Graph::instance().add_edge (&_out, &_out_a);
+  
+  /* c_out in now immediat : 07.2020
+     so I removed graph edge
+     it works because Ivy can't be stoped
+  */
+  //Graph::instance().add_edge (&_out, &_out_a);
+  
   /* IN is a special child build in IvyAccess::find_child */
 
   finalize_construction (parent, name);
@@ -239,7 +245,12 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
 IvyAccess::~IvyAccess ()
 {
-  Graph::instance().remove_edge (&_out, &_out_a);
+  /* c_out in now immediat : 07.2020
+    so I removed graph edge
+    it works because Ivy can't be stoped
+  */
+  //Graph::instance().remove_edge (&_out, &_out_a);
+
   remove_state_dependency (get_parent (), &_out_a);
 
   // TODO: Clean MAP before leaving
@@ -249,18 +260,19 @@ IvyAccess::~IvyAccess ()
   //}
 }
 
-void
-IvyAccess::set_parent (ParentProcess* parent)
-{ 
-  /* in case of re-parenting remove edge dependency in graph */
-  if (get_parent ()) {
-      remove_state_dependency (get_parent (), &_out_a);
-  }
+// note : see impl_activate on stoping Ivy
+// void
+// IvyAccess::set_parent (ParentProcess* parent)
+// { 
+//   /* in case of re-parenting remove edge dependency in graph */
+//   if (get_parent ()) {
+//       remove_state_dependency (get_parent (), &_out_a);
+//   }
 
-  add_state_dependency (parent, &_out_a);
+//   add_state_dependency (parent, &_out_a);
     
-  FatProcess::set_parent (parent); 
-}
+//   FatProcess::set_parent (parent); 
+// }
 
 void IvyAccess::set_arriving(const std::string& v) {
   djnn::IvyAccess* access = this;
