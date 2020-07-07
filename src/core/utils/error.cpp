@@ -14,6 +14,8 @@
 
 #include "error.h"
 
+#include "core/ontology/process.h"
+
 #if !defined(DJNN_NO_DEBUG)
 #include <iostream>
 #endif

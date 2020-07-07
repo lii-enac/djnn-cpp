@@ -413,6 +413,7 @@ $1_clean:
 	rm -f $$($1_objs)
 
 $1_dbg:
+	@echo $$($1)
 #	@echo $$($1_objs)
 #	@echo $$($1_djnn_deps)
 #	@echo $$($1_lib_ldflags)
@@ -441,7 +442,6 @@ size: $(libs_static)
 
 strip:
 	strip $(libs_static)
-
 
 # ---------------------------------------
 # rules
@@ -691,8 +691,5 @@ upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
 
 #--
-
-dbg:
-	@echo $(all_pkg)
 
 # end of the ultimate Makefile

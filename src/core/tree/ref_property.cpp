@@ -17,6 +17,7 @@
 #include "core/utils/error.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
+#include "core/utils/utils-dev.h" // __to_string
 
 //#include <sstream>
 //#include <boost/lexical_cast.hpp>

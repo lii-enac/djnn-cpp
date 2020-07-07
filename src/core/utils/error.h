@@ -14,8 +14,7 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
-#include "core/utils/utils-dev.h" // __to_string
+//#include "core/utils/utils-dev.h" // __to_string
 
 #include <string>
 
@@ -27,6 +26,8 @@ extern "C" {
 
 namespace djnn
 {
+  class CoreProcess;
+
   int __error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
   int __error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
   void __warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
@@ -53,16 +54,6 @@ namespace djnn
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
   #define warning(p,msg) djnn::__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
-
-  #ifdef DJNN_CRAZYFLIE
-  #define DBG DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");
-  #else
-  #ifndef DBG
-  #define DBG djnn::__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
-  #endif
-  #endif
-
-  
 
   class Context {
   public:

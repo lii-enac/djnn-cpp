@@ -11,15 +11,23 @@
 #endif
 
 #define __FL__ " " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
+
 #ifndef DBG
-#define DBG std::cerr << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
+
+#ifdef DJNN_CRAZYFLIE
+#define DBG DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");
+#else
+#define DBG djnn::__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
+//#define DBG std::cerr << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
 #endif
+
 #define DBGPROC std::cerr << this << " " << get_name() << " " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
 #define UNIMPL { static int done=false; if(!done) {std::cerr << "unimplemented " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl; done=true;} }
 #define DEPR { static int done=false; if(!done) {std::cerr << "deprecated " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl; done=true;} }
 
 #define DBGVAR(x) #x << ":" << x
 
+#endif
 #endif
 
 
