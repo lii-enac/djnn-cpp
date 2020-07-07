@@ -78,6 +78,6 @@ namespace djnn {
   };
 
   
-  void setBool (ParentProcess* parent, bool v);
-  bool getBool (FatProcess *p);
+  void setBool (CoreProcess* parent, bool v);
+  bool getBool (CoreProcess *p);
 }

@@ -76,6 +76,6 @@ namespace djnn {
     double& value;
   };
 
-  double getDouble (FatProcess *p);
-  void setDouble (ParentProcess* parent, double v);
+  double getDouble (CoreProcess *p);
+  void setDouble (CoreProcess* parent, double v);
 }

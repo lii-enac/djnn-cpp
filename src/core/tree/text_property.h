@@ -77,9 +77,9 @@ namespace djnn {
 
 
   std::string toString(const AbstractProperty& x);
-  std::string& toString(FatProcess* p);
+  std::string& toString(CoreProcess* p);
 
-  std::string& getString (FatProcess* p);
-  void setString (FatProcess* p, std::string &v);
+  std::string& getString (CoreProcess* p);
+  void setString (CoreProcess* p, std::string &v);
 }
 

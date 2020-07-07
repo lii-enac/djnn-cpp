@@ -36,13 +36,13 @@ namespace djnn
   }
 
   string&
-  toString(FatProcess* p)
+  toString(CoreProcess* p)
   {
       return getString (p);
   }
 
   string&
-  getString (FatProcess* p)
+  getString (CoreProcess* p)
   {
     TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
@@ -53,7 +53,7 @@ namespace djnn
   }
 
   void
-  setString (FatProcess* p, string& v)
+  setString (CoreProcess* p, string& v)
   {
     TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
@@ -70,7 +70,7 @@ namespace djnn
       return r;
     }
     catch (const std::invalid_argument& ia) {
-      warning (this, "undefined double value for text property");
+      warning (this, " - stof - undefined double value in text property");
       return 0;
     }
   }
@@ -83,6 +83,7 @@ namespace djnn
       return r;
     }
     catch (const std::invalid_argument& ia) {
+      warning (nullptr, " - stof - undefined double value in text property");
       return 0;
     }
   }

@@ -74,7 +74,7 @@ namespace djnn {
     int& value;
   };
 
-  int getInt (FatProcess *p);
-  void setInt (ParentProcess* parent, int v);
+  int getInt (CoreProcess *p);
+  void setInt (CoreProcess* parent, int v);
 
 }

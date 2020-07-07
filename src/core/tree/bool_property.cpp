@@ -29,7 +29,7 @@ namespace djnn
   using namespace std;
 
   bool
-  getBool (FatProcess *p)
+  getBool (CoreProcess *p)
   {
     AbstractBoolProperty *bp = djnn_dynamic_cast<AbstractBoolProperty*> (p);
     if (bp != nullptr)
