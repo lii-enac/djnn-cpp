@@ -177,6 +177,7 @@ CFLAGS += -DDJNN_USE_FREERTOS=1
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB = -shared
+echo = echo
 endif
 
 ifeq ($(cross_prefix),em)
