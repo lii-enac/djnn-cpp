@@ -26,6 +26,7 @@
 
 namespace djnn { 
 
+
   class CoreConnector : public CoreProcess
   {
   public:
@@ -44,8 +45,8 @@ namespace djnn {
     }
 
   protected:
-    void impl_activate   () override {  if (_copy_on_activation)  _assignment.activate ();   _binding.activate ();}
-    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
+    void impl_activate   () override {  if (_copy_on_activation)  _assignment.perform_action () /* better - instead of calling activate*/;   _binding.activate ();}
+    void impl_deactivate () override { /*_assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
 
   private:
     CoreAssignment _assignment;
@@ -73,9 +74,9 @@ public:
       finalize_construction (parent, name);
     }
 
-     protected:
-    void impl_activate   () override { _paused_assignment.activate ();  _binding.activate (); }
-    void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
+  protected:
+    void impl_activate   () override { _paused_assignment.perform_action ();  _binding.activate (); }
+    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
 
   private:
     CorePausedAssignment _paused_assignment;
@@ -110,8 +111,8 @@ public:
     {}
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation) _assignment.activate (); _binding.activate ();}
-    void impl_deactivate () override { _assignment.deactivate (); _binding.deactivate (); }
+    void impl_activate   () override { if (_copy_on_activation) _assignment.perform_action (); _binding.activate ();}
+    void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
 
   private:
     CoreAssignment _assignment;
@@ -143,9 +144,9 @@ public:
     : PausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))
     {}
 
-    protected:
+  protected:
     void impl_activate   () override { if (_copy_on_activation)  _paused_assignment.activate ();  _binding.activate ();}
-    void impl_deactivate () override { _paused_assignment.deactivate (); _binding.deactivate (); }
+    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
 
   private:
     CorePausedAssignment _paused_assignment;

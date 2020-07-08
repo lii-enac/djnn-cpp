@@ -46,13 +46,12 @@ namespace djnn {
 
     CoreProcess* get_src () { return _src; }
     CoreProcess* get_dst () { return _dst; }
-
+    void perform_action ();
+    
   protected:
     void impl_activate   () override { perform_action (); }
     void impl_deactivate () override {}
     void post_activate   () override { post_activate_auto_deactivate (); }
-
-    void perform_action ();
 
   private:    
     CoreProcess *_src, *_dst;

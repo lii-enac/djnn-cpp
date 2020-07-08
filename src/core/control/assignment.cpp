@@ -20,7 +20,8 @@ namespace djnn
 {
   using std::string;
 
-  void perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)
+  static void
+  perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)
   {
     AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
     AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
