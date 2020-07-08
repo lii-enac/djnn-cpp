@@ -41,9 +41,9 @@ namespace djnn
 
   void
   init_display () {
+    UpdateDrawing::init ();
     if ( __module_initialized == false ) {
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
-      UpdateDrawing::init ();
       DrawingRefreshManager = UpdateDrawing::instance ();
       GPUs = new Set (nullptr, "GPUs");
       GPUs->set_activation_state (ACTIVATED);
