@@ -391,12 +391,14 @@ namespace djnn
   Graph::print_sorted () const
   {
 #ifndef DJNN_NO_DEBUG
+    cout << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _activation_vector) {
       auto * pp = v->get_process ();
       if (pp && pp->get_debug_parent())
         cerr << pp->get_debug_parent()->get_debug_name () << "/";
       cerr << pp->get_debug_name () << " (" << v->get_timestamp () << ")\n";
     }
+    cout << " --- END SORTED GRAPH --- " << endl << endl;
 #endif
   }
 
