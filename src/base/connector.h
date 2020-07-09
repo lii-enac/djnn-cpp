@@ -75,7 +75,7 @@ public:
     }
 
   protected:
-    void impl_activate   () override { _paused_assignment.perform_action ();  _binding.activate (); }
+    void impl_activate   () override { _paused_assignment.perform_action () /* better - instead of calling activate*/;  _binding.activate (); }
     void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
 
   private:
@@ -111,7 +111,7 @@ public:
     {}
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation) _assignment.perform_action (); _binding.activate ();}
+    void impl_activate   () override { if (_copy_on_activation) _assignment.perform_action ()/* better - instead of calling activate*/; _binding.activate ();}
     void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
 
   private:
@@ -145,7 +145,7 @@ public:
     {}
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation)  _paused_assignment.activate ();  _binding.activate ();}
+    void impl_activate   () override { if (_copy_on_activation)  _paused_assignment.activate ()/* better - instead of calling activate*/;  _binding.activate ();}
     void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
 
   private:
