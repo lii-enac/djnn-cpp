@@ -1,0 +1,101 @@
+diff --git a/Makefile b/Makefile
+index 29040bc..8add530 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,9 +1,77 @@
+ # enable app support
+ APP=1
+-APP_STACKSIZE=300
++APP_STACKSIZE=3000
+ 
+ VPATH += src/
+-PROJ_OBJ += push.o
++
++# djnn
++djnn := 1
++
++CFLAGS += -Wno-error=address-of-packed-member
++
++ifeq ($(djnn),1)
++djnn_path := ../djnn-cpp
++djnn_include_path := $(djnn_path)/src
++djnn_lib_path := $(djnn_path)/build/lib
++
++FREERTOS_OBJ += event_groups.o
++
++INCLUDES += -I$(djnn_path)/src
++CFLAGS += -DUSE_DJNN=1
++CFLAGS += -fexceptions
++CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
++#CFLAGS += -DDEBUG=1
++
++CXXFLAGS = $(filter-out -std=gnu11,$(CFLAGS)) -Wno-error=write-strings -Wno-write-strings
++CXXFLAGS += -DDJNN_CRAZYFLIE
++CXXFLAGS += -DDJNN_NO_DEBUG
++CXXFLAGS += -DDJNN_NO_SERIALIZE
++CXXFLAGS += --rtti #--rtti_data
++CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
++CXXFLAGS += -std=c++14
++
++#CXXFLAGS += -ffunction-sections -fdata-sections
++#CXXFLAGS += -std=c++14
++LDFLAGS += -Wl,-z,now -Wl,-z,relro -Wl,-Bstatic -fexceptions --rtti #--rtti_data
++#LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections
++#-L$(djnn_lib_path)
++#LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core -static-libstdc++
++#LIBS += -ldjnn-crazyflie
++
++LIBS += $(djnn_lib_path)/libdjnn-crazyflie.a
++#LIBS += -static
++#LIBS += -lstdc++ 
++#LIBS += ../djnn-cpp/build/src/exec_env/crazyflie/crazyflie.o ../djnn-cpp/build/src/core/core.o
++#LIBS += -static-libstdc++ -static-libgcc -lsupc++ -lstdc++ -lc
++
++
++
++PROJ_OBJ := djnn_prog.o djnn.o
++#LIBS += $(addprefix $(djnn_path)/build/,$(djnn_crazyflie_objs))
++
++endif
+ 
+ CRAZYFLIE_BASE=crazyflie-firmware
+-include $(CRAZYFLIE_BASE)/Makefile
+\ No newline at end of file
++include $(CRAZYFLIE_BASE)/Makefile
++
++ifeq ($(djnn),1)
++
++$(PROG).elf: $(djnn_lib_path)/libdjnn-crazyflie.a
++#LDFLAGS := $(filter-out --specs=nano.specs,$(LDFLAGS))
++CFLAGS := $(filter-out -Werror, $(CFLAGS))
++CXX = $(CROSS_COMPILE)c++
++
++CXX_COMMAND=$(CXX) $(CXXFLAGS) -c $< -o $(BIN)/$@
++CXX_COMMAND_SILENT="  CXX    $@"
++.cpp.o:
++	@$(if $(QUIET), ,echo $(CXX_COMMAND$(VERBOSE)) )
++	@$(CXX_COMMAND)
++
++LD = $(CXX)
++LD_COMMAND += $(LIBS)
++
++toto:
++	@echo $(CXXFLAGS) | tr " " "\n" | sort
++	# | tr "\n" " " ; echo
++
++endif
+diff --git a/crazyflie-firmware b/crazyflie-firmware
+deleted file mode 160000
+index 2905384..0000000
+--- a/crazyflie-firmware
++++ /dev/null
+@@ -1 +0,0 @@
+-Subproject commit 2905384568bd56a19f579106fd0e057e4dfbb633
+diff --git a/crazyflie-firmware b/crazyflie-firmware
+new file mode 120000
+index 0000000..2b05df3
+--- /dev/null
++++ b/crazyflie-firmware
+@@ -0,0 +1 @@
++../crazyflie-firmware/
+\ No newline at end of file
