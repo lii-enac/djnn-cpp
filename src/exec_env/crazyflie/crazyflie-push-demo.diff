@@ -99,3 +99,223 @@ index 0000000..2b05df3
 @@ -0,0 +1 @@
 +../crazyflie-firmware/
 \ No newline at end of file
+diff --git a/src/djnn_prog.cpp b/src/djnn_prog.cpp
+new file mode 100644
+index 0000000..f12031b
+--- /dev/null
++++ b/src/djnn_prog.cpp
+@@ -0,0 +1,214 @@
++#include "core/tree/int_property.h"
++#include "core/control/binding.h"
++#include "core/control/assignment.h"
++#include "core/tree/spike.h"
++#include "core/execution/graph.h"
++#include "core/utils/djnn_dynamic_cast.h"
++#include "core/utils/error.h"
++#include "base/connector.h"
++#include "base/fsm.h"
++
++#include "commander.h"
++
++#include "FreeRTOS.h"
++#include "task.h"
++#include "debug.h"
++//#include "log.h"
++
++#if 0
++#define USE_FREERTOS 1
++
++// Define the ‘new’ operator for C++ to use the freeRTOS memory management
++// functions. THIS IS NOT OPTIONAL!
++//
++void *operator new(size_t size) {
++	void *p;
++#ifdef USE_FREERTOS
++	if(uxTaskGetNumberOfTasks())
++		p=pvPortMalloc(size);
++	else
++  		p=malloc(size);
++#else
++ 	p=malloc(size);
++#endif
++
++#ifdef __EXCEPTIONS
++ if (p==0) // did pvPortMalloc succeed?
++  throw std::bad_alloc(); // ANSI/ISO compliant behavior
++#endif
++ return p;
++}
++
++//
++// Define the ‘delete’ operator for C++ to use the freeRTOS memory management
++// functions. THIS IS NOT OPTIONAL!
++//
++void operator delete(void *p) {
++
++#ifdef USE_FREERTOS
++	if(uxTaskGetNumberOfTasks())
++		vPortFree( p );
++	else
++		free( p );
++#else
++ 	free( p );
++#endif
++	p = NULL;
++}
++
++void *operator new[](size_t size){
++	void *p;
++#ifdef USE_FREERTOS
++ if(uxTaskGetNumberOfTasks())
++  p=pvPortMalloc(size);
++ else
++  p=malloc(size);
++#else
++ p=malloc(size);
++#endif
++
++#ifdef __EXCEPTIONS
++	if (p==0) // did pvPortMalloc succeed?
++ 		throw std::bad_alloc(); // ANSI/ISO compliant behavior
++#endif
++ return p;
++}
++
++//
++// Define the ‘delete’ operator for C++ to use the freeRTOS memory management
++// functions. THIS IS NOT OPTIONAL!
++//
++void operator delete[](void *p){
++#ifdef USE_FREERTOS
++ if(uxTaskGetNumberOfTasks())
++  vPortFree( p );
++ else
++  free( p );
++#else
++ free( p );
++#endif
++ p = NULL;
++}
++
++/* Optionally you can override the ‘nothrow’ versions as well.
++   This is useful if you want to catch failed allocs with your
++   own debug code, or keep track of heap usage for example,
++   rather than just eliminate exceptions.
++ */
++
++void* operator new(std::size_t size, const std::nothrow_t&) {
++    return malloc(size);
++}
++
++void* operator new[](std::size_t size, const std::nothrow_t&) {
++    return malloc(size);
++}
++
++void operator delete(void* ptr, const std::nothrow_t&) {
++    free(ptr);
++}
++
++void operator delete[](void* ptr, const std::nothrow_t&) {
++    free(ptr);
++} 
++#endif
++
++#define REQUIRE(XX) DEBUG_PRINT( __djnn_str1(XX) ":%d\n", XX);
++
++struct A {virtual ~A() {}};
++struct B : A {};
++
++extern "C" {
++	void djnn_init_prog2 () {
++		try {
++			DEBUG_PRINT( "start djnn_init_prog2\n" );
++			// std::vector<int> v;
++			// for (int i=0; i<=100; ++i) v.push_back(i);
++			// int sum=0;
++			// for (int i=0; i<=100; ++i) sum += v[i];
++			// DEBUG_PRINT( "sum:%d ==? 5000\n", sum );
++			// A * a = new A;
++			// A * a2 = new B;
++			// DBG;
++			// DEBUG_PRINT("a:%x a2:%x da:%x da2:%x\n", a, a2, dynamic_cast<B*>(a), dynamic_cast<B*>(a2));
++			// DEBUG_PRINT("a:%x a2:%x dda:%x dda2:%x\n", a, a2, djnn::djnn_dynamic_cast<B*>(a), djnn::djnn_dynamic_cast<B*>(a2));
++
++
++			using namespace djnn;
++
++			// IntProperty i(nullptr, "", 111); // works
++			// IntProperty j(nullptr, "", 222); // works
++			//DEBUG_PRINT("i:%d j:%d di:%d dj:%d\n", i, j, djnn::djnn_dynamic_cast<AbstractProperty*>(&i), djnn::djnn_dynamic_cast<AbstractProperty*>(&j));
++
++			//Binding a(nullptr, "", &i, &j); // works
++			
++			// Assignment as(nullptr, "ass", &i, &j, true);
++			// DEBUG_PRINT("get_src:%d\n", as.get_src());
++			// DEBUG_PRINT( "activating assignment\n");
++			// as.activate (); // ******* does not work
++			// DBG;
++
++			// Connector con(nullptr, "con", &i, &j, false);
++			// DEBUG_PRINT( "activating connector\n");
++			// con.activate ();
++			// DEBUG_PRINT( "j:%d ==? 111\n", j.get_value () );
++
++			// i.activate();
++			// DEBUG_PRINT( "j:%d ==? 111\n", j.get_value () );
++
++			// DEBUG_PRINT( "graph exec\n");
++			// Graph::instance().exec();
++
++			// DEBUG_PRINT( "j:%d ==? 111\n", j.get_value () );
++
++			typedef CoreProcess Process;
++
++			Process *s1 = new Spike( nullptr, "s1");
++			Process *s2 = new Spike (nullptr, "s2");
++			Process *fsm = new FSM (nullptr, "FSM");
++			FSMState *st1 = new FSMState (fsm, "st1");
++			FSMState *st2 = new FSMState (fsm, "st2");
++			new FSMTransition (fsm, "t1", st1, st2, s1, "", 0, "");
++			new FSMTransition (fsm, "t2", st2, st1, s2, "", 0, "");
++
++			fsm->activate ();
++			REQUIRE (st1->is_activated ());
++			REQUIRE (st2->is_deactivated ());
++
++
++			s1->activate ();
++			Graph::instance ().exec ();
++			REQUIRE (st1->is_deactivated ());
++			REQUIRE (st2->is_activated ());
++
++			s2->activate ();
++			Graph::instance ().exec ();
++			REQUIRE (st1->is_activated ());
++			REQUIRE (st2->is_deactivated ());
++
++			/* check the resetting of the initial state */
++			s1->activate ();
++			Graph::instance ().exec ();
++			fsm->deactivate ();
++			Graph::instance ().exec ();
++			fsm->activate ();
++			Graph::instance ().exec ();
++			REQUIRE (st1->is_activated ());
++			REQUIRE (st2->is_deactivated ());
++
++			delete fsm;
++			delete s2;
++			delete s1;
++			REQUIRE (Graph::instance ().size () == 0);
++
++
++			DEBUG_PRINT( "end djnn_init_prog2\n" );
++		} catch (std::exception& e) {
++			DEBUG_PRINT( const_cast<char*>((std::string("std::exc: ") + e.what() + "\n").c_str() ));
++		} catch (...) {
++			DEBUG_PRINT( "c++ exception\n" );
++		}
++
++		DEBUG_PRINT( "end init_prog\n" );
++	}
++}
