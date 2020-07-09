@@ -74,7 +74,7 @@ b64decode(const void* p, const size_t len)
   int sz = (len * 3) /4;
   unsigned char tmp[sz];
   int offset = 0;
-  for (int i = 0; i < len; ++i) {
+  for (size_t i = 0; i < len; ++i) {
     int ch = data[i];
     int d;
     if (ch >= 'A' && ch <= 'Z')
