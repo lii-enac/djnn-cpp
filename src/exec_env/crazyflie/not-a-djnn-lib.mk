@@ -107,7 +107,8 @@ crazyflie_objs += \
 	src/base/base.o
 
 crazyflie_objs += \
-	src/base/connector.o
+	src/base/connector.o \
+	src/base/fsm.o
 
 
 .PHONY: $(build_dir)/include/djnn/crazyflie.h $(build_dir)/include/djnn/crazyflie-dev.h
