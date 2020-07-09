@@ -90,15 +90,17 @@ namespace djnn
   Set::remove_child (const std::string& name)
   {
     FatChildProcess *found = nullptr;
+    string symbol;
     for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       //if (it->second->get_name ().compare (name) == 0) {
       if (it->first.compare (name) == 0) {
-        remove_symbol (it->first);
+        symbol = it->first;
         found = it->second;
         continue;
       }
     }
     if (found) {
+      remove_symbol (symbol);
       _removed.set_value (found, true);
       _size.set_value (_size.get_value () - 1, true);
     }
@@ -166,6 +168,7 @@ namespace djnn
   {
     if (_set == nullptr)
       error (this, "The set argument must be a Set component in set iterator " + name);
+
     finalize_construction (parent, name);
   }
 
