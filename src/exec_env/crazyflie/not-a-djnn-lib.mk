@@ -30,6 +30,7 @@ thread = STD
 CFLAGS += -DDJNN_CRAZYFLIE
 CFLAGS += -DDJNN_NO_DEBUG
 CFLAGS += -DDJNN_NO_SERIALIZE
+CFLAGS += -DRMT_ENABLED=0
  
 CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 #CFLAGS += -pie
@@ -102,6 +103,10 @@ crazyflie_objs += \
 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
 	src/core/tree/spike.o
 # spike : for bool
+
+crazyflie_objs += \
+	src/core/tree/component.o \
+	src/core/tree/component_observer.o
 
 crazyflie_objs += \
 	src/base/base.o
