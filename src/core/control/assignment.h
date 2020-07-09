@@ -90,7 +90,7 @@ public:
     {
     public:
       AssignmentAction (ParentProcess* parent, const std::string& name)
-      : Action (parent, name) { finalize_construction (parent, name); }
+      : Action (parent, name) { /*finalize_construction (parent, name);*/ }
       void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
     };
   public:

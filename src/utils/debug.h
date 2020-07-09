@@ -1,5 +1,22 @@
 #pragma once
 
+#ifdef DJNN_CRAZYFLIE
+extern "C" {
+  void DJNN_DEBUG_PRINT(const char* fmt);
+  //extern void vTaskDelay (const unsigned uint_32);
+  //extern void vTaskDelay( const TickType_t xTicksToDelay ) PRIVILEGED_FUNCTION;
+}
+#ifdef CRAZYFLIE_FW
+#include "freertos.h"
+#include "task.h" // vTaskDelay
+#endif
+#endif
+
+#ifndef __djnn_str1
+#define __djnn_str(x) #x
+#define __djnn_str1(x) __djnn_str(x)
+#endif
+
 #ifndef __FL__
 
 #ifndef __DJNN__FUNCTION__
@@ -15,7 +32,7 @@
 #ifndef DBG
 
 #ifdef DJNN_CRAZYFLIE
-#define DBG DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");
+#define DBG  {DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n"); vTaskDelay ((unsigned int)100);}
 #else
 #define DBG djnn::__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
 //#define DBG std::cerr << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;

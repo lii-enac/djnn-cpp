@@ -69,6 +69,8 @@ namespace djnn
     return __error(p, msg.c_str(), ctxinfo);
   }
 
+  extern std::string __to_string(void*p);
+
   void
   __warning (CoreProcess *p, const char* msg, const char* ctxinfo)
   {
@@ -80,10 +82,11 @@ namespace djnn
     if(ctxinfo)
       out << ctxinfo << ":";
     auto * pp = p;
-    out << "djnn - WARNING: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
+    out << "djnn - WARNING: " << pp << " " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     out << std::endl << std::endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
+    DJNN_DEBUG_PRINT(  __to_string(p).c_str() ) ;
     DJNN_DEBUG_PRINT( msg ) ;
     DJNN_DEBUG_PRINT( "\n" ) ;
 #endif

@@ -25,7 +25,7 @@ namespace djnn
   {
     AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
     AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
-    if (!dst_p) { warning (dst_p, "dst not a property"); return; }
+    if (!dst_p) { warning (dst_p, "dst is not a property"); return; }
 
     if (src_p) {
       switch (src_p->get_prop_type ())

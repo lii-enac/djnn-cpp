@@ -20,6 +20,7 @@
 #include "core/utils/uri.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
+#include "core/utils/djnn_dynamic_cast.h"
 
 #include <algorithm>
 
@@ -226,6 +227,7 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
+
     if (get_activation_state () != DEACTIVATED)
       return false;
     set_activation_state (ACTIVATING);
@@ -379,7 +381,7 @@ namespace djnn
       if(_parent)
           parentless_names[this] = _parent->find_child_name (this);
     }
-    _parent = dynamic_cast<FatProcess*>(parent);
+    _parent = djnn_dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
     set_debug_parent (parent);
     #endif
@@ -606,8 +608,10 @@ namespace djnn
   #ifndef DJNN_NO_SERIALIZE
   void
   CoreProcess::serialize (const std::string& format) {
+    #ifndef DJNN_NO_DEBUG
     auto * pp = this;
     cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
+    #endif
   }
   #endif
   
