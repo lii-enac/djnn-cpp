@@ -197,7 +197,7 @@ get_classes (const std::string& classnames)
     const char *begin = str;
     while(!isspace (*str) && *str)
       str++;
-      tokens.push_back(string(begin, str));
+    tokens.push_back(string(begin, str));
   } while (0 != *str++);
 
   return tokens;
