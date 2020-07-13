@@ -29,15 +29,14 @@
 
 #ifndef DJNN_NO_DEBUG
 #include <iostream>
-//#include "utils/debug.h"
 #endif
-
+//#include "utils/debug.h"
 
 namespace djnn
 {
 
   static bool __module_initialized = false;
-  FatProcess* mainloop;
+  //FatProcess* mainloop;
 
   extern std::vector<std::string> loadedModules;
 
@@ -46,10 +45,11 @@ namespace djnn
   {
     if (__module_initialized == false) {
       __module_initialized = true;
-      djnn::loadedModules.push_back ("exec_env");
+      //djnn::loadedModules.push_back ("exec_env");
       init_global_mutex();
-      mainloop = &MainLoop::instance ();
-      //DjnnTimeManager::instance().activate ();
+      //mainloop = &MainLoop::instance ();
+      MainLoop::instance ();
+      DjnnTimeManager::instance();//.activate ();
       MainLoop::instance ().add_external_source(&DjnnTimeManager::instance());
       setlocale(LC_NUMERIC, "C");
     }
@@ -59,6 +59,7 @@ namespace djnn
   void
   clear_exec_env()
   {
+    DjnnTimeManager::instance().delete_ ();
   }
 
   void

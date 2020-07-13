@@ -35,9 +35,9 @@
 
 namespace djnn {
 
-    MainLoop MainLoop::_instance;
+    static MainLoop * _instance;
 
-    // MainLoop is a singleton, put this filed in a static variable, and do not include "djnn-thread.h" in mainloop.h
+    // MainLoop is a singleton, put this field in a static variable, and do not include "djnn-thread.h" in mainloop.h
     #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
     static djnn_thread_t own_thread;
     #endif
@@ -55,16 +55,17 @@ namespace djnn {
     {
       static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
       if(!onceFlag.test_and_set()) {
+        _instance = new MainLoop ();
         #if DJNN_USE_QT_MAINLOOP
-        QtMainloop::build_instance(&_instance);
+        QtMainloop::build_instance(_instance);
         #endif
         #if DJNN_USE_FREERTOS_MAINLOOP
-        FreeRTOSMainloop::build_instance(&_instance);
+        FreeRTOSMainloop::build_instance(_instance);
         #endif
         ExternalSource::init();
         launch_mutex_lock ();
       }
-      return _instance;
+      return *_instance;
     }
 
     MainLoop::MainLoop ()
@@ -82,16 +83,17 @@ namespace djnn {
 
     void
     MainLoop::impl_activate ()
-    { //DBG;
+    {
       DjnnTimeManager::instance().update_ref_now();
-
       _is_stopping = false;
 
-      for (auto es: _external_sources) es->start ();
+      for (auto es: _external_sources) {
+        //std::cerr << "starting " << es->get_name () << __FL__;
+        es->start ();
+      }
       for (auto p: _background_processes) {
         p->activate ();
       }
-      
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();
         set_activation_state (ACTIVATED);
@@ -99,16 +101,14 @@ namespace djnn {
         notify_activation();
         _another_source_wants_to_be_mainloop->run (); // should block
       } else {
-        launch_mutex_unlock();
+        ExternalSource::launch_mutex_unlock();
         notify_activation();
         run_in_main_thread (); // should block
       }
       // up here, the mainloop is blocking
-
       _is_stopping = true;
       // starting from here, the mainloop has exited
       launch_mutex_lock (); // reacquire launch mutex
-
       if (_another_source_wants_to_be_mainloop) {
         please_stop ();
         join_own_thread ();
@@ -128,11 +128,11 @@ namespace djnn {
         cv.wait(cancel_mutex);
         //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
       } else {
-        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.load().count()) << __FL__;
+        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << __FL__;
         //bool timer_cancelled =
         //cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
         cv.wait_for(cancel_mutex, std::chrono::milliseconds (_duration));
-        //std::cerr << "<< mainloop exited sleep " << DBGVAR(timer_cancelled) << __FL__;
+        //std::cerr << "<< mainloop exited sleep " << __FL__;
       }
       cancel_mutex.unlock(); // unlock first lock
 

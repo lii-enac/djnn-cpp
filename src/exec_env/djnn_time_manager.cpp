@@ -42,19 +42,38 @@ namespace djnn {
     }
   }
 
-  DjnnTimeManager& DjnnTimeManager::instance () {
-    return (_instance);
-  }
+  //DjnnTimeManager DjnnTimeManager::_instance;
+  //DjnnTimeManager _instance;
+  static DjnnTimeManager * _instance;
 
-  DjnnTimeManager DjnnTimeManager::_instance;
-
-  // here since DjnnTimeManager is a singleton: this prevents unneeded stuff in djnn_time_manager.h
-  static std::timed_mutex cancel_mutex;
+// here since DjnnTimeManager is a singleton: this prevents unneeded stuff in djnn_time_manager.h
+  static std::timed_mutex * cancel_mutex;
         
   // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough
   // The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock
   // If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-  static std::condition_variable_any cv;
+  static std::condition_variable_any * cv;
+
+  DjnnTimeManager&
+  DjnnTimeManager::instance ()
+  {
+    //return (_instance);
+    if(!_instance) {
+      _instance = new DjnnTimeManager;
+      cancel_mutex = new std::timed_mutex;
+      cv = new std::condition_variable_any();
+    }
+    return (*_instance);
+  }
+
+  void
+  DjnnTimeManager::delete_ ()
+  {
+    delete _instance;
+    _instance = nullptr;
+  }
+
+  
 
 
   djnn_internal::Time::time_point
@@ -101,7 +120,7 @@ namespace djnn {
   DjnnTimeManager::firstTimerHasChanged()
   {
     //cancel_mutex.unlock (); // FIXME1 The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock
-    cv.notify_one();
+    cv->notify_one();
   }
 
   void
@@ -109,26 +128,24 @@ namespace djnn {
   {
     if(get_please_stop ()) return;
     set_please_stop (true);
-    cv.notify_one();
+    cv->notify_one();
   }
 
   void
   DjnnTimeManager::run ()
   {
     set_please_stop (false);
-
     djnn::get_exclusive_access (DBG_GET);
-
     update_ref_now_in_scheduled_timers (); // we are about to begin but we took some time to init, so pretend that "now" is now.
     // try {
       while (!get_please_stop ()) {        
         //bool timer_cancelled =false;
-        cancel_mutex.lock(); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
-        if (empty()) {
+        cancel_mutex->lock (); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
+        if (empty ()) {
           djnn::release_exclusive_access (DBG_REL);
           //cancel_mutex.lock(); // second lock, blocks until another thread calls please_stop of firstTimerHasChanged //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
           // FIXME2: If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-          cv.wait(cancel_mutex
+          cv->wait(*cancel_mutex
             //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
           ); // FIXME cv should use global mutex
         } else {
@@ -137,12 +154,12 @@ namespace djnn {
           //timer_cancelled =
           //cancel_mutex.try_lock_until(next_time); //std::cerr << "<< djnntimemanager exited sleep " << DBGVAR(timer_cancelled) << __FL__;
           // FIXME2: If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-          cv.wait_until(cancel_mutex, next_time
+          cv->wait_until(*cancel_mutex, next_time
             //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
           ); // FIXME cv should use global mutex
         }
         djnn::get_exclusive_access (DBG_GET);
-        cancel_mutex.unlock(); // unlock first lock
+        cancel_mutex->unlock (); // unlock first lock
         if(thread_local_cancelled || get_please_stop ()) break;
         //if(timer_cancelled) {} // either 'infinite duration' has run out or there is a new timer
 

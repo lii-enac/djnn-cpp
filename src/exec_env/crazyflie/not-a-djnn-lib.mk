@@ -61,6 +61,7 @@ CFLAGS += -DDJNN_NO_SERIALIZE
 CFLAGS += -DRMT_ENABLED=0
 #CXXFLAGS += $(CFLAGS)
 #CXXFLAGS += -DDJNN_NO_DYNAMIC_CAST
+CXXFLAGS += -DDJNN_USE_FREERTOS
 CXXFLAGS += -DDJNN_USE_STD_THREAD=1
 CXXFLAGS += --rtti #--rtti_data
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
@@ -97,8 +98,10 @@ crazyflie_objs += \
 crazyflie_objs += \
 	src/core/control/action.o src/core/control/assignment.o \
 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
-	src/core/tree/spike.o
+	src/core/tree/spike.o \
+	src/core/tree/blank.o
 # spike : for bool
+# blank : for time
 
 # Component
 crazyflie_objs += \
@@ -126,6 +129,12 @@ crazyflie_objs += \
 	src/exec_env/time_manager.o \
 	src/exec_env/timer.o \
 	src/exec_env/freertos/freertos_mainloop.o \
+	src/exec_env/freertos/ext/freertos-cxx11/condition_variable.o \
+	src/exec_env/freertos/ext/freertos-cxx11/freertos_time.o \
+	src/exec_env/freertos/ext/freertos-cxx11/future.o \
+	src/exec_env/freertos/ext/freertos-cxx11/gthr_key.o \
+	src/exec_env/freertos/ext/freertos-cxx11/mutex.o \
+	src/exec_env/freertos/ext/freertos-cxx11/thread.o \
 
 
 .PHONY: $(build_dir)/include/djnn/crazyflie.h $(build_dir)/include/djnn/crazyflie-dev.h

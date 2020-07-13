@@ -23,7 +23,8 @@ namespace djnn {
         ~DjnnTimeManager();
 
         static DjnnTimeManager& instance ();
-        static DjnnTimeManager _instance;
+        void delete_ ();
+        //static DjnnTimeManager _instance;
 
         virtual void please_stop () override;
 

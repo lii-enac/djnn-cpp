@@ -31,6 +31,7 @@ namespace djnn
     virtual void join();
 
     void private_run();
+    const std::string& get_name () const { return _name; }
 
     static
 #ifndef __EMSCRIPTEN__

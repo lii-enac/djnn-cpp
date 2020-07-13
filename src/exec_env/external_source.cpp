@@ -3,9 +3,9 @@
 #include "cpp-mutex.h"
 #include <mutex>
 
-// #include <iostream>
-// #include "utils/debug.h"
-// #include <thread>
+//#include <iostream>
+//#include "utils/debug.h"
+//#include <thread>
 
 namespace djnn {
 
@@ -225,13 +225,13 @@ namespace djnn {
 	void
 	ExternalSource::private_run ()
 	{
-        //std::cerr << "thread created " << _name << " " << std::this_thread::get_id() << __FL__;
+        //std::cerr << "thread created " << _name << " " << __FL__; //<< std::this_thread::get_id() << __FL__;
         launch_mutex_lock();
         launch_mutex_unlock();
-        
+
         cancelled = &thread_local_cancelled;
         *cancelled = false;
-        
+
         run();
 
         cancelled = nullptr;

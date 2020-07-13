@@ -108,9 +108,7 @@ namespace djnn
     bool pre_activate () override { return true; }
 
   private:
-    static MainLoop _instance;
-
-    
+    //static MainLoop _instance;
 
     // MainLoop should be created *before* any other external-source
     MainLoop ();
