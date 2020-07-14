@@ -20,7 +20,8 @@
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-//#include <iostream>
+#include <iostream>
+//#include "core/utils/error.h"
 //#include "utils/debug.h"
 
 namespace djnn

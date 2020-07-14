@@ -7,6 +7,13 @@
 //#include "utils/debug.h"
 //#include <thread>
 
+// #ifndef DEBUG_PRINT
+// int eprintf(putc_t putcf, char * fmt, ...);
+// #define consolePrintf(FMT, ...) eprintf(consolePutchar, FMT, ## __VA_ARGS__)
+// #define DEBUG_FMT(fmt) fmt
+// #define DEBUG_PRINT(fmt, ...) consolePrintf(DEBUG_FMT(fmt), ##__VA_ARGS__)
+// #endif
+
 namespace djnn {
 
     //static djnn_mutex_t * launch_mutex;
@@ -141,6 +148,7 @@ namespace djnn {
     : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _name(name), _please_stop (false)
     {
         //MainLoop::instance().add_external_source(this); // on a per-ExternalSource basis according to idiosyncraties
+        //DEBUG_PRINT("%s &thread_local_cancelled:%u %d\n", _name.c_str(), &thread_local_cancelled, __gthread_active_p());
     }
 
     ExternalSource::~ExternalSource ()

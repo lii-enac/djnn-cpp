@@ -43,15 +43,33 @@ namespace free_rtos_std
 extern Key *s_key;
 } // namespace free_rtos_std
 
+
+extern "C" {
 void
-__pthread_key_create()
+__gthrw___pthread_key_create(unsigned int*, void (*)(void*))
 {
 }
 
 void
-pthread_cancel()
-{ 
+__pthread_key_create(unsigned int*, void (*)(void*))
+{
 }
+
+void
+__gthrw_pthread_cancel(void*)
+{
+}
+
+void
+pthread_cancel(void*)
+{
+}
+
+
+}
+
+
+
 
 namespace std
 {

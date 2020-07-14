@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index 29040bc..8add530 100644
+index 29040bc..1d26bba 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1,9 +1,77 @@
+@@ -1,9 +1,88 @@
  # enable app support
  APP=1
 -APP_STACKSIZE=300
@@ -21,21 +21,29 @@ index 29040bc..8add530 100644
 +djnn_include_path := $(djnn_path)/src
 +djnn_lib_path := $(djnn_path)/build/lib
 +
-+FREERTOS_OBJ += event_groups.o
-+
++#INCLUDES := -I/usr/local/Caskroom/gcc-arm-embedded/9-2019-q4-major/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/c++/9.2.1/ $(INCLUDES) 
 +INCLUDES += -I$(djnn_path)/src
++CFLAGS += -include $(djnn_path)/src/exec_env/freertos/ext/freertos-cxx11/freertos-cxx11-macros.h
++INCLUDES += -I$(djnn_path)/src/exec_env/freertos/ext/freertos-cxx11
 +CFLAGS += -DUSE_DJNN=1
 +CFLAGS += -fexceptions
-+CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
++
++#CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
 +#CFLAGS += -DDEBUG=1
 +
 +CXXFLAGS = $(filter-out -std=gnu11,$(CFLAGS)) -Wno-error=write-strings -Wno-write-strings
 +CXXFLAGS += -DDJNN_CRAZYFLIE
 +CXXFLAGS += -DDJNN_NO_DEBUG
 +CXXFLAGS += -DDJNN_NO_SERIALIZE
++CXXFLAGS += -DDJNN_USE_STD_THREAD
++CXXFLAGS += -DDJNN_USE_FREERTOS
++
 +CXXFLAGS += --rtti #--rtti_data
 +CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 +CXXFLAGS += -std=c++14
++#CXXFLAGS += -DDJNN_USE_STD_THREAD=1
++#CXXFLAGS += -D__GTHREADS=1 -D_GLIBCXX_HAS_GTHREADS
++#CXXFLAG += -D_GTHREAD_USE_MUTEX_TIMEDLOCK=1
 +
 +#CXXFLAGS += -ffunction-sections -fdata-sections
 +#CXXFLAGS += -std=c++14
@@ -45,15 +53,16 @@ index 29040bc..8add530 100644
 +#LIBS += -static -ldjnn-base -ldjnn-exec_env -ldjnn-core -static-libstdc++
 +#LIBS += -ldjnn-crazyflie
 +
++LIBS += -lstdc++ # link stdc++ before libdjnn-crazyflie.a so that stdc++ link with gettimeofday provided by libdjnn-crazyflie.a
 +LIBS += $(djnn_lib_path)/libdjnn-crazyflie.a
 +#LIBS += -static
-+#LIBS += -lstdc++ 
++
 +#LIBS += ../djnn-cpp/build/src/exec_env/crazyflie/crazyflie.o ../djnn-cpp/build/src/core/core.o
 +#LIBS += -static-libstdc++ -static-libgcc -lsupc++ -lstdc++ -lc
++#LIBS += -latomic # no atomic in toolchain :-/
 +
 +
-+
-+PROJ_OBJ := djnn_prog.o djnn.o
++PROJ_OBJ := djnn_prog.o djnn.o event_groups.o
 +#LIBS += $(addprefix $(djnn_path)/build/,$(djnn_crazyflie_objs))
 +
 +endif
@@ -64,6 +73,8 @@ index 29040bc..8add530 100644
 +include $(CRAZYFLIE_BASE)/Makefile
 +
 +ifeq ($(djnn),1)
++
++#FREERTOS_OBJ += event_groups.o
 +
 +$(PROG).elf: $(djnn_lib_path)/libdjnn-crazyflie.a
 +#LDFLAGS := $(filter-out --specs=nano.specs,$(LDFLAGS))
@@ -101,10 +112,10 @@ index 0000000..2b05df3
 \ No newline at end of file
 diff --git a/src/djnn_prog.cpp b/src/djnn_prog.cpp
 new file mode 100644
-index 0000000..f12031b
+index 0000000..a26221d
 --- /dev/null
 +++ b/src/djnn_prog.cpp
-@@ -0,0 +1,214 @@
+@@ -0,0 +1,306 @@
 +#include "core/tree/int_property.h"
 +#include "core/control/binding.h"
 +#include "core/control/assignment.h"
@@ -112,6 +123,9 @@ index 0000000..f12031b
 +#include "core/execution/graph.h"
 +#include "core/utils/djnn_dynamic_cast.h"
 +#include "core/utils/error.h"
++
++#include "exec_env/exec_env.h"
++
 +#include "base/connector.h"
 +#include "base/fsm.h"
 +
@@ -122,8 +136,9 @@ index 0000000..f12031b
 +#include "debug.h"
 +//#include "log.h"
 +
-+#if 0
++#if 1
 +#define USE_FREERTOS 1
++#define __EXCEPTIONS 1
 +
 +// Define the ‘new’ operator for C++ to use the freeRTOS memory management
 +// functions. THIS IS NOT OPTIONAL!
@@ -131,10 +146,14 @@ index 0000000..f12031b
 +void *operator new(size_t size) {
 +	void *p;
 +#ifdef USE_FREERTOS
-+	if(uxTaskGetNumberOfTasks())
++	if(uxTaskGetNumberOfTasks()) {
++		//DBG;
 +		p=pvPortMalloc(size);
-+	else
++	}
++	else {
++		//DBG;
 +  		p=malloc(size);
++	}
 +#else
 + 	p=malloc(size);
 +#endif
@@ -225,6 +244,28 @@ index 0000000..f12031b
 +struct A {virtual ~A() {}};
 +struct B : A {};
 +
++namespace djnn {
++	void init_core ();
++	void init_exec_env ();
++	void init_base ();
++}
++
++class TestAction1 : public djnn::Action
++{
++public:
++  TestAction1 (const std::string& msg) 
++    : djnn::Action (nullptr, "action"), _msg (msg) {};
++  ~TestAction1 () {};
++  void impl_activate () override {
++  	//std::lock_guard<std::mutex> lk(m);
++    //std::cout << "action " << _msg << std::endl;
++	DEBUG_PRINT("action %s\n", _msg.c_str());
++  }
++  void impl_deactivate () override {};
++  ;
++  std::string _msg;
++};
++
 +extern "C" {
 +	void djnn_init_prog2 () {
 +		try {
@@ -242,6 +283,10 @@ index 0000000..f12031b
 +
 +
 +			using namespace djnn;
++
++			init_core ();
++			init_exec_env ();
++			init_base ();
 +
 +			// IntProperty i(nullptr, "", 111); // works
 +			// IntProperty j(nullptr, "", 222); // works
@@ -270,6 +315,7 @@ index 0000000..f12031b
 +
 +			typedef CoreProcess Process;
 +
++			/*
 +			Process *s1 = new Spike( nullptr, "s1");
 +			Process *s2 = new Spike (nullptr, "s2");
 +			Process *fsm = new FSM (nullptr, "FSM");
@@ -293,7 +339,7 @@ index 0000000..f12031b
 +			REQUIRE (st1->is_activated ());
 +			REQUIRE (st2->is_deactivated ());
 +
-+			/* check the resetting of the initial state */
++			// check the resetting of the initial state
 +			s1->activate ();
 +			Graph::instance ().exec ();
 +			fsm->deactivate ();
@@ -307,8 +353,65 @@ index 0000000..f12031b
 +			delete s2;
 +			delete s1;
 +			REQUIRE (Graph::instance ().size () == 0);
++			*/
 +
++			/* 
++			// run mainloop 
++			MainLoop::instance ().set_run_for (2s);
++			DEBUG_PRINT( "activating mainloop for 2s\n" );
++			MainLoop::instance ().activate ();
++			DEBUG_PRINT( "mainloop stopped after 2s\n" );
++			MainLoop::instance ().deactivate ();
++			*/
 +
++			/*
++			Timer* p = new Timer (nullptr, "p", 10ms);
++			REQUIRE (p != 0);
++
++  			delete p;
++			*/
++
++			Timer t1 (nullptr, "t1", 1000ms);
++			TestAction1 a1 ("1s");
++			auto * end1 = t1.find_child ("end");  
++			Coupling* c1 = new Coupling (end1, ACTIVATION, &a1, ACTIVATION);
++			Graph::instance().add_edge (end1, &a1);
++			//auto * b1 = new Binding (nullptr, "", end1, ACTIVATION, &a1, ACTIVATION);
++			//b1->activate();
++
++			Timer t2 (nullptr, "t2", 2550ms);
++			TestAction1 a2 ("2,5s");
++			auto * end2 = t2.find_child ("end");
++			Coupling* c2 = new Coupling (end2, ACTIVATION, &a2, ACTIVATION);
++			Graph::instance().add_edge (end2, &a2);
++			//auto * b2 = new Binding (nullptr, "", end2, ACTIVATION, &a2, ACTIVATION);
++			//b2->activate();
++
++			t1.activate ();
++			t2.activate ();
++			//std::cout << "about to start mainloop..." << std::endl;
++			MainLoop::instance ().set_run_for (3s);
++			DEBUG_PRINT("about to launch mainloop for 3s...\n");
++			MainLoop::instance ().activate ();
++			DEBUG_PRINT("exited mainloop.\n");
++			MainLoop::instance ().deactivate ();
++
++			t1.deactivate ();
++			t2.deactivate ();
++			Graph::instance().remove_edge (end2, &a2);
++			Graph::instance().remove_edge (end1, &a1);
++			//Graph::instance ().exec ();
++			//b1->deactivate ();
++			//b2->deactivate ();
++
++			a1.impl_deactivate ();
++			a2.impl_deactivate ();
++			delete c2;
++  			delete c1;
++			//delete b2;
++  			//delete b1;
++
++  			REQUIRE (Graph::instance ().size () == 0);
 +			DEBUG_PRINT( "end djnn_init_prog2\n" );
 +		} catch (std::exception& e) {
 +			DEBUG_PRINT( const_cast<char*>((std::string("std::exc: ") + e.what() + "\n").c_str() ));
