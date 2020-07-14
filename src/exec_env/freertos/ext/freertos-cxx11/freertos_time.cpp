@@ -93,7 +93,7 @@ static timeval operator+(const timeval &l, const timeval &r)
   return t;
 }
 
-extern "C" int _gettimeofday(timeval *tv, void *tzvp)
+extern "C" int gettimeofday(timeval *tv, void *tzvp)
 {
   (void)tzvp;
 
