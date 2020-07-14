@@ -45,6 +45,11 @@
 
 typedef free_rtos_std::gthr_freertos __gthread_t;
 
+// int eprintf(putc_t putcf, char * fmt, ...);
+// #define consolePrintf(FMT, ...) eprintf(consolePutchar, FMT, ## __VA_ARGS__)
+// #define DEBUG_FMT(fmt) fmt
+// #define DEBUG_PRINT(fmt, ...) consolePrintf(DEBUG_FMT(fmt), ##__VA_ARGS__)
+
 extern "C"
 {
 
@@ -173,7 +178,7 @@ extern "C"
     int32_t ns{lhs.nsec - rhs.tv_usec * 1000};
 
     if (ns<0) {
-      ns += 1'000'000;
+      ns += 1'000'000'000;
       s -= 1;
     }
 
@@ -252,6 +257,7 @@ extern "C"
     gettimeofday(&now, NULL);
 
     auto ms{(*abs_timeout - now).milliseconds()};
+    //DEBUG_PRINT("%dms\n",ms);
     __gthread_mutex_unlock(mutex);
     auto fTimeout{0 == ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(ms))};
     __gthread_mutex_lock(mutex);
