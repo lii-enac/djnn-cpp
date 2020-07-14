@@ -40,7 +40,7 @@ namespace djnn {
 	void
 	FreeRTOSMainloop::run ()
 	{
-		while(true) {
+		while (true) {
 			workerBlock ();
 			djnn::get_exclusive_access (DBG_GET);
 			workerHandleOneEvent ();

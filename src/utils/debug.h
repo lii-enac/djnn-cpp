@@ -10,6 +10,14 @@ extern "C" {
 #include "freertos.h"
 #include "task.h" // vTaskDelay
 #endif
+
+// #ifndef DEBUG_PRINT
+// int eprintf(putc_t putcf, char * fmt, ...);
+// #define consolePrintf(FMT, ...) eprintf(consolePutchar, FMT, ## __VA_ARGS__)
+// #define DEBUG_FMT(fmt) fmt
+// #define DEBUG_PRINT(fmt, ...) consolePrintf(DEBUG_FMT(fmt), ##__VA_ARGS__)
+// #endif
+
 #endif
 
 #ifndef __djnn_str1

@@ -114,11 +114,13 @@ namespace djnn
     MainLoop ();
     std::vector<FatProcess*> _background_processes;
     std::vector<ExternalSource*> _external_sources;
-    std::timed_mutex cancel_mutex;
+    //std::timed_mutex cancel_mutex;
+    std::mutex cancel_mutex;
     // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough
     // The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock
     // If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-    std::condition_variable_any cv;
+    //std::condition_variable_any cv;
+    std::condition_variable cv;
 
     //std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy
     //static bool _is_stopping; // for external sources that can't be stopped easily eg Ivy

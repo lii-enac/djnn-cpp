@@ -172,6 +172,11 @@ extern "C"
     int32_t s{lhs.sec - rhs.tv_sec};
     int32_t ns{lhs.nsec - rhs.tv_usec * 1000};
 
+    if (ns<0) {
+      ns += 1'000'000;
+      s -= 1;
+    }
+
     return __gthread_time_t{s, ns};
   }
 
@@ -233,6 +238,7 @@ extern "C"
   //  return -1;
   //}
 
+
   static inline int __gthread_cond_timedwait(
       __gthread_cond_t *cond, __gthread_mutex_t *mutex,
       const __gthread_time_t *abs_timeout)
@@ -246,7 +252,6 @@ extern "C"
     gettimeofday(&now, NULL);
 
     auto ms{(*abs_timeout - now).milliseconds()};
-
     __gthread_mutex_unlock(mutex);
     auto fTimeout{0 == ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(ms))};
     __gthread_mutex_lock(mutex);

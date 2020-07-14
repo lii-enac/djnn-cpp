@@ -62,14 +62,11 @@ CFLAGS += -DRMT_ENABLED=0
 #CXXFLAGS += $(CFLAGS)
 #CXXFLAGS += -DDJNN_NO_DYNAMIC_CAST
 CXXFLAGS += -DDJNN_USE_FREERTOS
+#CXXFLAGS += -DDJNN_USE_FREERTOS_MAINLOOP
 CXXFLAGS += -DDJNN_USE_STD_THREAD=1
 CXXFLAGS += --rtti #--rtti_data
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
-
-
 #LDFLAGS += -z now -z relro
-
-
 
 toto:
 	@echo $(CXXFLAGS) | tr " " "\n" | sort ;
@@ -100,8 +97,8 @@ crazyflie_objs += \
 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
 	src/core/tree/spike.o \
 	src/core/tree/blank.o
-# spike : for bool
-# blank : for time
+# spike: for bool
+# blank: for time
 
 # Component
 crazyflie_objs += \

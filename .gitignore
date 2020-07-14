@@ -1,4 +1,2 @@
 build/
 config.mk
-djnn-cpp.pc
-djnn-cpp-dev.pc

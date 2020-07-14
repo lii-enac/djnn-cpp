@@ -31,6 +31,7 @@
 
 //#include <iostream>
 //#include "utils/debug.h"
+//#include "core/utils/error.h"
 
 
 namespace djnn {
@@ -121,20 +122,25 @@ namespace djnn {
     void
     MainLoop::run ()
     {
-      cancel_mutex.lock(); // first lock, get it
+      //cancel_mutex.lock(); // first lock, get it
+      {
+      std::unique_lock<std::mutex> l(cancel_mutex);
       if (is_run_forever ()) {
         //std::cerr << ">> mainloop entering sleep forever" << __FL__;
         //cancel_mutex.lock(); // second lock, blocks until another thread calls pleaseStop
-        cv.wait(cancel_mutex);
+        //cv.wait (cancel_mutex);
+        cv.wait (l);
         //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
       } else {
         //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << __FL__;
         //bool timer_cancelled =
         //cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
-        cv.wait_for(cancel_mutex, std::chrono::milliseconds (_duration));
+        //cv.wait_for (cancel_mutex, std::chrono::milliseconds (_duration));
+        cv.wait_for (l, std::chrono::milliseconds (_duration));
         //std::cerr << "<< mainloop exited sleep " << __FL__;
       }
-      cancel_mutex.unlock(); // unlock first lock
+      }
+      //cancel_mutex.unlock(); // unlock first lock
 
       // fist tell all external sources to stop...
       for (auto es: _external_sources) {

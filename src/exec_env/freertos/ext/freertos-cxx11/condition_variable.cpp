@@ -47,15 +47,13 @@ condition_variable::~condition_variable()
 }
 
 void condition_variable::wait(std::unique_lock<std::mutex> &m)
-{ // pre-condition: m is taken!!
+{
+  // pre-condition: m is taken!!
   _M_cond.lock();
   _M_cond.push(__gthread_t::native_task_handle());
   _M_cond.unlock();
-
   m.unlock();
-
   ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-
   m.lock();
 }
 
