@@ -171,9 +171,20 @@ DYNLIB = -shared
 YACC = bison -d
 endif
 
-ifeq ($(os),FreeRTOS)
+ifeq ($(os),crazyflie)
 CFLAGS += -g -MD -Wall -Os
-#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -ffunction-sections -fdata-sections
+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#boost name demangle
+CXXFLAGS += -I/usr/local/include
+# djnn
+CXXFLAGS += -DDJNN_CRAZYFLIE -DDJNN_USE_FREERTOS
+CXXFLAGS += -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
+CXXFLAGS += -DDJNN_USE_STD_THREAD=1
+CXXFLAGS += --rtti #--rtti_data
+CXXFLAGS += -DRMT_ENABLED=0
+
 lib_suffix =.so
 DYNLIB = -shared
 echo = echo

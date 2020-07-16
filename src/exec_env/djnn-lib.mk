@@ -23,8 +23,18 @@ boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
 lib_cppflags += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 endif
 
-ifeq ($(os),FreeRTOS)
-boost_libs =
+ifeq ($(os),crazyflie)
+# crazyflie
+lib_cflags += -I$(freertos_dir)/portable/GCC/ARM_CM4F
+lib_cflags += -DSTM32F40_41xxx
+lib_cflags += -I$(crazyflie_firmware_dir)/src/lib/CMSIS/STM32F4xx/Include
+lib_cflags += -I$(crazyflie_firmware_dir)/vendor/CMSIS/CMSIS/Include/
+#lib_cflags += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+lib_cflags += -fexceptions
+#lib_cflags += -ffunction-sections -fdata-sections
+lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
+#lib_cflags += -fpic
+#lib_cflags += -pie
 endif
 
 
@@ -117,10 +127,10 @@ include src/display/sdl/djnn-lib-flags.mk
 lib_srcs += $(shell find src/exec_env/sdl -name "*.cpp")
 endif
 
-ifeq ($(os),FreeRTOS)
-include src/exec_env/freertos/djnn-lib-flags.mk
-lib_cppflags += -DDJNN_USE_FREERTOS_MAINLOOP=1
-lib_srcs += src/exec_env/freertos/freertos_mainloop.cpp
-lib_srcs += src/exec_env/crazyflie/crazyflie.cpp
-lib_srcs += $(shell find src/exec_env/freertos/ext/freertos-cxx11 -name "*.cpp")
+ifeq ($(os),crazyflie)
+include src/exec_env/crazyflie/djnn-lib.mk
+#lib_cppflags += -DDJNN_USE_FREERTOS_MAINLOOP=1
+#lib_srcs += src/exec_env/freertos/freertos_mainloop.cpp
+#lib_srcs += src/exec_env/crazyflie/crazyflie.cpp
+#lib_srcs += $(shell find src/exec_env/freertos/ext/freertos-cxx11 -name "*.cpp")
 endif

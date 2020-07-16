@@ -99,6 +99,20 @@ namespace djnn
   }
 
   void
+  __info (const std::string& msg)
+  {
+#ifndef DJNN_NO_DEBUG
+    auto & out = std::cout;
+    out << msg << std::endl;
+#endif
+#ifdef DJNN_CRAZYFLIE
+    DJNN_DEBUG_PRINT( msg.c_str() ) ;
+    DJNN_DEBUG_PRINT( "\n" ) ;
+#endif
+    
+  }
+
+  void
   __debug (const char* file, const char* function, const char* line)
   {
 #ifndef DJNN_NO_DEBUG
