@@ -172,12 +172,12 @@ YACC = bison -d
 endif
 
 ifeq ($(os),FreeRTOS)
-CFLAGS += -g -MD -Wall -Os -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
-CFLAGS += -DDJNN_USE_FREERTOS=1
+CFLAGS += -g -MD -Wall -Os
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB = -shared
 echo = echo
+ARFLAGS = r
 endif
 
 ifeq ($(cross_prefix),em)
@@ -235,7 +235,7 @@ CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/
 #https://github.com/andysworkshop/avr-stl/releases
 endif
 
-ARFLAGS ?= -r -u
+#ARFLAGS ?= -r -u
 
 ifeq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400

@@ -19,7 +19,11 @@
 #include "core/tree/text_property.h"
 #include "core/serializer/serializer.h"
 
+#ifdef DJNN_CRAZYFLIE
+#include "debug.h"
+#else
 #include <iostream>
+#endif
 
 namespace djnn
 {
@@ -37,7 +41,11 @@ namespace djnn
   void
   TextPrinter::TextPrinterAction::impl_activate ()
   {
+#ifdef DJNN_CRAZYFLIE
+    DEBUG_PRINT("%s\n", _input->get_value ().c_str ());
+#else
     std::cout << _input->get_value () << std::endl;
+#endif
   }
 
   TextPrinter::TextPrinter (ParentProcess* parent, const std::string& name)

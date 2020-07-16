@@ -15,6 +15,8 @@
 
 # -------------------------------------
 
+src_dir ?= src
+
 display :=
 graphics :=
 os := FreeRTOS
@@ -28,72 +30,62 @@ freertos_dir := $(crazyflie_firmware_dir)/vendor/FreeRTOS
 freertos_config_dir := $(crazyflie_firmware_dir)/src/config
 freertos_layers_dir := $(crazyflie_firmware_dir)/src
 
-CFLAGS += -I$(freertos_dir)/include \
-	-I$(freertos_dir)/portable/GCC/ARM_CM4F \
-	-I$(freertos_config_dir) \
-	-I$(freertos_layers_dir)/drivers/interface \
-	-I$(freertos_layers_dir)/hal/interface \
-	-I$(freertos_layers_dir)/utils/interface \
-	-I$(freertos_layers_dir)/modules/interface
-
-#freetos-cxx11
-CXXFLAGS += -include $(src_dir)/exec_env/freertos/ext/freertos-cxx11/freertos-cxx11-macros.h
-CXXFLAGS += -Isrc/exec_env/freertos/ext/freertos-cxx11
+include src/exec_env/freertos/djnn-lib-flags.mk
 
 # crazyflie
-CFLAGS += -DSTM32F40_41xxx
-CFLAGS += -I$(crazyflie_firmware_dir)/src/lib/CMSIS/STM32F4xx/Include
-CFLAGS += -I$(crazyflie_firmware_dir)/vendor/CMSIS/CMSIS/Include/
-CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-#CFLAGS += -pie
-CFLAGS += -fexceptions
-CFLAGS += -ffunction-sections -fdata-sections
-CFLAGS += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
-#CFLAGS += -fpic
+lib_cflags += -I$(freertos_dir)/portable/GCC/ARM_CM4F
+lib_cflags += -DSTM32F40_41xxx
+lib_cflags += -I$(crazyflie_firmware_dir)/src/lib/CMSIS/STM32F4xx/Include
+lib_cflags += -I$(crazyflie_firmware_dir)/vendor/CMSIS/CMSIS/Include/
+lib_cflags += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+lib_cflags += -fexceptions
+lib_cflags += -ffunction-sections -fdata-sections
+lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
+#lib_cflags += -fpic
+#lib_cflags += -pie
 
-#boost
-CXXFLAGS += -I/usr/local/include
+#boost name demangle
+lib_cppflags += -I/usr/local/include
 
 # djnn
-CFLAGS += -DDJNN_CRAZYFLIE
-CFLAGS += -DDJNN_NO_DEBUG
-CFLAGS += -DDJNN_NO_SERIALIZE
-CFLAGS += -DRMT_ENABLED=0
-#CXXFLAGS += $(CFLAGS)
-#CXXFLAGS += -DDJNN_NO_DYNAMIC_CAST
-CXXFLAGS += -DDJNN_USE_FREERTOS
-#CXXFLAGS += -DDJNN_USE_FREERTOS_MAINLOOP
-CXXFLAGS += -DDJNN_USE_STD_THREAD=1
-CXXFLAGS += --rtti #--rtti_data
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+lib_cflags += -DDJNN_CRAZYFLIE
+lib_cflags += -DDJNN_NO_DEBUG
+lib_cflags += -DDJNN_NO_SERIALIZE
+lib_cflags += -DRMT_ENABLED=0
+lib_cppflags += -DDJNN_USE_FREERTOS
+lib_cppflags += -DDJNN_USE_STD_THREAD=1
+lib_cppflags += --rtti #--rtti_data
+lib_cppflags += -Wno-psabi #https://stackoverflow.com/a/48149400
+#lib_cppflags += -DDJNN_NO_DYNAMIC_CAST
+#lib_cppflags += -DDJNN_USE_FREERTOS_MAINLOOP
+
 #LDFLAGS += -z now -z relro
+
+# it's not a djnn lib .mk !!
+CFLAGS := $(lib_cflags)
+CXXFLAGS := $(lib_cppflags)
 
 toto:
 	@echo $(CXXFLAGS) | tr " " "\n" | sort ;
 	#| tr "\n" " "; echo 
 
-# minimum
-# crazyflie_objs := \
-# 	src/exec_env/crazyflie/crazyflie.o \
-# 	src/core/core.o \
-
 crazyflie_objs += \
 	src/core/core.o
 
-# IntProperty
+# Properties
 crazyflie_objs += \
 	src/core/ontology/process.o src/core/ontology/coupling.o src/core/execution/graph.o \
-	src/core/utils/error.o src/core/utils/uri.o src/core/utils/utils-dev.o \
-	src/core/tree/int_property.o
+	src/core/tree/int_property.o src/core/tree/bool_property.o src/core/tree/text_property.o \
+	src/core/tree/double_property.o src/core/tree/ref_property.o \
+	src/core/utils/error.o src/core/utils/uri.o src/core/utils/utils-dev.o
 # graph: for state_dependency
 # uri: for find_by_uri
 
-# Binding, nothing to add!
-#crazyflie_objs +=
+# Binding
+crazyflie_objs += src/core/control/binding.o
 
 # Assignment
 crazyflie_objs += \
-	src/core/control/binding.o \
 	src/core/control/action.o src/core/control/assignment.o \
 	src/core/tree/bool_property.o src/core/tree/double_property.o src/core/tree/text_property.o src/core/tree/ref_property.o \
 	src/core/tree/spike.o \
@@ -106,6 +98,14 @@ crazyflie_objs += \
 	src/core/tree/component.o \
 	src/core/tree/component_observer.o
 
+#
+crazyflie_objs += \
+	src/core/control/native_action.o \
+	src/core/control/native_expression_action.o \
+	src/core/control/synchronizer.o \
+	src/core/control/activator.o
+
+
 # base
 crazyflie_objs += \
 	src/base/base.o
@@ -113,6 +113,9 @@ crazyflie_objs += \
 crazyflie_objs += \
 	src/base/connector.o \
 	src/base/fsm.o
+
+crazyflie_objs += \
+	src/base/text.o
 
 # exec_env
 crazyflie_objs += \
@@ -133,9 +136,8 @@ crazyflie_objs += \
 	src/exec_env/freertos/ext/freertos-cxx11/gthr_key.o \
 	src/exec_env/freertos/ext/freertos-cxx11/mutex.o \
 	src/exec_env/freertos/ext/freertos-cxx11/thread.o \
-
+	src/exec_env/freertos/memory.o
 #	src/exec_env/freertos/freertos_mainloop.o # not used as of yet
 
 
 .PHONY: $(build_dir)/include/djnn/crazyflie.h $(build_dir)/include/djnn/crazyflie-dev.h
-

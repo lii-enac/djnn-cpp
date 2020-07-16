@@ -5,7 +5,6 @@
 #endif
 
 namespace djnn {
-#if !defined(DJNN_NO_SERIALIZE)
 
   using std::string;
 
@@ -24,6 +23,7 @@ namespace djnn {
     FatProcess::set_parent (parent); 
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   CoreBinding::serialize (const std::string& format)
   {
