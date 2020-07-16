@@ -1,4 +1,4 @@
-local_dir := $(src_dir)/extra/crazyflie
+local_dir := $(src_dir)/extra/crazyflie_rc
 
 lib_djnn_deps = core
 

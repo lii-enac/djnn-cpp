@@ -5,7 +5,7 @@
 #include "core/tree/text_property.h"
 
 
-#include "extra/crazyflie/ext/crazyflie_cpp/include/crazyflie_cpp/Crazyflie.h"
+#include "extra/crazyflie_rc/ext/crazyflie_cpp/include/crazyflie_cpp/Crazyflie.h"
 
 namespace djnn {
 

@@ -134,6 +134,8 @@ crazyflie_objs += \
 	src/exec_env/freertos/ext/freertos-cxx11/mutex.o \
 	src/exec_env/freertos/ext/freertos-cxx11/thread.o \
 
+#	src/exec_env/freertos/freertos_mainloop.o # not used as of yet
+
 
 .PHONY: $(build_dir)/include/djnn/crazyflie.h $(build_dir)/include/djnn/crazyflie-dev.h
 
