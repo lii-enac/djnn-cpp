@@ -28,7 +28,7 @@ namespace djnn
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
-      _action (this, "sort"),
+      _action (this, "sort_action"),
       _sort (this, "sort"),
       _c_sort_action (&_sort, ACTIVATION, &_action, ACTIVATION, true),
       _c_spec_action (&_spec, ACTIVATION, &_action, ACTIVATION, true)
