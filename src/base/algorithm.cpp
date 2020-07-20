@@ -309,7 +309,13 @@ namespace djnn
 
   ListOperator::~ListOperator()
   {
-    Graph::instance ().remove_edge (_container->find_child ("size"), &_action);
+    for (auto c: _coupling_list) {
+      auto * s = c->get_src();
+      Graph::instance ().remove_edge (s, &_action);
+      delete c;
+    }
+    
+    Graph::instance ().remove_edge (_container->find_child ("size"), &_update_list);
     delete _c_update_list_action;
   }
 
