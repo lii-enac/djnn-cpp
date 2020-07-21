@@ -61,7 +61,7 @@ namespace djnn
     _key (this, "key", nullptr),
     _value (this, "value", nullptr),
      _add (this, "add"),
-    _del (this, "delete"),
+    _del (this, "del"),
     _find_action (this, "find_action"),
      _add_action (this, "add_action"),
     _del_action (this, "del_action"),
