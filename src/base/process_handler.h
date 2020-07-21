@@ -177,7 +177,9 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
     void add_one ();
+    void add_one (CoreProcess* p);
     void remove_one ();
+    void remove_one (CoreProcess* p);
     void remove_all ();
     std::vector<CoreProcess*> get_list () { return _list; }
   protected:

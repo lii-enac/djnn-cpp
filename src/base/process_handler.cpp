@@ -130,11 +130,26 @@ namespace djnn
   }
 
   void
+  ProcessCollector::add_one (CoreProcess* p)
+  {
+    if (p) {
+      _list.push_back (p);
+    }
+  }
+
+  void
   ProcessCollector::remove_one ()
   {
     auto *to_remove = _remove.get_value ();
     if (to_remove)
       std::remove (_list.begin (), _list.end (), to_remove);
+  }
+
+  void
+  ProcessCollector::remove_one (CoreProcess* p)
+  {
+    if (p)
+      std::remove (_list.begin (), _list.end (), p);
   }
 
   void
