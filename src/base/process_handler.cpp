@@ -27,29 +27,16 @@ namespace djnn
   : FatProcess (name),
   _del (this, "del", nullptr),
   _del_one (this, "delete_one_action"),
-  _c_del (&_del, ACTIVATION, &_del_one, ACTIVATION)
+  _c_del (&_del, ACTIVATION, &_del_one, ACTIVATION, true)
   {
-
-    Graph::instance ().add_edge (&_del, &_del_one);
     finalize_construction (parent, name);
   }
 
   ProcessDeleter::~ProcessDeleter ()
   {
-    Graph::instance ().remove_edge (&_del, &_del_one);
   }
 
-  void
-  ProcessDeleter::set_parent (ParentProcess *p)
-  {
-    /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-     remove_state_dependency (get_parent (), &_del_one);
-    }
 
-    add_state_dependency (p, &_del_one);
-    FatProcess::set_parent (p);
-  }
   void
   ProcessDeleter::impl_activate ()
   {

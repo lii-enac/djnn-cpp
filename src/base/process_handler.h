@@ -42,7 +42,6 @@ namespace djnn
     void impl_deactivate () override;
     void delete_one ();
   protected:
-    void set_parent (ParentProcess* p) override;
     RefProperty _del;
     DeleteOneAction _del_one;
     Coupling _c_del;
