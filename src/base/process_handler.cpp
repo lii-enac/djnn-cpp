@@ -148,8 +148,9 @@ namespace djnn
   void
   ProcessCollector::remove_one (CoreProcess* p)
   {
-    if (p)
+    if (p) {
       std::remove (_list.begin (), _list.end (), p);
+    }
   }
 
   void
@@ -378,5 +379,40 @@ namespace djnn
           p->set_value (_value.get_value (), true);
       }
     }
+  }
+
+  NativeCollectionAction::NativeCollectionAction (ParentProcess* parent, const std::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel) :
+      Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
+  {
+    _coll = dynamic_cast<ProcessCollector*> (coll);
+    if (coll == nullptr)
+      error (this, "Only a ProcessCollector can be used in a NativeCollectionAction");
+    set_is_model (isModel);
+    finalize_construction (parent, name);
+  }
+
+  NativeCollectionAction::~NativeCollectionAction ()
+  {
+  }
+
+  void
+  NativeCollectionAction::impl_activate ()
+  {
+    (_action) (this, _coll->get_list());
+  }
+
+  void*
+  NativeCollectionAction::data ()
+  {
+    return _data;
+  }
+
+  void*
+  get_native_collection_user_data (CoreProcess* native_action)
+  {
+    NativeCollectionAction *na = djnn_dynamic_cast<NativeCollectionAction*> (native_action);
+    if (na == nullptr)
+      return nullptr;
+    return na->data ();
   }
 }

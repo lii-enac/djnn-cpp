@@ -193,4 +193,26 @@ namespace djnn
     RemoveAllAction _rm_all;
     Coupling _c_add, _c_rm, _c_rm_all;
   };
+
+  typedef void (NativeCollectionCode) (CoreProcess*, std::vector<CoreProcess*>);
+
+  class NativeCollectionAction : public Action
+  {
+  public:
+    NativeCollectionAction (ParentProcess* parent, const std::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel);
+    virtual ~NativeCollectionAction ();
+    virtual process_type_e get_process_type () const override { return NATIVE_COLLECTION_ACTION_T; }
+    void impl_activate () override;
+    void* data ();
+
+    virtual void set_activation_source (CoreProcess* src) override { _activation_source = src; }
+    virtual CoreProcess* get_activation_source () override { return _activation_source; }
+
+  private:
+    void *_data;
+    NativeCollectionCode *_action;
+    CoreProcess *_activation_source;
+    ProcessCollector* _coll;
+  };
+  void* get_native_collection_user_data (CoreProcess* native_collection_action);
 }

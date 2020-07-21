@@ -30,6 +30,7 @@ namespace djnn {
     PROPERTY_T,
     ACTION_T,
     NATIVE_ACTION_T,
+    NATIVE_COLLECTION_ACTION_T,
     CONTAINER_T,
     FSM_T,
     WINDOW_T,
