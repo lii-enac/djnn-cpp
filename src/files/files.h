@@ -17,13 +17,27 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/tree/text_property.h"
+#include "core/tree/bool_property.h"
+#include "core/tree/spike.h"
+#include "core/tree/blank.h"
+#include "core/tree/list.h"
 #include "core/control/action.h"
+#include "exec_env/external_source.h"
 #include "files/file_writer.h"
 #include "files/files-dev.h"
+#include "base/process_handler.h"
 
 namespace djnn
 {
+  typedef enum djn_dir_event {
+    DJN_CHANGE,
+    DJN_DELETE,
+    DJN_RENAME,
+    DJN_UNKNOWN,
+    DJN_ERROR
+  } djn_dir_event;
 
+  struct DirectoryObserverData;
   extern std::vector<std::string> loadedModules; 
 
   class FileReader : public FatProcess
@@ -49,4 +63,59 @@ namespace djnn
     Coupling* _c_input;
     FileReaderAction* _action;
   };
+
+  class DirectoryObserver : public FatProcess, public ExternalSource
+  {
+  private:
+     class UpdateAction : public Action
+     {
+     public:
+       UpdateAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+       void impl_activate () override { ((DirectoryObserver*)get_parent ())->iterate (); };
+       void impl_deactivate () override {}
+     };
+     class ChangePathAction : public Action
+     {
+     public:
+       ChangePathAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+       void impl_activate () override { ((DirectoryObserver*)get_parent ())->change_path (); };
+       void impl_deactivate () override {}
+     };
+  public:
+    DirectoryObserver (ParentProcess *parent, const std::string& name, const std::string& path);
+    virtual ~DirectoryObserver ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+    void iterate ();
+    void change_path ();
+  private:
+    void run () override;
+    TextProperty _path;
+    Spike _update, _s_added, _s_removed;
+    Blank _delete, _rename, _change;
+    UpdateAction _update_action;
+    ChangePathAction _change_path_action;
+    Coupling _c_path, _c_update;
+    List _files;
+    ProcessCollector _added_files, _removed_files;
+  };
+
+  class File : public FatProcess
+  {
+  public:
+    File (ParentProcess *parent, const std::string &name, const std::string &path, const std::string &filename, bool is_dir) :
+          FatProcess (name), _path (this, "path", path), _filename (this, "filename", filename),
+          _is_dir (this, "is_dir", is_dir) { finalize_construction (parent, name); }
+    virtual ~File () {}
+    void impl_activate () override {};
+    void impl_deactivate () override {}
+    const std::string& get_filename () { return _filename.get_value(); }
+    const std::string& get_path () { return _path.get_value(); }
+    bool is_dir () { return _is_dir.get_value (); }
+  private:
+    TextProperty _path, _filename;
+    BoolProperty _is_dir;
+  };
+  DirectoryObserverData* p_init_directory_watcher (const std::string& path);
+  djn_dir_event p_run_directory_watcher (DirectoryObserverData* data);
 }
