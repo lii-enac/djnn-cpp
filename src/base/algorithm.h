@@ -43,12 +43,6 @@ namespace djnn
     void impl_deactivate () override;
     void sort ();
   private:
-    int partition (int i, int j);
-    void quick_sort (int i_first, int i_last);
-    void merge_sort (int p, int r);
-    void merge (int p, int q, int r);
-    bool compare (AbstractProperty* left, AbstractProperty* right);
-    AbstractProperty* get_and_check (int i);
     AbstractProperty* get_and_check (CoreProcess* i);
   protected:
  #ifndef DJNN_NO_SERIALIZE
@@ -57,7 +51,7 @@ namespace djnn
     BoolProperty _ascending;
     TextProperty _spec;
     Container *_container;
-    SortAction _action;
+    SortAction _sort_action;
     Spike _sort;
     Coupling _c_sort_action, _c_spec_action;
   };
@@ -65,11 +59,11 @@ namespace djnn
   class ListOperator : public FatProcess
   {
   private:
-    class ListOperatorAction : public Action
+    class SpecListOperatorAction : public Action
     {
     public:
-      ListOperatorAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
-      virtual ~ListOperatorAction () {}
+      SpecListOperatorAction (ParentProcess* parent, const std::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      virtual ~SpecListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
     };
     class UpdateListOperatorAction : public Action
@@ -92,7 +86,7 @@ namespace djnn
     TextProperty _spec;
     Container *_container;
     UpdateListOperatorAction _update_list;
-    ListOperatorAction _action;
+    SpecListOperatorAction _spec_action;
     Coupling _c_spec_action;
     Coupling *_c_update_list_action;
     std::vector<Coupling*> _coupling_list;
