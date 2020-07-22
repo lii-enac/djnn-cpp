@@ -156,7 +156,7 @@ namespace djnn
   }
 #endif
 
-  ListOperator::ListOperator (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& spec) :
+  ListOperator::ListOperator (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) :
       FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),
