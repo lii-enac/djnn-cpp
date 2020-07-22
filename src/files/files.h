@@ -41,7 +41,9 @@ namespace djnn
     virtual ~FileReader ();
     void impl_activate () override;
     void impl_deactivate () override;
+#ifndef DJNN_NO_SERIALIZE    
     void serialize (const std::string& type) override;
+#endif
     void read ();
   private:
     TextProperty *_input, *_output;

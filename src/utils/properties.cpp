@@ -87,6 +87,7 @@ namespace djnn
     new TextProperty (this, key, value);
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   Properties::serialize (const std::string& type)
   {
@@ -98,6 +99,7 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+  #endif
 
   /* this code is adapted from
    * https://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string

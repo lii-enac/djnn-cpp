@@ -73,6 +73,7 @@ namespace djnn
     }
   }
 
+#ifndef DJNN_NO_SERIALIZE
   void
   FileReader::serialize (const std::string& type)
   {
@@ -84,5 +85,6 @@ namespace djnn
 
     AbstractSerializer::post_serialize (this);
   }
+#endif
 }
 
