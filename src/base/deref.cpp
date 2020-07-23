@@ -46,6 +46,12 @@ namespace djnn
     auto *old_src = _cset.get_src();
     if (old_src) {
       Graph::instance().remove_edge (old_src, &_get);
+      Graph::instance().remove_edge (&_set, old_src);
+    }
+    auto* unref = _ref->get_value ();
+    if (unref != nullptr) {
+      auto* src = unref->find_child (_path.get_value ());
+      Graph::instance().remove_edge (&_set, src);
     }
   }
 
