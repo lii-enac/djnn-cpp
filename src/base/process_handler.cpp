@@ -83,9 +83,9 @@ namespace djnn
 
   ProcessCollector::~ProcessCollector ()
   {
-    Graph::instance ().remove_edge (&_add, &_add_one);
-    Graph::instance ().remove_edge (&_remove, &_rm_one);
     Graph::instance ().remove_edge (&_s_rm_all, &_rm_all);
+    Graph::instance ().remove_edge (&_remove, &_rm_one);
+    Graph::instance ().remove_edge (&_add, &_add_one);
   }
 
   void
@@ -142,14 +142,14 @@ namespace djnn
   {
     auto *to_remove = _remove.get_value ();
     if (to_remove)
-      std::remove (_list.begin (), _list.end (), to_remove);
+      _list.erase(std::remove (_list.begin (), _list.end (), to_remove), _list.end ());
   }
 
   void
   ProcessCollector::remove_one (CoreProcess* p)
   {
     if (p) {
-      std::remove (_list.begin (), _list.end (), p);
+      _list.erase(std::remove (_list.begin (), _list.end (), p), _list.end ());
     }
   }
 
