@@ -118,8 +118,8 @@ namespace djnn
   }
 
   Dictionary::~Dictionary () {
-    Graph::instance ().remove_edge (&_add, &_add_action);
-    Graph::instance ().remove_edge (&_del, &_del_action);
     Graph::instance ().remove_edge (&_key, &_find_action);
+    Graph::instance ().remove_edge (&_del, &_del_action);
+    Graph::instance ().remove_edge (&_add, &_add_action);
   }
 }
