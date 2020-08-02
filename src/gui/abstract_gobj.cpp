@@ -29,19 +29,26 @@
 
 namespace djnn
 {
+
+  void
+  AbstractGObj::create_Gobj_update_coupling (CoreProcess **prop, CouplingWithData **cprop)
+  {
+    FatProcess *update = get_frame ();
+    if (update) update = get_frame ()->damaged ();
+    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
+    if (somehow_activating ()) {
+      (*cprop)->enable ();
+      Graph::instance ().add_edge (*prop, update);
+    }
+    else
+      (*cprop)->disable ();
+  }
+
   FatProcess*
   AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = get_frame ();
-    if (update) update = get_frame ()->damaged ();
-    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ()) {
-      (*cprop)->enable ();
-      Graph::instance().add_edge(*prop, update);
-    }
-    else
-      (*cprop)->disable ();
+    create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
     return *prop;
   }
 
@@ -49,15 +56,7 @@ namespace djnn
   AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = get_frame ();
-    if (update) update = get_frame ()->damaged ();
-    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ()) {
-      (*cprop)->enable ();
-      Graph::instance().add_edge(*prop, update);
-    }
-    else
-      (*cprop)->disable ();
+    create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
     return *prop;
   }
 
@@ -65,15 +64,7 @@ namespace djnn
   AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = get_frame ();
-    if (update) update = get_frame ()->damaged ();
-    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ()) {
-      (*cprop)->enable ();
-      Graph::instance().add_edge(*prop, update);
-    }
-    else
-      (*cprop)->disable ();
+    create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
     return *prop;
   }
 
@@ -81,25 +72,17 @@ namespace djnn
   AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
-    FatProcess *update = get_frame ();
-    if (update) update = get_frame ()->damaged ();
-    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
-    if (this->somehow_activating ()) {
-      (*cprop)->enable ();
-      Graph::instance().add_edge(*prop, update);
-    }
-    else
-      (*cprop)->disable ();
+    create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
     return *prop;
   }
 
   void
   enable (Coupling* c, CoreProcess* dst)
   {
-    if(c) {
-      if(c->get_dst() == nullptr) {
-        c->set_dst(dst);
-        Graph::instance().add_edge(c->get_src(), c->get_dst());
+    if (c) {
+      if (c->get_dst () == nullptr) {
+        c->set_dst (dst);
+        Graph::instance ().add_edge (c->get_src (), c->get_dst ());
       }
       c->enable();
     }
@@ -117,12 +100,12 @@ namespace djnn
   disable (Coupling *c)
   {
     if (c) {
-      c->disable();
+      c->disable ();
     }
   }
 
 
-  AbstractGObjImpl::~AbstractGObjImpl() {}
+  AbstractGObjImpl::~AbstractGObjImpl () {}
 
   void
   AbstractGObj::update_frame_if_necessary ()
@@ -163,8 +146,6 @@ namespace djnn
         return;
       }
 
-      //_frame = frame;
-      //AbstractGObj::_frame = frame->get_weak_ptr ();
       AbstractGObj::set_frame (frame);
     }
   }
@@ -173,21 +154,16 @@ namespace djnn
   AbstractGObj::update_drawing ()
   {
     if (_frame)
-      //UpdateDrawing::instance()->add_window_for_refresh (_frame);
       _frame->damaged ()->notify_activation ();
   }
 
   void
   AbstractGObj::impl_activate ()
   {
-    //std::cerr << __FILE__ << __LINE__ << std::endl;
     update_frame_if_necessary ();
     auto _frame = get_frame ();
-    //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-    //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
-    //_frame->damaged ()->notify_activation ();
     _frame->damaged ()->activate ();
-    Backend::instance()->activate_gobj(this);
+    Backend::instance ()->activate_gobj (this);
   }
 
   void
@@ -195,13 +171,8 @@ namespace djnn
   {
     auto _frame = get_frame ();
     if (_frame != nullptr) {
-      //UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-      //UpdateDrawing::instance ()->get_damaged ()->notify_activation ();
-      //UpdateDrawing::instance ()->set_activation_flag (ACTIVATION);
-      //_frame->damaged ()->notify_activation ();
       _frame->damaged ()->activate ();
-      //UpdateDrawing::instance ()->request_activation ();
-      Backend::instance()->deactivate_gobj(this);
+      Backend::instance ()->deactivate_gobj (this);
       _frame = nullptr;
     }
   }

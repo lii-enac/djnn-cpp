@@ -65,6 +65,8 @@ namespace djnn
     virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask);
     virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask);
 
+    void create_Gobj_update_coupling (CoreProcess **prop, CouplingWithData **cprop);
+
   protected:
     void update_frame_if_necessary ();
     Window * _frame;
