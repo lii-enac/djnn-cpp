@@ -55,7 +55,7 @@ namespace djnn
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
   #define warning(p,msg) djnn::__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
-  #define info(msg) djnn::__info(msg)
+  #define loginfo(msg) djnn::__info(msg)
 
   class Context {
   public:

@@ -37,7 +37,7 @@ namespace djnn
   void
   TextPrinter::TextPrinterAction::impl_activate ()
   {
-    info(_input->get_value ());
+    loginfo(_input->get_value ());
   }
 
   TextPrinter::TextPrinter (ParentProcess* parent, const std::string& name)
