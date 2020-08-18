@@ -276,7 +276,7 @@ namespace djnn
   {
     notify_deactivation ();
     set_activation_state (DEACTIVATED);
-    set_activation_flag (NONE_ACTIVATION); // already done in graph
+    //set_activation_flag (NONE_ACTIVATION); // handled in Graph::exec ()
   }
 
   void
