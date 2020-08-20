@@ -32,16 +32,18 @@ namespace djnn
     Finder* f = (Finder*) get_parent ();
     std::string path = f->_path.get_value ();
     std::string key = f->_key.get_value ();
-    if (key.empty())
+    if (key.empty()){
+      warning (this, "finder - \"key\" is empty \n");
+      f->_result.set_value ( (CoreProcess*)nullptr, true); // ??
+      f->_not_found.activate ();
       return;
+    }
     FatChildProcess *res;
     for (auto c : f->_container->children ()) {
       res = c->find_child (path);
       if (res) {
         if (res->get_process_type () != PROPERTY_T) {
-          f->_result.set_value (c, true);
-          f->_found.activate ();
-          return;
+          continue;
         } else {
           switch (((AbstractProperty*) res)->get_prop_type ())
             {
@@ -55,7 +57,7 @@ namespace djnn
                 }
               }
               catch (const std::invalid_argument& ia) {
-                warning (this, "failed to convert the string \"" + key + "\" into an integer property value\n");
+                warning (this, "finder - failed to convert the string \"" + key + "\" into an integer property value\n");
               }
               break;
             case Boolean:
@@ -76,7 +78,7 @@ namespace djnn
                 }
               }
               catch (const std::invalid_argument& ia) {
-                warning (this, "failed to convert the string \"" + key + "\" into a double property value\n");
+                warning (this, "finder - failed to convert the string \"" + key + "\" into a double property value\n");
               }
               break;
             case String:
@@ -92,6 +94,7 @@ namespace djnn
         }
       }
     }
+    f->_result.set_value ((CoreProcess*)nullptr, true);
     f->_not_found.activate ();
   }
 
@@ -120,8 +123,8 @@ namespace djnn
   Finder::~Finder ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_key, &_action);
     Graph::instance ().remove_edge (&_action, &_result);
+    Graph::instance ().remove_edge (&_key, &_action);
   }
 
   void
