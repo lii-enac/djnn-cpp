@@ -53,6 +53,12 @@ namespace djnn {
     XML_Parser parser;
   } djn__CurlData;
 
+  typedef struct
+  {
+    XML_Parser parser;
+    std::string filename;
+  } djn__ExpatData;
+
   size_t
   XML::djn__ReadXML (const char *buf, size_t size, size_t nmemb, void *stream)
   {
@@ -75,18 +81,13 @@ namespace djnn {
     string uri_ = uri;
     std::size_t found = uri.find("://");
     if (found == std::string::npos) {
-      FILE * pFile;
-      pFile = fopen (uri.c_str (),"r");
-      FatProcess* res;
-      if (pFile!=NULL)
-        res = djnParseXML (pFile);
-      else {
+      FatProcess* res = djnParseXML(uri);
+      return res;
+    } else {
         cerr << "unable to load file " + uri << endl;
         return nullptr;
-      }
-      fclose (pFile);
-      return res;
     }
+
     djn__CurlData d;
     CURLcode res;
     CURL *curl = curl_easy_init ();
@@ -101,6 +102,10 @@ namespace djnn {
     XML_SetElementHandler (d.parser, &djn__XMLTagStart, &djn__XMLTagEnd);
     XML_SetCharacterDataHandler (d.parser, &djn__XMLDataHandle);
     XML_SetNamespaceDeclHandler (d.parser, &djn__XMLNamespaceStart, &djn__XMLNamespaceEnd);
+    djn__ExpatData dexpat;
+    dexpat.parser = d.parser;
+    dexpat.filename = uri;
+    XML_SetUserData (d.parser, &dexpat);
 
     curComponent = 0;
     res = curl_easy_perform (curl);
@@ -116,15 +121,23 @@ namespace djnn {
   }
 
   FatProcess*
-  XML::djnParseXML (FILE* f)
+  XML::djnParseXML (const std::string& uri)
   {
+    FILE * f;
+    f = fopen (uri.c_str (),"r");
+    if (f==NULL) return nullptr;
+
     XML_Parser p = XML_ParserCreateNS ("UTF-8", '*');
     int done = 0;
 
     XML_SetElementHandler (p, &djn__XMLTagStart, &djn__XMLTagEnd);
     XML_SetCharacterDataHandler (p, &djn__XMLDataHandle);
     XML_SetNamespaceDeclHandler (p, &djn__XMLNamespaceStart, &djn__XMLNamespaceEnd);
-
+    djn__ExpatData dexpat;
+    dexpat.parser = p;
+    dexpat.filename = uri;
+    XML_SetUserData (p, &dexpat);
+    
     curComponent = 0;
 
     while (!done) {
@@ -147,6 +160,7 @@ namespace djnn {
     }
 
     XML_ParserFree (p);
+    fclose (f);
     return curComponent;
   }
 
@@ -310,6 +324,10 @@ namespace djnn {
 
     /* if yes, handle it and push the handler onto the stack */
     if (h) {
+      djn__ExpatData* dexpat = reinterpret_cast<djn__ExpatData*> (userData);
+      if (dexpat) {
+        Context::instance()->new_line(XML_GetCurrentLineNumber(dexpat->parser), dexpat->filename);
+      }
       FatProcess* e = h->start (attrs, curComponent);
       if (e)
         curComponent = e;
