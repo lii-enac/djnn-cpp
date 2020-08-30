@@ -11,6 +11,9 @@
 #include <stdlib.h>
 #endif
 
+// code borrowed from: https://forums.freertos.org/t/using-c-std-vector-in-task/3339
+// maybe first coming from here: http://www.cplusplus.com/forum/general/73828/
+
 // Define the ‘new’ operator for C++ to use the freeRTOS memory management
 // functions. THIS IS NOT OPTIONAL!
 //
