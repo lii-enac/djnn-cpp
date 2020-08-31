@@ -56,6 +56,9 @@ namespace djnn
   {
     if (_painter != nullptr)
       _painter->save ();
+    if (_picking_view && _picking_view->painter ()) {
+      _picking_view->painter ()->save ();
+    }
   }
 
   void
@@ -63,6 +66,9 @@ namespace djnn
   {
     if (_painter != nullptr)
       _painter->restore ();
+    if (_picking_view && _picking_view->painter ()) {
+      _picking_view->painter ()->restore ();
+    }
   }
   void
   QtBackend::set_painter (QPainter* p)

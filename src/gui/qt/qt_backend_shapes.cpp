@@ -535,13 +535,11 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-    if (is_in_picking_view (s)) {
       load_pick_context (s);
       _picking_view->painter ()->setClipRect (x, y, w, h);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
-    }
   }
 
   void
@@ -560,13 +558,11 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-    if (is_in_picking_view (p)) {
       load_pick_context (p);
       _picking_view->painter ()->setClipPath (cur_path);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
-    }
   }
 
   void
