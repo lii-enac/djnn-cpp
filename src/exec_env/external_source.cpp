@@ -64,6 +64,7 @@ namespace djnn {
         #if DJNN_USE_QT_THREAD
         if(_thread) {
             delete _thread;
+            _thread = nullptr;
         }
         #endif
         #if DJNN_USE_STD_THREAD

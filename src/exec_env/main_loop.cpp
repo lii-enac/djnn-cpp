@@ -205,7 +205,7 @@ namespace djnn {
       #if DJNN_USE_QT_THREAD
       //auto *
       own_thread = QThread::create([this]() { this->MainLoop::private_run(); });
-      QObject::connect(own_thread, SIGNAL(finished()), own_thread, SLOT(deleteLater()));
+      //QObject::connect(own_thread, SIGNAL(finished()), own_thread, SLOT(deleteLater()));
       own_thread->start();
       #endif
 
@@ -225,7 +225,8 @@ namespace djnn {
       #endif
 
       #if DJNN_USE_QT_THREAD
-      own_thread->wait();
+      if (own_thread) own_thread->wait();
+      delete own_thread;
       #endif
 
       #if DJNN_USE_SDL_THREAD
