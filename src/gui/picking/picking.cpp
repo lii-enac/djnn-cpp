@@ -245,12 +245,21 @@ namespace djnn
       {
       case BUTTON_LEFT:
         ((GUIMouse*) GenericMouse)->left ()->press ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->left_press->activate ();
+        }
         break;
       case BUTTON_RIGHT:
         ((GUIMouse*) GenericMouse)->right ()->press ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->right_press->activate ();
+        }
         break;
       case BUTTON_MIDDLE:
         ((GUIMouse*) GenericMouse)->middle ()->press ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->middle_press->activate ();
+        }
         break;
       default:
         ((GUIMouse*) GenericMouse)->left ()->press ()->activate ();
@@ -482,12 +491,21 @@ namespace djnn
       {
       case BUTTON_LEFT:
         ((GUIMouse*) GenericMouse)->left ()->release ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->left_release->activate ();
+        }
         break;
       case BUTTON_RIGHT:
         ((GUIMouse*) GenericMouse)->right ()->release ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->right_release->activate ();
+        }
         break;
       case BUTTON_MIDDLE:
         ((GUIMouse*) GenericMouse)->middle ()->release ()->activate ();
+        if (s != nullptr) {
+          s->get_ui()->middle_release->activate ();
+        }
         break;
       default:
         ((GUIMouse*) GenericMouse)->left ()->release ()->activate ();

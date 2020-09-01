@@ -63,7 +63,8 @@ namespace djnn
     DoubleProperty *move_x, *move_y, *press_x, *press_y, *local_move_x, *local_move_y, *local_press_x, *local_press_y;
     DoubleProperty *mouse_press_x, *mouse_press_y, *mouse_move_x, *mouse_move_y;
     DoubleProperty *mouse_local_press_x, *mouse_local_press_y, *mouse_local_move_x, *mouse_local_move_y;
-    FatProcess *press, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
+    FatProcess *press, *left, *right, *middle, *move, *release, *enter, *leave, *mouse, *mouse_press, *mouse_release, *mouse_move, *mouse_enter, *mouse_leave, *touches;
+    FatProcess *left_press, *left_release, *right_press, *right_release, *middle_press, *middle_release;
     ParentProcess* parent;
   };
 

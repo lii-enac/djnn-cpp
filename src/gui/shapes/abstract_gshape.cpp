@@ -39,7 +39,7 @@
 namespace djnn
 {
   std::vector<std::string> AbstractGShape::_ui =
-    { "pickable", "press", "release", "move", "enter", "leave", "touches", "mouse" };
+    { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
 
   FatChildProcess*
   SVGHolder::find_child (const std::string& path)
@@ -135,6 +135,15 @@ namespace djnn
 
     press = new Spike (parent, "press");
     move = new Spike (parent, "move");
+    left = new Component (parent, "left");
+    left_press = new Spike (left, "press");
+    left_release = new Spike (left, "release");
+    right = new Component (parent, "right");
+    right_press = new Spike (right, "press");
+    right_release = new Spike (right, "release");
+    middle = new Component (parent, "middle");
+    middle_press = new Spike (middle, "press");
+    middle_release = new Spike (middle, "release");
     release = new Spike (parent, "release");
     enter = new Spike (parent, "enter");
     leave = new Spike (parent, "leave");
@@ -144,8 +153,13 @@ namespace djnn
     mouse_move  = new Spike (mouse, "move");
     mouse_enter = new Spike (mouse, "enter");
     mouse_leave = new Spike (mouse, "leave");
+
     touches = new List (parent, "touches");
     touches->set_activation_state (ACTIVATED);
+    mouse->set_activation_state(ACTIVATED);
+    left->set_activation_state (ACTIVATED);
+    right->set_activation_state (ACTIVATED);
+    middle->set_activation_state (ACTIVATED);
 
     move_x = new DoubleProperty (nullptr, "move_x", 0);
     move_y = new DoubleProperty (nullptr, "move_y", 0);
@@ -237,12 +251,24 @@ namespace djnn
     parent->remove_child (move);
     parent->remove_child (enter);
     parent->remove_child (leave);
+    parent->remove_child (left);
+    parent->remove_child (right);
+    parent->remove_child (middle);
 
     mouse->remove_child (mouse_press);
     mouse->remove_child (mouse_release);
     mouse->remove_child (mouse_move);
     mouse->remove_child (mouse_enter);
     mouse->remove_child (mouse_leave);
+
+    left->remove_child (left_press);
+    left->remove_child (left_release);
+
+    right->remove_child (right_press);
+    right->remove_child (right_release);
+
+    middle->remove_child (middle_press);
+    middle->remove_child (middle_release);
 
     /* HACK 
     * clear _children of the (djnn:List) touches before
@@ -263,6 +289,15 @@ namespace djnn
     delete release;
     delete move;
     delete press;
+    delete left;
+    delete left_press;
+    delete left_release;
+    delete right;
+    delete right_press;
+    delete right_release;
+    delete middle;
+    delete middle_press;
+    delete middle_release;
     delete cpick;
     delete pickable;
   }
