@@ -21,7 +21,17 @@
 
 namespace djnn {
   class AbstractGShape;
-  
+  class PickShape
+  {
+    public:
+      PickShape (AbstractGShape* s, bool cache) : _s (s), _cache (cache) {}
+      AbstractGShape* get_shape () const { return _s; }
+      bool cache () const { return _cache; }
+    private:
+      AbstractGShape *_s;
+      bool _cache;
+  };
+
 	class ColorPickingView : public Picking
   {
   public:
@@ -31,7 +41,8 @@ namespace djnn {
     // Picking
     virtual void init ();
     AbstractGShape* pick (double x, double y);
-    void add_gobj (AbstractGShape* gobj);
+    void add_gobj (AbstractGShape* gobj, bool cache);
+    void remove_gobj (AbstractGShape* gobj);
     virtual int get_pixel(unsigned int x, unsigned int y) = 0;
     virtual void object_deactivated (AbstractGShape* gobj);
 
@@ -40,7 +51,7 @@ namespace djnn {
 
   protected:
     unsigned int _pick_color;
-    std::map<unsigned int, AbstractGShape*> _color_map;
+    std::map<unsigned int, PickShape> _color_map;
 
     int seed;
     double myrandom();

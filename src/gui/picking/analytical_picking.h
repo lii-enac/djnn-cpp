@@ -10,7 +10,7 @@ namespace djnn {
     	virtual ~AnalyticalPicking ();
     	virtual void init ();
     	virtual AbstractGShape* pick (double x, double y);
-    	virtual void add_gobj (AbstractGShape* gobj);
+    	virtual void add_gobj (AbstractGShape* gobj, bool cache = false);
 	};
 
 }

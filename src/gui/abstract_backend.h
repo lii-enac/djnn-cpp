@@ -16,6 +16,7 @@
 #pragma once
 
 #include <vector>
+#include "layer.h"
 #include "shapes/shapes.h"
 #include "transformation/transformations.h"
 #include "style/style_types.h"
@@ -129,6 +130,15 @@ namespace djnn
     }
     virtual void
     draw_image (Image *i)
+    {
+    }
+    virtual bool
+    pre_draw_layer (Layer* l)
+    {
+      return false;
+    }
+    virtual void
+    post_draw_layer (Layer* l)
     {
     }
     virtual int

@@ -96,6 +96,8 @@ namespace djnn
     get_pixel (Image *i, double x, double y) override;
     void
     draw_data_image (DataImage *i) override;
+    bool pre_draw_layer (Layer* l) override;
+    void post_draw_layer (Layer* l) override;
 
     //style
     void
@@ -192,6 +194,7 @@ namespace djnn
     is_in_picking_view (AbstractGShape *s);
     QPainter *_painter;
     QtPickingView *_picking_view;
+    bool _in_cache;
     //Picking * _picking_view;
     QtContextManager *_context_manager;
     QPolygonF cur_poly;

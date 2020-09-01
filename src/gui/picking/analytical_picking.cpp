@@ -37,7 +37,7 @@ namespace djnn {
    	}
 
     void
-    AnalyticalPicking::add_gobj (AbstractGShape* gobj)
+    AnalyticalPicking::add_gobj (AbstractGShape* gobj, bool cache)
     {
     }
 

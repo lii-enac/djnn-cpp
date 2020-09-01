@@ -671,4 +671,58 @@ namespace djnn
 #endif
       }
     }
+
+  static QPainter *buff_painter;
+  static QPainter *buff_pick_painter;
+
+  bool
+  QtBackend::pre_draw_layer (Layer *l)
+  {
+    double w,h;
+    QImage *pm = (QImage*) (l->cache ());
+    QImage *pick_pm = (QImage*) (l->pick_cache ());
+    w = l->get_frame()->width ()->get_value();
+    h = l->get_frame()->height ()->get_value();
+    if (l->invalid_cache () || (pm && (pm->width() != w || pm->height() != h))) {
+      if (l->cache () != nullptr) {
+        delete (pm);
+        pm = nullptr;
+      }
+      pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      pm->fill (Qt::transparent);
+      pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      pick_pm->fill (Qt::transparent);
+      l->set_cache (pm);
+      l->set_pick_cache (pick_pm);
+      l->set_invalid_cache (false);
+      buff_painter = _painter;
+      _painter = new QPainter (pm);
+      buff_pick_painter = _picking_view->painter ();
+      _picking_view->set_painter (new QPainter (pick_pm));
+      _in_cache = true;
+      return true;
+    }
+    buff_painter = nullptr;
+    buff_pick_painter = nullptr;
+    return false;
+  }
+
+  void
+  QtBackend::post_draw_layer (Layer *l)
+  {
+    QImage *pm = (QImage*) (l->cache ());
+    QImage *pick_pm =  (QImage*) (l->pick_cache());
+    if (buff_painter != nullptr) {
+      delete _painter;
+      delete _picking_view->painter ();
+      _picking_view->set_painter (buff_pick_painter);
+      _painter = buff_painter;
+      buff_painter = nullptr;
+      buff_pick_painter = nullptr;
+      _in_cache = false;
+    }
+    QRect rect (0, 0, pm->width (), pm->height ());
+    _painter->drawImage (rect, *pm);
+    _picking_view->painter()->drawImage (rect, *pick_pm);
+  }
 } /* namespace djnn */

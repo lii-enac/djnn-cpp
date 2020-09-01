@@ -31,15 +31,23 @@ namespace djnn
   {
   }
 
-  void
-  ColorPickingView::init ()
-  {
+  void ColorPickingView::init () {
     _pick_color = 0xff000000; // production
+    for (auto it = _color_map.cbegin(); it != _color_map.cend();) {
+      if (!it->second.cache()) {
+        if (it->first > _pick_color)
+          _pick_color = it->first;
+        _color_map.erase(it++);    // or "it = m.erase(it)" since C++11
+      } else {
+        ++it;
+      }
+    }
+
     //_pick_color = 0xff203040; // for debugging
     seed = 0;
     next_color();
     //if (!_color_map.empty ())
-      _color_map.clear ();
+    //  _color_map.clear ();
   }
 
   double
@@ -67,10 +75,28 @@ namespace djnn
   }
 
   void
-  ColorPickingView::add_gobj (AbstractGShape *gobj)
+  ColorPickingView::add_gobj (AbstractGShape *gobj, bool cache)
   {
-    _color_map.insert (std::pair<unsigned int, AbstractGShape*> (_pick_color, gobj));
+    // if the object has to be cached then maybe it is already there, so remove it first
+    // WARNING 1 - should we better do an update
+    // WARNING 2 - how to be sure that there is no remaining invalid objects?
+    if (cache)
+      remove_gobj (gobj);
+    PickShape ps (gobj, cache);
+    _color_map.insert (std::pair<unsigned int, PickShape> (_pick_color, ps));
     next_color();
+  }
+
+  void
+  ColorPickingView::remove_gobj (AbstractGShape *gobj)
+  {
+    for (auto it = _color_map.cbegin(); it != _color_map.cend();) {
+      if (it->second.get_shape() == gobj) {
+        _color_map.erase(it++);    // or "it = m.erase(it)" since C++11
+      } else {
+        ++it;
+      }
+    }
   }
 
   AbstractGShape*
@@ -79,7 +105,7 @@ namespace djnn
     int color = get_pixel (x, y);
     auto it = _color_map.find (color);
     if (it != _color_map.end ()) {
-      return it->second;
+      return it->second.get_shape ();
     }
     return nullptr;
   }
@@ -93,7 +119,7 @@ namespace djnn
     // FIXME : should we delete object from picking_view when deactivated
     auto it = _color_map.begin ();
     for ( ; it != _color_map.end () ; ++it) {
-      if (it->second == gobj)
+      if (it->second.get_shape () == gobj)
         break;
     }
     if (it != _color_map.end ())

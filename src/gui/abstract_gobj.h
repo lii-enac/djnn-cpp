@@ -29,6 +29,7 @@ namespace djnn
 {
 
   class Window;
+  class Layer;
   extern bool gui_initialized;
 
   class AbstractGObjImpl {
@@ -46,6 +47,7 @@ namespace djnn
     virtual process_type_e get_process_type () const override { return GOBJ_T; }
     Window*& get_frame () { return _frame; }
     void set_frame (Window*& frame) { _frame = frame; }
+    Layer* find_layer ();
     //std::weak_ptr<Window>
     //auto frame () { return &*AbstractGObj::_frame.lock (); }
     void update_drawing () override;
@@ -75,6 +77,7 @@ namespace djnn
     AbstractGObjImpl *_impl;
   };
 
+  Window* find_frame (CoreProcess* obj);
   void enable (Coupling* c, CoreProcess* dst);
   void remove_edge (Coupling *c);
   void disable (Coupling *c);

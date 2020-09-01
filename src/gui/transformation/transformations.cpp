@@ -1370,6 +1370,7 @@ namespace djnn
   AbstractHomography::init_rightTranslateBy ()
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
     _rightTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
     _rightTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
@@ -1377,9 +1378,9 @@ namespace djnn
     _rightTranslateBy_spike->add_symbol( "dy", _rightTranslateBy_dy);
     _rightTranslateBy_action = new RightTranslateByAction (this, "action_right_translate_by", this);
     _rightTranslateBy_dx_coupling = new CouplingWithData (_rightTranslateBy_dx, ACTIVATION, _rightTranslateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightTranslateBy_dx_coupling, _frame->damaged ()) : _rightTranslateBy_dx_coupling->disable ();
+    this->somehow_activating () ? enable (_rightTranslateBy_dx_coupling, damaged) : _rightTranslateBy_dx_coupling->disable ();
     _rightTranslateBy_dy_coupling = new CouplingWithData (_rightTranslateBy_dy, ACTIVATION, _rightTranslateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightTranslateBy_dy_coupling, _frame->damaged ()) : _rightTranslateBy_dy_coupling->disable ();
+    this->somehow_activating () ? enable (_rightTranslateBy_dy_coupling, damaged) : _rightTranslateBy_dy_coupling->disable ();
     Graph::instance().add_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
     Graph::instance().add_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
     Graph::instance().add_edge(_rightTranslateBy_action, m11 ());
@@ -1395,6 +1396,7 @@ namespace djnn
   AbstractHomography::init_leftTranslateBy ()
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
     _leftTranslateBy_dx = new DoubleProperty (nullptr, "dx", 0);
     _leftTranslateBy_dy = new DoubleProperty (nullptr, "dy", 0);
@@ -1402,9 +1404,9 @@ namespace djnn
     _leftTranslateBy_spike->add_symbol( "dy", _leftTranslateBy_dy);
     _leftTranslateBy_action = new LeftTranslateByAction (this, "action_left_translate_by", this);
     _leftTranslateBy_dx_coupling = new CouplingWithData (_leftTranslateBy_dx, ACTIVATION, _leftTranslateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftTranslateBy_dx_coupling, _frame->damaged ()) : _leftTranslateBy_dx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftTranslateBy_dx_coupling, damaged) : _leftTranslateBy_dx_coupling->disable ();
     _leftTranslateBy_dy_coupling = new CouplingWithData (_leftTranslateBy_dy, ACTIVATION, _leftTranslateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftTranslateBy_dy_coupling, _frame->damaged ()) : _leftTranslateBy_dy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftTranslateBy_dy_coupling, damaged) : _leftTranslateBy_dy_coupling->disable ();
     Graph::instance().add_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
     Graph::instance().add_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
     Graph::instance().add_edge(_leftTranslateBy_action, m11 ());
@@ -1420,6 +1422,7 @@ namespace djnn
   AbstractHomography::init_rightScaleBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _rightScaleBy_spike = new Spike (this, "rightScaleBy");
     _rightScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1431,13 +1434,13 @@ namespace djnn
     _rightScaleBy_spike->add_symbol ("sy", _rightScaleBy_sy);
     _rightScaleBy_action = new RightScaleByAction (this, "action_right_scale_by", this);
     _rightScaleBy_cx_coupling = new CouplingWithData (_rightScaleBy_cx, ACTIVATION, _rightScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightScaleBy_cx_coupling, _frame->damaged ()) : _rightScaleBy_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_rightScaleBy_cx_coupling, damaged) : _rightScaleBy_cx_coupling->disable ();
     _rightScaleBy_cy_coupling = new CouplingWithData (_rightScaleBy_cy, ACTIVATION, _rightScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightScaleBy_cy_coupling, _frame->damaged ()) : _rightScaleBy_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_rightScaleBy_cy_coupling, damaged) : _rightScaleBy_cy_coupling->disable ();
     _rightScaleBy_sx_coupling = new CouplingWithData (_rightScaleBy_sx, ACTIVATION, _rightScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightScaleBy_sx_coupling, _frame->damaged ()) : _rightScaleBy_sx_coupling->disable ();
+    this->somehow_activating () ? enable (_rightScaleBy_sx_coupling, damaged) : _rightScaleBy_sx_coupling->disable ();
     _rightScaleBy_sy_coupling = new CouplingWithData (_rightScaleBy_sy, ACTIVATION, _rightScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightScaleBy_sy_coupling, _frame->damaged ()) :_rightScaleBy_sy_coupling->disable ();
+    this->somehow_activating () ? enable (_rightScaleBy_sy_coupling, damaged) :_rightScaleBy_sy_coupling->disable ();
     Graph::instance().add_edge(_rightScaleBy_cx, _rightScaleBy_action);
     Graph::instance().add_edge(_rightScaleBy_cy, _rightScaleBy_action);
     Graph::instance().add_edge(_rightScaleBy_sx, _rightScaleBy_action);
@@ -1457,6 +1460,7 @@ namespace djnn
   AbstractHomography::init_leftScaleBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _leftScaleBy_spike = new Spike (this, "leftScaleBy");
     _leftScaleBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftScaleBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1468,13 +1472,13 @@ namespace djnn
     _leftScaleBy_spike->add_symbol ("sy", _leftScaleBy_sy);
     _leftScaleBy_action = new LeftScaleByAction (this, "action_left_scale_by", this);
     _leftScaleBy_cx_coupling = new CouplingWithData (_leftScaleBy_cx, ACTIVATION, _leftScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftScaleBy_cx_coupling, _frame->damaged ()) : _leftScaleBy_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftScaleBy_cx_coupling, damaged) : _leftScaleBy_cx_coupling->disable ();
     _leftScaleBy_cy_coupling = new CouplingWithData (_leftScaleBy_cy, ACTIVATION, _leftScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftScaleBy_cy_coupling, _frame->damaged ()) : _leftScaleBy_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftScaleBy_cy_coupling, damaged) : _leftScaleBy_cy_coupling->disable ();
     _leftScaleBy_sx_coupling = new CouplingWithData (_leftScaleBy_sx, ACTIVATION, _leftScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftScaleBy_sx_coupling, _frame->damaged ()) : _leftScaleBy_sx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftScaleBy_sx_coupling, damaged) : _leftScaleBy_sx_coupling->disable ();
     _leftScaleBy_sy_coupling = new CouplingWithData (_leftScaleBy_sy, ACTIVATION, _leftScaleBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftScaleBy_sy_coupling, _frame->damaged ()) :_leftScaleBy_sy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftScaleBy_sy_coupling, damaged) :_leftScaleBy_sy_coupling->disable ();
     Graph::instance().add_edge(_leftScaleBy_cx, _leftScaleBy_action);
     Graph::instance().add_edge(_leftScaleBy_cy, _leftScaleBy_action);
     Graph::instance().add_edge(_leftScaleBy_sx, _leftScaleBy_action);
@@ -1494,6 +1498,7 @@ namespace djnn
   AbstractHomography::init_rightRotateBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _rightRotateBy_spike = new Spike (this, "rightRotateBy");
     _rightRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1503,11 +1508,11 @@ namespace djnn
     _rightRotateBy_spike->add_symbol ("da", _rightRotateBy_da);
     _rightRotateBy_action = new RightRotateByAction (this, "action_right_rotate_by", this);
     _rightRotateBy_cx_coupling = new CouplingWithData (_rightRotateBy_cx, ACTIVATION, _rightRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable(_rightRotateBy_cx_coupling, _frame->damaged()) : _rightRotateBy_cx_coupling->disable ();
+    this->somehow_activating () ? enable(_rightRotateBy_cx_coupling, damaged) : _rightRotateBy_cx_coupling->disable ();
     _rightRotateBy_cy_coupling = new CouplingWithData (_rightRotateBy_cy, ACTIVATION, _rightRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable(_rightRotateBy_cy_coupling, _frame->damaged()) : _rightRotateBy_cy_coupling->disable ();
+    this->somehow_activating () ? enable(_rightRotateBy_cy_coupling, damaged) : _rightRotateBy_cy_coupling->disable ();
     _rightRotateBy_da_coupling = new CouplingWithData (_rightRotateBy_da, ACTIVATION, _rightRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable(_rightRotateBy_da_coupling, _frame->damaged()) : _rightRotateBy_da_coupling->disable ();
+    this->somehow_activating () ? enable(_rightRotateBy_da_coupling, damaged) : _rightRotateBy_da_coupling->disable ();
     Graph::instance().add_edge(_rightRotateBy_cx, _rightRotateBy_action);
     Graph::instance().add_edge(_rightRotateBy_cy, _rightRotateBy_action);
     Graph::instance().add_edge(_rightRotateBy_da, _rightRotateBy_action);
@@ -1525,6 +1530,7 @@ namespace djnn
   AbstractHomography::init_leftRotateBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _leftRotateBy_spike = new Spike (this, "leftRotateBy");
     _leftRotateBy_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftRotateBy_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1534,11 +1540,11 @@ namespace djnn
     _leftRotateBy_spike->add_symbol ("da", _leftRotateBy_da);
     _leftRotateBy_action = new LeftRotateByAction (this, "action_left_rotate_by", this);
     _leftRotateBy_cx_coupling = new CouplingWithData (_leftRotateBy_cx, ACTIVATION, _leftRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftRotateBy_cx_coupling, _frame->damaged()) : _leftRotateBy_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftRotateBy_cx_coupling, damaged) : _leftRotateBy_cx_coupling->disable ();
     _leftRotateBy_cy_coupling = new CouplingWithData (_leftRotateBy_cy, ACTIVATION, _leftRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftRotateBy_cy_coupling, _frame->damaged())  : _leftRotateBy_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftRotateBy_cy_coupling, damaged)  : _leftRotateBy_cy_coupling->disable ();
     _leftRotateBy_da_coupling = new CouplingWithData (_leftRotateBy_da, ACTIVATION, _leftRotateBy_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftRotateBy_da_coupling, _frame->damaged())  : _leftRotateBy_da_coupling->disable ();
+    this->somehow_activating () ? enable (_leftRotateBy_da_coupling, damaged)  : _leftRotateBy_da_coupling->disable ();
     Graph::instance().add_edge(_leftRotateBy_cx, _leftRotateBy_action);
     Graph::instance().add_edge(_leftRotateBy_cy, _leftRotateBy_action);
     Graph::instance().add_edge(_leftRotateBy_da, _leftRotateBy_action);
@@ -1556,6 +1562,7 @@ namespace djnn
   AbstractHomography::init_rightSkewXBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
     _rightSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1565,11 +1572,11 @@ namespace djnn
     _rightSkew_X_By_spike->add_symbol ("da", _rightSkew_X_By_da);
     _rightSkew_X_By_action = new Right_Skew_X_ByAction (this, "action_right_skewX_by", this);
     _rightSkew_X_By_cx_coupling = new CouplingWithData (_rightSkew_X_By_cx, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_X_By_cx_coupling,_frame->damaged ()) : _rightSkew_X_By_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_X_By_cx_coupling, damaged) : _rightSkew_X_By_cx_coupling->disable ();
     _rightSkew_X_By_cy_coupling = new CouplingWithData (_rightSkew_X_By_cy, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_X_By_cy_coupling,_frame->damaged ()) : _rightSkew_X_By_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_X_By_cy_coupling, damaged) : _rightSkew_X_By_cy_coupling->disable ();
     _rightSkew_X_By_da_coupling = new CouplingWithData (_rightSkew_X_By_da, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_X_By_da_coupling,_frame->damaged ()) : _rightSkew_X_By_da_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_X_By_da_coupling, damaged) : _rightSkew_X_By_da_coupling->disable ();
     Graph::instance().add_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
     Graph::instance().add_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
     Graph::instance().add_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
@@ -1586,6 +1593,7 @@ namespace djnn
   AbstractHomography::init_leftSkewXBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
     _leftSkew_X_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_X_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1595,11 +1603,11 @@ namespace djnn
     _leftSkew_X_By_spike->add_symbol ("da", _leftSkew_X_By_da);
     _leftSkew_X_By_action = new Left_Skew_X_ByAction (this, "action_left_skewX_by", this);
     _leftSkew_X_By_cx_coupling = new CouplingWithData (_leftSkew_X_By_cx, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_X_By_cx_coupling, _frame->damaged ()) : _leftSkew_X_By_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_X_By_cx_coupling, damaged) : _leftSkew_X_By_cx_coupling->disable ();
     _leftSkew_X_By_cy_coupling = new CouplingWithData (_leftSkew_X_By_cy, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_X_By_cy_coupling, _frame->damaged ()) : _leftSkew_X_By_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_X_By_cy_coupling, damaged) : _leftSkew_X_By_cy_coupling->disable ();
     _leftSkew_X_By_da_coupling = new CouplingWithData (_leftSkew_X_By_da, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_X_By_da_coupling, _frame->damaged ()) : _leftSkew_X_By_da_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_X_By_da_coupling, damaged) : _leftSkew_X_By_da_coupling->disable ();
     Graph::instance().add_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
     Graph::instance().add_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
     Graph::instance().add_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
@@ -1616,6 +1624,7 @@ namespace djnn
   AbstractHomography::init_rightSkewYBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
     _rightSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1625,11 +1634,11 @@ namespace djnn
     _rightSkew_Y_By_spike->add_symbol ("da", _rightSkew_Y_By_da);
     _rightSkew_Y_By_action = new Right_Skew_Y_ByAction (this, "action_right_skewY_by", this);
     _rightSkew_Y_By_cx_coupling = new CouplingWithData (_rightSkew_Y_By_cx, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_Y_By_cx_coupling, _frame->damaged ()) : _rightSkew_Y_By_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_Y_By_cx_coupling, damaged) : _rightSkew_Y_By_cx_coupling->disable ();
     _rightSkew_Y_By_cy_coupling = new CouplingWithData (_rightSkew_Y_By_cy, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_Y_By_cy_coupling, _frame->damaged ()) : _rightSkew_Y_By_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_Y_By_cy_coupling, damaged) : _rightSkew_Y_By_cy_coupling->disable ();
     _rightSkew_Y_By_da_coupling = new CouplingWithData (_rightSkew_Y_By_da, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_rightSkew_Y_By_da_coupling, _frame->damaged ()) : _rightSkew_Y_By_da_coupling->disable ();
+    this->somehow_activating () ? enable (_rightSkew_Y_By_da_coupling, damaged) : _rightSkew_Y_By_da_coupling->disable ();
     Graph::instance().add_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
     Graph::instance().add_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
     Graph::instance().add_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
@@ -1646,6 +1655,7 @@ namespace djnn
   AbstractHomography::init_leftSkewYBy () 
   {
     auto _frame = get_frame ();
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
     _leftSkew_Y_By_cx = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_Y_By_cy = new DoubleProperty (nullptr, "cy", 0);
@@ -1655,11 +1665,11 @@ namespace djnn
     _leftSkew_Y_By_spike->add_symbol ("da", _leftSkew_Y_By_da);
     _leftSkew_Y_By_action = new Left_Skew_Y_ByAction (this, "action_left_skewY_by", this);
     _leftSkew_Y_By_cx_coupling = new CouplingWithData (_leftSkew_Y_By_cx, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_Y_By_cx_coupling, _frame->damaged ()) : _leftSkew_Y_By_cx_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_Y_By_cx_coupling, damaged) : _leftSkew_Y_By_cx_coupling->disable ();
     _leftSkew_Y_By_cy_coupling = new CouplingWithData (_leftSkew_Y_By_cy, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_Y_By_cy_coupling, _frame->damaged ()) : _leftSkew_Y_By_cy_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_Y_By_cy_coupling, damaged) : _leftSkew_Y_By_cy_coupling->disable ();
     _leftSkew_Y_By_da_coupling = new CouplingWithData (_leftSkew_Y_By_da, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
-    this->somehow_activating () ? enable (_leftSkew_Y_By_da_coupling, _frame->damaged ()) : _leftSkew_Y_By_da_coupling->disable ();
+    this->somehow_activating () ? enable (_leftSkew_Y_By_da_coupling, damaged) : _leftSkew_Y_By_da_coupling->disable ();
     Graph::instance().add_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
     Graph::instance().add_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
     Graph::instance().add_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
@@ -2011,56 +2021,56 @@ namespace djnn
     AbstractPropHomography::impl_activate ();
 
     auto _frame = get_frame ();
-
+    CoreProcess* damaged = find_layer()? find_layer()->damaged() : (_frame ? _frame->damaged () : nullptr);
     if (_rightTranslateBy_action) {
-      enable (_rightTranslateBy_dx_coupling, _frame->damaged ());
-      enable (_rightTranslateBy_dy_coupling, _frame->damaged ());
+      enable (_rightTranslateBy_dx_coupling, damaged);
+      enable (_rightTranslateBy_dy_coupling, damaged);
     }
     if (_leftTranslateBy_action) {
-      enable (_leftTranslateBy_dx_coupling, _frame->damaged ());
-      enable (_leftTranslateBy_dy_coupling, _frame->damaged ());
+      enable (_leftTranslateBy_dx_coupling, damaged);
+      enable (_leftTranslateBy_dy_coupling, damaged);
     }
     if (_rightScaleBy_action) {
-      enable (_rightScaleBy_cx_coupling, _frame->damaged ());
-      enable (_rightScaleBy_cy_coupling, _frame->damaged ());
-      enable (_rightScaleBy_sx_coupling, _frame->damaged ());
-      enable (_rightScaleBy_cy_coupling, _frame->damaged ());
+      enable (_rightScaleBy_cx_coupling, damaged);
+      enable (_rightScaleBy_cy_coupling, damaged);
+      enable (_rightScaleBy_sx_coupling, damaged);
+      enable (_rightScaleBy_cy_coupling, damaged);
     }
     if (_leftScaleBy_action) {
-      enable (_leftScaleBy_cx_coupling, _frame->damaged ());
-      enable (_leftScaleBy_cy_coupling, _frame->damaged ());
-      enable (_leftScaleBy_sx_coupling, _frame->damaged ());
-      enable (_leftScaleBy_cy_coupling, _frame->damaged ());
+      enable (_leftScaleBy_cx_coupling, damaged);
+      enable (_leftScaleBy_cy_coupling, damaged);
+      enable (_leftScaleBy_sx_coupling, damaged);
+      enable (_leftScaleBy_cy_coupling, damaged);
     }
     if (_rightRotateBy_action) {
-      enable (_rightRotateBy_cx_coupling, _frame->damaged ());
-      enable (_rightRotateBy_cy_coupling, _frame->damaged ());
-      enable (_rightRotateBy_da_coupling, _frame->damaged ());
+      enable (_rightRotateBy_cx_coupling, damaged);
+      enable (_rightRotateBy_cy_coupling, damaged);
+      enable (_rightRotateBy_da_coupling, damaged);
     }
     if (_leftRotateBy_action) {
-      enable (_leftRotateBy_cx_coupling, _frame->damaged ());
-      enable (_leftRotateBy_cy_coupling, _frame->damaged ());
-      enable (_leftRotateBy_da_coupling, _frame->damaged ());
+      enable (_leftRotateBy_cx_coupling, damaged);
+      enable (_leftRotateBy_cy_coupling, damaged);
+      enable (_leftRotateBy_da_coupling, damaged);
     }
     if (_rightSkew_X_By_action) {
-      enable (_rightSkew_X_By_cx_coupling, _frame->damaged ());
-      enable (_rightSkew_X_By_cy_coupling, _frame->damaged ());
-      enable (_rightSkew_X_By_da_coupling, _frame->damaged ());
+      enable (_rightSkew_X_By_cx_coupling, damaged);
+      enable (_rightSkew_X_By_cy_coupling, damaged);
+      enable (_rightSkew_X_By_da_coupling, damaged);
     }
     if (_leftSkew_X_By_action) {
-      enable (_leftSkew_X_By_cx_coupling, _frame->damaged ());
-      enable (_leftSkew_X_By_cy_coupling, _frame->damaged ());
-      enable (_leftSkew_X_By_da_coupling, _frame->damaged ());
+      enable (_leftSkew_X_By_cx_coupling, damaged);
+      enable (_leftSkew_X_By_cy_coupling, damaged);
+      enable (_leftSkew_X_By_da_coupling, damaged);
     }
     if (_rightSkew_Y_By_action) {
-      enable (_rightSkew_Y_By_cx_coupling, _frame->damaged ());
-      enable (_rightSkew_Y_By_cy_coupling, _frame->damaged ());
-      enable (_rightSkew_Y_By_da_coupling, _frame->damaged ());
+      enable (_rightSkew_Y_By_cx_coupling, damaged);
+      enable (_rightSkew_Y_By_cy_coupling, damaged);
+      enable (_rightSkew_Y_By_da_coupling, damaged);
     }    
     if (_leftSkew_Y_By_action) {
-      enable (_leftSkew_Y_By_cx_coupling, _frame->damaged ());
-      enable (_leftSkew_Y_By_cy_coupling, _frame->damaged ());
-      enable (_leftSkew_Y_By_da_coupling, _frame->damaged ());
+      enable (_leftSkew_Y_By_cx_coupling, damaged);
+      enable (_leftSkew_Y_By_cy_coupling, damaged);
+      enable (_leftSkew_Y_By_da_coupling, damaged);
     }
   }
 

@@ -41,7 +41,7 @@ namespace djnn
   }
 
   QtBackend::QtBackend () :
-      _painter (nullptr), _picking_view (nullptr)
+      _painter (nullptr), _picking_view (nullptr), _in_cache (false)
   {
     _context_manager = new QtContextManager ();
   }
@@ -210,7 +210,7 @@ namespace djnn
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
-    _picking_view->add_gobj (s);
+    _picking_view->add_gobj (s, _in_cache);
     #endif
   }
 

@@ -42,6 +42,7 @@ namespace djnn
 
     // QtPickingView
     QPainter* painter () { return _painter; }
+    void set_painter (QPainter *p) { _painter = p; }
     void display ();
   private:
     QLabel *_pick_debug_win;

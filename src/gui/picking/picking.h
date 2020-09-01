@@ -32,7 +32,7 @@ namespace djnn {
     virtual void init () = 0;
     virtual AbstractGShape* pick (double x, double y) = 0;
 
-    virtual void add_gobj (AbstractGShape* gobj) = 0;
+    virtual void add_gobj (AbstractGShape* gobj, bool cache = false) = 0;
     virtual void object_deactivated (AbstractGShape* gobj);
 
     void common_press_setting (double x, double y, AbstractGShape *s);

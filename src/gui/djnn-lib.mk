@@ -1,7 +1,7 @@
 local_dir = $(src_dir)/gui
 lib_djnn_deps = display base exec_env core
 
-lib_srcs += src/gui/abstract_gobj.cpp src/gui/gui.cpp src/gui/gui-priv.cpp
+lib_srcs += src/gui/abstract_gobj.cpp src/gui/gui.cpp src/gui/layer.cpp src/gui/gui-priv.cpp
 submodules = interaction/ picking/ shapes/ style/ transformation/ XML/ widgets/
 lib_srcs += $(call rwildcardmul,$(addprefix $(local_dir)/,$(submodules)),*.cpp)
 

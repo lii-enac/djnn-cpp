@@ -36,7 +36,8 @@ namespace djnn {
     WINDOW_T,
     GOBJ_T,
     WORLD_T,
-    DEFS_T
+    DEFS_T,
+    LAYER_T
   };
 
   enum activation_flag_e {

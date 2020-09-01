@@ -19,6 +19,7 @@
 #include "style/style.h"
 #include "shapes/shapes.h"
 #include "transformation/transformations.h"
+#include "layer.h"
 
 namespace djnn {
 
