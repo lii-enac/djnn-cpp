@@ -40,7 +40,7 @@ make -j
 ``` 
 
 ---- ALL PLATFORMS -----  
-ivy bus -> https://www.eei.cena.fr/products/ivy/  
+ivy bus -> https://github.com/lii-enac/libivy 
 
 Windows:
 ```
@@ -55,11 +55,14 @@ make -j4 -f Makefile.mingw installlibs
 
 Linux/Ubuntu:
 ```
-sudo apt install subversion libpcre3-dev  
-svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
-cd ivy-c/src  
-make static-libs shared-libs  
-sudo make installlibs includes  
+
+linux package for ubuntu 18.04: https://github.com/lii-enac/libivy/releases 
+else
+sudo apt install libpcre3-dev  
+git clone https://github.com/lii-enac/libivy 
+cd libivy/src  
+make -j4 
+sudo make -j4 installlibs includes  
 ```
 MacOS:  
 ```
