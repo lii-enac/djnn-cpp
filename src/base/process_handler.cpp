@@ -230,9 +230,9 @@ namespace djnn
 
   CollectionActivator::~CollectionActivator ()
   {
-    Graph::instance ().remove_edge (&_activate, &_act_all);
-    Graph::instance ().remove_edge (&_collection, &_act_all);
     Graph::instance ().remove_edge (&_path, &_act_all);
+    Graph::instance ().remove_edge (&_collection, &_act_all);
+    Graph::instance ().remove_edge (&_activate, &_act_all);
   }
 
   void
