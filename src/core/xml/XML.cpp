@@ -83,9 +83,7 @@ namespace djnn {
     if (found == std::string::npos) {
       FatProcess* res = djnParseXML(uri);
       return res;
-    } else {
-        cerr << "unable to load file " + uri << endl;
-        return nullptr;
+       
     }
 
     djn__CurlData d;
@@ -125,7 +123,10 @@ namespace djnn {
   {
     FILE * f;
     f = fopen (uri.c_str (),"r");
-    if (f==NULL) return nullptr;
+    if (f==NULL) {
+      cerr << "unable to load file " + uri << endl;
+      return nullptr;
+    };
 
     XML_Parser p = XML_ParserCreateNS ("UTF-8", '*');
     int done = 0;
