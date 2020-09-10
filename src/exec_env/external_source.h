@@ -33,12 +33,9 @@ namespace djnn
     void private_run();
     const std::string& get_name () const { return _name; }
 
-    static
-#ifndef __EMSCRIPTEN__
-    thread_local
-#endif
-    std::atomic<bool> thread_local_cancelled;
     std::atomic<std::atomic<bool>*> cancelled;
+
+    bool should_i_stop () const;
 
   protected:
     virtual void set_please_stop (bool v) { _please_stop = v; }
@@ -62,5 +59,13 @@ namespace djnn
   private:
     std::atomic<bool> _please_stop;
   };
+
+
+  // not in class ExternalSource as static anymore, because of mingw ld or binutils bug
+  extern
+#ifndef __EMSCRIPTEN__
+    thread_local
+#endif
+    std::atomic<bool> thread_local_cancelled;
 
 }

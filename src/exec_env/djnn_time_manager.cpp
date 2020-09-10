@@ -168,17 +168,17 @@ namespace djnn {
         djnn::get_exclusive_access (DBG_GET);
         //cancel_mutex->unlock (); // unlock first lock
         }
-        if(thread_local_cancelled || get_please_stop ()) break;
+        if(should_i_stop ()) break;
         //if(timer_cancelled) {} // either 'infinite duration' has run out or there is a new timer
 
         update_ref_now(); // set the default 'now' -- FIXME useless in a time manager external source?
         djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast(get_ref_now());
         time_has_elapsed(now);
-        if(thread_local_cancelled || get_please_stop ()) break;
+        if(should_i_stop ()) break;
 
         GRAPH_EXEC;
 
-        if(thread_local_cancelled || get_please_stop ()) break;
+        if(should_i_stop ()) break;
       }
     // } catch (djnn::exception& e) {
     //   std::cerr << e.what() << __FILE__<< " " << __LINE__ << std::endl;

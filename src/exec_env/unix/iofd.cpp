@@ -62,7 +62,7 @@ namespace djnn {
   {
     set_please_stop (false);
     // try {
-      while (!thread_local_cancelled && !get_please_stop ()) {
+      while (!should_i_stop ()) {
         fd_set reads;
         FD_ZERO (&reads);
         FD_SET (_readfd, &reads);
@@ -71,11 +71,11 @@ namespace djnn {
           warning (nullptr, "error reading fd");
           return;
         }
-        if(thread_local_cancelled) {
+        if (should_i_stop()) {
           return;
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        if (!thread_local_cancelled && !get_please_stop ()) {
+        if (!should_i_stop ()) {
           _readable.activate (); // propagating
           GRAPH_EXEC; // executing
         }

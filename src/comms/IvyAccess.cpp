@@ -115,7 +115,7 @@ _ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
 /** IVY CALLBACK **/
 
-#define STOP_IVY djnn::MainLoop::instance().is_stopping() || djnn::ExternalSource::thread_local_cancelled || access->get_please_stop ()
+#define STOP_IVY djnn::MainLoop::instance().is_stopping() || access->should_i_stop ()
 
 
 struct msg_callback_user_data {
@@ -168,10 +168,6 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
       string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
       //GRAPH_EXEC; // methode 1 : per value
-      //if(djnn::ExternalSource::thread_local_cancelled || access->get_please_stop ()) {
-      //  djnn::release_exclusive_access (DBG_REL);
-      //  return;
-      //}
     }
 
   }
@@ -333,7 +329,7 @@ static void  _before_select (void *data) {
     return;
   }
   djnn::get_exclusive_access (DBG_GET);
-  if(ExternalSource::thread_local_cancelled || access->get_please_stop ()) return;
+  if(access->should_i_stop ()) return;
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }

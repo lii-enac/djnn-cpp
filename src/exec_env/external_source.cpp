@@ -21,32 +21,25 @@
 //#include "utils/debug.h"
 //#include <thread>
 
-// #ifndef DEBUG_PRINT
-// int eprintf(putc_t putcf, char * fmt, ...);
-// #define consolePrintf(FMT, ...) eprintf(consolePutchar, FMT, ## __VA_ARGS__)
-// #define DEBUG_FMT(fmt) fmt
-// #define DEBUG_PRINT(fmt, ...) consolePrintf(DEBUG_FMT(fmt), ##__VA_ARGS__)
-// #endif
 
 namespace djnn {
 
     //static djnn_mutex_t * launch_mutex;
     static std::mutex * launch_mutex;
 
-
 #ifndef __EMSCRIPTEN__
     thread_local
 #endif
-    std::atomic<bool> ExternalSource::thread_local_cancelled;
+    std::atomic<bool>
+    //ExternalSource:: // not in class ExternalSource as static anymore, because of mingw ld or binutils bug
+    thread_local_cancelled;
 
     #if DJNN_USE_SDL_THREAD
     static int SDL_ThreadFunction(void* data)
     {
-        //std::cerr << "start of thread " << __PRETTY_FUNCTION__ << " " << ExternalSource::thread_local_cancelled << " " << &ExternalSource::thread_local_cancelled << std::endl;
-        ExternalSource * es = (ExternalSource*) data;
+       ExternalSource * es = (ExternalSource*) data;
         es->private_run ();
-        //std::cerr << "end of thread " << __PRETTY_FUNCTION__ << " " << ExternalSource::thread_local_cancelled << " " << &ExternalSource::thread_local_cancelled << std::endl;
-        return 0;
+       return 0;
     }
     #endif
 
@@ -73,7 +66,6 @@ namespace djnn {
       }
 
       void start() {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         #if DJNN_USE_STD_THREAD
         if(_thread.joinable()) _thread.detach();
         #endif
@@ -131,8 +123,7 @@ namespace djnn {
       }
 
       void terminate_thread() {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-        #if DJNN_USE_SDL_THREAD
+       #if DJNN_USE_SDL_THREAD
         //int threadReturnValue;
         //SDL_WaitThread(_impl->_thread, &threadReturnValue);
         SDL_DetachThread(_thread);
@@ -162,13 +153,10 @@ namespace djnn {
 	ExternalSource::ExternalSource (const std::string& name)
     : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _name(name), _please_stop (false)
     {
-        //MainLoop::instance().add_external_source(this); // on a per-ExternalSource basis according to idiosyncraties
-        //DEBUG_PRINT("%s &thread_local_cancelled:%u %d\n", _name.c_str(), &thread_local_cancelled, __gthread_active_p());
     }
 
     ExternalSource::~ExternalSource ()
     {
-        //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
         thread_local_cancelled = true;
         please_stop ();
         delete _impl;
@@ -239,6 +227,12 @@ namespace djnn {
         _impl->please_stop ();
 	}
 
+    bool
+    ExternalSource::should_i_stop () const
+    {
+        return thread_local_cancelled || get_please_stop ();
+    }
+
 	void
 	ExternalSource::start_thread ()
 	{
@@ -263,13 +257,6 @@ namespace djnn {
 }
 
 #if 0
-
- // void
-    // ExternalSource::thread_terminated ()
-    // {
-    //     //std::cerr << __PRETTY_FUNCTION__ << " " << this << " " << thread_local_cancelled << " " << &thread_local_cancelled << std::endl;
-    //     _impl->thread_terminated();
-    // }
 
 
 #if 0
