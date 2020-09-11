@@ -38,7 +38,7 @@ namespace djnn {
 
     static MainLoop * _instance;
 
-    // MainLoop is a singleton, put this field in a static variable, and do not include "djnn-thread.h" in mainloop.h
+    // MainLoop is a singleton, put this field into a static variable, and do not include "djnn-thread.h" in mainloop.h
     #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
     static djnn_thread_t own_thread;
     #endif
@@ -74,7 +74,7 @@ namespace djnn {
       ExternalSource ("Mainloop"),
       _another_source_wants_to_be_mainloop (nullptr)
     {
-      set_run_for_ever (); // default mode is forever
+      set_run_for_ever (); // default mode
     }
 
     MainLoop::~MainLoop ()
@@ -97,50 +97,49 @@ namespace djnn {
       }
       if (_another_source_wants_to_be_mainloop) {
         run_in_own_thread ();
-        set_activation_state (ACTIVATED);
         launch_mutex_unlock();
-        notify_activation();
+        CoreProcess::post_activate ();
         _another_source_wants_to_be_mainloop->run (); // should block
       } else {
-        ExternalSource::launch_mutex_unlock();
-        notify_activation();
+        launch_mutex_unlock();
+        CoreProcess::post_activate ();
         run_in_main_thread (); // should block
       }
-      // up here, the mainloop is blocking
-      _is_stopping = true;
+      // here, the mainloop is blocking
+
+      // [blocking........]
+      
       // starting from here, the mainloop has exited
-      launch_mutex_lock (); // reacquire launch mutex
+      _is_stopping = true;
+      launch_mutex_lock ();
       if (_another_source_wants_to_be_mainloop) {
         please_stop ();
         join_own_thread ();
       }
+
+      // auto deactivate
+      if(somehow_activating()) {
+        deactivate ();
+      }
     }
 
     djnn_atomic<bool>::atomic MainLoop::_is_stopping;
-    //bool MainLoop::_is_stopping;
 
     void
     MainLoop::run ()
     {
-      //cancel_mutex.lock(); // first lock, get it
-      {
-      std::unique_lock<std::mutex> l(cancel_mutex);
-      if (is_run_forever ()) {
-        //std::cerr << ">> mainloop entering sleep forever" << __FL__;
-        //cancel_mutex.lock(); // second lock, blocks until another thread calls pleaseStop
-        //cv.wait (cancel_mutex);
-        cv.wait (l);
-        //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
-      } else {
-        //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << __FL__;
-        //bool timer_cancelled =
-        //cancel_mutex.try_lock_for(std::chrono::milliseconds (_duration)); // second lock, blocks for ddd ms unless it's unlocked elsewhere
-        //cv.wait_for (cancel_mutex, std::chrono::milliseconds (_duration));
-        cv.wait_for (l, std::chrono::milliseconds (_duration));
-        //std::cerr << "<< mainloop exited sleep " << __FL__;
+      { // scope for mutex
+        std::unique_lock<std::mutex> l(cancel_mutex); // first lock, get it
+        if (is_run_forever ()) {
+          //std::cerr << ">> mainloop entering sleep forever" << __FL__;
+          cv.wait (l); // second lock, blocks until another thread calls pleaseStop
+          //std::cerr << "<< mainloop leaving sleep forever" << __FL__;
+        } else {
+          //std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << __FL__;
+          cv.wait_for (l, std::chrono::milliseconds (_duration)); // second lock, blocks until another thread calls pleaseStop
+          //std::cerr << "<< mainloop exited sleep " << __FL__;
+        }
       }
-      }
-      //cancel_mutex.unlock(); // unlock first lock
 
       // fist tell all external sources to stop...
       for (auto es: _external_sources) {
@@ -166,7 +165,6 @@ namespace djnn {
     {
       if(get_please_stop ()) return;
       set_please_stop (true);
-      //cancel_mutex.unlock();
       cv.notify_one ();
     }
 
@@ -196,30 +194,22 @@ namespace djnn {
     MainLoop::run_in_own_thread ()
     {
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      //auto
       own_thread = djnn_thread_t (&MainLoop::private_run, this);
-      //own_thread.detach(); // FIXME: could be properly joined
-      // since the thread is detached, own_thread object does not own it anymore and can be safely destroyed
       #endif
 
       #if DJNN_USE_QT_THREAD
-      //auto *
       own_thread = QThread::create([this]() { this->MainLoop::private_run(); });
-      //QObject::connect(own_thread, SIGNAL(finished()), own_thread, SLOT(deleteLater()));
       own_thread->start();
       #endif
 
       #if DJNN_USE_SDL_THREAD
-      //auto *
       own_thread = SDL_CreateThread(SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
-      //SDL_DetachThread(own_thread); // // FIXME: could be properly joined
       #endif
     }
 
     void
     MainLoop::join_own_thread ()
     {
-      //std::cerr << ">> " << __FL__;
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
       own_thread.join();
       #endif
@@ -232,7 +222,6 @@ namespace djnn {
       #if DJNN_USE_SDL_THREAD
       SDL_WaitThread(own_thread, nullptr);
       #endif
-      //std::cerr << "<< " << __FL__;
     }
 
     void 

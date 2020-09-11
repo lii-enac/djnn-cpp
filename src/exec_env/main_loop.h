@@ -18,7 +18,6 @@
 #include "core/ontology/process.h"
 #include "exec_env.h"
 #include "external_source.h"
-//#include "cpp-thread.h"
 #include "cpp-chrono.h"
 
 #include <mutex>
@@ -98,23 +97,18 @@ namespace djnn
     void join_own_thread ();
     void run () override;
 
-    //atomic<chrono::milliseconds> _duration;
-    //chrono::milliseconds _duration;
     djnn_atomic<chrono::milliseconds>::atomic _duration;
-    //djnn_atomic<chrono::duration<int,std::milli>>::atomic _duration;
 
     // FIXME: hack to reactivate mainloop : used only for unit_test
     //        djnn application only has one mainloop.
     bool pre_activate () override { return true; }
 
   private:
-    //static MainLoop _instance;
-
     // MainLoop should be created *before* any other external-source
     MainLoop ();
     std::vector<FatProcess*> _background_processes;
     std::vector<ExternalSource*> _external_sources;
-    //std::timed_mutex cancel_mutex;
+
     std::mutex cancel_mutex;
     // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough
     // The mutex must be locked by the current thread of execution, otherwise, the behavior is undefined. https://en.cppreference.com/w/cpp/thread/timed_mutex/unlock
@@ -122,8 +116,6 @@ namespace djnn
     //std::condition_variable_any cv;
     std::condition_variable cv;
 
-    //std::atomic<bool> _is_stopping; // for external sources that can't be stopped easily eg Ivy
-    //static bool _is_stopping; // for external sources that can't be stopped easily eg Ivy
     static djnn_atomic<bool>::atomic _is_stopping; // for external sources that can't be stopped easily eg Ivy
   };
 
