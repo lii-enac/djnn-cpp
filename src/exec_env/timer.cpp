@@ -20,7 +20,7 @@
 #include "cpp-thread.h"
 #include "cpp-chrono.h"
 
-#include <iostream>
+//#include <iostream>
 //#include "core/utils/error.h"
 //#include "utils/debug.h"
 
@@ -83,7 +83,7 @@ namespace djnn
   Timer::do_it(const djnn_internal::Time::duration & actualduration)
   {
     if(somehow_activating()) {
-      set_activation_state (DEACTIVATED);
+      deactivate ();
       _end.notify_activation ();
     }
   }
