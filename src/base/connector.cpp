@@ -1,13 +1,57 @@
 #include "connector.h"
+#include "core/utils/error.h"
+#include "core/tree/component.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
 #include "core/serializer/serializer.h"
 #endif
 
+#include <iostream>
+
 namespace djnn {
 #if !defined(DJNN_NO_SERIALIZE)
 
   using std::string;
+
+  void
+  MultiConnector (ParentProcess* parent, CoreProcess* src, std::vector <std::string> src_props, CoreProcess* dst, std::vector <std::string> dst_props, bool copy_on_activation)
+  {
+    if (src_props.size() != dst_props.size ()) {
+      error (nullptr, "Incompatible number of properties in multiple connector");
+    }
+    for (int i = 0; i < src_props.size (); i++) {
+      CoreProcess *src_prop = src->find_child (src_props[i]);
+      CoreProcess *dst_prop = dst->find_child (dst_props[i]);
+      if (src_prop && dst_prop) {
+        new CoreConnector (parent, "", src_prop, dst_prop, copy_on_activation);
+      }
+      else {
+        error (nullptr, "Property not found in multiple connector: " + src_props[i] + " or " + dst_props[i]);
+      }
+    }
+  }
+
+  void
+  MultiConnector (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation)
+  {
+    Container* cont_src = dynamic_cast<Container*>(src);
+    Container* cont_dst = dynamic_cast<Container*>(dst);
+    if (cont_src && cont_dst) {
+      for (auto c: cont_src->children ()) {
+        std::string name = c->get_name (c->get_parent ());
+        CoreProcess* prop_dst = cont_dst->find_child (name);
+        if (dst)
+          new CoreConnector (parent, "", c, prop_dst, copy_on_activation);
+      }
+      return;
+    }
+    for (auto c: src->get_properties_name ()) {
+      CoreProcess *prop_src = src->find_child (c);
+      CoreProcess *prop_dst = dst->find_child (c);
+      if (prop_src && prop_dst)
+        new CoreConnector (parent, "", prop_src, prop_dst, copy_on_activation);
+    }
+  }
 
   void
   CoreConnector::serialize (const std::string& format)
