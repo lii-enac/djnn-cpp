@@ -28,28 +28,31 @@ namespace djnn
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
-      _sort_action (this, "sort_action"),
-      _sort (this, "sort"),
-      _c_sort_action (&_sort, ACTIVATION, &_sort_action, ACTIVATION, true),
-      _c_spec_action (&_spec, ACTIVATION, &_sort_action, ACTIVATION, true)
+      _sort_action (this, "sort"),
+      _c_spec_action (&_spec, ACTIVATION, &_sort_action, ACTIVATION)
   {
     _container = djnn_dynamic_cast<Container*> (container);
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be sorted");
+
+    Graph::instance ().add_edge (&_spec, &_sort_action);
+
     finalize_construction (parent, name);
+  }
+
+  Sorter::~Sorter () {
+    Graph::instance ().remove_edge (&_spec, &_sort_action);
   }
 
   void
   Sorter::impl_activate ()
   {
-    _c_sort_action.enable ();
     _c_spec_action.enable ();
   }
 
   void
   Sorter::impl_deactivate ()
   {
-    _c_sort_action.disable ();
     _c_spec_action.disable ();
   }
 

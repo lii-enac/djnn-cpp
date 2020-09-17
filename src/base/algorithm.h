@@ -38,7 +38,7 @@ namespace djnn
     };
   public:
     Sorter (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
-    virtual ~Sorter () {}
+    virtual ~Sorter ();
     void impl_activate () override;
     void impl_deactivate () override;
     void sort ();
@@ -52,8 +52,7 @@ namespace djnn
     TextProperty _spec;
     Container *_container;
     SortAction _sort_action;
-    Spike _sort;
-    Coupling _c_sort_action, _c_spec_action;
+    Coupling _c_spec_action;
   };
 
   class ListOperator : public FatProcess
