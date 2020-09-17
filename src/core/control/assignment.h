@@ -65,6 +65,11 @@ public:
 #endif
   };
 
+  void
+    MultiAssignment (ParentProcess* parent, CoreProcess* src, std::vector <std::string> src_props, CoreProcess* dst, std::vector <std::string> dst_props, bool copy_on_activation);
+  void
+    MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
+
   class CorePausedAssignment : public CoreAssignment
   {
   public:

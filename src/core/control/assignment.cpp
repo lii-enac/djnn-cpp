@@ -7,6 +7,7 @@
 #include "core/tree/double_property.h"
 #include "core/tree/text_property.h"
 #include "core/tree/ref_property.h"
+#include "core/tree/component.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
 
@@ -87,6 +88,45 @@ namespace djnn
     djnn::perform_action (get_src (), get_dst (), _propagate);    
   }
 
+  void
+  MultiAssignment (ParentProcess* parent, CoreProcess* src, std::vector <std::string> src_props, CoreProcess* dst, std::vector <std::string> dst_props, bool copy_on_activation)
+  {
+    if (src_props.size() != dst_props.size ()) {
+      error (nullptr, "Incompatible number of properties in multiple assignment");
+    }
+    for (int i = 0; i < src_props.size (); i++) {
+      CoreProcess *src_prop = src->find_child (src_props[i]);
+      CoreProcess *dst_prop = dst->find_child (dst_props[i]);
+      if (src_prop && dst_prop) {
+        new CoreAssignment (parent, "", src_prop, dst_prop, copy_on_activation);
+      }
+      else {
+        error (nullptr, "Property not found in multiple assignment: " + src_props[i] + " or " + dst_props[i]);
+      }
+    }
+  }
+
+  void
+  MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation)
+  {
+    Container* cont_src = dynamic_cast<Container*>(src);
+    Container* cont_dst = dynamic_cast<Container*>(dst);
+    if (cont_src && cont_dst) {
+      for (auto c: cont_src->children ()) {
+        std::string name = c->get_name (c->get_parent ());
+        CoreProcess* prop_dst = cont_dst->find_child (name);
+        if (dst)
+          new CoreAssignment (parent, "", c, prop_dst, copy_on_activation);
+      }
+      return;
+    }
+    for (auto c: src->get_properties_name ()) {
+      CoreProcess *prop_src = src->find_child (c);
+      CoreProcess *prop_dst = dst->find_child (c);
+      if (prop_src && prop_dst)
+        new CoreAssignment (parent, "", prop_src, prop_dst, copy_on_activation);
+    }
+  }
 
   #if !defined(DJNN_NO_SERIALIZE)
   void
