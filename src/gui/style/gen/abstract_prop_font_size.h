@@ -29,6 +29,12 @@ namespace djnn
     
     
     void get_properties_values (int& unit, double& size);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("unit");
+			res.push_back ("size");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child ("unit"); }
 		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child ("size"); }

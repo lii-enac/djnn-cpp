@@ -32,11 +32,16 @@ namespace djnn
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
-    %(CLASS)s (FatProcess *parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
+    %(CLASS)s (ParentProcess* parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      %(PUSHBACK_DYN_PROPS)s
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
@@ -69,7 +74,7 @@ def_string = """
 
 namespace djnn
 {
-  %(CLASS)s::%(CLASS)s (FatProcess *parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
+  %(CLASS)s::%(CLASS)s (ParentProcess* parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
     %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
     raw_props{%(RAW_PROPS_INIT)s},
     %(COUPLINGS_INIT)s
@@ -309,6 +314,8 @@ def just_do_it(dc, finalize_construction=True):
     # print (DELETE_COUPLINGS)
     DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = find_child_iterator ("' + p.name + '");\n\t\t\tif (it != children_end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
     #print (DELETE_DYN_PROPS)
+    PUSHBACK_DYN_PROPS = (join_str+'\t').join([ 'res.push_back ("' + p.name + '");' for p in dc.props])
+    #print (PUSHBACK_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)
     if(dc.inherits and dc.get_parent_prop_list() != []):
@@ -369,6 +376,7 @@ def just_do_it(dc, finalize_construction=True):
         'COUPLINGS_INIT': COUPLINGS_INIT,
         'DELETE_COUPLINGS': DELETE_COUPLINGS,
         'DELETE_DYN_PROPS': DELETE_DYN_PROPS,
+        'PUSHBACK_DYN_PROPS' : PUSHBACK_DYN_PROPS,
         'DEF_PROPS_REF_SET': DEF_PROPS_REF_SET,
         'GET_PROPS_FROM_PARENT': GET_PROPS_FROM_PARENT,
         'DEF_COUPLINGS_ENABLE': DEF_COUPLINGS_ENABLE,

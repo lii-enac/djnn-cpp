@@ -29,6 +29,26 @@ namespace djnn
     
     
     void get_properties_values (double& m11, double& m12, double& m13, double& m14, double& m21, double& m22, double& m23, double& m24, double& m31, double& m32, double& m33, double& m34, double& m41, double& m42, double& m43, double& m44);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("m11");
+			res.push_back ("m12");
+			res.push_back ("m13");
+			res.push_back ("m14");
+			res.push_back ("m21");
+			res.push_back ("m22");
+			res.push_back ("m23");
+			res.push_back ("m24");
+			res.push_back ("m31");
+			res.push_back ("m32");
+			res.push_back ("m33");
+			res.push_back ("m34");
+			res.push_back ("m41");
+			res.push_back ("m42");
+			res.push_back ("m43");
+			res.push_back ("m44");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractDoubleProperty* m11 () { return (AbstractDoubleProperty*) find_child ("m11"); }
 		AbstractDoubleProperty* m12 () { return (AbstractDoubleProperty*) find_child ("m12"); }

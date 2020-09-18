@@ -29,6 +29,11 @@ namespace djnn
     void draw () override;
     OutlineCapStyle* clone () override;
     void get_properties_values (int& cap);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("cap");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child ("cap"); }
 

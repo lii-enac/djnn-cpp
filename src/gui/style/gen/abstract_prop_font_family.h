@@ -29,6 +29,11 @@ namespace djnn
     
     
     void get_properties_values (std::string& family);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("family");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractTextProperty* family () { return (AbstractTextProperty*) find_child ("family"); }
 

@@ -29,6 +29,11 @@ namespace djnn
     
     
     void get_properties_values (int& weight);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("weight");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child ("weight"); }
 

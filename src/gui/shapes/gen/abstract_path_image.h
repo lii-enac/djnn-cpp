@@ -29,6 +29,11 @@ namespace djnn
     
     
     void get_properties_values (std::string& path, double& x, double& y, double& width, double& height);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("path");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child ("path"); }
 

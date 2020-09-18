@@ -29,6 +29,11 @@ namespace djnn
     void draw () override;
     FillRule* clone () override;
     void get_properties_values (int& rule);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("rule");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child ("rule"); }
 

@@ -29,6 +29,12 @@ namespace djnn
     
     
     void get_properties_values (int& spread, int& coords);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("spread");
+			res.push_back ("coords");
+      return res;
+    }
     virtual FatChildProcess* find_child (const std::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child ("coords"); }
