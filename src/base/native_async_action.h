@@ -18,6 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/control/action.h"
 #include "core/tree/blank.h"
+#include "core/control/native_action.h"
 
 #include "exec_env/external_source.h"
 
@@ -27,7 +28,7 @@ namespace djnn {
   //typedef void (NativeCode) (CoreProcess*);
   typedef void (NativeCode) (CoreProcess*);
   
-  class NativeAsyncAction : public Action, public ExternalSource
+  class NativeAsyncAction : public NativeAction, public ExternalSource
   {
   public:
     NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data, bool isModel);
@@ -45,10 +46,7 @@ namespace djnn {
     virtual void run () override;
 
   private:
-    void *_data;
-    NativeCode *_action;
     CoreProcess *_activation_source;
     Blank _end;
   };
-  void* get_native_async_user_data (CoreProcess* native_action);
 }

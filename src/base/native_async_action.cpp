@@ -24,7 +24,9 @@ namespace djnn
 
   NativeAsyncAction::NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data,
                               bool isModel) :
-      Action (parent, name), ExternalSource(name), _data (data), _action (action), _activation_source (nullptr), _end (this, "end")
+      NativeAction (parent, name, action, data, isModel), 
+      ExternalSource(name), 
+      _end (this, "end")
   {
     set_is_model (isModel);
     finalize_construction (parent, name);
@@ -62,15 +64,5 @@ namespace djnn
   NativeAsyncAction::data ()
   {
     return _data;
-  }
-
-  void*
-  get_native_async_user_data (CoreProcess* native_action)
-  {
-    NativeAsyncAction *na = djnn_dynamic_cast<NativeAsyncAction*> (native_action);
-    if (na == nullptr)
-      return nullptr;
-    return na->data ();
-    //return native_action->data ();
   }
 }

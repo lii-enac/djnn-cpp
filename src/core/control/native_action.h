@@ -34,7 +34,7 @@ namespace djnn {
     virtual void set_activation_source (CoreProcess* src) override { _activation_source = src; }
     virtual CoreProcess* get_activation_source () override { return _activation_source; }
 
-  private:
+  protected:
     void *_data;
     NativeCode *_action;
     CoreProcess *_activation_source;
