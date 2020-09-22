@@ -28,8 +28,6 @@ namespace djnn
       ExternalSource(name), 
       _end (this, "end")
   {
-    set_is_model (isModel);
-    finalize_construction (parent, name);
   }
 
   NativeAsyncAction::~NativeAsyncAction ()
