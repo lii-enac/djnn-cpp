@@ -240,7 +240,7 @@ namespace djnn
       return;
     }
     string cur_text = _text->get_raw_text ();
-    if (_index->get_value () < cur_text.length ()) {
+    if (_index->get_value () < static_cast<int>(cur_text.length ())) {
       string buff = cur_text.substr (_index->get_value ());
       int offset = sizeof_front_utf8char (buff);
       delete_text (_index->get_value(), offset);
@@ -256,7 +256,7 @@ namespace djnn
     if (_new_text->get_value().length() == 0)
       return;
     string cur_text = _text->get_raw_text ();
-    if (_index->get_value () >= cur_text.length()) {
+    if (_index->get_value () >= static_cast<int>(cur_text.length())) {
       cur_text = cur_text.append (_new_text->get_value());
       _index->set_value ((int)cur_text.length (), true);
     }
@@ -289,7 +289,7 @@ namespace djnn
   TextField::move_right ()
   {
     string cur_text = _text->get_raw_text ();
-    if (_index->get_value () < cur_text.length()) {
+    if (_index->get_value () < static_cast<int>(cur_text.length())) {
       string buff = cur_text.substr (_index->get_value ());
       int offset = sizeof_front_utf8char (buff);
       _index->set_value (_index->get_value() + offset, true);

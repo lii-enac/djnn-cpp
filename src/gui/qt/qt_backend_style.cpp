@@ -152,7 +152,7 @@ namespace djnn
   {
     int c;
     ocs->get_properties_values(c);
-    if (c >= (sizeof(capStyleArray) / sizeof(Qt::PenCapStyle))) {
+    if (static_cast<unsigned int>(c) >= (sizeof(capStyleArray) / sizeof(Qt::PenCapStyle))) {
       std::cerr << "Invalid Qt cap style, default will be used\n";
       c = 0;
     }
@@ -164,7 +164,7 @@ namespace djnn
   {
     int j;
     ojs->get_properties_values(j);
-    if (j >= (sizeof(joinStyleArray) / sizeof(Qt::PenJoinStyle))) {
+    if (static_cast<unsigned int>(j) >= (sizeof(joinStyleArray) / sizeof(Qt::PenJoinStyle))) {
       std::cerr << "Invalid Qt join style, default will be used\n";
       j = 0;
     }

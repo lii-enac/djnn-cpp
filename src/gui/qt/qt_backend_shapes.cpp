@@ -262,7 +262,7 @@ namespace djnn
 }
 
   static int
-  next_index (int i, string &str)
+  next_index (size_t i, string &str)
   {
     if (i > str.size ())
       return i;
@@ -295,7 +295,7 @@ namespace djnn
       return std::pair<double,int>(-1, 0);
     }
 
-    for (int i = 0; i < text.size (); i = next_index (i, text)) {
+    for (size_t i = 0; i < text.size (); i = next_index (i, text)) {
       int i2 = next_index (i, text);
       string s1 = text.substr (0, i);
       string s2 = text.substr (0, i2);
