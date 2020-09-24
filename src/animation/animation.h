@@ -16,6 +16,7 @@
 
 #include "core/control/action.h"
 #include "base/geometry.h"
+#include "easing_func.h"
 
 namespace djnn
 {
