@@ -150,6 +150,7 @@ CFLAGS += -fpic -g -MMD -Wall
 lib_suffix =.so
 DYNLIB = -shared
 YACC = bison -d
+thread = STD
 endif
 
 ifeq ($(os),Darwin)
