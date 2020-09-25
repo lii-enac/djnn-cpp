@@ -33,6 +33,7 @@ namespace djnn {
     void set_cursor (const std::string& path, int hotX, int hotY) override;
     //void set_qwidget(MyQWidget* q) { _qwidget = q; }
     MyQWidget* qwidget() { return _qwidget; }
+    virtual void perform_screenshot (const std::string& path) override;
 
   protected:
     /* FatProcess */

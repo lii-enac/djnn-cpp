@@ -17,6 +17,7 @@
 
 #include "core/ontology/process.h"
 #include "core/control/action.h"
+#include "core/tree/spike.h"
 
 #include "core/tree/int_property.h"
 #include "core/tree/double_property.h"
@@ -39,6 +40,7 @@ namespace djnn
     virtual void set_cursor (const std::string& path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
+    virtual void perform_screenshot (const std::string& path) {}
      
   private:
     Picking *_picking_view;
@@ -49,11 +51,18 @@ namespace djnn
     class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (Window * parent, const std::string& name)  : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
+        UndelayedSpike (Window * parent, const std::string& name) : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { post_activate_auto_deactivate (); }
         void impl_activate () override;
         void impl_deactivate () override {};
+    };
+
+    class ScreenshotAction : public Action
+    {
+      public:
+        ScreenshotAction (Window * parent, const std::string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->perform_screenshot (); }
     };
   public:
     Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
@@ -99,6 +108,10 @@ namespace djnn
     void set_holder (FatProcess *p) { _holder = p; }
     void set_cursor (const std::string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
+    FatProcess* screenshot () { return _screenshot; }
+    TextProperty* screenshot_path () { return _screenshot_path; }
+    void perform_screenshot ();
+
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
     void set_frame_to_component (FatProcess* c);
@@ -130,10 +143,14 @@ namespace djnn
     IntProperty *_key_released;
     WinImpl *_win_impl;
     UndelayedSpike *_damaged;
-    //CouplingWithData2 *_c_damaged_update_drawing_damaged;
     Coupling *_c_damaged_update_drawing_damaged;
     bool _refresh;
     FatProcess* _holder;
+
+    Spike * _screenshot;
+    TextProperty * _screenshot_path;
+    ScreenshotAction * _screenshot_action;
+    Coupling * _c_screenshot;
   };
 
    class Cursor : public FatProcess {

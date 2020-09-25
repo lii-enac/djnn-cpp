@@ -117,6 +117,17 @@ namespace djnn
   }
 
   void
+  QtWindow::perform_screenshot (const std::string& path)
+  {
+    if (_qwidget == nullptr)
+      return;
+    
+    //djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
+    _qwidget->grab().save(QString(path.c_str()));
+    //djnn::get_exclusive_access (DBG_GET);
+  }
+
+  void
   MyQWidget::set_building(bool v)
   {
     _building = v;

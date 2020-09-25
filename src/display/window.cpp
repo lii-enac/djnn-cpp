@@ -75,6 +75,12 @@ namespace djnn
     _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION, true);
     Graph::instance ().add_edge (_damaged, update);
 
+    _screenshot = new Spike (this, "screenshot");
+    _screenshot_path = new TextProperty (this, "screenshot_path", "screenshot.png");
+    _screenshot_action = new ScreenshotAction (this, "screenshot_action");
+    _c_screenshot = new Coupling (_screenshot, ACTIVATION, _screenshot_action, ACTIVATION);
+    Graph::instance ().add_edge (_screenshot, _screenshot_action);
+
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
@@ -92,6 +98,7 @@ namespace djnn
   Window::impl_activate ()
   {
     _c_damaged_update_drawing_damaged->enable();
+    _c_screenshot->enable();
     _win_impl->impl_activate ();
   }
   
@@ -99,6 +106,7 @@ namespace djnn
   Window::impl_deactivate ()
   {
     _c_damaged_update_drawing_damaged->disable();
+    _c_screenshot->disable();
     _win_impl->impl_deactivate ();
   }
 
@@ -108,6 +116,11 @@ namespace djnn
     Graph::instance ().remove_edge (_damaged, UpdateDrawing::instance ()->get_damaged ());
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
+
+    Graph::instance ().add_edge (_screenshot, _screenshot_path);
+    delete _c_screenshot;
+    delete _screenshot_path;
+    delete _screenshot;
 
     delete _pos_x;
     delete _pos_y;
@@ -151,6 +164,12 @@ namespace djnn
   //   UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
   //   notify_activation ();
   // }
+
+  void
+  Window::perform_screenshot ()
+  {
+    _win_impl->perform_screenshot(_screenshot_path->get_string_value());
+  }
 
   void
   Cursor::UpdateCursorAction::impl_activate () {
