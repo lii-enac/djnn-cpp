@@ -104,10 +104,10 @@ namespace djnn
       case QEvent::Wheel:
       case QEvent::Paint:
       //case QEvent::UpdateRequest:
-        if(! (_building || event->spontaneous ())) // spontaneous: could be a screenshot request 
+        if(! (_building)) // || event->spontaneous ())) // spontaneous: could be a screenshot request 
           djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
-        if(! (_building || event->spontaneous ()))
+        if(! (_building)) // || event->spontaneous ()))
           djnn::release_exclusive_access (DBG_REL);
         //return exec_;
         break;

@@ -122,9 +122,9 @@ namespace djnn
     if (_qwidget == nullptr)
       return;
     
-    //djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
+    djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
     _qwidget->grab().save(QString(path.c_str()));
-    //djnn::get_exclusive_access (DBG_GET);
+    djnn::get_exclusive_access (DBG_GET);
   }
 
   void
