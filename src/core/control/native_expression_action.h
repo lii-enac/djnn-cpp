@@ -18,11 +18,10 @@
 #include "core/control/action.h"
 
 namespace djnn {
-  //using namespace std;
 
 class NativeExpressionAction : public Action {
   public:
-    NativeExpressionAction (ParentProcess* parent, const std::string& name, bool model = false) : Action (parent, name, model), _src(nullptr) {}
+    NativeExpressionAction (ParentProcess* parent, const std::string& name, bool model = false);
     virtual ~NativeExpressionAction ();
 
     void add_native_edge (CoreProcess * src, CoreProcess * dst);
@@ -37,5 +36,6 @@ class NativeExpressionAction : public Action {
   private:
     CoreProcess *_src;
     std::vector<CoreProcess*> _dsts;
+    bool his_parent_is_an_assignmentsequence;
   };
 }
