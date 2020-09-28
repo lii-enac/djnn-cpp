@@ -117,8 +117,9 @@ namespace djnn
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
 
-    Graph::instance ().add_edge (_screenshot, _screenshot_path);
+    Graph::instance ().remove_edge (_screenshot, _screenshot_action);
     delete _c_screenshot;
+    delete _screenshot_action;
     delete _screenshot_path;
     delete _screenshot;
 
