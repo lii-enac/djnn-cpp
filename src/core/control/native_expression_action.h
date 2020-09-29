@@ -36,6 +36,6 @@ class NativeExpressionAction : public Action {
   private:
     CoreProcess *_src;
     std::vector<CoreProcess*> _dsts;
-    bool his_parent_is_an_assignmentsequence;
+    bool _my_parent_is_an_assignmentsequence;
   };
 }

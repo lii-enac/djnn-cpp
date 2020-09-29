@@ -26,22 +26,22 @@ namespace djnn
   NativeExpressionAction::NativeExpressionAction (ParentProcess* parent, const std::string& name, bool model): 
     Action (parent, name, model), 
     _src(nullptr), 
-    his_parent_is_an_assignmentsequence (false)
+    _my_parent_is_an_assignmentsequence (false)
   {
     
     if (dynamic_cast<AssignmentSequence*> (parent) != nullptr ) {
-        his_parent_is_an_assignmentsequence = true;
+        _my_parent_is_an_assignmentsequence = true;
         Graph::instance ().add_edge (parent, this);
     }
   }
 
   NativeExpressionAction::~NativeExpressionAction ()
   {
-      if ( his_parent_is_an_assignmentsequence ) {
-        Graph::instance ().remove_edge (get_parent (), this);
-      }
+    if ( _my_parent_is_an_assignmentsequence ) {
+      Graph::instance ().remove_edge (get_parent (), this);
+    }
 
-      remove_all_native_edges ();
+    remove_all_native_edges ();
   }
 
   void

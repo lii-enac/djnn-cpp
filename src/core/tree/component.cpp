@@ -73,7 +73,7 @@ namespace djnn
     for (int i = sz - 1; i >= 0; i--) {
 #ifdef DEBUG
       for (int space=0; space < nb_space; space++ ) cerr << "\t";
-      cerr << i << ". " << _children[i]->get_name () << endl ;
+      cerr << i << ". " << _children[i]->get_debug_name () << endl ;
 #endif
       /* remove child from structure_observer (if in structure_observer) */
       for (auto s: structure_observer_list) 
