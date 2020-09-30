@@ -44,13 +44,10 @@ ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
 ```
-pacman -S subversion patch
-svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
-cd ivy-c
-patch -p0 -i ../djnn-cpp/tools/ivy-C-patch-windows.diff
-cd src
-make -j4 -f Makefile.mingw static-libs shared-libs
-make -j4 -f Makefile.mingw installlibs
+pacman -S mingw-w64-x86_64-pcre mingw-w64-x86_64-gcc
+git clone git@github.com:lii-enac/libivy.git  
+cd libivy/src
+make -j4 -f Makefile.mingw
 ```
 
 Linux/Ubuntu:

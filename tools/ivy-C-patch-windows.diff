@@ -1,42 +1,82 @@
-Index: src/Makefile.mingw
-===================================================================
---- src/Makefile.mingw	(rÃ©vision 3694)
-+++ src/Makefile.mingw	(copie de travail)
-@@ -163,16 +163,16 @@
- 	test -d $(PREFIX)/usr/X11R6/lib || mkdir -p $(PREFIX)/usr/X11R6/lib
- 	test -d $(PREFIX)/usr/include || mkdir -p $(PREFIX)/usr/include
- 	install -m644 libivy.a $(PREFIX)/usr/lib
--	install -m644 libgivy.a $(PREFIX)/usr/lib
--	install -m644 libxtivy.a $(PREFIX)/usr/X11R6/lib
--	install -m644 libtclivy.a $(PREFIX)/usr/lib
--	install -m644 libgtkivy.a $(PREFIX)/usr/X11R6/lib
-+#	install -m644 libgivy.a $(PREFIX)/usr/lib
-+#	install -m644 libxtivy.a $(PREFIX)/usr/X11R6/lib
-+#	install -m644 libtclivy.a $(PREFIX)/usr/lib
-+#	install -m644 libgtkivy.a $(PREFIX)/usr/X11R6/lib
+From a9778cfe4f84400cae013dd2415d43007a4c4eb0 Mon Sep 17 00:00:00 2001
+From: Mathieu Poirier <mathieu.poirier@enac.fr>
+Date: Wed, 30 Sep 2020 16:04:57 +0200
+Subject: [PATCH] Makefile - fixed windows compilation
+
+---
+ src/Makefile.mingw | 30 +++++++++++++++---------------
+ src/ivy.c          | 19 +++++++++++++++++--
+ src/ivysocket.c    |  4 ++--
+ src/timer.h        |  2 +-
+ 4 files changed, 35 insertions(+), 20 deletions(-)
+
+diff --git a/src/Makefile.mingw b/src/Makefile.mingw
+index 29bc6da..085db40 100644
+--- a/src/Makefile.mingw
++++ b/src/Makefile.mingw
+@@ -65,7 +65,7 @@ export
+ .c.o:
+    $(CC) $(CFLAGS) -c $*.c
  
- 	install -m644 libivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
--	install -m644 libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
--	install -m644 libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
--	install -m644 libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
--	install -m644 libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
-+#	install -m644 libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
-+#	install -m644 libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
-+#	install -m644 libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
-+#	install -m644 libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
+-all: static-libs  shared-libs tools
++all: static-libs  shared-libs  installlibs #tools 
  
- 	install -m644 *.h $(PREFIX)/usr/include
+ static-libs: libivy.a libgivy.a
+ #static-libs: libivy.a libgivy.a libtclivy.a  
+@@ -163,16 +163,16 @@ installlibs: static-libs shared-libs
+    test -d $(PREFIX)/usr/X11R6/lib || mkdir -p $(PREFIX)/usr/X11R6/lib
+    test -d $(PREFIX)/usr/include || mkdir -p $(PREFIX)/usr/include
+    install -m644 libivy.a $(PREFIX)/usr/lib
+-   install -m644 libgivy.a $(PREFIX)/usr/lib
+-   install -m644 libxtivy.a $(PREFIX)/usr/X11R6/lib
+-   install -m644 libtclivy.a $(PREFIX)/usr/lib
+-   install -m644 libgtkivy.a $(PREFIX)/usr/X11R6/lib
++#  install -m644 libgivy.a $(PREFIX)/usr/lib
++#  install -m644 libxtivy.a $(PREFIX)/usr/X11R6/lib
++#  install -m644 libtclivy.a $(PREFIX)/usr/lib
++#  install -m644 libgtkivy.a $(PREFIX)/usr/X11R6/lib
  
-Index: src/ivy.c
-===================================================================
---- src/ivy.c	(rÃ©vision 3694)
-+++ src/ivy.c	(copie de travail)
+    install -m644 libivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
+-   install -m644 libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
+-   install -m644 libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
+-   install -m644 libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
+-   install -m644 libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
++#  install -m644 libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
++#  install -m644 libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
++#  install -m644 libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib
++#  install -m644 libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib
+ 
+    install -m644 *.h $(PREFIX)/usr/include
+ 
+@@ -182,12 +182,12 @@ installliblinks: installlibs
+    ln -s /usr/lib/libivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib/libivy.so.$(MAJOR)
+    ln -s /usr/lib/libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib/libgivy.so
+    ln -s /usr/lib/libgivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/lib/libgivy.so.$(MAJOR)
+-   ln -s /usr/X11R6/lib/libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libxtivy.so
+-   ln -s /usr/X11R6/lib/libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libxtivy.so.$(MAJOR)
+-   ln -s /usr/X11R6/lib/libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libgtkivy.so
+-   ln -s /usr/X11R6/lib/libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libgtkivy.so.$(MAJOR)
+-   ln -s /usr/X11R6/lib/libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libtclivy.so
+-   ln -s /usr/X11R6/lib/libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libtclivy.so.$(MAJOR)
++#  ln -s /usr/X11R6/lib/libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libxtivy.so
++#  ln -s /usr/X11R6/lib/libxtivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libxtivy.so.$(MAJOR)
++#  ln -s /usr/X11R6/lib/libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libgtkivy.so
++#  ln -s /usr/X11R6/lib/libgtkivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libgtkivy.so.$(MAJOR)
++#  ln -s /usr/X11R6/lib/libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libtclivy.so
++#  ln -s /usr/X11R6/lib/libtclivy.so.$(MAJOR).$(MINOR) $(PREFIX)/usr/X11R6/lib/libtclivy.so.$(MAJOR)
+ 
+ 
+ installbins: 
+diff --git a/src/ivy.c b/src/ivy.c
+index 8006f6b..e10a642 100644
+--- a/src/ivy.c
++++ b/src/ivy.c
 @@ -24,12 +24,13 @@
  #endif
  
  #include <stdlib.h>
 -#ifdef WIN32
-+#if 1 //def WIN32
++#ifdef __MINGW32__
 +#include <sys/time.h>
  #include <Ws2tcpip.h>
  #include <windows.h>
@@ -47,30 +87,48 @@ Index: src/ivy.c
  // should be removed in when defined in MinGW include of ws2tcpip.h
  extern const char * WSAAPI inet_ntop(int af, const void *src,
                               char *dst, socklen_t size);
-@@ -69,6 +70,18 @@
+@@ -69,6 +70,20 @@ extern int WSAAPI inet_pton(int af, const char *src, void *dst);
  #define DEFAULT_DOMAIN 127.255.255.255
  #endif
  
++#ifdef __MINGW32__
 +#ifndef timersub
 +#define timersub(a, b, result)\
-+	do {												\
-+		(result)->tv_sec = (a)->tv_sec - (b)->tv_sec;	\
-+		(result)->tv_usec = (a)->tv_usec - (b)->tv_usec;\
-+	if ((result)->tv_usec < 0) {						\
-+		--(result)->tv_sec;								\
-+	  (result)->tv_usec += 1000000;						\
-+	}													\
-+	} while (0)
++   do {                                                \
++       (result)->tv_sec = (a)->tv_sec - (b)->tv_sec;   \
++       (result)->tv_usec = (a)->tv_usec - (b)->tv_usec;\
++   if ((result)->tv_usec < 0) {                        \
++       --(result)->tv_sec;                             \
++     (result)->tv_usec += 1000000;                     \
++   }                                                   \
++   } while (0)
++#endif
 +#endif
 +
  /* stringification et concatenation du domaine et du port en 2 temps :
   * Obligatoire puisque la substitution de domain, et de bus n'est pas
   * effectuée si on stringifie directement dans la macro GenerateIvyBus */
-Index: src/timer.h
-===================================================================
---- src/timer.h	(rÃ©vision 3694)
-+++ src/timer.h	(copie de travail)
-@@ -36,7 +36,7 @@
+diff --git a/src/ivysocket.c b/src/ivysocket.c
+index c109627..a8b7ae9 100644
+--- a/src/ivysocket.c
++++ b/src/ivysocket.c
+@@ -111,9 +111,9 @@ static Client clients_list = NULL;
+ 
+ static int debug_send = 0;
+ 
+-#ifdef WIN32
++/*#ifdef WIN32
+ WSADATA    WsaData;
+-#endif
++#endif*/
+ 
+ 
+ static SendState BufferizedSocketSendRaw (const Client client, const char *buffer, const int len );
+diff --git a/src/timer.h b/src/timer.h
+index 7ac8113..8dd3aa4 100644
+--- a/src/timer.h
++++ b/src/timer.h
+@@ -36,7 +36,7 @@ void TimerRemove( TimerId id );
  
  
   //  implemetation of gettimeofday for windows
@@ -79,3 +137,6 @@ Index: src/timer.h
  #include "time.h"
  struct timezone 
  {
+-- 
+2.23.0
+
