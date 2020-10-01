@@ -686,7 +686,7 @@ ifeq ($(os), MinGW)
 	#https://www.msys2.org/
 	#pkgdeps := git make pkg-config
 	pkgcmd := pacman -S --needed
-	pkgupg := pacman -Syu
+	pkgupg := pacman -Syu --needed
 
 	mgwpkgdeps += gcc boost expat curl qt5
 	mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb

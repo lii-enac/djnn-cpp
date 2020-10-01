@@ -29,7 +29,8 @@ make -j
 install MSYS2 (follow instructions from https://www.msys2.org/)  
 then in an MSYS2-MSYS terminal:
 ```
-pacman -S git make pkg-config
+pacman -Syu
+pacman -Syu --needed git make pkg-config
 ```
 launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then:  
 ```
@@ -44,10 +45,12 @@ ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
 ```
-pacman -S mingw-w64-x86_64-pcre mingw-w64-x86_64-gcc
+(pacman -Syu)
+(pacman -Syu --needed git make pkg-config)
 git clone git@github.com:lii-enac/libivy.git  
 cd libivy/src
-make -j4 -f Makefile.mingw
+make -j4 -f Makefile.mingw upgrade-pkgdeps
+make -j4 -f Makefile.mingw 
 ```
 
 Linux/Ubuntu:
