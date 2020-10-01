@@ -37,8 +37,8 @@ endif
 
 ifeq ($(os),Linux)
 	# TODO: remove once .pkg made 
-	lib_cppflags = -I/usr/include/Ivy
-	lib_ldflags = -L/usr/lib64 -livy -lpcre
+	lib_cppflags = -I/usr/local/include/Ivy
+	lib_ldflags = -L/usr/local/lib -livy -lpcre
 	lib_srcs += $(local_dir)/serial.cpp
 endif
 
