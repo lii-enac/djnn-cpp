@@ -8,6 +8,63 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
     - Update the Docs !
 
+## [1.13.0] - 2020-10-01
+
+### NEW
+    - NEW multiple-assignment component
+    - NEW multiple-connector 
+    - NEW easing function animation component
+    - NEW - Qt Only - screenshoot service on Frame/window component
+
+### Added
+    - Added left/right/middle buttons in shape’s UI
+    - Added debuginfo to in-svg processes
+    - Added few methods to process handler
+    - Added NativeCollectionAction componant
+    - Added preprocessing condition for serialized
+    - Added mainloop auto-deactivation and cleanup
+    - exec_env - added missing copyright header
+
+### Changed
+    - make thread = STD standart option for Linux
+    - simplified native_async_action code
+    - Improved INSTALL.md instructions
+    - Ivy make a graph_exec on each messages not on each value (method 2) by default
+    - Set NONE_ACTIVATION in graph::exec () instead of post_deactivation
+    - IvyAccess react on each IvyOutAction
+    - Factorize abstract_obj generation
+    - Improved properies code
+    - Improved support for FreeRTOS/crazyfly
+    - Improved coverage checking
+    - Clean-up useless code 
+
+### Removed
+    - Removed the output_node using clear_display
+    - Removed useless serialiaze for action 
+
+### Fixed
+    - Fixed signedness warnings
+    - Fixed thread_local_cancelled for windows
+    - Fixed support for Qt 5.12 on Ubuntu 20.04
+    - Fixed loadFromXML
+    - Fixed a bug in clipping/picking management
+    - Fixed Finder component
+    - Fixed dictionary destructor
+    - Fixed destructor of ProcessCollector, CollectionActivator
+    - Fixed deref destructor
+    - Fixed MinList, ProductList and SumList
+    - Fixed bug on set : removed_child
+    - Fixed connector as it should be on the model, using copy_on_activation
+    - Fixed double assignment activation in connector
+    - Fixed binding as it should be on the model
+    - Fixed dx, dy, reset on mouse wheel event
+    - Fixed ordering graph between native_expression_action and assignment_sequence component
+    - Fixed ordering graph in regex 
+    - Fixed serialize names for binaryOperators
+    - Fixed destructor of ListOperator
+    - Fixed some warnings
+
+
 ## [1.12.0] - 2020-06-25
 
 ### NEW
