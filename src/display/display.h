@@ -20,11 +20,24 @@
 #include "core/ontology/process.h"
 #include "window.h"
 
-#define MACRO(key) extern const int DJN_Key_ ## key;
+#define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
 
 namespace djnn {
 
   #include "const_keys.h"
+  MACRO (Print, PRINT)
+  MACRO (Shift, SHIFT)
+  MACRO (Control, CONTROL)
+  MACRO (Meta, META)
+  MACRO (Alt, ALT)
+  MACRO (AltGr, ALTGR)
+  MACRO (NumLock, NUMLOCK)
+  MACRO (Exclam, EXCLAM)
+  MACRO (Apostrophe, APOSTROPHE)
+  MACRO (ParenLeft, PARENLEFT)
+  MACRO (ParenRight, PARENRIGHT)
+  MACRO (Equal, EQUAL)
+
 
   extern int mouse_tracking;
   extern int full_screen;
