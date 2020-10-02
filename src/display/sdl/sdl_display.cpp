@@ -1,11 +1,9 @@
 #include <SDL.h>
 
-#define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey = SDLK_ ## capkey;
-#define MACRO2(lowkey,capkey,sdlkey) extern const int DJN_Key_ ## lowkey = SDLK_ ## sdlkey;
-
-#define SDL_EVENT_CAP_LETTER(a,A) const int SDLK_ ## A = SDLK_ ## a;
 
 namespace djnn {
+
+  #define SDL_EVENT_CAP_LETTER(a,A) const int SDLK_ ## A = SDLK_ ## a;
 
   SDL_EVENT_CAP_LETTER (a,A)
   SDL_EVENT_CAP_LETTER (b,B)
@@ -34,7 +32,10 @@ namespace djnn {
   SDL_EVENT_CAP_LETTER (y,Y)
   SDL_EVENT_CAP_LETTER (z,Z)
 
+  #define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey = SDLK_ ## capkey;
   #include "display/const_keys.h"
+
+  #define MACRO2(lowkey,capkey,sdlkey) extern const int DJN_Key_ ## lowkey = SDLK_ ## sdlkey;
   MACRO2 (Print, PRINT, PRINTSCREEN)
   MACRO2 (Shift, SHIFT, LSHIFT)
   MACRO2 (Control, CONTROL, LCTRL)
