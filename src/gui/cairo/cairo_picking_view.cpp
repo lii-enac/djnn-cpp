@@ -18,8 +18,6 @@
 
 #include <assert.h>
 
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-
 namespace djnn
 {
 

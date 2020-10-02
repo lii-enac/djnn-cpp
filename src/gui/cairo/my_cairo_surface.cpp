@@ -20,8 +20,6 @@
 #include "display/display.h"
 #include "display/abstract_display.h"
 
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-
 #ifndef DOUBLE_BUFFER
 #define DOUBLE_BUFFER 1
 #endif

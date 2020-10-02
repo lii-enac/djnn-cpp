@@ -32,9 +32,7 @@
 
 #include <iostream>
 
-#define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
-#define attr(a) #a ":" << a << " "
+//#define attr(a) #a ":" << a << " "
 
 namespace djnn
 {
