@@ -21,7 +21,8 @@ MAKEFLAGS += --no-builtin-rules
 default: all
 .PHONY: default
 
-all: config.mk dirs djnn cccmd pkgconf
+all: config.mk dirs djnn pkgconf
+# cccmd
 
 help:
 	@echo "default: djnn ; all: djnn"
