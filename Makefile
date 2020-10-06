@@ -21,8 +21,7 @@ MAKEFLAGS += --no-builtin-rules
 default: all
 .PHONY: default
 
-all: config.mk dirs djnn pkgconf
-# cccmd
+all: config.mk dirs djnn pkgconf cccmd
 
 help:
 	@echo "default: djnn ; all: djnn"
@@ -287,15 +286,6 @@ all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
 
 
-all_cccmd_json = $(call rwildcard,$(build_dir)/,*.cccmd.json)
-$(build_dir)/compile_commands.json:
-	@echo "[" > $(@)
-	@cat $(all_cccmd_json) >> $(@)
-	@echo "{}]" >> $(@)
-
-cccmd: $(build_dir)/compile_commands.json
-.PHONY: $(build_dir)/compile_commands.json
-
 # ---------------------------------------
 # djnn modules
 
@@ -457,6 +447,30 @@ size: $(libs_static)
 strip:
 	strip $(libs_static)
 
+
+# ---------------------------------------
+# commands.json for linters in VS Code etc.
+# should be here, after the call to lib_makerule
+
+all_cccmd_json = $(objs:%.o=%.cccmd.json)
+
+$(build_dir)/compile_commands.json: $(all_cccmd_json)
+	@echo "[" > $(@)
+	@cat $^ >> $(@)
+	@echo "{}]" >> $(@)
+
+cccmd: $(build_dir)/compile_commands.json
+.PHONY: cccmd
+
+shit:
+	@echo $(all_cccmd_json)
+
+$(build_dir)/%.cccmd.json: %.cpp
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
+$(build_dir)/%.cccmd.json:$(build_dir)/%.cpp
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 # ---------------------------------------
 # rules
 
@@ -467,7 +481,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 
 $(build_dir)/%.o: %.c
 ifeq ($V,max)
@@ -476,7 +490,7 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
@@ -486,7 +500,6 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
 ifeq ($V,max)
@@ -495,7 +508,8 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(YACC) -v -o $@ $<
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"@$(YACC) -v -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
+#	@echo "{\"directory\": \"$(@D)\", \"command\": \"@$(YACC) -v -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cpp: %.l
 ifeq ($V,max)
@@ -504,7 +518,8 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(LEX) -o $@ $<
 endif
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"@@$(LEX) -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
+#	@echo "{\"directory\": \"$(@D)\", \"command\": \"@@$(LEX) -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 
 -include $(deps)
