@@ -593,7 +593,7 @@ else
 endif
 
 
-all_headers = $(shell find src -type f -name "*.h")
+all_headers = $(call rwildcard,src/,*.h)
 all_headers_no_src = $(patsubst src/%,%,$(all_headers))
 
 all_libs_no_build_dir = $(patsubst $(build_dir)/lib/%,%,$(libs))
