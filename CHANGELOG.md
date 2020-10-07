@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
     - Update the Docs !
 
-## [1.13.0] - 2020-10-01
+## [1.13.0] - 2020-10-07
 
 ### NEW
     - NEW multiple-assignment component
@@ -63,6 +63,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed serialize names for binaryOperators
     - Fixed destructor of ListOperator
     - Fixed some warnings
+    - Fixed SDL Keycode
+    - Fixed Makefile not quitting on some compilation
 
 
 ## [1.12.0] - 2020-06-25
