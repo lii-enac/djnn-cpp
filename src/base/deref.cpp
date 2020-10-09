@@ -74,7 +74,10 @@ namespace djnn
   {
     auto* unref = _ref->get_value ();
     auto *old_src = _cget.get_src ();
-    if (old_src) {
+    auto *new_src = unref == nullptr? nullptr : unref->find_child (_path.get_value ());
+    if (old_src == new_src)
+      return;
+    if (old_src != nullptr) {
       Graph::instance().remove_edge (&_set, old_src);
     }
     _cget.uninit ();
