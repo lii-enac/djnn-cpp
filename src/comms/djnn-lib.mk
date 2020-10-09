@@ -22,8 +22,8 @@ lib_srcs += $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 # sudo make install
 
 ifeq ($(os),Darwin)
-	lib_cppflags = -I/opt/local/include/Ivy
-	lib_ldflags = -L/opt/local/lib -livy
+	lib_cppflags += -I/opt/local/include/Ivy
+	lib_ldflags += -L/opt/local/lib -livy
 	
 	#TODO : activate after confinement and put above AND REMOVE /ivy
 	tmp_lib_cppflags = $(shell pkg-config ivy-c --cflags)
@@ -37,15 +37,15 @@ endif
 
 ifeq ($(os),Linux)
 	# TODO: remove once .pkg made 
-	lib_cppflags = -I/usr/local/include/Ivy
-	lib_ldflags = -L/usr/local/lib -livy -lpcre
+	lib_cppflags += -I/usr/local/include/Ivy
+	lib_ldflags += -L/usr/local/lib -livy -lpcre
 	lib_srcs += $(local_dir)/serial.cpp
 endif
 
 ifeq ($(os),MinGW)
 	# TODO: remove once .pkg made 
-	lib_cppflags = -I/usr/include
-	lib_ldflags = -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
+	lib_cppflags += -I/usr/include
+	lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 
 # library-specific thread support

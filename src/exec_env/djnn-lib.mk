@@ -18,7 +18,6 @@ endif
 ifeq ($(os),MinGW)
 lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
-lib_cppflags += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 endif
 
 ifeq ($(os),crazyflie)
