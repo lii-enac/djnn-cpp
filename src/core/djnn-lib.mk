@@ -17,7 +17,6 @@ ifeq ($(os),Darwin)
 lib_pkgpath += /usr/local/opt/expat/lib/pkgconfig
 lib_pkgpath += /usr/local/opt/curl/lib/pkgconfig
 
-#lib_cppflags += -I/usr/local/include # boost demangle _DEBUG_SEE_ACTIVATION_SEQUENCE
 endif
 
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
