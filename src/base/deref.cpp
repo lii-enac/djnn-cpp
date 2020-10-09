@@ -66,12 +66,12 @@ namespace djnn
     _cpath.disable ();
     _cset.disable ();
     _cget.disable ();
-    update_src ();
   }
 
   void
   AbstractDeref::update_src ()
   {
+
     auto* unref = _ref->get_value ();
     auto *old_src = _cget.get_src ();
     auto *new_src = unref == nullptr? nullptr : unref->find_child (_path.get_value ());
@@ -111,6 +111,7 @@ namespace djnn
     _cpath.enable ();
     _cset.enable ();
     _cget.enable ();
+    update_src ();
   }
 
   Deref::Deref (ParentProcess* parent, const std::string& name, CoreProcess *ref, const std::string& path, djnn_dir_t dir)
