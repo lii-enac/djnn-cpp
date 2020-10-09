@@ -32,8 +32,10 @@ lib_ldflags += -L/usr/local/opt/flex/lib
 endif
 
 ifeq ($(os),MinGW)
-CXXFLAGS += -I/usr/include # Fix for FlexLexer.h in /usr/include and in /ming64/include
 YACC = bison -d
+
+# Fix for FlexLexer.h in /usr/include and in /ming64/include
+$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
 endif
 
 ifeq ($(picking),ANALYTICAL)
