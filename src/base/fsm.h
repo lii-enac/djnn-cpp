@@ -102,7 +102,7 @@ namespace djnn {
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return FSM_T; }
     void update_state (FSMState *s, const std::string& name) { _cur_state = s; _fsm_state.set_value (name, true); };
-    void set_initial (const std::string& n) { if (_str_initial.length() == 0) _str_initial = n; };
+    void set_initial (const std::string& n) { if (_initial.get_value().length() == 0) _initial.set_value (n, false); };
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
@@ -117,7 +117,6 @@ namespace djnn {
 #endif
   private:
     int _priority;
-    std::string _str_initial;
     FSMState *_cur_state;
     TextProperty _fsm_state, _initial;
     std::vector<FSMState*> _states;

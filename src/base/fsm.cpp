@@ -265,14 +265,10 @@ namespace djnn
   FSM::impl_activate ()
   {
     _fsm_state.activate ();
-    _initial.activate ();
-    _initial.set_value (_str_initial, true);
 
-    if (_str_initial.length () != 0) {
-      FSMState* init_state = dynamic_cast<FSMState*> (find_child (_str_initial));
-      if (init_state)
-        init_state->activate ();
-    }
+    FSMState* init_state = dynamic_cast<FSMState*> (find_child (_initial.get_value ()));
+    if (init_state)
+      init_state->activate ();
   }
 
   void
