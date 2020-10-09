@@ -1,8 +1,6 @@
 lib_djnn_deps = core
-
-lib_srcs += src/exec_env/external_source.cpp src/exec_env/exec_env.cpp \
-			src/exec_env/global_mutex.cpp src/exec_env/main_loop.cpp src/exec_env/exit.cpp \
-			src/exec_env/timer.cpp src/exec_env/time_manager.cpp src/exec_env/djnn_time_manager.cpp
+local_dir = $(src_dir)/exec_env
+lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
 ifeq ($(os),Linux)
 lib_suffix =.so
@@ -73,9 +71,6 @@ chrono ?= STD
 ifeq ($(thread),BOOST)
 lib_cppflags += -DDJNN_USE_BOOST_THREAD=1
 lib_ldflags += $(boost_libs)
-ifeq ($(os),Darwin)
-lib_cppflags += -I/usr/local/include
-endif
 
 else ifeq ($(thread),QT)
 lib_cppflags += -DDJNN_USE_QT_THREAD=1
@@ -92,9 +87,6 @@ endif
 ifeq ($(chrono),BOOST)
 lib_cppflags += -DDJNN_USE_BOOST_CHRONO=1
 ifneq ($(thread),BOOST)
-ifeq ($(os),Darwin)
-#lib_cppflags += -I/usr/local/include
-endif
 lib_ldflags += $(boost_libs)
 endif
 

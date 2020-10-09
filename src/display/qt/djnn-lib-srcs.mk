@@ -1,7 +1,4 @@
-local_dir := src/display/qt
-
-#$(build_dir)/$(local_dir)/moc_MyQWindow.cpp: $(local_dir)/my_qwindow.h
-#	$(moc) $< > $@
+local_dir = $(src_dir)/display/qt
 
 $(build_dir)/$(local_dir)/moc_MyQWindow.cpp: $(local_dir)/my_qwindow.h
 ifeq ($V,max)

@@ -1,5 +1,5 @@
 lib_djnn_deps = exec_env core
-local_dir := $(src_dir)/audio
+local_dir = $(src_dir)/audio
 lib_srcs += $(call rwildcard,$(local_dir)/,*.cpp)
 
 lib_cppflags += -DUSE_OPENAL
