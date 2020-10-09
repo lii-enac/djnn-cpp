@@ -1,1 +1,2 @@
-lib_srcs += $(shell find src/display/sdl -name "*.cpp")
+local_dir := $(src_dir)/display/sdl
+lib_srcs += $(call rwildcard,$(local_dir)/,*.cpp)

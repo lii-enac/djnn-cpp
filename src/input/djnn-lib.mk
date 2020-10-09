@@ -1,8 +1,8 @@
 lib_djnn_deps = core
-lib_srcs := src/input/input.cpp
+lib_srcs += src/input/input.cpp
 
 ifeq ($(os),Linux)
-	lib_srcs += $(shell find src/input/linux -name "*.cpp")
+	lib_srcs += $(call rwildcard,src/input/linux/,*.cpp)
 	lib_cppflags = -I/usr/include/libevdev-1.0
 	lib_ldflags = -ludev -levdev
 else

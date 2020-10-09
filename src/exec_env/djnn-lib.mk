@@ -93,7 +93,7 @@ ifeq ($(chrono),BOOST)
 lib_cppflags += -DDJNN_USE_BOOST_CHRONO=1
 ifneq ($(thread),BOOST)
 ifeq ($(os),Darwin)
-lib_cppflags += -I/usr/local/include
+#lib_cppflags += -I/usr/local/include
 endif
 lib_ldflags += $(boost_libs)
 endif
@@ -119,18 +119,14 @@ endif
 
 ifeq ($(display),QT)
 include src/display/qt/djnn-lib-flags.mk
-lib_srcs += $(shell find src/exec_env/qt -name "*.cpp")
+lib_srcs += $(call rwildcard,src/exec_env/qt/,*.cpp)
 endif
 
 ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib-flags.mk
-lib_srcs += $(shell find src/exec_env/sdl -name "*.cpp")
+lib_srcs += $(call rwildcard,src/exec_env/sdl/,*.cpp)
 endif
 
 ifeq ($(os),crazyflie)
 include src/exec_env/crazyflie/djnn-lib.mk
-#lib_cppflags += -DDJNN_USE_FREERTOS_MAINLOOP=1
-#lib_srcs += src/exec_env/freertos/freertos_mainloop.cpp
-#lib_srcs += src/exec_env/crazyflie/crazyflie.cpp
-#lib_srcs += $(shell find src/exec_env/freertos/ext/freertos-cxx11 -name "*.cpp")
 endif

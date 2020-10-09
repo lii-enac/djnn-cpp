@@ -1,4 +1,5 @@
-lib_srcs += $(shell find src/gui/cairo -name "*.cpp"  -not -path "*sdl*" -not -path "*drm*")
+local_dir = $(src_dir)/gui/cairo
+lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
 ifndef cairo_backend
 ifeq ($(display),SDL)
@@ -20,7 +21,7 @@ endif
 
 ifeq ($(cairo_backend),drm)
 include src/display/drm/djnn-lib-flags.mk
-lib_srcs += $(shell find src/gui/cairo/drm -name "*.cpp")
+lib_srcs += $(call rwildcard,src/gui/cairo/drm/,*.cpp)
 lib_cppflags += -I.
 lib_pkg += cairo pango pangocairo
 endif

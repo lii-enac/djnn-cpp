@@ -6,7 +6,6 @@ submodules = ontology/ control/ tree/ execution/ utils/
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
 submodules += serializer/ xml/
 endif
-
 lib_srcs += $(call rwildcardmul,$(addprefix $(local_dir)/,$(submodules)),*.cpp)
 
 
@@ -17,12 +16,13 @@ CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
 ifeq ($(os),Darwin)
 lib_pkgpath += /usr/local/opt/expat/lib/pkgconfig
 lib_pkgpath += /usr/local/opt/curl/lib/pkgconfig
+
+#lib_cppflags += -I/usr/local/include # boost demangle _DEBUG_SEE_ACTIVATION_SEQUENCE
 endif
 
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
-#lib_ldflags += -lexpat -lcurl
 lib_pkg += expat libcurl
 endif
 
-lib_cppflags += -I/usr/local/include # boost demangle
+
 

@@ -1,6 +1,6 @@
 lib_djnn_deps = exec_env core
 local_dir := $(src_dir)/comms
-lib_srcs := $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
+lib_srcs += $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 
 #lib_pkg += rtmidi
 

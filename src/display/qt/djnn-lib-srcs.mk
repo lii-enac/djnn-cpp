@@ -14,5 +14,5 @@ endif
 
 lib_objs += $(build_dir)/$(local_dir)/moc_MyQWindow.o
 lib_srcgens += $(build_dir)/$(local_dir)/moc_MyQWindow.cpp
-lib_srcs += $(shell find $(local_dir) -name "*.cpp")
+lib_srcs += $(call rwildcard,$(local_dir)/,*.cpp)
 

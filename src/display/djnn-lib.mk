@@ -1,5 +1,6 @@
+local_dir = $(src_dir)/display
 lib_djnn_deps = exec_env core
-lib_srcs += src/display/display.cpp src/display/window.cpp src/display/update_drawing.cpp
+lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
 ifeq ($(display),DRM)
 include src/display/drm/djnn-lib.mk
