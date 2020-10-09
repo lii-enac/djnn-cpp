@@ -231,7 +231,6 @@ namespace djnn
     #endif
     curTextY = rect.y () + fm.height ();
 
-    std::cerr << text << std::endl;
     _painter->drawText (p, s);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
