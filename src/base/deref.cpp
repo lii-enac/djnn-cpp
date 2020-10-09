@@ -27,8 +27,8 @@ namespace djnn
   _action (this, "action"),
   _set (this, "set_action"),
   _get (this, "get_action"),
-  _cref (ref, ACTIVATION, &_action, ACTIVATION, true),
-  _cpath (&_path, ACTIVATION, &_action, ACTIVATION, true),
+  _cref (ref, ACTIVATION, &_action, ACTIVATION),
+  _cpath (&_path, ACTIVATION, &_action, ACTIVATION),
   _cget (),
   _cset (),
   _dir (dir),
@@ -39,6 +39,8 @@ namespace djnn
       warning (this, "Deref is only applicable to RefProperty");
       return;
     }
+    Graph::instance().add_edge (_ref, &_action);
+    Graph::instance().add_edge (&_path, &_action);
   }
 
   AbstractDeref::~AbstractDeref ()
@@ -53,6 +55,8 @@ namespace djnn
       auto* src = unref->find_child (_path.get_value ());
       Graph::instance().remove_edge (&_set, src);
     }
+    Graph::instance().remove_edge (_ref, &_action);
+    Graph::instance().remove_edge (&_path, &_action);
   }
 
   void
