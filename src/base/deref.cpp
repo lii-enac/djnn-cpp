@@ -66,6 +66,7 @@ namespace djnn
     _cpath.disable ();
     _cset.disable ();
     _cget.disable ();
+    update_src ();
   }
 
   void
@@ -117,7 +118,6 @@ namespace djnn
     _cset.init (&_activation, ACTIVATION, &_set, ACTIVATION);
     Graph::instance ().add_edge (&_activation, &_set);
     Graph::instance ().add_edge (&_get, &_activation);
-	  AbstractDeref::update_src ();
     finalize_construction (parent, name);
   }
 
@@ -159,7 +159,6 @@ namespace djnn
     _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
     Graph::instance ().add_edge (&_value, &_set);
     Graph::instance ().add_edge (&_get, &_value);
-    AbstractDeref::update_src ();
     finalize_construction (parent, name);
   }
 
@@ -208,7 +207,6 @@ namespace djnn
     _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
     Graph::instance ().add_edge (&_value, &_set);
     Graph::instance ().add_edge (&_get, &_value);
-    AbstractDeref::update_src ();
     finalize_construction (parent, name);
   }
 
