@@ -19,7 +19,6 @@ MAKEFLAGS += --no-builtin-rules
 # default
 
 default: all
-.PHONY: default
 
 all: config.mk dirs djnn pkgconf cccmd
 
@@ -128,24 +127,29 @@ endif
 ifndef os
 os := $(shell uname -s)
 endif
-ifndef arch
-arch := $(shell uname -m)
-endif
-
 ifeq ($(findstring MINGW,$(os)),MINGW)
 os := MinGW
 endif
 
+# ifndef arch
+# arch := $(shell uname -m)
+# endif
 
 build_lib_dir := $(build_dir)/lib
-CFLAGS += $(PRE_COV_CFLAGS) -I$(src_dir)
 build_incl_dir := $(build_dir)/include/djnn-cpp
-LDFLAGS += $(PRE_COV_LDFLAGS) -L$(build_lib_dir)
 lib_static_suffix = .a
 echo = echo -e
 
+CFLAGS += -g -MMD -Wall
+
+CFLAGS += $(PRE_COV_CFLAGS)
+LDFLAGS += $(PRE_COV_LDFLAGS)
+
+CFLAGS += -I$(src_dir)
+LDFLAGS += -L$(build_lib_dir)
+
 ifeq ($(os),Linux)
-CFLAGS += -fpic -g -MMD -Wall
+CFLAGS += -fpic
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB = -shared
@@ -154,7 +158,7 @@ thread = STD
 endif
 
 ifeq ($(os),Darwin)
-CFLAGS += -g -MMD -Wall -Wno-deprecated-declarations -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/
+CFLAGS += -Wno-deprecated-declarations -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
@@ -163,8 +167,8 @@ echo = echo
 endif
 
 ifeq ($(os),MinGW)
-CFLAGS += -fpic -g -MMD -Wall
-CXXFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
+CFLAGS += -fpic
+CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll
 DYNLIB = -shared
@@ -172,7 +176,7 @@ YACC = bison -d
 endif
 
 ifeq ($(os),crazyflie)
-CFLAGS += -g -MD -Wall -Os
+CFLAGS += -Os
 CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CFLAGS += -ffunction-sections -fdata-sections
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
@@ -279,7 +283,6 @@ tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacO
 
 %_tidy: %
 	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
-.PHONY: %_tidy
 
 all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
@@ -288,8 +291,8 @@ tidy: $(all_tidy)
 # ---------------------------------------
 # djnn modules
 
-CXXFLAGS += -std=c++14
 CXXFLAGS += $(CFLAGS)
+CXXFLAGS += -std=c++14
 
 djnn_libs ?= core exec_env base display comms gui input animation utils files audio
 djnn_libs += $(djnn_libs_extra)
@@ -336,7 +339,7 @@ $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
 
-# fix srcs
+# crystalize srcs
 $1_srcs := $$($1_srcs)
 
 $1_pkg_deps :=
@@ -459,16 +462,13 @@ $(build_dir)/compile_commands.json: $(all_cccmd_json)
 	@echo "{}]" >> $(@)
 
 cccmd: $(build_dir)/compile_commands.json
-.PHONY: cccmd
-
-shit:
-	@echo $(all_cccmd_json)
 
 $(build_dir)/%.cccmd.json: %.cpp
 	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cccmd.json:$(build_dir)/%.cpp
 	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 
 # ---------------------------------------
 # rules
@@ -481,7 +481,6 @@ else
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 endif
 
-
 $(build_dir)/%.o: %.c
 ifeq ($V,max)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -489,7 +488,6 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
 endif
-
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
@@ -508,8 +506,6 @@ else
 	@$(YACC) -v -o $@ $<
 endif
 
-#	@echo "{\"directory\": \"$(@D)\", \"command\": \"@$(YACC) -v -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
 $(build_dir)/%.cpp: %.l
 ifeq ($V,max)
 	$(LEX) -o $@ $<
@@ -518,10 +514,8 @@ else
 	@$(LEX) -o $@ $<
 endif
 
-#	@echo "{\"directory\": \"$(@D)\", \"command\": \"@@$(LEX) -o $@ $<\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
-
 -include $(deps)
+
 
 # ---------------------------------------
 # coverage tests
@@ -533,7 +527,6 @@ pre_cov: PRE_COV_CFLAGS += --coverage -O1
 pre_cov: PRE_COV_LDFLAGS += --coverage
 pre_cov: dirs djnn
 	lcov -d $(build_dir) -b . --zerocounters
-.PHONY: pre_cov
 
 cov_jenkins:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
@@ -544,7 +537,6 @@ cov_jenkins:
 	genhtml -o $(lcov_output_dir) $(lcov_file)
 cov: cov_jenkins
 	cd $(lcov_output_dir) ; open index.html
-.PHONY: cov
 
 
 # ---------------------------------------
@@ -623,7 +615,7 @@ install_clear:
 
 #note: 
 # use dpkg-depcheck -d make to find out all dependency on djnn
-# last tryon ubuntu 18_04: 
+# last try on ubuntu 18_04: 
 #      	qtbase5-dev-tools, pkg-config, bison, qtchooser, flex, m4
 # install with:
 #		sudo dpkg -i djnn-cpp_x.x.x.deb
@@ -645,7 +637,6 @@ deb:
 	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 # check integrity of the build package. We still have error
 #	cd "build/deb" ; lintian djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).deb
-.PHONY: deb
 
 
 # ---------------------------------------
