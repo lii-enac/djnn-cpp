@@ -89,7 +89,7 @@ namespace djnn_internal {
         bool firsthaschanged = false;
         if (it==_timers.begin()) firsthaschanged = true;
         _timers.erase(it);
-        (*it)->set_scheduled(false);
+        timer->set_scheduled(false);
         if(firsthaschanged) firstTimerHasChanged();
       }
     }

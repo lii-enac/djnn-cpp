@@ -263,7 +263,7 @@ endif
 #LDFLAGS += -fsanitize=thread
 
 #CFLAGS += -fsanitize=address -O1
-#LDFLAGS += -fsanitize=address
+#LDFLAGS += -fsanitize=address -fsanitize=leak
 
 #CFLAGS += -fsanitize=memory -O1
 #LDFLAGS += -fsanitize=memory
