@@ -142,34 +142,23 @@ namespace djnn {
     update_ref_now_in_scheduled_timers (); // we are about to begin but we took some time to init, so pretend that "now" is now.
     // try {
       while (!get_please_stop ()) {        
-        //bool timer_cancelled =false;
-        {
-        std::unique_lock<std::mutex> l (*cancel_mutex);
-        //cancel_mutex->lock (); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
-        if (empty ()) {
-          djnn::release_exclusive_access (DBG_REL);
-          //cancel_mutex.lock(); // second lock, blocks until another thread calls please_stop of firstTimerHasChanged //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
-          // FIXME2: If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-          //cv->wait(*cancel_mutex
-          cv->wait(l
-            //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
-          ); // FIXME cv should use global mutex
-        } else {
-          auto next_time = get_next()->get_end_time();
-          djnn::release_exclusive_access (DBG_REL);
-          //timer_cancelled =
-          //cancel_mutex.try_lock_until(next_time); //std::cerr << "<< djnntimemanager exited sleep " << DBGVAR(timer_cancelled) << __FL__;
-          // FIXME2: If lock is called by a thread that already owns the mutex, the behavior is undefined: for example, the program may deadlock. https://en.cppreference.com/w/cpp/thread/timed_mutex/lock
-          //cv->wait_until(*cancel_mutex, next_time
-          cv->wait_until(l, next_time
-            //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
-          ); // FIXME cv should use global mutex
-        }
-        djnn::get_exclusive_access (DBG_GET);
-        //cancel_mutex->unlock (); // unlock first lock
+        { // scope for mutex
+          std::unique_lock<std::mutex> l (*cancel_mutex); // first lock, get it //std::cerr << ">> djnntimemanager entering sleep forever" << __FL__;
+          if (empty ()) {
+            djnn::release_exclusive_access (DBG_REL);
+            cv->wait(l // second lock, blocks until another thread calls please_stop of firstTimerHasChanged //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
+              //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
+            ); // FIXME cv should use global mutex
+          } else {
+            auto next_time = get_next()->get_end_time();
+            djnn::release_exclusive_access (DBG_REL);
+            cv->wait_until(l, next_time  // second lock, blocks until another thread calls please_stop of firstTimerHasChanged //std::cerr << "<< djnntimemanager exit sleep forever" << __FL__;
+              //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
+            ); // FIXME cv should use global mutex
+          }
+          djnn::get_exclusive_access (DBG_GET);
         }
         if(should_i_stop ()) break;
-        //if(timer_cancelled) {} // either 'infinite duration' has run out or there is a new timer
 
         update_ref_now(); // set the default 'now' -- FIXME useless in a time manager external source?
         djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast(get_ref_now());
