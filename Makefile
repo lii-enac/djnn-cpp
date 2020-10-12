@@ -76,7 +76,18 @@ dirs: $(build_dir)/lib $(build_dir)/include/djnn-cpp $(addprefix $(build_dir)/,$
 # ---------------------------------------
 # stylized actions
 
+# Set silent_opt to 's' if --quiet/-s set, otherwise ''.
+silent_opt := $(filter s,$(word 1, $(MAKEFLAGS)))
+
+silent =
+ifeq ($(silent_opt),s)
+silent = yes
+endif
 ifeq ($V,0)
+silent = yes
+endif
+
+ifeq ($(silent),yes)
 rule_message =
 else
 rule_message = $(echo) $1 $2
