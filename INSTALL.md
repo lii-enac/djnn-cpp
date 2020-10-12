@@ -4,6 +4,10 @@ We provide a Makefile that should work on MacOS (10.12+), Linux, Windows 10+.
 in a Terminal:
 
 ```
+linux package for ubuntu 20.04: https://github.com/lii-enac/djnn-cpp/releases
+
+or using sources
+
 sudo apt install git make pkg-config
 git clone https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
@@ -41,10 +45,14 @@ make -j
 ``` 
 
 ---- ALL PLATFORMS -----  
-ivy bus -> https://github.com/lii-enac/libivy 
+ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
 ```
+pacmac (ArchLinux) package .tar.zst : https://github.com/lii-enac/libivy/releases 
+
+or using sources
+
 (pacman -Syu)
 (pacman -Syu --needed git make pkg-config)
 git clone git@github.com:lii-enac/libivy.git  
@@ -56,8 +64,10 @@ make -j4 -f Makefile.mingw
 Linux/Ubuntu:
 ```
 
-linux package for ubuntu 18.04: https://github.com/lii-enac/libivy/releases 
-else
+linux package for ubuntu 20.04 . deb : https://github.com/lii-enac/libivy/releases 
+
+or using sources
+
 sudo apt install libpcre3-dev  
 git clone https://github.com/lii-enac/libivy 
 cd libivy/src  
@@ -72,8 +82,8 @@ brew install libivy
 
 or using sources
 
-svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
-cd ivy-c/src  
+git clone git@github.com:lii-enac/libivy.git  
+cd libivy/src
 make -f Makefile.osx static-libs shared-libs  
-sudo make -f Makefile.osx installlibs includes
+make -f Makefile.osx install
 ```
