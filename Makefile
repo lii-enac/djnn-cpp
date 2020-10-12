@@ -480,6 +480,12 @@ $(build_dir)/%.cccmd.json: %.cpp
 $(build_dir)/%.cccmd.json:$(build_dir)/%.cpp
 	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
+$(build_dir)/%.cccmd.json: %.c
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
+$(build_dir)/%.cccmd.json:$(build_dir)/%.c
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+
 
 # ---------------------------------------
 # rules
