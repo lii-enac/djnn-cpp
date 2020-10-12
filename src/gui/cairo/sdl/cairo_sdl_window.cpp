@@ -81,8 +81,8 @@ namespace djnn
     //int w = (int) (_window->width ()->get_value ());
     //int h = (int) (_window->height ()->get_value ());
 
-    if(x<=0) x = SDL_WINDOWPOS_UNDEFINED;
-    if(y<=0) y = SDL_WINDOWPOS_UNDEFINED;
+    if(x<0) x = SDL_WINDOWPOS_UNDEFINED;
+    if(y<0) y = SDL_WINDOWPOS_UNDEFINED;
 
     _sdl_window = SDL_CreateWindow (title.c_str (), x, y, w, h,
                                     SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
