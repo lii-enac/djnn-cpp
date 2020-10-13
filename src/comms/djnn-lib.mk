@@ -22,8 +22,8 @@ lib_srcs += $(local_dir)/comms.cpp $(local_dir)/IvyAccess.cpp
 # sudo make install
 
 ifeq ($(os),Darwin)
-	lib_cppflags += -I/opt/local/include/Ivy
-	lib_ldflags += -L/opt/local/lib -livy
+# 	lib_cppflags += -I/opt/local/include/Ivy
+# 	lib_ldflags += -L/opt/local/lib -livy
 	
 	#TODO : activate after confinement and put above AND REMOVE /ivy
 	tmp_lib_cppflags = $(shell pkg-config ivy-c --cflags)
