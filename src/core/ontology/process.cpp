@@ -176,8 +176,10 @@ namespace djnn
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
       if (state_dep == nullptr)
         _state_dependency = parent->state_dependency ();
-      else
+      else {
         _state_dependency = state_dep;
+        add_state_dependency (parent, _state_dependency);
+      }
     }
   }
 
