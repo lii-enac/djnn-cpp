@@ -80,6 +80,7 @@ namespace djnn
       Coupling _cref, _cpath, _cget, _cset;
       djnn_dir_t _dir;
       bool _propagating;
+      bool _src_updated;
   };
 
   class Deref : public AbstractDeref

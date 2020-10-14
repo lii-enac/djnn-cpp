@@ -32,7 +32,8 @@ namespace djnn
   _cget (),
   _cset (),
   _dir (dir),
-  _propagating (false)
+  _propagating (false),
+  _src_updated (false)
   {
     _ref = djnn_dynamic_cast<RefProperty*> (ref);
     if (_ref == nullptr) {
@@ -51,12 +52,12 @@ namespace djnn
       Graph::instance().remove_edge (&_set, old_src);
     }
     auto* unref = _ref->get_value ();
-    if (unref != nullptr) {
+    if (_src_updated && unref != nullptr) {
       auto* src = unref->find_child (_path.get_value ());
       Graph::instance().remove_edge (&_set, src);
     }
-    Graph::instance().remove_edge (_ref, &_action);
     Graph::instance().remove_edge (&_path, &_action);
+    Graph::instance().remove_edge (_ref, &_action);
   }
 
   void
@@ -87,6 +88,7 @@ namespace djnn
       if (src != nullptr) {
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
         Graph::instance().add_edge (&_set, src);
+        _src_updated = true ;
       }
       change_src (src);
     }
@@ -127,8 +129,8 @@ namespace djnn
 
   Deref::~Deref ()
   {
-    Graph::instance ().remove_edge (&_activation, &_set);
     Graph::instance ().remove_edge (&_get, &_activation);
+    Graph::instance ().remove_edge (&_activation, &_set);
   }
 
   void
