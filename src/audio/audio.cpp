@@ -32,6 +32,10 @@ namespace djnn {
 	void clear_audio ()
 	{
 		#ifdef USE_OPENAL
+		
+		default_audio_listener->deactivate ();
+		delete default_audio_listener;
+
 		void clear_audio_openal ();
 		clear_audio_openal();
 		#endif
