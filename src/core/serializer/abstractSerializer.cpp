@@ -56,6 +56,7 @@ namespace djnn
   AbstractSerializer::post_serialize (const CoreProcess* root) {
     if (AbstractSerializer::serializationRoot == root) {
       AbstractSerializer::serializationRoot = nullptr;
+      delete AbstractSerializer::serializer;
       AbstractSerializer::serializer = nullptr;
 
       if (__cur_format.compare("JSON") == 0) 
