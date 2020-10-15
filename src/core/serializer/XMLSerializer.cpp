@@ -122,7 +122,7 @@ namespace djnn
     }
 
     c = __curXMLDumpContext->parent;
-    free (__curXMLDumpContext);
+    delete __curXMLDumpContext;
     __curXMLDumpContext = c;
   }
 #endif
