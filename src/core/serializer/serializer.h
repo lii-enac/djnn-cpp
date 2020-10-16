@@ -24,8 +24,8 @@ namespace djnn {
 
   class AbstractSerializer
   {
-  
   public:
+  	virtual ~AbstractSerializer () {}
   	static void pre_serialize (const CoreProcess* root, const std::string& format);
   	static void post_serialize (const CoreProcess* root);
     static  void compute_path (FatProcess* from, CoreProcess* to, std::string& buf);
