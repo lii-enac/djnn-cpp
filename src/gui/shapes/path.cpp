@@ -124,19 +124,6 @@ namespace djnn
     }
   }
 
-  void
-  Path::get_bounding_box (double& x, double& y, double& w, double& h) const
-  {
-    UNIMPL;
-  }
-
-  double
-  Path::sdf (double x, double y) const
-  {
-    UNIMPL;
-    return 0;
-  }
-
   PathLine*
   PathLine::clone ()
   {
@@ -645,6 +632,7 @@ namespace djnn
     _bounding_box->add_symbol ("y", _bby);
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
+    invalidate_bounding_box ();
     finalize_construction (parent, name);
   }
 
@@ -711,6 +699,30 @@ namespace djnn
       clone->items ()->add_child (p->clone (), "");
     }
     return clone;
+  }
+
+  void
+  Path::get_bounding_box (double& x, double& y, double& w, double& h) const
+  {
+    // warning : does not work until the path is drawn
+    // also, if a point in the path is modified, bbox is not recomputed until the path is drawn again
+    if (is_bounding_box_valid ()) {
+      x = _bbx->get_value ();
+      y = _bby->get_value ();
+      w = _bbw->get_value ();
+      h = _bbh->get_value ();
+    } else {
+      UNIMPL;
+      // should be computed for picking...
+      //for (auto p: _items->children ()) { 
+    }
+  }
+
+  double
+  Path::sdf (double x, double y) const
+  {
+    UNIMPL;
+    return 0;
   }
 
   void

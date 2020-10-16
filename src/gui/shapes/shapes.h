@@ -343,6 +343,8 @@ namespace djnn
     double sdf (double x, double y) const override;
     Path* clone () override;
     void set_bounding_box (double x, double y, double w, double h);
+    void invalidate_bounding_box () { _bbw->set_value(-1, true); }
+    bool is_bounding_box_valid () const { return _bbw->get_value()>=0; }
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
