@@ -45,11 +45,11 @@ namespace djnn
     
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* r () { return (AbstractIntProperty*) find_child ("r"); }
-		AbstractIntProperty* g () { return (AbstractIntProperty*) find_child ("g"); }
-		AbstractIntProperty* b () { return (AbstractIntProperty*) find_child ("b"); }
-		AbstractIntProperty* value () { return (AbstractIntProperty*) find_child ("value"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* r () { return (AbstractIntProperty*) find_child_impl ("r"); }
+		AbstractIntProperty* g () { return (AbstractIntProperty*) find_child_impl ("g"); }
+		AbstractIntProperty* b () { return (AbstractIntProperty*) find_child_impl ("b"); }
+		AbstractIntProperty* value () { return (AbstractIntProperty*) find_child_impl ("value"); }
 
   protected:
     struct raw_props_t { int r; int g; int b; int value; };

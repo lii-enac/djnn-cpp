@@ -165,7 +165,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractList::find_child (const std::string& path)
+  AbstractList::find_child_impl (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -180,7 +180,7 @@ namespace djnn
         if (index < _children.size ()) {
           auto * c = _children.at (index);
           if (path.length () > sz) {
-            return c->find_child (path.substr (sz + 1));
+            return c->find_child_impl (path.substr (sz + 1));
           } else
             return c;
         } else {
@@ -197,7 +197,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractList::find_child (int index)
+  AbstractList::find_child_impl (int index)
   {
     if ((index - 1) < (int)_children.size ()) {
       return _children.at (index - 1);

@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("cap");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child ("cap"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child_impl ("cap"); }
 
   protected:
     struct raw_props_t { int cap; };

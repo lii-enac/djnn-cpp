@@ -64,7 +64,7 @@ namespace djnn
     _my_cairo_surface = new MyCairoSurface (_window);
 
     is_activated = true;
-    _c_display = new Coupling (_window->find_child ("display"), ACTIVATION, &_change_dpy_action, ACTIVATION, true);
+    _c_display = new Coupling (_window->find_child_impl ("display"), ACTIVATION, &_change_dpy_action, ACTIVATION, true);
     if (_window->get_display () != nullptr && _window->get_display () != _conn)
       update_dpy_connection();
     else {
@@ -117,7 +117,7 @@ namespace djnn
       t1();
     #endif
     
-    if (!getBool(_conn->find_child ("connected")))
+    if (!getBool(_conn->find_child_impl ("connected")))
       return;
     if (is_waiting_for_vblank()) {
       _c_vblank->enable ();

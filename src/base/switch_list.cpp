@@ -171,7 +171,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  SwitchList::find_child (const std::string& path)
+  SwitchList::find_child_impl (const std::string& path)
   {
     if (path.compare ("next") == 0)
       return &_next;
@@ -182,7 +182,7 @@ namespace djnn
     else if (path.compare ("loop") == 0)
       return &_loop;
     else
-      return AbstractList::find_child (path);
+      return AbstractList::find_child_impl (path);
   }
 
   SwitchList*

@@ -86,19 +86,19 @@ namespace djnn {
     Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec)
-    : Binding (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    : Binding (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
     Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec, activation_flag_e src_flag,
                    CoreProcess* dst, const std::string& dspec, activation_flag_e dst_flag)
-    : Binding (parent, name, src->find_child (sspec), src_flag, dst->find_child (dspec), dst_flag)
+    : Binding (parent, name, src->find_child_impl (sspec), src_flag, dst->find_child_impl (dspec), dst_flag)
     {}
 
     Binding (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec, bool b_src_flag,
                    CoreProcess* dst, const std::string& dspec, bool b_dst_flag)
-    : Binding (parent, name, src->find_child (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
+    : Binding (parent, name, src->find_child_impl (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child_impl (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
     {}
 
     void set_parent (ParentProcess* parent) override;

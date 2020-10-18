@@ -42,7 +42,7 @@ namespace djnn
       %(PUSHBACK_DYN_PROPS)s
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -54,7 +54,7 @@ namespace djnn
 }
 """
 
-getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_child ("%(PROP_NAME)s"); }"""
+getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_child_impl ("%(PROP_NAME)s"); }"""
 
 def_string = """
 #include "gui/backend.h"
@@ -97,10 +97,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  %(CLASS)s::find_child (const std::string& name)
+  %(CLASS)s::find_child_impl (const std::string& name)
   {
-    auto * res = %(INHERITS)s::find_child(name);
-    if(res) return res;
+    auto * res = %(INHERITS)s::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

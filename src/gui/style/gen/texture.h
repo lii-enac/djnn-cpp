@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("path");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child ("path"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
 
   protected:
     struct raw_props_t { std::string path; };

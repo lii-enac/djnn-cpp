@@ -123,7 +123,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Set::find_child (const std::string& path)
+  Set::find_child_impl (const std::string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;

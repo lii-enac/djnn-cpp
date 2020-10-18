@@ -125,6 +125,45 @@ namespace djnn
   }
   #endif
 
+  FatChildProcess*
+  CoreProcess::find_child (const std::string& path)
+  {
+    auto * found = find_child_impl (path);
+    if (!found) {
+      if (Context::instance ()->line ()>0)
+        std::cerr << Context::instance ()->filename () << ":" << Context::instance ()->line () << ": symbol '" << path << "' in process '" << get_debug_name () << "' not found" << std::endl;
+      else
+        warning (this, "symbol '" + path + "' not found");
+    }
+    return found;
+  }
+  
+  FatChildProcess*
+  CoreProcess::find_child (int index)
+  {
+    auto * found = find_child_impl (index);
+    if (!found) {
+      if (Context::instance ()->line ()>0)
+        std::cerr << Context::instance ()->filename () << ":" << Context::instance ()->line () << ": index " << index << " in process '" << get_debug_name () << "' not found" << std::endl;
+      else
+        warning (this, "index '" + std::to_string(index) + "' not found");
+    }
+    return found;
+  }
+
+
+  FatChildProcess*
+  CoreProcess::find_child_impl (const std::string&)
+  {
+    return nullptr;
+  }
+  
+  FatChildProcess*
+  CoreProcess::find_child_impl (int /*index*/)
+  {
+    return nullptr;
+  }
+
   CouplingProcess::~CouplingProcess ()
   {
     for (auto * c : get_activation_couplings ()) {
@@ -422,7 +461,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  FatProcess::find_child (const std::string& key)
+  FatProcess::find_child_impl (const std::string& key)
   {
     //DEBUG
     //cout << "key: " << key << endl;
@@ -433,18 +472,17 @@ namespace djnn
 
     /* special case find '*' */ 
     else if (key[0] == '*') {
-      auto * found = find_child (key.substr(2)); // without "/*""
+      auto * found = find_child_impl (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
         auto it = symtable ().begin ();
         while ( it != symtable ().end ()) {
-          found = it->second->find_child (key); // with "/*""
+          found = it->second->find_child_impl (key); // with "/*""
           //if (found) return found;
           if (found) break;
           ++it;
         }
       }
-      if (found==nullptr) warning (this, "symbol '" + key + "' not found");
       return found;
     }
 
@@ -459,7 +497,7 @@ namespace djnn
         }
         //DEBUG
         //cout << "root found: " << current_cpnt->_name << endl;
-        return current_cpnt->find_child (key.substr(2));
+        return current_cpnt->find_child_impl (key.substr(2));
       }
 
     size_t found = key.find_first_of ('/');
@@ -468,33 +506,33 @@ namespace djnn
       string path = key.substr (found + 1);
       if (newKey[0] == '.' && newKey[1] == '.') {
         if (get_parent ())
-          return get_parent ()->find_child (path);
-        else
+          return get_parent ()->find_child_impl (path);
+        else {
           return nullptr;
+        }
       }
       symtable_t::iterator it = find_child_iterator (newKey);
       if (it != children_end ()) {
-        return (it->second)->find_child (path);
+        return (it->second)->find_child_impl (path);
       }
     }
     if (key[0] == '.' && key[1] == '.')
       return get_parent ();
+
     symtable_t::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
-      if(it->second == nullptr) warning (this, "symbol '" + key + "' not found");
       return it->second;
     }
 
-    warning (this, "symbol '" + key + "' not found");
     return nullptr;
   }
 
   FatChildProcess*
-  FatProcess::find_child (FatChildProcess *p, const std::string& path)
+  FatProcess::find_child_impl (FatChildProcess *p, const std::string& path)
   {
     if (p == nullptr)
       return URI::find_by_uri (path);
-    return p->find_child (path);
+    return p->find_child_impl (path);
   }
 
   const std::string&
@@ -573,14 +611,14 @@ namespace djnn
   void
   merge_children (ParentProcess *p1, const std::string& sy1, ParentProcess* p2, const std::string& sy2)
   {
-    auto * x2 = p2->find_child (sy2);
+    auto * x2 = p2->find_child_impl (sy2);
     if (x2 == nullptr) {
       #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy2 << endl;
       #endif
       return;
     }
-    auto * x1 = p1->find_child (sy1);
+    auto * x1 = p1->find_child_impl (sy1);
     if (x1 == nullptr) {
       #ifndef DJNN_NO_DEBUG
       cerr << "trying to merge unknown child " << sy1 << endl;

@@ -37,11 +37,11 @@ namespace djnn
 			res.push_back ("cy");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child ("sx"); }
-		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child ("sy"); }
-		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child ("cx"); }
-		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child ("cy"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child_impl ("sx"); }
+		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child_impl ("sy"); }
+		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }
+		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child_impl ("cy"); }
 
   protected:
     struct raw_props_t { double sx; double sy; double cx; double cy; };

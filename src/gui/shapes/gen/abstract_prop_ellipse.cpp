@@ -77,10 +77,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropEllipse::find_child (const std::string& name)
+  AbstractPropEllipse::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGShape::find_child(name);
-    if(res) return res;
+    auto * res = AbstractGShape::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

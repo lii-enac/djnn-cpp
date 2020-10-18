@@ -107,7 +107,7 @@ public:
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool copy_on_activation=true)
-    : Connector (parent, name, src->find_child (sspec), dst->find_child (dspec), copy_on_activation)
+    : Connector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
     {}
 
   protected:
@@ -141,7 +141,7 @@ public:
     PausedConnector (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec)
-    : PausedConnector (parent, name, src->find_child (sspec), dst->find_child (dspec))
+    : PausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
   protected:

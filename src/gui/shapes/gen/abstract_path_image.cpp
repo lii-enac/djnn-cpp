@@ -59,10 +59,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPathImage::find_child (const std::string& name)
+  AbstractPathImage::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractImage::find_child(name);
-    if(res) return res;
+    auto * res = AbstractImage::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

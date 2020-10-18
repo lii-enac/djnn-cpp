@@ -187,7 +187,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Cursor::find_child (const std::string& name)
+  Cursor::find_child_impl (const std::string& name)
   {
     auto * res = FatProcess::find_child (name);
     if (res)

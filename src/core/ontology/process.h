@@ -237,9 +237,11 @@ namespace djnn {
     virtual void   remove_child (FatChildProcess* c) {}
     virtual void   remove_child (const std::string& name) {}
     virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) {}
-    virtual FatChildProcess* find_child (const std::string&) { return nullptr; }
-    virtual FatChildProcess* find_child (int /*index*/) { return nullptr; }
-    static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path) { return nullptr; }
+
+    // public find_child api, uses find_child_impl 
+    FatChildProcess* find_child (const std::string&);
+    FatChildProcess* find_child (int /*index*/);
+    static FatChildProcess* find_child (FatChildProcess* p, const std::string& path) { return nullptr; }
     static std::string default_name;
     virtual const std::string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
     virtual size_t children_size () const { return 0; }
@@ -256,6 +258,11 @@ namespace djnn {
     // also used by ActiveView
     virtual void     set_activation_source (CoreProcess*) {}
     virtual CoreProcess* get_activation_source () { return nullptr; }
+  //protected:
+  public:
+    // (should be) protected find_child implementation
+    virtual FatChildProcess* find_child_impl (const std::string&);
+    virtual FatChildProcess* find_child_impl (int /*index*/);
   };
 
 
@@ -312,10 +319,7 @@ namespace djnn {
     virtual void   remove_child (FatChildProcess* c) override;
     virtual void   remove_child (const std::string& name) override;
     friend  void merge_children (FatChildProcess *p1, const std::string& sy1, FatChildProcess *p2, const std::string& sy2); // strange, only used in gradient...
-    virtual FatChildProcess* find_child (const std::string&) override;
-    virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
-    static  FatChildProcess* find_child (FatChildProcess* p, const std::string& path);
-    virtual const std::string& find_child_name (const CoreProcess* child) const override; // WARNING : low efficiency function cause by linear search. use with care !
+    virtual const std::string& find_child_name (const CoreProcess* child) const override; // WARNING : low efficiency function caused by linear search. use with care !
 
     // symbol and children-related methods only used in FatProcess
     symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
@@ -331,6 +335,11 @@ namespace djnn {
 
   protected:
     virtual bool pre_activate () override;
+
+  public:
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    //virtual FatChildProcess* find_child (int /*index*/) override { return nullptr; }
+    static  FatChildProcess* find_child_impl (FatChildProcess* p, const std::string& path);
 
   public:
     const std::string& get_name () const;

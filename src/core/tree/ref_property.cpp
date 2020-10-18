@@ -136,7 +136,7 @@ namespace djnn
 #endif
 
   CoreProcess*
-  RefProperty::find_child (const std::string& path)
+  RefProperty::find_child_impl (const std::string& path)
   {
     if (path.empty ())
       return this;
@@ -148,10 +148,10 @@ namespace djnn
       subpath = path.substr (found + 1, path.size () - 1);
     }
     if (key.compare ("$value") == 0) {
-      return _value->find_child (subpath);
+      return _value->find_child_impl(subpath);
       // auto * fpv = dynamic_cast<FatProcess*>(_value);
       // if(fpv)
-      //   return fpv->find_child (subpath);
+      //   return fpv->find_child_impl (subpath);
     }
     return nullptr;
   }

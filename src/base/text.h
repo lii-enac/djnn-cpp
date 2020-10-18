@@ -223,7 +223,7 @@ namespace djnn
     virtual void serialize (const std::string& format) override;
 #endif
     
-    FatProcess* find_child (const std::string&) override;
+    FatProcess* find_child_impl (const std::string&) override;
 
   private:
     void set_parent (ParentProcess* parent) override;

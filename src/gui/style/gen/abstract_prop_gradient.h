@@ -35,9 +35,9 @@ namespace djnn
 			res.push_back ("coords");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child ("spread"); }
-		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child ("coords"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child_impl ("spread"); }
+		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child_impl ("coords"); }
 
   protected:
     struct raw_props_t { int spread; int coords; };

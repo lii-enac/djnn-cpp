@@ -31,7 +31,7 @@ namespace djnn
       error (s, "dst argument cannot be null in synchronizer creation (" + s->get_name () + ", " + dspec + ")");
       return;
     }
-    s->_dst = dst->find_child (dspec);
+    s->_dst = dst->find_child_impl (dspec);
     if (s->_dst == nullptr) {
       error (s, "destination child " + dspec + " not found in synchronizer (" + s->get_name () + ", " + dspec + ")");
       return;
@@ -94,7 +94,7 @@ namespace djnn
       error (this,
              "src argument cannot be null in source addition to synchronizer (" + get_name () + ", " + ispec + ")");
     }
-    auto * _src = src->find_child (ispec);
+    auto * _src = src->find_child_impl (ispec);
     Coupling *cpl = new Coupling (_src, ACTIVATION, &_action, ACTIVATION);
     /* 
       if the synchronizer is already activated => cpl->enable (by default)

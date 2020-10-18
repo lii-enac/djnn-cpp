@@ -32,7 +32,7 @@ namespace djnn
   }
 
   Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action, const std::string& spec) :
-      Activator (parent, name, action->find_child (spec))
+      Activator (parent, name, action->find_child_impl (spec))
   {
   }
 

@@ -44,7 +44,7 @@ namespace djnn {
     void add_child (FatChildProcess* c, const std::string& name) override;
     void remove_child (FatChildProcess* c) override;
     void remove_child (const std::string& name) override;
-    FatChildProcess* find_child (const std::string& path) override;
+    FatChildProcess* find_child_impl (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();

@@ -59,10 +59,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractVolume::find_child (const std::string& name)
+  AbstractVolume::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractAudioStyle::find_child(name);
-    if(res) return res;
+    auto * res = AbstractAudioStyle::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

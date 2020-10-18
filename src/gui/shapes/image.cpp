@@ -51,9 +51,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  Image::find_child (const std::string& name)
+  Image::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractPathImage::find_child(name);
+    auto * res = AbstractPathImage::find_child_impl (name);
     //if(res) return res;
     if (name == "pixel" && !has_ui()) {
       init_ui ();
@@ -162,9 +162,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  DataImage::find_child (const std::string& name)
+  DataImage::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractDataImage::find_child(name);
+    auto * res = AbstractDataImage::find_child_impl (name);
     //if(res) return res;
 
     if( name=="data" && _watcher == nullptr) {

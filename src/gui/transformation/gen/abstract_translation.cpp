@@ -65,10 +65,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractTranslation::find_child (const std::string& name)
+  AbstractTranslation::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractTransformation::find_child(name);
-    if(res) return res;
+    auto * res = AbstractTransformation::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

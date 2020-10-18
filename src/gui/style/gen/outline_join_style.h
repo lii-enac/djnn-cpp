@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("join");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child ("join"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child_impl ("join"); }
 
   protected:
     struct raw_props_t { int join; };

@@ -128,8 +128,8 @@ namespace djnn {
     _udev_iofd = new IOFD (nullptr, "udev_iofd", udev_monitor_get_fd (_udev_mon));
     _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
-    _readable_cpl = new Coupling (_udev_iofd->find_child ("readable"), ACTIVATION, _action, ACTIVATION);
-    Graph::instance().add_edge (_udev_iofd->find_child ("readable"), _action);
+    _readable_cpl = new Coupling (_udev_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
+    Graph::instance().add_edge (_udev_iofd->find_child_impl ("readable"), _action);
   }
 
   DRMUdev::~DRMUdev ()
@@ -138,7 +138,7 @@ namespace djnn {
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
 
-    Graph::instance().remove_edge (_udev_iofd->find_child ("readable"), _action);
+    Graph::instance().remove_edge (_udev_iofd->find_child_impl ("readable"), _action);
 
     delete _readable_cpl;
     delete _action;
@@ -199,7 +199,7 @@ namespace djnn {
         uint32_t id = res->connectors[i];
         drm_conn = drmModeGetConnector (fd, id);
         string conn_name = build_name (drm_conn);
-        new DRMConnector (drm_dev->find_child ("connectors"), conn_name, fd, res, drm_conn);
+        new DRMConnector (drm_dev->find_child_impl ("connectors"), conn_name, fd, res, drm_conn);
         drmModeFreeConnector (drm_conn);
       }
       drmModeFreeResources (res);
@@ -215,7 +215,7 @@ namespace djnn {
     std::string str (name);
     std::size_t found = str.find_last_of ("/");
     std::string dev_name = str.substr (found + 1);
-    DRMDevice* drm_dev = (DRMDevice*) GPUs->find_child (dev_name);
+    DRMDevice* drm_dev = (DRMDevice*) GPUs->find_child_impl (dev_name);
     if (!drm_dev)
       return;
 
@@ -232,18 +232,18 @@ namespace djnn {
         continue;
       string conn_name = build_name (drm_conn);
       bool is_connected = drm_conn->connection == DRM_MODE_CONNECTED;
-      DRMConnector *conn = (DRMConnector*) drm_dev->find_child ("connectors/" + conn_name);
+      DRMConnector *conn = (DRMConnector*) drm_dev->find_child_impl ("connectors/" + conn_name);
       if (conn == nullptr) {
         cout << "connector not found\n";
         drmModeFreeConnector (drm_conn);
         continue;
       }
-      if (((BoolProperty*) conn->find_child ("connected"))->get_value () != is_connected) {
+      if (((BoolProperty*) conn->find_child_impl ("connected"))->get_value () != is_connected) {
         if (is_connected)
           conn->init_connection (res, drm_conn);
         else
           conn->clean ();
-        ((BoolProperty*) conn->find_child ("connected"))->set_value (is_connected, 1);
+        ((BoolProperty*) conn->find_child_impl ("connected"))->set_value (is_connected, 1);
 #if DEBUG
         cout << "Connector " << conn_name << " is now";
         if (is_connected)

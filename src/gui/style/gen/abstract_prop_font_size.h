@@ -35,9 +35,9 @@ namespace djnn
 			res.push_back ("size");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child ("unit"); }
-		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child ("size"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child_impl ("unit"); }
+		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child_impl ("size"); }
 
   protected:
     struct raw_props_t { int unit; double size; };

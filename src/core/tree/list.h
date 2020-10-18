@@ -34,8 +34,8 @@ namespace djnn {
     void remove_child (FatChildProcess* c) override;
     void remove_child (const std::string& name) override;
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
-    FatChildProcess* find_child (const std::string& path) override;
-    FatChildProcess* find_child (int index)  override;
+    FatChildProcess* find_child_impl (const std::string& path) override;
+    FatChildProcess* find_child_impl (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
   protected:

@@ -38,7 +38,7 @@ namespace djnn
       error (this, "Wrong type of FatProcess for matrix provided to ScaleRotateTranslate constructor");
       return;
     }
-    _touches = dynamic_cast<FatProcess*>(shape->find_child ("touches"));
+    _touches = dynamic_cast<FatProcess*>(shape->find_child_impl ("touches"));
     if (!_touches) {
       error (this, "Wrong interface for Shape provided to ScaleRotateTranslate constructor");
       return;
@@ -49,10 +49,10 @@ namespace djnn
     //_move_touch_action = new MoveTouchAction (this, "touch_move1_action");
     _update_action = new ScaleRotateTranslateAction (this, "srt_action");
   
-    _added = dynamic_cast<FatProcess*>(_touches->find_child ("$added"));
+    _added = dynamic_cast<FatProcess*>(_touches->find_child_impl ("$added"));
     _c_on_add = new Coupling (_added, ACTIVATION, _add_touch_action, ACTIVATION, true);
     
-    _removed = dynamic_cast<FatProcess*>(_touches->find_child ("$removed"));
+    _removed = dynamic_cast<FatProcess*>(_touches->find_child_impl ("$removed"));
     _c_on_del = new Coupling (_removed, ACTIVATION, _remove_touch_action, ACTIVATION, true);
   
     //_c_move = new Coupling (_move_touch_action, ACTIVATION, _update_action, ACTIVATION);

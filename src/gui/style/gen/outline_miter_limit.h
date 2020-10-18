@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("limit");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child ("limit"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child_impl ("limit"); }
 
   protected:
     struct raw_props_t { int limit; };

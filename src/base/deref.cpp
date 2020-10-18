@@ -53,7 +53,7 @@ namespace djnn
     }
     auto* unref = _ref->get_value ();
     if (_src_updated && unref != nullptr) {
-      auto* src = unref->find_child (_path.get_value ());
+      auto* src = unref->find_child_impl (_path.get_value ());
       Graph::instance().remove_edge (&_set, src);
     }
     Graph::instance().remove_edge (&_path, &_action);
@@ -75,7 +75,7 @@ namespace djnn
 
     auto* unref = _ref->get_value ();
     auto *old_src = _cget.get_src ();
-    auto *new_src = unref == nullptr? nullptr : unref->find_child (_path.get_value ());
+    auto *new_src = unref == nullptr? nullptr : unref->find_child_impl (_path.get_value ());
     if (old_src == new_src)
       return;
     if (old_src != nullptr) {
@@ -84,7 +84,7 @@ namespace djnn
     _cget.uninit ();
     _cget.set_src (nullptr);
     if (unref != nullptr) {
-      auto* src = unref->find_child (_path.get_value ());
+      auto* src = unref->find_child_impl (_path.get_value ());
       if (src != nullptr) {
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
         Graph::instance().add_edge (&_set, src);

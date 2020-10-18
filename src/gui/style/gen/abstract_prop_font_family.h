@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("family");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractTextProperty* family () { return (AbstractTextProperty*) find_child ("family"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractTextProperty* family () { return (AbstractTextProperty*) find_child_impl ("family"); }
 
   protected:
     struct raw_props_t { std::string family; };

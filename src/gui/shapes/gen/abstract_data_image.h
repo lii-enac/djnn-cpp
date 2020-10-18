@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("data");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child ("data"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child_impl ("data"); }
 
   protected:
     struct raw_props_t { std::string data; };

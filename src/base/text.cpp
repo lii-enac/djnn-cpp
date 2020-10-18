@@ -264,7 +264,7 @@ namespace djnn
 
 
   FatProcess*
-  Regex::find_child (const std::string& key)
+  Regex::find_child_impl (const std::string& key)
   {
 
     if (key.compare ("input") == 0)

@@ -115,7 +115,7 @@ public:
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)
-    : Assignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    : Assignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}
 
     virtual ~Assignment () {
@@ -158,7 +158,7 @@ public:
                    CoreProcess* src, const std::string& sspec,
                    CoreProcess* dst, const std::string& dspec,
                    bool is_model=false)
-    : PausedAssignment (parent, name, src->find_child (sspec), dst->find_child (dspec), is_model)
+    : PausedAssignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}
   };
 

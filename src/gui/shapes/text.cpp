@@ -168,9 +168,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  Text::find_child (const std::string& name)
+  Text::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGShape::find_child(name);
+    auto * res = AbstractGShape::find_child_impl (name);
     if(res) return res;
 
     bool propd = false;

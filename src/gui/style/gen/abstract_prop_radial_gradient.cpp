@@ -83,10 +83,10 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropRadialGradient::find_child (const std::string& name)
+  AbstractPropRadialGradient::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGradient::find_child(name);
-    if(res) return res;
+    auto * res = AbstractGradient::find_child_impl(name);
+    if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
     CouplingWithData ** coupling = nullptr;

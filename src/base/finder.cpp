@@ -40,7 +40,7 @@ namespace djnn
     }
     FatChildProcess *res;
     for (auto c : f->_container->children ()) {
-      res = c->find_child (path);
+      res = c->find_child_impl (path);
       if (res) {
         if (res->get_process_type () != PROPERTY_T) {
           continue;

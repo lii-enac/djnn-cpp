@@ -387,7 +387,7 @@ IvyAccess::run ()
 }
 
 FatChildProcess*
-IvyAccess::find_child (const std::string& key)
+IvyAccess::find_child_impl (const std::string& key)
 {
   
 #ifdef __IVY_DEBUG__
@@ -423,7 +423,7 @@ IvyAccess::find_child (const std::string& key)
     cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
-    TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child (regexp));
+    TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child_impl (regexp));
     if (tmp){
 
       string new_regexp_to_found = "in/" + tmp->get_value () + "/" + to_string(index);
@@ -434,7 +434,7 @@ IvyAccess::find_child (const std::string& key)
 #endif
 
       /* key do not exist - but use internal string as regexp --- return*/
-      return this->find_child (new_regexp_to_found);
+      return find_child_impl (new_regexp_to_found);
     }
     else {
       /* key don't exist at all - create it */

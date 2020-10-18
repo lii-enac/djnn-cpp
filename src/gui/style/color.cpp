@@ -400,9 +400,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractColor::find_child (const std::string& name)
+  AbstractColor::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractStyle::find_child(name);
+    auto * res = AbstractStyle::find_child_impl(name);
     if(res) return res;
 
     CouplingWithData ** coupling = nullptr;

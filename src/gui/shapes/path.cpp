@@ -71,9 +71,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathPoint::find_child (const std::string& name)
+  PathPoint::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -225,9 +225,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathQuadratic::find_child (const std::string& name)
+  PathQuadratic::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -365,9 +365,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathCubic::find_child (const std::string& name)
+  PathCubic::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
 
     CouplingWithData ** coupling;
@@ -524,9 +524,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathArc::find_child (const std::string& name)
+  PathArc::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
 
     CouplingWithData ** coupling;

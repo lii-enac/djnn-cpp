@@ -95,8 +95,8 @@ namespace djnn
       error (nullptr, "Incompatible number of properties in multiple assignment");
     }
     for (int i = 0; i < src_props.size (); i++) {
-      CoreProcess *src_prop = src->find_child (src_props[i]);
-      CoreProcess *dst_prop = dst->find_child (dst_props[i]);
+      CoreProcess *src_prop = src->find_child_impl (src_props[i]);
+      CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
       if (src_prop && dst_prop) {
         new CoreAssignment (parent, "", src_prop, dst_prop, copy_on_activation);
       }
@@ -114,15 +114,15 @@ namespace djnn
     if (cont_src && cont_dst) {
       for (auto c: cont_src->children ()) {
         std::string name = c->get_name (c->get_parent ());
-        CoreProcess* prop_dst = cont_dst->find_child (name);
+        CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
           new CoreAssignment (parent, "", c, prop_dst, copy_on_activation);
       }
       return;
     }
     for (auto c: src->get_properties_name ()) {
-      CoreProcess *prop_src = src->find_child (c);
-      CoreProcess *prop_dst = dst->find_child (c);
+      CoreProcess *prop_src = src->find_child_impl (c);
+      CoreProcess *prop_dst = dst->find_child_impl (c);
       if (prop_src && prop_dst)
         new CoreAssignment (parent, "", prop_src, prop_dst, copy_on_activation);
     }

@@ -266,7 +266,7 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        auto *p = to_act->find_child (path);
+        auto *p = to_act->find_child_impl (path);
         if (p)
           p->activate ();
       }
@@ -334,7 +334,7 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*>(to_act->find_child (path));
+        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*>(to_act->find_child_impl (path));
         if (p)
           p->set_value (_value.get_value(), true);
       }
@@ -374,7 +374,7 @@ namespace djnn
     if (coll) {
       std::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*> (to_act->find_child (path));
+        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*> (to_act->find_child_impl (path));
         if (p)
           p->set_value (_value.get_value (), true);
       }

@@ -58,7 +58,7 @@ namespace djnn {
     SwitchList (ParentProcess* parent, const std::string& name, bool loop=false);
     virtual ~SwitchList ();
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
-    FatChildProcess* find_child (const std::string& path) override;
+    FatChildProcess* find_child_impl (const std::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     SwitchList* clone () override;

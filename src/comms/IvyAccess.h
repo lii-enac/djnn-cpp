@@ -64,7 +64,7 @@ namespace djnn
     // make it public
     bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
 
-    FatChildProcess* find_child (const std::string&) override;
+    FatChildProcess* find_child_impl (const std::string&) override;
 
   protected:
     void impl_activate () override;

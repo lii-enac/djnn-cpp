@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("weight");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child ("weight"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child_impl ("weight"); }
 
   protected:
     struct raw_props_t { int weight; };

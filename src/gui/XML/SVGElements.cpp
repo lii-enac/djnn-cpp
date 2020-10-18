@@ -828,8 +828,8 @@ StartUse(const char** attrs, FatProcess* current) {
     attrs++;
   }
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
-  alias (holder, "x", pos->find_child ("tx"));
-  alias (holder, "y", pos->find_child ("ty"));
+  alias (holder, "x", pos->find_child_impl ("tx"));
+  alias (holder, "y", pos->find_child_impl ("ty"));
   auto it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
     FatProcess* clone = it->second->clone();

@@ -25,10 +25,10 @@ namespace djnn
   {
     auto * fpshape = dynamic_cast<FatProcess*>(shape);
     if(!fpshape) { error(this, "not a shape"); }
-    _press_x = dynamic_cast<DoubleProperty*>(fpshape->find_child ("press/x"));
-    _press_y = dynamic_cast<DoubleProperty*>(fpshape->find_child ("press/y"));
-    _move_x  = dynamic_cast<DoubleProperty*>(fpshape->find_child ("move/x"));
-    _move_y  = dynamic_cast<DoubleProperty*>(fpshape->find_child ("move/y"));
+    _press_x = dynamic_cast<DoubleProperty*>(fpshape->find_child_impl ("press/x"));
+    _press_y = dynamic_cast<DoubleProperty*>(fpshape->find_child_impl ("press/y"));
+    _move_x  = dynamic_cast<DoubleProperty*>(fpshape->find_child_impl ("move/x"));
+    _move_y  = dynamic_cast<DoubleProperty*>(fpshape->find_child_impl ("move/y"));
 
     if (_press_x == nullptr || _press_y == nullptr) {
       error (this, "wrong shape argument in LineEdit constructor");
@@ -44,7 +44,7 @@ namespace djnn
     if (_text == nullptr) {
       error (this, "wrong text argument in LineEdit constructor");
     }
-    _inverted_matrix = (Homography*) _text->find_child ("inverted_matrix");
+    _inverted_matrix = (Homography*) _text->find_child_impl ("inverted_matrix");
 
     _move_left        = new Spike (this, "move_left");
     _move_right       = new Spike (this, "move_right");
@@ -79,7 +79,7 @@ namespace djnn
     _c_on_del     = new Coupling (_del, ACTIVATION, _delete_action, ACTIVATION, true);
     _c_on_suppr   = new Coupling (_suppr, ACTIVATION, _suppr_action, ACTIVATION, true);
     _c_on_add     = new Coupling (_new_text, ACTIVATION, _add_string_action, ACTIVATION, true);
-    _c_on_press   = new Coupling (shape->find_child ("press"), ACTIVATION, _update_cursor_pos_action, ACTIVATION, true);
+    _c_on_press   = new Coupling (shape->find_child_impl ("press"), ACTIVATION, _update_cursor_pos_action, ACTIVATION, true);
     _c_cut        = new Coupling (_cut, ACTIVATION, _cut_action, ACTIVATION, true);
     _c_on_move    = new Coupling (_pointer_move, ACTIVATION, _pointer_move_action, ACTIVATION, true);
     _c_move_left  = new Coupling (_move_left, ACTIVATION, _move_left_action, ACTIVATION, true);

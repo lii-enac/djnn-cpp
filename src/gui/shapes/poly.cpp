@@ -70,9 +70,9 @@ namespace djnn {
   }
 
   FatChildProcess*
-  PolyPoint::find_child (const std::string& name)
+  PolyPoint::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractGObj::find_child(name);
+    auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
 
     CouplingWithData ** coupling;

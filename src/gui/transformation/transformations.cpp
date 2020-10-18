@@ -1899,9 +1899,9 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractHomography::find_child (const std::string& name)
+  AbstractHomography::find_child_impl (const std::string& name)
   {
-    auto * res = AbstractPropHomography::find_child(name);
+    auto * res = AbstractPropHomography::find_child_impl (name);
     if(res) return res;
 
     if (name.find ("rightTranslateBy") != std::string::npos) {

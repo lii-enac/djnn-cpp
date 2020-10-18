@@ -34,8 +34,8 @@ namespace djnn
       res.push_back ("volume");
       return res;
     }
-    virtual FatChildProcess* find_child (const std::string&) override;
-		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child ("volume"); }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child_impl ("volume"); }
 
   protected:
     struct raw_props_t { double volume; };

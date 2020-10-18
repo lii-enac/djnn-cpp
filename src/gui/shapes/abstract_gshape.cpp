@@ -42,11 +42,11 @@ namespace djnn
     { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
 
   FatChildProcess*
-  SVGHolder::find_child (const std::string& path)
+  SVGHolder::find_child_impl (const std::string& path)
   {
-    auto * p = Container::find_child (path);
+    auto * p = Container::find_child_impl (path);
     if (p == nullptr && _gobj != nullptr)
-      p = _gobj->find_child (path);
+      p = _gobj->find_child_impl (path);
     return p;
   }
 
@@ -322,10 +322,10 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractGShape::find_child (const std::string& path)
+  AbstractGShape::find_child_impl (const std::string& path)
   {
     if (ui)
-      return FatProcess::find_child (path);
+      return FatProcess::find_child_impl (path);
     else {
       size_t found = path.find_first_of ('/');
       std::string key = path;
@@ -352,7 +352,7 @@ namespace djnn
           it++;
         }
       }
-      return FatProcess::find_child (path);
+      return FatProcess::find_child_impl (path);
     }
   }
 

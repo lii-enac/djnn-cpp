@@ -43,7 +43,7 @@ namespace djnn
       {
       case PHIDID_1010_1013_1018_1019:
         {
-          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child (std::to_string (deviceLabel));
+          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (std::to_string (deviceLabel));
           if (dev == nullptr) {
 
             djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
@@ -112,7 +112,7 @@ namespace djnn
       {
       case PHIDID_1010_1013_1018_1019:
         {
-          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child (std::to_string (deviceLabel));
+          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (std::to_string (deviceLabel));
           if (dev != nullptr) {
 
             djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!

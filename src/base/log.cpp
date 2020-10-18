@@ -30,7 +30,7 @@ namespace djnn
   {
     alias (this, "label", _tc.find_child("head"));
     alias (this, "input", _tc.find_child("tail"));
-    ((TextProperty*)this->find_child ("label"))->set_value (label, false);
+    ((TextProperty*)find_child_impl ("label"))->set_value (label, false);
   }
 #else
 
@@ -43,7 +43,7 @@ namespace djnn
     _c = new Connector (this, "logprinter_connector", _tc->find_child("output"), _tp->find_child("input"), false);
     alias (this, "label", _tc->find_child("head"));
     alias (this, "input", _tc->find_child("tail"));
-    ((TextProperty*)this->find_child ("label"))->set_value (label, false);
+    ((TextProperty*)find_child_impl ("label"))->set_value (label, false);
   }
 #endif
 
@@ -55,7 +55,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:logprinter");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("label", ((TextProperty*)this->find_child ("label"))->get_value ());
+    AbstractSerializer::serializer->text_attribute ("label", ((TextProperty*)this->find_child_impl ("label"))->get_value ());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize(this);

@@ -40,26 +40,6 @@ namespace djnn
 
 namespace djnn
 {
-/*
-  class AbstractTranslation : public AbstractTransformation
-  {
-  public:
-    AbstractTranslation (ParentProcess* parent, const std::string& name, double tx, double ty);
-    AbstractTranslation (double tx, double ty);
-    virtual ~AbstractTranslation ();
-    void get_properties_values (double &tx, double &ty);
-    virtual FatProcess* find_child (const std::string&) override;
-    AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child("tx"); }
-    AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child("ty"); }
-    void impl_activate () override;
-    void impl_deactivate () override;
-    virtual void draw () override = 0;
-  protected:
-    struct raw_props_t { double tx,ty; };
-    raw_props_t raw_props;
-    Coupling *_ctx, *_cty;
-  };
-*/
   class Translation : public AbstractTranslation
   {
   public:
@@ -85,31 +65,6 @@ namespace djnn
 #include "gen/abstract_rotation.h"
 
 namespace djnn {
-  /*
-  class AbstractRotation : public AbstractTransformation
-  {
-  public:
-    AbstractRotation (ParentProcess* parent, const std::string& name, double a, double cx, double cy);
-    AbstractRotation (double a, double cx, double cy);
-    virtual ~AbstractRotation ();
-    void get_properties_values (double &a, double &cx, double &cy);
-    virtual FatProcess* find_child (const std::string&) override;
-    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
-    // TODO Rot by (u,v)
-    // AbstractDoubleProperty* ux () { return (AbstractDoubleProperty*) find_child("ux"); }
-    // AbstractDoubleProperty* uy () { return (AbstractDoubleProperty*) find_child("uy"); }
-    // AbstractDoubleProperty* vx () { return (AbstractDoubleProperty*) find_child("vx"); }
-    // AbstractDoubleProperty* vy () { return (AbstractDoubleProperty*) find_child("vy"); }
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child("cy"); }
-    void impl_activate () override;
-    void impl_deactivate () override;
-    virtual void draw () override = 0;
-  protected:
-    struct raw_props_t { double a,cx,cy; };
-    raw_props_t raw_props;
-    Coupling *_ca, *_ccx, *_ccy;
-  };*/
 
   class Rotation : public AbstractRotation
   {
@@ -136,27 +91,6 @@ namespace djnn {
 #include "gen/abstract_scaling.h"
 
 namespace djnn {
-  /*
-  class AbstractScaling : public AbstractTransformation
-  {
-  public:
-    AbstractScaling (ParentProcess* parent, const std::string& name, double sx, double sy, double cx, double cy);
-    AbstractScaling (double sx, double sy, double cx, double cy);
-    virtual ~AbstractScaling ();
-    void get_properties_values (double &sx, double &sy, double &cx, double &cy);
-    virtual FatProcess* find_child (const std::string&) override;
-    AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child("sx"); }
-    AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child("sy"); }
-    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child("cx"); }
-    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child("cy"); }
-    void impl_activate () override;
-    void impl_deactivate () override;
-    virtual void draw () override = 0;
-  protected:
-    struct raw_props_t { double sx,sy,cx,cy; };
-    raw_props_t raw_props;
-    Coupling *_csx, *_csy, *_ccx, *_ccy;
-  };*/
 
   class Scaling : public AbstractScaling
   {
@@ -184,23 +118,6 @@ namespace djnn {
 #include "gen/abstract_skew.h"
 
 namespace djnn {
-  /*class AbstractSkew : public AbstractTransformation
-  {
-  public:
-    AbstractSkew (ParentProcess* parent, const std::string& name, double a);
-    AbstractSkew (double a);
-    virtual ~AbstractSkew ();
-    void get_properties_values (double &a);
-    virtual FatProcess* find_child (const std::string&) override;
-    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child("a"); }
-    void impl_activate () override;
-    void impl_deactivate () override;
-    virtual void draw () override = 0;
-  protected:
-    struct raw_props_t { double a; };
-    raw_props_t raw_props;
-    Coupling *_ca;
-  };*/
 
   class SkewX : public AbstractSkew
   {
@@ -390,7 +307,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    virtual FatChildProcess* find_child (const std::string&) override;
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
     void impl_activate () override;
     void impl_deactivate () override;
     
