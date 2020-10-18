@@ -46,7 +46,7 @@ namespace djnn
     std::cerr << std::endl << std::endl;
     if (p && p->debug_info ().lineno) 
       std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
-    if(ctxinfo)
+    else if(ctxinfo)
       std::cerr << ctxinfo << ":";
     auto * pp = p;
     std::cerr << "djnn - ERROR: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
@@ -79,7 +79,7 @@ namespace djnn
     out << std::endl << std::endl;
     if (p && p->debug_info ().lineno) 
       out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
-    if(ctxinfo)
+    else if(ctxinfo)
       out << ctxinfo << ":";
     auto * pp = p;
     out << "djnn - WARNING: " << pp << " " << (pp ? pp->get_debug_name () : "") << " - " << msg;

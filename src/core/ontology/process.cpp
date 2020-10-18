@@ -427,21 +427,24 @@ namespace djnn
     //DEBUG
     //cout << "key: " << key << endl;
 
-    if (key.empty ())
+    if (key.empty ()) {
       return this;
+    }
 
     /* special case find '*' */ 
-    if (key[0] == '*') {
+    else if (key[0] == '*') {
       auto * found = find_child (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
         auto it = symtable ().begin ();
         while ( it != symtable ().end ()) {
           found = it->second->find_child (key); // with "/*""
-          if (found) return found;
+          //if (found) return found;
+          if (found) break;
           ++it;
         }
       }
+      if (found==nullptr) warning (this, "symbol '" + key + "' not found");
       return found;
     }
 
@@ -478,9 +481,12 @@ namespace djnn
       return get_parent ();
     symtable_t::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
+      if(it->second == nullptr) warning (this, "symbol '" + key + "' not found");
       return it->second;
     }
-    return 0;
+
+    warning (this, "symbol '" + key + "' not found");
+    return nullptr;
   }
 
   FatChildProcess*
@@ -525,7 +531,7 @@ namespace djnn
     if (it != children_end ())
       symtable ().erase (it);
     else
-      warning (nullptr,   "Warning: symbol " + name + " not found in FatProcess " + name + "\n");
+      warning (nullptr, "Warning: symbol '" + name + "' not found in FatProcess '" + name + "'\n");
   }
 
   const std::string&
