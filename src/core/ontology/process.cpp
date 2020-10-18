@@ -129,12 +129,14 @@ namespace djnn
   CoreProcess::find_child (const std::string& path)
   {
     auto * found = find_child_impl (path);
+#ifndef DJNN_NO_DEBUG
     if (!found) {
       if (Context::instance ()->line ()>0)
         std::cerr << Context::instance ()->filename () << ":" << Context::instance ()->line () << ": symbol '" << path << "' in process '" << get_debug_name () << "' not found" << std::endl;
       else
         warning (this, "symbol '" + path + "' not found");
     }
+#endif
     return found;
   }
   
@@ -142,12 +144,14 @@ namespace djnn
   CoreProcess::find_child (int index)
   {
     auto * found = find_child_impl (index);
+#ifndef DJNN_NO_DEBUG
     if (!found) {
       if (Context::instance ()->line ()>0)
         std::cerr << Context::instance ()->filename () << ":" << Context::instance ()->line () << ": index " << index << " in process '" << get_debug_name () << "' not found" << std::endl;
       else
         warning (this, "index '" + std::to_string(index) + "' not found");
     }
+#endif
     return found;
   }
 
