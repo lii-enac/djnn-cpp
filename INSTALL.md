@@ -5,6 +5,7 @@ in a Terminal:
 
 ```
 linux package for ubuntu 20.04: https://github.com/lii-enac/djnn-cpp/releases
+dpkg -i djnn-cpp-x.xx.x.deb
 
 or using sources
 
@@ -38,6 +39,11 @@ pacman -Syu --needed git make pkg-config
 ```
 launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then:  
 ```
+install pacmac (ArchLinux) package .tar.zst from https://github.com/lii-enac/djnn-cpp/releases 
+pacman -U djnn-cpp-x.xx.x-1.pkg.tar.zst
+
+or using sources
+
 git clone -c core.symlinks=true https://github.com/lii-enac/djnn-cpp.git  
 cd djnn-cpp  
 make install-pkgdeps  
@@ -49,13 +55,14 @@ ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
 ```
-pacmac (ArchLinux) package .tar.zst : https://github.com/lii-enac/libivy/releases 
+install pacmac (ArchLinux) package .tar.zst from https://github.com/lii-enac/libivy/releases 
+pacman -U libivy-x.xx.x-1.pkg.tar.zst
 
 or using sources
 
 (pacman -Syu)
 (pacman -Syu --needed git make pkg-config)
-git clone git@github.com:lii-enac/libivy.git  
+git clone http://github.com:lii-enac/libivy.git  
 cd libivy/src
 make -j4 -f Makefile.mingw upgrade-pkgdeps
 make -j4 -f Makefile.mingw 
@@ -65,6 +72,7 @@ Linux/Ubuntu:
 ```
 
 linux package for ubuntu 20.04 . deb : https://github.com/lii-enac/libivy/releases 
+dpkg -i libivy-x.xx.x.deb
 
 or using sources
 

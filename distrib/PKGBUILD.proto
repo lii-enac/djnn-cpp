@@ -13,7 +13,7 @@ arch=('x86_64')
 url="https://github.com/lii-enac/djnn-cpp"
 license=('SLEEPY CAT')
 groups=()
-depends=()
+depends=(libivy)
 makedepends=()
 checkdepends=()
 optdepends=()
@@ -37,9 +37,9 @@ prepare() {
 }
 
 build() {
-	cd "$pkgname-$pkgver"/src
+	cd "$pkgname-$pkgver"
 #	cd "$pkgname"/src
-	make
+	make -j6
 }
 
 check() {
@@ -49,8 +49,9 @@ check() {
 }
 
 package() {
-	cd "$pkgname-$pkgver"/src
+	cd "$pkgname-$pkgver"
 	echo $pkgdir
 	#	cd "$pkgname"
-	make DESTDIR="$pkgdir/" PREFIX="/usr" install
-}
+	echo make -j6 DESTDIR="$pkgdir/" PREFIX="/usr" install
+	make -j6 DESTDIR="$pkgdir/" PREFIX="/usr" install
+}	

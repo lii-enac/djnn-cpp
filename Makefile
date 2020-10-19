@@ -644,14 +644,14 @@ distclean clear:
 # ---------------------------------------
 # package config
 
-ifeq ($(prefix),)
+ifeq ($(PREFIX),)
 # dev install
 djnn_install_prefix :=  $(abspath $(build_dir))
 pkg_config_install_prefix := /usr/local
 else
 # pkg install (brew, deb, arch)
-djnn_install_prefix := $(abspath $(prefix))
-pkg_config_install_prefix := $(abspath $(prefix))
+djnn_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
+pkg_config_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
 endif
 
 pkgconfig_targets = djnn-cpp-dev.pc djnn-cpp.pc
@@ -669,7 +669,7 @@ $(build_dir)/%.pc: distrib/%.pc.in
 
 install_pkgconf: pkgconf
 	test -d $(pkg_config_install_prefix)/lib/pkgconfig || mkdir -p $(pkg_config_install_prefix)/lib/pkgconfig	
-ifeq ($(prefix),)
+ifeq ($(PREFIX),)
 	install -m 644 $(build_dir)/djnn-cpp-dev.pc	$(pkg_config_install_prefix)/lib/pkgconfig
 else
 	install -m 644 $(build_dir)/djnn-cpp.pc	$(pkg_config_install_prefix)/lib/pkgconfig
@@ -691,7 +691,7 @@ $(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
 
 $(djnn_install_prefix)/lib/%$(lib_suffix): $(build_dir)/lib/%$(lib_suffix)
 	@mkdir -p $(dir $@)
-ifneq ($(prefix),)
+ifneq ($(PREFIX),)
 	install -m 644 $< $@
 endif
 
@@ -717,7 +717,7 @@ install_clear:
 deb_prefix_version = build/deb/djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 deb_prefix = $(deb_prefix_version)/usr
 deb:	
-	make -j6  install prefix=$(deb_prefix)
+	make -j6  install PREFIX=$(deb_prefix)
 	test -d $(deb_prefix_version)/DEBIAN || mkdir -p $(deb_prefix_version)/DEBIAN
 	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' distrib/deb/control > $(deb_prefix_version)/DEBIAN/control
 # cp triggers file
@@ -755,7 +755,7 @@ pkg:
 #	make DESTDIR=$(pkg_destdir) PREFIX=$(pkg_prefix) install
 	test -d build || mkdir -p build
 	sed -e 's,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),;	 s,@MINOR2@,$(MINOR2),' distrib/PKGBUILD.proto > build/PKGBUILD
-	cd build ; makepkg --skipinteg 
+	cd build ; makepkg -f --skipinteg 
 .PHONY: pkg
 
 
