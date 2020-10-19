@@ -475,7 +475,7 @@ namespace djnn
     }
 
     /* special case find '*' */ 
-    else if (key[0] == '*') {
+    if (key[0] == '*') {
       auto * found = find_child_impl (key.substr(2)); // without "/*""
       if (!found) {
         /* we iterate in depth on each child and stop on the first 'key' found*/
