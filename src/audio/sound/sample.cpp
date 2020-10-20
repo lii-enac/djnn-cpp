@@ -86,8 +86,8 @@ namespace djnn {
   	Sample::do_it(const djnn_internal::Time::duration& actualduration)
   	{
     	if(somehow_activating()) {
-      		set_activation_state (DEACTIVATED);
-      		alSourceStop(sourceid); CHKAL;
+			alSourceStop(sourceid); CHKAL;
+      		deactivate ();
       		_end.notify_activation ();
     	}
   	}

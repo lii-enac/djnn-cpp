@@ -5,7 +5,8 @@ namespace djnn {
 
   class ALAudioBackend : public AudioBackend {
   public:
-    virtual void play (Sample* s);
+    virtual void sound (Sample* s);
+    virtual void load (Volume* s);
   };
 
   class ALSoundImpl : public AbstractSObjImpl {

@@ -15,8 +15,17 @@ namespace djnn {
 		return backend;
 	}
 
+	// OpenAL is retained : it does not make sense to imitate the drawing backend
+	// instead each sound should have a volume property etc.
+	// or connectors between a Volume process and the sources it applies to.
+
 	void
-	ALAudioBackend::play(Sample * s)
+	ALAudioBackend::sound (Sample * s)
+	{
+	}
+
+	void
+	ALAudioBackend::load (Volume * s)
 	{
 	}
 

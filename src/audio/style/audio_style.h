@@ -16,6 +16,7 @@
 #pragma once
 
 #include "audio/abstract_sobj.h"
+#include "audio/audio_backend.h"
 #include "core/ontology/process.h"
 
 #include <vector>
@@ -47,13 +48,12 @@ namespace djnn
   		finalize_construction (parent, name);
   	}
 
-  	/*
+  	
   	void sound () {
-  		auto _frame = get_frame ();
-    	if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-  			AudioBackend::instance ()->load_volume (this);
+    	if (somehow_activating ()) {
+  			AudioBackend::instance ().load (this);
   		}
-  	}*/
+  	}
 
   };
 

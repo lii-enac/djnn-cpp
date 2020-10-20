@@ -33,8 +33,8 @@ char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size)
         std::cout << "could not open " << fn << std::endl;
         return NULL;
     }
-    in.read(buffer, 4);
-    if (strncmp(buffer, "RIFF", 4) != 0)
+    in.read(buffer, 4); //RIFF
+    if (!in.good() || strncmp(buffer, "RIFF", 4) != 0)
     {
         std::cout << fn << " is not a valid WAVE file" << std::endl;
         return NULL;
@@ -43,17 +43,26 @@ char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size)
     in.read(buffer, 4);      //WAVE
     in.read(buffer, 4);      //fmt
     in.read(buffer, 4);      //16
-    if(convertToInt(buffer, 4) != 16) {
+    
+    if(!in.good() || convertToInt(buffer, 4) != 16) {
         std::cout << fn << " is not a PCM WAV file" << std::endl;
         return NULL;
     }
     in.read(buffer, 2);      //1
-    if(convertToInt(buffer, 2) != 1) {
+    if(!in.good() || convertToInt(buffer, 2) != 1) {
         std::cout << fn << " is not a PCM WAV file" << std::endl;
         return NULL;
     }
     in.read(buffer, 2);
+    if(!in.good()) {
+        std::cout << fn << " is not a PCM WAV file" << std::endl;
+        return NULL;
+    }
     chan = convertToInt(buffer, 2);
+    if(chan <=0 || chan >2) {
+        std::cout << fn << " number of audio channels" << std::endl;
+        return NULL;
+    }
     in.read(buffer, 4);
     samplerate = convertToInt(buffer, 4);
     in.read(buffer, 4);
