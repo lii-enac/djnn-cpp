@@ -496,6 +496,8 @@ else
 $(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
 endif
 
+#$(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
+
 
 # ---------------------------------------
 
@@ -799,3 +801,8 @@ $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-pars
 # find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
 $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
+
+ifeq ($(os),MinGW)
+# Fix for FlexLexer.h in /usr/include and in /ming64/include
+$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
+endif
