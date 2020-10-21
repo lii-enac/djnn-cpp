@@ -20,7 +20,8 @@ MAKEFLAGS += --no-builtin-rules
 
 default: all
 
-all: config.mk dirs djnn pkgconf cccmd
+all: config.mk dirs rules djnn pkgconf
+#cccmd
 
 help:
 	@echo "default: djnn ; all: djnn"
@@ -166,6 +167,7 @@ lib_suffix =.so
 DYNLIB = -shared
 YACC = bison -d
 thread = STD
+moc := moc
 endif
 
 ifeq ($(os),Darwin)
@@ -173,6 +175,9 @@ CFLAGS += -Wno-deprecated-declarations -I/Applications/Xcode.app/Contents/Develo
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
+YACC := /usr/local/opt/bison/bin/bison -d
+LEX := /usr/local/opt/flex/bin/flex
+moc := /usr/local/opt/qt/bin/moc
 #AR ?= /usr/bin/ar
 #ARFLAGS ?= -r
 endif
@@ -184,6 +189,7 @@ CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-l
 lib_suffix =.dll
 DYNLIB = -shared
 YACC = bison -d
+moc := moc
 endif
 
 ifeq ($(os),crazyflie)
@@ -319,6 +325,9 @@ djnn_libs += physics
 endif
 
 
+# ---------------------------------
+# functions
+
 srcs :=
 objs :=
 libs :=
@@ -391,6 +400,8 @@ ifeq ($(os), Darwin)
 $1_lib_soname := -Wl,-install_name,$$($1_libname),
 endif
 
+# the remaining will be put into a .mk file for further, faster, inclusion
+define $1_mk_content
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
@@ -398,11 +409,11 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
-ifeq ($$V,max)
-	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+ifeq ($$$$V,max)
+	$$(CXX) $(DYNLIB) -o $$$$@ $$($1_objs) $$$$(LDFLAGS) $$($1_lib_soname)
 else
-	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+	@$(call rule_message,linking,$$$$(stylized_target))
+	@$$(CXX) $(DYNLIB) -o $$$$@ $$($1_objs) $$$$(LDFLAGS) $$($1_lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
@@ -410,14 +421,17 @@ ifeq ($$V,max)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
 else
-	@$(call rule_message,linking,$$(stylized_target))
+	@$(call rule_message,linking,$$$$(stylized_target))
 	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	@$$(RANLIB) $$@
 endif
 
+libs += $$($1_lib)
+
 $1_size: $$($1_lib_static)
 	@ls -l $$^
 	@$$(SIZE) -t $$^
+
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
@@ -425,6 +439,7 @@ $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 $1_tidy: $$($1_tidy_srcs)
 
 $1: dirs $$($1_lib)
+
 
 $1_clean:
 	rm -f $$($1_objs)
@@ -444,11 +459,45 @@ libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 endef
+endef
 
-$(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
+# --
+# scheme to avoid calling lib functions each time we do a 'make'
+# including previous computed results leads to much faster 'make' invocations (especially on msys2)
 
-uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
-all_pkg := $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
+define newline
+
+
+endef
+
+# build a rule for each lib. This will be called once on the first 'make' invocation
+define lib_include_rule
+$(build_dir)/src/$1/$1_rules.mk: $(src_dir)/$1/djnn-lib.mk
+	$(eval $(call lib_makerule,$1))
+	@mkdir -p $(build_dir)/src/$1
+	@printf '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
+#@echo building $(build_dir)/src/$1/$1_rules.mk
+
+-include $(build_dir)/src/$1/$1_rules.mk
+endef
+
+# build an all-including rule. This will be called once on first 'make' invocation
+rules: $(build_dir)/src/lib_rules.mk
+$(build_dir)/src/lib_rules.mk: config.mk
+$(build_dir)/src/lib_rules.mk: $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
+	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
+
+# test if the all-including rule exists
+ifneq ($(wildcard $(build_dir)/src/lib_rules.mk),)
+# file exists: no need to call function, just include previous results. Fast.
+include $(build_dir)/src/lib_rules.mk
+else
+# file does not exist: call all functions and produce .mk files. Slow.
+$(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
+endif
+
+
+# ---------------------------------------
 
 djnn: $(libs)
 static: dirs $(libs_static)
@@ -530,6 +579,17 @@ else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(LEX) -o $@ $<
 endif
+
+$(build_dir)/%_moc.cpp: %_moc.h
+ifeq ($V,max)
+	$(moc) $< > $@
+else
+	@$(call rule_message,compiling,$(stylized_target))
+	@$(moc) $< > $@
+endif
+
+
+#----------------------------------------
 
 -include $(deps)
 
@@ -659,6 +719,8 @@ deb:
 # ---------------------------------------
 # package dependency installation
 
+#all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
+
 pkgdeps += bison flex
 
 ifeq ($(os),Linux)
@@ -729,3 +791,11 @@ upgrade-pkgdeps:
 #--
 
 # end of the ultimate Makefile
+
+$(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
+$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
+
+# for initial make -j
+# find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
+$(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
+$(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y

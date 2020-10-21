@@ -10,7 +10,8 @@ lib_srcs += $(call rwildcardmul,$(addprefix $(local_dir)/,$(submodules)),*.cpp)
 
 #lib_srcs += $(call rwildcard,$(local_dir)/utils/ext/remotery/,*.c)
 #lib_cflags += -DRMT_ENABLED=1 -DRMT_USE_OPENGL=0
-CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
+#CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
+lib_cflags += -DRMT_ENABLED=0 # remotery - get rid of any call
 
 ifeq ($(os),Darwin)
 lib_pkgpath += /usr/local/opt/expat/lib/pkgconfig

@@ -25,8 +25,8 @@ YACC = bison -d
 endif
 
 ifeq ($(os),Darwin)
-YACC := /usr/local/opt/bison/bin/bison -d
-LEX := /usr/local/opt/flex/bin/flex
+#YACC := /usr/local/opt/bison/bin/bison -d
+#LEX := /usr/local/opt/flex/bin/flex
 lib_cppflags += -I/usr/local/opt/flex/include
 lib_ldflags += -L/usr/local/opt/flex/lib
 endif

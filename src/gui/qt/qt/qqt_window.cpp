@@ -17,7 +17,7 @@
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
-#include "my_qqwindow.h"
+#include "qqwindow_moc.h"
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "display/qt/my_qwindow.h"
