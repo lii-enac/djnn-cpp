@@ -496,7 +496,7 @@ ifneq ($(wildcard $(lib_rules_mk)),)
 else
 # file does not exist: call all functions and produce .mk files. Slow.
 $(lib_rules_mk): $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
-	@echo building $@
+	@#echo building $@
 	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
 $(lib_rules_mk): config.mk
 
