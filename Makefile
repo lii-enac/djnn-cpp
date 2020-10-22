@@ -444,7 +444,6 @@ $1_tidy: $$($1_tidy_srcs)
 
 $1: dirs $$($1_lib)
 
-
 $1_clean:
 	rm -f $$($1_objs)
 
@@ -461,11 +460,11 @@ deps += $$($1_deps)
 libs += $$($1_lib)
 libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
-
-endef
 endef
 
-# --
+endef
+
+# -----------------
 # scheme to avoid calling lib functions each time we do a 'make'
 # including previous computed rules leads to much faster 'make' invocations (especially on msys2)
 
@@ -477,13 +476,12 @@ endef
 # build a rule for each lib. This will be called once on the first 'make' invocation
 define lib_include_rule
 $(build_dir)/src/$1/$1_rules.mk: $(src_dir)/$1/djnn-lib.mk
+	@#echo building $(build_dir)/src/$1/$1_rules.mk
 	$(eval $(call lib_makerule,$1))
 	@mkdir -p $(build_dir)/src/$1
 	@printf -- '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
 	@printf -- '$$(subst $$(newline),\n,$$($1_lib_rules))' >> $$@
 
-
-#@echo building $(build_dir)/src/$1/$1_rules.mk
 -include $(build_dir)/src/$1/$1_rules.mk
 endef
 
@@ -507,10 +505,11 @@ endif
 
 rules: $(lib_rules_mk)
 
-# caveat: make clean_rules whenever you change a djnn-lib.mk
+# caveat: do 'make clean_rules' whenever you change a djnn-lib.mk
 clean_rules:
 	rm -f $(lib_rules_mk)
 	rm -f $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
+
 
 # ---------------------------------------
 
@@ -524,8 +523,7 @@ size: $(libs_static)
 strip:
 	strip $(libs_static)
 
-shit:
-	@echo $(libs)
+
 # ---------------------------------------
 # commands.json for linters in VS Code etc.
 # should be here, after the call to lib_makerule
@@ -553,7 +551,7 @@ $(build_dir)/%.cccmd.json:$(build_dir)/%.c
 
 
 # ---------------------------------------
-# rules
+# generic rules
 
 $(build_dir)/%.o: %.cpp
 ifeq ($V,max)
@@ -598,6 +596,7 @@ endif
 
 
 #----------------------------------------
+# dependencies
 
 -include $(deps)
 
@@ -657,6 +656,7 @@ $(build_dir)/%.pc: distrib/%.pc.in
 	@mkdir -p $(dir $@)
 	@sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
+
 #----------------------------------------
 # install 
 
@@ -693,6 +693,7 @@ install: all install_pkgconf install_headers install_libs
 install_clear:
 	rm -rf $(djnn_install_prefix)
 
+
 #----------------------------------------
 # package builder
 
@@ -727,7 +728,8 @@ deb:
 # ---------------------------------------
 # package dependency installation
 
-#all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
+# should use the following variable
+# all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
 pkgdeps += bison flex
 
@@ -796,29 +798,5 @@ install-pkgdeps:
 upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
 
-#--
-
+#-----------------------
 # end of the ultimate Makefile
-
-# # additional rules from gui, should not be here ! FIXME
-# $(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
-# $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
-
-# # for initial make -j
-# # find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
-# $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
-# $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
-
-# ifeq ($(os),MinGW)
-# # Fix for FlexLexer.h in /usr/include and in /ming64/include
-# $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
-# endif
-
-# # additional rules from gui/qt/qt, should not be here ! FIXME
-# $(build_dir)/%_moc.cpp: %_moc.h
-# ifeq ($V,max)
-# 	$(moc) $< > $@
-# else
-# 	@$(call rule_message,compiling,$(stylized_target))
-# 	@$(moc) $< > $@
-# endif
