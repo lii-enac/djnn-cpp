@@ -276,6 +276,9 @@ endif
 # ---------------------------------------
 # debug, analysis
 
+CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
+#CFLAGS += -DRMT_ENABLED=1 -DRMT_USE_OPENGL=0
+
 #CFLAGS += -fsanitize=thread -O1
 #LDFLAGS += -fsanitize=thread
 
