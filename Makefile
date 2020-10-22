@@ -346,6 +346,9 @@ lib_djnn_deps :=
 lib_ldflags :=
 lib_pkg :=
 lib_pkgpath :=
+lib_rules :=
+#define lib_rules
+#endef
 
 -include $$(src_dir)/$1/djnn-lib.mk
 
@@ -359,8 +362,9 @@ $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
 
-# crystalize srcs
+# freeze
 $1_srcs := $$($1_srcs)
+$1_lib_rules := $$(lib_rules)
 
 $1_pkg_deps :=
 $1_deps := $$($1_objs:.o=.d)
@@ -401,6 +405,9 @@ $1_lib_soname := -Wl,-install_name,$$($1_libname),
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
+# does not work since it introduces new rules
+#$$(eval $$(lib_rules))
+
 define $1_mk_content
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
@@ -417,21 +424,18 @@ else
 endif
 
 $$($1_lib_static): $$($1_objs)
-ifeq ($$V,max)
-	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
-	$$(RANLIB) $$@
+ifeq ($$$$V,max)
+	$$(AR) $$(ARFLAGS) $$$$@ $$($1_objs)
+	$$(RANLIB) $$$$@
 else
 	@$(call rule_message,linking,$$$$(stylized_target))
-	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
-	@$$(RANLIB) $$@
+	@$$(AR) $$(ARFLAGS) $$$$@ $$($1_objs)
+	@$$(RANLIB) $$$$@
 endif
-
-libs += $$($1_lib)
 
 $1_size: $$($1_lib_static)
 	@ls -l $$^
 	@$$(SIZE) -t $$^
-
 
 $1_tidy_srcs := $$(addsuffix _tidy,$$($1_srcs))
 $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
@@ -463,7 +467,7 @@ endef
 
 # --
 # scheme to avoid calling lib functions each time we do a 'make'
-# including previous computed results leads to much faster 'make' invocations (especially on msys2)
+# including previous computed rules leads to much faster 'make' invocations (especially on msys2)
 
 define newline
 
@@ -475,29 +479,38 @@ define lib_include_rule
 $(build_dir)/src/$1/$1_rules.mk: $(src_dir)/$1/djnn-lib.mk
 	$(eval $(call lib_makerule,$1))
 	@mkdir -p $(build_dir)/src/$1
-	@printf '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
-#@echo building $(build_dir)/src/$1/$1_rules.mk
+	@printf -- '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
+	@printf -- '$$(subst $$(newline),\n,$$($1_lib_rules))' >> $$@
 
+
+#@echo building $(build_dir)/src/$1/$1_rules.mk
 -include $(build_dir)/src/$1/$1_rules.mk
 endef
 
-# build an all-including rule. This will be called once on first 'make' invocation
-rules: $(build_dir)/src/lib_rules.mk
-$(build_dir)/src/lib_rules.mk: config.mk
-$(build_dir)/src/lib_rules.mk: $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
-	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
+# all-including rule. This will be built only once on first 'make' invocation
+lib_rules_mk = $(build_dir)/src/lib_rules.mk
 
 # test if the all-including rule exists
-ifneq ($(wildcard $(build_dir)/src/lib_rules.mk),)
-# file exists: no need to call function, just include previous results. Fast.
-include $(build_dir)/src/lib_rules.mk
+ifneq ($(wildcard $(lib_rules_mk)),)
+# file exists: no need to call functions, just include previous results. Fast.
+-include $(lib_rules_mk)
+
 else
 # file does not exist: call all functions and produce .mk files. Slow.
+$(lib_rules_mk): $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
+	@echo building $@
+	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
+$(lib_rules_mk): config.mk
+
 $(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
 endif
 
-#$(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
+rules: $(lib_rules_mk)
 
+# caveat: make clean_rules whenever you change a djnn-lib.mk
+clean_rules:
+	rm -f $(lib_rules_mk)
+	rm -f $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
 
 # ---------------------------------------
 
@@ -511,7 +524,8 @@ size: $(libs_static)
 strip:
 	strip $(libs_static)
 
-
+shit:
+	@echo $(libs)
 # ---------------------------------------
 # commands.json for linters in VS Code etc.
 # should be here, after the call to lib_makerule
@@ -580,14 +594,6 @@ ifeq ($V,max)
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(LEX) -o $@ $<
-endif
-
-$(build_dir)/%_moc.cpp: %_moc.h
-ifeq ($V,max)
-	$(moc) $< > $@
-else
-	@$(call rule_message,compiling,$(stylized_target))
-	@$(moc) $< > $@
 endif
 
 
@@ -794,15 +800,25 @@ upgrade-pkgdeps:
 
 # end of the ultimate Makefile
 
-$(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
+# # additional rules from gui, should not be here ! FIXME
+# $(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
+# $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
 
-# for initial make -j
-# find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
-$(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
-$(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
+# # for initial make -j
+# # find build/src/gui/css-parser -name "*.d" | xargs grep -s "parser.hpp" | awk '{print $1}' | awk -F "." '{print $1".o"}' | sed s/build/\$\(build_dir\)/ | xargs echo
+# $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
+# $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
 
-ifeq ($(os),MinGW)
-# Fix for FlexLexer.h in /usr/include and in /ming64/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
-endif
+# ifeq ($(os),MinGW)
+# # Fix for FlexLexer.h in /usr/include and in /ming64/include
+# $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
+# endif
+
+# # additional rules from gui/qt/qt, should not be here ! FIXME
+# $(build_dir)/%_moc.cpp: %_moc.h
+# ifeq ($V,max)
+# 	$(moc) $< > $@
+# else
+# 	@$(call rule_message,compiling,$(stylized_target))
+# 	@$(moc) $< > $@
+# endif
