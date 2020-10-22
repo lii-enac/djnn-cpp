@@ -22,9 +22,9 @@ $(build_dir)/src/gui/css-parser/%%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-par
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
 $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
 
-ifeq ($(os),MinGW)
+ifeq ($$(os),MinGW)
 # Fix for FlexLexer.h in /usr/include and in /ming64/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
+$(build_dir)/src/gui/css-parser/%%.o: CXXFLAGS += -I/usr/include
 endif
 endef
 
@@ -44,9 +44,6 @@ endif
 
 ifeq ($(os),MinGW)
 YACC = bison -d
-
-# Fix for FlexLexer.h in /usr/include and in /ming64/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
 endif
 
 ifeq ($(picking),ANALYTICAL)
