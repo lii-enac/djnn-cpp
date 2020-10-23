@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-	class Sample : public Sound, public djnn_internal::Time::Timer
-	{
+	class Sample : public Sound {
 	public:
 		Sample (ParentProcess* parent, const std::string& name, const std::string& path);
 		virtual ~Sample ();
@@ -31,15 +30,33 @@ namespace djnn {
 		virtual void impl_activate () override;
     	virtual void impl_deactivate () override;
 
-	    // djnn_internal::Time::Timer
-    	virtual void do_it(const djnn_internal::Time::duration& actualduration) override;
-
     private:
 	    Blank _end;
+
+		struct end_timer : djnn_internal::Time::Timer {
+			Sample& s;
+			end_timer(Sample&s_) : s(s_){}
+			virtual void do_it(const djnn_internal::Time::duration& actualduration) override {
+				s.do_end();
+			}
+		};
+		end_timer _end_timer;
+		struct control_timer : djnn_internal::Time::Timer {
+			Sample& s;
+			control_timer(Sample&s_) : s(s_){}
+			virtual void do_it(const djnn_internal::Time::duration& actualduration) override {
+				s.do_control();
+			}
+		};
+		control_timer _control_timer;
+
+		void do_end ();
+		void do_control ();
 
     	unsigned int bufferid, format;
 	    int channel, sampleRate, bps;
 	    unsigned int sourceid;
+		unsigned int lowpassid;
 	    int size;
 	};
 

@@ -29,6 +29,9 @@ namespace djnn {
 	{
 	}
 
+
+
+
 	ALCdevice* device;
 	ALCcontext* context;
 
@@ -43,6 +46,11 @@ namespace djnn {
 	 		return;
 	    }
 
+		if (alcIsExtensionPresent(device, "ALC_EXT_EFX") == AL_FALSE)
+		{
+	        std::cerr << "no OpenAL EFX" << std::endl;
+	    }
+
 		context = alcCreateContext(device, NULL); //CHKAL;
 	    if (context == NULL)
 	    {
@@ -53,6 +61,9 @@ namespace djnn {
 	    alcMakeContextCurrent(context); CHKAL;
 
 	    std::cout << "Default device:" << alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER) << std::endl; CHKAL;
+		auto * v = alcGetString(0, AL_VENDOR); CHKAL;
+		if(v)
+			std::cout << "AL vendor: " << v << __FL__;
 
 	    int major, minor;
 		alcGetIntegerv(NULL, ALC_MAJOR_VERSION, 1, &major); CHKAL;

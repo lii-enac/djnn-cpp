@@ -408,8 +408,6 @@ $1_lib_soname := -Wl,-install_name,$$($1_libname),
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
-# does not work since it introduces new rules
-#$$(eval $$(lib_rules))
 
 define $1_mk_content
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
@@ -464,6 +462,7 @@ libs += $$($1_lib)
 libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 endef
+#$$(eval $$(lib_rules)) # does not work since it introduces new rules
 
 endef
 

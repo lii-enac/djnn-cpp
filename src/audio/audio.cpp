@@ -1,6 +1,6 @@
 #include "audio-priv.h"
 
-#ifdef USE_OPENAL
+#ifdef DJNN_USE_OPENAL
 #include "audio/al/openal.h"
 
 #include "audio/al/al_debug.h"
@@ -19,7 +19,7 @@ namespace djnn {
 
 	void init_audio ()
 	{
-		#ifdef USE_OPENAL
+		#ifdef DJNN_USE_OPENAL
 		void init_audio_openal ();
 		init_audio_openal();
 
@@ -31,7 +31,7 @@ namespace djnn {
 
 	void clear_audio ()
 	{
-		#ifdef USE_OPENAL
+		#ifdef DJNN_USE_OPENAL
 		
 		default_audio_listener->deactivate ();
 		delete default_audio_listener;
@@ -53,7 +53,7 @@ namespace djnn {
 	AudioListener::update_gain ()
 	{
 		double gain = _gain.get_value();
-		#ifdef USE_OPENAL
+		#ifdef DJNN_USE_OPENAL
 		alListenerf(AL_GAIN, gain); CHKAL;
 		#endif
 	}
