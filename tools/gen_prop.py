@@ -595,6 +595,16 @@ dc = DjnnClass("AbstractVolume", "AbstractAudioStyle", "../src/audio/style", ori
 dc.props.append(Prop('volume', 'double', None, "style"))
 dcs.append(dc)
 
+dc = DjnnClass("AbstractPropSound", "AbstractSObj", "../src/audio/sound", origin=None, finalize_construction=False)
+dc.props.append(Prop('gain', 'double', None, "style"))
+dc.props.append(Prop('lowpass_gain', 'double', None, "style"))
+dc.props.append(Prop('lowpass_freq', 'double', None, "style"))
+dc.props.append(Prop('x', 'double', None, "transform"))
+dc.props.append(Prop('y', 'double', None, "transform"))
+dc.props.append(Prop('z', 'double', None, "transform"))
+dc.props.append(Prop('pitch_mul', 'double', None, "transform"))
+dcs.append(dc)
+
 
 for dc in dcs:
     just_do_it(dc)

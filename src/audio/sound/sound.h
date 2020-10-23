@@ -1,11 +1,12 @@
 #pragma once
 
 #include "audio/abstract_sobj.h"
+#include "audio/sound/gen/abstract_prop_sound.h"
 
 namespace djnn {
 
 
-	class Sound : public AbstractSObj
+	class Sound : public AbstractPropSound
 	{
 	public:
 		Sound (ParentProcess* parent, const std::string& name);

@@ -67,6 +67,9 @@ namespace djnn {
 	Sample::impl_activate ()
 	{
 		alSourcei(sourceid, AL_BUFFER, bufferid); CHKAL;
+		alSourcef(sourceid, AL_GAIN, gain()->get_value()); CHKAL;
+		alSource3f(sourceid, AL_POSITION, x()->get_value(), y()->get_value(), z()->get_value()); CHKAL;
+		alSourcef(sourceid, AL_PITCH, pitch_mul()->get_value()); CHKAL;
     	alSourcePlay(sourceid); CHKAL;
     	djnn_internal::Time::duration d = std::chrono::milliseconds(1000*((size/channel)/2)/sampleRate);
     	DjnnTimeManager::instance().schedule(this, d);

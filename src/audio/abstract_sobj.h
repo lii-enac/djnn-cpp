@@ -30,6 +30,9 @@ namespace djnn {
 
     	AudioScene * get_frame () { return nullptr; } // FIXME
 
+		void impl_activate () override;
+    	void impl_deactivate () override;
+
     protected:
 	    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);
 	    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const std::string& name, int notify_mask);

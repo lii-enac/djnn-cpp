@@ -1,0 +1,59 @@
+/*
+ *  djnn v2
+ *
+ *  The copyright holders for the contents of this file are:
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2019)
+ *  See file "license.terms" for the rights and conditions
+ *  defined by copyright holders.
+ *
+ *
+ *  Contributors:
+ *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
+ *
+ *  !! this file has been automatically generated - do NOT modify !!
+ *
+ */
+
+
+#pragma once
+
+namespace djnn
+{
+  class AbstractPropSound : public AbstractSObj
+  {
+  public:
+    AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul);
+    virtual ~AbstractPropSound ();
+    
+    
+    void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul);
+    std::vector<std::string> get_properties_name () override {
+      std::vector<std::string> res;
+      res.push_back ("gain");
+			res.push_back ("lowpass_gain");
+			res.push_back ("lowpass_freq");
+			res.push_back ("x");
+			res.push_back ("y");
+			res.push_back ("z");
+			res.push_back ("pitch_mul");
+      return res;
+    }
+    virtual FatChildProcess* find_child_impl (const std::string&) override;
+		AbstractDoubleProperty* gain () { return (AbstractDoubleProperty*) find_child_impl ("gain"); }
+		AbstractDoubleProperty* lowpass_gain () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_gain"); }
+		AbstractDoubleProperty* lowpass_freq () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_freq"); }
+		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl ("x"); }
+		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl ("y"); }
+		AbstractDoubleProperty* z () { return (AbstractDoubleProperty*) find_child_impl ("z"); }
+		AbstractDoubleProperty* pitch_mul () { return (AbstractDoubleProperty*) find_child_impl ("pitch_mul"); }
+
+  protected:
+    struct raw_props_t { double gain; double lowpass_gain; double lowpass_freq; double x; double y; double z; double pitch_mul; };
+    raw_props_t raw_props;
+    CouplingWithData *_cgain, *_clowpass_gain, *_clowpass_freq, *_cx, *_cy, *_cz, *_cpitch_mul;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}
