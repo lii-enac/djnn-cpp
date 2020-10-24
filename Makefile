@@ -20,7 +20,8 @@ MAKEFLAGS += --no-builtin-rules
 
 default: all
 
-all: config.mk dirs rules djnn pkgconf
+all: config.mk dirs djnn pkgconf
+#rules
 #cccmd
 
 help:
@@ -353,7 +354,8 @@ lib_rules :=
 #define lib_rules
 #endef
 
--include $$(src_dir)/$1/djnn-lib.mk
+
+include $$(src_dir)/$1/djnn-lib.mk
 
 # default
 $1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
@@ -409,7 +411,7 @@ endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
 
-define $1_mk_content
+#define $1_mk_content
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
@@ -417,21 +419,21 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
 $$($1_lib): $$($1_objs)
-ifeq ($$$$V,max)
-	$$(CXX) $(DYNLIB) -o $$$$@ $$($1_objs) $$$$(LDFLAGS) $$($1_lib_soname)
+ifeq ($$V,max)
+	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 else
-	@$(call rule_message,linking,$$$$(stylized_target))
-	@$$(CXX) $(DYNLIB) -o $$$$@ $$($1_objs) $$$$(LDFLAGS) $$($1_lib_soname)
+	@$(call rule_message,linking,$$(stylized_target))
+	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
-ifeq ($$$$V,max)
-	$$(AR) $$(ARFLAGS) $$$$@ $$($1_objs)
-	$$(RANLIB) $$$$@
+ifeq ($$V,max)
+	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
+	$$(RANLIB) $$@
 else
-	@$(call rule_message,linking,$$$$(stylized_target))
-	@$$(AR) $$(ARFLAGS) $$$$@ $$($1_objs)
-	@$$(RANLIB) $$$$@
+	@$(call rule_message,linking,$$(stylized_target))
+	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
+	@$$(RANLIB) $$@
 endif
 
 $1_size: $$($1_lib_static)
@@ -461,62 +463,71 @@ deps += $$($1_deps)
 libs += $$($1_lib)
 libs_static += $$($1_lib_static)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
-endef
+
+#endef
 #$$(eval $$(lib_rules)) # does not work since it introduces new rules
 
 endef
 
 # -----------------
+# old scheme
+$(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
+
+# -----------------
 # scheme to avoid calling lib functions each time we do a 'make'
 # including previous computed rules leads to much faster 'make' invocations (especially on msys2)
 
-define newline
+# define newline
 
 
-endef
+# endef
 
-# build a rule for each lib. This will be called once on the first 'make' invocation
-define lib_include_rule
-$(build_dir)/src/$1/$1_rules.mk: $(src_dir)/$1/djnn-lib.mk
-	@#echo building $(build_dir)/src/$1/$1_rules.mk
-	$(eval $(call lib_makerule,$1))
-	@mkdir -p $(build_dir)/src/$1
-	@printf -- '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
-	@printf -- '$$(subst $$(newline),\n,$$($1_lib_rules))' >> $$@
+# # build a rule for each lib. This will be called once on the first 'make' invocation
+# define lib_include_rule
+# $(build_dir)/src/$1/$1_rules.mk: $(src_dir)/$1/djnn-lib.mk
+# 	@#echo building $(build_dir)/src/$1/$1_rules.mk
+# 	$(eval $(call lib_makerule,$1))
+# 	@mkdir -p $(build_dir)/src/$1
+# 	@printf -- '$$(subst $$(newline),\n,$$($1_mk_content))' > $$@
+# 	@printf -- '$$(subst $$(newline),\n,$$($1_lib_rules))' >> $$@
 
--include $(build_dir)/src/$1/$1_rules.mk
-endef
+# -include $(build_dir)/src/$1/$1_rules.mk
+# endef
 
-# all-including rule. This will be built only once on first 'make' invocation
-lib_rules_mk = $(build_dir)/src/lib_rules.mk
+# # all-including rule. This will be built only once on first 'make' invocation
+# lib_rules_mk = $(build_dir)/src/lib_rules.mk
 
-# test if the all-including rule exists
-ifneq ($(wildcard $(lib_rules_mk)),)
-# file exists: no need to call functions, just include previous results. Fast.
--include $(lib_rules_mk)
+# # test if the all-including rule exists
+# ifneq ($(wildcard $(lib_rules_mk)),)
+# # file exists: no need to call functions, just include previous results. Fast.
+# -include $(lib_rules_mk)
 
-else
-# file does not exist: call all functions and produce .mk files. Slow.
-$(lib_rules_mk): $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
-	@#echo building $@
-	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
-$(lib_rules_mk): config.mk
+# else
+# # file does not exist: call all functions and produce .mk files. Slow.
+# $(lib_rules_mk): $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
+# 	@#echo building $@
+# 	@printf -- "$(foreach a,$(djnn_libs),-include $(build_dir)/src/$a/$a_rules.mk\n)" > $@
+# $(lib_rules_mk): config.mk
 
-$(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
-endif
+# $(foreach a,$(djnn_libs),$(eval $(call lib_include_rule,$a)))
+# endif
 
-rules: $(lib_rules_mk)
+# rules: $(lib_rules_mk)
 
-# caveat: do 'make clean_rules' whenever you change a djnn-lib.mk
-clean_rules:
-	rm -f $(lib_rules_mk)
-	rm -f $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
+# # caveat: do 'make clean_rules' whenever you change a djnn-lib.mk
+# clean_rules:
+# 	rm -f $(lib_rules_mk)
+# 	rm -f $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
 
-
-# ---------------------------------------
 
 djnn: $(libs)
 static: dirs $(libs_static)
+
+shit:
+	@echo $(djnn_libs)
+	@echo $(libs)
+
+# ---------------------------------------
 
 size: $(libs_static)
 	ls -l $(libs_static)
@@ -524,7 +535,6 @@ size: $(libs_static)
 
 strip:
 	strip $(libs_static)
-
 
 # ---------------------------------------
 # commands.json for linters in VS Code etc.

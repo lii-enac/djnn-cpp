@@ -18,7 +18,7 @@
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"
-#include "display/qt/my_qwindow.h"
+#include "display/qt/qt_window_moc.h"
 #include "display/display.h"
 #include "display/abstract_display.h"
 

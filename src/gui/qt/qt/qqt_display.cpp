@@ -19,7 +19,7 @@
 #include "display/qt/qt_window.h"
 #include "exec_env/qt/qt_mainloop.h"
 
-#include "qqwindow_moc.h"
+#include "qqt_window_moc.h"
 
 #include <iostream>
 
