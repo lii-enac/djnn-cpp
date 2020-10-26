@@ -162,7 +162,7 @@ namespace djnn {
 					error (nullptr, "Low Pass Filter not supported\n");
 				} else {
 					alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
-					alSourcei (sourceid, AL_DIRECT_FILTER_GAINHF_AUTO, AL_FALSE);
+					alSourcei (sourceid, AL_DIRECT_FILTER_GAINHF_AUTO, AL_FALSE); CHKAL;
 				}
 				
 			}
