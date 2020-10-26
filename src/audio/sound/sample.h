@@ -53,11 +53,11 @@ namespace djnn {
 		void do_end ();
 		void do_control ();
 
-    	unsigned int bufferid, format;
-	    int channel, sampleRate, bps;
-	    unsigned int sourceid;
+    	unsigned int bufferid;
+		unsigned int sourceid;
 		unsigned int lowpassid;
-	    int size;
+
+		unsigned int duration;
 	};
 
 }
