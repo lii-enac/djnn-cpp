@@ -57,7 +57,7 @@ namespace djnn {
 		unsigned int sourceid;
 		unsigned int lowpassid;
 
-		unsigned int duration;
+		unsigned int duration_ms;
 	};
 
 }

@@ -552,7 +552,7 @@ cccmd: $(build_dir)/compile_commands.json
 $(build_dir)/%.cccmd.json: %.cpp
 	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
-$(build_dir)/%.cccmd.json:$(build_dir)/%.cpp
+$(build_dir)/%.cccmd.json: $(build_dir)/%.cpp
 	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 
 $(build_dir)/%.cccmd.json: %.c

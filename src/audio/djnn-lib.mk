@@ -1,6 +1,7 @@
 lib_djnn_deps = exec_env core
 local_dir = $(src_dir)/audio
 lib_srcs += $(call rwildcard,$(local_dir)/,*.cpp)
+lib_srcs += $(local_dir)/ext/dr_impl.c
 
 ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
 lib_cppflags += -DDJNN_USE_OPENAL

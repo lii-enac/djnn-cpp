@@ -26,13 +26,8 @@
 #include "utils/debug.h"
 #include "core/utils/error.h"
 
-#define DR_WAV_IMPLEMENTATION
-#define DR_WAV_NO_CONVERSION_API
 #include "audio/ext/dr_wav.h"
-
-// #define DR_MP3_IMPLEMENTATION
-// #define DR_MP3_NO_CONVERSION_API
-// #include "audio/ext/dr_mp3.h"
+//#include "audio/ext/dr_mp3.h"
 
 
 namespace djnn {
@@ -58,16 +53,17 @@ namespace djnn {
 			/*size = */
 			drwav_read_pcm_frames(&wav, numFrames, data);
 		} else {
-			// drmp3 wav;
-    		// if (drmp3_init_file(&wav, path.c_str(), NULL)) {
-			// 	sampleRate = wav.sampleRate;
+			// drmp3 dr;
+    		// if (drmp3_init_file(&dr, path.c_str(), NULL)) {
+			// 	sampleRate = dr.sampleRate;
 			// 	bps = 16; //wav.bitsPerSample;
-			// 	channels = wav.channels;
-			// 	numFrames = wav.pcmFramesRemainingInMP3Frame;
+			// 	channels = dr.channels;
+			// 	numFrames = dr.;
 			// 	datasize = numFrames * (bps/8) * channels;
 			// 	data = new unsigned char[datasize];
 			// 	/*size = */
-			// 	drmp3_read_pcm_frames_s16(&wav, numFrames, (drmp3_int16*)data);
+			// 	std::cerr << numFrames << std::endl;
+			// 	drmp3_read_pcm_frames_s16(&dr, numFrames, (drmp3_int16*)data);
 			// } else {
 				error (this, std::string("Error opening audio sample file ") + path);
 				return;
@@ -89,8 +85,8 @@ namespace djnn {
 	        }
 	    }
 	
-		//std::cerr << std::hex << format << " " << std::dec << sampleRate << " " << bps << " " << size << std::endl;
-		duration = numFrames / sampleRate;
+		std::cerr << std::hex << format << " " << std::dec << sampleRate << " " << bps << std::endl;
+		duration_ms = 1000 * numFrames / sampleRate;
 
 	    alGenBuffers (1, &bufferid); CHKAL;
 	    alBufferData (bufferid, format, data, datasize, sampleRate); CHKAL;
@@ -111,7 +107,7 @@ namespace djnn {
 #endif
 	}
 
-	// FatProcess
+	// Process
 	void
 	Sample::impl_activate ()
 	{
@@ -119,38 +115,8 @@ namespace djnn {
 		do_control ();
     	alSourcePlay(sourceid); CHKAL;
 		
-    	djnn_internal::Time::duration d1 = std::chrono::milliseconds(1000*duration);
+    	djnn_internal::Time::duration d1 = std::chrono::milliseconds(duration_ms);
 		DjnnTimeManager::instance ().schedule (&_end_timer, d1);
-	}
-
-	void
-  	Sample::do_control ()
-	{
-		double gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul;
-		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul);
-		alSourcef(sourceid, AL_GAIN, gain); CHKAL;
-		alSource3f(sourceid, AL_POSITION, x,y,z); CHKAL;
-		alSourcef(sourceid, AL_PITCH, pitch_mul); CHKAL;
-
-#ifdef DJNN_USE_OPENAL_EFX
-		if( (lowpass_gain<0.999 || lowpass_freq<0.999) || lowpassid) {
-			if (!lowpassid) {
-				alGenFilters (1, &lowpassid); CHKAL;
-				alFilteri (lowpassid, AL_FILTER_TYPE, AL_FILTER_LOWPASS); CHKAL;
-				if (alGetError () != AL_NO_ERROR) printf("Low Pass Filter not supported\n");
-				else {
-					alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
-				}
-			}
-			if (lowpassid) {
-				//std::cerr << lowpassid << " " << lowpass_freq << " " << lowpass_gain << __FL__;
-				alFilterf (lowpassid, AL_LOWPASS_GAIN, lowpass_gain); CHKAL;
-				alFilterf (lowpassid, AL_LOWPASS_GAINHF, lowpass_freq); CHKAL;
-			}
-		}
-#endif
-		djnn_internal::Time::duration d2 = std::chrono::milliseconds (10);
-		DjnnTimeManager::instance ().schedule (&_control_timer, d2);
 	}
 
 	void
@@ -174,5 +140,42 @@ namespace djnn {
       		_end.notify_activation ();
     	}
   	}
+
+	// do_control is called every xx ms to get the updated property values in case they were updated
+	// not very efficient, but this avoids using connectors.
+	// it's also called once in impl_activate and (re)schedules itself
+	void
+  	Sample::do_control ()
+	{
+		double gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul;
+		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul);
+		alSourcef(sourceid, AL_GAIN, gain); CHKAL;
+		alSource3f(sourceid, AL_POSITION, x,y,z); CHKAL;
+		alSourcef(sourceid, AL_PITCH, pitch_mul); CHKAL;
+
+#ifdef DJNN_USE_OPENAL_EFX
+		if( (lowpass_gain<0.999 || lowpass_freq<0.999) || lowpassid) {
+			if (!lowpassid) {
+				alGenFilters (1, &lowpassid); CHKAL;
+				alFilteri (lowpassid, AL_FILTER_TYPE, AL_FILTER_LOWPASS); CHKAL;
+				if (alGetError () != AL_NO_ERROR) {
+					error (nullptr, "Low Pass Filter not supported\n");
+				} else {
+					alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
+				}
+			}
+			if (lowpassid) {
+				//std::cerr << lowpassid << " " << lowpass_freq << " " << lowpass_gain << __FL__;
+				alFilterf (lowpassid, AL_LOWPASS_GAIN, lowpass_gain); CHKAL;
+				alFilterf (lowpassid, AL_LOWPASS_GAINHF, lowpass_freq); CHKAL;
+			}
+		}
+#endif
+
+		djnn_internal::Time::duration d2 = std::chrono::milliseconds (10);
+		DjnnTimeManager::instance ().schedule (&_control_timer, d2);
+	}
+
+	
 
 }
