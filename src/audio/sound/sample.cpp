@@ -85,7 +85,7 @@ namespace djnn {
 	        }
 	    }
 	
-		std::cerr << std::hex << format << " " << std::dec << sampleRate << " " << bps << std::endl;
+		//std::cerr << std::hex << format << " " << std::dec << sampleRate << " " << bps << std::endl;
 		duration_ms = 1000 * numFrames / sampleRate;
 
 	    alGenBuffers (1, &bufferid); CHKAL;
@@ -149,9 +149,9 @@ namespace djnn {
 	{
 		double gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul;
 		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul);
-		alSourcef(sourceid, AL_GAIN, gain); CHKAL;
-		alSource3f(sourceid, AL_POSITION, x,y,z); CHKAL;
-		alSourcef(sourceid, AL_PITCH, pitch_mul); CHKAL;
+		alSourcef (sourceid, AL_GAIN, gain); CHKAL;
+		alSource3f (sourceid, AL_POSITION, x,y,z); CHKAL;
+		alSourcef (sourceid, AL_PITCH, pitch_mul); CHKAL;
 
 #ifdef DJNN_USE_OPENAL_EFX
 		if( (lowpass_gain<0.999 || lowpass_freq<0.999) || lowpassid) {
@@ -162,12 +162,15 @@ namespace djnn {
 					error (nullptr, "Low Pass Filter not supported\n");
 				} else {
 					alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
+					alSourcei (sourceid, AL_DIRECT_FILTER_GAINHF_AUTO, AL_FALSE);
 				}
+				
 			}
 			if (lowpassid) {
 				//std::cerr << lowpassid << " " << lowpass_freq << " " << lowpass_gain << __FL__;
 				alFilterf (lowpassid, AL_LOWPASS_GAIN, lowpass_gain); CHKAL;
 				alFilterf (lowpassid, AL_LOWPASS_GAINHF, lowpass_freq); CHKAL;
+				alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
 			}
 		}
 #endif
