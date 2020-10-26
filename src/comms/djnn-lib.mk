@@ -44,7 +44,7 @@ endif
 
 ifeq ($(os),MinGW)
 	# TODO: remove once .pkg made 
-	lib_cppflags += -I/usr/include
+	lib_cppflags += -I/usr/include/Ivy
 	lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 
