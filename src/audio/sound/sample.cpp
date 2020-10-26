@@ -16,7 +16,7 @@
 #include "sample.h"
 #include "audio/al/openal.h"
 
-#ifdef DJNN_USE_OPEN_AL_EFX
+#ifdef DJNN_USE_OPENAL_EFX
 #define AL_ALEXT_PROTOTYPES
 #include <AL/efx.h>
 #endif
@@ -24,6 +24,7 @@
 #include <iostream>
 #include "audio/al/al_debug.h"
 #include "utils/debug.h"
+//#include "core/utils/error.h"
 
 char* loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size);
 
@@ -52,7 +53,7 @@ namespace djnn {
 	        {
 	            format = AL_FORMAT_STEREO8;
 	        }
-	        else {
+	        else if (bps == 16){
 	            format = AL_FORMAT_STEREO16;
 	        }
 	    }
@@ -68,7 +69,7 @@ namespace djnn {
 	{
 		alDeleteSources(1, &sourceid); CHKAL;
 	    alDeleteBuffers(1, &bufferid); CHKAL;
-#ifdef ALC_EFX_MAJOR_VERSION
+#ifdef DJNN_USE_OPENAL_EFX
 		if(lowpassid) {
 			alDeleteFilters(1,&lowpassid); CHKAL;
 		}
@@ -96,8 +97,8 @@ namespace djnn {
 		alSource3f(sourceid, AL_POSITION, x,y,z); CHKAL;
 		alSourcef(sourceid, AL_PITCH, pitch_mul); CHKAL;
 
-#ifdef ALC_EFX_MAJOR_VERSION
-		if( (lowpass_gain<0.999 && lowpass_freq<0.999) || lowpassid) {
+#ifdef DJNN_USE_OPENAL_EFX
+		if( (lowpass_gain<0.999 || lowpass_freq<0.999) || lowpassid) {
 			if(!lowpassid) {
 				alGenFilters (1,&lowpassid); CHKAL;
 				alFilteri (lowpassid, AL_FILTER_TYPE, AL_FILTER_LOWPASS); CHKAL;
