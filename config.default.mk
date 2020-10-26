@@ -7,6 +7,9 @@ display := QT
 graphics := QT
 #options: QT CAIRO
 
+audio := AL
+#options: AL AL_SOFT
+
 physics := # set to ODE
 phidgets := # set to PHIDGETS
 
