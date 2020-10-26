@@ -32,7 +32,7 @@
 
 namespace djnn {
 
-	Sample::Sample(ParentProcess* parent, const std::string& name, const std::string& path)
+	Sample::Sample (ParentProcess* parent, const std::string& name, const std::string& path)
 	: Sound(parent, name),
 	_end (this, "end"),
 	_end_timer(*this),
@@ -43,7 +43,7 @@ namespace djnn {
 		unsigned char * data;
 
 		drwav wav;
-    	if (drwav_init_file(&wav, path.c_str(), NULL)) {
+    	if (drwav_init_file (&wav, path.c_str (), NULL)) {
 			sampleRate = wav.sampleRate;
 			bps = wav.bitsPerSample;
 			channels = wav.channels;
@@ -51,7 +51,7 @@ namespace djnn {
 			datasize = numFrames * (bps/8) * channels;
 			data = new unsigned char[datasize];
 			/*size = */
-			drwav_read_pcm_frames(&wav, numFrames, data);
+			drwav_read_pcm_frames (&wav, numFrames, data);
 		} else {
 			// drmp3 dr;
     		// if (drmp3_init_file(&dr, path.c_str(), NULL)) {
@@ -63,9 +63,9 @@ namespace djnn {
 			// 	data = new unsigned char[datasize];
 			// 	/*size = */
 			// 	std::cerr << numFrames << std::endl;
-			// 	drmp3_read_pcm_frames_s16(&dr, numFrames, (drmp3_int16*)data);
+			// 	drmp3_read_pcm_frames_s16 (&dr, numFrames, (drmp3_int16*)data);
 			// } else {
-				error (this, std::string("Error opening audio sample file ") + path);
+				error (this, std::string ("Error opening audio sample file ") + path);
 				return;
 			// }
 		}
@@ -78,6 +78,7 @@ namespace djnn {
 	            format = AL_FORMAT_MONO16;
 	        }
 	    } else {
+			warning (this, std::string ("audio sample file is not mono and will not be panned") + path);
 	        if (bps == 8) {
 	            format = AL_FORMAT_STEREO8;
 	        } else {
@@ -92,17 +93,17 @@ namespace djnn {
 	    alBufferData (bufferid, format, data, datasize, sampleRate); CHKAL;
 	    alGenSources (1, &sourceid); CHKAL;
 
-	    finalize_construction(parent, name);
+	    finalize_construction (parent, name);
 	    delete [] data;
 	}
 
 	Sample::~Sample ()
 	{
-		alDeleteSources(1, &sourceid); CHKAL;
-	    alDeleteBuffers(1, &bufferid); CHKAL;
+		alDeleteSources (1, &sourceid); CHKAL;
+	    alDeleteBuffers (1, &bufferid); CHKAL;
 #ifdef DJNN_USE_OPENAL_EFX
 		if (lowpassid) {
-			alDeleteFilters(1,&lowpassid); CHKAL;
+			alDeleteFilters (1,&lowpassid); CHKAL;
 		}
 #endif
 	}
@@ -111,11 +112,11 @@ namespace djnn {
 	void
 	Sample::impl_activate ()
 	{
-		alSourcei(sourceid, AL_BUFFER, bufferid); CHKAL;
+		alSourcei (sourceid, AL_BUFFER, bufferid); CHKAL;
 		do_control ();
-    	alSourcePlay(sourceid); CHKAL;
+    	alSourcePlay (sourceid); CHKAL;
 		
-    	djnn_internal::Time::duration d1 = std::chrono::milliseconds(duration_ms);
+    	djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
 		DjnnTimeManager::instance ().schedule (&_end_timer, d1);
 	}
 
@@ -133,9 +134,9 @@ namespace djnn {
 	}
 
 	void
-  	Sample::do_end()
+  	Sample::do_end ()
   	{
-    	if(somehow_activating()) {
+    	if(somehow_activating ()) {
       		deactivate ();
       		_end.notify_activation ();
     	}
@@ -164,14 +165,13 @@ namespace djnn {
 					alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
 					alSourcei (sourceid, AL_DIRECT_FILTER_GAINHF_AUTO, AL_FALSE); CHKAL;
 				}
-				
 			}
-			if (lowpassid) {
+			//if (lowpassid) {
 				//std::cerr << lowpassid << " " << lowpass_freq << " " << lowpass_gain << __FL__;
 				alFilterf (lowpassid, AL_LOWPASS_GAIN, lowpass_gain); CHKAL;
 				alFilterf (lowpassid, AL_LOWPASS_GAINHF, lowpass_freq); CHKAL;
 				alSourcei (sourceid, AL_DIRECT_FILTER, lowpassid); CHKAL;
-			}
+			//}
 		}
 #endif
 
