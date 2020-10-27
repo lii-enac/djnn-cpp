@@ -26,8 +26,15 @@
 namespace djnn {
 
 static const named_color_t not_found = 0x000001;
+static std::map<std::string, named_color_t> color_map;
 
-static const std::map<std::string, named_color_t> color_map = {
+void
+SVG_Utils::init_named_colors ()
+{
+  // prevent several calls to this function
+  if (!color_map.empty()) return;
+
+  const std::map<std::string, named_color_t> color_map_ = {
     {"black",0x000000},
     {"navy",0x000080},
     {"darkblue",0x00008B},
@@ -176,7 +183,9 @@ static const std::map<std::string, named_color_t> color_map = {
     {"lightyellow",0xFFFFE0},
     {"ivory",0xFFFFF0},
     {"white",0xFFFFFF}
-};
+  };
+  color_map = std::move(color_map_);
+}
 
 named_color_t
 SVG_Utils::djn__get_color_from_name (const std::string& name)
