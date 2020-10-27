@@ -25,15 +25,6 @@ namespace djnn
   Coupling::init (CoreProcess* src, activation_flag_e src_flag,
                   CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
   {
-    /*if (src == nullptr) {
-      warning(src, "the source of a coupling cannot be null");
-      return;
-    }*/
-    /*if (dst == nullptr) {
-      warning(dst, "the destination of a coupling cannot be null");
-      return;
-    }*/
-
     set_immediate_propagation (immediate_propagation);
     set_is_enabled(true);
     set_src_activation_flag (src_flag);
@@ -44,9 +35,9 @@ namespace djnn
       src->add_deactivation_coupling (this);
     } else {
       warning (src, std::string("wrong activation flag in coupling creation ")
-      #ifndef DJNN_NO_DEBUG
-      + dst->get_debug_name ()
-      #endif
+        #ifndef DJNN_NO_DEBUG
+        + dst->get_debug_name ()
+        #endif
       );
     }
 
