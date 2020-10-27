@@ -215,6 +215,8 @@ class SVG_Utils
 public:
   static void
   init_named_colors ();
+  static void
+  clear_named_colors ();
   static int
   djn__SVGParseColor (unsigned*, unsigned*, unsigned*, const char*);
   static int

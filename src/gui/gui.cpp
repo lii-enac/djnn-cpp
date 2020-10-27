@@ -88,6 +88,7 @@ namespace djnn
     delete gui_structure_observer;
     delete GenericMouse;
 
+    SVG_Utils::clear_named_colors ();
     XMLEllipseAttrs_Hash::clear ();
 
     __module_initialized = false;

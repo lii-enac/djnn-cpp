@@ -192,6 +192,13 @@ SVG_Utils::init_named_colors ()
   *color_map = std::move(color_map_);
 }
 
+void
+SVG_Utils::clear_named_colors ()
+{
+  delete color_map;
+  color_map = nullptr;
+}
+
 named_color_t
 SVG_Utils::djn__get_color_from_name (const std::string& name)
 {
