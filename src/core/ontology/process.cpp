@@ -95,7 +95,7 @@ namespace djnn
     if (_vertex != nullptr) {
       #ifndef DJNN_NO_DEBUG
       auto * pp = this;
-      warning ( nullptr, " FatProcess::~FatProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
+      warning ( nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
       for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
       for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
       #endif
@@ -190,13 +190,12 @@ namespace djnn
   FatProcess::~FatProcess ()
   {
     /* make sure everything is wiped out the symtable */
-    symtable ().clear ();
+    //symtable ().clear (); // FIXME useless !!!!
   }
-  void
 
 
   // finalize_construction
-
+  void
   CoreProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     if (parent) {
