@@ -65,6 +65,7 @@ namespace djnn
       structure_observer_list.push_back (gui_structure_observer);
 
       SVG_Utils::init_named_colors ();
+      XMLEllipseAttrs_Hash::init ();
 
       p_init_p_display ();
       p_init_gui ();
@@ -86,6 +87,8 @@ namespace djnn
     /* and delete it */
     delete gui_structure_observer;
     delete GenericMouse;
+
+    XMLEllipseAttrs_Hash::clear ();
 
     __module_initialized = false;
   }

@@ -128,6 +128,8 @@ private:
   static inline unsigned int
   hash (const char *str, unsigned int len);
 public:
+  static void init ();
+  static void clear ();
   static djnn::djn_XMLAttrHandler *
   djn_XMLEllipseAttrsLookup (const char *str, unsigned int len);
 };
