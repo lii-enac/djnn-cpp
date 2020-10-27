@@ -21,7 +21,6 @@
 #include "core/utils/error.h"
 
 #include <algorithm>
-#include <boost/range/adaptor/reversed.hpp>
 
 #include <iostream>
 #include "utils/debug.h"
