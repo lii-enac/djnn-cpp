@@ -25,7 +25,9 @@
 
 namespace djnn {
 
-static const std::map<std::string, int> color_map = {
+static const named_color_t not_found = 0x000001;
+
+static const std::map<std::string, named_color_t> color_map = {
     {"black",0x000000},
     {"navy",0x000080},
     {"darkblue",0x00008B},
@@ -176,27 +178,29 @@ static const std::map<std::string, int> color_map = {
     {"white",0xFFFFFF}
 };
 
-int
+named_color_t
 SVG_Utils::djn__get_color_from_name (const std::string& name)
 {
   auto it = color_map.find (name);
   if (it != color_map.end())
     return it->second;
   else
-    return -1;
+    return not_found;
 }
 
 named_color_t
 SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
 {
-  std::string key (str);
-  std::transform(key.begin(), key.end(), key.begin(),
+  std::string key;
+  key.reserve (len);
+  std::copy (str, str+len, key.begin());
+  std::transform (key.begin(), key.end(), key.begin(),
       [](unsigned char c){ return std::tolower(c); });
   auto it = color_map.find(key);
   if (it != color_map.end())
     return it->second;
   else
-    return -1;
+    return not_found;
 }
 
 int
@@ -258,7 +262,7 @@ invalid:
 
   } else {
     named_color_t c = SVGColors_Hash::djn_SVGColorsLookup (v, strlen (v));
-    if (c>0) {
+    if (c != not_found) {
       *r = (c & 0xff0000) >> 16;
       *g = (c & 0x00ff00) >> 8;
       *b = (c & 0x0000ff);

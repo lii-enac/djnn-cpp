@@ -21,7 +21,7 @@
 
 namespace djnn {
 
-typedef int named_color_t;
+typedef unsigned int named_color_t;
 
 class XMLRectAttrs_Hash
 {
@@ -219,7 +219,7 @@ public:
   djn__SVGParseNumber (double*, const char**);
   static int
   djn__SVGParseUnitAndValue (djnLengthUnit*, double*, const char*);
-  static int
+  static named_color_t
   djn__get_color_from_name (const std::string& name);
 };
 
