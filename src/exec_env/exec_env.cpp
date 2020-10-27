@@ -40,13 +40,18 @@ namespace djnn
 
   extern std::vector<std::string> loadedModules;
 
+  static bool global_mutex_inited = false;
+
   void
   init_exec_env()
   {
     if (__module_initialized == false) {
       __module_initialized = true;
       //djnn::loadedModules.push_back ("exec_env");
-      init_global_mutex();
+      if (global_mutex_inited==false) {
+        init_global_mutex();
+        global_mutex_inited = true;
+      }
       //mainloop = &MainLoop::instance ();
       MainLoop::instance ();
       DjnnTimeManager::instance();//.activate ();
@@ -59,7 +64,11 @@ namespace djnn
   void
   clear_exec_env()
   {
-    DjnnTimeManager::instance().delete_ ();
+    if (__module_initialized == true) {
+      MainLoop::instance ().remove_external_source (&DjnnTimeManager::instance());
+      DjnnTimeManager::instance().delete_ ();
+      __module_initialized = false;
+    }
   }
 
   void
