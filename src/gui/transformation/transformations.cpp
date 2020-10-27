@@ -44,6 +44,13 @@ namespace djnn
   {
   }
 
+  AbstractGShape*
+  AbstractTransformation::pick_analytical (PickAnalyticalContext& pac)
+  {
+    inverse_transform (pac.x, pac.y);
+    return nullptr;
+  }
+
 
   Translation::Translation (ParentProcess* parent, const std::string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
@@ -64,12 +71,18 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  Translation::pick_analytical (PickAnalyticalContext& pac)
+  void
+  Translation::transform (double& x, double& y)
   {
-    pac.x -= raw_props.tx;
-    pac.y -= raw_props.ty;
-    return nullptr;
+    x += raw_props.tx;
+    y += raw_props.ty;
+  }
+
+  void
+  Translation::inverse_transform (double& x, double& y)
+  {
+    x -= raw_props.tx;
+    y -= raw_props.ty;
   }
 
   FatProcess*
@@ -130,23 +143,38 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  Rotation::pick_analytical (PickAnalyticalContext& pac)
+  void
+  Rotation::transform (double& x, double& y)
   {
-    pac.x -= raw_props.cx;
-    pac.y -= raw_props.cy;
+    x -= raw_props.cx;
+    y -= raw_props.cy;
+
+    double cosa =  cos(raw_props.a * M_PI / 180.),
+           sina =  sin(raw_props.a * M_PI / 180.);
+    double
+    nx = cosa * x - sina * y;
+    y =  sina * x + cosa * y;
+    x =  nx;
+
+    x += raw_props.cx;
+    y += raw_props.cy;
+  }
+
+  void
+  Rotation::inverse_transform (double& x, double& y)
+  {
+    x -= raw_props.cx;
+    y -= raw_props.cy;
 
     double cosa =  cos(- raw_props.a * M_PI / 180.),
            sina =  sin(- raw_props.a * M_PI / 180.);
     double
-    pacx =   cosa * pac.x - sina * pac.y;
-    pac.y =  sina * pac.x + cosa * pac.y;
-    pac.x =  pacx;
+    nx = cosa * x - sina * y;
+    y =  sina * x + cosa * y;
+    x =  nx;
 
-    pac.x += raw_props.cx;
-    pac.y += raw_props.cy;
-
-    return nullptr;
+    x += raw_props.cx;
+    y += raw_props.cy;
   }
 
   FatProcess*
@@ -207,12 +235,30 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  Scaling::pick_analytical (PickAnalyticalContext& pac)
+  void
+  Scaling::transform (double& x, double& y)
   {
-    pac.x /= raw_props.sx;
-    pac.y /= raw_props.sy;
-    return nullptr;
+    x -= raw_props.cx;
+    y -= raw_props.cy;
+
+    x *= raw_props.sx;
+    y *= raw_props.sy;
+
+    x += raw_props.cx;
+    y += raw_props.cy;
+  }
+
+  void
+  Scaling::inverse_transform (double& x, double& y)
+  {
+    x -= raw_props.cx;
+    y -= raw_props.cy;
+
+    x /= raw_props.sx;
+    y /= raw_props.sy;
+
+    x += raw_props.cx;
+    y += raw_props.cy;
   }
 
   FatProcess*
@@ -272,13 +318,18 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  SkewX::pick_analytical (PickAnalyticalContext& pac)
+  void
+  SkewX::transform (double& x, double& y)
+  {
+    double tana = tan(raw_props.a * M_PI / 180.);
+    x += tana * y;
+  }
+
+  void
+  SkewX::inverse_transform (double& x, double& y)
   {
     double tana = tan(- raw_props.a * M_PI / 180.);
-    pac.x += pac.x + tana * pac.y;
-
-    return nullptr;
+    x += tana * y;
   }
 
   FatProcess*
@@ -339,13 +390,18 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  SkewY::pick_analytical (PickAnalyticalContext& pac)
+  void
+  SkewY::transform (double& x, double& y)
+  {
+    double tana = tan(raw_props.a * M_PI / 180.);
+    y += tana * x;
+  }
+
+  void
+  SkewY::inverse_transform (double& x, double& y)
   {
     double tana = tan(- raw_props.a * M_PI / 180.);
-    pac.y += tana * pac.x;
-
-    return nullptr;
+    y += tana * x;
   }
 
   FatProcess*
@@ -2085,22 +2141,32 @@ namespace djnn
     }
   }
 
-  AbstractGShape*
-  Homography::pick_analytical (PickAnalyticalContext& pac)
+  void
+  Homography::transform (double& x, double& y)
   {
     double
       a = raw_props.m11, b = raw_props.m12,
       c = raw_props.m21, d = raw_props.m22;
     double
-    pacx = d * pac.x - b * pac.y;
-    pac.y = -c * pac.x + a * pac.y;
-    pac.x = pacx;
+    nx = a * x + b * y;
+    y =  c * x + d * y;
+    x = nx;
+  }
+
+  void
+  Homography::inverse_transform (double& x, double& y)
+  {
+    double
+      a = raw_props.m11, b = raw_props.m12,
+      c = raw_props.m21, d = raw_props.m22;
+    double
+    nx = d * x - b * y;
+    y = -c * x + a * y;
+    x = nx;
 
     double det = 1/(a*d-b*c);
-    pac.x *= det;
-    pac.y *= det;
-
-    return nullptr;
+    x *= det;
+    y *= det;
   }
 
   FatProcess*

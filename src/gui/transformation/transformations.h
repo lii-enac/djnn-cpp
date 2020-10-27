@@ -33,6 +33,9 @@ namespace djnn
     AbstractTransformation (ParentProcess* parent, const std::string& name);
     AbstractTransformation ();
     virtual ~AbstractTransformation ();
+    virtual void transform( double& x, double& y) {}
+    virtual void inverse_transform( double& x, double& y) {}
+    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
   };
 }
 
@@ -47,7 +50,8 @@ namespace djnn
     Translation (double tx, double ty);
     virtual ~Translation ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
@@ -73,7 +77,8 @@ namespace djnn {
     Rotation (double a, double cx, double cy);
     virtual ~Rotation ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
@@ -99,7 +104,8 @@ namespace djnn {
     Scaling (double sx, double sy, double cx, double cy);
     virtual ~Scaling ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
@@ -126,7 +132,8 @@ namespace djnn {
     SkewX (double a);
     virtual ~SkewX ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
@@ -147,7 +154,8 @@ namespace djnn {
     SkewY (double a);
     virtual ~SkewY ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
@@ -481,7 +489,8 @@ namespace djnn {
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~Homography ();
     void draw () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    virtual void transform( double& x, double& y) override;
+    virtual void inverse_transform( double& x, double& y) override;
     FatProcess* clone () override;
   };
 
