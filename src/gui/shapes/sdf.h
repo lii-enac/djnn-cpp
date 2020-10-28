@@ -56,7 +56,7 @@ namespace djnn {
   inline
   double abs(double d)
   {
-    return ::abs(d);
+    return std::abs(d);
   }
 
   inline
