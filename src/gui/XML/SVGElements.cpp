@@ -914,13 +914,10 @@ StartLinearGradient(const char** attrs, FatProcess* current) {
 		attrs++;
 	}
 
-	e = new LinearGradient(0, djn_GradientArgs.id, djn_LinearGradientArgs.x1,
+	e = new LinearGradient(current, djn_GradientArgs.id, djn_LinearGradientArgs.x1,
 			djn_LinearGradientArgs.y1, djn_LinearGradientArgs.x2,
 			djn_LinearGradientArgs.y2, djn_GradientArgs.spread,
 			djn_GradientArgs.coords);
-
-	/* hack to fool EndElement */
-	e->set_parent(current);
 
 	if (djn_GradientArgs.id != 0) {
 		djn__id_to_process.insert(
@@ -984,13 +981,10 @@ StartRadialGradient(const char** attrs, FatProcess* current) {
 	  djn_RadialGradientArgs.fx = djn_RadialGradientArgs.cx;
   if (djn_RadialGradientArgs.fy == std::numeric_limits<double>::infinity())
     djn_RadialGradientArgs.fy = djn_RadialGradientArgs.cy;
-	e = new RadialGradient(0, djn_GradientArgs.id, djn_RadialGradientArgs.cx,
+	e = new RadialGradient(current, djn_GradientArgs.id, djn_RadialGradientArgs.cx,
 			djn_RadialGradientArgs.cy, djn_RadialGradientArgs.r,
 			djn_RadialGradientArgs.fx, djn_RadialGradientArgs.fy,
 			djn_GradientArgs.spread, djn_GradientArgs.coords);
-
-	/* hack to fool EndElement */
-	e->set_parent(current);
 
 	if (djn_GradientArgs.id != 0) {
 		djn__id_to_process.insert(
