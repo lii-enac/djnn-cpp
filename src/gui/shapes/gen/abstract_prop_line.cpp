@@ -28,6 +28,8 @@
 #include "core/ontology/coupling.h"
 
 #include "audio/style/audio_style.h"
+#include "physics/abstract_pobj.h"
+#include "physics/physics.h"
 
 
 #include "abstract_prop_line.h"

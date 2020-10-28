@@ -15,6 +15,8 @@
 #include "utils-dev.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
+#include "core/ontology/coupling.h"
+#include "core/execution/graph.h"
 #include <cstdint>
 
 
@@ -109,4 +111,33 @@ namespace djnn
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;
   }
+
+  // for gen_prop.py
+	void
+ 	enable(Coupling* c, CoreProcess* dst)
+  {
+		if(c) {
+		if(c->get_dst() == nullptr) {
+			c->set_dst(dst);
+			Graph::instance().add_edge(c->get_src(), c->get_dst());
+		}
+		c->enable();
+		}
+  }
+
+	void
+	disable (Coupling *c)
+	{
+		if (c) {
+			c->disable();
+		}
+	}
+
+	void
+	remove_edge (Coupling *c)
+	{
+		if (c) {
+			if (c->get_dst ()) Graph::instance ().remove_edge (c->get_src (), c->get_dst ());
+		}
+	}
  }

@@ -68,6 +68,8 @@ def_string = """
 #include "core/ontology/coupling.h"
 
 #include "audio/style/audio_style.h"
+#include "physics/abstract_pobj.h"
+#include "physics/physics.h"
 
 
 #include "%(CLASS_LOWER)s.h"
@@ -407,8 +409,23 @@ def just_do_it(dc, finalize_construction=True):
 
     filename = camel_case_to_snake_case (dc.name)
     path = dc.path + '/gen/' + filename
-    open (path+'.h', 'w').write(decl_content)
-    open (path+'.cpp', 'w').write(def_content)
+    old_decl_content = ''
+    try:
+      old_decl_content = open (path+'.h', 'r').read()
+    except FileNotFoundError:
+      pass
+    old_def_content = ''
+    try:
+      old_def_content = open (path+'.cpp', 'r').read()
+    except FileNotFoundError:
+      pass
+
+    if (decl_content != old_decl_content):
+      open (path+'.h', 'w').write(decl_content)
+      print(path+'.h'+ ' updated')
+    if (def_content != old_def_content):
+      open (path+'.cpp', 'w').write(def_content)
+      print(path+'.cpp'+ ' updated')
 
 
 
@@ -605,6 +622,44 @@ dc.props.append(Prop('z', 'double', None, "transform"))
 dc.props.append(Prop('pitch_mul', 'double', None, "transform"))
 dcs.append(dc)
 
+dc = DjnnClass("AbstractPropWorld", "AbstractPObj", "../src/physics", origin=None, finalize_construction=False)
+dc.props.append(Prop('x', 'double', None, "transform"))
+dc.props.append(Prop('y', 'double', None, "transform"))
+dc.props.append(Prop('z', 'double', None, "transform"))
+dc.props.append(Prop('dt', 'double', None, "transform"))
+dcs.append(dc)
+
+dc = DjnnClass("AbstractPropPhyObj", "AbstractPObj", "../src/physics", origin=None, finalize_construction=False)
+dc.props.append(Prop('x', 'double', None, "transform"))
+dc.props.append(Prop('y', 'double', None, "transform"))
+dc.props.append(Prop('z', 'double', None, "transform"))
+dc.props.append(Prop('dx', 'double', None, "transform"))
+dc.props.append(Prop('dy', 'double', None, "transform"))
+dc.props.append(Prop('dz', 'double', None, "transform"))
+dc.props.append(Prop('roll', 'double', None, "geometry"))
+dc.props.append(Prop('pitch', 'double', None, "geometry"))
+dc.props.append(Prop('yall', 'double', None, "geometry"))
+dc.props.append(Prop('mass', 'double', None, "geometry"))
+dc.props.append(Prop('density', 'double', None, "geometry"))
+dc.props.append(Prop('friction', 'double', None, "geometry"))
+dcs.append(dc)
+
+dc = DjnnClass("AbstractPropBox", "PhyObj", "../src/physics", origin=None, finalize_construction=False)
+dc.props.append(Prop('w', 'double', None, "geometry"))
+dc.props.append(Prop('h', 'double', None, "geometry"))
+dc.props.append(Prop('d', 'double', None, "geometry"))
+dcs.append(dc)
+
+dc = DjnnClass("AbstractPropPlane", "PhyObj", "../src/physics", origin=None, finalize_construction=False)
+dc.props.append(Prop('a', 'double', None, "geometry"))
+dc.props.append(Prop('b', 'double', None, "geometry"))
+dc.props.append(Prop('c', 'double', None, "geometry"))
+dc.props.append(Prop('d', 'double', None, "geometry"))
+dcs.append(dc)
+
+dc = DjnnClass("AbstractPropSphere", "PhyObj", "../src/physics", origin=None, finalize_construction=False)
+dc.props.append(Prop('radius', 'double', None, "geometry"))
+dcs.append(dc)
 
 for dc in dcs:
     just_do_it(dc)

@@ -11,4 +11,64 @@ namespace djnn {
   AbstractSObj::impl_deactivate ()
   {
   }
+
+  FatProcess*
+  AbstractSObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractSObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractSObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractSObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
 }

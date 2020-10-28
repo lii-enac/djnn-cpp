@@ -1,6 +1,7 @@
-lib_djnn_deps = core base
+lib_djnn_deps = base core
 
 lib_srcs += src/physics/physics.cpp src/physics/world.cpp
+lib_srcs += $(wildcard src/physics/gen/*.cpp)
 
 ifeq ($(physics),BOX2D)
 lib_cppflags = -Isrc/physics

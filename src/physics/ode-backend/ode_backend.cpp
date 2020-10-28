@@ -114,7 +114,9 @@ namespace djnn
   ODEBackend::update_position (PhyObj* phy_obj)
   {
     dBodyID body = ((ODEPhyObj*) phy_obj->get_impl ())->get_body ();
-    dBodySetPosition (body, phy_obj->x (), phy_obj->y (), phy_obj->z ());
+    double x,y,z;
+    phy_obj->get_position_values(x,y,z);
+    dBodySetPosition (body, x, y, z);
   }
 
   void
@@ -172,7 +174,9 @@ namespace djnn
   ODEBackend::update_velocity (PhyObj* phy_obj)
   {
     dBodyID body = ((ODEPhyObj*) phy_obj->get_impl ())->get_body ();
-    dBodySetLinearVel (body, phy_obj->dx (), phy_obj->dy (), phy_obj->dz ());
+    double dx,dy,dz;
+    phy_obj->get_velocity_values (dx,dy,dz);
+    dBodySetLinearVel (body, dx, dy, dz);
   }
 
   void

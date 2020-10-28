@@ -24,13 +24,84 @@
 
 namespace djnn
 {
+
+  void
+  AbstractPObj::impl_activate ()
+  {
+  }
+  
+  void
+  AbstractPObj::impl_deactivate ()
+  {
+  }
+
+  FatProcess*
+  AbstractPObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractPObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractPObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
+  FatProcess*
+  AbstractPObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
+  {
+    *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
+    /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
+    *cprop = new Coupling (*prop, ACTIVATION, update, ACTIVATION);
+    if (this->somehow_activating ()) {
+      //auto _frame = get_frame ();
+      //(*cprop)->enable(_frame);
+    }
+    else
+      (*cprop)->disable ();*/
+    return *prop;
+  }
+
   void
   World::StepAction::impl_activate ()
   {
-    double dt;
+    double x,y,z,dt;
 
     World* w = (World*) get_parent ();
-    w->get_dt (dt);
+    w->get_properties_values(x,y,z,dt);
 
     w->get_impl ()->step (dt);
     for (auto p : w->get_phy_objects ()) {
@@ -39,11 +110,9 @@ namespace djnn
   }
 
   World::World (ParentProcess* parent, const std::string& name, double x, double y, double z) :
-      FatProcess (name), raw_props
-        { .x = x, .y = y, .z = z, .dt = 0.016 }, _dt (nullptr)
-
+  AbstractPropWorld (parent, name, x, y, z, 0.016), _dt (nullptr)
   {
-    _step = new Spike ();
+    _step = new Spike (this, "spike");
     add_symbol ("step", _step);
     _step_action = new StepAction (this, "step_action");
     _cstep = new Coupling (_step, ACTIVATION, _step_action, ACTIVATION, true);
@@ -67,19 +136,8 @@ namespace djnn
     delete _dt;
   }
 
-  FatProcess*
-  World::find_child (const std::string& n)
-  {
-    FatProcess* res = FatProcess::find_child (n);
-    if (res)
-      return res;
-    if (n == "dt") {
-      _dt = new DoublePropertyProxy (this, "dt", raw_props.dt);
-      res = _dt;
-    }
-    return res;
-  }
 
+  
   void
   World::impl_activate ()
   {
@@ -92,40 +150,23 @@ namespace djnn
     _cstep->disable ();
   }
 
-  void
-  World::get_dt (double &dt)
-  {
-    dt = raw_props.dt;
-  }
 
-  void
-  World::get_gravity (double &x, double &y)
-  {
-    x = raw_props.x;
-    y = raw_props.y;
-  }
-
-  /* static FatProcess*
-   create_double_prop (ParentProcess* parent, DoublePropertyProxy **prop, Coupling **cprop, FatProcess *dest, double *rawp,
-   const std::string& name)
-   {
-   *prop = new DoublePropertyProxy (p, name, *rawp, notify_none);
-   *cprop = new Coupling (*prop, ACTIVATION, dest, ACTIVATION);
-   if (p->somehow_activating ())
-   (*cprop)->enable ();
-   else
-   (*cprop)->disable ();
-   return *prop;
-   }
-   */
+  PhyObj::PhyObj (ParentProcess* parent, const std::string& name)
+  : PhyObj (parent, name, 0,0,0,0)
+  {}
 
   PhyObj::PhyObj (ParentProcess* parent, const std::string& name, double x, double y, double z, double mass) :
-      FatProcess (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
-          nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr), _cx (
-          nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _update_from_engine (
-          false), raw_props
+      AbstractPropPhyObj (parent, name, x, y, z, 0,0,0, 0,0,0, mass, 1.0, 0.3),
+      /*FatProcess (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
+          nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr),
+          _cx (
+          nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr),*/
+          _update_from_engine (false),
+          /*raw_props
         { .x = x, .y = y, .z = z, .dx = 0, .dy = 0, .dz = 0, .roll = 0, .pitch = 0, .yall = 0, .mass = mass, .density =
-            1.0f, .friction = 0.3f }, _world (nullptr), _impl (nullptr)
+            1.0f, .friction = 0.3f },*/
+            _world (nullptr),
+            _impl (nullptr)
   {
     _position_action = new D3PhyObjUpdatePosition (this, "position_action");
     _velocity_action = new D3PhyObjUpdateVelocity (this, "velocity_action");
@@ -135,41 +176,8 @@ namespace djnn
 
   PhyObj::~PhyObj ()
   {
-    if (_cx) {
-      Graph::instance ().remove_edge (_x, _position_action);
-      delete _cx;
-    }
-    if (_cy) {
-      Graph::instance ().remove_edge (_y, _position_action);
-      delete _cy;
-    }
-    if (_cz) {
-      Graph::instance ().remove_edge (_z, _position_action);
-      delete _cz;
-    }
-    if (_cdx) {
-      Graph::instance ().remove_edge (_dx, _velocity_action);
-      delete _cdx;
-    }
-    if (_cdy) {
-      Graph::instance ().remove_edge (_dy, _velocity_action);
-      delete _cdy;
-    }
-    if (_cdz) {
-      Graph::instance ().remove_edge (_dz, _velocity_action);
-      delete _cdz;
-    }
-    delete _x;
-    delete _y;
-    delete _z;
     delete _position_action;
     delete _velocity_action;
-    delete _dx;
-    delete _dy;
-    delete _dz;
-    delete _density;
-    delete _friction;
-    delete _mass;
   }
 
   void
@@ -213,72 +221,23 @@ namespace djnn
     PhysicsBackend::instance ()->enable_physical_object (this);
   }
 
-  FatProcess*
-  PhyObj::find_child (const std::string& n)
+  FatChildProcess*
+  PhyObj::find_child_impl (const std::string& name)
   {
-    FatProcess *res = FatProcess::find_child (n);
-    if (res)
+      auto * res = AbstractPropPhyObj::find_child_impl (name);
+      #define phyattr(x) if (name ==#x) _##x = dynamic_cast<DoublePropertyProxy*>(res); else
+      phyattr(x)
+      phyattr(y)
+      phyattr(z)
+      phyattr(dx)
+      phyattr(dy)
+      phyattr(dz)
+      phyattr(roll)
+      phyattr(pitch)
+      phyattr(yall)
+      #undef phyattr
+      {}
       return res;
-    if (n == "x") {
-      _x = new DoublePropertyProxy (this, "x", raw_props.x);
-      _cx = new Coupling (_x, ACTIVATION, _position_action, ACTIVATION);
-      Graph::instance ().add_edge (_x, _position_action);
-      res = _x;
-    }
-    if (n == "y") {
-      _y = new DoublePropertyProxy (this, "y", raw_props.y);
-      _cy = new Coupling (_y, ACTIVATION, _position_action, ACTIVATION);
-      Graph::instance ().add_edge (_y, _position_action);
-      res = _y;
-    }
-    if (n == "z") {
-      _z = new DoublePropertyProxy (this, "z", raw_props.z);
-      _cz = new Coupling (_z, ACTIVATION, _position_action, ACTIVATION);
-      Graph::instance ().add_edge (_z, _position_action);
-      res = _z;
-    }
-    if (n == "dx") {
-      _dx = new DoublePropertyProxy (this, "dx", raw_props.dx);
-      _cdx = new Coupling (_dx, ACTIVATION, _velocity_action, ACTIVATION);
-      Graph::instance ().add_edge (_dx, _velocity_action);
-      res = _dx;
-    }
-    if (n == "dy") {
-      _dy = new DoublePropertyProxy (this, "dy", raw_props.dy);
-      _cdy = new Coupling (_dy, ACTIVATION, _velocity_action, ACTIVATION);
-      Graph::instance ().add_edge (_dy, _velocity_action);
-      res = _dy;
-    }
-    if (n == "dz") {
-      _dz = new DoublePropertyProxy (this, "dz", raw_props.dz);
-      _cdz = new Coupling (_dz, ACTIVATION, _velocity_action, ACTIVATION);
-      Graph::instance ().add_edge (_dz, _velocity_action);
-      res = _dz;
-    }
-    if (n == "roll") {
-      _roll = new DoublePropertyProxy (this, "roll", raw_props.roll);
-      res = _roll;
-    }
-    if (n == "pitch") {
-      _pitch = new DoublePropertyProxy (this, "pitch", raw_props.pitch);
-      res = _pitch;
-    }
-    if (n == "yall") {
-      _yall = new DoublePropertyProxy (this, "yall", raw_props.yall);
-      res = _yall;
-    }
-    if (n == "density") {
-      _density = new DoublePropertyProxy (this, "density", raw_props.density);
-      res = _density;
-    }
-    if (n == "friction") {
-      _friction = new DoublePropertyProxy (this, "friction", raw_props.friction);
-      res = _friction;
-    }
-    if (n == "mass") {
-      res = new DoublePropertyProxy (this, "mass", raw_props.mass);
-    }
-    return res;
   }
 
   void
@@ -307,6 +266,22 @@ namespace djnn
   }
 
   void
+  PhyObj::get_position_values (double& x, double& y, double& z)
+  {
+    x = raw_props.x;
+    y = raw_props.y;
+    z = raw_props.z;
+  }
+
+  void
+  PhyObj::get_velocity_values (double& dx, double& dy, double& dz)
+  {
+    dx = raw_props.dx;
+    dy = raw_props.dy;
+    dz = raw_props.dz;
+  }
+
+  void
   PhyObj::update ()
   {
     if (!is_activated ())
@@ -315,73 +290,71 @@ namespace djnn
     PhysicsBackend::instance ()->get_velocity (this, raw_props.dx, raw_props.dy, raw_props.dz);
     PhysicsBackend::instance ()->get_angle (this, raw_props.roll, raw_props.pitch, raw_props.yall);
     _update_from_engine = true;
-    if (_x)
-      _x->notify_activation ();
-    if (_y)
-      _y->notify_activation ();
-    if (_z)
-      _z->notify_activation ();
-    if (_dx)
-      _dx->notify_activation ();
-    if (_dy)
-      _dy->notify_activation ();
-    if (_dz)
-      _dz->notify_activation ();
-    if (_roll)
-      _roll->notify_activation ();
-    if (_pitch)
-      _pitch->notify_activation ();
-    if (_yall)
-      _yall->notify_activation ();
+
+    #define phyattr(x) if (_##x) _##x->notify_activation ();
+    phyattr(x)
+    phyattr(y)
+    phyattr(z)
+    phyattr(dx)
+    phyattr(dy)
+    phyattr(dz)
+    phyattr(roll)
+    phyattr(pitch)
+    phyattr(yall)
+    #undef phyattr
+    
     _update_from_engine = false;
   }
 
+  
+
   Plane::Plane (ParentProcess* parent, const std::string& name, double a, double b, double c, double d) :
-      PhyObj (parent, name, 0, 0, 0, 0), _plane_props
-        { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
+      AbstractPropPlane (parent, name, a, b, c, d)
+      //plane_props
+      //  { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
   {
     finalize_construction (parent, name);
   }
 
   Plane::~Plane ()
   {
-    delete _a;
-    delete _b;
-    delete _c;
-    delete _d;
+    // delete _a;
+    // delete _b;
+    // delete _c;
+    // delete _d;
   }
 
-  FatProcess*
-  Plane::find_child (const std::string& n)
-  {
-    FatProcess *res = PhyObj::find_child (n);
-    if (res)
-      return res;
-    if (n == "a") {
-      _a = new DoublePropertyProxy (this, "a", _plane_props.a);
-      res = _a;
-    }
-    if (n == "b") {
-      _b = new DoublePropertyProxy (this, "b", _plane_props.b);
-      res = _b;
-    }
-    if (n == "c") {
-      _c = new DoublePropertyProxy (this, "c", _plane_props.c);
-      res = _c;
-    }
-    if (n == "d") {
-      _d = new DoublePropertyProxy (this, "d", _plane_props.d);
-      res = _d;
-    }
-    return res;
-  }
+  // FatProcess*
+  // Plane::find_child (const std::string& n)
+  // {
+  //   FatProcess *res = PhyObj::find_child (n);
+  //   if (res)
+  //     return res;
+  //   if (n == "a") {
+  //     _a = new DoublePropertyProxy (this, "a", _plane_props.a);
+  //     res = _a;
+  //   }
+  //   if (n == "b") {
+  //     _b = new DoublePropertyProxy (this, "b", _plane_props.b);
+  //     res = _b;
+  //   }
+  //   if (n == "c") {
+  //     _c = new DoublePropertyProxy (this, "c", _plane_props.c);
+  //     res = _c;
+  //   }
+  //   if (n == "d") {
+  //     _d = new DoublePropertyProxy (this, "d", _plane_props.d);
+  //     res = _d;
+  //   }
+  //   return res;
+  // }
 
   void
   Plane::impl_activate ()
   {
     PhyObj::impl_activate ();
-    PhysicsBackend::instance ()->create_plane (this, _world, _plane_props.a, _plane_props.b, _plane_props.c,
-                                               _plane_props.d);
+    PhysicsBackend::instance ()->create_plane (this, _world,
+      AbstractPropPlane::raw_props.a, AbstractPropPlane::raw_props.b, AbstractPropPlane::raw_props.c, AbstractPropPlane::raw_props.d);
   }
 
   void
@@ -392,23 +365,32 @@ namespace djnn
   }
 
   Box::Box (ParentProcess* parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
-      PhyObj (parent, name, x, y, z, mass), w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
+      AbstractPropBox (parent, name, w, h, d)
+      //, w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
+    PhyObj::raw_props.x = x;
+    PhyObj::raw_props.y = y;
+    PhyObj::raw_props.z = z;
+    PhyObj::raw_props.mass = mass;
     finalize_construction (parent, name);
   }
 
   Box::~Box ()
   {
-    delete _w;
-    delete _h;
-    delete _d;
+    // delete _w;
+    // delete _h;
+    // delete _d;
   }
 
   void
   Box::impl_activate ()
   {
     PhyObj::impl_activate ();
-    PhysicsBackend::instance ()->create_box (this, _world, raw_props.x, raw_props.y, raw_props.z, w, h, d,  raw_props.mass);
+    PhysicsBackend::instance ()->create_box (this, _world,
+        PhyObj::raw_props.x, PhyObj::raw_props.y, PhyObj::raw_props.z,
+        AbstractPropBox::raw_props.w, AbstractPropBox::raw_props.h, AbstractPropBox::raw_props.d,
+        PhyObj::raw_props.mass
+    );
   }
 
   void
@@ -418,42 +400,50 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_body (this);
   }
 
-  FatProcess*
-  Box::find_child (const std::string& n)
-  {
-    FatProcess* res = PhyObj::find_child (n);
-    if (res)
-      return res;
-    if (n == "width") {
-      _w = new DoublePropertyProxy (this, "width", w);
-      res = _w;
-    }
-    if (n == "height") {
-      _h = new DoublePropertyProxy (this, "height", h);
-      res = _h;
-    }
-    if (n == "depth") {
-      _d = new DoublePropertyProxy (this, "depth", d);
-    }
-    return res;
-  }
+  // FatProcess*
+  // Box::find_child (const std::string& n)
+  // {
+  //   FatProcess* res = PhyObj::find_child (n);
+  //   if (res)
+  //     return res;
+  //   if (n == "width") {
+  //     _w = new DoublePropertyProxy (this, "width", w);
+  //     res = _w;
+  //   }
+  //   if (n == "height") {
+  //     _h = new DoublePropertyProxy (this, "height", h);
+  //     res = _h;
+  //   }
+  //   if (n == "depth") {
+  //     _d = new DoublePropertyProxy (this, "depth", d);
+  //   }
+  //   return res;
+  // }
 
   Sphere::Sphere (ParentProcess* parent, const std::string& name, double x, double y, double z, double radius, double mass) :
-      PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
+    AbstractPropSphere (parent, name, radius) 
+      //PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
+    PhyObj::raw_props.x = x;
+    PhyObj::raw_props.y = y;
+    PhyObj::raw_props.z = z;
+    PhyObj::raw_props.mass = mass;
     finalize_construction (parent, name);
   }
 
   Sphere::~Sphere ()
   {
-    delete _radius;
+    //delete _radius;
   }
   void
   Sphere::impl_activate ()
   {
     PhyObj::impl_activate ();
-    PhysicsBackend::instance ()->create_sphere (this, _world, raw_props.x, raw_props.y, raw_props.z, radius,
-                                                raw_props.mass);
+    PhysicsBackend::instance ()->create_sphere (this, _world,
+        PhyObj::raw_props.x, PhyObj::raw_props.y, PhyObj::raw_props.z,
+        AbstractPropSphere::raw_props.radius,
+        PhyObj::raw_props.mass
+    );
   }
 
   void
@@ -463,16 +453,16 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_body (this);
   }
 
-  FatProcess*
-  Sphere::find_child (const std::string& n)
-  {
-    FatProcess* res = PhyObj::find_child (n);
-    if (res)
-      return res;
-    if (n == "r") {
-      _radius = new DoublePropertyProxy (this, "r", radius);
-      res = _radius;
-    }
-    return res;
-  }
+  // FatProcess*
+  // Sphere::find_child (const std::string& n)
+  // {
+  //   FatProcess* res = PhyObj::find_child (n);
+  //   if (res)
+  //     return res;
+  //   if (n == "r") {
+  //     _radius = new DoublePropertyProxy (this, "r", radius);
+  //     res = _radius;
+  //   }
+  //   return res;
+  // }
 }
