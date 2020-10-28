@@ -53,7 +53,7 @@ namespace djnn
       __module_initialized = true;
       //djnn::loadedModules.push_back("core");
       setlocale(LC_NUMERIC, "C");
-      Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
+      //Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
 /*    rmtSettings* settings = rmt_Settings();
@@ -70,6 +70,7 @@ namespace djnn
   void
   clear_core ()
   {
+    delete &Graph::instance ();
     //XML::clear_xml_parser ();
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
   }

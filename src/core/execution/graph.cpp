@@ -218,8 +218,9 @@ namespace djnn
   Graph&
   Graph::instance ()
   {
-    static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
-    if(!onceFlag.test_and_set()) {
+    //static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
+    //if(!onceFlag.test_and_set()) {
+    if (!_instance) {
       _instance = new Graph();
     }
 
@@ -235,6 +236,7 @@ namespace djnn
   Graph::~Graph ()
   {
     clear ();
+    _instance = nullptr;
   }
 
   void
