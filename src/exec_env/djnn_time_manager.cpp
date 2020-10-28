@@ -156,8 +156,8 @@ namespace djnn {
               //, [this]{return has_time_elapsed();} // should prevent spurious wakeup, but there is a race condition
             ); // FIXME cv should use global mutex
           }
-          djnn::get_exclusive_access (DBG_GET);
         }
+        djnn::get_exclusive_access (DBG_GET);
         if(should_i_stop ()) break;
 
         update_ref_now(); // set the default 'now' -- FIXME useless in a time manager external source?
