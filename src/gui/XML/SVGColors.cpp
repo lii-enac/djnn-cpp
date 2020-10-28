@@ -212,8 +212,7 @@ SVG_Utils::djn__get_color_from_name (const std::string& name)
 named_color_t
 SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
 {
-  std::string key;
-  key.reserve (len);
+  std::string key (len, ' ');
   std::copy (str, str+len, key.begin());
   std::transform (key.begin(), key.end(), key.begin(),
       [](unsigned char c){ return std::tolower(c); });
