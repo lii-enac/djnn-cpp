@@ -18,6 +18,7 @@
 #include "core/tree/spike.h"
 #include "abstract_pobj.h"
 
+#include <algorithm>
 
 namespace djnn
 {
