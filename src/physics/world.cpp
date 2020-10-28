@@ -157,8 +157,10 @@ namespace djnn
 
   PhyObj::PhyObj (ParentProcess* parent, const std::string& name, double x, double y, double z, double mass) :
       AbstractPropPhyObj (parent, name, x, y, z, 0,0,0, 0,0,0, mass, 1.0, 0.3),
-      /*FatProcess (name), _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr), _roll (
-          nullptr), _pitch (nullptr), _yall (nullptr), _mass (nullptr), _density (nullptr), _friction (nullptr),
+      /*FatProcess (name),*/
+      _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr),
+      _roll (nullptr), _pitch (nullptr), _yall (nullptr),
+      /*_mass (nullptr), _density (nullptr), _friction (nullptr),
           _cx (
           nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr),*/
           _update_from_engine (false),
