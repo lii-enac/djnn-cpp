@@ -18,6 +18,8 @@
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/execution/graph.h"
 
+// #include "core/utils/error.h"
+
 namespace djnn
 {
   using namespace std;
@@ -32,6 +34,8 @@ namespace djnn
 
   NativeAsyncAction::~NativeAsyncAction ()
   {
+    // please_stop (); // FIXME
+    join ();
   }
 
   void
