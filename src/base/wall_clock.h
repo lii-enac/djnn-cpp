@@ -51,12 +51,13 @@ namespace djnn
                 localtime_r(&currentTime, &currentLocalTime);
                 char timeBuffer[80];
                 std::size_t charCount { std::strftime( timeBuffer, 80,
-                                         "%d-%m-%Y_%T",
+                                         "%Y-%m-%d_%T",
                                           &currentLocalTime)
                          };
                 assert(charCount);
-                string res (' ', charCount);
+                std::string res (' ', charCount);
                 std::copy(timeBuffer, timeBuffer+charCount, res.begin());
+                res.resize (charCount);
                 res += '.' + std::to_string(now2.count() % 1000);
                 _ref = res;
                 return _ref;
