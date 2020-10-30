@@ -241,9 +241,12 @@ StartRect(const char** attrs, FatProcess* current) {
 		djn_RectArgs.ry = 0.;
 	}
 
-	if (djn__GrphIsInClip)
+	if (djn__GrphIsInClip) {
+		// note : see note in startPath if (djn__GrphIsInClip)
+		if (holder != nullptr) delete holder;
 		return new RectangleClip(current, djn_GraphicalShapeArgs.id,
 				djn_RectArgs.x, djn_RectArgs.y, djn_RectArgs.w, djn_RectArgs.h);
+	}
 
 	if (holder)
 		djn__CheckStroke(holder);
@@ -719,7 +722,7 @@ StartPath(const char** attrs, FatProcess* current) {
 			// current->add_child (holder, djn_GraphicalShapeArgs.id);
 			current->add_child(djn_PathArgs.e, djn_GraphicalShapeArgs.id);
 			if (holder != nullptr) {
-				// DBG = holder->dump(2);
+				// DBG holder->dump(2);
 				delete holder;
 			}
 			return djn_PathArgs.e;
@@ -1102,16 +1105,22 @@ StartPathClip(const char** attrs, FatProcess* current) {
 		attrs++;
 	}
 
-	e = new Component (nullptr, "pathclip");
-	if (strlen (djn_GraphicalShapeArgs.id) != 0) {
+	//e = new Component (nullptr, "pathclip");
+	e = new Component (holder ? holder : current, "pathclip");
+	if (holder) {
+		current->add_child(holder, djn_GraphicalShapeArgs.id);
+		((SVGHolder*) holder)->set_gobj (e);
 		djn__id_to_process.insert(
-				pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
+		        pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, holder));
+	} else {
+	  djn__id_to_process.insert(
+	              pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
 #ifdef DEBUG
 		fprintf (stderr, "new entry added: %s\n", djn_GraphicalShapeArgs.href);
 #endif
 	}
-	e->set_parent(current);
-	return e;
+	//e->set_parent(current);
+	return holder ? holder : e;
 }
 
 static FatProcess*
