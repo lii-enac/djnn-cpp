@@ -35,6 +35,7 @@ namespace djnn
   NativeAsyncAction::~NativeAsyncAction ()
   {
     // please_stop (); // FIXME
+    // see https://github.com/google/sanitizers/issues/602
     join ();
   }
 
