@@ -18,6 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/control/action.h"
 #include "core/tree/spike.h"
+#include "core/tree/blank.h"
 
 #include "core/tree/int_property.h"
 #include "core/tree/double_property.h"
@@ -112,6 +113,8 @@ namespace djnn
     TextProperty* screenshot_path () { return _screenshot_path; }
     void perform_screenshot ();
 
+    Blank * refreshed () { return _refreshed; }
+
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
     void set_frame_to_component (FatProcess* c);
@@ -151,6 +154,8 @@ namespace djnn
     TextProperty * _screenshot_path;
     ScreenshotAction * _screenshot_action;
     Coupling * _c_screenshot;
+
+    Blank * _refreshed;
   };
 
    class Cursor : public FatProcess {

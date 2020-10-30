@@ -81,6 +81,8 @@ namespace djnn
     _c_screenshot = new Coupling (_screenshot, ACTIVATION, _screenshot_action, ACTIVATION);
     Graph::instance ().add_edge (_screenshot, _screenshot_action);
 
+    _refreshed = new Blank (this, "refreshed");
+
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 

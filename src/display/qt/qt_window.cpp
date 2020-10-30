@@ -112,6 +112,7 @@ namespace djnn
   {
     if (_please_update) {
       _qwidget->update ();
+      _window->refreshed ()->notify_activation ();
       _please_update = false;
     }
   }
