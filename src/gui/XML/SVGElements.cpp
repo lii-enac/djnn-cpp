@@ -712,10 +712,22 @@ StartPath(const char** attrs, FatProcess* current) {
 
 	if (djn__GrphIsInClip) {
 		if (djn_PathArgs.e) {
+			// note 10.2020:
+			// try to fix leak without changing the behavior
+			// we have tried the line below which create side effect :
+			// holder->add_child (djn_PathArgs.e, djn_GraphicalShapeArgs.id);
+			// current->add_child (holder, djn_GraphicalShapeArgs.id);
 			current->add_child(djn_PathArgs.e, djn_GraphicalShapeArgs.id);
+			if (holder != nullptr) {
+				// DBG = holder->dump(2);
+				delete holder;
+			}
 			return djn_PathArgs.e;
-		} else
+		} else {
+			//note: see above
+			if (holder != nullptr) delete holder;
 			return current;
+		}
 	}
 
 	if (holder)
@@ -1089,6 +1101,7 @@ StartPathClip(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
+
 	e = new Component (nullptr, "pathclip");
 	if (strlen (djn_GraphicalShapeArgs.id) != 0) {
 		djn__id_to_process.insert(
