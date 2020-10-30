@@ -48,7 +48,8 @@ namespace djnn
                 std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
                 std::chrono::milliseconds now2 = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
                 struct tm currentLocalTime;
-                localtime_r(&currentTime, &currentLocalTime);
+                //localtime_r(&currentTime, &currentLocalTime);
+                currentLocalTime = *localtime(&currentTime); // not thread-safe
                 char timeBuffer[80];
                 std::size_t charCount { std::strftime( timeBuffer, 80,
                                          "%Y-%m-%d_%T",
