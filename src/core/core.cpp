@@ -70,7 +70,7 @@ namespace djnn
   void
   clear_core ()
   {
-    delete &Graph::instance ();
+    delete &Graph::instance (); // destructor will set Graph::_instance to nullptr since _instance is private
     //XML::clear_xml_parser ();
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
   }
