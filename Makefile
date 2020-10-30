@@ -191,6 +191,7 @@ lib_suffix =.dll
 DYNLIB = -shared
 YACC = bison -d
 moc := moc
+thread = STD
 endif
 
 ifeq ($(os),crazyflie)
