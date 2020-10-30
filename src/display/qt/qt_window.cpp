@@ -37,6 +37,7 @@
 #include <QtGui/QBitmap>
 
 //#include <iostream>
+#include "core/utils/error.h"
 
 
 namespace djnn
@@ -112,7 +113,6 @@ namespace djnn
   {
     if (_please_update) {
       _qwidget->update ();
-      _window->refreshed ()->notify_activation ();
       _please_update = false;
     }
   }
@@ -122,7 +122,6 @@ namespace djnn
   {
     if (_qwidget == nullptr)
       return;
-    
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
     _qwidget->grab().save(QString(path.c_str()));
     djnn::get_exclusive_access (DBG_GET);
