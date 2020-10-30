@@ -20,6 +20,7 @@
 
 #include <chrono>
 #include <iomanip> // put_time
+#include <cassert>
 
 namespace djnn
 {
