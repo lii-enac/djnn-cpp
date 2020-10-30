@@ -41,7 +41,7 @@ namespace djnn {
     // Picking
     virtual void init ();
     AbstractGShape* pick (double x, double y);
-    void add_gobj (AbstractGShape* gobj, bool cache);
+    void add_gobj (AbstractGShape* gobj, bool cache = false);
     void remove_gobj (AbstractGShape* gobj);
     virtual int get_pixel(unsigned int x, unsigned int y) = 0;
     virtual void object_deactivated (AbstractGShape* gobj);
