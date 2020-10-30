@@ -34,6 +34,7 @@
 #include "deref.h"
 #include "native_async_action.h"
 #include "process_handler.h"
+#include "wall_clock.h"
 
 namespace djnn {
 
