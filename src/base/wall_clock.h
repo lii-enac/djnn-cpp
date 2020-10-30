@@ -30,13 +30,11 @@ namespace djnn
           : AbstractIntProperty (parent, name) { finalize_construction (parent, name); }
           protected:
             int& get_ref_value() override {
-                _ref
-                    = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()).time_since_epoch ().count ();
+                _ref = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()).time_since_epoch ().count ();
                 return _ref;
             }
             const int& get_ref_value() const override {
                 return const_cast<LazyIntProperty&>(*this).get_ref_value();
-                return _ref;
             }
             int _ref;
       };
@@ -45,7 +43,7 @@ namespace djnn
           : AbstractTextProperty (parent, name) { finalize_construction (parent, name); }
           protected:
             std::string& get_ref_value() override {
-                //std::cerr << "yep" << std::endl;
+                // code borrowed from https://stackoverflow.com/a/54918353
                 std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
                 std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
                 std::chrono::milliseconds now2 = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
