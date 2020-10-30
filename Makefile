@@ -549,18 +549,6 @@ $(build_dir)/compile_commands.json: $(all_cccmd_json)
 
 cccmd: $(build_dir)/compile_commands.json
 
-$(build_dir)/%.cccmd.json: %.cpp
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
-$(build_dir)/%.cccmd.json: $(build_dir)/%.cpp
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
-$(build_dir)/%.cccmd.json: %.c
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
-$(build_dir)/%.cccmd.json:$(build_dir)/%.c
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
-
 
 # ---------------------------------------
 # generic rules
@@ -568,26 +556,32 @@ $(build_dir)/%.cccmd.json:$(build_dir)/%.c
 $(build_dir)/%.o: %.cpp
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.o: %.c
 ifeq ($V,max)
 	$(CC) $(CFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
