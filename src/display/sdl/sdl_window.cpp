@@ -162,6 +162,7 @@ namespace djnn
               lastTick = tick;
               //rmt_BeginCPUSample(redraw, 0);
               redraw();
+              _window->refreshed ()->notify_activation ();
               //rmt_EndCPUSample();
             } //else DBG;
 #else

@@ -34,6 +34,7 @@ namespace djnn {
     virtual void handle_resized(int w, int h) override;
     virtual void update_hdpi() override;
     virtual void redraw () override;
+    virtual void perform_screenshot (const std::string& path) override;
 
   protected:
     // FatProcess

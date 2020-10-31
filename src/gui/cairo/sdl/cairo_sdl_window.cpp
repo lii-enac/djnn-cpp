@@ -272,38 +272,35 @@ namespace djnn
       t1();
     #endif
 
-    cairo_surface_t *drawing_surface, *picking_surface;
-    unsigned char *data, *picking_data;
-    CairoBackend* backend = dynamic_cast<CairoBackend*> (Backend::instance ());
-
-    auto dbackend = DisplayBackend::instance();
+    CairoBackend * backend = dynamic_cast<CairoBackend*> (Backend::instance ());
+    auto * dbackend = DisplayBackend::instance();
     dbackend->set_window (_window);
-    
     backend->set_picking_view (_picking_view);
     _picking_view->init ();
-    drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
-                                                           _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
 
-    picking_surface = cairo_image_surface_create_for_data ((unsigned char*) _picking_data, CAIRO_FORMAT_ARGB32,
+    cairo_surface_t * drawing_surface = cairo_image_surface_create_for_data ((unsigned char*) _sdl_surface->pixels, CAIRO_FORMAT_ARGB32,
                                                            _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
-
+    cairo_surface_t * picking_surface = cairo_image_surface_create_for_data ((unsigned char*) _picking_data, CAIRO_FORMAT_ARGB32,
+                                                           _sdl_surface->w, _sdl_surface->h, _sdl_surface->pitch);
     _my_cairo_surface->update (drawing_surface, picking_surface);
-
     cairo_surface_flush (drawing_surface);
     cairo_surface_flush (picking_surface);
-    data = cairo_image_surface_get_data (drawing_surface);
-    picking_data = cairo_image_surface_get_data (picking_surface);
+  
+    unsigned char * data = cairo_image_surface_get_data (drawing_surface);
+    unsigned char * picking_data = cairo_image_surface_get_data (picking_surface);
     _picking_view->set_data (picking_data, _sdl_surface->w, _sdl_surface->h,
                              cairo_image_surface_get_stride (picking_surface));
 
     SDL_UpdateTexture (_sdl_texture, NULL, data, _sdl_surface->pitch);
     SDL_RenderCopy (_sdl_renderer, _sdl_texture, nullptr, nullptr);
     SDL_RenderPresent (_sdl_renderer);
+
 #if PICKING_DBG
     SDL_UpdateTexture (_pick_sdl_texture, NULL, picking_data, _pick_sdl_surface->pitch);
     SDL_RenderCopy (_pick_sdl_renderer, _pick_sdl_texture, nullptr, nullptr);
     SDL_RenderPresent (_pick_sdl_renderer);
 #endif
+
     cairo_surface_destroy (drawing_surface);
     cairo_surface_destroy (picking_surface);
 
@@ -323,6 +320,25 @@ namespace djnn
   CairoSDLWindow::update ()
   {
     SDLMainloop::instance ().wakeup (this);
+  }
+
+  void
+  CairoSDLWindow::perform_screenshot (const std::string& path)
+  {
+    UNIMPL;
+    // if (!_sdl_renderer) return;
+    
+    // SDL_Surface *sshot = SDL_CreateRGBSurface (0, _sdl_surface->w, _sdl_surface->h,  32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    // assert(sshot);
+    // SDL_LockSurface (_sdl_surface);
+    // void * pixels;
+    // int pitch;
+    // SDL_LockTexture (_sdl_texture, NULL, &pixels, &pitch);
+    // SDL_RenderReadPixels (_sdl_renderer, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
+    // SDL_SaveBMP (sshot, (path+".bmp").c_str());
+    // SDL_FreeSurface (sshot);
+    // SDL_UnlockTexture (_sdl_texture);
+    // SDL_UnlockSurface (_sdl_surface);
   }
 
   // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
