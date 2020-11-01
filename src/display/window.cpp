@@ -76,7 +76,7 @@ namespace djnn
     Graph::instance ().add_edge (_damaged, update);
 
     _screenshot = new Spike (this, "screenshot");
-    _screenshot_path = new TextProperty (this, "screenshot_path", "screenshot.png");
+    _screenshot_path = new TextProperty (this, "screenshot_path", "screenshot");
     _screenshot_action = new ScreenshotAction (this, "screenshot_action");
     _c_screenshot = new Coupling (_screenshot, ACTIVATION, _screenshot_action, ACTIVATION);
     Graph::instance ().add_edge (_screenshot, _screenshot_action);

@@ -33,7 +33,7 @@ namespace djnn
   class Picking;
   class WinImpl {
   public:
-    WinImpl () : _picking_view(nullptr) {}
+    WinImpl () : _picking_view (nullptr) {}
     virtual ~WinImpl () {}
     virtual void impl_activate () = 0;
     virtual void impl_deactivate () = 0;
