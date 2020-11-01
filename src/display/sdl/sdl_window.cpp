@@ -220,4 +220,10 @@ namespace djnn
       }
   }
 
+  void
+  SDLWindow::set_opacity (double opacity)
+  {
+    SDL_SetWindowOpacity (_sdl_window, opacity);
+  }
+
 }

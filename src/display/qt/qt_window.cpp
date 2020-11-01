@@ -128,6 +128,16 @@ namespace djnn
   }
 
   void
+  QtWindow::set_opacity (double opacity)
+  {
+    _qwidget->setWindowOpacity (opacity);
+  }
+
+
+
+  // MyQWidget
+
+  void
   MyQWidget::set_building(bool v)
   {
     _building = v;

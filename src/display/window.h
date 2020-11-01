@@ -42,6 +42,7 @@ namespace djnn
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const std::string& path) {}
+    virtual void set_opacity (double opacity) {}
      
   private:
     Picking *_picking_view;
@@ -64,6 +65,12 @@ namespace djnn
       public:
         ScreenshotAction (Window * parent, const std::string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->perform_screenshot (); }
+    };
+    class OpacityAction : public Action
+    {
+      public:
+        OpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->set_opacity (); }
     };
   public:
     Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
@@ -115,6 +122,9 @@ namespace djnn
 
     Blank * refreshed () { return _refreshed; }
 
+    DoubleProperty* opacity () { return _opacity; }
+    void set_opacity ();
+
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
     void set_frame_to_component (FatProcess* c);
@@ -156,6 +166,10 @@ namespace djnn
     Coupling * _c_screenshot;
 
     Blank * _refreshed;
+
+    DoubleProperty* _opacity;
+    OpacityAction * _opacity_action;
+    Coupling * _c_opacity;
   };
 
    class Cursor : public FatProcess {

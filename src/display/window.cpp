@@ -83,6 +83,11 @@ namespace djnn
 
     _refreshed = new Blank (this, "refreshed");
 
+    _opacity = new DoubleProperty (this, "opacity", 1.0);
+    _opacity_action = new OpacityAction (this, "opacity_action");
+    _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
+    Graph::instance ().add_edge (_opacity, _opacity_action);
+
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
   }
 
@@ -101,6 +106,7 @@ namespace djnn
   {
     _c_damaged_update_drawing_damaged->enable();
     _c_screenshot->enable();
+    _c_opacity->enable ();
     _win_impl->impl_activate ();
   }
   
@@ -109,6 +115,7 @@ namespace djnn
   {
     _c_damaged_update_drawing_damaged->disable();
     _c_screenshot->disable();
+    _c_opacity->disable ();
     _win_impl->impl_deactivate ();
   }
 
@@ -118,6 +125,11 @@ namespace djnn
     Graph::instance ().remove_edge (_damaged, UpdateDrawing::instance ()->get_damaged ());
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
+
+    Graph::instance ().remove_edge (_opacity, _opacity_action);
+    delete _c_opacity;
+    delete _opacity_action;
+    delete _opacity;
 
     delete _refreshed;
 
@@ -174,6 +186,12 @@ namespace djnn
   Window::perform_screenshot ()
   {
     _win_impl->perform_screenshot(_screenshot_path->get_string_value());
+  }
+
+  void
+  Window::set_opacity ()
+  {
+    _win_impl->set_opacity (_opacity->get_value());
   }
 
   void
