@@ -89,6 +89,17 @@ namespace djnn
     Graph::instance ().add_edge (_opacity, _opacity_action);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
+
+    _geometry_action = new GeometryAction (this, "geometry_action");
+    _c_geometry_x = new Coupling (_pos_x, ACTIVATION, _geometry_action, ACTIVATION);
+    Graph::instance ().add_edge (_pos_x, _geometry_action);
+    _c_geometry_y = new Coupling (_pos_y, ACTIVATION, _geometry_action, ACTIVATION);
+    Graph::instance ().add_edge (_pos_y, _geometry_action);
+    _c_geometry_width = new Coupling (_width, ACTIVATION, _geometry_action, ACTIVATION);
+    Graph::instance ().add_edge (_width, _geometry_action);
+    _c_geometry_height = new Coupling (_height, ACTIVATION, _geometry_action, ACTIVATION);
+    Graph::instance ().add_edge (_height, _geometry_action);
+    
   }
 
   Window::Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w,
@@ -126,6 +137,17 @@ namespace djnn
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
 
+    Graph::instance ().remove_edge (_pos_x, _geometry_action);
+    delete _c_geometry_x;
+    Graph::instance ().remove_edge (_pos_y, _geometry_action);
+    delete _c_geometry_y;
+    Graph::instance ().remove_edge (_width, _geometry_action);
+    delete _c_geometry_width;
+    Graph::instance ().remove_edge (_height, _geometry_action);
+    delete _c_geometry_height;
+
+    delete _geometry_action;
+    
     Graph::instance ().remove_edge (_opacity, _opacity_action);
     delete _c_opacity;
     delete _opacity_action;
@@ -192,6 +214,12 @@ namespace djnn
   Window::set_opacity ()
   {
     _win_impl->set_opacity (_opacity->get_value());
+  }
+
+  void
+  Window::update_geometry ()
+  {
+    _win_impl->update_geometry ();
   }
 
   void

@@ -42,6 +42,11 @@
 
 namespace djnn
 {
+
+  enum {
+    user_event_geometry = QEvent::User
+  };
+
   QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
   {
@@ -133,6 +138,25 @@ namespace djnn
     _qwidget->setWindowOpacity (opacity);
   }
 
+  void
+  QtWindow::update_geometry ()
+  {
+    auto * evt = new QEvent((QEvent::Type)user_event_geometry);
+    QtMainloop::instance ().get_QApplication ()->postEvent (_qwidget, evt);
+  }
+
+  void
+  QtWindow::update_geometry_for_good ()
+  {
+    auto x = (int) _window->pos_x()->get_value ();
+    auto y = (int) _window->pos_y()->get_value ();
+    auto w = (int) _window->width()->get_value ();
+    auto h = (int) _window->height()->get_value ();
+
+    // TODO macOS: should be done in GUI thread...
+    _qwidget->setGeometry (x,y,w,h);
+  }
+
 
 
   // MyQWidget
@@ -166,6 +190,9 @@ namespace djnn
         exec_ = QWidget::event (event); // should call our callback methods
         if(!_building)
         djnn::release_exclusive_access (DBG_REL);
+        break;
+      case user_event_geometry:
+        _qtwindow->update_geometry_for_good ();
         break;
 
       default:

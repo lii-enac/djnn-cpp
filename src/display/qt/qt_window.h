@@ -36,6 +36,8 @@ namespace djnn {
 
     virtual void perform_screenshot (const std::string& path) override;
     virtual void set_opacity (double opacity) override;
+    virtual void update_geometry () override;
+    virtual void update_geometry_for_good ();
 
   protected:
     /* FatProcess */

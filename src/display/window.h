@@ -43,6 +43,7 @@ namespace djnn
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const std::string& path) {}
     virtual void set_opacity (double opacity) {}
+    virtual void update_geometry () {}
      
   private:
     Picking *_picking_view;
@@ -71,6 +72,12 @@ namespace djnn
       public:
         OpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_opacity (); }
+    };
+    class GeometryAction : public Action
+    {
+      public:
+        GeometryAction (Window * parent, const std::string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->update_geometry (); }
     };
   public:
     Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w, double h);
@@ -124,6 +131,7 @@ namespace djnn
 
     DoubleProperty* opacity () { return _opacity; }
     void set_opacity ();
+    void update_geometry ();
 
   private:
     void init_ui (const std::string& title, double x, double y, double w, double h);
@@ -170,6 +178,12 @@ namespace djnn
     DoubleProperty* _opacity;
     OpacityAction * _opacity_action;
     Coupling * _c_opacity;
+
+    GeometryAction * _geometry_action;
+    Coupling * _c_geometry_x;
+    Coupling * _c_geometry_y;
+    Coupling * _c_geometry_width;
+    Coupling * _c_geometry_height;
   };
 
    class Cursor : public FatProcess {

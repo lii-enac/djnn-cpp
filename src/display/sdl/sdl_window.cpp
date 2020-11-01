@@ -22,6 +22,7 @@
 #include "exec_env/main_loop.h"
 
 #include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/error.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -147,33 +148,39 @@ namespace djnn
       
       case SDL_USEREVENT:
         {
-          rmt_BeginCPUSample(SDL_USEREVENT, 0);
-          if (e.user.code == user_event_awake) {
-            // awake
-#if 1
-            //std::cerr << "SDL awake" << __FL__;
-            static Uint32 lastTick=0;
-            Uint32 tick = SDL_GetTicks();
-            //float _refresh_rate=120.f;
-            //DBG;
-            //std::cerr << (tick - lastTick) << " " << 1000/_refresh_rate <<  __FL__;
-            if( (tick - lastTick) > 1000/_refresh_rate) {
+          switch (e.user.code) {
+            case user_event_awake: {
+              rmt_BeginCPUSample(SDL_USEREVENT, 0);
+              // awake
+              #if 1
+              //std::cerr << "SDL awake" << __FL__;
+              static Uint32 lastTick=0;
+              Uint32 tick = SDL_GetTicks();
+              //float _refresh_rate=120.f;
               //DBG;
-              lastTick = tick;
-              //rmt_BeginCPUSample(redraw, 0);
-              redraw();
-              _window->refreshed ()->notify_activation ();
-              //rmt_EndCPUSample();
-            } //else DBG;
-#else
-            redraw ();
-#endif
-          }
-          rmt_EndCPUSample();
-          //redraw(_window);
+              //std::cerr << (tick - lastTick) << " " << 1000/_refresh_rate <<  __FL__;
+              if( (tick - lastTick) > 1000/_refresh_rate) {
+                //DBG;
+                lastTick = tick;
+                //rmt_BeginCPUSample(redraw, 0);
+                redraw();
+                _window->refreshed ()->notify_activation ();
+                //rmt_EndCPUSample();
+              } //else DBG;
+              #else
+              redraw ();
+              #endif
+              rmt_EndCPUSample();
+              break;
+            }
+            case user_event_geometry: {
+              update_geometry_for_good ();
+              break;
+            }
           break;
         }
         break;
+      }
       case SDL_WINDOWEVENT:
         {
           switch (e.window.event)
@@ -224,6 +231,29 @@ namespace djnn
   SDLWindow::set_opacity (double opacity)
   {
     SDL_SetWindowOpacity (_sdl_window, opacity);
+  }
+
+  void
+  SDLWindow::update_geometry ()
+  {
+    // macOS: should be done in GUI thread...
+    SDL_Event e;
+    e.type = SDL_USEREVENT;
+    e.user.code = SDLWindow::user_event_geometry;
+    e.window.windowID = SDL_GetWindowID(_sdl_window);
+    SDL_PushEvent(&e);
+  }
+
+  void
+  SDLWindow::update_geometry_for_good ()
+  {
+    auto x = (int) _window->pos_x()->get_value ();
+    auto y = (int) _window->pos_y()->get_value ();
+    auto w = (int) _window->width()->get_value ();
+    auto h = (int) _window->height()->get_value ();
+
+    SDL_SetWindowPosition (_sdl_window, x, y);
+    SDL_SetWindowSize (_sdl_window, w, h);
   }
 
 }

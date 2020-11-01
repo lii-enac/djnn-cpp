@@ -38,7 +38,8 @@ namespace djnn {
     SDL_Window * sdl_window() { return _sdl_window; }
     void set_cursor (const std::string& path, int hotX, int hotY) override;
     enum {
-      user_event_awake
+      user_event_awake,
+      user_event_geometry
     };
 
     virtual void handle_event(SDL_Event&);
@@ -47,6 +48,8 @@ namespace djnn {
     virtual void redraw ();
 
     virtual void set_opacity (double opacity) override;
+    virtual void update_geometry () override;
+    virtual void update_geometry_for_good ();
     
   protected:
     djnn::Window* _window;
