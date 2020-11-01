@@ -123,7 +123,7 @@ namespace djnn
     if (_qwidget == nullptr)
       return;
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
-    _qwidget->grab().save(QString(path.c_str()));
+    _qwidget->grab().save(QString((path+".png").c_str()));
     djnn::get_exclusive_access (DBG_GET);
   }
 
