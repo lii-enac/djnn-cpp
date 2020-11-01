@@ -53,7 +53,7 @@ namespace djnn
                 currentLocalTime = *localtime(&currentTime); // not thread-safe
                 char timeBuffer[80];
                 std::size_t charCount { std::strftime( timeBuffer, 80,
-                                         "%Y-%m-%d_%T",
+                                         "%Y-%m-%d_%Hh%Mm%Ss",
                                           &currentLocalTime)
                          };
                 assert(charCount);
