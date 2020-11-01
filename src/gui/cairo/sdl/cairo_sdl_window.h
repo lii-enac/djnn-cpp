@@ -35,7 +35,7 @@ namespace djnn {
     virtual void update_hdpi() override;
     virtual void redraw () override;
     virtual void perform_screenshot (const std::string& path) override;
-
+    
   protected:
     // FatProcess
     void impl_activate () override;
@@ -48,6 +48,9 @@ namespace djnn {
     unsigned char * _picking_data;
     MyCairoSurface *_my_cairo_surface;
     CairoPickingView *_picking_view;
+
+    bool _perform_screenshot;
+    std::string _screenshot_path;
     
 #if PICKING_DBG
     SDL_Window *_pick_sdl_window;

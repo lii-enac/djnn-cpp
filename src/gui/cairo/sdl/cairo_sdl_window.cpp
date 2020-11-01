@@ -17,6 +17,7 @@
 #include "display/sdl/sdl_mainloop.h"
 #include "gui/cairo/my_cairo_surface.h"
 #include "gui/backend.h"
+#include "gui/utils/netpbm.h"
 
 #include "display/display.h"
 #include "display/abstract_display.h"
@@ -50,9 +51,8 @@ namespace djnn
 
   CairoSDLWindow::CairoSDLWindow (djnn::Window* win, const std::string& title, double x, double y, double w, double h) :
   SDLWindow(win, title, x,y,w,h),
-      _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _picking_data (nullptr), _my_cairo_surface (nullptr)
+      _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _picking_data (nullptr), _my_cairo_surface (nullptr), _perform_screenshot (false)
   {
-
 #if PICKING_DBG
     _pick_sdl_renderer = nullptr;
     _pick_sdl_surface = nullptr;
@@ -263,7 +263,6 @@ namespace djnn
     SDLWindow::update_hdpi();
   }
 
-
   void
   CairoSDLWindow::redraw ()
   {
@@ -295,6 +294,14 @@ namespace djnn
     SDL_RenderCopy (_sdl_renderer, _sdl_texture, nullptr, nullptr);
     SDL_RenderPresent (_sdl_renderer);
 
+    if (_perform_screenshot) {
+      write_ppm_argb (data, _sdl_surface->w, _sdl_surface->h, (_screenshot_path+".ppm").c_str());
+      _perform_screenshot = false;
+    }
+
+    //#define CHKSDL if(sdlerr<0) std::cerr << SDL_GetError() << __FL__;
+    //int sdlerr=0;
+
 #if PICKING_DBG
     SDL_UpdateTexture (_pick_sdl_texture, NULL, picking_data, _pick_sdl_surface->pitch);
     SDL_RenderCopy (_pick_sdl_renderer, _pick_sdl_texture, nullptr, nullptr);
@@ -323,22 +330,10 @@ namespace djnn
   }
 
   void
-  CairoSDLWindow::perform_screenshot (const std::string& path)
-  {
-    UNIMPL;
-    // if (!_sdl_renderer) return;
-    
-    // SDL_Surface *sshot = SDL_CreateRGBSurface (0, _sdl_surface->w, _sdl_surface->h,  32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-    // assert(sshot);
-    // SDL_LockSurface (_sdl_surface);
-    // void * pixels;
-    // int pitch;
-    // SDL_LockTexture (_sdl_texture, NULL, &pixels, &pitch);
-    // SDL_RenderReadPixels (_sdl_renderer, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
-    // SDL_SaveBMP (sshot, (path+".bmp").c_str());
-    // SDL_FreeSurface (sshot);
-    // SDL_UnlockTexture (_sdl_texture);
-    // SDL_UnlockSurface (_sdl_surface);
+  CairoSDLWindow::perform_screenshot (const std::string& path) { 
+      _screenshot_path = path;
+      _perform_screenshot = true;
+      update ();
   }
 
   // cost-free hack to avoid including xlib.h in X11Window.h header when calling handle_event
