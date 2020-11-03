@@ -32,7 +32,7 @@ config.mk:
 	cp config.default.mk config.mk
 
 MAJOR = 1
-MINOR = 13
+MINOR = 14
 MINOR2 = 0
 
 include config.default.mk
@@ -730,6 +730,33 @@ deb:
 	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 # check integrity of the build package. We still have error
 #	cd "build/deb" ; lintian djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).deb
+
+#pkg
+
+#note: 
+#      	makepkg
+# install with:
+#		pacman -U djnn-cpp.pkg 
+# remove with:
+#		pacman -Rs djnn-cpp
+pkg_destdir_version = build/pkg/djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
+ifeq ($(PREFIX),)
+pkg_prefix = /usr
+else
+pkg_prefix = $(PREFIX)
+endif
+ifeq ($(DESTDIR),) 
+pkg_destdir= $(shell pwd)/$(pkg_destdir_version)
+else
+pkg_destdir = $(DESTDIR)
+endif
+pkg:
+#   for test only	
+#	make DESTDIR=$(pkg_destdir) PREFIX=$(pkg_prefix) install
+	test -d build || mkdir -p build
+	sed -e 's,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),;	 s,@MINOR2@,$(MINOR2),' distrib/PKGBUILD.proto > build/PKGBUILD
+	cd build ; makepkg --skipinteg 
+.PHONY: pkg
 
 
 # ---------------------------------------

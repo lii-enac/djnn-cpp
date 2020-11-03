@@ -1,0 +1,56 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# Maintainer: Mathieu Poirier <mathieu.poirier@enac.fr>
+pkgname=djnn-cpp
+pkgver=@MAJOR@.@MINOR@.@MINOR2@
+pkgrel=1
+epoch=
+pkgdesc="djnn language package"
+arch=('x86_64')
+url="https://github.com/lii-enac/djnn-cpp"
+license=('SLEEPY CAT')
+groups=()
+depends=()
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog= 
+source=("https://github.com/lii-enac/$pkgname/archive/$pkgver.tar.gz")
+#source=("$pkgname-$pkgver.tar.gz")
+noextract=()
+#if needed use makepkg -g
+md5sums=("")
+validpgpkeys=()
+
+prepare() {
+	cd "$pkgname-$pkgver"
+#	cd "$pkgname"
+}
+
+build() {
+	cd "$pkgname-$pkgver"/src
+#	cd "$pkgname"/src
+	make
+}
+
+check() {
+	cd "$pkgname-$pkgver"
+#	cd "$pkgname"
+#	make -k check
+}
+
+package() {
+	cd "$pkgname-$pkgver"/src
+	echo $pkgdir
+	#	cd "$pkgname"
+	make DESTDIR="$pkgdir/" PREFIX="/usr" install
+}
