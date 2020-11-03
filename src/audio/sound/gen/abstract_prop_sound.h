@@ -24,11 +24,11 @@ namespace djnn
   class AbstractPropSound : public AbstractSObj
   {
   public:
-    AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul);
+    AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop);
     virtual ~AbstractPropSound ();
     
     
-    void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul);
+    void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop);
     std::vector<std::string> get_properties_name () override {
       std::vector<std::string> res;
       res.push_back ("gain");
@@ -38,6 +38,7 @@ namespace djnn
 			res.push_back ("y");
 			res.push_back ("z");
 			res.push_back ("pitch_mul");
+			res.push_back ("loop");
       return res;
     }
     virtual FatChildProcess* find_child_impl (const std::string&) override;
@@ -48,11 +49,12 @@ namespace djnn
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl ("y"); }
 		AbstractDoubleProperty* z () { return (AbstractDoubleProperty*) find_child_impl ("z"); }
 		AbstractDoubleProperty* pitch_mul () { return (AbstractDoubleProperty*) find_child_impl ("pitch_mul"); }
+		AbstractIntProperty* loop () { return (AbstractIntProperty*) find_child_impl ("loop"); }
 
   protected:
-    struct raw_props_t { double gain; double lowpass_gain; double lowpass_freq; double x; double y; double z; double pitch_mul; };
+    struct raw_props_t { double gain; double lowpass_gain; double lowpass_freq; double x; double y; double z; double pitch_mul; int loop; };
     raw_props_t raw_props;
-    CouplingWithData *_cgain, *_clowpass_gain, *_clowpass_freq, *_cx, *_cy, *_cz, *_cpitch_mul;
+    CouplingWithData *_cgain, *_clowpass_gain, *_clowpass_freq, *_cx, *_cy, *_cz, *_cpitch_mul, *_cloop;
     void impl_activate () override;
     void impl_deactivate () override;
   };

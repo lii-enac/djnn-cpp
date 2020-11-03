@@ -620,6 +620,7 @@ dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('z', 'double', None, "transform"))
 dc.props.append(Prop('pitch_mul', 'double', None, "transform"))
+dc.props.append(Prop('loop', 'int', None, "style"))
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropWorld", "AbstractPObj", "../src/physics", origin=None, finalize_construction=False)

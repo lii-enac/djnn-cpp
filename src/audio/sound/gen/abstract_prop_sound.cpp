@@ -36,10 +36,10 @@
 
 namespace djnn
 {
-  AbstractPropSound::AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul) :
+  AbstractPropSound::AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop) :
     AbstractSObj (parent, name),
-    raw_props{.gain=gain, .lowpass_gain=lowpass_gain, .lowpass_freq=lowpass_freq, .x=x, .y=y, .z=z, .pitch_mul=pitch_mul},
-    _cgain (nullptr), _clowpass_gain (nullptr), _clowpass_freq (nullptr), _cx (nullptr), _cy (nullptr), _cz (nullptr), _cpitch_mul (nullptr)
+    raw_props{.gain=gain, .lowpass_gain=lowpass_gain, .lowpass_freq=lowpass_freq, .x=x, .y=y, .z=z, .pitch_mul=pitch_mul, .loop=loop},
+    _cgain (nullptr), _clowpass_gain (nullptr), _clowpass_freq (nullptr), _cx (nullptr), _cy (nullptr), _cz (nullptr), _cpitch_mul (nullptr), _cloop (nullptr)
   {
     
     
@@ -54,6 +54,7 @@ namespace djnn
 		remove_edge (_cy);
 		remove_edge (_cz);
 		remove_edge (_cpitch_mul);
+		remove_edge (_cloop);
     delete _cgain;
 		delete _clowpass_gain;
 		delete _clowpass_freq;
@@ -61,6 +62,7 @@ namespace djnn
 		delete _cy;
 		delete _cz;
 		delete _cpitch_mul;
+		delete _cloop;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (children_size () > 0) {
@@ -91,6 +93,10 @@ namespace djnn
 				delete it->second;
 
 			it = find_child_iterator ("pitch_mul");
+			if (it != children_end ())
+				delete it->second;
+
+			it = find_child_iterator ("loop");
 			if (it != children_end ())
 				delete it->second;
     }
@@ -152,6 +158,12 @@ namespace djnn
       notify_mask = notify_damaged_transform;
       prop_Double=true;
     } else
+    if(name=="loop") {
+      coupling=&_cloop;
+      rawp_Int=&raw_props.loop;
+      notify_mask = notify_damaged_style;
+      prop_Int=true;
+    } else
     return nullptr;
 
     if(prop_Double) {
@@ -171,7 +183,7 @@ namespace djnn
   }
 
   void
-  AbstractPropSound::get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul)
+  AbstractPropSound::get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop)
   {
     gain = raw_props.gain;
 		lowpass_gain = raw_props.lowpass_gain;
@@ -180,6 +192,7 @@ namespace djnn
 		y = raw_props.y;
 		z = raw_props.z;
 		pitch_mul = raw_props.pitch_mul;
+		loop = raw_props.loop;
     
   }
 
@@ -195,6 +208,7 @@ namespace djnn
 		enable(_cy, _frame->damaged ());
 		enable(_cz, _frame->damaged ());
 		enable(_cpitch_mul, _frame->damaged ());
+		enable(_cloop, _frame->damaged ());
   }
 
   void
@@ -207,6 +221,7 @@ namespace djnn
 		disable(_cy);
 		disable(_cz);
 		disable(_cpitch_mul);
+		disable(_cloop);
     AbstractSObj::impl_deactivate ();
   }
 

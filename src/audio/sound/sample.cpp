@@ -37,7 +37,8 @@ namespace djnn {
 	_end (this, "end"),
 	_end_timer(*this),
 	_control_timer(*this),
-	lowpassid(0)
+	lowpassid(0),
+	looping (false)
 	{
 		unsigned int sampleRate, bps, channels, numFrames, datasize;
 		unsigned char * data;
@@ -116,8 +117,15 @@ namespace djnn {
 		do_control ();
     	alSourcePlay (sourceid); CHKAL;
 		
-    	djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
-		DjnnTimeManager::instance ().schedule (&_end_timer, d1);
+		if (raw_props.loop) {
+			alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
+			looping = true;
+		} else {
+			djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
+			DjnnTimeManager::instance ().schedule (&_end_timer, d1);
+			alSourcei (sourceid, AL_LOOPING, AL_FALSE); CHKAL;
+			looping = false;
+		}
 	}
 
 	void
@@ -149,10 +157,27 @@ namespace djnn {
   	Sample::do_control ()
 	{
 		double gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul;
-		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul);
+		int loop;
+		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul, loop);
 		alSourcef (sourceid, AL_GAIN, gain); CHKAL;
 		alSource3f (sourceid, AL_POSITION, x,y,z); CHKAL;
 		alSourcef (sourceid, AL_PITCH, pitch_mul); CHKAL;
+
+		if (raw_props.loop) {
+			if (!looping) {
+				DjnnTimeManager::instance ().cancel (&_end_timer);
+				alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
+				looping = true;
+				
+			}
+		} else {
+			if (looping) {
+				djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
+				DjnnTimeManager::instance ().schedule (&_end_timer, d1);
+				alSourcei (sourceid, AL_LOOPING, AL_FALSE); CHKAL;
+				looping = false;
+			}
+		}
 
 #ifdef DJNN_USE_OPENAL_EFX
 		if( (lowpass_gain<0.999 || lowpass_freq<0.999) || lowpassid) {

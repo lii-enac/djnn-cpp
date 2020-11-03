@@ -58,6 +58,7 @@ namespace djnn {
 		unsigned int lowpassid;
 
 		unsigned int duration_ms;
+		bool looping;
 	};
 
 }

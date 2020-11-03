@@ -6,7 +6,8 @@ namespace djnn {
 		1.0, // gain
 		1.0, 1.0, // lowpass gain and freq
 		0., 0., 0., // position
-		1.0 // pitch multiplier
+		1.0, // pitch multiplier
+		0 // loop
 		)
 	{
 	    
