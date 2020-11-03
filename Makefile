@@ -524,10 +524,6 @@ $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 djnn: $(libs)
 static: dirs $(libs_static)
 
-shit:
-	@echo $(djnn_libs)
-	@echo $(libs)
-
 # ---------------------------------------
 
 size: $(libs_static)
