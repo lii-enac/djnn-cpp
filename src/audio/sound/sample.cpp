@@ -44,7 +44,8 @@ namespace djnn {
 		unsigned char * data;
 
 		drwav wav;
-    	if (drwav_init_file (&wav, path.c_str (), NULL)) {
+		drwav_result res;
+    	if ( (res = drwav_init_file (&wav, path.c_str (), NULL)) ) {
 			sampleRate = wav.sampleRate;
 			bps = wav.bitsPerSample;
 			channels = wav.channels;
@@ -66,7 +67,7 @@ namespace djnn {
 			// 	std::cerr << numFrames << std::endl;
 			// 	drmp3_read_pcm_frames_s16 (&dr, numFrames, (drmp3_int16*)data);
 			// } else {
-				error (this, std::string ("Error opening audio sample file ") + path);
+				error (this, std::string ("cannot open audio sample file ") + path + "(dr_wav error " + std::to_string(res) + ")");
 				return;
 			// }
 		}
