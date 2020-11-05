@@ -636,7 +636,7 @@ namespace djnn
     }
     p2->remove_child (sy2);
     p2->add_symbol (sy2, x1);
-    //delete (x2); // hum, are we really sure about this?
+    delete (x2); // hum, are we really sure about this? // maybe used in for merging gradient
   }
 
   void
