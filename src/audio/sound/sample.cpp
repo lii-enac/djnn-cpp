@@ -114,18 +114,9 @@ namespace djnn {
 	Sample::impl_activate ()
 	{
 		alSourcei (sourceid, AL_BUFFER, bufferid); CHKAL;
+		looping = !raw_props.loop; // switch state in do_control
 		do_control ();
     	alSourcePlay (sourceid); CHKAL;
-		
-		if (raw_props.loop) {
-			alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
-			looping = true;
-		} else {
-			djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
-			DjnnTimeManager::instance ().schedule (&_end_timer, d1);
-			alSourcei (sourceid, AL_LOOPING, AL_FALSE); CHKAL;
-			looping = false;
-		}
 	}
 
 	void
@@ -163,12 +154,12 @@ namespace djnn {
 		alSource3f (sourceid, AL_POSITION, x,y,z); CHKAL;
 		alSourcef (sourceid, AL_PITCH, pitch_mul); CHKAL;
 
+		// check change of loop, react accordingly if the value is different, do nothing otherwise
 		if (raw_props.loop) {
 			if (!looping) {
 				DjnnTimeManager::instance ().cancel (&_end_timer);
 				alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
 				looping = true;
-				
 			}
 		} else {
 			if (looping) {
