@@ -20,7 +20,6 @@
 
 
 namespace djnn {
-  //using namespace std;
 
   class Synchronizer : public FatProcess
   {

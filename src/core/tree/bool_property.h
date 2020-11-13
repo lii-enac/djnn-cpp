@@ -19,7 +19,6 @@
 #include "spike.h"
 
 namespace djnn {
-  //using namespace std;
 
   class AbstractBoolProperty : public AbstractProperty {
   public:

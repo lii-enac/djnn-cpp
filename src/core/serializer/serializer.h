@@ -20,8 +20,6 @@
 
 namespace djnn {
 
-  //using namespace std;  
-
   class AbstractSerializer
   {
   public:

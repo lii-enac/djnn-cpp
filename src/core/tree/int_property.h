@@ -18,7 +18,6 @@
 #include "abstract_property.h"
 
 namespace djnn {
-  //using namespace std;
 
   class AbstractIntProperty : public AbstractProperty {
   public:

@@ -18,8 +18,6 @@
 #include "core/utils/utils-dev.h"
 #include "xml.h"
 
-//using namespace djnn;
-
 #include <map>
 
 

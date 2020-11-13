@@ -21,7 +21,6 @@
 
 namespace djnn
 {
-  //using namespace std;
 
   class ODEBackend : public AbstractPhysicsBackend
   {

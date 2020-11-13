@@ -28,8 +28,6 @@
 
 namespace djnn {
 
-  //using namespace std;
-
   class QtMainloopListener {
   public:
     virtual ~QtMainloopListener() {}

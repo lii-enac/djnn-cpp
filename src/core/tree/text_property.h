@@ -20,7 +20,6 @@
 #include <string>
 
 namespace djnn {
-  //using namespace std;
 
   class AbstractTextProperty : public AbstractProperty {
   public:

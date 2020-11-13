@@ -25,7 +25,6 @@
 
 namespace djnn
 {
-  //using namespace std;
 
   class AbstractTransformation : public AbstractGObj
   {

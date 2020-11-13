@@ -19,7 +19,6 @@
 #include <string>
 
 namespace djnn {
-  //using namespace std;
 
   class RefProperty: public AbstractProperty {
   public:

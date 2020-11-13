@@ -29,7 +29,6 @@ class QPainter;
 
 namespace djnn
 {
-  //using namespace std;
 
   class QtContextManager;
   class QtBackend : public AbstractBackend

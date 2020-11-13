@@ -18,7 +18,6 @@
 
 namespace djnn
 {
-  //using namespace std;
   class ContextManager;
 
   class ComponentObserver
