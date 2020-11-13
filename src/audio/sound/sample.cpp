@@ -35,7 +35,7 @@ namespace djnn {
 	Sample::Sample (ParentProcess* parent, const std::string& name, const std::string& path)
 	: Sound(parent, name),
 	_end (this, "end"),
-	_end_timer(*this),
+	// _end_timer(*this),
 	_control_timer(*this),
 	lowpassid(0),
 	looping (false)
@@ -116,7 +116,7 @@ namespace djnn {
 	{
 		alSourcei (sourceid, AL_BUFFER, bufferid); CHKAL;
 		looping = !raw_props.loop; // switch state in do_control
-		do_control ();
+		do_control_only ();
     	alSourcePlay (sourceid); CHKAL;
 	}
 
@@ -125,9 +125,9 @@ namespace djnn {
 	{
 		alSourceStop(sourceid); CHKAL;
 
-		if(_end_timer.is_already_scheduled ()) {
-      		DjnnTimeManager::instance ().cancel (&_end_timer);
-    	}
+		// if(_end_timer.is_already_scheduled ()) {
+      	// 	DjnnTimeManager::instance ().cancel (&_end_timer);
+    	// }
 		if(_control_timer.is_already_scheduled ()) {
       		DjnnTimeManager::instance ().cancel (&_control_timer);
     	}
@@ -148,6 +148,18 @@ namespace djnn {
 	void
   	Sample::do_control ()
 	{
+		ALint state;
+    	alGetSourcei(sourceid, AL_SOURCE_STATE, &state); CHKAL;
+		if (state != AL_PLAYING) {
+			deactivate ();
+			return;
+		}
+		do_control_only ();
+	}
+	
+	void
+  	Sample::do_control_only ()
+	{
 		double gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul;
 		int loop;
 		get_properties_values (gain, lowpass_gain, lowpass_freq, x, y, z, pitch_mul, loop);
@@ -158,16 +170,16 @@ namespace djnn {
 		// check change of loop, react accordingly if the value is different, do nothing otherwise
 		if (raw_props.loop) {
 			if (!looping) {
-				DjnnTimeManager::instance ().cancel (&_end_timer);
-				alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
 				looping = true;
+				// DjnnTimeManager::instance ().cancel (&_end_timer);
+				alSourcei (sourceid, AL_LOOPING, AL_TRUE); CHKAL;
 			}
 		} else {
 			if (looping) {
-				djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
-				DjnnTimeManager::instance ().schedule (&_end_timer, d1);
-				alSourcei (sourceid, AL_LOOPING, AL_FALSE); CHKAL;
 				looping = false;
+				// djnn_internal::Time::duration d1 = std::chrono::milliseconds (duration_ms);
+				// DjnnTimeManager::instance ().schedule (&_end_timer, d1);
+				alSourcei (sourceid, AL_LOOPING, AL_FALSE); CHKAL;
 			}
 		}
 
