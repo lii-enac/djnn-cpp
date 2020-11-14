@@ -9,10 +9,9 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
-
-//#include "backend.h"
 
 #include "qt_window_moc.h"
 #include "qt_window.h"
@@ -50,12 +49,10 @@ namespace djnn
   QtWindow::QtWindow (Window *win, const std::string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
   }
 
   QtWindow::~QtWindow ()
   {
-    //QtMainloop::instance ().remove_window (this);
     QtDisplayBackend::instance ()->remove_window (this);
     if (_qwidget != nullptr)
       delete _qwidget;
@@ -64,7 +61,6 @@ namespace djnn
   void
   QtWindow::impl_activate ()
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " " << this << std::endl;
     QtDisplayBackend::instance ()->add_window (this);
     _qwidget = dynamic_cast<QtDisplayBackend*>(DisplayBackend::instance())->create_qwidget(_window, this);
     WinImpl::set_picking_view(_qwidget->get_picking_view());
@@ -89,7 +85,6 @@ namespace djnn
   void
   QtWindow::impl_deactivate ()
   {
-    //QtMainloop::instance ().remove_window (this);
     QtDisplayBackend::instance ()->remove_window (this);
     delete _qwidget;
     _qwidget = nullptr;
@@ -97,11 +92,11 @@ namespace djnn
 
   void
   QtWindow::update ()
-  { //DBG;
+  {
     if (_qwidget == nullptr)
       return;
     //_qwidget->update (); // won't work since qt is blocked in mainloop
-    _please_update = true; // so remind this...
+    _please_update = true; // so remember it...
     QtMainloop::instance ().wakeup (); // ... and wake up qt
   }
 
@@ -124,7 +119,7 @@ namespace djnn
 
   void
   QtWindow::perform_screenshot (const std::string& path)
-  {
+  { DBG;
     if (_qwidget == nullptr)
       return;
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
@@ -172,8 +167,8 @@ namespace djnn
   {
 
     /* note:
-     * Get and release Mutex on each event BUT only the events that 
-     * WE manage else we let Qt and QTwidgets dealing with these Events.
+     * Get and release mutex on each event BUT only the events that WE manage
+     * For other events we let Qt and QtWidgets dealing with them
      */
     
     bool exec_ = false;
@@ -208,7 +203,7 @@ namespace djnn
 
   void
   MyQWidget::keyPressEvent (QKeyEvent *event)
-  { //DBG;
+  {
     _window->key_pressed ()->set_value (event->key (), 1);
     if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
       _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);
@@ -260,8 +255,8 @@ namespace djnn
   void
   MyQWidget::closeEvent (QCloseEvent *event)
   {
-// close child should be notified but Qt wants the control
-// and will not let it do the job
+    // close child should be notified but Qt wants the control
+    // and will not let it do the job
     _window->close ()->notify_activation ();
   }
 
