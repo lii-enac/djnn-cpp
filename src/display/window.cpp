@@ -99,7 +99,8 @@ namespace djnn
     Graph::instance ().add_edge (_width, _geometry_action);
     _c_geometry_height = new Coupling (_height, ACTIVATION, _geometry_action, ACTIVATION);
     Graph::instance ().add_edge (_height, _geometry_action);
-    
+
+    impl_deactivate (); // disable couplings
   }
 
   Window::Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w,
