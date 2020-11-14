@@ -172,7 +172,8 @@ moc := moc
 endif
 
 ifeq ($(os),Darwin)
-CFLAGS += -Wno-deprecated-declarations -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
+CFLAGS += -Wno-deprecated-declarations
+#CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
