@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/src",
                 "/usr/local/include",
-                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/"
+                //"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/"
+                "/usr/local/Cellar/qt/5.15.1/include"
             ],
             "defines": [],
             "macFrameworkPath": [],
