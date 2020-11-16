@@ -14,7 +14,9 @@
 
 #pragma once
 
+#include "proc_exporter.h"
 #include "IvyAccess.h"
+#include "remote_proc.h"
 #include "serial.h"
 
 namespace djnn {
