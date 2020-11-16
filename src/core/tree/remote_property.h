@@ -20,7 +20,6 @@
 #include <string>
 
 namespace djnn {
-  //using namespace std;
 
   class AbstractRemoteProperty : public AbstractProperty {
   public:
