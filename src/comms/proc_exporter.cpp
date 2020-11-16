@@ -221,7 +221,7 @@ namespace djnn
       std::vector < std::string > msg = tokenize (buffer, sz);
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       if (msg[0] == "N") {
-        for (int i = 1; i < msg.size (); ++i) {
+        for (size_t i = 1; i < msg.size (); ++i) {
           std::size_t found = msg[i].find ('=');
           if (found != std::string::npos) {
             std::string path = msg[i].substr (0, found);
@@ -234,11 +234,11 @@ namespace djnn
         }
 
       } else if (msg[0] == "S") {
-        for (int i = 1; i < msg.size (); ++i) {
+        for (size_t i = 1; i < msg.size (); ++i) {
           subscribe (msg[i]);
         }
       } else if (msg[0] == "U") {
-        for (int i = 1; i < msg.size (); ++i) {
+        for (size_t i = 1; i < msg.size (); ++i) {
           unsubscribe (msg[i]);
         }
       } else {
