@@ -18,16 +18,44 @@
 #include "core/utils/error.h"
 
 #include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include <string.h>
 #include <vector>
-#include <sys/errno.h>
+
+#ifdef _WIN32
+  /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
+  #ifndef _WIN32_WINNT
+    #define _WIN32_WINNT 0x0501  /* Windows XP. */
+  #endif
+  #include <winsock2.h>
+  #include <Ws2tcpip.h>
+#else
+  /* Assume that any non-Windows platform uses POSIX-style sockets instead. */
+  #include <sys/socket.h>
+  #include <arpa/inet.h>
+  #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
+  #include <unistd.h> /* Needed for close() */
+  #define INVALID_SOCKET -1
+#endif
 
 namespace djnn
 {
+
+  static int
+  socket_close (SOCKET sock)
+  {
+    int status = 0;
+#ifdef _WIN32
+      status = shutdown(sock, SD_BOTH);
+      if (status == 0) { status = closesocket(sock); }
+#else
+    status = shutdown (sock, SHUT_RDWR);
+    if (status == 0)
+      {
+        status = close (sock);
+      }
+#endif
+    return status;
+  }
 
   void
   Receiver::SendAction::impl_activate ()
@@ -78,7 +106,7 @@ namespace djnn
   Receiver::impl_deactivate ()
   {
     please_stop ();
-    close (_fd);
+    socket_close (_fd);
   }
 
   void
@@ -258,7 +286,7 @@ namespace djnn
         r->deactivate ();
         delete r;
       }
-      close (_fd);
+      socket_close (_fd);
     }
   }
 
@@ -277,23 +305,23 @@ namespace djnn
       r->deactivate ();
       delete r;
     }
-    close (_fd);
+    socket_close (_fd);
   }
 
   bool
   ProcExporter::connection ()
   {
     struct sockaddr_in serv_addr;
-    if ((_fd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((_fd = socket (AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
       error (this, "Failed to create socket");
     }
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons (_port);
     int reuse = 1;
-    if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0)
+    if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) == INVALID_SOCKET)
       error (this, "setsockopt(SO_REUSEADDR) failed");
-    if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
+    if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == INVALID_SOCKET)
       error(this, "ERROR on binding");
     return true;
   }
@@ -308,7 +336,7 @@ namespace djnn
     listen(_fd, 5);
     clilen = sizeof (cli_addr);
     while (!should_i_stop ()) {
-      int newsockfd = accept (_fd, (struct sockaddr*) &cli_addr, &clilen);
+      SOCKET newsockfd = accept (_fd, (struct sockaddr*) &cli_addr, &clilen);
       Receiver* recv = new Receiver (nullptr, "", newsockfd, _tree);
       _recvs.push_back (recv);
       recv->activate ();

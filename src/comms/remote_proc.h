@@ -26,7 +26,9 @@
 #include "exec_env/external_source.h"
 
 
-
+#ifndef _WIN32
+#define SOCKET int
+#endif
 
 namespace djnn
 {
@@ -96,13 +98,13 @@ namespace djnn
     void unsubscribe (const std::string& path);
     void unsubscribe_all ();
     dist_map_t get_send_props () { return _send_map; }
-    int get_sock () { return _fd; }
+    SOCKET get_sock () { return _fd; }
     void connection_failure () { _con_status.set_value (false, true); }
     bool connected () { return _con_status.get_value (); }
   private:
     std::string _addr;
     int _port;
-    int _fd;
+    SOCKET _fd;
     SendAction _send;
     ReceiveAction _receive;
     ConnectionAction _con;

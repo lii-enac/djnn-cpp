@@ -18,15 +18,28 @@
 #include "core/utils/error.h"
 
 #include <stdio.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include <string.h>
 #include <vector>
-#include <sys/errno.h>
+
+#ifdef _WIN32
+  /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
+  #ifndef _WIN32_WINNT
+    #define _WIN32_WINNT 0x0501  /* Windows XP. */
+  #endif
+  #include <winsock2.h>
+  #include <Ws2tcpip.h>
+#else
+  /* Assume that any non-Windows platform uses POSIX-style sockets instead. */
+  #include <sys/socket.h>
+  #include <arpa/inet.h>
+  #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
+  #include <unistd.h> /* Needed for close() */
+  #define INVALID_SOCKET -1
+#endif
 
 namespace djnn
 {
+
 
   void
   RemoteProc::SendAction::impl_activate ()
@@ -49,8 +62,7 @@ namespace djnn
     int sz = msg.size ();
     msg = std::to_string(sz) + msg;
     if (!send (p->get_sock (), msg.c_str (), strlen (msg.c_str ()), 0)) {
-      if (errno == ECONNRESET || errno == ENOTCONN)
-        p->connection_failure ();
+      p->connection_failure ();
     }
   }
 
@@ -250,21 +262,38 @@ namespace djnn
     if (_con_status.get_value () == true)
       return;
     struct sockaddr_in serv_addr;
-    if ((_fd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((_fd = socket (AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
       error (this, "Failed to create socket");
     }
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons (_port);
 
-    if (inet_pton (AF_INET, _addr.c_str (), &serv_addr.sin_addr) <= 0) {
+    if (inet_pton (AF_INET, _addr.c_str (), &serv_addr.sin_addr) == INVALID_SOCKET) {
       error (this, "Failed to configure socket");
     }
-    if (connect (_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) {
+    if (connect (_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == INVALID_SOCKET) {
       _con_status.set_value (false, true);
     } else {
       _con_status.set_value (true, true);
       _receive.activate ();
     }
+  }
+
+  static int
+  socket_close (SOCKET sock)
+  {
+    int status = 0;
+#ifdef _WIN32
+      status = shutdown(sock, SD_BOTH);
+      if (status == 0) { status = closesocket(sock); }
+#else
+    status = shutdown (sock, SHUT_RDWR);
+    if (status == 0)
+      {
+        status = close (sock);
+      }
+#endif
+    return status;
   }
 
   void
@@ -274,6 +303,6 @@ namespace djnn
       c->disable ();
     _receive.deactivate ();
     _c_con_req.disable ();
-    close (_fd);
+    socket_close (_fd);
   }
 }

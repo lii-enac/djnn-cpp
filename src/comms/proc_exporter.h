@@ -25,7 +25,9 @@
 #include "exec_env/global_mutex.h"
 #include "exec_env/external_source.h"
 
-
+#ifndef _WIN32
+#define SOCKET int
+#endif
 
 
 namespace djnn
@@ -56,7 +58,7 @@ namespace djnn
         CoreProcess *_src;
     };
     public:
-      Receiver (ParentProcess* parent, const std::string& name, int fd, CoreProcess* tree);
+      Receiver (ParentProcess* parent, const std::string& name, SOCKET fd, CoreProcess* tree);
       virtual ~Receiver () {}
       void impl_activate () override;
       void impl_deactivate () override;
@@ -71,10 +73,10 @@ namespace djnn
       std::vector<CoreProcess*> get_senders () { return _buff_senders; }
       void clear_senders () { _buff_senders.clear (); }
       void add_sender (CoreProcess *sender) { _buff_senders.push_back (sender); }
-      int get_sock () { return _fd; }
+      SOCKET get_sock () { return _fd; }
     private:
       void run () override;
-      int _fd;
+      SOCKET _fd;
       SendAction _send;
       BuildSendAction _build_send;
       CoreProcess* _tree;
@@ -92,7 +94,7 @@ namespace djnn
   public:
     ProcExporter (ParentProcess* parent, const std::string& name, CoreProcess *tree, int port);
     virtual ~ProcExporter ();
-    int get_sock () { return _fd; }
+    SOCKET get_sock () { return _fd; }
     bool connection ();
 
   protected:
@@ -101,7 +103,7 @@ namespace djnn
 
 
   private:
-    int _fd;
+    SOCKET _fd;
     int _port;
     CoreProcess* _tree;
     std::vector<Receiver*> _recvs;
