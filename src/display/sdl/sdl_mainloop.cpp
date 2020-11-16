@@ -270,7 +270,7 @@ namespace djnn {
            // pick the first window
           SDLWindow * w = _windows.begin()->second;
 
-          #ifndef __WIN32__
+          #ifndef _WIN32
           /*SDL_Rect rect;
           SDL_GetDisplayBounds(0, &rect);
           sw=rect.w;

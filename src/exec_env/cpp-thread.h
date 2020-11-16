@@ -14,7 +14,7 @@
 
 #pragma once
 
-#ifndef __WIN32__
+#ifndef _WIN32
 #if DJNN_USE_QT_THREAD
 #include <QtGlobal>
 #if (QT_VERSION < QT_VERSION_CHECK(5,10,0))

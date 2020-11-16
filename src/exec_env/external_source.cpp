@@ -274,7 +274,7 @@ static const char* th_err(int errmsg)
     void
     ExternalSource::set_thread_priority ()
     {
-#if 0 //defined(__WIN32__)
+#if 0 //defined(_WIN32)
         auto native_thread = _impl->_thread.native_handle();
         std::cerr << native_thread << __EFL__;
         //if(native_thread==-1) native_thread = 
@@ -320,7 +320,7 @@ static const char* th_err(int errmsg)
 
 #if 0
         auto native_thread = _impl->_thread.native_handle();
-#if defined(__WIN32__)
+#if defined(_WIN32)
         //DBG;
         auto b = SetThreadPriority(native_thread, THREAD_PRIORITY_NORMAL);
         if(!b) {
