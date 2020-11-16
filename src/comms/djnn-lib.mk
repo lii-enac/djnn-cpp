@@ -36,6 +36,7 @@ ifeq ($(os),Darwin)
 endif
 
 ifeq ($(os),Linux)
+	# TODO: add support for pkg-vonfig
 	# TODO: remove once .pkg made 
 	lib_cppflags += -I/usr/local/include/Ivy
 	lib_ldflags += -L/usr/local/lib -livy -lpcre
@@ -43,6 +44,7 @@ ifeq ($(os),Linux)
 endif
 
 ifeq ($(os),MinGW)
+	# TODO: add support for pkg-vonfig
 	# TODO: remove once .pkg made 
 	lib_cppflags += -I/usr/include/Ivy
 	lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
