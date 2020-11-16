@@ -1,6 +1,7 @@
 
 #include "assignment.h"
 
+#include "../tree/remote_property.h"
 #include "core/tree/abstract_property.h"
 #include "core/tree/bool_property.h"
 #include "core/tree/int_property.h"
@@ -59,6 +60,12 @@ namespace djnn
         {
           RefProperty* rp = djnn_dynamic_cast<RefProperty*> (src_p);
           if (rp) dst_p->set_value (rp->get_value (), propagate);
+          break;
+        }
+        case Dist:
+        {
+          RemoteProperty* dp = djnn_dynamic_cast<RemoteProperty*> (src_p);
+          if (dp) dst_p->set_value (dp->get_value (), propagate);
           break;
         }
         default:
