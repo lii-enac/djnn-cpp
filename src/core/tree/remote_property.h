@@ -58,6 +58,13 @@ namespace djnn {
   public:
     RemoteProperty (ParentProcess* parent, const std::string& name, const std::string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
     FatProcess* clone () override;
+
+    /* This method has to be specific because of the duality of a remote property.
+     * Indeed it can be used to transmit values, as any other property, or to
+     * transmit the (de)activation of another process. In this latter case, the coupling usually set a flag
+     * that is read by the GRAPH_EXEC. But, in these case it has no effect because the properties are removed from
+     * the execution graph. Consequently, we have to implement a specific behavior.
+     */
     void set_activation_flag (activation_flag_e VALUE) override {
       switch (VALUE){
         case ACTIVATION:
