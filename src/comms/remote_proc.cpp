@@ -132,13 +132,10 @@ namespace djnn
             it->second->set_incoming_value (s.substr (found + 1), true);
         }
       }
-      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
-
       if (!should_i_stop ()) {
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         GRAPH_EXEC; // executing
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
     fail:
       p->connection_failure ();

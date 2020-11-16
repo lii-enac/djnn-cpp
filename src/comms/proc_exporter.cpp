@@ -219,47 +219,41 @@ namespace djnn
         goto fail;
       }
       std::vector < std::string > msg = tokenize (buffer, sz);
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       if (msg[0] == "N") {
         for (int i = 1; i < msg.size (); ++i) {
           std::size_t found = msg[i].find ('=');
           if (found != std::string::npos) {
             std::string path = msg[i].substr (0, found);
             std::string value = msg[i].substr (found + 1);
-            djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
             find_and_set_value (path, value);
-            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
           }
         }
         if (!should_i_stop ()) {
-          djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
           GRAPH_EXEC; // executing
-          djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
         }
 
       } else if (msg[0] == "S") {
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         for (int i = 1; i < msg.size (); ++i) {
           subscribe (msg[i]);
         }
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       } else if (msg[0] == "U") {
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         for (int i = 1; i < msg.size (); ++i) {
           unsubscribe (msg[i]);
         }
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       } else {
         std::cout << "unknown msg:" << msg[1] << std::endl;
       }
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
     fail:
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       unsubscribe_all ();
       this->schedule_delete ();
       if (!should_i_stop ()) {
-        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         GRAPH_EXEC; // executing
-        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       }
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
   }
 
   ProcExporter::ProcExporter (ParentProcess *parent, const std::string &name, CoreProcess *tree, int port) :
