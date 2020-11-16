@@ -14,17 +14,6 @@
 
 #pragma once
 
-#include "../core/tree/remote_property.h"
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
-#include "core/control/action.h"
-#include "core/execution/graph.h"
-#include "core/tree/bool_property.h"
-#include "core/tree/spike.h"
-
-#include "exec_env/global_mutex.h"
-#include "exec_env/external_source.h"
-
 #ifdef _WIN32
   /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
   #ifndef _WIN32_WINNT
@@ -43,6 +32,16 @@
   #define SOCKET_ERROR -1
 #endif
 
+#include "core/tree/remote_property.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/execution/graph.h"
+#include "core/tree/bool_property.h"
+#include "core/tree/spike.h"
+
+#include "exec_env/global_mutex.h"
+#include "exec_env/external_source.h"
 
 namespace djnn
 {
