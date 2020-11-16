@@ -21,22 +21,6 @@
 #include <string.h>
 #include <vector>
 
-#ifdef _WIN32
-  /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
-  #ifndef _WIN32_WINNT
-    #define _WIN32_WINNT 0x0501  /* Windows XP. */
-  #endif
-  #include <winsock2.h>
-  #include <Ws2tcpip.h>
-#else
-  /* Assume that any non-Windows platform uses POSIX-style sockets instead. */
-  #include <sys/socket.h>
-  #include <arpa/inet.h>
-  #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
-  #include <unistd.h> /* Needed for close() */
-  #define INVALID_SOCKET -1
-#endif
-
 namespace djnn
 {
 
@@ -115,7 +99,7 @@ namespace djnn
       bool end_sz = false;
       std::string str_sz;
       while (!end_sz) {
-        if (!read (p->get_sock (), buff_sz, 1)) {
+        if (!recvfrom (p->get_sock (), buff_sz, 1, 0, NULL, NULL)) {
           goto fail;
         }
         else {
@@ -130,9 +114,9 @@ namespace djnn
         }
       }
       char buffer[sz];
-      bzero(buffer, sz);
+      memset (buffer, 0, sz);
       buffer[0] = str_sz.back ();
-      if (!read (p->get_sock (), buffer + 1, sz - 1)) {
+      if (!recvfrom (p->get_sock (), buffer + 1, sz - 1, 0, NULL, NULL)) {
         goto fail;
       }
       if (should_i_stop ())
