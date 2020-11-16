@@ -63,7 +63,7 @@ namespace djnn
     p->clear_senders();
     int sz = msg.size();
     msg = std::to_string(sz) + msg;
-    if (!send(p->get_sock(), msg.c_str(), strlen(msg.c_str()), 0)) {
+    if (send(p->get_sock(), msg.c_str(), strlen(msg.c_str()), 0) == SOCKET_ERROR) {
       warning (this, "Failed to send message: " + msg);
     }
   }
@@ -75,7 +75,7 @@ namespace djnn
     p->add_sender (_src);
   }
 
-  Receiver::Receiver (ParentProcess* parent, const std::string& name, int fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
+  Receiver::Receiver (ParentProcess* parent, const std::string& name, SOCKET fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
       _fd (fd),_send (this, "send"), _build_send (this, "build_send"), _tree (tree)
   {
   }
@@ -201,7 +201,7 @@ namespace djnn
       bool end_sz = false;
       std::string str_sz;
       while (!end_sz) {
-        if (!recvfrom (_fd, buff_sz, 1, 0, NULL, NULL)) {
+        if (recvfrom (_fd, buff_sz, 1, 0, NULL, NULL) == SOCKET_ERROR) {
           goto fail;
         }
         else
@@ -215,7 +215,7 @@ namespace djnn
       char buffer[sz];
       memset (buffer, 0, sz);
       buffer[0] = str_sz.back ();
-      if (!recvfrom (_fd, buffer + 1, sz - 1, 0, NULL, NULL)) {
+      if (recvfrom (_fd, buffer + 1, sz - 1, 0, NULL, NULL) == SOCKET_ERROR) {
         goto fail;
       }
       std::vector < std::string > msg = tokenize (buffer, sz);
@@ -303,9 +303,9 @@ namespace djnn
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons (_port);
     int reuse = 1;
-    if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) == INVALID_SOCKET)
+    if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) == SOCKET_ERROR)
       error (this, "setsockopt(SO_REUSEADDR) failed");
-    if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == INVALID_SOCKET)
+    if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == SOCKET_ERROR)
       error(this, "ERROR on binding");
     return true;
   }

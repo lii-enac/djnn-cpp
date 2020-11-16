@@ -45,7 +45,7 @@ namespace djnn
       return;
     int sz = msg.size ();
     msg = std::to_string(sz) + msg;
-    if (!send (p->get_sock (), msg.c_str (), strlen (msg.c_str ()), 0)) {
+    if (send (p->get_sock (), msg.c_str (), strlen (msg.c_str ()), 0) < 0) {
       p->connection_failure ();
     }
   }
@@ -99,7 +99,7 @@ namespace djnn
       bool end_sz = false;
       std::string str_sz;
       while (!end_sz) {
-        if (!recvfrom (p->get_sock (), buff_sz, 1, 0, NULL, NULL)) {
+        if (recvfrom (p->get_sock (), buff_sz, 1, 0, NULL, NULL) == SOCKET_ERROR) {
           goto fail;
         }
         else {
@@ -116,7 +116,7 @@ namespace djnn
       char buffer[sz];
       memset (buffer, 0, sz);
       buffer[0] = str_sz.back ();
-      if (!recvfrom (p->get_sock (), buffer + 1, sz - 1, 0, NULL, NULL)) {
+      if (recvfrom (p->get_sock (), buffer + 1, sz - 1, 0, NULL, NULL) == SOCKET_ERROR) {
         goto fail;
       }
       if (should_i_stop ())
@@ -152,7 +152,7 @@ namespace djnn
     std::string msg = "S:" + path;
     int sz = msg.size ();
     msg = std::to_string(sz) + msg;
-    if (!send (_fd, msg.c_str (), strlen (msg.c_str ()), 0)) {
+    if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
       connection_failure ();
     }
   }
@@ -179,9 +179,8 @@ namespace djnn
     std::string msg = "U:" + path;
     int sz = msg.size ();
     msg = std::to_string(sz) + msg;
-    if (!send (_fd, msg.c_str (), strlen (msg.c_str ()), 0)) {
-      if (errno == ECONNRESET || errno == ENOTCONN)
-        connection_failure ();
+    if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
+      connection_failure ();
     }
   }
 
@@ -252,10 +251,10 @@ namespace djnn
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons (_port);
 
-    if (inet_pton (AF_INET, _addr.c_str (), &serv_addr.sin_addr) == INVALID_SOCKET) {
+    if (inet_pton (AF_INET, _addr.c_str (), &serv_addr.sin_addr) == SOCKET_ERROR) {
       error (this, "Failed to configure socket");
     }
-    if (connect (_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == INVALID_SOCKET) {
+    if (connect (_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
       _con_status.set_value (false, true);
     } else {
       _con_status.set_value (true, true);

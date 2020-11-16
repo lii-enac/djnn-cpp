@@ -40,6 +40,7 @@
   #include <unistd.h> /* Needed for close() */
   #define INVALID_SOCKET -1
   #define SOCKET int
+  #define SOCKET_ERROR -1
 #endif
 
 
