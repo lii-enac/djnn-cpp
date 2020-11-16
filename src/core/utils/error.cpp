@@ -40,7 +40,7 @@ namespace djnn
 
   int
   //__error (ParentProcess* parent, const std::string& msg, const char* ctxinfo)
-  __error (CoreProcess* p, const char* msg, const char* ctxinfo)
+  djnn__error (CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
     std::cerr << std::endl << std::endl;
@@ -64,15 +64,15 @@ namespace djnn
   }
   
   int
-  __error (CoreProcess* p, const std::string& msg, const char* ctxinfo)
+  djnn__error (CoreProcess* p, const std::string& msg, const char* ctxinfo)
   {
-    return __error(p, msg.c_str(), ctxinfo);
+    return djnn__error(p, msg.c_str(), ctxinfo);
   }
 
   extern std::string __to_string(void*p);
 
   void
-  __warning (CoreProcess *p, const char* msg, const char* ctxinfo)
+  djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
     auto & out = std::cerr;
@@ -93,13 +93,13 @@ namespace djnn
   }
 
   void
-  __warning (CoreProcess* p, const std::string& msg, const char* ctxinfo)
+  djnn__warning (CoreProcess* p, const std::string& msg, const char* ctxinfo)
   {
-    __warning(p, msg.c_str(), ctxinfo);
+    djnn__warning(p, msg.c_str(), ctxinfo);
   }
 
   void
-  __info (const std::string& msg)
+  djnn__info (const std::string& msg)
   {
 #ifndef DJNN_NO_DEBUG
     auto & out = std::cout;
@@ -113,7 +113,7 @@ namespace djnn
   }
 
   void
-  __debug (const char* file, const char* function, const char* line)
+  djnn__debug (const char* file, const char* function, const char* line)
   {
 #ifndef DJNN_NO_DEBUG
     std::cerr <<  file << ":" << function << ":" << line << std::endl;

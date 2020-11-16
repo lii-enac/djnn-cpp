@@ -43,7 +43,7 @@ extern "C" {
 //#define DBG  {DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n"); vTaskDelay ((unsigned int)200);} // allow some time for transmitting text before crash
 #define DBG  {DJNN_DEBUG_PRINT(__FILE__ ":" __djnn_str1(__LINE__) "\n");}
 #else
-#define DBG djnn::__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
+#define DBG djnn::djnn__debug(__FILE__, __DJNN_FUNCTION__, __djnn_str1(__LINE__));
 //#define DBG std::cerr << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
 #endif
 

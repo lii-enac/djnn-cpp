@@ -28,13 +28,13 @@ namespace djnn
 {
   class CoreProcess;
 
-  int __error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  int __error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
-  void __warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  void __warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
-  void __info (const std::string& msg);
-  void __debug (const char* file, const char* function, const char* lineno);
-  inline int __exit(int ret) { exit(ret); return 1; }
+  int djnn__error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  int djnn__error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
+  void djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  void djnn__warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
+  void djnn__info (const std::string& msg);
+  void djnn__debug (const char* file, const char* function, const char* lineno);
+  inline int djnn__exit(int ret) { exit(ret); return 1; }
 
   /** Turn off -Wunused-result for a specific function call */
   #define __ignore_unused(M) if(1==((int)M)){;}
@@ -51,11 +51,11 @@ namespace djnn
   #endif
 
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
-  #define error(p,msg) __ignore_unused( djnn::__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::__exit(0))
+  #define error(p,msg) __ignore_unused( djnn::djnn__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::djnn__exit(0))
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
-  #define warning(p,msg) djnn::__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
-  #define loginfo(msg) djnn::__info(msg)
+  #define warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
+  #define loginfo(msg) djnn::djnn__info(msg)
 
   class Context {
   public:
