@@ -225,7 +225,7 @@ namespace djnn
   FatChildProcess*
   RemoteProc::find_child_impl (const std::string &path)
   {
-    FatChildProcess* res = Action::find_child_impl (path);
+    FatChildProcess* res = FatProcess::find_child_impl (path);
     if (res)
       return res;
     dist_map_t::iterator it = _send_map.find (path);
