@@ -122,6 +122,8 @@ namespace djnn
       if (should_i_stop ())
         return;
       std::vector<std::string> msg = tokenize (buffer, sz);
+
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       for (auto s : msg) {
         std::size_t found = s.find ('=');
         if (found != std::string::npos) {
@@ -130,6 +132,7 @@ namespace djnn
             it->second->set_incoming_value (s.substr (found + 1), true);
         }
       }
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
 
       if (!should_i_stop ()) {
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!

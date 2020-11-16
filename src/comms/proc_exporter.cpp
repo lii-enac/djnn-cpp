@@ -225,7 +225,9 @@ namespace djnn
           if (found != std::string::npos) {
             std::string path = msg[i].substr (0, found);
             std::string value = msg[i].substr (found + 1);
+            djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
             find_and_set_value (path, value);
+            djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
           }
         }
         if (!should_i_stop ()) {
@@ -235,13 +237,17 @@ namespace djnn
         }
 
       } else if (msg[0] == "S") {
+        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         for (int i = 1; i < msg.size (); ++i) {
           subscribe (msg[i]);
         }
+        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       } else if (msg[0] == "U") {
+        djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         for (int i = 1; i < msg.size (); ++i) {
           unsubscribe (msg[i]);
         }
+        djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
       } else {
         std::cout << "unknown msg:" << msg[1] << std::endl;
       }
@@ -323,7 +329,9 @@ namespace djnn
       SOCKET newsockfd = accept (_fd, (struct sockaddr*) &cli_addr, &clilen);
       Receiver* recv = new Receiver (nullptr, "", newsockfd, _tree);
       _recvs.push_back (recv);
+      djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       recv->activate ();
+      djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
   }
 }
