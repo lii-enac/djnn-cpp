@@ -16,6 +16,11 @@
 
 #pragma once
 
+#ifdef _WIN32
+// TODO: windows hack - do better
+#define NOGDI
+#include <winsock2.h>
+#endif
 
 #include "ontology/process.h"
 #include "execution/graph.h"
