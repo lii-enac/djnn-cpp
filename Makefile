@@ -552,9 +552,10 @@ all_cccmd_json = $(objs:%.o=%.cccmd.json)
 all_cccmd_json_joined = $(call join-with, join ,$(all_cccmd_json))
 
 $(build_dir)/compile_commands.json: $(all_cccmd_json)
+	@echo creating $(@)
 	@echo "," > join
 	@echo "[" > $(@)
-	cat $(all_cccmd_json_joined) >> $(@)
+	@cat $(all_cccmd_json_joined) >> $(@)
 	@echo "]" >> $(@)
 	@rm join
 
