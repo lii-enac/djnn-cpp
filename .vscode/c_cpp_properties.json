@@ -4,9 +4,10 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/src",
-                "/usr/local/include",
-                //"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/"
-                "/usr/local/Cellar/qt/**"
+                "/usr/local/Cellar/qt/**",
+                "/usr/local/include"
+                //"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/",
+                //"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
             ],
             "defines": [],
             "macFrameworkPath": [],
@@ -14,7 +15,7 @@
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": "/Users/conversy/recherche/istar/code/djnn/djnn-cpp-master/build/compile_commands.json"
         }
     ],
     "version": 4

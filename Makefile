@@ -57,6 +57,14 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 rwildcardmul = $(wildcard $(addsuffix $2, $1)) $(foreach d,$(wildcard $(addsuffix *, $1)),$(call rwildcard,$d/,$2))
 
+# join https://stackoverflow.com/a/9551487
+space :=
+space +=
+join-with = $(subst $(space),$1,$(strip $2))
+
+
+# ---------------------------------------
+
 all_srcs = $(call rwildcard,src/,*)
 all_dirs = $(call uniq,$(dir $(all_srcs)))
 
@@ -173,7 +181,9 @@ endif
 
 ifeq ($(os),Darwin)
 CFLAGS += -Wno-deprecated-declarations
-#CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
+# for clang-tidy
+CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
+CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
@@ -539,11 +549,14 @@ strip:
 # should be here, after the call to lib_makerule
 
 all_cccmd_json = $(objs:%.o=%.cccmd.json)
+all_cccmd_json_joined = $(call join-with, join ,$(all_cccmd_json))
 
 $(build_dir)/compile_commands.json: $(all_cccmd_json)
+	@echo "," > join
 	@echo "[" > $(@)
-	@cat $^ >> $(@)
-	@echo "{}]" >> $(@)
+	cat $(all_cccmd_json_joined) >> $(@)
+	@echo "]" >> $(@)
+	@rm join
 
 cccmd: $(build_dir)/compile_commands.json
 
@@ -551,35 +564,38 @@ cccmd: $(build_dir)/compile_commands.json
 # ---------------------------------------
 # generic rules
 
+# https://stackoverflow.com/a/23324703
+root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 $(build_dir)/%.o: %.cpp
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.o: %.c
 ifeq ($V,max)
 	$(CC) $(CFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "{\"directory\": \"$(@D)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}," > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
