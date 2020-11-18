@@ -122,6 +122,11 @@ namespace djnn {
     private:
       ParentProcess* _debug_parent;
       std::string _debug_name;
+#else
+  FatProcess* get_debug_parent () { return nullptr; }
+  void set_debug_parent (ParentProcess*) {}
+  const std::string& get_debug_name () const { return default_name; }
+  void set_debug_name (const std::string& n) {}
 #endif
 
     public:
