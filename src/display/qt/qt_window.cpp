@@ -54,8 +54,9 @@ namespace djnn
   QtWindow::~QtWindow ()
   {
     QtDisplayBackend::instance ()->remove_window (this);
-    if (_qwidget != nullptr)
+    if (_qwidget != nullptr) {
       delete _qwidget;
+    }
   }
 
   void
@@ -93,8 +94,9 @@ namespace djnn
   void
   QtWindow::update ()
   {
-    if (_qwidget == nullptr)
+    if (_qwidget == nullptr) {
       return;
+    }
     //_qwidget->update (); // won't work since qt is blocked in mainloop
     _please_update = true; // so remember it...
     QtMainloop::instance ().wakeup (); // ... and wake up qt
@@ -102,8 +104,7 @@ namespace djnn
 
   void
   QtWindow::set_cursor (const std::string& path, int hotX, int hotY) {
-    if (_qwidget == nullptr)
-      return;
+    if (_qwidget == nullptr) { return; }
     QBitmap bmp (path.c_str ());
     _qwidget->setCursor (QCursor (bmp, hotX, hotY));
   }
@@ -119,9 +120,8 @@ namespace djnn
 
   void
   QtWindow::perform_screenshot (const std::string& path)
-  { DBG;
-    if (_qwidget == nullptr)
-      return;
+  {
+    if (_qwidget == nullptr) { return; }
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
     _qwidget->grab().save(QString((path+".png").c_str()));
     djnn::get_exclusive_access (DBG_GET);
@@ -222,8 +222,9 @@ namespace djnn
   void
   MyQWidget::moveEvent (QMoveEvent *event)
   {
-    if (_updating)
+    if (_updating) {
       return;
+    }
     _updating = true;
 
     const QPoint pos = event->pos ();
@@ -239,8 +240,7 @@ namespace djnn
   void
   MyQWidget::resizeEvent (QResizeEvent * event)
   {
-    if (_updating)
-      return;
+    if (_updating) { return; }
     _updating = true;
 
     int h = event->size ().height ();
