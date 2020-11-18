@@ -67,7 +67,7 @@ namespace djnn
   _vertex (nullptr)
   {
     set_is_model (model);
-    set_activation_flag (NONE_ACTIVATION);
+    CoreProcess::set_activation_flag (NONE_ACTIVATION);
     set_activation_state (DEACTIVATED);
   
     #ifndef DJNN_NO_DEBUG
@@ -96,8 +96,9 @@ namespace djnn
       #ifndef DJNN_NO_DEBUG
       auto * pp = this;
       warning ( nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
-      for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
-      for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
+      // get_activation_couplings is virtual: in a destructor only CoreProcess::get_activation_couplings will be called and it should return an empty container
+      //for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
+      //for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
       #endif
       _vertex->invalidate ();
     }
@@ -170,11 +171,19 @@ namespace djnn
 
   CouplingProcess::~CouplingProcess ()
   {
-    for (auto * c : get_activation_couplings ()) {
+    for (auto * c : CouplingProcess::get_activation_couplings ()) {
       c->about_to_delete_src ();
     }
-    for (auto * c : get_deactivation_couplings ()) {
+    for (auto * c : CouplingProcess::get_deactivation_couplings ()) {
       c->about_to_delete_src ();
+    }
+    if (vertex () != nullptr) {
+      #ifndef DJNN_NO_DEBUG
+      auto * pp = this;
+      warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + "\n"); //" - _vertex is NOT NULL and it should\n");
+      for (auto &c: CouplingProcess::get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
+      for (auto &c: CouplingProcess::get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
+      #endif
     }
   }
 
