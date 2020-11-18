@@ -426,8 +426,9 @@ namespace djnn
   ChildProcess::set_parent (ParentProcess* parent)
   {
     if (parent == nullptr) {
-      if(_parent)
+      if (_parent) {
           parentless_names[this] = _parent->find_child_name (this);
+      }
     }
     _parent = djnn_dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
