@@ -313,7 +313,6 @@ namespace djnn {
   {
   public:
     FatProcess (const std::string& name, bool model = false);
-    virtual ~FatProcess ();
     virtual FatProcess* clone () override { CoreProcess::clone (); return nullptr; }
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui

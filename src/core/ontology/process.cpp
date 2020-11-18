@@ -43,18 +43,18 @@ namespace djnn
   #if _DEBUG_SEE_ACTIVATION_SEQUENCE
   std::vector<__stat_exec> __activation_order;
   #endif
-  std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
-  std::vector<string> __destruction_stat_order;
-  long int __creation_num = 0;
+  std::list<std::pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  std::vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  long int __dbg_creation_num = 0; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
 #ifdef DJNN_NO_DEBUG
   CoreProcess::DebugInfo   CoreProcess::_dbg_info{"no dbg info",0};
 #endif
-                    string CoreProcess::default_name = "noname";
-  CoreProcess::couplings_t CoreProcess::default_couplings;
-  CoreProcess::symtable_t  CoreProcess::default_symtable;
+                    string CoreProcess::default_name = "noname"; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  CoreProcess::couplings_t CoreProcess::default_couplings; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
-  static map<const ChildProcess*, string> parentless_names;
+  static map<const ChildProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
 
   CoreProcess::CoreProcess (bool model)
@@ -64,7 +64,8 @@ namespace djnn
   , _debug_name (FatProcess::default_name)
   ,
   #endif
-  _vertex (nullptr)
+  _vertex (nullptr),
+  _bitset (0)
   {
     set_is_model (model);
     CoreProcess::set_activation_flag (NONE_ACTIVATION);
@@ -158,7 +159,7 @@ namespace djnn
 
 
   FatChildProcess*
-  CoreProcess::find_child_impl (const std::string&)
+  CoreProcess::find_child_impl (const std::string& _)
   {
     return nullptr;
   }
@@ -192,14 +193,8 @@ namespace djnn
   _data (nullptr)
   {
     #ifndef DJNN_NO_DEBUG
-    if (name != "") set_debug_name (name);
+    if (name != "") { set_debug_name (name); }
     #endif
-  }
-
-  FatProcess::~FatProcess ()
-  {
-    /* make sure everything is wiped out the symtable */
-    //symtable ().clear (); // FIXME useless !!!!
   }
 
 
@@ -215,7 +210,7 @@ namespace djnn
 
     #ifndef DJNN_NO_DEBUG
     set_debug_parent(parent);
-    if (name != "") set_debug_name (name);
+    if (name != "") { set_debug_name (name); }
     #endif
   }
 
@@ -225,9 +220,9 @@ namespace djnn
     CoreProcess::finalize_construction (parent, name, state_dep);
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
-      if (state_dep == nullptr)
+      if (state_dep == nullptr) {
         _state_dependency = parent->state_dependency ();
-      else {
+      } else {
         _state_dependency = state_dep;
         add_state_dependency (parent, _state_dependency);
       }
@@ -281,8 +276,7 @@ namespace djnn
      * 3 - the parent exists and is stopped
      */
 
-    if (get_activation_state () != DEACTIVATED)
-      return false;
+    if (get_activation_state () != DEACTIVATED) { return false; }
     set_activation_state (ACTIVATING);
     return true;
   }
@@ -295,8 +289,9 @@ namespace djnn
      * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (get_parent () != nullptr && !get_parent ()->somehow_activating())
+    if (get_parent () != nullptr && !get_parent ()->somehow_activating()) {
        return false;
+    }
     return CoreProcess::pre_activate ();
   }
 
@@ -318,8 +313,7 @@ namespace djnn
   bool
   CoreProcess::pre_deactivate ()
   {
-    if (get_activation_state() != ACTIVATED)
-      return false;
+    if (get_activation_state() != ACTIVATED) { return false; }
     set_activation_state (DEACTIVATING);
     return true;
   }
@@ -340,7 +334,7 @@ namespace djnn
      * We make the choice to register all the couplings associated with a source before propagating
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
-    std::vector<Coupling*> to_propagate;
+    std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
     for (auto& coupling : get_activation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
@@ -370,7 +364,7 @@ namespace djnn
      * We make the choice to register all the couplings associated with a source before propagating
      * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
      * */
-    std::vector<Coupling*> to_propagate;
+    std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
     for (auto& coupling : get_deactivation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
@@ -417,8 +411,9 @@ namespace djnn
   void
   CoreProcess::set_vertex (Vertex *v) 
   { 
-    if (_vertex && v && _vertex != v)
-      std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl ;
+    if (_vertex && v && _vertex != v) {
+      std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl;
+    }
     //print_set_vertex_err_msg (v);
     _vertex = v; 
   }
@@ -443,8 +438,7 @@ namespace djnn
   void
   FatProcess::add_child (FatChildProcess* child, const std::string& name)
   {
-    if (child == nullptr)
-      return;
+    if (child == nullptr) { return; }
 
     if(child->get_parent ()==nullptr) {
       parentless_names.erase(this);
@@ -457,10 +451,11 @@ namespace djnn
   void
   FatProcess::remove_child (FatChildProcess* c)
   {
-    symtable_t::iterator it;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
-      if (it->second == c) {
-        symtable ().erase (it->first);
+    //symtable_t::iterator it;
+    //for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (auto & name_proc_pair: symtable ()) {
+      if (name_proc_pair.second == c) {
+        symtable ().erase (name_proc_pair.first);
         return;
       }
     }
@@ -517,9 +512,9 @@ namespace djnn
       string newKey = key.substr (0, found);
       string path = key.substr (found + 1);
       if (newKey[0] == '.' && newKey[1] == '.') {
-        if (get_parent ())
+        if (get_parent ()) {
           return get_parent ()->find_child_impl (path);
-        else {
+        } else {
           return nullptr;
         }
       }
@@ -542,8 +537,7 @@ namespace djnn
   FatChildProcess*
   FatProcess::find_child_impl (FatChildProcess *p, const std::string& path)
   {
-    if (p == nullptr)
-      return URI::find_by_uri (path);
+    if (p == nullptr) { return URI::find_by_uri (path); }
     return p->find_child_impl (path);
   }
 
@@ -551,14 +545,10 @@ namespace djnn
   FatProcess::find_child_name (const CoreProcess* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
-
-    for (auto it = symtable ().begin(); it != symtable ().end(); ++it)
-    {
-      if (it->second == symbol)
-      {
-        //debug
+    for (auto & name_proc_pair: symtable ()) {
+      if (name_proc_pair.second == symbol) {
         //cerr << "key found : " << it->first << endl;
-        return it->first;
+        return name_proc_pair.first;
       }
     }
   
@@ -645,7 +635,7 @@ namespace djnn
     }
     p2->remove_child (sy2);
     p2->add_symbol (sy2, x1);
-    delete (x2); // hum, are we really sure about this? // maybe used in for merging gradient
+    delete x2; // hum, are we really sure about this? // maybe used in for merging gradient
   }
 
   void
@@ -684,7 +674,7 @@ namespace djnn
   };
 
 #ifndef DJNN_NO_DEBUG
-  static int indent = -1;
+  static int indent = -1; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   void
   CoreProcess::dump (int level)
@@ -704,14 +694,13 @@ namespace djnn
     }
 
     /* check if the level is reached */
-    if ((level != 0) && (indent == level - 1))
-      return;
+    if ((level != 0) && (indent == level - 1)) { return; }
 
     cout << endl;
     indent++;
-    symtable_t::iterator it;
+
     int i = 0;
-    for (it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (symtable_t::iterator it = symtable ().begin (); it != symtable ().end (); ++it) {
       for (int j = 0; j < indent; j++)
         cout << "|\t";
       cout << " +" << i++ << " ";

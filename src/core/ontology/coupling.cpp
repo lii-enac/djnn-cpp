@@ -45,7 +45,7 @@ namespace djnn
   void
   Coupling::uninit ()
   {
-    if (_src == nullptr) return;
+    if (_src == nullptr) { return; }
     switch(get_src_activation_flag ()) {
     case ACTIVATION:
       _src->remove_activation_coupling (this);
@@ -80,12 +80,12 @@ namespace djnn
   {
     switch(get_src_activation_flag ()) {
       case ACTIVATION:
-        if (_src != nullptr) _src->remove_activation_coupling (this);
-        if ( src != nullptr)  src->add_activation_coupling    (this);
+        if (_src != nullptr) { _src->remove_activation_coupling (this); }
+        if ( src != nullptr) {  src->add_activation_coupling    (this); }
       break;
       case DEACTIVATION:
-        if (_src != nullptr) _src->remove_deactivation_coupling (this);
-        if ( src != nullptr)  src->add_deactivation_coupling    (this);
+        if (_src != nullptr) { _src->remove_deactivation_coupling (this); }
+        if ( src != nullptr) {  src->add_deactivation_coupling    (this); }
       break;
       case NONE_ACTIVATION:
       break;
