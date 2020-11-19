@@ -181,9 +181,6 @@ endif
 
 ifeq ($(os),Darwin)
 CFLAGS += -Wno-deprecated-declarations
-# for clang-tidy
-CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
-CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo = echo
