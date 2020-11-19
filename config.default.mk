@@ -31,6 +31,7 @@ djnn_libs_extra :=
 #cross_prefix := em
 #CXX := ++
 #CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
+#CXXFLAGS += -DGL2D_RPI2 -DMASK_STB
 # emscripten ext libs
 #em_ext_libs_path := ../djnn-emscripten-ext-libs
 #source /Users/conversy/recherche/istar/code/apps/ext-libs/emscripten/emsdk/emsdk_env.sh
