@@ -61,12 +61,23 @@ namespace djnn
   public:
     static Context* instance ();
     void new_line (int line, const std::string& filename) { _line = line; _filename = filename; }
+    void parser_info (int begline, int begcol, int endline, int endcol, const std::string& filename) {
+        _line = begline; _begcol = begcol; _endline=endline; _endcol = endcol; _filename = filename;
+    }
     int line () { return _line; }
+    int begline () { return _line; }
+    int begcol () { return _begcol; }
+    int endline () { return _endline; }
+    int endcol () { return _endcol; }
+    
     const std::string& filename () { return _filename; }
   private:
     Context () : _line (-1), _filename ("") {}
     static Context* _instance;
     int _line;
+    int _begcol;
+    int _endline;
+    int _endcol;
     std::string _filename;
   };
 }
