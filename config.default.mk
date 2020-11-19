@@ -7,6 +7,9 @@ display := QT
 graphics := QT
 #options: QT CAIRO
 
+picking := COLOR
+#option: COLOR ANALYTICAL
+
 audio := AL
 #options: AL AL_SOFT
 
@@ -22,12 +25,19 @@ djnn_libs_extra :=
 #options: /usr/local/Cellar/android-ndk/r14/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-g
 #options: /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 
+# emscripten
+# display: SDL graphics: GL picking: ANALYTICAL audio: AL
+# change config ingl and text
+#cross_prefix := em
+#CXX := ++
+#CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
 # emscripten ext libs
 #em_ext_libs_path := ../djnn-emscripten-ext-libs
+#source /Users/conversy/recherche/istar/code/apps/ext-libs/emscripten/emsdk/emsdk_env.sh
+
 
 build_dir := build
 
-picking := COLOR
-#option: color analytical
+
 
 #CFLAGS += -DDJNN_NO_DEBUG
