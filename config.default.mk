@@ -10,7 +10,7 @@ graphics := QT
 picking := COLOR
 #option: COLOR ANALYTICAL
 
-audio := AL
+audio := AL_SOFT
 #options: AL AL_SOFT
 
 physics := # set to ODE
@@ -26,21 +26,22 @@ djnn_libs_extra :=
 #options: /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-c
 
 # emscripten
-# display: SDL graphics: GL picking: ANALYTICAL audio: AL
-# change config ingl and text
-#cross_prefix := em
-#CXX := ++
-#CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
-#CXXFLAGS += -DGL2D_RPI2 -DMASK_STB
-# emscripten ext libs
-#em_ext_libs_path := ../djnn-emscripten-ext-libs
-#source /Users/conversy/recherche/istar/code/apps/ext-libs/emscripten/emsdk/emsdk_env.sh
+# in the shell: source /Users/conversy/recherche/istar/code/apps/ext-libs/emscripten/emsdk/emsdk_env.sh
+# cross_prefix := em
+# CXX := ++
+# CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
+# CXXFLAGS += -DGL2D_RPI2 -DMASK_STB
+# display := SDL
+# graphics := GL
+# picking := ANALYTICAL
+# audio := AL
 
 
 build_dir := build
 
 
 #CFLAGS += -DDJNN_NO_DEBUG
+
 # for clang-tidy
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
