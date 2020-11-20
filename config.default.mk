@@ -10,7 +10,7 @@ graphics := QT
 picking := COLOR
 #option: COLOR ANALYTICAL
 
-audio := AL_SOFT
+audio := AL
 #options: AL AL_SOFT
 
 physics := # set to ODE
