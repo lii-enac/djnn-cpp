@@ -8,6 +8,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
     - Update the Docs !
 
+## [1.14.0] - 2020-11-23
+
+### NEW
+    - package for windows (and Linux) are avaluable on : https://github.com/lii-enac/djnn-cpp/releases
+    - NEW support for layers on GUI backend
+    - NEW component WallClock giving time (state) in ms from 01/01/1970 or string (state_text) %Y-%m-%d_%Hh%Mm%Ss format 
+    - NEW support for screenshot from window/frame
+    - NEW support for window/frame opacity
+    - NEW support for window/frame geometry
+    - NEW Componant Remote_process to conect to a remote application
+    - NEW Componant process_exporter to export part of an application
+
+### Added
+    - Added refreshed (blank spike) to windwo/frame
+    - Added better handling of audio properties : loop, gain, position, pitch to sound and real-time control of parameters
+    - Audio : prepare for mp3 and flac
+    - Added the possibility to change the initial state of a FSM before the FSM activation
+    - Added silent "-s" option on Makefile 
+    - Added bounding_box on path
+    - Added warning messages on process::find_child() function else use process::find_child_impl() or not debug mode
+    - Added transform method to all transformations
+
+### Changed
+    - STD thread are now the standart for all the plateforms
+    - Improved physics module 
+    - Refreshed informations on INSTALL.md 
+    - Improved (better scheme) and clean-up Makefile
+    - Clean-up code using tidy
+
+### Removed
+### Fixed
+    - Fixed data-race using sanatizer -thread option.
+    - Fixed several leaks using sanatizer -leaks -address options
+    - Fixed process state_dependency function on cleanings
+    - Fixed deref immediate coupling, check on new source, graph cleaning and update source on start
+    - Fixed a bug (data-race) in time manager 
+    - Fixed window position on cairo/sdl backend
+    - Fixed some free/delete call
+    - Fixed comms compilation on windows
+    - Fixed clear_exec_env
+
+
 ## [1.13.0] - 2020-10-07
 
 ### NEW
