@@ -36,32 +36,18 @@ ifeq ($(os),Darwin)
 endif
 
 ifeq ($(os),Linux)
-	#TODO : activate after confinement and put above AND REMOVE /ivy
-	tmp_lib_cppflags = $(shell pkg-config ivy-c --cflags)
-	ifeq ($(tmp_lib_cppflags),)
-		lib_cppflags += -I/usr/local/include/Ivy
-	endif
-	tmp_lib_ldflags += $(shell pkg-config ivy-c --libs)
-	ifeq ($(tmp_lib_ldflags),)
-		lib_ldflags += -L/usr/local/lib -livy -lpcre
-	endif
-	#lib_cppflags += -I/usr/local/include/Ivy
-	#lib_ldflags += -L/usr/local/lib -livy -lpcre
+	# TODO: add support for pkg-vonfig
+	# TODO: remove once .pkg made 
+	lib_cppflags += -I/usr/local/include/Ivy
+	lib_ldflags += -L/usr/local/lib -livy -lpcre
 	lib_srcs += $(local_dir)/serial.cpp
 endif
 
 ifeq ($(os),MinGW)
-	#TODO : activate after confinement and put above AND REMOVE /ivy
-	tmp_lib_cppflags = $(shell pkg-config ivy-c --cflags)
-	ifeq ($(tmp_lib_cppflags),)
-		ib_cppflags += -I/usr/include/Ivy
-	endif
-	tmp_lib_ldflags += $(shell pkg-config ivy-c --libs)
-	ifeq ($(tmp_lib_ldflags),)
-		lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
-	endif 
-	#lib_cppflags += -I/usr/include/Ivy
-	#lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
+	# TODO: add support for pkg-vonfig
+	# TODO: remove once .pkg made 
+	lib_cppflags += -I/usr/include/Ivy
+	lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
 endif
 
 # library-specific thread support
