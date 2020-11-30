@@ -14,7 +14,7 @@
  *
  */
 
-#include "../abstract_sobj.h"
+#include "audio/abstract_sobj.h"
 //#include "backend.h"
 //#include "abstract_backend.h"
 

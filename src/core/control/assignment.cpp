@@ -1,7 +1,7 @@
 
 #include "assignment.h"
 
-#include "../tree/remote_property.h"
+#include "core/tree/remote_property.h"
 #include "core/tree/abstract_property.h"
 #include "core/tree/bool_property.h"
 #include "core/tree/int_property.h"

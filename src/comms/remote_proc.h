@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../core/tree/remote_property.h"
+#include "core/tree/remote_property.h"
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
