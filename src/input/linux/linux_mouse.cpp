@@ -72,9 +72,9 @@ namespace djnn {
   {
     _btn_name->set_value (name, true);
     if (val)
-      _press->activate ();
+      _press->schedule_activation ();
     else
-      _release->activate ();
+      _release->schedule_activation ();
   }
 
   void
@@ -104,15 +104,19 @@ namespace djnn {
         {
         case REL_X:
           _move_dx->set_value (ev->value, true);
+          _move->schedule_activation ();
           break;
         case REL_Y:
            _move_dy->set_value (ev->value, true);
+           _move->schedule_activation ();
           break;
         case REL_WHEEL:
            _wheel_dy->set_value (ev->value, true);
+           _wheel->schedule_activation ();
           break;
         case REL_HWHEEL:
           _wheel_dx->set_value (ev->value, true);
+          _wheel->schedule_activation ();
           break;
         }
       break;
