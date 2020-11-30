@@ -132,7 +132,7 @@ namespace djnn
     else if (path.compare ("size") == 0)
       return &_size;
     else {
-      return FatProcess::find_child (path);
+      return FatProcess::find_child_impl (path);
     }
     return nullptr;
   }
@@ -142,6 +142,9 @@ namespace djnn
   Set::dump (int level)
   {
     cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
+    for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
+      cout << "\t- " << it->first << endl;
+    }
   }
 #endif
 
