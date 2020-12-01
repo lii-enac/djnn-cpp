@@ -60,8 +60,15 @@ namespace djnn
 
   void
   clear_display () {
-    UpdateDrawing::clear ();
-    p_clear_display ();
+    if ( __module_initialized == true ) {
+      GPUs->set_activation_state (DEACTIVATED);
+      Displays->set_activation_state (DEACTIVATED);
+      UpdateDrawing::clear ();
+      p_clear_display ();
+      delete GPUs;
+      delete Displays;
+      __module_initialized = false;
+    }
   }
 
 }
