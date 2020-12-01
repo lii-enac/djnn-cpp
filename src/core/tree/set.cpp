@@ -34,7 +34,7 @@ namespace djnn
     FatProcess (name),
     _added (nullptr, "_added", nullptr),
     _removed (nullptr, "_removed", nullptr),
-    _size (nullptr, "size", 0)
+    _size (nullptr, "_size", 0)
   {
     finalize_construction (parent, name);
   }
