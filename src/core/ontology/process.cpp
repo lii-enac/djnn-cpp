@@ -104,6 +104,14 @@ namespace djnn
       _vertex->invalidate ();
     }
 
+    if (get_parent() == nullptr) {
+      auto it = parentless_names.find((ChildProcess*)this);
+      if (it!=parentless_names.end()) {
+        //std::cerr << "rem " << it->second << std::endl;
+        parentless_names.erase (it);
+      }
+    }
+
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
        " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
@@ -111,6 +119,21 @@ namespace djnn
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);
     #endif
+  }
+
+  void
+  delete_parentless_processes ()
+  {
+    std::vector<CoreProcess*> ps;
+    for (auto & pair: parentless_names) {
+      ps.push_back(const_cast<ChildProcess*>(pair.first));
+    }
+    for (auto * p: ps) {
+      assert (p->get_parent()==nullptr);
+      //delete p; // FIXME 1: uncomment when gradient is fixed
+      warning (p, " parentless process was not deleted before cleaning up core. Maybe due to a leak somewhere...");
+    }
+    parentless_names.clear (); // FIXME 2 should not be necessary, uncomment when gradient is fixed
   }
 
   const std::string&
@@ -429,6 +452,13 @@ namespace djnn
       if (_parent) {
           parentless_names[this] = _parent->find_child_name (this);
       }
+    } else { // do not erase if we have to reinsert afterwards...
+      if (_parent == nullptr) {
+        auto it = parentless_names.find((ChildProcess*)this);
+        if (it != parentless_names.end()) {
+          parentless_names.erase(it);
+        }
+      }
     }
     _parent = djnn_dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
@@ -442,7 +472,10 @@ namespace djnn
     if (child == nullptr) { return; }
 
     if(child->get_parent ()==nullptr) {
-      parentless_names.erase(this);
+      auto it = parentless_names.find((ChildProcess*)this);
+      if (it != parentless_names.end()) {
+        parentless_names.erase(it);
+      }
     }
 
     child->set_parent (this);

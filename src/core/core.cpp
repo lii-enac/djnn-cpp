@@ -67,12 +67,17 @@ namespace djnn
 */
   }
 
+  extern void
+  delete_parentless_processes ();
+
   void
   clear_core ()
   {
     delete &Graph::instance (); // destructor will set Graph::_instance to nullptr since _instance is private
     //XML::clear_xml_parser ();
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
+    //std::cerr << __PRETTY_FUNCTION__ << __FL__;
+    delete_parentless_processes ();
   }
 }
 
