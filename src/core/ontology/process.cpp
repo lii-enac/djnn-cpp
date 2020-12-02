@@ -23,7 +23,7 @@
 #include "core/utils/djnn_dynamic_cast.h"
 
 #include <algorithm>
-
+#include <cassert>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include <iostream>
