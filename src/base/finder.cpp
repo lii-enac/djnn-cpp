@@ -12,6 +12,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "finder.h"
 
 #include "core/serializer/serializer.h"
