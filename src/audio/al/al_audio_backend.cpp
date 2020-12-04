@@ -1,11 +1,6 @@
 #include "al_audio_backend.h"
 
 #include "openal.h"
-
-#if !defined(DJNN_NO_DEBUG)
-#include <iostream>
-#endif
-
 #include "audio/al/al_debug.h"
 
 #include "core/utils/error.h"

@@ -21,7 +21,7 @@
 #include <memory>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-//#include <iostream>
+//#include <__iostream>
 #endif
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBGG

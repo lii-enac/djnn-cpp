@@ -6,8 +6,6 @@
 #include "core/serializer/serializer.h"
 #endif
 
-#include <iostream>
-
 namespace djnn {
 #if !defined(DJNN_NO_SERIALIZE)
 

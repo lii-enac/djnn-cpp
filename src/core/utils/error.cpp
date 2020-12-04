@@ -104,13 +104,16 @@ namespace djnn
     auto & out = std::cout;
     out << msg;
     if (cr) {
-      if (ctxinfo) out << ctxinfo;
+      if (ctxinfo) out << " " << ctxinfo;
       out << std::endl;
     }
 #endif
 #ifdef DJNN_CRAZYFLIE
     DJNN_DEBUG_PRINT( msg.c_str() ) ;
-    DJNN_DEBUG_PRINT( "\n" ) ;
+    if (cr) {
+      if (ctxinfo) DJNN_DEBUG_PRINT( msg.c_str() ) ;
+      DJNN_DEBUG_PRINT( "\n" ) ;
+    }
 #endif
     
   }

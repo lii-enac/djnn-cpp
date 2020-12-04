@@ -17,9 +17,6 @@
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
 
-#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
-#endif
 
 namespace djnn
 {

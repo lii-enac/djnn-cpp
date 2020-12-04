@@ -698,7 +698,7 @@ namespace djnn
   CoreProcess::serialize (const std::string& format) {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    error (this, "serialize is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
+    warning (this, "serialize is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   }
   #endif
@@ -707,7 +707,7 @@ namespace djnn
   CoreProcess::clone () {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    error (this, "clone is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
+    warning (this, "clone is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   
     return nullptr;
@@ -719,7 +719,7 @@ namespace djnn
   void
   CoreProcess::dump (int level)
   {
-    loginfo ("CoreProcess " + __to_string(this));
+    loginfonofl ("CoreProcess " + __to_string(this));
   }
 
   void
@@ -729,14 +729,14 @@ namespace djnn
 
     /* check if the component is empty - should be ?*/
     if (children_empty ()) {
-      loginfo ("<EMPTY>");
+      loginfonofl ("<EMPTY>");
       return;
     }
 
     /* check if the level is reached */
     if ((level != 0) && (indent == level - 1)) { return; }
 
-    loginfo("");
+    loginfonofl("");
     indent++;
 
     int i = 0;
@@ -746,7 +746,7 @@ namespace djnn
       loginfonocr (" +" + __to_string(i++) + " ");
       it->second->dump (level);
       if (it->second->get_process_type() != CONTAINER_T || indent == level - 1)
-        loginfo("");
+        loginfonofl("");
     }
     indent--;
   }

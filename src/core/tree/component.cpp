@@ -16,6 +16,7 @@
 
 #include "core/control/assignment.h"
 #include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
 #include "core/execution/graph.h"
 #include "core/tree/component_observer.h"
 #include "core/tree/structure_observer.h"
@@ -33,7 +34,7 @@
 
 
 #if !defined(DJNN_NO_DEBUG)
-#include <iostream>
+// #include <__iostream>
 
 //#define DEBUG
 //#define DEBUG_DEACTIVATE
@@ -161,7 +162,7 @@ namespace djnn
         }
       } else {
 #ifndef DJNN_NO_DEBUG
-        cout << "spec = " << spec << endl;
+        loginfo (std::string("spec = ") + __to_string(spec));
 #endif
         warning (this, (std::string("Undefined spec to move child ") + child_to_move->get_name (child_to_move->get_parent ())).c_str());
       }
@@ -312,11 +313,11 @@ namespace djnn
   Container::print_children ()
   {
 #ifndef DJNN_NO_DEBUG
-    cout << get_name () << "'s children:\n";
+    loginfonofl (get_name () + "'s children:");
     for (auto c : _children) {
-      cout << c->get_name (c->get_parent()) << endl;
+      loginfonofl (c->get_name (c->get_parent()));
     }
-    cout << endl;
+    loginfonocr("\n");
 #endif
   }
 

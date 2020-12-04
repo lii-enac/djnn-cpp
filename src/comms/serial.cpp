@@ -18,7 +18,6 @@
 #include "exec_env/main_loop.h"
 #include "utils/debug.h"
 
-#include <iostream>
 // #include <string> // pch
 #include <unistd.h>
 #include <cstring> // strlen

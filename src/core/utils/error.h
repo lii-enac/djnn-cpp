@@ -57,6 +57,7 @@ namespace djnn
   #define warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
   #define loginfo(msg) djnn::djnn__info(msg,true, __FILE__ ":" __djnn_str1(__LINE__))
   #define loginfonocr(msg) djnn::djnn__info(msg,false, __FILE__ ":" __djnn_str1(__LINE__))
+  #define loginfonofl(msg) djnn::djnn__info(msg,true)
 
   class Context {
   public:

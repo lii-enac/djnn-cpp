@@ -21,8 +21,6 @@
 //#include "display/window.h"
 //#include "display/update_drawing.h"
 
-#include <iostream>
-
 namespace djnn
 {
   
