@@ -21,7 +21,10 @@
 #include <AL/efx.h>
 #endif
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
+
 #include "audio/al/al_debug.h"
 #include "utils/debug.h"
 #include "core/utils/error.h"

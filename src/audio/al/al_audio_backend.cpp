@@ -2,8 +2,14 @@
 
 #include "openal.h"
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iostream>
+#endif
+
 #include "audio/al/al_debug.h"
+
+#include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
 
 #ifdef DJNN_USE_OPENAL_EFX
 #define AL_ALEXT_PROTOTYPES
@@ -46,14 +52,14 @@ namespace djnn {
 		device = alcOpenDevice (NULL); //CHKAL // no context yet
 	    if (device == NULL)
 	    {
-	        std::cerr << "cannot open sound card" << std::endl;
+	        error (nullptr, "cannot open sound card");
 	 		return;
 	    }
 
 		if (alcIsExtensionPresent (device, "ALC_EXT_EFX") == AL_FALSE)
 		{
 #ifdef DJNN_USE_OPENAL_EFX
-	        std::cerr << "no OpenAL EFX" << std::endl;
+	        error (nullptr, "no OpenAL EFX");
 #endif
 	    }
 
@@ -64,23 +70,23 @@ namespace djnn {
 		context = alcCreateContext (device, NULL); //CHKAL; // no context yet
 	    if (context == NULL)
 	    {
-	        std::cerr << "cannot open context" << std::endl;
+	        error (nullptr, "cannot open context");
 	        return;
 	    }
 
 	    alcMakeContextCurrent (context); CHKAL;
 
-	    std::cout << "Default device:" << alcGetString (NULL, ALC_DEFAULT_DEVICE_SPECIFIER) << std::endl; CHKAL;
+	    loginfo (std::string("Default device:") + alcGetString (NULL, ALC_DEFAULT_DEVICE_SPECIFIER)); CHKAL;
 		auto * v = alcGetString (0, AL_VENDOR); CHKAL;
-		if(v)
-			std::cout << "AL vendor: " << v << __FL__;
+		if(v) {
+			loginfo ( std::string("AL vendor: ") + v);
+		}
 
 	    int major, minor;
 		alcGetIntegerv (NULL, ALC_MAJOR_VERSION, 1, &major); CHKAL;
 		alcGetIntegerv (NULL, ALC_MINOR_VERSION, 1, &minor); CHKAL;
 
-		std::cout << "ALC version: " << major << " " << minor << std::endl;
-		std::cout << std::flush;
+		loginfo ("ALC version: " + __to_string(major) + " " + __to_string (minor));
 	}
 
 	void clear_audio_openal ()

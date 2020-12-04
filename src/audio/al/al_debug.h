@@ -2,7 +2,11 @@
 
 #include "utils/debug.h"
 
+#if !defined(DJNN_NO_DEBUG)
 #define CHKAL {int err = alGetError(); if(err) { std::cerr << alErrorString(err) << __FL__; }}
+#else
+#define CHKAL
+#endif
 
 inline
 const char*
