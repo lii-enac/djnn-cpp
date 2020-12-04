@@ -15,12 +15,15 @@
 
 #pragma once
 
-#include "utils/debug.h"
-
 #include <vector>
-#include <list>
 #include <map>
 #include <string>
+
+#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+#include <list>
+#endif
+
+#include "utils/debug.h"
 
 namespace djnn {
 
