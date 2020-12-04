@@ -45,7 +45,7 @@ namespace djnn {
       }
       return;
     }
-    for (auto c: src->get_properties_name ()) {
+    for (auto & c: src->get_properties_name ()) {
       CoreProcess *prop_src = src->find_child_impl (c);
       CoreProcess *prop_dst = dst->find_child_impl (c);
       if (prop_src && prop_dst)
