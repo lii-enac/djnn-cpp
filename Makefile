@@ -100,7 +100,7 @@ endif
 ifeq ($(silent),yes)
 rule_message =
 else
-rule_message = $(echo) $1 $2
+rule_message = printf "$1 $2\n"
 endif
 
 ifeq ($V,)
@@ -159,7 +159,7 @@ endif
 build_lib_dir := $(build_dir)/lib
 build_incl_dir := $(build_dir)/include/djnn-cpp
 lib_static_suffix = .a
-echo = echo -e
+echo ?= echo -e
 
 CFLAGS += -g -MMD -Wall
 
@@ -183,7 +183,7 @@ ifeq ($(os),Darwin)
 CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
-echo = echo
+echo ?= echo
 YACC := /usr/local/opt/bison/bin/bison -d
 LEX := /usr/local/opt/flex/bin/flex
 moc := /usr/local/opt/qt/bin/moc
@@ -349,8 +349,6 @@ CXXFLAGS += -include-pch $(pch_dst)
 # ---------------------------------------
 # djnn modules
 
-CXXFLAGS += $(CFLAGS)
-CXXFLAGS += -std=c++14
 
 djnn_libs ?= core exec_env base display comms gui input animation utils files audio
 djnn_libs += $(djnn_libs_extra)
