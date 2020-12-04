@@ -283,7 +283,6 @@ endif
 
 ifeq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
-pch_ext = .gch
 endif
 
 # ---------------------------------------
@@ -330,6 +329,7 @@ CXXFLAGS += -std=c++14
 # precompiled headers
 
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
+# https://stackoverflow.com/a/3164874
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
 pch_src_ := src/core/ontology/precompiled
@@ -350,6 +350,8 @@ endif
 
 ifneq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -include-pch $(pch_dst)
+else
+CXXFLAGS += -include $(pch_dst)
 endif
 
 # ---------------------------------------
