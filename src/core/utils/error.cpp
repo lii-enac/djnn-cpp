@@ -52,9 +52,8 @@ namespace djnn
     std::cerr << "djnn - ERROR: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
     
     std::cerr << std::endl << std::endl;
-    
-    
 #endif
+
 #ifdef DJNN_CRAZYFLIE
     DJNN_DEBUG_PRINT( msg ) ;
     DJNN_DEBUG_PRINT( "\n" ) ;
@@ -99,11 +98,15 @@ namespace djnn
   }
 
   void
-  djnn__info (const std::string& msg)
+  djnn__info (const std::string& msg, bool cr, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
     auto & out = std::cout;
-    out << msg << std::endl;
+    out << msg;
+    if (cr) {
+      if (ctxinfo) out << ctxinfo;
+      out << std::endl;
+    }
 #endif
 #ifdef DJNN_CRAZYFLIE
     DJNN_DEBUG_PRINT( msg.c_str() ) ;

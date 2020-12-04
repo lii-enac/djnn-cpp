@@ -32,7 +32,7 @@ namespace djnn
   int djnn__error (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
   void djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
   void djnn__warning (CoreProcess *p, const std::string& msg, const char* ctxinfo=nullptr);
-  void djnn__info (const std::string& msg);
+  void djnn__info (const std::string& msg, bool cr, const char* ctxinfo=nullptr);
   void djnn__debug (const char* file, const char* function, const char* lineno);
   inline int djnn__exit(int ret) { exit(ret); return 1; }
 
@@ -55,7 +55,8 @@ namespace djnn
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
   #define warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
-  #define loginfo(msg) djnn::djnn__info(msg)
+  #define loginfo(msg) djnn::djnn__info(msg,true, __FILE__ ":" __djnn_str1(__LINE__))
+  #define loginfonocr(msg) djnn::djnn__info(msg,false, __FILE__ ":" __djnn_str1(__LINE__))
 
   class Context {
   public:

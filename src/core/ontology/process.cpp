@@ -26,7 +26,6 @@
 #include <cassert>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
 #include <boost/core/demangle.hpp>
 #include <typeinfo>
 #endif
@@ -55,7 +54,7 @@ namespace djnn
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   std::vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
-  static map<const ChildProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
 
   CoreProcess::CoreProcess (bool model)
@@ -97,7 +96,7 @@ namespace djnn
     if (_vertex != nullptr) {
       #ifndef DJNN_NO_DEBUG
       auto * pp = this;
-      warning ( nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
+      warning (nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
       // get_activation_couplings is virtual: in a destructor only CoreProcess::get_activation_couplings will be called and it should return an empty container
       //for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
       //for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
@@ -127,7 +126,8 @@ namespace djnn
   {
     std::vector<CoreProcess*> ps;
     for (auto & pair: parentless_names) {
-      ps.push_back(const_cast<ChildProcess*>(pair.first));
+      //ps.push_back(const_cast<ChildProcess*>(pair.first));
+      ps.push_back(const_cast<CoreProcess*>(pair.first));
     }
     for (auto * p: ps) {
       assert (p->get_parent()==nullptr);
@@ -212,8 +212,8 @@ namespace djnn
       #ifndef DJNN_NO_DEBUG
       auto * pp = this;
       warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + "\n"); //" - _vertex is NOT NULL and it should\n");
-      for (auto &c: CouplingProcess::get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
-      for (auto &c: CouplingProcess::get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
+      for (auto &c: CouplingProcess::get_activation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (activation)");
+      for (auto &c: CouplingProcess::get_deactivation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (deactivation)");
       #endif
     }
   }
@@ -233,9 +233,9 @@ namespace djnn
   CoreProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
   {
     if (parent) {
-      parent->add_child ((ChildProcess*)this, name); // FIXME
+      parent->add_child (this, name); // FIXME
     } else {
-      parentless_names[(ChildProcess*)this] = name; // FIXME
+      parentless_names[this] = name; // FIXME
     }
 
     #ifndef DJNN_NO_DEBUG
@@ -442,7 +442,9 @@ namespace djnn
   CoreProcess::set_vertex (Vertex *v) 
   { 
     if (_vertex && v && _vertex != v) {
+  #ifdef DJNN_LOCAL_DEBUG 
       std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl;
+  #endif
     }
     //print_set_vertex_err_msg (v);
     _vertex = v; 
@@ -654,20 +656,17 @@ namespace djnn
   void
   merge_children (ParentProcess *p1, const std::string& sy1, ParentProcess* p2, const std::string& sy2)
   {
-    auto * x2 = p2->find_child_impl (sy2);
-    if (x2 == nullptr) {
-      #ifndef DJNN_NO_DEBUG
-      cerr << "trying to merge unknown child " << sy2 << endl;
-      #endif
-      return;
-    }
     auto * x1 = p1->find_child_impl (sy1);
     if (x1 == nullptr) {
-      #ifndef DJNN_NO_DEBUG
-      cerr << "trying to merge unknown child " << sy1 << endl;
-      #endif
+      error (p1, "trying to merge unknown child " + sy1);
       return;
     }
+    auto * x2 = p2->find_child_impl (sy2);
+    if (x2 == nullptr) {
+      error(p2, "trying to merge unknown child " + sy2);
+      return;
+    }
+
     for (auto& c : x2->get_activation_couplings ()) {
       x1->add_activation_coupling (c);
     }
@@ -699,7 +698,7 @@ namespace djnn
   CoreProcess::serialize (const std::string& format) {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    cout << "serialize is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
+    error (this, "serialize is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   }
   #endif
@@ -708,7 +707,7 @@ namespace djnn
   CoreProcess::clone () {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    cout << "clone is not yet implemented for " << boost::core::demangle(typeid(*this).name()) << " '" << (pp? pp->get_debug_name ():"") << "'" << endl;
+    error (this, "clone is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   
     return nullptr;
@@ -720,34 +719,34 @@ namespace djnn
   void
   CoreProcess::dump (int level)
   {
-    cout << "CoreProcess " << this << endl;
+    loginfo ("CoreProcess " + __to_string(this));
   }
 
   void
   FatProcess::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << ": ";
+    loginfonocr ((get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + ": ");
 
     /* check if the component is empty - should be ?*/
     if (children_empty ()) {
-      cout << "<EMPTY>" << endl;
+      loginfo ("<EMPTY>");
       return;
     }
 
     /* check if the level is reached */
     if ((level != 0) && (indent == level - 1)) { return; }
 
-    cout << endl;
+    loginfo("");
     indent++;
 
     int i = 0;
     for (symtable_t::iterator it = symtable ().begin (); it != symtable ().end (); ++it) {
       for (int j = 0; j < indent; j++)
-        cout << "|\t";
-      cout << " +" << i++ << " ";
+        loginfonocr ("|\t");
+      loginfonocr (" +" + __to_string(i++) + " ");
       it->second->dump (level);
       if (it->second->get_process_type() != CONTAINER_T || indent == level - 1)
-        cout << endl;
+        loginfo("");
     }
     indent--;
   }

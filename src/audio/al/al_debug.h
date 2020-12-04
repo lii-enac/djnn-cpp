@@ -3,7 +3,8 @@
 #include "utils/debug.h"
 
 #if !defined(DJNN_NO_DEBUG)
-#define CHKAL {int err = alGetError(); if(err) { std::cerr << alErrorString(err) << __FL__; }}
+#include "core/utils/error.h"
+#define CHKAL {int err = alGetError(); if(err) { loginfo (alErrorString(err)); }}
 #else
 #define CHKAL
 #endif

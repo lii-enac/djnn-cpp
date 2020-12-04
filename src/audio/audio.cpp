@@ -11,9 +11,6 @@
 
 #include "core/execution/graph.h" // for enable
 
-#if !defined(DJNN_NO_DEBUG)
-#include <iostream>
-#endif
 
 namespace djnn {
 
