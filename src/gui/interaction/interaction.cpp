@@ -153,7 +153,7 @@ namespace djnn
       delete it->second;
       touches.erase (it);
     } else {
-      std::cout << "touch not found on remove\n";
+      warning (this, "touch not found on remove");
     }
   }
 
@@ -172,7 +172,7 @@ namespace djnn
       ta->_last_pt.set_values (ta->_new_pt);
       ta->_new_pt.set_values (t->get_move_x (), t->get_move_y ());
     } else {
-      std::cout << "touch not found on move\n";
+      warning (this, "touch not found on move");
     }
   }
 
