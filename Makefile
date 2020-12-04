@@ -331,7 +331,7 @@ CXXFLAGS += -std=c++14
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
-pch_src_ := src/core/ontology/precompiled
+pch_src_ := $(src_dir)/core/ontology/precompiled
 pch_src := $(pch_src_).h
 pch_dst := $(build_dir)/$(pch_src_)$(pch_ext)
 
@@ -351,7 +351,7 @@ ifneq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -include-pch $(pch_dst)
 else
 # https://stackoverflow.com/a/3164874
-CXXFLAGS += -I$(build_dir)/src/core/ontology -include $(pch_dst)
+CXXFLAGS += -I$(dir $(pch_dst)) -include $(build_dir)/$(pch_src).h
 endif
 
 # ---------------------------------------
