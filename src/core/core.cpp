@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include <locale.h>
+
 
 namespace djnn
 {
@@ -52,7 +54,7 @@ namespace djnn
     if (__module_initialized == false) {
       __module_initialized = true;
       //djnn::loadedModules.push_back("core");
-      setlocale(LC_NUMERIC, "C");
+      setlocale (LC_NUMERIC, "C");
       //Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
