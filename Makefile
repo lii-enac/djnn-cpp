@@ -159,6 +159,8 @@ endif
 build_lib_dir := $(build_dir)/lib
 build_incl_dir := $(build_dir)/include/djnn-cpp
 lib_static_suffix = .a
+pch_ext = .pch
+include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
 CFLAGS += -g -MMD -Wall
@@ -281,6 +283,7 @@ endif
 
 ifeq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+pch_ext = .gch
 endif
 
 # ---------------------------------------
@@ -331,11 +334,12 @@ CXXFLAGS += -std=c++14
 
 pch_src_ := src/core/ontology/precompiled
 pch_src := $(pch_src_).h
-pch_dst := $(build_dir)/$(pch_src_).pch
+pch_dst := $(build_dir)/$(pch_src_)$(pch_ext)
 
 CXXFLAGS_PCH := $(CXXFLAGS)
 
 pch: $(pch_dst)
+
 $(pch_dst): $(pch_src)
 ifeq ($$V,max)
 	$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
@@ -344,7 +348,9 @@ else
 	@$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
 endif
 
+ifneq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -include-pch $(pch_dst)
+endif
 
 # ---------------------------------------
 # djnn modules
