@@ -19,7 +19,7 @@
 #include "core/tree/spike.h"
 #include "core/tree/bool_property.h"
 
-#include <list>
+// #include <list> // pch
 
 
 namespace djnn {

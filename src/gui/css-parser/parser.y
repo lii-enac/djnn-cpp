@@ -15,8 +15,8 @@
 %{
 #include <stdio.h>
 #include <iostream>
-#include <string>
-#include <vector>
+// #include <string> // pch
+// #include <vector> // pch
 #include "core/core.h"
 #include "base/base.h"
 #include "gui/gui-dev.h"

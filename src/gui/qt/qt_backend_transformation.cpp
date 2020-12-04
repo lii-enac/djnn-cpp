@@ -23,7 +23,7 @@
 #include <QtGui/QPainter>
 
 #include <iostream>
-#include <vector>
+// #include <vector> // pch
 #include <cmath>
 
 namespace djnn

@@ -317,6 +317,34 @@ tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacO
 all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
 
+# ---------------------------------------
+# CFLAGS CXXFLAGS
+
+CXXFLAGS += $(CFLAGS)
+CXXFLAGS += -std=c++14
+
+# ---------------------------------------
+# precompiled headers
+
+# https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
+# https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
+
+pch_src_ := src/core/ontology/precompiled
+pch_src := $(pch_src_).h
+pch_dst := $(build_dir)/$(pch_src_).pch
+
+CXXFLAGS_PCH := $(CXXFLAGS)
+
+pch: $(pch_dst)
+$(pch_dst): $(pch_src)
+ifeq ($$V,max)
+	$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
+else
+	@$(call rule_message,compiling,$(stylized_target))
+	@$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
+endif
+
+CXXFLAGS += -include-pch $(pch_dst)
 
 # ---------------------------------------
 # djnn modules
@@ -421,6 +449,7 @@ endif
 # the remaining will be put into a .mk file for further, faster, inclusion
 
 #define $1_mk_content
+$$($1_objs): $$(pch_dst)
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)

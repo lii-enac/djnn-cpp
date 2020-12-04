@@ -15,13 +15,15 @@
 
 #pragma once
 
-#include <vector>
-#include <map>
-#include <string>
+// #include <vector> // pch
+// #include <map> // pch
+// #include <string> // pch
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-#include <list>
+// #include <list> // pch
 #endif
+
+#include "core/ontology/precompiled.h"
 
 #include "utils/debug.h"
 

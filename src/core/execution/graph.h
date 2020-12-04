@@ -16,8 +16,8 @@
 
 #include "core/ontology/process.h"
 
-#include <vector>
-#include <list>
+// #include <vector> // pch
+// #include <list> // pch
 #include <memory>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)

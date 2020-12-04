@@ -17,7 +17,7 @@
 
 #include "abstract_property.h"
 
-#include <string>
+// #include <string> // pch
 
 namespace djnn {
 

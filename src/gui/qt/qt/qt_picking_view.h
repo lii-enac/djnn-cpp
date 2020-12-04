@@ -21,7 +21,7 @@
 #include "display/window.h"
 #include "gui/shapes/abstract_gshape.h"
 
-#include <map>
+// #include <map> // pch
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtWidgets/QLabel>

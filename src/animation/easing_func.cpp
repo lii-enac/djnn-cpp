@@ -16,7 +16,7 @@
 #include "easing_func.h"
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
-#include <vector>
+// #include <vector> // pch
 #include <cmath>
 
 #define PI           3.14159265358979323846
@@ -281,10 +281,4 @@ namespace djnn
   }
 #endif
 
-  void
-  EasingGenerator::compute () {
-    double in = _in.get_value ();
-    in = in < 0 ? 0 : in > 1 ? 1 : in;
-    _out.set_value (func_list[_func_selector.get_value()](in), true);
-  }
 }
