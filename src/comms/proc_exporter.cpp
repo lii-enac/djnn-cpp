@@ -242,7 +242,7 @@ namespace djnn
           unsubscribe (msg[i]);
         }
       } else {
-        std::cout << "unknown msg:" << msg[1] << std::endl;
+        warning (this, "unknown msg: " + msg[1]);
       }
       djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
