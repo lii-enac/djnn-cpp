@@ -29,9 +29,10 @@ namespace djnn
     void draw () override;
     OutlineMiterLimit* clone () override;
     void get_properties_values (int& limit);
-    std::vector<std::string> get_properties_name () override {
-      std::vector<std::string> res;
-      res.push_back ("limit");
+    const std::vector<std::string>& get_properties_name () const override {
+      static const std::vector<std::string> res = {
+      "limit",
+      };
       return res;
     }
     virtual FatChildProcess* find_child_impl (const std::string&) override;

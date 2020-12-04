@@ -29,16 +29,17 @@ namespace djnn
     
     
     void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop);
-    std::vector<std::string> get_properties_name () override {
-      std::vector<std::string> res;
-      res.push_back ("gain");
-			res.push_back ("lowpass_gain");
-			res.push_back ("lowpass_freq");
-			res.push_back ("x");
-			res.push_back ("y");
-			res.push_back ("z");
-			res.push_back ("pitch_mul");
-			res.push_back ("loop");
+    const std::vector<std::string>& get_properties_name () const override {
+      static const std::vector<std::string> res = {
+      "gain",
+			"lowpass_gain",
+			"lowpass_freq",
+			"x",
+			"y",
+			"z",
+			"pitch_mul",
+			"loop",
+      };
       return res;
     }
     virtual FatChildProcess* find_child_impl (const std::string&) override;

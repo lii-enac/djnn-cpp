@@ -37,9 +37,10 @@ namespace djnn
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    std::vector<std::string> get_properties_name () override {
-      std::vector<std::string> res;
+    const std::vector<std::string>& get_properties_name () const override {
+      static const std::vector<std::string> res = {
       %(PUSHBACK_DYN_PROPS)s
+      };
       return res;
     }
     virtual FatChildProcess* find_child_impl (const std::string&) override;
@@ -316,7 +317,8 @@ def just_do_it(dc, finalize_construction=True):
     # print (DELETE_COUPLINGS)
     DELETE_DYN_PROPS = ('\n'+join_str+'\t').join([ 'it = find_child_iterator ("' + p.name + '");\n\t\t\tif (it != children_end ())\n\t\t\t\tdelete it->second;' for p in dc.props])
     #print (DELETE_DYN_PROPS)
-    PUSHBACK_DYN_PROPS = (join_str+'\t').join([ 'res.push_back ("' + p.name + '");' for p in dc.props])
+    #PUSHBACK_DYN_PROPS = (join_str+'\t').join([ 'res.push_back ("' + p.name + '");' for p in dc.props])
+    PUSHBACK_DYN_PROPS = (join_str+'\t').join([ '"' + p.name + '",' for p in dc.props])
     #print (PUSHBACK_DYN_PROPS)
     DEF_PROPS_REF_SET = (';'+join_str).join([p.name + ' = raw_props.'  + p.name for p in dc.props])
     # print (DEF_PROPS_REF_SET)

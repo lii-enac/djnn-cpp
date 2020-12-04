@@ -178,7 +178,8 @@ namespace djnn {
     virtual void set_state_dependency (CoreProcess* s) {}
 
     const std::string& get_name (ParentProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
-    virtual std::vector<std::string> get_properties_name () { std::vector<std::string> res; return res; }
+    static std::vector<std::string> default_properties_name;
+    virtual const std::vector<std::string>& get_properties_name () const;// { std::vector<std::string> res; return res; }
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);

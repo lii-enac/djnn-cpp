@@ -53,6 +53,7 @@ namespace djnn
                     string CoreProcess::default_name = "noname"; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::couplings_t CoreProcess::default_couplings; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  std::vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   static map<const ChildProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
@@ -140,6 +141,12 @@ namespace djnn
   CoreProcess::get_name (ParentProcess* parent) const
   {
     return parent->find_child_name(this);
+  }
+
+  const std::vector<std::string>&
+  CoreProcess::get_properties_name () const
+  {
+    return default_properties_name;
   }
 
   #ifndef DJNN_NO_DEBUG

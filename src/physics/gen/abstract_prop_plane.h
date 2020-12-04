@@ -29,12 +29,13 @@ namespace djnn
     
     
     void get_properties_values (double& a, double& b, double& c, double& d);
-    std::vector<std::string> get_properties_name () override {
-      std::vector<std::string> res;
-      res.push_back ("a");
-			res.push_back ("b");
-			res.push_back ("c");
-			res.push_back ("d");
+    const std::vector<std::string>& get_properties_name () const override {
+      static const std::vector<std::string> res = {
+      "a",
+			"b",
+			"c",
+			"d",
+      };
       return res;
     }
     virtual FatChildProcess* find_child_impl (const std::string&) override;
