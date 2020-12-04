@@ -18,8 +18,6 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 
-#include <iostream>
-
 namespace djnn {
     class Layer : public Container
     {
