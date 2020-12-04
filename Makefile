@@ -351,7 +351,7 @@ ifneq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -include-pch $(pch_dst)
 else
 # https://stackoverflow.com/a/3164874
-CXXFLAGS += -I$(dir $(pch_dst)) -include $(build_dir)/$(pch_src).h
+CXXFLAGS += -I$(dir $(pch_dst)) -include $(build_dir)/$(pch_src_).h
 endif
 
 # ---------------------------------------
