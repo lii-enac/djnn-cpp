@@ -13,6 +13,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "double_property.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
