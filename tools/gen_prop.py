@@ -60,7 +60,7 @@ getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abs
 def_string = """
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-#include "display/display.h"
+#include "display/display-dev.h" // DisplayBacken::instance
 #include "display/abstract_display.h"
 #include "display/window.h"
 #include "gui/shapes/shapes.h"

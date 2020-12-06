@@ -14,7 +14,10 @@
 
 #pragma once
 
-#include "display.h"
+//#include "display.h"
+
+#include "core/ontology/process.h"
+#include "abstract_display.h"
 
 namespace djnn {
   typedef enum mouse_button {
@@ -22,5 +25,24 @@ namespace djnn {
     BUTTON_MIDDLE,
     BUTTON_RIGHT
   } mouse_button;
+
+  class DisplayBackend
+  {
+  public:
+    static AbstractDisplay* instance ();
+    static void init ();
+    static void clear ();
+  private:
+    //class Impl;
+    class Impl
+    {
+      public:
+      //SDLDisplayBackend* backend;
+      AbstractDisplay* backend;
+    };
+    static Impl* _instance;
+  };
+
+  extern FatProcess* DrawingRefreshManager;
 
 }

@@ -12,9 +12,3 @@
  *
  */
 #pragma once
-
-#include "core.h"
-
-#include "ontology/process.h"
-#include "ontology/coupling.h"
-#include "execution/graph.h"

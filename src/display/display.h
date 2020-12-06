@@ -52,21 +52,4 @@ namespace djnn {
 
   class AbstractDisplay;
 
-  class DisplayBackend
-  {
-  public:
-    static AbstractDisplay* instance ();
-    static void init ();
-    static void clear ();
-  private:
-    //class Impl;
-    class Impl
-    {
-      public:
-      //SDLDisplayBackend* backend;
-      AbstractDisplay* backend;
-    };
-    static Impl* _instance;
-  };
-
 }

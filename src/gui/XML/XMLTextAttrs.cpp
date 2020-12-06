@@ -18,8 +18,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "core/core.h"
+// #include "core/cor__e.h"
 #include "gui/gui-dev.h"
+#include "gui/shapes/abstract_gshape.h" // SVGHolder
+#include "gui/style/style.h" // text style
 
 
 using namespace std;

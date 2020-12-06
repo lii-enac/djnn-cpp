@@ -16,6 +16,8 @@
  */
 #include "color_picking.h"
 #include "gui/transformation/transformations.h"
+#include "display/display.h" // mouse_tracking
+#include "gui/gui.h" // GenericMouse
 
 #include <assert.h>
 

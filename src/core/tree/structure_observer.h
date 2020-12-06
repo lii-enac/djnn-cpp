@@ -1,6 +1,7 @@
 #pragma once
 
 // #include <vector> // pch
+#include "core/ontology/process.h"
 
 namespace djnn {
 

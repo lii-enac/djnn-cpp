@@ -14,7 +14,9 @@
  */
 
 #include "gui-priv.h"
+#include "core/tree/component.h"
 #include "core/tree/component_observer.h"
+#include "display/window.h"
 
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>

@@ -12,7 +12,6 @@
  *
  */
 
-#include "core/core-dev.h"
 #include "serializer.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
@@ -21,6 +20,7 @@
 
 namespace djnn
 {
+  extern std::vector<std::string> loadedModules;
 
   using namespace std;
 

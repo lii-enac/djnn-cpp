@@ -16,8 +16,10 @@
 #include "gui/layer.h"
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-#include "display/display.h"
-#include "display/abstract_display.h"
+//#include "display/display.h"
+//#include "display/abstract_display.h"
+#include "display/display-dev.h"
+
 
 #include "core/execution/graph.h"
 #include "core/utils/error.h"

@@ -14,12 +14,13 @@
 
 
 #include "physics_backend.h"
-#include "core/core.h"
+// #include "core/cor__e.h"
 #include "core/serializer/serializer.h"
 
 
 namespace djnn
 {
+  extern std::vector<std::string> loadedModules;
   
   static bool __module_initialized = false;
 

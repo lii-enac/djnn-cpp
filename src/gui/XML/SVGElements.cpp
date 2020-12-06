@@ -22,11 +22,14 @@
 #include <locale.h>
 #include <stdlib.h>
 // #include <map> // pch
-#include "core/core.h"
+// #include "core/cor__e.h"
 #include "core/xml/xml-dev.h"
 #include "gui/gui-dev.h"
 #include "gui/shapes/abstract_gshape.h"
+#include "gui/shapes/shapes.h"
+#include "gui/transformation/transformations.h"
 #include "gui/css-parser/driver.h"
+
 
 using namespace std;
 

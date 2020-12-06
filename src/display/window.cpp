@@ -17,6 +17,7 @@
 #include "window.h"
 
 #include "display/display.h"
+#include "display/display-dev.h"
 #include "display/abstract_display.h"
 #include "display/update_drawing.h"
 

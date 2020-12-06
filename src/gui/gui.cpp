@@ -12,17 +12,19 @@
  *
  */
 
+#include "gui-dev.h"
 #include "gui-priv.h"
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "exec_env/main_loop.h"
+#include "display/display-dev.h"
 #include "display/window.h"
 
 #include "core/utils/error.h"
 
 #include <algorithm>
 
-#include <iostream>
+//#include <__iostream>
 #include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
@@ -35,6 +37,13 @@ namespace djnn
 {
   extern void p_init_p_display ();
   static bool __module_initialized = false;
+  extern std::vector<std::string> loadedModules;
+
+  extern FatProcess *GenericMouse;
+  extern GUIStructureObserver * gui_structure_observer;
+
+  void init_svg_parser ();
+  void clear_svg_parser ();
 
   void
   init_gui ()

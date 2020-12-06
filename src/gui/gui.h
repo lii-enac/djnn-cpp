@@ -29,11 +29,9 @@ namespace djnn {
   // extern int mouse_tracking;
   // extern int full_screen;
   // extern int hide_pointer;
-  extern FatProcess* DrawingRefreshManager;
+  // extern FatProcess* DrawingRefreshManager;
   extern FatProcess* GenericMouse;
 
   void init_gui ();
-  void init_svg_parser ();
-  void clear_svg_parser ();
   void clear_gui ();
 }

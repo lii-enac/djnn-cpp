@@ -17,8 +17,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "core/core.h"
+// #include "core/cor__e.h"
 #include "gui/gui-dev.h"
+#include "core/xml/xml-dev.h"
 
 namespace djnn {
 

@@ -20,8 +20,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "core/core.h"
-#include "base/base.h"
+
+#include "base/connector.h"
+#include "gui/shapes/abstract_gshape.h"
+#include "gui/style/style.h"
+#include "core/xml/xml-dev.h"
+#include "gui/transformation/transformations.h"
+
+// #include "core/cor__e.h"
+// #include "base/bas__e.h"
 #include "gui/gui-dev.h"
 
 namespace djnn {

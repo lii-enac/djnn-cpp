@@ -19,7 +19,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <algorithm>
-#include "core/core.h"
+// #include "core/cor__e.h"
 #include "gui/gui-dev.h"
 
 

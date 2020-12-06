@@ -13,15 +13,17 @@
  */
 
 
-#include "display-priv.h"
+#include "display/display-priv.h"
 #include "core/tree/set.h"
 #include "core/utils/uri.h"
-#include "update_drawing.h"
+#include "display/update_drawing.h"
 
 namespace djnn
 {
   
   static bool __module_initialized = false;
+  extern std::vector<std::string> loadedModules;
+
   FatProcess *DrawingRefreshManager;
 
   int mouse_tracking = 0;

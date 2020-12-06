@@ -13,10 +13,12 @@
  */
 
 #pragma once
-#include "gui-dev.h"
+//#include "gui-dev.h"
 #include "gui/abstract_gobj.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
+#include "core/tree/component.h"
+#include "display/window.h"
 
 namespace djnn {
     class Layer : public Container

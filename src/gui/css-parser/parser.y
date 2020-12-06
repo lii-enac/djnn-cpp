@@ -17,9 +17,12 @@
 #include <iostream>
 // #include <string> // pch
 // #include <vector> // pch
-#include "core/core.h"
-#include "base/base.h"
+// #include "core/cor__e.h"
+// #include "base/bas__e.h"
 #include "gui/gui-dev.h"
+
+#include "base/connector.h"
+#include "gui/style/style.h"
 
 // core/utils/error.h macros clash with Driver::error
 #undef error
