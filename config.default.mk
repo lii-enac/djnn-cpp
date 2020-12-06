@@ -18,6 +18,14 @@ phidgets := # set to PHIDGETS
 
 djnn_libs_extra :=
 
+# very fast compilation, but no debug
+# CFLAGS += -O0
+# fast compilation and debug
+# CFLAGS += -O0 -g
+# optimized but slower compilation
+# CFLAGS += -O3
+# optimized and debug but even slower compilation
+# CFLAGS += -O3 -g
 
 # cross-compile support
 #cross_prefix :=

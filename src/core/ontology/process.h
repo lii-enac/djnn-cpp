@@ -333,10 +333,14 @@ namespace djnn {
     virtual const std::string& find_child_name (const CoreProcess* child) const override; // WARNING : low efficiency function caused by linear search. use with care !
 
     // symbol and children-related methods only used in FatProcess
-    symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
-    symtable_t::iterator children_end () { return _symtable.end (); }
-    bool children_empty () { return _symtable.empty (); }
-    size_t children_size () const override { return _symtable.size(); }
+    // symtable_t::iterator find_child_iterator (const std::string& name) { return _symtable.find (name); }
+    // symtable_t::iterator children_end () { return _symtable.end (); }
+    // bool children_empty () { return _symtable.empty (); }
+    // size_t children_size () const override { return _symtable.size(); }
+    symtable_t::iterator find_child_iterator (const std::string& name);// { return _symtable.find (name); }
+    symtable_t::iterator children_end ();// { return _symtable.end (); }
+    bool children_empty ();// { return _symtable.empty (); }
+    size_t children_size () const override;// { return _symtable.size(); }
     
     symtable_t& symtable () { return _symtable; }
     const symtable_t& symtable () const override { return _symtable; }

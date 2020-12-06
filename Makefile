@@ -163,7 +163,7 @@ pch_ext = .pch
 include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
-CFLAGS += -g -MMD -Wall
+CFLAGS += -MMD -Wall
 
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)

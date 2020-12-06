@@ -598,6 +598,11 @@ namespace djnn
     return default_name;
   }
 
+  CoreProcess::symtable_t::iterator FatProcess::find_child_iterator (const std::string& name) { return _symtable.find (name); }
+  CoreProcess::symtable_t::iterator FatProcess::children_end () { return _symtable.end (); }
+  bool FatProcess::children_empty () { return _symtable.empty (); }
+  size_t FatProcess::children_size () const { return _symtable.size(); }
+
   void
   FatProcess::add_symbol (const std::string& name, FatChildProcess* c)
   {
