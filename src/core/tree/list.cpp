@@ -22,12 +22,12 @@
 #include "core/serializer/serializer.h"
 #include "core/tree/structure_observer.h"
 #include "core/utils/error.h"
-
+#include "core/utils/utils-dev.h"
 
 #include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG)
-#include <iostream>
+//#include <__iostream>
 #endif
 
 namespace djnn
@@ -47,8 +47,8 @@ namespace djnn
   void
   AbstractList::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
-
+    //cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
+    loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ index=" + __to_string(_children.size ()) + " ]");
     //FIXME: indent problem
     //for (auto c : _children)
     //  c->dump(level);

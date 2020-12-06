@@ -331,7 +331,7 @@ CXXFLAGS += -std=c++14
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
-pch_src_ := $(src_dir)/core/ontology/precompiled
+pch_src_ := $(src_dir)/core/utils/build/precompiled
 pch_src := $(pch_src_).h
 pch_dst := $(build_dir)/$(pch_src_)$(pch_ext)
 

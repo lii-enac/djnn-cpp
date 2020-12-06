@@ -20,7 +20,7 @@
 #include "core/utils/djnn_dynamic_cast.h"
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
+//#include <__iostream>
 #endif
 
 namespace djnn
@@ -107,7 +107,8 @@ namespace djnn
   void
   AbstractIntProperty::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
+    //cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
+    loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + get_string_value() + " ]");
   }
 #endif
 
