@@ -15,7 +15,7 @@
 
 #include "gui/layer.h"
 #include "gui/backend.h"
-#include "gui/abstract_backend.h"
+#include "gui/abstract_backend.h" // DisplayBackend::instance
 //#include "display/display.h"
 //#include "display/abstract_display.h"
 #include "display/display-dev.h"

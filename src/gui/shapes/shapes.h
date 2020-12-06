@@ -23,9 +23,11 @@
 #include "core/tree/text_property.h"
 #include "gui/style/style.h"
 
+#include "gui/shapes/ellipse.h"
+
 #include "gen/abstract_prop_rectangle.h"
 #include "gen/abstract_prop_circle.h"
-#include "gen/abstract_prop_ellipse.h"
+//#include "gen/abstract_prop_ellipse.h"
 #include "gen/abstract_prop_rectangle_clip.h"
 #include "gen/abstract_prop_line.h"
 #include "gen/abstract_image.h"
@@ -51,16 +53,6 @@ namespace djnn
   public:
     Circle (ParentProcess* parent, const std::string& name, double cx, double cy, double r);
     Circle* clone () override;
-    void draw () override;
-    void get_bounding_box (double& x, double& y, double& w, double& h) const override;
-    double sdf (double x, double y) const override;
-  };
-
-  class Ellipse : public AbstractPropEllipse
-  {
-  public:
-    Ellipse (ParentProcess* parent, const std::string& name, double cx, double cy, double rx, double ry);
-    Ellipse* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
