@@ -13,8 +13,8 @@
  */
  
 %{
-#include <stdio.h>
-#include <iostream>
+//#include <stdio.h>
+//#include <iostream>
 // #include <string> // pch
 // #include <vector> // pch
 // #include "core/cor__e.h"
