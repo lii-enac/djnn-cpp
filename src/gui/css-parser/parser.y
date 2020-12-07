@@ -13,6 +13,7 @@
  */
  
 %{
+#include <algorithm>
 //#include <stdio.h>
 //#include <iostream>
 // #include <string> // pch
