@@ -13,6 +13,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "remote_property.h"
 
 #include "core/serializer/serializer.h"
