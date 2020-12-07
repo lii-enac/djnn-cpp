@@ -13,6 +13,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "text.h"
 
 #include "core/execution/graph.h"

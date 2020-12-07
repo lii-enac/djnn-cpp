@@ -14,6 +14,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "list.h"
 
 #include "spike.h"

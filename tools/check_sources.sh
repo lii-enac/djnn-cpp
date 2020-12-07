@@ -1,4 +1,4 @@
-echo -- no include of precompiled headers (only in precompiled.h)
+echo -- no include of precompiled headers - only in precompiled.h
 find src -type f -not -path "*/ext/*" | xargs grep -E "include <(vector|map|string|list)>" | grep -v '://'
 
 echo -- no iostream in headers
