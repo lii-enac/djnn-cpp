@@ -718,7 +718,6 @@ namespace djnn
     return nullptr;
   };
 
-#ifndef DJNN_NO_DEBUG
   static int indent = -1; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   void
@@ -755,5 +754,4 @@ namespace djnn
     }
     indent--;
   }
-  #endif
 }

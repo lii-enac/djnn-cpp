@@ -51,5 +51,5 @@ namespace djnn {
   void clear_display ();
 
   class AbstractDisplay;
-
+  extern FatProcess* DrawingRefreshManager;
 }
