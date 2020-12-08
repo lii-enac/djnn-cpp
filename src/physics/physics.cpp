@@ -35,4 +35,7 @@ namespace djnn
       PhysicsBackend::init ();
     }
   }
+  void
+  clear_physics () {
+  }
 }

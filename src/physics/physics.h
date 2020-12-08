@@ -25,6 +25,7 @@ namespace djnn
 
   extern std::vector<std::string> loadedModules; 
   void init_physics ();
+  void clear_physics ();
 
   class PhyObj;
   class WorldImpl {
