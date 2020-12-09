@@ -481,7 +481,7 @@ namespace djnn
     if (child == nullptr) { return; }
 
     if(child->get_parent ()==nullptr) {
-      auto it = parentless_names.find((ChildProcess*)this);
+      auto it = parentless_names.find((ChildProcess*)child);
       if (it != parentless_names.end()) {
         parentless_names.erase(it);
       }
