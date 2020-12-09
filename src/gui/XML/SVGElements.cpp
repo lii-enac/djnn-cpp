@@ -1073,7 +1073,7 @@ static FatProcess*
 EndGradient(FatProcess* e) {
 	/* careful: e is actually the list of stops, not the gradient itself
 	 and e may be freed in djnMergeChildren */
-	FatProcess *gradient = e->get_parent();
+	auto *gradient = dynamic_cast<AbstractGradient*> (e->get_parent());
 
 	if (djn_GradientArgs.ancestor) {
 		int i;
@@ -1081,9 +1081,14 @@ EndGradient(FatProcess* e) {
 			if (djn_GradientArgs.inherited & (1 << i)) {
 				merge_children(djn_GradientArgs.ancestor, djn_Inherited[i],
 						gradient, djn_Inherited[i]);
+				//std::cout << "inherited " << i << " - " << djn_Inherited[i] << std::endl;
+				if (djn_Inherited[i] == "stops") gradient->bstops = false;
+				if (djn_Inherited[i] == "transforms") gradient->btransforms = false;
+				if (djn_Inherited[i] == "spread") gradient->bspread = false;
+				if (djn_Inherited[i] == "coords") gradient->bcoords = false;
 			}
 		}
-		((AbstractGradient*) gradient)->update ();
+		gradient->update ();
 	}
 
 	return gradient->get_parent();

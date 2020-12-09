@@ -204,6 +204,8 @@ namespace djnn {
     List* transforms () { return _transforms;}
     List* stops () { return _stops;}
     bool is_linear () { return _linear;}
+    // does this gradient owned thoses children or it merged with another gradient so it should not delete them
+    bool bstops, btransforms, bspread, bcoords;
   protected:
     List *_stops, *_transforms;
     AbstractGradient *_g;

@@ -195,7 +195,7 @@ namespace djnn
 
   AbstractGradient::AbstractGradient (ParentProcess* parent, const std::string& name, int spread, int coords) :
       AbstractPropGradient (parent, name, spread, coords),
-      _g (nullptr), _linear (false)
+      bstops (true), btransforms (true), bspread (true), bcoords (true), _g (nullptr), _linear (false)
   {
     _transforms = new List (this, "transforms");
     _stops = new List (this, "stops");
@@ -203,8 +203,14 @@ namespace djnn
 
   AbstractGradient::~AbstractGradient ()
   {
-    delete _transforms;
-    delete _stops;
+
+    // delete his own stops and transforms (NO merging has been applied)
+    if (btransforms) delete _transforms;
+    if (bstops) delete _stops;
+
+    // remove only from symtable his own spread and coords (because merging has been applied)
+    if (!bspread) this->remove_symbol ("spread");
+    if (!bcoords) this->remove_symbol ("coords");
   }
 
   LinearGradient::LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
@@ -388,14 +394,10 @@ namespace djnn
   void
   AbstractGradient::update ()
   {
-    if ( stops () != (List*) find_child ("stops")) {
-      delete _stops;
+    if ( stops () != (List*) find_child ("stops"))
       _stops = (List*) find_child ("stops");
-    }
-    if (_transforms != (List*) find_child ("transforms")) {
-      delete _transforms;
+    if (_transforms != (List*) find_child ("transforms"))
       _transforms = (List*) find_child ("transforms");
-     }
   }
 
   FontSize::FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size) :

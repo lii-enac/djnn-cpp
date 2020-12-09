@@ -55,7 +55,7 @@ namespace djnn
   std::vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-
+  static vector<const CoreProcess*> parentless_names_order;
 
   CoreProcess::CoreProcess (bool model)
   : 
@@ -108,7 +108,11 @@ namespace djnn
       auto it = parentless_names.find((ChildProcess*)this);
       if (it!=parentless_names.end()) {
         //std::cerr << "rem " << it->second << std::endl;
+        //erase from parentless_name_order
+        parentless_names_order.erase (std::remove(parentless_names_order.begin(), parentless_names_order.end(), this), parentless_names_order.end());
+        //erase from parentless_name
         parentless_names.erase (it);
+
       }
     }
 
@@ -124,17 +128,31 @@ namespace djnn
   void
   delete_parentless_processes ()
   {
-    std::vector<CoreProcess*> ps;
-    for (auto & pair: parentless_names) {
-      //ps.push_back(const_cast<ChildProcess*>(pair.first));
-      ps.push_back(const_cast<CoreProcess*>(pair.first));
+    int sz = parentless_names_order.size ();
+
+    //debug
+    // std::cout << "\nparentless status:" << std::endl;
+    // int i = 0;
+    // for (auto & pair: parentless_names) {
+    //   std::cout << i++ << " - " << pair.first->get_debug_name () << std::endl;
+    // }
+    // std::cout << "\nparentless_reverse_order status:" << std::endl;
+    // for (int i = sz - 1; i >= 0; i--) {
+    //   std::cout << i << " - " << parentless_names_order[i]->get_debug_name () << std::endl;
+    // }
+
+    for (int i = sz - 1; i >= 0; i--) {
+      auto it = parentless_names.find((ChildProcess*)parentless_names_order[i]);
+      if (it!=parentless_names.end()) {
+        //debug
+        //std::cout << "deleting - " << it->second << std::endl;
+        //warning (p, " parentless process was not deleted before cleaning up core. Maybe due to a leak somewhere...");
+        delete it->first;
+      }
     }
-    for (auto * p: ps) {
-      assert (p->get_parent()==nullptr);
-      //delete p; // FIXME 1: uncomment when gradient is fixed
-      warning (p, " parentless process was not deleted before cleaning up core. Maybe due to a leak somewhere...");
-    }
-    parentless_names.clear (); // FIXME 2 should not be necessary, uncomment when gradient is fixed
+
+    parentless_names_order.clear ();
+    parentless_names.clear ();
   }
 
   const std::string&
@@ -236,6 +254,7 @@ namespace djnn
       parent->add_child (this, name); // FIXME
     } else {
       parentless_names[this] = name; // FIXME
+      parentless_names_order.push_back(this);
     }
 
     #ifndef DJNN_NO_DEBUG
@@ -457,18 +476,11 @@ namespace djnn
   void
   ChildProcess::set_parent (ParentProcess* parent)
   {
-    if (parent == nullptr) {
-      if (_parent) {
-          parentless_names[this] = _parent->find_child_name (this);
-      }
-    } else { // do not erase if we have to reinsert afterwards...
-      if (_parent == nullptr) {
-        auto it = parentless_names.find((ChildProcess*)this);
-        if (it != parentless_names.end()) {
-          parentless_names.erase(it);
-        }
-      }
-    }
+    /* note: 
+    *  do not try to remove process from parentless_name if only set_parent has been called
+    *  remove from parentless_name only through add_child because we need to call add_symbol
+    *  else the parent will not recognise his children.
+    */
     _parent = djnn_dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
     set_debug_parent (parent);
@@ -483,7 +495,11 @@ namespace djnn
     if(child->get_parent ()==nullptr) {
       auto it = parentless_names.find((ChildProcess*)child);
       if (it != parentless_names.end()) {
-        parentless_names.erase(it);
+        //std::cerr << "rem from add_child " << it->second << std::endl;
+        //erase from parentless_name_order
+        parentless_names_order.erase (std::remove(parentless_names_order.begin(), parentless_names_order.end(), this), parentless_names_order.end());
+        //erase from parentless_name
+        parentless_names.erase (it);
       }
     }
 
@@ -661,6 +677,9 @@ namespace djnn
   void
   merge_children (ParentProcess *p1, const std::string& sy1, ParentProcess* p2, const std::string& sy2)
   {
+    //debug
+    //std::cout << "process::merge_children " << p1->get_debug_name () << " - " << sy1 << " - "  << p2->get_debug_name () << " - " << sy2 << std::endl ;
+
     auto * x1 = p1->find_child_impl (sy1);
     if (x1 == nullptr) {
       error (p1, "trying to merge unknown child " + sy1);
@@ -680,7 +699,7 @@ namespace djnn
     }
     p2->remove_child (sy2);
     p2->add_symbol (sy2, x1);
-    delete x2; // hum, are we really sure about this? // maybe used in for merging gradient
+    delete x2;
   }
 
   void
