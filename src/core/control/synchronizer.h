@@ -39,6 +39,7 @@ namespace djnn {
   public:
     Synchronizer (ParentProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec);
     virtual ~Synchronizer ();
+    virtual process_type_e get_process_type () const override { return SYNCHRONIZER_T; }
     void add_source (CoreProcess* src, const std::string& spec);
     void impl_activate () override;
     void impl_deactivate () override;

@@ -42,7 +42,8 @@ namespace djnn {
     GOBJ_T,
     WORLD_T,
     DEFS_T,
-    LAYER_T
+    LAYER_T,
+    SYNCHRONIZER_T
   };
 
   enum activation_flag_e {
