@@ -70,7 +70,7 @@ namespace djnn
             std::string _ref;
       };
     public:
-        WallClock (FatProcess* parent, const std::string& name)
+        WallClock (ParentProcess* parent, const std::string& name)
         : FatProcess (name),
         _state (this, "state"),
         _state_text (this, "state_text")
