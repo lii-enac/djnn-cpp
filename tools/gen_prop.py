@@ -208,6 +208,26 @@ class Prop:
           return 'const std::string&'
         else:
           return self.type
+    
+    def as_c_type_str(self):
+        if self.type == 'text':
+          return 'const char*'
+        else:
+          return self.type
+
+    def as_c_type_str_for_function_signature(self):
+        if self.type == 'text':
+          return 'const char*'
+        else:
+          return self.type
+    
+    def as_js_type_str_for_function_signature(self):
+        if self.type == 'text':
+          return 'string'
+        elif self.type == 'double' or self.type == 'int':
+          return 'number'
+        else:
+          return 'number'
 
     def __str__(self):
       return "prop " + self.as_cpp_type_str() + " " + self.name
@@ -272,19 +292,53 @@ def camel_case_to_snake_case(name):
     s1 = first_cap_re.sub(r'\1_\2', name)
     return all_cap_re.sub(r'\1_\2', s1).lower()
 
+def generate_c_api(dc):
+    #print(dc.name)
+    name = dc.name
+    if 'AbstractProp' in dc.name:
+      name = name[len('AbstractProp'):]
+    if 'Abstract' in name:
+      name = name[len('Abstract'):]
+    all_props = dc.get_all_prop_list ()
+    parent_props = dc.get_parent_prop_list ()
+
+    PROPS_CALL = ', '.join([p.name for p in all_props])
+    #print (PROPS_CALL)
+
+    DECL_PROPS_CALL_DECL = ', '.join([p.as_c_type_str_for_function_signature() + ' ' + p.name + (("=" + p.default_value) if p.default_value != None else "") for p in all_props])
+    #print (DECL_PROPS_CALL_DECL)
+
+    DECL_PROPS_CALL_DEF = ', '.join([p.as_c_type_str_for_function_signature() + ' ' + p.name for p in all_props])
+    #print (DECL_PROPS_CALL_DECL)
+
+    return "djnn::"+name+"* djnn_new_"+name+"(djnn::ParentProcess* parent, const char* name, "+DECL_PROPS_CALL_DECL+") { return new djnn::"+name+"(parent, name, "+PROPS_CALL+"); }"
+
+def generate_js_api(dc):
+    #print(dc.name)
+    name = dc.name
+    if 'AbstractProp' in dc.name:
+      name = name[len('AbstractProp'):]
+    if 'Abstract' in name:
+      name = name[len('Abstract'):]
+    all_props = dc.get_all_prop_list ()
+    parent_props = dc.get_parent_prop_list ()
+
+
+    DECL_PROPS_TYPE = "', '".join([p.as_js_type_str_for_function_signature() for p in all_props])
+    #print (DECL_PROPS_CALL_DECL)
+
+    return "var "+name+" = Module.cwrap('djnn_new_"+name+"', 'number', ['number', 'string', '"+DECL_PROPS_TYPE+"']);"
+    
+
 def just_do_it(dc, finalize_construction=True):
     # print(dc.name, dc.inherits)
     all_props = dc.get_all_prop_list ()
     parent_props = dc.get_parent_prop_list ()
 
-    #if dc.name == "LinearGradient":
-    #  print(all_props)
-    #  print(parent_props)
-
     PARENT_PROPS_CALL = ', '.join([p.name for p in parent_props])
 
     DECL_PROPS_CALL_DECL = ', '.join([p.as_cpp_type_str_for_function_signature() + ' ' + p.name + (("=" + p.default_value) if p.default_value != None else "") for p in all_props])
-    # print (DECL_PROPS_CALL)
+    # print (DECL_PROPS_CALL_DECL)
     DECL_PROPS_REF_CALL = ', '.join([p.as_cpp_type_str() + '& ' + p.name for p in all_props])
     # print (DECL_PROPS_REF_CALL)
     DECL_PROPS_STRUCT = '; '.join([p.as_cpp_type_str() + ' ' + p.name for p in dc.props])
@@ -665,5 +719,68 @@ dc.props.append(Prop('radius', 'double', None, "geometry"))
 dcs.append(dc)
 
 for dc in dcs:
-    just_do_it(dc)
+  just_do_it(dc)
+
+modules = ["core","exec_env","base","display","gui","audio","physics"]
+
+c_api_content = ""
+
+for module in modules:
+  c_api_content += '#include "'+module+'/'+module+'.h"\n'
+c_api_content += "\n"
+
+c_api_content += '''
+namespace djnn { using PathImage = Image; }
+'''
+
+c_api_content += 'extern "C" {\n'
+
+for module in modules:
+  c_api_content += "void djnn_init_"+module+"() { djnn::init_"+module+"(); }\n"
+  c_api_content += "void djnn_clear_"+module+"() { djnn::clear_"+module+"(); }\n"
+  c_api_content += "\n"
+
+c_api_content += "djnn::Component* djnn_new_Component(djnn::ParentProcess* parent, const char* name) { return new djnn::Component(parent, name); }\n"
+c_api_content += "djnn::Connector* djnn_new_Connector(djnn::ParentProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst, int copy_on_activation) { return new djnn::Connector(parent, name, src, dst, copy_on_activation); }\n"
+c_api_content += "djnn::Window* djnn_new_Window(djnn::ParentProcess* parent, const char* name, const char* title, double x, double y, double w, double h) { return new djnn::Window(parent, name, title,x,y,w,h); }\n"
+c_api_content += "void djnn_activate(djnn::Process* p) { p->activate (); }\n"
+c_api_content += "djnn::CoreProcess* djnn_find_child(djnn::Process* p, const char* n) { return p->find_child (n); }\n"
+c_api_content += "void djnn_dump(djnn::Process* p) { p->dump (); }\n"
+c_api_content += "djnn::MainLoop* djnn_mainloop_instance() { return &djnn::MainLoop::instance (); }\n"
+
+for dc in dcs:
+  if dc.name not in ["AbstractImage", "AbstractOpacity", "AbstractPropGradient", "AbstractSkew",
+    "AbstractPropPhyObj", "AbstractPropSound", "AbstractPropWorld", "AbstractPropBox", "AbstractPropSphere"]:
+    c_api_content += generate_c_api(dc) + "\n"
+
+c_api_content += '}\n'
+#print (c_api_content)
+open('../src/c_api/djnn_c_api.cpp','w').write(c_api_content)
+
+js_api_content = ''
+js_export = []
+
+for module in modules:
+  js_api_content += "var init_"+module+" = Module.cwrap('djnn_init_"+module+"', 'null', []);\n"
+  js_api_content += "var clear_"+module+" = Module.cwrap('djnn_clear_"+module+"', 'null', []);\n"
+  js_export += "init_"+module
+  js_export += "clear_"+module
+js_api_content += "\n"
+
+js_api_content += "var Component = Module.cwrap('djnn_new_Component', 'number', ['number', 'string']);\n"
+js_api_content += "var Connector = Module.cwrap('djnn_new_Connector', 'number', ['number', 'string', 'number', 'number', 'number']);\n"
+js_api_content += "var Window = Module.cwrap('djnn_new_Window', 'number', ['number', 'string', 'string', 'number','number','number','number']);\n"
+js_api_content += "var activate = Module.cwrap('djnn_activate', 'null', ['number']);\n"
+js_api_content += "var find_child = Module.cwrap('djnn_find_child', 'number', ['number', 'string']);\n"
+js_api_content += "var dump = Module.cwrap('djnn_dump', 'null', ['number']);\n"
+js_api_content += "var mainloop_instance = Module.cwrap('djnn_mainloop_instance', 'number', []);\n"
+
+for dc in dcs:
+  if dc.name not in ["AbstractImage", "AbstractOpacity", "AbstractPropGradient", "AbstractSkew",
+    "AbstractPropPhyObj", "AbstractPropSound", "AbstractPropWorld", "AbstractPropBox", "AbstractPropSphere"]:
+    js_api_content += generate_js_api(dc) + "\n"
+    js_export += "djnn_new_"+dc.name
+#print(js_api_content)
+open('../src/c_api/djnn_js_api.js','w').write(js_api_content)
+
 

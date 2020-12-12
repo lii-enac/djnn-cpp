@@ -52,6 +52,7 @@ namespace djnn
   init_core ()
   {    
     if (__module_initialized == false) {
+      printf("init_core\n");
       __module_initialized = true;
       //djnn::loadedModules.push_back("core");
       setlocale (LC_NUMERIC, "C");
@@ -83,10 +84,6 @@ namespace djnn
   }
 }
 
-extern "C" {
-  void djnn_init_core () { djnn::init_core (); }
-  void djnn_clear_core () { djnn::clear_core (); }
-}
 
 // temporyary hack
 #if DJNN_USE_FREERTOS

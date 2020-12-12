@@ -229,13 +229,16 @@ os := em
 DYNLIB=
 lib_suffix=.bc
 
-EMFLAGS := -Wall -Wno-unused-variable -Oz \
+EMFLAGS := -Wall -Wno-unused-variable \
 -s USE_BOOST_HEADERS -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_FREETYPE=1 -s USE_WEBGL2=1 \
 -DSDL_DISABLE_IMMINTRIN_H \
 -s EXPORT_ALL=1 -s DISABLE_EXCEPTION_CATCHING=0 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
 -s ASSERTIONS=2 \
 -s ERROR_ON_UNDEFINED_SYMBOLS=0
+
+#-s STANDALONE_WASM
+#EMFLAGS += -Oz
 
 em_ext_libs_path ?= ../djnn-emscripten-ext-libs
 
@@ -250,6 +253,14 @@ LDFLAGS += $(EMFLAGS) --emrun
 #ext_libs := $(addprefix $(em_ext_libs_path)/lib/lib,$(addsuffix .a, $(ext_libs))) -lopenal
 
 picking ?= ANALYTICAL
+
+all_libs = $(addprefix $(build_lib_dir)/,$(all_libs_no_build_dir))
+
+js wasm: $(build_lib_dir)/djnn.js
+$(build_lib_dir)/djnn.js:
+js:$(all_libs)
+	emcc $(EMFLAGS) -s LINKABLE=1 -s "EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']" -o $(build_lib_dir)/djnn.js $(all_libs)
+
 endif
 
 ifeq ($(findstring android,$(cross_prefix)),android)
@@ -363,7 +374,7 @@ djnn_libs += $(djnn_libs_extra)
 #extra
 
 ifeq ($(cross_prefix),em)
-djnn_libs := core exec_env base display gui input animation utils files audio
+djnn_libs := core exec_env base display gui input animation utils files audio c_api
 # comms input
 endif
 

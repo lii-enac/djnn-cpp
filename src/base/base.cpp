@@ -37,9 +37,3 @@ namespace djnn
   }
 
 }
-
-extern "C" {
-  void djnn_init_base () { djnn::init_base (); }
-  void djnn_clear_base () { djnn::clear_base (); }
-}
-
