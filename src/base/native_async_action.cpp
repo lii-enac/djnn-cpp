@@ -24,7 +24,7 @@ namespace djnn
 {
   using namespace std;
 
-  NativeAsyncAction::NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data,
+  NativeAsyncAction::NativeAsyncAction (ParentProcess* parent, const std::string& name, NativeCode action, void* data,
                               bool isModel) :
       NativeAction (parent, name, action, data, isModel), 
       ExternalSource(name), 
@@ -42,30 +42,24 @@ namespace djnn
   void
   NativeAsyncAction::impl_activate ()
   {
-    //_end.activate ();
     ExternalSource::start ();
   }
 
   void
   NativeAsyncAction::impl_deactivate ()
   {
-    //_end.deactivate ();
     ExternalSource::please_stop ();
   }
 
   void
   NativeAsyncAction::run ()
   {
-    (_action) (this);
+    NativeAction::impl_activate ();
+
     djnn::get_exclusive_access (DBG_GET);
     _end.notify_activation ();
     GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
   }
 
-  void*
-  NativeAsyncAction::data ()
-  {
-    return _data;
-  }
 }
