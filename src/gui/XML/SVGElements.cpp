@@ -1082,10 +1082,10 @@ EndGradient(FatProcess* e) {
 				merge_children(djn_GradientArgs.ancestor, djn_Inherited[i],
 						gradient, djn_Inherited[i]);
 				//std::cout << "inherited " << i << " - " << djn_Inherited[i] << std::endl;
-				if (djn_Inherited[i] == "stops") gradient->bstops = false;
-				if (djn_Inherited[i] == "transforms") gradient->btransforms = false;
-				if (djn_Inherited[i] == "spread") gradient->bspread = false;
-				if (djn_Inherited[i] == "coords") gradient->bcoords = false;
+				if ( strcmp (djn_Inherited[i], "stops") == 0) gradient->bstops = false;
+				if ( strcmp (djn_Inherited[i], "transforms") == 0) gradient->btransforms = false;
+				if ( strcmp (djn_Inherited[i], "spread") == 0) gradient->bspread = false;
+				if ( strcmp (djn_Inherited[i], "coords") == 0) gradient->bcoords = false;
 			}
 		}
 		gradient->update ();
