@@ -692,10 +692,14 @@ namespace djnn
     }
 
     for (auto& c : x2->get_activation_couplings ()) {
-      x1->add_activation_coupling (c);
+      // we have to change the src of the coupling 
+      // the set_src will remove from and add
+      c->set_src (x1);
     }
     for (auto& c : x2->get_deactivation_couplings ()) {
-      x1->add_deactivation_coupling (c);
+      // we have to change the src of the coupling 
+      // the set_src will remove from and add
+      c->set_src (x1);
     }
     p2->remove_child (sy2);
     p2->add_symbol (sy2, x1);
