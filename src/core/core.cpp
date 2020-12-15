@@ -81,6 +81,7 @@ namespace djnn
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
     //std::cerr << __PRETTY_FUNCTION__ << __FL__;
     delete_parentless_processes ();
+    __module_initialized = false;
   }
 }
 

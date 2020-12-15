@@ -24,7 +24,6 @@
 
 #include <algorithm>
 
-//#include <__iostream>
 #include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
