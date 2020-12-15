@@ -40,7 +40,7 @@ namespace djnn {
     class GUIStructureObserver : public StructureObserver {
     public:
       GUIStructureObserver () { }
-      virtual ~GUIStructureObserver () {}
+      virtual ~GUIStructureObserver () override;
       void add_container (FatProcess *cont) override;
       void remove_container (FatProcess *cont) override;
       void add_child_to_container (FatProcess *cont, FatChildProcess *c, int index) override;

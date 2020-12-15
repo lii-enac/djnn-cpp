@@ -140,6 +140,15 @@ namespace djnn {
     add_gui_child_at (c, neighboor_index, spec, new_index);
   }
 
+  GUIStructureObserver::~GUIStructureObserver () {
+    structures_t::iterator it = _structure_map.begin ();
+    while (it != _structure_map.end()){
+      delete it->second;
+      _structure_map.erase (it);
+      it = _structure_map.begin ();
+    }
+  }
+
   void
   GUIStructureObserver::add_container (FatProcess *cont)
   {
