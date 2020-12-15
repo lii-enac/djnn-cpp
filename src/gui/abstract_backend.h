@@ -18,10 +18,9 @@
 // #include <vector> // pch
 #include "layer.h"
 #include "shapes/shapes_fwd.h"
-#include "transformation/transformations.h"
+#include "style/style_fwd.h"
 #include "style/style_types.h"
-#include "style/style.h"
-//#include "window.h"
+#include "transformation/transformations.h"
 
 namespace djnn
 {

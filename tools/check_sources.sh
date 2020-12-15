@@ -13,4 +13,8 @@ find src -type f -not -path "*/ext/*" | xargs grep -E "(core|base|gui)-dev\.h"
 
 echo -- no include of a whole submodule in internal sources
 find src -type f -name "*.h" -not -name "shapes.h" | xargs grep "include" | grep "shapes.h"
-find src -type f -name "*.h" -not -name "*style.h" | xargs grep "include" | grep "style.h"
+find src -type f -name "*.cpp" -not -name "shapes.h" | xargs grep "include" | grep "shapes.h"
+find src -type f -name "*.h" -not -name "*style.h" | xargs grep "include" | grep "/style.h"
+find src -type f -name "*.cpp" -not -name "*style.h" | xargs grep "include" | grep "style.h"
+find src -type f -name "*.h" -not -name "*transformations.h" | xargs grep "include" | grep "transformations.h"
+find src -type f -name "*.cpp" -not -name "*transformations.h" | xargs grep "include" | grep "transformations.h"

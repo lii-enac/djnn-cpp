@@ -14,7 +14,6 @@
 
 #pragma once
 
-//#include "gui.h"
 #include "style/style_types.h"
 //#include "core/core-dev.h"
 //#include "core/xml/xml-dev.h"

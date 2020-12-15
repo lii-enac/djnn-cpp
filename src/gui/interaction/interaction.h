@@ -15,10 +15,11 @@
 #pragma once
 
 #include "gui/shapes/abstract_gshape.h"
-#include "gui/transformation/transformations.h"
 #include "core/control/synchronizer.h"
 
 namespace djnn {
+
+  class AbstractHomography;
 
   typedef enum State {
     START, DRAGGING, RRR

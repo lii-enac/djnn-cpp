@@ -15,6 +15,8 @@
 
 #include "gui/backend.h"
 
+#include "gui/style/style.h"
+
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"
 

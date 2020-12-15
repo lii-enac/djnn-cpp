@@ -14,7 +14,7 @@
 #include "text_field.h"
 #include "core/utils/error.h"
 
-#include <iostream>
+#include "gui/transformation/transformations.h" // homography
 
 using namespace std;
 

@@ -17,6 +17,7 @@
 #include "gui/transformation/transformations.h"
 #include "core/tree/spike.h"
 #include "core/tree/set.h"
+#include "core/tree/list.h"
 #include "core/tree/component_observer.h"
 #include "display/window.h"
 #include "gui/backend.h"
@@ -26,6 +27,7 @@
 #include "display/update_drawing.h"
 #include "gui/picking/picking.h"
 #include "gui/picking/analytical_picking_context.h"
+#include "gui/style/style_sheet.h"
 
 #include "core/utils/error.h"
 

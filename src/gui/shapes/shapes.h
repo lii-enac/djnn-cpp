@@ -21,14 +21,12 @@
 
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
-#include "gui/style/style.h"
 
 #include "gui/shapes/ellipse.h"
 #include "gui/shapes/text.h"
 
 #include "gen/abstract_prop_rectangle.h"
 #include "gen/abstract_prop_circle.h"
-//#include "gen/abstract_prop_ellipse.h"
 #include "gen/abstract_prop_rectangle_clip.h"
 #include "gen/abstract_prop_line.h"
 #include "gen/abstract_image.h"

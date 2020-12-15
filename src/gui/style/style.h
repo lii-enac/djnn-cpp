@@ -24,33 +24,7 @@
 
 // #include <vector> // pch
 
-
-namespace djnn
-{
-
-  class AbstractStyle : public AbstractGObj
-  {
-  public:
-    AbstractStyle (ParentProcess* parent, const std::string& name);
-    virtual ~AbstractStyle ();
-  };
-
-  class StyleSheet : public Container
-  {
-  public:
-    StyleSheet (ParentProcess* parent, const std::string& name);
-    virtual ~StyleSheet () override {}
-    StyleSheet* clone () override;
-    const std::string& classname () { return _classname; }
-    int id () { return _id; }
-    static int get_id (const std::string& classname);
-    static void draw_style (const std::vector<int>& classes);
-  private:
-    std::string _classname;
-    int _id;
-  };
-}
-
+#include "abstract_style.h"
 
 #include "gen/fill_rule.h"
 #include "gen/texture.h"
@@ -70,6 +44,7 @@ namespace djnn
 #include "gen/abstract_prop_font_style.h"
 #include "gen/abstract_prop_font_weight.h"
 
+#include "style_sheet.h"
 namespace djnn
 {
 
@@ -190,93 +165,9 @@ namespace djnn {
   
 }
 
-#include "gen/abstract_prop_gradient.h"
+#include "gradient.h"
 
 namespace djnn {
-
-  class AbstractGradient : public AbstractPropGradient
-  {
-  public:
-    AbstractGradient (ParentProcess* parent, const std::string& name, int spread, int coords);
-    AbstractGradient (ParentProcess* parent, const std::string& name);
-    virtual ~AbstractGradient ();
-    virtual void update ();
-    List* transforms () { return _transforms;}
-    List* stops () { return _stops;}
-    bool is_linear () { return _linear;}
-    // does this gradient owned thoses children or it merged with another gradient so it should not delete them
-    bool bstops, btransforms, bspread, bcoords;
-  protected:
-    List *_stops, *_transforms;
-    AbstractGradient *_g;
-    int _linear;
-  };
-}
-
-#include "gen/abstract_prop_linear_gradient.h"
-#include "gen/abstract_prop_radial_gradient.h"
-
-namespace djnn {
-
-  class LinearGradient : public AbstractPropLinearGradient
-  {
-  public:
-    LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
-                    djnFillSpread s, djnFillCoords fc);
-    LinearGradient (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2,
-                    int s, int fc);
-    LinearGradient (ParentProcess* parent, const std::string& name, LinearGradient *lg);
-    virtual ~LinearGradient ();
-    void draw () override;
-    LinearGradient* clone () override;
-  };
-
-
-  class RefLinearGradient : public AbstractStyle
-  {
-  public:
-    RefLinearGradient (ParentProcess* parent, const std::string& name, LinearGradient *lg);
-    virtual ~RefLinearGradient () {};
-    void impl_activate () override;
-    void impl_deactivate () override;
-    void draw () override;
-    RefLinearGradient* clone () override;
-  private:
-    void activate_children ();
-    LinearGradient *_lg;
-  };
-
-  
-
-  class RadialGradient : public AbstractPropRadialGradient
-  {
-  public:
-    RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
-                    djnFillSpread s, djnFillCoords fc);
-    RadialGradient (ParentProcess* parent, const std::string& name, double cx, double cy, double r, double fx, double fy,
-                        int s, int fc);
-    RadialGradient (ParentProcess* parent, const std::string& name, RadialGradient *rg);
-    virtual ~RadialGradient ();
-    void draw () override;
-    RadialGradient* clone () override;
-  };
-  
-
-  class RefRadialGradient : public AbstractStyle
-  {
-  public:
-    RefRadialGradient (ParentProcess* parent, const std::string& name, RadialGradient *rg);
-    virtual ~RefRadialGradient () {};
-    void impl_activate () override;
-    void impl_deactivate () override;
-    void draw () override;
-    RefRadialGradient* clone () override;
-  private:
-    void activate_children ();
-    RadialGradient* _rg;
-  };
-
-  
   class FontSize : public AbstractPropFontSize
   {
   public:

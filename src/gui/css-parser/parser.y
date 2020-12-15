@@ -24,7 +24,6 @@
 
 #include "base/connector.h"
 #include "gui/style/style.h"
-
 // core/utils/error.h macros clash with Driver::error
 #undef error
 #undef warning

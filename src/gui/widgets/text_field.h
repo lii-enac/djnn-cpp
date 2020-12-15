@@ -18,10 +18,11 @@
 #include "core/tree/text_property.h"
 #include "core/tree/double_property.h"
 #include "core/tree/int_property.h"
-#include "gui/transformation/transformations.h"
 #include "gui/shapes/text.h"
 
 namespace djnn {
+
+  class Homography;
 
   class TextField : public FatProcess
   {

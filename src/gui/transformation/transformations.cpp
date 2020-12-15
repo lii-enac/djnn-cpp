@@ -17,6 +17,7 @@
 
 #include "gui/transformation/transformations.h"
 #include "core/tree/spike.h"
+#include "core/tree/list.h"
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
@@ -27,7 +28,7 @@
 
 #include "core/execution/graph.h"
 #include "gui/picking/analytical_picking_context.h"
-
+#include "gui/style/gradient.h"
 
 #include <array>
 #include <cmath>
