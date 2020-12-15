@@ -60,10 +60,11 @@ getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abs
 def_string = """
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-#include "display/display-dev.h" // DisplayBacken::instance
+#include "display/display-dev.h" // DisplayBackend::instance
 #include "display/abstract_display.h"
 #include "display/window.h"
-#include "gui/shapes/shapes.h"
+//#include "gui/shapes/shapes.h"
+#include "gui/shapes/abstract_gshape.h"
 #include "gui/style/style.h"
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
@@ -72,7 +73,7 @@ def_string = """
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
-
+%(INCLUDES)s
 #include "%(CLASS_LOWER)s.h"
 
 namespace djnn
@@ -256,6 +257,7 @@ class DjnnClass:
           self.emit_clone = finalize_construction
         else:
           self.emit_clone = emit_clone
+        self.includes = ""
 
     def get_parent_prop_list(self):
       res = []
@@ -447,6 +449,7 @@ def just_do_it(dc, finalize_construction=True):
         #'DECL_CLONE': DECL_CLONE,
         'DECL_DRAW': DECL_DRAW,
         'DRAW_METHOD': dc.draw_method,
+        'INCLUDES': dc.includes
     }
 
     d['DEF_CLONE'] = ''
@@ -539,10 +542,12 @@ apg = dc
 
 dc = DjnnClass("AbstractPathImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
 dc.props.append(Prop('path', 'text', None, "geometry"))
+dc.includes = '''#include "gui/shapes/gen/abstract_image.h"'''
 dcs.append(dc)
 
 dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
 dc.props.append(Prop('data', 'text', None, "geometry"))
+dc.includes = '''#include "gui/shapes/gen/abstract_image.h"'''
 dcs.append(dc)
 
 
@@ -755,7 +760,7 @@ for dc in dcs:
 
 c_api_content += '}\n'
 #print (c_api_content)
-open('../src/c_api/djnn_c_api.cpp','w').write(c_api_content)
+#open('../src/c_api/djnn_c_api.cpp','w').write(c_api_content)
 
 js_api_content = ''
 js_export = []
@@ -781,6 +786,6 @@ for dc in dcs:
     js_api_content += generate_js_api(dc) + "\n"
     js_export += "djnn_new_"+dc.name
 #print(js_api_content)
-open('../src/c_api/djnn_js_api.js','w').write(js_api_content)
+#open('../src/c_api/djnn_js_api.js','w').write(js_api_content)
 
 

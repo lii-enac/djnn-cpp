@@ -22,6 +22,7 @@
 #include "display/abstract_display.h"
 #include "display/window.h"
 //#include "gui/shapes/shapes.h"
+#include "gui/shapes/abstract_gshape.h"
 #include "gui/shapes/ellipse.h"
 #include "gui/style/style.h"
 #include "core/ontology/coupling.h"

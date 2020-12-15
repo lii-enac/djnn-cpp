@@ -17,6 +17,8 @@
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"
+#include "gui/shapes/text.h"
+#include "gui/shapes/shapes.h" // Image
 
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>

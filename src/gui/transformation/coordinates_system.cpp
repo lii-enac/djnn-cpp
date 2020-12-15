@@ -19,6 +19,7 @@
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
+#include "gui/shapes/abstract_gshape.h"
 
 #include "core/execution/graph.h"
 

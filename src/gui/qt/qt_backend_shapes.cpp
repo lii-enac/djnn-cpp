@@ -21,6 +21,9 @@
 #include "display/qt/qt_window_moc.h"
 #include "display/display.h"
 #include "display/abstract_display.h"
+#include "gui/shapes/shapes.h"
+#include "gui/shapes/text.h"
+
 
 #include <QFontMetrics>
 #include <QPicture>

@@ -19,10 +19,11 @@
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-#include "display/display-dev.h" // DisplayBacken::instance
+#include "display/display-dev.h" // DisplayBackend::instance
 #include "display/abstract_display.h"
 #include "display/window.h"
-#include "gui/shapes/shapes.h"
+//#include "gui/shapes/shapes.h"
+#include "gui/shapes/abstract_gshape.h"
 #include "gui/style/style.h"
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
@@ -31,7 +32,7 @@
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
-
+#include "gui/shapes/gen/abstract_image.h"
 #include "abstract_path_image.h"
 
 namespace djnn
