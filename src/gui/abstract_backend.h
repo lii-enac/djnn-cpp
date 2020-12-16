@@ -15,12 +15,9 @@
 
 #pragma once
 
-// #include <vector> // pch
-//#include "layer.h"
 #include "shapes/shapes_fwd.h"
 #include "style/style_fwd.h"
 #include "style/style_types.h"
-//#include "transformation/transformations.h"
 #include "transformation/transformations_fwd.h"
 
 namespace djnn
@@ -33,28 +30,13 @@ namespace djnn
   class AbstractBackend
   {
   public:
-    AbstractBackend ()/* : _window (nullptr)*/ {
+    AbstractBackend () {
     }
 
     virtual
     ~AbstractBackend ()
     {
     }
-    /*
-    virtual WinImpl*
-    create_window (Window *win, const std::string& title, double x, double y, double w, double h) = 0;
-
-    void
-    set_window (Window *w)
-    {
-      _window = w;
-    }
-
-    Window*
-    window ()
-    {
-      return _window;
-    }*/
 
     /* shapes */
     virtual void
@@ -304,8 +286,6 @@ namespace djnn
     void
     load_simple_gradient_transform (AbstractHomography* g)
     {
-      //get_property
-      //load_gradient_homography (g, a, b, 0, c, d, 0, e, f, 1);
     }
 
     virtual void
@@ -332,8 +312,5 @@ namespace djnn
     deactivate_gobj (AbstractGObj*)
     {   
     }
-
-  protected:
-    //Window *_window;
   };
 }

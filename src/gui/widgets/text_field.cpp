@@ -14,7 +14,8 @@
 #include "text_field.h"
 #include "core/utils/error.h"
 
-#include "gui/transformation/transformations.h" // homography
+#include "gui/transformation/homography.h"
+#include "gui/shapes/svg_holder.h"
 
 using namespace std;
 

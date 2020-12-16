@@ -29,7 +29,7 @@
 #include "gui/shapes/shapes.h"
 #include "gui/transformation/transformations.h"
 #include "gui/css-parser/driver.h"
-
+#include "gui/shapes/svg_holder.h"
 
 using namespace std;
 

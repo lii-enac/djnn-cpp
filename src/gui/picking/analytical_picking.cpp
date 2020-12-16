@@ -1,8 +1,6 @@
 #include "analytical_picking.h"
 #include "analytical_picking_context.h"
-
-//#include <iostream>
-//#include "utils/debug.h"
+#include "display/window.h"
 
 namespace djnn {
   	AnalyticalPicking::AnalyticalPicking (Window *win)

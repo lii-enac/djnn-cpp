@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/tree/double_property.h"
+#include "gui/shapes/abstract_gshape.h"
 #include "gen/abstract_prop_ellipse.h"
 
 namespace djnn

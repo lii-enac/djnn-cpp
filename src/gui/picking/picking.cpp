@@ -16,8 +16,8 @@
  */
 #include "color_picking.h"
 #include "gui/transformation/transformations.h"
-#include "display/display.h" // mouse_tracking
-#include "gui/gui.h" // GenericMouse
+
+#include "gui/shapes/ui.h"
 
 #include <assert.h>
 
@@ -26,6 +26,8 @@
 
 namespace djnn
 {
+  extern int mouse_tracking; // in display
+  extern FatProcess* GenericMouse; // in gui
 
   Picking::Picking (Window *win) :
       _win (win), _catched_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)

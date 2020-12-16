@@ -16,7 +16,7 @@
 
 //#include "display.h"
 
-#include "core/ontology/process.h"
+// #include "core/ontology/process.h"
 #include "abstract_display.h"
 
 namespace djnn {
@@ -25,6 +25,8 @@ namespace djnn {
     BUTTON_MIDDLE,
     BUTTON_RIGHT
   } mouse_button;
+
+  class FatProcess;
 
   class DisplayBackend
   {

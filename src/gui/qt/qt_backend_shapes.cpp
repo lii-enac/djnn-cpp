@@ -30,14 +30,14 @@
 #include <QtGui/QPainter>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
-#include <iostream>
 #include <cmath>
 
-#include "core/utils/error.h"
+#include "exec_env/exec_env-dev.h"
 
+#include <iostream>
+#include "core/utils/error.h"
 #include "utils/debug.h"
 
-#include "exec_env/exec_env-dev.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 /* define in gui.cpp */

@@ -28,6 +28,8 @@
 #include "gui/picking/picking.h"
 #include "gui/picking/analytical_picking_context.h"
 #include "gui/style/style_sheet.h"
+#include "gui/shapes/svg_holder.h"
+#include "gui/shapes/ui.h"
 
 #include "core/utils/error.h"
 
