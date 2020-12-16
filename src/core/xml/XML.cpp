@@ -78,12 +78,11 @@ namespace djnn {
   FatProcess*
   XML::djnLoadFromXML (const std::string& uri)
   {
-    string uri_ = uri;
+    //string uri_ = uri;
     std::size_t found = uri.find("://");
     if (found == std::string::npos) {
-      FatProcess* res = djnParseXML(uri);
-      return res;
-       
+      FatProcess* res = djnParseXMLFromPath(uri);
+      return res;   
     }
 
     djn__CurlData d;
@@ -92,7 +91,7 @@ namespace djnn {
 
     if (!curl)
       return 0;
-    curl_easy_setopt(curl, CURLOPT_URL, uri_.c_str ());
+    curl_easy_setopt(curl, CURLOPT_URL, uri.c_str ());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, djn__ReadXML);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &d);
 
@@ -119,12 +118,12 @@ namespace djnn {
   }
 
   FatProcess*
-  XML::djnParseXML (const std::string& uri)
+  XML::djnParseXMLFromPath (const std::string& path)
   {
     FILE * f;
-    f = fopen (uri.c_str (),"r");
+    f = fopen (path.c_str (),"r");
     if (f==NULL) {
-      cerr << "unable to load file " + uri << endl;
+      cerr << "unable to load file " + path << endl;
       return nullptr;
     };
 
@@ -136,7 +135,7 @@ namespace djnn {
     XML_SetNamespaceDeclHandler (p, &djn__XMLNamespaceStart, &djn__XMLNamespaceEnd);
     djn__ExpatData dexpat;
     dexpat.parser = p;
-    dexpat.filename = uri;
+    dexpat.filename = path;
     XML_SetUserData (p, &dexpat);
     
     curComponent = 0;
@@ -148,6 +147,7 @@ namespace djnn {
       if (ferror (stdin)) {
         fprintf (stderr, "Read error\n");
         XML_ParserFree (p);
+        fclose (f);
         return 0;
       }
       done = feof (f);
@@ -156,6 +156,7 @@ namespace djnn {
         fprintf (stderr, "Parse error at line %d:\n%s\n", (int) XML_GetCurrentLineNumber (p),
                  XML_ErrorString (XML_GetErrorCode (p)));
         XML_ParserFree (p);
+        fclose (f);
         return 0;
       }
     }
@@ -313,6 +314,7 @@ namespace djnn {
     h = p->lookup (name, strlen (name));
     if (!h)
       fprintf (stderr, "Unknown %s tag: %s\n", p->format, name);
+    
     return h;
   }
 

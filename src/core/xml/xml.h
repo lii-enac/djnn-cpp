@@ -67,7 +67,7 @@ namespace djnn
   public:
     static FatProcess* djnLoadFromXML (const std::string& uri);
     //static FatProcess* djnParseXML (FILE* f);
-    static FatProcess* djnParseXML (const std::string& uri);
+    static FatProcess* djnParseXMLFromPath (const std::string& path);
     static int djn_RegisterXMLParser (const std::string& uri, djn_XMLTagLookupProc l, const char* format);
     static int djn_UnregisterXMLParser (const std::string& uri);
     static void clear_xml_parser ();
