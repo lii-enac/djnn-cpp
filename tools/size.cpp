@@ -7,12 +7,9 @@
 #include "core/control/action.h"
 #include "core/control/assignment.h"
 #include "core/control/binding.h"
-#include "core/control/simple_assignment.h"
-#include "core/control/simple_binding.h"
 
 #include "base/arithmetic.h"
 #include "base/connector.h"
-#include "base/simple_connector.h"
 #include "base/fsm.h"
 
 #include "gui/shapes/shapes.h"
@@ -57,7 +54,6 @@ main(int argc, char* argv[])
 	cout << endl;
 
 	PSIZE(CoreBinding);
-	PSIZE(SimpleBinding);
 	PSIZE(Binding);
 	cout << endl;
 
@@ -65,12 +61,10 @@ main(int argc, char* argv[])
 	cout << endl;
 
 	PSIZE(CoreAssignment);
-	PSIZE(SimpleAssignment);
 	PSIZE(Assignment);
 	cout << endl;
 
 	PSIZE(CoreConnector);
-	PSIZE(SimpleConnector);
 	PSIZE(Connector);
 	cout << endl;
 
