@@ -48,10 +48,18 @@ namespace djnn
       djnn::loadedModules.push_back("comms");
       
     }
+
 #ifdef _WIN32
       WSADATA wsa_data;
       WSAStartup(MAKEWORD(2,2), &wsa_data);
 #endif
   }
-  //TODO We should clean winsock
+
+
+  void
+  clear_comms () {
+    //TODO: We should clean winsock
+    clean_socket (); 
+  }
+  
 }
