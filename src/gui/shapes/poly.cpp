@@ -21,7 +21,7 @@
 
 #include "core/tree/list.h"
 #include "display/window.h"
-#include "gui/shapes/shapes.h"
+#include "gui/shapes/poly.h"
 
 #include <iostream>
 #include "utils/debug.h"

@@ -20,7 +20,7 @@
 #include "display/display-dev.h" // DisplayBackend::instance
 #include "gui/shapes/sdf.h"
 
-#include "gui/shapes/shapes.h"
+#include "gui/shapes/rectangle_clip.h"
 #include "gui/picking/analytical_picking_context.h"
 
 namespace djnn

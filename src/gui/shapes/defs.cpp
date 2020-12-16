@@ -18,7 +18,7 @@
 #include "display/display-dev.h" // DisplayBackend::instance
 #include "gui/shapes/sdf.h"
 
-#include "gui/shapes/shapes.h"
+#include "gui/shapes/defs.h"
 
 
 namespace djnn
