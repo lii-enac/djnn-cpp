@@ -16,13 +16,12 @@
 
 #pragma once
 
+// #include <vector> // pch
+
 #include "style_types.h"
 
-#include "core/tree/list.h"
 #include "gui/abstract_gobj.h"
 #include "core/ontology/process.h"
-
-// #include <vector> // pch
 
 #include "abstract_style.h"
 

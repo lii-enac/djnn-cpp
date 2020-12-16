@@ -18,9 +18,9 @@
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
 #include "display/display-dev.h" // DisplayBackend::instance
-#include "gui/shapes/ellipse.h"
-
 #include "gui/shapes/sdf.h"
+
+#include "gui/shapes/ellipse.h"
 
 namespace djnn
 {

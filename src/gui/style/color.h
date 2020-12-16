@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "core/control/action.h"
 namespace djnn
 {
   class AbstractColor : public AbstractStyle

@@ -16,12 +16,10 @@
 
 #pragma once
 
-#include "core/tree/list.h"
-#include "gui/shapes/abstract_gshape.h"
-
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
 
+#include "gui/shapes/abstract_gshape.h"
 #include "gui/shapes/ellipse.h"
 #include "gui/shapes/text.h"
 #include "gui/shapes/image.h"
@@ -33,6 +31,8 @@
 
 namespace djnn
 {
+  class List;
+  
   class Rectangle : public AbstractPropRectangle
   {
   public:
@@ -99,7 +99,7 @@ namespace djnn
   public:
     Poly (ParentProcess* parent, const std::string& name, int closed);
     virtual ~Poly ();
-    FatProcess* points () { return _points;}
+    List* points () { return _points;}
     bool closed () { return _closed;}
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -256,7 +256,7 @@ namespace djnn
   public:
     Path (ParentProcess* parent, const std::string& name);
     virtual ~Path ();
-    FatProcess* items () { return _items;}
+    List* items () { return _items;}
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;

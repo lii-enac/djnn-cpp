@@ -1,8 +1,11 @@
 #pragma once
 
+#include "gui/shapes/abstract_gshape.h"
 #include "gen/abstract_image.h"
 #include "gen/abstract_path_image.h"
 #include "gen/abstract_data_image.h"
+
+#include "core/control/action.h"
 
 namespace djnn {
   class ImageWatcher;

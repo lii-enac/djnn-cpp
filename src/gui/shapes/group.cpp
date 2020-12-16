@@ -13,14 +13,11 @@
  *
  */
 
-#include "shapes.h"
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-//#include "display/display.h"
-#include "display/display-dev.h" // DisplayBackend
-#include "display/abstract_display.h"
+#include "display/display-dev.h" // DisplayBackend::instance
 
-#include "core/execution/graph.h"
+#include "gui/shapes/shapes.h"
 
 
 namespace djnn

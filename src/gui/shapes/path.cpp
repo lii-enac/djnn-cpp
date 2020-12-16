@@ -14,20 +14,17 @@
  *
  */
 
+#include "display/display-dev.h" // DisplayBackend::instance
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-//#include "display/display.h"
-#include "display/display-dev.h" // DisplayBackend
-#include "display/abstract_display.h"
-#include "display/window.h"
-#include "core/ontology/coupling.h"
-#include "core/tree/blank.h"
-#include "shapes.h"
+#include "gui/shapes/sdf.h"
 
-#include "core/execution/graph.h"
+#include "core/tree/list.h"
+#include "display/window.h"
+#include "gui/shapes/shapes.h"
 
 #include <iostream>
-#include "utils/debug.h"
+//#include "utils/debug.h"
 
 
 namespace djnn

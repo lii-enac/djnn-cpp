@@ -22,6 +22,8 @@
 #include "display/window.h"
 #include "core/ontology/coupling.h"
 
+#include "core/tree/list.h"
+
 #include <iostream>
 
 namespace djnn
