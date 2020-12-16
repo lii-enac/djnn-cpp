@@ -1,8 +1,9 @@
 #pragma once
 
+#include "gui/abstract_gobj.h"
+
 namespace djnn
 {
-
   class AbstractTransformation : public AbstractGObj
   {
   public:

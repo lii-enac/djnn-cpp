@@ -15,15 +15,11 @@
  */
 
 
-#include "gui/backend.h"
-#include "gui/abstract_backend.h"
-#include "display/display.h"
-#include "display/abstract_display.h"
 #include "display/window.h"
-#include "gui/shapes/shapes.h"
-#include "gui/style/style.h"
-#include "core/ontology/coupling.h"
+#include "gui/style/abstract_style.h"
+#include "core/control/action.h"
 #include "core/execution/graph.h"
+
 #include "color.h"
 
 #include <cmath>

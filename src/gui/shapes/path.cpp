@@ -21,7 +21,8 @@
 
 #include "core/tree/list.h"
 #include "display/window.h"
-#include "gui/shapes/shapes.h"
+#include "gui/shapes/path.h"
+#include "gui/shapes/path_clip.h"
 
 #include <iostream>
 #include "utils/debug.h" // UNIMPL

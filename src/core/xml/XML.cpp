@@ -123,7 +123,7 @@ namespace djnn {
     FILE * f;
     f = fopen (path.c_str (),"r");
     if (f==NULL) {
-      cerr << "unable to load file " + path << endl;
+      error (nullptr, std::string("unable to load file ") + path);
       return nullptr;
     };
 
@@ -145,7 +145,7 @@ namespace djnn {
 
       len = fread (buf, 1, BUFFSIZE, f);
       if (ferror (stdin)) {
-        fprintf (stderr, "Read error\n");
+        error (nullptr, "Read error");
         XML_ParserFree (p);
         fclose (f);
         return 0;

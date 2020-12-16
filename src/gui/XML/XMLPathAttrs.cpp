@@ -17,9 +17,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-// #include "core/cor__e.h"
+
 #include "gui/gui-dev.h"
-#include "gui/shapes/shapes.h" // Group Path
+#include "gui/shapes/path.h"
+#include "gui/shapes/path_clip.h"
 
 namespace djnn {
 

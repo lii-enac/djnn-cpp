@@ -13,7 +13,6 @@
  *
  */
 
-//#include "gui/style/style.h"
 #include "gui/style/style_sheet.h"
 
 #include "core/utils/error.h"

@@ -13,7 +13,7 @@
  */
 
 #include "gui/backend.h"
-#include "gui/transformation/transformations.h"
+#include "gui/transformation/homography.h"
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"

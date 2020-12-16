@@ -17,7 +17,7 @@
 
 #include "core/execution/graph.h"
 #include "core/tree/list.h"
-#include "gui/transformation/transformations.h" // homography
+#include "gui/transformation/homography.h"
 
 #include "core/utils/error.h"
 

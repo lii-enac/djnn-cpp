@@ -15,9 +15,6 @@
 #include "spike.h"
 #include "core/serializer/serializer.h"
 
-#include <iostream>
-#include "utils/debug.h"
-
 namespace djnn
 {
   using namespace std;

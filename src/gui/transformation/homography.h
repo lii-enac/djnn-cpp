@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core/control/action.h"
+
 #include "abstract_transformation.h"
 #include "gen/abstract_prop_homography.h"
 

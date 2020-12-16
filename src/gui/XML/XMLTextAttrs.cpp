@@ -20,7 +20,7 @@
 #include <ctype.h>
 
 #include "gui/gui-dev.h"
-#include "gui/style/style.h" // text style
+#include "gui/style/text.h"
 #include "gui/shapes/svg_holder.h"
 
 using namespace std;

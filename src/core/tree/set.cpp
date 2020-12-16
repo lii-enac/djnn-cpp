@@ -18,12 +18,11 @@
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
 
 #include <algorithm>
 
-#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
-#endif
+
 
 namespace djnn
 {
@@ -141,9 +140,9 @@ namespace djnn
   void
   Set::dump (int level)
   {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ cardinality=" << _size.get_value () << " ]" << endl ;
+    loginfonocr ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  + " [ cardinality=" + __to_string(_size.get_value ()) + " ]\n") ;
     for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
-      cout << "\t- " << it->first << endl;
+      loginfonocr ( std::string("\t- ") + it->first + "\n");
     }
   }
 #endif

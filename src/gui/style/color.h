@@ -65,4 +65,52 @@ namespace djnn
     void update_rvb_from_hex ();
     void update_hex_from_rvb ();
   };
+
+  class RGBToLCHConverter : public FatProcess
+  {
+  private:
+    class ConverterAction : public Action {
+      public:
+        ConverterAction (RGBToLCHConverter *p, const std::string& n);
+        virtual ~ConverterAction () {}
+        void impl_activate () override;
+      private:
+        RGBToLCHConverter *_p;
+    };
+  public:
+    RGBToLCHConverter (ParentProcess* parent, const std::string& name);
+    virtual ~RGBToLCHConverter ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+  private:
+    void set_parent (ParentProcess* parent) override;
+    IntProperty *_r, *_g, *_b;
+    DoubleProperty *_l, *_c, *_h;
+    ConverterAction *_action;
+    Coupling *_cr, *_cg, *_cb;
+  };
+
+  class LCHToRGBConverter : public FatProcess
+  {
+  private:
+    class ConverterAction : public Action {
+      public:
+        ConverterAction (LCHToRGBConverter *p, const std::string& n);
+        virtual ~ConverterAction () {}
+        void impl_activate () override;
+      private:
+        LCHToRGBConverter *_p;
+    };
+  public:
+    LCHToRGBConverter (ParentProcess* parent, const std::string& name);
+    virtual ~LCHToRGBConverter ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+  private:
+    void set_parent (ParentProcess* parent) override;
+    IntProperty *_r, *_g, *_b;
+    DoubleProperty *_l, *_c, *_h;
+    ConverterAction *_action;
+    Coupling *_cl, *_cc, *_ch;
+  };
 }

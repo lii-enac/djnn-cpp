@@ -14,12 +14,12 @@
 
 #pragma once
 
-#include "core/tree/ref_property.h"
-
-//#include <time.h>
 
 namespace djnn {
-  
+  class CoreProcess;
+  class FatProcess;
+  class RefProperty;
+ 
   typedef std::pair<RefProperty*, std::string> ref_info_t;
   ref_info_t check_for_ref (FatProcess* src, const std::string& spec);
   std::string __to_string(long x);

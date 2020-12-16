@@ -23,7 +23,7 @@
 //#include <boost/lexical_cast.hpp>
 
 #if !defined(DJNN_NO_DEBUG)
-#include <iostream>
+//#include <_iostream>
 #endif
 
 namespace djnn
@@ -159,7 +159,7 @@ namespace djnn
 #if !defined(DJNN_NO_DEBUG)
   void
   RefProperty::dump (int level) {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << _value << " ]" ;
+    loginfonocr( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + __to_string(_value) + " ]" );
   }
 #endif
 
