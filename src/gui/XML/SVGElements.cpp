@@ -143,11 +143,25 @@ StartSVG(const char** attrs, FatProcess* current) {
 
 	djn__id_to_process.clear ();
 	FatProcess* g = new Group(current, "SVG");
-	//FatProcess* f;
-	djn_RectAreaArgs.x = 0.;
-	djn_RectAreaArgs.y = 0.;
-	djn_RectAreaArgs.width = 0.;
-	djn_RectAreaArgs.height = 0.;
+	
+	//make sure to init EVERY struct use by the XMl parser
+	djn_ComponentArgs = { "", 0 };
+	djn_GradientArgs = {"", "", DJN_LOCAL_COORDS, DJN_PAD_FILL, nullptr, 0};
+	djn_GradientStopArgs = {0, 0, 0, 1.0, 0.};
+	djn_LinearGradientArgs = {0., 0., 1., 0.};
+	djn_RadialGradientArgs = {0.5, 0.5, 0.5, 0.5, 0.5};
+	djn_GraphicalShapeArgs = {"", "", djnStrokeUndef};
+	djn_CircleArgs = {0., 0., 0.};
+	djn_EllipseArgs = {0., 0., 0., 0.};
+	djn_ImgArgs = {0., 0., 0., 0., 0, std::string("")};
+	djn_LineArgs = {0., 0., 0., 0.};
+	djn_PathArgs = {0};
+	djn_PolyArgs = {0, 0};
+	djn_RectAreaArgs = {0., 0., 0., 0.};
+	djn_RectArgs = {0., 0., 0., 0., -1., -1.};
+	djn_TextArgs = {0., 0., 0., 0., DJN_NO_UNIT, DJN_NO_UNIT, "Utf8", 0};
+	djn_UseArgs = {0., 0., 0., 0., ""};
+
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
@@ -173,7 +187,7 @@ StartSVG(const char** attrs, FatProcess* current) {
 }
 
 static FatProcess*
-EndElement(FatProcess* e) {
+EndElement (FatProcess* e) {
 	return e->get_parent() ? e->get_parent() : e;
 }
 
@@ -795,8 +809,7 @@ StartDefs(const char** attrs, FatProcess* current) {
     fprintf (stderr, "StartDefs\n");
 #endif
 
-  FatProcess* e = new Defs(0, "");
-
+  FatProcess* e = new Defs(nullptr, "XMLDefs");
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
 #ifdef DEBUG
