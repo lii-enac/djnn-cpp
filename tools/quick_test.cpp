@@ -1,7 +1,9 @@
+#include <iostream>
+
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
-//#include "core/control/simple_binding.h"
-#include "core/control/simple_assignment.h"
+//#include "core/control/binding.h"
+#include "core/control/assignment.h"
 #include "core/execution/graph.h"
 #include "core/utils/utils-dev.h"
 
@@ -16,7 +18,7 @@ main(int argc, const char* argv[])
 	IntProperty i(nullptr, "", 111); // works
 	IntProperty j(nullptr, "", 222); // works
 	TextProperty k(nullptr, "", "toto"	); // works
-	SimpleAssignment a(nullptr, "", &k, &i, true);
+	Assignment a(nullptr, "", &k, &i, true);
 	a.activate (); // ******* does not work
 	Graph::instance().exec();
 	printf("%d\n",j.get_value());
