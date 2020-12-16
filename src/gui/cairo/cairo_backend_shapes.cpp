@@ -21,6 +21,7 @@
 #include "display/abstract_display.h"
 #include "gui/shapes/shapes.h"
 #include "gui/layer.h"
+#include "gui/transformation/homography.h"
 
 #include <cmath>
 
