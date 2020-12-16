@@ -32,6 +32,7 @@
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
+#include "gui/transformation/homography.h"
 
 #include "abstract_prop_homography.h"
 

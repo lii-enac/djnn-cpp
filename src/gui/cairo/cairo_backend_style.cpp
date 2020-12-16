@@ -15,6 +15,8 @@
 #include "gui/backend.h"
 #include "cairo_backend.h"
 
+#include "gui/style/style.h"
+
 #include <iostream>
 // #include <vector> // pch
 #include <cmath>

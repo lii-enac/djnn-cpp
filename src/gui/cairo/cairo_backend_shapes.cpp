@@ -19,8 +19,9 @@
 #include "cairo_backend.h"
 #include "display/display.h"
 #include "display/abstract_display.h"
+#include "gui/shapes/shapes.h"
+#include "gui/layer.h"
 
-#include <iostream>
 #include <cmath>
 
 using namespace std;

@@ -22,7 +22,7 @@
 #include "display/window.h"
 #include "gui/shapes/abstract_gshape.h"
 #include "gui/shapes/ellipse.h"
-#include "gui/style/style.h"
+//#include "gui/style/style.h"
 #include "core/ontology/coupling.h"
 
 #include "gui/shapes/sdf.h"

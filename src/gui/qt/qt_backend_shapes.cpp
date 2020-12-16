@@ -22,8 +22,7 @@
 #include "display/display.h"
 #include "display/abstract_display.h"
 #include "gui/shapes/shapes.h"
-#include "gui/shapes/text.h"
-
+#include "gui/layer.h"
 
 #include <QFontMetrics>
 #include <QPicture>

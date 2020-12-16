@@ -15,22 +15,24 @@
  *
  */
 
-#include "gui/transformation/transformations.h"
+
 #include "core/tree/spike.h"
 #include "core/tree/list.h"
+#include "core/execution/graph.h"
 
-#include "gui/backend.h"
-#include "gui/abstract_backend.h"
 //#include "display/display.h"
 #include "display/display-dev.h" // DisplayBackend
 #include "display/abstract_display.h"
 #include "display/window.h"
 
-#include "core/execution/graph.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
 #include "gui/picking/analytical_picking_context.h"
 #include "gui/style/gradient.h"
+#include "gui/transformation/transformations.h"
+#include "gui/layer.h"
 
-#include <array>
+//#include <array>
 #include <cmath>
 
 #include <iostream>

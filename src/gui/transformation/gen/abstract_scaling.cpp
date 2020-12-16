@@ -32,6 +32,7 @@
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
+#include "gui/transformation/abstract_transformation.h"
 
 #include "abstract_scaling.h"
 

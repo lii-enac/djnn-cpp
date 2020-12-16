@@ -16,14 +16,19 @@
 #pragma once
 
 // #include <vector> // pch
-#include "layer.h"
+//#include "layer.h"
 #include "shapes/shapes_fwd.h"
 #include "style/style_fwd.h"
 #include "style/style_types.h"
-#include "transformation/transformations.h"
+//#include "transformation/transformations.h"
+#include "transformation/transformations_fwd.h"
 
 namespace djnn
 {
+
+  class AbstractGObj;
+  class AbstractGShape;
+  class Layer;
 
   class AbstractBackend
   {

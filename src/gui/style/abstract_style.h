@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/abstract_gobj.h"
 namespace djnn
 {
 

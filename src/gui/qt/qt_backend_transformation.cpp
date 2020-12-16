@@ -18,6 +18,7 @@
 #include "qt_context.h"
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"
+#include "gui/transformation/transformations.h"
 
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>

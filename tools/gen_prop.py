@@ -644,12 +644,14 @@ dcs.append(dc)
 dc = DjnnClass("AbstractTranslation", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)
 dc.props.append(Prop('tx', 'double', None, "transform"))
 dc.props.append(Prop('ty', 'double', None, "transform"))
+dc.includes = '#include "gui/transformation/abstract_transformation.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractRotation", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)
 dc.props.append(Prop('a', 'double', None, "transform"))
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
+dc.includes = '#include "gui/transformation/abstract_transformation.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractScaling", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)
@@ -657,16 +659,19 @@ dc.props.append(Prop('sx', 'double', None, "transform"))
 dc.props.append(Prop('sy', 'double', None, "transform"))
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
+dc.includes = '#include "gui/transformation/abstract_transformation.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractSkew", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)
 dc.props.append(Prop('a', 'double', None, "transform"))
+dc.includes = '#include "gui/transformation/abstract_transformation.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropHomography", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)
 for i in range(1,5):
   for j in range(1,5):
     dc.props.append(Prop('m'+str(i)+str(j), 'double', str(1 if i==j else 0), "transform"))
+dc.includes = '#include "gui/transformation/homography.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractVolume", "AbstractAudioStyle", "../src/audio/style", origin=None, finalize_construction=False)
