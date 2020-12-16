@@ -13,6 +13,8 @@
  *
  */
 
+#include "core/tree/list.h"
+
 #include "gui/backend.h"
 
 #include "cairo_context.h"
