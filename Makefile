@@ -351,7 +351,7 @@ CXXFLAGS_PCH := $(CXXFLAGS)
 pch: $(pch_dst)
 
 $(pch_dst): $(pch_src)
-ifeq ($$V,max)
+ifeq ($V,max)
 	$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
 else
 	@$(call rule_message,compiling,$(stylized_target))
@@ -360,6 +360,7 @@ endif
 
 ifneq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -include-pch $(pch_dst)
+#-fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
 else
 # https://stackoverflow.com/a/3164874
 CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch_src_).h
