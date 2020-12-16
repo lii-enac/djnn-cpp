@@ -16,6 +16,8 @@
 #include "cairo_backend.h"
 #include "gui/backend.h"
 #include "gui/transformation/transformations.h"
+#include "gui/shapes/text.h"
+#include "gui/style/text.h"
 #include "gui/shapes/ui.h"
 
 #include <iostream>
