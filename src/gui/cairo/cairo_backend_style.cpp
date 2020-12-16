@@ -16,6 +16,7 @@
 #include "cairo_backend.h"
 
 #include "gui/style/style.h"
+#include "gui/transformation/homography.h"
 
 #include <iostream>
 // #include <vector> // pch
