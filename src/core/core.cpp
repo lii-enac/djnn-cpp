@@ -52,7 +52,7 @@ namespace djnn
   init_core ()
   {    
     if (__module_initialized == false) {
-      printf("init_core\n");
+      //printf("init_core\n");
       __module_initialized = true;
       //djnn::loadedModules.push_back("core");
       setlocale (LC_NUMERIC, "C");
