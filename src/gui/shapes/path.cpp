@@ -24,7 +24,7 @@
 #include "gui/shapes/shapes.h"
 
 #include <iostream>
-//#include "utils/debug.h"
+#include "utils/debug.h" // UNIMPL
 
 
 namespace djnn

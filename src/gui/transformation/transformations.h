@@ -16,14 +16,16 @@
 
 #pragma once
 
-#include "gui/abstract_gobj.h"
+
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/tree/double_property.h"
 
+#include "gui/abstract_gobj.h"
+
 #include "abstract_transformation.h"
-#include "gui/transformation/homography.h"
+#include "homography.h"
 #include "gen/abstract_translation.h"
 
 namespace djnn

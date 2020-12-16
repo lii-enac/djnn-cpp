@@ -58,16 +58,14 @@ namespace djnn
 getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_child_impl ("%(PROP_NAME)s"); }"""
 
 def_string = """
+#include "gui/shapes/abstract_gshape.h"
+#include "display/window.h"
+#include "gui/style/abstract_style.h"
+
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
 #include "display/display-dev.h" // DisplayBackend::instance
 #include "display/abstract_display.h"
-#include "display/window.h"
-
-#include "gui/shapes/abstract_gshape.h"
-#include "gui/style/style.h"
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
 
 #include "audio/style/audio_style.h"
 #include "physics/abstract_pobj.h"
@@ -610,6 +608,7 @@ dc.props.append(Prop('x1', 'double', None, "style"))
 dc.props.append(Prop('y1', 'double', None, "style"))
 dc.props.append(Prop('x2', 'double', None, "style"))
 dc.props.append(Prop('y2', 'double', None, "style"))
+dc.includes += '#include "gui/style/gradient.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropRadialGradient", "AbstractGradient", "../src/gui/style", origin=None, finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
@@ -618,6 +617,7 @@ dc.props.append(Prop('cy', 'double', None, "style"))
 dc.props.append(Prop('r', 'double', None, "style"))
 dc.props.append(Prop('fx', 'double', None, "style"))
 dc.props.append(Prop('fy', 'double', None, "style"))
+dc.includes += '#include "gui/style/gradient.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontSize", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)

@@ -17,21 +17,20 @@
  */
 
 
+#include "gui/shapes/abstract_gshape.h"
+#include "display/window.h"
+#include "gui/style/abstract_style.h"
+
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
 #include "display/display-dev.h" // DisplayBackend::instance
 #include "display/abstract_display.h"
-#include "display/window.h"
-
-#include "gui/shapes/abstract_gshape.h"
-#include "gui/style/style.h"
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
 
 #include "audio/style/audio_style.h"
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
+#include "gui/style/gradient.h"
 
 #include "abstract_prop_radial_gradient.h"
 

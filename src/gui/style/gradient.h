@@ -6,7 +6,7 @@
 
 namespace djnn {
 
-    class List;
+  class List;
 
   class AbstractGradient : public AbstractPropGradient
   {
