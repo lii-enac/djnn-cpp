@@ -18,6 +18,7 @@
 
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
+#include "core/tree/component.h"
 
 #include "gui/shapes/abstract_gshape.h"
 #include "gui/shapes/ellipse.h"

@@ -14,18 +14,30 @@
  *
  */
 
-#include "shapes.h"
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-//#include "display/display.h"
-#include "display/display-dev.h" // DisplayBackend
-#include "display/abstract_display.h"
-#include "display/window.h"
-#include "core/ontology/coupling.h"
-#include "display/update_drawing.h"
+#include "display/display-dev.h" // DisplayBackend::instance
+#include "gui/shapes/sdf.h"
+
+#include "gui/shapes/text.h"
 
 #include "core/execution/graph.h"
+#include "core/tree/component.h"
+#include "display/window.h"
+
+// #include "shapes.h"
+
+// #include "gui/backend.h"
+// #include "gui/abstract_backend.h"
+// //#include "display/display.h"
+// #include "display/display-dev.h" // DisplayBackend
+// #include "display/abstract_display.h"
+// #include "display/window.h"
+// #include "core/ontology/coupling.h"
+// #include "display/update_drawing.h"
+
+// #include "core/execution/graph.h"
 
 #include <iostream>
 #include "utils/debug.h"

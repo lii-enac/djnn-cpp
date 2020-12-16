@@ -30,6 +30,7 @@
 #include "gui/transformation/transformations.h"
 #include "gui/css-parser/driver.h"
 #include "gui/shapes/svg_holder.h"
+#include "gui/style/style.h"
 
 using namespace std;
 

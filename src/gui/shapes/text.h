@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/control/action.h"
 #include "core/tree/double_property.h"
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
@@ -7,9 +8,7 @@
 //#include "gen/abstract_prop_text.h"
 #include "gui/shapes/abstract_gshape.h"
 
-#include "gui/style/style.h" // FontFamily FontSize FontWeight
-
-
+#include "gui/style/text.h" // FontFamily FontSize FontWeight
 
 namespace djnn {
     typedef void* FontMetricsImpl ;
