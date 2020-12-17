@@ -14,7 +14,7 @@
 
 #include "animation.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn
@@ -51,16 +51,16 @@ namespace djnn
   _action (this, "action", &_m, &_k, &_damping, &_v, &_output, &_dt)
   {
     _c_step.disable ();
-    Graph::instance ().add_edge (&_step, &_action);
-    Graph::instance ().add_edge (&_action, &_output);
+    graph_add_edge (&_step, &_action);
+    graph_add_edge (&_action, &_output);
     finalize_construction (parent, name);
   }
 
   Oscillator::~Oscillator ()
   { 
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_step, &_action);
-    Graph::instance ().remove_edge (&_action, &_output);
+    graph_remove_edge (&_step, &_action);
+    graph_remove_edge (&_action, &_output);
   }
 
   void

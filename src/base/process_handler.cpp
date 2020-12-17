@@ -15,7 +15,7 @@
 #include "process_handler.h"
 
 #include "core/serializer/serializer.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
@@ -75,17 +75,17 @@ namespace djnn
       _c_rm_all (&_s_rm_all, ACTIVATION, &_rm_all, ACTIVATION)
   {
 
-    Graph::instance ().add_edge (&_add, &_add_one);
-    Graph::instance ().add_edge (&_remove, &_rm_one);
-    Graph::instance ().add_edge (&_s_rm_all, &_rm_all);
+    graph_add_edge (&_add, &_add_one);
+    graph_add_edge (&_remove, &_rm_one);
+    graph_add_edge (&_s_rm_all, &_rm_all);
     finalize_construction (parent, name);
   }
 
   ProcessCollector::~ProcessCollector ()
   {
-    Graph::instance ().remove_edge (&_s_rm_all, &_rm_all);
-    Graph::instance ().remove_edge (&_remove, &_rm_one);
-    Graph::instance ().remove_edge (&_add, &_add_one);
+    graph_remove_edge (&_s_rm_all, &_rm_all);
+    graph_remove_edge (&_remove, &_rm_one);
+    graph_remove_edge (&_add, &_add_one);
   }
 
   void
@@ -165,13 +165,13 @@ namespace djnn
       _del_action (this, "del_action"),
       _c_del_all (&_del, ACTIVATION, &_del_action, ACTIVATION)
   {
-    Graph::instance ().add_edge (&_del, &_del_action);
+    graph_add_edge (&_del, &_del_action);
     finalize_construction (parent, name);
   }
 
   CollectionDeleter::~CollectionDeleter ()
   {
-    Graph::instance ().remove_edge (&_del, &_del_action);
+    graph_remove_edge (&_del, &_del_action);
   }
 
   void
@@ -222,17 +222,17 @@ namespace djnn
       _act_all (this, "act_all"),
       _c_act_all (&_collection, ACTIVATION, &_act_all, ACTIVATION)
   {
-    Graph::instance ().add_edge (&_activate, &_act_all);
-    Graph::instance ().add_edge (&_collection, &_act_all);
-    Graph::instance ().add_edge (&_path, &_act_all);
+    graph_add_edge (&_activate, &_act_all);
+    graph_add_edge (&_collection, &_act_all);
+    graph_add_edge (&_path, &_act_all);
     finalize_construction (parent, name);
   }
 
   CollectionActivator::~CollectionActivator ()
   {
-    Graph::instance ().remove_edge (&_path, &_act_all);
-    Graph::instance ().remove_edge (&_collection, &_act_all);
-    Graph::instance ().remove_edge (&_activate, &_act_all);
+    graph_remove_edge (&_path, &_act_all);
+    graph_remove_edge (&_collection, &_act_all);
+    graph_remove_edge (&_activate, &_act_all);
   }
 
   void
@@ -279,14 +279,14 @@ namespace djnn
     _path (this, "path", path),
     _act_set_val (this, "act_all")
   {
-    Graph::instance ().add_edge (&_collection, &_act_set_val);
-    Graph::instance ().add_edge (&_path, &_act_set_val);
+    graph_add_edge (&_collection, &_act_set_val);
+    graph_add_edge (&_path, &_act_set_val);
   }
 
   AbstractCollectionSetValue::~AbstractCollectionSetValue ()
   {
-    Graph::instance ().remove_edge (&_collection, &_act_set_val);
-    Graph::instance ().remove_edge (&_path, &_act_set_val);
+    graph_remove_edge (&_collection, &_act_set_val);
+    graph_remove_edge (&_path, &_act_set_val);
   }
 
   void
@@ -306,13 +306,13 @@ namespace djnn
     _value (this, "value", 0),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
     {
-      Graph::instance ().add_edge (&_value, &_act_set_val);
+      graph_add_edge (&_value, &_act_set_val);
       finalize_construction (parent, name);
     }
 
   CollectionSetDoubleValue::~CollectionSetDoubleValue ()
   {
-    Graph::instance ().remove_edge (&_value, &_act_set_val);
+    graph_remove_edge (&_value, &_act_set_val);
   }
 
   void
@@ -346,13 +346,13 @@ namespace djnn
     _value (this, "value", ""),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
   {
-    Graph::instance ().add_edge (&_value, &_act_set_val);
+    graph_add_edge (&_value, &_act_set_val);
     finalize_construction (parent, name);
   }
 
   CollectionSetStringValue::~CollectionSetStringValue ()
   {
-    Graph::instance ().remove_edge (&_value, &_act_set_val);
+    graph_remove_edge (&_value, &_act_set_val);
   }
 
   void

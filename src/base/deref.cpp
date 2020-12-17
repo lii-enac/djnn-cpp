@@ -15,7 +15,7 @@
 #include "deref.h"
 
 #include "core/serializer/serializer.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
@@ -40,24 +40,24 @@ namespace djnn
       warning (this, "Deref is only applicable to RefProperty");
       return;
     }
-    Graph::instance().add_edge (_ref, &_action);
-    Graph::instance().add_edge (&_path, &_action);
+    graph_add_edge (_ref, &_action);
+    graph_add_edge (&_path, &_action);
   }
 
   AbstractDeref::~AbstractDeref ()
   {
     auto *old_src = _cset.get_src();
     if (old_src) {
-      Graph::instance().remove_edge (old_src, &_get);
-      Graph::instance().remove_edge (&_set, old_src);
+      graph_remove_edge (old_src, &_get);
+      graph_remove_edge (&_set, old_src);
     }
     auto* unref = _ref->get_value ();
     if (_src_updated && unref != nullptr) {
       auto* src = unref->find_child_impl (_path.get_value ());
-      Graph::instance().remove_edge (&_set, src);
+      graph_remove_edge (&_set, src);
     }
-    Graph::instance().remove_edge (&_path, &_action);
-    Graph::instance().remove_edge (_ref, &_action);
+    graph_remove_edge (&_path, &_action);
+    graph_remove_edge (_ref, &_action);
   }
 
   void
@@ -79,7 +79,7 @@ namespace djnn
     if (old_src == new_src)
       return;
     if (old_src != nullptr) {
-      Graph::instance().remove_edge (&_set, old_src);
+      graph_remove_edge (&_set, old_src);
     }
     _cget.uninit ();
     _cget.set_src (nullptr);
@@ -87,7 +87,7 @@ namespace djnn
       auto* src = unref->find_child_impl (_path.get_value ());
       if (src != nullptr) {
         _cget.init (src, ACTIVATION, &_get, ACTIVATION);
-        Graph::instance().add_edge (&_set, src);
+        graph_add_edge (&_set, src);
         _src_updated = true ;
       }
       change_src (src);
@@ -122,15 +122,15 @@ namespace djnn
    _src (nullptr)
   {
     _cset.init (&_activation, ACTIVATION, &_set, ACTIVATION);
-    Graph::instance ().add_edge (&_activation, &_set);
-    Graph::instance ().add_edge (&_get, &_activation);
+    graph_add_edge (&_activation, &_set);
+    graph_add_edge (&_get, &_activation);
     finalize_construction (parent, name);
   }
 
   Deref::~Deref ()
   {
-    Graph::instance ().remove_edge (&_get, &_activation);
-    Graph::instance ().remove_edge (&_activation, &_set);
+    graph_remove_edge (&_get, &_activation);
+    graph_remove_edge (&_activation, &_set);
   }
 
   void
@@ -163,15 +163,15 @@ namespace djnn
   _src (nullptr)
   {
     _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
-    Graph::instance ().add_edge (&_value, &_set);
-    Graph::instance ().add_edge (&_get, &_value);
+    graph_add_edge (&_value, &_set);
+    graph_add_edge (&_get, &_value);
     finalize_construction (parent, name);
   }
 
   DerefString::~DerefString ()
   {
-    Graph::instance ().remove_edge (&_value, &_set);
-    Graph::instance ().remove_edge (&_get, &_value);
+    graph_remove_edge (&_value, &_set);
+    graph_remove_edge (&_get, &_value);
   }
 
   void
@@ -211,15 +211,15 @@ namespace djnn
       _src (nullptr)
   {
     _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
-    Graph::instance ().add_edge (&_value, &_set);
-    Graph::instance ().add_edge (&_get, &_value);
+    graph_add_edge (&_value, &_set);
+    graph_add_edge (&_get, &_value);
     finalize_construction (parent, name);
   }
 
   DerefDouble::~DerefDouble()
   {
-    Graph::instance ().remove_edge (&_value, &_set);
-    Graph::instance ().remove_edge (&_get, &_value);
+    graph_remove_edge (&_value, &_set);
+    graph_remove_edge (&_get, &_value);
   }
 
   void

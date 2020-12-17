@@ -15,7 +15,7 @@
 
 #include "fsm.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
@@ -134,7 +134,7 @@ namespace djnn
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
     _c_src.disable (); 
-    Graph::instance().add_edge(_trigger, _to_state);
+    graph_add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -152,7 +152,7 @@ namespace djnn
   _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
   {
     _c_src.disable ();
-    Graph::instance().add_edge(_trigger, _to_state);
+    graph_add_edge(_trigger, _to_state);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -160,7 +160,7 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
-    Graph::instance().remove_edge (_trigger, _to_state);
+    graph_remove_edge (_trigger, _to_state);
   }
 
   void
@@ -244,7 +244,7 @@ namespace djnn
     /* inverse delete of _states */
     sz = _states.size ();
     for (int i = sz - 1; i >= 0; i--) {
-        Graph::instance().remove_edge (_states[i], &_fsm_state);
+        graph_remove_edge (_states[i], &_fsm_state);
         delete _states[i];
     }
   }

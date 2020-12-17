@@ -14,7 +14,7 @@
 
 
 #include "easing_func.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 // #include <vector> // pch
 #include <cmath>
@@ -246,14 +246,14 @@ namespace djnn
         _act (this, "action"),
         _c_in (&_in, ACTIVATION, &_act, ACTIVATION)
   {
-    Graph::instance().add_edge (&_in, &_act);
-    Graph::instance().add_edge (&_act, &_out);
+    graph_add_edge (&_in, &_act);
+    graph_add_edge (&_act, &_out);
     finalize_construction (parent, name);
   }
 
   EasingGenerator::~EasingGenerator () {
-    Graph::instance().remove_edge (&_in, &_act);
-    Graph::instance().remove_edge (&_act, &_out);
+    graph_remove_edge (&_in, &_act);
+    graph_remove_edge (&_act, &_out);
   }
 
   void

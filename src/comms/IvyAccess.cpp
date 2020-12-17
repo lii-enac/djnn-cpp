@@ -18,6 +18,7 @@
 #include "ivy.h" //TODO add Ivy/ after confinement
 #include "ivyloop.h" //TODO add Ivy/ after confinement
 #include "core/utils/error.h"
+#include "core/core-dev.h" // graph exec
 #include "exec_env/main_loop.h"
 #include "utils/debug.h"
 
@@ -227,7 +228,7 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
    * so we removed the remove_edge (to graph)
    * it works because Ivy can't be stoped
    */
-  //Graph::instance().add_edge (&_out, &_out_a);
+  //graph_add_edge (&_out, &_out_a);
   
   /* IN is a special child build in IvyAccess::find_child */
 
@@ -244,7 +245,7 @@ IvyAccess::~IvyAccess ()
    * so we removed the remove_edge (to graph)
    * it works because Ivy can't be stoped
    */
-  //Graph::instance().remove_edge (&_out, &_out_a);
+  //graph_remove_edge (&_out, &_out_a);
 
   remove_state_dependency (get_parent (), &_out_a);
 

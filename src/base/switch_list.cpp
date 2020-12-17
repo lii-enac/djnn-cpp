@@ -14,7 +14,7 @@
 
 #include "switch_list.h"
 #include "core/ontology/coupling.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 #include "core/tree/bool_property.h"
 #include "core/utils/error.h"

@@ -14,7 +14,7 @@
  */
 
 #include "geometry.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn
@@ -64,24 +64,24 @@ namespace djnn
     _c_p2.disable ();
     _c_t1.disable ();
     _c_t2.disable ();
-    Graph::instance ().add_edge (&_input, &_action);
-    Graph::instance ().add_edge (&_p1, &_action);
-    Graph::instance ().add_edge (&_p2, &_action);
-    Graph::instance ().add_edge (&_t1, &_action);
-    Graph::instance ().add_edge (&_t2, &_action);
-    Graph::instance ().add_edge (&_action, &_output);
+    graph_add_edge (&_input, &_action);
+    graph_add_edge (&_p1, &_action);
+    graph_add_edge (&_p2, &_action);
+    graph_add_edge (&_t1, &_action);
+    graph_add_edge (&_t2, &_action);
+    graph_add_edge (&_action, &_output);
     finalize_construction (parent, name);
   }
 
   HermiteCurve::~HermiteCurve ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_input, &_action);
-    Graph::instance ().remove_edge (&_p1, &_action);
-    Graph::instance ().remove_edge (&_p2, &_action);
-    Graph::instance ().remove_edge (&_t1, &_action);
-    Graph::instance ().remove_edge (&_t2, &_action);
-    Graph::instance ().remove_edge (&_action, &_output);
+    graph_remove_edge (&_input, &_action);
+    graph_remove_edge (&_p1, &_action);
+    graph_remove_edge (&_p2, &_action);
+    graph_remove_edge (&_t1, &_action);
+    graph_remove_edge (&_t2, &_action);
+    graph_remove_edge (&_action, &_output);
   }
 
   void

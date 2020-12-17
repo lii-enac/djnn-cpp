@@ -18,7 +18,7 @@
 #include "core/tree/set.h"
 #include "core/ontology/coupling.h"
 #include "core/utils/error.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include <string.h>
 #include <iostream>
@@ -56,7 +56,7 @@ namespace djnn {
     //_read_vblank_action.set_activation_state (ACTIVATED);
     //_c_read_vblank.enable ();
     
-    Graph::instance ().add_edge (_iofd.find_child("readable"), &_read_vblank_action);
+    graph_add_edge (_iofd.find_child("readable"), &_read_vblank_action);
     finalize_construction (parent, name);
     //activate ();
   }
@@ -68,7 +68,7 @@ namespace djnn {
     delete find_child ("min_height");
     delete find_child ("max_height");
     delete find_child ("connectors");
-    Graph::instance ().remove_edge (_iofd.find_child("readable"), &_read_vblank_action);
+    graph_remove_edge (_iofd.find_child("readable"), &_read_vblank_action);
     close (_fd);
   }
 
@@ -129,7 +129,7 @@ namespace djnn {
     _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
     _readable_cpl = new Coupling (_udev_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-    Graph::instance().add_edge (_udev_iofd->find_child_impl ("readable"), _action);
+    graph_add_edge (_udev_iofd->find_child_impl ("readable"), _action);
   }
 
   DRMUdev::~DRMUdev ()
@@ -138,7 +138,7 @@ namespace djnn {
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
 
-    Graph::instance().remove_edge (_udev_iofd->find_child_impl ("readable"), _action);
+    graph_remove_edge (_udev_iofd->find_child_impl ("readable"), _action);
 
     delete _readable_cpl;
     delete _action;

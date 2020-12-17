@@ -21,7 +21,7 @@
 #include "core/tree/int_property.h"
 #include "core/tree/bool_property.h"
 #include "core/tree/double_property.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
@@ -116,8 +116,8 @@ namespace djnn
       return;
     }
     _cfind.disable ();
-    Graph::instance ().add_edge (&_key, &_action);
-    Graph::instance ().add_edge (&_action, &_result);
+    graph_add_edge (&_key, &_action);
+    graph_add_edge (&_action, &_result);
 
     finalize_construction (parent, name);
   }
@@ -125,8 +125,8 @@ namespace djnn
   Finder::~Finder ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_action, &_result);
-    Graph::instance ().remove_edge (&_key, &_action);
+    graph_remove_edge (&_action, &_result);
+    graph_remove_edge (&_key, &_action);
   }
 
   void

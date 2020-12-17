@@ -15,7 +15,7 @@
 #include "counter.h"
 
 #include "core/ontology/coupling.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn
@@ -35,11 +35,11 @@ namespace djnn
     _c_reset.disable (),
     _c_step.disable ();
 
-    Graph::instance ().add_edge (&_reset, &_action_reset);
-    Graph::instance ().add_edge (&_action_reset, &_output);
+    graph_add_edge (&_reset, &_action_reset);
+    graph_add_edge (&_action_reset, &_output);
     
-    Graph::instance ().add_edge (&_step, &_action_step);
-    Graph::instance ().add_edge (&_action_step, &_output);
+    graph_add_edge (&_step, &_action_step);
+    graph_add_edge (&_action_step, &_output);
 
     add_state_dependency (get_parent (), &_action_reset);
     add_state_dependency (get_parent (), &_action_step);
@@ -51,10 +51,10 @@ namespace djnn
   Counter::~Counter () {
     remove_state_dependency (get_parent (), &_action_reset);
     remove_state_dependency (get_parent (), &_action_step);
-    Graph::instance ().remove_edge (&_reset, &_action_reset);
-    Graph::instance ().remove_edge (&_action_reset, &_output);
-    Graph::instance ().remove_edge (&_step, &_action_step);
-    Graph::instance ().remove_edge (&_action_step, &_output);
+    graph_remove_edge (&_reset, &_action_reset);
+    graph_remove_edge (&_action_reset, &_output);
+    graph_remove_edge (&_step, &_action_step);
+    graph_remove_edge (&_action_step, &_output);
   }
 
   void

@@ -15,7 +15,7 @@
 #include <fstream>
 #include "files.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 using namespace std;

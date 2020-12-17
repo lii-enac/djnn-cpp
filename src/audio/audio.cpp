@@ -9,7 +9,7 @@
 
 #include "abstract_sobj.h"
 
-#include "core/execution/graph.h" // for enable
+#include "core/core-dev.h" // graph add/remove edge // for enable
 
 
 namespace djnn {

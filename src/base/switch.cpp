@@ -14,7 +14,7 @@
  */
 
 #include "switch.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn

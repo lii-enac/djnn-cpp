@@ -19,7 +19,7 @@
 #include "display/display-dev.h"
 
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
 
 
@@ -29,13 +29,13 @@ namespace djnn
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"),
      _invalid_cache (true), _cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION)
   {
-    Graph::instance().add_edge (&_damaged, &_damaged_action);
+    graph_add_edge (&_damaged, &_damaged_action);
     finalize_construction (parent, n);
   }
 
   Layer::~Layer ()
   {
-    Graph::instance().remove_edge (&_damaged, &_damaged_action);
+    graph_remove_edge (&_damaged, &_damaged_action);
   }
 
   void

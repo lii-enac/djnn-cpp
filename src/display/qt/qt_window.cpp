@@ -26,7 +26,7 @@
 
 #include "exec_env/main_loop.h"
 #include "exec_env/global_mutex.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>

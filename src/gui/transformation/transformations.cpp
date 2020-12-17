@@ -18,7 +18,7 @@
 
 #include "core/tree/spike.h"
 #include "core/tree/list.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include "display/display-dev.h" // DisplayBackend
 #include "display/abstract_display.h"
@@ -1384,14 +1384,14 @@ namespace djnn
     this->somehow_activating () ? enable (_rightTranslateBy_dx_coupling, damaged) : _rightTranslateBy_dx_coupling->disable ();
     _rightTranslateBy_dy_coupling = new CouplingWithData (_rightTranslateBy_dy, ACTIVATION, _rightTranslateBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightTranslateBy_dy_coupling, damaged) : _rightTranslateBy_dy_coupling->disable ();
-    Graph::instance().add_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
-    Graph::instance().add_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
-    Graph::instance().add_edge(_rightTranslateBy_action, m11 ());
-    Graph::instance().add_edge(_rightTranslateBy_action, m12 ());
-    Graph::instance().add_edge(_rightTranslateBy_action, m14 ());
-    Graph::instance().add_edge(_rightTranslateBy_action, m21 ());
-    Graph::instance().add_edge(_rightTranslateBy_action, m22 ());
-    Graph::instance().add_edge(_rightTranslateBy_action, m24 ());
+    graph_add_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
+    graph_add_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
+    graph_add_edge(_rightTranslateBy_action, m11 ());
+    graph_add_edge(_rightTranslateBy_action, m12 ());
+    graph_add_edge(_rightTranslateBy_action, m14 ());
+    graph_add_edge(_rightTranslateBy_action, m21 ());
+    graph_add_edge(_rightTranslateBy_action, m22 ());
+    graph_add_edge(_rightTranslateBy_action, m24 ());
     add_state_dependency (get_parent (), _rightTranslateBy_action);
   }
 
@@ -1410,14 +1410,14 @@ namespace djnn
     this->somehow_activating () ? enable (_leftTranslateBy_dx_coupling, damaged) : _leftTranslateBy_dx_coupling->disable ();
     _leftTranslateBy_dy_coupling = new CouplingWithData (_leftTranslateBy_dy, ACTIVATION, _leftTranslateBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftTranslateBy_dy_coupling, damaged) : _leftTranslateBy_dy_coupling->disable ();
-    Graph::instance().add_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
-    Graph::instance().add_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
-    Graph::instance().add_edge(_leftTranslateBy_action, m11 ());
-    Graph::instance().add_edge(_leftTranslateBy_action, m12 ());
-    Graph::instance().add_edge(_leftTranslateBy_action, m14 ());
-    Graph::instance().add_edge(_leftTranslateBy_action, m21 ());
-    Graph::instance().add_edge(_leftTranslateBy_action, m22 ());
-    Graph::instance().add_edge(_leftTranslateBy_action, m24 ());
+    graph_add_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
+    graph_add_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
+    graph_add_edge(_leftTranslateBy_action, m11 ());
+    graph_add_edge(_leftTranslateBy_action, m12 ());
+    graph_add_edge(_leftTranslateBy_action, m14 ());
+    graph_add_edge(_leftTranslateBy_action, m21 ());
+    graph_add_edge(_leftTranslateBy_action, m22 ());
+    graph_add_edge(_leftTranslateBy_action, m24 ());
     add_state_dependency (get_parent (), _leftTranslateBy_action);
   }
 
@@ -1444,18 +1444,18 @@ namespace djnn
     this->somehow_activating () ? enable (_rightScaleBy_sx_coupling, damaged) : _rightScaleBy_sx_coupling->disable ();
     _rightScaleBy_sy_coupling = new CouplingWithData (_rightScaleBy_sy, ACTIVATION, _rightScaleBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightScaleBy_sy_coupling, damaged) :_rightScaleBy_sy_coupling->disable ();
-    Graph::instance().add_edge(_rightScaleBy_cx, _rightScaleBy_action);
-    Graph::instance().add_edge(_rightScaleBy_cy, _rightScaleBy_action);
-    Graph::instance().add_edge(_rightScaleBy_sx, _rightScaleBy_action);
-    Graph::instance().add_edge(_rightScaleBy_sy, _rightScaleBy_action);
-    Graph::instance().add_edge(_rightScaleBy_action, _accsx);
-    Graph::instance().add_edge(_rightScaleBy_action, _accsy);
-    Graph::instance().add_edge(_rightScaleBy_action, m11 ());
-    Graph::instance().add_edge(_rightScaleBy_action, m12 ());
-    Graph::instance().add_edge(_rightScaleBy_action, m14 ());
-    Graph::instance().add_edge(_rightScaleBy_action, m21 ());
-    Graph::instance().add_edge(_rightScaleBy_action, m22 ());
-    Graph::instance().add_edge(_rightScaleBy_action, m24 ());
+    graph_add_edge(_rightScaleBy_cx, _rightScaleBy_action);
+    graph_add_edge(_rightScaleBy_cy, _rightScaleBy_action);
+    graph_add_edge(_rightScaleBy_sx, _rightScaleBy_action);
+    graph_add_edge(_rightScaleBy_sy, _rightScaleBy_action);
+    graph_add_edge(_rightScaleBy_action, _accsx);
+    graph_add_edge(_rightScaleBy_action, _accsy);
+    graph_add_edge(_rightScaleBy_action, m11 ());
+    graph_add_edge(_rightScaleBy_action, m12 ());
+    graph_add_edge(_rightScaleBy_action, m14 ());
+    graph_add_edge(_rightScaleBy_action, m21 ());
+    graph_add_edge(_rightScaleBy_action, m22 ());
+    graph_add_edge(_rightScaleBy_action, m24 ());
     add_state_dependency (get_parent (), _rightScaleBy_action);
   }
 
@@ -1482,18 +1482,18 @@ namespace djnn
     this->somehow_activating () ? enable (_leftScaleBy_sx_coupling, damaged) : _leftScaleBy_sx_coupling->disable ();
     _leftScaleBy_sy_coupling = new CouplingWithData (_leftScaleBy_sy, ACTIVATION, _leftScaleBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftScaleBy_sy_coupling, damaged) :_leftScaleBy_sy_coupling->disable ();
-    Graph::instance().add_edge(_leftScaleBy_cx, _leftScaleBy_action);
-    Graph::instance().add_edge(_leftScaleBy_cy, _leftScaleBy_action);
-    Graph::instance().add_edge(_leftScaleBy_sx, _leftScaleBy_action);
-    Graph::instance().add_edge(_leftScaleBy_sy, _leftScaleBy_action);
-    Graph::instance().add_edge(_leftScaleBy_action, _accsx);
-    Graph::instance().add_edge(_leftScaleBy_action, _accsy);
-    Graph::instance().add_edge(_leftScaleBy_action, m11 ());
-    Graph::instance().add_edge(_leftScaleBy_action, m12 ());
-    Graph::instance().add_edge(_leftScaleBy_action, m14 ());
-    Graph::instance().add_edge(_leftScaleBy_action, m21 ());
-    Graph::instance().add_edge(_leftScaleBy_action, m22 ());
-    Graph::instance().add_edge(_leftScaleBy_action, m24 ());
+    graph_add_edge(_leftScaleBy_cx, _leftScaleBy_action);
+    graph_add_edge(_leftScaleBy_cy, _leftScaleBy_action);
+    graph_add_edge(_leftScaleBy_sx, _leftScaleBy_action);
+    graph_add_edge(_leftScaleBy_sy, _leftScaleBy_action);
+    graph_add_edge(_leftScaleBy_action, _accsx);
+    graph_add_edge(_leftScaleBy_action, _accsy);
+    graph_add_edge(_leftScaleBy_action, m11 ());
+    graph_add_edge(_leftScaleBy_action, m12 ());
+    graph_add_edge(_leftScaleBy_action, m14 ());
+    graph_add_edge(_leftScaleBy_action, m21 ());
+    graph_add_edge(_leftScaleBy_action, m22 ());
+    graph_add_edge(_leftScaleBy_action, m24 ());
     add_state_dependency (get_parent (), _leftScaleBy_action);
   }
 
@@ -1516,16 +1516,16 @@ namespace djnn
     this->somehow_activating () ? enable(_rightRotateBy_cy_coupling, damaged) : _rightRotateBy_cy_coupling->disable ();
     _rightRotateBy_da_coupling = new CouplingWithData (_rightRotateBy_da, ACTIVATION, _rightRotateBy_action, ACTIVATION);
     this->somehow_activating () ? enable(_rightRotateBy_da_coupling, damaged) : _rightRotateBy_da_coupling->disable ();
-    Graph::instance().add_edge(_rightRotateBy_cx, _rightRotateBy_action);
-    Graph::instance().add_edge(_rightRotateBy_cy, _rightRotateBy_action);
-    Graph::instance().add_edge(_rightRotateBy_da, _rightRotateBy_action);
-    Graph::instance().add_edge(_rightRotateBy_action, _acca);
-    Graph::instance().add_edge(_rightRotateBy_action, m11 ());
-    Graph::instance().add_edge(_rightRotateBy_action, m12 ());
-    Graph::instance().add_edge(_rightRotateBy_action, m14 ());
-    Graph::instance().add_edge(_rightRotateBy_action, m21 ());
-    Graph::instance().add_edge(_rightRotateBy_action, m22 ());
-    Graph::instance().add_edge(_rightRotateBy_action, m24 ());
+    graph_add_edge(_rightRotateBy_cx, _rightRotateBy_action);
+    graph_add_edge(_rightRotateBy_cy, _rightRotateBy_action);
+    graph_add_edge(_rightRotateBy_da, _rightRotateBy_action);
+    graph_add_edge(_rightRotateBy_action, _acca);
+    graph_add_edge(_rightRotateBy_action, m11 ());
+    graph_add_edge(_rightRotateBy_action, m12 ());
+    graph_add_edge(_rightRotateBy_action, m14 ());
+    graph_add_edge(_rightRotateBy_action, m21 ());
+    graph_add_edge(_rightRotateBy_action, m22 ());
+    graph_add_edge(_rightRotateBy_action, m24 ());
     add_state_dependency (get_parent (), _rightRotateBy_action);
   }
 
@@ -1548,16 +1548,16 @@ namespace djnn
     this->somehow_activating () ? enable (_leftRotateBy_cy_coupling, damaged)  : _leftRotateBy_cy_coupling->disable ();
     _leftRotateBy_da_coupling = new CouplingWithData (_leftRotateBy_da, ACTIVATION, _leftRotateBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftRotateBy_da_coupling, damaged)  : _leftRotateBy_da_coupling->disable ();
-    Graph::instance().add_edge(_leftRotateBy_cx, _leftRotateBy_action);
-    Graph::instance().add_edge(_leftRotateBy_cy, _leftRotateBy_action);
-    Graph::instance().add_edge(_leftRotateBy_da, _leftRotateBy_action);
-    Graph::instance().add_edge(_leftRotateBy_action, _acca);
-    Graph::instance().add_edge(_leftRotateBy_action, m11 ());
-    Graph::instance().add_edge(_leftRotateBy_action, m12 ());
-    Graph::instance().add_edge(_leftRotateBy_action, m14 ());
-    Graph::instance().add_edge(_leftRotateBy_action, m21 ());
-    Graph::instance().add_edge(_leftRotateBy_action, m22 ());
-    Graph::instance().add_edge(_leftRotateBy_action, m24 ());
+    graph_add_edge(_leftRotateBy_cx, _leftRotateBy_action);
+    graph_add_edge(_leftRotateBy_cy, _leftRotateBy_action);
+    graph_add_edge(_leftRotateBy_da, _leftRotateBy_action);
+    graph_add_edge(_leftRotateBy_action, _acca);
+    graph_add_edge(_leftRotateBy_action, m11 ());
+    graph_add_edge(_leftRotateBy_action, m12 ());
+    graph_add_edge(_leftRotateBy_action, m14 ());
+    graph_add_edge(_leftRotateBy_action, m21 ());
+    graph_add_edge(_leftRotateBy_action, m22 ());
+    graph_add_edge(_leftRotateBy_action, m24 ());
     add_state_dependency (get_parent (), _leftRotateBy_action);
   }
 
@@ -1580,15 +1580,15 @@ namespace djnn
     this->somehow_activating () ? enable (_rightSkew_X_By_cy_coupling, damaged) : _rightSkew_X_By_cy_coupling->disable ();
     _rightSkew_X_By_da_coupling = new CouplingWithData (_rightSkew_X_By_da, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightSkew_X_By_da_coupling, damaged) : _rightSkew_X_By_da_coupling->disable ();
-    Graph::instance().add_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
-    Graph::instance().add_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
-    Graph::instance().add_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
-    Graph::instance().add_edge(_rightSkew_X_By_action, m11 ());
-    Graph::instance().add_edge(_rightSkew_X_By_action, m12 ());
-    Graph::instance().add_edge(_rightSkew_X_By_action, m14 ());
-    Graph::instance().add_edge(_rightSkew_X_By_action, m21 ());
-    Graph::instance().add_edge(_rightSkew_X_By_action, m22 ());
-    Graph::instance().add_edge(_rightSkew_X_By_action, m24 ());
+    graph_add_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
+    graph_add_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
+    graph_add_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
+    graph_add_edge(_rightSkew_X_By_action, m11 ());
+    graph_add_edge(_rightSkew_X_By_action, m12 ());
+    graph_add_edge(_rightSkew_X_By_action, m14 ());
+    graph_add_edge(_rightSkew_X_By_action, m21 ());
+    graph_add_edge(_rightSkew_X_By_action, m22 ());
+    graph_add_edge(_rightSkew_X_By_action, m24 ());
     add_state_dependency (get_parent (), _rightSkew_X_By_action);
   }
 
@@ -1611,15 +1611,15 @@ namespace djnn
     this->somehow_activating () ? enable (_leftSkew_X_By_cy_coupling, damaged) : _leftSkew_X_By_cy_coupling->disable ();
     _leftSkew_X_By_da_coupling = new CouplingWithData (_leftSkew_X_By_da, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftSkew_X_By_da_coupling, damaged) : _leftSkew_X_By_da_coupling->disable ();
-    Graph::instance().add_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
-    Graph::instance().add_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
-    Graph::instance().add_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
-    Graph::instance().add_edge(_leftSkew_X_By_action, m11 ());
-    Graph::instance().add_edge(_leftSkew_X_By_action, m12 ());
-    Graph::instance().add_edge(_leftSkew_X_By_action, m14 ());
-    Graph::instance().add_edge(_leftSkew_X_By_action, m21 ());
-    Graph::instance().add_edge(_leftSkew_X_By_action, m22 ());
-    Graph::instance().add_edge(_leftSkew_X_By_action, m24 ());
+    graph_add_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
+    graph_add_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
+    graph_add_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
+    graph_add_edge(_leftSkew_X_By_action, m11 ());
+    graph_add_edge(_leftSkew_X_By_action, m12 ());
+    graph_add_edge(_leftSkew_X_By_action, m14 ());
+    graph_add_edge(_leftSkew_X_By_action, m21 ());
+    graph_add_edge(_leftSkew_X_By_action, m22 ());
+    graph_add_edge(_leftSkew_X_By_action, m24 ());
     add_state_dependency (get_parent (), _leftSkew_X_By_action);
   }
 
@@ -1642,15 +1642,15 @@ namespace djnn
     this->somehow_activating () ? enable (_rightSkew_Y_By_cy_coupling, damaged) : _rightSkew_Y_By_cy_coupling->disable ();
     _rightSkew_Y_By_da_coupling = new CouplingWithData (_rightSkew_Y_By_da, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightSkew_Y_By_da_coupling, damaged) : _rightSkew_Y_By_da_coupling->disable ();
-    Graph::instance().add_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
-    Graph::instance().add_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
-    Graph::instance().add_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m11 ());
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m12 ());
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m14 ());
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m21 ());
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m22 ());
-    Graph::instance().add_edge(_rightSkew_Y_By_action, m24 ());
+    graph_add_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
+    graph_add_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
+    graph_add_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
+    graph_add_edge(_rightSkew_Y_By_action, m11 ());
+    graph_add_edge(_rightSkew_Y_By_action, m12 ());
+    graph_add_edge(_rightSkew_Y_By_action, m14 ());
+    graph_add_edge(_rightSkew_Y_By_action, m21 ());
+    graph_add_edge(_rightSkew_Y_By_action, m22 ());
+    graph_add_edge(_rightSkew_Y_By_action, m24 ());
     add_state_dependency (get_parent (), _rightSkew_Y_By_action);
   }
 
@@ -1673,15 +1673,15 @@ namespace djnn
     this->somehow_activating () ? enable (_leftSkew_Y_By_cy_coupling, damaged) : _leftSkew_Y_By_cy_coupling->disable ();
     _leftSkew_Y_By_da_coupling = new CouplingWithData (_leftSkew_Y_By_da, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftSkew_Y_By_da_coupling, damaged) : _leftSkew_Y_By_da_coupling->disable ();
-    Graph::instance().add_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
-    Graph::instance().add_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
-    Graph::instance().add_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m11 ());
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m12 ());
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m14 ());
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m21 ());
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m22 ());
-    Graph::instance().add_edge(_leftSkew_Y_By_action, m24 ());
+    graph_add_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
+    graph_add_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
+    graph_add_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
+    graph_add_edge(_leftSkew_Y_By_action, m11 ());
+    graph_add_edge(_leftSkew_Y_By_action, m12 ());
+    graph_add_edge(_leftSkew_Y_By_action, m14 ());
+    graph_add_edge(_leftSkew_Y_By_action, m21 ());
+    graph_add_edge(_leftSkew_Y_By_action, m22 ());
+    graph_add_edge(_leftSkew_Y_By_action, m24 ());
     add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
@@ -1748,14 +1748,14 @@ namespace djnn
   {
     if (_rightTranslateBy_action){
       remove_state_dependency (get_parent (), _rightTranslateBy_action);
-      Graph::instance().remove_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
-      Graph::instance().remove_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_rightTranslateBy_action, this->m24 ());
+      graph_remove_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
+      graph_remove_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
+      graph_remove_edge(_rightTranslateBy_action, this->m11 ());
+      graph_remove_edge(_rightTranslateBy_action, this->m12 ());
+      graph_remove_edge(_rightTranslateBy_action, this->m14 ());
+      graph_remove_edge(_rightTranslateBy_action, this->m21 ());
+      graph_remove_edge(_rightTranslateBy_action, this->m22 ());
+      graph_remove_edge(_rightTranslateBy_action, this->m24 ());
       delete _rightTranslateBy_dx_coupling;
       delete _rightTranslateBy_dy_coupling;
       delete _rightTranslateBy_action;
@@ -1766,14 +1766,14 @@ namespace djnn
 
     if (_leftTranslateBy_action){
       remove_state_dependency (get_parent (), _leftTranslateBy_action);
-      Graph::instance().remove_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
-      Graph::instance().remove_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_leftTranslateBy_action, this->m24 ());
+      graph_remove_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
+      graph_remove_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
+      graph_remove_edge(_leftTranslateBy_action, this->m11 ());
+      graph_remove_edge(_leftTranslateBy_action, this->m12 ());
+      graph_remove_edge(_leftTranslateBy_action, this->m14 ());
+      graph_remove_edge(_leftTranslateBy_action, this->m21 ());
+      graph_remove_edge(_leftTranslateBy_action, this->m22 ());
+      graph_remove_edge(_leftTranslateBy_action, this->m24 ());
       delete _leftTranslateBy_dx_coupling;
       delete _leftTranslateBy_dy_coupling;
       delete _leftTranslateBy_action;
@@ -1784,18 +1784,18 @@ namespace djnn
 
     if (_rightScaleBy_action) {
       remove_state_dependency (get_parent (), _rightScaleBy_action);
-      Graph::instance().remove_edge(_rightScaleBy_cx, _rightScaleBy_action);
-      Graph::instance().remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
-      Graph::instance().remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
-      Graph::instance().remove_edge(_rightScaleBy_sy, _rightScaleBy_action);
-      Graph::instance().remove_edge(_rightScaleBy_action, _accsx);
-      Graph::instance().remove_edge(_rightScaleBy_action, _accsy);
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m11 ());
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m12 ());
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m14 ());
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m21 ());
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m22 ());
-      Graph::instance().remove_edge(_rightScaleBy_action, this->m24 ());
+      graph_remove_edge(_rightScaleBy_cx, _rightScaleBy_action);
+      graph_remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
+      graph_remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
+      graph_remove_edge(_rightScaleBy_sy, _rightScaleBy_action);
+      graph_remove_edge(_rightScaleBy_action, _accsx);
+      graph_remove_edge(_rightScaleBy_action, _accsy);
+      graph_remove_edge(_rightScaleBy_action, this->m11 ());
+      graph_remove_edge(_rightScaleBy_action, this->m12 ());
+      graph_remove_edge(_rightScaleBy_action, this->m14 ());
+      graph_remove_edge(_rightScaleBy_action, this->m21 ());
+      graph_remove_edge(_rightScaleBy_action, this->m22 ());
+      graph_remove_edge(_rightScaleBy_action, this->m24 ());
       delete _rightScaleBy_cx_coupling;
       delete _rightScaleBy_cy_coupling;
       delete _rightScaleBy_sx_coupling;
@@ -1810,18 +1810,18 @@ namespace djnn
 
     if (_leftScaleBy_action) {
       remove_state_dependency (get_parent (), _leftScaleBy_action);
-      Graph::instance().remove_edge(_leftScaleBy_cx, _leftScaleBy_action);
-      Graph::instance().remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
-      Graph::instance().remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
-      Graph::instance().remove_edge(_leftScaleBy_sy, _leftScaleBy_action);
-      Graph::instance().remove_edge(_leftScaleBy_action, _accsx);
-      Graph::instance().remove_edge(_leftScaleBy_action, _accsy);
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m11 ());
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m12 ());
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m14 ());
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m21 ());
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m22 ());
-      Graph::instance().remove_edge(_leftScaleBy_action, this->m24 ());
+      graph_remove_edge(_leftScaleBy_cx, _leftScaleBy_action);
+      graph_remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
+      graph_remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
+      graph_remove_edge(_leftScaleBy_sy, _leftScaleBy_action);
+      graph_remove_edge(_leftScaleBy_action, _accsx);
+      graph_remove_edge(_leftScaleBy_action, _accsy);
+      graph_remove_edge(_leftScaleBy_action, this->m11 ());
+      graph_remove_edge(_leftScaleBy_action, this->m12 ());
+      graph_remove_edge(_leftScaleBy_action, this->m14 ());
+      graph_remove_edge(_leftScaleBy_action, this->m21 ());
+      graph_remove_edge(_leftScaleBy_action, this->m22 ());
+      graph_remove_edge(_leftScaleBy_action, this->m24 ());
       delete _leftScaleBy_cx_coupling;
       delete _leftScaleBy_cy_coupling;
       delete _leftScaleBy_sx_coupling;
@@ -1836,16 +1836,16 @@ namespace djnn
 
     if (_rightRotateBy_action) {
       remove_state_dependency (get_parent (), _rightRotateBy_action);
-      Graph::instance().remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
-      Graph::instance().remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
-      Graph::instance().remove_edge(_rightRotateBy_da, _rightRotateBy_action);
-      Graph::instance().remove_edge(_rightRotateBy_action, _acca);
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_rightRotateBy_action, this->m24 ());
+      graph_remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
+      graph_remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
+      graph_remove_edge(_rightRotateBy_da, _rightRotateBy_action);
+      graph_remove_edge(_rightRotateBy_action, _acca);
+      graph_remove_edge(_rightRotateBy_action, this->m11 ());
+      graph_remove_edge(_rightRotateBy_action, this->m12 ());
+      graph_remove_edge(_rightRotateBy_action, this->m14 ());
+      graph_remove_edge(_rightRotateBy_action, this->m21 ());
+      graph_remove_edge(_rightRotateBy_action, this->m22 ());
+      graph_remove_edge(_rightRotateBy_action, this->m24 ());
       delete _rightRotateBy_cx_coupling;
       delete _rightRotateBy_cy_coupling;
       delete _rightRotateBy_da_coupling;
@@ -1858,16 +1858,16 @@ namespace djnn
 
     if (_leftRotateBy_action) {
       remove_state_dependency (get_parent (), _leftRotateBy_action);
-      Graph::instance().remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
-      Graph::instance().remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
-      Graph::instance().remove_edge(_leftRotateBy_da, _leftRotateBy_action);
-      Graph::instance().remove_edge(_leftRotateBy_action, _acca);
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m11 ());
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m12 ());
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m14 ());
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m21 ());
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m22 ());
-      Graph::instance().remove_edge(_leftRotateBy_action, this->m24 ());
+      graph_remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
+      graph_remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
+      graph_remove_edge(_leftRotateBy_da, _leftRotateBy_action);
+      graph_remove_edge(_leftRotateBy_action, _acca);
+      graph_remove_edge(_leftRotateBy_action, this->m11 ());
+      graph_remove_edge(_leftRotateBy_action, this->m12 ());
+      graph_remove_edge(_leftRotateBy_action, this->m14 ());
+      graph_remove_edge(_leftRotateBy_action, this->m21 ());
+      graph_remove_edge(_leftRotateBy_action, this->m22 ());
+      graph_remove_edge(_leftRotateBy_action, this->m24 ());
       delete _leftRotateBy_cx_coupling;
       delete _leftRotateBy_cy_coupling;
       delete _leftRotateBy_da_coupling;
@@ -1880,15 +1880,15 @@ namespace djnn
 
     if (_rightSkew_X_By_action) {
       remove_state_dependency (get_parent (), _rightSkew_X_By_action);
-      Graph::instance().remove_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
-      Graph::instance().remove_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
-      Graph::instance().remove_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m11 ());
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m12 ());
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m14 ());
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m21 ());
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m22 ());
-      Graph::instance().remove_edge(_rightSkew_X_By_action, this->m24 ());
+      graph_remove_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
+      graph_remove_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
+      graph_remove_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
+      graph_remove_edge(_rightSkew_X_By_action, this->m11 ());
+      graph_remove_edge(_rightSkew_X_By_action, this->m12 ());
+      graph_remove_edge(_rightSkew_X_By_action, this->m14 ());
+      graph_remove_edge(_rightSkew_X_By_action, this->m21 ());
+      graph_remove_edge(_rightSkew_X_By_action, this->m22 ());
+      graph_remove_edge(_rightSkew_X_By_action, this->m24 ());
       delete _rightSkew_X_By_cx_coupling;
       delete _rightSkew_X_By_cy_coupling;
       delete _rightSkew_X_By_da_coupling;
@@ -1901,15 +1901,15 @@ namespace djnn
 
     if (_leftSkew_X_By_action) {
       remove_state_dependency (get_parent (), _leftSkew_X_By_action);
-      Graph::instance().remove_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
-      Graph::instance().remove_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
-      Graph::instance().remove_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m11 ());
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m12 ());
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m14 ());
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m21 ());
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m22 ());
-      Graph::instance().remove_edge(_leftSkew_X_By_action, this->m24 ());
+      graph_remove_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
+      graph_remove_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
+      graph_remove_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
+      graph_remove_edge(_leftSkew_X_By_action, this->m11 ());
+      graph_remove_edge(_leftSkew_X_By_action, this->m12 ());
+      graph_remove_edge(_leftSkew_X_By_action, this->m14 ());
+      graph_remove_edge(_leftSkew_X_By_action, this->m21 ());
+      graph_remove_edge(_leftSkew_X_By_action, this->m22 ());
+      graph_remove_edge(_leftSkew_X_By_action, this->m24 ());
       delete _leftSkew_X_By_cx_coupling;
       delete _leftSkew_X_By_cy_coupling;
       delete _leftSkew_X_By_da_coupling;
@@ -1922,15 +1922,15 @@ namespace djnn
 
     if (_rightSkew_Y_By_action) {
       remove_state_dependency (get_parent (), _rightSkew_Y_By_action);
-      Graph::instance().remove_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
-      Graph::instance().remove_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
-      Graph::instance().remove_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m11 ());
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m12 ());
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m14 ());
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m21 ());
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m22 ());
-      Graph::instance().remove_edge(_rightSkew_Y_By_action, this->m24 ());
+      graph_remove_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
+      graph_remove_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
+      graph_remove_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
+      graph_remove_edge(_rightSkew_Y_By_action, this->m11 ());
+      graph_remove_edge(_rightSkew_Y_By_action, this->m12 ());
+      graph_remove_edge(_rightSkew_Y_By_action, this->m14 ());
+      graph_remove_edge(_rightSkew_Y_By_action, this->m21 ());
+      graph_remove_edge(_rightSkew_Y_By_action, this->m22 ());
+      graph_remove_edge(_rightSkew_Y_By_action, this->m24 ());
       delete _rightSkew_Y_By_cx_coupling;
       delete _rightSkew_Y_By_cy_coupling;
       delete _rightSkew_Y_By_da_coupling;
@@ -1943,15 +1943,15 @@ namespace djnn
 
     if (_leftSkew_Y_By_action) {
       remove_state_dependency (get_parent (), _leftSkew_Y_By_action);
-      Graph::instance().remove_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
-      Graph::instance().remove_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
-      Graph::instance().remove_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m11 ());
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m12 ());
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m14 ());
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m21 ());
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m22 ());
-      Graph::instance().remove_edge(_leftSkew_Y_By_action, this->m24 ());
+      graph_remove_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
+      graph_remove_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
+      graph_remove_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
+      graph_remove_edge(_leftSkew_Y_By_action, this->m11 ());
+      graph_remove_edge(_leftSkew_Y_By_action, this->m12 ());
+      graph_remove_edge(_leftSkew_Y_By_action, this->m14 ());
+      graph_remove_edge(_leftSkew_Y_By_action, this->m21 ());
+      graph_remove_edge(_leftSkew_Y_By_action, this->m22 ());
+      graph_remove_edge(_leftSkew_Y_By_action, this->m24 ());
       delete _leftSkew_Y_By_cx_coupling;
       delete _leftSkew_Y_By_cy_coupling;
       delete _leftSkew_Y_By_da_coupling;

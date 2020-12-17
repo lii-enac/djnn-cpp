@@ -17,7 +17,7 @@
 #include "core/control/assignment.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component_observer.h"
 #include "core/tree/structure_observer.h"
 

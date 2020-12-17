@@ -16,7 +16,7 @@
 
 #include "math_functions.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn
@@ -74,20 +74,20 @@ namespace djnn
     _c_max (&_max, ACTIVATION, &_action, ACTIVATION),
     _c_input (&_input, ACTIVATION, &_action, ACTIVATION)
   {
-    Graph::instance ().add_edge (&_min, &_action);
-    Graph::instance ().add_edge (&_max, &_action);
-    Graph::instance ().add_edge (&_input, &_action);
-    Graph::instance ().add_edge (&_action, &_result);
+    graph_add_edge (&_min, &_action);
+    graph_add_edge (&_max, &_action);
+    graph_add_edge (&_input, &_action);
+    graph_add_edge (&_action, &_result);
     finalize_construction (parent, name);
   }
 
   BoundedValue::~BoundedValue ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_action, &_result);
-    Graph::instance ().remove_edge (&_input, &_action);
-    Graph::instance ().remove_edge (&_min, &_action);
-    Graph::instance ().remove_edge (&_max, &_action);
+    graph_remove_edge (&_action, &_result);
+    graph_remove_edge (&_input, &_action);
+    graph_remove_edge (&_min, &_action);
+    graph_remove_edge (&_max, &_action);
   }
 
   void

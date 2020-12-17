@@ -83,6 +83,25 @@ namespace djnn
     delete_parentless_processes ();
     __module_initialized = false;
   }
+
+  void
+  graph_add_edge (CoreProcess* src, CoreProcess* dst)
+  {
+    Graph::instance ().add_edge (src, dst);
+  }
+  
+  void
+  graph_remove_edge (CoreProcess* src, CoreProcess* dst)
+  {
+    Graph::instance ().remove_edge (src, dst);
+  }
+
+  void
+  graph_exec ()
+  {
+    Graph::instance ().exec ();
+  }
+
 }
 
 

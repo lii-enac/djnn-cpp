@@ -1,6 +1,7 @@
 #include "update_drawing.h"
 
 #include "core/control/action.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/execution/graph.h"
 #include "core/tree/bool_property.h"
 
@@ -56,12 +57,12 @@ namespace djnn {
     Graph::instance ().add_output_node (_instance->_redraw_action);
   
     _instance->_c_redraw_when_damaged = new Coupling (_instance->_damaged, ACTIVATION, _instance->_draw_sync, ACTIVATION); // _damaged -> _draw_sync
-    Graph::instance ().add_edge (_instance->_damaged, _instance->_draw_sync);
+    graph_add_edge (_instance->_damaged, _instance->_draw_sync);
     _instance->_c_redraw_when_draw_sync = new Coupling (_instance->_draw_sync, ACTIVATION, _instance->_redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
     // no need to add_edge from _draw_sync to _redraw_action since _redraw_action is an output
   
     _instance->_c_update_auto_refresh = new Coupling (_instance->_auto_refresh, ACTIVATION, _instance->_update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
-    Graph::instance ().add_edge (_instance->_auto_refresh, _instance->_update_auto_refresh_action);
+    graph_add_edge (_instance->_auto_refresh, _instance->_update_auto_refresh_action);
 
     _instance->set_activation_state (ACTIVATED);
 
@@ -74,8 +75,8 @@ namespace djnn {
     if (update_display_initialized) {
       _instance->set_data (nullptr);
       _instance->_win_list.clear ();
-      Graph::instance ().remove_edge (_instance->_auto_refresh, _instance->_update_auto_refresh_action);
-      Graph::instance ().remove_edge (_instance->_damaged, _instance->_draw_sync);
+      graph_remove_edge (_instance->_auto_refresh, _instance->_update_auto_refresh_action);
+      graph_remove_edge (_instance->_damaged, _instance->_draw_sync);
       Graph::instance ().remove_output_node (_instance->_redraw_action);
       
       delete _instance->_c_redraw_when_draw_sync;
@@ -117,12 +118,12 @@ namespace djnn {
     // Graph::instance ().add_output_node (_redraw_action);
   
     // _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION); // _damaged -> _draw_sync
-    // Graph::instance ().add_edge (_damaged, _draw_sync);
+    // graph_add_edge (_damaged, _draw_sync);
     // _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
     // // no need to add_edge from _draw_sync to _redraw_action since _redraw_action is an output
   
     // _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
-    // Graph::instance ().add_edge (_auto_refresh, _update_auto_refresh_action);
+    // graph_add_edge (_auto_refresh, _update_auto_refresh_action);
 
     // set_activation_state (ACTIVATED);
 
@@ -135,8 +136,8 @@ namespace djnn {
 
    //NOTE: 07.2020 : move everything to clear ()
 
-   // Graph::instance ().remove_edge (_damaged, _draw_sync);
-   // Graph::instance ().remove_edge (_auto_refresh, _update_auto_refresh_action);
+   // graph_remove_edge (_damaged, _draw_sync);
+   // graph_remove_edge (_auto_refresh, _update_auto_refresh_action);
    // Graph::instance ().remove_output_node (_redraw_action);
 
    // delete _c_redraw_when_draw_sync;

@@ -22,7 +22,7 @@
 
 #include "gui/shapes/text.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component.h"
 #include "display/window.h"
 
@@ -66,7 +66,7 @@ namespace djnn
   {
     set_origin (x, y);
 
-    //Graph::instance ().add_edge (&_text, &_update_size);
+    //graph_add_edge (&_text, &_update_size);
     //Graph:instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr); // try to init geometry on creation
     finalize_construction (parent, name);
@@ -75,21 +75,21 @@ namespace djnn
   Text::~Text ()
   {
     ////remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
-    //Graph::instance ().remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
+    //graph_remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     remove_state_dependency (get_parent (), &_update_size);
-    //Graph::instance ().remove_edge (&_text, &_update_size);
+    //graph_remove_edge (&_text, &_update_size);
     
     if (_cffamily) {
-      Graph::instance ().remove_edge ( _update_size._ff->family (), &_update_size);
+      graph_remove_edge ( _update_size._ff->family (), &_update_size);
     }
     if (_cfsize) {
-      Graph::instance ().remove_edge ( _update_size._fsz->size (), &_update_size);
+      graph_remove_edge ( _update_size._fsz->size (), &_update_size);
     }
     if (_cfstyle) {
-      Graph::instance ().remove_edge ( _update_size._fs->style (), &_update_size);
+      graph_remove_edge ( _update_size._fs->style (), &_update_size);
     }
     if (_cfweight) {
-      Graph::instance ().remove_edge ( _update_size._fw->weight (), &_update_size);
+      graph_remove_edge ( _update_size._fw->weight (), &_update_size);
     }
 
     remove_edge (_cx);
@@ -264,7 +264,7 @@ namespace djnn
 
         /* remove old coupling */
         if (_cffamily != nullptr) {
-          Graph::instance ().remove_edge (_update_size._ff->family (), &_update_size);
+          graph_remove_edge (_update_size._ff->family (), &_update_size);
           delete _cffamily;
           _cffamily = nullptr;
         }
@@ -272,7 +272,7 @@ namespace djnn
         /* update value */
         _update_size._ff = ff;
         _cffamily = new CouplingWithData (ff->family (), ACTIVATION, &_update_size, ACTIVATION);
-        Graph::instance ().add_edge (ff->family (), &_update_size);
+        graph_add_edge (ff->family (), &_update_size);
       }
 
       /* fontsize changed ? */
@@ -281,7 +281,7 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfsize != nullptr) {
-          Graph::instance ().remove_edge (_update_size._fsz->size (), &_update_size);
+          graph_remove_edge (_update_size._fsz->size (), &_update_size);
           delete _cfsize;
           _cfsize = nullptr;
         }
@@ -289,7 +289,7 @@ namespace djnn
         /* update value */
         _update_size._fsz = fsz;
         _cfsize = new CouplingWithData (fsz->size (), ACTIVATION, &_update_size, ACTIVATION);
-        Graph::instance ().add_edge (fsz->size (), &_update_size);
+        graph_add_edge (fsz->size (), &_update_size);
       }
 
       /* fontstyle changed ? */
@@ -298,7 +298,7 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfstyle != nullptr) {
-          Graph::instance ().remove_edge (_update_size._fs->style (), &_update_size);
+          graph_remove_edge (_update_size._fs->style (), &_update_size);
           delete _cfstyle;
           _cfstyle = nullptr;
         }
@@ -306,7 +306,7 @@ namespace djnn
         /* update value */
         _update_size._fs = fs;
         _cfstyle = new CouplingWithData (fs->style (), ACTIVATION, &_update_size, ACTIVATION);
-        Graph::instance ().add_edge (fs->style (), &_update_size);
+        graph_add_edge (fs->style (), &_update_size);
       }
 
       /* fontweight changed ? */
@@ -315,7 +315,7 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfweight != nullptr) {
-          Graph::instance ().remove_edge (_update_size._fw->weight (), &_update_size);
+          graph_remove_edge (_update_size._fw->weight (), &_update_size);
           delete _cfweight;
           _cfweight = nullptr;
         }
@@ -323,7 +323,7 @@ namespace djnn
         /* update value */
         _update_size._fw = fw;
         _cfweight = new CouplingWithData (fw->weight (), ACTIVATION, &_update_size, ACTIVATION);
-        Graph::instance ().add_edge (fw->weight (), &_update_size);
+        graph_add_edge (fw->weight (), &_update_size);
       }
     }
 

@@ -20,7 +20,7 @@
 #include "gui/shapes/sdf.h"
 
 #include "gui/shapes/image.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 namespace djnn
 {
@@ -37,7 +37,7 @@ namespace djnn
   Image::~Image ()
   {
     if (_cwatcher) {
-      Graph::instance ().remove_edge ( this->path (), _watcher);
+      graph_remove_edge ( this->path (), _watcher);
       delete _cwatcher;
     }
     delete _watcher;
@@ -57,7 +57,7 @@ namespace djnn
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       if (!somehow_activating())
         _cwatcher->disable ();
-      Graph::instance ().add_edge (res, _watcher);
+      graph_add_edge (res, _watcher);
     }
 
     return res;
@@ -149,7 +149,7 @@ namespace djnn
   DataImage::~DataImage ()
   {
     if (_cwatcher) {
-      Graph::instance ().remove_edge ( this->data (), _watcher);
+      graph_remove_edge ( this->data (), _watcher);
       delete _cwatcher;
     }
     delete _watcher;
@@ -166,7 +166,7 @@ namespace djnn
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       if (!somehow_activating())
         _cwatcher->disable ();
-      Graph::instance ().add_edge (res, _watcher);
+      graph_add_edge (res, _watcher);
     }
 
     return res;

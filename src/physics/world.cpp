@@ -13,7 +13,7 @@
  */
 
 #include "abstract_physics_backend.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component.h"
 #include "core/tree/spike.h"
 #include "core/ontology/coupling.h"
@@ -116,11 +116,11 @@ namespace djnn
     add_symbol ("step", _step);
     _step_action = new StepAction (this, "step_action");
     _cstep = new Coupling (_step, ACTIVATION, _step_action, ACTIVATION, true);
-    Graph::instance ().add_edge (_step, _step_action);
+    graph_add_edge (_step, _step_action);
 
     _world_impl = PhysicsBackend::instance ()->create_world (this, x, y, z);
     if (get_parent () && get_parent ()->state_dependency () != nullptr)
-      Graph::instance ().add_edge (get_parent ()->state_dependency (), _step_action);
+      graph_add_edge (get_parent ()->state_dependency (), _step_action);
 
     finalize_construction (parent, name);
   }
@@ -128,8 +128,8 @@ namespace djnn
   World::~World ()
   {
     if (get_parent () && get_parent ()->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (get_parent ()->state_dependency (), _step_action);
-    Graph::instance ().remove_edge (_step, _step_action);
+      graph_remove_edge (get_parent ()->state_dependency (), _step_action);
+    graph_remove_edge (_step, _step_action);
     delete _cstep;
     delete _step_action;
     delete _step;

@@ -26,8 +26,6 @@
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBGG
 
-#define GRAPH_EXEC { DBGG; djnn::Graph::instance ().exec (); }
-
 namespace djnn
 {
   class Vertex

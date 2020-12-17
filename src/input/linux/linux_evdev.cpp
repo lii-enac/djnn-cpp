@@ -15,7 +15,7 @@
 #include "linux_input.h"
 #include "core/utils/error.h"
 #include "core/ontology/coupling.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include <stdio.h>
 #include <unistd.h>
@@ -71,14 +71,14 @@ namespace djnn {
     _iofd->activate ();
     _action = new EvdevAction (this);
     _readable_cpl = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-    Graph::instance().add_edge (_iofd->find_child_impl ("readable"), _action);
+    graph_add_edge (_iofd->find_child_impl ("readable"), _action);
   }
 
   Evdev::~Evdev ()
   {
     if (_aborted)
       return;
-    Graph::instance().remove_edge (_iofd->find_child_impl ("readable"), _action);
+    graph_remove_edge (_iofd->find_child_impl ("readable"), _action);
     _iofd->deactivate ();
 
     delete _readable_cpl;

@@ -15,7 +15,7 @@
 #include "unix_phidgets.h"
 #include "core/utils/error.h"
 #include "exec_env/global_mutex.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 namespace djnn
 {
@@ -219,9 +219,9 @@ namespace djnn
     _rate_action = new ChangeRateAction (this, "rate_action");
     _trigger_action = new ChangeTriggerAction (this, "trigger_action");
     _c_rate = new Coupling (_rate, ACTIVATION, _rate_action, ACTIVATION, true);
-    Graph::instance ().add_edge (_rate, _rate_action);
+    graph_add_edge (_rate, _rate_action);
     _c_trigger = new Coupling (_trigger, ACTIVATION, _trigger_action, ACTIVATION, true);
-    Graph::instance ().add_edge (_trigger, _trigger_action);
+    graph_add_edge (_trigger, _trigger_action);
     _sw_ch = nullptr;
     finalize_construction (parent, name, nullptr);
   }
@@ -231,8 +231,8 @@ namespace djnn
     if (_sw_ch != nullptr) {
       PhidgetVoltageInput_delete (&_sw_ch);
     }
-    Graph::instance ().remove_edge (_rate, _rate_action);
-    Graph::instance ().remove_edge (_trigger, _trigger_action);
+    graph_remove_edge (_rate, _rate_action);
+    graph_remove_edge (_trigger, _trigger_action);
     delete _c_trigger;
     delete _c_rate;
     delete _trigger_action;

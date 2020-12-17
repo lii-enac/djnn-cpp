@@ -19,7 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/component.h"
 #include "core/tree/text_property.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include "core/utils/djnn_dynamic_cast.h"
 
@@ -106,7 +106,7 @@ namespace djnn {
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    void add_state (FSMState* st) { Graph::instance().add_edge (st, &_fsm_state); _states.push_back(st); };
+    void add_state (FSMState* st) { graph_add_edge (st, &_fsm_state); _states.push_back(st); };
     void add_transition (FSMTransition* tr) { _transitions.push_back(tr); };
     virtual ~FSM ();
     int priority () { return _priority; }

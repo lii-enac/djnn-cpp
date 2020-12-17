@@ -15,7 +15,7 @@
 
 #include "interaction.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/list.h"
 #include "gui/transformation/homography.h"
 
@@ -56,14 +56,14 @@ namespace djnn
     _c_on_del = new Coupling (_removed, ACTIVATION, _remove_touch_action, ACTIVATION, true);
   
     //_c_move = new Coupling (_move_touch_action, ACTIVATION, _update_action, ACTIVATION);
-    //Graph::instance().add_edge (_move_touch_action, _update_action);
+    //graph_add_edge (_move_touch_action, _update_action);
 
     finalize_construction (parent, name);
   }
 
   ScaleRotateTranslate::~ScaleRotateTranslate ()
   {
-    //Graph::instance().remove_edge (_move_touch_action, _update_action);
+    //graph_remove_edge (_move_touch_action, _update_action);
     //delete _c_move;
 
     std::map<int, TouchAlive*>::iterator it;
@@ -111,7 +111,7 @@ namespace djnn
     _c_update(&_move_touch_action, ACTIVATION, srt->get_update_action (), ACTIVATION)
   {
     //_c_move = new Coupling (_move_touch_action, ACTIVATION, srt->_update_action, ACTIVATION);
-    Graph::instance().add_edge (&_move_touch_action, srt->get_update_action ());
+    graph_add_edge (&_move_touch_action, srt->get_update_action ());
     _cpl.enable ();
     _c_update.enable ();
   }

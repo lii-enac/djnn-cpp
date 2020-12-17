@@ -16,7 +16,7 @@
 #include <stdexcept>
 
 #include "core/utils/error.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "linux_input.h"
 
 #include <fcntl.h>
@@ -131,11 +131,11 @@ namespace djnn {
       _iofd->activate ();
       _action = new GPIOLineReadAction (this, "read");
       _c_action = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-      Graph::instance().add_edge (_iofd->find_child_impl ("readable"), _action);
+      graph_add_edge (_iofd->find_child_impl ("readable"), _action);
     } else {
       _action = new GPIOLineWriteAction (this, "write");
       _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
-      Graph::instance().add_edge (_value, _action);
+      graph_add_edge (_value, _action);
     }
     finalize_construction (parent, name);
   }
@@ -144,12 +144,12 @@ namespace djnn {
   {
     if (_dir == IN) {
       _iofd->deactivate ();
-      Graph::instance().remove_edge (_iofd->find_child_impl ("readable"), _action);
+      graph_remove_edge (_iofd->find_child_impl ("readable"), _action);
       delete _c_action;
       delete _action;
       delete _iofd;
     } else {
-      Graph::instance().remove_edge (_value, _action);
+      graph_remove_edge (_value, _action);
       delete _c_action;
       delete _action;
     }

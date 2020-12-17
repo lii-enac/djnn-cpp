@@ -17,6 +17,7 @@
 #include "coupling.h"
 
 #include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/uri.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
@@ -710,14 +711,14 @@ namespace djnn
   add_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
-      Graph::instance ().add_edge (parent->state_dependency (), p); 
+      graph_add_edge (parent->state_dependency (), p); 
   }
 
   void
   remove_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->state_dependency () != nullptr)
-      Graph::instance ().remove_edge (parent->state_dependency (), p);
+      graph_remove_edge (parent->state_dependency (), p);
   }
 
 

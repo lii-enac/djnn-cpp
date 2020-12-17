@@ -17,7 +17,7 @@
 
 #include "text.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/text_property.h"
 #include "core/serializer/serializer.h"
 
@@ -79,17 +79,17 @@ namespace djnn
   {
     _c_input.disable ();
     _c_decimal.disable ();
-    Graph::instance ().add_edge (&_input, &_action);
-    Graph::instance ().add_edge (&_decimal, &_action);
-    Graph::instance ().add_edge (&_action, &_output);
+    graph_add_edge (&_input, &_action);
+    graph_add_edge (&_decimal, &_action);
+    graph_add_edge (&_action, &_output);
   }
 
   DoubleFormatter::~DoubleFormatter ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_input, &_action);
-    Graph::instance ().remove_edge (&_decimal, &_action);
-    Graph::instance ().remove_edge (&_action, &_output);
+    graph_remove_edge (&_input, &_action);
+    graph_remove_edge (&_decimal, &_action);
+    graph_remove_edge (&_action, &_output);
   }
 
   void
@@ -162,10 +162,10 @@ namespace djnn
   {
     _c_acc.disable ();
     _c_del.disable ();
-    Graph::instance ().add_edge (&_input, &_acc_action);
-    Graph::instance ().add_edge (&_del, &_del_action);
-    Graph::instance ().add_edge (&_acc_action, &_state);
-    Graph::instance ().add_edge (&_del_action, &_state);
+    graph_add_edge (&_input, &_acc_action);
+    graph_add_edge (&_del, &_del_action);
+    graph_add_edge (&_acc_action, &_state);
+    graph_add_edge (&_del_action, &_state);
     finalize_construction (parent, name);
   }
 
@@ -173,10 +173,10 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), &_acc_action);
     remove_state_dependency (get_parent (), &_del_action);
-    Graph::instance ().remove_edge (&_input, &_acc_action);
-    Graph::instance ().remove_edge (&_del, &_del_action);
-    Graph::instance ().remove_edge (&_acc_action, &_state);
-    Graph::instance ().remove_edge (&_del_action, &_state);
+    graph_remove_edge (&_input, &_acc_action);
+    graph_remove_edge (&_del, &_del_action);
+    graph_remove_edge (&_acc_action, &_state);
+    graph_remove_edge (&_del_action, &_state);
   }
 
   void
@@ -249,17 +249,17 @@ namespace djnn
     _c_reg (&_input, ACTIVATION, &_reg_action, ACTIVATION)
   {
     _c_reg.disable ();
-    Graph::instance ().add_edge (&_input, &_reg_action);
+    graph_add_edge (&_input, &_reg_action);
     finalize_construction (parent, name);
   }
 
   Regex::~Regex ()
   {
     remove_state_dependency (get_parent (), &_reg_action);
-    Graph::instance ().remove_edge (&_input, &_reg_action);
+    graph_remove_edge (&_input, &_reg_action);
 
     for (auto p : _in_map){
-      Graph::instance ().remove_edge (&_reg_action, p.second);
+      graph_remove_edge (&_reg_action, p.second);
       delete p.second;
     }
   }
@@ -283,7 +283,7 @@ namespace djnn
       else {
         /* key doesn't exist */
         TextProperty* newin = new TextProperty ( this, key, "");
-        Graph::instance ().add_edge (&_reg_action, newin);
+        graph_add_edge (&_reg_action, newin);
         _in_map[i] = newin;
         return newin;
       }

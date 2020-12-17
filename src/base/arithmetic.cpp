@@ -15,7 +15,7 @@
 
 #include "arithmetic.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
 namespace djnn
@@ -89,7 +89,7 @@ namespace djnn
   int
   Incr::init_incr (bool isModel)
   {
-    Graph::instance ().add_edge (this, &_state);
+    graph_add_edge (this, &_state);
     set_is_model (isModel);
     return 1;
   }
@@ -106,7 +106,7 @@ namespace djnn
   Incr::~Incr ()
   { 
     remove_state_dependency (get_parent (), &_state);
-    Graph::instance ().remove_edge (this, &_state);
+    graph_remove_edge (this, &_state);
   }
 
   void
@@ -177,16 +177,16 @@ namespace djnn
     _c_input (&_input, ACTIVATION, &_action, ACTIVATION)
   {
     _c_input.disable ();
-    Graph::instance ().add_edge (&_input, &_action);
-    Graph::instance ().add_edge (&_action, &_result);
+    graph_add_edge (&_input, &_action);
+    graph_add_edge (&_action, &_result);
     finalize_construction (parent, name);
   }
 
   AdderAccumulator::~AdderAccumulator ()
   {
     remove_state_dependency (get_parent (), &_action);
-    Graph::instance ().remove_edge (&_input, &_action);
-    Graph::instance ().remove_edge (&_action, &_result);
+    graph_remove_edge (&_input, &_action);
+    graph_remove_edge (&_action, &_result);
   }
 
   void

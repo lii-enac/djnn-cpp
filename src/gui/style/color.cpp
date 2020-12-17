@@ -18,7 +18,7 @@
 #include "display/window.h"
 #include "gui/style/abstract_style.h"
 #include "core/control/action.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include "color.h"
 
@@ -103,24 +103,24 @@ namespace djnn
     _cb = new Coupling (_b, ACTIVATION, _action, ACTIVATION);
     _cb->disable ();
 
-    Graph::instance ().add_edge (_r, _action);
-    Graph::instance ().add_edge (_g, _action);
-    Graph::instance ().add_edge (_b, _action);
-    Graph::instance ().add_edge (_action, _l);
-    Graph::instance ().add_edge (_action, _c);
-    Graph::instance ().add_edge (_action, _h);
+    graph_add_edge (_r, _action);
+    graph_add_edge (_g, _action);
+    graph_add_edge (_b, _action);
+    graph_add_edge (_action, _l);
+    graph_add_edge (_action, _c);
+    graph_add_edge (_action, _h);
     finalize_construction (parent, name);
   }
 
   RGBToLCHConverter::~RGBToLCHConverter ()
   {
     remove_state_dependency (get_parent (), _action);
-    Graph::instance ().remove_edge (_action, _h);
-    Graph::instance ().remove_edge (_action, _c);
-    Graph::instance ().remove_edge (_action, _l);
-    Graph::instance ().remove_edge (_b, _action);
-    Graph::instance ().remove_edge (_g, _action);
-    Graph::instance ().remove_edge (_r, _action);
+    graph_remove_edge (_action, _h);
+    graph_remove_edge (_action, _c);
+    graph_remove_edge (_action, _l);
+    graph_remove_edge (_b, _action);
+    graph_remove_edge (_g, _action);
+    graph_remove_edge (_r, _action);
 
     delete _cb;
     delete _cg;
@@ -230,12 +230,12 @@ namespace djnn
     _ch = new Coupling (_h, ACTIVATION, _action, ACTIVATION);
     _ch->disable ();
 
-    Graph::instance ().add_edge (_l, _action);
-    Graph::instance ().add_edge (_c, _action);
-    Graph::instance ().add_edge (_h, _action);
-    Graph::instance ().add_edge (_action, _r);
-    Graph::instance ().add_edge (_action, _g);
-    Graph::instance ().add_edge (_action, _b);
+    graph_add_edge (_l, _action);
+    graph_add_edge (_c, _action);
+    graph_add_edge (_h, _action);
+    graph_add_edge (_action, _r);
+    graph_add_edge (_action, _g);
+    graph_add_edge (_action, _b);
     finalize_construction (parent, name);
   }
 
@@ -255,12 +255,12 @@ namespace djnn
   LCHToRGBConverter::~LCHToRGBConverter ()
   {
     remove_state_dependency (get_parent (), _action);
-    Graph::instance ().remove_edge (_action, _b);
-    Graph::instance ().remove_edge (_action, _g);
-    Graph::instance ().remove_edge (_action, _r);
-    Graph::instance ().remove_edge (_h, _action);
-    Graph::instance ().remove_edge (_c, _action);
-    Graph::instance ().remove_edge (_l, _action);
+    graph_remove_edge (_action, _b);
+    graph_remove_edge (_action, _g);
+    graph_remove_edge (_action, _r);
+    graph_remove_edge (_h, _action);
+    graph_remove_edge (_c, _action);
+    graph_remove_edge (_l, _action);
 
     delete _ch;
     delete _cc;
@@ -325,15 +325,15 @@ namespace djnn
 		delete _cb;
 		delete _cv;
 		if (_c_rv) {
-		  Graph::instance ().remove_edge (r(), &_toValue);
+		  graph_remove_edge (r(), &_toValue);
 		  delete _c_rv;
 		}
 		if (_c_gv) {
-		  Graph::instance ().remove_edge (g(), &_toValue);
+		  graph_remove_edge (g(), &_toValue);
 		  delete _c_gv;
 		}
 		if (_c_bv) {
-		  Graph::instance ().remove_edge (b(), &_toValue);
+		  graph_remove_edge (b(), &_toValue);
 		  delete _c_bv;
 		}
 		delete _c_vrgb;
@@ -411,7 +411,7 @@ namespace djnn
       rawp_Int=&raw_props.r;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      Graph::instance ().add_edge (res, &_toValue);
+      graph_add_edge (res, &_toValue);
       _c_rv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_rv->disable ();
@@ -421,7 +421,7 @@ namespace djnn
       rawp_Int=&raw_props.g;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      Graph::instance ().add_edge (res, &_toValue);
+      graph_add_edge (res, &_toValue);
       _c_gv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_gv->disable ();
@@ -431,7 +431,7 @@ namespace djnn
       rawp_Int=&raw_props.b;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      Graph::instance ().add_edge (res, &_toValue);
+      graph_add_edge (res, &_toValue);
       _c_bv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_bv->disable ();

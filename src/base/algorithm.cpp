@@ -13,7 +13,7 @@
  */
 
 #include "algorithm.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/serializer/serializer.h"
@@ -35,13 +35,13 @@ namespace djnn
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be sorted");
 
-    Graph::instance ().add_edge (&_spec, &_sort_action);
+    graph_add_edge (&_spec, &_sort_action);
 
     finalize_construction (parent, name);
   }
 
   Sorter::~Sorter () {
-    Graph::instance ().remove_edge (&_spec, &_sort_action);
+    graph_remove_edge (&_spec, &_sort_action);
   }
 
   void
@@ -171,7 +171,7 @@ namespace djnn
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child_impl ("size"), ACTIVATION, &_update_list, ACTIVATION);
-    Graph::instance ().add_edge (container->find_child_impl ("size"), &_update_list);
+    graph_add_edge (container->find_child_impl ("size"), &_update_list);
     finalize_construction (parent, name);
   }
 
@@ -179,11 +179,11 @@ namespace djnn
   {
     for (auto c: _coupling_list) {
       auto * s = c->get_src();
-      Graph::instance ().remove_edge (s, &_spec_action);
+      graph_remove_edge (s, &_spec_action);
       delete c;
     }
 
-    Graph::instance ().remove_edge (_container->find_child_impl ("size"), &_update_list);
+    graph_remove_edge (_container->find_child_impl ("size"), &_update_list);
     delete _c_update_list_action;
   }
 
@@ -213,7 +213,7 @@ namespace djnn
   {
     for (auto c: _coupling_list) {
       auto * s = c->get_src();
-      Graph::instance ().remove_edge (s, &_spec_action);
+      graph_remove_edge (s, &_spec_action);
       delete c;
     }
     _coupling_list.clear ();
@@ -224,7 +224,7 @@ namespace djnn
         continue;
       }
       Coupling *cpl = new Coupling (s, ACTIVATION, &_spec_action, ACTIVATION);
-      Graph::instance ().add_edge (s, &_spec_action);
+      graph_add_edge (s, &_spec_action);
       _coupling_list.push_back (cpl);
     }
     do_action ();

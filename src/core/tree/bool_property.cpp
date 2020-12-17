@@ -16,7 +16,7 @@
 #include "bool_property.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include "core/utils/djnn_dynamic_cast.h"
 
@@ -54,14 +54,14 @@ namespace djnn
     _true (this, "true"),
     _false (this, "false")
   {
-    Graph::instance ().add_edge (this, &_true);
-    Graph::instance ().add_edge (this, &_false);
+    graph_add_edge (this, &_true);
+    graph_add_edge (this, &_false);
   };
 
   AbstractBoolProperty::~AbstractBoolProperty ()
   {
-    Graph::instance ().remove_edge (this, &_false);
-    Graph::instance ().remove_edge (this, &_true);
+    graph_remove_edge (this, &_false);
+    graph_remove_edge (this, &_true);
   }
 
   void

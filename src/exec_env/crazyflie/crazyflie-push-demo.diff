@@ -120,7 +120,7 @@ index 0000000..a26221d
 +#include "core/control/binding.h"
 +#include "core/control/assignment.h"
 +#include "core/tree/spike.h"
-+#include "core/execution/graph.h"
++#include "core/core-dev.h" // graph add/remove edge
 +#include "core/utils/djnn_dynamic_cast.h"
 +#include "core/utils/error.h"
 +
@@ -375,7 +375,7 @@ index 0000000..a26221d
 +			TestAction1 a1 ("1s");
 +			auto * end1 = t1.find_child ("end");  
 +			Coupling* c1 = new Coupling (end1, ACTIVATION, &a1, ACTIVATION);
-+			Graph::instance().add_edge (end1, &a1);
++			graph_add_edge (end1, &a1);
 +			//auto * b1 = new Binding (nullptr, "", end1, ACTIVATION, &a1, ACTIVATION);
 +			//b1->activate();
 +
@@ -383,7 +383,7 @@ index 0000000..a26221d
 +			TestAction1 a2 ("2,5s");
 +			auto * end2 = t2.find_child ("end");
 +			Coupling* c2 = new Coupling (end2, ACTIVATION, &a2, ACTIVATION);
-+			Graph::instance().add_edge (end2, &a2);
++			graph_add_edge (end2, &a2);
 +			//auto * b2 = new Binding (nullptr, "", end2, ACTIVATION, &a2, ACTIVATION);
 +			//b2->activate();
 +
@@ -398,8 +398,8 @@ index 0000000..a26221d
 +
 +			t1.deactivate ();
 +			t2.deactivate ();
-+			Graph::instance().remove_edge (end2, &a2);
-+			Graph::instance().remove_edge (end1, &a1);
++			graph_remove_edge (end2, &a2);
++			graph_remove_edge (end1, &a1);
 +			//Graph::instance ().exec ();
 +			//b1->deactivate ();
 +			//b2->deactivate ();

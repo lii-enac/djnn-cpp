@@ -14,7 +14,7 @@
 
 #include "dictionary.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 namespace djnn
 {
@@ -73,9 +73,9 @@ namespace djnn
     _c_add.disable ();
     _c_del.disable ();
     _c_find.disable ();
-    Graph::instance ().add_edge (&_add, &_add_action);
-    Graph::instance ().add_edge (&_del, &_del_action);
-    Graph::instance ().add_edge (&_key, &_find_action);
+    graph_add_edge (&_add, &_add_action);
+    graph_add_edge (&_del, &_del_action);
+    graph_add_edge (&_key, &_find_action);
     finalize_construction (parent, name);
   }
   void
@@ -118,8 +118,8 @@ namespace djnn
   }
 
   Dictionary::~Dictionary () {
-    Graph::instance ().remove_edge (&_key, &_find_action);
-    Graph::instance ().remove_edge (&_del, &_del_action);
-    Graph::instance ().remove_edge (&_add, &_add_action);
+    graph_remove_edge (&_key, &_find_action);
+    graph_remove_edge (&_del, &_del_action);
+    graph_remove_edge (&_add, &_add_action);
   }
 }

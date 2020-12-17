@@ -119,7 +119,7 @@ namespace djnn
     _senders_map[cp] = path;
     Coupling *c = new Coupling (cp, ACTIVATION, &_send, ACTIVATION);
     Coupling *c2 = new Coupling (cp, ACTIVATION, &_build_send, ACTIVATION, true);
-    Graph::instance ().add_edge (cp, &_send);
+    graph_add_edge (cp, &_send);
     c->enable ();
     _props_c.push_back (c);
     _props_c.push_back (c2);
@@ -145,7 +145,7 @@ namespace djnn
     for (it = _props_c.begin (); it != _props_c.end ();) {
       if ((*it)->get_src () == cp) {
         if (!found) {
-          Graph::instance ().remove_edge (cp, &_send);
+          graph_remove_edge (cp, &_send);
           found = true;
         }
         delete *it;

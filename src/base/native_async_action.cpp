@@ -16,7 +16,7 @@
 
 #include "exec_env/global_mutex.h"
 #include "core/utils/djnn_dynamic_cast.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 // #include "core/utils/error.h"
 

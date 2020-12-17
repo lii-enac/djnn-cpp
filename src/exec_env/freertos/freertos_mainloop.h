@@ -15,7 +15,7 @@
 #pragma once
 
 #include "exec_env/external_source.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 namespace djnn {
 	class MainLoop;

@@ -18,7 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 //#include "core/utils/error.h"
 
@@ -32,7 +32,7 @@ namespace djnn {
     : CoreProcess (is_model)
     , _src(src), _dst(dst), _propagate(true)
     {
-      Graph::instance ().add_edge (src, dst);
+      graph_add_edge (src, dst);
     }
     CoreAssignment (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreAssignment (src, dst, is_model)
@@ -41,7 +41,7 @@ namespace djnn {
     }
 
     ~CoreAssignment () {
-      Graph::instance ().remove_edge (get_src (), get_dst ());
+      graph_remove_edge (get_src (), get_dst ());
     }
 
     CoreProcess* get_src () { return _src; }
@@ -106,7 +106,7 @@ public:
     , _action(this, "action")
     , _propagate(true)
     {
-      Graph::instance ().add_edge (src, dst);
+      graph_add_edge (src, dst);
       finalize_construction (parent, name);
     }
 
@@ -119,7 +119,7 @@ public:
     {}
 
     virtual ~Assignment () {
-      Graph::instance ().remove_edge (get_src(), get_dst());
+      graph_remove_edge (get_src(), get_dst());
     }
 
     void impl_activate   () override { _action.activate(); }

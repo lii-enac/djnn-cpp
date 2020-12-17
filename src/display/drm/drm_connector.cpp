@@ -18,7 +18,7 @@
 #include "core/tree/set.h"
 #include "core/ontology/coupling.h"
 #include "core/utils/error.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 #include <string.h>
 #include <iostream>
@@ -220,8 +220,8 @@ namespace djnn {
       init_connection (res, drm_conn);
     }
 
-    Graph::instance ().add_edge (&_x, &_pos_action);
-    Graph::instance ().add_edge (&_y, &_pos_action);
+    graph_add_edge (&_x, &_pos_action);
+    graph_add_edge (&_y, &_pos_action);
     _c_update_pos_x.enable ();
     _c_update_pos_y.enable ();
     conn_list.push_back (this);
@@ -312,8 +312,8 @@ namespace djnn {
   DRMConnector::~DRMConnector ()
   {
     clean ();
-    Graph::instance ().remove_edge (&_x, &_pos_action);
-    Graph::instance ().remove_edge (&_y, &_pos_action);
+    graph_remove_edge (&_x, &_pos_action);
+    graph_remove_edge (&_y, &_pos_action);
     delete find_child ("connected");
   }
 }

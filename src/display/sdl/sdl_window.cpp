@@ -18,7 +18,7 @@
 #include "display/display.h"
 
 #include "exec_env/global_mutex.h"
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "exec_env/main_loop.h"
 
 #include "core/utils/ext/remotery/Remotery.h"

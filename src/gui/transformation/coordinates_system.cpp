@@ -21,7 +21,7 @@
 #include "gui/abstract_backend.h"
 #include "gui/shapes/abstract_gshape.h"
 
-#include "core/execution/graph.h"
+#include "core/core-dev.h" // graph add/remove edge
 
 
 #include <array>
@@ -71,10 +71,10 @@ namespace djnn
     _cinX->disable ();
     _cinY = new Coupling (_inY, ACTIVATION, _action, ACTIVATION);
     _cinY->disable ();
-    Graph::instance().add_edge(_inX, _action);
-    Graph::instance().add_edge(_inY, _action);
-    Graph::instance().add_edge(_action, _outX);
-    Graph::instance().add_edge(_action, _outY);
+    graph_add_edge(_inX, _action);
+    graph_add_edge(_inY, _action);
+    graph_add_edge(_action, _outX);
+    graph_add_edge(_action, _outY);
 
     finalize_construction (parent, name);
   }
@@ -83,10 +83,10 @@ namespace djnn
   {
 
     remove_state_dependency (get_parent (), _action);
-    Graph::instance().remove_edge(_action, _outY);
-    Graph::instance().remove_edge(_action, _outX);
-    Graph::instance().remove_edge(_inY, _action);
-    Graph::instance().remove_edge(_inX, _action);
+    graph_remove_edge(_action, _outY);
+    graph_remove_edge(_action, _outX);
+    graph_remove_edge(_inY, _action);
+    graph_remove_edge(_inX, _action);
  
     delete _cinY;
     delete _cinX;
@@ -168,10 +168,10 @@ namespace djnn
     _cinX->disable ();
     _cinY = new Coupling (_inY, ACTIVATION, _action, ACTIVATION);
     _cinY->disable ();
-    Graph::instance().add_edge(_inX, _action);
-    Graph::instance().add_edge(_inY, _action);
-    Graph::instance().add_edge(_action, _outX);
-    Graph::instance().add_edge(_action, _outY);
+    graph_add_edge(_inX, _action);
+    graph_add_edge(_inY, _action);
+    graph_add_edge(_action, _outX);
+    graph_add_edge(_action, _outY);
 
     finalize_construction (parent, name);
   }
@@ -180,10 +180,10 @@ namespace djnn
   {
 
     remove_state_dependency (get_parent (), _action);
-    Graph::instance().remove_edge(_inX, _action);
-    Graph::instance().remove_edge(_inY, _action);
-    Graph::instance().remove_edge(_action, _outX);
-    Graph::instance().remove_edge(_action, _outY);
+    graph_remove_edge(_inX, _action);
+    graph_remove_edge(_inY, _action);
+    graph_remove_edge(_action, _outX);
+    graph_remove_edge(_action, _outY);
     delete _cinY;
     delete _cinX;
     delete _action;
