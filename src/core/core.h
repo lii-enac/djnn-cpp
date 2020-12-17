@@ -43,6 +43,7 @@
 #include "tree/text_property.h"
 #include "tree/ref_property.h"
 #include "tree/remote_property.h"
+#include "tree/operators.h"
 #include "tree/set.h"
 
 // timer should be available in core, not only in exec_env
