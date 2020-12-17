@@ -242,18 +242,31 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 IvyAccess::~IvyAccess ()
 {
   /* c_out in now immediat : 07.2020
-    so I removed graph edge
+    so I removed the remove_edge (to graph)
     it works because Ivy can't be stoped
   */
   //Graph::instance().remove_edge (&_out, &_out_a);
 
   remove_state_dependency (get_parent (), &_out_a);
 
-  // TODO: Clean MAP before leaving
-  //while (!_in.empty()) {
-  // delete _in.back();
-  // _in.pop_back();
-  //}
+  /* erase _in_map */
+
+  //_ivy_debug_mapping (_in_map);
+  auto it = _in_map.begin ();
+  while (it != _in_map.end ()) {
+    //note it->second is a vector of pair <index, *textProperty> 
+    auto v = it->second;
+    while (!v.empty ()){
+      // note v.back () is a pair <index, *textProperty>
+      auto p = v.back ();
+      delete p.second;
+      v.pop_back ();
+    }
+    
+    _in_map.erase (it);
+    it = _in_map.begin ();
+  }
+  //_ivy_debug_mapping (_in_map);
 }
 
 // note : see impl_activate on stoping Ivy
@@ -318,7 +331,8 @@ IvyAccess::impl_deactivate ()
   *  IvyStop has never been implemented : 
   *  so Ivy won't stop if you insert into your main root and delete it 
   */
-  warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n\t\t solution: do not give parent to your IvyAccess (or nullptr)) and manage it separently from your main root \n\t\t and to not delete it - it will block");
+  //warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n\t\t solution: do not give parent to your IvyAccess (or nullptr)) and manage it separently from your main root \n\t\t and to not delete it - it will block");
+  warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n");
   //IvyStop();
   IvySendMsg ("%s", ""); // should eventually call _after_select and raise 1;
 }
