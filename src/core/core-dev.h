@@ -12,3 +12,11 @@
  *
  */
 #pragma once
+
+namespace djnn {
+    class CoreProcess;
+    using Process = CoreProcess;
+
+    void init_core ();
+    void clear_core ();
+}

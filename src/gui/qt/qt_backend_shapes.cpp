@@ -21,7 +21,6 @@
 #include "qt_backend.h"
 #include "display/qt/qt_window.h"
 #include "display/qt/qt_window_moc.h"
-#include "display/display.h"
 #include "display/abstract_display.h"
 #include "gui/shapes/shapes.h"
 #include "gui/layer.h"

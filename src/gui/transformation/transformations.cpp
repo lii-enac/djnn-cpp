@@ -20,7 +20,6 @@
 #include "core/tree/list.h"
 #include "core/execution/graph.h"
 
-//#include "display/display.h"
 #include "display/display-dev.h" // DisplayBackend
 #include "display/abstract_display.h"
 #include "display/window.h"

@@ -12,7 +12,6 @@
  *
  */
 
-#include "display/display.h"
 #include "display/abstract_display.h"
 
 #include "display/qt/qt_display.h"

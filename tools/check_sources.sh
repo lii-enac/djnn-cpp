@@ -7,7 +7,7 @@ find src -type f -name "*.h" | xargs grep "include <iostream>"
 
 echo
 echo -- no include of a whole module in internal sources
-find src -type f -not -path "*/ext/*" | xargs grep -E "(core|base|gui)\.h"
+find src -type f -not -path "*/ext/*" | xargs grep -E "/(core|exec_env|base|display|gui)\.h"
 #find src -type f -not -path "*/ext/*" | xargs grep -E "(core|base|gui)-dev\.h"
 
 echo

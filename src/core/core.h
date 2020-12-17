@@ -47,10 +47,7 @@
 
 // timer should be available in core, not only in exec_env
 // include it here to prevent 'use exec_env in smala'
-#include "exec_env/timer.h"
-
-//#include "utils/error.h"
-
+//#include "exec_env/timer.h"
 
 namespace djnn {
 
@@ -63,7 +60,7 @@ namespace djnn {
   void clear_core ();
 
   // Compatibility with djnn-test, smalac, cookbooks, legacy applications.
-  //using Process = FatProcess; // Process should not be used inside djnn-cpp until the refactoring dust settles
+  //using Process = FatProcess; // the name "Process" should not be used inside djnn-cpp until the refactoring dust settles
   using Process = CoreProcess;
 
 }

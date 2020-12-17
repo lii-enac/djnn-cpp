@@ -19,7 +19,6 @@
 
 #include "display/qt/qt_window.h"
 #include "qqt_window_moc.h"
-#include "display/display.h"
 #include "display/abstract_display.h"
 #include "exec_env/qt/qt_mainloop.h"
 #include "exec_env/global_mutex.h"

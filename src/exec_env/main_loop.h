@@ -16,7 +16,6 @@
 #pragma once
 
 #include "core/ontology/process.h"
-#include "exec_env.h"
 #include "external_source.h"
 #include "cpp-chrono.h"
 

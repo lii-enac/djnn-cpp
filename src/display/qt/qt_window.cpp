@@ -20,7 +20,7 @@
 #include "utils/debug.h"
 
 #include "exec_env/qt/qt_mainloop.h"
-#include "display/display.h"
+#include "display/display.h" // mouse_tracking full_screen hide_pointer
 #include "display/display-dev.h"
 #include "display/abstract_display.h"
 
