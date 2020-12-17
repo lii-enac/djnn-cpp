@@ -222,10 +222,11 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   _out_c.disable ();
   
-  /* c_out in now immediat : 07.2020
-     so I removed graph edge
-     it works because Ivy can't be stoped
-  */
+  /* note:
+   * c_out in now immediat : 07.2020 - to react each time is activated
+   * so we removed the remove_edge (to graph)
+   * it works because Ivy can't be stoped
+   */
   //Graph::instance().add_edge (&_out, &_out_a);
   
   /* IN is a special child build in IvyAccess::find_child */
@@ -264,7 +265,7 @@ IvyAccess::~IvyAccess ()
   /* erase _in_map */
 
 
-  //_ivy_debug_mapping (_in_map);
+  // _ivy_debug_mapping (_in_map);
   auto it = _in_map.begin ();
   while (it != _in_map.end ()) {
     //note it->second is a vector of pair <index, *textProperty> 
@@ -272,6 +273,8 @@ IvyAccess::~IvyAccess ()
     while (!v.empty ()){
       // note v.back () is a pair <index, *textProperty>
       auto p = v.back ();
+      // remove and delete the Textproperty
+      this->remove_child (p.second);
       delete p.second;
       v.pop_back ();
     }
@@ -279,7 +282,34 @@ IvyAccess::~IvyAccess ()
     _in_map.erase (it);
     it = _in_map.begin ();
   }
-  //_ivy_debug_mapping (_in_map);
+  // _ivy_debug_mapping (_in_map);
+
+  /* cleaning symtable */
+
+  /* note :
+   * - 4 children (plain object) should stay in the symtable: out, out_action, arriving, leaving
+   * - IvyAccess is not a Container so we have to take care of the symtable
+   */
+  auto it_s = symtable ().begin ();
+  while (symtable ().size () != 4) {
+    if ( it_s->first.compare ("out") == 0
+      || it_s->first.compare ("out_action") == 0
+      || it_s->first.compare ("arriving") == 0
+      || it_s->first.compare ("leaving") == 0 ) {
+      it_s ++;
+    }
+    else {
+      delete it_s->second;
+      this->remove_symbol (it_s->first);
+      it_s = symtable ().begin ();
+    }
+  }
+
+  //DEBUG
+  //std::cerr << "remaining children after symtable cleaning :" << children_size () << std::endl ;
+  //for (auto s : this->symtable ()) {
+  //  std::cerr << s.first << std::endl;
+  //}
 }
 
 // note : see impl_activate on stoping Ivy
