@@ -29,7 +29,7 @@
 
 namespace djnn
 {
-
+ 
   class IvyAccess : public FatProcess, public ExternalSource
   {
 
@@ -51,15 +51,20 @@ namespace djnn
   /*** Ivy Access Class ***/
 
   public:
+    typedef std::map<std::string, std::vector<std::pair<int, TextProperty*>>> in_map_t;
+    typedef std::pair<std::string, in_map_t*> regexp_keypair_t;
+
+    struct msg_callback_user_data {
+      IvyAccess* access;
+      regexp_keypair_t* keypair;
+    };
+
     IvyAccess (ParentProcess* parent, const std::string& name, 
       const std::string& bus="224.1.2.3:2010", const std::string& appname="NO_NAME", const std::string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
     void set_arriving(const std::string& v);
     void set_leaving(const std::string& v);
-
-    typedef std::map<std::string, std::vector<std::pair<int, TextProperty*>>> in_map_t;
-    typedef std::pair<std::string, in_map_t*> regexp_keypair_t;
 
     // make it public
     bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
@@ -77,6 +82,7 @@ namespace djnn
     std::string _ready_message;
 
     in_map_t _in_map; 
+    std::vector<djnn::IvyAccess::msg_callback_user_data*> _cb_regex_vector;
       
     TextProperty _out;
     IvyOutAction _out_a;

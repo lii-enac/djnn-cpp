@@ -117,15 +117,9 @@ _ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
 #define STOP_IVY djnn::MainLoop::instance().is_stopping() || access->should_i_stop ()
 
-
-struct msg_callback_user_data {
-  djnn::IvyAccess * access;
-  djnn::IvyAccess::regexp_keypair_t * keypair;
-};
-
 static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char **argv )
 {
-  msg_callback_user_data * mcud = reinterpret_cast<msg_callback_user_data *>(user_data);
+  djnn::IvyAccess::msg_callback_user_data * mcud = reinterpret_cast<djnn::IvyAccess::msg_callback_user_data *>(user_data);
 
   djnn::IvyAccess * access = mcud->access; //reinterpret_cast<djnn::IvyAccess*>(user_data);
   if(STOP_IVY) return;
@@ -241,15 +235,34 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
 IvyAccess::~IvyAccess ()
 {
-  /* c_out in now immediat : 07.2020
-    so I removed the remove_edge (to graph)
-    it works because Ivy can't be stoped
-  */
+
+  /* remove edges */
+
+  /* note:
+   * c_out in now immediat : 07.2020 - to react each time is activated
+   * so we removed the remove_edge (to graph)
+   * it works because Ivy can't be stoped
+   */
   //Graph::instance().remove_edge (&_out, &_out_a);
 
   remove_state_dependency (get_parent (), &_out_a);
 
+
+  /* erase _cb_regex_vector */
+
+
+  //std::cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << std::endl;
+  while (!_cb_regex_vector.empty ()) {
+    auto st = _cb_regex_vector.back ();
+    _cb_regex_vector.pop_back ();
+    delete st->keypair; // delete the regexp_keypair_t
+    delete st; // delete the pointer on struct djnn::IvyAccess::msg_callback_user_data
+  }
+  //std::cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << std::endl;
+
+
   /* erase _in_map */
+
 
   //_ivy_debug_mapping (_in_map);
   auto it = _in_map.begin ();
@@ -331,7 +344,6 @@ IvyAccess::impl_deactivate ()
   *  IvyStop has never been implemented : 
   *  so Ivy won't stop if you insert into your main root and delete it 
   */
-  //warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n\t\t solution: do not give parent to your IvyAccess (or nullptr)) and manage it separently from your main root \n\t\t and to not delete it - it will block");
   warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n");
   //IvyStop();
   IvySendMsg ("%s", ""); // should eventually call _after_select and raise 1;
@@ -463,7 +475,8 @@ IvyAccess::find_child_impl (const std::string& key)
       if (mit == _in_map.end ()) {
         /* the only way for now is to save in a pair <regexp, in_map*>* to keep track on cb */
         auto * regexp_keypair = new regexp_keypair_t (regexp, &_in_map);
-        msg_callback_user_data * mcud = new msg_callback_user_data{this, regexp_keypair};
+        msg_callback_user_data * mcud = new djnn::IvyAccess::msg_callback_user_data{this, regexp_keypair};
+        _cb_regex_vector.push_back (mcud);
         IvyBindMsg(_on_ivy_message, mcud, "%s", regexp.c_str() );
       }
 
