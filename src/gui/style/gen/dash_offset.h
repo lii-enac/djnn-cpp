@@ -29,19 +29,14 @@ namespace djnn
     void draw () override;
     DashOffset* clone () override;
     void get_properties_values (double& offset);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "offset",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child_impl ("offset"); }
 
   protected:
     struct raw_props_t { double offset; };
     raw_props_t raw_props;
-    CouplingWithData *_coffset;
+    Coupling *_coffset;
     void impl_activate () override;
     void impl_deactivate () override;
   };

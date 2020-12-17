@@ -29,19 +29,14 @@ namespace djnn
     
     
     void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "data",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child_impl ("data"); }
 
   protected:
     struct raw_props_t { std::string data; };
     raw_props_t raw_props;
-    CouplingWithData *_cdata;
+    Coupling *_cdata;
     void impl_activate () override;
     void impl_deactivate () override;
   };

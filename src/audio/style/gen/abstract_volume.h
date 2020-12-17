@@ -29,19 +29,14 @@ namespace djnn
     
     
     void get_properties_values (double& volume);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "volume",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child_impl ("volume"); }
 
   protected:
     struct raw_props_t { double volume; };
     raw_props_t raw_props;
-    CouplingWithData *_cvolume;
+    Coupling *_cvolume;
     void impl_activate () override;
     void impl_deactivate () override;
   };

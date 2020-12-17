@@ -66,7 +66,7 @@ namespace djnn
     if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    CouplingWithData ** coupling = nullptr;
+    Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef std::string text;
@@ -94,6 +94,15 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
     }
 
+    return res;
+  }
+
+  const std::vector<std::string>&
+  AbstractVolume::get_properties_name () const
+  {
+    static const std::vector<std::string> res = {
+    "volume",
+    };
     return res;
   }
 

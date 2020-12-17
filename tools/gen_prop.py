@@ -37,18 +37,13 @@ namespace djnn
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      %(PUSHBACK_DYN_PROPS)s
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
     raw_props_t raw_props;
-    CouplingWithData %(DECL_PROPS_COUPLING_POINTER)s;
+    Coupling %(DECL_PROPS_COUPLING_POINTER)s;
     void impl_activate () override;
     void impl_deactivate () override;
   };
@@ -105,7 +100,7 @@ namespace djnn
     if (res) return res;
 
     bool prop_Double=false, prop_Int=false, prop_Text=false;
-    CouplingWithData ** coupling = nullptr;
+    Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef std::string text;
@@ -127,6 +122,15 @@ namespace djnn
       res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
     }
 
+    return res;
+  }
+
+  const std::vector<std::string>&
+  %(CLASS)s::get_properties_name () const
+  {
+    static const std::vector<std::string> res = {
+    %(PUSHBACK_DYN_PROPS)s
+    };
     return res;
   }
 

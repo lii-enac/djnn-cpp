@@ -29,23 +29,7 @@ namespace djnn
     
     
     void get_properties_values (double& x, double& y, double& z, double& dx, double& dy, double& dz, double& roll, double& pitch, double& yall, double& mass, double& density, double& friction);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "x",
-			"y",
-			"z",
-			"dx",
-			"dy",
-			"dz",
-			"roll",
-			"pitch",
-			"yall",
-			"mass",
-			"density",
-			"friction",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl ("x"); }
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl ("y"); }
@@ -63,7 +47,7 @@ namespace djnn
   protected:
     struct raw_props_t { double x; double y; double z; double dx; double dy; double dz; double roll; double pitch; double yall; double mass; double density; double friction; };
     raw_props_t raw_props;
-    CouplingWithData *_cx, *_cy, *_cz, *_cdx, *_cdy, *_cdz, *_croll, *_cpitch, *_cyall, *_cmass, *_cdensity, *_cfriction;
+    Coupling *_cx, *_cy, *_cz, *_cdx, *_cdy, *_cdz, *_croll, *_cpitch, *_cyall, *_cmass, *_cdensity, *_cfriction;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -41,7 +41,10 @@
 
 namespace djnn
 {
-  std::vector<std::string> AbstractGShape::_ui =
+  static
+  std::vector<std::string>
+  //AbstractGShape::
+  _ui =
     { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
 
   FatChildProcess*

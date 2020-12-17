@@ -29,19 +29,14 @@ namespace djnn
     void draw () override;
     FillRule* clone () override;
     void get_properties_values (int& rule);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "rule",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child_impl ("rule"); }
 
   protected:
     struct raw_props_t { int rule; };
     raw_props_t raw_props;
-    CouplingWithData *_crule;
+    Coupling *_crule;
     void impl_activate () override;
     void impl_deactivate () override;
   };

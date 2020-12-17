@@ -29,19 +29,14 @@ namespace djnn
     
     
     void get_properties_values (double& radius);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "radius",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* radius () { return (AbstractDoubleProperty*) find_child_impl ("radius"); }
 
   protected:
     struct raw_props_t { double radius; };
     raw_props_t raw_props;
-    CouplingWithData *_cradius;
+    Coupling *_cradius;
     void impl_activate () override;
     void impl_deactivate () override;
   };

@@ -59,5 +59,3 @@ namespace djnn {
     unsigned int _notify_mask;
   };
 }
-
-//#include "core/tree/operators.h"

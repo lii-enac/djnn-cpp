@@ -29,19 +29,7 @@ namespace djnn
     
     
     void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "gain",
-			"lowpass_gain",
-			"lowpass_freq",
-			"x",
-			"y",
-			"z",
-			"pitch_mul",
-			"loop",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* gain () { return (AbstractDoubleProperty*) find_child_impl ("gain"); }
 		AbstractDoubleProperty* lowpass_gain () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_gain"); }
@@ -55,7 +43,7 @@ namespace djnn
   protected:
     struct raw_props_t { double gain; double lowpass_gain; double lowpass_freq; double x; double y; double z; double pitch_mul; int loop; };
     raw_props_t raw_props;
-    CouplingWithData *_cgain, *_clowpass_gain, *_clowpass_freq, *_cx, *_cy, *_cz, *_cpitch_mul, *_cloop;
+    Coupling *_cgain, *_clowpass_gain, *_clowpass_freq, *_cx, *_cy, *_cz, *_cpitch_mul, *_cloop;
     void impl_activate () override;
     void impl_deactivate () override;
   };

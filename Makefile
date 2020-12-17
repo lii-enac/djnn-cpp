@@ -575,6 +575,7 @@ $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 # 	rm -f $(lib_rules_mk)
 # 	rm -f $(foreach a,$(djnn_libs),$(build_dir)/src/$a/$a_rules.mk)
 
+# end of new scheme
 
 djnn: $(libs)
 static: dirs $(libs_static)

@@ -29,19 +29,14 @@ namespace djnn
     
     
     void get_properties_values (int& style);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "style",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* style () { return (AbstractIntProperty*) find_child_impl ("style"); }
 
   protected:
     struct raw_props_t { int style; };
     raw_props_t raw_props;
-    CouplingWithData *_cstyle;
+    Coupling *_cstyle;
     void impl_activate () override;
     void impl_deactivate () override;
   };

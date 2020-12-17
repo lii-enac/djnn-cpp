@@ -29,14 +29,7 @@ namespace djnn
     
     
     void get_properties_values (double& w, double& h, double& d);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "w",
-			"h",
-			"d",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* w () { return (AbstractDoubleProperty*) find_child_impl ("w"); }
 		AbstractDoubleProperty* h () { return (AbstractDoubleProperty*) find_child_impl ("h"); }
@@ -45,7 +38,7 @@ namespace djnn
   protected:
     struct raw_props_t { double w; double h; double d; };
     raw_props_t raw_props;
-    CouplingWithData *_cw, *_ch, *_cd;
+    Coupling *_cw, *_ch, *_cd;
     void impl_activate () override;
     void impl_deactivate () override;
   };

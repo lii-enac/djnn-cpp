@@ -29,19 +29,14 @@ namespace djnn
     void draw () override;
     OutlineCapStyle* clone () override;
     void get_properties_values (int& cap);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "cap",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child_impl ("cap"); }
 
   protected:
     struct raw_props_t { int cap; };
     raw_props_t raw_props;
-    CouplingWithData *_ccap;
+    Coupling *_ccap;
     void impl_activate () override;
     void impl_deactivate () override;
   };

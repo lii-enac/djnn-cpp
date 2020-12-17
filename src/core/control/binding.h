@@ -19,10 +19,10 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 
-#define DJNN_binding_INCLUDED 1
-
-
 namespace djnn {
+
+  //void graph_add_edge (CoreProcess*, CoreProcess*);
+  //void graph_remove_edge (CoreProcess*, CoreProcess*);
 
   class CoreBinding : public CoreProcess
   {
@@ -31,6 +31,7 @@ namespace djnn {
     : _c (src, src_flag, dst, dst_flag, false) {
       _c.disable ();
       Graph::instance ().add_edge (src, dst);
+      //graph_add_edge (src, dst);
     }
 
     CoreBinding (CoreProcess* src, CoreProcess* dst)
@@ -46,6 +47,7 @@ namespace djnn {
 
     ~CoreBinding () {
       Graph::instance ().remove_edge (get_src(), get_dst());
+      //graph_remove_edge (get_src(), get_dst());
     }
 
     CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space

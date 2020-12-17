@@ -29,19 +29,14 @@ namespace djnn
     void draw () override;
     OutlineJoinStyle* clone () override;
     void get_properties_values (int& join);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "join",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child_impl ("join"); }
 
   protected:
     struct raw_props_t { int join; };
     raw_props_t raw_props;
-    CouplingWithData *_cjoin;
+    Coupling *_cjoin;
     void impl_activate () override;
     void impl_deactivate () override;
   };

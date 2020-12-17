@@ -29,19 +29,14 @@ namespace djnn
     void draw () override;
     OutlineMiterLimit* clone () override;
     void get_properties_values (int& limit);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "limit",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child_impl ("limit"); }
 
   protected:
     struct raw_props_t { int limit; };
     raw_props_t raw_props;
-    CouplingWithData *_climit;
+    Coupling *_climit;
     void impl_activate () override;
     void impl_deactivate () override;
   };

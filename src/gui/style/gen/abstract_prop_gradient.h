@@ -29,13 +29,7 @@ namespace djnn
     
     
     void get_properties_values (int& spread, int& coords);
-    const std::vector<std::string>& get_properties_name () const override {
-      static const std::vector<std::string> res = {
-      "spread",
-			"coords",
-      };
-      return res;
-    }
+    const std::vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child_impl ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child_impl ("coords"); }
@@ -43,7 +37,7 @@ namespace djnn
   protected:
     struct raw_props_t { int spread; int coords; };
     raw_props_t raw_props;
-    CouplingWithData *_cspread, *_ccoords;
+    Coupling *_cspread, *_ccoords;
     void impl_activate () override;
     void impl_deactivate () override;
   };
