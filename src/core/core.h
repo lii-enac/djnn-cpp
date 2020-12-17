@@ -46,6 +46,8 @@
 #include "tree/operators.h"
 #include "tree/set.h"
 
+#include "core/core-dev.h"
+
 // timer should be available in core, not only in exec_env
 // include it here to prevent 'use exec_env in smala'
 //#include "exec_env/timer.h"
