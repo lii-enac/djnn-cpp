@@ -22,11 +22,11 @@
 #include <ctype.h>
 
 #include "base/connector.h"
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 #include "gui/style/style.h"
 #include "core/xml/xml-dev.h"
 #include "gui/transformation/transformations.h"
-#include "gui/shapes/svg_holder.h"
+#include "gui/shape/svg_holder.h"
 #include "gui/gui-dev.h"
 
 namespace djnn {

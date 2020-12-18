@@ -19,8 +19,8 @@
 #include <stdio.h>
 
 #include "gui/gui-dev.h"
-#include "gui/shapes/path.h"
-#include "gui/shapes/path_clip.h"
+#include "gui/shape/path.h"
+#include "gui/shape/path_clip.h"
 
 namespace djnn {
 

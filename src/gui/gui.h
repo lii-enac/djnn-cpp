@@ -17,7 +17,7 @@
 #include "widgets/text_field.h"
 #include "interaction/interaction.h"
 #include "style/style.h"
-#include "shapes/shapes.h"
+#include "shape/shapes.h"
 #include "transformation/transformations.h"
 #include "layer.h"
 

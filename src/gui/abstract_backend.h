@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "shapes/shapes_fwd.h"
+#include "shape/shapes_fwd.h"
 #include "style/style_fwd.h"
 #include "style/style_types.h"
 #include "transformation/transformations_fwd.h"

@@ -17,7 +17,7 @@
 #include "color_picking.h"
 #include "gui/transformation/homography.h"
 
-#include "gui/shapes/ui.h"
+#include "gui/shape/ui.h"
 
 #include <assert.h>
 

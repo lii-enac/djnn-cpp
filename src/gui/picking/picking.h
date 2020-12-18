@@ -18,7 +18,7 @@
 
 #include "gui/gui-priv.h"
 #include "display/display-dev.h" // mouse_button
-#include "gui/shapes/abstract_gshape.h" // touch
+#include "gui/shape/abstract_gshape.h" // touch
 
 namespace djnn {
 

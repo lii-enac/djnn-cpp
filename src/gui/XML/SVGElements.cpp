@@ -25,11 +25,11 @@
 // #include "core/cor__e.h"
 #include "core/xml/xml-dev.h"
 #include "gui/gui-dev.h"
-#include "gui/shapes/abstract_gshape.h"
-#include "gui/shapes/shapes.h"
+#include "gui/shape/abstract_gshape.h"
+#include "gui/shape/shapes.h"
 #include "gui/transformation/transformations.h"
 #include "gui/css-parser/driver.h"
-#include "gui/shapes/svg_holder.h"
+#include "gui/shape/svg_holder.h"
 #include "gui/style/style.h"
 
 using namespace std;

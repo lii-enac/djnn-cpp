@@ -22,7 +22,7 @@
 #include "display/qt/qt_window.h"
 #include "display/qt/qt_window_moc.h"
 #include "display/abstract_display.h"
-#include "gui/shapes/shapes.h"
+#include "gui/shape/shapes.h"
 #include "gui/layer.h"
 
 #include <QFontMetrics>

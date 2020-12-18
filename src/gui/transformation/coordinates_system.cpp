@@ -19,7 +19,7 @@
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 

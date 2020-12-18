@@ -18,7 +18,7 @@
 #include "core/tree/text_property.h"
 #include "core/tree/double_property.h"
 #include "core/tree/int_property.h"
-#include "gui/shapes/text.h"
+#include "gui/shape/text.h"
 
 namespace djnn {
 

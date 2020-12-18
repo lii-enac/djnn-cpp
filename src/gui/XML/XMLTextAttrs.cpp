@@ -21,7 +21,7 @@
 
 #include "gui/gui-dev.h"
 #include "gui/style/text.h"
-#include "gui/shapes/svg_holder.h"
+#include "gui/shape/svg_holder.h"
 
 using namespace std;
 

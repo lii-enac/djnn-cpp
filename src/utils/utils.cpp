@@ -28,7 +28,7 @@
 #include "base/connector.h"
 #include "base/switch.h"
 #include "base/fsm.h"
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 #include "gui/style/style.h"
 #include "gui/transformation/transformations.h"
 #include "base/operators.h"

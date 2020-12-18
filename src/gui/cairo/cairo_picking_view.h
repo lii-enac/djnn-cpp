@@ -17,7 +17,7 @@
 #include "gui/picking/color_picking.h"
 #include "core/core-dev.h"
 #include "display/window.h"
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 
 
 namespace djnn

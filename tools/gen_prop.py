@@ -53,7 +53,7 @@ namespace djnn
 getter_string = """Abstract%(PROP_TYPE)sProperty* %(PROP_NAME)s () { return (Abstract%(PROP_TYPE)sProperty*) find_child_impl ("%(PROP_NAME)s"); }"""
 
 def_string = """
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 #include "display/window.h"
 #include "gui/style/abstract_style.h"
 
@@ -497,7 +497,7 @@ dcs = []
 
 # -- shapes
 
-dc = DjnnClass("AbstractPropRectangle", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
+dc = DjnnClass("AbstractPropRectangle", "AbstractGShape", "../src/gui/shape", finalize_construction=False)
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
@@ -506,34 +506,34 @@ dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False)
+dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shape", origin='cx,cy', finalize_construction=False)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shapes", origin='cx,cy', finalize_construction=False)
+dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shape", origin='cx,cy', finalize_construction=False)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('rx', 'double', None, "geometry"))
 dc.props.append(Prop('ry', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropLine", "AbstractGShape", "../src/gui/shapes", origin='x1,y1', finalize_construction=False)
+dc = DjnnClass("AbstractPropLine", "AbstractGShape", "../src/gui/shape", origin='x1,y1', finalize_construction=False)
 dc.props.append(Prop('x1', 'double', None, "transform"))
 dc.props.append(Prop('y1', 'double', None, "transform"))
 dc.props.append(Prop('x2', 'double', None, "geometry"))
 dc.props.append(Prop('y2', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractPropRectangleClip", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
+dc = DjnnClass("AbstractPropRectangleClip", "AbstractGShape", "../src/gui/shape", finalize_construction=False)
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
 dcs.append(dc)
 
-dc = DjnnClass("AbstractImage", "AbstractGShape", "../src/gui/shapes", finalize_construction=False)
+dc = DjnnClass("AbstractImage", "AbstractGShape", "../src/gui/shape", finalize_construction=False)
 #dc.props.append(Prop('path', 'text', None, "geometry"))
 dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
@@ -542,14 +542,14 @@ dc.props.append(Prop('height', 'double', None, "geometry"))
 dcs.append(dc)
 apg = dc
 
-dc = DjnnClass("AbstractPathImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
+dc = DjnnClass("AbstractPathImage", "AbstractImage", "../src/gui/shape", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
 dc.props.append(Prop('path', 'text', None, "geometry"))
-dc.includes = '''#include "gui/shapes/gen/abstract_image.h"'''
+dc.includes = '''#include "gui/shape/gen/abstract_image.h"'''
 dcs.append(dc)
 
-dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shapes", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
+dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shape", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
 dc.props.append(Prop('data', 'text', None, "geometry"))
-dc.includes = '''#include "gui/shapes/gen/abstract_image.h"'''
+dc.includes = '''#include "gui/shape/gen/abstract_image.h"'''
 dcs.append(dc)
 
 

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "gui/shapes/abstract_gshape.h"
+#include "gui/shape/abstract_gshape.h"
 #include "core/control/synchronizer.h"
 
 namespace djnn {

@@ -50,7 +50,7 @@ namespace djnn
     WinImpl*
     create_window (Window *win, const std::string& title, double x, double y, double w, double h) override;
     */
-    //shapes
+    //shape
     void
     draw_rectangle (Rectangle *s) override;
     void
