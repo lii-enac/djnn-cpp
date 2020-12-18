@@ -2,8 +2,8 @@
 
 #include "abstract_style.h"
 
+#include "gen/abstract_prop_gradient_stop.h"
 #include "gen/abstract_prop_gradient.h"
-
 namespace djnn {
 
   class List;
@@ -31,6 +31,15 @@ namespace djnn {
 #include "gen/abstract_prop_radial_gradient.h"
 
 namespace djnn {
+
+  class GradientStop : public AbstractPropGradientStop
+  {
+  public:
+    GradientStop (ParentProcess* parent, const std::string& name, double r, double g, double b, double a, double offset);
+    virtual ~GradientStop ();
+    void draw () override;
+    GradientStop* clone () override;
+  };
 
   class LinearGradient : public AbstractPropLinearGradient
   {

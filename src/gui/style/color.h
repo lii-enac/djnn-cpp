@@ -18,6 +18,7 @@
 #pragma once
 
 #include "core/control/action.h"
+#include "abstract_style.h"
 namespace djnn
 {
   class AbstractColor : public AbstractStyle
@@ -64,6 +65,30 @@ namespace djnn
     void impl_deactivate () override;
     void update_rvb_from_hex ();
     void update_hex_from_rvb ();
+  };
+
+  class FillColor : public AbstractColor
+  {
+  public:
+    FillColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
+        AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
+    FillColor (ParentProcess* parent, const std::string& name, int v) :
+        AbstractColor (parent, name, v) { finalize_construction (parent, name); }
+    virtual ~FillColor () {}
+    void draw () override;
+    FillColor* clone () override;
+  };
+
+  class OutlineColor : public AbstractColor
+  {
+  public:
+    OutlineColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
+        AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
+    OutlineColor (ParentProcess* parent, const std::string& name, int v) :
+         AbstractColor (parent, name, v) { finalize_construction (parent, name); }
+    virtual ~OutlineColor () {}
+    void draw () override;
+    OutlineColor* clone () override;
   };
 
   class RGBToLCHConverter : public FatProcess
