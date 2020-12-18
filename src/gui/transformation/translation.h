@@ -1,3 +1,5 @@
+#pragma once
+
 #include "abstract_transformation.h"
 #include "gen/abstract_translation.h"
 
