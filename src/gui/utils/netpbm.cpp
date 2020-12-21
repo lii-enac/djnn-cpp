@@ -45,7 +45,7 @@ bool write_ppm_argb(const unsigned char* buf,
     if(fd) {
         unsigned char _buf2[width*height*3];
         unsigned char* buf2=_buf2;
-        for (int i=0; i<width*height; ++i) {
+        for (unsigned i=0; i<width*height; ++i) {
             buf2[0] = buf[2];
             buf2[1] = buf[1];
             buf2[2] = buf[0];

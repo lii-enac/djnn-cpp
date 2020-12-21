@@ -22,18 +22,18 @@ namespace djnn {
   class GUIStructureHolder : public FatProcess {
     public:
       GUIStructureHolder () : FatProcess ("GUIStructureHolder") {}
-      void add_gui_child (FatChildProcess *c, int index) ;
-      void add_gui_child_at (FatChildProcess *c, int neighboor_index, int spec, int new_index);
+      void add_gui_child (FatChildProcess *c, size_t index) ;
+      void add_gui_child_at (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index);
       void remove_gui_child (FatChildProcess *c);
-      void move_child_to (FatChildProcess *c, int neighboor_index, int spec, int new_index);
-      void swap_children (int i, int j);
-      void set_child (FatChildProcess *child, int i);
+      void move_child_to (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index);
+      void swap_children (size_t i, size_t j);
+      void set_child (FatChildProcess *child, size_t i);
       void draw () override;
       AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
       void impl_deactivate () override {}
     private:
-      typedef std::vector<std::pair<FatChildProcess*, int>> children_t;
+      typedef std::vector<std::pair<FatChildProcess*, size_t>> children_t;
       children_t _children;
     };
 

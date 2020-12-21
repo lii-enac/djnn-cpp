@@ -26,7 +26,7 @@ namespace djnn {
   GUIStructureObserver * gui_structure_observer;
 
   void
-  GUIStructureHolder::add_gui_child (FatChildProcess *c, int index)
+  GUIStructureHolder::add_gui_child (FatChildProcess *c, size_t index)
   {
     _children.push_back (children_t::value_type (c, index));
   }
@@ -40,7 +40,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::swap_children (int i, int j)
+  GUIStructureHolder::swap_children (size_t i, size_t j)
   {
     if (i < _children.size () && j < _children.size ()) {
       auto buff = _children[j];
@@ -50,7 +50,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::set_child (FatChildProcess *child, int i)
+  GUIStructureHolder::set_child (FatChildProcess *child, size_t i)
   {
     if (i < _children.size ()) {
       for (auto p : _children) {
@@ -101,9 +101,9 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::add_gui_child_at (FatChildProcess *c, int neighboor_index, int spec, int new_index)
+  GUIStructureHolder::add_gui_child_at (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index)
   {
-    int sz = _children.size ();
+    size_t sz = _children.size ();
     switch (spec)
       {
       case LAST:
@@ -113,7 +113,7 @@ namespace djnn {
         _children.insert (_children.begin (), children_t::value_type (c, new_index));
         break;
       case AFTER:
-        for (int i = 0; i < sz - 1; i++) {
+        for (size_t i = 0; i < sz - 1; i++) {
           if (_children.at (i).second == neighboor_index) {
             _children.insert (_children.begin () + i + 1, children_t::value_type (c, new_index));
             break;
@@ -122,7 +122,7 @@ namespace djnn {
         _children.push_back (children_t::value_type (c, new_index));
         break;
       case BEFORE:
-        for (int i = 0; i < sz; i++) {
+        for (size_t i = 0; i < sz; i++) {
           if (_children.at (i).second == neighboor_index) {
             _children.insert (_children.begin () + i, children_t::value_type (c, new_index));
             break;
@@ -132,7 +132,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::move_child_to (FatChildProcess *c, int neighboor_index, int spec, int new_index)
+  GUIStructureHolder::move_child_to (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index)
   {
     _children.erase (
         std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),

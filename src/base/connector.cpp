@@ -17,7 +17,7 @@ namespace djnn {
     if (src_props.size() != dst_props.size ()) {
       error (nullptr, "Incompatible number of properties in multiple connector");
     }
-    for (int i = 0; i < src_props.size (); i++) {
+    for (size_t i = 0; i < src_props.size (); ++i) {
       CoreProcess *src_prop = src->find_child_impl (src_props[i]);
       CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
       if (src_prop && dst_prop) {

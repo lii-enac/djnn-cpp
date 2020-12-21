@@ -110,9 +110,9 @@ else ifeq ($V,0)
 else ifeq ($V,1)
 stylized_target = "\\033[1m$(notdir $@)\\033[0m"
 else ifeq ($V,2)
-stylized_target = "\\033[1m$(notdir $@)\\033[0m" \(older than $(notdir $?)\)
+stylized_target = "\\033[1m$(notdir $@)\\033[0m" (older than $(notdir $?))
 else ifeq ($V,3)
-stylized_target = "\\033[1m$@\\033[0m" \(older than $?\)
+stylized_target = "\\033[1m$@\\033[0m" (older than $?)
 endif
 #in case it doesn't work on some terminals:
 #stylized_target = $(notdir $@) \(older than $(notdir $?)\)
@@ -360,9 +360,6 @@ pch_src := $(src_dir)/core/utils/build/$(pch)
 pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
 CXXFLAGS_PCH := $(CXXFLAGS)
-
-#pch: $(pch_dst)
-#.PHONY: pch
 
 $(pch_dst): $(pch_src)
 ifeq ($V,max)

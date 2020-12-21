@@ -70,7 +70,7 @@ namespace djnn
     contact.surface.bounce = 0.9;
     contact.surface.bounce_vel = 0.1;
     contact.surface.soft_cfm = 0.001;
-    if (int numc = dCollide (o1, o2, 1, &contact.geom, sizeof(dContact))) {
+    if (/*int numc =*/ dCollide (o1, o2, 1, &contact.geom, sizeof(dContact))) {
       dJointID c = dJointCreateContact (world, group, &contact);
       dJointAttach (c, b1, b2);
       phy_obj_1->collision ();
