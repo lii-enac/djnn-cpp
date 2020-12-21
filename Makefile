@@ -361,6 +361,10 @@ pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
 CXXFLAGS_PCH := $(CXXFLAGS)
 
+ifeq ($(compiler),gnu)
+CXXFLAGS_PCH += 
+endif
+
 $(pch_dst): $(pch_src)
 ifeq ($V,max)
 	$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
@@ -375,7 +379,7 @@ CXXFLAGS += -include-pch $(pch_dst)
 endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
-CXXFLAGS := -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch -D_REENTRANT $(CXXFLAGS)
+CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
 endif
 
 # ---------------------------------------
