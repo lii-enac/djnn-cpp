@@ -12,6 +12,8 @@ endif
 
 ifeq ($(os),Darwin)
 lib_suffix =.dylib
+# for gcc
+lib_ldflags += -L/usr/local/lib/
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt -lboost_fiber-mt -lboost_context-mt
 endif
 

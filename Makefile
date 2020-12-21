@@ -159,7 +159,7 @@ endif
 build_lib_dir := $(build_dir)/lib
 build_incl_dir := $(build_dir)/include/djnn-cpp
 lib_static_suffix = .a
-pch_ext = .pch
+
 include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
@@ -179,6 +179,7 @@ DYNLIB = -shared
 YACC = bison -d
 thread = STD
 moc := moc
+compiler ?= gnu
 endif
 
 ifeq ($(os),Darwin)
@@ -189,6 +190,9 @@ echo ?= echo
 YACC := /usr/local/opt/bison/bin/bison -d
 LEX := /usr/local/opt/flex/bin/flex
 moc := /usr/local/opt/qt/bin/moc
+#boost name demangle
+CXXFLAGS += -I/usr/local/include
+compiler ?= llvm
 #AR ?= /usr/bin/ar
 #ARFLAGS ?= -r
 endif
@@ -202,6 +206,7 @@ DYNLIB = -shared
 YACC = bison -d
 moc := moc
 thread = STD
+compiler ?= gnu
 endif
 
 ifeq ($(os),crazyflie)
@@ -228,6 +233,7 @@ ifeq ($(cross_prefix),em)
 os := em
 DYNLIB=
 lib_suffix=.bc
+compiler ?= llvm
 
 EMFLAGS := -Wall -Wno-unused-variable \
 -s USE_BOOST_HEADERS -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_FREETYPE=1 -s USE_WEBGL2=1 \
@@ -342,13 +348,21 @@ CXXFLAGS += -std=c++14
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
-pch_src_ := $(src_dir)/core/utils/build/precompiled
-pch_src := $(pch_src_).h
-pch_dst := $(build_dir)/$(pch_src_)$(pch_ext)
+ifeq ($(compiler),llvm)
+pch_ext = .pch
+endif
+ifeq ($(compiler),gnu)
+pch_ext = .gch
+endif
+
+pch := precompiled.h
+pch_src := $(src_dir)/core/utils/build/$(pch)
+pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
 CXXFLAGS_PCH := $(CXXFLAGS)
 
-pch: $(pch_dst)
+#pch: $(pch_dst)
+#.PHONY: pch
 
 $(pch_dst): $(pch_src)
 ifeq ($V,max)
@@ -358,12 +372,13 @@ else
 	@$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
 endif
 
-ifneq (g++,$(findstring g++,$(CXX)))
+ifeq ($(compiler),llvm)
 CXXFLAGS += -include-pch $(pch_dst)
 #-fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
-else
+endif
+ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
-CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch_src_).h
+CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch)
 endif
 
 # ---------------------------------------
@@ -461,13 +476,13 @@ ifneq ($(os),em)
 $1_lib_soname := -Wl,-soname,$$($1_libname)
 endif
 ifeq ($(os), Darwin)
-$1_lib_soname := -Wl,-install_name,$$($1_libname),
+$1_lib_soname := -Wl,-install_name,$$($1_libname)
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
 
 #define $1_mk_content
-$$($1_objs): $$(pch_dst)
+$$($1_objs): $(pch_dst)
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
