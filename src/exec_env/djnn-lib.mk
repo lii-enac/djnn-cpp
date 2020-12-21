@@ -100,10 +100,8 @@ endif
 
 
 
-ifeq (g++,$(findstring g++,$(CXX)))
-	ifneq (clang++,$(CXX))
+ifeq ($(compiler),gnu)
 	lib_ldflags += -latomic
-	endif
 endif
 
 ifeq ($(os),$(filter $(os),Darwin Linux))
