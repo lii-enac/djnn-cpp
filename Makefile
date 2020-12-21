@@ -379,7 +379,10 @@ CXXFLAGS += -include-pch $(pch_dst)
 endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
-CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch -D_REENTRANT
+CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
+	ifeq ($(display),SDL)
+	CXXFLAGS += -D_REENTRANT -Dmain=SDL_main
+	endif
 endif
 
 # ---------------------------------------
