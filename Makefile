@@ -359,9 +359,11 @@ pch := precompiled.h
 pch_src := $(src_dir)/core/utils/build/$(pch)
 pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
-# SDL and other stuff on windows define new variable for compiling, canceling the use of pch with gnu cc
-# FIXME this is not safe...
+# SDL and other stuff odefine new variables for compiling, canceling the use of pch with gnu cc
+# FIXME this is not safe as every other external lib may define something
 ifeq ($(compiler),gnu)
+# https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
+# Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
 CXXFLAGS += -D_REENTRANT
 ifeq ($(display),SDL)
 CXXFLAGS += -Dmain=SDL_main
@@ -385,6 +387,8 @@ endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
 CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
+#-fno-implicit-templates
+#$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
 endif
 
 # ---------------------------------------
