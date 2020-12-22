@@ -362,7 +362,7 @@ pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 # SDL and other stuff on windows define new variable for compiling, canceling the use of pch with gnu cc
 # FIXME this is not safe...
 ifeq ($(compiler),gnu)
-CXXFLAGS_PCH += -D_REENTRANT
+CXXFLAGS += -D_REENTRANT
 ifeq ($(display),SDL)
 CXXFLAGS += -Dmain=SDL_main
 endif
