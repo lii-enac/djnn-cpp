@@ -359,11 +359,16 @@ pch := precompiled.h
 pch_src := $(src_dir)/core/utils/build/$(pch)
 pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
-CXXFLAGS_PCH := $(CXXFLAGS)
-
+# SDL and other stuff on windows define new variable for compiling, canceling the use of pch with gnu cc
+# FIXME this is not safe...
 ifeq ($(compiler),gnu)
 CXXFLAGS_PCH += -D_REENTRANT
+ifeq ($(display),SDL)
+CXXFLAGS += -Dmain=SDL_main
 endif
+endif
+
+CXXFLAGS_PCH := $(CXXFLAGS)
 
 $(pch_dst): $(pch_src)
 ifeq ($V,max)
@@ -380,10 +385,6 @@ endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
 CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
-CXXFLAGS += -D_REENTRANT
-ifeq ($(display),SDL)
-CXXFLAGS += -Dmain=SDL_main
-endif
 endif
 
 # ---------------------------------------
