@@ -20,7 +20,7 @@
 #include "core/tree/ref_property.h"
 #include "core/tree/spike.h"
 
-// #include <map> // pch
+#include <map>
 
 namespace djnn {
 

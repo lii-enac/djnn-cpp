@@ -16,7 +16,7 @@
 #include "easing_func.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
-// #include <vector> // pch
+#include <vector> // pch
 #include <cmath>
 
 #define PI           3.14159265358979323846

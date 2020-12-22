@@ -24,7 +24,6 @@
 #include <QtGui/QPainter>
 
 #include <iostream>
-// #include <vector> // pch
 #include <cmath>
 
 namespace djnn

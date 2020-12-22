@@ -14,8 +14,8 @@
 
 #pragma once
 
-// #include <string> // pch
-// #include <vector> // pch
+#include <string>
+#include <vector>
 
 #include "core/ontology/process.h"
 #include "window.h"

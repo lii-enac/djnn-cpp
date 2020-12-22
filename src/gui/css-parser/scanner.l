@@ -18,7 +18,7 @@
 
 %{
 
-// #include <string> // pch
+#include <string>
 
 #include "scanner.h"
 

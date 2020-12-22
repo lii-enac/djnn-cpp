@@ -20,7 +20,7 @@
 #include "gui/transformation/transformations.h"
 
 
-// #include <vector> // pch
+#include <vector>
 #include <cmath>
 
 namespace djnn

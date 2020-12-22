@@ -21,7 +21,7 @@
 #include "gui/transformation/homography.h"
 
 #include <iostream>
-// #include <vector> // pch
+#include <vector>
 #include <cmath>
 
 using namespace std;

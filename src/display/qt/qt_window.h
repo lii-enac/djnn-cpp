@@ -17,7 +17,7 @@
 #include "exec_env/external_source.h"
 #include "display/window.h"
 
-// #include <string> // pch
+#include <string>
 
 namespace djnn {
 

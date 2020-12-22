@@ -15,7 +15,7 @@
 #pragma once
 
 #include <atomic>
-// #include <string> // pch
+#include <string>
 
 namespace djnn
 {

@@ -16,8 +16,6 @@
 
 #pragma once
 
-// #include <vector> // pch
-
 #include "style_types.h"
 
 #include "nopaint.h"

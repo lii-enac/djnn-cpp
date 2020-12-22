@@ -27,6 +27,8 @@ copyright = """/*
 decl_string = """
 #pragma once
 
+#include <vector>
+
 namespace djnn
 {
   class %(CLASS)s : public %(INHERITS)s

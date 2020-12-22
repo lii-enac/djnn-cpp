@@ -21,7 +21,7 @@
 #include <string.h>
 #include <locale.h>
 #include <stdlib.h>
-// #include <map> // pch
+#include <map>
 // #include "core/cor__e.h"
 #include "core/xml/xml-dev.h"
 #include "gui/gui-dev.h"

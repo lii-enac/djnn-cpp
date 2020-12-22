@@ -16,8 +16,8 @@
 
 #include "core/ontology/process.h"
 
-// #include <string> // pch
-// #include <map> // pch
+#include <string>
+#include <map>
 
 namespace djnn {
   class URI {

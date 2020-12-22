@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <string.h>
-// #include <vector> // pch
+
 
 namespace djnn
 {
@@ -68,7 +68,8 @@ namespace djnn
     please_stop ();
   }
 
-  static std::vector<std::string>
+  static
+  std::vector<std::string> // FIXME copy of vector
   tokenize (char* buff, int sz)
   {
     std::vector<std::string> res;

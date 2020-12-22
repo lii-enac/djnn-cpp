@@ -24,7 +24,7 @@
 #include <QtGui/QPainter>
 
 #include <iostream>
-// #include <vector> // pch
+#include <vector>
 #include <cmath>
 
 using namespace std;

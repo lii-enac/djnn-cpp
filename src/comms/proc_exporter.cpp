@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <string.h>
-// #include <vector> // pch
+#include <vector>
 
 namespace djnn
 {

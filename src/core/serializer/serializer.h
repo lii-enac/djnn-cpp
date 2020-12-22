@@ -16,7 +16,7 @@
 
 #include "core/ontology/process.h"
 
-// #include <string> // pch
+#include <string>
 
 namespace djnn {
 

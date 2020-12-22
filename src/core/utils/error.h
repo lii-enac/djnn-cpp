@@ -16,7 +16,7 @@
 
 //#include "core/utils/utils-dev.h" // __to_string
 
-// #include <string> // pch
+#include <string>
 
 #ifdef DJNN_CRAZYFLIE
 extern "C" {

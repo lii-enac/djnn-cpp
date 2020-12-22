@@ -1,6 +1,6 @@
 #pragma once
 
-// #include <string> // pch
+#include <string>
 
 namespace djnn {
 	class Window;

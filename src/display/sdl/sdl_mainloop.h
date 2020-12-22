@@ -18,7 +18,7 @@
 
 #include <SDL.h>
 #include <memory>
-// #include <map> // pch
+#include <map>
 #include <mutex> // std::call_once
 
 namespace djnn {

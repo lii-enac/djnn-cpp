@@ -16,10 +16,8 @@
 #include <algorithm>
 //#include <stdio.h>
 //#include <iostream>
-// #include <string> // pch
-// #include <vector> // pch
-// #include "core/cor__e.h"
-// #include "base/bas__e.h"
+#include <string>
+#include <vector>
 #include "gui/gui-dev.h"
 
 #include "base/connector.h"
