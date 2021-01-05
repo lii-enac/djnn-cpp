@@ -78,7 +78,7 @@ namespace djnn
 
     } else {
 
-      warning (nullptr, "incompatible source and destination in (Paused)assignment \n");
+      warning (src, "incompatible source and destination in (Paused)assignment \n");
 
     }
   }
@@ -99,7 +99,7 @@ namespace djnn
   MultiAssignment (ParentProcess* parent, CoreProcess* src, std::vector <std::string> src_props, CoreProcess* dst, std::vector <std::string> dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
-      error (nullptr, "Incompatible number of properties in multiple assignment");
+      error (src, "Incompatible number of properties in multiple assignment");
     }
     for (size_t i = 0; i < src_props.size (); ++i) {
       CoreProcess *src_prop = src->find_child_impl (src_props[i]);
@@ -108,7 +108,7 @@ namespace djnn
         new CoreAssignment (parent, "", src_prop, dst_prop, copy_on_activation);
       }
       else {
-        error (nullptr, "Property not found in multiple assignment: " + src_props[i] + " or " + dst_props[i]);
+        error (src, "Property not found in multiple assignment: " + src_props[i] + " or " + dst_props[i]);
       }
     }
   }
