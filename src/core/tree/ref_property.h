@@ -20,7 +20,7 @@
 
 namespace djnn {
 
-  class RefProperty: public AbstractProperty {
+  class RefProperty : public AbstractProperty {
   public:
     RefProperty (ParentProcess* parent, const std::string& name, CoreProcess* v, unsigned int nm = notify_none) 
     : AbstractProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }

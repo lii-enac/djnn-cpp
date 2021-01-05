@@ -54,7 +54,7 @@ namespace djnn {
 
   class Evdev {
     private:
-    class EvdevAction: public Action {
+    class EvdevAction : public Action {
       public:
         EvdevAction (Evdev* evdev) :
         Action (nullptr, "EvdevAction"), _evdev (evdev) {}
@@ -84,7 +84,7 @@ namespace djnn {
 
 	class Udev {
   private:
-    class UdevAction: public Action {
+    class UdevAction : public Action {
       public:
         UdevAction (Udev* udev) :
         Action (nullptr, "UdevAction"), _udev (udev) {}
@@ -166,7 +166,7 @@ namespace djnn {
     LinuxTouch *_cur_touch;
   };
 
-  class GPIOLine: public FatProcess {
+  class GPIOLine : public FatProcess {
     class GPIOLineWriteAction : public Action {
     public:
       GPIOLineWriteAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}

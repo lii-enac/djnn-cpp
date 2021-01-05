@@ -117,7 +117,7 @@ namespace djnn {
 
   class DRMUdev {
     private:
-      class DRMUdevAction: public Action {
+      class DRMUdevAction : public Action {
         public:
           DRMUdevAction (DRMUdev* udev) :
             Action (nullptr, "DRMUdevAction"), _udev (udev) {}

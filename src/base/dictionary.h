@@ -24,7 +24,7 @@
 
 namespace djnn {
 
-  class Dictionary: public FatProcess {
+  class Dictionary : public FatProcess {
     class FindAction : public Action
     {
     public:

@@ -18,7 +18,7 @@
 
 namespace djnn {
 
-  class Spike: public FatProcess {
+  class Spike : public FatProcess {
   public:
     Spike (ParentProcess* parent, const std::string& name) : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); };
     virtual ~Spike () {};
