@@ -45,6 +45,7 @@ namespace djnn {
     static Impl* _instance;
   };
 
+  extern FatProcess *GPUs;
   extern FatProcess* DrawingRefreshManager;
 
 }

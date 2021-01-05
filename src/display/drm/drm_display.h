@@ -20,6 +20,7 @@
 
 #include "display/display-priv.h"
 #include "exec_env/unix/iofd.h"
+#include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
 #include "core/tree/bool_property.h"

@@ -41,7 +41,7 @@ namespace djnn
   int
   DRMWindow::set_dpy_connection ()
   {
-    FatProcess *p = _window->get_display ();
+    CoreProcess *p = _window->get_display ();
     _conn = dynamic_cast<DRMConnector*> (p);
     if (_conn == nullptr) {
       return 0;
