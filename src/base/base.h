@@ -36,10 +36,4 @@
 #include "process_handler.h"
 #include "wall_clock.h"
 
-namespace djnn {
-
-	extern std::vector<std::string> loadedModules; 
-
-	void init_base ();
-    void clear_base ();
-}
+#include "base-dev.h"
