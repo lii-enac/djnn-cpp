@@ -1,5 +1,5 @@
-echo -- no include of precompiled headers - only in precompiled.h
-find src -type f -not -path "*/ext/*" -not -name "precompiled.h" | xargs grep -E "include <(vector|map|string|list)>" | grep -v '://'
+#echo -- no include of precompiled headers - only in precompiled.h
+#find src -type f -not -path "*/ext/*" -not -name "precompiled.h" | xargs grep -E "include <(vector|map|string|list)>" | grep -v '://'
 
 echo
 echo -- no iostream in headers
