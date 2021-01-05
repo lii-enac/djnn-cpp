@@ -865,7 +865,7 @@ ifeq ($(os),Linux)
 			# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
 			#pkgdeps += libraspberrypi-dev
 		else
-			pkgdeps += libsdl2-dev libsdl2-image-dev
+			pkgdeps += libsdl2-dev libsdl2-image-dev libgbm-dev
 		endif
 	endif
 	ifeq ($(display),DRM)
