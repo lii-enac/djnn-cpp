@@ -19,6 +19,11 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+
+
 namespace djnn
 {
   class OutlineMiterLimit : public AbstractStyle

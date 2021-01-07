@@ -19,6 +19,12 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "gui/transformation/homography.h"
+
+
 namespace djnn
 {
   class AbstractPropHomography : public AbstractTransformation

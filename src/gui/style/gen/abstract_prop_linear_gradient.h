@@ -19,6 +19,12 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "gui/style/gradient.h"
+
+
 namespace djnn
 {
   class AbstractPropLinearGradient : public AbstractGradient

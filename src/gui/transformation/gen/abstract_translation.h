@@ -19,6 +19,12 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "gui/transformation/abstract_transformation.h"
+
+
 namespace djnn
 {
   class AbstractTranslation : public AbstractTransformation

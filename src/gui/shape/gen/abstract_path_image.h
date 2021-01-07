@@ -19,6 +19,11 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "gui/shape/gen/abstract_image.h"
+
 namespace djnn
 {
   class AbstractPathImage : public AbstractImage
