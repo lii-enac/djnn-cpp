@@ -51,13 +51,17 @@ namespace djnn
   #endif
 
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
-  #define error(p,msg) __ignore_unused( djnn::djnn__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::djnn__exit(0))
+  #define djnn_error(p,msg) __ignore_unused( djnn::djnn__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::djnn__exit(0))
   //#define error(p,msg) __ignore_unused( __error(p, std::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
   //#define warning(p,msg) __warning(p, std::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
-  #define warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
+  #define djnn_warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
   #define loginfo(msg) djnn::djnn__info(msg,true, __FILE__ ":" __djnn_str1(__LINE__))
   #define loginfonocr(msg) djnn::djnn__info(msg,false, __FILE__ ":" __djnn_str1(__LINE__))
   #define loginfonofl(msg) djnn::djnn__info(msg,true)
+  
+  #define error(p,msg) djnn_error(p,msg)
+  #define warning(p,msg) djnn_warning(p,msg)
+  
 
   class Context {
   public:
