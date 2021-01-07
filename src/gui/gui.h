@@ -20,18 +20,5 @@
 #include "shape/shapes.h"
 #include "transformation/transformations.h"
 #include "layer.h"
+#include "gui-dev.h"
 
-namespace djnn {
-
-  class FatProcess;
-
-  extern std::vector<std::string> loadedModules;
-  // extern int mouse_tracking;
-  // extern int full_screen;
-  // extern int hide_pointer;
-  // extern FatProcess* DrawingRefreshManager;
-  extern FatProcess* GenericMouse;
-
-  void init_gui ();
-  void clear_gui ();
-}

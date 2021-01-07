@@ -15,6 +15,10 @@
 #pragma once
 
 namespace djnn {
+	extern FatProcess *mainloop;
+	void init_exec_env();
+	void clear_exec_env();
+
 	void get_monotonic_time (struct timespec *ts);
  	void t1 ();
 	double t2 (const std::string& msg = "", bool display_stderr=false);

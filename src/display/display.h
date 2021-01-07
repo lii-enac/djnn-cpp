@@ -14,15 +14,15 @@
 
 #pragma once
 
-#include <string>
 #include <vector>
 
-#include "core/ontology/process.h"
 #include "window.h"
+#include "display/display-dev.h"
 
 #define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
 
 namespace djnn {
+  extern std::vector<std::string> loadedModules;
 
   #include "const_keys.h"
   MACRO (Print, PRINT)
@@ -38,18 +38,5 @@ namespace djnn {
   MACRO (ParenRight, PARENRIGHT)
   MACRO (Equal, EQUAL)
 
-
-  extern int mouse_tracking;
-  extern int full_screen;
-  extern int hide_pointer;
-
-  extern std::vector<std::string> loadedModules;
-
-  extern FatProcess *GPUs;
-  extern FatProcess *Displays;
-  void init_display ();
-  void clear_display ();
-
-  class AbstractDisplay;
-  extern FatProcess* DrawingRefreshManager;
 }
+

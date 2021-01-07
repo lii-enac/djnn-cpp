@@ -15,15 +15,7 @@
 #pragma once
 
 #include "core/ontology/process.h"
-
-namespace djnn
-{
-  extern FatProcess *mainloop;
-  void init_exec_env();
-  void clear_exec_env();
-}
-
-
 #include "exec_env/exit.h"
 #include "exec_env/main_loop.h"
 #include "exec_env/timer.h"
+#include "exec_env/exec_env-dev.h"

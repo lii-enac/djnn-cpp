@@ -32,6 +32,11 @@ namespace djnn
       
     }
   }
+
+  void
+  clear_animation ()
+  {
+  }
   
   SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (ParentProcess* parent, const std::string& name) :
         HermiteCurve (parent, name, 0, 1, 0, 0) {}

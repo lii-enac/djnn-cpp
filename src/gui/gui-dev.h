@@ -20,6 +20,18 @@
 
 namespace djnn {
 
+  class FatProcess;
+
+  extern std::vector<std::string> loadedModules;
+  // extern int mouse_tracking;
+  // extern int full_screen;
+  // extern int hide_pointer;
+  // extern FatProcess* DrawingRefreshManager;
+  extern FatProcess* GenericMouse;
+
+  void init_gui ();
+  void clear_gui ();
+
   typedef unsigned int named_color_t;
 
   class XMLRectAttrs_Hash {

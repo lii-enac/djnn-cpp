@@ -12,3 +12,8 @@
  *
  */
 
+namespace djnn {
+ void init_files ();
+ void clear_files ();
+}
+

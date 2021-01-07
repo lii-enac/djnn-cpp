@@ -14,12 +14,23 @@
 
 #pragma once
 
-//#include "display.h"
 
-// #include "core/ontology/process.h"
 #include "abstract_display.h"
 
 namespace djnn {
+
+  extern int mouse_tracking;
+  extern int full_screen;
+  extern int hide_pointer;
+
+  extern FatProcess *GPUs;
+  extern FatProcess *Displays;
+  void init_display ();
+  void clear_display ();
+
+  class AbstractDisplay;
+  extern FatProcess* DrawingRefreshManager;
+
   typedef enum mouse_button {
     BUTTON_LEFT,
     BUTTON_MIDDLE,
@@ -47,5 +58,26 @@ namespace djnn {
 
   extern FatProcess *GPUs;
   extern FatProcess* DrawingRefreshManager;
+
+}
+
+#define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
+
+namespace djnn {
+  extern std::vector<std::string> loadedModules;
+
+  #include "const_keys.h"
+  MACRO (Print, PRINT)
+  MACRO (Shift, SHIFT)
+  MACRO (Control, CONTROL)
+  MACRO (Meta, META)
+  MACRO (Alt, ALT)
+  MACRO (AltGr, ALTGR)
+  MACRO (NumLock, NUMLOCK)
+  MACRO (Exclam, EXCLAM)
+  MACRO (Apostrophe, APOSTROPHE)
+  MACRO (ParenLeft, PARENLEFT)
+  MACRO (ParenRight, PARENRIGHT)
+  MACRO (Equal, EQUAL)
 
 }

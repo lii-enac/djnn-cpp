@@ -18,12 +18,5 @@
 #include "IvyAccess.h"
 #include "remote_proc.h"
 #include "serial.h"
+#include "comms/comms-dev.h"
 
-namespace djnn {
-
-	extern std::vector<std::string> loadedModules; 
-
-	void init_comms ();
-	void clear_comms ();
-
-}
