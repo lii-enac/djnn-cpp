@@ -13,7 +13,7 @@
 namespace djnn {
     typedef void* FontMetricsImpl ;
 
-class Text : public AbstractGShape
+  class Text : public AbstractGShape
   {
     class TextSizeAction : public Action
     {

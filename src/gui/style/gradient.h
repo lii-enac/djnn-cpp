@@ -1,6 +1,7 @@
 #pragma once
 
 #include "abstract_style.h"
+#include "style_types.h"
 
 #include "gen/abstract_prop_gradient_stop.h"
 #include "gen/abstract_prop_gradient.h"

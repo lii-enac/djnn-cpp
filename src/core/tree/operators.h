@@ -14,7 +14,6 @@
  */
 
 #include "core/tree/abstract_property.h"
-#include "core/ontology/process.h"
 
 inline
 const double
