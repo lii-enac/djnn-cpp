@@ -19,13 +19,12 @@
 #include "core/tree/text_property.h"
 #include "core/control/action.h"
 #include "files/file_writer.h"
+#include "files/files-dev.h"
 
 namespace djnn
 {
 
   extern std::vector<std::string> loadedModules; 
-
-  void init_files ();
 
   class FileReader : public FatProcess
   {
