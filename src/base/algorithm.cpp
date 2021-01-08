@@ -20,7 +20,6 @@
 
 #include <algorithm>
 
-
 namespace djnn
 {
 
@@ -230,6 +229,16 @@ namespace djnn
     do_action ();
   }
 
+  SumList::SumList(ParentProcess *parent, const std::string &name,
+  	  CoreProcess *container, const std::string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+  }
+
+  SumList::~SumList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
+
   void
   SumList::do_action ()
   {
@@ -257,6 +266,16 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 #endif
+
+  ProductList::ProductList(ParentProcess *parent, const std::string &name,
+  	  CoreProcess *container, const std::string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+  }
+
+  ProductList::~ProductList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
   void
   ProductList::do_action ()
@@ -286,6 +305,12 @@ namespace djnn
   }
 #endif
 
+  MaxList::MaxList(ParentProcess *parent, const std::string &name,
+  	  CoreProcess *container, const std::string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+  }
+
   void
   MaxList::do_action ()
   {
@@ -296,7 +321,11 @@ namespace djnn
     _output.set_value (vmax, true);
   }
 
-#ifndef DJNN_NO_SERIALIZE
+  MaxList::~MaxList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
+
+  #ifndef DJNN_NO_SERIALIZE
   void
   MaxList::serialize (const std::string& type)
   {
@@ -313,6 +342,16 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 #endif
+
+  MinList::MinList(ParentProcess *parent, const std::string &name,
+  	  CoreProcess *container, const std::string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+  }
+
+  MinList::~MinList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
   void
   MinList::do_action ()

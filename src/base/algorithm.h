@@ -94,8 +94,8 @@ namespace djnn
   class SumList : public ListOperator
   {
   public:
-    SumList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) : ListOperator (parent, name, container, spec), _output (this, "output", 0) {}
-    virtual ~SumList () {}
+    SumList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
+    virtual ~SumList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
@@ -108,8 +108,8 @@ namespace djnn
   class ProductList : public ListOperator
   {
   public:
-    ProductList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) : ListOperator (parent, name, container, spec), _output (this, "output", 0) {}
-    virtual ~ProductList () {}
+    ProductList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
+    virtual ~ProductList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
@@ -122,8 +122,8 @@ namespace djnn
   class MaxList : public ListOperator
   {
   public:
-    MaxList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) : ListOperator (parent, name, container, spec), _output (this, "output", 0) {}
-    virtual ~MaxList () {}
+    MaxList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
+    virtual ~MaxList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
@@ -136,8 +136,8 @@ namespace djnn
   class MinList : public ListOperator
   {
   public:
-    MinList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec) : ListOperator (parent, name, container, spec), _output (this, "output", 0) {}
-    virtual ~MinList () {}
+    MinList (ParentProcess* parent, const std::string& name, CoreProcess *container, const std::string& spec);
+    virtual ~MinList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
