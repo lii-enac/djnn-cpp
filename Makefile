@@ -359,7 +359,7 @@ pch := precompiled.h
 pch_src := $(src_dir)/core/utils/build/$(pch)
 pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
 
-# SDL and other stuff odefine new variables for compiling, canceling the use of pch with gnu cc
+# SDL and other stuff define new variables for compiling, canceling the use of pch with gnu cc
 # FIXME this is not safe as every other external lib may define something
 ifeq ($(compiler),gnu)
 # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
