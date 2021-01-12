@@ -49,12 +49,17 @@ namespace djnn
   Container::Container (ParentProcess* parent, const std::string& name) :
       FatProcess (name)
   {
-    Container* c = djnn_dynamic_cast<Container*> (parent);
-    if (c)
-      c->init_context (_cur_context);
     for (auto s: structure_observer_list) {
       s->add_container (this);
     }
+  }
+
+  void
+  Container::set_parent (ParentProcess* p) {
+    Container* c = djnn_dynamic_cast<Container*> (p);
+    if (c)
+      init_context (c->get_context());
+    FatProcess::set_parent (p);
   }
 
 #ifdef DEBUG

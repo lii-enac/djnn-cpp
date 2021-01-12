@@ -404,12 +404,20 @@ namespace djnn
   FontSize::FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c) {
+      c->add_to_context ("FontSize", this);
+    }
     finalize_construction (parent, name);
   }
 
   FontSize::FontSize (ParentProcess* parent, const std::string& name, int unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c) {
+      c->add_to_context ("FontSize", this);
+    }
     finalize_construction (parent, name);
   }
 
@@ -417,11 +425,11 @@ namespace djnn
   void
   FontSize::impl_activate ()
   {
-    AbstractPropFontSize::impl_activate ();
     Container *c = dynamic_cast<Container*> (get_parent ());
     if (c) {
       c->add_to_context ("FontSize", this);
     }
+    AbstractPropFontSize::impl_activate ();
   }
 
   void
@@ -442,16 +450,19 @@ namespace djnn
   FontWeight::FontWeight (ParentProcess* parent, const std::string& name, int weight) :
       AbstractPropFontWeight (parent, name, weight) 
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c)
+      c->add_to_context ("FontWeight", this);
     finalize_construction (parent, name);
   }
 
   void
   FontWeight::impl_activate ()
   {
-    AbstractPropFontWeight::impl_activate ();
     Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontWeight", this);
+    AbstractPropFontWeight::impl_activate ();
   }
 
   void
@@ -472,22 +483,28 @@ namespace djnn
   FontStyle::FontStyle (ParentProcess* parent, const std::string& name, djnFontSlope style) :
       AbstractPropFontStyle (parent, name, style)
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c)
+      c->add_to_context ("FontStyle", this);
     finalize_construction (parent, name);
   }
 
   FontStyle::FontStyle (ParentProcess* parent, const std::string& name, int style) :
       AbstractPropFontStyle (parent, name, style)
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c)
+      c->add_to_context ("FontStyle", this);
     finalize_construction (parent, name);
   }
 
   void
   FontStyle::impl_activate ()
   {
-    AbstractPropFontStyle::impl_activate ();
     Container *c = dynamic_cast<Container*> (get_parent ());
     if (c)
       c->add_to_context ("FontStyle", this);
+    AbstractPropFontStyle::impl_activate ();
   }
 
   void
@@ -508,6 +525,9 @@ namespace djnn
   FontFamily::FontFamily (ParentProcess* parent, const std::string& name, const std::string& family) :
       AbstractPropFontFamily (parent, name, family)
   {
+    Container *c = dynamic_cast<Container*> (parent);
+    if (c)
+      c->add_to_context ("FontFamily", this);
     finalize_construction (parent, name);
   }
 

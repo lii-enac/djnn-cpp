@@ -33,6 +33,7 @@ namespace djnn {
     void remove_child (const std::string& name) override;
     void swap_children (int i, int j);
     void set_child (FatChildProcess *child, int i);
+    void set_parent (ParentProcess *p) override;
     void update_drawing () override;
     void draw () override;
     void pick () override;
@@ -43,6 +44,7 @@ namespace djnn {
     void clean_up_content ();
     virtual ~Container ();
     const ordered_children_t& children () const { return _children; }
+    context_t& get_context () { return _cur_context; }
     void
     add_to_context (const std::string& k, FatChildProcess *v)
     {
@@ -58,8 +60,8 @@ namespace djnn {
       else return nullptr;
     }
     void init_context (context_t &context) {
-      if (!_cur_context.empty ()) {
-        context.insert (_cur_context.begin (), _cur_context.end ());
+      if (!context.empty ()) {
+        _cur_context.insert (context.begin (), context.end ());
       }
     }
   protected:
