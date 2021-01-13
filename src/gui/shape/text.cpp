@@ -68,7 +68,7 @@ namespace djnn
 
     //graph_add_edge (&_text, &_update_size);
     //Graph:instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
-    Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr); // try to init geometry on creation
+    //Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr); // try to init geometry on creation
     finalize_construction (parent, name);
   }
 
@@ -325,6 +325,9 @@ namespace djnn
         _cfweight = new CouplingWithData (fw->weight (), ACTIVATION, &_update_size, ACTIVATION);
         graph_add_edge (fw->weight (), &_update_size);
       }
+      Backend::instance ()->update_text_geometry (this, ff, fsz, fs, fw);
+    } else {
+      Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr);
     }
 
     auto * damaged = get_frame ()->damaged ();
@@ -343,7 +346,7 @@ namespace djnn
     enable (&_cupdate_size, damaged);
     enable (&_ctext, damaged);
 
-    _update_size.activate ();
+    //_update_size.activate ();
   }
 
   void

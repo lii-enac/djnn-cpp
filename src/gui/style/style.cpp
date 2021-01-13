@@ -404,20 +404,12 @@ namespace djnn
   FontSize::FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c) {
-      c->add_to_context ("FontSize", this);
-    }
     finalize_construction (parent, name);
   }
 
   FontSize::FontSize (ParentProcess* parent, const std::string& name, int unit, double size) :
       AbstractPropFontSize (parent, name, unit, size)
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c) {
-      c->add_to_context ("FontSize", this);
-    }
     finalize_construction (parent, name);
   }
 
@@ -450,9 +442,6 @@ namespace djnn
   FontWeight::FontWeight (ParentProcess* parent, const std::string& name, int weight) :
       AbstractPropFontWeight (parent, name, weight) 
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c)
-      c->add_to_context ("FontWeight", this);
     finalize_construction (parent, name);
   }
 
@@ -483,18 +472,12 @@ namespace djnn
   FontStyle::FontStyle (ParentProcess* parent, const std::string& name, djnFontSlope style) :
       AbstractPropFontStyle (parent, name, style)
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c)
-      c->add_to_context ("FontStyle", this);
     finalize_construction (parent, name);
   }
 
   FontStyle::FontStyle (ParentProcess* parent, const std::string& name, int style) :
       AbstractPropFontStyle (parent, name, style)
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c)
-      c->add_to_context ("FontStyle", this);
     finalize_construction (parent, name);
   }
 
@@ -525,9 +508,6 @@ namespace djnn
   FontFamily::FontFamily (ParentProcess* parent, const std::string& name, const std::string& family) :
       AbstractPropFontFamily (parent, name, family)
   {
-    Container *c = dynamic_cast<Container*> (parent);
-    if (c)
-      c->add_to_context ("FontFamily", this);
     finalize_construction (parent, name);
   }
 

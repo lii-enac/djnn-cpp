@@ -54,13 +54,6 @@ namespace djnn
     }
   }
 
-  void
-  Container::set_parent (ParentProcess* p) {
-    Container* c = djnn_dynamic_cast<Container*> (p);
-    if (c)
-      init_context (c->get_context());
-    FatProcess::set_parent (p);
-  }
 
 #ifdef DEBUG
   static int nb_space = 0;
@@ -230,6 +223,9 @@ namespace djnn
   void
   Container::impl_activate ()
   {
+    Container* c = djnn_dynamic_cast<Container*> (get_parent ());
+    if (c)
+      init_context (c->get_context());
     ComponentObserver::instance ().start_component ();
     /* WARNING Here we don't use C++ iterator as we want to allow
      * the dynamic modification of children list */
