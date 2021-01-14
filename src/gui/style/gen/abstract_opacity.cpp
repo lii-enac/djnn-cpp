@@ -30,6 +30,7 @@
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
+#include "gui/style/abstract_style.h"
 
 #include "abstract_opacity.h"
 
