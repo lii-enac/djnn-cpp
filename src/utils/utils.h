@@ -28,7 +28,6 @@ namespace djnn
 
   extern std::vector<std::string> loadedModules; 
 
-  void init_utils ();
   std::string strTrim (std::string s);
 
   class Properties : public FatProcess
