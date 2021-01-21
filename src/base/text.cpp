@@ -16,6 +16,7 @@
 #include <stdexcept>
 
 #include "text.h"
+#include "regex.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/text_property.h"
