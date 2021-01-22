@@ -154,9 +154,9 @@ namespace djnn
         }
       } else if (spec == AFTER) {
         Container::remove_child_from_children_only (child_to_move);
-        _children.insert (_children.begin () + index, child_to_move);
+        _children.insert (_children.begin () + index + 1, child_to_move);
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index, spec, index);
+          s->move_child_to (this, child_to_move, index + 1, spec, index);
         }
       } else {
 #ifndef DJNN_NO_DEBUG
