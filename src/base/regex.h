@@ -22,16 +22,16 @@
 
 namespace djnn {
 
-class Regex : public FatProcess
+  class Regex : public FatProcess
   {
   private:
     class RegexAction : public Action {
-      public:
-        RegexAction (ParentProcess* parent, const std::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
-        virtual ~RegexAction () {}
-        void impl_activate () override;
-      private:
-        Regex& _reg;
+    public:
+      RegexAction (ParentProcess* parent, const std::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+      virtual ~RegexAction () {}
+      void impl_activate () override;
+    private:
+      Regex& _reg;
     };
   public:
     Regex (ParentProcess* parent, const std::string& name, const std::string& Regex = "");
