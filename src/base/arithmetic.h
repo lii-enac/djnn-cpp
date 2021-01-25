@@ -19,6 +19,7 @@
 #include "operators.h"
 
 #include <functional>
+#include <math.h> // necessary for smala programs
 
 namespace djnn
 {
