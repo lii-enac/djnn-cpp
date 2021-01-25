@@ -23,8 +23,6 @@
 
 namespace djnn
 {
-
-
   void
   RemoteProc::SendAction::impl_activate ()
   {
@@ -68,7 +66,6 @@ namespace djnn
     please_stop ();
   }
 
-  static
   std::vector<std::string> // FIXME copy of vector
   tokenize (char* buff, int sz)
   {
@@ -245,39 +242,14 @@ namespace djnn
   {
     if (_con_status.get_value () == true)
       return;
-    struct sockaddr_in serv_addr;
-    if ((_fd = socket (AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-      error (this, "Failed to create socket");
-    }
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons (_port);
 
-    if (inet_pton (AF_INET, _addr.c_str (), &serv_addr.sin_addr) == SOCKET_ERROR) {
-      error (this, "Failed to configure socket");
-    }
-    if (connect (_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
+    _fd = socket_open_client (_addr.c_str (), _port);
+    if (_fd<0) {
       _con_status.set_value (false, true);
     } else {
       _con_status.set_value (true, true);
       _receive.activate ();
     }
-  }
-
-  static int
-  socket_close (SOCKET sock)
-  {
-    int status = 0;
-#ifdef _WIN32
-      status = shutdown(sock, SD_BOTH);
-      if (status == 0) { status = closesocket(sock); }
-#else
-    status = shutdown (sock, SHUT_RDWR);
-    if (status == 0)
-      {
-        status = close (sock);
-      }
-#endif
-    return status;
   }
 
   void
