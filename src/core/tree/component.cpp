@@ -141,19 +141,25 @@ namespace djnn
       } else
         return;
     }
+    // check for existance
     auto it = std::find (_children.begin (), _children.end (), child2);
     if (it == _children.end ()) {
       return;
     } else {
-      auto index = std::distance (_children.begin (), it);
       if (spec == BEFORE) {
         Container::remove_child_from_children_only (child_to_move);
+        // update it and index
+        it = std::find (_children.begin (), _children.end (), child2);
+        auto index = std::distance (_children.begin (), it);
         _children.insert (_children.begin () + index, child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, index, spec, index);
         }
       } else if (spec == AFTER) {
         Container::remove_child_from_children_only (child_to_move);
+        // update it and index
+        it = std::find (_children.begin (), _children.end (), child2);
+        auto index = std::distance (_children.begin (), it);
         _children.insert (_children.begin () + index + 1, child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, index + 1, spec, index);
