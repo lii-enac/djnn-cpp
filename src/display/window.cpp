@@ -88,6 +88,11 @@ namespace djnn
     _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
     graph_add_edge (_opacity, _opacity_action);
 
+    _background_opacity = new BoolProperty (this, "background_opacity", true);
+    _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
+    _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
+    graph_add_edge (_background_opacity, _background_opacity_action);
+
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
 
     _geometry_action = new GeometryAction (this, "geometry_action");
@@ -119,6 +124,7 @@ namespace djnn
     _c_damaged_update_drawing_damaged->enable();
     _c_screenshot->enable();
     _c_opacity->enable ();
+    _c_background_opacity->enable ();
     _win_impl->impl_activate ();
   }
   
@@ -128,6 +134,7 @@ namespace djnn
     _c_damaged_update_drawing_damaged->disable();
     _c_screenshot->disable();
     _c_opacity->disable ();
+    _c_background_opacity->disable ();
     _win_impl->impl_deactivate ();
   }
 
@@ -153,6 +160,11 @@ namespace djnn
     delete _c_opacity;
     delete _opacity_action;
     delete _opacity;
+
+    graph_remove_edge (_background_opacity, _background_opacity_action);
+    delete _c_background_opacity;
+    delete _background_opacity_action;
+    delete _background_opacity;
 
     delete _refreshed;
 
@@ -215,6 +227,12 @@ namespace djnn
   Window::set_opacity ()
   {
     _win_impl->set_opacity (_opacity->get_value());
+  }
+
+  void
+  Window::set_background_opacity ()
+  {
+    _win_impl->set_background_opacity (_background_opacity->get_value());
   }
 
   void

@@ -75,10 +75,11 @@ namespace djnn
 
     QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
                 _window->height ()->get_value ());
-
-    _qwidget->set_building(true);
     _qwidget->setGeometry (rect);
+    //set_background_opacity(false);
+    _qwidget->setParent(0); // Create TopLevel-Widget
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
+    _qwidget->set_building(true);
     _qwidget->show ();
     _qwidget->set_building(false);
   }
@@ -131,6 +132,18 @@ namespace djnn
   QtWindow::set_opacity (double opacity)
   {
     _qwidget->setWindowOpacity (opacity);
+  }
+
+  void
+  QtWindow::set_background_opacity (bool is_opaque)
+  {
+    bool is_transparent = !is_opaque;
+    _qwidget->setAttribute (Qt::WA_TranslucentBackground, is_transparent);
+    //_qwidget->setAttribute (Qt::WA_NoSystemBackground, is_transparent);
+    //_qwidget->setWindowFlags( Qt::FramelessWindowHint );
+    if( is_transparent ) {
+      _qwidget->setStyleSheet("background-color: rgba(255, 0, 0, 128)");
+    }
   }
 
   void

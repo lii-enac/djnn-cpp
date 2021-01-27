@@ -24,6 +24,7 @@
 #include "core/tree/double_property.h"
 #include "core/tree/text_property.h"
 #include "core/tree/ref_property.h"
+#include "core/tree/bool_property.h"
 
 #include <memory>
 
@@ -43,6 +44,7 @@ namespace djnn
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const std::string& path) {}
     virtual void set_opacity (double opacity) {}
+    virtual void set_background_opacity (bool is_opaque) {}
     virtual void update_geometry () {}
      
   private:
@@ -72,6 +74,12 @@ namespace djnn
       public:
         OpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_opacity (); }
+    };
+    class BackgroundOpacityAction : public Action
+    {
+      public:
+        BackgroundOpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->set_background_opacity (); }
     };
     class GeometryAction : public Action
     {
@@ -123,14 +131,18 @@ namespace djnn
     void set_holder (FatProcess *p) { _holder = p; }
     void set_cursor (const std::string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
+    Blank * refreshed () { return _refreshed; }
+
     FatProcess* screenshot () { return _screenshot; }
     TextProperty* screenshot_path () { return _screenshot_path; }
     void perform_screenshot ();
 
-    Blank * refreshed () { return _refreshed; }
-
     DoubleProperty* opacity () { return _opacity; }
     void set_opacity ();
+
+    BoolProperty* background_opacity () { return _background_opacity; }
+    void set_background_opacity ();
+
     void update_geometry ();
 
   private:
@@ -178,6 +190,10 @@ namespace djnn
     DoubleProperty* _opacity;
     OpacityAction * _opacity_action;
     Coupling * _c_opacity;
+
+    BoolProperty* _background_opacity;
+    BackgroundOpacityAction * _background_opacity_action;
+    Coupling * _c_background_opacity;
 
     GeometryAction * _geometry_action;
     Coupling * _c_geometry_x;
