@@ -8,6 +8,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
     - Update the Docs !
 
+
+## [1.15.0] - 2020-01-28
+   
+### NEW
+    - Lots of works to reduce compilation time : clean headers, precompiled headers, dependencies.
+        BECAREFUL: developer has to be more precise on includes declaration
+    - Added script to check sources and headers
+
+### Added
+    - Added init_xxx and clear_xxx module missing.
+    - Added SYNCHRONIZER_T type
+    - Added dependence to libgbm (kmsdrm driver) on linux x86
+    - Added a missing graph edge in list operators 
+
+### Changed
+    - Fixed leaks on display module.
+    - Removed move event on press event.
+    - Improved dump of : set component.
+    - Improved warning messages.
+    - Improved clear parentless_names.
+    - Improved global memory performances : DJNN_NO_DEBUG, _SERIALIZE
+    - Cleaning native_async_action
+    - Updated gen_prop script.
+    - Renamed djnParseXML -> djnParseXMLFromPath
+    - Improved Makefile : add compiler option
+    - Separate regex from text.h into regex.h
+    - Modularize socket from multi-platform
+
+### Removed
+    - Removed prototype of c api.
+
+### Fixed
+    - Fixed bug on merging gradient from svg.
+    - Fixed event on liux_mouse
+    - Fixed SVG parser leaks
+    - Fixed IvyAccess leaks on cleaning.
+    - Fixed SDL/DRM compilation. 
+    - Fixed text geometry/size calculation
+    - Fixed a bug in Container::move_child - AFTER
+
+
 ## [1.14.0] - 2020-11-23
 
 ### NEW
@@ -37,7 +78,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved (better scheme) and clean-up Makefile
     - Clean-up code using tidy
 
-### Removed
 ### Fixed
     - Fixed data-race using sanatizer -thread option.
     - Fixed several leaks using sanatizer -leaks -address options
