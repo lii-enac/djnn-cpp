@@ -128,13 +128,25 @@ namespace djnn
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger(trigger ? trigger->find_child_impl (tspec) : nullptr),
-  _action(action ? action->find_child_impl (aspec) : nullptr),
   _init(this, parent, tspec, aspec),
-  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
-  _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
+  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action ? action->find_child_impl (aspec) : nullptr),
+  _c_src (), _c_trigger_to_action (), _c_action_to_fsm_action (),
+  _priority (0)
   {
-    _c_src.disable (); 
-    graph_add_edge(_trigger, _to_state);
+    CoreProcess* _action = action ? action->find_child_impl (aspec) : nullptr;
+    if (_action) {
+      _c_trigger_to_action.init (_trigger, ACTIVATION, _action, ACTIVATION);
+      _c_action_to_fsm_action.init (_action, ACTIVATION, &_fsm_action, ACTIVATION);
+      _c_trigger_to_action.disable ();
+      _c_action_to_fsm_action.disable ();
+      graph_add_edge (_trigger, _action);
+      graph_add_edge(_action, &_fsm_action);
+    } else {
+      _c_src.init (_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
+      _c_src.disable ();
+      graph_add_edge(_trigger, &_fsm_action);
+    }
+    graph_add_edge (&_fsm_action, parent->find_child ("state"));
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -146,13 +158,24 @@ namespace djnn
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger (trigger),
-  _action (action),
   _init(this, parent, "NO spec for trigger", "NO spec for action"),
-  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, _action),
-  _c_src (_trigger, ACTIVATION, &_fsm_action, ACTIVATION, true)
+  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action),
+  _c_src (), _c_trigger_to_action (), _c_action_to_fsm_action (),
+  _priority (0)
   {
-    _c_src.disable ();
-    graph_add_edge(_trigger, _to_state);
+    if (action) {
+      _c_trigger_to_action.init (_trigger, ACTIVATION, action, ACTIVATION);
+      _c_action_to_fsm_action.init (action, ACTIVATION, &_fsm_action, ACTIVATION);
+      _c_trigger_to_action.disable ();
+      _c_action_to_fsm_action.disable ();
+      graph_add_edge (_trigger, action);
+      graph_add_edge(action, &_fsm_action);
+    } else {
+      _c_src.init(_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
+      _c_src.disable ();
+      graph_add_edge(_trigger, &_fsm_action);
+    }
+    graph_add_edge (&_fsm_action, parent->find_child ("state"));
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -160,19 +183,38 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
-    graph_remove_edge (_trigger, _to_state);
+    if (_c_src.is_effective()) {
+      graph_remove_edge(_trigger, &_fsm_action);
+    }
+	if (_c_trigger_to_action.is_effective()) {
+      graph_remove_edge (_trigger, _c_trigger_to_action.get_dst());
+    }
+    if (_c_action_to_fsm_action.is_effective()) {
+      graph_remove_edge(_c_action_to_fsm_action.get_src (), &_fsm_action);
+    }
+    graph_remove_edge (&_fsm_action, get_parent ()->find_child ("state"));
   }
 
   void
   FSMTransition::impl_activate ()
   {
-    _c_src.enable ();
+	if (_c_src.is_effective())
+      _c_src.enable ();
+    if (_c_trigger_to_action.is_effective())
+      _c_trigger_to_action.enable ();
+    if (_c_action_to_fsm_action.is_effective())
+      _c_action_to_fsm_action.enable ();
   }
 
   void
   FSMTransition::impl_deactivate ()
   {
-    _c_src.disable ();
+    if (_c_src.is_effective ())
+      _c_src.disable ();
+    if (_c_trigger_to_action.is_effective ())
+      _c_trigger_to_action.disable ();
+    if (_c_action_to_fsm_action.is_effective())
+      _c_action_to_fsm_action.disable ();
   }
 
   void
@@ -181,8 +223,6 @@ namespace djnn
     if (!_src->is_highest_priority (_t))
       return;
     _src->disable_transitions (_t);
-    if (_action != 0)
-      _action->activate ();
     notify_activation ();
     if (_src != _dst) {
       _src->deactivate ();
@@ -210,6 +250,7 @@ namespace djnn
     AbstractSerializer::compute_path (get_parent (), _trigger, buf);
     AbstractSerializer::serializer->text_attribute ("trigger", buf);
     buf.clear ();
+    CoreProcess* _action = _c_trigger_to_action.is_effective() ? _c_trigger_to_action.get_dst() : nullptr;
     AbstractSerializer::compute_path (get_parent (), _action, buf);
     AbstractSerializer::serializer->text_attribute ("action", buf);
 

@@ -56,14 +56,13 @@ namespace djnn {
     {
     public:
       FSMTransitionAction (ParentProcess* parent, const std::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
-	       Action (parent, name), _src (src), _dst (dst), _action (action) { _t = dynamic_cast<FSMTransition*> (parent); }
+	       Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
     private:
       FSMTransition *_t;
       FSMState* _src;
       FSMState* _dst;
-      CoreProcess* _action;
     };
   public:
     FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
@@ -87,10 +86,9 @@ namespace djnn {
     void init_FSMTransition ();
     FSMState* _from_state, *_to_state;
     CoreProcess *_trigger;
-    CoreProcess *_action;
     Init _init;
     FSMTransitionAction _fsm_action;
-    Coupling _c_src;
+    Coupling _c_src, _c_trigger_to_action, _c_action_to_fsm_action;
     int _priority;
   };
 
