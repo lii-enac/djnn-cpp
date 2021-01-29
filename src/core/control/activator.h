@@ -27,7 +27,7 @@ namespace djnn {
     Activator (ParentProcess* parent, const std::string& name, CoreProcess* src);
     Activator (ParentProcess* parent, const std::string& name, CoreProcess* src, const std::string& spec);
     virtual ~Activator ();
-    void impl_activate () override { _action->activate (); };
+    void impl_activate () override { _action->set_activation_flag (ACTIVATION); };
     void impl_deactivate () override {}
   private:
     CoreProcess *_action;
