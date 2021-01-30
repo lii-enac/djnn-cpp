@@ -31,7 +31,7 @@ namespace djnn {
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
     void set_src (CoreProcess* src);
-    void set_dst (CoreProcess* dst) { _dst = dst; }
+    void set_dst (CoreProcess* dst);
 
     void enable ()              { set_is_enabled (true); }
     void disable ()             { set_is_enabled (false); }

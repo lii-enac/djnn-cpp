@@ -13,6 +13,7 @@
  *
  */
 
+#include "core/core-dev.h" // graph add/remove edge
 #include "coupling.h"
 #include "process.h"
 
@@ -36,7 +37,9 @@ namespace djnn
     } else {
       warning (src, std::string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
     }
-
+    if (!immediate_propagation) {
+      graph_add_edge (src, dst);
+    }
     set_dst_activation_flag (dst_flag);
     _src = src;
     _dst = dst;
@@ -56,6 +59,9 @@ namespace djnn
     case NONE_ACTIVATION:
       break;
     }
+    if (!is_immediate ()) {
+      graph_remove_edge (_src, _dst);
+    }
   }
 
   Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
@@ -73,6 +79,9 @@ namespace djnn
   Coupling::~Coupling ()
   {
     uninit ();
+    if (!is_immediate () && _src && _dst) {
+      graph_remove_edge (_src, _dst);
+    }
   }
 
   void
@@ -90,7 +99,22 @@ namespace djnn
       case NONE_ACTIVATION:
       break;
     }
+    if (!is_immediate () && _src && _dst) {
+      graph_remove_edge (_src, _dst);
+      graph_add_edge (src, _dst);
+    }
     _src = src;
+
+  }
+
+  void
+  Coupling::set_dst (CoreProcess *dst)
+  {
+    if (!is_immediate () && _src && _dst) {
+      graph_remove_edge (_src, _dst);
+      graph_add_edge (_src, dst);
+    }
+    _dst = dst;
   }
 
   void
