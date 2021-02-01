@@ -384,7 +384,7 @@ namespace djnn
      * We make the choice to register all the couplings associated with a source before propagating
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
-    std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
+    std::vector<AbstractCoupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
     for (auto& coupling : get_activation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
@@ -414,7 +414,7 @@ namespace djnn
      * We make the choice to register all the couplings associated with a source before propagating
      * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
      * */
-    std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
+    std::vector<AbstractCoupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
     for (auto& coupling : get_deactivation_couplings ()) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
@@ -428,19 +428,19 @@ namespace djnn
   // coupling
 
   void
-  CouplingProcess::add_activation_coupling (Coupling* c)
+  CouplingProcess::add_activation_coupling (AbstractCoupling* c)
   {
     _activation_couplings.push_back (c);
   }
 
   void
-  CouplingProcess::add_deactivation_coupling (Coupling* c)
+  CouplingProcess::add_deactivation_coupling (AbstractCoupling* c)
   {
     _deactivation_couplings.push_back (c);
   }
 
   void
-  CouplingProcess::remove_activation_coupling (Coupling* c)
+  CouplingProcess::remove_activation_coupling (AbstractCoupling* c)
   {
     _activation_couplings.erase (
       std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
@@ -449,7 +449,7 @@ namespace djnn
   }
 
   void
-  CouplingProcess::remove_deactivation_coupling (Coupling* c)
+  CouplingProcess::remove_deactivation_coupling (AbstractCoupling* c)
   {
     _deactivation_couplings.erase (
       std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),

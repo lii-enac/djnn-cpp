@@ -76,7 +76,7 @@ namespace djnn {
     LAST
   };
 
-  class Coupling;
+  class AbstractCoupling;
   class Vertex;
   class CoreProcess;
   class ChildProcess;
@@ -101,11 +101,11 @@ namespace djnn {
     void deactivate ();
 
     // coupling
-    virtual void    add_activation_coupling (Coupling* c) {}
-    virtual void remove_activation_coupling (Coupling* c) {}
-    virtual void    add_deactivation_coupling (Coupling* c) {}
-    virtual void remove_deactivation_coupling (Coupling* c) {}
-    typedef std::vector<Coupling*> couplings_t;
+    virtual void    add_activation_coupling (AbstractCoupling* c) {}
+    virtual void remove_activation_coupling (AbstractCoupling* c) {}
+    virtual void    add_deactivation_coupling (AbstractCoupling* c) {}
+    virtual void remove_deactivation_coupling (AbstractCoupling* c) {}
+    typedef std::vector<AbstractCoupling*> couplings_t;
     virtual const couplings_t& get_activation_couplings () const { return default_couplings; }
     virtual const couplings_t& get_deactivation_couplings () const { return default_couplings; }
     bool  has_coupling () const { return false; }
@@ -288,10 +288,10 @@ namespace djnn {
     virtual ~CouplingProcess ();
 
     // coupling
-    void    add_activation_coupling (Coupling* c) override;
-    void remove_activation_coupling (Coupling* c) override;
-    void    add_deactivation_coupling (Coupling* c) override;
-    void remove_deactivation_coupling (Coupling* c) override;
+    void    add_activation_coupling (AbstractCoupling* c) override;
+    void remove_activation_coupling (AbstractCoupling* c) override;
+    void    add_deactivation_coupling (AbstractCoupling* c) override;
+    void remove_deactivation_coupling (AbstractCoupling* c) override;
     bool  has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
     
     const couplings_t& get_activation_couplings () const override { return _activation_couplings; }
