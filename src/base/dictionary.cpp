@@ -65,17 +65,15 @@ namespace djnn
     _find_action (this, "find_action"),
      _add_action (this, "add_action"),
     _del_action (this, "del_action"),
-    _c_add (&_add, ACTIVATION, &_add_action, ACTIVATION, true),
-    _c_del (&_del, ACTIVATION, &_del_action, ACTIVATION, true),
-    _c_find (&_key, ACTIVATION, &_find_action, ACTIVATION, true)
+    _c_add (&_add, ACTIVATION, &_add_action, ACTIVATION),
+    _c_del (&_del, ACTIVATION, &_del_action, ACTIVATION),
+    _c_find (&_key, ACTIVATION, &_find_action, ACTIVATION)
 
   {
     _c_add.disable ();
     _c_del.disable ();
     _c_find.disable ();
-    graph_add_edge (&_add, &_add_action);
-    graph_add_edge (&_del, &_del_action);
-    graph_add_edge (&_key, &_find_action);
+    graph_add_edge (&_find_action, &_value);
     finalize_construction (parent, name);
   }
   void
@@ -118,8 +116,6 @@ namespace djnn
   }
 
   Dictionary::~Dictionary () {
-    graph_remove_edge (&_key, &_find_action);
-    graph_remove_edge (&_del, &_del_action);
-    graph_remove_edge (&_add, &_add_action);
+    graph_remove_edge (&_find_action, &_value);
   }
 }

@@ -79,34 +79,6 @@ namespace djnn
     remove_state_dependency (get_parent (), &_update_size);
     //graph_remove_edge (&_text, &_update_size);
     
-    if (_cffamily) {
-      graph_remove_edge ( _update_size._ff->family (), &_update_size);
-    }
-    if (_cfsize) {
-      graph_remove_edge ( _update_size._fsz->size (), &_update_size);
-    }
-    if (_cfstyle) {
-      graph_remove_edge ( _update_size._fs->style (), &_update_size);
-    }
-    if (_cfweight) {
-      graph_remove_edge ( _update_size._fw->weight (), &_update_size);
-    }
-
-    remove_edge (_cx);
-    remove_edge (_cy);
-    remove_edge (_cdx);
-    remove_edge (_cdy);
-    remove_edge (_cdxU);
-    remove_edge (_cdyU);
-    remove_edge (_cencoding);
-    //remove_edge (_cffamily);
-    //remove_edge (_cfsize);
-    //remove_edge (_cfstyle);
-    //remove_edge (_cfweight);
-    //remove_edge (_cfweight);
-    //remove_edge (&_cupdate_size);
-    remove_edge (&_ctext);
-
     delete _cffamily;
     delete _cfsize;
     delete _cfstyle;
@@ -264,7 +236,6 @@ namespace djnn
 
         /* remove old coupling */
         if (_cffamily != nullptr) {
-          graph_remove_edge (_update_size._ff->family (), &_update_size);
           delete _cffamily;
           _cffamily = nullptr;
         }
@@ -272,7 +243,6 @@ namespace djnn
         /* update value */
         _update_size._ff = ff;
         _cffamily = new CouplingWithData (ff->family (), ACTIVATION, &_update_size, ACTIVATION);
-        graph_add_edge (ff->family (), &_update_size);
       }
 
       /* fontsize changed ? */
@@ -281,7 +251,6 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfsize != nullptr) {
-          graph_remove_edge (_update_size._fsz->size (), &_update_size);
           delete _cfsize;
           _cfsize = nullptr;
         }
@@ -289,7 +258,6 @@ namespace djnn
         /* update value */
         _update_size._fsz = fsz;
         _cfsize = new CouplingWithData (fsz->size (), ACTIVATION, &_update_size, ACTIVATION);
-        graph_add_edge (fsz->size (), &_update_size);
       }
 
       /* fontstyle changed ? */
@@ -298,7 +266,6 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfstyle != nullptr) {
-          graph_remove_edge (_update_size._fs->style (), &_update_size);
           delete _cfstyle;
           _cfstyle = nullptr;
         }
@@ -306,7 +273,6 @@ namespace djnn
         /* update value */
         _update_size._fs = fs;
         _cfstyle = new CouplingWithData (fs->style (), ACTIVATION, &_update_size, ACTIVATION);
-        graph_add_edge (fs->style (), &_update_size);
       }
 
       /* fontweight changed ? */
@@ -315,7 +281,6 @@ namespace djnn
         
         /* remove old coupling */
         if (_cfweight != nullptr) {
-          graph_remove_edge (_update_size._fw->weight (), &_update_size);
           delete _cfweight;
           _cfweight = nullptr;
         }
@@ -323,7 +288,6 @@ namespace djnn
         /* update value */
         _update_size._fw = fw;
         _cfweight = new CouplingWithData (fw->weight (), ACTIVATION, &_update_size, ACTIVATION);
-        graph_add_edge (fw->weight (), &_update_size);
       }
       Backend::instance ()->update_text_geometry (this, ff, fsz, fs, fw);
     } else {

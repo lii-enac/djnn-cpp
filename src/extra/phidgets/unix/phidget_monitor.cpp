@@ -218,10 +218,8 @@ namespace djnn
     _trigger = new DoubleProperty (this, "trigger", 0.0);
     _rate_action = new ChangeRateAction (this, "rate_action");
     _trigger_action = new ChangeTriggerAction (this, "trigger_action");
-    _c_rate = new Coupling (_rate, ACTIVATION, _rate_action, ACTIVATION, true);
-    graph_add_edge (_rate, _rate_action);
-    _c_trigger = new Coupling (_trigger, ACTIVATION, _trigger_action, ACTIVATION, true);
-    graph_add_edge (_trigger, _trigger_action);
+    _c_rate = new Coupling (_rate, ACTIVATION, _rate_action, ACTIVATION);
+    _c_trigger = new Coupling (_trigger, ACTIVATION, _trigger_action, ACTIVATION);
     _sw_ch = nullptr;
     finalize_construction (parent, name, nullptr);
   }
@@ -231,8 +229,6 @@ namespace djnn
     if (_sw_ch != nullptr) {
       PhidgetVoltageInput_delete (&_sw_ch);
     }
-    graph_remove_edge (_rate, _rate_action);
-    graph_remove_edge (_trigger, _trigger_action);
     delete _c_trigger;
     delete _c_rate;
     delete _trigger_action;

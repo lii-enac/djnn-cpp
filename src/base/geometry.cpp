@@ -64,11 +64,6 @@ namespace djnn
     _c_p2.disable ();
     _c_t1.disable ();
     _c_t2.disable ();
-    graph_add_edge (&_input, &_action);
-    graph_add_edge (&_p1, &_action);
-    graph_add_edge (&_p2, &_action);
-    graph_add_edge (&_t1, &_action);
-    graph_add_edge (&_t2, &_action);
     graph_add_edge (&_action, &_output);
     finalize_construction (parent, name);
   }
@@ -76,11 +71,6 @@ namespace djnn
   HermiteCurve::~HermiteCurve ()
   {
     remove_state_dependency (get_parent (), &_action);
-    graph_remove_edge (&_input, &_action);
-    graph_remove_edge (&_p1, &_action);
-    graph_remove_edge (&_p2, &_action);
-    graph_remove_edge (&_t1, &_action);
-    graph_remove_edge (&_t2, &_action);
     graph_remove_edge (&_action, &_output);
   }
 

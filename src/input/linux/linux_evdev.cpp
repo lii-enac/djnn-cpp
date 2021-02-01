@@ -71,14 +71,12 @@ namespace djnn {
     _iofd->activate ();
     _action = new EvdevAction (this);
     _readable_cpl = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-    graph_add_edge (_iofd->find_child_impl ("readable"), _action);
   }
 
   Evdev::~Evdev ()
   {
     if (_aborted)
       return;
-    graph_remove_edge (_iofd->find_child_impl ("readable"), _action);
     _iofd->deactivate ();
 
     delete _readable_cpl;

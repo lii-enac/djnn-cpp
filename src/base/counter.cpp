@@ -35,10 +35,8 @@ namespace djnn
     _c_reset.disable (),
     _c_step.disable ();
 
-    graph_add_edge (&_reset, &_action_reset);
     graph_add_edge (&_action_reset, &_output);
     
-    graph_add_edge (&_step, &_action_step);
     graph_add_edge (&_action_step, &_output);
 
     add_state_dependency (get_parent (), &_action_reset);
@@ -51,9 +49,7 @@ namespace djnn
   Counter::~Counter () {
     remove_state_dependency (get_parent (), &_action_reset);
     remove_state_dependency (get_parent (), &_action_step);
-    graph_remove_edge (&_reset, &_action_reset);
     graph_remove_edge (&_action_reset, &_output);
-    graph_remove_edge (&_step, &_action_step);
     graph_remove_edge (&_action_step, &_output);
   }
 

@@ -51,7 +51,6 @@ namespace djnn
   _action (this, "action", &_m, &_k, &_damping, &_v, &_output, &_dt)
   {
     _c_step.disable ();
-    graph_add_edge (&_step, &_action);
     graph_add_edge (&_action, &_output);
     finalize_construction (parent, name);
   }
@@ -59,7 +58,6 @@ namespace djnn
   Oscillator::~Oscillator ()
   { 
     remove_state_dependency (get_parent (), &_action);
-    graph_remove_edge (&_step, &_action);
     graph_remove_edge (&_action, &_output);
   }
 

@@ -139,12 +139,9 @@ namespace djnn
       _c_action_to_fsm_action.init (_action, ACTIVATION, &_fsm_action, ACTIVATION);
       _c_trigger_to_action.disable ();
       _c_action_to_fsm_action.disable ();
-      graph_add_edge (_trigger, _action);
-      graph_add_edge(_action, &_fsm_action);
     } else {
       _c_src.init (_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
       _c_src.disable ();
-      graph_add_edge(_trigger, &_fsm_action);
     }
     graph_add_edge (&_fsm_action, parent->find_child ("state"));
     finalize_construction (parent, name);
@@ -168,12 +165,9 @@ namespace djnn
       _c_action_to_fsm_action.init (action, ACTIVATION, &_fsm_action, ACTIVATION);
       _c_trigger_to_action.disable ();
       _c_action_to_fsm_action.disable ();
-      graph_add_edge (_trigger, action);
-      graph_add_edge(action, &_fsm_action);
     } else {
       _c_src.init(_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
       _c_src.disable ();
-      graph_add_edge(_trigger, &_fsm_action);
     }
     graph_add_edge (&_fsm_action, parent->find_child ("state"));
     finalize_construction (parent, name);
@@ -183,15 +177,6 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
-    if (_c_src.is_effective()) {
-      graph_remove_edge(_trigger, &_fsm_action);
-    }
-	if (_c_trigger_to_action.is_effective()) {
-      graph_remove_edge (_trigger, _c_trigger_to_action.get_dst());
-    }
-    if (_c_action_to_fsm_action.is_effective()) {
-      graph_remove_edge(_c_action_to_fsm_action.get_src (), &_fsm_action);
-    }
     graph_remove_edge (&_fsm_action, get_parent ()->find_child ("state"));
   }
 

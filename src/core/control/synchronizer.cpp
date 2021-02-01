@@ -56,8 +56,6 @@ namespace djnn
     int sz = _c_list.size ();
     for (int i = sz - 1; i >= 0; i--) {
       auto * c = _c_list[i];
-      auto * src = c->get_src ();
-      graph_remove_edge (src, &_action);
       delete c;
     }
   }
@@ -99,7 +97,6 @@ namespace djnn
     */
     if (!this->somehow_activating ())
       cpl->disable ();
-    graph_add_edge (_src, &_action);
 
     _c_list.push_back (cpl);
   }

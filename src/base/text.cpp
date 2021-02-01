@@ -47,7 +47,7 @@ namespace djnn
   : FatProcess (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
-    c_input (&_input, ACTIVATION, &_action, ACTIVATION, true)
+    c_input (&_input, ACTIVATION, &_action, ACTIVATION)
   {
     init ();
     finalize_construction (parent, name);
@@ -80,16 +80,12 @@ namespace djnn
   {
     _c_input.disable ();
     _c_decimal.disable ();
-    graph_add_edge (&_input, &_action);
-    graph_add_edge (&_decimal, &_action);
     graph_add_edge (&_action, &_output);
   }
 
   DoubleFormatter::~DoubleFormatter ()
   {
     remove_state_dependency (get_parent (), &_action);
-    graph_remove_edge (&_input, &_action);
-    graph_remove_edge (&_decimal, &_action);
     graph_remove_edge (&_action, &_output);
   }
 
@@ -163,8 +159,6 @@ namespace djnn
   {
     _c_acc.disable ();
     _c_del.disable ();
-    graph_add_edge (&_input, &_acc_action);
-    graph_add_edge (&_del, &_del_action);
     graph_add_edge (&_acc_action, &_state);
     graph_add_edge (&_del_action, &_state);
     finalize_construction (parent, name);
@@ -174,8 +168,6 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), &_acc_action);
     remove_state_dependency (get_parent (), &_del_action);
-    graph_remove_edge (&_input, &_acc_action);
-    graph_remove_edge (&_del, &_del_action);
     graph_remove_edge (&_acc_action, &_state);
     graph_remove_edge (&_del_action, &_state);
   }

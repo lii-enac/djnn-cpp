@@ -22,8 +22,6 @@
 #include "display/window.h"
 #include "display/update_drawing.h"
 
-#include "core/core-dev.h" // graph add/remove edge
-
 #include "core/utils/error.h"
 
 #include <iostream>
@@ -40,7 +38,6 @@ namespace djnn
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (somehow_activating ()) {
       (*cprop)->enable ();
-      graph_add_edge (*prop, update);
     }
     else
       (*cprop)->disable ();

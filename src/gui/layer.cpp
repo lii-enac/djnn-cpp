@@ -29,13 +29,11 @@ namespace djnn
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"),
      _invalid_cache (true), _cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION)
   {
-    graph_add_edge (&_damaged, &_damaged_action);
     finalize_construction (parent, n);
   }
 
   Layer::~Layer ()
   {
-    graph_remove_edge (&_damaged, &_damaged_action);
   }
 
   void

@@ -187,17 +187,14 @@ namespace djnn
       _con (this, "connection_action"), _con_status (this, "status", false), _con_req (this, "connect"),
       _c_con_req (&_con_req, ACTIVATION, &_con, ACTIVATION)
   {
-    graph_add_edge (&_con_req, &_con);
     finalize_construction (parent, name);
   }
 
   RemoteProc::~RemoteProc ()
   {
-    graph_remove_edge (&_con_req, &_con);
     _receive.deactivate ();
     for (auto c: _props_c) {
       CoreProcess* src = c->get_src ();
-      graph_remove_edge (src, &_send);
       delete c;
       delete src;
     }
@@ -217,7 +214,6 @@ namespace djnn
       _send_map[path] = p;
 
       Coupling *c = new Coupling (p, ACTIVATION, &_send, ACTIVATION);
-      graph_add_edge (p, &_send);
       if (is_activated ()) {
         c->enable ();
         subscribe (path);

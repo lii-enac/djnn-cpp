@@ -37,7 +37,6 @@ namespace djnn
   Image::~Image ()
   {
     if (_cwatcher) {
-      graph_remove_edge ( this->path (), _watcher);
       delete _cwatcher;
     }
     delete _watcher;
@@ -57,7 +56,6 @@ namespace djnn
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       if (!somehow_activating())
         _cwatcher->disable ();
-      graph_add_edge (res, _watcher);
     }
 
     return res;
@@ -149,7 +147,6 @@ namespace djnn
   DataImage::~DataImage ()
   {
     if (_cwatcher) {
-      graph_remove_edge ( this->data (), _watcher);
       delete _cwatcher;
     }
     delete _watcher;
@@ -166,7 +163,6 @@ namespace djnn
       _cwatcher = new Coupling (res, ACTIVATION, _watcher, ACTIVATION);
       if (!somehow_activating())
         _cwatcher->disable ();
-      graph_add_edge (res, _watcher);
     }
 
     return res;

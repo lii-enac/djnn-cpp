@@ -177,7 +177,6 @@ namespace djnn
     _c_input (&_input, ACTIVATION, &_action, ACTIVATION)
   {
     _c_input.disable ();
-    graph_add_edge (&_input, &_action);
     graph_add_edge (&_action, &_result);
     finalize_construction (parent, name);
   }
@@ -185,7 +184,6 @@ namespace djnn
   AdderAccumulator::~AdderAccumulator ()
   {
     remove_state_dependency (get_parent (), &_action);
-    graph_remove_edge (&_input, &_action);
     graph_remove_edge (&_action, &_result);
   }
 

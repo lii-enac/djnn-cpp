@@ -74,9 +74,6 @@ namespace djnn
     _c_max (&_max, ACTIVATION, &_action, ACTIVATION),
     _c_input (&_input, ACTIVATION, &_action, ACTIVATION)
   {
-    graph_add_edge (&_min, &_action);
-    graph_add_edge (&_max, &_action);
-    graph_add_edge (&_input, &_action);
     graph_add_edge (&_action, &_result);
     finalize_construction (parent, name);
   }
@@ -85,9 +82,6 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
-    graph_remove_edge (&_input, &_action);
-    graph_remove_edge (&_min, &_action);
-    graph_remove_edge (&_max, &_action);
   }
 
   void

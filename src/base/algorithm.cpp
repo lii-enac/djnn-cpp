@@ -34,13 +34,11 @@ namespace djnn
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be sorted");
 
-    graph_add_edge (&_spec, &_sort_action);
 
     finalize_construction (parent, name);
   }
 
   Sorter::~Sorter () {
-    graph_remove_edge (&_spec, &_sort_action);
   }
 
   void
@@ -170,19 +168,15 @@ namespace djnn
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child_impl ("size"), ACTIVATION, &_update_list, ACTIVATION);
-    graph_add_edge (container->find_child_impl ("size"), &_update_list);
     finalize_construction (parent, name);
   }
 
   ListOperator::~ListOperator()
   {
     for (auto c: _coupling_list) {
-      auto * s = c->get_src();
-      graph_remove_edge (s, &_spec_action);
       delete c;
     }
 
-    graph_remove_edge (_container->find_child_impl ("size"), &_update_list);
     delete _c_update_list_action;
   }
 
@@ -211,8 +205,6 @@ namespace djnn
   ListOperator::update_list ()
   {
     for (auto c: _coupling_list) {
-      auto * s = c->get_src();
-      graph_remove_edge (s, &_spec_action);
       delete c;
     }
     _coupling_list.clear ();
@@ -223,7 +215,6 @@ namespace djnn
         continue;
       }
       Coupling *cpl = new Coupling (s, ACTIVATION, &_spec_action, ACTIVATION);
-      graph_add_edge (s, &_spec_action);
       _coupling_list.push_back (cpl);
     }
     do_action ();

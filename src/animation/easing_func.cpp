@@ -246,13 +246,11 @@ namespace djnn
         _act (this, "action"),
         _c_in (&_in, ACTIVATION, &_act, ACTIVATION)
   {
-    graph_add_edge (&_in, &_act);
     graph_add_edge (&_act, &_out);
     finalize_construction (parent, name);
   }
 
   EasingGenerator::~EasingGenerator () {
-    graph_remove_edge (&_in, &_act);
     graph_remove_edge (&_act, &_out);
   }
 

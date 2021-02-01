@@ -82,21 +82,18 @@ namespace djnn
 
     _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged, connected to UpdateDrawing::damaged, the frame pointer is passed with the action
     FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
-    _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION, true);
-    graph_add_edge (_damaged, update);
+    _c_damaged_update_drawing_damaged = new Coupling (_damaged, ACTIVATION, update, ACTIVATION);
 
     _screenshot = new Spike (this, "screenshot");
     _screenshot_path = new TextProperty (this, "screenshot_path", "screenshot");
     _screenshot_action = new ScreenshotAction (this, "screenshot_action");
     _c_screenshot = new Coupling (_screenshot, ACTIVATION, _screenshot_action, ACTIVATION);
-    graph_add_edge (_screenshot, _screenshot_action);
 
     _refreshed = new Blank (this, "refreshed");
 
     _opacity = new DoubleProperty (this, "opacity", 1.0);
     _opacity_action = new OpacityAction (this, "opacity_action");
     _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
-    graph_add_edge (_opacity, _opacity_action);
 
     _background_opacity = new DoubleProperty (this, "background_opacity", -1);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
@@ -112,13 +109,9 @@ namespace djnn
 
     _geometry_action = new GeometryAction (this, "geometry_action");
     _c_geometry_x = new Coupling (_pos_x, ACTIVATION, _geometry_action, ACTIVATION);
-    graph_add_edge (_pos_x, _geometry_action);
     _c_geometry_y = new Coupling (_pos_y, ACTIVATION, _geometry_action, ACTIVATION);
-    graph_add_edge (_pos_y, _geometry_action);
     _c_geometry_width = new Coupling (_width, ACTIVATION, _geometry_action, ACTIVATION);
-    graph_add_edge (_width, _geometry_action);
     _c_geometry_height = new Coupling (_height, ACTIVATION, _geometry_action, ACTIVATION);
-    graph_add_edge (_height, _geometry_action);
 
     //impl_deactivate (); // disable couplings
     _c_damaged_update_drawing_damaged->disable();
@@ -163,22 +156,16 @@ namespace djnn
   Window::~Window ()
   {
     UpdateDrawing::instance ()->remove_window_for_refresh(this);
-    graph_remove_edge (_damaged, UpdateDrawing::instance ()->get_damaged ());
     delete _c_damaged_update_drawing_damaged;
     delete _damaged;
 
-    graph_remove_edge (_pos_x, _geometry_action);
     delete _c_geometry_x;
-    graph_remove_edge (_pos_y, _geometry_action);
     delete _c_geometry_y;
-    graph_remove_edge (_width, _geometry_action);
     delete _c_geometry_width;
-    graph_remove_edge (_height, _geometry_action);
     delete _c_geometry_height;
 
     delete _geometry_action;
     
-    graph_remove_edge (_opacity, _opacity_action);
     delete _c_opacity;
     delete _opacity_action;
     delete _opacity;
@@ -195,7 +182,6 @@ namespace djnn
 
     delete _refreshed;
 
-    graph_remove_edge (_screenshot, _screenshot_action);
     delete _c_screenshot;
     delete _screenshot_action;
     delete _screenshot_path;

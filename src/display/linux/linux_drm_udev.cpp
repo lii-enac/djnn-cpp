@@ -108,7 +108,6 @@ namespace djnn {
     _udev_iofd->activate ();
     _action = new DRMUdevAction (this);
     _readable_cpl = new Coupling (_udev_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-    graph_add_edge (_udev_iofd->find_child_impl ("readable"), _action);
   }
 
   DRMUdev::~DRMUdev ()
@@ -117,7 +116,6 @@ namespace djnn {
     udev_monitor_unref (_udev_mon);
     udev_unref (_udev_connection);
 
-    graph_remove_edge (_udev_iofd->find_child_impl ("readable"), _action);
 
     delete _readable_cpl;
     delete _action;

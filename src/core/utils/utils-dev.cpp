@@ -121,7 +121,6 @@ namespace djnn
 		if(c) {
 		if(c->get_dst() == nullptr) {
 			c->set_dst(dst);
-			graph_add_edge(c->get_src(), c->get_dst());
 		}
 		c->enable();
 		}
@@ -138,8 +137,5 @@ namespace djnn
 	void
 	remove_edge (Coupling *c)
 	{
-		if (c) {
-			if (c->get_dst ()) graph_remove_edge (c->get_src (), c->get_dst ());
-		}
 	}
  }

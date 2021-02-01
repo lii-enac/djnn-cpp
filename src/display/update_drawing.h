@@ -87,7 +87,8 @@ namespace djnn {
     UndelayedSpike *_damaged;
     RedrawAction *_redraw_action;
     AutoRefreshAction *_update_auto_refresh_action;
-    Coupling *_c_redraw_when_damaged, *_c_redraw_when_draw_sync, *_c_update_auto_refresh;
+    Coupling *_c_redraw_when_damaged, *_c_update_auto_refresh;
+    BasicCouplingToSink *_c_redraw_when_draw_sync;
     UpdateDrawing ();
   };
 }

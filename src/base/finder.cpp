@@ -116,7 +116,6 @@ namespace djnn
       return;
     }
     _cfind.disable ();
-    graph_add_edge (&_key, &_action);
     graph_add_edge (&_action, &_result);
 
     finalize_construction (parent, name);
@@ -126,7 +125,6 @@ namespace djnn
   {
     remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
-    graph_remove_edge (&_key, &_action);
   }
 
   void

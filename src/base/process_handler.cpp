@@ -75,17 +75,11 @@ namespace djnn
       _c_rm_all (&_s_rm_all, ACTIVATION, &_rm_all, ACTIVATION)
   {
 
-    graph_add_edge (&_add, &_add_one);
-    graph_add_edge (&_remove, &_rm_one);
-    graph_add_edge (&_s_rm_all, &_rm_all);
     finalize_construction (parent, name);
   }
 
   ProcessCollector::~ProcessCollector ()
   {
-    graph_remove_edge (&_s_rm_all, &_rm_all);
-    graph_remove_edge (&_remove, &_rm_one);
-    graph_remove_edge (&_add, &_add_one);
   }
 
   void
@@ -165,13 +159,11 @@ namespace djnn
       _del_action (this, "del_action"),
       _c_del_all (&_del, ACTIVATION, &_del_action, ACTIVATION)
   {
-    graph_add_edge (&_del, &_del_action);
     finalize_construction (parent, name);
   }
 
   CollectionDeleter::~CollectionDeleter ()
   {
-    graph_remove_edge (&_del, &_del_action);
   }
 
   void
@@ -223,7 +215,6 @@ namespace djnn
       _c_act_all (&_collection, ACTIVATION, &_act_all, ACTIVATION)
   {
     graph_add_edge (&_activate, &_act_all);
-    graph_add_edge (&_collection, &_act_all);
     graph_add_edge (&_path, &_act_all);
     finalize_construction (parent, name);
   }
@@ -231,7 +222,6 @@ namespace djnn
   CollectionActivator::~CollectionActivator ()
   {
     graph_remove_edge (&_path, &_act_all);
-    graph_remove_edge (&_collection, &_act_all);
     graph_remove_edge (&_activate, &_act_all);
   }
 
@@ -306,13 +296,11 @@ namespace djnn
     _value (this, "value", 0),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
     {
-      graph_add_edge (&_value, &_act_set_val);
       finalize_construction (parent, name);
     }
 
   CollectionSetDoubleValue::~CollectionSetDoubleValue ()
   {
-    graph_remove_edge (&_value, &_act_set_val);
   }
 
   void
@@ -346,13 +334,11 @@ namespace djnn
     _value (this, "value", ""),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
   {
-    graph_add_edge (&_value, &_act_set_val);
     finalize_construction (parent, name);
   }
 
   CollectionSetStringValue::~CollectionSetStringValue ()
   {
-    graph_remove_edge (&_value, &_act_set_val);
   }
 
   void

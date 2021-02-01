@@ -1548,9 +1548,6 @@ namespace djnn
     this->somehow_activating () ? enable (_leftRotateBy_cy_coupling, damaged)  : _leftRotateBy_cy_coupling->disable ();
     _leftRotateBy_da_coupling = new CouplingWithData (_leftRotateBy_da, ACTIVATION, _leftRotateBy_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftRotateBy_da_coupling, damaged)  : _leftRotateBy_da_coupling->disable ();
-    graph_add_edge(_leftRotateBy_cx, _leftRotateBy_action);
-    graph_add_edge(_leftRotateBy_cy, _leftRotateBy_action);
-    graph_add_edge(_leftRotateBy_da, _leftRotateBy_action);
     graph_add_edge(_leftRotateBy_action, _acca);
     graph_add_edge(_leftRotateBy_action, m11 ());
     graph_add_edge(_leftRotateBy_action, m12 ());
@@ -1580,9 +1577,6 @@ namespace djnn
     this->somehow_activating () ? enable (_rightSkew_X_By_cy_coupling, damaged) : _rightSkew_X_By_cy_coupling->disable ();
     _rightSkew_X_By_da_coupling = new CouplingWithData (_rightSkew_X_By_da, ACTIVATION, _rightSkew_X_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightSkew_X_By_da_coupling, damaged) : _rightSkew_X_By_da_coupling->disable ();
-    graph_add_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
-    graph_add_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
-    graph_add_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
     graph_add_edge(_rightSkew_X_By_action, m11 ());
     graph_add_edge(_rightSkew_X_By_action, m12 ());
     graph_add_edge(_rightSkew_X_By_action, m14 ());
@@ -1611,9 +1605,6 @@ namespace djnn
     this->somehow_activating () ? enable (_leftSkew_X_By_cy_coupling, damaged) : _leftSkew_X_By_cy_coupling->disable ();
     _leftSkew_X_By_da_coupling = new CouplingWithData (_leftSkew_X_By_da, ACTIVATION, _leftSkew_X_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftSkew_X_By_da_coupling, damaged) : _leftSkew_X_By_da_coupling->disable ();
-    graph_add_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
-    graph_add_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
-    graph_add_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
     graph_add_edge(_leftSkew_X_By_action, m11 ());
     graph_add_edge(_leftSkew_X_By_action, m12 ());
     graph_add_edge(_leftSkew_X_By_action, m14 ());
@@ -1642,9 +1633,6 @@ namespace djnn
     this->somehow_activating () ? enable (_rightSkew_Y_By_cy_coupling, damaged) : _rightSkew_Y_By_cy_coupling->disable ();
     _rightSkew_Y_By_da_coupling = new CouplingWithData (_rightSkew_Y_By_da, ACTIVATION, _rightSkew_Y_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_rightSkew_Y_By_da_coupling, damaged) : _rightSkew_Y_By_da_coupling->disable ();
-    graph_add_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
-    graph_add_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
-    graph_add_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
     graph_add_edge(_rightSkew_Y_By_action, m11 ());
     graph_add_edge(_rightSkew_Y_By_action, m12 ());
     graph_add_edge(_rightSkew_Y_By_action, m14 ());
@@ -1673,9 +1661,6 @@ namespace djnn
     this->somehow_activating () ? enable (_leftSkew_Y_By_cy_coupling, damaged) : _leftSkew_Y_By_cy_coupling->disable ();
     _leftSkew_Y_By_da_coupling = new CouplingWithData (_leftSkew_Y_By_da, ACTIVATION, _leftSkew_Y_By_action, ACTIVATION);
     this->somehow_activating () ? enable (_leftSkew_Y_By_da_coupling, damaged) : _leftSkew_Y_By_da_coupling->disable ();
-    graph_add_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
-    graph_add_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
-    graph_add_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
     graph_add_edge(_leftSkew_Y_By_action, m11 ());
     graph_add_edge(_leftSkew_Y_By_action, m12 ());
     graph_add_edge(_leftSkew_Y_By_action, m14 ());
@@ -1748,8 +1733,6 @@ namespace djnn
   {
     if (_rightTranslateBy_action){
       remove_state_dependency (get_parent (), _rightTranslateBy_action);
-      graph_remove_edge(_rightTranslateBy_dx, _rightTranslateBy_action);
-      graph_remove_edge(_rightTranslateBy_dy, _rightTranslateBy_action);
       graph_remove_edge(_rightTranslateBy_action, this->m11 ());
       graph_remove_edge(_rightTranslateBy_action, this->m12 ());
       graph_remove_edge(_rightTranslateBy_action, this->m14 ());
@@ -1766,8 +1749,6 @@ namespace djnn
 
     if (_leftTranslateBy_action){
       remove_state_dependency (get_parent (), _leftTranslateBy_action);
-      graph_remove_edge(_leftTranslateBy_dx, _leftTranslateBy_action);
-      graph_remove_edge(_leftTranslateBy_dy, _leftTranslateBy_action);
       graph_remove_edge(_leftTranslateBy_action, this->m11 ());
       graph_remove_edge(_leftTranslateBy_action, this->m12 ());
       graph_remove_edge(_leftTranslateBy_action, this->m14 ());
@@ -1784,10 +1765,6 @@ namespace djnn
 
     if (_rightScaleBy_action) {
       remove_state_dependency (get_parent (), _rightScaleBy_action);
-      graph_remove_edge(_rightScaleBy_cx, _rightScaleBy_action);
-      graph_remove_edge(_rightScaleBy_cy, _rightScaleBy_action);
-      graph_remove_edge(_rightScaleBy_sx, _rightScaleBy_action);
-      graph_remove_edge(_rightScaleBy_sy, _rightScaleBy_action);
       graph_remove_edge(_rightScaleBy_action, _accsx);
       graph_remove_edge(_rightScaleBy_action, _accsy);
       graph_remove_edge(_rightScaleBy_action, this->m11 ());
@@ -1810,10 +1787,6 @@ namespace djnn
 
     if (_leftScaleBy_action) {
       remove_state_dependency (get_parent (), _leftScaleBy_action);
-      graph_remove_edge(_leftScaleBy_cx, _leftScaleBy_action);
-      graph_remove_edge(_leftScaleBy_cy, _leftScaleBy_action);
-      graph_remove_edge(_leftScaleBy_sx, _leftScaleBy_action);
-      graph_remove_edge(_leftScaleBy_sy, _leftScaleBy_action);
       graph_remove_edge(_leftScaleBy_action, _accsx);
       graph_remove_edge(_leftScaleBy_action, _accsy);
       graph_remove_edge(_leftScaleBy_action, this->m11 ());
@@ -1836,9 +1809,6 @@ namespace djnn
 
     if (_rightRotateBy_action) {
       remove_state_dependency (get_parent (), _rightRotateBy_action);
-      graph_remove_edge(_rightRotateBy_cx, _rightRotateBy_action);
-      graph_remove_edge(_rightRotateBy_cy, _rightRotateBy_action);
-      graph_remove_edge(_rightRotateBy_da, _rightRotateBy_action);
       graph_remove_edge(_rightRotateBy_action, _acca);
       graph_remove_edge(_rightRotateBy_action, this->m11 ());
       graph_remove_edge(_rightRotateBy_action, this->m12 ());
@@ -1858,9 +1828,6 @@ namespace djnn
 
     if (_leftRotateBy_action) {
       remove_state_dependency (get_parent (), _leftRotateBy_action);
-      graph_remove_edge(_leftRotateBy_cx, _leftRotateBy_action);
-      graph_remove_edge(_leftRotateBy_cy, _leftRotateBy_action);
-      graph_remove_edge(_leftRotateBy_da, _leftRotateBy_action);
       graph_remove_edge(_leftRotateBy_action, _acca);
       graph_remove_edge(_leftRotateBy_action, this->m11 ());
       graph_remove_edge(_leftRotateBy_action, this->m12 ());
@@ -1880,9 +1847,6 @@ namespace djnn
 
     if (_rightSkew_X_By_action) {
       remove_state_dependency (get_parent (), _rightSkew_X_By_action);
-      graph_remove_edge(_rightSkew_X_By_cx, _rightSkew_X_By_action);
-      graph_remove_edge(_rightSkew_X_By_cy, _rightSkew_X_By_action);
-      graph_remove_edge(_rightSkew_X_By_da, _rightSkew_X_By_action);
       graph_remove_edge(_rightSkew_X_By_action, this->m11 ());
       graph_remove_edge(_rightSkew_X_By_action, this->m12 ());
       graph_remove_edge(_rightSkew_X_By_action, this->m14 ());
@@ -1901,9 +1865,6 @@ namespace djnn
 
     if (_leftSkew_X_By_action) {
       remove_state_dependency (get_parent (), _leftSkew_X_By_action);
-      graph_remove_edge(_leftSkew_X_By_cx, _leftSkew_X_By_action);
-      graph_remove_edge(_leftSkew_X_By_cy, _leftSkew_X_By_action);
-      graph_remove_edge(_leftSkew_X_By_da, _leftSkew_X_By_action);
       graph_remove_edge(_leftSkew_X_By_action, this->m11 ());
       graph_remove_edge(_leftSkew_X_By_action, this->m12 ());
       graph_remove_edge(_leftSkew_X_By_action, this->m14 ());
@@ -1922,9 +1883,6 @@ namespace djnn
 
     if (_rightSkew_Y_By_action) {
       remove_state_dependency (get_parent (), _rightSkew_Y_By_action);
-      graph_remove_edge(_rightSkew_Y_By_cx, _rightSkew_Y_By_action);
-      graph_remove_edge(_rightSkew_Y_By_cy, _rightSkew_Y_By_action);
-      graph_remove_edge(_rightSkew_Y_By_da, _rightSkew_Y_By_action);
       graph_remove_edge(_rightSkew_Y_By_action, this->m11 ());
       graph_remove_edge(_rightSkew_Y_By_action, this->m12 ());
       graph_remove_edge(_rightSkew_Y_By_action, this->m14 ());
@@ -1943,9 +1901,6 @@ namespace djnn
 
     if (_leftSkew_Y_By_action) {
       remove_state_dependency (get_parent (), _leftSkew_Y_By_action);
-      graph_remove_edge(_leftSkew_Y_By_cx, _leftSkew_Y_By_action);
-      graph_remove_edge(_leftSkew_Y_By_cy, _leftSkew_Y_By_action);
-      graph_remove_edge(_leftSkew_Y_By_da, _leftSkew_Y_By_action);
       graph_remove_edge(_leftSkew_Y_By_action, this->m11 ());
       graph_remove_edge(_leftSkew_Y_By_action, this->m12 ());
       graph_remove_edge(_leftSkew_Y_By_action, this->m14 ());

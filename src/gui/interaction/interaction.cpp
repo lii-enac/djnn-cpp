@@ -111,7 +111,6 @@ namespace djnn
     _c_update(&_move_touch_action, ACTIVATION, srt->get_update_action (), ACTIVATION)
   {
     //_c_move = new Coupling (_move_touch_action, ACTIVATION, srt->_update_action, ACTIVATION);
-    graph_add_edge (&_move_touch_action, srt->get_update_action ());
     _cpl.enable ();
     _c_update.enable ();
   }

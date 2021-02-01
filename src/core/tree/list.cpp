@@ -359,9 +359,6 @@ namespace djnn
     _c_next.disable ();
     _c_previous.disable ();
     _c_reset.disable ();
-    graph_add_edge (&_next, &_next_action);
-    graph_add_edge (&_previous, &_previous_action);
-    graph_add_edge (&_reset, &_reset_action);
     finalize_construction (parent, name);
   }
 
@@ -370,9 +367,6 @@ namespace djnn
     remove_state_dependency (get_parent (), &_next_action);
     remove_state_dependency (get_parent (), &_previous_action);
     remove_state_dependency (get_parent (), &_reset_action);
-    graph_remove_edge (&_next, &_next_action);
-    graph_remove_edge (&_previous, &_previous_action);
-    graph_remove_edge (&_reset, &_reset_action);
   }
 
   void

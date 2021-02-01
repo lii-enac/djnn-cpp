@@ -71,8 +71,6 @@ namespace djnn
     _cinX->disable ();
     _cinY = new Coupling (_inY, ACTIVATION, _action, ACTIVATION);
     _cinY->disable ();
-    graph_add_edge(_inX, _action);
-    graph_add_edge(_inY, _action);
     graph_add_edge(_action, _outX);
     graph_add_edge(_action, _outY);
 
@@ -85,8 +83,6 @@ namespace djnn
     remove_state_dependency (get_parent (), _action);
     graph_remove_edge(_action, _outY);
     graph_remove_edge(_action, _outX);
-    graph_remove_edge(_inY, _action);
-    graph_remove_edge(_inX, _action);
  
     delete _cinY;
     delete _cinX;
@@ -168,8 +164,6 @@ namespace djnn
     _cinX->disable ();
     _cinY = new Coupling (_inY, ACTIVATION, _action, ACTIVATION);
     _cinY->disable ();
-    graph_add_edge(_inX, _action);
-    graph_add_edge(_inY, _action);
     graph_add_edge(_action, _outX);
     graph_add_edge(_action, _outY);
 
@@ -180,8 +174,6 @@ namespace djnn
   {
 
     remove_state_dependency (get_parent (), _action);
-    graph_remove_edge(_inX, _action);
-    graph_remove_edge(_inY, _action);
     graph_remove_edge(_action, _outX);
     graph_remove_edge(_action, _outY);
     delete _cinY;

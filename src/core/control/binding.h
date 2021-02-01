@@ -27,7 +27,6 @@ namespace djnn {
     CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : _c (src, src_flag, dst, dst_flag, false) {
       _c.disable ();
-      graph_add_edge (src, dst);
     }
 
     CoreBinding (CoreProcess* src, CoreProcess* dst)
@@ -42,7 +41,6 @@ namespace djnn {
     : CoreBinding (parent, name, src, ACTIVATION, dst, ACTIVATION) {}
 
     ~CoreBinding () {
-      graph_remove_edge (get_src(), get_dst());
     }
 
     CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space
