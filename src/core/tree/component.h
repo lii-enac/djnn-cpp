@@ -83,7 +83,7 @@ namespace djnn {
   {
   public:
     AssignmentSequence (ParentProcess* parent, const std::string& name, bool is_model);
-    virtual ~AssignmentSequence () {};
+    virtual ~AssignmentSequence ();
     void add_child (FatChildProcess* c, const std::string& name) override;
     void draw () override {}
     void impl_activate () override;

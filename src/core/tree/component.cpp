@@ -381,7 +381,10 @@ namespace djnn
   {
     if (c == nullptr)
       return;
-
+    Assignment *a = dynamic_cast<Assignment*> (c);
+    if (a != nullptr) {
+      graph_add_edge (this, a->get_dst());
+    }
     _children.push_back (c);
     /* WARNING should we authorize multiple parenthood? */
     if (c->get_parent () != nullptr && c->get_parent () != this) {
@@ -395,6 +398,16 @@ namespace djnn
   AssignmentSequence::post_activate ()
   {
     post_activate_auto_deactivate ();
+  }
+
+  AssignmentSequence::~AssignmentSequence ()
+  {
+    for (auto c : _children) {
+      Assignment *a = dynamic_cast<Assignment*> (c);
+      if (a != nullptr) {
+        graph_remove_edge (this, a->get_dst());
+      }
+    }
   }
 
 #ifndef DJNN_NO_SERIALIZE
