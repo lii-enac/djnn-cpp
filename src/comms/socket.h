@@ -1,6 +1,8 @@
 #pragma once
 
 #ifdef _WIN32
+  // TODO: Windows hack - do better
+  #define NOGDI
   /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
   #include <winsock2.h>
   #include <ws2tcpip.h>
