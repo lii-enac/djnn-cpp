@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <utility> // std::pair
+#include <string>
 
 namespace djnn {
   class CoreProcess;

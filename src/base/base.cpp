@@ -12,6 +12,8 @@
  *
  */
 
+#include <vector>
+#include <string>
 
 namespace djnn
 {

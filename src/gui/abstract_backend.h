@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <utility> // std::pair
+
 #include "shape/shapes_fwd.h"
 #include "style/style_fwd.h"
 #include "style/style_types.h"

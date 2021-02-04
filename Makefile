@@ -345,6 +345,7 @@ CXXFLAGS += -std=c++14
 # ---------------------------------------
 # precompiled headers
 
+ifneq ($(use_pch),no)
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
@@ -389,6 +390,8 @@ ifeq ($(compiler),gnu)
 CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
 #-fno-implicit-templates
 #$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
+endif
+
 endif
 
 # ---------------------------------------

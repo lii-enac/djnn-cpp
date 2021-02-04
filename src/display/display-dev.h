@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <vector> // loaded modules
 
 #include "abstract_display.h"
 
@@ -22,6 +23,8 @@ namespace djnn {
   extern int mouse_tracking;
   extern int full_screen;
   extern int hide_pointer;
+
+  class FatProcess;
 
   extern FatProcess *GPUs;
   extern FatProcess *Displays;
