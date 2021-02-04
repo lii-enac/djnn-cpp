@@ -25,6 +25,7 @@ namespace djnn {
 		virtual ~IOFD() override;
 
 		int readfd() const { return _readfd; }
+		void setfd(int fd) { _readfd = fd; }
 
 	protected:
 		// FatProcess
