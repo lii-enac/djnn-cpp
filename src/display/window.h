@@ -17,19 +17,21 @@
 
 #include "core/ontology/process.h"
 #include "core/control/action.h"
-#include "core/tree/spike.h"
-#include "core/tree/blank.h"
 
-#include "core/tree/int_property.h"
-#include "core/tree/double_property.h"
-#include "core/tree/text_property.h"
 #include "core/tree/ref_property.h"
-#include "core/tree/bool_property.h"
 
 #include <memory>
 
 namespace djnn
 {
+  class IntProperty;
+  class DoubleProperty;
+  class TextProperty;
+  class BoolProperty;
+  class RefProperty;
+  class Spike;
+  class Blank;
+  class AbstractColor;
 
   class Picking;
   class WinImpl {
@@ -45,6 +47,7 @@ namespace djnn
     virtual void perform_screenshot (const std::string& path) {}
     virtual void set_opacity (double opacity) {}
     virtual void set_background_opacity (bool is_opaque) {}
+    virtual void set_background_color (int r, int g, int b) {}
     virtual void update_geometry () {}
      
   private:
@@ -80,6 +83,12 @@ namespace djnn
       public:
         BackgroundOpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_background_opacity (); }
+    };
+    class BackgroundColorAction : public Action
+    {
+      public:
+        BackgroundColorAction (Window * parent, const std::string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->set_background_color (); }
     };
     class GeometryAction : public Action
     {
@@ -133,15 +142,18 @@ namespace djnn
 
     Blank * refreshed () { return _refreshed; }
 
-    FatProcess* screenshot () { return _screenshot; }
+    Spike* screenshot () { return _screenshot; }
     TextProperty* screenshot_path () { return _screenshot_path; }
     void perform_screenshot ();
 
     DoubleProperty* opacity () { return _opacity; }
     void set_opacity ();
 
-    BoolProperty* background_opacity () { return _background_opacity; }
+    DoubleProperty* background_opacity () { return _background_opacity; }
     void set_background_opacity ();
+
+    AbstractColor* background_color () { return _background_color; }
+    void set_background_color ();
 
     void update_geometry ();
 
@@ -191,9 +203,13 @@ namespace djnn
     OpacityAction * _opacity_action;
     Coupling * _c_opacity;
 
-    BoolProperty* _background_opacity;
+    DoubleProperty* _background_opacity;
     BackgroundOpacityAction * _background_opacity_action;
     Coupling * _c_background_opacity;
+
+    AbstractColor* _background_color;
+    BackgroundColorAction * _background_color_action;
+    Coupling * _c_background_color;
 
     GeometryAction * _geometry_action;
     Coupling * _c_geometry_x;

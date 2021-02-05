@@ -21,6 +21,17 @@
 #include "display/update_drawing.h"
 
 #include "core/tree/spike.h"
+#include "core/tree/blank.h"
+
+#include "core/tree/int_property.h"
+#include "core/tree/double_property.h"
+#include "core/tree/text_property.h"
+#include "core/tree/ref_property.h"
+#include "core/tree/bool_property.h"
+
+#include "gui/style/color.h"
+
+#include "core/tree/spike.h"
 #include "core/tree/component.h"
 #include "core/tree/set.h"
 #include "core/tree/list.h"
@@ -88,10 +99,15 @@ namespace djnn
     _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
     graph_add_edge (_opacity, _opacity_action);
 
-    _background_opacity = new BoolProperty (this, "background_opacity", true);
+    _background_opacity = new DoubleProperty (this, "background_opacity", true);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
     graph_add_edge (_background_opacity, _background_opacity_action);
+
+    _background_color = new FillColor (this, "background_color", 0,0,0);
+    _background_color_action = new BackgroundColorAction (this, "background_color_action");
+    _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
+    graph_add_edge (_background_color, _background_color_action);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
 
@@ -125,6 +141,7 @@ namespace djnn
     _c_screenshot->enable();
     _c_opacity->enable ();
     _c_background_opacity->enable ();
+    _c_background_color->enable ();
     _win_impl->impl_activate ();
   }
   
@@ -135,6 +152,7 @@ namespace djnn
     _c_screenshot->disable();
     _c_opacity->disable ();
     _c_background_opacity->disable ();
+    _c_background_color->disable ();
     _win_impl->impl_deactivate ();
   }
 
@@ -165,6 +183,11 @@ namespace djnn
     delete _c_background_opacity;
     delete _background_opacity_action;
     delete _background_opacity;
+
+    graph_remove_edge (_background_color, _background_color_action);
+    delete _c_background_color;
+    delete _background_color_action;
+    delete _background_color;
 
     delete _refreshed;
 
@@ -233,6 +256,16 @@ namespace djnn
   Window::set_background_opacity ()
   {
     _win_impl->set_background_opacity (_background_opacity->get_value());
+  }
+
+  void
+  Window::set_background_color ()
+  {
+    _win_impl->set_background_color (
+      _background_color->r()->get_value(),
+      _background_color->g()->get_value(),
+      _background_color->b()->get_value()
+      );
   }
 
   void

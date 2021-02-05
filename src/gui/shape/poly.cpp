@@ -19,6 +19,7 @@
 #include "display/display-dev.h" // DisplayBackend::instance
 #include "gui/shape/sdf.h"
 
+#include "core/tree/blank.h"
 #include "core/tree/list.h"
 #include "display/window.h"
 #include "gui/shape/poly.h"

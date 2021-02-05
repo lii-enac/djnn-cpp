@@ -17,6 +17,15 @@
 #include "sdl_window.h"
 #include "display/display.h"
 
+#include "core/tree/spike.h"
+#include "core/tree/blank.h"
+
+#include "core/tree/int_property.h"
+#include "core/tree/double_property.h"
+#include "core/tree/text_property.h"
+#include "core/tree/ref_property.h"
+//#include "core/tree/bool_property.h"
+
 #include "exec_env/global_mutex.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "exec_env/main_loop.h"
