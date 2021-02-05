@@ -68,7 +68,7 @@ namespace djnn
 
     //graph_add_edge (&_text, &_update_size);
     //Graph:instance ().add_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
-    //Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr); // try to init geometry on creation
+    Backend::instance ()->update_text_geometry (this, nullptr, nullptr, nullptr, nullptr); // try to init geometry on creation
     finalize_construction (parent, name);
   }
 
