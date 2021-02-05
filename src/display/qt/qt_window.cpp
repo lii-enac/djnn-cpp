@@ -19,6 +19,12 @@
 
 #include "utils/debug.h"
 
+#include "core/tree/blank.h"
+
+#include "core/tree/int_property.h"
+#include "core/tree/double_property.h"
+#include "core/tree/text_property.h"
+
 #include "exec_env/qt/qt_mainloop.h"
 #include "display/display.h" // mouse_tracking full_screen hide_pointer
 #include "display/display-dev.h"
@@ -144,6 +150,12 @@ namespace djnn
     if( is_transparent ) {
       _qwidget->setStyleSheet("background-color: rgba(255, 0, 0, 128)");
     }
+  }
+
+  void
+  QtWindow::set_background_color (int r, int g, int b)
+  {
+    
   }
 
   void

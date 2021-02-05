@@ -15,6 +15,7 @@
  */
 
 #include "window.h"
+#include "background_color.h"
 
 #include "display/display-dev.h"
 #include "display/abstract_display.h"
@@ -28,8 +29,6 @@
 #include "core/tree/text_property.h"
 #include "core/tree/ref_property.h"
 #include "core/tree/bool_property.h"
-
-#include "gui/style/color.h"
 
 #include "core/tree/spike.h"
 #include "core/tree/component.h"
@@ -104,7 +103,7 @@ namespace djnn
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
     graph_add_edge (_background_opacity, _background_opacity_action);
 
-    _background_color = new FillColor (this, "background_color", 0,0,0);
+    _background_color = new BackgroundColor (this, "background_color", 0,0,0);
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
     _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
     graph_add_edge (_background_color, _background_color_action);

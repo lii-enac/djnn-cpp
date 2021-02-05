@@ -19,6 +19,8 @@
 
 #include "core/control/action.h"
 #include "abstract_style.h"
+
+
 namespace djnn
 {
   class AbstractColor : public AbstractStyle
@@ -44,7 +46,6 @@ namespace djnn
     AbstractColor (ParentProcess* parent, const std::string& name, int r, int g, int b);
     AbstractColor (ParentProcess* parent, const std::string& name, int v);
     virtual ~AbstractColor ();
-    
     
     void get_properties_values (double& r, double& g, double& b);
     virtual FatChildProcess* find_child_impl (const std::string&) override;

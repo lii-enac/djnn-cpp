@@ -35,4 +35,9 @@ typedef unsigned gperf_t;
 
   const std::string& get_parent_name (const CoreProcess *p, int up);
   const std::string get_hierarchy_name (const CoreProcess *p, int up=-1);
+
+  // for gen_prop.py
+  void enable (Coupling* c, CoreProcess* dst);
+  void remove_edge (Coupling *c);
+  void disable (Coupling *c);
 }

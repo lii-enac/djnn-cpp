@@ -31,7 +31,7 @@ namespace djnn
   class RefProperty;
   class Spike;
   class Blank;
-  class AbstractColor;
+  class BackgroundColor;
 
   class Picking;
   class WinImpl {
@@ -152,7 +152,7 @@ namespace djnn
     DoubleProperty* background_opacity () { return _background_opacity; }
     void set_background_opacity ();
 
-    AbstractColor* background_color () { return _background_color; }
+    BackgroundColor* background_color () { return _background_color; }
     void set_background_color ();
 
     void update_geometry ();
@@ -207,7 +207,7 @@ namespace djnn
     BackgroundOpacityAction * _background_opacity_action;
     Coupling * _c_background_opacity;
 
-    AbstractColor* _background_color;
+    BackgroundColor* _background_color;
     BackgroundColorAction * _background_color_action;
     Coupling * _c_background_color;
 
