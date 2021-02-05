@@ -13,8 +13,9 @@
  *
  */
 
-
-//#include "core/utils/ext/remotery/Remotery.h"
+#if RMT_ENABLED
+#include "core/utils/ext/remotery/Remotery.h"
+#endif
 
 //#include <locale.h>
 //#include "core/utils/error.h"
@@ -44,7 +45,10 @@ namespace djnn
   }
 */
   std::vector<StructureObserver*> structure_observer_list;
-//  Remotery* rmt;
+
+#if RMT_ENABLED
+  Remotery* rmt;
+#endif
 
   static bool __module_initialized = false;
 
@@ -59,7 +63,8 @@ namespace djnn
       //Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
-/*    rmtSettings* settings = rmt_Settings();
+#if RMT_ENABLED
+    rmtSettings* settings = rmt_Settings();
     if(settings) settings->reuse_open_port = RMT_TRUE;
 
     enum rmtError err = rmt_CreateGlobalInstance(&rmt);
@@ -67,7 +72,7 @@ namespace djnn
       //warning (nullptr, "Rmt error");
       //std::cerr << "rmt error " << err << __FL__;
     }
-*/
+#endif
   }
 
   extern void
@@ -78,7 +83,9 @@ namespace djnn
   {
     delete &Graph::instance (); // destructor will set Graph::_instance to nullptr since _instance is private
     //XML::clear_xml_parser ();
+#if RMT_ENABLED
     //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
+#endif
     //std::cerr << __PRETTY_FUNCTION__ << __FL__;
     delete_parentless_processes ();
     __module_initialized = false;
