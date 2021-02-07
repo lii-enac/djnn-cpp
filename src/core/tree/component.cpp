@@ -260,8 +260,9 @@ namespace djnn
   void
   Container::update_drawing ()
   {
-    if (get_activation_flag () == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     for (auto c : _children) {
       c->update_drawing ();
     }
@@ -271,8 +272,9 @@ namespace djnn
   Container::draw ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (get_activation_flag () == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     rmt_BeginCPUSample(container_draw, RMTSF_Recursive);
     ComponentObserver::instance ().start_draw ();
     for (auto c : _children) {
@@ -286,8 +288,9 @@ namespace djnn
   Container::pick ()
   {
     //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (get_activation_flag () == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     rmt_BeginCPUSample(container_pick, RMTSF_Recursive);
     //ComponentObserver::instance ().start_pick ();
     for (auto c : _children) {
@@ -300,10 +303,11 @@ namespace djnn
   AbstractGShape*
   Container::pick_analytical (PickAnalyticalContext& pac)
   {
-    PickAnalyticalContext pac_stacked = pac;
-    if (get_activation_flag () == DEACTIVATION) {
+    if (somehow_deactivating ())
       return nullptr;
-    }
+
+    PickAnalyticalContext pac_stacked = pac;
+
     AbstractGShape * picked = nullptr;
     for (auto p : _children) {
       AbstractGShape * picked_ = p->pick_analytical (pac_stacked);

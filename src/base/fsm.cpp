@@ -281,8 +281,9 @@ namespace djnn
   void
   FSM::draw ()
   {
-    if (get_activation_flag() == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     if (_cur_state != nullptr)
       _cur_state->draw ();
   }
@@ -290,8 +291,9 @@ namespace djnn
   void
   FSM::pick ()
   {
-    if (get_activation_flag() == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     if (_cur_state != nullptr)
       _cur_state->pick ();
   }
@@ -299,8 +301,9 @@ namespace djnn
   AbstractGShape*
   FSM::pick_analytical (PickAnalyticalContext& pac)
   {
-    if (get_activation_flag() == DEACTIVATION)
+    if (somehow_deactivating ())
       return nullptr;
+
     if (_cur_state != nullptr)
       return _cur_state->pick_analytical (pac);
     return nullptr;

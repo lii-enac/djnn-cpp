@@ -172,8 +172,9 @@ namespace djnn
   void
   SwitchRange::draw ()
   {
-    if (get_activation_flag () == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     if (_cur_branch != nullptr)
       _cur_branch->draw ();
   }
@@ -181,8 +182,9 @@ namespace djnn
   void
   SwitchRange::pick ()
   {
-    if (get_activation_flag() == DEACTIVATION)
+    if (somehow_deactivating ())
       return;
+
     if (_cur_branch != nullptr)
       _cur_branch->pick ();
   }
@@ -190,8 +192,9 @@ namespace djnn
   AbstractGShape*
   SwitchRange::pick_analytical (PickAnalyticalContext& pac)
   {
-    if (get_activation_flag() == DEACTIVATION)
+    if (somehow_deactivating ())
       return nullptr;
+
     if (_cur_branch != nullptr)
       return _cur_branch->pick_analytical (pac);
     return nullptr;
