@@ -32,8 +32,6 @@ namespace djnn {
   void
   UpdateDrawing::init ()
   {
-    //Graph::instance ()->add_output_node (instance ());
-    //update_display_initialized = true;
     instance ();
 
     // in smala that would be:
@@ -95,63 +93,15 @@ namespace djnn {
   UpdateDrawing::UpdateDrawing () :
     FatProcess ("UpdateDrawing")
   {
-    // NOTE: 07.2020 : move everything to init ()
-
-    // // in smala that would be:
-
-    // // UndelayedSpike _damaged
-    // // Bool _auto_refresh (true) // true by default, when set will enable or disable the coupling between damaged and draw_sync to offer client-provided, specific redraw policy
-    // // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable) // 
-    // // Spike _draw_sync      // external API to allow clients to directly trigger draw
-    // // Action _redraw_action // actual redraw action, output at the end of the activation vector
-
-    // // here '->' denotes a coupling, not a binding...
-    // // _damaged -> _draw_sync
-    // // _draw_sync -> _redraw_action
-    // // _auto_refresh -> _update_auto_refresh_action
-
-    // _damaged = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged
-    // _auto_refresh = new BoolProperty (this, "auto_refresh", true); // Bool _auto_refresh (true)
-    // _update_auto_refresh_action = new AutoRefreshAction (this, "auto_refresh_action"); // Action _update_auto_refresh_action (_c_redraw_when_damaged.en-dis-able)
-    // _draw_sync = new Spike (this, "draw_sync"); // Spike _draw_sync
-    // _redraw_action = new RedrawAction (this, "redraw_action"); // Action _redraw_action
-    // Graph::instance ().add_output_node (_redraw_action);
-  
-    // _c_redraw_when_damaged = new Coupling (_damaged, ACTIVATION, _draw_sync, ACTIVATION); // _damaged -> _draw_sync
-    // graph_add_edge (_damaged, _draw_sync);
-    // _c_redraw_when_draw_sync = new Coupling (_draw_sync, ACTIVATION, _redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
-    // // no need to add_edge from _draw_sync to _redraw_action since _redraw_action is an output
-  
-    // _c_update_auto_refresh = new Coupling (_auto_refresh, ACTIVATION, _update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
-    // graph_add_edge (_auto_refresh, _update_auto_refresh_action);
-
-    // set_activation_state (ACTIVATED);
-
+    // NOTE: 07.2020: moved everything to init ()
     // //finalize_construction (nullptr, "UpdateDrawing");
   }
 
   UpdateDrawing::~UpdateDrawing ()
   { 
-   UpdateDrawing::clear ();
-
-   //NOTE: 07.2020 : move everything to clear ()
-
-   // graph_remove_edge (_damaged, _draw_sync);
-   // graph_remove_edge (_auto_refresh, _update_auto_refresh_action);
-   // Graph::instance ().remove_output_node (_redraw_action);
-
-   // delete _c_redraw_when_draw_sync;
-   // delete _c_redraw_when_damaged;
-   // delete _redraw_action;
-   // delete _c_update_auto_refresh;
-
-   // delete _damaged;
-   // delete _draw_sync;
-   // delete _auto_refresh;
-   // delete _update_auto_refresh_action;
+    //NOTE: 07.2020: moved everything to clear ()
+    UpdateDrawing::clear ();
   }
-
-  
 
   void 
   UpdateDrawing::RedrawAction::impl_activate () 

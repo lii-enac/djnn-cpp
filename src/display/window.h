@@ -101,6 +101,12 @@ namespace djnn
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 
+    void update () { _win_impl->update (); };
+    void impl_activate () override;
+    void impl_deactivate () override;
+    Picking* picking_view () { return _win_impl->picking_view ();}
+    void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
+
     DoubleProperty* pos_x () { return _pos_x; }
     DoubleProperty* pos_y () { return _pos_y; }
     DoubleProperty* wheel_dx () { return _w_dx; }
@@ -118,11 +124,7 @@ namespace djnn
     WinImpl* win_impl () { return _win_impl; }
     void set_refresh (bool r) { _refresh = r; }
     bool refresh () { return _refresh; }
-    void update () { _win_impl->update (); };
-    void impl_activate () override;
-    void impl_deactivate () override;
-    Picking* picking_view () { return _win_impl->picking_view ();}
-    void set_picking_view (Picking* p) { _win_impl->set_picking_view(p);}
+    
     FatProcess* press () { return _press; }
     FatProcess* move () { return _move; }
     FatProcess* release () { return _release; }
