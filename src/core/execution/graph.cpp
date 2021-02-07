@@ -16,9 +16,8 @@
 
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
-
+#include "core/utils/ext/remotery/Remotery.h"
 #include "utils/debug.h"
-
 #include "exec_env/exec_env-dev.h"
 
 #include <algorithm>
@@ -455,7 +454,7 @@ namespace djnn
   {
     if (_sorted)
       return;
-
+//rmt_BeginCPUSample(Graph_sort, RMTSF_Recursive);
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     _t1 ();
     #endif
@@ -489,6 +488,7 @@ namespace djnn
     sorted_average = sorted_total / sorted_counter;
     cerr << "\033[0m"  << endl;
     #endif
+//rmt_EndCPUSample();
   }
 
   void
@@ -503,7 +503,7 @@ namespace djnn
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     _t1 ();
     #endif
-    
+rmt_BeginCPUSample(Graph_exec, 0);
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     {
       std::map<CoreProcess*, int> already_done;
@@ -540,6 +540,8 @@ namespace djnn
       delete p;
     }
     _scheduled_delete_processes.clear ();
+
+rmt_EndCPUSample();
 
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     display_exec_stats ();
