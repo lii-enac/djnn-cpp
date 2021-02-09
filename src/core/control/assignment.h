@@ -44,6 +44,16 @@ namespace djnn {
       graph_remove_edge (get_src (), get_dst ());
     }
 
+    void set_parent (ParentProcess* parent) override
+    {
+      /* in case of re-parenting remove edge dependency in graph */
+      if (get_parent ()){
+        remove_state_dependency (get_parent (), get_dst ());
+      }
+      add_state_dependency (parent, get_dst ());
+      CoreProcess::set_parent (parent);
+    }
+
     CoreProcess* get_src () { return _src; }
     CoreProcess* get_dst () { return _dst; }
     void perform_action ();
@@ -110,6 +120,15 @@ public:
       finalize_construction (parent, name);
     }
 
+    void set_parent (ParentProcess* parent) override
+    {
+      /* in case of re-parenting remove edge dependency in graph */
+      if (get_parent ()){
+        remove_state_dependency (get_parent (), get_dst ());
+      }
+      add_state_dependency (parent, get_dst ());
+      FatProcess::set_parent (parent);
+    }
     // for legacy reason, to get rid of?
     Assignment (ParentProcess* parent, const std::string& name,
                    CoreProcess* src, const std::string& sspec,

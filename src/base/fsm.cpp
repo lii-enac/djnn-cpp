@@ -253,6 +253,7 @@ namespace djnn
   _fsm_state (this, "state", ""),
   _initial (this, "initial", "")
   { 
+    set_state_dependency (&_fsm_state);
     /* with state_dependency */
     finalize_construction (parent, name, &_fsm_state);
   }

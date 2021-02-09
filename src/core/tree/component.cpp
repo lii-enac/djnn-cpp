@@ -52,6 +52,9 @@ namespace djnn
     for (auto s: structure_observer_list) {
       s->add_container (this);
     }
+    if (parent) {
+      set_state_dependency (parent->state_dependency());
+    }
   }
 
 

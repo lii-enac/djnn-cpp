@@ -36,11 +36,12 @@ namespace djnn
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),
   _action (this, "switch_action"),
-  _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION, true),
+  _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION),
   _cur_branch (nullptr)
   {
     add_symbol ("state", &_branch_name);
     _c_branch.disable ();
+    set_state_dependency (&_branch_name);
     finalize_construction (parent, name, &_action);
   }
   
