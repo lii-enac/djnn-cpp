@@ -55,7 +55,8 @@ namespace djnn {
     Graph::instance ().add_output_node (_instance->_redraw_action);
   
     _instance->_c_redraw_when_damaged = new Coupling (_instance->_damaged, ACTIVATION, _instance->_draw_sync, ACTIVATION); // _damaged -> _draw_sync
-    _instance->_c_redraw_when_draw_sync = new BasicCouplingToSink (_instance->_draw_sync, _instance->_redraw_action); // _draw_sync -> _redraw_action
+    _instance->_c_redraw_when_draw_sync = new Coupling (_instance->_draw_sync, ACTIVATION, _instance->_redraw_action, ACTIVATION); // _draw_sync -> _redraw_action
+    graph_remove_edge (_instance->_draw_sync, _instance->_redraw_action); // remove the edge added by the coupling
     // no need to add_edge from _draw_sync to _redraw_action since _redraw_action is an output
   
     _instance->_c_update_auto_refresh = new Coupling (_instance->_auto_refresh, ACTIVATION, _instance->_update_auto_refresh_action, ACTIVATION); // _auto_refresh -> _update_auto_refresh_action
@@ -73,6 +74,7 @@ namespace djnn {
       _instance->_win_list.clear ();
       Graph::instance ().remove_output_node (_instance->_redraw_action);
       
+      graph_add_edge (_instance->_draw_sync, _instance->_redraw_action); // this edge will be removed by the coupling's destructor but it doesn't exist anymore so add it now
       delete _instance->_c_redraw_when_draw_sync;
       delete _instance->_c_redraw_when_damaged;
       delete _instance->_redraw_action;
