@@ -37,7 +37,7 @@ namespace djnn
     } else {
       warning (src, std::string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
     }
-    if (!immediate_propagation) {
+    if (!immediate_propagation && src && dst) {
       graph_add_edge (src, dst);
     }
     set_dst_activation_flag (dst_flag);
@@ -59,7 +59,7 @@ namespace djnn
     case NONE_ACTIVATION:
       break;
     }
-    if (!is_immediate ()) {
+    if (!is_immediate () && _dst) {
       graph_remove_edge (_src, _dst);
     }
   }
