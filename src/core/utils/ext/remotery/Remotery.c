@@ -49,7 +49,6 @@
 #define RMT_IMPL
 #include "Remotery.h"
 
-#include <stdio.h>
 
 #ifdef RMT_PLATFORM_WINDOWS
   #pragma comment(lib, "ws2_32.lib")
@@ -93,7 +92,7 @@ static rmtBool g_SettingsInitialized = RMT_FALSE;
         #include <mach/mach.h>
         #include <sys/time.h>
     #else
-        #ifndef __FreeBSD__
+        #if !defined(__FreeBSD__) && !defined(__OpenBSD__)
             #include <malloc.h>
         #endif
     #endif
@@ -114,7 +113,7 @@ static rmtBool g_SettingsInitialized = RMT_FALSE;
 
     #ifdef RMT_PLATFORM_LINUX
         #include <time.h>
-        #ifdef __FreeBSD__
+        #if defined(__FreeBSD__) || defined(__OpenBSD__)
             #include <pthread_np.h>
         #else
             #include <sys/prctl.h>
@@ -249,7 +248,7 @@ static rmtU32 msTimer_Get()
         clock_t time = clock();
 
         // CLOCKS_PER_SEC is 128 on FreeBSD, causing div/0
-        #ifdef __FreeBSD__
+        #if defined(__FreeBSD__) || defined(__OpenBSD__)
             rmtU32 msTime = (rmtU32) (time * 1000 / CLOCKS_PER_SEC);
         #else
             rmtU32 msTime = (rmtU32) (time / (CLOCKS_PER_SEC / 1000));
@@ -703,7 +702,7 @@ static rmtError VirtualMirrorBuffer_Constructor(VirtualMirrorBuffer* buffer, rmt
     RMT_UNREFERENCED_PARAMETER(nb_attempts);
 
 #ifdef RMT_PLATFORM_LINUX
-    #ifdef __FreeBSD__
+    #if defined(__FreeBSD__) || defined(__OpenBSD__)
         char path[] = "/tmp/ring-buffer-XXXXXX";
     #else
         char path[] = "/dev/shm/ring-buffer-XXXXXX";
@@ -743,7 +742,7 @@ static rmtError VirtualMirrorBuffer_Constructor(VirtualMirrorBuffer* buffer, rmt
         rmtU8* desired_addr;
 
         // Create a page mapping for pointing to its physical address with multiple virtual pages
-        if (!AllocateTitlePhysicalPages( GetCurrentFatProcess(), MEM_LARGE_PAGES, &buffer->page_count, buffer->page_mapping ))
+        if (!AllocateTitlePhysicalPages( GetCurrentProcess(), MEM_LARGE_PAGES, &buffer->page_count, buffer->page_mapping ))
         {
             free( buffer->page_mapping );
             buffer->page_mapping = NULL;
@@ -769,7 +768,7 @@ static rmtError VirtualMirrorBuffer_Constructor(VirtualMirrorBuffer* buffer, rmt
         }
 
         // Failed to map the virtual pages; cleanup and try again
-        FreeTitlePhysicalPages( GetCurrentFatProcess(), buffer->page_count, buffer->page_mapping );
+        FreeTitlePhysicalPages( GetCurrentProcess(), buffer->page_count, buffer->page_mapping );
         buffer->page_mapping = NULL;
     }
 
@@ -985,7 +984,7 @@ static void VirtualMirrorBuffer_Destructor(VirtualMirrorBuffer* buffer)
         if (buffer->page_mapping != NULL)
         {
             VirtualFree( buffer->ptr, 0, MEM_DECOMMIT );	//needed in conjunction with FreeTitlePhysicalPages
-            FreeTitlePhysicalPages( GetCurrentFatProcess(), buffer->page_count, buffer->page_mapping );
+            FreeTitlePhysicalPages( GetCurrentProcess(), buffer->page_count, buffer->page_mapping );
             free( buffer->page_mapping );
             buffer->page_mapping = NULL;
         }
@@ -2303,12 +2302,9 @@ static rmtError TCPSocket_RunServer(TCPSocket* tcp_socket, rmtU16 port, rmtBool 
     assert(tcp_socket != NULL);
 
     // Try to create the socket
-    errno = 0;
     s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (s == SOCKET_ERROR) {
-        perror("remotery socket socket");
+    if (s == SOCKET_ERROR)
         return RMT_ERROR_SOCKET_CREATE_FAIL;
-    }
 
     if (reuse_open_port)
     {
@@ -2318,9 +2314,8 @@ static rmtError TCPSocket_RunServer(TCPSocket* tcp_socket, rmtU16 port, rmtBool 
         // (otherwise the same port can't be reused within TIME_WAIT)
         // I'm not checking for errors because if this fails (unlikely) we might still
         // be able to bind to the socket anyway
-            errno = 0;
         #ifdef RMT_PLATFORM_POSIX
-            setsockopt(s, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &enable, sizeof(enable));
+            setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
         #elif defined(RMT_PLATFORM_WINDOWS)
             // windows also needs SO_EXCLUSEIVEADDRUSE,
             // see http://www.andy-pearce.com/blog/posts/2013/Feb/so_reuseaddr-on-windows/
@@ -2328,29 +2323,21 @@ static rmtError TCPSocket_RunServer(TCPSocket* tcp_socket, rmtU16 port, rmtBool 
             enable = 1;
             setsockopt(s, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (char *)&enable, sizeof(enable));
         #endif
-            if(errno)
-            perror("remotery socket setsockopt");
     }
 
     // Bind the socket to the incoming port
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = htonl(limit_connections_to_localhost ? INADDR_LOOPBACK : INADDR_ANY);
     sin.sin_port = htons(port);
-    errno=0;
-    if (bind(s, (struct sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR) {
-        perror("remotery socket bind");
+    if (bind(s, (struct sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR)
         return RMT_ERROR_SOCKET_BIND_FAIL;
-    }
 
     // Connection is valid, remaining code is socket state modification
     tcp_socket->socket = s;
 
     // Enter a listening state with a backlog of 1 connection
-    errno = 0;
-    if (listen(s, 1) == SOCKET_ERROR) {
-        perror("remotery socket listen");
+    if (listen(s, 1) == SOCKET_ERROR)
         return RMT_ERROR_SOCKET_LISTEN_FAIL;
-    }
 
     // Set as non-blocking
     #ifdef RMT_PLATFORM_WINDOWS
@@ -2449,18 +2436,13 @@ static rmtError TCPSocket_AcceptConnection(TCPSocket* tcp_socket, TCPSocket** cl
     // Ensure there is an incoming connection
     assert(tcp_socket != NULL);
     status = TCPSocket_PollStatus(tcp_socket);
-    errno = 0;
-    if (status.error_state != RMT_ERROR_NONE || !status.can_read) {
+    if (status.error_state != RMT_ERROR_NONE || !status.can_read)
         return status.error_state;
-    }
 
     // Accept the connection
-    errno = 0;
     s = accept(tcp_socket->socket, 0, 0);
-    if (s == SOCKET_ERROR) {
-        perror("remotery socket accept");
+    if (s == SOCKET_ERROR)
         return RMT_ERROR_SOCKET_ACCEPT_FAIL;
-    }
 
 #ifdef SO_NOSIGPIPE
     // On POSIX systems, send() may send a SIGPIPE signal when writing to an
@@ -2476,14 +2458,10 @@ static rmtError TCPSocket_AcceptConnection(TCPSocket* tcp_socket, TCPSocket** cl
 #endif
     // Create a client socket for the new connection
     assert(client_socket != NULL);
-    errno = 0;
     New_0(TCPSocket, *client_socket);
-    if (error != RMT_ERROR_NONE) {
-        perror("remotery socket new_0");
+    if (error != RMT_ERROR_NONE)
         return error;
-    }
     (*client_socket)->socket = s;
-    perror("remotery socket accepted connection");
 
     return RMT_ERROR_NONE;
 }
@@ -2518,18 +2496,13 @@ static rmtError TCPSocket_Send(TCPSocket* tcp_socket, const void* data, rmtU32 l
     status.can_write = RMT_FALSE;
     while (!status.can_write)
     {
-        errno = 0;
         status = TCPSocket_PollStatus(tcp_socket);
-        if (status.error_state != RMT_ERROR_NONE) {
-            perror("remotery socke poll send");
+        if (status.error_state != RMT_ERROR_NONE)
             return status.error_state;
-        }
 
         cur_ms = msTimer_Get();
-        if (cur_ms - start_ms > timeout_ms) {
-            perror("remotery socket timeout");
+        if (cur_ms - start_ms > timeout_ms)
             return RMT_ERROR_SOCKET_SEND_TIMEOUT;
-        }
     }
 
     cur_data = (char*)data;
@@ -2550,10 +2523,8 @@ static rmtError TCPSocket_Send(TCPSocket* tcp_socket, const void* data, rmtU32 l
         if (bytes_sent == SOCKET_ERROR || bytes_sent == 0)
         {
             // Close the connection if sending fails for any other reason other than blocking
-            if (bytes_sent != 0 && !TCPSocketWouldBlock()) {
-                perror("remotery socket tcp would block");
+            if (bytes_sent != 0 && !TCPSocketWouldBlock())
                 return RMT_ERROR_SOCKET_SEND_FAIL;
-            }
 
             // First check for tick-count overflow and reset, giving a slight hitch every 49.7 days
             cur_ms = msTimer_Get();
@@ -2614,16 +2585,13 @@ static rmtError TCPSocket_Receive(TCPSocket* tcp_socket, void* data, rmtU32 leng
     start_ms = msTimer_Get();
     while (cur_data < end_data)
     {
-        errno = 0;
         int bytes_received = (int)recv(tcp_socket->socket, cur_data, (int)(end_data - cur_data), 0);
 
         if (bytes_received == SOCKET_ERROR || bytes_received == 0)
         {
             // Close the connection if receiving fails for any other reason other than blocking
-            if (bytes_received != 0 && !TCPSocketWouldBlock()) {
-                perror("remotery socket");
+            if (bytes_received != 0 && !TCPSocketWouldBlock())
                 return RMT_ERROR_SOCKET_RECV_FAILED;
-            }
 
             // First check for tick-count overflow and reset, giving a slight hitch every 49.7 days
             cur_ms = msTimer_Get();
@@ -4389,7 +4357,7 @@ static rmtError ThreadSampler_Constructor(ThreadSampler* thread_sampler)
 
     // Set the initial name to Thread0 etc. or use the existing Linux name.
     thread_sampler->name[0] = 0;
-    #if defined(RMT_PLATFORM_LINUX) && RMT_USE_POSIX_THREADNAMES && !defined(__FreeBSD__)
+    #if defined(RMT_PLATFORM_LINUX) && RMT_USE_POSIX_THREADNAMES && !defined(__FreeBSD__) && !defined(__OpenBSD__)
     prctl(PR_GET_NAME,thread_sampler->name,0,0,0);
     #else
     {
@@ -4886,7 +4854,7 @@ static rmtError Remotery_ThreadMain(rmtThread* thread)
 
         rmt_EndCPUSample();
 
-        // FatProcess any queue map requests
+        // Process any queue map requests
         if (LoadAcquirePointer((long* volatile*)&rmt->map_message_queue_fn) != NULL)
         {
             Remotery_MapMessageQueue(rmt);
@@ -5289,7 +5257,7 @@ static void SetDebuggerThreadName(const char* name)
         char name_clamp[16];
         name_clamp[0] = 0;
         strncat_s(name_clamp, sizeof(name_clamp), name, 15);
-        #ifdef __FreeBSD__
+        #if defined(__FreeBSD__) || defined(__OpenBSD__)
             pthread_set_name_np(pthread_self(), name_clamp);
         #else
             prctl(PR_SET_NAME,name_clamp,0,0,0);
@@ -6006,7 +5974,7 @@ static HRESULT rmtD3D11Finish(ID3D11Device* device, ID3D11DeviceContext* context
             }
         }
         //Give HyperThreading threads a breath on this spinlock.
-        YieldFatProcessor();
+        YieldProcessor();
     }
 
     if (disjoint.Disjoint == FALSE)
@@ -6438,7 +6406,7 @@ static void UpdateD3D11Frame(ThreadSampler* ts)
 
     rmt_BeginCPUSample(rmt_UpdateD3D11Frame, 0);
 
-    // FatProcess all messages in the D3D queue
+    // Process all messages in the D3D queue
     for (;;)
     {
         Msg_SampleTree* sample_tree;
@@ -6621,6 +6589,7 @@ struct OpenGL_t
     Buffer* flush_samples;
 };
 
+
 static GLenum rmtglGetError(void)
 {
     if (g_Remotery != NULL)
@@ -6633,19 +6602,12 @@ static GLenum rmtglGetError(void)
     return (GLenum)0;
 }
 
-extern const GLubyte * myGluErrorString(GLuint err);
-#define CHKGL {int err = rmtglGetError(); if(err) { fprintf(stderr, "%s %s:%d\n", myGluErrorString(err), __FILE__, __LINE__); }}
-
 
 #ifdef RMT_PLATFORM_LINUX
     #ifdef __cplusplus
         extern "C" void* glXGetProcAddressARB(const GLubyte*);
-        extern "C" void* eglGetProcAddress(const GLubyte*);
-        extern "C" void* SDL_GL_GetProcAddress(const GLubyte*);
     #else
         extern void* glXGetProcAddressARB(const GLubyte*);
-        extern void* eglGetProcAddress(const GLubyte*);
-        extern void* SDL_GL_GetProcAddress(const GLubyte*);
     #endif
 #endif
 
@@ -6670,12 +6632,7 @@ static ProcReturnType rmtglGetProcAddress(OpenGL* opengl, const char* symbol)
 
     #elif defined(RMT_PLATFORM_LINUX)
 
-        //return glXGetProcAddressARB((const GLubyte*)symbol);
-        //return eglGetProcAddress((const GLubyte*)symbol);
-        
-        ProcReturnType res = SDL_GL_GetProcAddress((const GLubyte*)symbol);
-        printf("%s %p %p\n", symbol, res, SDL_GL_GetProcAddress((const GLubyte*)"glFlush"));
-        return res;
+        return glXGetProcAddressARB((const GLubyte*)symbol);
 
     #endif
 
@@ -6741,15 +6698,15 @@ static void SyncOpenGLCpuGpuTimes(rmtU64* out_first_timestamp, rmtU64* out_last_
     GLint64 gpu_base = 0;
     int i;
 
-    rmtglFinish(); CHKGL;
+    rmtglFinish();
 
     for (i=0; i<RMT_GPU_CPU_SYNC_NUM_ITERATIONS; ++i)
     {
         rmtU64 half_RTT;
 
-        rmtglFinish(); CHKGL;
+        rmtglFinish();
         cpu_time_start = usTimer_Get(&g_Remotery->timer);
-        rmtglGetInteger64v(GL_TIMESTAMP, &gpu_base); CHKGL;
+        rmtglGetInteger64v(GL_TIMESTAMP, &gpu_base);
         cpu_time_stop = usTimer_Get(&g_Remotery->timer);
         //Average the time it takes a roundtrip from CPU to GPU
         //while doing nothing other than getting timestamps
@@ -6797,7 +6754,7 @@ static rmtError OpenGLTimestamp_Constructor(OpenGLTimestamp* stamp)
 
     // Create start/end timestamp queries
     assert(g_Remotery != NULL);
-    rmtglGenQueries(2, stamp->queries); CHKGL;
+    rmtglGenQueries(2, stamp->queries);
     error = rmtglGetError();
     if (error != GL_NO_ERROR)
         return RMT_ERROR_OPENGL_ERROR;
@@ -6812,7 +6769,7 @@ static void OpenGLTimestamp_Destructor(OpenGLTimestamp* stamp)
 
     // Destroy queries
     if (stamp->queries[0] != 0)
-        rmtglDeleteQueries(2, stamp->queries); CHKGL;
+        rmtglDeleteQueries(2, stamp->queries);
 }
 
 
@@ -6823,7 +6780,7 @@ static void OpenGLTimestamp_Begin(OpenGLTimestamp* stamp)
     // First query
     assert(g_Remotery != NULL);
     stamp->cpu_timestamp = usTimer_Get(&g_Remotery->timer);
-    rmtglQueryCounter(stamp->queries[0], GL_TIMESTAMP); CHKGL;
+    rmtglQueryCounter(stamp->queries[0], GL_TIMESTAMP);
 }
 
 
@@ -6833,7 +6790,7 @@ static void OpenGLTimestamp_End(OpenGLTimestamp* stamp)
 
     // Second query
     assert(g_Remotery != NULL);
-    rmtglQueryCounter(stamp->queries[1], GL_TIMESTAMP); CHKGL;
+    rmtglQueryCounter(stamp->queries[1], GL_TIMESTAMP);
 }
 
 static rmtBool OpenGLTimestamp_GetData(OpenGLTimestamp* stamp, rmtU64* out_start, rmtU64* out_end, rmtU64* out_first_timestamp, rmtU64* out_last_resync)
@@ -6848,21 +6805,21 @@ static rmtBool OpenGLTimestamp_GetData(OpenGLTimestamp* stamp, rmtU64* out_start
 
     // Check to see if all queries are ready
     // If any fail to arrive, wait until later
-    rmtglGetQueryObjectiv(stamp->queries[0], GL_QUERY_RESULT_AVAILABLE, &startAvailable); CHKGL;
+    rmtglGetQueryObjectiv(stamp->queries[0], GL_QUERY_RESULT_AVAILABLE, &startAvailable);
     if (!startAvailable)
         return RMT_FALSE;
-    rmtglGetQueryObjectiv(stamp->queries[1], GL_QUERY_RESULT_AVAILABLE, &endAvailable); CHKGL;
+    rmtglGetQueryObjectiv(stamp->queries[1], GL_QUERY_RESULT_AVAILABLE, &endAvailable);
     if (!endAvailable)
         return RMT_FALSE;
 
-    rmtglGetQueryObjectui64v(stamp->queries[0], GL_QUERY_RESULT, &start); CHKGL;
-    rmtglGetQueryObjectui64v(stamp->queries[1], GL_QUERY_RESULT, &end); CHKGL;
+    rmtglGetQueryObjectui64v(stamp->queries[0], GL_QUERY_RESULT, &start);
+    rmtglGetQueryObjectui64v(stamp->queries[1], GL_QUERY_RESULT, &end);
 
     // Mark the first timestamp. We may resync if we detect the GPU timestamp is in the
     // past (i.e. happened before the CPU command) since it should be impossible.
     assert(out_first_timestamp != NULL);
     if (*out_first_timestamp == 0 || ((start - *out_first_timestamp) / 1000ULL) < stamp->cpu_timestamp)
-        SyncOpenGLCpuGpuTimes(out_first_timestamp, out_last_resync); CHKGL;
+        SyncOpenGLCpuGpuTimes(out_first_timestamp, out_last_resync);
 
     // Calculate start and end timestamps (we want us, the queries give us ns)
     *out_start = (rmtU64)(start - *out_first_timestamp) / 1000ULL;
@@ -7049,7 +7006,7 @@ static void UpdateOpenGLFrame(void)
 
     rmt_BeginCPUSample(rmt_UpdateOpenGLFrame, 0);
 
-    // FatProcess all messages in the OpenGL queue
+    // Process all messages in the OpenGL queue
     while (1)
     {
         Msg_SampleTree* sample_tree;
@@ -7365,7 +7322,7 @@ static void UpdateMetalFrame(void)
 
     rmt_BeginCPUSample(rmt_UpdateMetalFrame, 0);
 
-    // FatProcess all messages in the Metal queue
+    // Process all messages in the Metal queue
     while (1)
     {
         Msg_SampleTree* sample_tree;
