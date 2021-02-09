@@ -19,6 +19,8 @@
 #include <map> // pch
 #include <string> // pch
 
+#include "utils/debug.h"
+
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
 #include <list> // pch
 #endif
