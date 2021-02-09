@@ -85,15 +85,15 @@ namespace djnn
   template <> const char name_info<my_clamp_min<double>>::left[];
   template <> const char name_info<my_clamp_min<double>>::right[];
   template <> const char name_info<my_clamp_min<double>>::serialize[];
-  typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> ClampMaxAction;
-  typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> ClampMax;
+  typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_min<double>, double, double> ClampMinAction;
+  typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_min<double>, double, double> ClampMin;
 
   template <typename T> struct my_clamp_max { T operator() (T t1, T t2) { return t2 > t1 ? t1 : t2;} };
   template <> const char name_info<my_clamp_max<double>>::left[];
   template <> const char name_info<my_clamp_max<double>>::right[];
   template <> const char name_info<my_clamp_max<double>>::serialize[];
-  typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> ClampMaxAction;
-  typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> ClampMax;
+  typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_max<double>, double, double> ClampMaxAction;
+  typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_max<double>, double, double> ClampMax;
 
 
 
