@@ -20,7 +20,7 @@ namespace djnn {
 
   class Spike : public FatProcess {
   public:
-    Spike (ParentProcess* parent, const std::string& name, bool model = false) : FatProcess (name, model) { set_is_model (true); finalize_construction (parent, name); };
+    Spike (ParentProcess* parent, const std::string& name, bool model = true) : FatProcess (name, model) { finalize_construction (parent, name); };
     virtual ~Spike () {};
     FatProcess* clone () override;
   protected:
