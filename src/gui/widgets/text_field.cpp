@@ -76,18 +76,18 @@ namespace djnn
     _end_selection_action     = new EndSelectionAction (this, "end_selection_action");
     _select_all_action        = new SelectAllAction (this, "select_all_action");
 
-    _c_clear      = new Coupling (_clear, ACTIVATION, _clear_action, ACTIVATION, true);
-    _c_on_del     = new Coupling (_del, ACTIVATION, _delete_action, ACTIVATION, true);
-    _c_on_suppr   = new Coupling (_suppr, ACTIVATION, _suppr_action, ACTIVATION, true);
-    _c_on_add     = new Coupling (_new_text, ACTIVATION, _add_string_action, ACTIVATION, true);
-    _c_on_press   = new Coupling (shape->find_child_impl ("press"), ACTIVATION, _update_cursor_pos_action, ACTIVATION, true);
-    _c_cut        = new Coupling (_cut, ACTIVATION, _cut_action, ACTIVATION, true);
-    _c_on_move    = new Coupling (_pointer_move, ACTIVATION, _pointer_move_action, ACTIVATION, true);
-    _c_move_left  = new Coupling (_move_left, ACTIVATION, _move_left_action, ACTIVATION, true);
-    _c_move_right = new Coupling (_move_right, ACTIVATION, _move_right_action, ACTIVATION, true);
-    _c_start_sel  = new Coupling (_start_selection, ACTIVATION, _start_selection_action, ACTIVATION, true);
-    _c_end_sel    = new Coupling (_end_selection, ACTIVATION, _end_selection_action, ACTIVATION, true);
-    _c_select_all = new Coupling (_select_all, ACTIVATION, _select_all_action, ACTIVATION, true);
+    _c_clear      = new Coupling (_clear, ACTIVATION, _clear_action, ACTIVATION);
+    _c_on_del     = new Coupling (_del, ACTIVATION, _delete_action, ACTIVATION);
+    _c_on_suppr   = new Coupling (_suppr, ACTIVATION, _suppr_action, ACTIVATION);
+    _c_on_add     = new Coupling (_new_text, ACTIVATION, _add_string_action, ACTIVATION);
+    _c_on_press   = new Coupling (shape->find_child_impl ("press"), ACTIVATION, _update_cursor_pos_action, ACTIVATION);
+    _c_cut        = new Coupling (_cut, ACTIVATION, _cut_action, ACTIVATION);
+    _c_on_move    = new Coupling (_pointer_move, ACTIVATION, _pointer_move_action, ACTIVATION);
+    _c_move_left  = new Coupling (_move_left, ACTIVATION, _move_left_action, ACTIVATION);
+    _c_move_right = new Coupling (_move_right, ACTIVATION, _move_right_action, ACTIVATION);
+    _c_start_sel  = new Coupling (_start_selection, ACTIVATION, _start_selection_action, ACTIVATION);
+    _c_end_sel    = new Coupling (_end_selection, ACTIVATION, _end_selection_action, ACTIVATION);
+    _c_select_all = new Coupling (_select_all, ACTIVATION, _select_all_action, ACTIVATION);
 
     finalize_construction (parent, name, nullptr);
   }
