@@ -88,7 +88,7 @@ namespace djnn {
     CoreProcess *_trigger;
     Init _init;
     FSMTransitionAction _fsm_action;
-    Coupling _c_src, _c_trigger_to_action, _c_action_to_fsm_action;
+    Coupling _c_src, _c_trigger_to_action;
     int _priority;
   };
 
