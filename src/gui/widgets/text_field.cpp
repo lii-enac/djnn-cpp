@@ -32,7 +32,7 @@ namespace djnn
     _move_y  = dynamic_cast<DoubleProperty*>(fpshape->find_child_impl ("move/y"));
 
     if (_press_x == nullptr || _press_y == nullptr) {
-      error (this, "wrong shape argument in LineEdit constructor");
+      error (this, "wrong shape argument in TextField constructor");
     }
     _text = dynamic_cast<Text*> (text);
     if (_text == nullptr) {
@@ -43,7 +43,7 @@ namespace djnn
       }
     }
     if (_text == nullptr) {
-      error (this, "wrong text argument in LineEdit constructor");
+      error (this, "wrong text argument in TextField constructor");
     }
     _inverted_matrix = (Homography*) _text->find_child_impl ("inverted_matrix");
 
