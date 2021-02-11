@@ -133,6 +133,7 @@ namespace djnn {
     void select_all ();
   private:
     void delete_text (int from, int to);
+    VoidProcess _ordering_node;
     FatProcess  *_move_left, *_move_right, *_del, *_suppr, *_clear, *_cut, *_start_selection, *_end_selection, *_pointer_move, *_select_all;
     Text *_text;
     TextProperty *_new_text;

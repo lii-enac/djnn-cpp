@@ -13,7 +13,7 @@
 
 #include "text_field.h"
 #include "core/utils/error.h"
-
+#include "core/core-dev.h" // graph
 #include "gui/transformation/homography.h"
 #include "gui/shape/svg_holder.h"
 
@@ -22,7 +22,7 @@ using namespace std;
 namespace djnn
 {
   TextField::TextField (ParentProcess* parent, const std::string& name, CoreProcess* text, CoreProcess* shape) :
-      FatProcess (name), _start_select (0), _end_select (0), _is_selecting (false)
+      FatProcess (name), _ordering_node (), _start_select (0), _end_select (0), _is_selecting (false)
   {
     auto * fpshape = dynamic_cast<FatProcess*>(shape);
     if(!fpshape) { error(this, "not a shape"); }
@@ -89,11 +89,42 @@ namespace djnn
     _c_end_sel    = new Coupling (_end_selection, ACTIVATION, _end_selection_action, ACTIVATION);
     _c_select_all = new Coupling (_select_all, ACTIVATION, _select_all_action, ACTIVATION);
 
+    graph_add_edge (_clear_action, &_ordering_node);
+    graph_add_edge (_delete_action, &_ordering_node);
+    graph_add_edge (_suppr_action, &_ordering_node);
+    graph_add_edge (_add_string_action, &_ordering_node);
+    graph_add_edge (_update_cursor_pos_action, &_ordering_node);
+    graph_add_edge (_cut_action, &_ordering_node);
+    graph_add_edge (_pointer_move_action, &_ordering_node);
+    graph_add_edge (_move_left_action, &_ordering_node);
+    graph_add_edge (_move_right_action, &_ordering_node);
+    graph_add_edge (_select_all_action, &_ordering_node);
+    graph_add_edge (&_ordering_node, _index);
+    graph_add_edge (&_ordering_node, _x_start);
+    graph_add_edge (&_ordering_node, _x_end);
+    graph_add_edge (&_ordering_node, _new_text);
+
+
     finalize_construction (parent, name, nullptr);
   }
 
   TextField::~TextField ()
   {
+    graph_remove_edge (_clear_action, &_ordering_node);
+    graph_remove_edge (_delete_action, &_ordering_node);
+    graph_remove_edge (_suppr_action, &_ordering_node);
+    graph_remove_edge (_add_string_action, &_ordering_node);
+    graph_remove_edge (_update_cursor_pos_action, &_ordering_node);
+    graph_remove_edge (_cut_action, &_ordering_node);
+    graph_remove_edge (_pointer_move_action, &_ordering_node);
+    graph_remove_edge (_move_left_action, &_ordering_node);
+    graph_remove_edge (_move_right_action, &_ordering_node);
+    graph_remove_edge (_select_all_action, &_ordering_node);
+    graph_remove_edge (&_ordering_node, _index);
+    graph_remove_edge (&_ordering_node, _x_start);
+    graph_remove_edge (&_ordering_node, _x_end);
+    graph_remove_edge (&_ordering_node, _new_text);
+
     delete _c_select_all;
     delete _c_end_sel;
     delete _c_start_sel;
