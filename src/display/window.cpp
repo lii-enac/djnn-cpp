@@ -120,7 +120,12 @@ namespace djnn
     _c_geometry_height = new Coupling (_height, ACTIVATION, _geometry_action, ACTIVATION);
     graph_add_edge (_height, _geometry_action);
 
-    impl_deactivate (); // disable couplings
+    //impl_deactivate (); // disable couplings
+    _c_damaged_update_drawing_damaged->disable();
+    _c_screenshot->disable();
+    _c_opacity->disable ();
+    _c_background_opacity->disable ();
+    _c_background_color->disable ();
   }
 
   Window::Window (ParentProcess* parent, const std::string& name, const std::string& title, double x, double y, double w,
