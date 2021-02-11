@@ -151,13 +151,6 @@ namespace djnn {
   void
   DRMConnector::init_connection (drmModeRes *res, drmModeConnector *drm_conn)
   {
-    memcpy(&_mode, &drm_conn->modes[0], sizeof(_mode));
-    _buffs[0].width = drm_conn->modes[0].hdisplay;
-    _buffs[1].width = drm_conn->modes[0].hdisplay;
-    _buffs[0].height = drm_conn->modes[0].vdisplay;
-    _buffs[1].height = drm_conn->modes[0].vdisplay;
-    _width.set_value (drm_conn->modes[0].hdisplay, false);
-    _height.set_value (drm_conn->modes[0].vdisplay, false);
 #if DEBUG
     cout << "available modes:\n";
     for (int i = 0; i < drm_conn->count_modes; i++) {
@@ -169,6 +162,14 @@ namespace djnn {
       cout << "\tvrefresh: " << drm_conn->modes[i].vrefresh << endl;
     }
 #endif
+    memcpy(&_mode, &drm_conn->modes[0], sizeof(_mode));
+    _buffs[0].width = drm_conn->modes[0].hdisplay;
+    _buffs[1].width = drm_conn->modes[0].hdisplay;
+    _buffs[0].height = drm_conn->modes[0].vdisplay;
+    _buffs[1].height = drm_conn->modes[0].vdisplay;
+    _width.set_value (drm_conn->modes[0].hdisplay, false);
+    _height.set_value (drm_conn->modes[0].vdisplay, false);
+
 
     int ret = get_crtc(res, drm_conn);
     if (!ret) {
@@ -268,6 +269,7 @@ namespace djnn {
     buff *b = &_buffs[0];
     int ret = drmModeSetCrtc (_fd, _crtc_id, b->fb, _x.get_value (), _y.get_value (), &_conn, 1, &_mode);
     if (ret) {
+      perror ("drm failed to set crtc for connector");
       error (this, "failed to set crtc for connector");
     }
   }
@@ -277,6 +279,7 @@ namespace djnn {
     //buff *b = &_buffs[0];
     int ret = drmModeSetCrtc (_fd, _crtc_id, fb, _x.get_value (), _y.get_value (), &_conn, 1, &_mode);
     if (ret) {
+      perror ("drm failed to set crtc for connector");
       error (this, "failed to set crtc for connector");
     }
   }

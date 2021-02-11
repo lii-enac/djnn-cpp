@@ -24,6 +24,7 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/int_property.h"
 #include "core/tree/bool_property.h"
+#include "core/control/action.h"
 
 // dbg
 //#include <__iostream>

@@ -40,6 +40,7 @@ using namespace std;
 
 namespace djnn {
 
+  extern FatProcess *GPUs; // display.h
 
   DRMDevice::DRMDevice (ParentProcess* parent, const std::string& name, int fd, int min_width, int max_width,
                         int min_height, int max_height) : FatProcess (name), _fd (fd),
