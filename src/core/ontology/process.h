@@ -281,6 +281,13 @@ namespace djnn {
     virtual FatChildProcess* find_child_impl (int /*index*/);
   };
 
+  class VoidProcess : public CoreProcess {
+    public:
+      VoidProcess () : CoreProcess () {}
+      ~VoidProcess () {}
+      void impl_activate () override {}
+      void impl_deactivate () override {}
+  };
 
   class CouplingProcess : public CoreProcess {
   public:
