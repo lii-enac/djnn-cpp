@@ -98,7 +98,7 @@ namespace djnn
     _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
     graph_add_edge (_opacity, _opacity_action);
 
-    _background_opacity = new DoubleProperty (this, "background_opacity", true);
+    _background_opacity = new DoubleProperty (this, "background_opacity", -1);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
     graph_add_edge (_background_opacity, _background_opacity_action);
@@ -257,15 +257,10 @@ namespace djnn
   }
 
   void
-  Window::set_background_opacity ()
+  Window::set_background_opacity_and_color ()
   {
-    _win_impl->set_background_opacity (_background_opacity->get_value());
-  }
-
-  void
-  Window::set_background_color ()
-  {
-    _win_impl->set_background_color (
+    _win_impl->set_background_opacity_and_color (
+      _background_opacity->get_value(), 
       _background_color->r()->get_value(),
       _background_color->g()->get_value(),
       _background_color->b()->get_value()

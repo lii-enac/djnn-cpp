@@ -41,9 +41,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 
-//#include <iostream>
 #include "core/utils/error.h"
-
 
 namespace djnn
 {
@@ -82,8 +80,8 @@ namespace djnn
     QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
                 _window->height ()->get_value ());
     _qwidget->setGeometry (rect);
-    //set_background_opacity(false);
-    _qwidget->setParent(0); // Create TopLevel-Widget
+    _window->set_background_opacity_and_color();
+     _qwidget->setParent(0); // Create TopLevel-Widget
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->set_building(true);
     _qwidget->show ();
@@ -141,21 +139,20 @@ namespace djnn
   }
 
   void
-  QtWindow::set_background_opacity (bool is_opaque)
+  QtWindow::set_background_opacity_and_color (double opacity, int r, int g, int b)
   {
-    bool is_transparent = !is_opaque;
-    _qwidget->setAttribute (Qt::WA_TranslucentBackground, is_transparent);
-    //_qwidget->setAttribute (Qt::WA_NoSystemBackground, is_transparent);
-    //_qwidget->setWindowFlags( Qt::FramelessWindowHint );
-    if( is_transparent ) {
-      _qwidget->setStyleSheet("background-color: rgba(255, 0, 0, 128)");
+    if( opacity != -1 ) {  // if not the init value
+      opacity = opacity * 255;
+      _qwidget->setWindowFlags ( Qt::Widget | Qt::FramelessWindowHint );
+        //_qwidget->setAttribute (Qt::WA_TranslucentBackground, is_transparent); //useless
+      
+      QString str = QString ("background-color: rgba(%1, %2, %3, %4)").arg (QString::number(r), QString::number(g), QString::number(b), QString::number(opacity));
+      //_qwidget->setStyleSheet("background-color: rgba(255, 255, 255, 0)");
+      //cout << str.toStdString () << endl;
+      _qwidget->setStyleSheet(str);
+      
+      _qwidget->show ();  // if we want it interactive
     }
-  }
-
-  void
-  QtWindow::set_background_color (int r, int g, int b)
-  {
-    
   }
 
   void

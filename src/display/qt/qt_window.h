@@ -36,8 +36,7 @@ namespace djnn {
 
     virtual void perform_screenshot (const std::string& path) override;
     virtual void set_opacity (double opacity) override;
-    virtual void set_background_opacity (bool is_opaque) override;
-    virtual void set_background_color (int r, int g, int b) override;
+    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) override;
     virtual void update_geometry () override;
     virtual void update_geometry_for_good ();
 

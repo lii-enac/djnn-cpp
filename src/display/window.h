@@ -46,8 +46,7 @@ namespace djnn
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const std::string& path) {}
     virtual void set_opacity (double opacity) {}
-    virtual void set_background_opacity (bool is_opaque) {}
-    virtual void set_background_color (int r, int g, int b) {}
+    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) {}
     virtual void update_geometry () {}
      
   private:
@@ -82,13 +81,13 @@ namespace djnn
     {
       public:
         BackgroundOpacityAction (Window * parent, const std::string& name) : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent())->set_background_opacity (); }
+        void impl_activate () override { ((Window*)get_parent())->set_background_opacity_and_color (); }
     };
     class BackgroundColorAction : public Action
     {
       public:
         BackgroundColorAction (Window * parent, const std::string& name) : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent())->set_background_color (); }
+        void impl_activate () override { ((Window*)get_parent())->set_background_opacity_and_color (); }
     };
     class GeometryAction : public Action
     {
@@ -152,10 +151,8 @@ namespace djnn
     void set_opacity ();
 
     DoubleProperty* background_opacity () { return _background_opacity; }
-    void set_background_opacity ();
-
     BackgroundColor* background_color () { return _background_color; }
-    void set_background_color ();
+    void set_background_opacity_and_color ();
 
     void update_geometry ();
 
