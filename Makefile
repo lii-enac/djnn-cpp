@@ -710,6 +710,7 @@ cov_jenkins:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
 	# remove .cpp from css-parser which are destroyed after compilation
 	lcov --remove $(lcov_file) '*/css-parser/*.cpp' -o $(lcov_file)
+	lcov --remove $(lcov_file) '*/qt/*_moc.cpp' -o $(lcov_file)
 	# convert lcov report to gcov report
 	# gcovr --xml-pretty -o $(build_dir)/gcov_report.xml -s
 	genhtml -o $(lcov_output_dir) $(lcov_file)
