@@ -324,9 +324,9 @@ namespace djnn
   Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
   {
 
-    // std::cerr << "remove_edge: " <<
-    //   ( p_src->get_parent () ? p_src->get_parent ()->get_name () + "/" : "" ) << p_src->get_name () << " - " << 
-    //   ( p_dst->get_parent () ? p_dst->get_parent ()->get_name () + "/" : "" ) << p_dst->get_name () << endl;
+    //std::cerr << "remove_edge: " <<
+    //( p_src->get_parent () ? p_src->get_debug_parent ()->get_debug_name () + "/" : "" ) << p_src->get_debug_name () << " - " << 
+    //( p_dst->get_parent () ? p_dst->get_debug_parent ()->get_debug_name () + "/" : "" ) << p_dst->get_debug_name () << endl;
 
     Vertex *vs = p_src->vertex ();
     Vertex *vd = p_dst->vertex ();
