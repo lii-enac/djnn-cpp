@@ -36,10 +36,6 @@ namespace djnn {
 
   BackgroundColor::~BackgroundColor ()
   {
-    remove_edge (_cr);
-    remove_edge (_cg);
-    remove_edge (_cb);
-    remove_edge (_cv);
     delete _cr;
     delete _cg;
     delete _cb;
