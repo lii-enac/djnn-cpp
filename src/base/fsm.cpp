@@ -142,6 +142,8 @@ namespace djnn
       graph_add_edge (_action, &_fsm_action);
     }
     graph_add_edge (&_fsm_action, parent->find_child ("state"));
+    graph_add_edge (&_fsm_action, from);
+    graph_add_edge (&_fsm_action, to);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -166,6 +168,8 @@ namespace djnn
       graph_add_edge (action, &_fsm_action);
     }
     graph_add_edge (&_fsm_action, parent->find_child ("state"));
+    graph_add_edge (&_fsm_action, from);
+    graph_add_edge (&_fsm_action, to);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -177,6 +181,8 @@ namespace djnn
     if (_c_trigger_to_action.is_effective()) {
       graph_remove_edge (_c_trigger_to_action.get_dst(), &_fsm_action);
     }
+    graph_remove_edge (&_fsm_action, _from_state);
+    graph_remove_edge (&_fsm_action, _to_state);
   }
 
   void
@@ -203,8 +209,8 @@ namespace djnn
     _src->disable_transitions (_t);
     notify_activation ();
     if (_src != _dst) {
-      _src->deactivate ();
-      _dst->activate ();
+      _src->set_activation_flag (DEACTIVATION);
+      _dst->set_activation_flag (ACTIVATION);
     }
   }
 
