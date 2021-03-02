@@ -148,9 +148,12 @@ namespace djnn
     update_frame_if_necessary ();
     _frame = get_frame ();
     if (find_layer()) {
-      find_layer()->damaged ()->activate ();
-    } else if (_frame)
-     _frame->damaged ()->activate ();
+      find_layer()->set_invalid_cache (true);
+    } else if (_frame) {
+      UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+      UpdateDrawing::instance ()->get_redraw ()->activate ();
+      //_frame->damaged ()->activate ();
+    }
     Backend::instance ()->activate_gobj (this);
   }
 
@@ -159,9 +162,11 @@ namespace djnn
   {
     auto _frame = get_frame ();
     if (find_layer()) {
-      find_layer()->damaged ()->activate ();
+      find_layer()->set_invalid_cache (true);
     } else if (_frame) {
-       _frame->damaged ()->activate ();
+      UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+      UpdateDrawing::instance ()->get_redraw ()->activate ();
+      //_frame->damaged ()->activate ();
     }
     Backend::instance ()->deactivate_gobj (this);
    _frame = nullptr;

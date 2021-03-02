@@ -17,7 +17,7 @@
 #include "gui/backend.h"
 #include "gui/abstract_backend.h" // DisplayBackend::instance
 #include "display/display-dev.h"
-
+#include "display/update_drawing.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
@@ -45,7 +45,8 @@ namespace djnn
       return;
     }
     Container::impl_activate ();
-    _frame->damaged ()->activate ();
+    UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+    UpdateDrawing::instance ()->get_redraw ()->activate ();
   }
 
   void
@@ -77,5 +78,15 @@ namespace djnn
     }
 
     return newg;
+  }
+
+  void
+  Layer::set_invalid_cache (bool v)
+  {
+    _invalid_cache = v;
+    if (_frame) {
+      UpdateDrawing::instance ()->add_window_for_refresh (_frame);
+      UpdateDrawing::instance ()->get_redraw ()->activate ();
+    }
   }
 }
