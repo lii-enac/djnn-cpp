@@ -54,10 +54,12 @@ namespace djnn {
         ENABLED_SHIFT             = 0 ,
         IMMEDIATE_SHIFT           = 1 ,
         SRC_ACTIVATION_FLAG_SHIFT = 2 , // FIXME: NONE is never used? if so, 1 bit is enough
-        DST_ACTIVATION_FLAG_SHIFT = 4   // FIXME: NONE is never used? if so, 1 bit is enough
+        DST_ACTIVATION_FLAG_SHIFT = 4 , // FIXME: NONE is never used? if so, 1 bit is enough
+        HAS_GRAPH_EDGE_SHIFT      = 6
     };
 
     enum bit_mask {
+        HAS_GRAPH_EDGE            = 0b1  << HAS_GRAPH_EDGE_SHIFT,
         ENABLED_MASK              = 0b1  << ENABLED_SHIFT ,
         IMMEDIATE_MASK            = 0b1  << IMMEDIATE_SHIFT ,
         SRC_ACTIVATION_FLAG_MASK  = 0b11 << SRC_ACTIVATION_FLAG_SHIFT ,
@@ -69,6 +71,9 @@ namespace djnn {
 
     bool get_is_enabled () const            { return get_bitset (ENABLED_MASK, ENABLED_SHIFT); }
     void set_is_enabled (bool VALUE)        {        set_bitset (ENABLED_MASK, ENABLED_SHIFT, VALUE); }
+
+    bool get_has_edge () const              { return get_bitset (HAS_GRAPH_EDGE, HAS_GRAPH_EDGE_SHIFT); }
+    void set_has_edge (bool VALUE)          {        set_bitset (HAS_GRAPH_EDGE, HAS_GRAPH_EDGE_SHIFT, VALUE); }
 
     bool get_immediate_propagation () const { return get_bitset (IMMEDIATE_MASK, IMMEDIATE_SHIFT); }
     void set_immediate_propagation (bool VALUE) {    set_bitset (IMMEDIATE_MASK, IMMEDIATE_SHIFT, VALUE); }

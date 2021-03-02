@@ -27,7 +27,7 @@ namespace djnn
                   CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
   {
     set_immediate_propagation (immediate_propagation);
-    set_is_enabled(true);
+    set_is_enabled (true);
     set_src_activation_flag (src_flag);
 
     if (src_flag == ACTIVATION) {
@@ -37,12 +37,17 @@ namespace djnn
     } else {
       warning (src, std::string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
     }
-    if (!immediate_propagation && src && dst) {
-      graph_add_edge (src, dst);
+    if (get_has_edge ()) {
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
     }
-    set_dst_activation_flag (dst_flag);
     _src = src;
     _dst = dst;
+    if (!immediate_propagation && _src && _dst) {
+      graph_add_edge (_src, _dst);
+      set_has_edge (true);
+    }
+    set_dst_activation_flag (dst_flag);
   }
 
   void
@@ -59,8 +64,9 @@ namespace djnn
     case NONE_ACTIVATION:
       break;
     }
-    if (!is_immediate () && _dst) {
+    if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);
+      set_has_edge (false);
     }
   }
 
@@ -79,9 +85,6 @@ namespace djnn
   Coupling::~Coupling ()
   {
     uninit ();
-    if (!is_immediate () && _src && _dst) {
-      graph_remove_edge (_src, _dst);
-    }
   }
 
   void
@@ -99,22 +102,29 @@ namespace djnn
       case NONE_ACTIVATION:
       break;
     }
-    if (!is_immediate () && _src && _dst) {
+    if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);
-      graph_add_edge (src, _dst);
+      set_has_edge (false);
     }
     _src = src;
-
+    if (!is_immediate () && _src && _dst) {
+      graph_add_edge (_src, _dst);
+      set_has_edge (true);
+    }
   }
 
   void
   Coupling::set_dst (CoreProcess *dst)
   {
-    if (!is_immediate () && _src && _dst) {
+    if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);
-      graph_add_edge (_src, dst);
+      set_has_edge (false);
     }
     _dst = dst;
+    if (!is_immediate () && _src && _dst) {
+      graph_add_edge (_src, _dst);
+      set_has_edge (true);
+    }
   }
 
   void
