@@ -94,7 +94,9 @@ namespace djnn
 
   SwitchRange::~SwitchRange ()
   {
-    remove_state_dependency (get_parent (), state_dependency ());
+    if (get_parent ()){
+      remove_state_dependency (get_parent (), state_dependency ());
+    }
 
     /* note:
      * We have to delete all content BEFORE deleting _action and _branch_name

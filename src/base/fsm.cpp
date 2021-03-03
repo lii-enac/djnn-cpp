@@ -259,7 +259,9 @@ namespace djnn
 
   FSM::~FSM ()
   {
-    remove_state_dependency (get_parent (), state_dependency ());
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), state_dependency ());
+    }
 
     /* inverse delete of _transition */
     int sz = _transitions.size ();

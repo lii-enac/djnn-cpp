@@ -42,6 +42,9 @@ namespace djnn {
 
     ~CoreAssignment () {
       graph_remove_edge (get_src (), get_dst ());
+      if (get_parent ()){
+        remove_state_dependency (get_parent (), get_dst ());
+      }
     }
 
     void set_parent (ParentProcess* parent) override
@@ -139,6 +142,9 @@ public:
 
     virtual ~Assignment () {
       graph_remove_edge (get_src(), get_dst());
+      if (get_parent ()){
+        remove_state_dependency (get_parent (), get_dst ());
+      }
     }
 
     void impl_activate   () override { _action.activate(); }

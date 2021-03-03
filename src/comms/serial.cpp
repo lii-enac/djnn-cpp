@@ -52,7 +52,9 @@ namespace djnn
 
  Serial::~Serial ()
 {
-  remove_state_dependency (get_parent (), &_out_a);
+   if (get_parent ()) {
+     remove_state_dependency (get_parent (), &_out_a);
+   }
 }
 
 void
@@ -60,7 +62,7 @@ Serial::set_parent (ParentProcess* parent)
 { 
   /* in case of re-parenting remove edge dependency in graph */
   if (get_parent ()) {
-      remove_state_dependency (get_parent (), &_out_a);
+    remove_state_dependency (get_parent (), &_out_a);
   }
 
   add_state_dependency (parent, &_out_a);

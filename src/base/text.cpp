@@ -85,7 +85,9 @@ namespace djnn
 
   DoubleFormatter::~DoubleFormatter ()
   {
-    remove_state_dependency (get_parent (), &_action);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_action);
+    }
     graph_remove_edge (&_action, &_output);
   }
 
@@ -166,8 +168,10 @@ namespace djnn
 
   TextAccumulator::~TextAccumulator ()
   {
-    remove_state_dependency (get_parent (), &_acc_action);
-    remove_state_dependency (get_parent (), &_del_action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), &_acc_action);
+       remove_state_dependency (get_parent (), &_del_action);
+    }
     graph_remove_edge (&_acc_action, &_state);
     graph_remove_edge (&_del_action, &_state);
   }
@@ -248,7 +252,9 @@ namespace djnn
 
   Regex::~Regex ()
   {
-    remove_state_dependency (get_parent (), &_reg_action);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_reg_action);
+    }
     graph_remove_edge (&_input, &_reg_action);
 
     for (auto p : _in_map){

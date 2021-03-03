@@ -80,6 +80,11 @@ namespace djnn
 
   ProcessCollector::~ProcessCollector ()
   {
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_add_one);
+      remove_state_dependency (get_parent (), &_rm_one);
+      remove_state_dependency (get_parent (), &_rm_all);
+    }
   }
 
   void
@@ -164,6 +169,9 @@ namespace djnn
 
   CollectionDeleter::~CollectionDeleter ()
   {
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_del_action);
+    }
   }
 
   void
@@ -223,6 +231,9 @@ namespace djnn
   {
     graph_remove_edge (&_path, &_act_all);
     graph_remove_edge (&_activate, &_act_all);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_act_all);
+    }
   }
 
   void
@@ -277,6 +288,9 @@ namespace djnn
   {
     graph_remove_edge (&_collection, &_act_set_val);
     graph_remove_edge (&_path, &_act_set_val);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_act_set_val);
+    }
   }
 
   void

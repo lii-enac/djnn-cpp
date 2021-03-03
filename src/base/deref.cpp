@@ -43,6 +43,9 @@ namespace djnn
 
   AbstractDeref::~AbstractDeref ()
   {
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_action);
+    }
   }
 
   void

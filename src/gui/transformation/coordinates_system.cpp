@@ -80,7 +80,9 @@ namespace djnn
   ScreenToLocal::~ScreenToLocal () 
   {
 
-    remove_state_dependency (get_parent (), _action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
+    }
     graph_remove_edge(_action, _outY);
     graph_remove_edge(_action, _outX);
  
@@ -172,8 +174,9 @@ namespace djnn
 
   LocalToScreen::~LocalToScreen () 
   {
-
-    remove_state_dependency (get_parent (), _action);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), _action);
+    }
     graph_remove_edge(_action, _outX);
     graph_remove_edge(_action, _outY);
     delete _cinY;

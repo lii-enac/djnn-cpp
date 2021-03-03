@@ -38,17 +38,16 @@ namespace djnn
     graph_add_edge (&_action_reset, &_output);
     
     graph_add_edge (&_action_step, &_output);
-
-    add_state_dependency (get_parent (), &_action_reset);
-    add_state_dependency (get_parent (), &_action_step);
     
     if(parent)
       finalize_construction (parent, name);
   }
 
   Counter::~Counter () {
-    remove_state_dependency (get_parent (), &_action_reset);
-    remove_state_dependency (get_parent (), &_action_step);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_action_reset);
+      remove_state_dependency (get_parent (), &_action_step);
+    }
     graph_remove_edge (&_action_reset, &_output);
     graph_remove_edge (&_action_step, &_output);
   }

@@ -105,7 +105,9 @@ namespace djnn
 
   Incr::~Incr ()
   { 
-    remove_state_dependency (get_parent (), &_state);
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_state);
+    }
     graph_remove_edge (this, &_state);
   }
 
@@ -183,7 +185,9 @@ namespace djnn
 
   AdderAccumulator::~AdderAccumulator ()
   {
-    remove_state_dependency (get_parent (), &_action);
+    if (get_parent ()){
+       remove_state_dependency (get_parent (), &_action);
+    }
     graph_remove_edge (&_action, &_result);
   }
 

@@ -111,7 +111,10 @@ namespace djnn
 
   RGBToLCHConverter::~RGBToLCHConverter ()
   {
-    remove_state_dependency (get_parent (), _action);
+
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), _action);
+    }
 
     graph_remove_edge (_b, _action);
     graph_remove_edge (_g, _action);
@@ -246,8 +249,9 @@ namespace djnn
 
   LCHToRGBConverter::~LCHToRGBConverter ()
   {
-    remove_state_dependency (get_parent (), _action);
-
+    if (get_parent ()) {
+      remove_state_dependency (get_parent (), _action);
+    }
     graph_remove_edge (_h, _action);
     graph_remove_edge (_c, _action);
     graph_remove_edge (_l, _action);

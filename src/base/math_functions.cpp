@@ -80,7 +80,9 @@ namespace djnn
 
   BoundedValue::~BoundedValue ()
   {
-    remove_state_dependency (get_parent (), &_action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), &_action);
+    }
     graph_remove_edge (&_action, &_result);
   }
 

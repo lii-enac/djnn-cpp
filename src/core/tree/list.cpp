@@ -364,9 +364,11 @@ namespace djnn
 
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
-    remove_state_dependency (get_parent (), &_next_action);
-    remove_state_dependency (get_parent (), &_previous_action);
-    remove_state_dependency (get_parent (), &_reset_action);
+    if (get_parent ()) {
+       remove_state_dependency (get_parent (), &_next_action);
+       remove_state_dependency (get_parent (), &_previous_action);
+       remove_state_dependency (get_parent (), &_reset_action);
+    }
   }
 
   void
