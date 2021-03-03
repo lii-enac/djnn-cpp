@@ -4,7 +4,7 @@ Section: libs
 Priority: optional
 Architecture: amd64
 Homepage: <http://smala.io/>
-Depends:  qtbase5-dev-tools, pkg-config, bison, flex,  m4, libivy (>= 3.15.3)| ivy-c
+Depends:  qtbase5-dev-tools, libqt5gui5, pkg-config, bison, flex,  m4, curl, libopenal1, libivy (>= 3.15.3)| ivy-c
 Maintainer: Mathieu Poirier <mathieu.poirier@enac.fr>
 Description: interactive programming
  Library for interactive programming
