@@ -98,12 +98,10 @@ namespace djnn
     _background_opacity = new DoubleProperty (this, "background_opacity", -1);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
-    graph_add_edge (_background_opacity, _background_opacity_action);
 
     _background_color = new BackgroundColor (this, "background_color", 0,0,0);
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
     _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
-    graph_add_edge (_background_color, _background_color_action);
 
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
 
@@ -156,8 +154,7 @@ namespace djnn
   Window::~Window ()
   {
     UpdateDrawing::instance ()->remove_window_for_refresh(this);
-    delete _c_damaged_update_drawing_damaged;
-    delete _damaged;
+
 
     delete _c_geometry_x;
     delete _c_geometry_y;
@@ -170,12 +167,10 @@ namespace djnn
     delete _opacity_action;
     delete _opacity;
 
-    graph_remove_edge (_background_opacity, _background_opacity_action);
     delete _c_background_opacity;
     delete _background_opacity_action;
     delete _background_opacity;
 
-    graph_remove_edge (_background_color, _background_color_action);
     delete _c_background_color;
     delete _background_color_action;
     delete _background_color;
@@ -186,6 +181,9 @@ namespace djnn
     delete _screenshot_action;
     delete _screenshot_path;
     delete _screenshot;
+
+    delete _c_damaged_update_drawing_damaged;
+    delete _damaged;
 
     delete _pos_x;
     delete _pos_y;

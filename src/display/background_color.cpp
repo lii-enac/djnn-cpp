@@ -41,15 +41,12 @@ namespace djnn {
     delete _cb;
     delete _cv;
     if (_c_rv) {
-        graph_remove_edge (r(), &_toValue);
         delete _c_rv;
     }
     if (_c_gv) {
-        graph_remove_edge (g(), &_toValue);
         delete _c_gv;
     }
     if (_c_bv) {
-        graph_remove_edge (b(), &_toValue);
         delete _c_bv;
     }
     delete _c_vrgb;
@@ -121,7 +118,6 @@ namespace djnn {
     *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
     if (somehow_activating ()) {
       (*cprop)->enable ();
-      graph_add_edge (*prop, update);
     }
     else
       (*cprop)->disable ();
@@ -151,7 +147,6 @@ namespace djnn {
       rawp_Int=&raw_props.r;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      graph_add_edge (res, &_toValue);
       _c_rv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_rv->disable ();
@@ -161,7 +156,6 @@ namespace djnn {
       rawp_Int=&raw_props.g;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      graph_add_edge (res, &_toValue);
       _c_gv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_gv->disable ();
@@ -171,7 +165,6 @@ namespace djnn {
       rawp_Int=&raw_props.b;
       notify_mask = notify_damaged_style;
       res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-      graph_add_edge (res, &_toValue);
       _c_bv = new CouplingWithData (res, ACTIVATION, &_toValue, ACTIVATION);
       if (!somehow_activating())
         _c_bv->disable ();
