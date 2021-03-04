@@ -3,6 +3,8 @@
 
 display := QT
 #options: QT SDL DRM
+#options SDL with kmsdrm: ubuntu SDL2 is not compiled with kmsdrm enabled, compile it with the option 
+#see how to recompile SDL2 with this option in the file tools/raspberry-ua-netinst.md
 
 graphics := QT
 #options: QT CAIRO
