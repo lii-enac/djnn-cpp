@@ -58,7 +58,7 @@ namespace djnn
       void set_parent (ParentProcess* parent) override;
       DoubleProperty _m, _k, _damping, _v, _output, _dt;
       Spike _step;
-      Coupling _c_step;
       OscillatorAction _action;
+      Coupling _c_step;
   };
 }
