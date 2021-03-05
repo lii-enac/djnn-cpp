@@ -275,7 +275,6 @@ namespace djnn
         graph_remove_edge (_states[i], &_fsm_state);
         delete _states[i];
     }
-    std::cout << "\nend delete FSM\n";
   }
 
   void
