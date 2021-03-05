@@ -111,6 +111,7 @@ namespace djnn
 
   Deref::~Deref ()
   {
+    _cset.uninit ();
   }
 
   void
@@ -148,6 +149,7 @@ namespace djnn
 
   DerefString::~DerefString ()
   {
+    _cset.uninit ();
   }
 
   void
@@ -192,6 +194,7 @@ namespace djnn
 
   DerefDouble::~DerefDouble()
   {
+    _cset.uninit ();
   }
 
   void
