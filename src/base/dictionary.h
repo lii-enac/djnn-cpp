@@ -68,7 +68,7 @@ namespace djnn {
     FindAction _find_action;
     AddEntryAction _add_action;
     DelEntryAction _del_action;
-    Coupling _c_add, _c_del, _c_find;
+    Coupling _c_add, _c_del, _c_find, _c_add_find;
     map_t _map;
   };
 }

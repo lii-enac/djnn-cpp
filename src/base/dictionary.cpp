@@ -67,12 +67,14 @@ namespace djnn
     _del_action (this, "del_action"),
     _c_add (&_add, ACTIVATION, &_add_action, ACTIVATION),
     _c_del (&_del, ACTIVATION, &_del_action, ACTIVATION),
-    _c_find (&_key, ACTIVATION, &_find_action, ACTIVATION)
+    _c_find (&_key, ACTIVATION, &_find_action, ACTIVATION),
+    _c_add_find (&_add, ACTIVATION, &_find_action, DEACTIVATION)
 
   {
     _c_add.disable ();
     _c_del.disable ();
     _c_find.disable ();
+    _c_add_find.disable ();
     graph_add_edge (&_find_action, &_value);
     finalize_construction (parent, name);
   }
@@ -82,6 +84,7 @@ namespace djnn
     _c_add.enable ();
     _c_del.enable ();
     _c_find.enable ();
+    _c_add_find.enable ();
   }
   void
   Dictionary::impl_deactivate ()
@@ -89,6 +92,7 @@ namespace djnn
     _c_add.disable ();
     _c_del.disable ();
     _c_find.disable ();
+    _c_add_find.disable ();
   }
   void
   Dictionary::add_entry (CoreProcess* key, CoreProcess *value)
