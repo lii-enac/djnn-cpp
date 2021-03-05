@@ -23,6 +23,13 @@ namespace djnn {
     FatProcess::set_parent (parent); 
   }
 
+  Binding::~Binding () {
+    auto * dst = _b.get_dst ();
+    if (get_parent () && dst) {
+      remove_state_dependency (get_parent (), dst);
+    }
+  }
+
 #if !defined(DJNN_NO_SERIALIZE)
   void
   CoreBinding::serialize (const std::string& format)

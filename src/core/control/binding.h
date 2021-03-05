@@ -96,6 +96,7 @@ namespace djnn {
     : Binding (parent, name, src->find_child_impl (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child_impl (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
     {}
 
+    virtual ~Binding();
     void set_parent (ParentProcess* parent) override;
 
   protected:
