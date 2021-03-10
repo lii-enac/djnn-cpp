@@ -189,7 +189,7 @@ DYNLIB = -dynamiclib
 echo ?= echo
 YACC := /usr/local/opt/bison/bin/bison -d
 LEX := /usr/local/opt/flex/bin/flex
-moc := /usr/local/opt/qt/bin/moc
+moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
 CXXFLAGS += -I/usr/local/include
 compiler ?= llvm
