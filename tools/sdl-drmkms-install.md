@@ -17,9 +17,9 @@ make install
 cd ..
 
 # ivy
-apt install -y subversion libpcre3-dev  
-svn co https://svn.tls.cena.fr/svn/ivy/ivy-c/trunk ivy-c  
-cd ivy-c/src
+apt install -y git libpcre3-dev  
+git clone git://github.com/lii-enac/libivy.git
+cd libivy/src
 make libivy.a
 install -m644 libivy.a /usr/local/lib
 make includes
