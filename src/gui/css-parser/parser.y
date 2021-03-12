@@ -154,7 +154,7 @@
       return;
     }
     if (property == "fill-opacity") {
-      new FillOpacity (cur_parent, "stroke-opacity", arg);
+      new FillOpacity (cur_parent, "fill-opacity", arg);
       return;
     }
     if (property == "font-weight") {
