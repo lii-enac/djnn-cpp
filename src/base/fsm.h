@@ -76,7 +76,7 @@ namespace djnn {
     virtual void serialize (const std::string& format) override;
 #endif
     int priority () { return _priority; }
-    Action* fsm_action () { return &_fsm_action; }
+    Action* transition_action () { return &_transition_action; }
   protected:
     struct Init { Init (FSMTransition* t, ParentProcess* parent, 
                         const std::string& tspec, const std::string& aspec); };
@@ -84,16 +84,24 @@ namespace djnn {
     
   private:
     void init_FSMTransition ();
+    int _priority;
     FSMState* _from_state, *_to_state;
     CoreProcess *_trigger;
     Init _init;
-    FSMTransitionAction _fsm_action;
+    FSMTransitionAction _transition_action;
     Coupling _c_src, _c_trigger_to_action;
-    int _priority;
   };
 
   class FSM : public FatProcess
   {
+      class FSMPostTriggerAction : public Action
+      {
+         public:
+          FSMPostTriggerAction (ParentProcess* parent, const std::string& name) :
+               Action (parent, name) { }
+          virtual ~FSMPostTriggerAction () {};
+          void impl_activate () { ((FSM*)get_parent())->set_triggered (0); };
+      };
   public:
     FSM (ParentProcess* parent, const std::string& name);
     void impl_activate () override;
@@ -105,18 +113,21 @@ namespace djnn {
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     void add_state (FSMState* st) { graph_add_edge (st, &_fsm_state); _states.push_back(st); };
-    void add_transition (FSMTransition* tr) { _transitions.push_back(tr); };
+    void add_transition (FSMTransition* tr);
     virtual ~FSM ();
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
     void set_parent (ParentProcess* parent) override;
+    void set_triggered (int v) { _already_triggered = v; if (v) _post_trigger.set_activation_flag(ACTIVATION); }
+    int is_already_triggered () { return _already_triggered; }
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format) override;
 #endif
   private:
-    int _priority;
+    int _priority, _already_triggered;
     FSMState *_cur_state;
     TextProperty _fsm_state, _initial;
+    FSMPostTriggerAction _post_trigger;
     std::vector<FSMState*> _states;
     std::vector<FSMTransition*> _transitions;
   };

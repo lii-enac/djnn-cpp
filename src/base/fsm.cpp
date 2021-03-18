@@ -44,7 +44,7 @@ namespace djnn
   {
     int priority = t->priority ();
     for (auto t2 : _transitions) {
-      if (t2 != t && t2->fsm_action ()->get_activation_flag () == ACTIVATION && t2->priority () < priority)
+      if (t2 != t && t2->transition_action ()->get_activation_flag () == ACTIVATION && t2->priority () < priority)
         return false;
     }
     return true;
@@ -54,8 +54,8 @@ namespace djnn
   FSMState::disable_transitions (FSMTransition *t)
   {
     for (auto t2 : _transitions) {
-      if (t2 != t && t2->fsm_action ()->get_activation_flag () == ACTIVATION) {
-        t2->fsm_action ()->set_activation_flag (NONE_ACTIVATION);
+      if (t2 != t && t2->transition_action ()->get_activation_flag () == ACTIVATION) {
+        t2->transition_action ()->set_activation_flag (NONE_ACTIVATION);
       }
     }
   }
@@ -125,25 +125,25 @@ namespace djnn
                                 CoreProcess *trigger, const std::string& tspec, CoreProcess *action,
                                 const std::string& aspec) 
   : FatProcess (name),
+  _priority (0),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger(trigger ? trigger->find_child_impl (tspec) : nullptr),
   _init(this, parent, tspec, aspec),
-  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action ? action->find_child_impl (aspec) : nullptr),
-  _c_src (), _c_trigger_to_action (),
-  _priority (0)
+  _transition_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action ? action->find_child_impl (aspec) : nullptr),
+  _c_src (), _c_trigger_to_action ()
   {
     CoreProcess* _action = action ? action->find_child_impl (aspec) : nullptr;
-    _c_src.init (_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
+    _c_src.init (_trigger, ACTIVATION, &_transition_action, ACTIVATION);
     _c_src.disable ();
     if (_action) {
       _c_trigger_to_action.init (_trigger, ACTIVATION, _action, ACTIVATION);
       _c_trigger_to_action.disable ();
-      graph_add_edge (_action, &_fsm_action);
+      graph_add_edge (_action, &_transition_action);
     }
-    graph_add_edge (&_fsm_action, parent->find_child ("state"));
-    graph_add_edge (&_fsm_action, from);
-    graph_add_edge (&_fsm_action, to);
+    graph_add_edge (&_transition_action, parent->find_child ("state"));
+    graph_add_edge (&_transition_action, from);
+    graph_add_edge (&_transition_action, to);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -152,24 +152,24 @@ namespace djnn
   FSMTransition::FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, CoreProcess *action) 
   : FatProcess (name),
+  _priority (0),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
   _to_state (to ? dynamic_cast<FSMState*> (to) : nullptr),
   _trigger (trigger),
   _init(this, parent, "NO spec for trigger", "NO spec for action"),
-  _fsm_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action),
-  _c_src (), _c_trigger_to_action (),
-  _priority (0)
+  _transition_action (this, "transition_action_" + _from_state->get_name () + "_" + _to_state->get_name (), _from_state, _to_state, action),
+  _c_src (), _c_trigger_to_action ()
   {
-    _c_src.init (_trigger, ACTIVATION, &_fsm_action, ACTIVATION);
+    _c_src.init (_trigger, ACTIVATION, &_transition_action, ACTIVATION);
     _c_src.disable ();
     if (action) {
       _c_trigger_to_action.init (_trigger, ACTIVATION, action, ACTIVATION);
       _c_trigger_to_action.disable ();
-      graph_add_edge (action, &_fsm_action);
+      graph_add_edge (action, &_transition_action);
     }
-    graph_add_edge (&_fsm_action, parent->find_child ("state"));
-    graph_add_edge (&_fsm_action, from);
-    graph_add_edge (&_fsm_action, to);
+    graph_add_edge (&_transition_action, parent->find_child ("state"));
+    graph_add_edge (&_transition_action, from);
+    graph_add_edge (&_transition_action, to);
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -177,12 +177,12 @@ namespace djnn
 
   FSMTransition::~FSMTransition ()
   {
-    graph_remove_edge (&_fsm_action, get_parent ()->find_child ("state"));
+    graph_remove_edge (&_transition_action, get_parent ()->find_child ("state"));
     if (_c_trigger_to_action.is_effective()) {
-      graph_remove_edge (_c_trigger_to_action.get_dst(), &_fsm_action);
+      graph_remove_edge (_c_trigger_to_action.get_dst(), &_transition_action);
     }
-    graph_remove_edge (&_fsm_action, _from_state);
-    graph_remove_edge (&_fsm_action, _to_state);
+    graph_remove_edge (&_transition_action, _from_state);
+    graph_remove_edge (&_transition_action, _to_state);
   }
 
   void
@@ -204,7 +204,7 @@ namespace djnn
   void
   FSMTransition::FSMTransitionAction::impl_activate ()
   {
-    if (!_src->is_highest_priority (_t))
+    if (((FSM*)_t->get_parent())->is_already_triggered())
       return;
     _src->disable_transitions (_t);
     notify_activation ();
@@ -212,6 +212,7 @@ namespace djnn
       _src->set_activation_flag (DEACTIVATION);
       _dst->set_activation_flag (ACTIVATION);
     }
+    ((FSM*)_t->get_parent())->set_triggered (1);
   }
 
 #ifndef DJNN_NO_SERIALIZE
@@ -248,9 +249,11 @@ namespace djnn
   FSM::FSM (ParentProcess* parent, const std::string& name) 
   : FatProcess (name), 
   _priority (0),
+  _already_triggered (0),
   _cur_state (nullptr),
   _fsm_state (this, "state", ""),
-  _initial (this, "initial", "")
+  _initial (this, "initial", ""),
+  _post_trigger (this, "post_trigger")
   { 
     set_state_dependency (&_fsm_state);
     /* with state_dependency */
@@ -263,8 +266,16 @@ namespace djnn
       remove_state_dependency (get_parent (), state_dependency ());
     }
 
-    /* inverse delete of _transition */
+
     int sz = _transitions.size ();
+    /*remove graph edges*/
+    if (sz > 0) {
+      for (int i = 0; i < sz - 1; i++) {
+        graph_remove_edge (_transitions[i]->transition_action(), _transitions[i+1]->transition_action());
+      }
+      graph_remove_edge(_transitions[sz-1]->transition_action (), &_post_trigger);
+    }
+    /* inverse delete of _transition */
     for (int i = sz - 1; i >= 0; i--) {
         delete _transitions[i];
     }
@@ -276,6 +287,18 @@ namespace djnn
         delete _states[i];
     }
   }
+
+  void
+  FSM::add_transition (FSMTransition *tr)
+  {
+    _transitions.push_back(tr);
+    int p = tr->priority();
+    if (p > 0) {
+      graph_add_edge (_transitions.at(p - 1)->transition_action (), tr->transition_action());
+      graph_remove_edge (_transitions.at(p - 1)->transition_action (), &_post_trigger);
+    }
+    graph_add_edge (tr->transition_action(), &_post_trigger);
+  };
 
   void
   FSM::set_parent (ParentProcess* parent)
