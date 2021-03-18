@@ -22,7 +22,7 @@
 #include <cstdint>
 
 #if !defined(DJNN_NO_DEBUG)
-#include <boost/core/demangle.hpp>
+//#include <boost/core/demangle.hpp>
 #include <cxxabi.h>  // needed for abi::__cxa_demangle
 #endif
 
@@ -108,7 +108,7 @@ namespace djnn
     else return FatProcess::default_name;
   }
 
-#if 1
+#if 0
   std::string cpp_demangle( char const * name )
   {
     return boost::core::demangle(name);
