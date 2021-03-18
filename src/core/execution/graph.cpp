@@ -27,10 +27,10 @@
 #endif
 
 
- #if _DEBUG_SEE_ACTIVATION_SEQUENCE || !defined(DJNN_NO_DEBUG)
-#include <boost/core/demangle.hpp> 
-#include <typeinfo>
-#endif
+// #if _DEBUG_SEE_ACTIVATION_SEQUENCE || !defined(DJNN_NO_DEBUG)
+// #include <boost/core/demangle.hpp> 
+// #include <typeinfo>
+// #endif
 
 
 #ifndef DJNN_NO_DEBUG
@@ -190,7 +190,7 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     auto * pp = _process;
     std::cout << "vertex (" <<
-    boost::core::demangle(typeid(*pp).name()) << ":" << 
+    cpp_demangle(typeid(*pp).name()) << ":" << 
     ( pp && pp->get_debug_parent () ? pp->get_debug_parent ()->get_debug_name () + "/" : "") <<
     ( pp ? pp->get_debug_name () : "") << ") - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
@@ -202,7 +202,7 @@ namespace djnn
          auto result = _map_edges.find(e);
          auto * ppe = e->_process;
          if (ppe) {
-          std::cout << boost::core::demangle(typeid(*ppe).name()) << ":" << 
+          std::cout << cpp_demangle(typeid(*ppe).name()) << ":" << 
           ( ppe->get_debug_parent () ?  ppe->get_debug_parent ()->get_debug_name () + "/" : "" ) << ppe->get_debug_name () << " [x"
             << result->second << "] \t" ;
          }
@@ -344,8 +344,8 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
       auto * ppsrc = p_src;
       auto * ppdst = p_dst;
-      std::cerr << "Graph remove_edge: " << boost::core::demangle(typeid(*p_src).name()) + ":" + 
-      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << boost::core::demangle(typeid(*p_dst).name()) + ":" +
+      std::cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
+      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << cpp_demangle(typeid(*p_dst).name()) + ":" +
       (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
 #endif
       //assert(0);

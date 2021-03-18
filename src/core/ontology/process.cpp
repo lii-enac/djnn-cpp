@@ -26,15 +26,15 @@
 #include <algorithm>
 #include <cassert>
 
-#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <boost/core/demangle.hpp>
-#include <typeinfo>
-#endif
+// #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+// #include <boost/core/demangle.hpp>
+// //#include <typeinfo>
+// #endif
 
-#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-#include <boost/core/demangle.hpp>
-#include <boost/type_index.hpp>
-#endif
+// #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
+// #include <boost/core/demangle.hpp>
+// //#include <boost/type_index.hpp>
+// #endif
 
 namespace djnn
 {
@@ -118,7 +118,7 @@ namespace djnn
     }
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + boost::core::demangle(typeid(*this).name()) + \
+    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
        " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
     __destruction_stat_order.push_back (data_save);
@@ -727,7 +727,7 @@ namespace djnn
   CoreProcess::serialize (const std::string& format) {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    warning (this, "serialize is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
+    warning (this, "serialize is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   }
   #endif
@@ -736,7 +736,7 @@ namespace djnn
   CoreProcess::clone () {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
-    warning (this, "clone is not yet implemented for " + boost::core::demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
+    warning (this, "clone is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   
     return nullptr;

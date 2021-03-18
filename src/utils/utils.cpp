@@ -16,13 +16,14 @@
 #include "utils.h"
 #include "core/serializer/serializer.h"
 
-#include <boost/core/demangle.hpp>
+// #include <boost/core/demangle.hpp>
+#include "core/utils/utils-dev.h" // demangle
 #include <typeinfo>
 
 #include <iostream>
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-#include <boost/core/demangle.hpp>
+//#include <boost/core/demangle.hpp>
 #include "core/control/binding.h"
 #include "core/control/native_expression_action.h"
 #include "base/connector.h"
@@ -65,7 +66,7 @@ namespace djnn
     int num_more_than_one_coupling=0;
     int size=0;
     depth_first_traverse(p, [&](CoreProcess* p) -> void {
-        ++num_by_type[boost::core::demangle(typeid(*p).name())];
+        ++num_by_type[cpp_demangle(typeid(*p).name())];
         num_no_coupling += !p->has_coupling();
         num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
         num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;
@@ -127,7 +128,7 @@ namespace djnn
           long int i = it->second;
           auto * p = it->first;
           std::cerr << "\033[1;34m";
-          std::cerr << "[" << i << "] - " << boost::core::demangle(typeid(*p).name()) <<  " - " << 
+          std::cerr << "[" << i << "] - " << cpp_demangle(typeid(*p).name()) <<  " - " << 
             (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_debug_name () << std::endl;
           std::cerr << "\033[0m" ;
         }
@@ -155,7 +156,7 @@ namespace djnn
 
          auto * p = pair.first;
 
-         ++num_by_type[boost::core::demangle(typeid(*p).name())];
+         ++num_by_type[cpp_demangle(typeid(*p).name())];
          num_no_coupling += !p->has_coupling();
          num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
          num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;

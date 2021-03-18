@@ -21,6 +21,10 @@
 
 #include <cstdint>
 
+#if !defined(DJNN_NO_DEBUG)
+#include <boost/core/demangle.hpp>
+#include <cxxabi.h>  // needed for abi::__cxa_demangle
+#endif
 
 namespace djnn
 {
@@ -103,6 +107,80 @@ namespace djnn
     if(p) return p->get_name();
     else return FatProcess::default_name;
   }
+
+#if 1
+  std::string cpp_demangle( char const * name )
+  {
+    return boost::core::demangle(name);
+  }
+#else
+  // from boost/demangle
+  inline char const * demangle_alloc( char const * name ) noexcept;
+  inline void demangle_free( char const * name ) noexcept;
+
+  class scoped_demangled_name
+  {
+  private:
+      char const * m_p;
+
+  public:
+      explicit scoped_demangled_name( char const * name ) noexcept :
+          m_p( demangle_alloc( name ) )
+      {
+      }
+
+      ~scoped_demangled_name() noexcept
+      {
+          demangle_free( m_p );
+      }
+
+      char const * get() const noexcept
+      {
+          return m_p;
+      }
+
+      scoped_demangled_name( scoped_demangled_name const& ) = delete;
+      scoped_demangled_name& operator= ( scoped_demangled_name const& ) = delete;
+  };
+
+#if !defined(DJNN_NO_DEBUG)
+  char const * demangle_alloc( char const * name ) noexcept
+  {
+      int status = 0;
+      std::size_t size = 0;
+      return abi::__cxa_demangle( name, NULL, &size, &status );
+  }
+
+  void demangle_free( char const * name ) noexcept
+  {
+      std::free( const_cast< char* >( name ) );
+  }
+
+  std::string cpp_demangle( char const * name )
+  {
+      scoped_demangled_name demangled_name( name );
+      char const * p = demangled_name.get();
+      if( !p )
+          p = name;
+      return p;
+  }
+#else
+  char const * demangle_alloc( char const * name ) noexcept
+  {
+      return name;
+  }
+
+  inline void demangle_free( char const * ) noexcept
+  {
+  }
+
+  std::string cpp_demangle( char const * name )
+  {
+      return name;
+  }
+
+#endif
+#endif
 
   const std::string
   get_hierarchy_name (const CoreProcess *cp, int up)
