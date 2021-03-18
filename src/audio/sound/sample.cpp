@@ -36,7 +36,9 @@ namespace djnn {
 	_end (this, "end"),
 	// _end_timer(*this),
 	_control_timer(*this),
+#ifdef DJNN_USE_OPENAL_EFX
 	lowpassid(0),
+#endif
 	looping (false)
 	{
 		unsigned int sampleRate, bps, channels, numFrames, datasize;

@@ -26,11 +26,12 @@ ifeq ($(os),Darwin)
 # 	lib_ldflags += -L/opt/local/lib -livy
 	
 	#TODO : activate after confinement and put above AND REMOVE /ivy
-	tmp_lib_cppflags = $(shell pkg-config ivy-c --cflags)
+
+	tmp_lib_cppflags = $(shell pkg-config libivy --cflags)
 	ifneq ($(tmp_lib_cppflags),)
-		lib_cppflags += $(shell pkg-config ivy-c --cflags)/Ivy
+		lib_cppflags += $(shell pkg-config libivy --cflags)/Ivy
 	endif
-	lib_ldflags += $(shell pkg-config ivy-c --libs)
+	lib_ldflags += $(shell pkg-config libivy --libs)
 
 	lib_srcs += $(local_dir)/serial.cpp
 endif

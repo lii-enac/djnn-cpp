@@ -40,7 +40,7 @@ endif
 ifeq ($(display),QT)
 
 ifeq ($(os),Darwin)
-thread ?= BOOST
+thread ?= STD
 chrono ?= STD
 else
 thread ?= QT

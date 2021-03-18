@@ -857,7 +857,7 @@ pkg:
 # should use the following variable
 # all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
-pkgdeps += bison flex
+pkgdeps += bison flex boost
 
 ifeq ($(os),Linux)
 	pkgcmd := apt install -y
@@ -892,14 +892,24 @@ ifeq ($(os),Darwin)
 	pkgcmd := brew install
 	pkgupg := brew upgrade
 
-	pkgdeps += expat curl boost
-	pkgdeps += qt5
-	pkgdeps += cairo pango
-	pkgdeps += sdl2 sdl2_image
-	pkgdeps += libusb
+	#boost
+	pkgdeps += expat curl
+	#pkgdeps += libusb #crazyflie
 	pkgdeps += rtmidi
+	ifeq ($(graphics),QT)
+		pkgdeps += qt5
+	endif
+	ifeq ($(display),SDL)
+		pkgdeps += sdl2 sdl2_image
+	endif
+	ifeq ($(graphics),CAIRO)
+		pkgdeps += cairo pango
+	endif
 	ifeq ($(graphics),GL)
 		pkgdeps += glm
+	endif
+	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+		pkgdeps += openal-soft
 	endif
 endif
 

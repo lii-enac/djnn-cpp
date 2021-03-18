@@ -60,8 +60,9 @@ namespace djnn {
 
     	unsigned int bufferid;
 		unsigned int sourceid;
+#ifdef DJNN_USE_OPENAL_EFX
 		unsigned int lowpassid;
-
+#endif
 		unsigned int duration_ms;
 		bool looping;
 	};
