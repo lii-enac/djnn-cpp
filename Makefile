@@ -906,7 +906,7 @@ ifeq ($(os),Darwin)
 		pkgdeps += cairo pango
 	endif
 	ifeq ($(graphics),GL)
-		pkgdeps += glm
+		pkgdeps += glm fontconfig freetype2
 	endif
 	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
 		pkgdeps += openal-soft
