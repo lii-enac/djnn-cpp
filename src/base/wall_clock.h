@@ -60,7 +60,11 @@ namespace djnn
                 std::string res (' ', charCount);
                 std::copy(timeBuffer, timeBuffer+charCount, res.begin());
                 res.resize (charCount);
-                res += '.' + std::to_string(now2.count() % 1000);
+                auto ms = now2.count() % 1000;
+                auto ms_str = std::to_string(ms);
+                if (ms<10) ms_str = "00" + ms_str;
+                else if (ms<100) ms_str = "0" + ms_str;
+                res += ms_str + "ms";
                 _ref = res;
                 return _ref;
             }
