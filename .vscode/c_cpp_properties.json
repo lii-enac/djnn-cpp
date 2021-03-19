@@ -7,7 +7,7 @@
                 "/usr/local/Cellar/qt/**",
                 "/usr/local/include"
                 //"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/",
-                //"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
             ],
             "defines": [],
             "macFrameworkPath": [],
@@ -15,7 +15,7 @@
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
-            "compileCommands": "/Users/conversy/recherche/istar/code/djnn/djnn-cpp-master/build/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],
     "version": 4
