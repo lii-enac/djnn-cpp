@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "default",
+            "label": "build djnn-cpp",
             "type": "shell",
             "command": "make -j",
             "problemMatcher": [
