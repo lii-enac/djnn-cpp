@@ -913,19 +913,43 @@ ifeq ($(os),Darwin)
 	endif
 endif
 
-ifeq ($(os), MinGW)
+ifeq ($(os),MinGW)
 	#https://www.msys2.org/
 	#pkgdeps := git make pkg-config
-	pkgcmd := pacman -S --needed
-	pkgupg := pacman -Syu --needed
 
-	mgwpkgdeps += gcc boost expat curl qt5
-	mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
-	ifeq ($(graphics),GL)
-		mgwpkgdeps += glm
+	pkgcmd := pacboy -S --needed
+	pkgupg := pacboy -Syu --needed
+
+	#boost
+	pkgdeps += expat curl
+	#pkgdeps += libusb #crazyflie
+	pkgdeps += rtmidi
+	ifeq ($(graphics),QT)
+		pkgdeps += qt5
 	endif
-	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-	pkgdeps += $(mgwpkgdeps)
+	ifeq ($(display),SDL)
+		pkgdeps += SDL2 SDL2_image
+	endif
+	ifeq ($(graphics),CAIRO)
+		pkgdeps += cairo pango
+	endif
+	ifeq ($(graphics),GL)
+		pkgdeps += glm fontconfig freetype2
+	endif
+	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+		pkgdeps += openal-soft
+	endif
+
+	# pkgcmd := pacman -S --needed
+	# pkgupg := pacman -Syu --needed
+
+	# mgwpkgdeps += gcc boost expat curl qt5
+	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
+	# ifeq ($(graphics),GL)
+	# 	mgwpkgdeps += glm
+	# endif
+	# mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+	# pkgdeps += $(mgwpkgdeps)
 endif
 
 install-pkgdeps:
