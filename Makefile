@@ -857,7 +857,7 @@ pkg:
 # should use the following variable
 # all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
-pkgdeps += bison flex boost
+pkgdeps += bison flex
 
 ifeq ($(os),Linux)
 	pkgcmd := apt install -y
@@ -917,39 +917,42 @@ ifeq ($(os),MinGW)
 	#https://www.msys2.org/
 	#pkgdeps := git make pkg-config
 
-	pkgcmd := pacboy -S --needed
-	pkgupg := pacboy -Syu --needed
+	#pkgcmd := pacboy -S --needed
+	#pkgupg := pacboy -Syu --needed
 
 	#boost
-	pkgdeps += expat curl
+	mgwpkgdeps += expat curl
 	#pkgdeps += libusb #crazyflie
-	pkgdeps += rtmidi
+	mgwpkgdeps += rtmidi
 	ifeq ($(graphics),QT)
-		pkgdeps += qt5
+		mgwpkgdeps += qt5
 	endif
 	ifeq ($(display),SDL)
-		pkgdeps += SDL2 SDL2_image
+		mgwpkgdeps += SDL2 SDL2_image
 	endif
 	ifeq ($(graphics),CAIRO)
-		pkgdeps += cairo pango
+		mgwpkgdeps += cairo pango
 	endif
 	ifeq ($(graphics),GL)
-		pkgdeps += glm fontconfig freetype2
+		mgwpkgdeps += glm fontconfig freetype2
 	endif
 	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-		pkgdeps += openal-soft
+		mgwpkgdeps += openal
 	endif
 
 	# pkgcmd := pacman -S --needed
 	# pkgupg := pacman -Syu --needed
+
+	pkgcmd := pacman -S --needed
+	pkgupg := pacman -Syu --needed
 
 	# mgwpkgdeps += gcc boost expat curl qt5
 	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
 	# ifeq ($(graphics),GL)
 	# 	mgwpkgdeps += glm
 	# endif
-	# mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-	# pkgdeps += $(mgwpkgdeps)
+	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+	pkgdeps += $(mgwpkgdeps)
 endif
 
 install-pkgdeps:
