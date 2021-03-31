@@ -581,7 +581,7 @@ dcs.append(dc)
 
 dc = DjnnClass("Texture", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('path', 'text', None, "style"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractOpacity", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
