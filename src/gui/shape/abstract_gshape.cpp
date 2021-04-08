@@ -330,12 +330,14 @@ namespace djnn
   FatChildProcess*
   AbstractGShape::find_child_impl (const std::string& path)
   {
+    // looking for ui interface
     if (ui) {
       FatChildProcess* process = FatProcess::find_child_impl (path);
       if (process != nullptr)
         return process;
     }
 
+    // looking for something else
     size_t found = path.find_first_of ('/');
     std::string key = path;
     if (found != std::string::npos) {
