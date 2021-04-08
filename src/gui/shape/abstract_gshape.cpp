@@ -330,36 +330,39 @@ namespace djnn
   FatChildProcess*
   AbstractGShape::find_child_impl (const std::string& path)
   {
-    if (ui)
-      return FatProcess::find_child_impl (path);
-    else {
-      size_t found = path.find_first_of ('/');
-      std::string key = path;
-      if (found != std::string::npos) {
-        key = path.substr (0, found);
-      }
-      if (key.compare ("matrix") == 0) {
-        _matrix = new Homography (this, "matrix");
-        _matrix->set_activation_state (ACTIVATED);
-      }
-      else if (key.compare ("inverted_matrix") == 0) {
-        _inverted_matrix = new Homography (this, "inverted_matrix");
-        _inverted_matrix->set_activation_state (ACTIVATED);
-      }
-      else {
-        /*  "press", "release", "move", "enter", "leave", "touches" */
-        std::vector<std::string>::iterator it = _ui.begin ();
-        found = false;
-        while (!found && it != _ui.end ()) {
-          if (key.compare (*it) == 0) {
-            found = true;
-            init_ui ();
-          }
-          it++;
-        }
-      }
-      return FatProcess::find_child_impl (path);
+    if (ui) {
+      FatChildProcess* process = FatProcess::find_child_impl (path);
+      if (process != nullptr)
+        return process;
     }
+
+    size_t found = path.find_first_of ('/');
+    std::string key = path;
+    if (found != std::string::npos) {
+      key = path.substr (0, found);
+    }
+
+    if (key.compare ("matrix") == 0) {
+      _matrix = new Homography (this, "matrix");
+      _matrix->set_activation_state (ACTIVATED);
+    }
+    else if (key.compare ("inverted_matrix") == 0) {
+      _inverted_matrix = new Homography (this, "inverted_matrix");
+      _inverted_matrix->set_activation_state (ACTIVATED);
+    }
+    else {
+      /*  "press", "release", "move", "enter", "leave", "touches" */
+      std::vector<std::string>::iterator it = _ui.begin ();
+      found = false;
+      while (!found && it != _ui.end ()) {
+        if (key.compare (*it) == 0) {
+          found = true;
+          init_ui ();
+        }
+        it++;
+      }
+    }
+    return FatProcess::find_child_impl (path);
   }
 
   void
