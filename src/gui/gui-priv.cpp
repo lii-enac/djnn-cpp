@@ -21,6 +21,16 @@
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
+#if _DEBUG_SEE_GUI_INFO_PREF
+#include <iostream>
+using namespace std;
+
+/* define in gui.cpp */
+extern int __nb_Drawing_object;
+extern int __nb_Drawing_object_picking;
+#endif
+
+
 namespace djnn {
   FatProcess *GenericMouse;
   GUIStructureObserver * gui_structure_observer;
