@@ -18,18 +18,24 @@
 #include "gui/abstract_backend.h" // DisplayBackend::instance
 #include "display/display-dev.h"
 #include "display/update_drawing.h"
+#include "core/tree/component_observer.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
-
+#include "core/utils/ext/remotery/Remotery.h"
 
 namespace djnn
 {
-  Layer::Layer (ParentProcess* parent, const std::string& n) :
+  Layer::Layer (ParentProcess* parent, const std::string& n, double x, double y, double w, double h) :
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"),
-     _invalid_cache (true), _cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION)
+     _invalid_cache (true), _cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION),
+     _x(x), _y(y), _w(w), _h(h)
   {
     finalize_construction (parent, n);
+  }
+
+  Layer::Layer (ParentProcess* parent, const std::string& n) : Layer(parent, n, 0,0,-1,0)
+  {
   }
 
   Layer::~Layer ()
@@ -59,10 +65,17 @@ namespace djnn
   Layer::draw ()
   {
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      rmt_BeginCPUSample(layer_draw, RMTSF_Recursive);
+      ComponentObserver::instance ().start_draw ();
       if (Backend::instance ()->pre_draw_layer (this)) {
-        Container::draw ();
+        //Container::draw ();
+        for (auto c : _children) {
+          c->draw ();
+        }  
       }
+      ComponentObserver::instance ().end_draw ();
       Backend::instance ()->post_draw_layer (this);
+      rmt_EndCPUSample();
     }
   }
 

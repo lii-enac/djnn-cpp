@@ -33,6 +33,7 @@ namespace djnn {
       };
     public:
       Layer (ParentProcess* parent, const std::string& name);
+      Layer (ParentProcess* parent, const std::string& name, double x, double y, double w, double h);
       virtual ~Layer () override;
       auto
         get_frame () { return _frame;}
@@ -49,6 +50,8 @@ namespace djnn {
       FatProcess* damaged () { return &_damaged; }
       process_type_e get_process_type () const override { return LAYER_T; }
 
+      void get_xywh(double& x, double& y, double& w, double& h) { x=_x; y=_y; w=_w; h=_h; }
+
     protected:
       Window *_frame;
       Spike _damaged;
@@ -56,5 +59,6 @@ namespace djnn {
       void *_cache, *_pick_cache;
       LayerDamagedAction _damaged_action;
       Coupling _c_damaged;
+      double _x, _y, _w, _h;
     };
 }
