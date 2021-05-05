@@ -105,6 +105,12 @@ namespace djnn {
   };
 
   class SimpleTextEdit : public AbstractGShape {
+      class ToggleEditAction : public Action {
+        public:
+          ToggleEditAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
+          virtual ~ToggleEditAction () {}
+          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->toggle_edit (); }
+      };
       class MousePressAction : public Action {
         public:
           MousePressAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
@@ -142,7 +148,7 @@ namespace djnn {
           void impl_activate () override { ((SimpleTextEdit*)get_parent ())->add_string_input (); }
       };
     public:
-      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y);
+      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, bool enable_edit_on_activation);
       virtual ~SimpleTextEdit ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -175,6 +181,7 @@ namespace djnn {
       void update_lines_position ();
       void copy ();
       void paste ();
+      void toggle_edit ();
       int get_index_x_layout ();
       int get_index_from_x (int x);
       void add_string_input ();
@@ -188,18 +195,20 @@ namespace djnn {
       IntProperty _x, _y, _width, _height, _line_height;
       IntProperty _key_code_pressed, _key_code_released;
       TextProperty _str_input, _copy_buffer;
+      Spike _toggle_edit;
       SimpleText* _line;
+      ToggleEditAction _toggle_action;
       MousePressAction _on_press;
       MouseReleaseAction _on_release;
       MouseMoveAction _on_move;
       KeyPressedAction _key_pressed;
       KeyReleasedAction _key_released;
       StrInputAction _on_str_input;
-      Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y;
+      Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_toggle;
       FontMetricsImpl _font_metrics;
       VoidProcess _ordering_node;
       int _index_x, _index_y, _ascent, _descent, _leading;
       int _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
-      bool _shift_on, _ctrl_on, _press_on;
+      bool _shift_on, _ctrl_on, _press_on, _enable_edit_on_activation;
   };
 }

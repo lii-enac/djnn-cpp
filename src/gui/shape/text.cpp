@@ -482,15 +482,15 @@ namespace djnn
     text = _text.get_value ();
   }
 
-  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y) :
+  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, bool enable_edit_on_activation) :
     AbstractGShape (parent, name), _lines (this, "lines"),
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
     _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y(this, "y", y),
     _width (this, "width", 0), _height (this, "height", 0), _line_height (this, "line_height", 16),
     _key_code_pressed (this, "key_pressed", 0), _key_code_released (this, "key_released", 0),
-    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _line (nullptr),
-    _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
+    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _line (nullptr),
+    _toggle_action (this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
     _key_pressed (this, "key_pressed_action"),  _key_released (this, "key_released_action"),
     _on_str_input (this, "on_str_input_action"),
     _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
@@ -499,9 +499,10 @@ namespace djnn
     _c_press (), _c_release (), _c_move (),
     _c_x (&_x, ACTIVATION, nullptr, ACTIVATION),
     _c_y (&_y, ACTIVATION, nullptr, ACTIVATION),
+    _c_toggle (&_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION),
     _font_metrics (nullptr), _ordering_node (),
     _index_x (0), _index_y (0), _ascent (0), _descent (0), _leading (0),
-    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _press_on (false)
+    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _press_on (false), _enable_edit_on_activation (enable_edit_on_activation)
 
   {
     init_ui();
@@ -568,27 +569,51 @@ namespace djnn
   }
 
   void
+  SimpleTextEdit::toggle_edit ()
+  {
+    if (_c_press.is_enabled()) {
+      _c_str_input.disable ();
+      _c_key_press.disable ();
+      _c_press.disable ();
+      _c_release.disable ();
+      _c_move.disable ();
+    }
+    else {
+      _c_str_input.enable ();
+      _c_key_press.enable ();
+      _c_press.enable ();
+      _c_release.enable ();
+      _c_move.enable ();
+    }
+  }
+
+  void
   SimpleTextEdit::impl_activate()
   {
-    if (_lines.children().empty())
-      _line = new SimpleText (this, "", 0, 0, "");
-    else
-      _line = (SimpleText*)_lines.children().at (0);
+    if (_line == nullptr) {
+      if (_lines.children().empty())
+        _line = new SimpleText (this, "", 0, 0, "");
+      else
+        _line = (SimpleText*)_lines.children().at (0);
+    }
     AbstractGShape::impl_activate ();
     _c_press.init (get_frame()->find_child("press"), ACTIVATION, &_on_press, ACTIVATION, false);
     _c_release.init (get_frame()->find_child("release"), ACTIVATION, &_on_release, ACTIVATION, false);
     _c_move.init (get_frame()->find_child("move"), ACTIVATION, &_on_move, ACTIVATION, false);
-
     _lines.activate ();
 
     _c_x.set_dst (get_frame()->damaged());
     _c_y.set_dst (get_frame()->damaged());
     _c_x.enable();
     _c_y.enable();
-    _c_key_press.enable ();
-    _c_press.enable ();
-    _c_release.enable ();
-    _c_move.enable ();
+    if (!_enable_edit_on_activation) {
+      _c_str_input.disable ();
+      _c_key_press.disable ();
+      _c_press.disable ();
+      _c_release.disable ();
+      _c_move.disable ();
+    }
+    _shift_on = _ctrl_on = _press_on = false;
   }
 
   void
