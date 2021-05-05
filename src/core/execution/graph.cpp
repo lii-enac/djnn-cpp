@@ -475,8 +475,6 @@ namespace djnn
     // sort
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
 
-    // append ouptut nodes
-    _ordered_vertices.insert (_ordered_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
 
     _sorted = true;
 
@@ -540,6 +538,14 @@ rmt_BeginCPUSample(Graph_exec, 0);
       delete p;
     }
     _scheduled_delete_processes.clear ();
+
+    // execute _output_nodes
+    for (auto v : _output_nodes) {
+        if (v->is_invalid ()) continue;
+        auto * p = v->get_process ();
+        p->trigger_activation_flag ();
+        p->set_activation_flag (NONE_ACTIVATION);
+    }
 
 rmt_EndCPUSample();
 
