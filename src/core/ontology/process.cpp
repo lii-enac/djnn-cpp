@@ -40,9 +40,6 @@ namespace djnn
 {
   using namespace std;
 
-  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-  std::vector<__stat_exec> __activation_order;
-  #endif
   std::list<std::pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   std::vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   long int __dbg_creation_num = 0; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
@@ -291,11 +288,6 @@ namespace djnn
   void
   CoreProcess::activate ()
   {
-    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-    __nb_activation.first++;
-    __activation_order.push_back(std::make_pair(true, this));
-    #endif
-
     if (pre_activate ()) {
       impl_activate ();
       post_activate ();
@@ -306,11 +298,6 @@ namespace djnn
   void
   CoreProcess::deactivate ()
   {
-    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-    __nb_activation.second++;
-    __activation_order.push_back(std::make_pair(false, this));
-    #endif
-
     if (pre_deactivate ()) {
       impl_deactivate ();
       post_deactivate ();

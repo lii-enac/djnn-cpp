@@ -383,10 +383,6 @@ namespace djnn {
     // <<instance fields end here
   };
 
-  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-   typedef std::pair<bool , CoreProcess*> __stat_exec;
-   extern std::vector<__stat_exec> __activation_order;
-  #endif
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
    extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
   #endif

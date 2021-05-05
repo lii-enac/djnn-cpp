@@ -514,12 +514,6 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
 rmt_EndCPUSample();
 
-    #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-    display_exec_stats ();
-
-    init_exec_stats();
-    #endif
-
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     // print in GREEN
     cerr << "\033[1;32m" << endl;
@@ -556,62 +550,4 @@ rmt_EndCPUSample();
     #endif
 
   }
-
-  /* ----------- DEBUG ------------- */
-  #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-
-  static int _total_num_exec = 0;
-
-  void 
-  init_exec_stats(){
-    for (int i=0 ; i < __activation_order.size (); i++){
-      auto * p = __activation_order[i].second;
-      p->__nb_activation.first = 0;
-      p->__nb_activation.second = 0;
-    }
-    __activation_order.clear ();
-  }
-
-  void
-  display_exec_stats (){
-    cerr << "\033[1;33m" << endl;
-    cerr << "EXEC " << _total_num_exec++ << endl;
-    
-    for (int i=0 ; i < __activation_order.size (); i++){
-      auto * p = __activation_order[i].second;
-      if ( __activation_order[i].first || (p->__nb_activation.first != p->__nb_activation.second) ) {
-        cerr << "[" << i << "] \t- " << 
-          (__activation_order[i].first ? "ACT   " : "DEACT ") << "- " <<
-          boost::core::demangle(typeid(*p).name()) << " - " <<
-          (p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () : "") << "/" << p->get_debug_name () <<
-          "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ;
-          if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
-            cerr << "\033[1;31m";
-            cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
-            cerr << "\033[1;33m";
-          }
-          cerr << endl;
-      }
-      else {
-        cerr << "\033[1;30m";
-        cerr << "[" << i << "] \t- " << 
-          "DEACT - " <<
-          boost::core::demangle(typeid(*p).name()) << " - " <<
-          (p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () : "") << "/" << p->get_debug_name () <<
-          "\t- [" << p->__nb_activation.first << ", " << p->__nb_activation.second << "]" ;
-          if (p->__nb_activation.first > 1 || p->__nb_activation.second > 1) {
-            cerr << "\033[1;31m";
-            cerr  << "\t\t !!! MORE than 1 act/deact - should never happen";
-            cerr << "\033[1;33m";
-          }
-        cerr << endl << "\033[1;33m";
-      }
-    }
-    
-    cerr << endl << endl;
-    cerr << "\033[0m"  << endl;
-  }
-
-  #endif
-  /* ----------- END DEBUG ------------- */
 }
