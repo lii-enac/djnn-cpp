@@ -507,6 +507,7 @@ namespace djnn
     init_ui();
     graph_add_edge (&_on_str_input, &_width);
 
+    graph_add_edge (&_on_str_input, &_ordering_node);
     graph_add_edge (&_on_press, &_ordering_node);
     graph_add_edge (&_on_release, &_ordering_node);
     graph_add_edge (&_on_move, &_ordering_node);
@@ -525,6 +526,7 @@ namespace djnn
   {
     graph_remove_edge (&_on_str_input, &_width);
 
+    graph_remove_edge (&_on_str_input, &_ordering_node);
     graph_remove_edge (&_on_press, &_ordering_node);
     graph_remove_edge (&_on_release, &_ordering_node);
     graph_remove_edge (&_on_move, &_ordering_node);
