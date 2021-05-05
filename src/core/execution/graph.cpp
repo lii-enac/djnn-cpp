@@ -242,7 +242,7 @@ namespace djnn
   Graph::clear ()
   {
     /* nothing to delete because vertices are own by _vertices. */
-    _activation_vector.clear ();
+    _ordered_vertices.clear ();
 
     /* delete vertices from _vertices and clear.*/
     for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
@@ -393,7 +393,7 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     cout << " --- SORTED GRAPH --- " << endl ;
-    for (auto v : _activation_vector) {
+    for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
       if (pp && pp->get_debug_parent())
         cerr << pp->get_debug_parent()->get_debug_name () << "/";
@@ -428,7 +428,7 @@ namespace djnn
 //     || (v->get_count_edges_in () > 1)
 // #endif
     )
-      _activation_vector.push_back (v);
+      _ordered_vertices.push_back (v);
 
     v->set_mark (BROWSING);
 
@@ -459,7 +459,7 @@ namespace djnn
     _t1 ();
     #endif
     _cur_date = 0;
-    _activation_vector.clear ();
+    _ordered_vertices.clear ();
     //warning(nullptr, std::string("num vertices: ")+__to_string(_vertices.size()));
 
     // set every vertex as NOT_MARKED before sorting them
@@ -473,10 +473,10 @@ namespace djnn
     }
 
     // sort
-    std::sort (_activation_vector.begin (), _activation_vector.end (), cmp_vertices);
+    std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
 
     // append ouptut nodes
-    _activation_vector.insert (_activation_vector.end (), _output_nodes.begin (), _output_nodes.end ());
+    _ordered_vertices.insert (_ordered_vertices.end (), _output_nodes.begin (), _output_nodes.end ());
 
     _sorted = true;
 
@@ -522,7 +522,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
     bool is_end = false;
     while (!is_end) {
       is_end = true;
-      for (auto v : _activation_vector) {
+      for (auto v : _ordered_vertices) {
       	if (!_sorted) break;
         if (v->is_invalid ()) continue;
         auto * p = v->get_process ();
