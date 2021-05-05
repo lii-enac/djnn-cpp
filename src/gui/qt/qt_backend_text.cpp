@@ -126,6 +126,7 @@ namespace djnn
     delete last_fm;
     ste->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
 
+    load_drawing_context (ste, 0, 0, 1, 1);
     _context_manager->get_current ()->matrix.translate (ste->x (), ste->y () + fm.ascent ());
     for (auto l : ste->lines ()->children ()) {
       w  = draw_simple_text(((SimpleText*)l), &fm);

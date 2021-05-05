@@ -676,9 +676,9 @@ namespace djnn
   {
     /* compute local coords */
     Homography *h = dynamic_cast<Homography*> (this->inverted_matrix ());
-    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
+    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m14
         - this->origin_x ()->get_value ();
-    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
+    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y  + h->raw_props.m24
         - this->origin_y ()->get_value ();
     return std::pair<double, double> (loc_x, loc_y);
   }
@@ -692,9 +692,9 @@ namespace djnn
     int x = (int) local.first - this->x ();
     int y = (int) local.second - this->y ();
     update_index_from_xy (x, y);
-    update_cursor ();
     _start_sel_x = _end_sel_x = _index_x;
     _start_sel_y = _end_sel_y = _index_y;
+    update_cursor ();
     _press_on = true;
   }
 
@@ -715,9 +715,9 @@ namespace djnn
     int x = (int) local.first - this->x ();
     int y = (int) local.second - this->y ();
     update_index_from_xy (x, y);
-    update_cursor ();
     _end_sel_x = _index_x;
     _end_sel_y = _index_y;
+    update_cursor ();
   }
 
   void
