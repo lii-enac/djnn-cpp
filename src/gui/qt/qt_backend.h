@@ -61,6 +61,16 @@ namespace djnn
     draw_line (Line *s) override;
     void
     draw_text (Text *t) override;
+    int
+    draw_simple_text (SimpleText *t, QFontMetrics* fm);
+    void
+    draw_simple_text_edit (SimpleTextEdit*) override;
+    int
+    compute_index (FontMetricsImpl fm, SimpleText* t, int x) override;
+    int
+    compute_x_offset (FontMetricsImpl fm, SimpleText* t, int index) override;
+    int
+    compute_text_width (FontMetricsImpl fm, SimpleText *t) override;
     double
     get_cursor_from_index (Text*, int) override;
     std::pair<double,int>

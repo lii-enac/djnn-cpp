@@ -25,10 +25,12 @@
 namespace djnn
 {
 
+  typedef void* FontMetricsImpl;
   class AbstractGObj;
   class AbstractGShape;
   class Layer;
-
+  class SimpleText;
+  class SimpleTextEdit;
   class AbstractBackend
   {
   public:
@@ -60,6 +62,26 @@ namespace djnn
     virtual void
     draw_text (Text*)
     {
+    }
+    virtual void
+    draw_simple_text_edit (SimpleTextEdit*)
+    {
+
+    }
+    virtual int
+    compute_index (FontMetricsImpl fm, SimpleText* t, int x)
+    {
+      return 0;
+    }
+    virtual int
+    compute_x_offset (FontMetricsImpl fm, SimpleText* t, int index)
+    {
+      return 0;
+    }
+    virtual int
+    compute_text_width (FontMetricsImpl fm, SimpleText *t)
+    {
+      return 0;
     }
     virtual double
     get_cursor_from_index (Text*, int)
