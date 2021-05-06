@@ -596,7 +596,7 @@ namespace djnn
         _line = (SimpleText*)_lines.children().at (0);
     }
     AbstractGShape::impl_activate ();
-    _c_press.init (get_frame()->find_child("press"), ACTIVATION, &_on_press, ACTIVATION, false);
+    _c_press.init (this->find_child("press"), ACTIVATION, &_on_press, ACTIVATION, false);
     _c_release.init (get_frame()->find_child("release"), ACTIVATION, &_on_release, ACTIVATION, false);
     _c_move.init (get_frame()->find_child("move"), ACTIVATION, &_on_move, ACTIVATION, false);
     _lines.activate ();
@@ -611,6 +611,12 @@ namespace djnn
       _c_press.disable ();
       _c_release.disable ();
       _c_move.disable ();
+    } else {
+      _c_str_input.enable ();
+      _c_key_press.enable ();
+      _c_press.enable ();
+      _c_release.enable ();
+      _c_move.enable ();
     }
     _shift_on = _ctrl_on = _press_on = false;
   }
