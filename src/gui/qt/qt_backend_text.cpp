@@ -53,10 +53,8 @@ using namespace std;
 namespace djnn
 {
   int
-  QtBackend::draw_simple_text (SimpleText *t, QFontMetrics* fm)
+  QtBackend::draw_simple_text (SimpleText *t, QFontMetrics* fm, int posX, int posY)
   {
-    double posX = t->get_x ();
-    double posY = t->get_y ();
     QString s = QObject::tr (t->get_content ().c_str ());
     QtContext *cur_context = _context_manager->get_current ();
     load_drawing_context (t, posX, posY, 1, 1);
@@ -127,8 +125,15 @@ namespace djnn
 
     load_drawing_context (ste, 0, 0, 1, 1);
     _context_manager->get_current ()->matrix.translate (ste->x (), ste->y () + fm.ascent ());
+    int y = 0;
+    int height = fm.height() + fm.leading ();
     for (auto l : ste->lines ()->children ()) {
-      draw_simple_text(((SimpleText*)l), &fm);
+      SimpleText* line = (SimpleText*)l;
+      if (ste->first_draw()) {
+        line->set_y (y);
+        y += height;
+      }
+      draw_simple_text(line, &fm, line->get_x (), line->get_y ());
     }
     load_pick_context (ste);
     _context_manager->get_current ()->matrix.translate (-ste->x (), -ste->y () - fm.ascent ());

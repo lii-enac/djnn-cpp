@@ -93,6 +93,8 @@ namespace djnn {
       void set_content (std::string& new_content) { _text.set_value (new_content, true); };
       double get_x () { return raw_props.x; }
       double get_y () { return raw_props.y; }
+      void set_x (double x) { raw_props.x = x; }
+      void set_y (double y) { raw_props.y = y; }
       void get_properties_values (double &x, double &y, std::string &text);
       virtual FatChildProcess* find_child_impl (const std::string&) override;
     private:
@@ -148,7 +150,7 @@ namespace djnn {
           void impl_activate () override { ((SimpleTextEdit*)get_parent ())->add_string_input (); }
       };
     public:
-      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, bool enable_edit_on_activation);
+      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text = std::string(), bool enable_edit_on_activation = true);
       virtual ~SimpleTextEdit ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -166,6 +168,7 @@ namespace djnn {
       void set_leading (int v) { _leading = v; }
       FontMetricsImpl get_font_metrics () { return _font_metrics; }
       void set_font_metrics (FontMetricsImpl fm) { _font_metrics = fm; }
+      bool first_draw () { return _first_draw; }
     private:
       void delete_line (SimpleText* st);
       void sort_selection ();
@@ -209,6 +212,7 @@ namespace djnn {
       VoidProcess _ordering_node;
       int _index_x, _index_y, _ascent, _descent, _leading;
       int _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
-      bool _shift_on, _ctrl_on, _press_on, _enable_edit_on_activation;
+      bool _shift_on, _ctrl_on, _press_on, _enable_edit_on_activation, _first_draw;
+      std::string _init_text;
   };
 }

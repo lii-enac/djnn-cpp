@@ -482,7 +482,7 @@ namespace djnn
     text = _text.get_value ();
   }
 
-  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, bool enable_edit_on_activation) :
+  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text, bool enable_edit_on_activation) :
     AbstractGShape (parent, name), _lines (this, "lines"),
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
@@ -502,7 +502,9 @@ namespace djnn
     _c_toggle (&_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION),
     _font_metrics (nullptr), _ordering_node (),
     _index_x (0), _index_y (0), _ascent (0), _descent (0), _leading (0),
-    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _press_on (false), _enable_edit_on_activation (enable_edit_on_activation)
+    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _press_on (false),
+    _enable_edit_on_activation (enable_edit_on_activation), _first_draw (true),
+    _init_text (text)
 
   {
     init_ui();
@@ -588,8 +590,11 @@ namespace djnn
   SimpleTextEdit::impl_activate()
   {
     if (_line == nullptr) {
-      if (_lines.children().empty())
+      if (_lines.children().empty()) {
         _line = new SimpleText (this, "", 0, 0, "");
+        add_str (_init_text);
+        _init_text = "";
+      }
       else
         _line = (SimpleText*)_lines.children().at (0);
     }
@@ -1155,6 +1160,7 @@ namespace djnn
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_simple_text_edit (this);
+      _first_draw = false;
       _cursor_height.set_value (_ascent + _descent, true);
       _line_height.set_value (_ascent + _descent + _leading, true);
       AbstractGShape::post_draw ();

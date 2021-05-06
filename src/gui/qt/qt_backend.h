@@ -62,7 +62,7 @@ namespace djnn
     void
     draw_text (Text *t) override;
     int
-    draw_simple_text (SimpleText *t, QFontMetrics* fm);
+    draw_simple_text (SimpleText *t, QFontMetrics* fm, int x, int y);
     void
     draw_simple_text_edit (SimpleTextEdit*) override;
     int
