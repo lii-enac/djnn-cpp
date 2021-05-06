@@ -182,12 +182,10 @@ namespace djnn
     auto * found = find_child_impl (path);
 #ifndef DJNN_NO_DEBUG
     if (!found) {
-      if (Context::instance ()->line ()>0) {
-        error (nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": symbol '" + path + "' in process '" + get_debug_name () + "' not found");
-      }
-      else {
-        error (this, "symbol '" + path + "' not found");
-      }
+      if (Context::instance ()->line ()>0)
+        warning (nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": symbol '" + path + "' in process '" + get_debug_name () + "' not found");
+      else
+        warning (this, "symbol '" + path + "' not found");
     }
 #endif
     return found;
@@ -199,12 +197,10 @@ namespace djnn
     auto * found = find_child_impl (index);
 #ifndef DJNN_NO_DEBUG
     if (!found) {
-      if (Context::instance ()->line ()>0) {
-        error (nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": index " + std::to_string(index) + " in process '" + get_debug_name () + "' not found");
-      }
-      else {
-        error (this, "index '" + std::to_string(index) + "' not found");
-      }
+      if (Context::instance ()->line ()>0)
+        warning(nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": index " + std::to_string(index) + " in process '" + get_debug_name () + "' not found");
+      else
+        warning (this, "index '" + std::to_string(index) + "' not found");
     }
 #endif
     return found;
