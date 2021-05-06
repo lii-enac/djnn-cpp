@@ -148,25 +148,25 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     auto * pp = _process;
-    std::cout << "vertex (" <<
+    std::cerr << "vertex (" <<
     cpp_demangle(typeid(*pp).name()) << ":" << 
     ( pp && pp->get_debug_parent () ? pp->get_debug_parent ()->get_debug_name () + "/" : "") <<
     ( pp ? pp->get_debug_name () : "") << ") - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
-      cout << "EMPTY" << endl;
+      std::cerr << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
          auto result = _map_edges.find(e);
          auto * ppe = e->_process;
          if (ppe) {
-          std::cout << cpp_demangle(typeid(*ppe).name()) << ":" << 
+          std::cerr << cpp_demangle(typeid(*ppe).name()) << ":" << 
           ( ppe->get_debug_parent () ?  ppe->get_debug_parent ()->get_debug_name () + "/" : "" ) << ppe->get_debug_name () << " [x"
             << result->second << "] \t" ;
          }
       }
-      std::cout << std::endl;
+      std::cerr << std::endl;
     }
 #endif
   }
@@ -339,11 +339,11 @@ namespace djnn
   Graph::print_graph () const
   {
 #ifndef DJNN_NO_DEBUG
-    cout << " --- GRAPH --- " << endl ;
+    std::cerr << " --- GRAPH --- " << endl ;
     for (auto v : _vertices) {
       v->print_vertex ();
     }
-    cout << " --- END GRAPH --- " << endl << endl;
+    std::cerr << " --- END GRAPH --- " << endl << endl;
 #endif
   }
 
@@ -351,14 +351,14 @@ namespace djnn
   Graph::print_sorted () const
   {
 #ifndef DJNN_NO_DEBUG
-    cout << " --- SORTED GRAPH --- " << endl ;
+    std::cerr << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
       if (pp && pp->get_debug_parent())
         cerr << pp->get_debug_parent()->get_debug_name () << "/";
       cerr << pp->get_debug_name () << " (" << v->get_timestamp () << ")\n";
     }
-    cout << " --- END SORTED GRAPH --- " << endl << endl;
+    std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
 #endif
   }
 
@@ -443,9 +443,9 @@ namespace djnn
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_SORT - begin_GRAPH_SORT).count();
     std::cerr << "SORT_GRAPH = " << time << "[us]" ;
     if (time > 1000 )
-        std::cout << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
+        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
       else
-        std::cout << std::endl;
+        std::cerr << std::endl;
     sorted_counter = sorted_counter + 1;
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
@@ -521,9 +521,9 @@ rmt_EndCPUSample();
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_EXEC - begin_GRAPH_EXEC).count();
     std::cerr << "GRAPH_EXEC = " << time << "[us]" ;
     if (time > 1000 )
-        std::cout << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
+        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
       else
-        std::cout << std::endl;
+        std::cerr << std::endl;
     graph_counter = graph_counter + 1;
     graph_total = graph_total + time ;
     graph_average = graph_total / graph_counter;
