@@ -38,8 +38,8 @@ namespace djnn
   FileWriter::FileWriter (ParentProcess* parent, const std::string& name, const std::string& filename)
   : FatProcess (name), _input (this, "input", ""), _filename (this, "filename", filename),
   _fn_action (this, "fn_action"), _action (this, "action"),
-  _c_input (&_input, ACTIVATION, &_action, ACTIVATION, true),
-  _c_filename (&_filename, ACTIVATION, &_fn_action, ACTIVATION, true),
+  _c_input (&_input, ACTIVATION, &_action, ACTIVATION),
+  _c_filename (&_filename, ACTIVATION, &_fn_action, ACTIVATION),
   _fs (filename, std::ofstream::out | std::ofstream::trunc)
   {
     finalize_construction (parent, name);
