@@ -18,8 +18,6 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
-using namespace std;
-
 namespace djnn
 {
   void
@@ -34,7 +32,7 @@ namespace djnn
     _input = new TextProperty (this, "input", filename);
     _output = new TextProperty (this, "output", "");
     _action = new FileReaderAction (this, "action");
-    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
+    _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION);
     finalize_construction (parent, name);
   }
 
@@ -62,13 +60,15 @@ namespace djnn
   void
   FileReader::read ()
   {
-    string filename = _input->get_value ();
-    ifstream file (filename);
+    std::string filename = _input->get_value ();
+    std::ifstream file (filename);
     if (file.is_open()) {
-      string line;
+      std::string buff;
+      std::string line;
       while (getline(file, line)) {
-        _output->set_value (line, true);
+        buff.append (line + "\n");
       }
+      _output->set_value (buff, true);
       file.close();
     }
   }
