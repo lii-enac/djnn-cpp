@@ -119,6 +119,7 @@ public:
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
+    Connector* clone () override { /* TBD --- but annoying when loading text from svg */ return nullptr;}
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const std::string& format) override;
 #endif
