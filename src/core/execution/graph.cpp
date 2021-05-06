@@ -232,6 +232,45 @@ namespace djnn
     return v;
   }
 
+  void 
+  Graph::add_in_activation (Vertex *v)
+  {
+    /*
+      note : if the graph has not been sorted yet.
+      we do not know the order so we just push_back and the
+      _new_activ will be reordered during sorted process.
+    */
+    if (_sorted) {
+      if (_new_activ.empty ())
+        _new_activ.push_front (v);
+      else {
+        std::deque <Vertex *>::iterator it = _new_activ.begin () ;
+        bool is_inserted = false;
+
+        while ( !is_inserted && it != _new_activ.end () ) {
+          // do not insert duplicate
+          if ((*it)->get_sorted_index () == v->get_sorted_index ()) return ; 
+          if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
+            _new_activ.insert (it, v);
+            is_inserted = true;
+          }
+          it++;
+        }
+        //if not inserted : it is the last one
+        if (!is_inserted)
+          _new_activ.push_back (v);
+      }
+    }
+    else {
+      // but should avoid duplicate
+      for (auto vv: _new_activ)
+        if (vv == v) return ;
+
+      // new we add it 
+      _new_activ.push_front (v);
+    }
+  }
+
   void
   Graph::add_output_node (CoreProcess* c)
   {
@@ -362,11 +401,28 @@ namespace djnn
     std::cerr << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
+      cerr << v->get_sorted_index () << " - " ;
       if (pp && pp->get_debug_parent())
         cerr << pp->get_debug_parent()->get_debug_name () << "/";
       cerr << pp->get_debug_name () << " (" << v->get_timestamp () << ")\n";
     }
     std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
+#endif
+  }
+
+  void
+  Graph::print_activation () const
+  {
+#ifndef DJNN_NO_DEBUG
+    std::cerr << " --- SORTED ACTIVATION --- " << endl ;
+    for (auto v : _new_activ) {
+      auto * pp = v->get_process ();
+      cerr << "i: " << v->get_sorted_index () << " - t: " << v->get_timestamp () << " - p: " << pp << " - ";
+      if (pp && pp->get_debug_parent())
+        cerr << pp->get_debug_parent()->get_debug_name () << "/";
+      cerr << pp->get_debug_name () << "\n";
+    }
+    std::cerr << " --- END ACTIVATION --- " << endl << endl;
 #endif
   }
 
@@ -416,6 +472,11 @@ namespace djnn
     return v2->get_timestamp () < v1->get_timestamp ();
   }
 
+  bool
+  cmp_index (const Vertex* v1, const Vertex *v2) {
+    return v2->get_sorted_index () < v1->get_sorted_index ();
+  }
+
   void
   Graph::sort ()
   {
@@ -442,6 +503,15 @@ namespace djnn
     // sort
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
 
+#if !_EXEC_FULL_ORDERED_VERTICES
+    //give sorted_index
+    int index = 0 ;
+    for (auto v : _ordered_vertices) {
+      v->set_sorted_index (index++);
+    }
+
+    std::sort (_new_activ.begin (), _new_activ.end (), cmp_index);
+#endif
 
     _sorted = true;
 
@@ -492,11 +562,13 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     int count_real_activation = 0 ;
+    int count_activation = 0;
     graph_counter_act++;
     int _sorted_break = 0;
     std::chrono::steady_clock::time_point begin_act = std::chrono::steady_clock::now();
 #endif
 
+#if _EXEC_FULL_ORDERED_VERTICES
     bool is_end = false;
     while (!is_end) {
       is_end = true;
@@ -514,6 +586,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
         auto * p = v->get_process ();
         
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
+        count_activation++;
         if (p->get_activation_flag () != NONE_ACTIVATION) {
           std::chrono::steady_clock::time_point begin_process_act = std::chrono::steady_clock::now();
           count_real_activation++;
@@ -539,7 +612,57 @@ rmt_BeginCPUSample(Graph_exec, 0);
         is_end = false;
       }
     }
-    
+
+#else //between OLD and NEW execution
+
+    bool is_end = false;
+    while (!is_end) {
+      is_end = true;
+
+      while (!_new_activ.empty ()) {
+        auto * v = _new_activ.front ();
+        _new_activ.pop_front ();
+        
+      if (!_sorted) {
+#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+          _sorted_break++;
+          std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break <<  "\033[0m" << endl ;
+#endif
+          break;
+        } 
+        if (v->is_invalid ()) 
+          continue;
+        auto * p = v->get_process ();
+        
+#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+        count_activation++;
+        if (p->get_activation_flag () != NONE_ACTIVATION) { // should be removed ??
+          std::chrono::steady_clock::time_point begin_process_act = std::chrono::steady_clock::now();
+          count_real_activation++;
+#endif
+      
+          p->trigger_activation_flag ();
+          p->set_activation_flag (NONE_ACTIVATION);
+
+#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+          std::chrono::steady_clock::time_point end_process_act = std::chrono::steady_clock::now();
+          int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
+          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
+            cerr << "\033[1;36m";
+          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
+            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
+          cerr << "\033[0m";
+        }
+ #endif
+      } 
+
+      if (!_sorted) {
+        sort ();
+        is_end = false;
+      }
+    }
+    #endif
+
     // then execute delayed delete on processes 
     for (auto p: _scheduled_delete_processes) {
       delete p;
@@ -567,10 +690,10 @@ rmt_EndCPUSample();
       }
       else
         std::cerr << std::endl;
-      double pourcent_graph = (count_real_activation/ (double)_ordered_vertices.size ()) * 100;
+      double pourcent_graph = (count_real_activation/ (double)count_activation) * 100;
       if (pourcent_graph < 50)
         cerr << "\033[1;31m";
-      std::cerr << "nb action = " << count_real_activation  << "/" << _ordered_vertices.size () << "(" << pourcent_graph << "%)" ;
+      std::cerr << "nb action = " << count_real_activation  << "/" << count_activation << "(" << pourcent_graph << "%)" ;
       std::cerr << "--- nb sorted_break " << _sorted_break << endl << endl ;
       cerr << "\033[0m";
 #endif

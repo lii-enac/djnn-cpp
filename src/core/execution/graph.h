@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <list>
+#include <deque>
 #include <memory>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
@@ -55,6 +56,9 @@ namespace djnn
     void set_timestamp (int date) { _timestamp = date; }
     int  get_timestamp () const   { return _timestamp; }
 
+    void set_sorted_index (int index) { _sorted_index = index; }
+    int get_sorted_index () const { return _sorted_index; }
+
     CoreProcess*       get_process ()       { return _process; }
     const CoreProcess* get_process () const { return _process; }
 
@@ -68,6 +72,7 @@ namespace djnn
     size_t _count_edges_in;
     std::map<Vertex*, int> _map_edges; /* try to deal with duplicate */
     bool _is_invalid;
+    int _sorted_index;
   };
 
   class Graph
@@ -91,7 +96,10 @@ namespace djnn
     const Vertex::vertices_t& get_sorted () const { return _ordered_vertices; }
 
     void print_graph  () const;
-    void print_sorted () const; 
+    void print_sorted () const;
+    void print_activation () const; 
+
+    void add_in_activation (Vertex *v);
 
   private:
     //static Graph _instance;
@@ -108,6 +116,9 @@ namespace djnn
     Vertex::vertices_t _output_nodes;
     std::vector<CoreProcess*> _scheduled_delete_processes;
     std::vector<CoreProcess*> _scheduled_activation_processes;
+
+    std::deque < Vertex*> _new_activ;
+
     int _cur_date;
     bool _sorted;
   };
