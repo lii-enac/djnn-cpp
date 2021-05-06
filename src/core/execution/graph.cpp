@@ -66,6 +66,15 @@ namespace djnn
     MARKED
   };
 
+#ifndef DJNN_NO_DEBUG
+  static std::string 
+  print_process_full_name (CoreProcess *p) {
+    return cpp_demangle(typeid(*p).name()) + "- (" + 
+    ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
+    ( p ? p->get_debug_name () : "") + ")";
+  }
+#endif
+
   Vertex::Vertex (CoreProcess* p) :
       _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
   {
@@ -152,10 +161,7 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     auto * pp = _process;
-    std::cerr << "vertex (" <<
-    cpp_demangle(typeid(*pp).name()) << ":" << 
-    ( pp && pp->get_debug_parent () ? pp->get_debug_parent ()->get_debug_name () + "/" : "") <<
-    ( pp ? pp->get_debug_name () : "") << ") - [" << 
+    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
@@ -165,9 +171,7 @@ namespace djnn
          auto result = _map_edges.find(e);
          auto * ppe = e->_process;
          if (ppe) {
-          std::cerr << cpp_demangle(typeid(*ppe).name()) << ":" << 
-          ( ppe->get_debug_parent () ?  ppe->get_debug_parent ()->get_debug_name () + "/" : "" ) << ppe->get_debug_name () << " [x"
-            << result->second << "] \t" ;
+          std::cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
          }
       }
       std::cerr << std::endl;
@@ -524,7 +528,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " ------ " << p->get_debug_name () <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
+            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
           cerr << "\033[0m";
         }
  #endif
