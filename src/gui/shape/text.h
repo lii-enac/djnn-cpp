@@ -148,7 +148,7 @@ namespace djnn {
           void impl_activate () override { ((SimpleTextEdit*)get_parent ())->add_string_input (); }
       };
     public:
-      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, bool enable_edit_on_activation);
+      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, bool enable_edit_on_activation);
       virtual ~SimpleTextEdit ();
       void impl_activate () override;
       void impl_deactivate () override;

@@ -116,7 +116,6 @@ namespace djnn
   void
   QtBackend::draw_simple_text_edit (SimpleTextEdit* ste)
   {
-    int max_width = 0, w = 0;
     QtContext *cur_context = _context_manager->get_current ();
     _painter->setFont (cur_context->font);
     QFontMetrics fm = _painter->fontMetrics ();
@@ -129,17 +128,12 @@ namespace djnn
     load_drawing_context (ste, 0, 0, 1, 1);
     _context_manager->get_current ()->matrix.translate (ste->x (), ste->y () + fm.ascent ());
     for (auto l : ste->lines ()->children ()) {
-      w  = draw_simple_text(((SimpleText*)l), &fm);
-      if (max_width < w)
-        max_width = w;
+      draw_simple_text(((SimpleText*)l), &fm);
     }
-    int height = _painter->fontMetrics ().height() * ste->lines ()->children ().size ();
     load_pick_context (ste);
     _context_manager->get_current ()->matrix.translate (-ste->x (), -ste->y () - fm.ascent ());
-    QRect rect (ste->x (), ste->y(), max_width, height);
+    QRect rect (ste->x (), ste->y(), ste->width(), ste->height());
     _picking_view->painter ()->drawRect (rect);
-    ste->set_width(max_width);
-    ste->set_height(height);
     // Update font metrics data
     ste->set_ascent  (fm.ascent ());
     ste->set_descent (fm.descent ());

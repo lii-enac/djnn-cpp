@@ -482,12 +482,12 @@ namespace djnn
     text = _text.get_value ();
   }
 
-  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, bool enable_edit_on_activation) :
+  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, bool enable_edit_on_activation) :
     AbstractGShape (parent, name), _lines (this, "lines"),
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
     _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y(this, "y", y),
-    _width (this, "width", 0), _height (this, "height", 0), _line_height (this, "line_height", 16),
+    _width (this, "width", width), _height (this, "height", height), _line_height (this, "line_height", 16),
     _key_code_pressed (this, "key_pressed", 0), _key_code_released (this, "key_released", 0),
     _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _line (nullptr),
     _toggle_action (this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
@@ -506,7 +506,6 @@ namespace djnn
 
   {
     init_ui();
-    graph_add_edge (&_on_str_input, &_width);
 
     graph_add_edge (&_on_str_input, &_ordering_node);
     graph_add_edge (&_on_press, &_ordering_node);
@@ -1112,12 +1111,6 @@ namespace djnn
         _index_x = _line->get_content ().size ();
         update_lines_position ();
       }
-    }
-
-
-    int width = Backend::instance ()->compute_text_width (_font_metrics, _line);
-    if (width > _width.get_value()) {
-      set_width (width);
     }
     update_cursor ();
   }
