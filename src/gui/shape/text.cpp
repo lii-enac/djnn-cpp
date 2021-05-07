@@ -487,7 +487,7 @@ namespace djnn
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
     _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y(this, "y", y),
-    _width (this, "width", width), _height (this, "height", height), _line_height (this, "line_height", 16),
+    _width (this, "width", width), _height (this, "height", height), _line_height (this, "line_height", 16), _spaces_for_tab (this, "spaces_for_tab", 0),
     _key_code_pressed (this, "key_pressed", 0), _key_code_released (this, "key_released", 0),
     _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _line (nullptr),
     _toggle_action (this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
@@ -502,7 +502,7 @@ namespace djnn
     _c_toggle (&_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION),
     _font_metrics (nullptr), _ordering_node (),
     _index_x (0), _index_y (0), _ascent (0), _descent (0), _leading (0),
-    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _press_on (false),
+    _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
     _enable_edit_on_activation (enable_edit_on_activation), _first_draw (true),
     _init_text (text)
 
@@ -539,32 +539,127 @@ namespace djnn
     graph_remove_edge (&_ordering_node, &_cursor_end_y);
   }
 
+  void
+   SimpleTextEdit::impl_activate()
+   {
+     if (_line == nullptr) {
+       if (_lines.children().empty()) {
+         _line = new SimpleText (this, "", 0, 0, "");
+         add_str (_init_text);
+         _init_text = "";
+         _index_y = _start_sel_y = _end_sel_y = 0;
+         _index_x = _start_sel_x = _end_sel_x = 0;
+         _line = get_line (0);
+         update_cursor ();
+       }
+       else
+         _line = get_line (0);
+     }
+     AbstractGShape::impl_activate ();
+     _c_press.init (this->find_child("press"), ACTIVATION, &_on_press, ACTIVATION, false);
+     _c_release.init (get_frame()->find_child("release"), ACTIVATION, &_on_release, ACTIVATION, false);
+     _c_move.init (get_frame()->find_child("move"), ACTIVATION, &_on_move, ACTIVATION, false);
+     _lines.activate ();
+
+     _c_x.set_dst (get_frame()->damaged());
+     _c_y.set_dst (get_frame()->damaged());
+     _c_x.enable();
+     _c_y.enable();
+     if (!_enable_edit_on_activation) {
+       _c_str_input.disable ();
+       _c_key_press.disable ();
+       _c_press.disable ();
+       _c_release.disable ();
+       _c_move.disable ();
+     } else {
+       _c_str_input.enable ();
+       _c_key_press.enable ();
+       _c_press.enable ();
+       _c_release.enable ();
+       _c_move.enable ();
+     }
+     _shift_on = _ctrl_on = _press_on = false;
+   }
+
+   void
+   SimpleTextEdit::impl_deactivate()
+   {
+     AbstractGShape::impl_deactivate ();
+     _lines.deactivate ();
+     _c_x.disable();
+     _c_y.disable();
+     _c_key_press.disable ();
+     _c_press.disable ();
+     _c_release.disable ();
+     _c_move.disable ();
+   }
+
   int
-  SimpleTextEdit::next_index ()
+  SimpleTextEdit::next_index (const std::string &str, int idx)
   {
-    std::string str = _line->get_content();
-    if (_index_x > str.size ())
-      return _index_x;
+    if (idx > str.size ())
+      return idx;
     int offset = 1;
-    auto cp = str.data () + _index_x;
+    auto cp = str.data () + idx;
     while (++cp <= (str.data () + str.size ()) && ((*cp & 0b10000000) && !(*cp & 0b01000000))) {
      offset++;
     }
-    return _index_x + offset;
+    return idx + offset;
   }
 
   int
-  SimpleTextEdit::previous_index ()
+  SimpleTextEdit::previous_index (const std::string &str, int idx)
   {
-    std::string str = _line->get_content();
-    if (_index_x <= 0)
+    if (idx <= 0)
       return 0;
     int offset = 1;
-    auto cp = str.data () + _index_x;
+    auto cp = str.data () + idx;
     while (--cp > str.data () && ((*cp & 0b10000000) && !(*cp & 0b01000000))) {
      offset++;
     }
-    return _index_x - offset;
+    return idx - offset;
+  }
+
+  static bool
+  isspace (const char &c) {
+    return c == ' ' || c == '\t';
+  }
+
+  static bool
+  isdelimiter (const char &c) {
+    bool r = (c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']' || c == '\"');
+    return r;
+  }
+
+  bool
+  SimpleTextEdit::is_starting_word (const std::string& str, int i)
+  {
+    if (i <= 0)
+      return true;
+    char c = str.at(i);
+    char prev_c = str.at(i - 1);
+    if ( (isspace (prev_c) || isdelimiter (prev_c)) && !isspace (c))
+      return true;
+    return false;
+  }
+
+  int
+  SimpleTextEdit::next_word (const std::string &str, int idx)
+  {
+    int i = next_index(str, idx);
+    while (i < str.length() && !is_starting_word(str, i))
+      i = next_index(str, i);
+    return i;
+  }
+
+  int
+  SimpleTextEdit::previous_word (const std::string &str, int idx)
+  {
+    int i = previous_index (str, idx) ;
+    while (i > 0 && !is_starting_word (str, i) ) {
+      i = previous_index (str, i);
+    }
+    return i;
   }
 
   void
@@ -586,56 +681,6 @@ namespace djnn
     }
   }
 
-  void
-  SimpleTextEdit::impl_activate()
-  {
-    if (_line == nullptr) {
-      if (_lines.children().empty()) {
-        _line = new SimpleText (this, "", 0, 0, "");
-        add_str (_init_text);
-        _init_text = "";
-      }
-      else
-        _line = (SimpleText*)_lines.children().at (0);
-    }
-    AbstractGShape::impl_activate ();
-    _c_press.init (this->find_child("press"), ACTIVATION, &_on_press, ACTIVATION, false);
-    _c_release.init (get_frame()->find_child("release"), ACTIVATION, &_on_release, ACTIVATION, false);
-    _c_move.init (get_frame()->find_child("move"), ACTIVATION, &_on_move, ACTIVATION, false);
-    _lines.activate ();
-
-    _c_x.set_dst (get_frame()->damaged());
-    _c_y.set_dst (get_frame()->damaged());
-    _c_x.enable();
-    _c_y.enable();
-    if (!_enable_edit_on_activation) {
-      _c_str_input.disable ();
-      _c_key_press.disable ();
-      _c_press.disable ();
-      _c_release.disable ();
-      _c_move.disable ();
-    } else {
-      _c_str_input.enable ();
-      _c_key_press.enable ();
-      _c_press.enable ();
-      _c_release.enable ();
-      _c_move.enable ();
-    }
-    _shift_on = _ctrl_on = _press_on = false;
-  }
-
-  void
-  SimpleTextEdit::impl_deactivate()
-  {
-    AbstractGShape::impl_deactivate ();
-    _lines.deactivate ();
-    _c_x.disable();
-    _c_y.disable();
-    _c_key_press.disable ();
-    _c_press.disable ();
-    _c_release.disable ();
-    _c_move.disable ();
-  }
 
   void
   SimpleTextEdit::update_selection ()
@@ -647,8 +692,8 @@ namespace djnn
   SimpleTextEdit::update_cursor ()
   {
     if (has_selection()) {
-      SimpleText* l1 = (SimpleText*)_lines.children().at (_start_sel_y);
-      SimpleText* l2 = (SimpleText*)_lines.children().at (_end_sel_y);
+      SimpleText* l1 = get_line (_start_sel_y);
+      SimpleText* l2 = get_line (_end_sel_y);
       _cursor_start_x.set_value (Backend::instance ()->compute_x_offset (_font_metrics, l1, _start_sel_x), true);
       _cursor_start_y.set_value (l1->get_y (), true);
       _cursor_end_x.set_value (Backend::instance ()->compute_x_offset (_font_metrics, l2, _end_sel_x), true);
@@ -687,9 +732,9 @@ namespace djnn
     }
     else {
       for (int i = 0; i < _lines.children ().size (); i++) {
-        int cur_y = ((SimpleText*)_lines.children ().at (i))->get_y () + _ascent;
+        int cur_y = (get_line (i))->get_y () + _ascent;
         if (y <= (cur_y + _descent) && y >= (cur_y - _ascent)) {
-            _line = ((SimpleText*)_lines.children ().at (i));
+            _line = get_line (i);
             _index_y = i;
             break;
         }
@@ -765,6 +810,10 @@ namespace djnn
       _ctrl_on = false;
       return;
     }
+    if (key == DJN_Key_Alt) {
+      _alt_on = false;
+      return;
+    }
   }
 
   void
@@ -779,11 +828,26 @@ namespace djnn
       _ctrl_on = true;
       return;
     }
+    if (key == DJN_Key_Alt) {
+      _alt_on = true;
+      return;
+    }
+    if (key == DJN_Key_Tab) {
+      std::string tab;
+      if (_spaces_for_tab.get_value() == 0)
+        tab = "\t";
+      else {
+        for (int i = 0; i < _spaces_for_tab.get_value(); i++)
+          tab.append(" ");
+      }
+      add_str (tab);
+      return;
+    }
     if(key == DJN_Key_Return) {
       if (has_selection())
         del_selection();
       int height = _ascent + _descent;
-      int y = ((SimpleText*)_lines.children().at(_index_y))->get_y() + height + _leading;
+      int y = (get_line(_index_y))->get_y() + height + _leading;
       SimpleText* buff_line = _line;
       //check if we are at the end of the line
       if (_index_x == _line->get_content().size())
@@ -811,15 +875,18 @@ namespace djnn
     if (key == DJN_Key_Left) {
       if (has_selection() && !_shift_on) {
         sort_selection ();
-        _line = (SimpleText*)_lines.children().at (_start_sel_y);
+        _line = get_line (_start_sel_y);
         _index_x = _end_sel_x = _start_sel_x;
         _index_y = _end_sel_y = _start_sel_y;
+        if (_alt_on) {
+          _index_x = _end_sel_x = _start_sel_x = previous_word (_line->get_content (), _index_x);
+        }
       } else {
         if (_index_x > 0) {
-          _index_x = previous_index ();
+          _index_x = _alt_on ? previous_word (_line->get_content (), _index_x) : previous_index (_line->get_content (), _index_x);
         } else if (_index_y > 0) {
           _index_y--;
-          _line = (SimpleText*)_lines.children().at (_index_y);
+          _line = get_line (_index_y);
           _index_x = _line->get_content().size ();
         }
         if (_shift_on) {
@@ -836,15 +903,18 @@ namespace djnn
     if (key == DJN_Key_Right) {
       if (has_selection() && !_shift_on) {
         sort_selection ();
-        _line = (SimpleText*)_lines.children().at (_end_sel_y);
+        _line = get_line (_end_sel_y);
         _index_x = _start_sel_x = _end_sel_x;
         _index_y = _start_sel_y = _end_sel_y;
+        if (_alt_on) {
+          _index_x = _end_sel_x = _start_sel_x = next_word (_line->get_content (), _index_x);
+        }
       } else {
         if (_index_x < _line->get_content().size ()) {
-          _index_x = next_index ();
+          _index_x = _alt_on ? next_word (_line->get_content (), _index_x) : next_index (_line->get_content(), _index_x);
         } else if (_index_y < _lines.children().size () - 1) {
           _index_y++;
-          _line = (SimpleText*)_lines.children().at (_index_y);
+          _line = get_line (_index_y);
           _index_x = 0;
         }
         if (_shift_on) {
@@ -865,7 +935,7 @@ namespace djnn
         _index_y--;
         moved = true;
       }
-      _line = (SimpleText*)_lines.children().at (_index_y);
+      _line = get_line (_index_y);
 
       if (_index_x > _line->get_content().size () && moved)
         _index_x = _line->get_content().size ();
@@ -891,7 +961,7 @@ namespace djnn
         _index_y++;
         moved = true;
       }
-      _line = (SimpleText*)_lines.children().at (_index_y);
+      _line = get_line (_index_y);
       if (_index_x > _line->get_content().size () || !moved)
         _index_x = _line->get_content().size ();
       else
@@ -912,7 +982,7 @@ namespace djnn
       } else {
         if (_index_x == 0) {
           if (_index_y > 0) {
-            SimpleText* prev_line = (SimpleText*)_lines.children().at(_index_y - 1);
+            SimpleText* prev_line = get_line(_index_y - 1);
             std::string content = prev_line->get_content() + _line->get_content();
             _end_sel_x = _start_sel_x = _index_x =  prev_line->get_content().size();
             prev_line->set_content (content);
@@ -924,7 +994,7 @@ namespace djnn
           }
         } else {
           std::string str = _line->get_content ();
-          int prev_idx = previous_index ();
+          int prev_idx = previous_index (str, _index_x);
           int l = _index_x - prev_idx;
           str.erase (prev_idx, l);
           _start_sel_x = _end_sel_x = _index_x = prev_idx;
@@ -940,7 +1010,7 @@ namespace djnn
       } else {
         if (_index_x == _line->get_content().size()) {
           if (_index_y < _lines.children().size()) {
-            SimpleText* next_line = (SimpleText*)_lines.children().at(_index_y + 1);
+            SimpleText* next_line = get_line(_index_y + 1);
             std::string content =  _line->get_content() + next_line->get_content();
             _end_sel_x = _start_sel_x = _index_x;
             _line->set_content (content);
@@ -950,7 +1020,7 @@ namespace djnn
           }
         } else {
           std::string str = _line->get_content ();
-          int next_idx = next_index ();
+          int next_idx = next_index (str, _index_x);
           int l = next_idx - _index_x;
           str.erase (_index_x, l);
           _line->set_content(str);
@@ -965,6 +1035,11 @@ namespace djnn
     }
     if (key == DJN_Key_V && _ctrl_on) {
       paste ();
+      return;
+    }
+    if (key == DJN_Key_X && _ctrl_on) {
+      copy ();
+      del_selection();
       return;
     }
   }
@@ -1051,38 +1126,39 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::add_str (std::string& str)
+  SimpleTextEdit::add_str (const std::string& str)
   {
     if (str.empty())
       return;
     std::string cur_text = _line->get_content();
+    std::string cpy = str;
     if (has_selection())
       del_selection ();
 
     int off_y = _ascent + _descent + _leading;
-    std::size_t found = str.find("\n");
+    std::size_t found = cpy.find("\n");
 
     if (_index_x == cur_text.length ()) {
       if (found == std::string::npos) {
-        cur_text.append (str);
+        cur_text.append (cpy);
         _index_x = _start_sel_x = _end_sel_x = cur_text.length ();
         _line->set_content (cur_text);
       } else {
-        cur_text.append (str.substr (0, found));
+        cur_text.append (cpy.substr (0, found));
         _line->set_content (cur_text);
-        str = str.substr(found + 1);
-        found = str.find("\n");
-        int y = ((SimpleText*)_lines.children().at(_index_y))->get_y() + off_y;
+        cpy = cpy.substr(found + 1);
+        found = cpy.find("\n");
+        int y = (get_line(_index_y))->get_y() + off_y;
         while (found != std::string::npos) {
-          SimpleText* buff = new SimpleText (this, "", 0, y, str.substr (0, found));
+          SimpleText* buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child(buff, AFTER, _line);
           _line = buff;
-          str = str.substr(found + 1);
-          found = str.find("\n");
+          cpy = cpy.substr(found + 1);
+          found = cpy.find("\n");
           y += off_y;
           _index_y++;
         }
-        SimpleText* buff = new SimpleText (this, "", 0, y, str);
+        SimpleText* buff = new SimpleText (this, "", 0, y, cpy);
         _lines.move_child(buff, AFTER, _line);
         _line = buff;
         _index_y++;
@@ -1091,29 +1167,29 @@ namespace djnn
       }
     } else {
       if (found == std::string::npos) {
-        cur_text.insert (_index_x, str);
-        _index_x = _start_sel_x = _end_sel_x = _index_x + str.length ();
+        cur_text.insert (_index_x, cpy);
+        _index_x = _start_sel_x = _end_sel_x = _index_x + cpy.length ();
         _line->set_content (cur_text);
       } else {
         std::string start = cur_text.substr (0, _index_x);
         std::string end = cur_text.substr(_index_x);
         cur_text.erase (_index_x);
-        cur_text.insert (_index_x, str.substr (0, found));
+        cur_text.insert (_index_x, cpy.substr (0, found));
         _line->set_content (cur_text);
-        str = str.substr(found + 1);
-        found = str.find("\n");
-        int y = ((SimpleText*)_lines.children().at(_index_y))->get_y() + off_y;
+        cpy = cpy.substr(found + 1);
+        found = cpy.find("\n");
+        int y = (get_line(_index_y))->get_y() + off_y;
         while (found != std::string::npos) {
-          SimpleText* buff = new SimpleText (this, "", 0, y, str.substr (0, found));
+          SimpleText* buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child(buff, AFTER, _line);
           _line = buff;
-          str = str.substr(found + 1);
-          found = str.find("\n");
+          cpy = cpy.substr(found + 1);
+          found = cpy.find("\n");
           y += off_y;
           _index_y++;
         }
-        str.append(end);
-        SimpleText* buff = new SimpleText (this, "", 0, y, str);
+        cpy.append(end);
+        SimpleText* buff = new SimpleText (this, "", 0, y, cpy);
         _lines.move_child(buff, AFTER, _line);
         _line = buff;
         _index_y++;
@@ -1130,7 +1206,7 @@ namespace djnn
     if (_start_sel_x == _end_sel_x && _start_sel_y == _end_sel_y)
       return;
     sort_selection();
-    std::string content = ((SimpleText*)_lines.children().at (_start_sel_y))->get_content();
+    std::string content = (get_line (_start_sel_y))->get_content();
     int length_init_sel = _end_sel_y == _start_sel_y ? _end_sel_x - _start_sel_x: content.length() - _start_sel_x;
     std::string str = content.substr(_start_sel_x, length_init_sel);
 
@@ -1138,10 +1214,10 @@ namespace djnn
       str.append ("\n");
       int i = _start_sel_y + 1;
       while (i < _end_sel_y) {
-        str.append (((SimpleText*)_lines.children().at (i++))->get_content());
+        str.append ((get_line (i++))->get_content());
         str.append ("\n");
       }
-      str.append (((SimpleText*)_lines.children().at (_end_sel_y))->get_content().substr(0, _end_sel_x));
+      str.append ((get_line (_end_sel_y))->get_content().substr(0, _end_sel_x));
     }
     _copy_buffer.set_value (str, true);
   }

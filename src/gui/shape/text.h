@@ -170,6 +170,7 @@ namespace djnn {
       void set_font_metrics (FontMetricsImpl fm) { _font_metrics = fm; }
       bool first_draw () { return _first_draw; }
     private:
+      SimpleText* get_line (int y) { return (SimpleText*)_lines.children ().at(y); }
       void delete_line (SimpleText* st);
       void sort_selection ();
       void del_selection ();
@@ -188,14 +189,17 @@ namespace djnn {
       int get_index_x_layout ();
       int get_index_from_x (int x);
       void add_string_input ();
-      void add_str (std::string& str );
-      int next_index ();
-      int previous_index ();
+      void add_str (const std::string& str );
+      int next_word (const std::string &s, int idx);
+      int previous_word (const std::string &s, int idx);
+      int next_index (const std::string &s, int idx);
+      int previous_index (const std::string &s, int idx);
+      bool is_starting_word (const std::string& str, int i);
       void draw () override;
       std::pair<double, double> get_local_coords (double x, double y);
       List _lines;
       IntProperty _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
-      IntProperty _x, _y, _width, _height, _line_height;
+      IntProperty _x, _y, _width, _height, _line_height, _spaces_for_tab;
       IntProperty _key_code_pressed, _key_code_released;
       TextProperty _str_input, _copy_buffer;
       Spike _toggle_edit;
@@ -212,7 +216,7 @@ namespace djnn {
       VoidProcess _ordering_node;
       int _index_x, _index_y, _ascent, _descent, _leading;
       int _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
-      bool _shift_on, _ctrl_on, _press_on, _enable_edit_on_activation, _first_draw;
+      bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
       std::string _init_text;
   };
 }
