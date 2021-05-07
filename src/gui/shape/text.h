@@ -190,11 +190,6 @@ namespace djnn {
       int get_index_from_x (int x);
       void add_string_input ();
       void add_str (const std::string& str );
-      int next_word (const std::string &s, int idx);
-      int previous_word (const std::string &s, int idx);
-      int next_index (const std::string &s, int idx);
-      int previous_index (const std::string &s, int idx);
-      bool is_starting_word (const std::string& str, int i);
       void draw () override;
       std::pair<double, double> get_local_coords (double x, double y);
       List _lines;

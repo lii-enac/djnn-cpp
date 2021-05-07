@@ -594,8 +594,8 @@ namespace djnn
      _c_move.disable ();
    }
 
-  int
-  SimpleTextEdit::next_index (const std::string &str, int idx)
+  static int
+  next_index (const std::string &str, int idx)
   {
     if (idx > str.size ())
       return idx;
@@ -607,8 +607,8 @@ namespace djnn
     return idx + offset;
   }
 
-  int
-  SimpleTextEdit::previous_index (const std::string &str, int idx)
+  static int
+  previous_index (const std::string &str, int idx)
   {
     if (idx <= 0)
       return 0;
@@ -631,8 +631,8 @@ namespace djnn
     return r;
   }
 
-  bool
-  SimpleTextEdit::is_starting_word (const std::string& str, int i)
+  static bool
+  is_starting_word (const std::string& str, int i)
   {
     if (i <= 0)
       return true;
@@ -643,8 +643,8 @@ namespace djnn
     return false;
   }
 
-  int
-  SimpleTextEdit::next_word (const std::string &str, int idx)
+  static int
+  first_word (const std::string &str, int idx)
   {
     int i = next_index(str, idx);
     while (i < str.length() && !is_starting_word(str, i))
@@ -652,8 +652,8 @@ namespace djnn
     return i;
   }
 
-  int
-  SimpleTextEdit::previous_word (const std::string &str, int idx)
+  static int
+  previous_word (const std::string &str, int idx)
   {
     int i = previous_index (str, idx) ;
     while (i > 0 && !is_starting_word (str, i) ) {
