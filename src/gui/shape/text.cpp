@@ -646,9 +646,22 @@ namespace djnn
   static int
   first_word (const std::string &str, int idx)
   {
-    int i = next_index(str, idx);
+    int first_word_idx = 0;
+    while (isspace (str.at (first_word_idx)) && first_word_idx < idx) {
+      first_word_idx++;
+    }
+    if (first_word_idx == idx) // if we are already at the first word then got to the beginning of the line
+      return 0;
+    else
+      return first_word_idx;
+  }
+
+  static int
+  next_word (const std::string &str, int idx)
+  {
+    int i = next_index (str, idx);
     while (i < str.length() && !is_starting_word(str, i))
-      i = next_index(str, i);
+      i = next_index (str, i);
     return i;
   }
 
@@ -880,10 +893,14 @@ namespace djnn
         _index_y = _end_sel_y = _start_sel_y;
         if (_alt_on) {
           _index_x = _end_sel_x = _start_sel_x = previous_word (_line->get_content (), _index_x);
+        } else if (_ctrl_on && _index_x > 0){
+            std::string str = _line->get_content ();
+            _index_x = _end_sel_x = _start_sel_x = first_word (str, _index_x);
         }
       } else {
         if (_index_x > 0) {
-          _index_x = _alt_on ? previous_word (_line->get_content (), _index_x) : previous_index (_line->get_content (), _index_x);
+          _index_x = _alt_on ? previous_word (_line->get_content (), _index_x) :
+                        (_ctrl_on ? first_word (_line->get_content (), _index_x) : previous_index (_line->get_content (), _index_x));
         } else if (_index_y > 0) {
           _index_y--;
           _line = get_line (_index_y);
@@ -908,10 +925,13 @@ namespace djnn
         _index_y = _start_sel_y = _end_sel_y;
         if (_alt_on) {
           _index_x = _end_sel_x = _start_sel_x = next_word (_line->get_content (), _index_x);
+        } else if (_ctrl_on){
+          _index_x = _end_sel_x = _start_sel_x = _line->get_content ().length();
         }
       } else {
         if (_index_x < _line->get_content().size ()) {
-          _index_x = _alt_on ? next_word (_line->get_content (), _index_x) : next_index (_line->get_content(), _index_x);
+          _index_x = _alt_on ? next_word (_line->get_content (), _index_x) :
+                        (_ctrl_on ? _line->get_content ().length() : next_index (_line->get_content(), _index_x));
         } else if (_index_y < _lines.children().size () - 1) {
           _index_y++;
           _line = get_line (_index_y);
