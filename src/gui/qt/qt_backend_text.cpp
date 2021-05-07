@@ -136,14 +136,13 @@ namespace djnn
       draw_simple_text(line, &fm, line->get_x (), line->get_y ());
     }
     load_pick_context (ste);
-    _context_manager->get_current ()->matrix.translate (-ste->x (), -ste->y () - fm.ascent ());
-    QRect rect (ste->x (), ste->y(), ste->width(), ste->height());
+    QRect rect (0, -fm.ascent (), ste->width(), ste->height());
     _picking_view->painter ()->drawRect (rect);
     // Update font metrics data
     ste->set_ascent  (fm.ascent ());
     ste->set_descent (fm.descent ());
     ste->set_leading (fm.leading ());
-
+    _context_manager->get_current ()->matrix.translate (-ste->x (), -ste->y () - fm.ascent ());
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
