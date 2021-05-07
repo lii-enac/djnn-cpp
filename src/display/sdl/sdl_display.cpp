@@ -40,7 +40,7 @@ namespace djnn {
   MACRO2 (Shift, SHIFT, LSHIFT)
   MACRO2 (Control, CONTROL, LCTRL)
   //MACRO2 (Meta, META, LMETA)
-  //MACRO2 (Alt, ALT, LATL)
+  MACRO2 (Alt, ALT, LALT)
   //MACRO2 (AltGr, ALTGR, LALTGR)
   MACRO2 (NumLock, NUMLOCK, NUMLOCKCLEAR)
   MACRO2 (Exclam, EXCLAM, EXCLAIM)
