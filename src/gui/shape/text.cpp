@@ -707,12 +707,12 @@ namespace djnn
     if (has_selection()) {
       SimpleText* l1 = get_line (_start_sel_y);
       SimpleText* l2 = get_line (_end_sel_y);
-      _cursor_start_x.set_value (Backend::instance ()->compute_x_offset (_font_metrics, l1, _start_sel_x), true);
+      _cursor_start_x.set_value (Backend::instance ()->compute_x (_font_metrics, l1, _start_sel_x), true);
       _cursor_start_y.set_value (l1->get_y (), true);
-      _cursor_end_x.set_value (Backend::instance ()->compute_x_offset (_font_metrics, l2, _end_sel_x), true);
+      _cursor_end_x.set_value (Backend::instance ()->compute_x (_font_metrics, l2, _end_sel_x), true);
       _cursor_end_y.set_value (l2->get_y (), true);
     } else {
-      _cursor_start_x.set_value (Backend::instance ()->compute_x_offset (_font_metrics, _line, _index_x), true);
+      _cursor_start_x.set_value (Backend::instance ()->compute_x (_font_metrics, _line, _index_x), true);
       _cursor_start_y.set_value (_line->get_y (), true);
       _cursor_end_x.set_value (_cursor_start_x.get_value (), true);
       _cursor_end_y.set_value (_cursor_start_y.get_value (), true);
@@ -726,9 +726,9 @@ namespace djnn
   }
 
   int
-  SimpleTextEdit::get_index_x_layout ()
+  SimpleTextEdit::get_x_from_index ()
   {
-    return Backend::instance ()->compute_x_offset (_font_metrics, _line, _index_x);
+    return Backend::instance ()->compute_x (_font_metrics, _line, _index_x);
   }
   void
   SimpleTextEdit::update_index_from_xy (int x, int y)
@@ -950,7 +950,7 @@ namespace djnn
     }
     if (key == DJN_Key_Up) {
       bool moved = false;
-      int x_layout = get_index_x_layout ();
+      int x_layout = get_x_from_index ();
       if (_index_y > 0) {
         _index_y--;
         moved = true;
@@ -960,7 +960,7 @@ namespace djnn
       if (_index_x > _line->get_content().size () && moved)
         _index_x = _line->get_content().size ();
       else if (moved)
-        _index_x = get_index_from_x (x_layout);
+         _index_x = get_index_from_x (x_layout);
       else
         _index_x = 0;
 
@@ -976,7 +976,7 @@ namespace djnn
     }
     if (key == DJN_Key_Down) {
       bool moved = false;
-      int x_layout = get_index_x_layout ();
+      int x_layout = get_x_from_index ();
       if (_index_y < _lines.children().size() - 1) {
         _index_y++;
         moved = true;

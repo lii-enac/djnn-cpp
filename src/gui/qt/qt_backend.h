@@ -68,7 +68,7 @@ namespace djnn
     int
     compute_index (FontMetricsImpl fm, SimpleText* t, int x) override;
     int
-    compute_x_offset (FontMetricsImpl fm, SimpleText* t, int index) override;
+    compute_x (FontMetricsImpl fm, SimpleText* t, int index) override;
     int
     compute_text_width (FontMetricsImpl fm, SimpleText *t) override;
     double

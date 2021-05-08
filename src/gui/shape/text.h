@@ -186,7 +186,7 @@ namespace djnn {
       void copy ();
       void paste ();
       void toggle_edit ();
-      int get_index_x_layout ();
+      int get_x_from_index ();
       int get_index_from_x (int x);
       void add_string_input ();
       void add_str (const std::string& str );

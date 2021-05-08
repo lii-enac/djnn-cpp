@@ -74,7 +74,7 @@ namespace djnn
       return 0;
     }
     virtual int
-    compute_x_offset (FontMetricsImpl fm, SimpleText* t, int index)
+    compute_x (FontMetricsImpl fm, SimpleText* t, int index)
     {
       return 0;
     }

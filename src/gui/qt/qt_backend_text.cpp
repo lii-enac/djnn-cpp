@@ -368,7 +368,7 @@ QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
 }
 
 int
-QtBackend::compute_x_offset (FontMetricsImpl fm, SimpleText* t, int index)
+QtBackend::compute_x (FontMetricsImpl fm, SimpleText* t, int index)
 {
   QFontMetrics *qfm = (QFontMetrics*) fm;
   string text = t->get_content ();
