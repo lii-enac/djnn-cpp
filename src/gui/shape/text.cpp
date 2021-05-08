@@ -951,19 +951,25 @@ namespace djnn
     if (key == DJN_Key_Up) {
       bool moved = false;
       int x_layout = get_x_from_index ();
+      if (has_selection() && !_shift_on) {
+        sort_selection ();
+        _index_y = _end_sel_y = _start_sel_y;
+        _end_sel_x = _index_x = _start_sel_x;
+        _line = get_line (_index_y);
+        update_cursor ();
+        return;
+      }
       if (_index_y > 0) {
         _index_y--;
         moved = true;
       }
       _line = get_line (_index_y);
-
       if (_index_x > _line->get_content().size () && moved)
-        _index_x = _line->get_content().size ();
+         _index_x = _line->get_content().size ();
       else if (moved)
          _index_x = get_index_from_x (x_layout);
       else
-        _index_x = 0;
-
+         _index_x = 0;
       if (_shift_on) {
         _end_sel_x = _index_x;
         _end_sel_y = _index_y;
@@ -1061,6 +1067,13 @@ namespace djnn
       copy ();
       del_selection();
       return;
+    }
+    if (key == DJN_Key_A && _ctrl_on) {
+      _line = (SimpleText*)_lines.children().back();
+      _start_sel_x = _start_sel_y = 0;
+      _end_sel_y = _index_y = _lines.children().size() - 1;
+      _end_sel_x = _index_x = _line->get_content().length ();
+      update_cursor ();
     }
   }
 
