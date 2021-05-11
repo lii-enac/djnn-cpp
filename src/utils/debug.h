@@ -100,10 +100,12 @@ extern "C" {
 
 /*
  Choose if you want to use OLD/NEW Grapth::exec 
-  - OLD (0) = execute FULL ORDERED_VERTICES
-  - NEW (1) = execute only the needed process - using deque
+  - OLD (1) = execute FULL ORDERED_VERTICES
+  - NEW (0) = execute only the needed process - using deque
 */
 #define _EXEC_FULL_ORDERED_VERTICES 1
+//ONLY if _EXEC_FULL_ORDERED_VERTICES 0
+#define _DEBUG_GRAPH_INSERT_TIME 0
 
 
 #endif

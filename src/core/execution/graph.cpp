@@ -39,6 +39,13 @@
 static int graph_counter_act = 0;
 #endif
 
+#if _DEBUG_GRAPH_INSERT_TIME
+static int nb_insert_by_graph_exec = 0;
+static int acc_insert_time_by_graph_exec = 0;
+static int max_insert_time_all_graph = 0;
+static int max_insert_for_this_size = 0;
+#endif 
+
 #if _DEBUG_SEE_GRAPH_INFO_PREF
 //#include "core/utils/utils-dev.h"
 static int graph_counter = 0;
@@ -235,6 +242,11 @@ namespace djnn
   void 
   Graph::add_in_activation (Vertex *v)
   {
+
+#if _DEBUG_GRAPH_INSERT_TIME
+  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+#endif 
+
     /*
       note : if the graph has not been sorted yet.
       we do not know the order so we just push_back and the
@@ -269,6 +281,17 @@ namespace djnn
       // new we add it 
       _new_activ.push_front (v);
     }
+
+#if _DEBUG_GRAPH_INSERT_TIME
+  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  nb_insert_by_graph_exec++ ;
+  int time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+  acc_insert_time_by_graph_exec = acc_insert_time_by_graph_exec + time;
+  if (time > max_insert_time_all_graph) {
+    max_insert_time_all_graph = time;
+    max_insert_for_this_size = _activation_deque.size ();
+  }
+#endif     
   }
 
   void
@@ -541,6 +564,11 @@ namespace djnn
   void
   Graph::exec ()
   {
+#if _DEBUG_GRAPH_INSERT_TIME
+    nb_insert_by_graph_exec = 0;
+    acc_insert_time_by_graph_exec = 0;
+#endif
+
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
     #endif
@@ -566,6 +594,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
     graph_counter_act++;
     int _sorted_break = 0;
     std::chrono::steady_clock::time_point begin_act = std::chrono::steady_clock::now();
+    std::cerr << std::endl;
 #endif
 
 #if _EXEC_FULL_ORDERED_VERTICES
@@ -694,9 +723,20 @@ rmt_EndCPUSample();
       if (pourcent_graph < 50)
         cerr << "\033[1;31m";
       std::cerr << "nb action = " << count_real_activation  << "/" << count_activation << "(" << pourcent_graph << "%)" ;
-      std::cerr << "--- nb sorted_break " << _sorted_break << endl << endl ;
+      std::cerr << "--- nb sorted_break " << _sorted_break << endl ;
       cerr << "\033[0m";
 #endif
+
+#if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
+  cerr << "\033[1;37m";
+  if (nb_insert_by_graph_exec > 0) {
+    std::cerr << "nb insert: " << nb_insert_by_graph_exec <<" - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec  << "[us]";
+    std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[us] for size: " << max_insert_for_this_size << std::endl;
+  }
+  else
+    std::cerr << "NO insert" << std::endl;
+  cerr << "\033[0m";
+#endif 
 
 #if _DEBUG_SEE_GRAPH_INFO_PREF
     // print in GREEN
