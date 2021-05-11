@@ -344,11 +344,11 @@ namespace djnn
       key = path.substr (0, found);
     }
 
-    if (key.compare ("matrix") == 0) {
+    if ((_matrix == nullptr) && (key.compare ("matrix") == 0)) {
       _matrix = new Homography (this, "matrix");
       _matrix->set_activation_state (ACTIVATED);
     }
-    else if (key.compare ("inverted_matrix") == 0) {
+    else if ((_inverted_matrix == nullptr) && (key.compare ("inverted_matrix") == 0)) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
       _inverted_matrix->set_activation_state (ACTIVATED);
     }
