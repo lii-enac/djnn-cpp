@@ -117,7 +117,7 @@ namespace djnn
     std::vector<CoreProcess*> _scheduled_delete_processes;
     std::vector<CoreProcess*> _scheduled_activation_processes;
 
-    std::deque < Vertex*> _new_activ;
+    std::deque < Vertex*> _activation_deque;
 
     int _cur_date;
     bool _sorted;

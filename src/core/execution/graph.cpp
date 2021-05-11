@@ -253,33 +253,33 @@ namespace djnn
       _new_activ will be reordered during sorted process.
     */
     if (_sorted) {
-      if (_new_activ.empty ())
-        _new_activ.push_front (v);
+      if (_activation_deque.empty ())
+        _activation_deque.push_front (v);
       else {
-        std::deque <Vertex *>::iterator it = _new_activ.begin () ;
+        std::deque <Vertex *>::iterator it = _activation_deque.begin () ;
         bool is_inserted = false;
 
-        while ( !is_inserted && it != _new_activ.end () ) {
+        while ( !is_inserted && it != _activation_deque.end () ) {
           // do not insert duplicate
           if ((*it)->get_sorted_index () == v->get_sorted_index ()) return ; 
           if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
-            _new_activ.insert (it, v);
+            _activation_deque.insert (it, v);
             is_inserted = true;
           }
           it++;
         }
         //if not inserted : it is the last one
         if (!is_inserted)
-          _new_activ.push_back (v);
+          _activation_deque.push_back (v);
       }
     }
     else {
       // but should avoid duplicate
-      for (auto vv: _new_activ)
+      for (auto vv: _activation_deque)
         if (vv == v) return ;
 
       // new we add it 
-      _new_activ.push_front (v);
+      _activation_deque.push_front (v);
     }
 
 #if _DEBUG_GRAPH_INSERT_TIME
@@ -438,7 +438,7 @@ namespace djnn
   {
 #ifndef DJNN_NO_DEBUG
     std::cerr << " --- SORTED ACTIVATION --- " << endl ;
-    for (auto v : _new_activ) {
+    for (auto v : _activation_deque) {
       auto * pp = v->get_process ();
       cerr << "i: " << v->get_sorted_index () << " - t: " << v->get_timestamp () << " - p: " << pp << " - ";
       if (pp && pp->get_debug_parent())
@@ -533,7 +533,7 @@ namespace djnn
       v->set_sorted_index (index++);
     }
 
-    std::sort (_new_activ.begin (), _new_activ.end (), cmp_index);
+    std::sort (_activation_deque.begin (), _activation_deque.end (), cmp_index);
 #endif
 
     _sorted = true;
@@ -648,9 +648,9 @@ rmt_BeginCPUSample(Graph_exec, 0);
     while (!is_end) {
       is_end = true;
 
-      while (!_new_activ.empty ()) {
-        auto * v = _new_activ.front ();
-        _new_activ.pop_front ();
+      while (!_activation_deque.empty ()) {
+        auto * v = _activation_deque.front ();
+        _activation_deque.pop_front ();
         
       if (!_sorted) {
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
