@@ -377,11 +377,16 @@ QtBackend::compute_x (FontMetricsImpl fm, SimpleText* t, int index)
   QString s (text.c_str ());
   if (qfm == nullptr)
     return 0;
-  int i = 0;
-  while (i < index) {
-    i = next_index (i, text);
+  string sub;
+  if (index >= text.length()) {
+    sub = text;
+  } else {
+    int i = 0;
+    while (i < index) {
+      i = next_index (i, text);
+    }
+    sub = text.substr (0, i);
   }
-  string sub = text.substr (0, i);
 #if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
   return qfm->width (QString (sub.c_str ()));
 #else
