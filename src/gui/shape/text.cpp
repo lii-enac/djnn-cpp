@@ -950,8 +950,24 @@ namespace djnn
     }
     if (key == DJN_Key_Up) {
       bool moved = false;
-      int x_layout = get_x_from_index ();
-      if (has_selection() && !_shift_on) {
+      if (_ctrl_on) {
+        if (_shift_on) {
+          if (_end_sel_y > _start_sel_y || _end_sel_x > _start_sel_x) {
+            _end_sel_y = _start_sel_y;
+            _end_sel_x = _start_sel_x;
+          } else {
+            sort_selection();
+          }
+          _start_sel_x = _start_sel_y = _index_y = _index_x = 0;
+        } else {
+          _index_y = _end_sel_y = _start_sel_y = 0;
+          _end_sel_x = _index_x = _start_sel_x = 0;
+        }
+        _line = get_line (_index_y);
+        update_cursor ();
+        return;
+      }
+      if (has_selection () && !_shift_on) {
         sort_selection ();
         _index_y = _end_sel_y = _start_sel_y;
         _end_sel_x = _index_x = _start_sel_x;
@@ -966,9 +982,10 @@ namespace djnn
       _line = get_line (_index_y);
       if (_index_x > _line->get_content().size () && moved)
          _index_x = _line->get_content().size ();
-      else if (moved)
-         _index_x = get_index_from_x (x_layout);
-      else
+      else if (moved) {
+    	  //this may appear strange but it is not, because the line has changed
+        _index_x = get_index_from_x (get_x_from_index ());
+      } else
          _index_x = 0;
       if (_shift_on) {
         _end_sel_x = _index_x;
@@ -981,8 +998,23 @@ namespace djnn
       return;
     }
     if (key == DJN_Key_Down) {
+      if (_ctrl_on) {
+        int last = _lines.children().size() - 1;
+        if (_shift_on) {
+          sort_selection ();
+          _start_sel_y = _end_sel_y;
+          _start_sel_x = _end_sel_x;
+        } else {
+          _start_sel_y = last;
+          _start_sel_x = get_line(last)->get_content().size ();
+        }
+        _end_sel_y = _index_y = last;
+        _line = get_line (_index_y);
+        _end_sel_x = _index_x = _line->get_content().size ();
+        update_cursor ();
+        return;
+      }
       bool moved = false;
-      int x_layout = get_x_from_index ();
       if (_index_y < _lines.children().size() - 1) {
         _index_y++;
         moved = true;
@@ -991,7 +1023,7 @@ namespace djnn
       if (_index_x > _line->get_content().size () || !moved)
         _index_x = _line->get_content().size ();
       else
-        _index_x = get_index_from_x (x_layout);
+        _index_x = get_index_from_x (get_x_from_index ());
       if (_shift_on) {
         _end_sel_x = _index_x;
         _end_sel_y = _index_y;
