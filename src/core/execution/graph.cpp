@@ -650,16 +650,18 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
       while (!_activation_deque.empty ()) {
         auto * v = _activation_deque.front ();
-        _activation_deque.pop_front ();
-        
+      
       if (!_sorted) {
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
           _sorted_break++;
           std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break <<  "\033[0m" << endl ;
 #endif
           break;
-        } 
-        if (v->is_invalid ()) 
+        }
+        // pop only if sorted else .. the process activation willl be skip
+        _activation_deque.pop_front ();
+
+        if (v->is_invalid ())
           continue;
         auto * p = v->get_process ();
         
