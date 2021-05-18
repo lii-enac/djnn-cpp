@@ -502,7 +502,7 @@ namespace djnn
 
   bool
   cmp_index (const Vertex* v1, const Vertex *v2) {
-    return v2->get_sorted_index () < v1->get_sorted_index ();
+    return v1 ->get_sorted_index () < v2->get_sorted_index ();
   }
 
   void
