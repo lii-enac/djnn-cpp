@@ -288,7 +288,7 @@ namespace djnn
 #if _DEBUG_GRAPH_INSERT_TIME
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
   nb_insert_by_graph_exec++ ;
-  int time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+  int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
   acc_insert_time_by_graph_exec = acc_insert_time_by_graph_exec + time;
   if (time > max_insert_time_all_graph) {
     max_insert_time_all_graph = time;
@@ -738,7 +738,7 @@ rmt_EndCPUSample();
   cerr << "\033[1;37m";
   if (nb_insert_by_graph_exec > 0) {
     std::cerr << "nb insert: " << nb_insert_by_graph_exec <<" - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec  << "[us]";
-    std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[us] for size: " << max_insert_for_this_size << std::endl;
+    std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << std::endl;
   }
   else
     std::cerr << "NO insert" << std::endl;
