@@ -35,6 +35,8 @@
 
 #ifndef DJNN_NO_DEBUG
 
+#define MAX_LOOP_DETECTION 10000000
+
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
 static int graph_counter_act = 0;
 #endif
@@ -593,9 +595,10 @@ rmt_BeginCPUSample(Graph_exec, 0);
       _scheduled_activation_processes.clear ();
     }
 
+    int count_activation = 0; // use for loop detection else this could be replace in the #if _DEBUG_SEE_ACTIVATION_SEQUENCE below
+
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
     int count_real_activation = 0 ;
-    int count_activation = 0;
     graph_counter_act++;
     int _sorted_break = 0;
     std::chrono::steady_clock::time_point begin_act = std::chrono::steady_clock::now();
@@ -669,9 +672,21 @@ rmt_BeginCPUSample(Graph_exec, 0);
         if (v->is_invalid ())
           continue;
         auto * p = v->get_process ();
+
         
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
         count_activation++;
+
+#ifndef DJNN_NO_DEBUG
+        // loop detection
+        if (count_activation > MAX_LOOP_DETECTION) {
+          cerr << "\033[1;31m";
+          cerr << "djnn Warning - It seem there is a loop in your program !! \n We stopped it and exit" << endl;
+          cerr << "\033[0m";
+          continue;
+        }
+#endif
+          
+#if _DEBUG_SEE_ACTIVATION_SEQUENCE
         if (p->get_activation_flag () != NONE_ACTIVATION) { // should be removed ??
           std::chrono::steady_clock::time_point begin_process_act = std::chrono::steady_clock::now();
           count_real_activation++;
