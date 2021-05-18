@@ -433,10 +433,8 @@ namespace djnn
     std::cerr << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
-      cerr << v->get_sorted_index () << " - " ;
-      if (pp && pp->get_debug_parent())
-        cerr << pp->get_debug_parent()->get_debug_name () << "/";
-      cerr << pp->get_debug_name () << " (" << v->get_timestamp () << ")\n";
+      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - ";
+      cerr << print_process_full_name (pp) << endl;
     }
     std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
 #endif
@@ -449,10 +447,8 @@ namespace djnn
     std::cerr << " --- SORTED ACTIVATION --- " << endl ;
     for (auto v : _activation_deque) {
       auto * pp = v->get_process ();
-      cerr << "i: " << v->get_sorted_index () << " - t: " << v->get_timestamp () << " - p: " << pp << " - ";
-      if (pp && pp->get_debug_parent())
-        cerr << pp->get_debug_parent()->get_debug_name () << "/";
-      cerr << pp->get_debug_name () << "\n";
+      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - p: " << pp << " - ";
+      cerr << print_process_full_name (pp) << endl;
     }
     std::cerr << " --- END ACTIVATION --- " << endl << endl;
 #endif
