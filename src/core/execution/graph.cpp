@@ -218,6 +218,9 @@ namespace djnn
     /* nothing to delete because vertices are own by _vertices. */
     _ordered_vertices.clear ();
 
+    /* nothing to delete because vertices are own by _vertices.  */
+    _activation_deque.clear ();
+
     /* delete vertices from _vertices and clear.*/
     for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
         delete *it;
@@ -293,6 +296,12 @@ namespace djnn
   }
 #endif     
   }
+
+  void 
+  Graph::clear_activation ()
+  {
+    _activation_deque.clear ();
+  } 
 
   void
   Graph::add_output_node (CoreProcess* c)

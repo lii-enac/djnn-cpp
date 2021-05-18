@@ -100,6 +100,7 @@ namespace djnn
     void print_activation () const; 
 
     void add_in_activation (Vertex *v);
+    void clear_activation ();
 
   private:
     //static Graph _instance;
@@ -117,7 +118,7 @@ namespace djnn
     std::vector<CoreProcess*> _scheduled_delete_processes;
     std::vector<CoreProcess*> _scheduled_activation_processes;
 
-    std::deque < Vertex*> _activation_deque;
+    std::deque < Vertex*> _activation_deque; // try skip_list ?
 
     int _cur_date;
     bool _sorted;

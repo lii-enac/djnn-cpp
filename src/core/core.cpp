@@ -63,6 +63,9 @@ namespace djnn
       //Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
+  /* especially for unit test - make sure graph::_activation_deque is clean for each run */
+  Graph::instance ().clear_activation ();
+
 #if RMT_ENABLED
     rmtSettings* settings = rmt_Settings();
     if(settings) settings->reuse_open_port = RMT_TRUE;
