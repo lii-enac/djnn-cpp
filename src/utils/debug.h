@@ -104,6 +104,7 @@ extern "C" {
   - NEW (0) = execute only the needed process - using deque
 */
 #define _EXEC_FULL_ORDERED_VERTICES 1
+
 //ONLY if _EXEC_FULL_ORDERED_VERTICES 0
 #define _DEBUG_GRAPH_INSERT_TIME 0
 

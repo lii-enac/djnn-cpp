@@ -581,6 +581,7 @@ namespace djnn
     #endif
 rmt_BeginCPUSample(Graph_exec, 0);
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
+    // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
       std::map<CoreProcess*, int> already_done;
       for (auto p: _scheduled_activation_processes) {
@@ -680,7 +681,8 @@ rmt_BeginCPUSample(Graph_exec, 0);
         // loop detection
         if (count_activation > MAX_LOOP_DETECTION) {
           cerr << "\033[1;31m";
-          cerr << "djnn Warning - It seem there is a loop in your program !! \n We stopped it and exit" << endl;
+          cerr << "djnn Warning - \tWe detected more than " << MAX_LOOP_DETECTION << " activations in one Graph cycle " << endl;
+          cerr << "\t\tIt seems there is a loop in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
           cerr << "\033[0m";
           continue;
         }
