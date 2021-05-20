@@ -553,6 +553,7 @@ namespace djnn
          _index_x = _start_sel_x = _end_sel_x = 0;
          _line = get_line (0);
          update_cursor ();
+         _content_changed.set_activation_flag(NONE_ACTIVATION);
        }
        else
          _line = get_line (0);
