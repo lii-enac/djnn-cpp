@@ -588,6 +588,9 @@ rmt_BeginCPUSample(Graph_exec, 0);
         if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();
           already_done[p];
+#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+     std::cerr << "Scheduled event notifying ------ " << print_process_full_name(p) << std::endl;
+#endif
         }
         // DEBUG DUPLICATES
         //else
