@@ -197,7 +197,7 @@ namespace djnn {
       IntProperty _x, _y, _width, _height, _line_height, _spaces_for_tab;
       IntProperty _key_code_pressed, _key_code_released;
       TextProperty _str_input, _copy_buffer;
-      Spike _toggle_edit;
+      Spike _toggle_edit, _content_changed;
       SimpleText* _line;
       ToggleEditAction _toggle_action;
       MousePressAction _on_press;

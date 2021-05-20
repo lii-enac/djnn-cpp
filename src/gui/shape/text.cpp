@@ -489,7 +489,7 @@ namespace djnn
     _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y(this, "y", y),
     _width (this, "width", width), _height (this, "height", height), _line_height (this, "line_height", 16), _spaces_for_tab (this, "spaces_for_tab", 0),
     _key_code_pressed (this, "key_pressed", 0), _key_code_released (this, "key_released", 0),
-    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _line (nullptr),
+    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _content_changed (this, "content_changed"), _line (nullptr),
     _toggle_action (this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
     _key_pressed (this, "key_pressed_action"),  _key_released (this, "key_released_action"),
     _on_str_input (this, "on_str_input_action"),
@@ -520,6 +520,7 @@ namespace djnn
     graph_add_edge (&_ordering_node, &_cursor_end_x);
     graph_add_edge (&_ordering_node, &_cursor_start_y);
     graph_add_edge (&_ordering_node, &_cursor_end_y);
+    graph_add_edge (&_ordering_node, &_content_changed);
 
     finalize_construction (parent, name);
   }
@@ -537,6 +538,7 @@ namespace djnn
     graph_remove_edge (&_ordering_node, &_cursor_end_x);
     graph_remove_edge (&_ordering_node, &_cursor_start_y);
     graph_remove_edge (&_ordering_node, &_cursor_end_y);
+    graph_remove_edge (&_ordering_node, &_content_changed);
   }
 
   void
@@ -885,6 +887,7 @@ namespace djnn
         update_lines_position();
       }
       update_cursor ();
+      _content_changed.set_activation_flag (ACTIVATION);
       return;
     }
     if (key == DJN_Key_Left) {
@@ -1060,6 +1063,7 @@ namespace djnn
           _start_sel_x = _end_sel_x = _index_x = prev_idx;
           _line->set_content(str);
         }
+        _content_changed.set_activation_flag (ACTIVATION);
       }
       update_cursor();
       return;
@@ -1085,6 +1089,7 @@ namespace djnn
           str.erase (_index_x, l);
           _line->set_content(str);
         }
+        _content_changed.set_activation_flag (ACTIVATION);
       }
       update_cursor();
       return;
@@ -1172,6 +1177,7 @@ namespace djnn
     _line = (SimpleText*)_lines.children ().at(_index_y);
     update_lines_position ();
     update_cursor ();
+    _content_changed.set_activation_flag (ACTIVATION);
   }
 
   void
@@ -1265,6 +1271,7 @@ namespace djnn
       }
     }
     update_cursor ();
+    _content_changed.set_activation_flag (ACTIVATION);
   }
 
   void
