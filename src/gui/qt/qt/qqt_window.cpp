@@ -78,21 +78,27 @@ namespace djnn
               case Qt::TouchPointPressed:
                 {
                   exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
+                  // NO event synthesis on press, release
+                  if (exec_ ) GRAPH_EXEC;
                   break;
                 }
               case Qt::TouchPointMoved:
                 {
                   exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
+                  // event synthesis on move, paint
+                  if (exec_) QtMainloop::instance ().set_please_exec (true);
                   break;
                 }
               case Qt::TouchPointReleased:
                 {
                   exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
+                  // NO event synthesis on press, release
+                  if (exec_ ) GRAPH_EXEC;
                   break;
                 }
               }
           }
-          if (exec_) QtMainloop::instance ().set_please_exec (true);
+          //if (exec_) QtMainloop::instance ().set_please_exec (true);
           //if(!_building)
           djnn::release_exclusive_access (DBG_REL);
         }
@@ -120,6 +126,7 @@ namespace djnn
         FatProcess *p = _window->close();
         if (p != nullptr) {
           p->activate ();
+          // we may want to react to close : before closing
           QtMainloop::instance ().set_please_exec (true);
         }
         djnn::release_exclusive_access (DBG_REL);
@@ -175,7 +182,9 @@ namespace djnn
 
     bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_)
-      QtMainloop::instance ().set_please_exec (true);
+      // QtMainloop::instance ().set_please_exec (true);
+      // NO event synthesis on press, release
+      GRAPH_EXEC;
   }
 
   void
@@ -186,6 +195,7 @@ namespace djnn
 
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_)
+      // event synthesis for move, paint ...
       QtMainloop::instance ().set_please_exec (true);
   }
 
@@ -197,7 +207,9 @@ namespace djnn
 
     bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_)
-      QtMainloop::instance ().set_please_exec (true);
+      // QtMainloop::instance ().set_please_exec (true);
+      // NO event synthesis on press, release
+      GRAPH_EXEC;
   }
 
   void
@@ -210,7 +222,10 @@ namespace djnn
       return;
     bool exec_ = _picking_view->genericMouseWheel (dx, dy);  // the angle is in eights of a degree
     if (exec_)
-      QtMainloop::instance ().set_please_exec (true);
+      // QtMainloop::instance ().set_please_exec (true);
+      // NO event synthesis on press, release, wheel
+      GRAPH_EXEC;
+      
   }
 
   void
@@ -243,6 +258,7 @@ namespace djnn
 #endif
     }
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
+      // event synthesis or not ??
       QtMainloop::instance ().set_please_exec (true);
 
 #if _DEBUG_SEE_COLOR_PICKING_VIEW 

@@ -230,7 +230,9 @@ namespace djnn
     if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
       _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);
     }
-    QtMainloop::instance ().set_please_exec (true);
+    // QtMainloop::instance ().set_please_exec (true);
+    // NO event synthesis on press, release
+    GRAPH_EXEC;
   }
 
   void
@@ -238,7 +240,9 @@ namespace djnn
   {
     _window->key_released ()->set_value (event->key (), 1);
     _window->key_released_text ()->set_value (event->text ().toStdString (), 1);
-    QtMainloop::instance ().set_please_exec (true);
+    //QtMainloop::instance ().set_please_exec (true);
+    // NO event synthesis on press, release
+    GRAPH_EXEC;
   }
 
   void
@@ -256,6 +260,7 @@ namespace djnn
     _window->pos_y ()->set_value (y, 1);
 
     _updating = false;
+    // event synthesis on move paint ...
     QtMainloop::instance ().set_please_exec (true);
   }
 
