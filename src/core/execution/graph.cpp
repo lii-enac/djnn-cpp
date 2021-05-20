@@ -35,7 +35,7 @@
 
 #ifndef DJNN_NO_DEBUG
 
-#define MAX_LOOP_DETECTION 10000000
+#define MAX_LOOP_DETECTION 5000000
 
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
 static int graph_counter_act = 0;
