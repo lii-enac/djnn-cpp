@@ -150,7 +150,7 @@ namespace djnn
         }
       }
       if (!found) {
-        CoreProcess * file = new File (&_files, "", nf.root_directory(), nf.filename(), std::filesystem::is_directory (nf));
+        CoreProcess * file = new File (&_files, "", nf.root_directory().string(), nf.filename().string(), std::filesystem::is_directory (nf));
         _added_files.add_one (file);
         added = true;
       }
