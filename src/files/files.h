@@ -104,7 +104,7 @@ namespace djnn
   {
   public:
     File (ParentProcess *parent, const std::string &name, const std::string &path, const std::string &filename, bool is_dir) :
-          FatProcess (name), _path (this, "path", path), _filename (this, "filename", filename),
+          FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),
           _is_dir (this, "is_dir", is_dir) { finalize_construction (parent, name); }
     virtual ~File () {}
     void impl_activate () override {};
