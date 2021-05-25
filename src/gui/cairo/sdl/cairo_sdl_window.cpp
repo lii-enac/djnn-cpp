@@ -257,10 +257,10 @@ namespace djnn
   }
 
   void
-  CairoSDLWindow::update_hdpi()
+  CairoSDLWindow::update_hidpi()
   {
     // FIXME should be a connection
-    SDLWindow::update_hdpi();
+    SDLWindow::update_hidpi();
   }
 
   void

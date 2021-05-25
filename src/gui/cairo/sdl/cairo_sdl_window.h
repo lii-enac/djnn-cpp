@@ -32,7 +32,7 @@ namespace djnn {
     // SDLWindow API
     virtual void handle_event(SDL_Event&) override;
     virtual void handle_resized(int w, int h) override;
-    virtual void update_hdpi() override;
+    virtual void update_hidpi() override;
     virtual void redraw () override;
     virtual void perform_screenshot (const std::string& path) override;
     

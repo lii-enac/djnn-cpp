@@ -44,7 +44,7 @@ namespace djnn {
 
     virtual void handle_event(SDL_Event&);
     virtual void handle_resized(int w, int h);
-    virtual void update_hdpi();
+    virtual void update_hidpi();
     virtual void redraw ();
 
     virtual void set_opacity (double opacity) override;

@@ -105,7 +105,7 @@ namespace djnn
   }
 
   void
-  SDLWindow::update_hdpi ()
+  SDLWindow::update_hidpi ()
   {
   }
 
@@ -206,7 +206,7 @@ namespace djnn
                 int y = e.window.data2;
                 _window->pos_x ()->set_value (x, true);
                 _window->pos_y ()->set_value (y, true);
-                update_hdpi ();
+                update_hidpi ();
                 break;
               }
             case SDL_WINDOWEVENT_SIZE_CHANGED:
@@ -217,7 +217,7 @@ namespace djnn
                   return;
                 //_window->width ()->set_value (width, true);
                 //_window->height ()->set_value (height, true);
-                update_hdpi ();
+                update_hidpi ();
                 handle_resized (width, height);
                 //redraw ();
 
