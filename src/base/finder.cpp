@@ -37,7 +37,7 @@ namespace djnn
     if (key.empty()){
       warning (this, "finder - \"key\" is empty \n");
       f->_result.set_value ( (CoreProcess*)nullptr, true); // ??
-      f->_not_found.activate ();
+      f->_not_found.set_activation_flag (ACTIVATION);
       return;
     }
     FatChildProcess *res;
@@ -54,7 +54,7 @@ namespace djnn
                 int v = (int) stoi (key);
                 if (v == ((IntProperty*) res)->get_value ()) {
                   f->_result.set_value (c, true);
-                  f->_found.activate ();
+                  f->_found.set_activation_flag (ACTIVATION);
                   return;
                 }
               }
@@ -66,7 +66,7 @@ namespace djnn
               if ((key.compare ("true") == 0 && ((BoolProperty*) res)->get_value () == 1)
                   || (key.compare ("false") == 0 && ((BoolProperty*) res)->get_value () == 0)) {
                 f->_result.set_value (c, true);
-                f->_found.activate ();
+                f->_found.set_activation_flag (ACTIVATION);
                 return;
               }
               break;
@@ -75,7 +75,7 @@ namespace djnn
                 double v = (double) stof (key);
                 if (v == ((DoubleProperty*) res)->get_value ()) {
                   f->_result.set_value (c, true);
-                  f->_found.activate ();
+                  f->_found.set_activation_flag (ACTIVATION);
                   return;
                 }
               }
@@ -86,7 +86,7 @@ namespace djnn
             case String:
               if (key.compare (((TextProperty*) res)->get_value ()) == 0) {
                 f->_result.set_value (c, true);
-                f->_found.activate ();
+                f->_found.set_activation_flag (ACTIVATION);
                 return;
               }
               break;
@@ -97,7 +97,7 @@ namespace djnn
       }
     }
     f->_result.set_value ((CoreProcess*)nullptr, true);
-    f->_not_found.activate ();
+    f->_not_found.set_activation_flag (ACTIVATION);
   }
 
   Finder::Finder (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& path)
@@ -117,6 +117,8 @@ namespace djnn
     }
     _cfind.disable ();
     graph_add_edge (&_action, &_result);
+    graph_add_edge (&_action, &_found);
+    graph_add_edge (&_action, &_not_found);
 
     finalize_construction (parent, name);
   }
@@ -127,6 +129,8 @@ namespace djnn
       remove_state_dependency (get_parent (), &_action);
     }
     graph_remove_edge (&_action, &_result);
+    graph_remove_edge (&_action, &_found);
+    graph_remove_edge (&_action, &_not_found);
   }
 
   void
