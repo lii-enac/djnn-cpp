@@ -85,7 +85,7 @@ namespace djnn
 #endif
 
   Vertex::Vertex (CoreProcess* p) :
-      _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false)
+      _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
   {
     //std::cerr << __PRETTY_FUNCTION__ << " vertex:" << this << " process:" << p << " " << (p->get_parent() ? p->get_parent()->get_name () + "/"  : "") << p->get_name() << std::endl; 
   }
@@ -706,7 +706,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
+            std::cerr << count_real_activation << " ------ i: " << v->get_sorted_index () << " --- " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
           cerr << "\033[0m";
         }
  #endif
