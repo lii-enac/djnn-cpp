@@ -568,6 +568,36 @@ namespace djnn
     _scheduled_activation_processes.push_back(p);
   }
 
+#ifndef DJNN_NO_DEBUG
+#if _DEBUG_DETECT_GRAPH_CYCLE
+  std::pair<Vertex*, int>
+  find_pair_from_value_in_map (std::map<Vertex*, int> &vertex_already_activated, int value){
+    for (auto pair : vertex_already_activated){
+      if (pair.second == value)
+        return pair;
+    }
+  }
+  
+
+  void 
+  display_cycle_analysis_stack (std::map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v){
+
+    cerr << "----- CYCLE ANALYSIS - revers activation stack ---- " << endl;
+    cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
+    
+    std::pair<Vertex*, int> pair ;
+    // while we don't find the beginning of the cycle ... which is the vertex already activated
+    do {
+      pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
+      cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
+    } while (pair.first != v);
+
+    cerr << "--------------------------------------------------- " << endl;
+
+  }
+#endif
+#endif
+
   void
   Graph::exec ()
   {
@@ -688,7 +718,8 @@ rmt_BeginCPUSample(Graph_exec, 0);
         if (_vertex_already_activated.find (v) != _vertex_already_activated.end ()) {
           cerr << "\033[1;31m";
           cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
-          cerr << "\t\tindex: " << v->get_sorted_index () << " --- " << print_process_full_name (v->get_process()) << " have already been activated in this cycle \n" ;
+          cerr << "\t\t"  << print_process_full_name (v->get_process()) << " have already been activated in this cycle \n" ;
+          display_cycle_analysis_stack (_vertex_already_activated, count_activation, v);
           cerr << "\033[0m";
           break;
         }
