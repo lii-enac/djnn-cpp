@@ -109,7 +109,7 @@ debug to detect cycle in graph and display informations
   - OLD (1) = execute FULL ORDERED_VERTICES
   - NEW (0) = execute only the needed process - using deque
 */
-#define _EXEC_FULL_ORDERED_VERTICES 1
+#define _EXEC_FULL_ORDERED_VERTICES 0
 
 //ONLY if _EXEC_FULL_ORDERED_VERTICES 0
 #define _DEBUG_GRAPH_INSERT_TIME 0
