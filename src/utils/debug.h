@@ -92,6 +92,12 @@ extern "C" {
 #define _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US 1000 // microsecond
 #define _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED 1 // will display only the targeted process or full_stack (O)
 
+/* 
+debug to detect cycle in graph and display informations
+*/
+#define _DEBUG_DETECT_GRAPH_CYCLE 0
+
+
 /*
  diplayed infos (PURPLE, RED and GREEN) : 
  - display order in which component are created or destroyed between to call of utils/display_creation_stats () function

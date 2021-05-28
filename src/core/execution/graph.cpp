@@ -660,6 +660,10 @@ rmt_BeginCPUSample(Graph_exec, 0);
     while (!is_end) {
       is_end = true;
 
+#if _DEBUG_DETECT_GRAPH_CYCLE
+      std::map<Vertex*, int> _vertex_already_activated;
+#endif
+
       while (!_activation_deque.empty ()) {
         auto * v = _activation_deque.front ();
       
@@ -676,19 +680,32 @@ rmt_BeginCPUSample(Graph_exec, 0);
         if (v->is_invalid ())
           continue;
         auto * p = v->get_process ();
-
-        
         count_activation++;
 
+
 #ifndef DJNN_NO_DEBUG
-        // loop detection
+#if _DEBUG_DETECT_GRAPH_CYCLE
+        if (_vertex_already_activated.find (v) != _vertex_already_activated.end ()) {
+          cerr << "\033[1;31m";
+          cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
+          cerr << "\t\tindex: " << v->get_sorted_index () << " --- " << print_process_full_name (v->get_process()) << " have already been activated in this cycle \n" ;
+          cerr << "\033[0m";
+          break;
+        }
+        else {
+          _vertex_already_activated[v] = count_activation;
+        }
+#else
+// default guard against cycles if _DEBUG_DETECT_GRAPH_CYCLE is not activated
         if (count_activation > MAX_LOOP_DETECTION) {
           cerr << "\033[1;31m";
-          cerr << "djnn Warning - \tWe detected more than " << MAX_LOOP_DETECTION << " activations in one Graph cycle " << endl;
-          cerr << "\t\tIt seems there is a loop in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
+          cerr << "djnn Warning - \tWe detected more than " << MAX_LOOP_DETECTION << " activations in only one graph exectution " << endl;
+          cerr << "\t\tIt seems there is a cycle in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
+          cerr << "\t\tPlease rebuild djnn with _DEBUG_DETECT_GRAPH_CYCLE to have full information about this detected cycle." << endl;
           cerr << "\033[0m";
           continue;
         }
+#endif
 #endif
           
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
@@ -716,6 +733,9 @@ rmt_BeginCPUSample(Graph_exec, 0);
         sort ();
         is_end = false;
       }
+#if _DEBUG_DETECT_GRAPH_CYCLE
+      _vertex_already_activated.clear ();
+#endif
     }
     #endif
 
