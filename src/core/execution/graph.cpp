@@ -508,6 +508,27 @@ namespace djnn
   }
 
   void
+  Graph::print_order (CoreProcess *p1, CoreProcess *p2)
+  {
+    int i_p1 = -1;
+    int i_p2 = -1;
+    for (int i = 0; i < _ordered_vertices.size (); i++)
+    {
+      if (_ordered_vertices.at (i)->get_process () == p1) i_p1 = i;
+      if (_ordered_vertices.at (i)->get_process () == p2) i_p2 = i;
+    }
+    std::string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
+    std::string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
+    if (i_p1 == -1) std::cout << "p1 " << p1_name << " not found\n";
+    if (i_p2 == -1) std::cout << "p2 " << p2_name << " not found\n";
+
+    if (i_p1 >= 0 && i_p2 >= 0) std::cout << "p1 "
+        << p1_name
+        << (i_p1 < i_p2 ? " before " : " after ") << " p2 "
+        << p2_name << std::endl;
+  }
+
+  void
   Graph::sort ()
   {
     if (_sorted)
@@ -544,6 +565,15 @@ namespace djnn
 #endif
 
     _sorted = true;
+
+#if _DEBUG_ENABLE_CHECK_ORDER
+    if (!_pair_to_check.empty ()) {
+      for (auto p: _pair_to_check) {
+        print_order (p.first, p.second);
+      }
+    }
+#endif
+
 
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     cerr << "\033[1;33m" << endl;

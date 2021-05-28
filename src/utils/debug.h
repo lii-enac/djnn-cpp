@@ -114,5 +114,6 @@ debug to detect cycle in graph and display informations
 //ONLY if _EXEC_FULL_ORDERED_VERTICES 0
 #define _DEBUG_GRAPH_INSERT_TIME 0
 
+#define _DEBUG_ENABLE_CHECK_ORDER 0
 
 #endif

@@ -21,6 +21,7 @@ namespace djnn {
     void clear_core ();
     void graph_add_edge (CoreProcess* src, CoreProcess* dst);
     void graph_remove_edge (CoreProcess* src, CoreProcess* dst);
+    void graph_check_order (CoreProcess* p1, CoreProcess* p2);
     void graph_exec ();
 }
 

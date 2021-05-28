@@ -107,6 +107,12 @@ namespace djnn
   }
 
   void
+  graph_check_order (CoreProcess* p1, CoreProcess* p2) {
+#if _DEBUG_ENABLE_CHECK_ORDER
+    Graph::instance ().check_order (p1, p2);
+#endif
+  }
+  void
   graph_exec ()
   {
     Graph::instance ().exec ();

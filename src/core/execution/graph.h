@@ -102,6 +102,10 @@ namespace djnn
     void add_in_activation (Vertex *v);
     void clear_activation ();
 
+#if _DEBUG_ENABLE_CHECK_ORDER
+    void check_order (CoreProcess *p1, CoreProcess *p2) { _pair_to_check.push_back (std::make_pair(p1, p2)); }
+#endif
+
   private:
     //static Graph _instance;
     static Graph *_instance;
@@ -109,7 +113,9 @@ namespace djnn
     void traverse_depth_first (Vertex* v);
     Vertex* add_vertex (CoreProcess* c);
     Vertex* get_vertex (CoreProcess* c);
-    
+
+    void print_order (CoreProcess *p1, CoreProcess *p2);
+
     //Vertex::vertices_t _vertices;
     std::list< Vertex* > _vertices;
 
@@ -119,6 +125,10 @@ namespace djnn
     std::vector<CoreProcess*> _scheduled_activation_processes;
 
     std::deque < Vertex*> _activation_deque; // try skip_list ?
+
+#if _DEBUG_ENABLE_CHECK_ORDER
+    std::vector < std::pair <CoreProcess*, CoreProcess*> > _pair_to_check;
+#endif
 
     int _cur_date;
     bool _sorted;
