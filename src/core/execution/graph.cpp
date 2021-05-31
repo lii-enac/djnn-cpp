@@ -35,8 +35,6 @@
 
 #ifndef DJNN_NO_DEBUG
 
-#define MAX_LOOP_DETECTION 5000000
-
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
 static int graph_counter_act = 0;
 #endif
@@ -599,7 +597,7 @@ namespace djnn
   }
 
 #ifndef DJNN_NO_DEBUG
-#if _DEBUG_DETECT_GRAPH_CYCLE
+
   std::pair<Vertex*, int>
   find_pair_from_value_in_map (std::map<Vertex*, int> &vertex_already_activated, int value){
     for (auto pair : vertex_already_activated){
@@ -625,7 +623,7 @@ namespace djnn
     cerr << "--------------------------------------------------- " << endl;
 
   }
-#endif
+
 #endif
 
   void
@@ -720,7 +718,8 @@ rmt_BeginCPUSample(Graph_exec, 0);
     while (!is_end) {
       is_end = true;
 
-#if _DEBUG_DETECT_GRAPH_CYCLE
+#ifndef DJNN_NO_DEBUG
+      //was #if _DEBUG_GRAPH_CYCLE_DETECT
       std::map<Vertex*, int> _vertex_already_activated;
 #endif
 
@@ -744,29 +743,29 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
 
 #ifndef DJNN_NO_DEBUG
-#if _DEBUG_DETECT_GRAPH_CYCLE
-        if (_vertex_already_activated.find (v) != _vertex_already_activated.end ()) {
-          cerr << "\033[1;31m";
-          cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
-          cerr << "\t\t"  << print_process_full_name (v->get_process()) << " have already been activated in this cycle \n" ;
-          display_cycle_analysis_stack (_vertex_already_activated, count_activation, v);
-          cerr << "\033[0m";
-          break;
+        if (_DEBUG_GRAPH_CYCLE_DETECT) {
+          if (_vertex_already_activated.find(v) != _vertex_already_activated.end()) {
+            cerr << "\033[1;31m";
+            cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
+            cerr << "\t\t" << print_process_full_name(v->get_process()) << " have already been activated in this cycle \n";
+            display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
+            cerr << "\033[0m";
+            break;
+          }
+          else 
+            _vertex_already_activated[v] = count_activation;
         }
         else {
-          _vertex_already_activated[v] = count_activation;
+          // default guard against cycles if _DEBUG_GRAPH_CYCLE_DETECT = 0
+          if (count_activation > _vertices.size()) {
+            cerr << "\033[1;31m";
+            cerr << "djnn Warning - \tWe detected more activations in only one graph execution than vertices in the graph !" << endl;
+            cerr << "\t\tIt seems there is a cycle in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
+            cerr << "\t\tPlease activate debug option _DEBUG_GRAPH_CYCLE_DETECT to have full information about this detected cycle." << endl;
+            cerr << "\033[0m";
+            continue;
+          }
         }
-#else
-// default guard against cycles if _DEBUG_DETECT_GRAPH_CYCLE is not activated
-        if (count_activation > MAX_LOOP_DETECTION) {
-          cerr << "\033[1;31m";
-          cerr << "djnn Warning - \tWe detected more than " << MAX_LOOP_DETECTION << " activations in only one graph exectution " << endl;
-          cerr << "\t\tIt seems there is a cycle in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
-          cerr << "\t\tPlease rebuild djnn with _DEBUG_DETECT_GRAPH_CYCLE to have full information about this detected cycle." << endl;
-          cerr << "\033[0m";
-          continue;
-        }
-#endif
 #endif
           
 #if _DEBUG_SEE_ACTIVATION_SEQUENCE
@@ -794,8 +793,9 @@ rmt_BeginCPUSample(Graph_exec, 0);
         sort ();
         is_end = false;
       }
-#if _DEBUG_DETECT_GRAPH_CYCLE
-      _vertex_already_activated.clear ();
+#ifndef DJNN_NO_DEBUG      
+      if (_DEBUG_GRAPH_CYCLE_DETECT)
+        _vertex_already_activated.clear ();
 #endif
     }
     #endif

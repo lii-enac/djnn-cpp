@@ -28,6 +28,9 @@
 
 namespace djnn
 {
+  // DEBUG OPTIONS
+  int _DEBUG_GRAPH_CYCLE_DETECT = 0;
+
   std::string
   __to_string(void*p)
   {
