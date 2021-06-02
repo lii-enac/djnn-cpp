@@ -604,6 +604,7 @@ namespace djnn
       if (pair.second == value)
         return pair;
     }
+    return std::pair<Vertex*, int> (nullptr, -1);
   }
   
 
@@ -617,8 +618,9 @@ namespace djnn
     // while we don't find the beginning of the cycle ... which is the vertex already activated
     do {
       pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
-      cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
-    } while (pair.first != v);
+      if (pair.first)
+        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
+    } while (pair.first && pair.first != v);
 
     cerr << "--------------------------------------------------- " << endl;
 
