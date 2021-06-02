@@ -24,6 +24,7 @@
 #include "display/abstract_display.h"
 #include "gui/shape/shapes.h"
 #include "gui/layer.h"
+#include "gui/widgets/multiline_edit.h"
 
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextCursor>
