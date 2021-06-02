@@ -12,12 +12,14 @@
  *
  */
 
+
 #include "utils/debug.h"
 
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
 #include "core/tree/blank.h"
+#include "core/utils/utils-dev.h"
 
 #include "display/qt/qt_window.h"
 #include "qqt_window_moc.h"
@@ -261,9 +263,8 @@ namespace djnn
       // event synthesis or not ??
       QtMainloop::instance ().set_please_exec (true);
 
-#if _DEBUG_SEE_COLOR_PICKING_VIEW 
-    _picking_view->display();
-#endif
+    if (_DEBUG_SEE_COLOR_PICKING_VIEW)
+      _picking_view->display();
   }
 
 }

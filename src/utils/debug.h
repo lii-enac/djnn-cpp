@@ -60,11 +60,6 @@ extern "C" {
 #ifndef DJNN_NO_DEBUG
 
 /* DEBUG DISPLAY INFORMATION */
-/* 
-  diplayed infos :
-    - a new frame with interactive object beside (right) the main frame
-*/
-#define _DEBUG_SEE_COLOR_PICKING_VIEW  0
 
 /*
  diplayed infos (LIGHT BLUE) : 

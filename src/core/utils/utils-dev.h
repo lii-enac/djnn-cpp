@@ -22,9 +22,6 @@ namespace djnn {
   class FatProcess;
   class RefProperty;
  
-  //DEBUG OPTIONS
-  extern int _DEBUG_GRAPH_CYCLE_DETECT;
-
   typedef std::pair<RefProperty*, std::string> ref_info_t;
   ref_info_t check_for_ref (FatProcess* src, const std::string& spec);
   std::string __to_string(long x);
@@ -45,4 +42,18 @@ typedef unsigned gperf_t;
   void enable (Coupling* c, CoreProcess* dst);
   void remove_edge (Coupling *c);
   void disable (Coupling *c);
+
+  /* DEBUG OPTION - FOR djnn */
+
+  /* 
+  diplayed infos :
+    - a new frame with interactive object beside (right) the main frame
+  */
+  extern int _DEBUG_SEE_COLOR_PICKING_VIEW;
+
+
+  /* 
+    debug to detect cycle in graph and display informations
+  */
+  extern int _DEBUG_GRAPH_CYCLE_DETECT;
 }
