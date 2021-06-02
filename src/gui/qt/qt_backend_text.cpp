@@ -113,7 +113,7 @@ namespace djnn
   }
 
   void
-  QtBackend::draw_simple_text_edit (SimpleTextEdit* ste)
+  QtBackend::draw_simple_text_edit (MultilineEditor* ste)
   {
     QtContext *cur_context = _context_manager->get_current ();
     _painter->setFont (cur_context->font);

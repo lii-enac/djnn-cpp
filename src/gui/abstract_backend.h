@@ -30,7 +30,7 @@ namespace djnn
   class AbstractGShape;
   class Layer;
   class SimpleText;
-  class SimpleTextEdit;
+  class MultilineEditor;
   class AbstractBackend
   {
   public:
@@ -64,7 +64,7 @@ namespace djnn
     {
     }
     virtual void
-    draw_simple_text_edit (SimpleTextEdit*)
+    draw_simple_text_edit (MultilineEditor*)
     {
 
     }

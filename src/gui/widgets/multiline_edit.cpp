@@ -39,7 +39,7 @@ namespace djnn
       _cx (nullptr), _cy (nullptr),
       _ctext (&_text, ACTIVATION, nullptr, ACTIVATION ), _init (false)
   {
-    SimpleTextEdit* ste = dynamic_cast<SimpleTextEdit*> (parent);
+    MultilineEditor* ste = dynamic_cast<MultilineEditor*> (parent);
     if (ste == nullptr) {
       return;
     }
@@ -54,7 +54,7 @@ namespace djnn
   {
     if (_init)
       return;
-    SimpleTextEdit* ste = dynamic_cast<SimpleTextEdit*> (parent);
+    MultilineEditor* ste = dynamic_cast<MultilineEditor*> (parent);
     if (ste == nullptr) {
       error (this, "The Parent of SimpleText must be SimpleTextEdit");
     return;
@@ -121,7 +121,7 @@ namespace djnn
     text = _text.get_value ();
   }
 
-  SimpleTextEdit::SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text, bool enable_edit_on_activation) :
+  MultilineEditor::MultilineEditor (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text, bool enable_edit_on_activation) :
     AbstractGShape (parent, name), _lines (this, "lines"),
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
@@ -164,7 +164,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  SimpleTextEdit::~SimpleTextEdit()
+  MultilineEditor::~MultilineEditor()
   {
     graph_remove_edge (&_on_str_input, &_ordering_node);
     graph_remove_edge (&_on_press, &_ordering_node);
@@ -181,7 +181,7 @@ namespace djnn
   }
 
   void
-   SimpleTextEdit::impl_activate()
+   MultilineEditor::impl_activate()
    {
      if (_line == nullptr) {
        if (_lines.children().empty()) {
@@ -224,7 +224,7 @@ namespace djnn
    }
 
    void
-   SimpleTextEdit::impl_deactivate()
+   MultilineEditor::impl_deactivate()
    {
      AbstractGShape::impl_deactivate ();
      _lines.deactivate ();
@@ -318,7 +318,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::toggle_edit ()
+  MultilineEditor::toggle_edit ()
   {
     if (_c_press.is_enabled()) {
       _c_str_input.disable ();
@@ -338,13 +338,13 @@ namespace djnn
 
 
   void
-  SimpleTextEdit::update_selection ()
+  MultilineEditor::update_selection ()
   {
 
   }
 
   void
-  SimpleTextEdit::update_cursor ()
+  MultilineEditor::update_cursor ()
   {
     if (has_selection()) {
       SimpleText* l1 = get_line (_start_sel_y);
@@ -362,18 +362,18 @@ namespace djnn
   }
 
   int
-  SimpleTextEdit::get_index_from_x (int x)
+  MultilineEditor::get_index_from_x (int x)
   {
     return Backend::instance ()->compute_index (_font_metrics, _line, x);
   }
 
   int
-  SimpleTextEdit::get_x_from_index ()
+  MultilineEditor::get_x_from_index ()
   {
     return Backend::instance ()->compute_x (_font_metrics, _line, _index_x);
   }
   void
-  SimpleTextEdit::update_index_from_xy (int x, int y)
+  MultilineEditor::update_index_from_xy (int x, int y)
   {
     if (_lines.children ().empty ()) {
       warning (this, "No more line in simple text editor");
@@ -405,7 +405,7 @@ namespace djnn
   }
 
   std::pair<double, double>
-  SimpleTextEdit::get_local_coords (double x, double y)
+  MultilineEditor::get_local_coords (double x, double y)
   {
     /* compute local coords */
     Homography *h = dynamic_cast<Homography*> (this->inverted_matrix ());
@@ -417,7 +417,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::mouse_press ()
+  MultilineEditor::mouse_press ()
   {
     if (getRef(get_frame()->find_child ("touches/$added")) != nullptr)
       return; // ignore touch
@@ -434,13 +434,13 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::mouse_release ()
+  MultilineEditor::mouse_release ()
   {
     _press_on = false;
   }
 
   void
-  SimpleTextEdit::mouse_move ()
+  MultilineEditor::mouse_move ()
   {
     if (!_press_on)
       return;
@@ -456,7 +456,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::key_released ()
+  MultilineEditor::key_released ()
   {
     int key = _key_code_released.get_value ();
     if (key == DJN_Key_Shift) {
@@ -474,7 +474,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::key_pressed ()
+  MultilineEditor::key_pressed ()
   {
     int key = _key_code_pressed.get_value ();
     if (key == DJN_Key_Shift) {
@@ -757,7 +757,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::sort_selection ()
+  MultilineEditor::sort_selection ()
   {
     if (_start_sel_y == _end_sel_y) {
       if (_start_sel_x > _end_sel_x) {
@@ -776,7 +776,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::delete_line (SimpleText *st)
+  MultilineEditor::delete_line (SimpleText *st)
   {
     st->deactivate ();
     _lines.remove_child (st);
@@ -784,7 +784,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::del_selection ()
+  MultilineEditor::del_selection ()
   {
     sort_selection ();
 
@@ -821,7 +821,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::update_lines_position ()
+  MultilineEditor::update_lines_position ()
   {
     int height = _ascent + _descent;
     for (int i = 0; i < _lines.children ().size (); i++) {
@@ -830,7 +830,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::add_string_input ()
+  MultilineEditor::add_string_input ()
   {
     std::string str = _str_input.get_value ();
     if (str.empty())
@@ -839,7 +839,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::add_str (const std::string& str)
+  MultilineEditor::add_str (const std::string& str)
   {
     if (str.empty())
       return;
@@ -915,7 +915,7 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::copy ()
+  MultilineEditor::copy ()
   {
     if (_start_sel_x == _end_sel_x && _start_sel_y == _end_sel_y)
       return;
@@ -937,14 +937,14 @@ namespace djnn
   }
 
   void
-  SimpleTextEdit::paste ()
+  MultilineEditor::paste ()
   {
     std::string str = _copy_buffer.get_value();
     add_str (str);
   }
 
   void
-  SimpleTextEdit::draw ()
+  MultilineEditor::draw ()
   {
     auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {

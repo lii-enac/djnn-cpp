@@ -37,52 +37,52 @@ namespace djnn {
       bool _init;
   };
 
-  class SimpleTextEdit : public AbstractGShape {
+  class MultilineEditor : public AbstractGShape {
       class ToggleEditAction : public Action {
         public:
           ToggleEditAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~ToggleEditAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->toggle_edit (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->toggle_edit (); }
       };
       class MousePressAction : public Action {
         public:
           MousePressAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~MousePressAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->mouse_press (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_press (); }
       };
       class MouseReleaseAction : public Action {
         public:
           MouseReleaseAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~MouseReleaseAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->mouse_release (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_release (); }
       };
       class MouseMoveAction : public Action {
         public:
           MouseMoveAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~MouseMoveAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->mouse_move (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_move (); }
       };
       class KeyPressedAction : public Action {
         public:
           KeyPressedAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~KeyPressedAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->key_pressed (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->key_pressed (); }
       };
       class KeyReleasedAction : public Action {
         public:
           KeyReleasedAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~KeyReleasedAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->key_released (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->key_released (); }
       };
       class StrInputAction : public Action {
         public:
           StrInputAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
           virtual ~StrInputAction () {}
-          void impl_activate () override { ((SimpleTextEdit*)get_parent ())->add_string_input (); }
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->add_string_input (); }
       };
     public:
-      SimpleTextEdit (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text = std::string(), bool enable_edit_on_activation = true);
-      virtual ~SimpleTextEdit ();
+      MultilineEditor (ParentProcess* parent, const std::string& name, int x, int y, int width, int height, const std::string &text = std::string(), bool enable_edit_on_activation = true);
+      virtual ~MultilineEditor ();
       void impl_activate () override;
       void impl_deactivate () override;
 
