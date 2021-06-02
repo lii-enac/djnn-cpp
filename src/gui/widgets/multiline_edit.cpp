@@ -419,8 +419,10 @@ namespace djnn
   void
   MultilineEditor::mouse_press ()
   {
-    if (getRef(get_frame()->find_child ("touches/$added")) != nullptr)
-      return; // ignore touch
+    if (getRef(get_frame()->find_child ("touches/$added")) != nullptr) {
+      setRef(get_frame()->find_child ("touches/$added"), nullptr);
+      return; // ignore and cancel touch
+    }
     AbstractProperty* press_x = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("press/x"));
     AbstractProperty* press_y = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("press/y"));
     std::pair<double, double> local = get_local_coords(press_x->get_double_value(), press_y->get_double_value());
