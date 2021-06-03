@@ -59,7 +59,7 @@ typedef unsigned gperf_t;
 
   /*
     diplayed infos (YELLOW) : 
-    - display order in which component are activated and dactivated by GRAPH_EXEC
+    - display order in which component are activated and deactivated by GRAPH_EXEC
  */
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US;
