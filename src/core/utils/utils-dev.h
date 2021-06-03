@@ -46,7 +46,7 @@ typedef unsigned gperf_t;
   /* DEBUG OPTION - FOR djnn */
 
   /* 
-  diplayed infos :
+    diplayed infos :
     - a new frame with interactive object beside (right) the main frame
   */
   extern int _DEBUG_SEE_COLOR_PICKING_VIEW;
@@ -56,4 +56,12 @@ typedef unsigned gperf_t;
     debug to detect cycle in graph and display informations
   */
   extern int _DEBUG_GRAPH_CYCLE_DETECT;
-}
+
+  /*
+    diplayed infos (YELLOW) : 
+    - display order in which component are activated and dactivated by GRAPH_EXEC
+ */
+  extern int _DEBUG_SEE_ACTIVATION_SEQUENCE;
+  extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US;
+  extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED;
+} 

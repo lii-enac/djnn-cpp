@@ -78,15 +78,6 @@ extern "C" {
 */
 #define _DEBUG_SEE_GRAPH_INFO_PREF 0
 
-
-/*
- diplayed infos (YELLOW) : 
- - display order in which component are activated and dactivated by GRAPH_EXEC
-*/
-#define _DEBUG_SEE_ACTIVATION_SEQUENCE 0
-#define _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US 1000 // microsecond
-#define _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED 1 // will display only the targeted process or full_stack (O)
-
 /*
  diplayed infos (PURPLE, RED and GREEN) : 
  - display order in which component are created or destroyed between to call of utils/display_creation_stats () function

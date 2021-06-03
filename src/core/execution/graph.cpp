@@ -26,18 +26,9 @@
 #include <iostream>
 #endif
 
-
-// #if _DEBUG_SEE_ACTIVATION_SEQUENCE || !defined(DJNN_NO_DEBUG)
-// #include <boost/core/demangle.hpp> 
-// #include <typeinfo>
-// #endif
-
-
 #ifndef DJNN_NO_DEBUG
 
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
 static int graph_counter_act = 0;
-#endif
 
 #if _DEBUG_GRAPH_INSERT_TIME
 static int nb_insert_by_graph_exec = 0;
@@ -644,13 +635,12 @@ rmt_BeginCPUSample(Graph_exec, 0);
     // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
       std::map<CoreProcess*, int> already_done;
-      for (auto p: _scheduled_activation_processes) {
-        if (already_done.find (p) == already_done.end ()) {
-          p->notify_activation ();
+      for (auto p : _scheduled_activation_processes) {
+        if (already_done.find(p) == already_done.end()) {
+          p->notify_activation();
           already_done[p];
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-     std::cerr << "Scheduled event notifying ------ " << print_process_full_name(p) << std::endl;
-#endif
+          if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+            std::cerr << "Scheduled event notifying ------ " << print_process_full_name(p) << std::endl;
         }
         // DEBUG DUPLICATES
         //else
@@ -659,14 +649,17 @@ rmt_BeginCPUSample(Graph_exec, 0);
       _scheduled_activation_processes.clear ();
     }
 
-    int count_activation = 0; // use for loop detection else this could be replace in the #if _DEBUG_SEE_ACTIVATION_SEQUENCE below
+    int count_activation = 0;
 
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+#ifndef DJNN_NO_DEBUG
     int count_real_activation = 0 ;
     graph_counter_act++;
     int _sorted_break = 0;
-    std::chrono::steady_clock::time_point begin_act = std::chrono::steady_clock::now();
-    std::cerr << std::endl;
+    std::chrono::steady_clock::time_point begin_act, begin_process_act, end_process_act;
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+      begin_act = std::chrono::steady_clock::now();
+      std::cerr << std::endl;
+    }
 #endif
 
 #if _EXEC_FULL_ORDERED_VERTICES
@@ -676,36 +669,36 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
       for (auto v : _ordered_vertices) {
 
-      	if (!_sorted) {
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-          _sorted_break++;
-          std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break <<  "\033[0m" << endl ;
-#endif
+        if (!_sorted) {
+          if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+            _sorted_break++;
+            std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
+          }
           break;
-        } 
-        if (v->is_invalid ()) continue;
-        auto * p = v->get_process ();
-        
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-        count_activation++;
-        if (p->get_activation_flag () != NONE_ACTIVATION) {
-          std::chrono::steady_clock::time_point begin_process_act = std::chrono::steady_clock::now();
-          count_real_activation++;
-#endif
+        }
+        if (v->is_invalid()) continue;
+        auto* p = v->get_process();
 
-          p->trigger_activation_flag ();
-          p->set_activation_flag (NONE_ACTIVATION);
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+          count_activation++;
+          if (p->get_activation_flag() != NONE_ACTIVATION) {
+            begin_process_act = std::chrono::steady_clock::now();
+            count_real_activation++;
+          }
+        }
 
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-          std::chrono::steady_clock::time_point end_process_act = std::chrono::steady_clock::now();
+        p->trigger_activation_flag();
+        p->set_activation_flag(NONE_ACTIVATION);
+
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+          end_process_act = std::chrono::steady_clock::now();
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
+            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
           cerr << "\033[0m";
         }
- #endif
       }
 
       if (!_sorted) {
@@ -721,26 +714,25 @@ rmt_BeginCPUSample(Graph_exec, 0);
       is_end = true;
 
 #ifndef DJNN_NO_DEBUG
-      //was #if _DEBUG_GRAPH_CYCLE_DETECT
       std::map<Vertex*, int> _vertex_already_activated;
 #endif
 
       while (!_activation_deque.empty ()) {
         auto * v = _activation_deque.front ();
       
-      if (!_sorted) {
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-          _sorted_break++;
-          std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break <<  "\033[0m" << endl ;
-#endif
+        if (!_sorted) {
+          if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+            _sorted_break++;
+            std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
+          }
           break;
         }
         // pop only if sorted else .. the process activation willl be skip
-        _activation_deque.pop_front ();
+        _activation_deque.pop_front();
 
-        if (v->is_invalid ())
+        if (v->is_invalid())
           continue;
-        auto * p = v->get_process ();
+        auto* p = v->get_process();
         count_activation++;
 
 
@@ -754,7 +746,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
             cerr << "\033[0m";
             break;
           }
-          else 
+          else
             _vertex_already_activated[v] = count_activation;
         }
         else {
@@ -768,31 +760,33 @@ rmt_BeginCPUSample(Graph_exec, 0);
             continue;
           }
         }
-#endif
-          
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-        if (p->get_activation_flag () != NONE_ACTIVATION) { // should be removed ??
-          std::chrono::steady_clock::time_point begin_process_act = std::chrono::steady_clock::now();
-          count_real_activation++;
-#endif
-      
-          p->trigger_activation_flag ();
-          p->set_activation_flag (NONE_ACTIVATION);
 
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
-          std::chrono::steady_clock::time_point end_process_act = std::chrono::steady_clock::now();
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+          if (p->get_activation_flag() != NONE_ACTIVATION) { // should be removed ??
+            begin_process_act = std::chrono::steady_clock::now();
+            count_real_activation++;
+          }
+        }
+#endif
+
+        p->trigger_activation_flag();
+        p->set_activation_flag(NONE_ACTIVATION);
+
+#ifndef DJNN_NO_DEBUG
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+          end_process_act = std::chrono::steady_clock::now();
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " ------ i: " << v->get_sorted_index () << " --- " << print_process_full_name(p) <<  "---- process time act/deact = " << _process_time  << "[us]" << std::endl;
+            std::cerr << count_real_activation << " ------ i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
           cerr << "\033[0m";
         }
- #endif
-      } 
+#endif
+      }
 
       if (!_sorted) {
-        sort ();
+        sort();
         is_end = false;
       }
 #ifndef DJNN_NO_DEBUG      
@@ -803,49 +797,49 @@ rmt_BeginCPUSample(Graph_exec, 0);
     #endif
 
     // then execute delayed delete on processes 
-    for (auto p: _scheduled_delete_processes) {
+    for (auto p : _scheduled_delete_processes) {
       delete p;
     }
-    _scheduled_delete_processes.clear ();
+    _scheduled_delete_processes.clear();
 
     // execute _output_nodes
     for (auto v : _output_nodes) {
-        if (v->is_invalid ()) continue;
-        auto * p = v->get_process ();
-        p->trigger_activation_flag ();
-        p->set_activation_flag (NONE_ACTIVATION);
+      if (v->is_invalid()) continue;
+      auto* p = v->get_process();
+      p->trigger_activation_flag();
+      p->set_activation_flag(NONE_ACTIVATION);
     }
 
-rmt_EndCPUSample();
+    rmt_EndCPUSample();
 
-#if _DEBUG_SEE_ACTIVATION_SEQUENCE
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
-      std::cerr << " ---- GRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]" ;
-      if (time_exec > 1000 ) {
+      std::cerr << " ---- GRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]";
+      if (time_exec > 1000) {
         cerr << "\033[1;31m";
-        std::cerr << " - or " << time_exec / 1000.0 <<  "[ms]" << std::endl;
+        std::cerr << " - or " << time_exec / 1000.0 << "[ms]" << std::endl;
         cerr << "\033[0m";
       }
       else
         std::cerr << std::endl;
-      double pourcent_graph = (count_real_activation/ (double)count_activation) * 100;
+      double pourcent_graph = (count_real_activation / (double)count_activation) * 100;
       if (pourcent_graph < 50)
         cerr << "\033[1;31m";
-      std::cerr << "nb action = " << count_real_activation  << "/" << count_activation << "(" << pourcent_graph << "%)" ;
-      std::cerr << "--- nb sorted_break " << _sorted_break << endl ;
+      std::cerr << "nb action = " << count_real_activation << "/" << count_activation << "(" << pourcent_graph << "%)";
+      std::cerr << "--- nb sorted_break " << _sorted_break << endl << endl << endl;
       cerr << "\033[0m";
-#endif
+    }
 
 #if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
-  cerr << "\033[1;37m";
-  if (nb_insert_by_graph_exec > 0) {
-    std::cerr << "nb insert: " << nb_insert_by_graph_exec <<" - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec  << "[us]";
-    std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << std::endl;
-  }
-  else
-    std::cerr << "NO insert" << std::endl;
-  cerr << "\033[0m";
+    cerr << "\033[1;37m";
+    if (nb_insert_by_graph_exec > 0) {
+      std::cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[us]";
+      std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << std::endl;
+    }
+    else
+      std::cerr << "NO insert" << std::endl;
+    cerr << "\033[0m";
 #endif 
 
 #if _DEBUG_SEE_GRAPH_INFO_PREF
@@ -853,7 +847,7 @@ rmt_EndCPUSample();
     cerr << "\033[1;32m" << endl;
     std::chrono::steady_clock::time_point end_GRAPH_EXEC = std::chrono::steady_clock::now();
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_EXEC - begin_GRAPH_EXEC).count();
-    std::cerr << "GRAPH_EXEC = " << time << "[us]" ;
+    std::cerr << "GRAPH_EXEC = " << time << "[us]";
     if (time > 1000 )
         std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
       else
