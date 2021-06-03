@@ -28,6 +28,7 @@
 
 #ifndef DJNN_NO_DEBUG
 
+#include <chrono>
 static int graph_counter_act = 0;
 
 #if _DEBUG_GRAPH_INSERT_TIME
@@ -46,7 +47,7 @@ static int sorted_counter = 0;
 static double sorted_total = 0.0;
 static double sorted_average = 0.0;
 
-//#include <chrono>
+#include <chrono>
 #endif
 #endif
 
