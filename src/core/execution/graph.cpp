@@ -683,8 +683,8 @@ rmt_BeginCPUSample(Graph_exec, 0);
 
         if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
           count_activation++;
+          begin_process_act = std::chrono::steady_clock::now();
           if (p->get_activation_flag() != NONE_ACTIVATION) {
-            begin_process_act = std::chrono::steady_clock::now();
             count_real_activation++;
           }
         }
@@ -781,7 +781,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " -- targeted i:" << count_targeted++ << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
+            std::cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
           cerr << "\033[0m";
         }
 #endif
