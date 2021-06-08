@@ -97,9 +97,13 @@ namespace djnn
   Incr::Incr (ParentProcess* parent, const std::string& name, bool isModel) :
       FatProcess (name),
       _delta (this, "delta", 1),
-      _state (this, "state", 0)
+      _state (this, "state", 0),
+	  _step (this, "step"),
+	  _action (this, "action"),
+	  _c_step (&_step, ACTIVATION, &_action, ACTIVATION),
+	  _is_model (isModel)
   {
-    init_incr (isModel);
+    init_incr (0);
     finalize_construction (parent, name);
   }
 
@@ -123,8 +127,40 @@ namespace djnn
     FatProcess::set_parent (parent); 
   }
 
+  bool
+  Incr::pre_activate()
+  {
+	/* no activation if :
+	 * 1 - the parent exists and is stopped
+	 *
+	 * WARNING - In order to keep the old behavior (step on activation) we relieve
+	 * the usual condition that the process cannot be activated if it is already
+	 * active.
+	 */
+	if (get_parent () != nullptr && !get_parent ()->somehow_activating()) {
+	  return false;
+	}
+	if (!is_activated())
+	  set_activation_state (ACTIVATING);
+	return true;
+  }
+
   void
   Incr::impl_activate ()
+  {
+	_c_step.enable ();
+    if (!_is_model || is_activated())
+      step ();
+  }
+
+  void
+  Incr::impl_deactivate ()
+  {
+    _c_step.disable ();
+  }
+
+  void
+  Incr::step ()
   {
     _state.set_value (_state.get_value () + _delta.get_value (), true);
   }
