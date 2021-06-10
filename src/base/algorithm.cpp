@@ -168,7 +168,6 @@ namespace djnn
     if (_container == nullptr)
       error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child_impl ("size"), ACTIVATION, &_update_list, ACTIVATION);
-    finalize_construction (parent, name);
   }
 
   ListOperator::~ListOperator()
@@ -224,6 +223,7 @@ namespace djnn
   	  CoreProcess *container, const std::string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
   }
 
   SumList::~SumList () {
@@ -262,6 +262,7 @@ namespace djnn
   	  CoreProcess *container, const std::string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
   }
 
   ProductList::~ProductList () {
@@ -300,6 +301,7 @@ namespace djnn
   	  CoreProcess *container, const std::string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
   }
 
   void
@@ -338,6 +340,7 @@ namespace djnn
   	  CoreProcess *container, const std::string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
   }
 
   MinList::~MinList () {
