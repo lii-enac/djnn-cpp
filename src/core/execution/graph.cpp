@@ -255,8 +255,16 @@ namespace djnn
         bool is_inserted = false;
 
         while ( !is_inserted && it != _activation_deque.end () ) {
-          // do not insert duplicate
-          if ((*it)->get_sorted_index () == v->get_sorted_index ()) return ; 
+          // do not insert duplicate -- (should not happen any more)
+          if ((*it)->get_sorted_index () == v->get_sorted_index ()) {
+
+  #if _DEBUG_GRAPH_INSERT_TIME          
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+            cerr << "!! insert time (duplicate) :" << time << endl << endl;
+#endif 
+            return ;
+          } 
           if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
             _activation_deque.insert (it, v);
             is_inserted = true;
@@ -286,6 +294,7 @@ namespace djnn
     max_insert_time_all_graph = time;
     max_insert_for_this_size = _activation_deque.size ();
   }
+  cerr << "!! insert time :" << time << endl << endl;
 #endif     
   }
 
@@ -836,7 +845,7 @@ rmt_BeginCPUSample(Graph_exec, 0);
 #if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
     cerr << "\033[1;37m";
     if (nb_insert_by_graph_exec > 0) {
-      std::cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[us]";
+      std::cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[ns]";
       std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << std::endl;
     }
     else
