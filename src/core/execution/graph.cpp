@@ -255,16 +255,19 @@ namespace djnn
         bool is_inserted = false;
 
         while ( !is_inserted && it != _activation_deque.end () ) {
-          // do not insert duplicate -- (should not happen any more)
-          if ((*it)->get_sorted_index () == v->get_sorted_index ()) {
-
-  #if _DEBUG_GRAPH_INSERT_TIME          
-            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-            int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
-            cerr << "!! insert time (duplicate) :" << time << endl << endl;
-#endif 
-            return ;
-          } 
+          /* note:
+          /  should avoid duplicates
+          /  we don't need this code anymore ? 
+          / the guard for duplicate is now in process::set_activation_flag
+          */
+//           if ((*it)->get_sorted_index () == v->get_sorted_index ()) {
+//   #if _DEBUG_GRAPH_INSERT_TIME          
+//             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+//             int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+//             cerr << "!! insert time (duplicate) :" << time << endl << endl;
+// #endif 
+//             return ;
+//           } 
           if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
             _activation_deque.insert (it, v);
             is_inserted = true;
@@ -277,11 +280,15 @@ namespace djnn
       }
     }
     else {
-      // but should avoid duplicate
-      for (auto vv: _activation_deque)
-        if (vv == v) return ;
+      /* note:
+      /  should avoid duplicates
+      /  we don't need this code anymore ? 
+      / the guard for duplicate is now in process::set_activation_flag
+      */
+      //for (auto vv: _activation_deque)
+      //  if (vv == v) return ;
 
-      // new we add it 
+      // now we add it 
       _activation_deque.push_front (v);
     }
 
