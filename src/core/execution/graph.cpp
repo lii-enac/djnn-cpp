@@ -784,6 +784,13 @@ rmt_BeginCPUSample(Graph_exec, 0);
             begin_process_act = std::chrono::steady_clock::now();
             count_real_activation++;
           }
+          else {
+            // why this process is in the list but his activation is now: none.
+            cerr << "\033[1;31m";
+            cerr << "djnn Warning - " << print_process_full_name (p) << " is in activation list but never activated " << endl;
+            cerr << "\t\t you may have a probleme of simultanous flux " << endl;
+            cerr << "\033[0m";
+          }
         }
 #endif
 
