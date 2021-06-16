@@ -26,6 +26,7 @@
 #include "display/abstract_display.h"
 #include "exec_env/qt/qt_mainloop.h"
 #include "exec_env/global_mutex.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 #include <QEvent>
 #include <QTouchEvent>
@@ -243,9 +244,11 @@ namespace djnn
     if (p) {
 
       t1();
-
+      rmt_BeginCPUSample(draw, RMTSF_None);
+    
       p->draw ();
 
+      rmt_EndCPUSample ();
       double time = t2 ("");
       _window->mspf ()->set_value(time, true);
 

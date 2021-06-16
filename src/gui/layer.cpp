@@ -65,7 +65,7 @@ namespace djnn
   Layer::draw ()
   {
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      rmt_BeginCPUSample(layer_draw, RMTSF_Recursive);
+      //rmt_BeginCPUSample(Layer_draw, RMTSF_Recursive);
       ComponentObserver::instance ().start_draw ();
       if (Backend::instance ()->pre_draw_layer (this)) {
         //Container::draw ();
@@ -75,7 +75,7 @@ namespace djnn
       }
       ComponentObserver::instance ().end_draw ();
       Backend::instance ()->post_draw_layer (this);
-      rmt_EndCPUSample();
+      //rmt_EndCPUSample();
     }
   }
 

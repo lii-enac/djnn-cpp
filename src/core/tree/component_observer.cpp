@@ -57,21 +57,21 @@ namespace djnn
   void
   ComponentObserver::start_draw ()
   {
-rmt_BeginCPUSample(start_draw, RMTSF_Aggregate);
+//rmt_BeginCPUSample(start_draw, RMTSF_Aggregate);
     for (auto m : _draw_manager_list) {
       m->push ();
     }
-rmt_EndCPUSample();
+//rmt_EndCPUSample();
   }
 
   void
   ComponentObserver::end_draw ()
   {
-rmt_BeginCPUSample(stop_draw, RMTSF_Aggregate);
+//rmt_BeginCPUSample(stop_draw, RMTSF_Aggregate);
     for (auto m : _draw_manager_list) {
       m->pop ();
     }
-rmt_EndCPUSample();
+//rmt_EndCPUSample();
   }
 
   void

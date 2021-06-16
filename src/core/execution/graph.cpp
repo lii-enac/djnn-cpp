@@ -639,15 +639,18 @@ namespace djnn
   void
   Graph::exec ()
   {
-#if _DEBUG_GRAPH_INSERT_TIME
+
+rmt_BeginCPUSample(Graph_exec, RMTSF_None);
+
+    #if _DEBUG_GRAPH_INSERT_TIME
     nb_insert_by_graph_exec = 0;
     acc_insert_time_by_graph_exec = 0;
-#endif
+    #endif
 
     #if _DEBUG_SEE_GRAPH_INFO_PREF
     std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
     #endif
-rmt_BeginCPUSample(Graph_exec, 0);
+
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
@@ -835,8 +838,6 @@ rmt_BeginCPUSample(Graph_exec, 0);
       p->set_activation_flag(NONE_ACTIVATION);
     }
 
-    rmt_EndCPUSample();
-
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
@@ -900,7 +901,9 @@ rmt_BeginCPUSample(Graph_exec, 0);
     cerr << "SORTED_GRAPH #edges: " << sorted_edges << endl ;    
     cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << "[us]" << endl;
     cerr << "\033[0m"  << endl;
-#endif
+    #endif
+
+rmt_EndCPUSample();
 
   }
 }
