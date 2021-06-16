@@ -83,16 +83,81 @@ namespace djnn
     }
   }
 
+    static void
+  perform_action_2 (CoreProcess * src, CoreProcess * dst, bool propagate)
+  {
+
+    AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
+    AbstractProperty *dst_p = (AbstractProperty*) (dst);
+    //if (!dst_p) { warning (dst_p, "dst is not a property"); return; }
+
+    if (src_p) {
+      switch (src_p->get_prop_type ())
+      {
+        case Integer:
+        {
+          AbstractIntProperty* ip = (AbstractIntProperty*) (src_p);
+          // if (ip) 
+          dst_p->set_value (ip->get_value (), propagate);
+          break;
+        }
+        case Boolean:
+        {
+          AbstractBoolProperty* bp = (AbstractBoolProperty*) (src_p);
+          // if (bp) 
+          dst_p->set_value (bp->get_value (), propagate);
+          break;
+        }
+        case Double:
+        {
+          AbstractDoubleProperty* dp = (AbstractDoubleProperty*) (src_p);
+          // if (dp) 
+          dst_p->set_value (dp->get_value (), propagate);
+          break;
+        }
+        case String:
+        {
+          AbstractTextProperty* tp = (AbstractTextProperty*) (src_p);
+          // if (tp) 
+          dst_p->set_value (string (tp->get_value ()), propagate);
+          break;
+        }
+        case Reference:
+        {
+          RefProperty* rp = (RefProperty*) (src_p);
+          // if (rp) 
+          dst_p->set_value (rp->get_value (), propagate);
+          break;
+        }
+        case Dist:
+        {
+          RemoteProperty* dp = djnn_dynamic_cast<RemoteProperty*> (src_p);
+          // if (dp) 
+          dst_p->set_value (dp->get_value (), propagate);
+          break;
+        }
+        default:
+        warning (src_p, "Unknown property type");
+        return;
+      } 
+    }
+    else if (dst_p->get_prop_type () == Reference) {
+       ((RefProperty*) dst_p)->set_value (src, propagate);
+    }
+  }
+
+
+
   void
   CoreAssignment::perform_action ()
   {
-    djnn::perform_action (get_src (), get_dst (), _propagate);    
+    djnn::perform_action_2 (get_src (), get_dst (), _propagate);    
   }
 
   void
   Assignment::perform_action ()
   {
-    djnn::perform_action (get_src (), get_dst (), _propagate);    
+    djnn::perform_action_2 (get_src (), get_dst (), _propagate);    
   }
 
   void
