@@ -272,7 +272,7 @@ namespace djnn
             _activation_deque.insert (it, v);
             is_inserted = true;
           }
-          it++;
+          ++it;
         }
         //if not inserted : it is the last one
         if (!is_inserted)
@@ -671,7 +671,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
     int count_activation = 0;
 
-#ifndef DJNN_NO_DEBUG
+    #ifndef DJNN_NO_DEBUG
     int count_real_activation = 0;
     int count_targeted = 0;
     graph_counter_act++;
@@ -681,9 +681,9 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       begin_act = std::chrono::steady_clock::now();
       std::cerr << std::endl;
     }
-#endif
+    #endif
 
-#if _EXEC_FULL_ORDERED_VERTICES
+    #if _EXEC_FULL_ORDERED_VERTICES
     bool is_end = false;
     while (!is_end) {
       is_end = true;
@@ -728,15 +728,15 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       }
     }
 
-#else //between OLD and NEW execution
+    #else //between OLD and NEW execution
 
     bool is_end = false;
     while (!is_end) {
       is_end = true;
 
-#ifndef DJNN_NO_DEBUG
+      #ifndef DJNN_NO_DEBUG
       std::map<Vertex*, int> _vertex_already_activated;
-#endif
+      #endif
 
       while (!_activation_deque.empty ()) {
         auto * v = _activation_deque.front ();
@@ -756,8 +756,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         auto* p = v->get_process();
         count_activation++;
 
-
-#ifndef DJNN_NO_DEBUG
+        #ifndef DJNN_NO_DEBUG
         if (_DEBUG_GRAPH_CYCLE_DETECT) {
           if (_vertex_already_activated.find(v) != _vertex_already_activated.end()) {
             cerr << "\033[1;31m";
@@ -795,12 +794,12 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
             cerr << "\033[0m";
           }
         }
-#endif
+        #endif
 
-        p->trigger_activation_flag();
-        p->set_activation_flag(NONE_ACTIVATION);
+        p->trigger_activation_flag ();
+        p->set_activation_flag (NONE_ACTIVATION);
 
-#ifndef DJNN_NO_DEBUG
+        #ifndef DJNN_NO_DEBUG
         if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
           end_process_act = std::chrono::steady_clock::now();
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
@@ -810,17 +809,18 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
             std::cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
           cerr << "\033[0m";
         }
-#endif
+        #endif
       }
 
       if (!_sorted) {
         sort();
         is_end = false;
       }
-#ifndef DJNN_NO_DEBUG      
+
+      #ifndef DJNN_NO_DEBUG      
       if (_DEBUG_GRAPH_CYCLE_DETECT)
         _vertex_already_activated.clear ();
-#endif
+      #endif
     }
     #endif
 
@@ -857,7 +857,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       cerr << "\033[0m";
     }
 
-#if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
+    #if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
     cerr << "\033[1;37m";
     if (nb_insert_by_graph_exec > 0) {
       std::cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[ns]";
@@ -866,9 +866,9 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     else
       std::cerr << "NO insert" << std::endl;
     cerr << "\033[0m";
-#endif 
+    #endif 
 
-#if _DEBUG_SEE_GRAPH_INFO_PREF
+    #if _DEBUG_SEE_GRAPH_INFO_PREF
     // print in GREEN
     cerr << "\033[1;32m" << endl;
     std::chrono::steady_clock::time_point end_GRAPH_EXEC = std::chrono::steady_clock::now();
