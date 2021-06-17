@@ -676,7 +676,8 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     int count_targeted = 0;
     graph_counter_act++;
     int _sorted_break = 0;
-    std::chrono::steady_clock::time_point begin_act, begin_process_act, end_process_act;
+    static std::chrono::steady_clock::time_point begin_act, begin_process_act, end_process_act;
+    static std::chrono::steady_clock::time_point begin_delete, end_delete, begin_output, end_output;
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       begin_act = std::chrono::steady_clock::now();
       std::cerr << std::endl;
@@ -796,8 +797,10 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         }
         #endif
 
+        //rmt_BeginCPUSample(process_exec, RMTSF_Aggregate);
         p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
+        //rmt_EndCPUSample ();
 
         #ifndef DJNN_NO_DEBUG
         if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
@@ -823,25 +826,33 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       #endif
     }
     #endif
-
+    
     // then execute delayed delete on processes 
+    begin_delete = std::chrono::steady_clock::now();
     for (auto p : _scheduled_delete_processes) {
       delete p;
     }
     _scheduled_delete_processes.clear();
+    end_delete = std::chrono::steady_clock::now();
 
     // execute _output_nodes
+    begin_output = std::chrono::steady_clock::now();
     for (auto v : _output_nodes) {
       if (v->is_invalid()) continue;
       auto* p = v->get_process();
       p->trigger_activation_flag();
       p->set_activation_flag(NONE_ACTIVATION);
     }
+    end_output = std::chrono::steady_clock::now();
 
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
-      int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
-      std::cerr << " ---- GRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]";
+      int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
+      std::cerr << "\t_scheduled_delete_processes time = " << time_exec << "[us]" << std::endl;
+      time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_output - begin_output).count();
+      std::cerr << "\t_output_nodes time = " << time_exec << "[us]" << std::endl;
+      time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
+      std::cerr << "----\tGRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]";
       if (time_exec > 1000) {
         cerr << "\033[1;31m";
         std::cerr << " - or " << time_exec / 1000.0 << "[ms]" << std::endl;
@@ -902,8 +913,6 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << "[us]" << endl;
     cerr << "\033[0m"  << endl;
     #endif
-
-rmt_EndCPUSample();
 
   }
 }
