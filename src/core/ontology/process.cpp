@@ -375,19 +375,6 @@ namespace djnn
     Graph::instance().schedule_delete (this);
   }
 
-
-  template <class X>
-  class array_on_stack {
-    public:
-      array_on_stack(size_t num, X* b) : size(0), buf (b) {}
-      void push_back (const X& x) { buf[size] = x; ++size; }
-      const X* begin() const { return buf; }
-      const X* end() const { return &buf[size]; }
-    private:
-      size_t size;
-      X* buf;
-  };
-
   void
   CoreProcess::notify_activation ()
   {
@@ -407,15 +394,16 @@ namespace djnn
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
 
-    //std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
-    Coupling* b[couplings.size ()]; // allocate on stack instead of heap
-    array_on_stack<Coupling*> to_propagate (couplings.size (), b);
+    // save enabled statuses
+    bool enabled[couplings.size ()]; // allocate on stack
+    size_t index = 0;
     for (auto& coupling : couplings) {
-      if (coupling->is_enabled ())
-        to_propagate.push_back (coupling);
+      enabled[index++] = coupling->is_enabled ();
     }
-    for (auto& coupling : to_propagate) {
-      coupling->propagate_activation ();
+    // propagate
+    index = 0;
+    for (auto& coupling : couplings) {
+      if (enabled[index++]) coupling->propagate_activation ();
     }
   }
 
@@ -438,26 +426,17 @@ namespace djnn
      * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
 
-    //std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
-    Coupling* b[couplings.size ()]; // allocate on stack instead of heap
-    array_on_stack<Coupling*> to_propagate (couplings.size (), b);
+    // save enabled statuses
+    bool enabled[couplings.size ()]; // allocate on stack
+    size_t index = 0;
     for (auto& coupling : couplings) {
-      if (coupling->is_enabled ())
-        to_propagate.push_back (coupling);
+      enabled[index++] = coupling->is_enabled ();
     }
-    for (auto& coupling : to_propagate) {
-      coupling->propagate_deactivation ();
+    // propagate
+    index = 0;
+    for (auto& coupling : couplings) {
+      if (enabled[index++]) coupling->propagate_deactivation ();
     }
-  
-    /*Coupling* to_propagate[get_deactivation_couplings ().size ()]; // allocate on stack
-    size_t num=0;
-    for (auto& coupling : get_deactivation_couplings ()) {
-      if (coupling->is_enabled ()) {
-        to_propagate[num] = coupling;
-        ++num;
-      }
-    }
-    for (size_t i=0; i<num; ++i) to_propagate[i]->propagate_deactivation ();*/
   }
 
   void
