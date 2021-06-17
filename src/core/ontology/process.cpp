@@ -395,8 +395,8 @@ namespace djnn
      * */
 
     // save enabled statuses
+    size_t index = 0; // allocate before Variable Length Array
     bool enabled[couplings.size ()]; // allocate on stack
-    size_t index = 0;
     for (auto& coupling : couplings) {
       enabled[index++] = coupling->is_enabled ();
     }
@@ -427,8 +427,8 @@ namespace djnn
      * */
 
     // save enabled statuses
+    size_t index = 0; // allocate before Variable Length Array
     bool enabled[couplings.size ()]; // allocate on stack
-    size_t index = 0;
     for (auto& coupling : couplings) {
       enabled[index++] = coupling->is_enabled ();
     }
