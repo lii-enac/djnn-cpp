@@ -375,16 +375,15 @@ namespace djnn
     Graph::instance().schedule_delete (this);
   }
 
+  inline
   void
-  CoreProcess::notify_activation ()
+  notify (const Process::couplings_t& couplings, void (Coupling::*propagate_activation_fun) ())
   {
-    auto& couplings = get_activation_couplings ();
-
     // optimizations for 0 and 1 coupling before protecting from auto disabling
     if (couplings.empty ()) return;
     if (couplings.size () == 1) { // no risk of disabling a coupling
       auto& coupling = *(couplings.begin());
-      if (coupling->is_enabled ()) coupling->propagate_activation ();
+      if (coupling->is_enabled ()) (*coupling.*propagate_activation_fun) ();
       return;
     }
 
@@ -403,40 +402,24 @@ namespace djnn
     // propagate
     index = 0;
     for (auto& coupling : couplings) {
-      if (enabled[index++]) coupling->propagate_activation ();
+      if (enabled[index++]) (*coupling.*propagate_activation_fun) ();
     }
+  }
+
+  void
+  CoreProcess::notify_activation ()
+  {
+    auto const & couplings = get_activation_couplings ();
+    auto const & propagate_fun = &Coupling::propagate_activation;
+    notify (couplings, propagate_fun);
   }
 
   void
   CoreProcess::notify_deactivation ()
   {
-    auto& couplings = get_deactivation_couplings ();
-
-    // optimizations for 0 and 1 coupling before protecting from auto disabling
-    if (couplings.empty ()) return;
-    if (couplings.size () == 1) { // no risk of disabling a coupling
-      auto& coupling = *(couplings.begin());
-      if (coupling->is_enabled ()) coupling->propagate_deactivation ();
-      return;
-    }
-    
-    /* WARNING: disputable choice.
-     * The immediate propagation could disable some sibling couplings.
-     * We make the choice to register all the couplings associated with a source before propagating
-     * the activation. Thus the disabling of a coupling will be effective only on the next run.
-     * */
-
-    // save enabled statuses
-    size_t index = 0; // allocate before Variable Length Array
-    bool enabled[couplings.size ()]; // allocate on stack
-    for (auto& coupling : couplings) {
-      enabled[index++] = coupling->is_enabled ();
-    }
-    // propagate
-    index = 0;
-    for (auto& coupling : couplings) {
-      if (enabled[index++]) coupling->propagate_deactivation ();
-    }
+    auto const & couplings = get_deactivation_couplings ();
+    auto const & propagate_fun = &Coupling::propagate_deactivation;
+    notify (couplings, propagate_fun);
   }
 
   void
