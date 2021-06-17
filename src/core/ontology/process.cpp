@@ -363,62 +363,6 @@ namespace djnn
     //set_activation_flag (NONE_ACTIVATION); // handled in Graph::exec ()
   }
 
-  /*
-  template <class X>
-  class array_on_stack {
-    public:
-      array_on_stack(size_t num) : size(0) {
-          buf=(X*) alloca(num * sizeof(X));
-      }
-      void push_back (const X& x) { buf[size] = x; ++size; }
-      const X* begin() const { return buf; }
-      const X* end() const { return &buf[size]; }
-    private:
-      size_t size;
-      X* buf;
-  };*/
-
-  void
-  CoreProcess::notify_activation ()
-  {
-    // optimizations before copying etc.
-    if (get_activation_couplings ().empty ()) return;
-    if (get_activation_couplings ().size () == 1) { // no risk of disabling a coupling
-      auto * coupling = *(get_activation_couplings ().begin());
-      if (coupling->is_enabled ()) coupling->propagate_activation ();
-      return;
-    }
-    
-    /* WARNING: disputable choice.
-     * The immediate propagation could disable some sibling couplings.
-     * We make the choice to register all the couplings associated with a source before propagating
-     * the activation. Thus the disabling of a coupling will be effective only on the next run.
-     * */
-
-    /*
-    //std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
-    array_on_stack<Coupling*> to_propagate(get_activation_couplings ().size ()); 
-    for (auto& coupling : get_activation_couplings ()) {
-      if (coupling->is_enabled ())
-        to_propagate.push_back (coupling);
-    }
-    for (auto& coupling : to_propagate) {
-      coupling->propagate_activation ();
-    }
-    */
-
-    Coupling* to_propagate[get_activation_couplings ().size ()]; // allocate on stack
-    size_t num=0;
-    for (auto& coupling : get_activation_couplings ()) {
-      if (coupling->is_enabled ()) {
-        to_propagate[num] = coupling;
-        ++num;
-      }
-    }
-    for (size_t i=0; i<num; ++i) to_propagate[i]->propagate_activation ();
-    
-  }
-
   void
   CoreProcess::schedule_activation ()
   {
@@ -431,35 +375,81 @@ namespace djnn
     Graph::instance().schedule_delete (this);
   }
 
+
+  template <class X>
+  class array_on_stack {
+    public:
+      array_on_stack(size_t num, X* b) : size(0), buf (b) {}
+      void push_back (const X& x) { buf[size] = x; ++size; }
+      const X* begin() const { return buf; }
+      const X* end() const { return &buf[size]; }
+    private:
+      size_t size;
+      X* buf;
+  };
+
   void
-  CoreProcess::notify_deactivation ()
+  CoreProcess::notify_activation ()
   {
-    // optimizations before copying etc.
-    if (get_deactivation_couplings ().empty ()) return;
-    if (get_deactivation_couplings ().size () == 1) { // no risk of disabling a coupling
-      auto * coupling = *(get_deactivation_couplings ().begin());
-      if (coupling->is_enabled ()) coupling->propagate_deactivation ();
+    auto & couplings = get_activation_couplings ();
+
+    // optimizations for 0 and 1 coupling before protecting from auto disabling
+    if (couplings.empty ()) return;
+    if (couplings.size () == 1) { // no risk of disabling a coupling
+      auto * coupling = *(couplings.begin());
+      if (coupling->is_enabled ()) coupling->propagate_activation ();
       return;
     }
 
     /* WARNING: disputable choice.
-     * The immediate propagation could disable some couplings.
+     * The immediate propagation could disable some sibling couplings.
      * We make the choice to register all the couplings associated with a source before propagating
-     * the deactivation. Thus the disabling of a coupling will be effective only on the next run.
+     * the activation. Thus the disabling of a coupling will be effective only on the next run.
      * */
-    /*
+
     //std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
-    array_on_stack<Coupling*> to_propagate(get_deactivation_couplings ().size ()); 
-    for (auto& coupling : get_activation_couplings ()) {
+    Coupling* b[couplings.size ()]; // allocate on stack instead of heap
+    array_on_stack<Coupling*> to_propagate (couplings.size (), b);
+    for (auto& coupling : couplings) {
+      if (coupling->is_enabled ())
+        to_propagate.push_back (coupling);
+    }
+    for (auto& coupling : to_propagate) {
+      coupling->propagate_activation ();
+    }
+  }
+
+  void
+  CoreProcess::notify_deactivation ()
+  {
+    auto & couplings = get_deactivation_couplings ();
+
+    // optimizations for 0 and 1 coupling before protecting from auto disabling
+    if (couplings.empty ()) return;
+    if (couplings.size () == 1) { // no risk of disabling a coupling
+      auto * coupling = *(couplings.begin());
+      if (coupling->is_enabled ()) coupling->propagate_deactivation ();
+      return;
+    }
+    
+    /* WARNING: disputable choice.
+     * The immediate propagation could disable some sibling couplings.
+     * We make the choice to register all the couplings associated with a source before propagating
+     * the activation. Thus the disabling of a coupling will be effective only on the next run.
+     * */
+
+    //std::vector<Coupling*> to_propagate; // NOLINT (cppcoreguidelines-init-variables)
+    Coupling* b[couplings.size ()]; // allocate on stack instead of heap
+    array_on_stack<Coupling*> to_propagate (couplings.size (), b);
+    for (auto& coupling : couplings) {
       if (coupling->is_enabled ())
         to_propagate.push_back (coupling);
     }
     for (auto& coupling : to_propagate) {
       coupling->propagate_deactivation ();
     }
-    */
-    
-    Coupling* to_propagate[get_deactivation_couplings ().size ()]; // allocate on stack
+  
+    /*Coupling* to_propagate[get_deactivation_couplings ().size ()]; // allocate on stack
     size_t num=0;
     for (auto& coupling : get_deactivation_couplings ()) {
       if (coupling->is_enabled ()) {
@@ -467,7 +457,7 @@ namespace djnn
         ++num;
       }
     }
-    for (size_t i=0; i<num; ++i) to_propagate[i]->propagate_deactivation ();
+    for (size_t i=0; i<num; ++i) to_propagate[i]->propagate_deactivation ();*/
   }
 
   void
