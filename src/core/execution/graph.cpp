@@ -824,20 +824,6 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     }
     #endif
 
-    // then execute delayed delete on processes 
-    for (auto p : _scheduled_delete_processes) {
-      delete p;
-    }
-    _scheduled_delete_processes.clear();
-
-    // execute _output_nodes
-    for (auto v : _output_nodes) {
-      if (v->is_invalid()) continue;
-      auto* p = v->get_process();
-      p->trigger_activation_flag();
-      p->set_activation_flag(NONE_ACTIVATION);
-    }
-
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
@@ -855,6 +841,20 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       std::cerr << "nb action = " << count_real_activation << "/" << count_activation << "(" << pourcent_graph << "%)";
       std::cerr << "--- nb sorted_break " << _sorted_break << endl << endl << endl;
       cerr << "\033[0m";
+    }
+
+    // then execute delayed delete on processes 
+    for (auto p : _scheduled_delete_processes) {
+      delete p;
+    }
+    _scheduled_delete_processes.clear();
+
+    // execute _output_nodes
+    for (auto v : _output_nodes) {
+      if (v->is_invalid()) continue;
+      auto* p = v->get_process();
+      p->trigger_activation_flag();
+      p->set_activation_flag(NONE_ACTIVATION);
     }
 
     #if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
