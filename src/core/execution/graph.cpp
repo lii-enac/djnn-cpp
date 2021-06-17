@@ -914,5 +914,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     cerr << "\033[0m"  << endl;
     #endif
 
+rmt_EndCPUSample();
+
   }
 }
