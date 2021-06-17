@@ -378,12 +378,12 @@ namespace djnn
   void
   CoreProcess::notify_activation ()
   {
-    auto & couplings = get_activation_couplings ();
+    auto& couplings = get_activation_couplings ();
 
     // optimizations for 0 and 1 coupling before protecting from auto disabling
     if (couplings.empty ()) return;
     if (couplings.size () == 1) { // no risk of disabling a coupling
-      auto * coupling = *(couplings.begin());
+      auto& coupling = *(couplings.begin());
       if (coupling->is_enabled ()) coupling->propagate_activation ();
       return;
     }
@@ -410,12 +410,12 @@ namespace djnn
   void
   CoreProcess::notify_deactivation ()
   {
-    auto & couplings = get_deactivation_couplings ();
+    auto& couplings = get_deactivation_couplings ();
 
     // optimizations for 0 and 1 coupling before protecting from auto disabling
     if (couplings.empty ()) return;
     if (couplings.size () == 1) { // no risk of disabling a coupling
-      auto * coupling = *(couplings.begin());
+      auto& coupling = *(couplings.begin());
       if (coupling->is_enabled ()) coupling->propagate_deactivation ();
       return;
     }
