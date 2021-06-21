@@ -40,3 +40,7 @@ lib_cppflags += -DDJNN_USE_OPENAL
 	endif
 endif
 #lib_pkg += portaudio-2.0
+
+# ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
+# lib_pkg += fmt
+# endif

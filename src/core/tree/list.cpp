@@ -25,6 +25,7 @@
 #include "core/tree/structure_observer.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
+#include "core/utils/to_string.h"
 
 #include <algorithm>
 
@@ -158,7 +159,7 @@ namespace djnn
         remove_child (c);
       } else {
          /* we have to dispay index as the API user index */
-         warning (this, "index " + std::to_string(index+1) + " is out of bound for list '" + get_name () + "'");
+         warning (this, "index " + __to_string(index+1) + " is out of bound for list '" + get_name () + "'");
       }
     }
     catch (invalid_argument& arg) {
@@ -187,7 +188,7 @@ namespace djnn
             return c;
         } else {
           /* we have to dispay index as the API user index */
-          warning (this,  "index " + std::to_string(index+1) + " is out of bound for list \'" + get_name () + "\'");
+          warning (this,  "index " + __to_string(index+1) + " is out of bound for list \'" + get_name () + "\'");
         }
       }
       catch (invalid_argument& arg) {
@@ -206,7 +207,7 @@ namespace djnn
 
     } else {
       /* we have to dispay index as the API user index */
-      warning (this, "index " + std::to_string (index) + " is out of bound for list \'" + get_name () + "\'");
+      warning (this, "index " + __to_string (index) + " is out of bound for list \'" + get_name () + "\'");
     }
     return nullptr;
   }

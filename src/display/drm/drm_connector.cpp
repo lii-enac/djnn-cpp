@@ -19,6 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
+#include "core/utils/to_string.h"
 
 #include <string.h>
 #include <iostream>
@@ -173,14 +174,14 @@ namespace djnn {
 
     int ret = get_crtc(res, drm_conn);
     if (!ret) {
-      error (this, string("no valid crtc for connector ") + to_string(
+      error (this, string("no valid crtc for connector ") + __to_string(
       drm_conn->connector_id));
     }
 
     ret = init_fb(&_buffs[0]);
     ret &= init_fb(&_buffs[1]);
     if (!ret) {
-      error (this, string("Cannot create framebuffer for connector ") + to_string(
+      error (this, string("Cannot create framebuffer for connector ") + __to_string(
         drm_conn->connector_id));
     }
 
@@ -188,7 +189,7 @@ namespace djnn {
     buff *b = &_buffs[0];
     ret = init_connection_crtc(b->fb);
     if (ret) {
-      error (this, string("failed to set mode for connector ") + to_string(
+      error (this, string("failed to set mode for connector ") + __to_string(
         drm_conn->connector_id));
     }
   }

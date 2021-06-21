@@ -16,6 +16,7 @@
 #include "remote_proc.h"
 
 #include "core/utils/error.h"
+#include "core/utils/to_string.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -42,7 +43,7 @@ namespace djnn
     if (!to_send)
       return;
     int sz = msg.size ();
-    msg = std::to_string(sz) + msg;
+    msg = djnn::to_string(sz) + msg;
     if (send (p->get_sock (), msg.c_str (), strlen (msg.c_str ()), 0) < 0) {
       p->connection_failure ();
     }
@@ -149,7 +150,7 @@ namespace djnn
   {
     std::string msg = "S:" + path;
     int sz = msg.size ();
-    msg = std::to_string(sz) + msg;
+    msg = djnn::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
       connection_failure ();
     }
@@ -176,7 +177,7 @@ namespace djnn
   {
     std::string msg = "U:" + path;
     int sz = msg.size ();
-    msg = std::to_string(sz) + msg;
+    msg = djnn::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
       connection_failure ();
     }

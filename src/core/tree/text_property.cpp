@@ -18,6 +18,7 @@
 #include "text_property.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"
+#include "core/utils/to_string.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
 
@@ -93,13 +94,13 @@ namespace djnn
   void
   AbstractTextProperty::set_value (int v, bool propagate)
   {
-    set_value(to_string (v), propagate);
+    set_value(djnn::to_string (v), propagate);
   }
 
   void
   AbstractTextProperty::set_value (double v, bool propagate)
   {
-    set_value(to_string (v), propagate);
+    set_value(djnn::to_string (v), propagate);
   }
 
   void

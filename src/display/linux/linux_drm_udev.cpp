@@ -19,6 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
+#include "core/utils/to_string.h"
 
 #include <string.h>
 #include <iostream>
@@ -146,7 +147,7 @@ namespace djnn {
   {
     string n;
     if (con->connector_type < _type_names.size ())
-      n = string (_type_names[con->connector_type] + "-" + std::to_string (con->connector_type_id));
+      n = string (_type_names[con->connector_type] + "-" + djnn::to_string (con->connector_type_id));
     else
       n = "UNNAMED";
     return n;

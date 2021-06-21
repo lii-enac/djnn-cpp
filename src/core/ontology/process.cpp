@@ -22,6 +22,7 @@
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
 #include "core/utils/djnn_dynamic_cast.h"
+#include "core/utils/to_string.h"
 
 #include <algorithm>
 #include <cassert>
@@ -115,7 +116,7 @@ namespace djnn
     }
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    string data_save = "DELETE [" + to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
+    string data_save = "DELETE [" + djnn::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
        " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
     __destruction_stat_order.push_back (data_save);
@@ -180,7 +181,7 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     if (!found) {
       if (Context::instance ()->line ()>0)
-        warning (nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": symbol '" + path + "' in process '" + get_debug_name () + "' not found");
+        warning (nullptr, Context::instance ()->filename () + ":" + __to_string (Context::instance ()->line ()) + ": symbol '" + path + "' in process '" + get_debug_name () + "' not found");
       else
         warning (this, "symbol '" + path + "' not found");
     }
@@ -195,9 +196,9 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     if (!found) {
       if (Context::instance ()->line ()>0)
-        warning(nullptr, Context::instance ()->filename () + ":" + std::to_string (Context::instance ()->line ()) + ": index " + std::to_string(index) + " in process '" + get_debug_name () + "' not found");
+        warning(nullptr, Context::instance ()->filename () + ":" + __to_string (Context::instance ()->line ()) + ": index " + __to_string(index) + " in process '" + get_debug_name () + "' not found");
       else
-        warning (this, "index '" + std::to_string(index) + "' not found");
+        warning (this, "index '" + __to_string(index) + "' not found");
     }
 #endif
     return found;

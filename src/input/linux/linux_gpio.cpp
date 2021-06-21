@@ -17,6 +17,7 @@
 
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
+#include "core/utils/to_string.h"
 #include "linux_input.h"
 
 #include <fcntl.h>
@@ -74,7 +75,7 @@ namespace djnn {
       if (it != gpio_lines.end ()) {
         line = it->second;
       } else {
-        line = new GPIOLine (nullptr, "line" + to_string (index), index, dir);
+        line = new GPIOLine (nullptr, "line" + djnn::to_string (index), index, dir);
         line->activate ();
       }
       if (path.length() > (sz + 1))
@@ -97,7 +98,7 @@ namespace djnn {
    _c_action (nullptr)
   {
     if (pin < 0 || pin > num_gpios)
-      error (this, "no gpio " + to_string (pin));
+      error (this, "no gpio " + __to_string (pin));
     _value = new BoolProperty (this, "value", true);
 
     /* activate the GPIO interface */
@@ -115,7 +116,7 @@ namespace djnn {
     snprintf (buf, 64, "/sys/class/gpio/gpio%d/direction", pin);
     _fd = open (buf, O_WRONLY);
     if (_fd < 0) {
-      error (this, "cannot set direction of GPIO " + to_string (pin));
+      error (this, "cannot set direction of GPIO " + __to_string (pin));
     }
     write (_fd, direction, dirlen);
     close (_fd);
@@ -124,7 +125,7 @@ namespace djnn {
     snprintf (buf, 64, "/sys/class/gpio/gpio%d/value", pin);
     _fd = open (buf, _dir == IN ? O_RDONLY : O_WRONLY);
     if (_fd < 0) {
-      error (this, "cannot open GPIO " + to_string (pin));
+      error (this, "cannot open GPIO " + __to_string (pin));
     }
     if (dir == IN) {
       _iofd = new IOFD (nullptr, "gpiofd", _fd);

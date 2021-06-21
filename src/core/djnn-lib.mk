@@ -18,5 +18,5 @@ lib_pkgpath += /usr/local/opt/curl/lib/pkgconfig
 endif
 
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
-lib_pkg += expat libcurl
+lib_pkg += expat libcurl # fmt
 endif

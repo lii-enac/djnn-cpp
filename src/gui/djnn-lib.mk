@@ -69,3 +69,7 @@ ifeq ($(graphics),EGL)
 include src/gui/egl/djnn-lib.mk
 endif
 
+
+# ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
+# lib_pkg += fmt
+# endif

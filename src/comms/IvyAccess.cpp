@@ -21,6 +21,7 @@
 #include "core/core-dev.h" // graph exec
 #include "exec_env/main_loop.h"
 #include "utils/debug.h"
+#include "core/utils/to_string.h"
 
 #include <iostream>
 #include <string>
@@ -483,7 +484,7 @@ IvyAccess::find_child_impl (const std::string& key)
     TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child_impl (regexp));
     if (tmp){
 
-      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + to_string(index);
+      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + djnn::to_string(index);
 
 #ifdef __IVY_DEBUG__
       cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;

@@ -16,6 +16,7 @@
 #include "proc_exporter.h"
 
 #include "core/utils/error.h"
+#include "core/utils/to_string.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -44,7 +45,7 @@ namespace djnn
     }
     p->clear_senders();
     int sz = msg.size();
-    msg = std::to_string(sz) + msg;
+    msg = djnn::to_string(sz) + msg;
     if (send(p->get_sock(), msg.c_str(), strlen(msg.c_str()), 0) == SOCKET_ERROR) {
       warning (this, "Failed to send message: " + msg);
     }

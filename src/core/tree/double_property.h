@@ -16,6 +16,7 @@
 #pragma once
 
 #include "abstract_property.h"
+#include "core/utils/to_string.h"
 
 #include <string>
 
@@ -36,8 +37,8 @@ namespace djnn {
     void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     double get_double_value () const override { return get_ref_value(); }
-    std::string get_string_value () override { return std::to_string (get_ref_value ()); }
-    std::string get_string_value () const override { return std::to_string (get_ref_value ()); }
+    std::string get_string_value () override { return djnn::to_string (get_ref_value ()); }
+    std::string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
     double get_value () { return get_ref_value(); };
   protected:

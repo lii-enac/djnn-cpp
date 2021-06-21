@@ -17,6 +17,7 @@
 #include "core/ontology/process.h"
 #include "core/tree/int_property.h"
 #include "core/tree/text_property.h"
+#include "core/utils/to_string.h"
 
 #include <chrono>
 #include <iomanip> // put_time
@@ -61,7 +62,7 @@ namespace djnn
                 std::copy(timeBuffer, timeBuffer+charCount, res.begin());
                 res.resize (charCount);
                 auto ms = now2.count() % 1000;
-                auto ms_str = std::to_string(ms);
+                auto ms_str = djnn::to_string(ms);
                 if (ms<10) ms_str = "00" + ms_str;
                 else if (ms<100) ms_str = "0" + ms_str;
                 res += ms_str + "ms";

@@ -24,6 +24,7 @@
 #include "audio/al/al_debug.h"
 #include "utils/debug.h"
 #include "core/utils/error.h"
+#include "core/utils/to_string.h"
 
 #include "audio/ext/dr_wav.h"
 //#include "audio/ext/dr_mp3.h"
@@ -68,7 +69,7 @@ namespace djnn {
 			// 	std::cerr << numFrames << std::endl;
 			// 	drmp3_read_pcm_frames_s16 (&dr, numFrames, (drmp3_int16*)data);
 			// } else {
-				error (this, std::string ("cannot open audio sample file ") + path + "(dr_wav error " + std::to_string(res) + ")");
+				error (this, std::string ("cannot open audio sample file ") + path + "(dr_wav error " + djnn::to_string(res) + ")");
 				return;
 			// }
 		}

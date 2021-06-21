@@ -66,5 +66,6 @@ endif
 #include src/exec_env/freertos-cxx11/djnn-lib-flags.mk
 #endif
 
-
-
+# ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
+# lib_pkg += fmt
+# endif
