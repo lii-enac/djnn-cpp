@@ -28,7 +28,7 @@ static int ParseWidth (FatProcess**, const char*);
 static int ParseHeight (FatProcess**, const char*);
 static int ParseHref (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
   {"x",{&ParseX}},
   {"y",{&ParseY}},
   {"width",{&ParseWidth}},
@@ -39,15 +39,15 @@ static map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLImgAttrs_Hash::djn_XMLImgAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;
 }
 
 
-struct djn_ImgArgs djn_ImgArgs = {0., 0., 0., 0., 0, djnn::string("")};
+struct djn_ImgArgs djn_ImgArgs = {0., 0., 0., 0., 0, string("")};
 
 static int ParseX(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.x, v);
@@ -65,7 +65,7 @@ static int ParseHeight(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_ImgArgs.h, v);
 }
 
-djnn::string
+string
 b64decode(const void* p, const size_t len)
 {
   unsigned char* data = (unsigned char*) p;
@@ -105,7 +105,7 @@ b64decode(const void* p, const size_t len)
     }
   }
 
-  djnn::string str ((const char*)tmp, offset);
+  string str ((const char*)tmp, offset);
   return str;
 }
 

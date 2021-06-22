@@ -28,14 +28,14 @@ static int ParseCy (FatProcess**, const char*);
 static int ParseRx (FatProcess**, const char*);
 static int ParseRy (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> * handlers;
+static map <string, djn_XMLAttrHandler> * handlers;
 
 void
 XMLEllipseAttrs_Hash::init ()
 {
   if (handlers) return;
-  handlers = new map <djnn::string, djn_XMLAttrHandler>;
-  map <djnn::string, djn_XMLAttrHandler> handlers_ = {
+  handlers = new map <string, djn_XMLAttrHandler>;
+  map <string, djn_XMLAttrHandler> handlers_ = {
     {"ry",{&ParseRy}},
     {"rx",{&ParseRx}},
     {"cy",{&ParseCy}},
@@ -54,8 +54,8 @@ XMLEllipseAttrs_Hash::clear ()
 djn_XMLAttrHandler*
 XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers->find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers->find(string(str));
   if (it != handlers->end())
     return &it->second;
   return 0;

@@ -29,7 +29,7 @@ namespace djnn {
 	class CairoSDLDisplayBackend : public AbstractDisplay {
   public:
     static CairoSDLDisplayBackend* instance ();
-  	WinImpl* create_window (Window *win, const djnn::string& title,  double x, double y, double w, double h);
+  	WinImpl* create_window (Window *win, const string& title,  double x, double y, double w, double h);
 
     struct Impl;
     Impl *impl;
@@ -42,7 +42,7 @@ namespace djnn {
   std::once_flag CairoSDLDisplayBackend::onceFlag;
 
   WinImpl*
-  CairoSDLDisplayBackend::create_window (Window *win, const djnn::string& title,  double x, double y, double w, double h)
+  CairoSDLDisplayBackend::create_window (Window *win, const string& title,  double x, double y, double w, double h)
   {
 //#if DJNN_GRAPHICS_GL
     SDLWindow *implwin = new CairoSDLWindow (win, title, x, y, w, h);

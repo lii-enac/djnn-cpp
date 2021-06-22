@@ -28,7 +28,7 @@ namespace css
   }
 
   bool
-  Driver::parse_stream (std::istream& in, const djnn::string& name, FatProcess *p)
+  Driver::parse_stream (std::istream& in, const string& name, FatProcess *p)
   {
     _root = p;
     stream = name;
@@ -41,7 +41,7 @@ namespace css
   }
 
   bool
-  Driver::parse_file (const djnn::string& filename, FatProcess *p)
+  Driver::parse_file (const string& filename, FatProcess *p)
   {
     std::ifstream in (filename.c_str ());
     if (!in.good ())
@@ -50,7 +50,7 @@ namespace css
   }
 
   bool
-  Driver::parse_string (const djnn::string& input, const djnn::string& sname, FatProcess *p)
+  Driver::parse_string (const string& input, const string& sname, FatProcess *p)
   {
     std::istringstream iss (input);
     return parse_stream (iss, sname, p);
@@ -63,13 +63,13 @@ namespace css
   }
 
   void
-  Driver::error (const class location& l, const djnn::string& m)
+  Driver::error (const class location& l, const string& m)
   {
     std::cerr << l << ": " << m << std::endl;
   }
 
   void
-  Driver::error (const djnn::string& m)
+  Driver::error (const string& m)
   {
     std::cerr << m << std::endl;
   }

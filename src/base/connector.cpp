@@ -10,7 +10,7 @@ namespace djnn {
 #if !defined(DJNN_NO_SERIALIZE)
 
   void
-  MultiConnector (ParentProcess* parent, CoreProcess* src, vector <djnn::string> src_props, CoreProcess* dst, vector <djnn::string> dst_props, bool copy_on_activation)
+  MultiConnector (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
       error (nullptr, "Incompatible number of properties in multiple connector");
@@ -34,7 +34,7 @@ namespace djnn {
     Container* cont_dst = dynamic_cast<Container*>(dst);
     if (cont_src && cont_dst) {
       for (auto c: cont_src->children ()) {
-        djnn::string name = c->get_name (c->get_parent ());
+        string name = c->get_name (c->get_parent ());
         CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
           new CoreConnector (parent, "", c, prop_dst, copy_on_activation);
@@ -50,7 +50,7 @@ namespace djnn {
   }
 
   void
-  CoreConnector::serialize (const djnn::string& format)
+  CoreConnector::serialize (const string& format)
   {
     string buf;
 
@@ -70,7 +70,7 @@ namespace djnn {
   }
 
   void
-  CorePausedConnector::serialize (const djnn::string& format)
+  CorePausedConnector::serialize (const string& format)
   {
     string buf;
 
@@ -90,7 +90,7 @@ namespace djnn {
   }
 
   void
-  Connector::serialize (const djnn::string& format)
+  Connector::serialize (const string& format)
   {
     string buf;
 
@@ -110,7 +110,7 @@ namespace djnn {
   }
 
   void
-  PausedConnector::serialize (const djnn::string& format)
+  PausedConnector::serialize (const string& format)
   {
     string buf;
 

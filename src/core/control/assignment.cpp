@@ -160,7 +160,7 @@ namespace djnn
   }
 
   void
-  MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <djnn::string> src_props, CoreProcess* dst, vector <djnn::string> dst_props, bool copy_on_activation)
+  MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
       error (src, "Incompatible number of properties in multiple assignment");
@@ -184,7 +184,7 @@ namespace djnn
     Container* cont_dst = dynamic_cast<Container*>(dst);
     if (cont_src && cont_dst) {
       for (auto c: cont_src->children ()) {
-        djnn::string name = c->get_name (c->get_parent ());
+        string name = c->get_name (c->get_parent ());
         CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
           new CoreAssignment (parent, "", c, prop_dst, copy_on_activation);
@@ -201,7 +201,7 @@ namespace djnn
 
   #if !defined(DJNN_NO_SERIALIZE)
   void
-  CoreAssignment::serialize (const djnn::string& format)
+  CoreAssignment::serialize (const string& format)
   {
     string buf;
 
@@ -221,7 +221,7 @@ namespace djnn
   }
 
   void
-  Assignment::serialize (const djnn::string& format)
+  Assignment::serialize (const string& format)
   {
     string buf;
 

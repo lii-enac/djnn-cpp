@@ -4,7 +4,7 @@
 
 namespace djnn {
 
-	extern vector<djnn::string> loadedModules; 
+	extern vector<string> loadedModules; 
 
 	void init_base ();
     void clear_base ();

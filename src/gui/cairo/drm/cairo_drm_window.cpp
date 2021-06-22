@@ -38,7 +38,7 @@ static double draw_average = 0.0;
 namespace djnn
 {
 
-  CairoDRMWindow::CairoDRMWindow (djnn::Window* win, const djnn::string& title, double x, double y, double w, double h) :
+  CairoDRMWindow::CairoDRMWindow (djnn::Window* win, const string& title, double x, double y, double w, double h) :
   DRMWindow(win, title, x, y, w, h),
     _picking_data (nullptr), _my_cairo_surface (nullptr), _picking_view (nullptr), _refresh (this, "refresh"),
     _change_dpy_action (this, "change_dpy_action"),

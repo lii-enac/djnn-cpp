@@ -29,13 +29,13 @@ namespace djnn
   class AbstractVolume : public AbstractAudioStyle
   {
   public:
-    AbstractVolume (ParentProcess* parent, const djnn::string& name, double volume);
+    AbstractVolume (ParentProcess* parent, const string& name, double volume);
     virtual ~AbstractVolume ();
     
     
     void get_properties_values (double& volume);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child_impl ("volume"); }
 
   protected:

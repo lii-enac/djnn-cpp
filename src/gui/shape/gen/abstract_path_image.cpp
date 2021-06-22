@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPathImage::AbstractPathImage (ParentProcess* parent, const djnn::string& name, const djnn::string& path, double x, double y, double width, double height) :
+  AbstractPathImage::AbstractPathImage (ParentProcess* parent, const string& name, const string& path, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPathImage::find_child_impl (const djnn::string& name)
+  AbstractPathImage::find_child_impl (const string& name)
   {
     auto * res = AbstractImage::find_child_impl(name);
     if (res) return res;
@@ -69,7 +69,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -97,17 +97,17 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPathImage::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "path",
     };
     return res;
   }
 
   void
-  AbstractPathImage::get_properties_values (djnn::string& path, double& x, double& y, double& width, double& height)
+  AbstractPathImage::get_properties_values (string& path, double& x, double& y, double& width, double& height)
   {
     path = raw_props.path;
     AbstractImage::get_properties_values(x, y, width, height);

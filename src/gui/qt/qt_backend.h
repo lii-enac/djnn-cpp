@@ -48,7 +48,7 @@ namespace djnn
     QPainter *painter () { return _painter; }
     /*
     WinImpl*
-    create_window (Window *win, const djnn::string& title, double x, double y, double w, double h) override;
+    create_window (Window *win, const string& title, double x, double y, double w, double h) override;
     */
     //shape
     void

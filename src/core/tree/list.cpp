@@ -37,7 +37,7 @@ namespace djnn
 {
   
 
-  AbstractList::AbstractList (ParentProcess* parent, const djnn::string& name)
+  AbstractList::AbstractList (ParentProcess* parent, const string& name)
   :
     Container (parent, name),
     _added (nullptr, "_added", nullptr),
@@ -59,7 +59,7 @@ namespace djnn
 #endif
 
   void
-  AbstractList::add_child (FatChildProcess* c, const djnn::string& name)
+  AbstractList::add_child (FatChildProcess* c, const string& name)
   {
     if (c == nullptr)
       return;
@@ -71,7 +71,7 @@ namespace djnn
   }
 
   void
-  AbstractList::insert (FatChildProcess* c, const djnn::string& spec)
+  AbstractList::insert (FatChildProcess* c, const string& spec)
   {
     int index = _children.size () - 1;
     if (spec.compare (">") == 0) {
@@ -148,7 +148,7 @@ namespace djnn
   }
 
   void
-  AbstractList::remove_child (const djnn::string& name)
+  AbstractList::remove_child (const string& name)
   {
     size_t index;
     try {
@@ -168,7 +168,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractList::find_child_impl (const djnn::string& path)
+  AbstractList::find_child_impl (const string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -212,7 +212,7 @@ namespace djnn
     return nullptr;
   }
 
-  List::List (ParentProcess* parent, const djnn::string& name) :
+  List::List (ParentProcess* parent, const string& name) :
     AbstractList (parent, name)
   {
     finalize_construction (parent, name);
@@ -247,7 +247,7 @@ namespace djnn
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  List::serialize (const djnn::string& type) {
+  List::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -263,7 +263,7 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (ParentProcess* parent, const djnn::string& name, CoreProcess *list, CoreProcess *action, bool model)
+  ListIterator::ListIterator (ParentProcess* parent, const string& name, CoreProcess *list, CoreProcess *action, bool model)
   :
     FatProcess (name, model),
     _action (action)
@@ -291,7 +291,7 @@ namespace djnn
     post_activate_auto_deactivate ();
   }
 
-  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const djnn::string& name, CoreProcess *list,
+  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const string& name, CoreProcess *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Action (parent, name), _list (dynamic_cast<List*>(list)), _iter (iter), _index (index), _forward (forward)
@@ -319,7 +319,7 @@ namespace djnn
     }
   }
 
-  BidirectionalListIterator::ResetAction::ResetAction (ParentProcess* parent, const djnn::string& name,
+  BidirectionalListIterator::ResetAction::ResetAction (ParentProcess* parent, const string& name,
                                                        IntProperty *index) :
       Action (parent, name), _index (index)
   {
@@ -333,7 +333,7 @@ namespace djnn
     _index->set_value (1, true);
   }
 
-  BidirectionalListIterator::BidirectionalListIterator (ParentProcess* parent, const djnn::string& name,
+  BidirectionalListIterator::BidirectionalListIterator (ParentProcess* parent, const string& name,
                                                         List* list)
   :
   FatProcess (name),
@@ -407,7 +407,7 @@ namespace djnn
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  BidirectionalListIterator::serialize (const djnn::string& type) {
+  BidirectionalListIterator::serialize (const string& type) {
    
     string buf;
 

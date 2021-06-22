@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropPlane::AbstractPropPlane (ParentProcess* parent, const djnn::string& name, double a, double b, double c, double d) :
+  AbstractPropPlane::AbstractPropPlane (ParentProcess* parent, const string& name, double a, double b, double c, double d) :
     PhyObj (parent, name),
     raw_props{.a=a, .b=b, .c=c, .d=d},
     _ca (nullptr), _cb (nullptr), _cc (nullptr), _cd (nullptr)
@@ -78,7 +78,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropPlane::find_child_impl (const djnn::string& name)
+  AbstractPropPlane::find_child_impl (const string& name)
   {
     auto * res = PhyObj::find_child_impl(name);
     if (res) return res;
@@ -87,7 +87,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -133,10 +133,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPropPlane::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "a",
 			"b",
 			"c",

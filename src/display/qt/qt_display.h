@@ -16,7 +16,7 @@ namespace djnn {
 
       virtual ~QtDisplayBackend() {}
 
-      virtual WinImpl* create_window (Window *win, const djnn::string& title,  double x, double y, double w, double h) override {
+      virtual WinImpl* create_window (Window *win, const string& title,  double x, double y, double w, double h) override {
         //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
         return nullptr;
       }

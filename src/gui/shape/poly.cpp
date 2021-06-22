@@ -31,7 +31,7 @@
 
 namespace djnn {
 
-  PolyPoint::PolyPoint (ParentProcess* parent, const djnn::string& name, double x, double y) :
+  PolyPoint::PolyPoint (ParentProcess* parent, const string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
@@ -70,7 +70,7 @@ namespace djnn {
   }
 
   FatChildProcess*
-  PolyPoint::find_child_impl (const djnn::string& name)
+  PolyPoint::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -128,7 +128,7 @@ namespace djnn {
     return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
-  Poly::Poly (ParentProcess* parent, const djnn::string& name, int closed) :
+  Poly::Poly (ParentProcess* parent, const string& name, int closed) :
       AbstractGShape (parent, name), _closed (closed)
   {
     _points = new List (this, "points");

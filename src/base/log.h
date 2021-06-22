@@ -27,9 +27,9 @@ namespace djnn
   class LogPrinter : public Component
   {
   public:
-    LogPrinter (ParentProcess* parent, const djnn::string& n, const djnn::string& label);
+    LogPrinter (ParentProcess* parent, const string& n, const string& label);
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
   private:
 #if NEW_LOG_PLAIN_OBJ

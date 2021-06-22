@@ -29,10 +29,10 @@ namespace djnn
   class CoreProcess;
 
   int djnn__error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  int djnn__error (CoreProcess *p, const djnn::string& msg, const char* ctxinfo=nullptr);
+  int djnn__error (CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
   void djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  void djnn__warning (CoreProcess *p, const djnn::string& msg, const char* ctxinfo=nullptr);
-  void djnn__info (const djnn::string& msg, bool cr, const char* ctxinfo=nullptr);
+  void djnn__warning (CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
+  void djnn__info (const string& msg, bool cr, const char* ctxinfo=nullptr);
   void djnn__debug (const char* file, const char* function, const char* lineno);
   inline int djnn__exit(int ret) { exit(ret); return 1; }
 
@@ -50,10 +50,10 @@ namespace djnn
     #endif
   #endif
 
-  //#define error(p,msg) __ignore_unused( __error(p, djnn::string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
+  //#define error(p,msg) __ignore_unused( __error(p, string(msg)+" " +__FILE__+":"+djnn::__to_string(__LINE__)) & __exit(0))
   #define djnn_error(p,msg) __ignore_unused( djnn::djnn__error(p, msg, __FILE__  ":" __djnn_str1(__LINE__) ) & djnn::djnn__exit(0))
-  //#define error(p,msg) __ignore_unused( __error(p, djnn::string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
-  //#define warning(p,msg) __warning(p, djnn::string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
+  //#define error(p,msg) __ignore_unused( __error(p, string(msg)+ " " __FILE__ ":" DJNN_STR1(__LINE__))) & __exit(0))
+  //#define warning(p,msg) __warning(p, string(msg)+" "+__FILE__+":"+djnn::__to_string(__LINE__))
   #define djnn_warning(p,msg) djnn::djnn__warning(p, msg, __FILE__ ":" __djnn_str1(__LINE__) )
   #define loginfo(msg) djnn::djnn__info(msg,true, __FILE__ ":" __djnn_str1(__LINE__))
   #define loginfonocr(msg) djnn::djnn__info(msg,false, __FILE__ ":" __djnn_str1(__LINE__))
@@ -66,8 +66,8 @@ namespace djnn
   class Context {
   public:
     static Context* instance ();
-    void new_line (int line, const djnn::string& filename) { _line = line; _filename = filename; }
-    void parser_info (int begline, int begcol, int endline, int endcol, const djnn::string& filename) {
+    void new_line (int line, const string& filename) { _line = line; _filename = filename; }
+    void parser_info (int begline, int begcol, int endline, int endcol, const string& filename) {
         _line = begline; _begcol = begcol; _endline=endline; _endcol = endcol; _filename = filename;
     }
     int line () { return _line; }
@@ -76,7 +76,7 @@ namespace djnn
     int endline () { return _endline; }
     int endcol () { return _endcol; }
     
-    const djnn::string& filename () { return _filename; }
+    const string& filename () { return _filename; }
   private:
     Context () : _line (-1), _filename ("") {}
     static Context* _instance;
@@ -84,6 +84,6 @@ namespace djnn
     int _begcol;
     int _endline;
     int _endcol;
-    djnn::string _filename;
+    string _filename;
   };
 }

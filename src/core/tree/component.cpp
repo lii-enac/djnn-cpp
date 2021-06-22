@@ -46,7 +46,7 @@ namespace djnn
 {
   
 
-  Container::Container (ParentProcess* parent, const djnn::string& name) :
+  Container::Container (ParentProcess* parent, const string& name) :
       FatProcess (name)
   {
     for (auto s: structure_observer_list) {
@@ -100,7 +100,7 @@ namespace djnn
   }
 
   void
-  Container::add_child (FatChildProcess* child, const djnn::string& name)
+  Container::add_child (FatChildProcess* child, const string& name)
   {
     if (child == nullptr) {
       error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
@@ -169,9 +169,9 @@ namespace djnn
         }
       } else {
 #ifndef DJNN_NO_DEBUG
-        loginfo (djnn::string("spec = ") + __to_string(spec));
+        loginfo (string("spec = ") + __to_string(spec));
 #endif
-        warning (this, (djnn::string("Undefined spec to move child ") + child_to_move->get_name (child_to_move->get_parent ())).c_str());
+        warning (this, (string("Undefined spec to move child ") + child_to_move->get_name (child_to_move->get_parent ())).c_str());
       }
     }
   }
@@ -199,7 +199,7 @@ namespace djnn
     remove child but do not delete child 
   */
   void
-  Container::remove_child (const djnn::string& name)
+  Container::remove_child (const string& name)
   {
     symtable_t::iterator it = find_child_iterator (name);
     if (it != children_end ()) {
@@ -347,7 +347,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Component::serialize (const djnn::string& format) {
+  Component::serialize (const string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
@@ -364,7 +364,7 @@ namespace djnn
 #endif
 
 
-  AssignmentSequence::AssignmentSequence (ParentProcess* parent, const djnn::string& name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (ParentProcess* parent, const string& name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);
@@ -380,7 +380,7 @@ namespace djnn
   }
 
   void
-  AssignmentSequence::add_child (FatChildProcess* c, const djnn::string& name)
+  AssignmentSequence::add_child (FatChildProcess* c, const string& name)
   {
     if (c == nullptr)
       return;
@@ -415,7 +415,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AssignmentSequence::serialize (const djnn::string& format) {
+  AssignmentSequence::serialize (const string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

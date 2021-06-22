@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractPropRadialGradient::AbstractPropRadialGradient (ParentProcess* parent, const djnn::string& name, double cx, double cy, double r, double fx, double fy, int spread, int coords) :
+  AbstractPropRadialGradient::AbstractPropRadialGradient (ParentProcess* parent, const string& name, double cx, double cy, double r, double fx, double fy, int spread, int coords) :
     AbstractGradient (parent, name, spread, coords),
     raw_props{.cx=cx, .cy=cy, .r=r, .fx=fx, .fy=fy},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr), _cfx (nullptr), _cfy (nullptr)
@@ -85,7 +85,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropRadialGradient::find_child_impl (const djnn::string& name)
+  AbstractPropRadialGradient::find_child_impl (const string& name)
   {
     auto * res = AbstractGradient::find_child_impl(name);
     if (res) return res;
@@ -94,7 +94,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -146,10 +146,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPropRadialGradient::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "cx",
 			"cy",
 			"r",

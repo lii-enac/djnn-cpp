@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropFontSize::AbstractPropFontSize (ParentProcess* parent, const djnn::string& name, int unit, double size) :
+  AbstractPropFontSize::AbstractPropFontSize (ParentProcess* parent, const string& name, int unit, double size) :
     AbstractStyle (parent, name),
     raw_props{.unit=unit, .size=size},
     _cunit (nullptr), _csize (nullptr)
@@ -66,7 +66,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropFontSize::find_child_impl (const djnn::string& name)
+  AbstractPropFontSize::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
@@ -75,7 +75,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -109,10 +109,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPropFontSize::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "unit",
 			"size",
     };

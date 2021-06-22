@@ -30,7 +30,7 @@ namespace djnn {
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  CoreBinding::serialize (const djnn::string& format)
+  CoreBinding::serialize (const string& format)
   {
     string buf;
 
@@ -49,7 +49,7 @@ namespace djnn {
   }
 
   void
-  Binding::serialize (const djnn::string& format)
+  Binding::serialize (const string& format)
   {
     string buf;
   

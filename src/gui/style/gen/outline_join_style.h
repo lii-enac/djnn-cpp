@@ -29,13 +29,13 @@ namespace djnn
   class OutlineJoinStyle : public AbstractStyle
   {
   public:
-    OutlineJoinStyle (ParentProcess* parent, const djnn::string& name, int join);
+    OutlineJoinStyle (ParentProcess* parent, const string& name, int join);
     virtual ~OutlineJoinStyle ();
     void draw () override;
     OutlineJoinStyle* clone () override;
     void get_properties_values (int& join);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child_impl ("join"); }
 
   protected:

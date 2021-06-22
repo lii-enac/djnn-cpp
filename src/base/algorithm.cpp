@@ -23,7 +23,7 @@
 namespace djnn
 {
 
-  Sorter::Sorter (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec) :
+  Sorter::Sorter (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec) :
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
@@ -73,7 +73,7 @@ namespace djnn
   }
 
   bool
-  compare_string (const pair<djnn::string, int> &l, const pair<djnn::string, int> &r)
+  compare_string (const pair<string, int> &l, const pair<string, int> &r)
   {
     return l.first < r.first;
   }
@@ -116,14 +116,14 @@ namespace djnn
     	}
       case String:
     	{
-    	  vector<pair<djnn::string, int>> to_sort;
+    	  vector<pair<string, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
     	    AbstractProperty* prop = get_and_check (c);
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
-    	    to_sort.push_back (pair<djnn::string, int> (prop->get_string_value (), i++));
+    	    to_sort.push_back (pair<string, int> (prop->get_string_value (), i++));
     	  }
     	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
     	  i = 0;
@@ -143,7 +143,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Sorter::serialize (const djnn::string& type)
+  Sorter::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 
@@ -156,7 +156,7 @@ namespace djnn
   }
 #endif
 
-  ListOperator::ListOperator (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec) :
+  ListOperator::ListOperator (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec) :
       FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),
@@ -219,8 +219,8 @@ namespace djnn
     do_action ();
   }
 
-  SumList::SumList(ParentProcess *parent, const djnn::string &name,
-  	  CoreProcess *container, const djnn::string &spec) :
+  SumList::SumList(ParentProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
         finalize_construction (parent, name);
@@ -242,13 +242,13 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  SumList::serialize (const djnn::string& type)
+  SumList::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:sum-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    djnn::string buf;
+    string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -258,8 +258,8 @@ namespace djnn
   }
 #endif
 
-  ProductList::ProductList(ParentProcess *parent, const djnn::string &name,
-  	  CoreProcess *container, const djnn::string &spec) :
+  ProductList::ProductList(ParentProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
         finalize_construction (parent, name);
@@ -281,13 +281,13 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  ProductList::serialize (const djnn::string& type)
+  ProductList::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:product-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    djnn::string buf;
+    string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -297,8 +297,8 @@ namespace djnn
   }
 #endif
 
-  MaxList::MaxList(ParentProcess *parent, const djnn::string &name,
-  	  CoreProcess *container, const djnn::string &spec) :
+  MaxList::MaxList(ParentProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
         finalize_construction (parent, name);
@@ -320,13 +320,13 @@ namespace djnn
 
   #ifndef DJNN_NO_SERIALIZE
   void
-  MaxList::serialize (const djnn::string& type)
+  MaxList::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:max-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    djnn::string buf;
+    string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
@@ -336,8 +336,8 @@ namespace djnn
   }
 #endif
 
-  MinList::MinList(ParentProcess *parent, const djnn::string &name,
-  	  CoreProcess *container, const djnn::string &spec) :
+  MinList::MinList(ParentProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
         finalize_construction (parent, name);
@@ -359,13 +359,13 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  MinList::serialize (const djnn::string& type)
+  MinList::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:min-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    djnn::string buf;
+    string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
     AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());

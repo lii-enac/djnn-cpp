@@ -49,7 +49,7 @@ namespace djnn
 
 //  int mouse_tracking; // unused but important for Qt
 
-  CairoSDLWindow::CairoSDLWindow (djnn::Window* win, const djnn::string& title, double x, double y, double w, double h) :
+  CairoSDLWindow::CairoSDLWindow (djnn::Window* win, const string& title, double x, double y, double w, double h) :
   SDLWindow(win, title, x,y,w,h),
       _sdl_surface (nullptr), _sdl_renderer (nullptr), _sdl_texture (nullptr), _picking_data (nullptr), _my_cairo_surface (nullptr), _perform_screenshot (false)
   {
@@ -76,7 +76,7 @@ namespace djnn
     y = _window->pos_y ()->get_value ();
     w = _window->width ()->get_value ();
     h = _window->height ()->get_value ();
-    const djnn::string& title = _window->title ()->get_value ();
+    const string& title = _window->title ()->get_value ();
 
     //int w = (int) (_window->width ()->get_value ());
     //int h = (int) (_window->height ()->get_value ());
@@ -330,7 +330,7 @@ namespace djnn
   }
 
   void
-  CairoSDLWindow::perform_screenshot (const djnn::string& path) { 
+  CairoSDLWindow::perform_screenshot (const string& path) { 
       _screenshot_path = path;
       _perform_screenshot = true;
       update ();

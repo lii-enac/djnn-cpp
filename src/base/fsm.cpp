@@ -24,7 +24,7 @@
 namespace djnn
 {
 
-  FSMState::FSMState (ParentProcess* parent, const djnn::string& name)
+  FSMState::FSMState (ParentProcess* parent, const string& name)
   : Container (parent, name)
   {
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
@@ -80,7 +80,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  FSMState::serialize (const djnn::string& type) {
+  FSMState::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -98,7 +98,7 @@ namespace djnn
 #endif
 
   FSMTransition::Init::Init (FSMTransition* t, ParentProcess* parent, 
-                            const djnn::string& tspec, const djnn::string& aspec) 
+                            const string& tspec, const string& aspec) 
   {
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     if (fsm == nullptr) {
@@ -120,9 +120,9 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (ParentProcess* parent, const djnn::string& name, CoreProcess* from, CoreProcess* to,
-                                CoreProcess *trigger, const djnn::string& tspec, CoreProcess *action,
-                                const djnn::string& aspec) 
+  FSMTransition::FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
+                                CoreProcess *trigger, const string& tspec, CoreProcess *action,
+                                const string& aspec) 
   : FatProcess (name),
   _priority (0),
   _from_state (from ? dynamic_cast<FSMState*> (from) : nullptr),
@@ -148,7 +148,7 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (ParentProcess* parent, const djnn::string& name, CoreProcess* from, CoreProcess* to,
+  FSMTransition::FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, CoreProcess *action) 
   : FatProcess (name),
   _priority (0),
@@ -216,7 +216,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  FSMTransition::serialize (const djnn::string& type) {
+  FSMTransition::serialize (const string& type) {
    
     string buf;
 
@@ -245,7 +245,7 @@ namespace djnn
   }
 #endif
 
-  FSM::FSM (ParentProcess* parent, const djnn::string& name) 
+  FSM::FSM (ParentProcess* parent, const string& name) 
   : FatProcess (name), 
   _priority (0),
   _already_triggered (0),
@@ -361,7 +361,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  FSM::serialize (const djnn::string& type) {
+  FSM::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

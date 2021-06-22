@@ -13,7 +13,7 @@ namespace djnn {
      class RightTranslateByAction : public Action
     {
     public:
-      RightTranslateByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      RightTranslateByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightTranslateByAction () {}
       void impl_activate () override;
@@ -26,7 +26,7 @@ namespace djnn {
      class LeftTranslateByAction : public Action
     {
     public:
-      LeftTranslateByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      LeftTranslateByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftTranslateByAction () {}
       void impl_activate () override;
@@ -39,7 +39,7 @@ namespace djnn {
      class RightScaleByAction : public Action
     {
     public:
-      RightScaleByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      RightScaleByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightScaleByAction () {}
       void impl_activate () override;
@@ -52,7 +52,7 @@ namespace djnn {
      class LeftScaleByAction : public Action
     {
     public:
-      LeftScaleByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      LeftScaleByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftScaleByAction () {}
       void impl_activate () override;
@@ -65,7 +65,7 @@ namespace djnn {
      class RightRotateByAction : public Action
     {
     public:
-      RightRotateByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      RightRotateByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~RightRotateByAction () {}
       void impl_activate () override;
@@ -78,7 +78,7 @@ namespace djnn {
      class LeftRotateByAction : public Action
     {
     public:
-      LeftRotateByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      LeftRotateByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~LeftRotateByAction () {}
       void impl_activate () override;
@@ -91,7 +91,7 @@ namespace djnn {
      class Right_Skew_X_ByAction : public Action
     {
     public:
-      Right_Skew_X_ByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      Right_Skew_X_ByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_X_ByAction () {}
       void impl_activate () override;
@@ -104,7 +104,7 @@ namespace djnn {
      class Left_Skew_X_ByAction : public Action
     {
     public:
-      Left_Skew_X_ByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      Left_Skew_X_ByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_X_ByAction () {}
       void impl_activate () override;
@@ -117,7 +117,7 @@ namespace djnn {
      class Right_Skew_Y_ByAction : public Action
     {
     public:
-      Right_Skew_Y_ByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      Right_Skew_Y_ByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Right_Skew_Y_ByAction () {}
       void impl_activate () override;
@@ -130,7 +130,7 @@ namespace djnn {
      class Left_Skew_Y_ByAction : public Action
     {
     public:
-      Left_Skew_Y_ByAction (ParentProcess* parent, const djnn::string& name, AbstractHomography *h) :
+      Left_Skew_Y_ByAction (ParentProcess* parent, const string& name, AbstractHomography *h) :
       Action (parent, name), _h(h) {}
       virtual ~Left_Skew_Y_ByAction () {}
       void impl_activate () override;
@@ -139,7 +139,7 @@ namespace djnn {
     };
 
   public:
-    AbstractHomography (ParentProcess* parent, const djnn::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
+    AbstractHomography (ParentProcess* parent, const string& name, double m11=1, double m12=0, double m13=0, double m14=0,
      double m21=0, double m22=1, double m23=0, double m24=0,
      double m31=0, double m32=0, double m33=1, double m34=0,
      double m41=0, double m42=0, double m43=0, double m44=1);
@@ -148,7 +148,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
     virtual ~AbstractHomography ();
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
     void impl_activate () override;
     void impl_deactivate () override;
     
@@ -312,7 +312,7 @@ namespace djnn {
   class Homography : public AbstractHomography
   {
   public:
-    Homography (ParentProcess* parent, const djnn::string& name, double m11=1, double m12=0, double m13=0, double m14=0,
+    Homography (ParentProcess* parent, const string& name, double m11=1, double m12=0, double m13=0, double m14=0,
       double m21=0, double m22=1, double m23=0, double m24=0,
       double m31=0, double m32=0, double m33=1, double m34=0,
       double m41=0, double m42=0, double m43=0, double m44=1);
@@ -330,7 +330,7 @@ namespace djnn {
   class GradientHomography : public AbstractHomography
   {
   public:
-    GradientHomography (ParentProcess* parent, const djnn::string& name, double m11=1, double m12=0, double m13=0, 
+    GradientHomography (ParentProcess* parent, const string& name, double m11=1, double m12=0, double m13=0, 
       double m21=0,	double m22=1, double m23=0,
       double m31=0, double m32=0, double m33=1);
     GradientHomography (double m11=1, double m12=0, double m13=0, 
@@ -344,7 +344,7 @@ namespace djnn {
   class SimpleGradientTransform : public AbstractHomography
   {
   public:
-    SimpleGradientTransform (ParentProcess* parent, const djnn::string& name, double a, double b, double c, double d, double e,
+    SimpleGradientTransform (ParentProcess* parent, const string& name, double a, double b, double c, double d, double e,
       double f);
     SimpleGradientTransform (double a, double b, double c, double d, double e,
      double f);

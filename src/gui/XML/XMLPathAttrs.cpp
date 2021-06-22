@@ -29,15 +29,15 @@ typedef void (djn_PathCoordProc) (FatProcess*, double);
 
 static int ParseData (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
     {"d",{&ParseData}}
 };
 
 djn_XMLAttrHandler*
 XMLPathAttrs_Hash::djn_XMLPathAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

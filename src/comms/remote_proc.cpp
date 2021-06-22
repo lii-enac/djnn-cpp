@@ -31,7 +31,7 @@ namespace djnn
     if (!p->connected ())
       return;
     dist_map_t props = p->get_send_props ();
-    djnn::string msg = "N";
+    string msg = "N";
     bool to_send = false;
     for (auto const &prop : props) {
       if (prop.second->send()) {
@@ -67,11 +67,11 @@ namespace djnn
     please_stop ();
   }
 
-  vector<djnn::string> // FIXME copy of vector
+  vector<string> // FIXME copy of vector
   tokenize (char* buff, int sz)
   {
-    vector<djnn::string> res;
-    djnn::string msg;
+    vector<string> res;
+    string msg;
     for (int i = 0; i < sz; i++) {
       if (buff[i] == ':') {
         res.push_back (msg);
@@ -96,7 +96,7 @@ namespace djnn
       char buff_sz[1];
       int sz;
       bool end_sz = false;
-      djnn::string str_sz;
+      string str_sz;
       while (!end_sz) {
         if (recvfrom (p->get_sock (), buff_sz, 1, 0, NULL, NULL) == SOCKET_ERROR) {
           goto fail;
@@ -120,12 +120,12 @@ namespace djnn
       }
       if (should_i_stop ())
         return;
-      vector<djnn::string> msg = tokenize (buffer, sz);
+      vector<string> msg = tokenize (buffer, sz);
 
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       for (auto s : msg) {
         std::size_t found = s.find ('=');
-        if (found != djnn::string::npos) {
+        if (found != string::npos) {
           dist_map_t::iterator it = props.find (s.substr(0,found));
           if (it != props.end ())
             it->second->set_incoming_value (s.substr (found + 1), true);
@@ -146,9 +146,9 @@ namespace djnn
   }
 
   void
-  RemoteProc::subscribe (const djnn::string& path)
+  RemoteProc::subscribe (const string& path)
   {
-    djnn::string msg = "S:" + path;
+    string msg = "S:" + path;
     int sz = msg.size ();
     msg = djnn::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
@@ -173,9 +173,9 @@ namespace djnn
   }
 
   void
-  RemoteProc::unsubscribe (const djnn::string& path)
+  RemoteProc::unsubscribe (const string& path)
   {
-    djnn::string msg = "U:" + path;
+    string msg = "U:" + path;
     int sz = msg.size ();
     msg = djnn::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
@@ -183,7 +183,7 @@ namespace djnn
     }
   }
 
-  RemoteProc::RemoteProc (ParentProcess *parent, const djnn::string &name, const djnn::string &addr, int port) :
+  RemoteProc::RemoteProc (ParentProcess *parent, const string &name, const string &addr, int port) :
       FatProcess (name), _addr (addr), _port (port), _fd (0), _send (this, "send"), _receive (this, "receive"),
       _con (this, "connection_action"), _con_status (this, "status", false), _con_req (this, "connect"),
       _c_con_req (&_con_req, ACTIVATION, &_con, ACTIVATION)
@@ -202,7 +202,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  RemoteProc::find_child_impl (const djnn::string &path)
+  RemoteProc::find_child_impl (const string &path)
   {
     FatChildProcess* res = FatProcess::find_child_impl (path);
     if (res)

@@ -18,5 +18,5 @@
 namespace djnn {
   void p_init_input ();
   void p_init_gpios ();
-  CoreProcess* p_find_gpio (const djnn::string& path, direction_e dir);
+  CoreProcess* p_find_gpio (const string& path, direction_e dir);
 }

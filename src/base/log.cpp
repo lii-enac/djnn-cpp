@@ -22,7 +22,7 @@ namespace djnn
 {
 
 #if NEW_LOG_PLAIN_OBJ
-  LogPrinter::LogPrinter (ParentProcess* parent, const djnn::string& name, const djnn::string& label) 
+  LogPrinter::LogPrinter (ParentProcess* parent, const string& name, const string& label) 
   : Component (p, n),
   _tc (this, "catenator"),
   _tp (this, "printer"),
@@ -34,7 +34,7 @@ namespace djnn
   }
 #else
 
-  LogPrinter::LogPrinter (ParentProcess* parent, const djnn::string& name, const djnn::string& label)
+  LogPrinter::LogPrinter (ParentProcess* parent, const string& name, const string& label)
   : Component (parent, name)
   {
     _tc = new TextCatenator (this, "catenator");
@@ -49,7 +49,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  LogPrinter::serialize (const djnn::string& type) {
+  LogPrinter::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

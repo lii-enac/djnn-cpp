@@ -28,17 +28,17 @@ namespace djnn
     class FileWriterAction : public Action
     {
     public:
-      FileWriterAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      FileWriterAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       void impl_activate () override;
     };
     class FileNameAction : public Action
     {
     public:
-      FileNameAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      FileNameAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       void impl_activate () override;
     };
   public:
-    FileWriter (ParentProcess* parent, const djnn::string& name, const djnn::string& filename);
+    FileWriter (ParentProcess* parent, const string& name, const string& filename);
     virtual ~FileWriter ();
     void impl_activate () override;
     void impl_deactivate () override;

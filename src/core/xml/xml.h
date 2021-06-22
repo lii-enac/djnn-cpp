@@ -65,11 +65,11 @@ namespace djnn
 
   class XML {
   public:
-    static FatProcess* djnLoadFromXML (const djnn::string& uri);
+    static FatProcess* djnLoadFromXML (const string& uri);
     //static FatProcess* djnParseXML (FILE* f);
-    static FatProcess* djnParseXMLFromPath (const djnn::string& path);
-    static int djn_RegisterXMLParser (const djnn::string& uri, djn_XMLTagLookupProc l, const char* format);
-    static int djn_UnregisterXMLParser (const djnn::string& uri);
+    static FatProcess* djnParseXMLFromPath (const string& path);
+    static int djn_RegisterXMLParser (const string& uri, djn_XMLTagLookupProc l, const char* format);
+    static int djn_UnregisterXMLParser (const string& uri);
     static void clear_xml_parser ();
     static int djn_XMLHandleAttr (FatProcess** e, const char** attrs, djn_XMLSymLookupProc lookup, ...);
   private:
@@ -91,12 +91,12 @@ namespace djnn
     djn__XMLNamespaceStart (void*, const XML_Char*, const XML_Char*);
     static void
     djn__XMLNamespaceEnd (void*, const XML_Char*);
-    typedef map<djnn::string, djn__XMLParser*> djn__NamespaceTable_t;
+    typedef map<string, djn__XMLParser*> djn__NamespaceTable_t;
     static djn__NamespaceTable_t djn__NamespaceTable;
     static FatProcess *curComponent;
     static djn__XMLTagHandlerList *handlerStack;
   };
   void
   init_xml ();
-  inline FatProcess* loadFromXML (const djnn::string& uri) { return XML::djnLoadFromXML (uri); }
+  inline FatProcess* loadFromXML (const string& uri) { return XML::djnLoadFromXML (uri); }
 }

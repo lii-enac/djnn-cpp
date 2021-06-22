@@ -28,7 +28,7 @@ namespace djnn {
     class SynchronizerAction : public NativeExpressionAction
     {
     public:
-      SynchronizerAction (ParentProcess* parent, const djnn::string& name) : NativeExpressionAction (parent, name) {}
+      SynchronizerAction (ParentProcess* parent, const string& name) : NativeExpressionAction (parent, name) {}
       virtual ~SynchronizerAction () {};
       void impl_activate () override {
         if (get_parent ()->somehow_activating ())
@@ -37,10 +37,10 @@ namespace djnn {
       void impl_deactivate () override {}
     };
   public:
-    Synchronizer (ParentProcess* parent, const djnn::string& name, CoreProcess* dst, const djnn::string&  dspec);
+    Synchronizer (ParentProcess* parent, const string& name, CoreProcess* dst, const string&  dspec);
     virtual ~Synchronizer ();
     virtual process_type_e get_process_type () const override { return SYNCHRONIZER_T; }
-    void add_source (CoreProcess* src, const djnn::string& spec);
+    void add_source (CoreProcess* src, const string& spec);
     void impl_activate () override;
     void impl_deactivate () override;
     void add_native_edge (CoreProcess *src, CoreProcess* dst);
@@ -49,7 +49,7 @@ namespace djnn {
     void propagate ();
 
     void set_parent (ParentProcess* parent) override;
-    struct Init { Init(Synchronizer *, ParentProcess* parent, const djnn::string& name, CoreProcess* dst, const djnn::string&  dspec); };
+    struct Init { Init(Synchronizer *, ParentProcess* parent, const string& name, CoreProcess* dst, const string&  dspec); };
     friend struct Init;
     CoreProcess *_dst;
     Init _init;

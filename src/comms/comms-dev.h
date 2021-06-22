@@ -2,7 +2,7 @@
 
 namespace djnn {
 
-	extern vector<djnn::string> loadedModules; 
+	extern vector<string> loadedModules; 
 
 	void init_comms ();
 	void clear_comms ();

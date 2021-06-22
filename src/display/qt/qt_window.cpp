@@ -50,7 +50,7 @@ namespace djnn
     user_event_geometry = QEvent::User
   };
 
-  QtWindow::QtWindow (Window *win, const djnn::string& title, double x, double y, double w, double h) :
+  QtWindow::QtWindow (Window *win, const string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
   {
   }
@@ -108,7 +108,7 @@ namespace djnn
   }
 
   void
-  QtWindow::set_cursor (const djnn::string& path, int hotX, int hotY) {
+  QtWindow::set_cursor (const string& path, int hotX, int hotY) {
     if (_qwidget == nullptr) { return; }
     QBitmap bmp (path.c_str ());
     _qwidget->setCursor (QCursor (bmp, hotX, hotY));
@@ -124,7 +124,7 @@ namespace djnn
   }
 
   void
-  QtWindow::perform_screenshot (const djnn::string& path)
+  QtWindow::perform_screenshot (const string& path)
   {
     if (_qwidget == nullptr) { return; }
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous

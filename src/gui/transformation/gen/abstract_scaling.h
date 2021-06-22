@@ -30,13 +30,13 @@ namespace djnn
   class AbstractScaling : public AbstractTransformation
   {
   public:
-    AbstractScaling (ParentProcess* parent, const djnn::string& name, double sx, double sy, double cx, double cy);
+    AbstractScaling (ParentProcess* parent, const string& name, double sx, double sy, double cx, double cy);
     virtual ~AbstractScaling ();
     
     
     void get_properties_values (double& sx, double& sy, double& cx, double& cy);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child_impl ("sx"); }
 		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child_impl ("sy"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }

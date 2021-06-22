@@ -28,7 +28,7 @@ static int ParseR (FatProcess**, const char*);
 static int ParseFX (FatProcess**, const char*);
 static int ParseFY (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
   {"r",{&ParseR}},
   {"fy",{&ParseFY}},
   {"cy",{&ParseCY}},
@@ -39,8 +39,8 @@ static map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGRadialGradientAttrs_Hash::djn_SVGRadialGradientAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

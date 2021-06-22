@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropGradientStop : public AbstractStyle
   {
   public:
-    AbstractPropGradientStop (ParentProcess* parent, const djnn::string& name, double r, double g, double b, double a, double offset);
+    AbstractPropGradientStop (ParentProcess* parent, const string& name, double r, double g, double b, double a, double offset);
     virtual ~AbstractPropGradientStop ();
     
     
     void get_properties_values (double& r, double& g, double& b, double& a, double& offset);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_child_impl ("r"); }
 		AbstractDoubleProperty* g () { return (AbstractDoubleProperty*) find_child_impl ("g"); }
 		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_child_impl ("b"); }

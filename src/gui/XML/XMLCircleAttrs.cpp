@@ -27,7 +27,7 @@ static int ParseCx (FatProcess**, const char*);
 static int ParseCy (FatProcess**, const char*);
 static int ParseR (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
   {"r",{&ParseR}},
   {"cy",{&ParseCy}},
   {"cx",{&ParseCx}}
@@ -36,8 +36,8 @@ static map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

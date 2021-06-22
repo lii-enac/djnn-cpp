@@ -17,7 +17,6 @@
 #include "core/ontology/process.h"
 #include "utils/debug.h"
 
-#include <vector>
 #include <list>
 #include <deque>
 #include <memory>

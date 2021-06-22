@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractRotation::AbstractRotation (ParentProcess* parent, const djnn::string& name, double a, double cx, double cy) :
+  AbstractRotation::AbstractRotation (ParentProcess* parent, const string& name, double a, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.a=a, .cx=cx, .cy=cy},
     _ca (nullptr), _ccx (nullptr), _ccy (nullptr)
@@ -73,7 +73,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractRotation::find_child_impl (const djnn::string& name)
+  AbstractRotation::find_child_impl (const string& name)
   {
     auto * res = AbstractTransformation::find_child_impl(name);
     if (res) return res;
@@ -82,7 +82,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -122,10 +122,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractRotation::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "a",
 			"cx",
 			"cy",

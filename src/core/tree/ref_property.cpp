@@ -102,7 +102,7 @@ namespace djnn
   }
 
   void
-  RefProperty::set_value (const djnn::string& v, bool propagate)
+  RefProperty::set_value (const string& v, bool propagate)
   {
     warning (this, "undefined conversion from Text to Component");
   }
@@ -119,7 +119,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  RefProperty::serialize (const djnn::string& format) {
+  RefProperty::serialize (const string& format) {
 
     string buf;
 
@@ -136,7 +136,7 @@ namespace djnn
 #endif
 
   CoreProcess*
-  RefProperty::find_child_impl (const djnn::string& path)
+  RefProperty::find_child_impl (const string& path)
   {
     if (path.empty ())
       return this;

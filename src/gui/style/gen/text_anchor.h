@@ -29,13 +29,13 @@ namespace djnn
   class TextAnchor : public AbstractStyle
   {
   public:
-    TextAnchor (ParentProcess* parent, const djnn::string& name, int anchor);
+    TextAnchor (ParentProcess* parent, const string& name, int anchor);
     virtual ~TextAnchor ();
     void draw () override;
     TextAnchor* clone () override;
     void get_properties_values (int& anchor);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_child_impl ("anchor"); }
 
   protected:

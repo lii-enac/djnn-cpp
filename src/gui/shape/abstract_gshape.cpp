@@ -42,13 +42,13 @@
 namespace djnn
 {
   static
-  vector<djnn::string>
+  vector<string>
   //AbstractGShape::
   _ui =
     { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
 
   FatChildProcess*
-  SVGHolder::find_child_impl (const djnn::string& path)
+  SVGHolder::find_child_impl (const string& path)
   {
     auto * p = Container::find_child_impl (path);
     if (p == nullptr && _gobj != nullptr)
@@ -96,7 +96,7 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (ParentProcess* parent, const djnn::string& name, int id, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (ParentProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure) :
       FatProcess (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
@@ -320,7 +320,7 @@ namespace djnn
 
   }
 
-  AbstractGShape::AbstractGShape (ParentProcess* parent, const djnn::string& name) :
+  AbstractGShape::AbstractGShape (ParentProcess* parent, const string& name) :
     AbstractGObj (parent, name), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
@@ -328,7 +328,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractGShape::find_child_impl (const djnn::string& path)
+  AbstractGShape::find_child_impl (const string& path)
   {
     // looking for ui interface
     if (ui) {
@@ -339,8 +339,8 @@ namespace djnn
 
     // looking for something else
     size_t found = path.find_first_of ('/');
-    djnn::string key = path;
-    if (found != djnn::string::npos) {
+    string key = path;
+    if (found != string::npos) {
       key = path.substr (0, found);
     }
 
@@ -354,7 +354,7 @@ namespace djnn
     }
     else {
       /*  "press", "release", "move", "enter", "leave", "touches" */
-      vector<djnn::string>::iterator it = _ui.begin ();
+      vector<string>::iterator it = _ui.begin ();
       found = false;
       while (!found && it != _ui.end ()) {
         if (key.compare (*it) == 0) {
@@ -395,7 +395,7 @@ namespace djnn
   }
 
   void
-  AbstractGShape::add_style_class (const djnn::string& classname)
+  AbstractGShape::add_style_class (const string& classname)
   {
     int id = StyleSheet::get_id(classname);
     if (id != -1)

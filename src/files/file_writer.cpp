@@ -35,7 +35,7 @@ namespace djnn
     ((FileWriter*)get_parent ())->change_file ();
   }
 
-  FileWriter::FileWriter (ParentProcess* parent, const djnn::string& name, const djnn::string& filename)
+  FileWriter::FileWriter (ParentProcess* parent, const string& name, const string& filename)
   : FatProcess (name), _input (this, "input", ""), _filename (this, "filename", filename),
   _fn_action (this, "fn_action"), _action (this, "action"),
   _c_input (&_input, ACTIVATION, &_action, ACTIVATION),

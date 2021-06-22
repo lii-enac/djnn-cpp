@@ -22,7 +22,7 @@ namespace djnn {
 
 	class AbstractSObj : public FatProcess {
 	public:
-		AbstractSObj (ParentProcess* parent, const djnn::string& name) : FatProcess(name), _impl(nullptr) {}
+		AbstractSObj (ParentProcess* parent, const string& name) : FatProcess(name), _impl(nullptr) {}
 		virtual ~AbstractSObj () { delete _impl; }
 
 		AbstractSObjImpl* impl() { return _impl; }
@@ -34,10 +34,10 @@ namespace djnn {
     	void impl_deactivate () override;
 
     protected:
-	    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const djnn::string& name, int notify_mask);
-	    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const djnn::string& name, int notify_mask);
-	    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const djnn::string& name, int notify_mask);
-	    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, djnn::string *rawp, const djnn::string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const string& name, int notify_mask);
+	    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, string *rawp, const string& name, int notify_mask);
 
 	private:
 		AbstractSObjImpl *_impl;

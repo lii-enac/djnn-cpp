@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractPropLinearGradient::AbstractPropLinearGradient (ParentProcess* parent, const djnn::string& name, double x1, double y1, double x2, double y2, int spread, int coords) :
+  AbstractPropLinearGradient::AbstractPropLinearGradient (ParentProcess* parent, const string& name, double x1, double y1, double x2, double y2, int spread, int coords) :
     AbstractGradient (parent, name, spread, coords),
     raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2},
     _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr)
@@ -79,7 +79,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropLinearGradient::find_child_impl (const djnn::string& name)
+  AbstractPropLinearGradient::find_child_impl (const string& name)
   {
     auto * res = AbstractGradient::find_child_impl(name);
     if (res) return res;
@@ -88,7 +88,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -134,10 +134,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPropLinearGradient::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "x1",
 			"y1",
 			"x2",

@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  extern vector<djnn::string> loadedModules;
+  extern vector<string> loadedModules;
 
   
 
@@ -28,7 +28,7 @@ namespace djnn
     struct djnXMLDumpContext* parent;
     int haschildren;
     //const char* classname;
-    djnn::string classname;
+    string classname;
   };// __XMLDumpContext;
 
 #if !defined(DJNN_NO_SERIALIZE)
@@ -40,7 +40,7 @@ namespace djnn
   static int __XMLLevel = 0;
 
   void
-  XMLSerializer::start (const djnn::string& name) {
+  XMLSerializer::start (const string& name) {
 
   
     int i;
@@ -86,19 +86,19 @@ namespace djnn
   }
 
   void
-  XMLSerializer::text_attribute (const djnn::string& name, const djnn::string& value){
+  XMLSerializer::text_attribute (const string& name, const string& value){
     std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
-  XMLSerializer::int_attribute (const djnn::string& name, int value){
+  XMLSerializer::int_attribute (const string& name, int value){
     std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
-  XMLSerializer::float_attribute (const djnn::string& name, double value){
+  XMLSerializer::float_attribute (const string& name, double value){
     std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }

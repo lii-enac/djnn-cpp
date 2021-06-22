@@ -6,7 +6,7 @@ namespace djnn {
   class NoOutline : public AbstractStyle
   {
   public:
-    NoOutline (ParentProcess* parent, const djnn::string& name) :
+    NoOutline (ParentProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -18,7 +18,7 @@ namespace djnn {
   class NoFill : public AbstractStyle
   {
   public:
-    NoFill (ParentProcess* parent, const djnn::string& name) :
+    NoFill (ParentProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}

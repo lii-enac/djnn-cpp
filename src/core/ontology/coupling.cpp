@@ -35,7 +35,7 @@ namespace djnn
     } else if (src_flag == DEACTIVATION) {
       src->add_deactivation_coupling (this);
     } else {
-      warning (src, djnn::string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
+      warning (src, string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
     }
     if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);

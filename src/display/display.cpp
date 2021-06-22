@@ -22,7 +22,7 @@ namespace djnn
 {
   
   static bool __module_initialized = false;
-  extern vector<djnn::string> loadedModules;
+  extern vector<string> loadedModules;
 
   FatProcess *DrawingRefreshManager;
 

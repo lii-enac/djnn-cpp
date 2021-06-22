@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <vector>
 
 namespace djnn
 {
@@ -29,11 +28,11 @@ namespace djnn
   {
     Receiver *p = (Receiver*) get_parent();
     vector<CoreProcess*> senders = p->get_senders();
-    djnn::string msg;
-    djnn::string start = "";
+    string msg;
+    string start = "";
     for (auto s : senders) {
-      djnn::string path = p->get_path(s);
-      djnn::string value;
+      string path = p->get_path(s);
+      string value;
       AbstractProperty *ap = dynamic_cast<AbstractProperty*>(s);
       if (ap)
         value = ap->get_string_value();
@@ -58,7 +57,7 @@ namespace djnn
     p->add_sender (_src);
   }
 
-  Receiver::Receiver (ParentProcess* parent, const djnn::string& name, SOCKET fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
+  Receiver::Receiver (ParentProcess* parent, const string& name, SOCKET fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
       _fd (fd),_send (this, "send"), _build_send (this, "build_send"), _tree (tree)
   {
   }
@@ -77,7 +76,7 @@ namespace djnn
   }
 
   void
-  Receiver::find_and_set_value (djnn::string &path, djnn::string &value)
+  Receiver::find_and_set_value (string &path, string &value)
   {
     CoreProcess *cp = _tree->find_child (path);
     if (cp) {
@@ -94,7 +93,7 @@ namespace djnn
   }
 
   void
-  Receiver::subscribe (const djnn::string &path)
+  Receiver::subscribe (const string &path)
   {
     CoreProcess *cp = _tree->find_child (path);
     if (!cp)
@@ -117,7 +116,7 @@ namespace djnn
   }
 
   void
-  Receiver::unsubscribe (const djnn::string &path)
+  Receiver::unsubscribe (const string &path)
   {
     CoreProcess *cp = _tree->find_child (path);
     bool found = false;
@@ -145,17 +144,17 @@ namespace djnn
     }
   }
 
-  djnn::string
+  string
   Receiver::get_path (CoreProcess *s)
   {
-    djnn::string res = "";
+    string res = "";
     dist_map_t::iterator it = _senders_map.find (s);
     if (it != _senders_map.end ())
       res = it->second;
     return res;
   }
 
-  extern vector<djnn::string>
+  extern vector<string>
   tokenize (char* buff, int sz);
 
   void
@@ -166,7 +165,7 @@ namespace djnn
       char buff_sz[1];
       int sz;
       bool end_sz = false;
-      djnn::string str_sz;
+      string str_sz;
       while (!end_sz) {
         if (recvfrom (_fd, buff_sz, 1, 0, NULL, NULL) == SOCKET_ERROR) {
           goto fail;
@@ -185,14 +184,14 @@ namespace djnn
       if (recvfrom (_fd, buffer + 1, sz - 1, 0, NULL, NULL) == SOCKET_ERROR) {
         goto fail;
       }
-      vector < djnn::string > msg = tokenize (buffer, sz);
+      vector < string > msg = tokenize (buffer, sz);
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       if (msg[0] == "N") {
         for (size_t i = 1; i < msg.size (); ++i) {
           std::size_t found = msg[i].find ('=');
-          if (found != djnn::string::npos) {
-            djnn::string path = msg[i].substr (0, found);
-            djnn::string value = msg[i].substr (found + 1);
+          if (found != string::npos) {
+            string path = msg[i].substr (0, found);
+            string value = msg[i].substr (found + 1);
             find_and_set_value (path, value);
           }
         }
@@ -223,7 +222,7 @@ namespace djnn
       djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
   }
 
-  ProcExporter::ProcExporter (ParentProcess *parent, const djnn::string &name, CoreProcess *tree, int port) :
+  ProcExporter::ProcExporter (ParentProcess *parent, const string &name, CoreProcess *tree, int port) :
       FatProcess (name), ExternalSource (name), _fd (0), _port (port), _tree (tree)
   {
     finalize_construction (parent, name);

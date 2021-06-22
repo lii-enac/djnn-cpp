@@ -31,7 +31,7 @@ namespace djnn
     class CounterResetAction : public Action
     {
     public:
-      CounterResetAction (ParentProcess* parent, const djnn::string& name, bool* reset_occurred) :
+      CounterResetAction (ParentProcess* parent, const string& name, bool* reset_occurred) :
         Action (parent, name), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterResetAction () {}
@@ -44,7 +44,7 @@ namespace djnn
     class CounterStepAction : public Action
     {
     public:
-      CounterStepAction (ParentProcess* parent, const djnn::string& name, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
+      CounterStepAction (ParentProcess* parent, const string& name, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
         Action (parent, name), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
     
       virtual ~CounterStepAction () {}
@@ -66,12 +66,12 @@ namespace djnn
     };
 
   public:
-    Counter (ParentProcess* parent, const djnn::string& n, double init, double delta);
+    Counter (ParentProcess* parent, const string& n, double init, double delta);
     ~Counter();
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
 
   private:

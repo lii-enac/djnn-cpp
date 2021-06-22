@@ -23,7 +23,7 @@ namespace djnn {
 
 	class Sample : public Sound {
 	public:
-		Sample (ParentProcess* parent, const djnn::string& name, const djnn::string& path);
+		Sample (ParentProcess* parent, const string& name, const string& path);
 		virtual ~Sample ();
 	protected:
 		// FatProcess

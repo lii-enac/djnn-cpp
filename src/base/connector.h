@@ -38,7 +38,7 @@ namespace djnn {
       // no need to add edge to graph, assignment already did it
     }
     
-    CoreConnector (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    CoreConnector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : CoreConnector (src, dst, copy_on_activation)
     {
       finalize_construction (parent, name);
@@ -54,7 +54,7 @@ namespace djnn {
     bool _copy_on_activation;
 public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
@@ -68,7 +68,7 @@ public:
       // no need to add edge to graph, assignment already did it
     }
     
-    CorePausedConnector (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst)
+    CorePausedConnector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst)
     : CorePausedConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -83,7 +83,7 @@ public:
     CoreBinding _binding;
 public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
@@ -92,7 +92,7 @@ public:
   class Connector : public FatProcess
   {
   public:
-    Connector (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    Connector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _assignment (src, dst, false)
     , _binding (src, &_assignment)
@@ -103,9 +103,9 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    Connector (ParentProcess* parent, const djnn::string& name,
-                   CoreProcess* src, const djnn::string& sspec,
-                   CoreProcess* dst, const djnn::string& dspec,
+    Connector (ParentProcess* parent, const string& name,
+                   CoreProcess* src, const string& sspec,
+                   CoreProcess* dst, const string& dspec,
                    bool copy_on_activation=true)
     : Connector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
     {}
@@ -121,14 +121,14 @@ public:
 public:
     Connector* clone () override { /* TBD --- but annoying when loading text from svg */ return nullptr;}
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
   class PausedConnector : public FatProcess
   {
   public:
-    PausedConnector (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    PausedConnector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
@@ -139,9 +139,9 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    PausedConnector (ParentProcess* parent, const djnn::string& name,
-                   CoreProcess* src, const djnn::string& sspec,
-                   CoreProcess* dst, const djnn::string& dspec)
+    PausedConnector (ParentProcess* parent, const string& name,
+                   CoreProcess* src, const string& sspec,
+                   CoreProcess* dst, const string& dspec)
     : PausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
@@ -155,10 +155,10 @@ public:
     bool _copy_on_activation;
 public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
-  void MultiConnector (ParentProcess* parent, CoreProcess* src, vector <djnn::string> src_props, CoreProcess* dst, vector <djnn::string> dst_props, bool copy_on_activation=true);
+  void MultiConnector (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation=true);
   void MultiConnector (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true);
 }

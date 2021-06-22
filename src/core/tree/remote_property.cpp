@@ -72,7 +72,7 @@ namespace djnn
   }
 
   void
-  AbstractRemoteProperty::set_value (const djnn::string& v, bool propagate)
+  AbstractRemoteProperty::set_value (const string& v, bool propagate)
   {
     _send = true;
     get_ref_value() = v;
@@ -83,7 +83,7 @@ namespace djnn
   }
 
   void
-  AbstractRemoteProperty::set_incoming_value (const djnn::string& v, bool propagate)
+  AbstractRemoteProperty::set_incoming_value (const string& v, bool propagate)
   {
     _send = false;
     get_ref_value() = v;
@@ -108,7 +108,7 @@ namespace djnn
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  AbstractRemoteProperty::serialize (const djnn::string& format) {
+  AbstractRemoteProperty::serialize (const string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

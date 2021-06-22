@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractScaling::AbstractScaling (ParentProcess* parent, const djnn::string& name, double sx, double sy, double cx, double cy) :
+  AbstractScaling::AbstractScaling (ParentProcess* parent, const string& name, double sx, double sy, double cx, double cy) :
     AbstractTransformation (parent, name),
     raw_props{.sx=sx, .sy=sy, .cx=cx, .cy=cy},
     _csx (nullptr), _csy (nullptr), _ccx (nullptr), _ccy (nullptr)
@@ -79,7 +79,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractScaling::find_child_impl (const djnn::string& name)
+  AbstractScaling::find_child_impl (const string& name)
   {
     auto * res = AbstractTransformation::find_child_impl(name);
     if (res) return res;
@@ -88,7 +88,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -134,10 +134,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractScaling::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "sx",
 			"sy",
 			"cx",

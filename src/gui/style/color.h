@@ -28,7 +28,7 @@ namespace djnn
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToValueAction (ParentProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_hex_from_rvb ();
@@ -36,19 +36,19 @@ namespace djnn
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToRGBAction (ParentProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((AbstractColor*) get_parent())->update_rvb_from_hex ();
       }
     };
   public:
-    AbstractColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b);
-    AbstractColor (ParentProcess* parent, const djnn::string& name, int v);
+    AbstractColor (ParentProcess* parent, const string& name, int r, int g, int b);
+    AbstractColor (ParentProcess* parent, const string& name, int v);
     virtual ~AbstractColor ();
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractIntProperty* r () { return (AbstractIntProperty*) find_child_impl ("r"); }
 		AbstractIntProperty* g () { return (AbstractIntProperty*) find_child_impl ("g"); }
 		AbstractIntProperty* b () { return (AbstractIntProperty*) find_child_impl ("b"); }
@@ -71,9 +71,9 @@ namespace djnn
   class FillColor : public AbstractColor
   {
   public:
-    FillColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b) :
+    FillColor (ParentProcess* parent, const string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
-    FillColor (ParentProcess* parent, const djnn::string& name, int v) :
+    FillColor (ParentProcess* parent, const string& name, int v) :
         AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~FillColor () {}
     void draw () override;
@@ -83,9 +83,9 @@ namespace djnn
   class OutlineColor : public AbstractColor
   {
   public:
-    OutlineColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b) :
+    OutlineColor (ParentProcess* parent, const string& name, int r, int g, int b) :
         AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
-    OutlineColor (ParentProcess* parent, const djnn::string& name, int v) :
+    OutlineColor (ParentProcess* parent, const string& name, int v) :
          AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~OutlineColor () {}
     void draw () override;
@@ -97,14 +97,14 @@ namespace djnn
   private:
     class ConverterAction : public Action {
       public:
-        ConverterAction (RGBToLCHConverter *p, const djnn::string& n);
+        ConverterAction (RGBToLCHConverter *p, const string& n);
         virtual ~ConverterAction () {}
         void impl_activate () override;
       private:
         RGBToLCHConverter *_p;
     };
   public:
-    RGBToLCHConverter (ParentProcess* parent, const djnn::string& name);
+    RGBToLCHConverter (ParentProcess* parent, const string& name);
     virtual ~RGBToLCHConverter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -121,14 +121,14 @@ namespace djnn
   private:
     class ConverterAction : public Action {
       public:
-        ConverterAction (LCHToRGBConverter *p, const djnn::string& n);
+        ConverterAction (LCHToRGBConverter *p, const string& n);
         virtual ~ConverterAction () {}
         void impl_activate () override;
       private:
         LCHToRGBConverter *_p;
     };
   public:
-    LCHToRGBConverter (ParentProcess* parent, const djnn::string& name);
+    LCHToRGBConverter (ParentProcess* parent, const string& name);
     virtual ~LCHToRGBConverter ();
     void impl_activate () override;
     void impl_deactivate () override;

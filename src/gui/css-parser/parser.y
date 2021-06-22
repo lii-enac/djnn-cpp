@@ -16,8 +16,6 @@
 #include <algorithm>
 //#include <stdio.h>
 //#include <iostream>
-#include <string>
-#include <vector>
 #include "gui/gui-dev.h"
 
 #include "base/connector.h"
@@ -52,11 +50,11 @@
 {
   using namespace djnn;
 
-  djnn::string cur_property;
+  string cur_property;
   FatProcess *cur_parent;
 
   void
-  make_text_property (djnn::string property, djnn::string arg)
+  make_text_property (string property, string arg)
   {
     if (property == "fill") {
       if (arg == "none") {
@@ -124,7 +122,7 @@
   }
 
   void
-  make_num_property (djnn::string property, float arg)
+  make_num_property (string property, float arg)
   {
     if (property == "fill") {
       new FillColor (cur_parent, "fill", arg);
@@ -257,7 +255,7 @@ operator
  ;
 
 property
- : IDENT { cur_property = djnn::string($1->data()); }
+ : IDENT { cur_property = string($1->data()); }
  ;
 
 ruleset
@@ -287,7 +285,7 @@ simple_selector
  : element_name id cssclass pseudo_class
  | solitary_id cssclass pseudo_class
  | solitary_class {
-   djnn::string classname = $1->data ();
+   string classname = $1->data ();
    if (classname.at(0) == '.')
     classname = classname.substr (1);
    cur_parent = new StyleSheet (driver.get_parent (),  classname);
@@ -360,7 +358,7 @@ term
  : unary_operator NUMBER { make_num_property (cur_property, $2); };
  | unary_operator STRING {
    // remove quote
-   djnn::string str ($2->data());
+   string str ($2->data());
    str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
    str.erase (std::remove(str.begin(), str.end(), '\"'), str.end());
    make_text_property (cur_property,str);
@@ -389,7 +387,7 @@ hexcolor
 %%
 
 void css::Parser::error(const Parser::location_type& l,
-			    const djnn::string& m)
+			    const string& m)
 {
     driver.error(l, m);
 }

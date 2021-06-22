@@ -44,7 +44,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const djnn::string& name, int notify_mask)
+  AbstractGObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
     create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
@@ -52,7 +52,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const djnn::string& name, int notify_mask)
+  AbstractGObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
     create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
@@ -60,7 +60,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const djnn::string& name, int notify_mask)
+  AbstractGObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
     create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
@@ -68,7 +68,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, djnn::string *rawp, const djnn::string& name, int notify_mask)
+  AbstractGObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, string *rawp, const string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
     create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);

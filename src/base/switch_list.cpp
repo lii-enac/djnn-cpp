@@ -100,7 +100,7 @@ namespace djnn
    * do not add directly Property, spikes and actions into the symbol switchlist's table 
    * switchlist sympbol table should only containt branch
    */
-  SwitchList::SwitchList (ParentProcess* parent, const djnn::string& name, bool loop) 
+  SwitchList::SwitchList (ParentProcess* parent, const string& name, bool loop) 
   : AbstractList (parent, name),
   _cur_item (nullptr),
   _loop (nullptr, "_loop", loop),
@@ -171,7 +171,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  SwitchList::find_child_impl (const djnn::string& path)
+  SwitchList::find_child_impl (const string& path)
   {
     if (path.compare ("next") == 0)
       return &_next;
@@ -197,7 +197,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  SwitchList::serialize (const djnn::string& type)
+  SwitchList::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

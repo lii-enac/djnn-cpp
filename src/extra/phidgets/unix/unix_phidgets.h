@@ -29,7 +29,7 @@ namespace djnn {
 
   class PhidgetsMonitor : public FatProcess {
   public:
-    PhidgetsMonitor (ParentProcess* parent, const djnn::string& n) : FatProcess (name), _handle (nullptr) {}
+    PhidgetsMonitor (ParentProcess* parent, const string& n) : FatProcess (name), _handle (nullptr) {}
     virtual ~PhidgetsMonitor () {}
   protected:
     virtual void impl_activate () override;
@@ -42,20 +42,20 @@ namespace djnn {
   private:
     class ChangeRateAction : public Action {
     public:
-      ChangeRateAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      ChangeRateAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~ChangeRateAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
     };
     class ChangeTriggerAction : public Action {
     public:
-      ChangeTriggerAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      ChangeTriggerAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~ChangeTriggerAction () {}
     protected:
       void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_trigger (); }
     };
   public:
-    VoltageInputChannel (ParentProcess* parent, const djnn::string& name);
+    VoltageInputChannel (ParentProcess* parent, const string& name);
     virtual ~VoltageInputChannel ();
     void update_rate ();
     void update_trigger ();
@@ -78,7 +78,7 @@ namespace djnn {
   class IFaceKit888 : public FatProcess {
     friend PhidgetsMonitor;
   public:
-    IFaceKit888 (ParentProcess* parent, const djnn::string& name);
+    IFaceKit888 (ParentProcess* parent, const string& name);
     virtual ~IFaceKit888 ();
     vector<DoubleProperty*>& get_inputs () { return _digitalIn; }
     vector<DoubleProperty*>& get_outputs () { return _digitalOut; }

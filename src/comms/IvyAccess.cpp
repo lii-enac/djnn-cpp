@@ -171,7 +171,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   std::cout << "_on_ivy_message - "  << endl;
   std::cout << "argc " << argc  << endl ;
   for (int i=0; i < argc ; i++){
-    std::cout << "argv[" << i << "] - " << string(argv[i]) << endl;
+    std::cout << "argv[" << i << "] - " << djnn::string(argv[i]) << endl;
   } 
   std::cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
   std::cout << "---------------------" << endl << endl;
@@ -206,8 +206,8 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   /**** IVY ACCESS ****/
 
- IvyAccess::IvyAccess (ParentProcess* parent, const djnn::string& name, 
-  const djnn::string& bus, const djnn::string& appname, const djnn::string& ready, bool isModel)
+ IvyAccess::IvyAccess (ParentProcess* parent, const string& name, 
+  const string& bus, const string& appname, const string& ready, bool isModel)
  : FatProcess (name, isModel),
  ExternalSource(name),
  _out ( this, "out", ""),
@@ -326,7 +326,7 @@ IvyAccess::~IvyAccess ()
 //   FatProcess::set_parent (parent); 
 // }
 
-void IvyAccess::set_arriving(const djnn::string& v) {
+void IvyAccess::set_arriving(const string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -338,7 +338,7 @@ void IvyAccess::set_arriving(const djnn::string& v) {
   djnn::release_exclusive_access (DBG_REL);
 }
 
-void IvyAccess::set_leaving(const djnn::string& v) {
+void IvyAccess::set_leaving(const string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -443,7 +443,7 @@ IvyAccess::run ()
 }
 
 FatChildProcess*
-IvyAccess::find_child_impl (const djnn::string& key)
+IvyAccess::find_child_impl (const string& key)
 {
   
 #ifdef __IVY_DEBUG__

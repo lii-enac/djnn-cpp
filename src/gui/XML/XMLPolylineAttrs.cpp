@@ -26,15 +26,15 @@ namespace djnn {
 
 static int ParsePoints (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
     {"points",{&ParsePoints}}
 };
 
 djn_XMLAttrHandler*
 XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

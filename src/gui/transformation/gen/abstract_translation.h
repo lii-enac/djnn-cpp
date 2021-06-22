@@ -30,13 +30,13 @@ namespace djnn
   class AbstractTranslation : public AbstractTransformation
   {
   public:
-    AbstractTranslation (ParentProcess* parent, const djnn::string& name, double tx, double ty);
+    AbstractTranslation (ParentProcess* parent, const string& name, double tx, double ty);
     virtual ~AbstractTranslation ();
     
     
     void get_properties_values (double& tx, double& ty);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* tx () { return (AbstractDoubleProperty*) find_child_impl ("tx"); }
 		AbstractDoubleProperty* ty () { return (AbstractDoubleProperty*) find_child_impl ("ty"); }
 

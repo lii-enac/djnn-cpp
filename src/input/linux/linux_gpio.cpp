@@ -66,7 +66,7 @@ namespace djnn {
   }
 
   CoreProcess*
-  p_find_gpio (const djnn::string& path, direction_e dir)
+  p_find_gpio (const string& path, direction_e dir)
   {
     try {
       string::size_type sz;
@@ -90,7 +90,7 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (ParentProcess* parent, const djnn::string& name, int pin, direction_e dir)
+  GPIOLine::GPIOLine (ParentProcess* parent, const string& name, int pin, direction_e dir)
    : FatProcess (name),
    _pin (pin),
    _dir (dir),

@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  Texture::Texture (ParentProcess* parent, const djnn::string& name, const djnn::string& path) :
+  Texture::Texture (ParentProcess* parent, const string& name, const string& path) :
     AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -61,7 +61,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  Texture::find_child_impl (const djnn::string& name)
+  Texture::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
@@ -70,7 +70,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -98,17 +98,17 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   Texture::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "path",
     };
     return res;
   }
 
   void
-  Texture::get_properties_values (djnn::string& path)
+  Texture::get_properties_values (string& path)
   {
     path = raw_props.path;
     

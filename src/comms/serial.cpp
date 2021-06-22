@@ -33,7 +33,7 @@
 namespace djnn
 {
 
- Serial::Serial (ParentProcess* parent, const djnn::string& name, const djnn::string& port, int baudrate, char eol) :
+ Serial::Serial (ParentProcess* parent, const string& name, const string& port, int baudrate, char eol) :
          FatProcess (name),
          ExternalSource (name),
          _port (port),

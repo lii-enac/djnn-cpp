@@ -18,7 +18,7 @@
 
 %{
 
-#include <string>
+using djnn::string;
 
 #include "scanner.h"
 
@@ -83,8 +83,8 @@ string      \"({stringchar}|\')*\"|\'({stringchar}|\")*\'
 <COMMENT>.      {/* ignore */}
 @import         {BEGIN(0); return token::IMPORT_SYM;}
 "!"{w}important {BEGIN(0); return token::IMPORTANT_SYM;}
-{ident}         {BEGIN(AFTER_IDENT); yylval->stringVal = new djnn::string(yytext, yyleng); return token::IDENT;}
-{string}        {BEGIN(0); yylval->stringVal = new djnn::string(yytext, yyleng); return token::STRING;}
+{ident}         {BEGIN(AFTER_IDENT); yylval->stringVal = new string(yytext, yyleng); return token::IDENT;}
+{string}        {BEGIN(0); yylval->stringVal = new string(yytext, yyleng); return token::STRING;}
 
 {num}             {BEGIN(0); yylval->doubleVal = atof(yytext); return token::NUMBER;}
 {num}"%"          {BEGIN(0); yylval->doubleVal = atof(yytext); return token::PERCENTAGE;}
@@ -102,7 +102,7 @@ string      \"({stringchar}|\')*\"|\'({stringchar}|\")*\'
 <AFTER_IDENT>":"active          {return token::ACTIVE_PSCLASS_AFTER_IDENT;}
 <AFTER_IDENT>":"first-line      {return token::FIRST_LINE_AFTER_IDENT;}
 <AFTER_IDENT>":"first-letter    {return token::FIRST_LETTER_AFTER_IDENT;}
-<AFTER_IDENT>"#"{name}          {yylval->integerVal = std::strtol((djnn::string(yytext)).replace(0,1,"0x").c_str(), nullptr, 16); return token::HASH_AFTER_IDENT;}
+<AFTER_IDENT>"#"{name}          {yylval->integerVal = std::strtol((string(yytext)).replace(0,1,"0x").c_str(), nullptr, 16); return token::HASH_AFTER_IDENT;}
 <AFTER_IDENT>"."{name}          {return token::CLASS_AFTER_IDENT;}
 
 ":"link         {BEGIN(AFTER_IDENT); return token::LINK_PSCLASS;}
@@ -110,12 +110,12 @@ string      \"({stringchar}|\')*\"|\'({stringchar}|\")*\'
 ":"active       {BEGIN(AFTER_IDENT); return token::ACTIVE_PSCLASS;}
 ":"first-line   {BEGIN(AFTER_IDENT); return token::FIRST_LINE;}
 ":"first-letter {BEGIN(AFTER_IDENT); return token::FIRST_LETTER;}
-"#"{name}       {BEGIN(AFTER_IDENT); yylval->integerVal = std::strtol((djnn::string(yytext)).replace(0,1,"0x").c_str(), nullptr, 16); return token::HASH;}
-"."{name}       {BEGIN(AFTER_IDENT); yylval->stringVal = new djnn::string(yytext, yyleng); return token::CLASS;}
+"#"{name}       {BEGIN(AFTER_IDENT); yylval->integerVal = std::strtol((string(yytext)).replace(0,1,"0x").c_str(), nullptr, 16); return token::HASH;}
+"."{name}       {BEGIN(AFTER_IDENT); yylval->stringVal = new string(yytext, yyleng); return token::CLASS;}
 
 url\({w}{string}{w}\)            |
 url\({w}([^ \n\'\")]|\\\ |\\\'|\\\"|\\\))+{w}\)    {BEGIN(0); return token::URL;}
-rgb\({w}{num}%?{w}\,{w}{num}%?{w}\,{w}{num}%?{w}\) {BEGIN(0); yylval->stringVal = new djnn::string(yytext, yyleng); return token::RGB;}
+rgb\({w}{num}%?{w}\,{w}{num}%?{w}\,{w}{num}%?{w}\) {BEGIN(0); yylval->stringVal = new string(yytext, yyleng); return token::RGB;}
 
 [\n]            {BEGIN(0);}
 \<\!\-\-        {BEGIN(0); return token::CDO;}

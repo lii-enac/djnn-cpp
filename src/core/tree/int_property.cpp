@@ -73,7 +73,7 @@ namespace djnn
   }
 
   void
-  AbstractIntProperty::set_value (const djnn::string& v, bool propagate)
+  AbstractIntProperty::set_value (const string& v, bool propagate)
   {
     int oldVal = get_value();
     try {
@@ -116,7 +116,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AbstractIntProperty::serialize (const djnn::string& format) {
+  AbstractIntProperty::serialize (const string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:IntProperty");

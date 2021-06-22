@@ -46,12 +46,12 @@ namespace djnn {
     class UpdatePosAction : public Action
     {
     public:
-      UpdatePosAction (ParentProcess* parent, const djnn::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      UpdatePosAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdatePosAction () {}
       void impl_activate () { ((DRMConnector*) get_parent())->update_pos (); }
     };
   public:
-    DRMConnector (ParentProcess* parent, const djnn::string& name, int fd, drmModeRes *res, drmModeConnector *conn);
+    DRMConnector (ParentProcess* parent, const string& name, int fd, drmModeRes *res, drmModeConnector *conn);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
@@ -98,12 +98,12 @@ namespace djnn {
     class VBlankAction : public Action
     {
     public:
-      VBlankAction (ParentProcess* parent, const djnn::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      VBlankAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~VBlankAction () {}
       void impl_activate () { static_cast<DRMDevice*>(get_parent())->read_vblank (); }
     };
   public:
-    DRMDevice (ParentProcess* parent, const djnn::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (ParentProcess* parent, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}

@@ -8,7 +8,7 @@
 
 namespace djnn {
 
-  BackgroundColor::BackgroundColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b) :
+  BackgroundColor::BackgroundColor (ParentProcess* parent, const string& name, int r, int g, int b) :
     FatProcess (name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
@@ -20,7 +20,7 @@ namespace djnn {
     finalize_construction (parent, name);
   }
 
-  BackgroundColor::BackgroundColor (ParentProcess* parent, const djnn::string& name, int v) :
+  BackgroundColor::BackgroundColor (ParentProcess* parent, const string& name, int v) :
     FatProcess (name),
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),
@@ -124,7 +124,7 @@ namespace djnn {
   }
 
   FatProcess*
-  BackgroundColor::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const djnn::string& name, int notify_mask)
+  BackgroundColor::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
     create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
@@ -132,7 +132,7 @@ namespace djnn {
   }
 
   FatChildProcess*
-  BackgroundColor::find_child_impl (const djnn::string& name)
+  BackgroundColor::find_child_impl (const string& name)
   {
     auto * res = FatProcess::find_child_impl(name);
     if(res) return res;

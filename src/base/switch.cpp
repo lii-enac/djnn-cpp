@@ -21,7 +21,7 @@ namespace djnn
 {
   
 
-  Switch::SwitchAction::SwitchAction (Switch * parent, const djnn::string& name) :
+  Switch::SwitchAction::SwitchAction (Switch * parent, const string& name) :
         Action (parent, name),  _sw (parent) 
   {
   }
@@ -31,7 +31,7 @@ namespace djnn
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-  Switch::Switch (ParentProcess* parent, const djnn::string& name, const djnn::string& initial) 
+  Switch::Switch (ParentProcess* parent, const string& name, const string& initial) 
   : Container (parent, name),
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),
@@ -147,7 +147,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Switch::serialize (const djnn::string& type) {
+  Switch::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

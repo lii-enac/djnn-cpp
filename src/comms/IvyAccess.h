@@ -38,7 +38,7 @@ namespace djnn
      class IvyOutAction : public Action
     {
     public:
-      IvyOutAction (ParentProcess* parent, const djnn::string& name, TextProperty* out) :
+      IvyOutAction (ParentProcess* parent, const string& name, TextProperty* out) :
       Action (parent, name), _out (out) { finalize_construction (parent, name); } 
       virtual ~IvyOutAction () {}
       //void coupling_activation_hook () override;
@@ -51,25 +51,25 @@ namespace djnn
   /*** Ivy Access Class ***/
 
   public:
-    typedef map<djnn::string, vector<pair<int, TextProperty*>>> in_map_t;
-    typedef pair<djnn::string, in_map_t*> regexp_keypair_t;
+    typedef map<string, vector<pair<int, TextProperty*>>> in_map_t;
+    typedef pair<string, in_map_t*> regexp_keypair_t;
 
     struct msg_callback_user_data {
       IvyAccess* access;
       regexp_keypair_t* keypair;
     };
 
-    IvyAccess (ParentProcess* parent, const djnn::string& name, 
-      const djnn::string& bus="224.1.2.3:2010", const djnn::string& appname="NO_NAME", const djnn::string& ready="READY", bool isModel=false);
+    IvyAccess (ParentProcess* parent, const string& name, 
+      const string& bus="224.1.2.3:2010", const string& appname="NO_NAME", const string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
-    void set_arriving(const djnn::string& v);
-    void set_leaving(const djnn::string& v);
+    void set_arriving(const string& v);
+    void set_leaving(const string& v);
 
     // make it public
     bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
 
-    FatChildProcess* find_child_impl (const djnn::string&) override;
+    FatChildProcess* find_child_impl (const string&) override;
 
   protected:
     void impl_activate () override;
@@ -77,9 +77,9 @@ namespace djnn
     //void set_parent (ParentProcess* parent) override;
 
   private:
-    djnn::string _bus;
-    djnn::string _appname;
-    djnn::string _ready_message;
+    string _bus;
+    string _appname;
+    string _ready_message;
 
     in_map_t _in_map; 
     vector<djnn::IvyAccess::msg_callback_user_data*> _cb_regex_vector;

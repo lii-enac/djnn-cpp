@@ -42,7 +42,7 @@
 namespace djnn
 {
   void
-  Window::init_ui (const djnn::string& title, double x, double y, double w, double h)
+  Window::init_ui (const string& title, double x, double y, double w, double h)
   {
     _pos_x = new DoubleProperty (this, "x", x);
     _pos_y = new DoubleProperty (this, "y", y);
@@ -119,7 +119,7 @@ namespace djnn
     _c_background_color->disable ();
   }
 
-  Window::Window (ParentProcess* parent, const djnn::string& name, const djnn::string& title, double x, double y, double w,
+  Window::Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w,
 		  double h) :
       FatProcess (name),
       _refresh (false), _holder (nullptr)
@@ -262,7 +262,7 @@ namespace djnn
     ((Cursor*) get_parent ())->update_cursor ();
   }
 
-  Cursor::Cursor (ParentProcess* parent, const djnn::string& name, const djnn::string& path, int hotX, int hotY) :
+  Cursor::Cursor (ParentProcess* parent, const string& name, const string& path, int hotX, int hotY) :
       FatProcess (name), raw_props
         { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
 
@@ -272,7 +272,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Cursor::find_child_impl (const djnn::string& name)
+  Cursor::find_child_impl (const string& name)
   {
     auto * res = FatProcess::find_child (name);
     if (res)

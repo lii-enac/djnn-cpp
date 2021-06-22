@@ -27,28 +27,28 @@ namespace djnn {
   private:
     class RegexAction : public Action {
     public:
-      RegexAction (ParentProcess* parent, const djnn::string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+      RegexAction (ParentProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
       virtual ~RegexAction () {}
       void impl_activate () override;
     private:
       Regex& _reg;
     };
   public:
-    Regex (ParentProcess* parent, const djnn::string& name, const djnn::string& Regex = "");
+    Regex (ParentProcess* parent, const string& name, const string& Regex = "");
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
 
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
     
-    FatProcess* find_child_impl (const djnn::string&) override;
+    FatProcess* find_child_impl (const string&) override;
 
   private:
     void set_parent (ParentProcess* parent) override;
     TextProperty _input;
-    djnn::string _init;
+    string _init;
     std::regex _regex;
     RegexAction _reg_action;
     Coupling _c_reg;

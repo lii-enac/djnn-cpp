@@ -28,7 +28,7 @@ namespace djnn
   class WallClock : public FatProcess
   {
       struct LazyIntProperty : public AbstractIntProperty {
-          LazyIntProperty (FatProcess* parent, const djnn::string& name)
+          LazyIntProperty (FatProcess* parent, const string& name)
           : AbstractIntProperty (parent, name) { finalize_construction (parent, name); }
           protected:
             int& get_ref_value() override {
@@ -41,10 +41,10 @@ namespace djnn
             int _ref;
       };
       struct LazyTextProperty : public AbstractTextProperty {
-          LazyTextProperty (FatProcess* parent, const djnn::string& name)
+          LazyTextProperty (FatProcess* parent, const string& name)
           : AbstractTextProperty (parent, name) { finalize_construction (parent, name); }
           protected:
-            djnn::string& get_ref_value() override {
+            string& get_ref_value() override {
                 // code borrowed from https://stackoverflow.com/a/54918353
                 std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
                 std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
@@ -58,7 +58,7 @@ namespace djnn
                                           &currentLocalTime)
                          };
                 assert(charCount);
-                djnn::string res (' ', charCount);
+                string res (' ', charCount);
                 std::copy(timeBuffer, timeBuffer+charCount, res.begin());
                 res.resize (charCount);
                 auto ms = now2.count() % 1000;
@@ -69,13 +69,13 @@ namespace djnn
                 _ref = res;
                 return _ref;
             }
-            const djnn::string& get_ref_value() const override {
+            const string& get_ref_value() const override {
                 return const_cast<LazyTextProperty&>(*this).get_ref_value();
             }
-            djnn::string _ref;
+            string _ref;
       };
     public:
-        WallClock (ParentProcess* parent, const djnn::string& name)
+        WallClock (ParentProcess* parent, const string& name)
         : FatProcess (name),
         _state (this, "state"),
         _state_text (this, "state_text")

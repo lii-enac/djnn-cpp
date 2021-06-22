@@ -29,7 +29,7 @@ static int ParseGradientUnits (FatProcess**, const char*);
 static int ParseSpreadMethod (FatProcess**, const char*);
 static int ParseHRef (FatProcess** e, const char* v);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
   {"id", {&ParseId}},
   {"spreadMethod",{&ParseSpreadMethod}},
   {"gradientUnits",{&ParseGradientUnits}},
@@ -40,8 +40,8 @@ static map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;
@@ -93,8 +93,8 @@ static int ParseGradientUnits(FatProcess** e, const char* v) {
 }
 
 static int ParseHRef(FatProcess** e, const char* v) {
-	djnn::string id(v + sizeof(char));
-	map<djnn::string, FatProcess*>::iterator it = djn__id_to_process.find (id);
+	string id(v + sizeof(char));
+	map<string, FatProcess*>::iterator it = djn__id_to_process.find (id);
 	if (it == djn__id_to_process.end()) {
 		fprintf (stderr, "unknown gradient %s\n", v);
 		return 0;

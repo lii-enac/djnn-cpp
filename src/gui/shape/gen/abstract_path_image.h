@@ -29,17 +29,17 @@ namespace djnn
   class AbstractPathImage : public AbstractImage
   {
   public:
-    AbstractPathImage (ParentProcess* parent, const djnn::string& name, const djnn::string& path, double x, double y, double width, double height);
+    AbstractPathImage (ParentProcess* parent, const string& name, const string& path, double x, double y, double width, double height);
     virtual ~AbstractPathImage ();
     
     
-    void get_properties_values (djnn::string& path, double& x, double& y, double& width, double& height);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    void get_properties_values (string& path, double& x, double& y, double& width, double& height);
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
 
   protected:
-    struct raw_props_t { djnn::string path; };
+    struct raw_props_t { string path; };
     raw_props_t raw_props;
     Coupling *_cpath;
     void impl_activate () override;

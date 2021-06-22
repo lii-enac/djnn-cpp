@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  extern vector<djnn::string> loadedModules;
+  extern vector<string> loadedModules;
   
   static bool __module_initialized = false;
 

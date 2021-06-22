@@ -28,7 +28,7 @@ static int ParseStopOpacity (FatProcess**, const char*);
 static int ParseOffset (FatProcess**, const char*);
 static int ParseStopStyle (FatProcess**, const char*);
 
-map <djnn::string, djn_XMLAttrHandler> handlers = {
+map <string, djn_XMLAttrHandler> handlers = {
   {"style",{&ParseStopStyle}},
   {"offset",{&ParseOffset}},
   {"stop-color",{&ParseStopColor}},
@@ -38,8 +38,8 @@ map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGGradientStopAttrs_Hash::djn_SVGGradientStopAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

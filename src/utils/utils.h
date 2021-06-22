@@ -26,9 +26,9 @@
 namespace djnn
 {
 
-  extern vector<djnn::string> loadedModules; 
+  extern vector<string> loadedModules; 
 
-  djnn::string strTrim (djnn::string s);
+  string strTrim (string s);
 
   class Properties : public FatProcess
   {
@@ -36,18 +36,18 @@ namespace djnn
     class PropertiesAction : public Action
     {
     public:
-      PropertiesAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      PropertiesAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       void impl_activate () override;
     };
   public:
-    Properties (ParentProcess* parent, const djnn::string& name, const djnn::string& filename = "");
+    Properties (ParentProcess* parent, const string& name, const string& filename = "");
     virtual ~Properties ();
     void impl_activate () override;
     void impl_deactivate () override;
     void add_property ();
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& type) override;
+    void serialize (const string& type) override;
 #endif
 
   private:

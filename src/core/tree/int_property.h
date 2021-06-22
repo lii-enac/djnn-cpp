@@ -22,7 +22,7 @@ namespace djnn {
 
   class AbstractIntProperty : public AbstractProperty {
   public:
-    AbstractIntProperty (ParentProcess* parent, const djnn::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractIntProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Integer; }
     //virtual process_type_e get_process_type () const override { return INT_PROPERTY_T; }
 
@@ -31,12 +31,12 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (CoreProcess* v, bool propagate) override;
-    void set_value (const djnn::string& v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(djnn::string(v), propagate);};
+    void set_value (const string& v, bool propagate) override;
+    void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     double get_double_value () const override { return get_ref_value(); }
-    djnn::string get_string_value () override { return djnn::to_string (get_ref_value ()); }
-    djnn::string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
+    string get_string_value () override { return djnn::to_string (get_ref_value ()); }
+    string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
     int get_value () { return get_ref_value(); };
   protected:
@@ -48,13 +48,13 @@ namespace djnn {
     void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
   class IntProperty : public AbstractIntProperty {
   public:
-    IntProperty (ParentProcess* parent, const djnn::string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
+    IntProperty (ParentProcess* parent, const string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }
@@ -65,7 +65,7 @@ namespace djnn {
 
   class IntPropertyProxy : public AbstractIntProperty {
   public:
-    IntPropertyProxy (ParentProcess* parent, const djnn::string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
+    IntPropertyProxy (ParentProcess* parent, const string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual int& get_ref_value() override { return value; }

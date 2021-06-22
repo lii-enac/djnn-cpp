@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Circle::Circle (ParentProcess* parent, const djnn::string& name, double cx, double cy, double r)
+  Circle::Circle (ParentProcess* parent, const string& name, double cx, double cy, double r)
   : AbstractPropCircle (parent, name, cx, cy, r)
   {
     finalize_construction (parent, name);

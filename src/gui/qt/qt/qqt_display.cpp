@@ -27,7 +27,7 @@ namespace djnn {
   class QtQtDisplayBackend : public QtDisplayBackend {
   public:
     //static QtDisplayBackend* instance ();
-    virtual WinImpl* create_window (Window *win, const djnn::string& title,  double x, double y, double w, double h) override;
+    virtual WinImpl* create_window (Window *win, const string& title,  double x, double y, double w, double h) override;
     virtual MyQWidget* create_qwidget(Window *win, QtWindow*) override;
 
     struct Impl;
@@ -44,7 +44,7 @@ namespace djnn {
   std::once_flag QtQtDisplayBackend::onceFlag;
 
   WinImpl*
-  QtQtDisplayBackend::create_window (Window *win, const djnn::string& title,  double x, double y, double w, double h)
+  QtQtDisplayBackend::create_window (Window *win, const string& title,  double x, double y, double w, double h)
   {
     //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
     return new QtWindow (win, title, x, y, w, h);

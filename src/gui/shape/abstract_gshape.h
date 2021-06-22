@@ -27,7 +27,7 @@ namespace djnn
   class AbstractGShape : public AbstractGObj
   {
   public:
-    AbstractGShape (ParentProcess* parent, const djnn::string& name);
+    AbstractGShape (ParentProcess* parent, const string& name);
     virtual ~AbstractGShape ();
     FatProcess* matrix () { return _matrix; }
     FatProcess* inverted_matrix () { return _inverted_matrix; }
@@ -36,10 +36,10 @@ namespace djnn
     DoubleProperty* origin_y () { return _origin_y; }
     bool has_ui () { return ui != nullptr; }
     UI* get_ui () { return ui; }
-    FatChildProcess* find_child_impl (const djnn::string& n) override;
+    FatChildProcess* find_child_impl (const string& n) override;
     void impl_deactivate () override;
     void impl_activate () override;
-    void add_style_class (const djnn::string& classname);
+    void add_style_class (const string& classname);
     virtual void press (double x, double y) {}
     virtual void move (double x, double y) {}
     void pick () override;
@@ -54,7 +54,7 @@ namespace djnn
   private:
     FatProcess* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
-    //static vector<djnn::string> _ui;
+    //static vector<string> _ui;
     UI *ui;
     vector<int> _classes;
   };
@@ -62,7 +62,7 @@ namespace djnn
   class Touch : public FatProcess
   {
   public:
-    Touch (ParentProcess* parent, const djnn::string& name, int id, double init_x, double init_y, double init_pressure);
+    Touch (ParentProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure);
     void impl_activate () override {};
     void impl_deactivate () override {};
     void set_init_x (double v) { _init_x->set_value (v, true); }

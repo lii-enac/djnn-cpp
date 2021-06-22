@@ -20,7 +20,7 @@ namespace djnn
 {
   
 
-  NativeAction::NativeAction (ParentProcess* parent, const djnn::string& name, NativeCode *action, void* data,
+  NativeAction::NativeAction (ParentProcess* parent, const string& name, NativeCode *action, void* data,
                               bool isModel) :
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {

@@ -56,7 +56,7 @@ namespace djnn {
   typedef struct
   {
     XML_Parser parser;
-    djnn::string filename;
+    string filename;
   } djn__ExpatData;
 
   size_t
@@ -76,11 +76,11 @@ namespace djnn {
 
   /* should add handling of '-' to denote stdin, until a URI is defined for that */
   FatProcess*
-  XML::djnLoadFromXML (const djnn::string& uri)
+  XML::djnLoadFromXML (const string& uri)
   {
     //string uri_ = uri;
     std::size_t found = uri.find("://");
-    if (found == djnn::string::npos) {
+    if (found == string::npos) {
       FatProcess* res = djnParseXMLFromPath(uri);
       return res;   
     }
@@ -118,12 +118,12 @@ namespace djnn {
   }
 
   FatProcess*
-  XML::djnParseXMLFromPath (const djnn::string& path)
+  XML::djnParseXMLFromPath (const string& path)
   {
     FILE * f;
     f = fopen (path.c_str (),"r");
     if (f==NULL) {
-      error (nullptr, djnn::string("unable to load file ") + path);
+      error (nullptr, string("unable to load file ") + path);
       return nullptr;
     };
 
@@ -172,7 +172,7 @@ namespace djnn {
 
 
   int
-  XML::djn_RegisterXMLParser (const djnn::string& uri, djn_XMLTagLookupProc l, const char* f)
+  XML::djn_RegisterXMLParser (const string& uri, djn_XMLTagLookupProc l, const char* f)
   {
     djn__XMLParser *h;
     djn__NamespaceTable_t::iterator it;
@@ -192,7 +192,7 @@ namespace djnn {
   }
 
   int
-  XML::djn_UnregisterXMLParser (const djnn::string& uri)
+  XML::djn_UnregisterXMLParser (const string& uri)
   {
     //djn__XMLParser *h;
     djn__NamespaceTable_t::iterator it;

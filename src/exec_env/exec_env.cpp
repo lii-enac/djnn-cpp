@@ -38,7 +38,7 @@ namespace djnn
   static bool __module_initialized = false;
   //FatProcess* mainloop;
 
-  extern vector<djnn::string> loadedModules;
+  extern vector<string> loadedModules;
 
   static bool global_mutex_inited = false;
 
@@ -101,7 +101,7 @@ namespace djnn
   }
 
   double
-  t2 (const djnn::string& msg, bool display_stderr)
+  t2 (const string& msg, bool display_stderr)
   {
     if (!init)
       return 0.0;

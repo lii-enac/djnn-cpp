@@ -23,7 +23,7 @@ namespace djnn {
   class GraphEdgeAdder : public FatProcess
   {
   public:
-    GraphEdgeAdder (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst);
+    GraphEdgeAdder (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst);
     virtual ~GraphEdgeAdder ();
     void impl_activate () override {};
     void impl_deactivate () override {}
@@ -32,7 +32,7 @@ namespace djnn {
 
   public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 }

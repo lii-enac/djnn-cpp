@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropBox : public PhyObj
   {
   public:
-    AbstractPropBox (ParentProcess* parent, const djnn::string& name, double w, double h, double d);
+    AbstractPropBox (ParentProcess* parent, const string& name, double w, double h, double d);
     virtual ~AbstractPropBox ();
     
     
     void get_properties_values (double& w, double& h, double& d);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* w () { return (AbstractDoubleProperty*) find_child_impl ("w"); }
 		AbstractDoubleProperty* h () { return (AbstractDoubleProperty*) find_child_impl ("h"); }
 		AbstractDoubleProperty* d () { return (AbstractDoubleProperty*) find_child_impl ("d"); }

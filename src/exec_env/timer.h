@@ -32,7 +32,7 @@ namespace djnn
     class TimerAction : public Action
     {
     public:
-      TimerAction (ParentProcess* parent, const djnn::string& name) :
+      TimerAction (ParentProcess* parent, const string& name) :
         Action (parent, name) {};
       virtual ~TimerAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
@@ -41,17 +41,17 @@ namespace djnn
     class ResetAction : public Action
     {
     public:
-      ResetAction (ParentProcess* parent, const djnn::string& name) :
+      ResetAction (ParentProcess* parent, const string& name) :
         Action (parent, name) {};
       virtual ~ResetAction () {}
       void impl_activate () override { ((Timer*)get_parent())->update_period (); }
     };
 
   public:
-    Timer (ParentProcess* parent, const djnn::string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
-    Timer (ParentProcess* parent, const djnn::string& n, int period = 1000);
+    Timer (ParentProcess* parent, const string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
+    Timer (ParentProcess* parent, const string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Timer (ParentProcess* parent, const djnn::string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
+    Timer (ParentProcess* parent, const string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Timer ();
 
@@ -75,7 +75,7 @@ namespace djnn
     Coupling _c_reset;
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& type) override;
+    void serialize (const string& type) override;
 #endif
   };
 

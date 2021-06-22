@@ -9,7 +9,7 @@ namespace djnn {
 	class Sound : public AbstractPropSound
 	{
 	public:
-		Sound (ParentProcess* parent, const djnn::string& name);
+		Sound (ParentProcess* parent, const string& name);
 		virtual ~Sound ();
 	protected:
 

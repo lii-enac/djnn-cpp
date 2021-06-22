@@ -24,12 +24,12 @@
 namespace djnn
 {
 
-  Clock::Clock (ParentProcess* parent, const djnn::string& name, std::chrono::milliseconds period)
+  Clock::Clock (ParentProcess* parent, const string& name, std::chrono::milliseconds period)
   : Clock(parent, name, period.count ())
   {
   }
 
-  Clock::Clock (ParentProcess* parent, const djnn::string& name, int period)
+  Clock::Clock (ParentProcess* parent, const string& name, int period)
   :
     FatProcess (name),
     _period (this, "period", period),
@@ -43,7 +43,7 @@ namespace djnn
 
 
 #if DJNN_USE_BOOST_CHRONO
-  Clock::Clock (ParentProcess* parent, const djnn::string& name, boost::chrono::milliseconds period)
+  Clock::Clock (ParentProcess* parent, const string& name, boost::chrono::milliseconds period)
   : Clock(parent, name, period.count())
   {
   }
@@ -103,7 +103,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Clock::serialize (const djnn::string& type) {
+  Clock::serialize (const string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

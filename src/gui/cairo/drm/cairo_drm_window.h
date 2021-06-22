@@ -26,7 +26,7 @@ namespace djnn {
     class RefreshAction : public Action
     {
     public:
-      RefreshAction (CairoDRMWindow* win, const djnn::string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
+      RefreshAction (CairoDRMWindow* win, const string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
       virtual ~RefreshAction () {}
       void impl_activate () { _win->ask_refresh (); }
     private:
@@ -35,7 +35,7 @@ namespace djnn {
     class ChangeDpyAction : public Action
     {
     public:
-      ChangeDpyAction (CairoDRMWindow* win, const djnn::string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
+      ChangeDpyAction (CairoDRMWindow* win, const string& name) : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
       virtual ~ChangeDpyAction () {}
       void impl_activate () { _win->update_dpy_connection (); _win->ask_refresh (); }
       void impl_deactivate () {_win->update_dpy_connection (); }
@@ -43,7 +43,7 @@ namespace djnn {
       CairoDRMWindow *_win;
     };
   public:
-    CairoDRMWindow (Window *win, const djnn::string& title, double x, double y, double w, double h);
+    CairoDRMWindow (Window *win, const string& title, double x, double y, double w, double h);
     virtual ~CairoDRMWindow ();
     void ask_refresh ();
     void update () override;

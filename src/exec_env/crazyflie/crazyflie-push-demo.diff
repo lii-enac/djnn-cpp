@@ -253,7 +253,7 @@ index 0000000..a26221d
 +class TestAction1 : public djnn::Action
 +{
 +public:
-+  TestAction1 (const djnn::string& msg) 
++  TestAction1 (const string& msg) 
 +    : djnn::Action (nullptr, "action"), _msg (msg) {};
 +  ~TestAction1 () {};
 +  void impl_activate () override {
@@ -263,7 +263,7 @@ index 0000000..a26221d
 +  }
 +  void impl_deactivate () override {};
 +  ;
-+  djnn::string _msg;
++  string _msg;
 +};
 +
 +extern "C" {
@@ -414,7 +414,7 @@ index 0000000..a26221d
 +  			REQUIRE (Graph::instance ().size () == 0);
 +			DEBUG_PRINT( "end djnn_init_prog2\n" );
 +		} catch (std::exception& e) {
-+			DEBUG_PRINT( const_cast<char*>((djnn::string("std::exc: ") + e.what() + "\n").c_str() ));
++			DEBUG_PRINT( const_cast<char*>((string("std::exc: ") + e.what() + "\n").c_str() ));
 +		} catch (...) {
 +			DEBUG_PRINT( "c++ exception\n" );
 +		}

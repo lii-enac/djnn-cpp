@@ -9,7 +9,7 @@ namespace djnn
   class Ellipse : public AbstractPropEllipse
   {
   public:
-    Ellipse (ParentProcess* parent, const djnn::string& name, double cx, double cy, double rx, double ry);
+    Ellipse (ParentProcess* parent, const string& name, double cx, double cy, double rx, double ry);
     Ellipse* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;

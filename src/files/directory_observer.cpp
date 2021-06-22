@@ -37,7 +37,7 @@
 
 namespace djnn
 {
-  DirectoryObserver::DirectoryObserver (ParentProcess *parent, const djnn::string& name, const djnn::string& path)
+  DirectoryObserver::DirectoryObserver (ParentProcess *parent, const string& name, const string& path)
   : FatProcess (name), ExternalSource(name),
     _path (this, "path", path),
     _update (this, "update"),
@@ -129,7 +129,7 @@ namespace djnn
   DirectoryObserver::iterate ()
   {
     vector<std::filesystem::path> new_files;
-    vector<djnn::string> old_files;
+    vector<string> old_files;
     bool added = false;
     bool removed = false;
     _added_files.remove_all ();
@@ -150,7 +150,7 @@ namespace djnn
         }
       }
       if (!found) {
-        djnn::string full_path = nf.root_directory().string() + nf.relative_path().string();
+        string full_path = nf.root_directory().string() + nf.relative_path().string();
         CoreProcess * file = new File (&_files, "",full_path, nf.filename().string(), std::filesystem::is_directory (nf));
         _added_files.add_one (file);
         added = true;

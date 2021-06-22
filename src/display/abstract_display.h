@@ -19,7 +19,7 @@ namespace djnn {
 	    }
 	    
 	    virtual WinImpl*
-	    create_window (Window *win, const djnn::string& title, double x, double y, double w, double h) = 0;
+	    create_window (Window *win, const string& title, double x, double y, double w, double h) = 0;
 
 	    void
 	    set_window (Window *w)

@@ -31,7 +31,7 @@ namespace djnn {
   class AbstractProperty : public FatProcess
   {
   public:
-    AbstractProperty (ParentProcess* parent, const djnn::string& name, unsigned int nm=notify_none) :
+    AbstractProperty (ParentProcess* parent, const string& name, unsigned int nm=notify_none) :
       FatProcess (name),
       _notify_mask (nm) {}
     virtual ~AbstractProperty () override {}
@@ -45,12 +45,12 @@ namespace djnn {
     virtual void set_value (double v, bool propagate) = 0;
     virtual void set_value (bool v, bool propagate) = 0;
     virtual void set_value (CoreProcess* v, bool propagate) = 0;
-    virtual void set_value (const djnn::string& v, bool propagate) = 0;
+    virtual void set_value (const string& v, bool propagate) = 0;
     virtual void set_value (const char* v, bool propagate) = 0;
     virtual double get_double_value () = 0;
     virtual double get_double_value () const = 0;
-    virtual djnn::string get_string_value () = 0;
-    virtual djnn::string get_string_value () const = 0;
+    virtual string get_string_value () = 0;
+    virtual string get_string_value () const = 0;
     explicit operator bool () const { return get_double_value () != 0; } // added for the management of ternary operator in Smala
   protected:
     void post_activate () override { post_activate_auto_deactivate (); }

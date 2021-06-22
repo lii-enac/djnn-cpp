@@ -33,7 +33,7 @@
 namespace djnn
 {
 
-  SimpleText::SimpleText (ParentProcess* parent, const djnn::string& name, double x, double y, const djnn::string& text) :
+  SimpleText::SimpleText (ParentProcess* parent, const string& name, double x, double y, const string& text) :
       AbstractGShape (parent, name), raw_props{.x=x, .y=y, .text=text},
       _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cx (nullptr), _cy (nullptr),
@@ -86,7 +86,7 @@ namespace djnn
   SimpleText::~SimpleText () {}
 
   FatChildProcess*
-  SimpleText::find_child_impl (const djnn::string& name)
+  SimpleText::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -114,14 +114,14 @@ namespace djnn
   }
 
   void
-  SimpleText::get_properties_values (double &x, double &y, djnn::string &text)
+  SimpleText::get_properties_values (double &x, double &y, string &text)
   {
     x = raw_props.x;
     y = raw_props.y;
     text = _text.get_value ();
   }
 
-  MultilineEditor::MultilineEditor (ParentProcess* parent, const djnn::string& name, int x, int y, int width, int height, const djnn::string &text, bool enable_edit_on_activation) :
+  MultilineEditor::MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text, bool enable_edit_on_activation) :
     AbstractGShape (parent, name), _lines (this, "lines"),
     _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
     _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
@@ -237,7 +237,7 @@ namespace djnn
    }
 
   static MultilineEditor::coord_t
-  next_index (const djnn::string &str, int idx)
+  next_index (const string &str, int idx)
   {
     if (idx > str.size ())
       return idx;
@@ -250,7 +250,7 @@ namespace djnn
   }
 
   static MultilineEditor::coord_t
-  previous_index (const djnn::string &str, int idx)
+  previous_index (const string &str, int idx)
   {
     if (idx <= 0)
       return 0;
@@ -274,7 +274,7 @@ namespace djnn
   }
 
   static bool
-  is_starting_word (const djnn::string& str, MultilineEditor::coord_t i)
+  is_starting_word (const string& str, MultilineEditor::coord_t i)
   {
     if (i <= 0)
       return true;
@@ -286,7 +286,7 @@ namespace djnn
   }
 
   static MultilineEditor::coord_t
-  first_word (const djnn::string &str, MultilineEditor::coord_t idx)
+  first_word (const string &str, MultilineEditor::coord_t idx)
   {
     int first_word_idx = 0;
     while (isspace (str.at (first_word_idx)) && first_word_idx < idx) {
@@ -299,7 +299,7 @@ namespace djnn
   }
 
   static MultilineEditor::coord_t
-  next_word (const djnn::string &str, MultilineEditor::coord_t idx)
+  next_word (const string &str, MultilineEditor::coord_t idx)
   {
     int i = next_index (str, idx);
     while (i < str.length() && !is_starting_word(str, i))
@@ -308,7 +308,7 @@ namespace djnn
   }
 
   static MultilineEditor::coord_t
-  previous_word (const djnn::string &str, MultilineEditor::coord_t idx)
+  previous_word (const string &str, MultilineEditor::coord_t idx)
   {
     int i = previous_index (str, idx) ;
     while (i > 0 && !is_starting_word (str, i) ) {
@@ -492,7 +492,7 @@ namespace djnn
       return;
     }
     if (key == DJN_Key_Tab) {
-      djnn::string tab;
+      string tab;
       if (_spaces_for_tab.get_value() == 0)
         tab = "\t";
       else {
@@ -513,8 +513,8 @@ namespace djnn
         _line = new SimpleText (this, "", 0, y, "");
       else {
         //if not, cut the current line
-        djnn::string cur_content = _line->get_content();
-        djnn::string sub = cur_content.substr(_index_x);
+        string cur_content = _line->get_content();
+        string sub = cur_content.substr(_index_x);
         cur_content.erase(_index_x);
         _line->set_content(cur_content);
         _line = new SimpleText (this, "", 0, y, sub);
@@ -541,7 +541,7 @@ namespace djnn
         if (_alt_on) {
           _index_x = _end_sel_x = _start_sel_x = previous_word (_line->get_content (), _index_x);
         } else if (_ctrl_on && _index_x > 0){
-            djnn::string str = _line->get_content ();
+            string str = _line->get_content ();
             _index_x = _end_sel_x = _start_sel_x = first_word (str, _index_x);
         }
       } else {
@@ -688,7 +688,7 @@ namespace djnn
         if (_index_x == 0) {
           if (_index_y > 0) {
             SimpleText* prev_line = get_line(_index_y - 1);
-            djnn::string content = prev_line->get_content() + _line->get_content();
+            string content = prev_line->get_content() + _line->get_content();
             _end_sel_x = _start_sel_x = _index_x =  prev_line->get_content().size();
             prev_line->set_content (content);
             _end_sel_y = _start_sel_y = _index_y-1;
@@ -698,7 +698,7 @@ namespace djnn
             update_lines_position();
           }
         } else {
-          djnn::string str = _line->get_content ();
+          string str = _line->get_content ();
           int prev_idx = previous_index (str, _index_x);
           int l = _index_x - prev_idx;
           str.erase (prev_idx, l);
@@ -717,7 +717,7 @@ namespace djnn
         if (_index_x == _line->get_content().size()) {
           if (_index_y < _lines.children().size()) {
             SimpleText* next_line = get_line(_index_y + 1);
-            djnn::string content =  _line->get_content() + next_line->get_content();
+            string content =  _line->get_content() + next_line->get_content();
             _end_sel_x = _start_sel_x = _index_x;
             _line->set_content (content);
             _end_sel_y = _start_sel_y = _index_y;
@@ -725,7 +725,7 @@ namespace djnn
             update_lines_position();
           }
         } else {
-          djnn::string str = _line->get_content ();
+          string str = _line->get_content ();
           int next_idx = next_index (str, _index_x);
           int l = next_idx - _index_x;
           str.erase (_index_x, l);
@@ -792,7 +792,7 @@ namespace djnn
 
     if (_start_sel_y == _end_sel_y) {
       // Single line selection
-      djnn::string cur_text = _line->get_content();
+      string cur_text = _line->get_content();
       cur_text.erase(_start_sel_x, _end_sel_x - _start_sel_x);
       _line->set_content (cur_text);
     } else {
@@ -800,9 +800,9 @@ namespace djnn
       vector<SimpleText*> to_delete;
       SimpleText *start_line = (SimpleText*) _lines.children ().at(_start_sel_y);
       SimpleText *end_line = (SimpleText*)_lines.children ().at(_end_sel_y);
-      djnn::string start_text = start_line->get_content();
+      string start_text = start_line->get_content();
       start_text.erase(_start_sel_x);
-      djnn::string end_text = end_line->get_content();
+      string end_text = end_line->get_content();
       end_text.erase (0, _end_sel_x);
       start_text.append (end_text);
       start_line->set_content (start_text);
@@ -834,19 +834,19 @@ namespace djnn
   void
   MultilineEditor::add_string_input ()
   {
-    djnn::string str = _str_input.get_value ();
+    string str = _str_input.get_value ();
     if (str.empty())
       return;
     add_str (str);
   }
 
   void
-  MultilineEditor::add_str (const djnn::string& str)
+  MultilineEditor::add_str (const string& str)
   {
     if (str.empty())
       return;
-    djnn::string cur_text = _line->get_content();
-    djnn::string cpy = str;
+    string cur_text = _line->get_content();
+    string cpy = str;
     if (has_selection())
       del_selection ();
 
@@ -854,7 +854,7 @@ namespace djnn
     size_t found = cpy.find("\n");
 
     if (_index_x == cur_text.length ()) {
-      if (found == djnn::string::npos) {
+      if (found == string::npos) {
         cur_text.append (cpy);
         _index_x = _start_sel_x = _end_sel_x = cur_text.length ();
         _line->set_content (cur_text);
@@ -864,7 +864,7 @@ namespace djnn
         cpy = cpy.substr(found + 1);
         found = cpy.find("\n");
         int y = (get_line(_index_y))->get_y() + off_y;
-        while (found != djnn::string::npos) {
+        while (found != string::npos) {
           SimpleText* buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child(buff, AFTER, _line);
           _line = buff;
@@ -881,20 +881,20 @@ namespace djnn
         update_lines_position ();
       }
     } else {
-      if (found == djnn::string::npos) {
+      if (found == string::npos) {
         cur_text.insert (_index_x, cpy);
         _index_x = _start_sel_x = _end_sel_x = _index_x + cpy.length ();
         _line->set_content (cur_text);
       } else {
-        djnn::string start = cur_text.substr (0, _index_x);
-        djnn::string end = cur_text.substr(_index_x);
+        string start = cur_text.substr (0, _index_x);
+        string end = cur_text.substr(_index_x);
         cur_text.erase (_index_x);
         cur_text.insert (_index_x, cpy.substr (0, found));
         _line->set_content (cur_text);
         cpy = cpy.substr(found + 1);
         found = cpy.find("\n");
         int y = (get_line(_index_y))->get_y() + off_y;
-        while (found != djnn::string::npos) {
+        while (found != string::npos) {
           SimpleText* buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child(buff, AFTER, _line);
           _line = buff;
@@ -922,9 +922,9 @@ namespace djnn
     if (_start_sel_x == _end_sel_x && _start_sel_y == _end_sel_y)
       return;
     sort_selection();
-    djnn::string content = (get_line (_start_sel_y))->get_content();
+    string content = (get_line (_start_sel_y))->get_content();
     int length_init_sel = _end_sel_y == _start_sel_y ? _end_sel_x - _start_sel_x: content.length() - _start_sel_x;
-    djnn::string str = content.substr(_start_sel_x, length_init_sel);
+    string str = content.substr(_start_sel_x, length_init_sel);
 
     if (_end_sel_y != _start_sel_y) {
       str.append ("\n");
@@ -941,7 +941,7 @@ namespace djnn
   void
   MultilineEditor::paste ()
   {
-    djnn::string str = _copy_buffer.get_value();
+    string str = _copy_buffer.get_value();
     add_str (str);
   }
 

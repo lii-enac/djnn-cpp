@@ -32,12 +32,12 @@ namespace djnn
     class SortAction : public Action
     {
     public:
-      SortAction (ParentProcess* parent, const djnn::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      SortAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
     };
   public:
-    Sorter (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    Sorter (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~Sorter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -46,7 +46,7 @@ namespace djnn
     AbstractProperty* get_and_check (CoreProcess* i);
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
     BoolProperty _ascending;
     TextProperty _spec;
@@ -61,19 +61,19 @@ namespace djnn
     class SpecListOperatorAction : public Action
     {
     public:
-      SpecListOperatorAction (ParentProcess* parent, const djnn::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      SpecListOperatorAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SpecListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
     };
     class UpdateListOperatorAction : public Action
     {
     public:
-      UpdateListOperatorAction (ParentProcess* parent, const djnn::string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      UpdateListOperatorAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdateListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
     };
   public:
-    ListOperator (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    ListOperator (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~ListOperator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -94,12 +94,12 @@ namespace djnn
   class SumList : public ListOperator
   {
   public:
-    SumList (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    SumList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~SumList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -108,12 +108,12 @@ namespace djnn
   class ProductList : public ListOperator
   {
   public:
-    ProductList (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    ProductList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~ProductList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -122,12 +122,12 @@ namespace djnn
   class MaxList : public ListOperator
   {
   public:
-    MaxList (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    MaxList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~MaxList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
   private:
     DoubleProperty _output;
@@ -136,12 +136,12 @@ namespace djnn
   class MinList : public ListOperator
   {
   public:
-    MinList (ParentProcess* parent, const djnn::string& name, CoreProcess *container, const djnn::string& spec);
+    MinList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~MinList ();
     void do_action () override;
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
   private:
     DoubleProperty _output;

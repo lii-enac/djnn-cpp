@@ -26,12 +26,12 @@ namespace djnn {
   class DRMWindow : public WinImpl
   {
   public:
-    DRMWindow (Window *win, const djnn::string& title, double x, double y, double w, double h);
+    DRMWindow (Window *win, const string& title, double x, double y, double w, double h);
     virtual ~DRMWindow ();
     buff* get_next_buff ();
     void flip_page ();
     void flip_page_fb (uint32_t fb);
-    void set_cursor (const djnn::string& path, int hotX, int hotY) {}
+    void set_cursor (const string& path, int hotX, int hotY) {}
     FatProcess* get_vblank () {
       if (_conn == nullptr)
         return nullptr;

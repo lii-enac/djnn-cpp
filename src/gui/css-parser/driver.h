@@ -12,7 +12,7 @@
  *
  */
 
-#include <string>
+//#include <string>
 #include "core/ontology/process.h"
 
 // core/utils/error.h macros clash with Driver::error
@@ -21,22 +21,24 @@
 
 namespace css {
 
+using djnn::string;
+
 class Scanner;
 class Driver
 {
 public:
     Driver();
 
-    djnn::string stream;
+    string stream;
     bool parse_stream (std::istream& in,
-		      const djnn::string& name, djnn::FatProcess *p);
-    bool parse_string (const djnn::string& input,
-		      const djnn::string& name, djnn::FatProcess *p);
-    bool parse_file (const djnn::string& filename, djnn::FatProcess *p);
+		      const string& name, djnn::FatProcess *p);
+    bool parse_string (const string& input,
+		      const string& name, djnn::FatProcess *p);
+    bool parse_file (const string& filename, djnn::FatProcess *p);
 
-    void error (const class location& l, const djnn::string& m);
+    void error (const class location& l, const string& m);
 
-    void error (const djnn::string& m);
+    void error (const string& m);
     djnn::FatProcess* get_parent ();
     Scanner* _lexer;
     djnn::FatProcess* _root;

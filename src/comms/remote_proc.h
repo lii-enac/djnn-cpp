@@ -39,7 +39,7 @@ namespace djnn
     class SendAction : public Action
     {
     public:
-      SendAction (ParentProcess* parent, const djnn::string& name) :
+      SendAction (ParentProcess* parent, const string& name) :
         Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SendAction () {}
       void impl_activate () override;
@@ -47,7 +47,7 @@ namespace djnn
     class ConnectionAction : public Action
     {
       public:
-        ConnectionAction (ParentProcess* parent, const djnn::string& name) :
+        ConnectionAction (ParentProcess* parent, const string& name) :
           Action (parent, name) { finalize_construction (parent, name); }
         virtual ~ConnectionAction () {}
         void impl_activate () override { ((RemoteProc*)get_parent ())->connection ();}
@@ -55,7 +55,7 @@ namespace djnn
     class ReceiveAction : public Action, public ExternalSource
     {
     public:
-      ReceiveAction (ParentProcess* parent, const djnn::string& name) :
+      ReceiveAction (ParentProcess* parent, const string& name) :
         Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
       virtual ~ReceiveAction () {}
       void impl_activate () override;
@@ -77,30 +77,30 @@ namespace djnn
   /*** RemoteProc Class ***/
 
   public:
-     RemoteProc (ParentProcess* parent, const djnn::string& name,
-      const djnn::string& addr="224.1.2.3", int port = 2010);
+     RemoteProc (ParentProcess* parent, const string& name,
+      const string& addr="224.1.2.3", int port = 2010);
 
     virtual ~RemoteProc ();
 
-    typedef map<djnn::string, RemoteProperty*> dist_map_t;
+    typedef map<string, RemoteProperty*> dist_map_t;
 
-    FatChildProcess* find_child_impl (const djnn::string&) override;
-    djnn::string& get_addr () { return _addr; }
+    FatChildProcess* find_child_impl (const string&) override;
+    string& get_addr () { return _addr; }
     int get_port () { return _port; }
     void connection ();
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    void subscribe (const djnn::string& path);
+    void subscribe (const string& path);
     void subscribe_all ();
-    void unsubscribe (const djnn::string& path);
+    void unsubscribe (const string& path);
     void unsubscribe_all ();
     dist_map_t get_send_props () { return _send_map; }
     SOCKET get_sock () { return _fd; }
     void connection_failure () { _con_status.set_value (false, true); }
     bool connected () { return _con_status.get_value (); }
   private:
-    djnn::string _addr;
+    string _addr;
     int _port;
     SOCKET _fd;
     SendAction _send;

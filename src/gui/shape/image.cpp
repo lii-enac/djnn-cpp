@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Image::Image (ParentProcess* parent, const djnn::string& name, djnn::string path, double x, double y, double w,
+  Image::Image (ParentProcess* parent, const string& name, string path, double x, double y, double w,
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
@@ -44,7 +44,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Image::find_child_impl (const djnn::string& name)
+  Image::find_child_impl (const string& name)
   {
     auto * res = AbstractPathImage::find_child_impl (name);
     //if(res) return res;
@@ -129,7 +129,7 @@ namespace djnn
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
-  DataImage::DataImage (ParentProcess* parent, const djnn::string& name, const djnn::string& data, double x, double y, double w,
+  DataImage::DataImage (ParentProcess* parent, const string& name, const string& data, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, x, y, w, h),
       _cwatcher(nullptr),
@@ -139,8 +139,8 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  DataImage::DataImage (ParentProcess* parent, const djnn::string& name, double x, double y, double w, double h)
-  : DataImage(parent, name, djnn::string(), x, y, w, h)
+  DataImage::DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h)
+  : DataImage(parent, name, string(), x, y, w, h)
   {
   }
 
@@ -153,7 +153,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  DataImage::find_child_impl (const djnn::string& name)
+  DataImage::find_child_impl (const string& name)
   {
     auto * res = AbstractDataImage::find_child_impl (name);
     //if(res) return res;

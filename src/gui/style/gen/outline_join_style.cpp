@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  OutlineJoinStyle::OutlineJoinStyle (ParentProcess* parent, const djnn::string& name, int join) :
+  OutlineJoinStyle::OutlineJoinStyle (ParentProcess* parent, const string& name, int join) :
     AbstractStyle (parent, name),
     raw_props{.join=join},
     _cjoin (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  OutlineJoinStyle::find_child_impl (const djnn::string& name)
+  OutlineJoinStyle::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
@@ -69,7 +69,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -97,10 +97,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   OutlineJoinStyle::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "join",
     };
     return res;

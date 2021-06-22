@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Line::Line (ParentProcess* parent, const djnn::string& name, double x1, double y1, double x2, double y2)
+  Line::Line (ParentProcess* parent, const string& name, double x1, double y1, double x2, double y2)
   : AbstractPropLine (parent, name, x1, y1, x2, y2)
   {
     finalize_construction (parent, name);

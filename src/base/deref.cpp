@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (ParentProcess *parent, const djnn::string& name, CoreProcess *ref, const djnn::string& path, djnn_dir_t dir)
+  AbstractDeref::AbstractDeref (ParentProcess *parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : FatProcess (name),
   _path (this, "path", path),
   _action (this, "action"),
@@ -100,7 +100,7 @@ namespace djnn
     update_src ();
   }
 
-  Deref::Deref (ParentProcess* parent, const djnn::string& name, CoreProcess *ref, const djnn::string& path, djnn_dir_t dir)
+  Deref::Deref (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _activation (this, "activation"),
    _src (nullptr)
@@ -138,7 +138,7 @@ namespace djnn
     _src = src;
   }
 
-  DerefString::DerefString (ParentProcess* parent, const djnn::string& name, CoreProcess *ref, const djnn::string& path, djnn_dir_t dir)
+  DerefString::DerefString (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _value (this, "value", ""),
   _src (nullptr)
@@ -183,7 +183,7 @@ namespace djnn
     }
   }
 
-  DerefDouble::DerefDouble (ParentProcess* parent, const djnn::string &name, CoreProcess *ref, const djnn::string &path, djnn_dir_t dir) :
+  DerefDouble::DerefDouble (ParentProcess* parent, const string &name, CoreProcess *ref, const string &path, djnn_dir_t dir) :
       AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
       _src (nullptr)
@@ -230,7 +230,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Deref::serialize (const djnn::string& type)
+  Deref::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);
@@ -244,7 +244,7 @@ namespace djnn
 
   }
   void
-  DerefString::serialize (const djnn::string& type)
+  DerefString::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);
@@ -258,7 +258,7 @@ namespace djnn
 
   }
   void
-  DerefDouble::serialize (const djnn::string& type)
+  DerefDouble::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

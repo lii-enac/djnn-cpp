@@ -15,21 +15,21 @@ namespace djnn {
 
   class SimpleText : public AbstractGShape {
     public:
-      SimpleText (ParentProcess* parent, const djnn::string& name, double x, double y, const djnn::string& text);
+      SimpleText (ParentProcess* parent, const string& name, double x, double y, const string& text);
       virtual ~SimpleText ();
       void impl_activate () override;
       void impl_deactivate () override;
       void set_parent (ParentProcess *p) override;
-      djnn::string get_content () { return raw_props.text; }
-      void set_content (djnn::string& new_content) { _text.set_value (new_content, true); };
+      string get_content () { return raw_props.text; }
+      void set_content (string& new_content) { _text.set_value (new_content, true); };
       double get_x () { return raw_props.x; }
       double get_y () { return raw_props.y; }
       void set_x (double x) { raw_props.x = x; }
       void set_y (double y) { raw_props.y = y; }
-      void get_properties_values (double &x, double &y, djnn::string &text);
-      virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+      void get_properties_values (double &x, double &y, string &text);
+      virtual FatChildProcess* find_child_impl (const string&) override;
     private:
-      struct raw_props_t { double x, y; djnn::string text; };
+      struct raw_props_t { double x, y; string text; };
       raw_props_t raw_props;
       TextPropertyProxy _text;
       CouplingWithData *_cx, *_cy;
@@ -40,48 +40,48 @@ namespace djnn {
   class MultilineEditor : public AbstractGShape {
       class ToggleEditAction : public Action {
         public:
-          ToggleEditAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          ToggleEditAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~ToggleEditAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->toggle_edit (); }
       };
       class MousePressAction : public Action {
         public:
-          MousePressAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          MousePressAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MousePressAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_press (); }
       };
       class MouseReleaseAction : public Action {
         public:
-          MouseReleaseAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          MouseReleaseAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MouseReleaseAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_release (); }
       };
       class MouseMoveAction : public Action {
         public:
-          MouseMoveAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          MouseMoveAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MouseMoveAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_move (); }
       };
       class KeyPressedAction : public Action {
         public:
-          KeyPressedAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          KeyPressedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~KeyPressedAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->key_pressed (); }
       };
       class KeyReleasedAction : public Action {
         public:
-          KeyReleasedAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          KeyReleasedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~KeyReleasedAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->key_released (); }
       };
       class StrInputAction : public Action {
         public:
-          StrInputAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+          StrInputAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~StrInputAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->add_string_input (); }
       };
     public:
-      MultilineEditor (ParentProcess* parent, const djnn::string& name, int x, int y, int width, int height, const djnn::string &text = djnn::string(), bool enable_edit_on_activation = true);
+      MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true);
       virtual ~MultilineEditor ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -122,7 +122,7 @@ namespace djnn {
       coord_t get_x_from_index ();
       coord_t get_index_from_x (coord_t x);
       void add_string_input ();
-      void add_str (const djnn::string& str );
+      void add_str (const string& str );
       void draw () override;
       pair<double, double> get_local_coords (double x, double y);
       List _lines;
@@ -145,6 +145,6 @@ namespace djnn {
       coord_t _index_x, _index_y, _ascent, _descent, _leading;
       coord_t _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
       bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
-      djnn::string _init_text;
+      string _init_text;
   };
 }

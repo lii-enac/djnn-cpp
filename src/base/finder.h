@@ -30,17 +30,17 @@ namespace djnn
     class FinderAction : public Action
     {
     public:
-      FinderAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      FinderAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~FinderAction () {}
       void impl_activate () override;
     };
     public:
-      Finder (ParentProcess* parent, const djnn::string& name, FatProcess *container, const djnn::string& path);
+      Finder (ParentProcess* parent, const string& name, FatProcess *container, const string& path);
       virtual ~Finder ();
       void impl_activate () override;
       void impl_deactivate () override;
 #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const djnn::string& format) override;
+    virtual void serialize (const string& format) override;
 #endif
     private:
       void set_parent (ParentProcess* parent) override;

@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropWorld::AbstractPropWorld (ParentProcess* parent, const djnn::string& name, double x, double y, double z, double dt) :
+  AbstractPropWorld::AbstractPropWorld (ParentProcess* parent, const string& name, double x, double y, double z, double dt) :
     AbstractPObj (parent, name),
     raw_props{.x=x, .y=y, .z=z, .dt=dt},
     _cx (nullptr), _cy (nullptr), _cz (nullptr), _cdt (nullptr)
@@ -78,7 +78,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropWorld::find_child_impl (const djnn::string& name)
+  AbstractPropWorld::find_child_impl (const string& name)
   {
     auto * res = AbstractPObj::find_child_impl(name);
     if (res) return res;
@@ -87,7 +87,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef djnn::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -133,10 +133,10 @@ namespace djnn
     return res;
   }
 
-  const vector<djnn::string>&
+  const vector<string>&
   AbstractPropWorld::get_properties_name () const
   {
-    static const vector<djnn::string> res = {
+    static const vector<string> res = {
     "x",
 			"y",
 			"z",

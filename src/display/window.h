@@ -41,10 +41,10 @@ namespace djnn
     virtual void impl_activate () = 0;
     virtual void impl_deactivate () = 0;
     virtual void update () = 0;
-    virtual void set_cursor (const djnn::string& path, int hotX, int hotY) = 0;
+    virtual void set_cursor (const string& path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
-    virtual void perform_screenshot (const djnn::string& path) {}
+    virtual void perform_screenshot (const string& path) {}
     virtual void set_opacity (double opacity) {}
     virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) {}
     virtual void update_geometry () {}
@@ -58,7 +58,7 @@ namespace djnn
     class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (Window * parent, const djnn::string& name) : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
+        UndelayedSpike (Window * parent, const string& name) : FatProcess (name) { set_is_model (true); finalize_construction (parent, name); }
         virtual ~UndelayedSpike () {}
         void post_activate () override { post_activate_auto_deactivate (); }
         void impl_activate () override;
@@ -68,35 +68,35 @@ namespace djnn
     class ScreenshotAction : public Action
     {
       public:
-        ScreenshotAction (Window * parent, const djnn::string& name) : Action (parent, name) {}
+        ScreenshotAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->perform_screenshot (); }
     };
     class OpacityAction : public Action
     {
       public:
-        OpacityAction (Window * parent, const djnn::string& name) : Action (parent, name) {}
+        OpacityAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_opacity (); }
     };
     class BackgroundOpacityAction : public Action
     {
       public:
-        BackgroundOpacityAction (Window * parent, const djnn::string& name) : Action (parent, name) {}
+        BackgroundOpacityAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_background_opacity_and_color (); }
     };
     class BackgroundColorAction : public Action
     {
       public:
-        BackgroundColorAction (Window * parent, const djnn::string& name) : Action (parent, name) {}
+        BackgroundColorAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->set_background_opacity_and_color (); }
     };
     class GeometryAction : public Action
     {
       public:
-        GeometryAction (Window * parent, const djnn::string& name) : Action (parent, name) {}
+        GeometryAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->update_geometry (); }
     };
   public:
-    Window (ParentProcess* parent, const djnn::string& name, const djnn::string& title, double x, double y, double w, double h);
+    Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 
@@ -139,7 +139,7 @@ namespace djnn
     FatProcess* damaged () { return _damaged; }
     FatProcess* holder () { return _holder; }
     void set_holder (FatProcess *p) { _holder = p; }
-    void set_cursor (const djnn::string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
+    void set_cursor (const string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
 
     Blank * refreshed () { return _refreshed; }
 
@@ -157,7 +157,7 @@ namespace djnn
     void update_geometry ();
 
   private:
-    void init_ui (const djnn::string& title, double x, double y, double w, double h);
+    void init_ui (const string& title, double x, double y, double w, double h);
     void set_frame_to_component (FatProcess* c);
     DoubleProperty* _pos_x;
     DoubleProperty* _pos_y;
@@ -220,20 +220,20 @@ namespace djnn
    class Cursor : public FatProcess {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      UpdateCursorAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
     };
    public:
-    Cursor (ParentProcess* parent, const djnn::string& name, const djnn::string& path, int hotX, int hotY);
+    Cursor (ParentProcess* parent, const string& name, const string& path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
-    FatChildProcess* find_child_impl (const djnn::string& n) override;
+    FatChildProcess* find_child_impl (const string& n) override;
    private:
-    struct raw_props_t { int hot_x; int hot_y; djnn::string path; };
+    struct raw_props_t { int hot_x; int hot_y; string path; };
     raw_props_t raw_props;
     Coupling *_c_x, *_c_y, *_c_path;
     UpdateCursorAction *_action;

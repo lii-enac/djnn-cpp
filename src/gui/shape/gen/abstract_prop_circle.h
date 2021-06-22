@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropCircle : public AbstractGShape
   {
   public:
-    AbstractPropCircle (ParentProcess* parent, const djnn::string& name, double cx, double cy, double r);
+    AbstractPropCircle (ParentProcess* parent, const string& name, double cx, double cy, double r);
     virtual ~AbstractPropCircle ();
     
     
     void get_properties_values (double& cx, double& cy, double& r);
-    const vector<djnn::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }
 		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child_impl ("cy"); }
 		AbstractDoubleProperty* r () { return (AbstractDoubleProperty*) find_child_impl ("r"); }

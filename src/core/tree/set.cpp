@@ -28,7 +28,7 @@ namespace djnn
 {
   
 
-  Set::Set (ParentProcess* parent, const djnn::string& name)
+  Set::Set (ParentProcess* parent, const string& name)
   :
     FatProcess (name),
     _added (nullptr, "_added", nullptr),
@@ -43,7 +43,7 @@ namespace djnn
   }
 
   void
-  Set::add_child (FatChildProcess* c, const djnn::string& name)
+  Set::add_child (FatChildProcess* c, const string& name)
   {
     /* test if the child is already in the set
      * it == symtable ().end () if the element is not find 
@@ -86,7 +86,7 @@ namespace djnn
   }
 
   void
-  Set::remove_child (const djnn::string& name)
+  Set::remove_child (const string& name)
   {
     FatChildProcess *found = nullptr;
     string symbol;
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Set::find_child_impl (const djnn::string& path)
+  Set::find_child_impl (const string& path)
   {
     if (path.compare ("$added") == 0)
       return &_added;
@@ -142,14 +142,14 @@ namespace djnn
   {
     loginfonocr ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  + " [ cardinality=" + __to_string(_size.get_value ()) + " ]\n") ;
     for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
-      loginfonocr ( djnn::string("\t- ") + it->first + "\n");
+      loginfonocr ( string("\t- ") + it->first + "\n");
     }
   }
 #endif
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  Set::serialize (const djnn::string& type)
+  Set::serialize (const string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 
@@ -165,7 +165,7 @@ namespace djnn
   }
 #endif
 
-  SetIterator::SetIterator (ParentProcess* parent, const djnn::string& name, CoreProcess *set, CoreProcess *action, bool model) :
+  SetIterator::SetIterator (ParentProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model) :
       FatProcess (name, model), _set (dynamic_cast<Set*> (set)), _action (action)
   {
     if (_set == nullptr)

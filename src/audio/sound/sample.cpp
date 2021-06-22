@@ -32,7 +32,7 @@
 
 namespace djnn {
 
-	Sample::Sample (ParentProcess* parent, const djnn::string& name, const djnn::string& path)
+	Sample::Sample (ParentProcess* parent, const string& name, const string& path)
 	: Sound(parent, name),
 	_end (this, "end"),
 	// _end_timer(*this),
@@ -69,7 +69,7 @@ namespace djnn {
 			// 	std::cerr << numFrames << std::endl;
 			// 	drmp3_read_pcm_frames_s16 (&dr, numFrames, (drmp3_int16*)data);
 			// } else {
-				error (this, djnn::string ("cannot open audio sample file ") + path + "(dr_wav error " + djnn::to_string(res) + ")");
+				error (this, string ("cannot open audio sample file ") + path + "(dr_wav error " + djnn::to_string(res) + ")");
 				return;
 			// }
 		}
@@ -82,7 +82,7 @@ namespace djnn {
 	            format = AL_FORMAT_MONO16;
 	        }
 	    } else {
-			warning (this, djnn::string ("audio sample file is not mono and will not be panned") + path);
+			warning (this, string ("audio sample file is not mono and will not be panned") + path);
 	        if (bps == 8) {
 	            format = AL_FORMAT_STEREO8;
 	        } else {

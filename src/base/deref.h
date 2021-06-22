@@ -37,14 +37,14 @@ namespace djnn
     class DerefAction : public Action
     {
     public:
-      DerefAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
+      DerefAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~DerefAction () {}
       void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
     };
     class GetAction : public Action
     {
     public:
-      GetAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
+      GetAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
       virtual ~GetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->get ();
@@ -53,14 +53,14 @@ namespace djnn
     class SetAction : public Action
     {
     public:
-      SetAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
+      SetAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
       virtual ~SetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->set ();
       };
     };
     public:
-      AbstractDeref (ParentProcess* parent, const djnn::string& name, CoreProcess *ref_prop, const djnn::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      AbstractDeref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~AbstractDeref ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -87,13 +87,13 @@ namespace djnn
   {
   private:
     public:
-      Deref (ParentProcess* parent, const djnn::string& name, CoreProcess *ref_prop, const djnn::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      Deref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~Deref ();
       void set () override;
       void get () override;
       void change_src (CoreProcess* src) override;
 #ifndef DJNN_NO_SERIALIZE
-      void serialize (const djnn::string& type) override;
+      void serialize (const string& type) override;
 #endif
     private:
       Spike _activation;
@@ -104,13 +104,13 @@ namespace djnn
   class DerefString : public AbstractDeref
   {
     public:
-      DerefString (ParentProcess* parent, const djnn::string& name, CoreProcess *ref_prop, const djnn::string& path, djnn_dir_t dir = DJNN_IGNORE);
+      DerefString (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~DerefString ();
       void set () override;
       void get () override;
       void change_src (CoreProcess* src) override;
 #ifndef DJNN_NO_SERIALIZE
-      void serialize (const djnn::string& type) override;
+      void serialize (const string& type) override;
 #endif
     private:
       TextProperty _value;
@@ -119,13 +119,13 @@ namespace djnn
   class DerefDouble : public AbstractDeref
     {
       public:
-        DerefDouble (ParentProcess* parent, const djnn::string& name, CoreProcess *ref_prop, const djnn::string& path, djnn_dir_t dir = DJNN_IGNORE);
+        DerefDouble (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
         virtual ~DerefDouble ();
         void set () override;
         void get () override;
         void change_src (CoreProcess* src) override;
   #ifndef DJNN_NO_SERIALIZE
-        void serialize (const djnn::string& type) override;
+        void serialize (const string& type) override;
   #endif
       private:
         DoubleProperty _value;

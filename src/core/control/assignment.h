@@ -34,7 +34,7 @@ namespace djnn {
     {
       graph_add_edge (src, dst);
     }
-    CoreAssignment (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreAssignment (src, dst, is_model)
     {
       finalize_construction (parent, name);
@@ -74,12 +74,12 @@ namespace djnn {
 
 public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
   void
-    MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <djnn::string> src_props, CoreProcess* dst, vector <djnn::string> dst_props, bool copy_on_activation);
+    MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation);
   void
     MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
 
@@ -91,7 +91,7 @@ public:
     {
       _propagate = false;
     }
-    CorePausedAssignment (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CorePausedAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreAssignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
@@ -107,12 +107,12 @@ public:
     class AssignmentAction : public Action
     {
     public:
-      AssignmentAction (ParentProcess* parent, const djnn::string& name)
+      AssignmentAction (ParentProcess* parent, const string& name)
       : Action (parent, name) { /*finalize_construction (parent, name);*/ }
       void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    Assignment (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    Assignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -133,9 +133,9 @@ public:
       FatProcess::set_parent (parent);
     }
     // for legacy reason, to get rid of?
-    Assignment (ParentProcess* parent, const djnn::string& name,
-                   CoreProcess* src, const djnn::string& sspec,
-                   CoreProcess* dst, const djnn::string& dspec,
+    Assignment (ParentProcess* parent, const string& name,
+                   CoreProcess* src, const string& sspec,
+                   CoreProcess* dst, const string& dspec,
                    bool is_model=false)
     : Assignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}
@@ -165,23 +165,23 @@ public:
 
 public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 
   class PausedAssignment : public Assignment
   {
   public:
-    PausedAssignment (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    PausedAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : Assignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
     }
 
     // for legacy reason, to get rid of?
-    PausedAssignment (ParentProcess* parent, const djnn::string& name,
-                   CoreProcess* src, const djnn::string& sspec,
-                   CoreProcess* dst, const djnn::string& dspec,
+    PausedAssignment (ParentProcess* parent, const string& name,
+                   CoreProcess* src, const string& sspec,
+                   CoreProcess* dst, const string& dspec,
                    bool is_model=false)
     : PausedAssignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}

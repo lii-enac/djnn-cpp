@@ -43,7 +43,7 @@ namespace djnn {
 
   extern FatProcess *GPUs; // display.h
 
-  DRMDevice::DRMDevice (ParentProcess* parent, const djnn::string& name, int fd, int min_width, int max_width,
+  DRMDevice::DRMDevice (ParentProcess* parent, const string& name, int fd, int min_width, int max_width,
                         int min_height, int max_height) : FatProcess (name), _fd (fd),
                         _iofd (this, "vblank_fd", fd), _read_vblank_action (this, "read_vblank_action"),
                         _c_read_vblank (_iofd.find_child("readable"), ACTIVATION, &_read_vblank_action, ACTIVATION, true)
@@ -188,9 +188,9 @@ namespace djnn {
       drmModeRes *res = drmModeGetResources (fd);
       if (!res)
         return;
-      djnn::string str (name);
+      string str (name);
       std::size_t found = str.find_last_of ("/");
-      djnn::string dev_name = str.substr (found + 1);
+      string dev_name = str.substr (found + 1);
       DRMDevice* drm_dev = new DRMDevice (GPUs, dev_name, fd, res->min_width, res->max_width, res->min_height, res->max_height);
 #if DEBUG
       std::cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
@@ -214,9 +214,9 @@ namespace djnn {
     const char *name = udev_device_get_property_value (dev,  "DEVNAME");
     if (!name)
       return;
-    djnn::string str (name);
+    string str (name);
     std::size_t found = str.find_last_of ("/");
-    djnn::string dev_name = str.substr (found + 1);
+    string dev_name = str.substr (found + 1);
     DRMDevice* drm_dev = (DRMDevice*) GPUs->find_child_impl (dev_name);
     if (!drm_dev)
       return;

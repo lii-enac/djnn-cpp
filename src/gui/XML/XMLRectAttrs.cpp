@@ -31,7 +31,7 @@ static int ParseHeight (FatProcess**, const char*);
 static int ParseRx (FatProcess**, const char*);
 static int ParseRy (FatProcess**, const char*);
 
-static map <djnn::string, djn_XMLAttrHandler> handlers = {
+static map <string, djn_XMLAttrHandler> handlers = {
   {"x",{&ParseX}},
   {"y",{&ParseY}},
   {"width",{&ParseWidth}},
@@ -43,8 +43,8 @@ static map <djnn::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLRectAttrs_Hash::djn_XMLRectAttrsLookup (const char *str, unsigned int len)
 {
-  map<djnn::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(djnn::string(str));
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

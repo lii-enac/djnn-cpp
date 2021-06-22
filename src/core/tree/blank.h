@@ -26,7 +26,7 @@ namespace djnn {
 
   class Blank : public FatProcess {
   public:
-    Blank (ParentProcess* parent, const djnn::string& name) : FatProcess (name) { finalize_construction (parent, name); }
+    Blank (ParentProcess* parent, const string& name) : FatProcess (name) { finalize_construction (parent, name); }
     virtual ~Blank () {};
     FatProcess* clone () override;
   protected:
@@ -39,7 +39,7 @@ namespace djnn {
 
   public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const djnn::string& format) override;
+    void serialize (const string& format) override;
 #endif
   };
 

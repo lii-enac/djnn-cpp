@@ -24,8 +24,6 @@
 //#include "utils/debug.h"
 //#include <__iostream>
 
-#include <string>
-#include <vector>
 
 #include <locale.h>
 
@@ -36,7 +34,7 @@ namespace djnn
   class StructureObserver;
 
 
-  vector<djnn::string> loadedModules;
+  vector<string> loadedModules;
 /*
   void
   module_loaded(const char*)

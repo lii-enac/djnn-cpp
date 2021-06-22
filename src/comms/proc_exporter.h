@@ -37,7 +37,7 @@ namespace djnn
     class SendAction : public Action
     {
     public:
-      SendAction (ParentProcess* parent, const djnn::string& name) :
+      SendAction (ParentProcess* parent, const string& name) :
         Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SendAction () {}
       void impl_activate () override;
@@ -45,7 +45,7 @@ namespace djnn
     class BuildSendAction : public Action
     {
     public:
-      BuildSendAction (ParentProcess* parent, const djnn::string& name) :
+      BuildSendAction (ParentProcess* parent, const string& name) :
         Action (parent, name), _src (nullptr) { finalize_construction (parent, name); }
       virtual ~BuildSendAction () {}
       void impl_activate () override;
@@ -55,18 +55,18 @@ namespace djnn
         CoreProcess *_src;
     };
     public:
-      Receiver (ParentProcess* parent, const djnn::string& name, SOCKET fd, CoreProcess* tree);
+      Receiver (ParentProcess* parent, const string& name, SOCKET fd, CoreProcess* tree);
       virtual ~Receiver () {}
       void impl_activate () override;
       void impl_deactivate () override;
-      void find_and_set_value (djnn::string &path, djnn::string &value);
-      void subscribe (const djnn::string& path);
-      void unsubscribe (const djnn::string& path);
+      void find_and_set_value (string &path, string &value);
+      void subscribe (const string& path);
+      void unsubscribe (const string& path);
       void unsubscribe_all ();
-      typedef map<CoreProcess*, djnn::string> dist_map_t;
+      typedef map<CoreProcess*, string> dist_map_t;
 
     protected:
-      djnn::string get_path (CoreProcess *s);
+      string get_path (CoreProcess *s);
       vector<CoreProcess*> get_senders () { return _buff_senders; }
       void clear_senders () { _buff_senders.clear (); }
       void add_sender (CoreProcess *sender) { _buff_senders.push_back (sender); }
@@ -89,7 +89,7 @@ namespace djnn
   /*** ProcExporter Class ***/
 
   public:
-    ProcExporter (ParentProcess* parent, const djnn::string& name, CoreProcess *tree, int port);
+    ProcExporter (ParentProcess* parent, const string& name, CoreProcess *tree, int port);
     virtual ~ProcExporter ();
     SOCKET get_sock () { return _fd; }
     bool connection ();

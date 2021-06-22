@@ -12,14 +12,13 @@
  *
  */
 
-#include <vector>
-#include <string>
+#include "core/ontology/process.h" // vector etc.
 
 namespace djnn
 {
   
   static bool __module_initialized = false;
-  extern vector<djnn::string> loadedModules;
+  extern vector<string> loadedModules;
 
   void
   init_base () {

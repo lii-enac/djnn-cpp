@@ -24,7 +24,7 @@ namespace djnn {
 
   class DRMConnector : public FatProcess {
   public:
-    DRMConnector (ParentProcess* parent, const djnn::string& name, int id, bool connected);
+    DRMConnector (ParentProcess* parent, const string& name, int id, bool connected);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
@@ -36,7 +36,7 @@ namespace djnn {
 
   class DRMDevice : public FatProcess {
   public:
-    DRMDevice (ParentProcess* parent, const djnn::string& name, int fd, int min_width, int max_width, int min_height, int max_height);
+    DRMDevice (ParentProcess* parent, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}
