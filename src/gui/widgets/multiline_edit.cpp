@@ -236,7 +236,7 @@ namespace djnn
      _c_move.disable ();
    }
 
-  static int
+  static MultilineEditor::coord_t
   next_index (const std::string &str, int idx)
   {
     if (idx > str.size ())
@@ -249,7 +249,7 @@ namespace djnn
     return idx + offset;
   }
 
-  static int
+  static MultilineEditor::coord_t
   previous_index (const std::string &str, int idx)
   {
     if (idx <= 0)
@@ -274,7 +274,7 @@ namespace djnn
   }
 
   static bool
-  is_starting_word (const std::string& str, int i)
+  is_starting_word (const std::string& str, MultilineEditor::coord_t i)
   {
     if (i <= 0)
       return true;
@@ -285,8 +285,8 @@ namespace djnn
     return false;
   }
 
-  static int
-  first_word (const std::string &str, int idx)
+  static MultilineEditor::coord_t
+  first_word (const std::string &str, MultilineEditor::coord_t idx)
   {
     int first_word_idx = 0;
     while (isspace (str.at (first_word_idx)) && first_word_idx < idx) {
@@ -298,8 +298,8 @@ namespace djnn
       return first_word_idx;
   }
 
-  static int
-  next_word (const std::string &str, int idx)
+  static MultilineEditor::coord_t
+  next_word (const std::string &str, MultilineEditor::coord_t idx)
   {
     int i = next_index (str, idx);
     while (i < str.length() && !is_starting_word(str, i))
@@ -307,8 +307,8 @@ namespace djnn
     return i;
   }
 
-  static int
-  previous_word (const std::string &str, int idx)
+  static MultilineEditor::coord_t
+  previous_word (const std::string &str, MultilineEditor::coord_t idx)
   {
     int i = previous_index (str, idx) ;
     while (i > 0 && !is_starting_word (str, i) ) {
@@ -361,19 +361,19 @@ namespace djnn
     }
   }
 
-  int
-  MultilineEditor::get_index_from_x (int x)
+  MultilineEditor::coord_t
+  MultilineEditor::get_index_from_x (MultilineEditor::coord_t x)
   {
     return Backend::instance ()->compute_index (_font_metrics, _line, x);
   }
 
-  int
+  MultilineEditor::coord_t
   MultilineEditor::get_x_from_index ()
   {
     return Backend::instance ()->compute_x (_font_metrics, _line, _index_x);
   }
   void
-  MultilineEditor::update_index_from_xy (int x, int y)
+  MultilineEditor::update_index_from_xy (MultilineEditor::coord_t x, MultilineEditor::coord_t y)
   {
     if (_lines.children ().empty ()) {
       warning (this, "No more line in simple text editor");
@@ -524,7 +524,7 @@ namespace djnn
       _index_y++;
       _start_sel_x = _end_sel_x = 0;
       _start_sel_y = _end_sel_y = _index_y;
-      _height.set_value(_height.get_value() + height + _leading, true);
+      _height.set_value(static_cast<int>((_height.get_value() + height + _leading)), true);
       if (_index_y < _lines.children().size()) {
         update_lines_position();
       }
@@ -827,7 +827,7 @@ namespace djnn
   {
     int height = _ascent + _descent;
     for (int i = 0; i < _lines.children ().size (); i++) {
-      ((DoubleProperty*)(_lines.children().at (i)->find_child("y")))->set_value( i * (height + _leading), true);
+      ((DoubleProperty*)(_lines.children().at (i)->find_child("y")))->set_value( static_cast<int>(i * (height + _leading)), true);
     }
   }
 
@@ -851,7 +851,7 @@ namespace djnn
       del_selection ();
 
     int off_y = _ascent + _descent + _leading;
-    std::size_t found = cpy.find("\n");
+    size_t found = cpy.find("\n");
 
     if (_index_x == cur_text.length ()) {
       if (found == std::string::npos) {
@@ -953,8 +953,8 @@ namespace djnn
       AbstractGShape::pre_draw ();
       Backend::instance ()->draw_simple_text_edit (this);
       _first_draw = false;
-      _cursor_height.set_value (_ascent + _descent, true);
-      _line_height.set_value (_ascent + _descent + _leading, true);
+      _cursor_height.set_value (static_cast<int>(_ascent + _descent), true);
+      _line_height.set_value (static_cast<int>(_ascent + _descent + _leading), true);
       AbstractGShape::post_draw ();
     }
   }

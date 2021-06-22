@@ -100,6 +100,8 @@ namespace djnn {
       FontMetricsImpl get_font_metrics () { return _font_metrics; }
       void set_font_metrics (FontMetricsImpl fm) { _font_metrics = fm; }
       bool first_draw () { return _first_draw; }
+
+      typedef size_t coord_t;
     private:
       SimpleText* get_line (int y) { return (SimpleText*)_lines.children ().at(y); }
       void delete_line (SimpleText* st);
@@ -110,15 +112,15 @@ namespace djnn {
       void mouse_move ();
       void key_pressed ();
       void key_released ();
-      void update_index_from_xy (int x, int y);
+      void update_index_from_xy (coord_t x, coord_t y);
       void update_selection ();
       void update_cursor ();
       void update_lines_position ();
       void copy ();
       void paste ();
       void toggle_edit ();
-      int get_x_from_index ();
-      int get_index_from_x (int x);
+      coord_t get_x_from_index ();
+      coord_t get_index_from_x (coord_t x);
       void add_string_input ();
       void add_str (const std::string& str );
       void draw () override;
@@ -140,8 +142,8 @@ namespace djnn {
       Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_toggle;
       FontMetricsImpl _font_metrics;
       VoidProcess _ordering_node;
-      int _index_x, _index_y, _ascent, _descent, _leading;
-      int _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
+      coord_t _index_x, _index_y, _ascent, _descent, _leading;
+      coord_t _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
       bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
       std::string _init_text;
   };
