@@ -41,13 +41,13 @@ namespace djnn
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
-    %(CLASS)s (ParentProcess* parent, const std::string& name, %(DECL_PROPS_CALL_DECL)s);
+    %(CLASS)s (ParentProcess* parent, const string& name, %(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
-    const std::vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -80,7 +80,7 @@ def_string = """
 
 namespace djnn
 {
-  %(CLASS)s::%(CLASS)s (ParentProcess* parent, const std::string& name, %(DECL_PROPS_CALL_DEF)s) :
+  %(CLASS)s::%(CLASS)s (ParentProcess* parent, const string& name, %(DECL_PROPS_CALL_DEF)s) :
     %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
     raw_props{%(RAW_PROPS_INIT)s},
     %(COUPLINGS_INIT)s
@@ -103,7 +103,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  %(CLASS)s::find_child_impl (const std::string& name)
+  %(CLASS)s::find_child_impl (const string& name)
   {
     auto * res = %(INHERITS)s::find_child_impl(name);
     if (res) return res;
@@ -112,7 +112,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     %(CREATE_PROPERTIES)s
@@ -134,10 +134,10 @@ namespace djnn
     return res;
   }
 
-  const std::vector<std::string>&
+  const vector<string>&
   %(CLASS)s::get_properties_name () const
   {
-    static const std::vector<std::string> res = {
+    static const vector<string> res = {
     %(PUSHBACK_DYN_PROPS)s
     };
     return res;
@@ -211,13 +211,13 @@ class Prop:
 
     def as_cpp_type_str(self):
         if self.type == 'text':
-          return 'std::string'
+          return 'string'
         else:
           return self.type
 
     def as_cpp_type_str_for_function_signature(self):
         if self.type == 'text':
-          return 'const std::string&'
+          return 'const string&'
         else:
           return self.type
     
