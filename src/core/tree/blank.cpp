@@ -15,7 +15,6 @@
 #include "blank.h"
 #include "core/serializer/serializer.h"
 
-#include <string>
 
 namespace djnn
 {

@@ -18,7 +18,6 @@
 #include "abstract_property.h"
 #include "core/utils/to_string.h"
 
-#include <string>
 
 namespace djnn {
 

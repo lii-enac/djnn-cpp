@@ -16,7 +16,6 @@
 
 //#include "core/utils/utils-dev.h" // __to_string
 
-#include <string>
 
 #ifdef DJNN_CRAZYFLIE
 extern "C" {

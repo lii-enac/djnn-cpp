@@ -18,14 +18,6 @@
 #include "core/utils/containers.h"
 #include "utils/debug.h"
 
-// #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-// #include <list> // pch
-// #endif
-
-//#include "core/utils/build/precompiled.h"
-
-//#include "utils/debug.h"
-
 namespace djnn {
 
   // process types

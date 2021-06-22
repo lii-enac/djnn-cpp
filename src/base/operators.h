@@ -24,7 +24,6 @@
 #include "core/tree/double_property.h"
 #include "core/serializer/serializer.h"
 
-#include <string>
 
 namespace djnn {
 

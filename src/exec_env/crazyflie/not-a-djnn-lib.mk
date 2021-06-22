@@ -4,7 +4,6 @@
 # this is a WIP, don't run this on your flying taxi-drone
 
 # to use it:
-#
 # in djnn-cpp/ :
 #	make -j static
 # in crazyflie-firmware/ :
@@ -98,7 +97,6 @@ crazyflie_objs += \
 	src/core/tree/component.o \
 	src/core/tree/component_observer.o
 
-#
 crazyflie_objs += \
 	src/core/control/native_action.o \
 	src/core/control/native_expression_action.o \
