@@ -35,7 +35,7 @@ namespace djnn
     void draw () override;
     OutlineWidth* clone () override;
     void get_properties_values (double& width);
-    const std::vector<std::string>& get_properties_name () const override;
+    const vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child_impl ("width"); }
 

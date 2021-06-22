@@ -122,7 +122,7 @@ namespace djnn
     draw_image (Image *i) override;
     double
     get_cursor_from_index (Text*, int) override;
-    std::pair<double,int>
+    pair<double,int>
     get_cursor_from_local_x (Text*, double) override;
 
     //style

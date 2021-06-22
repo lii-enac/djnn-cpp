@@ -31,7 +31,7 @@ namespace djnn {
       void remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
 
   private:
-      std::vector<QtWindow*> _windows;
+      vector<QtWindow*> _windows;
 
     };
 }

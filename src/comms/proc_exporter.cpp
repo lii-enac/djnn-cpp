@@ -28,7 +28,7 @@ namespace djnn
   Receiver::SendAction::impl_activate ()
   {
     Receiver *p = (Receiver*) get_parent();
-    std::vector<CoreProcess*> senders = p->get_senders();
+    vector<CoreProcess*> senders = p->get_senders();
     std::string msg;
     std::string start = "";
     for (auto s : senders) {
@@ -123,7 +123,7 @@ namespace djnn
     bool found = false;
     if (!cp)
       return;
-    std::vector<Coupling*>::iterator  it;
+    vector<Coupling*>::iterator  it;
     for (it = _props_c.begin (); it != _props_c.end ();) {
       if ((*it)->get_src () == cp) {
         if (!found) {
@@ -155,7 +155,7 @@ namespace djnn
     return res;
   }
 
-  extern std::vector<std::string>
+  extern vector<std::string>
   tokenize (char* buff, int sz);
 
   void
@@ -185,7 +185,7 @@ namespace djnn
       if (recvfrom (_fd, buffer + 1, sz - 1, 0, NULL, NULL) == SOCKET_ERROR) {
         goto fail;
       }
-      std::vector < std::string > msg = tokenize (buffer, sz);
+      vector < std::string > msg = tokenize (buffer, sz);
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       if (msg[0] == "N") {
         for (size_t i = 1; i < msg.size (); ++i) {

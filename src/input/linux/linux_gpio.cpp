@@ -29,7 +29,7 @@
 
 namespace djnn {
   static int num_gpios = 0;
-  static std::map<int,GPIOLine*> gpio_lines;
+  static map<int,GPIOLine*> gpio_lines;
 
   void
   p_init_gpios ()

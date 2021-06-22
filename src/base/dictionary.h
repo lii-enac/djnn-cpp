@@ -58,7 +58,7 @@ namespace djnn {
     CoreProcess* get_value (CoreProcess* key);
     void del_entry (CoreProcess* key);
     void set_value (CoreProcess* value) { _value.set_value (value, true); }
-    typedef std::map<CoreProcess*,CoreProcess*> map_t; 
+    typedef map<CoreProcess*,CoreProcess*> map_t; 
     map_t& get_map () { return _map; }
     RefProperty* key () { return &_key; }
     RefProperty* value () { return &_value; }

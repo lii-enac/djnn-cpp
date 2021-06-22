@@ -55,7 +55,7 @@ namespace djnn {
     void set_height (double height) { _height.set_value (height, true); }
     const std::string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
-    std::pair<double,int> get_cursor_from_local_x (double pos);
+    pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:

@@ -38,7 +38,7 @@ namespace djnn
   static bool __module_initialized = false;
   //FatProcess* mainloop;
 
-  extern std::vector<std::string> loadedModules;
+  extern vector<std::string> loadedModules;
 
   static bool global_mutex_inited = false;
 

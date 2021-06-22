@@ -63,11 +63,11 @@ namespace djnn
       void subscribe (const std::string& path);
       void unsubscribe (const std::string& path);
       void unsubscribe_all ();
-      typedef std::map<CoreProcess*, std::string> dist_map_t;
+      typedef map<CoreProcess*, std::string> dist_map_t;
 
     protected:
       std::string get_path (CoreProcess *s);
-      std::vector<CoreProcess*> get_senders () { return _buff_senders; }
+      vector<CoreProcess*> get_senders () { return _buff_senders; }
       void clear_senders () { _buff_senders.clear (); }
       void add_sender (CoreProcess *sender) { _buff_senders.push_back (sender); }
       SOCKET get_sock () { return _fd; }
@@ -79,8 +79,8 @@ namespace djnn
       CoreProcess* _tree;
 
       dist_map_t _senders_map;
-      std::vector<Coupling*> _props_c;
-      std::vector<CoreProcess*> _buff_senders;
+      vector<Coupling*> _props_c;
+      vector<CoreProcess*> _buff_senders;
   };
 
   class ProcExporter : public FatProcess, public ExternalSource
@@ -103,7 +103,7 @@ namespace djnn
     SOCKET _fd;
     int _port;
     CoreProcess* _tree;
-    std::vector<Receiver*> _recvs;
+    vector<Receiver*> _recvs;
     void run () override;
   };
 }

@@ -35,7 +35,7 @@ namespace djnn {
 
     private:
       CoreProcess *_src;
-      std::vector<CoreProcess*> _dsts;
+      vector<CoreProcess*> _dsts;
       bool _my_parent_is_an_assignmentsequence;
     };
 }

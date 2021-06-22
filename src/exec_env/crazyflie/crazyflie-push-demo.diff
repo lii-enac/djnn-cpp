@@ -270,7 +270,7 @@ index 0000000..a26221d
 +	void djnn_init_prog2 () {
 +		try {
 +			DEBUG_PRINT( "start djnn_init_prog2\n" );
-+			// std::vector<int> v;
++			// vector<int> v;
 +			// for (int i=0; i<=100; ++i) v.push_back(i);
 +			// int sum=0;
 +			// for (int i=0; i<=100; ++i) sum += v[i];

@@ -92,7 +92,7 @@ namespace djnn {
     Coupling _c_update_pos_x, _c_update_pos_y;
   };
 
-  extern  std::vector<DRMConnector*> conn_list;
+  extern  vector<DRMConnector*> conn_list;
 
   class DRMDevice : public FatProcess {
     class VBlankAction : public Action

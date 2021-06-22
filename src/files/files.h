@@ -38,7 +38,7 @@ namespace djnn
   } djn_dir_event;
 
   struct DirectoryObserverData;
-  extern std::vector<std::string> loadedModules; 
+  extern vector<std::string> loadedModules; 
 
   class FileReader : public FatProcess
   {

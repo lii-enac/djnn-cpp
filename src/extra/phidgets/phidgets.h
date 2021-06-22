@@ -17,7 +17,7 @@
 
 namespace djnn {
 
-	extern std::vector<string> loadedModules;
+	extern vector<string> loadedModules;
 	extern FatProcess *Phidgets;
 	extern FatProcess *InterfaceKits;
  	

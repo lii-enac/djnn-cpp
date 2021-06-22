@@ -35,7 +35,7 @@ namespace djnn
     
     
     void get_properties_values (double& a, double& cx, double& cy);
-    const std::vector<std::string>& get_properties_name () const override;
+    const vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }

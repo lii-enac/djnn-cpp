@@ -36,7 +36,7 @@ namespace djnn
 {
   extern void p_init_p_display ();
   static bool __module_initialized = false;
-  extern std::vector<std::string> loadedModules;
+  extern vector<std::string> loadedModules;
 
   extern FatProcess *GenericMouse;
   extern GUIStructureObserver * gui_structure_observer;

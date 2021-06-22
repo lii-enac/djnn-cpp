@@ -60,7 +60,7 @@ extern struct djn_ModuleArgs
 } djn_ModuleArgs;
 
 namespace djnn {
-extern std::map<std::string, djnn::FatProcess*> djn__id_to_process;
+extern map<std::string, djnn::FatProcess*> djn__id_to_process;
 }
 
 extern void

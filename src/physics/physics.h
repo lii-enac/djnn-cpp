@@ -23,7 +23,7 @@
 namespace djnn
 {
 
-  extern std::vector<std::string> loadedModules; 
+  extern vector<std::string> loadedModules; 
   void init_physics ();
   void clear_physics ();
 
@@ -47,7 +47,7 @@ namespace djnn
 namespace djnn
 {
   class World : public AbstractPropWorld {
-    typedef std::vector<PhyObj*> phy_obj_list;
+    typedef vector<PhyObj*> phy_obj_list;
     class StepAction : public Action {
     public:
       StepAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}

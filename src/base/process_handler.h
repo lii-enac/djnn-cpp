@@ -181,20 +181,20 @@ namespace djnn
     void remove_one ();
     void remove_one (CoreProcess* p);
     void remove_all ();
-    std::vector<CoreProcess*> get_list () { return _list; }
+    vector<CoreProcess*> get_list () { return _list; }
   protected:
     void set_parent (ParentProcess* p) override;
     Spike _s_rm_all;
     RefProperty _add;
     RefProperty _remove;
-    std::vector<CoreProcess*> _list;
+    vector<CoreProcess*> _list;
     AddOneAction _add_one;
     RemoveOneAction _rm_one;
     RemoveAllAction _rm_all;
     Coupling _c_add, _c_rm, _c_rm_all;
   };
 
-  typedef void (NativeCollectionCode) (CoreProcess*, std::vector<CoreProcess*>);
+  typedef void (NativeCollectionCode) (CoreProcess*, vector<CoreProcess*>);
 
   class NativeCollectionAction : public Action
   {

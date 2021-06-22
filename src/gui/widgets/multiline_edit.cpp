@@ -404,7 +404,7 @@ namespace djnn
     }
   }
 
-  std::pair<double, double>
+  pair<double, double>
   MultilineEditor::get_local_coords (double x, double y)
   {
     /* compute local coords */
@@ -413,7 +413,7 @@ namespace djnn
         - this->origin_x ()->get_value ();
     double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y  + h->raw_props.m24
         - this->origin_y ()->get_value ();
-    return std::pair<double, double> (loc_x, loc_y);
+    return pair<double, double> (loc_x, loc_y);
   }
 
   void
@@ -425,7 +425,7 @@ namespace djnn
     }
     AbstractProperty* press_x = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("press/x"));
     AbstractProperty* press_y = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("press/y"));
-    std::pair<double, double> local = get_local_coords(press_x->get_double_value(), press_y->get_double_value());
+    pair<double, double> local = get_local_coords(press_x->get_double_value(), press_y->get_double_value());
     int x = (int) local.first - this->x ();
     int y = (int) local.second - this->y ();
     update_index_from_xy (x, y);
@@ -448,7 +448,7 @@ namespace djnn
       return;
     AbstractProperty* move_x = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("move/x"));
     AbstractProperty* move_y = dynamic_cast<AbstractProperty*> (get_frame()->find_child ("move/y"));
-    std::pair<double, double> local = get_local_coords(move_x->get_double_value(), move_y->get_double_value());
+    pair<double, double> local = get_local_coords(move_x->get_double_value(), move_y->get_double_value());
     int x = (int) local.first - this->x ();
     int y = (int) local.second - this->y ();
     update_index_from_xy (x, y);
@@ -797,7 +797,7 @@ namespace djnn
       _line->set_content (cur_text);
     } else {
       // Multi-line selection
-      std::vector<SimpleText*> to_delete;
+      vector<SimpleText*> to_delete;
       SimpleText *start_line = (SimpleText*) _lines.children ().at(_start_sel_y);
       SimpleText *end_line = (SimpleText*)_lines.children ().at(_end_sel_y);
       std::string start_text = start_line->get_content();

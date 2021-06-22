@@ -60,7 +60,7 @@ static int ParseTransform (FatProcess**, const char*);
 static int ParseTextAnchor (FatProcess**, const char*);
 static int ParsePathClip (FatProcess**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"id",{&ParseId}},
   {"style",{&ParseStyle}},
   {"stroke",{&ParseStroke}},
@@ -119,7 +119,7 @@ static std::map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

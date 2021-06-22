@@ -28,7 +28,7 @@ static int ParseWidth (FatProcess**, const char*);
 static int ParseHeight (FatProcess**, const char*);
 static int ParseHref (FatProcess**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"x",{&ParseX}},
   {"y",{&ParseY}},
   {"width",{&ParseWidth}},
@@ -39,7 +39,7 @@ static std::map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLImgAttrs_Hash::djn_XMLImgAttrsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

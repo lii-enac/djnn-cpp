@@ -29,7 +29,7 @@ static int ParseSkewX (FatProcess**, const char*);
 static int ParseSkewY (FatProcess**, const char*);
 static int ParseTranslate (FatProcess**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"scale",{&ParseScale}},
   {"rotate",{&ParseRotate}},
   {"skewX",{&ParseSkewX}},
@@ -43,7 +43,7 @@ SVGGradientTransformAttrs_Hash::djn_SVGGradientTransformAttrsLookup (const char 
 {
 
 
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

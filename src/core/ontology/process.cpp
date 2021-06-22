@@ -41,8 +41,8 @@ namespace djnn
 {
   
 
-  std::list<std::pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  std::vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  std::list<pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   long int __dbg_creation_num = 0; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
 #ifdef DJNN_NO_DEBUG
@@ -51,7 +51,7 @@ namespace djnn
                     string CoreProcess::default_name = "noname"; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::couplings_t CoreProcess::default_couplings; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  std::vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   static vector<const CoreProcess*> parentless_names_order;
@@ -160,7 +160,7 @@ namespace djnn
     return parent->find_child_name(this);
   }
 
-  const std::vector<std::string>&
+  const vector<std::string>&
   CoreProcess::get_properties_name () const
   {
     return default_properties_name;
@@ -636,7 +636,7 @@ namespace djnn
   void
   FatProcess::add_symbol (const std::string& name, FatChildProcess* c)
   {
-    /* if ((symtable ().insert (std::pair<string, FatProcess*> (name, c))).second == false) {
+    /* if ((symtable ().insert (pair<string, FatProcess*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
      }*/
     _symtable[name] = c;

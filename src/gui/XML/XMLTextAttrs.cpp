@@ -41,7 +41,7 @@ static int ParseFontWeight (FatProcess**, const char*);
 static int ParseFontSize (FatProcess**, const char*);
 static char* cleanStr (const char *);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"y",{&ParseY}},
   {"dy",{&ParseDy}},
   {"x",{&ParseX}},
@@ -60,7 +60,7 @@ static std::map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLTextAttrs_Hash::djn_XMLTextAttrsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

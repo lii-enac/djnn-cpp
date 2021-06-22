@@ -67,13 +67,13 @@ namespace djnn
   }
 
   bool
-  compare_number (const std::pair<double, int> &l, const std::pair<double, int> &r)
+  compare_number (const pair<double, int> &l, const pair<double, int> &r)
   {
     return l.first < r.first;
   }
 
   bool
-  compare_string (const std::pair<std::string, int> &l, const std::pair<std::string, int> &r)
+  compare_string (const pair<std::string, int> &l, const pair<std::string, int> &r)
   {
     return l.first < r.first;
   }
@@ -94,14 +94,14 @@ namespace djnn
       case Integer:
       case Double:
     	{
-    	  std::vector<std::pair<double, int>> to_sort;
+    	  vector<pair<double, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
     	    AbstractProperty* prop = get_and_check (c);
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
-    	    to_sort.push_back (std::pair<double, int> (prop->get_double_value (), i++));
+    	    to_sort.push_back (pair<double, int> (prop->get_double_value (), i++));
     	  }
     	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
     	  i = 0;
@@ -116,14 +116,14 @@ namespace djnn
     	}
       case String:
     	{
-    	  std::vector<std::pair<std::string, int>> to_sort;
+    	  vector<pair<std::string, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
     	    AbstractProperty* prop = get_and_check (c);
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
-    	    to_sort.push_back (std::pair<std::string, int> (prop->get_string_value (), i++));
+    	    to_sort.push_back (pair<std::string, int> (prop->get_string_value (), i++));
     	  }
     	  std::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
     	  i = 0;

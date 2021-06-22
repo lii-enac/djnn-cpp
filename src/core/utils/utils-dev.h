@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <utility> // std::pair
+#include <utility> // pair
 #include <string>
 
 namespace djnn {
@@ -22,7 +22,7 @@ namespace djnn {
   class FatProcess;
   class RefProperty;
  
-  typedef std::pair<RefProperty*, std::string> ref_info_t;
+  typedef pair<RefProperty*, std::string> ref_info_t;
   ref_info_t check_for_ref (FatProcess* src, const std::string& spec);
   std::string __to_string(long x);
   std::string __to_string(void *x);

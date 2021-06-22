@@ -54,9 +54,9 @@ namespace djnn
   private:
     FatProcess* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
-    //static std::vector<std::string> _ui;
+    //static vector<std::string> _ui;
     UI *ui;
-    std::vector<int> _classes;
+    vector<int> _classes;
   };
 
   class Touch : public FatProcess

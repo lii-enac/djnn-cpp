@@ -29,7 +29,7 @@ static const named_color_t not_found = 0x000001;
 
 // circumvent memory sanitizer false positive with a pointer rather than a static plain object
 // https://github.com/google/sanitizers/wiki/MemorySanitizerLibcxxHowTo
-static std::map<std::string, named_color_t>* color_map = nullptr;
+static map<std::string, named_color_t>* color_map = nullptr;
 
 void
 SVG_Utils::init_named_colors ()
@@ -37,9 +37,9 @@ SVG_Utils::init_named_colors ()
   // prevent several calls to this function
   if (color_map) return;
 
-  color_map = new std::map<std::string, named_color_t>;
+  color_map = new map<std::string, named_color_t>;
 
-  const std::map<std::string, named_color_t> color_map_ = {
+  const map<std::string, named_color_t> color_map_ = {
     {"black",0x000000},
     {"navy",0x000080},
     {"darkblue",0x00008B},

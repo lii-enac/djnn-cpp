@@ -128,8 +128,8 @@ namespace djnn
   void
   DirectoryObserver::iterate ()
   {
-    std::vector<std::filesystem::path> new_files;
-    std::vector<std::string> old_files;
+    vector<std::filesystem::path> new_files;
+    vector<std::string> old_files;
     bool added = false;
     bool removed = false;
     _added_files.remove_all ();

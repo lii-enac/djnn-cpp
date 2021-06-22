@@ -36,7 +36,7 @@ namespace djnn
   class StructureObserver;
 
 
-  std::vector<std::string> loadedModules;
+  vector<std::string> loadedModules;
 /*
   void
   module_loaded(const char*)
@@ -44,7 +44,7 @@ namespace djnn
     djnn::loadedModules.push_back("core");
   }
 */
-  std::vector<StructureObserver*> structure_observer_list;
+  vector<StructureObserver*> structure_observer_list;
 
 #if RMT_ENABLED
   Remotery* rmt;

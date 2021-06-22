@@ -82,7 +82,7 @@ namespace djnn
 
     virtual ~RemoteProc ();
 
-    typedef std::map<std::string, RemoteProperty*> dist_map_t;
+    typedef map<std::string, RemoteProperty*> dist_map_t;
 
     FatChildProcess* find_child_impl (const std::string&) override;
     std::string& get_addr () { return _addr; }
@@ -110,6 +110,6 @@ namespace djnn
     Spike _con_req;
     Coupling _c_con_req;
     dist_map_t _send_map;
-    std::vector<Coupling*> _props_c;
+    vector<Coupling*> _props_c;
   };
 }

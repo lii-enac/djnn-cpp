@@ -51,7 +51,7 @@ namespace djnn {
 
   protected:
     unsigned int _pick_color;
-    std::map<unsigned int, PickShape> _color_map;
+    map<unsigned int, PickShape> _color_map;
 
     int seed;
     double myrandom();

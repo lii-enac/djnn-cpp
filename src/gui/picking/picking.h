@@ -49,14 +49,14 @@ namespace djnn {
     bool genericTouchMove (double x, double y, int id, float pressure);
     bool genericTouchRelease (double x, double y, int id, float pressure);
 
-    std::pair<double, double> set_local_coords (AbstractGShape *s, Touch *t, double x, double y, bool is_move);
+    pair<double, double> set_local_coords (AbstractGShape *s, Touch *t, double x, double y, bool is_move);
   protected:
 
     bool genericEnterLeave (AbstractGShape* gobj);
 
     Window *_win;
     AbstractGShape *_catched_shape, *_hovered_shape;
-    std::map <int, Touch*> _active_touches;
+    map <int, Touch*> _active_touches;
     bool _mouse_released;
   };
 }

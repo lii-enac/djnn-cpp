@@ -36,12 +36,12 @@ namespace djnn
     Vertex (CoreProcess* c);
     virtual ~Vertex ();
     
-    typedef std::vector<Vertex* > vertices_t;
+    typedef vector<Vertex* > vertices_t;
     void add_edge (Vertex* dst);
     void remove_edge (Vertex* dst);
     vertices_t& get_edges () { return _edges; }
     const vertices_t& get_edges () const { return _edges; }
-    std::map<Vertex*, int>& get_map_edges () { return _map_edges; }
+    map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
     void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
@@ -70,7 +70,7 @@ namespace djnn
     std::list<Vertex* >::iterator _pos;
     int _mark, _timestamp;
     size_t _count_edges_in;
-    std::map<Vertex*, int> _map_edges; /* try to deal with duplicate */
+    map<Vertex*, int> _map_edges; /* try to deal with duplicate */
     bool _is_invalid;
     int _sorted_index;
   };
@@ -121,13 +121,13 @@ namespace djnn
 
     Vertex::vertices_t _ordered_vertices;
     Vertex::vertices_t _output_nodes;
-    std::vector<CoreProcess*> _scheduled_delete_processes;
-    std::vector<CoreProcess*> _scheduled_activation_processes;
+    vector<CoreProcess*> _scheduled_delete_processes;
+    vector<CoreProcess*> _scheduled_activation_processes;
 
     std::deque < Vertex*> _activation_deque; // try skip_list ?
 
 #if _DEBUG_ENABLE_CHECK_ORDER
-    std::vector < std::pair <CoreProcess*, CoreProcess*> > _pair_to_check;
+    vector < pair <CoreProcess*, CoreProcess*> > _pair_to_check;
 #endif
 
     int _cur_date;

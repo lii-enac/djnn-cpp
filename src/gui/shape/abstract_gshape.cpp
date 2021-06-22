@@ -42,7 +42,7 @@
 namespace djnn
 {
   static
-  std::vector<std::string>
+  vector<std::string>
   //AbstractGShape::
   _ui =
     { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
@@ -354,7 +354,7 @@ namespace djnn
     }
     else {
       /*  "press", "release", "move", "enter", "leave", "touches" */
-      std::vector<std::string>::iterator it = _ui.begin ();
+      vector<std::string>::iterator it = _ui.begin ();
       found = false;
       while (!found && it != _ui.end ()) {
         if (key.compare (*it) == 0) {

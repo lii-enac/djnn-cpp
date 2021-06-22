@@ -34,7 +34,7 @@ namespace djnn
     
     
     void get_properties_values (std::string& data, double& x, double& y, double& width, double& height);
-    const std::vector<std::string>& get_properties_name () const override;
+    const vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child_impl ("data"); }
 

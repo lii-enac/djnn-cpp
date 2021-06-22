@@ -52,7 +52,7 @@ namespace djnn {
     std::regex _regex;
     RegexAction _reg_action;
     Coupling _c_reg;
-    std::map <int, TextProperty*> _in_map;
+    map <int, TextProperty*> _in_map;
   };
 
 }

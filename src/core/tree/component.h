@@ -21,9 +21,9 @@ namespace djnn {
   class Container : public FatProcess
   {
 
-  typedef std::map<std::string, FatChildProcess*> context_t;
+  typedef map<std::string, FatChildProcess*> context_t;
   public:
-    typedef std::vector<FatChildProcess*> ordered_children_t;
+    typedef vector<FatChildProcess*> ordered_children_t;
     Container (ParentProcess* parent, const std::string& name);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void add_child (FatChildProcess* c, const std::string& name) override;

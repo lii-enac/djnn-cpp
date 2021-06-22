@@ -26,7 +26,7 @@
 namespace djnn
 {
 
-  extern std::vector<std::string> loadedModules; 
+  extern vector<std::string> loadedModules; 
 
   std::string strTrim (std::string s);
 

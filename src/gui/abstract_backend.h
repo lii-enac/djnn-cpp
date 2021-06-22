@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <utility> // std::pair
+#include <utility> // pair
 
 #include "shape/shapes_fwd.h"
 #include "style/style_fwd.h"
@@ -88,10 +88,10 @@ namespace djnn
     {
       return 0;
     }
-    virtual std::pair<double,int>
+    virtual pair<double,int>
     get_cursor_from_local_x (Text*, double)
     {
-      return std::pair<double,int>(0,0);
+      return pair<double,int>(0,0);
     }
     virtual void
     draw_poly (Poly* p)

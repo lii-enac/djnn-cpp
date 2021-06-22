@@ -72,7 +72,7 @@ namespace djnn {
     void update_auto_refresh ();
     void add_window_for_refresh (Window* w);
     void remove_window_for_refresh (Window* w);
-    std::vector<Window*>& get_windows_for_refresh () { return _win_list; };
+    vector<Window*>& get_windows_for_refresh () { return _win_list; };
     void clear_windows_for_refresh () {_win_list.clear (); }
     FatProcess* get_damaged () { return _damaged; }
     FatProcess* get_redraw () { return _redraw_action; }
@@ -81,7 +81,7 @@ namespace djnn {
     UpdateDrawing & operator=(const UpdateDrawing&) = delete;
     static UpdateDrawing* _instance;
     static std::once_flag onceFlag;
-    std::vector<Window*> _win_list;
+    vector<Window*> _win_list;
     BoolProperty *_auto_refresh;
     Spike *_draw_sync;
     UndelayedSpike *_damaged;

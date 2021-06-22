@@ -8,7 +8,7 @@ using namespace djnn;
 static int HandleId (FatProcess**, const char*);
 static int HandleModel (FatProcess**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"id",{.handle_attr = &HandleId}},
   {"model",{.handle_attr = &HandleModel}}
 };
@@ -16,7 +16,7 @@ static std::map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 DJNComponentAttrs_Hash::djn_DJNComponentAttrsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

@@ -38,8 +38,8 @@ namespace djnn
     ComponentObserver & operator=(const ComponentObserver&) = delete;
     static ComponentObserver _instance;
     ComponentObserver ();
-    std::vector<ContextManager*> _manager_list;
-    std::vector<ContextManager*> _draw_manager_list;
+    vector<ContextManager*> _manager_list;
+    vector<ContextManager*> _draw_manager_list;
   };
 
   class ContextManager {

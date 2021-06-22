@@ -105,8 +105,8 @@ namespace djnn
   private:
     // MainLoop should be created *before* any other external-source
     MainLoop ();
-    std::vector<FatProcess*> _background_processes;
-    std::vector<ExternalSource*> _external_sources;
+    vector<FatProcess*> _background_processes;
+    vector<ExternalSource*> _external_sources;
 
     std::mutex cancel_mutex;
     // we need a condition variable, a mutex is not enough, see https://stackoverflow.com/questions/12551341/when-is-a-condition-variable-needed-isnt-a-mutex-enough

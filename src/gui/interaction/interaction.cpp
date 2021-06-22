@@ -66,7 +66,7 @@ namespace djnn
     //graph_remove_edge (_move_touch_action, _update_action);
     //delete _c_move;
 
-    std::map<int, TouchAlive*>::iterator it;
+    map<int, TouchAlive*>::iterator it;
     for ( it = touches.begin (); it != touches.end (); ++it ) {
       delete it->second;
       touches.erase (it);
@@ -147,7 +147,7 @@ namespace djnn
   ScaleRotateTranslate::remove_touch ()
   {
     Touch *t = (Touch*) getRef (_removed);
-    std::map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
+    map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
     if (it != touches.end ()) {
       delete it->second;
       touches.erase (it);
@@ -165,7 +165,7 @@ namespace djnn
   void
   ScaleRotateTranslate::move_touch (Touch *t)
   {
-    std::map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
+    map<int, TouchAlive*>::iterator it = touches.find (t->get_id ());
     if (it != touches.end ()) {
       TouchAlive *ta = it->second;
       ta->_last_pt.set_values (ta->_new_pt);

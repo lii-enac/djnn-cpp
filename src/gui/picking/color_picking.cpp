@@ -83,7 +83,7 @@ namespace djnn
     if (cache)
       remove_gobj (gobj);
     PickShape ps (gobj, cache);
-    _color_map.insert (std::pair<unsigned int, PickShape> (_pick_color, ps));
+    _color_map.insert (pair<unsigned int, PickShape> (_pick_color, ps));
     next_color();
   }
 

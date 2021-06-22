@@ -53,7 +53,7 @@ namespace djnn {
     friend struct Init;
     CoreProcess *_dst;
     Init _init;
-    std::vector<Coupling*> _c_list;
+    vector<Coupling*> _c_list;
     SynchronizerAction _action;
   };
 }

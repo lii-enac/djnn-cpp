@@ -22,7 +22,7 @@ namespace djnn {
 
   class FatProcess;
 
-  extern std::vector<std::string> loadedModules;
+  extern vector<std::string> loadedModules;
   // extern int mouse_tracking;
   // extern int full_screen;
   // extern int hide_pointer;

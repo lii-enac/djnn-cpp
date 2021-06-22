@@ -22,7 +22,7 @@ namespace djnn
 {
   
   static bool __module_initialized = false;
-  extern std::vector<std::string> loadedModules;
+  extern vector<std::string> loadedModules;
 
   FatProcess *DrawingRefreshManager;
 

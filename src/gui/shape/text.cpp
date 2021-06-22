@@ -382,7 +382,7 @@ namespace djnn
     return Backend::instance ()->get_cursor_from_index (this, index);
   }
 
-  std::pair<double, int>
+  pair<double, int>
   Text::get_cursor_from_local_x (double pos)
   {
     return Backend::instance ()->get_cursor_from_local_x (this, pos);

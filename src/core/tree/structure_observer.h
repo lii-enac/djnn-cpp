@@ -22,5 +22,5 @@ namespace djnn {
     virtual void set_child (FatProcess *cont, FatChildProcess *child, int i) = 0;
   };
 
-  extern std::vector<StructureObserver*> structure_observer_list;
+  extern vector<StructureObserver*> structure_observer_list;
 }

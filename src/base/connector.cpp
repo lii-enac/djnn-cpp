@@ -10,7 +10,7 @@ namespace djnn {
 #if !defined(DJNN_NO_SERIALIZE)
 
   void
-  MultiConnector (ParentProcess* parent, CoreProcess* src, std::vector <std::string> src_props, CoreProcess* dst, std::vector <std::string> dst_props, bool copy_on_activation)
+  MultiConnector (ParentProcess* parent, CoreProcess* src, vector <std::string> src_props, CoreProcess* dst, vector <std::string> dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
       error (nullptr, "Incompatible number of properties in multiple connector");

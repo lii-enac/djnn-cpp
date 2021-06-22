@@ -34,7 +34,7 @@ namespace djnn
     
     
     void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop);
-    const std::vector<std::string>& get_properties_name () const override;
+    const vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractDoubleProperty* gain () { return (AbstractDoubleProperty*) find_child_impl ("gain"); }
 		AbstractDoubleProperty* lowpass_gain () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_gain"); }

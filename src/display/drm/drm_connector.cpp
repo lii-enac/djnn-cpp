@@ -39,7 +39,7 @@
 
 namespace djnn {
 
-  std::vector<DRMConnector*> conn_list;
+  vector<DRMConnector*> conn_list;
 
   void
   p_clear_display () {

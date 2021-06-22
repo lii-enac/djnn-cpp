@@ -226,7 +226,7 @@ namespace djnn
     std::smatch match;
     if (std::regex_search(_reg._input.get_value(), match, _reg._regex) && match.size() > 1) {
 
-      std::map<int, TextProperty*>::iterator it;
+      map<int, TextProperty*>::iterator it;
       for (size_t i = 0 ; i < match.size(); i++)
       {
         it = _reg._in_map.find (i);
@@ -274,7 +274,7 @@ namespace djnn
     try {
       int i = stoi (key, nullptr);
 
-      std::map<int, TextProperty*>::iterator it = _in_map.find (i);
+      map<int, TextProperty*>::iterator it = _in_map.find (i);
       if (it != _in_map.end ()) {
         /* key exist  - return */
         return it->second;

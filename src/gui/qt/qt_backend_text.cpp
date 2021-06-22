@@ -282,12 +282,12 @@ namespace djnn
    return i + offset;
  }
 
- std::pair<double,int>
+ pair<double,int>
  QtBackend::get_cursor_from_local_x (Text *t, double loc_x)
  {
   string text = t->get_raw_text ();
   if (text.length() == 0)
-    return std::pair<double,int>(0,0);
+    return pair<double,int>(0,0);
   QString s (text.c_str ());
   QFontMetrics *fm = (QFontMetrics*)(t->get_font_metrics());
 
@@ -298,9 +298,9 @@ namespace djnn
 #endif
 
   if (loc_x > end)
-    return std::pair<double,int>(end, text.length());
+    return pair<double,int>(end, text.length());
   if (loc_x < 0) {
-    return std::pair<double,int>(-1, 0);
+    return pair<double,int>(-1, 0);
   }
 
   for (size_t i = 0; i < text.size (); i = next_index (i, text)) {
@@ -317,13 +317,13 @@ namespace djnn
     if (loc_x >= r1) {
       if (loc_x <= r2) {
         if (loc_x - r1 <= r2 - loc_x)
-          return std::pair<double, int>(r1, i);
-        return std::pair<double, int>(r2, i2);
+          return pair<double, int>(r1, i);
+        return pair<double, int>(r2, i2);
       }
     }
   }
     // this should never happen
-  return std::pair<double, int>(0, 0);
+  return pair<double, int>(0, 0);
 }
 
 int

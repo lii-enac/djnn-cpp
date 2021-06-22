@@ -28,7 +28,7 @@ static int ParseY1 (FatProcess**, const char*);
 static int ParseX2 (FatProcess**, const char*);
 static int ParseY2 (FatProcess**, const char*);
 
-static std::map <std::string, djn_XMLAttrHandler> handlers = {
+static map <std::string, djn_XMLAttrHandler> handlers = {
   {"x1",{&ParseX1}},
   {"y1",{&ParseY1}},
   {"x2",{&ParseX2}},
@@ -38,7 +38,7 @@ static std::map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLLineAttrs_Hash::djn_XMLLineAttrsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLAttrHandler>::iterator it;
+  map<std::string, djn_XMLAttrHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;

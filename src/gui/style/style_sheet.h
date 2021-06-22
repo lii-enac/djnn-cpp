@@ -12,7 +12,7 @@ namespace djnn {
     const std::string& classname () { return _classname; }
     int id () { return _id; }
     static int get_id (const std::string& classname);
-    static void draw_style (const std::vector<int>& classes);
+    static void draw_style (const vector<int>& classes);
   private:
     std::string _classname;
     int _id;

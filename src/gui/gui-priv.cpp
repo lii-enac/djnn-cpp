@@ -165,7 +165,7 @@ namespace djnn {
     structures_t::iterator it_cont = _structure_map.find (cont);
     if (it_cont == _structure_map.end ()) {
       GUIStructureHolder *holder = new GUIStructureHolder ();
-      _structure_map.insert (std::pair<FatProcess*, GUIStructureHolder*> (cont, holder));
+      _structure_map.insert (pair<FatProcess*, GUIStructureHolder*> (cont, holder));
     }
   }
 

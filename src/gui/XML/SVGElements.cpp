@@ -70,7 +70,7 @@ static FatProcess* DataIgnored (const char*, int, FatProcess*);
 static void djnUnloadTextBuf (FatProcess *);
 static void djn__CheckStroke (FatProcess *);
 
-static std::map <std::string, djn_XMLTagHandler> handlers={
+static map <std::string, djn_XMLTagHandler> handlers={
   {"g",{&StartGroup, &EndElement, &DataIgnored}},
   {"use",{&StartUse, &EndElement, &DataIgnored}},
   {"text",{&StartText, &EndText, &TextData}},
@@ -102,7 +102,7 @@ static std::map <std::string, djn_XMLTagHandler> handlers={
 djn_XMLTagHandler*
 SVGElements_Hash::djn_SVGElementsLookup (const char *str, unsigned int len)
 {
-  std::map<std::string, djn_XMLTagHandler>::iterator it;
+  map<std::string, djn_XMLTagHandler>::iterator it;
   it = handlers.find(std::string(str));
   if (it != handlers.end())
     return &it->second;
@@ -202,7 +202,7 @@ static void djn__CheckStroke(FatProcess* holder) {
 	}
 }
 
-static std::vector<string>
+static vector<string>
 get_classes (const std::string& classnames)
 {
   vector<string> tokens;
@@ -272,7 +272,7 @@ StartRect(const char** attrs, FatProcess* current) {
 			djn_RectArgs.x, djn_RectArgs.y, djn_RectArgs.w, djn_RectArgs.h,
 			djn_RectArgs.rx, djn_RectArgs.ry);
 	if (!djn_GraphicalShapeArgs.classname.empty ()) {
-	  std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+	  vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
 	  for (auto cl: classes) {
 	    ((AbstractGShape*)e)->add_style_class (cl);
 	  }
@@ -328,7 +328,7 @@ StartImage (const char** attrs, FatProcess* current)
 		       djn_ImgArgs.y, djn_ImgArgs.w, djn_ImgArgs.h);
   }
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
-    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
     for (auto cl: classes) {
       ((AbstractGShape*)e)->add_style_class (cl);
     }
@@ -383,7 +383,7 @@ StartEllipse(const char** attrs, FatProcess* current) {
 			djn_EllipseArgs.cx, djn_EllipseArgs.cy, djn_EllipseArgs.rx,
 			djn_EllipseArgs.ry);
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
-    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
     for (auto cl: classes) {
       ((AbstractGShape*)e)->add_style_class (cl);
     }
@@ -437,7 +437,7 @@ StartCircle(const char** attrs, FatProcess* current) {
 	e = new Circle(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_CircleArgs.cx, djn_CircleArgs.cy, djn_CircleArgs.r);
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
-    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
     for (auto cl: classes) {
       ((AbstractGShape*)e)->add_style_class (cl);
     }
@@ -491,7 +491,7 @@ StartLine(const char** attrs, FatProcess* current) {
 	e = new Line(holder ? holder : current, djn_GraphicalShapeArgs.id,
 			djn_LineArgs.x1, djn_LineArgs.y1, djn_LineArgs.x2, djn_LineArgs.y2);
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
-    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
     for (auto cl: classes) {
       ((AbstractGShape*)e)->add_style_class (cl);
     }
@@ -546,7 +546,7 @@ StartPoly(const char** attrs, FatProcess* current) {
 		else
 			current->add_child(djn_PolyArgs.e, djn_GraphicalShapeArgs.id);
 	  if (!djn_GraphicalShapeArgs.classname.empty ()) {
-	    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+	    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
 	    for (auto cl: classes) {
 	      ((AbstractGShape*)djn_PolyArgs.e)->add_style_class (cl);
 	    }
@@ -755,7 +755,7 @@ StartPath(const char** attrs, FatProcess* current) {
 
 	if (djn_PathArgs.e) {
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
-      std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+      vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
       for (auto cl: classes) {
         ((AbstractGShape*)djn_PathArgs.e)->add_style_class (cl);
       }
@@ -1197,7 +1197,7 @@ static void djnUnloadTextBuf(FatProcess *e) {
 			djn_TextArgs.dxUnit, djn_TextArgs.dyUnit, djn_TextArgs.encoding,
 			djn_TextArgs.data);
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
-    std::vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
+    vector <string> classes = get_classes (djn_GraphicalShapeArgs.classname);
     for (auto cl: classes) {
       ((AbstractGShape*)t)->add_style_class (cl);
     }

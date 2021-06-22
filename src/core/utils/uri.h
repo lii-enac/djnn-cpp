@@ -25,7 +25,7 @@ namespace djnn {
     static FatChildProcess* find_by_uri (const std::string& uri);
     static void add_uri (const std::string& prefix, FatProcess* p);
   private:
-    typedef std::map<std::string, FatChildProcess*> uris_t;
+    typedef map<std::string, FatChildProcess*> uris_t;
     static uris_t uri_manager;
   };
 }

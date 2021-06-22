@@ -121,10 +121,10 @@ namespace djnn
     return res;
   }
 
-  const std::vector<std::string>&
+  const vector<std::string>&
   AbstractPropBox::get_properties_name () const
   {
-    static const std::vector<std::string> res = {
+    static const vector<std::string> res = {
     "w",
 			"h",
 			"d",

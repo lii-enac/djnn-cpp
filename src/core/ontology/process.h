@@ -110,7 +110,7 @@ namespace djnn {
     virtual void remove_activation_coupling (Coupling* c) {}
     virtual void    add_deactivation_coupling (Coupling* c) {}
     virtual void remove_deactivation_coupling (Coupling* c) {}
-    typedef std::vector<Coupling*> couplings_t;
+    typedef vector<Coupling*> couplings_t;
     virtual const couplings_t& get_activation_couplings () const { return default_couplings; }
     virtual const couplings_t& get_deactivation_couplings () const { return default_couplings; }
     bool  has_coupling () const { return false; }
@@ -144,10 +144,10 @@ namespace djnn {
 
     public:
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-     std::pair<int, int> __nb_activation;
+     pair<int, int> __nb_activation;
     #endif
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-     std::list<std::pair<CoreProcess*, long int>>::iterator __position_in_creation;
+     std::list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
     #endif
 
     public:
@@ -188,8 +188,8 @@ namespace djnn {
     virtual void set_state_dependency (CoreProcess* s) {}
 
     const std::string& get_name (ParentProcess* parent) const;  // WARNING : low efficiency function cause by linear search. use with care !
-    static std::vector<std::string> default_properties_name;
-    virtual const std::vector<std::string>& get_properties_name () const;// { std::vector<std::string> res; return res; }
+    static vector<std::string> default_properties_name;
+    virtual const vector<std::string>& get_properties_name () const;// { vector<std::string> res; return res; }
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const std::string& format);
@@ -268,7 +268,7 @@ namespace djnn {
     virtual size_t children_size () const { return 0; }
     virtual void add_symbol (const std::string& name, FatChildProcess* c) {}
 
-    typedef std::map<std::string, FatChildProcess*> symtable_t;
+    typedef map<std::string, FatChildProcess*> symtable_t;
     static symtable_t default_symtable;
     virtual const symtable_t& symtable () const { return default_symtable; }
     
@@ -389,7 +389,7 @@ namespace djnn {
   };
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-   extern std::list<std::pair<CoreProcess*, long int>> __creation_stat_order;
+   extern std::list<pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
   
   void alias_children (ParentProcess* parent, FatProcess *to);

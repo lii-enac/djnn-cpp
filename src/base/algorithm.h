@@ -88,7 +88,7 @@ namespace djnn
     SpecListOperatorAction _spec_action;
     Coupling _c_spec_action;
     Coupling *_c_update_list_action;
-    std::vector<Coupling*> _coupling_list;
+    vector<Coupling*> _coupling_list;
   };
 
   class SumList : public ListOperator

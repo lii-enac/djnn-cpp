@@ -166,12 +166,12 @@ namespace djnn {
     CoreProcess *_shape;
     FatProcess *_touches, *_added, *_removed;
     AbstractHomography *_matrix;
-    std::map <int, TouchAlive*> touches;
+    map <int, TouchAlive*> touches;
     Coupling *_c_on_add, *_c_on_del; //, *_c_move;
     ScaleRotateTranslateAction *_update_action;
     AddTouchAction *_add_touch_action;
     RemoveTouchAction *_remove_touch_action;
     //MoveTouchAction *_move_touch_action;
   };
-  bool estimateTSR (std::map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
+  bool estimateTSR (map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
 }

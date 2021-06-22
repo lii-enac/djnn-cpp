@@ -47,7 +47,7 @@ namespace djnn
   {
   }
 
-  std::pair<double, double>
+  pair<double, double>
   Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y, bool is_move)
   {
     /* compute local coords */
@@ -90,7 +90,7 @@ namespace djnn
     /* we choose to set/init move even on press */
     s->get_ui()->local_move_x->set_value (loc_x, true);
     s->get_ui()->local_move_y->set_value (loc_y, true);
-    return std::pair<double, double> (loc_x, loc_y);
+    return pair<double, double> (loc_x, loc_y);
   }
 
   void
@@ -233,7 +233,7 @@ namespace djnn
       s->get_ui()->mouse_press_y->set_value (y, true);
       // s->get_ui()->mouse_move_x->set_value (x, true);
       // s->get_ui()->mouse_move_y->set_value (y, true);
-      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, false);
+      pair<double, double> coord = set_local_coords (s, nullptr, x, y, false);
       s->press (coord.first, coord.second);
 
       /* event */
@@ -287,7 +287,7 @@ namespace djnn
   Picking::genericTouchPress (double x, double y, int id, float pressure)
   {
     /* touch management */
-    std::map<int, Touch*>::iterator it = _active_touches.find (id);
+    map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     if (it != _active_touches.end ()) {
       t = it->second;
@@ -345,7 +345,7 @@ namespace djnn
         s->get_ui()->move_y->set_value (y, true);
         s->get_ui()->mouse_move_y->set_value (y, true);
       }
-      std::pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
+      pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
       s->move (coord.first, coord.second);
       /* event */
       s->get_ui()->move->schedule_activation ();
@@ -402,7 +402,7 @@ namespace djnn
   bool
   Picking::genericTouchMove (double x, double y, int id, float pressure)
   {
-    std::map<int, Touch*>::iterator it = _active_touches.find (id);
+    map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {
@@ -535,7 +535,7 @@ namespace djnn
   {
     
     AbstractGShape *s = this->pick (x, y);
-    std::map<int, Touch*>::iterator it = _active_touches.find (id);
+    map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {

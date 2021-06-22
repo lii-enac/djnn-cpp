@@ -34,7 +34,7 @@ namespace djnn
     void draw () override;
     TextAnchor* clone () override;
     void get_properties_values (int& anchor);
-    const std::vector<std::string>& get_properties_name () const override;
+    const vector<std::string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const std::string&) override;
 		AbstractIntProperty* anchor () { return (AbstractIntProperty*) find_child_impl ("anchor"); }
 

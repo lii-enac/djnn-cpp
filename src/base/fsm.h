@@ -128,8 +128,8 @@ namespace djnn {
     FSMState *_cur_state;
     TextProperty _fsm_state, _initial;
     FSMPostTriggerAction _post_trigger;
-    std::vector<FSMState*> _states;
-    std::vector<FSMTransition*> _transitions;
+    vector<FSMState*> _states;
+    vector<FSMTransition*> _transitions;
   };
 
 #ifdef DJNN_NO_DYNAMIC_CAST

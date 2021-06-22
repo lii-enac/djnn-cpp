@@ -105,7 +105,7 @@ namespace djnn {
 		IOFD* _udev_iofd;
     struct udev *_udev_connection;
     struct udev_monitor *_udev_mon;
-    std::map<std::string, Evdev*> _sysname_to_dev;
+    map<std::string, Evdev*> _sysname_to_dev;
     UdevAction *_action;
     Coupling *_readable_cpl;
 	};
@@ -160,7 +160,7 @@ namespace djnn {
   private:
     unsigned int _fieldmap;
     int _nb_slots;
-    std::vector<LinuxTouch*> _v_touches;
+    vector<LinuxTouch*> _v_touches;
     Set *_touches;
     IntProperty *_max_x, *_max_y;
     LinuxTouch *_cur_touch;

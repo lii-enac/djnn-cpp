@@ -124,7 +124,7 @@ namespace djnn {
       void add_string_input ();
       void add_str (const std::string& str );
       void draw () override;
-      std::pair<double, double> get_local_coords (double x, double y);
+      pair<double, double> get_local_coords (double x, double y);
       List _lines;
       IntProperty _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
       IntProperty _x, _y, _width, _height, _line_height, _spaces_for_tab;

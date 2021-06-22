@@ -90,7 +90,7 @@ namespace djnn
     /* 
        NOTE : We SHOULD avoid duplicate edges in this vector.
        here a vector is used because the insert order is importante and used in sorting (traverse_depth_first)
-       we can't use std::set, std::unordered_set or std::map because it break this order.
+       we can't use std::set, std::unordered_set or map because it break this order.
        BUT the find on stc::vector O(n) is more complex than std::set O(log(n)) or std::unordered_set O(1)
 
        We add another _map_edges to manage duplicate info !
@@ -606,23 +606,23 @@ namespace djnn
 
 #ifndef DJNN_NO_DEBUG
 
-  std::pair<Vertex*, int>
-  find_pair_from_value_in_map (std::map<Vertex*, int> &vertex_already_activated, int value){
+  pair<Vertex*, int>
+  find_pair_from_value_in_map (map<Vertex*, int> &vertex_already_activated, int value){
     for (auto pair : vertex_already_activated){
       if (pair.second == value)
         return pair;
     }
-    return std::pair<Vertex*, int> (nullptr, -1);
+    return pair<Vertex*, int> (nullptr, -1);
   }
   
 
   void 
-  display_cycle_analysis_stack (std::map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v){
+  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v){
 
     cerr << "----- CYCLE ANALYSIS - revers activation stack ---- " << endl;
     cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
     
-    std::pair<Vertex*, int> pair ;
+    pair<Vertex*, int> pair ;
     // while we don't find the beginning of the cycle ... which is the vertex already activated
     do {
       pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
@@ -654,7 +654,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
-      std::map<CoreProcess*, int> already_done;
+      map<CoreProcess*, int> already_done;
       for (auto p : _scheduled_activation_processes) {
         if (already_done.find(p) == already_done.end()) {
           p->notify_activation();
@@ -736,7 +736,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       is_end = true;
 
       #ifndef DJNN_NO_DEBUG
-      std::map<Vertex*, int> _vertex_already_activated;
+      map<Vertex*, int> _vertex_already_activated;
       #endif
 
       while (!_activation_deque.empty ()) {

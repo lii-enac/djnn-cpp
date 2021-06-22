@@ -159,7 +159,7 @@ namespace djnn {
     udev_device_unref (dev);
   }
 
-  static std::vector<string> _type_names = {
+  static vector<string> _type_names = {
     "Unknown", "VGA","DVI-I", "DVI-D", "DVI-A",
     "Composite", "SVIDEO", "LVDS", "Component",
     "DIN", "DP", "HDMI-A", "HDMI-B", "TV",

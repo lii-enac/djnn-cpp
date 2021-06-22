@@ -67,10 +67,10 @@ namespace djnn
     please_stop ();
   }
 
-  std::vector<std::string> // FIXME copy of vector
+  vector<std::string> // FIXME copy of vector
   tokenize (char* buff, int sz)
   {
-    std::vector<std::string> res;
+    vector<std::string> res;
     std::string msg;
     for (int i = 0; i < sz; i++) {
       if (buff[i] == ':') {
@@ -120,7 +120,7 @@ namespace djnn
       }
       if (should_i_stop ())
         return;
-      std::vector<std::string> msg = tokenize (buffer, sz);
+      vector<std::string> msg = tokenize (buffer, sz);
 
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       for (auto s : msg) {

@@ -33,7 +33,7 @@ namespace djnn {
       void impl_activate () override {}
       void impl_deactivate () override {}
     private:
-      typedef std::vector<std::pair<FatChildProcess*, size_t>> children_t;
+      typedef vector<pair<FatChildProcess*, size_t>> children_t;
       children_t _children;
     };
 
@@ -50,7 +50,7 @@ namespace djnn {
       void swap_children (FatProcess *cont, int i, int j) override;
       void set_child (FatProcess *cont, FatChildProcess *child, int i) override;
     private:
-      typedef std::map<FatChildProcess*, GUIStructureHolder*> structures_t;
+      typedef map<FatChildProcess*, GUIStructureHolder*> structures_t;
       structures_t _structure_map;
     };
 

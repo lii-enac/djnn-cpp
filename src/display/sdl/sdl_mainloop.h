@@ -49,7 +49,7 @@ namespace djnn {
       void handle_events(SDL_Event&) ;
       void handle_single_event(SDL_Event&) ;
 
-      std::map<Uint32, SDLWindow*> _windows;
+      map<Uint32, SDLWindow*> _windows;
 
       SDLMainloop();
       static SDLMainloop* _instance;

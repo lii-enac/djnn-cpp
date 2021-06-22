@@ -133,10 +133,10 @@ namespace djnn
     return res;
   }
 
-  const std::vector<std::string>&
+  const vector<std::string>&
   AbstractPropLine::get_properties_name () const
   {
-    static const std::vector<std::string> res = {
+    static const vector<std::string> res = {
     "x1",
 			"y1",
 			"x2",

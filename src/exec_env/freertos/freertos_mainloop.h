@@ -39,7 +39,7 @@ namespace djnn {
 	    bool _please_exec;
 	    //void slot_for_awake ();
 	    //void slot_for_about_to_block ();
-	    //std::vector<QtMainloopListener*> _mlls;
+	    //vector<QtMainloopListener*> _mlls;
 	    bool already_awaken;
 	    //int argc;
 	    //char **argv;
