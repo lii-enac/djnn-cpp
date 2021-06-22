@@ -34,7 +34,7 @@
 //#include <array>
 #include <cmath>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn
 {

@@ -44,7 +44,7 @@ namespace djnn {
     void disable_transitions (FSMTransition *t);
     void add_transition (FSMTransition *t) { FSMTransition* pt = t; _transitions.push_front (pt); };
   private:
-    std::list<FSMTransition*> _transitions;
+    list<FSMTransition*> _transitions;
     FSM* _parent_fsm;
   };
 

@@ -22,7 +22,7 @@
 #include "core/utils/to_string.h"
 
 #include <string.h>
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -31,7 +31,7 @@
 #define DEBUG 0
 #endif
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h"
 
 

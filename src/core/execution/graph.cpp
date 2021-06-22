@@ -23,7 +23,7 @@
 #include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
+#include "core/utils/iostream.h"
 #endif
 
 #ifndef DJNN_NO_DEBUG
@@ -214,7 +214,7 @@ namespace djnn
     _activation_deque.clear ();
 
     /* delete vertices from _vertices and clear.*/
-    for (std::list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
+    for (list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
         delete *it;
     _vertices.clear ();
 
@@ -330,7 +330,7 @@ namespace djnn
     Vertex::vertices_t::iterator new_end = _output_nodes.end ();
 
     new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
-      [c](Vertex::vertices_t::iterator::value_type v) {return v->get_process () == c;});
+      [c](Vertex* v) {return v->get_process () == c;});
 
     if (new_end != _output_nodes.end ()) {
       // delete nodes

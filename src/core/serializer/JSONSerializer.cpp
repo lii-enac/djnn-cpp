@@ -15,7 +15,7 @@
 #include "serializer.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
-#include <iostream>
+#include "core/utils/iostream.h"
 #endif
 
 namespace djnn

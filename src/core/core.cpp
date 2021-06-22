@@ -22,7 +22,7 @@
 #include "core/execution/graph.h"
 
 //#include "utils/debug.h"
-//#include <__iostream>
+#include "core/utils/iostream.h"
 
 
 #include <locale.h>

@@ -20,7 +20,7 @@
 #include "core/utils/utils-dev.h" // demangle
 #include <typeinfo>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
 //#include <boost/core/demangle.hpp>
@@ -84,10 +84,10 @@ namespace djnn
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
 
-  extern std::list<pair<CoreProcess*, long int>> __creation_stat_order;
+  extern list<pair<CoreProcess*, long int>> __creation_stat_order;
   extern vector<string> __destruction_stat_order;
 
-  static std::list<pair<CoreProcess*, long int>>::iterator last_creation_end;
+  static list<pair<CoreProcess*, long int>>::iterator last_creation_end;
   static vector<string>::iterator last_destruction_end; 
   static bool init_display_creation_stats = false;
 

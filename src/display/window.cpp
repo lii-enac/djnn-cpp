@@ -37,7 +37,7 @@
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn
 {

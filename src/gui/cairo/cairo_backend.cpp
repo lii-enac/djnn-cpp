@@ -20,7 +20,7 @@
 #include "gui/style/text.h"
 #include "gui/shape/ui.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <cmath>
 #include <locale.h>
 #include <atomic>

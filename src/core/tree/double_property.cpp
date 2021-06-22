@@ -22,7 +22,7 @@
 #include "core/utils/djnn_dynamic_cast.h"
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-//#include <__iostream>
+#include "core/utils/iostream.h"
 #endif
 
 namespace djnn
@@ -103,7 +103,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AbstractDoubleProperty::serialize (const string& format) {
+  AbstractDoubleProperty::serialize (const djnn::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:doubleproperty");

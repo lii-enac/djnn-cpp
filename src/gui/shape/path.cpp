@@ -25,7 +25,7 @@
 #include "gui/shape/path.h"
 #include "gui/shape/path_clip.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h" // UNIMPL
 
 

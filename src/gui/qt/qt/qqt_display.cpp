@@ -20,7 +20,7 @@
 
 #include "qqt_window_moc.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn {
 

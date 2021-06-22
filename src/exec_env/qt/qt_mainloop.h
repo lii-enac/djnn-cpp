@@ -50,7 +50,7 @@ namespace djnn {
     //void add_window (QtWindow* win) { _windows.push_back (win); }
     //void remove_window (QtWindow* win) { _windows.erase (remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
     void add_listener (QtMainloopListener* mll) { _mlls.push_back (mll); }
-    void remove_listener (QtMainloopListener* mll) { _mlls.erase (remove (_mlls.begin (), _mlls.end (), mll), _mlls.end ()); }
+    void remove_listener (QtMainloopListener* mll) { _mlls.erase (std::remove (_mlls.begin (), _mlls.end (), mll), _mlls.end ()); }
 
     QApplication* get_QApplication () { return _qapp; }
   

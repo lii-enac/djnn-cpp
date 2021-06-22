@@ -20,7 +20,7 @@
 #include "core/tree/double_property.h"
 #include "core/utils/error.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn
 {

@@ -22,7 +22,7 @@
 #include "core/utils/to_string.h"
 
 #include <string.h>
-#include <iostream>
+#include "core/utils/iostream.h"
 
 #include <fcntl.h>
 

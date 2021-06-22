@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h"
 
 #include "exec_env/exec_env-dev.h"

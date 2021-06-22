@@ -22,7 +22,7 @@
 
 #include <SDL.h>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn {
 

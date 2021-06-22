@@ -17,7 +17,7 @@
 #include "core/ontology/process.h"
 
 #if !defined(DJNN_NO_DEBUG)
-#include <iostream>
+#include "core/utils/iostream.h"
 #endif
 
 #ifdef DJNN_CRAZYFLIE

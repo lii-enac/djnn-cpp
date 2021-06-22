@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h"
 
 namespace djnn {

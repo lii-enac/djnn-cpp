@@ -19,7 +19,7 @@
 #include <QtGui/QPainter>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <cmath>
 
 namespace djnn

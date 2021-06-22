@@ -16,7 +16,7 @@
 #include "gui/backend.h"
 #include "cairo_backend.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <cmath>
 
 namespace djnn

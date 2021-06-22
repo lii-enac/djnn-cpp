@@ -30,7 +30,7 @@
 #include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG)
-//#include <__iostream>
+#include "core/utils/iostream.h"
 #endif
 
 namespace djnn
@@ -92,7 +92,7 @@ namespace djnn
       return;
     }
     try {
-      index = std::stoi (spec.substr (1, string::npos)) - 1;
+      index = stoi (spec.substr (1, string::npos)) - 1;
       if (spec.at (0) == '<') {
         auto it = _children.begin () + index;
         it = _children.insert (it, c);
@@ -137,7 +137,7 @@ namespace djnn
     }
     /* remove if 'c' is found in the vector */
     newend = std::remove_if (_children.begin (), _children.end (), 
-        [c](ordered_children_t::iterator::value_type v) { return v == c; });
+        [c](FatChildProcess* v) { return v == c; });
 
     /* check if end has changed and erase if necessary */
     if (newend != _children.end ()){
@@ -153,7 +153,7 @@ namespace djnn
     size_t index;
     try {
       /* from user index to internal index : -1 */
-      index = std::stoi (name, nullptr) - 1;
+      index = stoi (name, nullptr) - 1;
       if (index < _children.size ()) {
         auto * c = _children.at (index);
         remove_child (c);
@@ -179,7 +179,7 @@ namespace djnn
     else {
       try {
         string::size_type sz;
-        size_t index = std::stoi (path, &sz) - 1;
+        size_t index = stoi (path, &sz) - 1;
         if (index < _children.size ()) {
           auto * c = _children.at (index);
           if (path.length () > sz) {

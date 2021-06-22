@@ -23,7 +23,7 @@
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <cmath>
 
 namespace djnn

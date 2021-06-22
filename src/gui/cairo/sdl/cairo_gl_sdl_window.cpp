@@ -11,7 +11,7 @@
 #include <SDL_syswm.h>
 #include <cairo/cairo-gl.h>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #define __FL__ " " __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define DBG std::cerr << __FILE__ ":" << __LINE__ << ":" << __FUNCTION__ << std::endl;
 #define attr(a) #a ":" << a << " "

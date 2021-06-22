@@ -26,7 +26,7 @@
 #include "core/tree/component.h"
 #include "display/window.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h" // UNIMPL
 #include "core/utils/error.h"
 

@@ -12,13 +12,15 @@
  *
  */
 
-#include "algorithm.h"
+#include <algorithm>
+
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/serializer/serializer.h"
 
-#include <algorithm>
+#include "algorithm.h"
+
 
 namespace djnn
 {

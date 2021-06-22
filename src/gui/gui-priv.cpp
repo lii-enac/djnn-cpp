@@ -22,7 +22,7 @@
 //#include <boost/range/adaptor/reversed.hpp>
 
 #if _DEBUG_SEE_GUI_INFO_PREF
-#include <iostream>
+#include "core/utils/iostream.h"
 
 
 /* define in gui.cpp */

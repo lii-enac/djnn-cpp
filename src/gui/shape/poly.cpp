@@ -24,7 +24,7 @@
 #include "display/window.h"
 #include "gui/shape/poly.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h"
 
 

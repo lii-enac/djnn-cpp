@@ -12,7 +12,7 @@
  *
  */
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <fstream>
 #include <iomanip>
 #include "file_writer.h"

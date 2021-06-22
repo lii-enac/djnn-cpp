@@ -21,7 +21,7 @@
 #include <memory>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-//#include <__iostream>
+#include "core/utils/iostream.h"
 #endif
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBGG
@@ -42,8 +42,8 @@ namespace djnn
     map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
-    void set_position_in_vertices (std::list <Vertex *>::iterator end) { _pos = std::prev(end); }
-    std::list<Vertex* >::iterator get_position_in_vertices () { return _pos; }
+    void set_position_in_vertices (list <Vertex *>::iterator end) { _pos = prev(end); }
+    list<Vertex* >::iterator get_position_in_vertices () { return _pos; }
 
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
@@ -65,7 +65,7 @@ namespace djnn
   private:
     CoreProcess* _process;
     vertices_t _edges;
-    std::list<Vertex* >::iterator _pos;
+    list<Vertex* >::iterator _pos;
     int _mark, _timestamp;
     size_t _count_edges_in;
     map<Vertex*, int> _map_edges; /* try to deal with duplicate */
@@ -115,7 +115,7 @@ namespace djnn
     void print_order (CoreProcess *p1, CoreProcess *p2);
 
     //Vertex::vertices_t _vertices;
-    std::list< Vertex* > _vertices;
+    list< Vertex* > _vertices;
 
     Vertex::vertices_t _ordered_vertices;
     Vertex::vertices_t _output_nodes;

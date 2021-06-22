@@ -28,7 +28,7 @@
 #endif
 
 #ifndef DJNN_NO_DEBUG
-#include <iostream>
+#include "core/utils/iostream.h"
 #endif
 //#include "utils/debug.h"
 

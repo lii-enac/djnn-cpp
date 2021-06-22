@@ -49,7 +49,7 @@ namespace djnn {
     {
       context_t::iterator it = _cur_context.find (k);
       if (it != _cur_context.end ()) it->second = v;
-      else _cur_context.insert (std::make_pair (k, v));
+      else _cur_context.insert (make_pair (k, v));
     }
     FatChildProcess*
     get_from_context (const string& k)

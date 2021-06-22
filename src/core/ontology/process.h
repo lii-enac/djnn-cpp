@@ -65,11 +65,6 @@ namespace djnn {
     LAST
   };
 
-  using std::string;
-  using std::vector;
-  using std::map;
-  using std::pair;
-
   class Coupling;
   class Vertex;
   class CoreProcess;
@@ -136,7 +131,7 @@ namespace djnn {
      pair<int, int> __nb_activation;
     #endif
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-     std::list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
+     list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
     #endif
 
     public:
@@ -378,7 +373,7 @@ namespace djnn {
   };
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-   extern std::list<pair<CoreProcess*, long int>> __creation_stat_order;
+   extern list<pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
   
   void alias_children (ParentProcess* parent, FatProcess *to);

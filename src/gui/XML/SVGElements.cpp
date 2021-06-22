@@ -16,7 +16,7 @@
 
 #include <numeric>
 #include <algorithm>
-#include <iostream>
+#include "core/utils/iostream.h"
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>

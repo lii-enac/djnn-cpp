@@ -1,6 +1,6 @@
 #include "crazyflie_rc.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 #include "utils/debug.h"
 
 namespace djnn {

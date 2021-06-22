@@ -16,7 +16,7 @@
 #include "color_picking.h"
 
 #include "utils/debug.h"
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn
 {

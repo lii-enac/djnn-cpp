@@ -24,7 +24,7 @@
 
 #include <mutex> // std::call_once
 
-//#include <__iostream>
+#include "core/utils/iostream.h"
 //#include "utils/debug.h"
 
 namespace djnn {

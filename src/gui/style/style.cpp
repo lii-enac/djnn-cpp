@@ -23,7 +23,7 @@
 
 #include "core/tree/list.h"
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 namespace djnn
 {
