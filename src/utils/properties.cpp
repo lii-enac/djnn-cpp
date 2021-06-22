@@ -38,11 +38,11 @@ namespace djnn
     _action = new PropertiesAction (this, "action");
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     if (!filename.empty()) {
-      std::ifstream file (filename);
+      std::ifstream file (filename.c_str());
       if (file.is_open()) {
-        string line;
+        std::string line;
         while (getline(file, line)) {
-          _input->set_value (line, false);
+          _input->set_value (line.c_str(), false);
           add_property ();
         }
       file.close();

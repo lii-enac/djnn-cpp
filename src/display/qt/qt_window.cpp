@@ -228,7 +228,7 @@ namespace djnn
   {
     _window->key_pressed ()->set_value (event->key (), 1);
     if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
-      _window->key_pressed_text ()->set_value (event->text ().toStdString (), 1);
+      _window->key_pressed_text ()->set_value (event->text ().toStdString ().c_str (), 1);
     }
     // QtMainloop::instance ().set_please_exec (true);
     // NO event synthesis on press, release
@@ -239,7 +239,7 @@ namespace djnn
   MyQWidget::keyReleaseEvent (QKeyEvent *event)
   {
     _window->key_released ()->set_value (event->key (), 1);
-    _window->key_released_text ()->set_value (event->text ().toStdString (), 1);
+    _window->key_released_text ()->set_value (event->text ().toStdString ().c_str(), 1);
     //QtMainloop::instance ().set_please_exec (true);
     // NO event synthesis on press, release
     GRAPH_EXEC;

@@ -40,7 +40,7 @@ namespace djnn
   _fn_action (this, "fn_action"), _action (this, "action"),
   _c_input (&_input, ACTIVATION, &_action, ACTIVATION),
   _c_filename (&_filename, ACTIVATION, &_fn_action, ACTIVATION),
-  _fs (filename, std::ofstream::out | std::ofstream::trunc)
+  _fs (filename.c_str(), std::ofstream::out | std::ofstream::trunc)
   {
     finalize_construction (parent, name);
   }
@@ -57,7 +57,7 @@ namespace djnn
     if (_fs.is_open ()) {
       _fs.close ();
     }
-    _fs.open (_filename.get_value (), std::ofstream::out | std::ofstream::trunc);
+    _fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
   }
 
   void
@@ -75,7 +75,7 @@ namespace djnn
     if (_fs.is_open ()) {
       _fs.close ();
     }
-    _fs.open (_filename.get_value (), std::ofstream::out | std::ofstream::trunc);
+    _fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
   }
 
   void

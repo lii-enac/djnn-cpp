@@ -61,8 +61,19 @@ namespace djnn
   FileReader::read ()
   {
     string filename = _input->get_value ();
-    std::ifstream file (filename);
-    if (file.is_open()) {
+    std::ifstream file (filename.c_str ());
+
+    // https://stackoverflow.com/a/2602258
+    if (file.is_open()) {    
+      file.seekg(0, std::ios::end);
+      size_t size = file.tellg();
+      string buffer(size, ' ');
+      file.seekg(0);
+      file.read(&buffer[0], size);
+      _output->set_value (buffer, true);
+    }
+
+    /*if (file.is_open()) {
       string buff;
       string line;
       while (getline(file, line)) {
@@ -70,7 +81,7 @@ namespace djnn
       }
       _output->set_value (buff, true);
       file.close();
-    }
+    }*/
   }
 
 #ifndef DJNN_NO_SERIALIZE

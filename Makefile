@@ -168,6 +168,10 @@ CFLAGS += -MMD -Wall
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
 
+# EASTL
+#CFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
+#LDFLAGS += -L/Users/conversy/recherche/istar/code/misc/EASTL/build -lEASTL
+
 CFLAGS += -I$(src_dir)
 LDFLAGS += -L$(build_lib_dir)
 
@@ -305,7 +309,7 @@ endif
 # ---------------------------------------
 # debug, analysis
 
-CFLAGS += -DRMT_ENABLED=0 # remotery - get rid of any call
+#CFLAGS += -DRMT_ENABLED=1 # remotery - get rid of any call
 #CFLAGS += -DRMT_ENABLED=1 -DRMT_USE_OPENGL=0
 
 #CFLAGS += -fsanitize=thread -O1

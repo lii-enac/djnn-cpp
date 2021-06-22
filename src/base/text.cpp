@@ -223,15 +223,17 @@ namespace djnn
   void 
   Regex::RegexAction::impl_activate () 
   {
-    std::smatch match;
-    if (std::regex_search(_reg._input.get_value(), match, _reg._regex) && match.size() > 1) {
-
+    std::match_results<string::const_iterator> match;
+    auto & input = _reg._input.get_value();
+    if (std::regex_search(input, match, _reg._regex) && match.size() > 1) {
+    //if (std::regex_search(input.begin(), input.end(), match, _reg._regex) && match.size() > 1) {
       map<int, TextProperty*>::iterator it;
       for (size_t i = 0 ; i < match.size(); i++)
       {
         it = _reg._in_map.find (i);
-        if (it != _reg._in_map.end () && !match.str(i).empty ()){
-          it->second->set_value (match.str(i), true);
+        if (it != _reg._in_map.end () && !match.str(i).empty ()) {
+          const string res = match.str(i).c_str(); // FIXME copy of string even if no EASTL
+          it->second->set_value (res, true);
         }
       }
     }
@@ -241,7 +243,7 @@ namespace djnn
   : FatProcess (name),
     _input (this, "input", ""),
     _init (reg),
-    _regex (reg),
+    _regex (reg.c_str()),
     _reg_action (this, "reg_action", *this),
     _c_reg (&_input, ACTIVATION, &_reg_action, ACTIVATION)
   {

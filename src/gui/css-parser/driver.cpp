@@ -11,6 +11,9 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *
  */
+
+#include "core/utils/iostream.h"
+
 #include <fstream>
 #include <sstream>
 
@@ -52,7 +55,7 @@ namespace css
   bool
   Driver::parse_string (const string& input, const string& sname, FatProcess *p)
   {
-    std::istringstream iss (input);
+    std::istringstream iss (input.c_str());
     return parse_stream (iss, sname, p);
   }
 
