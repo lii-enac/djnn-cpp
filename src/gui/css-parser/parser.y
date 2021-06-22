@@ -54,7 +54,7 @@
   FatProcess *cur_parent;
 
   void
-  make_text_property (string property, string arg)
+  make_text_property (const string& property, const string& arg)
   {
     if (property == "fill") {
       if (arg == "none") {
