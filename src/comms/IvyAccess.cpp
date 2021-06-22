@@ -30,15 +30,6 @@
 
 //#define __IVY_DEBUG__
 
-
-
-using djnn::string;
-using std::pair;
-using std::vector;
-using std::map;
-
-
-
 /** regexp function **/
 
 static const char* _skim_regex (const char* p, int* nb)
@@ -143,7 +134,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   //pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair = 
     //(pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> *) user_data;
   djnn::IvyAccess::regexp_keypair_t * keypair = mcud->keypair; //reinterpret_cast<djnn::IvyAccess::regexp_keypair_t*>(user_data);
-  string regexp = keypair->first;
+  djnn::string regexp = keypair->first;
   //map<string, vector<pair<int, djnn::TextProperty*>>>*
   djnn::IvyAccess::in_map_t*
     in_map =  keypair->second;
@@ -168,7 +159,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
         std::cerr << "Ivy err: regexp position is greater or equal to argc " << (*vit).first << " " << argc << std::endl;
         continue;
       }
-      string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
+      djnn::string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
       //GRAPH_EXEC; // methode 1 : per value
     }

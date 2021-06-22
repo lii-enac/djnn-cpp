@@ -77,6 +77,9 @@ namespace djnn {
   };
 
   using std::string;
+  using std::vector;
+  using std::map;
+  using std::pair;
 
   class Coupling;
   class Vertex;

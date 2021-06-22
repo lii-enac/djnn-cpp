@@ -20,7 +20,6 @@
 
 namespace djnn
 {
-  using std::string;
 
   static void
   perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)

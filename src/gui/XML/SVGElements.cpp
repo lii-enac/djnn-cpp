@@ -33,10 +33,6 @@
 #include "gui/style/style.h"
 
 
-using std::pair;
-using std::vector;
-using std::map;
-
 namespace djnn {
 	/* all the specific tag handling procedures defined in this file */
 

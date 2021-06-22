@@ -6,8 +6,6 @@
 
 namespace djnn {
 
-  using std::string;
-
   void
   Binding::set_parent (ParentProcess* parent)
   { 
