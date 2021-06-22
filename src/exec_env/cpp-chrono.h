@@ -33,7 +33,7 @@ namespace chrono = boost::chrono;
 #endif
 
 // import literal such as "1s" etc
-// using namespace std::chrono_literals;
+using namespace std::chrono_literals;
 
 
 }
