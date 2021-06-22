@@ -29,13 +29,13 @@ namespace djnn
   class DashOffset : public AbstractStyle
   {
   public:
-    DashOffset (ParentProcess* parent, const std::string& name, double offset);
+    DashOffset (ParentProcess* parent, const djnn::string& name, double offset);
     virtual ~DashOffset ();
     void draw () override;
     DashOffset* clone () override;
     void get_properties_values (double& offset);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child_impl ("offset"); }
 
   protected:

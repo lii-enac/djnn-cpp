@@ -33,7 +33,7 @@ namespace djnn
   static string __cur_format;
   
   void
-  AbstractSerializer::pre_serialize (const CoreProcess* root, const std::string& format) {
+  AbstractSerializer::pre_serialize (const CoreProcess* root, const djnn::string& format) {
      if (AbstractSerializer::serializationRoot == 0) {
 
         AbstractSerializer::serializationRoot = root;
@@ -133,7 +133,7 @@ path_compute (FatProcess* from, CoreProcess* to,
       else
         insert_slash = 1;
       auto * pt = dynamic_cast<FatProcess*>(pc->t);
-      std::string name;
+      djnn::string name;
       if(pt)
         name = pt->get_name();
       buf +=  !(name.empty ()) ? name : "<anonymous>";

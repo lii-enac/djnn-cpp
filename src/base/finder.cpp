@@ -32,8 +32,8 @@ namespace djnn
   Finder::FinderAction::impl_activate ()
   {
     Finder* f = (Finder*) get_parent ();
-    std::string path = f->_path.get_value ();
-    std::string key = f->_key.get_value ();
+    djnn::string path = f->_path.get_value ();
+    djnn::string key = f->_key.get_value ();
     if (key.empty()){
       warning (this, "finder - \"key\" is empty \n");
       f->_result.set_value ( (CoreProcess*)nullptr, true); // ??
@@ -100,7 +100,7 @@ namespace djnn
     f->_not_found.set_activation_flag (ACTIVATION);
   }
 
-  Finder::Finder (ParentProcess* parent, const std::string& name, FatProcess *container, const std::string& path)
+  Finder::Finder (ParentProcess* parent, const djnn::string& name, FatProcess *container, const djnn::string& path)
   : FatProcess (name),
   _path (this, "path", path),
   _key (this, "key", ""),
@@ -159,7 +159,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Finder::serialize (const std::string& type)
+  Finder::serialize (const djnn::string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

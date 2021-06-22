@@ -21,7 +21,7 @@ namespace djnn
 {
 #if !defined(DJNN_NO_SERIALIZE)
   void
-  Blank::serialize (const std::string& format) {
+  Blank::serialize (const djnn::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

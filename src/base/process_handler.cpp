@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  ProcessDeleter::ProcessDeleter (ParentProcess *parent, const std::string& name)
+  ProcessDeleter::ProcessDeleter (ParentProcess *parent, const djnn::string& name)
   : FatProcess (name),
   _del (this, "del", nullptr),
   _del_one (this, "delete_one_action"),
@@ -62,7 +62,7 @@ namespace djnn
     }
   }
 
-  ProcessCollector::ProcessCollector (ParentProcess *parent, const std::string& name) :
+  ProcessCollector::ProcessCollector (ParentProcess *parent, const djnn::string& name) :
       FatProcess (name),
       _s_rm_all (this, "rm_all"),
       _add (this, "add", nullptr),
@@ -158,7 +158,7 @@ namespace djnn
     _list.clear ();
   }
 
-  CollectionDeleter::CollectionDeleter (ParentProcess *parent, const std::string& name) :
+  CollectionDeleter::CollectionDeleter (ParentProcess *parent, const djnn::string& name) :
       FatProcess (name),
       _del (this, "del", nullptr),
       _del_action (this, "del_action"),
@@ -214,7 +214,7 @@ namespace djnn
     coll->remove_all ();
   }
 
-  CollectionActivator::CollectionActivator (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+  CollectionActivator::CollectionActivator (ParentProcess *parent, const djnn::string& name, CoreProcess* collection, const djnn::string &path) :
       FatProcess (name),
       _activate (this, "activate"),
       _collection (this, "collection", collection),
@@ -265,7 +265,7 @@ namespace djnn
   {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-      std::string path = _path.get_value ();
+      djnn::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
         auto *p = to_act->find_child_impl (path);
         if (p)
@@ -274,7 +274,7 @@ namespace djnn
     }
   }
 
-  AbstractCollectionSetValue::AbstractCollectionSetValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+  AbstractCollectionSetValue::AbstractCollectionSetValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection, const djnn::string &path) :
     FatProcess (name),
     _collection (this, "collection", collection),
     _path (this, "path", path),
@@ -305,7 +305,7 @@ namespace djnn
     FatProcess::set_parent (p);
   }
 
-  CollectionSetDoubleValue::CollectionSetDoubleValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+  CollectionSetDoubleValue::CollectionSetDoubleValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection, const djnn::string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", 0),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
@@ -334,7 +334,7 @@ namespace djnn
   {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-      std::string path = _path.get_value ();
+      djnn::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
         AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*>(to_act->find_child_impl (path));
         if (p)
@@ -343,7 +343,7 @@ namespace djnn
     }
   }
 
-  CollectionSetStringValue::CollectionSetStringValue (ParentProcess *parent, const std::string& name, CoreProcess* collection, const std::string &path) :
+  CollectionSetStringValue::CollectionSetStringValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection, const djnn::string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", ""),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
@@ -372,7 +372,7 @@ namespace djnn
   {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-      std::string path = _path.get_value ();
+      djnn::string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
         AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*> (to_act->find_child_impl (path));
         if (p)
@@ -381,7 +381,7 @@ namespace djnn
     }
   }
 
-  NativeCollectionAction::NativeCollectionAction (ParentProcess* parent, const std::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel) :
+  NativeCollectionAction::NativeCollectionAction (ParentProcess* parent, const djnn::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel) :
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {
     _coll = dynamic_cast<ProcessCollector*> (coll);

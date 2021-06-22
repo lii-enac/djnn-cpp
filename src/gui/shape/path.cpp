@@ -31,7 +31,7 @@
 
 namespace djnn
 {
-  PathPoint::PathPoint (ParentProcess* parent, const std::string& name, double x, double y) :
+  PathPoint::PathPoint (ParentProcess* parent, const djnn::string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
@@ -71,7 +71,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathPoint::find_child_impl (const std::string& name)
+  PathPoint::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -145,7 +145,7 @@ namespace djnn
     return new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
   }
 
-  PathClosure::PathClosure (ParentProcess* parent, const std::string& name) :
+  PathClosure::PathClosure (ParentProcess* parent, const djnn::string& name) :
     AbstractGObj (parent, name)
   {
     /* avoid dynamic_cast for cloning */
@@ -173,7 +173,7 @@ namespace djnn
     return new PathClosure (nullptr, get_name ());
   }
 
-  PathQuadratic::PathQuadratic (ParentProcess* parent, const std::string& name, double x1, double y1, double x, double y) :
+  PathQuadratic::PathQuadratic (ParentProcess* parent, const djnn::string& name, double x1, double y1, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{ .x1=x1, .y1=y1, .x=x, .y=y },
       _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
@@ -225,7 +225,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathQuadratic::find_child_impl (const std::string& name)
+  PathQuadratic::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -301,7 +301,7 @@ namespace djnn
   }
 
 
-  PathCubic::PathCubic (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2, double x, double y) :
+  PathCubic::PathCubic (ParentProcess* parent, const djnn::string& name, double x1, double y1, double x2, double y2, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
@@ -365,7 +365,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathCubic::find_child_impl (const std::string& name)
+  PathCubic::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -453,7 +453,7 @@ namespace djnn
     return new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
   }
 
-  PathArc::PathArc (ParentProcess* parent, const std::string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
+  PathArc::PathArc (ParentProcess* parent, const djnn::string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y) :
       AbstractGObj (parent, name),
       raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
@@ -524,7 +524,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  PathArc::find_child_impl (const std::string& name)
+  PathArc::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
     if(res) return res;
@@ -619,7 +619,7 @@ namespace djnn
     return new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
   }
 
-  Path::Path (ParentProcess* parent, const std::string& name) :
+  Path::Path (ParentProcess* parent, const djnn::string& name) :
       AbstractGShape (parent, name)
   {
     _items = new List (this, "items");

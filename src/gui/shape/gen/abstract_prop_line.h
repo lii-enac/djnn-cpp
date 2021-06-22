@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropLine : public AbstractGShape
   {
   public:
-    AbstractPropLine (ParentProcess* parent, const std::string& name, double x1, double y1, double x2, double y2);
+    AbstractPropLine (ParentProcess* parent, const djnn::string& name, double x1, double y1, double x2, double y2);
     virtual ~AbstractPropLine ();
     
     
     void get_properties_values (double& x1, double& y1, double& x2, double& y2);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child_impl ("x1"); }
 		AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child_impl ("y1"); }
 		AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child_impl ("x2"); }

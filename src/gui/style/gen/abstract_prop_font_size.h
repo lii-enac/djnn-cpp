@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropFontSize : public AbstractStyle
   {
   public:
-    AbstractPropFontSize (ParentProcess* parent, const std::string& name, int unit, double size);
+    AbstractPropFontSize (ParentProcess* parent, const djnn::string& name, int unit, double size);
     virtual ~AbstractPropFontSize ();
     
     
     void get_properties_values (int& unit, double& size);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child_impl ("unit"); }
 		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child_impl ("size"); }
 

@@ -31,7 +31,7 @@ static int djn__ParseWidth (FatProcess**, const char*);
 static int djn__ParseHeight (FatProcess**, const char*);
 static int djn__ParseHref (FatProcess**, const char*);
 
-static map <std::string, djn_XMLAttrHandler> handlers = {
+static map <djnn::string, djn_XMLAttrHandler> handlers = {
   {"x", {&djn__ParseX}},
   {"y", {&djn__ParseY}},
   {"width", {&djn__ParseWidth}},
@@ -43,8 +43,8 @@ static map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 XMLUseAttrs_Hash::djn_XMLUseAttrsLookup (const char *str, unsigned int len)
 {
-  map<std::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(std::string(str));
+  map<djnn::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(djnn::string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

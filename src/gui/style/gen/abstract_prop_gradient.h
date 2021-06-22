@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropGradient : public AbstractStyle
   {
   public:
-    AbstractPropGradient (ParentProcess* parent, const std::string& name, int spread, int coords);
+    AbstractPropGradient (ParentProcess* parent, const djnn::string& name, int spread, int coords);
     virtual ~AbstractPropGradient ();
     
     
     void get_properties_values (int& spread, int& coords);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child_impl ("spread"); }
 		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child_impl ("coords"); }
 

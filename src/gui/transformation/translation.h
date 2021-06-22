@@ -8,7 +8,7 @@ namespace djnn
   class Translation : public AbstractTranslation
   {
   public:
-    Translation (ParentProcess* parent, const std::string& name, double tx, double ty);
+    Translation (ParentProcess* parent, const djnn::string& name, double tx, double ty);
     Translation (double tx, double ty);
     virtual ~Translation ();
     void draw () override;

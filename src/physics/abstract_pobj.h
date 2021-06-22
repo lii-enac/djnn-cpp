@@ -15,14 +15,14 @@ namespace djnn {
 	};
     class AbstractPObj : public FatProcess {
 	public:
-		AbstractPObj (ParentProcess* parent, const std::string& name) : FatProcess(name) {}
+		AbstractPObj (ParentProcess* parent, const djnn::string& name) : FatProcess(name) {}
         //World * get_frame () { return get_world (); } // FIXME
         PhysicScene * get_frame () { return nullptr; } // FIXME
         virtual void impl_activate () override;
     	virtual void impl_deactivate () override;
-    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const std::string& name, int notify_mask);
-    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const std::string& name, int notify_mask);
-    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const std::string& name, int notify_mask);
-    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, std::string *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData  **cprop, bool *rawp, const djnn::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const djnn::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const djnn::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, djnn::string *rawp, const djnn::string& name, int notify_mask);
   };
 }

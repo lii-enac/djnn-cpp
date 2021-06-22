@@ -32,7 +32,7 @@
 
 namespace djnn {
 
-static std::string djn_ParseURL (const char *);
+static djnn::string djn_ParseURL (const char *);
 
 static int Ignore (FatProcess**, const char*);
 static int ParseId (FatProcess**, const char*);
@@ -60,7 +60,7 @@ static int ParseTransform (FatProcess**, const char*);
 static int ParseTextAnchor (FatProcess**, const char*);
 static int ParsePathClip (FatProcess**, const char*);
 
-static map <std::string, djn_XMLAttrHandler> handlers = {
+static map <djnn::string, djn_XMLAttrHandler> handlers = {
   {"id",{&ParseId}},
   {"style",{&ParseStyle}},
   {"stroke",{&ParseStroke}},
@@ -119,8 +119,8 @@ static map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (const char *str, unsigned int len)
 {
-  map<std::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(std::string(str));
+  map<djnn::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(djnn::string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;
@@ -678,7 +678,7 @@ static int ParseTextAnchor(FatProcess** e, const char* v) {
 static
 int ParseClass (FatProcess** e, const char* v)
 {
-  djn_GraphicalShapeArgs.classname = std::string (v);
+  djn_GraphicalShapeArgs.classname = djnn::string (v);
   return 1;
 }
 }

@@ -43,7 +43,7 @@ namespace djnn
       return (KAPPA * v + 16) / 116;
   }
 
-  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter * parent, const std::string& name) :
+  RGBToLCHConverter::ConverterAction::ConverterAction (RGBToLCHConverter * parent, const djnn::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -86,7 +86,7 @@ namespace djnn
     _p->_h->set_value (H, true);
   }
 
-  RGBToLCHConverter::RGBToLCHConverter (ParentProcess* parent, const std::string& name) :
+  RGBToLCHConverter::RGBToLCHConverter (ParentProcess* parent, const djnn::string& name) :
       FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
@@ -161,7 +161,7 @@ namespace djnn
     _cb->disable ();
   }
 
-  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter * parent, const std::string& name) :
+  LCHToRGBConverter::ConverterAction::ConverterAction (LCHToRGBConverter * parent, const djnn::string& name) :
       Action (parent, name), _p (parent)
   {
   }
@@ -211,7 +211,7 @@ namespace djnn
     _p->_b->set_value (B < 0 ? 0 : (B > 255) ? 255 : B, true);
   }
 
-  LCHToRGBConverter::LCHToRGBConverter (ParentProcess* parent, const std::string& name) :
+  LCHToRGBConverter::LCHToRGBConverter (ParentProcess* parent, const djnn::string& name) :
       FatProcess (name)
   {
     _r = new IntProperty (this, "r", 0);
@@ -284,7 +284,7 @@ namespace djnn
     _ch->disable ();
   }
 
-  AbstractColor::AbstractColor (ParentProcess* parent, const std::string& name, int r, int g, int b) :
+  AbstractColor::AbstractColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b) :
     AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
@@ -295,7 +295,7 @@ namespace djnn
     raw_props.value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
   }
 
-  AbstractColor::AbstractColor (ParentProcess* parent, const std::string& name, int v) :
+  AbstractColor::AbstractColor (ParentProcess* parent, const djnn::string& name, int v) :
     AbstractStyle (parent, name),
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),
@@ -383,7 +383,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  AbstractColor::find_child_impl (const std::string& name)
+  AbstractColor::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if(res) return res;

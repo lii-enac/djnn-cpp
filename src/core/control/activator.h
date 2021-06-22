@@ -24,8 +24,8 @@ namespace djnn {
   class Activator : public FatProcess
   {
   public:
-    Activator (ParentProcess* parent, const std::string& name, CoreProcess* src);
-    Activator (ParentProcess* parent, const std::string& name, CoreProcess* src, const std::string& spec);
+    Activator (ParentProcess* parent, const djnn::string& name, CoreProcess* src);
+    Activator (ParentProcess* parent, const djnn::string& name, CoreProcess* src, const djnn::string& spec);
     virtual ~Activator ();
     void impl_activate () override { _action->set_activation_flag (ACTIVATION); };
     void impl_deactivate () override {}
@@ -34,7 +34,7 @@ namespace djnn {
 
   public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 }

@@ -9,7 +9,7 @@ namespace djnn
   class Circle : public AbstractPropCircle
   {
   public:
-    Circle (ParentProcess* parent, const std::string& name, double cx, double cy, double r);
+    Circle (ParentProcess* parent, const djnn::string& name, double cx, double cy, double r);
     Circle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;

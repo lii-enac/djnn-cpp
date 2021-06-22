@@ -55,15 +55,15 @@ namespace djnn {
       SwitchList* _sw;
     };
   public:
-    SwitchList (ParentProcess* parent, const std::string& name, bool loop=false);
+    SwitchList (ParentProcess* parent, const djnn::string& name, bool loop=false);
     virtual ~SwitchList ();
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
-    FatChildProcess* find_child_impl (const std::string& path) override;
+    FatChildProcess* find_child_impl (const djnn::string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     SwitchList* clone () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
     FatChildProcess* item () { return _cur_item; }
     void set_item (FatChildProcess *item) { _cur_item = item; }

@@ -10,9 +10,9 @@ namespace djnn
   class PolyPoint : public AbstractGObj
   {
   public:
-    PolyPoint (ParentProcess* parent, const std::string& name, double x, double y);
+    PolyPoint (ParentProcess* parent, const djnn::string& name, double x, double y);
     virtual ~PolyPoint ();
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
@@ -30,7 +30,7 @@ namespace djnn
   class Poly : public AbstractGShape
   {
   public:
-    Poly (ParentProcess* parent, const std::string& name, int closed);
+    Poly (ParentProcess* parent, const djnn::string& name, int closed);
     virtual ~Poly ();
     List* points () { return _points;}
     bool closed () { return _closed;}
@@ -52,14 +52,14 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon (ParentProcess* parent, const std::string& name) : Poly (parent, name, 1) {};
+    Polygon (ParentProcess* parent, const djnn::string& name) : Poly (parent, name, 1) {};
     virtual ~Polygon () {};
   };
 
   class Polyline : public Poly
   {
   public:
-    Polyline (ParentProcess* parent, const std::string& name) : Poly (parent, name, 0) {};
+    Polyline (ParentProcess* parent, const djnn::string& name) : Poly (parent, name, 0) {};
     virtual ~Polyline () {};
   };
 }

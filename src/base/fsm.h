@@ -34,12 +34,12 @@ namespace djnn {
   class FSMState : public Container
   {
   public:
-    FSMState (ParentProcess* parent, const std::string& name);
+    FSMState (ParentProcess* parent, const djnn::string& name);
     ~FSMState () { clean_up_content () ; _transitions.clear (); };
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
     bool is_highest_priority (FSMTransition *t);
     void disable_transitions (FSMTransition *t);
@@ -55,7 +55,7 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (ParentProcess* parent, const std::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
+      FSMTransitionAction (ParentProcess* parent, const djnn::string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
 	       Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
@@ -65,21 +65,21 @@ namespace djnn {
       FSMState* _dst;
     };
   public:
-    FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
-		   CoreProcess *trigger, const std::string& tspec, CoreProcess *action = 0, const std::string& aspec = "");
-    FSMTransition (ParentProcess* parent, const std::string& name, CoreProcess* from, CoreProcess* to,
+    FSMTransition (ParentProcess* parent, const djnn::string& name, CoreProcess* from, CoreProcess* to,
+		   CoreProcess *trigger, const djnn::string& tspec, CoreProcess *action = 0, const djnn::string& aspec = "");
+    FSMTransition (ParentProcess* parent, const djnn::string& name, CoreProcess* from, CoreProcess* to,
        CoreProcess *trigger, CoreProcess *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
     int priority () { return _priority; }
     Action* transition_action () { return &_transition_action; }
   protected:
     struct Init { Init (FSMTransition* t, ParentProcess* parent, 
-                        const std::string& tspec, const std::string& aspec); };
+                        const djnn::string& tspec, const djnn::string& aspec); };
     friend struct Init;
     
   private:
@@ -97,18 +97,18 @@ namespace djnn {
       class FSMPostTriggerAction : public Action
       {
          public:
-          FSMPostTriggerAction (ParentProcess* parent, const std::string& name) :
+          FSMPostTriggerAction (ParentProcess* parent, const djnn::string& name) :
                Action (parent, name) { }
           virtual ~FSMPostTriggerAction () {};
           void impl_activate () { ((FSM*)get_parent())->set_triggered (0); };
       };
   public:
-    FSM (ParentProcess* parent, const std::string& name);
+    FSM (ParentProcess* parent, const djnn::string& name);
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return FSM_T; }
-    void update_state (FSMState *s, const std::string& name) { _cur_state = s; _fsm_state.set_value (name, true); };
-    void set_initial (const std::string& n) { if (_initial.get_value().length() == 0) _initial.set_value (n, false); };
+    void update_state (FSMState *s, const djnn::string& name) { _cur_state = s; _fsm_state.set_value (name, true); };
+    void set_initial (const djnn::string& n) { if (_initial.get_value().length() == 0) _initial.set_value (n, false); };
     void draw () override;
     void pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
@@ -121,7 +121,7 @@ namespace djnn {
     void set_triggered (int v) { _already_triggered = v; if (v) _post_trigger.set_activation_flag(ACTIVATION); }
     int is_already_triggered () { return _already_triggered; }
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
   private:
     int _priority, _already_triggered;

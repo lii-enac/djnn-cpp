@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropBox::AbstractPropBox (ParentProcess* parent, const std::string& name, double w, double h, double d) :
+  AbstractPropBox::AbstractPropBox (ParentProcess* parent, const djnn::string& name, double w, double h, double d) :
     PhyObj (parent, name),
     raw_props{.w=w, .h=h, .d=d},
     _cw (nullptr), _ch (nullptr), _cd (nullptr)
@@ -72,7 +72,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropBox::find_child_impl (const std::string& name)
+  AbstractPropBox::find_child_impl (const djnn::string& name)
   {
     auto * res = PhyObj::find_child_impl(name);
     if (res) return res;
@@ -81,7 +81,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -121,10 +121,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractPropBox::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "w",
 			"h",
 			"d",

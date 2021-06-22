@@ -25,7 +25,7 @@
 
 namespace djnn
 {
-  ScaleRotateTranslate::ScaleRotateTranslate(ParentProcess* parent, const std::string& name, CoreProcess* shape, CoreProcess* matrix)
+  ScaleRotateTranslate::ScaleRotateTranslate(ParentProcess* parent, const djnn::string& name, CoreProcess* shape, CoreProcess* matrix)
   : FatProcess (name)
   {
     if (shape == nullptr || matrix == nullptr) {

@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropSound : public AbstractSObj
   {
   public:
-    AbstractPropSound (ParentProcess* parent, const std::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop);
+    AbstractPropSound (ParentProcess* parent, const djnn::string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop);
     virtual ~AbstractPropSound ();
     
     
     void get_properties_values (double& gain, double& lowpass_gain, double& lowpass_freq, double& x, double& y, double& z, double& pitch_mul, int& loop);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractDoubleProperty* gain () { return (AbstractDoubleProperty*) find_child_impl ("gain"); }
 		AbstractDoubleProperty* lowpass_gain () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_gain"); }
 		AbstractDoubleProperty* lowpass_freq () { return (AbstractDoubleProperty*) find_child_impl ("lowpass_freq"); }

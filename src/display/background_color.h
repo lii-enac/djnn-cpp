@@ -15,7 +15,7 @@ namespace djnn {
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (ParentProcess* parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToValueAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((BackgroundColor*) get_parent())->update_hex_from_rvb ();
@@ -23,19 +23,19 @@ namespace djnn {
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (ParentProcess* parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToRGBAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((BackgroundColor*) get_parent())->update_rvb_from_hex ();
       }
     };
   public:
-    BackgroundColor (ParentProcess* parent, const std::string& name, int r, int g, int b);
-    BackgroundColor (ParentProcess* parent, const std::string& name, int v);
+    BackgroundColor (ParentProcess* parent, const djnn::string& name, int r, int g, int b);
+    BackgroundColor (ParentProcess* parent, const djnn::string& name, int v);
     virtual ~BackgroundColor ();
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
     AbstractIntProperty* r () { return (AbstractIntProperty*) find_child_impl ("r"); }
     AbstractIntProperty* g () { return (AbstractIntProperty*) find_child_impl ("g"); }
     AbstractIntProperty* b () { return (AbstractIntProperty*) find_child_impl ("b"); }
@@ -44,7 +44,7 @@ namespace djnn {
   protected:
     Window* get_frame () { return (Window*) get_parent (); }
     virtual void create_Gobj_update_coupling (CoreProcess **prop, CouplingWithData **cprop);
-    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask);
+    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const djnn::string& name, int notify_mask);
 
     struct raw_props_t { int r; int g; int b; int value; };
     raw_props_t raw_props;

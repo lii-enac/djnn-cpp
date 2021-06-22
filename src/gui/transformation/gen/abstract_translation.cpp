@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (ParentProcess* parent, const std::string& name, double tx, double ty) :
+  AbstractTranslation::AbstractTranslation (ParentProcess* parent, const djnn::string& name, double tx, double ty) :
     AbstractTransformation (parent, name),
     raw_props{.tx=tx, .ty=ty},
     _ctx (nullptr), _cty (nullptr)
@@ -67,7 +67,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractTranslation::find_child_impl (const std::string& name)
+  AbstractTranslation::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractTransformation::find_child_impl(name);
     if (res) return res;
@@ -76,7 +76,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -110,10 +110,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractTranslation::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "tx",
 			"ty",
     };

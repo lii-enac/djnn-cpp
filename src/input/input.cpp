@@ -49,7 +49,7 @@ namespace djnn {
   }
 
   CoreProcess*
-  GPIOProxy::find_child_impl (const std::string& path)
+  GPIOProxy::find_child_impl (const djnn::string& path)
   {
     int pos = 0;
     if (path.rfind("in/", 0) == 0) {
@@ -60,7 +60,7 @@ namespace djnn {
       return nullptr;
     }
     //string::size_type sz;
-    const std::string buff = path.substr (pos);
+    const djnn::string buff = path.substr (pos);
     CoreProcess *c = nullptr;
     if (pos == 3) {
       c = p_find_gpio (buff, IN);

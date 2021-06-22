@@ -71,10 +71,10 @@ namespace djnn {
 
 	    alcMakeContextCurrent (context); CHKAL;
 
-	    loginfo (std::string("Default device:") + alcGetString (NULL, ALC_DEFAULT_DEVICE_SPECIFIER)); CHKAL;
+	    loginfo (djnn::string("Default device:") + alcGetString (NULL, ALC_DEFAULT_DEVICE_SPECIFIER)); CHKAL;
 		auto * v = alcGetString (0, AL_VENDOR); CHKAL;
 		if(v) {
-			loginfo ( std::string("AL vendor: ") + v);
+			loginfo ( djnn::string("AL vendor: ") + v);
 		}
 
 	    int major, minor;

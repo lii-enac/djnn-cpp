@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractPropHomography::AbstractPropHomography (ParentProcess* parent, const std::string& name, double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44) :
+  AbstractPropHomography::AbstractPropHomography (ParentProcess* parent, const djnn::string& name, double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44) :
     AbstractTransformation (parent, name),
     raw_props{.m11=m11, .m12=m12, .m13=m13, .m14=m14, .m21=m21, .m22=m22, .m23=m23, .m24=m24, .m31=m31, .m32=m32, .m33=m33, .m34=m34, .m41=m41, .m42=m42, .m43=m43, .m44=m44},
     _cm11 (nullptr), _cm12 (nullptr), _cm13 (nullptr), _cm14 (nullptr), _cm21 (nullptr), _cm22 (nullptr), _cm23 (nullptr), _cm24 (nullptr), _cm31 (nullptr), _cm32 (nullptr), _cm33 (nullptr), _cm34 (nullptr), _cm41 (nullptr), _cm42 (nullptr), _cm43 (nullptr), _cm44 (nullptr)
@@ -151,7 +151,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropHomography::find_child_impl (const std::string& name)
+  AbstractPropHomography::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractTransformation::find_child_impl(name);
     if (res) return res;
@@ -160,7 +160,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -278,10 +278,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractPropHomography::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "m11",
 			"m12",
 			"m13",

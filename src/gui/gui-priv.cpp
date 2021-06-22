@@ -264,7 +264,7 @@ namespace djnn {
     cont->update_drawing ();
   }
 
-  GUIMouseButton::GUIMouseButton (ParentProcess* parent, const std::string& name)
+  GUIMouseButton::GUIMouseButton (ParentProcess* parent, const djnn::string& name)
   : FatProcess (name)
   {
     _press = new Spike (this, "press");
@@ -272,7 +272,7 @@ namespace djnn {
     finalize_construction (parent, name);
   }
 
-  GUIMouse::GUIMouse (ParentProcess* parent, const std::string& name)
+  GUIMouse::GUIMouse (ParentProcess* parent, const djnn::string& name)
   : FatProcess (name)
   {
     _left = new GUIMouseButton (this, "left");

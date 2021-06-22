@@ -9,7 +9,7 @@ namespace djnn
   class RectangleClip : public AbstractPropRectangleClip
   {
   public:
-    RectangleClip (ParentProcess* parent, const std::string& name, double x, double y, double width, double height);
+    RectangleClip (ParentProcess* parent, const djnn::string& name, double x, double y, double width, double height);
     RectangleClip* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;

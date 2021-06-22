@@ -26,7 +26,7 @@ namespace djnn
     ((FileReader*)get_parent ())->read ();
   }
 
-  FileReader::FileReader (ParentProcess* parent, const std::string& name, const std::string& filename)
+  FileReader::FileReader (ParentProcess* parent, const djnn::string& name, const djnn::string& filename)
   : FatProcess (name)
   {
     _input = new TextProperty (this, "input", filename);
@@ -60,11 +60,11 @@ namespace djnn
   void
   FileReader::read ()
   {
-    std::string filename = _input->get_value ();
+    djnn::string filename = _input->get_value ();
     std::ifstream file (filename);
     if (file.is_open()) {
-      std::string buff;
-      std::string line;
+      djnn::string buff;
+      djnn::string line;
       while (getline(file, line)) {
         buff.append (line + "\n");
       }
@@ -75,7 +75,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  FileReader::serialize (const std::string& type)
+  FileReader::serialize (const djnn::string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 

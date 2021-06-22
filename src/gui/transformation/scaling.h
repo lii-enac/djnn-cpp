@@ -7,7 +7,7 @@ namespace djnn {
   class Scaling : public AbstractScaling
   {
   public:
-    Scaling (ParentProcess* parent, const std::string& name, double sx, double sy, double cx, double cy);
+    Scaling (ParentProcess* parent, const djnn::string& name, double sx, double sy, double cx, double cy);
     Scaling (double sx, double sy, double cx, double cy);
     virtual ~Scaling ();
     void draw () override;

@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  FillRule::FillRule (ParentProcess* parent, const std::string& name, int rule) :
+  FillRule::FillRule (ParentProcess* parent, const djnn::string& name, int rule) :
     AbstractStyle (parent, name),
     raw_props{.rule=rule},
     _crule (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  FillRule::find_child_impl (const std::string& name)
+  FillRule::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
@@ -69,7 +69,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -97,10 +97,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   FillRule::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "rule",
     };
     return res;

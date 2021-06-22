@@ -7,7 +7,7 @@ namespace djnn {
 class Defs : public Container
   {
   public:
-    Defs (ParentProcess* parent, const std::string& name);
+    Defs (ParentProcess* parent, const djnn::string& name);
     virtual ~Defs () override;
     void impl_activate () override;
     void impl_deactivate () override;

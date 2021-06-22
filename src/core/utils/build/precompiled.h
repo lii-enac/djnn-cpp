@@ -12,6 +12,6 @@ namespace djnn {
 
 
 extern template class std::basic_string<char>;
-extern template class djnn::map<std::string, djnn::CoreProcess*>;
+extern template class djnn::map<djnn::string, djnn::CoreProcess*>;
 extern template class djnn::vector<djnn::Coupling*>;
 

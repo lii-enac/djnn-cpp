@@ -25,7 +25,7 @@ namespace djnn {
   class NativeAction : public Action
   {
   public:
-    NativeAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data, bool isModel);
+    NativeAction (ParentProcess* parent, const djnn::string& name, NativeCode *action, void* data, bool isModel);
     virtual ~NativeAction ();
     virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
     void impl_activate () override;

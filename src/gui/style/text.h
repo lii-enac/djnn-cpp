@@ -13,8 +13,8 @@ namespace djnn {
   class FontSize : public AbstractPropFontSize
   {
   public:
-    FontSize (ParentProcess* parent, const std::string& name, djnLengthUnit unit, double size);
-    FontSize (ParentProcess* parent, const std::string& name, int unit, double size);
+    FontSize (ParentProcess* parent, const djnn::string& name, djnLengthUnit unit, double size);
+    FontSize (ParentProcess* parent, const djnn::string& name, int unit, double size);
     void impl_activate () override;
     void draw () override;
     FontSize* clone () override;
@@ -24,7 +24,7 @@ namespace djnn {
   class FontWeight : public AbstractPropFontWeight // AbstractStyle
   {
   public:
-    FontWeight (ParentProcess* parent, const std::string& name, int weight);
+    FontWeight (ParentProcess* parent, const djnn::string& name, int weight);
     void impl_activate () override;
     void draw () override;
     FontWeight* clone () override;
@@ -33,8 +33,8 @@ namespace djnn {
   class FontStyle : public AbstractPropFontStyle // AbstractStyle
   {
   public:
-    FontStyle (ParentProcess* parent, const std::string& name, djnFontSlope style);
-    FontStyle (ParentProcess* parent, const std::string& name, int style);
+    FontStyle (ParentProcess* parent, const djnn::string& name, djnFontSlope style);
+    FontStyle (ParentProcess* parent, const djnn::string& name, int style);
     void impl_activate () override;
     void draw () override;
     FontStyle* clone () override;
@@ -43,7 +43,7 @@ namespace djnn {
   class FontFamily : public AbstractPropFontFamily // AbstractStyle
   {
   public:
-    FontFamily (ParentProcess* parent, const std::string& name, const std::string& family);
+    FontFamily (ParentProcess* parent, const djnn::string& name, const djnn::string& family);
     void impl_activate () override;
     void draw () override;
     FontFamily* clone () override;

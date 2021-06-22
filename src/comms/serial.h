@@ -38,7 +38,7 @@ namespace djnn
      class SerialOutAction : public Action
     {
     public:
-      SerialOutAction (ParentProcess* parent, const std::string& name) :
+      SerialOutAction (ParentProcess* parent, const djnn::string& name) :
       Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SerialOutAction () {}
       void impl_activate () override { ((Serial*)get_parent())->serial_write (); };
@@ -48,8 +48,8 @@ namespace djnn
   /*** Serial Class ***/
 
   public:
-    Serial (ParentProcess* parent, const std::string& name,
-      const std::string& port, int baudrate=9600, char eol='\n');
+    Serial (ParentProcess* parent, const djnn::string& name,
+      const djnn::string& port, int baudrate=9600, char eol='\n');
     
     virtual ~Serial ();
     void serial_write ();
@@ -63,7 +63,7 @@ namespace djnn
     void set_parent (ParentProcess* parent) override;
 
   private:
-    const std::string& _port;
+    const djnn::string& _port;
     void init_comm ();
     TextProperty _out, _in;
     IntProperty _baudrate;

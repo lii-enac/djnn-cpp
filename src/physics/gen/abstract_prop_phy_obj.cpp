@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropPhyObj::AbstractPropPhyObj (ParentProcess* parent, const std::string& name, double x, double y, double z, double dx, double dy, double dz, double roll, double pitch, double yall, double mass, double density, double friction) :
+  AbstractPropPhyObj::AbstractPropPhyObj (ParentProcess* parent, const djnn::string& name, double x, double y, double z, double dx, double dy, double dz, double roll, double pitch, double yall, double mass, double density, double friction) :
     AbstractPObj (parent, name),
     raw_props{.x=x, .y=y, .z=z, .dx=dx, .dy=dy, .dz=dz, .roll=roll, .pitch=pitch, .yall=yall, .mass=mass, .density=density, .friction=friction},
     _cx (nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _croll (nullptr), _cpitch (nullptr), _cyall (nullptr), _cmass (nullptr), _cdensity (nullptr), _cfriction (nullptr)
@@ -126,7 +126,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropPhyObj::find_child_impl (const std::string& name)
+  AbstractPropPhyObj::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractPObj::find_child_impl(name);
     if (res) return res;
@@ -135,7 +135,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -229,10 +229,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractPropPhyObj::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "x",
 			"y",
 			"z",

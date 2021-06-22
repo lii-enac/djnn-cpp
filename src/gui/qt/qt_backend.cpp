@@ -219,7 +219,7 @@ namespace djnn
 
   /*
   WinImpl*
-  QtBackend::create_window (Window *win, const std::string& title, double x, double y, double w, double h)
+  QtBackend::create_window (Window *win, const djnn::string& title, double x, double y, double w, double h)
   {
     return new QtWindow (win, title, x, y, w, h);
   }

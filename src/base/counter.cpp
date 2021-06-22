@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  Counter::Counter (ParentProcess* parent, const std::string& name, double init, double delta)
+  Counter::Counter (ParentProcess* parent, const djnn::string& name, double init, double delta)
   : FatProcess (name),
     _reset (this, "reset"),
     _step (this, "step"),
@@ -81,7 +81,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Counter::serialize (const std::string& type) {
+  Counter::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

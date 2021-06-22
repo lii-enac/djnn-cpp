@@ -24,7 +24,7 @@ namespace djnn {
   class CairoSDLWindow : public SDLWindow
   {
   public:
-    CairoSDLWindow (Window *win, const std::string& title, double x, double y, double w, double h);
+    CairoSDLWindow (Window *win, const djnn::string& title, double x, double y, double w, double h);
     virtual ~CairoSDLWindow ();
 
     void update () override;
@@ -34,7 +34,7 @@ namespace djnn {
     virtual void handle_resized(int w, int h) override;
     virtual void update_hidpi() override;
     virtual void redraw () override;
-    virtual void perform_screenshot (const std::string& path) override;
+    virtual void perform_screenshot (const djnn::string& path) override;
     
   protected:
     // FatProcess
@@ -50,7 +50,7 @@ namespace djnn {
     CairoPickingView *_picking_view;
 
     bool _perform_screenshot;
-    std::string _screenshot_path;
+    djnn::string _screenshot_path;
     
 #if PICKING_DBG
     SDL_Window *_pick_sdl_window;

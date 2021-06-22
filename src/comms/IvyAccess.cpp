@@ -206,8 +206,8 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   /**** IVY ACCESS ****/
 
- IvyAccess::IvyAccess (ParentProcess* parent, const std::string& name, 
-  const std::string& bus, const std::string& appname, const std::string& ready, bool isModel)
+ IvyAccess::IvyAccess (ParentProcess* parent, const djnn::string& name, 
+  const djnn::string& bus, const djnn::string& appname, const djnn::string& ready, bool isModel)
  : FatProcess (name, isModel),
  ExternalSource(name),
  _out ( this, "out", ""),
@@ -326,7 +326,7 @@ IvyAccess::~IvyAccess ()
 //   FatProcess::set_parent (parent); 
 // }
 
-void IvyAccess::set_arriving(const std::string& v) {
+void IvyAccess::set_arriving(const djnn::string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -338,7 +338,7 @@ void IvyAccess::set_arriving(const std::string& v) {
   djnn::release_exclusive_access (DBG_REL);
 }
 
-void IvyAccess::set_leaving(const std::string& v) {
+void IvyAccess::set_leaving(const djnn::string& v) {
   djnn::IvyAccess* access = this;
   djnn::get_exclusive_access (DBG_GET);
   if(STOP_IVY) {
@@ -443,7 +443,7 @@ IvyAccess::run ()
 }
 
 FatChildProcess*
-IvyAccess::find_child_impl (const std::string& key)
+IvyAccess::find_child_impl (const djnn::string& key)
 {
   
 #ifdef __IVY_DEBUG__

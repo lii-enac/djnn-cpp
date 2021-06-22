@@ -72,7 +72,7 @@ namespace djnn
   }
 
   void
-  AbstractDoubleProperty::set_value (const std::string& v, bool propagate)
+  AbstractDoubleProperty::set_value (const djnn::string& v, bool propagate)
   {
     double oldVal = get_value();
     try {
@@ -103,7 +103,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AbstractDoubleProperty::serialize (const std::string& format) {
+  AbstractDoubleProperty::serialize (const djnn::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:doubleproperty");

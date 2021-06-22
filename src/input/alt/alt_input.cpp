@@ -19,7 +19,7 @@ namespace djnn {
   void
   p_init_input () {
   }
-  CoreProcess* p_find_gpio (const std::string& path, direction_e dir)
+  CoreProcess* p_find_gpio (const djnn::string& path, direction_e dir)
   {
     warning (nullptr, "GPIOs not supported on this platform");
     return nullptr;

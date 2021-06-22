@@ -7,7 +7,7 @@ namespace djnn {
     class Group : public Container
     {
     public:
-        Group (ParentProcess* parent, const std::string& name);
+        Group (ParentProcess* parent, const djnn::string& name);
         virtual ~Group () override;
         auto get_frame () { return _gobj->get_frame ();}
         void impl_activate () override;

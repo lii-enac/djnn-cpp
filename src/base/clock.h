@@ -35,17 +35,17 @@ namespace djnn
     class ClockUpdateAction : public Action
     {
     public:
-      ClockUpdateAction (ParentProcess* parent, const std::string& name) :
+      ClockUpdateAction (ParentProcess* parent, const djnn::string& name) :
         Action (parent, name){};
     
       virtual ~ClockUpdateAction () {}
       void impl_activate () override { ((Clock*)get_parent())->update_period (); }
     };
   public:
-    Clock (ParentProcess* parent, const std::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
-    Clock (ParentProcess* parent, const std::string& n, int period = 1000);
+    Clock (ParentProcess* parent, const djnn::string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
+    Clock (ParentProcess* parent, const djnn::string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Clock (ParentProcess* parent, const std::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
+    Clock (ParentProcess* parent, const djnn::string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Clock ();
 
@@ -54,7 +54,7 @@ namespace djnn
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
     // djnn_internal::Time::Timer
     virtual void do_it(const djnn_internal::Time::duration& actualduration) override;

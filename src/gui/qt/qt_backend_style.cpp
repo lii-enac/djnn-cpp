@@ -99,7 +99,7 @@ namespace djnn
   void
   QtBackend::load_texture (Texture *t)
   {
-    std::string path;
+    djnn::string path;
     t->get_properties_values(path);
     QPixmap pic (path.c_str ());
     _context_manager->get_current ()->brush.setTexture (pic);

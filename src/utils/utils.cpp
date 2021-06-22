@@ -60,7 +60,7 @@ namespace djnn
     depth_first_traverse(p, [&i](CoreProcess* p){++i;});
     std::cerr << std::endl << "count items: " << i << std::endl;
 
-    map<std::string,int> num_by_type;
+    map<djnn::string,int> num_by_type;
     int num_no_coupling=0;
     int num_one_coupling=0;
     int num_more_than_one_coupling=0;
@@ -85,10 +85,10 @@ namespace djnn
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
 
   extern std::list<pair<CoreProcess*, long int>> __creation_stat_order;
-  extern vector<std::string> __destruction_stat_order;
+  extern vector<djnn::string> __destruction_stat_order;
 
   static std::list<pair<CoreProcess*, long int>>::iterator last_creation_end;
-  static vector<std::string>::iterator last_destruction_end; 
+  static vector<djnn::string>::iterator last_destruction_end; 
   static bool init_display_creation_stats = false;
 
   void
@@ -102,7 +102,7 @@ namespace djnn
 
       int size = __creation_stat_order.size ();
       
-      map<std::string,int> num_by_type;
+      map<djnn::string,int> num_by_type;
       int num_no_coupling=0;
       int num_one_coupling=0;
       int num_more_than_one_coupling=0;

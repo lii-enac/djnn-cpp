@@ -20,7 +20,7 @@ namespace djnn {
     {
       friend Text;
       public:
-        TextSizeAction (ParentProcess* parent, const std::string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        TextSizeAction (ParentProcess* parent, const djnn::string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
       private:
@@ -31,16 +31,16 @@ namespace djnn {
         Text* _text;
     };
   public:
-    Text (ParentProcess* parent, const std::string& name, double x, double y, const std::string& text);
-    Text (ParentProcess* parent, const std::string& name, double x, double y, double dx, double dy, int dxu, int dyu,
-          const std::string& encoding, const std::string& text);
+    Text (ParentProcess* parent, const djnn::string& name, double x, double y, const djnn::string& text);
+    Text (ParentProcess* parent, const djnn::string& name, double x, double y, double dx, double dy, int dxu, int dyu,
+          const djnn::string& encoding, const djnn::string& text);
     virtual ~Text ();
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
     Text* clone () override;
-    void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text);
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, djnn::string &text);
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_child_impl("dx"); }
@@ -53,14 +53,14 @@ namespace djnn {
     AbstractTextProperty* text () { return &_text;}
     void set_width (double width) { _width.set_value (width, true); }
     void set_height (double height) { _height.set_value (height, true); }
-    const std::string& get_raw_text () { return _text.get_value (); }
+    const djnn::string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
     pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
   private:
     void set_parent (ParentProcess* parent) override;
-    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; std::string text; };
+    struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; djnn::string text; };
     raw_props_t raw_props;    
     CouplingWithData *_cx, *_cy, *_cdx, *_cdy, *_cfsize,
       *_cdxU, *_cdyU, *_cencoding, *_cfstyle, *_cfweight,

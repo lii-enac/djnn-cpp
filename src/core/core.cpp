@@ -36,7 +36,7 @@ namespace djnn
   class StructureObserver;
 
 
-  vector<std::string> loadedModules;
+  vector<djnn::string> loadedModules;
 /*
   void
   module_loaded(const char*)

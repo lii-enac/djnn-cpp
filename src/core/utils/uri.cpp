@@ -20,21 +20,21 @@ namespace djnn
   URI::uris_t URI::uri_manager;
 
   void
-  URI::add_uri (const std::string& prefix, FatProcess* p)
+  URI::add_uri (const djnn::string& prefix, FatProcess* p)
   {
     uri_manager.insert (uris_t::value_type (prefix, p));
   }
 
   FatChildProcess*
-  URI::find_by_uri (const std::string& uri)
+  URI::find_by_uri (const djnn::string& uri)
   {
     std::size_t found = uri.find("://");
-    if (found == std::string::npos)
+    if (found == djnn::string::npos)
       return nullptr;
     uris_t::iterator it;
     it = uri_manager.find (uri.substr (0, found));
     if (it == uri_manager.end ())
       return nullptr;
-    return it->second->find_child_impl (uri.substr (found + 3, std::string::npos));
+    return it->second->find_child_impl (uri.substr (found + 3, djnn::string::npos));
   }
 }

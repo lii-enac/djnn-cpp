@@ -66,7 +66,7 @@ namespace djnn
   };
 
 #ifndef DJNN_NO_DEBUG
-  static std::string 
+  static djnn::string 
   print_process_full_name (CoreProcess *p) {
     return cpp_demangle(typeid(*p).name()) + "- (" + 
     ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
@@ -523,8 +523,8 @@ namespace djnn
       if (_ordered_vertices.at (i)->get_process () == p1) i_p1 = i;
       if (_ordered_vertices.at (i)->get_process () == p2) i_p2 = i;
     }
-    std::string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
-    std::string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
+    djnn::string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
+    djnn::string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
     if (i_p1 == -1) std::cout << "p1 " << p1_name << " not found\n";
     if (i_p2 == -1) std::cout << "p2 " << p2_name << " not found\n";
 
@@ -545,7 +545,7 @@ namespace djnn
     #endif
     _cur_date = 0;
     _ordered_vertices.clear ();
-    //warning(nullptr, std::string("num vertices: ")+__to_string(_vertices.size()));
+    //warning(nullptr, djnn::string("num vertices: ")+__to_string(_vertices.size()));
 
     // set every vertex as NOT_MARKED before sorting them
     for (auto v : _vertices) {

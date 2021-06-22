@@ -22,7 +22,7 @@ namespace djnn {
 
   class FatProcess;
 
-  extern vector<std::string> loadedModules;
+  extern vector<djnn::string> loadedModules;
   // extern int mouse_tracking;
   // extern int full_screen;
   // extern int hide_pointer;
@@ -216,7 +216,7 @@ namespace djnn {
     static int
     djn__SVGParseUnitAndValue (djnLengthUnit*, double*, const char*);
     static named_color_t
-    djn__get_color_from_name (const std::string& name);
+    djn__get_color_from_name (const djnn::string& name);
   };
 
   extern int djn__GrphIsInClip;
@@ -229,7 +229,7 @@ namespace djnn {
   extern struct djn_GraphicalShapeArgs
   {
     const char* id;
-    std::string classname;
+    djnn::string classname;
     djnStrokeType strokeType;
   } djn_GraphicalShapeArgs;
 
@@ -250,7 +250,7 @@ namespace djnn {
     double w;
     double h;
     const char *path;
-    std::string data;
+    djnn::string data;
   } djn_ImgArgs;
 
   extern struct djn_CircleArgs
@@ -466,7 +466,7 @@ namespace djnn {
     double y;
     double width;
     double height;
-    std::string href;
+    djnn::string href;
   } djn_UseArgs;
 
 }

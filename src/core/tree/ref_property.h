@@ -22,7 +22,7 @@ namespace djnn {
 
   class RefProperty : public AbstractProperty {
   public:
-    RefProperty (ParentProcess* parent, const std::string& name, CoreProcess* v, unsigned int nm = notify_none) 
+    RefProperty (ParentProcess* parent, const djnn::string& name, CoreProcess* v, unsigned int nm = notify_none) 
     : AbstractProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }
@@ -32,16 +32,16 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (CoreProcess* v, bool propagate) override;
-    void set_value (const std::string& v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);}
+    void set_value (const djnn::string& v, bool propagate) override;
+    void set_value (const char* v, bool propagate) override { set_value(djnn::string(v), propagate);}
     double get_double_value () override;
     double get_double_value () const override;
-    std::string get_string_value () override;
-    std::string get_string_value () const override;
+    djnn::string get_string_value () override;
+    djnn::string get_string_value () const override;
     RefProperty* clone () override;
 
   protected:
-    CoreProcess* find_child_impl (const std::string& path) override;
+    CoreProcess* find_child_impl (const djnn::string& path) override;
   private:
     CoreProcess* _value;
 
@@ -50,7 +50,7 @@ namespace djnn {
     void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
 };
 

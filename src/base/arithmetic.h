@@ -83,7 +83,7 @@ namespace djnn
     class PreviousAction : public Action
     {
     public:
-      PreviousAction (ParentProcess* parent, const std::string& name, Previous& np, double init_val)
+      PreviousAction (ParentProcess* parent, const djnn::string& name, Previous& np, double init_val)
       : Action(parent, name),
       _np(np),
        _prev (init_val) { finalize_construction (parent, name); }
@@ -98,13 +98,13 @@ namespace djnn
       double _prev;
     };
   public:
-    Previous (ParentProcess* parent, const std::string& name, double i_val);
+    Previous (ParentProcess* parent, const djnn::string& name, double i_val);
     virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
   protected:
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
     DoubleProperty _input;
     DoubleProperty _output;
@@ -118,12 +118,12 @@ namespace djnn
     class StepAction : public Action
       {
       public:
-        StepAction (ParentProcess* parent, const std::string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        StepAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~StepAction () {}
         void impl_activate ()  { ((Incr*)get_parent ())->step (); }
       };
   public:
-    Incr (ParentProcess* parent, const std::string& name, bool is_model);
+    Incr (ParentProcess* parent, const djnn::string& name, bool is_model);
     bool pre_activate () override;
     void impl_activate () override;
     void impl_deactivate () override;
@@ -140,7 +140,7 @@ namespace djnn
   protected:
     void set_parent (ParentProcess* parent) override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
   };
 
@@ -150,20 +150,20 @@ namespace djnn
     class AdderAccumulatorAction : public Action
     {
     public:
-      AdderAccumulatorAction (ParentProcess* parent, const std::string& name, AdderAccumulator& aa);
+      AdderAccumulatorAction (ParentProcess* parent, const djnn::string& name, AdderAccumulator& aa);
       void impl_activate () override;
     private:
       AdderAccumulator& _aa;
     };
   public:
-    AdderAccumulator (ParentProcess* parent, const std::string& name, double input, double clamp_min, double clamp_max);
+    AdderAccumulator (ParentProcess* parent, const djnn::string& name, double input, double clamp_min, double clamp_max);
     virtual ~AdderAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
   protected:
     void set_parent (ParentProcess* parent) override;
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
   private:
     friend class AdderAccumulatorAction;

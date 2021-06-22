@@ -26,11 +26,11 @@ namespace djnn {
   class SwitchRangeBranch : public Container
   {
   public:
-    SwitchRangeBranch (ParentProcess* parent, const std::string& name, double lower, bool left_open, double upper, bool right_open);
+    SwitchRangeBranch (ParentProcess* parent, const djnn::string& name, double lower, bool left_open, double upper, bool right_open);
     ~SwitchRangeBranch ();
     bool is_in_range (double v);
 #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
   private:
     bool _left_open, _right_open;
@@ -43,14 +43,14 @@ namespace djnn {
     class SwitchRangeAction : public Action
     {
     public:
-      SwitchRangeAction (SwitchRange * parent, const std::string& name);
+      SwitchRangeAction (SwitchRange * parent, const djnn::string& name);
       virtual ~SwitchRangeAction () {};
       void impl_activate () override { _sw->change_branch(); };
     private:
       SwitchRange* _sw;
     };
   public:
-    SwitchRange (ParentProcess* parent, const std::string& name, double initial);
+    SwitchRange (ParentProcess* parent, const djnn::string& name, double initial);
     //virtual process_type_e get_process_type () const override { return SWITCH_T; }
     void impl_activate () override;
     void impl_deactivate () override;
@@ -59,7 +59,7 @@ namespace djnn {
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual ~SwitchRange ();
  #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const std::string& format) override;
+    virtual void serialize (const djnn::string& format) override;
 #endif
   private:
     void set_parent (ParentProcess* parent) override;

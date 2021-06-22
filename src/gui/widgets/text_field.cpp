@@ -21,7 +21,7 @@
 
 namespace djnn
 {
-  TextField::TextField (ParentProcess* parent, const std::string& name, CoreProcess* text, CoreProcess* shape) :
+  TextField::TextField (ParentProcess* parent, const djnn::string& name, CoreProcess* text, CoreProcess* shape) :
       FatProcess (name), _ordering_node (), _start_select (0), _end_select (0), _is_selecting (false)
   {
     auto * fpshape = dynamic_cast<FatProcess*>(shape);
@@ -202,7 +202,7 @@ namespace djnn
   }
 
   static int
-  sizeof_back_utf8char(const std::string& str)
+  sizeof_back_utf8char(const djnn::string& str)
   {
     if (str.empty ())
       return 0;
@@ -216,7 +216,7 @@ namespace djnn
   }
 
   static int
-  sizeof_front_utf8char(const std::string& str)
+  sizeof_front_utf8char(const djnn::string& str)
   {
     if (str.empty ())
       return 0;

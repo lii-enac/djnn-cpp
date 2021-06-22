@@ -36,14 +36,14 @@ operator+ (double l, const djnn::AbstractProperty& r)
   return r + l;
 }
 
-inline const std::string
-operator+ (const std::string& l, const djnn::AbstractProperty& r)
+inline const djnn::string
+operator+ (const djnn::string& l, const djnn::AbstractProperty& r)
 {
   return l + r.get_string_value ();
 }
 
-inline const std::string
-operator+ (const djnn::AbstractProperty& l, const std::string& r)
+inline const djnn::string
+operator+ (const djnn::AbstractProperty& l, const djnn::string& r)
 {
   return l.get_string_value () + r;
 }

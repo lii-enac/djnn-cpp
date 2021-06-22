@@ -13,11 +13,11 @@ namespace djnn {
   class Image : public AbstractPathImage
   {
   public:
-    Image (ParentProcess* parent, const std::string& name, std::string path, double x, double y, double w, double h);
+    Image (ParentProcess* parent, const djnn::string& name, djnn::string path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
     Image* clone () override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -40,12 +40,12 @@ namespace djnn {
   class DataImage : public AbstractDataImage
     {
     public:
-      DataImage (ParentProcess* parent, const std::string& name, const std::string& data, double x, double y, double w, double h);
-      DataImage (ParentProcess* parent, const std::string& name, double x, double y, double w, double h);
+      DataImage (ParentProcess* parent, const djnn::string& name, const djnn::string& data, double x, double y, double w, double h);
+      DataImage (ParentProcess* parent, const djnn::string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       DataImage* clone () override;
-      virtual FatChildProcess* find_child_impl (const std::string&) override;
+      virtual FatChildProcess* find_child_impl (const djnn::string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}

@@ -23,7 +23,7 @@
 namespace djnn
 {
   DirectoryObserverData*
-  p_init_directory_watcher (const std::string& path)
+  p_init_directory_watcher (const djnn::string& path)
   {
     int kq = kqueue ();
     if (kq == -1) {
@@ -32,7 +32,7 @@ namespace djnn
     }
     int fd = open(path.c_str (), O_RDONLY);
     if (fd == -1) {
-      warning (nullptr, std::string ("Unable to find directory " + path));
+      warning (nullptr, djnn::string ("Unable to find directory " + path));
       return nullptr;
     }
     struct kevent ev;

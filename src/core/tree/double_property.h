@@ -24,7 +24,7 @@ namespace djnn {
 
   class AbstractDoubleProperty : public AbstractProperty {
   public:
-    AbstractDoubleProperty (ParentProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractDoubleProperty (ParentProcess* parent, const djnn::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Double; }
     //virtual process_type_e get_process_type () const override { return DOUBLE_PROPERTY_T; }
 
@@ -33,12 +33,12 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (CoreProcess* v, bool propagate) override;
-    void set_value (const std::string& v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate);};
+    void set_value (const djnn::string& v, bool propagate) override;
+    void set_value (const char* v, bool propagate) override { set_value(djnn::string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     double get_double_value () const override { return get_ref_value(); }
-    std::string get_string_value () override { return djnn::to_string (get_ref_value ()); }
-    std::string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
+    djnn::string get_string_value () override { return djnn::to_string (get_ref_value ()); }
+    djnn::string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
     double get_value () { return get_ref_value(); };
   protected:
@@ -50,13 +50,13 @@ namespace djnn {
     void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 
   class DoubleProperty : public AbstractDoubleProperty {
   public:
-    DoubleProperty (ParentProcess* parent, const std::string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
+    DoubleProperty (ParentProcess* parent, const djnn::string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
 
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
-    DoublePropertyProxy (ParentProcess* parent, const std::string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
+    DoublePropertyProxy (ParentProcess* parent, const djnn::string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual double& get_ref_value() override { return value; }

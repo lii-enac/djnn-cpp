@@ -238,7 +238,7 @@ namespace djnn
     in_back, out_back, in_out_back,
     in_bounce, out_bounce, in_out_bounce};
 
-  EasingGenerator::EasingGenerator (ParentProcess* parent, const std::string& name, int func) :
+  EasingGenerator::EasingGenerator (ParentProcess* parent, const djnn::string& name, int func) :
         FatProcess (name),
         _func_selector (this, "selector", func),
         _in (this, "input", 0),
@@ -273,7 +273,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  EasingGenerator::serialize (const std::string& type)
+  EasingGenerator::serialize (const djnn::string& type)
   {
 
   }

@@ -23,7 +23,7 @@ namespace djnn
   class ExternalSource
   {
   public:
-    ExternalSource (const std::string& name);
+    ExternalSource (const djnn::string& name);
     virtual ~ExternalSource ();
 
     virtual void start ();
@@ -31,7 +31,7 @@ namespace djnn
     virtual void join();
 
     void private_run();
-    const std::string& get_name () const { return _name; }
+    const djnn::string& get_name () const { return _name; }
 
     std::atomic<std::atomic<bool>*> cancelled;
 
@@ -54,7 +54,7 @@ namespace djnn
     class Impl;
     Impl * _impl;
 
-    std::string _name;
+    djnn::string _name;
 
   private:
     std::atomic<bool> _please_stop;

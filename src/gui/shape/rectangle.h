@@ -9,7 +9,7 @@ namespace djnn
   class Rectangle : public AbstractPropRectangle
   {
   public:
-    Rectangle (ParentProcess* parent, const std::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
+    Rectangle (ParentProcess* parent, const djnn::string& name, double x, double y, double width, double height, double rx=0, double ry=0);
     Rectangle* clone () override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;

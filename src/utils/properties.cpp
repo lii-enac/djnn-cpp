@@ -31,7 +31,7 @@ namespace djnn
     ((Properties*)get_parent ())->add_property ();
   }
 
-  Properties::Properties (ParentProcess* parent, const std::string& name, const std::string& filename)
+  Properties::Properties (ParentProcess* parent, const djnn::string& name, const djnn::string& filename)
   : FatProcess (name)
   {
     _input = new TextProperty (this, "input", "");
@@ -89,7 +89,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Properties::serialize (const std::string& type)
+  Properties::serialize (const djnn::string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 
@@ -106,20 +106,20 @@ namespace djnn
    */
   typedef unsigned char BYTE;
 
-  std::string
-  strTrim (std::string s)
+  djnn::string
+  strTrim (djnn::string s)
   {
     // convert all whitespace characters to a standard space
     std::replace_if (s.begin (), s.end (), (std::function<int (BYTE)>)::isspace, ' ');
 
     // remove leading and trailing spaces
     size_t f = s.find_first_not_of (' ');
-    if (f == std::string::npos)
+    if (f == djnn::string::npos)
       return "";
     s = s.substr (f, s.find_last_not_of (' ') - f + 1);
 
     // remove consecutive spaces
-    s = std::string (s.begin (), std::unique (s.begin (), s.end (), [](BYTE l, BYTE r) {return l == ' ' && r == ' ';}));
+    s = djnn::string (s.begin (), std::unique (s.begin (), s.end (), [](BYTE l, BYTE r) {return l == ' ' && r == ' ';}));
 
     return s;
   }

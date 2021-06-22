@@ -31,12 +31,12 @@ namespace djnn
     class DeleteOneAction : public Action
     {
     public:
-      DeleteOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+      DeleteOneAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~DeleteOneAction () {}
       void impl_activate () override { ((ProcessDeleter*)get_parent ())->delete_one (); };
     };
   public:
-    ProcessDeleter (ParentProcess *parent, const std::string& name);
+    ProcessDeleter (ParentProcess *parent, const djnn::string& name);
     virtual ~ProcessDeleter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -58,12 +58,12 @@ namespace djnn
     class DeleteAllAction : public Action
     {
     public:
-      DeleteAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+      DeleteAllAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~DeleteAllAction () {}
       void impl_activate () override { ((CollectionDeleter*)get_parent ())->delete_all (); };
     };
   public:
-    CollectionDeleter (ParentProcess *parent, const std::string& name);
+    CollectionDeleter (ParentProcess *parent, const djnn::string& name);
     virtual ~CollectionDeleter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -81,12 +81,12 @@ namespace djnn
     class ActivateAllAction : public Action
     {
     public:
-      ActivateAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+      ActivateAllAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~ActivateAllAction () {}
       void impl_activate () override { ((CollectionActivator*)get_parent ())->activate_all (); };
     };
   public:
-    CollectionActivator (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
+    CollectionActivator (ParentProcess *parent, const djnn::string& name, CoreProcess* collection = nullptr, const djnn::string& path = djnn::string(""));
     virtual ~CollectionActivator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -106,12 +106,12 @@ namespace djnn
     class SetValueAction : public Action
     {
     public:
-      SetValueAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+      SetValueAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~SetValueAction () {}
       void impl_activate () override { ((AbstractCollectionSetValue*)get_parent ())->set_value (); };
     };
   public:
-    AbstractCollectionSetValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
+    AbstractCollectionSetValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection = nullptr, const djnn::string& path = djnn::string(""));
     virtual ~AbstractCollectionSetValue ();
     virtual void set_value () = 0;
   protected:
@@ -124,7 +124,7 @@ namespace djnn
   class CollectionSetDoubleValue : public AbstractCollectionSetValue
   {
   public:
-    CollectionSetDoubleValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
+    CollectionSetDoubleValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection = nullptr, const djnn::string& path = djnn::string(""));
     virtual ~CollectionSetDoubleValue ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -137,7 +137,7 @@ namespace djnn
   class CollectionSetStringValue : public AbstractCollectionSetValue
   {
   public:
-    CollectionSetStringValue (ParentProcess *parent, const std::string& name, CoreProcess* collection = nullptr, const std::string& path = std::string(""));
+    CollectionSetStringValue (ParentProcess *parent, const djnn::string& name, CoreProcess* collection = nullptr, const djnn::string& path = djnn::string(""));
     virtual ~CollectionSetStringValue ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -153,26 +153,26 @@ namespace djnn
    class AddOneAction : public Action
    {
    public:
-     AddOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+     AddOneAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
      virtual ~AddOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->add_one (); };
    };
    class RemoveOneAction : public Action
    {
    public:
-     RemoveOneAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+     RemoveOneAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
      virtual ~RemoveOneAction () {}
      void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_one (); };
     };
     class RemoveAllAction : public Action
     {
     public:
-      RemoveAllAction (ParentProcess *parent, const std::string& name) : Action (parent, name) {}
+      RemoveAllAction (ParentProcess *parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~RemoveAllAction () {}
       void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_all (); };
     };
   public:
-    ProcessCollector (ParentProcess *parent, const std::string& name);
+    ProcessCollector (ParentProcess *parent, const djnn::string& name);
     virtual ~ProcessCollector ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -199,7 +199,7 @@ namespace djnn
   class NativeCollectionAction : public Action
   {
   public:
-    NativeCollectionAction (ParentProcess* parent, const std::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel);
+    NativeCollectionAction (ParentProcess* parent, const djnn::string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel);
     virtual ~NativeCollectionAction ();
     virtual process_type_e get_process_type () const override { return NATIVE_COLLECTION_ACTION_T; }
     void impl_activate () override;

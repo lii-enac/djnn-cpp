@@ -23,7 +23,7 @@ namespace djnn {
 
   class AbstractRemoteProperty : public AbstractProperty {
   public:
-    AbstractRemoteProperty (ParentProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
+    AbstractRemoteProperty (ParentProcess* parent, const djnn::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Dist; }
 
     // AbstractProperty interface
@@ -31,31 +31,31 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (CoreProcess* v, bool propagate) override;
-    void set_value (const std::string& v, bool propagate) override;
-    void set_incoming_value (const std::string& v, bool propagate);
-    void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate); };
+    void set_value (const djnn::string& v, bool propagate) override;
+    void set_incoming_value (const djnn::string& v, bool propagate);
+    void set_value (const char* v, bool propagate) override { set_value(djnn::string(v), propagate); };
     double get_double_value () override;
     double get_double_value () const override;
-    std::string get_string_value () override { return get_ref_value (); }
-    std::string get_string_value () const override { return get_ref_value (); }
-    std::string& get_value () { return get_ref_value(); };
+    djnn::string get_string_value () override { return get_ref_value (); }
+    djnn::string get_string_value () const override { return get_ref_value (); }
+    djnn::string& get_value () { return get_ref_value(); };
     bool send () { return _send; }
   protected:
-    virtual std::string& get_ref_value() = 0;
-    virtual const std::string& get_ref_value() const= 0;
+    virtual djnn::string& get_ref_value() = 0;
+    virtual const djnn::string& get_ref_value() const= 0;
     bool _send;
   public:
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 
   class RemoteProperty : public AbstractRemoteProperty {
   public:
-    RemoteProperty (ParentProcess* parent, const std::string& name, const std::string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
+    RemoteProperty (ParentProcess* parent, const djnn::string& name, const djnn::string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
     FatProcess* clone () override;
 
     /* This method has to be specific because of the duality of a remote property.
@@ -77,9 +77,9 @@ namespace djnn {
     }
     void sent () { _send = false; }
   protected:
-    virtual std::string& get_ref_value() override { return _value; }
-    virtual const std::string& get_ref_value() const override { return _value; }
+    virtual djnn::string& get_ref_value() override { return _value; }
+    virtual const djnn::string& get_ref_value() const override { return _value; }
   private:
-    std::string _value;
+    djnn::string _value;
   };
 }

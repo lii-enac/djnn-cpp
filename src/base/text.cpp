@@ -43,7 +43,7 @@ namespace djnn
     loginfonofl(_input->get_value ());
   }
 
-  TextPrinter::TextPrinter (ParentProcess* parent, const std::string& name)
+  TextPrinter::TextPrinter (ParentProcess* parent, const djnn::string& name)
   : FatProcess (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
@@ -55,7 +55,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  TextPrinter::serialize (const std::string& type) {
+  TextPrinter::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -104,7 +104,7 @@ namespace djnn
     FatProcess::set_parent (parent); 
   }
 
-  DoubleFormatter::DoubleFormatter (ParentProcess* parent, const std::string& name, double initial, int decimal) :
+  DoubleFormatter::DoubleFormatter (ParentProcess* parent, const djnn::string& name, double initial, int decimal) :
     FatProcess (name),
     _input (this, "input", initial),
     _decimal (this, "decimal", decimal),
@@ -135,7 +135,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  DoubleFormatter::serialize (const std::string& type) {
+  DoubleFormatter::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -149,7 +149,7 @@ namespace djnn
   }
 #endif
 
-  TextAccumulator::TextAccumulator (ParentProcess* parent, const std::string& name, const std::string& init)
+  TextAccumulator::TextAccumulator (ParentProcess* parent, const djnn::string& name, const djnn::string& init)
   : FatProcess (name),
     _input (this, "input", ""),
     _state (this, "state", init),
@@ -207,7 +207,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  TextAccumulator::serialize (const std::string& type)
+  TextAccumulator::serialize (const djnn::string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 
@@ -237,7 +237,7 @@ namespace djnn
     }
   }
 
-  Regex::Regex (ParentProcess* parent, const std::string& name, const std::string& reg)
+  Regex::Regex (ParentProcess* parent, const djnn::string& name, const djnn::string& reg)
   : FatProcess (name),
     _input (this, "input", ""),
     _init (reg),
@@ -265,7 +265,7 @@ namespace djnn
 
 
   FatProcess*
-  Regex::find_child_impl (const std::string& key)
+  Regex::find_child_impl (const djnn::string& key)
   {
 
     if (key.compare ("input") == 0)
@@ -321,7 +321,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Regex::serialize (const std::string& type)
+  Regex::serialize (const djnn::string& type)
   {
     AbstractSerializer::pre_serialize (this, type);
 

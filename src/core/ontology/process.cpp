@@ -51,7 +51,7 @@ namespace djnn
                     string CoreProcess::default_name = "noname"; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::couplings_t CoreProcess::default_couplings; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  vector<djnn::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   static vector<const CoreProcess*> parentless_names_order;
@@ -154,13 +154,13 @@ namespace djnn
     parentless_names.clear ();
   }
 
-  const std::string&
+  const djnn::string&
   CoreProcess::get_name (ParentProcess* parent) const
   {
     return parent->find_child_name(this);
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   CoreProcess::get_properties_name () const
   {
     return default_properties_name;
@@ -175,7 +175,7 @@ namespace djnn
   #endif
 
   FatChildProcess*
-  CoreProcess::find_child (const std::string& path)
+  CoreProcess::find_child (const djnn::string& path)
   {
     auto * found = find_child_impl (path);
 #ifndef DJNN_NO_DEBUG
@@ -206,7 +206,7 @@ namespace djnn
 
 
   FatChildProcess*
-  CoreProcess::find_child_impl (const std::string& _)
+  CoreProcess::find_child_impl (const djnn::string& _)
   {
     return nullptr;
   }
@@ -235,7 +235,7 @@ namespace djnn
     }
   }
 
-  FatProcess::FatProcess (const std::string& name, bool model)
+  FatProcess::FatProcess (const djnn::string& name, bool model)
   : ChildProcess(model),
   _data (nullptr)
   {
@@ -247,7 +247,7 @@ namespace djnn
 
   // finalize_construction
   void
-  CoreProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
+  CoreProcess::finalize_construction (ParentProcess* parent, const djnn::string& name, CoreProcess* state_dep)
   {
     if (parent) {
       parent->add_child (this, name); // FIXME
@@ -263,7 +263,7 @@ namespace djnn
   }
 
   void
-  ChildProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep)
+  ChildProcess::finalize_construction (ParentProcess* parent, const djnn::string& name, CoreProcess* state_dep)
   {
     CoreProcess::finalize_construction (parent, name, state_dep);
     if (parent) {
@@ -278,7 +278,7 @@ namespace djnn
   }
 
   void
-  FatProcess::finalize_construction (ParentProcess* parent, const std::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
+  FatProcess::finalize_construction (ParentProcess* parent, const djnn::string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
   {
     ChildProcess::finalize_construction (parent, name, state_dep);
   }
@@ -502,7 +502,7 @@ namespace djnn
   }
 
   void
-  FatProcess::add_child (FatChildProcess* child, const std::string& name)
+  FatProcess::add_child (FatChildProcess* child, const djnn::string& name)
   {
     if (child == nullptr) { return; }
 
@@ -535,13 +535,13 @@ namespace djnn
   }
 
   void
-  FatProcess::remove_child (const std::string& name)
+  FatProcess::remove_child (const djnn::string& name)
   {
     remove_symbol (name);
   }
 
   FatChildProcess*
-  FatProcess::find_child_impl (const std::string& key)
+  FatProcess::find_child_impl (const djnn::string& key)
   {
     //DEBUG
     //std::cout << "key: " << key << endl;
@@ -608,13 +608,13 @@ namespace djnn
   }
 
   FatChildProcess*
-  FatProcess::find_child_impl (FatChildProcess *p, const std::string& path)
+  FatProcess::find_child_impl (FatChildProcess *p, const djnn::string& path)
   {
     if (p == nullptr) { return URI::find_by_uri (path); }
     return p->find_child_impl (path);
   }
 
-  const std::string&
+  const djnn::string&
   FatProcess::find_child_name (const CoreProcess* symbol) const
   {
     // FIXME : low efficiency function cause by linear search. use with care !
@@ -628,13 +628,13 @@ namespace djnn
     return default_name;
   }
 
-  CoreProcess::symtable_t::iterator FatProcess::find_child_iterator (const std::string& name) { return _symtable.find (name); }
+  CoreProcess::symtable_t::iterator FatProcess::find_child_iterator (const djnn::string& name) { return _symtable.find (name); }
   CoreProcess::symtable_t::iterator FatProcess::children_end () { return _symtable.end (); }
   bool FatProcess::children_empty () { return _symtable.empty (); }
   size_t FatProcess::children_size () const { return _symtable.size(); }
 
   void
-  FatProcess::add_symbol (const std::string& name, FatChildProcess* c)
+  FatProcess::add_symbol (const djnn::string& name, FatChildProcess* c)
   {
     /* if ((symtable ().insert (pair<string, FatProcess*> (name, c))).second == false) {
      cerr << "Duplicate name " << name << " in component " << get_name () << endl;
@@ -643,7 +643,7 @@ namespace djnn
   }
 
   void
-  FatProcess::remove_symbol (const std::string& name)
+  FatProcess::remove_symbol (const djnn::string& name)
   {
     auto it = find_child_iterator (name);
     if (it != children_end ())
@@ -652,7 +652,7 @@ namespace djnn
       warning (nullptr, "Warning: symbol '" + name + "' not found in FatProcess '" + name + "'\n");
   }
 
-  const std::string&
+  const djnn::string&
   FatProcess::get_name () const
   {
     return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
@@ -683,13 +683,13 @@ namespace djnn
   }
 
   void
-  alias (ParentProcess* parent, const std::string& name, FatChildProcess* from)
+  alias (ParentProcess* parent, const djnn::string& name, FatChildProcess* from)
   {
     parent->add_symbol (name, from);
   }
 
   void
-  merge_children (ParentProcess *p1, const std::string& sy1, ParentProcess* p2, const std::string& sy2)
+  merge_children (ParentProcess *p1, const djnn::string& sy1, ParentProcess* p2, const djnn::string& sy2)
   {
     //debug
     //std::cout << "process::merge_children " << p1->get_debug_name () << " - " << sy1 << " - "  << p2->get_debug_name () << " - " << sy2 << std::endl ;
@@ -737,7 +737,7 @@ namespace djnn
 
   #ifndef DJNN_NO_SERIALIZE
   void
-  CoreProcess::serialize (const std::string& format) {
+  CoreProcess::serialize (const djnn::string& format) {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
     warning (this, "serialize is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");

@@ -30,13 +30,13 @@ namespace djnn
   class AbstractSkew : public AbstractTransformation
   {
   public:
-    AbstractSkew (ParentProcess* parent, const std::string& name, double a);
+    AbstractSkew (ParentProcess* parent, const djnn::string& name, double a);
     virtual ~AbstractSkew ();
     
     
     void get_properties_values (double& a);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
 
   protected:

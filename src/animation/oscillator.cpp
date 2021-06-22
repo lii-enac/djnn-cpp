@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (ParentProcess* parent, const std::string& name, DoubleProperty* m,
+  Oscillator::OscillatorAction::OscillatorAction (ParentProcess* parent, const djnn::string& name, DoubleProperty* m,
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
@@ -38,7 +38,7 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (ParentProcess* parent, const std::string& name)
+  Oscillator::Oscillator (ParentProcess* parent, const djnn::string& name)
   : FatProcess (name),
   _m (this, "m", 1),
   _k (this, "k", 1),
@@ -89,7 +89,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Oscillator::serialize (const std::string& type)
+  Oscillator::serialize (const djnn::string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

@@ -23,7 +23,7 @@ namespace djnn {
 
   class AbstractTextProperty : public AbstractProperty {
   public:
-    AbstractTextProperty (ParentProcess* parent, const std::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractTextProperty (ParentProcess* parent, const djnn::string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return String; }
     //virtual process_type_e get_process_type () const override { return TEXT_PROPERTY_T; }
 
@@ -32,53 +32,53 @@ namespace djnn {
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
     void set_value (CoreProcess* v, bool propagate) override;
-    void set_value (const std::string& v, bool propagate) override;
-    void set_value (const char* v, bool propagate) override { set_value(std::string(v), propagate); };
+    void set_value (const djnn::string& v, bool propagate) override;
+    void set_value (const char* v, bool propagate) override { set_value(djnn::string(v), propagate); };
     double get_double_value () override;
     double get_double_value () const override;
-    std::string get_string_value () override { return get_ref_value (); }
-    std::string get_string_value () const override { return get_ref_value (); }
-    std::string& get_value () { return get_ref_value(); };
+    djnn::string get_string_value () override { return get_ref_value (); }
+    djnn::string get_string_value () const override { return get_ref_value (); }
+    djnn::string& get_value () { return get_ref_value(); };
   protected:
-    virtual std::string& get_ref_value() = 0;
-    virtual const std::string& get_ref_value() const= 0;
+    virtual djnn::string& get_ref_value() = 0;
+    virtual const djnn::string& get_ref_value() const= 0;
 
   public:
 #ifndef DJNN_NO_DEBUG
     void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 
   class TextProperty : public AbstractTextProperty {
   public:
-    TextProperty (ParentProcess* parent, const std::string& name, std::string v) : AbstractTextProperty (parent, name), value(v) { }
+    TextProperty (ParentProcess* parent, const djnn::string& name, djnn::string v) : AbstractTextProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
-    virtual std::string& get_ref_value() override { return value; }
-    virtual const std::string& get_ref_value() const override { return value; }
+    virtual djnn::string& get_ref_value() override { return value; }
+    virtual const djnn::string& get_ref_value() const override { return value; }
   private:
-    std::string value;
+    djnn::string value;
   };
 
   class TextPropertyProxy : public AbstractTextProperty {
   public:
-    TextPropertyProxy (ParentProcess* parent, const std::string& name, std::string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
+    TextPropertyProxy (ParentProcess* parent, const djnn::string& name, djnn::string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
     FatProcess* clone () override;
   protected:
-    virtual std::string& get_ref_value() override { return value; }
-    virtual const std::string& get_ref_value() const override { return value; }
+    virtual djnn::string& get_ref_value() override { return value; }
+    virtual const djnn::string& get_ref_value() const override { return value; }
   private:
-    std::string& value;
+    djnn::string& value;
   };
 
 
-  std::string toString(const AbstractProperty& x);
-  std::string& toString(CoreProcess* p);
+  djnn::string toString(const AbstractProperty& x);
+  djnn::string& toString(CoreProcess* p);
 
-  std::string& getString (CoreProcess* p);
-  void setString (CoreProcess* p, std::string &v);
+  djnn::string& getString (CoreProcess* p);
+  void setString (CoreProcess* p, djnn::string &v);
 }
 

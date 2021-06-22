@@ -6,7 +6,7 @@ namespace djnn {
   class OutlineOpacity : public AbstractOpacity
   {
   public:
-    OutlineOpacity (ParentProcess* parent, const std::string& name, double alpha) :
+    OutlineOpacity (ParentProcess* parent, const djnn::string& name, double alpha) :
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~OutlineOpacity () {}
     void draw () override;
@@ -16,7 +16,7 @@ namespace djnn {
   class FillOpacity : public AbstractOpacity
   {
   public:
-    FillOpacity (ParentProcess* parent, const std::string& name, double alpha) :
+    FillOpacity (ParentProcess* parent, const djnn::string& name, double alpha) :
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~FillOpacity () {}
     void draw () override;

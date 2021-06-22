@@ -45,11 +45,11 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  Text::Text (ParentProcess* parent, const std::string& name, double x, double y, const std::string& text) :
+  Text::Text (ParentProcess* parent, const djnn::string& name, double x, double y, const djnn::string& text) :
   Text(parent, name, x,y,0,0,0,0,"utf8", text) {}
 
-  Text::Text (ParentProcess* parent, const std::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
-              const std::string& encoding, const std::string& text) :
+  Text::Text (ParentProcess* parent, const djnn::string& name, double x, double y, double dx, double dy, int dxU, int dyU,
+              const djnn::string& encoding, const djnn::string& text) :
       AbstractGShape (parent, name),
       /* FIXME: encoding - should be string or convert in Int  from Enum? */
       raw_props{.x=x, .y=y, .dx=dx, .dy=dy, .dxU=dxU, .dyU=dyU, .encoding=DJN_UTF8, .text=text},
@@ -142,7 +142,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  Text::find_child_impl (const std::string& name)
+  Text::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGShape::find_child_impl (name);
     if(res) return res;
@@ -211,7 +211,7 @@ namespace djnn
   }
 
   void
-  Text::get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, std::string &text)
+  Text::get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, djnn::string &text)
   {
     x = raw_props.x;
     y = raw_props.y;

@@ -27,16 +27,16 @@ class Driver
 public:
     Driver();
 
-    std::string stream;
+    djnn::string stream;
     bool parse_stream (std::istream& in,
-		      const std::string& name, djnn::FatProcess *p);
-    bool parse_string (const std::string& input,
-		      const std::string& name, djnn::FatProcess *p);
-    bool parse_file (const std::string& filename, djnn::FatProcess *p);
+		      const djnn::string& name, djnn::FatProcess *p);
+    bool parse_string (const djnn::string& input,
+		      const djnn::string& name, djnn::FatProcess *p);
+    bool parse_file (const djnn::string& filename, djnn::FatProcess *p);
 
-    void error (const class location& l, const std::string& m);
+    void error (const class location& l, const djnn::string& m);
 
-    void error (const std::string& m);
+    void error (const djnn::string& m);
     djnn::FatProcess* get_parent ();
     Scanner* _lexer;
     djnn::FatProcess* _root;

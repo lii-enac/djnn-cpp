@@ -29,13 +29,13 @@ namespace djnn
   class OutlineMiterLimit : public AbstractStyle
   {
   public:
-    OutlineMiterLimit (ParentProcess* parent, const std::string& name, int limit);
+    OutlineMiterLimit (ParentProcess* parent, const djnn::string& name, int limit);
     virtual ~OutlineMiterLimit ();
     void draw () override;
     OutlineMiterLimit* clone () override;
     void get_properties_values (int& limit);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child_impl ("limit"); }
 
   protected:

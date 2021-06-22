@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractVolume::AbstractVolume (ParentProcess* parent, const std::string& name, double volume) :
+  AbstractVolume::AbstractVolume (ParentProcess* parent, const djnn::string& name, double volume) :
     AbstractAudioStyle (parent, name),
     raw_props{.volume=volume},
     _cvolume (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractVolume::find_child_impl (const std::string& name)
+  AbstractVolume::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractAudioStyle::find_child_impl(name);
     if (res) return res;
@@ -69,7 +69,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -97,10 +97,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractVolume::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "volume",
     };
     return res;

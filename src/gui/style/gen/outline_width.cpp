@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (ParentProcess* parent, const std::string& name, double width) :
+  OutlineWidth::OutlineWidth (ParentProcess* parent, const djnn::string& name, double width) :
     AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)
@@ -61,7 +61,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  OutlineWidth::find_child_impl (const std::string& name)
+  OutlineWidth::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
@@ -70,7 +70,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -98,10 +98,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   OutlineWidth::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "width",
     };
     return res;

@@ -22,7 +22,7 @@ namespace djnn
 {
   
 
-  Exit::Exit (ParentProcess* parent, const std::string& name, int value, bool isModel)
+  Exit::Exit (ParentProcess* parent, const djnn::string& name, int value, bool isModel)
   : FatProcess (name),
   _value (this, "value", value)
   {
@@ -42,7 +42,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Exit::serialize (const std::string& format) {
+  Exit::serialize (const djnn::string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 

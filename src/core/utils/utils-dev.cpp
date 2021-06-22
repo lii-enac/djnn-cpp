@@ -35,13 +35,13 @@ namespace djnn
   int _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US = 1000;
   int _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED = 1;
 
-  std::string
+  djnn::string
   __to_string(void*p)
   {
     return __to_string((uintptr_t)p);
   }
 
-  std::string
+  djnn::string
   __to_string(long x)
   {
     char tab[256];
@@ -60,12 +60,12 @@ namespace djnn
       tab[i] = '-';
       --i;
     }
-    return std::string(&tab[i+1]); 
+    return djnn::string(&tab[i+1]); 
   }
   
 
   ref_info_t
-  check_for_ref (FatProcess* src, const std::string& spec)
+  check_for_ref (FatProcess* src, const djnn::string& spec)
   {
     /* spec is empty */
     if (spec.empty ()) 
@@ -73,7 +73,7 @@ namespace djnn
     
     size_t found = spec.find ("$value");
     /* we found §value */
-    if (found != std::string::npos) {
+    if (found != djnn::string::npos) {
       
       FatChildProcess *prop = src;
       
@@ -89,7 +89,7 @@ namespace djnn
       RefProperty *ref = djnn_dynamic_cast<RefProperty*> (prop);
       /* ref is a refproperty */
       if (ref != nullptr ) {
-        std::string new_spec = "";
+        djnn::string new_spec = "";
         /* spec is more than juste $value, eg : boo/bar/$value/toto */
         if ( spec.size () > 6) {
           new_spec = spec.substr (found + 6);
@@ -105,7 +105,7 @@ namespace djnn
      return ref_info_t (nullptr, spec);
    }
 
-  const std::string&
+  const djnn::string&
   get_parent_name (const CoreProcess *cp, int up)
   {
     const auto * p = dynamic_cast<const FatProcess*>(cp);
@@ -116,7 +116,7 @@ namespace djnn
   }
 
 #if 0
-  std::string cpp_demangle( char const * name )
+  djnn::string cpp_demangle( char const * name )
   {
     return boost::core::demangle(name);
   }
@@ -163,7 +163,7 @@ namespace djnn
       std::free( const_cast< char* >( name ) );
   }
 
-  std::string cpp_demangle( char const * name )
+  djnn::string cpp_demangle( char const * name )
   {
       scoped_demangled_name demangled_name( name );
       char const * p = demangled_name.get();
@@ -181,7 +181,7 @@ namespace djnn
   {
   }
 
-  std::string cpp_demangle( char const * name )
+  djnn::string cpp_demangle( char const * name )
   {
       return name;
   }
@@ -189,12 +189,12 @@ namespace djnn
 #endif
 #endif
 
-  const std::string
+  const djnn::string
   get_hierarchy_name (const CoreProcess *cp, int up)
   {
     const auto * p = dynamic_cast<const FatProcess*>(cp);
     if(!p) return FatProcess::default_name;
-    std::string res;
+    djnn::string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;
   }

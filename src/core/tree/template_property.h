@@ -26,7 +26,7 @@ namespace djnn {
     template <typename X>
     class AbstractTemplateProperty : public AbstractProperty {
     public:
-        AbstractTemplateProperty (Process* parent, const std::string& name, int notify_mask=notify_none)
+        AbstractTemplateProperty (Process* parent, const djnn::string& name, int notify_mask=notify_none)
         : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
         virtual int get_prop_type () const override { return TemplatePropertyType<X>.type; }
         void set_value (const X& v, bool propagate) override {
@@ -47,7 +47,7 @@ namespace djnn {
     template <typename X>
     class TemplateProperty : public AbstractTemplateProperty<X> {
     public:
-        TemplateProperty (Process* parent, const std::string& name, int v)
+        TemplateProperty (Process* parent, const djnn::string& name, int v)
         : AbstractTemplateProperty (parent, name), value(v) {}
         Process* clone () override;
     protected:
@@ -58,14 +58,14 @@ namespace djnn {
 
     public:
         #ifndef DJNN_NO_SERIALIZE
-        void serialize (const std::string& format) override;
+        void serialize (const djnn::string& format) override;
         #endif
     };
 
     template <typename X>
     class TemplatePropertyProxy : public AbstractTemplateProperty<X> {
     public:
-        IntPropertyProxy (Process* parent, const std::string& name, X &v, int notify_mask=notify_none)
+        IntPropertyProxy (Process* parent, const djnn::string& name, X &v, int notify_mask=notify_none)
         : AbstractTemplateProperty (parent, name, notify_mask), value(v) {}
         Process* clone () override;
     protected:
@@ -76,7 +76,7 @@ namespace djnn {
 
     public:
         #ifndef DJNN_NO_SERIALIZE
-        void serialize (const std::string& format) override;
+        void serialize (const djnn::string& format) override;
         #endif
     };
 }

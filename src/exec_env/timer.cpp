@@ -27,7 +27,7 @@
 namespace djnn
 {
 
-  Timer::Timer (ParentProcess* parent, const std::string& name, int delay)
+  Timer::Timer (ParentProcess* parent, const djnn::string& name, int delay)
   : FatProcess (name),
   _delay (this, "delay", delay),
   _end (this, "end"),
@@ -40,13 +40,13 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Timer::Timer (ParentProcess* parent, const std::string& name, std::chrono::milliseconds delay)
+  Timer::Timer (ParentProcess* parent, const djnn::string& name, std::chrono::milliseconds delay)
   : Timer (parent, name, delay.count())
   {
   }
 
 #if DJNN_USE_BOOST_CHRONO
-  Timer::Timer (ParentProcess* parent, const std::string& name, boost::chrono::milliseconds delay)
+  Timer::Timer (ParentProcess* parent, const djnn::string& name, boost::chrono::milliseconds delay)
   : Timer(parent, name, delay.count())
   {
   }
@@ -100,7 +100,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Timer::serialize (const std::string& type) {
+  Timer::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

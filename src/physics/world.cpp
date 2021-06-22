@@ -36,7 +36,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractPObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const std::string& name, int notify_mask)
+  AbstractPObj::create_GObj_prop (BoolPropertyProxy **prop, CouplingWithData **cprop, bool *rawp, const djnn::string& name, int notify_mask)
   {
     *prop = new BoolPropertyProxy (this, name, *rawp, notify_mask);
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
@@ -51,7 +51,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractPObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const std::string& name, int notify_mask)
+  AbstractPObj::create_GObj_prop (IntPropertyProxy **prop, CouplingWithData **cprop, int *rawp, const djnn::string& name, int notify_mask)
   {
     *prop = new IntPropertyProxy (this, name, *rawp, notify_mask);
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
@@ -66,7 +66,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractPObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const std::string& name, int notify_mask)
+  AbstractPObj::create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData **cprop, double *rawp, const djnn::string& name, int notify_mask)
   {
     *prop = new DoublePropertyProxy (this, name, *rawp, notify_mask);
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
@@ -81,7 +81,7 @@ namespace djnn
   }
 
   FatProcess*
-  AbstractPObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, std::string *rawp, const std::string& name, int notify_mask)
+  AbstractPObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, djnn::string *rawp, const djnn::string& name, int notify_mask)
   {
     *prop = new TextPropertyProxy (this, name, *rawp, notify_mask);
     /*FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
@@ -109,7 +109,7 @@ namespace djnn
     }
   }
 
-  World::World (ParentProcess* parent, const std::string& name, double x, double y, double z) :
+  World::World (ParentProcess* parent, const djnn::string& name, double x, double y, double z) :
   AbstractPropWorld (parent, name, x, y, z, 0.016), _dt (nullptr)
   {
     _step = new Spike (this, "spike");
@@ -151,11 +151,11 @@ namespace djnn
   }
 
 
-  PhyObj::PhyObj (ParentProcess* parent, const std::string& name)
+  PhyObj::PhyObj (ParentProcess* parent, const djnn::string& name)
   : PhyObj (parent, name, 0,0,0,0)
   {}
 
-  PhyObj::PhyObj (ParentProcess* parent, const std::string& name, double x, double y, double z, double mass) :
+  PhyObj::PhyObj (ParentProcess* parent, const djnn::string& name, double x, double y, double z, double mass) :
       AbstractPropPhyObj (parent, name, x, y, z, 0,0,0, 0,0,0, mass, 1.0, 0.3),
       /*FatProcess (name),*/
       _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr),
@@ -224,7 +224,7 @@ namespace djnn
   }
 
   FatChildProcess*
-  PhyObj::find_child_impl (const std::string& name)
+  PhyObj::find_child_impl (const djnn::string& name)
   {
       auto * res = AbstractPropPhyObj::find_child_impl (name);
       #define phyattr(x) if (name ==#x) _##x = dynamic_cast<DoublePropertyProxy*>(res); else
@@ -310,7 +310,7 @@ namespace djnn
 
   
 
-  Plane::Plane (ParentProcess* parent, const std::string& name, double a, double b, double c, double d) :
+  Plane::Plane (ParentProcess* parent, const djnn::string& name, double a, double b, double c, double d) :
       AbstractPropPlane (parent, name, a, b, c, d)
       //plane_props
       //  { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
@@ -327,7 +327,7 @@ namespace djnn
   }
 
   // FatProcess*
-  // Plane::find_child (const std::string& n)
+  // Plane::find_child (const djnn::string& n)
   // {
   //   FatProcess *res = PhyObj::find_child (n);
   //   if (res)
@@ -366,7 +366,7 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (ParentProcess* parent, const std::string& name, double x, double y, double z, double w, double h, double d, double mass) :
+  Box::Box (ParentProcess* parent, const djnn::string& name, double x, double y, double z, double w, double h, double d, double mass) :
       AbstractPropBox (parent, name, w, h, d)
       //, w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
@@ -403,7 +403,7 @@ namespace djnn
   }
 
   // FatProcess*
-  // Box::find_child (const std::string& n)
+  // Box::find_child (const djnn::string& n)
   // {
   //   FatProcess* res = PhyObj::find_child (n);
   //   if (res)
@@ -422,7 +422,7 @@ namespace djnn
   //   return res;
   // }
 
-  Sphere::Sphere (ParentProcess* parent, const std::string& name, double x, double y, double z, double radius, double mass) :
+  Sphere::Sphere (ParentProcess* parent, const djnn::string& name, double x, double y, double z, double radius, double mass) :
     AbstractPropSphere (parent, name, radius) 
       //PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {
@@ -456,7 +456,7 @@ namespace djnn
   }
 
   // FatProcess*
-  // Sphere::find_child (const std::string& n)
+  // Sphere::find_child (const djnn::string& n)
   // {
   //   FatProcess* res = PhyObj::find_child (n);
   //   if (res)

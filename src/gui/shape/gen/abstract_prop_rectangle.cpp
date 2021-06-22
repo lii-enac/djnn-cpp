@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropRectangle::AbstractPropRectangle (ParentProcess* parent, const std::string& name, double x, double y, double width, double height, double rx, double ry) :
+  AbstractPropRectangle::AbstractPropRectangle (ParentProcess* parent, const djnn::string& name, double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
@@ -90,7 +90,7 @@ namespace djnn
   }
  
   FatChildProcess*
-  AbstractPropRectangle::find_child_impl (const std::string& name)
+  AbstractPropRectangle::find_child_impl (const djnn::string& name)
   {
     auto * res = AbstractGShape::find_child_impl(name);
     if (res) return res;
@@ -99,7 +99,7 @@ namespace djnn
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
-    typedef std::string text;
+    typedef djnn::string text;
     text* rawp_Text = nullptr;
     int notify_mask = notify_none;
     
@@ -157,10 +157,10 @@ namespace djnn
     return res;
   }
 
-  const vector<std::string>&
+  const vector<djnn::string>&
   AbstractPropRectangle::get_properties_name () const
   {
-    static const vector<std::string> res = {
+    static const vector<djnn::string> res = {
     "x",
 			"y",
 			"width",

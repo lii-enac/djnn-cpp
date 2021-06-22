@@ -24,7 +24,7 @@ using namespace djnn;
 
 static int IgnoreAttr (FatProcess**, const char*);
 
-static map <std::string, djn_XMLAttrHandler> handlers = {
+static map <djnn::string, djn_XMLAttrHandler> handlers = {
   {"viewBox",{&IgnoreAttr}},
   {"contentStyleType",{&IgnoreAttr}},
   {"contentScriptType",{&IgnoreAttr}},
@@ -34,8 +34,8 @@ static map <std::string, djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char *str, unsigned int len)
 {
-  map<std::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(std::string(str));
+  map<djnn::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(djnn::string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

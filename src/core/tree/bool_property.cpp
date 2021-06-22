@@ -49,7 +49,7 @@ namespace djnn
       warning (p, "setBool only works on boolean properties");
   }
 
-  AbstractBoolProperty::AbstractBoolProperty (ParentProcess* parent, const std::string& name, int notify_mask)
+  AbstractBoolProperty::AbstractBoolProperty (ParentProcess* parent, const djnn::string& name, int notify_mask)
   : AbstractProperty (parent, name, notify_mask),
     _true (this, "true"),
     _false (this, "false")
@@ -90,7 +90,7 @@ namespace djnn
   }
 
   void
-  AbstractBoolProperty::set_value (const std::string& v, bool propagate)
+  AbstractBoolProperty::set_value (const djnn::string& v, bool propagate)
   {
     if (v.compare ("true") == 0) {
       //get_ref_value() = true;
@@ -120,7 +120,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AbstractBoolProperty::serialize (const std::string& format) {
+  AbstractBoolProperty::serialize (const djnn::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:BoolProperty");

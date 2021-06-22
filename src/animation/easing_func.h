@@ -60,17 +60,17 @@ namespace djnn
   private:
     class EasingAction : public Action {
     public:
-      EasingAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
+      EasingAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
       void impl_activate () override { ((EasingGenerator*)get_parent())->compute (); }
     };
   public:
-    EasingGenerator (ParentProcess* parent, const std::string& name, int func_t);
+    EasingGenerator (ParentProcess* parent, const djnn::string& name, int func_t);
     ~EasingGenerator ();
     void impl_activate () override;
     void impl_deactivate () override;
     void compute ();
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& type) override;
+    void serialize (const djnn::string& type) override;
 #endif
   private:
     IntProperty _func_selector;

@@ -22,7 +22,7 @@
 #define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
 
 namespace djnn {
-  extern vector<std::string> loadedModules;
+  extern vector<djnn::string> loadedModules;
 
   #include "const_keys.h"
   MACRO (Print, PRINT)

@@ -21,17 +21,17 @@ namespace djnn
 {
   
 
-  Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action) :
+  Activator::Activator (ParentProcess* parent, const djnn::string& name, CoreProcess* action) :
       FatProcess (name), _action (action)
   {
     if (_action == nullptr) {
-      error  (this, std::string("action not found in activator ") + name);
+      error  (this, djnn::string("action not found in activator ") + name);
       return;
     }
     finalize_construction (parent, name);
   }
 
-  Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action, const std::string& spec) :
+  Activator::Activator (ParentProcess* parent, const djnn::string& name, CoreProcess* action, const djnn::string& spec) :
       Activator (parent, name, action->find_child_impl (spec))
   {
   }
@@ -42,7 +42,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Activator::serialize (const std::string& format) {
+  Activator::serialize (const djnn::string& format) {
 
     string buf;
 

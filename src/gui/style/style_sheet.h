@@ -6,15 +6,15 @@ namespace djnn {
     class StyleSheet : public Container
   {
   public:
-    StyleSheet (ParentProcess* parent, const std::string& name);
+    StyleSheet (ParentProcess* parent, const djnn::string& name);
     virtual ~StyleSheet () override {}
     StyleSheet* clone () override;
-    const std::string& classname () { return _classname; }
+    const djnn::string& classname () { return _classname; }
     int id () { return _id; }
-    static int get_id (const std::string& classname);
+    static int get_id (const djnn::string& classname);
     static void draw_style (const vector<int>& classes);
   private:
-    std::string _classname;
+    djnn::string _classname;
     int _id;
   };
 

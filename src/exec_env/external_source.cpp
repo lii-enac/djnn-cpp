@@ -150,7 +150,7 @@ namespace djnn {
         #endif
 	};
 
-	ExternalSource::ExternalSource (const std::string& name)
+	ExternalSource::ExternalSource (const djnn::string& name)
     : cancelled(nullptr), _impl(new ExternalSource::Impl(this)), _name(name), _please_stop (false)
     {
     }

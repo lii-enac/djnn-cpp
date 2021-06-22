@@ -29,13 +29,13 @@ namespace djnn
   class FillRule : public AbstractStyle
   {
   public:
-    FillRule (ParentProcess* parent, const std::string& name, int rule);
+    FillRule (ParentProcess* parent, const djnn::string& name, int rule);
     virtual ~FillRule ();
     void draw () override;
     FillRule* clone () override;
     void get_properties_values (int& rule);
-    const vector<std::string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const std::string&) override;
+    const vector<djnn::string>& get_properties_name () const override;
+    virtual FatChildProcess* find_child_impl (const djnn::string&) override;
 		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child_impl ("rule"); }
 
   protected:

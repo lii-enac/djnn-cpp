@@ -42,7 +42,7 @@ namespace djnn {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (ParentProcess* parent, const std::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
+    BinaryOperatorAction (ParentProcess* parent, const djnn::string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
       finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
@@ -60,7 +60,7 @@ namespace djnn {
 
   class BinaryOperatorCommon : public FatProcess {
     public:
-    BinaryOperatorCommon (const std::string& name) : FatProcess(name) {}
+    BinaryOperatorCommon (const djnn::string& name) : FatProcess(name) {}
     virtual ~BinaryOperatorCommon () {}
   };
 
@@ -70,7 +70,7 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (ParentProcess* parent, const std::string& name, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (ParentProcess* parent, const djnn::string& name, const Left_init& l_val, const Right_init& r_val)
     : BinaryOperatorCommon (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
@@ -89,12 +89,12 @@ namespace djnn {
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate ();}
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& type) override {
+    void serialize (const djnn::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + std::string(name_info<BinaryFunction>::serialize));
+      AbstractSerializer::serializer->start ("base:" + djnn::string(name_info<BinaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
-      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<BinaryFunction>::left), _left.get_value ());
-      AbstractSerializer::serializer->cpptype_attribute (std::string(name_info<BinaryFunction>::right), _right.get_value ());
+      AbstractSerializer::serializer->cpptype_attribute (djnn::string(name_info<BinaryFunction>::left), _left.get_value ());
+      AbstractSerializer::serializer->cpptype_attribute (djnn::string(name_info<BinaryFunction>::right), _right.get_value ());
       AbstractSerializer::serializer->end ();
       AbstractSerializer::post_serialize(this);
     }
@@ -135,7 +135,7 @@ namespace djnn {
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    UnaryOperatorAction (ParentProcess* parent, const std::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
+    UnaryOperatorAction (ParentProcess* parent, const djnn::string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
       finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
@@ -149,7 +149,7 @@ namespace djnn {
 
   class UnaryOperatorCommon : public FatProcess {
     public:
-    UnaryOperatorCommon (const std::string& name) : FatProcess(name) {}
+    UnaryOperatorCommon (const djnn::string& name) : FatProcess(name) {}
     virtual ~UnaryOperatorCommon () {}
   };
 
@@ -159,7 +159,7 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (ParentProcess* parent, const std::string& name, const Input_init& i_val)
+    UnaryOperator (ParentProcess* parent, const djnn::string& name, const Input_init& i_val)
     : UnaryOperatorCommon (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
@@ -176,9 +176,9 @@ namespace djnn {
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();}
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& type) override {
+    void serialize (const djnn::string& type) override {
       AbstractSerializer::pre_serialize(this, type);
-      AbstractSerializer::serializer->start ("base:" + std::string(name_info<UnaryFunction>::serialize));
+      AbstractSerializer::serializer->start ("base:" + djnn::string(name_info<UnaryFunction>::serialize));
       AbstractSerializer::serializer->text_attribute ("id", get_name ());
       AbstractSerializer::serializer->cpptype_attribute ("input", _input.get_value ());
       AbstractSerializer::serializer->end ();

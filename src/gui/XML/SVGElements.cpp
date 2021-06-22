@@ -70,7 +70,7 @@ static FatProcess* DataIgnored (const char*, int, FatProcess*);
 static void djnUnloadTextBuf (FatProcess *);
 static void djn__CheckStroke (FatProcess *);
 
-static map <std::string, djn_XMLTagHandler> handlers={
+static map <djnn::string, djn_XMLTagHandler> handlers={
   {"g",{&StartGroup, &EndElement, &DataIgnored}},
   {"use",{&StartUse, &EndElement, &DataIgnored}},
   {"text",{&StartText, &EndText, &TextData}},
@@ -102,8 +102,8 @@ static map <std::string, djn_XMLTagHandler> handlers={
 djn_XMLTagHandler*
 SVGElements_Hash::djn_SVGElementsLookup (const char *str, unsigned int len)
 {
-  map<std::string, djn_XMLTagHandler>::iterator it;
-  it = handlers.find(std::string(str));
+  map<djnn::string, djn_XMLTagHandler>::iterator it;
+  it = handlers.find(djnn::string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;
@@ -152,7 +152,7 @@ StartSVG(const char** attrs, FatProcess* current) {
 	djn_GraphicalShapeArgs = {"", "", djnStrokeUndef};
 	djn_CircleArgs = {0., 0., 0.};
 	djn_EllipseArgs = {0., 0., 0., 0.};
-	djn_ImgArgs = {0., 0., 0., 0., 0, std::string("")};
+	djn_ImgArgs = {0., 0., 0., 0., 0, djnn::string("")};
 	djn_LineArgs = {0., 0., 0., 0.};
 	djn_PathArgs = {0};
 	djn_PolyArgs = {0, 0};
@@ -203,7 +203,7 @@ static void djn__CheckStroke(FatProcess* holder) {
 }
 
 static vector<string>
-get_classes (const std::string& classnames)
+get_classes (const djnn::string& classnames)
 {
   vector<string> tokens;
   string cur_str (classnames);
@@ -301,7 +301,7 @@ StartImage (const char** attrs, FatProcess* current)
   djn_ImgArgs.w = 0.;
   djn_ImgArgs.h = 0.;
   djn_ImgArgs.path = 0;
-  djn_ImgArgs.data = std::string ("");
+  djn_ImgArgs.data = djnn::string ("");
 
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
@@ -1243,7 +1243,7 @@ StartStyle(const char** attrs, FatProcess* current) {
 
 static FatProcess*
 StyleData(const char* data, int len, FatProcess* current) {
-  std::string str (data, len);
+  djnn::string str (data, len);
   css::Driver driver;
   driver.parse_string (str, "svg file", current);
   return current;

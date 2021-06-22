@@ -59,7 +59,7 @@ namespace djnn
 
   
 
-  Previous::Previous (ParentProcess* parent, const std::string& name, double i_val)
+  Previous::Previous (ParentProcess* parent, const djnn::string& name, double i_val)
   : FatProcess (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),
@@ -72,7 +72,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Previous::serialize (const std::string& type) {
+  Previous::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -94,7 +94,7 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (ParentProcess* parent, const std::string& name, bool isModel) :
+  Incr::Incr (ParentProcess* parent, const djnn::string& name, bool isModel) :
       FatProcess (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0),
@@ -167,7 +167,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Incr::serialize (const std::string& type) {
+  Incr::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 
@@ -181,7 +181,7 @@ namespace djnn
   }
 #endif
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (ParentProcess* parent, const std::string& name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (ParentProcess* parent, const djnn::string& name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -203,7 +203,7 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (ParentProcess* parent, const std::string& name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (ParentProcess* parent, const djnn::string& name, double input, double clamp_min,
                                       double clamp_max)
   : FatProcess (name),
     _input (this, "input", input),
@@ -253,7 +253,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AdderAccumulator::serialize (const std::string& type) {
+  AdderAccumulator::serialize (const djnn::string& type) {
    
     AbstractSerializer::pre_serialize(this, type);
 

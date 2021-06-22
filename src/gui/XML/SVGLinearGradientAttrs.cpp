@@ -27,7 +27,7 @@ static int ParseY1 (FatProcess**, const char*);
 static int ParseX2 (FatProcess**, const char*);
 static int ParseY2 (FatProcess**, const char*);
 
-static map <std::string, djnn::djn_XMLAttrHandler> handlers = {
+static map <djnn::string, djnn::djn_XMLAttrHandler> handlers = {
   {"y2",{&ParseY2}},
   {"y1",{&ParseY1}},
   {"x2",{&ParseX2}},
@@ -37,8 +37,8 @@ static map <std::string, djnn::djn_XMLAttrHandler> handlers = {
 djn_XMLAttrHandler*
 SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup (const char *str, unsigned int len)
 {
-  map<std::string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(std::string(str));
+  map<djnn::string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(djnn::string(str));
   if (it != handlers.end())
     return &it->second;
   return 0;

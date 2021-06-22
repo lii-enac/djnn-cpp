@@ -32,12 +32,12 @@ namespace djnn {
     CoreBinding (CoreProcess* src, CoreProcess* dst)
     : CoreBinding (src, ACTIVATION, dst, ACTIVATION) {}
 
-    CoreBinding (ParentProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    CoreBinding (ParentProcess* parent, const djnn::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : CoreBinding (src, src_flag, dst, dst_flag) {
       finalize_construction (parent, name);
     }
     
-    CoreBinding (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    CoreBinding (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst)
     : CoreBinding (parent, name, src, ACTIVATION, dst, ACTIVATION) {}
 
     ~CoreBinding () {
@@ -56,7 +56,7 @@ namespace djnn {
 
   public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 
@@ -67,32 +67,32 @@ namespace djnn {
   class Binding : public FatProcess //, virtual CoreBinding 
   {
   public:
-    Binding (ParentProcess* parent, const std::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
+    Binding (ParentProcess* parent, const djnn::string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
     : FatProcess (name), _b (src, src_flag, dst, dst_flag)
     {
       finalize_construction (parent, name);
     }
 
-    Binding (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst)
+    Binding (ParentProcess* parent, const djnn::string& name, CoreProcess* src, CoreProcess* dst)
     : Binding (parent, name, src, ACTIVATION, dst, ACTIVATION)
     {}
 
     // for legacy reason, to get rid of?
-    Binding (ParentProcess* parent, const std::string& name,
-                   CoreProcess* src, const std::string& sspec,
-                   CoreProcess* dst, const std::string& dspec)
+    Binding (ParentProcess* parent, const djnn::string& name,
+                   CoreProcess* src, const djnn::string& sspec,
+                   CoreProcess* dst, const djnn::string& dspec)
     : Binding (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
-    Binding (ParentProcess* parent, const std::string& name,
-                   CoreProcess* src, const std::string& sspec, activation_flag_e src_flag,
-                   CoreProcess* dst, const std::string& dspec, activation_flag_e dst_flag)
+    Binding (ParentProcess* parent, const djnn::string& name,
+                   CoreProcess* src, const djnn::string& sspec, activation_flag_e src_flag,
+                   CoreProcess* dst, const djnn::string& dspec, activation_flag_e dst_flag)
     : Binding (parent, name, src->find_child_impl (sspec), src_flag, dst->find_child_impl (dspec), dst_flag)
     {}
 
-    Binding (ParentProcess* parent, const std::string& name,
-                   CoreProcess* src, const std::string& sspec, bool b_src_flag,
-                   CoreProcess* dst, const std::string& dspec, bool b_dst_flag)
+    Binding (ParentProcess* parent, const djnn::string& name,
+                   CoreProcess* src, const djnn::string& sspec, bool b_src_flag,
+                   CoreProcess* dst, const djnn::string& dspec, bool b_dst_flag)
     : Binding (parent, name, src->find_child_impl (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION , dst->find_child_impl (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
     {}
 
@@ -109,7 +109,7 @@ namespace djnn {
 
   public:
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const std::string& format) override;
+    void serialize (const djnn::string& format) override;
 #endif
   };
 }

@@ -42,7 +42,7 @@ namespace djnn {
 
   class LinuxDevice : public FatProcess {
   public:
-    LinuxDevice (ParentProcess* parent, const std::string& name, dev_type type) : FatProcess (name), _type (type) {}
+    LinuxDevice (ParentProcess* parent, const djnn::string& name, dev_type type) : FatProcess (name), _type (type) {}
     ~LinuxDevice () {}
     virtual void handle_event (struct input_event *ev) = 0;
     dev_type type () { return _type; }
@@ -50,7 +50,7 @@ namespace djnn {
     dev_type _type;
   };
 
-  LinuxDevice* map_device (const struct libevdev *_dev, const std::string& n);
+  LinuxDevice* map_device (const struct libevdev *_dev, const djnn::string& n);
 
   class Evdev {
     private:
@@ -76,7 +76,7 @@ namespace djnn {
     IOFD *_iofd;
     LinuxDevice *_djn_dev;
     Coupling *_readable_cpl;
-    std::string _name;
+    djnn::string _name;
     struct libevdev *_dev;
     int _fd;
     bool _aborted;
@@ -105,7 +105,7 @@ namespace djnn {
 		IOFD* _udev_iofd;
     struct udev *_udev_connection;
     struct udev_monitor *_udev_mon;
-    map<std::string, Evdev*> _sysname_to_dev;
+    map<djnn::string, Evdev*> _sysname_to_dev;
     UdevAction *_action;
     Coupling *_readable_cpl;
 	};
@@ -113,7 +113,7 @@ namespace djnn {
   class LinuxMouse : public LinuxDevice
   {
   public:
-    LinuxMouse (ParentProcess* parent, const std::string& name, const struct libevdev *dev);
+    LinuxMouse (ParentProcess* parent, const djnn::string& name, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
     void impl_activate () override {}
@@ -152,7 +152,7 @@ namespace djnn {
   class LinuxTouchPanel : public LinuxDevice
   {
   public:
-    LinuxTouchPanel (ParentProcess* parent, const std::string& name, const struct libevdev *dev);
+    LinuxTouchPanel (ParentProcess* parent, const djnn::string& name, const struct libevdev *dev);
     ~LinuxTouchPanel ();
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -169,20 +169,20 @@ namespace djnn {
   class GPIOLine : public FatProcess {
     class GPIOLineWriteAction : public Action {
     public:
-      GPIOLineWriteAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineWriteAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
     };
     class GPIOLineReadAction : public Action {
     public:
-      GPIOLineReadAction (ParentProcess* parent, const std::string& name) : Action (parent, name) {}
+      GPIOLineReadAction (ParentProcess* parent, const djnn::string& name) : Action (parent, name) {}
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
     };
   public:
-    GPIOLine (ParentProcess* parent, const std::string& name, int pin, direction_e dir);
+    GPIOLine (ParentProcess* parent, const djnn::string& name, int pin, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int get_pin () { return _pin; }

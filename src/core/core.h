@@ -54,7 +54,7 @@
 
 namespace djnn {
 
-  extern vector<std::string> loadedModules;
+  extern vector<djnn::string> loadedModules;
   //void module_loaded(const char* name);
 
   class StructureObserver;

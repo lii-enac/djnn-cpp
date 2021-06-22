@@ -19,7 +19,7 @@
 namespace djnn
 {
   DirectoryObserverData*
-  p_init_directory_watcher (const std::string& path)
+  p_init_directory_watcher (const djnn::string& path)
   {
     return nullptr;
   }
