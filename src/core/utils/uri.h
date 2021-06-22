@@ -16,8 +16,6 @@
 
 #include "core/ontology/process.h"
 
-#include <string>
-#include <map>
 
 namespace djnn {
   class URI {

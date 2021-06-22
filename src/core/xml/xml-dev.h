@@ -18,9 +18,6 @@
 #include "core/utils/utils-dev.h"
 #include "xml.h"
 
-#include <map>
-
-
 
 class DJNComponentAttrs_Hash
 {

@@ -14,8 +14,6 @@
 
 #pragma once
 
-#include <vector> // loaded modules
-
 #include "abstract_display.h"
 
 namespace djnn {
@@ -67,7 +65,6 @@ namespace djnn {
 #define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
 
 namespace djnn {
-  extern vector<string> loadedModules;
 
   #include "const_keys.h"
   MACRO (Print, PRINT)

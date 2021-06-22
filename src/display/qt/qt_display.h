@@ -1,9 +1,8 @@
 #pragma once
 
-#include "display/abstract_display.h"
-
-#include <vector>
 #include <algorithm>
+
+#include "display/abstract_display.h"
 
 namespace djnn {
 

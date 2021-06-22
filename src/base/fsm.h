@@ -23,7 +23,6 @@
 
 #include "core/utils/djnn_dynamic_cast.h"
 
-#include <list>
 
 namespace djnn {
 

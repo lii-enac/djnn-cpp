@@ -25,7 +25,6 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <stdio.h>
-#include <map>
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>

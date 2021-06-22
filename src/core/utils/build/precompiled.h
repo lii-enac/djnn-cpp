@@ -1,8 +1,3 @@
-#include <vector>
-#include <map>
-#include <string>
-#include <list>
-
 #include "core/ontology/process.h"
 
 namespace djnn {

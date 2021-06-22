@@ -22,7 +22,7 @@
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
-#include <vector>
+
 #include <mutex> // std::call_once
 
 

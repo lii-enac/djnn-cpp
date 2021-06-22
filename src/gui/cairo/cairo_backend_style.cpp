@@ -21,7 +21,6 @@
 #include "gui/transformation/homography.h"
 
 #include <iostream>
-#include <vector>
 #include <cmath>
 
 

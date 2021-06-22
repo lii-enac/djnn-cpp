@@ -19,8 +19,6 @@
 #include "cairo_backend.h"
 #include "gui/transformation/transformations.h"
 
-
-#include <vector>
 #include <cmath>
 
 namespace djnn

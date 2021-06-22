@@ -14,15 +14,12 @@
 
 #pragma once
 
-#include <vector>
-
 #include "window.h"
 #include "display/display-dev.h"
 
 #define MACRO(lowkey,capkey) extern const int DJN_Key_ ## lowkey;
 
 namespace djnn {
-  extern vector<string> loadedModules;
 
   #include "const_keys.h"
   MACRO (Print, PRINT)
