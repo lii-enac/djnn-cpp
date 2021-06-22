@@ -18,6 +18,7 @@
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/to_string.h"
+#include "core/utils/utils-dev.h"
 #include "linux_input.h"
 
 #include <fcntl.h>
