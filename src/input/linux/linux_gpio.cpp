@@ -84,7 +84,7 @@ namespace djnn {
         else
           return line;
       }
-    catch (invalid_argument& arg) {
+    catch (std::invalid_argument& arg) {
       warning (nullptr, "invalid gpio path specification: " + path);
     }
     return nullptr;

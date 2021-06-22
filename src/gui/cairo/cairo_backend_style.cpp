@@ -27,6 +27,8 @@
 
 namespace djnn
 {
+  using std::cerr;
+
   static cairo_line_cap_t capStyleArray[3] =
     { CAIRO_LINE_CAP_BUTT, CAIRO_LINE_CAP_ROUND, CAIRO_LINE_CAP_SQUARE };
 
