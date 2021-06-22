@@ -17,7 +17,7 @@
 #include "gui/transformation/homography.h"
 #include "gui/shape/svg_holder.h"
 
-using namespace std;
+
 
 namespace djnn
 {
@@ -349,7 +349,7 @@ namespace djnn
     double resultX = _inverted_matrix->raw_props.m11 * _press_x->get_value ()
         + _inverted_matrix->raw_props.m12 * _press_y->get_value () + _inverted_matrix->raw_props.m14
         - _text->origin_x ()->get_value ();
-    pair<double,int> res = _text->get_cursor_from_local_x (resultX);
+    std::pair<double,int> res = _text->get_cursor_from_local_x (resultX);
     _x_start->set_value (res.first, true);
     _x_end->set_value (res.first, true);
     _index->set_value (res.second, true);
@@ -365,7 +365,7 @@ namespace djnn
     double resultX = _inverted_matrix->raw_props.m11 * _move_x->get_value ()
         + _inverted_matrix->raw_props.m12 * _move_y->get_value () + _inverted_matrix->raw_props.m14
         - _text->origin_x ()->get_value ();
-    pair<double,int> res = _text->get_cursor_from_local_x (resultX);
+    std::pair<double,int> res = _text->get_cursor_from_local_x (resultX);
     _x_end->set_value (res.first, true);
     _index->set_value (res.second, true);
     _end_select = res.second;

@@ -27,7 +27,7 @@
 
 #include <cmath>
 
-using namespace std;
+
 
 #define CACHE_GEOMETRY 0
 

@@ -21,7 +21,7 @@
 // #include "core/cor__e.h"
 #include "gui/gui-dev.h"
 
-using namespace std;
+
 
 namespace djnn {
 

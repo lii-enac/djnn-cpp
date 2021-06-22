@@ -28,7 +28,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   static string null_string = "null string";
 
@@ -128,7 +128,7 @@ namespace djnn
 #if !defined(DJNN_NO_DEBUG)
   void
   AbstractTextProperty::dump (int level) {
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
+    std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
   }
 #endif
 

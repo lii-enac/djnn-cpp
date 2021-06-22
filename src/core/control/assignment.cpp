@@ -83,7 +83,7 @@ namespace djnn
     }
   }
 
-    static void
+  static void
   perform_action_2 (CoreProcess * src, CoreProcess * dst, bool propagate)
   {
 

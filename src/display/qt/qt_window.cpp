@@ -148,7 +148,7 @@ namespace djnn
       
       QString str = QString ("background-color: rgba(%1, %2, %3, %4)").arg (QString::number(r), QString::number(g), QString::number(b), QString::number(opacity));
       //_qwidget->setStyleSheet("background-color: rgba(255, 255, 255, 0)");
-      //cout << str.toStdString () << endl;
+      //std::cout << str.toStdString () << endl;
       _qwidget->setStyleSheet(str);
       
       _qwidget->show ();  // if we want it interactive

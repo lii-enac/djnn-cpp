@@ -21,7 +21,7 @@
 
 #include "core/serializer/serializer.h"
 
-using namespace std;
+
 
 namespace djnn
 {
@@ -38,7 +38,7 @@ namespace djnn
     _action = new PropertiesAction (this, "action");
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
     if (!filename.empty()) {
-      ifstream file (filename);
+      std::ifstream file (filename);
       if (file.is_open()) {
         string line;
         while (getline(file, line)) {

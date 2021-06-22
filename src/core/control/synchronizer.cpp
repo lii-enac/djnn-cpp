@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   Synchronizer::Init::Init(Synchronizer * s, ParentProcess* parent, const std::string& name, CoreProcess* dst, const std::string&  dspec)
   {

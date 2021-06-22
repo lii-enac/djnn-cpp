@@ -27,7 +27,7 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 
-using namespace std;
+
 
 
 namespace djnn
@@ -186,7 +186,7 @@ Serial::run ()
         djnn::release_exclusive_access (DBG_REL);
       }
     }
-  } catch (exception& e) {
+  } catch (std::exception& e) {
     warning (nullptr, e.what());
   }
 }

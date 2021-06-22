@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   SwitchList::Next::Next  (SwitchList * parent) : 
     Action (parent, "_next_action"), _sw (parent)

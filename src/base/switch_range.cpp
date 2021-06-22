@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   SwitchRangeBranch::SwitchRangeBranch (ParentProcess* parent, const std::string& name, double lower, bool left_open, double upper,
                                         bool right_open) 

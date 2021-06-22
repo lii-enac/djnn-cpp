@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   Switch::SwitchAction::SwitchAction (Switch * parent, const std::string& name) :
         Action (parent, name),  _sw (parent) 

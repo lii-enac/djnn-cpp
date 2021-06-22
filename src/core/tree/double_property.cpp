@@ -27,7 +27,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   double
   getDouble (CoreProcess* p)
@@ -97,7 +97,7 @@ namespace djnn
   AbstractDoubleProperty::dump (int level)
   {
     loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + get_string_value() + " ]");
-    //cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
+    //std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
   }
 #endif
 

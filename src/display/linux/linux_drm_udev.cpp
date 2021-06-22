@@ -33,7 +33,7 @@
 #define DEBUG 1
 #endif
 
-using namespace std;
+
 
 namespace djnn {
 
@@ -167,7 +167,7 @@ namespace djnn {
         return;
       DRMDevice* drm_dev = new DRMDevice (GPUs, name, fd, res->min_width, res->max_width, res->min_height, res->max_height);
 #if DEBUG
-      cout << "New device found: " << name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
+      std::cout << "New device found: " << name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
 #endif
       drmModeConnector *con;
       for (int i = 0; i < res->count_connectors; ++i)
@@ -177,11 +177,11 @@ namespace djnn {
         string con_name = build_name (con);
         new DRMConnector (drm_dev->find_child_impl ("connectors"), con_name, id, con->connection == DRM_MODE_CONNECTED);
 #if DEBUG
-        cout << "New connector found " << con_name;
+        std::cout << "New connector found " << con_name;
         if (con->connection == DRM_MODE_CONNECTED)
-          cout << " STATUS: connected\n";
+          std::cout << " STATUS: connected\n";
         else
-          cout << " STATUS: not connected\n";
+          std::cout << " STATUS: not connected\n";
 #endif
         drmModeFreeConnector (con);
       }
@@ -215,18 +215,18 @@ namespace djnn {
       bool is_connected = con->connection == DRM_MODE_CONNECTED;
       FatProcess *drm_con = drm_dev->find_child_impl ("connectors/" + con_name);
       if (drm_con == nullptr) {
-        cout << "drm_con not found\n";
+        std::cout << "drm_con not found\n";
         drmModeFreeConnector (con);
         continue;
       }
       if (((BoolProperty*) drm_con->find_child_impl ("connected"))->get_value () != is_connected) {
         ((BoolProperty*) drm_con->find_child_impl ("connected"))->set_value (is_connected, 1);
 #if DEBUG
-        cout << "Connector " << con_name << " is now";
+        std::cout << "Connector " << con_name << " is now";
         if (con->connection == DRM_MODE_CONNECTED)
-          cout << " connected\n";
+          std::cout << " connected\n";
         else
-          cout << " disconnected\n";
+          std::cout << " disconnected\n";
 #endif
       }
       drmModeFreeConnector (con);

@@ -69,7 +69,7 @@ timeval wall_clock::_timeOffset;
 
 } // namespace free_rtos_std
 
-using namespace std::chrono;
+// using namespace std::chrono;
 void SetSystemClockTime(
     const time_point<system_clock, system_clock::duration> &time)
 {

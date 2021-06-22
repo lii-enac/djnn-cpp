@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   GraphEdgeAdder::GraphEdgeAdder (ParentProcess* parent, const std::string& name, CoreProcess* src, CoreProcess* dst) :
       FatProcess (name), _src (src), _dst (dst)

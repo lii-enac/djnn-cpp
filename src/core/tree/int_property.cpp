@@ -27,7 +27,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   int
   getInt (CoreProcess* p)
@@ -109,7 +109,7 @@ namespace djnn
   void
   AbstractIntProperty::dump (int level)
   {
-    //cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
+    //std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
     loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + get_string_value() + " ]");
   }
 #endif

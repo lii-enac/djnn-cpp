@@ -35,7 +35,7 @@
 #include <iostream>
 #include "utils/debug.h"
 
-using namespace std;
+
 
 namespace djnn {
 
@@ -153,14 +153,14 @@ namespace djnn {
   DRMConnector::init_connection (drmModeRes *res, drmModeConnector *drm_conn)
   {
 #if DEBUG
-    cout << "available modes:\n";
+    std::cout << "available modes:\n";
     for (int i = 0; i < drm_conn->count_modes; i++) {
-      cout << "\thdisplay: "  << drm_conn->modes[i].hdisplay << endl;
-      cout << "\tvdisplay: "  << drm_conn->modes[i].vdisplay << endl;
-      cout << "\thsync: " << drm_conn->modes[i].hsync_start << " " << drm_conn->modes[i].hsync_end << endl;
-      cout << "\tvsync: " << drm_conn->modes[i].vsync_start << " " << drm_conn->modes[i].vsync_end << endl;
-      cout << "\tclock: " << drm_conn->modes[i].clock << endl;
-      cout << "\tvrefresh: " << drm_conn->modes[i].vrefresh << endl;
+      std::cout << "\thdisplay: "  << drm_conn->modes[i].hdisplay << endl;
+      std::cout << "\tvdisplay: "  << drm_conn->modes[i].vdisplay << endl;
+      std::cout << "\thsync: " << drm_conn->modes[i].hsync_start << " " << drm_conn->modes[i].hsync_end << endl;
+      std::cout << "\tvsync: " << drm_conn->modes[i].vsync_start << " " << drm_conn->modes[i].vsync_end << endl;
+      std::cout << "\tclock: " << drm_conn->modes[i].clock << endl;
+      std::cout << "\tvrefresh: " << drm_conn->modes[i].vrefresh << endl;
     }
 #endif
     memcpy(&_mode, &drm_conn->modes[0], sizeof(_mode));
@@ -212,11 +212,11 @@ namespace djnn {
     _connected.set_value (connected, false);
 
 #if DEBUG
-    cout << "New connector found " << name;
+    std::cout << "New connector found " << name;
     if (connected)
-      cout << " STATUS: connected\n";
+      std::cout << " STATUS: connected\n";
     else
-      cout << " STATUS: not connected\n";
+      std::cout << " STATUS: not connected\n";
 #endif
     if (connected) {
       init_connection (res, drm_conn);

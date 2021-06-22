@@ -45,7 +45,7 @@ extern int __nb_Drawing_object;
 extern int __nb_Drawing_object_picking;
 #endif
 
-using namespace std;
+
 
 namespace djnn
 {

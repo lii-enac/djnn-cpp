@@ -36,7 +36,7 @@ namespace djnn
   Text::TextSizeAction::impl_activate ()
   {
     // DEBUG
-    // cout << endl << "TEXT SIZE ACTION ---- text: " << _text->text ()->get_value ()
+    // std::cout << endl << "TEXT SIZE ACTION ---- text: " << _text->text ()->get_value ()
     //                                 << " - family: " << ( _ff ? _ff->family ()->get_value () : "NO_family")
     //                                 << " - size: " <<  (_fsz ? _fsz->size ()->get_value () : 12 ) 
     //                                 << " - style: " << ( _fs ? _fs->style ()->get_value () : 0 )

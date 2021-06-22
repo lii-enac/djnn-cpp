@@ -21,7 +21,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   NativeExpressionAction::NativeExpressionAction (ParentProcess* parent, const std::string& name, bool model): 
     Action (parent, name, model), 

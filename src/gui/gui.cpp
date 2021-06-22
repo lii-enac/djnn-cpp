@@ -27,7 +27,7 @@
 #include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
-using namespace std;
+
 int __nb_Drawing_object = 0;
 int __nb_Drawing_object_picking = 0;
 #endif

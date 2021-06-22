@@ -26,7 +26,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   Set::Set (ParentProcess* parent, const std::string& name)
   :

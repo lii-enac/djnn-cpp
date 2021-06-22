@@ -30,7 +30,14 @@
 
 //#define __IVY_DEBUG__
 
-using namespace std;
+
+
+using djnn::string;
+using std::pair;
+using std::vector;
+using std::map;
+
+
 
 /** regexp function **/
 
@@ -100,18 +107,18 @@ static void
 _ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
   map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
-  cout << endl << "MAP _in_map:" << endl;
+  std::cout << endl << "MAP _in_map:" << endl;
   for (mit = inmap.begin(); mit != inmap.end(); ++mit) {
-    cout << mit->first << " => (" ;
+    std::cout << mit->first << " => (" ;
     /* vector */
     vector<pair<int, djnn::TextProperty*>>::iterator vit;
     for (vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
       /* pair */
-      cout << "[" << (*vit).first << ", " << (*vit).second << "] " ; 
+      std::cout << "[" << (*vit).first << ", " << (*vit).second << "] " ; 
     }
-    cout << ")" << endl;
+    std::cout << ")" << endl;
   }
-  cout << endl;
+  std::cout << endl;
 }
 #endif
 
@@ -142,8 +149,8 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
     in_map =  keypair->second;
 
 #ifdef __IVY_DEBUG__
-  cout <<  endl <<"_on_ivy_message" << endl;
-  cout <<  "regexp: '" << regexp << "'" << endl;
+  std::cout <<  endl <<"_on_ivy_message" << endl;
+  std::cout <<  "regexp: '" << regexp << "'" << endl;
   _ivy_debug_mapping (*in_map);
 #endif
 
@@ -169,14 +176,14 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   }
   
 #ifdef __IVY_DEBUG__
-  cout << "---------------------" << endl;
-  cout << "_on_ivy_message - "  << endl;
-  cout << "argc " << argc  << endl ;
+  std::cout << "---------------------" << endl;
+  std::cout << "_on_ivy_message - "  << endl;
+  std::cout << "argc " << argc  << endl ;
   for (int i=0; i < argc ; i++){
-    cout << "argv[" << i << "] - " << string(argv[i]) << endl;
+    std::cout << "argv[" << i << "] - " << string(argv[i]) << endl;
   } 
-  cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
-  cout << "---------------------" << endl << endl;
+  std::cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
+  std::cout << "---------------------" << endl << endl;
 #endif
   GRAPH_EXEC; // methode 2 : per message
   djnn::release_exclusive_access (DBG_REL);
@@ -439,7 +446,7 @@ IvyAccess::run ()
     _out_c.disable();
     djnn::release_exclusive_access (DBG_REL);
 
-  } catch (exception& e) {
+  } catch (std::exception& e) {
     warning (nullptr, e.what());
   }
 }
@@ -449,7 +456,7 @@ IvyAccess::find_child_impl (const std::string& key)
 {
   
 #ifdef __IVY_DEBUG__
-  cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
+  std::cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
 #endif
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
@@ -475,10 +482,10 @@ IvyAccess::find_child_impl (const std::string& key)
       len = key.find (re_end, 3);
        regexp = key.substr (3, len-3);
     }
-    int index = stoi (re_end+1);
+    int index = std::stoi (re_end+1);
 
 #ifdef __IVY_DEBUG__
-    cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
+    std::cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
     TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child_impl (regexp));
@@ -487,8 +494,8 @@ IvyAccess::find_child_impl (const std::string& key)
       string new_regexp_to_found = "in/" + tmp->get_value () + "/" + djnn::to_string(index);
 
 #ifdef __IVY_DEBUG__
-      cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
-      cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
+      std::cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
+      std::cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
 #endif
 
       /* key do not exist - but use internal string as regexp --- return*/
@@ -513,13 +520,13 @@ IvyAccess::find_child_impl (const std::string& key)
       }
 
       /* register in _in_map */  
-      _in_map[regexp].push_back (make_pair(index, newin));
+      _in_map[regexp].push_back (std::make_pair(index, newin));
       
      
 #ifdef __IVY_DEBUG__
        _ivy_debug_mapping (_in_map);
-      cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
-      cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
+      std::cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
+      std::cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif
 
       /* key don't exist at all - return */

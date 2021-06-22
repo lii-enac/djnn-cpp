@@ -23,7 +23,7 @@
 #include "gui/style/text.h"
 #include "gui/shape/svg_holder.h"
 
-using namespace std;
+
 
 namespace djnn {
 

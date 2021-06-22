@@ -98,7 +98,7 @@ namespace djnn
           break;
         }
       default:
-        cout << "Phidget not yet supported\n";
+        std::cout << "Phidget not yet supported\n";
       }
   }
 

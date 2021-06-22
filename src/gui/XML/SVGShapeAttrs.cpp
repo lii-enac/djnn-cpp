@@ -29,9 +29,13 @@
 #include "gui/shape/svg_holder.h"
 #include "gui/gui-dev.h"
 
+using std::pair;
+using std::vector;
+using std::map;
+
 namespace djnn {
 
-using namespace std;
+
 
 static std::string djn_ParseURL (const char *);
 

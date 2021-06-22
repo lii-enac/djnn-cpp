@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   AbstractList::AbstractList (ParentProcess* parent, const std::string& name)
   :
@@ -50,7 +50,7 @@ namespace djnn
   void
   AbstractList::dump (int level)
   {
-    //cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
+    //std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ())  << " [ index=" << _children.size () << " ]" << endl ;
     loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ index=" + __to_string(_children.size ()) + " ]");
     //FIXME: indent problem
     //for (auto c : _children)
@@ -113,7 +113,7 @@ namespace djnn
         goto label_error;
       }
     }
-    catch (invalid_argument& arg) {
+    catch (std::invalid_argument& arg) {
       goto label_error;
     }
     label_error: 
@@ -162,7 +162,7 @@ namespace djnn
          warning (this, "index " + __to_string(index+1) + " is out of bound for list '" + get_name () + "'");
       }
     }
-    catch (invalid_argument& arg) {
+    catch (std::invalid_argument& arg) {
       warning (this, "invalid child name '" + name + "' for list '" + get_name () + "'");
     }
   }
@@ -191,7 +191,7 @@ namespace djnn
           warning (this,  "index " + __to_string(index+1) + " is out of bound for list \'" + get_name () + "\'");
         }
       }
-      catch (invalid_argument& arg) {
+      catch (std::invalid_argument& arg) {
         //FIXME: comment the warning for now because it polluted the find_child ("//*")
         //warning (this, "invalid child path '" + path + "' for list '" + get_name () + "'");
       }

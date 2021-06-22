@@ -27,7 +27,8 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
+
+using std::vector;
 
 namespace djnn
 {

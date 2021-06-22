@@ -25,7 +25,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   double
   AbstractRemoteProperty::get_double_value ()

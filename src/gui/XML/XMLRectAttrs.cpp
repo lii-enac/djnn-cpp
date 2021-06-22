@@ -22,7 +22,7 @@
 
 
 namespace djnn {
-using namespace std;
+
 
 static int ParseX (FatProcess**, const char*);
 static int ParseY (FatProcess**, const char*);

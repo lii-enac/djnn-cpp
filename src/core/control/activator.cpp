@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   Activator::Activator (ParentProcess* parent, const std::string& name, CoreProcess* action) :
       FatProcess (name), _action (action)

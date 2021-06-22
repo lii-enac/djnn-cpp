@@ -39,7 +39,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   std::list<std::pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   std::vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
@@ -52,6 +52,9 @@ namespace djnn
   CoreProcess::couplings_t CoreProcess::default_couplings; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   std::vector<std::string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+
+  using std::map;
+  using std::vector;
 
   static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   static vector<const CoreProcess*> parentless_names_order;
@@ -544,7 +547,7 @@ namespace djnn
   FatProcess::find_child_impl (const std::string& key)
   {
     //DEBUG
-    //cout << "key: " << key << endl;
+    //std::cout << "key: " << key << endl;
 
     if (key.empty ()) {
       return this;
@@ -576,7 +579,7 @@ namespace djnn
           current_parent = current_cpnt->get_parent ();
         }
         //DEBUG
-        //cout << "root found: " << current_cpnt->_name << endl;
+        //std::cout << "root found: " << current_cpnt->_name << endl;
         return current_cpnt->find_child_impl (key.substr(2));
       }
 

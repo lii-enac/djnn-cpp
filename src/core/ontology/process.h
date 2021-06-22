@@ -76,6 +76,8 @@ namespace djnn {
     LAST
   };
 
+  using std::string;
+
   class Coupling;
   class Vertex;
   class CoreProcess;

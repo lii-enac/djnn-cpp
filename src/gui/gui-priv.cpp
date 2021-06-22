@@ -23,7 +23,7 @@
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 #include <iostream>
-using namespace std;
+
 
 /* define in gui.cpp */
 extern int __nb_Drawing_object;

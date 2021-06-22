@@ -35,12 +35,12 @@
 #endif
 
 namespace djnn {
-  using namespace std;
+  
 
 #if !defined(DJNN_NO_SERIALIZE)
   #define BUFFSIZE 8192
   static char buf[BUFFSIZE];
-  map<string, djn__XMLParser*> XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
+  XML::djn__NamespaceTable_t XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
 
@@ -175,10 +175,10 @@ namespace djnn {
   XML::djn_RegisterXMLParser (const std::string& uri, djn_XMLTagLookupProc l, const char* f)
   {
     djn__XMLParser *h;
-    map<string, djn__XMLParser*>::iterator it;
+    djn__NamespaceTable_t::iterator it;
     it = djn__NamespaceTable.find (uri);
     if (it != djn__NamespaceTable.end ()) {
-      cerr << "conflict of XML parsers on namespace " << uri << endl;
+      std::cerr << "conflict of XML parsers on namespace " << uri << std::endl;
       return 0;
     }
 
@@ -186,7 +186,7 @@ namespace djnn {
     h->lookup = l;
     h->format = f;
 
-    djn__NamespaceTable.insert (pair<string, djn__XMLParser*> (uri, h));
+    djn__NamespaceTable.insert (djn__NamespaceTable_t::value_type (uri, h));
     //cerr << "XML registered " << uri << endl;
     return 1;
   }
@@ -195,10 +195,10 @@ namespace djnn {
   XML::djn_UnregisterXMLParser (const std::string& uri)
   {
     //djn__XMLParser *h;
-    map<string, djn__XMLParser*>::iterator it;
+    djn__NamespaceTable_t::iterator it;
     it = djn__NamespaceTable.find (uri);
     if (it == djn__NamespaceTable.end ()) {
-      cerr << "unregister warning: no registered XML parsers on namespace " << uri << endl;
+      std::cerr << "unregister warning: no registered XML parsers on namespace " << uri << std::endl;
       return 0;
     }
 
@@ -290,7 +290,7 @@ namespace djnn {
       *n = '\0';
 
       /* find a parser for this name space */
-      map<string, djn__XMLParser*>::iterator it;
+      djn__NamespaceTable_t::iterator it;
 
       it = djn__NamespaceTable.find (name);
       if (it != djn__NamespaceTable.end ()) {

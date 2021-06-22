@@ -22,7 +22,7 @@ namespace djnn
 {
   extern std::vector<std::string> loadedModules;
 
-  using namespace std;
+  
 
   struct djnXMLDumpContext {
     struct djnXMLDumpContext* parent;
@@ -49,27 +49,27 @@ namespace djnn
 
     if (__curXMLDumpContext && !__curXMLDumpContext->haschildren) {
       if (__XMLDumpNumAttrs > 0)
-        cout << " ";
+        std::cout << " ";
 
-      cout << ">\n";
+      std::cout << ">\n";
       ++__XMLLevel;
       __curXMLDumpContext->haschildren = 1;
     }
 
     for (i = 0; i < __XMLLevel; ++i)
-      cout << "  ";
-    cout << "<" << name;
+      std::cout << "  ";
+    std::cout << "<" << name;
 
     if (__curXMLDumpContext == 0) {
       for (auto module_name : djnn::loadedModules) {
         int l = name.length () + 3;
         if (module_name.compare("core") == 0)
-          cout << " xmlns=\"http://xml.djnn.net/2012/" << module_name << "\"";
+          std::cout << " xmlns=\"http://xml.djnn.net/2012/" << module_name << "\"";
         else {
-          cout << endl ;
+          std::cout << std::endl ;
           while (--l)
-            cout << " ";
-          cout << "xmlns:" << module_name << "=\"http://xml.djnn.net/2012/" << module_name << "\"";
+            std::cout << " ";
+          std::cout << "xmlns:" << module_name << "=\"http://xml.djnn.net/2012/" << module_name << "\"";
         }
       }
     }
@@ -87,19 +87,19 @@ namespace djnn
 
   void
   XMLSerializer::text_attribute (const std::string& name, const std::string& value){
-    cout << " " << name << "=\"" << value << "\"";
+    std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
   XMLSerializer::int_attribute (const std::string& name, int value){
-    cout << " " << name << "=\"" << value << "\"";
+    std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
   void
   XMLSerializer::float_attribute (const std::string& name, double value){
-    cout << " " << name << "=\"" << value << "\"";
+    std::cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
   }
 
@@ -113,12 +113,12 @@ namespace djnn
       int i;
       --__XMLLevel;
       for (i = 0; i < __XMLLevel; ++i)
-        cout << " ";
-      cout << "</" << __curXMLDumpContext->classname << ">\n";
+        std::cout << " ";
+      std::cout << "</" << __curXMLDumpContext->classname << ">\n";
     } else {
       if (__XMLDumpNumAttrs > 0)
-        cout << " ";
-      cout << "/>\n";
+        std::cout << " ";
+      std::cout << "/>\n";
     }
 
     c = __curXMLDumpContext->parent;

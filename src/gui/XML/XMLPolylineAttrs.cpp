@@ -23,7 +23,7 @@
 
 namespace djnn {
 
-using namespace std;
+
 static int ParsePoints (FatProcess**, const char*);
 
 static std::map <std::string, djn_XMLAttrHandler> handlers = {

@@ -18,7 +18,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   NativeAction::NativeAction (ParentProcess* parent, const std::string& name, NativeCode *action, void* data,
                               bool isModel) :

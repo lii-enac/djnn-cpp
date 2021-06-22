@@ -37,7 +37,7 @@
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
-using namespace std;
+
 static int draw_counter = 0;
 static double draw_total = 0.0;
 static double draw_average = 0.0;

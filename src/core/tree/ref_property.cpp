@@ -28,7 +28,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   CoreProcess*
   getRef (CoreProcess* p)

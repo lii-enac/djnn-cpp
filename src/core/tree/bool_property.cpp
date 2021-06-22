@@ -26,7 +26,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   bool
   getBool (CoreProcess *p)

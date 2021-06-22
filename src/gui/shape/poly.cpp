@@ -27,7 +27,7 @@
 #include <iostream>
 #include "utils/debug.h"
 
-using namespace std;
+
 
 namespace djnn {
 
@@ -42,7 +42,7 @@ namespace djnn {
     /* if not cloning we test parent with dynamic_cast */
     Poly *poly = dynamic_cast<Poly*> (parent);
     if (poly == nullptr) {
-      cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
+      std::cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
       return;
     }
     poly->points ()->add_child (this, "");

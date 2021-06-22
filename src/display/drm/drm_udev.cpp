@@ -37,7 +37,7 @@
 //#define DEBUG 1
 #endif
 
-using namespace std;
+
 
 namespace djnn {
 
@@ -193,7 +193,7 @@ namespace djnn {
       std::string dev_name = str.substr (found + 1);
       DRMDevice* drm_dev = new DRMDevice (GPUs, dev_name, fd, res->min_width, res->max_width, res->min_height, res->max_height);
 #if DEBUG
-      cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
+      std::cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " "  << res->min_height << " " << res->max_height << endl;
 #endif
       drmModeConnector *drm_conn;
       for (int i = 0; i < res->count_connectors; ++i)
@@ -236,7 +236,7 @@ namespace djnn {
       bool is_connected = drm_conn->connection == DRM_MODE_CONNECTED;
       DRMConnector *conn = (DRMConnector*) drm_dev->find_child_impl ("connectors/" + conn_name);
       if (conn == nullptr) {
-        cout << "connector not found\n";
+        std::cout << "connector not found\n";
         drmModeFreeConnector (drm_conn);
         continue;
       }
@@ -247,11 +247,11 @@ namespace djnn {
           conn->clean ();
         ((BoolProperty*) conn->find_child_impl ("connected"))->set_value (is_connected, 1);
 #if DEBUG
-        cout << "Connector " << conn_name << " is now";
+        std::cout << "Connector " << conn_name << " is now";
         if (is_connected)
-          cout << " connected\n";
+          std::cout << " connected\n";
         else
-          cout << " disconnected\n";
+          std::cout << " disconnected\n";
 #endif
       }
       drmModeFreeConnector (drm_conn);

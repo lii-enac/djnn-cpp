@@ -26,7 +26,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   void
   init_binary_couplings (FatProcess& _left, FatProcess& _right, FatProcess& _result, Action& _action, Coupling& _c_left, Coupling& _c_right)

@@ -17,7 +17,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   bool
   Spike::pre_activate ()

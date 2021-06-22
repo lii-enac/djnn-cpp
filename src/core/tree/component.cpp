@@ -44,7 +44,7 @@
 
 namespace djnn
 {
-  using namespace std;
+  
 
   Container::Container (ParentProcess* parent, const std::string& name) :
       FatProcess (name)

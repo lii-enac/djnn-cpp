@@ -22,7 +22,7 @@
 namespace djnn
 {
 
-  using namespace std;
+  
 
 #if !defined(DJNN_NO_SERIALIZE)
 
@@ -41,11 +41,11 @@ namespace djnn
         
         if (format.compare("XML") == 0) {
           AbstractSerializer::serializer = new XMLSerializer();
-          cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n";
+          std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n";
         }
         else if (format.compare ("JSON") == 0){
           AbstractSerializer::serializer = new JSONSerializer();
-          cout << "{\n";
+          std::cout << "{\n";
         }
         else
           warning (nullptr, format + " is not a valid serializer format (XML|JSON) " );
@@ -60,7 +60,7 @@ namespace djnn
       AbstractSerializer::serializer = nullptr;
 
       if (__cur_format.compare("JSON") == 0) 
-      cout << "}\n";
+      std::cout << "}\n";
     }
   }
 
