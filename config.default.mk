@@ -23,7 +23,7 @@ djnn_libs_extra :=
 # very fast compilation, but no debug
 # CFLAGS += -O0
 # fast compilation and debug
-CFLAGS += -O0 -g
+# CFLAGS += -O0 -g
 # optimized but slower compilation
 # CFLAGS += -O3
 # optimized and debug but even slower compilation
@@ -55,3 +55,5 @@ build_dir := build
 # for clang-tidy
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+
+remotery_cflags?=-DRMT_ENABLED=0

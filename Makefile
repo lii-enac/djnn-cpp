@@ -310,8 +310,10 @@ endif
 # ---------------------------------------
 # debug, analysis
 
-#CFLAGS += -DRMT_ENABLED=1 # remotery - get rid of any call
+ifeq ($(remotery_cflags),-DRMT_ENABLED=1)
+CFLAGS += -DRMT_ENABLED=1 # remotery - get rid of any call
 #CFLAGS += -DRMT_ENABLED=1 -DRMT_USE_OPENGL=0
+endif
 
 #CFLAGS += -fsanitize=thread -O1
 #LDFLAGS += -fsanitize=thread
