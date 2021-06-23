@@ -7,7 +7,6 @@ lib_suffix =.so
 boost_libs = -lboost_thread -lboost_chrono -lboost_system
 #-lboost_fiber-mt -lboost_context-mt
 DYNLIB = -shared
-lib_cflags += -fpic -g -MMD -Wall
 endif
 
 ifeq ($(os),Darwin)
