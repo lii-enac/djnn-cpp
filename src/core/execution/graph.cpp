@@ -518,7 +518,7 @@ namespace djnn
   {
     int i_p1 = -1;
     int i_p2 = -1;
-    for (int i = 0; i < _ordered_vertices.size (); i++)
+    for (size_t i = 0; i < _ordered_vertices.size (); i++)
     {
       if (_ordered_vertices.at (i)->get_process () == p1) i_p1 = i;
       if (_ordered_vertices.at (i)->get_process () == p2) i_p2 = i;
@@ -669,7 +669,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       _scheduled_activation_processes.clear ();
     }
 
-    int count_activation = 0;
+    size_t count_activation = 0;
 
     #ifndef DJNN_NO_DEBUG
     int count_real_activation = 0;
