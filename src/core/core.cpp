@@ -133,6 +133,7 @@ namespace djnn {
 
 
 #if DJNN_STL_EASTL
+// https://github.com/paulhodge/EASTL/blob/community/example/example1.cpp
 // EASTL expects us to define these, see allocator.h line 194
 void* operator new[](size_t size, const char* /* pName */,
                      int /* flags */, unsigned /* debugFlags */,
@@ -172,6 +173,7 @@ int stoi(const eastl::string& s, size_t* idx, int base)
 {
   return strtol(s.c_str(), (char **)&idx, base);
 }
+
 double stof(const eastl::string& s)
 {
   return atof(s.c_str());
