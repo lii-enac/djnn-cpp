@@ -130,3 +130,57 @@ namespace djnn {
   void XML::clear_xml_parser () {}
 }
 #endif
+
+
+#if DJNN_STL_EASTL
+// EASTL expects us to define these, see allocator.h line 194
+void* operator new[](size_t size, const char* /* pName */,
+                     int /* flags */, unsigned /* debugFlags */,
+                     const char* /* file */, int /* line */) {
+    return malloc(size);
+}
+
+void* operator new[](size_t size, size_t alignment,
+                     size_t /* alignmentOffset */, const char* /* pName */,
+                     int /* flags */, unsigned /* debugFlags */,
+                     const char* /* file */, int /* line */) {
+    // this allocator doesn't support alignment
+    EASTL_ASSERT(alignment <= 8);
+    return malloc(size);
+}
+
+// EASTL also wants us to define this (see string.h line 197)
+namespace EA {
+namespace StdC {
+int Vsnprintf(char8_t* pDestination, size_t n,
+               const char8_t* pFormat, va_list arguments) {
+#ifdef _MSC_VER
+        return _vsnprintf(pDestination, n, pFormat, arguments);
+#else
+        return vsnprintf(pDestination, n, pFormat, arguments);
+#endif
+}
+}
+}
+
+int stoi(const eastl::string& s)
+{
+  return atoi(s.c_str());
+}
+
+int stoi(const eastl::string& s, size_t* idx, int base)
+{
+  return strtol(s.c_str(), (char **)&idx, base);
+}
+double stof(const eastl::string& s)
+{
+  return atof(s.c_str());
+}
+
+double stof(const eastl::string& s, size_t* idx)
+{
+  return strtod(s.c_str(), (char **)&idx);
+}
+
+#endif
+

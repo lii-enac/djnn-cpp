@@ -20,6 +20,7 @@
 #include "driver.h"
 #include "scanner.h"
 
+
 namespace css
 {
   using namespace djnn;
@@ -34,7 +35,7 @@ namespace css
   Driver::parse_stream (std::istream& in, const string& name, FatProcess *p)
   {
     _root = p;
-    stream = name;
+    stream = name.c_str();
 
     Scanner scanner (&in);
     this->_lexer = &scanner;
@@ -66,13 +67,13 @@ namespace css
   }
 
   void
-  Driver::error (const class location& l, const string& m)
+  Driver::error (const class location& l, const djnn::string& m)
   {
     std::cerr << l << ": " << m << std::endl;
   }
 
   void
-  Driver::error (const string& m)
+  Driver::error (const djnn::string& m)
   {
     std::cerr << m << std::endl;
   }

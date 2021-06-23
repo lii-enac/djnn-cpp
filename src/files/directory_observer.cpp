@@ -129,16 +129,21 @@ namespace djnn
   DirectoryObserver::iterate ()
   {
     vector<std::filesystem::path> new_files;
-    vector<string> old_files;
+    vector<std::string> old_files;
     bool added = false;
     bool removed = false;
     _added_files.remove_all ();
     _removed_files.remove_all ();
-    for (auto &p: std::filesystem::directory_iterator(_path.get_value())) {
+    #if DJNN_STL_STD
+    const auto& path = _path.get_value();
+    #elif DJNN_STL_EASTL
+    const std::string path = _path.get_value().c_str();
+    #endif
+    for (auto &p: std::filesystem::directory_iterator(path)) {
       new_files.push_back (p);
     }
     for (auto &p : _files.children ()) {
-      old_files.push_back (((File*)p)->get_filename ());
+      old_files.push_back (((File*)p)->get_filename ().c_str());
     }
     bool found = false;
     for (auto nf: new_files) {
@@ -150,8 +155,8 @@ namespace djnn
         }
       }
       if (!found) {
-        string full_path = nf.root_directory().string() + nf.relative_path().string();
-        CoreProcess * file = new File (&_files, "",full_path, nf.filename().string(), std::filesystem::is_directory (nf));
+        std::string full_path = nf.root_directory().string() + nf.relative_path().string();
+        CoreProcess * file = new File (&_files, "",full_path.c_str(), nf.filename().string().c_str(), std::filesystem::is_directory (nf));
         _added_files.add_one (file);
         added = true;
       }
@@ -166,7 +171,7 @@ namespace djnn
       }
       if (!found) {
         for (auto p : _files.children()) {
-          if (of == ((File*)p)->get_filename ()) {
+          if (of == ((File*)p)->get_filename ().c_str()) {
             p->deactivate();
             _files.remove_child (p);
             _removed_files.add_one (p);

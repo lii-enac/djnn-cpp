@@ -387,7 +387,7 @@ hexcolor
 %%
 
 void css::Parser::error(const Parser::location_type& l,
-			    const string& m)
+			    const std::string& m)
 {
-    driver.error(l, m);
+    driver.error(l, m.c_str());
 }

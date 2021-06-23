@@ -26,7 +26,7 @@ namespace djnn {
 }
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include "core/utils/iostream.h"
+//#include "core/utils/iostream.h"
 #endif
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBG_GRAPH_EXE

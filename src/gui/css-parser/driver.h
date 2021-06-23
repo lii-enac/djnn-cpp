@@ -28,7 +28,7 @@ class Driver
 public:
     Driver();
 
-    string stream;
+    std::string stream;
     bool parse_stream (std::istream& in,
 		      const string& name, djnn::FatProcess *p);
     bool parse_string (const string& input,

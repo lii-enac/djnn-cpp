@@ -168,9 +168,10 @@ CFLAGS += -MMD -Wall
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
 
-# EASTL
-#CFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
-#LDFLAGS += -L/Users/conversy/recherche/istar/code/misc/EASTL/build -lEASTL
+# STL
+# CXXFLAGS += -DDJNN_STL_EASTL
+# CXXFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
+# LDFLAGS += -L/Users/conversy/recherche/istar/code/misc/EASTL/build -lEASTL
 
 CFLAGS += -I$(src_dir)
 LDFLAGS += -L$(build_lib_dir)

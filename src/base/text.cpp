@@ -225,14 +225,15 @@ namespace djnn
   {
     std::match_results<string::const_iterator> match;
     auto & input = _reg._input.get_value();
+    #if DJNN_STL_STD
     if (std::regex_search(input, match, _reg._regex) && match.size() > 1) {
-    //if (std::regex_search(input.begin(), input.end(), match, _reg._regex) && match.size() > 1) {
-      map<int, TextProperty*>::iterator it;
-      for (size_t i = 0 ; i < match.size(); i++)
-      {
-        it = _reg._in_map.find (i);
+    #elif DJNN_STL_EASTL 
+    if (std::regex_search(input.begin(), input.end(), match, _reg._regex) && match.size() > 1) {
+    #endif
+      for (size_t i = 0 ; i < match.size(); i++) {
+        auto it = _reg._in_map.find (i);
         if (it != _reg._in_map.end () && !match.str(i).empty ()) {
-          const string res = match.str(i).c_str(); // FIXME copy of string even if no EASTL
+          const string res = match.str(i).c_str(); // FIXME copy of string even if no EASTL (or not, if optimized?)
           it->second->set_value (res, true);
         }
       }
