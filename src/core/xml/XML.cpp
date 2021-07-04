@@ -84,33 +84,37 @@ namespace djnn {
       return res;   
     }
 
-    djn__CurlData d;
-    CURLcode res;
+    auto parser = XML_ParserCreateNS ("UTF-8", '*');
+    XML_SetElementHandler (parser, &djn__XMLTagStart, &djn__XMLTagEnd);
+    XML_SetCharacterDataHandler (parser, &djn__XMLDataHandle);
+    XML_SetNamespaceDeclHandler (parser, &djn__XMLNamespaceStart, &djn__XMLNamespaceEnd);
+    
+    djn__ExpatData dexpat;
+    dexpat.parser = parser;
+    dexpat.filename = uri;
+    XML_SetUserData (parser, &dexpat);
+    
     CURL *curl = curl_easy_init ();
+    if (!curl) {
+      XML_ParserFree (parser);
+      return nullptr;
+    }
 
-    if (!curl)
-      return 0;
+    djn__CurlData d;
     curl_easy_setopt(curl, CURLOPT_URL, uri.c_str ());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, djn__ReadXML);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &d);
-
-    d.parser = XML_ParserCreateNS ("UTF-8", '*');
-    XML_SetElementHandler (d.parser, &djn__XMLTagStart, &djn__XMLTagEnd);
-    XML_SetCharacterDataHandler (d.parser, &djn__XMLDataHandle);
-    XML_SetNamespaceDeclHandler (d.parser, &djn__XMLNamespaceStart, &djn__XMLNamespaceEnd);
-    djn__ExpatData dexpat;
-    dexpat.parser = d.parser;
-    dexpat.filename = uri;
-    XML_SetUserData (d.parser, &dexpat);
-
-    curComponent = 0;
-    res = curl_easy_perform (curl);
+    d.parser = parser;
+    
+    curComponent = nullptr;
+    CURLcode res = curl_easy_perform (curl);
+  
     curl_easy_cleanup (curl);
-    XML_ParserFree (d.parser);
+    XML_ParserFree (parser);
+  
     if (res == CURLE_OK) {
       return curComponent;
-    }
-    else {
+    } else {
       error (nullptr, "could not parse " + uri);
       return 0;
     };

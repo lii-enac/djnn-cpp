@@ -122,12 +122,9 @@ static int ParseHref(FatProcess** e, const char* v) {
   	if (start == v) {
       char* data = strchr ( (char*) v, ',');
       if (data != 0) {
-      	data++;
-      	int i = 0;
-      	while (data[i] != '\0') {
-      	  i++;
-      	}
-      	const size_t sz = i * sizeof (data[0]);
+      	++data;
+        const size_t len = strlen(data);
+      	const size_t sz = len * sizeof (data[0]);
       	djn_ImgArgs.data = b64decode (data, sz);
       }
   	}
