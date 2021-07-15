@@ -140,8 +140,7 @@ namespace djnn
   SDLWindow::handle_event (SDL_Event& e)
   {
     //std::cerr << e.type << __FL__;
-    switch (e.type)
-      {
+    switch (e.type) {
       case SDL_TEXTINPUT:
         _window->key_pressed ()->set_value (e.key.keysym.sym, 1);
         _window->key_pressed_text ()->set_value (e.text.text, 1);
@@ -159,27 +158,7 @@ namespace djnn
         {
           switch (e.user.code) {
             case user_event_awake: {
-              rmt_BeginCPUSample(SDL_USEREVENT, 0);
-              // awake
-              #if 1
-              //std::cerr << "SDL awake" << __FL__;
-              static Uint32 lastTick=0;
-              Uint32 tick = SDL_GetTicks();
-              //float _refresh_rate=120.f;
-              //DBG;
-              //std::cerr << (tick - lastTick) << " " << 1000/_refresh_rate <<  __FL__;
-              if( (tick - lastTick) > 1000/_refresh_rate) {
-                //DBG;
-                lastTick = tick;
-                //rmt_BeginCPUSample(redraw, 0);
-                redraw();
-                _window->refreshed ()->notify_activation ();
-                //rmt_EndCPUSample();
-              } //else DBG;
-              #else
-              redraw ();
-              #endif
-              rmt_EndCPUSample();
+              trigger_redraw ();
               break;
             }
             case user_event_geometry: {
@@ -197,7 +176,7 @@ namespace djnn
             case SDL_WINDOWEVENT_SHOWN:
             case SDL_WINDOWEVENT_EXPOSED:
               {
-                redraw ();
+                trigger_redraw ();
                 break;
               }
             case SDL_WINDOWEVENT_MOVED:
@@ -234,6 +213,25 @@ namespace djnn
             }
         }
       }
+  }
+
+  void
+  SDLWindow::trigger_redraw ()
+  {
+    rmt_BeginCPUSample(trigger_redraw, 0);
+    #if 1
+    redraw ();
+    _window->refreshed ()->notify_activation ();
+    #else
+    static Uint32 lastTick=0;
+    Uint32 tick = SDL_GetTicks();
+    if( (tick - lastTick) > 1000/_refresh_rate) {
+      lastTick = tick;
+      redraw();
+      _window->refreshed ()->notify_activation ();
+    }
+    #endif
+    rmt_EndCPUSample();
   }
 
   void
