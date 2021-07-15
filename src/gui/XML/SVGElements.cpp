@@ -324,7 +324,7 @@ StartImage (const char** attrs, FatProcess* current)
     e = new Image (holder ? holder : current, djn_GraphicalShapeArgs.id, djn_ImgArgs.path, djn_ImgArgs.x, djn_ImgArgs.y,
 		   djn_ImgArgs.w, djn_ImgArgs.h);
   } else {
-    e = new DataImage (holder ? holder : current, djn_GraphicalShapeArgs.id, djn_ImgArgs.data, djn_ImgArgs.x,
+    e = new DataImage (holder ? holder : current, djn_GraphicalShapeArgs.id, &djn_ImgArgs.data, djn_ImgArgs.x,
 		       djn_ImgArgs.y, djn_ImgArgs.w, djn_ImgArgs.h);
   }
   if (!djn_GraphicalShapeArgs.classname.empty ()) {
