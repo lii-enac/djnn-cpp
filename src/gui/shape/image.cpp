@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Image::Image (ParentProcess* parent, const string& name, string path, double x, double y, double w,
+  Image::Image (ParentProcess* parent, const string& name, const string& path, double x, double y, double w,
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),

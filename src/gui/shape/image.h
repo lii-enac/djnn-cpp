@@ -13,7 +13,7 @@ namespace djnn {
   class Image : public AbstractPathImage
   {
   public:
-    Image (ParentProcess* parent, const string& name, string path, double x, double y, double w, double h);
+    Image (ParentProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
     Image* clone () override;
