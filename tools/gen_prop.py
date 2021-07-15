@@ -108,12 +108,14 @@ namespace djnn
     auto * res = %(INHERITS)s::find_child_impl(name);
     if (res) return res;
 
-    bool prop_Double=false, prop_Int=false, prop_Text=false;
+    bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef string text;
     text* rawp_Text = nullptr;
+    typedef string* textp;
+    textp* rawp_Textp = nullptr;
     int notify_mask = notify_none;
     %(CREATE_PROPERTIES)s
     return nullptr;
@@ -129,6 +131,10 @@ namespace djnn
     else if(prop_Text) {
       TextPropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
+    }
+    else if(prop_Textp) {
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
     }
 
     return res;
@@ -212,17 +218,23 @@ class Prop:
     def as_cpp_type_str(self):
         if self.type == 'text':
           return 'string'
+        elif self.type == 'textp':
+          return 'string*'
         else:
           return self.type
 
     def as_cpp_type_str_for_function_signature(self):
         if self.type == 'text':
           return 'const string&'
+        elif self.type == 'textp':
+          return 'string*&'
         else:
           return self.type
     
     def as_c_type_str(self):
         if self.type == 'text':
+          return 'const char*'
+        elif self.type == 'textp':
           return 'const char*'
         else:
           return self.type
@@ -230,12 +242,16 @@ class Prop:
     def as_c_type_str_for_function_signature(self):
         if self.type == 'text':
           return 'const char*'
+        elif self.type == 'textp':
+          return 'const char*'
         else:
           return self.type
     
     def as_js_type_str_for_function_signature(self):
         if self.type == 'text':
           return 'string'
+        elif self.type == 'textp':
+          return 'string*'
         elif self.type == 'double' or self.type == 'int':
           return 'number'
         else:
@@ -561,7 +577,7 @@ dc.includes = '''#include "gui/shape/gen/abstract_image.h"'''
 dcs.append(dc)
 
 dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shape", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
-dc.props.append(Prop('data', 'text', None, "geometry"))
+dc.props.append(Prop('data', 'textp', None, "geometry"))
 dc.includes = '#include "gui/shape/gen/abstract_image.h"'
 dcs.append(dc)
 
