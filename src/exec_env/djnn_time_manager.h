@@ -12,6 +12,8 @@
  *
  */
 
+#pragma once
+
 #include "exec_env/time_manager.h"
 #include "exec_env/external_source.h"
 
