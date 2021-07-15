@@ -129,23 +129,25 @@ namespace djnn
     return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
   }
 
-  DataImage::DataImage (ParentProcess* parent, const string& name, const string& data, double x, double y, double w,
+  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, x, y, w, h),
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
+    raw_props.data = new string(*data);
     set_origin (x, y);
     finalize_construction (parent, name);
   }
 
   DataImage::DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h)
-  : DataImage(parent, name, string(), x, y, w, h)
+  : DataImage(parent, name, nullptr, x, y, w, h)
   {
   }
 
   DataImage::~DataImage ()
   {
+    delete raw_props.data;
     if (_cwatcher) {
       delete _cwatcher;
     }

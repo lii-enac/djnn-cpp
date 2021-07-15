@@ -38,6 +38,8 @@ namespace djnn {
 	    virtual FatProcess* create_GObj_prop (IntPropertyProxy **prop, CouplingWithData  **cprop, int *rawp, const string& name, int notify_mask);
 	    virtual FatProcess* create_GObj_prop (DoublePropertyProxy **prop, CouplingWithData  **cprop, double *rawp, const string& name, int notify_mask);
 	    virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData  **cprop, string *rawp, const string& name, int notify_mask);
+		virtual FatProcess* create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, string **rawp, const string& name, int notify_mask);
+
 
 	private:
 		AbstractSObjImpl *_impl;

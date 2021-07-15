@@ -71,12 +71,14 @@ namespace djnn
     auto * res = AbstractStyle::find_child_impl(name);
     if (res) return res;
 
-    bool prop_Double=false, prop_Int=false, prop_Text=false;
+    bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef string text;
     text* rawp_Text = nullptr;
+    typedef string* textp;
+    textp* rawp_Textp = nullptr;
     int notify_mask = notify_none;
     
     if(name=="unit") {
@@ -104,6 +106,10 @@ namespace djnn
     else if(prop_Text) {
       TextPropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
+    }
+    else if(prop_Textp) {
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
     }
 
     return res;

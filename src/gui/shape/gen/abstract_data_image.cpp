@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, const string& data, double x, double y, double width, double height) :
+  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, string*& data, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.data=data},
     _cdata (nullptr)
@@ -65,19 +65,21 @@ namespace djnn
     auto * res = AbstractImage::find_child_impl(name);
     if (res) return res;
 
-    bool prop_Double=false, prop_Int=false, prop_Text=false;
+    bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
     Coupling ** coupling = nullptr;
     double* rawp_Double = nullptr;
     int* rawp_Int = nullptr;
     typedef string text;
     text* rawp_Text = nullptr;
+    typedef string* textp;
+    textp* rawp_Textp = nullptr;
     int notify_mask = notify_none;
     
     if(name=="data") {
       coupling=&_cdata;
-      rawp_Text=&raw_props.data;
+      rawp_Textp=&raw_props.data;
       notify_mask = notify_damaged_geometry;
-      prop_Text=true;
+      prop_Textp=true;
     } else
     return nullptr;
 
@@ -93,6 +95,10 @@ namespace djnn
       TextPropertyProxy* prop = nullptr; // do not cache
       res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
     }
+    else if(prop_Textp) {
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
+    }
 
     return res;
   }
@@ -107,7 +113,7 @@ namespace djnn
   }
 
   void
-  AbstractDataImage::get_properties_values (string& data, double& x, double& y, double& width, double& height)
+  AbstractDataImage::get_properties_values (string*& data, double& x, double& y, double& width, double& height)
   {
     data = raw_props.data;
     AbstractImage::get_properties_values(x, y, width, height);

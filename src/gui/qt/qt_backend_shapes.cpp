@@ -459,7 +459,7 @@ namespace djnn
   QtBackend::draw_data_image (DataImage *i)
     {
       double x,y,w,h;
-      string data;
+      string* data;
       i->get_properties_values (data, x,y,w,h);
       load_drawing_context (i, x, y, w, h);
       QRect rect (x, y, w, h);
@@ -470,7 +470,7 @@ namespace djnn
         i->set_invalid_cache (true);
       }
       if (i->invalid_cache ()) {
-        pm->loadFromData (reinterpret_cast<const uchar*>(data.c_str ()), data.length());
+        pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
         i->set_invalid_cache (false);
       }
 

@@ -29,17 +29,17 @@ namespace djnn
   class AbstractDataImage : public AbstractImage
   {
   public:
-    AbstractDataImage (ParentProcess* parent, const string& name, const string& data, double x, double y, double width, double height);
+    AbstractDataImage (ParentProcess* parent, const string& name, string*& data, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
     
     
-    void get_properties_values (string& data, double& x, double& y, double& width, double& height);
+    void get_properties_values (string*& data, double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;
-		AbstractTextProperty* data () { return (AbstractTextProperty*) find_child_impl ("data"); }
+		//AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
 
   protected:
-    struct raw_props_t { string data; };
+    struct raw_props_t { string* data; };
     raw_props_t raw_props;
     Coupling *_cdata;
     void impl_activate () override;

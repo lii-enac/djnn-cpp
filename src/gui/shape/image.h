@@ -40,7 +40,7 @@ namespace djnn {
   class DataImage : public AbstractDataImage
     {
     public:
-      DataImage (ParentProcess* parent, const string& name, const string& data, double x, double y, double w, double h);
+      DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w, double h);
       DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;

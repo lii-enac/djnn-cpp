@@ -71,4 +71,11 @@ namespace djnn {
       (*cprop)->disable ();*/
     return *prop;
   }
+  FatProcess*
+  AbstractSObj::create_GObj_prop (TextPropertyProxy **prop, CouplingWithData **cprop, string **rawp, const string& name, int notify_mask)
+  {
+    *prop = new TextPropertyProxy (this, name, **rawp, notify_mask);
+    //create_Gobj_update_coupling(reinterpret_cast<CoreProcess**>(prop), cprop);
+    return *prop;
+  }
 }
