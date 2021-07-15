@@ -120,7 +120,7 @@ namespace djnn {
   void
   SDLMainloop::wakeup (SDLWindow * requestingWin)
   {
-    if(_wakeup_already_triggered) return;
+    //if(_wakeup_already_triggered) return;
     //DBG;
     // push a dummy event into the queue so that the event loop has a chance to stop
     SDL_Event e;
@@ -211,8 +211,8 @@ namespace djnn {
          if (get_please_stop ()) break;
        } while (--pending);
 
-       if(redraw_awake) {
-         handle_single_event (e);
+       if (redraw_awake) {
+         handle_single_event (redraw_event);
        }
     } else {
       //djnn::release_exclusive_access (DBG_REL);
@@ -247,11 +247,13 @@ namespace djnn {
       case SDL_WINDOWEVENT:
       case SDL_USEREVENT: // redraw
       {
-        //std::cout << sdl_event_to_char(e.type) << " " << __FL__;
+        //std::cerr << "sdl mainloop wakeup " << sdl_event_to_char(e.type) << " " << __FL__;
         auto it = _windows.find(e.window.windowID);
         if(it != _windows.end()) {
           SDLWindow * w = it->second;
+          //std::cerr << "sdl mainloop wakeup before win" << __FL__;
           w->handle_event(e);
+        } else {
         }
         break;
       }

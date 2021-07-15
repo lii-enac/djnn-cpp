@@ -158,6 +158,7 @@ namespace djnn
         {
           switch (e.user.code) {
             case user_event_awake: {
+              //std::cerr << "sdl window wakeup" << __FL__;
               trigger_redraw ();
               break;
             }
