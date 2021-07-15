@@ -53,7 +53,7 @@ namespace djnn {
 
   class TextProperty : public AbstractTextProperty {
   public:
-    TextProperty (ParentProcess* parent, const string& name, string v) : AbstractTextProperty (parent, name), value(v) { }
+    TextProperty (ParentProcess* parent, const string& name, const string& v) : AbstractTextProperty (parent, name), value(v) { }
     FatProcess* clone () override;
   protected:
     virtual string& get_ref_value() override { return value; }

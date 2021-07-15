@@ -69,13 +69,13 @@ namespace djnn
     void parser_info (int begline, int begcol, int endline, int endcol, const string& filename) {
         _line = begline; _begcol = begcol; _endline=endline; _endcol = endcol; _filename = filename;
     }
-    int line () { return _line; }
-    int begline () { return _line; }
-    int begcol () { return _begcol; }
-    int endline () { return _endline; }
-    int endcol () { return _endcol; }
+    int line () const { return _line; }
+    int begline () const { return _line; }
+    int begcol () const { return _begcol; }
+    int endline () const { return _endline; }
+    int endcol () const { return _endcol; }
     
-    const string& filename () { return _filename; }
+    const string& filename () const { return _filename; }
   private:
     Context () : _line (-1), _filename ("") {}
     static Context* _instance;
