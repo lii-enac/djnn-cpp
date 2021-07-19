@@ -138,7 +138,7 @@ namespace djnn {
 	void
   	Sample::do_end ()
   	{
-    	if(somehow_activating ()) {
+    	if (somehow_activating ()) {
       		deactivate ();
       		_end.notify_activation ();
     	}
@@ -153,7 +153,7 @@ namespace djnn {
 		ALint state;
     	alGetSourcei(sourceid, AL_SOURCE_STATE, &state); CHKAL;
 		if (state != AL_PLAYING) {
-			deactivate ();
+			do_end ();
 			return;
 		}
 		do_control_only ();
