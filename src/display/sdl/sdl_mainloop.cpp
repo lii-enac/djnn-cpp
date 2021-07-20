@@ -189,7 +189,18 @@ namespace djnn {
     //rmt_LogText(">> logging");
   #if 1
     // slightly more efficient loop: handle all events in the queue
-    if (!get_please_stop ()) { handle_single_event (first_event); }
+    bool redraw_awake=false;
+    SDL_Event redraw_event;
+
+    if (!get_please_stop ()) {
+      auto & e = first_event;
+      if (e.type==SDL_USEREVENT && e.user.code==SDLWindow::user_event_awake) {
+          redraw_awake=true;
+          redraw_event=e;
+      } else {
+        handle_single_event (first_event);
+      }
+    }
 
     const unsigned int max_events = 10;
     SDL_Event es[max_events];
@@ -197,12 +208,9 @@ namespace djnn {
     //std::cerr << "   pending events: " << pending << " " << __FL__;
     if (pending && !get_please_stop ()) {
        SDL_Event &e = es[max_events-pending];
-       bool redraw_awake=false;
-       SDL_Event redraw_event;
-
        do {
          SDL_WaitEvent (&e); // should be non-blocking call, since there are pending events
-         if(e.type==SDL_USEREVENT && e.user.code==SDLWindow::user_event_awake) {
+         if (e.type==SDL_USEREVENT && e.user.code==SDLWindow::user_event_awake) {
           redraw_awake=true;
           redraw_event=e;
           continue;
@@ -210,13 +218,12 @@ namespace djnn {
          handle_single_event (e);
          if (get_please_stop ()) break;
        } while (--pending);
-
-       if (redraw_awake) {
-         handle_single_event (redraw_event);
-       }
     } else {
       //djnn::release_exclusive_access (DBG_REL);
       //this_thread::yield();
+    }
+    if (redraw_awake) {
+      handle_single_event (redraw_event);
     }
   #else 
     // simple loop: handle one event at a time, might be costly to acquire mutex each time
