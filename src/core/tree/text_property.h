@@ -37,6 +37,7 @@ namespace djnn {
     double get_double_value () const override;
     string get_string_value () override { return get_ref_value (); }
     string get_string_value () const override { return get_ref_value (); }
+    const string& get_value () const { return get_ref_value(); };
     string& get_value () { return get_ref_value(); };
   protected:
     virtual string& get_ref_value() = 0;
