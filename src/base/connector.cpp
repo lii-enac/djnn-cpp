@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "connector.h"
 #include "core/utils/error.h"
 #include "core/tree/component.h"

@@ -20,13 +20,252 @@
 
 namespace djnn
 {
+  inline
+  int
+  s_to_p(const string& s, int)
+  {
+    return stoi(s);
+  }
 
+  inline
+  double
+  s_to_p(const string& s, double)
+  {
+    return stof(s) ? true : false;
+  }
+
+  inline
+  bool
+  s_to_p(const string& s, bool)
+  {
+    return stoi(s) ? true : false;
+  }
+
+  template <class X>
+  string
+  p_to_s(const X& x)
+  {
+    return to_string(x);
+  }
+
+  template <>
+  string
+  p_to_s<bool>(const bool& x)
+  {
+    return (x ? "true" : "false");
+  }
+
+  // implicit conversion int, double, bool
+  template <typename src_t, typename dst_t>
+  void t_perform_action (src_t* src, dst_t* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_value ();
+    if (lazy && (sv == dv) ) return; 
+    dst->set_value (sv, propagate);
+  }
+
+  // conversion from string to int, double, bool
+  template <typename dst_t>
+  void t_perform_action (AbstractTextProperty* src, dst_t* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_value ();
+    if (lazy) {
+      const auto sdv = s_to_p(sv, dv);
+      if (sdv == dv) return;
+      dst->set_value (sdv, propagate);
+    } else {
+      dst->set_value (sv, propagate);
+    }
+  }
+
+  // conversion from int, double, bool to string
+  template <typename src_t>
+  void t_perform_action (src_t* src, AbstractTextProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_value ();
+    const auto sdv = p_to_s (sv);
+    if (lazy && (sdv == dv) ) return; 
+    dst->set_value (sdv, propagate);
+  }
+
+  // string to string is ambiguous because of the above partial specialization, so provide one with overloading (and not template)
+  //template <>
+  void t_perform_action (AbstractTextProperty* src, AbstractTextProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_value ();
+    if (lazy && (sv == dv) ) return; 
+    dst->set_value (sv, propagate);
+  }
+
+  // sepcific case when assigning a CoreProcess to a RefProperty
+  template <>
+  void t_perform_action (CoreProcess* src, RefProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src;
+    const auto & dv = dst;
+    if (lazy && (sv == dv) ) return; 
+    dst->set_value (sv, propagate);
+  }
+
+  template <class src_t, class dst_t>
+  struct TAssignment : public TTAssignment {
+    TAssignment (src_t* src, dst_t* dst)
+    : _src (src)
+    , _dst (dst)
+    {
+    }
+
+    virtual void perform_action (double propagate = true, double lazy = false) override
+    {
+      t_perform_action (_src, _dst, propagate, lazy);
+    }
+    src_t* get_src () override { return _src; }
+    dst_t* get_dst () override { return _dst; }
+    src_t* _src;
+    dst_t* _dst;
+  };
+
+
+  // building a TAssignment is a 2 part function for int, double, bool, string
+
+  template <class src_t>
+  TTAssignment*
+  build_ttassignment2 (src_t * src, CoreProcess* dst)
+  {
+    TTAssignment* ttassignment = nullptr;
+    AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
+    if (dst_p)
+    switch (dst_p->get_prop_type ())
+    {
+      case Integer:
+      {
+        auto * dp = djnn_dynamic_cast<AbstractIntProperty*> (dst_p);
+        assert (dp);
+        ttassignment = new TAssignment <src_t, AbstractIntProperty> (src, dp);
+        break;
+      }
+      case Boolean:
+      {
+        auto * bp = djnn_dynamic_cast<AbstractBoolProperty*> (dst_p);
+        assert (bp);
+        ttassignment = new TAssignment <src_t, AbstractBoolProperty> (src, bp);
+        break;
+      }
+      case Double:
+      {
+        auto * dp = djnn_dynamic_cast<AbstractDoubleProperty*> (dst_p);
+        assert (dp);
+        ttassignment = new TAssignment <src_t, AbstractDoubleProperty> (src, dp);
+        break;
+      }
+      case String:
+      {
+        auto * tp = djnn_dynamic_cast<AbstractTextProperty*> (dst_p);
+        assert (tp);
+        ttassignment = new TAssignment <src_t, AbstractTextProperty> (src, tp);
+        break;
+      }
+      default:
+        warning (dst_p, "Unknown property type");
+        break;
+    }
+    
+    return ttassignment;
+  }
+
+  TTAssignment *
+  build_ttassignment (CoreProcess* src, CoreProcess* dst)
+  {
+    TTAssignment * _ttassignment = nullptr;
+    AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
+    AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
+    if (!dst_p) { warning (dst_p, "dst is not a property"); return nullptr; }
+
+    if (src_p) {
+      switch (src_p->get_prop_type ())
+      {
+        case Integer:
+        {
+          auto * sp = djnn_dynamic_cast<AbstractIntProperty*> (src_p);
+          assert (sp);
+          _ttassignment = build_ttassignment2 (sp, dst);
+          break;
+        }
+        case Boolean:
+        {
+          auto * bp = djnn_dynamic_cast<AbstractBoolProperty*> (src_p);
+          assert (bp);
+          _ttassignment = build_ttassignment2 (bp, dst_p);
+          break;
+        }
+        case Double:
+        {
+          auto * dp = djnn_dynamic_cast<AbstractDoubleProperty*> (src_p);
+          assert (dp);
+          _ttassignment = build_ttassignment2 (dp, dst_p);
+          break;
+        }
+        case String:
+        {
+          auto * tp = djnn_dynamic_cast<AbstractTextProperty*> (src_p);
+          assert (tp);
+          _ttassignment = build_ttassignment2 (tp, dst_p);
+          break;
+        }
+        case Reference:
+        {
+          auto * srp = djnn_dynamic_cast<RefProperty*> (src_p);
+          assert (srp);
+          auto * drp = djnn_dynamic_cast<RefProperty*> (dst_p);
+          if (!drp) {
+            warning (dst_p, "is not a Reference in assignment");
+            return nullptr;
+          }
+          _ttassignment = new TAssignment <RefProperty, RefProperty> (srp, drp);
+          break;
+        }
+        case Dist: // FIXME name
+        {
+          auto * srp = djnn_dynamic_cast<RemoteProperty*> (src_p);
+          assert (srp);
+          auto * drp = djnn_dynamic_cast<RemoteProperty*> (dst_p);
+          if (!drp) {
+            warning (dst_p, "is not a Remote Property in assignment");
+            return nullptr;
+          }
+          _ttassignment = new TAssignment <RemoteProperty, RemoteProperty> (srp, drp);
+          break;
+        }
+        default:
+          warning (src_p, "unknown Property type");
+          return nullptr;
+      }
+    } else if (dst_p->get_prop_type () == Reference) {
+      auto * drp = djnn_dynamic_cast<RefProperty*> (dst_p);
+      assert (drp);
+      _ttassignment = new TAssignment <CoreProcess, RefProperty> (src, drp);
+
+    } else {
+
+      warning (src, "incompatible source and destination in Assignment \n");
+
+    }
+
+    return _ttassignment;
+  }
+
+// old assignment code
+#if 0
   static void
   perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)
   {
     AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
     AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
-    if (!dst_p) { warning (dst_p, "dst is not a property"); return; }
+    if (!dst_p) { warning (dst_p, "dst is not a Property"); return; }
 
     if (src_p) {
       switch (src_p->get_prop_type ())
@@ -68,7 +307,7 @@ namespace djnn
           break;
         }
         default:
-        warning (src_p, "Unknown property type");
+        warning (src_p, "unknown Property type");
         return;
       }
     } else if (dst_p->get_prop_type () == Reference) {
@@ -77,86 +316,31 @@ namespace djnn
 
     } else {
 
-      warning (src, "incompatible source and destination in (Paused)assignment \n");
+      warning (src, "incompatible source and destination in (Paused)Assignment \n");
 
     }
   }
-
-  static void
-  perform_action_2 (CoreProcess * src, CoreProcess * dst, bool propagate)
-  {
-
-    AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
-    AbstractProperty *dst_p = (AbstractProperty*) (dst);
-    //if (!dst_p) { warning (dst_p, "dst is not a property"); return; }
-
-    if (src_p) {
-      switch (src_p->get_prop_type ())
-      {
-        case Integer:
-        {
-          AbstractIntProperty* ip = (AbstractIntProperty*) (src_p);
-          // if (ip) 
-          dst_p->set_value (ip->get_value (), propagate);
-          break;
-        }
-        case Boolean:
-        {
-          AbstractBoolProperty* bp = (AbstractBoolProperty*) (src_p);
-          // if (bp) 
-          dst_p->set_value (bp->get_value (), propagate);
-          break;
-        }
-        case Double:
-        {
-          AbstractDoubleProperty* dp = (AbstractDoubleProperty*) (src_p);
-          // if (dp) 
-          dst_p->set_value (dp->get_value (), propagate);
-          break;
-        }
-        case String:
-        {
-          AbstractTextProperty* tp = (AbstractTextProperty*) (src_p);
-          // if (tp) 
-          dst_p->set_value (string (tp->get_value ()), propagate);
-          break;
-        }
-        case Reference:
-        {
-          RefProperty* rp = (RefProperty*) (src_p);
-          // if (rp) 
-          dst_p->set_value (rp->get_value (), propagate);
-          break;
-        }
-        case Dist:
-        {
-          RemoteProperty* dp = djnn_dynamic_cast<RemoteProperty*> (src_p);
-          // if (dp) 
-          dst_p->set_value (dp->get_value (), propagate);
-          break;
-        }
-        default:
-        warning (src_p, "Unknown property type");
-        return;
-      } 
-    }
-    else if (dst_p->get_prop_type () == Reference) {
-       ((RefProperty*) dst_p)->set_value (src, propagate);
-    }
-  }
-
-
+#endif
 
   void
   CoreAssignment::perform_action ()
   {
-    djnn::perform_action_2 (get_src (), get_dst (), _propagate);    
+    //djnn::perform_action (get_src (), get_dst (), _propagate);
+    _ttassignment->perform_action (_propagate, false);
   }
 
   void
   Assignment::perform_action ()
   {
-    djnn::perform_action_2 (get_src (), get_dst (), _propagate);    
+    //djnn::perform_action (get_src (), get_dst (), _propagate);
+    if (!_ttassignment) {
+      _ttassignment = build_ttassignment (get_src (), get_dst ());
+      if (!_ttassignment) {
+        warning (this, "invalid assignment");
+        return;
+      }
+    }
+    _ttassignment->perform_action (_propagate, _lazy);
   }
 
   void
