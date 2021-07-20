@@ -36,15 +36,24 @@ namespace djnn
   }
 
   StyleSheet*
-  StyleSheet::clone ()
+  StyleSheet::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    StyleSheet* newd = new StyleSheet (nullptr, get_name ());
+    /*StyleSheet* newd = new StyleSheet (nullptr, get_name ());
 
     for (auto c : _children) {
       newd->add_child (c->clone (), this->find_child_name(c));
     }
 
-    return newd;
+    return newd;*/
+
+    auto * clone = new StyleSheet (nullptr, get_name ());
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
+    return clone;
   }
 
   int

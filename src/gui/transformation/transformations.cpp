@@ -89,9 +89,11 @@ namespace djnn
   }
 
   FatProcess*
-  Translation::clone ()
+  Translation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    auto res = new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -121,9 +123,11 @@ namespace djnn
   }
 
   FatProcess*
-  GradientTranslation::clone ()
+  GradientTranslation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    auto res = new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -181,9 +185,11 @@ namespace djnn
   }
 
   FatProcess*
-  Rotation::clone ()
+  Rotation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    auto res = new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -213,9 +219,11 @@ namespace djnn
   }
 
   FatProcess*
-  GradientRotation::clone ()
+  GradientRotation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    auto res = new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -265,9 +273,11 @@ namespace djnn
   }
 
   FatProcess*
-  Scaling::clone ()
+  Scaling::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    auto res = new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -297,9 +307,11 @@ namespace djnn
   }
 
   FatProcess*
-  GradientScaling::clone ()
+  GradientScaling::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    auto res = new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    origs_clones[this] = res;
+    return res;
   }
 
   SkewX::SkewX (ParentProcess* parent, const string& name, double a) :
@@ -336,9 +348,11 @@ namespace djnn
   }
 
   FatProcess*
-  SkewX::clone ()
+  SkewX::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new SkewX (nullptr, get_name (), raw_props.a);
+    auto res = new SkewX (nullptr, get_name (), raw_props.a);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -368,9 +382,11 @@ namespace djnn
   }
 
   FatProcess*
-  GradientSkewX::clone ()
+  GradientSkewX::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientSkewX (nullptr, get_name (), raw_props.a);
+    auto res = new GradientSkewX (nullptr, get_name (), raw_props.a);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -408,9 +424,11 @@ namespace djnn
   }
 
   FatProcess*
-  SkewY::clone ()
+  SkewY::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new SkewY (nullptr, get_name (), raw_props.a);
+    auto res = new SkewY (nullptr, get_name (), raw_props.a);
+    origs_clones[this] = res;
+    return res;
   }
 
   GradientSkewY::GradientSkewY (ParentProcess* parent, const string& name, double a) :
@@ -439,9 +457,11 @@ namespace djnn
   }
 
   FatProcess*
-  GradientSkewY::clone ()
+  GradientSkewY::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientSkewY (nullptr, get_name (), raw_props.a);
+    auto res = new GradientSkewY (nullptr, get_name (), raw_props.a);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -2138,13 +2158,15 @@ namespace djnn
   }
 
   FatProcess*
-  Homography::clone ()
+  Homography::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Homography (nullptr, get_name (),
+    auto res = new Homography (nullptr, get_name (),
                            raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
                            raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
                            raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
+    origs_clones[this] = res;
+    return res;
   }
 
   GradientHomography::GradientHomography (ParentProcess* parent, const string& name, double m11, double m12, double m13, double m21,
@@ -2174,12 +2196,14 @@ namespace djnn
   }
 
   FatProcess*
-  GradientHomography::clone ()
+  GradientHomography::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientHomography ( nullptr, get_name (), 
+    auto res = new GradientHomography ( nullptr, get_name (), 
                                     raw_props.m11, raw_props.m12, raw_props.m13,
                                     raw_props.m21, raw_props.m22, raw_props.m23,
                                     raw_props.m31, raw_props.m32, raw_props.m33);
+    origs_clones[this] = res;
+    return res;
   }
 
   SimpleGradientTransform::SimpleGradientTransform (ParentProcess* parent, const string& name, double a, double b, double c, double d,
@@ -2209,12 +2233,14 @@ namespace djnn
   }
 
   FatProcess*
-  SimpleGradientTransform::clone ()
+  SimpleGradientTransform::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientHomography (nullptr, get_name (), 
+    auto res = new GradientHomography (nullptr, get_name (), 
                                    raw_props.m11, raw_props.m12, raw_props.m13,
                                    raw_props.m21, raw_props.m22, raw_props.m23,
                                    raw_props.m31, raw_props.m32, raw_props.m33);
+    origs_clones[this] = res;
+    return res;
   }
 }
 

@@ -161,7 +161,10 @@ namespace djnn {
     static couplings_t default_couplings; // default_couplings is a static empty couplings_t
 
   public:
-    virtual CoreProcess* clone ();
+    virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones);
+
+  public:
+    CoreProcess* clone ();
     virtual process_type_e get_process_type () const { return UNDEFINED_T; }
 
     virtual FatProcess* get_parent() { return nullptr; }
@@ -308,7 +311,7 @@ namespace djnn {
     virtual CoreProcess* state_dependency () override { return _state_dependency; } // for control flow change and execution scheduling
     virtual void set_state_dependency (CoreProcess* s) override { _state_dependency = s; }
 
-    virtual ChildProcess* clone () override { return nullptr; }
+    //virtual ChildProcess* clone () override { return nullptr; }
   protected:
     void finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state=nullptr) override;
     FatProcess *_parent;
@@ -319,7 +322,7 @@ namespace djnn {
   {
   public:
     FatProcess (const string& name, bool model = false);
-    virtual FatProcess* clone () override { CoreProcess::clone (); return nullptr; }
+    //FatProcess* clone () { return dynamic_cast<FatProcess*> (CoreProcess::clone ()); }
     
     virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
 

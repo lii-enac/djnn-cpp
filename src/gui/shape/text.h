@@ -38,7 +38,7 @@ namespace djnn {
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    Text* clone () override;
+    Text* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text);
     virtual FatChildProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }

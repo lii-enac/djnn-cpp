@@ -10,7 +10,7 @@ namespace djnn
   {
   public:
     Circle (ParentProcess* parent, const string& name, double cx, double cy, double r);
-    Circle* clone () override;
+    Circle* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;

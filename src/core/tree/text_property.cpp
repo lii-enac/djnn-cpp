@@ -148,14 +148,18 @@ namespace djnn
 #endif
 
   FatProcess* 
-  TextProperty::clone ()
+  TextProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new TextProperty (nullptr, get_name (), value);
+    auto res = new TextProperty (nullptr, get_name (), value);
+    origs_clones[this] = res;
+    return res;
   }
 
   FatProcess* 
-  TextPropertyProxy::clone ()
+  TextPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new TextPropertyProxy (nullptr, get_name (), value);
+    auto res = new TextPropertyProxy (nullptr, get_name (), value);
+    origs_clones[this] = res;
+    return res;
   }
 }

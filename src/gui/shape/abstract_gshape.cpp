@@ -56,8 +56,8 @@ namespace djnn
     return p;
   }
 
-  SVGHolder*
-  SVGHolder::clone ()
+  /*SVGHolder*
+  SVGHolderimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     SVGHolder* newh = new SVGHolder (nullptr, "SVGHolder");
 
@@ -70,6 +70,20 @@ namespace djnn
     newh->_gobj = dynamic_cast<FatProcess*>(newh->_children.back ());
 
     return newh;
+  }*/
+
+  SVGHolder*
+  SVGHolder::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto * clone = new SVGHolder (nullptr, "SVGHolder");
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
+    }
+    clone->_gobj = dynamic_cast<FatProcess*>(clone->_children.back ());
+    origs_clones[this] = clone;
+    return clone;
   }
 
   void

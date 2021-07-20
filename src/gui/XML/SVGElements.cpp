@@ -863,7 +863,7 @@ StartUse(const char** attrs, FatProcess* current) {
   alias (holder, "y", pos->find_child_impl ("ty"));
   auto it = djn__id_to_process.find (djn_UseArgs.href);
   if (it != djn__id_to_process.end ()) {
-    FatProcess* clone = it->second->clone();
+    auto* clone = it->second->clone();
     if (clone->get_process_type() == DEFS_T) {
       for (auto c : ((Defs*)clone)->children ()) {
         holder->add_child (c, c->get_name (clone));

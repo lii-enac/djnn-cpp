@@ -23,7 +23,8 @@
 
 #include "core/tree/list.h"
 
-#include "core/utils/iostream.h"
+//#include "core/utils/iostream.h"
+#include "core/utils/error.h"
 
 namespace djnn
 {
@@ -47,9 +48,11 @@ namespace djnn
   }
 
   FillColor*
-  FillColor::clone ()
+  FillColor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
+    auto res = new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -62,9 +65,11 @@ namespace djnn
   }
 
   OutlineColor*
-  OutlineColor::clone ()
+  OutlineColor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
+    auto res = new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -77,9 +82,11 @@ namespace djnn
   }
 
   NoOutline*
-  NoOutline::clone ()
+  NoOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new NoOutline (nullptr, get_name ());
+    auto res = new NoOutline (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -92,9 +99,11 @@ namespace djnn
   }
 
   NoFill*
-  NoFill::clone ()
+  NoFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new NoFill (nullptr, get_name ());
+    auto res = new NoFill (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
   
   void
@@ -107,9 +116,17 @@ namespace djnn
   }
 
   OutlineOpacity*
-  OutlineOpacity::clone ()
+  OutlineOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new OutlineOpacity (nullptr, get_name (), raw_props.a);
+    auto res = new OutlineOpacity (nullptr, get_name (), raw_props.a);
+    auto a = AbstractStyle::find_child_impl("a");
+    if (a) {
+      origs_clones[a] = res->a();
+    }
+    origs_clones[this] = res;
+    
+    
+    return res;
   }
 
   void
@@ -122,9 +139,15 @@ namespace djnn
   }
 
   FillOpacity*
-  FillOpacity::clone ()
+  FillOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FillOpacity (nullptr, get_name (), raw_props.a);
+    auto res = new FillOpacity (nullptr, get_name (), raw_props.a);
+    auto a = AbstractStyle::find_child_impl("a");
+    if (a) {
+      origs_clones[a] = res->a();
+    }
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -137,15 +160,14 @@ namespace djnn
   }
 
   DashArray*
-  DashArray::clone ()
+  DashArray::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    DashArray* newda = new DashArray (nullptr, get_name ());
-
+    auto * res = new DashArray (nullptr, get_name ());
     for (auto d : _dash_array) {
-      newda->_dash_array.push_back(d);
+      res->_dash_array.push_back(d);
     }
-
-    return newda;
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -158,9 +180,11 @@ namespace djnn
   }
 
   NoDashArray*
-  NoDashArray::clone ()
+  NoDashArray::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new NoDashArray (nullptr, get_name ());
+    auto res = new NoDashArray (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
 
   GradientStop::GradientStop (ParentProcess* parent, const string& name, double r, double g, double b, double a, double offset) :
@@ -172,7 +196,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient stop must be <LinearGradient|RadialGradient>\n";
+      error (this, "parent of Gradient Stop must be <LinearGradient|RadialGradient>\n");
       return;
     }
     grad->stops ()->add_child (this, "");
@@ -183,9 +207,11 @@ namespace djnn
   }
 
   GradientStop*
-  GradientStop::clone ()
+  GradientStop::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
+    auto res = new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -231,9 +257,9 @@ namespace djnn
   }
 
   LinearGradient*
-  LinearGradient::clone ()
+  LinearGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
+    /*LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
 					    AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto s : _stops->children ()) {
       g->stops ()->add_child (s->clone (), s->get_name (_stops));
@@ -241,7 +267,22 @@ namespace djnn
     for (auto t : _transforms->children ()) {
       g->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
-    return g;
+    return g;*/
+
+    auto * clone = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
+					    AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
+    for (auto c : _stops->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->stops ()->add_child (cclone , c->find_child_name(_stops));
+    }
+    for (auto c : _transforms->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->transforms ()->add_child (cclone , c->find_child_name(_stops));
+    }
+    origs_clones[this] = clone;
+    return clone;
   }
 
   LinearGradient::~LinearGradient ()
@@ -300,9 +341,11 @@ namespace djnn
   }
 
   RefLinearGradient*
-  RefLinearGradient::clone ()
+  RefLinearGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new RefLinearGradient (nullptr, get_name (), _lg);
+    auto res = new RefLinearGradient (nullptr, get_name (), _lg);
+    origs_clones[this] = res;
+    return res;
   }
 
   RadialGradient::RadialGradient (ParentProcess* parent, const string& name, double cx, double cy, double r, double fx,
@@ -322,9 +365,9 @@ namespace djnn
   RadialGradient::~RadialGradient () {}
 
   RadialGradient*
-  RadialGradient::clone ()
+  RadialGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
+    /*RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
 					     raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto s : _stops->children ()) {
       rg->stops ()->add_child (s->clone (), s->get_name (_stops));
@@ -332,7 +375,22 @@ namespace djnn
     for (auto t : _transforms->children ()) {
       rg->transforms ()->add_child (t->clone (), t->get_name (_stops));
     }
-    return rg;
+    return rg;*/
+
+    auto * clone = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
+					     raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
+    for (auto c : _stops->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->stops ()->add_child (cclone , c->find_child_name(_stops));
+    }
+    for (auto c : _transforms->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->transforms ()->add_child (cclone , c->find_child_name(_stops));
+    }
+    origs_clones[this] = clone;
+    return clone;
   }
 
   void
@@ -387,9 +445,11 @@ namespace djnn
   }
 
   RefRadialGradient*
-  RefRadialGradient::clone ()
+  RefRadialGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new RefRadialGradient (nullptr, get_name (), _rg);
+    auto res = new RefRadialGradient (nullptr, get_name (), _rg);
+    origs_clones[this]=res;
+    return res;
   }
 
   void
@@ -434,9 +494,11 @@ namespace djnn
   }
 
   FontSize*
-  FontSize::clone ()
+  FontSize::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
+    auto res = new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
+    origs_clones[this] = res;
+    return res;
   }
 
   FontWeight::FontWeight (ParentProcess* parent, const string& name, int weight) :
@@ -464,9 +526,11 @@ namespace djnn
   }
 
   FontWeight*
-  FontWeight::clone ()
+  FontWeight::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FontWeight (nullptr, get_name (), raw_props.weight);
+    auto res = new FontWeight (nullptr, get_name (), raw_props.weight);
+    origs_clones[this] = res;
+    return res;
   }
 
   FontStyle::FontStyle (ParentProcess* parent, const string& name, djnFontSlope style) :
@@ -500,9 +564,11 @@ namespace djnn
   }
 
   FontStyle*
-  FontStyle::clone ()
+  FontStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FontStyle (nullptr, get_name (), raw_props.style);
+    auto res = new FontStyle (nullptr, get_name (), raw_props.style);
+    origs_clones[this] = res;
+    return res;
   }
 
   FontFamily::FontFamily (ParentProcess* parent, const string& name, const string& family) :
@@ -530,9 +596,11 @@ namespace djnn
   }
 
   FontFamily*
-  FontFamily::clone ()
+  FontFamily::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new FontFamily (nullptr, get_name (), raw_props.family);
+    auto res = new FontFamily (nullptr, get_name (), raw_props.family);
+    origs_clones[this] = res;
+    return res;
   }
 }
 

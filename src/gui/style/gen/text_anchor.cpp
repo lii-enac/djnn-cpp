@@ -147,9 +147,11 @@ namespace djnn
 
   
   TextAnchor*
-  TextAnchor::clone ()
+  TextAnchor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new TextAnchor (nullptr, get_name (), raw_props.anchor);
+    auto res = new TextAnchor (nullptr, get_name (), raw_props.anchor);
+    origs_clones[this] = res;
+    return res;
   }
 
 

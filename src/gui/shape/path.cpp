@@ -125,9 +125,11 @@ namespace djnn
   }
 
   PathLine*
-  PathLine::clone ()
+  PathLine::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
+    auto res = new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
   void
@@ -140,9 +142,11 @@ namespace djnn
   }
 
   PathMove*
-  PathMove::clone ()
+  PathMove::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
+    auto res = new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
   PathClosure::PathClosure (ParentProcess* parent, const string& name) :
@@ -168,9 +172,11 @@ namespace djnn
   }
 
   PathClosure*
-  PathClosure::clone ()
+  PathClosure::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathClosure (nullptr, get_name ());
+    auto res = new PathClosure (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
 
   PathQuadratic::PathQuadratic (ParentProcess* parent, const string& name, double x1, double y1, double x, double y) :
@@ -295,9 +301,11 @@ namespace djnn
   }
 
   PathQuadratic*
-  PathQuadratic::clone ()
+  PathQuadratic::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
+    auto res = new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
 
@@ -448,9 +456,11 @@ namespace djnn
   }
 
   PathCubic*
-  PathCubic::clone ()
+  PathCubic::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
+    auto res = new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
   PathArc::PathArc (ParentProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
@@ -614,9 +624,11 @@ namespace djnn
   }
 
   PathArc*
-  PathArc::clone ()
+  PathArc::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
+    auto res = new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
   Path::Path (ParentProcess* parent, const string& name) :
@@ -672,13 +684,26 @@ namespace djnn
     }
   }
 
-  Path*
-  Path::clone ()
+  /*Path*
+  Pathimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     Path* clone = new Path (nullptr, get_name ());
     for (auto p: _items->children ()) {
       clone->items ()->add_child (p->clone (), "");
     }
+    return clone;
+  }*/
+
+  Path* 
+  Path::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto * clone = new Path (nullptr, get_name ());
+    for (auto c : _items->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->items ()->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
     return clone;
   }
 
@@ -691,13 +716,26 @@ namespace djnn
     }
   }
 
-  PathClip*
-  PathClip::clone ()
+  /*PathClip*
+  PathClipimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     PathClip* clone = new PathClip (nullptr, get_name ());
     for (auto p: _items->children ()) {
       clone->items ()->add_child (p->clone (), "");
     }
+    return clone;
+  }*/
+
+  PathClip* 
+  PathClip::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto * clone = new PathClip (nullptr, get_name ());
+    for (auto c : _items->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->items ()->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
     return clone;
   }
 

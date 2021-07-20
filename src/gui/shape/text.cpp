@@ -389,9 +389,11 @@ namespace djnn
   }
 
   Text*
-  Text::clone ()
+  Text::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());
+    auto res = new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());
+    origs_clones[this] = res;
+    return res;
   }
 
 } /* namespace djnn */

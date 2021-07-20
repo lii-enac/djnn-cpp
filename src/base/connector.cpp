@@ -51,6 +51,21 @@ namespace djnn {
     }
   }
 
+  Connector*
+  Connector::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    // check if it already exists in origs_clones? returns it if so?
+    auto sit = origs_clones.find(_assignment.get_src ());
+    assert (sit!=origs_clones.end());
+    auto dit = origs_clones.find(_assignment.get_dst ());
+    assert (dit!=origs_clones.end());
+    auto s = sit->second;
+    auto d = dit->second;
+    auto res = new Connector (nullptr, get_name (), s, d, _copy_on_activation);
+    origs_clones[this] = res;
+    return res;
+  }
+
   void
   CoreConnector::serialize (const string& format)
   {

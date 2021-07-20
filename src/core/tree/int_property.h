@@ -55,7 +55,7 @@ namespace djnn {
   class IntProperty : public AbstractIntProperty {
   public:
     IntProperty (ParentProcess* parent, const string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }
@@ -66,7 +66,7 @@ namespace djnn {
   class IntPropertyProxy : public AbstractIntProperty {
   public:
     IntPropertyProxy (ParentProcess* parent, const string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }

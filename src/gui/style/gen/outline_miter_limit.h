@@ -32,7 +32,7 @@ namespace djnn
     OutlineMiterLimit (ParentProcess* parent, const string& name, int limit);
     virtual ~OutlineMiterLimit ();
     void draw () override;
-    OutlineMiterLimit* clone () override;
+    OutlineMiterLimit* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (int& limit);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

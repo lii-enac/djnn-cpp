@@ -22,7 +22,7 @@ namespace djnn {
   public:
     Spike (ParentProcess* parent, const string& name, bool model = true) : FatProcess (name, model) { finalize_construction (parent, name); };
     virtual ~Spike () {};
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
     bool pre_activate () override;
     void post_activate () override;

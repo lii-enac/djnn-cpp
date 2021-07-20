@@ -186,12 +186,20 @@ namespace djnn
   }
 
   SwitchList*
-  SwitchList::clone ()
+  SwitchList::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    SwitchList* clone = new SwitchList (nullptr, get_name());
+    /*SwitchList* clone = new SwitchList (nullptr, get_name());
     for (auto c : _children) {
       clone->add_child (c->clone (), c->get_name (this));
     }
+    return clone;*/
+    auto * clone = new SwitchList (nullptr, get_name());
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
     return clone;
   }
 

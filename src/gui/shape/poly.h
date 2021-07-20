@@ -16,7 +16,7 @@ namespace djnn
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
-    PolyPoint* clone () override;
+    PolyPoint* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
     void notify_change (unsigned int nm) override { _damaged |= nm; get_parent ()->get_parent()->notify_change (nm); }
   protected:
@@ -37,7 +37,7 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    Poly* clone () override;
+    Poly* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void set_bounding_box (double x, double y, double w, double h);
   protected:
     void impl_activate () override;

@@ -115,15 +115,19 @@ namespace djnn
   }
 #endif
 
-  FatProcess*
-  DoubleProperty::clone ()
+  DoubleProperty*
+  DoubleProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new DoubleProperty (nullptr, get_name (), get_value());
+    auto res = new DoubleProperty (nullptr, get_name (), get_value());
+    origs_clones[this] = res;
+    return res;
   }
 
-  FatProcess*
-  DoublePropertyProxy::clone ()
+  DoublePropertyProxy*
+  DoublePropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new DoublePropertyProxy (nullptr, get_name (), get_ref_value());
+    auto res = new DoublePropertyProxy (nullptr, get_name (), get_ref_value());
+    origs_clones[this] = res;
+    return res;
   }
 }

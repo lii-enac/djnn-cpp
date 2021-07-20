@@ -49,8 +49,10 @@ namespace djnn
 #endif
 
   FatProcess* 
-  Spike::clone ()
+  Spike::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Spike (nullptr, get_name ());
+    auto res = new Spike (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
 }

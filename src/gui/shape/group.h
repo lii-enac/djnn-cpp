@@ -13,7 +13,8 @@ namespace djnn {
         void impl_activate () override;
         void impl_deactivate () override;
         void draw () override;
-        Group* clone () override;
+        //Group* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+        Group* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     protected:
         AbstractGObj *_gobj;
     };

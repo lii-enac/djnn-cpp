@@ -148,9 +148,11 @@ namespace djnn
 
   
   OutlineWidth*
-  OutlineWidth::clone ()
+  OutlineWidth::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new OutlineWidth (nullptr, get_name (), raw_props.width);
+    auto res = new OutlineWidth (nullptr, get_name (), raw_props.width);
+    origs_clones[this] = res;
+    return res;
   }
 
 

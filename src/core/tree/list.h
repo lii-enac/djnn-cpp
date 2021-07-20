@@ -54,7 +54,7 @@ namespace djnn {
   public:
     List (ParentProcess* parent, const string& name);
     virtual ~List ();
-    List* clone () override;
+    List* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     void finalize_child_insertion (FatChildProcess *child) override;
   public:

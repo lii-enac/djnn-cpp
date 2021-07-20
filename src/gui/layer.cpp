@@ -80,9 +80,9 @@ namespace djnn
   }
 
   Layer*
-  Layer::clone ()
+  Layer::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    Layer* newg = new Layer (nullptr, get_name ());
+    /*Layer* newg = new Layer (nullptr, get_name ());
 
     for (auto c : _children) {
       auto * child = c->clone ();
@@ -90,7 +90,16 @@ namespace djnn
         newg->add_child (child, this->find_child_name(c));
     }
 
-    return newg;
+    return newg;*/
+
+    auto * clone = new Layer (nullptr, get_name ());
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
+    return clone;
   }
 
   void

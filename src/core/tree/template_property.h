@@ -49,7 +49,7 @@ namespace djnn {
     public:
         TemplateProperty (Process* parent, const string& name, int v)
         : AbstractTemplateProperty (parent, name), value(v) {}
-        Process* clone () override;
+        Process* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     protected:
         virtual X& get_ref_value() override { return value; }
         virtual const X& get_ref_value() const override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
     public:
         IntPropertyProxy (Process* parent, const string& name, X &v, int notify_mask=notify_none)
         : AbstractTemplateProperty (parent, name, notify_mask), value(v) {}
-        Process* clone () override;
+        Process* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     protected:
         virtual X& get_ref_value() override { return value; }
         virtual const X& get_ref_value() const override { return value; }

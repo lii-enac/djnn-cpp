@@ -10,7 +10,7 @@ namespace djnn {
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~OutlineOpacity () {}
     void draw () override;
-    OutlineOpacity* clone () override;
+    OutlineOpacity* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class FillOpacity : public AbstractOpacity
@@ -20,7 +20,7 @@ namespace djnn {
         AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~FillOpacity () {}
     void draw () override;
-    FillOpacity* clone () override;
+    FillOpacity* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
 }

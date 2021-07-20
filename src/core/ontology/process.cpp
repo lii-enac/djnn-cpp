@@ -746,14 +746,22 @@ namespace djnn
   #endif
   
   CoreProcess*
-  CoreProcess::clone () {
+  CoreProcess::clone ()
+  {
+    map<CoreProcess*, CoreProcess*> origs_clones;
+    return impl_clone (origs_clones);
+  };
+
+  CoreProcess*
+  CoreProcess::impl_clone (std::map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
     warning (this, "clone is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
     #endif
   
     return nullptr;
-  };
+  }
 
   static int indent = -1; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 

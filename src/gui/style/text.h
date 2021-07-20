@@ -17,7 +17,7 @@ namespace djnn {
     FontSize (ParentProcess* parent, const string& name, int unit, double size);
     void impl_activate () override;
     void draw () override;
-    FontSize* clone () override;
+    FontSize* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
   };
 
@@ -27,7 +27,7 @@ namespace djnn {
     FontWeight (ParentProcess* parent, const string& name, int weight);
     void impl_activate () override;
     void draw () override;
-    FontWeight* clone () override;
+    FontWeight* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class FontStyle : public AbstractPropFontStyle // AbstractStyle
@@ -37,7 +37,7 @@ namespace djnn {
     FontStyle (ParentProcess* parent, const string& name, int style);
     void impl_activate () override;
     void draw () override;
-    FontStyle* clone () override;
+    FontStyle* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class FontFamily : public AbstractPropFontFamily // AbstractStyle
@@ -46,6 +46,6 @@ namespace djnn {
     FontFamily (ParentProcess* parent, const string& name, const string& family);
     void impl_activate () override;
     void draw () override;
-    FontFamily* clone () override;
+    FontFamily* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 }

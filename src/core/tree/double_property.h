@@ -56,7 +56,7 @@ namespace djnn {
   class DoubleProperty : public AbstractDoubleProperty {
   public:
     DoubleProperty (ParentProcess* parent, const string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
-    FatProcess* clone () override;
+    DoubleProperty* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
     virtual double& get_ref_value() override { return value; }
     virtual const double& get_ref_value() const override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
     DoublePropertyProxy (ParentProcess* parent, const string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
-    FatProcess* clone () override;
+    DoublePropertyProxy* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
     virtual double& get_ref_value() override { return value; }
     virtual const double& get_ref_value() const override { return value; }

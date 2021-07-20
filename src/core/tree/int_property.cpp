@@ -94,15 +94,19 @@ namespace djnn
   }
 
   FatProcess*
-  IntProperty::clone ()
+  IntProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new IntProperty (nullptr, get_name (), get_value());
+    auto res = new IntProperty (nullptr, get_name (), get_value());
+    origs_clones[this] = res;
+    return res;
   }
 
   FatProcess*
-  IntPropertyProxy::clone ()
+  IntPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new IntPropertyProxy (nullptr, get_name (), get_ref_value());
+    auto res = new IntPropertyProxy (nullptr, get_name (), get_ref_value());
+    origs_clones[this] = res;
+    return res;
   }
 
 #ifndef DJNN_NO_DEBUG

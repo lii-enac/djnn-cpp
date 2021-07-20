@@ -32,7 +32,7 @@ namespace djnn
     FillRule (ParentProcess* parent, const string& name, int rule);
     virtual ~FillRule ();
     void draw () override;
-    FillRule* clone () override;
+    FillRule* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (int& rule);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

@@ -324,7 +324,7 @@ namespace djnn {
     void draw () override;
     virtual void transform( double& x, double& y) override;
     virtual void inverse_transform( double& x, double& y) override;
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class GradientHomography : public AbstractHomography
@@ -338,7 +338,7 @@ namespace djnn {
       double m31=0, double m32=0, double m33=1);
     virtual ~GradientHomography ();
     void draw () override;
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class SimpleGradientTransform : public AbstractHomography
@@ -350,6 +350,6 @@ namespace djnn {
      double f);
     virtual ~SimpleGradientTransform ();
     void draw () override;
-    FatProcess* clone () override;
+    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 }

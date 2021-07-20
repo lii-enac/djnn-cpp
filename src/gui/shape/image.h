@@ -16,7 +16,7 @@ namespace djnn {
     Image (ParentProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
-    Image* clone () override;
+    Image* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     virtual FatChildProcess* find_child_impl (const string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
@@ -44,7 +44,7 @@ namespace djnn {
       DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
-      DataImage* clone () override;
+      DataImage* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
       virtual FatChildProcess* find_child_impl (const string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}

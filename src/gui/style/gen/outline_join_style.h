@@ -32,7 +32,7 @@ namespace djnn
     OutlineJoinStyle (ParentProcess* parent, const string& name, int join);
     virtual ~OutlineJoinStyle ();
     void draw () override;
-    OutlineJoinStyle* clone () override;
+    OutlineJoinStyle* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (int& join);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

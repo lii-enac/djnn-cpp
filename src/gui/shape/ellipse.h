@@ -10,7 +10,7 @@ namespace djnn
   {
   public:
     Ellipse (ParentProcess* parent, const string& name, double cx, double cy, double rx, double ry);
-    Ellipse* clone () override;
+    Ellipse* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;

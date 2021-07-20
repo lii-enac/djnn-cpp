@@ -133,7 +133,6 @@ namespace djnn
     disable(_cjoin);
     AbstractStyle::impl_deactivate ();
   }
-
   
   void
   OutlineJoinStyle::draw ()
@@ -144,12 +143,12 @@ namespace djnn
     }
   }
 
-
-  
   OutlineJoinStyle*
-  OutlineJoinStyle::clone ()
+  OutlineJoinStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
+    auto res = new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
+    origs_clones[this] = res;
+    return res;
   }
 
 

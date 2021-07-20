@@ -33,7 +33,7 @@ namespace djnn
     OutlineWidth (ParentProcess* parent, const string& name, double width);
     virtual ~OutlineWidth ();
     void draw () override;
-    OutlineWidth* clone () override;
+    OutlineWidth* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double& width);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

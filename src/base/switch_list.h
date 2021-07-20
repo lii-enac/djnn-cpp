@@ -59,7 +59,7 @@ namespace djnn {
     FatChildProcess* find_child_impl (const string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
-    SwitchList* clone () override;
+    SwitchList* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif

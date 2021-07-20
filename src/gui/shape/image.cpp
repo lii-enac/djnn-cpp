@@ -124,9 +124,11 @@ namespace djnn
   }
 
   Image*
-  Image::clone () 
+  Image::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) 
   {
-    return new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    auto res = new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    origs_clones[this] = res;
+    return res;
   }
 
   DataImage::DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w,
@@ -194,8 +196,10 @@ namespace djnn
   }
 
   DataImage*
-  DataImage::clone ()
+  DataImage::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    auto res = new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    origs_clones[this] = res;
+    return res;
   }
 }

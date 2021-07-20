@@ -73,7 +73,8 @@ namespace djnn {
   public:
     Component (ParentProcess* parent, const string& name) : Container (parent, name) { finalize_construction (parent, name); }
     //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    Component* clone () override;
+    //Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif

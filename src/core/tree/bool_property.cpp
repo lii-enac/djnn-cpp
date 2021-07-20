@@ -133,14 +133,18 @@ namespace djnn
 #endif
 
   FatProcess*
-  BoolProperty::clone ()
+  BoolProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new BoolProperty (nullptr, get_name (), get_value());
+    auto res = new BoolProperty (nullptr, get_name (), get_value());
+    origs_clones[this] = res;
+    return res;
   }
 
   FatProcess*
-  BoolPropertyProxy::clone ()
+  BoolPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new BoolPropertyProxy (nullptr, get_name (), get_ref_value());
+    auto res = new BoolPropertyProxy (nullptr, get_name (), get_ref_value());
+    origs_clones[this] = res;
+    return res;
   }
 }

@@ -31,9 +31,11 @@ namespace djnn
   }
 
   Line*
-  Line::clone ()
+  Line::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+    auto res = new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+    origs_clones[this] = res;
+    return res;
   }
  
   void

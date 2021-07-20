@@ -134,7 +134,6 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
   }
 
-  
   void
   DashOffset::draw ()
   {
@@ -144,12 +143,12 @@ namespace djnn
     }
   }
 
-
-  
   DashOffset*
-  DashOffset::clone ()
+  DashOffset::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new DashOffset (nullptr, get_name (), raw_props.offset);
+    auto res = new DashOffset (nullptr, get_name (), raw_props.offset);
+    origs_clones[this] = res;
+    return res;
   }
 
 

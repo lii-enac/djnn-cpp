@@ -148,9 +148,11 @@ namespace djnn
 
   
   Texture*
-  Texture::clone ()
+  Texture::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Texture (nullptr, get_name (), raw_props.path);
+    auto res = new Texture (nullptr, get_name (), raw_props.path);
+    origs_clones[this] = res;
+    return res;
   }
 
 

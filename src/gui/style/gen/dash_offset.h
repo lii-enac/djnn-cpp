@@ -32,7 +32,7 @@ namespace djnn
     DashOffset (ParentProcess* parent, const string& name, double offset);
     virtual ~DashOffset ();
     void draw () override;
-    DashOffset* clone () override;
+    DashOffset* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double& offset);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

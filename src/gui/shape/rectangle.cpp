@@ -31,9 +31,11 @@ namespace djnn
   }
 
   Rectangle*
-  Rectangle::clone ()
+  Rectangle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new Rectangle (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
+    auto res = new Rectangle (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height, raw_props.rx, raw_props.ry);
+    origs_clones[this] = res;
+    return res;
   }
 
   void

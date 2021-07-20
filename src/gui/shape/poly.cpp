@@ -124,8 +124,10 @@ namespace djnn {
   }
 
   PolyPoint*
-  PolyPoint::clone () {
-    return new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
+  PolyPoint::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) {
+    auto res = new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
+    origs_clones[this] = res;
+    return res;
   }
 
   Poly::Poly (ParentProcess* parent, const string& name, int closed) :
@@ -202,12 +204,21 @@ namespace djnn {
   }
 
   Poly*
-  Poly::clone ()
+  Poly::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {  
-    Poly* newp = new Poly (nullptr, get_name (), _closed);
+    /*Poly* newp = new Poly (nullptr, get_name (), _closed);
     for (auto p: _points->children ()) {
       newp->_points->add_child (p->clone (), "");
     }
-    return newp;
+    return newp;*/
+
+    auto * clone = new Poly (nullptr, get_name (), _closed);
+    for (auto c : _points->children ()) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->_points->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
+    return clone;
   }
 }

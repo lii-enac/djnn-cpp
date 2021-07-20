@@ -32,7 +32,7 @@ namespace djnn
     PathMove (ParentProcess* parent, const string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
-    PathMove* clone () override;
+    PathMove* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class PathLine : public PathPoint
@@ -41,7 +41,7 @@ namespace djnn
     PathLine (ParentProcess* parent, const string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
-    PathLine* clone () override;
+    PathLine* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 
   class PathQuadratic : public AbstractGObj
@@ -55,7 +55,7 @@ namespace djnn
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
-    PathQuadratic* clone () override;
+    PathQuadratic* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     struct raw_props_t { double x1,y1,x,y; };
     raw_props_t raw_props;
@@ -77,7 +77,7 @@ namespace djnn
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y ()  { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
-    PathCubic* clone () override;
+    PathCubic* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     struct raw_props_t { double x1,y1,x2,y2,x,y; };
     raw_props_t raw_props;
@@ -101,7 +101,7 @@ namespace djnn
     AbstractDoubleProperty* x ()    { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y ()    { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
-    PathArc* clone () override;
+    PathArc* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     struct raw_props_t { double rx,ry,rotx,fl,swfl,x,y; };
     raw_props_t raw_props;
@@ -116,7 +116,7 @@ namespace djnn
     PathClosure (ParentProcess* parent, const string& name);
     virtual ~PathClosure () {}
     void draw () override;
-    PathClosure* clone () override;
+    PathClosure* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     void impl_activate () override
     {
@@ -137,7 +137,8 @@ namespace djnn
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    Path* clone () override;
+    //Path* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    Path* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void set_bounding_box (double x, double y, double w, double h);
     void invalidate_bounding_box () { _bbw->set_value(-1, true); }
     bool is_bounding_box_valid () const { return _bbw->get_value()>=0; }

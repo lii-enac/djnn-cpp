@@ -33,7 +33,7 @@ namespace djnn
     Texture (ParentProcess* parent, const string& name, const string& path);
     virtual ~Texture ();
     void draw () override;
-    Texture* clone () override;
+    Texture* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (string& path);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;

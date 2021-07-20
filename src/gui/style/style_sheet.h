@@ -8,7 +8,7 @@ namespace djnn {
   public:
     StyleSheet (ParentProcess* parent, const string& name);
     virtual ~StyleSheet () override {}
-    StyleSheet* clone () override;
+    StyleSheet* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     const string& classname () { return _classname; }
     int id () { return _id; }
     static int get_id (const string& classname);

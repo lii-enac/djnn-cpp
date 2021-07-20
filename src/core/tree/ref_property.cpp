@@ -164,8 +164,10 @@ namespace djnn
 #endif
 
   RefProperty* 
-  RefProperty::clone ()
+  RefProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new RefProperty (nullptr, get_name (), _value);
+    auto res = new RefProperty (nullptr, get_name (), _value);
+    origs_clones[this] = res;
+    return res;
   }
 }

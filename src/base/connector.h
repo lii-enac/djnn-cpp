@@ -119,7 +119,7 @@ public:
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
-    Connector* clone () override { /* TBD --- but annoying when loading text from svg */ return nullptr;}
+    Connector* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif

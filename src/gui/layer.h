@@ -46,7 +46,7 @@ namespace djnn {
       void set_pick_cache (void* cache) { _pick_cache = cache; }
       bool invalid_cache () { return _invalid_cache; }
       void set_invalid_cache (bool v);
-      Layer* clone () override;
+      Layer* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
       FatProcess* damaged () { return &_damaged; }
       process_type_e get_process_type () const override { return LAYER_T; }
 

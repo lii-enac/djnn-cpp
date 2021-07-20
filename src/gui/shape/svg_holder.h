@@ -8,11 +8,12 @@ namespace djnn {
     public:
         SVGHolder (ParentProcess* parent, const string& name) : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }
         virtual ~SVGHolder () {}
-        SVGHolder* clone () override;
+        //SVGHolder* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+        SVGHolder* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
         FatChildProcess* find_child_impl (const string& path) override;
-        void set_gobj (FatProcess* gobj) { _gobj = gobj; }
-        FatProcess* get_gobj () { return _gobj; }
+        void set_gobj (CoreProcess* gobj) { _gobj = gobj; }
+        CoreProcess* get_gobj () { return _gobj; }
     private:
-        FatProcess* _gobj;
+        CoreProcess* _gobj;
     };
 }

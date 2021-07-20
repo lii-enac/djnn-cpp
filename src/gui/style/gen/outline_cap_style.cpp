@@ -133,7 +133,6 @@ namespace djnn
     disable(_ccap);
     AbstractStyle::impl_deactivate ();
   }
-
   
   void
   OutlineCapStyle::draw ()
@@ -143,13 +142,13 @@ namespace djnn
       Backend::instance ()->load_outline_cap_style (this);
     }
   }
-
-
   
   OutlineCapStyle*
-  OutlineCapStyle::clone ()
+  OutlineCapStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new OutlineCapStyle (nullptr, get_name (), raw_props.cap);
+    auto res = new OutlineCapStyle (nullptr, get_name (), raw_props.cap);
+    origs_clones[this] = res;
+    return res;
   }
 
 

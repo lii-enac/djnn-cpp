@@ -33,9 +33,11 @@ namespace djnn
   }
 
   RectangleClip*
-  RectangleClip::clone ()
+  RectangleClip::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    auto res = new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    origs_clones[this] = res;
+    return res;
   }
 
   void

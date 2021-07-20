@@ -33,8 +33,10 @@ namespace djnn
 #endif
 
   FatProcess* 
-  Blank::clone () 
+  Blank::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) 
   {
-  	return new Blank (nullptr, get_name ());
+  	auto res = new Blank (nullptr, get_name ());
+    origs_clones[this] = res;
+    return res;
   }
 }

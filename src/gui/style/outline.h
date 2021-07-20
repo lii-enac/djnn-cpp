@@ -24,7 +24,7 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    DashArray* clone () override;
+    DashArray* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
     vector<double> _dash_array;
   };
@@ -38,6 +38,6 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    NoDashArray* clone () override;
+    NoDashArray* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   };
 }*/

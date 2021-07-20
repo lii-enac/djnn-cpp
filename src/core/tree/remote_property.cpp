@@ -122,9 +122,11 @@ namespace djnn
 #endif
 
   FatProcess* 
-  RemoteProperty::clone ()
+  RemoteProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new RemoteProperty (nullptr, get_name (), _value);
+    auto res = new RemoteProperty (nullptr, get_name (), _value);
+    origs_clones[this] = res;
+    return res;
   }
 
 }

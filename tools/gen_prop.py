@@ -191,9 +191,11 @@ def_draw = """
 
 def_clone = """
   %(CLASS)s*
-  %(CLASS)s::clone ()
+  %(CLASS)s::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    return new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
+    auto res = new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
+    origs_clones[this] = res;
+    return res;
   }
 """
 
@@ -457,7 +459,7 @@ def gen_prop(dc, finalize_construction=True):
         FINALIZE_CONSTRUCTION = "finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
-    decl_clone = "%(CLASS)s* clone () override;"
+    decl_clone = "%(CLASS)s* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;"
 
     DECL_DRAW = ''
     if(dc.finalize_construction):

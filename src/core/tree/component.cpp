@@ -335,13 +335,26 @@ namespace djnn
 #endif
   }
 
-  Component*
-  Component::clone ()
+  /*Component*
+  Componentimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     auto * clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), this->find_child_name(c));
     }
+    return clone;
+  }*/
+
+  Component*
+  Component::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto * clone = new Component (nullptr, get_name ());
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
+    }
+    origs_clones[this] = clone;
     return clone;
   }
 

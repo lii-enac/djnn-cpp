@@ -67,16 +67,16 @@ namespace djnn
   }
 
   Group* 
-  Group::clone () 
+  Group::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    Group* newg = new Group (nullptr, get_name ());
-
+    auto * clone = new Group (nullptr, get_name ());
     for (auto c : _children) {
-      auto * child = c->clone ();
-      if (child != nullptr)
-        newg->add_child (child, this->find_child_name(c));
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
     }
-
-    return newg;
+    origs_clones[this] = clone;
+    return clone;
   }
+
 }
