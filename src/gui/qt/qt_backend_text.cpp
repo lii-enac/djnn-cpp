@@ -335,7 +335,7 @@ QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
     return 0;
   QString s (text.c_str ());
 #if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
-  int end = fm->width (s);
+  int end = qfm->width (s);
 #else
   int end = qfm->horizontalAdvance (s);
 #endif
