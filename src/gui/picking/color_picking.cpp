@@ -32,8 +32,13 @@ namespace djnn
   }
 
   void ColorPickingView::init () {
-    _pick_color = 0xff000000; // production
-    for (auto it = _color_map.cbegin(); it != _color_map.cend();) {
+    _pick_color = 0xff000000; // for production
+    //_pick_color = 0xff203040; // for debugging
+
+    // --------- code before 07/2021
+    //_color_map.clear (); // no correct anymore since Layers
+    
+    /*for (auto it = _color_map.cbegin(); it != _color_map.cend();) {
       if (!it->second.cache()) {
         if (it->first > _pick_color)
           _pick_color = it->first;
@@ -41,13 +46,28 @@ namespace djnn
       } else {
         ++it;
       }
+    }*/
+
+    // if (nocache) {
+    //   _pick_color.clear();
+    // } else {
+    // -----------------
+
+    // ---- code after 07/2021 
+    for (auto it = _color_map.cbegin(); it != _color_map.cend();  ) {
+      if (it->second.cache()) {
+        if (_pick_color < it->first) {
+          _pick_color = it->first;
+        }
+        ++it;
+      } else {
+        it = _color_map.erase(it);    // or "it = m.erase(it)" since C++11
+      }
     }
 
-    //_pick_color = 0xff203040; // for debugging
-    seed = 0;
+    seed = 0; // no correct anymore since Layers
+
     next_color();
-    //if (!_color_map.empty ())
-    //  _color_map.clear ();
   }
 
   double
@@ -61,7 +81,8 @@ namespace djnn
   ColorPickingView::next_color()
   {
 #if 1
-    _pick_color++;
+    ++_pick_color;
+    //_pick_color+=100;
 #else
     // repeatable random, helpful for debugging
     // (maxed out to 200 to see color on white bg)
