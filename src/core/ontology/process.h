@@ -389,6 +389,6 @@ namespace djnn {
   void add_state_dependency (ParentProcess* parent, CoreProcess *p);
   void remove_state_dependency (ParentProcess* parent, CoreProcess *p);
   //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
-  inline template <typename P> P* clone (P *p) { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
+  template <typename P> P* clone (P *p) { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
 
 }
