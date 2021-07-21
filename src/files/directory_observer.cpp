@@ -12,20 +12,7 @@
  *
  */
 
-#ifndef __has_include
-  static_assert(false, "__has_include not supported");
-#else
-#  if __has_include(<filesystem>)
-#    include <filesystem>
-  namespace filesystem = std::filesystem;
-#  elif __has_include(<experimental/filesystem>)
-#    include <experimental/filesystem>
-  namespace filesystem = experimental::filesystem;
-#  elif __has_include(<boost/filesystem.hpp>)
-#    include <boost/filesystem.hpp>
-  namespace filesystem = boost::filesystem;
-#  endif
-#endif
+#include "core/utils/filesystem.h"
 #include "files.h"
 #include "core/core-dev.h"
 #include "exec_env/global_mutex.h"
@@ -128,8 +115,8 @@ namespace djnn
   void
   DirectoryObserver::iterate ()
   {
-    vector<std::filesystem::path> new_files;
-    vector<std::string> old_files;
+    vector<filesystem::path> new_files;
+    vector<string> old_files;
     bool added = false;
     bool removed = false;
     _added_files.remove_all ();
@@ -137,9 +124,9 @@ namespace djnn
     #if DJNN_STL_STD
     const auto& path = _path.get_value();
     #elif DJNN_STL_EASTL
-    const std::string path = _path.get_value().c_str();
+    const string path = _path.get_value().c_str();
     #endif
-    for (auto &p: std::filesystem::directory_iterator(path)) {
+    for (auto &p: filesystem::directory_iterator(path)) {
       new_files.push_back (p);
     }
     for (auto &p : _files.children ()) {
@@ -155,8 +142,8 @@ namespace djnn
         }
       }
       if (!found) {
-        std::string full_path = nf.root_directory().string() + nf.relative_path().string();
-        CoreProcess * file = new File (&_files, "",full_path.c_str(), nf.filename().string().c_str(), std::filesystem::is_directory (nf));
+        string full_path = nf.root_directory().string() + nf.relative_path().string();
+        CoreProcess * file = new File (&_files, "",full_path.c_str(), nf.filename().string().c_str(), filesystem::is_directory (nf));
         _added_files.add_one (file);
         added = true;
       }
