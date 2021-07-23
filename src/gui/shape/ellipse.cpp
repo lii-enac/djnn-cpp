@@ -35,6 +35,7 @@ namespace djnn
   {
     auto res = new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
  

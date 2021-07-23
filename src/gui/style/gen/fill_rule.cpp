@@ -134,6 +134,7 @@ namespace djnn
     AbstractStyle::impl_deactivate ();
   }
 
+  
   void
   FillRule::draw ()
   {
@@ -142,12 +143,15 @@ namespace djnn
       Backend::instance ()->load_fill_rule (this);
     }
   }
+
+
   
   FillRule*
   FillRule::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     auto res = new FillRule (nullptr, get_name (), raw_props.rule);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

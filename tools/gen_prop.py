@@ -195,6 +195,7 @@ def_clone = """
   {
     auto res = new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 """

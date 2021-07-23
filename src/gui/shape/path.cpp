@@ -129,6 +129,7 @@ namespace djnn
   {
     auto res = new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -146,6 +147,7 @@ namespace djnn
   {
     auto res = new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -176,6 +178,7 @@ namespace djnn
   {
     auto res = new PathClosure (nullptr, get_name ());
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -305,6 +308,7 @@ namespace djnn
   {
     auto res = new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -460,6 +464,7 @@ namespace djnn
   {
     auto res = new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -628,6 +633,7 @@ namespace djnn
   {
     auto res = new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

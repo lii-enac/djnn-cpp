@@ -151,6 +151,7 @@ namespace djnn
   {
     auto res = new OutlineMiterLimit (nullptr, get_name (), raw_props.limit);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

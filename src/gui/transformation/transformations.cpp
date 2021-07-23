@@ -93,6 +93,7 @@ namespace djnn
   {
     auto res = new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -127,6 +128,7 @@ namespace djnn
   {
     auto res = new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -189,6 +191,7 @@ namespace djnn
   {
     auto res = new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -223,6 +226,7 @@ namespace djnn
   {
     auto res = new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -277,6 +281,7 @@ namespace djnn
   {
     auto res = new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -311,6 +316,7 @@ namespace djnn
   {
     auto res = new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -352,6 +358,7 @@ namespace djnn
   {
     auto res = new SkewX (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -386,6 +393,7 @@ namespace djnn
   {
     auto res = new GradientSkewX (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -428,6 +436,7 @@ namespace djnn
   {
     auto res = new SkewY (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -461,6 +470,7 @@ namespace djnn
   {
     auto res = new GradientSkewY (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -2166,6 +2176,7 @@ namespace djnn
                            raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
                            raw_props.m41, raw_props.m42, raw_props.m43, raw_props.m44);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -2203,6 +2214,7 @@ namespace djnn
                                     raw_props.m21, raw_props.m22, raw_props.m23,
                                     raw_props.m31, raw_props.m32, raw_props.m33);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -2240,6 +2252,7 @@ namespace djnn
                                    raw_props.m21, raw_props.m22, raw_props.m23,
                                    raw_props.m31, raw_props.m32, raw_props.m33);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 }

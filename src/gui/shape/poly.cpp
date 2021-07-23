@@ -127,6 +127,7 @@ namespace djnn {
   PolyPoint::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) {
     auto res = new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

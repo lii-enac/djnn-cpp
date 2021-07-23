@@ -151,6 +151,7 @@ namespace djnn
   {
     auto res = new TextAnchor (nullptr, get_name (), raw_props.anchor);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

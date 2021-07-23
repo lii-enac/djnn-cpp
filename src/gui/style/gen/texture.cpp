@@ -152,6 +152,7 @@ namespace djnn
   {
     auto res = new Texture (nullptr, get_name (), raw_props.path);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 

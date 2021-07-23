@@ -83,6 +83,17 @@ namespace djnn
     return *prop;
   }
 
+  void
+  AbstractGObj::impl_clone_properties (CoreProcess *clone, map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    for (auto & pname: get_properties_name ()) {
+      auto * p = AbstractGObj::find_child_impl(pname);
+      if (p) {
+        origs_clones[p] = clone->find_child_impl(pname);
+      }
+    }
+  }
+
 
   AbstractGObjImpl::~AbstractGObjImpl () {}
 

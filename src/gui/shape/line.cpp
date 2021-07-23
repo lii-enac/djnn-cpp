@@ -35,6 +35,7 @@ namespace djnn
   {
     auto res = new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
  

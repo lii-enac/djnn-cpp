@@ -52,6 +52,7 @@ namespace djnn
   {
     auto res = new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -69,6 +70,7 @@ namespace djnn
   {
     auto res = new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -86,6 +88,7 @@ namespace djnn
   {
     auto res = new NoOutline (nullptr, get_name ());
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -103,6 +106,7 @@ namespace djnn
   {
     auto res = new NoFill (nullptr, get_name ());
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
   
@@ -119,13 +123,8 @@ namespace djnn
   OutlineOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     auto res = new OutlineOpacity (nullptr, get_name (), raw_props.a);
-    auto a = AbstractStyle::find_child_impl("a");
-    if (a) {
-      origs_clones[a] = res->a();
-    }
     origs_clones[this] = res;
-    
-    
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -142,11 +141,8 @@ namespace djnn
   FillOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     auto res = new FillOpacity (nullptr, get_name (), raw_props.a);
-    auto a = AbstractStyle::find_child_impl("a");
-    if (a) {
-      origs_clones[a] = res->a();
-    }
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -167,6 +163,7 @@ namespace djnn
       res->_dash_array.push_back(d);
     }
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -184,6 +181,7 @@ namespace djnn
   {
     auto res = new NoDashArray (nullptr, get_name ());
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -211,6 +209,7 @@ namespace djnn
   {
     auto res = new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -345,6 +344,7 @@ namespace djnn
   {
     auto res = new RefLinearGradient (nullptr, get_name (), _lg);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -498,6 +498,7 @@ namespace djnn
   {
     auto res = new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -530,6 +531,7 @@ namespace djnn
   {
     auto res = new FontWeight (nullptr, get_name (), raw_props.weight);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -568,6 +570,7 @@ namespace djnn
   {
     auto res = new FontStyle (nullptr, get_name (), raw_props.style);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 
@@ -600,6 +603,7 @@ namespace djnn
   {
     auto res = new FontFamily (nullptr, get_name (), raw_props.family);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
 }

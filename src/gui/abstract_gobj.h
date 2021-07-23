@@ -70,6 +70,8 @@ namespace djnn
 
     void create_Gobj_update_coupling (CoreProcess **prop, CouplingWithData **cprop);
 
+    void impl_clone_properties (CoreProcess* clone, map<CoreProcess*, CoreProcess*>& origs_clones);
+
   protected:
     void update_frame_if_necessary ();
     Window * _frame;

@@ -35,6 +35,7 @@ namespace djnn
   {
     auto res = new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);
     origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
     return res;
   }
  
