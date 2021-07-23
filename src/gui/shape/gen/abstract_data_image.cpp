@@ -31,6 +31,8 @@
 #include "physics/physics.h"
 
 #include "gui/shape/gen/abstract_image.h"
+using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data ()' compile
+
 #include "abstract_data_image.h"
 
 namespace djnn

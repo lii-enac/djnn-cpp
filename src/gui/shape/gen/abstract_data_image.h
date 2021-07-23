@@ -23,6 +23,8 @@
 #include "core/ontology/coupling.h"
 
 #include "gui/shape/gen/abstract_image.h"
+using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data ()' compile
+
 
 namespace djnn
 {
@@ -36,7 +38,7 @@ namespace djnn
     void get_properties_values (string*& data, double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;
-		//AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
+		AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
 
   protected:
     struct raw_props_t { string* data; };
