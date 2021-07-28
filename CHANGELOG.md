@@ -9,6 +9,83 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
 
 
+## [1.16.0] - 2021-07-28
+    note: debut on changelog. This section has to be completed, if we have time. 
+
+### NOTE:
+    - djnn is still using Qt5. Not compatible with Qt6 yet.
+### NEW
+    - New Component: 
+        - VoidProcess
+        - SimpleTextEdit, SimpleText
+        - DirectoryObserver
+        - LazyAssignment : do not trigger if the new value is the same old value.
+    - New execution engine :
+        - usgin deque instead of vector
+        - respecting order
+        - More sensitive to loops on dataflow but also detect them.
+        - A lot more efficient: time, and memory. Execute only what it should
+        - Moved _outputs_nodes outside activation loop
+        - Old system still exist : _EXEC_FULL_ORDERED_VERTICES = 1
+    - New debug options that can be called directly from code :
+        - _DEBUG_SEE_COLOR_PICKING_VIEW
+        - _DEBUG_GRAPH_CYCLE_DETECT
+        - _DEBUG_SEE_ACTIVATION_SEQUENCE
+        - _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US
+        - _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED
+    - New Clone API (including complexe component : connector) but implementation for all component other thatn GUI is not complet yet.
+    - New Added vscode compatibility
+    - New compatibility with C++17
+    - New optimise version of assignment 'perform_action' function
+    - New eastl support (optionnal)
+### Added
+    - Incr Component : add a 'step' child
+    - Added setfd option on iofd
+    - Added background color and opacity on window/frame : background_opacity and background_color
+    - Improved remotery support
+    - Improved Graph debug info : 
+    - Added tools/sdl-drmkms-install.md
+    - Added a function to check the order between Processes : graph_check_order
+
+### Changed
+    - Improved code and conception of Assignment.
+    - Changed on add/remove edge : 
+        - Now coupling manages the edge addition/removal in graph 
+        - Removed no more necessary add/remove_edge instructions
+        - Add a dedicated component to create/delete graph edges
+        - NO longer use immediate coupling
+    - Changed deactivating instead of DEACTIVATION in actions.
+    - Improved code / clean up code.
+    - Enabled the isModel argument for Spike
+    - Changed and added graph edges between an AssignmentSequence and the destination of its children Assignment
+    - Improved package system building : brew, deb ,pkg
+    - Improved code on DataImage
+
+### Removed
+    - Removed event synthesis on press, release and wheel but keep it for move, close or paint
+    - Disabled the possibility to have multiple activation for a process through the activator
+    - Removed explicite path to moc in Makefile to be sur to use the correct one (qt5 vs qt6)
+    - Removed all using namespace 'std' to prepare for 'stl' implementation swap
+### Fixed
+    - Fixed FSM : 
+        - semantics
+        - possible concurrency issue between transitions
+        - state are not (de)activate directly in transition action, let the execution graph do the job
+    - Fixed color_picking map management.   
+    - Fixed Dictonary :  inhibit find when add is triggered
+    - Fixed a bug on find_child_impl for Abstract_gshape with ui
+    - Fixed ms padding in Wallclock
+    - Fixed isModel initialisation
+    - Fixed window initialisation.
+    - Fixed ordering issue in Finder component.
+    - Fixed name on ClampMin/ClampMax.
+    - Fixed a touch issue with some trackpads.
+    - Fixed code coverage 
+    - Fixed dev dependencies and pkgconfig file generation
+    - Fixed compilation with qt5 on macosx
+    - Fixed SDL Compilation
+    - Fixed typo and comments
+
 ## [1.15.0] - 2021-01-28
    
 ### NEW

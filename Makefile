@@ -32,7 +32,7 @@ config.mk:
 	cp config.default.mk config.mk
 
 MAJOR = 1
-MINOR = 15
+MINOR = 16
 MINOR2 = 0
 
 include config.default.mk
