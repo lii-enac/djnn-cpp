@@ -779,7 +779,7 @@ StartGroup(const char** attrs, FatProcess* current) {
 #ifdef DEBUG
 		fprintf (stderr, "StartGroup\n");
 #endif
-
+	djn_GraphicalShapeArgs.id = "";
 	FatProcess* e = new Group(0, "");
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
