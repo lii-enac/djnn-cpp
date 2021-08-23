@@ -99,6 +99,14 @@ static map <string, djn_XMLTagHandler> handlers={
   {"style",{&StartStyle, &EndElement, &StyleData}},
 };
 
+static int _index_uid_element = 0;
+static string get_new_uid(FatProcess* current)
+{
+	if (current != nullptr)
+		std::cerr << "djnn warning - SVG element without id is not allowed - parent name: " << current->get_name() << std::endl;
+	return "_uid_" + to_string(_index_uid_element++);
+}
+
 djn_XMLTagHandler*
 SVGElements_Hash::djn_SVGElementsLookup (const char *str, unsigned int len)
 {
@@ -231,6 +239,7 @@ StartRect(const char** attrs, FatProcess* current) {
 	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_RectArgs.x = 0.;
 	djn_RectArgs.y = 0.;
 	djn_RectArgs.w = 0.;
@@ -251,6 +260,9 @@ StartRect(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (djn_RectArgs.rx == -1.) {
@@ -296,6 +308,7 @@ StartImage (const char** attrs, FatProcess* current)
   FatProcess* e;
   djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
   djn_GraphicalShapeArgs.classname = "";
+  djn_GraphicalShapeArgs.id = "";
   djn_ImgArgs.x = 0.;
   djn_ImgArgs.y = 0.;
   djn_ImgArgs.w = 0.;
@@ -309,14 +322,17 @@ StartImage (const char** attrs, FatProcess* current)
     int ret =
 #endif
     XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
-			    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+			    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);	
 #ifdef DEBUG
     if (!ret)
     fprintf (stderr, "unknown attribute '%s' in img element\n", *attrs);
 #endif
     attrs++;
     attrs++;
-  }
+	}
+  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
+	}
 
   if (holder)
     djn__CheckStroke (holder);
@@ -356,6 +372,7 @@ StartEllipse(const char** attrs, FatProcess* current) {
 	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_EllipseArgs.cx = 0.;
 	djn_EllipseArgs.cy = 0.;
 	djn_EllipseArgs.rx = 0.;
@@ -374,6 +391,9 @@ StartEllipse(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (holder)
@@ -412,6 +432,7 @@ StartCircle(const char** attrs, FatProcess* current) {
 	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_CircleArgs.cx = 0.;
 	djn_CircleArgs.cy = 0.;
 	djn_CircleArgs.r = 0.;
@@ -429,6 +450,9 @@ StartCircle(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (holder)
@@ -465,6 +489,7 @@ StartLine(const char** attrs, FatProcess* current) {
 	FatProcess* e;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_LineArgs.x1 = 0.;
 	djn_LineArgs.y1 = 0.;
 	djn_LineArgs.x2 = 0.;
@@ -483,6 +508,9 @@ StartLine(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (holder)
@@ -519,6 +547,7 @@ StartPoly(const char** attrs, FatProcess* current) {
 	FatProcess *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_PolyArgs.e = 0;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -535,6 +564,9 @@ StartPoly(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (holder)
@@ -601,6 +633,7 @@ StartText(const char** attrs, FatProcess* current) {
 	FatProcess *holder = new SVGHolder (nullptr, "SVGHolder");
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_TextArgs.x = 0.;
 	djn_TextArgs.y = 0.;
 	djn_TextArgs.encoding = "UTF-8";
@@ -623,6 +656,9 @@ StartText(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	djn__CheckStroke(holder);
@@ -674,6 +710,7 @@ StartTspan(const char** attrs, FatProcess* current) {
 	}
 
 	holder = new SVGHolder (nullptr, "SVGHolder");
+	djn_GraphicalShapeArgs.id = "";
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
 	while (*attrs) {
@@ -688,6 +725,9 @@ StartTspan(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	current->add_child(holder, djn_GraphicalShapeArgs.id);
@@ -712,6 +752,7 @@ StartPath(const char** attrs, FatProcess* current) {
 	FatProcess *holder = 0;
 	djn_GraphicalShapeArgs.strokeType = djnStrokeUndef;
 	djn_GraphicalShapeArgs.classname = "";
+	djn_GraphicalShapeArgs.id = "";
 	djn_PathArgs.e = 0;
 
 	/* FIXME: should manage optional, mandatory and duplicate attributes */
@@ -728,6 +769,9 @@ StartPath(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	if (djn__GrphIsInClip) {
@@ -795,6 +839,10 @@ StartGroup(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
+	}
+
 	current->add_child(e, djn_GraphicalShapeArgs.id);
 	djn__id_to_process.insert(
 	    pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
@@ -807,7 +855,7 @@ StartDefs(const char** attrs, FatProcess* current) {
 #ifdef DEBUG
     fprintf (stderr, "StartDefs\n");
 #endif
-
+	djn_GraphicalShapeArgs.id = "";
   FatProcess* e = new Defs(nullptr, "XMLDefs");
   /* FIXME: should manage optional, mandatory and duplicate attributes */
   while (*attrs) {
@@ -822,6 +870,10 @@ StartDefs(const char** attrs, FatProcess* current) {
     attrs++;
     attrs++;
   }
+  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
+	}
+
   current->add_child(e, djn_GraphicalShapeArgs.id);
   djn__id_to_process.insert(
       pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
@@ -858,6 +910,10 @@ StartUse(const char** attrs, FatProcess* current) {
     attrs++;
     attrs++;
   }
+  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
+	}
+
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
   alias (holder, "x", pos->find_child_impl ("tx"));
   alias (holder, "y", pos->find_child_impl ("ty"));
@@ -1113,7 +1169,8 @@ StartPathClip(const char** attrs, FatProcess* current) {
 #ifdef DEBUG
 		fprintf (stderr, "StartPathClip\n");
 #endif
-
+	djn_GraphicalShapeArgs.id = "";
+	
 	FatProcess *holder = 0;
 	FatProcess* e;
 	djn__GrphIsInClip = 1;
@@ -1130,6 +1187,9 @@ StartPathClip(const char** attrs, FatProcess* current) {
 #endif
 		attrs++;
 		attrs++;
+	}
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
 	}
 
 	//e = new Component (nullptr, "pathclip");
@@ -1235,6 +1295,10 @@ StartStyle(const char** attrs, FatProcess* current) {
       attrs++;
       attrs++;
     }
+	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
+		djn_GraphicalShapeArgs.id = get_new_uid(current).c_str();
+	}
+
     current->add_child(e, djn_GraphicalShapeArgs.id);
     djn__id_to_process.insert(
         pair<string, FatProcess*>(djn_GraphicalShapeArgs.id, e));
