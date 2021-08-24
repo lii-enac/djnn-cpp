@@ -703,22 +703,17 @@ endif
 # coverage tests
 
 lcov_file ?= $(build_dir)/djnn_cov.info
-lcov_output_dir ?= $(build_dir)/coverage_html
 
 pre_cov: PRE_COV_CFLAGS += --coverage -O0
 pre_cov: PRE_COV_LDFLAGS += --coverage
 pre_cov: dirs djnn
 	lcov -d $(build_dir) -b . --zerocounters
 
-cov_jenkins:
+cov:
 	lcov -o $(lcov_file) -c -d . -b . --no-external > /dev/null 2>&1
-	# remove .cpp from css-parser which are destroyed after compilation
+	# remove useless reference
 	lcov --remove $(lcov_file) '*/css-parser/*.*' -o $(lcov_file)
 	lcov --remove $(lcov_file) '*/qt/*_moc.cpp' -o $(lcov_file)
-	# convert lcov report to gcov report
-	genhtml -o $(lcov_output_dir) $(lcov_file)
-cov: cov_jenkins
-	cd $(lcov_output_dir) ; open index.html
 
 
 # ---------------------------------------
@@ -726,7 +721,6 @@ cov: cov_jenkins
 
 clean:
 	rm -f $(deps) $(objs) $(libs) $(srcgens) $(cov)
-	rm -rf $(lcov_output_dir) > /dev/null 2>&1 || true
 	rmdir $(build_dir) > /dev/null 2>&1 || true
 
 distclean clear:
