@@ -31,7 +31,7 @@ namespace djnn {
   class MyQQWidget : public MyQWidget
   {
     Q_OBJECT
-    // /usr/local/Cellar/qt5/5.10.1/bin/moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp 
+    // moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp 
 
   public:
     MyQQWidget(Window *w, QtWindow * qtw) : MyQWidget(w,qtw) {

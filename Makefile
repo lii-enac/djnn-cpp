@@ -192,8 +192,8 @@ CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo ?= echo
-YACC := /usr/local/opt/bison/bin/bison -d
-LEX := /usr/local/opt/flex/bin/flex
+YACC := $(shell brew --prefix bison)/bin/bison -d
+LEX := $(shell brew --prefix flex)/bin/flex
 moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
 #CXXFLAGS += -I/usr/local/include

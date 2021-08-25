@@ -29,7 +29,7 @@ namespace djnn {
   class MyQWidget : public QWidget
   {
     Q_OBJECT
-    // /usr/local/Cellar/qt5/5.10.1/bin/moc src/display/qt/my_qwindow.h > src/display/qt/moc_MyQWindow.cpp 
+    // moc src/display/qt/my_qwindow.h > src/display/qt/moc_MyQWindow.cpp 
 
   public:
     MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _updating (false), _building (false) {

@@ -34,8 +34,9 @@ YACC = bison -d
 endif
 
 ifeq ($(os),Darwin)
-lib_cppflags += -I/usr/local/opt/flex/include
-lib_ldflags += -L/usr/local/opt/flex/lib
+#lib_cppflags += -I$(shell brew --prefix flex)/include
+$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(shell brew --prefix flex)/include
+lib_ldflags += -L$(shell brew --prefix flex)/lib
 endif
 
 ifeq ($(os),MinGW)

@@ -22,7 +22,7 @@ lib_cppflags += -DDJNN_USE_OPENAL
 		endif
 		ifeq ($(audio),AL_SOFT)
 		# brew openal-soft
-		lib_pkgpath += /usr/local/Cellar/openal-soft/1.20.1/lib/pkgconfig
+		lib_pkgpath += $(shell brew --prefix openal-soft)/lib/pkgconfig
 		lib_pkg += openal
 		endif
 	endif
