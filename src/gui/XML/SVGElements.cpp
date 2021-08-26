@@ -100,10 +100,6 @@ static map <string, djn_XMLTagHandler> handlers={
 };
 
 static int _index_uid_element = 0;
-static string get_new_uid()
-{
-	return "_uid_" + to_string(_index_uid_element++);
-}
 
 djn_XMLTagHandler*
 SVGElements_Hash::djn_SVGElementsLookup (const char *str, unsigned int len)
@@ -259,8 +255,8 @@ StartRect(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (djn_RectArgs.rx == -1.) {
@@ -328,8 +324,8 @@ StartImage (const char** attrs, FatProcess* current)
     attrs++;
     attrs++;
 	}
-  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+  	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
   if (holder)
@@ -390,8 +386,8 @@ StartEllipse(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (holder)
@@ -449,8 +445,8 @@ StartCircle(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (holder)
@@ -507,8 +503,8 @@ StartLine(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (holder)
@@ -563,8 +559,8 @@ StartPoly(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (holder)
@@ -655,8 +651,8 @@ StartText(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	djn__CheckStroke(holder);
@@ -724,8 +720,8 @@ StartTspan(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	current->add_child(holder, djn_GraphicalShapeArgs.id);
@@ -768,8 +764,8 @@ StartPath(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	if (djn__GrphIsInClip) {
@@ -837,8 +833,8 @@ StartGroup(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	current->add_child(e, djn_GraphicalShapeArgs.id);
@@ -868,8 +864,8 @@ StartDefs(const char** attrs, FatProcess* current) {
     attrs++;
     attrs++;
   }
-  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+  	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
   current->add_child(e, djn_GraphicalShapeArgs.id);
@@ -908,8 +904,8 @@ StartUse(const char** attrs, FatProcess* current) {
     attrs++;
     attrs++;
   }
-  	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+  	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
   Translation* pos = new Translation (holder, "", djn_UseArgs.x, djn_UseArgs.y);
@@ -1186,8 +1182,8 @@ StartPathClip(const char** attrs, FatProcess* current) {
 		attrs++;
 		attrs++;
 	}
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
 	//e = new Component (nullptr, "pathclip");
@@ -1293,8 +1289,8 @@ StartStyle(const char** attrs, FatProcess* current) {
       attrs++;
       attrs++;
     }
-	if (strcmp(djn_GraphicalShapeArgs.id, "") == 0) { // If id is empty
-		djn_GraphicalShapeArgs.id = get_new_uid().c_str();
+	if (djn_GraphicalShapeArgs.id.empty ()) {
+		djn_GraphicalShapeArgs.id = "_uid_" + to_string(_index_uid_element++);
 	}
 
     current->add_child(e, djn_GraphicalShapeArgs.id);

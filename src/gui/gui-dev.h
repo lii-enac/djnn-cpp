@@ -228,7 +228,7 @@ namespace djnn {
 
   extern struct djn_GraphicalShapeArgs
   {
-    const char* id;
+    string id;
     string classname;
     djnStrokeType strokeType;
   } djn_GraphicalShapeArgs;
