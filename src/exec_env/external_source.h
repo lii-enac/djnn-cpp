@@ -15,6 +15,7 @@
 #pragma once
 
 #include <atomic>
+#include "core/utils/containers.h"
 
 namespace djnn
 {

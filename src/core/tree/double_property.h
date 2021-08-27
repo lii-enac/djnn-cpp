@@ -17,6 +17,7 @@
 
 #include "abstract_property.h"
 #include "core/utils/to_string.h"
+#include "core/utils/containers.h"
 
 
 namespace djnn {

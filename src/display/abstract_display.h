@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/utils/containers.h"
 
 namespace djnn {
 	class Window;

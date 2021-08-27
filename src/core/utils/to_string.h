@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core/utils/containers.h"
+
 #if DJNN_STRING_FMT
 
 #include <fmt/format.h>

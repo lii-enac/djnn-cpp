@@ -12,14 +12,16 @@
  *
  */
 
-//#include "core/ontology/process.h"
+
 
 // core/utils/error.h macros clash with Driver::error
 #undef error
 #undef warning
 
-namespace css {
+#include "core/utils/containers.h"
+#include "core/ontology/process.h"
 
+namespace css {
 using djnn::string;
 
 class Scanner;

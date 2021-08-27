@@ -21,6 +21,7 @@
 #include "style/style_fwd.h"
 #include "style/style_types.h"
 #include "transformation/transformations_fwd.h"
+#include "core/utils/containers.h"
 
 namespace djnn
 {
