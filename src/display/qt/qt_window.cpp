@@ -128,7 +128,9 @@ namespace djnn
   {
     if (_qwidget == nullptr) { return; }
     djnn::release_exclusive_access (DBG_GET); // => QEvent::spontaneous
+    _qwidget->set_in_screenshot (true);
     _qwidget->grab().save(QString((path+".png").c_str()));
+    _qwidget->set_in_screenshot (false);
     djnn::get_exclusive_access (DBG_GET);
   }
 

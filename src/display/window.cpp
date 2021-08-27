@@ -90,6 +90,7 @@ namespace djnn
     _c_screenshot = new Coupling (_screenshot, ACTIVATION, _screenshot_action, ACTIVATION);
 
     _refreshed = new Blank (this, "refreshed");
+    graph_add_edge (_damaged, _refreshed);
 
     _opacity = new DoubleProperty (this, "opacity", 1.0);
     _opacity_action = new OpacityAction (this, "opacity_action");

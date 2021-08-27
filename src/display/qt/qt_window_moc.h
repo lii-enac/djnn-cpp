@@ -35,6 +35,7 @@ namespace djnn {
     MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _updating (false), _building (false) {
       setAttribute(Qt::WA_AcceptTouchEvents, true);
       //_picking_view = new QtPickingView (w);
+      _in_screenshot = false;
     }
     virtual ~MyQWidget () { 
       //delete _picking_view;
@@ -42,6 +43,7 @@ namespace djnn {
     virtual Picking* get_picking_view() { return nullptr; }
 
     virtual void set_building(bool);
+    void set_in_screenshot (bool state) { _in_screenshot = state; }
   protected:
 
     virtual bool event (QEvent *event) override;
@@ -55,6 +57,7 @@ namespace djnn {
     QtWindow * _qtwindow;
     int mouse_pos_x, mouse_pos_y;
     bool _updating;
+    bool _in_screenshot;
     std::atomic<bool> _building;
   };
 }

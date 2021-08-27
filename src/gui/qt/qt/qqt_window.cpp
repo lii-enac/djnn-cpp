@@ -117,7 +117,8 @@ namespace djnn
         if(! (_building)) // || event->spontaneous ())) // spontaneous: could be a screenshot request 
           djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
-        _window->refreshed ()->notify_activation ();
+        if (!_in_screenshot)//(!event->spontaneous ()) // spontaneous: could be a screenshot request )
+          _window->refreshed ()->notify_activation ();
         if(! (_building)) // || event->spontaneous ()))
           djnn::release_exclusive_access (DBG_REL);
         //return exec_;
