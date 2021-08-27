@@ -619,7 +619,7 @@ namespace djnn
   void 
   display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v){
 
-    cerr << "----- CYCLE ANALYSIS - revers activation stack ---- " << endl;
+    cerr << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
     cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
     
     pair<Vertex*, int> pair ;
@@ -762,7 +762,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           if (_vertex_already_activated.find(v) != _vertex_already_activated.end()) {
             cerr << "\033[1;31m";
             cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
-            cerr << "\t\t" << print_process_full_name(v->get_process()) << " have already been activated in this cycle \n";
+            cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
             display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
             cerr << "\033[0m";
             break;
@@ -775,8 +775,8 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           if (count_activation > _vertices.size()) {
             cerr << "\033[1;31m";
             cerr << "djnn Warning - \tWe detected more activations in only one graph execution than vertices in the graph !" << endl;
-            cerr << "\t\tIt seems there is a cycle in your program !! \n\t\tWe stopped it and break the GRAPH::EXEC" << endl;
-            cerr << "\t\tPlease activate debug option _DEBUG_GRAPH_CYCLE_DETECT to have full information about this detected cycle." << endl;
+            cerr << "\t\tIt seems there is a cycle in your program !! \n\t\tWe stopped it and broke out of GRAPH::EXEC" << endl;
+            cerr << "\t\tPlease activate debug option _DEBUG_GRAPH_CYCLE_DETECT to have full information about this cycle." << endl;
             cerr << "\033[0m";
             continue;
           }
@@ -791,7 +791,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
             // why this process is in the list but his activation is now: none.
             cerr << "\033[1;31m";
             cerr << "djnn Warning - " << print_process_full_name (p) << " is in activation list but never activated " << endl;
-            cerr << "\t\t you may have a probleme of simultanous flux " << endl;
+            cerr << "\t\t you may have a probleme of simultaneous flux " << endl;
             cerr << "\033[0m";
           }
         }
