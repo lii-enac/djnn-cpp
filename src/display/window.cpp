@@ -176,6 +176,7 @@ namespace djnn
     delete _background_color_action;
     delete _background_color;
 
+    graph_remove_edge (_damaged, _refreshed);
     delete _refreshed;
 
     delete _c_screenshot;
