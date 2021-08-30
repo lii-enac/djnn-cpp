@@ -53,6 +53,8 @@ namespace djnn {
     AbstractTextProperty* text () { return &_text;}
     void set_width (double width) { _width.set_value (width, true); }
     void set_height (double height) { _height.set_value (height, true); }
+    void set_ascent (int ascent) { _ascent.set_value (ascent, true); }
+    void set_descent (int descent) { _descent.set_value (descent, true); }
     const string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
     pair<double,int> get_cursor_from_local_x (double pos);
@@ -73,6 +75,8 @@ namespace djnn {
     TextSizeAction _update_size;
     IntProperty _width;
     IntProperty _height;
+    IntProperty _ascent;
+    IntProperty _descent;
 
     // text must notify_geometry when changed, hence it's a proxy
     TextPropertyProxy _text; 

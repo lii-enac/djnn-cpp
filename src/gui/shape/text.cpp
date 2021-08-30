@@ -59,6 +59,8 @@ namespace djnn
       _update_size (this, "size_action", this),
       _width (this, "width", 0),
       _height (this, "height", 0),
+      _ascent (this, "ascent", 0),
+      _descent (this, "descent", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION, true),
       //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )

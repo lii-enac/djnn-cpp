@@ -240,7 +240,7 @@ namespace djnn
   void
   QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
   {
-    int width, height;
+    int width, height, ascent, descent;
     QFontMetrics *fm = (QFontMetrics*) (text->get_font_metrics ());
     if (fm) {
       QString str (text->get_raw_text ().c_str ());
@@ -250,6 +250,8 @@ namespace djnn
       width = fm->horizontalAdvance (str);
 #endif
       height = fm->height ();
+      ascent = fm->ascent ();
+      descent = fm->descent ();
     } else {
       QFont qfont;
       if (ff) {
@@ -275,10 +277,13 @@ namespace djnn
       width = fm.horizontalAdvance (str);
 #endif
       height = fm.height ();
+      ascent = fm.ascent ();
+      descent = fm.descent ();
     }
     text->set_width (width);
     text->set_height (height);
-    
+    text->set_ascent (ascent);
+    text->set_descent (descent);
   }
 
   void 
