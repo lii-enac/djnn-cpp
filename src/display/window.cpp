@@ -104,6 +104,11 @@ namespace djnn
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
     _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
 
+    _min_width = new IntProperty (this, "min_width", 0);
+    _min_height = new IntProperty (this, "min_height", 0);
+    _min_size_action = new MinimumSizeAction (this, "min_size_action");
+    _c_min_width = new Coupling (_min_width, ACTIVATION, _min_size_action, ACTIVATION);
+    _c_min_height = new Coupling (_min_height, ACTIVATION, _min_size_action, ACTIVATION);
     _win_impl = DisplayBackend::instance ()->create_window (this, title, x, y, w, h);
 
     _geometry_action = new GeometryAction (this, "geometry_action");
@@ -138,7 +143,10 @@ namespace djnn
     _c_opacity->enable ();
     _c_background_opacity->enable ();
     _c_background_color->enable ();
+    _c_min_width->enable ();
+    _c_min_height->enable ();
     _win_impl->impl_activate ();
+    set_minimum_size ();
   }
   
   void
@@ -149,6 +157,8 @@ namespace djnn
     _c_opacity->disable ();
     _c_background_opacity->disable ();
     _c_background_color->disable ();
+    _c_min_width->disable ();
+    _c_min_height->disable ();
     _win_impl->impl_deactivate ();
   }
 
@@ -175,6 +185,12 @@ namespace djnn
     delete _c_background_color;
     delete _background_color_action;
     delete _background_color;
+
+    delete _c_min_width;
+    delete _c_min_height;
+    delete _min_width;
+    delete _min_height;
+    delete _min_size_action;
 
     graph_remove_edge (_damaged, _refreshed);
     delete _refreshed;
@@ -251,6 +267,12 @@ namespace djnn
       _background_color->g()->get_value(),
       _background_color->b()->get_value()
       );
+  }
+
+  void
+  Window::set_minimum_size ()
+  {
+    _win_impl->set_minimum_size (_min_width->get_value (), _min_height->get_value ());
   }
 
   void

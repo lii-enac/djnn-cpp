@@ -47,6 +47,7 @@ namespace djnn
     virtual void perform_screenshot (const string& path) {}
     virtual void set_opacity (double opacity) {}
     virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) {}
+    virtual void set_minimum_size (int w, int h) {}
     virtual void update_geometry () {}
      
   private:
@@ -94,6 +95,12 @@ namespace djnn
       public:
         GeometryAction (Window * parent, const string& name) : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent())->update_geometry (); }
+    };
+    class MinimumSizeAction : public Action
+    {
+      public:
+        MinimumSizeAction (Window * parent, const string& name) : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent())->set_minimum_size (); }
     };
   public:
     Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
@@ -153,7 +160,7 @@ namespace djnn
     DoubleProperty* background_opacity () { return _background_opacity; }
     BackgroundColor* background_color () { return _background_color; }
     void set_background_opacity_and_color ();
-
+    void set_minimum_size ();
     void update_geometry ();
 
   private:
@@ -209,6 +216,10 @@ namespace djnn
     BackgroundColor* _background_color;
     BackgroundColorAction * _background_color_action;
     Coupling * _c_background_color;
+
+    IntProperty* _min_width, *_min_height;
+    MinimumSizeAction * _min_size_action;
+    Coupling * _c_min_width, * _c_min_height;
 
     GeometryAction * _geometry_action;
     Coupling * _c_geometry_x;

@@ -158,6 +158,11 @@ namespace djnn
   }
 
   void
+  QtWindow::set_minimum_size (int w, int h) {
+    _qwidget->setMinimumSize (w, h);
+  }
+
+  void
   QtWindow::update_geometry ()
   {
     auto * evt = new QEvent((QEvent::Type)user_event_geometry);
