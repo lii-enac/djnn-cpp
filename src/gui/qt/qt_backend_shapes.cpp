@@ -501,43 +501,98 @@ namespace djnn
   static QPainter *buff_painter;
   static QPainter *buff_pick_painter;
 
+  struct LayerStuff {
+    QImage *pm;
+    double tx, ty;
+    double s;
+    QMatrix4x4 m;
+    LayerStuff () : s(1) {}
+    ~LayerStuff () {
+      delete pm;
+    }
+  };
+
   bool
   QtBackend::pre_draw_layer (Layer *l)
   {
-    double w,h;
-    QImage *pm = (QImage*) (l->cache ());
+    double x,y,w,h;
+    l->get_xywh(x,y,w,h);
+    //QImage *pm = (QImage*) (l->cache ());
+    LayerStuff* ls = (LayerStuff*) (l->cache ());
     QImage *pick_pm = (QImage*) (l->pick_cache ());
-    w = l->get_frame()->width ()->get_value();
-    h = l->get_frame()->height ()->get_value();
-    if (l->invalid_cache () || (pm && (pm->width() != w || pm->height() != h))) {
-      if (l->cache () != nullptr) {
-        delete (pm);
-        pm = nullptr;
-      }
-      pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
-      pm->fill (Qt::transparent);
+    auto fw = l->get_frame()->width ()->get_value();
+    auto fh = l->get_frame()->height ()->get_value();
+    if (w<0) { 
+      w = fw;
+      h = fh;
+    }
+
+    bool recompute_pixmap =
+      l->invalid_cache ()
+      || (ls && (ls->pm->width() != w || ls->pm->height() != h))
+    ;
+
+    if (recompute_pixmap) {
+      delete ls;
+      ls = new LayerStuff;
+      ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      ls->pm->fill (Qt::transparent);
       pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
       pick_pm->fill (Qt::transparent);
-      l->set_cache (pm);
+      l->set_cache (ls);
       l->set_pick_cache (pick_pm);
       l->set_invalid_cache (false);
       buff_painter = _painter;
-      _painter = new QPainter (pm);
+      _painter = new QPainter (ls->pm);
       buff_pick_painter = _picking_view->painter ();
       _picking_view->set_painter (new QPainter (pick_pm));
       _in_cache = true;
-      return true;
+
+      QtContext *cur_context = _context_manager->get_current ();
+      QMatrix4x4& origin = cur_context->matrix;
+      ls->m = origin;
+      auto s = origin(0,0);
+      auto tx = origin(0,3);
+      auto ty = origin(1,3);
+
+      //std::cerr << tx << " " << ty << " " << s << __FL__;
+
+      QMatrix4x4 newm;
+      if (tx>0) {
+        newm.translate(-tx, 0); // apply translation
+      } // else dx is negative, so do not try to adjust fbo so that the right-most part of the rendering is not clipped
+      if (ty>0) {
+        auto inv_tvy = (h-ls->pm->height()) + ty; // take into account reverse y
+        newm.translate(0, -inv_tvy); // apply translation
+      }
+      newm.translate(-x, -y);
+      origin = newm * origin;
+      //}
+
+      ls->tx = tx;
+      ls->ty = ty;
+      ls->s = s;
+
+    } else {
+      buff_painter = nullptr;
+      buff_pick_painter = nullptr;
     }
-    buff_painter = nullptr;
-    buff_pick_painter = nullptr;
-    return false;
+
+    return recompute_pixmap;
   }
 
   void
   QtBackend::post_draw_layer (Layer *l)
   {
-    QImage *pm = (QImage*) (l->cache ());
+    //QImage *pm = (QImage*) (l->cache ());
+    LayerStuff* ls = (LayerStuff*) (l->cache ());
     QImage *pick_pm =  (QImage*) (l->pick_cache());
+
+    QtContext *cur_context = _context_manager->get_current ();
+    QMatrix4x4& origin = cur_context->matrix;
+    QMatrix4x4 m = origin;
+
+    bool damaged = true;
     if (buff_painter != nullptr) {
       delete _painter;
       delete _picking_view->painter ();
@@ -546,9 +601,45 @@ namespace djnn
       buff_painter = nullptr;
       buff_pick_painter = nullptr;
       _in_cache = false;
+      //damaged = true;
+      m = ls->m;
     }
-    QRect rect (0, 0, pm->width (), pm->height ());
-    _painter->drawImage (rect, *pm);
+
+    auto curs = m(0,0);
+    auto tx = m(0,3);
+    auto ty = m(1,3);
+    auto s = curs/ls->s;
+
+    //std::cerr << tx << " " << ty << " " << s << __FL__;
+
+    double x,y,w,h;
+    l->get_xywh(x,y,w,h);
+  
+    QMatrix4x4 newm;
+    newm.translate(tx, ty);
+    if (ls->tx<0) {
+        newm.translate(-ls->tx*s, 0); // apply translation
+    }
+    if (ls->ty<0) {
+        newm.translate(0,-ls->ty*s); // apply translation
+    }
+    //newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
+    if (damaged) {
+      newm.scale(s, s);
+    }
+    origin = newm;
+    //newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
+    //m = newm * m;
+    
+    // align translation to the grid
+    m(2,0) = round(m(2,0));
+    m(2,1) = round(m(2,1));
+
+    const QTransform transform = origin.toTransform ();
+    _painter->setTransform (transform);
+
+    QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
+    _painter->drawImage (rect, *(ls->pm));
     _picking_view->painter()->drawImage (rect, *pick_pm);
   }
 } /* namespace djnn */
