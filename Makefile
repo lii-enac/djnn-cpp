@@ -236,27 +236,29 @@ endif
 
 ifeq ($(cross_prefix),em)
 os := em
-DYNLIB=
+DYNLIB = -shared -r
 lib_suffix=.bc
 compiler ?= llvm
 
 EMFLAGS := -Wall -Wno-unused-variable \
 -s USE_BOOST_HEADERS -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_FREETYPE=1 -s USE_WEBGL2=1 \
 -DSDL_DISABLE_IMMINTRIN_H \
--s EXPORT_ALL=1 -s DISABLE_EXCEPTION_CATCHING=0 \
+-s DISABLE_EXCEPTION_CATCHING=0 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
 -s ASSERTIONS=2 \
 -s ERROR_ON_UNDEFINED_SYMBOLS=0
 
+#-s EXPORT_ALL=1 
 #-s STANDALONE_WASM
-#EMFLAGS += -Oz
+EMFLAGS += -Oz
 
 em_ext_libs_path ?= ../djnn-emscripten-ext-libs
 
 EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 CFLAGS += $(EMCFLAGS)
 CXXFLAGS += $(EMCFLAGS)
-LDFLAGS += $(EMFLAGS) --emrun
+LDFLAGS += $(EMFLAGS)
+# --emrun
 #   $(ext_libs) # to add in application makefile
 ##idn2 expat curl fontconfig unistring psl
 # to add in application makefile:
@@ -267,10 +269,11 @@ picking ?= ANALYTICAL
 
 all_libs = $(addprefix $(build_lib_dir)/,$(all_libs_no_build_dir))
 
-js wasm: $(build_lib_dir)/djnn.js
-$(build_lib_dir)/djnn.js:
-js:$(all_libs)
-	emcc $(EMFLAGS) -s LINKABLE=1 -s "EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']" -o $(build_lib_dir)/djnn.js $(all_libs)
+#js wasm: $(build_lib_dir)/djnn.js $(src_dir)/c_api/djnn_js_api.js
+#$(build_lib_dir)/djnn.js:
+js: $(all_libs) $(src_dir)/c_api/djnn_js_api.js
+	emcc $(EMFLAGS) -s "EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']" -s "EXPORTED_FUNCTIONS=`cat $(src_dir)/c_api/exported_functions.txt`" -o $(build_lib_dir)/djnn.js $(all_libs)
+	cp $(src_dir)/c_api/djnn_js_api.js $(build_lib_dir)
 
 endif
 
@@ -316,7 +319,8 @@ CFLAGS += $(remotery_cflags)
 #LDFLAGS += -fsanitize=thread
 
 #CFLAGS += -fsanitize=address -O1
-#LDFLAGS += -fsanitize=address -fsanitize=leak
+#LDFLAGS += -fsanitize=address
+#-fsanitize=leak
 
 #CFLAGS += -fsanitize=memory -O1
 #LDFLAGS += -fsanitize=memory
@@ -931,7 +935,7 @@ ifeq ($(os),MinGW)
 		mgwpkgdeps += cairo pango
 	endif
 	ifeq ($(graphics),GL)
-		mgwpkgdeps += glm fontconfig freetype2
+		mgwpkgdeps += glm fontconfig freetype
 	endif
 	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
 		mgwpkgdeps += openal
