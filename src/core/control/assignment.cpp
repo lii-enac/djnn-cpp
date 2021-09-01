@@ -21,6 +21,8 @@
 
 namespace djnn
 {
+
+  // FIXME: share the following code with other parts of the lib that cast from one type to another
   inline
   int
   s_to_p(const string& s, int)
@@ -56,13 +58,14 @@ namespace djnn
     return (x ? "true" : "false");
   }
 
+
   // implicit conversion int, double, bool
   template <typename src_t, typename dst_t>
   void t_perform_action (src_t* src, dst_t* dst, double propagate, double lazy)
   {
     const auto & sv = src->get_value ();
     const auto & dv = dst->get_value ();
-    if (lazy && (sv == dv) ) return; 
+    if (lazy && (sv == dv) ) return;
     dst->set_value (sv, propagate);
   }
 
@@ -102,7 +105,7 @@ namespace djnn
     dst->set_value (sv, propagate);
   }
 
-  // sepcific case when assigning a CoreProcess to a RefProperty
+  // specific case when assigning a CoreProcess to a RefProperty
   template <>
   void t_perform_action (CoreProcess* src, RefProperty* dst, double propagate, double lazy)
   {
@@ -112,6 +115,17 @@ namespace djnn
     dst->set_value (sv, propagate);
   }
 
+  // specific case when assigning a RemoteProcess to a Property
+  template <>
+  void t_perform_action (RemoteProperty* src, AbstractProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src;
+    const auto & dv = dst;
+    if (lazy && (sv == dv) ) return; 
+    dst->set_value (sv, propagate);
+  }
+
+  // templated TAssignement
   template <class src_t, class dst_t>
   struct TAssignment : public TTAssignment {
     TAssignment (src_t* src, dst_t* dst)
@@ -229,16 +243,16 @@ namespace djnn
           _ttassignment = new TAssignment <RefProperty, RefProperty> (srp, drp);
           break;
         }
-        case Dist: // FIXME name
+        case Remote: // FIXME name
         {
           auto * srp = djnn_dynamic_cast<RemoteProperty*> (src_p);
           assert (srp);
-          auto * drp = djnn_dynamic_cast<RemoteProperty*> (dst_p);
+          auto * drp = djnn_dynamic_cast<AbstractProperty*> (dst_p);
           if (!drp) {
-            warning (dst_p, "is not a Remote Property in assignment");
+            warning (dst_p, "is not a Property in assignment");
             return nullptr;
           }
-          _ttassignment = new TAssignment <RemoteProperty, RemoteProperty> (srp, drp);
+          _ttassignment = new TAssignment <RemoteProperty, AbstractProperty> (srp, drp);
           break;
         }
         default:
@@ -301,7 +315,7 @@ namespace djnn
           if (rp) dst_p->set_value (rp->get_value (), propagate);
           break;
         }
-        case Dist:
+        case Remote:
         {
           RemoteProperty* dp = djnn_dynamic_cast<RemoteProperty*> (src_p);
           if (dp) dst_p->set_value (dp->get_value (), propagate);

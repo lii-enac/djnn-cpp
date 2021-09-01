@@ -25,7 +25,7 @@ namespace djnn {
     Double,
     String,
     Reference,
-    Dist
+    Remote
   };
 
   class AbstractProperty : public FatProcess

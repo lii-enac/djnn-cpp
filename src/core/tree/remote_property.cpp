@@ -96,7 +96,7 @@ namespace djnn
   void
   AbstractRemoteProperty::set_value (CoreProcess* v, bool propagate)
   {
-    warning(this, "undefined conversion from Process to DistProperty");
+    warning(this, "undefined conversion from Process to RemoteProperty");
   }
 
 #if !defined(DJNN_NO_DEBUG)
