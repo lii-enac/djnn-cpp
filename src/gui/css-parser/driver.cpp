@@ -39,8 +39,9 @@ namespace css
 
     Scanner scanner (&in);
     this->_lexer = &scanner;
-
     Parser parser (*this);
+    _lexer = nullptr; // scanner will not exist anymore when the method returns
+  
     return (parser.parse () == 0);
   }
 

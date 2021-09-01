@@ -269,7 +269,7 @@ namespace djnn
 //             return ;
 //           } 
           if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
-            _activation_deque.insert (it, v);
+            it = _activation_deque.insert (it, v);
             is_inserted = true;
           }
           ++it;
