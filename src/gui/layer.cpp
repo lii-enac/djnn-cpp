@@ -73,8 +73,8 @@ namespace djnn
           c->draw ();
         }  
       }
-      ComponentObserver::instance ().end_draw ();
       Backend::instance ()->post_draw_layer (this);
+      ComponentObserver::instance ().end_draw ();
       //rmt_EndCPUSample();
     }
   }
@@ -93,12 +93,14 @@ namespace djnn
     return newg;*/
 
     auto * clone = new Layer (nullptr, get_name ());
+    origs_clones[this] = clone;
+    //impl_clone_properties (clone, origs_clones);
     for (auto c : _children) {
       auto cclone = c->impl_clone (origs_clones);
       //origs_clones[c] = cclone;
       clone->add_child (cclone , this->find_child_name(c));
     }
-    origs_clones[this] = clone;
+    
     return clone;
   }
 

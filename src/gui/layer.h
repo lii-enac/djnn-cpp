@@ -35,8 +35,7 @@ namespace djnn {
       Layer (ParentProcess* parent, const string& name);
       Layer (ParentProcess* parent, const string& name, double x, double y, double w, double h);
       virtual ~Layer () override;
-      auto
-        get_frame () { return _frame;}
+      auto get_frame () { return _frame;}
       void impl_activate () override;
       void impl_deactivate () override;
       void draw () override;
@@ -47,10 +46,12 @@ namespace djnn {
       bool invalid_cache () { return _invalid_cache; }
       void set_invalid_cache (bool v);
       Layer* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
-      FatProcess* damaged () { return &_damaged; }
       process_type_e get_process_type () const override { return LAYER_T; }
 
+      Spike* damaged () { return &_damaged; } 
+
       void get_xywh(double& x, double& y, double& w, double& h) { x=_x; y=_y; w=_w; h=_h; }
+      void set_xy(double x, double y) { _x=x; _y=y; }
 
     protected:
       Window *_frame;
