@@ -159,6 +159,8 @@ namespace djnn
 
   void
   QtWindow::set_minimum_size (int w, int h) {
+    djnn::release_exclusive_access (DBG_REL); //hum,hum workaround to avoid the lock issue
+                                              //caused by the qt generated event on setMinumumSize call
     _qwidget->setMinimumSize (w, h);
   }
 
