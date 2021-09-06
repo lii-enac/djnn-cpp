@@ -22,6 +22,7 @@ namespace djnn
 {
   Counter::Counter (ParentProcess* parent, const string& name, double init, double delta)
   : FatProcess (name),
+    _reset_occurred (false),
     _reset (this, "reset"),
     _step (this, "step"),
     _output (this, "output", init),
