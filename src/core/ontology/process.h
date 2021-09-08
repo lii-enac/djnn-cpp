@@ -291,7 +291,7 @@ namespace djnn {
     void remove_activation_coupling (Coupling* c) override;
     void    add_deactivation_coupling (Coupling* c) override;
     void remove_deactivation_coupling (Coupling* c) override;
-    bool  has_coupling () const { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
+    bool  has_coupling () const override { return !get_activation_couplings ().empty() || !get_deactivation_couplings ().empty(); }
     
     const couplings_t& get_activation_couplings () const override { return _activation_couplings; }
     const couplings_t& get_deactivation_couplings () const override { return _deactivation_couplings; }
