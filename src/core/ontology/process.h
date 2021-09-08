@@ -97,7 +97,7 @@ namespace djnn {
     typedef vector<Coupling*> couplings_t;
     virtual const couplings_t& get_activation_couplings () const { return default_couplings; }
     virtual const couplings_t& get_deactivation_couplings () const { return default_couplings; }
-    bool  has_coupling () const { return false; }
+    virtual bool  has_coupling () const { return false; }
     void  notify_activation ();
     void  notify_deactivation ();
     void  schedule_activation (); // for gui picking only: why is there a problem?
