@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "utils.h"
+
 namespace djnn {
 
 	void init_utils ();
