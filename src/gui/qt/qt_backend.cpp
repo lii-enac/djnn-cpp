@@ -20,6 +20,7 @@
 #include "gui/shape/text.h"
 #include "gui/shape/image.h"
 #include "gui/shape/ui.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 #include <QtWidgets/QWidget>
 #include <QtGui/QPainter>
@@ -57,21 +58,25 @@ namespace djnn
   void
   QtBackend::save_context ()
   {
+    rmt_BeginCPUSample(save_context, RMTSF_Aggregate);
     if (_painter != nullptr)
       _painter->save ();
     if (_picking_view && _picking_view->painter ()) {
       _picking_view->painter ()->save ();
     }
+    rmt_EndCPUSample();
   }
 
   void
   QtBackend::restore_context ()
   {
+    rmt_BeginCPUSample(restore_context, RMTSF_Aggregate);
     if (_painter != nullptr)
       _painter->restore ();
     if (_picking_view && _picking_view->painter ()) {
       _picking_view->painter ()->restore ();
     }
+    rmt_EndCPUSample();
   }
   void
   QtBackend::set_painter (QPainter* p)
@@ -95,6 +100,8 @@ namespace djnn
   void
   QtBackend::load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height)
   {
+    rmt_BeginCPUSample(load_drawing_context, RMTSF_Aggregate);
+
     QtContext *cur_context = _context_manager->get_current ();
     const QMatrix4x4& matrix = cur_context->matrix;
     const QTransform transform = matrix.toTransform ();
@@ -192,11 +199,15 @@ namespace djnn
     }
     cur_context->brush.setTransform (cur_context->gradientTransform);
     _painter->setBrush (cur_context->brush);
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::load_pick_context (AbstractGShape *s)
   {
+    rmt_BeginCPUSample(load_pick_context, RMTSF_Aggregate);
+
     #if 1
     QtContext *cur_context = _context_manager->get_current ();
     QBrush pickBrush (_picking_view->pick_color ());
@@ -215,6 +226,8 @@ namespace djnn
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
     _picking_view->add_gobj (s, _in_cache);
     #endif
+    
+    rmt_EndCPUSample ();
   }
 
   /*
@@ -240,6 +253,8 @@ namespace djnn
   void
   QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
   {
+    rmt_BeginCPUSample(update_text_geometry, RMTSF_Aggregate);
+
     int width, height, ascent, descent;
     QFontMetrics *fm = (QFontMetrics*) (text->get_font_metrics ());
     if (fm) {
@@ -284,15 +299,25 @@ namespace djnn
     text->set_height (height);
     text->set_ascent (ascent);
     text->set_descent (descent);
+
+    rmt_EndCPUSample ();
   }
 
   void 
   QtBackend::delete_text_impl (Text* text) {
+    rmt_BeginCPUSample(delete_text_impl, RMTSF_Aggregate);
+
     delete (QFontMetrics*)text->get_font_metrics();
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::delete_image_impl (Image* image) {
+    rmt_BeginCPUSample(delete_image_impl, RMTSF_Aggregate);
+
     delete (QPixmap*)image->cache ();
+
+    rmt_EndCPUSample ();
   }
 } /* namespace djnn */

@@ -241,7 +241,10 @@ namespace djnn
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
     FatProcess *p = _window->holder ();
+
+    rmt_BeginCPUSample(picking_view_init, RMTSF_Aggregate);
     _picking_view->init ();
+    rmt_EndCPUSample ();
     if (p) {
 
       t1();

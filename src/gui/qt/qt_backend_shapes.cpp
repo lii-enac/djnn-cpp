@@ -14,6 +14,7 @@
  */
 
 #include "core/tree/list.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 #include "gui/backend.h"
 
@@ -52,6 +53,8 @@ namespace djnn
   void
   QtBackend::draw_rectangle (Rectangle *s)
   {
+    rmt_BeginCPUSample(draw_rectangle, RMTSF_Aggregate);
+
     if (_painter == nullptr)
       return;
     double x, y, w, h, rx, ry;
@@ -70,11 +73,15 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_circle (Circle *s)
   {
+    rmt_BeginCPUSample(draw_circle, RMTSF_Aggregate);
+
     if (_painter == nullptr)
       return;
     double cx, cy, r;
@@ -94,11 +101,15 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_ellipse (Ellipse *s)
   {
+    rmt_BeginCPUSample(draw_ellipse, RMTSF_Aggregate);
+
     if (_painter == nullptr)
       return;
     double cx, cy, rx, ry;
@@ -118,11 +129,15 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_line (Line *s)
   {
+    rmt_BeginCPUSample(draw_line, RMTSF_Aggregate);
+
     if (_painter == nullptr)
       return;
     double x1, y1, x2, y2;
@@ -141,12 +156,16 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
 
   void
   QtBackend::draw_poly (Poly* p)
   {
+    rmt_BeginCPUSample(draw_poly, RMTSF_Aggregate);
+
     QPainterPath path;
     cur_poly = QPolygonF ();
     p->points ()->draw ();
@@ -171,6 +190,8 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
@@ -181,6 +202,8 @@ namespace djnn
   void
   QtBackend::draw_path (Path *p)
   {
+    rmt_BeginCPUSample(draw_path, RMTSF_Aggregate);
+
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
@@ -202,6 +225,8 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
@@ -242,6 +267,8 @@ namespace djnn
   QtBackend::draw_path_arc (double rx, double ry, double x_axis_rotation, double large_arc_flag, double sweep_flag,
                             double x, double y)
   {
+    rmt_BeginCPUSample(draw_path_arc, RMTSF_Aggregate);
+
     double curx = cur_path.currentPosition ().x ();
     double cury = cur_path.currentPosition ().y ();
     double sin_th, cos_th;
@@ -309,12 +336,16 @@ namespace djnn
     for (i = 0; i < n_segs; i++) {
       draw_path_segment (xc, yc, th0 + i * th_arc / n_segs, th0 + (i + 1) * th_arc / n_segs, rx, ry, x_axis_rotation);
     }
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry,
                                 double xAxisRotation)
   {
+    rmt_BeginCPUSample(draw_path_segment, RMTSF_Aggregate);
+
     double sinTh, cosTh;
     double a00, a01, a10, a11;
     double x1, y1, x2, y2, x3, y3;
@@ -341,6 +372,7 @@ namespace djnn
     cur_path.cubicTo (a00 * x1 + a01 * y1, a10 * x1 + a11 * y1, a00 * x2 + a01 * y2, a10 * x2 + a11 * y2,
                       a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
 
+    rmt_EndCPUSample ();
   }
 
   void
@@ -352,6 +384,8 @@ namespace djnn
   void
   QtBackend::draw_rectangle_clip (RectangleClip *s)
   {
+    rmt_BeginCPUSample(draw_rectangle_clip, RMTSF_Aggregate);
+
     double x, y, w, h;
     s->get_properties_values(x,y,w,h);
     load_drawing_context (s, x, y, w, h);
@@ -366,11 +400,15 @@ namespace djnn
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_path_clip (Path *p)
   {
+    rmt_BeginCPUSample(draw_path_clip, RMTSF_Aggregate);
+
     cur_path = QPainterPath ();
     p->items ()->draw ();
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
@@ -389,11 +427,14 @@ namespace djnn
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_image (Image *i)
   {
+    rmt_BeginCPUSample(draw_image, RMTSF_Aggregate);
+
     double x,y,w,h;
     string path;
     i->get_properties_values(path, x,y,w,h);
@@ -440,6 +481,8 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
     }
+    
+    rmt_EndCPUSample ();
   }
 
   int
@@ -457,6 +500,8 @@ namespace djnn
   void
   QtBackend::draw_data_image (DataImage *i)
     {
+      rmt_BeginCPUSample(draw_data_image, RMTSF_Aggregate);
+
       double x,y,w,h;
       string* data;
       i->get_properties_values (data, x,y,w,h);
@@ -495,6 +540,8 @@ namespace djnn
     __nb_Drawing_object_picking++;
 #endif
       }
+
+      rmt_EndCPUSample ();
     }
 
   static QPainter *buff_painter;
@@ -514,6 +561,8 @@ namespace djnn
   bool
   QtBackend::pre_draw_layer (Layer *l)
   {
+    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate)
+
     double x,y,w,h;
     l->get_xywh(x,y,w,h);
     //QImage *pm = (QImage*) (l->cache ());
@@ -577,12 +626,16 @@ namespace djnn
       buff_pick_painter = nullptr;
     }
 
+    rmt_EndCPUSample ();
+
     return recompute_pixmap;
   }
 
   void
   QtBackend::post_draw_layer (Layer *l)
   {
+    rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
+
     //QImage *pm = (QImage*) (l->cache ());
     LayerStuff* ls = (LayerStuff*) (l->cache ());
     QImage *pick_pm =  (QImage*) (l->pick_cache());
@@ -640,5 +693,7 @@ namespace djnn
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
     _painter->drawImage (rect, *(ls->pm));
     _picking_view->painter()->drawImage (rect, *pick_pm);
+
+    rmt_EndCPUSample ();
   }
 } /* namespace djnn */
