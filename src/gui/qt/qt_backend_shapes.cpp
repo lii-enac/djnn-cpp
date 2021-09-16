@@ -67,11 +67,13 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (s)) {
+      rmt_BeginCPUSample(draw_rectangle_picking, RMTSF_Aggregate);
       load_pick_context (s);
       _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -95,11 +97,13 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (s)) {
+      rmt_BeginCPUSample(draw_circle_picking, RMTSF_Aggregate);
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -123,11 +127,13 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (s)) {
+      rmt_BeginCPUSample(draw_ellipse_picking, RMTSF_Aggregate);
       load_pick_context (s);
       _picking_view->painter ()->drawEllipse (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -150,11 +156,13 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (s)) {
+      rmt_BeginCPUSample(draw_line_picking, RMTSF_Aggregate);
       load_pick_context (s);
       _picking_view->painter ()->drawLine (line);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -184,11 +192,13 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (p)) {
+      rmt_BeginCPUSample(draw_poly_picking, RMTSF_Aggregate);
       load_pick_context (p);
       _picking_view->painter ()->drawPath (path);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -218,12 +228,14 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (p)) {
+      rmt_BeginCPUSample(draw_path_picking, RMTSF_Aggregate);
       load_pick_context (p);
       _picking_view->painter ()->drawPath (cur_path);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
@@ -395,11 +407,13 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
+      rmt_BeginCPUSample(draw_rectangle_clip_picking, RMTSF_Aggregate);
       load_pick_context (s);
       _picking_view->painter ()->setClipRect (x, y, w, h);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
 
     rmt_EndCPUSample ();
   }
@@ -422,11 +436,14 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
+      rmt_BeginCPUSample(draw_path_clip_picking, RMTSF_Aggregate);
       load_pick_context (p);
       _picking_view->painter ()->setClipPath (cur_path);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
+
     rmt_EndCPUSample ();
   }
 
@@ -475,11 +492,13 @@ namespace djnn
     _painter->setOpacity (old_opacity);
 
     if (is_in_picking_view (i)) {
+      rmt_BeginCPUSample(draw_image_picking, RMTSF_Aggregate);
       load_pick_context (i);
       _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+      rmt_EndCPUSample ();
     }
     
     rmt_EndCPUSample ();
@@ -534,11 +553,13 @@ namespace djnn
       _painter->setOpacity (old_opacity);
 
       if (is_in_picking_view (i)) {
+        rmt_BeginCPUSample(draw_data_image_picking, RMTSF_Aggregate);
         load_pick_context (i);
         _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+        rmt_EndCPUSample ();
       }
 
       rmt_EndCPUSample ();
