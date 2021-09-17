@@ -64,6 +64,10 @@ namespace djnn
     if (c == nullptr)
       return;
     _children.push_back (c);
+    /* We don't want multiple parenthood */
+    if (c->get_parent () != nullptr && c->get_parent () != this) {
+      c->get_parent ()->remove_child (c);
+    }
     for (auto s: structure_observer_list) {
       s->add_child_to_container (this, c, _children.size () - 1);
     }
