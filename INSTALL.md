@@ -31,7 +31,7 @@ make install-pkgdeps
 make -j  
 ```
 ---- WINDOWS -----  
-install MSYS2 (follow instructions from https://www.msys2.org/)  
+install MSYS2 (from https://www.msys2.org/, follow installation steps 1 to 6 ONLY )  
 then in an MSYS2-MSYS terminal:
 ```
 pacman -Syu
