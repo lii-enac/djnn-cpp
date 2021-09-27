@@ -922,7 +922,7 @@ ifeq ($(os),MinGW)
 	#pkgupg := pacboy -Syu --needed
 
 	#boost
-	mgwpkgdeps += expat curl
+	mgwpkgdeps += gcc expat curl
 	#pkgdeps += libusb #crazyflie
 	mgwpkgdeps += rtmidi
 	ifeq ($(graphics),QT)
