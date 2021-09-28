@@ -43,12 +43,16 @@
 
 #include "core/utils/error.h"
 
+#include <iostream>
+
 namespace djnn
 {
 
-  enum {
-    user_event_geometry = QEvent::User
-  };
+ class djnnQEvent : public QEvent {
+ public:
+    static const QEvent::Type user_event_geometry = static_cast<QEvent::Type> (QEvent::User);
+    static const QEvent::Type user_event_minimum_size = static_cast<QEvent::Type> (QEvent::User+1);
+ };
 
   QtWindow::QtWindow (Window *win, const string& title, double x, double y, double w, double h) :
       _qwidget (nullptr), _window (win), _please_update (true)
@@ -158,16 +162,16 @@ namespace djnn
   }
 
   void
-  QtWindow::set_minimum_size (int w, int h) {
-    djnn::release_exclusive_access (DBG_REL); //hum,hum workaround to avoid the lock issue
-                                              //caused by the qt generated event on setMinumumSize call
-    _qwidget->setMinimumSize (w, h);
+  QtWindow::set_minimum_size (int w, int h)
+  {
+    auto * evt = new QEvent (djnnQEvent::user_event_minimum_size);
+    QtMainloop::instance ().get_QApplication ()->postEvent (_qwidget, evt);
   }
 
   void
   QtWindow::update_geometry ()
   {
-    auto * evt = new QEvent((QEvent::Type)user_event_geometry);
+    auto * evt = new QEvent (djnnQEvent::user_event_geometry);
     QtMainloop::instance ().get_QApplication ()->postEvent (_qwidget, evt);
   }
 
@@ -183,6 +187,15 @@ namespace djnn
     _qwidget->setGeometry (x,y,w,h);
   }
 
+ void
+  QtWindow::set_minimum_size_for_good ()
+  {
+    auto w = (int) _window->min_width ()->get_value ();
+    auto h = (int) _window->min_height ()->get_value ();
+
+    // TODO macOS: should be done in GUI thread...
+    _qwidget->setMinimumSize (w, h);
+  }
 
 
   // MyQWidget
@@ -217,8 +230,11 @@ namespace djnn
         if(!_building)
         djnn::release_exclusive_access (DBG_REL);
         break;
-      case user_event_geometry:
+      case djnnQEvent::user_event_geometry:
         _qtwindow->update_geometry_for_good ();
+        break;
+      case djnnQEvent::user_event_minimum_size:
+        _qtwindow->set_minimum_size_for_good ();
         break;
 
       default:

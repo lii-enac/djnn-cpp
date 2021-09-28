@@ -37,6 +37,7 @@ namespace djnn {
     virtual void set_opacity (double opacity) override;
     virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) override;
     virtual void set_minimum_size (int w, int h) override;
+    virtual void set_minimum_size_for_good ();
     virtual void update_geometry () override;
     virtual void update_geometry_for_good ();
 

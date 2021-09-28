@@ -119,6 +119,8 @@ namespace djnn
     DoubleProperty* wheel_dy () { return _w_dy; }
     DoubleProperty* width () { return _width; }
     DoubleProperty* height () { return _height; }
+    IntProperty* min_width () { return _min_width; }
+    IntProperty* min_height () { return _min_height; }
     TextProperty* title () { return _title; }
     IntProperty* key_pressed () { return _key_pressed; }
     IntProperty* key_released () { return _key_released; }
