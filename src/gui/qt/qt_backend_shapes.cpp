@@ -543,7 +543,7 @@ namespace djnn
       QColor c = cur_context->pen.color ();
       _painter->setOpacity (c.alphaF ());
 
-      _painter->setRenderHint (QPainter::SmoothPixmapTransform);
+      //_painter->setRenderHint (QPainter::SmoothPixmapTransform); // do not need anymore if djnn::Layer is used correctly
       _painter->drawPixmap (rect, *pm);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
