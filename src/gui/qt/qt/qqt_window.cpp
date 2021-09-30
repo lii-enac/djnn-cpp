@@ -235,14 +235,18 @@ namespace djnn
   void
   MyQQWidget::paintEvent (QPaintEvent *event)
   { //DBG;
+    rmt_BeginCPUSample(paintEvent, RMTSF_None);
+    
+    rmt_BeginCPUSample (pre_draw, RMTSF_None);
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
     QPainter painter (this);
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
     FatProcess *p = _window->holder ();
+    rmt_EndCPUSample (); // pre_draw
 
-    rmt_BeginCPUSample(picking_view_init, RMTSF_Aggregate);
+    rmt_BeginCPUSample(picking_view_init, RMTSF_None);
     _picking_view->init ();
     rmt_EndCPUSample ();
     if (p) {
@@ -266,12 +270,17 @@ namespace djnn
       cerr << "\033[0m" << endl;
 #endif
     }
+
+    rmt_BeginCPUSample (post_draw, RMTSF_None);
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
       // event synthesis or not ??
       QtMainloop::instance ().set_please_exec (true);
 
     if (_DEBUG_SEE_COLOR_PICKING_VIEW)
       _picking_view->display();
+    rmt_EndCPUSample (); //post_draw
+
+    rmt_EndCPUSample (); // paintEvent
   }
 
 }
