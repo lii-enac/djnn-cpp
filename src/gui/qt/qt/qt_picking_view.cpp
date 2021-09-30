@@ -18,6 +18,7 @@
 
 #include "core/utils/utils-dev.h"
 #include "utils/debug.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 #include "qt_picking_view.h"
 #include <QtGui/QImage>
@@ -52,7 +53,10 @@ namespace djnn
   void
   QtPickingView::init ()
   {
+    rmt_BeginCPUSample(ColorPickingView_init, RMTSF_None);
     ColorPickingView::init ();
+    rmt_EndCPUSample ();
+    rmt_BeginCPUSample(ColorPickingView_setting, RMTSF_None);
     double w = _win->width ()->get_value ();
     double h = _win->height ()->get_value ();
     if (_painter != nullptr)
@@ -61,7 +65,10 @@ namespace djnn
       delete _image;
     _image = new QImage (w, h, QImage::Format_RGB32);
     _image->fill (0xffffffff);
+    rmt_EndCPUSample ();
+    rmt_BeginCPUSample(ColorPickingView_new, RMTSF_None);
     _painter = new QPainter (_image);
+    rmt_EndCPUSample ();
   }
 
   void
