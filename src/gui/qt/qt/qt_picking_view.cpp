@@ -61,13 +61,16 @@ namespace djnn
     double h = _win->height ()->get_value ();
     if (_painter != nullptr)
       delete _painter;
-    if (_image != nullptr)
+    if (_image != nullptr && (w != _image->width () || h != _image->height ())){
       delete _image;
-    _image = new QImage (w, h, QImage::Format_RGB32);
-    _image->fill (0xffffffff);
+      _image = nullptr;
+    }
     rmt_EndCPUSample ();
     rmt_BeginCPUSample(ColorPickingView_new, RMTSF_None);
+    if ( _image == nullptr)
+      _image = new QImage (w, h, QImage::Format_RGB32);
     _painter = new QPainter (_image);
+    _painter->fillRect (0, 0, w, h, QColor(255, 255, 255, 255));  //0xfffffff 
     rmt_EndCPUSample ();
   }
 
