@@ -46,7 +46,7 @@ namespace djnn
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const string& path) {}
     virtual void set_opacity (double opacity) {}
-    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b) {}
+    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b, bool isFrameless = false) {}
     virtual void set_minimum_size (int w, int h) {}
     virtual void update_geometry () {}
      
@@ -161,6 +161,7 @@ namespace djnn
 
     DoubleProperty* background_opacity () { return _background_opacity; }
     BackgroundColor* background_color () { return _background_color; }
+    BoolProperty* frameless () { return _frameless; }
     void set_background_opacity_and_color ();
     void set_minimum_size ();
     void update_geometry ();
@@ -210,6 +211,9 @@ namespace djnn
     DoubleProperty* _opacity;
     OpacityAction * _opacity_action;
     Coupling * _c_opacity;
+
+    //Note: could it be interactive ? not sure ?
+    BoolProperty* _frameless;
 
     DoubleProperty* _background_opacity;
     BackgroundOpacityAction * _background_opacity_action;

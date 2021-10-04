@@ -96,6 +96,8 @@ namespace djnn
     _opacity_action = new OpacityAction (this, "opacity_action");
     _c_opacity = new Coupling (_opacity, ACTIVATION, _opacity_action, ACTIVATION);
 
+    _frameless = new BoolProperty (this, "frameless", false);
+
     _background_opacity = new DoubleProperty (this, "background_opacity", -1);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
@@ -177,6 +179,8 @@ namespace djnn
     delete _c_opacity;
     delete _opacity_action;
     delete _opacity;
+
+    delete _frameless;
 
     delete _c_background_opacity;
     delete _background_opacity_action;
@@ -265,7 +269,8 @@ namespace djnn
       _background_opacity->get_value(), 
       _background_color->r()->get_value(),
       _background_color->g()->get_value(),
-      _background_color->b()->get_value()
+      _background_color->b()->get_value(),
+      _frameless->get_value ()
       );
   }
 
