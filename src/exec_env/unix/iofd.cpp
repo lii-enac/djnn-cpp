@@ -19,8 +19,17 @@
 #include "core/utils/error.h"
 #include "core/core-dev.h" // graph add/remove edge
 
+#ifdef _WIN32
+  // TODO: Windows hack - do better
+  #define NOGDI
+  /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
+  #include <winsock2.h>
+  #include <ws2tcpip.h>
+#else
+
 #include <sys/select.h>
 
+#endif
 // dbg
 // #include "core/utils/iostream.h"
 // #include "utils/debug.h"
@@ -68,6 +77,7 @@ namespace djnn {
         FD_ZERO (&reads);
         FD_SET (_readfd, &reads);
         int ret = select(_readfd+1, &reads, nullptr, nullptr, nullptr); // blocking call
+        //int ret = read(_readfd);
         if (ret == -1) {
           warning (nullptr, "error reading fd");
           return;

@@ -19,6 +19,7 @@ endif
 ifeq ($(os),MinGW)
 lib_suffix =.dll
 boost_libs = -lboost_thread-mt -lboost_chrono-mt -lboost_system-mt
+lib_ldflags += -lws2_32
 endif
 
 ifeq ($(os),crazyflie)
@@ -103,7 +104,7 @@ ifeq ($(compiler),gnu)
 	lib_ldflags += -latomic
 endif
 
-ifeq ($(os),$(filter $(os),Darwin Linux))
+ifeq ($(os),$(filter $(os),Darwin Linux MinGW))
 lib_srcs += src/exec_env/unix/iofd.cpp
 endif
 
