@@ -30,6 +30,8 @@
 #include "gui/shape/svg_holder.h"
 #include "gui/shape/ui.h"
 
+#include "core/core-dev.h" //  add/remove edge
+
 #include "core/utils/error.h"
 
 #include "core/utils/iostream.h"
@@ -108,6 +110,8 @@ namespace djnn
     _leave = new Spike (this, "leave");
     _release = new Spike (this, "release");
     _last_shape = new RefProperty (this, "last_shape", nullptr);
+
+    graph_add_edge (_enter, _leave); // make sur enter event are process before leave event
   }
 
   Touch::Touch (ParentProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure) :
@@ -122,6 +126,7 @@ namespace djnn
   {
     delete _last_shape;
     delete _release;
+    graph_remove_edge (_enter, _leave);
     delete _leave;
     delete _enter;
     _move->remove_symbol ("local_x");
@@ -173,6 +178,9 @@ namespace djnn
     mouse_move  = new Spike (mouse, "move");
     mouse_enter = new Spike (mouse, "enter");
     mouse_leave = new Spike (mouse, "leave");
+
+    graph_add_edge (enter, leave); // make sur enter event are process before leave event
+    graph_add_edge (mouse_enter, mouse_leave); // make sur enter event are process before leave event
 
     touches = new List (parent, "touches");
     touches->set_activation_state (ACTIVATED);
@@ -298,12 +306,14 @@ namespace djnn
     ((List*) touches)->clear ();
     delete touches;
     
+    graph_remove_edge (mouse_enter, mouse_leave);
     delete mouse_leave;
     delete mouse_enter;
     delete mouse_move;
     delete mouse_release;
     delete mouse_press;
     delete mouse;
+    graph_remove_edge (enter, leave);
     delete leave;
     delete enter;
     delete release;
