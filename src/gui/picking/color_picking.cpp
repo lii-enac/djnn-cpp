@@ -13,6 +13,8 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
  */
+#include "core/utils/utils-dev.h"
+
 #include "color_picking.h"
 
 #include "utils/debug.h"
@@ -80,18 +82,19 @@ namespace djnn
   void
   ColorPickingView::next_color()
   {
-#if 1
-    ++_pick_color;
-    //_pick_color+=100;
-#else
-    // repeatable random, helpful for debugging
-    // (maxed out to 200 to see color on white bg)
-    // (mined out to 100 to see color on black bg)
-    int r = 100+myrandom()*155;
-    int g = 100+myrandom()*155;
-    int b = 100+myrandom()*155;
-    _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
-#endif
+    if ( _DEBUG_SEE_COLOR_PICKING_VIEW == 0 )
+      ++_pick_color;
+      //_pick_color+=100;
+    else {
+      // DEBUG MODE
+      // repeatable random, helpful for debugging
+      // (maxed out to 200 to see color on white bg)
+      // (mined out to 100 to see color on black bg)
+      int r = 100+myrandom()*155;
+      int g = 100+myrandom()*155;
+      int b = 100+myrandom()*155;
+      _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
+    }
     //std::cerr << hex << _pick_color << dec << __FL__;
   }
 
