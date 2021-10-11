@@ -98,7 +98,7 @@ namespace djnn
 
     _frameless = new BoolProperty (this, "frameless", false);
 
-    _background_opacity = new DoubleProperty (this, "background_opacity", -1);
+    _background_opacity = new DoubleProperty (this, "background_opacity", 1);
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
 
