@@ -19,11 +19,14 @@
 #include "color_picking.h"
 #include "gui/transformation/homography.h"
 #include "gui/shape/ui.h"
+#include "core/core-dev.h"
 
 #include <assert.h>
 
 //#include "core/utils/iostream.h"
 //#include "utils/debug.h"
+
+#include <iostream>
 
 namespace djnn
 {
@@ -132,6 +135,7 @@ namespace djnn
           FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
           p1->schedule_activation ();
           p2->schedule_activation ();
+          GRAPH_EXEC;
         }
         s->get_ui ()->enter->schedule_activation ();
         s->get_ui ()->mouse_enter->schedule_activation ();
@@ -139,7 +143,9 @@ namespace djnn
         /* new _hovered_shape */
         _hovered_shape = s;
         
-        exec_ = true;
+        //exec_ = true;
+        std::cout << "GRAPH_EXEC 1" << std::endl;
+        GRAPH_EXEC;  //cut the event synthesis when enter/leave happened
       }    
     } 
     else if (_hovered_shape != nullptr) {
@@ -151,7 +157,9 @@ namespace djnn
         /* reset */
         _hovered_shape = nullptr;
 
-        exec_ = true;
+        //exec_ = true;
+        std::cout << "GRAPH_EXEC 1" << std::endl;
+        GRAPH_EXEC;
     }
     
     return exec_;
