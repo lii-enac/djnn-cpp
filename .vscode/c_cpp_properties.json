@@ -4,7 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/src",
-                "/usr/local/Cellar/qt/**",
+                "/usr/local/Cellar/qt@5/**",
                 "/usr/local/include",
                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/**",
                 "/usr/local/include/Ivy"
