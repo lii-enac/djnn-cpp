@@ -126,7 +126,6 @@ namespace djnn
   {
 
     auto s = picked;
-    bool exec_ = false;
 
     if (s) {
       if (s != _hovered_shape) {
@@ -135,6 +134,7 @@ namespace djnn
           FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
           p1->schedule_activation ();
           p2->schedule_activation ();
+          //cut the event synthesis when enter/leave happened
           GRAPH_EXEC;
         }
         s->get_ui ()->enter->schedule_activation ();
@@ -142,10 +142,8 @@ namespace djnn
         
         /* new _hovered_shape */
         _hovered_shape = s;
-        
-        //exec_ = true;
-        std::cout << "GRAPH_EXEC 1" << std::endl;
-        GRAPH_EXEC;  //cut the event synthesis when enter/leave happened
+        //cut the event synthesis when enter/leave happened
+        GRAPH_EXEC;
       }    
     } 
     else if (_hovered_shape != nullptr) {
@@ -157,12 +155,11 @@ namespace djnn
         /* reset */
         _hovered_shape = nullptr;
 
-        //exec_ = true;
-        std::cout << "GRAPH_EXEC 1" << std::endl;
+        //cut the event synthesis when enter/leave happened
         GRAPH_EXEC;
     }
     
-    return exec_;
+    return false;
   }
 
   bool
