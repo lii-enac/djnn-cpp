@@ -95,19 +95,20 @@ namespace djnn
     h = AbstractImage::raw_props.height;
   }
 
-  void
-  Image::press (double x, double y)
-  {
-    if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
-      _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
-  }
+  // Note: should not do like this : MP 15.10.2021
+  // void
+  // Image::press (double x, double y)
+  // {
+  //   if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
+  //     _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
+  // }
 
-  void
-  Image::move (double x, double y)
-  {
-    if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
-      _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
-  }
+  // void
+  // Image::move (double x, double y) : MP 15.10.2021
+  // {
+  //   if (x < AbstractImage::raw_props.width && y < AbstractImage::raw_props.height)
+  //     _pixel.set_value (Backend::instance()->get_pixel (this, x, y), true);
+  // }
 
   double
   Image::sdf (double x, double y) const

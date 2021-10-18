@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -19,7 +19,7 @@
 #include "display/qt/qt_window.h"
 #include "gui/shape/text.h"
 #include "gui/shape/image.h"
-#include "gui/shape/ui.h"
+#include "display/ui.h"
 #include "core/utils/ext/remotery/Remotery.h"
 
 #include <QtWidgets/QWidget>
@@ -220,11 +220,12 @@ namespace djnn
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width());
     /* no antialiasing in Color Picking otherwise it will modified a given color */
-    //_picking_view->painter ()->setRenderHint (QPainter::Antialiasing, true);
+    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
-    _picking_view->add_gobj (s, _in_cache);
+    PickUI* p = dynamic_cast<PickUI*> (s);
+    _picking_view->add_pick_shape (p, _in_cache);
     #endif
     
     rmt_EndCPUSample ();

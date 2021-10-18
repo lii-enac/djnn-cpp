@@ -28,7 +28,7 @@
 #include "gui/picking/analytical_picking_context.h"
 #include "gui/style/style_sheet.h"
 #include "gui/shape/svg_holder.h"
-#include "gui/shape/ui.h"
+#include "display/ui.h"
 
 #include "core/utils/error.h"
 
@@ -41,12 +41,6 @@
 
 namespace djnn
 {
-  static
-  vector<string>
-  //AbstractGShape::
-  _ui =
-    { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
-
   FatChildProcess*
   SVGHolder::find_child_impl (const string& path)
   {
@@ -140,192 +134,49 @@ namespace djnn
     delete _init_y;
     delete _init_x;
   }
-
-  UI::UI (ParentProcess* parent_, FatProcess *f) : parent (parent_)
+  
+  void
+  Touch::set_touch_local_coords (PickUI *p, double x, double y, bool is_move)
   {
-    pickable = new BoolProperty (parent, "pickable", true);
-    //FatProcess *update = UpdateDrawing::instance ()->get_damaged ();
-    //cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
-    //if (f != nullptr)
-    //  cpick->enable (f);
-    FatProcess *update = f;
-    if (update) update = dynamic_cast<Window*>(f)->damaged ();
-    cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);
-    if (f != nullptr) cpick->enable ();
-
-    press = new Spike (parent, "press");
-    move = new Spike (parent, "move");
-    left = new Component (parent, "left");
-    left_press = new Spike (left, "press");
-    left_release = new Spike (left, "release");
-    right = new Component (parent, "right");
-    right_press = new Spike (right, "press");
-    right_release = new Spike (right, "release");
-    middle = new Component (parent, "middle");
-    middle_press = new Spike (middle, "press");
-    middle_release = new Spike (middle, "release");
-    release = new Spike (parent, "release");
-    enter = new Spike (parent, "enter");
-    leave = new Spike (parent, "leave");
-    mouse = new Component (parent, "mouse");
-    mouse_press = new Spike (mouse, "press");
-    mouse_release = new Spike (mouse, "release");
-    mouse_move  = new Spike (mouse, "move");
-    mouse_enter = new Spike (mouse, "enter");
-    mouse_leave = new Spike (mouse, "leave");
-
-    touches = new List (parent, "touches");
-    touches->set_activation_state (ACTIVATED);
-    mouse->set_activation_state(ACTIVATED);
-    left->set_activation_state (ACTIVATED);
-    right->set_activation_state (ACTIVATED);
-    middle->set_activation_state (ACTIVATED);
-
-    move_x = new DoubleProperty (nullptr, "move_x", 0);
-    move_y = new DoubleProperty (nullptr, "move_y", 0);
-    press_x = new DoubleProperty (nullptr, "press_x", 0);
-    press_y = new DoubleProperty (nullptr, "press_y", 0);
-
-    local_move_x = new DoubleProperty (nullptr, "local_move_x", 0);
-    local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
-    local_press_x = new DoubleProperty (nullptr, "local_press_x", 0);
-    local_press_y = new DoubleProperty (nullptr, "local_press_y", 0);
-
-    move->add_symbol ("x", move_x);
-    move->add_symbol ("y", move_y);
-    move->add_symbol ("local_x", local_move_x);
-    move->add_symbol ("local_y", local_move_y);
-
-    press->add_symbol ("x", press_x);
-    press->add_symbol ("y", press_y);
-    press->add_symbol ("local_x", local_press_x);
-    press->add_symbol ("local_y", local_press_y);
-
-    mouse_press_x = new DoubleProperty (nullptr, "mouse_press_x", 0);
-    mouse_press_y = new DoubleProperty (nullptr, "mouse_press_y", 0);
-    mouse_move_x = new DoubleProperty (nullptr, "mouse_move_x", 0);
-    mouse_move_y = new DoubleProperty (nullptr, "mouse_move_y", 0);
-
-    mouse_local_press_x = new DoubleProperty (nullptr, "mouse_local_press_x", 0);
-    mouse_local_press_y = new DoubleProperty (nullptr, "mouse_local_press_y", 0);
-    mouse_local_move_x = new DoubleProperty (nullptr, "mouse_local_move_x", 0);
-    mouse_local_move_y = new DoubleProperty (nullptr, "mouse_local_move_y", 0);
-
-    mouse_move->add_symbol ("x", mouse_move_x);
-    mouse_move->add_symbol ("y", mouse_move_y);
-    mouse_move->add_symbol ("local_x", mouse_local_move_x);
-    mouse_move->add_symbol ("local_y", mouse_local_move_y);
-
-    mouse_press->add_symbol ("x", mouse_press_x);
-    mouse_press->add_symbol ("y", mouse_press_y);
-    mouse_press->add_symbol ("local_x", mouse_local_press_x);
-    mouse_press->add_symbol ("local_y", mouse_local_press_y);
-  }
-
-  UI::~UI()
-  {
-    move->remove_symbol ("x");
-    move->remove_symbol ("y");
-    move->remove_symbol ("local_x");
-    move->remove_symbol ("local_y");
-
-    press->remove_symbol ("x");
-    press->remove_symbol ("y");
-    press->remove_symbol ("local_x");
-    press->remove_symbol ("local_y");
-
-    mouse_move->remove_symbol ("x");
-    mouse_move->remove_symbol ("y");
-    mouse_move->remove_symbol ("local_x");
-    mouse_move->remove_symbol ("local_y");
-
-    mouse_press->remove_symbol ("x");
-    mouse_press->remove_symbol ("y");
-    mouse_press->remove_symbol ("local_x");
-    mouse_press->remove_symbol ("local_y");
-
-    delete mouse_press_x;
-    delete mouse_press_y;
-    delete mouse_move_x;
-    delete mouse_move_y;
-
-    delete mouse_local_press_x;
-    delete mouse_local_press_y;
-    delete mouse_local_move_x;
-    delete mouse_local_move_y;
-
-    delete move_x;
-    delete move_y;
-    delete press_x;
-    delete press_y;
-
-    delete local_move_x;
-    delete local_move_y;
-    delete local_press_x;
-    delete local_press_y;
-
-    parent->remove_child (touches);
-    parent->remove_child (mouse);
-    parent->remove_child (press);
-    parent->remove_child (release);
-    parent->remove_child (move);
-    parent->remove_child (enter);
-    parent->remove_child (leave);
-    parent->remove_child (left);
-    parent->remove_child (right);
-    parent->remove_child (middle);
-
-    mouse->remove_child (mouse_press);
-    mouse->remove_child (mouse_release);
-    mouse->remove_child (mouse_move);
-    mouse->remove_child (mouse_enter);
-    mouse->remove_child (mouse_leave);
-
-    left->remove_child (left_press);
-    left->remove_child (left_release);
-
-    right->remove_child (right_press);
-    right->remove_child (right_release);
-
-    middle->remove_child (middle_press);
-    middle->remove_child (middle_release);
-
-    /* HACK 
-    * clear _children of the (djnn:List) touches before
-    * deleting it (touches), to avoid ~Container to delete touches inside "touches list"
-    * which are also in a _active_touches list
-    */
-    ((List*) touches)->clear ();
-    delete touches;
     
-    delete mouse_leave;
-    delete mouse_enter;
-    delete mouse_move;
-    delete mouse_release;
-    delete mouse_press;
-    delete mouse;
-    delete leave;
-    delete enter;
-    delete release;
-    delete move;
-    delete press;
-    delete left;
-    delete left_press;
-    delete left_release;
-    delete right;
-    delete right_press;
-    delete right_release;
-    delete middle;
-    delete middle_press;
-    delete middle_release;
-    delete cpick;
-    delete pickable;
+    AbstractGShape *s = dynamic_cast<AbstractGShape*> (p);
+
+    if (!s)
+      return;
+
+    /* compute local coords */
+    Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
+    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
+        - s->origin_x ()->get_value ();
+    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
+        - s->origin_x ()->get_value ();
+    
+    /* 1 -touches */ 
+    /* it's a press */
+    if (!is_move) {
+      this->set_local_init_x (loc_x);
+      this->set_local_init_y (loc_y);
+    } 
+    /* we choose to set/init move even on press */
+    this->set_local_move_x (loc_x);
+    this->set_local_move_y (loc_y);
+
+    /* 2 - common mouse + touch on the PickUI interface */
+    if (!is_move)  {
+      s->ui ()->local_press_x ()->set_value (loc_x, true);
+      s->ui ()->local_press_y ()->set_value (loc_y, true);
+    }
+
+    /* we choose to set/init move even on press */
+    s->ui ()->local_move_x ()->set_value (loc_x, true);
+    s->ui ()->local_move_y ()->set_value (loc_y, true);
   }
+
 
   void
   AbstractGShape::init_ui ()
   {
-    ui = new UI (this, get_frame ());
+    _ui = new UI (this, get_frame ());
 
     if( !_inverted_matrix) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
@@ -335,7 +186,7 @@ namespace djnn
   }
 
   AbstractGShape::AbstractGShape (ParentProcess* parent, const string& name) :
-    AbstractGObj (parent, name), _matrix (nullptr), _inverted_matrix (nullptr), ui (nullptr)
+    AbstractGObj (parent, name), PickUI (false), _matrix (nullptr), _inverted_matrix (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
@@ -345,7 +196,7 @@ namespace djnn
   AbstractGShape::find_child_impl (const string& path)
   {
     // looking for ui interface
-    if (ui) {
+    if (_ui) {
       FatChildProcess* process = FatProcess::find_child_impl (path);
       if (process != nullptr)
         return process;
@@ -368,9 +219,9 @@ namespace djnn
     }
     else {
       /*  "press", "release", "move", "enter", "leave", "touches" */
-      vector<string>::iterator it = _ui.begin ();
+      vector<string>::iterator it = __ui_interface.begin ();
       found = false;
-      while (!found && it != _ui.end ()) {
+      while (!found && it != __ui_interface.end ()) {
         if (key.compare (*it) == 0) {
           found = true;
           init_ui ();
@@ -384,9 +235,8 @@ namespace djnn
   void
   AbstractGShape::impl_deactivate ()
   {
-    UI *ui = get_ui();
-    if (ui)
-      ui->deactivate ();
+    if (_ui)
+      _ui->deactivate ();
     // remove from picking_view if is the current object
     if (is_pickable(this)) {
       if (this->get_frame ()) {
@@ -403,9 +253,8 @@ namespace djnn
   AbstractGShape::impl_activate ()
   {
    AbstractGObj::impl_activate ();
-   UI *ui = get_ui();
-   if (ui)
-     ui->activate (get_frame());
+   if (_ui)
+     _ui->activate (get_frame());
   }
 
   void
@@ -430,8 +279,6 @@ namespace djnn
     delete _matrix;
     delete _inverted_matrix;
 
-    // remove _ui if it exist
-    delete ui;
   }
 
   void
@@ -442,6 +289,38 @@ namespace djnn
     if (somehow_activating () && is_pickable(this) && DisplayBackend::instance ()->window () == _frame) {
       Backend::instance ()->pick_gshape (this);
     }
+  }
+
+  // pair<double, double>
+  void
+  AbstractGShape::set_mouse_local_coords (double x, double y, bool is_move)
+  {
+    /* compute local coords */
+    Homography *h = dynamic_cast<Homography*> (_inverted_matrix);
+    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
+        - _origin_x->get_value ();
+    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
+      - _origin_y->get_value();
+
+    /* 1 - mouse */
+    /* it's a press */
+    if (!is_move) {
+      this->ui()->mouse_local_press_x()->set_value(loc_x, true);
+      this->ui()->mouse_local_press_y()->set_value(loc_y, true);
+    }
+    /* we choose to set/init move even on press */
+    this->ui()->mouse_local_move_x()->set_value(loc_x, true);
+    this->ui()->mouse_local_move_y()->set_value(loc_y, true);
+
+    /* 2 - common mouse + touch */
+    if (!is_move) {
+      this->ui()->local_press_x()->set_value(loc_x, true);
+      this->ui()->local_press_y()->set_value(loc_y, true);
+    }
+
+    /* we choose to set/init move even on press */
+    this->ui()->local_move_x()->set_value(loc_x, true);
+    this->ui()->local_move_y()->set_value(loc_y, true);
   }
 
   void

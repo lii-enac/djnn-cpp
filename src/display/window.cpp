@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -16,6 +16,7 @@
 
 #include "window.h"
 #include "background_color.h"
+#include "background_rect.h"
 
 #include "display/display-dev.h"
 #include "display/abstract_display.h"
@@ -105,6 +106,8 @@ namespace djnn
     _background_color = new BackgroundColor (this, "background_color");
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
     _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
+
+    _background_rect = new BackgroundRect (this, "background_rect");
 
     _min_width = new IntProperty (this, "min_width", 0);
     _min_height = new IntProperty (this, "min_height", 0);

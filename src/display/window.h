@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2020)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -17,6 +17,7 @@
 
 #include "core/ontology/process.h"
 #include "core/control/action.h"
+#include "core/tree/component.h"
 
 #include "core/tree/ref_property.h"
 
@@ -32,6 +33,7 @@ namespace djnn
   class Spike;
   class Blank;
   class BackgroundColor;
+  class BackgroundRect;
 
   class Picking;
   class WinImpl {
@@ -162,6 +164,7 @@ namespace djnn
     DoubleProperty* background_opacity () { return _background_opacity; }
     BackgroundColor* background_color () { return _background_color; }
     BoolProperty* frameless () { return _frameless; }
+    BackgroundRect* background_rect () { return _background_rect; }
     void set_background_opacity_and_color ();
     void set_minimum_size ();
     void update_geometry ();
@@ -222,6 +225,8 @@ namespace djnn
     BackgroundColor* _background_color;
     BackgroundColorAction * _background_color_action;
     Coupling * _c_background_color;
+
+    BackgroundRect * _background_rect;
 
     IntProperty* _min_width, *_min_height;
     MinimumSizeAction * _min_size_action;

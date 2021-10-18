@@ -22,8 +22,8 @@ namespace djnn {
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
     void set_invalid_cache (bool v) { _invalid_cache = v;}
-    void press (double x, double y) override;
-    void move (double x, double y) override;
+    //void press (double x, double y) override; // should not have it here : MP 15.10.2021
+    //void move (double x, double y) override; // should not have it here : MP 15.10.2021
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
   private:

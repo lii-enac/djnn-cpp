@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2014-2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -18,23 +18,17 @@
 #include "core/utils/to_string.h"
 #include "color_picking.h"
 #include "gui/transformation/homography.h"
-#include "gui/shape/ui.h"
+#include "display/ui.h"
 #include "core/core-dev.h"
 
 #include <assert.h>
-
-//#include "core/utils/iostream.h"
-//#include "utils/debug.h"
-
-#include <iostream>
-
 namespace djnn
 {
   extern int mouse_tracking; // in display
   extern FatProcess* GenericMouse; // in gui
 
   Picking::Picking (Window *win) :
-      _win (win), _catched_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)
+      _win (win), _cought_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)
   {
     // FIXME: uniformiser l'API
     //_win->set_picking_view(this);
@@ -50,62 +44,16 @@ namespace djnn
   {
   }
 
-  pair<double, double>
-  Picking::set_local_coords (AbstractGShape* s, Touch *t, double x, double y, bool is_move)
-  {
-    /* compute local coords */
-    Homography *h = dynamic_cast<Homography*> (s->inverted_matrix ());
-    double loc_x = h->raw_props.m11 * x + h->raw_props.m12 * y + h->raw_props.m13 + h->raw_props.m14
-        - s->origin_x ()->get_value ();
-    double loc_y = h->raw_props.m21 * x + h->raw_props.m22 * y + h->raw_props.m23 + h->raw_props.m24
-        - s->origin_y ()->get_value ();
-    
-    /* 1 -touches */ 
-    if (t != nullptr) {
-      /* it's a press */
-      if (!is_move) {
-        t->set_local_init_x (loc_x);
-        t->set_local_init_y (loc_y);
-      } 
-      /* we choose to set/init move even on press */
-      t->set_local_move_x (loc_x);
-      t->set_local_move_y (loc_y);
-    } 
-    /* 2 - mouse */
-    else {
-      /* it's a press */
-      if (!is_move) {
-        s->get_ui()->mouse_local_press_x->set_value (loc_x, true);
-        s->get_ui()->mouse_local_press_y->set_value (loc_y, true);
-      }
-      /* we choose to set/init move even on press */
-      s->get_ui()->mouse_local_move_x->set_value (loc_x, true);
-      s->get_ui()->mouse_local_move_y->set_value (loc_y, true);
-    }
-    
-
-    /* 3 - common mouse + touch */
-    if (!is_move)  {
-      s->get_ui()->local_press_x->set_value (loc_x, true);
-      s->get_ui()->local_press_y->set_value (loc_y, true);
-    }
-
-    /* we choose to set/init move even on press */
-    s->get_ui()->local_move_x->set_value (loc_x, true);
-    s->get_ui()->local_move_y->set_value (loc_y, true);
-    return pair<double, double> (loc_x, loc_y);
-  }
-
   void
-  Picking::object_deactivated (AbstractGShape* gobj)
+  Picking::object_deactivated (AbstractGShape* picked_shape)
   {
     /* Reset _catched_shape to nullptr if this object has been removed from picking_view */
-    if (_catched_shape == gobj) {
-      _catched_shape = nullptr;
+    if (_cought_shape == picked_shape) {
+      _cought_shape = nullptr;
     }
 
      /* Reset _hovered_shape to nullptr if this object has been removed from picking_view */
-    if (_hovered_shape == gobj) {
+    if (_hovered_shape == picked_shape) {
       _hovered_shape = nullptr;
     }
 
@@ -114,15 +62,15 @@ namespace djnn
     {
       Touch *t = iter->second;
       assert(t);
-      if (t->init_shape () == gobj)
+      if (t->init_shape () == picked_shape)
         t->set_init_shape (nullptr);
-      if (t->current_shape () == gobj)
+      if (t->current_shape () == picked_shape)
         t->set_current_shape (nullptr);
     }
   }
 
   bool
-  Picking::genericEnterLeave (AbstractGShape* picked) 
+  Picking::genericEnterLeave (PickUI* picked) 
   {
 
     auto s = picked;
@@ -130,15 +78,15 @@ namespace djnn
     if (s) {
       if (s != _hovered_shape) {
         if (_hovered_shape != nullptr) {
-          FatProcess* p1 = _hovered_shape->get_ui ()->leave;
-          FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
+          FatProcess* p1 = _hovered_shape->ui ()->leave ();
+          FatProcess* p2 = _hovered_shape->ui ()->mouse_leave ();
           p1->schedule_activation ();
           p2->schedule_activation ();
           //cut the event synthesis when enter/leave happened
           GRAPH_EXEC;
         }
-        s->get_ui ()->enter->schedule_activation ();
-        s->get_ui ()->mouse_enter->schedule_activation ();
+        s->ui ()->enter ()->schedule_activation ();
+        s->ui ()->mouse_enter ()->schedule_activation ();
         
         /* new _hovered_shape */
         _hovered_shape = s;
@@ -147,8 +95,8 @@ namespace djnn
       }    
     } 
     else if (_hovered_shape != nullptr) {
-        FatProcess* p1 = _hovered_shape->get_ui ()->leave;
-        FatProcess* p2 = _hovered_shape->get_ui ()->mouse_leave;
+        FatProcess* p1 = _hovered_shape->ui ()->leave ();
+        FatProcess* p2 = _hovered_shape->ui ()->mouse_leave ();
         p1->schedule_activation ();
         p2->schedule_activation ();
         
@@ -172,20 +120,20 @@ namespace djnn
 
     /* shape */
     bool exec_ = false;
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     if (s) {
-      double cur_move_x = s->get_ui ()->move_x->get_value ();
-      double cur_move_y = s->get_ui ()->move_y->get_value ();
+      double cur_move_x = s->ui ()->move_x ()->get_value ();
+      double cur_move_y = s->ui ()->move_y ()->get_value ();
 
-      if (s == _catched_shape) {
+      if (s == _cought_shape) {
         if (cur_move_x == x && cur_move_y == y)
           return exec_; /* return false */
         else {
-          set_local_coords (s, nullptr, x, y, true);
+            s->set_mouse_local_coords (x, y, true);
         }
       } 
-      s->get_ui ()->move->schedule_activation ();
-      s->get_ui ()->mouse_move->schedule_activation ();
+      s->ui ()->move ()->schedule_activation ();
+      s->ui ()->mouse_move ()->schedule_activation ();
     }
 
     exec_ |= genericEnterLeave(s);
@@ -194,23 +142,23 @@ namespace djnn
   }
 
   void
-  Picking::common_press_setting (double x, double y , AbstractGShape *s)
+  Picking::common_press_setting (double x, double y , PickUI *s)
   {
-    s->get_ui()->press_x->set_value (x, true);
-    s->get_ui()->press_y->set_value (y, true);
-    s->get_ui()->move_x->set_value (x, true);
-    s->get_ui()->move_y->set_value (y, true);
+    s->ui()->press_x ()->set_value (x, true);
+    s->ui()->press_y ()->set_value (y, true);
+    s->ui()->move_x ()->set_value (x, true);
+    s->ui()->move_y ()->set_value (y, true);
   }
 
   void
-  Picking::common_press_notify (AbstractGShape *s)
+  Picking::common_press_notify (PickUI *s)
   {
     if (s != _hovered_shape)
-      s->get_ui()->enter->schedule_activation ();
-    s->get_ui()->press->schedule_activation ();
+      s->ui()->enter ()->schedule_activation ();
+    s->ui()->press ()->schedule_activation ();
 
     /* reset _hovered_shape and _catched_shape */
-    _catched_shape = s;
+    _cought_shape = s;
     _hovered_shape = s;
   }
 
@@ -228,23 +176,22 @@ namespace djnn
     
 
     /* shape */ 
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     //std::cerr << s << " " << typeid(s).name() << std::endl;
     if (s != nullptr) {
      
       /* setting */
       common_press_setting (x, y, s);
-      s->get_ui()->mouse_press_x->set_value (x, true);
-      s->get_ui()->mouse_press_y->set_value (y, true);
-      // s->get_ui()->mouse_move_x->set_value (x, true);
-      // s->get_ui()->mouse_move_y->set_value (y, true);
-      pair<double, double> coord = set_local_coords (s, nullptr, x, y, false);
-      s->press (coord.first, coord.second);
+      s->ui()->mouse_press_x ()->set_value (x, true);
+      s->ui()->mouse_press_y ()->set_value (y, true);
+      // s->ui()->mouse_move_x->set_value (x, true);
+      // s->ui()->mouse_move_y->set_value (y, true);
+      s->set_mouse_local_coords (x, y, false);
 
       /* event */
       if (s != _hovered_shape)
-        s->get_ui()->mouse_enter->schedule_activation ();
-      s->get_ui()->mouse_press->schedule_activation ();
+        s->ui()->mouse_enter ()->schedule_activation ();
+      s->ui()->mouse_press ()->schedule_activation ();
       common_press_notify (s);
 
       exec_ = true;
@@ -256,19 +203,19 @@ namespace djnn
       case BUTTON_LEFT:
         ((GUIMouse*) GenericMouse)->left ()->press ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->left_press->activate ();
+          s->ui()->left_press ()->activate ();
         }
         break;
       case BUTTON_RIGHT:
         ((GUIMouse*) GenericMouse)->right ()->press ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->right_press->activate ();
+          s->ui()->right_press ()->activate ();
         }
         break;
       case BUTTON_MIDDLE:
         ((GUIMouse*) GenericMouse)->middle ()->press ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->middle_press->activate ();
+          s->ui()->middle_press ()->activate ();
         }
         break;
       default:
@@ -298,7 +245,7 @@ namespace djnn
       t = it->second;
       _win->touches ()->remove_child (t);
       if (t->init_shape () != nullptr) {
-        t->init_shape ()->get_ui()->touches->remove_child (t);
+        t->init_shape ()->ui()->touches ()->remove_child (t);
         t->leave ();
       }
       _active_touches.erase (it);
@@ -308,15 +255,15 @@ namespace djnn
     _active_touches[id] = t;
 
     /* picking/shape management */
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     if (s != nullptr) {
       common_press_setting (x, y, s);
       t->set_init_shape (s);
       t->set_current_shape (s);
-      set_local_coords (s, t, x, y, false);
+      t->set_touch_local_coords (s, x, y, false);
       common_press_notify (s);
       /* press event on touch is replace by touches/$added */
-      s->get_ui()->touches->add_child (t, djnn::to_string (id));
+      s->ui()->touches ()->add_child (t, djnn::to_string (id));
       t->enter ();
     }
     return true;
@@ -337,49 +284,49 @@ namespace djnn
     
 
     /* shape */
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     exec_ |= genericEnterLeave(s);
     if (s) {
 
       /* setting */
       if (x != old_x) {
-        s->get_ui()->move_x->set_value (x, true);
-        s->get_ui()->mouse_move_x->set_value (x, true);
+        s->ui()->move_x ()->set_value (x, true);
+        s->ui()->mouse_move_x ()->set_value (x, true);
       }
       if (y != old_y) {
-        s->get_ui()->move_y->set_value (y, true);
-        s->get_ui()->mouse_move_y->set_value (y, true);
+        s->ui()->move_y ()->set_value (y, true);
+        s->ui()->mouse_move_y ()->set_value (y, true);
       }
-      pair<double, double> coord = set_local_coords (s, nullptr, x, y, true);
-      s->move (coord.first, coord.second);
+      s->set_mouse_local_coords (x, y, true); 
+
       /* event */
-      s->get_ui()->move->schedule_activation ();
-      s->get_ui()->mouse_move->schedule_activation ();
+      s->ui()->move ()->schedule_activation ();
+      s->ui()->mouse_move ()->schedule_activation ();
 
       exec_ = true;
     }
 
     /* _catched_shape */
-    if (_catched_shape != nullptr && _catched_shape != s) {
+    if (_cought_shape != nullptr && _cought_shape != s) {
 
        /* setting */
       if (x != old_x) {
-        DoubleProperty* p1 = _catched_shape->get_ui()->move_x;
-        DoubleProperty* p2 = _catched_shape->get_ui()->mouse_move_x;
+        DoubleProperty* p1 = _cought_shape->ui()->move_x ();
+        DoubleProperty* p2 = _cought_shape->ui()->mouse_move_x ();
         p1->set_value (x, true);
         p2->set_value (x, true);
       }
       if (y != old_y) {
-        DoubleProperty* p1 = _catched_shape->get_ui()->move_y;
-        DoubleProperty* p2 = _catched_shape->get_ui()->mouse_move_y;
+        DoubleProperty* p1 = _cought_shape->ui()->move_y ();
+        DoubleProperty* p2 = _cought_shape->ui()->mouse_move_y ();
         p1->set_value (y, true);
         p2->set_value (y, true);
       }
-      set_local_coords (_catched_shape, nullptr, x, y, true);
+      _cought_shape->set_mouse_local_coords (x, y, true);
 
        /* event */
-      FatProcess* p1 = _catched_shape->get_ui ()->move;
-      FatProcess* p2 = _catched_shape->get_ui ()->mouse_move;
+      FatProcess* p1 = _cought_shape->ui ()->move ();
+      FatProcess* p2 = _cought_shape->ui ()->mouse_move ();
       p1->schedule_activation ();
       p2->schedule_activation ();
 
@@ -420,28 +367,27 @@ namespace djnn
       t->set_id (id);
 
       /* shape */
-      AbstractGShape *s = this->pick (x, y);
-      AbstractGShape *cur_shape = t->current_shape ();
-      AbstractGShape *init_shape = t->init_shape ();
+      PickUI* s = this->pick (x, y);
+      PickUI* cur_shape = t->current_shape ();
+      PickUI* init_shape = t->init_shape ();
       if (s == nullptr && cur_shape != nullptr) {
         if (cur_shape != init_shape)
-          cur_shape->get_ui ()->touches->remove_child (t);
+          cur_shape->ui ()->touches ()->remove_child (t);
         t->set_current_shape (nullptr);
         /* touch event */
         t->leave ();
       } 
       else if (s != nullptr && s != cur_shape) {
         if (cur_shape != nullptr && cur_shape != init_shape)
-          cur_shape->get_ui ()->touches->remove_child (t);
-        s->get_ui ()->touches->add_child (t, djnn::to_string (id));
+          cur_shape->ui ()->touches ()->remove_child (t);
+        s->ui ()->touches ()->add_child (t, djnn::to_string (id));
         t->set_current_shape (s);
         /* setting */
-        s->get_ui ()->move_x->set_value (x, true);
-        s->get_ui ()->move_y->set_value (y, true);
-        set_local_coords (s, t, x, y, true);
-
+        s->ui ()->move_x ()->set_value (x, true);
+        s->ui ()->move_y ()->set_value (y, true);
+        t->set_touch_local_coords (s, x, y, true);
         /* touch and shape event */
-        s->get_ui ()->move->schedule_activation ();
+        s->ui ()->move ()->schedule_activation ();
         t->enter ();
         
       }
@@ -466,16 +412,16 @@ namespace djnn
     bool exec_ = false;
 
     /* shape */
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     if (s) {
       /* event */
 
-      s->get_ui ()->release->schedule_activation ();
-      s->get_ui ()->mouse_release->schedule_activation ();
+      s->ui ()->release ()->schedule_activation ();
+      s->ui ()->mouse_release ()->schedule_activation ();
       /* event if no mouse tracking */
       if (mouse_tracking == 0) {
-        s->get_ui ()->leave->schedule_activation ();
-        s->get_ui ()->mouse_leave->schedule_activation ();
+        s->ui ()->leave ()->schedule_activation ();
+        s->ui ()->mouse_leave ()->schedule_activation ();
       }
 
       exec_ = true;
@@ -487,14 +433,14 @@ namespace djnn
     }
 
     /* reset _catched_shape */
-    if (_catched_shape && _catched_shape != s) {
-      FatProcess* p1 = _catched_shape->get_ui ()->release;
-      FatProcess* p2 = _catched_shape->get_ui ()->mouse_release;
+    if (_cought_shape && _cought_shape != s) {
+      FatProcess* p1 = _cought_shape->ui ()->release ();
+      FatProcess* p2 = _cought_shape->ui ()->mouse_release ();
       p1->schedule_activation ();
       p2->schedule_activation ();
       exec_ = true;
     }
-    _catched_shape = nullptr;
+    _cought_shape = nullptr;
 
     /* button */
     switch (button)
@@ -502,19 +448,19 @@ namespace djnn
       case BUTTON_LEFT:
         ((GUIMouse*) GenericMouse)->left ()->release ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->left_release->activate ();
+          s->ui()->left_release ()->activate ();
         }
         break;
       case BUTTON_RIGHT:
         ((GUIMouse*) GenericMouse)->right ()->release ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->right_release->activate ();
+          s->ui()->right_release ()->activate ();
         }
         break;
       case BUTTON_MIDDLE:
         ((GUIMouse*) GenericMouse)->middle ()->release ()->activate ();
         if (s != nullptr) {
-          s->get_ui()->middle_release->activate ();
+          s->ui()->middle_release ()->activate ();
         }
         break;
       default:
@@ -539,7 +485,7 @@ namespace djnn
   Picking::genericTouchRelease (double x, double y, int id, float pressure)
   {
     
-    AbstractGShape *s = this->pick (x, y);
+    PickUI *s = this->pick (x, y);
     map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
@@ -553,14 +499,14 @@ namespace djnn
       t->set_id (id);
 
       /* shape */
-      AbstractGShape *current_shape = t->current_shape ();
-      AbstractGShape *init_shape = t->init_shape ();
+      PickUI* current_shape = t->current_shape ();
+      PickUI* init_shape = t->init_shape ();
       if (init_shape != nullptr) {
-        init_shape->get_ui()->touches->remove_child (t);
-        set_local_coords (init_shape, t, x, y, true);
+        init_shape->ui()->touches ()->remove_child (t);
+        t->set_touch_local_coords (init_shape, x, y, true);
       }
       if (current_shape != nullptr) {
-        current_shape->get_ui()->touches->remove_child (t);
+        current_shape->ui()->touches ()->remove_child (t);
       }
 
       /* touch event */
@@ -580,15 +526,15 @@ namespace djnn
 
     /* common shape event */
     if (s) {
-      s->get_ui ()->release->schedule_activation ();
-      s->get_ui ()->leave->schedule_activation ();
+      s->ui ()->release ()->schedule_activation ();
+      s->ui ()->leave ()->schedule_activation ();
     }
 
     /* reset _catched_shape */
-    if (_catched_shape && _catched_shape != s) {
-      _catched_shape->get_ui ()->release->schedule_activation ();
+    if (_cought_shape && _cought_shape != s) {
+      _cought_shape->ui ()->release ()->schedule_activation ();
     }
-    _catched_shape = nullptr;
+    _cought_shape = nullptr;
 
     /* reset _hovered_shape */
     _hovered_shape = nullptr;

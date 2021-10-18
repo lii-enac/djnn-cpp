@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2014-2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -19,10 +19,10 @@
 #include "gui/gui-priv.h"
 #include "display/display-dev.h" // mouse_button
 #include "gui/shape/abstract_gshape.h" // touch
+#include "display/pickui.h"
 
 namespace djnn {
 
-  class AbstractGShape;
   class Window;
   class Picking
   {
@@ -31,13 +31,13 @@ namespace djnn {
     virtual
     ~Picking ();
     virtual void init () = 0;
-    virtual AbstractGShape* pick (double x, double y) = 0;
+    virtual PickUI* pick (double x, double y) = 0;
 
-    virtual void add_gobj (AbstractGShape* gobj, bool cache = false) = 0;
+    virtual void add_pick_shape (PickUI* pshape, bool cache = false) = 0;
     virtual void object_deactivated (AbstractGShape* gobj);
 
-    void common_press_setting (double x, double y, AbstractGShape *s);
-    void common_press_notify (AbstractGShape *s);
+    void common_press_setting (double x, double y, PickUI *s);
+    void common_press_notify (PickUI *s);
 
     bool genericMousePress(double x, double y, mouse_button button);
     bool genericMouseMove(double x, double y);
@@ -49,13 +49,10 @@ namespace djnn {
     bool genericTouchMove (double x, double y, int id, float pressure);
     bool genericTouchRelease (double x, double y, int id, float pressure);
 
-    pair<double, double> set_local_coords (AbstractGShape *s, Touch *t, double x, double y, bool is_move);
   protected:
-
-    bool genericEnterLeave (AbstractGShape* gobj);
-
+    bool genericEnterLeave (PickUI* gobj);
     Window *_win;
-    AbstractGShape *_catched_shape, *_hovered_shape;
+    PickUI *_cought_shape, *_hovered_shape;
     map <int, Touch*> _active_touches;
     bool _mouse_released;
   };

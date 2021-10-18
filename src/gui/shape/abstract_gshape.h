@@ -2,17 +2,20 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
 #pragma once
+
+#include "display/pickui.h"
 
 #include "gui/abstract_gobj.h"
 
@@ -23,8 +26,7 @@
 namespace djnn
 {
 
-  class UI;
-  class AbstractGShape : public AbstractGObj
+  class AbstractGShape : public AbstractGObj, public PickUI
   {
   public:
     AbstractGShape (ParentProcess* parent, const string& name);
@@ -34,8 +36,6 @@ namespace djnn
     void set_origin (double x, double y) { _origin_x->set_value (x, true); _origin_y->set_value (y, true); }
     DoubleProperty* origin_x () { return _origin_x; }
     DoubleProperty* origin_y () { return _origin_y; }
-    bool has_ui () { return ui != nullptr; }
-    UI* get_ui () { return ui; }
     FatChildProcess* find_child_impl (const string& n) override;
     void impl_deactivate () override;
     void impl_activate () override;
@@ -48,16 +48,19 @@ namespace djnn
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     virtual void get_bounding_box (double& x, double& y, double& w, double& h) const;
     virtual double sdf (double x, double y) const;
+    void set_mouse_local_coords (double x, double y, bool is_move) override;
 
   protected:
     void init_ui ();
   private:
     FatProcess* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
-    //static vector<string> _ui;
-    UI *ui;
     vector<int> _classes;
   };
+
+  inline bool is_pickable (AbstractGShape * s) {
+     return s->has_ui () && s->ui ()->is_pickable ();
+  }
 
   class Touch : public FatProcess
   {
@@ -82,17 +85,22 @@ namespace djnn
     void leave () { _leave->activate (); }
     void release () { _release->activate (); }
     void enter () { _enter->activate (); }
-    AbstractGShape* init_shape () { return _shape; }
-    AbstractGShape* current_shape () { return (AbstractGShape*)_last_shape->get_value (); }
-    void set_init_shape (AbstractGShape *s) { _shape = s; }
-    void set_current_shape (AbstractGShape *s) { _last_shape->set_value(s, true); }
+    PickUI* init_shape () { return _shape; }
+    PickUI* current_shape () { return dynamic_cast<PickUI*>(_last_shape->get_value ()); }
+    void set_init_shape (PickUI *s) { _shape = s; }
+    void set_touch_local_coords (PickUI *t, double x, double y, bool is_move);
+    void set_current_shape (PickUI *s) {
+      CoreProcess *ss = dynamic_cast<CoreProcess*> (s);
+      if (ss)
+        _last_shape->set_value((CoreProcess*)ss, true); 
+    }
     virtual ~Touch ();
   private:
     void init_touch (int id, double init_x, double init_y, double init_pressure);
     DoubleProperty *_init_x,* _init_y, *_move_x,* _move_y, *_local_init_x, *_local_init_y, *_local_move_x, *_local_move_y, *_pressure;
     IntProperty *_id;
     RefProperty *_last_shape;
-    AbstractGShape* _shape;
+    PickUI* _shape;
     FatProcess *_move, *_enter, *_leave, *_release;
   };
 

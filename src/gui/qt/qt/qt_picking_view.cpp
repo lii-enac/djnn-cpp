@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2014-2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2014-2021)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -14,11 +14,10 @@
  *
  */
 
-//#include "backend.h"
-
 #include "core/utils/utils-dev.h"
 #include "utils/debug.h"
 #include "core/utils/ext/remotery/Remotery.h"
+#include "display/background_rect.h"
 
 #include "qt_picking_view.h"
 #include <QtGui/QImage>
@@ -70,7 +69,8 @@ namespace djnn
     if ( _image == nullptr)
       _image = new QImage (w, h, QImage::Format_RGB32);
     _painter = new QPainter (_image);
-    _painter->fillRect (0, 0, w, h, QColor(255, 255, 255, 255));  //0xfffffff 
+    _painter->fillRect (0, 0, w, h, QColor(255, 255, 255, 255));  //0xfffffff fast method to fill color
+    _color_map.insert (pair<unsigned int, PickUI*> (0xffffffff, _win->background_rect ())); // always add background , without cached , in any layer
     rmt_EndCPUSample ();
   }
 
