@@ -37,7 +37,7 @@ install MSYS2 (from https://www.msys2.org/, follow installation steps 1 to 6 ONL
 then in an MSYS2-MSYS terminal:
 ```
 pacman -Syu
-pacman -Syu --needed git make pkg-config
+pacman -S --needed git make pkg-config
 ```
 launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then install pacmac (ArchLinux) package .tar.zst from https://github.com/lii-enac/djnn-cpp/releases :
 ```
@@ -84,7 +84,7 @@ sudo make -j4 installlibs includes
 ```
 MacOS:  
 ```
-brew install subversion pcre pkg-config
+brew install pcre pkg-config
 brew tap lii-enac/repo
 brew install libivy
 ```
