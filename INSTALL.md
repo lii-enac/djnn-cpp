@@ -1,10 +1,9 @@
 We provide a Makefile that should work on MacOS (10.12+), Linux, Windows 10+.
 
----- LINUX -----  
-in a Terminal:
-
-```
+---- LINUX -----
 linux package for ubuntu 20.04: https://github.com/lii-enac/djnn-cpp/releases
+in a Terminal:
+```
 dpkg -i djnn-cpp-x.xx.x.deb
 ````
 
@@ -33,7 +32,7 @@ make install-pkgdeps
 make -j  
 ```
 ---- WINDOWS -----  
-install MSYS2 (from https://www.msys2.org/, follow installation steps 1 to 6 ONLY )  
+install MSYS2 (from https://www.msys2.org/, follow installation steps **1 to 6** ONLY )  
 then in an MSYS2-MSYS terminal:
 ```
 pacman -Syu
@@ -55,7 +54,7 @@ make -j
 ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
-install pacmac (ArchLinux) package .tar.zst from https://github.com/lii-enac/libivy/releases :
+install pacman (ArchLinux) package .tar.zst from https://github.com/lii-enac/libivy/releases :
 ```
 pacman -U libivy-x.xx.x-1.pkg.tar.zst
 ```
