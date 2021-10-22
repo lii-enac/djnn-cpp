@@ -228,8 +228,8 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (p)) {
-      rmt_BeginCPUSample(draw_path_picking, RMTSF_Aggregate);
       load_pick_context (p);
+      rmt_BeginCPUSample(draw_path_picking, RMTSF_Aggregate);
       _picking_view->painter ()->drawPath (cur_path);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
@@ -244,30 +244,38 @@ namespace djnn
   void
   QtBackend::draw_path_move (double x, double y)
   {
+    rmt_BeginCPUSample (draw_path_add_move, RMTSF_Aggregate);
     cur_path.moveTo (x, y);
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_path_line (double x, double y)
   {
+    rmt_BeginCPUSample (draw_path_add_line, RMTSF_Aggregate);
     cur_path.lineTo (x, y);
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_path_quadratic (double x1, double y1, double x, double y)
   {
+    rmt_BeginCPUSample (draw_path_add_quadratic, RMTSF_Aggregate);
     QPointF c (x1, y1);
     QPointF end (x, y);
     cur_path.quadTo (c, end);
+    rmt_EndCPUSample ();
   }
 
   void
   QtBackend::draw_path_cubic (double x1, double y1, double x2, double y2, double x, double y)
   {
+    rmt_BeginCPUSample (draw_path_add_cubic, RMTSF_Aggregate);
     QPointF c1 (x1, y1);
     QPointF c2 (x2, y2);
     QPointF end (x, y);
     cur_path.cubicTo (c1, c2, end);
+    rmt_EndCPUSample ();
   }
 
   /*
@@ -279,7 +287,7 @@ namespace djnn
   QtBackend::draw_path_arc (double rx, double ry, double x_axis_rotation, double large_arc_flag, double sweep_flag,
                             double x, double y)
   {
-    rmt_BeginCPUSample(draw_path_arc, RMTSF_Aggregate);
+    rmt_BeginCPUSample(draw_path_add_arc, RMTSF_Aggregate);
 
     double curx = cur_path.currentPosition ().x ();
     double cury = cur_path.currentPosition ().y ();
@@ -356,7 +364,7 @@ namespace djnn
   QtBackend::draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry,
                                 double xAxisRotation)
   {
-    rmt_BeginCPUSample(draw_path_segment, RMTSF_Aggregate);
+    rmt_BeginCPUSample(draw_path_add_segment, RMTSF_Aggregate);
 
     double sinTh, cosTh;
     double a00, a01, a10, a11;
@@ -390,7 +398,9 @@ namespace djnn
   void
   QtBackend::draw_path_closure ()
   {
+    rmt_BeginCPUSample (draw_path_add_closure, RMTSF_Aggregate);
     cur_path.closeSubpath ();
+    rmt_EndCPUSample ();
   }
 
   void
