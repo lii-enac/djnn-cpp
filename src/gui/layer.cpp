@@ -64,19 +64,20 @@ namespace djnn
   void
   Layer::draw ()
   {
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-      //rmt_BeginCPUSample(Layer_draw, RMTSF_Recursive);
-      ComponentObserver::instance ().start_draw ();
-      if (Backend::instance ()->pre_draw_layer (this)) {
-        //Container::draw ();
-        for (auto c : _children) {
-          c->draw ();
-        }  
-      }
-      Backend::instance ()->post_draw_layer (this);
-      ComponentObserver::instance ().end_draw ();
-      //rmt_EndCPUSample();
-    }
+    warning (this, string ("DEPRECATED - Layer::draw - Should not be using - use GUIStructureHolder::draw instead\n Is Layer is only composed of GUI Component ?"));
+    // if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+    //   //rmt_BeginCPUSample(Layer_draw, RMTSF_Recursive);
+    //   ComponentObserver::instance ().start_draw ();
+    //   if (Backend::instance ()->pre_draw_layer (this)) {
+    //     //Container::draw ();
+    //     for (auto c : _children) {
+    //       c->draw ();
+    //     }  
+    //   }
+    //   Backend::instance ()->post_draw_layer (this);
+    //   ComponentObserver::instance ().end_draw ();
+    //   //rmt_EndCPUSample();
+    //}
   }
 
   Layer*

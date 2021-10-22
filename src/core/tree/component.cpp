@@ -274,17 +274,20 @@ namespace djnn
   void
   Container::draw ()
   {
-    //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    if (somehow_deactivating ())
-      return;
+    warning (this, string ("DEPRECATED - Container::draw - Should not be using - use GUIStructureHolder::draw instead"));
 
-    //rmt_BeginCPUSample(container_draw, RMTSF_Recursive);
-    ComponentObserver::instance ().start_draw ();
-    for (auto c : _children) {
-      c->draw ();
-    }
-    ComponentObserver::instance ().end_draw ();
-    //rmt_EndCPUSample();
+    // // //std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
+
+    // if (somehow_deactivating ())
+    //   return;
+
+    // //rmt_BeginCPUSample(container_draw, RMTSF_Aggregate);
+    // ComponentObserver::instance ().start_draw ();    
+    // for (auto c : _children) {
+    //   c->draw ();
+    // }
+    // ComponentObserver::instance ().end_draw ();
+    // //rmt_EndCPUSample();
   }
 
   void

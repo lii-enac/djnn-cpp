@@ -176,7 +176,11 @@ namespace djnn
 
     QPainterPath path;
     cur_poly = QPolygonF ();
-    p->points ()->draw ();
+
+    // HACK use GUIStructureHolder::draw instead of container/list::draw
+    //p->points ()->draw ();
+    p->points_GH ()->draw ();
+
     path.addPolygon (cur_poly);
     if (p->closed ())
       path.closeSubpath ();
@@ -215,7 +219,11 @@ namespace djnn
     rmt_BeginCPUSample(draw_path, RMTSF_Aggregate);
 
     cur_path = QPainterPath ();
-    p->items ()->draw ();
+
+    // HACK use GUIStructureHolder::draw instead of container/list::draw
+    //p->items ()->draw ();
+    p->items_GH ()->draw ();
+    
     cur_path.setFillRule (_context_manager->get_current ()->fillRule);
     p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                          cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());

@@ -44,6 +44,8 @@ namespace djnn {
   void
   GUIStructureHolder::remove_gui_child (FatChildProcess *c)
   {
+
+    //TODO MP : becareful ... how much time does this take ?
     _children.erase (
         std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
         _children.end ());
@@ -81,6 +83,10 @@ namespace djnn {
     __nb_Drawing_object = 0 ;
     __nb_Drawing_object_picking = 0 ;
 #endif
+
+    // if the content_process activated else return
+    if ( content_process->somehow_deactivating ())
+      return;
 
     ComponentObserver::instance ().start_draw ();
     for (auto p : _children) {
@@ -164,7 +170,7 @@ namespace djnn {
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
     if (it_cont == _structure_map.end ()) {
-      GUIStructureHolder *holder = new GUIStructureHolder ();
+      GUIStructureHolder *holder = new GUIStructureHolder (cont);
       _structure_map.insert (pair<FatProcess*, GUIStructureHolder*> (cont, holder));
     }
   }
@@ -180,20 +186,52 @@ namespace djnn {
     }
   }
 
+  // void
+  // GUIStructureObserver::print_structure_map () {
+  //   std::cerr << "------- _structure_map ------ " << std::endl;
+  //   for (auto p : _structure_map) {
+  //     std::cout << "stucture of - " << cpp_demangle(typeid(*p.first).name()) << " - " << p.first->get_debug_name () << std::endl;
+  //     int i = 0 ;
+  //     GUIStructureHolder* GH = dynamic_cast<GUIStructureHolder*>(p.second);
+  //     if (GH) {
+  //       //std::cout << "size: " << GH->children ().size () << std::endl;
+  //       for (auto c : GH->children ()) {
+  //         std::cout  << "--- c" << i++ << " - " << cpp_demangle(typeid(*c.first).name()) << " - " << c.first->get_debug_name () << std::endl;
+  //       }
+  //     }
+  //   }
+  //   std::cerr << "---------------------------- \n" << std::endl;
+  // }
+
   void
   GUIStructureObserver::add_child_to_container (FatProcess *cont, FatChildProcess *c, int index)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
-    if (c->get_process_type () == GOBJ_T) {
-      if (it_cont != _structure_map.end ())
-        it_cont->second->add_gui_child (c, index);
-    } else if (c->get_process_type () == WINDOW_T) {
-      Window *w = dynamic_cast<Window*> (c);
-      w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == CONTAINER_T || c->get_process_type () == FSM_T || c->get_process_type () == LAYER_T /*|| c->get_process_type () == SWITCH_T*/) {
-      add_container (dynamic_cast<Container*>(c));
-      if (it_cont != _structure_map.end ())
-        it_cont->second->add_gui_child (c, index);
+
+    switch (c->get_process_type())
+    {
+    case GOBJ_T:
+      if (it_cont != _structure_map.end())
+        it_cont->second->add_gui_child(c, index);
+      break;
+    case WINDOW_T:
+    {
+      Window* w = dynamic_cast<Window*> (c);
+      w->set_holder(it_cont->second);
+      break;
+    }
+    case CONTAINER_T:
+    case FSM_T:
+    case LAYER_T:
+    {
+      GUIStructureHolder* GH = _structure_map[c];
+      if (it_cont != _structure_map.end())
+        it_cont->second->add_gui_child(GH, index);
+      break;
+    }
+
+    default:
+      break;
     }
     cont->update_drawing ();
   }
@@ -201,40 +239,65 @@ namespace djnn {
   void
   GUIStructureObserver::add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index)
   {
-    //AbstractGObj *obj = dynamic_cast<AbstractGObj*> (c);
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    if (c->get_process_type () == GOBJ_T) {
-      if (it_cont != _structure_map.end ()) {
+    structures_t::iterator it_cont = _structure_map.find(cont);
+    switch (c->get_process_type())
+    {
+    case GOBJ_T:
+      if (it_cont != _structure_map.end())
         it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
-      }
-    } else if (c->get_process_type () == WINDOW_T) {
+      break;
+    case WINDOW_T:
+    {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == CONTAINER_T || c->get_process_type () == FSM_T || c->get_process_type () == LAYER_T /*|| c->get_process_type () == SWITCH_T*/) {
-      add_container (dynamic_cast<Container*>(c));
-      if (it_cont != _structure_map.end ())
-        it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
+      break;
     }
-    cont->update_drawing ();
+    case CONTAINER_T:
+    case FSM_T:
+    case LAYER_T:
+    {
+      GUIStructureHolder* GH = _structure_map[c];
+      if (it_cont != _structure_map.end())
+        it_cont->second->add_gui_child_at (GH, neighboor_index, spec, new_index);
+      break;
+    }
+
+    default:
+      break;
+    }
+    cont->update_drawing();
   }
 
   void
   GUIStructureObserver::move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
-    if (c->get_process_type () == GOBJ_T) {
-      if (it_cont != _structure_map.end ()) {
+    switch (c->get_process_type())
+    {
+    case GOBJ_T:
+      if (it_cont != _structure_map.end())
         it_cont->second->move_child_to (c, neighboor_index, spec, new_index);
-      }
-    } else if (c->get_process_type () == WINDOW_T) {
+      break;
+    case WINDOW_T:
+    {
       Window *w = dynamic_cast<Window*> (c);
       w->set_holder (it_cont->second);
-    } else if (c->get_process_type () == CONTAINER_T || c->get_process_type () == FSM_T || c->get_process_type () == LAYER_T /*|| c->get_process_type () == SWITCH_T*/) {
-      add_container (dynamic_cast<Container*>(c));
-      if (it_cont != _structure_map.end ())
-        it_cont->second->move_child_to (c, neighboor_index, spec, new_index);
+      break;
     }
-    cont->update_drawing ();
+    case CONTAINER_T:
+    case FSM_T:
+    case LAYER_T:
+    {
+      GUIStructureHolder* GH = _structure_map[c];
+      if (it_cont != _structure_map.end())
+        it_cont->second->move_child_to (GH, neighboor_index, spec, new_index);
+      break;
+    }
+
+    default:
+      break;
+    }
+    cont->update_drawing();
   }
 
   void

@@ -2,6 +2,8 @@
 
 #include "core/tree/double_property.h"
 #include "gui/shape/abstract_gshape.h"
+#include "core/tree/structure_observer.h"
+#include "gui/gui-priv.h"
 
 namespace djnn
 {
@@ -32,7 +34,12 @@ namespace djnn
   public:
     Poly (ParentProcess* parent, const string& name, int closed);
     virtual ~Poly ();
-    List* points () { return _points;}
+
+    // HACK to get access directly to GUIstructureHolder of points
+    // and use the correct draw function
+    List* points () { return _points;} 
+    GUIStructureHolder* points_GH () { return _points_GH;}
+
     bool closed () { return _closed;}
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -47,6 +54,7 @@ namespace djnn
     FatProcess* _bounding_box;
     DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
     bool _closed;
+    GUIStructureHolder* _points_GH ; // HACK to get access directly to GUIstructureHolder of points
   };
 
   class Polygon : public Poly

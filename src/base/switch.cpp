@@ -16,6 +16,7 @@
 #include "switch.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
 namespace djnn
 {
@@ -78,11 +79,13 @@ namespace djnn
   void
   Switch::draw ()
   {
-    if (somehow_deactivating ())
-      return;
+    warning (this, string ("DEPRECATED - Switch::draw - Should not be using - use GUIStructureHolder::draw instead"));
+    
+    // if (somehow_deactivating ())
+    //   return;
 
-    if (_cur_branch != nullptr)
-      _cur_branch->draw ();
+    // if (_cur_branch != nullptr)
+    //   _cur_branch->draw ();
   }
 
   void

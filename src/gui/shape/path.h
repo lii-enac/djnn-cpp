@@ -2,6 +2,8 @@
 
 #include "core/tree/double_property.h"
 #include "gui/shape/abstract_gshape.h"
+#include "core/tree/structure_observer.h"
+#include "gui/gui-priv.h"
 
 namespace djnn
 {
@@ -133,7 +135,12 @@ namespace djnn
   public:
     Path (ParentProcess* parent, const string& name);
     virtual ~Path ();
+
+    // HACK to get access directly to GUIstructureHolder of items
+    // and use the correct draw function
     List* items () { return _items;}
+    GUIStructureHolder* items_GH () { return _items_GH;}
+    
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
@@ -148,5 +155,6 @@ namespace djnn
     List *_items;
     FatProcess* _bounding_box;
     DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
+    GUIStructureHolder* _items_GH ; // HACK to get access directly to GUIstructureHolder of items
   };
 }

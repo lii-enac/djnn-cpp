@@ -19,6 +19,7 @@
 #include "core/serializer/serializer.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
+#include "core/tree/structure_observer.h"
 
 
 namespace djnn
@@ -34,8 +35,25 @@ namespace djnn
     }
     fsm->set_initial (name);
     _parent_fsm = fsm;
-    finalize_construction (parent, name);
     _parent_fsm->FSM::add_state(this);
+
+    // connect fsm_state to fsm by structure holder
+    for (auto s: structure_observer_list) {
+      s->add_child_to_container (_parent_fsm, this, _children.size () - 1);
+    }
+
+    finalize_construction (parent, name);
+  }
+
+  FSMState::~FSMState () 
+  {
+    clean_up_content () ; 
+    _transitions.clear ();
+
+    // disconnect fsm_state from fsm by structure holder
+    for (auto s: structure_observer_list) {
+      s->remove_child_from_container (_parent_fsm, this);
+    }
   }
 
   bool
@@ -257,6 +275,11 @@ namespace djnn
     set_state_dependency (&_fsm_state);
     /* with state_dependency */
     finalize_construction (parent, name, &_fsm_state);
+
+    // add FSM has potentiel GUIStrucureHolder or GUI container
+    for (auto s: structure_observer_list) {
+      s->add_container (this);
+    }
   }
 
   FSM::~FSM ()
@@ -331,11 +354,13 @@ namespace djnn
   void
   FSM::draw ()
   {
-    if (somehow_deactivating ())
-      return;
+    warning (this, string ("DEPRECATED - FSM::draw - Should not be using - use GUIStructureHolder::draw instead"));
+  
+    // if (somehow_deactivating ())
+    //   return;
 
-    if (_cur_state != nullptr)
-      _cur_state->draw ();
+    // if (_cur_state != nullptr)
+    //   _cur_state->draw ();
   }
 
   void

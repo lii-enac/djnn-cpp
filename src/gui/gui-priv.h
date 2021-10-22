@@ -19,9 +19,11 @@
 #include "core/tree/spike.h"
 
 namespace djnn {
+
+  typedef vector<pair<FatChildProcess*, size_t>> children_t; // TODO better structure ??
   class GUIStructureHolder : public FatProcess {
     public:
-      GUIStructureHolder () : FatProcess ("GUIStructureHolder") {}
+      GUIStructureHolder (FatProcess* content) : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name()), content_process(content) {}
       void add_gui_child (FatChildProcess *c, size_t index) ;
       void add_gui_child_at (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index);
       void remove_gui_child (FatChildProcess *c);
@@ -32,11 +34,13 @@ namespace djnn {
       AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
       void impl_deactivate () override {}
+      children_t& children () { return _children;}
     private:
-      typedef vector<pair<FatChildProcess*, size_t>> children_t;
       children_t _children;
+      FatProcess* content_process;
     };
 
+    typedef map<FatChildProcess*, GUIStructureHolder*> structures_t;
     class GUIStructureObserver : public StructureObserver {
     public:
       GUIStructureObserver () { }
@@ -49,8 +53,9 @@ namespace djnn {
       void remove_child_from_container (FatProcess *cont, FatChildProcess *c) override;
       void swap_children (FatProcess *cont, int i, int j) override;
       void set_child (FatProcess *cont, FatChildProcess *child, int i) override;
+      //void print_structure_map ();
+      structures_t& structure_map () { return _structure_map;};
     private:
-      typedef map<FatChildProcess*, GUIStructureHolder*> structures_t;
       structures_t _structure_map;
     };
 

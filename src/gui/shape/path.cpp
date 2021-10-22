@@ -651,6 +651,10 @@ namespace djnn
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
     invalidate_bounding_box ();
+
+    // save pointer to th eGUIStructureHolder of items to call the correct draw function
+    _items_GH = gui_structure_observer->structure_map()[_items];
+
     finalize_construction (parent, name);
   }
 

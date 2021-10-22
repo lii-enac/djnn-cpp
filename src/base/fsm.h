@@ -34,7 +34,7 @@ namespace djnn {
   {
   public:
     FSMState (ParentProcess* parent, const string& name);
-    ~FSMState () { clean_up_content () ; _transitions.clear (); };
+    ~FSMState ();
     void impl_activate () override;
     void impl_deactivate () override;
  #ifndef DJNN_NO_SERIALIZE
