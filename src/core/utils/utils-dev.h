@@ -44,6 +44,7 @@ typedef unsigned gperf_t;
   void remove_edge (Coupling *c);
   void disable (Coupling *c);
 
+#ifndef DJNN_NO_DEBUG
   /* DEBUG OPTION - FOR djnn */
 
   /* 
@@ -65,4 +66,15 @@ typedef unsigned gperf_t;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED;
+
+#else
+
+  const int
+    _DEBUG_SEE_COLOR_PICKING_VIEW=0,
+    _DEBUG_GRAPH_CYCLE_DETECT=0,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE=0,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US=1000,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED=1
+    ;
+#endif
 } 

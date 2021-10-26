@@ -659,8 +659,10 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         if (already_done.find(p) == already_done.end()) {
           p->notify_activation();
           already_done[p];
+          #ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
             std::cerr << "Scheduled event notifying ------ " << print_process_full_name(p) << std::endl;
+          #endif
         }
         // DEBUG DUPLICATES
         //else
@@ -743,10 +745,12 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         auto * v = _activation_deque.front ();
       
         if (!_sorted) {
+          #ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
             _sorted_break++;
             std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
           }
+          #endif
           break;
         }
         // pop only if sorted else .. the process activation willl be skip
@@ -827,24 +831,37 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     }
     #endif
     
-    // then execute delayed delete on processes 
+    // then execute delayed delete on processes
+    #ifndef DJNN_NO_DEBUG
     begin_delete = std::chrono::steady_clock::now();
+    #endif
+
     for (auto p : _scheduled_delete_processes) {
       delete p;
     }
     _scheduled_delete_processes.clear();
+
+    #ifndef DJNN_NO_DEBUG
     end_delete = std::chrono::steady_clock::now();
+    #endif
 
     // execute _output_nodes
+    #ifndef DJNN_NO_DEBUG
     begin_output = std::chrono::steady_clock::now();
+    #endif
+
     for (auto v : _output_nodes) {
       if (v->is_invalid()) continue;
       auto* p = v->get_process();
       p->trigger_activation_flag();
       p->set_activation_flag(NONE_ACTIVATION);
     }
-    end_output = std::chrono::steady_clock::now();
 
+    #ifndef DJNN_NO_DEBUG
+    end_output = std::chrono::steady_clock::now();
+    #endif
+
+    #ifndef DJNN_NO_DEBUG
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
@@ -912,6 +929,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     cerr << "SORTED_GRAPH #edges: " << sorted_edges << endl ;    
     cerr << "SORT_GRAPH : " << sorted_counter << " - avg: " << sorted_average << "[us]" << endl;
     cerr << "\033[0m"  << endl;
+    #endif
     #endif
 
 rmt_EndCPUSample();
