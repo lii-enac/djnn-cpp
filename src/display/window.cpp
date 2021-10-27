@@ -102,7 +102,7 @@ namespace djnn
     _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
     _c_background_opacity = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
 
-    _background_color = new BackgroundColor (this, "background_color", 0,0,0);
+    _background_color = new BackgroundColor (this, "background_color");
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
     _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
 

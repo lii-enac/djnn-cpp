@@ -30,7 +30,7 @@ namespace djnn {
       }
     };
   public:
-    BackgroundColor (ParentProcess* parent, const string& name, int r, int g, int b);
+    BackgroundColor (ParentProcess* parent, const string& name, int r=50, int g=50, int b=50); //by default: macos dark mode background
     BackgroundColor (ParentProcess* parent, const string& name, int v);
     virtual ~BackgroundColor ();
     
