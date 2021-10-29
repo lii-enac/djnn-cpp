@@ -306,13 +306,23 @@ namespace djnn {
     structures_t::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ()) {
 
-      // c is a GOBJ_T
-      if (c->get_process_type() == GOBJ_T)
+      switch (c->get_process_type())
+      {
+      case GOBJ_T:
         it_cont->second->remove_gui_child (c);
-      // c is CONTAINER_T/FSM_T so a GUIStructureHolder
-      else {
+        break;
+      case WINDOW_T:
+        break;
+      case CONTAINER_T:
+      case FSM_T:
+      case LAYER_T:
+      {
         GUIStructureHolder* GH = _structure_map[c];
         it_cont->second->remove_gui_child (GH);
+        break;
+      }
+      default:
+        break;
       }
     }
     cont->update_drawing ();
