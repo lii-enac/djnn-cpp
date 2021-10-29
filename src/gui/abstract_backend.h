@@ -187,6 +187,22 @@ namespace djnn
     {
     }
     virtual void
+    load_no_pick_outline ()
+    {
+    }
+    virtual void
+    load_no_pick_fill ()
+    {
+    }
+    virtual void
+    load_pick_outline ()
+    {
+    }
+    virtual void
+    load_pick_fill ()
+    {
+    }
+    virtual void
     load_texture (Texture *t)
     {
     }

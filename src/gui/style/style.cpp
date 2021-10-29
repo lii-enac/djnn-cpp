@@ -92,6 +92,45 @@ namespace djnn
     return res;
   }
 
+
+  NoPickOutline*
+  NoPickOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto res = new NoPickOutline (nullptr, get_name ());
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
+  }
+
+  void
+  NoPickOutline::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_no_pick_outline ();
+    }
+  }
+
+  PickOutline*
+  PickOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto res = new PickOutline (nullptr, get_name ());
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
+  }
+
+  void
+  PickOutline::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_pick_outline ();
+    }
+  }
+
+  
+
   void
   NoFill::draw ()
   {
@@ -109,6 +148,44 @@ namespace djnn
     impl_clone_properties (res, origs_clones);
     return res;
   }
+
+  void
+  NoPickFill::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_no_pick_fill ();
+    }
+  }
+
+  NoPickFill*
+  NoPickFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto res = new NoPickFill (nullptr, get_name ());
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
+  }
+
+  void
+  PickFill::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_pick_fill ();
+    }
+  }
+
+  PickFill*
+  PickFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto res = new PickFill (nullptr, get_name ());
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
+  }
+
+
   
   void
   OutlineOpacity::draw ()

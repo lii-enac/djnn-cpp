@@ -19,6 +19,7 @@
 #include "style_types.h"
 
 #include "nopaint.h"
+#include "picking_paint.h"
 #include "color.h"
 #include "gradient.h"
 #include "texture.h"
