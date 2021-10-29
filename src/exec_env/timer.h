@@ -48,8 +48,8 @@ namespace djnn
     };
 
   public:
-    Timer (ParentProcess* parent, const string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000));
-    Timer (ParentProcess* parent, const string& n, int period = 1000);
+    Timer (ParentProcess* parent, const string& n, std::chrono::milliseconds delay = std::chrono::milliseconds(1000), bool model = false);
+    Timer (ParentProcess* parent, const string& n, int period = 1000, bool lazy = false);
 #if DJNN_USE_BOOST_CHRONO
     Timer (ParentProcess* parent, const string& n, boost::chrono::milliseconds delay = boost::chrono::milliseconds(1000));
 #endif
