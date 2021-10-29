@@ -304,8 +304,17 @@ namespace djnn {
   GUIStructureObserver::remove_child_from_container (FatProcess *cont, FatChildProcess *c)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
-    if (it_cont != _structure_map.end ())
-      it_cont->second->remove_gui_child (c);
+    if (it_cont != _structure_map.end ()) {
+
+      // c is a GOBJ_T
+      if (c->get_process_type() == GOBJ_T)
+        it_cont->second->remove_gui_child (c);
+      // c is CONTAINER_T/FSM_T so a GUIStructureHolder
+      else {
+        GUIStructureHolder* GH = _structure_map[c];
+        it_cont->second->remove_gui_child (GH);
+      }
+    }
     cont->update_drawing ();
   }
 
