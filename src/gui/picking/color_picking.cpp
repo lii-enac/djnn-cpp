@@ -82,10 +82,13 @@ namespace djnn
   void
   ColorPickingView::next_color()
   {
-    if ( _DEBUG_SEE_COLOR_PICKING_VIEW == 0 )
+    // 11.2021 MP : bug when on picking with myrandom color
+    #if 1
+    //if ( _DEBUG_SEE_COLOR_PICKING_VIEW == 0 ) 
       ++_pick_color;
       //_pick_color+=100;
-    else {
+    #else
+    //else {
       // DEBUG MODE
       // repeatable random, helpful for debugging
       // (maxed out to 200 to see color on white bg)
@@ -94,7 +97,9 @@ namespace djnn
       int g = 100+myrandom()*155;
       int b = 100+myrandom()*155;
       _pick_color = ((((((0xff << 8) + r) << 8) + g) << 8) + b);
-    }
+    #endif
+    //}
+
     //std::cerr << hex << _pick_color << dec << __FL__;
   }
 
