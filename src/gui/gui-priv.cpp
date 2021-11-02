@@ -17,6 +17,11 @@
 #include "core/tree/component.h"
 #include "core/tree/component_observer.h"
 #include "display/window.h"
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "gui/layer.h"
+#include "display/display-dev.h"
+
 
 #include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
@@ -88,11 +93,28 @@ namespace djnn {
     if ( content_process->somehow_deactivating ())
       return;
 
-    ComponentObserver::instance ().start_draw ();
-    for (auto p : _children) {
-      p.first->draw ();
+    // if Layer and the correct frame
+    if (content_process->get_process_type () == LAYER_T) {
+      Layer* l = dynamic_cast<Layer*> (content_process);
+      if (DisplayBackend::instance ()->window () == l->get_frame ()) {
+        ComponentObserver::instance ().start_draw ();
+        if (Backend::instance ()->pre_draw_layer (l)) {
+          for (auto p : _children) {
+            p.first->draw ();         
+          } 
+        }
+        Backend::instance ()->post_draw_layer (l);
+        ComponentObserver::instance ().end_draw ();
+      }
     }
-    ComponentObserver::instance ().end_draw ();
+    //if other container 
+    else {
+      ComponentObserver::instance ().start_draw ();
+      for (auto p : _children) {
+        p.first->draw ();
+      }
+      ComponentObserver::instance ().end_draw ();
+    }
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     cerr << "\033[1;36m" << endl;
