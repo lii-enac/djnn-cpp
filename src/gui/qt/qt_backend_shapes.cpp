@@ -728,6 +728,8 @@ namespace djnn
 
     const QTransform transform = origin.toTransform ();
     _painter->setTransform (transform);
+    _picking_view->painter()->setTransform (transform);
+    
 
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
     _painter->drawImage (rect, *(ls->pm));
