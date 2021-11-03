@@ -69,6 +69,8 @@ namespace djnn
     if ( _image == nullptr)
       _image = new QImage (w, h, QImage::Format_RGB32);
     _painter = new QPainter (_image);
+    /* no antialiasing in Color Picking otherwise it will modify a given color */
+    _painter->setCompositionMode(QPainter::CompositionMode_Source);
     _painter->fillRect (0, 0, w, h, QColor(255, 255, 255, 255));  //0xfffffff fast method to fill color
     _color_map.insert (pair<unsigned int, PickUI*> (0xffffffff, _win->background_rect ())); // always add background , without cached , in any layer
     rmt_EndCPUSample ();

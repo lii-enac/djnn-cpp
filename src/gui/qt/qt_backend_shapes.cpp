@@ -733,8 +733,10 @@ namespace djnn
 
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
     _painter->drawImage (rect, *(ls->pm));
+    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_SourceOver);
     _picking_view->painter()->drawImage (rect, *pick_pm);
-
+    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
+    
     rmt_EndCPUSample ();
   }
 } /* namespace djnn */

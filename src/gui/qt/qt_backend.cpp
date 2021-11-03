@@ -208,7 +208,6 @@ namespace djnn
   {
     rmt_BeginCPUSample(load_pick_context, RMTSF_Aggregate);
 
-    #if 1
     QtContext *cur_context = _context_manager->get_current ();
     QBrush pickBrush (_picking_view->pick_color ());
     QPen pickPen;
@@ -220,14 +219,12 @@ namespace djnn
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width());
     /* no antialiasing in Color Picking otherwise it will modified a given color */
-    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
+    //_picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
     _picking_view->painter ()->setPen (pickPen);
     _picking_view->painter ()->setBrush (pickBrush);
     _picking_view->painter ()->setTransform (cur_context->matrix.toTransform ());
     PickUI* p = dynamic_cast<PickUI*> (s);
     _picking_view->add_pick_shape (p, _in_cache);
-    #endif
-    
     rmt_EndCPUSample ();
   }
 
