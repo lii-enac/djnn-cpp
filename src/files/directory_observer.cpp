@@ -81,14 +81,17 @@ namespace djnn
   {
     set_please_stop (false);
     DirectoryObserverData *data = p_init_directory_watcher (_path.get_value ());
-    while (!thread_local_cancelled && !get_please_stop ()) {
+    //while (!thread_local_cancelled && !get_please_stop ()) {
+    while (!get_please_stop ()) {
       djn_dir_event ret = p_run_directory_watcher (data);
-      if(thread_local_cancelled) {
+      //if(thread_local_cancelled) {
+      if (get_please_stop ()) {
         return;
       }
       bool exec = false;
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-      if (!thread_local_cancelled && !get_please_stop () && ret != DJN_UNKNOWN && ret != DJN_ERROR) {
+      //if (!thread_local_cancelled && !get_please_stop () && ret != DJN_UNKNOWN && ret != DJN_ERROR) {
+      if (!get_please_stop () && ret != DJN_UNKNOWN && ret != DJN_ERROR) {
         switch (ret) {
           case DJN_CHANGE:
             _change.notify_activation ();
