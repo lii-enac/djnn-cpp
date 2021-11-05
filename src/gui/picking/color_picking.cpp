@@ -146,17 +146,13 @@ namespace djnn
   }
 
   void
-  ColorPickingView::object_deactivated (AbstractGShape* gobj)
+  ColorPickingView::object_deactivated (PickUI* gobj)
   {
 
     Picking::object_deactivated (gobj);
     
     // FIXME : should we delete object from picking_view when deactivated
-    auto it = _color_map.begin ();
-    for ( ; it != _color_map.end () ; ++it) {
-      if (it->second == gobj)
-        break;
-    }
+    auto it = _color_map.find (gobj->color());
     if (it != _color_map.end ())
       _color_map.erase (it);
 

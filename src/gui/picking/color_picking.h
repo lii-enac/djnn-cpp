@@ -34,7 +34,7 @@ namespace djnn {
     void add_pick_shape (PickUI* gobj, bool cache = false);
     void remove_pick_shape (PickUI* gobj);
     virtual int get_pixel(unsigned int x, unsigned int y) = 0;
-    virtual void object_deactivated (AbstractGShape* gobj);
+    virtual void object_deactivated (PickUI* gobj);
 
     // ColorPicking
     unsigned int pick_color () { return _pick_color; }

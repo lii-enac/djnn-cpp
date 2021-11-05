@@ -34,7 +34,7 @@ namespace djnn {
     virtual PickUI* pick (double x, double y) = 0;
 
     virtual void add_pick_shape (PickUI* pshape, bool cache = false) = 0;
-    virtual void object_deactivated (AbstractGShape* gobj);
+    virtual void object_deactivated (PickUI* gobj);
 
     void common_press_setting (double x, double y, PickUI *s);
     void common_press_notify (PickUI *s);

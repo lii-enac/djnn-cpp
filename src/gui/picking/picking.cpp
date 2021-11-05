@@ -45,7 +45,7 @@ namespace djnn
   }
 
   void
-  Picking::object_deactivated (AbstractGShape* picked_shape)
+  Picking::object_deactivated (PickUI* picked_shape)
   {
     /* Reset _catched_shape to nullptr if this object has been removed from picking_view */
     if (_cought_shape == picked_shape) {
