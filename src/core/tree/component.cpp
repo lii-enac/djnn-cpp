@@ -111,6 +111,8 @@ namespace djnn
     if (child->get_parent () != nullptr && child->get_parent () != this) {
       child->get_parent ()->remove_child (child);
     }
+    remove_from_parentless_name (child);
+
     child->set_parent (this);
     add_symbol (name, child);
     

@@ -386,6 +386,8 @@ namespace djnn {
   inline FatProcess* find (CoreProcess* p) { return dynamic_cast<FatProcess*>(p); } // helper for smalac
   inline FatChildProcess* find (ParentProcess* parent, const string& path) { return parent->find_child (path); }
 
+  void remove_from_parentless_name (CoreProcess* child);
+  
   void add_state_dependency (ParentProcess* parent, CoreProcess *p);
   void remove_state_dependency (ParentProcess* parent, CoreProcess *p);
   //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }

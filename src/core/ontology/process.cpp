@@ -53,8 +53,8 @@ namespace djnn
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   vector<string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
-  static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  static vector<const CoreProcess*> parentless_names_order;
+  // TODO MP 11.2021 : parentless_names should be map : <const CoreProcess*, Pair<string, timestamp>> parentless_name
+  static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables) 
 
   CoreProcess::CoreProcess (bool model)
   : 
@@ -103,17 +103,7 @@ namespace djnn
       _vertex->invalidate ();
     }
 
-    if (get_parent() == nullptr) {
-      auto it = parentless_names.find((ChildProcess*)this);
-      if (it!=parentless_names.end()) {
-        //std::cerr << "rem " << it->second << std::endl;
-        //erase from parentless_name_order
-        parentless_names_order.erase (std::remove(parentless_names_order.begin(), parentless_names_order.end(), this), parentless_names_order.end());
-        //erase from parentless_name
-        parentless_names.erase (it);
-
-      }
-    }
+    remove_from_parentless_name (this);
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + djnn::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
@@ -127,6 +117,20 @@ namespace djnn
   void
   delete_parentless_processes ()
   {
+
+    // TODO MP 11.2021 
+    // remade parentless_name_order
+    // as static vector<const CoreProcess*> parentless_names_order;
+    // sorted using parentless_name timestamp
+
+    // rebuild
+
+    // sort
+
+    warning (nullptr, "\n\n This FUNCTION (delete_parentless_processes) is broken and should be remade - TODO MP 11.2021 \n\n ");
+    warning (nullptr, "\n\n UNIT TESTS may not work very well \n\n ");
+    /*
+
     int sz = parentless_names_order.size ();
 
     //debug
@@ -151,6 +155,9 @@ namespace djnn
     }
 
     parentless_names_order.clear ();
+
+    */
+
     parentless_names.clear ();
   }
 
@@ -250,10 +257,9 @@ namespace djnn
   CoreProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
   {
     if (parent) {
-      parent->add_child (this, name); // FIXME
+      parent->add_child (this, name);
     } else {
-      parentless_names[this] = name; // FIXME
-      parentless_names_order.push_back(this);
+      parentless_names[this] = name;
     }
 
     #ifndef DJNN_NO_DEBUG
@@ -502,20 +508,21 @@ namespace djnn
   }
 
   void
+  remove_from_parentless_name (CoreProcess* child) {
+
+    if(child->get_parent ()==nullptr) {
+      auto it = parentless_names.find(child);
+      if (it != parentless_names.end())
+        parentless_names.erase (it);
+    }
+  }
+
+  void
   FatProcess::add_child (FatChildProcess* child, const string& name)
   {
     if (child == nullptr) { return; }
 
-    if(child->get_parent ()==nullptr) {
-      auto it = parentless_names.find((ChildProcess*)child);
-      if (it != parentless_names.end()) {
-        //std::cerr << "rem from add_child " << it->second << std::endl;
-        //erase from parentless_name_order
-        parentless_names_order.erase (std::remove(parentless_names_order.begin(), parentless_names_order.end(), this), parentless_names_order.end());
-        //erase from parentless_name
-        parentless_names.erase (it);
-      }
-    }
+    remove_from_parentless_name (child);
 
     child->set_parent (this);
     add_symbol (name, child);
@@ -524,8 +531,6 @@ namespace djnn
   void
   FatProcess::remove_child (FatChildProcess* c)
   {
-    //symtable_t::iterator it;
-    //for (it = symtable ().begin (); it != symtable ().end (); ++it) {
     for (auto & name_proc_pair: symtable ()) {
       if (name_proc_pair.second == c) {
         symtable ().erase (name_proc_pair.first);

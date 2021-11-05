@@ -229,6 +229,8 @@ namespace djnn
   void
   List::finalize_child_insertion (FatChildProcess *c)
   {
+    remove_from_parentless_name (c);
+
     c->set_parent (this);
 
     if (get_activation_state () == ACTIVATED && c->get_activation_state () == DEACTIVATED) {
