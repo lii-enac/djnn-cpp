@@ -489,7 +489,8 @@ namespace djnn
     )
       _ordered_vertices.push_back (v);
 
-    v->set_mark (BROWSING);
+    //v->set_mark (BROWSING); // MP 11.2021 : useless BROWSING MARKED
+    v->set_mark (MARKED);
 
     for (auto& v2 : v->get_edges ()) {
       if (v2->get_mark () == NOT_MARKED
@@ -499,7 +500,7 @@ namespace djnn
     }
     
     v->set_timestamp (++_cur_date);
-    v->set_mark (MARKED); 
+    //v->set_mark (MARKED);  // MP 11.2021 : useless BROWSING MARKED
   }
 
   bool
