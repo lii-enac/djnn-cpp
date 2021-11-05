@@ -111,22 +111,22 @@ namespace djnn
     // WARNING 2 - how to be sure that there is no remaining invalid objects?
     if (cache)
       remove_pick_shape (pshape);
+      
     //reset cache if it changed
     pshape->cache(cache);
     _color_map.insert (pair<unsigned int, PickUI*> (_pick_color, pshape));
+    //save pick_color in PickUI interface
+    pshape->color(_pick_color);
     next_color();
   }
 
   void
   ColorPickingView::remove_pick_shape (PickUI *pshape)
   {
-    for (auto it = _color_map.cbegin(); it != _color_map.cend();) {
-      if (it->second == pshape) {
-        _color_map.erase(it++);    // or "it = m.erase(it)" since C++11
-      } else {
-        ++it;
-      }
-    }
+    // use the saved color in pickUI interface to accelerate find in _color_map
+    auto it = _color_map.find (pshape->color ());
+    if (it != _color_map.end ())
+       _color_map.erase (it);
   }
 
   PickUI*
