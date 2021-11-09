@@ -14,6 +14,7 @@
 
 #if DJNN_STL_STD
 #include <algorithm>
+#include <limits>
 #elif DJNN_STL_EASTL
 #include <EASTL/algorithm.h>
 #include <EASTL/sort.h>

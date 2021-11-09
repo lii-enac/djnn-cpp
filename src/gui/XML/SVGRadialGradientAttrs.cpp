@@ -14,6 +14,8 @@
  *
  */
 
+#include <limits>
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
