@@ -32,8 +32,8 @@ namespace djnn {
         void impl_activate () override { ((Layer*)get_parent())->set_invalid_cache (true); }
       };
     public:
-      Layer (ParentProcess* parent, const string& name);
-      Layer (ParentProcess* parent, const string& name, double x, double y, double w, double h);
+      Layer (ParentProcess* parent, const string& name, double pad=0);
+      Layer (ParentProcess* parent, const string& name, double x, double y, double w, double h, double pad=0);
       virtual ~Layer () override;
       auto get_frame () { return _frame;}
       void impl_activate () override;
@@ -50,7 +50,7 @@ namespace djnn {
 
       Spike* damaged () { return &_damaged; } 
 
-      void get_xywh(double& x, double& y, double& w, double& h) { x=_x; y=_y; w=_w; h=_h; }
+      void get_xywhp(double& x, double& y, double& w, double& h, double& pad) { x=_x; y=_y; w=_w; h=_h; pad=_pad; }
       void set_xy(double x, double y) { _x=x; _y=y; }
 
     protected:
@@ -60,6 +60,6 @@ namespace djnn {
       void *_cache, *_pick_cache;
       LayerDamagedAction _damaged_action;
       Coupling _c_damaged;
-      double _x, _y, _w, _h;
+      double _x, _y, _w, _h, _pad;
     };
 }

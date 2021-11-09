@@ -602,8 +602,8 @@ namespace djnn
   {
     rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate)
 
-    double x,y,w,h;
-    l->get_xywh(x,y,w,h);
+    double x,y,w,h,pad;
+    l->get_xywhp(x,y,w,h,pad);
     //QImage *pm = (QImage*) (l->cache ());
     LayerStuff* ls = (LayerStuff*) (l->cache ());
     QImage *pick_pm = (QImage*) (l->pick_cache ());
@@ -622,6 +622,8 @@ namespace djnn
     if (recompute_pixmap) {
       delete ls;
       ls = new LayerStuff;
+      w += pad;
+      h += pad;
       ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
       ls->pm->fill (Qt::transparent);
       pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
@@ -636,6 +638,8 @@ namespace djnn
       _in_cache = true;
 
       QtContext *cur_context = _context_manager->get_current ();
+
+      // find current translation
       QMatrix4x4& origin = cur_context->matrix;
       ls->m = origin;
       auto s = origin(0,0);
@@ -644,15 +648,18 @@ namespace djnn
 
       //std::cerr << tx << " " << ty << " " << s << __FL__;
 
+      // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
+      // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
       QMatrix4x4 newm;
       if (tx>0) {
-        newm.translate(-tx, 0); // apply translation
-      } // else dx is negative, so do not try to adjust fbo so that the right-most part of the rendering is not clipped
+        newm.translate(-tx, 0); // apply -translation
+      } 
       if (ty>0) {
         auto inv_tvy = (h-ls->pm->height()) + ty; // take into account reverse y
         newm.translate(0, -inv_tvy); // apply translation
       }
       newm.translate(-x, -y);
+      newm.translate(pad, pad); // apply padding to get the surrounding
       origin = newm * origin;
       //}
 
@@ -703,21 +710,25 @@ namespace djnn
 
     //std::cerr << tx << " " << ty << " " << s << __FL__;
 
-    double x,y,w,h;
-    l->get_xywh(x,y,w,h);
+    double x,y,w,h,pad;
+    l->get_xywhp(x,y,w,h,pad);
   
     QMatrix4x4 newm;
     newm.translate(tx, ty);
+    
     if (ls->tx<0) {
-        newm.translate(-ls->tx*s, 0); // apply translation
+        newm.translate((-ls->tx)*s, 0); // apply no-emptiness translation
     }
     if (ls->ty<0) {
-        newm.translate(0,-ls->ty*s); // apply translation
+        newm.translate(0,(-ls->ty)*s); // apply no-emptiness translation
     }
     //newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
+    newm.translate(-pad*s, -pad*s);
     if (damaged) {
       newm.scale(s, s);
     }
+    
+    
     origin = newm;
     //newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
     //m = newm * m;

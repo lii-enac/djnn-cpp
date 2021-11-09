@@ -26,15 +26,15 @@
 
 namespace djnn
 {
-  Layer::Layer (ParentProcess* parent, const string& n, double x, double y, double w, double h) :
+  Layer::Layer (ParentProcess* parent, const string& n, double x, double y, double w, double h, double pad) :
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"),
      _invalid_cache (true), _cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION),
-     _x(x), _y(y), _w(w), _h(h)
+     _x(x), _y(y), _w(w), _h(h), _pad(pad)
   {
     finalize_construction (parent, n);
   }
 
-  Layer::Layer (ParentProcess* parent, const string& n) : Layer(parent, n, 0,0,-1,0)
+  Layer::Layer (ParentProcess* parent, const string& n, double pad) : Layer(parent, n, 0,0,-1,0,pad)
   {
   }
 
