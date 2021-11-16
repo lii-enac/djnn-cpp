@@ -419,7 +419,8 @@ namespace djnn
       delete vd;
     }
 
-    _sorted = false;
+    // MP TEST 11.2021
+    //_sorted = false;
   }
 
   void
