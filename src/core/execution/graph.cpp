@@ -230,7 +230,8 @@ namespace djnn
     Vertex* v = new Vertex (c);
     _vertices.push_back (v);
     v->set_position_in_vertices (_vertices.end ());
-    _sorted = false;
+    // MP : 11.2021
+    //_sorted = false;
     return v;
   }
 
