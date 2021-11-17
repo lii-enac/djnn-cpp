@@ -602,8 +602,8 @@ namespace djnn
   {
     rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate)
 
-    double x,y,w,h,pad;
-    l->get_xywhp(x,y,w,h,pad);
+    double x, y, w, h, pad;
+    l->get_xywhp (x, y, w, h, pad);
     //QImage *pm = (QImage*) (l->cache ());
     LayerStuff* ls = (LayerStuff*) (l->cache ());
     QImage *pick_pm = (QImage*) (l->pick_cache ());
@@ -616,14 +616,14 @@ namespace djnn
 
     bool recompute_pixmap =
       l->invalid_cache ()
-      || (ls && (ls->pm->width() != w || ls->pm->height() != h))
+      || (ls && (ls->pm->width() != (w+pad*2) || ls->pm->height() != (h+pad*2)))
     ;
 
     if (recompute_pixmap) {
       delete ls;
       ls = new LayerStuff;
-      w += pad;
-      h += pad;
+      w += pad*2;
+      h += pad*2;
       ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
       ls->pm->fill (Qt::transparent);
       pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
@@ -710,8 +710,8 @@ namespace djnn
 
     //std::cerr << tx << " " << ty << " " << s << __FL__;
 
-    double x,y,w,h,pad;
-    l->get_xywhp(x,y,w,h,pad);
+    double x, y, w, h, pad;
+    l->get_xywhp (x, y, w, h, pad);
   
     QMatrix4x4 newm;
     newm.translate(tx, ty);
