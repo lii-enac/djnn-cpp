@@ -621,6 +621,7 @@ namespace djnn
 
     if (recompute_pixmap) {
       delete ls;
+      delete pick_pm;
       ls = new LayerStuff;
       w += pad*2;
       h += pad*2;
