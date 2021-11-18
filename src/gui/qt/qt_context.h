@@ -43,8 +43,28 @@ namespace djnn
     QFont font;
     double factor[10];
     int textAnchor;
+    unsigned int _pick_bitset;
     void update_relative_units ();
     double get_unit_factor (djnLengthUnit unit);
+ 
+    void set_pick_bitset (pick_bit_mask MASK, pick_bit_shift SHIFT, unsigned int VALUE)  { _pick_bitset = (_pick_bitset & ~MASK) | (VALUE << SHIFT); }
+    int  get_pick_bitset (pick_bit_mask MASK, pick_bit_shift SHIFT) const       { return ( _pick_bitset &  MASK) >> SHIFT; }
+
+    bool pick_fill_undefined () const         { return get_pick_bitset (PICK_FILL_UNDEFINED_MASK, PICK_FILL_UNDEFINED_SHIFT); }
+    void set_pick_fill_undefined (bool VALUE) {        set_pick_bitset (PICK_FILL_UNDEFINED_MASK, PICK_FILL_UNDEFINED_SHIFT, VALUE); }
+
+    bool pick_outline_undefined () const         { return get_pick_bitset (PICK_OUTLINE_UNDEFINED_MASK, PICK_OUTLINE_UNDEFINED_SHIFT); }
+    void set_pick_outline_undefined (bool VALUE) {        set_pick_bitset (PICK_OUTLINE_UNDEFINED_MASK, PICK_OUTLINE_UNDEFINED_SHIFT, VALUE); }
+
+    bool pick_fill () const         { return get_pick_bitset (PICK_FILL_MASK, PICK_FILL_SHIFT); }
+    void set_pick_fill (bool VALUE) {        set_pick_bitset (PICK_FILL_MASK, PICK_FILL_SHIFT, VALUE); 
+                                             set_pick_fill_undefined (false);
+                                    }
+
+    bool pick_outline () const         { return get_pick_bitset (PICK_OUTLINE_MASK, PICK_OUTLINE_SHIFT); }
+    void set_pick_outline (bool VALUE) {        set_pick_bitset (PICK_OUTLINE_MASK, PICK_OUTLINE_SHIFT, VALUE);
+                                                set_pick_outline_undefined (false);
+                                       }
   };
 
   class QtContextManager : public ContextManager

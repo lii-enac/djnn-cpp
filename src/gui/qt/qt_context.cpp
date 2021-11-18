@@ -51,7 +51,7 @@ namespace djnn
 
   QtContext::QtContext () :
       pen (QColor ("darkslategray"), 1, Qt::NoPen, Qt::FlatCap, Qt::MiterJoin), brush (QColor ("black"),
-                                                                                            Qt::SolidPattern), matrix (), gradientTransform (), font ()
+                                                                                            Qt::SolidPattern), matrix (), gradientTransform (), font (), _pick_bitset (0b0101)
   {
     alpha = 1;
     fillRule = Qt::OddEvenFill;
@@ -77,6 +77,7 @@ namespace djnn
     alpha = p->alpha;
     fillRule = p->fillRule;
     textAnchor = p->textAnchor;
+    _pick_bitset = p->_pick_bitset;
     DEFAULT_DPI_RES = 96;
     for (int i = 0; i < 10; i++)
       factor[i] = p->factor[i];

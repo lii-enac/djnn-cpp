@@ -120,6 +120,14 @@ namespace djnn
     void
     load_no_fill () override;
     void
+    load_no_pick_outline () override;
+    void
+    load_no_pick_fill () override;
+    void
+    load_pick_outline () override;
+    void
+    load_pick_fill () override;
+    void
     load_texture (Texture *t) override;
     void
     load_outline_opacity (OutlineOpacity *oo) override;

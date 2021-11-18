@@ -211,13 +211,18 @@ namespace djnn
     QtContext *cur_context = _context_manager->get_current ();
     QBrush pickBrush (_picking_view->pick_color ());
     QPen pickPen;
-    if (cur_context->pen.style () == Qt::NoPen) {
+    if ( (cur_context->pen.style () == Qt::NoPen && cur_context->pick_outline_undefined () == true)
+      || (cur_context->pick_outline_undefined () ==false && cur_context->pick_outline () == false)) {
       pickPen.setStyle (Qt::NoPen);
     } else {
       pickPen.setStyle (Qt::SolidLine);
     }
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width());
+    if ( (cur_context->brush.style() == Qt::NoBrush && cur_context->pick_fill_undefined () == true)
+      || (cur_context->pick_fill_undefined () == false && cur_context->pick_fill () == false)) {
+      pickBrush.setStyle (Qt::NoBrush);
+    }
     /* no antialiasing in Color Picking otherwise it will modified a given color */
     //_picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
     _picking_view->painter ()->setPen (pickPen);

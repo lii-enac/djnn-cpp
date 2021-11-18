@@ -66,6 +66,20 @@ namespace djnn
     DJN_START_ANCHOR, DJN_MIDDLE_ANCHOR, DJN_END_ANCHOR
   };
 
+  enum pick_bit_shift {
+    PICK_OUTLINE_UNDEFINED_SHIFT = 0 ,
+    PICK_OUTLINE_SHIFT           = 1 ,
+    PICK_FILL_UNDEFINED_SHIFT    = 2 ,
+    PICK_FILL_SHIFT              = 4
+  };
+
+  enum pick_bit_mask {
+    PICK_OUTLINE_UNDEFINED_MASK = 0b1  << PICK_OUTLINE_UNDEFINED_SHIFT,
+    PICK_OUTLINE_MASK           = 0b1  << PICK_OUTLINE_SHIFT ,
+    PICK_FILL_UNDEFINED_MASK    = 0b1  << PICK_FILL_UNDEFINED_SHIFT ,
+    PICK_FILL_MASK              = 0b11 << PICK_FILL_SHIFT
+  };
+
   enum djnFillRuleType
   {
     DJN_NON_ZERO_FILL, DJN_EVENT_ODD_FILL

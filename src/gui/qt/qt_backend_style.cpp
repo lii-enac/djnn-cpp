@@ -73,6 +73,34 @@ namespace djnn
   }
 
   void
+  QtBackend::load_no_pick_outline ()
+  {
+    QtContext *cur_context = _context_manager->get_current ();
+    cur_context->set_pick_outline (false);
+  }
+
+  void
+  QtBackend::load_no_pick_fill ()
+  {
+    QtContext *cur_context = _context_manager->get_current ();
+    cur_context->set_pick_fill (false);
+  }
+
+  void
+  QtBackend::load_pick_outline ()
+  {
+    QtContext *cur_context = _context_manager->get_current ();
+    cur_context->set_pick_outline (true);
+  }
+
+  void
+  QtBackend::load_pick_fill ()
+  {
+    QtContext *cur_context = _context_manager->get_current ();
+    cur_context->set_pick_fill (true);
+  }
+
+  void
   QtBackend::load_fill_rule (FillRule *fr)
   {
     int rule;
