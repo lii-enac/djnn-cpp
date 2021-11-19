@@ -14,6 +14,7 @@
  */
 
 #include "core/tree/list.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 #include "gui/backend.h"
 
@@ -56,6 +57,7 @@ namespace djnn
   int
   QtBackend::draw_simple_text (SimpleText *t, QFontMetrics* fm, int posX, int posY)
   {
+    rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
     QString s = QObject::tr (t->get_content ().c_str ());
     QtContext *cur_context = _context_manager->get_current ();
     load_drawing_context (t, posX, posY, 1, 1);
@@ -98,6 +100,7 @@ namespace djnn
       __nb_Drawing_object_picking++;
 #endif
     }
+    rmt_EndCPUSample ();
     return rect.width ();
   }
 
@@ -115,6 +118,8 @@ namespace djnn
   void
   QtBackend::draw_simple_text_edit (MultilineEditor* ste)
   {
+    rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+
     QtContext *cur_context = _context_manager->get_current ();
     _painter->setFont (cur_context->font);
     QFontMetrics fm = _painter->fontMetrics ();
@@ -147,6 +152,8 @@ namespace djnn
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
+    rmt_EndCPUSample ();
+
   }
 
   static double curTextX = 0.;
@@ -154,6 +161,8 @@ namespace djnn
   void
   QtBackend::draw_text (Text *t)
   {
+    rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+
     double x, y, dx, dy;
     int dxU, dyU, width, height, encoding;
     string text;
@@ -254,6 +263,7 @@ namespace djnn
       __nb_Drawing_object_picking++;
 #endif
     }
+    rmt_EndCPUSample ();
   }
 
   double
