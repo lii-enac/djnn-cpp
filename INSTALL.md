@@ -54,14 +54,12 @@ make -j
 ivy bus -> https://github.com/lii-enac/libivy
 
 Windows:
-install pacman (ArchLinux) package .tar.zst from https://github.com/lii-enac/libivy/releases :
+download the pacman package .tar.zst from https://github.com/lii-enac/libivy/releases, and install it:
 ```
 pacman -U libivy-x.xx.x-1.pkg.tar.zst
 ```
 or using sources:
 ```
-#pacman -Syu
-#pacman -Syu --needed git make pkg-config
 git clone --depth 1 http://github.com:lii-enac/libivy.git  
 cd libivy/src
 make -j4 -f Makefile.mingw upgrade-pkgdeps

@@ -18,6 +18,8 @@ audio := AL
 physics := # set to ODE
 phidgets := # set to PHIDGETS
 
+use_ivy := no
+
 djnn_libs_extra :=
 
 # very fast compilation, but no debug
