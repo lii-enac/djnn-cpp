@@ -43,6 +43,8 @@ static double draw_total = 0.0;
 static double draw_average = 0.0;
 #endif
 
+#define test_between_2_paintevents 0
+
 namespace djnn
 {
   bool
@@ -200,7 +202,12 @@ namespace djnn
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_)
       // event synthesis for move, paint ...
+#if test_between_2_paintevents
+      GRAPH_EXEC; //remotery test between_2_paintevent part 1
+#else
       QtMainloop::instance ().set_please_exec (true);
+#endif
+      
   }
 
   void
@@ -232,9 +239,24 @@ namespace djnn
       
   }
 
+  //remotery test between_2_paintevent part 1
+  #if test_between_2_paintevents
+  static bool first_time = true;
+  #endif
+
   void
   MyQQWidget::paintEvent (QPaintEvent *event)
   { //DBG;
+
+#if test_between_2_paintevents
+    if (first_time)
+      first_time = false ;
+    else
+      rmt_EndCPUSample (); // end of between 2 paintevent
+      
+    rmt_BeginCPUSample(between_2_paintEvent, RMTSF_None);
+#endif
+
     rmt_BeginCPUSample(paintEvent, RMTSF_None);
     
     rmt_BeginCPUSample (pre_draw, RMTSF_None);
