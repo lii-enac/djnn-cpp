@@ -116,17 +116,43 @@ namespace djnn
   }
 
   // specific case when assigning a RemoteProcess to a Property
-  template <>
-  void t_perform_action (RemoteProperty* src, AbstractProperty* dst, double propagate, double lazy)
+  template <typename dst_t>
+  void t_perform_action (AbstractRemoteProperty* src, dst_t* dst, double propagate, double lazy)
   {
-    const auto & sv = src;
-    const auto & dv = dst;
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_string_value ();
+    if (lazy) {
+      //const auto sdv = s_to_p(sv, dv);
+      if (sv == dv) return;
+      dst->set_value (sv, propagate);
+    } else {
+      dst->set_value (sv, propagate);
+    }
+  }
+
+  // specific case when assigning a Property to a RemoteProcess
+  template <typename src_t>
+  void t_perform_action (src_t* src, AbstractRemoteProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_string_value ();
+    const auto & dv = dst->get_value ();
+    //const auto sdv = p_to_s (sv);
+    if (lazy && (sv == dv) ) return; 
+    dst->set_value (sv, propagate);
+  }
+
+  // string to remote is ambiguous because of the above text partial specialization, so provide one with overloading (and not template)
+  //template <>
+  void t_perform_action (AbstractTextProperty* src, AbstractRemoteProperty* dst, double propagate, double lazy)
+  {
+    const auto & sv = src->get_value ();
+    const auto & dv = dst->get_value ();
     if (lazy && (sv == dv) ) return; 
     dst->set_value (sv, propagate);
   }
 
   // templated TAssignement
-  template <class src_t, class dst_t>
+  template <typename src_t, typename dst_t>
   struct TAssignment : public TTAssignment {
     TAssignment (src_t* src, dst_t* dst)
     : _src (src)
@@ -147,7 +173,7 @@ namespace djnn
 
   // building a TAssignment is a 2 part function for int, double, bool, string
 
-  template <class src_t>
+  template <typename src_t>
   TTAssignment*
   build_ttassignment2 (src_t * src, CoreProcess* dst)
   {
@@ -182,6 +208,13 @@ namespace djnn
         auto * tp = djnn_dynamic_cast<AbstractTextProperty*> (dst_p);
         assert (tp);
         ttassignment = new TAssignment <src_t, AbstractTextProperty> (src, tp);
+        break;
+      }
+      case Remote:
+      {
+        auto * rp = djnn_dynamic_cast<AbstractRemoteProperty*> (dst_p);
+        assert (rp);
+        ttassignment = new TAssignment <src_t, AbstractRemoteProperty> (src, rp);
         break;
       }
       default:
@@ -245,14 +278,14 @@ namespace djnn
         }
         case Remote: // FIXME name
         {
-          auto * srp = djnn_dynamic_cast<RemoteProperty*> (src_p);
+          auto * srp = djnn_dynamic_cast<AbstractRemoteProperty*> (src_p);
           assert (srp);
           auto * drp = djnn_dynamic_cast<AbstractProperty*> (dst_p);
           if (!drp) {
             warning (dst_p, "is not a Property in assignment");
             return nullptr;
           }
-          _ttassignment = new TAssignment <RemoteProperty, AbstractProperty> (srp, drp);
+          _ttassignment = new TAssignment <AbstractRemoteProperty, AbstractProperty> (srp, drp);
           break;
         }
         default:
@@ -317,7 +350,7 @@ namespace djnn
         }
         case Remote:
         {
-          RemoteProperty* dp = djnn_dynamic_cast<RemoteProperty*> (src_p);
+          RemoteProperty* dp = djnn_dynamic_cast<AbstractRemoteProperty*> (src_p);
           if (dp) dst_p->set_value (dp->get_value (), propagate);
           break;
         }
