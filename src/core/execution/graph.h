@@ -28,22 +28,25 @@
 
 namespace djnn
 {
+  using vertices_t = list<Vertex*>;
+  using edges_t = vector<Vertex*>;
+  using ordered_vertices_t = vector<Vertex*>;
+
   class Vertex
   {
   public:
     Vertex (CoreProcess* c);
     virtual ~Vertex ();
     
-    typedef vector<Vertex* > vertices_t;
     void add_edge (Vertex* dst);
     void remove_edge (Vertex* dst);
-    vertices_t& get_edges () { return _edges; }
-    const vertices_t& get_edges () const { return _edges; }
+    edges_t& get_edges () { return _edges; }
+    const edges_t& get_edges () const { return _edges; }
     map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
-    void set_position_in_vertices (list <Vertex *>::iterator end) { _pos = prev(end); }
-    list<Vertex* >::iterator get_position_in_vertices () { return _pos; }
+    void set_position_in_vertices (vertices_t::iterator end) { _pos = prev(end); }
+    vertices_t::iterator get_position_in_vertices () { return _pos; }
 
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
@@ -64,8 +67,8 @@ namespace djnn
 
   private:
     CoreProcess* _process;
-    vertices_t _edges;
-    list<Vertex* >::iterator _pos;
+    edges_t _edges;
+    vertices_t::iterator _pos;
     int _mark, _timestamp;
     size_t _count_edges_in;
     map<Vertex*, int> _map_edges; /* try to deal with duplicate */
@@ -91,7 +94,7 @@ namespace djnn
     void clear ();
     void schedule_delete (CoreProcess *p) { _scheduled_delete_processes.push_back (p); }
     void schedule_activation (CoreProcess* p);
-    const Vertex::vertices_t& get_sorted () const { return _ordered_vertices; }
+    const ordered_vertices_t& get_sorted () const { return _ordered_vertices; }
 
     void print_graph  () const;
     void print_sorted () const;
@@ -114,15 +117,12 @@ namespace djnn
 
     void print_order (CoreProcess *p1, CoreProcess *p2);
 
-    //Vertex::vertices_t _vertices;
-    list< Vertex* > _vertices;
-
-    Vertex::vertices_t _ordered_vertices;
-    Vertex::vertices_t _output_nodes;
+    vertices_t _vertices;
+    ordered_vertices_t _ordered_vertices;
+    ordered_vertices_t _output_nodes;
     vector<CoreProcess*> _scheduled_delete_processes;
     vector<CoreProcess*> _scheduled_activation_processes;
-
-    std::deque < Vertex*> _activation_deque; // try skip_list ?
+    std::deque<Vertex*> _activation_deque; // try skip_list ?
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     vector < pair <CoreProcess*, CoreProcess*> > _pair_to_check;

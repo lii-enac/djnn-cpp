@@ -136,8 +136,8 @@ namespace djnn
       */
 
       /* or remove dst from _edges vector  */
-      Vertex::vertices_t::iterator newend = _edges.end ();
-      newend = std::remove (_edges.begin (), _edges.end (), dst);
+      //auto newend = _edges.end ();
+      auto newend = std::remove (_edges.begin (), _edges.end (), dst);
 
       /* check if end has changed and erase */
       if (newend != _edges.end ()) {
@@ -219,7 +219,7 @@ namespace djnn
     _vertices.clear ();
 
     /* delete output_vertices from _outpur_nodes and clear */
-    for (Vertex::vertices_t::iterator it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
+    for (auto it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
         delete *it;
     _output_nodes.clear ();
   }
@@ -328,14 +328,14 @@ namespace djnn
   Graph::remove_output_node (CoreProcess* c)
   {
     //remove_if 
-    Vertex::vertices_t::iterator new_end = _output_nodes.end ();
+    //auto new_end = _output_nodes.end ();
 
-    new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
+    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
       [c](Vertex* v) {return v->get_process () == c;});
 
     if (new_end != _output_nodes.end ()) {
       // delete nodes
-      for (Vertex::vertices_t::iterator it = new_end ; it != _output_nodes.end(); ++it)
+      for (auto it = new_end ; it != _output_nodes.end(); ++it)
         delete *it;
 
       //erase from vector
@@ -465,58 +465,6 @@ namespace djnn
   }
 
   void
-  Graph::traverse_depth_first (Vertex *v)
-  {
-
-    // skip invalid vertex
-    //FIXME: we should not use this code anymore - check with coverage result
-    if (v->is_invalid ()) {
-      //assert (0);
-      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
-#ifndef DJNN_NO_DEBUG
-      cerr << "vertex: " << v << "- v->process " << v->get_process ();
-#endif
-      v->set_mark (MARKED);
-      return;
-    }
-
-    if (false
-#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
-    // add vertex if it's not a property: its timestamp is taken into account anyway
-    || (v->get_process ()->get_process_type() != PROPERTY_T)
-#endif
-// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
-//     || (v->get_count_edges_in () > 1)
-// #endif
-    )
-      _ordered_vertices.push_back (v);
-
-    //v->set_mark (BROWSING); // MP 11.2021 : useless BROWSING MARKED
-    v->set_mark (MARKED);
-
-    for (auto& v2 : v->get_edges ()) {
-      if (v2->get_mark () == NOT_MARKED
-      ) {
-        traverse_depth_first (v2);
-      }
-    }
-    
-    v->set_timestamp (++_cur_date);
-    //v->set_mark (MARKED);  // MP 11.2021 : useless BROWSING MARKED
-  }
-
-  bool
-  cmp_vertices (const Vertex* v1, const Vertex *v2)
-  {
-    return v2->get_timestamp () < v1->get_timestamp ();
-  }
-
-  bool
-  cmp_index (const Vertex* v1, const Vertex *v2) {
-    return v1 ->get_sorted_index () < v2->get_sorted_index ();
-  }
-
-  void
   Graph::print_order (CoreProcess *p1, CoreProcess *p2)
   {
     int i_p1 = -1;
@@ -537,25 +485,79 @@ namespace djnn
         << p2_name << std::endl;
   }
 
+
+  void
+  Graph::traverse_depth_first (Vertex *v)
+  {
+    // skip invalid vertex
+    //FIXME: we should not use this code anymore - check with coverage result
+    if (v->is_invalid ()) {
+      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+#ifndef DJNN_NO_DEBUG
+      cerr << "vertex: " << v << "- v->process " << v->get_process ();
+#endif
+      v->set_mark (MARKED);
+      return;
+    }
+
+    if (false
+#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
+    // add vertex if it's not a property: its timestamp is taken into account anyway
+    || (v->get_process ()->get_process_type() != PROPERTY_T)
+#endif
+// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
+//     || (v->get_count_edges_in () > 1)
+// #endif
+    ) {
+      _ordered_vertices.push_back (v);
+    }
+
+    //v->set_mark (BROWSING); // MP 11.2021 : useless BROWSING MARKED
+    v->set_mark (MARKED);
+    for (auto * v2 : v->get_edges ()) {
+      if (v2->get_mark () == NOT_MARKED) {
+        traverse_depth_first (v2);
+      }
+    }
+    
+    v->set_timestamp (++_cur_date);
+    //v->set_mark (MARKED);  // MP 11.2021 : useless BROWSING MARKED
+  }
+
+  bool
+  cmp_vertices (const Vertex* v1, const Vertex *v2)
+  {
+    return v2->get_timestamp () < v1->get_timestamp ();
+  }
+
+  bool
+  cmp_index (const Vertex* v1, const Vertex *v2) {
+    return v1->get_sorted_index () < v2->get_sorted_index ();
+  }
+
   void
   Graph::sort ()
   {
     if (_sorted)
       return;
-//rmt_BeginCPUSample(Graph_sort, RMTSF_Recursive);
-    #if _DEBUG_SEE_GRAPH_INFO_PREF
-    std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now();
-    #endif
-    _cur_date = 0;
-    _ordered_vertices.clear ();
+    
     //warning(nullptr, string("num vertices: ")+__to_string(_vertices.size()));
 
+//rmt_BeginCPUSample(Graph_sort, RMTSF_Recursive);
+#if _DEBUG_SEE_GRAPH_INFO_PREF
+    std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now();
+#endif
+
+    _cur_date = 0;
+    _ordered_vertices.clear ();
+
     // set every vertex as NOT_MARKED before sorting them
-    for (auto v : _vertices) {
+    for (auto * v : _vertices) {
       v->set_mark (NOT_MARKED);
     }
+
     // traverse
-    for (auto v : _vertices) {
+    for (auto * v : _vertices) {
       if (v->get_mark () == NOT_MARKED)
         traverse_depth_first (v);
     }
@@ -564,7 +566,7 @@ namespace djnn
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
 
 #if !_EXEC_FULL_ORDERED_VERTICES
-    //give sorted_index
+    // sorted_index
     int index = 0 ;
     for (auto v : _ordered_vertices) {
       v->set_sorted_index (index++);
@@ -575,6 +577,7 @@ namespace djnn
 
     _sorted = true;
 
+
 #if _DEBUG_ENABLE_CHECK_ORDER
     if (!_pair_to_check.empty ()) {
       for (auto p: _pair_to_check) {
@@ -583,8 +586,7 @@ namespace djnn
     }
 #endif
 
-
-    #if _DEBUG_SEE_GRAPH_INFO_PREF
+#if _DEBUG_SEE_GRAPH_INFO_PREF
     cerr << "\033[1;33m" << endl;
     std::chrono::steady_clock::time_point end_GRAPH_SORT = std::chrono::steady_clock::now();
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_SORT - begin_GRAPH_SORT).count();
@@ -597,7 +599,7 @@ namespace djnn
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
     cerr << "\033[0m"  << endl;
-    #endif
+#endif
 //rmt_EndCPUSample();
   }
 
