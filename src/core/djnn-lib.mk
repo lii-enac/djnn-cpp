@@ -11,7 +11,7 @@ lib_srcs += $(call rwildcardmul,$(addprefix $(local_dir)/,$(submodules)),*.cpp)
 ifeq ($(remotery_cflags),-DRMT_ENABLED=1)
 lib_srcs += $(call rwildcard,$(local_dir)/utils/ext/remotery/,*.c)
 ifeq ($(os),MinGW)
-lib_ldflags += -lWs2_32
+lib_ldflags += -lwinmm -lWs2_32
 endif
 endif
 
