@@ -24,11 +24,12 @@
 #include "gui/picking/analytical_picking.h"
 
 #include <QtWidgets/QWidget>
+//#include <QOpenGLFunctions>
 
 namespace djnn {
 
   // no signal for QWidget events!!!
-  class MyQQWidget : public MyQWidget
+  class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
   {
     Q_OBJECT
     // moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp 
@@ -51,6 +52,8 @@ namespace djnn {
     virtual void mouseMoveEvent (QMouseEvent *event) override;
     virtual void wheelEvent (QWheelEvent *event) override;
     virtual void paintEvent (QPaintEvent *event) override;
+    //virtual void paintGL () override;
+    //virtual void initializeGL () override;
     
     QtPickingView *_picking_view;
     //AnalyticalPicking *_picking_view;

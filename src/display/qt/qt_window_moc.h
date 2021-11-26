@@ -20,23 +20,22 @@
 #include "display/qt/qt_window.h"
 
 #include <QtWidgets/QWidget>
+using QTWIDGET = QWidget;
+//#include <QtWidgets/QOpenGLWidget>
+//using QTWIDGET = QOpenGLWidget;
 
 namespace djnn {
 
   class Picking;
 
   // no signal for QWidget events!!!
-  class MyQWidget : public QWidget
+  class MyQWidget : public QTWIDGET
   {
     Q_OBJECT
     // moc src/display/qt/my_qwindow.h > src/display/qt/moc_MyQWindow.cpp 
 
   public:
-    MyQWidget(Window *w, QtWindow * qtw) : _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _updating (false), _building (false) {
-      setAttribute(Qt::WA_AcceptTouchEvents, true);
-      //_picking_view = new QtPickingView (w);
-      _in_screenshot = false;
-    }
+    MyQWidget(Window *w, QtWindow * qtw);
     virtual ~MyQWidget () { 
       //delete _picking_view;
     }

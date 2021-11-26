@@ -587,7 +587,8 @@ namespace djnn
   static QPainter *buff_pick_painter;
 
   struct LayerStuff {
-    QImage *pm;
+    //QImage *pm;
+    QPixmap *pm;
     double tx, ty;
     double s;
     QMatrix4x4 m;
@@ -604,9 +605,9 @@ namespace djnn
 
     double x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
-    //QImage *pm = (QImage*) (l->cache ());
-    LayerStuff* ls = (LayerStuff*) (l->cache ());
-    QImage *pick_pm = (QImage*) (l->pick_cache ());
+    LayerStuff * ls = (LayerStuff*) (l->cache ());
+    //auto * pick_pm = (QPixmap*) (l->pick_cache ());
+    auto * pick_pm = (QImage*) (l->pick_cache ());
     auto fw = l->get_frame()->width ()->get_value();
     auto fh = l->get_frame()->height ()->get_value();
     if (w<0) { 
@@ -625,9 +626,11 @@ namespace djnn
       ls = new LayerStuff;
       w += pad*2;
       h += pad*2;
-      ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      //ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      ls->pm = new QPixmap (w, h);
       ls->pm->fill (Qt::transparent);
       pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      //pick_pm = new QPixmap (w, h);
       pick_pm->fill (Qt::transparent);
       l->set_cache (ls);
       l->set_pick_cache (pick_pm);
@@ -662,7 +665,6 @@ namespace djnn
       newm.translate(-x, -y);
       newm.translate(pad, pad); // apply padding to get the surrounding
       origin = newm * origin;
-      //}
 
       ls->tx = tx;
       ls->ty = ty;
@@ -683,9 +685,9 @@ namespace djnn
   {
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
-    //QImage *pm = (QImage*) (l->cache ());
     LayerStuff* ls = (LayerStuff*) (l->cache ());
-    QImage *pick_pm =  (QImage*) (l->pick_cache());
+    auto *pick_pm =  (QImage*) (l->pick_cache());
+    //auto *pick_pm =  (QPixmap*) (l->pick_cache());
 
     QtContext *cur_context = _context_manager->get_current ();
     QMatrix4x4& origin = cur_context->matrix;
@@ -729,7 +731,6 @@ namespace djnn
       newm.scale(s, s);
     }
     
-    
     origin = newm;
     //newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
     //m = newm * m;
@@ -742,11 +743,21 @@ namespace djnn
     _painter->setTransform (transform);
     _picking_view->painter()->setTransform (transform);
     
-
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
-    _painter->drawImage (rect, *(ls->pm));
+
+    auto rh = _painter->renderHints();
+    _painter->setRenderHints(0);
+    rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
+    //_painter->drawImage (rect, *(ls->pm));
+    _painter->drawPixmap (0,0, *(ls->pm));
+    rmt_EndCPUSample ();
+    _painter->setRenderHints(rh);
+  
     _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_SourceOver);
+    rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
     _picking_view->painter()->drawImage (rect, *pick_pm);
+    //_picking_view->painter()->drawPixmap (0, 0, *pick_pm);
+    rmt_EndCPUSample ();
     _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
     
     rmt_EndCPUSample ();

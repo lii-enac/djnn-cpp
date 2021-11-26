@@ -12,9 +12,6 @@
  *
  */
 
-
-#include "utils/debug.h"
-
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
@@ -30,10 +27,15 @@
 
 #include <QEvent>
 #include <QTouchEvent>
-
-#include "core/utils/iostream.h"
+#include <QOpenGLWidget>
 
 #include "exec_env/exec_env-dev.h"
+
+#include "core/utils/iostream.h"
+#include "core/utils/error.h"
+#include "utils/debug.h"
+
+ #include <type_traits> // is_same
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
@@ -235,9 +237,15 @@ namespace djnn
     if (exec_)
       // QtMainloop::instance ().set_please_exec (true);
       // NO event synthesis on press, release, wheel
-      GRAPH_EXEC;
-      
+      GRAPH_EXEC;   
   }
+
+  /*void
+  MyQQWidget::initializeGL ()
+  {
+    initializeOpenGLFunctions();
+  }*/
+
 
   //remotery test between_2_paintevent part 1
   #if test_between_2_paintevents
@@ -262,7 +270,12 @@ namespace djnn
     rmt_BeginCPUSample (pre_draw, RMTSF_None);
     QtBackend* backend = dynamic_cast<QtBackend*> (Backend::instance ());
     DisplayBackend::instance()->set_window (_window);
+    //glClear (GL_COLOR_BUFFER_BIT);
     QPainter painter (this);
+    //if constexpr (QTWIGDET==QOpenGLWidget)
+    if constexpr (std::is_same<QTWIDGET,QOpenGLWidget>())
+      painter.fillRect(0,0,width(),height(),QColor(0,0,0));
+    
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
     FatProcess *p = _window->holder ();

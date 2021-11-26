@@ -84,7 +84,7 @@ namespace djnn
                 _window->height ()->get_value ());
     _qwidget->setGeometry (rect);
     _window->set_background_opacity_and_color();
-     _qwidget->setParent(0); // Create TopLevel-Widget
+    _qwidget->setParent(0); // Create TopLevel-Widget
     _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
     _qwidget->set_building(true);
     _qwidget->show ();
@@ -198,6 +198,15 @@ namespace djnn
 
   // MyQWidget
 
+  MyQWidget::MyQWidget(Window *w, QtWindow * qtw)
+  : QTWIDGET(nullptr), _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _updating (false), _building (false)
+  {
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+
+    //_picking_view = new QtPickingView (w);
+    _in_screenshot = false;
+  }
+
   void
   MyQWidget::set_building(bool v)
   {
@@ -224,7 +233,7 @@ namespace djnn
       //case QEvent::Paint:
         if(!_building)
         djnn::get_exclusive_access (DBG_GET);
-        exec_ = QWidget::event (event); // should call our callback methods
+        exec_ = QTWIDGET::event (event); // should call our callback methods
         if(!_building)
         djnn::release_exclusive_access (DBG_REL);
         break;
@@ -238,7 +247,7 @@ namespace djnn
       default:
         {
           /* Event not managed by us */      
-          exec_ = QWidget::event (event);
+          exec_ = QTWIDGET::event (event);
           break;
         }
       }
