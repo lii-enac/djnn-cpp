@@ -16,7 +16,6 @@
 #include "qt_backend.h"
 
 #include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
 #include "core/utils/iostream.h"

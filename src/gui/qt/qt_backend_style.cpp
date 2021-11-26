@@ -21,7 +21,6 @@
 #include "qt_backend.h"
 
 #include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
 
 #include "core/utils/iostream.h"
 #include <cmath>

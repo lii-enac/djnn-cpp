@@ -37,7 +37,6 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QBitmap>
 

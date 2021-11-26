@@ -21,7 +21,6 @@
 #include "gui/transformation/transformations.h"
 
 #include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
 
 #include "core/utils/iostream.h"
 #include <cmath>

@@ -32,7 +32,6 @@
 #include <QFontMetrics>
 #include <QPicture>
 #include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
 #include <cmath>
