@@ -160,6 +160,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
       }
       djnn::string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
       txtprop->set_value(msg, true);
+      txtprop->schedule_activation ();
       //GRAPH_EXEC; // methode 1 : per value
     }
 

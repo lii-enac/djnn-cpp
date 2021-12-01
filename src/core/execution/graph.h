@@ -89,7 +89,7 @@ namespace djnn
     void remove_output_node (CoreProcess* c);
 
     size_t  size () {return _vertices.size ();}
-    void sort ();
+    void sort (Vertex* v_root);
     void exec ();
     void clear ();
     void schedule_delete (CoreProcess *p) { _scheduled_delete_processes.push_back (p); }
@@ -112,6 +112,7 @@ namespace djnn
     static Graph *_instance;
     Graph ();
     void traverse_depth_first (Vertex* v);
+    void reset_vertices_mark ();
     Vertex* add_vertex (CoreProcess* c);
     Vertex* get_vertex (CoreProcess* c);
 
@@ -122,7 +123,8 @@ namespace djnn
     ordered_vertices_t _output_nodes;
     vector<CoreProcess*> _scheduled_delete_processes;
     vector<CoreProcess*> _scheduled_activation_processes;
-    std::deque<Vertex*> _activation_deque; // try skip_list ?
+    std::deque<Vertex*> _activation_deque;
+    vector<Vertex *> _activation_triggers_to_sort;
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     vector < pair <CoreProcess*, CoreProcess*> > _pair_to_check;

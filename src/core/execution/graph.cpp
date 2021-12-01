@@ -59,11 +59,7 @@ namespace djnn
   using std::endl;
 #endif
 
-  enum mark_e {
-    NOT_MARKED,
-    BROWSING,
-    MARKED
-  };
+static int MARKED = 0;
 
 #ifndef DJNN_NO_DEBUG
   static string 
@@ -75,7 +71,7 @@ namespace djnn
 #endif
 
   Vertex::Vertex (CoreProcess* p) :
-      _process (p), _mark (NOT_MARKED), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
+      _process (p), _mark (0), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
   {
     //std::cerr << __PRETTY_FUNCTION__ << " vertex:" << this << " process:" << p << " " << (p->get_parent() ? p->get_parent()->get_name () + "/"  : "") << p->get_name() << std::endl; 
   }
@@ -514,8 +510,10 @@ namespace djnn
 
     //v->set_mark (BROWSING); // MP 11.2021 : useless BROWSING MARKED
     v->set_mark (MARKED);
+    // debug traverse
+    //std::cerr << print_process_full_name (v->get_process ()) << std::endl;
     for (auto * v2 : v->get_edges ()) {
-      if (v2->get_mark () == NOT_MARKED) {
+      if (v2->get_mark () < MARKED) {
         traverse_depth_first (v2);
       }
     }
@@ -536,14 +534,20 @@ namespace djnn
   }
 
   void
-  Graph::sort ()
+  Graph::reset_vertices_mark () {
+    for (auto * v : _vertices) {
+      v->set_mark (0);
+    }
+  }
+  
+  void
+  Graph::sort (Vertex* v_root)
   {
     if (_sorted)
       return;
-    
-    //warning(nullptr, string("num vertices: ")+__to_string(_vertices.size()));
+      
+    rmt_BeginCPUSample(Graph_sort, RMTSF_Aggregate);
 
-//rmt_BeginCPUSample(Graph_sort, RMTSF_Recursive);
 #if _DEBUG_SEE_GRAPH_INFO_PREF
     std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now();
 #endif
@@ -551,18 +555,15 @@ namespace djnn
     _cur_date = 0;
     _ordered_vertices.clear ();
 
-    // set every vertex as NOT_MARKED before sorting them
-    for (auto * v : _vertices) {
-      v->set_mark (NOT_MARKED);
+    if (_activation_triggers_to_sort.size ()) {
+      for (auto v : _activation_triggers_to_sort) {
+        if (v->get_mark () < MARKED)
+          traverse_depth_first (v);
+      }
     }
+    else
+      traverse_depth_first (v_root);
 
-    // traverse
-    for (auto * v : _vertices) {
-      if (v->get_mark () == NOT_MARKED)
-        traverse_depth_first (v);
-    }
-
-    // sort
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
 
 #if !_EXEC_FULL_ORDERED_VERTICES
@@ -574,6 +575,9 @@ namespace djnn
 
     std::sort (_activation_deque.begin (), _activation_deque.end (), cmp_index);
 #endif
+
+    //debug
+    //print_sorted ();
 
     _sorted = true;
 
@@ -600,8 +604,10 @@ namespace djnn
     sorted_average = sorted_total / sorted_counter;
     cerr << "\033[0m"  << endl;
 #endif
-//rmt_EndCPUSample();
+  rmt_EndCPUSample(); // end  of sort
   }
+
+
 
   void
   Graph::schedule_activation (CoreProcess *p)
@@ -656,22 +662,32 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
     #endif
 
+    _activation_triggers_to_sort.clear ();
     //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
       map<CoreProcess*, int> already_done;
+      if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+        std::cerr << std::endl << std::endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << std::endl;
       for (auto p : _scheduled_activation_processes) {
         if (already_done.find(p) == already_done.end()) {
-          p->notify_activation();
+          p->notify_activation ();
           already_done[p];
+          if (p->vertex ())
+            _activation_triggers_to_sort.push_back (p->vertex ());
           #ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
-            std::cerr << "Scheduled event notifying ------ " << print_process_full_name(p) << std::endl;
+            std::cerr << "Scheduled ------ " << print_process_full_name(p) << " \t\t--  v: " << p->vertex () << std::endl;
           #endif
         }
-        // DEBUG DUPLICATES
-        //else
-        //  cerr << "DUPLICATES " << (p->get_parent () ? p->get_parent ()->get_name () : "NUUULL") << "/" << p->get_name () << endl;
+      }
+      if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+        std::cerr << " ----------------------------------------- " << std::endl;
+        int i = 0;
+        for (auto v : _activation_triggers_to_sort){
+          std::cerr << i++ << " - triggers ------ " << print_process_full_name(v->get_process ()) << std::endl;
+        }
+        std::cerr << " ----------------------------------------- " << std::endl;
       }
       _scheduled_activation_processes.clear ();
     }
@@ -682,6 +698,13 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     int count_real_activation = 0;
     int count_targeted = 0;
     graph_counter_act++;
+    if (graph_counter_act == 0){
+      // reset to 0
+      reset_vertices_mark ();
+      // and start at 1
+      graph_counter_act++;
+    }
+    MARKED = graph_counter_act;
     int _sorted_break = 0;
     static std::chrono::steady_clock::time_point begin_act, begin_process_act, end_process_act;
     static std::chrono::steady_clock::time_point begin_delete, end_delete, begin_output, end_output;
@@ -739,6 +762,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     #else //between OLD and NEW execution
 
     bool is_end = false;
+    _sorted = false;
     while (!is_end) {
       is_end = true;
 
@@ -746,8 +770,9 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       map<Vertex*, int> _vertex_already_activated;
       #endif
 
+      Vertex* v = nullptr;
       while (!_activation_deque.empty ()) {
-        auto * v = _activation_deque.front ();
+        v = _activation_deque.front ();
       
         if (!_sorted) {
           #ifndef DJNN_NO_DEBUG
@@ -817,15 +842,25 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
-          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
+          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED) {
+            if ( v->get_sorted_index () == -1)
+              cerr << "\033[1;35m";
             std::cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
+          }
           cerr << "\033[0m";
         }
         #endif
       }
 
-      if (!_sorted) {
-        sort();
+      // note:
+      // we have to keep both system to sort :
+      // either it is triggered for external source
+      // or by a internal property
+      if (!_sorted && _activation_triggers_to_sort.size ()) {
+        sort(nullptr);
+        is_end = false;
+      } else if (!_sorted && v){
+        sort (v);
         is_end = false;
       }
 

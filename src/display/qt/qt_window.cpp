@@ -316,7 +316,7 @@ namespace djnn
   {
     // close child should be notified but Qt wants the control
     // and will not let it do the job
-    _window->close ()->notify_activation ();
+    _window->close ()->schedule_activation ();
   }
 
 }

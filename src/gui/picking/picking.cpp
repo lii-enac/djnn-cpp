@@ -555,7 +555,7 @@ namespace djnn
     ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->dy ()->set_value (y, true);
     /* generic mouse event */
-    ((GUIMouse*)GenericMouse)->wheel ()->activate ();
+    ((GUIMouse*)GenericMouse)->wheel ()->schedule_activation ();
     if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() || ((GUIMouse*)GenericMouse)->dx ()->has_coupling() || ((GUIMouse*)GenericMouse)->dy ()->has_coupling()) {
       exec_ = true;
      }

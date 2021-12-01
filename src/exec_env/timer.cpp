@@ -84,7 +84,7 @@ namespace djnn
   {
     if(somehow_activating()) {
       deactivate ();
-      _end.notify_activation ();
+      _end.schedule_activation ();
     }
   }
 

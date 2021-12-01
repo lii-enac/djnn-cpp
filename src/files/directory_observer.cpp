@@ -94,15 +94,15 @@ namespace djnn
       if (!get_please_stop () && ret != DJN_UNKNOWN && ret != DJN_ERROR) {
         switch (ret) {
           case DJN_CHANGE:
-            _change.notify_activation ();
+            _change.schedule_activation ();
             exec = true;
             break;
           case DJN_RENAME:
-            _rename.notify_activation ();
+            _rename.schedule_activation ();
             exec = true;
             break;
           case DJN_DELETE:
-            _delete.notify_activation ();
+            _delete.schedule_activation ();
             exec = true;
             break;
           default:;

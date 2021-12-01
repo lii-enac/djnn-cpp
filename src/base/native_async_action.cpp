@@ -69,8 +69,7 @@ namespace djnn
     NativeAction::impl_activate ();
 
     djnn::get_exclusive_access (DBG_GET);
-    //deactivate ();
-    _end.notify_activation ();
+    _end.schedule_activation ();
     GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
   }

@@ -293,7 +293,7 @@ namespace djnn
     PhysicsBackend::instance ()->get_angle (this, raw_props.roll, raw_props.pitch, raw_props.yall);
     _update_from_engine = true;
 
-    #define phyattr(x) if (_##x) _##x->notify_activation ();
+    #define phyattr(x) if (_##x) _##x->schedule_activation ();
     phyattr(x)
     phyattr(y)
     phyattr(z)

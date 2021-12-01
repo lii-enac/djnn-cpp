@@ -77,7 +77,7 @@ namespace djnn
   {
     _elapsed.set_value ((double)actualduration.count()/1000, true);
     //auto sav_period = _period.get_value ();
-    _tick.activate (); // OR ?? _tick.notify_activation ();
+    _tick.schedule_activation ();
     if(somehow_activating()
       //&& !DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period // FIXME costly
       //&& sav_period == _period.get_value ()
