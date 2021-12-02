@@ -195,6 +195,12 @@ namespace djnn
 #endif
     return found;
   }
+
+  FatChildProcess*
+  CoreProcess::find_optional_child (const string& path)
+  {
+    return find_child_impl (path);
+  }
   
   FatChildProcess*
   CoreProcess::find_child (int index)

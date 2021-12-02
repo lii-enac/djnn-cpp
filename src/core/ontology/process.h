@@ -249,6 +249,7 @@ namespace djnn {
     // public find_child api, uses find_child_impl 
     FatChildProcess* find_child (const string&);
     FatChildProcess* find_child (int /*index*/);
+    FatChildProcess* find_optional_child (const string&); // child might not exist, no warning in debug mode
     static FatChildProcess* find_child (FatChildProcess* p, const string& path) { return nullptr; }
     static string default_name;
     virtual const string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
