@@ -65,5 +65,7 @@ namespace djnn {
     CoreProcess *_activation_source;
     Blank _end;
     Spike _restart;
+    RestartAction _action;
+    Coupling _c_restart;
   };
 }
