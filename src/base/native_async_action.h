@@ -18,6 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/control/action.h"
 #include "core/tree/blank.h"
+#include "core/tree/spike.h"
 #include "core/control/native_action.h"
 
 #include "exec_env/external_source.h"
@@ -40,8 +41,29 @@ namespace djnn {
     // ExternalSource
     virtual void run () override;
 
+    void post_activate () override {
+      // contrarily to Action and NativeAction, do not auto deactivate
+      //post_activate_auto_deactivate ();
+      CoreProcess::post_activate ();
+    }
+
+
+  private:
+    class RestartAction : public Action
+    {
+    public:
+      RestartAction (ParentProcess* parent, const string& name) :
+        Action (parent, name) {};
+      virtual ~RestartAction () {}
+      void impl_activate () override { ((NativeAsyncAction*)get_parent())->restart (); }
+    };
+  
+  void restart ();
+  friend class RestartAction;
+
   private:
     CoreProcess *_activation_source;
     Blank _end;
+    Spike _restart;
   };
 }

@@ -28,7 +28,8 @@ namespace djnn
                               bool isModel) :
       NativeAction (parent, name, action, data, isModel), 
       ExternalSource(name), 
-      _end (this, "end")
+      _end (this, "end"),
+      _restart (this, "restart")
   {
   }
 
@@ -52,11 +53,19 @@ namespace djnn
   }
 
   void
+  NativeAsyncAction::restart ()
+  {
+    ExternalSource::please_stop ();
+    ExternalSource::start ();
+  }
+
+  void
   NativeAsyncAction::run ()
   {
     NativeAction::impl_activate ();
 
     djnn::get_exclusive_access (DBG_GET);
+    deactivate ();
     _end.notify_activation ();
     GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
