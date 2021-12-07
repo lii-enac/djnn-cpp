@@ -19,7 +19,7 @@
 
 namespace djnn {
 
-    class DjnnTimeManager : public djnn_internal::Time::Manager, public djnn::ExternalSource {
+    class DjnnTimeManager : public djnn_internal::Time::Manager, public ExternalSource {
     public:
         DjnnTimeManager();
         ~DjnnTimeManager();
