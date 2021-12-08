@@ -139,6 +139,26 @@ namespace djnn
   }
 
 
+
+  DerefProperty::DerefProperty (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
+  : AbstractDeref (parent, name, ref, path, dir),
+  _src (nullptr)
+  {
+  }
+
+  void
+  DerefProperty::change_src (CoreProcess *src)
+  {
+    _src = djnn_dynamic_cast<AbstractProperty*> (src);
+    if (_src) {
+      if (_dir == DJNN_GET_ON_CHANGE)
+        get ();
+      else if (_dir == DJNN_SET_ON_CHANGE)
+        set ();
+    }
+  }
+
+
 /*
   DerefString::DerefString (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
