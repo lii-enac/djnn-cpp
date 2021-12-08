@@ -77,40 +77,6 @@ namespace djnn
   typedef UnaryOperatorAction<DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverterAction;
   typedef UnaryOperator      <DoubleProperty, DoubleProperty,  std::negate<double>, double> SignInverter;
 
-  class Previous : public FatProcess
-  {
-  private:
-    class PreviousAction : public Action
-    {
-    public:
-      PreviousAction (ParentProcess* parent, const string& name, Previous& np, double init_val)
-      : Action(parent, name),
-      _np(np),
-       _prev (init_val) { finalize_construction (parent, name); }
-      virtual ~PreviousAction () {}
-      void impl_activate ()
-      {
-        _np._output.set_value (_prev, true);
-        _prev = _np._input.get_value ();
-      }
-    private:
-      Previous &_np;
-      double _prev;
-    };
-  public:
-    Previous (ParentProcess* parent, const string& name, double i_val);
-    virtual ~Previous () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
-    void impl_activate () override { _coupling.enable (); _action.activate (); }
-    void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
-  protected:
- #ifndef DJNN_NO_SERIALIZE
-    virtual void serialize (const string& format) override;
-#endif
-    DoubleProperty _input;
-    DoubleProperty _output;
-    PreviousAction _action;
-    Coupling _coupling;
-  };
 
   class Incr : public FatProcess
   {

@@ -57,34 +57,6 @@ namespace djnn
   template <> const char name_info<std::negate<double>>::right[] = "right";
   template <> const char name_info<std::negate<double>>::serialize[] = "signinverter";
 
-  
-
-  Previous::Previous (ParentProcess* parent, const string& name, double i_val)
-  : FatProcess (name),
-    _input(this, "input", i_val),
-    _output(this, "output", i_val),
-    _action(this, "action", *this, i_val),
-    _coupling(&_input, ACTIVATION, &_action, ACTIVATION)
-  {
-    init_unary_couplings(_input, _output, _action, _coupling);
-    finalize_construction (parent, name);
-  }
-
-#ifndef DJNN_NO_SERIALIZE
-  void
-  Previous::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
-
-    AbstractSerializer::serializer->start ("base:previous");
-    AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->float_attribute ("input", _input.get_value ());
-    AbstractSerializer::serializer->end ();
-
-    AbstractSerializer::post_serialize(this);
-
-  }
-#endif
 
   int
   Incr::init_incr (bool isModel)

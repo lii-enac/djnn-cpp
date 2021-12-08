@@ -35,5 +35,6 @@
 #include "native_async_action.h"
 #include "process_handler.h"
 #include "wall_clock.h"
+#include "previous.h"
 
 #include "base-dev.h"
