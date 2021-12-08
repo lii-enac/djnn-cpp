@@ -27,8 +27,8 @@ namespace djnn
 {
   class WallClock : public FatProcess
   {
-      struct LazyIntProperty : public AbstractIntProperty {
-          LazyIntProperty (FatProcess* parent, const string& name)
+      struct WallClockIntProperty : public AbstractIntProperty {
+          WallClockIntProperty (FatProcess* parent, const string& name)
           : AbstractIntProperty (parent, name) { finalize_construction (parent, name); }
           protected:
             int& get_ref_value() override {
@@ -36,12 +36,12 @@ namespace djnn
                 return _ref;
             }
             const int& get_ref_value() const override {
-                return const_cast<LazyIntProperty&>(*this).get_ref_value();
+                return const_cast<WallClockIntProperty&>(*this).get_ref_value();
             }
             int _ref;
       };
-      struct LazyTextProperty : public AbstractTextProperty {
-          LazyTextProperty (FatProcess* parent, const string& name)
+      struct WallClockTextProperty : public AbstractTextProperty {
+          WallClockTextProperty (FatProcess* parent, const string& name)
           : AbstractTextProperty (parent, name) { finalize_construction (parent, name); }
           protected:
             string& get_ref_value() override {
@@ -54,7 +54,8 @@ namespace djnn
                 currentLocalTime = *localtime(&currentTime); // not thread-safe
                 char timeBuffer[80];
                 std::size_t charCount { std::strftime( timeBuffer, 80,
-                                         "%Y-%m-%d_%Hh%Mm%Ss",
+                                         //"%Y-%m-%d_%Hh%Mm%Ss",
+                                         ((WallClock*)get_parent())->_format.get_value().c_str(),
                                           &currentLocalTime)
                          };
                 assert(charCount);
@@ -70,7 +71,7 @@ namespace djnn
                 return _ref;
             }
             const string& get_ref_value() const override {
-                return const_cast<LazyTextProperty&>(*this).get_ref_value();
+                return const_cast<WallClockTextProperty&>(*this).get_ref_value();
             }
             string _ref;
       };
@@ -78,14 +79,16 @@ namespace djnn
         WallClock (ParentProcess* parent, const string& name)
         : FatProcess (name),
         _state (this, "state"),
-        _state_text (this, "state_text")
+        _state_text (this, "state_text"),
+        _format (this, "format", "%Y-%m-%d_%Hh%Mm%Ss")
         {
             finalize_construction (parent, name);
         }
     protected:
         virtual void impl_activate () override {}
         virtual void impl_deactivate () override {}
-        LazyIntProperty _state;
-        LazyTextProperty _state_text;
+        WallClockIntProperty _state;
+        WallClockTextProperty _state_text;
+        TextProperty _format;
   };
 }
