@@ -5,28 +5,10 @@
 #include "core/tree/text_property.h"
 #include "core/tree/bool_property.h"
 
+#include "core/tree/property_trait.h"
+
 namespace djnn {
 
-  template <typename T>
-  struct PreviousTrait {
-  };
-
-  template <>
-  struct PreviousTrait<double> {
-    using property_type = DoubleProperty;
-  };
-  template <>
-  struct PreviousTrait<int> {
-    using property_type = IntProperty;
-  };
-  template <>
-  struct PreviousTrait<bool> {
-    using property_type = BoolProperty;
-  };
-  template <>
-  struct PreviousTrait<string> {
-    using property_type = TextProperty;
-  };
 
   template <typename T>
   class TPrevious : public FatProcess {
@@ -57,8 +39,8 @@ namespace djnn {
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
-    typename PreviousTrait<T>::property_type _input;
-    typename PreviousTrait<T>::property_type _output;
+    typename PropertyTrait<T>::property_type _input;
+    typename PropertyTrait<T>::property_type _output;
     PreviousAction _action;
     Coupling _coupling;
   };

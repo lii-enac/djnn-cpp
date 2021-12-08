@@ -138,6 +138,8 @@ namespace djnn
     _src = src;
   }
 
+
+/*
   DerefString::DerefString (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _value (this, "value", ""),
@@ -227,7 +229,7 @@ namespace djnn
         set ();
     }
   }
-
+*/
 #ifndef DJNN_NO_SERIALIZE
   void
   Deref::serialize (const string& type)
@@ -243,8 +245,10 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+
+  template <>
   void
-  DerefString::serialize (const string& type)
+  TDeref<string>::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);
@@ -257,8 +261,10 @@ namespace djnn
     AbstractSerializer::post_serialize (this);
 
   }
+
+  template<>
   void
-  DerefDouble::serialize (const string& type)
+  TDeref<double>::serialize (const string& type)
   {
 
     AbstractSerializer::pre_serialize (this, type);

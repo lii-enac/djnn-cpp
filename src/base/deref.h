@@ -14,14 +14,16 @@
 
 #pragma once
 
-#include "base/connector.h"
+#include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/ontology/process.h"
 #include "core/tree/spike.h"
 #include "core/tree/ref_property.h"
 #include "core/tree/text_property.h"
 #include "core/tree/double_property.h"
-#include "core/ontology/coupling.h"
+#include "core/tree/property_trait.h"
+
+#include "base/connector.h"
 
 namespace djnn
 {
@@ -92,6 +94,7 @@ namespace djnn
       void set () override;
       void get () override;
       void change_src (CoreProcess* src) override;
+      
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const string& type) override;
 #endif
@@ -101,6 +104,59 @@ namespace djnn
       Coupling _cdst_to_src;
   };
 
+  template <typename T>
+  class TDeref : public AbstractDeref
+  {
+    public:
+      TDeref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE)
+      : AbstractDeref (parent, name, ref_prop, path, dir),
+      _value (this, "value", T()),
+      _src (nullptr)
+      {
+        _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
+        finalize_construction (parent, name);
+      }
+
+      virtual ~TDeref () { _cset.uninit (); }
+      
+      void get () override {
+        if (_src) {
+          _cset.disable ();
+          _value.set_value (PropertyTrait<T>::get_value(_src), true);
+          _cset.enable ();
+        }
+      }
+      void set () override {
+        if (_src) {
+          _cget.disable ();
+          _src->set_value (_value.get_value (), true);
+          _cget.enable ();
+        }
+      }
+      void change_src (CoreProcess* src) override {
+        _src = dynamic_cast<AbstractProperty*> (src);
+        if (_src) {
+          if (_dir == DJNN_GET_ON_CHANGE)
+            get ();
+          else if (_dir == DJNN_SET_ON_CHANGE)
+            set ();
+        }
+      }
+#ifndef DJNN_NO_SERIALIZE
+      void serialize (const string& type) override;
+#endif
+    private:
+      typename PropertyTrait<T>::property_type _value;
+      AbstractProperty *_src;
+  };
+
+  typedef TDeref<double> DerefDouble;
+  typedef TDeref<string> DerefText;
+  typedef TDeref<string> DerefString;
+  typedef TDeref<int> DerefInt;
+  typedef TDeref<bool> DerefBool;
+
+  /*
   class DerefString : public AbstractDeref
   {
     public:
@@ -131,4 +187,5 @@ namespace djnn
         DoubleProperty _value;
         AbstractProperty *_src;
     };
+    */
 }
