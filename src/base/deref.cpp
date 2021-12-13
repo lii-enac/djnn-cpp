@@ -270,7 +270,6 @@ namespace djnn
   void
   TDeref<string>::serialize (const string& type)
   {
-
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:deref-string");
@@ -279,14 +278,12 @@ namespace djnn
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
-
   }
 
   template<>
   void
   TDeref<double>::serialize (const string& type)
   {
-
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:deref-double");
@@ -295,7 +292,34 @@ namespace djnn
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
+  }
 
+  template<>
+  void
+  TDeref<bool>::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:deref-bool");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("path", _path.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
+
+  template<>
+  void
+  TDeref<int>::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:deref-int");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("path", _path.get_value ());
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
   }
 #endif
 }
