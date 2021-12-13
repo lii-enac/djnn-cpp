@@ -21,7 +21,6 @@
 #include "gui/shape/abstract_gshape.h"
 
 #include <QtGui/QImage>
-//#include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include <QtWidgets/QLabel>
 
@@ -46,7 +45,6 @@ namespace djnn
   private:
     QLabel *_pick_debug_win;
     QImage *_image;
-    //QPixmap *_image;
     QPainter *_painter;
   };
 } /* namespace djnn */
