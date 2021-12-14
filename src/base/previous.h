@@ -7,6 +7,9 @@
 
 #include "core/tree/property_trait.h"
 
+#include "core/serializer/serializer.h"
+#include "base/operators.h"
+
 namespace djnn {
 
 
