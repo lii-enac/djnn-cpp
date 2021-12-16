@@ -37,8 +37,6 @@ namespace djnn {
   
 
 #if !defined(DJNN_NO_SERIALIZE)
-  #define BUFFSIZE 8192
-  static char buf[BUFFSIZE];
   XML::djn__NamespaceTable_t XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
@@ -145,9 +143,11 @@ namespace djnn {
 
     while (!done) {
       int len;
+      const int BUFFSIZE = 8192;
+      void *buf = XML_GetBuffer(p, BUFFSIZE);
 
       len = fread (buf, 1, BUFFSIZE, f);
-      if (ferror (stdin)) {
+      if (ferror (f)) {
         error (nullptr, "Read error");
         XML_ParserFree (p);
         fclose (f);
@@ -155,7 +155,7 @@ namespace djnn {
       }
       done = feof (f);
 
-      if (!XML_Parse (p, buf, len, done)) {
+      if (!XML_ParseBuffer (p, len, done)) {
         fprintf (stderr, "Parse error at line %d:\n%s\n", (int) XML_GetCurrentLineNumber (p),
                  XML_ErrorString (XML_GetErrorCode (p)));
         XML_ParserFree (p);
