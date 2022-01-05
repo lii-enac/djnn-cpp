@@ -9,9 +9,60 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
 
 
-## [1.16.0] - 2021-07-28
-    note: debut on changelog. This section has to be completed, if we have time. 
+## [1.17.0] - 2022-01-05  
+### NEW
+    - NEW IMPORTANT : 
+        - new GUIStructureHolder management system (change renderer strategy)
+        - new sort management on execution graph : to favor local micro sort, no sort after removing edges 
+    - NEW Componant :
+        - new Previous componant for double, int, bool and text
+        - new deref for bool and int
+    - NEW child on Wallclock :
+        - Add format eq: %Y-%m-%d_%Hh%Mm%Ss
+    - NEW child for qt Window :
+        - Added frame.background_rect to subscribe directly to background without adding a "fake" rectangle
+        - Frameless option on qt window with window.frameless = TRUE | FALSE
+        - Background_capacity setting appart from brackground_color (works badly on Linux and Windows)
+        - Fixed window default background_color as macOS dark mode (50, 50, 50)
+        - Moved UI and PickUI classes into display
+    - NEW child on GUI componant :
+        - Added PickFill, PickOutline
+        - Added NoPickFill, NoPickOutline
+    - NEW child on Layer :
+        - Added Padding
+    - NEW on system :
+        - Made Ivy optionnal to facilitate first-time compiling experience   
+### Added
+    - Added find_optional_child with no "not found" msg
+    - Added is_model as an optional argument for Timer
+    - Added min_width and min_height properties for Window
+    - Added ascent/descent properties to gui text
+    - Added support to QOpenGLWidget
+    - Improved code coverage.
+### Changed
+    - Reordered GUI event to improved performence.
+    - Removed possible multiple parenthood in list
+    - Improved performence on qt_picking_view
+    - Improved color_map management
+    - Improved Image Renderer
+    - Improved support of Layer in GUI
+    - Improved XML parsing/loading
+    - Improved remoteProperty
+    - Improved remotery monitoring Informations 
+    - Improved use of qpainter composition_mode with Layer
+    - Improved Picking management
+    - Auto generate missing id for all SVG elements on parsing
+    - Improved code and include.
+    - Improved MSYS2/mingw64 compatibility, dependency and instructions
+    - Improved Install.md
+    - Cleaned Code, comments
+### Fixed
+    - Fixed execution cycle on screenshot componant
+    - Fixed NativeAsyncAction destructor
+    - Fixed update layer in picking view
+    - Fixed Leaks 
 
+## [1.16.0] - 2021-07-28
 ### NOTE:
     - djnn is still using Qt5. Not compatible with Qt6 yet.
 ### NEW
@@ -21,7 +72,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
         - DirectoryObserver
         - LazyAssignment : do not trigger if the new value is the same old value.
     - New execution engine :
-        - usgin deque instead of vector
+        - using deque instead of vector
         - respecting order
         - More sensitive to loops on dataflow but also detect them.
         - A lot more efficient: time, and memory. Execute only what it should
