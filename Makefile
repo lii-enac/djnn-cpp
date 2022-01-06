@@ -188,7 +188,11 @@ compiler ?= gnu
 endif
 
 ifeq ($(os),Darwin)
+ifeq ($(PREFIX),)
 brew_prefix := $(shell brew --prefix)
+else
+brew_prefix := $(PREFIX)
+endif
 CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
