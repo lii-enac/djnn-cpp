@@ -16,8 +16,8 @@ endif
 endif
 
 ifeq ($(os),Darwin)
-lib_pkgpath += $(shell brew --prefix expat)/lib/pkgconfig
-lib_pkgpath += $(shell brew --prefix curl)/lib/pkgconfig
+lib_pkgpath += $(brew_prefix)/opt/expat/lib/pkgconfig
+lib_pkgpath += $(brew_prefix)/opt/curl/lib/pkgconfig
 endif
 
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
