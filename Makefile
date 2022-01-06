@@ -191,7 +191,7 @@ ifeq ($(os),Darwin)
 ifeq ($(PREFIX),)
 brew_prefix := $(shell brew --prefix)
 else
-brew_prefix := $(PREFIX)
+brew_prefix := $(HOMEBREW_PREFIX)
 endif
 CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
