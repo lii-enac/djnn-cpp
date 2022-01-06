@@ -188,12 +188,13 @@ compiler ?= gnu
 endif
 
 ifeq ($(os),Darwin)
+brew_prefix := $(shell brew --prefix)
 CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
 DYNLIB = -dynamiclib
 echo ?= echo
-YACC := $(shell brew --prefix bison)/bin/bison -d
-LEX := $(shell brew --prefix flex)/bin/flex
+YACC := $(brew_prefix)/opt/bison/bin/bison -d
+LEX := $(brew_prefix)/opt/flex/bin/flex
 moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
 #CXXFLAGS += -I/usr/local/include
