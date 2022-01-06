@@ -29,28 +29,35 @@ ifeq ($(os),Darwin)
 	
 	#TODO : activate after confinement and put above AND REMOVE /ivy
 
+	ifeq ($(use_ivy),yes)
 	tmp_lib_cppflags = $(shell pkg-config libivy --cflags)
 	ifneq ($(tmp_lib_cppflags),)
 		lib_cppflags += $(shell pkg-config libivy --cflags)/Ivy
 	endif
 	lib_ldflags += $(shell pkg-config libivy --libs)
+	endif
 
 	lib_srcs += $(local_dir)/serial.cpp
 endif
 
 ifeq ($(os),Linux)
-	# TODO: add support for pkg-vonfig
+	ifeq ($(use_ivy),yes)
+	# TODO: add support for pkg-config
 	# TODO: remove once .pkg made 
 	lib_cppflags += -I/usr/local/include/Ivy
 	lib_ldflags += -L/usr/local/lib -livy -lpcre
+	endif
+
 	lib_srcs += $(local_dir)/serial.cpp
 endif
 
 ifeq ($(os),MinGW)
-	# TODO: add support for pkg-vonfig
+	ifeq ($(use_ivy),yes)
+	# TODO: add support for pkg-config
 	# TODO: remove once .pkg made 
 	lib_cppflags += -I/usr/include/Ivy
 	lib_ldflags += -L/usr/lib -livy -lws2_32 -L/mingw64/lib -lpcre
+	endif
 endif
 
 # library-specific thread support
