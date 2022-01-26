@@ -52,6 +52,7 @@ namespace djnn {
       void set_invalid_cache (bool v) { _invalid_cache = v;}
       //void get_bounding_box (double& x, double& y, double& w, double& h) const override;
       //double sdf (double x, double y) const override;
+      string*& get_data_ref() { return raw_props.data; }
     private:
       Coupling *_cwatcher;
       DataImageWatcher *_watcher;

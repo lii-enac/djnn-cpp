@@ -139,7 +139,8 @@ namespace djnn
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
-    raw_props.data = new string(*data);
+    if(data)
+      raw_props.data = new string(*data);
     set_origin (x, y);
     finalize_construction (parent, name);
   }

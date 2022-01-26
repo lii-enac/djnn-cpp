@@ -538,10 +538,10 @@ namespace djnn
   QtBackend::draw_data_image (DataImage *i)
     {
       rmt_BeginCPUSample(draw_data_image, RMTSF_Aggregate);
-
       double x,y,w,h;
       string* data;
       i->get_properties_values (data, x,y,w,h);
+      //std::cerr << data << " " << w << " " << h << __FL__;
       load_drawing_context (i, x, y, w, h);
       QRect rect (x, y, w, h);
       QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
@@ -551,7 +551,11 @@ namespace djnn
         i->set_invalid_cache (true);
       }
       if (i->invalid_cache ()) {
-        pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
+        if (data) {
+          //std::cerr << data->length() << __FL__;
+          pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
+        }
+        //else
         i->set_invalid_cache (false);
       }
 
