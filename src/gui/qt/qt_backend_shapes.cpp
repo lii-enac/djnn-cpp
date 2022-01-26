@@ -540,48 +540,59 @@ namespace djnn
       rmt_BeginCPUSample(draw_data_image, RMTSF_Aggregate);
       double x,y,w,h;
       string* data;
-      i->get_properties_values (data, x,y,w,h);
+      int format;
+      i->get_properties_values (data,format, x,y,w,h);
       //std::cerr << data << " " << w << " " << h << __FL__;
       load_drawing_context (i, x, y, w, h);
       QRect rect (x, y, w, h);
-      QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
-      if(pm == nullptr) {
-        pm = new QPixmap ();
-        i->set_cache (pm);
-        i->set_invalid_cache (true);
-      }
+      //QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
+      auto *pm = reinterpret_cast<QImage*>(i->cache());
+      // if(pm == nullptr) {
+      //   //pm = new QPixmap (w,h);
+      //   pm = new QImage ();
+      //   i->set_cache (pm);
+      //   i->set_invalid_cache (true);
+      // }
       if (i->invalid_cache ()) {
         if (data) {
-          //std::cerr << data->length() << __FL__;
-          pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
+          delete pm;
+          if (format<0)
+            pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
+          else
+            pm = new QImage (reinterpret_cast<const uchar*>(data->c_str ()), w,h, (QImage::Format)format); //QImage::Format_BGR888);
+          i->set_cache (pm);
         }
         //else
         i->set_invalid_cache (false);
       }
 
-      /* manage opacity on image */
-      qreal old_opacity = _painter->opacity ();
-      QtContext *cur_context = _context_manager->get_current ();
-      QColor c = cur_context->pen.color ();
-      _painter->setOpacity (c.alphaF ());
+      if (pm) {
 
-      //_painter->setRenderHint (QPainter::SmoothPixmapTransform); // do not need anymore if djnn::Layer is used correctly
-      _painter->drawPixmap (rect, *pm);
-#if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object++;
-#endif
+        /* manage opacity on image */
+        qreal old_opacity = _painter->opacity ();
+        QtContext *cur_context = _context_manager->get_current ();
+        QColor c = cur_context->pen.color ();
+        _painter->setOpacity (c.alphaF ());
 
-      /* reset opacity */
-      _painter->setOpacity (old_opacity);
+        //_painter->setRenderHint (QPainter::SmoothPixmapTransform); // do not need anymore if djnn::Layer is used correctly
+        //_painter->drawPixmap (rect, *pm);
+        _painter->drawImage (rect, *pm);
+  #if _DEBUG_SEE_GUI_INFO_PREF
+      __nb_Drawing_object++;
+  #endif
 
-      if (is_in_picking_view (i)) {
-        rmt_BeginCPUSample(draw_data_image_picking, RMTSF_Aggregate);
-        load_pick_context (i);
-        _picking_view->painter ()->drawRect (rect);
-#if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
-#endif
-        rmt_EndCPUSample ();
+        /* reset opacity */
+        _painter->setOpacity (old_opacity);
+
+        if (is_in_picking_view (i)) {
+          rmt_BeginCPUSample(draw_data_image_picking, RMTSF_Aggregate);
+          load_pick_context (i);
+          _picking_view->painter ()->drawRect (rect);
+  #if _DEBUG_SEE_GUI_INFO_PREF
+      __nb_Drawing_object_picking++;
+  #endif
+          rmt_EndCPUSample ();
+        }
       }
 
       rmt_EndCPUSample ();

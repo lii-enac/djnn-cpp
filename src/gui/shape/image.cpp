@@ -133,9 +133,9 @@ namespace djnn
     return res;
   }
 
-  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w,
+  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, int format, double x, double y, double w,
     double h) :
-      AbstractDataImage (parent, name, data, x, y, w, h),
+      AbstractDataImage (parent, name, data, format, x, y, w, h),
       _cwatcher(nullptr),
       _watcher(nullptr), _cache(nullptr), _invalid_cache (true)
   {
@@ -145,8 +145,13 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
+  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w, double h)
+  : DataImage(parent, name, data, -1, x, y, w, h)
+  {
+  }
+
   DataImage::DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h)
-  : DataImage(parent, name, nullptr, x, y, w, h)
+  : DataImage(parent, name, nullptr, -1, x, y, w, h)
   {
   }
 
@@ -201,7 +206,7 @@ namespace djnn
   DataImage*
   DataImage::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    auto res = new DataImage (nullptr, get_name(), raw_props.data, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    auto res = new DataImage (nullptr, get_name(), raw_props.data, raw_props.format, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

@@ -37,9 +37,9 @@ using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data
 
 namespace djnn
 {
-  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, string*& data, double x, double y, double width, double height) :
+  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
-    raw_props{.data=data},
+    raw_props{.data=data, .format=format},
     _cdata (nullptr)
   {
     set_origin (x, y);
@@ -83,6 +83,12 @@ namespace djnn
       notify_mask = notify_damaged_geometry;
       prop_Textp=true;
     } else
+    if(name=="format") {
+      coupling=&_cdata;
+      rawp_Int=&raw_props.format;
+      notify_mask = notify_damaged_style;
+      prop_Int=true;
+    } else
     return nullptr;
 
     if(prop_Double) {
@@ -110,14 +116,16 @@ namespace djnn
   {
     static const vector<string> res = {
     "data",
+    "format"
     };
     return res;
   }
 
   void
-  AbstractDataImage::get_properties_values (string*& data, double& x, double& y, double& width, double& height)
+  AbstractDataImage::get_properties_values (string*& data, int& format, double& x, double& y, double& width, double& height)
   {
     data = raw_props.data;
+    format = raw_props.format;
     AbstractImage::get_properties_values(x, y, width, height);
   }
 
