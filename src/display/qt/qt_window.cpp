@@ -294,6 +294,7 @@ namespace djnn
     _updating = false;
     // event synthesis on move paint ...
     QtMainloop::instance ().set_please_exec (true);
+    //GRAPH_EXEC;
   }
 
   void

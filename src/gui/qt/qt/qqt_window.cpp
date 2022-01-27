@@ -81,26 +81,25 @@ namespace djnn
             switch (touchPoint.state ())
               {
               case Qt::TouchPointStationary:
-                continue;
+                  break;
               case Qt::TouchPointPressed:
                 {
                   exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
                   // NO event synthesis on press, release
-                  if (exec_ ) GRAPH_EXEC;
+                  if (exec_) { GRAPH_EXEC; }
                   break;
                 }
               case Qt::TouchPointMoved:
                 {
                   exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
-                  // event synthesis on move, paint
-                  if (exec_) QtMainloop::instance ().set_please_exec (true);
+                  // NO event synthesis on move
+                  if (exec_) { GRAPH_EXEC; }
                   break;
                 }
               case Qt::TouchPointReleased:
                 {
                   exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
-                  // NO event synthesis on press, release
-                  if (exec_ ) GRAPH_EXEC;
+                  if (exec_) { GRAPH_EXEC; }
                   break;
                 }
               }
@@ -155,7 +154,7 @@ namespace djnn
 
     //if(!_building)
     //djnn::release_exclusive_access (DBG_REL);
-    //if(exec_) event->accept();
+    if(exec_) event->accept();
     //std::cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
     return exec_;
   }
@@ -189,10 +188,7 @@ namespace djnn
     mouse_pos_y = event->y ();
 
     bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
-    if (exec_)
-      // QtMainloop::instance ().set_please_exec (true);
-      // NO event synthesis on press, release
-      GRAPH_EXEC;
+    if (exec_) { GRAPH_EXEC; }
   }
 
   void
@@ -202,14 +198,7 @@ namespace djnn
     mouse_pos_y = event->y ();
 
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
-    if (exec_)
-      // event synthesis for move, paint ...
-#if test_between_2_paintevents
-      GRAPH_EXEC; //remotery test between_2_paintevent part 1
-#else
-      QtMainloop::instance ().set_please_exec (true);
-#endif
-      
+    if (exec_) { GRAPH_EXEC; }
   }
 
   void
@@ -219,10 +208,7 @@ namespace djnn
     mouse_pos_y = event->y ();
 
     bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
-    if (exec_)
-      // QtMainloop::instance ().set_please_exec (true);
-      // NO event synthesis on press, release
-      GRAPH_EXEC;
+    if (exec_) { GRAPH_EXEC; }
   }
 
   void
@@ -312,8 +298,7 @@ namespace djnn
 
     rmt_BeginCPUSample (post_draw, RMTSF_None);
     if (_picking_view->genericCheckShapeAfterDraw (mouse_pos_x, mouse_pos_y))
-      // event synthesis or not ??
-      QtMainloop::instance ().set_please_exec (true);
+      { GRAPH_EXEC;}  
 
     if (_DEBUG_SEE_COLOR_PICKING_VIEW)
       _picking_view->display();
