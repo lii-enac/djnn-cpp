@@ -228,16 +228,20 @@ namespace djnn
   void
   MyQQWidget::wheelEvent (QWheelEvent *event)
   {
-    QPointF fdelta (event->angleDelta ());
-    double dx = fdelta.x () / 8;
-    double dy = fdelta.y () / 8;
-    if (dx == 0 && dy == 0) // some trackpads seem to send a lot of unwanted zero values
-      return;
-    bool exec_ = _picking_view->genericMouseWheel (dx, dy);  // the angle is in eights of a degree
-    if (exec_)
-      // QtMainloop::instance ().set_please_exec (true);
-      // NO event synthesis on press, release, wheel
-      GRAPH_EXEC;   
+    QPoint numPixels = event->pixelDelta();
+    QPoint numDegrees = event->angleDelta() / 8; // the angle is in eights of a degree
+
+    bool exec_ = false ;
+    if (!numPixels.isNull()) {
+        //std::cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << std::endl;
+        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y ());  
+    } else if (!numDegrees.isNull()) {
+        QPoint numSteps = numDegrees / 15;
+        //std::cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << std::endl;
+        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y ());
+    }
+
+    if (exec_) { GRAPH_EXEC; } 
   }
 
   /*void
