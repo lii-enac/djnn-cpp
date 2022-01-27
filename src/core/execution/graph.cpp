@@ -555,7 +555,7 @@ static int MARKED = 0;
     _cur_date = 0;
     _ordered_vertices.clear ();
 
-    if (_activation_triggers_to_sort.size ()) {
+    if (!_activation_triggers_to_sort.empty ()) {
       for (auto v : _activation_triggers_to_sort) {
         if (v->get_mark () < MARKED)
           traverse_depth_first (v);
@@ -799,7 +799,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
             cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
             display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
             cerr << "\033[0m";
-            break;
+            continue;
           }
           else
             _vertex_already_activated[v] = count_activation;
@@ -863,11 +863,6 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         sort (v);
         is_end = false;
       }
-
-      #ifndef DJNN_NO_DEBUG      
-      if (_DEBUG_GRAPH_CYCLE_DETECT)
-        _vertex_already_activated.clear ();
-      #endif
     }
     #endif
     
