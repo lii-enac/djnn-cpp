@@ -201,25 +201,25 @@ namespace djnn
     switch (button)
       {
       case BUTTON_LEFT:
-        ((GUIMouse*) GenericMouse)->left ()->press ()->activate ();
+        ((GUIMouse*) GenericMouse)->left ()->press ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->left_press ()->activate ();
+          s->ui()->left_press ()->schedule_activation ();
         }
         break;
       case BUTTON_RIGHT:
-        ((GUIMouse*) GenericMouse)->right ()->press ()->activate ();
+        ((GUIMouse*) GenericMouse)->right ()->press ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->right_press ()->activate ();
+          s->ui()->right_press ()->schedule_activation ();
         }
         break;
       case BUTTON_MIDDLE:
-        ((GUIMouse*) GenericMouse)->middle ()->press ()->activate ();
+        ((GUIMouse*) GenericMouse)->middle ()->press ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->middle_press ()->activate ();
+          s->ui()->middle_press ()->schedule_activation ();
         }
         break;
       default:
-        ((GUIMouse*) GenericMouse)->left ()->press ()->activate ();
+        ((GUIMouse*) GenericMouse)->left ()->press ()->schedule_activation ();
       }
     if (((GUIMouse*)GenericMouse)->left ()->press ()->has_coupling () || ((GUIMouse*)GenericMouse)->right ()->press ()->has_coupling ()
         || ((GUIMouse*)GenericMouse)->middle ()->press ()->has_coupling ()) {
@@ -227,8 +227,16 @@ namespace djnn
     }
 
     /* windows event schedule event After shape event*/
-    _win->press ()->schedule_activation ();
-    if (_win->press ()->has_coupling () || _win->press_x ()->has_coupling () || _win->press_y ()->has_coupling ()) {
+    if (_win->press ()->has_coupling ()) {
+      _win->press ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->press_x ()->has_coupling ()) {
+      _win->press_x ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->press_y ()->has_coupling ()) {
+      _win->press_y ()->schedule_activation ();
       exec_ = true;
     }
 
@@ -337,14 +345,30 @@ namespace djnn
     ((GUIMouse*)GenericMouse)->x ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->y ()->set_value (y, true);
     /* generic mouse event */
-    ((GUIMouse*)GenericMouse)->move ()->activate ();
-    if (((GUIMouse*)GenericMouse)->move ()->has_coupling() || ((GUIMouse*)GenericMouse)->x ()->has_coupling() || ((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
+    if (((GUIMouse*)GenericMouse)->move ()->has_coupling()) {
+      ((GUIMouse*)GenericMouse)->move ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (((GUIMouse*)GenericMouse)->x ()->has_coupling()) {
+      ((GUIMouse*)GenericMouse)->x ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (((GUIMouse*)GenericMouse)->y ()->has_coupling()) {
+      ((GUIMouse*)GenericMouse)->y ()->schedule_activation ();
       exec_ = true;
     }
 
     /* windows event schedule event After shape event*/
-    _win->move ()->schedule_activation ();
-    if (_win->move ()->has_coupling () || _win->move_x ()->has_coupling () || _win->move_y ()->has_coupling ()) {
+    if (_win->move ()->has_coupling ()) {
+      _win->move ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->move_x ()->has_coupling ()) {
+      _win->move_x ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->move_y ()->has_coupling ()) {
+      _win->move_y ()->schedule_activation ();
       exec_ = true;
     }
 
@@ -446,21 +470,21 @@ namespace djnn
     switch (button)
       {
       case BUTTON_LEFT:
-        ((GUIMouse*) GenericMouse)->left ()->release ()->activate ();
+        ((GUIMouse*) GenericMouse)->left ()->release ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->left_release ()->activate ();
+          s->ui()->left_release ()->schedule_activation ();
         }
         break;
       case BUTTON_RIGHT:
-        ((GUIMouse*) GenericMouse)->right ()->release ()->activate ();
+        ((GUIMouse*) GenericMouse)->right ()->release ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->right_release ()->activate ();
+          s->ui()->right_release ()->schedule_activation ();
         }
         break;
       case BUTTON_MIDDLE:
-        ((GUIMouse*) GenericMouse)->middle ()->release ()->activate ();
+        ((GUIMouse*) GenericMouse)->middle ()->release ()->schedule_activation ();
         if (s != nullptr) {
-          s->ui()->middle_release ()->activate ();
+          s->ui()->middle_release ()->schedule_activation ();
         }
         break;
       default:
@@ -554,15 +578,32 @@ namespace djnn
     /* generic mouse setting */
     ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->dy ()->set_value (y, true);
+
     /* generic mouse event */
-    ((GUIMouse*)GenericMouse)->wheel ()->schedule_activation ();
-    if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() || ((GUIMouse*)GenericMouse)->dx ()->has_coupling() || ((GUIMouse*)GenericMouse)->dy ()->has_coupling()) {
+    if (((GUIMouse*)GenericMouse)->wheel ()->has_coupling() ) {
+      ((GUIMouse*)GenericMouse)->wheel ()->schedule_activation ();
       exec_ = true;
-     }
+    }
+    if (((GUIMouse*)GenericMouse)->dx ()->has_coupling() ) {
+      ((GUIMouse*)GenericMouse)->dx ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (((GUIMouse*)GenericMouse)->dy ()->has_coupling() ) {
+      ((GUIMouse*)GenericMouse)->dy ()->schedule_activation ();
+      exec_ = true;
+    }
 
     /* windows event schedule event After shape event*/
-    _win->wheel ()->schedule_activation ();
-    if (_win->wheel ()->has_coupling () || _win->wheel_dx ()->has_coupling () || _win->wheel_dy ()->has_coupling ()) {
+    if (_win->wheel ()->has_coupling ()) {
+      _win->wheel ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->wheel_dx ()->has_coupling ()) {
+      _win->wheel_dx ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->wheel_dy ()->has_coupling ()) {
+      _win->wheel_dy ()->schedule_activation ();
       exec_ = true;
     }
 
