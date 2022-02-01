@@ -60,6 +60,11 @@ typedef unsigned gperf_t;
   extern int _DEBUG_GRAPH_CYCLE_DETECT;
 
   /*
+    explicitly accept cycles in graph without displaying information
+  */
+  extern int _AUTHORIZE_CYCLE;
+
+  /*
     diplayed infos (YELLOW) : 
     - display order in which component are activated and deactivated by GRAPH_EXEC
  */
@@ -74,7 +79,8 @@ typedef unsigned gperf_t;
     _DEBUG_GRAPH_CYCLE_DETECT=0,
     _DEBUG_SEE_ACTIVATION_SEQUENCE=0,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US=1000,
-    _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED=1
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED=1,
+    _AUTHORIZE_CYCLE=0
     ;
 #endif
 } 

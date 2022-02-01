@@ -792,14 +792,16 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         count_activation++;
 
         #ifndef DJNN_NO_DEBUG
-        if (_DEBUG_GRAPH_CYCLE_DETECT) {
+        if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE) {
           auto it = _vertex_already_activated.find(v);
           if (it != _vertex_already_activated.end()) {
-            cerr << "\033[1;31m";
-            cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
-            cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
-            display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
-            cerr << "\033[0m";
+            if (_DEBUG_GRAPH_CYCLE_DETECT) {
+              cerr << "\033[1;31m";
+              cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
+              cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
+              display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
+              cerr << "\033[0m";
+            }
             p->set_activation_flag (NONE_ACTIVATION);
             continue;
           }
