@@ -54,7 +54,7 @@ namespace djnn
     c->get_properties_values(r, g, b);
     QtContext *cur_context = _context_manager->get_current ();
     cur_context->brush.setStyle (Qt::SolidPattern);
-    int a = cur_context->brush.color ().alpha ();
+    int a = cur_context->alpha * 255;
     cur_context->brush.setColor (QColor (r, g, b, a));
   }
 
