@@ -24,6 +24,7 @@
 #include "gui/picking/analytical_picking.h"
 
 #include <QtWidgets/QWidget>
+//#include <QTabletEvent>
 //#include <QOpenGLFunctions>
 
 namespace djnn {
@@ -52,6 +53,7 @@ namespace djnn {
     virtual void mouseMoveEvent (QMouseEvent *event) override;
     virtual void wheelEvent (QWheelEvent *event) override;
     virtual void paintEvent (QPaintEvent *event) override;
+    //virtual void tabletEvent (QTabletEvent *event) override;
     //virtual void paintGL () override;
     //virtual void initializeGL () override;
     

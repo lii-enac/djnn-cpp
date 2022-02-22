@@ -110,6 +110,14 @@ namespace djnn
         }
         break;
 
+      case QEvent::TabletPress:
+      case QEvent::TabletMove:
+      case QEvent::TabletRelease:
+        //{
+        //  tabletEvent(static_cast<QTabletEvent*> (event));
+        //}
+        break;
+
       case QEvent::MouseButtonPress:
       case QEvent::MouseButtonDblClick:
       case QEvent::MouseMove:
@@ -229,6 +237,24 @@ namespace djnn
 
     if (exec_) { GRAPH_EXEC; } 
   }
+
+  /*void
+  MyQQWidget::tabletEvent(QTabletEvent *event)
+  {
+    switch (event->type()) {
+        case QEvent::TabletPress:
+            std::cout << "TabletPress" << std::endl;
+            break;
+        case QEvent::TabletMove:
+            //std::cout << "TabletMove" << std::endl;
+            break;
+        case QEvent::TabletRelease:
+            std::cout << "TabletRelease" << std::endl;
+            break;
+        default:
+            break;
+    }
+  }*/
 
   /*void
   MyQQWidget::initializeGL ()
