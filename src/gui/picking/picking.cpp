@@ -607,6 +607,22 @@ namespace djnn
       exec_ = true;
     }
 
+    if (_hovered_shape != nullptr) {
+        _hovered_shape->ui ()->wheel_dx ()->set_value (x, true);
+        _hovered_shape->ui ()->wheel_dy ()->set_value (y, true);
+      if (_hovered_shape->ui ()->wheel ()->has_coupling () ) {
+          _hovered_shape->ui ()->wheel ()->schedule_activation ();
+          exec_ = true;
+      }
+      if (_hovered_shape->ui ()->wheel_dx ()->has_coupling ()) {
+          _hovered_shape->ui ()->wheel_dx ()->schedule_activation ();
+          exec_ = true;
+      }
+      if (_hovered_shape->ui ()->wheel_dy ()->has_coupling ()) {
+          _hovered_shape->ui ()->wheel_dy ()->schedule_activation ();
+          exec_ = true;
+      }
+    }
     return exec_;
   }
 

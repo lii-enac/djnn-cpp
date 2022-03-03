@@ -54,6 +54,7 @@ namespace djnn
     _mouse_release = new Spike (_mouse, "release");
     _mouse_move  = new Spike (_mouse, "move");
     _mouse_enter = new Spike (_mouse, "enter");
+    _wheel = new Component (parent, "wheel");
     _mouse_leave = new Spike (_mouse, "leave");
 
     graph_add_edge (_enter, _leave); // make sur enter event are process before leave event
@@ -65,11 +66,15 @@ namespace djnn
     _left->set_activation_state (ACTIVATED);
     _right->set_activation_state (ACTIVATED);
     _middle->set_activation_state (ACTIVATED);
+    _wheel->set_activation_state (ACTIVATED);
 
     _move_x = new DoubleProperty (nullptr, "move_x", 0);
     _move_y = new DoubleProperty (nullptr, "move_y", 0);
     _press_x = new DoubleProperty (nullptr, "press_x", 0);
     _press_y = new DoubleProperty (nullptr, "press_y", 0);
+
+    _wheel_dx = new DoubleProperty (_wheel, "dx", 0);
+    _wheel_dy = new DoubleProperty (_wheel, "dy", 0);
 
     _local_move_x = new DoubleProperty (nullptr, "local_move_x", 0);
     _local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
@@ -160,6 +165,10 @@ namespace djnn
     parent->remove_child (_right);
     parent->remove_child (_middle);
 
+    parent->remove_child (_wheel);
+    _wheel->remove_child (_wheel_dx);
+    _wheel->remove_child (_wheel_dy);
+
     _mouse->remove_child (_mouse_press);
     _mouse->remove_child (_mouse_release);
     _mouse->remove_child (_mouse_move);
@@ -207,5 +216,8 @@ namespace djnn
     delete _middle_release;
     delete cpick;
     delete pickable;
+    delete _wheel_dx;
+    delete _wheel_dy;
+    delete _wheel;
   }
 } /* namespace djnn */

@@ -24,7 +24,7 @@
 namespace djnn {
 
     static vector<string>
-    __ui_interface = { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse" };
+    __ui_interface = { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel" };
 
     class UI {
     public:
@@ -61,6 +61,8 @@ namespace djnn {
         DoubleProperty* mouse_local_press_y () { return _mouse_local_press_y; }
         DoubleProperty* mouse_local_move_x () { return _mouse_local_move_x; }
         DoubleProperty* mouse_local_move_y () { return _mouse_local_move_y; }
+        DoubleProperty* wheel_dx () { return _wheel_dx; }
+        DoubleProperty* wheel_dy () { return _wheel_dy; }
         FatProcess* press () { return _press; }
         FatProcess* left () { return _left; }
         FatProcess* right () { return _right; }
@@ -82,6 +84,7 @@ namespace djnn {
         FatProcess* right_release () { return _right_release; }
         FatProcess* middle_press () { return _middle_press; }
         FatProcess* middle_release () { return _middle_release; }
+        FatProcess* wheel () { return _wheel; }
                
     private:
         BoolProperty* pickable;
@@ -89,7 +92,8 @@ namespace djnn {
         DoubleProperty* _move_x, * _move_y, * _press_x, * _press_y, * _local_move_x, * _local_move_y, * _local_press_x, * _local_press_y;
         DoubleProperty* _mouse_press_x, * _mouse_press_y, * _mouse_move_x, * _mouse_move_y;
         DoubleProperty* _mouse_local_press_x, * _mouse_local_press_y, * _mouse_local_move_x, * _mouse_local_move_y;
-        FatProcess* _press, * _left, * _right, * _middle, * _move, * _release, * _enter, * _leave, * _mouse, * _mouse_press, * _mouse_release, * _mouse_move, * _mouse_enter, * _mouse_leave, * _touches;
+        DoubleProperty* _wheel_dx, *_wheel_dy;
+        FatProcess* _press, * _left, * _right, * _middle, * _move, * _release, * _enter, * _leave, * _mouse, * _mouse_press, * _mouse_release, * _mouse_move, * _mouse_enter, * _mouse_leave, * _touches, *_wheel;
         FatProcess* _left_press, * _left_release, * _right_press, * _right_release, * _middle_press, * _middle_release;
         ParentProcess* parent;
     };
