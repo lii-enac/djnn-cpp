@@ -298,12 +298,24 @@ namespace djnn
 
       /* setting */
       if (x != old_x) {
-        s->ui()->move_x ()->set_value (x, true);
-        s->ui()->mouse_move_x ()->set_value (x, true);
+        DoubleProperty* p1 = s->ui()->move_x ();
+        DoubleProperty* p2 = s->ui()->mouse_move_x ();
+        p1->set_value (x, true);
+        p2->set_value (x, true);
+        if (p1->has_coupling())
+          p1->schedule_activation ();
+        if (p2->has_coupling())
+          p2->schedule_activation ();
       }
       if (y != old_y) {
-        s->ui()->move_y ()->set_value (y, true);
-        s->ui()->mouse_move_y ()->set_value (y, true);
+        DoubleProperty* p1 = s->ui()->move_y ();
+        DoubleProperty* p2 = s->ui()->mouse_move_y ();
+        p1->set_value (y, true);
+        p2->set_value (y, true);
+        if (p1->has_coupling())
+          p1->schedule_activation ();
+        if (p2->has_coupling())
+          p2->schedule_activation ();
       }
       s->set_mouse_local_coords (x, y, true); 
 
@@ -323,12 +335,20 @@ namespace djnn
         DoubleProperty* p2 = _cought_shape->ui()->mouse_move_x ();
         p1->set_value (x, true);
         p2->set_value (x, true);
+        if (p1->has_coupling())
+          p1->schedule_activation ();
+        if (p2->has_coupling())
+          p2->schedule_activation ();
       }
       if (y != old_y) {
         DoubleProperty* p1 = _cought_shape->ui()->move_y ();
         DoubleProperty* p2 = _cought_shape->ui()->mouse_move_y ();
         p1->set_value (y, true);
         p2->set_value (y, true);
+        if (p1->has_coupling())
+          p1->schedule_activation ();
+        if (p2->has_coupling())
+          p2->schedule_activation ();
       }
       _cought_shape->set_mouse_local_coords (x, y, true);
 
