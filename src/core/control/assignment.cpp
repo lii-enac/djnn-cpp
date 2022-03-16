@@ -385,7 +385,7 @@ namespace djnn
   void
   CoreLazyAssignment::perform_action ()
   {
-    _ttassignment->perform_action (false, true);
+    _ttassignment->perform_action (true, true);
   }
 
   void

@@ -188,6 +188,40 @@ public:
 #endif
   };
 
+  class LazyConnector : public FatProcess
+  {
+  public:
+    LazyConnector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true)
+    : FatProcess (name)
+    , _lazy_assignment (src, dst, false)
+    , _binding (src, &_lazy_assignment)
+    , _copy_on_activation (copy_on_activation)
+    {
+      // no need to add edge to graph, assignment already did it
+      finalize_construction (parent, name);
+    }
+
+    // for legacy reason, to get rid of?
+    LazyConnector (ParentProcess* parent, const string& name,
+                   CoreProcess* src, const string& sspec,
+                   CoreProcess* dst, const string& dspec)
+    : LazyConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
+    {}
+
+  protected:
+    void impl_activate   () override { if (_copy_on_activation)  _lazy_assignment.activate ()/* better - instead of calling activate*/;  _binding.activate ();}
+    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
+
+  private:
+    CoreLazyAssignment _lazy_assignment;
+    CoreBinding _binding;
+    bool _copy_on_activation;
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const string& format) override;
+#endif
+  };
+
   void MultiConnector (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation=true);
   void MultiConnector (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true);
 }

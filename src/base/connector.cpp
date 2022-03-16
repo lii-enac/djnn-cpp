@@ -153,13 +153,33 @@ namespace djnn {
 
     AbstractSerializer::pre_serialize (this, format);
 
-    AbstractSerializer::serializer->start ("base:Connector");
+    AbstractSerializer::serializer->start ("base:PauseConnector");
     AbstractSerializer::serializer->text_attribute ("id", get_name ()); // FatProcess
     //AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
     AbstractSerializer::compute_path (get_parent (), _binding.get_src (), buf);
     AbstractSerializer::serializer->text_attribute ("source", buf);
     buf.clear ();
     AbstractSerializer::compute_path (get_parent (), _paused_assignment.get_dst (), buf);
+    AbstractSerializer::serializer->text_attribute ("destination", buf);
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+  }
+
+  void
+  LazyConnector::serialize (const string& format)
+  {
+    string buf;
+
+    AbstractSerializer::pre_serialize (this, format);
+
+    AbstractSerializer::serializer->start ("base:LazyConnector");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ()); // FatProcess
+    //AbstractSerializer::serializer->text_attribute ("id", ""); // CoreProcess
+    AbstractSerializer::compute_path (get_parent (), _binding.get_src (), buf);
+    AbstractSerializer::serializer->text_attribute ("source", buf);
+    buf.clear ();
+    AbstractSerializer::compute_path (get_parent (), _lazy_assignment.get_dst (), buf);
     AbstractSerializer::serializer->text_attribute ("destination", buf);
     AbstractSerializer::serializer->end ();
 
