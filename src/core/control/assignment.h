@@ -35,24 +35,22 @@ namespace djnn {
   TTAssignment * build_ttassignment (CoreProcess* src, CoreProcess* dst);
 
   // CoreAssignment does not follow the process/action model for memory minimization reason
-  class CoreAssignment : public CoreProcess
+  class AbstractCoreAssignment : public CoreProcess
   {
   public:
-    CoreAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    AbstractCoreAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : CoreProcess (is_model)
-    //, _src(src), _dst(dst),
-    , _propagate(true)
     {
       graph_add_edge (src, dst);
       _ttassignment = build_ttassignment (src, dst);
     }
-    CoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
-    : CoreAssignment (src, dst, is_model)
+    AbstractCoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : AbstractCoreAssignment (src, dst, is_model)
     {
       finalize_construction (parent, name);
     }
 
-    ~CoreAssignment () {
+    virtual ~AbstractCoreAssignment () {
       graph_remove_edge (get_src (), get_dst ());
       delete _ttassignment;
       // if (get_parent ()) {
@@ -72,19 +70,14 @@ namespace djnn {
 
     CoreProcess* get_src () { return _ttassignment->get_src (); }
     CoreProcess* get_dst () { return _ttassignment->get_dst (); }
-    void perform_action ();
+    virtual void perform_action () = 0;
     
   protected:
     void impl_activate   () override { perform_action (); }
     void impl_deactivate () override {}
     void post_activate   () override { post_activate_auto_deactivate (); }
 
-  private:    
-    //CoreProcess *_src, *_dst;
     TTAssignment * _ttassignment;
-  
-  protected:
-    bool _propagate;
     
 public:
 #ifndef DJNN_NO_SERIALIZE
@@ -92,24 +85,46 @@ public:
 #endif
   };
 
-  void
-    MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation);
-  void
-    MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
+  class CoreAssignment : public AbstractCoreAssignment
+  {
+  public:
+    CoreAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : AbstractCoreAssignment (src, dst, is_model)
+    {
+    }
+    CoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : AbstractCoreAssignment (parent, name, src, dst, is_model)
+    {
+    }
+    void perform_action () override;
+  };
 
-  class CorePausedAssignment : public CoreAssignment
+  class CorePausedAssignment : public AbstractCoreAssignment
   {
   public:
     CorePausedAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
-    : CoreAssignment (src, dst, is_model)
+    : AbstractCoreAssignment (src, dst, is_model)
     {
-      _propagate = false;
     }
     CorePausedAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
-    : CoreAssignment (parent, name, src, dst, is_model)
+    : AbstractCoreAssignment (parent, name, src, dst, is_model)
     {
-      _propagate = false;
     }
+    void perform_action () override;
+  };
+
+  class CoreLazyAssignment : public AbstractCoreAssignment
+  {
+  public:
+    CoreLazyAssignment (CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : AbstractCoreAssignment (src, dst, is_model)
+    {
+    }
+    CoreLazyAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    : AbstractCoreAssignment (parent, name, src, dst, is_model)
+    {
+    }
+    void perform_action () override;
   };
 
   // Assignement follows the process/action model
@@ -226,5 +241,8 @@ public:
     : LazyAssignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}
   };
+
+  void MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation);
+  void MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
 
 }

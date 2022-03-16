@@ -87,6 +87,35 @@ public:
 #endif
   };
 
+  class CoreLazyConnector : public CoreProcess
+  {
+  public:
+    CoreLazyConnector (CoreProcess* src, CoreProcess* dst)
+    : _lazy_assignment (src, dst, false)
+    , _binding (src, &_lazy_assignment)
+    {
+      // no need to add edge to graph, assignment already did it
+    }
+    
+    CoreLazyConnector (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst)
+    : CoreLazyConnector (src, dst)
+    {
+      finalize_construction (parent, name);
+    }
+
+  protected:
+    void impl_activate   () override { _lazy_assignment.perform_action () /* better - instead of calling activate*/;  _binding.activate (); }
+    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
+
+  private:
+    CoreLazyAssignment _lazy_assignment;
+    CoreBinding _binding;
+public:
+#ifndef DJNN_NO_SERIALIZE
+    void serialize (const string& format) override;
+#endif
+  };
+
 
 
   class Connector : public FatProcess

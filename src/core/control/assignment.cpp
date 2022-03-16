@@ -373,14 +373,24 @@ namespace djnn
   void
   CoreAssignment::perform_action ()
   {
-    //djnn::perform_action (get_src (), get_dst (), _propagate);
-    _ttassignment->perform_action (_propagate, false);
+    _ttassignment->perform_action (true, false);
+  }
+
+  void
+  CorePausedAssignment::perform_action ()
+  {
+    _ttassignment->perform_action (false, false);
+  }
+
+  void
+  CoreLazyAssignment::perform_action ()
+  {
+    _ttassignment->perform_action (false, true);
   }
 
   void
   Assignment::perform_action ()
   {
-    //djnn::perform_action (get_src (), get_dst (), _propagate);
     if (!_ttassignment) {
       _ttassignment = build_ttassignment (get_src (), get_dst ());
       if (!_ttassignment) {
@@ -433,7 +443,7 @@ namespace djnn
 
   #if !defined(DJNN_NO_SERIALIZE)
   void
-  CoreAssignment::serialize (const string& format)
+  AbstractCoreAssignment::serialize (const string& format)
   {
     string buf;
 
