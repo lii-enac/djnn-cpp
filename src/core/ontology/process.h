@@ -51,11 +51,11 @@ namespace djnn {
   };
 
   enum notify_mask {
-    notify_none               = 1 << 0,
-    notify_generic            = 1 << 1,
-    notify_damaged_geometry   = 1 << 2,
-    notify_damaged_transform  = 1 << 3,
-    notify_damaged_style      = 1 << 4
+    notify_none               =      0,
+    notify_generic            = 1 << 0,
+    notify_damaged_geometry   = 1 << 1,
+    notify_damaged_transform  = 1 << 2,
+    notify_damaged_style      = 1 << 3
   };
 
   enum child_position_e {
