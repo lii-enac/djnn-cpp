@@ -27,7 +27,7 @@
 #endif
 
 #ifndef DJNN_NO_DEBUG
-
+#include "core/control/assignment.h"
 #include <chrono>
 static int graph_counter_act = 0;
 
@@ -64,9 +64,14 @@ static int MARKED = 0;
 #ifndef DJNN_NO_DEBUG
   static string 
   print_process_full_name (CoreProcess *p) {
+    string postfix;
+    CoreAssignment* ca = dynamic_cast<CoreAssignment*>(p);
+    if (ca != nullptr) {
+      postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
+    }
     return cpp_demangle(typeid(*p).name()) + "- (" + 
     ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
-    ( p ? p->get_debug_name () : "") + ")";
+    ( p ? p->get_debug_name () : "") + ")" + postfix;
   }
 #endif
 
