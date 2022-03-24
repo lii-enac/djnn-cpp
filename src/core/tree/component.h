@@ -40,7 +40,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     void print_children ();
-    void clean_up_content ();
+    virtual void clean_up_content ();
     virtual ~Container ();
     const ordered_children_t& children () const { return _children; }
     context_t& get_context () { return _cur_context; }

@@ -132,6 +132,15 @@ namespace djnn
     _size.set_value (0, true);
   }
 
+
+  void
+  AbstractList::clean_up_content () 
+  {
+    /* empty _children CALLING delete on each element */
+    Container::clean_up_content () ;
+    _size.set_value (0, true);
+  }
+
   void
   AbstractList::remove_child (FatChildProcess* c)
   {
