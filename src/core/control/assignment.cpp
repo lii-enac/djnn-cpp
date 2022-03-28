@@ -231,7 +231,7 @@ namespace djnn
     TTAssignment * _ttassignment = nullptr;
     AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
     AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
-    if (!dst_p) { warning (dst_p, "dst is not a property"); return nullptr; }
+    if (!dst_p) { warning (dst_p, "dst " + dst->get_debug_name() + " is not a property"); return nullptr; }
 
     if (src_p) {
       switch (src_p->get_prop_type ())
