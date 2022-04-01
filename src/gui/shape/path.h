@@ -134,6 +134,7 @@ namespace djnn
   {
   public:
     Path (ParentProcess* parent, const string& name);
+    Path (ParentProcess* parent, const string& name, const string& path_spec);
     virtual ~Path ();
 
     // HACK to get access directly to GUIstructureHolder of items
@@ -157,4 +158,6 @@ namespace djnn
     DoubleProperty *_bbx, *_bby, *_bbw, *_bbh;
     GUIStructureHolder* _items_GH ; // HACK to get access directly to GUIstructureHolder of items
   };
+
+  int parse_path (Path* p, const char* path_spec);
 }

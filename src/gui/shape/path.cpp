@@ -29,8 +29,294 @@
 #include "utils/debug.h" // UNIMPL
 
 
+
 namespace djnn
 {
+  static const char*
+  ParseCoords (const char *v, int num, double *coord, int *numout)
+  {
+    char *p;
+    int i = 0;
+
+    /* read a list of coordinate pairs */
+    while (*v && i < num)
+      {
+
+        /* skip comma and separating white space */
+        while (*v == ',' || *v == ' ' || *v == '\t' || *v == '\n' || *v == '\r')
+          ++v;
+
+        /* try and read coord */
+        *coord = strtod (v, &p);
+        if (p == v) break;
+
+        v = p;
+        ++i;
+        ++coord;
+      }
+
+    *numout = i;
+    return v;
+  }
+
+  int
+  parse_path (Path *p, const char *path_spec)
+  {
+    double initx = 0., inity = 0.;
+    double curx = 0., cury = 0.;
+    double ctrlx = 0., ctrly = 0.;
+    double coords[7];
+    int rel;
+    int num;
+    int firstPt = 1;
+    char prevItem = ' ', curItem = ' ';
+
+    /* read a list of commands and their parameters */
+    while (*path_spec)
+      {
+
+        /* skip leading white space */
+        while (*path_spec == ' ' || *path_spec == '\t' || *path_spec == '\n'
+            || *path_spec == '\r')
+          ++path_spec;
+
+        /* try and read command */
+        rel = 0;
+        curItem = *path_spec;
+
+        switch (*path_spec++)
+          {
+
+          case 'm':
+            rel = 1;
+          case 'M':
+            path_spec = ParseCoords (path_spec, 2, coords, &num);
+            if (num != 2) goto error;
+            curx = rel ? curx + coords[0] : coords[0];
+            cury = rel ? cury + coords[1] : coords[1];
+            new PathMove (p, "", curx, cury);
+            if (firstPt)
+              {
+                firstPt = 0;
+                initx = curx;
+                inity = cury;
+              }
+            while (num == 2)
+              {
+                path_spec = ParseCoords (path_spec, 2, coords, &num);
+                if (num == 2)
+                  {
+                    curx = rel ? curx + coords[0] : coords[0];
+                    cury = rel ? cury + coords[1] : coords[1];
+                    new PathLine (p, "", curx, cury);
+                  }
+              }
+            if (num != 0) goto error;
+            break;
+
+          case 'l':
+            rel = 1;
+          case 'L':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 2, coords, &num);
+                if (num != 2) break;
+                curx = rel ? curx + coords[0] : coords[0];
+                cury = rel ? cury + coords[1] : coords[1];
+                new PathLine (p, "", curx, cury);
+              }
+            while (num == 2);
+            if (num != 0) goto error;
+            break;
+
+          case 'v':
+            rel = 1;
+          case 'V':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 1, coords, &num);
+                if (num != 1) break;
+                cury = rel ? cury + coords[0] : coords[0];
+                new PathLine (p, "", curx, cury);
+              }
+            while (num == 1);
+            break;
+
+          case 'h':
+            rel = 1;
+          case 'H':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 1, coords, &num);
+                if (num != 1) break;
+                curx = rel ? curx + coords[0] : coords[0];
+                new PathLine (p, "", curx, cury);
+              }
+            while (num == 1);
+            break;
+
+          case 'c':
+            rel = 1;
+          case 'C':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 6, coords, &num);
+                if (num != 6) break;
+                if (rel)
+                  {
+                    int i = 0;
+                    while (i < 6)
+                      {
+                        coords[i++] += curx;
+                        coords[i++] += cury;
+                      }
+                  }
+                curx = coords[4];
+                cury = coords[5];
+                new PathCubic (p, "", coords[0], coords[1], coords[2],
+                               coords[3], coords[4], coords[5]);
+                ctrlx = coords[2];
+                ctrly = coords[3];
+              }
+            while (num == 6);
+            if (num != 0) goto error;
+            break;
+
+          case 's':
+            rel = 1;
+          case 'S':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 4, coords, &num);
+                if (num != 4) break;
+                if (prevItem == 'c' || prevItem == 'C' || prevItem == 's'
+                    || prevItem == 'S')
+                  {
+                    ctrlx = 2 * curx - ctrlx;
+                    ctrly = 2 * cury - ctrly;
+                  }
+                else
+                  {
+                    ctrlx = curx;
+                    ctrly = cury;
+                  }
+                if (rel)
+                  {
+                    int i = 0;
+                    while (i < 4)
+                      {
+                        coords[i++] += curx;
+                        coords[i++] += cury;
+                      }
+                  }
+                curx = coords[2];
+                cury = coords[3];
+                new PathCubic (p, "", ctrlx, ctrly, coords[0], coords[1],
+                               coords[2], coords[3]);
+                ctrlx = coords[0];
+                ctrly = coords[1];
+              }
+            while (num == 4);
+            if (num != 0) goto error;
+            break;
+
+          case 'q':
+            rel = 1;
+          case 'Q':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 4, coords, &num);
+                if (num != 4) break;
+                if (rel)
+                  {
+                    int i = 0;
+                    while (i < 4)
+                      {
+                        coords[i++] += curx;
+                        coords[i++] += cury;
+                      }
+                  }
+                curx = coords[2];
+                cury = coords[3];
+                ctrlx = coords[0];
+                ctrly = coords[1];
+                new PathQuadratic (p, "", coords[0], coords[1], coords[2],
+                                   coords[3]);
+              }
+            while (num == 4);
+            if (num != 0) goto error;
+            break;
+
+          case 't':
+            rel = 1;
+          case 'T':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 2, coords, &num);
+                if (num != 2) break;
+                if (prevItem == 'q' || prevItem == 'Q' || prevItem == 't'
+                    || prevItem == 'T')
+                  {
+                    ctrlx = 2 * curx - ctrlx;
+                    ctrly = 2 * cury - ctrly;
+                  }
+                else
+                  {
+                    ctrlx = curx;
+                    ctrly = cury;
+                  }
+                curx = rel ? curx + coords[0] : coords[0];
+                cury = rel ? cury + coords[1] : coords[1];
+                new PathQuadratic (p, "", ctrlx, ctrly, curx, cury);
+              }
+            while (num == 2);
+            if (num != 0) goto error;
+            break;
+
+          case 'a':
+            rel = 1;
+          case 'A':
+            do
+              {
+                path_spec = ParseCoords (path_spec, 7, coords, &num);
+                if (num != 7) break;
+                if (rel)
+                  {
+                    coords[5] += curx;
+                    coords[6] += cury;
+                  }
+                curx = coords[5];
+                cury = coords[6];
+                new PathArc (p, "", coords[0], coords[1], coords[2], coords[3],
+                             coords[4], coords[5], coords[6]);
+              }
+            while (num == 7);
+            if (num != 0) goto error;
+            break;
+
+          case 'z':
+          case 'Z':
+            new PathClosure (p, "");
+            curx = initx;
+            cury = inity;
+            firstPt = 1;
+            while (*path_spec == ' ' || *path_spec == '\t' || *path_spec == '\n'
+                || *path_spec == '\r')
+              ++path_spec;
+            break;
+
+          default:
+            fprintf (stderr, "SVG path parser: unknown command '%c' in path\n",
+                     *(path_spec - 1));
+          }
+        prevItem = curItem;
+      }
+    return 1;
+
+error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
+    return 0;
+  }
+
   PathPoint::PathPoint (ParentProcess* parent, const string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
@@ -657,6 +943,13 @@ namespace djnn
 
     finalize_construction (parent, name);
   }
+
+  Path::Path (ParentProcess* parent, const string& name, const string& path_spec) :
+        Path (parent, name)
+  {
+    parse_path (this, path_spec.c_str());
+  }
+
 
   Path::~Path ()
   {
