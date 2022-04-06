@@ -66,6 +66,15 @@ namespace djnn
     DJN_START_ANCHOR, DJN_MIDDLE_ANCHOR, DJN_END_ANCHOR
   };
 
+  enum djnFontWeight
+  {
+    DJN_LIGHT     = 25,
+    DJN_NORMAL    = 50,
+    DJN_DEMI_BOLD = 63,
+    DJN_BOLD      = 75,
+    DJN_BLACK     = 87
+  };
+
   enum pick_bit_shift {
     PICK_OUTLINE_UNDEFINED_SHIFT = 0 ,
     PICK_OUTLINE_SHIFT           = 1 ,
