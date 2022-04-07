@@ -183,6 +183,8 @@ namespace djnn
   FatChildProcess*
   AbstractList::find_child_impl (const string& path)
   {
+    if (path.compare ("..") == 0)
+      return get_parent ();
     if (path.compare ("$added") == 0)
       return &_added;
     else if (path.compare ("$removed") == 0)
