@@ -16,7 +16,7 @@
 
 #include "core/tree/structure_observer.h"
 #include "core/property/double_property.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 
 namespace djnn {
 

@@ -15,7 +15,7 @@
 #include "abstract_physics_backend.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/ontology/coupling.h"
 #include "core/property/double_property.h"
 #include "core/utils/error.h"

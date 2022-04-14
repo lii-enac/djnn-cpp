@@ -16,7 +16,7 @@
 
 #include "core/ontology/process.h"
 #include "exec_env/external_source.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 
 namespace djnn {
 	class IOFD : public FatProcess, public ExternalSource {

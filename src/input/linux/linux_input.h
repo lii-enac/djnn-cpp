@@ -24,7 +24,7 @@
 #include "core/property/int_property.h"
 #include "core/property/text_property.h"
 #include "core/tree/set.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "exec_env/unix/iofd.h"
 
 namespace djnn {

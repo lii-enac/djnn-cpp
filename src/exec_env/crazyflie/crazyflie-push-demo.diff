@@ -119,7 +119,7 @@ index 0000000..a26221d
 +#include "core/property/int_property.h"
 +#include "core/control/binding.h"
 +#include "core/control/assignment.h"
-+#include "core/tree/spike.h"
++#include "core/control/spike.h"
 +#include "core/core-dev.h" // graph add/remove edge
 +#include "core/utils/djnn_dynamic_cast.h"
 +#include "core/utils/error.h"

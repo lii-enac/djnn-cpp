@@ -19,7 +19,7 @@
 #include "gui/abstract_backend.h"
 #include "gui/shape/sdf.h"
 
-#include "core/tree/blank.h"
+#include "core/control/blank.h"
 #include "core/tree/list.h"
 #include "display/window.h"
 #include "gui/shape/path.h"

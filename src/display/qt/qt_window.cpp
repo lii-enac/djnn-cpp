@@ -19,7 +19,7 @@
 
 #include "utils/debug.h"
 
-#include "core/tree/blank.h"
+#include "core/control/blank.h"
 
 #include "core/property/int_property.h"
 #include "core/property/double_property.h"

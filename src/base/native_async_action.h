@@ -17,8 +17,8 @@
 
 #include "core/ontology/process.h"
 #include "core/control/action.h"
-#include "core/tree/blank.h"
-#include "core/tree/spike.h"
+#include "core/control/blank.h"
+#include "core/control/spike.h"
 #include "core/control/native_action.h"
 
 #include "exec_env/external_source.h"

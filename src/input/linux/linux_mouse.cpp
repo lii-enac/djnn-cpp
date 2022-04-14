@@ -14,7 +14,7 @@
 
 #include "core/property/int_property.h"
 #include "core/property/text_property.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 
 #include "linux_input.h"
 #include <linux/input.h>

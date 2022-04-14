@@ -22,7 +22,7 @@
 #include "core/control/action.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/property/bool_property.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 
 #include "exec_env/global_mutex.h"
 #include "exec_env/external_source.h"

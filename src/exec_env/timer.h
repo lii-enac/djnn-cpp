@@ -18,8 +18,8 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/property/int_property.h"
-#include "core/tree/blank.h"
-#include "core/tree/spike.h"
+#include "core/control/blank.h"
+#include "core/control/spike.h"
 #include "core/control/action.h"
 
 #include "exec_env/time_manager.h"

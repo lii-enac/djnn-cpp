@@ -14,7 +14,7 @@
  */
 
 #include "gui/transformation/transformations.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/utils/error.h"
 
 #include "gui/backend.h"

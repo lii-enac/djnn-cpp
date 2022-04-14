@@ -15,7 +15,7 @@
 #pragma once
 
 #include "core/control/action.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "abstract_pobj.h"
 
 #include <algorithm>

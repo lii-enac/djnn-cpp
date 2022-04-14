@@ -20,7 +20,7 @@
 #include "component.h"
 #include "core/property/ref_property.h"
 #include "core/property/int_property.h"
-#include "spike.h"
+#include "core/control/spike.h"
 #include "core/control/action.h"
 
 namespace djnn {

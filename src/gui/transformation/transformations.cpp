@@ -16,7 +16,7 @@
  */
 
 
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/tree/list.h"
 #include "core/core-dev.h" // graph add/remove edge
 

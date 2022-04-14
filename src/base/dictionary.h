@@ -18,7 +18,7 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/property/ref_property.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 
 
 namespace djnn {

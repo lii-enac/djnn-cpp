@@ -15,7 +15,7 @@
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
-#include "core/tree/blank.h"
+#include "core/control/blank.h"
 #include "core/utils/utils-dev.h"
 
 #include "display/qt/qt_window.h"

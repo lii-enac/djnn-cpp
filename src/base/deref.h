@@ -17,7 +17,7 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/ontology/process.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/property/ref_property.h"
 #include "core/property/text_property.h"
 #include "core/property/double_property.h"

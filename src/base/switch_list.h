@@ -16,7 +16,7 @@
 
 #include "core/control/action.h"
 #include "core/tree/list.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/property/bool_property.h"
 
 

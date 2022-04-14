@@ -17,7 +17,7 @@
 
 #include "sound.h"
 #include "exec_env/djnn_time_manager.h"
-#include "core/tree/blank.h"
+#include "core/control/blank.h"
 
 namespace djnn {
 

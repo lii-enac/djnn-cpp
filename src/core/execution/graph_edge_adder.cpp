@@ -13,9 +13,10 @@
  */
 
 #include "core/core-dev.h"
-#include "graph_edge_adder.h"
 #include "core/utils/error.h"
 #include "core/serializer/serializer.h"
+
+#include "graph_edge_adder.h"
 
 namespace djnn
 {

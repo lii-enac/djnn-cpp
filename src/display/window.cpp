@@ -22,8 +22,8 @@
 #include "display/abstract_display.h"
 #include "display/update_drawing.h"
 
-#include "core/tree/spike.h"
-#include "core/tree/blank.h"
+#include "core/control/spike.h"
+#include "core/control/blank.h"
 
 #include "core/property/int_property.h"
 #include "core/property/double_property.h"
@@ -31,7 +31,7 @@
 #include "core/property/ref_property.h"
 #include "core/property/bool_property.h"
 
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/tree/component.h"
 #include "core/tree/set.h"
 #include "core/tree/list.h"

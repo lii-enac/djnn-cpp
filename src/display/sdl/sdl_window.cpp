@@ -17,8 +17,8 @@
 #include "sdl_window.h"
 #include "display/display.h"
 
-#include "core/tree/spike.h"
-#include "core/tree/blank.h"
+#include "core/control/spike.h"
+#include "core/control/blank.h"
 
 #include "core/property/int_property.h"
 #include "core/property/double_property.h"

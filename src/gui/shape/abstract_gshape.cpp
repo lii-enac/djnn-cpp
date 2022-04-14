@@ -15,7 +15,7 @@
 
 #include "abstract_gshape.h"
 #include "gui/transformation/homography.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "core/tree/set.h"
 #include "core/tree/list.h"
 #include "core/tree/component_observer.h"

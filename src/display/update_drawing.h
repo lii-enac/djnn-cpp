@@ -19,7 +19,7 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/property/bool_property.h"
-#include "core/tree/spike.h"
+#include "core/control/spike.h"
 #include "window.h"
 
 #include <mutex> // std::call_once
