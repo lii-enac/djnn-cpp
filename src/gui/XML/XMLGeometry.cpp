@@ -14,7 +14,7 @@
  */
 
 #include "gui/gui-dev.h"
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 
 #include <stdlib.h>
 #include <string.h>

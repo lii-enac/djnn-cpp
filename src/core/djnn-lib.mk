@@ -2,7 +2,7 @@ local_dir = $(src_dir)/core
 
 lib_srcs += $(local_dir)/core.cpp
 
-submodules = ontology/ control/ tree/ execution/ utils/
+submodules = ontology/ control/ property/ tree/ execution/ utils/
 ifneq ($(os),$(filter $(os),FreeRTOS crazyflie))
 submodules += serializer/ xml/
 endif

@@ -2,13 +2,13 @@
 
 #include "assignment.h"
 
-#include "core/tree/remote_property.h"
-#include "core/tree/abstract_property.h"
-#include "core/tree/bool_property.h"
-#include "core/tree/int_property.h"
-#include "core/tree/double_property.h"
-#include "core/tree/text_property.h"
-#include "core/tree/ref_property.h"
+#include "core/property/remote_property.h"
+#include "core/property/abstract_property.h"
+#include "core/property/bool_property.h"
+#include "core/property/int_property.h"
+#include "core/property/double_property.h"
+#include "core/property/text_property.h"
+#include "core/property/ref_property.h"
 #include "core/tree/component.h"
 
 #include "core/utils/djnn_dynamic_cast.h"

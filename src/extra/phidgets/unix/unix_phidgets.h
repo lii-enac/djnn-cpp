@@ -19,7 +19,7 @@
 
 #include "phidgets-priv.h"
 #include "exec_env/external_source.h"
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 #include "core/tree/list.h"
 #include "core/control/action.h"
 

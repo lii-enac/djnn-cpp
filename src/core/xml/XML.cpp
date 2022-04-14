@@ -17,7 +17,7 @@
 #include "core/ontology/process.h"
 #include "xml.h"
 #include "xml-dev.h"
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 #include "core/utils/error.h"
 
 

@@ -17,7 +17,7 @@
 #include <regex>
 
 #include "core/ontology/coupling.h"
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 #include "core/control/action.h"
 
 namespace djnn {

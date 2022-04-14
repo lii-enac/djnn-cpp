@@ -15,7 +15,7 @@
 #include "djnn_time_manager.h"
 
 #include "exec_env/global_mutex.h"
-#include "core/tree/int_property.h"
+#include "core/property/int_property.h"
 #include "exec_env/cpp-thread.h"
 #include "core/core-dev.h" // graph add/remove edge
 

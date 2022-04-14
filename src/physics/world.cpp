@@ -17,7 +17,7 @@
 #include "core/tree/component.h"
 #include "core/tree/spike.h"
 #include "core/ontology/coupling.h"
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 #include "core/utils/error.h"
 
 #include "core/utils/iostream.h"

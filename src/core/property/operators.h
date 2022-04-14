@@ -13,7 +13,7 @@
  *
  */
 
-#include "core/tree/abstract_property.h"
+#include "core/property/abstract_property.h"
 
 inline
 const double

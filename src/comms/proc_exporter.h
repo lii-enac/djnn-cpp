@@ -16,12 +16,12 @@
 
 #include "socket.h"
 
-#include "core/tree/remote_property.h"
+#include "core/property/remote_property.h"
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/core-dev.h" // graph add/remove edge
-#include "core/tree/bool_property.h"
+#include "core/property/bool_property.h"
 #include "core/tree/spike.h"
 
 #include "exec_env/global_mutex.h"

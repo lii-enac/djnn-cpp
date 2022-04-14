@@ -18,9 +18,9 @@
 #include "core/ontology/coupling.h"
 #include "core/tree/spike.h"
 #include "core/tree/component.h"
-#include "core/tree/double_property.h"
-#include "core/tree/text_property.h"
-#include "core/tree/bool_property.h"
+#include "core/property/double_property.h"
+#include "core/property/text_property.h"
+#include "core/property/bool_property.h"
 #include "core/control/action.h"
 
 namespace djnn

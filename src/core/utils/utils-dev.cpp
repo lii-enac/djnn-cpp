@@ -14,7 +14,7 @@
 
 #include "utils-dev.h"
 
-#include "core/tree/ref_property.h"
+#include "core/property/ref_property.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/ontology/coupling.h"
 #include "core/core-dev.h" // graph add/remove edge

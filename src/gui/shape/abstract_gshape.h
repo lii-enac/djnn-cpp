@@ -19,9 +19,9 @@
 
 #include "gui/abstract_gobj.h"
 
-#include "core/tree/ref_property.h"
-#include "core/tree/double_property.h"
-#include "core/tree/int_property.h"
+#include "core/property/ref_property.h"
+#include "core/property/double_property.h"
+#include "core/property/int_property.h"
 
 namespace djnn
 {

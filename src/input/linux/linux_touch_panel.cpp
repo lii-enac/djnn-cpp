@@ -12,7 +12,7 @@
  *
  */
 
-#include "core/tree/int_property.h"
+#include "core/property/int_property.h"
 #include "core/tree/set.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"

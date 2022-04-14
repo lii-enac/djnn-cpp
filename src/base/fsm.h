@@ -18,7 +18,7 @@
 #include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/tree/component.h"
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 #include "core/core-dev.h" // graph add/remove edge
 
 #include "core/utils/djnn_dynamic_cast.h"

@@ -16,7 +16,7 @@
 #pragma once
 
 #include "core/ontology/process.h"
-#include "core/tree/int_property.h"
+#include "core/property/int_property.h"
 
 
 namespace djnn {

@@ -15,8 +15,8 @@
 #pragma once
 
 #include "core/ontology/process.h"
-#include "core/tree/int_property.h"
-#include "core/tree/text_property.h"
+#include "core/property/int_property.h"
+#include "core/property/text_property.h"
 #include "core/utils/to_string.h"
 
 #include <chrono>

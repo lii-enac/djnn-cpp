@@ -3,7 +3,7 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 
 namespace djnn {
 

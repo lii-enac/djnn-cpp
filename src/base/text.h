@@ -16,7 +16,7 @@
 #pragma once
 
 #include "operators.h"
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 #include "core/utils/to_string.h"
 
 namespace djnn

@@ -18,9 +18,9 @@
 
 #include "core/serializer/serializer.h"
 #include "core/ontology/coupling.h"
-#include "core/tree/int_property.h"
-#include "core/tree/bool_property.h"
-#include "core/tree/double_property.h"
+#include "core/property/int_property.h"
+#include "core/property/bool_property.h"
+#include "core/property/double_property.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"

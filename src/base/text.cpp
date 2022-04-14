@@ -19,7 +19,7 @@
 #include "regex.h"
 
 #include "core/core-dev.h" // graph add/remove edge
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 #include "core/serializer/serializer.h"
 
 #include "core/utils/error.h"

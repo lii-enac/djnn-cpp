@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 #include "gui/shape/abstract_gshape.h"
 #include "gen/abstract_prop_ellipse.h"
 

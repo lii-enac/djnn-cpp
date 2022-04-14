@@ -3,7 +3,7 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/utils-dev.h" // coupling add/remove edge
 
-#include "core/tree/int_property.h"
+#include "core/property/int_property.h"
 #include "window.h"
 
 namespace djnn {

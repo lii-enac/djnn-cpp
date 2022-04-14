@@ -16,8 +16,8 @@
 #pragma once
 
 #include "component.h"
-#include "ref_property.h"
-#include "int_property.h"
+#include "core/property/ref_property.h"
+#include "core/property/int_property.h"
 
 namespace djnn {
 

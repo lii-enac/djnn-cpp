@@ -18,8 +18,8 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "component.h"
-#include "ref_property.h"
-#include "int_property.h"
+#include "core/property/ref_property.h"
+#include "core/property/int_property.h"
 #include "spike.h"
 #include "core/control/action.h"
 

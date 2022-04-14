@@ -1,12 +1,12 @@
 #pragma once
 
 #ifdef DJNN_NO_DYNAMIC_CAST
-#include "core/tree/abstract_property.h"
-#include "core/tree/bool_property.h"
-#include "core/tree/int_property.h"
-#include "core/tree/double_property.h"
-#include "core/tree/text_property.h"
-#include "core/tree/ref_property.h"
+#include "core/property/abstract_property.h"
+#include "core/property/bool_property.h"
+#include "core/property/int_property.h"
+#include "core/property/double_property.h"
+#include "core/property/text_property.h"
+#include "core/property/ref_property.h"
 #include "core/control/action.h"
 #include "core/control/native_action.h"
 #include "core/tree/component.h"

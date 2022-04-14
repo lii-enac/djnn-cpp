@@ -13,8 +13,8 @@
  */
 
 #include "linux_display.h"
-#include "core/tree/bool_property.h"
-#include "core/tree/int_property.h"
+#include "core/property/bool_property.h"
+#include "core/property/int_property.h"
 #include "core/tree/set.h"
 #include "core/ontology/coupling.h"
 #include "core/utils/error.h"

@@ -12,8 +12,8 @@
  *
  */
 
-#include "core/tree/int_property.h"
-#include "core/tree/text_property.h"
+#include "core/property/int_property.h"
+#include "core/property/text_property.h"
 #include "core/tree/spike.h"
 
 #include "linux_input.h"

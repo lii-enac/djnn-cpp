@@ -18,7 +18,7 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/tree/component.h"
-#include "core/tree/text_property.h"
+#include "core/property/text_property.h"
 
 namespace djnn {
 

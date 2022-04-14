@@ -18,7 +18,7 @@
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
-#include "core/tree/bool_property.h"
+#include "core/property/bool_property.h"
 #include "core/tree/spike.h"
 #include "window.h"
 

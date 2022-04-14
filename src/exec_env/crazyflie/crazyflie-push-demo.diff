@@ -116,7 +116,7 @@ index 0000000..a26221d
 --- /dev/null
 +++ b/src/djnn_prog.cpp
 @@ -0,0 +1,306 @@
-+#include "core/tree/int_property.h"
++#include "core/property/int_property.h"
 +#include "core/control/binding.h"
 +#include "core/control/assignment.h"
 +#include "core/tree/spike.h"

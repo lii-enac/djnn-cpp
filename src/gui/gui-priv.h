@@ -15,7 +15,7 @@
 #pragma once
 
 #include "core/tree/structure_observer.h"
-#include "core/tree/double_property.h"
+#include "core/property/double_property.h"
 #include "core/tree/spike.h"
 
 namespace djnn {

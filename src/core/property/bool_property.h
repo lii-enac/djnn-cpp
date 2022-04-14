@@ -17,7 +17,7 @@
 
 #include "abstract_property.h"
 #include "core/utils/to_string.h"
-#include "spike.h"
+#include "core/tree/spike.h"
 
 namespace djnn {
 

@@ -3,7 +3,7 @@
 #include "core/control/action.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/execution/graph.h"
-#include "core/tree/bool_property.h"
+#include "core/property/bool_property.h"
 
 #include <algorithm>
 
