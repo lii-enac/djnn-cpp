@@ -12,12 +12,14 @@
  *
  */
 
-#include "native_expression_action.h"
-#include "core/core-dev.h" // graph add/remove edge
-#include "core/tree/component.h"
-
 #include <algorithm>
 #include <cassert>
+
+#include "core/core-dev.h" // graph add/remove edge
+#include "core/tree/assignment_sequence.h"
+
+#include "native_expression_action.h"
+
 
 namespace djnn
 {

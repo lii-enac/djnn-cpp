@@ -46,36 +46,62 @@
 namespace djnn
 {
 
-  /*Component*
-  Componentimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  AssignmentSequence::AssignmentSequence (ParentProcess* parent, const string& name, bool isModel) :
+      Container (parent, name)
   {
-    auto * clone = new Component (nullptr, get_name ());
-    for (auto c : _children) {
-      clone->add_child (c->clone (), this->find_child_name(c));
-    }
-    return clone;
-  }*/
+    set_is_model (isModel);
+    finalize_construction (parent, name);
+  }
 
-  Component*
-  Component::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  void
+  AssignmentSequence::impl_activate ()
   {
-    auto * clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
-      auto cclone = c->impl_clone (origs_clones);
-      //origs_clones[c] = cclone;
-      clone->add_child (cclone , this->find_child_name(c));
+      c->activate ();
     }
-    origs_clones[this] = clone;
-    return clone;
+  }
+
+  void
+  AssignmentSequence::add_child (FatChildProcess* c, const string& name)
+  {
+    if (c == nullptr)
+      return;
+    Assignment *a = dynamic_cast<Assignment*> (c);
+    if (a != nullptr) {
+      graph_add_edge (this, a->get_dst());
+    }
+    _children.push_back (c);
+    /* WARNING should we authorize multiple parenthood? */
+    if (c->get_parent () != nullptr && c->get_parent () != this) {
+      c->get_parent ()->remove_child (c);
+    }
+    c->set_parent (this);
+    add_symbol (name, c);
+  }
+
+  void
+  AssignmentSequence::post_activate ()
+  {
+    post_activate_auto_deactivate ();
+  }
+
+  AssignmentSequence::~AssignmentSequence ()
+  {
+    for (auto c : _children) {
+      Assignment *a = dynamic_cast<Assignment*> (c);
+      if (a != nullptr) {
+        graph_remove_edge (this, a->get_dst());
+      }
+    }
   }
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  Component::serialize (const string& format) {
+  AssignmentSequence::serialize (const string& format) {
 
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("core:component");
+    AbstractSerializer::serializer->start ("core:assignmentsequence");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)
@@ -86,6 +112,5 @@ namespace djnn
     AbstractSerializer::post_serialize(this);
   }
 #endif
-
 }
 

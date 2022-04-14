@@ -18,16 +18,19 @@
 
 namespace djnn {
 
-  class Component : public Container
+  class AssignmentSequence : public Container
   {
   public:
-    Component (ParentProcess* parent, const string& name) : Container (parent, name) { finalize_construction (parent, name); }
-    //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    //Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
-    Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    AssignmentSequence (ParentProcess* parent, const string& name, bool is_model);
+    virtual ~AssignmentSequence ();
+    void add_child (FatChildProcess* c, const string& name) override;
+    void draw () override {}
+    void impl_activate () override;
+    void post_activate () override;
+    void impl_deactivate () override {};
+
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
   };
-
 }
