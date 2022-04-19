@@ -25,9 +25,9 @@ namespace djnn {
     public:
       GUIStructureHolder (FatProcess* content) : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name()), content_process(content) {}
       void add_gui_child (FatChildProcess *c, size_t index) ;
-      void add_gui_child_at (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index);
+      void add_gui_child_at (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
       void remove_gui_child (FatChildProcess *c);
-      void move_child_to (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index);
+      void move_child_to (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
       void swap_children (size_t i, size_t j);
       void set_child (FatChildProcess *child, size_t i);
       void draw () override;
@@ -48,8 +48,8 @@ namespace djnn {
       void add_container (FatProcess *cont) override;
       void remove_container (FatProcess *cont) override;
       void add_child_to_container (FatProcess *cont, FatChildProcess *c, int index) override;
-      void add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index) override;
-      void move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index) override;
+      void add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
+      void move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
       void remove_child_from_container (FatProcess *cont, FatChildProcess *c) override;
       void swap_children (FatProcess *cont, int i, int j) override;
       void set_child (FatProcess *cont, FatChildProcess *child, int i) override;

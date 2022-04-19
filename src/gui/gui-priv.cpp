@@ -139,7 +139,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::add_gui_child_at (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index)
+  GUIStructureHolder::add_gui_child_at (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
   {
     size_t sz = _children.size ();
     switch (spec)
@@ -170,7 +170,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::move_child_to (FatChildProcess *c, size_t neighboor_index, int spec, size_t new_index)
+  GUIStructureHolder::move_child_to (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
   {
     _children.erase (
         std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
@@ -259,7 +259,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index)
+  GUIStructureObserver::add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index)
   {
     structures_t::iterator it_cont = _structure_map.find(cont);
     switch (c->get_process_type())
@@ -291,7 +291,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, int spec, int new_index)
+  GUIStructureObserver::move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
     switch (c->get_process_type())
