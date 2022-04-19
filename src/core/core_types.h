@@ -32,20 +32,5 @@ namespace djnn {
   class RefProperty;
   class Spike;
   class NativeAction;
-
-  // enum activation_state {
-  //   activating,
-  //   activated,
-  //   deactivating,
-  //   deactivated
-  // };
-
-  // enum PropertyType {
-  //   Boolean,
-  //   Integer,
-  //   Double,
-  //   String,
-  //   Reference
-  // };
 }
 

@@ -21,7 +21,7 @@
 namespace djnn {
 
   // process types
-  enum process_type_e {
+  enum class process_type_e {
     UNDEFINED_T,
     PROPERTY_T,
     ACTION_T,
@@ -36,19 +36,22 @@ namespace djnn {
     LAYER_T,
     SYNCHRONIZER_T
   };
+  using enum process_type_e;
 
-  enum activation_flag_e {
+  enum class activation_flag_e {
     NONE_ACTIVATION,
     ACTIVATION,
     DEACTIVATION
   };
+  using enum activation_flag_e;
 
-  enum activation_state_e {
+  enum class activation_state_e {
     ACTIVATING,
     ACTIVATED,
     DEACTIVATING,
     DEACTIVATED
   };
+  using enum activation_state_e;
 
   enum notify_mask {
     notify_none               =      0,
@@ -58,12 +61,13 @@ namespace djnn {
     notify_damaged_style      = 1 << 3
   };
 
-  enum child_position_e {
+  enum class child_position_e {
     FIRST,
     BEFORE,
     AFTER,
     LAST
   };
+  using enum child_position_e;
 
   class Coupling;
   class Vertex;
@@ -212,7 +216,7 @@ namespace djnn {
         BINDING_ACTION_MASK    = 0b1  << BINDING_ACTION_SHIFT
     };
 
-    int  get_bitset (bit_mask MASK, bit_shift SHIFT) const       { return    (_bitset &  MASK) >> SHIFT; }
+    int  get_bitset (bit_mask MASK, bit_shift SHIFT) const                { return    (_bitset &  MASK) >> SHIFT; }
     void set_bitset (bit_mask MASK, bit_shift SHIFT, unsigned int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
 
   public:
@@ -223,7 +227,7 @@ namespace djnn {
     virtual void set_activation_flag (activation_flag_e VALUE);
 
     activation_state_e get_activation_state () const { return static_cast<activation_state_e>(get_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT)); }
-    void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, VALUE); }
+    void set_activation_state (activation_state_e VALUE) {                                    set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, static_cast<unsigned int>(VALUE)); }
 
   public:
     bool is_activated ()         const { return get_activation_state () == ACTIVATED; }

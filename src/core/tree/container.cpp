@@ -172,7 +172,7 @@ namespace djnn
         }
       } else {
 #ifndef DJNN_NO_DEBUG
-        loginfo (string("spec = ") + __to_string(spec));
+        loginfo (string("spec = ") + __to_string(std::underlying_type<child_position_e>::type(spec)));
 #endif
         warning (this, (string("Undefined spec to move child ") + child_to_move->get_name (child_to_move->get_parent ())).c_str());
       }

@@ -353,7 +353,7 @@ tidy: $(all_tidy)
 # CFLAGS CXXFLAGS
 
 CXXFLAGS += $(CFLAGS)
-CXXFLAGS += -std=c++17
+CXXFLAGS += -std=c++20
 
 # ---------------------------------------
 # precompiled headers

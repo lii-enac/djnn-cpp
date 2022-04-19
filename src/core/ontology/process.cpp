@@ -439,14 +439,14 @@ namespace djnn
   CoreProcess::set_activation_flag (activation_flag_e VALUE)
   {
     // only if flags are different
-    if (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT) != VALUE) {
+    if (static_cast<activation_flag_e>(get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)) != VALUE) {
   #if !_EXEC_FULL_ORDERED_VERTICES
       // if the process has vertex and has something to do // could be simplify ?
       if (_vertex && (VALUE != NONE_ACTIVATION)) {
         Graph::instance ().add_in_activation (_vertex);
       }
   #endif
-      set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, VALUE);
+      set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, static_cast<unsigned int>(VALUE));
     }
   } 
 
