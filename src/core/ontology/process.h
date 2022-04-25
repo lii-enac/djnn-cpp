@@ -21,7 +21,9 @@
 namespace djnn {
 
   // process types
-  enum class process_type_e {
+  enum
+  //class
+  process_type_e {
     UNDEFINED_T,
     PROPERTY_T,
     ACTION_T,
@@ -36,22 +38,26 @@ namespace djnn {
     LAYER_T,
     SYNCHRONIZER_T
   };
-  using enum process_type_e;
+  //using enum process_type_e;
 
-  enum class activation_flag_e {
+  enum
+  //class
+  activation_flag_e {
     NONE_ACTIVATION,
     ACTIVATION,
     DEACTIVATION
   };
-  using enum activation_flag_e;
+  //using enum activation_flag_e;
 
-  enum class activation_state_e {
+  enum
+  //class
+  activation_state_e {
     ACTIVATING,
     ACTIVATED,
     DEACTIVATING,
     DEACTIVATED
   };
-  using enum activation_state_e;
+  //using enum activation_state_e;
 
   enum notify_mask {
     notify_none               =      0,
@@ -61,13 +67,15 @@ namespace djnn {
     notify_damaged_style      = 1 << 3
   };
 
-  enum class child_position_e {
+  enum
+  //class
+  child_position_e {
     FIRST,
     BEFORE,
     AFTER,
     LAST
   };
-  using enum child_position_e;
+  //using enum child_position_e;
 
   class Coupling;
   class Vertex;
