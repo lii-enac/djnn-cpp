@@ -45,6 +45,7 @@
 #include "property/remote_property.h"
 #include "property/operators.h"
 #include "tree/set.h"
+#include "tree/assignment_sequence.h"
 
 #include "core/core-dev.h"
 

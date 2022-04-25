@@ -5,7 +5,7 @@
 #include "core/property/text_property.h"
 #include "core/property/bool_property.h"
 
-#include "core/tree/property_trait.h"
+#include "core/property/property_trait.h"
 
 #include "core/serializer/serializer.h"
 #include "base/operators.h"
