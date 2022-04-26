@@ -83,8 +83,8 @@ namespace djnn {
   class ChildProcess;
   class FatProcess;
 
-  typedef CoreProcess FatChildProcess;
-  typedef CoreProcess ParentProcess;
+  using FatChildProcess = CoreProcess;
+  using ParentProcess = CoreProcess;
 
   class AbstractGShape;
   class PickAnalyticalContext;
@@ -119,57 +119,71 @@ namespace djnn {
     void  schedule_activation (); // for gui picking only: why is there a problem?
     void  schedule_delete ();
 
-    // actions to be redefined by subclasses
+    // model
+    bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
+    void set_is_model (bool VALUE) {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
+
+    // clone and utils
+    CoreProcess* clone ();
+    virtual process_type_e get_process_type () const { return UNDEFINED_T; }
+    virtual void           set_data (CoreProcess* data) {}
+    virtual CoreProcess*   get_data () { return nullptr; }
+    #ifndef DJNN_NO_SERIALIZE
+    virtual void           serialize (const string& format);
+    #endif
+
+
+    // starting from here, methods are empty or return nullptr by default, and are redefined by more specialized processes
+
+    // actions
     virtual void update_drawing () {}
     virtual void draw () {}
     virtual void pick () {}
     virtual AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
 
-    // clone and utils
-    CoreProcess* clone ();
-    virtual process_type_e get_process_type () const { return UNDEFINED_T; }
-    #ifndef DJNN_NO_SERIALIZE
-    virtual void           serialize (const string& format);
-    #endif
-    virtual void           set_data (CoreProcess* data) {}
-    virtual CoreProcess*   get_data () { return nullptr; }
 
-    // parent, state dependency. Here methods are empty or return nullptr.
-    virtual FatProcess* get_parent() { return nullptr; }
+    // parent, state dependency
+    virtual       FatProcess* get_parent() { return nullptr; }
     virtual const FatProcess* get_parent() const { return nullptr; }
-    virtual void set_parent (ParentProcess* p) {}
+    virtual              void set_parent (ParentProcess* p) {}
 
     virtual CoreProcess* state_dependency () { return nullptr; } // for control flow change and execution scheduling
-    virtual void set_state_dependency (CoreProcess* s) {}
+    virtual         void set_state_dependency (CoreProcess* s) {}
 
 
-     // children, tree, component, symtable. 
+     // children, tree, component, symtable
     virtual void      add_child (FatChildProcess* c, const string& name) {}
     virtual void   remove_child (FatChildProcess* c) {}
     virtual void   remove_child (const string& name) {}
     virtual void     move_child (FatChildProcess */*child_to_move*/, child_position_e /*spec*/, FatChildProcess */*child*/ = nullptr) {}
+    virtual size_t children_size () const { return 0; }
 
-    // public find_child api, uses find_child_impl 
     FatChildProcess* find_child (const string&);
     FatChildProcess* find_child (int /*index*/);
     FatChildProcess* find_optional_child (const string&); // child might not exist, no warning in debug mode
     static FatChildProcess* find_child (FatChildProcess* p, const string& path) { return nullptr; }
-    static string default_name;
     virtual const string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
-    virtual size_t children_size () const { return 0; }
-    virtual void add_symbol (const string& name, FatChildProcess* c) {}
 
+    virtual void add_symbol (const string& name, FatChildProcess* c) {}
     typedef map<string, FatChildProcess*> symtable_t;
     static symtable_t default_symtable;
     virtual const symtable_t& symtable () const { return default_symtable; }
-    
-  public:
-    // (should be) protected find_child implementation
-    virtual FatChildProcess* find_child_impl (const string&);
-    virtual FatChildProcess* find_child_impl (int /*index*/);
   
 
   // implementation
+
+  private:
+    // >>instance fields start here
+    Vertex *_vertex;
+    unsigned int _bitset;
+    // <<instance fields end here
+
+    static couplings_t default_couplings; // default_couplings is a static empty couplings_t
+
+  public:
+    static string default_name;
+    
+
   public:
     // execution graph
     Vertex*  vertex () { return _vertex; }
@@ -178,9 +192,6 @@ namespace djnn {
 #else
     void     set_vertex (Vertex *v);
 #endif
-
-  public: // should be protected
-    virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones);
 
   protected:
     // constructor
@@ -194,14 +205,16 @@ namespace djnn {
     virtual bool pre_deactivate ();
     virtual void impl_deactivate () = 0;
     virtual void post_deactivate ();
+  
+  // should be protected
+  public: 
+    virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones);
+  
+  // should be protected
+  public:
+    virtual FatChildProcess* find_child_impl (const string&);
+    virtual FatChildProcess* find_child_impl (int /*index*/);
 
-  private:
-    // >>instance fields start here
-    Vertex *_vertex;
-    unsigned int _bitset;
-    // <<instance fields end here
-
-    static couplings_t default_couplings; // default_couplings is a static empty couplings_t
   
   // bitfield for various state info: model, activation flag, activation state, binding
   public:
@@ -213,7 +226,7 @@ namespace djnn {
     };
 
     enum bit_mask {
-        MODEL_MASK             = 0b1  << MODEL_SHIFT ,
+        MODEL_MASK             = 0b1  << MODEL_SHIFT , // FIXME ?! shouldn't it be 0?
         ACTIVATION_FLAG_MASK   = 0b11 << ACTIVATION_FLAG_SHIFT ,
         ACTIVATION_STATE_MASK  = 0b11 << ACTIVATION_STATE_SHIFT ,
         BINDING_ACTION_MASK    = 0b1  << BINDING_ACTION_SHIFT
@@ -223,8 +236,6 @@ namespace djnn {
     void set_bitset (bit_mask MASK, bit_shift SHIFT, unsigned int VALUE)  { _bitset = (_bitset & ~MASK) | (VALUE << SHIFT); }
 
   public:
-    bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
-    void set_is_model (bool VALUE) {        set_bitset (MODEL_MASK, MODEL_SHIFT, VALUE); }
 
     activation_flag_e  get_activation_flag () const  { return static_cast<activation_flag_e> (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)); }
     virtual void set_activation_flag (activation_flag_e VALUE);
@@ -249,7 +260,7 @@ namespace djnn {
   // debug stuff
   public:
 
-    #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
     FatProcess* get_debug_parent ();
     void set_debug_parent (ParentProcess* parent) { _debug_parent = parent; }
     const string& get_debug_name () const { return _debug_name; }
