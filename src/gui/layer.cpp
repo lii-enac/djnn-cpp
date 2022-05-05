@@ -27,7 +27,7 @@
 namespace djnn
 {
   Layer::Layer (ParentProcess* parent, const string& n, double x, double y, double w, double h, double pad) :
-      Container (parent, n), _frame (nullptr), _damaged (this, "damaged"),
+      Container (parent, n), _frame (nullptr), _damaged (this, "damaged"), _auto_redisplay (this, "auto_redisplay", true),
      _invalid_cache (true), _cache (nullptr), _pick_cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION),
      _x(x), _y(y), _w(w), _h(h), _pad(pad)
   {

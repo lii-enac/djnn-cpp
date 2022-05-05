@@ -48,7 +48,8 @@ namespace djnn {
       Layer* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
       process_type_e get_process_type () const override { return LAYER_T; }
 
-      Spike* damaged () { return &_damaged; } 
+      Spike* damaged () { return &_damaged; }
+      virtual void notify_change ( unsigned int /*notify_mask_*/ ) override { if (_auto_redisplay.get_value()) set_invalid_cache(true); }
 
       void get_xywhp(double& x, double& y, double& w, double& h, double& pad) { x=_x; y=_y; w=_w; h=_h; pad=_pad; }
       void set_xy(double x, double y) { _x=x; _y=y; }
@@ -56,6 +57,7 @@ namespace djnn {
     protected:
       Window *_frame;
       Spike _damaged;
+      BoolProperty _auto_redisplay;
       bool _invalid_cache;
       void *_cache, *_pick_cache;
       LayerDamagedAction _damaged_action;
