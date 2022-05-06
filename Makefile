@@ -333,10 +333,12 @@ CFLAGS += $(remotery_cflags)
 #CFLAGS += -fsanitize=undefined
 #LDFLAGS += -fsanitize=undefined
 
-# scan_build: static analizer
-# 1. download the latest llvm (+9.0.0) release from your platform using "Pre-Built Binaries" on http://releases.llvm.org/download.html
+# scan_build: static analyzer
+# 1. download the latest llvm (+14.0.0) release from your platform (brew, apt) or using "Pre-Built Binaries" on http://releases.llvm.org/download.html
+#     - Linux(deb): sudo apt install llvm-14 clang-tools-14
 # 2. launch the CLI on this Makefile wih: 
 #	/path/to/llvm/bin/scan-build -o build/scan-report/htmldir make -j
+#      - Linux(deb) : /usr/lib/llvm-14/bin/scan-build
 # 3. vizualize report with CLI (this command is given at the end of the above command: 
 #	/path/to/llvm/bin/scan-view build/scan-report/htmldir/xxxx-xx-xx-xxxxx-xxxxx-x 
 
