@@ -59,7 +59,9 @@ namespace djnn
     rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
     QString s = QObject::tr (t->get_content ().c_str ());
     QtContext *cur_context = _context_manager->get_current ();
+    //rmt_BeginCPUSample(text_load_drawing_context, RMTSF_Aggregate);
     load_drawing_context (t, posX, posY, 1, 1);
+    //rmt_EndCPUSample ();
     QPointF p (posX, posY);
     QPen oldPen = cur_context->pen;
     QPen newPen (oldPen);
@@ -70,8 +72,9 @@ namespace djnn
       newPen.setStyle (Qt::NoPen);
     _painter->setPen (newPen);
 
-
+    rmt_BeginCPUSample(text_bounding_rect, RMTSF_Aggregate);
     QRect rect = fm->boundingRect (s);
+    rmt_EndCPUSample ();
     /* applying alignment attribute */
     switch (cur_context->textAnchor)
     {
@@ -85,7 +88,9 @@ namespace djnn
       break;
     }
     rect.moveTo (posX, posY - fm->ascent ());
+    rmt_BeginCPUSample(text_painter_drawText, RMTSF_Aggregate);
     _painter->drawText (p, s);
+    rmt_EndCPUSample ();
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
@@ -117,7 +122,7 @@ namespace djnn
   void
   QtBackend::draw_simple_text_edit (MultilineEditor* ste)
   {
-    rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+    rmt_BeginCPUSample(draw_simple_text_edit, RMTSF_Aggregate);
 
     QtContext *cur_context = _context_manager->get_current ();
     _painter->setFont (cur_context->font);
@@ -160,7 +165,7 @@ namespace djnn
   void
   QtBackend::draw_text (Text *t)
   {
-    rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+    rmt_BeginCPUSample(draw_text, RMTSF_Aggregate);
 
     double x, y, dx, dy;
     int dxU, dyU, width, height, encoding;
@@ -218,11 +223,17 @@ namespace djnn
     _painter->setPen (newPen);
     _painter->setFont (cur_context->font);
 
+    rmt_BeginCPUSample(qt_fontMetrics, RMTSF_Aggregate);
     QFontMetrics fm = _painter->fontMetrics ();
+    rmt_EndCPUSample ();
+    rmt_BeginCPUSample(boundingRect, RMTSF_Aggregate);
     QRect rect = fm.boundingRect (s);
+    rmt_EndCPUSample ();
 
     /* hack to enable the use of a correct FontMetrics for future cursor positioning*/
+    rmt_BeginCPUSample(qt_get_font_metrics, RMTSF_Aggregate);
     QFontMetrics *last_fm = (QFontMetrics*) t->get_font_metrics ();
+    rmt_EndCPUSample ();
     delete last_fm;
     t->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
 
@@ -240,14 +251,18 @@ namespace djnn
     }
 
     rect.moveTo (posX, posY - rect.height ());
+    rmt_BeginCPUSample(qt_horizontalAdvance, RMTSF_Aggregate);
     #if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
     curTextX = rect.x () + fm.width (s);  // for qt 5.9
     #else
     curTextX = rect.x () + fm.horizontalAdvance (s); // for qt 5.12
     #endif
+    rmt_EndCPUSample ();
     curTextY = rect.y () + fm.height ();
 
+    rmt_BeginCPUSample(qt_drawText, RMTSF_Aggregate);
     _painter->drawText (p, s);
+    rmt_EndCPUSample ();
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
