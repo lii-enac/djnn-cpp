@@ -1069,9 +1069,13 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   void
   Path::set_bounding_box (double x, double y, double w, double h)
   {
-    _bbx->set_value (x, true);
-    _bby->set_value (y, true);
-    _bbw->set_value (w, true);
-    _bbh->set_value (h, true);
+    if (_bbx->get_double_value() != x)
+      _bbx->set_value (x, true);
+    if (_bby->get_double_value() != y)
+      _bby->set_value (y, true);
+    if (_bbw->get_double_value() != w)
+      _bbw->set_value (w, true);
+    if (_bbh->get_double_value() != h)
+      _bbh->set_value (h, true);
   }
 }
