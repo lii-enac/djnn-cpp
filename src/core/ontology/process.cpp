@@ -638,6 +638,15 @@ namespace djnn
     return default_name;
   }
 
+  void
+  FatProcess::notify_change ( unsigned int notify_mask_ ) // pseudo, graph-less coupling for efficiency reasons in gui
+  {
+    auto * p = get_parent();
+    if(p) {
+      p->notify_change(notify_mask_);
+    }
+  }
+
   CoreProcess::symtable_t::iterator FatProcess::find_child_iterator (const string& name) { return _symtable.find (name); }
   CoreProcess::symtable_t::iterator FatProcess::children_end () { return _symtable.end (); }
   bool FatProcess::children_empty () { return _symtable.empty (); }

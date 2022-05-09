@@ -49,7 +49,10 @@ namespace djnn {
       process_type_e get_process_type () const override { return LAYER_T; }
 
       Spike* damaged () { return &_damaged; }
-      virtual void notify_change ( unsigned int /*notify_mask_*/ ) override { if (_auto_redisplay.get_value()) set_invalid_cache(true); }
+      virtual void notify_change ( unsigned int nm ) override { 
+        if (_auto_redisplay.get_value()) set_invalid_cache(true);
+        FatProcess::notify_change (nm);
+      }
 
       void get_xywhp(double& x, double& y, double& w, double& h, double& pad) { x=_x; y=_y; w=_w; h=_h; pad=_pad; }
       void set_xy(double x, double y) { _x=x; _y=y; }

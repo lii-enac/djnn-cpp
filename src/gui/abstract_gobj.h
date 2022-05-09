@@ -53,7 +53,7 @@ namespace djnn
     void update_drawing () override;
     void impl_activate () override;
     void impl_deactivate () override;
-    void notify_change (unsigned int nm) override { _damaged |= nm; }
+    void notify_change (unsigned int nm) override { _damaged |= nm; FatProcess::notify_change (nm); }
     void reset_damaged (unsigned int nm) { _damaged &= ~nm; }
     void reset_damaged () { _damaged = notify_none; }
     int get_damaged () { return _damaged; }

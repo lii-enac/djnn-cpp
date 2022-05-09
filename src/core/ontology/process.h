@@ -352,7 +352,7 @@ namespace djnn {
   public:
     FatProcess (const string& name, bool model = false);
     
-    virtual void notify_change ( unsigned int /*notify_mask_*/ ) {} // pseudo, graph-less coupling for efficiency reasons in gui
+    virtual void notify_change ( unsigned int /*notify_mask_*/ ); // pseudo, graph-less coupling for efficiency reasons in gui
 
     // tree, component, symtable
     virtual void finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
