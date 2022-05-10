@@ -29,10 +29,6 @@
 
 #include <algorithm>
 
-#if !defined(DJNN_NO_DEBUG)
-#include "core/utils/iostream.h"
-#endif
-
 namespace djnn
 {
   

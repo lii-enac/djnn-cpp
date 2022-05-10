@@ -25,9 +25,9 @@ namespace djnn {
     void graph_exec ();
 }
 
-#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+//#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 //#include "core/utils/iostream.h"
-#endif
+//#endif
 //#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBG_GRAPH_EXE
 #define GRAPH_EXEC { DBG_GRAPH_EXE; djnn::graph_exec (); }

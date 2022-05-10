@@ -8,6 +8,10 @@ submodules += serializer/ xml/
 endif
 lib_srcs += $(call rwildcardmul,$(addprefix $(local_dir)/,$(submodules)),*.cpp)
 
+ifeq ($(compiler),llvm)
+lib_objs += $(pch_shared_dst)
+endif
+
 ifeq ($(remotery_cflags),-DRMT_ENABLED=1)
 lib_srcs += $(call rwildcard,$(local_dir)/utils/ext/remotery/,*.c)
 ifeq ($(os),MinGW)

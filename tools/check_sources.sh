@@ -4,6 +4,7 @@
 echo
 echo -- no iostream in headers
 find src -type f -name "*.h" | xargs grep "include <iostream>"
+find src -type f -name "*.h" | xargs grep "iostream.h"
 
 echo
 echo -- no include of a whole module in internal sources
@@ -19,6 +20,7 @@ find src -type f -name "*.h" -not -name "*transformations.h" -not -name "gui.h" 
 echo
 echo -- minimize use of iostream
 find src -type f -not -path "*/ext/*" -name "*.cpp" | xargs grep "include <iostream>"
+find src -type f -not -path "*/ext/*" -name "*.cpp" | xargs grep "iostream.h"
 
 echo
 echo -- minimize include of a whole submodule in internal sources

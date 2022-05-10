@@ -22,14 +22,20 @@ use_ivy := no
 
 djnn_libs_extra :=
 
-# very fast compilation, but no debug
+# optimization, the higher the level, the faster runtime, the slower compile
 # CFLAGS += -O0
-# fast compilation and debug
-# CFLAGS += -O0 -g
-# optimized but slower compilation
+# CFLAGS += -O1 # recommended with sanitizer
+# CFLAGS += -O2
 # CFLAGS += -O3
-# optimized and debug but even slower compilation
-# CFLAGS += -O3 -g
+
+# debug, compile is slower with it
+# CFLAGS += -g
+
+# sanitizer
+# CFLAGS += -fsanitize=address
+# LDFLAGS += -fsanitize=address
+# CFLAGS += -fsanitize=thread
+# LDFLAGS += -fsanitize=thread
 
 # cross-compile support
 #cross_prefix :=

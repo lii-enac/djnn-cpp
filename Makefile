@@ -398,7 +398,12 @@ endif
 
 ifeq ($(compiler),llvm)
 CXXFLAGS += -include-pch $(pch_dst)
-#-fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
+#CXXFLAGS += -march=native -mtune=native # next clang version?
+CXXFLAGS_PCH += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
+pch_shared := precompiled.o
+pch_shared_dst := $(build_dir)/$(src_dir)/core/utils/build/$(pch_shared)
+$(pch_shared_dst): $(pch_dst)
+	$(CXX) -c $< -o $@
 endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
