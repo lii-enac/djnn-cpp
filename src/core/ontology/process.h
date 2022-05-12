@@ -287,7 +287,7 @@ namespace djnn {
     virtual  void dump (int level=0);
 
 #ifndef DJNN_NO_DEBUG
-    const DebugInfo& debug_info () { return _dbg_info; }
+    const DebugInfo& debug_info () const { return _dbg_info; }
     DebugInfo _dbg_info;
 #else
     static DebugInfo _dbg_info;
