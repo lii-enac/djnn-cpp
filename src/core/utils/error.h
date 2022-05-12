@@ -27,10 +27,10 @@ namespace djnn
 {
   class CoreProcess;
 
-  int djnn__error (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  int djnn__error (CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
-  void djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  void djnn__warning (CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
+  int djnn__error (const CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  int djnn__error (const CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
+  void djnn__warning (const CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+  void djnn__warning (const CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
   void djnn__info (const string& msg, bool cr, const char* ctxinfo=nullptr);
   void djnn__debug (const char* file, const char* function, const char* lineno);
   inline int djnn__exit(int ret) { exit(ret); return 1; }

@@ -40,7 +40,7 @@ namespace djnn
 
   int
   //__error (ParentProcess* parent, const string& msg, const char* ctxinfo)
-  djnn__error (CoreProcess* p, const char* msg, const char* ctxinfo)
+  djnn__error (const CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
     std::cerr << std::endl << std::endl;
@@ -63,7 +63,7 @@ namespace djnn
   }
   
   int
-  djnn__error (CoreProcess* p, const string& msg, const char* ctxinfo)
+  djnn__error (const CoreProcess* p, const string& msg, const char* ctxinfo)
   {
     return djnn__error(p, msg.c_str(), ctxinfo);
   }
@@ -71,7 +71,7 @@ namespace djnn
   extern string __to_string(void*p);
 
   void
-  djnn__warning (CoreProcess *p, const char* msg, const char* ctxinfo)
+  djnn__warning (const CoreProcess *p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
     auto & out = std::cerr;
@@ -92,7 +92,7 @@ namespace djnn
   }
 
   void
-  djnn__warning (CoreProcess* p, const string& msg, const char* ctxinfo)
+  djnn__warning (const CoreProcess* p, const string& msg, const char* ctxinfo)
   {
     djnn__warning(p, msg.c_str(), ctxinfo);
   }
