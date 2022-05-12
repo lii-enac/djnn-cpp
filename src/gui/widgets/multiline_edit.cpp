@@ -128,10 +128,10 @@ namespace djnn
     _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y(this, "y", y),
     _width (this, "width", width), _height (this, "height", height), _line_height (this, "line_height", 16), _spaces_for_tab (this, "spaces_for_tab", 0),
     _key_code_pressed (this, "key_pressed", 0), _key_code_released (this, "key_released", 0),
-    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _content_changed (this, "content_changed"), _line (nullptr),
+    _str_input (this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (this, "toggle_edit"), _content_changed (this, "content_changed"), _clear (this, "clear"), _line (nullptr),
     _toggle_action (this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (this, "on_move_action"),
     _key_pressed (this, "key_pressed_action"),  _key_released (this, "key_released_action"),
-    _on_str_input (this, "on_str_input_action"),
+    _on_str_input (this, "on_str_input_action"), _on_clear (this, "on_clear"),
     _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
     _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
     _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION),
@@ -139,6 +139,7 @@ namespace djnn
     _c_x (&_x, ACTIVATION, nullptr, ACTIVATION),
     _c_y (&_y, ACTIVATION, nullptr, ACTIVATION),
     _c_toggle (&_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION),
+    _c_clear (&_clear, ACTIVATION, &_on_clear, ACTIVATION),
     _font_metrics (nullptr), _ordering_node (),
     _index_x (0), _index_y (0), _ascent (0), _descent (0), _leading (0),
     _start_sel_x (0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
@@ -782,7 +783,16 @@ namespace djnn
   {
     st->deactivate ();
     _lines.remove_child (st);
-    delete st;
+    st->schedule_delete ();
+  }
+
+  void
+  MultilineEditor::clear () {
+    _start_sel_y = 0;
+    _end_sel_y = _lines.children().size () - 1;
+    _start_sel_x = 0;
+    _end_sel_x = 1000; //large arbitrary value to catch the last character of the last line, it should be actually calculated
+    del_selection ();
   }
 
   void

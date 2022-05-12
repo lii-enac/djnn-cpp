@@ -80,6 +80,12 @@ namespace djnn {
           virtual ~StrInputAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->add_string_input (); }
       };
+      class ClearAction : public Action {
+        public:
+          ClearAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          virtual ~ClearAction () {}
+          void impl_activate () override { ((MultilineEditor*)get_parent ())->clear (); }
+      };
     public:
       MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true);
       virtual ~MultilineEditor ();
@@ -107,6 +113,7 @@ namespace djnn {
       void delete_line (SimpleText* st);
       void sort_selection ();
       void del_selection ();
+      void clear ();
       void mouse_press ();
       void mouse_release ();
       void mouse_move ();
@@ -130,7 +137,7 @@ namespace djnn {
       IntProperty _x, _y, _width, _height, _line_height, _spaces_for_tab;
       IntProperty _key_code_pressed, _key_code_released;
       TextProperty _str_input, _copy_buffer;
-      Spike _toggle_edit, _content_changed;
+      Spike _toggle_edit, _content_changed, _clear;
       SimpleText* _line;
       ToggleEditAction _toggle_action;
       MousePressAction _on_press;
@@ -139,7 +146,8 @@ namespace djnn {
       KeyPressedAction _key_pressed;
       KeyReleasedAction _key_released;
       StrInputAction _on_str_input;
-      Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_toggle;
+      ClearAction _on_clear;
+      Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_toggle, _c_clear;
       FontMetricsImpl _font_metrics;
       VoidProcess _ordering_node;
       coord_t _index_x, _index_y, _ascent, _descent, _leading;
