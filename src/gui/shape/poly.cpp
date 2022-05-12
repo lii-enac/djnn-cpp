@@ -24,7 +24,7 @@
 #include "display/window.h"
 #include "gui/shape/poly.h"
 
-#include "core/utils/iostream.h"
+#include "core/utils/error.h"
 #include "utils/debug.h"
 
 
@@ -42,7 +42,7 @@ namespace djnn {
     /* if not cloning we test parent with dynamic_cast */
     Poly *poly = dynamic_cast<Poly*> (parent);
     if (poly == nullptr) {
-      std::cerr << "Parent of polypoint must be <Polygon|Polyline>\n";
+      error(this, "Parent of polypoint must be <Polygon|Polyline>\n");
       return;
     }
     poly->points ()->add_child (this, "");

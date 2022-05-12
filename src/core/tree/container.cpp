@@ -328,6 +328,29 @@ namespace djnn
     return picked;
   }
 
+  void
+  Container::add_to_context (const string& k, FatChildProcess *v)
+  {
+    context_t::iterator it = _cur_context.find (k);
+    if (it != _cur_context.end ()) it->second = v;
+    else _cur_context.insert (make_pair (k, v));
+  }
+
+  FatChildProcess*
+  Container::get_from_context (const string& k)
+  {
+    context_t::iterator it = _cur_context.find (k);
+    if (it != _cur_context.end ()) return it->second;
+    else return nullptr;
+  }
+
+  void
+  Container::init_context (context_t &context) {
+    if (!context.empty ()) {
+      _cur_context.insert (context.begin (), context.end ());
+    }
+  }
+
 
   void
   Container::print_children ()

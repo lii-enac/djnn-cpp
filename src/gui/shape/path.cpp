@@ -25,7 +25,7 @@
 #include "gui/shape/path.h"
 #include "gui/shape/path_clip.h"
 
-#include "core/utils/iostream.h"
+#include "core/utils/error.h"
 #include "utils/debug.h" // UNIMPL
 
 
@@ -328,7 +328,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      std::cerr << "Parent of PathPoint must be <Path>\n";
+      error(this, "Parent of PathPoint must be <Path>");
       return;
     }
     path->items ()->add_child (this, "");
@@ -446,7 +446,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      std::cerr << "Parent of path closure must be Path\n";
+      error(this, "Parent of path closure must be Path");
       return;
     }
     path->items ()->add_child (this, "");
@@ -479,7 +479,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      std::cerr << "Parent of path quadratic must be Path\n";
+      error(this, "Parent of path quadratic must be Path");
       return;
     }
     path->items ()->add_child (this, "");
@@ -519,7 +519,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   PathQuadratic::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
@@ -610,7 +610,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      std::cerr << "Parent of path cubic must be Path\n";
+      error(this,  "Parent of path cubic must be Path");
       return;
     }
     path->items ()->add_child (this, "");
@@ -662,7 +662,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   PathCubic::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
@@ -766,7 +766,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     /* if not cloning we test parent with dynamic_cast */
     Path *path = dynamic_cast<Path*> (parent);
     if (path == nullptr) {
-      std::cerr << "Parent of path arc must be Path\n";
+      error(this, "Parent of path arc must be Path");
       return;
     }
     path->items ()->add_child (this, "");
@@ -824,7 +824,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   PathArc::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);

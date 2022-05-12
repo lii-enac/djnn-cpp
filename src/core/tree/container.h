@@ -44,25 +44,9 @@ namespace djnn {
     virtual ~Container ();
     const ordered_children_t& children () const { return _children; }
     context_t& get_context () { return _cur_context; }
-    void
-    add_to_context (const string& k, FatChildProcess *v)
-    {
-      context_t::iterator it = _cur_context.find (k);
-      if (it != _cur_context.end ()) it->second = v;
-      else _cur_context.insert (make_pair (k, v));
-    }
-    FatChildProcess*
-    get_from_context (const string& k)
-    {
-      context_t::iterator it = _cur_context.find (k);
-      if (it != _cur_context.end ()) return it->second;
-      else return nullptr;
-    }
-    void init_context (context_t &context) {
-      if (!context.empty ()) {
-        _cur_context.insert (context.begin (), context.end ());
-      }
-    }
+    void add_to_context (const string& k, FatChildProcess *v);
+    FatChildProcess* get_from_context (const string& k);
+    void init_context (context_t &context);
   protected:
     ordered_children_t _children;
     context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!!
