@@ -381,7 +381,7 @@ pch_dst ?= $(build_dir)/$(pch_file)
 ifeq ($(compiler),gnu)
 # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
 # Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
-CXXFLAGS_PCH_DEF += -D_REENTRANT
+# CXXFLAGS_PCH_DEF += -D_REENTRANT
 ifeq ($(display),SDL)
 CXXFLAGS_PCH_DEF += -Dmain=SDL_main
 endif
