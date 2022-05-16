@@ -66,7 +66,9 @@ namespace djnn
   void
   NativeAsyncAction::run ()
   {
-    NativeAction::impl_activate ();
+    // this is executed in its own thread
+
+    NativeAction::impl_activate (); // execute the action
 
     djnn::get_exclusive_access (DBG_GET);
     _end.schedule_activation ();

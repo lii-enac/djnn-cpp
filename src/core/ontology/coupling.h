@@ -59,7 +59,7 @@ namespace djnn {
     };
 
     enum bit_mask {
-        ENABLED_MASK              = 0b1  << ENABLED_SHIFT ,
+        ENABLED_MASK              = 0b1  << ENABLED_SHIFT , // FIXME, shouldn't it be 0b0?!
         IMMEDIATE_MASK            = 0b1  << IMMEDIATE_SHIFT ,
         SRC_ACTIVATION_FLAG_MASK  = 0b11 << SRC_ACTIVATION_FLAG_SHIFT ,
         DST_ACTIVATION_FLAG_MASK  = 0b11 << DST_ACTIVATION_FLAG_SHIFT ,
