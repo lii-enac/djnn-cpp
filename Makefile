@@ -365,52 +365,68 @@ ifneq ($(use_pch),no)
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
 ifeq ($(compiler),llvm)
-pch_ext = .pch
+pch_ext ?= .pch
+CXXFLAGS_PCH_GEN += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
 endif
 ifeq ($(compiler),gnu)
-pch_ext = .gch
+pch_ext ?= .gch
 endif
 
-pch := precompiled.h
-pch_src := $(src_dir)/core/utils/build/$(pch)
-pch_dst := $(build_dir)/$(pch_src)$(pch_ext)
+pch_file ?= $(src_dir)/core/utils/build/precompiled.hpp
+pch_dst ?= $(build_dir)/$(pch_file)
 
 # SDL and other stuff define new variables for compiling, canceling the use of pch with gnu cc
 # FIXME this is not safe as every other external lib may define something
 ifeq ($(compiler),gnu)
 # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
 # Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
-CXXFLAGS += -D_REENTRANT
+CXXFLAGS_PCH_DEF += -D_REENTRANT
 ifeq ($(display),SDL)
-CXXFLAGS += -Dmain=SDL_main
+CXXFLAGS_PCH_DEF += -Dmain=SDL_main
 endif
 endif
 
 CXXFLAGS_PCH := $(CXXFLAGS)
 
-$(pch_dst): $(pch_src)
+$(build_dir)/%$(pch_ext): %
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
-	$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
+	$(CXX) -x c++-header $(CXXFLAGS) $(CXXFLAGS_PCH_GEN) $< -o $@
 else
-	@$(call rule_message,compiling,$(stylized_target))
-	@$(CXX) -x c++-header $(CXXFLAGS_PCH) $< -o $@
+	@$(call rule_message,compiling to,$(stylized_target))
+	@$(CXX) -x c++-header $(CXXFLAGS) $(CXXFLAGS_PCH_GEN) $< -o $@
 endif
 
 ifeq ($(compiler),llvm)
-CXXFLAGS += -include-pch $(pch_dst)
-#CXXFLAGS += -march=native -mtune=native # next clang version?
-CXXFLAGS_PCH += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
-pch_shared := precompiled.o
-pch_shared_dst := $(build_dir)/$(src_dir)/core/utils/build/$(pch_shared)
-$(pch_shared_dst): $(pch_dst)
+CXXFLAGS_PCH_INC += -include-pch $(pch_dst)$(pch_ext)
+
+
+pch_shared_dst ?= $(build_dir)/$(src_dir)/core/utils/build/precompiled.o
+
+$(build_dir)/%precompiled.o: $(build_dir)/%precompiled.hpp$(pch_ext)
+ifeq ($V,max)
 	$(CXX) -c $< -o $@
+else
+	@$(call rule_message,compiling,$(stylized_target))
+	@$(CXX) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX)  -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
+endif
+
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
-CXXFLAGS += -I$(dir $(pch_dst)) -include $(pch) -Winvalid-pch
+CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Winvalid-pch
 #-fno-implicit-templates
 #$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
 endif
+
+$(build_dir)/%$(pch_ext): override CXXFLAGS = $(CXXFLAGS_PCH) $(CXXFLAGS_CFG) $(CXXFLAGS_PCH_DEF) $(djnn_cflags) $(CXXFLAGS_COMMON) $(CXXFLAGS_CK)
+
+pch: $(pch_dst)$(pch_ext)
+clean_pch:
+	rm -f $(pch_dst)$(pch_ext)
+
+CXXFLAGS += $(CXXFLAGS_PCH_INC)
 
 endif
 
@@ -454,9 +470,15 @@ lib_ldflags :=
 lib_pkg :=
 lib_pkgpath :=
 lib_rules :=
+lib_pch_file :=
+lib_pch_dep_files :=
 #define lib_rules
 #endef
 
+$1_libname := libdjnn-$1$$(lib_suffix)
+$1_lib := $$(build_lib_dir)/$$($1_libname)
+$1_libname_static := libdjnn-$1$$(lib_static_suffix)
+$1_lib_static := $$(build_lib_dir)/$$($1_libname_static)
 
 include $$(src_dir)/$1/djnn-lib.mk
 
@@ -464,7 +486,7 @@ include $$(src_dir)/$1/djnn-lib.mk
 $1_c_srcs ?= $$(filter %.c,$$(lib_srcs))
 $1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
 $1_srcs = $$($1_cpp_srcs) $$($1_c_srcs) 
-$1_objs ?= $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
+$1_objs += $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
 
 $1_srcgens ?= $$(lib_srcgens)
@@ -476,14 +498,42 @@ $1_lib_rules := $$(lib_rules)
 
 $1_pkg_deps :=
 $1_deps := $$($1_objs:.o=.d)
-$1_libname := libdjnn-$1$$(lib_suffix)
-$1_lib := $$(build_lib_dir)/$$($1_libname)
-$1_libname_static := libdjnn-$1$$(lib_static_suffix)
-$1_lib_static := $$(build_lib_dir)/$$($1_libname_static)
+
 $1_lib_cflags := $$(lib_cflags)
 $1_lib_cppflags := $$(lib_cppflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_pkg := $$(lib_pkg)
+
+$1_pch_file := $$(lib_pch_file)
+$1_pch_dep_files := $$(lib_pch_dep_files)
+
+# -- specific precompiled header
+
+$1_pch_dest := $$(build_dir)/$$($1_pch_file)$$(pch_ext)
+$$($1_pch_dep_files): $$($1_pch_dest)
+$$($1_pch_dep_files): pch_file=$$($1_pch_file)
+$$($1_pch_dep_files): CXXFLAGS_PCH_GEN+=$$($1_lib_cflags)
+
+ifeq ($$(compiler),llvm)
+
+ifneq ($$($1_pch_file),)
+$1_pch_shared_dst := $$(build_dir)/$$($1_pch_file:.hpp=.o)
+#$$($1_pch_shared_dst): $$($1_pch_dest)
+
+$1_objs += $$($1_pch_shared_dst)
+$$($1_lib): $$($1_pch_shared_dst)
+endif
+
+endif
+
+$1_myass:
+	#@echo $1_pch_file
+	@echo $$($1_pch_file)
+	#@echo $1_pch_dest
+	@echo $$($1_pch_dest)
+	#@echo $1_pch_shared_dst
+	@echo $$($1_pch_shared_dst)
+	
 
 $1_gperf_srcs :=
 $1_cov_gcno  := $$($1_objs:.o=.gcno)
@@ -515,7 +565,7 @@ endif
 # the remaining will be put into a .mk file for further, faster, inclusion
 
 #define $1_mk_content
-$$($1_objs): $(pch_dst)
+$$($1_objs): $(pch_dst)$(pch_ext)
 $$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)

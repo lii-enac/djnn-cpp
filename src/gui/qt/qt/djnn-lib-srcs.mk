@@ -1,4 +1,4 @@
-local_dir := src/gui/qt/qt
+local_dir := $(src_dir)/gui/qt/qt
 
 lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
