@@ -23,7 +23,7 @@
 #include "core/property/double_property.h"
 #include "core/property/text_property.h"
 
-#include <memory>
+//#include <memory>
 
 namespace djnn
 {

@@ -18,11 +18,13 @@
 #include "gui/backend.h"
 #include "gui/style/style.h"
 
+#include "qt_context.h"
 #include "qt_backend.h"
 
 #include <QtWidgets/QWidget>
 
-#include "core/utils/iostream.h"
+//#include "core/utils/iostream.h"
+#include "core/utils/error.h"
 #include <cmath>
 
 
@@ -181,7 +183,7 @@ namespace djnn
     int c;
     ocs->get_properties_values(c);
     if (static_cast<unsigned int>(c) >= (sizeof(capStyleArray) / sizeof(Qt::PenCapStyle))) {
-      std::cerr << "Invalid Qt cap style, default will be used\n";
+      error(ocs, "Invalid Qt cap style, default will be used");
       c = 0;
     }
     _context_manager->get_current ()->pen.setCapStyle (capStyleArray[c]);
@@ -193,7 +195,7 @@ namespace djnn
     int j;
     ojs->get_properties_values(j);
     if (static_cast<unsigned int>(j) >= (sizeof(joinStyleArray) / sizeof(Qt::PenJoinStyle))) {
-      std::cerr << "Invalid Qt join style, default will be used\n";
+      error(ojs, "Invalid Qt join style, default will be used");
       j = 0;
     }
     _context_manager->get_current ()->pen.setJoinStyle (joinStyleArray[j]);
@@ -318,7 +320,7 @@ namespace djnn
     QtContext *cur_context = _context_manager->get_current ();
     int val = style;
     if (style >= (int) (sizeof(fontStyleArray) / sizeof(QFont::Style))) {
-      std::cerr << "Invalid Qt font style, default will be used\n";
+      error(fs,  "Invalid Qt font style, default will be used");
       val = 0;
     }
     cur_context->font.setStyle (fontStyleArray[val]);

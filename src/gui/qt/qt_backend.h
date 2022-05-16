@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include "qt_context.h"
-
 #include "qt/qt_picking_view.h"
 #include "gui/abstract_backend.h"
 
