@@ -6,7 +6,7 @@ namespace djnn {
     class Coupling;
 }
 
-extern template class djnnstl::basic_string<char>;
-extern template class djnn::map<djnn::string, djnn::CoreProcess*>;
-extern template class djnn::vector<djnn::Coupling*>;
+template class djnnstl::basic_string<char>;
+template class djnn::map<djnn::string, djnn::CoreProcess*>;
+template class djnn::vector<djnn::Coupling*>;
 
