@@ -20,7 +20,8 @@ MAKEFLAGS += --no-builtin-rules
 
 default: all
 
-all: config.mk dirs djnn pkgconf
+all: config.mk djnn pkgconf
+#dirs
 #rules
 #cccmd
 
@@ -71,8 +72,8 @@ all_dirs = $(call uniq,$(dir $(all_srcs)))
 # ---------------------------------------
 # directory structure
 
-$(build_dir)/%/: %/
-	@mkdir -p $@
+#$(build_dir)/%/: %/
+#	@mkdir -p $@
 
 $(build_dir)/lib:
 	@mkdir -p $@
@@ -581,6 +582,7 @@ else
 endif
 
 $$($1_lib_static): $$($1_objs)
+	@mkdir -p $$(dir $$@)
 ifeq ($$V,max)
 	$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
 	$$(RANLIB) $$@
@@ -712,6 +714,7 @@ cccmd: $(build_dir)/compile_commands.json
 root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 $(build_dir)/%.o: %.cpp
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
@@ -722,6 +725,7 @@ else
 endif
 
 $(build_dir)/%.o: %.c
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CC) $(CFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
@@ -733,6 +737,7 @@ endif
 
 # for generated .cpp
 $(build_dir)/%.o: $(build_dir)/%.cpp
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
@@ -743,6 +748,7 @@ else
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
 	$(YACC) -v -o $@ $<
 else
@@ -751,6 +757,7 @@ else
 endif
 
 $(build_dir)/%.cpp: %.l
+	@mkdir -p $(dir $@)
 ifeq ($V,max)
 	$(LEX) -o $@ $<
 else
