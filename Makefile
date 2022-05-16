@@ -505,15 +505,17 @@ $1_lib_cppflags := $$(lib_cppflags)
 $1_lib_ldflags := $$(lib_ldflags)
 $1_lib_pkg := $$(lib_pkg)
 
+# -- specific precompiled header
+
 $1_pch_file := $$(lib_pch_file)
 $1_pch_dep_files := $$(lib_pch_dep_files)
 
-# -- specific precompiled header
-
+ifneq ($$($1_pch_file),)
 $1_pch_dest := $$(build_dir)/$$($1_pch_file)$$(pch_ext)
 $$($1_pch_dep_files): $$($1_pch_dest)
 $$($1_pch_dep_files): pch_file=$$($1_pch_file)
 $$($1_pch_dep_files): CXXFLAGS_PCH_GEN+=$$($1_lib_cflags)
+endif
 
 ifeq ($$(compiler),llvm)
 
