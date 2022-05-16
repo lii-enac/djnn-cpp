@@ -181,7 +181,7 @@ ifeq ($(os),Linux)
 CFLAGS += -fpic
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
-DYNLIB = -shared
+DYNLIB ?= -shared
 YACC = bison -d
 thread = STD
 moc := moc
@@ -196,7 +196,7 @@ brew_prefix := $(HOMEBREW_PREFIX)
 endif
 CFLAGS += -Wno-deprecated-declarations
 lib_suffix =.dylib
-DYNLIB = -dynamiclib
+DYNLIB ?= -dynamiclib
 echo ?= echo
 YACC := $(brew_prefix)/opt/bison/bin/bison -d
 LEX := $(brew_prefix)/opt/flex/bin/flex
@@ -213,7 +213,7 @@ CFLAGS += -fpic
 CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll
-DYNLIB = -shared
+DYNLIB ?= -shared
 YACC = bison -d
 moc := moc
 thread = STD
@@ -526,14 +526,6 @@ $$($1_lib): $$($1_pch_shared_dst)
 endif
 
 endif
-
-$1_myass:
-	#@echo $1_pch_file
-	@echo $$($1_pch_file)
-	#@echo $1_pch_dest
-	@echo $$($1_pch_dest)
-	#@echo $1_pch_shared_dst
-	@echo $$($1_pch_shared_dst)
 	
 
 $1_gperf_srcs :=
@@ -573,12 +565,15 @@ $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
 $$($1_lib): $$($1_djnn_deps)
 
+CXXLD ?= $$(CXX)
+
 $$($1_lib): $$($1_objs)
+	@mkdir -p $$(dir $$@)
 ifeq ($$V,max)
-	$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXX) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
