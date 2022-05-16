@@ -367,18 +367,27 @@ ifneq ($(use_pch),no)
 
 ifeq ($(compiler),llvm)
 pch_ext ?= .pch
-CXXFLAGS_PCH_GEN += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
 endif
 ifeq ($(compiler),gnu)
 pch_ext ?= .gch
 endif
 
 pch_file ?= $(src_dir)/core/utils/build/precompiled.hpp
-pch_dst ?= $(build_dir)/$(pch_file)
+pch_dst := $(build_dir)/$(pch_file)
+
+ifeq ($(compiler),llvm)
+CXXFLAGS_PCH_INC += -include-pch $(pch_dst)$(pch_ext)
+CXXFLAGS_PCH_GEN += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
+pch_shared_dst := $(pch_dst:.hpp=.o)
+endif
+ifeq ($(compiler),gnu)
+# https://stackoverflow.com/a/3164874
+CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Winvalid-pch
+#-fno-implicit-templates
+#$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
 
 # SDL and other stuff define new variables for compiling, canceling the use of pch with gnu cc
 # FIXME this is not safe as every other external lib may define something
-ifeq ($(compiler),gnu)
 # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
 # Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
 # CXXFLAGS_PCH_DEF += -D_REENTRANT
@@ -398,12 +407,9 @@ else
 	@$(CXX) -x c++-header $(CXXFLAGS) $(CXXFLAGS_PCH_GEN) $< -o $@
 endif
 
-ifeq ($(compiler),llvm)
-CXXFLAGS_PCH_INC += -include-pch $(pch_dst)$(pch_ext)
+$(build_dir)/%$(pch_ext): override CXXFLAGS = $(CXXFLAGS_PCH) $(CXXFLAGS_CFG) $(CXXFLAGS_PCH_DEF) $(djnn_cflags) $(CXXFLAGS_COMMON) $(CXXFLAGS_CK)
 
-
-pch_shared_dst ?= $(build_dir)/$(src_dir)/core/utils/build/precompiled.o
-
+# for llvm -fpch-instantiate-templates -fpch-codegen
 $(build_dir)/%precompiled.o: $(build_dir)/%precompiled.hpp$(pch_ext)
 ifeq ($V,max)
 	$(CXX) -c $< -o $@
@@ -412,16 +418,6 @@ else
 	@$(CXX) -c $< -o $@
 	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX)  -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
-endif
-
-ifeq ($(compiler),gnu)
-# https://stackoverflow.com/a/3164874
-CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Winvalid-pch
-#-fno-implicit-templates
-#$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
-endif
-
-$(build_dir)/%$(pch_ext): override CXXFLAGS = $(CXXFLAGS_PCH) $(CXXFLAGS_CFG) $(CXXFLAGS_PCH_DEF) $(djnn_cflags) $(CXXFLAGS_COMMON) $(CXXFLAGS_CK)
 
 pch: $(pch_dst)$(pch_ext)
 clean_pch:
