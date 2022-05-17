@@ -14,7 +14,7 @@ lib_cflags += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=
 lib_cflags += -fexceptions
 lib_cflags += -ffunction-sections -fdata-sections
 lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
-#lib_cflags += -fpic
+#lib_cflags += -fPIC
 #lib_cflags += -pie
 
 #boost name demangle

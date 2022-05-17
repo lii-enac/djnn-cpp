@@ -178,7 +178,7 @@ CFLAGS += -I$(src_dir)
 LDFLAGS += -L$(build_lib_dir)
 
 ifeq ($(os),Linux)
-CFLAGS += -fpic
+CFLAGS += -fPIC
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB ?= -shared
@@ -209,7 +209,7 @@ compiler ?= llvm
 endif
 
 ifeq ($(os),MinGW)
-CFLAGS += -fpic
+CFLAGS += -fPIC
 CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 #CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll

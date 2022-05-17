@@ -32,7 +32,7 @@ lib_cflags += -I$(crazyflie_firmware_dir)/vendor/CMSIS/CMSIS/Include/
 lib_cflags += -fexceptions
 #lib_cflags += -ffunction-sections -fdata-sections
 lib_cflags += -fno-math-errno -fno-strict-aliasing -Wdouble-promotion
-#lib_cflags += -fpic
+#lib_cflags += -fPIC
 #lib_cflags += -pie
 endif
 
