@@ -3,7 +3,7 @@
 #define GET_CHILD(type, parent, name) auto * name = dynamic_cast<type*>(parent->find_child(#name)); if (!name) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }
 // ex: GET_CHILD (djnn::TextProperty, data, layer_name);
 // is equivalent to:
-// auto * name = dynamic_cast<djnn::TextProperty*>(data->find("layer_name")); (this will create a djnn TextProperty* variable 'name')
+// auto * layer_name = dynamic_cast<djnn::TextProperty*>(data->find("layer_name")); (this will create a djnn TextProperty* variable 'name')
 
 #define GET_CHILD_VAR(varname, type, parent, name) auto * varname = dynamic_cast<djnn::type*>(parent->find_child(#name)); if (!varname) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }
 #define GET_CHILD_VAR2(varname, type, parent, name) varname = dynamic_cast<djnn::type*>(parent->find_child(#name)); if (!varname) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }
