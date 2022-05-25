@@ -26,6 +26,8 @@ namespace djnn {
 
   extern FatProcess *GPUs;
   extern FatProcess *Displays;
+  extern FatProcess* GenericKeyboard;
+
   void init_display ();
   void clear_display ();
 

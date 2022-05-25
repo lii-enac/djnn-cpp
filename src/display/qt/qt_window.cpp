@@ -27,8 +27,7 @@
 
 #include "exec_env/qt/qt_mainloop.h"
 #include "display/display.h" // mouse_tracking full_screen hide_pointer
-#include "display/display-dev.h"
-#include "display/abstract_display.h"
+#include "display/display-priv.h"
 
 #include "exec_env/main_loop.h"
 #include "exec_env/global_mutex.h"
@@ -259,8 +258,10 @@ namespace djnn
   MyQWidget::keyPressEvent (QKeyEvent *event)
   {
     _window->key_pressed ()->set_value (event->key (), 1);
+    ((GUIKeyboard*)GenericKeyboard)->key_pressed ()->set_value (event->key (), 1);
     if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
       _window->key_pressed_text ()->set_value (event->text ().toStdString ().c_str (), 1);
+      ((GUIKeyboard*)GenericKeyboard)->key_pressed_text ()->set_value (event->text ().toStdString ().c_str (), 1);
     }
     // QtMainloop::instance ().set_please_exec (true);
     // NO event synthesis on press, release
@@ -271,7 +272,9 @@ namespace djnn
   MyQWidget::keyReleaseEvent (QKeyEvent *event)
   {
     _window->key_released ()->set_value (event->key (), 1);
+    ((GUIKeyboard*)GenericKeyboard)->key_released ()->set_value (event->key (), 1);
     _window->key_released_text ()->set_value (event->text ().toStdString ().c_str(), 1);
+    ((GUIKeyboard*)GenericKeyboard)->key_released_text ()->set_value (event->text ().toStdString ().c_str(), 1);
     //QtMainloop::instance ().set_please_exec (true);
     // NO event synthesis on press, release
     GRAPH_EXEC;

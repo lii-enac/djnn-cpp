@@ -32,8 +32,25 @@ namespace djnn
 
   FatProcess *GPUs = nullptr;
   FatProcess *Displays = nullptr;
+  FatProcess *GenericKeyboard = nullptr;
+
 
   DisplayBackend::Impl* DisplayBackend::_instance;
+
+  GUIKeyboard::GUIKeyboard (ParentProcess* parent, const string& name) : FatProcess (name) {
+    _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
+    _key_pressed = new IntProperty (this, "key-pressed", 0);
+    _key_released_text  =  new TextProperty (this, "key-released_text", "");
+    _key_released = new IntProperty (this, "key-released", 0);
+  }
+
+  GUIKeyboard::~GUIKeyboard ()
+  {
+    delete _key_pressed_text;
+    delete _key_pressed;
+    delete _key_released_text;
+    delete _key_released;
+  }
 
   AbstractDisplay*
   DisplayBackend::instance ()
@@ -51,6 +68,8 @@ namespace djnn
       GPUs->set_activation_state (ACTIVATED);
       Displays = new Set (nullptr, "Displays");
       Displays->set_activation_state (ACTIVATED);
+      GenericKeyboard = new GUIKeyboard (nullptr, "GenericKeyboard");
+      GenericKeyboard->activate ();
       URI::add_uri ("gpu", GPUs);
       URI::add_uri ("display", Displays);
       //std::cerr << __FILE__ << " " << __LINE__ << std::endl;

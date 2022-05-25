@@ -14,8 +14,27 @@
 
 #pragma once
 #include "display-dev.h"
+#include "core/property/int_property.h"
+#include "core/property/text_property.h"
 
 namespace djnn {
   void p_init_display ();
   void p_clear_display ();
+
+  class GUIKeyboard : public FatProcess {
+      public:
+        GUIKeyboard (ParentProcess* parent, const string& name);
+        ~GUIKeyboard ();
+        void impl_activate () { }
+        void impl_deactivate () {}
+        IntProperty* key_pressed () { return _key_pressed; }
+        IntProperty* key_released () { return _key_released; }
+        TextProperty* key_pressed_text () { return _key_pressed_text; }
+        TextProperty* key_released_text () { return _key_released_text; }
+      private:
+        TextProperty *_key_pressed_text;
+        IntProperty *_key_pressed;
+        TextProperty *_key_released_text;
+        IntProperty *_key_released;
+      };
 }
