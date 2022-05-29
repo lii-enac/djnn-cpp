@@ -701,6 +701,20 @@ cccmd: $(build_dir)/compile_commands.json
 
 
 # ---------------------------------------
+# generate ninja file from Makefile
+
+ninja: build.ninja
+build.ninja: make2ninja.py
+	make -Bnd V=max | python3 make2ninja.py > build.ninja
+.PHONY: build.ninja ninja
+
+make2ninja.py:
+	curl -O https://raw.githubusercontent.com/conversy/make2ninja/90e939a539a081b44c9bdc2bef70e6908e7a645a/make2ninja.py
+ifeq ($(os),Darwin)
+	sed -i '' "s/\'(./\`(./" make2ninja.py
+endif
+
+# ---------------------------------------
 # generic rules
 
 # https://stackoverflow.com/a/23324703

@@ -19,6 +19,9 @@ $(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-pars
 
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
 $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
+$(build_dir)/src/gui/css-parser/parser.hpp: src/gui/css-parser/parser.y
+$(build_dir)/src/gui/css-parser/location.hh: src/gui/css-parser/parser.y
+
 
 ifeq ($(os),MinGW)
 # Fix for FlexLexer.h in /usr/include and in /ming64/include
