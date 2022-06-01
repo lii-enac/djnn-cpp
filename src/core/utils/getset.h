@@ -12,7 +12,7 @@
 // auto * name = dynamic_cast<djnn::TextProperty*>(data->find("layer_name")); (this will create a djnn TextProperty* variable 'name')
 
 #define GET_CHILD_VALUE(varname, type, parent, name) auto * child_##varname = dynamic_cast<djnn::Abstract##type##Property*>(parent->find_child(#name)); if (!child_##varname) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }; const auto& varname = child_##varname->get_value ();
-#define GET_CHILD_VALUE2(varname, type, parent, name) auto * child_##varname = dynamic_cast<djnn::Abstract##type##Property*>(parent->find_child(#name)); if (!child_##varname) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }; varname = child_##varname->get_value ();
+#define GET_CHILD_VALUE2(varname, type, parent, name) if (auto * child_##parent = dynamic_cast<djnn::Abstract##type##Property*>(parent->find_child(#name))) {varname = child_##parent->get_value ();} else { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #name, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }
 // ex: GET_CHILD_VALUE (name, Text, data, "layer_name");
 // is equivalent to:
 // const auto& name = dynamic_cast<djnn::TextProperty*>(data->find_child("layer_name"))->get_value(); (this will create a "string name" with the value of the property)
