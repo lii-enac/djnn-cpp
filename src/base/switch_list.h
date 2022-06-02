@@ -18,12 +18,10 @@
 #include "core/tree/list.h"
 #include "core/control/spike.h"
 #include "core/property/bool_property.h"
+#include "core/property/int_property_fwd.h"
 
 
 namespace djnn {
-
-  class IntProperty;
-  class BoolProperty;
 
   class SwitchList : public AbstractList
   {

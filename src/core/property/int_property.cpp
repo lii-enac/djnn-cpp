@@ -47,6 +47,7 @@ namespace djnn
       warning (p, "setInt only works on integer properties");
   }
 
+#if 1
   void
   AbstractIntProperty::set_value (double v, bool propagate)
   {
@@ -101,7 +102,7 @@ namespace djnn
   FatProcess*
   IntPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    auto res = new IntPropertyProxy (nullptr, get_name (), get_ref_value());
+    auto res = new IntPropertyProxy (nullptr, get_name (), get_ref_value(), _notify_mask);
     origs_clones[this] = res;
     return res;
   }
@@ -127,6 +128,8 @@ namespace djnn
 
     AbstractSerializer::post_serialize(this);
   }
+#endif
+
 #endif
 
 }

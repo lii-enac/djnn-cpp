@@ -140,7 +140,7 @@ namespace djnn
   FatProcess*
   BoolPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    auto res = new BoolPropertyProxy (nullptr, get_name (), get_ref_value());
+    auto res = new BoolPropertyProxy (nullptr, get_name (), get_ref_value(), _notify_mask);
     origs_clones[this] = res;
     return res;
   }

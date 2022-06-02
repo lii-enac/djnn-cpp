@@ -9,6 +9,7 @@
 #include "core/property/double_property.h"
 #include "core/property/text_property.h"
 #include "core/property/ref_property.h"
+#include "core/property/s_to_p.h"
 #include "core/tree/component.h"
 
 #include "core/utils/djnn_dynamic_cast.h"
@@ -21,44 +22,6 @@
 
 namespace djnn
 {
-
-  // FIXME: share the following code with other parts of the lib that cast from one type to another
-  inline
-  int
-  s_to_p(const string& s, int)
-  {
-    return stoi(s);
-  }
-
-  inline
-  double
-  s_to_p(const string& s, double)
-  {
-    return stof(s) ? true : false;
-  }
-
-  inline
-  bool
-  s_to_p(const string& s, bool)
-  {
-    return stoi(s) ? true : false;
-  }
-
-  template <class X>
-  string
-  p_to_s(const X& x)
-  {
-    return to_string(x);
-  }
-
-  template <>
-  string
-  p_to_s<bool>(const bool& x)
-  {
-    return (x ? "true" : "false");
-  }
-
-
   // implicit conversion int, double, bool
   template <typename src_t, typename dst_t>
   void t_perform_action (src_t* src, dst_t* dst, double propagate, double lazy)
@@ -80,7 +43,12 @@ namespace djnn
       if (sdv == dv) return;
       dst->set_value (sdv, propagate);
     } else {
-      dst->set_value (sv, propagate);
+      try {
+        const auto sdv = s_to_p(sv, dv);
+        dst->set_value (sdv, propagate);
+      }
+      catch (const std::invalid_argument& ia) {
+      }
     }
   }
 

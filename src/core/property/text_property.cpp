@@ -158,7 +158,7 @@ namespace djnn
   FatProcess* 
   TextPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
-    auto res = new TextPropertyProxy (nullptr, get_name (), value);
+    auto res = new TextPropertyProxy (nullptr, get_name (), value, _notify_mask);
     origs_clones[this] = res;
     return res;
   }

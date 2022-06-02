@@ -27,8 +27,6 @@
 
 namespace djnn
 {
-  class IntProperty;
-  class DoubleProperty;
 
   class Clock : public FatProcess, public djnn_internal::Time::Timer
   {

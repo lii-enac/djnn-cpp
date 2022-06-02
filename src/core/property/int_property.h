@@ -18,8 +18,9 @@
 #include "abstract_property.h"
 #include "core/utils/to_string.h"
 
-namespace djnn {
+#if 1
 
+namespace djnn {
   class AbstractIntProperty : public AbstractProperty {
   public:
     AbstractIntProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
@@ -76,5 +77,25 @@ namespace djnn {
 
   int getInt (CoreProcess *p);
   void setInt (CoreProcess* parent, int v);
-
 }
+
+#else
+
+#include "template_property.h"
+namespace djnn {
+
+  template <>
+  struct TemplatePropertyType<int> {
+      static const PropertyType type = Integer;
+  };
+
+  using AbstractIntProperty = AbstractTemplateProperty<int>;
+  using IntProperty = TemplateProperty<int>;
+  using IntPropertyProxy = TemplatePropertyProxy<int>;
+
+  int getInt (CoreProcess *p);
+  void setInt (CoreProcess* parent, int v);
+}
+
+
+#endif
