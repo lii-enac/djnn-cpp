@@ -1,3 +1,7 @@
 /build
 /config.mk
 /.vscode/*.log
+/build.ninja
+/.ninja_log
+/jq_script
+/make2ninja.py
