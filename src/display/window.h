@@ -20,12 +20,13 @@
 #include "core/tree/component.h"
 
 #include "core/property/ref_property.h"
+#include "core/property/int_property_fwd.h"
 
 #include <memory>
 
 namespace djnn
 {
-  class IntProperty;
+  //class IntProperty;
   class DoubleProperty;
   class TextProperty;
   class BoolProperty;

@@ -4,10 +4,12 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 
+#include "core/property/int_property_fwd.h"
+
 namespace djnn {
 
-  class AbstractIntProperty;
-  class IntPropertyProxy;
+  //class AbstractIntProperty;
+  //class IntPropertyProxy;
   class Window;
 
   class BackgroundColor : public FatProcess
