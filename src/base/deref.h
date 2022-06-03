@@ -23,7 +23,6 @@
 #include "core/property/double_property.h"
 #include "core/property/property_trait.h"
 
-#include "base/connector.h"
 
 namespace djnn
 {

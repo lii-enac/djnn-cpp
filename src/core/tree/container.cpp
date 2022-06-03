@@ -15,7 +15,6 @@
 #include "container.h"
 #include "assignment_sequence.h"
 
-#include "core/control/assignment.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
 #include "core/core-dev.h" // graph add/remove edge
