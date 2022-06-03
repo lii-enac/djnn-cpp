@@ -13,148 +13,151 @@
 
 #pragma once
 
+#include <gui/widgets/text_edit_common.h>
 #include "core/ontology/process.h"
 #include "core/control/action.h"
+#include "core/control/blank.h"
 #include "core/property/text_property.h"
 #include "core/property/double_property.h"
 #include "core/property/int_property.h"
+#include "core/property/bool_property.h"
 #include "gui/shape/text.h"
 
 namespace djnn {
 
-  class Homography;
 
-  class TextField : public FatProcess
+  class TextField : public AbstractGShape
   {
   private:
-    class CutAction : public Action
-    {
-     public:
-       CutAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-       ~CutAction () {}
-       void impl_activate () override { ((TextField*)get_parent ())->cut (); };
+    class EnableEditAction : public Action {
+      public:
+        EnableEditAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~EnableEditAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->set_editable (true); }
     };
-    class PointerMoveAction : public Action
-    {
-     public:
-       PointerMoveAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-       ~PointerMoveAction () {}
-       void impl_activate () override { ((TextField*)get_parent ())->pointer_move (); };
+    class DisableEditAction : public Action {
+      public:
+        DisableEditAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~DisableEditAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->set_editable (false); }
     };
-    class ClearAction : public Action
-    {
-     public:
-       ClearAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-       ~ClearAction () {}
-       void impl_activate () override { ((TextField*)get_parent ())->clear (); };
+    class MousePressAction : public Action {
+      public:
+        MousePressAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~MousePressAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->mouse_press (); }
     };
-    class DeleteAction : public Action
-    {
-    public:
-      DeleteAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~DeleteAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->del ();};
+    class MouseReleaseAction : public Action {
+      public:
+        MouseReleaseAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~MouseReleaseAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->mouse_release (); }
     };
-
-    class SupprAction : public Action
-    {
-    public:
-      SupprAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~SupprAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->suppr (); };
+    class MouseMoveAction : public Action {
+      public:
+        MouseMoveAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~MouseMoveAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->mouse_move (); }
     };
-
-    class AddStringAction : public Action
-    {
-    public:
-      AddStringAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~AddStringAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->add_string (); };
+    class KeyPressedAction : public Action {
+      public:
+        KeyPressedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~KeyPressedAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->key_pressed (); }
     };
-    class MoveLeftAction : public Action
-    {
-    public:
-      MoveLeftAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~MoveLeftAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->move_left ();};
+    class KeyReleasedAction : public Action {
+      public:
+        KeyReleasedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~KeyReleasedAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->key_released (); }
     };
-    class MoveRightAction : public Action
-    {
-    public:
-      MoveRightAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~MoveRightAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->move_right ();};
+    class StrInputAction : public Action {
+      public:
+        StrInputAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~StrInputAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->add_string_input (); }
     };
-    class UpdateCursorPositionAction : public Action
-    {
-    public:
-      UpdateCursorPositionAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~UpdateCursorPositionAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->update_cursor_pos_from_press ();};
+    class ClearAction : public Action {
+      public:
+        ClearAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~ClearAction () {}
+        void impl_activate () override { ((TextField*)get_parent ())->clear (); }
     };
-    class StartSelectionAction : public Action
-    {
-    public:
-      StartSelectionAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~StartSelectionAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->start_selection ();};
-    };
-    class EndSelectionAction : public Action
-    {
-    public:
-      EndSelectionAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~EndSelectionAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->end_selection ();};
-    };
-    class SelectAllAction : public Action
-    {
-    public:
-      SelectAllAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
-      ~SelectAllAction () {}
-      void impl_activate () override { ((TextField*)get_parent ())->select_all ();};
-  };
   public:
-    TextField (ParentProcess* parent, const string& name, CoreProcess* text, CoreProcess* shape);
+    TextField (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true);
     virtual ~TextField ();
     void impl_activate () override;
     void impl_deactivate () override;
-    void cut ();
-    void clear ();
-    void del ();
-    void suppr ();
-    void add_string ();
-    void pointer_move ();
-    void move_left ();
-    void move_right ();
-    int update_cursor_pos_from_index ();
-    void update_cursor_pos_from_press ();
-    void start_selection ();
-    void end_selection ();
-    void select_all ();
+
+    SimpleText* content () { return &_line; }
+    int x () { return _x.get_value (); }
+    int y () { return _y.get_value (); }
+    int width () { return _width.get_value (); }
+    int height () { return _height.get_value (); }
+    int offset () { return _offset; }
+    int text_color () { return _text_color.get_value (); }
+    int selected_text_color () { return _selected_text_color.get_value (); }
+    int selection_color () { return _selection_color.get_value (); }
+    int start_x () { return _cursor_start_x.get_value (); }
+    int end_x () { return _cursor_end_x.get_value (); }
+    void set_width (int w) { _width.set_value (w, true); }
+    void set_height (int h) { _height.set_value (h, true); }
+    bool has_selection () { return _start_sel_x != _end_sel_x || _start_sel_y != _end_sel_y; }
+    void set_ascent (int v) { _ascent = v; }
+    void set_descent (int v) { _descent = v; }
+    void set_leading (int v) { _leading = v; }
+    FontMetricsImpl get_font_metrics () { return _font_metrics; }
+    void set_font_metrics (FontMetricsImpl fm) { _font_metrics = fm; }
+    bool first_draw () { return _first_draw; }
+
   private:
-    void delete_text (int from, int to);
+    void sort_selection ();
+    void del_selection ();
+    void clear ();
+    void mouse_press ();
+    void mouse_release ();
+    void mouse_move ();
+    void key_pressed ();
+    void key_released ();
+    void update_index_from_xy (coord_t x, coord_t y);
+    void update_cursor ();
+    void update_lines_position ();
+    void copy ();
+    void paste ();
+    void set_editable (bool v);
+    coord_t get_x_from_index ();
+    coord_t get_index_from_x (coord_t x);
+    void add_string_input ();
+    void add_str (const string& str );
+    void draw () override;
+    pair<double, double> get_local_coords (double x, double y);
+
+    SimpleText _line;
+    IntProperty _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
+    IntProperty _x, _y, _width, _height, _line_height;
+    IntProperty _key_code_pressed, _key_code_released;
+    IntProperty _text_color, _selected_text_color, _selection_color;
+    TextProperty _str_input, _copy_buffer;
+    Spike _enable_edit, _disable_edit, _content_changed, _clear;
+    Blank _validate;
+    EnableEditAction _on_enable_edit;
+    DisableEditAction _on_disable_edit;
+    MousePressAction _on_press;
+    MouseReleaseAction _on_release;
+    MouseMoveAction _on_move;
+    KeyPressedAction _key_pressed;
+    KeyReleasedAction _key_released;
+    StrInputAction _on_str_input;
+    ClearAction _on_clear;
+    Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear;
+    FontMetricsImpl _font_metrics;
     VoidProcess _ordering_node;
-    FatProcess  *_move_left, *_move_right, *_del, *_suppr, *_clear, *_cut, *_start_selection, *_end_selection, *_pointer_move, *_select_all;
-    Text *_text;
-    TextProperty *_new_text;
-    IntProperty *_x_start, *_x_end;
-    DoubleProperty *_press_x, *_press_y, *_move_x, *_move_y;
-    Homography* _inverted_matrix;
-    Coupling *_c_on_add, *_c_on_del, *_c_on_suppr, *_c_move_left, *_c_move_right, *_c_on_press, *_c_on_move, *_c_clear, *_c_cut, *_c_start_sel, *_c_end_sel, *_c_select_all;
-    ClearAction *_clear_action;
-    DeleteAction *_delete_action;
-    SupprAction *_suppr_action;
-    AddStringAction *_add_string_action;
-    MoveLeftAction *_move_left_action;
-    MoveRightAction *_move_right_action;
-    CutAction *_cut_action;
-    PointerMoveAction *_pointer_move_action;
-    UpdateCursorPositionAction *_update_cursor_pos_action;
-    StartSelectionAction *_start_selection_action;
-    EndSelectionAction *_end_selection_action;
-    SelectAllAction *_select_all_action;
-    IntProperty *_index;
-    int _start_select, _end_select;
-    bool _is_selecting;
+    coord_t _index_x, _ascent, _descent, _leading;
+    const coord_t _index_y;
+    coord_t _start_sel_x, _end_sel_x;
+    const coord_t _start_sel_y, _end_sel_y;
+    bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
+    BoolProperty _edit_enabled;
+    int _offset;
   };
 }

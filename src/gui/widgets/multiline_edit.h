@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/widgets/text_edit_common.h"
 #include "core/control/action.h"
 #include "core/property/double_property.h"
 #include "core/property/int_property.h"
@@ -7,36 +8,10 @@
 #include "core/property/ref_property.h"
 #include "core/tree/list.h"
 //#include "gen/abstract_prop_text.h"
-#include "gui/shape/abstract_gshape.h"
 
 #include "gui/shape/text.h" // FontFamily FontSize FontWeight
 
 namespace djnn {
-
-  class SimpleText : public AbstractGShape {
-    public:
-      SimpleText (ParentProcess* parent, const string& name, double x, double y, const string& text);
-      virtual ~SimpleText ();
-      void impl_activate () override;
-      void impl_deactivate () override;
-      void set_parent (ParentProcess *p) override;
-      string get_content () { return raw_props.text; }
-      void set_content (string& new_content) { _text.set_value (new_content, true); };
-      double get_x () { return raw_props.x; }
-      double get_y () { return raw_props.y; }
-      void set_x (double x) { raw_props.x = x; }
-      void set_y (double y) { raw_props.y = y; }
-      void get_properties_values (double &x, double &y, string &text);
-      virtual FatChildProcess* find_child_impl (const string&) override;
-    private:
-      struct raw_props_t { double x, y; string text; };
-      raw_props_t raw_props;
-      TextPropertyProxy _text;
-      CouplingWithData *_cx, *_cy;
-      CouplingWithData _ctext;
-      bool _init;
-  };
-
   class MultilineEditor : public AbstractGShape {
       class ToggleEditAction : public Action {
         public:
@@ -107,7 +82,7 @@ namespace djnn {
       void set_font_metrics (FontMetricsImpl fm) { _font_metrics = fm; }
       bool first_draw () { return _first_draw; }
 
-      typedef size_t coord_t;
+
     private:
       SimpleText* get_line (int y) { return (SimpleText*)_lines.children ().at(y); }
       void delete_line (SimpleText* st);

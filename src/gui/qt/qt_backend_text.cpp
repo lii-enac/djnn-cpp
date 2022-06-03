@@ -26,11 +26,12 @@
 #include "gui/shape/shapes.h"
 #include "gui/layer.h"
 #include "gui/widgets/multiline_edit.h"
+#include "gui/widgets/text_field.h"
 
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextCursor>
-#include <QFontMetrics>
-#include <QPicture>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QPicture>
 #include <QtWidgets/QWidget>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
@@ -117,6 +118,95 @@ namespace djnn
     QString s = QObject::tr (t->get_content ().c_str ());
     QRect rec = qfm->boundingRect (s);
     return rec.width();
+  }
+
+  void
+  QtBackend::draw_text_field (TextField* tf)
+  {
+    rmt_BeginCPUSample(draw_text_field, RMTSF_Aggregate);
+    load_drawing_context (tf, 0, 0, 1, 1);
+    int start_x = tf->start_x ();
+    int end_x = tf->end_x ();
+    int width = tf->width ();
+    int x = tf->x ();
+    int y = tf->y ();
+    QtContext *cur_context = _context_manager->get_current ();
+
+    _painter->save ();
+    _painter->setFont (cur_context->font);
+
+    /* hack to enable the use of a correct FontMetrics for future cursor positioning */
+    QFontMetrics fm = _painter->fontMetrics ();
+    QFontMetrics *last_fm = (QFontMetrics*) tf->get_font_metrics ();
+    delete last_fm;
+    tf->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
+    double text_height = fm.ascent () + fm.descent ();
+
+    QMatrix4x4& matrix (cur_context->matrix);
+    matrix.translate (x, y + fm.ascent ());
+
+    SimpleText* line = tf->content();
+    QString s = QObject::tr (line->get_content ().c_str ());
+
+    double posX = line->get_x ();
+    double posY = line->get_y ();
+    QPointF p (posX, posY);
+
+
+    p.setX (posX - tf->offset ());
+
+    QPen pen (cur_context->pen);
+    pen.setColor (QColor(tf->text_color()));
+    pen.setStyle (Qt::SolidLine);
+
+    // clip the text
+    _painter->setClipRect (0, 0, width, text_height);
+    _painter->setPen (pen);
+    _painter->setTransform(matrix.toTransform ());
+    _painter->drawText (p, s);
+
+    #if _DEBUG_SEE_GUI_INFO_PREF
+        __nb_Drawing_object++;
+    #endif
+     // draw selection if any
+    if (start_x != end_x) {
+      pen.setStyle (Qt::NoPen);
+      QBrush brush (cur_context->brush);
+      brush.setColor (QColor (tf->selection_color ()));
+      _painter->setBrush (brush);
+      _painter->setPen (pen);
+      matrix.translate (-x, -y - fm.ascent ());
+      _painter->setTransform (matrix.toTransform ());
+      _painter->drawRect (start_x, 0, end_x - start_x,
+        fm.ascent () + fm.descent ());
+      _painter->setClipRect (start_x, 0, end_x - start_x,
+        text_height, Qt::IntersectClip);
+      matrix.translate (x, y + fm.ascent ());
+      _painter->setTransform (matrix.toTransform ());
+      pen.setStyle (Qt::SolidLine);
+      pen.setColor (QColor (tf->selected_text_color ()));
+      _painter->setPen (pen);
+      _painter->drawText (p, s);
+    }
+
+    _painter->restore ();
+
+    if (is_in_picking_view (tf)) {
+      load_pick_context (tf);
+      QRect rect (0, -fm.ascent (), tf->width(), tf->height());
+      _picking_view->painter ()->drawRect (rect);
+#if _DEBUG_SEE_GUI_INFO_PREF
+    __nb_Drawing_object_picking++;
+#endif
+    }
+    // Update font metrics data
+    tf->set_ascent  (fm.ascent ());
+    tf->set_descent (fm.descent ());
+    tf->set_leading (fm.leading ());
+    _context_manager->get_current ()->matrix.translate (-tf->x (), -tf->y () - fm.ascent ());
+
+    rmt_EndCPUSample ();
+
   }
 
   void
@@ -355,6 +445,7 @@ QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
 {
   QFontMetrics *qfm = (QFontMetrics*) fm;
   string text = t->get_content ();
+
   if (text.length() == 0 || x <= 0)
     return 0;
   QString s (text.c_str ());

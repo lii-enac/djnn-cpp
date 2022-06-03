@@ -62,6 +62,8 @@ namespace djnn
     int
     draw_simple_text (SimpleText *t, QFontMetrics* fm, int x, int y);
     void
+    draw_text_field (TextField*) override;
+    void
     draw_simple_text_edit (MultilineEditor*) override;
     int
     compute_index (FontMetricsImpl fm, SimpleText* t, int x) override;

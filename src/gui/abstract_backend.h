@@ -32,6 +32,7 @@ namespace djnn
   class Layer;
   class SimpleText;
   class MultilineEditor;
+  class TextField;
   class AbstractBackend
   {
   public:
@@ -66,6 +67,11 @@ namespace djnn
     }
     virtual void
     draw_simple_text_edit (MultilineEditor*)
+    {
+
+    }
+    virtual void
+    draw_text_field (TextField*)
     {
 
     }
