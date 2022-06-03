@@ -13,55 +13,21 @@
  */
 
 #include "component.h"
-#include "assignment_sequence.h"
 
-#include "core/utils/error.h"
-#include "core/utils/utils-dev.h"
-#include "core/core-dev.h" // graph add/remove edge
-#include "core/tree/component_observer.h"
-#include "core/tree/structure_observer.h"
-
+#ifndef DJNN_NO_SERIALIZE
 #include "core/serializer/serializer.h"
-
-#include "gui/picking/analytical_picking_context.h"
-
-#include "core/utils/ext/remotery/Remotery.h"
-
-#include <algorithm>
-//#include <boost/range/adaptor/reversed.hpp>
-
-#include "core/utils/djnn_dynamic_cast.h"
-
-
-#if !defined(DJNN_NO_DEBUG)
-// #include <__iostream>
-
-//#define DEBUG
-//#define DEBUG_DEACTIVATE
-
 #endif
+
 
 
 namespace djnn
 {
-
-  /*Component*
-  Componentimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
-  {
-    auto * clone = new Component (nullptr, get_name ());
-    for (auto c : _children) {
-      clone->add_child (c->clone (), this->find_child_name(c));
-    }
-    return clone;
-  }*/
-
   Component*
   Component::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
   {
     auto * clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
       auto cclone = c->impl_clone (origs_clones);
-      //origs_clones[c] = cclone;
       clone->add_child (cclone , this->find_child_name(c));
     }
     origs_clones[this] = clone;

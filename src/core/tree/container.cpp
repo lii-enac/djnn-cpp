@@ -13,11 +13,7 @@
  */
 
 #include "container.h"
-#include "assignment_sequence.h"
 
-#include "core/utils/error.h"
-#include "core/utils/utils-dev.h"
-#include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component_observer.h"
 #include "core/tree/structure_observer.h"
 
@@ -25,12 +21,11 @@
 
 #include "gui/picking/analytical_picking_context.h"
 
-#include "core/utils/ext/remotery/Remotery.h"
-
-#include <algorithm>
-//#include <boost/range/adaptor/reversed.hpp>
-
 #include "core/utils/djnn_dynamic_cast.h"
+
+#include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
+#include "core/utils/ext/remotery/Remotery.h"
 
 
 #if !defined(DJNN_NO_DEBUG)
