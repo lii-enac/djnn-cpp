@@ -27,6 +27,7 @@
 #include "core/utils/utils-dev.h"
 #include "core/utils/ext/remotery/Remotery.h"
 
+#include <algorithm>
 
 #if !defined(DJNN_NO_DEBUG)
 // #include <__iostream>
