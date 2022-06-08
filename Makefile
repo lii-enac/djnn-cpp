@@ -594,7 +594,7 @@ $$($1_tidy_srcs): tidy_opts+=$$($1_lib_cppflags)
 
 $1_tidy: $$($1_tidy_srcs)
 
-$1: dirs $$($1_lib)
+$1: $$($1_lib)
 
 $1_clean:
 	rm -f $$($1_objs)
