@@ -936,6 +936,41 @@ pkg:
 
 pkgdeps += bison flex
 
+ifneq ($(pkgcmd),)
+ifeq ($(notdir $(pkgcmd)),apt)
+	pkgcmd := apt add
+	pkgupg := apt
+	
+	pkgdeps += make g++ #llvm ?
+	pkgdeps += pkgconfig
+	pkgdeps += expat-dev curl-dev
+	pkgdeps += openal-soft-dev
+endif
+
+#untested - source only :-/
+ifeq ($(notdir $(pkgcmd)),vcpkg)
+	pkgcmd := vcpkg install
+	pkgupg := apt
+	
+	pkgdeps += pkgconf
+	#pkgdeps += llvm
+	pkgdeps += expat curl
+	pkgdeps += openal-soft-dev
+	ifeq ($(display),QT)
+	pkgdeps += qt5
+	endif
+
+	#CXX = tools/cccl
+endif
+
+#untested - binaries, but unsusaul way of managing pkg :-/
+# ifeq ($(notdir $(pkgcmd)),conan)
+# 	pkgcmd := apt add
+# 	pkgupg := apt
+# endif
+
+else
+
 ifeq ($(os),Linux)
 	pkgcmd := apt install -y
 	pkgupg := apt upgrade -y
@@ -1030,6 +1065,7 @@ ifeq ($(os),MinGW)
 	# endif
 	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
 	pkgdeps += $(mgwpkgdeps)
+endif
 endif
 
 install-pkgdeps:
