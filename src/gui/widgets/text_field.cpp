@@ -161,6 +161,7 @@ namespace djnn
       _c_key_press.disable ();
       _c_release.disable ();
       _c_move.disable ();
+      _offset = 0;
     }
     _edit_enabled.set_value (v, true);
   }

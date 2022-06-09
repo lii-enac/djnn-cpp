@@ -191,14 +191,13 @@ namespace djnn
 
     _painter->restore ();
 
-    if (is_in_picking_view (tf)) {
-      load_pick_context (tf);
-      QRect rect (0, -fm.ascent (), tf->width(), tf->height());
-      _picking_view->painter ()->drawRect (rect);
+    load_pick_context (tf);
+    QRect rect (0, -fm.ascent (), tf->width(), tf->height());
+    _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
-    }
+
     // Update font metrics data
     tf->set_ascent  (fm.ascent ());
     tf->set_descent (fm.descent ());
