@@ -7,7 +7,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added
     - Update the Docs !
+    - test on Native Windows 10 compilation
 
+## [1.18.0] - 2022-06-09
+
+### NEW
+    - NEW LazyConnector component : if the value did change -> don't raise any event.
+    - NEW LazyAssignment component : if the value did change -> don't raise any event.
+    - NEW enum type for font weight : DJN_LIGHT, DJN_NORMAL, DJN_DEMI_BOLD, DJN_BOLD, DJN_BLACK
+    - NEW add getset macros : GET_CHILD, GET_CHILD_VALUE, SET_CHILD_VALUE (see: src/core/utils/getset.h)
+    - NEW a generic keyboard component
+    - NEW Makefile: add ninja support
+### Added
+    - Added new experimental mode - _AUTHORIZE_CYCLE
+    - Added support to image raw data.
+    - Added Qtablet events management
+    - Added remotery sampling in text drawing
+    - Added a Clear spike on MultilineEdit componant
+### Changed
+    - Makefile: reorganize pch
+    - Compute bbox of graphical shapes only if a value changed
+    - Layers auto re-display when their children changed
+    - Rearrangement of source files
+    - Made "ms" optional for wallclock
+    - Improved debug information on CoreAssignment componant.
+    - Removed accumulation on Move Events (mouse and touch)
+    - Scheduled activation for all needed mouse/touch events.
+    - Remade wheel events computation and added to graphical shapes
+    - Improved debug messages.
+    - Cleaned Code, comments
+### Fixed
+    - Fixe a bug on find_chil_impl for djnn::List getting parent eg: ../foobar
+    - Fixed clean_up_content on djnn::List
+    - Fixed fill color alpha management
+    - Fixed a bug in graph cycles detection
+    - Fixed bug with empty image
 
 ## [1.17.0] - 2022-01-05  
 ### NEW
