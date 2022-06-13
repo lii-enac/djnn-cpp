@@ -170,6 +170,10 @@ namespace djnn
     pick_gshape (AbstractGShape *s)
     {
     }
+    virtual void
+    draw_z_ordered_group (ZOrderedGroup *g)
+    {
+    }
 
     /* style */
     virtual void

@@ -18,6 +18,7 @@
 #include "qt/qt_picking_view.h"
 #include "gui/abstract_backend.h"
 
+#include "gui/qt/qt_context.h"
 #include <QtGui/QPainterPath>
 
 #include <mutex> // std::once_flag
@@ -107,7 +108,7 @@ namespace djnn
     draw_data_image (DataImage *i) override;
     bool pre_draw_layer (Layer* l) override;
     void post_draw_layer (Layer* l) override;
-
+    void draw_z_ordered_group (ZOrderedGroup *g) override;
     //style
     void
     load_fill_color (AbstractColor *c) override;
@@ -202,9 +203,9 @@ namespace djnn
     static std::once_flag onceFlag;
     QtBackend ();
     void
-    load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height);
+    load_drawing_context (AbstractGShape *s, QtContext* context, double tx, double ty, double width, double height);
     void
-    load_pick_context (AbstractGShape *s);
+    load_pick_context (AbstractGShape *s, QtContext* context);
     void
     prepare_gradient (AbstractGradient *g);
     bool

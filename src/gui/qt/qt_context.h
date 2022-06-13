@@ -15,13 +15,18 @@
 #pragma once
 
 #include "gui/style/style_types.h"
+#include "gui/shape/abstract_gshape.h"
 #include "core/tree/component_observer.h"
+
+#include <vector>
+#include <utility>
 
 #include <QtGui/QPen>
 #include <QtGui/QBrush>
 #include <QtGui/QMatrix4x4>
 #include <QtGui/QTransform>
 #include <QtGui/QFont>
+#include <QtGui/QPainterPath>
 
 namespace djnn
 {
@@ -40,7 +45,9 @@ namespace djnn
     QBrush brush;
     QMatrix4x4 matrix;
     QTransform gradientTransform;
+    QTransform clipTransform;
     QFont font;
+    QPainterPath clip;
     double factor[10];
     int textAnchor;
     unsigned int _pick_bitset;
@@ -88,5 +95,24 @@ namespace djnn
   private:
     vector<QtContext*> _context_list;
   };
+
+  class QtVectorShapeToDraw {
+    public:
+      QtVectorShapeToDraw (int z_order) : _z_order (z_order) {}
+      virtual ~QtVectorShapeToDraw ();
+      void draw ();
+      int z_order () { return _z_order; }
+      void add_item (AbstractGShape* shape, QtContext *context);
+      vector< std::pair<AbstractGShape*, QtContext> > shapes () { return _shapes; }
+    private:
+      vector< std::pair<AbstractGShape*, QtContext> > _shapes;
+      int _z_order;
+  };
+
+  void add_shape (AbstractGShape* shape, QtContext *context);
+  void clear_shapes ();
+  extern vector<QtVectorShapeToDraw*> shapes_vectors;
+  extern int z_processing_step;
+  extern QtContext *cur_context;
 
 } /* namespace djnn */

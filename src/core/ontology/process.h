@@ -36,7 +36,8 @@ namespace djnn {
     WORLD_T,
     DEFS_T,
     LAYER_T,
-    SYNCHRONIZER_T
+    SYNCHRONIZER_T,
+    Z_ORDERED_GROUP_T
   };
   //using enum process_type_e;
 
@@ -75,6 +76,7 @@ namespace djnn {
     AFTER,
     LAST
   };
+
   //using enum child_position_e;
 
   class Coupling;

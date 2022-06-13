@@ -98,11 +98,10 @@ namespace djnn
 
   /* Qt context management is imported from djnn v1 */
   void
-  QtBackend::load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height)
+  QtBackend::load_drawing_context (AbstractGShape *s, QtContext* cur_context, double tx, double ty, double width, double height)
   {
     rmt_BeginCPUSample(load_drawing_context, RMTSF_Aggregate);
 
-    QtContext *cur_context = _context_manager->get_current ();
     const QMatrix4x4& matrix = cur_context->matrix;
     const QTransform transform = matrix.toTransform ();
     if (s->matrix () != nullptr) {
@@ -169,6 +168,15 @@ namespace djnn
       tmpPen.setDashPattern (tmp);
       tmpPen.setDashOffset (cur_context->pen.dashOffset () / w);
     }
+    if (z_processing_step == 2) {
+      if (!cur_context->clip.isEmpty ()) {
+       _painter->setTransform (cur_context->clipTransform);
+       _painter->setClipPath (cur_context->clip);
+      } else {
+        _painter->setClipping (false);
+      }
+    }
+
     _painter->setRenderHint (QPainter::Antialiasing, true);
     _painter->setPen (tmpPen);
     _painter->setTransform (transform);
@@ -204,11 +212,10 @@ namespace djnn
   }
 
   void
-  QtBackend::load_pick_context (AbstractGShape *s)
+  QtBackend::load_pick_context (AbstractGShape *s, QtContext *cur_context)
   {
     rmt_BeginCPUSample(load_pick_context, RMTSF_Aggregate);
 
-    QtContext *cur_context = _context_manager->get_current ();
     QBrush pickBrush (_picking_view->pick_color ());
     QPen pickPen;
     if ( (cur_context->pen.style () == Qt::NoPen && cur_context->pick_outline_undefined () == true)

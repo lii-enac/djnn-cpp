@@ -29,7 +29,7 @@ namespace djnn
   class AbstractGShape : public AbstractGObj, public PickUI
   {
   public:
-    AbstractGShape (ParentProcess* parent, const string& name);
+    AbstractGShape (ParentProcess* parent, const string& name, int z_order = 0);
     virtual ~AbstractGShape ();
     FatProcess* matrix () { return _matrix; }
     FatProcess* inverted_matrix () { return _inverted_matrix; }
@@ -49,13 +49,15 @@ namespace djnn
     virtual void get_bounding_box (double& x, double& y, double& w, double& h) const;
     virtual double sdf (double x, double y) const;
     void set_mouse_local_coords (double x, double y, bool is_move) override;
-
+    int z_order () { return _z.get_value (); }
   protected:
     void init_ui ();
   private:
     FatProcess* _matrix, *_inverted_matrix;
     DoubleProperty *_origin_x, *_origin_y;
+    IntProperty _z;
     vector<int> _classes;
+    CouplingWithData* _c_z_prop;
   };
 
   inline bool is_pickable (AbstractGShape * s) {

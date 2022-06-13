@@ -35,4 +35,5 @@ namespace djnn {
   using djnnstl::list;
   using djnnstl::map;
   using djnnstl::pair;
+  using djnnstl::make_pair;
 }

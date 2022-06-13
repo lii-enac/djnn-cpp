@@ -41,6 +41,8 @@ namespace djnn
   extern FatProcess *GenericMouse;
   extern GUIStructureObserver * gui_structure_observer;
 
+  int z_order_enabled = 0;
+
   void init_svg_parser ();
   void clear_svg_parser ();
 

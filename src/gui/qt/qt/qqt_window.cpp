@@ -12,6 +12,7 @@
  *
  */
 
+#include "gui/gui-dev.h"
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 
@@ -24,6 +25,9 @@
 #include "exec_env/qt/qt_mainloop.h"
 #include "exec_env/global_mutex.h"
 #include "core/utils/ext/remotery/Remotery.h"
+#include "gui/qt/qt_context.h"
+
+#include <algorithm>
 
 #include <QEvent>
 #include <QTouchEvent>
@@ -304,7 +308,7 @@ namespace djnn
 
       t1();
       rmt_BeginCPUSample(draw, RMTSF_None);
-    
+
       p->draw ();
 
       rmt_EndCPUSample ();

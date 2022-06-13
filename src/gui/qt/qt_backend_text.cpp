@@ -58,16 +58,16 @@ namespace djnn
   QtBackend::draw_simple_text (SimpleText *t, QFontMetrics* fm, int posX, int posY)
   {
     rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     QString s = QObject::tr (t->get_content ().c_str ());
-    QtContext *cur_context = _context_manager->get_current ();
     //rmt_BeginCPUSample(text_load_drawing_context, RMTSF_Aggregate);
-    load_drawing_context (t, posX, posY, 1, 1);
+    load_drawing_context (t, _context, posX, posY, 1, 1);
     //rmt_EndCPUSample ();
     QPointF p (posX, posY);
-    QPen oldPen = cur_context->pen;
+    QPen oldPen = _context->pen;
     QPen newPen (oldPen);
-    newPen.setColor (cur_context->brush.color ());
-    if (cur_context->brush.style () == Qt::SolidPattern)
+    newPen.setColor (_context->brush.color ());
+    if (_context->brush.style () == Qt::SolidPattern)
       newPen.setStyle (Qt::SolidLine);
     else
       newPen.setStyle (Qt::NoPen);
@@ -77,7 +77,7 @@ namespace djnn
     QRect rect = fm->boundingRect (s);
     rmt_EndCPUSample ();
     /* applying alignment attribute */
-    switch (cur_context->textAnchor)
+    switch (_context->textAnchor)
     {
       case DJN_MIDDLE_ANCHOR:
       posX = posX - (rect.width () / 2.0);
@@ -99,7 +99,7 @@ namespace djnn
     /* Don't forget to reset the old pen color */
     _painter->setPen (oldPen);
     if (is_in_picking_view (t)) {
-      load_pick_context (t);
+      load_pick_context (t, _context);
       _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
       __nb_Drawing_object_picking++;
@@ -124,16 +124,21 @@ namespace djnn
   QtBackend::draw_text_field (TextField* tf)
   {
     rmt_BeginCPUSample(draw_text_field, RMTSF_Aggregate);
-    load_drawing_context (tf, 0, 0, 1, 1);
+    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    if (z_processing_step == 1) {
+      add_shape (tf, _context);
+      return;
+    }
+    load_drawing_context (tf, _context, 0, 0, 1, 1);
     int start_x = tf->start_x ();
     int end_x = tf->end_x ();
     int width = tf->width ();
     int x = tf->x ();
     int y = tf->y ();
-    QtContext *cur_context = _context_manager->get_current ();
+
 
     _painter->save ();
-    _painter->setFont (cur_context->font);
+    _painter->setFont (_context->font);
 
     /* hack to enable the use of a correct FontMetrics for future cursor positioning */
     QFontMetrics fm = _painter->fontMetrics ();
@@ -171,7 +176,7 @@ namespace djnn
      // draw selection if any
     if (start_x != end_x) {
       pen.setStyle (Qt::NoPen);
-      QBrush brush (cur_context->brush);
+      QBrush brush (_context->brush);
       brush.setColor (QColor (tf->selection_color ()));
       _painter->setBrush (brush);
       _painter->setPen (pen);
@@ -191,7 +196,7 @@ namespace djnn
 
     _painter->restore ();
 
-    load_pick_context (tf);
+    load_pick_context (tf, _context);
     QRect rect (0, -fm.ascent (), tf->width(), tf->height());
     _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
@@ -202,7 +207,7 @@ namespace djnn
     tf->set_ascent  (fm.ascent ());
     tf->set_descent (fm.descent ());
     tf->set_leading (fm.leading ());
-    _context_manager->get_current ()->matrix.translate (-tf->x (), -tf->y () - fm.ascent ());
+    _context->matrix.translate (-tf->x (), -tf->y () - fm.ascent ());
 
     rmt_EndCPUSample ();
 
@@ -212,9 +217,13 @@ namespace djnn
   QtBackend::draw_simple_text_edit (MultilineEditor* ste)
   {
     rmt_BeginCPUSample(draw_simple_text_edit, RMTSF_Aggregate);
+    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
-    QtContext *cur_context = _context_manager->get_current ();
-    _painter->setFont (cur_context->font);
+    if (z_processing_step == 1) {
+      add_shape (ste, _context);
+      return;
+    }
+    _painter->setFont (_context->font);
     QFontMetrics fm = _painter->fontMetrics ();
 
     /* hack to enable the use of a correct FontMetrics for future cursor positioning */
@@ -222,7 +231,7 @@ namespace djnn
     delete last_fm;
     ste->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
 
-    load_drawing_context (ste, 0, 0, 1, 1);
+    load_drawing_context (ste, _context, 0, 0, 1, 1);
     _context_manager->get_current ()->matrix.translate (ste->x (), ste->y () + fm.ascent ());
     int y = 0;
     int height = fm.height() + fm.leading ();
@@ -234,7 +243,7 @@ namespace djnn
       }
       draw_simple_text(line, &fm, line->get_x (), line->get_y ());
     }
-    load_pick_context (ste);
+    load_pick_context (ste, _context);
     QRect rect (0, -fm.ascent (), ste->width(), ste->height());
     _picking_view->painter ()->drawRect (rect);
     // Update font metrics data
@@ -255,15 +264,19 @@ namespace djnn
   QtBackend::draw_text (Text *t)
   {
     rmt_BeginCPUSample(draw_text, RMTSF_Aggregate);
+    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
+    if (z_processing_step == 1) {
+      add_shape (t, _context);
+      return;
+    }
     double x, y, dx, dy;
     int dxU, dyU, width, height, encoding;
     string text;
     t->get_properties_values(x, y, dx, dy, dxU, dyU, width, height, encoding, text);
 
-    QtContext *cur_context = _context_manager->get_current ();
-    double dxfactor = cur_context->factor[dxU];
-    double dyfactor = cur_context->factor[dyU];
+    double dxfactor = _context->factor[dxU];
+    double dyfactor = _context->factor[dyU];
 
     if (dxU == DJN_PERCENT) {
       int v = DisplayBackend::instance()->window()->width ()->get_value ();
@@ -298,19 +311,19 @@ namespace djnn
     /* dummy value for width-height parameters because we do not manage
      gradient for text object
      */
-    load_drawing_context (t, x, y, 1, 1);
+    load_drawing_context (t, _context, x, y, 1, 1);
 
     /* Qt draws text with the outline color
      but we want it to use the fill color */
-    QPen oldPen = cur_context->pen;
+    QPen oldPen = _context->pen;
     QPen newPen (oldPen);
-    newPen.setColor (cur_context->brush.color ());
-    if (cur_context->brush.style () == Qt::SolidPattern)
+    newPen.setColor (_context->brush.color ());
+    if (_context->brush.style () == Qt::SolidPattern)
       newPen.setStyle (Qt::SolidLine);
     else
       newPen.setStyle (Qt::NoPen);
     _painter->setPen (newPen);
-    _painter->setFont (cur_context->font);
+    _painter->setFont (_context->font);
 
     rmt_BeginCPUSample(qt_fontMetrics, RMTSF_Aggregate);
     QFontMetrics fm = _painter->fontMetrics ();
@@ -327,7 +340,7 @@ namespace djnn
     t->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
 
     /* applying alignment attribute */
-    switch (cur_context->textAnchor)
+    switch (_context->textAnchor)
     {
       case DJN_MIDDLE_ANCHOR:
       posX = posX - (rect.width () / 2.0);
@@ -360,7 +373,7 @@ namespace djnn
     _painter->setPen (oldPen);
 
     if (is_in_picking_view (t)) {
-      load_pick_context (t);
+      load_pick_context (t, _context);
       _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
       __nb_Drawing_object_picking++;

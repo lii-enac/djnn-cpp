@@ -18,6 +18,7 @@
 #include "core/property/double_property.h"
 #include "core/control/spike.h"
 
+
 namespace djnn {
 
   typedef vector<pair<FatChildProcess*, size_t>> children_t; // TODO better structure ??
@@ -41,6 +42,7 @@ namespace djnn {
     };
 
     typedef map<FatChildProcess*, GUIStructureHolder*> structures_t;
+    typedef map<FatChildProcess*, GUIStructureHolder*>::iterator structures_t_it;
     class GUIStructureObserver : public StructureObserver {
     public:
       GUIStructureObserver () { }
@@ -53,6 +55,7 @@ namespace djnn {
       void remove_child_from_container (FatProcess *cont, FatChildProcess *c) override;
       void swap_children (FatProcess *cont, int i, int j) override;
       void set_child (FatProcess *cont, FatChildProcess *child, int i) override;
+      GUIStructureHolder* find_holder (FatChildProcess* cont);
       //void print_structure_map ();
       structures_t& structure_map () { return _structure_map;};
     private:

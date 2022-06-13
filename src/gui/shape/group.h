@@ -18,4 +18,13 @@ namespace djnn {
     protected:
         AbstractGObj *_gobj;
     };
+
+    class ZOrderedGroup : public Group
+    {
+    public:
+        ZOrderedGroup (ParentProcess* parent, const string& name) : Group (parent, name) {}
+        process_type_e get_process_type () const override { return Z_ORDERED_GROUP_T; }
+        virtual ~ZOrderedGroup () override {};
+        void draw () override;
+    };
 }

@@ -79,4 +79,12 @@ namespace djnn
     return clone;
   }
 
+  void
+  ZOrderedGroup::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->draw_z_ordered_group (this);
+    }
+  }
 }

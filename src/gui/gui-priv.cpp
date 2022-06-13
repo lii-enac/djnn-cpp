@@ -100,12 +100,15 @@ namespace djnn {
         ComponentObserver::instance ().start_draw ();
         if (Backend::instance ()->pre_draw_layer (l)) {
           for (auto p : _children) {
-            p.first->draw ();         
+            p.first->draw ();
           } 
         }
         Backend::instance ()->post_draw_layer (l);
         ComponentObserver::instance ().end_draw ();
       }
+    }
+    else if (content_process->get_process_type () == Z_ORDERED_GROUP_T ) {
+       content_process->draw ();
     }
     //if other container 
     else {
@@ -366,6 +369,15 @@ namespace djnn {
     if (it_cont != _structure_map.end ())
       it_cont->second->set_child (child, i);
     cont->update_drawing ();
+  }
+
+  GUIStructureHolder*
+  GUIStructureObserver::find_holder (FatChildProcess* cont)
+  {
+    structures_t_it it = _structure_map.find(cont);
+    if (it != _structure_map.end())
+      return it->second;
+    return nullptr;
   }
 
   GUIMouseButton::GUIMouseButton (ParentProcess* parent, const string& name)

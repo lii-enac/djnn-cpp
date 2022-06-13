@@ -24,5 +24,6 @@ namespace djnn {
     class RectangleClip;
     
     class Group;
+    class ZOrderedGroup;
     class Defs;
 }

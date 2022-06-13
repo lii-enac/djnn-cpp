@@ -28,6 +28,7 @@ namespace djnn {
   // extern int hide_pointer;
   // extern FatProcess* DrawingRefreshManager;
   extern FatProcess* GenericMouse;
+  extern int z_order_enabled;
 
   void init_gui ();
   void clear_gui ();

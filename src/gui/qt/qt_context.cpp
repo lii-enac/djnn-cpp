@@ -23,6 +23,10 @@
 
 namespace djnn
 {
+  vector<QtVectorShapeToDraw*> shapes_vectors;
+  int z_processing_step = 0;
+  QtContext *cur_context = nullptr;
+
   QtContext*
   QtContextManager::get_current ()
   {
@@ -50,7 +54,7 @@ namespace djnn
 
   QtContext::QtContext () :
       pen (QColor ("darkslategray"), 1, Qt::NoPen, Qt::FlatCap, Qt::MiterJoin), brush (QColor ("black"),
-                                                                                            Qt::SolidPattern), matrix (), gradientTransform (), font (), _pick_bitset (0b0101)
+                                                                                            Qt::SolidPattern), matrix (), gradientTransform (), clipTransform(), font (), _pick_bitset (0b0101)
   {
     alpha = 1;
     fillRule = Qt::OddEvenFill;
@@ -71,8 +75,10 @@ namespace djnn
     pen = QPen (p->pen);
     brush = QBrush (p->brush);
     matrix = QMatrix4x4 (p->matrix);
-    gradientTransform = QTransform (gradientTransform);
+    gradientTransform = QTransform (p->gradientTransform);
+    clipTransform = QTransform (p->clipTransform);
     font = QFont (p->font);
+    clip = QPainterPath (p->clip);
     alpha = p->alpha;
     fillRule = p->fillRule;
     textAnchor = p->textAnchor;
@@ -100,4 +106,59 @@ namespace djnn
     return factor[unit];
   }
 
+  QtVectorShapeToDraw::~QtVectorShapeToDraw () {
+    //for (auto p : _shapes) {
+      //delete p.second;
+    //}
+  }
+
+  void
+  QtVectorShapeToDraw::add_item (AbstractGShape* shape, QtContext *context) {
+    _shapes.push_back (make_pair(shape, QtContext (context)));
+  }
+
+  void
+  QtVectorShapeToDraw::draw () {
+    for (auto p : _shapes) {
+      p.first->draw();
+    }
+  }
+  void add_shape (AbstractGShape* shape, QtContext *context)
+  {
+    int z = shape->z_order();
+    if (shapes_vectors.empty () || shapes_vectors.back()->z_order() < z) {
+      QtVectorShapeToDraw* v = new QtVectorShapeToDraw (z);
+      v->add_item(shape, context);
+      shapes_vectors.push_back(v);
+      return;
+    }
+    if (shapes_vectors.at(0)->z_order() > z) {
+      QtVectorShapeToDraw* v = new QtVectorShapeToDraw (z);
+      v->add_item(shape, context);
+      vector<QtVectorShapeToDraw*>::iterator it = shapes_vectors.begin ();
+      shapes_vectors.insert(it, v);
+      return;
+    }
+    vector<QtVectorShapeToDraw*>::iterator it = shapes_vectors.begin ();
+    while (it != shapes_vectors.end ()) {
+      if ((*it)->z_order () == z) {
+        (*it)->add_item(shape, context);
+        return;
+      }
+      if ((*it)->z_order () < z && (*(it+1))->z_order () > z) {
+        QtVectorShapeToDraw* v = new QtVectorShapeToDraw (z);
+        v->add_item(shape, context);
+        shapes_vectors.insert(it+1, v);
+        return;
+      }
+      it++;
+    }
+  }
+
+  void clear_shapes ()
+  {
+    for (auto v : shapes_vectors) {
+      delete v;
+    }
+  }
 } /* namespace djnn */

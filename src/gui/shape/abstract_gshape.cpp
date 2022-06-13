@@ -13,6 +13,8 @@
  *
  */
 
+#include "gui/gui-dev.h"
+#include "gui/layer.h"
 #include "abstract_gshape.h"
 #include "gui/transformation/homography.h"
 #include "core/control/spike.h"
@@ -185,8 +187,8 @@ namespace djnn
 
   }
 
-  AbstractGShape::AbstractGShape (ParentProcess* parent, const string& name) :
-    AbstractGObj (parent, name), PickUI (false), _matrix (nullptr), _inverted_matrix (nullptr)
+  AbstractGShape::AbstractGShape (ParentProcess* parent, const string& name, int z) :
+    AbstractGObj (parent, name), PickUI (false), _matrix (nullptr), _inverted_matrix (nullptr), _z (this, "z", z), _c_z_prop (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
@@ -216,8 +218,12 @@ namespace djnn
     else if ((_inverted_matrix == nullptr) && (key.compare ("inverted_matrix") == 0)) {
       _inverted_matrix = new Homography (this, "inverted_matrix");
       _inverted_matrix->set_activation_state (ACTIVATED);
-    }
-    else {
+    } else if (_c_z_prop == nullptr && (key.compare ("z") == 0)) {
+      FatProcess *update = nullptr;
+      if (find_layer ()) update = find_layer()->damaged ();
+      else if (get_frame ()) update = get_frame ()->damaged ();
+      _c_z_prop = new CouplingWithData (&_z, ACTIVATION, update, ACTIVATION);
+    } else {
       /*  "press", "release", "move", "enter", "leave", "touches" */
       vector<string>::iterator it = __ui_interface.begin ();
       found = false;
@@ -245,7 +251,7 @@ namespace djnn
         }
       }
     }
-
+    if (_c_z_prop != nullptr) disable (_c_z_prop);
     AbstractGObj::impl_deactivate ();
   }
 
@@ -253,6 +259,8 @@ namespace djnn
   AbstractGShape::impl_activate ()
   {
    AbstractGObj::impl_activate ();
+   auto _frame = get_frame ();
+   if (_c_z_prop != nullptr) enable (_c_z_prop, _frame->damaged ());
    if (_ui)
      _ui->activate (get_frame());
   }
@@ -279,6 +287,7 @@ namespace djnn
     delete _matrix;
     delete _inverted_matrix;
 
+    delete _c_z_prop;
   }
 
   void
