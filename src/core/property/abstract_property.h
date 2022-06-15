@@ -59,4 +59,21 @@ namespace djnn {
     void impl_deactivate () override {}
     unsigned int _notify_mask;
   };
+
+  inline
+  double
+  get_property_value(const AbstractProperty* ap) {
+     return ap->get_double_value();
+  }
+
+  inline
+  double
+  get_property_value(const FatChildProcess* fcp) {
+    auto * ap = dynamic_cast<const AbstractProperty*>(fcp);
+    if (!ap) {
+      //warning (fcp, "not a property"); // FIXME warn or do something
+      return -1;
+    }
+    return ap->get_double_value();
+  }
 }

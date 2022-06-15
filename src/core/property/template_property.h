@@ -21,7 +21,7 @@ namespace djnn {
 
     template <typename X>
     struct TemplatePropertyType {
-        static const PropertyType type;
+        static const PropertyType type = UserDefined; // by default
     };
 
     template <typename X>
@@ -45,29 +45,10 @@ namespace djnn {
         virtual void set_value (const string& v, bool propagate) override {}
         virtual void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); }
 
-        // virtual void set_value (int v, bool propagate) override { my_set_value(v, propagate); }
-        // virtual void set_value (double v, bool propagate) override { my_set_value(v, propagate); }
-        // virtual void set_value (bool v, bool propagate) override { my_set_value(v, propagate); }
-        // virtual void set_value (CoreProcess* v, bool propagate) override { }
-        // virtual void set_value (const string& v, bool propagate) override {
-        //     try {
-        //         auto b = s_to_p(v, X());
-        //         my_set_value(b, propagate);
-        //     }
-        //     catch (const std::invalid_argument& ia) {
-        //     }
-        // }
-        // virtual void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); }
-
         double get_double_value () override { return 0; }
         double get_double_value () const override { return 0; }
         string get_string_value () override { return djnn::string (); }
         string get_string_value () const override { return djnn::string (); }
-        
-        // double get_double_value () override { return get_ref_value(); }
-        // double get_double_value () const override { return get_ref_value(); }
-        // string get_string_value () override { return djnn::to_string (get_ref_value ()); }
-        // string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
         X& get_value () { return get_ref_value(); }
         const X& get_value () const { return get_ref_value(); }
@@ -76,6 +57,14 @@ namespace djnn {
         virtual X& get_ref_value() = 0;
         virtual const X& get_ref_value() const = 0;
     };
+
+    template <class X>
+    inline
+    const X&
+    get_property_value(const AbstractTemplateProperty<X>* ap) {
+        return ap->get_value();
+    }
+
 
     template <typename X>
     class TemplateProperty : public AbstractTemplateProperty<X> {
