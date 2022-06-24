@@ -31,7 +31,7 @@ namespace djnn {
   class TAbstractCoreAssignment : public CoreProcess
   {
   public:
-    TAbstractCoreAssignment (AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TAbstractCoreAssignment (X* src, X* dst, bool is_model=false)
     : CoreProcess (is_model), _src(src), _dst(dst)
     {
       graph_add_edge (src, dst);
@@ -58,8 +58,8 @@ namespace djnn {
       CoreProcess::set_parent (parent);
     }
 
-    AbstractTemplateProperty<X>* get_src () { return _src; /*_ttassignment->get_src ();*/ }
-    AbstractTemplateProperty<X>* get_dst () { return _dst; /*_ttassignment->get_dst ();*/ }
+    X* get_src () { return _src; /*_ttassignment->get_src ();*/ }
+    X* get_dst () { return _dst; /*_ttassignment->get_dst ();*/ }
     virtual void perform_action () = 0;
     
   protected:
@@ -67,7 +67,7 @@ namespace djnn {
     void impl_deactivate () override {}
     void post_activate   () override { post_activate_auto_deactivate (); }
 
-    AbstractTemplateProperty<X> *_src, *_dst;
+    X *_src, *_dst;
 
     //TTAssignment * _ttassignment;
     
@@ -81,11 +81,11 @@ public:
   class TCoreAssignment : public TAbstractCoreAssignment<X>
   {
   public:
-    TCoreAssignment (AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCoreAssignment (X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (src, dst, is_model)
     {
     }
-    TCoreAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCoreAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (parent, name, src, dst, is_model)
     {
     }
@@ -101,11 +101,11 @@ public:
   class TCorePausedAssignment : public TAbstractCoreAssignment<X>
   {
   public:
-    TCorePausedAssignment (AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCorePausedAssignment (X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (src, dst, is_model)
     {
     }
-    TCorePausedAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCorePausedAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (parent, name, src, dst, is_model)
     {
     }
@@ -121,11 +121,11 @@ public:
   class TCoreLazyAssignment : public TAbstractCoreAssignment<X>
   {
   public:
-    TCoreLazyAssignment (AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCoreLazyAssignment (X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (src, dst, is_model)
     {
     }
-    TCoreLazyAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TCoreLazyAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : TAbstractCoreAssignment<X> (parent, name, src, dst, is_model)
     {
     }
@@ -151,7 +151,7 @@ public:
       void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    TAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -198,12 +198,12 @@ public:
 
     void perform_action ();
 
-    AbstractTemplateProperty<X>* get_src() { return _src; }
-    AbstractTemplateProperty<X>* get_dst() { return _dst; }
+    X* get_src() { return _src; }
+    X* get_dst() { return _dst; }
 
   private:
-    AbstractTemplateProperty<X> *_src;
-    AbstractTemplateProperty<X> *_dst;
+    X *_src;
+    X *_dst;
     AssignmentAction _action;
     TTAssignment * _ttassignment;
 
@@ -221,7 +221,7 @@ public:
   class TPausedAssignment : public TAssignment<X>
   {
   public:
-    TPausedAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TPausedAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : TAssignment<X> (parent, name, src, dst, is_model)
     {
       TAssignment<X>::_propagate = false;
@@ -240,7 +240,7 @@ public:
   class TLazyAssignment : public TAssignment<X>
   {
   public:
-    TLazyAssignment (ParentProcess* parent, const string& name, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool is_model=false)
+    TLazyAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
     : TAssignment<X> (parent, name, src, dst, is_model)
     {
       TAssignment<X>::_lazy = true;
@@ -256,9 +256,9 @@ public:
   };
 
   template <typename X>
-  void TMultiAssignment (ParentProcess* parent, AbstractTemplateProperty<X>* src, vector <string> src_props, AbstractTemplateProperty<X>* dst, vector <string> dst_props, bool copy_on_activation);
+  void TMultiAssignment (ParentProcess* parent, X* src, vector <string> src_props, X* dst, vector <string> dst_props, bool copy_on_activation);
   
   template <typename X>
-  void TMultiAssignment (ParentProcess* parent, AbstractTemplateProperty<X>* src, AbstractTemplateProperty<X>* dst, bool copy_on_activation);
+  void TMultiAssignment (ParentProcess* parent, X* src, X* dst, bool copy_on_activation);
 
 }

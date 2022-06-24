@@ -53,6 +53,8 @@ namespace djnn {
         X& get_value () { return get_ref_value(); }
         const X& get_value () const { return get_ref_value(); }
 
+        using type=X;
+
     protected:
         virtual X& get_ref_value() = 0;
         virtual const X& get_ref_value() const = 0;
@@ -76,6 +78,7 @@ namespace djnn {
             origs_clones[this] = res;
             return res;
         }
+        using type=X;
     protected:
         virtual X& get_ref_value() override { return value; }
         virtual const X& get_ref_value() const override { return value; }
@@ -98,6 +101,7 @@ namespace djnn {
             origs_clones[this] = res;
             return res;
         }
+        using type=X;
     protected:
         virtual X& get_ref_value() override { return value; }
         virtual const X& get_ref_value() const override { return value; }
