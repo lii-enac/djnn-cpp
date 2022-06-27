@@ -24,7 +24,7 @@ namespace djnn {
   typedef map<string, FatChildProcess*> context_t;
   public:
     typedef vector<FatChildProcess*> ordered_children_t;
-    Container (ParentProcess* parent, const string& name);
+    Container (ParentProcess* parent, const string& name, bool is_model=false);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void add_child (FatChildProcess* c, const string& name) override;
     void move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child = 0) override;

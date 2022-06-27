@@ -42,8 +42,8 @@ namespace djnn
 {
   
 
-  Container::Container (ParentProcess* parent, const string& name) :
-      FatProcess (name)
+  Container::Container (ParentProcess* parent, const string& name, bool is_model) :
+      FatProcess (name, is_model)
   {
     for (auto s: structure_observer_list) {
       s->add_container (this);

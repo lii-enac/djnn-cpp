@@ -21,7 +21,7 @@ namespace djnn {
   class Component : public Container
   {
   public:
-    Component (ParentProcess* parent, const string& name) : Container (parent, name) { finalize_construction (parent, name); }
+    Component (ParentProcess* parent, const string& name, bool is_model=false) : Container (parent, name, is_model) { finalize_construction (parent, name); }
     //virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     //Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     Component* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
