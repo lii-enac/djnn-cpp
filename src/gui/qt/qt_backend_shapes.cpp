@@ -503,7 +503,9 @@ namespace djnn
      return;
     }
     load_drawing_context (s, _context, x, y, w, h);
-    _painter->setClipRect (x, y, w, h);
+    QPainterPath clip;
+    clip.addRect (x, y, w, h);
+    _painter->setClipPath (clip, Qt::IntersectClip);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
@@ -511,7 +513,7 @@ namespace djnn
 
       rmt_BeginCPUSample(draw_rectangle_clip_picking, RMTSF_Aggregate);
       load_pick_context (s, _context_manager->get_current ());
-      _picking_view->painter ()->setClipRect (x, y, w, h);
+      _picking_view->painter ()->setClipPath (clip, Qt::IntersectClip);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
@@ -545,7 +547,7 @@ namespace djnn
     load_drawing_context (p, _context, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                           cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
 
-    _painter->setClipPath (cur_path, Qt::ReplaceClip); // could be Qt::UniteClip
+    _painter->setClipPath (cur_path, Qt::IntersectClip); // could be Qt::ReplaceClip
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
@@ -553,7 +555,7 @@ namespace djnn
 
       rmt_BeginCPUSample(draw_path_clip_picking, RMTSF_Aggregate);
       load_pick_context (p, _context);
-      _picking_view->painter ()->setClipPath (cur_path);
+      _picking_view->painter ()->setClipPath (cur_path, Qt::IntersectClip);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
