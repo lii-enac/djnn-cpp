@@ -52,6 +52,6 @@ package() {
 	cd "$pkgname-$pkgver"
 	echo $pkgdir
 	#	cd "$pkgname"
-	echo make -j6 DESTDIR="$pkgdir/" PREFIX="/usr" install
-	make -j6 DESTDIR="$pkgdir/" PREFIX="/usr" install
+	echo make -j6 DESTDIR="$pkgdir/" PREFIX="/mingw64" install
+	make -j6 DESTDIR="$pkgdir/" PREFIX="/mingw64" install
 }	
