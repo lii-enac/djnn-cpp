@@ -38,7 +38,7 @@ namespace djnn {
       //_ttassignment = build_ttassignment (src, dst);
     }
     TAbstractCoreAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
-    : AbstractCoreAssignment (src, dst, is_model)
+    : CoreProcess (src, dst, is_model)
     {
       finalize_construction (parent, name);
     }
@@ -148,7 +148,7 @@ public:
     public:
       AssignmentAction (ParentProcess* parent, const string& name)
       : Action (parent, name) { /*finalize_construction (parent, name);*/ }
-      void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
+      void impl_activate () override { (static_cast<TAssignment<X>*>(get_parent ())) -> perform_action (); }
     };
   public:
     TAssignment (ParentProcess* parent, const string& name, X* src, X* dst, bool is_model=false)
@@ -156,7 +156,7 @@ public:
     , _src(src)
     , _dst(dst)
     , _action(this, "action")
-    , _ttassignment(nullptr) // FIXME
+    //, _ttassignment(nullptr) // FIXME
     , _propagate(true)
     , _lazy(false)
     {
@@ -170,7 +170,7 @@ public:
       if (get_parent ()) {
         remove_state_dependency (get_parent (), get_dst ());
       }
-      delete _ttassignment;
+      //delete _ttassignment;
     }
 
     void set_parent (ParentProcess* parent) override
@@ -196,7 +196,16 @@ public:
     void impl_deactivate () override {} 
     void post_activate   () override { post_activate_auto_deactivate (); }
 
-    void perform_action ();
+    void perform_action () {
+      const auto & sv = _src->get_value ();
+      const auto & dv = _dst->get_value ();
+      if (_lazy) {
+        if (sv == dv) return;
+        _dst->set_value (sv, _propagate);
+      } else {
+        _dst->set_value (sv, _propagate);
+      }
+    }
 
     X* get_src() { return _src; }
     X* get_dst() { return _dst; }
@@ -205,7 +214,7 @@ public:
     X *_src;
     X *_dst;
     AssignmentAction _action;
-    TTAssignment * _ttassignment;
+    //TTAssignment * _ttassignment;
 
   protected:
     bool _propagate;
