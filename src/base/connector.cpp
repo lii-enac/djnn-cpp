@@ -56,11 +56,9 @@ namespace djnn {
   {
     // check if it already exists in origs_clones? returns it if so?
     auto sit = origs_clones.find(_assignment.get_src ());
-    assert (sit!=origs_clones.end());
     auto dit = origs_clones.find(_assignment.get_dst ());
-    assert (dit!=origs_clones.end());
-    auto s = sit->second;
-    auto d = dit->second;
+    auto s = sit!=origs_clones.end() ? sit->second : _assignment.get_src (); // the source of the connector can be outside the cloned subtree
+    auto d = dit!=origs_clones.end() ? dit->second : _assignment.get_dst (); // the destination of the connector can be outside the cloned subtree
     auto res = new Connector (nullptr, get_name (), s, d, _copy_on_activation);
     origs_clones[this] = res;
     return res;

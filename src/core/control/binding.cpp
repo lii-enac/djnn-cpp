@@ -34,11 +34,9 @@ namespace djnn {
   {
     // check if it already exists in origs_clones? returns it if so?
     auto sit = origs_clones.find (_b.get_src ());
-    assert (sit != origs_clones.end ());
     auto dit = origs_clones.find (_b.get_dst ());
-    assert (dit != origs_clones.end ());
-    auto s = sit->second;
-    auto d = dit->second;
+    auto s = sit != origs_clones.end () ? sit->second : _b.get_src (); // the source of the binding can be outside the cloned subtree
+    auto d = dit != origs_clones.end () ? dit->second : _b.get_dst (); // the destination of the binding can be outside the cloned subtree
     auto res = new Binding (nullptr, get_name (), s, _b.get_src_flag (), d,
                             _b.get_dst_flag ());
     origs_clones[this] = res;
