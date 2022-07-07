@@ -146,12 +146,15 @@ namespace djnn
         }
       }
 
-      virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override
+      CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override
       {
         auto res = new TDeref<T> (nullptr, get_name (), get_ref (), get_str_path (), get_dir ());
         origs_clones[this] = res;
+        origs_clones[&_value] = res->get_value ();
         return res;
       }
+
+      typename PropertyTrait<T>::property_type* get_value () { return &_value; }
 
 #ifndef DJNN_NO_SERIALIZE
       void serialize (const string& type) override;
