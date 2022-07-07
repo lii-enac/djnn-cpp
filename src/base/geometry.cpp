@@ -20,8 +20,8 @@
 namespace djnn
 {
   HermiteCurve::HermiteCurveAction::HermiteCurveAction (ParentProcess* parent, const string& name,
-                                                        AbstractProperty *input, AbstractProperty *p1, AbstractProperty *p2,
-                                                        AbstractProperty *t1, AbstractProperty *t2, AbstractProperty *output) :
+                                                        AbstractSimpleProperty *input, AbstractSimpleProperty *p1, AbstractSimpleProperty *p2,
+                                                        AbstractSimpleProperty *t1, AbstractSimpleProperty *t2, AbstractSimpleProperty *output) :
       Action (parent, name), _input (input), _p1 (p1), _p2 (p2), _t1 (t1), _t2 (t2), _output (output)
   {
   }

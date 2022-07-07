@@ -21,14 +21,14 @@
 
 namespace djnn {
 
-  class AbstractBoolProperty : public AbstractProperty {
+  class AbstractBoolProperty : public AbstractSimpleProperty {
   public:
     AbstractBoolProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
     virtual int get_prop_type () const override { return Boolean; }
     //virtual process_type_e get_process_type () const override { return BOOL_PROPERTY_T; }
 
-    // AbstractProperty interface
+    // AbstractSimpleProperty interface
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;

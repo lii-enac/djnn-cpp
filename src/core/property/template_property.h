@@ -25,10 +25,10 @@ namespace djnn {
     };
 
     template <typename X>
-    class AbstractTemplateProperty : public AbstractProperty {
+    class AbstractTemplateProperty : public SuperAbstractProperty {
     public:
         AbstractTemplateProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none)
-        : AbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
+        : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
         virtual int get_prop_type () const override { return TemplatePropertyType<X>::type; }
         void my_set_value (const X& v, bool propagate) {
             get_ref_value() = v;
@@ -38,17 +38,17 @@ namespace djnn {
             }
         }
         void set_value (const X& v, bool propagate) { my_set_value(v, propagate); }
-        virtual void set_value (int v, bool propagate) override {}
-        virtual void set_value (double v, bool propagate) override {}
-        virtual void set_value (bool v, bool propagate) override {}
-        virtual void set_value (CoreProcess* v, bool propagate) override {}
-        virtual void set_value (const string& v, bool propagate) override {}
-        virtual void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); }
+        // virtual void set_value (int v, bool propagate) override {}
+        // void set_value (double v, bool propagate) override = delete; // override { my_set_value(X(v), propagate); }
+        // virtual void set_value (bool v, bool propagate) override {}
+        // virtual void set_value (CoreProcess* v, bool propagate) override {}
+        // virtual void set_value (const string& v, bool propagate) override {}
+        // virtual void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); }
 
-        double get_double_value () override { return 0; }
-        double get_double_value () const override { return 0; }
-        string get_string_value () override { return djnn::string (); }
-        string get_string_value () const override { return djnn::string (); }
+        // double get_double_value () override { return 0; }
+        // double get_double_value () const override { return 0; }
+        // string get_string_value () override { return djnn::string (); }
+        // string get_string_value () const override { return djnn::string (); }
 
         X& get_value () { return get_ref_value(); }
         const X& get_value () const { return get_ref_value(); }

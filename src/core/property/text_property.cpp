@@ -33,7 +33,7 @@ namespace djnn
   static string null_string = "null string";
 
   string
-  toString(const AbstractProperty& x)
+  toString(const AbstractSimpleProperty& x)
   {
       return x.get_string_value();
   }

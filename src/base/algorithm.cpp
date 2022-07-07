@@ -61,12 +61,12 @@ namespace djnn
     _c_spec_action.disable ();
   }
 
-  AbstractProperty*
+  AbstractSimpleProperty*
   Sorter::get_and_check (CoreProcess *p)
   {
-    AbstractProperty* r = nullptr;
+    AbstractSimpleProperty* r = nullptr;
     if(p)
-      r = djnn_dynamic_cast<AbstractProperty*> (p->find_child_impl (_spec.get_value ()));
+      r = djnn_dynamic_cast<AbstractSimpleProperty*> (p->find_child_impl (_spec.get_value ()));
     if (r == nullptr) {
       error (this, "Unable to sort children: properties not found or with incorrect type");
       return nullptr;
@@ -94,7 +94,7 @@ namespace djnn
     if (sz == 0)
       return;
     Container::ordered_children_t cpy (children);
-    AbstractProperty* p = get_and_check (children[0]);
+    auto * p = get_and_check (children[0]);
     int type = p->get_prop_type ();
     switch (type)
       {
@@ -105,7 +105,7 @@ namespace djnn
     	  vector<pair<double, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
-    	    AbstractProperty* prop = get_and_check (c);
+    	    auto * prop = get_and_check (c);
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
@@ -127,7 +127,7 @@ namespace djnn
     	  vector<pair<string, int>> to_sort;
     	  int i = 0;
     	  for (auto c : children) {
-    	    AbstractProperty* prop = get_and_check (c);
+    	    auto * prop = get_and_check (c);
     	    if (prop->get_prop_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
@@ -216,7 +216,7 @@ namespace djnn
     }
     _coupling_list.clear ();
     for (auto c: _container->children ()) {
-      AbstractProperty *s = djnn_dynamic_cast<AbstractProperty*> (c->find_child_impl (_spec.get_value ()));
+      auto * s = djnn_dynamic_cast<AbstractSimpleProperty*> (c->find_child_impl (_spec.get_value ()));
       if (s == nullptr) {
         warning (this, "Wrong property in ListOperator " + get_name ());
         continue;
@@ -243,7 +243,7 @@ namespace djnn
   {
     double sum = 0;
     for (auto c: _container->children ()) {
-      sum += ((AbstractProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
+      sum += ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (sum, true);
   }
@@ -282,7 +282,7 @@ namespace djnn
   {
     double product = 1;
     for (auto c: _container->children ()) {
-      product *= ((AbstractProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
+      product *= ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (product, true);
   }
@@ -317,7 +317,7 @@ namespace djnn
   {
     double vmax = 0;
     for (auto c: _container->children ()) {
-      vmax = djnnstl::max (((AbstractProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
+      vmax = djnnstl::max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
   }
@@ -360,7 +360,7 @@ namespace djnn
   {
     double vmin = std::numeric_limits<double>::max(); // set to double max value
     for (auto c: _container->children ()) {
-      vmin = djnnstl::min (((AbstractProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
+      vmin = djnnstl::min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
   }

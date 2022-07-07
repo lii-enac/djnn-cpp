@@ -149,7 +149,7 @@ namespace djnn
   void
   DerefProperty::change_src (CoreProcess *src)
   {
-    _src = djnn_dynamic_cast<AbstractProperty*> (src);
+    _src = djnn_dynamic_cast<AbstractSimpleProperty*> (src);
     if (_src) {
       if (_dir == DJNN_GET_ON_CHANGE)
         get ();
@@ -196,7 +196,7 @@ namespace djnn
   void
   DerefString::change_src (CoreProcess *src)
   {
-    _src = djnn_dynamic_cast<AbstractProperty*> (src);
+    _src = djnn_dynamic_cast<AbstractSimpleProperty*> (src);
     if (_src) {
       if (_dir == DJNN_GET_ON_CHANGE)
         get ();
@@ -241,7 +241,7 @@ namespace djnn
   void
   DerefDouble::change_src (CoreProcess *src)
   {
-    _src = djnn_dynamic_cast<AbstractProperty*> (src);
+    _src = djnn_dynamic_cast<AbstracSimpletProperty*> (src);
     if (_src) {
       if (_dir == DJNN_GET_ON_CHANGE)
         get ();

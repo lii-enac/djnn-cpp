@@ -147,7 +147,7 @@ namespace djnn
   build_ttassignment2 (src_t * src, CoreProcess* dst)
   {
     TTAssignment* ttassignment = nullptr;
-    AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
+    auto *dst_p = djnn_dynamic_cast<AbstractSimpleProperty*> (dst);
     if (dst_p)
     switch (dst_p->get_prop_type ())
     {
@@ -198,8 +198,8 @@ namespace djnn
   build_ttassignment (CoreProcess* src, CoreProcess* dst)
   {
     TTAssignment * _ttassignment = nullptr;
-    AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
-    AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
+    auto *src_p = djnn_dynamic_cast<AbstractSimpleProperty*> (src);
+    auto *dst_p = djnn_dynamic_cast<AbstractSimpleProperty*> (dst);
     if (!dst_p) { warning (dst_p, "dst " + dst->get_debug_name() + " is not a property"); return nullptr; }
 
     if (src_p) {
@@ -249,12 +249,12 @@ namespace djnn
         {
           auto * srp = djnn_dynamic_cast<AbstractRemoteProperty*> (src_p);
           assert (srp);
-          auto * drp = djnn_dynamic_cast<AbstractProperty*> (dst_p);
+          auto * drp = djnn_dynamic_cast<AbstractSimpleProperty*> (dst_p);
           if (!drp) {
             warning (dst_p, "is not a Property in assignment");
             return nullptr;
           }
-          _ttassignment = new TAssignment <AbstractRemoteProperty, AbstractProperty> (srp, drp);
+          _ttassignment = new TAssignment <AbstractRemoteProperty, AbstractSimpleProperty> (srp, drp);
           break;
         }
         default:
@@ -280,8 +280,8 @@ namespace djnn
   static void
   perform_action (CoreProcess * src, CoreProcess * dst, bool propagate)
   {
-    AbstractProperty *src_p = djnn_dynamic_cast<AbstractProperty*> (src);
-    AbstractProperty *dst_p = djnn_dynamic_cast<AbstractProperty*> (dst);
+    AbstractSimpleProperty *src_p = djnn_dynamic_cast<AbstractSimpleProperty*> (src);
+    AbstractSimpleProperty *dst_p = djnn_dynamic_cast<AbstractSimpleProperty*> (dst);
     if (!dst_p) { warning (dst_p, "dst is not a Property"); return; }
 
     if (src_p) {

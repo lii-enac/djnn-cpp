@@ -236,10 +236,10 @@ namespace djnn
       setRef (get_frame ()->find_child ("touches/$added"), nullptr);
       return; // ignore and cancel touch
     }
-    AbstractProperty *press_x =
-        dynamic_cast<AbstractProperty*> (get_frame ()->find_child ("press/x"));
-    AbstractProperty *press_y =
-        dynamic_cast<AbstractProperty*> (get_frame ()->find_child ("press/y"));
+    auto * press_x =
+        dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("press/x"));
+    auto * press_y =
+        dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("press/y"));
     pair<double, double> local = get_local_coords (
         press_x->get_double_value (), press_y->get_double_value ());
     int x = (int) local.first - this->x () + _offset;
@@ -258,10 +258,10 @@ namespace djnn
   void
   TextField::mouse_move () {
     if (!_press_on) return;
-    AbstractProperty *move_x =
-        dynamic_cast<AbstractProperty*> (get_frame ()->find_child ("move/x"));
-    AbstractProperty *move_y =
-        dynamic_cast<AbstractProperty*> (get_frame ()->find_child ("move/y"));
+    auto * move_x =
+        dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("move/x"));
+    auto * move_y =
+        dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("move/y"));
     pair<double, double> local = get_local_coords (move_x->get_double_value (),
                                                    move_y->get_double_value ());
     int x = (int) local.first - this->x () + _offset;

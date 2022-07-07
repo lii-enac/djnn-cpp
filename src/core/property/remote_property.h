@@ -20,12 +20,12 @@
 
 namespace djnn {
 
-  class AbstractRemoteProperty : public AbstractProperty {
+  class AbstractRemoteProperty : public AbstractSimpleProperty {
   public:
-    AbstractRemoteProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none) : AbstractProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
+    AbstractRemoteProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none) : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Remote; }
 
-    // AbstractProperty interface
+    // AbstractSimpleProperty interface
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;

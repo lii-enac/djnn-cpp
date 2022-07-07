@@ -31,13 +31,13 @@ namespace djnn
     class HermiteCurveAction : public Action
     {
     public:
-      HermiteCurveAction (ParentProcess* parent, const string& name, AbstractProperty *input, AbstractProperty *p1,
-                          AbstractProperty *p2, AbstractProperty *t1, AbstractProperty *t2,
-                          AbstractProperty *output);
+      HermiteCurveAction (ParentProcess* parent, const string& name, AbstractSimpleProperty *input, AbstractSimpleProperty *p1,
+                          AbstractSimpleProperty *p2, AbstractSimpleProperty *t1, AbstractSimpleProperty *t2,
+                          AbstractSimpleProperty *output);
       virtual ~HermiteCurveAction () {}
       void impl_activate () override;
     private:
-      AbstractProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
+      AbstractSimpleProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };
   public:
     HermiteCurve (ParentProcess* parent, const string& name, double p1, double p2, double t1, double t2);

@@ -33,7 +33,7 @@ namespace djnn
     for (auto s : senders) {
       string path = p->get_path(s);
       string value;
-      AbstractProperty *ap = dynamic_cast<AbstractProperty*>(s);
+      auto * ap = dynamic_cast<AbstractSimpleProperty*>(s);
       if (ap)
         value = ap->get_string_value();
       else {
@@ -80,7 +80,7 @@ namespace djnn
   {
     CoreProcess *cp = _tree->find_child (path);
     if (cp) {
-      AbstractProperty *ap = dynamic_cast<AbstractProperty*> (cp);
+      auto * ap = dynamic_cast<AbstractSimpleProperty*> (cp);
       if (ap)
         ap->set_value (value, true);
       else {
@@ -104,7 +104,7 @@ namespace djnn
     c->enable ();
     _props_c.push_back (c);
     _props_c.push_back (c2);
-    AbstractProperty *ap = dynamic_cast<AbstractProperty*> (cp);
+    auto * ap = dynamic_cast<AbstractSimpleProperty*> (cp);
     /* if not a property we may also be interested by the deactivation */
     if (!ap) {
       c = new Coupling (cp, DEACTIVATION, &_send, ACTIVATION);

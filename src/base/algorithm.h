@@ -43,7 +43,7 @@ namespace djnn
     void impl_deactivate () override;
     void sort ();
   private:
-    AbstractProperty* get_and_check (CoreProcess* i);
+    AbstractSimpleProperty* get_and_check (CoreProcess* i);
   protected:
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;

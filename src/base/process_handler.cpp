@@ -336,7 +336,7 @@ namespace djnn
     if (coll) {
       string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*>(to_act->find_child_impl (path));
+        auto * p = djnn_dynamic_cast<AbstractSimpleProperty*>(to_act->find_child_impl (path));
         if (p)
           p->set_value (_value.get_value(), true);
       }
@@ -374,7 +374,7 @@ namespace djnn
     if (coll) {
       string path = _path.get_value ();
       for (auto to_act : coll->get_list ()) {
-        AbstractProperty *p = djnn_dynamic_cast<AbstractProperty*> (to_act->find_child_impl (path));
+        auto * p = djnn_dynamic_cast<AbstractSimpleProperty*> (to_act->find_child_impl (path));
         if (p)
           p->set_value (_value.get_value (), true);
       }

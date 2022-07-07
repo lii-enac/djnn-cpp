@@ -114,7 +114,7 @@ namespace djnn
       void change_src (CoreProcess* src) override;
       
     protected:
-      AbstractProperty *_src;
+      AbstractSimpleProperty *_src;
   };
 
   template <typename T>
@@ -187,7 +187,7 @@ namespace djnn
 #endif
     private:
       TextProperty _value;
-      AbstractProperty *_src;
+      AbstractSimpleProperty *_src;
   };
   class DerefDouble : public AbstractDeref
     {
@@ -202,7 +202,7 @@ namespace djnn
   #endif
       private:
         DoubleProperty _value;
-        AbstractProperty *_src;
+        AbstractSimpleProperty *_src;
     };
     */
 }

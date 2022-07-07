@@ -47,7 +47,7 @@ namespace djnn
   }
 
   AbstractBoolProperty::AbstractBoolProperty (ParentProcess* parent, const string& name, int notify_mask)
-  : AbstractProperty (parent, name, notify_mask),
+  : AbstractSimpleProperty (parent, name, notify_mask),
     _true (this, "true"),
     _false (this, "false")
   {
