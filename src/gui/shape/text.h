@@ -60,6 +60,7 @@ namespace djnn {
     pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
+    const vector<string>& get_properties_name () const override;
   private:
     void set_parent (ParentProcess* parent) override;
     struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; string text; };

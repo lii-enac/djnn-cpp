@@ -399,4 +399,20 @@ namespace djnn
     return res;
   }
 
+  const vector<string>&
+  Text::get_properties_name () const
+  {
+    static const vector<string> res = {
+      "x",
+      "y",
+      "dx",
+      "dy",
+      "dxU",
+      "dyU",
+      "encoding",
+      "text"
+    };
+    return res;
+  }
+
 } /* namespace djnn */
