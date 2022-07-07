@@ -68,6 +68,9 @@ namespace djnn
       void update_src ();
       bool propagating () { return _propagating; }
       void set_propagating (bool v) { _propagating = v; }
+      RefProperty* get_ref () { return _ref; }
+      const string& get_str_path () { return _path.get_value (); }
+      djnn_dir_t get_dir () { return _dir; }
       virtual void set () = 0;
       virtual void get () = 0;
       virtual void change_src (CoreProcess* src) = 0;
@@ -141,6 +144,13 @@ namespace djnn
           _src->set_value (_value.get_value (), true);
           _cget.enable ();
         }
+      }
+
+      virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override
+      {
+        auto res = new TDeref<T> (nullptr, get_name (), get_ref (), get_str_path (), get_dir ());
+        origs_clones[this] = res;
+        return res;
       }
 
 #ifndef DJNN_NO_SERIALIZE
