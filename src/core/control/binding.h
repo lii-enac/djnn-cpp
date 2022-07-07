@@ -45,6 +45,8 @@ namespace djnn {
 
     CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space
     CoreProcess * get_dst() { return _c.get_dst (); }
+    activation_flag_e get_src_flag () { return _c.get_src_activation_flag (); }
+    activation_flag_e get_dst_flag () { return _c.get_dst_activation_flag (); }
 
   protected:
     void impl_activate   () override { _c.enable  (); }
@@ -98,7 +100,7 @@ namespace djnn {
 
     virtual ~Binding();
     void set_parent (ParentProcess* parent) override;
-
+    CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   protected:
 
     void impl_activate   () override { _b.impl_activate (); }

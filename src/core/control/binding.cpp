@@ -27,6 +27,21 @@ namespace djnn {
       remove_state_dependency (get_parent (), dst);
     }
   }
+  CoreProcess*
+  Binding::impl_clone (map<CoreProcess*, CoreProcess*> &origs_clones)
+  {
+    // check if it already exists in origs_clones? returns it if so?
+    auto sit = origs_clones.find (_b.get_src ());
+    assert (sit != origs_clones.end ());
+    auto dit = origs_clones.find (_b.get_dst ());
+    assert (dit != origs_clones.end ());
+    auto s = sit->second;
+    auto d = dit->second;
+    auto res = new Binding (nullptr, get_name (), s, _b.get_src_flag (), d,
+                            _b.get_dst_flag ());
+    origs_clones[this] = res;
+    return res;
+  }
 
 #if !defined(DJNN_NO_SERIALIZE)
   void
