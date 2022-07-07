@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "binding.h"
 
 #if !defined(DJNN_NO_SERIALIZE)
