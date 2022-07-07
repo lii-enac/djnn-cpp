@@ -95,7 +95,18 @@ namespace djnn
     }
   }
 
-#ifndef DJNN_NO_SERIALIZE
+  AssignmentSequence*
+  AssignmentSequence::impl_clone (map<CoreProcess*, CoreProcess*> &origs_clones) {
+    auto *clone = new AssignmentSequence (nullptr, get_name (), is_model ());
+    for (auto c : _children) {
+      auto cclone = c->impl_clone (origs_clones);
+      clone->add_child (cclone, this->find_child_name (c));
+    }
+    origs_clones[this] = clone;
+    return clone;
+  }
+
+  #ifndef DJNN_NO_SERIALIZE
   void
   AssignmentSequence::serialize (const string& format) {
 

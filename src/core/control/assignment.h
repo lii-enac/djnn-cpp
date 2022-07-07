@@ -171,7 +171,8 @@ public:
       add_state_dependency (parent, get_dst ());
       FatProcess::set_parent (parent);
     }
-    
+
+    Assignment* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     // for legacy reason, to get rid of?
     Assignment (ParentProcess* parent, const string& name,
                    CoreProcess* src, const string& sspec,

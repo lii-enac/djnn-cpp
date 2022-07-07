@@ -28,6 +28,7 @@ namespace djnn {
     void impl_activate () override;
     void post_activate () override;
     void impl_deactivate () override {};
+    AssignmentSequence* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;

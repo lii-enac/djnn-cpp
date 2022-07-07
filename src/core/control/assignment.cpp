@@ -370,6 +370,17 @@ namespace djnn
     _ttassignment->perform_action (_propagate, _lazy);
   }
 
+  Assignment* Assignment::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto sit = origs_clones.find (_src);
+    auto dit = origs_clones.find (_dst);
+    auto s = sit != origs_clones.end () ? sit->second : _src; // the source of the assignment can be outside the cloned subtree
+    auto d = dit != origs_clones.end () ? dit->second : _dst; // the destination of the assignment can be outside the cloned subtree
+    auto res = new Assignment (nullptr, get_name (), s, d, is_model ());
+    origs_clones[this] = res;
+    return res;
+  }
+
   void
   MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
   {
