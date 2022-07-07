@@ -27,11 +27,11 @@
 namespace djnn { 
 
 
-  template <typename X>
+  template <typename X, typename Y>
   class TCoreConnector : public CoreProcess
   {
   public:
-    TCoreConnector (X* src, X* dst, bool copy_on_activation=true)
+    TCoreConnector (X* src, Y* dst, bool copy_on_activation=true)
     : _assignment (src, dst, false)
     , _binding (src, &_assignment)
     , _copy_on_activation (copy_on_activation)
@@ -39,7 +39,7 @@ namespace djnn {
       // no need to add edge to graph, assignment already did it
     }
     
-    TCoreConnector (ParentProcess* parent, const string& name, X* src, X* dst, bool copy_on_activation=true)
+    TCoreConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : TCoreConnector (src, dst, copy_on_activation)
     {
       finalize_construction (parent, name);
@@ -50,7 +50,7 @@ namespace djnn {
     void impl_deactivate () override { /*_assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCoreAssignment<X> _assignment;
+    TCoreAssignment<X,Y> _assignment;
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
@@ -59,18 +59,18 @@ public:
 #endif
   };
 
-  template <typename X>
+  template <typename X, typename Y>
   class TCorePausedConnector : public CoreProcess
   {
   public:
-    TCorePausedConnector (X* src, X* dst)
+    TCorePausedConnector (X* src, Y* dst)
     : _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
     {
       // no need to add edge to graph, assignment already did it
     }
     
-    TCorePausedConnector (ParentProcess* parent, const string& name, X* src, X* dst)
+    TCorePausedConnector (ParentProcess* parent, const string& name, X* src, Y* dst)
     : TCorePausedConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -81,7 +81,7 @@ public:
     void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCorePausedAssignment<X> _paused_assignment;
+    TCorePausedAssignment<X,Y> _paused_assignment;
     CoreBinding _binding;
 public:
 #ifndef DJNN_NO_SERIALIZE
@@ -89,18 +89,18 @@ public:
 #endif
   };
 
-  template <typename X>
+  template <typename X, typename Y>
   class TCoreLazyConnector : public CoreProcess
   {
   public:
-    TCoreLazyConnector (X* src, X* dst)
+    TCoreLazyConnector (X* src, Y* dst)
     : _lazy_assignment (src, dst, false)
     , _binding (src, &_lazy_assignment)
     {
       // no need to add edge to graph, assignment already did it
     }
     
-    TCoreLazyConnector (ParentProcess* parent, const string& name, X* src, X* dst)
+    TCoreLazyConnector (ParentProcess* parent, const string& name, X* src, Y* dst)
     : TCoreLazyConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -111,7 +111,7 @@ public:
     void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCoreLazyAssignment<X> _lazy_assignment;
+    TCoreLazyAssignment<X,Y> _lazy_assignment;
     CoreBinding _binding;
 public:
 #ifndef DJNN_NO_SERIALIZE
@@ -120,11 +120,11 @@ public:
   };
 
 
-  template <typename X>
+  template <typename X, typename Y>
   class TConnector : public FatProcess
   {
   public:
-    TConnector (ParentProcess* parent, const string& name, X* src, X* dst, bool copy_on_activation=true)
+    TConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _assignment (src, dst, false)
     , _binding (src, &_assignment)
@@ -137,7 +137,7 @@ public:
     // for legacy reason, to get rid of?
     TConnector (ParentProcess* parent, const string& name,
                    X* src, const string& sspec,
-                   X* dst, const string& dspec,
+                   Y* dst, const string& dspec,
                    bool copy_on_activation=true)
     : TConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
     {}
@@ -147,7 +147,7 @@ public:
     void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCoreAssignment<X> _assignment;
+    TCoreAssignment<X,Y> _assignment;
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
@@ -157,11 +157,11 @@ public:
 #endif
   };
 
-  template <typename X>
+  template <typename X, typename Y>
   class TPausedConnector : public FatProcess
   {
   public:
-    TPausedConnector (ParentProcess* parent, const string& name, X* src, X* dst, bool copy_on_activation=true)
+    TPausedConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
@@ -174,7 +174,7 @@ public:
     // for legacy reason, to get rid of?
     TPausedConnector (ParentProcess* parent, const string& name,
                    X* src, const string& sspec,
-                   X* dst, const string& dspec)
+                   Y* dst, const string& dspec)
     : TPausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
@@ -183,7 +183,7 @@ public:
     void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCorePausedAssignment<X> _paused_assignment;
+    TCorePausedAssignment<X,Y> _paused_assignment;
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
@@ -192,11 +192,11 @@ public:
 #endif
   };
 
-  template <typename X>
+  template <typename X, typename Y>
   class TLazyConnector : public FatProcess
   {
   public:
-    TLazyConnector (ParentProcess* parent, const string& name, X* src, X* dst, bool copy_on_activation=true)
+    TLazyConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _lazy_assignment (src, dst, false)
     , _binding (src, &_lazy_assignment)
@@ -209,7 +209,7 @@ public:
     // for legacy reason, to get rid of?
     TLazyConnector (ParentProcess* parent, const string& name,
                    X* src, const string& sspec,
-                   X* dst, const string& dspec)
+                   Y* dst, const string& dspec)
     : TLazyConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
     {}
 
@@ -218,7 +218,7 @@ public:
     void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
 
   private:
-    TCoreLazyAssignment<X> _lazy_assignment;
+    TCoreLazyAssignment<X,Y> _lazy_assignment;
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
@@ -227,9 +227,9 @@ public:
 #endif
   };
 
-  template <typename X>
-  void TMultiConnector (ParentProcess* parent, X* src, vector <string> src_props, X* dst, vector <string> dst_props, bool copy_on_activation=true);
+  template <typename X, typename Y>
+  void TMultiConnector (ParentProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation=true);
   
-  template <typename X>
-  void TMultiConnector (ParentProcess* parent, X* src, X* dst, bool copy_on_activation=true);
+  template <typename X, typename Y>
+  void TMultiConnector (ParentProcess* parent, X* src, Y* dst, bool copy_on_activation=true);
 }
