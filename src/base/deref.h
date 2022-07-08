@@ -148,7 +148,9 @@ namespace djnn
 
       CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override
       {
-        auto res = new TDeref<T> (nullptr, get_name (), get_ref (), get_str_path (), get_dir ());
+        auto ref = origs_clones.find (get_ref ());
+        auto s = ref != origs_clones.end () ? ref->second : get_ref ();
+        auto res = new TDeref<T> (nullptr, get_name (), s, get_str_path (), get_dir ());
         origs_clones[this] = res;
         origs_clones[&_value] = res->get_value ();
         return res;
