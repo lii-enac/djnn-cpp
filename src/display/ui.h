@@ -44,6 +44,10 @@ namespace djnn {
         }
         void deactivate() { cpick->disable(); }
         virtual ~UI();
+
+        ParentProcess * get_parent () { return parent; }
+        const ParentProcess * get_parent () const { return parent; }
+        
         
         DoubleProperty* move_x () { return _move_x; }
         DoubleProperty* move_y () { return _move_y; }
