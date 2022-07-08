@@ -38,7 +38,7 @@ namespace djnn {
     //virtual ~SuperAbstractProperty () override {}
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () const = 0;
-    bool is_activable const () {
+    bool is_activable () const {
       return get_parent () == nullptr || get_parent ()->somehow_activating ();
     }
     void notify_parent () { if (_notify_mask != notify_none && get_parent ()) get_parent ()->notify_change (_notify_mask ); }
