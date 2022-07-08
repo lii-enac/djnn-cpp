@@ -35,13 +35,14 @@ namespace djnn {
     SuperAbstractProperty (ParentProcess* parent, const string& name, unsigned int nm=notify_none) :
       FatProcess (name),
       _notify_mask (nm) {}
-    virtual ~SuperAbstractProperty () override {}
+    //virtual ~SuperAbstractProperty () override {}
     virtual process_type_e get_process_type () const override { return PROPERTY_T; }
     virtual int get_prop_type () const = 0;
-    bool is_activable () {
+    bool is_activable const () {
       return get_parent () == nullptr || get_parent ()->somehow_activating ();
     }
     void notify_parent () { if (_notify_mask != notify_none && get_parent ()) get_parent ()->notify_change (_notify_mask ); }
+    unsigned int get_notify_mask () const { return _notify_mask; }
   protected:
     void post_activate () override { post_activate_auto_deactivate (); }
     void impl_activate () override {}
