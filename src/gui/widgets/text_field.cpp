@@ -304,7 +304,7 @@ namespace djnn
       return;
     }
     if (key == DJN_Key_Tab) {
-      add_str ("\t");
+      //add_str ("\t");
       return;
     }
     if (key == DJN_Key_Return) {
