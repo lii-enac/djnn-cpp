@@ -4,8 +4,7 @@
 #include "gen/dash_offset.h"
 
 namespace djnn {
-  class DashArray : public AbstractStyle
-  {
+  class DashArray : public AbstractStyle {
   public:
     DashArray (ParentProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
