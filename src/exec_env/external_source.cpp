@@ -61,13 +61,15 @@ namespace djnn {
         }
         #endif
         #if DJNN_USE_STD_THREAD
-        if(_thread.joinable()) _thread.detach();
+        //if(_thread.joinable()) _thread.detach();
         #endif
       }
 
       void start() {
         #if DJNN_USE_STD_THREAD
-        if(_thread.joinable()) _thread.detach();
+        //if(_thread.joinable()) _thread.detach();
+        // if(_thread.joinable())
+        //     _thread.join();
         #endif
 
         _thread = 
@@ -76,6 +78,7 @@ namespace djnn {
         //djnn_thread_t (&ExternalSource::private_run, this);
         djnn_thread_t ([this]() {this->_es->ExternalSource::private_run();});
         //DBG;
+        _thread.detach();
         #endif
 
         #if DJNN_USE_QT_THREAD
