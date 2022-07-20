@@ -58,6 +58,8 @@ namespace djnn
   QtBackend::draw_simple_text (SimpleText *t, QFontMetrics* fm, int posX, int posY)
   {
     rmt_BeginCPUSample(draw_simple_text, RMTSF_Aggregate);
+
+    // set up
     QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     QString s = QObject::tr (t->get_content ().c_str ());
     //rmt_BeginCPUSample(text_load_drawing_context, RMTSF_Aggregate);
@@ -66,6 +68,7 @@ namespace djnn
     QPointF p (posX, posY);
     QPen oldPen = _context->pen;
     QPen newPen (oldPen);
+
     newPen.setColor (_context->brush.color ());
     if (_context->brush.style () == Qt::SolidPattern)
       newPen.setStyle (Qt::SolidLine);
@@ -73,10 +76,12 @@ namespace djnn
       newPen.setStyle (Qt::NoPen);
     _painter->setPen (newPen);
 
+    // get bbox
     rmt_BeginCPUSample(text_bounding_rect, RMTSF_Aggregate);
     QRect rect = fm->boundingRect (s);
     rmt_EndCPUSample ();
-    /* applying alignment attribute */
+
+    // apply alignment attributes
     switch (_context->textAnchor)
     {
       case DJN_MIDDLE_ANCHOR:
@@ -89,6 +94,8 @@ namespace djnn
       break;
     }
     rect.moveTo (posX, posY - fm->ascent ());
+
+    // draw text
     rmt_BeginCPUSample(text_painter_drawText, RMTSF_Aggregate);
     _painter->drawText (p, s);
     rmt_EndCPUSample ();
@@ -96,8 +103,10 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-    /* Don't forget to reset the old pen color */
+    // reset to previous pen color
     _painter->setPen (oldPen);
+
+    // draw the corresponding bounding rect in picking view
     if (is_in_picking_view (t)) {
       load_pick_context (t, _context);
       _picking_view->painter ()->drawRect (rect);
@@ -106,6 +115,8 @@ namespace djnn
 #endif
     }
     rmt_EndCPUSample ();
+
+    // return advance(?)
     return rect.width ();
   }
 
@@ -124,78 +135,92 @@ namespace djnn
   QtBackend::draw_text_field (TextField* tf)
   {
     rmt_BeginCPUSample(draw_text_field, RMTSF_Aggregate);
+
+    // handle z order
     QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
       add_shape (tf, _context);
       return;
     }
+
+    // set up
     load_drawing_context (tf, _context, 0, 0, 1, 1);
-    int start_x = tf->start_x ();
-    int end_x = tf->end_x ();
+    _painter->save ();
+    _painter->setFont (_context->font);
+
+    // set pen
+    QPen pen (_context->pen);
+    pen.setColor (QColor(tf->text_color()));
+    pen.setStyle (Qt::SolidLine);
+    _painter->setPen (pen);
+
+    // hack to enable the use of a correct FontMetrics for future cursor positioning
+    QFontMetrics fm = _painter->fontMetrics ();
+    QFontMetrics *last_fm = (QFontMetrics*) tf->get_font_metrics ();
+    delete last_fm; // FIXME costly!
+    tf->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
+    double text_height = fm.ascent () + fm.descent ();
+
+    // compute position
     int width = tf->width ();
     int x = tf->x ();
     int y = tf->y ();
 
-
-    _painter->save ();
-    _painter->setFont (_context->font);
-
-    /* hack to enable the use of a correct FontMetrics for future cursor positioning */
-    QFontMetrics fm = _painter->fontMetrics ();
-    QFontMetrics *last_fm = (QFontMetrics*) tf->get_font_metrics ();
-    delete last_fm;
-    tf->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
-    double text_height = fm.ascent () + fm.descent ();
-
-    QMatrix4x4& matrix (cur_context->matrix);
+    QMatrix4x4& matrix (_context->matrix);
     matrix.translate (x, y + fm.ascent ());
 
     SimpleText* line = tf->content();
-    QString s = QObject::tr (line->get_content ().c_str ());
 
     double posX = line->get_x ();
     double posY = line->get_y ();
+  
     QPointF p (posX, posY);
-
-
     p.setX (posX - tf->offset ());
 
-    QPen pen (cur_context->pen);
-    pen.setColor (QColor(tf->text_color()));
-    pen.setStyle (Qt::SolidLine);
-
-    // clip the text
-    _painter->setClipRect (0, 0, width, text_height);
-    _painter->setPen (pen);
+    _painter->setClipRect (0, 0, width, text_height); // clip text
     _painter->setTransform(matrix.toTransform ());
+
+    // draw
+    QString s = QObject::tr (line->get_content ().c_str ());
     _painter->drawText (p, s);
 
     #if _DEBUG_SEE_GUI_INFO_PREF
         __nb_Drawing_object++;
     #endif
-     // draw selection if any
+
+    // draw selection if any
+    int start_x = tf->start_x ();
+    int end_x = tf->end_x ();
     if (start_x != end_x) {
       pen.setStyle (Qt::NoPen);
       QBrush brush (_context->brush);
       brush.setColor (QColor (tf->selection_color ()));
       _painter->setBrush (brush);
       _painter->setPen (pen);
+
+      // draw selection rectangle
       matrix.translate (-x, -y - fm.ascent ());
       _painter->setTransform (matrix.toTransform ());
       _painter->drawRect (start_x, 0, end_x - start_x,
         fm.ascent () + fm.descent ());
+      
+      // clip text to selection
       _painter->setClipRect (start_x, 0, end_x - start_x,
         text_height, Qt::IntersectClip);
+      
       matrix.translate (x, y + fm.ascent ());
       _painter->setTransform (matrix.toTransform ());
       pen.setStyle (Qt::SolidLine);
       pen.setColor (QColor (tf->selected_text_color ()));
       _painter->setPen (pen);
+
+      // draw text again
       _painter->drawText (p, s);
     }
 
     _painter->restore ();
 
+    // draw picking view
     load_pick_context (tf, _context);
     QRect rect (0, -fm.ascent (), tf->width(), tf->height());
     _picking_view->painter ()->drawRect (rect);
@@ -210,7 +235,6 @@ namespace djnn
     _context->matrix.translate (-tf->x (), -tf->y () - fm.ascent ());
 
     rmt_EndCPUSample ();
-
   }
 
   void
@@ -219,6 +243,7 @@ namespace djnn
     rmt_BeginCPUSample(draw_simple_text_edit, RMTSF_Aggregate);
     QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
+    // handle z order
     if (z_processing_step == 1) {
       add_shape (ste, _context);
       return;
@@ -226,15 +251,18 @@ namespace djnn
     _painter->setFont (_context->font);
     QFontMetrics fm = _painter->fontMetrics ();
 
-    /* hack to enable the use of a correct FontMetrics for future cursor positioning */
+    // hack to enable the use of a correct FontMetrics for future cursor positioning
     QFontMetrics *last_fm = (QFontMetrics*) ste->get_font_metrics ();
     delete last_fm;
     ste->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
 
+    // set up
     load_drawing_context (ste, _context, 0, 0, 1, 1);
     _context_manager->get_current ()->matrix.translate (ste->x (), ste->y () + fm.ascent ());
     int y = 0;
     int height = fm.height() + fm.leading ();
+
+    // for each line, call draw_simple_text
     for (auto l : ste->lines ()->children ()) {
       SimpleText* line = (SimpleText*)l;
       if (ste->first_draw()) {
@@ -243,9 +271,12 @@ namespace djnn
       }
       draw_simple_text(line, &fm, line->get_x (), line->get_y ());
     }
+
+    // draw bbox in picking
     load_pick_context (ste, _context);
     QRect rect (0, -fm.ascent (), ste->width(), ste->height());
     _picking_view->painter ()->drawRect (rect);
+
     // Update font metrics data
     ste->set_ascent  (fm.ascent ());
     ste->set_descent (fm.descent ());

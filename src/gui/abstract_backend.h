@@ -66,41 +66,6 @@ namespace djnn
     {
     }
     virtual void
-    draw_simple_text_edit (MultilineEditor*)
-    {
-
-    }
-    virtual void
-    draw_text_field (TextField*)
-    {
-
-    }
-    virtual int
-    compute_index (FontMetricsImpl fm, SimpleText* t, int x)
-    {
-      return 0;
-    }
-    virtual int
-    compute_x (FontMetricsImpl fm, SimpleText* t, int index)
-    {
-      return 0;
-    }
-    virtual int
-    compute_text_width (FontMetricsImpl fm, SimpleText *t)
-    {
-      return 0;
-    }
-    virtual double
-    get_cursor_from_index (Text*, int)
-    {
-      return 0;
-    }
-    virtual pair<double,int>
-    get_cursor_from_local_x (Text*, double)
-    {
-      return pair<double,int>(0,0);
-    }
-    virtual void
     draw_poly (Poly* p)
     {
     }
@@ -165,6 +130,39 @@ namespace djnn
     virtual void
     draw_data_image (DataImage *i)
     {
+    }
+    virtual void
+    draw_simple_text_edit (MultilineEditor*)
+    {
+    }
+    virtual void
+    draw_text_field (TextField*)
+    {
+    }
+    virtual int
+    compute_index (FontMetricsImpl fm, SimpleText* t, int x)
+    {
+      return 0;
+    }
+    virtual int
+    compute_x (FontMetricsImpl fm, SimpleText* t, int index)
+    {
+      return 0;
+    }
+    virtual int
+    compute_text_width (FontMetricsImpl fm, SimpleText *t)
+    {
+      return 0;
+    }
+    virtual double
+    get_cursor_from_index (Text*, int)
+    {
+      return 0;
+    }
+    virtual pair<double,int>
+    get_cursor_from_local_x (Text*, double)
+    {
+      return pair<double,int>(0,0);
     }
     virtual void
     pick_gshape (AbstractGShape *s)
