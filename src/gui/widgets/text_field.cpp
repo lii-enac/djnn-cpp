@@ -27,38 +27,39 @@ namespace djnn
   TextField::TextField (ParentProcess* parent, const string &name, int x, int y,
                         int width, int height, const string &text,
                         bool enable_edit_on_activation) :
-      AbstractGShape (parent, name), _line (this, "content", 0, 0, text), _cursor_start_x (
-          this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y",
-                                                       0), _cursor_end_x (
-          this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0), _cursor_height (
-          this, "cursor_height", 16), _x (this, "x", x), _y (this, "y", y), _width (
-          this, "width", width), _height (this, "height", height), _line_height (
-          this, "line_height", 16), _key_code_pressed (this, "key_pressed", 0), _key_code_released (
-          this, "key_released", 0), _text_color (this, "text_color", 0), _selected_text_color (
-          this, "text_selected_color", 0xffffff), _selection_color (
-          this, "selection_color", 0x429fe0), _str_input (this, "string_input", ""), _copy_buffer (
-          this, "copy_buffer", ""), _enable_edit (this, "enable_edit"), _disable_edit (
-          this, "disable_edit"), _content_changed (this, "content_changed"), _clear (
-          this, "clear"), _validate (this, "validate"), _on_enable_edit (
-          this, "on_enable_edit"), _on_disable_edit (this, "on_disable_edit"), _on_press (
-          this, "on_press_action"), _on_release (this, "on_release_action"), _on_move (
-          this, "on_move_action"), _key_pressed (this, "key_pressed_action"), _key_released (
-          this, "key_released_action"), _on_str_input (this,
-                                                       "on_str_input_action"), _on_clear (
-          this, "on_clear"), _c_key_press (&_key_code_pressed, ACTIVATION,
-                                           &_key_pressed, ACTIVATION), _c_key_release (
-          &_key_code_released, ACTIVATION, &_key_released, ACTIVATION), _c_str_input (
-          &_str_input, ACTIVATION, &_on_str_input, ACTIVATION), _c_press (), _c_release (), _c_move (), _c_x (
-          &_x, ACTIVATION, nullptr, ACTIVATION), _c_y (&_y, ACTIVATION, nullptr,
-                                                       ACTIVATION), _c_enable_edit (
-          &_enable_edit, ACTIVATION, &_on_enable_edit, ACTIVATION), _c_disable_edit (
-          &_disable_edit, ACTIVATION, &_on_disable_edit, ACTIVATION), _c_clear (
-          &_clear, ACTIVATION, &_on_clear, ACTIVATION), _font_metrics (nullptr), _ordering_node (), _index_x (
-          0), _ascent (0), _descent (0), _leading (0), _index_y (0), _start_sel_x (
-          0), _end_sel_x (0), _start_sel_y (0), _end_sel_y (0), _shift_on (
-          false), _ctrl_on (false), _alt_on (false), _press_on (false), _enable_edit_on_activation (
-          enable_edit_on_activation), _first_draw (true), _edit_enabled (
-          this, "edit_enabled", enable_edit_on_activation), _offset (0) {
+      AbstractGShape (parent, name),
+          _line (this, "content", 0, 0, text),
+          _cursor_start_x (this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y", 0),
+          _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
+          _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y (this, "y", y),
+          _width (this, "width", width), _height (this, "height", height), 
+          _line_height (this, "line_height", 16), _key_code_pressed (this, "key_pressed", 0),
+          _key_code_released (this, "key_released", 0), _text_color (this, "text_color", 0),
+          _selected_text_color (this, "text_selected_color", 0xffffff),
+          _selection_color (this, "selection_color", 0x429fe0), _str_input (this, "string_input", ""),
+          _copy_buffer (this, "copy_buffer", ""), _enable_edit (this, "enable_edit"),
+          _disable_edit (this, "disable_edit"), _content_changed (this, "content_changed"),
+          _clear (this, "clear"), _validate (this, "validate"),
+          _on_enable_edit (this, "on_enable_edit"), _on_disable_edit (this, "on_disable_edit"),
+          _on_press (this, "on_press_action"), _on_release (this, "on_release_action"),
+          _on_move (this, "on_move_action"), _key_pressed (this, "key_pressed_action"),
+          _key_released (this, "key_released_action"), _on_str_input (this,"on_str_input_action"),
+          _on_clear (this, "on_clear"),
+          _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
+          _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
+          _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION),
+          _c_press (), _c_release (), _c_move (),
+          _c_x (&_x, ACTIVATION, nullptr, ACTIVATION),
+          _c_y (&_y, ACTIVATION, nullptr,ACTIVATION),
+          _c_enable_edit (&_enable_edit, ACTIVATION, &_on_enable_edit, ACTIVATION),
+          _c_disable_edit (&_disable_edit, ACTIVATION, &_on_disable_edit, ACTIVATION),
+          _c_clear (&_clear, ACTIVATION, &_on_clear, ACTIVATION),
+          _font_metrics (nullptr), _ordering_node (), _index_x (0), _ascent (0), _descent (0),
+          _leading (0), _index_y (0), _start_sel_x (0), _end_sel_x (0), _start_sel_y (0),
+          _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
+          _enable_edit_on_activation (enable_edit_on_activation), _first_draw (true),
+          _edit_enabled (this, "edit_enabled", enable_edit_on_activation), _offset (0)
+          {
     init_ui ();
 
     graph_add_edge (&_on_str_input, &_ordering_node);

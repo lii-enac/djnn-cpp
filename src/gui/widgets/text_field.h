@@ -133,13 +133,16 @@ namespace djnn {
     pair<double, double> get_local_coords (double x, double y);
 
     SimpleText _line;
+
     IntProperty _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
     IntProperty _x, _y, _width, _height, _line_height;
     IntProperty _key_code_pressed, _key_code_released;
     IntProperty _text_color, _selected_text_color, _selection_color;
     TextProperty _str_input, _copy_buffer;
+
     Spike _enable_edit, _disable_edit, _content_changed, _clear;
     Blank _validate;
+
     EnableEditAction _on_enable_edit;
     DisableEditAction _on_disable_edit;
     MousePressAction _on_press;
@@ -149,7 +152,9 @@ namespace djnn {
     KeyReleasedAction _key_released;
     StrInputAction _on_str_input;
     ClearAction _on_clear;
+
     Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear;
+
     FontMetricsImpl _font_metrics;
     VoidProcess _ordering_node;
     coord_t _index_x, _ascent, _descent, _leading;
