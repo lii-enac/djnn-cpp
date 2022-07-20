@@ -146,9 +146,9 @@ namespace djnn {
         es->please_stop ();
       }
       // ...then join them
-      for (auto es: _external_sources) {
-        es->join ();
-      }
+      // for (auto es: _external_sources) {
+      //   es->join ();
+      // }
 
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();
@@ -211,7 +211,8 @@ namespace djnn {
     MainLoop::join_own_thread ()
     {
       #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
-      own_thread.join();
+      //own_thread.join();
+      own_thread.detach();
       #endif
 
       #if DJNN_USE_QT_THREAD
