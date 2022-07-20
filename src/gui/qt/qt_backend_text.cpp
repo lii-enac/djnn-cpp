@@ -192,29 +192,31 @@ namespace djnn
     int start_x = tf->start_x ();
     int end_x = tf->end_x ();
     if (start_x != end_x) {
+      // setup selection rectangle
       pen.setStyle (Qt::NoPen);
       QBrush brush (_context->brush);
       brush.setColor (QColor (tf->selection_color ()));
       _painter->setBrush (brush);
       _painter->setPen (pen);
 
-      // draw selection rectangle
       matrix.translate (-x, -y - fm.ascent ());
       _painter->setTransform (matrix.toTransform ());
+
+      // draw selection rectangle
       _painter->drawRect (start_x, 0, end_x - start_x,
         fm.ascent () + fm.descent ());
-      
-      // clip text to selection
-      _painter->setClipRect (start_x, 0, end_x - start_x,
-        text_height, Qt::IntersectClip);
-      
-      matrix.translate (x, y + fm.ascent ());
-      _painter->setTransform (matrix.toTransform ());
+
+      // setup text, with clip
       pen.setStyle (Qt::SolidLine);
       pen.setColor (QColor (tf->selected_text_color ()));
       _painter->setPen (pen);
 
-      // draw text again
+      _painter->setClipRect (start_x, 0, end_x - start_x,
+        text_height, Qt::IntersectClip);
+      matrix.translate (x, y + fm.ascent ());
+      _painter->setTransform (matrix.toTransform ());
+
+      // draw text
       _painter->drawText (p, s);
     }
 
