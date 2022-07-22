@@ -528,7 +528,7 @@ namespace djnn
     rmt_BeginCPUSample(draw_path_clip, RMTSF_Aggregate);
     QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     cur_path = QPainterPath ();
-    p->items ()->draw ();
+    p->items_GH ()->draw ();
     if (z_processing_step == 1) {
       add_shape (p, _context);
       QPainterPath clip (cur_path);
