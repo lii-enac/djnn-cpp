@@ -43,7 +43,7 @@ namespace djnn {
     bool genericMouseMove(double x, double y);
     bool genericCheckShapeAfterDraw (double x, double y);
     bool genericMouseRelease(double x, double y, mouse_button button);
-    bool genericMouseWheel(double x, double y);
+    bool genericMouseWheel(double dx, double dy, double cursorx, double cursory);
 
     bool genericTouchPress (double x, double y, int id, float pressure);
     bool genericTouchMove (double x, double y, int id, float pressure);

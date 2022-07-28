@@ -118,8 +118,6 @@ namespace djnn
 
     DoubleProperty* pos_x () { return _pos_x; }
     DoubleProperty* pos_y () { return _pos_y; }
-    DoubleProperty* wheel_dx () { return _w_dx; }
-    DoubleProperty* wheel_dy () { return _w_dy; }
     DoubleProperty* width () { return _width; }
     DoubleProperty* height () { return _height; }
     IntProperty* min_width () { return _min_width; }
@@ -145,6 +143,10 @@ namespace djnn
     DoubleProperty* press_y () { return _press_y; }
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
+    DoubleProperty* wheel_dx () { return _w_dx; }
+    DoubleProperty* wheel_dy () { return _w_dy; }
+    DoubleProperty* wheel_x () { return _w_x; }
+    DoubleProperty* wheel_y () { return _w_y; }
     CoreProcess* get_display () { return _display->get_value (); }
     void init_display (FatProcess *conn) { _display->set_value (conn, false); }
     void set_frame ();
@@ -176,6 +178,7 @@ namespace djnn
     DoubleProperty* _pos_x;
     DoubleProperty* _pos_y;
     DoubleProperty* _w_dx, *_w_dy;
+    DoubleProperty* _w_x, *_w_y;
     DoubleProperty* _width;
     DoubleProperty* _height;
     TextProperty* _title;

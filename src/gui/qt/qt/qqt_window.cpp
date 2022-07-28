@@ -232,11 +232,11 @@ namespace djnn
     bool exec_ = false ;
     if (!numPixels.isNull()) {
         //std::cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << std::endl;
-        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y ());  
+        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->position ().x (), event->position ().y ());  
     } else if (!numDegrees.isNull()) {
         QPoint numSteps = numDegrees / 15;
         //std::cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << std::endl;
-        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y ());
+        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->position ().x (), event->position ().y ());
     }
 
     if (exec_) { GRAPH_EXEC; } 

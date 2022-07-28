@@ -587,13 +587,15 @@ namespace djnn
   }
 
   bool
-  Picking::genericMouseWheel (double x, double y)
+  Picking::genericMouseWheel (double x, double y, double cursorx, double cursory)
   {
     bool exec_ = false;
 
     /* window setting */
     _win->wheel_dx ()->set_value (x, true);
     _win->wheel_dy ()->set_value (y, true);
+    _win->wheel_x ()->set_value (cursorx, true);
+    _win->wheel_y ()->set_value (cursory, true);
     
     /* generic mouse setting */
     ((GUIMouse*)GenericMouse)->dx ()->set_value (x, true);
@@ -626,10 +628,20 @@ namespace djnn
       _win->wheel_dy ()->schedule_activation ();
       exec_ = true;
     }
+    if (_win->wheel_x ()->has_coupling ()) {
+      _win->wheel_x ()->schedule_activation ();
+      exec_ = true;
+    }
+    if (_win->wheel_y ()->has_coupling ()) {
+      _win->wheel_y ()->schedule_activation ();
+      exec_ = true;
+    }
 
     if (_hovered_shape != nullptr) {
         _hovered_shape->ui ()->wheel_dx ()->set_value (x, true);
         _hovered_shape->ui ()->wheel_dy ()->set_value (y, true);
+        _hovered_shape->ui ()->wheel_x ()->set_value (cursorx, true);
+        _hovered_shape->ui ()->wheel_y ()->set_value (cursory, true);
       if (_hovered_shape->ui ()->wheel ()->has_coupling () ) {
           _hovered_shape->ui ()->wheel ()->schedule_activation ();
           exec_ = true;
@@ -640,6 +652,14 @@ namespace djnn
       }
       if (_hovered_shape->ui ()->wheel_dy ()->has_coupling ()) {
           _hovered_shape->ui ()->wheel_dy ()->schedule_activation ();
+          exec_ = true;
+      }
+      if (_hovered_shape->ui ()->wheel_x ()->has_coupling ()) {
+          _hovered_shape->ui ()->wheel_x ()->schedule_activation ();
+          exec_ = true;
+      }
+      if (_hovered_shape->ui ()->wheel_y ()->has_coupling ()) {
+          _hovered_shape->ui ()->wheel_y ()->schedule_activation ();
           exec_ = true;
       }
     }

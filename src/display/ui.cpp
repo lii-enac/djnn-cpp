@@ -75,6 +75,8 @@ namespace djnn
 
     _wheel_dx = new DoubleProperty (_wheel, "dx", 0);
     _wheel_dy = new DoubleProperty (_wheel, "dy", 0);
+    _wheel_x = new DoubleProperty (_wheel, "x", 0);
+    _wheel_y = new DoubleProperty (_wheel, "y", 0);
 
     _local_move_x = new DoubleProperty (nullptr, "local_move_x", 0);
     _local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
@@ -91,10 +93,17 @@ namespace djnn
     _press->add_symbol ("local_x", _local_press_x);
     _press->add_symbol ("local_y", _local_press_y);
 
+    _wheel->add_symbol ("x", _wheel_x);
+    _wheel->add_symbol ("y", _wheel_y);
+    _wheel->add_symbol ("local_x", _local_wheel_x);
+    _wheel->add_symbol ("local_y", _local_wheel_y);
+
     _mouse_press_x = new DoubleProperty (nullptr, "mouse_press_x", 0);
     _mouse_press_y = new DoubleProperty (nullptr, "mouse_press_y", 0);
     _mouse_move_x = new DoubleProperty (nullptr, "mouse_move_x", 0);
     _mouse_move_y = new DoubleProperty (nullptr, "mouse_move_y", 0);
+    _mouse_wheel_x = new DoubleProperty (nullptr, "mouse_wheel_x", 0);
+    _mouse_wheel_y = new DoubleProperty (nullptr, "mouse_wheel_y", 0);
 
     _mouse_local_press_x = new DoubleProperty (nullptr, "mouse_local_press_x", 0);
     _mouse_local_press_y = new DoubleProperty (nullptr, "mouse_local_press_y", 0);
@@ -110,6 +119,11 @@ namespace djnn
     _mouse_press->add_symbol ("y", _mouse_press_y);
     _mouse_press->add_symbol ("local_x", _mouse_local_press_x);
     _mouse_press->add_symbol ("local_y", _mouse_local_press_y);
+
+    _wheel->add_symbol ("x", _mouse_wheel_x);
+    _wheel->add_symbol ("y", _mouse_wheel_y);
+    _wheel->add_symbol ("local_x", _mouse_local_wheel_x);
+    _wheel->add_symbol ("local_y", _mouse_local_wheel_y);
   }
 
   UI::~UI()
@@ -138,21 +152,29 @@ namespace djnn
     delete _mouse_press_y;
     delete _mouse_move_x;
     delete _mouse_move_y;
+    delete _mouse_wheel_x;
+    delete _mouse_wheel_y;
 
     delete _mouse_local_press_x;
     delete _mouse_local_press_y;
     delete _mouse_local_move_x;
     delete _mouse_local_move_y;
+    delete _mouse_local_wheel_x;
+    delete _mouse_local_wheel_y;
 
     delete _move_x;
     delete _move_y;
     delete _press_x;
     delete _press_y;
+    delete _wheel_x;
+    delete _wheel_y;
 
     delete _local_move_x;
     delete _local_move_y;
     delete _local_press_x;
     delete _local_press_y;
+    delete _local_wheel_x;
+    delete _local_wheel_y;
 
     parent->remove_child (_touches);
     parent->remove_child (_mouse);
@@ -168,6 +190,8 @@ namespace djnn
     parent->remove_child (_wheel);
     _wheel->remove_child (_wheel_dx);
     _wheel->remove_child (_wheel_dy);
+    _wheel->remove_child (_wheel_x);
+    _wheel->remove_child (_wheel_y);
 
     _mouse->remove_child (_mouse_press);
     _mouse->remove_child (_mouse_release);

@@ -74,8 +74,12 @@ namespace djnn
     _move->add_symbol ("y", _move_y);
     _w_dx = new DoubleProperty (nullptr, "wheel_dx", 0);
     _w_dy = new DoubleProperty (nullptr, "wheel_dy", 0);
+    _w_x = new DoubleProperty (nullptr, "wheel_x", 0);
+    _w_y = new DoubleProperty (nullptr, "wheel_y", 0);
     _wheel->add_symbol ("dx", _w_dx);
     _wheel->add_symbol ("dy", _w_dy);
+    _wheel->add_symbol ("x", _w_x);
+    _wheel->add_symbol ("y", _w_y);
     add_symbol ("press", _press);
     add_symbol ("move", _move);
     add_symbol ("release", _release);
@@ -233,6 +237,8 @@ namespace djnn
     delete _move_y;
     delete _w_dx;
     delete _w_dy;
+    delete _w_x;
+    delete _w_y;
     delete _display;
 
     delete _win_impl;
