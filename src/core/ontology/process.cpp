@@ -62,7 +62,7 @@ namespace djnn
   , _bitset (0)
   #ifndef DJNN_NO_DEBUG
   , _debug_parent (nullptr)
-  , _debug_name (FatProcess::default_name)
+  , _debug_name (default_name)
   #endif
   {
     set_is_model (model);

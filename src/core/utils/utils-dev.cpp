@@ -102,10 +102,10 @@ namespace djnn
   get_parent_name (const CoreProcess *cp, int up)
   {
     const auto * p = dynamic_cast<const FatProcess*>(cp);
-    if(!p) return FatProcess::default_name;
+    if(!p) return CoreProcess::default_name;
     while(up && p) { p=p->get_parent(); --up; }
     if(p) return p->get_name();
-    else return FatProcess::default_name;
+    else return CoreProcess::default_name;
   }
 
 #if 0
