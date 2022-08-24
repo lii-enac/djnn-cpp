@@ -413,10 +413,11 @@ $(build_dir)/%$(pch_ext): override CXXFLAGS = $(CXXFLAGS_PCH) $(CXXFLAGS_CFG) $(
 $(build_dir)/%precompiled.o: $(build_dir)/%precompiled.hpp$(pch_ext)
 ifeq ($V,max)
 	$(CXX) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX)  -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*precompiled.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
 	@$(CXX) -c $< -o $@
-	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX)  -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX)  -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*precompiled.cccmd.json
 endif
 
 pch: $(pch_dst)$(pch_ext)
