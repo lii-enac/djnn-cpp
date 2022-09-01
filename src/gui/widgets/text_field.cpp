@@ -131,6 +131,7 @@ namespace djnn
       _c_move.enable ();
     }
 
+    _line.activate ();
     _shift_on = _ctrl_on = _press_on = false;
   }
 
@@ -147,6 +148,7 @@ namespace djnn
     _c_enable_edit.disable ();
     _c_disable_edit.disable ();
     _c_clear.disable ();
+    _line.deactivate ();
   }
 
   void
