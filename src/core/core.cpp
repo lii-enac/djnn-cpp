@@ -88,7 +88,7 @@ namespace djnn
     delete &Graph::instance (); // destructor will set Graph::_instance to nullptr since _instance is private
     //XML::clear_xml_parser ();
 #if RMT_ENABLED
-    //rmt_DestroyGlobalInstance(rmt); still a bug with opengl remotery
+    rmt_DestroyGlobalInstance(rmt);
 #endif
     //std::cerr << __PRETTY_FUNCTION__ << __FL__;
     delete_parentless_processes ();

@@ -14,6 +14,7 @@ endif
 
 ifeq ($(remotery_cflags),-DRMT_ENABLED=1)
 lib_srcs += $(call rwildcard,$(local_dir)/utils/ext/remotery/,*.c)
+$(build_dir)/src/core/utils/ext/remotery/Remotery.o: CFLAGS += -Wno-unused-function
 ifeq ($(os),MinGW)
 lib_ldflags += -lwinmm -lWs2_32
 endif
