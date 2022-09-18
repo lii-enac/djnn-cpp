@@ -22,6 +22,7 @@ namespace djnn {
 	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
  	
  	void init_input ();
+	void clear_input ();
   
 }
 

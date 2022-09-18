@@ -48,6 +48,10 @@ namespace djnn {
 
   }
 
+  void
+  clear_input () {
+  }
+
   CoreProcess*
   GPIOProxy::find_child_impl (const string& path)
   {
