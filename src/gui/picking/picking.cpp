@@ -28,7 +28,7 @@ namespace djnn
   extern FatProcess* GenericMouse; // in gui
 
   Picking::Picking (Window *win) :
-      _win (win), _cought_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)
+      _win (win), _caught_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)
   {
     // FIXME: uniformiser l'API
     //_win->set_picking_view(this);
@@ -47,9 +47,9 @@ namespace djnn
   void
   Picking::object_deactivated (PickUI* picked_shape)
   {
-    /* Reset _catched_shape to nullptr if this object has been removed from picking_view */
-    if (_cought_shape == picked_shape) {
-      _cought_shape = nullptr;
+    /* Reset _caught_shape to nullptr if this object has been removed from picking_view */
+    if (_caught_shape == picked_shape) {
+      _caught_shape = nullptr;
     }
 
      /* Reset _hovered_shape to nullptr if this object has been removed from picking_view */
@@ -125,7 +125,7 @@ namespace djnn
       double cur_move_x = s->ui ()->move_x ()->get_value ();
       double cur_move_y = s->ui ()->move_y ()->get_value ();
 
-      if (s == _cought_shape) {
+      if (s == _caught_shape) {
         if (cur_move_x == x && cur_move_y == y)
           return exec_; /* return false */
         else {
@@ -157,8 +157,8 @@ namespace djnn
       s->ui()->enter ()->schedule_activation ();
     s->ui()->press ()->schedule_activation ();
 
-    /* reset _hovered_shape and _catched_shape */
-    _cought_shape = s;
+    /* reset _hovered_shape and _caught_shape */
+    _caught_shape = s;
     _hovered_shape = s;
   }
 
@@ -326,13 +326,13 @@ namespace djnn
       exec_ = true;
     }
 
-    /* _catched_shape */
-    if (_cought_shape != nullptr && _cought_shape != s) {
+    /* _caught_shape */
+    if (_caught_shape != nullptr && _caught_shape != s) {
 
        /* setting */
       if (x != old_x) {
-        DoubleProperty* p1 = _cought_shape->ui()->move_x ();
-        DoubleProperty* p2 = _cought_shape->ui()->mouse_move_x ();
+        DoubleProperty* p1 = _caught_shape->ui()->move_x ();
+        DoubleProperty* p2 = _caught_shape->ui()->mouse_move_x ();
         p1->set_value (x, true);
         p2->set_value (x, true);
         if (p1->has_coupling())
@@ -341,8 +341,8 @@ namespace djnn
           p2->schedule_activation ();
       }
       if (y != old_y) {
-        DoubleProperty* p1 = _cought_shape->ui()->move_y ();
-        DoubleProperty* p2 = _cought_shape->ui()->mouse_move_y ();
+        DoubleProperty* p1 = _caught_shape->ui()->move_y ();
+        DoubleProperty* p2 = _caught_shape->ui()->mouse_move_y ();
         p1->set_value (y, true);
         p2->set_value (y, true);
         if (p1->has_coupling())
@@ -350,11 +350,11 @@ namespace djnn
         if (p2->has_coupling())
           p2->schedule_activation ();
       }
-      _cought_shape->set_mouse_local_coords (x, y, true);
+      _caught_shape->set_mouse_local_coords (x, y, true);
 
        /* event */
-      FatProcess* p1 = _cought_shape->ui ()->move ();
-      FatProcess* p2 = _cought_shape->ui ()->mouse_move ();
+      FatProcess* p1 = _caught_shape->ui ()->move ();
+      FatProcess* p2 = _caught_shape->ui ()->mouse_move ();
       p1->schedule_activation ();
       p2->schedule_activation ();
 
@@ -476,15 +476,15 @@ namespace djnn
       _hovered_shape = nullptr;
     }
 
-    /* reset _catched_shape */
-    if (_cought_shape && _cought_shape != s) {
-      FatProcess* p1 = _cought_shape->ui ()->release ();
-      FatProcess* p2 = _cought_shape->ui ()->mouse_release ();
+    /* reset _caught_shape */
+    if (_caught_shape && _caught_shape != s) {
+      FatProcess* p1 = _caught_shape->ui ()->release ();
+      FatProcess* p2 = _caught_shape->ui ()->mouse_release ();
       p1->schedule_activation ();
       p2->schedule_activation ();
       exec_ = true;
     }
-    _cought_shape = nullptr;
+    _caught_shape = nullptr;
 
     /* button */
     switch (button)
@@ -574,11 +574,11 @@ namespace djnn
       s->ui ()->leave ()->schedule_activation ();
     }
 
-    /* reset _catched_shape */
-    if (_cought_shape && _cought_shape != s) {
-      _cought_shape->ui ()->release ()->schedule_activation ();
+    /* reset _caught_shape */
+    if (_caught_shape && _caught_shape != s) {
+      _caught_shape->ui ()->release ()->schedule_activation ();
     }
-    _cought_shape = nullptr;
+    _caught_shape = nullptr;
 
     /* reset _hovered_shape */
     _hovered_shape = nullptr;

@@ -52,7 +52,7 @@ namespace djnn {
   protected:
     bool genericEnterLeave (PickUI* gobj);
     Window *_win;
-    PickUI *_cought_shape, *_hovered_shape;
+    PickUI *_caught_shape, *_hovered_shape;
     map <int, Touch*> _active_touches;
     bool _mouse_released;
   };
