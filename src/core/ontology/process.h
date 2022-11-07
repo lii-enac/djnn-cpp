@@ -406,7 +406,7 @@ namespace djnn {
   };
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    extern list<pair<CoreProcess*, long int>> __creation_stat_order;
+    extern list<pair<CoreProcess*, long int>> __dbg_creation_stat_order;
   #endif
   
   void alias_children (ParentProcess* parent, FatProcess *to);

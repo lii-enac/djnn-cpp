@@ -30,6 +30,7 @@
 #include "base/switch.h"
 #include "base/fsm.h"
 #include "gui/shape/abstract_gshape.h"
+#include "gui/style/abstract_style.h"
 #include "gui/style/style.h"
 #include "gui/transformation/transformations.h"
 #include "base/operators.h"
@@ -84,8 +85,9 @@ namespace djnn
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
 
-  extern list<pair<CoreProcess*, long int>> __creation_stat_order;
-  extern vector<string> __destruction_stat_order;
+  extern list<pair<CoreProcess*, long int>> __dbg_creation_stat_order;
+  extern vector<string> __dbg_destruction_stat_order;
+  extern map<const CoreProcess*, string> parentless_names;
 
   static list<pair<CoreProcess*, long int>>::iterator last_creation_end;
   static vector<string>::iterator last_destruction_end; 
@@ -95,12 +97,12 @@ namespace djnn
   display_creation_stats()
   {
     if (init_display_creation_stats == false) {
-      last_destruction_end = __destruction_stat_order.begin ();
-      last_creation_end = __creation_stat_order.begin ();
+      last_destruction_end = __dbg_destruction_stat_order.begin ();
+      last_creation_end = __dbg_creation_stat_order.begin ();
       init_display_creation_stats = true;
     }
 
-      int size = __creation_stat_order.size ();
+      int size = __dbg_creation_stat_order.size ();
       
       map<string,int> num_by_type;
       int num_no_coupling=0;
@@ -122,18 +124,18 @@ namespace djnn
       int num_gtransform = 0;
 
       // new Process ?
-      if (last_creation_end != __creation_stat_order.end ()){
+      if (last_creation_end != __dbg_creation_stat_order.end ()){
 
-        for (auto it = last_creation_end ; it != __creation_stat_order.end (); it++){
+        for (auto it = last_creation_end ; it != __dbg_creation_stat_order.end (); it++){
           long int i = it->second;
           auto * p = it->first;
           std::cerr << "\033[1;34m";
-          std::cerr << "[" << i << "] - " << cpp_demangle(typeid(*p).name()) <<  " - " << 
+          std::cerr << "[" << i << "] \t- " << "["<< p <<"] - \t" << cpp_demangle(typeid(*p).name()) <<  " - " << 
             (p->get_parent () ? p->get_parent ()->get_name () : "") << "/" << p->get_debug_name () << std::endl;
           std::cerr << "\033[0m" ;
         }
 
-        last_creation_end = __creation_stat_order.end ();
+        last_creation_end = __dbg_creation_stat_order.end ();
       }
       else
         std::cerr << "nothing has been created" << std::endl;
@@ -146,11 +148,23 @@ namespace djnn
               std::cerr << *it << std::endl;
               std::cerr << "\033[0m" ;
         }
-        last_destruction_end = __destruction_stat_order.end ();
+        last_destruction_end = __dbg_destruction_stat_order.end ();
       }
       else 
         std::cerr << "nothing has been destroyed" << std::endl;
 
+      //Parentless_names emtpy ?
+      std::cerr << "\033[1;35m" << std::endl;
+      std::cerr << "-- Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+      if (!parentless_names.empty()) {
+        std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+        for (const auto& [key, value] : parentless_names)
+          std::cout << '[' << key << "] = \"" << value << "\"\n";
+      }
+      else
+        std::cerr << "OK - Parentless_Name is EMPTY";
+      std::cerr << "\033[0m" << std::endl ;
+      
 
       for (auto pair : __dbg_creation_stat_order) { 
 

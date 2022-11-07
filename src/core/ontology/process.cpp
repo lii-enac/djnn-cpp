@@ -27,6 +27,8 @@
 #include <algorithm>
 #include <cassert>
 
+// #include <iostream>
+
 // #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 // #include <boost/core/demangle.hpp>
 // //#include <typeinfo>
@@ -54,7 +56,11 @@ namespace djnn
   vector<string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   // TODO MP 11.2021 : parentless_names should be map : <const CoreProcess*, Pair<string, timestamp>> parentless_name
-  static map<const CoreProcess*, string> parentless_names; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables) 
+#if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
+    map<const CoreProcess*, string> parentless_names; 
+#else
+  static map<const CoreProcess*, string> parentless_names;
+#endif
 
   CoreProcess::CoreProcess (bool model)
   : 
@@ -78,8 +84,8 @@ namespace djnn
     #endif
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    __creation_stat_order.push_back (std::make_pair(this, __creation_num++));
-    __position_in_creation = std::prev(__creation_stat_order.end ());
+    __dbg_creation_stat_order.push_back (std::make_pair(this, __dbg_creation_num++));
+    __position_in_creation = std::prev(__dbg_creation_stat_order.end ());
     #endif
   }
 
@@ -108,8 +114,8 @@ namespace djnn
     string data_save = "DELETE [" + djnn::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
-    __destruction_stat_order.push_back (data_save);
-    __creation_stat_order.erase (__position_in_creation);
+    __dbg_destruction_stat_order.push_back (data_save);
+    __dbg_creation_stat_order.erase (__position_in_creation);
     #endif
   }
 
@@ -128,6 +134,20 @@ namespace djnn
 
     warning (nullptr, "\n\n This FUNCTION (delete_parentless_processes) is broken and should be remade - TODO MP 11.2021 \n\n ");
     warning (nullptr, "\n\n UNIT TESTS may not work very well \n\n ");
+
+    // debug
+    // std::cerr << "\033[1;35m" << std::endl;
+    // std::cerr << "-- Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+    // if (!parentless_names.empty()) {
+    //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+    //   for (const auto& [key, value] : parentless_names)
+    //     std::cout << '[' << key << "] = \"" << value << "\"\n";
+    // }
+    // else
+    //   std::cerr << "OK - Parentless_Name is EMPTY";
+    // std::cerr << "\033[0m \n\n";
+
+
     /*
 
     int sz = parentless_names_order.size ();
