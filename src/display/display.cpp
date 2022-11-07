@@ -86,8 +86,10 @@ namespace djnn
       Displays->set_activation_state (DEACTIVATED);
       UpdateDrawing::clear ();
       p_clear_display ();
-      delete GPUs;
+      GenericKeyboard->deactivate ();
+      delete GenericKeyboard;
       delete Displays;
+      delete GPUs;
       __module_initialized = false;
     }
   }
