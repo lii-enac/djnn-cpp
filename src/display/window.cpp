@@ -197,6 +197,8 @@ namespace djnn
     delete _background_color_action;
     delete _background_color;
 
+    delete _background_rect;
+
     delete _c_min_width;
     delete _c_min_height;
     delete _min_width;
