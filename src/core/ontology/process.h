@@ -297,10 +297,10 @@ namespace djnn {
 
     public:
     #if _DEBUG_SEE_ACTIVATION_SEQUENCE
-     pair<int, int> __nb_activation;
+      pair<int, int> __nb_activation;
     #endif
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-     list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
+      list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
     #endif
 
   };
@@ -406,7 +406,7 @@ namespace djnn {
   };
 
   #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-   extern list<pair<CoreProcess*, long int>> __creation_stat_order;
+    extern list<pair<CoreProcess*, long int>> __creation_stat_order;
   #endif
   
   void alias_children (ParentProcess* parent, FatProcess *to);

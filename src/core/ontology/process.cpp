@@ -86,10 +86,10 @@ namespace djnn
   CoreProcess::~CoreProcess ()
   {
     /* note: 
-       this code is to prevent bugs 
-       this should NEVER happen
-       _vertex should be nullptr at this place
-       if not, something IS NOT deleted correctly
+        this code is to prevent bugs 
+        this should NEVER happen
+        _vertex should be nullptr at this place
+        if not, something IS NOT deleted correctly
     */
     if (_vertex != nullptr) {
       #ifndef DJNN_NO_DEBUG
@@ -106,7 +106,7 @@ namespace djnn
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
     string data_save = "DELETE [" + djnn::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
-       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
+      " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
     __destruction_stat_order.push_back (data_save);
     __creation_stat_order.erase (__position_in_creation);

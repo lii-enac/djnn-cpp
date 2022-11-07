@@ -63,30 +63,30 @@ extern "C" {
 /* DEBUG DISPLAY INFORMATION */
 
 /*
- diplayed infos (LIGHT BLUE) : 
- - time to draw and average
- - nb object to draw
- - nb object in color picking view
+  diplayed infos (LIGHT BLUE) : 
+  - time to draw and average
+  - nb object to draw
+  - nb object in color picking view
 */
 #define _DEBUG_SEE_GUI_INFO_PREF 0
 
 /*
- diplayed infos (GREEN and YELLOW) : 
- - time to exec graph and average
- - time to sort graph and average
- - nb vertices and edges in graph 
- - nb vertices and edges in sorted_graph 
+  diplayed infos (GREEN and YELLOW) : 
+  - time to exec graph and average
+  - time to sort graph and average
+  - nb vertices and edges in graph 
+  - nb vertices and edges in sorted_graph 
 */
 #define _DEBUG_SEE_GRAPH_INFO_PREF 0
 
 /*
- diplayed infos (PURPLE, RED and GREEN) : 
- - display order in which component are created or destroyed between to call of utils/display_creation_stats () function
+  diplayed infos (PURPLE, RED and GREEN) : 
+  - display order in which component are created or destroyed between to call of utils/display_creation_stats () function
 */
 #define _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 0
 
 /*
- Choose if you want to use OLD/NEW Grapth::exec 
+  Choose if you want to use OLD/NEW Grapth::exec 
   - OLD (1) = execute FULL ORDERED_VERTICES
   - NEW (0) = execute only the needed process - using deque
 */
