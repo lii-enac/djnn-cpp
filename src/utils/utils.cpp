@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2022)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -56,7 +56,7 @@ namespace djnn
   void
   run_stats(CoreProcess *p)
   {
-  	int i=0;
+    int i=0;
     depth_first_traverse(p, [&i](CoreProcess* p){++i;});
     std::cerr << std::endl << "count items: " << i << std::endl;
 
@@ -140,11 +140,11 @@ namespace djnn
 
 
       //delete Process ?
-      if (last_destruction_end != __destruction_stat_order.end ()){
-        for (auto it = last_destruction_end ; it != __destruction_stat_order.end (); ++it){
-             std::cerr << "\033[1;31m";
-             std::cerr << *it << std::endl;
-             std::cerr << "\033[0m" ;
+      if (last_destruction_end != __dbg_destruction_stat_order.end ()){
+        for (auto it = last_destruction_end ; it != __dbg_destruction_stat_order.end (); ++it){
+              std::cerr << "\033[1;31m";
+              std::cerr << *it << std::endl;
+              std::cerr << "\033[0m" ;
         }
         last_destruction_end = __destruction_stat_order.end ();
       }
@@ -152,33 +152,33 @@ namespace djnn
         std::cerr << "nothing has been destroyed" << std::endl;
 
 
-      for (auto pair : __creation_stat_order) { 
+      for (auto pair : __dbg_creation_stat_order) { 
 
-         auto * p = pair.first;
+          auto * p = pair.first;
 
-         ++num_by_type[cpp_demangle(typeid(*p).name())];
-         num_no_coupling += !p->has_coupling();
-         num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
-         num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;
-         num_total_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size();
-         num_no_children += p->children_size () > 0 ? 0 : 1;
+          ++num_by_type[cpp_demangle(typeid(*p).name())];
+          num_no_coupling += !p->has_coupling();
+          num_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() == 1 ? 1 : 0;
+          num_more_than_one_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size() > 1 ? 1 : 0;
+          num_total_coupling += p->get_activation_couplings ().size() + p->get_deactivation_couplings ().size();
+          num_no_children += p->children_size () > 0 ? 0 : 1;
 
-         /* categories */
-         num_propertie += (dynamic_cast<AbstractProperty*> (p) != 0) ? 1 : 0;
-         num_bindings += (dynamic_cast<Binding*> (p) != 0) ? 1 : 0;
-         num_connectors += (dynamic_cast<Connector*> (p) != 0) ? 1 : 0;
-         num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
-         num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
-         num_math_expr += (dynamic_cast<NativeExpressionAction*> (p) != 0) ? 1 : 0;
-         num_FSM += (dynamic_cast<FSM*> (p) != 0) ? 1 : 0;
-         num_FSMState += (dynamic_cast<FSMState*> (p) != 0) ? 1 : 0;
-         num_FSMTransition += (dynamic_cast<FSMTransition*> (p) != 0) ? 1 : 0;
-         num_switches += (dynamic_cast<Switch*> (p) != 0) ? 1 : 0;
-         // Component (Container) dont le parent est un sw.
-         num_switheState += (dynamic_cast<Container*> (p) && p->get_parent () && dynamic_cast<Switch*> (p->get_parent ())) ? 1 : 0; 
-         num_gshapes += (dynamic_cast<AbstractGShape*> (p) != 0) ? 1 : 0;
-         num_gstype += (dynamic_cast<AbstractStyle*> (p) != 0) ? 1 : 0;
-         num_gtransform += (dynamic_cast<AbstractTransformation*> (p) != 0) ? 1 : 0;
+          /* categories */
+          num_propertie += (dynamic_cast<AbstractProperty*> (p) != 0) ? 1 : 0;
+          num_bindings += (dynamic_cast<Binding*> (p) != 0) ? 1 : 0;
+          num_connectors += (dynamic_cast<Connector*> (p) != 0) ? 1 : 0;
+          num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
+          num_math_expr += (dynamic_cast<UnaryOperatorCommon*> (p) != 0) ? 1 : 0;
+          num_math_expr += (dynamic_cast<NativeExpressionAction*> (p) != 0) ? 1 : 0;
+          num_FSM += (dynamic_cast<FSM*> (p) != 0) ? 1 : 0;
+          num_FSMState += (dynamic_cast<FSMState*> (p) != 0) ? 1 : 0;
+          num_FSMTransition += (dynamic_cast<FSMTransition*> (p) != 0) ? 1 : 0;
+          num_switches += (dynamic_cast<Switch*> (p) != 0) ? 1 : 0;
+          // Component (Container) dont le parent est un sw.
+          num_switheState += (dynamic_cast<Container*> (p) && p->get_parent () && dynamic_cast<Switch*> (p->get_parent ())) ? 1 : 0; 
+          num_gshapes += (dynamic_cast<AbstractGShape*> (p) != 0) ? 1 : 0;
+          num_gstype += (dynamic_cast<AbstractStyle*> (p) != 0) ? 1 : 0;
+          num_gtransform += (dynamic_cast<AbstractTransformation*> (p) != 0) ? 1 : 0;
       }
 
       std::cerr << "\033[1;32m";

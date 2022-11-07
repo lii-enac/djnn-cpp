@@ -134,8 +134,7 @@ namespace djnn
     _c_background_color->disable ();
   }
 
-  Window::Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w,
-		  double h) :
+  Window::Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w, double h) :
       FatProcess (name),
       _refresh (false), _holder (nullptr)
   {
