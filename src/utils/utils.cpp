@@ -87,7 +87,7 @@ namespace djnn
 
   extern list<pair<CoreProcess*, long int>> __dbg_creation_stat_order;
   extern vector<string> __dbg_destruction_stat_order;
-  extern map<const CoreProcess*, string> parentless_names;
+  extern map<const CoreProcess*, std::pair<string, int>> parentless_names;
 
   static list<pair<CoreProcess*, long int>>::iterator last_creation_end;
   static vector<string>::iterator last_destruction_end; 
@@ -158,8 +158,8 @@ namespace djnn
       std::cerr << "-- Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
       if (!parentless_names.empty()) {
         std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
-        for (const auto& [key, value] : parentless_names)
-          std::cout << '[' << key << "] = \"" << value << "\"\n";
+        for (const auto& [key, pair_value] : parentless_names)
+          std::cerr << '[' << key << "] = " << pair_value.second << " - \"" << pair_value.first << "\"\n";
       }
       else
         std::cerr << "OK - Parentless_Name is EMPTY";

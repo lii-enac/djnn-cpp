@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <cassert>
 
-// #include <iostream>
+#include <iostream>
 
 // #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 // #include <boost/core/demangle.hpp>
@@ -55,11 +55,11 @@ namespace djnn
   CoreProcess::symtable_t  CoreProcess::default_symtable; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
   vector<string> CoreProcess::default_properties_name;  // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
-  // TODO MP 11.2021 : parentless_names should be map : <const CoreProcess*, Pair<string, timestamp>> parentless_name
+  static int parentless_names_order = 0 ;
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
-    map<const CoreProcess*, string> parentless_names; 
+  map<const CoreProcess*, std::pair<string, long long>> parentless_names; 
 #else
-  static map<const CoreProcess*, string> parentless_names;
+  static map<const CoreProcess*, std::pair<string, int>> parentless_names;
 #endif
 
   CoreProcess::CoreProcess (bool model)
@@ -122,62 +122,53 @@ namespace djnn
   void
   delete_parentless_processes ()
   {
+    // warning (nullptr, "\n\n This FUNCTION (delete_parentless_processes) is broken and should be remade - TODO MP 11.2021 \n\n ");
+    // warning (nullptr, "\n\n UNIT TESTS may not work very well \n\n ");
 
-    // TODO MP 11.2021 
-    // remade parentless_name_order
-    // as static vector<const CoreProcess*> parentless_names_order;
-    // sorted using parentless_name timestamp
-
-    // rebuild
-
-    // sort
-
-    warning (nullptr, "\n\n This FUNCTION (delete_parentless_processes) is broken and should be remade - TODO MP 11.2021 \n\n ");
-    warning (nullptr, "\n\n UNIT TESTS may not work very well \n\n ");
-
-    // debug
+    // // debug print before
     // std::cerr << "\033[1;35m" << std::endl;
-    // std::cerr << "-- Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+    // std::cerr << "-- Before - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
     // if (!parentless_names.empty()) {
     //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
-    //   for (const auto& [key, value] : parentless_names)
-    //     std::cout << '[' << key << "] = \"" << value << "\"\n";
+    //   for (const auto& [key, pair_value] : parentless_names)
+    //     std::cerr << '[' << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
     // }
     // else
     //   std::cerr << "OK - Parentless_Name is EMPTY";
     // std::cerr << "\033[0m \n\n";
 
+    // sort by building order
+    std::map <int, const Process*> parentless_names_ordered;
+    for (auto& [key, pair_value] : parentless_names)
+      parentless_names_ordered[pair_value.second] = key;
 
+    // delete by reverse order
+    //C++20 : for (const auto& [key, value] : parentless_names_ordered | std::views::reverse)
     /*
-
-    int sz = parentless_names_order.size ();
-
-    //debug
-    // std::cout << "\nparentless status:" << std::endl;
-    // int i = 0;
-    // for (auto & pair: parentless_names) {
-    //   std::cout << i++ << " - " << pair.first->get_debug_name () << std::endl;
-    // }
-    // std::cout << "\nparentless_reverse_order status:" << std::endl;
-    // for (int i = sz - 1; i >= 0; i--) {
-    //   std::cout << i << " - " << parentless_names_order[i]->get_debug_name () << std::endl;
-    // }
-
-    for (int i = sz - 1; i >= 0; i--) {
-      auto it = parentless_names.find((ChildProcess*)parentless_names_order[i]);
-      if (it!=parentless_names.end()) {
-        //debug
-        //std::cout << "deleting - " << it->second << std::endl;
-        //warning (p, " parentless process was not deleted before cleaning up core. Maybe due to a leak somewhere...");
-        delete it->first;
+    for (auto iter = parentless_names_ordered.rbegin(); iter != parentless_names_ordered.rend(); ++iter) {
+      //debug: display parentless_names_ordered -- in reverse
+      //std::cerr << '[' << iter->first << "] = " << iter->second  << "not delete yet" << std::endl;
+      //TODO 11.2022 : hack to not remove updateDrawing but it should NOT be here - it should be deleted in updateDrawing::clear ()
+      if (iter->first) {
+        delete iter->second;
+        iter->second = nullptr;
       }
     }
-
-    parentless_names_order.clear ();
-
     */
-
+    //TODO : TO BE REMOVED ... used for now ... but should be replaced by the code above
     parentless_names.clear ();
+
+    //debug print after cleaning
+    // std::cerr << "\033[1;35m" << std::endl;
+    // std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+    // if (!parentless_names.empty()) {
+    //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+    //   for (const auto& [key, pair_value] : parentless_names)
+    //     std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
+    // }
+    // else
+    //   std::cerr << "OK - Parentless_Name is EMPTY";
+    // std::cerr << "\033[0m \n\n";
   }
 
   const string&
@@ -284,7 +275,7 @@ namespace djnn
     if (parent) {
       parent->add_child (this, name);
     } else {
-      parentless_names[this] = name;
+      parentless_names[this] = std::pair<string, int> {name, parentless_names_order++} ;
     }
 
     #ifndef DJNN_NO_DEBUG
@@ -694,7 +685,7 @@ namespace djnn
   const string&
   FatProcess::get_name () const
   {
-    return (_parent ? _parent->find_child_name(this) : parentless_names[this]);
+    return (_parent ? _parent->find_child_name(this) : parentless_names[this].first);
   }
 
 
