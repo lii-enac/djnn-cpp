@@ -513,9 +513,8 @@ namespace djnn
   ChildProcess::set_parent (ParentProcess* parent)
   {
     /* note: 
-    *  do not try to remove process from parentless_name if only set_parent has been called
-    *  remove from parentless_name only through add_child because we need to call add_symbol
-    *  else the parent will not recognise his children.
+    *  do not try to remove parentless process from parentless_name if only set_parent has been called
+    *  remove from parentless_name only through add_symbol else the parent will not recognise his children.
     */
     _parent = djnn_dynamic_cast<FatProcess*>(parent);
     #if !DJNN_NO_DEBUG
@@ -538,7 +537,8 @@ namespace djnn
   {
     if (child == nullptr) { return; }
 
-    remove_from_parentless_name (child);
+    // see note from ChildProcess::set_parent
+    //remove_from_parentless_name (child); // is now directly made in add_symbol
 
     child->set_parent (this);
     add_symbol (name, child);
@@ -666,9 +666,17 @@ namespace djnn
   void
   FatProcess::add_symbol (const string& name, FatChildProcess* c)
   {
-    /* if ((symtable ().insert (pair<string, FatProcess*> (name, c))).second == false) {
-     cerr << "Duplicate name " << name << " in component " << get_name () << endl;
-     }*/
+    /* 
+      if ((symtable ().insert (pair<string, FatProcess*> (name, c))).second == false) {
+        cerr << "Duplicate name " << name << " in component " << get_name () << endl;
+      }
+    */
+
+    // see note from ChildProcess::set_parent
+    // remove c from parentless_names if necessarry 
+    // if c is here, now, he's should have a parent
+    remove_from_parentless_name (c);
+
     _symtable[name] = c;
   }
 

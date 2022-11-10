@@ -35,6 +35,9 @@ namespace djnn
     _removed (nullptr, "_removed", nullptr),
     _size (nullptr, "_size", 0)
   {
+    remove_from_parentless_name (&_added);
+    remove_from_parentless_name (&_removed);
+    remove_from_parentless_name (&_size);
     finalize_construction (parent, name);
   }
 

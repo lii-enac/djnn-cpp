@@ -40,6 +40,11 @@ namespace djnn
     _removed (nullptr, "_removed", nullptr),
     _size (nullptr, "_size", 0)
   {
+    // we have to remove them manually because those symbols are creating with parent=nullptr
+    // but their destruction is directly managed in ~AbstractList
+    remove_from_parentless_name (&_added);
+    remove_from_parentless_name (&_removed);
+    remove_from_parentless_name (&_size);
   }
 
 #if !defined(DJNN_NO_DEBUG)
