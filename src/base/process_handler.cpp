@@ -81,9 +81,9 @@ namespace djnn
   ProcessCollector::~ProcessCollector ()
   {
     if (get_parent ()) {
-      remove_state_dependency (get_parent (), &_add_one);
-      remove_state_dependency (get_parent (), &_rm_one);
       remove_state_dependency (get_parent (), &_rm_all);
+      remove_state_dependency (get_parent (), &_rm_one);
+      remove_state_dependency (get_parent (), &_add_one);
     }
   }
 
