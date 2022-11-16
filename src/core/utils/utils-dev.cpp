@@ -186,7 +186,11 @@ namespace djnn
   get_hierarchy_name (const CoreProcess *cp, int up)
   {
     const auto * p = dynamic_cast<const FatProcess*>(cp);
+#ifndef DJNN_NO_DEBUG
+    if(!p) return cp->get_debug_name (); 
+#else 
     if(!p) return FatProcess::default_name;
+#endif
     string res;
     while(up && p) { res = p->get_name()+"/"+res; p=p->get_parent(); --up; }
     return res;
