@@ -40,6 +40,13 @@ namespace djnn
 
   Layer::~Layer ()
   {
+    // remove _damaged and _auto_redisplay from _children
+    // because they are also plain object and will be deleted twice.
+    remove_child ("damaged");
+    remove_child ("auto_redisplay");
+
+    Container::clean_up_content ();
+
     delete _cache;
     delete _pick_cache;
   }
