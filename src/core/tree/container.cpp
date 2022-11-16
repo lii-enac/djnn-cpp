@@ -29,6 +29,11 @@
 
 #include <algorithm>
 
+
+//TODO: remove
+#include <iostream>
+
+
 #if !defined(DJNN_NO_DEBUG)
 // #include <__iostream>
 
@@ -61,17 +66,17 @@ namespace djnn
   void Container::clean_up_content () 
   {
 #ifdef DEBUG
-    for (int space = 0; space < nb_space; space++ ) cerr << "\t";
+    for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
     ++nb_space ;
-    cerr << "--- " << get_name () << " :" << endl;
+    std::cerr << "--- " << get_name () << " :" << std::endl;
 #endif
 
     /* delete and remove children from this container */
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
 #ifdef DEBUG
-      for (int space=0; space < nb_space; space++ ) cerr << "\t";
-      cerr << i << ". " << _children[i]->get_debug_name () << endl ;
+      for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
+      std::cerr << i << ". " << _children[i]->get_debug_name () << std::endl ;
 #endif
       /* remove child from structure_observer (if in structure_observer) */
       for (auto s: structure_observer_list) 
