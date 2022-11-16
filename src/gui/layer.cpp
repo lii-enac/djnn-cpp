@@ -40,6 +40,8 @@ namespace djnn
 
   Layer::~Layer ()
   {
+    delete _cache;
+    delete _pick_cache;
   }
 
   void

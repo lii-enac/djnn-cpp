@@ -710,7 +710,7 @@ namespace djnn
   static QPainter *buff_painter;
   static QPainter *buff_pick_painter;
 
-  struct LayerStuff {
+  struct LayerStuff : LayerCache {
     //QImage *pm;
     QPixmap *pm;
     double tx, ty;
@@ -722,6 +722,15 @@ namespace djnn
     }
   };
 
+  struct PickLayerStuff : LayerCache {
+    QImage *pm;
+    PickLayerStuff () : pm(nullptr) {}
+    ~PickLayerStuff () {
+      delete pm;
+    }
+  };
+
+
   bool
   QtBackend::pre_draw_layer (Layer *l)
   {
@@ -732,7 +741,7 @@ namespace djnn
     l->get_xywhp (x, y, w, h, pad);
     LayerStuff * ls = (LayerStuff*) (l->cache ());
     //auto * pick_pm = (QPixmap*) (l->pick_cache ());
-    auto * pick_pm = (QImage*) (l->pick_cache ());
+    auto * pick_pm = (PickLayerStuff*) (l->pick_cache ());
     auto fw = l->get_frame()->width ()->get_value();
     auto fh = l->get_frame()->height ()->get_value();
     if (w<0) { 
@@ -754,16 +763,17 @@ namespace djnn
       //ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
       ls->pm = new QPixmap (w, h);
       ls->pm->fill (Qt::transparent);
-      pick_pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      pick_pm = new PickLayerStuff;
+      pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
       //pick_pm = new QPixmap (w, h);
-      pick_pm->fill (Qt::transparent);
+      pick_pm->pm->fill (Qt::transparent);
       l->set_cache (ls);
       l->set_pick_cache (pick_pm);
       l->set_invalid_cache (false);
       buff_painter = _painter;
       _painter = new QPainter (ls->pm);
       buff_pick_painter = _picking_view->painter ();
-      _picking_view->set_painter (new QPainter (pick_pm));
+      _picking_view->set_painter (new QPainter (pick_pm->pm));
       _in_cache = true;
 
       QtContext *cur_context = _context_manager->get_current ();
@@ -811,7 +821,7 @@ namespace djnn
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
     LayerStuff* ls = (LayerStuff*) (l->cache ());
-    auto *pick_pm =  (QImage*) (l->pick_cache());
+    auto *pick_pm =  (PickLayerStuff*) (l->pick_cache());
     //auto *pick_pm =  (QPixmap*) (l->pick_cache());
 
     QtContext *cur_context = _context_manager->get_current ();
@@ -880,7 +890,7 @@ namespace djnn
   
     _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_SourceOver);
     rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
-    _picking_view->painter()->drawImage (rect, *pick_pm);
+    _picking_view->painter()->drawImage (rect, *pick_pm->pm);
     //_picking_view->painter()->drawPixmap (0, 0, *pick_pm);
     rmt_EndCPUSample ();
     _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);

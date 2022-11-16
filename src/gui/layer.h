@@ -21,6 +21,10 @@
 #include "display/window.h"
 
 namespace djnn {
+
+    struct LayerCache {
+      virtual ~LayerCache() {}
+    };
     class Layer : public Container
     {
       class LayerDamagedAction : public Action
@@ -39,10 +43,10 @@ namespace djnn {
       void impl_activate () override;
       void impl_deactivate () override;
       void draw () override;
-      void* cache () { return _cache;}
-      void* pick_cache () { return _pick_cache;}
-      void set_cache (void* cache) { _cache = cache; }
-      void set_pick_cache (void* cache) { _pick_cache = cache; }
+      LayerCache* cache () { return _cache;}
+      LayerCache* pick_cache () { return _pick_cache;}
+      void set_cache (LayerCache* cache) { _cache = cache; }
+      void set_pick_cache (LayerCache* cache) { _pick_cache = cache; }
       bool invalid_cache () { return _invalid_cache; }
       void set_invalid_cache (bool v);
       Layer* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
@@ -62,7 +66,7 @@ namespace djnn {
       Spike _damaged;
       BoolProperty _auto_redisplay;
       bool _invalid_cache;
-      void *_cache, *_pick_cache;
+      LayerCache *_cache, *_pick_cache;
       LayerDamagedAction _damaged_action;
       Coupling _c_damaged;
       double _x, _y, _w, _h, _pad;
