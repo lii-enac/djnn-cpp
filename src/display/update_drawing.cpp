@@ -70,20 +70,26 @@ namespace djnn {
   UpdateDrawing::clear ()
   {
     if (update_display_initialized) {
+      _instance->set_activation_state (DEACTIVATED);
       _instance->set_data (nullptr);
       _instance->_win_list.clear ();
-      Graph::instance ().remove_output_node (_instance->_redraw_action);
-      
+
+      delete _instance->_c_update_auto_refresh;
+    
       graph_add_edge (_instance->_draw_sync, _instance->_redraw_action); // this edge will be removed by the coupling's destructor but it doesn't exist anymore so add it now
       delete _instance->_c_redraw_when_draw_sync;
       delete _instance->_c_redraw_when_damaged;
+      Graph::instance ().remove_output_node (_instance->_redraw_action);
       delete _instance->_redraw_action;
-      delete _instance->_c_update_auto_refresh;
+      //delete _instance->_c_update_auto_refresh;
 
-      delete _instance->_damaged;
       delete _instance->_draw_sync;
-      delete _instance->_auto_refresh;
       delete _instance->_update_auto_refresh_action;
+      delete _instance->_auto_refresh;
+      delete _instance->_damaged;
+      
+      
+      
       update_display_initialized = false;
     }
   }
@@ -91,8 +97,8 @@ namespace djnn {
   UpdateDrawing::UpdateDrawing () :
     FatProcess ("UpdateDrawing")
   {
-    // NOTE: 07.2020: moved everything to init ()
-    // //finalize_construction (nullptr, "UpdateDrawing");
+    // we have to "finalise" it with nullptr to correctly added into Parentless_names
+    finalize_construction (nullptr, "UpdateDrawing");
   }
 
   UpdateDrawing::~UpdateDrawing ()
