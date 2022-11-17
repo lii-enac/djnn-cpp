@@ -36,34 +36,63 @@ namespace djnn
                                     int x, int y, int width, int height,
                                     const string &text,
                                     bool enable_edit_on_activation) :
-      AbstractGShape (parent, name), _lines (this, "lines"), _cursor_start_x (
-          this, "cursor_start_x", 0), _cursor_start_y (this, "cursor_start_y",
-                                                       0), _cursor_end_x (
-          this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0), _cursor_height (
-          this, "cursor_height", 16), _x (this, "x", x), _y (this, "y", y), _width (
-          this, "width", width), _height (this, "height", height), _line_height (
-          this, "line_height", 16), _spaces_for_tab (this, "spaces_for_tab", 0), _key_code_pressed (
-          this, "key_pressed", 0), _key_code_released (this, "key_released", 0), _str_input (
-          this, "string_input", ""), _copy_buffer (this, "copy_buffer", ""), _toggle_edit (
-          this, "toggle_edit"), _content_changed (this, "content_changed"), _clear (
-          this, "clear"), _line (nullptr), _toggle_action (
-          this, "toggle_edit_action"), _on_press (this, "on_press_action"), _on_release (
-          this, "on_release_action"), _on_move (this, "on_move_action"), _key_pressed (
-          this, "key_pressed_action"), _key_released (this,
-                                                      "key_released_action"), _on_str_input (
-          this, "on_str_input_action"), _on_clear (this, "on_clear"), _c_key_press (
-          &_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION), _c_key_release (
-          &_key_code_released, ACTIVATION, &_key_released, ACTIVATION), _c_str_input (
-          &_str_input, ACTIVATION, &_on_str_input, ACTIVATION), _c_press (), _c_release (), _c_move (), _c_x (
-          &_x, ACTIVATION, nullptr, ACTIVATION), _c_y (&_y, ACTIVATION, nullptr,
-                                                       ACTIVATION), _c_toggle (
-          &_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION), _c_clear (
-          &_clear, ACTIVATION, &_on_clear, ACTIVATION), _font_metrics (nullptr), _ordering_node (), _index_x (
-          0), _index_y (0), _ascent (0), _descent (0), _leading (0), _start_sel_x (
-          0), _start_sel_y (0), _end_sel_x (0), _end_sel_y (0), _shift_on (
-          false), _ctrl_on (false), _alt_on (false), _press_on (false), _enable_edit_on_activation (
-          enable_edit_on_activation), _first_draw (true), _init_text (text)
-
+      AbstractGShape (parent, name), 
+      _lines (this, "lines"), 
+      _cursor_start_x (this, "cursor_start_x", 0), 
+      _cursor_start_y (this, "cursor_start_y", 0),
+      _cursor_end_x (this, "cursor_end_x", 0),
+      _cursor_end_y (this, "cursor_end_y", 0),
+      _cursor_height (this, "cursor_height", 16),
+      _x (this, "x", x),
+      _y (this, "y", y),
+      _width (this, "width", width),
+      _height (this, "height", height),
+      _line_height (this, "line_height", 16),
+      _spaces_for_tab (this, "spaces_for_tab", 0),
+      _key_code_pressed (this, "key_pressed", 0),
+      _key_code_released (this, "key_released", 0),
+      _str_input (this, "string_input", ""),
+      _copy_buffer (this, "copy_buffer", ""),
+      _toggle_edit (this, "toggle_edit"),
+      _content_changed (this, "content_changed"),
+      _clear (this, "clear"),
+      _line (nullptr),
+      _toggle_action (this, "toggle_edit_action"),
+      _on_press (this, "on_press_action"),
+      _on_release (this, "on_release_action"),
+      _on_move (this, "on_move_action"),
+      _key_pressed (this, "key_pressed_action"),
+      _key_released (this, "key_released_action"),
+      _on_str_input (this, "on_str_input_action"),
+      _on_clear (this, "on_clear"),
+      _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
+      _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
+      _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION), 
+      _c_press (), 
+      _c_release (), 
+      _c_move (), 
+      _c_x (&_x, ACTIVATION, nullptr, ACTIVATION),
+      _c_y (&_y, ACTIVATION, nullptr, ACTIVATION),
+      _c_toggle (&_toggle_edit, ACTIVATION, &_toggle_action, ACTIVATION),
+      _c_clear (&_clear, ACTIVATION, &_on_clear, ACTIVATION),
+      _font_metrics (nullptr),
+      _ordering_node (),
+      _index_x (0),
+      _index_y (0),
+      _ascent (0),
+      _descent (0),
+      _leading (0),
+      _start_sel_x (0),
+      _start_sel_y (0),
+      _end_sel_x (0),
+      _end_sel_y (0),
+      _shift_on (false),
+      _ctrl_on (false),
+      _alt_on (false),
+      _press_on (false),
+      _enable_edit_on_activation (enable_edit_on_activation),
+      _first_draw (true),
+      _init_text (text)
   {
     init_ui ();
 
@@ -84,18 +113,18 @@ namespace djnn
   }
 
   MultilineEditor::~MultilineEditor () {
-    graph_remove_edge (&_on_str_input, &_ordering_node);
-    graph_remove_edge (&_on_press, &_ordering_node);
-    graph_remove_edge (&_on_release, &_ordering_node);
-    graph_remove_edge (&_on_move, &_ordering_node);
-    graph_remove_edge (&_key_pressed, &_ordering_node);
-    graph_remove_edge (&_key_released, &_ordering_node);
-
-    graph_remove_edge (&_ordering_node, &_cursor_start_x);
-    graph_remove_edge (&_ordering_node, &_cursor_end_x);
-    graph_remove_edge (&_ordering_node, &_cursor_start_y);
-    graph_remove_edge (&_ordering_node, &_cursor_end_y);
     graph_remove_edge (&_ordering_node, &_content_changed);
+    graph_remove_edge (&_ordering_node, &_cursor_end_y);
+    graph_remove_edge (&_ordering_node, &_cursor_start_y);
+    graph_remove_edge (&_ordering_node, &_cursor_end_x);
+    graph_remove_edge (&_ordering_node, &_cursor_start_x);
+
+    graph_remove_edge (&_key_released, &_ordering_node);
+    graph_remove_edge (&_key_pressed, &_ordering_node);
+    graph_remove_edge (&_on_move, &_ordering_node);
+    graph_remove_edge (&_on_release, &_ordering_node);
+    graph_remove_edge (&_on_press, &_ordering_node);
+    graph_remove_edge (&_on_str_input, &_ordering_node);
   }
 
   void
@@ -114,12 +143,9 @@ namespace djnn
       else _line = get_line (0);
     }
     AbstractGShape::impl_activate ();
-    _c_press.init (this->find_child ("press"), ACTIVATION, &_on_press,
-                   ACTIVATION, false);
-    _c_release.init (get_frame ()->find_child ("release"), ACTIVATION,
-                     &_on_release, ACTIVATION, false);
-    _c_move.init (get_frame ()->find_child ("move"), ACTIVATION, &_on_move,
-                  ACTIVATION, false);
+    _c_press.init (this->find_child ("press"), ACTIVATION, &_on_press, ACTIVATION, false);
+    _c_release.init (get_frame ()->find_child ("release"), ACTIVATION, &_on_release, ACTIVATION, false);
+    _c_move.init (get_frame ()->find_child ("move"), ACTIVATION, &_on_move, ACTIVATION, false);
     _lines.activate ();
 
     _c_x.set_dst (get_frame ()->damaged ());
@@ -287,8 +313,7 @@ namespace djnn
         dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("move/x"));
     auto * move_y =
         dynamic_cast<AbstractSimpleProperty*> (get_frame ()->find_child ("move/y"));
-    pair<double, double> local = get_local_coords (move_x->get_double_value (),
-                                                   move_y->get_double_value ());
+    pair<double, double> local = get_local_coords (move_x->get_double_value (), move_y->get_double_value ());
     int x = (int) local.first - this->x ();
     int y = (int) local.second - this->y ();
     update_index_from_xy (x, y);
@@ -735,8 +760,7 @@ namespace djnn
         found = cpy.find ("\n");
         int y = (get_line (_index_y))->get_y () + off_y;
         while (found != string::npos) {
-          SimpleText *buff = new SimpleText (this, "", 0, y,
-                                             cpy.substr (0, found));
+          SimpleText *buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child (buff, AFTER, _line);
           _line = buff;
           cpy = cpy.substr (found + 1);
@@ -768,8 +792,7 @@ namespace djnn
         found = cpy.find ("\n");
         int y = (get_line (_index_y))->get_y () + off_y;
         while (found != string::npos) {
-          SimpleText *buff = new SimpleText (this, "", 0, y,
-                                             cpy.substr (0, found));
+          SimpleText *buff = new SimpleText (this, "", 0, y, cpy.substr (0, found));
           _lines.move_child (buff, AFTER, _line);
           _line = buff;
           cpy = cpy.substr (found + 1);
