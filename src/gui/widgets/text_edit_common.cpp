@@ -69,7 +69,10 @@ namespace djnn
     disable (&_ctext);
   }
 
-  SimpleText::~SimpleText () {}
+  SimpleText::~SimpleText () {
+    delete _cy;
+    delete _cx;
+  }
 
   FatChildProcess*
   SimpleText::find_child_impl (const string& name)
