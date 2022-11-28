@@ -128,90 +128,76 @@ namespace djnn
 
   UI::~UI()
   {
-    _move->remove_symbol ("x");
-    _move->remove_symbol ("y");
-    _move->remove_symbol ("local_x");
-    _move->remove_symbol ("local_y");
-
-    _press->remove_symbol ("x");
-    _press->remove_symbol ("y");
-    _press->remove_symbol ("local_x");
-    _press->remove_symbol ("local_y");
-
-    _mouse_move->remove_symbol ("x");
-    _mouse_move->remove_symbol ("y");
-    _mouse_move->remove_symbol ("local_x");
-    _mouse_move->remove_symbol ("local_y");
-
-    _mouse_press->remove_symbol ("x");
-    _mouse_press->remove_symbol ("y");
-    _mouse_press->remove_symbol ("local_x");
-    _mouse_press->remove_symbol ("local_y");
-
-    _mouse_wheel->remove_symbol ("x");
-    _mouse_wheel->remove_symbol ("y");
-    _mouse_wheel->remove_symbol ("local_x");
     _mouse_wheel->remove_symbol ("local_y");
-
-    delete _mouse_press_x;
-    delete _mouse_press_y;
-    delete _mouse_move_x;
-    delete _mouse_move_y;
-    delete _mouse_wheel_x;
-    delete _mouse_wheel_y;
-
-    delete _mouse_local_press_x;
-    delete _mouse_local_press_y;
-    delete _mouse_local_move_x;
-    delete _mouse_local_move_y;
-    delete _mouse_local_wheel_x;
+    _mouse_wheel->remove_symbol ("local_x");
+    _mouse_wheel->remove_symbol ("y");
+    _mouse_wheel->remove_symbol ("x");
+    
+    _mouse_press->remove_symbol ("local_y");
+    _mouse_press->remove_symbol ("local_x");
+    _mouse_press->remove_symbol ("y");
+    _mouse_press->remove_symbol ("x");
+    
+    _mouse_move->remove_symbol ("local_y");
+    _mouse_move->remove_symbol ("local_x");
+    _mouse_move->remove_symbol ("y");
+    _mouse_move->remove_symbol ("x");
+    
     delete _mouse_local_wheel_y;
+    delete _mouse_local_wheel_x;
+    delete _mouse_local_move_y;
+    delete _mouse_local_move_x;
+    delete _mouse_local_press_y;
+    delete _mouse_local_press_x;
 
-    delete _move_x;
-    delete _move_y;
-    delete _press_x;
-    delete _press_y;
+    delete _mouse_wheel_y;
+    delete _mouse_wheel_x;
+    delete _mouse_move_y;
+    delete _mouse_move_x;
+    delete _mouse_press_y;
+    delete _mouse_press_x;
 
-    delete _local_move_x;
-    delete _local_move_y;
-    delete _local_press_x;
+    _press->remove_symbol ("local_y");
+    _press->remove_symbol ("local_x");
+    _press->remove_symbol ("y");
+    _press->remove_symbol ("x");
+
+    _move->remove_symbol ("local_y");
+    _move->remove_symbol ("local_x");
+    _move->remove_symbol ("y");
+    _move->remove_symbol ("x");
+        
     delete _local_press_y;
+    delete _local_press_x;
+    delete _local_move_y;
+    delete _local_move_x;
 
-    parent->remove_child (_touches);
-    parent->remove_child (_mouse);
-    parent->remove_child (_press);
-    parent->remove_child (_release);
-    parent->remove_child (_move);
-    parent->remove_child (_enter);
-    parent->remove_child (_leave);
-    parent->remove_child (_left);
-    parent->remove_child (_right);
-    parent->remove_child (_middle);
-    parent->remove_child (_wheel);
-
-    _wheel->remove_child (_wheel_dx);
-    _wheel->remove_child (_wheel_dy);
-    _wheel->remove_child (_wheel_x);
-    _wheel->remove_child (_wheel_y);
-    _wheel->remove_child (_local_wheel_x);
     _wheel->remove_child (_local_wheel_y);
-
-    _mouse->remove_child (_mouse_press);
-    _mouse->remove_child (_mouse_release);
-    _mouse->remove_child (_mouse_move);
-    _mouse->remove_child (_mouse_enter);
-    _mouse->remove_child (_mouse_leave);
-    _mouse->remove_child (_mouse_wheel);
-
-    _left->remove_child (_left_press);
-    _left->remove_child (_left_release);
-
-    _right->remove_child (_right_press);
-    _right->remove_child (_right_release);
-
-    _middle->remove_child (_middle_press);
-    _middle->remove_child (_middle_release);
-
+    _wheel->remove_child (_local_wheel_x);
+    delete _local_wheel_y;
+    delete _local_wheel_x;
+    _wheel->remove_child (_wheel_y);
+    _wheel->remove_child (_wheel_x);
+    delete _wheel_y;
+    delete _wheel_x;
+    _wheel->remove_child (_wheel_dy);
+    _wheel->remove_child (_wheel_dx);
+    delete _wheel_dy; 
+    delete _wheel_dx;
+    
+    delete _press_y;
+    delete _press_x;
+    delete _move_y;
+    delete _move_x;
+    
+    _wheel->set_activation_state (DEACTIVATED);
+    _middle->set_activation_state (DEACTIVATED);
+    _right->set_activation_state (DEACTIVATED);
+    _left->set_activation_state (DEACTIVATED);
+    _mouse->set_activation_state(DEACTIVATED);
+    _touches->set_activation_state (DEACTIVATED);
+    
+    parent->remove_child (_touches);
     /* HACK 
     * clear _children of the (djnn:List) touches before
     * deleting it (touches), to avoid ~Container to delete touches inside "touches list"
@@ -219,38 +205,57 @@ namespace djnn
     */
     ((List*) _touches)->clear ();
     delete _touches;
-    
+
     graph_remove_edge (_mouse_enter, _mouse_leave);
-    delete _mouse_leave;
-    delete _mouse_enter;
-    delete _mouse_move;
-    delete _mouse_release;
-    delete _mouse_press;
-    delete _mouse_wheel;
-    delete _mouse;
     graph_remove_edge (_enter, _leave);
-    delete _leave;
-    delete _enter;
-    delete _release;
-    delete _move;
-    delete _press;
-    delete _left;
-    delete _left_press;
-    delete _left_release;
-    delete _right;
-    delete _right_press;
-    delete _right_release;
-    delete _middle;
-    delete _middle_press;
-    delete _middle_release;
-    delete cpick;
-    delete pickable;
-    delete _wheel_x;
-    delete _wheel_y;
-    delete _wheel_dx;
-    delete _wheel_dy;
-    delete _local_wheel_x;
-    delete _local_wheel_y;
+
+    _mouse->remove_child (_mouse_wheel);
+    delete _mouse_wheel;
+    _mouse->remove_child (_mouse_leave);
+    delete _mouse_leave;
+    _mouse->remove_child (_mouse_enter);
+    delete _mouse_enter;
+    _mouse->remove_child (_mouse_move);
+    delete _mouse_move;
+    _mouse->remove_child (_mouse_release);
+    delete _mouse_release;
+    _mouse->remove_child (_mouse_press);
+    delete _mouse_press;
+    parent->remove_child (_wheel);
     delete _wheel;
+    parent->remove_child (_mouse);
+    delete _mouse;
+    parent->remove_child (_leave);
+    delete _leave;
+    parent->remove_child (_enter);
+    delete _enter;
+    parent->remove_child (_release);
+    delete _release;
+    _middle->remove_child (_middle_release);
+    delete _middle_release;
+    _middle->remove_child (_middle_press);
+    delete _middle_press;
+    parent->remove_child (_middle);
+    delete _middle;
+    _right->remove_child (_right_release);
+    delete _right_release;
+    _right->remove_child (_right_press);
+    delete _right_press;
+    parent->remove_child (_right);
+    delete _right;
+    _left->remove_child (_left_release);
+    delete _left_release;
+    _left->remove_child (_left_press);
+    delete _left_press;
+    parent->remove_child (_left);
+    delete _left;
+    parent->remove_child (_move);
+    delete _move;
+    parent->remove_child (_press);
+    delete _press;
+    
+    delete cpick;
+    parent->remove_child (pickable);
+    delete pickable; 
   }
 } /* namespace djnn */
