@@ -24,6 +24,9 @@ namespace djnn {
 
   BackgroundRect::~BackgroundRect ()
   {
+    //Note: it's seems no need to reorder destructors due to multiple heritage
+    //PickUI::delete_UI ();
+    //Container::clean_up_content ();
   }
 
   FatChildProcess*
