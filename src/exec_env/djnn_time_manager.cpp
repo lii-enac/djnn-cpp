@@ -37,8 +37,8 @@ namespace djnn {
   DjnnTimeManager::~DjnnTimeManager()
   {
     if (is_global_mutex_inited()) {
-      djnn::get_exclusive_access (DBG_GET);
-      djnn::release_exclusive_access (DBG_REL);
+      // djnn::get_exclusive_access (DBG_GET);
+      // djnn::release_exclusive_access (DBG_REL);
     }
   }
 
