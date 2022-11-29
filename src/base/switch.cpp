@@ -27,7 +27,7 @@ namespace djnn
   {
   }
 
-   /*  be carefull :
+    /*  be carefull :
         we have to add branch_name in the process symTable but NOT in the container _children list 
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
@@ -50,6 +50,7 @@ namespace djnn
   {
     if (get_parent ()) {
       remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), &_branch_name);
     }
 
     /* note:
