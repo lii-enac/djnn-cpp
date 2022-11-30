@@ -129,6 +129,7 @@ namespace djnn {
     FSMPostTriggerAction _post_trigger;
     vector<FSMState*> _states;
     vector<FSMTransition*> _transitions;
+    bool _has_been_initialized_with_parent;
   };
 
 #ifdef DJNN_NO_DYNAMIC_CAST

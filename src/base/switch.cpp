@@ -38,8 +38,14 @@ namespace djnn
   _branch_name (nullptr, "switch_state", initial),
   _action (this, "switch_action"),
   _c_branch (&_branch_name, ACTIVATION, &_action, ACTIVATION),
-  _cur_branch (nullptr)
+  _cur_branch (nullptr),
+  _has_been_initialized_with_parent (false)
   {
+    // to separe cases between djnn (often with parent) and smala (no parent at init)
+    // no parent at init = no state_dependency with parent initialized
+    if (parent)
+      _has_been_initialized_with_parent = true;
+
     add_symbol ("state", &_branch_name);
     _c_branch.disable ();
     set_state_dependency (&_branch_name);
@@ -53,7 +59,9 @@ namespace djnn
       remove_state_dependency (get_parent (), state_dependency ());
       // remove original state_dependency that may has changed
       // from _branch_name if the switch is a child of another fsm.state, switch.state ...
-      remove_state_dependency (get_parent (), &_branch_name);
+      // also do not exist when the switch is initialized with no parent.
+      if (_has_been_initialized_with_parent)
+        remove_state_dependency (get_parent (), &_branch_name);
     }
 
     /* note:

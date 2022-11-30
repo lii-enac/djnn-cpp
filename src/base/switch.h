@@ -55,6 +55,7 @@ namespace djnn {
     SwitchAction _action;
     Coupling _c_branch;
     CoreProcess* _cur_branch;
+    bool _has_been_initialized_with_parent;
   };
 
 }

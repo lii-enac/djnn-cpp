@@ -270,8 +270,14 @@ namespace djnn
   _cur_state (nullptr),
   _fsm_state (this, "state", ""),
   _initial (this, "initial", ""),
-  _post_trigger (this, "post_trigger")
+  _post_trigger (this, "post_trigger"),
+  _has_been_initialized_with_parent (false)
   { 
+    // to separe cases between djnn (often with parent) and smala (no parent at init)
+    // no parent at init = no state_dependency with parent initialized
+    if (parent)
+      _has_been_initialized_with_parent = true;
+
     set_state_dependency (&_fsm_state);
     /* with state_dependency */
     finalize_construction (parent, name, &_fsm_state);
@@ -289,7 +295,9 @@ namespace djnn
       remove_state_dependency (get_parent (), state_dependency ());
       // remove original state_dependency that may has changed 
       // from _fsm_state if the fsm is a child of another fsm.state, switch.state ...
-      remove_state_dependency (get_parent (), &_fsm_state);
+      // also do not exist when the fsm is initialized with no parent.
+      if (_has_been_initialized_with_parent)
+        remove_state_dependency (get_parent (), &_fsm_state);
     }
 
 
