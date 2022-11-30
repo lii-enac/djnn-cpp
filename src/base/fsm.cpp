@@ -285,7 +285,11 @@ namespace djnn
   FSM::~FSM ()
   {
     if (get_parent ()) {
+      // remove current state_dependency
       remove_state_dependency (get_parent (), state_dependency ());
+      // remove original state_dependency that may has changed 
+      // from _fsm_state if the fsm is a child of another fsm.state, switch.state ...
+      remove_state_dependency (get_parent (), &_fsm_state);
     }
 
 
