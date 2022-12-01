@@ -18,6 +18,7 @@ lib_cppflags += -DDJNN_USE_OPENAL
 	ifeq ($(os),Darwin)
 		ifeq ($(audio),AL)
 		# MacOS OpenAL
+		lib_ldflags += -F/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks
 		lib_ldflags += -framework OpenAL
 		endif
 		ifeq ($(audio),AL_SOFT)
