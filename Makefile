@@ -316,6 +316,17 @@ ifeq (g++,$(findstring g++,$(CXX)))
 CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
+
+linker ?= $(compiler)
+
+ifeq ($(linker),mold)
+ifeq ($(os),Darwin)
+CXXLD := ld64.mold
+DYNLIB =-L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
+endif
+DYNLIB += -dylib -lc++ -lc
+endif
+
 # ---------------------------------------
 # debug, analysis
 
@@ -550,8 +561,11 @@ endif
 ifneq ($(os),em)
 $1_lib_soname := -Wl,-soname,$$($1_libname)
 endif
-ifeq ($(os), Darwin)
+ifeq ($(linker), llvm)
 $1_lib_soname := -Wl,-install_name,$$($1_libname)
+endif
+ifeq ($(linker), mold)
+$1_lib_soname := -install_name $$($1_libname)
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
