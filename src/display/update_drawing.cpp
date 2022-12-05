@@ -14,17 +14,15 @@ namespace djnn {
 
   bool update_display_initialized = false;
   UpdateDrawing *UpdateDrawing::_instance;
-  std::once_flag UpdateDrawing::onceFlag;
 
   UpdateDrawing*
   UpdateDrawing::instance ()
   {
-    std::call_once (UpdateDrawing::onceFlag, [] () {
+    if (update_display_initialized == false) {
       _instance = new UpdateDrawing ();
       //_instance->update_auto_refresh ();
       _instance->impl_activate ();
-      //update_display_initialized = true;
-    });
+    }
 
     return _instance;
   }
@@ -81,14 +79,11 @@ namespace djnn {
       delete _instance->_c_redraw_when_damaged;
       Graph::instance ().remove_output_node (_instance->_redraw_action);
       delete _instance->_redraw_action;
-      //delete _instance->_c_update_auto_refresh;
 
       delete _instance->_draw_sync;
       delete _instance->_update_auto_refresh_action;
       delete _instance->_auto_refresh;
       delete _instance->_damaged;
-      
-      
       
       update_display_initialized = false;
     }

@@ -60,9 +60,8 @@ namespace djnn
 
   void
   init_display () {
-    UpdateDrawing::init ();
     if ( __module_initialized == false ) {
-      //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
+      UpdateDrawing::init ();
       DrawingRefreshManager = UpdateDrawing::instance ();
       GPUs = new Set (nullptr, "GPUs");
       GPUs->set_activation_state (ACTIVATED);
@@ -72,7 +71,6 @@ namespace djnn
       GenericKeyboard->activate ();
       URI::add_uri ("gpu", GPUs);
       URI::add_uri ("display", Displays);
-      //std::cerr << __FILE__ << " " << __LINE__ << std::endl;
       p_init_display ();
       djnn::loadedModules.push_back("display");
       __module_initialized = true;
@@ -84,7 +82,8 @@ namespace djnn
     if ( __module_initialized == true ) {
       GPUs->set_activation_state (DEACTIVATED);
       Displays->set_activation_state (DEACTIVATED);
-      UpdateDrawing::clear ();
+      delete DrawingRefreshManager;
+      DrawingRefreshManager = nullptr;
       p_clear_display ();
       GenericKeyboard->deactivate ();
       delete GenericKeyboard;

@@ -79,6 +79,7 @@ namespace djnn
     void remove_external_source (ExternalSource*);
     
     void add_background_process (FatProcess *p) { _background_processes.push_back (p); }
+    void remove_background_process (FatProcess *p) {  _background_processes.erase (std::remove(_background_processes.begin(), _background_processes.end(), p), _background_processes.end()); }
 
     void external_run_for_qt5_9_fixme() { run(); }
     void private_run ();

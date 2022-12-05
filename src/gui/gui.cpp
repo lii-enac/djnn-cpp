@@ -84,10 +84,11 @@ namespace djnn
 
   void
   clear_gui ()
-  {   
-    clear_svg_parser ();
-
+  {  
     p_clear_gui ();
+
+    XMLEllipseAttrs_Hash::clear ();
+    SVG_Utils::clear_named_colors ();
 
     /* remove container from structure_observer_list */
     structure_observer_list.erase (
@@ -96,11 +97,13 @@ namespace djnn
     );
     /* and delete it */
     delete gui_structure_observer;
+
+    clear_svg_parser ();
+
+    MainLoop::instance ().remove_background_process (DrawingRefreshManager);
+
     delete GenericMouse;
-
-    SVG_Utils::clear_named_colors ();
-    XMLEllipseAttrs_Hash::clear ();
-
+  
     __module_initialized = false;
   }
 

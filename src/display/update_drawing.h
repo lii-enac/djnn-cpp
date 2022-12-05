@@ -80,7 +80,6 @@ namespace djnn {
     UpdateDrawing (const UpdateDrawing&) = delete;
     UpdateDrawing & operator=(const UpdateDrawing&) = delete;
     static UpdateDrawing* _instance;
-    static std::once_flag onceFlag;
     vector<Window*> _win_list;
     BoolProperty *_auto_refresh;
     Spike *_draw_sync;
