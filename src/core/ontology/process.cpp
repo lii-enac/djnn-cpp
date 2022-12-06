@@ -122,10 +122,7 @@ namespace djnn
   void
   delete_parentless_processes ()
   {
-    // warning (nullptr, "\n\n This FUNCTION (delete_parentless_processes) is broken and should be remade - TODO MP 11.2021 \n\n ");
-    // warning (nullptr, "\n\n UNIT TESTS may not work very well \n\n ");
-
-    // // debug print before
+    // //debug print before
     // std::cerr << "\033[1;35m" << std::endl;
     // std::cerr << "-- Before - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
     // if (!parentless_names.empty()) {
@@ -144,31 +141,29 @@ namespace djnn
 
     // delete by reverse order
     //C++20 : for (const auto& [key, value] : parentless_names_ordered | std::views::reverse)
-    /*
     for (auto iter = parentless_names_ordered.rbegin(); iter != parentless_names_ordered.rend(); ++iter) {
+
       //debug: display parentless_names_ordered -- in reverse
-      //std::cerr << '[' << iter->first << "] = " << iter->second  << "not delete yet" << std::endl;
+      //std::cerr << '[' << iter->first << "] = " << iter->second  << " try to delete" << std::endl;
       //TODO 11.2022 : hack to not remove updateDrawing but it should NOT be here - it should be deleted in updateDrawing::clear ()
       if (iter->first) {
         delete iter->second;
         iter->second = nullptr;
       }
+      
     }
-    */
-    //TODO : TO BE REMOVED ... used for now ... but should be replaced by the code above
-    parentless_names.clear ();
-
-    //debug print after cleaning
-    // std::cerr << "\033[1;35m" << std::endl;
-    // std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
-    // if (!parentless_names.empty()) {
-    //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
-    //   for (const auto& [key, pair_value] : parentless_names)
-    //     std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
-    // }
-    // else
-    //   std::cerr << "OK - Parentless_Name is EMPTY";
-    // std::cerr << "\033[0m \n\n";
+    
+    // print if Parentless_names is not empty
+  #ifndef DJNN_NO_DEBUG
+    if (!parentless_names.empty()) {
+      std::cerr << "\033[1;35m" << std::endl;
+      //std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+      std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+      for (const auto& [key, pair_value] : parentless_names)
+        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
+      std::cerr << "\033[0m \n\n";
+    }
+  #endif
   }
 
   const string&
