@@ -40,6 +40,7 @@ namespace djnn {
   XML::djn__NamespaceTable_t XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
+  map<const string, FatProcess*> _XML_loaded_map;
 
   /*
    * I. The public API: initialisation and parsing function
@@ -66,7 +67,7 @@ namespace djnn {
       return len;
     else {
       fprintf (stderr, "Parse error at line %d:\n%s\n", (int) XML_GetCurrentLineNumber (d->parser),
-               XML_ErrorString (XML_GetErrorCode (d->parser)));
+                XML_ErrorString (XML_GetErrorCode (d->parser)));
       return -1;
     }
   }
@@ -119,6 +120,19 @@ namespace djnn {
   }
 
   FatProcess*
+  XML::djnLoadThenClone (const string& path) {
+    auto it = _XML_loaded_map.find (path);
+    FatProcess* fp;
+    if (it != _XML_loaded_map.end())
+      fp = it->second;
+    else {
+      fp = XML::djnLoadFromXML (path);
+      _XML_loaded_map[path] = fp;
+    }
+    return clone (fp);
+  }
+
+  FatProcess*
   XML::djnParseXMLFromPath (const string& path)
   {
     FILE * f;
@@ -157,7 +171,7 @@ namespace djnn {
 
       if (!XML_ParseBuffer (p, len, done)) {
         fprintf (stderr, "Parse error at line %d:\n%s\n", (int) XML_GetCurrentLineNumber (p),
-                 XML_ErrorString (XML_GetErrorCode (p)));
+                  XML_ErrorString (XML_GetErrorCode (p)));
         XML_ParserFree (p);
         fclose (f);
         return 0;
@@ -384,5 +398,13 @@ namespace djnn {
   XML::djn__XMLNamespaceEnd (void* userData, const XML_Char *prefix)
   {
   }
+
+  void
+  clear_xml (){
+    for (auto it : _XML_loaded_map) {
+      delete it.second ;
+      it.second = nullptr;
+    }
+  } 
 #endif
 }

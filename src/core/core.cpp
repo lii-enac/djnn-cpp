@@ -79,8 +79,8 @@ namespace djnn
 #endif
   }
 
-  extern void
-  delete_parentless_processes ();
+  extern void delete_parentless_processes ();
+  extern void clear_xml ();
 
   void
   clear_core ()
@@ -91,6 +91,7 @@ namespace djnn
     rmt_DestroyGlobalInstance(rmt);
 #endif
     //std::cerr << __PRETTY_FUNCTION__ << __FL__;
+    clear_xml ();
     delete_parentless_processes ();
     __module_initialized = false;
   }
