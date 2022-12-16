@@ -618,22 +618,22 @@ dcs.append(dc)
 
 dc = DjnnClass("OutlineCapStyle", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('cap', 'int', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("OutlineJoinStyle", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('join', 'int', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("OutlineMiterLimit", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('limit', 'int', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("DashOffset", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('offset', 'double', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropGradientStop", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
@@ -692,7 +692,7 @@ dcs.append(dc)
 
 dc = DjnnClass("TextAnchor", "AbstractStyle", "../src/gui/style", origin=None)
 dc.props.append(Prop('anchor', 'int', None, "transform"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractTranslation", "AbstractTransformation", "../src/gui/transformation", origin=None, finalize_construction=False)

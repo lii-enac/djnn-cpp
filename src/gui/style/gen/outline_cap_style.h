@@ -21,7 +21,8 @@
 
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
-#include "gui/style/abstract_style.h" 
+
+#include "gui/style/abstract_style.h"
 
 
 namespace djnn
