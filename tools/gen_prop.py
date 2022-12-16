@@ -581,6 +581,7 @@ dcs.append(dc)
 
 dc = DjnnClass("AbstractDataImage", "AbstractImage", "../src/gui/shape", finalize_construction=False, parent_prop = apg, parent_prop_pos = DjnnClass.parent_prop_pos_end)
 dc.props.append(Prop('data', 'textp', None, "geometry"))
+dc.props.append(Prop('format', 'int', None, "style"))
 dc.includes = '''#include "gui/shape/gen/abstract_image.h"
 using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data ()' compile
 '''

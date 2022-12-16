@@ -40,7 +40,7 @@ namespace djnn
   AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.data=data, .format=format},
-    _cdata (nullptr)
+    _cdata (nullptr), _cformat (nullptr)
   {
     set_origin (x, y);
     
@@ -49,13 +49,19 @@ namespace djnn
   AbstractDataImage::~AbstractDataImage ()
   {
     remove_edge (_cdata);
+		remove_edge (_cformat);
     delete _cdata;
+		delete _cformat;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (children_size () > 2) {
       symtable_t::iterator it;
 
       it = find_child_iterator ("data");
+			if (it != children_end ())
+				delete it->second;
+
+			it = find_child_iterator ("format");
 			if (it != children_end ())
 				delete it->second;
     }
@@ -84,7 +90,7 @@ namespace djnn
       prop_Textp=true;
     } else
     if(name=="format") {
-      coupling=&_cdata;
+      coupling=&_cformat;
       rawp_Int=&raw_props.format;
       notify_mask = notify_damaged_style;
       prop_Int=true;
@@ -116,7 +122,7 @@ namespace djnn
   {
     static const vector<string> res = {
     "data",
-    "format"
+			"format",
     };
     return res;
   }
@@ -125,7 +131,7 @@ namespace djnn
   AbstractDataImage::get_properties_values (string*& data, int& format, double& x, double& y, double& width, double& height)
   {
     data = raw_props.data;
-    format = raw_props.format;
+		format = raw_props.format;
     AbstractImage::get_properties_values(x, y, width, height);
   }
 
@@ -135,12 +141,14 @@ namespace djnn
     AbstractImage::impl_activate ();
     auto _frame = get_frame ();
     enable(_cdata, _frame->damaged ());
+		enable(_cformat, _frame->damaged ());
   }
 
   void
   AbstractDataImage::impl_deactivate ()
   {
     disable(_cdata);
+		disable(_cformat);
     AbstractImage::impl_deactivate ();
   }
 

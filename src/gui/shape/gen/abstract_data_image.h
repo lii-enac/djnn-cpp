@@ -39,12 +39,12 @@ namespace djnn
     const vector<string>& get_properties_name () const override;
     virtual FatChildProcess* find_child_impl (const string&) override;
 		AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
-    AbstractIntProperty* format () { return (AbstractIntProperty*) find_child_impl ("format"); }
+		AbstractIntProperty* format () { return (AbstractIntProperty*) find_child_impl ("format"); }
 
   protected:
     struct raw_props_t { string* data; int format; };
     raw_props_t raw_props;
-    Coupling *_cdata;
+    Coupling *_cdata, *_cformat;
     void impl_activate () override;
     void impl_deactivate () override;
   };
