@@ -520,7 +520,7 @@ namespace djnn
   void
   remove_from_parentless_name (CoreProcess* child) {
 
-    if(child->get_parent ()==nullptr) {
+    if(child && child->get_parent ()==nullptr) {
       auto it = parentless_names.find(child);
       if (it != parentless_names.end())
         parentless_names.erase (it);
