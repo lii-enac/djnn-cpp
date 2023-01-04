@@ -140,6 +140,8 @@ namespace djnn
   {
     if (path.empty ())
       return this;
+    if (path.compare ("..") == 0)
+      return this->get_parent ();
     size_t found = path.find_first_of ('/');
     string key = path;
     string subpath = "";
