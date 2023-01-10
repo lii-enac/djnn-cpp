@@ -39,7 +39,7 @@ namespace djnn {
     bool is_immediate () const  { return get_immediate_propagation (); }
     bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }
 
-    void about_to_delete_src () { _src = nullptr; }
+    void about_to_delete_src (); // { _src = nullptr; }
 
     void init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     void uninit ();

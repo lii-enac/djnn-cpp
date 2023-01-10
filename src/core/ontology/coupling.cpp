@@ -70,6 +70,16 @@ namespace djnn
     }
   }
 
+  void
+  Coupling::about_to_delete_src () 
+  {
+    if (get_has_edge ()) {
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
+    }
+    _src = nullptr;
+  }
+
   Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
                       CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
   : _src (src), _dst (dst), _bitset (0)
