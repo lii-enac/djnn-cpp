@@ -177,7 +177,7 @@ namespace djnn
     QPointF p (posX, posY);
     p.setX (posX - tf->offset ());
 
-    _painter->setClipRect (0, 0, width, text_height); // clip text
+    _painter->setClipRect (0, 0, width, text_height, Qt::IntersectClip); // clip text
     _painter->setTransform(matrix.toTransform ());
 
     // draw
