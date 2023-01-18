@@ -902,7 +902,7 @@ install_clear:
 #		sudo dpkg -r djnn-cpp
 deb_prefix_version = build/deb/djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 deb_prefix = $(deb_prefix_version)/usr
-deb:	
+deb:
 	make -j6  install PREFIX=$(deb_prefix)
 	test -d $(deb_prefix_version)/DEBIAN || mkdir -p $(deb_prefix_version)/DEBIAN
 	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' distrib/deb/control > $(deb_prefix_version)/DEBIAN/control
@@ -916,6 +916,18 @@ deb:
 	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2)
 # check integrity of the build package. We still have error
 #	cd "build/deb" ; lintian djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).deb
+
+
+MINOR3 = $(shell echo `date +%j`)
+deb_git_prefix_version = build/deb/djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).$(MINOR3)
+deb_git_prefix = $(deb_git_prefix_version)/usr
+deb_git:
+	make -j6  install PREFIX=$(deb_git_prefix)
+	test -d $(deb_git_prefix_version)/DEBIAN || mkdir -p $(deb_git_prefix_version)/DEBIAN
+	sed -e 's,@PREFIX@,$(djnn_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2).$(MINOR3),' distrib/deb/control > $(deb_git_prefix_version)/DEBIAN/control
+	cp distrib/deb/triggers $(deb_git_prefix_version)/DEBIAN/triggers
+	cd $(deb_git_prefix)/lib ; strip --strip-debug --strip-unneeded *.so
+	cd "build/deb" ; fakeroot dpkg-deb --build djnn-cpp_$(MAJOR).$(MINOR).$(MINOR2).$(MINOR3)
 
 #pkg
 
