@@ -1,2 +1,2 @@
 URL : https://github.com/Celtoys/Remotery
-our version : 92c65e807720a12f3a75b9706a5f84ea125c7c6a [92c65e8]
+our version : 58a8fa794e02c2205a9f384221401a873c84fdde [58a8fa7]

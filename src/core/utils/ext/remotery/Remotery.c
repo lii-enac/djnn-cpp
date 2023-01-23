@@ -3104,12 +3104,12 @@ static void TCPSocket_Close(TCPSocket* tcp_socket)
         if (result != SOCKET_ERROR)
         {
             // Keep receiving until the peer closes the connection
-            //int total = 0;
+            int total = 0;
             char temp_buf[128];
             while (result > 0)
             {
                 result = (int)recv(tcp_socket->socket, temp_buf, sizeof(temp_buf), 0);
-                //total += result;
+                total += result;
             }
         }
 
@@ -5508,6 +5508,12 @@ static rmtError ThreadProfilers_GetThreadProfiler(ThreadProfilers* thread_profil
         }
     }
 
+    if (thread_profilers->nbThreadProfilers+1 > thread_profilers->maxNbThreadProfilers)
+    {
+        mtxUnlock(&thread_profilers->threadProfilerMutex);
+        return RMT_ERROR_MALLOC_FAIL;
+    }
+
     // Thread info not found so create a new one at the end
     thread_profiler = thread_profilers->threadProfilers + thread_profilers->nbThreadProfilers;
     error = ThreadProfiler_Constructor(thread_profilers->mqToRmtThread, thread_profiler, thread_id);
@@ -5575,11 +5581,11 @@ static rmtBool ThreadProfilers_ThreadInCallback(ThreadProfilers* thread_profiler
 
 static void GatherThreads(ThreadProfilers* thread_profilers)
 {
-#ifdef RMT_ENABLE_THREAD_SAMPLER
     rmtThreadHandle handle;
 
     assert(thread_profilers != NULL);
 
+#ifdef RMT_ENABLE_THREAD_SAMPLER
 
     // Create the snapshot - this is a slow call
     handle = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
@@ -7277,9 +7283,7 @@ static void SetDebuggerThreadName(const char* name)
 RMT_API void _rmt_SetCurrentThreadName(rmtPStr thread_name)
 {
     ThreadProfiler* thread_profiler;
-#ifdef RMT_PLATFORM_WINDOWS
     rmtU32 name_length;
-#endif
 
     if (g_Remotery == NULL)
     {
