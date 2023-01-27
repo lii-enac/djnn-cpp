@@ -9,8 +9,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - test on Native Windows 10 compilation
 
-## [1.18.0] - 2022-06-09
 
+## [1.19.0] - 2023-01-26 
+### NEW
+    - NEW z_order management for graphical shapes.
+    - NEW Wheel has now a position x, y
+    - NEW support for Mold
+### Added
+    - Added is_model (=false) for component and container to start inactived
+    - Added missing clone function on Component: Text, Deref, timer, binding, assignmentSequence, assignment 
+    - Added a new constructor for dashArray 
+    - Added deb_git target in Makefile for daily deb packaging
+### Changed
+    - make sure that src of coupling is nullptr when about_to_detete_src
+    - Abstract LayerCache
+    - Fixed several memory leaks on several component
+    - Fixed issue  in DashArray
+    - Fixed draw method called on Path.
+    - Fixed missing activation in text_field
+    - Fixed clipping issue with text
+    - correctly added "format" property to data_image through auto-generation file
+    - Change managing of Parentless_name and fixed deletes 
+    - Assignments and Connetor are now templated
+    - Clips are now IntersectClip instead of ReplaceClip
+    - Updated link to remotery
+    - improved component: multiline_edit
+    - Improved Makefile
+    - Improved Code and typo.
+### Deprecated
+    - deprecated LoadFromXML and add new load_from_XML (which load then clone) and load_from_XML_once (only load once)
+
+## [1.18.0] - 2022-06-09
 ### NEW
     - NEW LazyConnector component : if the value did change -> don't raise any event.
     - NEW LazyAssignment component : if the value did change -> don't raise any event.
