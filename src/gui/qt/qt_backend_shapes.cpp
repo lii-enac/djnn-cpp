@@ -852,7 +852,7 @@ namespace djnn
     l->get_xywhp (x, y, w, h, pad);
   
     QMatrix4x4 newm;
-    newm.translate(tx, ty);
+    newm.translate(tx+x, ty+y);
     
     if (ls->tx<0) {
         newm.translate((-ls->tx)*s, 0); // apply no-emptiness translation
