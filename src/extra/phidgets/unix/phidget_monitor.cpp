@@ -18,6 +18,9 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/to_string.h"
 
+#include "core/utils/iostream.h"
+
+
 namespace djnn
 {
   void CCONV
@@ -162,7 +165,7 @@ namespace djnn
   }
 
   IFaceKit888::IFaceKit888 (ParentProcess* parent, const string& name) :
-      FatProcess (n)
+      FatProcess (name)
   {
     _inputs = new List (this, "inputs");
     _outputs = new List (this, "outputs");
@@ -210,8 +213,8 @@ namespace djnn
     _sensors->deactivate ();
   }
 
-  VoltageInputChannel::VoltageInputChannel (ParentProcess* parent, const string& n) :
-      FatProcess (n)
+  VoltageInputChannel::VoltageInputChannel (ParentProcess* parent, const string& name) :
+      FatProcess (name)
   {
     _end_init = new Spike (this, "end_init");
     _value = new DoubleProperty (this, "value", 0.0);

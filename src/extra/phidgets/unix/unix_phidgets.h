@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include <phidget22.h>
 
-#include "phidgets-priv.h"
+#include "extra/phidgets/phidgets-priv.h"
 #include "exec_env/external_source.h"
 #include "core/property/double_property.h"
 #include "core/tree/list.h"
@@ -29,7 +29,7 @@ namespace djnn {
 
   class PhidgetsMonitor : public FatProcess {
   public:
-    PhidgetsMonitor (ParentProcess* parent, const string& n) : FatProcess (name), _handle (nullptr) {}
+    PhidgetsMonitor (ParentProcess* parent, const string& n) : FatProcess (n), _handle (nullptr) {}
     virtual ~PhidgetsMonitor () {}
   protected:
     virtual void impl_activate () override;
