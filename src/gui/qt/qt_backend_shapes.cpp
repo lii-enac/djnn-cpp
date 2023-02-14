@@ -737,7 +737,7 @@ namespace djnn
     rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate)
     if (z_processing_step == 1)
       z_processing_step = 3;
-    double x, y, w, h, pad;
+    int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
     LayerStuff * ls = (LayerStuff*) (l->cache ());
     //auto * pick_pm = (QPixmap*) (l->pick_cache ());
@@ -850,7 +850,7 @@ namespace djnn
 
     //std::cerr << tx << " " << ty << " " << s << __FL__;
 
-    double x, y, w, h, pad;
+    int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
   
     QMatrix4x4 newm;

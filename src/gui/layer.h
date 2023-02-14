@@ -18,6 +18,7 @@
 #include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/tree/component.h"
+#include "core/property/double_property.h"
 #include "display/window.h"
 
 namespace djnn {
@@ -58,8 +59,8 @@ namespace djnn {
         FatProcess::notify_change (nm);
       }
 
-      void get_xywhp(double& x, double& y, double& w, double& h, double& pad) { x=_x; y=_y; w=_w; h=_h; pad=_pad; }
-      void set_xy(double x, double y) { _x=x; _y=y; }
+      void get_xywhp(int& x, int& y, int& w, int& h, int& pad) { x=_x->get_value(); y=_y->get_value(); w=_w->get_value(); h=_h->get_value(); pad=_pad->get_value(); }
+      void set_xy(int x, int y) { _x->set_value(x, true); _y->set_value(y,true); }
 
     protected:
       Window *_frame;
@@ -68,7 +69,7 @@ namespace djnn {
       bool _invalid_cache;
       LayerCache *_cache, *_pick_cache;
       LayerDamagedAction _damaged_action;
-      Coupling _c_damaged;
-      double _x, _y, _w, _h, _pad;
+      IntProperty *_x, *_y, *_w, *_h, *_pad;
+      Coupling _c_damaged, *_c_x, *_c_y, *_c_w, *_c_h, *_c_pad;
     };
 }

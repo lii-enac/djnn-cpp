@@ -28,10 +28,23 @@ namespace djnn
 {
   Layer::Layer (ParentProcess* parent, const string& n, double x, double y, double w, double h, double pad) :
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"), _auto_redisplay (this, "auto_redisplay", true),
-     _invalid_cache (true), _cache (nullptr), _pick_cache (nullptr), _damaged_action (this, "damaged_action"), _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION),
-     _x(x), _y(y), _w(w), _h(h), _pad(pad)
+      _invalid_cache (true), _cache (nullptr), _pick_cache (nullptr), _damaged_action (this, "damaged_action"), 
+      _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION)
   {
     finalize_construction (parent, n);
+
+    _x = new IntProperty (this, "x", x);
+    _y = new IntProperty (this, "y", y);
+    _w = new IntProperty (this, "w", w);
+    _h = new IntProperty (this, "h", h);
+    _pad = new IntProperty (this, "pad", pad);
+
+    _c_x = new Coupling (_x, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_y = new Coupling (_y, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_w = new Coupling (_w, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_h = new Coupling (_h, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_pad = new Coupling (_h, ACTIVATION, &_damaged_action, ACTIVATION);
+
   }
 
   Layer::Layer (ParentProcess* parent, const string& n, double pad) : Layer(parent, n, 0,0,-1,0,pad)
@@ -44,6 +57,12 @@ namespace djnn
     // because they are also plain object and will be deleted twice.
     remove_child ("damaged");
     remove_child ("auto_redisplay");
+
+    delete _c_pad;
+    delete _c_h;
+    delete _c_w;
+    delete _c_y;
+    delete _c_x;
 
     Container::clean_up_content ();
 
@@ -73,7 +92,7 @@ namespace djnn
   void
   Layer::draw ()
   {
-    warning (this, string ("DEPRECATED - Layer::draw - Should not be using - use GUIStructureHolder::draw instead\n Is Layer is only composed of GUI Component ?"));
+    warning (this, string ("DEPRECATED - Layer::draw - Should not be using - use GUIStructureHolder::draw instead\n Is Layer only composed of GUI Component ?"));
     // if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
     //   //rmt_BeginCPUSample(Layer_draw, RMTSF_Recursive);
     //   ComponentObserver::instance ().start_draw ();
