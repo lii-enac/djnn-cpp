@@ -53,7 +53,6 @@ typedef unsigned gperf_t;
   */
   extern int _DEBUG_SEE_COLOR_PICKING_VIEW;
 
-
   /* 
     debug to detect cycle in graph and display informations
   */
@@ -72,6 +71,14 @@ typedef unsigned gperf_t;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US;
   extern int _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED;
 
+  /*
+    displayed info : 
+    - when paintevent is receiv and when Layer (Pixmap) is recompute
+    - when Layer (Pixmap) is recompute only
+  */
+  extern int _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT;
+  extern int _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY;
+
 #else
 
   const int
@@ -81,6 +88,8 @@ typedef unsigned gperf_t;
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US=1000,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED=1,
     _AUTHORIZE_CYCLE=0
+    _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT = 0,
+    _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY=0
     ;
 #endif
 } 

@@ -276,6 +276,9 @@ namespace djnn
   MyQQWidget::paintEvent (QPaintEvent *event)
   { //DBG;
 
+    if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT)
+      std::cerr << std::endl << " PaintEvent " << std::endl;
+    
 #if test_between_2_paintevents
     if (first_time)
       first_time = false ;
