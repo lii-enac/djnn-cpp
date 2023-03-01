@@ -346,7 +346,7 @@ namespace djnn {
     if (h) {
       djn__ExpatData* dexpat = reinterpret_cast<djn__ExpatData*> (userData);
       if (dexpat) {
-        Context::instance()->new_line(XML_GetCurrentLineNumber(dexpat->parser), dexpat->filename);
+        Context::instance()->new_line(XML_GetCurrentLineNumber(dexpat->parser), dexpat->filename); // set xml source filename to help debug within xml files
       }
       FatProcess* e = h->start (attrs, curComponent);
       if (e)
@@ -370,6 +370,7 @@ namespace djnn {
     /* if yes, handle it and pop the handler from the stack */
     if (h) {
       FatProcess* e = h->end (curComponent);
+      Context::instance()->new_line(-1, ""); // unset xml source filename
       if (e)
         curComponent = e;
       old_h = djn__XMLPopTagHandler ();
