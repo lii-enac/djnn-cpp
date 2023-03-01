@@ -79,6 +79,14 @@ typedef unsigned gperf_t;
   extern int _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT;
   extern int _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY;
 
+  /*
+    displayed info :
+    - display the tree structure of component's destruction
+    - to see on which component destruction warning appears
+  */
+
+  extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE;
+
 #else
 
   const int
@@ -89,7 +97,8 @@ typedef unsigned gperf_t;
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED=1,
     _AUTHORIZE_CYCLE=0
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT = 0,
-    _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY=0
+    _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY=0,
+    _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE=0
     ;
 #endif
 } 

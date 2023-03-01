@@ -30,16 +30,10 @@
 #include <algorithm>
 
 
-//TODO: remove
-#include <iostream>
-
-
 #if !defined(DJNN_NO_DEBUG)
-// #include <__iostream>
+  #include <iostream>
 
-//#define DEBUG
-//#define DEBUG_DEACTIVATE
-
+// #define DEBUG_DEACTIVATE
 #endif
 
 
@@ -59,25 +53,26 @@ namespace djnn
   }
 
 
-#ifdef DEBUG
+  // use only for _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1
+  // but can't use precompiled condition anymore to add/remove it
   static int nb_space = 0;
-#endif
 
   void Container::clean_up_content () 
   {
-#ifdef DEBUG
-    for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
-    ++nb_space ;
-    std::cerr << "--- " << get_name () << " :" << std::endl;
-#endif
+    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+      for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
+      ++nb_space ;
+      std::cerr << "--- " << get_name () << " :" << std::endl;
+    }
 
     /* delete and remove children from this container */
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
-#ifdef DEBUG
-      for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
-      std::cerr << i << ". " << _children[i]->get_debug_name () << std::endl ;
-#endif
+
+      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+        for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
+        std::cerr << i << ". " << _children[i]->get_debug_name () << std::endl ;
+      }
       /* remove child from structure_observer (if in structure_observer) */
       for (auto s: structure_observer_list) 
         s->remove_child_from_container (this, _children[i]);
@@ -85,9 +80,9 @@ namespace djnn
       _children.pop_back();
     }
 
-#ifdef DEBUG
-    --nb_space ;
-#endif
+    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+      --nb_space ;
+    }
   }
 
   Container::~Container ()
@@ -257,7 +252,7 @@ namespace djnn
     for(auto it = _children.rbegin(); it != _children.rend(); ++it) {
       auto& c = *it;
 #ifdef DEBUG_DEACTIVATE
-      cerr << __FUNCTION__ << " name: " << c->get_name () << endl;
+      std::cerr << __FUNCTION__ << " name: " << c->get_debug_name () << std::endl;
 #endif
       c->deactivate ();
     }
