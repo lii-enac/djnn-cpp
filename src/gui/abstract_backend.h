@@ -285,6 +285,10 @@ namespace djnn
 
     /* transform */
     virtual void
+    load_identity (Identity*)
+    {
+    }
+    virtual void
     load_translation (Translation*)
     {
     }

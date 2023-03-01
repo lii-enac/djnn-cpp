@@ -2,6 +2,7 @@
 
 namespace djnn {
     class AbstractTransformation;
+    class Identity;
     class Translation;
     class GradientTranslation;
     class Rotation;

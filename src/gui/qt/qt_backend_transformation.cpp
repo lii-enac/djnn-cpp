@@ -28,6 +28,12 @@
 namespace djnn
 {
   void
+  QtBackend::load_identity (Identity*)
+  {
+    _context_manager->get_current ()->matrix.setToIdentity ();
+  }
+
+  void
   QtBackend::load_translation (Translation* t)
   {
     double tx, ty;

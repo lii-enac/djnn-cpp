@@ -28,6 +28,7 @@
 #include "homography.h"
 #include "translation.h"
 #include "scaling.h"
+#include "identity.h"
 
 namespace djnn
 {

@@ -30,6 +30,7 @@
 #include "gui/style/gradient.h"
 #include "gui/transformation/transformations.h"
 #include "gui/layer.h"
+#include "gui/transformation/identity.h"
 
 //#include <array>
 #include <cmath>
@@ -52,6 +53,30 @@ namespace djnn
   {
     inverse_transform (pac.x, pac.y);
     return nullptr;
+  }
+
+  Identity::Identity (ParentProcess* parent, const string& name) :
+      AbstractTransformation (parent, name)
+  {
+    finalize_construction (parent, name);
+  }
+
+  void
+  Identity::draw ()
+  {
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+      Backend::instance ()->load_identity (this);
+    }
+  }
+
+  FatProcess*
+  Identity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  {
+    auto res = new Identity (nullptr, get_name ());
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
   }
 
 

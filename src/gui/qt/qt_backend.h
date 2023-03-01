@@ -167,6 +167,8 @@ namespace djnn
 
     //transformations
     void
+    load_identity (Identity*) override;
+    void
     load_translation (Translation* t) override;
     void
     load_gradient_translation (GradientTranslation* t) override;
