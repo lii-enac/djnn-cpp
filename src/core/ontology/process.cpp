@@ -796,7 +796,10 @@ namespace djnn
     return nullptr;
   }
 
-  static int indent = -1; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+
+#ifndef DJNN_NO_DEBUG
+  //static
+  int indent = -1; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
   void
   CoreProcess::dump (int level)
@@ -823,13 +826,16 @@ namespace djnn
 
     int i = 0;
     for (symtable_t::iterator it = symtable ().begin (); it != symtable ().end (); ++it) {
+      auto & child = it->second;
       for (int j = 0; j < indent; j++)
         loginfonocr ("|\t");
       loginfonocr (" +" + __to_string(i++) + " ");
-      it->second->dump (level);
-      if (it->second->get_process_type() != CONTAINER_T || indent == level - 1)
+      child->dump (level);
+      if (child->get_process_type() != CONTAINER_T || indent == level - 1)
         loginfonofl("");
     }
+
     indent--;
   }
+#endif
 }

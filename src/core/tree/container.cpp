@@ -323,6 +323,44 @@ namespace djnn
     return picked;
   }
 
+#ifndef DJNN_NO_DEBUG
+  extern int indent;
+
+  void
+  Container::dump (int level)
+  {
+    // same as FatProcess, except in an ordered manner
+    loginfonocr ((get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + ": ");
+
+    /* check if the component is empty - should be ?*/
+    if (children_empty ()) {
+      loginfonofl ("<EMPTY>");
+      return;
+    }
+
+    /* check if the level is reached */
+    if ((level != 0) && (indent == level - 1)) { return; }
+
+    loginfonofl("");
+    indent++;
+
+    int i = 0;
+    //for (symtable_t::iterator it = symtable ().begin (); it != symtable ().end (); ++it) {
+    for (auto & it: children()) {
+      auto * child = &*it;
+      for (int j = 0; j < indent; j++)
+        loginfonocr ("|\t");
+      loginfonocr (" +" + __to_string(i++) + " ");
+      child->dump (level);
+      if (child->get_process_type() != CONTAINER_T || indent == level - 1)
+        loginfonofl("");
+    }
+
+    indent--;
+
+  }
+#endif
+
   void
   Container::add_to_context (const string& k, FatChildProcess *v)
   {

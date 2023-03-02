@@ -36,6 +36,9 @@ namespace djnn {
     void update_drawing () override;
     void draw () override;
     void pick () override;
+#ifndef DJNN_NO_DEBUG
+    void dump (int level=0) override;
+#endif
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     void impl_activate () override;
     void impl_deactivate () override;

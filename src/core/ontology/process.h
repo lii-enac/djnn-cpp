@@ -286,9 +286,8 @@ namespace djnn {
       int lineno;
     };
 
-    virtual  void dump (int level=0);
-
 #ifndef DJNN_NO_DEBUG
+    virtual  void dump (int level=0);
     const DebugInfo& debug_info () const { return _dbg_info; }
     DebugInfo _dbg_info;
 #else
@@ -392,8 +391,10 @@ namespace djnn {
   public:
     const string& get_name () const;
 
+#ifndef DJNN_NO_DEBUG
     virtual  void dump (int level=0) override;
-    
+#endif
+
     // data
     void         set_data (CoreProcess* data) override;
     CoreProcess* get_data () override;
