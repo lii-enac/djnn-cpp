@@ -423,4 +423,7 @@ namespace djnn {
   //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
   template <typename P> P* clone (P *p) { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
 
+  inline void activate (CoreProcess* p) { p->activate (); }
+  inline void deactivate (CoreProcess* p) { p->deactivate (); }
+
 }
