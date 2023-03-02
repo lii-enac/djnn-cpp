@@ -87,6 +87,12 @@ typedef unsigned gperf_t;
 
   extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE;
 
+  /* 
+    disable touch event  (especially for macos trackpad)
+  */
+
+  extern int _DEBUG_NO_TOUCH_EVENT;
+
 #else
 
   const int
@@ -98,7 +104,8 @@ typedef unsigned gperf_t;
     _AUTHORIZE_CYCLE=0
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY=0,
-    _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE=0
+    _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE=0,
+    _DEBUG_NO_TOUCH_EVENT=0
     ;
 #endif
 } 

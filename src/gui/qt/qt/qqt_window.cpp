@@ -88,22 +88,28 @@ namespace djnn
                   break;
               case Qt::TouchPointPressed:
                 {
-                  exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
-                  // NO event synthesis on press, release
-                  if (exec_) { GRAPH_EXEC; }
+                  if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                    exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
+                    // NO event synthesis on press, release
+                    if (exec_) { GRAPH_EXEC; }
+                  }
                   break;
                 }
               case Qt::TouchPointMoved:
                 {
-                  exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
-                  // NO event synthesis on move
-                  if (exec_) { GRAPH_EXEC; }
+                  if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                    exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
+                    // NO event synthesis on move
+                    if (exec_) { GRAPH_EXEC; }
+                  }
                   break;
                 }
               case Qt::TouchPointReleased:
                 {
-                  exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
-                  if (exec_) { GRAPH_EXEC; }
+                  if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                    exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
+                    if (exec_) { GRAPH_EXEC; }
+                  }
                   break;
                 }
               }
