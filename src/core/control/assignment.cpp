@@ -391,7 +391,7 @@ namespace djnn
       CoreProcess *src_prop = src->find_child_impl (src_props[i]);
       CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
       if (src_prop && dst_prop) {
-        new CoreAssignment (parent, "", src_prop, dst_prop, copy_on_activation);
+        new Assignment (parent, "toto", src_prop, dst_prop, copy_on_activation);
       }
       else {
         error (src, "Property not found in multiple assignment: " + src_props[i] + " or " + dst_props[i]);
@@ -409,7 +409,7 @@ namespace djnn
         string name = c->get_name (c->get_parent ());
         CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
-          new CoreAssignment (parent, "", c, prop_dst, copy_on_activation);
+          new Assignment (parent, "", c, prop_dst, copy_on_activation);
       }
       return;
     }
@@ -417,7 +417,7 @@ namespace djnn
       CoreProcess *prop_src = src->find_child_impl (c);
       CoreProcess *prop_dst = dst->find_child_impl (c);
       if (prop_src && prop_dst)
-        new CoreAssignment (parent, "", prop_src, prop_dst, copy_on_activation);
+        new Assignment (parent, "", prop_src, prop_dst, copy_on_activation);
     }
   }
 
