@@ -39,7 +39,8 @@ namespace djnn
   void
   uninit_binary_couplings (FatProcess* this_, FatProcess& _left, FatProcess& _right, FatProcess& _result, Action& _action, Coupling& _c_left, Coupling& _c_right)
   {
-    remove_state_dependency (this_->get_parent (), &_action);
+    if (this_->get_parent ())
+      remove_state_dependency (this_->get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
   }
 
@@ -53,7 +54,8 @@ namespace djnn
   void
   uninit_unary_couplings (FatProcess* this_, FatProcess& _input, FatProcess& _output, Action& _action, Coupling& _coupling)
   {
-    remove_state_dependency (this_->get_parent (), &_action);
+    if (this_->get_parent ())
+      remove_state_dependency (this_->get_parent (), &_action);
     graph_remove_edge (&_action, &_output);
   }
 

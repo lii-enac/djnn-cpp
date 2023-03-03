@@ -155,10 +155,10 @@ public:
 
     virtual ~Assignment ()
     {
-      graph_remove_edge (get_src(), get_dst());
       if (get_parent ()) {
         remove_state_dependency (get_parent (), get_dst ());
       }
+      graph_remove_edge (get_src(), get_dst());
       delete _ttassignment;
     }
 

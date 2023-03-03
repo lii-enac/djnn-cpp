@@ -136,7 +136,9 @@ namespace djnn
   {
     Container::clean_up_content ();
 
-    remove_state_dependency (get_parent (), state_dependency ());
+    if (get_parent ()){
+      remove_state_dependency (get_parent (), state_dependency ());
+    }
   }
 
   void

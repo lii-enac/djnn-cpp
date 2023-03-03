@@ -246,8 +246,9 @@ IvyAccess::~IvyAccess ()
    */
   //graph_remove_edge (&_out, &_out_a);
 
-  remove_state_dependency (get_parent (), &_out_a);
-
+  if (get_parent ()) {
+      remove_state_dependency (get_parent (), &_out_a);
+  }
 
   /* erase _cb_regex_vector */
 
