@@ -21,7 +21,7 @@ namespace djnn {
       CoreProcess *src_prop = src->find_child_impl (src_props[i]);
       CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
       if (src_prop && dst_prop) {
-        new CoreConnector (parent, "", src_prop, dst_prop, copy_on_activation);
+        new Connector (parent, "", src_prop, dst_prop, copy_on_activation);
       }
       else {
         error (nullptr, "Property not found in multiple connector: " + src_props[i] + " or " + dst_props[i]);
@@ -39,7 +39,7 @@ namespace djnn {
         string name = c->get_name (c->get_parent ());
         CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
-          new CoreConnector (parent, "", c, prop_dst, copy_on_activation);
+          new Connector (parent, "", c, prop_dst, copy_on_activation);
       }
       return;
     }
@@ -47,7 +47,7 @@ namespace djnn {
       CoreProcess *prop_src = src->find_child_impl (c);
       CoreProcess *prop_dst = dst->find_child_impl (c);
       if (prop_src && prop_dst)
-        new CoreConnector (parent, "", prop_src, prop_dst, copy_on_activation);
+        new Connector (parent, "", prop_src, prop_dst, copy_on_activation);
     }
   }
 
