@@ -116,7 +116,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-       remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), state_dependency ());
     }
 
     add_state_dependency (parent, state_dependency ());
@@ -148,9 +148,9 @@ namespace djnn
       if (((SwitchRangeBranch*)c)->is_in_range (v)) {
         if (_cur_branch == c) {
           if (_cur_branch->get_activation_state () == DEACTIVATED) {
-             _cur_branch->activate ();
-             _branch_name.set_value (_cur_branch->get_name (this), 1);
-           }
+            _cur_branch->activate ();
+            _branch_name.set_value (_cur_branch->get_name (this), 1);
+          }
         } else {
           if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
             _cur_branch->deactivate ();

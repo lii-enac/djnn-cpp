@@ -14,7 +14,7 @@ namespace djnn {
     /* in case of re-parenting remove edge dependency in graph */
     auto * dst = _b.get_dst ();
     if (get_parent () && dst) {
-       remove_state_dependency (get_parent (), dst);
+      remove_state_dependency (get_parent (), dst);
     }
 
     if (dst)

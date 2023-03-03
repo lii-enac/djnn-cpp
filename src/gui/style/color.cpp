@@ -113,7 +113,7 @@ namespace djnn
   {
 
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
 
     graph_remove_edge (_b, _action);
@@ -137,7 +137,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (parent, _action);
@@ -239,7 +239,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (parent, _action);

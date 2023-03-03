@@ -32,28 +32,28 @@
 namespace djnn
 {
 
- Serial::Serial (ParentProcess* parent, const string& name, const string& port, int baudrate, char eol) :
-         FatProcess (name),
-         ExternalSource (name),
-         _port (port),
-         _out ( this, "out", ""),
-         _in (this, "in", ""),
-         _baudrate (this, "baudrate", baudrate),
-         _out_a (this, "out_action"),
-         _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
-         _buf_max (256), _fd (-1), _eol (eol)
- {
+Serial::Serial (ParentProcess* parent, const string& name, const string& port, int baudrate, char eol) :
+        FatProcess (name),
+        ExternalSource (name),
+        _port (port),
+        _out ( this, "out", ""),
+        _in (this, "in", ""),
+        _baudrate (this, "baudrate", baudrate),
+        _out_a (this, "out_action"),
+        _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
+        _buf_max (256), _fd (-1), _eol (eol)
+{
 
   _out_c.disable ();
 
   finalize_construction (parent, name);
 }
 
- Serial::~Serial ()
+Serial::~Serial ()
 {
-   if (get_parent ()) {
-     remove_state_dependency (get_parent (), &_out_a);
-   }
+  if (get_parent ()) {
+    remove_state_dependency (get_parent (), &_out_a);
+  }
 }
 
 void

@@ -69,7 +69,7 @@ namespace djnn
      * especially all the state_dependency
      */
     Container::clean_up_content ();
-   
+  
   }
 
   void

@@ -81,11 +81,11 @@ namespace djnn
   {
 
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
     graph_remove_edge(_action, _outY);
     graph_remove_edge(_action, _outX);
- 
+
     delete _cinY;
     delete _cinX;
     delete _action;
@@ -101,7 +101,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (parent, _action);
@@ -134,11 +134,11 @@ namespace djnn
       double x = _lts->_inX->get_value () + _lts->_shape->origin_x ()->get_value ();
       double y = _lts->_inY->get_value () + _lts->_shape->origin_y ()->get_value ();
       double resultX = h->raw_props.m11 * x + 
-                       h->raw_props.m12 * y + 
-                       h->raw_props.m14 ;
+                      h->raw_props.m12 * y + 
+                      h->raw_props.m14 ;
       double resultY = h->raw_props.m21 * x + 
-                       h->raw_props.m22 * y +
-                       h->raw_props.m24;
+                      h->raw_props.m22 * y +
+                      h->raw_props.m24;
 
       _lts->_outX->set_value (resultX, true);
       _lts->_outY->set_value (resultY, true);
@@ -194,7 +194,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), _action);
+      remove_state_dependency (get_parent (), _action);
     }
 
     add_state_dependency (parent, _action);

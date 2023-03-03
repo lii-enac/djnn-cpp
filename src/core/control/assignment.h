@@ -175,9 +175,9 @@ public:
     Assignment* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     // for legacy reason, to get rid of?
     Assignment (ParentProcess* parent, const string& name,
-                   CoreProcess* src, const string& sspec,
-                   CoreProcess* dst, const string& dspec,
-                   bool is_model=false)
+                  CoreProcess* src, const string& sspec,
+                  CoreProcess* dst, const string& dspec,
+                  bool is_model=false)
     : Assignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model)
     {}
 

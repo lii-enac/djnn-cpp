@@ -86,8 +86,7 @@ namespace djnn
   Synchronizer::add_source (CoreProcess *src, const string& ispec)
   {
     if (src == nullptr) {
-      error (this,
-             "src argument cannot be null in source addition to synchronizer (" + get_name () + ", " + ispec + ")");
+      error (this, "src argument cannot be null in source addition to synchronizer (" + get_name () + ", " + ispec + ")");
     }
     auto * _src = src->find_child_impl (ispec);
     Coupling *cpl = new Coupling (_src, ACTIVATION, &_action, ACTIVATION);

@@ -58,8 +58,8 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-       remove_state_dependency (get_parent (), &_action_reset);
-       remove_state_dependency (get_parent (), &_action_step);
+      remove_state_dependency (get_parent (), &_action_reset);
+      remove_state_dependency (get_parent (), &_action_step);
     }
 
     add_state_dependency (parent, &_action_reset);

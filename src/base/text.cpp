@@ -96,7 +96,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_action);
+      remove_state_dependency (get_parent (), &_action);
     }
 
     add_state_dependency (parent, &_action);
@@ -169,8 +169,8 @@ namespace djnn
   TextAccumulator::~TextAccumulator ()
   {
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_acc_action);
-       remove_state_dependency (get_parent (), &_del_action);
+      remove_state_dependency (get_parent (), &_acc_action);
+      remove_state_dependency (get_parent (), &_del_action);
     }
     graph_remove_edge (&_acc_action, &_state);
     graph_remove_edge (&_del_action, &_state);
@@ -181,8 +181,8 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_acc_action);
-       remove_state_dependency (get_parent (), &_del_action);
+      remove_state_dependency (get_parent (), &_acc_action);
+      remove_state_dependency (get_parent (), &_del_action);
     }
 
     add_state_dependency (parent, &_acc_action);
@@ -302,7 +302,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_reg_action);
+      remove_state_dependency (get_parent (), &_reg_action);
     }
 
     add_state_dependency (parent, &_reg_action);

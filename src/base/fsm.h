@@ -37,7 +37,7 @@ namespace djnn {
     ~FSMState ();
     void impl_activate () override;
     void impl_deactivate () override;
- #ifndef DJNN_NO_SERIALIZE
+#ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
     bool is_highest_priority (FSMTransition *t);
@@ -55,7 +55,7 @@ namespace djnn {
     {
     public:
       FSMTransitionAction (ParentProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
-	       Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
+        Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
     private:
@@ -71,7 +71,7 @@ namespace djnn {
     ~FSMTransition ();
     void impl_activate () override;
     void impl_deactivate () override;
- #ifndef DJNN_NO_SERIALIZE
+#ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
     int priority () { return _priority; }
@@ -95,9 +95,9 @@ namespace djnn {
   {
       class FSMPostTriggerAction : public Action
       {
-         public:
+        public:
           FSMPostTriggerAction (ParentProcess* parent, const string& name) :
-               Action (parent, name) { }
+              Action (parent, name) { }
           virtual ~FSMPostTriggerAction () {};
           void impl_activate () { ((FSM*)get_parent())->set_triggered (0); };
       };
@@ -119,7 +119,7 @@ namespace djnn {
     void set_parent (ParentProcess* parent) override;
     void set_triggered (int v) { _already_triggered = v; if (v) _post_trigger.set_activation_flag(ACTIVATION); }
     int is_already_triggered () { return _already_triggered; }
- #ifndef DJNN_NO_SERIALIZE
+#ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
   private:

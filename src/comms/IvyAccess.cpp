@@ -206,16 +206,16 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   /**** IVY ACCESS ****/
 
- IvyAccess::IvyAccess (ParentProcess* parent, const string& name, 
+IvyAccess::IvyAccess (ParentProcess* parent, const string& name, 
   const string& bus, const string& appname, const string& ready, bool isModel)
- : FatProcess (name, isModel),
- ExternalSource(name),
- _out ( this, "out", ""),
- _out_a (this, "out_action", &_out),
- _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
- _arriving ( this,  "arriving", ""),
- _leaving ( this,  "leaving", "")
- {
+: FatProcess (name, isModel),
+  ExternalSource(name),
+  _out ( this, "out", ""),
+  _out_a (this, "out_action", &_out),
+  _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
+  _arriving ( this,  "arriving", ""),
+  _leaving ( this,  "leaving", "")
+{
   _bus =  bus;
   _appname =  appname;
   _ready_message = ready;

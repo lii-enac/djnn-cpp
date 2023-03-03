@@ -400,9 +400,9 @@ namespace djnn
   BidirectionalListIterator::~BidirectionalListIterator ()
   {
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_next_action);
-       remove_state_dependency (get_parent (), &_previous_action);
-       remove_state_dependency (get_parent (), &_reset_action);
+      remove_state_dependency (get_parent (), &_next_action);
+      remove_state_dependency (get_parent (), &_previous_action);
+      remove_state_dependency (get_parent (), &_reset_action);
     }
   }
 
@@ -411,9 +411,9 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_next_action);
-       remove_state_dependency (get_parent (), &_previous_action);
-       remove_state_dependency (get_parent (), &_reset_action);
+      remove_state_dependency (get_parent (), &_next_action);
+      remove_state_dependency (get_parent (), &_previous_action);
+      remove_state_dependency (get_parent (), &_reset_action);
     }
 
     add_state_dependency (parent, &_next_action);

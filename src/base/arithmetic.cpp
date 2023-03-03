@@ -70,10 +70,10 @@ namespace djnn
       FatProcess (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0),
-	  _step (this, "step"),
-	  _action (this, "action"),
-	  _c_step (&_step, ACTIVATION, &_action, ACTIVATION),
-	  _is_model (isModel)
+      _step (this, "step"),
+      _action (this, "action"),
+      _c_step (&_step, ACTIVATION, &_action, ACTIVATION),
+      _is_model (isModel)
   {
     init_incr (0);
     finalize_construction (parent, name);
@@ -92,7 +92,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-       remove_state_dependency (get_parent (), &_state);
+      remove_state_dependency (get_parent (), &_state);
     }
 
     add_state_dependency (parent, &_state);
@@ -110,10 +110,10 @@ namespace djnn
 	 * active.
 	 */
 	if (get_parent () != nullptr && !get_parent ()->somehow_activating()) {
-	  return false;
+    return false;
 	}
 	if (!is_activated())
-	  set_activation_state (ACTIVATING);
+    set_activation_state (ACTIVATING);
 	return true;
   }
 
@@ -194,7 +194,7 @@ namespace djnn
   AdderAccumulator::~AdderAccumulator ()
   {
     if (get_parent ()){
-       remove_state_dependency (get_parent (), &_action);
+      remove_state_dependency (get_parent (), &_action);
     }
     graph_remove_edge (&_action, &_result);
   }
@@ -204,7 +204,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-       remove_state_dependency (get_parent (), &_action);
+      remove_state_dependency (get_parent (), &_action);
     }
 
     add_state_dependency (parent, &_action);

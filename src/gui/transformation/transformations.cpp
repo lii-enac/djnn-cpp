@@ -1411,7 +1411,7 @@ namespace djnn
 
     _h->_rightSkew_Y_By_da->set_value (0, false);
   }
- 
+
   void
   AbstractHomography::Left_Skew_Y_ByAction::impl_activate ()
   { 

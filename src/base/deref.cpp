@@ -83,7 +83,7 @@ namespace djnn
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_action);
+      remove_state_dependency (get_parent (), &_action);
     }
 
     add_state_dependency (parent, &_action);
@@ -103,7 +103,7 @@ namespace djnn
   Deref::Deref (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _activation (this, "activation"),
-   _src (nullptr)
+    _src (nullptr)
   {
     _cset.init (&_activation, ACTIVATION, &_set, ACTIVATION);
     finalize_construction (parent, name);

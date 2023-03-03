@@ -79,7 +79,7 @@ namespace djnn
     ////remove_state_dependency (get_parent (), UpdateDrawing::instance ()->get_damaged ());
     //graph_remove_edge (&_text, UpdateDrawing::instance ()->get_damaged ());
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_update_size);
+      remove_state_dependency (get_parent (), &_update_size);
     }
     //graph_remove_edge (&_text, &_update_size);
     
@@ -135,7 +135,7 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
-       remove_state_dependency (get_parent (), &_update_size);
+      remove_state_dependency (get_parent (), &_update_size);
     }
 
     add_state_dependency (parent, &_update_size);

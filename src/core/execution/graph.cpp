@@ -131,9 +131,9 @@ static int MARKED = 0;
     } else {
       
       /* NOTE: 
-         for now we keep this complicated way to erase instead of 
-         _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
-         to manage wrong removing, as in unit-test
+        for now we keep this complicated way to erase instead of 
+        _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
+        to manage wrong removing, as in unit-test
       */
 
       /* or remove dst from _edges vector  */
@@ -168,11 +168,11 @@ static int MARKED = 0;
       std::cerr << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
-         auto result = _map_edges.find(e);
-         auto * ppe = e->_process;
-         if (ppe) {
+        auto result = _map_edges.find(e);
+        auto * ppe = e->_process;
+        if (ppe) {
           std::cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
-         }
+        }
       }
       std::cerr << std::endl;
     }
