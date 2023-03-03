@@ -81,11 +81,11 @@ typedef unsigned gperf_t;
 
   /*
     displayed info :
-    - display the tree structure of component's destruction
-    - to see on which component destruction warning appears
+    - level 1: display execution graph infos on coupling in the warnings
+    - level 2: display the tree structure of component's destruction
   */
 
-  extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE;
+  extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL;
 
   /* 
     disable touch event  (especially for macos trackpad)
@@ -104,7 +104,7 @@ typedef unsigned gperf_t;
     _AUTHORIZE_CYCLE=0
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY=0,
-    _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE=0,
+    _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL=0,
     _DEBUG_NO_TOUCH_EVENT=0
     ;
 #endif

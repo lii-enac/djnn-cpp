@@ -64,6 +64,7 @@ namespace djnn
     const CoreProcess* get_process () const { return _process; }
 
     void print_vertex () const;
+    void print_full_vertex () ;
 
   private:
     CoreProcess* _process;
@@ -87,6 +88,7 @@ namespace djnn
     void remove_edge (CoreProcess* src, CoreProcess* dst);
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
+    vertices_t vertices () {return _vertices;}; // for debug ONLY
 
     size_t  size () {return _vertices.size ();}
     void sort (Vertex* v_root);
@@ -99,6 +101,7 @@ namespace djnn
     void print_graph  () const;
     void print_sorted () const;
     void print_activation () const; 
+    void print_full_vertex (Vertex* v) { v->print_full_vertex ();}
 
     void add_in_activation (Vertex *v);
     void clear_activation ();

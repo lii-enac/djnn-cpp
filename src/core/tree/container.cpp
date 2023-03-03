@@ -53,13 +53,13 @@ namespace djnn
   }
 
 
-  // use only for _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1
+  // use only for _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL > 1
   // but can't use precompiled condition anymore to add/remove it
   static int nb_space = 0;
 
   void Container::clean_up_content () 
   {
-    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
       for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
       ++nb_space ;
       std::cerr << "--- " << get_name () << " :" << std::endl;
@@ -69,7 +69,7 @@ namespace djnn
     int sz = _children.size ();
     for (int i = sz - 1; i >= 0; i--) {
 
-      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
         for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
         std::cerr << i << ". " << _children[i]->get_debug_name () << std::endl ;
       }
@@ -80,7 +80,7 @@ namespace djnn
       _children.pop_back();
     }
 
-    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE == 1) {
+    if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1) {
       --nb_space ;
     }
   }

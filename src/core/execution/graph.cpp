@@ -178,6 +178,55 @@ static int MARKED = 0;
     }
 #endif
   }
+  
+  void
+  Vertex::print_full_vertex ()
+  {
+#ifndef DJNN_NO_DEBUG
+    cerr << "\033[1;31m";
+    std::cerr << "Execution Graph - details on vertex: " << std::endl;
+        
+    auto * pp = _process;
+    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
+    _count_edges_in << ", " << _edges.size () << "] :\n";
+
+    std::cerr << "edge in " << _count_edges_in << ":\n" ;
+
+    if( _count_edges_in == 0)
+      std::cerr << "\tEMPTY" << std::endl;
+    else {
+      int i = 0;
+      for (auto v : Graph::instance ().vertices ()) {
+        map<Vertex*, int> m = v->get_map_edges ();
+        auto it = m.find (this);
+        if ( it != m.end ()) {
+          auto* ppv = v->_process;
+          if (ppv) {
+            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "] \t" ;
+          }
+        }
+      }
+      std::cerr << std::endl;
+    }
+
+    std::cerr << "edge out " << _edges.size () << ":\n" ;
+
+    if( _edges.size () == 0)
+      std::cerr << "\tEMPTY" << std::endl;
+    else {
+      int i = 0;
+      for (auto e : _edges) {
+        auto result = _map_edges.find(e);
+        auto * ppe = e->_process;
+        if (ppe) {
+          std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
+        }
+      }
+      std::cerr << std::endl;
+    }
+    cerr << "\033[0m";
+#endif
+  }
 
   Graph * Graph::_instance;
 

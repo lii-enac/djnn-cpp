@@ -98,9 +98,10 @@ namespace djnn
         if not, something IS NOT deleted correctly
     */
     if (_vertex != nullptr) {
+      // ?? do we need this warning anymore or the warning from ~CouplingProcess is enough ?
       #ifndef DJNN_NO_DEBUG
-      auto * pp = this;
-      warning (nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
+      //auto * pp = this;
+      //warning (nullptr, " CoreProcess::~CoreProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n");
       // get_activation_couplings is virtual: in a destructor only CoreProcess::get_activation_couplings will be called and it should return an empty container
       //for (auto &c: get_activation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (activation)" << __FL__;
       //for (auto &c: get_deactivation_couplings()) std::cerr << get_hierarchy_name (c->get_dst()) << " is still coupled (deactivation)" << __FL__;
@@ -246,9 +247,11 @@ namespace djnn
     if (vertex () != nullptr) {
       #ifndef DJNN_NO_DEBUG
       auto * pp = this;
-      warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + "\n"); //" - _vertex is NOT NULL and it should\n");
+      warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n\tPlease use _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL = 1|2 for more details");
       for (auto &c: CouplingProcess::get_activation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (activation)");
       for (auto &c: CouplingProcess::get_deactivation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (deactivation)");
+      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1)
+        Graph::instance ().print_full_vertex (vertex ());
       #endif
     }
   }
