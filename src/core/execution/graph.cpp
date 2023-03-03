@@ -200,9 +200,14 @@ static int MARKED = 0;
         map<Vertex*, int> m = v->get_map_edges ();
         auto it = m.find (this);
         if ( it != m.end ()) {
-          auto* ppv = v->_process;
-          if (ppv) {
-            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "] \t" ;
+          if ( v->is_invalid () == 0 ) {
+            auto* ppv = v->_process;
+            if (ppv) {
+              std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "]\n" ;
+            }
+          }
+          else {
+            std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
           }
         }
       }
@@ -216,10 +221,14 @@ static int MARKED = 0;
     else {
       int i = 0;
       for (auto e : _edges) {
-        auto result = _map_edges.find(e);
-        auto * ppe = e->_process;
-        if (ppe) {
-          std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
+        if (e->is_invalid () == 0) {
+          auto result = _map_edges.find(e);
+          auto * ppe = e->_process;
+          if (ppe)
+            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "]\n" ;
+        }
+        else {
+          std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
         }
       }
       std::cerr << std::endl;
