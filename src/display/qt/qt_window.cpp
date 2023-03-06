@@ -294,6 +294,8 @@ namespace djnn
     _window->pos_x ()->set_value (x, 1);
     _window->pos_y ()->set_value (y, 1);
 
+    _window->hidpi_scale()->set_value(devicePixelRatioF(), true);
+
     _updating = false;
     // event synthesis on move paint ...
     QtMainloop::instance ().set_please_exec (true);

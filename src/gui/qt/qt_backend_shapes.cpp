@@ -762,11 +762,14 @@ namespace djnn
       ls = new LayerStuff;
       w += pad*2;
       h += pad*2;
-      //ls->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
-      ls->pm = new QPixmap (w, h);
+
+      double hidpi_scale = DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
+      ls->pm = new QPixmap (w * hidpi_scale, h * hidpi_scale);
+      ls->pm->setDevicePixelRatio (hidpi_scale);
       ls->pm->fill (Qt::transparent);
       pick_pm = new PickLayerStuff;
       pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+      //pick_pm->pm->setDevicePixelRatio (1);
       //pick_pm = new QPixmap (w, h);
       pick_pm->pm->fill (Qt::transparent);
       l->set_cache (ls);
