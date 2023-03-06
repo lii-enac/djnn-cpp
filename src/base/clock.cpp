@@ -21,6 +21,8 @@
 //#include "core/utils/iostream.h"
 //#include "utils/debug.h"
 
+#include "core/utils/error.h"
+
 namespace djnn
 {
 
@@ -58,8 +60,11 @@ namespace djnn
   {
     //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
     //std::cerr << "activate " << get_name () << __FL__;
-    _c_update.enable ();
     djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
+    if (d<=std::chrono::milliseconds(0)) {
+      error (this, "clock period must be greater than 0");
+    }
+    _c_update.enable ();
     DjnnTimeManager::instance().schedule(this, d);
   }
 
