@@ -45,17 +45,12 @@ namespace djnn {
 
     virtual ~TAbstractCoreAssignment () {
       graph_remove_edge (get_src (), get_dst ());
-      //delete _ttassignment;
     }
 
     void set_parent (ParentProcess* parent) override
     {
-      /* in case of re-parenting remove edge dependency in graph */
-      if (get_parent ()){
-        remove_state_dependency (get_parent (), get_dst ());
-      }
-      add_state_dependency (parent, get_dst ());
-      CoreProcess::set_parent (parent);
+      // be careful !
+      // CoreAssignment do not have any parent to manage
     }
 
     X* get_src () { return _src; /*_ttassignment->get_src ();*/ }
