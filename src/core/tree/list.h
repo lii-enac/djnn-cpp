@@ -33,6 +33,7 @@ namespace djnn {
     void insert (FatChildProcess* c, const string& spec);
     void remove_child (FatChildProcess* c) override;
     void remove_child (const string& name) override;
+    void insert_new_child (Container::ordered_children_t::iterator it, FatChildProcess *c);
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
     void clean_up_content () override; /* empty _children CALLING delete on each element */
     FatChildProcess* find_child_impl (const string& path) override;

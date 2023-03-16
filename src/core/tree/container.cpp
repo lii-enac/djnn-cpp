@@ -2,13 +2,14 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2023)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -42,7 +43,7 @@ namespace djnn
   
 
   Container::Container (ParentProcess* parent, const string& name, bool is_model) :
-      FatProcess (name, is_model)
+      FatProcess (name, is_model), _is_altered (false)
   {
     for (auto s: structure_observer_list) {
       s->add_container (this);
@@ -59,25 +60,40 @@ namespace djnn
 
   void Container::clean_up_content () 
   {
+    if (_is_altered && (_children.size () != _not_altered_children->size () )) {
+      warning (this, "this container \"" + this->get_debug_name () +  "\" has been altered and _chilldren size != that _not_altered_children !!!!\n");
+    }
+
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
       for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
       ++nb_space ;
       std::cerr << "--- " << get_name () << " :" << std::endl;
     }
 
+    /* choose correct vector */
+    ordered_children_t* pvector_to_delete = &_children;
+    if (_is_altered) {
+      pvector_to_delete = _not_altered_children;
+    }
+    auto& vector_to_delete = *pvector_to_delete;
+
     /* delete and remove children from this container */
-    int sz = _children.size ();
+    int sz = vector_to_delete.size ();
     for (int i = sz - 1; i >= 0; i--) {
 
       if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
         for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
-        std::cerr << i << ". " << _children[i]->get_debug_name () << std::endl ;
+        std::cerr << i << ". " << vector_to_delete[i]->get_debug_name () << std::endl ;
       }
-      /* remove child from structure_observer (if in structure_observer) */
-      for (auto s: structure_observer_list) 
-        s->remove_child_from_container (this, _children[i]);
-      delete _children[i]; 
-      _children.pop_back();
+
+      if (_is_altered)
+        remove_child_from_children_only (vector_to_delete[i]);
+      else {
+        for (auto s: structure_observer_list) 
+          s->remove_child_from_container (this, vector_to_delete[i]);
+      }
+      delete vector_to_delete[i]; 
+      vector_to_delete.pop_back();
     }
 
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1) {
@@ -96,13 +112,24 @@ namespace djnn
   }
 
   void
+  Container::push_back_child (FatChildProcess* child){
+    _children.push_back (child);
+    if (_is_altered)
+      _not_altered_children->push_back (child);
+  }
+
+
+
+  void
   Container::add_child (FatChildProcess* child, const string& name)
   {
     if (child == nullptr) {
       error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
       return;
     }
-    _children.push_back (child);
+
+    push_back_child (child);
+
     /* WARNING should we authorize multiple parenthood? */
     if (child->get_parent () != nullptr && child->get_parent () != this) {
       child->get_parent ()->remove_child (child);
@@ -125,20 +152,27 @@ namespace djnn
   void
   Container::move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child2)
   {
+    /* create a copy of _children if necessary*/
+    if (_is_altered == false) {
+      _not_altered_children = new ordered_children_t (_children);
+      _is_altered = true;
+    }
+
     if (child2 == 0) {
       if (spec == FIRST) {
         Container::remove_child_from_children_only (child_to_move);
         _children.insert (_children.begin (), child_to_move);
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, 0);
-        }
+        } 
         return;
       } else if (spec == LAST) {
         Container::remove_child_from_children_only (child_to_move);
-        _children.push_back (child_to_move);
+        _children.push_back (child_to_move); // it is the same children so do not add it in _not_alterated_children
         for (auto s: structure_observer_list) {
           s->move_child_to (this, child_to_move, 0, spec, _children.size () - 1);
         }
+        return;
       } else
         return;
     }
@@ -152,19 +186,21 @@ namespace djnn
         // update it and index
         it = std::find (_children.begin (), _children.end (), child2);
         auto index = std::distance (_children.begin (), it);
-        _children.insert (_children.begin () + index, child_to_move);
+        _children.insert (_children.begin () + index, child_to_move); // it is the same children so do not add it in _not_alterated_children
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index, spec, index);
+          s->move_child_to (this, child_to_move, index, spec, index); // BUG ? : using the same index for _children and GUIstructureHolder ?
         }
+        return;
       } else if (spec == AFTER) {
         Container::remove_child_from_children_only (child_to_move);
         // update it and index
         it = std::find (_children.begin (), _children.end (), child2);
         auto index = std::distance (_children.begin (), it);
-        _children.insert (_children.begin () + index + 1, child_to_move);
+        _children.insert (_children.begin () + index + 1, child_to_move); // it is the same children so do not add it in _not_alterated_children
         for (auto s: structure_observer_list) {
-          s->move_child_to (this, child_to_move, index + 1, spec, index);
+          s->move_child_to (this, child_to_move, index + 1, spec, index); // BUG ? : using the same index for _children and GUIstructureHolder ?
         }
+        return;
       } else {
 #ifndef DJNN_NO_DEBUG
         loginfo (string("spec = ") + __to_string(std::underlying_type<child_position_e>::type(spec)));
@@ -190,6 +226,8 @@ namespace djnn
   Container::remove_child (FatChildProcess* c)
   {
     FatProcess::remove_child (c);
+    if (_is_altered)
+      _not_altered_children->erase (std::remove (_not_altered_children->begin (), _not_altered_children->end (), c), _not_altered_children->end ());
     remove_child_from_children_only (c);
   }
 
@@ -391,12 +429,12 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     loginfonofl (get_name () + "'s children:");
     for (auto c : _children) {
-      loginfonofl (c->get_name (c->get_parent()));
+      // loginfonofl (c->get_name (c->get_parent()));
+      loginfonofl (c->get_debug_name ());
     }
     loginfonocr("\n");
 #endif
   }
 
- 
 }
 

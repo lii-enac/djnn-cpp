@@ -70,7 +70,7 @@ namespace djnn
     if (a != nullptr) {
       graph_add_edge (this, a->get_dst());
     }
-    _children.push_back (c);
+    Container::push_back_child (c);
     /* WARNING should we authorize multiple parenthood? */
     if (c->get_parent () != nullptr && c->get_parent () != this) {
       c->get_parent ()->remove_child (c);

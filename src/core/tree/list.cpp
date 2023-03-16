@@ -64,7 +64,9 @@ namespace djnn
   {
     if (c == nullptr)
       return;
-    _children.push_back (c);
+
+    Container::push_back_child (c);
+
     /* We don't want multiple parenthood */
     if (c->get_parent () != nullptr && c->get_parent () != this) {
       c->get_parent ()->remove_child (c);
@@ -76,8 +78,18 @@ namespace djnn
   }
 
   void
+  AbstractList::insert_new_child (Container::ordered_children_t::iterator it, FatChildProcess *c) {
+    _children.insert (it, c);
+    if (_is_altered)
+      _not_altered_children->push_back (c);
+    finalize_child_insertion (c);
+  }
+
+  void
   AbstractList::insert (FatChildProcess* c, const string& spec)
   {
+    // becareful : insert add a NEW child
+
     int index = _children.size () - 1;
     if (spec.compare (">") == 0) {
       add_child (c, "");
@@ -88,8 +100,7 @@ namespace djnn
     }
     if (spec.compare ("<") == 0) {
       auto it = _children.begin ();
-      it = _children.insert (it, c);
-      finalize_child_insertion (c);
+      insert_new_child (it, c);
       index = 0;
       for (auto s: structure_observer_list) {
         s->add_child_to_container (this, c, index);
@@ -100,16 +111,14 @@ namespace djnn
       index = stoi (spec.substr (1, string::npos)) - 1;
       if (spec.at (0) == '<') {
         auto it = _children.begin () + index;
-        it = _children.insert (it, c);
-        finalize_child_insertion (c);
+        insert_new_child (it, c);
         for (auto s: structure_observer_list) {
           s->add_child_to_container (this, c, index);
         }
         return;
       } else if (spec.at (0) == '>') {
         auto it = _children.begin () + index + 1;
-        it = _children.insert (it, c);
-        finalize_child_insertion (c);
+        insert_new_child (it, c);
         for (auto s: structure_observer_list) {
           s->add_child_to_container (this, c, index + 1);
         }
@@ -145,18 +154,13 @@ namespace djnn
   void
   AbstractList::remove_child (FatChildProcess* c)
   {
-    auto newend = children ().end ();
-    for (auto s: structure_observer_list) {
-      s->remove_child_from_container (this, c);
-    }
-    /* remove if 'c' is found in the vector */
-    newend = std::remove_if (_children.begin (), _children.end (), 
-        [c](FatChildProcess* v) { return v == c; });
+    /* check for existance */
+    auto it = std::find (_children.begin (), _children.end (), c);
 
-    /* check if end has changed and erase if necessary */
-    if (newend != _children.end ()){
-      _children.erase(newend, _children.end ());
-       _removed.set_value (c, true);
+    /* then remove it and set _removed */
+    if (it != _children.end ()) {
+      Container::remove_child (c);
+      _removed.set_value (c, true);
       _size.set_value (_size.get_value () - 1, true);
     }
   }

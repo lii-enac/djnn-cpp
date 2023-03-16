@@ -26,6 +26,7 @@ namespace djnn {
     typedef vector<FatChildProcess*> ordered_children_t;
     Container (ParentProcess* parent, const string& name, bool is_model=false);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
+    void push_back_child (FatChildProcess* child);
     void add_child (FatChildProcess* c, const string& name) override;
     void move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child = 0) override;
     void remove_child_from_children_only (FatChildProcess* c);
@@ -52,6 +53,9 @@ namespace djnn {
     void init_context (context_t &context);
   protected:
     ordered_children_t _children;
-    context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!!
+    ordered_children_t *_not_altered_children;
+    context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!
+    bool _is_altered; //move_child has been use on the container or not ?
+    
   };
 }
