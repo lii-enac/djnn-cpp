@@ -80,8 +80,8 @@ namespace djnn
   void
   AbstractList::insert_new_child (Container::ordered_children_t::iterator it, FatChildProcess *c) {
     _children.insert (it, c);
-    if (_is_altered)
-      _not_altered_children->push_back (c);
+    if (is_altered ())
+      _unaltered_children->push_back (c);
     finalize_child_insertion (c);
   }
 

@@ -53,9 +53,10 @@ namespace djnn {
     void init_context (context_t &context);
   protected:
     ordered_children_t _children;
-    ordered_children_t *_not_altered_children;
+    ordered_children_t * _unaltered_children; // to enable proper deletion, store original children sequence as soon as move_child is used on the container 
+    bool is_altered () const { return _unaltered_children != nullptr; } // has move_child been used on the container or not?
+
     context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!
-    bool _is_altered; //move_child has been use on the container or not ?
     
   };
 }

@@ -43,7 +43,7 @@ namespace djnn
   
 
   Container::Container (ParentProcess* parent, const string& name, bool is_model) :
-      FatProcess (name, is_model), _is_altered (false)
+      FatProcess (name, is_model), _unaltered_children (nullptr)
   {
     for (auto s: structure_observer_list) {
       s->add_container (this);
@@ -60,8 +60,8 @@ namespace djnn
 
   void Container::clean_up_content () 
   {
-    if (_is_altered && (_children.size () != _not_altered_children->size () )) {
-      warning (this, "this container \"" + this->get_debug_name () +  "\" has been altered and _chilldren size != that _not_altered_children !!!!\n");
+    if (is_altered () && (_children.size () != _unaltered_children->size () )) {
+      warning (this, "this container \"" + this->get_debug_name () +  "\" has been altered and _chilldren size != that _unaltered_children !!!!\n");
     }
 
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
@@ -72,8 +72,8 @@ namespace djnn
 
     /* choose correct vector */
     ordered_children_t* pvector_to_delete = &_children;
-    if (_is_altered) {
-      pvector_to_delete = _not_altered_children;
+    if (is_altered ()) {
+      pvector_to_delete = _unaltered_children;
     }
     auto& vector_to_delete = *pvector_to_delete;
 
@@ -86,7 +86,7 @@ namespace djnn
         std::cerr << i << ". " << vector_to_delete[i]->get_debug_name () << std::endl ;
       }
 
-      if (_is_altered)
+      if (is_altered ())
         remove_child_from_children_only (vector_to_delete[i]);
       else {
         for (auto s: structure_observer_list) 
@@ -109,13 +109,15 @@ namespace djnn
     /* remove container from structure_observer_list */
     for (auto s: structure_observer_list)
       s->remove_container (this);
+
+    delete _unaltered_children;
   }
 
   void
   Container::push_back_child (FatChildProcess* child){
     _children.push_back (child);
-    if (_is_altered)
-      _not_altered_children->push_back (child);
+    if (is_altered ())
+      _unaltered_children->push_back (child);
   }
 
 
@@ -153,9 +155,8 @@ namespace djnn
   Container::move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child2)
   {
     /* create a copy of _children if necessary*/
-    if (_is_altered == false) {
-      _not_altered_children = new ordered_children_t (_children);
-      _is_altered = true;
+    if (is_altered () == false) {
+      _unaltered_children = new ordered_children_t (_children);
     }
 
     if (child2 == 0) {
@@ -226,8 +227,8 @@ namespace djnn
   Container::remove_child (FatChildProcess* c)
   {
     FatProcess::remove_child (c);
-    if (_is_altered)
-      _not_altered_children->erase (std::remove (_not_altered_children->begin (), _not_altered_children->end (), c), _not_altered_children->end ());
+    if (is_altered ())
+      _unaltered_children->erase (std::remove (_unaltered_children->begin (), _unaltered_children->end (), c), _unaltered_children->end ());
     remove_child_from_children_only (c);
   }
 
