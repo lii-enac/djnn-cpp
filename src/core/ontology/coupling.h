@@ -21,16 +21,21 @@ namespace djnn {
 
   class Coupling {
   public:
+    // construction / destruction
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
     Coupling (); // needed for pointer-less zombie initialization in Binding, Assignment, Connector
     ~Coupling();
-    
-    void propagate ();
 
+    void init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
+    void uninit ();
+
+
+    // management
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }
     void set_src (CoreProcess* src);
     void set_dst (CoreProcess* dst);
+    void about_to_delete_src ();
 
     void enable ()              { set_is_enabled (true); }
     void disable ()             { set_is_enabled (false); }
@@ -38,10 +43,9 @@ namespace djnn {
     bool is_immediate () const  { return get_immediate_propagation (); }
     bool is_effective () const  { return _src != nullptr /*&& _dst != nullptr*/; }
 
-    void about_to_delete_src (); // { _src = nullptr; }
 
-    void init (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
-    void uninit ();
+    // behavior
+    void propagate ();
 
   protected:
     void propagate_immediately ();

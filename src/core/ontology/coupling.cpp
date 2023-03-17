@@ -13,26 +13,34 @@
  *
  */
 
-#include "core/core-dev.h" // graph add/remove edge
 #include "coupling.h"
 #include "process.h"
+
+#include "core/core-dev.h" // graph add/remove edge
 
 #include "core/utils/error.h"
 
 namespace djnn
 {
 
-  void
-  Coupling::replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation)
+  // -----------------------------------------------------------------------
+  // construction / destruction
+
+  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
+                      CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
+  : _src (src), _dst (dst), _bitset (0)
   {
-    if (get_has_edge ()) {
-      graph_remove_edge (_src, _dst);
-      set_has_edge (false);
-    }
-    if (!immediate_propagation && src && dst) {
-      graph_add_edge (src, dst);
-      set_has_edge (true);
-    }
+    init (src, src_flag, dst, dst_flag, immediate_propagation);
+  }
+
+  Coupling::Coupling ()
+  : _src(nullptr), _dst(nullptr), _bitset (0)
+  {
+  }
+
+  Coupling::~Coupling ()
+  {
+    uninit ();
   }
 
   void
@@ -71,32 +79,9 @@ namespace djnn
     }
   }
 
-  void
-  Coupling::about_to_delete_src () 
-  {
-    if (get_has_edge ()) {
-      graph_remove_edge (_src, _dst);
-      set_has_edge (false);
-    }
-    _src = nullptr;
-  }
 
-  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
-                      CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
-  : _src (src), _dst (dst), _bitset (0)
-  {
-    init (src, src_flag, dst, dst_flag, immediate_propagation);
-  }
-
-  Coupling::Coupling ()
-  : _src(nullptr), _dst(nullptr), _bitset (0)
-  {
-  }
-
-  Coupling::~Coupling ()
-  {
-    uninit ();
-  }
+  // -----------------------------------------------------------------------
+  // management
 
   void
   Coupling::set_src (CoreProcess *src)
@@ -123,6 +108,33 @@ namespace djnn
     replace_edge (_src, dst, is_immediate());
     _dst = dst;
   }
+
+  void
+  Coupling::about_to_delete_src () 
+  {
+    if (get_has_edge ()) {
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
+    }
+    _src = nullptr;
+  }
+
+  void
+  Coupling::replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation)
+  {
+    if (get_has_edge ()) {
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
+    }
+    if (!immediate_propagation && src && dst) {
+      graph_add_edge (src, dst);
+      set_has_edge (true);
+    }
+  }
+
+
+  // -----------------------------------------------------------------------
+  // behavior
 
   void
   Coupling::propagate ()
