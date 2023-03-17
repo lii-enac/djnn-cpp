@@ -25,8 +25,7 @@ namespace djnn {
     Coupling (); // needed for pointer-less zombie initialization in Binding, Assignment, Connector
     ~Coupling();
     
-    void propagate_activation ();
-    void propagate_deactivation ();
+    void propagate ();
 
     CoreProcess* get_src ()  { return _src; }
     CoreProcess* get_dst ()  { return _dst; }

@@ -125,18 +125,7 @@ namespace djnn
   }
 
   void
-  Coupling::propagate_activation ()
-  {
-    _dst->set_activation_source (_src);
-    if (is_immediate ()) {
-      propagate_immediately ();
-    } else {
-      _dst->set_activation_flag (get_dst_activation_flag());
-    }
-  }
-
-  void
-  Coupling::propagate_deactivation ()
+  Coupling::propagate ()
   {
     _dst->set_activation_source (_src);
     if (is_immediate ()) {

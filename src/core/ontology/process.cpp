@@ -398,13 +398,13 @@ namespace djnn
 
   inline
   void
-  notify (const Process::couplings_t& couplings, void (Coupling::*propagate_activation_fun) ())
+  notify (const Process::couplings_t& couplings)
   {
     // optimizations for 0 and 1 coupling before protecting from auto disabling
     if (couplings.empty ()) return;
     if (couplings.size () == 1) { // no risk of disabling a coupling
       auto& coupling = *(couplings.begin());
-      if (coupling->is_enabled ()) (*coupling.*propagate_activation_fun) ();
+      if (coupling->is_enabled ()) coupling->propagate ();
       return;
     }
 
@@ -423,24 +423,20 @@ namespace djnn
     // propagate
     index = 0;
     for (auto& coupling : couplings) {
-      if (enabled[index++]) (*coupling.*propagate_activation_fun) ();
+      if (enabled[index++]) coupling->propagate ();
     }
   }
 
   void
   CoreProcess::notify_activation ()
   {
-    auto const & couplings = get_activation_couplings ();
-    auto const & propagate_fun = &Coupling::propagate_activation;
-    notify (couplings, propagate_fun);
+    notify (get_activation_couplings ());
   }
 
   void
   CoreProcess::notify_deactivation ()
   {
-    auto const & couplings = get_deactivation_couplings ();
-    auto const & propagate_fun = &Coupling::propagate_deactivation;
-    notify (couplings, propagate_fun);
+    notify (get_deactivation_couplings ());
   }
 
   void
