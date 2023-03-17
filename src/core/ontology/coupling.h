@@ -46,6 +46,7 @@ namespace djnn {
 
   protected:
     void propagate_immediately ();
+    void replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation);
 
     CoreProcess *_src, *_dst;
     unsigned int _bitset;

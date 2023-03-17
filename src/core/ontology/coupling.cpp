@@ -23,35 +23,43 @@ namespace djnn
 {
 
   void
+  Coupling::replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation)
+  {
+    if (get_has_edge ()) {
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
+    }
+    if (!immediate_propagation && src && dst) {
+      graph_add_edge (src, dst);
+      set_has_edge (true);
+    }
+  }
+
+  void
   Coupling::init (CoreProcess* src, activation_flag_e src_flag,
                   CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
   {
-    set_immediate_propagation (immediate_propagation);
     set_is_enabled (true);
     set_src_activation_flag (src_flag);
+    set_dst_activation_flag (dst_flag);
+    set_immediate_propagation (immediate_propagation);
 
     switch (src_flag) {
       case   ACTIVATION: src->add_activation_coupling (this); break;
       case DEACTIVATION: src->add_deactivation_coupling (this); break;
       default: warning (src, string("wrong activation flag in coupling creation ") + src->get_debug_name ()); break;
     }
-    if (get_has_edge ()) {
-      graph_remove_edge (_src, _dst);
-      set_has_edge (false);
-    }
+    replace_edge (src, dst, immediate_propagation);
+
     _src = src;
     _dst = dst;
-    if (!immediate_propagation && _src && _dst) {
-      graph_add_edge (_src, _dst);
-      set_has_edge (true);
-    }
-    set_dst_activation_flag (dst_flag);
   }
 
   void
   Coupling::uninit ()
   {
     if (_src == nullptr) { return; }
+
     switch (get_src_activation_flag ()) {
       case   ACTIVATION: _src->remove_activation_coupling (this); break;
       case DEACTIVATION: _src->remove_deactivation_coupling (this); break;
@@ -105,29 +113,15 @@ namespace djnn
       case NONE_ACTIVATION:
       break;
     }
-    if (get_has_edge ()) {
-      graph_remove_edge (_src, _dst);
-      set_has_edge (false);
-    }
+    replace_edge (src, _dst, is_immediate());
     _src = src;
-    if (!is_immediate () && _src && _dst) {
-      graph_add_edge (_src, _dst);
-      set_has_edge (true);
-    }
   }
 
   void
   Coupling::set_dst (CoreProcess *dst)
   {
-    if (get_has_edge ()) {
-      graph_remove_edge (_src, _dst);
-      set_has_edge (false);
-    }
+    replace_edge (_src, dst, is_immediate());
     _dst = dst;
-    if (!is_immediate () && _src && _dst) {
-      graph_add_edge (_src, _dst);
-      set_has_edge (true);
-    }
   }
 
   void
