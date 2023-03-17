@@ -30,12 +30,10 @@ namespace djnn
     set_is_enabled (true);
     set_src_activation_flag (src_flag);
 
-    if (src_flag == ACTIVATION) {
-      src->add_activation_coupling (this);
-    } else if (src_flag == DEACTIVATION) {
-      src->add_deactivation_coupling (this);
-    } else {
-      warning (src, string("wrong activation flag in coupling creation ") + dst->get_debug_name ());
+    switch (src_flag) {
+      case   ACTIVATION: src->add_activation_coupling (this); break;
+      case DEACTIVATION: src->add_deactivation_coupling (this); break;
+      default: warning (src, string("wrong activation flag in coupling creation ") + src->get_debug_name ()); break;
     }
     if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);
@@ -54,15 +52,10 @@ namespace djnn
   Coupling::uninit ()
   {
     if (_src == nullptr) { return; }
-    switch(get_src_activation_flag ()) {
-    case ACTIVATION:
-      _src->remove_activation_coupling (this);
-      break;
-    case DEACTIVATION:
-      _src->remove_deactivation_coupling (this);
-      break;
-    case NONE_ACTIVATION:
-      break;
+    switch (get_src_activation_flag ()) {
+      case   ACTIVATION: _src->remove_activation_coupling (this); break;
+      case DEACTIVATION: _src->remove_deactivation_coupling (this); break;
+      case NONE_ACTIVATION: break;
     }
     if (get_has_edge ()) {
       graph_remove_edge (_src, _dst);
@@ -163,9 +156,9 @@ namespace djnn
   Coupling::propagate_immediately ()
   {
     switch(get_dst_activation_flag ()) {
-    case NONE_ACTIVATION: break;
     case      ACTIVATION: _dst->activate ();   break;
     case    DEACTIVATION: _dst->deactivate (); break;
+    case NONE_ACTIVATION: break;
     }
   }
 
