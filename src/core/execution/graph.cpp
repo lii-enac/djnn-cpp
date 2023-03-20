@@ -585,16 +585,6 @@ static int MARKED = 0;
     //v->set_mark (MARKED);  // MP 11.2021 : useless BROWSING MARKED
   }
 
-  bool
-  cmp_vertices (const Vertex* v1, const Vertex *v2)
-  {
-    return v2->get_timestamp () < v1->get_timestamp ();
-  }
-
-  bool
-  cmp_index (const Vertex* v1, const Vertex *v2) {
-    return v1->get_sorted_index () < v2->get_sorted_index ();
-  }
 
   void
   Graph::reset_vertices_mark () {
@@ -627,7 +617,8 @@ static int MARKED = 0;
     else
       traverse_depth_first (v_root);
 
-    std::sort (_ordered_vertices.begin (), _ordered_vertices.end (), cmp_vertices);
+    std::sort (_ordered_vertices.begin (), _ordered_vertices.end (),
+      [](const Vertex* v1, const Vertex *v2) { return v2->get_timestamp () < v1->get_timestamp (); });
 
 #if !_EXEC_FULL_ORDERED_VERTICES
     // sorted_index
@@ -636,7 +627,8 @@ static int MARKED = 0;
       v->set_sorted_index (index++);
     }
 
-    std::sort (_activation_deque.begin (), _activation_deque.end (), cmp_index);
+    std::sort (_activation_deque.begin (), _activation_deque.end (),
+      [](const Vertex* v1, const Vertex *v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
 #endif
 
     //debug
