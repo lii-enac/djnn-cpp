@@ -64,11 +64,13 @@ namespace djnn
       warning (this, "this container \"" + this->get_debug_name () +  "\" has been altered and _chilldren size != that _unaltered_children !!!!\n");
     }
 
+    #ifndef DJNN_NO_DEBUG
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
       for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
       ++nb_space ;
       std::cerr << "--- " << get_name () << " :" << std::endl;
     }
+    #endif
 
     /* choose correct vector */
     ordered_children_t* pvector_to_delete = &_children;
@@ -81,10 +83,12 @@ namespace djnn
     int sz = vector_to_delete.size ();
     for (int i = sz - 1; i >= 0; i--) {
 
+      #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
         for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
         std::cerr << i << ". " << vector_to_delete[i]->get_debug_name () << std::endl ;
       }
+      #endif
 
       if (is_altered ())
         remove_child_from_children_only (vector_to_delete[i]);
@@ -96,9 +100,11 @@ namespace djnn
       vector_to_delete.pop_back();
     }
 
+    #ifndef DJNN_NO_DEBUG
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1) {
       --nb_space ;
     }
+    #endif
   }
 
   Container::~Container ()

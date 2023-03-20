@@ -755,8 +755,10 @@ namespace djnn
     ;
 
     if (recompute_pixmap) {
+      #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
         std::cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : "  << (w+pad*2) << " - " << (h+pad*2) << std::endl;
+      #endif
       delete ls;
       delete pick_pm;
       ls = new LayerStuff;

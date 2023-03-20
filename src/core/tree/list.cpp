@@ -47,7 +47,7 @@ namespace djnn
     remove_from_parentless_name (&_size);
   }
 
-#if !defined(DJNN_NO_DEBUG)
+#ifndef DJNN_NO_DEBUG
   void
   AbstractList::dump (int level)
   {

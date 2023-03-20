@@ -99,7 +99,7 @@ namespace djnn
     warning(this, "undefined conversion from Process to RemoteProperty");
   }
 
-#if !defined(DJNN_NO_DEBUG)
+#ifndef DJNN_NO_DEBUG
   void
   AbstractRemoteProperty::dump (int level) {
     loginfonocr( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + get_ref_value() + " ]") ;

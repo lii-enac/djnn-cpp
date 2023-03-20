@@ -158,7 +158,7 @@ namespace djnn
     return nullptr;
   }
 
-#if !defined(DJNN_NO_DEBUG)
+#ifndef DJNN_NO_DEBUG
   void
   RefProperty::dump (int level) {
     loginfonocr( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + __to_string(_value) + " ]" );

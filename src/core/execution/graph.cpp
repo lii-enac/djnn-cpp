@@ -730,8 +730,10 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     // notify_activation of event : mouse, touch, etc... which do not have vertex
     {
       map<CoreProcess*, int> already_done;
+      #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
         std::cerr << std::endl << std::endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << std::endl;
+      #endif
       for (auto p : _scheduled_activation_processes) {
         if (already_done.find(p) == already_done.end()) {
           p->notify_activation ();
@@ -744,6 +746,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           #endif
         }
       }
+      #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
         std::cerr << " ----------------------------------------- " << std::endl;
         int i = 0;
@@ -752,6 +755,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         }
         std::cerr << " ----------------------------------------- " << std::endl;
       }
+      #endif
       _scheduled_activation_processes.clear ();
     }
 

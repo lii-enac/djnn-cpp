@@ -125,7 +125,7 @@ namespace djnn
     warning(this, "undefined conversion from Process to Text");
   }
 
-#if !defined(DJNN_NO_DEBUG)
+#ifndef DJNN_NO_DEBUG
   void
   AbstractTextProperty::dump (int level) {
     std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;

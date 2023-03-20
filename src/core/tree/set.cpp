@@ -139,7 +139,7 @@ namespace djnn
     return nullptr;
   }
 
-#if !defined(DJNN_NO_DEBUG)
+#ifndef DJNN_NO_DEBUG
   void
   Set::dump (int level)
   {
