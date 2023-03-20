@@ -2,7 +2,7 @@
 #include "core/ontology/coupling.h"
 #include "core/execution/graph.h"
 
-#include "core/tree/int_property.h"
+#include "core/property/int_property.h"
 #include "core/tree/component.h"
 #include "core/control/action.h"
 #include "core/control/assignment.h"
@@ -12,7 +12,7 @@
 #include "base/connector.h"
 #include "base/fsm.h"
 
-#include "gui/shapes/shapes.h"
+#include "gui/shape/shapes.h"
 
 #include <iostream>
 #include <vector>
