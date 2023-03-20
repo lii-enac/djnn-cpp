@@ -266,20 +266,18 @@ static int MARKED = 0;
   void
   Graph::clear ()
   {
-    /* nothing to delete because vertices are own by _vertices. */
+    /* nothing to delete because vertices are own by _vertices */
     _ordered_vertices.clear ();
 
-    /* nothing to delete because vertices are own by _vertices.  */
+    /* nothing to delete because vertices are own by _vertices */
     _activation_deque.clear ();
 
-    /* delete vertices from _vertices and clear.*/
-    for (list< Vertex* >::iterator it = _vertices.begin (); it != _vertices.end (); ++it)
-        delete *it;
+    /* delete vertices from _vertices and clear */
+    for (auto * v: _vertices) delete v;
     _vertices.clear ();
 
     /* delete output_vertices from _outpur_nodes and clear */
-    for (auto it = _output_nodes.begin (); it != _output_nodes.end (); ++it)
-        delete *it;
+    for (auto * node: _output_nodes) delete node;
     _output_nodes.clear ();
   }
 
@@ -311,7 +309,7 @@ static int MARKED = 0;
       if (_activation_deque.empty ())
         _activation_deque.push_front (v);
       else {
-        std::deque <Vertex *>::iterator it = _activation_deque.begin () ;
+        auto it = _activation_deque.begin () ;
         bool is_inserted = false;
 
         while ( !is_inserted && it != _activation_deque.end () ) {
