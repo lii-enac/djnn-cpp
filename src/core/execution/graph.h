@@ -20,12 +20,6 @@
 #include <deque>
 #include <memory>
 
-//#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-//#include "core/utils/iostream.h"
-//#endif
-//#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
-#define DBGG
-
 namespace djnn
 {
   using vertices_t = list<Vertex*>;
@@ -58,13 +52,15 @@ namespace djnn
     int  get_timestamp () const   { return _timestamp; }
 
     void set_sorted_index (int index) { _sorted_index = index; }
-    int get_sorted_index () const { return _sorted_index; }
+    int  get_sorted_index () const { return _sorted_index; }
 
     CoreProcess*       get_process ()       { return _process; }
     const CoreProcess* get_process () const { return _process; }
 
+#if !defined(DJNN_NO_DEBUG)
     void print_vertex () const;
     void print_full_vertex () ;
+#endif
 
   private:
     CoreProcess* _process;
@@ -88,23 +84,26 @@ namespace djnn
     void remove_edge (CoreProcess* src, CoreProcess* dst);
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
-    vertices_t vertices () {return _vertices;}; // for debug ONLY
-
-    size_t  size () {return _vertices.size ();}
-    void sort (Vertex* v_root);
-    void exec ();
-    void clear ();
+    void add_in_activation (Vertex *v);
+    void clear_activation ();
     void schedule_delete (CoreProcess *p) { _scheduled_delete_processes.push_back (p); }
     void schedule_activation (CoreProcess* p);
-    const ordered_vertices_t& get_sorted () const { return _ordered_vertices; }
 
+    void sort (Vertex* v_root);
+    void exec ();
+    
+#if !defined(DJNN_NO_DEBUG)
+    const ordered_vertices_t& get_sorted () const { return _ordered_vertices; }
+    vertices_t vertices () { return _vertices; }
+    size_t size () { return _vertices.size (); }
     void print_graph  () const;
     void print_sorted () const;
     void print_activation () const; 
     void print_full_vertex (Vertex* v) { v->print_full_vertex ();}
+    void print_order (CoreProcess *p1, CoreProcess *p2);
+#endif
 
-    void add_in_activation (Vertex *v);
-    void clear_activation ();
+
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     void check_order (CoreProcess *p1, CoreProcess *p2) { _pair_to_check.push_back (std::make_pair(p1, p2)); }
@@ -114,12 +113,12 @@ namespace djnn
     //static Graph _instance;
     static Graph *_instance;
     Graph ();
+    void clear ();
+
     void traverse_depth_first (Vertex* v);
     void reset_vertices_mark ();
     Vertex* add_vertex (CoreProcess* c);
     Vertex* get_vertex (CoreProcess* c);
-
-    void print_order (CoreProcess *p1, CoreProcess *p2);
 
     vertices_t _vertices;
     ordered_vertices_t _ordered_vertices;

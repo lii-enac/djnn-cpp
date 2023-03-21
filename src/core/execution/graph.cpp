@@ -59,26 +59,11 @@ namespace djnn
   using std::endl;
 #endif
 
-static int MARKED = 0;
-
-#ifndef DJNN_NO_DEBUG
-  static string 
-  print_process_full_name (CoreProcess *p) {
-    string postfix;
-    CoreAssignment* ca = dynamic_cast<CoreAssignment*>(p);
-    if (ca != nullptr) {
-      postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
-    }
-    return cpp_demangle(typeid(*p).name()) + "- (" + 
-    ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
-    ( p ? p->get_debug_name () : "") + ")" + postfix;
-  }
-#endif
+  static int MARKED = 0;
 
   Vertex::Vertex (CoreProcess* p) :
       _process (p), _mark (0), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
   {
-    //std::cerr << __PRETTY_FUNCTION__ << " vertex:" << this << " process:" << p << " " << (p->get_parent() ? p->get_parent()->get_name () + "/"  : "") << p->get_name() << std::endl; 
   }
 
   Vertex::~Vertex () {
@@ -100,7 +85,7 @@ static int MARKED = 0;
 
     auto result = _map_edges.find(dst);
  
-    /* if is a NEW edge */
+    /* if it's a NEW edge */
     if (result == _map_edges.end()) {
       _edges.push_back (dst);
       dst->_count_edges_in++;
@@ -113,11 +98,9 @@ static int MARKED = 0;
       // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
       // dst->_process->get_name () << endl;
     }
-    /* it a duplicate */
+    /* it's a duplicate */
     else
       result->second = ++result->second ;
-    
-    
   }
 
   void
@@ -156,10 +139,23 @@ static int MARKED = 0;
     // dst->_process->get_name () << " _count_edges_in: " << dst->_count_edges_in << endl;
   }
 
+
+#ifndef DJNN_NO_DEBUG
+  static string 
+  print_process_full_name (CoreProcess *p) {
+    string postfix;
+    CoreAssignment* ca = dynamic_cast<CoreAssignment*>(p);
+    if (ca != nullptr) {
+      postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
+    }
+    return cpp_demangle(typeid(*p).name()) + "- (" + 
+    ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
+    ( p ? p->get_debug_name () : "") + ")" + postfix;
+  }
+
   void
   Vertex::print_vertex () const
   {
-#ifndef DJNN_NO_DEBUG
     auto * pp = _process;
     std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
@@ -176,13 +172,11 @@ static int MARKED = 0;
       }
       std::cerr << std::endl;
     }
-#endif
   }
   
   void
   Vertex::print_full_vertex ()
   {
-#ifndef DJNN_NO_DEBUG
     cerr << "\033[1;31m";
     std::cerr << "Execution Graph - details on vertex: " << std::endl;
         
@@ -234,8 +228,10 @@ static int MARKED = 0;
       std::cerr << std::endl;
     }
     cerr << "\033[0m";
-#endif
   }
+  #endif
+
+
 
   Graph * Graph::_instance;
 
@@ -481,22 +477,21 @@ static int MARKED = 0;
     //_sorted = false;
   }
 
+#ifndef DJNN_NO_DEBUG
+
   void
   Graph::print_graph () const
   {
-#ifndef DJNN_NO_DEBUG
     std::cerr << " --- GRAPH --- " << endl ;
     for (auto v : _vertices) {
       v->print_vertex ();
     }
     std::cerr << " --- END GRAPH --- " << endl << endl;
-#endif
   }
 
   void
   Graph::print_sorted () const
   {
-#ifndef DJNN_NO_DEBUG
     std::cerr << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
@@ -504,13 +499,11 @@ static int MARKED = 0;
       cerr << print_process_full_name (pp) << endl;
     }
     std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
-#endif
   }
 
   void
   Graph::print_activation () const
   {
-#ifndef DJNN_NO_DEBUG
     std::cerr << " --- SORTED ACTIVATION --- " << endl ;
     for (auto v : _activation_deque) {
       auto * pp = v->get_process ();
@@ -518,7 +511,6 @@ static int MARKED = 0;
       cerr << print_process_full_name (pp) << endl;
     }
     std::cerr << " --- END ACTIVATION --- " << endl << endl;
-#endif
   }
 
   void
@@ -541,7 +533,7 @@ static int MARKED = 0;
         << (i_p1 < i_p2 ? " before " : " after ") << " p2 "
         << p2_name << std::endl;
   }
-
+#endif
 
   void
   Graph::traverse_depth_first (Vertex *v)
@@ -751,7 +743,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
     size_t count_activation = 0;
 
-    #ifndef DJNN_NO_DEBUG
+  #ifndef DJNN_NO_DEBUG
     int count_real_activation = 0;
     int count_targeted = 0;
     graph_counter_act++;
@@ -769,7 +761,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       begin_act = std::chrono::steady_clock::now();
       std::cerr << std::endl;
     }
-    #endif
+  #endif
 
     #if _EXEC_FULL_ORDERED_VERTICES
     bool is_end = false;
@@ -955,9 +947,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
     #ifndef DJNN_NO_DEBUG
     end_output = std::chrono::steady_clock::now();
-    #endif
 
-    #ifndef DJNN_NO_DEBUG
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
