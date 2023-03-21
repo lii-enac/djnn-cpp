@@ -89,9 +89,7 @@ namespace djnn
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
     void add_in_activation (Vertex *v);
-    void clear_activation ();
-    void schedule_delete (CoreProcess *p) { _scheduled_delete_processes.push_back (p); }
-    void schedule_activation (CoreProcess* p);
+    void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
 
     // behavior
     void sort (Vertex* v_root);

@@ -391,9 +391,9 @@ namespace djnn
   }
 
   void
-  CoreProcess::schedule_delete ()
+  CoreProcess::schedule_deletion ()
   {
-    Graph::instance().schedule_delete (this);
+    Graph::instance().schedule_deletion (this);
   }
 
   inline
