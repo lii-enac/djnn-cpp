@@ -44,8 +44,8 @@ namespace djnn
     map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in  () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
-                    void set_position_in_vertices (vertices_t::iterator end) { _pos = prev(end); }
-    vertices_t::iterator get_position_in_vertices () { return _pos; }
+                    void set_position_in_graph_vertices (vertices_t::iterator end) { _pos = prev(end); }
+    vertices_t::iterator get_position_in_graph_vertices () { return _pos; }
 
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
@@ -67,12 +67,16 @@ namespace djnn
   private:
     CoreProcess* _process;
     edges_t _edges;
-    vertices_t::iterator _pos;
+    
+    // sort management
     int _mark, _timestamp;
-    size_t _count_edges_in;
-    map<Vertex*, int> _map_edges; /* try to deal with duplicate */
-    bool _is_invalid;
     int _sorted_index;
+
+    // deletion management
+    bool _is_invalid;
+    size_t _count_edges_in;
+    map<Vertex*, int> _map_edges;
+    vertices_t::iterator _pos;
   };
 
   class Graph
@@ -81,6 +85,7 @@ namespace djnn
     // constructor
     static Graph& instance ();
     virtual ~Graph ();
+    void clear ();
     
     // management
     void add_edge (CoreProcess* src, CoreProcess* dst);
@@ -88,12 +93,16 @@ namespace djnn
     void remove_edge (CoreProcess* src, CoreProcess* dst);
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
+    void clear_activation (); // only for re-init (e.g unit tests)
+
+    // activation management during exec
     void add_in_activation (Vertex *v);
+    void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back(p); }
     void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
 
     // behavior
-    void sort (Vertex* v_root);
     void exec ();
+    void sort (Vertex* v_root);
     
 #if !defined(DJNN_NO_DEBUG)
     // debug
@@ -116,7 +125,6 @@ namespace djnn
     //static Graph _instance;
     static Graph *_instance;
     Graph ();
-    void clear ();
 
     // management
     Vertex* add_vertex (CoreProcess* c);

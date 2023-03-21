@@ -36,6 +36,7 @@ using std::endl;
 
 #ifndef DJNN_NO_DEBUG
 #include "core/control/assignment.h"
+#include "core/utils/utils-dev.h"
 
 static int graph_counter_act = 0;
 
@@ -61,60 +62,53 @@ namespace djnn
 {
 
   Vertex::Vertex (CoreProcess* p) :
-      _process (p), _mark (0), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
+      _process (p), _mark (0), _timestamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in(0)
   {
   }
 
-  Vertex::~Vertex () {
+  Vertex::~Vertex ()
+  {
   }
 
   void
   Vertex::add_edge (Vertex *dst) 
   { 
-    
     /* 
-       NOTE : We SHOULD avoid duplicate edges in this vector.
-       here a vector is used because the insert order is importante and used in sorting (traverse_depth_first)
-       we can't use std::set, std::unordered_set or map because it break this order.
-       BUT the find on stc::vector O(n) is more complex than std::set O(log(n)) or std::unordered_set O(1)
-
-       We add another _map_edges to manage duplicate info !
-       FIXME: maybe adapte the sort algorithm to use set or better unordered_set OR maybe replace current vector by _map_edges
+       NOTE : We must avoid duplicated edges in the _edges vector to prevent multiple activation at once.
+       _edges is a vector because the insert order is important and used in sorting (traverse_depth_first)
+       we can't use std::set, std::unordered_set or map because it would not keep this order.
+       BUT the find operation on std::vector O(n) is more complex than that of std::set O(log(n)) or std::unordered_set O(1)
+       so we add another _map_edges to manage duplicated info properly remove it when there is no such an edge anymore
+       FIXME?: maybe adapt the sort algorithm to use set or better unordered_set OR maybe replace current vector by _map_edges
     */
 
-    auto result = _map_edges.find(dst);
+    auto edge = _map_edges.find(dst);
  
-    /* if it's a NEW edge */
-    if (result == _map_edges.end()) {
+    if (edge == _map_edges.end()) {
+      // it's a NEW edge
       _edges.push_back (dst);
-      dst->_count_edges_in++;
+      dst->_count_edges_in += 1;
       _map_edges[dst] = 1;
-
-      // print debug
-      // cerr << "add_edge : " << "\t between " << 
-      // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
-      // this->_process->get_name () << " - " <<
-      // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
-      // dst->_process->get_name () << endl;
+      // cerr << "add_edge : " << "\t between " << get_hierarchy_name(get_process())  << " - " << get_hierarchy_name(dst->get_process()) << endl;
     }
-    /* it's a duplicate */
     else
-      result->second = ++result->second ;
+      // it's a duplicate
+      edge->second += 1;
   }
 
   void
   Vertex::remove_edge (Vertex *dst)
   {
-    auto result = _map_edges.find(dst);
+    auto edge = _map_edges.find(dst);
 
     /* remove duplicate */
-    if (result != _map_edges.end () && result->second > 1) {
-      result->second = --result->second;
+    if (edge != _map_edges.end () && edge->second > 1) {
+      edge->second -= 1;
     } else {
       
       /* NOTE: 
         for now we keep this complicated way of erasing instead of 
-        _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
+          _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
         to manage wrong removing, such as in unit tests
       */
 
@@ -126,15 +120,10 @@ namespace djnn
         /* erase them from _edges */
         _edges.erase(newend, _edges.end ());
         _map_edges.erase(dst); 
-        --dst->_count_edges_in;
+        dst->_count_edges_in -= 1;
       }
     }
-    // print debug
-    // cerr << "remove_edge : " << "\t between " << 
-    // ( this->_process->get_parent () ? this->_process->get_parent ()->get_name () + "/" : "") <<
-    // this->_process->get_name () << " - " <<
-    // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
-    // dst->_process->get_name () << " _count_edges_in: " << dst->_count_edges_in << endl;
+    // cerr << "remove_edge : " << "\t between " << get_hierarchy_name(get_process())  << " - " << get_hierarchy_name(dst->get_process()) << endl;
   }
 
 
@@ -186,69 +175,136 @@ namespace djnn
   Vertex*
   Graph::add_vertex (CoreProcess* c)
   {
-    Vertex* v = new Vertex (c);
+    auto * v = new Vertex (c);
     _vertices.push_back (v);
-    v->set_position_in_vertices (_vertices.end ());
-    // MP : 11.2021
+    v->set_position_in_graph_vertices (_vertices.end ());
+    // adding a vertex keeps the global order, so do not invalidate it
     //_sorted = false;
     return v;
   }
+
+
+  void
+  Graph::add_output_node (CoreProcess* c)
+  {
+    /* check if c is already in the graph */
+    for (auto v : _output_nodes) {
+      if (v->get_process () == c)
+        return;
+    }
+    auto * v = new Vertex (c);
+    _output_nodes.push_back (v);
+  }
+
+  void
+  Graph::remove_output_node (CoreProcess* c)
+  {
+    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
+      [c](Vertex* v) { return v->get_process () == c; });
+
+    if (new_end != _output_nodes.end ()) {
+      // delete nodes
+      for (auto it = new_end ; it != _output_nodes.end (); ++it)
+        delete *it;
+
+      //erase from vector
+      _output_nodes.erase (new_end, _output_nodes.end ());
+    }
+  }
+
+  void
+  Graph::add_edge (CoreProcess* src, CoreProcess* dst)
+  {
+    //std::cerr << "add_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
+
+    Vertex *vs = src->vertex ();
+    if (vs == nullptr) {
+      vs = add_vertex (src);
+      src->set_vertex (vs);
+    }
+
+    Vertex *vd = dst->vertex ();
+    if (vd == nullptr) {
+      vd = add_vertex (dst);
+      dst->set_vertex (vd);
+    }
+
+    vs->add_edge (vd);
+    _sorted = false;
+  }
+
+  void
+  Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
+  {
+    //std::cerr << "remove_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
+    
+    Vertex *vs = p_src->vertex ();
+    Vertex *vd = p_dst->vertex ();
+
+    /* note: 
+       this code is here to prevent bugs 
+       this should NEVER happen
+       vertex should NOT be nullptr at this place
+       if it is null, something (FatProcess or edge dependency) IS NOT well deleted
+    */
+    if (vs == nullptr || vd == nullptr) {
+      warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
+#ifndef DJNN_NO_DEBUG
+      auto * ppsrc = p_src;
+      auto * ppdst = p_dst;
+      std::cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
+      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << cpp_demangle(typeid(*p_dst).name()) + ":" +
+      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << std::endl;
+#endif
+      return;
+    }
+
+    vs->remove_edge (vd);
+
+    /* 
+      delete vertex if they have no more out_edges and in_edges
+    */
+
+    // remove src if necessary
+    if (vs->get_edges ().empty () && (vs->get_count_edges_in () == 0)) {
+      _vertices.erase(vs->get_position_in_graph_vertices ());
+      p_src->set_vertex (nullptr);
+      delete vs; 
+    }
+
+    // remove dst if necessary
+    if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)){
+      _vertices.erase(vd->get_position_in_graph_vertices ());
+      p_dst->set_vertex (nullptr);
+      delete vd;
+    }
+
+    // removing an edge should not break the order, so do not invalidate it 
+    //_sorted = false;
+  }
+
+
 
   void 
   Graph::add_in_activation (Vertex *v)
   {
 
 #if _DEBUG_GRAPH_INSERT_TIME
-  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 #endif 
 
-    /*
-      note : if the graph has not been sorted yet.
-      we do not know the order so we just push_back and the
-      _new_activ will be reordered during sorted process.
-    */
     if (_sorted) {
-      if (_activation_deque.empty ())
+      if (_activation_deque.empty ()) {
         _activation_deque.push_front (v);
+      }
       else {
-        auto it = _activation_deque.begin () ;
-        bool is_inserted = false;
-
-        while ( !is_inserted && it != _activation_deque.end () ) {
-          /* note:
-          /  should avoid duplicates
-          /  we don't need this code anymore ? 
-          / the guard for duplicate is now in process::set_activation_flag
-          */
-//           if ((*it)->get_sorted_index () == v->get_sorted_index ()) {
-//   #if _DEBUG_GRAPH_INSERT_TIME          
-//             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-//             int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
-//             cerr << "!! insert time (duplicate) :" << time << endl << endl;
-//   #endif 
-//             return ;
-//           } 
-          if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
-            it = _activation_deque.insert (it, v);
-            is_inserted = true;
-          }
-          ++it;
-        }
-        // if not inserted : it is the last one
-        if (!is_inserted)
-          _activation_deque.push_back (v);
+        auto pos = find_if (_activation_deque.begin(), _activation_deque.end(),
+          [v](const Vertex* v1) { return v->get_sorted_index () < v1->get_sorted_index (); });
+        
+        _activation_deque.insert (pos, v);
       }
     }
     else {
-      /* note:
-      /  should avoid duplicates
-      /  we don't need this code anymore ? 
-      / the guard for duplicate is now in process::set_activation_flag
-      */
-      //for (auto vv: _activation_deque)
-      //  if (vv == v) return ;
-
-      // now we add it 
       _activation_deque.push_front (v);
     }
 
@@ -271,119 +327,6 @@ namespace djnn
     _activation_deque.clear ();
   } 
 
-  void
-  Graph::add_output_node (CoreProcess* c)
-  {
-    /* check if c is already in the graph */
-    for (auto v : _output_nodes) {
-      if (v->get_process () == c)
-        return;
-    }
-    Vertex *v = new Vertex (c);
-    _output_nodes.push_back (v);
-  }
-
-  void
-  Graph::remove_output_node (CoreProcess* c)
-  {
-    //remove_if 
-    //auto new_end = _output_nodes.end ();
-
-    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
-      [c](Vertex* v) {return v->get_process () == c;});
-
-    if (new_end != _output_nodes.end ()) {
-      // delete nodes
-      for (auto it = new_end ; it != _output_nodes.end(); ++it)
-        delete *it;
-
-      //erase from vector
-      _output_nodes.erase( new_end, _output_nodes.end ());
-    }
-  }
-
-  void
-  Graph::add_edge (CoreProcess* src, CoreProcess* dst)
-  {
-
-    // std::cerr << "add_edge: " <<
-    //   ( src->get_parent () ? src->get_parent ()->get_name () + "/" : "" ) << src->get_name () << " - " << 
-    //   ( dst->get_parent () ? dst->get_parent ()->get_name () + "/" : "" ) << dst->get_name () << endl;
-
-    Vertex *vs = src->vertex ();
-    if (vs == nullptr) {
-      vs = add_vertex (src);
-      src->set_vertex (vs);
-    }
-
-    Vertex *vd = dst->vertex ();
-    if (vd == nullptr) {
-      vd = add_vertex (dst);
-      dst->set_vertex (vd);
-    }
-
-    vs->add_edge (vd);
-    _sorted = false;
-  }
-
-  void
-  Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
-  {
-
-    //std::cerr << "remove_edge: " <<
-    //( p_src->get_parent () ? p_src->get_debug_parent ()->get_debug_name () + "/" : "" ) << p_src->get_debug_name () << " - " << 
-    //( p_dst->get_parent () ? p_dst->get_debug_parent ()->get_debug_name () + "/" : "" ) << p_dst->get_debug_name () << endl;
-
-    Vertex *vs = p_src->vertex ();
-    Vertex *vd = p_dst->vertex ();
-
-    /* note: 
-       this code is to prevent bugs 
-       this should NEVER happen
-       vertex should NOT be nullptr at this place
-       if not, something (FatProcess or edge dependency) IS NOT well deleted
-    */
-    if (vs == nullptr || vd == nullptr) {
-
-      warning ( nullptr,  " Graph::remove_edge - - vertex vs or vd is NULL and it SHOULD NOT HAPPEN (except in unit test) \n");
-
-#ifndef DJNN_NO_DEBUG
-      auto * ppsrc = p_src;
-      auto * ppdst = p_dst;
-      std::cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
-      (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << cpp_demangle(typeid(*p_dst).name()) + ":" +
-      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << std::endl;
-#endif
-      //assert(0);
-      return;
-    }
-
-    vs->remove_edge (vd);
-
-    /* 
-      note :
-      delete vertex if they have no more out_edges and in_edges
-     */
-
-    // 1 - remove src if necessary
-    if ( vs->get_edges ().empty () && (vs->get_count_edges_in () == 0)) {
-      _vertices.erase(vs->get_position_in_vertices ());
-      p_src->set_vertex (nullptr);
-      delete vs; 
-    }
-
-    // 2 - remove dst if necessary
-    if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)){
-      _vertices.erase(vd->get_position_in_vertices ());
-      p_dst->set_vertex (nullptr);
-      delete vd;
-    }
-
-    // MP TEST 11.2021
-    //_sorted = false;
-  }
-
-
 
   // TODO: explain what MARK is
   static int MARKED = 0;
@@ -404,7 +347,8 @@ namespace djnn
 
     if (false
 #ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
-    // add vertex if it's not a property: its timestamp is taken into account anyway
+    // add vertex if it's not a property, as their activation does nothing
+    // the property timestamp is taken into account anyway
     || (v->get_process ()->get_process_type() != PROPERTY_T)
 #endif
 // #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
@@ -414,9 +358,7 @@ namespace djnn
       _ordered_vertices.push_back (v);
     }
 
-    //v->set_mark (BROWSING); // MP 11.2021 : useless BROWSING MARKED
     v->set_mark (MARKED);
-    // debug traverse
     //std::cerr << print_process_full_name (v->get_process ()) << std::endl;
     for (auto * v2 : v->get_edges ()) {
       if (v2->get_mark () < MARKED) {
@@ -425,7 +367,6 @@ namespace djnn
     }
     
     v->set_timestamp (++_cur_date);
-    //v->set_mark (MARKED);  // MP 11.2021 : useless BROWSING MARKED
   }
 
 
@@ -451,6 +392,7 @@ namespace djnn
     _cur_date = 0;
     _ordered_vertices.clear ();
 
+    // TODO: explanation here
     if (!_activation_triggers_to_sort.empty ()) {
       for (auto v : _activation_triggers_to_sort) {
         if (v->get_mark () < MARKED)
@@ -474,7 +416,6 @@ namespace djnn
       [](const Vertex* v1, const Vertex *v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
 #endif
 
-    //debug
     //print_sorted ();
 
     _sorted = true;
@@ -506,13 +447,6 @@ namespace djnn
   }
 
 
-
-  void
-  Graph::schedule_activation (CoreProcess *p)
-  {
-    _scheduled_activation_processes.push_back(p);
-  }
-
 #ifndef DJNN_NO_DEBUG
   void 
   display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v);
@@ -537,28 +471,33 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
     #endif
 
-    _activation_triggers_to_sort.clear ();
-    //pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
-    // notify_activation of event : mouse, touch, etc... which do not have vertex
+    // pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
+    // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
-      map<CoreProcess*, int> already_done;
-      #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
         std::cerr << std::endl << std::endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << std::endl;
-      #endif
+#endif
+
+      _activation_triggers_to_sort.clear ();
+
+      map<CoreProcess*, int> already_done;
       for (auto p : _scheduled_activation_processes) {
         if (already_done.find(p) == already_done.end()) {
           p->notify_activation ();
           already_done[p];
           if (p->vertex ())
             _activation_triggers_to_sort.push_back (p->vertex ());
-          #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
             std::cerr << "Scheduled ------ " << print_process_full_name(p) << " \t\t--  v: " << p->vertex () << std::endl;
-          #endif
+#endif
         }
       }
-      #ifndef DJNN_NO_DEBUG
+
+      _scheduled_activation_processes.clear ();
+
+#ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
         std::cerr << " ----------------------------------------- " << std::endl;
         int i = 0;
@@ -567,13 +506,12 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         }
         std::cerr << " ----------------------------------------- " << std::endl;
       }
-      #endif
-      _scheduled_activation_processes.clear ();
+#endif
     }
 
+#ifndef DJNN_NO_DEBUG
     size_t count_activation = 0;
 
-  #ifndef DJNN_NO_DEBUG
     int count_real_activation = 0;
     int count_targeted = 0;
     graph_counter_act++;
@@ -591,9 +529,9 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       begin_act = std::chrono::steady_clock::now();
       std::cerr << std::endl;
     }
-  #endif
+#endif
 
-    #if _EXEC_FULL_ORDERED_VERTICES
+#if _EXEC_FULL_ORDERED_VERTICES
     bool is_end = false;
     while (!is_end) {
       is_end = true;
@@ -638,39 +576,43 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       }
     }
 
-    #else //between OLD and NEW execution
+#else // between OLD and NEW execution
 
-    bool is_end = false;
     _sorted = false;
+    bool is_end = false;
+
     while (!is_end) {
       is_end = true;
 
-      #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
       map<Vertex*, int> _vertex_already_activated;
-      #endif
+#endif
 
       Vertex* v = nullptr;
       while (!_activation_deque.empty ()) {
         v = _activation_deque.front ();
       
         if (!_sorted) {
-          #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
             _sorted_break++;
             std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
           }
-          #endif
+#endif
           break;
         }
-        // pop only if sorted else .. the process activation willl be skip
+        // pop only if sorted otherwise the process activation will be skipped
         _activation_deque.pop_front();
 
         if (v->is_invalid())
           continue;
         auto* p = v->get_process();
-        count_activation++;
 
-        #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
+        count_activation++;
+#endif
+
+#ifndef DJNN_NO_DEBUG
         if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE) {
           auto it = _vertex_already_activated.find(v);
           if (it != _vertex_already_activated.end()) {
@@ -712,14 +654,12 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
             cerr << "\033[0m";
           }
         }
-        #endif
+#endif
 
-        //rmt_BeginCPUSample(process_exec, RMTSF_Aggregate);
         p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
-        //rmt_EndCPUSample ();
 
-        #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
         if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
           end_process_act = std::chrono::steady_clock::now();
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
@@ -732,24 +672,24 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           }
           cerr << "\033[0m";
         }
-        #endif
+#endif
       }
 
       // note:
-      // we have to keep both system to sort :
-      // either it is triggered for external source
+      // we have to keep both systems sorted:
+      // either it is triggered by an external source
       // or by a internal property
       if (!_sorted && !_activation_triggers_to_sort.empty ()) {
-        sort(nullptr);
+        sort (nullptr);
         is_end = false;
-      } else if (!_sorted && v){
+      } else if (!_sorted && v) {
         sort (v);
         is_end = false;
       }
     }
-    #endif
+  #endif
     
-    // then execute delayed delete on processes
+    // execute delayed delete on processes
     #ifndef DJNN_NO_DEBUG
     begin_delete = std::chrono::steady_clock::now();
     #endif
@@ -769,10 +709,10 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     #endif
 
     for (auto v : _output_nodes) {
-      if (v->is_invalid()) continue;
-      auto* p = v->get_process();
-      p->trigger_activation_flag();
-      p->set_activation_flag(NONE_ACTIVATION);
+      if (v->is_invalid ()) continue;
+      auto* p = v->get_process ();
+      p->trigger_activation_flag ();
+      p->set_activation_flag (NONE_ACTIVATION);
     }
 
     #ifndef DJNN_NO_DEBUG
