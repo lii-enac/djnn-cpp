@@ -12,7 +12,18 @@
  *
  */
 
-#include "graph.h"
+#include <algorithm>
+
+#if !defined(DJNN_NO_DEBUG) && defined(_DEBUG_GRAPH_INSERT_TIME) || !defined(_DEBUG_SEE_GRAPH_INFO_PREF)
+#include <chrono>
+#endif
+
+#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
+#include "core/utils/iostream.h"
+using std::cout;
+using std::cerr;
+using std::endl;
+#endif
 
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
@@ -20,15 +31,12 @@
 #include "utils/debug.h"
 #include "exec_env/exec_env-dev.h"
 
-#include <algorithm>
+#include "graph.h"
 
-#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-#include "core/utils/iostream.h"
-#endif
 
 #ifndef DJNN_NO_DEBUG
 #include "core/control/assignment.h"
-#include <chrono>
+
 static int graph_counter_act = 0;
 
 #if _DEBUG_GRAPH_INSERT_TIME
@@ -46,20 +54,11 @@ static double graph_average = 0.0;
 static int sorted_counter = 0;
 static double sorted_total = 0.0;
 static double sorted_average = 0.0;
-
-#include <chrono>
 #endif
 #endif
 
 namespace djnn
 {
-#ifndef DJNN_NO_DEBUG
-  using std::cout;
-  using std::cerr;
-  using std::endl;
-#endif
-
-  static int MARKED = 0;
 
   Vertex::Vertex (CoreProcess* p) :
       _process (p), _mark (0), _timestamp (0), _count_edges_in(0), _is_invalid (false), _sorted_index (-1)
@@ -114,13 +113,12 @@ namespace djnn
     } else {
       
       /* NOTE: 
-        for now we keep this complicated way to erase instead of 
+        for now we keep this complicated way of erasing instead of 
         _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
-        to manage wrong removing, as in unit-test
+        to manage wrong removing, such as in unit tests
       */
 
-      /* or remove dst from _edges vector  */
-      //auto newend = _edges.end ();
+      /* remove dst from _edges vector */
       auto newend = std::remove (_edges.begin (), _edges.end (), dst);
 
       /* check if end has changed and erase */
@@ -138,98 +136,6 @@ namespace djnn
     // ( dst->_process->get_parent () ? dst->_process->get_parent ()->get_name () + "/" : "") <<
     // dst->_process->get_name () << " _count_edges_in: " << dst->_count_edges_in << endl;
   }
-
-
-#ifndef DJNN_NO_DEBUG
-  static string 
-  print_process_full_name (CoreProcess *p) {
-    string postfix;
-    CoreAssignment* ca = dynamic_cast<CoreAssignment*>(p);
-    if (ca != nullptr) {
-      postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
-    }
-    return cpp_demangle(typeid(*p).name()) + "- (" + 
-    ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
-    ( p ? p->get_debug_name () : "") + ")" + postfix;
-  }
-
-  void
-  Vertex::print_vertex () const
-  {
-    auto * pp = _process;
-    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
-    _count_edges_in << ", " << _edges.size () << "] :\t";
-
-    if( _edges.size () == 0)
-      std::cerr << "EMPTY" << endl;
-    else {
-      for (auto e : _edges) {
-        auto result = _map_edges.find(e);
-        auto * ppe = e->_process;
-        if (ppe) {
-          std::cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
-        }
-      }
-      std::cerr << std::endl;
-    }
-  }
-  
-  void
-  Vertex::print_full_vertex ()
-  {
-    cerr << "\033[1;31m";
-    std::cerr << "Execution Graph - details on vertex: " << std::endl;
-        
-    auto * pp = _process;
-    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
-    _count_edges_in << ", " << _edges.size () << "] :\n";
-
-    std::cerr << "edge in " << _count_edges_in << ":\n" ;
-
-    if( _count_edges_in == 0)
-      std::cerr << "\tEMPTY" << std::endl;
-    else {
-      int i = 0;
-      for (auto v : Graph::instance ().vertices ()) {
-        map<Vertex*, int> m = v->get_map_edges ();
-        auto it = m.find (this);
-        if ( it != m.end ()) {
-          if ( v->is_invalid () == 0 ) {
-            auto* ppv = v->_process;
-            if (ppv) {
-              std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "]\n" ;
-            }
-          }
-          else {
-            std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
-          }
-        }
-      }
-      std::cerr << std::endl;
-    }
-
-    std::cerr << "edge out " << _edges.size () << ":\n" ;
-
-    if( _edges.size () == 0)
-      std::cerr << "\tEMPTY" << std::endl;
-    else {
-      int i = 0;
-      for (auto e : _edges) {
-        if (e->is_invalid () == 0) {
-          auto result = _map_edges.find(e);
-          auto * ppe = e->_process;
-          if (ppe)
-            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "]\n" ;
-        }
-        else {
-          std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
-        }
-      }
-      std::cerr << std::endl;
-    }
-    cerr << "\033[0m";
-  }
-  #endif
 
 
 
@@ -319,7 +225,7 @@ namespace djnn
 //             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 //             int time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
 //             cerr << "!! insert time (duplicate) :" << time << endl << endl;
-// #endif 
+//   #endif 
 //             return ;
 //           } 
           if ((*it)->get_sorted_index () > v->get_sorted_index ()) {
@@ -328,7 +234,7 @@ namespace djnn
           }
           ++it;
         }
-        //if not inserted : it is the last one
+        // if not inserted : it is the last one
         if (!is_inserted)
           _activation_deque.push_back (v);
       }
@@ -446,7 +352,7 @@ namespace djnn
       auto * ppdst = p_dst;
       std::cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
       (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << cpp_demangle(typeid(*p_dst).name()) + ":" +
-      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
+      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << std::endl;
 #endif
       //assert(0);
       return;
@@ -477,63 +383,10 @@ namespace djnn
     //_sorted = false;
   }
 
-#ifndef DJNN_NO_DEBUG
 
-  void
-  Graph::print_graph () const
-  {
-    std::cerr << " --- GRAPH --- " << endl ;
-    for (auto v : _vertices) {
-      v->print_vertex ();
-    }
-    std::cerr << " --- END GRAPH --- " << endl << endl;
-  }
 
-  void
-  Graph::print_sorted () const
-  {
-    std::cerr << " --- SORTED GRAPH --- " << endl ;
-    for (auto v : _ordered_vertices) {
-      auto * pp = v->get_process ();
-      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - ";
-      cerr << print_process_full_name (pp) << endl;
-    }
-    std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
-  }
-
-  void
-  Graph::print_activation () const
-  {
-    std::cerr << " --- SORTED ACTIVATION --- " << endl ;
-    for (auto v : _activation_deque) {
-      auto * pp = v->get_process ();
-      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - p: " << pp << " - ";
-      cerr << print_process_full_name (pp) << endl;
-    }
-    std::cerr << " --- END ACTIVATION --- " << endl << endl;
-  }
-
-  void
-  Graph::print_order (CoreProcess *p1, CoreProcess *p2)
-  {
-    int i_p1 = -1;
-    int i_p2 = -1;
-    for (size_t i = 0; i < _ordered_vertices.size (); i++)
-    {
-      if (_ordered_vertices.at (i)->get_process () == p1) i_p1 = i;
-      if (_ordered_vertices.at (i)->get_process () == p2) i_p2 = i;
-    }
-    string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
-    string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
-    if (i_p1 == -1) std::cout << "p1 " << p1_name << " not found\n";
-    if (i_p2 == -1) std::cout << "p2 " << p2_name << " not found\n";
-
-    if (i_p1 >= 0 && i_p2 >= 0) std::cout << "p1 "
-        << p1_name
-        << (i_p1 < i_p2 ? " before " : " after ") << " p2 "
-        << p2_name << std::endl;
-  }
-#endif
+  // TODO: explain what MARK is
+  static int MARKED = 0;
 
   void
   Graph::traverse_depth_first (Vertex *v)
@@ -661,36 +514,13 @@ namespace djnn
   }
 
 #ifndef DJNN_NO_DEBUG
-
-  pair<Vertex*, int>
-  find_pair_from_value_in_map (map<Vertex*, int> &vertex_already_activated, int value){
-    for (auto pair : vertex_already_activated){
-      if (pair.second == value)
-        return pair;
-    }
-    return pair<Vertex*, int> (nullptr, -1);
-  }
-  
-
   void 
-  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v){
+  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v);
 
-    cerr << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
-    cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
-    
-    pair<Vertex*, int> pair ;
-    // while we don't find the beginning of the cycle ... which is the vertex already activated
-    do {
-      pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
-      if (pair.first)
-        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
-    } while (pair.first && pair.first != v);
-
-    cerr << "--------------------------------------------------- " << endl;
-
-  }
-
+  static string 
+  print_process_full_name (CoreProcess *p);
 #endif
+
 
   void
   Graph::exec ()
@@ -1021,4 +851,183 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 rmt_EndCPUSample();
 
   }
+
+
+  #ifndef DJNN_NO_DEBUG
+
+  static string 
+  print_process_full_name (CoreProcess *p) {
+    string postfix;
+    CoreAssignment* ca = dynamic_cast<CoreAssignment*>(p);
+    if (ca != nullptr) {
+      postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
+    }
+    return cpp_demangle(typeid(*p).name()) + "- (" + 
+    ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
+    ( p ? p->get_debug_name () : "") + ")" + postfix;
+  }
+
+  void
+  Vertex::print_vertex () const
+  {
+    auto * pp = _process;
+    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
+    _count_edges_in << ", " << _edges.size () << "] :\t";
+
+    if( _edges.size () == 0)
+      std::cerr << "EMPTY" << endl;
+    else {
+      for (auto e : _edges) {
+        auto result = _map_edges.find(e);
+        auto * ppe = e->_process;
+        if (ppe) {
+          std::cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
+        }
+      }
+      std::cerr << std::endl;
+    }
+  }
+  
+  void
+  Vertex::print_full_vertex ()
+  {
+    cerr << "\033[1;31m";
+    std::cerr << "Execution Graph - details on vertex: " << std::endl;
+        
+    auto * pp = _process;
+    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
+    _count_edges_in << ", " << _edges.size () << "] :\n";
+
+    std::cerr << "edge in " << _count_edges_in << ":\n" ;
+
+    if( _count_edges_in == 0)
+      std::cerr << "\tEMPTY" << std::endl;
+    else {
+      int i = 0;
+      for (auto v : Graph::instance ().vertices ()) {
+        map<Vertex*, int> m = v->get_map_edges ();
+        auto it = m.find (this);
+        if ( it != m.end ()) {
+          if ( v->is_invalid () == 0 ) {
+            auto* ppv = v->_process;
+            if (ppv) {
+              std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "]\n" ;
+            }
+          }
+          else {
+            std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
+          }
+        }
+      }
+      std::cerr << std::endl;
+    }
+
+    std::cerr << "edge out " << _edges.size () << ":\n" ;
+
+    if( _edges.size () == 0)
+      std::cerr << "\tEMPTY" << std::endl;
+    else {
+      int i = 0;
+      for (auto e : _edges) {
+        if (e->is_invalid () == 0) {
+          auto result = _map_edges.find(e);
+          auto * ppe = e->_process;
+          if (ppe)
+            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "]\n" ;
+        }
+        else {
+          std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
+        }
+      }
+      std::cerr << std::endl;
+    }
+    cerr << "\033[0m";
+  }
+
+
+  void
+  Graph::print_graph () const
+  {
+    std::cerr << " --- GRAPH --- " << endl ;
+    for (auto v : _vertices) {
+      v->print_vertex ();
+    }
+    std::cerr << " --- END GRAPH --- " << endl << endl;
+  }
+
+  void
+  Graph::print_sorted () const
+  {
+    std::cerr << " --- SORTED GRAPH --- " << endl ;
+    for (auto v : _ordered_vertices) {
+      auto * pp = v->get_process ();
+      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - ";
+      cerr << print_process_full_name (pp) << endl;
+    }
+    std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
+  }
+
+  void
+  Graph::print_activation () const
+  {
+    std::cerr << " --- SORTED ACTIVATION --- " << endl ;
+    for (auto v : _activation_deque) {
+      auto * pp = v->get_process ();
+      cerr << "index: " << v->get_sorted_index () << " - timestamp: " << v->get_timestamp () << " - p: " << pp << " - ";
+      cerr << print_process_full_name (pp) << endl;
+    }
+    std::cerr << " --- END ACTIVATION --- " << endl << endl;
+  }
+
+  void
+  Graph::print_order (CoreProcess *p1, CoreProcess *p2)
+  {
+    int i_p1 = -1;
+    int i_p2 = -1;
+    for (size_t i = 0; i < _ordered_vertices.size (); i++)
+    {
+      if (_ordered_vertices.at (i)->get_process () == p1) i_p1 = i;
+      if (_ordered_vertices.at (i)->get_process () == p2) i_p2 = i;
+    }
+    string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
+    string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
+    if (i_p1 == -1) std::cout << "p1 " << p1_name << " not found\n";
+    if (i_p2 == -1) std::cout << "p2 " << p2_name << " not found\n";
+
+    if (i_p1 >= 0 && i_p2 >= 0) std::cout << "p1 "
+        << p1_name
+        << (i_p1 < i_p2 ? " before " : " after ") << " p2 "
+        << p2_name << std::endl;
+  }
+
+  pair<Vertex*, int>
+  find_pair_from_value_in_map (map<Vertex*, int> &vertex_already_activated, int value){
+    for (auto pair : vertex_already_activated){
+      if (pair.second == value)
+        return pair;
+    }
+    return pair<Vertex*, int> (nullptr, -1);
+  }
+  
+
+  void 
+  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v) {
+
+    cerr << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
+    cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
+    
+    pair<Vertex*, int> pair ;
+    // while we don't find the beginning of the cycle ... which is the vertex already activated
+    do {
+      pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
+      if (pair.first)
+        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
+    } while (pair.first && pair.first != v);
+
+    cerr << "--------------------------------------------------- " << endl;
+
+  }
+#endif
+
+
 }

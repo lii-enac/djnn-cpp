@@ -56,7 +56,9 @@ namespace djnn
 
   // use only for _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL > 1
   // but can't use precompiled condition anymore to add/remove it
+  #ifndef DJNN_NO_DEBUG
   static int nb_space = 0;
+  #endif
 
   void Container::clean_up_content () 
   {
