@@ -165,7 +165,7 @@ namespace djnn
             p->deactivate();
             _files.remove_child (p);
             _removed_files.add_one (p);
-            p->schedule_delete();
+            p->schedule_deletion();
             removed = true;
           }
         }

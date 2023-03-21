@@ -58,7 +58,7 @@ namespace djnn
       auto *p = to_del->get_parent ();
       if (p)
         p->remove_child (to_del);
-      to_del->schedule_delete();
+      to_del->schedule_deletion();
     }
   }
 
@@ -208,7 +208,7 @@ namespace djnn
         auto *p = to_del->get_parent ();
         if (p)
           p->remove_child (to_del);
-        to_del->schedule_delete ();
+        to_del->schedule_deletion ();
       }
     }
     coll->remove_all ();

@@ -257,7 +257,7 @@ namespace djnn
         t->leave ();
       }
       _active_touches.erase (it);
-      t->schedule_delete ();
+      t->schedule_deletion ();
     }
     t = new Touch (_win->touches (), djnn::to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
@@ -565,7 +565,7 @@ namespace djnn
       _active_touches.erase (it);
 
       /* delay touch delete */
-      t->schedule_delete ();
+      t->schedule_deletion ();
     }
 
     /* common shape event */

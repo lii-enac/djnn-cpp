@@ -671,7 +671,7 @@ namespace djnn
   MultilineEditor::delete_line (SimpleText *st) {
     st->deactivate ();
     _lines.remove_child (st);
-    st->schedule_delete ();
+    st->schedule_deletion ();
   }
 
   void

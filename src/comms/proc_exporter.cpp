@@ -215,7 +215,7 @@ namespace djnn
     fail:
       djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
       unsubscribe_all ();
-      this->schedule_delete ();
+      this->schedule_deletion ();
       if (!should_i_stop ()) {
         GRAPH_EXEC; // executing
       }
