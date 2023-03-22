@@ -188,13 +188,13 @@ namespace djnn
   {
     //std::cerr << "add_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
 
-    Vertex *vs = src->vertex ();
+    Vertex* vs = src->vertex ();
     if (vs == nullptr) {
       vs = add_vertex (src);
       src->set_vertex (vs);
     }
 
-    Vertex *vd = dst->vertex ();
+    Vertex* vd = dst->vertex ();
     if (vd == nullptr) {
       vd = add_vertex (dst);
       dst->set_vertex (vd);
@@ -479,7 +479,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
       map<CoreProcess*, int> already_done;
       for (auto p : _scheduled_activation_processes) {
-        if (already_done.find (p) == already_done.end()) {
+        if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();
           already_done[p];
           if (p->vertex ())
