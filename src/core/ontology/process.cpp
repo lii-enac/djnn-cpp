@@ -42,10 +42,9 @@
 namespace djnn
 {
   
+  // -----------------------------------------------------------------------
+  // parentless names
 
-  list<pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
-  long int __dbg_creation_num = 0; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 
 #ifdef DJNN_NO_DEBUG
   CoreProcess::DebugInfo   CoreProcess::_dbg_info{"no dbg info",0};
@@ -60,6 +59,73 @@ namespace djnn
   map<const CoreProcess*, std::pair<string, long long>> parentless_names; 
 #else
   static map<const CoreProcess*, std::pair<string, int>> parentless_names;
+#endif
+
+  void
+  remove_from_parentless_name (CoreProcess* child)
+  {
+    if(child && child->get_parent ()==nullptr) {
+      auto it = parentless_names.find(child);
+      if (it != parentless_names.end())
+        parentless_names.erase (it);
+    }
+  }
+
+  void
+  delete_parentless_processes ()
+  {
+    // //debug print before
+    // std::cerr << "\033[1;35m" << std::endl;
+    // std::cerr << "-- Before - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+    // if (!parentless_names.empty()) {
+    //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+    //   for (const auto& [key, pair_value] : parentless_names)
+    //     std::cerr << '[' << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
+    // }
+    // else
+    //   std::cerr << "OK - Parentless_Name is EMPTY";
+    // std::cerr << "\033[0m \n\n";
+
+    // sort by building order
+    std::map <int, const Process*> parentless_names_ordered;
+    for (auto& [key, pair_value] : parentless_names)
+      parentless_names_ordered[pair_value.second] = key;
+
+    // delete by reverse order
+    //C++20 : for (const auto& [key, value] : parentless_names_ordered | std::views::reverse)
+    for (auto iter = parentless_names_ordered.rbegin(); iter != parentless_names_ordered.rend(); ++iter) {
+
+      //debug: display parentless_names_ordered -- in reverse
+      //std::cerr << '[' << iter->first << "] = " << iter->second  << " try to delete" << std::endl;
+      //TODO 11.2022 : hack to not remove updateDrawing but it should NOT be here - it should be deleted in updateDrawing::clear ()
+      if (iter->first) {
+        delete iter->second;
+        iter->second = nullptr;
+      }
+      
+    }
+    
+    // print if Parentless_names is not empty
+  #ifndef DJNN_NO_DEBUG
+    if (!parentless_names.empty()) {
+      std::cerr << "\033[1;35m" << std::endl;
+      //std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
+      std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+      for (const auto& [key, pair_value] : parentless_names)
+        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
+      std::cerr << "\033[0m \n\n";
+    }
+  #endif
+  }
+
+
+  // -----------------------------------------------------------------------
+  // constructors / destructors
+
+#ifndef DJNN_NO_DEBUG
+  list<pair<CoreProcess*, long int>> __dbg_creation_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  vector<string> __dbg_destruction_stat_order; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
+  long int __dbg_creation_num = 0; // NOLINT (cppcoreguidelines-avoid-non-const-global-variables)
 #endif
 
   CoreProcess::CoreProcess (bool model)
@@ -120,52 +186,78 @@ namespace djnn
     #endif
   }
 
-  void
-  delete_parentless_processes ()
+  CouplingProcess::~CouplingProcess ()
   {
-    // //debug print before
-    // std::cerr << "\033[1;35m" << std::endl;
-    // std::cerr << "-- Before - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
-    // if (!parentless_names.empty()) {
-    //   std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
-    //   for (const auto& [key, pair_value] : parentless_names)
-    //     std::cerr << '[' << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
-    // }
-    // else
-    //   std::cerr << "OK - Parentless_Name is EMPTY";
-    // std::cerr << "\033[0m \n\n";
-
-    // sort by building order
-    std::map <int, const Process*> parentless_names_ordered;
-    for (auto& [key, pair_value] : parentless_names)
-      parentless_names_ordered[pair_value.second] = key;
-
-    // delete by reverse order
-    //C++20 : for (const auto& [key, value] : parentless_names_ordered | std::views::reverse)
-    for (auto iter = parentless_names_ordered.rbegin(); iter != parentless_names_ordered.rend(); ++iter) {
-
-      //debug: display parentless_names_ordered -- in reverse
-      //std::cerr << '[' << iter->first << "] = " << iter->second  << " try to delete" << std::endl;
-      //TODO 11.2022 : hack to not remove updateDrawing but it should NOT be here - it should be deleted in updateDrawing::clear ()
-      if (iter->first) {
-        delete iter->second;
-        iter->second = nullptr;
-      }
-      
+    for (auto * c : CouplingProcess::get_activation_couplings ()) {
+      c->about_to_delete_src ();
     }
-    
-    // print if Parentless_names is not empty
-  #ifndef DJNN_NO_DEBUG
-    if (!parentless_names.empty()) {
-      std::cerr << "\033[1;35m" << std::endl;
-      //std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
-      std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
-      for (const auto& [key, pair_value] : parentless_names)
-        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
-      std::cerr << "\033[0m \n\n";
+    for (auto * c : CouplingProcess::get_deactivation_couplings ()) {
+      c->about_to_delete_src ();
     }
-  #endif
+    if (vertex () != nullptr) {
+      #ifndef DJNN_NO_DEBUG
+      auto * pp = this;
+      warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n\tPlease use _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL = 1|2 for more details");
+      for (auto &c: CouplingProcess::get_activation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (activation)");
+      for (auto &c: CouplingProcess::get_deactivation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (deactivation)");
+      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1)
+        Graph::instance ().print_full_vertex (vertex ());
+      #endif
+    }
   }
+
+  FatProcess::FatProcess (const string& name, bool model)
+  : ChildProcess(model),
+  _data (nullptr)
+  {
+    #ifndef DJNN_NO_DEBUG
+    if (name != "") { set_debug_name (name); }
+    #endif
+  }
+
+
+  // -----------------------------------------------------------------------
+  // finalize_construction
+
+  void
+  CoreProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
+  {
+    if (parent) {
+      parent->add_child (this, name);
+    } else {
+      parentless_names[this] = std::pair<string, int> {name, parentless_names_order++} ;
+    }
+
+    #ifndef DJNN_NO_DEBUG
+    set_debug_parent(parent);
+    if (name != "") { set_debug_name (name); }
+    #endif
+  }
+
+  void
+  ChildProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
+  {
+    CoreProcess::finalize_construction (parent, name, state_dep);
+    if (parent) {
+      // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
+      if (state_dep == nullptr) {
+        _state_dependency = parent->state_dependency ();
+      } else {
+        _state_dependency = state_dep;
+        add_state_dependency (parent, _state_dependency);
+      }
+    }
+  }
+
+  void
+  FatProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
+  {
+    ChildProcess::finalize_construction (parent, name, state_dep);
+  }
+
+  
+  // -----------------------------------------------------------------------
+  // management
 
   const string&
   CoreProcess::get_name (ParentProcess* parent) const
@@ -184,6 +276,18 @@ namespace djnn
   CoreProcess::get_debug_parent ()
   {
     return dynamic_cast<FatProcess*>(_debug_parent);
+  }
+
+  void
+  CoreProcess::set_vertex (Vertex *v) 
+  { 
+    if (_vertex && v && _vertex != v) {
+  #ifdef DJNN_LOCAL_DEBUG 
+      std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl;
+  #endif
+    }
+    //print_set_vertex_err_msg (v);
+    _vertex = v; 
   }
   #endif
 
@@ -223,7 +327,6 @@ namespace djnn
     return found;
   }
 
-
   FatChildProcess*
   CoreProcess::find_child_impl (const string& _)
   {
@@ -236,75 +339,9 @@ namespace djnn
     return nullptr;
   }
 
-  CouplingProcess::~CouplingProcess ()
-  {
-    for (auto * c : CouplingProcess::get_activation_couplings ()) {
-      c->about_to_delete_src ();
-    }
-    for (auto * c : CouplingProcess::get_deactivation_couplings ()) {
-      c->about_to_delete_src ();
-    }
-    if (vertex () != nullptr) {
-      #ifndef DJNN_NO_DEBUG
-      auto * pp = this;
-      warning ( nullptr, " CouplingProcess::~CouplingProcess - " +  (pp ? get_hierarchy_name (pp): "")  + " - _vertex is NOT NULL and it should\n\tPlease use _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL = 1|2 for more details");
-      for (auto &c: CouplingProcess::get_activation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (activation)");
-      for (auto &c: CouplingProcess::get_deactivation_couplings()) loginfo(get_hierarchy_name (c->get_dst()) + " is still coupled (deactivation)");
-      if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 1)
-        Graph::instance ().print_full_vertex (vertex ());
-      #endif
-    }
-  }
 
-  FatProcess::FatProcess (const string& name, bool model)
-  : ChildProcess(model),
-  _data (nullptr)
-  {
-    #ifndef DJNN_NO_DEBUG
-    if (name != "") { set_debug_name (name); }
-    #endif
-  }
-
-
-  // finalize_construction
-  void
-  CoreProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
-  {
-    if (parent) {
-      parent->add_child (this, name);
-    } else {
-      parentless_names[this] = std::pair<string, int> {name, parentless_names_order++} ;
-    }
-
-    #ifndef DJNN_NO_DEBUG
-    set_debug_parent(parent);
-    if (name != "") { set_debug_name (name); }
-    #endif
-  }
-
-  void
-  ChildProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
-  {
-    CoreProcess::finalize_construction (parent, name, state_dep);
-    if (parent) {
-      // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
-      if (state_dep == nullptr) {
-        _state_dependency = parent->state_dependency ();
-      } else {
-        _state_dependency = state_dep;
-        add_state_dependency (parent, _state_dependency);
-      }
-    }
-  }
-
-  void
-  FatProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
-  {
-    ChildProcess::finalize_construction (parent, name, state_dep);
-  }
-
-
-  // main activation API
+  // -----------------------------------------------------------------------
+  // behavior: main activation API
 
   void
   CoreProcess::activate ()
@@ -396,7 +433,7 @@ namespace djnn
     Graph::instance().schedule_deletion (this);
   }
 
-  inline
+  static
   void
   notify (const Process::couplings_t& couplings)
   {
@@ -486,21 +523,19 @@ namespace djnn
     );
   }
 
-  #ifndef DJNN_NO_DEBUG
+  // pseudo, graph-less coupling for efficiency reasons in gui
   void
-  CoreProcess::set_vertex (Vertex *v) 
-  { 
-    if (_vertex && v && _vertex != v) {
-  #ifdef DJNN_LOCAL_DEBUG 
-      std::cerr << "!!!???  _vertex " << _vertex << " /= " << " v " << v << std::endl;
-  #endif
+  FatProcess::notify_change ( unsigned int notify_mask_ )
+  {
+    auto * p = get_parent();
+    if(p) {
+      p->notify_change(notify_mask_);
     }
-    //print_set_vertex_err_msg (v);
-    _vertex = v; 
   }
-  #endif
 
 
+
+  // -----------------------------------------------------------------------
   // tree, component, symtable
 
   void
@@ -514,16 +549,6 @@ namespace djnn
     #if !DJNN_NO_DEBUG
     set_debug_parent (parent);
     #endif
-  }
-
-  void
-  remove_from_parentless_name (CoreProcess* child) {
-
-    if(child && child->get_parent ()==nullptr) {
-      auto it = parentless_names.find(child);
-      if (it != parentless_names.end())
-        parentless_names.erase (it);
-    }
   }
 
   void
@@ -643,14 +668,6 @@ namespace djnn
     return default_name;
   }
 
-  void
-  FatProcess::notify_change ( unsigned int notify_mask_ ) // pseudo, graph-less coupling for efficiency reasons in gui
-  {
-    auto * p = get_parent();
-    if(p) {
-      p->notify_change(notify_mask_);
-    }
-  }
 
   CoreProcess::symtable_t::iterator FatProcess::find_child_iterator (const string& name) { return _symtable.find (name); }
   CoreProcess::symtable_t::iterator FatProcess::children_end () { return _symtable.end (); }
@@ -691,6 +708,7 @@ namespace djnn
   }
 
 
+  // -----------------------------------------------------------------------
   // data
 
   void
@@ -704,6 +722,10 @@ namespace djnn
   {
     return _data;
   }
+
+
+  // -----------------------------------------------------------------------
+  // helper functions
 
   void
   alias_children (ParentProcess* parent, FatProcess* from)
@@ -767,16 +789,9 @@ namespace djnn
   }
 
 
-  #ifndef DJNN_NO_SERIALIZE
-  void
-  CoreProcess::serialize (const string& format) {
-    #ifndef DJNN_NO_DEBUG
-    auto * pp = this;
-    warning (this, "serialize is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
-    #endif
-  }
-  #endif
-  
+  // -----------------------------------------------------------------------
+  // clone, serialize, dump
+
   CoreProcess*
   CoreProcess::clone ()
   {
@@ -795,6 +810,16 @@ namespace djnn
     return nullptr;
   }
 
+#ifndef DJNN_NO_SERIALIZE
+  void
+  CoreProcess::serialize (const string& format) {
+    #ifndef DJNN_NO_DEBUG
+    auto * pp = this;
+    warning (this, "serialize is not yet implemented for " + cpp_demangle(typeid(*this).name()) + " '" + (pp? pp->get_debug_name ():"") + "'");
+    #endif
+  }
+#endif
+  
 
 #ifndef DJNN_NO_DEBUG
   //static
