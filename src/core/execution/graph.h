@@ -37,7 +37,7 @@ namespace djnn
           CoreProcess* get_process ()       { return _process; }
     const CoreProcess* get_process () const { return _process; }
     
-    void add_edge (Vertex* dst);
+    void    add_edge (Vertex* dst);
     void remove_edge (Vertex* dst);
           edges_t& get_edges ()       { return _edges; }
     const edges_t& get_edges () const { return _edges; }
@@ -89,21 +89,19 @@ namespace djnn
     void clear ();
     
     // management
-    void add_edge (CoreProcess* src, CoreProcess* dst);
-    void add_native_edge (CoreProcess *src, CoreProcess* dst);
+    void    add_edge (CoreProcess* src, CoreProcess* dst);
     void remove_edge (CoreProcess* src, CoreProcess* dst);
-    void add_output_node (CoreProcess* c);
+    void    add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
 
     // activation management during exec
     void add_in_activation (Vertex *v);
     void clear_activation (); // only for re-init (e.g unit tests)
-    void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back(p); }
+    void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back (p); }
     void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
 
     // behavior
     void exec ();
-    void sort (Vertex* v_root);
     
 #if !defined(DJNN_NO_DEBUG)
     // debug
@@ -113,12 +111,12 @@ namespace djnn
     void print_graph  () const;
     void print_sorted () const;
     void print_activation () const; 
-    void print_full_vertex (Vertex* v) { v->print_full_vertex ();}
-    void print_order (CoreProcess *p1, CoreProcess *p2);
+    void print_full_vertex (Vertex* v) { v->print_full_vertex (); }
+    void print_order (CoreProcess* p1, CoreProcess* p2);
 #endif
 
 #if _DEBUG_ENABLE_CHECK_ORDER
-    void check_order (CoreProcess *p1, CoreProcess *p2) { _pair_to_check.push_back (std::make_pair(p1, p2)); }
+    void check_order (CoreProcess* p1, CoreProcess* p2) { _pair_to_check.push_back (std::make_pair(p1, p2)); }
 #endif
 
   private:
@@ -132,6 +130,7 @@ namespace djnn
     Vertex* get_vertex (CoreProcess* c);
 
     // behavior
+    void sort (Vertex* v_root);
     void traverse_depth_first (Vertex* v);
     void reset_vertices_mark ();
 
