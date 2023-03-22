@@ -62,7 +62,7 @@ namespace djnn
 {
 
   Vertex::Vertex (CoreProcess* p) :
-      _process (p), _mark (0), _timestamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in(0)
+      _process (p), _mark (0), _timestamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in (0)
   {
   }
 
@@ -82,9 +82,9 @@ namespace djnn
        FIXME?: maybe adapt the sort algorithm to use set or better unordered_set OR maybe replace current vector by _map_edges
     */
 
-    auto edge = _map_edges.find(dst);
+    auto edge = _map_edges.find (dst);
  
-    if (edge == _map_edges.end()) {
+    if (edge == _map_edges.end ()) {
       // it's a NEW edge
       _edges.push_back (dst);
       dst->_count_edges_in += 1;
@@ -99,7 +99,7 @@ namespace djnn
   void
   Vertex::remove_edge (Vertex *dst)
   {
-    auto edge = _map_edges.find(dst);
+    auto edge = _map_edges.find (dst);
 
     /* remove duplicate */
     if (edge != _map_edges.end () && edge->second > 1) {
@@ -118,8 +118,8 @@ namespace djnn
       /* check if end has changed and erase */
       if (newend != _edges.end ()) {
         /* erase them from _edges */
-        _edges.erase(newend, _edges.end ());
-        _map_edges.erase(dst); 
+        _edges.erase (newend, _edges.end ());
+        _map_edges.erase (dst); 
         dst->_count_edges_in -= 1;
       }
     }
@@ -209,8 +209,8 @@ namespace djnn
   {
     //std::cerr << "remove_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
     
-    Vertex *vs = p_src->vertex ();
-    Vertex *vd = p_dst->vertex ();
+    Vertex* vs = p_src->vertex ();
+    Vertex* vd = p_dst->vertex ();
 
     /* note: 
        this code is here to prevent bugs 
@@ -238,14 +238,14 @@ namespace djnn
 
     // remove src if necessary
     if (vs->get_edges ().empty () && (vs->get_count_edges_in () == 0)) {
-      _vertices.erase(vs->get_position_in_graph_vertices ());
+      _vertices.erase (vs->get_position_in_graph_vertices ());
       p_src->set_vertex (nullptr);
       delete vs; 
     }
 
     // remove dst if necessary
     if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)) {
-      _vertices.erase(vd->get_position_in_graph_vertices ());
+      _vertices.erase (vd->get_position_in_graph_vertices ());
       p_dst->set_vertex (nullptr);
       delete vd;
     }
@@ -295,7 +295,7 @@ namespace djnn
         _activation_deque.push_front (v);
       }
       else {
-        auto pos = find_if (_activation_deque.begin(), _activation_deque.end(),
+        auto pos = find_if (_activation_deque.begin (), _activation_deque.end (),
           [v](const Vertex* v1) { return v->get_sorted_index () < v1->get_sorted_index (); });
         
         _activation_deque.insert (pos, v);
@@ -479,7 +479,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
       map<CoreProcess*, int> already_done;
       for (auto p : _scheduled_activation_processes) {
-        if (already_done.find(p) == already_done.end()) {
+        if (already_done.find (p) == already_done.end()) {
           p->notify_activation ();
           already_done[p];
           if (p->vertex ())
@@ -598,11 +598,11 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
           break;
         }
         // pop only if sorted otherwise the process activation will be skipped
-        _activation_deque.pop_front();
+        _activation_deque.pop_front ();
 
-        if (v->is_invalid())
+        if (v->is_invalid ())
           continue;
-        auto* p = v->get_process();
+        auto* p = v->get_process ();
 
 #ifndef DJNN_NO_DEBUG
         count_activation++;
@@ -691,7 +691,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     for (auto p : _scheduled_delete_processes) {
       delete p;
     }
-    _scheduled_delete_processes.clear();
+    _scheduled_delete_processes.clear ();
 
     #ifndef DJNN_NO_DEBUG
     end_delete = std::chrono::steady_clock::now();
