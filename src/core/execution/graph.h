@@ -51,11 +51,11 @@ namespace djnn
     void invalidate   () { _is_invalid = true; }
     bool is_invalid   () { return _is_invalid; }
 
-    void set_mark (int m)  { _mark = m; }
-    int  get_mark () const { return _mark; }
+    void set_execution_round (int er)  { _execution_round = er; }
+    int  get_execution_round () const { return _execution_round; }
 
-    void set_timestamp (int date) { _timestamp = date; }
-    int  get_timestamp () const   { return _timestamp; }
+    void set_order_stamp (int os) { _order_stamp = os; }
+    int  get_order_stamp () const   { return _order_stamp; }
 
     void set_sorted_index (int index) { _sorted_index = index; }
     int  get_sorted_index () const    { return _sorted_index; }
@@ -70,7 +70,7 @@ namespace djnn
     edges_t _edges;
     
     // sort management
-    int _mark, _timestamp;
+    int _execution_round, _order_stamp;
     int _sorted_index;
 
     // deletion management
@@ -115,6 +115,7 @@ namespace djnn
     void print_activation () const; 
     void print_full_vertex (Vertex* v) { v->print_full_vertex (); }
     void print_order (CoreProcess* p1, CoreProcess* p2);
+    void reset_vertices_execution_round ();
 #endif
 
 #if _DEBUG_ENABLE_CHECK_ORDER
@@ -134,7 +135,6 @@ namespace djnn
     // behavior
     void sort (Vertex* v_root);
     void traverse_depth_first (Vertex* v);
-    void reset_vertices_mark ();
 
     vertices_t _vertices;
     ordered_vertices_t _ordered_vertices;
@@ -148,7 +148,7 @@ namespace djnn
     vector < pair <CoreProcess*, CoreProcess*> > _pair_to_check;
 #endif
 
-    int _cur_date;
+    int _cur_stamp;
     bool _sorted;
   };
 
