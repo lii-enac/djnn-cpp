@@ -61,6 +61,9 @@ static double sorted_average = 0.0;
 namespace djnn
 {
 
+  // -----------------------------------------------------------------------
+  // Vertex
+
   Vertex::Vertex (CoreProcess* p) :
       _process (p), _execution_round (0), _order_stamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in (0)
   {
@@ -127,6 +130,8 @@ namespace djnn
   }
 
 
+  // -----------------------------------------------------------------------
+  // Graph construction / destruction
 
   Graph * Graph::_instance;
 
@@ -171,6 +176,10 @@ namespace djnn
     for (auto * node: _output_nodes) delete node;
     _output_nodes.clear ();
   }
+
+
+  // -----------------------------------------------------------------------
+  // Graph management
 
   Vertex*
   Graph::add_vertex (CoreProcess* c)
@@ -326,121 +335,14 @@ namespace djnn
   void
   Graph::schedule_delete (CoreProcess* p)
   {
-    warning(p, "'schedule delete' is deprecated, please use 'schedule_deletion");
+    warning(p, "'schedule delete' is deprecated, please use 'schedule_deletion instead");
     schedule_deletion (p);
   }
 
 
 
-  // TODO: explain what MARK is
-  static int EXECUTION_ROUND = 0;
-
-  void
-  Graph::traverse_depth_first (Vertex *v)
-  {
-    // skip invalid vertex
-    //FIXME: we should not use this code anymore - check with coverage result
-    if (v->is_invalid ()) {
-      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
-#ifndef DJNN_NO_DEBUG
-      cerr << "vertex: " << v << "- v->process " << v->get_process ();
-#endif
-      v->set_execution_round (EXECUTION_ROUND);
-      return;
-    }
-
-    if (false
-#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
-    // add vertex if it's not a property, as their activation does nothing
-    // the property order_stamp is taken into account anyway
-    || (v->get_process ()->get_process_type() != PROPERTY_T)
-#endif
-// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
-//     || (v->get_count_edges_in () > 1)
-// #endif
-    ) {
-      _ordered_vertices.push_back (v);
-    }
-
-    v->set_execution_round (EXECUTION_ROUND);
-    //std::cerr << print_process_full_name (v->get_process ()) << std::endl;
-    for (auto * v2 : v->get_edges ()) {
-      if (v2->get_execution_round () < EXECUTION_ROUND) {
-        traverse_depth_first (v2);
-      }
-    }
-    
-    v->set_order_stamp (++_cur_stamp);
-  }
-  
-  void
-  Graph::sort (Vertex* v_root)
-  {
-    if (_sorted)
-      return;
-      
-    rmt_BeginCPUSample(Graph_sort, RMTSF_Aggregate);
-
-#if _DEBUG_SEE_GRAPH_INFO_PREF
-    std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now();
-#endif
-
-    _cur_stamp = 0;
-    _ordered_vertices.clear ();
-
-    // TODO: explanation here
-    if (!_activation_triggers_to_sort.empty ()) {
-      for (auto v : _activation_triggers_to_sort) {
-        if (v->get_execution_round () < EXECUTION_ROUND)
-          traverse_depth_first (v);
-      }
-    }
-    else
-      traverse_depth_first (v_root);
-
-    std::sort (_ordered_vertices.begin (), _ordered_vertices.end (),
-      [](const Vertex* v1, const Vertex *v2) { return v1->get_order_stamp () > v2->get_order_stamp (); });
-
-#if !_EXEC_FULL_ORDERED_VERTICES
-    // sorted_index
-    int index = 0 ;
-    for (auto v : _ordered_vertices) {
-      v->set_sorted_index (index++);
-    }
-
-    std::sort (_activation_deque.begin (), _activation_deque.end (),
-      [](const Vertex* v1, const Vertex *v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
-#endif
-
-    _sorted = true;
-
-    //print_sorted ();
-
-#if _DEBUG_ENABLE_CHECK_ORDER
-    if (!_pair_to_check.empty ()) {
-      for (auto p: _pair_to_check) {
-        print_order (p.first, p.second);
-      }
-    }
-#endif
-
-#if _DEBUG_SEE_GRAPH_INFO_PREF
-    cerr << "\033[1;33m" << endl;
-    std::chrono::steady_clock::time_point end_GRAPH_SORT = std::chrono::steady_clock::now();
-    int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_SORT - begin_GRAPH_SORT).count();
-    std::cerr << "SORT_GRAPH = " << time << "[us]" ;
-    if (time > 1000 )
-        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
-      else
-        std::cerr << std::endl;
-    sorted_counter = sorted_counter + 1;
-    sorted_total = sorted_total + time ;
-    sorted_average = sorted_total / sorted_counter;
-    cerr << "\033[0m"  << endl;
-#endif
-  rmt_EndCPUSample(); // end  of sort
-  }
-
+  // -----------------------------------------------------------------------
+  // Graph behavior: exec, sort, traverse_depth_first
 
 #ifndef DJNN_NO_DEBUG
   void 
@@ -450,6 +352,11 @@ namespace djnn
   print_process_full_name (CoreProcess *p);
 #endif
 
+  // TODO: explain what EXECUTION_ROUND is
+  static int EXECUTION_ROUND = 0;
+
+
+  // -----------------------------------------------------------------------
 
   void
   Graph::exec ()
@@ -466,7 +373,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
     #endif
 
-    // pre_execution : notify_activation *only once* per _scheduled_activation_processes before real graph execution 
+    // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
 #ifndef DJNN_NO_DEBUG
@@ -477,7 +384,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
       _activation_triggers_to_sort.clear ();
 
       map<CoreProcess*, int> already_done;
-      for (auto p : _scheduled_activation_processes) {
+      for (auto p : _scheduled_activations) {
         if (already_done.find (p) == already_done.end ()) {
           p->notify_activation ();
           already_done[p];
@@ -490,7 +397,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         }
       }
 
-      _scheduled_activation_processes.clear ();
+      _scheduled_activations.clear ();
 
 #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
@@ -682,15 +589,13 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     }
 #endif
     
-    // execute delayed delete on processes
+    // execute scheduled deletion of processes
     #ifndef DJNN_NO_DEBUG
     begin_delete = std::chrono::steady_clock::now();
     #endif
 
-    for (auto p : _scheduled_delete_processes) {
-      delete p;
-    }
-    _scheduled_delete_processes.clear ();
+    for (auto p : _scheduled_deletions) delete p;
+    _scheduled_deletions.clear ();
 
     #ifndef DJNN_NO_DEBUG
     end_delete = std::chrono::steady_clock::now();
@@ -714,7 +619,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
-      std::cerr << "\t_scheduled_delete_processes time = " << time_exec << "[us]" << std::endl;
+      std::cerr << "\t_scheduled_deletions time = " << time_exec << "[us]" << std::endl;
       time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_output - begin_output).count();
       std::cerr << "\t_output_nodes time = " << time_exec << "[us]" << std::endl;
       time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
@@ -785,6 +690,123 @@ rmt_EndCPUSample();
 
   }
 
+
+  // -----------------------------------------------------------------------
+  
+  void
+  Graph::sort (Vertex* v_root)
+  {
+    if (_sorted)
+      return;
+      
+    rmt_BeginCPUSample(Graph_sort, RMTSF_Aggregate);
+
+#if _DEBUG_SEE_GRAPH_INFO_PREF
+    std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now();
+#endif
+
+    _cur_stamp = 0;
+    _ordered_vertices.clear ();
+
+    // TODO: explanation here
+    if (!_activation_triggers_to_sort.empty ()) {
+      for (auto v : _activation_triggers_to_sort) {
+        if (v->get_execution_round () < EXECUTION_ROUND)
+          traverse_depth_first (v);
+      }
+    }
+    else
+      traverse_depth_first (v_root);
+
+    std::sort (_ordered_vertices.begin (), _ordered_vertices.end (),
+      [](const Vertex* v1, const Vertex *v2) { return v1->get_order_stamp () > v2->get_order_stamp (); });
+
+#if !_EXEC_FULL_ORDERED_VERTICES
+    // sorted_index
+    int index = 0 ;
+    for (auto v : _ordered_vertices) {
+      v->set_sorted_index (index++);
+    }
+
+    std::sort (_activation_deque.begin (), _activation_deque.end (),
+      [](const Vertex* v1, const Vertex *v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
+#endif
+
+    _sorted = true;
+
+    //print_sorted ();
+
+#if _DEBUG_ENABLE_CHECK_ORDER
+    if (!_pair_to_check.empty ()) {
+      for (auto p: _pair_to_check) {
+        print_order (p.first, p.second);
+      }
+    }
+#endif
+
+#if _DEBUG_SEE_GRAPH_INFO_PREF
+    cerr << "\033[1;33m" << endl;
+    std::chrono::steady_clock::time_point end_GRAPH_SORT = std::chrono::steady_clock::now();
+    int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_SORT - begin_GRAPH_SORT).count();
+    std::cerr << "SORT_GRAPH = " << time << "[us]" ;
+    if (time > 1000 )
+        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
+      else
+        std::cerr << std::endl;
+    sorted_counter = sorted_counter + 1;
+    sorted_total = sorted_total + time ;
+    sorted_average = sorted_total / sorted_counter;
+    cerr << "\033[0m"  << endl;
+#endif
+  rmt_EndCPUSample(); // end  of sort
+  }
+
+
+  // -----------------------------------------------------------------------
+
+  void
+  Graph::traverse_depth_first (Vertex *v)
+  {
+    // skip invalid vertex
+    //FIXME: we should not use this code anymore - check with coverage result
+    if (v->is_invalid ()) {
+      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+#ifndef DJNN_NO_DEBUG
+      cerr << "vertex: " << v << "- v->process " << v->get_process ();
+#endif
+      v->set_execution_round (EXECUTION_ROUND);
+      return;
+    }
+
+    if (false
+#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
+    // add vertex if it's not a property, as their activation does nothing
+    // the property order_stamp is taken into account anyway
+    || (v->get_process ()->get_process_type() != PROPERTY_T)
+#endif
+// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
+//     || (v->get_count_edges_in () > 1)
+// #endif
+    ) {
+      _ordered_vertices.push_back (v);
+    }
+
+    v->set_execution_round (EXECUTION_ROUND);
+    //std::cerr << print_process_full_name (v->get_process ()) << std::endl;
+    for (auto * v2 : v->get_edges ()) {
+      if (v2->get_execution_round () < EXECUTION_ROUND) {
+        traverse_depth_first (v2);
+      }
+    }
+    
+    v->set_order_stamp (++_cur_stamp);
+  }
+  
+
+
+
+  // -----------------------------------------------------------------------
+  // Vertex and Graph debug
 
 #ifndef DJNN_NO_DEBUG
 

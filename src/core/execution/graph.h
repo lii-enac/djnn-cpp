@@ -98,8 +98,8 @@ namespace djnn
     // activation management during exec
     void add_in_activation (Vertex *v);
     void clear_activation (); // only for re-init (e.g unit tests)
-    void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back (p); }
-    void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
+    void schedule_activation (CoreProcess* p) { _scheduled_activations.push_back (p); }
+    void schedule_deletion   (CoreProcess* p) { _scheduled_deletions.push_back (p); }
     void schedule_delete     (CoreProcess* p); // deprecated
 
     // behavior
@@ -139,8 +139,8 @@ namespace djnn
     vertices_t _vertices;
     ordered_vertices_t _ordered_vertices;
     ordered_vertices_t _output_nodes;
-    vector<CoreProcess*> _scheduled_delete_processes;
-    vector<CoreProcess*> _scheduled_activation_processes;
+    vector<CoreProcess*> _scheduled_deletions;
+    vector<CoreProcess*> _scheduled_activations;
     std::deque<Vertex*> _activation_deque;
     vector<Vertex*> _activation_triggers_to_sort;
 
