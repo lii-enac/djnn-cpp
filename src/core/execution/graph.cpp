@@ -9,8 +9,11 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Stéphane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poiriert@enac.fr>
  *
  */
+
 
 #include <algorithm>
 
