@@ -79,6 +79,7 @@ namespace djnn
     vertices_t::iterator _pos;
   };
 
+
   class Graph
   {
   public:
@@ -93,10 +94,10 @@ namespace djnn
     void remove_edge (CoreProcess* src, CoreProcess* dst);
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
-    void clear_activation (); // only for re-init (e.g unit tests)
 
     // activation management during exec
     void add_in_activation (Vertex *v);
+    void clear_activation (); // only for re-init (e.g unit tests)
     void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back(p); }
     void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
 

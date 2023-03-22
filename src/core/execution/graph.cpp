@@ -136,7 +136,7 @@ namespace djnn
     //static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
     //if(!onceFlag.test_and_set()) {
     if (!_instance) {
-      _instance = new Graph();
+      _instance = new Graph ();
     }
 
     return *(_instance);
@@ -181,35 +181,6 @@ namespace djnn
     // adding a vertex keeps the global order, so do not invalidate it
     //_sorted = false;
     return v;
-  }
-
-
-  void
-  Graph::add_output_node (CoreProcess* c)
-  {
-    /* check if c is already in the graph */
-    for (auto v : _output_nodes) {
-      if (v->get_process () == c)
-        return;
-    }
-    auto * v = new Vertex (c);
-    _output_nodes.push_back (v);
-  }
-
-  void
-  Graph::remove_output_node (CoreProcess* c)
-  {
-    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
-      [c](Vertex* v) { return v->get_process () == c; });
-
-    if (new_end != _output_nodes.end ()) {
-      // delete nodes
-      for (auto it = new_end ; it != _output_nodes.end (); ++it)
-        delete *it;
-
-      //erase from vector
-      _output_nodes.erase (new_end, _output_nodes.end ());
-    }
   }
 
   void
@@ -273,7 +244,7 @@ namespace djnn
     }
 
     // remove dst if necessary
-    if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)){
+    if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)) {
       _vertices.erase(vd->get_position_in_graph_vertices ());
       p_dst->set_vertex (nullptr);
       delete vd;
@@ -283,7 +254,33 @@ namespace djnn
     //_sorted = false;
   }
 
+  void
+  Graph::add_output_node (CoreProcess* c)
+  {
+    /* check if c is already in the graph */
+    for (auto v : _output_nodes) {
+      if (v->get_process () == c)
+        return;
+    }
+    auto * v = new Vertex (c);
+    _output_nodes.push_back (v);
+  }
 
+  void
+  Graph::remove_output_node (CoreProcess* c)
+  {
+    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
+      [c](Vertex* v) { return v->get_process () == c; });
+
+    if (new_end != _output_nodes.end ()) {
+      // delete nodes
+      for (auto it = new_end ; it != _output_nodes.end (); ++it)
+        delete *it;
+
+      //erase from vector
+      _output_nodes.erase (new_end, _output_nodes.end ());
+    }
+  }
 
   void 
   Graph::add_in_activation (Vertex *v)
@@ -368,7 +365,6 @@ namespace djnn
     
     v->set_timestamp (++_cur_date);
   }
-
 
   void
   Graph::reset_vertices_mark () {
@@ -610,9 +606,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
 
 #ifndef DJNN_NO_DEBUG
         count_activation++;
-#endif
 
-#ifndef DJNN_NO_DEBUG
         if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE) {
           auto it = _vertex_already_activated.find(v);
           if (it != _vertex_already_activated.end()) {
@@ -687,7 +681,7 @@ rmt_BeginCPUSample(Graph_exec, RMTSF_None);
         is_end = false;
       }
     }
-  #endif
+#endif
     
     // execute delayed delete on processes
     #ifndef DJNN_NO_DEBUG
@@ -793,7 +787,7 @@ rmt_EndCPUSample();
   }
 
 
-  #ifndef DJNN_NO_DEBUG
+#ifndef DJNN_NO_DEBUG
 
   static string 
   print_process_full_name (CoreProcess *p) {
