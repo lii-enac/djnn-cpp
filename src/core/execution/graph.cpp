@@ -322,7 +322,15 @@ namespace djnn
   Graph::clear_activation ()
   {
     _activation_deque.clear ();
-  } 
+  }
+
+  void
+  Graph::schedule_delete (CoreProcess* p)
+  {
+    warning(p, "'schedule delete' is deprecated, please use 'schedule_deletion");
+    schedule_deletion (p);
+  }
+
 
 
   // TODO: explain what MARK is

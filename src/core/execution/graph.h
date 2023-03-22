@@ -20,7 +20,6 @@
 #include "core/ontology/process.h"
 #include "utils/debug.h"
 
-#include "core/utils/error.h" // warning schedule_delete deprecated
 
 namespace djnn
 {
@@ -101,7 +100,7 @@ namespace djnn
     void clear_activation (); // only for re-init (e.g unit tests)
     void schedule_activation (CoreProcess* p) { _scheduled_activation_processes.push_back (p); }
     void schedule_deletion   (CoreProcess* p) { _scheduled_delete_processes.push_back (p); }
-    void schedule_delete     (CoreProcess* p) { warning(p, "'schedule delete' is deprecated, please use 'schedule_deletion"); schedule_deletion (p); }
+    void schedule_delete     (CoreProcess* p); // deprecated
 
     // behavior
     void exec ();
