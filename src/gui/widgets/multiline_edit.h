@@ -62,7 +62,7 @@ namespace djnn {
           void impl_activate () override { ((MultilineEditor*)get_parent ())->clear (); }
       };
     public:
-      MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true);
+      MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true, bool wrap_text = false);
       virtual ~MultilineEditor ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -105,6 +105,7 @@ namespace djnn {
       coord_t get_index_from_x (coord_t x);
       void add_string_input ();
       void add_str (const string& str );
+      void wrap ();
       void draw () override;
       pair<double, double> get_local_coords (double x, double y);
       List _lines;
@@ -127,7 +128,7 @@ namespace djnn {
       VoidProcess _ordering_node;
       coord_t _index_x, _index_y, _ascent, _descent, _leading;
       coord_t _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
-      bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
+      bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw, _wrap_text;
       string _init_text;
   };
 }

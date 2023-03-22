@@ -121,6 +121,12 @@ namespace djnn
   }
 
   int
+  QtBackend::get_average_char_width (FontMetricsImpl fm) {
+    QFontMetrics *qfm = (QFontMetrics*) fm;
+    return qfm->averageCharWidth ();
+  }
+
+  int
   QtBackend::compute_text_width (FontMetricsImpl fm, SimpleText *t)
   {
     QFontMetrics *qfm = (QFontMetrics*) fm;

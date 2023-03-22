@@ -64,6 +64,8 @@ namespace djnn
     draw_simple_text (SimpleText *t, QFontMetrics* fm, int x, int y);
     void
     draw_text_field (TextField*) override;
+    int
+    get_average_char_width (FontMetricsImpl fm) override;
     void
     draw_simple_text_edit (MultilineEditor*) override;
     int

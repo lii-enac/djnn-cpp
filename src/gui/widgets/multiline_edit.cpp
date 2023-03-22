@@ -35,7 +35,8 @@ namespace djnn
   MultilineEditor::MultilineEditor (ParentProcess *parent, const string &name,
                                     int x, int y, int width, int height,
                                     const string &text,
-                                    bool enable_edit_on_activation) :
+                                    bool enable_edit_on_activation,
+                                    bool wrap_text) :
       AbstractGShape (parent, name), 
       _lines (this, "lines"), 
       _cursor_start_x (this, "cursor_start_x", 0), 
@@ -92,6 +93,7 @@ namespace djnn
       _press_on (false),
       _enable_edit_on_activation (enable_edit_on_activation),
       _first_draw (true),
+      _wrap_text (wrap_text),
       _init_text (text)
   {
     init_ui ();
@@ -649,6 +651,70 @@ namespace djnn
   }
 
   void
+  MultilineEditor::wrap () {
+    if (_font_metrics == nullptr)
+      return;
+
+    int average_width = Backend::instance ()->get_average_char_width (_font_metrics);
+    int max_width = (int) _width.get_value ();
+    int nb_of_char = max_width/average_width;
+    std::string s;
+    int sz = _lines.children ().size();
+    for (int i = 0; i < sz; i++) {
+      SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
+      std::string content = cur_line->get_content ();
+      if (content.empty())
+        content = "\n";
+      s += content;
+      if (i < sz -1 && s.back() != '\n')
+        s += "\n";
+    }
+    int i = 0;
+    int len = s.length();
+    int cur_idx = 0;
+    int start_idx = 0;
+    while (cur_idx < len) {
+      sz = _lines.children ().size(); //sz may have changed
+      start_idx = cur_idx;
+      for (int j = 0; j < nb_of_char; j++) {
+        cur_idx = next_index(s, cur_idx);
+        if (cur_idx >= len || s.at(cur_idx) == '\n')
+          break;
+      }
+      if (cur_idx < len) {
+        int buff_cur_idx = cur_idx;
+        while (!std::isspace (s.at(cur_idx))) { // got to the space before the current word
+          cur_idx--;
+          if (cur_idx == start_idx) { // if the current (too long) word is the first then cut it
+            cur_idx = buff_cur_idx;
+            break;
+          }
+        }
+      }
+      if (s.at(start_idx) == '\n')
+        start_idx++;
+      std::string line = s.substr (start_idx, cur_idx - start_idx);
+      if (line.back() == '\n')
+        line.pop_back();
+      if (i < sz) {
+        SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
+        cur_line->set_content (line);
+      } else {
+        SimpleText *buff = new SimpleText (this, "", 0, 0, line);
+        _lines.move_child (buff, LAST);
+      }
+      i++;
+    }
+    if (i < sz - 1) {
+      for (int a = i; a < sz; a++) {
+        SimpleText* cur_line = (SimpleText*)_lines.children().at(a);
+        std::string str = "";
+        cur_line->set_content (str);
+      }
+    }
+  }
+
+  void
   MultilineEditor::sort_selection () {
     if (_start_sel_y == _end_sel_y) {
       if (_start_sel_x > _end_sel_x) {
@@ -808,6 +874,10 @@ namespace djnn
         _index_x = _line->get_content ().size ();
         update_lines_position ();
       }
+    }
+    if (_wrap_text) {
+      wrap ();
+      update_lines_position ();
     }
     update_cursor ();
     _content_changed.set_activation_flag (ACTIVATION);

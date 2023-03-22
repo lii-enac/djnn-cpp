@@ -154,6 +154,10 @@ namespace djnn
     {
       return 0;
     }
+    virtual int
+    get_average_char_width (FontMetricsImpl fm) {
+      return 0;
+    }
     virtual double
     get_cursor_from_index (Text*, int)
     {
