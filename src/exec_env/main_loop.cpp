@@ -146,9 +146,9 @@ namespace djnn {
         es->please_stop ();
       }
       // ...then join them
-      // for (auto es: _external_sources) {
-      //   es->join ();
-      // }
+      for (auto es: _external_sources) {
+        es->join ();
+      }
 
       if (_another_source_wants_to_be_mainloop)
         _another_source_wants_to_be_mainloop->please_stop ();

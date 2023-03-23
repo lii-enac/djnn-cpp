@@ -25,6 +25,7 @@
 #include <cassert>
 
 // #include "core/utils/iostream.h"
+// #include "core/utils/error.h"
 // #include "utils/debug.h"
 
 namespace djnn {
