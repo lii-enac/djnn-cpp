@@ -100,7 +100,6 @@ namespace djnn
     void clear_activation (); // only for re-init (e.g unit tests)
     void schedule_activation (CoreProcess* p) { _scheduled_activations.push_back (p); }
     void schedule_deletion   (CoreProcess* p) { _scheduled_deletions.push_back (p); }
-    void schedule_delete     (CoreProcess* p); // deprecated
 
     // behavior
     void exec ();

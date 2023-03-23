@@ -120,6 +120,7 @@ namespace djnn {
     void  notify_deactivation ();
     void  schedule_activation (); // for gui picking only: why is there a problem?
     void  schedule_deletion ();
+    void  schedule_delete (); // deprecated
 
     // model
     bool is_model () const         { return get_bitset (MODEL_MASK, MODEL_SHIFT); }

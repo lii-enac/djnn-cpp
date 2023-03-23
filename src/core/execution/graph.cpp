@@ -335,15 +335,6 @@ namespace djnn
     _activation_deque.clear ();
   }
 
-  void
-  Graph::schedule_delete (CoreProcess* p)
-  {
-    warning(p, "'schedule delete' is deprecated, please use 'schedule_deletion instead");
-    schedule_deletion (p);
-  }
-
-
-
   // -----------------------------------------------------------------------
   // Graph behavior: exec, sort, traverse_depth_first
 

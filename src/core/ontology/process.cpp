@@ -433,6 +433,13 @@ namespace djnn
     Graph::instance().schedule_deletion (this);
   }
 
+  void
+  CoreProcess::schedule_delete ()
+  {
+    warning(this, "'schedule delete' is deprecated, please use 'schedule_deletion instead");
+    Graph::instance().schedule_deletion (this);
+  }
+
   static
   void
   notify (const Process::couplings_t& couplings)
