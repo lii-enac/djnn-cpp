@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  ProcessDeleter::ProcessDeleter (ParentProcess *parent, const string& name)
+  ProcessDeleter::ProcessDeleter (CoreProcess *parent, const string& name)
   : FatProcess (name),
   _del (this, "del", nullptr),
   _del_one (this, "delete_one_action"),
@@ -62,7 +62,7 @@ namespace djnn
     }
   }
 
-  ProcessCollector::ProcessCollector (ParentProcess *parent, const string& name) :
+  ProcessCollector::ProcessCollector (CoreProcess *parent, const string& name) :
       FatProcess (name),
       _s_rm_all (this, "rm_all"),
       _add (this, "add", nullptr),
@@ -88,7 +88,7 @@ namespace djnn
   }
 
   void
-  ProcessCollector::set_parent (ParentProcess *p)
+  ProcessCollector::set_parent (CoreProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -158,7 +158,7 @@ namespace djnn
     _list.clear ();
   }
 
-  CollectionDeleter::CollectionDeleter (ParentProcess *parent, const string& name) :
+  CollectionDeleter::CollectionDeleter (CoreProcess *parent, const string& name) :
       FatProcess (name),
       _del (this, "del", nullptr),
       _del_action (this, "del_action"),
@@ -175,7 +175,7 @@ namespace djnn
   }
 
   void
-  CollectionDeleter::set_parent (ParentProcess *p)
+  CollectionDeleter::set_parent (CoreProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -214,7 +214,7 @@ namespace djnn
     coll->remove_all ();
   }
 
-  CollectionActivator::CollectionActivator (ParentProcess *parent, const string& name, CoreProcess* collection, const string &path) :
+  CollectionActivator::CollectionActivator (CoreProcess *parent, const string& name, CoreProcess* collection, const string &path) :
       FatProcess (name),
       _activate (this, "activate"),
       _collection (this, "collection", collection),
@@ -237,7 +237,7 @@ namespace djnn
   }
 
   void
-  CollectionActivator::set_parent (ParentProcess *p)
+  CollectionActivator::set_parent (CoreProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -274,7 +274,7 @@ namespace djnn
     }
   }
 
-  AbstractCollectionSetValue::AbstractCollectionSetValue (ParentProcess *parent, const string& name, CoreProcess* collection, const string &path) :
+  AbstractCollectionSetValue::AbstractCollectionSetValue (CoreProcess *parent, const string& name, CoreProcess* collection, const string &path) :
     FatProcess (name),
     _collection (this, "collection", collection),
     _path (this, "path", path),
@@ -294,7 +294,7 @@ namespace djnn
   }
 
   void
-  AbstractCollectionSetValue::set_parent (ParentProcess *p)
+  AbstractCollectionSetValue::set_parent (CoreProcess *p)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -305,7 +305,7 @@ namespace djnn
     FatProcess::set_parent (p);
   }
 
-  CollectionSetDoubleValue::CollectionSetDoubleValue (ParentProcess *parent, const string& name, CoreProcess* collection, const string &path) :
+  CollectionSetDoubleValue::CollectionSetDoubleValue (CoreProcess *parent, const string& name, CoreProcess* collection, const string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", 0),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
@@ -343,7 +343,7 @@ namespace djnn
     }
   }
 
-  CollectionSetStringValue::CollectionSetStringValue (ParentProcess *parent, const string& name, CoreProcess* collection, const string &path) :
+  CollectionSetStringValue::CollectionSetStringValue (CoreProcess *parent, const string& name, CoreProcess* collection, const string &path) :
     AbstractCollectionSetValue (parent, name, collection, path),
     _value (this, "value", ""),
     _c_act_set_val (&_value, ACTIVATION, &_act_set_val, ACTIVATION)
@@ -381,7 +381,7 @@ namespace djnn
     }
   }
 
-  NativeCollectionAction::NativeCollectionAction (ParentProcess* parent, const string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel) :
+  NativeCollectionAction::NativeCollectionAction (CoreProcess* parent, const string& name, NativeCollectionCode *action, CoreProcess* coll, void* data, bool isModel) :
       Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
   {
     _coll = dynamic_cast<ProcessCollector*> (coll);

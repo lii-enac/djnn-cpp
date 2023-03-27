@@ -89,7 +89,7 @@ namespace djnn
             string _ref;
       };
     public:
-        WallClock (ParentProcess* parent, const string& name)
+        WallClock (CoreProcess* parent, const string& name)
         : FatProcess (name),
         _state (this, "state"),
         _state_text (this, "state_text"),

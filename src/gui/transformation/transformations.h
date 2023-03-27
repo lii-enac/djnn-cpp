@@ -35,7 +35,7 @@ namespace djnn
   class GradientTranslation : public AbstractTranslation
   {
   public:
-    GradientTranslation (ParentProcess* parent, const string& name, double tx, double ty);
+    GradientTranslation (CoreProcess* parent, const string& name, double tx, double ty);
     GradientTranslation (double tx, double ty);
     FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     virtual ~GradientTranslation ();
@@ -50,7 +50,7 @@ namespace djnn {
   class Rotation : public AbstractRotation
   {
   public:
-    Rotation (ParentProcess* parent, const string& name, double a, double cx, double cy);
+    Rotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     Rotation (double a, double cx, double cy);
     virtual ~Rotation ();
     void draw () override;
@@ -62,7 +62,7 @@ namespace djnn {
   class GradientRotation : public AbstractRotation
   {
   public:
-    GradientRotation (ParentProcess* parent, const string& name, double a, double cx, double cy);
+    GradientRotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     GradientRotation (double a, double cx, double cy);
     virtual ~GradientRotation ();
     void draw () override;
@@ -77,7 +77,7 @@ namespace djnn {
   class GradientScaling : public AbstractScaling
   {
   public:
-    GradientScaling (ParentProcess* parent, const string& name, double sx, double sy, double cx, double cy);
+    GradientScaling (CoreProcess* parent, const string& name, double sx, double sy, double cx, double cy);
     GradientScaling (double sx, double sy, double cx, double cy);
     virtual ~GradientScaling ();
     void draw () override;
@@ -93,7 +93,7 @@ namespace djnn {
   class SkewX : public AbstractSkew
   {
   public:
-    SkewX (ParentProcess* parent, const string& name, double a);
+    SkewX (CoreProcess* parent, const string& name, double a);
     SkewX (double a);
     virtual ~SkewX ();
     void draw () override;
@@ -105,7 +105,7 @@ namespace djnn {
   class GradientSkewX : public AbstractSkew
   {
   public:
-    GradientSkewX (ParentProcess* parent, const string& name, double a);
+    GradientSkewX (CoreProcess* parent, const string& name, double a);
     GradientSkewX (double a);
     virtual ~GradientSkewX ();
     void draw () override;
@@ -115,7 +115,7 @@ namespace djnn {
   class SkewY : public AbstractSkew
   {
   public:
-    SkewY (ParentProcess* parent, const string& name, double a);
+    SkewY (CoreProcess* parent, const string& name, double a);
     SkewY (double a);
     virtual ~SkewY ();
     void draw () override;
@@ -127,7 +127,7 @@ namespace djnn {
   class GradientSkewY : public AbstractSkew
   {
   public:
-    GradientSkewY (ParentProcess* parent, const string& name, double a);
+    GradientSkewY (CoreProcess* parent, const string& name, double a);
     GradientSkewY (double a);
     virtual ~GradientSkewY ();
     void draw () override;
@@ -141,7 +141,7 @@ namespace djnn {
      class stl_action : public Action
     {
     public:
-      stl_action (ParentProcess* parent, const string& name, ScreenToLocal *stl) :
+      stl_action (CoreProcess* parent, const string& name, ScreenToLocal *stl) :
       Action (parent, name), _stl(stl) {}
       virtual ~stl_action () {}
       void impl_activate () override;
@@ -150,12 +150,12 @@ namespace djnn {
     };
 
     public:
-      ScreenToLocal (ParentProcess* parent, const string& name, CoreProcess* shape);
+      ScreenToLocal (CoreProcess* parent, const string& name, CoreProcess* shape);
       virtual ~ScreenToLocal () override; 
       void impl_activate () override;
       void impl_deactivate () override;
     private:
-      void set_parent (ParentProcess* parent) override;
+      void set_parent (CoreProcess* parent) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;
@@ -170,7 +170,7 @@ namespace djnn {
      class lts_action : public Action
     {
     public:
-      lts_action (ParentProcess* parent, const string& name, LocalToScreen *lts) :
+      lts_action (CoreProcess* parent, const string& name, LocalToScreen *lts) :
       Action (parent, name), _lts(lts) {}
       virtual ~lts_action () {}
       void impl_activate () override;
@@ -179,12 +179,12 @@ namespace djnn {
     };
 
     public:
-      LocalToScreen (ParentProcess* parent, const string& name, CoreProcess* shape);
+      LocalToScreen (CoreProcess* parent, const string& name, CoreProcess* shape);
       virtual ~LocalToScreen () override; 
       void impl_activate () override;
       void impl_deactivate () override;
     private:
-      void set_parent (ParentProcess* parent) override;
+      void set_parent (CoreProcess* parent) override;
       AbstractGShape* _shape;
       DoubleProperty *_inX, *_inY;
       DoubleProperty *_outX, *_outY;

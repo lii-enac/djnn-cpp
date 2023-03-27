@@ -20,7 +20,7 @@ namespace djnn {
     {
       friend Text;
       public:
-        TextSizeAction (ParentProcess* parent, const string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
+        TextSizeAction (CoreProcess* parent, const string& name, Text *text) : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
       private:
@@ -31,8 +31,8 @@ namespace djnn {
         Text* _text;
     };
   public:
-    Text (ParentProcess* parent, const string& name, double x, double y, const string& text);
-    Text (ParentProcess* parent, const string& name, double x, double y, double dx, double dy, int dxu, int dyu,
+    Text (CoreProcess* parent, const string& name, double x, double y, const string& text);
+    Text (CoreProcess* parent, const string& name, double x, double y, double dx, double dy, int dxu, int dyu,
           const string& encoding, const string& text);
     virtual ~Text ();
     void draw () override;
@@ -40,7 +40,7 @@ namespace djnn {
     double sdf (double x, double y) const override;
     Text* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double &x, double &y, double &dx, double &dy, int &dxU, int &dyU, int &width, int &height, int &encoding, string &text);
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     AbstractDoubleProperty* dx () { return (AbstractDoubleProperty*) find_child_impl("dx"); }
@@ -62,7 +62,7 @@ namespace djnn {
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
     const vector<string>& get_properties_name () const override;
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     struct raw_props_t { double x, y, dx, dy; int dxU, dyU, encoding; string text; };
     raw_props_t raw_props;    
     CouplingWithData *_cx, *_cy, *_cdx, *_cdy, *_cfsize,

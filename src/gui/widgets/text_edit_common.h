@@ -26,11 +26,11 @@ namespace djnn {
 
   class SimpleText : public AbstractGShape {
     public:
-      SimpleText (ParentProcess* parent, const std::string& name, double x, double y, const std::string& text);
+      SimpleText (CoreProcess* parent, const std::string& name, double x, double y, const std::string& text);
       virtual ~SimpleText ();
       void impl_activate () override;
       void impl_deactivate () override;
-      void set_parent (ParentProcess *p) override;
+      void set_parent (CoreProcess *p) override;
       std::string get_content () { return raw_props.text; }
       void set_content (std::string& new_content) { _text.set_value (new_content, true); };
       double get_x () { return raw_props.x; }
@@ -38,7 +38,7 @@ namespace djnn {
       void set_x (double x) { raw_props.x = x; }
       void set_y (double y) { raw_props.y = y; }
       void get_properties_values (double &x, double &y, std::string &text);
-      virtual FatChildProcess* find_child_impl (const std::string&) override;
+      virtual CoreProcess* find_child_impl (const std::string&) override;
     private:
       struct raw_props_t { double x, y; std::string text; };
       raw_props_t raw_props;

@@ -41,13 +41,13 @@ namespace djnn {
   GUIStructureObserver * gui_structure_observer;
 
   void
-  GUIStructureHolder::add_gui_child (FatChildProcess *c, size_t index)
+  GUIStructureHolder::add_gui_child (CoreProcess *c, size_t index)
   {
     _children.push_back (children_t::value_type (c, index));
   }
 
   void
-  GUIStructureHolder::remove_gui_child (FatChildProcess *c)
+  GUIStructureHolder::remove_gui_child (CoreProcess *c)
   {
 
     //TODO MP : becareful ... how much time does this take ?
@@ -67,7 +67,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::set_child (FatChildProcess *child, size_t i)
+  GUIStructureHolder::set_child (CoreProcess *child, size_t i)
   {
     if (i < _children.size ()) {
       for (auto p : _children) {
@@ -142,7 +142,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::add_gui_child_at (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
+  GUIStructureHolder::add_gui_child_at (CoreProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
   {
     size_t sz = _children.size ();
     switch (spec)
@@ -173,7 +173,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureHolder::move_child_to (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
+  GUIStructureHolder::move_child_to (CoreProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
   {
     _children.erase (
         std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
@@ -229,7 +229,7 @@ namespace djnn {
   // }
 
   void
-  GUIStructureObserver::add_child_to_container (FatProcess *cont, FatChildProcess *c, int index)
+  GUIStructureObserver::add_child_to_container (FatProcess *cont, CoreProcess *c, int index)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
 
@@ -262,7 +262,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index)
+  GUIStructureObserver::add_child_at (FatProcess *cont, CoreProcess *c, int neighboor_index, child_position_e spec, int new_index)
   {
     structures_t::iterator it_cont = _structure_map.find(cont);
     switch (c->get_process_type())
@@ -294,7 +294,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index)
+  GUIStructureObserver::move_child_to (FatProcess *cont, CoreProcess *c, int neighboor_index, child_position_e spec, int new_index)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
     switch (c->get_process_type())
@@ -326,7 +326,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::remove_child_from_container (FatProcess *cont, FatChildProcess *c)
+  GUIStructureObserver::remove_child_from_container (FatProcess *cont, CoreProcess *c)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ()) {
@@ -363,7 +363,7 @@ namespace djnn {
   }
 
   void
-  GUIStructureObserver::set_child (FatProcess *cont, FatChildProcess *child, int  i)
+  GUIStructureObserver::set_child (FatProcess *cont, CoreProcess *child, int  i)
   {
     structures_t::iterator it_cont = _structure_map.find (cont);
     if (it_cont != _structure_map.end ())
@@ -372,7 +372,7 @@ namespace djnn {
   }
 
   GUIStructureHolder*
-  GUIStructureObserver::find_holder (FatChildProcess* cont)
+  GUIStructureObserver::find_holder (CoreProcess* cont)
   {
     structures_t_it it = _structure_map.find(cont);
     if (it != _structure_map.end())
@@ -380,7 +380,7 @@ namespace djnn {
     return nullptr;
   }
 
-  GUIMouseButton::GUIMouseButton (ParentProcess* parent, const string& name)
+  GUIMouseButton::GUIMouseButton (CoreProcess* parent, const string& name)
   : FatProcess (name)
   {
     _press = new Spike (this, "press");
@@ -388,7 +388,7 @@ namespace djnn {
     finalize_construction (parent, name);
   }
 
-  GUIMouse::GUIMouse (ParentProcess* parent, const string& name)
+  GUIMouse::GUIMouse (CoreProcess* parent, const string& name)
   : FatProcess (name)
   {
     _left = new GUIMouseButton (this, "left");

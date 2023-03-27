@@ -24,7 +24,7 @@ namespace djnn {
   class Exit : public FatProcess
   {
   public:
-    Exit (ParentProcess* parent, const string& name, int value, bool is_model);
+    Exit (CoreProcess* parent, const string& name, int value, bool is_model);
     virtual ~Exit ();
     void impl_activate () override;
     void impl_deactivate () override {}

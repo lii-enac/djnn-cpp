@@ -19,7 +19,7 @@
 
 namespace djnn
 {
-  Oscillator::OscillatorAction::OscillatorAction (ParentProcess* parent, const string& name, DoubleProperty* m,
+  Oscillator::OscillatorAction::OscillatorAction (CoreProcess* parent, const string& name, DoubleProperty* m,
                                                   DoubleProperty* k, DoubleProperty* b,
                                                   DoubleProperty* v, DoubleProperty* output,
                                                   DoubleProperty* dt) :
@@ -38,7 +38,7 @@ namespace djnn
     _output->set_value (output, true);
   }
 
-  Oscillator::Oscillator (ParentProcess* parent, const string& name)
+  Oscillator::Oscillator (CoreProcess* parent, const string& name)
   : FatProcess (name),
   _m (this, "m", 1),
   _k (this, "k", 1),
@@ -64,7 +64,7 @@ namespace djnn
   }
 
   void
-  Oscillator::set_parent (ParentProcess* parent)
+  Oscillator::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

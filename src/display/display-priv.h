@@ -23,7 +23,7 @@ namespace djnn {
 
   class GUIKeyboard : public FatProcess {
       public:
-        GUIKeyboard (ParentProcess* parent, const string& name);
+        GUIKeyboard (CoreProcess* parent, const string& name);
         ~GUIKeyboard ();
         void impl_activate () { }
         void impl_deactivate () {}

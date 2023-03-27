@@ -84,17 +84,16 @@ namespace djnn
     class StepAction : public Action
       {
       public:
-        StepAction (ParentProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        StepAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~StepAction () {}
         void impl_activate ()  { ((Incr*)get_parent ())->step (); }
       };
   public:
-    Incr (ParentProcess* parent, const string& name, bool is_model);
+    Incr (CoreProcess* parent, const string& name, bool is_model);
     bool pre_activate () override;
     void impl_activate () override;
     void impl_deactivate () override;
     void step ();
-    //void post_activate () override { post_activate_auto_deactivate (); }
     virtual ~Incr ();
   private:
     int init_incr (bool isModel);
@@ -104,7 +103,7 @@ namespace djnn
     Coupling _c_step;
     bool _is_model;
   protected:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
@@ -116,18 +115,18 @@ namespace djnn
     class AdderAccumulatorAction : public Action
     {
     public:
-      AdderAccumulatorAction (ParentProcess* parent, const string& name, AdderAccumulator& aa);
+      AdderAccumulatorAction (CoreProcess* parent, const string& name, AdderAccumulator& aa);
       void impl_activate () override;
     private:
       AdderAccumulator& _aa;
     };
   public:
-    AdderAccumulator (ParentProcess* parent, const string& name, double input, double clamp_min, double clamp_max);
+    AdderAccumulator (CoreProcess* parent, const string& name, double input, double clamp_min, double clamp_max);
     virtual ~AdderAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
   protected:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
  #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif

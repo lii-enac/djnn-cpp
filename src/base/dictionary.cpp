@@ -56,7 +56,7 @@ namespace djnn
     d->get_map ()[key] = value;
   }
 
-  Dictionary::Dictionary (ParentProcess* parent, const string& name)
+  Dictionary::Dictionary (CoreProcess* parent, const string& name)
   : FatProcess (name), 
     _key (this, "key", nullptr),
     _value (this, "value", nullptr),

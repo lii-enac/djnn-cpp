@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropBox::AbstractPropBox (ParentProcess* parent, const string& name, double w, double h, double d) :
+  AbstractPropBox::AbstractPropBox (CoreProcess* parent, const string& name, double w, double h, double d) :
     PhyObj (parent, name),
     raw_props{.w=w, .h=h, .d=d},
     _cw (nullptr), _ch (nullptr), _cd (nullptr)
@@ -71,7 +71,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropBox::find_child_impl (const string& name)
   {
     auto * res = PhyObj::find_child_impl(name);

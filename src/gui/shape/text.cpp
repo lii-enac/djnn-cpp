@@ -45,10 +45,10 @@ namespace djnn
     Backend::instance ()->update_text_geometry (_text, _ff, _fsz, _fs, _fw);
   }
 
-  Text::Text (ParentProcess* parent, const string& name, double x, double y, const string& text) :
+  Text::Text (CoreProcess* parent, const string& name, double x, double y, const string& text) :
   Text(parent, name, x,y,0,0,0,0,"utf8", text) {}
 
-  Text::Text (ParentProcess* parent, const string& name, double x, double y, double dx, double dy, int dxU, int dyU,
+  Text::Text (CoreProcess* parent, const string& name, double x, double y, double dx, double dy, int dxU, int dyU,
               const string& encoding, const string& text) :
       AbstractGShape (parent, name),
       /* FIXME: encoding - should be string or convert in Int  from Enum? */
@@ -131,7 +131,7 @@ namespace djnn
   }
 
   void
-  Text::set_parent (ParentProcess* parent)
+  Text::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -143,7 +143,7 @@ namespace djnn
     FatProcess::set_parent (parent); 
   }
 
-  FatChildProcess*
+  CoreProcess*
   Text::find_child_impl (const string& name)
   {
     auto * res = AbstractGShape::find_child_impl (name);

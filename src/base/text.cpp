@@ -43,7 +43,7 @@ namespace djnn
     loginfonofl(_input->get_value ());
   }
 
-  TextPrinter::TextPrinter (ParentProcess* parent, const string& name)
+  TextPrinter::TextPrinter (CoreProcess* parent, const string& name)
   : FatProcess (name),
     _input (this, "input", ""),
     _action (this, get_name () + "_action", &_input),
@@ -92,7 +92,7 @@ namespace djnn
   }
 
   void
-  DoubleFormatter::set_parent (ParentProcess* parent)
+  DoubleFormatter::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -104,7 +104,7 @@ namespace djnn
     FatProcess::set_parent (parent); 
   }
 
-  DoubleFormatter::DoubleFormatter (ParentProcess* parent, const string& name, double initial, int decimal) :
+  DoubleFormatter::DoubleFormatter (CoreProcess* parent, const string& name, double initial, int decimal) :
     FatProcess (name),
     _input (this, "input", initial),
     _decimal (this, "decimal", decimal),
@@ -149,7 +149,7 @@ namespace djnn
   }
 #endif
 
-  TextAccumulator::TextAccumulator (ParentProcess* parent, const string& name, const string& init)
+  TextAccumulator::TextAccumulator (CoreProcess* parent, const string& name, const string& init)
   : FatProcess (name),
     _input (this, "input", ""),
     _state (this, "state", init),
@@ -177,7 +177,7 @@ namespace djnn
   }
 
   void
-  TextAccumulator::set_parent (ParentProcess* parent)
+  TextAccumulator::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -240,7 +240,7 @@ namespace djnn
     }
   }
 
-  Regex::Regex (ParentProcess* parent, const string& name, const string& reg)
+  Regex::Regex (CoreProcess* parent, const string& name, const string& reg)
   : FatProcess (name),
     _input (this, "input", ""),
     _init (reg),
@@ -298,7 +298,7 @@ namespace djnn
   }
 
   void
-  Regex::set_parent (ParentProcess* parent)
+  Regex::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

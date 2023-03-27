@@ -12,9 +12,9 @@ namespace djnn
   class PolyPoint : public AbstractGObj
   {
   public:
-    PolyPoint (ParentProcess* parent, const string& name, double x, double y);
+    PolyPoint (CoreProcess* parent, const string& name, double x, double y);
     virtual ~PolyPoint ();
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override;
@@ -32,7 +32,7 @@ namespace djnn
   class Poly : public AbstractGShape
   {
   public:
-    Poly (ParentProcess* parent, const string& name, int closed);
+    Poly (CoreProcess* parent, const string& name, int closed);
     virtual ~Poly ();
 
     // HACK to get access directly to GUIstructureHolder of points
@@ -60,14 +60,14 @@ namespace djnn
   class Polygon : public Poly
   {
   public:
-    Polygon (ParentProcess* parent, const string& name) : Poly (parent, name, 1) {};
+    Polygon (CoreProcess* parent, const string& name) : Poly (parent, name, 1) {};
     virtual ~Polygon () {};
   };
 
   class Polyline : public Poly
   {
   public:
-    Polyline (ParentProcess* parent, const string& name) : Poly (parent, name, 0) {};
+    Polyline (CoreProcess* parent, const string& name) : Poly (parent, name, 0) {};
     virtual ~Polyline () {};
   };
 }

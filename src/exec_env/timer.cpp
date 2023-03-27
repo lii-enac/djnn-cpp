@@ -27,7 +27,7 @@
 namespace djnn
 {
 
-  Timer::Timer (ParentProcess* parent, const string& name, int delay, bool model)
+  Timer::Timer (CoreProcess* parent, const string& name, int delay, bool model)
   : FatProcess (name, model),
   _delay (this, "delay", delay),
   _end (this, "end"),
@@ -40,13 +40,13 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Timer::Timer (ParentProcess* parent, const string& name, std::chrono::milliseconds delay, bool model)
+  Timer::Timer (CoreProcess* parent, const string& name, std::chrono::milliseconds delay, bool model)
   : Timer (parent, name, delay.count(), model)
   {
   }
 
 #if DJNN_USE_BOOST_CHRONO
-  Timer::Timer (ParentProcess* parent, const string& name, boost::chrono::milliseconds delay)
+  Timer::Timer (CoreProcess* parent, const string& name, boost::chrono::milliseconds delay)
   : Timer(parent, name, delay.count())
   {
   }

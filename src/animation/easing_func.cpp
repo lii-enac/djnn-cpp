@@ -238,7 +238,7 @@ namespace djnn
     in_back, out_back, in_out_back,
     in_bounce, out_bounce, in_out_bounce};
 
-  EasingGenerator::EasingGenerator (ParentProcess* parent, const string& name, int func) :
+  EasingGenerator::EasingGenerator (CoreProcess* parent, const string& name, int func) :
         FatProcess (name),
         _func_selector (this, "selector", func),
         _in (this, "input", 0),

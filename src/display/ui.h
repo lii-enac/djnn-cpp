@@ -28,7 +28,7 @@ namespace djnn {
 
     class UI {
     public:
-        UI(ParentProcess* parent, FatProcess* f);
+        UI(CoreProcess* parent, FatProcess* f);
         bool is_pickable() { return pickable->get_value(); }
         //void activate (FatProcess* frame) { cpick->enable (frame); }
         void activate(FatProcess* frame) {
@@ -45,8 +45,8 @@ namespace djnn {
         void deactivate() { cpick->disable(); }
         virtual ~UI();
 
-        ParentProcess * get_parent () { return parent; }
-        const ParentProcess * get_parent () const { return parent; }
+        CoreProcess * get_parent () { return parent; }
+        const CoreProcess * get_parent () const { return parent; }
         
         DoubleProperty* move_x () { return _move_x; }
         DoubleProperty* move_y () { return _move_y; }
@@ -111,6 +111,6 @@ namespace djnn {
         DoubleProperty* _wheel_dx, *_wheel_dy;
         FatProcess* _press, * _left, * _right, * _middle, * _move, * _release, * _enter, * _leave, * _mouse, * _mouse_press, * _mouse_release, * _mouse_move, * _mouse_enter, * _mouse_leave, * _touches, *_wheel, *_mouse_wheel;
         FatProcess* _left_press, * _left_release, * _right_press, * _right_release, * _middle_press, * _middle_release;
-        ParentProcess* parent;
+        CoreProcess* parent;
     };
 }

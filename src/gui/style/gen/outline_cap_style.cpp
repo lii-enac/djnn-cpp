@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  OutlineCapStyle::OutlineCapStyle (ParentProcess* parent, const string& name, int cap) :
+  OutlineCapStyle::OutlineCapStyle (CoreProcess* parent, const string& name, int cap) :
     AbstractStyle (parent, name),
     raw_props{.cap=cap},
     _ccap (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   OutlineCapStyle::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

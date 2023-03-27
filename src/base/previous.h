@@ -19,7 +19,7 @@ namespace djnn {
     class PreviousAction : public Action
     {
     public:
-      PreviousAction (ParentProcess* parent, const string& name, TPrevious& np, const T& init_val)
+      PreviousAction (CoreProcess* parent, const string& name, TPrevious& np, const T& init_val)
       : Action(parent, name),
       _np(np),
        _prev (init_val) { finalize_construction (parent, name); }
@@ -34,7 +34,7 @@ namespace djnn {
       T _prev;
     };
   public:
-    TPrevious (ParentProcess* parent, const string& name, const T& i_val);
+    TPrevious (CoreProcess* parent, const string& name, const T& i_val);
     virtual ~TPrevious () { uninit_unary_couplings(this, _input, _output, _action, _coupling); }
     void impl_activate () override { _coupling.enable (); _action.activate (); }
     void impl_deactivate () override { _coupling.disable (); _action.deactivate ();};
@@ -63,7 +63,7 @@ namespace djnn {
   
   //inline
   template <typename T>
-  TPrevious<T>::TPrevious (ParentProcess* parent, const string& name, const T& i_val)
+  TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& i_val)
   : FatProcess (name),
     _input(this, "input", i_val),
     _output(this, "output", i_val),

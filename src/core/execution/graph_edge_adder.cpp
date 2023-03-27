@@ -22,7 +22,7 @@ namespace djnn
 {
   
 
-  GraphEdgeAdder::GraphEdgeAdder (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst) :
+  GraphEdgeAdder::GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst) :
       FatProcess (name), _src (src), _dst (dst)
   {
     if (_src == nullptr || _dst == nullptr) {

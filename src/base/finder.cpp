@@ -40,7 +40,7 @@ namespace djnn
       f->_not_found.set_activation_flag (ACTIVATION);
       return;
     }
-    FatChildProcess *res;
+    CoreProcess *res;
     for (auto c : f->_container->children ()) {
       res = c->find_child_impl (path);
       if (res) {
@@ -100,7 +100,7 @@ namespace djnn
     f->_not_found.set_activation_flag (ACTIVATION);
   }
 
-  Finder::Finder (ParentProcess* parent, const string& name, FatProcess *container, const string& path)
+  Finder::Finder (CoreProcess* parent, const string& name, FatProcess *container, const string& path)
   : FatProcess (name),
   _path (this, "path", path),
   _key (this, "key", ""),
@@ -134,7 +134,7 @@ namespace djnn
   }
 
   void
-  Finder::set_parent (ParentProcess* parent)
+  Finder::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

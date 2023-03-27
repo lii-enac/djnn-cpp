@@ -28,20 +28,20 @@ namespace djnn {
   class AbstractList : public Container
   {
   public:
-    AbstractList (ParentProcess* parent, const string& name);
-    void add_child (FatChildProcess* c, const string& name) override;
-    void insert (FatChildProcess* c, const string& spec);
-    void remove_child (FatChildProcess* c) override;
+    AbstractList (CoreProcess* parent, const string& name);
+    void add_child (CoreProcess* c, const string& name) override;
+    void insert (CoreProcess* c, const string& spec);
+    void remove_child (CoreProcess* c) override;
     void remove_child (const string& name) override;
-    void insert_new_child (Container::ordered_children_t::iterator it, FatChildProcess *c);
+    void insert_new_child (Container::ordered_children_t::iterator it, CoreProcess *c);
     void clear (); /* empty _children without calling delete on each element IF they are pointers */
     void clean_up_content () override; /* empty _children CALLING delete on each element */
-    FatChildProcess* find_child_impl (const string& path) override;
-    FatChildProcess* find_child_impl (int index)  override;
+    CoreProcess* find_child_impl (const string& path) override;
+    CoreProcess* find_child_impl (int index)  override;
     virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
   protected:
-    virtual void finalize_child_insertion (FatChildProcess *child) = 0;
+    virtual void finalize_child_insertion (CoreProcess *child) = 0;
     RefProperty _added, _removed;
     IntProperty _size;
 
@@ -54,11 +54,11 @@ namespace djnn {
   class List : public AbstractList
   {
   public:
-    List (ParentProcess* parent, const string& name);
+    List (CoreProcess* parent, const string& name);
     virtual ~List ();
     List* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
   private:
-    void finalize_child_insertion (FatChildProcess *child) override;
+    void finalize_child_insertion (CoreProcess *child) override;
   public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
@@ -68,7 +68,7 @@ namespace djnn {
   class ListIterator : public FatProcess
   {
   public:
-    ListIterator (ParentProcess* parent, const string& name, CoreProcess *list, CoreProcess *action, bool model = true);
+    ListIterator (CoreProcess* parent, const string& name, CoreProcess *list, CoreProcess *action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {};
@@ -84,7 +84,7 @@ namespace djnn {
     class IterAction : public Action
     {
     public:
-      IterAction (ParentProcess* parent, const string& name, CoreProcess *list, RefProperty *iter, IntProperty *index, bool forward);
+      IterAction (CoreProcess* parent, const string& name, CoreProcess *list, RefProperty *iter, IntProperty *index, bool forward);
       virtual ~IterAction () {}
       void impl_activate () override;
     private:
@@ -96,19 +96,19 @@ namespace djnn {
     class ResetAction : public Action
     {
     public:
-      ResetAction (ParentProcess* parent, const string& name, IntProperty *index);
+      ResetAction (CoreProcess* parent, const string& name, IntProperty *index);
       virtual ~ResetAction () {}
       void impl_activate () override;
     private:
       IntProperty *_index;
     };
   public:
-    BidirectionalListIterator (ParentProcess* parent, const string& name, List* list);
+    BidirectionalListIterator (CoreProcess* parent, const string& name, List* list);
     virtual ~BidirectionalListIterator ();
     void impl_activate () override;
     void impl_deactivate () override;
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     List* _list;
     Spike _next, _previous, _reset;
     RefProperty _iter;

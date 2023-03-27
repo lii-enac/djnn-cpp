@@ -32,7 +32,7 @@
 namespace djnn
 {
 
-Serial::Serial (ParentProcess* parent, const string& name, const string& port, int baudrate, char eol) :
+Serial::Serial (CoreProcess* parent, const string& name, const string& port, int baudrate, char eol) :
         FatProcess (name),
         ExternalSource (name),
         _port (port),
@@ -57,7 +57,7 @@ Serial::~Serial ()
 }
 
 void
-Serial::set_parent (ParentProcess* parent)
+Serial::set_parent (CoreProcess* parent)
 { 
   /* in case of re-parenting remove edge dependency in graph */
   if (get_parent ()) {

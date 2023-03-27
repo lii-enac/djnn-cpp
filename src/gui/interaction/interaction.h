@@ -106,7 +106,7 @@ namespace djnn {
       class MoveTouchAction : public Action
       {
       public:
-        MoveTouchAction (ParentProcess* parent, const string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
+        MoveTouchAction (CoreProcess* parent, const string& name, TouchAlive* ta) : Action (parent, name), _ta(ta) {}
         ~MoveTouchAction () {}
         void impl_activate () override;
         TouchAlive * _ta;
@@ -125,14 +125,14 @@ namespace djnn {
     class ScaleRotateTranslateAction : public Action
     {
     public:
-      ScaleRotateTranslateAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      ScaleRotateTranslateAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       ~ScaleRotateTranslateAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update ();};
     };
     class AddTouchAction : public Action
     {
     public:
-      AddTouchAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      AddTouchAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       ~AddTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
     };
@@ -140,7 +140,7 @@ namespace djnn {
     class RemoveTouchAction : public Action
     {
     public:
-      RemoveTouchAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      RemoveTouchAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       ~RemoveTouchAction () {}
       void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->remove_touch ();};
     };
@@ -148,12 +148,12 @@ namespace djnn {
     /*class MoveTouchAction : public Action
     {
     public:
-      MoveTouchAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      MoveTouchAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       ~MoveTouchAction () {}
       void impl_activate () override;
     };*/
   public:
-    ScaleRotateTranslate (ParentProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix);
+    ScaleRotateTranslate (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix);
     virtual ~ScaleRotateTranslate ();
     void impl_activate () override;
     void impl_deactivate () override;

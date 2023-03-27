@@ -47,7 +47,7 @@ namespace djnn
     %(DECL_CLONE)s
     void get_properties_values (%(DECL_PROPS_REF_CALL)s);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 %(PROP_GETTERS)s
   protected:
     struct raw_props_t { %(DECL_PROPS_STRUCT)s; };
@@ -102,7 +102,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   %(CLASS)s::find_child_impl (const string& name)
   {
     auto * res = %(INHERITS)s::find_child_impl(name);

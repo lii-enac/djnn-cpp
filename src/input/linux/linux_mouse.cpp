@@ -21,7 +21,7 @@
 #include <libevdev/libevdev.h>
 
 namespace djnn {
-  LinuxMouse::LinuxMouse (ParentProcess* parent, const string& name, const struct libevdev *dev) : LinuxDevice (parent, name, MOUSE)
+  LinuxMouse::LinuxMouse (CoreProcess* parent, const string& name, const struct libevdev *dev) : LinuxDevice (parent, name, MOUSE)
   {
     _move = new Spike (this, "move");
     _move_dx = new IntProperty (nullptr, "dx", 0);

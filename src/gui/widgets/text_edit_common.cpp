@@ -16,7 +16,7 @@
 namespace djnn
 {
 
-  SimpleText::SimpleText (ParentProcess* parent, const string& name, double x, double y, const string& text) :
+  SimpleText::SimpleText (CoreProcess* parent, const string& name, double x, double y, const string& text) :
       AbstractGShape (parent, name), raw_props{.x=x, .y=y, .text=text},
       _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cx (nullptr), _cy (nullptr),
@@ -37,7 +37,7 @@ namespace djnn
   }
 
   void
-  SimpleText::set_parent (ParentProcess* parent)
+  SimpleText::set_parent (CoreProcess* parent)
   {
     if (_init)
       return;
@@ -74,7 +74,7 @@ namespace djnn
     delete _cx;
   }
 
-  FatChildProcess*
+  CoreProcess*
   SimpleText::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);

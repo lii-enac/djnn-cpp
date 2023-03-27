@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropRectangle::AbstractPropRectangle (ParentProcess* parent, const string& name, double x, double y, double width, double height, double rx, double ry) :
+  AbstractPropRectangle::AbstractPropRectangle (CoreProcess* parent, const string& name, double x, double y, double width, double height, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height, .rx=rx, .ry=ry},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr), _crx (nullptr), _cry (nullptr)
@@ -89,7 +89,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropRectangle::find_child_impl (const string& name)
   {
     auto * res = AbstractGShape::find_child_impl(name);

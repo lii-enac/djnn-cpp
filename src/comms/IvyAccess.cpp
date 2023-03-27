@@ -206,7 +206,7 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 
   /**** IVY ACCESS ****/
 
-IvyAccess::IvyAccess (ParentProcess* parent, const string& name, 
+IvyAccess::IvyAccess (CoreProcess* parent, const string& name, 
   const string& bus, const string& appname, const string& ready, bool isModel)
 : FatProcess (name, isModel),
   ExternalSource(name),
@@ -315,7 +315,7 @@ IvyAccess::~IvyAccess ()
 
 // note : see impl_activate on stoping Ivy
 // void
-// IvyAccess::set_parent (ParentProcess* parent)
+// IvyAccess::set_parent (CoreProcess* parent)
 // { 
 //   /* in case of re-parenting remove edge dependency in graph */
 //   if (get_parent ()) {
@@ -443,7 +443,7 @@ IvyAccess::run ()
   }
 }
 
-FatChildProcess*
+CoreProcess*
 IvyAccess::find_child_impl (const string& key)
 {
   

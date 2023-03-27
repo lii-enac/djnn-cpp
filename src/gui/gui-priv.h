@@ -21,16 +21,16 @@
 
 namespace djnn {
 
-  typedef vector<pair<FatChildProcess*, size_t>> children_t; // TODO better structure ??
+  typedef vector<pair<CoreProcess*, size_t>> children_t; // TODO better structure ??
   class GUIStructureHolder : public FatProcess {
     public:
       GUIStructureHolder (FatProcess* content) : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name()), content_process(content) {}
-      void add_gui_child (FatChildProcess *c, size_t index) ;
-      void add_gui_child_at (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
-      void remove_gui_child (FatChildProcess *c);
-      void move_child_to (FatChildProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
+      void add_gui_child (CoreProcess *c, size_t index) ;
+      void add_gui_child_at (CoreProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
+      void remove_gui_child (CoreProcess *c);
+      void move_child_to (CoreProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index);
       void swap_children (size_t i, size_t j);
-      void set_child (FatChildProcess *child, size_t i);
+      void set_child (CoreProcess *child, size_t i);
       void draw () override;
       AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
       void impl_activate () override {}
@@ -41,21 +41,21 @@ namespace djnn {
       FatProcess* content_process;
     };
 
-    typedef map<FatChildProcess*, GUIStructureHolder*> structures_t;
-    typedef map<FatChildProcess*, GUIStructureHolder*>::iterator structures_t_it;
+    typedef map<CoreProcess*, GUIStructureHolder*> structures_t;
+    typedef map<CoreProcess*, GUIStructureHolder*>::iterator structures_t_it;
     class GUIStructureObserver : public StructureObserver {
     public:
       GUIStructureObserver () { }
       virtual ~GUIStructureObserver () override;
       void add_container (FatProcess *cont) override;
       void remove_container (FatProcess *cont) override;
-      void add_child_to_container (FatProcess *cont, FatChildProcess *c, int index) override;
-      void add_child_at (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
-      void move_child_to (FatProcess *cont, FatChildProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
-      void remove_child_from_container (FatProcess *cont, FatChildProcess *c) override;
+      void add_child_to_container (FatProcess *cont, CoreProcess *c, int index) override;
+      void add_child_at (FatProcess *cont, CoreProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
+      void move_child_to (FatProcess *cont, CoreProcess *c, int neighboor_index, child_position_e spec, int new_index) override;
+      void remove_child_from_container (FatProcess *cont, CoreProcess *c) override;
       void swap_children (FatProcess *cont, int i, int j) override;
-      void set_child (FatProcess *cont, FatChildProcess *child, int i) override;
-      GUIStructureHolder* find_holder (FatChildProcess* cont);
+      void set_child (FatProcess *cont, CoreProcess *child, int i) override;
+      GUIStructureHolder* find_holder (CoreProcess* cont);
       //void print_structure_map ();
       structures_t& structure_map () { return _structure_map;};
     private:
@@ -65,7 +65,7 @@ namespace djnn {
     class GUIMouseButton : public FatProcess
     {
     public:
-      GUIMouseButton (ParentProcess* parent, const string& name);
+      GUIMouseButton (CoreProcess* parent, const string& name);
       ~GUIMouseButton () { delete _press; delete _release; }
       FatProcess* press () { return _press; }
       FatProcess* release () { return _release; }
@@ -77,7 +77,7 @@ namespace djnn {
 
     class GUIMouse : public FatProcess {
     public:
-      GUIMouse (ParentProcess* parent, const string& name);
+      GUIMouse (CoreProcess* parent, const string& name);
       ~GUIMouse ();
       void impl_activate () { _left->activate (); _right->activate (); _middle->activate ();}
       void impl_deactivate () {}

@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropCircle::AbstractPropCircle (ParentProcess* parent, const string& name, double cx, double cy, double r) :
+  AbstractPropCircle::AbstractPropCircle (CoreProcess* parent, const string& name, double cx, double cy, double r) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .r=r},
     _ccx (nullptr), _ccy (nullptr), _cr (nullptr)
@@ -71,7 +71,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropCircle::find_child_impl (const string& name)
   {
     auto * res = AbstractGShape::find_child_impl(name);

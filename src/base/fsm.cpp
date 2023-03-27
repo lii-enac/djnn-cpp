@@ -25,7 +25,7 @@
 namespace djnn
 {
 
-  FSMState::FSMState (ParentProcess* parent, const string& name)
+  FSMState::FSMState (CoreProcess* parent, const string& name)
   : Container (parent, name)
   {
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
@@ -115,7 +115,7 @@ namespace djnn
   }
 #endif
 
-  FSMTransition::Init::Init (FSMTransition* t, ParentProcess* parent, 
+  FSMTransition::Init::Init (FSMTransition* t, CoreProcess* parent, 
                             const string& tspec, const string& aspec) 
   {
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
@@ -138,7 +138,7 @@ namespace djnn
   }
 
 
-  FSMTransition::FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
+  FSMTransition::FSMTransition (CoreProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, const string& tspec, CoreProcess *action,
                                 const string& aspec) 
   : FatProcess (name),
@@ -166,7 +166,7 @@ namespace djnn
     fsm->FSM::add_transition(this);
   }
 
-  FSMTransition::FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
+  FSMTransition::FSMTransition (CoreProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
                                 CoreProcess *trigger, CoreProcess *action) 
   : FatProcess (name),
   _priority (0),
@@ -263,7 +263,7 @@ namespace djnn
   }
 #endif
 
-  FSM::FSM (ParentProcess* parent, const string& name) 
+  FSM::FSM (CoreProcess* parent, const string& name) 
   : FatProcess (name), 
   _priority (0),
   _already_triggered (0),
@@ -335,7 +335,7 @@ namespace djnn
   };
 
   void
-  FSM::set_parent (ParentProcess* parent)
+  FSM::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){

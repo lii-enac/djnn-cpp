@@ -37,7 +37,7 @@ namespace djnn
     class SendAction : public Action
     {
     public:
-      SendAction (ParentProcess* parent, const string& name) :
+      SendAction (CoreProcess* parent, const string& name) :
         Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SendAction () {}
       void impl_activate () override;
@@ -45,7 +45,7 @@ namespace djnn
     class BuildSendAction : public Action
     {
     public:
-      BuildSendAction (ParentProcess* parent, const string& name) :
+      BuildSendAction (CoreProcess* parent, const string& name) :
         Action (parent, name), _src (nullptr) { finalize_construction (parent, name); }
       virtual ~BuildSendAction () {}
       void impl_activate () override;
@@ -55,7 +55,7 @@ namespace djnn
         CoreProcess *_src;
     };
     public:
-      Receiver (ParentProcess* parent, const string& name, SOCKET fd, CoreProcess* tree);
+      Receiver (CoreProcess* parent, const string& name, SOCKET fd, CoreProcess* tree);
       virtual ~Receiver () {}
       void impl_activate () override;
       void impl_deactivate () override;
@@ -89,7 +89,7 @@ namespace djnn
   /*** ProcExporter Class ***/
 
   public:
-    ProcExporter (ParentProcess* parent, const string& name, CoreProcess *tree, int port);
+    ProcExporter (CoreProcess* parent, const string& name, CoreProcess *tree, int port);
     virtual ~ProcExporter ();
     SOCKET get_sock () { return _fd; }
     bool connection ();

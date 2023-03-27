@@ -27,14 +27,14 @@ namespace djnn {
   private:
     class RegexAction : public Action {
     public:
-      RegexAction (ParentProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+      RegexAction (CoreProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
       virtual ~RegexAction () {}
       void impl_activate () override;
     private:
       Regex& _reg;
     };
   public:
-    Regex (ParentProcess* parent, const string& name, const string& Regex = "");
+    Regex (CoreProcess* parent, const string& name, const string& Regex = "");
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -46,7 +46,7 @@ namespace djnn {
     FatProcess* find_child_impl (const string&) override;
 
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     TextProperty _input;
     string _init;
     std::regex _regex;

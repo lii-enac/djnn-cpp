@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropWorld::AbstractPropWorld (ParentProcess* parent, const string& name, double x, double y, double z, double dt) :
+  AbstractPropWorld::AbstractPropWorld (CoreProcess* parent, const string& name, double x, double y, double z, double dt) :
     AbstractPObj (parent, name),
     raw_props{.x=x, .y=y, .z=z, .dt=dt},
     _cx (nullptr), _cy (nullptr), _cz (nullptr), _cdt (nullptr)
@@ -77,7 +77,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropWorld::find_child_impl (const string& name)
   {
     auto * res = AbstractPObj::find_child_impl(name);

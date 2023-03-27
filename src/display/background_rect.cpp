@@ -17,7 +17,7 @@
 
 namespace djnn {
 
-  BackgroundRect::BackgroundRect (ParentProcess* parent, const string& name) :
+  BackgroundRect::BackgroundRect (CoreProcess* parent, const string& name) :
     Component (parent, name), PickUI (false)
   {
   }
@@ -29,12 +29,12 @@ namespace djnn {
     //Container::clean_up_content ();
   }
 
-  FatChildProcess*
+  CoreProcess*
   BackgroundRect::find_child_impl (const string& path)
   {
     // looking for ui interface
     if (_ui) {
-      FatChildProcess* process = FatProcess::find_child_impl (path);
+      CoreProcess* process = FatProcess::find_child_impl (path);
       if (process != nullptr)
         return process;
     }

@@ -13,11 +13,11 @@ namespace djnn {
   class Image : public AbstractPathImage
   {
   public:
-    Image (ParentProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
+    Image (CoreProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
     virtual ~Image ();
     void draw () override;
     Image* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     void* cache () { return _cache;}
     void set_cache (void * cache) { _cache = cache;}
     bool invalid_cache () { return _invalid_cache;}
@@ -40,13 +40,13 @@ namespace djnn {
   class DataImage : public AbstractDataImage
     {
     public:
-      DataImage (ParentProcess* parent, const string& name, string* data, int format, double x, double y, double w, double h);
-      DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w, double h);
-      DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h);
+      DataImage (CoreProcess* parent, const string& name, string* data, int format, double x, double y, double w, double h);
+      DataImage (CoreProcess* parent, const string& name, string* data, double x, double y, double w, double h);
+      DataImage (CoreProcess* parent, const string& name, double x, double y, double w, double h);
       virtual ~DataImage ();
       void draw () override;
       DataImage* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
-      virtual FatChildProcess* find_child_impl (const string&) override;
+      virtual CoreProcess* find_child_impl (const string&) override;
       void* cache () { return _cache;}
       void set_cache (void * cache) { _cache = cache;}
       bool invalid_cache () { return _invalid_cache;}

@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  FillRule::FillRule (ParentProcess* parent, const string& name, int rule) :
+  FillRule::FillRule (CoreProcess* parent, const string& name, int rule) :
     AbstractStyle (parent, name),
     raw_props{.rule=rule},
     _crule (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   FillRule::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

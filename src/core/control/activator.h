@@ -23,8 +23,8 @@ namespace djnn {
   class Activator : public FatProcess
   {
   public:
-    Activator (ParentProcess* parent, const string& name, CoreProcess* src);
-    Activator (ParentProcess* parent, const string& name, CoreProcess* src, const string& spec);
+    Activator (CoreProcess* parent, const string& name, CoreProcess* src);
+    Activator (CoreProcess* parent, const string& name, CoreProcess* src, const string& spec);
     virtual ~Activator ();
     void impl_activate () override { _action->set_activation_flag (ACTIVATION); };
     void impl_deactivate () override {}

@@ -9,7 +9,7 @@
 namespace djnn {
 
   void
-  Binding::set_parent (ParentProcess* parent)
+  Binding::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     auto * dst = _b.get_dst ();

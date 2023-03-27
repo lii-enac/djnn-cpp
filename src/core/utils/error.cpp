@@ -39,19 +39,23 @@ namespace djnn
   }
 
   int
-  //__error (ParentProcess* parent, const string& msg, const char* ctxinfo)
+  //__error (CoreProcess* parent, const string& msg, const char* ctxinfo)
   djnn__error (const CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    std::cerr << std::endl << std::endl;
+    auto & out = std::cerr;
+    out << std::endl << std::endl;
+    out << "djnn - ";
+    out << "\033[0;33m";
+    out << "ERROR: ";
+    out << "\033[0m";
+    out << "\"" << (p ? p->get_debug_name () : "") << "\" - " << msg;
     if (p && p->debug_info ().lineno) 
-      std::cerr << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
+      out << " - " << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     else if(ctxinfo)
-      std::cerr << ctxinfo << ":";
-    auto * pp = p;
-    std::cerr << "djnn - ERROR: " << (pp ? pp->get_debug_name () : "") << " - " << msg;
+      out << " - " << ctxinfo << ":";
     
-    std::cerr << std::endl << std::endl;
+    out << std::endl << std::endl;
 #endif
 
 #ifdef DJNN_CRAZYFLIE
@@ -76,12 +80,16 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
     auto & out = std::cerr;
     out << std::endl << std::endl;
+    out << "djnn - ";
+    out << "\033[0;33m";
+    out << "WARNING: ";
+    out << "\033[0m";
+    out << "\"" << (p ? p->get_debug_name () : "") << "\" - " << msg;
     if (p && p->debug_info ().lineno) 
-      out << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
+      out << " - " << p->debug_info ().filepath << ":" <<  p->debug_info ().lineno << ":";
     else if(ctxinfo)
-      out << ctxinfo << ":";
-    auto * pp = p;
-    out << "djnn - WARNING: " << pp << " " << (pp ? pp->get_debug_name () : "") << " - " << msg;
+      out << " - " << ctxinfo << ":";
+    
     out << std::endl << std::endl;
 #endif
 #ifdef DJNN_CRAZYFLIE

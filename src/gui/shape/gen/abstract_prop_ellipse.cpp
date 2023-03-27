@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropEllipse::AbstractPropEllipse (ParentProcess* parent, const string& name, double cx, double cy, double rx, double ry) :
+  AbstractPropEllipse::AbstractPropEllipse (CoreProcess* parent, const string& name, double cx, double cy, double rx, double ry) :
     AbstractGShape (parent, name),
     raw_props{.cx=cx, .cy=cy, .rx=rx, .ry=ry},
     _ccx (nullptr), _ccy (nullptr), _crx (nullptr), _cry (nullptr)
@@ -77,7 +77,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropEllipse::find_child_impl (const string& name)
   {
     auto * res = AbstractGShape::find_child_impl(name);

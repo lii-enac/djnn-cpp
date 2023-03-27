@@ -31,13 +31,13 @@ namespace djnn
   class AbstractDataImage : public AbstractImage
   {
   public:
-    AbstractDataImage (ParentProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height);
+    AbstractDataImage (CoreProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
     
     
     void get_properties_values (string*& data, int& format, double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
 		AbstractIntProperty* format () { return (AbstractIntProperty*) find_child_impl ("format"); }
 

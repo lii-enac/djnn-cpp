@@ -21,7 +21,7 @@
 namespace djnn {
 	class IOFD : public FatProcess, public ExternalSource {
 	public:
-		IOFD(ParentProcess* parent, const string& name, int readfd);
+		IOFD(CoreProcess* parent, const string& name, int readfd);
 		virtual ~IOFD() override;
 
 		int readfd() const { return _readfd; }

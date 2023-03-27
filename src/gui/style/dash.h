@@ -6,9 +6,9 @@
 namespace djnn {
   class DashArray : public AbstractStyle {
   public:
-    DashArray (ParentProcess* parent, const string& name) :
+    DashArray (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
-    DashArray (ParentProcess* parent, const string& name, vector<double> patterns) :
+    DashArray (CoreProcess* parent, const string& name, vector<double> patterns) :
         AbstractStyle (parent, name), _dash_array (patterns) { finalize_construction (parent, name); }
 
     virtual ~DashArray () { _dash_array.clear ();}
@@ -29,7 +29,7 @@ namespace djnn {
   class NoDashArray : public AbstractStyle
   {
   public:
-    NoDashArray (ParentProcess* parent, const string& name) :
+    NoDashArray (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoDashArray () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}

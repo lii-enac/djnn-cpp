@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  TextField::TextField (ParentProcess* parent, const string &name, int x, int y,
+  TextField::TextField (CoreProcess* parent, const string &name, int x, int y,
                         int width, int height, const string &text,
                         bool enable_edit_on_activation) :
       AbstractGShape (parent, name),

@@ -46,7 +46,7 @@
 namespace djnn
 {
 
-  AssignmentSequence::AssignmentSequence (ParentProcess* parent, const string& name, bool isModel) :
+  AssignmentSequence::AssignmentSequence (CoreProcess* parent, const string& name, bool isModel) :
       Container (parent, name)
   {
     set_is_model (isModel);
@@ -62,7 +62,7 @@ namespace djnn
   }
 
   void
-  AssignmentSequence::add_child (FatChildProcess* c, const string& name)
+  AssignmentSequence::add_child (CoreProcess* c, const string& name)
   {
     if (c == nullptr)
       return;

@@ -15,7 +15,7 @@ namespace djnn {
 	};
     class AbstractPObj : public FatProcess {
 	public:
-		AbstractPObj (ParentProcess* parent, const string& name) : FatProcess(name) {}
+		AbstractPObj (CoreProcess* parent, const string& name) : FatProcess(name) {}
         //World * get_frame () { return get_world (); } // FIXME
         PhysicScene * get_frame () { return nullptr; } // FIXME
         virtual void impl_activate () override;

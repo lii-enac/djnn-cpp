@@ -26,7 +26,7 @@
 
 namespace djnn
 {
-  Layer::Layer (ParentProcess* parent, const string& n, double x, double y, double w, double h, double pad) :
+  Layer::Layer (CoreProcess* parent, const string& n, double x, double y, double w, double h, double pad) :
       Container (parent, n), _frame (nullptr), _damaged (this, "damaged"), _auto_redisplay (this, "auto_redisplay", true),
       _invalid_cache (true), _cache (nullptr), _pick_cache (nullptr), _damaged_action (this, "damaged_action"), 
       _c_damaged (&_damaged, ACTIVATION, &_damaged_action, ACTIVATION)
@@ -47,7 +47,7 @@ namespace djnn
 
   }
 
-  Layer::Layer (ParentProcess* parent, const string& n, double pad) : Layer(parent, n, 0,0,-1,0,pad)
+  Layer::Layer (CoreProcess* parent, const string& n, double pad) : Layer(parent, n, 0,0,-1,0,pad)
   {
   }
 

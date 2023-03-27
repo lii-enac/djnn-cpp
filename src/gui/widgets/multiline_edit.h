@@ -15,54 +15,54 @@ namespace djnn {
   class MultilineEditor : public AbstractGShape {
       class ToggleEditAction : public Action {
         public:
-          ToggleEditAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          ToggleEditAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~ToggleEditAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->toggle_edit (); }
       };
       class MousePressAction : public Action {
         public:
-          MousePressAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          MousePressAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MousePressAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_press (); }
       };
       class MouseReleaseAction : public Action {
         public:
-          MouseReleaseAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          MouseReleaseAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MouseReleaseAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_release (); }
       };
       class MouseMoveAction : public Action {
         public:
-          MouseMoveAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          MouseMoveAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~MouseMoveAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->mouse_move (); }
       };
       class KeyPressedAction : public Action {
         public:
-          KeyPressedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          KeyPressedAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~KeyPressedAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->key_pressed (); }
       };
       class KeyReleasedAction : public Action {
         public:
-          KeyReleasedAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          KeyReleasedAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~KeyReleasedAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->key_released (); }
       };
       class StrInputAction : public Action {
         public:
-          StrInputAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          StrInputAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~StrInputAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->add_string_input (); }
       };
       class ClearAction : public Action {
         public:
-          ClearAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          ClearAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
           virtual ~ClearAction () {}
           void impl_activate () override { ((MultilineEditor*)get_parent ())->clear (); }
       };
     public:
-      MultilineEditor (ParentProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true, bool wrap_text = false);
+      MultilineEditor (CoreProcess* parent, const string& name, int x, int y, int width, int height, const string &text = string(), bool enable_edit_on_activation = true, bool wrap_text = false);
       virtual ~MultilineEditor ();
       void impl_activate () override;
       void impl_deactivate () override;

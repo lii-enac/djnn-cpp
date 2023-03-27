@@ -12,9 +12,9 @@ namespace djnn
   class PathPoint : public AbstractGObj
   {
   public:
-    PathPoint (ParentProcess* parent, const string& name, double x, double y);
+    PathPoint (CoreProcess* parent, const string& name, double x, double y);
     virtual ~PathPoint ();
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl("y"); }
     void draw () override = 0;
@@ -31,7 +31,7 @@ namespace djnn
   class PathMove : public PathPoint
   {
   public:
-    PathMove (ParentProcess* parent, const string& name, double x, double y) :
+    PathMove (CoreProcess* parent, const string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     PathMove* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
@@ -40,7 +40,7 @@ namespace djnn
   class PathLine : public PathPoint
   {
   public:
-    PathLine (ParentProcess* parent, const string& name, double x, double y) :
+    PathLine (CoreProcess* parent, const string& name, double x, double y) :
         PathPoint (parent, name, x, y) {}
     void draw () override;
     PathLine* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
@@ -49,9 +49,9 @@ namespace djnn
   class PathQuadratic : public AbstractGObj
   {
   public:
-    PathQuadratic (ParentProcess* parent, const string& name, double x1, double y1, double x, double y);
+    PathQuadratic (CoreProcess* parent, const string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child_impl("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child_impl("y1"); }
     AbstractDoubleProperty* x ()  { return (AbstractDoubleProperty*) find_child_impl("x"); }
@@ -69,9 +69,9 @@ namespace djnn
   class PathCubic : public AbstractGObj
   {
   public:
-    PathCubic (ParentProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y);
+    PathCubic (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* x1 () { return (AbstractDoubleProperty*) find_child_impl("x1"); }
     AbstractDoubleProperty* y1 () { return (AbstractDoubleProperty*) find_child_impl("y1"); }
     AbstractDoubleProperty* x2 () { return (AbstractDoubleProperty*) find_child_impl("x2"); }
@@ -91,10 +91,10 @@ namespace djnn
   class PathArc : public AbstractGObj
   {
   public:
-    PathArc (ParentProcess* parent, const string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
+    PathArc (CoreProcess* parent, const string& name,  double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y);
     virtual ~PathArc ();
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractDoubleProperty* rotx () { return (AbstractDoubleProperty*) find_child_impl("rotx"); }
     AbstractDoubleProperty* fl ()   { return (AbstractDoubleProperty*) find_child_impl("fl"); }
     AbstractDoubleProperty* swfl () { return (AbstractDoubleProperty*) find_child_impl("swfl"); }
@@ -115,7 +115,7 @@ namespace djnn
   class PathClosure : public AbstractGObj
   {
   public:
-    PathClosure (ParentProcess* parent, const string& name);
+    PathClosure (CoreProcess* parent, const string& name);
     virtual ~PathClosure () {}
     void draw () override;
     PathClosure* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
@@ -133,8 +133,8 @@ namespace djnn
   class Path : public AbstractGShape
   {
   public:
-    Path (ParentProcess* parent, const string& name);
-    Path (ParentProcess* parent, const string& name, const string& path_spec);
+    Path (CoreProcess* parent, const string& name);
+    Path (CoreProcess* parent, const string& name, const string& path_spec);
     virtual ~Path ();
 
     // HACK to get access directly to GUIstructureHolder of items

@@ -32,7 +32,7 @@ namespace djnn {
   class SuperAbstractProperty : public FatProcess
   {
   public:
-    SuperAbstractProperty (ParentProcess* parent, const string& name, unsigned int nm=notify_none) :
+    SuperAbstractProperty (CoreProcess* parent, const string& name, unsigned int nm=notify_none) :
       FatProcess (name),
       _notify_mask (nm) {}
     //virtual ~SuperAbstractProperty () override {}
@@ -54,7 +54,7 @@ namespace djnn {
   class AbstractSimpleProperty : public SuperAbstractProperty
   {
   public:
-    AbstractSimpleProperty (ParentProcess* parent, const string& name, unsigned int nm=notify_none) :
+    AbstractSimpleProperty (CoreProcess* parent, const string& name, unsigned int nm=notify_none) :
       SuperAbstractProperty (parent, name, nm) {}
     virtual void set_value (int v, bool propagate) = 0;
     virtual void set_value (double v, bool propagate) = 0;
@@ -81,7 +81,7 @@ namespace djnn {
 
   // inline
   // double
-  // get_property_value(const FatChildProcess* fcp) {
+  // get_property_value(const CoreProcess* fcp) {
   //   auto * ap = dynamic_cast<const AbstractProperty*>(fcp);
   //   if (!ap) {
   //     //warning (fcp, "not a property"); // FIXME warn or do something

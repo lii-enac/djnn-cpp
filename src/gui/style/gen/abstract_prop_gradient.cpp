@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropGradient::AbstractPropGradient (ParentProcess* parent, const string& name, int spread, int coords) :
+  AbstractPropGradient::AbstractPropGradient (CoreProcess* parent, const string& name, int spread, int coords) :
     AbstractStyle (parent, name),
     raw_props{.spread=spread, .coords=coords},
     _cspread (nullptr), _ccoords (nullptr)
@@ -65,7 +65,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropGradient::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

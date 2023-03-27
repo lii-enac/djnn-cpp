@@ -42,7 +42,7 @@ namespace djnn {
 
   class LinuxDevice : public FatProcess {
   public:
-    LinuxDevice (ParentProcess* parent, const string& name, dev_type type) : FatProcess (name), _type (type) {}
+    LinuxDevice (CoreProcess* parent, const string& name, dev_type type) : FatProcess (name), _type (type) {}
     ~LinuxDevice () {}
     virtual void handle_event (struct input_event *ev) = 0;
     dev_type type () { return _type; }
@@ -113,7 +113,7 @@ namespace djnn {
   class LinuxMouse : public LinuxDevice
   {
   public:
-    LinuxMouse (ParentProcess* parent, const string& name, const struct libevdev *dev);
+    LinuxMouse (CoreProcess* parent, const string& name, const struct libevdev *dev);
     ~LinuxMouse ();
     void mouse_btn_event (const char* name, int val);
     void impl_activate () override {}
@@ -152,7 +152,7 @@ namespace djnn {
   class LinuxTouchPanel : public LinuxDevice
   {
   public:
-    LinuxTouchPanel (ParentProcess* parent, const string& name, const struct libevdev *dev);
+    LinuxTouchPanel (CoreProcess* parent, const string& name, const struct libevdev *dev);
     ~LinuxTouchPanel ();
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -169,20 +169,20 @@ namespace djnn {
   class GPIOLine : public FatProcess {
     class GPIOLineWriteAction : public Action {
     public:
-      GPIOLineWriteAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      GPIOLineWriteAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~GPIOLineWriteAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
     };
     class GPIOLineReadAction : public Action {
     public:
-      GPIOLineReadAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      GPIOLineReadAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~GPIOLineReadAction () {}
     protected:
       void impl_activate () override { ((GPIOLine*)get_parent ())->read_value (); }
     };
   public:
-    GPIOLine (ParentProcess* parent, const string& name, int pin, direction_e dir);
+    GPIOLine (CoreProcess* parent, const string& name, int pin, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int get_pin () { return _pin; }

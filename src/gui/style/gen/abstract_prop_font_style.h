@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropFontStyle : public AbstractStyle
   {
   public:
-    AbstractPropFontStyle (ParentProcess* parent, const string& name, int style);
+    AbstractPropFontStyle (CoreProcess* parent, const string& name, int style);
     virtual ~AbstractPropFontStyle ();
     
     
     void get_properties_values (int& style);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractIntProperty* style () { return (AbstractIntProperty*) find_child_impl ("style"); }
 
   protected:

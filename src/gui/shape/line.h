@@ -9,7 +9,7 @@ namespace djnn
   class Line : public AbstractPropLine
   {
   public:
-    Line (ParentProcess* parent, const string& name, double x1, double y1, double x2, double y2);
+    Line (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2);
     Line* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void draw () override;
     void get_bounding_box (double& x, double& y, double& w, double& h) const override;

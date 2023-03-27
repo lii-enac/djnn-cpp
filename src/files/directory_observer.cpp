@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  DirectoryObserver::DirectoryObserver (ParentProcess *parent, const string& name, const string& path)
+  DirectoryObserver::DirectoryObserver (CoreProcess *parent, const string& name, const string& path)
   : FatProcess (name), ExternalSource(name),
     _path (this, "path", path),
     _update (this, "update"),

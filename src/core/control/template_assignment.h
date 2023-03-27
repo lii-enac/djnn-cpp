@@ -37,7 +37,7 @@ namespace djnn {
       graph_add_edge (src, dst);
       //_ttassignment = build_ttassignment (src, dst);
     }
-    TAbstractCoreAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TAbstractCoreAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : CoreProcess (src, dst, is_model)
     {
       finalize_construction (parent, name);
@@ -47,7 +47,7 @@ namespace djnn {
       graph_remove_edge (get_src (), get_dst ());
     }
 
-    void set_parent (ParentProcess* parent) override
+    void set_parent (CoreProcess* parent) override
     {
       // be careful !
       // CoreAssignment do not have any parent to manage
@@ -81,7 +81,7 @@ public:
     : TAbstractCoreAssignment<X,Y> (src, dst, is_model)
     {
     }
-    TCoreAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TCoreAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : TAbstractCoreAssignment<X,Y> (parent, name, src, dst, is_model)
     {
     }
@@ -101,7 +101,7 @@ public:
     : TAbstractCoreAssignment<X,Y> (src, dst, is_model)
     {
     }
-    TCorePausedAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TCorePausedAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : TAbstractCoreAssignment<X,Y> (parent, name, src, dst, is_model)
     {
     }
@@ -121,7 +121,7 @@ public:
     : TAbstractCoreAssignment<X,Y> (src, dst, is_model)
     {
     }
-    TCoreLazyAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TCoreLazyAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : TAbstractCoreAssignment<X,Y> (parent, name, src, dst, is_model)
     {
     }
@@ -142,12 +142,12 @@ public:
     class AssignmentAction : public Action
     {
     public:
-      AssignmentAction (ParentProcess* parent, const string& name)
+      AssignmentAction (CoreProcess* parent, const string& name)
       : Action (parent, name) { /*finalize_construction (parent, name);*/ }
       void impl_activate () override { (static_cast<TAssignment<X,Y>*>(get_parent ())) -> perform_action (); }
     };
   public:
-    TAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -169,7 +169,7 @@ public:
       //delete _ttassignment;
     }
 
-    void set_parent (ParentProcess* parent) override
+    void set_parent (CoreProcess* parent) override
     {
       /* in case of re-parenting remove edge dependency in graph */
       if (get_parent ()) {
@@ -180,7 +180,7 @@ public:
     }
     
     // for legacy reason, to get rid of?
-    /*Assignment (ParentProcess* parent, const string& name,
+    /*Assignment (CoreProcess* parent, const string& name,
                   CoreProcess* src, const string& sspec,
                   CoreProcess* dst, const string& dspec,
                   bool is_model=false)
@@ -227,14 +227,14 @@ public:
   class TPausedAssignment : public TAssignment<X,Y>
   {
   public:
-    TPausedAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TPausedAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : TAssignment<X,Y> (parent, name, src, dst, is_model)
     {
       TAssignment<X,Y>::_propagate = false;
     }
 
     // for legacy reason, to get rid of?
-    TPausedAssignment (ParentProcess* parent, const string& name,
+    TPausedAssignment (CoreProcess* parent, const string& name,
                    X* src, const string& sspec,
                    Y* dst, const string& dspec,
                    bool is_model=false)
@@ -246,14 +246,14 @@ public:
   class TLazyAssignment : public TAssignment<X,Y>
   {
   public:
-    TLazyAssignment (ParentProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
+    TLazyAssignment (CoreProcess* parent, const string& name, X* src, Y* dst, bool is_model=false)
     : TAssignment<X,Y> (parent, name, src, dst, is_model)
     {
       TAssignment<X,Y>::_lazy = true;
     }
 
     // for legacy reason, to get rid of?
-    TLazyAssignment (ParentProcess* parent, const string& name,
+    TLazyAssignment (CoreProcess* parent, const string& name,
                    X* src, const string& sspec,
                    Y* dst, const string& dspec,
                    bool is_model=false)
@@ -262,9 +262,9 @@ public:
   };
 
   template <typename X, typename Y>
-  void TMultiAssignment (ParentProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation);
+  void TMultiAssignment (CoreProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation);
   
   template <typename X, typename Y>
-  void TMultiAssignment (ParentProcess* parent, X* src, Y* dst, bool copy_on_activation);
+  void TMultiAssignment (CoreProcess* parent, X* src, Y* dst, bool copy_on_activation);
 
 }

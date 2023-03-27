@@ -44,7 +44,7 @@ namespace djnn {
       graph_add_edge (src, dst);
       _ttassignment = build_ttassignment (src, dst);
     }
-    AbstractCoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    AbstractCoreAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : AbstractCoreAssignment (src, dst, is_model)
     {
       finalize_construction (parent, name);
@@ -55,7 +55,7 @@ namespace djnn {
       delete _ttassignment;
     }
 
-    void set_parent (ParentProcess* parent) override
+    void set_parent (CoreProcess* parent) override
     {
       // be careful !
       // CoreAssignment do not have any parent to manage
@@ -85,7 +85,7 @@ public:
     : AbstractCoreAssignment (src, dst, is_model)
     {
     }
-    CoreAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CoreAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : AbstractCoreAssignment (parent, name, src, dst, is_model)
     {
     }
@@ -99,7 +99,7 @@ public:
     : AbstractCoreAssignment (src, dst, is_model)
     {
     }
-    CorePausedAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CorePausedAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : AbstractCoreAssignment (parent, name, src, dst, is_model)
     {
     }
@@ -113,7 +113,7 @@ public:
     : AbstractCoreAssignment (src, dst, is_model)
     {
     }
-    CoreLazyAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    CoreLazyAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : AbstractCoreAssignment (parent, name, src, dst, is_model)
     {
     }
@@ -128,12 +128,12 @@ public:
     class AssignmentAction : public Action
     {
     public:
-      AssignmentAction (ParentProcess* parent, const string& name)
+      AssignmentAction (CoreProcess* parent, const string& name)
       : Action (parent, name) { /*finalize_construction (parent, name);*/ }
       void impl_activate () override { (static_cast<Assignment*>(get_parent ())) -> perform_action (); }
     };
   public:
-    Assignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    Assignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : FatProcess (name, is_model)
     , _src(src)
     , _dst(dst)
@@ -155,7 +155,7 @@ public:
       delete _ttassignment;
     }
 
-    void set_parent (ParentProcess* parent) override
+    void set_parent (CoreProcess* parent) override
     {
       /* in case of re-parenting remove edge dependency in graph */
       if (get_parent ()) {
@@ -167,7 +167,7 @@ public:
 
     Assignment* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     // for legacy reason, to get rid of?
-    Assignment (ParentProcess* parent, const string& name,
+    Assignment (CoreProcess* parent, const string& name,
                   CoreProcess* src, const string& sspec,
                   CoreProcess* dst, const string& dspec,
                   bool is_model=false)
@@ -203,14 +203,14 @@ public:
   class PausedAssignment : public Assignment
   {
   public:
-    PausedAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    PausedAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : Assignment (parent, name, src, dst, is_model)
     {
       _propagate = false;
     }
 
     // for legacy reason, to get rid of?
-    PausedAssignment (ParentProcess* parent, const string& name,
+    PausedAssignment (CoreProcess* parent, const string& name,
                    CoreProcess* src, const string& sspec,
                    CoreProcess* dst, const string& dspec,
                    bool is_model=false)
@@ -221,14 +221,14 @@ public:
   class LazyAssignment : public Assignment
   {
   public:
-    LazyAssignment (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
+    LazyAssignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model=false)
     : Assignment (parent, name, src, dst, is_model)
     {
       _lazy = true;
     }
 
     // for legacy reason, to get rid of?
-    LazyAssignment (ParentProcess* parent, const string& name,
+    LazyAssignment (CoreProcess* parent, const string& name,
                    CoreProcess* src, const string& sspec,
                    CoreProcess* dst, const string& dspec,
                    bool is_model=false)
@@ -236,7 +236,7 @@ public:
     {}
   };
 
-  void MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation);
-  void MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
+  void MultiAssignment (CoreProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation);
+  void MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation);
 
 }

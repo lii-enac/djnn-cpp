@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropGradientStop::AbstractPropGradientStop (ParentProcess* parent, const string& name, double r, double g, double b, double a, double offset) :
+  AbstractPropGradientStop::AbstractPropGradientStop (CoreProcess* parent, const string& name, double r, double g, double b, double a, double offset) :
     AbstractStyle (parent, name),
     raw_props{.r=r, .g=g, .b=b, .a=a, .offset=offset},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _ca (nullptr), _coffset (nullptr)
@@ -83,7 +83,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropGradientStop::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

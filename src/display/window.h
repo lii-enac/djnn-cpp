@@ -106,7 +106,7 @@ namespace djnn
         void impl_activate () override { ((Window*)get_parent())->set_minimum_size (); }
     };
   public:
-    Window (ParentProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
+    Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 
@@ -246,18 +246,18 @@ namespace djnn
    class Cursor : public FatProcess {
     class UpdateCursorAction : public Action {
     public:
-      UpdateCursorAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      UpdateCursorAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       ~UpdateCursorAction () {}
       void impl_activate () override;
     };
    public:
-    Cursor (ParentProcess* parent, const string& name, const string& path, int hotX, int hotY);
+    Cursor (CoreProcess* parent, const string& name, const string& path, int hotX, int hotY);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
-    FatChildProcess* find_child_impl (const string& n) override;
+    CoreProcess* find_child_impl (const string& n) override;
    private:
     struct raw_props_t { int hot_x; int hot_y; string path; };
     raw_props_t raw_props;

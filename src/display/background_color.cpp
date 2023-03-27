@@ -8,7 +8,7 @@
 
 namespace djnn {
 
-  BackgroundColor::BackgroundColor (ParentProcess* parent, const string& name, int r, int g, int b) :
+  BackgroundColor::BackgroundColor (CoreProcess* parent, const string& name, int r, int g, int b) :
     FatProcess (name),
     raw_props{.r=r, .g=g, .b=b},
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
@@ -20,7 +20,7 @@ namespace djnn {
     finalize_construction (parent, name);
   }
 
-  BackgroundColor::BackgroundColor (ParentProcess* parent, const string& name, int v) :
+  BackgroundColor::BackgroundColor (CoreProcess* parent, const string& name, int v) :
     FatProcess (name),
     _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
     _toValue (this, "toValue"),
@@ -131,7 +131,7 @@ namespace djnn {
     return *prop;
   }
 
-  FatChildProcess*
+  CoreProcess*
   BackgroundColor::find_child_impl (const string& name)
   {
     auto * res = FatProcess::find_child_impl(name);

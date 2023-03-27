@@ -21,9 +21,9 @@ namespace djnn {
   class AssignmentSequence : public Container
   {
   public:
-    AssignmentSequence (ParentProcess* parent, const string& name, bool is_model);
+    AssignmentSequence (CoreProcess* parent, const string& name, bool is_model);
     virtual ~AssignmentSequence ();
-    void add_child (FatChildProcess* c, const string& name) override;
+    void add_child (CoreProcess* c, const string& name) override;
     void draw () override {}
     void impl_activate () override;
     void post_activate () override;

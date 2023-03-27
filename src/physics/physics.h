@@ -50,7 +50,7 @@ namespace djnn
     typedef vector<PhyObj*> phy_obj_list;
     class StepAction : public Action {
     public:
-      StepAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      StepAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
 
       virtual ~StepAction () {}
     private:
@@ -58,7 +58,7 @@ namespace djnn
     };
 
   public:
-    World (ParentProcess* parent, const string& name, double x, double y, double z = 0);
+    World (CoreProcess* parent, const string& name, double x, double y, double z = 0);
     virtual ~World ();
     WorldImpl* get_impl () { return _world_impl; }
     //void get_gravity (double &x, double &y);
@@ -88,19 +88,19 @@ namespace djnn
   class PhyObj : public AbstractPropPhyObj {
     class D3PhyObjUpdatePosition : public Action {
         public:
-          D3PhyObjUpdatePosition (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          D3PhyObjUpdatePosition (CoreProcess* parent, const string& name) : Action (parent, name) {}
           ~D3PhyObjUpdatePosition () {}
           void impl_activate () override;
         };
         class D3PhyObjUpdateVelocity : public Action {
         public:
-          D3PhyObjUpdateVelocity (ParentProcess* parent, const string& name) : Action (parent, name) {}
+          D3PhyObjUpdateVelocity (CoreProcess* parent, const string& name) : Action (parent, name) {}
           ~D3PhyObjUpdateVelocity () {}
           void impl_activate () override;
         };
   public:
-    PhyObj (ParentProcess* parent, const string& name, double x, double y, double z, double mass);
-    PhyObj (ParentProcess* parent, const string& name);
+    PhyObj (CoreProcess* parent, const string& name, double x, double y, double z, double mass);
+    PhyObj (CoreProcess* parent, const string& name);
     virtual ~PhyObj ();
     //FatProcess* find_child (const string& name) override;
     void impl_activate () override;
@@ -113,7 +113,7 @@ namespace djnn
     // double friction () { return raw_props.friction; }
     void collision () { _collision->activate (); }
     bool update_from_engine () { return _update_from_engine; }
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     void get_position_values (double& x, double& y, double& z);
     void get_velocity_values (double& dx, double& dy, double& dz);
     // double x () { return raw_props.x; }
@@ -144,7 +144,7 @@ namespace djnn
 {
   class Box : public AbstractPropBox {
   public:
-    Box (ParentProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
+    Box (CoreProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -161,7 +161,7 @@ namespace djnn
 {
   class Plane : public AbstractPropPlane  {
   public:
-    Plane (ParentProcess* parent, const string& name, double a, double b, double c, double d);
+    Plane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -180,7 +180,7 @@ namespace djnn
 {
   class Sphere : public AbstractPropSphere {
   public:
-    Sphere (ParentProcess* parent, const string& name, double x, double y, double z, double radius, double mass);
+    Sphere (CoreProcess* parent, const string& name, double x, double y, double z, double radius, double mass);
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;

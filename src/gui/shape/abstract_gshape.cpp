@@ -43,7 +43,7 @@
 
 namespace djnn
 {
-  FatChildProcess*
+  CoreProcess*
   SVGHolder::find_child_impl (const string& path)
   {
     auto * p = Container::find_child_impl (path);
@@ -106,7 +106,7 @@ namespace djnn
     _last_shape = new RefProperty (this, "last_shape", nullptr);
   }
 
-  Touch::Touch (ParentProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure) :
+  Touch::Touch (CoreProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure) :
       FatProcess (name), _shape (nullptr)
   {
     init_touch (id, init_x, init_y, init_pressure);
@@ -187,19 +187,19 @@ namespace djnn
 
   }
 
-  AbstractGShape::AbstractGShape (ParentProcess* parent, const string& name, int z) :
+  AbstractGShape::AbstractGShape (CoreProcess* parent, const string& name, int z) :
     AbstractGObj (parent, name), PickUI (false), _matrix (nullptr), _inverted_matrix (nullptr), _z (this, "z", z), _c_z_prop (nullptr)
   {
     _origin_x = new DoubleProperty (this, "origin_x", 0);
     _origin_y = new DoubleProperty (this, "origin_y", 0);
   }
 
-  FatChildProcess*
+  CoreProcess*
   AbstractGShape::find_child_impl (const string& path)
   {
     // looking for ui interface
     if (_ui) {
-      FatChildProcess* process = FatProcess::find_child_impl (path);
+      CoreProcess* process = FatProcess::find_child_impl (path);
       if (process != nullptr)
         return process;
     }

@@ -16,7 +16,7 @@ namespace djnn {
 	  virtual void error(const string& msg) override { std::cerr << msg << __FL__; }
 	};
 
-	CrazyflieRC::CrazyflieRC(ParentProcess* parent, const string& name, const string& uri)
+	CrazyflieRC::CrazyflieRC(CoreProcess* parent, const string& name, const string& uri)
 	: FatProcess(name),
 	_uri(this, "uri", uri),
 	_takeoff(this, "takeoff"),

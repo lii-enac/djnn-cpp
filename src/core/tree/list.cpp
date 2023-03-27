@@ -33,7 +33,7 @@ namespace djnn
 {
   
 
-  AbstractList::AbstractList (ParentProcess* parent, const string& name)
+  AbstractList::AbstractList (CoreProcess* parent, const string& name)
   :
     Container (parent, name),
     _added (nullptr, "_added", nullptr),
@@ -60,7 +60,7 @@ namespace djnn
 #endif
 
   void
-  AbstractList::add_child (FatChildProcess* c, const string& name)
+  AbstractList::add_child (CoreProcess* c, const string& name)
   {
     if (c == nullptr)
       return;
@@ -78,7 +78,7 @@ namespace djnn
   }
 
   void
-  AbstractList::insert_new_child (Container::ordered_children_t::iterator it, FatChildProcess *c) {
+  AbstractList::insert_new_child (Container::ordered_children_t::iterator it, CoreProcess *c) {
     _children.insert (it, c);
     if (is_altered ())
       _unaltered_children->push_back (c);
@@ -86,7 +86,7 @@ namespace djnn
   }
 
   void
-  AbstractList::insert (FatChildProcess* c, const string& spec)
+  AbstractList::insert (CoreProcess* c, const string& spec)
   {
     // becareful : insert add a NEW child
 
@@ -152,7 +152,7 @@ namespace djnn
   }
 
   void
-  AbstractList::remove_child (FatChildProcess* c)
+  AbstractList::remove_child (CoreProcess* c)
   {
     /* check for existance */
     auto it = std::find (_children.begin (), _children.end (), c);
@@ -185,7 +185,7 @@ namespace djnn
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   AbstractList::find_child_impl (const string& path)
   {
 
@@ -226,7 +226,7 @@ namespace djnn
     return nullptr;
   }
 
-  FatChildProcess*
+  CoreProcess*
   AbstractList::find_child_impl (int index)
   {
     if ((index - 1) < (int)_children.size ()) {
@@ -239,7 +239,7 @@ namespace djnn
     return nullptr;
   }
 
-  List::List (ParentProcess* parent, const string& name) :
+  List::List (CoreProcess* parent, const string& name) :
     AbstractList (parent, name)
   {
     finalize_construction (parent, name);
@@ -250,7 +250,7 @@ namespace djnn
   }
 
   void
-  List::finalize_child_insertion (FatChildProcess *c)
+  List::finalize_child_insertion (CoreProcess *c)
   {
     remove_from_parentless_name (c);
 
@@ -301,7 +301,7 @@ namespace djnn
   }
 #endif
 
-  ListIterator::ListIterator (ParentProcess* parent, const string& name, CoreProcess *list, CoreProcess *action, bool model)
+  ListIterator::ListIterator (CoreProcess* parent, const string& name, CoreProcess *list, CoreProcess *action, bool model)
   :
     FatProcess (name, model),
     _action (action)
@@ -329,7 +329,7 @@ namespace djnn
     post_activate_auto_deactivate ();
   }
 
-  BidirectionalListIterator::IterAction::IterAction (ParentProcess* parent, const string& name, CoreProcess *list,
+  BidirectionalListIterator::IterAction::IterAction (CoreProcess* parent, const string& name, CoreProcess *list,
                                                      RefProperty *iter, IntProperty *index,
                                                      bool forward) :
       Action (parent, name), _list (dynamic_cast<List*>(list)), _iter (iter), _index (index), _forward (forward)
@@ -357,7 +357,7 @@ namespace djnn
     }
   }
 
-  BidirectionalListIterator::ResetAction::ResetAction (ParentProcess* parent, const string& name,
+  BidirectionalListIterator::ResetAction::ResetAction (CoreProcess* parent, const string& name,
                                                        IntProperty *index) :
       Action (parent, name), _index (index)
   {
@@ -371,7 +371,7 @@ namespace djnn
     _index->set_value (1, true);
   }
 
-  BidirectionalListIterator::BidirectionalListIterator (ParentProcess* parent, const string& name,
+  BidirectionalListIterator::BidirectionalListIterator (CoreProcess* parent, const string& name,
                                                         List* list)
   :
   FatProcess (name),
@@ -411,7 +411,7 @@ namespace djnn
   }
 
   void
-  BidirectionalListIterator::set_parent (ParentProcess* parent)
+  BidirectionalListIterator::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

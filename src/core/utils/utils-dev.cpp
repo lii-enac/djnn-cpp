@@ -68,7 +68,7 @@ namespace djnn
     /* we found §value */
     if (found != string::npos) {
       
-      FatChildProcess *prop = src;
+      CoreProcess *prop = src;
       
       /* $value is not the first element, eg : foo/bar/$value */
       if (found > 0) 

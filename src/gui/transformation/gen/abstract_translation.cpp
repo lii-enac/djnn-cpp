@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  AbstractTranslation::AbstractTranslation (ParentProcess* parent, const string& name, double tx, double ty) :
+  AbstractTranslation::AbstractTranslation (CoreProcess* parent, const string& name, double tx, double ty) :
     AbstractTransformation (parent, name),
     raw_props{.tx=tx, .ty=ty},
     _ctx (nullptr), _cty (nullptr)
@@ -66,7 +66,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractTranslation::find_child_impl (const string& name)
   {
     auto * res = AbstractTransformation::find_child_impl(name);

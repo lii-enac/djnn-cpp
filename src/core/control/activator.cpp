@@ -21,7 +21,7 @@ namespace djnn
 {
   
 
-  Activator::Activator (ParentProcess* parent, const string& name, CoreProcess* action) :
+  Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action) :
       FatProcess (name), _action (action)
   {
     if (_action == nullptr) {
@@ -31,7 +31,7 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  Activator::Activator (ParentProcess* parent, const string& name, CoreProcess* action, const string& spec) :
+  Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action, const string& spec) :
       Activator (parent, name, action->find_child_impl (spec))
   {
   }

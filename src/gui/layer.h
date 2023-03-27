@@ -31,14 +31,14 @@ namespace djnn {
       class LayerDamagedAction : public Action
       {
       public:
-        LayerDamagedAction (ParentProcess* parent, const string& name) :
+        LayerDamagedAction (CoreProcess* parent, const string& name) :
           Action (parent, name) {}
         virtual ~LayerDamagedAction () {}
         void impl_activate () override { ((Layer*)get_parent())->set_invalid_cache (true); }
       };
     public:
-      Layer (ParentProcess* parent, const string& name, double pad=0);
-      Layer (ParentProcess* parent, const string& name, double x, double y, double w, double h, double pad=0);
+      Layer (CoreProcess* parent, const string& name, double pad=0);
+      Layer (CoreProcess* parent, const string& name, double x, double y, double w, double h, double pad=0);
       virtual ~Layer () override;
       auto get_frame () { return _frame;}
       void impl_activate () override;

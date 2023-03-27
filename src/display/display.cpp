@@ -37,7 +37,7 @@ namespace djnn
 
   DisplayBackend::Impl* DisplayBackend::_instance;
 
-  GUIKeyboard::GUIKeyboard (ParentProcess* parent, const string& name) : FatProcess (name) {
+  GUIKeyboard::GUIKeyboard (CoreProcess* parent, const string& name) : FatProcess (name) {
     _key_pressed_text = new TextProperty (this, "key-pressed_text", "");
     _key_pressed = new IntProperty (this, "key-pressed", 0);
     _key_released_text  =  new TextProperty (this, "key-released_text", "");

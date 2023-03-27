@@ -28,14 +28,14 @@ namespace djnn
     class TextPrinterAction : public Action
     {
     public:
-      TextPrinterAction (ParentProcess* parent, const string& name, TextProperty* input) : Action (parent, name), _input (input) {}
+      TextPrinterAction (CoreProcess* parent, const string& name, TextProperty* input) : Action (parent, name), _input (input) {}
       virtual ~TextPrinterAction () {}
       void impl_activate () override;
     private:
       TextProperty* _input;
     };
   public:
-    TextPrinter (ParentProcess* parent, const string& name);
+    TextPrinter (CoreProcess* parent, const string& name);
     void impl_activate () override { c_input.enable(); };
     void impl_deactivate () override { c_input.disable (); };
     virtual ~TextPrinter ();
@@ -63,7 +63,7 @@ namespace djnn
   class TextBinaryOperator : public FatProcess
   {
   public:
-    TextBinaryOperator (ParentProcess* parent, const string& name, const string& l_val, const string& r_val)
+    TextBinaryOperator (CoreProcess* parent, const string& name, const string& l_val, const string& r_val)
     : FatProcess (name),
       _left(this, name_info<Action>::left, l_val),
       _right(this, name_info<Action>::right, r_val),
@@ -75,7 +75,7 @@ namespace djnn
       init_binary_couplings(_left, _right, _result, _action, _c_left, _c_right);
       finalize_construction (parent, name);
     }
-    TextBinaryOperator (ParentProcess* parent, const string& name)
+    TextBinaryOperator (CoreProcess* parent, const string& name)
     : FatProcess (name),
       _left(this, name_info<Action>::left, ""),
       _right(this, name_info<Action>::right, ""),
@@ -94,7 +94,7 @@ namespace djnn
     void impl_deactivate () override { _c_left.disable (); _c_right.disable (); _action.deactivate (); }
 
   protected:
-    void set_parent (ParentProcess* parent) override {
+    void set_parent (CoreProcess* parent) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
         remove_state_dependency (get_parent (), &_action);
@@ -113,7 +113,7 @@ namespace djnn
   class TextCatenatorAction : public Action
     {
     public:
-      TextCatenatorAction (ParentProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
+      TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextCatenatorAction () {}
       void impl_activate () override
@@ -134,7 +134,7 @@ namespace djnn
   class TextComparatorAction : public Action
     {
     public:
-      TextComparatorAction (ParentProcess* parent, const string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
+      TextComparatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) :
       Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
       virtual ~TextComparatorAction () {}
       void impl_activate ()
@@ -160,7 +160,7 @@ namespace djnn
   private:
     class AccumulateAction : public Action {
       public:
-        AccumulateAction (ParentProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+        AccumulateAction (CoreProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
         virtual ~AccumulateAction () {}
         void impl_activate () override {
           string new_state = _ta._state.get_value () + _ta._input.get_value ();
@@ -171,7 +171,7 @@ namespace djnn
     };
     class DeleteAction : public Action {
     public:
-      DeleteAction (ParentProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+      DeleteAction (CoreProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
       virtual ~DeleteAction () {}
       void impl_activate () override {
         int sz = _ta._state.get_value ().size ();
@@ -184,7 +184,7 @@ namespace djnn
       TextAccumulator& _ta;
     };
   public:
-    TextAccumulator (ParentProcess* parent, const string& name, const string& init = "");
+    TextAccumulator (CoreProcess* parent, const string& name, const string& init = "");
     virtual ~TextAccumulator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -192,7 +192,7 @@ namespace djnn
     virtual void serialize (const string& format) override;
 #endif
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     TextProperty _input, _state;
     Spike _del;
     AccumulateAction _acc_action;
@@ -207,7 +207,7 @@ namespace djnn
     class DoubleFormatterAction : public Action
     {
     public:
-      DoubleFormatterAction (ParentProcess* parent, const string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { finalize_construction (parent, name); }
+      DoubleFormatterAction (CoreProcess* parent, const string& name, DoubleFormatter& df) : Action (parent, name), _df(df) { finalize_construction (parent, name); }
       virtual ~DoubleFormatterAction () {}
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();
@@ -228,7 +228,7 @@ namespace djnn
     };
   public:
     DoubleFormatter (double initial, int decimal);
-    DoubleFormatter (ParentProcess* parent, const string& name, double initial, int decimal);
+    DoubleFormatter (CoreProcess* parent, const string& name, double initial, int decimal);
     virtual ~DoubleFormatter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -236,7 +236,7 @@ namespace djnn
     virtual void serialize (const string& format) override;
 #endif
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     void init (double initial, int decimal);
     DoubleProperty _input;
     IntProperty _decimal;

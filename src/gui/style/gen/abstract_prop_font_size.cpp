@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropFontSize::AbstractPropFontSize (ParentProcess* parent, const string& name, int unit, double size) :
+  AbstractPropFontSize::AbstractPropFontSize (CoreProcess* parent, const string& name, int unit, double size) :
     AbstractStyle (parent, name),
     raw_props{.unit=unit, .size=size},
     _cunit (nullptr), _csize (nullptr)
@@ -65,7 +65,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropFontSize::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

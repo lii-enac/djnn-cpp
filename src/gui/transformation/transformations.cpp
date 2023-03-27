@@ -39,7 +39,7 @@
 
 namespace djnn
 {
-  AbstractTransformation::AbstractTransformation (ParentProcess* parent, const string& name) :
+  AbstractTransformation::AbstractTransformation (CoreProcess* parent, const string& name) :
       AbstractGObj (parent, name)
   {
   }
@@ -55,7 +55,7 @@ namespace djnn
     return nullptr;
   }
 
-  Identity::Identity (ParentProcess* parent, const string& name) :
+  Identity::Identity (CoreProcess* parent, const string& name) :
       AbstractTransformation (parent, name)
   {
     finalize_construction (parent, name);
@@ -80,7 +80,7 @@ namespace djnn
   }
 
 
-  Translation::Translation (ParentProcess* parent, const string& name, double tx, double ty) :
+  Translation::Translation (CoreProcess* parent, const string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     finalize_construction (parent, name);
@@ -123,7 +123,7 @@ namespace djnn
   }
 
 
-  GradientTranslation::GradientTranslation (ParentProcess* parent, const string& name, double tx, double ty) :
+  GradientTranslation::GradientTranslation (CoreProcess* parent, const string& name, double tx, double ty) :
       AbstractTranslation (parent, name, tx, ty)
   {
     /* avoid dynamic_cast for cloning */
@@ -158,7 +158,7 @@ namespace djnn
   }
 
 
-  Rotation::Rotation (ParentProcess* parent, const string& name, double a, double cx, double cy) :
+  Rotation::Rotation (CoreProcess* parent, const string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     finalize_construction (parent, name);
@@ -221,7 +221,7 @@ namespace djnn
   }
 
 
-  GradientRotation::GradientRotation (ParentProcess* parent, const string& name, double a, double cx, double cy) :
+  GradientRotation::GradientRotation (CoreProcess* parent, const string& name, double a, double cx, double cy) :
       AbstractRotation (parent, name, a, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -256,7 +256,7 @@ namespace djnn
   }
 
 
-  Scaling::Scaling (ParentProcess* parent, const string& name, double sx, double sy, double cx, double cy) :
+  Scaling::Scaling (CoreProcess* parent, const string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     finalize_construction (parent, name);
@@ -311,7 +311,7 @@ namespace djnn
   }
 
 
-  GradientScaling::GradientScaling (ParentProcess* parent, const string& name, double sx, double sy, double cx, double cy) :
+  GradientScaling::GradientScaling (CoreProcess* parent, const string& name, double sx, double sy, double cx, double cy) :
       AbstractScaling (parent, name, sx, sy, cx, cy)
   {
     /* avoid dynamic_cast for cloning */
@@ -345,7 +345,7 @@ namespace djnn
     return res;
   }
 
-  SkewX::SkewX (ParentProcess* parent, const string& name, double a) :
+  SkewX::SkewX (CoreProcess* parent, const string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     finalize_construction (parent, name);
@@ -388,7 +388,7 @@ namespace djnn
   }
 
 
-  GradientSkewX::GradientSkewX (ParentProcess* parent, const string& name, double a) :
+  GradientSkewX::GradientSkewX (CoreProcess* parent, const string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -423,7 +423,7 @@ namespace djnn
   }
 
 
-  SkewY::SkewY (ParentProcess* parent, const string& name, double a) :
+  SkewY::SkewY (CoreProcess* parent, const string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     finalize_construction (parent, name);
@@ -465,7 +465,7 @@ namespace djnn
     return res;
   }
 
-  GradientSkewY::GradientSkewY (ParentProcess* parent, const string& name, double a) :
+  GradientSkewY::GradientSkewY (CoreProcess* parent, const string& name, double a) :
       AbstractSkew (parent, name, a)
   {
     /* avoid dynamic_cast for cloning */
@@ -1725,7 +1725,7 @@ namespace djnn
     add_state_dependency (get_parent (), _leftSkew_Y_By_action);
   }
 
-  AbstractHomography::AbstractHomography (ParentProcess* parent, const string& name, 
+  AbstractHomography::AbstractHomography (CoreProcess* parent, const string& name, 
                                           double m11, double m12, double m13, double m14,
                                           double m21, double m22, double m23, double m24, 
                                           double m31, double m32, double m33, double m34, 
@@ -1977,7 +1977,7 @@ namespace djnn
     delete _accsy;
   }
 
-  FatChildProcess*
+  CoreProcess*
   AbstractHomography::find_child_impl (const string& name)
   {
     auto * res = AbstractPropHomography::find_child_impl (name);
@@ -2143,7 +2143,7 @@ namespace djnn
     AbstractPropHomography::impl_deactivate ();
   }
 
-  Homography::Homography (ParentProcess* parent, const string& name, double m11, double m12, double m13, double m14, double m21,
+  Homography::Homography (CoreProcess* parent, const string& name, double m11, double m12, double m13, double m14, double m21,
                           double m22, double m23, double m24, double m31, double m32, double m33, double m34,
                           double m41, double m42, double m43, double m44) :
       AbstractHomography (parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44)
@@ -2205,7 +2205,7 @@ namespace djnn
     return res;
   }
 
-  GradientHomography::GradientHomography (ParentProcess* parent, const string& name, double m11, double m12, double m13, double m21,
+  GradientHomography::GradientHomography (CoreProcess* parent, const string& name, double m11, double m12, double m13, double m21,
                                           double m22, double m23, double m31, double m32, double m33) :
       AbstractHomography (parent, name, m11, m12, m13, 0, m21, m22, m23, 0, m31, m32, m33, 0, 0, 0, 0, 1)
   {
@@ -2243,7 +2243,7 @@ namespace djnn
     return res;
   }
 
-  SimpleGradientTransform::SimpleGradientTransform (ParentProcess* parent, const string& name, double a, double b, double c, double d,
+  SimpleGradientTransform::SimpleGradientTransform (CoreProcess* parent, const string& name, double a, double b, double c, double d,
                                                     double e, double f) :
       AbstractHomography (parent, name, a, b, 0, 0, c, d, 0, 0, e, f, 1, 0, 0, 0, 0, 1)
   {

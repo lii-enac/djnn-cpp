@@ -28,7 +28,7 @@ namespace djnn {
   class NativeAsyncAction : public NativeAction, public ExternalSource
   {
   public:
-    NativeAsyncAction (ParentProcess* parent, const string& name, NativeCode action, void* data, bool isModel);
+    NativeAsyncAction (CoreProcess* parent, const string& name, NativeCode action, void* data, bool isModel);
     virtual ~NativeAsyncAction ();
     virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
     void impl_activate () override;
@@ -52,7 +52,7 @@ namespace djnn {
     class RestartAction : public Action
     {
     public:
-      RestartAction (ParentProcess* parent, const string& name) :
+      RestartAction (CoreProcess* parent, const string& name) :
         Action (parent, name) {};
       virtual ~RestartAction () {}
       void impl_activate () override { ((NativeAsyncAction*)get_parent())->restart (); }

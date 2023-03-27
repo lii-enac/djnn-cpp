@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  OutlineJoinStyle::OutlineJoinStyle (ParentProcess* parent, const string& name, int join) :
+  OutlineJoinStyle::OutlineJoinStyle (CoreProcess* parent, const string& name, int join) :
     AbstractStyle (parent, name),
     raw_props{.join=join},
     _cjoin (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   OutlineJoinStyle::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

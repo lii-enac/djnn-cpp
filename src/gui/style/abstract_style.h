@@ -7,7 +7,7 @@ namespace djnn
   class AbstractStyle : public AbstractGObj
   {
   public:
-    AbstractStyle (ParentProcess* parent, const string& name);
+    AbstractStyle (CoreProcess* parent, const string& name);
     virtual ~AbstractStyle ();
   };
 }

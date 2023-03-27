@@ -62,7 +62,7 @@ namespace djnn
   template <> const char name_info<my_clamp_max<double>>::right[] = "input";
   template <> const char name_info<my_clamp_max<double>>::serialize[] = "clamp_max";
   
-  BoundedValue::BoundedValue (ParentProcess* parent, const string& name, double min, double max, double init_val)
+  BoundedValue::BoundedValue (CoreProcess* parent, const string& name, double min, double max, double init_val)
   :
     FatProcess (name),
     _min (this, "min", min),
@@ -87,7 +87,7 @@ namespace djnn
   }
 
   void
-  BoundedValue::set_parent (ParentProcess* parent)
+  BoundedValue::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

@@ -22,7 +22,7 @@ namespace djnn {
 
 	class AbstractSObj : public FatProcess {
 	public:
-		AbstractSObj (ParentProcess* parent, const string& name) : FatProcess(name), _impl(nullptr) {}
+		AbstractSObj (CoreProcess* parent, const string& name) : FatProcess(name), _impl(nullptr) {}
 		virtual ~AbstractSObj () { delete _impl; }
 
 		AbstractSObjImpl* impl() { return _impl; }

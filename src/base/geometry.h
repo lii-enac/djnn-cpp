@@ -31,7 +31,7 @@ namespace djnn
     class HermiteCurveAction : public Action
     {
     public:
-      HermiteCurveAction (ParentProcess* parent, const string& name, AbstractSimpleProperty *input, AbstractSimpleProperty *p1,
+      HermiteCurveAction (CoreProcess* parent, const string& name, AbstractSimpleProperty *input, AbstractSimpleProperty *p1,
                           AbstractSimpleProperty *p2, AbstractSimpleProperty *t1, AbstractSimpleProperty *t2,
                           AbstractSimpleProperty *output);
       virtual ~HermiteCurveAction () {}
@@ -40,7 +40,7 @@ namespace djnn
       AbstractSimpleProperty *_input, *_p1, *_p2, *_t1, *_t2, *_output;
     };
   public:
-    HermiteCurve (ParentProcess* parent, const string& name, double p1, double p2, double t1, double t2);
+    HermiteCurve (CoreProcess* parent, const string& name, double p1, double p2, double t1, double t2);
     virtual ~HermiteCurve ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -48,7 +48,7 @@ namespace djnn
     virtual void serialize (const string& format) override;
 #endif
   private:
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     DoubleProperty _input, _p1, _p2, _t1, _t2, _output;
     HermiteCurveAction _action;
     Coupling _c_input, _c_p1, _c_p2, _c_t1, _c_t2;

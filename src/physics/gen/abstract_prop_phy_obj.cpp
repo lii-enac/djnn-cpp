@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropPhyObj::AbstractPropPhyObj (ParentProcess* parent, const string& name, double x, double y, double z, double dx, double dy, double dz, double roll, double pitch, double yall, double mass, double density, double friction) :
+  AbstractPropPhyObj::AbstractPropPhyObj (CoreProcess* parent, const string& name, double x, double y, double z, double dx, double dy, double dz, double roll, double pitch, double yall, double mass, double density, double friction) :
     AbstractPObj (parent, name),
     raw_props{.x=x, .y=y, .z=z, .dx=dx, .dy=dy, .dz=dz, .roll=roll, .pitch=pitch, .yall=yall, .mass=mass, .density=density, .friction=friction},
     _cx (nullptr), _cy (nullptr), _cz (nullptr), _cdx (nullptr), _cdy (nullptr), _cdz (nullptr), _croll (nullptr), _cpitch (nullptr), _cyall (nullptr), _cmass (nullptr), _cdensity (nullptr), _cfriction (nullptr)
@@ -125,7 +125,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropPhyObj::find_child_impl (const string& name)
   {
     auto * res = AbstractPObj::find_child_impl(name);

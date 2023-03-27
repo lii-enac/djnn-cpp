@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropPlane : public PhyObj
   {
   public:
-    AbstractPropPlane (ParentProcess* parent, const string& name, double a, double b, double c, double d);
+    AbstractPropPlane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~AbstractPropPlane ();
     
     
     void get_properties_values (double& a, double& b, double& c, double& d);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
 		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_child_impl ("b"); }
 		AbstractDoubleProperty* c () { return (AbstractDoubleProperty*) find_child_impl ("c"); }

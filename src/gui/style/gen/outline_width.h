@@ -30,13 +30,13 @@ namespace djnn
   class OutlineWidth : public AbstractStyle
   {
   public:
-    OutlineWidth (ParentProcess* parent, const string& name, double width);
+    OutlineWidth (CoreProcess* parent, const string& name, double width);
     virtual ~OutlineWidth ();
     void draw () override;
     OutlineWidth* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double& width);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child_impl ("width"); }
 
   protected:

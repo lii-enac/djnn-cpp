@@ -90,7 +90,7 @@ namespace djnn {
     return nullptr;
   }
 
-  GPIOLine::GPIOLine (ParentProcess* parent, const string& name, int pin, direction_e dir)
+  GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_e dir)
    : FatProcess (name),
    _pin (pin),
    _dir (dir),

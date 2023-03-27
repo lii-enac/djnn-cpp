@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropSphere::AbstractPropSphere (ParentProcess* parent, const string& name, double radius) :
+  AbstractPropSphere::AbstractPropSphere (CoreProcess* parent, const string& name, double radius) :
     PhyObj (parent, name),
     raw_props{.radius=radius},
     _cradius (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropSphere::find_child_impl (const string& name)
   {
     auto * res = PhyObj::find_child_impl(name);

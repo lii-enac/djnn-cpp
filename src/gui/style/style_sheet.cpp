@@ -22,7 +22,7 @@ namespace djnn
   static map <string, int> name_to_id;
   static vector<StyleSheet*> style_array;
 
-  StyleSheet::StyleSheet (ParentProcess* parent, const string& n) :
+  StyleSheet::StyleSheet (CoreProcess* parent, const string& n) :
       Container (parent, n), _classname (n)
   {
     map<string,int>::iterator it = name_to_id.find(n);

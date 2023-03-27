@@ -30,13 +30,13 @@ namespace djnn
   class DashOffset : public AbstractStyle
   {
   public:
-    DashOffset (ParentProcess* parent, const string& name, double offset);
+    DashOffset (CoreProcess* parent, const string& name, double offset);
     virtual ~DashOffset ();
     void draw () override;
     DashOffset* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (double& offset);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child_impl ("offset"); }
 
   protected:

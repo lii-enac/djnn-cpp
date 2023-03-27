@@ -22,7 +22,7 @@
 
 namespace djnn
 {
-  Group::Group (ParentProcess* parent, const string& n) :
+  Group::Group (CoreProcess* parent, const string& n) :
       Container (parent, n), _gobj (nullptr)
   {
     _gobj = new AbstractGObj (this, "_gobj");

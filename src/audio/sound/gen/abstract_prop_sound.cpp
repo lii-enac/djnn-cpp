@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropSound::AbstractPropSound (ParentProcess* parent, const string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop) :
+  AbstractPropSound::AbstractPropSound (CoreProcess* parent, const string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop) :
     AbstractSObj (parent, name),
     raw_props{.gain=gain, .lowpass_gain=lowpass_gain, .lowpass_freq=lowpass_freq, .x=x, .y=y, .z=z, .pitch_mul=pitch_mul, .loop=loop},
     _cgain (nullptr), _clowpass_gain (nullptr), _clowpass_freq (nullptr), _cx (nullptr), _cy (nullptr), _cz (nullptr), _cpitch_mul (nullptr), _cloop (nullptr)
@@ -101,7 +101,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropSound::find_child_impl (const string& name)
   {
     auto * res = AbstractSObj::find_child_impl(name);

@@ -41,7 +41,7 @@ namespace djnn {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (ParentProcess* parent, const string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
+    BinaryOperatorAction (CoreProcess* parent, const string& name, BinOperator& binop) : Action(parent,name), _binop(binop) {
       finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction () {};
@@ -69,7 +69,7 @@ namespace djnn {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
-    BinaryOperator (ParentProcess* parent, const string& name, const Left_init& l_val, const Right_init& r_val)
+    BinaryOperator (CoreProcess* parent, const string& name, const Left_init& l_val, const Right_init& r_val)
     : BinaryOperatorCommon (name),
       _left(this, name_info<BinaryFunction>::left, l_val),
       _right(this, name_info<BinaryFunction>::right, r_val),
@@ -99,7 +99,7 @@ namespace djnn {
     }
 #endif
   protected:
-    void set_parent (ParentProcess* parent) override {
+    void set_parent (CoreProcess* parent) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
         remove_state_dependency (get_parent (), &_action);
@@ -134,7 +134,7 @@ namespace djnn {
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop) : _unop(unop) {}
-    UnaryOperatorAction (ParentProcess* parent, const string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
+    UnaryOperatorAction (CoreProcess* parent, const string& name, UnOperator& unop) : Action(parent,name), _unop(unop) {
       finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction () {};
@@ -158,7 +158,7 @@ namespace djnn {
   public:
     typedef UnaryOperatorAction<Input, Output, UnaryFunction, Input_init> Action;
 
-    UnaryOperator (ParentProcess* parent, const string& name, const Input_init& i_val)
+    UnaryOperator (CoreProcess* parent, const string& name, const Input_init& i_val)
     : UnaryOperatorCommon (name),
       _input(this, "input", i_val),
       _output(this, "output", UnaryFunction()(i_val)),
@@ -186,7 +186,7 @@ namespace djnn {
 #endif
 
   protected:
-    void set_parent (ParentProcess* parent) override {
+    void set_parent (CoreProcess* parent) override {
       // in case of re-parenting remove edge dependency in graph
       if (get_parent ()) {
         remove_state_dependency (get_parent (), &_action);

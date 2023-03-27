@@ -183,7 +183,7 @@ namespace djnn
     }
   }
 
-  RemoteProc::RemoteProc (ParentProcess *parent, const string &name, const string &addr, int port) :
+  RemoteProc::RemoteProc (CoreProcess *parent, const string &name, const string &addr, int port) :
       FatProcess (name), _addr (addr), _port (port), _fd (0), _send (this, "send"), _receive (this, "receive"),
       _con (this, "connection_action"), _con_status (this, "status", false), _con_req (this, "connect"),
       _c_con_req (&_con_req, ACTIVATION, &_con, ACTIVATION)
@@ -201,10 +201,10 @@ namespace djnn
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   RemoteProc::find_child_impl (const string &path)
   {
-    FatChildProcess* res = FatProcess::find_child_impl (path);
+    CoreProcess* res = FatProcess::find_child_impl (path);
     if (res)
       return res;
     dist_map_t::iterator it = _send_map.find (path);

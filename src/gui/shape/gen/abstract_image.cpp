@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractImage::AbstractImage (ParentProcess* parent, const string& name, double x, double y, double width, double height) :
+  AbstractImage::AbstractImage (CoreProcess* parent, const string& name, double x, double y, double width, double height) :
     AbstractGShape (parent, name),
     raw_props{.x=x, .y=y, .width=width, .height=height},
     _cx (nullptr), _cy (nullptr), _cwidth (nullptr), _cheight (nullptr)
@@ -77,7 +77,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractImage::find_child_impl (const string& name)
   {
     auto * res = AbstractGShape::find_child_impl(name);

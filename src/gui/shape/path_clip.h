@@ -6,7 +6,7 @@ namespace djnn {
   class PathClip : public Path
   {
   public:
-    PathClip (ParentProcess* parent, const string& name) :
+    PathClip (CoreProcess* parent, const string& name) :
         Path (parent, name) {}
     virtual ~PathClip () {}
     void draw () override;

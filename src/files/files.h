@@ -46,11 +46,11 @@ namespace djnn
     class FileReaderAction : public Action
     {
     public:
-      FileReaderAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      FileReaderAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       void impl_activate () override;
     };
   public:
-    FileReader (ParentProcess* parent, const string& name, const string& filename);
+    FileReader (CoreProcess* parent, const string& name, const string& filename);
     virtual ~FileReader ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -70,19 +70,19 @@ namespace djnn
      class UpdateAction : public Action
      {
      public:
-       UpdateAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
+       UpdateAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
        void impl_activate () override { ((DirectoryObserver*)get_parent ())->iterate (); };
        void impl_deactivate () override {}
      };
      class ChangePathAction : public Action
      {
      public:
-       ChangePathAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
+       ChangePathAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
        void impl_activate () override { ((DirectoryObserver*)get_parent ())->change_path (); };
        void impl_deactivate () override {}
      };
   public:
-    DirectoryObserver (ParentProcess *parent, const string& name, const string& path);
+    DirectoryObserver (CoreProcess *parent, const string& name, const string& path);
     virtual ~DirectoryObserver ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -103,7 +103,7 @@ namespace djnn
   class File : public FatProcess
   {
   public:
-    File (ParentProcess *parent, const string &name, const string &path, const string &filename, bool is_dir) :
+    File (CoreProcess *parent, const string &name, const string &path, const string &filename, bool is_dir) :
           FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),
           _is_dir (this, "is_dir", is_dir) { finalize_construction (parent, name); }
     virtual ~File () {}

@@ -382,7 +382,7 @@ namespace djnn
   }
 
   void
-  MultiAssignment (ParentProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
+  MultiAssignment (CoreProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
       error (src, "Incompatible number of properties in multiple assignment");
@@ -400,7 +400,7 @@ namespace djnn
   }
 
   void
-  MultiAssignment (ParentProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation)
+  MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation)
   {
     Container* cont_src = dynamic_cast<Container*>(src);
     Container* cont_dst = dynamic_cast<Container*>(dst);

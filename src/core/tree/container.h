@@ -21,19 +21,19 @@ namespace djnn {
   class Container : public FatProcess
   {
 
-  typedef map<string, FatChildProcess*> context_t;
+  typedef map<string, CoreProcess*> context_t;
   public:
-    typedef vector<FatChildProcess*> ordered_children_t;
-    Container (ParentProcess* parent, const string& name, bool is_model=false);
+    typedef vector<CoreProcess*> ordered_children_t;
+    Container (CoreProcess* parent, const string& name, bool is_model=false);
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    void push_back_child (FatChildProcess* child);
-    void add_child (FatChildProcess* c, const string& name) override;
-    void move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child = 0) override;
-    void remove_child_from_children_only (FatChildProcess* c);
-    void remove_child (FatChildProcess* c) override;
+    void push_back_child (CoreProcess* child);
+    void add_child (CoreProcess* c, const string& name) override;
+    void move_child (CoreProcess *child_to_move, child_position_e spec, CoreProcess *child = 0) override;
+    void remove_child_from_children_only (CoreProcess* c);
+    void remove_child (CoreProcess* c) override;
     void remove_child (const string& name) override;
     void swap_children (int i, int j);
-    void set_child (FatChildProcess *child, int i);
+    void set_child (CoreProcess *child, int i);
     void update_drawing () override;
     void draw () override;
     void pick () override;
@@ -48,8 +48,8 @@ namespace djnn {
     virtual ~Container ();
     const ordered_children_t& children () const { return _children; }
     context_t& get_context () { return _cur_context; }
-    void add_to_context (const string& k, FatChildProcess *v);
-    FatChildProcess* get_from_context (const string& k);
+    void add_to_context (const string& k, CoreProcess *v);
+    CoreProcess* get_from_context (const string& k);
     void init_context (context_t &context);
   protected:
     ordered_children_t _children;

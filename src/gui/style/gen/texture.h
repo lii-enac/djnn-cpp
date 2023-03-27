@@ -30,13 +30,13 @@ namespace djnn
   class Texture : public AbstractStyle
   {
   public:
-    Texture (ParentProcess* parent, const string& name, const string& path);
+    Texture (CoreProcess* parent, const string& name, const string& path);
     virtual ~Texture ();
     void draw () override;
     Texture* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     void get_properties_values (string& path);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
 
   protected:

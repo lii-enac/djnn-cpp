@@ -31,7 +31,7 @@
 namespace djnn
 {
 
-  Sorter::Sorter (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec) :
+  Sorter::Sorter (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec) :
       FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
@@ -164,7 +164,7 @@ namespace djnn
   }
 #endif
 
-  ListOperator::ListOperator (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec) :
+  ListOperator::ListOperator (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec) :
       FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),
@@ -227,7 +227,7 @@ namespace djnn
     do_action ();
   }
 
-  SumList::SumList(ParentProcess *parent, const string &name,
+  SumList::SumList(CoreProcess *parent, const string &name,
   	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
@@ -266,7 +266,7 @@ namespace djnn
   }
 #endif
 
-  ProductList::ProductList(ParentProcess *parent, const string &name,
+  ProductList::ProductList(CoreProcess *parent, const string &name,
   	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
@@ -305,7 +305,7 @@ namespace djnn
   }
 #endif
 
-  MaxList::MaxList(ParentProcess *parent, const string &name,
+  MaxList::MaxList(CoreProcess *parent, const string &name,
   	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);
@@ -344,7 +344,7 @@ namespace djnn
   }
 #endif
 
-  MinList::MinList(ParentProcess *parent, const string &name,
+  MinList::MinList(CoreProcess *parent, const string &name,
   	  CoreProcess *container, const string &spec) :
 	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
         graph_add_edge(&_spec_action, &_output);

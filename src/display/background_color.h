@@ -17,7 +17,7 @@ namespace djnn {
   private:
     class ToValueAction : public Action {
     public:
-      ToValueAction (ParentProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToValueAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToValueAction () {}
       void impl_activate () override {
         ((BackgroundColor*) get_parent())->update_hex_from_rvb ();
@@ -25,19 +25,19 @@ namespace djnn {
     };
     class ToRGBAction : public Action {
     public:
-      ToRGBAction (ParentProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
+      ToRGBAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
       ~ToRGBAction () {}
       void impl_activate () override {
         ((BackgroundColor*) get_parent())->update_rvb_from_hex ();
       }
     };
   public:
-    BackgroundColor (ParentProcess* parent, const string& name, int r=50, int g=50, int b=50); //by default: macos dark mode background
-    BackgroundColor (ParentProcess* parent, const string& name, int v);
+    BackgroundColor (CoreProcess* parent, const string& name, int r=50, int g=50, int b=50); //by default: macos dark mode background
+    BackgroundColor (CoreProcess* parent, const string& name, int v);
     virtual ~BackgroundColor ();
     
     void get_properties_values (double& r, double& g, double& b);
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
     AbstractIntProperty* r () { return (AbstractIntProperty*) find_child_impl ("r"); }
     AbstractIntProperty* g () { return (AbstractIntProperty*) find_child_impl ("g"); }
     AbstractIntProperty* b () { return (AbstractIntProperty*) find_child_impl ("b"); }

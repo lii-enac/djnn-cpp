@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropWorld : public AbstractPObj
   {
   public:
-    AbstractPropWorld (ParentProcess* parent, const string& name, double x, double y, double z, double dt);
+    AbstractPropWorld (CoreProcess* parent, const string& name, double x, double y, double z, double dt);
     virtual ~AbstractPropWorld ();
     
     
     void get_properties_values (double& x, double& y, double& z, double& dt);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl ("x"); }
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl ("y"); }
 		AbstractDoubleProperty* z () { return (AbstractDoubleProperty*) find_child_impl ("z"); }

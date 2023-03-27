@@ -220,7 +220,7 @@ namespace djnn
   // finalize_construction
 
   void
-  CoreProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
+  CoreProcess::finalize_construction (CoreProcess* parent, const string& name, CoreProcess* state_dep)
   {
     if (parent) {
       parent->add_child (this, name);
@@ -235,7 +235,7 @@ namespace djnn
   }
 
   void
-  ChildProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep)
+  ChildProcess::finalize_construction (CoreProcess* parent, const string& name, CoreProcess* state_dep)
   {
     CoreProcess::finalize_construction (parent, name, state_dep);
     if (parent) {
@@ -254,7 +254,7 @@ namespace djnn
   // management
 
   const string&
-  CoreProcess::get_name (ParentProcess* parent) const
+  CoreProcess::get_name (CoreProcess* parent) const
   {
     return parent->find_child_name(this);
   }
@@ -285,7 +285,7 @@ namespace djnn
   }
   #endif
 
-  FatChildProcess*
+  CoreProcess*
   CoreProcess::find_child (const string& path)
   {
     auto * found = find_child_impl (path);
@@ -300,13 +300,13 @@ namespace djnn
     return found;
   }
 
-  FatChildProcess*
+  CoreProcess*
   CoreProcess::find_optional_child (const string& path)
   {
     return find_child_impl (path);
   }
   
-  FatChildProcess*
+  CoreProcess*
   CoreProcess::find_child (int index)
   {
     auto * found = find_child_impl (index);
@@ -321,13 +321,13 @@ namespace djnn
     return found;
   }
 
-  FatChildProcess*
+  CoreProcess*
   CoreProcess::find_child_impl (const string& _)
   {
     return nullptr;
   }
   
-  FatChildProcess*
+  CoreProcess*
   CoreProcess::find_child_impl (int /*index*/)
   {
     return nullptr;
@@ -547,7 +547,7 @@ namespace djnn
   // tree, component, symtable
 
   void
-  ChildProcess::set_parent (ParentProcess* parent)
+  ChildProcess::set_parent (CoreProcess* parent)
   {
     /* note: 
     *  do not try to remove parentless process from parentless_name if only set_parent has been called
@@ -560,7 +560,7 @@ namespace djnn
   }
 
   void
-  FatProcess::add_child (FatChildProcess* child, const string& name)
+  FatProcess::add_child (CoreProcess* child, const string& name)
   {
     if (child == nullptr) { return; }
 
@@ -572,7 +572,7 @@ namespace djnn
   }
 
   void
-  FatProcess::remove_child (FatChildProcess* c)
+  FatProcess::remove_child (CoreProcess* c)
   {
     for (auto & name_proc_pair: symtable ()) {
       if (name_proc_pair.second == c) {
@@ -588,7 +588,7 @@ namespace djnn
     remove_symbol (name);
   }
 
-  FatChildProcess*
+  CoreProcess*
   FatProcess::find_child_impl (const string& key)
   {
     //DEBUG
@@ -655,8 +655,8 @@ namespace djnn
     return nullptr;
   }
 
-  FatChildProcess*
-  FatProcess::find_child_impl (FatChildProcess *p, const string& path)
+  CoreProcess*
+  FatProcess::find_child_impl (CoreProcess *p, const string& path)
   {
     if (p == nullptr) { return URI::find_by_uri (path); }
     return p->find_child_impl (path);
@@ -683,7 +683,7 @@ namespace djnn
   size_t FatProcess::children_size () const { return _symtable.size(); }
 
   void
-  FatProcess::add_symbol (const string& name, FatChildProcess* c)
+  FatProcess::add_symbol (const string& name, CoreProcess* c)
   {
     /* 
       if ((symtable ().insert (pair<string, FatProcess*> (name, c))).second == false) {
@@ -736,7 +736,7 @@ namespace djnn
   // helper functions
 
   void
-  alias_children (ParentProcess* parent, FatProcess* from)
+  alias_children (CoreProcess* parent, FatProcess* from)
   {
     FatProcess::symtable_t& symtable = from->symtable ();
     for (auto& sym : symtable) {
@@ -745,13 +745,13 @@ namespace djnn
   }
 
   void
-  alias (ParentProcess* parent, const string& name, FatChildProcess* from)
+  alias (CoreProcess* parent, const string& name, CoreProcess* from)
   {
     parent->add_symbol (name, from);
   }
 
   void
-  merge_children (ParentProcess *p1, const string& sy1, ParentProcess* p2, const string& sy2)
+  merge_children (CoreProcess *p1, const string& sy1, CoreProcess* p2, const string& sy2)
   {
     //debug
     //std::cout << "process::merge_children " << p1->get_debug_name () << " - " << sy1 << " - "  << p2->get_debug_name () << " - " << sy2 << std::endl ;
@@ -783,14 +783,14 @@ namespace djnn
   }
 
   void
-  add_state_dependency (ParentProcess* parent, CoreProcess *p)
+  add_state_dependency (CoreProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->get_state_dependency () != nullptr)
       graph_add_edge (parent->get_state_dependency (), p); 
   }
 
   void
-  remove_state_dependency (ParentProcess* parent, CoreProcess *p)
+  remove_state_dependency (CoreProcess* parent, CoreProcess *p)
   {
     if (p && parent && parent->get_state_dependency () != nullptr)
       graph_remove_edge (parent->get_state_dependency (), p);

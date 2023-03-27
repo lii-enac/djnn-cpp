@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropPlane::AbstractPropPlane (ParentProcess* parent, const string& name, double a, double b, double c, double d) :
+  AbstractPropPlane::AbstractPropPlane (CoreProcess* parent, const string& name, double a, double b, double c, double d) :
     PhyObj (parent, name),
     raw_props{.a=a, .b=b, .c=c, .d=d},
     _ca (nullptr), _cb (nullptr), _cc (nullptr), _cd (nullptr)
@@ -77,7 +77,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropPlane::find_child_impl (const string& name)
   {
     auto * res = PhyObj::find_child_impl(name);

@@ -42,7 +42,7 @@ namespace djnn
 {
   
 
-  Container::Container (ParentProcess* parent, const string& name, bool is_model) :
+  Container::Container (CoreProcess* parent, const string& name, bool is_model) :
       FatProcess (name, is_model), _unaltered_children (nullptr)
   {
     for (auto s: structure_observer_list) {
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   void
-  Container::push_back_child (FatChildProcess* child){
+  Container::push_back_child (CoreProcess* child){
     _children.push_back (child);
     if (is_altered ())
       _unaltered_children->push_back (child);
@@ -131,7 +131,7 @@ namespace djnn
 
 
   void
-  Container::add_child (FatChildProcess* child, const string& name)
+  Container::add_child (CoreProcess* child, const string& name)
   {
     if (child == nullptr) {
       error (this, " add_child: trying to add '" +  name + "' to the parent '" + this->get_name () + "'  but could NOT find it\n");
@@ -160,7 +160,7 @@ namespace djnn
   }
 
   void
-  Container::move_child (FatChildProcess *child_to_move, child_position_e spec, FatChildProcess *child2)
+  Container::move_child (CoreProcess *child_to_move, child_position_e spec, CoreProcess *child2)
   {
     /* create a copy of _children if necessary*/
     if (is_altered () == false) {
@@ -220,7 +220,7 @@ namespace djnn
   }
 
   void
-  Container::remove_child_from_children_only (FatChildProcess* c)
+  Container::remove_child_from_children_only (CoreProcess* c)
   {
     _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
     for (auto s: structure_observer_list) {
@@ -232,7 +232,7 @@ namespace djnn
     remove child but do not delete child 
   */
   void
-  Container::remove_child (FatChildProcess* c)
+  Container::remove_child (CoreProcess* c)
   {
     FatProcess::remove_child (c);
     if (is_altered ())
@@ -266,7 +266,7 @@ namespace djnn
   }
 
   void
-  Container::set_child (FatChildProcess *child, int i)
+  Container::set_child (CoreProcess *child, int i)
     {
       _children[i] = child;
       for (auto s: structure_observer_list) {
@@ -409,14 +409,14 @@ namespace djnn
 #endif
 
   void
-  Container::add_to_context (const string& k, FatChildProcess *v)
+  Container::add_to_context (const string& k, CoreProcess *v)
   {
     context_t::iterator it = _cur_context.find (k);
     if (it != _cur_context.end ()) it->second = v;
     else _cur_context.insert (make_pair (k, v));
   }
 
-  FatChildProcess*
+  CoreProcess*
   Container::get_from_context (const string& k)
   {
     context_t::iterator it = _cur_context.find (k);

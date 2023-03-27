@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  TextAnchor::TextAnchor (ParentProcess* parent, const string& name, int anchor) :
+  TextAnchor::TextAnchor (CoreProcess* parent, const string& name, int anchor) :
     AbstractStyle (parent, name),
     raw_props{.anchor=anchor},
     _canchor (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   TextAnchor::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

@@ -100,7 +100,7 @@ namespace djnn
    * do not add directly Property, spikes and actions into the symbol switchlist's table 
    * switchlist sympbol table should only containt branch
    */
-  SwitchList::SwitchList (ParentProcess* parent, const string& name, bool loop) 
+  SwitchList::SwitchList (CoreProcess* parent, const string& name, bool loop) 
   : AbstractList (parent, name),
   _cur_item (nullptr),
   _loop (nullptr, "_loop", loop),
@@ -121,7 +121,7 @@ namespace djnn
   }
 
   void
-  SwitchList::set_parent (ParentProcess* parent)
+  SwitchList::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -165,14 +165,14 @@ namespace djnn
   }
 
   void
-  SwitchList::finalize_child_insertion (FatChildProcess *c)
+  SwitchList::finalize_child_insertion (CoreProcess *c)
   {
     c->set_parent (this);
     _added.set_value (c, true);
     _size.set_value (_size.get_value () + 1, true);
   }
 
-  FatChildProcess*
+  CoreProcess*
   SwitchList::find_child_impl (const string& path)
   {
     if (path.compare ("next") == 0)

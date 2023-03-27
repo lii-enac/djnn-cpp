@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  OutlineWidth::OutlineWidth (ParentProcess* parent, const string& name, double width) :
+  OutlineWidth::OutlineWidth (CoreProcess* parent, const string& name, double width) :
     AbstractStyle (parent, name),
     raw_props{.width=width},
     _cwidth (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   OutlineWidth::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

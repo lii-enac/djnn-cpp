@@ -109,7 +109,7 @@ namespace djnn
     }
   }
 
-  World::World (ParentProcess* parent, const string& name, double x, double y, double z) :
+  World::World (CoreProcess* parent, const string& name, double x, double y, double z) :
   AbstractPropWorld (parent, name, x, y, z, 0.016), _dt (nullptr)
   {
     _step = new Spike (this, "spike");
@@ -151,11 +151,11 @@ namespace djnn
   }
 
 
-  PhyObj::PhyObj (ParentProcess* parent, const string& name)
+  PhyObj::PhyObj (CoreProcess* parent, const string& name)
   : PhyObj (parent, name, 0,0,0,0)
   {}
 
-  PhyObj::PhyObj (ParentProcess* parent, const string& name, double x, double y, double z, double mass) :
+  PhyObj::PhyObj (CoreProcess* parent, const string& name, double x, double y, double z, double mass) :
       AbstractPropPhyObj (parent, name, x, y, z, 0,0,0, 0,0,0, mass, 1.0, 0.3),
       /*FatProcess (name),*/
       _x (nullptr), _y (nullptr), _z (nullptr), _dx (nullptr), _dy (nullptr), _dz (nullptr),
@@ -223,7 +223,7 @@ namespace djnn
     PhysicsBackend::instance ()->enable_physical_object (this);
   }
 
-  FatChildProcess*
+  CoreProcess*
   PhyObj::find_child_impl (const string& name)
   {
       auto * res = AbstractPropPhyObj::find_child_impl (name);
@@ -310,7 +310,7 @@ namespace djnn
 
   
 
-  Plane::Plane (ParentProcess* parent, const string& name, double a, double b, double c, double d) :
+  Plane::Plane (CoreProcess* parent, const string& name, double a, double b, double c, double d) :
       AbstractPropPlane (parent, name, a, b, c, d)
       //plane_props
       //  { .a = a, .b = b, .c = c, .d = d }, _a (nullptr), _b (nullptr), _c (nullptr), _d (nullptr)
@@ -366,7 +366,7 @@ namespace djnn
     PhysicsBackend::instance ()->destroy_plane (this, _world);
   }
 
-  Box::Box (ParentProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass) :
+  Box::Box (CoreProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass) :
       AbstractPropBox (parent, name, w, h, d)
       //, w (w), h (h), d (d), _w (nullptr), _h (nullptr), _d (nullptr)
   {
@@ -422,7 +422,7 @@ namespace djnn
   //   return res;
   // }
 
-  Sphere::Sphere (ParentProcess* parent, const string& name, double x, double y, double z, double radius, double mass) :
+  Sphere::Sphere (CoreProcess* parent, const string& name, double x, double y, double z, double radius, double mass) :
     AbstractPropSphere (parent, name, radius) 
       //PhyObj (parent, name, x, y, z, mass), radius (radius), _radius (nullptr)
   {

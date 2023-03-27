@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropSphere : public PhyObj
   {
   public:
-    AbstractPropSphere (ParentProcess* parent, const string& name, double radius);
+    AbstractPropSphere (CoreProcess* parent, const string& name, double radius);
     virtual ~AbstractPropSphere ();
     
     
     void get_properties_values (double& radius);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* radius () { return (AbstractDoubleProperty*) find_child_impl ("radius"); }
 
   protected:

@@ -7,7 +7,7 @@ namespace djnn
   class AbstractTransformation : public AbstractGObj
   {
   public:
-    AbstractTransformation (ParentProcess* parent, const string& name);
+    AbstractTransformation (CoreProcess* parent, const string& name);
     AbstractTransformation ();
     virtual ~AbstractTransformation ();
     virtual void transform( double& x, double& y) {}

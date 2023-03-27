@@ -66,7 +66,7 @@ namespace djnn
     return 1;
   }
 
-  Incr::Incr (ParentProcess* parent, const string& name, bool isModel) :
+  Incr::Incr (CoreProcess* parent, const string& name, bool isModel) :
       FatProcess (name),
       _delta (this, "delta", 1),
       _state (this, "state", 0),
@@ -88,7 +88,7 @@ namespace djnn
   }
 
   void
-  Incr::set_parent (ParentProcess* parent)
+  Incr::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
@@ -153,7 +153,7 @@ namespace djnn
   }
 #endif
 
-  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (ParentProcess* parent, const string& name,
+  AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (CoreProcess* parent, const string& name,
                                                                     AdderAccumulator& aa) :
       Action (parent, name), _aa(aa)
   {
@@ -175,7 +175,7 @@ namespace djnn
     _aa._result.set_value (value, true);
   }
 
-  AdderAccumulator::AdderAccumulator (ParentProcess* parent, const string& name, double input, double clamp_min,
+  AdderAccumulator::AdderAccumulator (CoreProcess* parent, const string& name, double input, double clamp_min,
                                       double clamp_max)
   : FatProcess (name),
     _input (this, "input", input),
@@ -200,7 +200,7 @@ namespace djnn
   }
 
   void
-  AdderAccumulator::set_parent (ParentProcess* parent)
+  AdderAccumulator::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){

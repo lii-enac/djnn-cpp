@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPropFontWeight::AbstractPropFontWeight (ParentProcess* parent, const string& name, int weight) :
+  AbstractPropFontWeight::AbstractPropFontWeight (CoreProcess* parent, const string& name, int weight) :
     AbstractStyle (parent, name),
     raw_props{.weight=weight},
     _cweight (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPropFontWeight::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

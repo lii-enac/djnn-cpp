@@ -37,7 +37,7 @@ using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data
 
 namespace djnn
 {
-  AbstractDataImage::AbstractDataImage (ParentProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height) :
+  AbstractDataImage::AbstractDataImage (CoreProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.data=data, .format=format},
     _cdata (nullptr), _cformat (nullptr)
@@ -67,7 +67,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractDataImage::find_child_impl (const string& name)
   {
     auto * res = AbstractImage::find_child_impl(name);

@@ -28,7 +28,7 @@ namespace djnn
 {
   
 
-  Set::Set (ParentProcess* parent, const string& name)
+  Set::Set (CoreProcess* parent, const string& name)
   :
     FatProcess (name),
     _added (nullptr, "_added", nullptr),
@@ -46,7 +46,7 @@ namespace djnn
   }
 
   void
-  Set::add_child (FatChildProcess* c, const string& name)
+  Set::add_child (CoreProcess* c, const string& name)
   {
     /* test if the child is already in the set
      * it == symtable ().end () if the element is not find 
@@ -69,7 +69,7 @@ namespace djnn
   }
 
   void
-  Set::remove_child (FatChildProcess* c)
+  Set::remove_child (CoreProcess* c)
   {
     bool found = false;
     //symtable_t::iterator it;
@@ -91,7 +91,7 @@ namespace djnn
   void
   Set::remove_child (const string& name)
   {
-    FatChildProcess *found = nullptr;
+    CoreProcess *found = nullptr;
     string symbol;
     for (auto it = symtable ().begin (); it != symtable ().end (); ++it) {
       //if (it->second->get_name ().compare (name) == 0) {
@@ -124,7 +124,7 @@ namespace djnn
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   Set::find_child_impl (const string& path)
   {
     if (path.compare ("$added") == 0)
@@ -168,7 +168,7 @@ namespace djnn
   }
 #endif
 
-  SetIterator::SetIterator (ParentProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model) :
+  SetIterator::SetIterator (CoreProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model) :
       FatProcess (name, model), _set (dynamic_cast<Set*> (set)), _action (action)
   {
     if (_set == nullptr)

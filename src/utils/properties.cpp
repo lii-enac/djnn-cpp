@@ -31,7 +31,7 @@ namespace djnn
     ((Properties*)get_parent ())->add_property ();
   }
 
-  Properties::Properties (ParentProcess* parent, const string& name, const string& filename)
+  Properties::Properties (CoreProcess* parent, const string& name, const string& filename)
   : FatProcess (name)
   {
     _input = new TextProperty (this, "input", "");

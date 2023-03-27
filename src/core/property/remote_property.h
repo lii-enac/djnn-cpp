@@ -22,7 +22,7 @@ namespace djnn {
 
   class AbstractRemoteProperty : public AbstractSimpleProperty {
   public:
-    AbstractRemoteProperty (ParentProcess* parent, const string& name, int notify_mask=notify_none) : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
+    AbstractRemoteProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none) : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
     virtual int get_prop_type () const override { return Remote; }
 
     // AbstractSimpleProperty interface
@@ -54,7 +54,7 @@ namespace djnn {
 
   class RemoteProperty : public AbstractRemoteProperty {
   public:
-    RemoteProperty (ParentProcess* parent, const string& name, const string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
+    RemoteProperty (CoreProcess* parent, const string& name, const string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
     FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
 
     /* This method has to be specific because of the duality of a remote property.

@@ -7,7 +7,7 @@ namespace djnn {
     class Group : public Container
     {
     public:
-        Group (ParentProcess* parent, const string& name);
+        Group (CoreProcess* parent, const string& name);
         virtual ~Group () override;
         auto get_frame () { return _gobj->get_frame ();}
         void impl_activate () override;
@@ -22,7 +22,7 @@ namespace djnn {
     class ZOrderedGroup : public Group
     {
     public:
-        ZOrderedGroup (ParentProcess* parent, const string& name) : Group (parent, name) {}
+        ZOrderedGroup (CoreProcess* parent, const string& name) : Group (parent, name) {}
         process_type_e get_process_type () const override { return Z_ORDERED_GROUP_T; }
         virtual ~ZOrderedGroup () override {};
         void draw () override;

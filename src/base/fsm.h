@@ -33,7 +33,7 @@ namespace djnn {
   class FSMState : public Container
   {
   public:
-    FSMState (ParentProcess* parent, const string& name);
+    FSMState (CoreProcess* parent, const string& name);
     ~FSMState ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -54,7 +54,7 @@ namespace djnn {
     class FSMTransitionAction : public Action
     {
     public:
-      FSMTransitionAction (ParentProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
+      FSMTransitionAction (CoreProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action) :
         Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
       virtual ~FSMTransitionAction () {};
       void impl_activate ();
@@ -64,9 +64,9 @@ namespace djnn {
       FSMState* _dst;
     };
   public:
-    FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
+    FSMTransition (CoreProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
 		   CoreProcess *trigger, const string& tspec, CoreProcess *action = 0, const string& aspec = "");
-    FSMTransition (ParentProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
+    FSMTransition (CoreProcess* parent, const string& name, CoreProcess* from, CoreProcess* to,
        CoreProcess *trigger, CoreProcess *action = 0);
     ~FSMTransition ();
     void impl_activate () override;
@@ -77,7 +77,7 @@ namespace djnn {
     int priority () { return _priority; }
     Action* transition_action () { return &_transition_action; }
   protected:
-    struct Init { Init (FSMTransition* t, ParentProcess* parent, 
+    struct Init { Init (FSMTransition* t, CoreProcess* parent, 
                         const string& tspec, const string& aspec); };
     friend struct Init;
     
@@ -96,13 +96,13 @@ namespace djnn {
       class FSMPostTriggerAction : public Action
       {
         public:
-          FSMPostTriggerAction (ParentProcess* parent, const string& name) :
+          FSMPostTriggerAction (CoreProcess* parent, const string& name) :
               Action (parent, name) { }
           virtual ~FSMPostTriggerAction () {};
           void impl_activate () { ((FSM*)get_parent())->set_triggered (0); };
       };
   public:
-    FSM (ParentProcess* parent, const string& name);
+    FSM (CoreProcess* parent, const string& name);
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return FSM_T; }
@@ -116,7 +116,7 @@ namespace djnn {
     virtual ~FSM ();
     int priority () { return _priority; }
     void increase_priority () { _priority++; }
-    void set_parent (ParentProcess* parent) override;
+    void set_parent (CoreProcess* parent) override;
     void set_triggered (int v) { _already_triggered = v; if (v) _post_trigger.set_activation_flag(ACTIVATION); }
     int is_already_triggered () { return _already_triggered; }
 #ifndef DJNN_NO_SERIALIZE

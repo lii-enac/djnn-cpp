@@ -32,12 +32,12 @@ namespace djnn
     class SortAction : public Action
     {
     public:
-      SortAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      SortAction (CoreProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SortAction () {}
       void impl_activate () { ((Sorter*) get_parent())->sort (); }
     };
   public:
-    Sorter (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    Sorter (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~Sorter ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -61,19 +61,19 @@ namespace djnn
     class SpecListOperatorAction : public Action
     {
     public:
-      SpecListOperatorAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      SpecListOperatorAction (CoreProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~SpecListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->do_action (); }
     };
     class UpdateListOperatorAction : public Action
     {
     public:
-      UpdateListOperatorAction (ParentProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
+      UpdateListOperatorAction (CoreProcess* parent, const string& name) : Action(parent, name) { finalize_construction (parent, name); }
       virtual ~UpdateListOperatorAction () {}
       void impl_activate () { ((ListOperator*) get_parent())->update_list (); }
     };
   public:
-    ListOperator (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    ListOperator (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~ListOperator ();
     void impl_activate () override;
     void impl_deactivate () override;
@@ -94,7 +94,7 @@ namespace djnn
   class SumList : public ListOperator
   {
   public:
-    SumList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    SumList (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~SumList ();
     void do_action () override;
   protected:
@@ -108,7 +108,7 @@ namespace djnn
   class ProductList : public ListOperator
   {
   public:
-    ProductList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    ProductList (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~ProductList ();
     void do_action () override;
   protected:
@@ -122,7 +122,7 @@ namespace djnn
   class MaxList : public ListOperator
   {
   public:
-    MaxList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    MaxList (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~MaxList ();
     void do_action () override;
   protected:
@@ -136,7 +136,7 @@ namespace djnn
   class MinList : public ListOperator
   {
   public:
-    MinList (ParentProcess* parent, const string& name, CoreProcess *container, const string& spec);
+    MinList (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec);
     virtual ~MinList ();
     void do_action () override;
   protected:

@@ -60,11 +60,11 @@ namespace djnn
   private:
     class EasingAction : public Action {
     public:
-      EasingAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      EasingAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       void impl_activate () override { ((EasingGenerator*)get_parent())->compute (); }
     };
   public:
-    EasingGenerator (ParentProcess* parent, const string& name, int func_t);
+    EasingGenerator (CoreProcess* parent, const string& name, int func_t);
     ~EasingGenerator ();
     void impl_activate () override;
     void impl_deactivate () override;

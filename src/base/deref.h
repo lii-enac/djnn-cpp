@@ -38,14 +38,14 @@ namespace djnn
     class DerefAction : public Action
     {
     public:
-      DerefAction (ParentProcess* parent, const string& name) : Action (parent, name) {}
+      DerefAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
       virtual ~DerefAction () {}
       void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
     };
     class GetAction : public Action
     {
     public:
-      GetAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
+      GetAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
       virtual ~GetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->get ();
@@ -54,14 +54,14 @@ namespace djnn
     class SetAction : public Action
     {
     public:
-      SetAction (ParentProcess *parent, const string& name) : Action (parent, name) {}
+      SetAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
       virtual ~SetAction () {}
       void impl_activate () override {
         ((AbstractDeref*)get_parent ())->set ();
       };
     };
     public:
-      AbstractDeref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
+      AbstractDeref (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~AbstractDeref ();
       void impl_activate () override;
       void impl_deactivate () override;
@@ -75,7 +75,7 @@ namespace djnn
       virtual void get () = 0;
       virtual void change_src (CoreProcess* src) = 0;
     protected:
-      void set_parent (ParentProcess* parent) override;
+      void set_parent (CoreProcess* parent) override;
       TextProperty _path;
       RefProperty* _ref;
       DerefAction _action;
@@ -91,7 +91,7 @@ namespace djnn
   {
   private:
     public:
-      Deref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
+      Deref (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~Deref ();
       void set () override;
       void get () override;
@@ -110,7 +110,7 @@ namespace djnn
   {
   private:
     public:
-      DerefProperty (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
+      DerefProperty (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       void change_src (CoreProcess* src) override;
       
     protected:
@@ -121,7 +121,7 @@ namespace djnn
   class TDeref : public DerefProperty
   {
     public:
-      TDeref (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE)
+      TDeref (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE)
       : DerefProperty (parent, name, ref_prop, path, dir),
       _value (this, "value", T())
       {
@@ -177,7 +177,7 @@ namespace djnn
   class DerefString : public AbstractDeref
   {
     public:
-      DerefString (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
+      DerefString (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
       virtual ~DerefString ();
       void set () override;
       void get () override;
@@ -192,7 +192,7 @@ namespace djnn
   class DerefDouble : public AbstractDeref
     {
       public:
-        DerefDouble (ParentProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
+        DerefDouble (CoreProcess* parent, const string& name, CoreProcess *ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
         virtual ~DerefDouble ();
         void set () override;
         void get () override;

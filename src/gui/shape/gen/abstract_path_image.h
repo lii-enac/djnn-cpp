@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPathImage : public AbstractImage
   {
   public:
-    AbstractPathImage (ParentProcess* parent, const string& name, const string& path, double x, double y, double width, double height);
+    AbstractPathImage (CoreProcess* parent, const string& name, const string& path, double x, double y, double width, double height);
     virtual ~AbstractPathImage ();
     
     
     void get_properties_values (string& path, double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
 
   protected:

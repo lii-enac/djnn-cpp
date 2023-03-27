@@ -25,10 +25,10 @@ namespace djnn {
   class BackgroundRect : public Component, public PickUI
   {
   public:
-    BackgroundRect(ParentProcess* parent, const string&);
+    BackgroundRect(CoreProcess* parent, const string&);
     ~BackgroundRect();
 
-    FatChildProcess* find_child_impl(const string&) override;
+    CoreProcess* find_child_impl(const string&) override;
     void set_mouse_local_coords (double x, double y, bool is_move) override {};
 
   protected:

@@ -26,7 +26,7 @@ namespace djnn {
   class SetIterator : public FatProcess
   {
   public:
-    SetIterator (ParentProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model = true);
+    SetIterator (CoreProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model = true);
     virtual ~SetIterator () {}
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void impl_activate () override;
@@ -40,11 +40,11 @@ namespace djnn {
   class Set : public FatProcess
   {
   public:
-    Set (ParentProcess* parent, const string& name);
-    void add_child (FatChildProcess* c, const string& name) override;
-    void remove_child (FatChildProcess* c) override;
+    Set (CoreProcess* parent, const string& name);
+    void add_child (CoreProcess* c, const string& name) override;
+    void remove_child (CoreProcess* c) override;
     void remove_child (const string& name) override;
-    FatChildProcess* find_child_impl (const string& path) override;
+    CoreProcess* find_child_impl (const string& path) override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~Set ();

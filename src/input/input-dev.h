@@ -25,7 +25,7 @@ namespace djnn {
 
   class GPIOProxy : public FatProcess {
   public:
-    GPIOProxy (ParentProcess* parent, const string& n) : FatProcess (n) { set_activation_state (ACTIVATED); }
+    GPIOProxy (CoreProcess* parent, const string& n) : FatProcess (n) { set_activation_state (ACTIVATED); }
     virtual ~GPIOProxy () {}
     CoreProcess* find_child_impl (const string& path) override;
   protected:

@@ -317,7 +317,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     return 0;
   }
 
-  PathPoint::PathPoint (ParentProcess* parent, const string& name, double x, double y) :
+  PathPoint::PathPoint (CoreProcess* parent, const string& name, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x=x, .y=y},
       _cx(nullptr), _cy(nullptr)
@@ -356,7 +356,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     }
   }
 
-  FatChildProcess*
+  CoreProcess*
   PathPoint::find_child_impl (const string& name)
   {
     auto * res = AbstractGObj::find_child_impl (name);
@@ -437,7 +437,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     return res;
   }
 
-  PathClosure::PathClosure (ParentProcess* parent, const string& name) :
+  PathClosure::PathClosure (CoreProcess* parent, const string& name) :
     AbstractGObj (parent, name)
   {
     /* avoid dynamic_cast for cloning */
@@ -468,7 +468,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     return res;
   }
 
-  PathQuadratic::PathQuadratic (ParentProcess* parent, const string& name, double x1, double y1, double x, double y) :
+  PathQuadratic::PathQuadratic (CoreProcess* parent, const string& name, double x1, double y1, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{ .x1=x1, .y1=y1, .x=x, .y=y },
       _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
@@ -599,7 +599,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
 
-  PathCubic::PathCubic (ParentProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y) :
+  PathCubic::PathCubic (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y) :
       AbstractGObj (parent, name),
       raw_props{.x1=x1, .y1=y1, .x2=x2, .y2=y2, .x=x, .y=y},
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
@@ -754,7 +754,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     return res;
   }
 
-  PathArc::PathArc (ParentProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
+  PathArc::PathArc (CoreProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
                     double y) :
       AbstractGObj (parent, name),
       raw_props{.rx=rx, .ry=ry, .rotx=rotx, .fl=fl, .swfl=swfl, .x=x, .y=y},
@@ -923,7 +923,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     return res;
   }
 
-  Path::Path (ParentProcess* parent, const string& name) :
+  Path::Path (CoreProcess* parent, const string& name) :
       AbstractGShape (parent, name)
   {
     _items = new List (this, "items");
@@ -944,7 +944,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
     finalize_construction (parent, name);
   }
 
-  Path::Path (ParentProcess* parent, const string& name, const string& path_spec) :
+  Path::Path (CoreProcess* parent, const string& name, const string& path_spec) :
         Path (parent, name)
   {
     parse_path (this, path_spec.c_str());

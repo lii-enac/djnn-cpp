@@ -29,13 +29,13 @@ namespace djnn
   class AbstractPropRectangleClip : public AbstractGShape
   {
   public:
-    AbstractPropRectangleClip (ParentProcess* parent, const string& name, double x, double y, double width, double height);
+    AbstractPropRectangleClip (CoreProcess* parent, const string& name, double x, double y, double width, double height);
     virtual ~AbstractPropRectangleClip ();
     
     
     void get_properties_values (double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* x () { return (AbstractDoubleProperty*) find_child_impl ("x"); }
 		AbstractDoubleProperty* y () { return (AbstractDoubleProperty*) find_child_impl ("y"); }
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child_impl ("width"); }

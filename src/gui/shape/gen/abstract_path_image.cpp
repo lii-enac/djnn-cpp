@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractPathImage::AbstractPathImage (ParentProcess* parent, const string& name, const string& path, double x, double y, double width, double height) :
+  AbstractPathImage::AbstractPathImage (CoreProcess* parent, const string& name, const string& path, double x, double y, double width, double height) :
     AbstractImage (parent, name, x, y, width, height),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractPathImage::find_child_impl (const string& name)
   {
     auto * res = AbstractImage::find_child_impl(name);

@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  DashOffset::DashOffset (ParentProcess* parent, const string& name, double offset) :
+  DashOffset::DashOffset (CoreProcess* parent, const string& name, double offset) :
     AbstractStyle (parent, name),
     raw_props{.offset=offset},
     _coffset (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   DashOffset::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

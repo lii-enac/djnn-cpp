@@ -39,7 +39,7 @@ namespace djnn
     class SendAction : public Action
     {
     public:
-      SendAction (ParentProcess* parent, const string& name) :
+      SendAction (CoreProcess* parent, const string& name) :
         Action (parent, name) { finalize_construction (parent, name); }
       virtual ~SendAction () {}
       void impl_activate () override;
@@ -47,7 +47,7 @@ namespace djnn
     class ConnectionAction : public Action
     {
       public:
-        ConnectionAction (ParentProcess* parent, const string& name) :
+        ConnectionAction (CoreProcess* parent, const string& name) :
           Action (parent, name) { finalize_construction (parent, name); }
         virtual ~ConnectionAction () {}
         void impl_activate () override { ((RemoteProc*)get_parent ())->connection ();}
@@ -55,7 +55,7 @@ namespace djnn
     class ReceiveAction : public Action, public ExternalSource
     {
     public:
-      ReceiveAction (ParentProcess* parent, const string& name) :
+      ReceiveAction (CoreProcess* parent, const string& name) :
         Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
       virtual ~ReceiveAction () {}
       void impl_activate () override;
@@ -77,14 +77,14 @@ namespace djnn
   /*** RemoteProc Class ***/
 
   public:
-     RemoteProc (ParentProcess* parent, const string& name,
+     RemoteProc (CoreProcess* parent, const string& name,
       const string& addr="224.1.2.3", int port = 2010);
 
     virtual ~RemoteProc ();
 
     typedef map<string, RemoteProperty*> dist_map_t;
 
-    FatChildProcess* find_child_impl (const string&) override;
+    CoreProcess* find_child_impl (const string&) override;
     string& get_addr () { return _addr; }
     int get_port () { return _port; }
     void connection ();

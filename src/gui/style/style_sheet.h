@@ -6,7 +6,7 @@ namespace djnn {
     class StyleSheet : public Container
   {
   public:
-    StyleSheet (ParentProcess* parent, const string& name);
+    StyleSheet (CoreProcess* parent, const string& name);
     virtual ~StyleSheet () override {}
     StyleSheet* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
     const string& classname () { return _classname; }

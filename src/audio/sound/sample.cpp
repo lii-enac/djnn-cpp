@@ -32,7 +32,7 @@
 
 namespace djnn {
 
-	Sample::Sample (ParentProcess* parent, const string& name, const string& path)
+	Sample::Sample (CoreProcess* parent, const string& name, const string& path)
 	: Sound(parent, name),
 	_end (this, "end"),
 	// _end_timer(*this),

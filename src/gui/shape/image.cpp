@@ -24,7 +24,7 @@
 
 namespace djnn
 {
-  Image::Image (ParentProcess* parent, const string& name, const string& path, double x, double y, double w,
+  Image::Image (CoreProcess* parent, const string& name, const string& path, double x, double y, double w,
     double h) :
       AbstractPathImage (parent, name, path, x, y, w, h),
       _cwatcher(nullptr),
@@ -43,7 +43,7 @@ namespace djnn
     Backend::instance ()->delete_image_impl (this);
   }
 
-  FatChildProcess*
+  CoreProcess*
   Image::find_child_impl (const string& name)
   {
     auto * res = AbstractPathImage::find_child_impl (name);
@@ -133,7 +133,7 @@ namespace djnn
     return res;
   }
 
-  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, int format, double x, double y, double w,
+  DataImage::DataImage (CoreProcess* parent, const string& name, string* data, int format, double x, double y, double w,
     double h) :
       AbstractDataImage (parent, name, data, format, x, y, w, h),
       _cwatcher(nullptr),
@@ -145,12 +145,12 @@ namespace djnn
     finalize_construction (parent, name);
   }
 
-  DataImage::DataImage (ParentProcess* parent, const string& name, string* data, double x, double y, double w, double h)
+  DataImage::DataImage (CoreProcess* parent, const string& name, string* data, double x, double y, double w, double h)
   : DataImage(parent, name, data, -1, x, y, w, h)
   {
   }
 
-  DataImage::DataImage (ParentProcess* parent, const string& name, double x, double y, double w, double h)
+  DataImage::DataImage (CoreProcess* parent, const string& name, double x, double y, double w, double h)
   : DataImage(parent, name, nullptr, -1, x, y, w, h)
   {
   }
@@ -164,7 +164,7 @@ namespace djnn
     delete _watcher;
   }
 
-  FatChildProcess*
+  CoreProcess*
   DataImage::find_child_impl (const string& name)
   {
     auto * res = AbstractDataImage::find_child_impl (name);

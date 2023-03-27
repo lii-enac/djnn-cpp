@@ -23,7 +23,7 @@
 
 namespace djnn
 {
-  UI::UI (ParentProcess* parent_, FatProcess *f) : parent (parent_)
+  UI::UI (CoreProcess* parent_, FatProcess *f) : parent (parent_)
   {
     pickable = new BoolProperty (parent, "pickable", true);
     //FatProcess *update = UpdateDrawing::instance ()->get_damaged ();

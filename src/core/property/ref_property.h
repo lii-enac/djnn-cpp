@@ -21,7 +21,7 @@ namespace djnn {
 
   class RefProperty : public AbstractSimpleProperty {
   public:
-    RefProperty (ParentProcess* parent, const string& name, CoreProcess* v, unsigned int nm = notify_none) 
+    RefProperty (CoreProcess* parent, const string& name, CoreProcess* v, unsigned int nm = notify_none) 
     : AbstractSimpleProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }

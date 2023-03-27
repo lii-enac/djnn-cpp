@@ -36,7 +36,7 @@
 
 namespace djnn
 {
-  Texture::Texture (ParentProcess* parent, const string& name, const string& path) :
+  Texture::Texture (CoreProcess* parent, const string& name, const string& path) :
     AbstractStyle (parent, name),
     raw_props{.path=path},
     _cpath (nullptr)
@@ -60,7 +60,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   Texture::find_child_impl (const string& name)
   {
     auto * res = AbstractStyle::find_child_impl(name);

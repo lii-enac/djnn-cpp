@@ -6,7 +6,7 @@ namespace djnn {
   class PickOutline : public AbstractStyle
   {
   public:
-    PickOutline (ParentProcess* parent, const string& name) :
+    PickOutline (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~PickOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -18,7 +18,7 @@ namespace djnn {
   class PickFill : public AbstractStyle
   {
   public:
-    PickFill (ParentProcess* parent, const string& name) :
+    PickFill (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~PickFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -30,7 +30,7 @@ namespace djnn {
   class NoPickOutline : public AbstractStyle
   {
   public:
-    NoPickOutline (ParentProcess* parent, const string& name) :
+    NoPickOutline (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoPickOutline () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}
@@ -42,7 +42,7 @@ namespace djnn {
   class NoPickFill : public AbstractStyle
   {
   public:
-    NoPickFill (ParentProcess* parent, const string& name) :
+    NoPickFill (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
     virtual ~NoPickFill () {}
     void impl_activate () override { AbstractStyle::impl_activate ();}

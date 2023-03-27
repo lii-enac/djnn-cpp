@@ -32,7 +32,7 @@ namespace djnn
         so _branch_name has to be create with nullptr as _parent with a "fake" name (but really usefull in debug mode)
         then added to symtable with his real name
     */
-  Switch::Switch (ParentProcess* parent, const string& name, const string& initial) 
+  Switch::Switch (CoreProcess* parent, const string& name, const string& initial) 
   : Container (parent, name),
   _initial (initial),
   _branch_name (nullptr, "switch_state", initial),
@@ -122,7 +122,7 @@ namespace djnn
   }
 
   void
-  Switch::set_parent (ParentProcess* parent)
+  Switch::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){

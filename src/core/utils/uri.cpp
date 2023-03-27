@@ -25,7 +25,7 @@ namespace djnn
     uri_manager.insert (uris_t::value_type (prefix, p));
   }
 
-  FatChildProcess*
+  CoreProcess*
   URI::find_by_uri (const string& uri)
   {
     std::size_t found = uri.find("://");

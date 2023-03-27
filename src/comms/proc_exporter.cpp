@@ -57,7 +57,7 @@ namespace djnn
     p->add_sender (_src);
   }
 
-  Receiver::Receiver (ParentProcess* parent, const string& name, SOCKET fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
+  Receiver::Receiver (CoreProcess* parent, const string& name, SOCKET fd, CoreProcess* tree) : FatProcess (name), ExternalSource (name),
       _fd (fd),_send (this, "send"), _build_send (this, "build_send"), _tree (tree)
   {
   }
@@ -222,7 +222,7 @@ namespace djnn
       djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
   }
 
-  ProcExporter::ProcExporter (ParentProcess *parent, const string &name, CoreProcess *tree, int port) :
+  ProcExporter::ProcExporter (CoreProcess *parent, const string &name, CoreProcess *tree, int port) :
       FatProcess (name), ExternalSource (name), _fd (0), _port (port), _tree (tree)
   {
     finalize_construction (parent, name);

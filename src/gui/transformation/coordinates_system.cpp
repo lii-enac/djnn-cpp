@@ -51,7 +51,7 @@ namespace djnn
       
   }
 
-  ScreenToLocal::ScreenToLocal (ParentProcess* parent, const string& name, CoreProcess* shape) :
+  ScreenToLocal::ScreenToLocal (CoreProcess* parent, const string& name, CoreProcess* shape) :
   FatProcess (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
@@ -97,7 +97,7 @@ namespace djnn
   }
 
   void
-  ScreenToLocal::set_parent (ParentProcess* parent)
+  ScreenToLocal::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -146,7 +146,7 @@ namespace djnn
       
   }
 
-  LocalToScreen::LocalToScreen (ParentProcess* parent, const string& name, CoreProcess* shape) :
+  LocalToScreen::LocalToScreen (CoreProcess* parent, const string& name, CoreProcess* shape) :
   FatProcess (name)
   {
     _shape = dynamic_cast<AbstractGShape*> (shape);
@@ -190,7 +190,7 @@ namespace djnn
   }
 
   void
-  LocalToScreen::set_parent (ParentProcess* parent)
+  LocalToScreen::set_parent (CoreProcess* parent)
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {

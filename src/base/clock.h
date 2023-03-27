@@ -33,17 +33,17 @@ namespace djnn
     class ClockUpdateAction : public Action
     {
     public:
-      ClockUpdateAction (ParentProcess* parent, const string& name) :
+      ClockUpdateAction (CoreProcess* parent, const string& name) :
         Action (parent, name){};
     
       virtual ~ClockUpdateAction () {}
       void impl_activate () override { ((Clock*)get_parent())->update_period (); }
     };
   public:
-    Clock (ParentProcess* parent, const string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
-    Clock (ParentProcess* parent, const string& n, int period = 1000);
+    Clock (CoreProcess* parent, const string& n, std::chrono::milliseconds period = std::chrono::seconds(1));
+    Clock (CoreProcess* parent, const string& n, int period = 1000);
 #if DJNN_USE_BOOST_CHRONO
-    Clock (ParentProcess* parent, const string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
+    Clock (CoreProcess* parent, const string& n, boost::chrono::milliseconds period = boost::chrono::milliseconds(1000));
 #endif
     virtual ~Clock ();
 

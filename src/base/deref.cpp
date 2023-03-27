@@ -20,7 +20,7 @@
 
 namespace djnn
 {
-  AbstractDeref::AbstractDeref (ParentProcess *parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
+  AbstractDeref::AbstractDeref (CoreProcess *parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : FatProcess (name),
   _path (this, "path", path),
   _action (this, "action"),
@@ -79,7 +79,7 @@ namespace djnn
   }
 
   void
-  AbstractDeref::set_parent (ParentProcess* parent)
+  AbstractDeref::set_parent (CoreProcess* parent)
   {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()) {
@@ -100,7 +100,7 @@ namespace djnn
     update_src ();
   }
 
-  Deref::Deref (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
+  Deref::Deref (CoreProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _activation (this, "activation"),
     _src (nullptr)
@@ -140,7 +140,7 @@ namespace djnn
 
 
 
-  DerefProperty::DerefProperty (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
+  DerefProperty::DerefProperty (CoreProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
   _src (nullptr)
   {
@@ -160,7 +160,7 @@ namespace djnn
 
 
 /*
-  DerefString::DerefString (ParentProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
+  DerefString::DerefString (CoreProcess* parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : AbstractDeref (parent, name, ref, path, dir),
     _value (this, "value", ""),
   _src (nullptr)
@@ -205,7 +205,7 @@ namespace djnn
     }
   }
 
-  DerefDouble::DerefDouble (ParentProcess* parent, const string &name, CoreProcess *ref, const string &path, djnn_dir_t dir) :
+  DerefDouble::DerefDouble (CoreProcess* parent, const string &name, CoreProcess *ref, const string &path, djnn_dir_t dir) :
       AbstractDeref (parent, name, ref, path, dir),
       _value (this, "value", 0),
       _src (nullptr)

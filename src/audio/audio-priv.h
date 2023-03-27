@@ -12,12 +12,12 @@ namespace djnn {
 		class GainAction : public Action
 	    {
 	    public:
-	      GainAction (ParentProcess* parent, const string& name) : Action (parent, name) {};
+	      GainAction (CoreProcess* parent, const string& name) : Action (parent, name) {};
 	      virtual ~GainAction () {}
 	      void impl_activate () override { ((AudioListener*)get_parent())->update_gain (); }
 	    };
 	public:
-		AudioListener (ParentProcess* parent, const string& name);
+		AudioListener (CoreProcess* parent, const string& name);
 		DoubleProperty* gain () { return &_gain; }
 
 		void impl_activate () override {}

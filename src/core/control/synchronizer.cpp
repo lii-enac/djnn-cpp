@@ -22,7 +22,7 @@ namespace djnn
 {
   
 
-  Synchronizer::Init::Init(Synchronizer * s, ParentProcess* parent, const string& name, CoreProcess* dst, const string&  dspec)
+  Synchronizer::Init::Init(Synchronizer * s, CoreProcess* parent, const string& name, CoreProcess* dst, const string&  dspec)
   {
     if (dst == nullptr) {
       error (s, "dst argument cannot be null in synchronizer creation (" + s->get_name () + ", " + dspec + ")");
@@ -35,7 +35,7 @@ namespace djnn
     }
   }
 
-  Synchronizer::Synchronizer (ParentProcess* parent, const string& name, CoreProcess* dst, const string&  dspec)
+  Synchronizer::Synchronizer (CoreProcess* parent, const string& name, CoreProcess* dst, const string&  dspec)
   :
     FatProcess (name),
     _dst(nullptr),
@@ -107,7 +107,7 @@ namespace djnn
   }
 
   void
-  Synchronizer::set_parent (ParentProcess* parent) {
+  Synchronizer::set_parent (CoreProcess* parent) {
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent () && _dst) {
       remove_state_dependency (get_parent (), &_action);

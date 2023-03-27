@@ -22,7 +22,7 @@ namespace djnn {
   class GraphEdgeAdder : public FatProcess
   {
   public:
-    GraphEdgeAdder (ParentProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst);
+    GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst);
     virtual ~GraphEdgeAdder ();
     void impl_activate () override {};
     void impl_deactivate () override {}

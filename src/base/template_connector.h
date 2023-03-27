@@ -39,7 +39,7 @@ namespace djnn {
       // no need to add edge to graph, assignment already did it
     }
     
-    TCoreConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
+    TCoreConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : TCoreConnector (src, dst, copy_on_activation)
     {
       finalize_construction (parent, name);
@@ -70,7 +70,7 @@ public:
       // no need to add edge to graph, assignment already did it
     }
     
-    TCorePausedConnector (ParentProcess* parent, const string& name, X* src, Y* dst)
+    TCorePausedConnector (CoreProcess* parent, const string& name, X* src, Y* dst)
     : TCorePausedConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -100,7 +100,7 @@ public:
       // no need to add edge to graph, assignment already did it
     }
     
-    TCoreLazyConnector (ParentProcess* parent, const string& name, X* src, Y* dst)
+    TCoreLazyConnector (CoreProcess* parent, const string& name, X* src, Y* dst)
     : TCoreLazyConnector (src, dst)
     {
       finalize_construction (parent, name);
@@ -124,7 +124,7 @@ public:
   class TConnector : public FatProcess
   {
   public:
-    TConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
+    TConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _assignment (src, dst, false)
     , _binding (src, &_assignment)
@@ -135,7 +135,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    TConnector (ParentProcess* parent, const string& name,
+    TConnector (CoreProcess* parent, const string& name,
                    X* src, const string& sspec,
                    Y* dst, const string& dspec,
                    bool copy_on_activation=true)
@@ -161,7 +161,7 @@ public:
   class TPausedConnector : public FatProcess
   {
   public:
-    TPausedConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
+    TPausedConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _paused_assignment (src, dst, false)
     , _binding (src, &_paused_assignment)
@@ -172,7 +172,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    TPausedConnector (ParentProcess* parent, const string& name,
+    TPausedConnector (CoreProcess* parent, const string& name,
                    X* src, const string& sspec,
                    Y* dst, const string& dspec)
     : TPausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
@@ -196,7 +196,7 @@ public:
   class TLazyConnector : public FatProcess
   {
   public:
-    TLazyConnector (ParentProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
+    TLazyConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
     : FatProcess (name)
     , _lazy_assignment (src, dst, false)
     , _binding (src, &_lazy_assignment)
@@ -207,7 +207,7 @@ public:
     }
 
     // for legacy reason, to get rid of?
-    TLazyConnector (ParentProcess* parent, const string& name,
+    TLazyConnector (CoreProcess* parent, const string& name,
                    X* src, const string& sspec,
                    Y* dst, const string& dspec)
     : TLazyConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
@@ -228,8 +228,8 @@ public:
   };
 
   template <typename X, typename Y>
-  void TMultiConnector (ParentProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation=true);
+  void TMultiConnector (CoreProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation=true);
   
   template <typename X, typename Y>
-  void TMultiConnector (ParentProcess* parent, X* src, Y* dst, bool copy_on_activation=true);
+  void TMultiConnector (CoreProcess* parent, X* src, Y* dst, bool copy_on_activation=true);
 }

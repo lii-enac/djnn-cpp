@@ -30,13 +30,13 @@ namespace djnn
   class AbstractRotation : public AbstractTransformation
   {
   public:
-    AbstractRotation (ParentProcess* parent, const string& name, double a, double cx, double cy);
+    AbstractRotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     virtual ~AbstractRotation ();
     
     
     void get_properties_values (double& a, double& cx, double& cy);
     const vector<string>& get_properties_name () const override;
-    virtual FatChildProcess* find_child_impl (const string&) override;
+    virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
 		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }
 		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child_impl ("cy"); }

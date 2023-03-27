@@ -26,7 +26,7 @@
 namespace djnn
 {
 
-  RectangleClip::RectangleClip (ParentProcess* parent, const string& name, double x, double y, double width, double height) :
+  RectangleClip::RectangleClip (CoreProcess* parent, const string& name, double x, double y, double width, double height) :
     AbstractPropRectangleClip (parent, name, x, y, width, height)
   {
     finalize_construction (parent, name);

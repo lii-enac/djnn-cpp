@@ -38,7 +38,7 @@ namespace djnn
      class IvyOutAction : public Action
     {
     public:
-      IvyOutAction (ParentProcess* parent, const string& name, TextProperty* out) :
+      IvyOutAction (CoreProcess* parent, const string& name, TextProperty* out) :
       Action (parent, name), _out (out) { finalize_construction (parent, name); } 
       virtual ~IvyOutAction () {}
       //void coupling_activation_hook () override;
@@ -59,7 +59,7 @@ namespace djnn
       regexp_keypair_t* keypair;
     };
 
-    IvyAccess (ParentProcess* parent, const string& name, 
+    IvyAccess (CoreProcess* parent, const string& name, 
       const string& bus="224.1.2.3:2010", const string& appname="NO_NAME", const string& ready="READY", bool isModel=false);
     
     virtual ~IvyAccess ();
@@ -69,12 +69,12 @@ namespace djnn
     // make it public
     bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
 
-    FatChildProcess* find_child_impl (const string&) override;
+    CoreProcess* find_child_impl (const string&) override;
 
   protected:
     void impl_activate () override;
     void impl_deactivate () override;
-    //void set_parent (ParentProcess* parent) override;
+    //void set_parent (CoreProcess* parent) override;
 
   private:
     string _bus;

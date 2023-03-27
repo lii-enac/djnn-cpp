@@ -35,7 +35,7 @@
 
 namespace djnn
 {
-  AbstractVolume::AbstractVolume (ParentProcess* parent, const string& name, double volume) :
+  AbstractVolume::AbstractVolume (CoreProcess* parent, const string& name, double volume) :
     AbstractAudioStyle (parent, name),
     raw_props{.volume=volume},
     _cvolume (nullptr)
@@ -59,7 +59,7 @@ namespace djnn
     }
   }
  
-  FatChildProcess*
+  CoreProcess*
   AbstractVolume::find_child_impl (const string& name)
   {
     auto * res = AbstractAudioStyle::find_child_impl(name);
