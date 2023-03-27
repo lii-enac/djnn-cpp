@@ -423,4 +423,7 @@ namespace djnn {
   inline void activate (CoreProcess* p) { p->activate (); }
   inline void deactivate (CoreProcess* p) { p->deactivate (); }
 
+  // to be removed
+  using FatChildProcess = CoreProcess;
+  using ParentProcess = CoreProcess;
 }
