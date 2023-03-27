@@ -338,6 +338,13 @@ namespace djnn
 #endif
 
 
+
+  // TODO: explain what EXECUTION_ROUND is
+  static int EXECUTION_ROUND = 0;
+
+  void
+  Graph::exec ()
+  {
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
