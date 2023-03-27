@@ -261,8 +261,8 @@ namespace djnn
     // check if c is already in the graph
     for (auto v : _output_nodes) {
       if (v->get_process () == c)
-        //return;
-        assert (0); // programming error
+        return; // what about multiple gui windows?
+        // assert (0); // programming error
     }
     auto * v = new Vertex (c);
     _output_nodes.push_back (v);
@@ -483,7 +483,8 @@ namespace djnn
         auto* p = v->get_process ();
 
 #ifndef DJNN_NO_DEBUG
-        count_activation++;
+        // detect cycles
+        count_activation += 1;
 
         if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE) {
           auto it = _vertex_already_activated.find(v);
@@ -554,10 +555,12 @@ namespace djnn
       if (!_sorted && !_activation_triggers_to_sort.empty ()) {
         sort (nullptr);
         is_end = false;
-      } else if (!_sorted && v) {
-        sort (v);
-        is_end = false;
       }
+      else
+        if (!_sorted && v) {
+          sort (v);
+          is_end = false;
+        }
     }
 #endif
     
@@ -682,7 +685,7 @@ rmt_EndCPUSample();
 
     // TODO: explanation here
     if (!_activation_triggers_to_sort.empty ()) {
-      for (auto v : _activation_triggers_to_sort) {
+      for (auto v: _activation_triggers_to_sort) {
         if (v->get_execution_round () < EXECUTION_ROUND)
           traverse_depth_first (v);
       }
@@ -696,9 +699,7 @@ rmt_EndCPUSample();
 #if !_EXEC_FULL_ORDERED_VERTICES
     // sorted_index
     int index = 0 ;
-    for (auto v : _ordered_vertices) {
-      v->set_sorted_index (index++);
-    }
+    for (auto v: _ordered_vertices) v->set_sorted_index (index++);
 
     std::sort (_activation_deque.begin (), _activation_deque.end (),
       [](const Vertex* v1, const Vertex *v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
@@ -742,12 +743,9 @@ rmt_EndCPUSample();
     // skip invalid vertex
     //FIXME: we should not use this code anymore - check with coverage result
     if (v->is_invalid ()) {
-      warning ( nullptr, " Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
-#ifndef DJNN_NO_DEBUG
-      cerr << "vertex: " << v << "- v->process " << v->get_process ();
-#endif
-      v->set_execution_round (EXECUTION_ROUND);
-      return;
+      warning (v->get_process(), "useful code after all!!! Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+      // v->set_execution_round (EXECUTION_ROUND);
+      // return;
     }
 
     if ((v->get_process ()->get_process_type() == PROPERTY_T)) {
