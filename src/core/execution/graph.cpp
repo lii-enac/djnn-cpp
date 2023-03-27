@@ -329,26 +329,14 @@ namespace djnn
   // -----------------------------------------------------------------------
   // Graph behavior: exec, sort, traverse_depth_first
 
-  // TODO: explain what EXECUTION_ROUND is
-  static int EXECUTION_ROUND = 0;
+#ifndef DJNN_NO_DEBUG
+  void 
+  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v);
 
+  static string 
+  print_process_full_name (CoreProcess *p);
+#endif
 
-  // -----------------------------------------------------------------------
-
-  void
-  Graph::exec ()
-  {
-
-rmt_BeginCPUSample(Graph_exec, RMTSF_None);
-
-    #if _DEBUG_GRAPH_INSERT_TIME
-    nb_insert_by_graph_exec = 0;
-    acc_insert_time_by_graph_exec = 0;
-    #endif
-
-    #if _DEBUG_SEE_GRAPH_INFO_PREF
-    std::chrono::steady_clock::time_point begin_GRAPH_EXEC = std::chrono::steady_clock::now();
-    #endif
 
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have a vertex
