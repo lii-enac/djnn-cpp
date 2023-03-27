@@ -357,8 +357,6 @@ namespace djnn {
     virtual void notify_change ( unsigned int /*notify_mask_*/ ); // pseudo, graph-less coupling for efficiency reasons in gui
 
     // tree, component, symtable
-    virtual void finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state=nullptr) override; // to be moved in ChildProcess
-
     virtual void      add_child (FatChildProcess* c, const string& name) override;
     virtual void   remove_child (FatChildProcess* c) override;
     virtual void   remove_child (const string& name) override;

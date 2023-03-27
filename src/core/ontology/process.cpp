@@ -249,12 +249,6 @@ namespace djnn
     }
   }
 
-  void
-  FatProcess::finalize_construction (ParentProcess* parent, const string& name, CoreProcess* state_dep) /* called by SubFatProcess to link to parent */
-  {
-    ChildProcess::finalize_construction (parent, name, state_dep);
-  }
-
   
   // -----------------------------------------------------------------------
   // management
