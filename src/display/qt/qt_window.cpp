@@ -148,14 +148,18 @@ namespace djnn
     opacity = opacity * 255;
 
     if (isFrameless)
-      _qwidget->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint);
+      _qwidget->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     else
       _qwidget->setWindowFlags(Qt::Widget);
 
+#ifdef _WIN32
+    if (opacity < 255)
+      _qwidget->setAttribute(Qt::WA_TranslucentBackground, true);
+#endif 
     QString str = QString("background-color: rgba(%1, %2, %3, %4)").arg(QString::number(r), QString::number(g), QString::number(b), QString::number(opacity));
     _qwidget->setStyleSheet(str);
 
-    _qwidget->show();  // if we want it interactive
+    //_qwidget->show();  // if we want it interactive but not advise
   }
 
   void
