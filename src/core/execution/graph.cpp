@@ -67,8 +67,8 @@ namespace djnn
   // -----------------------------------------------------------------------
   // Vertex
 
-  Vertex::Vertex (CoreProcess* p) :
-      _process (p), _execution_round (0), _order_stamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in (0)
+  Vertex::Vertex (CoreProcess* p)
+  : _process (p), _execution_round (0), _order_stamp (0), _sorted_index (-1), _is_invalid (false), _count_edges_in (0)
   {
   }
 
@@ -80,25 +80,22 @@ namespace djnn
   Vertex::add_edge (Vertex *dst) 
   { 
     /* 
-       NOTE : We must avoid duplicated edges in the _edges vector to prevent multiple activation at once.
+       NOTE : We must avoid duplicated edges in the _edges vector to prevent multiple activations in a single execution.
        _edges is a vector because the insert order is important and used in sorting (traverse_depth_first)
        we can't use std::set, std::unordered_set or map because it would not keep this order.
        BUT the find operation on std::vector O(n) is more complex than that of std::set O(log(n)) or std::unordered_set O(1)
-       so we add another _map_edges to manage duplicated info properly remove it when there is no such an edge anymore
+       so we add another _map_edges to manage duplicated info properly and remove it when there is no such an edge anymore
        FIXME?: maybe adapt the sort algorithm to use set or better unordered_set OR maybe replace current vector by _map_edges
     */
 
     auto edge = _map_edges.find (dst);
  
-    if (edge == _map_edges.end ()) {
-      // it's a NEW edge
+    if (edge == _map_edges.end ()) {  // it's a NEW edge
       _edges.push_back (dst);
       dst->_count_edges_in += 1;
       _map_edges[dst] = 1;
-      // cerr << "add_edge : " << "\t between " << get_hierarchy_name(get_process())  << " - " << get_hierarchy_name(dst->get_process()) << endl;
     }
-    else
-      // it's a duplicate
+    else                              // it's a duplicate
       edge->second += 1;
   }
 
@@ -141,18 +138,12 @@ namespace djnn
   Graph&
   Graph::instance ()
   {
-    //static std::atomic_flag onceFlag = ATOMIC_FLAG_INIT;
-    //if(!onceFlag.test_and_set()) {
-    if (!_instance) {
-      _instance = new Graph ();
-    }
-
+    if (!_instance) _instance = new Graph ();
     return *(_instance);
-    //return _instance;
   }
 
-  Graph::Graph () :
-      _cur_stamp (0), _sorted (false)
+  Graph::Graph ()
+  : _cur_stamp (0), _sorted (false)
   {
   }
 
@@ -165,17 +156,17 @@ namespace djnn
   void
   Graph::clear ()
   {
-    /* nothing to delete because vertices are own by _vertices */
+    /* nothing to delete because vertices are owned by _vertices */
     _ordered_vertices.clear ();
 
-    /* nothing to delete because vertices are own by _vertices */
+    /* nothing to delete because vertices are owned by _vertices */
     _activation_deque.clear ();
 
     /* delete vertices from _vertices and clear */
     for (auto * v: _vertices) delete v;
     _vertices.clear ();
 
-    /* delete output_vertices from _outpur_nodes and clear */
+    /* delete output_vertices from _output_nodes and clear */
     for (auto * node: _output_nodes) delete node;
     _output_nodes.clear ();
   }
@@ -190,8 +181,7 @@ namespace djnn
     auto * v = new Vertex (c);
     _vertices.push_back (v);
     v->set_position_in_graph_vertices (_vertices.end ());
-    // adding a vertex keeps the global order, so do not invalidate it
-    //_sorted = false;
+    //_sorted = false; // adding a vertex keeps the global order, so do not invalidate it
     return v;
   }
 
@@ -261,18 +251,18 @@ namespace djnn
       p_dst->set_vertex (nullptr);
       delete vd;
     }
-
-    // removing an edge should not break the order, so do not invalidate it 
-    //_sorted = false;
+    
+    //_sorted = false; // removing an edge should not break the order, so do not invalidate it 
   }
 
   void
   Graph::add_output_node (CoreProcess* c)
   {
-    /* check if c is already in the graph */
+    // check if c is already in the graph
     for (auto v : _output_nodes) {
       if (v->get_process () == c)
-        return;
+        //return;
+        assert (0); // programming error
     }
     auto * v = new Vertex (c);
     _output_nodes.push_back (v);
@@ -289,7 +279,7 @@ namespace djnn
       for (auto it = new_end ; it != _output_nodes.end (); ++it)
         delete *it;
 
-      //erase from vector
+      // erase from vector
       _output_nodes.erase (new_end, _output_nodes.end ());
     }
   }
@@ -335,16 +325,9 @@ namespace djnn
     _activation_deque.clear ();
   }
 
+
   // -----------------------------------------------------------------------
   // Graph behavior: exec, sort, traverse_depth_first
-
-#ifndef DJNN_NO_DEBUG
-  void 
-  display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v);
-
-  static string 
-  print_process_full_name (CoreProcess *p);
-#endif
 
   // TODO: explain what EXECUTION_ROUND is
   static int EXECUTION_ROUND = 0;
@@ -772,17 +755,11 @@ rmt_EndCPUSample();
       return;
     }
 
-    if (false
-#ifndef DJNN_NO_OPTIM_NO_PROPERTIES_IN_PROCESS_VECTOR
-    // add vertex if it's not a property, as their activation does nothing
-    // the property order_stamp is taken into account anyway
-    || (v->get_process ()->get_process_type() != PROPERTY_T)
-#endif
-// #ifndef DJNN_NO_OPTIM_NO_SINGLE_DST_IN_PROCESS_VECTOR
-//     || (v->get_count_edges_in () > 1)
-// #endif
-    ) {
-      _ordered_vertices.push_back (v);
+    if ((v->get_process ()->get_process_type() == PROPERTY_T)) {
+      // don't put a property in the _vertices since there is no action in properties
+    }
+    else {
+      _ordered_vertices.push_back (v); // put anything else
     }
 
     v->set_execution_round (EXECUTION_ROUND);
