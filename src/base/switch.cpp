@@ -56,7 +56,7 @@ namespace djnn
   {
     if (get_parent ()) {
       // remove current state_dependency
-      remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), get_state_dependency ());
       // remove original state_dependency that may has changed
       // from _branch_name if the switch is a child of another fsm.state, switch.state ...
       // also do not exist when the switch is initialized with no parent.
@@ -126,10 +126,10 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-      remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), get_state_dependency ());
     }
     
-    add_state_dependency (parent, state_dependency ());
+    add_state_dependency (parent, get_state_dependency ());
 
     FatProcess::set_parent (parent);
   }

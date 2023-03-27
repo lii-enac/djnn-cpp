@@ -34,8 +34,8 @@ namespace djnn
 
     finalize_construction (parent, n);
 
-    /* and set state_dependency here AFTER setting the parent to "this" */
-    _gobj->set_state_dependency (this->state_dependency ());
+    /* and set get_state_dependency here AFTER setting the parent to "this" */
+    _gobj->set_state_dependency (this->get_state_dependency ());
   }
 
   Group::~Group ()

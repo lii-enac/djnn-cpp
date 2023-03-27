@@ -33,7 +33,7 @@ namespace djnn {
        * so they have to be deleted manually from destructor // FIXME: not done??
        */ 
       if (parent) {
-        set_state_dependency (parent->state_dependency ());
+        set_state_dependency (parent->get_state_dependency ());
         set_parent (parent);
       }
     }

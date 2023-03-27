@@ -49,7 +49,7 @@ namespace djnn
       s->add_container (this);
     }
     if (parent) {
-      set_state_dependency (parent->state_dependency());
+      set_state_dependency (parent->get_state_dependency());
     }
   }
 

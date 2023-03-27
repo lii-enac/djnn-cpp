@@ -241,7 +241,7 @@ namespace djnn
     if (parent) {
       // by default state_dep is nullptr so _state_dependency depends on parent->state_dependenncy)
       if (state_dep == nullptr) {
-        _state_dependency = parent->state_dependency ();
+        _state_dependency = parent->get_state_dependency ();
       } else {
         _state_dependency = state_dep;
         add_state_dependency (parent, _state_dependency);
@@ -430,8 +430,15 @@ namespace djnn
   void
   CoreProcess::schedule_delete ()
   {
-    warning(this, "'schedule delete' is deprecated, please use 'schedule_deletion instead");
+    warning(this, "'schedule_delete' is deprecated, please use 'schedule_deletion instead");
     Graph::instance().schedule_deletion (this);
+  }
+
+  CoreProcess*
+  CoreProcess::state_dependency  ()
+  {
+    warning(this, "'state_dependency' is deprecated, please use 'get_state_dependency instead");
+    return get_state_dependency ();
   }
 
   static
@@ -778,15 +785,15 @@ namespace djnn
   void
   add_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
-    if (p && parent && parent->state_dependency () != nullptr)
-      graph_add_edge (parent->state_dependency (), p); 
+    if (p && parent && parent->get_state_dependency () != nullptr)
+      graph_add_edge (parent->get_state_dependency (), p); 
   }
 
   void
   remove_state_dependency (ParentProcess* parent, CoreProcess *p)
   {
-    if (p && parent && parent->state_dependency () != nullptr)
-      graph_remove_edge (parent->state_dependency (), p);
+    if (p && parent && parent->get_state_dependency () != nullptr)
+      graph_remove_edge (parent->get_state_dependency (), p);
   }
 
 

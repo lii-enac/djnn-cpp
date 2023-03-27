@@ -119,16 +119,16 @@ namespace djnn
     graph_add_edge (_step, _step_action);
 
     _world_impl = PhysicsBackend::instance ()->create_world (this, x, y, z);
-    if (get_parent () && get_parent ()->state_dependency () != nullptr)
-      graph_add_edge (get_parent ()->state_dependency (), _step_action);
+    if (get_parent () && get_parent ()->get_state_dependency () != nullptr)
+      graph_add_edge (get_parent ()->get_state_dependency (), _step_action);
 
     finalize_construction (parent, name);
   }
 
   World::~World ()
   {
-    if (get_parent () && get_parent ()->state_dependency () != nullptr)
-      graph_remove_edge (get_parent ()->state_dependency (), _step_action);
+    if (get_parent () && get_parent ()->get_state_dependency () != nullptr)
+      graph_remove_edge (get_parent ()->get_state_dependency (), _step_action);
     graph_remove_edge (_step, _step_action);
     delete _cstep;
     delete _step_action;

@@ -150,9 +150,9 @@ namespace djnn {
     virtual const FatProcess* get_parent() const { return nullptr; }
     virtual              void set_parent (ParentProcess* p) {}
 
-    virtual CoreProcess* state_dependency () { return nullptr; } // for control flow change and execution scheduling
+    virtual CoreProcess* get_state_dependency () { return nullptr; } // for control flow change and execution scheduling
     virtual         void set_state_dependency (CoreProcess* s) {}
-
+    virtual CoreProcess* state_dependency (); // deprecated
 
      // children, tree, component, symtable
     virtual void      add_child (FatChildProcess* c, const string& name) {}
@@ -340,7 +340,7 @@ namespace djnn {
     FatProcess*  get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
 
-    virtual CoreProcess* state_dependency () override { return _state_dependency; } // for control flow change and execution scheduling
+    virtual CoreProcess* get_state_dependency () override { return _state_dependency; } // for control flow change and execution scheduling
     virtual void set_state_dependency (CoreProcess* s) override { _state_dependency = s; }
 
   protected:

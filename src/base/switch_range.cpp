@@ -95,7 +95,7 @@ namespace djnn
   SwitchRange::~SwitchRange ()
   {
     if (get_parent ()){
-      remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), get_state_dependency ());
     }
 
     /* note:
@@ -116,10 +116,10 @@ namespace djnn
   { 
     /* in case of re-parenting remove edge dependency in graph */
     if (get_parent ()){
-      remove_state_dependency (get_parent (), state_dependency ());
+      remove_state_dependency (get_parent (), get_state_dependency ());
     }
 
-    add_state_dependency (parent, state_dependency ());
+    add_state_dependency (parent, get_state_dependency ());
     FatProcess::set_parent (parent); 
   }
 
