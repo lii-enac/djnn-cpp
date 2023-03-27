@@ -55,7 +55,7 @@ namespace djnn
     switch (src_flag) {
       case   ACTIVATION: src->add_activation_coupling (this); break;
       case DEACTIVATION: src->add_deactivation_coupling (this); break;
-      default: warning (src, string("wrong activation flag in coupling creation ") + src->get_debug_name ()); break;
+      default: warning (src, "wrong activation flag in coupling creation"); break;
     }
     replace_edge (src, dst, immediate_propagation);
 
