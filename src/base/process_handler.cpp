@@ -67,6 +67,7 @@ namespace djnn
       _s_rm_all (this, "rm_all"),
       _add (this, "add", nullptr),
       _remove (this, "rm", nullptr),
+      _size (this, "size", 0),
       _add_one (this, "add_one_action"),
       _rm_one (this, "remove_one_action"),
       _rm_all (this, "remove_all_action"),
@@ -74,7 +75,9 @@ namespace djnn
       _c_rm (&_remove, ACTIVATION, &_rm_one, ACTIVATION),
       _c_rm_all (&_s_rm_all, ACTIVATION, &_rm_all, ACTIVATION)
   {
-
+    graph_add_edge (&_add_one, &_size);
+    graph_add_edge (&_rm_one, &_size);
+    graph_add_edge (&_rm_all, &_size);
     finalize_construction (parent, name);
   }
 
@@ -85,6 +88,9 @@ namespace djnn
       remove_state_dependency (get_parent (), &_rm_one);
       remove_state_dependency (get_parent (), &_add_one);
     }
+    graph_remove_edge (&_add_one, &_size);
+    graph_remove_edge (&_rm_one, &_size);
+    graph_remove_edge (&_rm_all, &_size);
   }
 
   void
@@ -124,7 +130,7 @@ namespace djnn
   {
     auto *to_add = _add.get_value ();
     if (to_add) {
-      _list.push_back (to_add);
+      add_one (to_add);
     }
   }
 
@@ -133,6 +139,7 @@ namespace djnn
   {
     if (p) {
       _list.push_back (p);
+      _size.set_value ((int)_list.size (), true);
     }
   }
 
@@ -141,7 +148,7 @@ namespace djnn
   {
     auto *to_remove = _remove.get_value ();
     if (to_remove)
-      _list.erase(std::remove (_list.begin (), _list.end (), to_remove), _list.end ());
+      remove_one (to_remove);
   }
 
   void
@@ -149,6 +156,7 @@ namespace djnn
   {
     if (p) {
       _list.erase(std::remove (_list.begin (), _list.end (), p), _list.end ());
+      _size.set_value ((int)_list.size (), true);
     }
   }
 
@@ -156,6 +164,7 @@ namespace djnn
   ProcessCollector::remove_all ()
   {
     _list.clear ();
+    _size.set_value (0, true);
   }
 
   CollectionDeleter::CollectionDeleter (CoreProcess *parent, const string& name) :

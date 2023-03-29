@@ -20,6 +20,7 @@
 #include "core/control/spike.h"
 #include "core/property/ref_property.h"
 #include "core/property/text_property.h"
+#include "core/property/int_property.h"
 #include "core/property/double_property.h"
 
 namespace djnn
@@ -187,6 +188,7 @@ namespace djnn
     Spike _s_rm_all;
     RefProperty _add;
     RefProperty _remove;
+    IntProperty _size;
     vector<CoreProcess*> _list;
     AddOneAction _add_one;
     RemoveOneAction _rm_one;
