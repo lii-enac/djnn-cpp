@@ -17,6 +17,7 @@
 #include "abstract_property.h"
 #include "s_to_p.h"
 
+#include "core/utils/error.h"
 namespace djnn {
 
     template <typename X>
