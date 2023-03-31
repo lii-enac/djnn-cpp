@@ -30,15 +30,16 @@ namespace djnn {
     }
   }
   CoreProcess*
-  Binding::impl_clone (map<CoreProcess*, CoreProcess*> &origs_clones)
+  Binding::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     // check if it already exists in origs_clones? returns it if so?
     auto sit = origs_clones.find (_b.get_src ());
     auto dit = origs_clones.find (_b.get_dst ());
-    auto s = sit != origs_clones.end () ? sit->second : _b.get_src (); // the source of the binding can be outside the cloned subtree
-    auto d = dit != origs_clones.end () ? dit->second : _b.get_dst (); // the destination of the binding can be outside the cloned subtree
-    auto res = new Binding (nullptr, get_name (), s, _b.get_src_flag (), d,
-                            _b.get_dst_flag ());
+    auto s = sit != origs_clones.end () ? sit->second : const_cast<CoreProcess*>(_b.get_src ()); // the source of the binding can be outside the cloned subtree
+    auto d = dit != origs_clones.end () ? dit->second : const_cast<CoreProcess*>(_b.get_dst ()); // the destination of the binding can be outside the cloned subtree
+    auto res = new Binding (nullptr, get_name (),
+                  s, _b.get_src_flag (),
+                  d, _b.get_dst_flag ());
     origs_clones[this] = res;
     return res;
   }

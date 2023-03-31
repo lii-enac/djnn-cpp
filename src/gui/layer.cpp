@@ -109,7 +109,7 @@ namespace djnn
   }
 
   Layer*
-  Layer::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Layer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*Layer* newg = new Layer (nullptr, get_name ());
 

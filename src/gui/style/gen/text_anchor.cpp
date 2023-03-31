@@ -147,7 +147,7 @@ namespace djnn
 
   
   TextAnchor*
-  TextAnchor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  TextAnchor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new TextAnchor (nullptr, get_name (), raw_props.anchor);
     origs_clones[this] = res;

@@ -98,6 +98,16 @@ namespace djnn
     }
   }
 
+  CoreProcess*
+  Timer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
+    auto res = new Timer (nullptr, get_name (), _delay.get_value (), is_model ());
+    origs_clones[this] = res;
+    origs_clones[&_delay] = res->get_delay ();
+    origs_clones[&_end] = res->get_end ();
+    return res;
+  }
+
 #ifndef DJNN_NO_SERIALIZE
   void
   Timer::serialize (const string& type) {

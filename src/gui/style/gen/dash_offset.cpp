@@ -147,7 +147,7 @@ namespace djnn
 
   
   DashOffset*
-  DashOffset::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  DashOffset::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new DashOffset (nullptr, get_name (), raw_props.offset);
     origs_clones[this] = res;

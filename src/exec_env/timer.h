@@ -56,13 +56,7 @@ namespace djnn
     virtual ~Timer ();
     CoreProcess* get_delay () { return &_delay; }
     CoreProcess* get_end () { return &_end; }
-    CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override {
-      auto res = new Timer (nullptr, get_name (), _delay.get_value (), is_model ());
-      origs_clones[this] = res;
-      origs_clones[&_delay] = res->get_delay ();
-      origs_clones[&_end] = res->get_end ();
-      return res;
-    }
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
     // djnn_internal::Time::Timer
     virtual void do_it(const djnn_internal::Time::duration& actualduration) override;

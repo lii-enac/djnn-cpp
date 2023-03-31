@@ -31,7 +31,7 @@ namespace djnn
   }
 
   Ellipse*
-  Ellipse::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Ellipse::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
     origs_clones[this] = res;

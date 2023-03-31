@@ -45,8 +45,10 @@ namespace djnn {
 
     CoreProcess * get_src() { return _c.get_src (); } // delegate to coupling to save space
     CoreProcess * get_dst() { return _c.get_dst (); }
-    activation_flag_e get_src_flag () { return _c.get_src_activation_flag (); }
-    activation_flag_e get_dst_flag () { return _c.get_dst_activation_flag (); }
+    const CoreProcess * get_src() const { return _c.get_src (); }
+    const CoreProcess * get_dst() const { return _c.get_dst (); }
+    activation_flag_e get_src_flag () const { return _c.get_src_activation_flag (); }
+    activation_flag_e get_dst_flag () const { return _c.get_dst_activation_flag (); }
 
   protected:
     void impl_activate   () override { _c.enable  (); }
@@ -70,7 +72,8 @@ namespace djnn {
   {
   public:
     Binding (CoreProcess* parent, const string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-    : FatProcess (name), _b (src, src_flag, dst, dst_flag)
+    : FatProcess (name),
+    _b (src, src_flag, dst, dst_flag)
     {
       finalize_construction (parent, name);
     }
@@ -100,7 +103,7 @@ namespace djnn {
 
     virtual ~Binding();
     void set_parent (CoreProcess* parent) override;
-    CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
 
     void impl_activate   () override { _b.impl_activate (); }

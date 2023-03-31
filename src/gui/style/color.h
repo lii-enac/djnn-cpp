@@ -77,7 +77,7 @@ namespace djnn
         AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~FillColor () {}
     void draw () override;
-    FillColor* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FillColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class OutlineColor : public AbstractColor
@@ -89,7 +89,7 @@ namespace djnn
          AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~OutlineColor () {}
     void draw () override;
-    OutlineColor* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    OutlineColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class RGBToLCHConverter : public FatProcess

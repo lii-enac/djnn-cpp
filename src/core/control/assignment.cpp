@@ -135,6 +135,8 @@ namespace djnn
     }
     src_t* get_src () override { return _src; }
     dst_t* get_dst () override { return _dst; }
+    const src_t* get_src () const override { return _src; }
+    const dst_t* get_dst () const override { return _dst; }
     src_t* _src;
     dst_t* _dst;
   };
@@ -370,7 +372,7 @@ namespace djnn
     _ttassignment->perform_action (_propagate, _lazy);
   }
 
-  Assignment* Assignment::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Assignment* Assignment::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto sit = origs_clones.find (_src);
     auto dit = origs_clones.find (_dst);

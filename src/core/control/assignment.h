@@ -30,6 +30,8 @@ namespace djnn {
     virtual void perform_action (double propagate = true, double lazy = false) = 0;
     virtual CoreProcess* get_src () = 0;
     virtual CoreProcess* get_dst () = 0;
+    virtual const CoreProcess* get_src () const = 0;
+    virtual const CoreProcess* get_dst () const = 0;
   };
 
   TTAssignment * build_ttassignment (CoreProcess* src, CoreProcess* dst);
@@ -63,6 +65,8 @@ namespace djnn {
 
     CoreProcess* get_src () { return _ttassignment->get_src (); }
     CoreProcess* get_dst () { return _ttassignment->get_dst (); }
+    const CoreProcess* get_src () const { return _ttassignment->get_src (); }
+    const CoreProcess* get_dst () const { return _ttassignment->get_dst (); }
     virtual void perform_action () = 0;
     
   protected:
@@ -165,7 +169,7 @@ public:
       FatProcess::set_parent (parent);
     }
 
-    Assignment* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    Assignment* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     // for legacy reason, to get rid of?
     Assignment (CoreProcess* parent, const string& name,
                   CoreProcess* src, const string& sspec,
@@ -181,8 +185,10 @@ public:
 
     void perform_action ();
 
-    CoreProcess* get_src() { return _src; }
-    CoreProcess* get_dst() { return _dst; }
+    CoreProcess* get_src () { return _src; }
+    CoreProcess* get_dst () { return _dst; }
+    const CoreProcess* get_src () const { return _src; }
+    const CoreProcess* get_dst () const { return _dst; }
 
   private:
     CoreProcess *_src;

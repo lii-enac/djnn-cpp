@@ -124,7 +124,7 @@ namespace djnn {
   }
 
   PolyPoint*
-  PolyPoint::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) {
+  PolyPoint::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const {
     auto res = new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
@@ -213,7 +213,7 @@ namespace djnn {
   }
 
   Poly*
-  Poly::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Poly::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {  
     /*Poly* newp = new Poly (nullptr, get_name (), _closed);
     for (auto p: _points->children ()) {

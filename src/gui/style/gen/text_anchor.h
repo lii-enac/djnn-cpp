@@ -33,7 +33,7 @@ namespace djnn
     TextAnchor (CoreProcess* parent, const string& name, int anchor);
     virtual ~TextAnchor ();
     void draw () override;
-    TextAnchor* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    TextAnchor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     void get_properties_values (int& anchor);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;

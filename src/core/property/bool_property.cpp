@@ -130,7 +130,7 @@ namespace djnn
 #endif
 
   FatProcess*
-  BoolProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  BoolProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new BoolProperty (nullptr, get_name (), get_value());
     origs_clones[this] = res;
@@ -138,10 +138,9 @@ namespace djnn
   }
 
   FatProcess*
-  BoolPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  BoolPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
-    auto res = new BoolPropertyProxy (nullptr, get_name (), get_ref_value(), _notify_mask);
-    origs_clones[this] = res;
-    return res;
+    error (this, "*PropertyProxy should not be cloned");
+    return nullptr;
   }
 }

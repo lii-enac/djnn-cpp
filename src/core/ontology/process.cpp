@@ -801,14 +801,14 @@ namespace djnn
   // clone, serialize, dump
 
   CoreProcess*
-  CoreProcess::clone ()
+  CoreProcess::clone () const
   {
-    map<CoreProcess*, CoreProcess*> origs_clones;
+    map<const CoreProcess*, CoreProcess*> origs_clones;
     return impl_clone (origs_clones);
   };
 
   CoreProcess*
-  CoreProcess::impl_clone (std::map<CoreProcess*, CoreProcess*>& origs_clones)
+  CoreProcess::impl_clone (std::map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;

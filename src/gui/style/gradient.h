@@ -39,7 +39,7 @@ namespace djnn {
     GradientStop (CoreProcess* parent, const string& name, double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
     void draw () override;
-    GradientStop* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    GradientStop* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class LinearGradient : public AbstractPropLinearGradient
@@ -52,7 +52,7 @@ namespace djnn {
     LinearGradient (CoreProcess* parent, const string& name, LinearGradient *lg);
     virtual ~LinearGradient ();
     void draw () override;
-    LinearGradient* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    LinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
 
@@ -64,7 +64,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;
-    RefLinearGradient* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    RefLinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   private:
     void activate_children ();
     LinearGradient *_lg;
@@ -82,7 +82,7 @@ namespace djnn {
     RadialGradient (CoreProcess* parent, const string& name, RadialGradient *rg);
     virtual ~RadialGradient ();
     void draw () override;
-    RadialGradient* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    RadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
   
 
@@ -94,7 +94,7 @@ namespace djnn {
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;
-    RefRadialGradient* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    RefRadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   private:
     void activate_children ();
     RadialGradient* _rg;

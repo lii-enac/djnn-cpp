@@ -31,7 +31,7 @@ namespace djnn
   }
 
   Circle*
-  Circle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Circle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);
     origs_clones[this] = res;

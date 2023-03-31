@@ -147,7 +147,7 @@ namespace djnn
 
   
   OutlineJoinStyle*
-  OutlineJoinStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  OutlineJoinStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
     origs_clones[this] = res;

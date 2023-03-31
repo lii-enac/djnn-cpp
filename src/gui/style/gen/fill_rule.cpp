@@ -147,7 +147,7 @@ namespace djnn
 
   
   FillRule*
-  FillRule::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FillRule::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FillRule (nullptr, get_name (), raw_props.rule);
     origs_clones[this] = res;

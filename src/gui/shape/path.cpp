@@ -411,7 +411,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathLine*
-  PathLine::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathLine::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
@@ -429,7 +429,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathMove*
-  PathMove::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathMove::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
     origs_clones[this] = res;
@@ -460,7 +460,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathClosure*
-  PathClosure::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathClosure::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathClosure (nullptr, get_name ());
     origs_clones[this] = res;
@@ -590,7 +590,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathQuadratic*
-  PathQuadratic::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathQuadratic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     origs_clones[this] = res;
@@ -746,7 +746,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathCubic*
-  PathCubic::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathCubic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     origs_clones[this] = res;
@@ -915,7 +915,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }
 
   PathArc*
-  PathArc::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathArc::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     origs_clones[this] = res;
@@ -998,7 +998,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }*/
 
   Path* 
-  Path::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Path::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto * clone = new Path (nullptr, get_name ());
     for (auto c : _items->children ()) {
@@ -1030,7 +1030,7 @@ error: fprintf (stderr, "SVG path parser: error in path coordinates\n");
   }*/
 
   PathClip* 
-  PathClip::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PathClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto * clone = new PathClip (nullptr, get_name ());
     for (auto c : _items->children ()) {

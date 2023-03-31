@@ -69,7 +69,7 @@ namespace djnn
   }*/
 
   SVGHolder*
-  SVGHolder::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  SVGHolder::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto * clone = new SVGHolder (nullptr, "SVGHolder");
     origs_clones[this] = clone;

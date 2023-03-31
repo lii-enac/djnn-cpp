@@ -31,7 +31,7 @@ namespace djnn
   }
 
   Line*
-  Line::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Line::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
     origs_clones[this] = res;

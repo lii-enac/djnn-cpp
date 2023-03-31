@@ -121,7 +121,7 @@ namespace djnn {
     virtual const string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
 
     // utils
-            CoreProcess*      clone (); // relies on impl_clone // FIXME: should be const
+            CoreProcess*      clone () const; // relies on impl_clone
     virtual void           set_data (CoreProcess* data) {}
     virtual CoreProcess*   get_data () { return nullptr; }
     #ifndef DJNN_NO_SERIALIZE
@@ -213,7 +213,7 @@ namespace djnn {
   
   // should be protected
   public: 
-    virtual CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones);
+    virtual CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const;
   
   // should be protected
   public:

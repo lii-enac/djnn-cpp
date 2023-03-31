@@ -69,8 +69,9 @@ namespace djnn
       bool propagating () { return _propagating; }
       void set_propagating (bool v) { _propagating = v; }
       RefProperty* get_ref () { return _ref; }
-      const string& get_str_path () { return _path.get_value (); }
-      djnn_dir_t get_dir () { return _dir; }
+      const RefProperty* get_ref () const { return _ref; }
+      const string& get_str_path () const { return _path.get_value (); }
+      djnn_dir_t get_dir () const { return _dir; }
       virtual void set () = 0;
       virtual void get () = 0;
       virtual void change_src (CoreProcess* src) = 0;
@@ -146,11 +147,11 @@ namespace djnn
         }
       }
 
-      CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override
+      CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override
       {
         auto ref = origs_clones.find (get_ref ());
         auto s = ref != origs_clones.end () ? ref->second : get_ref ();
-        auto res = new TDeref<T> (nullptr, get_name (), s, get_str_path (), get_dir ());
+        auto res = new TDeref<T> (nullptr, get_name (), const_cast<CoreProcess*>(s), get_str_path (), get_dir ());
         origs_clones[this] = res;
         origs_clones[&_value] = res->get_value ();
         return res;

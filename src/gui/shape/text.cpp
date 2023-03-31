@@ -391,7 +391,7 @@ namespace djnn
   }
 
   Text*
-  Text::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Text::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());
     origs_clones[this] = res;

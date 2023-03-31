@@ -125,7 +125,7 @@ namespace djnn
   }
 
   Image*
-  Image::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) 
+  Image::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const 
   {
     auto res = new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
     origs_clones[this] = res;
@@ -204,7 +204,7 @@ namespace djnn
   }
 
   DataImage*
-  DataImage::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  DataImage::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new DataImage (nullptr, get_name(), raw_props.data, raw_props.format, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
     origs_clones[this] = res;

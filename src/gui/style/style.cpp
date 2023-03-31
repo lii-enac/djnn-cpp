@@ -48,7 +48,7 @@ namespace djnn
   }
 
   FillColor*
-  FillColor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FillColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
@@ -66,7 +66,7 @@ namespace djnn
   }
 
   OutlineColor*
-  OutlineColor::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  OutlineColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new OutlineColor (nullptr, get_name (),raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
@@ -84,7 +84,7 @@ namespace djnn
   }
 
   NoOutline*
-  NoOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  NoOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new NoOutline (nullptr, get_name ());
     origs_clones[this] = res;
@@ -94,7 +94,7 @@ namespace djnn
 
 
   NoPickOutline*
-  NoPickOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  NoPickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new NoPickOutline (nullptr, get_name ());
     origs_clones[this] = res;
@@ -112,7 +112,7 @@ namespace djnn
   }
 
   PickOutline*
-  PickOutline::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PickOutline (nullptr, get_name ());
     origs_clones[this] = res;
@@ -141,7 +141,7 @@ namespace djnn
   }
 
   NoFill*
-  NoFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  NoFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new NoFill (nullptr, get_name ());
     origs_clones[this] = res;
@@ -159,7 +159,7 @@ namespace djnn
   }
 
   NoPickFill*
-  NoPickFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  NoPickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new NoPickFill (nullptr, get_name ());
     origs_clones[this] = res;
@@ -177,7 +177,7 @@ namespace djnn
   }
 
   PickFill*
-  PickFill::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  PickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new PickFill (nullptr, get_name ());
     origs_clones[this] = res;
@@ -197,7 +197,7 @@ namespace djnn
   }
 
   OutlineOpacity*
-  OutlineOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  OutlineOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new OutlineOpacity (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -215,7 +215,7 @@ namespace djnn
   }
 
   FillOpacity*
-  FillOpacity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FillOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FillOpacity (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -233,7 +233,7 @@ namespace djnn
   }
 
   DashArray*
-  DashArray::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  DashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto * res = new DashArray (nullptr, get_name ());
     for (auto d : _dash_array) {
@@ -254,7 +254,7 @@ namespace djnn
   }
 
   NoDashArray*
-  NoDashArray::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  NoDashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new NoDashArray (nullptr, get_name ());
     origs_clones[this] = res;
@@ -282,7 +282,7 @@ namespace djnn
   }
 
   GradientStop*
-  GradientStop::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientStop::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
     origs_clones[this] = res;
@@ -333,7 +333,7 @@ namespace djnn
   }
 
   LinearGradient*
-  LinearGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  LinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
 					    AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
@@ -417,7 +417,7 @@ namespace djnn
   }
 
   RefLinearGradient*
-  RefLinearGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  RefLinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new RefLinearGradient (nullptr, get_name (), _lg);
     origs_clones[this] = res;
@@ -442,7 +442,7 @@ namespace djnn
   RadialGradient::~RadialGradient () {}
 
   RadialGradient*
-  RadialGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  RadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
 					     raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
@@ -522,7 +522,7 @@ namespace djnn
   }
 
   RefRadialGradient*
-  RefRadialGradient::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  RefRadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new RefRadialGradient (nullptr, get_name (), _rg);
     origs_clones[this]=res;
@@ -571,7 +571,7 @@ namespace djnn
   }
 
   FontSize*
-  FontSize::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FontSize::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
     origs_clones[this] = res;
@@ -604,7 +604,7 @@ namespace djnn
   }
 
   FontWeight*
-  FontWeight::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FontWeight::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FontWeight (nullptr, get_name (), raw_props.weight);
     origs_clones[this] = res;
@@ -643,7 +643,7 @@ namespace djnn
   }
 
   FontStyle*
-  FontStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FontStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FontStyle (nullptr, get_name (), raw_props.style);
     origs_clones[this] = res;
@@ -676,7 +676,7 @@ namespace djnn
   }
 
   FontFamily*
-  FontFamily::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  FontFamily::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new FontFamily (nullptr, get_name (), raw_props.family);
     origs_clones[this] = res;

@@ -52,13 +52,12 @@ namespace djnn {
   }
 
   Connector*
-  Connector::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Connector::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
-    // check if it already exists in origs_clones? returns it if so?
     auto sit = origs_clones.find(_assignment.get_src ());
     auto dit = origs_clones.find(_assignment.get_dst ());
-    auto s = sit!=origs_clones.end() ? sit->second : _assignment.get_src (); // the source of the connector can be outside the cloned subtree
-    auto d = dit!=origs_clones.end() ? dit->second : _assignment.get_dst (); // the destination of the connector can be outside the cloned subtree
+    auto s = sit!=origs_clones.end() ? sit->second : const_cast<CoreAssignment&>(_assignment).get_src (); // the source of the connector can be outside the cloned subtree
+    auto d = dit!=origs_clones.end() ? dit->second : const_cast<CoreAssignment&>(_assignment).get_dst (); // the destination of the connector can be outside the cloned subtree
     auto res = new Connector (nullptr, get_name (), s, d, _copy_on_activation);
     origs_clones[this] = res;
     return res;

@@ -39,7 +39,7 @@ namespace djnn {
     double get_double_value () const override { return get_ref_value(); }
     string get_string_value () override { return djnn::to_string (get_ref_value ()); }
     string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
-    bool get_value () { return get_ref_value(); };
+    bool get_value () const { return get_ref_value(); };
 
   protected:
     virtual bool& get_ref_value() = 0;
@@ -58,7 +58,7 @@ namespace djnn {
   class BoolProperty : public AbstractBoolProperty {
   public:
     BoolProperty (CoreProcess* parent, const string& name, bool v) : AbstractBoolProperty (parent, name), value(v) { finalize_construction (parent, name); }    
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual bool& get_ref_value() override { return value; }
     virtual const bool& get_ref_value() const override { return value; }
@@ -69,7 +69,7 @@ namespace djnn {
   class BoolPropertyProxy : public AbstractBoolProperty {
   public:
     BoolPropertyProxy (CoreProcess* parent, const string& name, bool &v, int notify_mask=notify_none) : AbstractBoolProperty (parent, name, notify_mask), value(v) { finalize_construction (parent, name); }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual bool& get_ref_value() override { return value; }
     virtual const bool& get_ref_value() const override { return value; }

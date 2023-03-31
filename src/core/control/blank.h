@@ -28,7 +28,7 @@ namespace djnn {
   public:
     Blank (CoreProcess* parent, const string& name) : FatProcess (name) { finalize_construction (parent, name); }
     virtual ~Blank () {};
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     bool pre_activate () override { return true; }
     void impl_activate () override { set_activation_state(ACTIVATED); }

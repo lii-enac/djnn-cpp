@@ -166,7 +166,7 @@ namespace djnn
 #endif
 
   RefProperty* 
-  RefProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  RefProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new RefProperty (nullptr, get_name (), _value);
     origs_clones[this] = res;

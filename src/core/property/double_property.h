@@ -40,7 +40,7 @@ namespace djnn {
     string get_string_value () override { return djnn::to_string (get_ref_value ()); }
     string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
-    double get_value () { return get_ref_value(); };
+    double get_value () const { return get_ref_value(); };
   protected:
     virtual double& get_ref_value() = 0;
     virtual const double& get_ref_value() const = 0;
@@ -57,7 +57,7 @@ namespace djnn {
   class DoubleProperty : public AbstractDoubleProperty {
   public:
     DoubleProperty (CoreProcess* parent, const string& name, double v) : AbstractDoubleProperty (parent, name), value(v) { }
-    DoubleProperty* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    DoubleProperty* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual double& get_ref_value() override { return value; }
     virtual const double& get_ref_value() const override { return value; }
@@ -68,7 +68,7 @@ namespace djnn {
   class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
     DoublePropertyProxy (CoreProcess* parent, const string& name, double &v, int notify_mask=notify_none) : AbstractDoubleProperty (parent, name, notify_mask), value(v) { }
-    DoublePropertyProxy* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    DoublePropertyProxy* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual double& get_ref_value() override { return value; }
     virtual const double& get_ref_value() const override { return value; }

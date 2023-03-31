@@ -33,7 +33,7 @@ namespace djnn
     OutlineCapStyle (CoreProcess* parent, const string& name, int cap);
     virtual ~OutlineCapStyle ();
     void draw () override;
-    OutlineCapStyle* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    OutlineCapStyle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     void get_properties_values (int& cap);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;

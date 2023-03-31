@@ -55,7 +55,7 @@ namespace djnn {
   class RemoteProperty : public AbstractRemoteProperty {
   public:
     RemoteProperty (CoreProcess* parent, const string& name, const string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
     /* This method has to be specific because of the duality of a remote property.
      * Indeed it can be used to transmit values, as any other property, or to

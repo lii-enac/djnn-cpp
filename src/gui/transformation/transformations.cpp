@@ -71,7 +71,7 @@ namespace djnn
   }
 
   FatProcess*
-  Identity::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Identity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Identity (nullptr, get_name ());
     origs_clones[this] = res;
@@ -114,7 +114,7 @@ namespace djnn
   }
 
   FatProcess*
-  Translation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Translation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
@@ -149,7 +149,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientTranslation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientTranslation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
@@ -212,7 +212,7 @@ namespace djnn
   }
 
   FatProcess*
-  Rotation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Rotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
@@ -247,7 +247,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientRotation::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientRotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
@@ -302,7 +302,7 @@ namespace djnn
   }
 
   FatProcess*
-  Scaling::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Scaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
@@ -337,7 +337,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientScaling::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientScaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
@@ -379,7 +379,7 @@ namespace djnn
   }
 
   FatProcess*
-  SkewX::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  SkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new SkewX (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -414,7 +414,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientSkewX::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientSkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientSkewX (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -457,7 +457,7 @@ namespace djnn
   }
 
   FatProcess*
-  SkewY::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  SkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new SkewY (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -491,7 +491,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientSkewY::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientSkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientSkewY (nullptr, get_name (), raw_props.a);
     origs_clones[this] = res;
@@ -2193,7 +2193,7 @@ namespace djnn
   }
 
   FatProcess*
-  Homography::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Homography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new Homography (nullptr, get_name (),
                            raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
@@ -2232,7 +2232,7 @@ namespace djnn
   }
 
   FatProcess*
-  GradientHomography::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  GradientHomography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientHomography ( nullptr, get_name (), 
                                     raw_props.m11, raw_props.m12, raw_props.m13,
@@ -2270,7 +2270,7 @@ namespace djnn
   }
 
   FatProcess*
-  SimpleGradientTransform::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  SimpleGradientTransform::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new GradientHomography (nullptr, get_name (), 
                                    raw_props.m11, raw_props.m12, raw_props.m13,

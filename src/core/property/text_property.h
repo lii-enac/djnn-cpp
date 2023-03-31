@@ -37,8 +37,8 @@ namespace djnn {
     double get_double_value () const override;
     string get_string_value () override { return get_ref_value (); }
     string get_string_value () const override { return get_ref_value (); }
-    const string& get_value () const { return get_ref_value(); };
-    string& get_value () { return get_ref_value(); };
+    string& get_value () { return get_ref_value(); }
+    const string& get_value () const { return get_ref_value(); }
   protected:
     virtual string& get_ref_value() = 0;
     virtual const string& get_ref_value() const= 0;
@@ -55,7 +55,7 @@ namespace djnn {
   class TextProperty : public AbstractTextProperty {
   public:
     TextProperty (CoreProcess* parent, const string& name, const string& v) : AbstractTextProperty (parent, name), value(v) { }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual string& get_ref_value() override { return value; }
     virtual const string& get_ref_value() const override { return value; }
@@ -66,7 +66,7 @@ namespace djnn {
   class TextPropertyProxy : public AbstractTextProperty {
   public:
     TextPropertyProxy (CoreProcess* parent, const string& name, string &v, int notify_mask=notify_none) : AbstractTextProperty (parent, name, notify_mask), value(v) { }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual string& get_ref_value() override { return value; }
     virtual const string& get_ref_value() const override { return value; }

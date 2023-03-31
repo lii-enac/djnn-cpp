@@ -67,7 +67,7 @@ namespace djnn
   }
 
   Group* 
-  Group::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Group::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto * clone = new Group (nullptr, get_name ());
     for (auto c : _children) {

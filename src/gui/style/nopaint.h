@@ -12,7 +12,7 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    NoOutline* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    NoOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class NoFill : public AbstractStyle
@@ -24,6 +24,6 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    NoFill* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    NoFill* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 }

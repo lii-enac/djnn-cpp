@@ -12,6 +12,6 @@ class Defs : public Container
     void impl_activate () override;
     void impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return DEFS_T; }
-    Defs* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    Defs* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 }

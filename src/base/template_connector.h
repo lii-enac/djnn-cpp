@@ -151,7 +151,7 @@ public:
     CoreBinding _binding;
     bool _copy_on_activation;
 public:
-    //TConnector* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    //TConnector* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 #ifndef DJNN_NO_SERIALIZE
     //void serialize (const string& format) override;
 #endif

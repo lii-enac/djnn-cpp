@@ -36,7 +36,7 @@ namespace djnn
   }
 
   StyleSheet*
-  StyleSheet::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*StyleSheet* newd = new StyleSheet (nullptr, get_name ());
 

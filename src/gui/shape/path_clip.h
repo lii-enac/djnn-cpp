@@ -10,7 +10,7 @@ namespace djnn {
         Path (parent, name) {}
     virtual ~PathClip () {}
     void draw () override;
-    //PathClip* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
-    PathClip* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    //PathClip* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathClip* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 }

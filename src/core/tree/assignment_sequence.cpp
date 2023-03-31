@@ -96,7 +96,7 @@ namespace djnn
   }
 
   AssignmentSequence*
-  AssignmentSequence::impl_clone (map<CoreProcess*, CoreProcess*> &origs_clones) {
+  AssignmentSequence::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const {
     auto *clone = new AssignmentSequence (nullptr, get_name (), is_model ());
     for (auto c : _children) {
       auto cclone = c->impl_clone (origs_clones);

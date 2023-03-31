@@ -33,7 +33,7 @@ namespace djnn
   }
 
   RectangleClip*
-  RectangleClip::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  RectangleClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);
     origs_clones[this] = res;

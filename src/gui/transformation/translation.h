@@ -14,6 +14,6 @@ namespace djnn
     void draw () override;
     virtual void transform( double& x, double& y) override;
     virtual void inverse_transform( double& x, double& y) override;
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 }

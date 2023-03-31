@@ -46,7 +46,7 @@ namespace djnn
   }
 
   Defs* 
-  Defs::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  Defs::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*Defs* newd = new Defs (nullptr, get_name ());
 

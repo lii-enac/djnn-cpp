@@ -148,7 +148,7 @@ namespace djnn
 #endif
 
   FatProcess* 
-  TextProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  TextProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new TextProperty (nullptr, get_name (), value);
     origs_clones[this] = res;
@@ -156,10 +156,9 @@ namespace djnn
   }
 
   FatProcess* 
-  TextPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  TextPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
-    auto res = new TextPropertyProxy (nullptr, get_name (), value, _notify_mask);
-    origs_clones[this] = res;
-    return res;
+    error (this, "*PropertyProxy should not be cloned");
+    return nullptr;
   }
 }

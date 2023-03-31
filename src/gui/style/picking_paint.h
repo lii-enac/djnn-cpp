@@ -12,7 +12,7 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    PickOutline* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    PickOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class PickFill : public AbstractStyle
@@ -24,7 +24,7 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    PickFill* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    PickFill* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class NoPickOutline : public AbstractStyle
@@ -36,7 +36,7 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    NoPickOutline* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    NoPickOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 
   class NoPickFill : public AbstractStyle
@@ -48,6 +48,6 @@ namespace djnn {
     void impl_activate () override { AbstractStyle::impl_activate ();}
     void impl_deactivate () override { AbstractStyle::impl_deactivate ();}
     void draw () override;
-    NoPickFill* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    NoPickFill* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   };
 }

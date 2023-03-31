@@ -92,7 +92,7 @@ namespace djnn
   }
 
   FatProcess*
-  IntProperty::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  IntProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new IntProperty (nullptr, get_name (), get_value());
     origs_clones[this] = res;
@@ -100,11 +100,10 @@ namespace djnn
   }
 
   FatProcess*
-  IntPropertyProxy::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  IntPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
-    auto res = new IntPropertyProxy (nullptr, get_name (), get_ref_value(), _notify_mask);
-    origs_clones[this] = res;
-    return res;
+    error (this, "*PropertyProxy should not be cloned");
+    return nullptr;
   }
 
 #ifndef DJNN_NO_DEBUG

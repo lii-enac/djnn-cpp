@@ -39,7 +39,7 @@ namespace djnn {
     string get_string_value () override { return djnn::to_string (get_ref_value ()); }
     string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
 
-    int get_value () { return get_ref_value(); };
+    int get_value () const { return get_ref_value(); };
   protected:
     virtual int& get_ref_value() = 0;
     virtual const int& get_ref_value() const = 0;
@@ -56,7 +56,7 @@ namespace djnn {
   class IntProperty : public AbstractIntProperty {
   public:
     IntProperty (CoreProcess* parent, const string& name, int v) : AbstractIntProperty (parent, name), value(v) { }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }
@@ -67,7 +67,7 @@ namespace djnn {
   class IntPropertyProxy : public AbstractIntProperty {
   public:
     IntPropertyProxy (CoreProcess* parent, const string& name, int &v, int notify_mask=notify_none) : AbstractIntProperty (parent, name, notify_mask), value(v) { }
-    FatProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
   protected:
     virtual int& get_ref_value() override { return value; }
     virtual const int& get_ref_value() const override { return value; }

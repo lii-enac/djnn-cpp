@@ -147,7 +147,7 @@ namespace djnn
 
   
   OutlineMiterLimit*
-  OutlineMiterLimit::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  OutlineMiterLimit::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new OutlineMiterLimit (nullptr, get_name (), raw_props.limit);
     origs_clones[this] = res;

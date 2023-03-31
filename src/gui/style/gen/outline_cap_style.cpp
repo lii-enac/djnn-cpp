@@ -147,7 +147,7 @@ namespace djnn
 
   
   OutlineCapStyle*
-  OutlineCapStyle::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  OutlineCapStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new OutlineCapStyle (nullptr, get_name (), raw_props.cap);
     origs_clones[this] = res;

@@ -188,7 +188,7 @@ namespace djnn
   }
 
   SwitchList*
-  SwitchList::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  SwitchList::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     /*SwitchList* clone = new SwitchList (nullptr, get_name());
     for (auto c : _children) {

@@ -266,7 +266,7 @@ namespace djnn
   }
 
   List*
-  List::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) {
+  List::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const {
     /*List* clone = new List (nullptr, get_name ());
     for (auto c: _children) {
       clone->add_child (c->clone (), "");

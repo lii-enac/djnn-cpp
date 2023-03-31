@@ -73,10 +73,9 @@ namespace djnn {
     public:
         TemplateProperty (CoreProcess* parent, const string& name, const X& v)
         : AbstractTemplateProperty<X> (parent, name), value(v) {}
-        CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override {
-            auto res = new TemplateProperty<X> (nullptr, FatProcess::get_name (), get_ref_value());
-            origs_clones[this] = res;
-            return res;
+        CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+            error (this, "*PropertyProxy should not be cloned");
+            return nullptr;
         }
         using type=X;
     protected:
@@ -96,10 +95,9 @@ namespace djnn {
     public:
         TemplatePropertyProxy (CoreProcess* parent, const string& name, const X &v, int notify_mask=notify_none)
         : AbstractTemplateProperty<X> (parent, name, notify_mask), value(v) {}
-        CoreProcess* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override {
-            auto res = new TemplatePropertyProxy<X> (nullptr, FatProcess::get_name (), get_ref_value(), AbstractProperty::_notify_mask);
-            origs_clones[this] = res;
-            return res;
+        CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+            error (this, "*PropertyProxy should not be cloned");
+            return nullptr;
         }
         using type=X;
     protected:

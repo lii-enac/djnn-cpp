@@ -31,8 +31,10 @@ namespace djnn {
 
 
     // management
-    CoreProcess* get_src ()  { return _src; }
-    CoreProcess* get_dst ()  { return _dst; }
+    CoreProcess* get_src () { return _src; }
+    CoreProcess* get_dst () { return _dst; }
+    const CoreProcess* get_src () const { return _src; }
+    const CoreProcess* get_dst () const { return _dst; }
     void set_src (CoreProcess* src);
     void set_dst (CoreProcess* dst);
     void about_to_delete_src ();
