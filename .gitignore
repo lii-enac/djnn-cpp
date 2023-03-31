@@ -5,3 +5,5 @@
 /.ninja_log
 /jq_script
 /make2ninja.py
+/ignore
+/-.json
