@@ -195,7 +195,7 @@ else
 brew_prefix := $(HOMEBREW_PREFIX)
 endif
 CFLAGS += -Wno-deprecated-declarations
-CFLAGS += -isysroot $(shell xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+#CFLAGS += -isysroot $(shell xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 lib_suffix =.dylib
 DYNLIB ?= -dynamiclib
 echo ?= echo
