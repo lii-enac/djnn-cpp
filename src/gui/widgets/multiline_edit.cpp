@@ -650,6 +650,32 @@ namespace djnn
     }
   }
 
+  string
+  MultilineEditor::get_content_str ()
+  {
+    std::string s;
+    _cursor_pos = 0;
+    int sz = _lines.children ().size();
+    for (int i = 0; i < sz; i++) {
+      SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
+      std::string content = cur_line->get_content ();
+      if (i < _index_y) {
+        _cursor_pos += content.length () + 1;
+      } else if (i == _index_y) {
+        _cursor_pos += _index_x;
+        std::cout << "i = " << i << " pos_x = " << _index_x << "\n";
+      }
+      if (content.empty())
+        content = "\n";
+      s += content;
+      if (i < sz -1 && s.back() != '\n')
+        s += "\n";
+
+    }
+    return s;
+  }
+
+
   void
   MultilineEditor::wrap () {
     if (_font_metrics == nullptr)
@@ -658,17 +684,8 @@ namespace djnn
     int average_width = Backend::instance ()->get_average_char_width (_font_metrics);
     int max_width = (int) _width.get_value ();
     int nb_of_char = max_width/average_width;
-    std::string s;
     int sz = _lines.children ().size();
-    for (int i = 0; i < sz; i++) {
-      SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
-      std::string content = cur_line->get_content ();
-      if (content.empty())
-        content = "\n";
-      s += content;
-      if (i < sz -1 && s.back() != '\n')
-        s += "\n";
-    }
+    std::string s = get_content_str ();
     int i = 0;
     int len = s.length();
     int cur_idx = 0;
@@ -712,6 +729,23 @@ namespace djnn
         cur_line->set_content (str);
       }
     }
+    //update cursor pos
+    sz = _lines.children ().size();
+    i = 0;
+    int loc_pos = _cursor_pos;
+    while (loc_pos > 0 && i < sz) {
+      SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
+      int len = cur_line->get_content ().length ();
+      if (loc_pos >= len) {
+        loc_pos -= len;
+      } else {
+        _index_y = i;
+        _index_x = loc_pos;
+        loc_pos = 0;
+      }
+      i++;
+    }
+    update_cursor ();
   }
 
   void

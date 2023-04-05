@@ -106,6 +106,8 @@ namespace djnn {
       void add_string_input ();
       void add_str (const string& str );
       void wrap ();
+      string get_content_str ();
+      int get_cursor_pos ();
       void draw () override;
       pair<double, double> get_local_coords (double x, double y);
       List _lines;
@@ -130,5 +132,6 @@ namespace djnn {
       coord_t _start_sel_x, _start_sel_y, _end_sel_x, _end_sel_y;
       bool _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw, _wrap_text;
       string _init_text;
+      int _cursor_pos;
   };
 }
