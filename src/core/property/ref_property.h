@@ -19,14 +19,22 @@
 
 namespace djnn {
 
-  class RefProperty : public AbstractSimpleProperty {
+  class AbstractRefProperty : public AbstractSimpleProperty { // for GET_CHILD_VALUE to work...
+    public:
+    AbstractRefProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
+    : AbstractSimpleProperty (parent, name, nm) {}
+
+    virtual CoreProcess* get_value () = 0;
+  };
+
+  class RefProperty : public AbstractRefProperty {
   public:
     RefProperty (CoreProcess* parent, const string& name, CoreProcess* v, unsigned int nm = notify_none) 
-    : AbstractSimpleProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
+    : AbstractRefProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }
     virtual int get_prop_type () const override { return Reference; }
     //virtual process_type_e get_process_type () const override { return REF_PROPERTY_T; }
 
-    CoreProcess* get_value () { return _value; }
+    CoreProcess* get_value () override { return _value; }
     void set_value (int newValue, bool propagate) override;
     void set_value (double v, bool propagate) override;
     void set_value (bool v, bool propagate) override;
