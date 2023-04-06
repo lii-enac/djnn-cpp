@@ -72,6 +72,13 @@ namespace djnn {
     }
   }
 
+  FatProcess*
+  loadFromXML (const string& uri)
+  { 
+    warning (nullptr, "loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri)  - to load then clone many times the same XML\n- load_from_XML_once (string uri) - to load only once an XML\n");
+    return XML::djnLoadFromXML (uri); 
+  }
+
   /* should add handling of '-' to denote stdin, until a URI is defined for that */
   FatProcess*
   XML::djnLoadFromXML (const string& uri)

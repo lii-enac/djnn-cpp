@@ -16,7 +16,7 @@
 #include "core/utils/utils-dev.h"
 #include "core/ontology/process.h"
 
-#include <iostream>
+#include "core/utils/error.h"
 
 typedef char XML_Char; // FIXME should not be public, and avoid including expat.h (maybe in xml-dev.h)
 
@@ -97,12 +97,10 @@ namespace djnn
     static FatProcess *curComponent;
     static djn__XMLTagHandlerList *handlerStack;
   };
+
   void init_xml ();
   void clear_xml ();
   inline FatProcess* load_from_XML (const string& uri) { return XML::djnLoadThenClone (uri); }
   inline FatProcess* load_from_XML_once (const string& uri) { return XML::djnLoadFromXML (uri); }
-  inline FatProcess* loadFromXML (const string& uri) { 
-    std::cerr << "\n\nWarning - loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri)  - to load then clone many times the same XML\n- load_from_XML_once (string uri) - to load only once an XML\n" << std::endl; 
-    return XML::djnLoadFromXML (uri); 
-  }
+  FatProcess* loadFromXML (const string& uri);
 }
