@@ -13,6 +13,14 @@
  *
  */
 
+#include <cmath>
+
+#include <QPicture>
+#include <QtWidgets/QWidget>
+#include <QtGui/QPainter>
+#include <QtCore/QtMath>
+#include <QtCore/QFileInfo>
+
 #include "core/tree/list.h"
 #include "core/utils/ext/remotery/Remotery.h"
 
@@ -27,12 +35,7 @@
 #include "gui/shape/shapes.h"
 #include "gui/layer.h"
 
-#include <QPicture>
-#include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
-#include <QtCore/QtMath>
-#include <QtCore/QFileInfo>
-#include <cmath>
+
 
 #include "exec_env/exec_env-dev.h"
 

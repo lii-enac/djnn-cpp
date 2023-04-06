@@ -14,10 +14,6 @@
 
 #pragma once
 
-#include "gui/style/style_types.h"
-#include "gui/shape/abstract_gshape.h"
-#include "core/tree/component_observer.h"
-
 #include <vector>
 #include <utility>
 
@@ -27,6 +23,12 @@
 #include <QtGui/QTransform>
 #include <QtGui/QFont>
 #include <QtGui/QPainterPath>
+
+#include "gui/style/style_types.h"
+#include "gui/shape/abstract_gshape.h"
+#include "core/tree/component_observer.h"
+
+
 
 namespace djnn
 {

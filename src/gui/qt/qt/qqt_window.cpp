@@ -12,6 +12,14 @@
  *
  */
 
+#include <algorithm>
+
+#include <QEvent>
+#include <QTouchEvent>
+#include <QOpenGLWidget>
+
+#include <type_traits> // is_same
+
 #include "gui/gui-dev.h"
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
@@ -27,11 +35,7 @@
 #include "core/utils/ext/remotery/Remotery.h"
 #include "gui/qt/qt_context.h"
 
-#include <algorithm>
-
-#include <QEvent>
-#include <QTouchEvent>
-#include <QOpenGLWidget>
+#include "core/utils/iostream.h"
 
 #include "exec_env/exec_env-dev.h"
 
@@ -39,7 +43,7 @@
 #include "core/utils/error.h"
 #include "utils/debug.h"
 
- #include <type_traits> // is_same
+
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 //#include "core/utils/utils-dev.h"
