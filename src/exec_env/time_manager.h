@@ -40,38 +40,17 @@ TODO:?
 #include <chrono>
 #include <set>
 
+#include "time_internal.h"
+
 namespace djnn_internal {
 
   namespace Time {
-
-    typedef std::chrono::duration<long long, std::micro> duration;
-    typedef std::chrono::steady_clock clock;
-    typedef std::chrono::time_point <clock, duration> time_point;
     
     template <typename xxx>
     time_point
     time_point_cast (const xxx& tp)  {
       return std::chrono::time_point_cast<std::chrono::microseconds>(tp);
     }
-
-
-    class Timer {
-    public:
-      Timer () : _scheduled(false) {}
-      virtual ~Timer() {}
-      virtual void do_it(const duration& actualduration)=0;
-      const time_point& get_start_time () const { return _start; }
-      const time_point& get_end_time () const { return _end; }
-      void set_start_time (time_point d) { _start=d; }
-      void set_end_time (time_point d) { _end=d; }
-      duration get_duration () const { return _end-_start;}
-      bool is_already_scheduled () const { return _scheduled; }
-      void set_scheduled(bool s) { _scheduled = s; }
-      
-    private:
-      time_point _start, _end;
-      bool _scheduled;
-    };
 
     struct lesser {
       bool
