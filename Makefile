@@ -500,6 +500,9 @@ $1_cpp_srcs ?= $$(filter %.cpp,$$(lib_srcs))
 $1_srcs = $$($1_cpp_srcs) $$($1_c_srcs) 
 $1_objs += $$($1_cpp_srcs:.cpp=.o) $$($1_c_srcs:.c=.o)
 $1_objs := $$(addprefix $(build_dir)/, $$($1_objs))
+ifeq ($$(compiler),llvm)
+$1_objs += $$(pch_shared_dst)
+endif
 
 $1_srcgens ?= $$(lib_srcgens)
 $1_objs += $$(lib_objs)
