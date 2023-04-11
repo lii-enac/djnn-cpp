@@ -15,7 +15,7 @@
 #pragma once
 
 #include "core/ontology/process.h"
-#include "core/property/int_property.h"
+#include "core/property/double_property.h"
 #include "core/property/text_property.h"
 
 
@@ -23,13 +23,13 @@ namespace djnn
 {
   class WallClock : public FatProcess
   {
-      struct WallClockIntProperty : public AbstractIntProperty {
-          WallClockIntProperty (FatProcess* parent, const string& name)
-          : AbstractIntProperty (parent, name) { finalize_construction (parent, name); }
+      struct WallClockDoubleProperty : public AbstractDoubleProperty {
+          WallClockDoubleProperty (FatProcess* parent, const string& name)
+          : AbstractDoubleProperty (parent, name) { finalize_construction (parent, name); }
           protected:
-            int& get_ref_value() override;
-            const int& get_ref_value() const override;
-            int _ref;
+            double& get_ref_value() override;
+            const double& get_ref_value() const override;
+            double _ref;
       };
       struct WallClockTextProperty : public AbstractTextProperty {
           WallClockTextProperty (FatProcess* parent, const string& name)
@@ -51,7 +51,7 @@ namespace djnn
     protected:
         virtual void impl_activate () override {}
         virtual void impl_deactivate () override {}
-        WallClockIntProperty _state;
+        WallClockDoubleProperty _state; // int is not sufficient to store ms since epoch (1970) --> use a double
         WallClockTextProperty _state_text;
         TextProperty _format;
   };

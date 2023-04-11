@@ -8,17 +8,17 @@
 
 namespace djnn {
     
-int&
-WallClock::WallClockIntProperty::get_ref_value()
+double&
+WallClock::WallClockDoubleProperty::get_ref_value()
 {
-    _ref = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()).time_since_epoch ().count ();
+    _ref = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     return _ref;
 }
 
-const int&
-WallClock::WallClockIntProperty::get_ref_value() const
+const double&
+WallClock::WallClockDoubleProperty::get_ref_value() const
 {
-    return const_cast<WallClockIntProperty&>(*this).get_ref_value();
+    return const_cast<WallClockDoubleProperty&>(*this).get_ref_value();
 }
 
 
