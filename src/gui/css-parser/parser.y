@@ -38,7 +38,8 @@
 
 %define api.prefix {css}
 
-%define parser_class_name { Parser }
+//%define parser_class_name { Parser }
+%define api.parser.class { Parser }
 
 %locations
 %initial-action

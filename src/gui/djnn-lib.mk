@@ -38,7 +38,7 @@ endif
 
 ifeq ($(os),Darwin)
 #lib_cppflags += -I$(brew_prefix)/opt/flex/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(brew_prefix)/opt/flex/include
+$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(brew_prefix)/opt/flex/include -Wno-unused-but-set-variable
 lib_ldflags += -L$(brew_prefix)/opt/flex/lib
 endif
 
