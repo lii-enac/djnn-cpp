@@ -164,7 +164,8 @@ lib_static_suffix = .a
 include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
-CFLAGS += -MMD -Wall
+CFLAGS += -MMD
+CFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-vla-extension
 
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
