@@ -489,7 +489,7 @@ namespace djnn
         if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE) {
           auto it = _vertex_already_activated.find(v);
           if (it != _vertex_already_activated.end()) {
-            if (_DEBUG_GRAPH_CYCLE_DETECT) {
+            if (_DEBUG_GRAPH_CYCLE_DETECT && _activation_triggers_to_sort.size () != 0) {  // if _activation_triggers_to_sort is empty we are in initialisation phase
               cerr << "\033[1;31m";
               cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
               cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
