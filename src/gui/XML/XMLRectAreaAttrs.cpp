@@ -45,7 +45,7 @@ XMLRectAreaAttrs_Hash::djn_XMLRectAreaAttrsLookup (const char *str, unsigned int
 }
 
 
-struct djn_RectAreaArgs djn_RectAreaArgs = {0., 0., 0., 0.};
+struct djn_RectAreaArgs djn_RectAreaArgs = {0., 0., 0., 0., nullptr};
 
 static int djn__ParseX(FatProcess** e, const char* v) {
 	return XML_Utils::djn_XMLParseLength(&djn_RectAreaArgs.x, v);

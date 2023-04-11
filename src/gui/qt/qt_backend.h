@@ -68,10 +68,10 @@ namespace djnn
     get_average_char_width (FontMetricsImpl fm) override;
     void
     draw_simple_text_edit (MultilineEditor*) override;
-    int
+    size_t
     compute_index (FontMetricsImpl fm, SimpleText* t, int x) override;
     int
-    compute_x (FontMetricsImpl fm, SimpleText* t, int index) override;
+    compute_x (FontMetricsImpl fm, SimpleText* t, size_t index) override;
     int
     compute_text_width (FontMetricsImpl fm, SimpleText *t) override;
     double

@@ -252,7 +252,7 @@ namespace djnn
       _index_y = 0;
     }
     else {
-      for (int i = 0; i < _lines.children ().size (); i++) {
+      for (size_t i = 0; i < _lines.children ().size (); i++) {
         int cur_y = (get_line (i))->get_y () + _ascent;
         if (y <= (cur_y + _descent) && y >= (cur_y - _ascent)) {
           _line = get_line (i);
@@ -655,8 +655,8 @@ namespace djnn
   {
     std::string s;
     _cursor_pos = 0;
-    int sz = _lines.children ().size();
-    for (int i = 0; i < sz; i++) {
+    auto sz = _lines.children ().size();
+    for (size_t i = 0; i < sz; i++) {
       SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
       std::string content = cur_line->get_content ();
       if (i < _index_y) {
@@ -806,7 +806,7 @@ namespace djnn
       start_text.append (end_text);
       start_line->set_content (start_text);
 
-      for (int i = _start_sel_y + 1; i <= _end_sel_y; i++) {
+      for (auto i = _start_sel_y + 1; i <= _end_sel_y; i++) {
         to_delete.push_back ((SimpleText*) _lines.children ().at (i));
       }
       for (auto p : to_delete) {
@@ -824,7 +824,7 @@ namespace djnn
   void
   MultilineEditor::update_lines_position () {
     int height = _ascent + _descent;
-    for (int i = 0; i < _lines.children ().size (); i++) {
+    for (size_t i = 0; i < _lines.children ().size (); i++) {
       ((DoubleProperty*) (_lines.children ().at (i)->find_child ("y")))->set_value (
           static_cast<int> (i * (height + _leading)), true);
     }
@@ -929,7 +929,7 @@ namespace djnn
 
     if (_end_sel_y != _start_sel_y) {
       str.append ("\n");
-      int i = _start_sel_y + 1;
+      size_t i = _start_sel_y + 1;
       while (i < _end_sel_y) {
         str.append ((get_line (i++))->get_content ());
         str.append ("\n");

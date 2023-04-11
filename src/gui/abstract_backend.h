@@ -139,13 +139,13 @@ namespace djnn
     draw_text_field (TextField*)
     {
     }
-    virtual int
+    virtual size_t
     compute_index (FontMetricsImpl fm, SimpleText* t, int x)
     {
       return 0;
     }
     virtual int
-    compute_x (FontMetricsImpl fm, SimpleText* t, int index)
+    compute_x (FontMetricsImpl fm, SimpleText* t, size_t index)
     {
       return 0;
     }

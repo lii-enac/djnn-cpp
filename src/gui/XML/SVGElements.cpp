@@ -156,11 +156,11 @@ StartSVG(const char** attrs, FatProcess* current) {
 	djn_GraphicalShapeArgs = {"", "", djnStrokeUndef};
 	djn_CircleArgs = {0., 0., 0.};
 	djn_EllipseArgs = {0., 0., 0., 0.};
-	djn_ImgArgs = {0., 0., 0., 0., 0, string("")};
+	djn_ImgArgs = {0., 0., 0., 0., nullptr, string("")};
 	djn_LineArgs = {0., 0., 0., 0.};
 	djn_PathArgs = {0};
 	djn_PolyArgs = {0, 0};
-	djn_RectAreaArgs = {0., 0., 0., 0.};
+	djn_RectAreaArgs = {0., 0., 0., 0., nullptr};
 	djn_RectArgs = {0., 0., 0., 0., -1., -1.};
 	djn_TextArgs = {0., 0., 0., 0., DJN_NO_UNIT, DJN_NO_UNIT, "Utf8", 0};
 	djn_UseArgs = {0., 0., 0., 0., ""};

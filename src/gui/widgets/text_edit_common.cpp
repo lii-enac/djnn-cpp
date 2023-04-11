@@ -111,7 +111,7 @@ namespace djnn
   }
 
   coord_t
-  next_index (const std::string &str, int idx)
+  next_index (const std::string &str, coord_t idx)
   {
     if (idx > str.size ()) return idx;
     int offset = 1;
@@ -125,7 +125,7 @@ namespace djnn
   }
 
   coord_t
-  previous_index (const std::string &str, int idx)
+  previous_index (const std::string &str, coord_t idx)
   {
     if (idx <= 0) return 0;
     int offset = 1;
@@ -164,7 +164,7 @@ namespace djnn
   coord_t
   first_word (const std::string &str, coord_t idx)
   {
-    int first_word_idx = 0;
+    coord_t first_word_idx = 0;
     while (isspace (str.at (first_word_idx)) && first_word_idx < idx)
       {
         first_word_idx++;
@@ -177,7 +177,7 @@ namespace djnn
   coord_t
   next_word (const std::string &str, coord_t idx)
   {
-    int i = next_index (str, idx);
+    coord_t i = next_index (str, idx);
     while (i < str.length () && !is_starting_word (str, i))
       i = next_index (str, i);
     return i;

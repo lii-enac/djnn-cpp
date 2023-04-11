@@ -47,7 +47,7 @@ SVGGradientAttrs_Hash::djn_SVGGradientAttrsLookup (const char *str, unsigned int
   return 0;
 }
 
-struct djn_GradientArgs djn_GradientArgs = {"", 0, DJN_LOCAL_COORDS, DJN_PAD_FILL};
+struct djn_GradientArgs djn_GradientArgs = {"", 0, DJN_LOCAL_COORDS, DJN_PAD_FILL, nullptr, 0};
 
 static int ParseId(FatProcess** e, const char* v) {
 	djn_GradientArgs.id = v;

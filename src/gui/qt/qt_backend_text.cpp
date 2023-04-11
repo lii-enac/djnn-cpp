@@ -491,7 +491,7 @@ namespace djnn
   return pair<double, int>(0, 0);
 }
 
-int
+size_t
 QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
 {
   QFontMetrics *qfm = (QFontMetrics*) fm;
@@ -508,7 +508,7 @@ QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
 
   if (x >= end)
     return text.length ();
-  int res = 0;
+  size_t res = 0;
   for (size_t i = 0; i < text.size (); i = next_index (i, text)) {
     int i2 = next_index (i, text);
     string s1 = text.substr (0, i);
@@ -535,7 +535,7 @@ QtBackend::compute_index (FontMetricsImpl fm, SimpleText* t, int x)
 }
 
 int
-QtBackend::compute_x (FontMetricsImpl fm, SimpleText* t, int index)
+QtBackend::compute_x (FontMetricsImpl fm, SimpleText* t, size_t index)
 {
   QFontMetrics *qfm = (QFontMetrics*) fm;
   string text = t->get_content ();
@@ -548,7 +548,7 @@ QtBackend::compute_x (FontMetricsImpl fm, SimpleText* t, int index)
   if (index >= text.length()) {
     sub = text;
   } else {
-    int i = 0;
+    size_t i = 0;
     while (i < index) {
       i = next_index (i, text);
     }

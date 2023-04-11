@@ -49,8 +49,8 @@ namespace djnn {
   };
 
   typedef size_t coord_t;
-  coord_t next_index (const std::string &str, int idx);
-  coord_t previous_index (const std::string &str, int idx);
+  coord_t next_index (const std::string &str, coord_t idx);
+  coord_t previous_index (const std::string &str, coord_t idx);
   bool isspace (const char &c);
   bool isdelimiter (const char &c);
   bool is_starting_word (const std::string& str, coord_t i);
