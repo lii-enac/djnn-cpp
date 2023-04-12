@@ -28,8 +28,7 @@ namespace djnn {
     vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
-      for (int i = 0; i < l.size (); i++) {
-        double v = l.at (i) + r.at (i);
+      for (size_t i = 0; i < l.size (); i++) {
         res[i] = l.at (i) + r.at (i);
       }
     }
@@ -41,8 +40,7 @@ namespace djnn {
     vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
-      for (int i = 0; i < l.size (); i++) {
-        double v = l.at (i) + r.at (i);
+      for (size_t i = 0; i < l.size (); i++) {
         res[i] = l.at (i) - r.at (i);
       }
     }
@@ -54,8 +52,7 @@ namespace djnn {
     vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
-      for (int i = 0; i < l.size (); i++) {
-        double v = l.at (i) + r.at (i);
+      for (size_t i = 0; i < l.size (); i++) {
         res[i] = l.at (i) * r.at (i);
       }
     }
@@ -67,8 +64,7 @@ namespace djnn {
     vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
-      for (int i = 0; i < l.size (); i++) {
-        double v = l.at (i) + r.at (i);
+      for (size_t i = 0; i < l.size (); i++) {
         res[i] = l.at (i) / r.at (i);
       }
     }
