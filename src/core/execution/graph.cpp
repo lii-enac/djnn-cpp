@@ -491,7 +491,7 @@ namespace djnn
           if (it != _vertex_already_activated.end()) {
             if (_DEBUG_GRAPH_CYCLE_DETECT && _activation_triggers_to_sort.size () != 0) {  // if _activation_triggers_to_sort is empty we are in initialisation phase
               cerr << "\033[1;31m";
-              cerr << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
+              cerr << endl << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
               cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
               display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
               cerr << "\033[0m";
@@ -940,16 +940,23 @@ rmt_EndCPUSample();
   void 
   display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v) {
 
-    cerr << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
-    cerr << count_activation << " --- " << print_process_full_name (v->get_process ()) << endl;
+    cerr << endl << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
+    cerr << "\033[1;36m" << count_activation << " --- " << print_process_full_name (v->get_process ()) << "\033[1;31m" << endl;
     
     pair<Vertex*, int> pair ;
     // while we don't find the beginning of the cycle ... which is the vertex already activated
     do {
       pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
-      if (pair.first)
-        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;    
+      if (pair.first) {
+        if (pair.first == v) cerr << "\033[1;36m" ;
+        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;
+        if (pair.first == v) cerr << "\033[1;31m" ;    
+      }
     } while (pair.first && pair.first != v);
+    // One last time to know who is the caller the starting cycle
+    pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
+      if (pair.first) 
+        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;
 
     cerr << "--------------------------------------------------- " << endl;
 
