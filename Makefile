@@ -1011,9 +1011,9 @@ ifeq ($(os),Linux)
 	pkgcmd := apt install -y
 	pkgupg := apt upgrade -y
 
-	pkgdeps += libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev librtmidi-dev #libboost-fiber-dev
+	pkgdeps += g++ libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev librtmidi-dev #libboost-fiber-dev
 	ifeq ($(display),QT)
-		pkgdeps += qt5-default
+		pkgdeps += libqt5opengl5-dev #qt5-default #for ubuntu < 22.04
 	endif
 	ifeq ($(display),SDL)
 		pkgdeps += libfontconfig1-dev
