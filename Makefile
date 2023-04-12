@@ -324,11 +324,13 @@ linker ?= $(compiler)
 ifeq ($(linker),mold)
 ifeq ($(os),Darwin)
 CXXLD := ld64.mold
-DYNLIB =-L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
+LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
+LDFLAGS += -dylib -lc++ -lc
 else
 CXXLD := mold
+CXXFLAGS += -fPIC
+LDFLAGS += --shared -L/usr/lib/x86_64-linux-gnu
 endif
-DYNLIB += -dylib -lc++ -lc
 endif
 
 # ---------------------------------------
