@@ -16,21 +16,21 @@
 #include "core/property/abstract_property.h"
 
 inline
-const double
+double
 operator+ (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () + r.get_double_value ();
 }
 
 inline
-const double
+double
 operator+ (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () + r;
 }
 
 inline
-const double
+double
 operator+ (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r + l;
@@ -49,259 +49,259 @@ operator+ (const djnn::AbstractSimpleProperty& l, const djnn::string& r)
 }
 
 inline
-const double
+double
 operator- (const djnn::AbstractSimpleProperty& l)
 {
   return -l.get_double_value ();
 }
 
 inline
-const double
+double
 operator- (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () - r.get_double_value ();
 }
 
 inline
-const double
+double
 operator- (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () - r;
 }
 
 inline
-const double
+double
 operator- (double l, const djnn::AbstractSimpleProperty& r)
 {
   return l - r.get_double_value ();
 }
 
 inline
-const double
+double
 operator* (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () * r.get_double_value ();
 }
 
 inline
-const double
+double
 operator* (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () * r;
 }
 
 inline
-const double
+double
 operator* (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r * l;
 }
 
 inline
-const double
+double
 operator/ (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () / r.get_double_value ();
 }
 
 inline
-const double
+double
 operator/ (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () / r;
 }
 
 inline
-const double
+double
 operator/ (double l, const djnn::AbstractSimpleProperty& r)
 {
   return l / r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator&& (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return (int) l.get_double_value () && (int) r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator&& (const djnn::AbstractSimpleProperty& l, bool r)
 {
   return (int) l.get_double_value () && r;
 }
 
 inline
-const bool
+bool
 operator&& (bool l, const djnn::AbstractSimpleProperty& r)
 {
   return r && l;
 }
 
 inline
-const bool
+bool
 operator|| (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return (int) l.get_double_value () || (int) r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator|| (const djnn::AbstractSimpleProperty& l, bool r)
 {
   return (int) l.get_double_value () || r;
 }
 
 inline
-const bool
+bool
 operator|| (bool l, const djnn::AbstractSimpleProperty& r)
 {
   return r || l;
 }
 
 inline
-const bool
+bool
 operator! (const djnn::AbstractSimpleProperty& p)
 {
   return !(int) p.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator== (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () == r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator== (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () == r;
 }
 
 inline
-const bool
+bool
 operator== (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r == l;
 }
 
 inline
-const bool
+bool
 operator!= (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () != r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator!= (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () != r;
 }
 
 inline
-const bool
+bool
 operator!= (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r != l;
 }
 
 inline
-const bool
+bool
 operator> (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () > r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator> (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () > r;
 }
 
 inline
-const bool
+bool
 operator> (double l, const djnn::AbstractSimpleProperty& r)
 {
   return l > r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator< (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return r > l;
 }
 
 inline
-const bool
+bool
 operator< (const djnn::AbstractSimpleProperty& l, double r)
 {
   return r > l;
 }
 
 inline
-const bool
+bool
 operator< (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r > l;
 }
 
 inline
-const bool
+bool
 operator>= (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return l.get_double_value () >= r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator>= (const djnn::AbstractSimpleProperty& l, double r)
 {
   return l.get_double_value () >= r;
 }
 
 inline
-const bool
+bool
 operator>= (double l, const djnn::AbstractSimpleProperty& r)
 {
   return l >= r.get_double_value ();
 }
 
 inline
-const bool
+bool
 operator<= (const djnn::AbstractSimpleProperty& l, const djnn::AbstractSimpleProperty& r)
 {
   return r >= l;
 }
 
 inline
-const bool
+bool
 operator<= (const djnn::AbstractSimpleProperty& l, double r)
 {
   return r >= l;
 }
 
 inline
-const bool
+bool
 operator<= (double l, const djnn::AbstractSimpleProperty& r)
 {
   return r >= l;
 }
 
 inline
-const int
+int
 operator++ (djnn::AbstractSimpleProperty& p)
 {
   return (int) p.get_double_value () + 1;
 }
 
 inline
-const int
+int
 operator-- (djnn::AbstractSimpleProperty& p)
 {
   return (int) p.get_double_value () - 1;
