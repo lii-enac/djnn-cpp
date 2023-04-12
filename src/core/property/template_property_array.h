@@ -72,7 +72,7 @@ namespace djnn {
   }
 
   void
-  set_value (TemplateProperty<DoubleArray>* array, int at, double v, int propagate) {
+  set_value (TemplateProperty<DoubleArray>* array, size_t at, double v, int propagate) {
     if (array->get_value().size () > at) array->get_value().at (at) = v;
     if (array->is_activable () && propagate) {
       array->notify_activation ();
