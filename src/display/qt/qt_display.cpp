@@ -1,3 +1,5 @@
+#include "core/utils/algorithm.h"
+
 #include "qt_display.h"
 #include "qt_window.h"
 
@@ -36,6 +38,9 @@ namespace djnn {
      w->check_for_update ();
     }
   }
+
+  void QtDisplayBackend::add_window (QtWindow* win) { _windows.push_back (win); }
+  void QtDisplayBackend::remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
 
 }
 

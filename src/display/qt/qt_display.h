@@ -25,8 +25,8 @@ namespace djnn {
 
       virtual void slot_for_about_to_block ();
 
-      void add_window (QtWindow* win) { _windows.push_back (win); }
-      void remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+      void add_window (QtWindow* win);
+      void remove_window (QtWindow* win);
 
   private:
       vector<QtWindow*> _windows;
