@@ -164,8 +164,3 @@ namespace djnn
   }
 
 } /* namespace djnn */
-
-
-namespace djnn_stl {
-    template class vector<pair<djnn::AbstractGShape*,djnn::QtContext>>;
-}
