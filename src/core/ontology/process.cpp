@@ -13,6 +13,8 @@
  *
  */
 
+#include "core/utils/algorithm.h"
+
 #include "process.h"
 #include "coupling.h"
 
