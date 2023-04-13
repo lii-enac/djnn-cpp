@@ -12,6 +12,7 @@
  *
  */
 
+#include "core/utils/algorithm.h"
 #include "process_handler.h"
 
 #include "core/serializer/serializer.h"
