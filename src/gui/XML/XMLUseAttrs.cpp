@@ -73,7 +73,7 @@ static int djn__ParseHeight(FatProcess** e, const char* v) {
 static int djn__ParseHref(FatProcess** e, const char* v) {
   // remove possible quotes
   string str(v);
-  str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
+  str.erase (djnnstl::remove(str.begin(), str.end(), '\''), str.end());
   if (str.at(0) == '#')
     str = str.substr (1);
   djn_UseArgs.href = str;

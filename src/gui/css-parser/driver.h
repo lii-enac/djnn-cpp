@@ -22,7 +22,7 @@
 #include "core/ontology/process.h"
 
 namespace css {
-using djnn::string;
+using djnnstl::string;
 
 class Scanner;
 class Driver
@@ -30,7 +30,7 @@ class Driver
 public:
     Driver();
 
-    std::string stream;
+    string stream;
     bool parse_stream (std::istream& in,
 		      const string& name, djnn::FatProcess *p);
     bool parse_string (const string& input,

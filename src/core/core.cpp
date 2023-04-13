@@ -164,6 +164,11 @@ int Vsnprintf(char8_t* pDestination, size_t n,
         return vsnprintf(pDestination, n, pFormat, arguments);
 #endif
 }
+
+int Vsnprintf(char32_t* pDestination, size_t n, const char32_t* pFormat, va_list arguments) { return -1; }
+int Vsnprintf(char16_t* pDestination, size_t n, const char16_t* pFormat, va_list arguments) { return -1; }
+int Vsnprintf(wchar_t* pDestination, size_t n, const wchar_t* pFormat, va_list arguments) { return -1; }
+
 }
 }
 

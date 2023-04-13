@@ -512,7 +512,7 @@ IvyAccess::find_child_impl (const string& key)
       }
 
       /* register in _in_map */  
-      _in_map[regexp].push_back (djnnstl::make_pair(index, newin));
+      _in_map[regexp].push_back (djnnstl::pair(index, newin));
       
      
 #ifdef __IVY_DEBUG__

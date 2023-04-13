@@ -92,7 +92,7 @@ namespace djnn
 
     /* remove container from structure_observer_list */
     structure_observer_list.erase (
-      remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer),
+      djnnstl::remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer),
       structure_observer_list.end ()
     );
     /* and delete it */

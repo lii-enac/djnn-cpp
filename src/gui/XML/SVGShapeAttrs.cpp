@@ -621,7 +621,7 @@ djn_ParseURL(const char * url) {
   string str (url);
   // remove possible quotes
 
-  str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
+  str.erase (djnnstl::remove(str.begin(), str.end(), '\''), str.end());
   //then remove the prefix url and the brackets
   std::size_t start = str.find ('#') + 1;
   std::size_t end = str.find (')');

@@ -17,7 +17,6 @@
 #pragma once
 
 #include <cmath>
-#include "core/utils/algorithm.h"
 
 #include "operators.h"
 
@@ -68,14 +67,14 @@ namespace djnn
   typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> PowAction;
   typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> Pow;
 
-  template <typename T> struct my_min { T operator() (T t1, T t2) { return std::min(t1, t2);} };
+  template <typename T> struct my_min { T operator() (T t1, T t2) { return djnnstl::min(t1, t2);} };
   template <> const char name_info<my_min<double>>::left[];
   template <> const char name_info<my_min<double>>::right[];
   template <> const char name_info<my_min<double>>::serialize[];
   typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> MinAction;
   typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> Min;
 
-  template <typename T> struct my_max { T operator() (T t1, T t2) { return std::max(t1, t2);} };
+  template <typename T> struct my_max { T operator() (T t1, T t2) { return djnnstl::max(t1, t2);} };
   template <> const char name_info<my_max<double>>::left[];
   template <> const char name_info<my_max<double>>::right[];
   template <> const char name_info<my_max<double>>::serialize[];

@@ -40,7 +40,7 @@ namespace djnn {
   }
 
   void QtDisplayBackend::add_window (QtWindow* win) { _windows.push_back (win); }
-  void QtDisplayBackend::remove_window (QtWindow* win) { _windows.erase (std::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
+  void QtDisplayBackend::remove_window (QtWindow* win) { _windows.erase (djnnstl::remove (_windows.begin (), _windows.end (), win), _windows.end ()); }
 
 }
 

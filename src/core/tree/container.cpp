@@ -70,7 +70,7 @@ namespace djnn
     if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
       for (int space = 0; space < nb_space; space++ ) std::cerr << "\t";
       ++nb_space ;
-      std::cerr << "--- " << get_name () << " :" << std::endl;
+      std::cerr << "--- " << get_name ().c_str() << " :" << std::endl;
     }
     #endif
 
@@ -88,7 +88,7 @@ namespace djnn
       #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL >= 2) {
         for (int space=0; space < nb_space; space++ ) std::cerr << "\t";
-        std::cerr << i << ". " << vector_to_delete[i]->get_debug_name () << std::endl ;
+        std::cerr << i << ". " << vector_to_delete[i]->get_debug_name ().c_str() << std::endl ;
       }
       #endif
 
@@ -186,14 +186,14 @@ namespace djnn
         return;
     }
     // check for existance
-    auto it = std::find (_children.begin (), _children.end (), child2);
+    auto it = djnnstl::find (_children.begin (), _children.end (), child2);
     if (it == _children.end ()) {
       return;
     } else {
       if (spec == BEFORE) {
         Container::remove_child_from_children_only (child_to_move);
         // update it and index
-        it = std::find (_children.begin (), _children.end (), child2);
+        it = djnnstl::find (_children.begin (), _children.end (), child2);
         auto index = std::distance (_children.begin (), it);
         _children.insert (_children.begin () + index, child_to_move); // it is the same children so do not add it in _not_alterated_children
         for (auto s: structure_observer_list) {
@@ -203,7 +203,7 @@ namespace djnn
       } else if (spec == AFTER) {
         Container::remove_child_from_children_only (child_to_move);
         // update it and index
-        it = std::find (_children.begin (), _children.end (), child2);
+        it = djnnstl::find (_children.begin (), _children.end (), child2);
         auto index = std::distance (_children.begin (), it);
         _children.insert (_children.begin () + index + 1, child_to_move); // it is the same children so do not add it in _not_alterated_children
         for (auto s: structure_observer_list) {
@@ -222,7 +222,7 @@ namespace djnn
   void
   Container::remove_child_from_children_only (CoreProcess* c)
   {
-    _children.erase (std::remove (_children.begin (), _children.end (), c), _children.end ());
+    _children.erase (djnnstl::remove (_children.begin (), _children.end (), c), _children.end ());
     for (auto s: structure_observer_list) {
       s->remove_child_from_container (this, c);
     }
@@ -236,7 +236,7 @@ namespace djnn
   {
     FatProcess::remove_child (c);
     if (is_altered ())
-      _unaltered_children->erase (std::remove (_unaltered_children->begin (), _unaltered_children->end (), c), _unaltered_children->end ());
+      _unaltered_children->erase (djnnstl::remove (_unaltered_children->begin (), _unaltered_children->end (), c), _unaltered_children->end ());
     remove_child_from_children_only (c);
   }
 

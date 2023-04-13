@@ -18,8 +18,9 @@
 
 %{
 
-#include "core/utils/containers.h"
-using djnn::string;
+#include <string>
+using std::string;
+
 
 #include "scanner.h"
 

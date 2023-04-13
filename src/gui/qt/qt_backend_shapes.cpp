@@ -109,7 +109,7 @@ namespace djnn
     for (auto c : h->children ()) {
       c.first->draw ();
     }
-    sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
+    djnnstl::sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
     z_processing_step = 2;
     for (auto v : shapes_vectors) {
       for (auto item : v->shapes ()) {

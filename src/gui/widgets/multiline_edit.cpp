@@ -653,12 +653,12 @@ namespace djnn
   string
   MultilineEditor::get_content_str ()
   {
-    std::string s;
+    string s;
     _cursor_pos = 0;
     auto sz = _lines.children ().size();
     for (size_t i = 0; i < sz; i++) {
       SimpleText* cur_line = (SimpleText*)_lines.children().at(i);
-      std::string content = cur_line->get_content ();
+      string content = cur_line->get_content ();
       if (i < _index_y) {
         _cursor_pos += content.length () + 1;
       } else if (i == _index_y) {
@@ -685,7 +685,7 @@ namespace djnn
     int max_width = (int) _width.get_value ();
     int nb_of_char = max_width/average_width;
     int sz = _lines.children ().size();
-    std::string s = get_content_str ();
+    string s = get_content_str ();
     int i = 0;
     int len = s.length();
     int cur_idx = 0;
@@ -710,7 +710,7 @@ namespace djnn
       }
       if (s.at(start_idx) == '\n')
         start_idx++;
-      std::string line = s.substr (start_idx, cur_idx - start_idx);
+      string line = s.substr (start_idx, cur_idx - start_idx);
       if (line.back() == '\n')
         line.pop_back();
       if (i < sz) {
@@ -725,7 +725,7 @@ namespace djnn
     if (i < sz - 1) {
       for (int a = i; a < sz; a++) {
         SimpleText* cur_line = (SimpleText*)_lines.children().at(a);
-        std::string str = "";
+        string str = "";
         cur_line->set_content (str);
       }
     }

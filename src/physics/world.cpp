@@ -153,7 +153,7 @@ namespace djnn
   }
 
   void World::add_phy_object (PhyObj* p) { _phy_objs.push_back (p); }
-  void World::remove_phy_object (PhyObj* p) { _phy_objs.erase (std::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
+  void World::remove_phy_object (PhyObj* p) { _phy_objs.erase (djnnstl::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
 
 
   PhyObj::PhyObj (CoreProcess* parent, const string& name)

@@ -214,7 +214,7 @@ named_color_t
 SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
 {
   string key (len, ' ');
-  std::transform (str, str+len, key.begin(),
+  djnnstl::transform (str, str+len, key.begin(),
       [](unsigned char c){ return tolower(c); });
   auto it = color_map->find(key);
   if (it != color_map->end())

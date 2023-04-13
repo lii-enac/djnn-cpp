@@ -310,7 +310,7 @@ namespace djnn
   {
     double vmax = 0;
     for (auto c: _container->children ()) {
-      vmax = max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
+      vmax = djnnstl::max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
   }
@@ -351,9 +351,9 @@ namespace djnn
   void
   MinList::do_action ()
   {
-    double vmin = std::numeric_limits<double>::max(); // set to double max value
+    double vmin = djnnstl::numeric_limits<double>::max(); // set to double max value
     for (auto c: _container->children ()) {
-      vmin = min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
+      vmin = djnnstl::min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
   }

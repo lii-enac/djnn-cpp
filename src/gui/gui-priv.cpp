@@ -53,7 +53,7 @@ namespace djnn {
 
     //TODO MP : becareful ... how much time does this take ?
     _children.erase (
-        std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
+        djnnstl::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
         _children.end ());
   }
 
@@ -177,7 +177,7 @@ namespace djnn {
   GUIStructureHolder::move_child_to (CoreProcess *c, size_t neighboor_index, child_position_e spec, size_t new_index)
   {
     _children.erase (
-        std::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
+        djnnstl::remove_if (_children.begin (), _children.end (), [c](children_t::value_type p) {return p.first == c;}),
         _children.end ());
     add_gui_child_at (c, neighboor_index, spec, new_index);
   }

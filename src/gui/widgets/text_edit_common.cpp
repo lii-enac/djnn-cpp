@@ -111,7 +111,7 @@ namespace djnn
   }
 
   coord_t
-  next_index (const std::string &str, coord_t idx)
+  next_index (const string &str, coord_t idx)
   {
     if (idx > str.size ()) return idx;
     int offset = 1;
@@ -125,7 +125,7 @@ namespace djnn
   }
 
   coord_t
-  previous_index (const std::string &str, coord_t idx)
+  previous_index (const string &str, coord_t idx)
   {
     if (idx <= 0) return 0;
     int offset = 1;
@@ -152,7 +152,7 @@ namespace djnn
   }
 
   bool
-  is_starting_word (const std::string &str, coord_t i)
+  is_starting_word (const string &str, coord_t i)
   {
     if (i <= 0) return true;
     char c = str.at (i);
@@ -162,7 +162,7 @@ namespace djnn
   }
 
   coord_t
-  first_word (const std::string &str, coord_t idx)
+  first_word (const string &str, coord_t idx)
   {
     coord_t first_word_idx = 0;
     while (isspace (str.at (first_word_idx)) && first_word_idx < idx)
@@ -175,7 +175,7 @@ namespace djnn
   }
 
   coord_t
-  next_word (const std::string &str, coord_t idx)
+  next_word (const string &str, coord_t idx)
   {
     coord_t i = next_index (str, idx);
     while (i < str.length () && !is_starting_word (str, i))
@@ -184,7 +184,7 @@ namespace djnn
   }
 
   coord_t
-  previous_word (const std::string &str, coord_t idx)
+  previous_word (const string &str, coord_t idx)
   {
     int i = previous_index (str, idx);
     while (i > 0 && !is_starting_word (str, i))

@@ -155,7 +155,7 @@ namespace djnn
   AbstractList::remove_child (CoreProcess* c)
   {
     /* check for existance */
-    auto it = std::find (_children.begin (), _children.end (), c);
+    auto it = djnnstl::find (_children.begin (), _children.end (), c);
 
     /* then remove it and set _removed */
     if (it != _children.end ()) {

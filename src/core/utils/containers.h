@@ -31,9 +31,11 @@ extern double stof(const eastl::string&, size_t* idx, int base = 10);
 
 namespace djnn {
   using djnnstl::string;
+  using djnnstl::to_string;
   using djnnstl::vector;
   using djnnstl::list;
   using djnnstl::map;
   using djnnstl::pair;
-  using djnnstl::make_pair;
+  using djnnstl::prev;
+  //using djnnstl::make_pair;
 }

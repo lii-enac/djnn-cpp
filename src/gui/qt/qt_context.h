@@ -105,9 +105,9 @@ namespace djnn
       void draw ();
       int z_order () { return _z_order; }
       void add_item (AbstractGShape* shape, QtContext *context);
-      vector< std::pair<AbstractGShape*, QtContext> > shapes () { return _shapes; }
+      vector< pair<AbstractGShape*, QtContext> > shapes () { return _shapes; }
     private:
-      vector< std::pair<AbstractGShape*, QtContext> > _shapes;
+      vector< pair<AbstractGShape*, QtContext> > _shapes;
       int _z_order;
   };
 

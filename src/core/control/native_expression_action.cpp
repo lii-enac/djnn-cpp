@@ -83,6 +83,6 @@ namespace djnn
     graph_remove_edge (src, dst);
     
     //FIXME : remove-->erase ?
-    _dsts.erase(std::find (_dsts.begin (), _dsts.end (), dst));
+    _dsts.erase(djnnstl::find (_dsts.begin (), _dsts.end (), dst));
   }
 }

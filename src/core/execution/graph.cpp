@@ -15,7 +15,7 @@
  */
 
 
-#include <algorithm>
+#include "core/utils/algorithm.h"
 
 #if !defined(DJNN_NO_DEBUG) && defined(_DEBUG_GRAPH_INSERT_TIME) || !defined(_DEBUG_SEE_GRAPH_INFO_PREF)
 #include <chrono>
@@ -111,12 +111,12 @@ namespace djnn
       
       /* NOTE: 
         for now we keep this complicated way of erasing instead of 
-          _edges.erase(std::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
+          _edges.erase(djnnstl::remove (_edges.begin (), _edges.end (), dst), _edges.end ());
         to manage wrong removing, such as in unit tests
       */
 
       /* remove dst from _edges vector */
-      auto newend = std::remove (_edges.begin (), _edges.end (), dst);
+      auto newend = djnnstl::remove (_edges.begin (), _edges.end (), dst);
 
       /* check if end has changed and erase */
       if (newend != _edges.end ()) {
@@ -271,7 +271,7 @@ namespace djnn
   void
   Graph::remove_output_node (CoreProcess* c)
   {
-    auto new_end = std::remove_if (_output_nodes.begin (), _output_nodes.end (),
+    auto new_end = djnnstl::remove_if (_output_nodes.begin (), _output_nodes.end (),
       [c](Vertex* v) { return v->get_process () == c; });
 
     if (new_end != _output_nodes.end ()) {

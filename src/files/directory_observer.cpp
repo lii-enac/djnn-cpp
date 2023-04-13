@@ -127,7 +127,7 @@ namespace djnn
     #if DJNN_STL_STD || DJNN_STL_DJNN
     const auto& path = _path.get_value();
     #elif DJNN_STL_EASTL
-    const string path = _path.get_value().c_str();
+    const std::string path = _path.get_value().c_str();
     #endif
     for (auto &p: filesystem::directory_iterator(path)) {
       new_files.push_back (p);
@@ -139,13 +139,13 @@ namespace djnn
     for (auto nf: new_files) {
       found = false;
       for (auto of: old_files) {
-        if (nf.filename() == of) {
+        if (nf.filename().c_str() == of) {
           found = true;
           break;
         }
       }
       if (!found) {
-        string full_path = nf.root_directory().string() + nf.relative_path().string();
+        std::string full_path = nf.root_directory().string() + nf.relative_path().string();
         CoreProcess * file = new File (&_files, "",full_path.c_str(), nf.filename().string().c_str(), filesystem::is_directory (nf));
         _added_files.add_one (file);
         added = true;
@@ -154,7 +154,7 @@ namespace djnn
     for (auto of: old_files) {
       found = false;
       for (auto nf: new_files) {
-        if (nf.filename() == of) {
+        if (nf.filename().c_str() == of) {
           found = true;
           break;
         }

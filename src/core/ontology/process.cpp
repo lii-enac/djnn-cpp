@@ -57,9 +57,9 @@ namespace djnn
 
   static int parentless_names_order = 0 ;
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 
-  map<const CoreProcess*, std::pair<string, long long>> parentless_names; 
+  map<const CoreProcess*, pair<string, long long>> parentless_names; 
 #else
-  static map<const CoreProcess*, std::pair<string, int>> parentless_names;
+  static map<const CoreProcess*, pair<string, int>> parentless_names;
 #endif
 
   void
@@ -88,7 +88,7 @@ namespace djnn
     // std::cerr << "\033[0m \n\n";
 
     // sort by building order
-    std::map <int, const Process*> parentless_names_ordered;
+    djnn::map <int, const Process*> parentless_names_ordered;
     for (auto& [key, pair_value] : parentless_names)
       parentless_names_ordered[pair_value.second] = key;
 
@@ -113,7 +113,7 @@ namespace djnn
       //std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
       std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
       for (const auto& [key, pair_value] : parentless_names)
-        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first << "\"\n";
+        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first.c_str() << "\"\n";
       std::cerr << "\033[0m \n\n";
     }
   #endif
@@ -151,8 +151,8 @@ namespace djnn
     #endif
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    __dbg_creation_stat_order.push_back (std::make_pair(this, __dbg_creation_num++));
-    __position_in_creation = std::prev(__dbg_creation_stat_order.end ());
+    __dbg_creation_stat_order.push_back (djnn::pair(this, __dbg_creation_num++));
+    __position_in_creation = djnn::prev(__dbg_creation_stat_order.end ());
     #endif
   }
 
@@ -226,7 +226,7 @@ namespace djnn
     if (parent) {
       parent->add_child (this, name);
     } else {
-      parentless_names[this] = std::pair<string, int> {name, parentless_names_order++} ;
+      parentless_names[this] = djnn::pair<string, int> {name, parentless_names_order++} ;
     }
 
     #ifndef DJNN_NO_DEBUG
@@ -518,7 +518,7 @@ namespace djnn
   CouplingProcess::remove_activation_coupling (Coupling* c)
   {
     _activation_couplings.erase (
-      std::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
+      djnnstl::remove (_activation_couplings.begin (), _activation_couplings.end (), c),
       _activation_couplings.end ()
     );
   }
@@ -527,7 +527,7 @@ namespace djnn
   CouplingProcess::remove_deactivation_coupling (Coupling* c)
   {
     _deactivation_couplings.erase (
-      std::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),
+      djnnstl::remove (_deactivation_couplings.begin (), _deactivation_couplings.end (), c),
       _deactivation_couplings.end ()
     );
   }

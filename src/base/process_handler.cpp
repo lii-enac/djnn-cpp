@@ -155,7 +155,7 @@ namespace djnn
   ProcessCollector::remove_one (CoreProcess* p)
   {
     if (p) {
-      _list.erase(std::remove (_list.begin (), _list.end (), p), _list.end ());
+      _list.erase(djnnstl::remove (_list.begin (), _list.end (), p), _list.end ());
       _size.set_value ((int)_list.size (), true);
     }
   }

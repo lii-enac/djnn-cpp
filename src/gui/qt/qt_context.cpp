@@ -114,7 +114,7 @@ namespace djnn
 
   void
   QtVectorShapeToDraw::add_item (AbstractGShape* shape, QtContext *context) {
-    _shapes.push_back (make_pair(shape, QtContext (context)));
+    _shapes.push_back (pair(shape, QtContext (context)));
   }
 
   void

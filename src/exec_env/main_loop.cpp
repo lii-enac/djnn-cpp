@@ -239,7 +239,7 @@ namespace djnn {
     void
     MainLoop::remove_external_source (ExternalSource* es)
     {
-       auto i = std::find(_external_sources.begin (), _external_sources.end (), es);
+       auto i = djnnstl::find(_external_sources.begin (), _external_sources.end (), es);
        if (i != _external_sources.end ())
           _external_sources.erase(i);
     }
@@ -253,7 +253,7 @@ namespace djnn {
     void
     MainLoop::remove_background_process (FatProcess *p)
     {
-      _background_processes.erase (std::remove(_background_processes.begin(), _background_processes.end(), p), _background_processes.end());
+      _background_processes.erase (djnnstl::remove(_background_processes.begin(), _background_processes.end(), p), _background_processes.end());
     }
 
 

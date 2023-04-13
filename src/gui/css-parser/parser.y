@@ -24,6 +24,10 @@
 #undef error
 #undef warning
 
+#include <string>
+
+std::string filename_tmp;
+
 %}
 
 %require "2.3"
@@ -44,7 +48,8 @@
 %locations
 %initial-action
 {
-    @$.begin.filename = @$.end.filename = &driver.stream;
+    std::string filename_tmp = driver.stream.c_str();
+    @$.begin.filename = @$.end.filename = &filename_tmp; //&driver.stream;
 };
 
 %code
@@ -178,7 +183,7 @@
 %union {
   int integerVal;
   double doubleVal;
-  djnn::string* stringVal;
+  std::string* stringVal;
 }
 
 %token END 0	"end of file"
@@ -360,8 +365,8 @@ term
  | unary_operator STRING {
    // remove quote
    string str ($2->data());
-   str.erase (std::remove(str.begin(), str.end(), '\''), str.end());
-   str.erase (std::remove(str.begin(), str.end(), '\"'), str.end());
+   str.erase (djnnstl::remove(str.begin(), str.end(), '\''), str.end());
+   str.erase (djnnstl::remove(str.begin(), str.end(), '\"'), str.end());
    make_text_property (cur_property,str);
  }
  | unary_operator PERCENTAGE { make_num_property (cur_property, $2); }
