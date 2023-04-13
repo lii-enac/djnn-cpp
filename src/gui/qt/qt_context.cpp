@@ -14,7 +14,6 @@
 
 #include "qt_context.h"
 #include "qt_backend.h"
-#include "core/utils/containers_impl.h"
 
 #include <QtWidgets/QWidget>
 #include <QtCore/QtMath>
