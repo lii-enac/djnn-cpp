@@ -13,6 +13,8 @@
  *
  */
 
+#include "core/utils/algorithm.h"
+
 #include "gui-priv.h"
 #include "core/tree/component.h"
 #include "core/tree/component_observer.h"
