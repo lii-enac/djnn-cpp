@@ -1,3 +1,5 @@
+#include "core/utils/algorithm.h"
+
 #include "update_drawing.h"
 
 #include "core/control/action.h"
