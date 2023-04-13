@@ -14,7 +14,6 @@
 
 #include "component_observer.h"
 
-#include <algorithm>
 
 #include "core/utils/ext/remotery/Remotery.h"
 

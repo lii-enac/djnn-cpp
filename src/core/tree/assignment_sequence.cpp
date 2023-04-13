@@ -28,7 +28,6 @@
 
 #include "core/utils/ext/remotery/Remotery.h"
 
-#include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
 #include "core/utils/djnn_dynamic_cast.h"

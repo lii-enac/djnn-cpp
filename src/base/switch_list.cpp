@@ -19,7 +19,6 @@
 #include "core/property/bool_property.h"
 #include "core/utils/error.h"
 
-#include <algorithm>
 
 namespace djnn
 {

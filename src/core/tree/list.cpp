@@ -27,7 +27,6 @@
 #include "core/utils/utils-dev.h"
 #include "core/utils/to_string.h"
 
-#include <algorithm>
 
 namespace djnn
 {

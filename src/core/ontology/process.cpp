@@ -24,7 +24,6 @@
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/to_string.h"
 
-#include <algorithm>
 #include <cassert>
 
 #include <iostream>

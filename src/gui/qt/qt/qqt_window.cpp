@@ -12,13 +12,12 @@
  *
  */
 
-#include <algorithm>
+#include <type_traits> // is_same
 
 #include <QEvent>
 #include <QTouchEvent>
 #include <QOpenGLWidget>
 
-#include <type_traits> // is_same
 
 #include "gui/gui-dev.h"
 #include "gui/backend.h"

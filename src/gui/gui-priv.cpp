@@ -23,7 +23,6 @@
 #include "display/display-dev.h"
 
 
-#include <algorithm>
 //#include <boost/range/adaptor/reversed.hpp>
 
 #if _DEBUG_SEE_GUI_INFO_PREF

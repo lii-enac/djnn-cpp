@@ -5,7 +5,6 @@
 #include "core/execution/graph.h"
 #include "core/property/bool_property.h"
 
-#include <algorithm>
 
 #include "core/utils/iostream.h"
 #include "utils/debug.h"

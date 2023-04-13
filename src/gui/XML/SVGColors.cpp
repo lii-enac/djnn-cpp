@@ -18,8 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <algorithm>
-// #include "core/cor__e.h"
+
 #include "gui/gui-dev.h"
 
 

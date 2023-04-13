@@ -16,10 +16,11 @@
 
 #pragma once
 
+#include <cmath>
+#include "core/utils/algorithm.h"
+
 #include "operators.h"
 
-#include <cmath>
-#include <algorithm>
 
 namespace djnn
 {

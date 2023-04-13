@@ -12,7 +12,6 @@
  *
  */
 
-#include <algorithm>
 #include <cassert>
 
 #include "core/core-dev.h" // graph add/remove edge

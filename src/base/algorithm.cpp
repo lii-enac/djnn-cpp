@@ -12,25 +12,12 @@
  *
  */
 
-#if DJNN_STL_STD
-#include <algorithm>
-#include <limits>
-namespace djnn {
-  using std::stable_sort;
-}
-#elif DJNN_STL_EASTL
-#include <EASTL/algorithm.h>
-#include <EASTL/sort.h>
-namespace djnn {
-  using eastl::stable_sort;
-}
-#endif
-
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/serializer/serializer.h"
 
+#include "core/utils/algorithm.h"
 #include "algorithm.h"
 
 
@@ -323,7 +310,7 @@ namespace djnn
   {
     double vmax = 0;
     for (auto c: _container->children ()) {
-      vmax = djnnstl::max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
+      vmax = max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
   }
@@ -366,7 +353,7 @@ namespace djnn
   {
     double vmin = std::numeric_limits<double>::max(); // set to double max value
     for (auto c: _container->children ()) {
-      vmin = djnnstl::min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
+      vmin = min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
   }

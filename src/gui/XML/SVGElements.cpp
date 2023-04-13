@@ -15,7 +15,6 @@
  */
 
 #include <numeric>
-#include <algorithm>
 #include <limits>
 
 //#include "core/utils/iostream.h"

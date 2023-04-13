@@ -13,7 +13,6 @@
  */
 
 #include <fstream>
-#include <algorithm>
 #include <functional>
 #include <locale>
 

@@ -124,7 +124,7 @@ namespace djnn
     bool removed = false;
     _added_files.remove_all ();
     _removed_files.remove_all ();
-    #if DJNN_STL_STD
+    #if DJNN_STL_STD || DJNN_STL_DJNN
     const auto& path = _path.get_value();
     #elif DJNN_STL_EASTL
     const string path = _path.get_value().c_str();

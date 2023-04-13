@@ -22,6 +22,8 @@
 #include <QtCore/QFileInfo>
 
 #include "core/tree/list.h"
+#include "core/utils/algorithm.h"
+
 #include "core/utils/ext/remotery/Remotery.h"
 
 #include "gui/gui-dev.h"

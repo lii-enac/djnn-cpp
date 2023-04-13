@@ -19,7 +19,6 @@
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
-#include <algorithm>
 
 namespace djnn
 {

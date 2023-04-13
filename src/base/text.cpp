@@ -225,7 +225,7 @@ namespace djnn
   {
     std::match_results<string::const_iterator> match;
     auto & input = _reg._input.get_value();
-    #if DJNN_STL_STD
+    #if DJNN_STL_STD || DJNN_STL_DJNN
     if (std::regex_search(input, match, _reg._regex) && match.size() > 1) {
     #elif DJNN_STL_EASTL 
     if (std::regex_search(input.begin(), input.end(), match, _reg._regex) && match.size() > 1) {

@@ -14,7 +14,6 @@
  *
  */
 
-#include <algorithm>
 #include "core/utils/iostream.h"
 #include <stdio.h>
 #include <stdlib.h>
