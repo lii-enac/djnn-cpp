@@ -12,6 +12,8 @@
  *
  */
 
+#include "core/utils/algorithm.h"
+
 #include "abstract_physics_backend.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/component.h"
@@ -149,6 +151,9 @@ namespace djnn
   {
     _cstep->disable ();
   }
+
+  void World::add_phy_object (PhyObj* p) { _phy_objs.push_back (p); }
+  void World::remove_phy_object (PhyObj* p) { _phy_objs.erase (std::remove (_phy_objs.begin (), _phy_objs.end (), p), _phy_objs.end ()); }
 
 
   PhyObj::PhyObj (CoreProcess* parent, const string& name)
