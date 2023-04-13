@@ -15,9 +15,15 @@
 #if DJNN_STL_STD
 #include <algorithm>
 #include <limits>
+namespace djnn {
+  using std::stable_sort;
+}
 #elif DJNN_STL_EASTL
 #include <EASTL/algorithm.h>
 #include <EASTL/sort.h>
+namespace djnn {
+  using eastl::stable_sort;
+}
 #endif
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -111,7 +117,7 @@ namespace djnn
     	    }
     	    to_sort.push_back (pair<double, int> (prop->get_double_value (), i++));
     	  }
-    	  djnnstl::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
+    	  djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
     	  i = 0;
     	  for (auto v : to_sort) {
     	    if (_ascending.get_value ())
@@ -133,7 +139,7 @@ namespace djnn
     	    }
     	    to_sort.push_back (pair<string, int> (prop->get_string_value (), i++));
     	  }
-    	  djnnstl::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
+    	  djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
     	  i = 0;
     	  for (auto v : to_sort) {
     	    if (_ascending.get_value ())
