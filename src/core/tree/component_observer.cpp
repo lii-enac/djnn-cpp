@@ -12,6 +12,7 @@
  *
  */
 
+#include "core/utils/algorithm.h"
 #include "component_observer.h"
 
 
@@ -82,7 +83,7 @@ namespace djnn
   void
   ComponentObserver::remove_context_manager (ContextManager* m)
   {
-    _manager_list.erase (std::remove (_manager_list.begin (), _manager_list.end (), m), _manager_list.end ());
+    _manager_list.erase (remove (_manager_list.begin (), _manager_list.end (), m), _manager_list.end ());
   }
 
   void
@@ -94,7 +95,7 @@ namespace djnn
   void
   ComponentObserver::remove_draw_context_manager (ContextManager* m)
   {
-    _draw_manager_list.erase (std::remove (_draw_manager_list.begin (), _draw_manager_list.end (), m),
+    _draw_manager_list.erase (remove (_draw_manager_list.begin (), _draw_manager_list.end (), m),
                               _draw_manager_list.end ());
   }
 

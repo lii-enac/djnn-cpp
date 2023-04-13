@@ -14,6 +14,7 @@
  *
  */
 
+#include "core/utils/algorithm.h"
 #include <stdexcept>
 
 #include "list.h"

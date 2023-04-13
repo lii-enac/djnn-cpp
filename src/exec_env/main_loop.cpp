@@ -14,6 +14,7 @@
  *
  */
 
+#include "core/utils/algorithm.h"
 #include "main_loop.h"
 #include "cpp-thread.h"
 

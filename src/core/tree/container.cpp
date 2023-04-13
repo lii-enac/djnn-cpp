@@ -13,6 +13,7 @@
  *
  */
 
+#include "core/utils/algorithm.h"
 #include "container.h"
 
 #include "core/tree/component_observer.h"

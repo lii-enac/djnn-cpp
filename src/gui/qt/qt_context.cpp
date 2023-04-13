@@ -14,6 +14,7 @@
 
 #include "qt_context.h"
 #include "qt_backend.h"
+#include "core/utils/containers_impl.h"
 
 #include <QtWidgets/QWidget>
 #include <QtCore/QtMath>
@@ -161,4 +162,10 @@ namespace djnn
       delete v;
     }
   }
+
 } /* namespace djnn */
+
+
+namespace djnn_stl {
+    template class vector<pair<djnn::AbstractGShape*,djnn::QtContext>>;
+}
