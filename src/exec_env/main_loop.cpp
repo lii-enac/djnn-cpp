@@ -244,4 +244,17 @@ namespace djnn {
           _external_sources.erase(i);
     }
 
+    void
+    MainLoop::add_background_process (FatProcess *p)
+    {
+      _background_processes.push_back (p);
+    }
+
+    void
+    MainLoop::remove_background_process (FatProcess *p)
+    {
+      _background_processes.erase (std::remove(_background_processes.begin(), _background_processes.end(), p), _background_processes.end());
+    }
+
+
 }
