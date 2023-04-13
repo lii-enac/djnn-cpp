@@ -19,6 +19,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "core/utils/algorithm.h"
+
 #include "gui/gui-dev.h"
 
 

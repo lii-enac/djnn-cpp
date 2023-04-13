@@ -17,6 +17,8 @@
 #include <numeric>
 #include <limits>
 
+#include "core/utils/algorithm.h"
+
 //#include "core/utils/iostream.h"
 #include <stdio.h>
 #include <string.h>
