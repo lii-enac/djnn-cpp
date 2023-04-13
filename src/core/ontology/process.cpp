@@ -809,7 +809,7 @@ namespace djnn
   };
 
   CoreProcess*
-  CoreProcess::impl_clone (std::map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  CoreProcess::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     #ifndef DJNN_NO_DEBUG
     auto * pp = this;
