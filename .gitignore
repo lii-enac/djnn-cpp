@@ -3,7 +3,7 @@
 /.vscode/*.log
 /build.ninja
 /.ninja_log
+/tools/make2ninja.py
 /jq_script
-/make2ninja.py
 /ignore
 /-.json
