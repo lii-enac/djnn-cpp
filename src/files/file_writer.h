@@ -18,10 +18,10 @@
 #include "core/ontology/coupling.h"
 #include "core/property/text_property.h"
 #include "core/control/action.h"
-#include <fstream>
 
 namespace djnn
 {
+  struct FileWriterImpl;
   class FileWriter : public FatProcess
   {
   private:
@@ -50,7 +50,6 @@ namespace djnn
     FileNameAction _fn_action;
     FileWriterAction _action;
     Coupling _c_input, _c_filename;
-    std::ofstream _fs;
-
+    FileWriterImpl* _impl;
   };
 }

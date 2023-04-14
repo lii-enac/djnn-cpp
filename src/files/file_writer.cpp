@@ -35,18 +35,25 @@ namespace djnn
     ((FileWriter*)get_parent ())->change_file ();
   }
 
+  struct FileWriterImpl {
+    FileWriterImpl(const string& filename)
+    : _fs(std::ofstream(filename.c_str(), std::ofstream::out | std::ofstream::trunc)) {}
+    std::ofstream _fs;
+  };
+
   FileWriter::FileWriter (CoreProcess* parent, const string& name, const string& filename)
   : FatProcess (name), _input (this, "input", ""), _filename (this, "filename", filename),
   _fn_action (this, "fn_action"), _action (this, "action"),
   _c_input (&_input, ACTIVATION, &_action, ACTIVATION),
   _c_filename (&_filename, ACTIVATION, &_fn_action, ACTIVATION),
-  _fs (filename.c_str(), std::ofstream::out | std::ofstream::trunc)
+  _impl(new FileWriterImpl(filename.c_str()))
   {
     finalize_construction (parent, name);
   }
 
   FileWriter::~FileWriter ()
   {
+    delete _impl;
   }
 
   void
@@ -54,10 +61,10 @@ namespace djnn
   {
     _c_input.enable ();
     _c_filename.enable ();
-    if (_fs.is_open ()) {
-      _fs.close ();
+    if (_impl->_fs.is_open ()) {
+      _impl->_fs.close ();
     }
-    _fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
+    _impl->_fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
   }
 
   void
@@ -65,24 +72,24 @@ namespace djnn
   {
     _c_input.disable ();
     _c_filename.disable ();
-    _fs.close();
+    _impl->_fs.close();
     
   }
 
   void
   FileWriter::change_file ()
   {
-    if (_fs.is_open ()) {
-      _fs.close ();
+    if (_impl->_fs.is_open ()) {
+      _impl->_fs.close ();
     }
-    _fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
+    _impl->_fs.open (_filename.get_value ().c_str (), std::ofstream::out | std::ofstream::trunc);
   }
 
   void
   FileWriter::write ()
   {
-    _fs << _input.get_value ();
-    _fs.flush ();
+    _impl->_fs << _input.get_value ();
+    _impl->_fs.flush ();
   }
 }
 
