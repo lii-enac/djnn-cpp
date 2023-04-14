@@ -727,15 +727,18 @@ cccmd: $(build_dir)/compile_commands.json
 # ---------------------------------------
 # generate ninja file from Makefile
 
-ninja: build.ninja
-build.ninja: make2ninja.py
-	make -Bnd V=max | python3 make2ninja.py > build.ninja
+make2ninja ?= tools/make2ninja.py
+
+ninja: clear build.ninja
+build.ninja: $(make2ninja)
+	$(MAKE) -Bnd V=max | python3 $(make2ninja) > build.ninja
 .PHONY: build.ninja ninja
 
-make2ninja.py:
-	curl -O https://raw.githubusercontent.com/conversy/make2ninja/90e939a539a081b44c9bdc2bef70e6908e7a645a/make2ninja.py
+$(make2ninja):
+	mkdir -p $(dir $@)
+	curl -O https://raw.githubusercontent.com/conversy/make2ninja/master/make2ninja.py && mv make2ninja.py $(make2ninja)
 ifeq ($(os),Darwin)
-	sed -i '' "s/\'(./\`(./" make2ninja.py
+	sed -i '' "s/\'(./\`(./" $@
 endif
 
 # ---------------------------------------
