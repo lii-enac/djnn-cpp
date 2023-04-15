@@ -68,6 +68,10 @@ namespace djnn
     get_average_char_width (FontMetricsImpl fm) override;
     void
     draw_simple_text_edit (MultilineEditor*) override;
+    void
+    open_dialog (FileDialog*) override;
+    void
+    save_dialog (FileDialog*) override;
     size_t
     compute_index (FontMetricsImpl fm, SimpleText* t, int x) override;
     int

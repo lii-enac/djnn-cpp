@@ -33,6 +33,7 @@ namespace djnn
   class SimpleText;
   class MultilineEditor;
   class TextField;
+  class FileDialog;
   class AbstractBackend
   {
   public:
@@ -129,6 +130,13 @@ namespace djnn
     }
     virtual void
     draw_data_image (DataImage *i)
+    {
+    }
+    /*widgets*/
+    virtual void open_dialog (FileDialog*)
+    {
+    }
+    virtual void save_dialog (FileDialog*)
     {
     }
     virtual void
