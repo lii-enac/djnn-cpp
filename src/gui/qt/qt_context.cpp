@@ -12,13 +12,16 @@
  *
  */
 
-#include "qt_context.h"
-#include "qt_backend.h"
-#include "core/utils/containers_impl.h"
-
 #include <QtWidgets/QWidget>
 #include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
+
+#include "qt_context.h"
+#include "qt_backend.h"
+#if DJNN_STL_DJNN
+#include "core/utils/containers_impl.h"
+#endif
+
 #include "core/utils/iostream.h"
 #include <cmath>
 
