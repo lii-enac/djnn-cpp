@@ -147,7 +147,7 @@ namespace djnn {
   {
     string n;
     if (con->connector_type < _type_names.size ())
-      n = string (_type_names[con->connector_type] + "-" + djnn::to_string (con->connector_type_id));
+      n = string (_type_names[con->connector_type] + "-" + djnnstl::to_string (con->connector_type_id));
     else
       n = "UNNAMED";
     return n;

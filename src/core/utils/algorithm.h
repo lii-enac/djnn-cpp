@@ -7,25 +7,36 @@
 #if DJNN_STL_STD
 #include <algorithm>
 #include <limits>
-namespace djnn {
+namespace djnnstl {
   using std::stable_sort;
   using std::max;
   using std::min;
+  using std::remove;
+  using std::remove_if;
+  using std::sort;
+  using std::find;
+  using std::transform;
+  using std::numeric_limits;
 }
 #elif DJNN_STL_EASTL
 #include <EASTL/algorithm.h>
 #include <EASTL/sort.h>
-namespace djnn {
+namespace djnnstl {
   using eastl::stable_sort;
 }
 #elif DJNN_STL_DJNN
 #include <algorithm>
 #include <limits>
-namespace djnn {
+namespace djnnstl {
   using std::stable_sort;
   using std::max;
   using std::min;
+  //using djnnstl::remove;
   using std::remove;
+  using std::remove_if;
   using std::sort;
+  using std::find;
+  using std::transform;
+  using std::numeric_limits;
 }
 #endif

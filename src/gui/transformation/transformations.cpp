@@ -37,6 +37,9 @@
 
 #include "core/utils/iostream.h"
 
+using djnnstl::cerr;
+using djnnstl::endl;
+
 namespace djnn
 {
   AbstractTransformation::AbstractTransformation (CoreProcess* parent, const string& name) :
@@ -132,7 +135,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient translation must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient translation must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -230,7 +233,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient rotation must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient rotation must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -320,7 +323,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient scaling must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient scaling must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -397,7 +400,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient skewX must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient skewX must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -474,7 +477,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient skewY must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient skewY must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -631,7 +634,7 @@ namespace djnn
         }
         break;
       default:
-        std::cerr << "AbstractHomography::rightTranslate2d -> missing case in a switch " << state2d << std::endl;
+        cerr << "AbstractHomography::rightTranslate2d -> missing case in a switch " << state2d << endl;
         // cannot reach
         break;
     }
@@ -735,7 +738,7 @@ namespace djnn
         }
         break;
       default:
-        std::cerr << "AbstractHomography::rightScale2d -> missing case in a switch " << state2d << std::endl;
+        cerr << "AbstractHomography::rightScale2d -> missing case in a switch " << state2d << endl;
         // cannot reach
         break;
     }
@@ -860,7 +863,7 @@ namespace djnn
         }
         break;
       default:
-        std::cerr << "AbstractHomography::leftScale2d -> missing case in a switch " << state2d << std::endl;
+        cerr << "AbstractHomography::leftScale2d -> missing case in a switch " << state2d << endl;
         // cannot reach
         break;
     }
@@ -1184,7 +1187,7 @@ namespace djnn
         }
         return;
       default:
-        std::cerr << "AbstractHomography::rightSkew2d -> missing case in a switch " << state2d << std::endl;
+        cerr << "AbstractHomography::rightSkew2d -> missing case in a switch " << state2d << endl;
         // cannot reach
         break;
     }
@@ -1284,7 +1287,7 @@ namespace djnn
         }
         return;
       default:
-        std::cerr << "AbstractHomography::leftSkew2d -> missing case in a switch " << state2d << std::endl;
+        cerr << "AbstractHomography::leftSkew2d -> missing case in a switch " << state2d << endl;
         // cannot reach
         break;
     }
@@ -2215,7 +2218,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of gradient homography must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of gradient homography must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");
@@ -2253,7 +2256,7 @@ namespace djnn
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient *grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-      std::cerr << "Parent of simple gradient transform must be <LinearGradient|RadialGradient>\n";
+      cerr << "Parent of simple gradient transform must be <LinearGradient|RadialGradient>\n";
       return;
     }
     grad->transforms ()->add_child (this, "");

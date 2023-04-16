@@ -19,6 +19,7 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
 
   class ExternalSource
   {

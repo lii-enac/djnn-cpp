@@ -76,7 +76,7 @@ namespace djnn {
       if (it != gpio_lines.end ()) {
         line = it->second;
       } else {
-        line = new GPIOLine (nullptr, "line" + djnn::to_string (index), index, dir);
+        line = new GPIOLine (nullptr, "line" + djnnstl::to_string (index), index, dir);
         line->activate ();
       }
       if (path.length() > (sz + 1))

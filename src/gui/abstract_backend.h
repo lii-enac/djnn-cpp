@@ -25,6 +25,8 @@
 
 namespace djnn
 {
+  using djnnstl::string;
+  using djnnstl::pair;
 
   typedef void* FontMetricsImpl;
   class AbstractGObj;

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <vector>
+#include "core/utils/containers.h"
 #include <utility>
 
 #include <QtGui/QPen>

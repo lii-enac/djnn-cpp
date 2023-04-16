@@ -47,11 +47,11 @@ namespace djnn
       {
       case PHIDID_1010_1013_1018_1019:
         {
-          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (djnn::to_string (deviceLabel));
+          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (djnnstl::to_string (deviceLabel));
           if (dev == nullptr) {
 
             djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-            dev = new IFaceKit888 (InterfaceKits, djnn::to_string (deviceLabel));
+            dev = new IFaceKit888 (InterfaceKits, djnnstl::to_string (deviceLabel));
             dev->activate ();
             if (!in_init) {
               GRAPH_EXEC // executing
@@ -116,7 +116,7 @@ namespace djnn
       {
       case PHIDID_1010_1013_1018_1019:
         {
-          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (djnn::to_string (deviceLabel));
+          IFaceKit888 *dev = (IFaceKit888*) InterfaceKits->find_child_impl (djnnstl::to_string (deviceLabel));
           if (dev != nullptr) {
 
             djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
@@ -248,7 +248,7 @@ namespace djnn
   {
     PhidgetReturnCode rec = PhidgetVoltageInput_setDataInterval (_sw_ch, _rate->get_value ());
     if (rec != EPHIDGET_OK) {
-      warning (this, "Phidgets: failed to update data interval. Phidget error code: " + djnn::to_string (rec));
+      warning (this, "Phidgets: failed to update data interval. Phidget error code: " + djnnstl::to_string (rec));
     }
   }
 
@@ -257,7 +257,7 @@ namespace djnn
   {
     PhidgetReturnCode rec = PhidgetVoltageInput_setVoltageChangeTrigger (_sw_ch, _trigger->get_value ());
     if (rec != EPHIDGET_OK) {
-      warning (this, "Phidgets: failed to update trigger. Phidget error code: " + djnn::to_string (rec));
+      warning (this, "Phidgets: failed to update trigger. Phidget error code: " + djnnstl::to_string (rec));
     }
   }
 

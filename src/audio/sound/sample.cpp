@@ -69,7 +69,7 @@ namespace djnn {
 			// 	std::cerr << numFrames << std::endl;
 			// 	drmp3_read_pcm_frames_s16 (&dr, numFrames, (drmp3_int16*)data);
 			// } else {
-				error (this, string ("cannot open audio sample file ") + path + "(dr_wav error " + djnn::to_string(res) + ")");
+				error (this, string ("cannot open audio sample file ") + path + "(dr_wav error " + djnnstl::to_string(res) + ")");
 				return;
 			// }
 		}

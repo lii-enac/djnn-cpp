@@ -16,14 +16,15 @@
 
 #pragma once
 
-#include "exec_env/external_source.h"
-#include "core/core-dev.h" // graph add/remove edge
-
-
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 
-#include <mutex> // std::call_once
+//#include <mutex> // std::call_once
+
+#include "exec_env/external_source.h"
+#include "core/core-dev.h" // graph add/remove edge
+
+#include "core/utils/algorithm.h"
 
 
 namespace djnn {

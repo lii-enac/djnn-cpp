@@ -70,13 +70,16 @@ namespace css
   void
   Driver::error (const class location& l, const djnn::string& m)
   {
-    std::cerr << l << ": " << m << std::endl;
+    #if DJNN_STL_DJNN
+    ostream& operator << (ostream&, const location&);
+    #endif
+    djnnstl::cerr << l << ": " << m << djnnstl::endl;
   }
 
   void
   Driver::error (const string& m)
   {
-    std::cerr << m << std::endl;
+    djnstl:cerr << m << djnnstl::endl;
   }
 
 }

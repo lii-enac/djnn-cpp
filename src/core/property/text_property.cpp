@@ -94,13 +94,13 @@ namespace djnn
   void
   AbstractTextProperty::set_value (int v, bool propagate)
   {
-    set_value(djnn::to_string (v), propagate);
+    set_value(djnnstl::to_string (v), propagate);
   }
 
   void
   AbstractTextProperty::set_value (double v, bool propagate)
   {
-    set_value(djnn::to_string (v), propagate);
+    set_value(djnnstl::to_string (v), propagate);
   }
 
   void
@@ -128,7 +128,8 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
   void
   AbstractTextProperty::dump (int level) {
-    std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
+    using namespace djnnstl;
+    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
   }
 #endif
 

@@ -3,6 +3,8 @@
 #include "core/utils/containers.h"
 
 namespace djnn {
+	using djnnstl::string;
+
 	class Window;
 
 	class WinImpl;

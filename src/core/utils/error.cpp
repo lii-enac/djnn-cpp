@@ -43,8 +43,9 @@ namespace djnn
   djnn__error (const CoreProcess* p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    auto & out = std::cerr;
-    out << std::endl << std::endl;
+    using namespace djnnstl;
+    auto & out = cerr;
+    out << endl << endl;
     out << "djnn - ";
     out << "\033[0;33m";
     out << "ERROR: ";
@@ -55,7 +56,7 @@ namespace djnn
     else if(ctxinfo)
       out << " - " << ctxinfo << ":";
     
-    out << std::endl << std::endl;
+    out << endl << endl;
 #endif
 
 #ifdef DJNN_CRAZYFLIE
@@ -78,8 +79,9 @@ namespace djnn
   djnn__warning (const CoreProcess *p, const char* msg, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    auto & out = std::cerr;
-    out << std::endl << std::endl;
+    using namespace djnnstl;
+    auto & out = cerr;
+    out << endl << endl;
     out << "djnn - ";
     out << "\033[0;33m";
     out << "WARNING: ";
@@ -90,7 +92,7 @@ namespace djnn
     else if(ctxinfo)
       out << " - " << ctxinfo << ":";
     
-    out << std::endl << std::endl;
+    out << endl << endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
     DJNN_DEBUG_PRINT(  __to_string(p).c_str() ) ;
@@ -109,11 +111,12 @@ namespace djnn
   djnn__info (const string& msg, bool cr, const char* ctxinfo)
   {
 #ifndef DJNN_NO_DEBUG
-    auto & out = std::cout;
+    using namespace djnnstl;
+    auto & out = cout;
     out << msg;
     if (cr) {
       if (ctxinfo) out << " " << ctxinfo;
-      out << std::endl;
+      out << endl;
     }
 #endif
 #ifdef DJNN_CRAZYFLIE
@@ -130,7 +133,8 @@ namespace djnn
   djnn__debug (const char* file, const char* function, const char* line)
   {
 #ifndef DJNN_NO_DEBUG
-    std::cerr <<  file << ":" << function << ":" << line << std::endl;
+    using namespace djnnstl;
+    cerr <<  file << ":" << function << ":" << line << endl;
 #endif
 #ifdef DJNN_CRAZYFLIE
     //DJNN_DEBUG_PRINT( string(file, function, line) ;

@@ -12,6 +12,8 @@
  *
  */
 
+#include <cstdint>
+
 #include "ref_property.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/error.h"

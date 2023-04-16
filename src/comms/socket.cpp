@@ -47,7 +47,7 @@ SOCKET socket_open_server (int _port)
       perror("");
       return -1;
     }
-    if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
+    if (::bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
       warning (nullptr, "ERROR on binding");
       perror("");
       return -1;

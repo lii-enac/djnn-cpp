@@ -20,6 +20,8 @@
 
 namespace djnn {
 
+  using namespace djnnstl;
+
   // process types
   enum
   //class

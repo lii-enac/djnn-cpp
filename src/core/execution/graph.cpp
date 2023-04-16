@@ -23,9 +23,9 @@
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include "core/utils/iostream.h"
-using std::cout;
-using std::cerr;
-using std::endl;
+using djnnstl::cout;
+using djnnstl::cerr;
+using djnnstl::endl;
 #endif
 
 #include "core/utils/utils-dev.h"
@@ -188,7 +188,7 @@ namespace djnn
   void
   Graph::add_edge (CoreProcess* src, CoreProcess* dst)
   {
-    //std::cerr << "add_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
+    //cerr << "add_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
 
     Vertex* vs = src->vertex ();
     if (vs == nullptr) {
@@ -209,7 +209,7 @@ namespace djnn
   void
   Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
   {
-    //std::cerr << "remove_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
+    //cerr << "remove_edge: " << get_hierarchy_name(src) << " - " << get_hierarchy_name(dst) << endl;
     
     Vertex* vs = p_src->vertex ();
     Vertex* vd = p_dst->vertex ();
@@ -225,9 +225,9 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
       auto * ppsrc = p_src;
       auto * ppdst = p_dst;
-      std::cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
+      cerr << "Graph remove_edge: " << cpp_demangle(typeid(*p_src).name()) + ":" + 
       (ppsrc ? get_hierarchy_name (ppsrc) : "") << "  " << vs << " - " << cpp_demangle(typeid(*p_dst).name()) + ":" +
-      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << std::endl;
+      (ppdst ? get_hierarchy_name (ppdst) : "") << "  " << vd << endl;
 #endif
       return;
     }
@@ -350,7 +350,7 @@ namespace djnn
     {
 #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
-        std::cerr << std::endl << std::endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << std::endl;
+        cerr << endl << endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << endl;
 #endif
 
       _activation_triggers_to_sort.clear ();
@@ -364,7 +364,7 @@ namespace djnn
             _activation_triggers_to_sort.push_back (p->vertex ());
 #ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
-            std::cerr << "Scheduled ------ " << print_process_full_name(p) << " \t\t--  v: " << p->vertex () << std::endl;
+            cerr << "Scheduled ------ " << print_process_full_name(p) << " \t\t--  v: " << p->vertex () << endl;
 #endif
         }
       }
@@ -373,12 +373,12 @@ namespace djnn
 
 #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
-        std::cerr << " ----------------------------------------- " << std::endl;
+        cerr << " ----------------------------------------- " << endl;
         int i = 0;
         for (auto v : _activation_triggers_to_sort){
-          std::cerr << i++ << " - triggers ------ " << print_process_full_name(v->get_process ()) << std::endl;
+          cerr << i++ << " - triggers ------ " << print_process_full_name(v->get_process ()) << endl;
         }
-        std::cerr << " ----------------------------------------- " << std::endl;
+        cerr << " ----------------------------------------- " << endl;
       }
 #endif
     }
@@ -401,7 +401,7 @@ namespace djnn
     static std::chrono::steady_clock::time_point begin_delete, end_delete, begin_output, end_output;
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       begin_act = std::chrono::steady_clock::now();
-      std::cerr << std::endl;
+      cerr << endl;
     }
 #endif
 
@@ -415,7 +415,7 @@ namespace djnn
         if (!_sorted) {
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
             _sorted_break++;
-            std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
+            cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
           }
           break;
         }
@@ -439,7 +439,7 @@ namespace djnn
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
             cerr << "\033[1;36m";
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            std::cerr << count_real_activation << " ------ " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
+            cerr << count_real_activation << " ------ " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << endl;
           cerr << "\033[0m";
         }
       }
@@ -470,7 +470,7 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
           if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
             _sorted_break++;
-            std::cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
+            cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
           }
 #endif
           break;
@@ -541,7 +541,7 @@ namespace djnn
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED) {
             if ( v->get_sorted_index () == -1)
               cerr << "\033[1;35m";
-            std::cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << std::endl;
+            cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << endl;
           }
           cerr << "\033[0m";
         }
@@ -594,34 +594,34 @@ namespace djnn
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
-      std::cerr << "\t_scheduled_deletions time = " << time_exec << "[us]" << std::endl;
+      cerr << "\t_scheduled_deletions time = " << time_exec << "[us]" << endl;
       time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_output - begin_output).count();
-      std::cerr << "\t_output_nodes time = " << time_exec << "[us]" << std::endl;
+      cerr << "\t_output_nodes time = " << time_exec << "[us]" << endl;
       time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_act - begin_act).count();
-      std::cerr << "----\tGRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]";
+      cerr << "----\tGRAPH_EXEC # " << graph_counter_act << " time = " << time_exec << "[us]";
       if (time_exec > 1000) {
         cerr << "\033[1;31m";
-        std::cerr << " - or " << time_exec / 1000.0 << "[ms]" << std::endl;
+        cerr << " - or " << time_exec / 1000.0 << "[ms]" << endl;
         cerr << "\033[0m";
       }
       else
-        std::cerr << std::endl;
+        cerr << endl;
       double pourcent_graph = (count_real_activation / (double)count_activation) * 100;
       if (pourcent_graph < 50)
         cerr << "\033[1;31m";
-      std::cerr << "nb action = " << count_real_activation << "/" << count_activation << "(" << pourcent_graph << "%)";
-      std::cerr << "--- nb sorted_break " << _sorted_break << endl << endl << endl;
+      cerr << "nb action = " << count_real_activation << "/" << count_activation << "(" << pourcent_graph << "%)";
+      cerr << "--- nb sorted_break " << _sorted_break << endl << endl << endl;
       cerr << "\033[0m";
     }
 
     #if (!_EXEC_FULL_ORDERED_VERTICES && _DEBUG_GRAPH_INSERT_TIME)
     cerr << "\033[1;37m";
     if (nb_insert_by_graph_exec > 0) {
-      std::cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[ns]";
-      std::cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << std::endl;
+      cerr << "nb insert: " << nb_insert_by_graph_exec << " - av insert time = " << acc_insert_time_by_graph_exec / nb_insert_by_graph_exec << "[ns]";
+      cerr << " - MAX insert time: " << max_insert_time_all_graph << "[nanos] for size: " << max_insert_for_this_size << endl;
     }
     else
-      std::cerr << "NO insert" << std::endl;
+      cerr << "NO insert" << endl;
     cerr << "\033[0m";
     #endif 
 
@@ -630,11 +630,11 @@ namespace djnn
     cerr << "\033[1;32m" << endl;
     std::chrono::steady_clock::time_point end_GRAPH_EXEC = std::chrono::steady_clock::now();
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_EXEC - begin_GRAPH_EXEC).count();
-    std::cerr << "GRAPH_EXEC = " << time << "[us]";
+    cerr << "GRAPH_EXEC = " << time << "[us]";
     if (time > 1000 )
-        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
+        cerr << " - or " << time / 1000.0 <<  "[ms]" << endl;
       else
-        std::cerr << std::endl;
+        cerr << endl;
     graph_counter = graph_counter + 1;
     graph_total = graph_total + time ;
     graph_average = graph_total / graph_counter;
@@ -721,11 +721,11 @@ rmt_EndCPUSample();
     cerr << "\033[1;33m" << endl;
     std::chrono::steady_clock::time_point end_GRAPH_SORT = std::chrono::steady_clock::now();
     int time = std::chrono::duration_cast<std::chrono::microseconds>(end_GRAPH_SORT - begin_GRAPH_SORT).count();
-    std::cerr << "SORT_GRAPH = " << time << "[us]" ;
+    cerr << "SORT_GRAPH = " << time << "[us]" ;
     if (time > 1000 )
-        std::cerr << " - or " << time / 1000.0 <<  "[ms]" << std::endl;
+        cerr << " - or " << time / 1000.0 <<  "[ms]" << endl;
       else
-        std::cerr << std::endl;
+        cerr << endl;
     sorted_counter = sorted_counter + 1;
     sorted_total = sorted_total + time ;
     sorted_average = sorted_total / sorted_counter;
@@ -756,7 +756,7 @@ rmt_EndCPUSample();
     }
 
     v->set_execution_round (EXECUTION_ROUND);
-    //std::cerr << print_process_full_name (v->get_process ()) << std::endl;
+    //cerr << print_process_full_name (v->get_process ()) << endl;
     for (auto * v2 : v->get_edges ()) {
       if (v2->get_execution_round () < EXECUTION_ROUND) {
         traverse_depth_first (v2);
@@ -798,20 +798,20 @@ rmt_EndCPUSample();
   Vertex::print_vertex () const
   {
     auto * pp = _process;
-    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
+    cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\t";
 
     if( _edges.size () == 0)
-      std::cerr << "EMPTY" << endl;
+      cerr << "EMPTY" << endl;
     else {
       for (auto e : _edges) {
         auto result = _map_edges.find(e);
         auto * ppe = e->_process;
         if (ppe) {
-          std::cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
+          cerr << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "] \t" ;
         }
       }
-      std::cerr << std::endl;
+      cerr << endl;
     }
   }
   
@@ -819,16 +819,16 @@ rmt_EndCPUSample();
   Vertex::print_full_vertex ()
   {
     cerr << "\033[1;31m";
-    std::cerr << "Execution Graph - details on vertex: " << std::endl;
+    cerr << "Execution Graph - details on vertex: " << endl;
         
     auto * pp = _process;
-    std::cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
+    cerr << "vertex (" << print_process_full_name (pp) << " - [" << 
     _count_edges_in << ", " << _edges.size () << "] :\n";
 
-    std::cerr << "edge in " << _count_edges_in << ":\n" ;
+    cerr << "edge in " << _count_edges_in << ":\n" ;
 
     if( _count_edges_in == 0)
-      std::cerr << "\tEMPTY" << std::endl;
+      cerr << "\tEMPTY" << endl;
     else {
       int i = 0;
       for (auto v : Graph::instance ().vertices ()) {
@@ -838,21 +838,21 @@ rmt_EndCPUSample();
           if ( v->is_invalid () == 0 ) {
             auto* ppv = v->_process;
             if (ppv) {
-              std::cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "]\n" ;
+              cerr << "\t" << ++i << " - " << print_process_full_name (ppv) << ppv->get_debug_name () << " [x" << it->second << "]\n" ;
             }
           }
           else {
-            std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
+            cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
           }
         }
       }
-      std::cerr << std::endl;
+      cerr << endl;
     }
 
-    std::cerr << "edge out " << _edges.size () << ":\n" ;
+    cerr << "edge out " << _edges.size () << ":\n" ;
 
     if( _edges.size () == 0)
-      std::cerr << "\tEMPTY" << std::endl;
+      cerr << "\tEMPTY" << endl;
     else {
       int i = 0;
       for (auto e : _edges) {
@@ -860,13 +860,13 @@ rmt_EndCPUSample();
           auto result = _map_edges.find(e);
           auto * ppe = e->_process;
           if (ppe)
-            std::cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "]\n" ;
+            cerr << "\t" << ++i << " - " << print_process_full_name (ppe) << ppe->get_debug_name () << " [x" << result->second << "]\n" ;
         }
         else {
-          std::cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
+          cerr << "\t" << ++i << " - THIS VERTEX HAS BEEN INVALIDATED -- associated process has been deleted\n" ;
         }
       }
-      std::cerr << std::endl;
+      cerr << endl;
     }
     cerr << "\033[0m";
   }
@@ -875,35 +875,35 @@ rmt_EndCPUSample();
   void
   Graph::print_graph () const
   {
-    std::cerr << " --- GRAPH --- " << endl ;
+    cerr << " --- GRAPH --- " << endl ;
     for (auto v : _vertices) {
       v->print_vertex ();
     }
-    std::cerr << " --- END GRAPH --- " << endl << endl;
+    cerr << " --- END GRAPH --- " << endl << endl;
   }
 
   void
   Graph::print_sorted () const
   {
-    std::cerr << " --- SORTED GRAPH --- " << endl ;
+    cerr << " --- SORTED GRAPH --- " << endl ;
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
       cerr << "index: " << v->get_sorted_index () << " - order_stamp: " << v->get_order_stamp () << " - ";
       cerr << print_process_full_name (pp) << endl;
     }
-    std::cerr << " --- END SORTED GRAPH --- " << endl << endl;
+    cerr << " --- END SORTED GRAPH --- " << endl << endl;
   }
 
   void
   Graph::print_activation () const
   {
-    std::cerr << " --- SORTED ACTIVATION --- " << endl ;
+    cerr << " --- SORTED ACTIVATION --- " << endl ;
     for (auto v : _activation_deque) {
       auto * pp = v->get_process ();
       cerr << "index: " << v->get_sorted_index () << " - order_stamp: " << v->get_order_stamp () << " - p: " << pp << " - ";
       cerr << print_process_full_name (pp) << endl;
     }
-    std::cerr << " --- END ACTIVATION --- " << endl << endl;
+    cerr << " --- END ACTIVATION --- " << endl << endl;
   }
 
   void
@@ -918,13 +918,13 @@ rmt_EndCPUSample();
     }
     string p1_name = (p1 && p1->get_parent()) ? p1->get_name (p1->get_parent ()) : "";
     string p2_name = (p2 && p2->get_parent()) ? p2->get_name (p2->get_parent ()) : "";
-    if (i_p1 == -1) std::cout << "p1 " << p1_name << " not found\n";
-    if (i_p2 == -1) std::cout << "p2 " << p2_name << " not found\n";
+    if (i_p1 == -1) cout << "p1 " << p1_name << " not found\n";
+    if (i_p2 == -1) cout << "p2 " << p2_name << " not found\n";
 
-    if (i_p1 >= 0 && i_p2 >= 0) std::cout << "p1 "
+    if (i_p1 >= 0 && i_p2 >= 0) cout << "p1 "
         << p1_name
         << (i_p1 < i_p2 ? " before " : " after ") << " p2 "
-        << p2_name << std::endl;
+        << p2_name << endl;
   }
 
   pair<Vertex*, int>

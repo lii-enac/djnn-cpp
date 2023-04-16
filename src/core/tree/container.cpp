@@ -413,7 +413,7 @@ namespace djnn
   {
     context_t::iterator it = _cur_context.find (k);
     if (it != _cur_context.end ()) it->second = v;
-    else _cur_context.insert (make_pair (k, v));
+    else _cur_context.insert (djnnstl::make_pair (k, v));
   }
 
   CoreProcess*

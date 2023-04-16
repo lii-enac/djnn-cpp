@@ -108,8 +108,10 @@ namespace djnn
     get_monotonic_time (&after);
     double elapsedTime = (after.tv_sec * 1000 + after.tv_nsec * 1e-6) - (before.tv_sec * 1000 + before.tv_nsec * 1e-6);
 #ifndef DJNN_NO_DEBUG
+    using djnnstl::cout;
+    using djnnstl::endl;
     if(display_stderr)
-      std::cout << msg << " elapsedTime = " << elapsedTime << " ms" << std::endl;
+      cout << msg << " elapsedTime = " << elapsedTime << " ms" << endl;
 #endif
     init = 0;
     return elapsedTime;

@@ -20,8 +20,7 @@
 
 namespace djnn
 {
-
-  
+  using djnnstl::cout;
 
   /* FIXME:
   we don't know when is the end on the componant so there is problem with the last ","
@@ -37,8 +36,8 @@ namespace djnn
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)
-      std::cout << "\t";
-    std::cout << "\"" << classname << "\": {\n";
+      cout << "\t";
+    cout << "\"" << classname << "\": {\n";
     ++__JSONLevel;
 
   }
@@ -48,8 +47,8 @@ namespace djnn
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)
-      std::cout << "\t";
-    std::cout << "\"" << name << "\": \""<< value <<"\",\n";
+      cout << "\t";
+    cout << "\"" << name << "\": \""<< value <<"\",\n";
 
   }
 
@@ -58,8 +57,8 @@ namespace djnn
  
     int i;
     for (i = 0; i < __JSONLevel; ++i)
-      std::cout << "\t";
-    std::cout << "\"" << name << "\": "<< value <<",\n";
+      cout << "\t";
+    cout << "\"" << name << "\": "<< value <<",\n";
 
   }
 
@@ -68,8 +67,8 @@ namespace djnn
 
     int i;
     for (i = 0; i < __JSONLevel; ++i)
-      std::cout << "\t";
-    std::cout << "\"" << name << "\": "<< value <<",\n";
+      cout << "\t";
+    cout << "\"" << name << "\": "<< value <<",\n";
 
   }
 
@@ -78,8 +77,8 @@ namespace djnn
 
   int i;
   for (i = 0; i < __JSONLevel; ++i)
-      std::cout << "\t";
-  std::cout << "},\n";
+      cout << "\t";
+  cout << "},\n";
    --__JSONLevel;
 
   }

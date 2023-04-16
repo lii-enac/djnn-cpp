@@ -37,8 +37,8 @@ namespace djnn {
     void set_value (const char* v, bool propagate) override { set_value(string(v), propagate);};
     double get_double_value () override { return get_ref_value(); }
     double get_double_value () const override { return get_ref_value(); }
-    string get_string_value () override { return djnn::to_string (get_ref_value ()); }
-    string get_string_value () const override { return djnn::to_string (get_ref_value ()); }
+    string get_string_value () override { return djnnstl::to_string (get_ref_value ()); }
+    string get_string_value () const override { return djnnstl::to_string (get_ref_value ()); }
 
     double get_value () const { return get_ref_value(); };
   protected:

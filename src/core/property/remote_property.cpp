@@ -56,13 +56,13 @@ namespace djnn
   void
   AbstractRemoteProperty::set_value (int v, bool propagate)
   {
-    set_value(djnn::to_string (v), propagate);
+    set_value(djnnstl::to_string (v), propagate);
   }
 
   void
   AbstractRemoteProperty::set_value (double v, bool propagate)
   {
-    set_value(djnn::to_string (v), propagate);
+    set_value(djnnstl::to_string (v), propagate);
   }
 
   void

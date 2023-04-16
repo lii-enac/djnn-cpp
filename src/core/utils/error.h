@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <stdlib.h> // exit
+
 //#include "core/utils/utils-dev.h" // __to_string
 #include "containers.h"
 
@@ -28,10 +30,10 @@ namespace djnn
   class CoreProcess;
 
   int djnn__error (const CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  int djnn__error (const CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
+  int djnn__error (const CoreProcess *p, const djnnstl::string& msg, const char* ctxinfo=nullptr);
   void djnn__warning (const CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
-  void djnn__warning (const CoreProcess *p, const string& msg, const char* ctxinfo=nullptr);
-  void djnn__info (const string& msg, bool cr, const char* ctxinfo=nullptr);
+  void djnn__warning (const CoreProcess *p, const djnnstl::string& msg, const char* ctxinfo=nullptr);
+  void djnn__info (const djnnstl::string& msg, bool cr, const char* ctxinfo=nullptr);
   void djnn__debug (const char* file, const char* function, const char* lineno);
   inline int djnn__exit(int ret) { exit(ret); return 1; }
 
@@ -65,8 +67,8 @@ namespace djnn
   class Context {
   public:
     static Context* instance ();
-    void new_line (int line, const string& filename) { _line = line; _filename = filename; }
-    void parser_info (int begline, int begcol, int endline, int endcol, const string& filename) {
+    void new_line (int line, const djnnstl::string& filename) { _line = line; _filename = filename; }
+    void parser_info (int begline, int begcol, int endline, int endcol, const djnnstl::string& filename) {
         _line = begline; _begcol = begcol; _endline=endline; _endcol = endcol; _filename = filename;
     }
     int line () const { return _line; }
@@ -75,7 +77,7 @@ namespace djnn
     int endline () const { return _endline; }
     int endcol () const { return _endcol; }
     
-    const string& filename () const { return _filename; }
+    const djnnstl::string& filename () const { return _filename; }
   private:
     Context () : _line (-1), _filename ("") {}
     static Context* _instance;
@@ -83,6 +85,6 @@ namespace djnn
     int _begcol;
     int _endline;
     int _endcol;
-    string _filename;
+    djnnstl::string _filename;
   };
 }

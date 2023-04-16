@@ -32,6 +32,7 @@
 namespace djnn
 {
 
+
   MultilineEditor::MultilineEditor (CoreProcess *parent, const string &name,
                                     int x, int y, int width, int height,
                                     const string &text,
@@ -663,7 +664,7 @@ namespace djnn
         _cursor_pos += content.length () + 1;
       } else if (i == _index_y) {
         _cursor_pos += _index_x;
-        std::cout << "i = " << i << " pos_x = " << _index_x << "\n";
+        djnnstl::cout << "i = " << i << " pos_x = " << _index_x << "\n";
       }
       if (content.empty())
         content = "\n";

@@ -13,6 +13,8 @@
  *
  */
 
+#include <unistd.h>
+
 #include "IvyAccess.h"
 
 #include "ivy.h" //TODO add Ivy/ after confinement
@@ -24,7 +26,10 @@
 #include "core/utils/to_string.h"
 
 #include "core/utils/iostream.h"
-#include <unistd.h>
+
+using djnnstl::cout;
+using djnnstl::cerr;
+using djnnstl::endl;
 
 
 //#define __IVY_DEBUG__
@@ -97,18 +102,18 @@ static void
 _ivy_debug_mapping (map<string, vector<pair<int, djnn::TextProperty*>>> inmap){
 
   map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
-  std::cout << endl << "MAP _in_map:" << endl;
+  cout << endl << "MAP _in_map:" << endl;
   for (mit = inmap.begin(); mit != inmap.end(); ++mit) {
-    std::cout << mit->first << " => (" ;
+    cout << mit->first << " => (" ;
     /* vector */
     vector<pair<int, djnn::TextProperty*>>::iterator vit;
     for (vit = mit->second.begin (); vit != mit->second.end(); ++vit) {
       /* pair */
-      std::cout << "[" << (*vit).first << ", " << (*vit).second << "] " ; 
+      cout << "[" << (*vit).first << ", " << (*vit).second << "] " ; 
     }
-    std::cout << ")" << endl;
+    cout << ")" << endl;
   }
-  std::cout << endl;
+  cout << endl;
 }
 #endif
 
@@ -139,8 +144,8 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
     in_map =  keypair->second;
 
 #ifdef __IVY_DEBUG__
-  std::cout <<  endl <<"_on_ivy_message" << endl;
-  std::cout <<  "regexp: '" << regexp << "'" << endl;
+  cout <<  endl <<"_on_ivy_message" << endl;
+  cout <<  "regexp: '" << regexp << "'" << endl;
   _ivy_debug_mapping (*in_map);
 #endif
 
@@ -155,7 +160,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
       /* pair */
       djnn::TextProperty* txtprop = (*vit).second;
       if((*vit).first - 1 >= argc) {
-        std::cerr << "Ivy err: regexp position is greater or equal to argc " << (*vit).first << " " << argc << std::endl;
+        cerr << "Ivy err: regexp position is greater or equal to argc " << (*vit).first << " " << argc << endl;
         continue;
       }
       djnn::string msg = argv[(*vit).first - 1] ; // index shift is -1 between regexp and argv
@@ -167,14 +172,14 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   }
   
 #ifdef __IVY_DEBUG__
-  std::cout << "---------------------" << endl;
-  std::cout << "_on_ivy_message - "  << endl;
-  std::cout << "argc " << argc  << endl ;
+  cout << "---------------------" << endl;
+  cout << "_on_ivy_message - "  << endl;
+  cout << "argc " << argc  << endl ;
   for (int i=0; i < argc ; i++){
-    std::cout << "argv[" << i << "] - " << djnn::string(argv[i]) << endl;
+    cout << "argv[" << i << "] - " << djnn::string(argv[i]) << endl;
   } 
-  std::cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
-  std::cout << "---------------------" << endl << endl;
+  cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
+  cout << "---------------------" << endl << endl;
 #endif
   GRAPH_EXEC; // methode 2 : per message
   djnn::release_exclusive_access (DBG_REL);
@@ -253,14 +258,14 @@ IvyAccess::~IvyAccess ()
   /* erase _cb_regex_vector */
 
 
-  //std::cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << std::endl;
+  //cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << endl;
   while (!_cb_regex_vector.empty ()) {
     auto st = _cb_regex_vector.back ();
     _cb_regex_vector.pop_back ();
     delete st->keypair; // delete the regexp_keypair_t
     delete st; // delete the pointer on struct djnn::IvyAccess::msg_callback_user_data
   }
-  //std::cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << std::endl;
+  //cerr << "_cb_regex_vector.size: " << _cb_regex_vector.size () << endl;
 
 
   /* erase _in_map */
@@ -307,9 +312,9 @@ IvyAccess::~IvyAccess ()
   }
 
   //DEBUG
-  //std::cerr << "remaining children after symtable cleaning :" << children_size () << std::endl ;
+  //cerr << "remaining children after symtable cleaning :" << children_size () << endl ;
   //for (auto s : this->symtable ()) {
-  //  std::cerr << s.first << std::endl;
+  //  cerr << s.first << endl;
   //}
 }
 
@@ -448,7 +453,7 @@ IvyAccess::find_child_impl (const string& key)
 {
   
 #ifdef __IVY_DEBUG__
-  std::cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
+  cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
 #endif
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
@@ -477,17 +482,17 @@ IvyAccess::find_child_impl (const string& key)
     int index = std::stoi (re_end+1);
 
 #ifdef __IVY_DEBUG__
-    std::cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
+    cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
     TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child_impl (regexp));
     if (tmp){
 
-      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + djnn::to_string(index);
+      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + djnnstl::to_string(index);
 
 #ifdef __IVY_DEBUG__
-      std::cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
-      std::cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
+      cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
+      cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
 #endif
 
       /* key do not exist - but use internal string as regexp --- return*/
@@ -517,8 +522,8 @@ IvyAccess::find_child_impl (const string& key)
      
 #ifdef __IVY_DEBUG__
        _ivy_debug_mapping (_in_map);
-      std::cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
-      std::cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
+      cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
+      cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif
 
       /* key don't exist at all - return */

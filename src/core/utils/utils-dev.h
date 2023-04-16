@@ -22,6 +22,8 @@ namespace djnn {
   class FatProcess;
   class RefProperty;
   class Coupling;
+
+  using namespace djnnstl;
  
   typedef pair<RefProperty*, string> ref_info_t;
   ref_info_t check_for_ref (FatProcess* src, const string& spec);

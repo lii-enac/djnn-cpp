@@ -1,4 +1,5 @@
 #include "core/utils/containers.h"
+#include "core/utils/algorithm.h"
 #include "core/ontology/process.h"
 
 namespace djnn {
@@ -6,7 +7,9 @@ namespace djnn {
     class Coupling;
 }
 
-template class djnnstl::basic_string<char>;
+#if DJNN_STL_STD
+template class std::basic_string<char>;
+#endif
 template class djnn::map<djnn::string, djnn::CoreProcess*>;
 template class djnn::vector<djnn::Coupling*>;
 

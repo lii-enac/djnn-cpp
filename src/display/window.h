@@ -22,8 +22,6 @@
 #include "core/property/ref_property.h"
 #include "core/property/int_property_fwd.h"
 
-#include <memory>
-
 namespace djnn
 {
   //class IntProperty;

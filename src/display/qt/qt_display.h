@@ -2,8 +2,12 @@
 
 
 #include "display/abstract_display.h"
+#include "core/utils/containers.h"
 
 namespace djnn {
+
+  using djnnstl::string;
+  using djnnstl::vector;
 
   class MyQWidget;
   class QtWindow;

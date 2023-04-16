@@ -212,7 +212,7 @@ namespace djnn
       void impl_activate () override {
         int decimal = _df._decimal.get_value ();
         double value = _df._input.get_value();
-        string res = djnn::to_string (value);
+        string res = djnnstl::to_string (value);
         std::size_t found = res.find('.');
         if (found != string::npos) {
           if (decimal == 0) {

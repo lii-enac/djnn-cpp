@@ -56,6 +56,11 @@ extern int __nb_Drawing_object_picking;
 
 namespace djnn
 {
+
+  using djnnstl::cout;
+  using djnnstl::cerr;
+  using djnnstl::endl;
+
   bool compare_z_order (QtVectorShapeToDraw* i,QtVectorShapeToDraw* j) { return (i->z_order()<j->z_order()); }
 
   void
@@ -657,7 +662,7 @@ namespace djnn
       }
 
       i->get_properties_values (data,format, x,y,w,h);
-      //std::cerr << data << " " << w << " " << h << __FL__;
+      //cerr << data << " " << w << " " << h << __FL__;
       load_drawing_context (i, _context, x, y, w, h);
       QRect rect (x, y, w, h);
       //QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
@@ -762,7 +767,7 @@ namespace djnn
     if (recompute_pixmap) {
       #ifndef DJNN_NO_DEBUG
       if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
-        std::cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : "  << (w+pad*2) << " - " << (h+pad*2) << std::endl;
+        cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : "  << (w+pad*2) << " - " << (h+pad*2) << endl;
       #endif
       delete ls;
       delete pick_pm;
@@ -797,7 +802,7 @@ namespace djnn
       auto tx = origin(0,3);
       auto ty = origin(1,3);
 
-      //std::cerr << tx << " " << ty << " " << s << __FL__;
+      //cerr << tx << " " << ty << " " << s << __FL__;
 
       // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
       // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
@@ -858,7 +863,7 @@ namespace djnn
     auto ty = m(1,3);
     auto s = curs/ls->s;
 
-    //std::cerr << tx << " " << ty << " " << s << __FL__;
+    //cerr << tx << " " << ty << " " << s << __FL__;
 
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);

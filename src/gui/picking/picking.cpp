@@ -259,7 +259,7 @@ namespace djnn
       _active_touches.erase (it);
       t->schedule_deletion ();
     }
-    t = new Touch (_win->touches (), djnn::to_string (id), id, x, y, pressure);
+    t = new Touch (_win->touches (), djnnstl::to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
 
     /* picking/shape management */
@@ -271,7 +271,7 @@ namespace djnn
       t->set_touch_local_coords (s, x, y, false);
       common_press_notify (s);
       /* press event on touch is replace by touches/$added */
-      s->ui()->touches ()->add_child (t, djnn::to_string (id));
+      s->ui()->touches ()->add_child (t, djnnstl::to_string (id));
       t->enter ();
     }
     return true;
@@ -424,7 +424,7 @@ namespace djnn
       else if (s != nullptr && s != cur_shape) {
         if (cur_shape != nullptr && cur_shape != init_shape)
           cur_shape->ui ()->touches ()->remove_child (t);
-        s->ui ()->touches ()->add_child (t, djnn::to_string (id));
+        s->ui ()->touches ()->add_child (t, djnnstl::to_string (id));
         t->set_current_shape (s);
         /* setting */
         s->ui ()->move_x ()->set_value (x, true);

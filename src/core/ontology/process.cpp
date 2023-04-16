@@ -28,7 +28,7 @@
 
 #include <cassert>
 
-#include <iostream>
+#include "core/utils/iostream.h"
 
 // #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 // #include <boost/core/demangle.hpp>
@@ -109,12 +109,13 @@ namespace djnn
     // print if Parentless_names is not empty
   #ifndef DJNN_NO_DEBUG
     if (!parentless_names.empty()) {
-      std::cerr << "\033[1;35m" << std::endl;
+      using namespace djnnstl;
+      cerr << "\033[1;35m" << endl;
       //std::cerr << "-- After - Parentless_name map - "<< parentless_names.size() << " -- " << std::endl;
-      std::cerr << "Warning - parentless_names is not EMPTY !!" << std::endl;
+      cerr << "Warning - parentless_names is not EMPTY !!" << endl;
       for (const auto& [key, pair_value] : parentless_names)
-        std::cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first.c_str() << "\"\n";
-      std::cerr << "\033[0m \n\n";
+        cerr << "[" << key << "] = " << pair_value.second  << " - \"" << pair_value.first.c_str() << "\"\n";
+      cerr << "\033[0m \n\n";
     }
   #endif
   }
@@ -179,7 +180,7 @@ namespace djnn
     remove_from_parentless_name (this);
 
     #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    string data_save = "DELETE [" + djnn::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
+    string data_save = "DELETE [" + djnnstl::to_string (__position_in_creation->second) + "] - " + cpp_demangle(typeid(*this).name()) + \
       " - " + (this->get_debug_parent () ? this->get_debug_parent ()->get_name () : "") + "/" + this->get_debug_name ();
 
     __dbg_destruction_stat_order.push_back (data_save);

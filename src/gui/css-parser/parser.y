@@ -14,8 +14,7 @@
  
 %{
 #include "core/utils/algorithm.h"
-//#include <stdio.h>
-//#include "core/utils/iostream.h"
+#include "core/utils/iostream.h"
 #include "gui/gui-dev.h"
 
 #include "base/connector.h"

@@ -43,7 +43,7 @@ namespace djnn
     if (!to_send)
       return;
     int sz = msg.size ();
-    msg = djnn::to_string(sz) + msg;
+    msg = djnnstl::to_string(sz) + msg;
     if (send (p->get_sock (), msg.c_str (), strlen (msg.c_str ()), 0) < 0) {
       p->connection_failure ();
     }
@@ -150,7 +150,7 @@ namespace djnn
   {
     string msg = "S:" + path;
     int sz = msg.size ();
-    msg = djnn::to_string(sz) + msg;
+    msg = djnnstl::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
       connection_failure ();
     }
@@ -177,7 +177,7 @@ namespace djnn
   {
     string msg = "U:" + path;
     int sz = msg.size ();
-    msg = djnn::to_string(sz) + msg;
+    msg = djnnstl::to_string(sz) + msg;
     if (send (_fd, msg.c_str (), strlen (msg.c_str ()), 0) == SOCKET_ERROR) {
       connection_failure ();
     }

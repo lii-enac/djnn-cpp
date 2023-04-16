@@ -37,6 +37,9 @@ namespace djnn {
   
 
 #if !defined(DJNN_NO_SERIALIZE)
+
+  using djnnstl::cout;
+
   XML::djn__NamespaceTable_t XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
@@ -202,7 +205,7 @@ namespace djnn {
     djn__NamespaceTable_t::iterator it;
     it = djn__NamespaceTable.find (uri);
     if (it != djn__NamespaceTable.end ()) {
-      std::cerr << "conflict of XML parsers on namespace " << uri << std::endl;
+      cerr << "conflict of XML parsers on namespace " << uri << endl;
       return 0;
     }
 
@@ -222,7 +225,7 @@ namespace djnn {
     djn__NamespaceTable_t::iterator it;
     it = djn__NamespaceTable.find (uri);
     if (it == djn__NamespaceTable.end ()) {
-      std::cerr << "unregister warning: no registered XML parsers on namespace " << uri << std::endl;
+      cerr << "unregister warning: no registered XML parsers on namespace " << uri << endl;
       return 0;
     }
 

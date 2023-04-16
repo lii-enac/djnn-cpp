@@ -56,16 +56,20 @@ static double draw_average = 0.0;
 
 namespace djnn
 {
+  using djnnstl::cout;
+  using djnnstl::cerr;
+  using djnnstl::endl;
+
   bool
   MyQQWidget::event (QEvent *event)
   {
-    //std::cerr << ">> " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
+    //cerr << ">> " << __PRETTY_FUNCTION__ << " " << event->type () << endl;
     /* note:
      * Get and release Mutex on each event BUT only the events that 
      * WE manage else we let Qt and QTwidgets dealing with these Events.
      */
 
-    //if(_building) std::cerr << "building" << std::endl;
+    //if(_building) cerr << "building" << endl;
     //if(!_building)
     //djnn::get_exclusive_access (DBG_GET);
 
@@ -176,7 +180,7 @@ namespace djnn
     //if(!_building)
     //djnn::release_exclusive_access (DBG_REL);
     if(exec_) event->accept();
-    //std::cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << std::endl;
+    //cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << endl;
     return exec_;
   }
 
@@ -240,11 +244,11 @@ namespace djnn
 
     bool exec_ = false ;
     if (!numPixels.isNull()) {
-        //std::cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << std::endl;
+        //cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << endl;
         exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->pos ().x (), event->pos ().y ());  
     } else if (!numDegrees.isNull()) {
         QPoint numSteps = numDegrees / 15;
-        //std::cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << std::endl;
+        //cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
         exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->pos ().x (), event->pos ().y ());
     }
 
@@ -256,13 +260,13 @@ namespace djnn
   {
     switch (event->type()) {
         case QEvent::TabletPress:
-            std::cout << "TabletPress" << std::endl;
+            cout << "TabletPress" << endl;
             break;
         case QEvent::TabletMove:
-            //std::cout << "TabletMove" << std::endl;
+            //cout << "TabletMove" << endl;
             break;
         case QEvent::TabletRelease:
-            std::cout << "TabletRelease" << std::endl;
+            cout << "TabletRelease" << endl;
             break;
         default:
             break;
@@ -286,7 +290,7 @@ namespace djnn
   { //DBG;
 
     if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT)
-      std::cerr << std::endl << " PaintEvent " << std::endl;
+      cerr << endl << " PaintEvent " << endl;
     
 #if test_between_2_paintevents
     if (first_time)

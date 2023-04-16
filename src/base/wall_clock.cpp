@@ -49,7 +49,7 @@ WallClock::WallClockTextProperty::get_ref_value()
 
     if(ms_pos != string::npos) {
         auto ms = now2.count() % 1000;
-        auto ms_str = djnn::to_string(ms);
+        auto ms_str = djnnstl::to_string(ms);
         if (ms<10) ms_str = "00" + ms_str;
         else if (ms<100) ms_str = "0" + ms_str;
 

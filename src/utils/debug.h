@@ -35,7 +35,7 @@ extern "C" {
     #endif
 #endif
 
-#define __FL__ " " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << std::endl;
+#define __FL__ " " << __DJNN_FUNCTION__ << ":" << __FILE__ << ":" << __LINE__ << "\n";
 
 #ifndef DBG
 

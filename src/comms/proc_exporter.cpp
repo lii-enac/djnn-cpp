@@ -44,7 +44,7 @@ namespace djnn
     }
     p->clear_senders();
     int sz = msg.size();
-    msg = djnn::to_string(sz) + msg;
+    msg = djnnstl::to_string(sz) + msg;
     if (send(p->get_sock(), msg.c_str(), strlen(msg.c_str()), 0) == SOCKET_ERROR) {
       warning (this, "Failed to send message: " + msg);
     }
