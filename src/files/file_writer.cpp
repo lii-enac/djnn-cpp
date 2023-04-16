@@ -88,7 +88,7 @@ namespace djnn
   void
   FileWriter::write ()
   {
-    _impl->_fs << _input.get_value ();
+    _impl->_fs << _input.get_value ().c_str ();
     _impl->_fs.flush ();
   }
 }

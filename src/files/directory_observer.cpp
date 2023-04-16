@@ -129,7 +129,7 @@ namespace djnn
     #elif DJNN_STL_EASTL
     const std::string path = _path.get_value().c_str();
     #endif
-    for (auto &p: filesystem::directory_iterator(path)) {
+    for (auto &p: filesystem::directory_iterator(filesystem::path(path.c_str()))) {
       new_files.push_back (p);
     }
     for (auto &p : _files.children ()) {
@@ -139,7 +139,7 @@ namespace djnn
     for (auto nf: new_files) {
       found = false;
       for (auto of: old_files) {
-        if (nf.filename() == of) {
+        if (string(nf.filename().c_str()) == of) {
           found = true;
           break;
         }
@@ -154,7 +154,7 @@ namespace djnn
     for (auto of: old_files) {
       found = false;
       for (auto nf: new_files) {
-        if (nf.filename() == of) {
+        if (string(nf.filename().c_str()) == of) {
           found = true;
           break;
         }

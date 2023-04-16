@@ -89,7 +89,7 @@ namespace djnn
 
     // sort by building order
     djnn::map <int, const Process*> parentless_names_ordered;
-    for (auto& [key, pair_value] : parentless_names)
+    for (auto const& [key, pair_value] : parentless_names)
       parentless_names_ordered[pair_value.second] = key;
 
     // delete by reverse order
@@ -576,7 +576,7 @@ namespace djnn
   void
   FatProcess::remove_child (CoreProcess* c)
   {
-    for (auto & name_proc_pair: symtable ()) {
+    for (auto const & name_proc_pair: symtable ()) {
       if (name_proc_pair.second == c) {
         symtable ().erase (name_proc_pair.first);
         return;
@@ -741,7 +741,7 @@ namespace djnn
   alias_children (CoreProcess* parent, FatProcess* from)
   {
     FatProcess::symtable_t& symtable = from->symtable ();
-    for (auto& sym : symtable) {
+    for (auto const & sym : symtable) {
       parent->add_symbol (sym.first, sym.second);
     }
   }
