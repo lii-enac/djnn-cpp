@@ -14,15 +14,16 @@
 
 #pragma once
 
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtWidgets/QLabel>
 
 #include "gui/picking/color_picking.h"
 #include "core/core-dev.h"
 #include "display/window.h"
 #include "gui/shape/abstract_gshape.h"
 
-#include <QtGui/QImage>
-#include <QtGui/QPainter>
-#include <QtWidgets/QLabel>
+
 
 namespace djnn
 {

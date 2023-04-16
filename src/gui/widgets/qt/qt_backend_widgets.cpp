@@ -12,13 +12,15 @@
  *
  */
 
+#include <QtWidgets/QFileDialog>
+
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 #include "gui/widgets/file_dialog.h"
 
 #include "display/qt/qt_window.h"
 #include "display/qt/qt_window_moc.h"
-#include <QtWidgets/QFileDialog>
+
 
 namespace djnn
 {

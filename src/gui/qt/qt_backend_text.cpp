@@ -13,6 +13,15 @@
  *
  */
 
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextCursor>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QPicture>
+#include <QtWidgets/QWidget>
+#include <QtCore/QtMath>
+#include <QtCore/QFileInfo>
+#include <cmath>
+
 #include "core/tree/list.h"
 #include "core/utils/ext/remotery/Remotery.h"
 
@@ -27,15 +36,6 @@
 #include "gui/layer.h"
 #include "gui/widgets/multiline_edit.h"
 #include "gui/widgets/text_field.h"
-
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QPicture>
-#include <QtWidgets/QWidget>
-#include <QtCore/QtMath>
-#include <QtCore/QFileInfo>
-#include <cmath>
 
 #include "exec_env/exec_env-dev.h"
 

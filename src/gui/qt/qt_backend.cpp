@@ -12,6 +12,13 @@
  *
  */
 
+#include <QtWidgets/QWidget>
+#include <QtGui/QPainter>
+#include <QtCore/QtMath>
+#include <QtCore/QFileInfo>
+#include "core/utils/iostream.h"
+#include <cmath>
+
 #include "gui/backend.h"
 #include "gui/transformation/homography.h"
 #include "qt_context.h"
@@ -21,13 +28,6 @@
 #include "gui/shape/image.h"
 #include "display/ui.h"
 #include "core/utils/ext/remotery/Remotery.h"
-
-#include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
-#include <QtCore/QtMath>
-#include <QtCore/QFileInfo>
-#include "core/utils/iostream.h"
-#include <cmath>
 
 namespace djnn
 {

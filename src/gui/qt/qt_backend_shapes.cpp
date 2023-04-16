@@ -43,8 +43,8 @@
 
 #include "core/utils/iostream.h"
 #include "core/utils/error.h"
-#include "utils/debug.h"
 
+#include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 /* define in gui.cpp */

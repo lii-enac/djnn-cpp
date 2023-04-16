@@ -14,13 +14,16 @@
  *
  */
 
+#include <QtGui/QImage>
+#include "qt_picking_view.h"
+
 #include "core/utils/utils-dev.h"
 #include "utils/debug.h"
 #include "core/utils/ext/remotery/Remotery.h"
 #include "display/background_rect.h"
 
-#include "qt_picking_view.h"
-#include <QtGui/QImage>
+
+
 
 namespace djnn
 {
