@@ -67,10 +67,17 @@ namespace css
     return _root;
   }
 
+  #if DJNN_STL_DJNN || DJNN_USE_DJNN_IOSTREAM
+  ostream& operator << (ostream& out, const location& l) {
+    out << "location TODO\n";
+    return out;
+  }
+  #endif
+
   void
   Driver::error (const class location& l, const djnn::string& m)
   {
-    #if DJNN_STL_DJNN
+    #if DJNN_STL_DJNN || DJNN_USE_DJNN_IOSTREAM
     ostream& operator << (ostream&, const location&);
     #endif
     djnnstl::cerr << l << ": " << m << djnnstl::endl;
