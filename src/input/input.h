@@ -14,17 +14,6 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
-
-namespace djnn {
-
-	extern vector<string> loadedModules;
-	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
- 	
- 	void init_input ();
-	void clear_input ();
-  
-}
 
 
 /*

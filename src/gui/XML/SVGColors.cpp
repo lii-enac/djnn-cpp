@@ -22,6 +22,7 @@
 #include "core/utils/algorithm.h"
 
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
 
 
 namespace djnn {

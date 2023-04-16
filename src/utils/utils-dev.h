@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "utils.h"
 
 namespace djnn {
 
 	void init_utils ();
+	void clear_utils ();
 }
 

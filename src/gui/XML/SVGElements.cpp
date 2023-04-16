@@ -25,9 +25,11 @@
 #include <locale.h>
 #include <stdlib.h>
 
-// #include "core/cor__e.h"
 #include "core/xml/xml-dev.h"
+#include "core/xml/xml-priv.h" // djn__id_to_process
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
+
 #include "gui/shape/abstract_gshape.h"
 #include "gui/shape/shapes.h"
 #include "gui/transformation/transformations.h"

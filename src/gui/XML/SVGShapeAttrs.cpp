@@ -25,9 +25,11 @@
 #include "gui/shape/abstract_gshape.h"
 #include "gui/style/style.h"
 #include "core/xml/xml-dev.h"
+#include "core/xml/xml-priv.h" // djn__id_to_process
 #include "gui/transformation/transformations.h"
 #include "gui/shape/svg_holder.h"
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
 
 
 namespace djnn {

@@ -18,21 +18,12 @@
 
 namespace djnn {
 
-  extern int mouse_tracking;
-  extern int full_screen;
-  extern int hide_pointer;
-
-  class FatProcess;
-
-  extern FatProcess *GPUs;
-  extern FatProcess *Displays;
-  extern FatProcess* GenericKeyboard;
-
   void init_display ();
   void clear_display ();
 
-  class AbstractDisplay;
-  extern FatProcess* DrawingRefreshManager;
+  extern int mouse_tracking;
+  extern int full_screen;
+  extern int hide_pointer;
 
   typedef enum mouse_button {
     BUTTON_LEFT,
@@ -41,6 +32,11 @@ namespace djnn {
   } mouse_button;
 
   class FatProcess;
+
+  extern FatProcess *GPUs;
+  extern FatProcess *Displays;
+  extern FatProcess* GenericKeyboard;
+  extern FatProcess* DrawingRefreshManager;
 
   class DisplayBackend
   {
@@ -58,9 +54,6 @@ namespace djnn {
     };
     static Impl* _instance;
   };
-
-  extern FatProcess *GPUs;
-  extern FatProcess* DrawingRefreshManager;
 
 }
 

@@ -19,6 +19,7 @@
 #include <stdio.h>
 // #include "core/cor__e.h"
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
 #include "gui/shape/poly.h" // Polyline
 
 namespace djnn {

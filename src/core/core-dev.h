@@ -13,6 +13,8 @@
  */
 #pragma once
 
+#include "core/xml/xml-dev.h"
+
 namespace djnn {
     class CoreProcess;
     using Process = CoreProcess;
@@ -25,9 +27,25 @@ namespace djnn {
     void graph_exec ();
 }
 
-//#if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
-//#include "core/utils/iostream.h"
-//#endif
-//#define DBGG std::cerr << "'" << __FUNCTION__ << " calling graph exec " << __FILE__ << ":" << __LINE__ << std::endl;
 #define DBG_GRAPH_EXE
 #define GRAPH_EXEC { DBG_GRAPH_EXE; djnn::graph_exec (); }
+
+
+namespace djnn
+{
+#ifndef DJNN_NO_DEBUG // still required to link smala programs
+  // DEBUG OPTIONS
+    extern int
+    _DEBUG_SEE_COLOR_PICKING_VIEW,
+    _DEBUG_GRAPH_CYCLE_DETECT,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED,
+    _AUTHORIZE_CYCLE,
+    _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT,
+    _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY,
+    _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL,
+    _DEBUG_NO_TOUCH_EVENT
+    ;
+#endif
+}

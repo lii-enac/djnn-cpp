@@ -14,11 +14,17 @@
 
 #pragma once
 
-#include "input.h"
+//#include "input.h"
 #include "core/ontology/process.h"
-#include "core/property/bool_property.h"
+//#include "core/property/bool_property.h"
 
 namespace djnn {
+  extern vector<string> loadedModules;
+	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
+ 	
+ 	void init_input ();
+	void clear_input ();
+
   typedef enum direction_e {
     IN, OUT
   } direction_e;

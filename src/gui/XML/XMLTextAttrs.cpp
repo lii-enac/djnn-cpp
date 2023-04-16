@@ -20,6 +20,8 @@
 #include <ctype.h>
 
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
+
 #include "gui/style/text.h"
 #include "gui/shape/svg_holder.h"
 

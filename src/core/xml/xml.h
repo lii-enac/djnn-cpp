@@ -18,7 +18,7 @@
 
 #include "core/utils/error.h"
 
-typedef char XML_Char; // FIXME should not be public, and avoid including expat.h (maybe in xml-dev.h)
+typedef char XML_Char; // FIXME should not be public, but avoid including expat.h (might be in xml-dev.h?)
 
 namespace djnn
 {
@@ -98,9 +98,9 @@ namespace djnn
     static djn__XMLTagHandlerList *handlerStack;
   };
 
-  void init_xml ();
-  void clear_xml ();
-  inline FatProcess* load_from_XML (const string& uri) { return XML::djnLoadThenClone (uri); }
-  inline FatProcess* load_from_XML_once (const string& uri) { return XML::djnLoadFromXML (uri); }
-  FatProcess* loadFromXML (const string& uri);
+  // void init_xml ();
+  // void clear_xml ();
+  // inline FatProcess* load_from_XML (const string& uri) { return XML::djnLoadThenClone (uri); }
+  // inline FatProcess* load_from_XML_once (const string& uri) { return XML::djnLoadFromXML (uri); }
+  // FatProcess* loadFromXML (const string& uri);
 }

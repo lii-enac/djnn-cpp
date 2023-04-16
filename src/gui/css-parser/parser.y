@@ -16,6 +16,7 @@
 #include "core/utils/algorithm.h"
 #include "core/utils/iostream.h"
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
 
 #include "base/connector.h"
 #include "gui/style/style.h"

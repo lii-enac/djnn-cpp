@@ -40,10 +40,31 @@ namespace djnn {
 
   using djnnstl::cout;
 
+  map<const string, FatProcess*> _XML_loaded_map;
+
+  void init_xml () {}
+
+  void
+  clear_xml (){
+    for (auto it : _XML_loaded_map) {
+      delete it.second ;
+      it.second = nullptr;
+    }
+  } 
+  FatProcess* load_from_XML (const string& uri) { return XML::djnLoadThenClone (uri); }
+  FatProcess* load_from_XML_once (const string& uri) { return XML::djnLoadFromXML (uri); }
+  
+  FatProcess*
+  loadFromXML (const string& uri)
+  { 
+    warning (nullptr, "loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri)  - to load then clone many times the same XML\n- load_from_XML_once (string uri) - to load only once an XML\n");
+    return XML::djnLoadFromXML (uri); 
+  }
+
   XML::djn__NamespaceTable_t XML::djn__NamespaceTable; // = new map<string, djn__XMLParser*>;
   FatProcess *XML::curComponent = nullptr;
   djn__XMLTagHandlerList *XML::handlerStack = nullptr;
-  map<const string, FatProcess*> _XML_loaded_map;
+  
 
   /*
    * I. The public API: initialisation and parsing function
@@ -73,13 +94,6 @@ namespace djnn {
                 XML_ErrorString (XML_GetErrorCode (d->parser)));
       return -1;
     }
-  }
-
-  FatProcess*
-  loadFromXML (const string& uri)
-  { 
-    warning (nullptr, "loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri)  - to load then clone many times the same XML\n- load_from_XML_once (string uri) - to load only once an XML\n");
-    return XML::djnLoadFromXML (uri); 
   }
 
   /* should add handling of '-' to denote stdin, until a URI is defined for that */
@@ -410,12 +424,5 @@ namespace djnn {
   {
   }
 
-  void
-  clear_xml (){
-    for (auto it : _XML_loaded_map) {
-      delete it.second ;
-      it.second = nullptr;
-    }
-  } 
 #endif
 }

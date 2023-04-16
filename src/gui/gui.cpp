@@ -14,6 +14,8 @@
 
 #include "gui-dev.h"
 #include "gui-priv.h"
+#include "gui-xml.h"
+
 #include "abstract_gobj.h"
 #include "backend.h"
 #include "exec_env/main_loop.h"

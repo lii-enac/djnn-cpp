@@ -18,6 +18,7 @@
 #include "core/property/double_property.h"
 #include "core/control/spike.h"
 
+#include "core/xml/xml.h"
 
 namespace djnn {
 
@@ -99,4 +100,6 @@ namespace djnn {
   void p_init_gui ();
   void p_clear_gui ();
   extern GUIStructureObserver* gui_structure_observer;
+
+
 }

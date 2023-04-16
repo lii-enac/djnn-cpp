@@ -17,9 +17,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-// #include "core/cor__e.h"
+
 #include "gui/gui-dev.h"
 #include "core/xml/xml-dev.h"
+#include "core/xml/xml-priv.h" // djn__id_to_process
+#include "gui/gui-xml.h"
 
 namespace djnn {
 

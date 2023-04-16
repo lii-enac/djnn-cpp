@@ -19,6 +19,8 @@
 #include <stdio.h>
 
 #include "gui/gui-dev.h"
+#include "gui/gui-xml.h"
+
 #include "gui/shape/path.h"
 #include "gui/shape/path_clip.h"
 

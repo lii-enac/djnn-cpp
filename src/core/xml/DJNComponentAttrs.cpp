@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "xml-dev.h"
+
+#include "core/utils/containers.h"
+#include "xml-priv.h"
 
 using namespace djnn;
 
