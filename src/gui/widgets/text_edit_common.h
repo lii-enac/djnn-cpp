@@ -14,8 +14,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 #include "core/property/text_property.h"

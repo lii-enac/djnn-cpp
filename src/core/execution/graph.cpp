@@ -129,6 +129,12 @@ namespace djnn
     // cerr << "remove_edge : " << "\t between " << get_hierarchy_name(get_process())  << " - " << get_hierarchy_name(dst->get_process()) << endl;
   }
 
+  void
+  Vertex::set_position_in_graph_vertices (vertices_t::iterator end)
+  {
+    _pos = djnnstl::prev(end);
+  }
+
 
   // -----------------------------------------------------------------------
   // Graph construction / destruction

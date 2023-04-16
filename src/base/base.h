@@ -15,6 +15,7 @@
 #pragma once
 
 #include "arithmetic.h"
+#include "incr.h"
 #include "trigonometry.h"
 #include "geometry.h"
 #include "math_functions.h"

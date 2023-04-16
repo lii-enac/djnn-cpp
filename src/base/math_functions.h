@@ -16,10 +16,18 @@
 
 #pragma once
 
-#include <cmath>
+//#include <cmath>
+
+extern "C" {
+  double exp (double);
+  double log (double);
+  double log10 (double);
+  double sqrt (double);
+  double fabs (double);
+  double pow (double,double);
+}
 
 #include "operators.h"
-
 
 namespace djnn
 {
@@ -67,19 +75,23 @@ namespace djnn
   typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> PowAction;
   typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_pow<double>, double, double> Pow;
 
-  template <typename T> struct my_min { T operator() (T t1, T t2) { return djnnstl::min(t1, t2);} };
+  #define DJNN_MIN___(x,y) ((x)<(y)?(x):(y))
+  template <typename T> struct my_min { T operator() (T t1, T t2) { return DJNN_MIN___(t1, t2);} };
   template <> const char name_info<my_min<double>>::left[];
   template <> const char name_info<my_min<double>>::right[];
   template <> const char name_info<my_min<double>>::serialize[];
   typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> MinAction;
   typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_min<double>, double, double> Min;
+  #undef DJNN_MIN___
 
-  template <typename T> struct my_max { T operator() (T t1, T t2) { return djnnstl::max(t1, t2);} };
+  #define DJNN_MAX___(x,y) ((x)>(y)?(x):(y))
+  template <typename T> struct my_max { T operator() (T t1, T t2) { return DJNN_MAX___(t1, t2);} };
   template <> const char name_info<my_max<double>>::left[];
   template <> const char name_info<my_max<double>>::right[];
   template <> const char name_info<my_max<double>>::serialize[];
   typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> MaxAction;
   typedef BinaryOperator      <DoubleProperty, DoubleProperty, DoubleProperty, my_max<double>, double, double> Max;
+  #undef DJNN_MAX___
 
   template <typename T> struct my_clamp_min { T operator() (T t1, T t2) { return t2 < t1 ? t1 : t2;} };
   template <> const char name_info<my_clamp_min<double>>::left[];

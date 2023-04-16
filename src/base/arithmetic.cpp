@@ -14,6 +14,7 @@
  */
 
 #include "arithmetic.h"
+#include "incr.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"

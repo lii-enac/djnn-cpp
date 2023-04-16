@@ -46,7 +46,7 @@ namespace djnn
     map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in  () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
-                    void set_position_in_graph_vertices (vertices_t::iterator end) { _pos = djnnstl::prev(end); }
+                    void set_position_in_graph_vertices (vertices_t::iterator end); // { _pos = djnnstl::prev(end); }
     vertices_t::iterator get_position_in_graph_vertices () { return _pos; }
 
     void invalidate   () { _is_invalid = true; }

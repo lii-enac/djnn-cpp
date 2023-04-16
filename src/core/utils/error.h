@@ -14,7 +14,10 @@
 
 #pragma once
 
-#include <stdlib.h> // exit
+//#include <stdlib.h> // exit
+extern "C" {
+void exit(int status);
+}
 
 //#include "core/utils/utils-dev.h" // __to_string
 #include "containers.h"
