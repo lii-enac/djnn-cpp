@@ -139,7 +139,7 @@ namespace djnn
     for (auto nf: new_files) {
       found = false;
       for (auto of: old_files) {
-        if (string(nf.filename().c_str()) == of) {
+        if (nf.filename() == of) {
           found = true;
           break;
         }
@@ -154,7 +154,7 @@ namespace djnn
     for (auto of: old_files) {
       found = false;
       for (auto nf: new_files) {
-        if (string(nf.filename().c_str()) == of) {
+        if (nf.filename() == of) {
           found = true;
           break;
         }
