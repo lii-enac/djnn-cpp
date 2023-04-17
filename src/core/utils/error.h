@@ -14,7 +14,8 @@
 
 #pragma once
 
-//#include <stdlib.h> // exit
+#include <stdlib.h> // exit
+/*
 extern "C" {
 #if __MINGW64__
 void exit(int status) ;
@@ -22,6 +23,7 @@ void exit(int status) ;
 void exit(int status) ; // noexcept;
 #endif
 }
+*/
 
 //#include "core/utils/utils-dev.h" // __to_string
 #include "containers.h"

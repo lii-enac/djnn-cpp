@@ -16,10 +16,11 @@
 
 #pragma once
 
-//#include <cmath>
+#include <cmath>
 
+/*
 extern "C" {
-  #if __MINGW64__
+  #if __MINGW64__ || __APPLE__
   #define noexcept
   #endif
   double exp (double) noexcept;
@@ -28,11 +29,11 @@ extern "C" {
   double sqrt (double) noexcept;
   double fabs (double) noexcept;
   double pow (double,double) noexcept;
-  #if __MINGW64__
+  #if __MINGW64__ || __APPLE__
   #undef noexcept
   #endif
 }
-
+*/
 #include "operators.h"
 
 namespace djnn
