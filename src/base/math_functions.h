@@ -19,12 +19,18 @@
 //#include <cmath>
 
 extern "C" {
+  #if __MINGW64__
+  #define noexcept
+  #endif
   double exp (double) noexcept;
   double log (double) noexcept;
   double log10 (double) noexcept;
   double sqrt (double) noexcept;
   double fabs (double) noexcept;
   double pow (double,double) noexcept;
+  #if __MINGW64__
+  #undef noexcept
+  #endif
 }
 
 #include "operators.h"
