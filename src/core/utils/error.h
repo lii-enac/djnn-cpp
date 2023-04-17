@@ -19,7 +19,7 @@ extern "C" {
 #if __MINGW64__
 void exit(int status) ;
 #else
-void exit(int status) noexcept;
+void exit(int status) ; // noexcept;
 #endif
 }
 
