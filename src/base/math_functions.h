@@ -19,12 +19,12 @@
 //#include <cmath>
 
 extern "C" {
-  double exp (double);
-  double log (double);
-  double log10 (double);
-  double sqrt (double);
-  double fabs (double);
-  double pow (double,double);
+  double exp (double) noexcept;
+  double log (double) noexcept;
+  double log10 (double) noexcept;
+  double sqrt (double) noexcept;
+  double fabs (double) noexcept;
+  double pow (double,double) noexcept;
 }
 
 #include "operators.h"
