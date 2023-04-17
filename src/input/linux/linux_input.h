@@ -22,6 +22,7 @@
 #include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/property/int_property.h"
+#include "core/property/bool_property.h"
 #include "core/property/text_property.h"
 #include "core/tree/set.h"
 #include "core/control/spike.h"

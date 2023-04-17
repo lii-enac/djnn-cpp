@@ -12,6 +12,9 @@
  *
  */
 
+#include <memory> // shared_ptr
+#include <mutex> // std::once_flag
+
 #include "display/abstract_display.h"
 
 #include "display/qt/qt_display.h"
