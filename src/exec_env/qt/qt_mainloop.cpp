@@ -14,6 +14,7 @@
  *
  */
 
+#include <mutex> // std::call_once
 
 #include "exec_env/main_loop.h"
 #include "exec_env/global_mutex.h"
@@ -27,7 +28,7 @@ namespace djnn
 {
 
   QtMainloop* QtMainloop::_instance;
-  std::once_flag QtMainloop::onceFlag;
+  static std::once_flag onceFlag;
 
   void
   QtMainloop::build_instance (MainLoop * ml)

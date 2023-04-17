@@ -19,8 +19,6 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtWidgets/QApplication>
 
-//#include <mutex> // std::call_once
-
 #include "exec_env/external_source.h"
 #include "core/core-dev.h" // graph add/remove edge
 
@@ -57,7 +55,6 @@ namespace djnn {
   
   private:
     static QtMainloop* _instance;
-    static std::once_flag onceFlag;
     QtMainloop (MainLoop*);
     bool _please_exec;
     QApplication* _qapp;
