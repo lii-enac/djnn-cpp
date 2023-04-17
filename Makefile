@@ -327,9 +327,7 @@ CXXLD := ld64.mold
 LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
 LDFLAGS += -dylib -lc++ -lc
 else
-CXXLD := mold
-CXXFLAGS += -fPIC
-LDFLAGS += --shared -L/usr/lib/x86_64-linux-gnu
+CXXLD := $(CXX) --use-ld=mold 
 endif
 endif
 
@@ -574,7 +572,7 @@ ifeq ($(linker), llvm)
 $1_lib_soname := -Wl,-install_name,$$($1_libname)
 endif
 ifeq ($(linker), mold)
-$1_lib_soname := -install_name $$($1_libname)
+#$1_lib_soname := -Wl,-install_name,$$($1_libname)
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion

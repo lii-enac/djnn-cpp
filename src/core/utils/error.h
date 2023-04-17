@@ -16,7 +16,11 @@
 
 //#include <stdlib.h> // exit
 extern "C" {
-void exit(int status);
+#if __MINGW64__
+void exit(int status) ;
+#else
+void exit(int status) noexcept;
+#endif
 }
 
 //#include "core/utils/utils-dev.h" // __to_string
