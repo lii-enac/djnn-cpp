@@ -41,7 +41,7 @@ namespace djnn
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
-    %(CLASS)s (ParentProcess* parent, const string& name, %(DECL_PROPS_CALL_DECL)s);
+    %(CLASS)s (CoreProcess* parent, const string& name, %(DECL_PROPS_CALL_DECL)s);
     virtual ~%(CLASS)s ();
     %(DECL_DRAW)s
     %(DECL_CLONE)s
@@ -80,7 +80,7 @@ def_string = """
 
 namespace djnn
 {
-  %(CLASS)s::%(CLASS)s (ParentProcess* parent, const string& name, %(DECL_PROPS_CALL_DEF)s) :
+  %(CLASS)s::%(CLASS)s (CoreProcess* parent, const string& name, %(DECL_PROPS_CALL_DEF)s) :
     %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
     raw_props{%(RAW_PROPS_INIT)s},
     %(COUPLINGS_INIT)s
@@ -191,7 +191,7 @@ def_draw = """
 
 def_clone = """
   %(CLASS)s*
-  %(CLASS)s::impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
+  %(CLASS)s::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
     auto res = new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
     origs_clones[this] = res;
@@ -460,7 +460,7 @@ def gen_prop(dc, finalize_construction=True):
         FINALIZE_CONSTRUCTION = "finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
-    decl_clone = "%(CLASS)s* impl_clone (map<CoreProcess*, CoreProcess*>& origs_clones) override;"
+    decl_clone = "%(CLASS)s* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;"
 
     DECL_DRAW = ''
     if(dc.finalize_construction):
