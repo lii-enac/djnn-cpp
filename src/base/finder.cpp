@@ -100,7 +100,7 @@ namespace djnn
     f->_not_found.set_activation_flag (ACTIVATION);
   }
 
-  Finder::Finder (CoreProcess* parent, const string& name, FatProcess *container, const string& path)
+  Finder::Finder (CoreProcess* parent, const string& name, CoreProcess *container, const string& path)
   : FatProcess (name),
   _path (this, "path", path),
   _key (this, "key", ""),

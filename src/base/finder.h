@@ -35,7 +35,7 @@ namespace djnn
       void impl_activate () override;
     };
     public:
-      Finder (CoreProcess* parent, const string& name, FatProcess *container, const string& path);
+      Finder (CoreProcess* parent, const string& name, CoreProcess *container, const string& path);
       virtual ~Finder ();
       void impl_activate () override;
       void impl_deactivate () override;
