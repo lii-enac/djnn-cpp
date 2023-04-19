@@ -1,4 +1,4 @@
-lib_djnn_deps = exec_env core base
+lib_djnn_deps = base exec_env core
 lib_srcs := src/files/files.cpp src/files/file_reader.cpp src/files/file_writer.cpp src/files/directory_observer.cpp 
 
 ifeq ($(os),Darwin)
