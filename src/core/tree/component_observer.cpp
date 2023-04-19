@@ -16,7 +16,7 @@
 #include "component_observer.h"
 
 
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 namespace djnn
 {

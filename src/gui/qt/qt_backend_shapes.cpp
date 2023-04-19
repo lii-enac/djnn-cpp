@@ -24,7 +24,7 @@
 #include "core/tree/list.h"
 #include "core/utils/algorithm.h"
 
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 #include "gui/gui-dev.h"
 #include "gui/backend.h"
@@ -898,7 +898,7 @@ namespace djnn
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
 
     auto rh = _painter->renderHints();
-    _painter->setRenderHints(0);
+    _painter->setRenderHints({});
     rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
     //_painter->drawImage (rect, *(ls->pm));
     _painter->drawPixmap (0,0, *(ls->pm));

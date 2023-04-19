@@ -26,5 +26,7 @@ lib_pkgpath += $(brew_prefix)/opt/curl/lib/pkgconfig
 endif
 
 ifneq ($(os),$(filter $(os),FreeRTOS em crazyflie))
-lib_pkg += expat libcurl # fmt
+lib_pkg += expat libcurl
 endif
+
+$(build_dir)/$(local_dir)/xml/XML.o: CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(core_lib_pkgpath) pkg-config --cflags expat libcurl)

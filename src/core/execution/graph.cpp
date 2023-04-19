@@ -30,7 +30,7 @@ using djnnstl::endl;
 
 #include "core/utils/utils-dev.h"
 #include "core/utils/error.h"
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 #include "utils/debug.h"
 #include "exec_env/exec_env-dev.h"
 

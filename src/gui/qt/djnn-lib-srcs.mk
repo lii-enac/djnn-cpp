@@ -1,5 +1,5 @@
-local_dir := $(src_dir)/gui/qt
-lib_srcs += $(wildcard $(local_dir)/*.cpp)
+local_dir = $(src_dir)/gui/qt
+my_srcs := $(wildcard $(local_dir)/*.cpp)
 
 # -- specific precompiled header
 # no gain :-/ ?!
@@ -17,3 +17,14 @@ lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
 # this will change local_dir !
 include $(local_dir)/qt/djnn-lib-srcs.mk
+
+$(patsubst %.cpp,$(build_dir)/%.o,$(my_srcs)) \
+$(build_dir)/$(local_dir)/qqt_window_moc.o \
+: CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags Qt5OpenGL Qt5Gui)
+
+lib_srcs += $(my_srcs) 
+
+# qt_srcs := $(my_srcs)
+
+# moncul:
+# 	@echo $(qt_srcs)

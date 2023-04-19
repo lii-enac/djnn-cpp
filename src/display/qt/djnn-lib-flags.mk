@@ -1,4 +1,4 @@
-lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
+#lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
 lib_cppflags += -I$(src_dir)/.. # for moc
 
 ifeq ($(os),Darwin)

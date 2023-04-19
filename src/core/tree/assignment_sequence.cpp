@@ -26,7 +26,7 @@
 
 #include "gui/picking/analytical_picking_context.h"
 
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 //#include <boost/range/adaptor/reversed.hpp>
 

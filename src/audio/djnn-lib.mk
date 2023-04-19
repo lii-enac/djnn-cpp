@@ -3,6 +3,10 @@ local_dir = $(src_dir)/audio
 lib_srcs += $(call rwildcard,$(local_dir)/,*.cpp)
 lib_srcs += $(local_dir)/ext/dr_impl.c
 
+ifeq ($(os),Darwin)
+lib_cppflags += -Wno-deprecated-declarations
+endif
+
 ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
 lib_cppflags += -DDJNN_USE_OPENAL
 

@@ -64,4 +64,4 @@ build_dir := build
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 #CFLAGS += -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 
-remotery_cflags := -DRMT_ENABLED=0
+# remotery_cflags := -DRMT_ENABLED=0

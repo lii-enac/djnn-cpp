@@ -27,7 +27,7 @@
 #include "gui/shape/text.h"
 #include "gui/shape/image.h"
 #include "display/ui.h"
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 namespace djnn
 {

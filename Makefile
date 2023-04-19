@@ -195,7 +195,7 @@ brew_prefix := $(shell brew --prefix)
 else
 brew_prefix := $(HOMEBREW_PREFIX)
 endif
-CFLAGS += -Wno-deprecated-declarations
+#CFLAGS += -Wno-deprecated-declarations
 #CFLAGS += -isysroot $(shell xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 lib_suffix =.dylib
 DYNLIB ?= -dynamiclib
@@ -370,13 +370,13 @@ tidy: $(all_tidy)
 # ---------------------------------------
 # CFLAGS CXXFLAGS
 
-CXXFLAGS += $(CFLAGS)
 CXXFLAGS += -std=c++17
+CXXFLAGS += $(CFLAGS)
 
 # ---------------------------------------
 # precompiled headers
-
-ifneq ($(use_pch),no)
+use_pch ?= yes
+ifeq ($(use_pch),yes)
 # https://stackoverflow.com/questions/58841/precompiled-headers-with-gcc
 # https://stackoverflow.com/questions/26755219/how-to-use-pch-with-clang
 
@@ -550,8 +550,8 @@ $1_cov_gcno  := $$($1_objs:.o=.gcno)
 $1_cov_gcda  := $$($1_objs:.o=.gcda)
 
 ifneq ($$($1_lib_pkg),)
-$1_lib_pkgpath = $$(subst $$() $$(),:,$$(lib_pkgpath))
-$1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
+$1_lib_pkgpath := $$(subst $$() $$(),:,$$(lib_pkgpath))
+#$1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
 $1_lib_ldflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --libs $$($1_lib_pkg))
 endif
 

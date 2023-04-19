@@ -14,7 +14,7 @@
  */
 
 #if RMT_ENABLED
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 #endif
 
 //#include <locale.h>

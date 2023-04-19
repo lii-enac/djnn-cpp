@@ -30,7 +30,7 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "exec_env/main_loop.h"
 
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 #include "core/utils/error.h"
 
 #include <SDL.h>

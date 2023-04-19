@@ -23,7 +23,7 @@
 #include <cmath>
 
 #include "core/tree/list.h"
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 #include "gui/backend.h"
 

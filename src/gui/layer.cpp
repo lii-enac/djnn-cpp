@@ -22,7 +22,7 @@
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 namespace djnn
 {

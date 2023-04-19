@@ -19,7 +19,7 @@
 
 #include "core/utils/utils-dev.h"
 #include "utils/debug.h"
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 #include "display/background_rect.h"
 
 

@@ -14,6 +14,10 @@ else
 	@$(moc) $< > $@
 endif
 
+$(build_dir)/$(local_dir)/qt_display.o \
+$(build_dir)/$(local_dir)/qt_window.o \
+$(build_dir)/$(local_dir)/qt_window_moc.o \
+: CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags Qt5OpenGL Qt5Gui)
 
 # -- specific precompiled header
 # no gain :-/ ?!

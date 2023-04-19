@@ -24,7 +24,7 @@
 #include "exec_env/djnn_time_manager.h"
 #endif
 
-#include "core/utils/ext/remotery/Remotery.h"
+#include "core/utils/remotery.h"
 
 #include "core/utils/iostream.h"
 
