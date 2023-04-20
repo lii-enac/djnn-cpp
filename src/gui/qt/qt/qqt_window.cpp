@@ -245,11 +245,20 @@ namespace djnn
     bool exec_ = false ;
     if (!numPixels.isNull()) {
         //cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << endl;
-        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->position ().x (), event->position ().y ());  
+        #if (QT_VERSION>= QT_VERSION_CHECK(5,14,0))
+        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->position ().x (), event->position ().y ());
+        #else
+        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->pos ().x (), event->pos ().y ());
+        
+        #endif
     } else if (!numDegrees.isNull()) {
         QPoint numSteps = numDegrees / 15;
         //cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
+        #if (QT_VERSION>= QT_VERSION_CHECK(5,14,0))
         exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->position ().x (), event->position ().y ());
+        #else
+        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->pos ().x (), event->pos ().y ());
+        #endif
     }
 
     if (exec_) { GRAPH_EXEC; } 
