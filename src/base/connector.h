@@ -222,6 +222,6 @@ public:
 #endif
   };
 
-  void MultiConnector (CoreProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation=true);
+  void MultiConnector (CoreProcess* parent, CoreProcess* src, const vector <string>& src_props, CoreProcess* dst, const vector <string>& dst_props, bool copy_on_activation=true);
   void MultiConnector (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true);
 }

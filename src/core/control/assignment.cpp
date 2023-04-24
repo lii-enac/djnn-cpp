@@ -384,7 +384,7 @@ namespace djnn
   }
 
   void
-  MultiAssignment (CoreProcess* parent, CoreProcess* src, vector <string> src_props, CoreProcess* dst, vector <string> dst_props, bool copy_on_activation)
+  MultiAssignment (CoreProcess* parent, CoreProcess* src, const vector<string>& src_props, CoreProcess* dst, const vector<string>& dst_props, bool copy_on_activation)
   {
     if (src_props.size() != dst_props.size ()) {
       error (src, "Incompatible number of properties in multiple assignment");
@@ -408,7 +408,7 @@ namespace djnn
     Container* cont_dst = dynamic_cast<Container*>(dst);
     if (cont_src && cont_dst) {
       for (auto c: cont_src->children ()) {
-        string name = c->get_name (c->get_parent ());
+        const string& name = c->get_name (c->get_parent ());
         CoreProcess* prop_dst = cont_dst->find_child_impl (name);
         if (dst)
           new Assignment (parent, "", c, prop_dst, copy_on_activation);
