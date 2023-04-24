@@ -19,13 +19,33 @@ namespace djnn {
     }
     for (size_t i = 0; i < src_props.size (); ++i) {
       CoreProcess *src_prop = src->find_child_impl (src_props[i]);
+      if (!src_prop) {
+        error (nullptr, "src property not found in multiple connector: " + src_props[i]);
+      }
       CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
-      if (src_prop && dst_prop) {
-        new Connector (parent, "", src_prop, dst_prop, copy_on_activation);
+      if (!dst_prop) {
+        error (nullptr, "dst property not found in multiple connector: " + dst_props[i]);
       }
-      else {
-        error (nullptr, "Property not found in multiple connector: " + src_props[i] + " or " + dst_props[i]);
+      new Connector (parent, "", src_prop, dst_prop, copy_on_activation);
+    }
+  }
+
+  void
+  MultiConnector (CoreProcess* parent, CoreProcess* src, const char* src_props[], size_t src_size, CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation)
+  {
+    if (src_size != dst_size) {
+      error (nullptr, "Incompatible number of properties in multiple connector");
+    }
+    for (size_t i = 0; i < src_size; ++i) {
+      CoreProcess *src_prop = src->find_child_impl (src_props[i]);
+      if (!src_prop) {
+        error (nullptr, "src property not found in multiple connector: " + string(src_props[i]));
       }
+      CoreProcess *dst_prop = dst->find_child_impl (dst_props[i]);
+      if (!dst_prop) {
+        error (nullptr, "dst property not found in multiple connector: " + string(dst_props[i]));
+      }
+      new Connector (parent, "", src_prop, dst_prop, copy_on_activation);
     }
   }
 
