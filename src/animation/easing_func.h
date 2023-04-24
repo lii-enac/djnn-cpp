@@ -18,42 +18,10 @@
 #include "core/property/int_property.h"
 #include "core/property/double_property.h"
 
+#include "enums.h"
+
 namespace djnn
 {
-
-  enum easing_function_t {
-    DJN_IN_SINE,
-    DJN_OUT_SINE,
-    DJN_IN_OUT_SINE,
-    DJN_IN_CUBIC,
-    DJN_OUT_CUBIC,
-    DJN_IN_OUT_CUBIC,
-    DJN_IN_QUINT,
-    DJN_OUT_QUINT,
-    DJN_IN_OUT_QUINT,
-    DJN_IN_CIRC,
-    DJN_OUT_CIRC,
-    DJN_IN_OUT_CIRC,
-    DJN_IN_ELASTIC,
-    DJN_OUT_ELASTIC,
-    DJN_IN_OUT_ELASTIC,
-    DJN_IN_QUAD,
-    DJN_OUT_QUAD,
-    DJN_IN_OUT_QUAD,
-    DJN_IN_QUART,
-    DJN_OUT_QUART,
-    DJN_IN_OUT_QUART,
-    DJN_IN_EXPO,
-    DJN_OUT_EXPO,
-    DJN_IN_OUT_EXPO,
-    DJN_IN_BACK,
-    DJN_OUT_BACK,
-    DJN_IN_OUT_BACK,
-    DJN_IN_BOUNCE,
-    DJN_OUT_BOUNCE,
-    DJN_IN_OUT_BOUNCE
-  };
-
   typedef double (easing_function)(double);
   class EasingGenerator : public FatProcess
   {

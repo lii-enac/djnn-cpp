@@ -23,15 +23,10 @@
 #include "core/property/double_property.h"
 #include "core/property/property_trait.h"
 
+#include "base/enums.h"
 
 namespace djnn
 {
-  typedef enum djnn_dir_t {
-    DJNN_GET_ON_CHANGE,
-    DJNN_SET_ON_CHANGE,
-    DJNN_IGNORE
-  } djnn_dir_t;
-
   class AbstractDeref : public FatProcess
   {
   private:
