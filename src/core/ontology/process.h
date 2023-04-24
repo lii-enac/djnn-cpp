@@ -16,9 +16,7 @@
 #pragma once
 
 #include "core/utils/containers.h"
-#include "utils/debug.h"
 
-namespace djnn {
 
   using namespace djnnstl;
 
