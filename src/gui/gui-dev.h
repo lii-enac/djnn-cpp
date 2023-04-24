@@ -29,7 +29,7 @@ namespace djnn {
   // extern int full_screen;
   // extern int hide_pointer;
   // extern FatProcess* DrawingRefreshManager;
-  extern FatProcess* GenericMouse;
+  extern CoreProcess* GenericMouse;
   extern int z_order_enabled;
 
   void init_gui ();
