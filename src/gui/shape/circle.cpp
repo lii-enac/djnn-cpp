@@ -18,6 +18,7 @@
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
 #include "display/display-dev.h" // DisplayBackend::instance
+#include "display/abstract_display.h" // DisplayBackend::instance
 #include "gui/shape/sdf.h"
 
 #include "gui/shape/circle.h"

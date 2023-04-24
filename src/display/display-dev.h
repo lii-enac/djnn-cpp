@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "abstract_display.h"
+//#include "abstract_display.h"
 
 namespace djnn {
 
@@ -38,6 +38,7 @@ namespace djnn {
   extern FatProcess* GenericKeyboard;
   extern FatProcess* DrawingRefreshManager;
 
+  class AbstractDisplay;
   class DisplayBackend
   {
   public:

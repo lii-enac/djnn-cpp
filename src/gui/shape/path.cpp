@@ -15,6 +15,7 @@
  */
 
 #include "display/display-dev.h" // DisplayBackend::instance
+#include "display/abstract_display.h" // DisplayBackend::instance
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"
 #include "gui/shape/sdf.h"

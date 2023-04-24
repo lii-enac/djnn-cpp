@@ -23,6 +23,7 @@
 #include "gui/abstract_backend.h"
 #include "gui/layer.h"
 #include "display/display-dev.h"
+#include "display/abstract_display.h"
 
 
 //#include <boost/range/adaptor/reversed.hpp>
