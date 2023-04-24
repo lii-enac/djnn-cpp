@@ -8,7 +8,7 @@ namespace djnn {
   public:
     DashArray (CoreProcess* parent, const string& name) :
         AbstractStyle (parent, name) { finalize_construction (parent, name); }
-    DashArray (CoreProcess* parent, const string& name, vector<double> patterns) :
+    DashArray (CoreProcess* parent, const string& name, const vector<double>& patterns) :
         AbstractStyle (parent, name), _dash_array (patterns) { finalize_construction (parent, name); }
 
     virtual ~DashArray () { _dash_array.clear ();}
