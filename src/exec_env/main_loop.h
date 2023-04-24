@@ -78,8 +78,8 @@ namespace djnn
     void add_external_source (ExternalSource*);
     void remove_external_source (ExternalSource*);
     
-    void add_background_process (FatProcess *p);
-    void remove_background_process (FatProcess *p);
+    void add_background_process (CoreProcess *p);
+    void remove_background_process (CoreProcess *p);
 
     void external_run_for_qt5_9_fixme() { run(); }
     void private_run ();
@@ -106,7 +106,7 @@ namespace djnn
   private:
     // MainLoop should be created *before* any other external-source
     MainLoop ();
-    vector<FatProcess*> _background_processes;
+    vector<CoreProcess*> _background_processes;
     vector<ExternalSource*> _external_sources;
 
     std::mutex cancel_mutex;

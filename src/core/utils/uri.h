@@ -21,7 +21,7 @@ namespace djnn {
   class URI {
   public:
     static CoreProcess* find_by_uri (const string& uri);
-    static void add_uri (const string& prefix, FatProcess* p);
+    static void add_uri (const string& prefix, CoreProcess* p);
   private:
     typedef map<string, CoreProcess*> uris_t;
     static uris_t uri_manager;

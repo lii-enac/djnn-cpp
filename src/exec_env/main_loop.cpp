@@ -245,13 +245,13 @@ namespace djnn {
     }
 
     void
-    MainLoop::add_background_process (FatProcess *p)
+    MainLoop::add_background_process (CoreProcess *p)
     {
       _background_processes.push_back (p);
     }
 
     void
-    MainLoop::remove_background_process (FatProcess *p)
+    MainLoop::remove_background_process (CoreProcess *p)
     {
       _background_processes.erase (djnnstl::remove(_background_processes.begin(), _background_processes.end(), p), _background_processes.end());
     }

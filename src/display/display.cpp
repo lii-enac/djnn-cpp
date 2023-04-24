@@ -24,15 +24,15 @@ namespace djnn
   static bool __module_initialized = false;
   extern vector<string> loadedModules;
 
-  FatProcess *DrawingRefreshManager;
+  CoreProcess *DrawingRefreshManager;
 
   int mouse_tracking = 0;
   int full_screen = 0;
   int hide_pointer = 0;
 
-  FatProcess *GPUs = nullptr;
-  FatProcess *Displays = nullptr;
-  FatProcess *GenericKeyboard = nullptr;
+  CoreProcess *GPUs = nullptr;
+  CoreProcess *Displays = nullptr;
+  CoreProcess *GenericKeyboard = nullptr;
 
 
   DisplayBackend::Impl* DisplayBackend::_instance;

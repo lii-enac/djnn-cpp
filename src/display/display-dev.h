@@ -31,12 +31,12 @@ namespace djnn {
     BUTTON_RIGHT
   } mouse_button;
 
-  class FatProcess;
+  class CoreProcess;
 
-  extern FatProcess *GPUs;
-  extern FatProcess *Displays;
-  extern FatProcess* GenericKeyboard;
-  extern FatProcess* DrawingRefreshManager;
+  extern CoreProcess *GPUs;
+  extern CoreProcess *Displays;
+  extern CoreProcess* GenericKeyboard;
+  extern CoreProcess* DrawingRefreshManager;
 
   class AbstractDisplay;
   class DisplayBackend

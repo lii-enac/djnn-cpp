@@ -20,7 +20,7 @@ namespace djnn
   URI::uris_t URI::uri_manager;
 
   void
-  URI::add_uri (const string& prefix, FatProcess* p)
+  URI::add_uri (const string& prefix, CoreProcess* p)
   {
     uri_manager.insert (uris_t::value_type (prefix, p));
   }
