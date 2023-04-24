@@ -22,7 +22,7 @@ namespace djnn {
 
   using namespace djnnstl;
 
-  class FatProcess;
+  class CoreProcess;
 
   extern vector<string> loadedModules;
   // extern int mouse_tracking;

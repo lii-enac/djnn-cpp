@@ -40,7 +40,7 @@ namespace djnn
   static bool __module_initialized = false;
   extern vector<string> loadedModules;
 
-  extern FatProcess *GenericMouse;
+  extern CoreProcess *GenericMouse;
   extern GUIStructureObserver * gui_structure_observer;
 
   int z_order_enabled = 0;
