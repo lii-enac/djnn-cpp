@@ -20,7 +20,7 @@ namespace djnn {
 
   class NativeExpressionActionProxy {
     public:
-	  NativeExpressionActionProxy (CoreProcess *p, const char* n, bool string_setter, bool isModel);
+	  NativeExpressionActionProxy (CoreProcess *p, const char* n, bool string_setter, bool is_model=false);
     ~NativeExpressionActionProxy ();
 
     protected:
@@ -42,35 +42,35 @@ namespace djnn {
 }
 
 //extern "C" {
-void djnn_init_core(); // { djnn::init_core(); }
-void djnn_clear_core(); // { djnn::clear_core(); }
+void djnn_init_core();
+void djnn_clear_core();
 
-void djnn_init_exec_env(); // { djnn::init_exec_env(); }
-void djnn_clear_exec_env(); // { djnn::clear_exec_env(); }
+void djnn_init_exec_env();
+void djnn_clear_exec_env();
 
-void djnn_init_base(); // { djnn::init_base(); }
-void djnn_clear_base(); // { djnn::clear_base(); }
+void djnn_init_base();
+void djnn_clear_base();
 
-void djnn_init_display(); // { djnn::init_display(); }
-void djnn_clear_display(); // { djnn::clear_display(); }
+void djnn_init_display();
+void djnn_clear_display();
 
-void djnn_init_gui(); // { djnn::init_gui(); }
-void djnn_clear_gui(); // { djnn::clear_gui(); }
+void djnn_init_gui();
+void djnn_clear_gui();
 
-void djnn_init_input(); // { djnn::init_gui(); }
-void djnn_clear_input(); // { djnn::clear_gui(); }
+void djnn_init_input();
+void djnn_clear_input();
 
-void djnn_init_audio(); // { djnn::init_audio(); }
-void djnn_clear_audio(); // { djnn::clear_audio(); }
+void djnn_init_audio();
+void djnn_clear_audio();
 
-void djnn_init_physics(); // { djnn::init_physics(); }
-void djnn_clear_physics(); // { djnn::clear_physics(); }
+void djnn_init_physics();
+void djnn_clear_physics();
 
-void djnn_init_animation(); // { djnn::init_gui(); }
-void djnn_clear_animation(); // { djnn::clear_gui(); }
+void djnn_init_animation();
+void djnn_clear_animation();
 
-void djnn_init_comms(); // { djnn::init_core(); }
-void djnn_clear_comms(); // { djnn::clear_core(); }
+void djnn_init_comms();
+void djnn_clear_comms();
 
 void djnn_init_files();
 void djnn_clear_files();
@@ -186,7 +186,7 @@ djnn::CoreProcess* djnn_new_Activator(djnn::CoreProcess* parent, const char* nam
 //djnn::CoreProcess* djnn_new_NativeAction(djnn::CoreProcess* parent, const char* name, const char* action, void* data, bool is_model); // { return new djnn::NativeAction(parent, name, action, data, is_model); }
 djnn::CoreProcess* djnn_new_NativeAction(djnn::CoreProcess* parent, const char* name, djnn::NativeCode action, void* data, bool is_model); // { return new djnn::NativeAction(parent, name, action, data, is_model); }
 djnn::CoreProcess* djnn_new_Blank(djnn::CoreProcess* parent, const char* name); // { return new djnn::Blank(parent, name); }
-djnn::CoreProcess* djnn_new_Component(djnn::CoreProcess* parent, const char* name); // { return new djnn::Component(parent, name); }
+djnn::CoreProcess* djnn_new_Component(djnn::CoreProcess* parent, const char* name, bool is_model=false); // { return new djnn::Component(parent, name); }
 djnn::CoreProcess* djnn_new_AssignmentSequence(djnn::CoreProcess* parent, const char* name, bool is_model); // { return new djnn::AssignmentSequence(parent, name, is_model); }
 djnn::CoreProcess* djnn_new_List(djnn::CoreProcess* parent, const char* name); // { return new djnn::List(parent, name); }
 djnn::CoreProcess* djnn_new_ListIterator(djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* list, djnn::CoreProcess* action, bool is_model); // { return new djnn::ListIterator(parent, name, list, action, is_model); }
