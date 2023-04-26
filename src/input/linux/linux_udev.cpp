@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-
+using namespace djnnstl;
 
 namespace djnn {
 
