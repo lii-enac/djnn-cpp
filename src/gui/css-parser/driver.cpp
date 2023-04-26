@@ -87,7 +87,7 @@ namespace css
   void
   Driver::error (const string& m)
   {
-    djnstl:cerr << m << djnnstl::endl;
+    djnnstl::cerr << m << djnnstl::endl;
   }
 
 }

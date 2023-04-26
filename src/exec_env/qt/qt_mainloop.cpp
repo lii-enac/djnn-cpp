@@ -29,7 +29,7 @@ namespace djnn
   using namespace djnnstl;
 
   QtMainloop* QtMainloop::_instance;
-  static std::once_flag onceFlag;
+  //static std::once_flag onceFlag;
 
   void
   QtMainloop::build_instance (MainLoop * ml)

@@ -20,18 +20,18 @@
 
 namespace djnn
 {
-  FileDialog::FileDialog(CoreProcess *parent, const string &name, const string &title) : AbstractGShape(parent, name),
-                                                                                         _open(this, "open"),
-                                                                                         _save(this, "save"),
-                                                                                         _title(this, "title", title),
-                                                                                         _from(this, "from", ""),
-                                                                                         _filter(this, "filter", ""),
-                                                                                         _file_selected(this, "file_selected", ""),
-                                                                                         _open_action(this, "open_action"),
-                                                                                         _save_action(this, "save_action"),
-                                                                                         _c_open(&_open, ACTIVATION, &_open_action, ACTIVATION),
-                                                                                         _c_save(&_save, ACTIVATION, &_save_action, ACTIVATION)
-
+  FileDialog::FileDialog(CoreProcess *parent, const string &name, const string &title)
+  : AbstractGShape(parent, name),
+  _open(this, "open"),
+  _save(this, "save"),
+  _title(this, "title", title),
+  _filter(this, "filter", ""),
+  _from(this, "from", ""),
+  _file_selected(this, "file_selected", ""),
+  _open_action(this, "open_action"),
+  _save_action(this, "save_action"),
+  _c_open(&_open, ACTIVATION, &_open_action, ACTIVATION),
+  _c_save(&_save, ACTIVATION, &_save_action, ACTIVATION)
   {
     finalize_construction(parent, name);
   }

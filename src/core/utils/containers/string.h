@@ -11,6 +11,8 @@
 namespace djnnstl {
   using std::string;
   using std::to_string;
+  using std::stoi;
+  using std::stof;
 }
 
 #elif DJNN_STL_EASTL
