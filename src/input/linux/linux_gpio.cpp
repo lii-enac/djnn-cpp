@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <cstring>
 
-
+using namespace djnnstl;
 
 namespace djnn {
   static int num_gpios = 0;
