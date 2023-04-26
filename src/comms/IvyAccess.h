@@ -51,6 +51,7 @@ namespace djnn
   /*** Ivy Access Class ***/
 
   public:
+    using string = CoreProcess::string; 
     typedef map<string, vector<djnnstl::pair<int, TextProperty*>>> in_map_t;
     typedef djnnstl::pair<string, in_map_t*> regexp_keypair_t;
 
