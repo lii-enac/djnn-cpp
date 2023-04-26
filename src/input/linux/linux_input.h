@@ -106,7 +106,7 @@ namespace djnn {
 		IOFD* _udev_iofd;
     struct udev *_udev_connection;
     struct udev_monitor *_udev_mon;
-    djnnstl::map<string, Evdev*> _sysname_to_dev;
+    djnnstl::map<djnnstl::string, Evdev*> _sysname_to_dev;
     UdevAction *_action;
     Coupling *_readable_cpl;
 	};
