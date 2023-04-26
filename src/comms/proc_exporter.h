@@ -55,6 +55,7 @@ namespace djnn
         CoreProcess *_src;
     };
     public:
+      using string = CoreProcess::string; 
       Receiver (CoreProcess* parent, const string& name, SOCKET fd, CoreProcess* tree);
       virtual ~Receiver () {}
       void impl_activate () override;
@@ -89,6 +90,7 @@ namespace djnn
   /*** ProcExporter Class ***/
 
   public:
+    using string = CoreProcess::string; 
     ProcExporter (CoreProcess* parent, const string& name, CoreProcess *tree, int port);
     virtual ~ProcExporter ();
     SOCKET get_sock () { return _fd; }

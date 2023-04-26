@@ -48,6 +48,7 @@ namespace djnn
   /*** Serial Class ***/
 
   public:
+    using string = CoreProcess::string; 
     Serial (CoreProcess* parent, const string& name,
       const string& port, int baudrate=9600, char eol='\n');
     

@@ -55,6 +55,7 @@ namespace djnn
     class ReceiveAction : public Action, public ExternalSource
     {
     public:
+      using string = CoreProcess::string; 
       ReceiveAction (CoreProcess* parent, const string& name) :
         Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
       virtual ~ReceiveAction () {}

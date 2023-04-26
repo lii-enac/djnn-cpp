@@ -82,6 +82,7 @@ namespace djnn
        void impl_deactivate () override {}
      };
   public:
+    using string = CoreProcess::string; 
     DirectoryObserver (CoreProcess *parent, const string& name, const string& path);
     virtual ~DirectoryObserver ();
     void impl_activate () override;
