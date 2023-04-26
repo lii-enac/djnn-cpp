@@ -114,7 +114,7 @@ namespace djnn
       
     //reset cache if it changed
     pshape->cache(cache);
-    _color_map.insert (pair<unsigned int, PickUI*> (_pick_color, pshape));
+    _color_map.insert (djnnstl::pair<unsigned int, PickUI*> (_pick_color, pshape));
     //save pick_color in PickUI interface
     pshape->color(_pick_color);
     next_color();

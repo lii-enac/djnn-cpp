@@ -116,7 +116,7 @@ namespace djnn
     return res;
   }
 
-  const vector<string>&
+  const djnnstl::vector<djnnstl::string>&
   AbstractTranslation::get_properties_name () const
   {
     static const vector<string> res = {

@@ -29,6 +29,7 @@
 namespace djnn
 {
   
+  using namespace djnnstl;
 
   static string null_string = "null string";
 

@@ -36,7 +36,7 @@ namespace djnn
     
     
     void get_properties_values (string*& data, int& format, double& x, double& y, double& width, double& height);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractTextpProperty* data () { return (AbstractTextpProperty*) find_child_impl ("data"); }
 		AbstractIntProperty* format () { return (AbstractIntProperty*) find_child_impl ("format"); }

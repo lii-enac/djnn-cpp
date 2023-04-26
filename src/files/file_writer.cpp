@@ -20,6 +20,7 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
+using namespace djnnstl;
 
 namespace djnn
 {

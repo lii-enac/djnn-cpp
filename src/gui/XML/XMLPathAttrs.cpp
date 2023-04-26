@@ -24,6 +24,8 @@
 #include "gui/shape/path.h"
 #include "gui/shape/path_clip.h"
 
+using namespace djnnstl;
+
 namespace djnn {
 
 typedef void (djn_PathPointProc) (FatProcess*, double, double);

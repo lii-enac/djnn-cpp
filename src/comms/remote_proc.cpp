@@ -24,6 +24,8 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
+
   void
   RemoteProc::SendAction::impl_activate ()
   {

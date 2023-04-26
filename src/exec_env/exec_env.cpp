@@ -34,6 +34,7 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
 
   static bool __module_initialized = false;
   //FatProcess* mainloop;

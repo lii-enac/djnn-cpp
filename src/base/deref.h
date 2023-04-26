@@ -162,8 +162,8 @@ namespace djnn
   };
 
   typedef TDeref<double> DerefDouble;
-  typedef TDeref<string> DerefText;
-  typedef TDeref<string> DerefString;
+  typedef TDeref<djnnstl::string> DerefText;
+  typedef TDeref<djnnstl::string> DerefString;
   typedef TDeref<int> DerefInt;
   typedef TDeref<bool> DerefBool;
 

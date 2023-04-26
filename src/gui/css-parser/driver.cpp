@@ -24,6 +24,7 @@
 namespace css
 {
   using namespace djnn;
+  using namespace djnnstl;
 
   Driver::Driver () :
       _lexer (nullptr), _root (nullptr)
@@ -75,7 +76,7 @@ namespace css
   #endif
 
   void
-  Driver::error (const class location& l, const djnn::string& m)
+  Driver::error (const class location& l, const string& m)
   {
     #if DJNN_STL_DJNN || DJNN_USE_DJNN_IOSTREAM
     ostream& operator << (ostream&, const location&);

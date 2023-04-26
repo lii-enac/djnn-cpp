@@ -105,20 +105,20 @@ namespace djnn
    */
   typedef unsigned char BYTE;
 
-  string
-  strTrim (string s)
+  djnnstl::string
+  strTrim (djnnstl::string s)
   {
     // convert all whitespace characters to a standard space
     std::replace_if (s.begin (), s.end (), (std::function<int (BYTE)>)::isspace, ' ');
 
     // remove leading and trailing spaces
     size_t f = s.find_first_not_of (' ');
-    if (f == string::npos)
+    if (f == djnnstl::string::npos)
       return "";
     s = s.substr (f, s.find_last_not_of (' ') - f + 1);
 
     // remove consecutive spaces
-    s = string (s.begin (), std::unique (s.begin (), s.end (), [](BYTE l, BYTE r) {return l == ' ' && r == ' ';}));
+    s = djnnstl::string (s.begin (), std::unique (s.begin (), s.end (), [](BYTE l, BYTE r) {return l == ' ' && r == ' ';}));
 
     return s;
   }

@@ -22,7 +22,7 @@
 
 namespace djnn {
 
-  typedef vector<pair<CoreProcess*, size_t>> children_t; // TODO better structure ??
+  typedef djnnstl::vector<djnnstl::pair<CoreProcess*, size_t>> children_t; // TODO better structure ??
   class GUIStructureHolder : public FatProcess {
     public:
       GUIStructureHolder (FatProcess* content) : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name()), content_process(content) {}
@@ -42,8 +42,8 @@ namespace djnn {
       FatProcess* content_process;
     };
 
-    typedef map<CoreProcess*, GUIStructureHolder*> structures_t;
-    typedef map<CoreProcess*, GUIStructureHolder*>::iterator structures_t_it;
+    typedef djnnstl::map<CoreProcess*, GUIStructureHolder*> structures_t;
+    typedef djnnstl::map<CoreProcess*, GUIStructureHolder*>::iterator structures_t_it;
     class GUIStructureObserver : public StructureObserver {
     public:
       GUIStructureObserver () { }

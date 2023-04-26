@@ -23,7 +23,7 @@
 
 namespace djnn {
 
-    static vector<string>
+    static djnnstl::vector<djnnstl::string>
     __ui_interface = { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel" };
 
     class UI {

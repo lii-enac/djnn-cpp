@@ -35,7 +35,7 @@ namespace djnn
     void draw () override;
     OutlineWidth* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     void get_properties_values (double& width);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child_impl ("width"); }
 

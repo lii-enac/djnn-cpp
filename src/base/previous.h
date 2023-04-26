@@ -51,7 +51,7 @@ namespace djnn {
   typedef TPrevious<double> PreviousDouble;
   typedef TPrevious<int> PreviousInt;
   typedef TPrevious<bool> PreviousBool;
-  typedef TPrevious<string> PreviousText;
+  typedef TPrevious<djnnstl::string> PreviousText;
   typedef PreviousDouble Previous;
 
 //   using PreviousDouble = TPrevious<double>;

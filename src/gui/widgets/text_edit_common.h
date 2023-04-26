@@ -47,12 +47,12 @@ namespace djnn {
   };
 
   typedef size_t coord_t;
-  coord_t next_index (const string &str, coord_t idx);
-  coord_t previous_index (const string &str, coord_t idx);
+  coord_t next_index (const djnnstl::string &str, coord_t idx);
+  coord_t previous_index (const djnnstl::string &str, coord_t idx);
   bool isspace (const char &c);
   bool isdelimiter (const char &c);
-  bool is_starting_word (const string& str, coord_t i);
-  coord_t first_word (const string &str, coord_t idx);
-  coord_t next_word (const string &str, coord_t idx);
-  coord_t previous_word (const string &str, coord_t idx);
+  bool is_starting_word (const djnnstl::string& str, coord_t i);
+  coord_t first_word (const djnnstl::string &str, coord_t idx);
+  coord_t next_word (const djnnstl::string &str, coord_t idx);
+  coord_t previous_word (const djnnstl::string &str, coord_t idx);
 }

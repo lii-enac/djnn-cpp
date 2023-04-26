@@ -7,7 +7,9 @@
 
 
 namespace djnn {
-    
+
+using namespace djnnstl;
+
 double&
 WallClock::WallClockDoubleProperty::get_ref_value()
 {

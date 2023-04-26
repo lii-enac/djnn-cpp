@@ -35,7 +35,7 @@ namespace djnn
     void draw () override;
     Texture* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     void get_properties_values (string& path);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
 

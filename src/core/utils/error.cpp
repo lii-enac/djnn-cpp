@@ -28,6 +28,8 @@ extern "C" {
 
 namespace djnn
 {
+  using namespace djnnstl;
+
   Context* Context::_instance = nullptr;
 
   Context*

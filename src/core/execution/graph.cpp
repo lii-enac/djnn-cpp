@@ -64,6 +64,8 @@ static double sorted_average = 0.0;
 namespace djnn
 {
 
+  using namespace djnnstl;
+
   // -----------------------------------------------------------------------
   // Vertex
 

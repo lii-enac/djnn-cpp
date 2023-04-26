@@ -31,7 +31,7 @@ static const named_color_t not_found = 0x000001;
 
 // circumvent memory sanitizer false positive with a pointer rather than a static plain object
 // https://github.com/google/sanitizers/wiki/MemorySanitizerLibcxxHowTo
-static map<string, named_color_t>* color_map = nullptr;
+static djnnstl::map<djnnstl::string, named_color_t>* color_map = nullptr;
 
 void
 SVG_Utils::init_named_colors ()
@@ -39,9 +39,9 @@ SVG_Utils::init_named_colors ()
   // prevent several calls to this function
   if (color_map) return;
 
-  color_map = new map<string, named_color_t>;
+  color_map = new djnnstl::map<djnnstl::string, named_color_t>;
 
-  const map<string, named_color_t> color_map_ = {
+  const djnnstl::map<djnnstl::string, named_color_t> color_map_ = {
     {"black",0x000000},
     {"navy",0x000080},
     {"darkblue",0x00008B},
@@ -202,7 +202,7 @@ SVG_Utils::clear_named_colors ()
 }
 
 named_color_t
-SVG_Utils::djn__get_color_from_name (const string& name)
+SVG_Utils::djn__get_color_from_name (const djnnstl::string& name)
 {
   auto it = color_map->find (name);
   if (it != color_map->end())
@@ -214,7 +214,7 @@ SVG_Utils::djn__get_color_from_name (const string& name)
 named_color_t
 SVGColors_Hash::djn_SVGColorsLookup (const char *str, unsigned int len)
 {
-  string key (len, ' ');
+  djnnstl::string key (len, ' ');
   djnnstl::transform (str, str+len, key.begin(),
       [](unsigned char c){ return tolower(c); });
   auto it = color_map->find(key);

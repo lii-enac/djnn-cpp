@@ -23,6 +23,7 @@ namespace djnn {
   {
   public:
   	virtual ~AbstractSerializer () {}
+	using string = djnnstl::string;
   	static void pre_serialize (const CoreProcess* root, const string& format);
   	static void post_serialize (const CoreProcess* root);
     static  void compute_path (FatProcess* from, CoreProcess* to, string& buf);

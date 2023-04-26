@@ -22,6 +22,8 @@
 
 #include "core/utils/iostream.h"
 
+using namespace djnnstl;
+
 namespace djnn
 {
   DirectoryObserver::DirectoryObserver (CoreProcess *parent, const string& name, const string& path)

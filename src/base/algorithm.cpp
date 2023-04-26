@@ -23,6 +23,7 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
 
   Sorter::Sorter (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec) :
       FatProcess (name),

@@ -227,7 +227,7 @@ namespace djnn
       : (1 + out_bounce(2 * x - 1)) / 2;
   }
 
-  vector<easing_function*> func_list = { in_sine, out_sine, in_out_sine,
+  djnnstl::vector<easing_function*> func_list = { in_sine, out_sine, in_out_sine,
     in_cubic, out_cubic, in_out_cubic,
     in_quint, out_quint, in_out_quint,
     in_circ, out_circ, in_out_circ,

@@ -34,7 +34,7 @@ namespace djnn
     
     
     void get_properties_values (double& volume);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child_impl ("volume"); }
 

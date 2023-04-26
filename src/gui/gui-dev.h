@@ -20,11 +20,11 @@
 
 namespace djnn {
 
-  using namespace djnnstl;
+  //using namespace djnnstl;
 
   class CoreProcess;
 
-  extern vector<string> loadedModules;
+  extern djnnstl::vector<djnnstl::string> loadedModules;
   // extern int mouse_tracking;
   // extern int full_screen;
   // extern int hide_pointer;

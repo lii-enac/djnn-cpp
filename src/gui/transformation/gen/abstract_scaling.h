@@ -35,7 +35,7 @@ namespace djnn
     
     
     void get_properties_values (double& sx, double& sy, double& cx, double& cy);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractDoubleProperty* sx () { return (AbstractDoubleProperty*) find_child_impl ("sx"); }
 		AbstractDoubleProperty* sy () { return (AbstractDoubleProperty*) find_child_impl ("sy"); }

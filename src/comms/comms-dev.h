@@ -1,8 +1,10 @@
 #pragma once
 
+#include "core/utils/containers.h"
+
 namespace djnn {
 
-	extern vector<string> loadedModules; 
+	extern djnnstl::vector<djnnstl::string> loadedModules; 
 
 	void init_comms ();
 	void clear_comms ();

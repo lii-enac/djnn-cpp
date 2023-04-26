@@ -187,7 +187,7 @@ namespace djnn
     return res;
   }
 
-  const vector<string>&
+  const djnnstl::vector<djnnstl::string>&
   AbstractPropSound::get_properties_name () const
   {
     static const vector<string> res = {

@@ -182,7 +182,7 @@ namespace djnn
     void remove_one ();
     void remove_one (CoreProcess* p);
     void remove_all ();
-    vector<CoreProcess*> get_list () { return _list; }
+    const vector<CoreProcess*>& get_list () { return _list; }
   protected:
     void set_parent (CoreProcess* p) override;
     Spike _s_rm_all;
@@ -196,7 +196,7 @@ namespace djnn
     Coupling _c_add, _c_rm, _c_rm_all;
   };
 
-  typedef void (NativeCollectionCode) (CoreProcess*, vector<CoreProcess*>);
+  typedef void (NativeCollectionCode) (CoreProcess*, djnnstl::vector<CoreProcess*>);
 
   class NativeCollectionAction : public Action
   {

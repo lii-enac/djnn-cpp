@@ -34,7 +34,7 @@ namespace djnn
     void draw () override;
     FillRule* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     void get_properties_values (int& rule);
-    const vector<string>& get_properties_name () const override;
+    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
     virtual CoreProcess* find_child_impl (const string&) override;
 		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child_impl ("rule"); }
 

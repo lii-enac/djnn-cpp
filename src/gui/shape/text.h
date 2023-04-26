@@ -57,7 +57,7 @@ namespace djnn {
     void set_descent (int descent) { _descent.set_value (descent, true); }
     const string& get_raw_text () { return _text.get_value (); }
     double get_cursor_from_index (int index);
-    pair<double,int> get_cursor_from_local_x (double pos);
+    djnnstl::pair<double,int> get_cursor_from_local_x (double pos);
     FontMetricsImpl get_font_metrics () { return _fm; };
     void set_font_metrics (FontMetricsImpl *fm) { _fm = fm; }
     const vector<string>& get_properties_name () const override;

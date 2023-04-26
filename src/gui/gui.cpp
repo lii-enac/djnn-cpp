@@ -38,7 +38,7 @@ namespace djnn
 {
   extern void p_init_p_display ();
   static bool __module_initialized = false;
-  extern vector<string> loadedModules;
+  extern djnnstl::vector<djnnstl::string> loadedModules;
 
   extern CoreProcess *GenericMouse;
   extern GUIStructureObserver * gui_structure_observer;

@@ -36,6 +36,8 @@
 #include "base/operators.h"
 #endif
 
+using namespace djnnstl;
+
 namespace djnn
 {
   using djnnstl::cerr;

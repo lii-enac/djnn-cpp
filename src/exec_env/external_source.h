@@ -19,11 +19,12 @@
 
 namespace djnn
 {
-  using namespace djnnstl;
+  //using namespace djnnstl;
 
   class ExternalSource
   {
   public:
+    using string = djnnstl::string;
     ExternalSource (const string& name);
     virtual ~ExternalSource ();
 

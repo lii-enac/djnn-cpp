@@ -41,7 +41,7 @@ namespace djnn {
 
   protected:
     unsigned int _pick_color;
-    map<unsigned int, PickUI*> _color_map;
+    djnnstl::map<unsigned int, PickUI*> _color_map;
 
     int seed;
     double myrandom();

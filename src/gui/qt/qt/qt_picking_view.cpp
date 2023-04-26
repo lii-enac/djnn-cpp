@@ -22,8 +22,7 @@
 #include "core/utils/remotery.h"
 #include "display/background_rect.h"
 
-
-
+using namespace djnnstl;
 
 namespace djnn
 {

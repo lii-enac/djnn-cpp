@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+using namespace djnnstl;
+
 namespace djnn {
 
 int

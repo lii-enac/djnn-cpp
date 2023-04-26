@@ -24,6 +24,8 @@
 #include "gui/transformation/transformations.h"
 
 using namespace djnn;
+using namespace djnnstl;
+
 static int ParseMatrix (FatProcess**, const char*);
 static int ParseRotate (FatProcess**, const char*);
 static int ParseScale (FatProcess**, const char*);

@@ -38,7 +38,7 @@ namespace djnn {
 
 #if !defined(DJNN_NO_SERIALIZE)
 
-  using djnnstl::cout;
+  using namespace djnnstl;
 
   map<const string, FatProcess*> _XML_loaded_map;
 

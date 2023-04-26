@@ -22,6 +22,7 @@
 #include "gui/gui-xml.h"
 
 using namespace djnn;
+using namespace djnnstl;
 
 static int IgnoreAttr (FatProcess**, const char*);
 

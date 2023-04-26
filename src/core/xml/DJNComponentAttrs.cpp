@@ -6,6 +6,7 @@
 #include "xml-priv.h"
 
 using namespace djnn;
+using namespace djnnstl;
 
 static int HandleId (FatProcess**, const char*);
 static int HandleModel (FatProcess**, const char*);

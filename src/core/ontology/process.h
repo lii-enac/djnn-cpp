@@ -22,8 +22,6 @@
 
 namespace djnn {
 
-  using namespace djnnstl;
-
   class Coupling;
   class Vertex;
 
@@ -33,7 +31,15 @@ namespace djnn {
   class AbstractGShape;
   class PickAnalyticalContext;
 
+  
+
   class CoreProcess {
+    public:
+    using string = djnnstl::string;
+    template <typename T> using vector = djnnstl::vector<T>;
+    template <typename T> using list = djnnstl::list<T>;
+    template <typename Key, typename T> using map = djnnstl::map<Key,T>;
+
     public:
 
     // --- public interface
@@ -367,15 +373,15 @@ namespace djnn {
   inline void   activate (CoreProcess* p) { p->activate (); }
   inline void deactivate (CoreProcess* p) { p->deactivate (); }
 
-  inline CoreProcess* find (CoreProcess* parent, const string& path) { return parent->find_child (path); }
-  inline CoreProcess* find_optional (CoreProcess* parent, const string& path) { return parent->find_optional_child (path); }
+  inline CoreProcess* find (CoreProcess* parent, const CoreProcess::string& path) { return parent->find_child (path); }
+  inline CoreProcess* find_optional (CoreProcess* parent, const CoreProcess::string& path) { return parent->find_optional_child (path); }
 
   template <typename P> P* clone (P *p) { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
   //inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
   void alias_children (CoreProcess* parent, FatProcess *to);
-  void alias (CoreProcess* parent, const string& name, CoreProcess* from);
-  void merge_children (CoreProcess* parent1, const string& sy1, CoreProcess* parent2, const string& sy2);
+  void alias (CoreProcess* parent, const CoreProcess::string& name, CoreProcess* from);
+  void merge_children (CoreProcess* parent1, const CoreProcess::string& sy1, CoreProcess* parent2, const CoreProcess::string& sy2);
 
   // internal c-like API
   inline FatProcess*  find (FatProcess* p) { return p; } // helper for smalac

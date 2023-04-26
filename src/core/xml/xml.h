@@ -65,6 +65,7 @@ namespace djnn
 
   class XML {
   public:
+    using string = djnnstl::string;
     static FatProcess* djnLoadFromXML (const string& uri);
     static FatProcess* djnLoadThenClone (const string& uri);
     //static FatProcess* djnParseXML (FILE* f);
@@ -92,7 +93,7 @@ namespace djnn
     djn__XMLNamespaceStart (void*, const XML_Char*, const XML_Char*);
     static void
     djn__XMLNamespaceEnd (void*, const XML_Char*);
-    typedef map<string, djn__XMLParser*> djn__NamespaceTable_t;
+    typedef djnnstl::map<string, djn__XMLParser*> djn__NamespaceTable_t;
     static djn__NamespaceTable_t djn__NamespaceTable;
     static FatProcess *curComponent;
     static djn__XMLTagHandlerList *handlerStack;

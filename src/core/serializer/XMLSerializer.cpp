@@ -20,7 +20,8 @@
 
 namespace djnn
 {
-  using djnnstl::cout;
+  using namespace djnnstl;
+  //using djnnstl::cout;
   
   extern vector<string> loadedModules;
 

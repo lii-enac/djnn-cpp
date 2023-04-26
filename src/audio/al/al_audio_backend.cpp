@@ -11,6 +11,8 @@
 #include <AL/efx.h>
 #endif
 
+using namespace djnnstl;
+
 namespace djnn {
 
 	static ALAudioBackend backend;

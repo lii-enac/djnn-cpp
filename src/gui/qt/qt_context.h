@@ -95,7 +95,7 @@ namespace djnn
     QtContext* get_current ();
 
   private:
-    vector<QtContext*> _context_list;
+    djnnstl::vector<QtContext*> _context_list;
   };
 
   class QtVectorShapeToDraw {
@@ -105,15 +105,15 @@ namespace djnn
       void draw ();
       int z_order () { return _z_order; }
       void add_item (AbstractGShape* shape, QtContext *context);
-      vector< pair<AbstractGShape*, QtContext> > shapes () { return _shapes; }
+      djnnstl::vector< djnnstl::pair<AbstractGShape*, QtContext> > shapes () { return _shapes; }
     private:
-      vector< pair<AbstractGShape*, QtContext> > _shapes;
+      djnnstl::vector< djnnstl::pair<AbstractGShape*, QtContext> > _shapes;
       int _z_order;
   };
 
   void add_shape (AbstractGShape* shape, QtContext *context);
   void clear_shapes ();
-  extern vector<QtVectorShapeToDraw*> shapes_vectors;
+  extern djnnstl::vector<QtVectorShapeToDraw*> shapes_vectors;
   extern int z_processing_step;
   extern QtContext *cur_context;
 

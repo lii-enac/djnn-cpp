@@ -185,14 +185,14 @@ namespace djnn {
     static int
     djn__SVGParseUnitAndValue (djnLengthUnit*, double*, const char*);
     static named_color_t
-    djn__get_color_from_name (const string& name);
+    djn__get_color_from_name (const djnnstl::string& name);
   };
 
 
   extern struct djn_GraphicalShapeArgs
   {
-    string id;
-    string classname;
+    djnnstl::string id;
+    djnnstl::string classname;
     djnStrokeType strokeType;
   } djn_GraphicalShapeArgs;
 
@@ -213,7 +213,7 @@ namespace djnn {
     double w;
     double h;
     const char *path;
-    string data;
+    djnnstl::string data;
   } djn_ImgArgs;
 
   extern struct djn_CircleArgs
@@ -429,7 +429,7 @@ namespace djnn {
     double y;
     double width;
     double height;
-    string href;
+    djnnstl::string href;
   } djn_UseArgs;
 
 

@@ -23,12 +23,12 @@ namespace djnn {
   class RefProperty;
   class Coupling;
 
-  using namespace djnnstl;
+  //using namespace djnnstl;
  
-  typedef pair<RefProperty*, string> ref_info_t;
-  ref_info_t check_for_ref (FatProcess* src, const string& spec);
-  string __to_string(long x);
-  string __to_string(void *x);
+  typedef djnnstl::pair<RefProperty*, djnnstl::string> ref_info_t;
+  ref_info_t check_for_ref (FatProcess* src, const djnnstl::string& spec);
+  djnnstl::string __to_string(long x);
+  djnnstl::string __to_string(void *x);
 
 #if defined (GPERF_VERSION) && GPERF_VERSION >= 31
 typedef size_t gperf_t;
@@ -36,10 +36,10 @@ typedef size_t gperf_t;
 typedef unsigned gperf_t;
 #endif
 
-  const string& get_parent_name (const CoreProcess *p, int up);
-  const string get_hierarchy_name (const CoreProcess *p, int up=-1);
+  const djnnstl::string& get_parent_name (const CoreProcess *p, int up);
+  const djnnstl::string get_hierarchy_name (const CoreProcess *p, int up=-1);
 
-  string cpp_demangle (char const * name);
+  djnnstl::string cpp_demangle (char const * name);
 
   // for gen_prop.py
   void enable (Coupling* c, CoreProcess* dst);

@@ -100,7 +100,7 @@ namespace djnn
 
 #ifndef DJNN_NO_SERIALIZE
   void
-  AbstractDoubleProperty::serialize (const djnn::string& format) {
+  AbstractDoubleProperty::serialize (const djnnstl::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:doubleproperty");

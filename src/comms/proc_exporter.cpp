@@ -23,6 +23,8 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
+
   void
   Receiver::SendAction::impl_activate ()
   {

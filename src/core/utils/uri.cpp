@@ -16,6 +16,7 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
 
   URI::uris_t URI::uri_manager;
 

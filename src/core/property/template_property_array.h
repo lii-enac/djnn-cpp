@@ -20,12 +20,12 @@
 
 namespace djnn {
 
-  using DoubleArray = vector<double>;
+  using DoubleArray = djnnstl::vector<double>;
   //using DoubleArray = TemplateProperty<double_array>*;
 
   const DoubleArray
   operator+ (const DoubleArray &l, const DoubleArray &r) {
-    vector<double> res;
+    djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
       for (size_t i = 0; i < l.size (); i++) {
@@ -37,7 +37,7 @@ namespace djnn {
 
   const DoubleArray
   operator- (const DoubleArray &l, const DoubleArray &r) {
-    vector<double> res;
+    djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
       for (size_t i = 0; i < l.size (); i++) {
@@ -49,7 +49,7 @@ namespace djnn {
 
   const DoubleArray
   operator* (const DoubleArray &l, const DoubleArray &r) {
-    vector<double> res;
+    djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
       for (size_t i = 0; i < l.size (); i++) {
@@ -61,7 +61,7 @@ namespace djnn {
 
   const DoubleArray
   operator/ (const DoubleArray &l, const DoubleArray &r) {
-    vector<double> res;
+    djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
       for (size_t i = 0; i < l.size (); i++) {

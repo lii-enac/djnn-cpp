@@ -75,10 +75,10 @@ namespace djnn {
   };
 
 
-  string toString(const AbstractSimpleProperty& x);
-  string& toString(CoreProcess* p);
+  djnnstl::string toString(const AbstractSimpleProperty& x);
+  djnnstl::string& toString(CoreProcess* p);
 
-  string& getString (CoreProcess* p);
-  void setString (CoreProcess* p, string &v);
+  djnnstl::string& getString (CoreProcess* p);
+  void setString (CoreProcess* p, djnnstl::string &v);
 }
 

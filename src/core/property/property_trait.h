@@ -27,9 +27,9 @@ namespace djnn {
     static bool get_value (AbstractSimpleProperty* p) { return p->get_double_value (); }
   };
   template <>
-  struct PropertyTrait<string> {
+  struct PropertyTrait<djnnstl::string> {
     using property_type = TextProperty;
-    static const string get_value (AbstractSimpleProperty* p) { return p->get_string_value (); }
+    static const djnnstl::string get_value (AbstractSimpleProperty* p) { return p->get_string_value (); }
   };
 
 }

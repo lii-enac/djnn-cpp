@@ -42,10 +42,10 @@ namespace djnn
     virtual void impl_activate () = 0;
     virtual void impl_deactivate () = 0;
     virtual void update () = 0;
-    virtual void set_cursor (const string& path, int hotX, int hotY) = 0;
+    virtual void set_cursor (const djnnstl::string& path, int hotX, int hotY) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
-    virtual void perform_screenshot (const string& path) {}
+    virtual void perform_screenshot (const djnnstl::string& path) {}
     virtual void set_opacity (double opacity) {}
     virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b, bool isFrameless = false) {}
     virtual void set_minimum_size (int w, int h) {}

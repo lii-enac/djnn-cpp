@@ -9,7 +9,9 @@
 #endif
 
 namespace djnn {
-#if !defined(DJNN_NO_SERIALIZE)
+
+
+  using namespace djnnstl;
 
   void
   MultiConnector (CoreProcess* parent, CoreProcess* src, const vector<string>& src_props, CoreProcess* dst, const vector<string>& dst_props, bool copy_on_activation)
@@ -83,6 +85,7 @@ namespace djnn {
     return res;
   }
 
+#if !defined(DJNN_NO_SERIALIZE)
   void
   CoreConnector::serialize (const string& format)
   {

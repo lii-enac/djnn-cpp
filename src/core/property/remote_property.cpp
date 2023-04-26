@@ -25,7 +25,7 @@
 
 namespace djnn
 {
-  
+  using namespace djnnstl;
 
   double
   AbstractRemoteProperty::get_double_value ()

@@ -23,7 +23,7 @@
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
 
-
+using namespace djnnstl;
 
 namespace djnn {
 

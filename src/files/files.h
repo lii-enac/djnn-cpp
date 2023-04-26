@@ -38,7 +38,7 @@ namespace djnn
   } djn_dir_event;
 
   struct DirectoryObserverData;
-  extern vector<string> loadedModules; 
+  extern djnnstl::vector<djnnstl::string> loadedModules; 
 
   class FileReader : public FatProcess
   {
@@ -116,6 +116,6 @@ namespace djnn
     TextProperty _path, _filename;
     BoolProperty _is_dir;
   };
-  DirectoryObserverData* p_init_directory_watcher (const string& path);
+  DirectoryObserverData* p_init_directory_watcher (const djnnstl::string& path);
   djn_dir_event p_run_directory_watcher (DirectoryObserverData* data);
 }

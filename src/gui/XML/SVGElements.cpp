@@ -41,6 +41,8 @@
 namespace djnn {
 	/* all the specific tag handling procedures defined in this file */
 
+using namespace djnnstl;
+
 static FatProcess* StartSVG (const char**, FatProcess*);
 static FatProcess* EndElement (FatProcess*);
 static FatProcess* StartRect (const char**, FatProcess*);

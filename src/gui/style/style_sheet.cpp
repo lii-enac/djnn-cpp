@@ -19,8 +19,8 @@
 
 namespace djnn
 {
-  static map <string, int> name_to_id;
-  static vector<StyleSheet*> style_array;
+  static djnnstl::map <djnnstl::string, int> name_to_id;
+  static djnnstl::vector<StyleSheet*> style_array;
 
   StyleSheet::StyleSheet (CoreProcess* parent, const string& n) :
       Container (parent, n), _classname (n)
@@ -31,7 +31,7 @@ namespace djnn
     }
     style_array.push_back (this);
     _id = style_array.size () - 1;
-    name_to_id.insert (pair<string, int> (n, _id));
+    name_to_id.insert (djnnstl::pair<djnnstl::string, int> (n, _id));
     finalize_construction (parent, n);
   }
 

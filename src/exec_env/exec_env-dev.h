@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "core/utils/containers.h"
 namespace djnn {
 	extern FatProcess *mainloop;
 	void init_exec_env();
@@ -21,6 +22,6 @@ namespace djnn {
 
 	void get_monotonic_time (struct timespec *ts);
  	void t1 ();
-	double t2 (const string& msg = "", bool display_stderr=false);
+	double t2 (const djnnstl::string& msg = "", bool display_stderr=false);
 }
 

@@ -222,7 +222,7 @@ public:
 #endif
   };
 
-  void MultiConnector (CoreProcess* parent, CoreProcess* src, const vector <string>& src_props, CoreProcess* dst, const vector <string>& dst_props, bool copy_on_activation=true);
+  void MultiConnector (CoreProcess* parent, CoreProcess* src, const djnnstl::vector <djnnstl::string>& src_props, CoreProcess* dst, const djnnstl::vector <djnnstl::string>& dst_props, bool copy_on_activation=true);
   void MultiConnector (CoreProcess* parent, CoreProcess* src, const char* src_props[], size_t src_size, CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation=true);
   void MultiConnector (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation=true);
 }

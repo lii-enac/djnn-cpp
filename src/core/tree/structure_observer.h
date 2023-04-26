@@ -1,11 +1,13 @@
 #pragma once
 
-#include "core/ontology/process.h"
+//#include "core/ontology/process.h"
+#include "core/ontology/enums.h"
+#include "core/utils/containers.h"
 
 namespace djnn {
 
   class FatProcess;
-  //class CoreProcess;
+  class CoreProcess;
 
   class StructureObserver {
   public:
@@ -21,5 +23,5 @@ namespace djnn {
     virtual void set_child (FatProcess *cont, CoreProcess *child, int i) = 0;
   };
 
-  extern vector<StructureObserver*> structure_observer_list;
+  extern djnnstl::vector<StructureObserver*> structure_observer_list;
 }

@@ -19,7 +19,7 @@
 //#include "core/property/bool_property.h"
 
 namespace djnn {
-  extern vector<string> loadedModules;
+  extern djnnstl::vector<djnnstl::string> loadedModules;
 	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
  	
  	void init_input ();

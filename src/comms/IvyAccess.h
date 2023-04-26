@@ -51,8 +51,8 @@ namespace djnn
   /*** Ivy Access Class ***/
 
   public:
-    typedef map<string, vector<pair<int, TextProperty*>>> in_map_t;
-    typedef pair<string, in_map_t*> regexp_keypair_t;
+    typedef map<string, vector<djnnstl::pair<int, TextProperty*>>> in_map_t;
+    typedef djnnstl::pair<string, in_map_t*> regexp_keypair_t;
 
     struct msg_callback_user_data {
       IvyAccess* access;

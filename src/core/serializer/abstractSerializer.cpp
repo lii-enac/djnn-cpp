@@ -21,6 +21,7 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
 
 #if !defined(DJNN_NO_SERIALIZE)
   using djnnstl::cout;

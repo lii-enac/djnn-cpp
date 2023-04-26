@@ -74,7 +74,7 @@ namespace djnn {
     public:
         TemplateProperty (CoreProcess* parent, const string& name, const X& v)
         : AbstractTemplateProperty<X> (parent, name), value(v) {}
-        CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+        CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
             error (this, "*PropertyProxy should not be cloned");
             return nullptr;
         }
@@ -96,7 +96,7 @@ namespace djnn {
     public:
         TemplatePropertyProxy (CoreProcess* parent, const string& name, const X &v, int notify_mask=notify_none)
         : AbstractTemplateProperty<X> (parent, name, notify_mask), value(v) {}
-        CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+        CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
             error (this, "*PropertyProxy should not be cloned");
             return nullptr;
         }

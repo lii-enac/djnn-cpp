@@ -130,7 +130,7 @@ namespace djnn {
     void add_string_input ();
     void add_str (const string& str );
     void draw () override;
-    pair<double, double> get_local_coords (double x, double y);
+    djnnstl::pair<double, double> get_local_coords (double x, double y);
 
     SimpleText _line;
 

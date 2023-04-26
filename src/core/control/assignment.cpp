@@ -383,6 +383,8 @@ namespace djnn
     return res;
   }
 
+  using namespace djnnstl;
+
   void
   MultiAssignment (CoreProcess* parent, CoreProcess* src, const vector<string>& src_props, CoreProcess* dst, const vector<string>& dst_props, bool copy_on_activation)
   {

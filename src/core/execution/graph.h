@@ -24,9 +24,9 @@
 
 namespace djnn
 {
-  using vertices_t = list<Vertex*>;
-  using edges_t = vector<Vertex*>;
-  using ordered_vertices_t = vector<Vertex*>;
+  using vertices_t = djnnstl::list<Vertex*>;
+  using edges_t = djnnstl::vector<Vertex*>;
+  using ordered_vertices_t = djnnstl::vector<Vertex*>;
 
   class Vertex
   {
@@ -43,7 +43,7 @@ namespace djnn
     void remove_edge (Vertex* dst);
           edges_t& get_edges ()       { return _edges; }
     const edges_t& get_edges () const { return _edges; }
-    map<Vertex*, int>& get_map_edges () { return _map_edges; }
+    djnnstl::map<Vertex*, int>& get_map_edges () { return _map_edges; }
     size_t get_count_edges_in  () { return _count_edges_in; }
     size_t get_count_edges_out () { return _edges.size ();}
                     void set_position_in_graph_vertices (vertices_t::iterator end); // { _pos = djnnstl::prev(end); }
@@ -77,7 +77,7 @@ namespace djnn
     // deletion management
     bool _is_invalid;
     size_t _count_edges_in;
-    map<Vertex*, int> _map_edges;
+    djnnstl::map<Vertex*, int> _map_edges;
     vertices_t::iterator _pos;
   };
 
@@ -139,10 +139,10 @@ namespace djnn
     vertices_t _vertices;
     ordered_vertices_t _ordered_vertices;
     ordered_vertices_t _output_nodes;
-    vector<CoreProcess*> _scheduled_deletions;
-    vector<CoreProcess*> _scheduled_activations;
+    djnnstl::vector<CoreProcess*> _scheduled_deletions;
+    djnnstl::vector<CoreProcess*> _scheduled_activations;
     std::deque<Vertex*> _activation_deque;
-    vector<Vertex*> _activation_triggers_to_sort;
+    djnnstl::vector<Vertex*> _activation_triggers_to_sort;
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     vector < pair <CoreProcess*, CoreProcess*> > _pair_to_check;

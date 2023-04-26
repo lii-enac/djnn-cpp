@@ -247,7 +247,7 @@ namespace djnn
   Picking::genericTouchPress (double x, double y, int id, float pressure)
   {
     /* touch management */
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     if (it != _active_touches.end ()) {
       t = it->second;
@@ -398,7 +398,7 @@ namespace djnn
   bool
   Picking::genericTouchMove (double x, double y, int id, float pressure)
   {
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {
@@ -530,7 +530,7 @@ namespace djnn
   {
     
     PickUI *s = this->pick (x, y);
-    map<int, Touch*>::iterator it = _active_touches.find (id);
+    djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch *t;
     /* touch exist */
     if (it != _active_touches.end ()) {

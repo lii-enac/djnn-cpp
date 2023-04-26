@@ -173,5 +173,5 @@ namespace djnn {
     RemoveTouchAction *_remove_touch_action;
     //MoveTouchAction *_move_touch_action;
   };
-  bool estimateTSR (map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
+  bool estimateTSR (djnnstl::map< int, TouchAlive* > &pts, double *dx, double *dy, double *ds, double *dr);
 }

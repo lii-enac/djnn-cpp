@@ -25,6 +25,8 @@
 #include "core/utils/iostream.h"
 #include <cmath>
 
+using namespace djnnstl;
+
 namespace djnn
 {
   vector<QtVectorShapeToDraw*> shapes_vectors;

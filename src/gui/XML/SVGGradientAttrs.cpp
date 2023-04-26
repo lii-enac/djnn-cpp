@@ -25,6 +25,8 @@
 
 namespace djnn {
 
+using namespace djnnstl;
+
 static int ParseId (FatProcess**, const char*);
 static int ParseGradientTransform (FatProcess**, const char*);
 static int ParseGradientUnits (FatProcess**, const char*);

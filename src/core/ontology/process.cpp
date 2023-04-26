@@ -46,6 +46,7 @@ namespace djnn
   // -----------------------------------------------------------------------
   // parentless names
 
+  using namespace djnnstl;
 
 #ifdef DJNN_NO_DEBUG
   CoreProcess::DebugInfo   CoreProcess::_dbg_info{"no dbg info",0};

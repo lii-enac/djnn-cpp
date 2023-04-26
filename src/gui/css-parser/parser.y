@@ -56,11 +56,11 @@ std::string filename_tmp;
 {
   using namespace djnn;
 
-  string cur_property;
+  djnnstl::string cur_property;
   FatProcess *cur_parent;
 
   void
-  make_text_property (const string& property, const string& arg)
+  make_text_property (const djnnstl::string& property, const djnnstl::string& arg)
   {
     if (property == "fill") {
       if (arg == "none") {
@@ -128,7 +128,7 @@ std::string filename_tmp;
   }
 
   void
-  make_num_property (string property, float arg)
+  make_num_property (djnnstl::string property, float arg)
   {
     if (property == "fill") {
       new FillColor (cur_parent, "fill", arg);

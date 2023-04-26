@@ -28,6 +28,8 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
+
   string
   __to_string(void*p)
   {

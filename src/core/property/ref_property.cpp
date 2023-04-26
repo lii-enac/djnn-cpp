@@ -30,7 +30,8 @@
 
 namespace djnn
 {
-  
+
+  using namespace djnnstl;
 
   CoreProcess*
   getRef (CoreProcess* p)

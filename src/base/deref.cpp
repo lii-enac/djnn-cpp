@@ -20,6 +20,8 @@
 
 namespace djnn
 {
+  using namespace djnnstl;
+
   AbstractDeref::AbstractDeref (CoreProcess *parent, const string& name, CoreProcess *ref, const string& path, djnn_dir_t dir)
   : FatProcess (name),
   _path (this, "path", path),

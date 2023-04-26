@@ -20,6 +20,8 @@
 
 #include "core/utils/iostream.h"
 
+using namespace djnnstl;
+
 namespace djnn
 {
   DirectoryObserverData*

@@ -22,6 +22,8 @@
 #include "gui/gui-xml.h"
 #include "gui/shape/poly.h" // Polyline
 
+using namespace djnnstl;
+
 namespace djnn {
 
 

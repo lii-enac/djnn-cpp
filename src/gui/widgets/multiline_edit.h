@@ -109,7 +109,7 @@ namespace djnn {
       string get_content_str ();
       int get_cursor_pos ();
       void draw () override;
-      pair<double, double> get_local_coords (double x, double y);
+      djnnstl::pair<double, double> get_local_coords (double x, double y);
       List _lines;
       IntProperty _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
       IntProperty _x, _y, _width, _height, _line_height, _spaces_for_tab;

@@ -26,9 +26,9 @@
 namespace djnn
 {
 
-  extern vector<string> loadedModules; 
+  extern djnnstl::vector<djnnstl::string> loadedModules; 
 
-  string strTrim (string s);
+  djnnstl::string strTrim (djnnstl::string s);
 
   class Properties : public FatProcess
   {
