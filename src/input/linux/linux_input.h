@@ -51,7 +51,7 @@ namespace djnn {
     dev_type _type;
   };
 
-  LinuxDevice* map_device (const struct libevdev *_dev, const string& n);
+  LinuxDevice* map_device (const struct libevdev *_dev, const djnnstl::string& n);
 
   class Evdev {
     private:
@@ -77,7 +77,7 @@ namespace djnn {
     IOFD *_iofd;
     LinuxDevice *_djn_dev;
     Coupling *_readable_cpl;
-    string _name;
+    djnnstl::string _name;
     struct libevdev *_dev;
     int _fd;
     bool _aborted;
@@ -106,7 +106,7 @@ namespace djnn {
 		IOFD* _udev_iofd;
     struct udev *_udev_connection;
     struct udev_monitor *_udev_mon;
-    map<string, Evdev*> _sysname_to_dev;
+    djnnstl::map<string, Evdev*> _sysname_to_dev;
     UdevAction *_action;
     Coupling *_readable_cpl;
 	};
