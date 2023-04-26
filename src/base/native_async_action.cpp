@@ -24,7 +24,7 @@ namespace djnn
 {
   
 
-  NativeAsyncAction::NativeAsyncAction (CoreProcess* parent, const string& name, NativeCode action, void* data,
+  NativeAsyncAction::NativeAsyncAction (CoreProcess* parent, const CoreProcess::string& name, NativeCode action, void* data,
                               bool isModel) :
       NativeAction (parent, name, action, data, isModel), 
       ExternalSource(name), 
