@@ -21,7 +21,7 @@
 
 namespace djnn {
   LinuxDevice*
-  map_device (const struct libevdev *dev, const string& n)
+  map_device (const struct libevdev *dev, const djnnstl::string& n)
   {
     //int keyFound = 0;
 
