@@ -12,14 +12,22 @@ namespace djnnstl {
 
 }
 
+extern "C" {
+char * strdup(const char *s1);
+void free(void *ptr);
+}
+
 struct mystring {
-  const char* s;
-  mystring (const char* _s) : s(_s) {}
+  char* s;
+  // mystring (const char* _s) : s(_s) {}
+  mystring (const char* _s) : s(strdup(_s)) {}
+  //mystring (const mystring& other) : s(strdup(other.s)) {}
+  //mystring (const mystring&& other) : s(other.s) {}
+  //~mystring() { free ((void*)s); }
   operator const char*() const { return s; }
   mystring& operator += (const char*);
   bool operator == (const char*) const;
   bool operator == (const mystring&) const;
-  //operator double () const; // fake
 #ifdef TOTO
   // operator const djnnstl::string&();
   // mystring (const djnnstl::string& _s);

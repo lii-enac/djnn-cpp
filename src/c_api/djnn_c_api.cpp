@@ -16,16 +16,22 @@
 #include "files/files.h"
 
 struct mystring {
-  const char* s;
-  mystring (const char* _s) : s(_s) {}
+  char* s;
+  // mystring (const char* _s) : s(_s) {}
+  // mystring (const mystring& other) : s(other.s) {}
+  mystring (const char* _s) : s(strdup(_s)) {}
+  //mystring (const mystring& other) : s(strdup(other.s)) {}
+  //mystring (const mystring&& other) : s(other.s) {}
+  //~mystring() { free ((void*)s); }
   operator const char*() const { return s; }
   mystring& operator += (const char*);
   bool operator == (const char*) const;
   bool operator == (const mystring&) const;
-  operator const djnnstl::string&() const { return djnnstl::string(s); }
-  mystring (const djnnstl::string& _s) : s(_s.c_str()) {}
+  operator const djnnstl::string () const { return djnnstl::string(s); }
+  //mystring (const djnnstl::string& _s) : s(strdup(_s.c_str())) {}
+  //mystring (const djnnstl::string& _s) : s(_s.c_str()) {}
 };
-mystring& mystring::operator += (const char* a) { djnnstl::string str(this->s); str+=a; s=str.c_str(); return *this; }
+mystring& mystring::operator += (const char* a) { djnnstl::string str(this->s); str+=a; s=strdup(str.c_str()); return *this; }
 bool mystring::operator == (const char* a) const { return strcmp (s,a) == 0; }
 bool mystring::operator == (const mystring& a) const { return strcmp (s,a.s) == 0; }
 mystring operator+ (const mystring& a, const char* b) { djnnstl::string str(a.s); str += b; return mystring(str.c_str()); }
@@ -117,7 +123,7 @@ djnn::CoreProcess* djnn_find_optional (djnn::CoreProcess* parent, const char* pa
 djnn::FatProcess*  find (djnn::CoreProcess* p) { return dynamic_cast<djnn::FatProcess*>(p); } // helper for smalac
 
 mystring to_string(int i) { return djnnstl::to_string(i).c_str(); }
-int stoi(const mystring& s) { return stoi (s.s); }
+int stoi(const mystring& s) { return djnnstl::stoi (s.s); }
 
 djnn::CoreProcess* djnn_get_parent (djnn::CoreProcess* p) { return p->get_parent (); }
 
@@ -155,7 +161,8 @@ void* djnn_get_native_user_data(djnn::CoreProcess* p) { return djnn::get_native_
 void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
-void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (djnnstl::string(v), immediate); }
+//void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (djnnstl::string(v), immediate); }
+void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 double djnn_get_double_value (djnn::CoreProcess* p) { return ((djnn::AbstractProperty*)p)->get_double_value (); }
 
 

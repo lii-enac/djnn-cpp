@@ -16,18 +16,9 @@
 #pragma once
 
 #include "core/ontology/process.h"
+#include "core/enums.h"
 
 namespace djnn {
-
-  enum PropertyType {
-    Boolean,
-    Integer,
-    Double,
-    String,
-    Reference,
-    Remote,
-    UserDefined
-  };
 
   class SuperAbstractProperty : public FatProcess
   {
