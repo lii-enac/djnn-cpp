@@ -132,7 +132,7 @@ djnn::CoreProcess* djnn_find_optional (djnn::CoreProcess* parent, const char* pa
 djnn::CoreProcess* djnn_get_parent (djnn::CoreProcess* p);
 inline djnn::CoreProcess* find (djnn::CoreProcess* parent, const char* path) { return djnn_find (parent, path); }
 inline djnn::CoreProcess* find_optional (djnn::CoreProcess* parent, const char* path) { return djnn_find_optional (parent, path); }
-inline djnn::CoreProcess*  find (djnn::CoreProcess* p) { return p; } // helper for smalac
+//inline djnn::CoreProcess*  find (djnn::CoreProcess* p) { return p; } // helper for smalac
 
 mystring to_string(int);
 int stoi(const mystring&);
