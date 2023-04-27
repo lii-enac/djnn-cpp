@@ -183,6 +183,7 @@ namespace djnn
     void remove_one (CoreProcess* p);
     void remove_all ();
     const vector<CoreProcess*>& get_list () { return _list; }
+    process_type_e get_process_type () const override { return PROCESS_COLLECTOR_T; }
   protected:
     void set_parent (CoreProcess* p) override;
     Spike _s_rm_all;

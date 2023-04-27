@@ -18,7 +18,8 @@ namespace djnn {
     DEFS_T,
     LAYER_T,
     SYNCHRONIZER_T,
-    Z_ORDERED_GROUP_T
+    Z_ORDERED_GROUP_T,
+    PROCESS_COLLECTOR_T
   };
   //using enum process_type_e;
 
