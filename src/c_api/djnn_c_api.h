@@ -2,6 +2,7 @@
 #pragma once
 
 //#include "core/core-dev.h" // _DEBUG*
+#include "core/enums.h"
 #include "core/ontology/enums.h"
 #include "base/enums.h"
 #include "display/display-dev.h"
@@ -157,6 +158,7 @@ void djnn_remove_from_parentless_name (djnn::CoreProcess* child);
 
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p);
+djnn::PropertyType djnn_get_property_type (djnn::CoreProcess* p);
   
 void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);

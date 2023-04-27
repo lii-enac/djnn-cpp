@@ -30,7 +30,7 @@ namespace djnn {
     public:
         AbstractTemplateProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none)
         : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
-        virtual int get_prop_type () const override { return TemplatePropertyType<X>::type; }
+        virtual PropertyType get_prop_type () const override { return TemplatePropertyType<X>::type; }
         void my_set_value (const X& v, bool propagate) {
             get_ref_value() = v;
             if (is_activable () && propagate) {
