@@ -19,22 +19,22 @@ void free(void *ptr);
 
 struct mystring {
   char* s;
-  // mystring (const char* _s) : s(_s) {}
   mystring () : s(0) {}
   mystring (const char* _s) : s(strdup(_s)) {}
-  //mystring (const mystring& other) : s(strdup(other.s)) {}
-  // mystring (mystring&& other) : s(other.s) { other.s = 0; }
   ~mystring() { free ((void*)s); }
   operator const char*() const { return s; }
   mystring& operator += (const char*);
   mystring& operator = (const char*);
   bool operator == (const char*) const;
   bool operator == (const mystring&) const;
-#ifdef TOTO
-  // operator const djnnstl::string&();
-  // mystring (const djnnstl::string& _s);
+#ifdef DJNN_C_API_IMPL
+  operator const djnnstl::string () const { return djnnstl::string(s); }
 #endif
 };
+  // mystring (const char* _s) : s(_s) {}
+  // mystring (const mystring& other) : s(strdup(other.s)) {}
+  // mystring (mystring&& other) : s(other.s) { other.s = 0; }
+
 mystring operator+ (const mystring&, const char*);
 mystring operator+ (const mystring&, const mystring&);
 
@@ -125,14 +125,12 @@ void djnn_clear_files();
 void djnn_activate (djnn::CoreProcess* p);
 void djnn_notify_activation (djnn::CoreProcess* p);
 void djnn_deactivate (djnn::CoreProcess* p);
-djnn::CoreProcess* djnn_find (djnn::CoreProcess* parent, const char* path); // { return parent->find_child (path); }
+djnn::CoreProcess* djnn_find (djnn::CoreProcess* parent, const char* path);
 djnn::CoreProcess* djnn_find (djnn::CoreProcess* parent, int pos);
-djnn::CoreProcess* djnn_find_optional (djnn::CoreProcess* parent, const char* path); // { return parent->find_optional_child (path); }
+djnn::CoreProcess* djnn_find_optional (djnn::CoreProcess* parent, const char* path);
 djnn::CoreProcess* djnn_get_parent (djnn::CoreProcess* p);
 inline djnn::CoreProcess* find (djnn::CoreProcess* parent, const char* path) { return djnn_find (parent, path); }
 inline djnn::CoreProcess* find_optional (djnn::CoreProcess* parent, const char* path) { return djnn_find_optional (parent, path); }
-//inline djnn::FatProcess*  find (djnn::FatProcess* p) { return p; } // helper for smalac
-//inline djnn::FatProcess*  find (djnn::CoreProcess* p);
 inline djnn::CoreProcess*  find (djnn::CoreProcess* p) { return p; } // helper for smalac
 
 mystring to_string(int);
@@ -141,7 +139,7 @@ int stoi(const mystring&);
 //void djnn_delete (djnn::CoreProcess* p);
 void djnn_schedule_deletion (djnn::CoreProcess* p);
 
-djnn::CoreProcess* clone (djnn::CoreProcess *p); // { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
+djnn::CoreProcess* clone (djnn::CoreProcess *p);
 
 void djnn_add_child (djnn::CoreProcess *parent, djnn::CoreProcess *child, const char* name);
 void djnn_remove_child (djnn::CoreProcess *parent, djnn::CoreProcess *child);
@@ -154,9 +152,9 @@ void djnn_move_child (djnn::CoreProcess* parent, djnn::CoreProcess* child_to_mov
 
 // internal c-like API
 inline djnn::FatProcess*  djnn_find (djnn::FatProcess* p) { return p; } // helper for smalac
-djnn::FatProcess*  djnn_find (djnn::CoreProcess* p); // { return dynamic_cast<djnn::FatProcess*>(p); } // helper for smalac
+djnn::FatProcess*  djnn_find (djnn::CoreProcess* p);
 void djnn_remove_from_parentless_name (djnn::CoreProcess* child);
-//djnn::FatProcess* find (djnn::CoreProcess* p) { return p; } // helper for smalac
+
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p);
   
@@ -169,19 +167,19 @@ void djnn_add_native_edge (djnn::NativeExpressionActionProxy* naep, djnn::Native
 void djnn_finalize_construction (djnn::NativeExpressionActionProxy* self, djnn::CoreProcess* parent, const char* name);
 
 //djnn::CoreProcess* djnn_find_child(djnn::CoreProcess* p, const mystring& n); // { return p->find_child (n); }
-djnn::CoreProcess* djnn_get_activation_source(djnn::CoreProcess* p); // { return p->get_activation_source (); }
-void* djnn_get_native_user_data(djnn::CoreProcess* p); // { return djnn::get_native_user_data(p); }
+djnn::CoreProcess* djnn_get_activation_source(djnn::CoreProcess* p);
+void* djnn_get_native_user_data(djnn::CoreProcess* p);
 
-void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate);
-void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate);
-void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }
-void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }
-double djnn_get_double_value (djnn::CoreProcess* p); // { return ((djnn::AbstractProperty*)p)->get_double_value (); }
-const mystring djnn_get_string_value (djnn::CoreProcess* p); // { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }
+void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate);
+void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate);
+void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate);
+void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate);
+double djnn_get_double_value (djnn::CoreProcess* p);
+const mystring djnn_get_string_value (djnn::CoreProcess* p);
 
 
-void djnn_dump(djnn::CoreProcess* p); // { p->dump (); }
-djnn::CoreProcess* djnn_mainloop_instance(); // { return &djnn::MainLoop::instance (); }
+void djnn_dump(djnn::CoreProcess* p);
+djnn::CoreProcess* djnn_mainloop_instance();
 
 djnn::CoreProcess* load_from_XML(const char* path);
 djnn::CoreProcess* load_from_XML_once(const char* path);

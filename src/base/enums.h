@@ -1,3 +1,5 @@
+#pragma once
+
 namespace djnn {
   typedef enum djnn_dir_t {
     DJNN_GET_ON_CHANGE,

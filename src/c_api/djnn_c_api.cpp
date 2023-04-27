@@ -1,6 +1,5 @@
 // generated with gen_prop.py
 
-//#include "djnn_c_api.h"
 
 #include "core/core.h"
 #include "exec_env/exec_env.h"
@@ -15,24 +14,10 @@
 #include "animation/animation.h"
 #include "files/files.h"
 
-struct mystring {
-  char* s;
-  // mystring (const char* _s) : s(_s) {}
-  // mystring (const mystring& other) : s(other.s) {}
-  mystring () : s(0) {}
-  mystring (const char* _s) : s(strdup(_s)) {}
-  // mystring (const mystring& other) : s(strdup(other.s)) {}
-  // mystring (mystring&& other) : s(other.s) { other.s = 0; }
-  ~mystring() { free ((void*)s); }
-  operator const char*() const { return s; }
-  mystring& operator += (const char*);
-  mystring& operator = (const char*);
-  bool operator == (const char*) const;
-  bool operator == (const mystring&) const;
-  operator const djnnstl::string () const { return djnnstl::string(s); }
-  //mystring (const djnnstl::string& _s) : s(strdup(_s.c_str())) {}
-  //mystring (const djnnstl::string& _s) : s(_s.c_str()) {}
-};
+#define DJNN_C_API_IMPL
+#include "djnn_c_api.h"
+
+
 mystring& mystring::operator += (const char* a) { djnnstl::string str(this->s); str+=a; s=strdup(str.c_str()); return *this; }
 mystring& mystring::operator = (const char* a) { free(s); s=strdup(a); return *this; }
 bool mystring::operator == (const char* a) const { return strcmp (s,a) == 0; }
@@ -57,19 +42,6 @@ namespace djnn {
     NativeExpressionActionProxy *_neap;
   };
 
-  class NativeExpressionActionProxy {
-    public:
-	  NativeExpressionActionProxy (CoreProcess* parent, const char* name, bool string_setter, bool is_model=false);
-    ~NativeExpressionActionProxy ();
-
-    virtual void impl_activate () = 0;
-    void finalize_construction (CoreProcess* parent, const char* name);
-
-    bool _string_setter;
-    bool isModel;
-    NativeExpressionAction * _nea;
-  };
-
   NativeExpressionActionProxy::NativeExpressionActionProxy (CoreProcess *parent, const char* name, bool string_setter, bool is_model)
   : _string_setter (string_setter)
   {
@@ -77,7 +49,6 @@ namespace djnn {
   }
   void MyAction::impl_activate () { _neap->impl_activate (); }
 
-  typedef void (NativeCollectionCodeProxy) (CoreProcess*, CoreProcess*[], unsigned long);
 }
 
 //extern "C" {
@@ -123,7 +94,7 @@ djnn::CoreProcess* djnn_find (djnn::CoreProcess* parent, const char* path) { ret
 djnn::CoreProcess* djnn_find (djnn::CoreProcess* parent, int pos) { return parent->find_child (pos); }
 djnn::CoreProcess* djnn_find_child(djnn::CoreProcess* p, const char* n) { return p->find_child (n); }
 djnn::CoreProcess* djnn_find_optional (djnn::CoreProcess* parent, const char* path) { return parent->find_optional_child (path); }
-djnn::FatProcess*  find (djnn::CoreProcess* p) { return dynamic_cast<djnn::FatProcess*>(p); } // helper for smalac
+//djnn::FatProcess*  find (djnn::CoreProcess* p) { return dynamic_cast<djnn::FatProcess*>(p); } // helper for smalac
 
 mystring to_string(int i) { return djnnstl::to_string(i).c_str(); }
 int stoi(const mystring& s) { return djnnstl::stoi (s.s); }
@@ -141,10 +112,10 @@ void djnn_remove_child (djnn::CoreProcess *parent, djnn::CoreProcess *child) { p
 void alias_children (djnn::CoreProcess* parent, djnn::FatProcess *to) { djnn::alias_children (parent, to); }
 void alias (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* from) { djnn::alias (parent, name, from); }
 void merge_children (djnn::CoreProcess* parent1, const char* sym1, djnn::CoreProcess* parent2, const char* sym2) { djnn::merge_children (parent1, sym1, parent2, sym2); }
-void djnn_move_child (djnn::CoreProcess* parent, djnn::CoreProcess* child_to_move, djnn::child_position_e spec, djnn::CoreProcess* child = nullptr) { parent->move_child (child_to_move, spec, child); }
+void djnn_move_child (djnn::CoreProcess* parent, djnn::CoreProcess* child_to_move, djnn::child_position_e spec, djnn::CoreProcess* child) { parent->move_child (child_to_move, spec, child); }
 
 // internal c-like API
-inline djnn::FatProcess*  djnn_find (djnn::FatProcess* p) { return p; } // helper for smalac
+//inline djnn::FatProcess*  djnn_find (djnn::FatProcess* p) { return p; } // helper for smalac
 djnn::FatProcess*  djnn_find (djnn::CoreProcess* p) { return dynamic_cast<djnn::FatProcess*>(p); } // helper for smalac
 void djnn_remove_from_parentless_name (djnn::CoreProcess* child) { return djnn::remove_from_parentless_name (child); }
 
@@ -154,8 +125,8 @@ void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess 
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p) { djnn::remove_state_dependency(parent, p); }
 
 void djnn_synchronizer_add_source (djnn::CoreProcess* sync, djnn::CoreProcess* source, const char* path) { dynamic_cast<djnn::Synchronizer*>(sync)->add_source (source, path); }
-void djnn_add_native_edge (djnn::CoreProcess* sync, djnn::NativeExpressionActionProxy* src, djnn::CoreProcess* dst ) { dynamic_cast<djnn::Synchronizer*>(sync)->add_native_edge(src->_nea, dst); }
-void djnn_add_native_edge (djnn::NativeExpressionActionProxy* naep, djnn::NativeExpressionActionProxy* src, djnn::CoreProcess* dst ) { dynamic_cast<djnn::NativeExpressionAction*>(naep->_nea)->add_native_edge(src->_nea, dst); }
+void djnn_add_native_edge (djnn::CoreProcess* sync, djnn::NativeExpressionActionProxy* src, djnn::CoreProcess* dst) { dynamic_cast<djnn::Synchronizer*>(sync)->add_native_edge(src->_nea, dst); }
+void djnn_add_native_edge (djnn::NativeExpressionActionProxy* naep, djnn::NativeExpressionActionProxy* src, djnn::CoreProcess* dst) { dynamic_cast<djnn::NativeExpressionAction*>(naep->_nea)->add_native_edge(src->_nea, dst); }
 void djnn_finalize_construction (djnn::NativeExpressionActionProxy* self, djnn::CoreProcess* parent, const char* name) { self->_nea->finalize_construction (parent, name); }
 
 
@@ -169,12 +140,6 @@ void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dyna
 double djnn_get_double_value (djnn::CoreProcess* p) { return ((djnn::AbstractProperty*)p)->get_double_value (); }
 
 
-
-//const mystring& djnn_get_string_value (djnn::CoreProcess* p) { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }
-
-
-
-
 void djnn_dump(djnn::CoreProcess* p) { p->dump (); }
 djnn::CoreProcess* djnn_mainloop_instance() { return &djnn::MainLoop::instance (); }
 
@@ -185,7 +150,7 @@ int djnn__error (const djnn::CoreProcess *p, const char* msg, const char* ctxinf
 void djnn__warning (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo=nullptr) { warning (p,msg); }
 int djnn__exit(int ret) { ::exit(ret); return 1; }
 
-djnn::CoreProcess* djnn_new_Rectangle(djnn::CoreProcess* parent, const char* name, double x, double y, double width, double height, double rx=0, double ry=0) { return new djnn::Rectangle(parent, name, x, y, width, height, rx, ry); }
+djnn::CoreProcess* djnn_new_Rectangle(djnn::CoreProcess* parent, const char* name, double x, double y, double width, double height, double rx, double ry) { return new djnn::Rectangle(parent, name, x, y, width, height, rx, ry); }
 djnn::CoreProcess* djnn_new_Circle(djnn::CoreProcess* parent, const char* name, double cx, double cy, double r) { return new djnn::Circle(parent, name, cx, cy, r); }
 djnn::CoreProcess* djnn_new_Ellipse(djnn::CoreProcess* parent, const char* name, double cx, double cy, double rx, double ry) { return new djnn::Ellipse(parent, name, cx, cy, rx, ry); }
 djnn::CoreProcess* djnn_new_Line(djnn::CoreProcess* parent, const char* name, double x1, double y1, double x2, double y2) { return new djnn::Line(parent, name, x1, y1, x2, y2); }
@@ -221,7 +186,7 @@ djnn::CoreProcess* djnn_new_TextAnchor(djnn::CoreProcess* parent, const char* na
 djnn::CoreProcess* djnn_new_Translation(djnn::CoreProcess* parent, const char* name, double tx, double ty) { return new djnn::Translation(parent, name, tx, ty); }
 djnn::CoreProcess* djnn_new_Rotation(djnn::CoreProcess* parent, const char* name, double a, double cx, double cy) { return new djnn::Rotation(parent, name, a, cx, cy); }
 djnn::CoreProcess* djnn_new_Scaling(djnn::CoreProcess* parent, const char* name, double sx, double sy, double cx, double cy) { return new djnn::Scaling(parent, name, sx, sy, cx, cy); }
-djnn::CoreProcess* djnn_new_Homography(djnn::CoreProcess* parent, const char* name, double m11=1, double m12=0, double m13=0, double m14=0, double m21=0, double m22=1, double m23=0, double m24=0, double m31=0, double m32=0, double m33=1, double m34=0, double m41=0, double m42=0, double m43=0, double m44=1) { return new djnn::Homography(parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44); }
+djnn::CoreProcess* djnn_new_Homography(djnn::CoreProcess* parent, const char* name, double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44) { return new djnn::Homography(parent, name, m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44); }
 djnn::CoreProcess* djnn_new_Volume(djnn::CoreProcess* parent, const char* name, double volume) { return new djnn::Volume(parent, name, volume); }
 //djnn::CoreProcess* djnn_new_Plane(djnn::CoreProcess* parent, const char* name, double a, double b, double c, double d) { return new djnn::Plane(parent, name, a, b, c, d); }
 djnn::CoreProcess* djnn_new_Binding(djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::activation_flag_e src_flag, djnn::CoreProcess* dst, djnn::activation_flag_e dst_flag) { return new djnn::Binding(parent, name, src, src_flag, dst, dst_flag); }
@@ -231,7 +196,7 @@ djnn::CoreProcess* djnn_new_Activator(djnn::CoreProcess* parent, const char* nam
 //djnn::CoreProcess* djnn_new_NativeAction(djnn::CoreProcess* parent, const char* name, djnn::NativeCode * action, void* data, bool is_model) { return new djnn::NativeAction(parent, name, action, data, is_model); }
 djnn::CoreProcess* djnn_new_NativeAction(djnn::CoreProcess* parent, const char* name, djnn::NativeCode * action, void* data, bool is_model) { return new djnn::NativeAction(parent, name, action, data, is_model); }
 djnn::CoreProcess* djnn_new_Blank(djnn::CoreProcess* parent, const char* name) { return new djnn::Blank(parent, name); }
-djnn::CoreProcess* djnn_new_Component(djnn::CoreProcess* parent, const char* name, bool is_model=false) { return new djnn::Component (parent, name, is_model); }
+djnn::CoreProcess* djnn_new_Component(djnn::CoreProcess* parent, const char* name, bool is_model) { return new djnn::Component (parent, name, is_model); }
 djnn::CoreProcess* djnn_new_AssignmentSequence(djnn::CoreProcess* parent, const char* name, bool is_model) { return new djnn::AssignmentSequence (parent, name, is_model); }
 djnn::CoreProcess* djnn_new_List(djnn::CoreProcess* parent, const char* name) { return new djnn::List(parent, name); }
 djnn::CoreProcess* djnn_new_ListIterator(djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* list, djnn::CoreProcess* action, bool is_model) { return new djnn::ListIterator(parent, name, list, action, is_model); }
@@ -289,13 +254,13 @@ djnn::CoreProcess* djnn_new_Pow (djnn::CoreProcess* parent, const char* name, do
 djnn::CoreProcess* djnn_new_BoundedValue (djnn::CoreProcess* parent, const char* name, double min, double max, double v) { return new djnn::BoundedValue (parent, name, min, max, v); }
 djnn::CoreProcess* djnn_new_OutlineColor(djnn::CoreProcess* parent, const char* name, int r, int g, int b) { return new djnn::OutlineColor(parent, name, r, g, b); }
 djnn::CoreProcess* djnn_new_OutlineColor(djnn::CoreProcess* parent, const char* name, int value) { return new djnn::OutlineColor(parent, name, value); }
-djnn::CoreProcess* djnn_new_TextField (djnn::CoreProcess* parent, const char* name, int x, int y, int width, int height, const apistring& text = "", bool enable_edit_on_activation = true) { return new djnn::TextField (parent, name, x, y, width, height, text, enable_edit_on_activation); }
+djnn::CoreProcess* djnn_new_TextField (djnn::CoreProcess* parent, const char* name, int x, int y, int width, int height, const apistring& text, bool enable_edit_on_activation) { return new djnn::TextField (parent, name, x, y, width, height, text, enable_edit_on_activation); }
 djnn::CoreProcess* djnn_new_Path (djnn::CoreProcess* parent, const char* name, const apistring& path) { return new djnn::Path (parent, name, path); }
 djnn::CoreProcess* djnn_new_MaxList (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess *container, const apistring& spec) { return new djnn::MaxList (parent, name, container, spec); }
 djnn::CoreProcess* djnn_new_SumList (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess *container, const apistring& spec) { return new djnn::SumList (parent, name, container, spec); }
 djnn::CoreProcess* djnn_new_ProductList (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess *container, const apistring& spec) { return new djnn::ProductList (parent, name, container, spec); }
 //djnn::CoreProcess* djnn_new_DivideList (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess *container, const apistring& spec) { return new djnn::DivideList (parent, name, container, spec); }
-djnn::CoreProcess* djnn_new_LazyConnector (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation=true) { return new djnn::LazyConnector (parent, name, src, dst, copy_on_activation); }
+djnn::CoreProcess* djnn_new_LazyConnector (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation) { return new djnn::LazyConnector (parent, name, src, dst, copy_on_activation); }
 djnn::CoreProcess* djnn_new_SwitchRangeBranch (djnn::CoreProcess* parent, const char* name, double lower, bool left_open, double upper, bool right_open) { return new djnn::SwitchRangeBranch (parent, name, lower, left_open, upper, right_open); }
 djnn::CoreProcess* djnn_new_PathMove (djnn::CoreProcess* parent, const char* name, double x, double y) { return new djnn::PathMove (parent, name, x, y); }
 djnn::CoreProcess* djnn_new_PathLine (djnn::CoreProcess* parent, const char* name, double x, double y) { return new djnn::PathLine (parent, name, x, y); }
@@ -322,12 +287,12 @@ djnn::CoreProcess* djnn_new_Sine (djnn::CoreProcess* parent, const char* name, d
 djnn::CoreProcess* djnn_new_Abs (djnn::CoreProcess* parent, const char* name, double v) { return new djnn::Abs (parent, name, v); }
 djnn::CoreProcess* djnn_new_ClampMin (djnn::CoreProcess* parent, const char* name, double v, double a) { return new djnn::ClampMin (parent, name, v, a); }
 djnn::CoreProcess* djnn_new_ClampMax (djnn::CoreProcess* parent, const char* name, double v, double a) { return new djnn::ClampMax (parent, name, v, a); }
-djnn::CoreProcess* djnn_new_IvyAccess (djnn::CoreProcess* parent, const char* name, const apistring& bus="224.1.2.3:2010", const apistring& appname="NO_NAME", const apistring& ready="READY", bool isModel=false) { return new djnn::IvyAccess (parent, name, bus, appname, ready, isModel); }
+djnn::CoreProcess* djnn_new_IvyAccess (djnn::CoreProcess* parent, const char* name, const apistring& bus, const apistring& appname, const apistring& ready, bool isModel) { return new djnn::IvyAccess (parent, name, bus, appname, ready, isModel); }
 djnn::CoreProcess* djnn_new_ProcExporter (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* tree, int port) { return new djnn::ProcExporter (parent, name, tree, port); }
-djnn::CoreProcess* djnn_new_RemoteProc (djnn::CoreProcess* parent, const char* name, const apistring& addr="224.1.2.3", int port = 2010) { return new djnn::RemoteProc (parent, name, addr, port); }
+djnn::CoreProcess* djnn_new_RemoteProc (djnn::CoreProcess* parent, const char* name, const apistring& addr, int port) { return new djnn::RemoteProc (parent, name, addr, port); }
 //djnn::CoreProcess* djnn_new_NativeCollectionAction (djnn::CoreProcess* parent, const char* name, djnn::NativeCollectionCode* action, unsigned long size, djnn::CoreProcess* coll, void* data, bool isModel) { return new djnn::NativeCollectionAction (parent, name, , coll, data, isModel); }
 djnn::CoreProcess* djnn_new_LazyAssignment(djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool is_model) { return new djnn::LazyAssignment(parent, name, src, dst, is_model); }
-djnn::CoreProcess* djnn_new_MultilineEditor (djnn::CoreProcess* parent, const char* name, int x, int y, int width, int height, const apistring& text = "", bool enable_edit_on_activation = true, bool wrap_text = false) { return new djnn::MultilineEditor (parent, name, x, y, width, height, text, enable_edit_on_activation, wrap_text); }
+djnn::CoreProcess* djnn_new_MultilineEditor (djnn::CoreProcess* parent, const char* name, int x, int y, int width, int height, const apistring& text, bool enable_edit_on_activation, bool wrap_text) { return new djnn::MultilineEditor (parent, name, x, y, width, height, text, enable_edit_on_activation, wrap_text); }
 djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, double pad) { return new djnn::Layer (parent, name, pad); }
 djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, double x, double y, double w, double h, double pad) { return new djnn::Layer (parent, name, x, y, w, h, pad); }
 djnn::CoreProcess* djnn_new_Sorter (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* container, const apistring& spec) { return new djnn::Sorter (parent, name, container, spec); }
@@ -340,8 +305,8 @@ FAST_COMP_IMPL(NoPickOutline);
 FAST_COMP_IMPL(Identity);
 
 
-void MultiConnector (djnn::CoreProcess* parent, djnn::CoreProcess* src, const char* src_props[], size_t src_size, djnn::CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation=true) { return djnn::MultiConnector (parent, src, src_props, src_size, dst, dst_props, dst_size, copy_on_activation); }
-void MultiConnector (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation=true) { djnn::MultiConnector (parent, src, dst, copy_on_activation); }
-void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, const char* src_props[], size_t src_size, djnn::CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation=true) { return djnn::MultiAssignment (parent, src, src_props, src_size, dst, dst_props, dst_size, copy_on_activation); }
-void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation=true);
+void MultiConnector (djnn::CoreProcess* parent, djnn::CoreProcess* src, const char* src_props[], size_t src_size, djnn::CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation) { return djnn::MultiConnector (parent, src, src_props, src_size, dst, dst_props, dst_size, copy_on_activation); }
+void MultiConnector (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation) { djnn::MultiConnector (parent, src, dst, copy_on_activation); }
+void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, const char* src_props[], size_t src_size, djnn::CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation) { return djnn::MultiAssignment (parent, src, src_props, src_size, dst, dst_props, dst_size, copy_on_activation); }
+void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation);
 //}
