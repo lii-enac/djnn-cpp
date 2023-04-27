@@ -89,7 +89,7 @@ namespace djnn
       return;
     Container::ordered_children_t cpy (children);
     auto * p = get_and_check (children[0]);
-    int type = p->get_prop_type ();
+    int type = p->get_property_type ();
     switch (type)
       {
       case Boolean:
@@ -100,7 +100,7 @@ namespace djnn
     	  int i = 0;
     	  for (auto c : children) {
     	    auto * prop = get_and_check (c);
-    	    if (prop->get_prop_type () != type) {
+    	    if (prop->get_property_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
     	    to_sort.push_back (pair<double, int> (prop->get_double_value (), i++));
@@ -122,7 +122,7 @@ namespace djnn
     	  int i = 0;
     	  for (auto c : children) {
     	    auto * prop = get_and_check (c);
-    	    if (prop->get_prop_type () != type) {
+    	    if (prop->get_property_type () != type) {
     	      error (this, "Cannot compare properties of different types");
     	    }
     	    to_sort.push_back (pair<string, int> (prop->get_string_value (), i++));

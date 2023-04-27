@@ -26,7 +26,7 @@ namespace djnn {
 
 #ifdef DJNN_NO_DYNAMIC_CAST
 
-  // simulate dynamic_cast with get_process_type and get_prop_type
+  // simulate dynamic_cast with get_process_type and get_property_type
   /*
   template <typename X> inline X djnn_dynamic_cast(CoreProcess* p)
   {
@@ -39,7 +39,7 @@ namespace djnn {
   */
   template <> inline AbstractIntProperty* djnn_dynamic_cast(AbstractSimpleProperty* p)
   {
-    if(p->get_prop_type() == Integer) {
+    if(p->get_property_type() == Integer) {
       return static_cast<AbstractIntProperty*>(p);
     }
     return nullptr;
@@ -47,7 +47,7 @@ namespace djnn {
 
   template <> inline AbstractBoolProperty* djnn_dynamic_cast(AbstractSimpleProperty* p)
   {
-    if(p->get_prop_type() == Boolean) {
+    if(p->get_property_type() == Boolean) {
       return static_cast<AbstractBoolProperty*>(p);
     }
     return nullptr;
@@ -55,7 +55,7 @@ namespace djnn {
 
   template <> inline AbstractDoubleProperty* djnn_dynamic_cast(AbstractSimpleProperty* p)
   {
-    if(p->get_prop_type() == Double) {
+    if(p->get_property_type() == Double) {
       return static_cast<AbstractDoubleProperty*>(p);
     }
     return nullptr;
@@ -63,7 +63,7 @@ namespace djnn {
 
   template <> inline AbstractTextProperty* djnn_dynamic_cast(AbstractSimpleProperty* p)
   {
-    if(p->get_prop_type() == String) {
+    if(p->get_property_type() == String) {
       return static_cast<AbstractTextProperty*>(p);
     }
     return nullptr;
@@ -71,7 +71,7 @@ namespace djnn {
 
   template <> inline RefProperty* djnn_dynamic_cast(AbstractSimpleProperty* p)
   {
-    if(p->get_prop_type() == Reference) {
+    if(p->get_property_type() == Reference) {
       return static_cast<RefProperty*>(p);
     }
     return nullptr;

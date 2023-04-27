@@ -23,7 +23,7 @@ namespace djnn {
   class AbstractTextProperty : public AbstractSimpleProperty {
   public:
     AbstractTextProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none) : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
-    virtual PropertyType get_prop_type () const override { return String; }
+    virtual property_type_e get_property_type () const override { return String; }
     //virtual process_type_e get_process_type () const override { return TEXT_PROPERTY_T; }
 
     // AbstractSimpleProperty interface

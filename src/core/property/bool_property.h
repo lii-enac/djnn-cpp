@@ -25,7 +25,7 @@ namespace djnn {
   public:
     AbstractBoolProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none);
     virtual ~AbstractBoolProperty ();
-    virtual PropertyType get_prop_type () const override { return Boolean; }
+    virtual property_type_e get_property_type () const override { return Boolean; }
     //virtual process_type_e get_process_type () const override { return BOOL_PROPERTY_T; }
 
     // AbstractSimpleProperty interface

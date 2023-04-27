@@ -158,7 +158,7 @@ void djnn_remove_from_parentless_name (djnn::CoreProcess* child);
 
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p);
-djnn::PropertyType djnn_get_property_type (djnn::CoreProcess* p);
+djnn::property_type_e djnn_get_property_type (djnn::CoreProcess* p);
   
 void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);

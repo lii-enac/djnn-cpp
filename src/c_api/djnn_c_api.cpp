@@ -120,7 +120,7 @@ djnn::FatProcess*  djnn_find (djnn::CoreProcess* p) { return dynamic_cast<djnn::
 void djnn_remove_from_parentless_name (djnn::CoreProcess* child) { return djnn::remove_from_parentless_name (child); }
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p) { return p->get_process_type (); }
-djnn::PropertyType djnn_get_property_type (djnn::CoreProcess* p) { return dynamic_cast<djnn::AbstractSimpleProperty*>(p)->get_prop_type (); }
+djnn::property_type_e djnn_get_property_type (djnn::CoreProcess* p) { return dynamic_cast<djnn::AbstractSimpleProperty*>(p)->get_property_type (); }
   
 void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p) { djnn::add_state_dependency(parent, p); }
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p) { djnn::remove_state_dependency(parent, p); }

@@ -22,7 +22,7 @@ namespace djnn {
 
     template <typename X>
     struct TemplatePropertyType {
-        static const PropertyType type = UserDefined; // by default
+        static const property_type_e type = UserDefined; // by default
     };
 
     template <typename X>
@@ -30,7 +30,7 @@ namespace djnn {
     public:
         AbstractTemplateProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none)
         : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
-        virtual PropertyType get_prop_type () const override { return TemplatePropertyType<X>::type; }
+        virtual property_type_e get_property_type () const override { return TemplatePropertyType<X>::type; }
         void my_set_value (const X& v, bool propagate) {
             get_ref_value() = v;
             if (is_activable () && propagate) {

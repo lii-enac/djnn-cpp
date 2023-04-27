@@ -47,7 +47,7 @@ namespace djnn
         if (res->get_process_type () != PROPERTY_T) {
           continue;
         } else {
-          switch (((AbstractProperty*) res)->get_prop_type ())
+          switch (((AbstractProperty*) res)->get_property_type ())
             {
             case Integer:
               try {

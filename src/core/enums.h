@@ -1,7 +1,7 @@
 #pragma once
 
 namespace djnn {
-  enum PropertyType {
+  enum property_type_e {
     Boolean,
     Integer,
     Double,

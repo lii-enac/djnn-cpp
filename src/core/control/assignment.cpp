@@ -151,7 +151,7 @@ namespace djnn
     TTAssignment* ttassignment = nullptr;
     auto *dst_p = djnn_dynamic_cast<AbstractSimpleProperty*> (dst);
     if (dst_p)
-    switch (dst_p->get_prop_type ())
+    switch (dst_p->get_property_type ())
     {
       case Integer:
       {
@@ -205,7 +205,7 @@ namespace djnn
     if (!dst_p) { warning (dst_p, "dst " + dst->get_debug_name() + " is not a property"); return nullptr; }
 
     if (src_p) {
-      switch (src_p->get_prop_type ())
+      switch (src_p->get_property_type ())
       {
         case Integer:
         {
@@ -263,7 +263,7 @@ namespace djnn
           warning (src_p, "unknown Property type");
           return nullptr;
       }
-    } else if (dst_p->get_prop_type () == Reference) {
+    } else if (dst_p->get_property_type () == Reference) {
       auto * drp = djnn_dynamic_cast<RefProperty*> (dst_p);
       assert (drp);
       _ttassignment = new TAssignment <CoreProcess, RefProperty> (src, drp);
@@ -287,7 +287,7 @@ namespace djnn
     if (!dst_p) { warning (dst_p, "dst is not a Property"); return; }
 
     if (src_p) {
-      switch (src_p->get_prop_type ())
+      switch (src_p->get_property_type ())
       {
         case Integer:
         {
@@ -329,7 +329,7 @@ namespace djnn
         warning (src_p, "unknown Property type");
         return;
       }
-    } else if (dst_p->get_prop_type () == Reference) {
+    } else if (dst_p->get_property_type () == Reference) {
 
       ((RefProperty*) dst_p)->set_value (src, propagate);
 
