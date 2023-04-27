@@ -159,6 +159,9 @@ void djnn_remove_from_parentless_name (djnn::CoreProcess* child);
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p);
 djnn::property_type_e djnn_get_property_type (djnn::CoreProcess* p);
+
+//vector<CoreProcess*> djnn_get_process_collector_list (djnn::CoreProcess* p);
+//vector<djnn::CoreProcess*> djnn_get_children (djnn::CoreProcess* p);
   
 void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p);
@@ -179,6 +182,11 @@ void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate);
 double djnn_get_double_value (djnn::CoreProcess* p);
 const mystring djnn_get_string_value (djnn::CoreProcess* p);
 
+djnn::CoreProcess* djnn_get_ref (djnn::CoreProcess*);
+void djnn_set_ref (djnn::CoreProcess *p, djnn::CoreProcess *v);
+
+//inline djnn::CoreProcess* getRef (djnn::CoreProcess* p) { return djnn_get_ref (p); }
+//inline void setRef (djnn::CoreProcess *p, djnn::CoreProcess *v) { return djnn_set_ref (p, v); }
 
 void djnn_dump(djnn::CoreProcess* p);
 djnn::CoreProcess* djnn_mainloop_instance();
@@ -334,8 +342,10 @@ djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, 
 djnn::CoreProcess* djnn_new_Sorter (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* container, const apistring& spec);
 djnn::CoreProcess* djnn_new_FileWriter (djnn::CoreProcess* parent, const char* name, const apistring& filename);
 
+#ifndef FAST_COMP_DECL
 #define FAST_COMP_DECL(Proc) djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name);
 #define FAST_COMP_IMPL(Proc) djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name) { return new djnn::Proc (parent, name); }
+#endif
 
 FAST_COMP_DECL(SwitchList);
 FAST_COMP_DECL(ProcessCollector);

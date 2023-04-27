@@ -121,6 +121,9 @@ void djnn_remove_from_parentless_name (djnn::CoreProcess* child) { return djnn::
 
 djnn::process_type_e djnn_get_process_type (djnn::CoreProcess* p) { return p->get_process_type (); }
 djnn::property_type_e djnn_get_property_type (djnn::CoreProcess* p) { return dynamic_cast<djnn::AbstractSimpleProperty*>(p)->get_property_type (); }
+
+//vector<djnn::CoreProcess*> djnn_get_process_collector_list (djnn::CoreProcess* p) { return dynamic_cast<djnn::ProcessCollector*>(p)->get_list (); }
+//vector<djnn::CoreProcess*> djnn_get_children (djnn::CoreProcess* p) { return p->children (); } 
   
 void    djnn_add_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p) { djnn::add_state_dependency(parent, p); }
 void djnn_remove_state_dependency (djnn::CoreProcess* parent, djnn::CoreProcess *p) { djnn::remove_state_dependency(parent, p); }
@@ -140,6 +143,8 @@ void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate) { dynamic_c
 void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 double djnn_get_double_value (djnn::CoreProcess* p) { return ((djnn::AbstractProperty*)p)->get_double_value (); }
 
+djnn::CoreProcess* djnn_get_ref (djnn::CoreProcess* p) { return djnn::getRef (p); }
+void djnn_set_ref (djnn::CoreProcess* p, djnn::CoreProcess* v) { djnn::setRef (p, v); }
 
 void djnn_dump(djnn::CoreProcess* p) { p->dump (); }
 djnn::CoreProcess* djnn_mainloop_instance() { return &djnn::MainLoop::instance (); }

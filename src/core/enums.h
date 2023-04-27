@@ -10,4 +10,9 @@ namespace djnn {
     Remote,
     UserDefined
   };
+
+  class CoreProcess;
+
+  CoreProcess* getRef (CoreProcess *p);
+  void setRef (CoreProcess *p, CoreProcess *v);
 }
