@@ -32,6 +32,16 @@
 //#include "utils/debug.h"
 //#include "core/utils/error.h"
 
+void djnn_launch_mainloop ()
+{
+  djnn::MainLoop::instance ().activate ();
+}
+
+djnn::CoreProcess*
+djnn_mainloop_instance ()
+{
+  return &djnn::MainLoop::instance ();
+}
 
 namespace djnn {
 
