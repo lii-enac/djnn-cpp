@@ -20,12 +20,14 @@ void free(void *ptr);
 struct mystring {
   char* s;
   // mystring (const char* _s) : s(_s) {}
+  mystring () : s(0) {}
   mystring (const char* _s) : s(strdup(_s)) {}
   //mystring (const mystring& other) : s(strdup(other.s)) {}
-  //mystring (const mystring&& other) : s(other.s) {}
-  //~mystring() { free ((void*)s); }
+  // mystring (mystring&& other) : s(other.s) { other.s = 0; }
+  ~mystring() { free ((void*)s); }
   operator const char*() const { return s; }
   mystring& operator += (const char*);
+  mystring& operator = (const char*);
   bool operator == (const char*) const;
   bool operator == (const mystring&) const;
 #ifdef TOTO
@@ -175,7 +177,7 @@ void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate); // { ((djnn::
 void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }
 void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate); // { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }
 double djnn_get_double_value (djnn::CoreProcess* p); // { return ((djnn::AbstractProperty*)p)->get_double_value (); }
-const mystring& djnn_get_string_value (djnn::CoreProcess* p); // { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }
+const mystring djnn_get_string_value (djnn::CoreProcess* p); // { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }
 
 
 void djnn_dump(djnn::CoreProcess* p); // { p->dump (); }

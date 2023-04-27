@@ -19,12 +19,14 @@ struct mystring {
   char* s;
   // mystring (const char* _s) : s(_s) {}
   // mystring (const mystring& other) : s(other.s) {}
+  mystring () : s(0) {}
   mystring (const char* _s) : s(strdup(_s)) {}
-  //mystring (const mystring& other) : s(strdup(other.s)) {}
-  //mystring (const mystring&& other) : s(other.s) {}
-  //~mystring() { free ((void*)s); }
+  // mystring (const mystring& other) : s(strdup(other.s)) {}
+  // mystring (mystring&& other) : s(other.s) { other.s = 0; }
+  ~mystring() { free ((void*)s); }
   operator const char*() const { return s; }
   mystring& operator += (const char*);
+  mystring& operator = (const char*);
   bool operator == (const char*) const;
   bool operator == (const mystring&) const;
   operator const djnnstl::string () const { return djnnstl::string(s); }
@@ -32,11 +34,12 @@ struct mystring {
   //mystring (const djnnstl::string& _s) : s(_s.c_str()) {}
 };
 mystring& mystring::operator += (const char* a) { djnnstl::string str(this->s); str+=a; s=strdup(str.c_str()); return *this; }
+mystring& mystring::operator = (const char* a) { free(s); s=strdup(a); return *this; }
 bool mystring::operator == (const char* a) const { return strcmp (s,a) == 0; }
 bool mystring::operator == (const mystring& a) const { return strcmp (s,a.s) == 0; }
 mystring operator+ (const mystring& a, const char* b) { djnnstl::string str(a.s); str += b; return mystring(str.c_str()); }
 mystring operator+ (const mystring& a, const mystring& b) { djnnstl::string str(a.s); str += b.s; return mystring(str.c_str()); }
-const mystring& djnn_get_string_value (djnn::CoreProcess* p) { return mystring (((djnn::AbstractProperty*)p)->get_string_value ().c_str()); }
+const mystring djnn_get_string_value (djnn::CoreProcess* p) { return mystring (((djnn::AbstractProperty*)p)->get_string_value ().c_str()); }
 
 using apistring = mystring;
 //using apistring = const char*;
