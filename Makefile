@@ -322,12 +322,16 @@ endif
 linker ?= $(compiler)
 
 ifeq ($(linker),mold)
-ifeq ($(os),Darwin)
-CXXLD := ld64.mold
-LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
-LDFLAGS += -dylib -lc++ -lc
-else
-CXXLD := $(CXX) --use-ld=mold 
+# ifeq ($(os),Darwin)
+# CXXLD := ld64.mold
+# CXXFLAGS += -fPIC
+# LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
+# LDFLAGS += -dylib -lc++ -lc
+ifeq ($(compiler),gcc)
+CXXLD ?= $(CXX) --use-ld=mold
+endif
+ifeq ($(compiler),llvm)
+CXXLD ?= $(CXX) -fuse-ld=mold
 endif
 endif
 
