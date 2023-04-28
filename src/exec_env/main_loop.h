@@ -120,3 +120,5 @@ namespace djnn
   };
 
 }
+
+djnn::CoreProcess* djnn_mainloop_instance ();
