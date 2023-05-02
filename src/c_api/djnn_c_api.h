@@ -8,6 +8,7 @@
 #include "display/display-dev.h"
 #include "animation/enums.h"
 #include "gui/style/style_types.h"
+#include "function.h"
 
 namespace djnnstl {
 
@@ -139,11 +140,15 @@ int stoi(const mystring&);
 
 //void djnn_delete (djnn::CoreProcess* p);
 void djnn_schedule_deletion (djnn::CoreProcess* p);
+void djnn_delete_content (djnn::CoreProcess* p);
 
-djnn::CoreProcess* clone (djnn::CoreProcess *p);
 
-void djnn_add_child (djnn::CoreProcess *parent, djnn::CoreProcess *child, const char* name);
-void djnn_remove_child (djnn::CoreProcess *parent, djnn::CoreProcess *child);
+void djnn_for_every (djnn::CoreProcess* p, djnnc::function<int(djnn::CoreProcess*)>);
+
+djnn::CoreProcess* clone (djnn::CoreProcess* p);
+
+void djnn_add_child (djnn::CoreProcess* parent, djnn::CoreProcess *child, const char* name);
+void djnn_remove_child (djnn::CoreProcess* parent, djnn::CoreProcess *child);
 
 void alias_children (djnn::CoreProcess* parent, djnn::FatProcess *to);
 void alias (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* from);

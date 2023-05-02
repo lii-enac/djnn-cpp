@@ -16,6 +16,7 @@
 
 #define DJNN_C_API_IMPL
 #include "djnn_c_api.h"
+#include "function.h"
 
 
 mystring& mystring::operator += (const char* a) { djnnstl::string str(this->s); str+=a; s=strdup(str.c_str()); return *this; }
@@ -316,3 +317,54 @@ void MultiConnector (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::Co
 void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, const char* src_props[], size_t src_size, djnn::CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation) { return djnn::MultiAssignment (parent, src, src_props, src_size, dst, dst_props, dst_size, copy_on_activation); }
 void MultiAssignment (djnn::CoreProcess* parent, djnn::CoreProcess* src, djnn::CoreProcess* dst, bool copy_on_activation);
 //}
+
+void
+djnn_delete_content (djnn::CoreProcess* p)
+{
+  auto *is_layer_2 = p;
+  if (djnn_get_process_type (is_layer_2) == djnn::LAYER_T) {
+		puts ("\nERROR - delete_content should not be used on Layer (better use a component inside a Layer\n");
+		djnn__exit(0);
+	}
+	auto *cpnt_3 = dynamic_cast<djnn::Container *> (p);
+	if (cpnt_3) {
+		int cpnt_3_size = cpnt_3->children ().size ();
+		for (int i = cpnt_3_size - 1; i >= 0; i--) {
+			[[maybe_unused]] auto * cpnt_4 = cpnt_3->children ()[i];
+			if (cpnt_4) {
+				cpnt_4->deactivate ();
+				if (cpnt_4->get_parent ())
+					cpnt_4->get_parent ()->remove_child (dynamic_cast<djnn::CoreProcess*>(cpnt_4));
+				cpnt_4->schedule_deletion ();
+				cpnt_4 = nullptr;
+			}
+		}
+	}
+	else {
+		puts ("\nERROR - delete_content should be used on Containers (except Layer)\n");
+		djnn__exit(0);
+	}
+}
+
+
+
+void
+djnn_for_every (djnn::CoreProcess* p, djnnc::function<int(djnn::CoreProcess*)> fff)
+{
+  const djnnstl::vector<djnn::CoreProcess*>* list_11;
+	[[maybe_unused]] auto * cpnt_12 = p;
+{ auto*&cpn=cpnt_12; auto & lst=list_11;
+
+  if (dynamic_cast<djnn::ProcessCollector*> (cpn) != nullptr) {
+		lst = &((djnn::ProcessCollector*) cpn)->get_list();
+	} else if (dynamic_cast<djnn::Container*> (cpn) != nullptr) {
+		lst = &((djnn::Container*) cpn)->children();
+	} else {
+		djnn__error (nullptr, "only Container and ProcessCollector can be used in forevery instruction\n");
+		djnn__exit (0);
+	}
+  }
+  	for (auto cpnt_13 : *list_11) {
+      fff(cpnt_13);
+		}
+}
