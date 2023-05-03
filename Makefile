@@ -29,8 +29,13 @@ help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
 
-config.mk:
+
+config:
 	cp config.default.mk config.mk
+
+# does not work anymore
+# config.mk:
+# 	cp config.default.mk config.mk
 
 MAJOR = 1
 MINOR = 19
@@ -165,7 +170,7 @@ include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
 CFLAGS += -MMD
-#CFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-vla-extension
+CFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-vla-extension
 
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
@@ -315,7 +320,7 @@ endif
 #ARFLAGS ?= -r -u
 
 ifeq (g++,$(findstring g++,$(CXX)))
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
 
@@ -374,7 +379,7 @@ tidy: $(all_tidy)
 # ---------------------------------------
 # CFLAGS CXXFLAGS
 
-CXXFLAGS += -std=c++17
+CXXFLAGS += -std=c++20
 CXXFLAGS += $(CFLAGS)
 
 # ---------------------------------------
@@ -456,7 +461,7 @@ djnn_libs += $(djnn_libs_extra)
 #extra
 
 ifeq ($(cross_prefix),em)
-djnn_libs := core exec_env base display gui input animation utils files audio c_api
+djnn_libs := core exec_env base display gui input animation utils files audio
 # comms input
 endif
 
