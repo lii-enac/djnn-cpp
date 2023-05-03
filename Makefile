@@ -375,7 +375,7 @@ tidy: $(all_tidy)
 # ---------------------------------------
 # CFLAGS CXXFLAGS
 
-CXXFLAGS += -std=c++20
+CXXFLAGS += -std=c++17
 CXXFLAGS += $(CFLAGS)
 
 # ---------------------------------------
