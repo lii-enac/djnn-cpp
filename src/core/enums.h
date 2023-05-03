@@ -13,6 +13,8 @@ namespace djnn {
 
   class CoreProcess;
 
-  CoreProcess* getRef (CoreProcess *p);
-  void setRef (CoreProcess *p, CoreProcess *v);
+  CoreProcess* getRef (CoreProcess* p);
+  void setRef (CoreProcess* p, CoreProcess* v);
+  void activate (CoreProcess* p);
+  void deactivate (CoreProcess* p);
 }
