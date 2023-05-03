@@ -124,6 +124,11 @@ void djnn_clear_comms();
 void djnn_init_files();
 void djnn_clear_files();
 
+int djnn__error (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+void djnn__warning (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo=nullptr);
+int djnn__exit(int ret);
+extern "C" { int puts(const char *s); } // for print()
+
 void djnn_activate (djnn::CoreProcess* p);
 void djnn_notify_activation (djnn::CoreProcess* p);
 void djnn_deactivate (djnn::CoreProcess* p);
