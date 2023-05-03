@@ -20,7 +20,8 @@ MAKEFLAGS += --no-builtin-rules
 
 default: all
 
-all: config.mk djnn pkgconf
+#all: config.mk djnn pkgconf # does not work anymore
+all: djnn pkgconf
 #dirs
 #rules
 #cccmd
@@ -29,13 +30,8 @@ help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
 
-
-config:
+config config.mk:
 	cp config.default.mk config.mk
-
-# does not work anymore
-# config.mk:
-# 	cp config.default.mk config.mk
 
 MAJOR = 1
 MINOR = 19
