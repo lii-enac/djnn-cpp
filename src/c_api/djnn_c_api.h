@@ -351,6 +351,7 @@ djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, 
 djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, double x, double y, double w, double h, double pad=0);
 djnn::CoreProcess* djnn_new_Sorter (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* container, const apistring& spec);
 djnn::CoreProcess* djnn_new_FileWriter (djnn::CoreProcess* parent, const char* name, const apistring& filename);
+djnn::CoreProcess* djnn_new_LocalToScreen (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* p);
 
 #ifndef FAST_COMP_DECL
 #define FAST_COMP_DECL(Proc) djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name);

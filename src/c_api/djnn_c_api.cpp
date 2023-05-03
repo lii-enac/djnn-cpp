@@ -153,8 +153,8 @@ djnn::CoreProcess* djnn_mainloop_instance() { return &djnn::MainLoop::instance (
 djnn::CoreProcess* load_from_XML(const char* path) { return djnn::load_from_XML (path); }
 djnn::CoreProcess* load_from_XML_once(const char* path) { return djnn::load_from_XML_once (path); }
 
-int djnn__error (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo=nullptr) { error (p,msg); return -1; }
-void djnn__warning (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo=nullptr) { warning (p,msg); }
+int djnn__error (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo) { error (p,msg); return -1; }
+void djnn__warning (const djnn::CoreProcess *p, const char* msg, const char* ctxinfo) { warning (p,msg); }
 int djnn__exit(int ret) { ::exit(ret); return 1; }
 
 djnn::CoreProcess* djnn_new_Rectangle(djnn::CoreProcess* parent, const char* name, double x, double y, double width, double height, double rx, double ry) { return new djnn::Rectangle(parent, name, x, y, width, height, rx, ry); }
@@ -304,6 +304,7 @@ djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, 
 djnn::CoreProcess* djnn_new_Layer (djnn::CoreProcess* parent, const char* name, double x, double y, double w, double h, double pad) { return new djnn::Layer (parent, name, x, y, w, h, pad); }
 djnn::CoreProcess* djnn_new_Sorter (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* container, const apistring& spec) { return new djnn::Sorter (parent, name, container, spec); }
 djnn::CoreProcess* djnn_new_FileWriter (djnn::CoreProcess* parent, const char* name, const apistring& filename) { return new djnn::FileWriter (parent, name, filename); }
+djnn::CoreProcess* djnn_new_LocalToScreen (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* p) { return new djnn::LocalToScreen (parent, name, p); }
 
 #define FAST_COMP_IMPL(Proc) djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name) { return new djnn::Proc (parent, name); }
 FAST_COMP_IMPL(SwitchList);
