@@ -140,6 +140,12 @@ void* djnn_get_native_user_data(djnn::CoreProcess* p) { return djnn::get_native_
 void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
+
+void djnn_get_value (djnn::CoreProcess* p, bool& v) { v = dynamic_cast<djnn::AbstractBoolProperty*>(p)->get_value (); }
+void djnn_get_value (djnn::CoreProcess* p, int& v) { v = dynamic_cast<djnn::AbstractIntProperty*>(p)->get_value (); }
+void djnn_get_value (djnn::CoreProcess* p, double& v) { v = dynamic_cast<djnn::AbstractDoubleProperty*>(p)->get_value (); }
+void djnn_get_value (djnn::CoreProcess* p, const char*& v) { v = dynamic_cast<djnn::AbstractTextProperty*>(p)->get_value ().c_str(); }
+
 //void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (djnnstl::string(v), immediate); }
 void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate) { dynamic_cast<djnn::AbstractSimpleProperty*>(p)->set_value (v, immediate); }
 double djnn_get_double_value (djnn::CoreProcess* p) { return ((djnn::AbstractProperty*)p)->get_double_value (); }
