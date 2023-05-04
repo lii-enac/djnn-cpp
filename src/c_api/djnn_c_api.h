@@ -189,10 +189,22 @@ void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate);
+
+#ifndef GET_CHILD_VALUE
+using BoolSFC_t = bool;
+using IntSFC_t = int;
+using DoubleSFC_t = double;
+using TextSFC_t = const char*;
+#define GET_CHILD_VALUE(varname, type, parent, path) type##SFC_t varname; djnn_get_value(djnn_find (parent, #path), varname);
+#define GET_CHILD(type, parent, path) auto* path = (type*) djnn_find (parent, #path);
+#define GET_CHILD_VAR(varname, type, parent, path) auto * varname = (type*) djnn_find (parent, #path);
+
+#endif
+
 void djnn_get_value (djnn::CoreProcess* p, bool& v);
 void djnn_get_value (djnn::CoreProcess* p, int& v);
 void djnn_get_value (djnn::CoreProcess* p, double& v);
-void djnn_get_value (djnn::CoreProcess* p, const char* v);
+void djnn_get_value (djnn::CoreProcess* p, const char*& v);
 
 double djnn_get_double_value (djnn::CoreProcess* p);
 const mystring djnn_get_string_value (djnn::CoreProcess* p);
