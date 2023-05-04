@@ -350,22 +350,23 @@ djnn_delete_content (djnn::CoreProcess* p)
 
 
 void
-djnn_for_every (djnn::CoreProcess* p, djnnc::function<int(djnn::CoreProcess*)> fff)
+djnn_for_every (djnn::CoreProcess* p, djnnc::function<void(djnn::CoreProcess*)> fff)
 {
-  const djnnstl::vector<djnn::CoreProcess*>* list_11;
+  	const djnnstl::vector<djnn::CoreProcess*>* list_11;
 	[[maybe_unused]] auto * cpnt_12 = p;
-{ auto*&cpn=cpnt_12; auto & lst=list_11;
+	{
+		auto*&cpn=cpnt_12; auto & lst=list_11;
 
-  if (dynamic_cast<djnn::ProcessCollector*> (cpn) != nullptr) {
-		lst = &((djnn::ProcessCollector*) cpn)->get_list();
-	} else if (dynamic_cast<djnn::Container*> (cpn) != nullptr) {
-		lst = &((djnn::Container*) cpn)->children();
-	} else {
-		djnn__error (nullptr, "only Container and ProcessCollector can be used in forevery instruction\n");
-		djnn__exit (0);
+		if (dynamic_cast<djnn::ProcessCollector*> (cpn) != nullptr) {
+			lst = &((djnn::ProcessCollector*) cpn)->get_list();
+		} else if (dynamic_cast<djnn::Container*> (cpn) != nullptr) {
+			lst = &((djnn::Container*) cpn)->children();
+		} else {
+			djnn__error (nullptr, "only Container and ProcessCollector can be used in forevery instruction\n");
+			djnn__exit (0);
+		}
 	}
-  }
   	for (auto cpnt_13 : *list_11) {
       fff(cpnt_13);
-		}
+	}
 }

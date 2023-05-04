@@ -10,6 +10,13 @@ namespace djnnc
         virtual abstract_function *clone() const =0;
         virtual ~abstract_function() = default;
     };
+    template <typename ...Args>
+    struct abstract_function<void,Args...>
+    {
+        virtual void operator()(Args... args)=0;
+        virtual abstract_function *clone() const =0;
+        virtual ~abstract_function() = default;
+    };
 
     template<typename Func,typename Result,typename ...Args>
     class concrete_function: public abstract_function<Result,Args...>
@@ -22,6 +29,24 @@ namespace djnnc
         Result operator()(Args... args) override
         {
             return f(args...);
+        }
+        concrete_function *clone() const override
+        {
+            return new concrete_function{f};
+        }
+    };
+
+    template<typename Func,typename ...Args>
+    class concrete_function<Func, void, Args...>: public abstract_function<void,Args...>
+    {
+        Func f;
+    public:
+        concrete_function(const Func &x)
+            : f(x)
+        {}
+        void operator()(Args... args) override
+        {
+            f(args...);
         }
         concrete_function *clone() const override
         {
@@ -79,12 +104,32 @@ namespace djnnc
             if(f)
                 return (*f)(args...);
             else
-                return Result{};
+                return Result();
         }
         ~function()
         {
             delete f;
         }
     };
+
+    /*
+    template<typename Result,typename ...Args>
+    Result function<Result(Args...)>::operator()(Args... args)
+    {
+        if(f)
+            return (*f)(args...);
+        else
+            return Result{};
+    }
+
+    template<typename ...Args>
+    void function<void(Args...)>::operator()(Args... args)
+    {
+        if(f)
+            (*f)(args...);
+        else
+            return;
+    }
+    */
 }
 

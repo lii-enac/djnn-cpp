@@ -148,7 +148,7 @@ void djnn_schedule_deletion (djnn::CoreProcess* p);
 void djnn_delete_content (djnn::CoreProcess* p);
 
 
-void djnn_for_every (djnn::CoreProcess* p, djnnc::function<int(djnn::CoreProcess*)>);
+void djnn_for_every (djnn::CoreProcess* p, djnnc::function<void(djnn::CoreProcess*)>); // int instead of void because of function.h limitation
 
 djnn::CoreProcess* clone (djnn::CoreProcess* p);
 
