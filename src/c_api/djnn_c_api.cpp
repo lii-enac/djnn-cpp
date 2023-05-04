@@ -277,7 +277,7 @@ djnn::CoreProcess* djnn_new_PathArc (djnn::CoreProcess* parent, const char* name
 djnn::CoreProcess* djnn_new_PathClosure (djnn::CoreProcess* parent, const char* name) { return new djnn::PathClosure (parent, name); }
 djnn::CoreProcess* djnn_new_ZOrderedGroup (djnn::CoreProcess* parent, const char* name) { return new djnn::ZOrderedGroup (parent, name); }
 djnn::CoreProcess* djnn_new_GraphEdgeAdder (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst) { return new djnn::GraphEdgeAdder (parent, name, src, dst); }
-djnn::CoreProcess* djnn_new_DashArray (djnn::CoreProcess* parent, const char* name, double patterns[]) { return new djnn::DashArray (parent, name, djnnstl::vector(patterns, patterns)); }
+djnn::CoreProcess* djnn_new_DashArray_ (djnn::CoreProcess* parent, const char* name, double patterns[], size_t pat_len) { return new djnn::DashArray (parent, name, djnnstl::vector(patterns, patterns+pat_len)); }
 djnn::CoreProcess* djnn_new_NoDashArray (djnn::CoreProcess* parent, const char* name) { return new djnn::NoDashArray (parent, name); }
 djnn::CoreProcess* djnn_new_NoFill (djnn::CoreProcess* parent, const char* name) { return new djnn::NoFill(parent, name); }
 djnn::CoreProcess* djnn_new_NoPickFill (djnn::CoreProcess* parent, const char* name) { return new djnn::NoPickFill(parent, name); }

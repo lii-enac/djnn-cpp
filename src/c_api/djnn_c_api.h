@@ -189,6 +189,11 @@ void djnn_set_value (djnn::CoreProcess* p, bool v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, int v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate);
 void djnn_set_value (djnn::CoreProcess* p, const char* v, bool immediate);
+void djnn_get_value (djnn::CoreProcess* p, bool& v);
+void djnn_get_value (djnn::CoreProcess* p, int& v);
+void djnn_get_value (djnn::CoreProcess* p, double& v);
+void djnn_get_value (djnn::CoreProcess* p, const char* v);
+
 double djnn_get_double_value (djnn::CoreProcess* p);
 const mystring djnn_get_string_value (djnn::CoreProcess* p);
 
@@ -324,7 +329,8 @@ djnn::CoreProcess* djnn_new_PathArc (djnn::CoreProcess* parent, const char* name
 djnn::CoreProcess* djnn_new_PathClosure (djnn::CoreProcess* parent, const char* name);
 djnn::CoreProcess* djnn_new_ZOrderedGroup (djnn::CoreProcess* parent, const char* name);
 djnn::CoreProcess* djnn_new_GraphEdgeAdder (djnn::CoreProcess* parent, const char* name, djnn::CoreProcess* src, djnn::CoreProcess* dst);
-djnn::CoreProcess* djnn_new_DashArray (djnn::CoreProcess* parent, const char* name, double patterns[]);
+djnn::CoreProcess* djnn_new_DashArray_ (djnn::CoreProcess* parent, const char* name, double patterns[], unsigned long pat_len);
+#define djnn_new_DashArray(parent, name, patterns) djnn_new_DashArray_(parent, name, patterns, sizeof(patterns)/sizeof(double))
 djnn::CoreProcess* djnn_new_NoDashArray (djnn::CoreProcess* parent, const char* name);
 djnn::CoreProcess* djnn_new_NoFill (djnn::CoreProcess* parent, const char* name);
 djnn::CoreProcess* djnn_new_PickFill (djnn::CoreProcess* parent, const char* name);
