@@ -18,7 +18,9 @@
 #ifndef GET_CHILD_VALUE
 #define GET_CHILD_VALUE(varname, type, parent, path) auto * child_##varname = dynamic_cast<djnn::Abstract##type##Property*>(parent->find_child(#path)); if (!child_##varname) { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #path, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }; const auto& varname = child_##varname->get_value ();
 #endif
+#ifndef GET_CHILD_VALUE2
 #define GET_CHILD_VALUE2(varname, type, parent, path) if (auto * child_##parent = dynamic_cast<djnn::Abstract##type##Property*>(parent->find_child(#path))) {varname = child_##parent->get_value ();} else { fprintf (stderr, "ERROR - there is NO " #type " \"%s\" child in process \"%s\" - %s:%s:%d\n\n", #path, #parent, __FUNCTION__,__FILE__,__LINE__);  exit(-1); }
+#endif
 // ex: GET_CHILD_VALUE (name, Text, data, layer_name);
 // is equivalent to:
 // const auto& name = dynamic_cast<djnn::TextProperty*>(data->find_child("layer_name"))->get_value(); (this will create a "string name" with the value of the property)
