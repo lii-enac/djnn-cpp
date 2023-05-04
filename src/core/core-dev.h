@@ -13,6 +13,7 @@
  */
 #pragma once
 
+#include "core/enums.h"
 #include "core/xml/xml-dev.h"
 
 namespace djnn {
@@ -27,8 +28,8 @@ namespace djnn {
     void graph_exec ();
 }
 
-#define DBG_GRAPH_EXE
-#define GRAPH_EXEC { DBG_GRAPH_EXE; djnn::graph_exec (); }
+// #define DBG_GRAPH_EXE
+// #define GRAPH_EXEC { DBG_GRAPH_EXE; djnn::graph_exec (); }
 
 
 namespace djnn

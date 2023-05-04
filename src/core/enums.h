@@ -18,4 +18,7 @@ namespace djnn {
   void activate (CoreProcess* p);
   void deactivate (CoreProcess* p);
   void* get_native_user_data (CoreProcess* native_action);
+  void graph_exec ();
+  #define DBG_GRAPH_EXE
+  #define GRAPH_EXEC { DBG_GRAPH_EXE; djnn::graph_exec (); }
 }
