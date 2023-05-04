@@ -17,4 +17,5 @@ namespace djnn {
   void setRef (CoreProcess* p, CoreProcess* v);
   void activate (CoreProcess* p);
   void deactivate (CoreProcess* p);
+  void* get_native_user_data (CoreProcess* native_action);
 }
