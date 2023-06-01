@@ -31,6 +31,8 @@ namespace djnn {
   class AbstractGShape;
   class PickAnalyticalContext;
 
+  class Visitor;
+
   
 
   class CoreProcess {
@@ -72,12 +74,8 @@ namespace djnn {
     virtual const string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
 
     // utils
-            CoreProcess*      clone () const; // relies on impl_clone
     virtual void           set_data (CoreProcess* data) {}
     virtual CoreProcess*   get_data () { return nullptr; }
-    #ifndef DJNN_NO_SERIALIZE
-    virtual void          serialize (const string& format);
-    #endif
 
 
     // --- implementation
@@ -108,10 +106,15 @@ namespace djnn {
     void schedule_delete ();     // deprecated
 
     // actions
+    CoreProcess* clone () const; // relies on impl_clone
+    #ifndef DJNN_NO_SERIALIZE
+    virtual void serialize (const string& format);
+    #endif
     virtual void update_drawing () {}
     virtual void draw () {}
     virtual void pick () {}
     virtual AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
+    virtual void visit (Visitor*) {};
 
     // helpers
         bool is_model () const     { return get_bitset (MODEL_MASK, MODEL_SHIFT); }
