@@ -357,11 +357,16 @@ namespace djnn
   void
   Graph::exec ()
   {
+    //remotery start
+    rmt_BeginCPUSample(Graph_exec, RMTSF_None);
+
 #ifndef DJNN_NO_DEBUG
     bool display_sequence_on_target_location = false;
     if ( _DEBUG_SEE_ACTIVATION_SEQUENCE && strcmp (_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION, "") == 0)
       display_sequence_on_target_location = true;
 #endif
+
+
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
