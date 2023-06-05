@@ -27,6 +27,7 @@ using djnnstl::cout;
 using djnnstl::cerr;
 using djnnstl::endl;
 #include <fstream>
+#include <cstring>
 #endif
 
 #include "core/utils/utils-dev.h"
