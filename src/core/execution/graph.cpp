@@ -413,53 +413,6 @@ namespace djnn
     }
 #endif
 
-#if _EXEC_FULL_ORDERED_VERTICES
-    bool is_end = false;
-    while (!is_end) {
-      is_end = true;
-
-      for (auto v : _ordered_vertices) {
-
-        if (!_sorted) {
-          if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
-            _sorted_break++;
-            cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
-          }
-          break;
-        }
-        if (v->is_invalid()) continue;
-        auto* p = v->get_process();
-
-        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
-          count_activation++;
-          begin_process_act = std::chrono::steady_clock::now();
-          if (p->get_activation_flag() != NONE_ACTIVATION) {
-            count_real_activation++;
-          }
-        }
-
-        p->trigger_activation_flag();
-        p->set_activation_flag(NONE_ACTIVATION);
-
-        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
-          end_process_act = std::chrono::steady_clock::now();
-          int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
-          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
-            cerr << "\033[1;36m";
-          if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED)
-            cerr << count_real_activation << " ------ " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << endl;
-          cerr << "\033[0m";
-        }
-      }
-
-      if (!_sorted) {
-        sort ();
-        is_end = false;
-      }
-    }
-
-#else // between OLD and NEW execution
-
     _sorted = false;
     bool is_end = false;
 
@@ -570,7 +523,6 @@ namespace djnn
           is_end = false;
         }
     }
-#endif
     
     // execute scheduled deletion of processes
     #ifndef DJNN_NO_DEBUG
