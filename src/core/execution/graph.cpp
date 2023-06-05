@@ -26,6 +26,7 @@
 using djnnstl::cout;
 using djnnstl::cerr;
 using djnnstl::endl;
+#include <fstream>
 #endif
 
 #include "core/utils/utils-dev.h"
@@ -292,6 +293,14 @@ namespace djnn
     }
   }
 
+#ifndef DJNN_NO_DEBUG
+  static string print_process_fileno (CoreProcess *p);
+  static string print_process_full_name (CoreProcess *p);
+  static string print_process_debug_info (CoreProcess *p);
+  static string extract_filename (string s);
+  static string extract_code_from_file (string filepath, int lineno);
+#endif
+
   void 
   Graph::add_in_activation (Vertex *v)
   {
@@ -340,12 +349,7 @@ namespace djnn
 #ifndef DJNN_NO_DEBUG
   void 
   display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v);
-
-  static string 
-  print_process_full_name (CoreProcess *p);
 #endif
-
-
 
   // TODO: explain what EXECUTION_ROUND is
   static int EXECUTION_ROUND = 0;
@@ -353,11 +357,17 @@ namespace djnn
   void
   Graph::exec ()
   {
+#ifndef DJNN_NO_DEBUG
+    bool display_sequence_on_target_location = false;
+    if ( _DEBUG_SEE_ACTIVATION_SEQUENCE && strcmp (_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION, "") == 0)
+      display_sequence_on_target_location = true;
+#endif
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
     // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
 #ifndef DJNN_NO_DEBUG
-      if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+      // if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+      if (display_sequence_on_target_location)
         cerr << endl << endl << " -------- ACTIVATION TRIGGERS QUEUE ------ " << endl;
 #endif
 
@@ -371,7 +381,8 @@ namespace djnn
           if (p->vertex ())
             _activation_triggers_to_sort.push_back (p->vertex ());
 #ifndef DJNN_NO_DEBUG
-          if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+          // if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
+          if (display_sequence_on_target_location)
             cerr << "Scheduled ------ " << print_process_full_name(p) << " \t\t--  v: " << p->vertex () << endl;
 #endif
         }
@@ -384,9 +395,13 @@ namespace djnn
         cerr << " ----------------------------------------- " << endl;
         int i = 0;
         for (auto v : _activation_triggers_to_sort){
-          cerr << i++ << " - triggers ------ " << print_process_full_name(v->get_process ()) << endl;
+          if ( strcmp (_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION, print_process_fileno (v->get_process ()).c_str ()) == 0)
+            display_sequence_on_target_location = true;
+          if (display_sequence_on_target_location)
+            cerr << i++ << " - triggers ------ " << print_process_full_name(v->get_process ()) << "\t\t" << print_process_debug_info (v->get_process ()) << endl;
         }
-        cerr << " ----------------------------------------- " << endl;
+        if (display_sequence_on_target_location)
+          cerr << " ----------------------------------------- " << endl;
       }
 #endif
     }
@@ -429,7 +444,7 @@ namespace djnn
       
         if (!_sorted) {
 #ifndef DJNN_NO_DEBUG
-          if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+          if (_DEBUG_SEE_ACTIVATION_SEQUENCE && display_sequence_on_target_location) {
             _sorted_break++;
             cerr << "\033[1;33m" << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
           }
@@ -494,7 +509,7 @@ namespace djnn
         p->set_activation_flag (NONE_ACTIVATION);
 
 #ifndef DJNN_NO_DEBUG
-        if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE && display_sequence_on_target_location) {
           end_process_act = std::chrono::steady_clock::now();
           int _process_time = std::chrono::duration_cast<std::chrono::microseconds>(end_process_act - begin_process_act).count();
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US)
@@ -502,7 +517,8 @@ namespace djnn
           if (_process_time > _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US || !_DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED) {
             if ( v->get_sorted_index () == -1)
               cerr << "\033[1;35m";
-            cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << " --- " << print_process_full_name(p) << "---- process time act/deact = " << _process_time << "[us]" << endl;
+            if (display_sequence_on_target_location)
+              cerr << count_real_activation << " -- targeted i:" << ++count_targeted << " ---- i: " << v->get_sorted_index() << "---- process time act/deact = " << _process_time << "[us]" << " --- " << print_process_full_name(p) << print_process_debug_info (p) << endl;
           }
           cerr << "\033[0m";
         }
@@ -551,7 +567,7 @@ namespace djnn
     #ifndef DJNN_NO_DEBUG
     end_output = std::chrono::steady_clock::now();
 
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE && display_sequence_on_target_location) {
       std::chrono::steady_clock::time_point end_act = std::chrono::steady_clock::now();
       int time_exec = std::chrono::duration_cast<std::chrono::microseconds>(end_delete - begin_delete).count();
       cerr << "\t_scheduled_deletions time = " << time_exec << "[us]" << endl;
@@ -742,6 +758,31 @@ rmt_EndCPUSample();
     }
   }
 
+  static string
+  extract_filename (string s) {
+    std::string::size_type n;
+    n = s.rfind('/');
+    std::string sub1 = s.substr(n+1);
+    //std::cout << sub1 << '\n';
+    return sub1;
+  }
+
+  static string
+  extract_code_from_file (string filepath, int lineno) {
+    std::ifstream file(filepath); // ouverture du fichier
+    string line;
+    int current_line = 0;
+    while (getline(file, line)) {
+        current_line++;
+        if (current_line == lineno) {
+            line.erase(0, line.find_first_not_of(" \t"));
+            return line;
+        }
+    }
+    // si on n'a pas trouvé la ligne demandée
+    return " line not found in file ! ";
+  }
+
   static string 
   print_process_full_name (CoreProcess *p) {
     string postfix;
@@ -751,7 +792,17 @@ rmt_EndCPUSample();
     }
     return cpp_demangle(typeid(*p).name()) + "- (" + 
     ( p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
-    ( p ? p->get_debug_name () : "") + ")" + postfix;
+    ( p ? p->get_debug_name () : "") + ")" + postfix  ;
+  }
+
+  static string
+  print_process_fileno (CoreProcess *p) {
+    return extract_filename ( p->debug_info ().filepath ) + ":" +  to_string( p->debug_info ().lineno);
+  }
+
+  static string
+  print_process_debug_info (CoreProcess *p) {
+    return " ---- from " + print_process_fileno (p) + " ---- " + extract_code_from_file ( p->debug_info ().filepath,  p->debug_info ().lineno) ;
   }
 
   void
@@ -849,7 +900,7 @@ rmt_EndCPUSample();
     for (auto v : _ordered_vertices) {
       auto * pp = v->get_process ();
       cerr << "index: " << v->get_sorted_index () << " - order_stamp: " << v->get_order_stamp () << " - ";
-      cerr << print_process_full_name (pp) << endl;
+      cerr << print_process_full_name (pp) << print_process_debug_info (pp) <<  endl;
     }
     cerr << " --- END SORTED GRAPH --- " << endl << endl;
   }
@@ -901,7 +952,7 @@ rmt_EndCPUSample();
   display_cycle_analysis_stack (map<Vertex*, int> &vertex_already_activated, int count_activation, Vertex* v) {
 
     cerr << endl << "----- CYCLE ANALYSIS - reversed activation stack ---- " << endl;
-    cerr << "\033[1;36m" << count_activation << " --- " << print_process_full_name (v->get_process ()) << "\033[1;31m" << endl;
+    cerr << "\033[1;36m" << count_activation << " --- index: " << v->get_sorted_index() << " -- " << print_process_full_name (v->get_process ()) << print_process_debug_info (v->get_process ()) << "\033[1;31m" << endl;
     
     pair<Vertex*, int> pair ;
     // while we don't find the beginning of the cycle ... which is the vertex already activated
@@ -909,14 +960,14 @@ rmt_EndCPUSample();
       pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
       if (pair.first) {
         if (pair.first == v) cerr << "\033[1;36m" ;
-        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;
+        cerr << pair.second << " --- index: " << pair.first->get_sorted_index() << " -- " <<  print_process_full_name (pair.first->get_process ()) << print_process_debug_info (pair.first->get_process ()) << endl;
         if (pair.first == v) cerr << "\033[1;31m" ;    
       }
     } while (pair.first && pair.first != v);
     // One last time to know who is the caller the starting cycle
     pair = find_pair_from_value_in_map (vertex_already_activated, --count_activation);
-      if (pair.first) 
-        cerr << pair.second << " --- " << print_process_full_name (pair.first->get_process ()) << endl;
+    if (pair.first) 
+      cerr << pair.second << " --- index: " << pair.first->get_sorted_index() << " -- " << print_process_full_name (pair.first->get_process ()) << endl;
 
     cerr << "--------------------------------------------------- " << endl;
 

@@ -88,6 +88,8 @@ namespace djnn {
     _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL,
     _DEBUG_NO_TOUCH_EVENT
     ;
+  
+  extern const char* _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION;
 }
 
 //extern "C" {
