@@ -294,11 +294,64 @@ namespace djnn
   }
 
 #ifndef DJNN_NO_DEBUG
+  static Vertex* current_v;
+  static map<Vertex*, list<Vertex*>> data_flow_paths_save;
+  static vector<string> data_flow_result;
   static string print_process_fileno (CoreProcess *p);
   static string print_process_full_name (CoreProcess *p);
   static string print_process_debug_info (CoreProcess *p);
   static string extract_filename (string s);
   static string extract_code_from_file (string filepath, int lineno);
+
+  void
+  print_data_flow_paths_save_single (Vertex *v, int index, Vertex *start_v ) {
+      
+      string save = data_flow_result[index] + " --- index: " + to_string (v->get_sorted_index()) + " -- " + print_process_full_name(v->get_process ()) + print_process_debug_info (v->get_process ()) + "\n";
+      auto it = data_flow_paths_save.find (v);
+      if (it != data_flow_paths_save.end() && it->first != start_v /* ou egale au process de départ si boucle - A TESTER */) {
+        int i = 0;
+        for (auto vv : it->second) {
+          if (i != 0){
+            data_flow_result.push_back (save);
+            index++;
+          }
+          data_flow_result[index] = save ;
+          if (start_v == nullptr)
+            print_data_flow_paths_save_single (vv, index, v); // initiliaze the first time
+          else
+            print_data_flow_paths_save_single (vv, index, start_v);
+          i++;
+        }
+      }
+      else
+        data_flow_result[index] = save ;
+  }
+
+  void
+  print_data_flow_paths_save (Vertex *v) {
+
+    data_flow_result.clear ();
+    //create first string
+    data_flow_result.push_back ("");
+
+    std::cerr << std::endl << "data_flow_paths_save: ";
+    print_data_flow_paths_save_single (v, 0, nullptr);
+
+    if (data_flow_result.size () > 1)
+      std::cerr << "!!! Multiples flow detected ";
+    std::cerr << std::endl;
+    int index = 0;
+    for (auto s : data_flow_result)
+      std::cerr << index++ << ":" << std::endl <<  s << std::endl;
+
+    // debug - print full data
+    // std::cerr << std::endl << "FULL data_flow_paths_save: " << std::endl;
+    // for (auto it2 : data_flow_paths_save) {
+    //   std:cerr << "key: " << print_process_full_name(it2.first->get_process ()) << " : " << std::endl;
+    //   for (auto caller : it2.second)
+    //     std::cerr << "\t\t --------- " << print_process_full_name(caller->get_process ()) << std::endl;
+    // }
+  }
 #endif
 
   void 
@@ -322,6 +375,12 @@ namespace djnn
     else {
       _activation_deque.push_front (v);
     }
+
+#ifndef DJNN_NO_DEBUG
+    if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE)
+      (data_flow_paths_save[v]).push_back (current_v);
+#endif
+  
 
 #if _DEBUG_GRAPH_INSERT_TIME
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -441,6 +500,8 @@ namespace djnn
 
 #ifndef DJNN_NO_DEBUG
       map<Vertex*, int> _vertex_already_activated;
+      if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE)
+        data_flow_paths_save.clear ();
 #endif
 
       Vertex* v = nullptr;
@@ -475,6 +536,7 @@ namespace djnn
               cerr << endl << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
               cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
               display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
+              print_data_flow_paths_save (v) ;
               cerr << "\033[0m";
             }
             p->set_activation_flag (NONE_ACTIVATION);
@@ -508,6 +570,11 @@ namespace djnn
             cerr << "\033[0m";
           }
         }
+#endif
+
+#ifndef DJNN_NO_DEBUG
+        if (_DEBUG_GRAPH_CYCLE_DETECT || _AUTHORIZE_CYCLE)
+          current_v = v;
 #endif
 
         p->trigger_activation_flag ();
