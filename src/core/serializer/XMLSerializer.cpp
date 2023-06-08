@@ -66,7 +66,7 @@ namespace djnn
       for (auto module_name : djnn::loadedModules) {
         int l = name.length () + 3;
         if (module_name.compare("core") == 0)
-          cout << " xmlns=\"http://xml.djnn.net/2012/" << module_name << "\"";
+          cout << " xmlns:core=\"http://xml.djnn.net/2012/" << module_name << "\"";
         else {
           cout << endl ;
           while (--l)

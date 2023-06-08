@@ -40,7 +40,7 @@ namespace djnn
 
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("core:component");
+    AbstractSerializer::serializer->start ("core:Component");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
 
     for (auto c : _children)

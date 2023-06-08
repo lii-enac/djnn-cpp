@@ -103,7 +103,7 @@ namespace djnn
   AbstractDoubleProperty::serialize (const djnnstl::string& format) {
     AbstractSerializer::pre_serialize(this, format);
 
-    AbstractSerializer::serializer->start ("core:doubleproperty");
+    AbstractSerializer::serializer->start ("core:DoubleProperty");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("value", get_value ());
     AbstractSerializer::serializer->end ();
