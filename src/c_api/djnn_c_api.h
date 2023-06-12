@@ -384,6 +384,8 @@ FAST_COMP_DECL(SwitchList);
 FAST_COMP_DECL(ProcessCollector);
 FAST_COMP_DECL(NoPickOutline);
 FAST_COMP_DECL(Identity);
+FAST_COMP_DECL(FileDialog);
+
 
 
 //djnn::CoreProcess* djnn_new_

@@ -23,8 +23,7 @@
 
 namespace djnn
 {
-  class FileDialog : public AbstractGShape
-  {
+  class FileDialog : public AbstractGShape {
   private:
     class OpenAction : public Action
     {
