@@ -86,12 +86,12 @@ namespace djnn
   void
   AbstractGObj::impl_clone_properties (CoreProcess *clone, map<const CoreProcess*, CoreProcess*>& origs_clones) const
   {
-    // for (auto & pname: get_properties_name ()) {
-    //   auto * p = const_cast<AbstractGObj*>(this)->AbstractGObj::find_child_impl(pname);
-    //   if (p) {
-    //     origs_clones[p] = clone->find_child_impl(pname);
-    //   }
-    // }
+    for (auto & pname: get_properties_name ()) {
+      auto * p = const_cast<AbstractGObj*>(this)->AbstractGObj::find_child_impl(pname);
+      if (p) {
+        origs_clones[p] = clone->find_child_impl(pname);
+      }
+    }
   }
 
 
