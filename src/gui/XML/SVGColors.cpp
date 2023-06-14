@@ -237,9 +237,12 @@ SVG_Utils::djn__SVGParseColor (unsigned *r, unsigned *g, unsigned *b, const char
        *g = (rgb & 0x00ff00) >> 8;
        *b = (rgb & 0x0000ff);
     } else if (endptr-(v+1)==3) {
-       *r = (rgb & 0xf00) >> 4;
-       *g = (rgb & 0x0f0) >> 0;
-       *b = (rgb & 0x00f) << 4;
+       *r = ((rgb & 0xf00) >> 8);
+       *r = (*r << 4) + *r;
+       *g = (rgb & 0x0f0) >> 4;
+       *g = (*g << 4) + *g;
+       *b = (rgb & 0x00f) >> 0;
+       *b = (*b << 4) + *b;
     } else {
       fprintf (stderr, "invalid color %s\n", v);
       return 0;
@@ -248,7 +251,7 @@ SVG_Utils::djn__SVGParseColor (unsigned *r, unsigned *g, unsigned *b, const char
 
   } else if (strncmp (v, "rgb(", 4) == 0) {
     const char* vv = v+4;
-   *r = *g = *b = 0;
+    *r = *g = *b = 0;
     /* skip white space */
     while (*vv == ' ' ||  *vv == '\t' || *vv == '\n' || *vv == '\r')
       vv++;
