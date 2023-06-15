@@ -109,7 +109,8 @@ namespace djnn
 
     _background_color = new BackgroundColor (this, "background_color");
     _background_color_action = new BackgroundColorAction (this, "background_color_action");
-    _c_background_color = new Coupling (_background_color, ACTIVATION, _background_color_action, ACTIVATION);
+    _c_background_color_toValue = new Coupling (_background_color->find_child("toValue"), ACTIVATION, _background_color_action, ACTIVATION);
+    _c_background_color_toRGB = new Coupling (_background_color->find_child("toRGB"), ACTIVATION, _background_color_action, ACTIVATION);
 
     _background_rect = new BackgroundRect (this, "background_rect");
 
@@ -131,7 +132,8 @@ namespace djnn
     _c_screenshot->disable();
     _c_opacity->disable ();
     _c_background_opacity->disable ();
-    _c_background_color->disable ();
+    _c_background_color_toValue->disable ();
+    _c_background_color_toRGB->disable ();
   }
 
   Window::Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h) :
@@ -146,11 +148,14 @@ namespace djnn
   void
   Window::impl_activate ()
   {
+    _background_color->activate ();
+    _background_rect->activate ();
     _c_damaged_update_drawing_damaged->enable();
     _c_screenshot->enable();
     _c_opacity->enable ();
     _c_background_opacity->enable ();
-    _c_background_color->enable ();
+    _c_background_color_toValue->enable ();
+    _c_background_color_toRGB->enable ();
     _c_min_width->enable ();
     _c_min_height->enable ();
     _win_impl->impl_activate ();
@@ -160,11 +165,14 @@ namespace djnn
   void
   Window::impl_deactivate ()
   {
+    _background_color->deactivate ();
+    _background_rect->deactivate ();
     _c_damaged_update_drawing_damaged->disable();
     _c_screenshot->disable();
     _c_opacity->disable ();
     _c_background_opacity->disable ();
-    _c_background_color->disable ();
+    _c_background_color_toValue->disable ();
+    _c_background_color_toRGB->disable ();
     _c_min_width->disable ();
     _c_min_height->disable ();
     _win_impl->impl_deactivate ();
@@ -192,7 +200,8 @@ namespace djnn
     delete _background_opacity_action;
     delete _background_opacity;
 
-    delete _c_background_color;
+    delete _c_background_color_toValue;
+    delete _c_background_color_toRGB;
     delete _background_color_action;
     delete _background_color;
 

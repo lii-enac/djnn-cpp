@@ -226,7 +226,7 @@ namespace djnn
 
     BackgroundColor* _background_color;
     BackgroundColorAction * _background_color_action;
-    Coupling * _c_background_color;
+    Coupling * _c_background_color_toValue, * _c_background_color_toRGB;
 
     BackgroundRect * _background_rect;
 
