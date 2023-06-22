@@ -30,6 +30,7 @@ djnn_libs_extra :=
 
 # debug, compile is slower with it
 # CFLAGS += -g
+# CFLAGS += -fstandalone-debug -fno-limit-debug-info
 
 # sanitizer
 # CFLAGS += -fsanitize=address
