@@ -225,14 +225,11 @@ namespace djnn
       _c_z_prop = new CouplingWithData (&_z, ACTIVATION, update, ACTIVATION);
     } else {
       /*  "press", "release", "move", "enter", "leave", "touches" */
-      vector<string>::iterator it = __ui_interface.begin ();
-      found = false;
-      while (!found && it != __ui_interface.end ()) {
-        if (key.compare (*it) == 0) {
-          found = true;
+      for (auto & event: __ui_interface) {
+        if (key == event) {
           init_ui ();
+          break;
         }
-        it++;
       }
     }
     return FatProcess::find_child_impl (path);

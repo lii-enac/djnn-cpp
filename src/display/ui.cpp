@@ -23,6 +23,8 @@
 
 namespace djnn
 {
+  djnnstl::vector<djnnstl::string> __ui_interface = { "pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel" };
+
   UI::UI (CoreProcess* parent_, FatProcess *f) : parent (parent_)
   {
     pickable = new BoolProperty (parent, "pickable", true);

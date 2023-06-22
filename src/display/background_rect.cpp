@@ -45,16 +45,13 @@ namespace djnn {
     if (found != string::npos) {
       key = path.substr (0, found);
     }
-      /*  "press", "release", "move", "enter", "leave", "touches" */
-      vector<string>::iterator it = __ui_interface.begin ();
-      found = false;
-      while (!found && it != __ui_interface.end ()) {
-        if (key.compare (*it) == 0) {
-          found = true;
-          _ui = new UI (this, get_frame ());
-        }
-        it++;
+    /*  "press", "release", "move", "enter", "leave", "touches" */
+    for (auto & event: __ui_interface) {
+      if (key == event) {
+        _ui = new UI (this, get_frame ());
+        break;
       }
+    }
     return FatProcess::find_child_impl (path);
   }
 }
