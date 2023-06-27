@@ -428,7 +428,6 @@ namespace djnn
 
 
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution 
-    // notify_activation of event : mouse, touch, etc... which do not have a vertex
     {
 #ifndef DJNN_NO_DEBUG
       // if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
@@ -441,6 +440,13 @@ namespace djnn
       map<CoreProcess*, int> already_done;
       for (auto p : _scheduled_activations) {
         if (already_done.find (p) == already_done.end ()) {
+          /*  note:
+              As a source of activation, nobody will actually active it. 
+              We have to do it here, for each one, so it can propagate 
+              their activations to their linked processes. Then we store 
+              the vertex as the sub-root of the graph that we want 
+              to sort and work on.
+          */
           p->notify_activation ();
           already_done[p];
           if (p->vertex ())
