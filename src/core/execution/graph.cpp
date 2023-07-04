@@ -792,6 +792,18 @@ rmt_EndCPUSample();
 
   // -----------------------------------------------------------------------
 
+
+  /* 
+    Note on cycle detection:
+      One would like to detect cycles during the Depth-First Search (DFS) traversal
+      because the algorithm is rather simple. However, the DFS traverses a larger graph
+      than the one that will actually be executed, resulting in the presence of 
+      multiple paths that, in reality, cannot be executed simultaneously 
+      (for example, a path resulting from the value of a boolean). 
+      The boolean cannot have both "true" and "false" values within a single execution loop,
+      yet both paths will be present during the graph traversal because there can 
+      be a subscription to both true and false values.
+  */
   void
   Graph::traverse_depth_first (Vertex *v)
   {
