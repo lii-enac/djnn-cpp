@@ -138,7 +138,8 @@ public:
                    bool copy_on_activation=true)
     : Connector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
     {}
-
+  CoreProcess* get_src () { return _assignment.get_src(); }
+  CoreProcess* get_dst () { return _assignment.get_dst(); }
   protected:
     void impl_activate   () override { if (_copy_on_activation) _assignment.perform_action ()/* better - instead of calling activate*/; _binding.activate ();}
     void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
