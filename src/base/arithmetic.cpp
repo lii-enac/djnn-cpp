@@ -77,6 +77,7 @@ namespace djnn
       _is_model (isModel)
   {
     init_incr (0);
+    graph_add_edge (&_step, &_state);
     finalize_construction (parent, name);
   }
 
@@ -85,6 +86,7 @@ namespace djnn
     if (get_parent ()) {
       remove_state_dependency (get_parent (), &_state);
     }
+    graph_remove_edge (&_step, &_state);
     graph_remove_edge (this, &_state);
   }
 
