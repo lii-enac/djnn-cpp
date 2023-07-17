@@ -158,9 +158,9 @@ namespace djnn
       _c_trigger_to_action.disable ();
       graph_add_edge (_action, &_transition_action);
     }
+
     graph_add_edge (&_transition_action, parent->find_child ("state"));
-    graph_add_edge (&_transition_action, from);
-    graph_add_edge (&_transition_action, to);
+    
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -184,9 +184,10 @@ namespace djnn
       _c_trigger_to_action.disable ();
       graph_add_edge (action, &_transition_action);
     }
-    graph_add_edge (&_transition_action, parent->find_child ("state"));
+
     graph_add_edge (&_transition_action, from);
     graph_add_edge (&_transition_action, to);
+
     finalize_construction (parent, name);
     FSM *fsm = djnn_dynamic_cast<FSM*> (parent);
     fsm->FSM::add_transition(this);
@@ -198,8 +199,6 @@ namespace djnn
     if (_c_trigger_to_action.is_effective()) {
       graph_remove_edge (_c_trigger_to_action.get_dst(), &_transition_action);
     }
-    graph_remove_edge (&_transition_action, _from_state);
-    graph_remove_edge (&_transition_action, _to_state);
   }
 
   void
@@ -226,8 +225,8 @@ namespace djnn
     _src->disable_transitions (_t);
     notify_activation ();
     if (_src != _dst) {
-      _src->set_activation_flag (DEACTIVATION);
-      _dst->set_activation_flag (ACTIVATION);
+      _src->deactivate ();
+      _dst->activate ();
     }
     ((FSM*)_t->get_parent())->set_triggered (1);
   }
@@ -399,7 +398,7 @@ namespace djnn
 #ifndef DJNN_NO_SERIALIZE
   void
   FSM::serialize (const string& type) {
-   
+
     AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:fsm");
