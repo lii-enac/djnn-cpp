@@ -511,6 +511,13 @@ namespace djnn
         data_flow_paths_save.clear ();
 #endif
 
+      //use only of _DEBUG_GRAPH_CYCLE_DETECT
+      // note: These two variables are merely a safeguard against the
+      // detection of false cycles caused by an erroneous topological sort. 
+      // The MAX is merely a palliative value and is not a solution in itself.
+      int local_cycle_counter = 0;
+      int MAX_cycle_accepted = 2;
+
       Vertex* v = nullptr;
       while (!_activation_deque.empty ()) {
         v = _activation_deque.front ();
@@ -539,12 +546,15 @@ namespace djnn
           auto it = _vertex_already_activated.find(v);
           if (it != _vertex_already_activated.end()) {
             if (_DEBUG_GRAPH_CYCLE_DETECT && _activation_triggers_to_sort.size () != 0) {  // if _activation_triggers_to_sort is empty we are in initialisation phase
-              cerr << "\033[1;31m";
-              cerr << endl << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
-              cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
-              display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
-              print_data_flow_paths_save (v) ;
-              cerr << "\033[0m";
+              local_cycle_counter++;
+              if (local_cycle_counter >= MAX_cycle_accepted) {
+                cerr << "\033[1;31m";
+                cerr << endl << "djnn Warning - \tWe detected a cycle in GRAPH Execution" << endl;
+                cerr << "\t\t" << print_process_full_name(v->get_process()) << " has already been activated in this execution.\n";
+                display_cycle_analysis_stack(_vertex_already_activated, count_activation, v);
+                print_data_flow_paths_save (v) ;
+                cerr << "\033[0m";
+              }
             }
             p->set_activation_flag (NONE_ACTIVATION);
             continue;
