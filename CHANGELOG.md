@@ -1,26 +1,103 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-
 ## [Unreleased]
+
 ### Added
+
     - Update the Docs !
     - test on Native Windows 10 compilation
 
+## [1.20.0] - 2023-10-10
 
-## [1.19.0] - 2023-01-26 
 ### NEW
+
+    - NEW : phidgets features on LINUX only
+    - NEW : FileDialog widget
+    - NEW debug option : _DEBUG_SEE_COMPONENTS_DESTRUCTION_TREE to track warning on component destruction
+    - NEW debug option : _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL = 0|1|2 to have several levels of information
+    - NEW debug option : _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = file.sma:lineno
+    - NEW debug option : _DEBUG_NO_TOUCH_EVENT to enable touch events (they are disable by default due to issues with Qt and apple trackpad)
+    - NEW script: make_bundle for MacOs
+
+
+### Added
+
+    - Added identity transformation
+    - Added (de)activate functions on process.
+    - Added a wrap algorithm for multiline edit component.
+    - Added djnn_mainloop_instance
+    - Added skeleton for xml loader visitor
+    - Added accessors to src and dst in Connector
+
+### Changed
+
+    - Execution graph : 
+        - big clean-up of the code
+        - use now local root 
+        - better infos on cycles detection 
+        - added important comment in code
+    - Containers now use a not altered children vector in case of movechild has been use
+    - Process_handler : add a size field in ProcessCollector.
+    - window : new work on window transparency background for each plateform
+    - layer : x, y, w, h and pad are now int
+    - dump function, now dump children in order
+    - main_loop: join threads when exiting
+    - Improved cycle analysis display
+    - Improved debug infos.
+    - Cleaned Code , format and reorganizing header
+    - Improved support for mold.
+    - Improved compilation time.
+    - Improved string management
+    - Reformat Changlog
+    - ubuntu 22.04 is now the main reference for package name
+    - improved script : gen_prop.py
+
+### Deprecated
+
+    - Process : schedule_delete --> schedule_deletion
+    - All components : state_dependency() -> get_state_dependency()
+    - All components : Parent/FatChildProcess -> CoreProcess
+
+### Removed
+
+    - Removed cycle_analysis for djnn execution initialization phase
+    - Removed old execution loop from code
+
+### Fixed
+
+    - Fixed layer position when cropped
+    - Fixed issues on remove_state_dependancy
+    - Fixed Multi-Connector/assignment
+    - Fixed clock : period is > 0
+    - Fixed the option DJNN_NO_DEBUG compile again
+    - Fixed clone function for all component using properties
+    - Fixed Bison warnings
+    - Fixed mouse wheel event api
+    - Fixed ambigous string use
+    - Fixed color computation with 3 bytes
+    - Fixed frame/background_color change
+
+## [1.19.0] - 2023-01-26
+
+### NEW
+
     - NEW z_order management for graphical shapes.
     - NEW Wheel has now a position x, y
     - NEW support for Mold
+
 ### Added
+
     - Added is_model (=false) for component and container to start inactived
     - Added missing clone function on Component: Text, Deref, timer, binding, assignmentSequence, assignment 
     - Added a new constructor for dashArray 
     - Added deb_git target in Makefile for daily deb packaging
+
 ### Changed
+
     - make sure that src of coupling is nullptr when about_to_detete_src
     - Abstract LayerCache
     - Fixed several memory leaks on several component
@@ -36,24 +113,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - improved component: multiline_edit
     - Improved Makefile
     - Improved Code and typo.
+
 ### Deprecated
+
     - deprecated LoadFromXML and add new load_from_XML (which load then clone) and load_from_XML_once (only load once)
 
 ## [1.18.0] - 2022-06-09
+
 ### NEW
+
     - NEW LazyConnector component : if the value did change -> don't raise any event.
     - NEW LazyAssignment component : if the value did change -> don't raise any event.
     - NEW enum type for font weight : DJN_LIGHT, DJN_NORMAL, DJN_DEMI_BOLD, DJN_BOLD, DJN_BLACK
     - NEW add getset macros : GET_CHILD, GET_CHILD_VALUE, SET_CHILD_VALUE (see: src/core/utils/getset.h)
     - NEW a generic keyboard component
     - NEW Makefile: add ninja support
+
 ### Added
+
     - Added new experimental mode - _AUTHORIZE_CYCLE
     - Added support to image raw data.
     - Added Qtablet events management
     - Added remotery sampling in text drawing
     - Added a Clear spike on MultilineEdit componant
+
 ### Changed
+
     - Makefile: reorganize pch
     - Compute bbox of graphical shapes only if a value changed
     - Layers auto re-display when their children changed
@@ -65,7 +150,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Remade wheel events computation and added to graphical shapes
     - Improved debug messages.
     - Cleaned Code, comments
+
 ### Fixed
+
     - Fixe a bug on find_chil_impl for djnn::List getting parent eg: ../foobar
     - Fixed clean_up_content on djnn::List
     - Fixed fill color alpha management
@@ -73,7 +160,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed bug with empty image
 
 ## [1.17.0] - 2022-01-05  
+
 ### NEW
+
     - NEW IMPORTANT : 
         - new GUIStructureHolder management system (change renderer strategy)
         - new sort management on execution graph : to favor local micro sort, no sort after removing edges 
@@ -95,14 +184,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
         - Added Padding
     - NEW on system :
         - Made Ivy optionnal to facilitate first-time compiling experience   
+
 ### Added
+
     - Added find_optional_child with no "not found" msg
     - Added is_model as an optional argument for Timer
     - Added min_width and min_height properties for Window
     - Added ascent/descent properties to gui text
     - Added support to QOpenGLWidget
     - Improved code coverage.
+
 ### Changed
+
     - Reordered GUI event to improved performence.
     - Removed possible multiple parenthood in list
     - Improved performence on qt_picking_view
@@ -119,16 +212,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved MSYS2/mingw64 compatibility, dependency and instructions
     - Improved Install.md
     - Cleaned Code, comments
+
 ### Fixed
+
     - Fixed execution cycle on screenshot componant
     - Fixed NativeAsyncAction destructor
     - Fixed update layer in picking view
     - Fixed Leaks 
 
 ## [1.16.0] - 2021-07-28
-### NOTE:
+
+### NOTE
+
     - djnn is still using Qt5. Not compatible with Qt6 yet.
+
 ### NEW
+
     - New Component: 
         - VoidProcess
         - SimpleTextEdit, SimpleText
@@ -152,7 +251,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - New compatibility with C++17
     - New optimise version of assignment 'perform_action' function
     - New eastl support (optionnal)
+
 ### Added
+
     - Incr Component : add a 'step' child
     - Added setfd option on iofd
     - Added background color and opacity on window/frame : background_opacity and background_color
@@ -162,6 +263,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added a function to check the order between Processes : graph_check_order
 
 ### Changed
+
     - Improved code and conception of Assignment.
     - Changed on add/remove edge : 
         - Now coupling manages the edge addition/removal in graph 
@@ -176,11 +278,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved code on DataImage
 
 ### Removed
+
     - Removed event synthesis on press, release and wheel but keep it for move, close or paint
     - Disabled the possibility to have multiple activation for a process through the activator
     - Removed explicite path to moc in Makefile to be sur to use the correct one (qt5 vs qt6)
     - Removed all using namespace 'std' to prepare for 'stl' implementation swap
+
 ### Fixed
+
     - Fixed FSM : 
         - semantics
         - possible concurrency issue between transitions
@@ -201,19 +306,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed typo and comments
 
 ## [1.15.0] - 2021-01-28
-   
+
 ### NEW
+
     - Lots of works to reduce compilation time : clean headers, precompiled headers, dependencies.
         BECAREFUL: developer has to be more precise on includes declaration
     - Added script to check sources and headers
 
 ### Added
+
     - Added init_xxx and clear_xxx module missing.
     - Added SYNCHRONIZER_T type
     - Added dependence to libgbm (kmsdrm driver) on linux x86
     - Added a missing graph edge in list operators 
 
 ### Changed
+
     - Fixed leaks on display module.
     - Removed move event on press event.
     - Improved dump of : set component.
@@ -228,9 +336,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Modularize socket from multi-platform
 
 ### Removed
+
     - Removed prototype of c api.
 
 ### Fixed
+
     - Fixed bug on merging gradient from svg.
     - Fixed event on liux_mouse
     - Fixed SVG parser leaks
@@ -239,10 +349,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed text geometry/size calculation
     - Fixed a bug in Container::move_child - AFTER
 
-
 ## [1.14.0] - 2020-11-23
 
 ### NEW
+
     - package for windows (and Linux) are avaluable on : https://github.com/lii-enac/djnn-cpp/releases
     - NEW support for layers on GUI backend
     - NEW component WallClock giving time (state) in ms from 01/01/1970 or string (state_text) %Y-%m-%d_%Hh%Mm%Ss format 
@@ -253,6 +363,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW Componant process_exporter to export part of an application
 
 ### Added
+
     - Added refreshed (blank spike) to windwo/frame
     - Added better handling of audio properties : loop, gain, position, pitch to sound and real-time control of parameters
     - Audio : prepare for mp3 and flac
@@ -263,6 +374,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added transform method to all transformations
 
 ### Changed
+
     - STD thread are now the standart for all the plateforms
     - Improved physics module 
     - Refreshed informations on INSTALL.md 
@@ -270,6 +382,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Clean-up code using tidy
 
 ### Fixed
+
     - Fixed data-race using sanatizer -thread option.
     - Fixed several leaks using sanatizer -leaks -address options
     - Fixed process state_dependency function on cleanings
@@ -280,16 +393,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed comms compilation on windows
     - Fixed clear_exec_env
 
-
 ## [1.13.0] - 2020-10-07
 
 ### NEW
+
     - NEW multiple-assignment component
     - NEW multiple-connector 
     - NEW easing function animation component
     - NEW - Qt Only - screenshoot service on Frame/window component
 
 ### Added
+
     - Added left/right/middle buttons in shape’s UI
     - Added debuginfo to in-svg processes
     - Added few methods to process handler
@@ -299,6 +413,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - exec_env - added missing copyright header
 
 ### Changed
+
     - make thread = STD standart option for Linux
     - simplified native_async_action code
     - Improved INSTALL.md instructions
@@ -312,10 +427,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Clean-up useless code 
 
 ### Removed
+
     - Removed the output_node using clear_display
     - Removed useless serialiaze for action 
 
 ### Fixed
+
     - Fixed signedness warnings
     - Fixed thread_local_cancelled for windows
     - Fixed support for Qt 5.12 on Ubuntu 20.04
@@ -339,10 +456,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed SDL Keycode
     - Fixed Makefile not quitting on some compilation
 
-
 ## [1.12.0] - 2020-06-25
 
 ### NEW
+
     - Main NEWS: General improvement of all the code by separation of Process's code into 3 kind of processes.
      A lot of change has been made for this and really detailed explanation will be useless. 
      We'll just point API change if necessary. For now, Process is used as CoreProcess.
@@ -352,8 +469,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW NativeAsyncAction component: Natives Action asynchronous
     - NEW process handler : new components designed to ease process management : ProcessDeleter , CollectionDeleter, CollectionActivator, ProcessCollector
 
-
 ### Added
+
     - Added in debug.h several options to displau debug informations  :
         - _DEBUG_SEE_COLOR_PICKING_VIEW: to view picking view debug
         - _DEBUG_SEE_GUI_INFO_PREF: to view time informations on display
@@ -365,35 +482,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added missing edges into fsm code.
     - Added press and move methods on Graphical object
 
-
 ### Changed
+
     - Picking now call press and move methods on graphical objects.
     - Spike, action, incr, assignment, properties, assignmentsequence, list, set components now use post_activation_auto_deactivation
     - Improved code optimisaton
 
 ### Removed
+
     - Removed useless function redefinition.
 
 ### Fixed
+
     - Fixed the activation coupling if the coupling is created in find_child method
     - Fixed coverage test
     - Fixed compilation on window : mingw64
     - Fixed ref_property get_double () function
 
-
 ## [1.11.0] - 2020-05-07
 
 ### NEW
+
     - NEW deref double component
     - NEW image_data component to prepare graph visualization 
     - NEW simple_connector component
 
 ### Added
+
     - Added c++ operators for abstract properties
     - Added a bool property : pickable for graphical shaps management
     - Added notify_activation () to all process that deactivate by themselves
 
 ### Changed
+
     - now update text size before rendering, not on creation
     - Improved run_stats utility
     - Imporoved error and warning messages
@@ -403,13 +524,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved code
 
 ### Fixed
+
     - Fixed simple_binding and simple assignment component
     - Fixed compilation issues
-
 
 ## [1.10.0] - 2020-04-03
 
 ### NEW
+
     - Created extra module : phidgets, crazyflie
     - New module crazyflie
     - New Deref component in Base module: dereferencement use in binding, connector, assignment
@@ -421,6 +543,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - New Simple_assignement Component
 
 ### Added
+
     - Makefile: control verbosity with level: V= 0, 1, 2, 3, max
     - Makefile: support for pkg-config
     - Makefile: "make install" rules and "make install prefix="
@@ -433,6 +556,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added Cairo matrix, inverted_matrix for graphical shapes
 
 ### Changed
+
     - Changed find_component -> find_child
     - Changed get_cpnt_type -> get_process_type
     - Changed COMPONENT_T -> CONTAINER_T
@@ -445,21 +569,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Changed INSTALL.md
 
 ### Fixed
+
     - Fixed timer scheduling warning
     - Fixed clock cancel warning
     - Fixed radial gradient for Cairo
     - Fixed exit on error macro
 
-
 ## [1.9.0] - 2020-03-13
+
     note: debut on changelog. This section has to be completed, if we have time. 
 
 ### NEW
+
     - NEW backend: kms_drm
     - NEW FileWriter Component
     - SVG opacity is now a property that can be changed
 
 ### Added
+
     - Added new sort algorithms: merge_sort, stable_quick_sort
     - Added few operators over lists: Sum, Product, Max, Min
     - Added 'mspf' child to windows component: millisecond per frame informations
@@ -474,6 +601,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Notify frame closed
 
 ### Changed
+
     - Remaded Timemanager
     - Updated gen_prop.py to current status
     - Improved multi_plateform compilation
@@ -484,19 +612,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - IvyAccess: execute GRAPH_EXEC on each message
 
 ### Removed
+
     - Removed Antialiasing on color_picking
     - Removed reference to macport in compilation (macOs)
 
 ### Fixed
+
     - Fixed Timemanager bugs: cancel, reset, precision
     - Fixed thread races: thread join, MouseButttonDblClick
     - Fixed audio headers
     - Fixed bug on font family
     - Fixed a bug on gradient transform parsing
 
-
 ## [1.8.0] - 2020-01-31
+
 ### NEW
+
     - NEW sorter component
     - NEW audio Module (possibility to play wave sound)
     - NEW support for incorporated images in svg files
@@ -505,6 +636,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW clamp_min and clamp_max component
 
 ### Added
+
     - Added implementation of a timemanager (internal component)
     - Added the use of sanitizer=(Address, memory) option in Makefile
     - Added the use of scan-build (llvm) option in Makefile
@@ -518,6 +650,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added Picking method choice in Makefile
 
 ### Changed
+
     - Changed gradient default values to fit with SVG spec
     - Removed all default constructors and especially process ()
     - Changed some constant names to be usable from Smala
@@ -527,10 +660,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - clean-up includes 
 
 ### Removed
+
     - Get rid of gperf
     - Removed _name in proc, and make parenting code consistent in constructors
 
 ### Fixed
+
     - Fixed container method move_child() - child are now correctly moved.
     - Fixed IvyAccess - preventing overflow error
     - Fixed return value for TextComparator
@@ -546,22 +681,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed typos
     - Fixed compilation
 
-
 ## [1.7.2] - 2019-11-28 [YANKED]
+
 ### Fixed
+
     - Fixed thread for Qt < 5.10
 
 ## [1.7.1] - 2019-11-21 [YANKED]
+
 ### Changed
+
     - Added instructons for Ivy in INSTALL.md
 
 ### Fixed
+
     - Remove potential null pointer access
     - Fixed a bug in children reordering
 
-
 ## [1.7.0] - 2019-11-18
+
 ### NEW
+
     - NEW text field component
     - NEW implement schedule_activation processes and use it in picking, mouse and touch events
     - NEW implement schedule_delete processes
@@ -571,6 +711,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW support for FreeRTOS (just start) : add static lib
 
 ### Added
+
     - Added graphics option in config.mk
     - Added CAIRO text input
     - Added tools : size.cpp for size measuring of component
@@ -578,6 +719,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added getter/stter on FatProcess component
 
 ### Changed
+
     - Important code refactoring in base and core module
     - Imporved Mainloop and thread management
         - timer and clock leave their thread if they are dead
@@ -591,9 +733,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Cleaned code
 
 ### Removed
+
     - Removed use of std::onceFlag and change all unique instances to plain objects
 
 ### Fixed
+
     - Fixed the use of refproperty/$value in assignment, binding and connector
     - Fixed IvyAccess thread
     - Fixed and removes unnecessary string copy
@@ -603,9 +747,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed move include in .cpp file
     - Fixed typo
 
-
 ## [1.6.0] - 2019-09-17
+
 ### NEW
+
     - New physics module (optional)
     - New Phidgets module (optional)
     - New utils module
@@ -619,6 +764,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - FatProcess can only have 1 execution graph vertex associate and vice versa
 
 ### Added
+
     - Added internal enum process_type_e
     - Added Action class
     - Added functions in properties : set*, get*
@@ -629,6 +775,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added dump function for set component
 
 ### Changed
+
     - Improved execution graph and model for performances : can't reactivate a component already activate, except components made for it.
     - Improved Management of edges duplicates in execution graph.
     - Improved parent setting : made only once in finalize_construction () or in add_child ().
@@ -656,6 +803,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Improved Install.md
 
 ### Fixed
+
     - Fixed picking deactivation
     - Fixed Rectangle can now be draw with width/heigh < than 1
     - Fixed several component's destructor
@@ -666,18 +814,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed Windows compilation
     - Fixed Cairo compilation
 
-
 ## [1.5.0] - 2019-06-04
+
 ### NEW
+
     - New module : display
     - New Synchronizer component to synchronise different source of interaction : eg: to react once x and y of the mouse changed.
 
 ### Added
+
     - Added accumulated transform props to Homography
     - Added get_string method on properties
     - Added a new constructor for counter component
 
 ### Changed
+
     - Assignments and connectors can now have dynamic source and destination : automatically reassigned
     - redefine execution graph : connectors, bindings, unary operators are directly executed => use synchronizer to create a point of synchronisation
     - Frame/window component is now owned by display module and not gui anymore : use initDisplay () and #include "display/display.h
@@ -689,9 +840,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Cleaned Code
 
 ### Removed
+
     - Removed Frame/Window component from gui module
 
 ### Fixed
+
     - Fixed some component destructors : homography
     - Fixed thread mutex lock in some case : conflic between diplay and gui module, launch and stop
     - Fixed bug bon picking and enter/leave mechanism
@@ -701,9 +854,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Fixed clock and timer mechanism with new graph execution
     - Fixed Locale for non GUI app.
 
-
 ## [1.4.0] - 2019-04-05
+
 ### NEW
+
     - Added New Display API: move frame/window into display. should use init_display ()
     - Added Dictionary class Component : see smala->cookbook->multi-touch as exemple.
     - Added generic mouse Class for Qt/SDL backend :
@@ -716,6 +870,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added support for custom cursor/pointer
 
 ### Added
+
     - Can now use relative path for XML or Image loading (or absolute URI)
         eg : XML::djnLoadFromXML (path/to/file) or XML::djnLoadFromXML (file://absolute/path/to/file)
     - Added touch support for SDL
@@ -724,19 +879,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Enable immediate processing in couplings - low level API
 
 ### Changed
+
     - "Touches" is now a list instead of a set 
     - Improved Color_picking
     - Improved Qt image loading
     - Improved Install.md for ivy on windows (not finished)
 
 ### Fixed
+
     - Fixed a bug on thread running < Qt-5.10
     - Fixed HDPI for 
     - Fixed Linux Compilation
 
-
 ## [1.3.0] - 2019-03-15
+
 ### NEW
+
     - NEW component - BASE - Finder - raise "found"/"not found" if the property of a component (path) is equal to "something"
     - NEW machanism for find_child: '//' to start research from ROOT. 
         eg: find_child ("//foo")  from ROOT give me 'foo' component.
@@ -746,6 +904,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
         eg: in config.mk change line : "graphics := QT" -> "graphics := CAIRO"
 
 ### Added
+
     - Added warning on image loading if file is not found
     - Added watcher on image path. You can now bind to path to modify
     - Added tools to generate backend's code more easily : tools/gen_prop.py
@@ -753,6 +912,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Added pick() function to FatProcess.
 
 ### Changed
+
     - Improved the execution graph performance : sort, browse_in_depth and remove_properties, _timestamp
     - Changed mechanism to access picking_view directly from. 
     - Improved Thread mechanism.
@@ -765,61 +925,73 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Cleaned up code
 
 ### Fixed
+
     - Fixed Windows (10/8) compilation.
     - Fixed delete on all backend objects.
     - Fixed Memory leaks: Touch, Path, abstract_gshape, set, Text
 
 ### Deprecated
+
     - Renamed draw_rect -> draw_rectagnle function
     - Reanmed dran_rect_clip -> draw_rectangleclip function
 
 ### Removed
+
     - Remove useless draw in FSM.
 
-
 ## [1.2.1] - 2019-02-25 [YANKED]
+
 ### Fixed
+
     - Fixed move_child_to and add_child_at in djnn core and gui
 
-
 ## [1.2.0] - 2019-02-15
+
 ### Added
+
     - Cleaned code - especially delete and destructeur.
     - Improved Makefile and compilation on Linux.
     - Switches can now have unknown branches, use such as default branch and deactivate the current branch if running.
     - Improved PERF_TEST in gui.cpp.
 
 ### Fixed
+
     - Improved delete: GUI text, GUI window, FSM
     - Fixed Mainloop thread creation for Windows.
     - Fixed side effect in Switch destructor.
     - Fixed Container destructor, now, delete children items from structure observers 
 
 ### Changed
+
     - GUI/cache - x, y, dx, dy ... now notify damaged transform.
     - Renamed cpp-time into cpp-chrono.
 
-
 ## [1.1.2] - 2019-02-06 [YANKED]
+
 ### Added
+
     - CHANGELOG.md
 
 ### Fixed
+
     - Fixed gradient loaded from SVG file
 
-
 ## [1.1.1] - 2019-02-04 [YANKED]
+
 ### Fixed
+
     - API - AbstractOpacity API, replaced bad name "alpha" by "a".
     - Activated frame/windows touches.
 
-
 ## [1.1.0] - 2019-02-01
+
 ### NEW
+
     - NEW anti-binding mechanism
     - NEW basic support for Linux display
 
 ### Added
+
     - Makefile : add rule make install-pkgdeps for all platform (MacOS, Linux, Windows).
     - Compilation on Windows (8/10) is working.
     - Properties are now dynamically generated for GUI (shape/transform/style) component.
@@ -834,6 +1006,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Cleaned code and Makefile.
 
 ### Changed
+
     - Renamed DEBUG variable for picking.
     - Changed default style attribute values to comply with SVG spec.
     - Activate matrix on gui component only when necessary.
@@ -843,17 +1016,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - API - to use time : 1000ms -> 1. 
 
 ### Fixed
+
     - Memory leak and performances on execution graph.
     - Makefile for Linux.
 
 ## [1.0.0] - 2018-12-17
+
     note: debut on changelog. This section has to be completed, if we have time. 
 
 ### NEW
+
 ### Added
+
 ### Changed
+
 ### Deprecated
+
 ### Removed
+
 ### Fixed
-
-
