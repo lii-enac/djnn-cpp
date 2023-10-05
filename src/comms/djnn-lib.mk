@@ -3,6 +3,7 @@ local_dir := $(src_dir)/comms
 lib_srcs += $(local_dir)/comms.cpp $(local_dir)/remote_proc.cpp $(local_dir)/proc_exporter.cpp $(local_dir)/socket.cpp
 ifeq ($(use_ivy),yes)
 lib_srcs += $(local_dir)/IvyAccess.cpp
+lib_cppflags += -Wno-invalid-utf8
 endif
 #lib_pkg += rtmidi
 
