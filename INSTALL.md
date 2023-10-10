@@ -32,11 +32,11 @@ make install-pkgdeps
 make -j  
 ```
 ---- WINDOWS -----  
-install MSYS2 (from https://www.msys2.org/, follow installation steps **1 to 6** ONLY )  
-then in an MSYS2-MSYS terminal:
+install MSYS2 (from https://www.msys2.org/, follow installation steps )  
+then in an MSYS2-MinGW64/32 terminal:
 ```
 pacman -Syu
-pacman -S --needed git make pkg-config
+pacman -S --needed git make
 ```
 launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then install pacmac (ArchLinux) package .tar.zst from https://github.com/lii-enac/djnn-cpp/releases :
 ```
