@@ -23,7 +23,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - NEW debug option : _DEBUG_NO_TOUCH_EVENT to enable touch events (they are disable by default due to issues with Qt and apple trackpad)
     - NEW script: make_bundle for MacOs
 
-
 ### Added
 
     - Added identity transformation
@@ -64,22 +63,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Removed
 
-    - Removed cycle_analysis for djnn execution initialization phase
-    - Removed old execution loop from code
+    - Removed cycle_analysis for djnn execution initialization phase.
+    - Removed old execution loop from the code.
 
 ### Fixed
 
-    - Fixed layer position when cropped
-    - Fixed issues on remove_state_dependancy
-    - Fixed Multi-Connector/assignment
-    - Fixed clock : period is > 0
-    - Fixed the option DJNN_NO_DEBUG compile again
-    - Fixed clone function for all component using properties
-    - Fixed Bison warnings
-    - Fixed mouse wheel event api
-    - Fixed ambigous string use
-    - Fixed color computation with 3 bytes
-    - Fixed frame/background_color change
+    - Fixed layer position when cropped.
+    - Fixed issues with remove_state_dependency.
+    - Fixed Multi-Connector/assignment.
+    - Fixed clock: period is now > 0.
+    - Fixed the option DJNN_NO_DEBUG to compile again.
+    - Fixed clone function for all components using properties.
+    - Fixed Bison warnings.
+    - Fixed mouse wheel event API.
+    - Fixed ambiguous string use.
+    - Fixed color computation with 3 bytes.
+    - Fixed frame/background_color change.
 
 ## [1.19.0] - 2023-01-26
 
