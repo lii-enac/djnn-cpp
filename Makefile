@@ -875,7 +875,7 @@ else
 endif
 
 
-all_headers = $(call rwildcard,src/,*.h)
+all_headers = $(call rwildcard,src/,*.h) $(call rwildcard,src/,*.hpp)
 all_headers_no_src = $(patsubst src/%,%,$(all_headers))
 
 all_libs_no_build_dir = $(patsubst $(build_dir)/lib/%,%,$(libs))
@@ -885,6 +885,10 @@ install_headers: $(addprefix $(djnn_install_prefix)/include/djnn-cpp/,$(all_head
 install_libs: $(addprefix $(djnn_install_prefix)/lib/,$(all_libs_no_build_dir))
 
 $(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
+	@mkdir -p $(dir $@)
+	install -m 644 $< $@
+
+$(djnn_install_prefix)/include/djnn-cpp/%.hpp: src/%.hpp
 	@mkdir -p $(dir $@)
 	install -m 644 $< $@
 
