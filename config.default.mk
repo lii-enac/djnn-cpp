@@ -48,8 +48,8 @@ djnn_libs_extra :=
 # in the shell: source /Users/conversy/recherche/istar/code/apps/ext-libs/emscripten/emsdk/emsdk_env.sh
 # cross_prefix := em
 # CXX := ++
-# CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
-# CXXFLAGS += -DGL2D_RPI2 -DMASK_STB
+# DJNN_CXXFLAGS += -I/usr/local/Cellar/flex/2.6.4_1/include/
+# DJNN_CXXFLAGS += -DGL2D_RPI2 -DMASK_STB
 # display := SDL
 # graphics := GL
 # picking := ANALYTICAL

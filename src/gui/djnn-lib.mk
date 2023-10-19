@@ -14,8 +14,8 @@ lib_srcs += src/gui/css-parser/parser.cpp src/gui/css-parser/scanner.cpp src/gui
 
 #define my_lib_rules
 
-#$(build_dir)/src/gui/css-parser/scanner.o: CXXFLAGS += -Dregister=""
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
+#$(build_dir)/src/gui/css-parser/scanner.o: DJNN_CXXFLAGS += -Dregister=""
+$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
 
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
 $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
@@ -25,7 +25,7 @@ $(build_dir)/src/gui/css-parser/location.hh: src/gui/css-parser/parser.y
 
 ifeq ($(os),MinGW)
 # Fix for FlexLexer.h in /usr/include and in /ming64/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I/usr/include
+$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I/usr/include
 endif
 #endef
 
@@ -38,7 +38,7 @@ endif
 
 ifeq ($(os),Darwin)
 #lib_cppflags += -I$(brew_prefix)/opt/flex/include
-$(build_dir)/src/gui/css-parser/%.o: CXXFLAGS += -I$(brew_prefix)/opt/flex/include -Wno-unused-but-set-variable
+$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(brew_prefix)/opt/flex/include -Wno-unused-but-set-variable
 lib_ldflags += -L$(brew_prefix)/opt/flex/lib
 endif
 

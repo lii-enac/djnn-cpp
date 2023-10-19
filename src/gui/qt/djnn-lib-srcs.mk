@@ -20,7 +20,7 @@ include $(local_dir)/qt/djnn-lib-srcs.mk
 
 $(patsubst %.cpp,$(build_dir)/%.o,$(my_srcs)) \
 $(build_dir)/$(local_dir)/qqt_window_moc.o \
-: CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags Qt5OpenGL Qt5Gui)
+: DJNN_CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags Qt5OpenGL Qt5Gui)
 
 lib_srcs += $(my_srcs) 
 

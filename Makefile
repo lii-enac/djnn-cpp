@@ -15,6 +15,10 @@
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
+$(info	CXXFLAGS is $(CXXFLAGS))
+DJNN_CXXFLAGS := $(CXXFLAGS)
+$(info DJNN_CXXFLAGS is $(DJNN_CXXFLAGS))
+
 # ---------------------------------------
 # default
 
@@ -172,8 +176,8 @@ CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
 
 # STL
-# CXXFLAGS += -DDJNN_STL_EASTL
-# CXXFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
+# DJNN_CXXFLAGS += -DDJNN_STL_EASTL
+# DJNN_CXXFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
 # LDFLAGS += -L/Users/conversy/recherche/istar/code/misc/EASTL/build -lEASTL
 
 CFLAGS += -I$(src_dir)
@@ -181,7 +185,7 @@ LDFLAGS += -L$(build_lib_dir)
 
 ifeq ($(os),Linux)
 CFLAGS += -fPIC
-#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB ?= -shared
 YACC = bison -d -Wno-conflicts-sr -Wno-conflicts-rr
@@ -205,7 +209,7 @@ YACC := $(brew_prefix)/opt/bison/bin/bison -d -Wno-conflicts-sr -Wno-conflicts-r
 LEX := $(brew_prefix)/opt/flex/bin/flex
 moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
-#CXXFLAGS += -I/usr/local/include
+#DJNN_CXXFLAGS += -I/usr/local/include
 compiler ?= llvm
 #AR ?= /usr/bin/ar
 #ARFLAGS ?= -r
@@ -214,7 +218,7 @@ endif
 ifeq ($(os),MinGW)
 CFLAGS += -fPIC
 CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
-#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.dll
 DYNLIB ?= -shared
 YACC = bison -d -Wno-conflicts-sr -Wno-conflicts-rr
@@ -227,15 +231,15 @@ ifeq ($(os),crazyflie)
 CFLAGS += -Os
 CFLAGS += -mfp16-format=ieee -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CFLAGS += -ffunction-sections -fdata-sections
-CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 #boost name demangle
-CXXFLAGS += -I/usr/local/include
+DJNN_CXXFLAGS += -I/usr/local/include
 # djnn
-CXXFLAGS += -DDJNN_CRAZYFLIE -DDJNN_USE_FREERTOS
-CXXFLAGS += -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
-CXXFLAGS += -DDJNN_USE_STD_THREAD=1
-CXXFLAGS += --rtti #--rtti_data
-CXXFLAGS += -DRMT_ENABLED=0
+DJNN_CXXFLAGS += -DDJNN_CRAZYFLIE -DDJNN_USE_FREERTOS
+DJNN_CXXFLAGS += -DDJNN_NO_DEBUG -DDJNN_NO_SERIALIZE
+DJNN_CXXFLAGS += -DDJNN_USE_STD_THREAD=1
+DJNN_CXXFLAGS += --rtti #--rtti_data
+DJNN_CXXFLAGS += -DRMT_ENABLED=0
 
 lib_suffix =.so
 DYNLIB = -shared
@@ -265,7 +269,7 @@ em_ext_libs_path ?= ../djnn-emscripten-ext-libs
 
 EMCFLAGS += $(EMFLAGS) -I$(em_ext_libs_path)/include -I/usr/local/include #glm
 CFLAGS += $(EMCFLAGS)
-CXXFLAGS += $(EMCFLAGS)
+DJNN_CXXFLAGS += $(EMCFLAGS)
 LDFLAGS += $(EMFLAGS)
 # --emrun
 #   $(ext_libs) # to add in application makefile
@@ -309,14 +313,14 @@ endif
 
 ifeq ($(findstring avr,$(cross_prefix)),avr)
 djnn_libs := core base
-CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include
+DJNN_CXXFLAGS += -I/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr -I/usr/local/include
 #https://github.com/andysworkshop/avr-stl/releases
 endif
 
 #ARFLAGS ?= -r -u
 
 ifeq (g++,$(findstring g++,$(CXX)))
-#CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+#DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
 
@@ -325,7 +329,7 @@ linker ?= $(compiler)
 ifeq ($(linker),mold)
 # ifeq ($(os),Darwin)
 # CXXLD := ld64.mold
-# CXXFLAGS += -fPIC
+# DJNN_CXXFLAGS += -fPIC
 # LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
 # LDFLAGS += -dylib -lc++ -lc
 ifeq ($(compiler),gcc)
@@ -373,10 +377,10 @@ all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
 
 # ---------------------------------------
-# CFLAGS CXXFLAGS
+# CFLAGS DJNN_CXXFLAGS
 
-CXXFLAGS += -std=c++17
-CXXFLAGS += $(CFLAGS)
+DJNN_CXXFLAGS += -std=c++17
+DJNN_CXXFLAGS += $(CFLAGS)
 
 # ---------------------------------------
 # precompiled headers
@@ -396,38 +400,38 @@ pch_file ?= $(src_dir)/core/utils/build/precompiled.hpp
 pch_dst := $(build_dir)/$(pch_file)
 
 ifeq ($(compiler),llvm)
-CXXFLAGS_PCH_INC += -include-pch $(pch_dst)$(pch_ext)
-CXXFLAGS_PCH_GEN += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
+DJNN_CXXFLAGS_PCH_INC += -include-pch $(pch_dst)$(pch_ext)
+DJNN_CXXFLAGS_PCH_GEN += -fpch-instantiate-templates -fpch-codegen -fpch-debuginfo
 pch_shared_dst := $(pch_dst:.hpp=.o)
 endif
 ifeq ($(compiler),gnu)
 # https://stackoverflow.com/a/3164874
-CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Winvalid-pch
+DJNN_CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Winvalid-pch
 #-fno-implicit-templates
-#$(build_dir)/src/core/utils/build/external_template.o: CXXFLAGS += -fimplicit-templates
+#$(build_dir)/src/core/utils/build/external_template.o: DJNN_CXXFLAGS += -fimplicit-templates
 
 # SDL and other stuff define new variables for compiling, canceling the use of pch with gnu cc
 # FIXME this is not safe as every other external lib may define something
 # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/14
 # Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
-# CXXFLAGS_PCH_DEF += -D_REENTRANT
+# DJNN_CXXFLAGS_PCH_DEF += -D_REENTRANT
 ifeq ($(display),SDL)
-CXXFLAGS_PCH_DEF += -Dmain=SDL_main
+DJNN_CXXFLAGS_PCH_DEF += -Dmain=SDL_main
 endif
 endif
 
-CXXFLAGS_PCH := $(CXXFLAGS)
+DJNN_CXXFLAGS_PCH := $(DJNN_CXXFLAGS)
 
 $(build_dir)/%$(pch_ext): %
 	@mkdir -p $(dir $@)
 ifeq ($V,max)
-	$(CXX) -x c++-header $(CXXFLAGS) $(CXXFLAGS_PCH_GEN) $< -o $@
+	$(CXX) -x c++-header $(DJNN_CXXFLAGS) $(DJNN_CXXFLAGS_PCH_GEN) $< -o $@
 else
 	@$(call rule_message,compiling to,$(stylized_target))
-	@$(CXX) -x c++-header $(CXXFLAGS) $(CXXFLAGS_PCH_GEN) $< -o $@
+	@$(CXX) -x c++-header $(DJNN_CXXFLAGS) $(DJNN_CXXFLAGS_PCH_GEN) $< -o $@
 endif
 
-$(build_dir)/%$(pch_ext): override CXXFLAGS = $(CXXFLAGS_PCH) $(CXXFLAGS_CFG) $(CXXFLAGS_PCH_DEF) $(djnn_cflags) $(CXXFLAGS_COMMON) $(CXXFLAGS_CK)
+$(build_dir)/%$(pch_ext): override DJNN_CXXFLAGS = $(DJNN_CXXFLAGS_PCH) $(DJNN_CXXFLAGS_CFG) $(DJNN_CXXFLAGS_PCH_DEF) $(djnn_cflags) $(DJNN_CXXFLAGS_COMMON) $(DJNN_CXXFLAGS_CK)
 
 # for llvm -fpch-instantiate-templates -fpch-codegen
 $(build_dir)/%precompiled.o: $(build_dir)/%precompiled.hpp$(pch_ext)
@@ -444,7 +448,7 @@ pch: $(pch_dst)$(pch_ext)
 clean_pch:
 	rm -f $(pch_dst)$(pch_ext)
 
-CXXFLAGS += $(CXXFLAGS_PCH_INC)
+DJNN_CXXFLAGS += $(DJNN_CXXFLAGS_PCH_INC)
 
 endif
 
@@ -534,7 +538,7 @@ ifneq ($$($1_pch_file),)
 $1_pch_dest := $$(build_dir)/$$($1_pch_file)$$(pch_ext)
 $$($1_pch_dep_files): $$($1_pch_dest)
 $$($1_pch_dep_files): pch_file=$$($1_pch_file)
-$$($1_pch_dep_files): CXXFLAGS_PCH_GEN+=$$($1_lib_cflags)
+$$($1_pch_dep_files): DJNN_CXXFLAGS_PCH_GEN+=$$($1_lib_cflags)
 endif
 
 ifeq ($$(compiler),llvm)
@@ -584,7 +588,7 @@ endif
 
 #define $1_mk_content
 $$($1_objs): $(pch_dst)$(pch_ext)
-$$($1_objs): CXXFLAGS+=$$($1_lib_cppflags)
+$$($1_objs): DJNN_CXXFLAGS+=$$($1_lib_cppflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
@@ -753,12 +757,12 @@ root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 $(build_dir)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 ifeq ($V,max)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
+	$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
+	@$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.o: %.c
@@ -776,12 +780,12 @@ endif
 $(build_dir)/%.o: $(build_dir)/%.cpp
 	@mkdir -p $(dir $@)
 ifeq ($V,max)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
+	$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 else
 	@$(call rule_message,compiling,$(stylized_target))
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
+	@$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@
+	@printf "{\"directory\": \"$(root_dir)\", \"command\": \"$(CXX) $(DJNN_CXXFLAGS) -c $< -o $@\", \"file\": \"$<\"}" > $(build_dir)/$*.cccmd.json
 endif
 
 $(build_dir)/%.cpp $(build_dir)/%.hpp: %.y

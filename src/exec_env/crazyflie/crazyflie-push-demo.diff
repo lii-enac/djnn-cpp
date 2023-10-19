@@ -31,22 +31,22 @@ index 29040bc..1d26bba 100644
 +#CFLAGS += -DconfigUSE_RECURSIVE_MUTEXES=1 -DconfigNUM_THREAD_LOCAL_STORAGE_POINTERS=8
 +#CFLAGS += -DDEBUG=1
 +
-+CXXFLAGS = $(filter-out -std=gnu11,$(CFLAGS)) -Wno-error=write-strings -Wno-write-strings
-+CXXFLAGS += -DDJNN_CRAZYFLIE
-+CXXFLAGS += -DDJNN_NO_DEBUG
-+CXXFLAGS += -DDJNN_NO_SERIALIZE
-+CXXFLAGS += -DDJNN_USE_STD_THREAD
-+CXXFLAGS += -DDJNN_USE_FREERTOS
++DJNN_CXXFLAGS = $(filter-out -std=gnu11,$(CFLAGS)) -Wno-error=write-strings -Wno-write-strings
++DJNN_CXXFLAGS += -DDJNN_CRAZYFLIE
++DJNN_CXXFLAGS += -DDJNN_NO_DEBUG
++DJNN_CXXFLAGS += -DDJNN_NO_SERIALIZE
++DJNN_CXXFLAGS += -DDJNN_USE_STD_THREAD
++DJNN_CXXFLAGS += -DDJNN_USE_FREERTOS
 +
-+CXXFLAGS += --rtti #--rtti_data
-+CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
-+CXXFLAGS += -std=c++14
-+#CXXFLAGS += -DDJNN_USE_STD_THREAD=1
-+#CXXFLAGS += -D__GTHREADS=1 -D_GLIBCXX_HAS_GTHREADS
++DJNN_CXXFLAGS += --rtti #--rtti_data
++DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
++DJNN_CXXFLAGS += -std=c++14
++#DJNN_CXXFLAGS += -DDJNN_USE_STD_THREAD=1
++#DJNN_CXXFLAGS += -D__GTHREADS=1 -D_GLIBCXX_HAS_GTHREADS
 +#CXXFLAG += -D_GTHREAD_USE_MUTEX_TIMEDLOCK=1
 +
-+#CXXFLAGS += -ffunction-sections -fdata-sections
-+#CXXFLAGS += -std=c++14
++#DJNN_CXXFLAGS += -ffunction-sections -fdata-sections
++#DJNN_CXXFLAGS += -std=c++14
 +LDFLAGS += -Wl,-z,now -Wl,-z,relro -Wl,-Bstatic -fexceptions --rtti #--rtti_data
 +#LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections
 +#-L$(djnn_lib_path)
@@ -81,7 +81,7 @@ index 29040bc..1d26bba 100644
 +CFLAGS := $(filter-out -Werror, $(CFLAGS))
 +CXX = $(CROSS_COMPILE)c++
 +
-+CXX_COMMAND=$(CXX) $(CXXFLAGS) -c $< -o $(BIN)/$@
++CXX_COMMAND=$(CXX) $(DJNN_CXXFLAGS) -c $< -o $(BIN)/$@
 +CXX_COMMAND_SILENT="  CXX    $@"
 +.cpp.o:
 +	@$(if $(QUIET), ,echo $(CXX_COMMAND$(VERBOSE)) )
@@ -91,7 +91,7 @@ index 29040bc..1d26bba 100644
 +LD_COMMAND += $(LIBS)
 +
 +toto:
-+	@echo $(CXXFLAGS) | tr " " "\n" | sort
++	@echo $(DJNN_CXXFLAGS) | tr " " "\n" | sort
 +	# | tr "\n" " " ; echo
 +
 +endif
