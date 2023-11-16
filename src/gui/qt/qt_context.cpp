@@ -65,6 +65,7 @@ namespace djnn
     alpha = 1;
     fillRule = Qt::OddEvenFill;
     textAnchor = DJN_START_ANCHOR;
+    _z_order = 0;
     DEFAULT_DPI_RES = 96;
     for (int i = 0; i < 10; i++)
       factor[i] = 1.;
@@ -88,6 +89,7 @@ namespace djnn
     alpha = p->alpha;
     fillRule = p->fillRule;
     textAnchor = p->textAnchor;
+    _z_order = p->_z_order;
     _pick_bitset = p->_pick_bitset;
     DEFAULT_DPI_RES = 96;
     for (int i = 0; i < 10; i++)
@@ -131,7 +133,7 @@ namespace djnn
   }
   void add_shape (AbstractGShape* shape, QtContext *context)
   {
-    int z = shape->z_order();
+    int z = context->z_order();
     if (shapes_vectors.empty () || shapes_vectors.back()->z_order() < z) {
       QtVectorShapeToDraw* v = new QtVectorShapeToDraw (z);
       v->add_item(shape, context);

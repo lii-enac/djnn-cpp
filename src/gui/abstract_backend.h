@@ -354,7 +354,10 @@ namespace djnn
     load_simple_gradient_transform (AbstractHomography* g)
     {
     }
-
+    virtual void
+    load_zorder(int z)
+    {
+    }
     virtual void
     update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
     {

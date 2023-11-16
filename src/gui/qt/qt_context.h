@@ -39,6 +39,7 @@ namespace djnn
     QtContext ();
     QtContext (QtContext* parent);
     virtual ~QtContext ();
+    int z_order() {return _z_order;}
   private:
     int DEFAULT_DPI_RES;
     double alpha;
@@ -52,6 +53,7 @@ namespace djnn
     QPainterPath clip;
     double factor[10];
     int textAnchor;
+    int _z_order;
     unsigned int _pick_bitset;
     void update_relative_units ();
     double get_unit_factor (djnLengthUnit unit);

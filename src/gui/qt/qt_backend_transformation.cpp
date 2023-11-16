@@ -32,7 +32,11 @@ namespace djnn
   {
     _context_manager->get_current ()->matrix.setToIdentity ();
   }
-
+  void
+  QtBackend::load_zorder(int z)
+  {
+    _context_manager->get_current()->_z_order = z;
+  }
   void
   QtBackend::load_translation (Translation* t)
   {

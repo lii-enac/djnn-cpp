@@ -200,6 +200,8 @@ namespace djnn
     void
     load_gradient_homography (AbstractHomography* h) override;
     void
+    load_zorder(int z) override;
+    void
     update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
     void
     delete_text_impl (Text* text) override;
