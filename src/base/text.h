@@ -51,6 +51,8 @@ namespace djnn
 
   class TextCatenatorAction;
   class TextComparatorAction;
+  class TextContainerAction;
+  
   template <> const char name_info<TextCatenatorAction>::left [];
   template <> const char name_info<TextCatenatorAction>::right [];
   template <> const char name_info<TextCatenatorAction>::serialize [];
@@ -58,6 +60,10 @@ namespace djnn
   template <> const char name_info<TextComparatorAction>::left [];
   template <> const char name_info<TextComparatorAction>::right [];
   template <> const char name_info<TextComparatorAction>::serialize [];
+
+  template <> const char name_info<TextContainerAction>::left [];
+  template <> const char name_info<TextContainerAction>::right [];
+  template <> const char name_info<TextContainerAction>::serialize [];
 
   template <typename Action, typename Result>
   class TextBinaryOperator : public FatProcess
@@ -151,8 +157,28 @@ namespace djnn
       TextBinaryOperator<TextComparatorAction, BoolProperty>& _tbo;
     };
 
+    class TextContainerAction : public Action
+    {
+    public:
+      TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo) :
+      Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
+      virtual ~TextContainerAction () {}
+      void impl_activate ()
+      {
+        const string& left = _tbo._left.get_value ();
+        const string& right = _tbo._right.get_value ();
+        _tbo._result.set_value (perform(left, right), true);
+      }
+      static bool perform(const string& l, const string& r) { return l.find(r) != std::string::npos; }
+      static bool default_value () {return false;}
+
+      private:
+      TextBinaryOperator<TextContainerAction, BoolProperty>& _tbo;
+    };
+
   typedef TextBinaryOperator<TextCatenatorAction, TextProperty> TextCatenator;
   typedef TextBinaryOperator<TextComparatorAction, BoolProperty> TextComparator;
+  typedef TextBinaryOperator<TextContainerAction, BoolProperty> TextContainer;
 
 
   class TextAccumulator : public FatProcess

@@ -979,6 +979,8 @@ dc = DjnnClass("TextComparator", "", "../src/base", origin=None, finalize_constr
 dcs.append(dc)
 dc = DjnnClass("TextCatenator", "", "../src/base", origin=None, finalize_construction=False)
 dcs.append(dc)
+dc = DjnnClass("TextContainer", "", "../src/base", origin=None, finalize_construction=False)
+dcs.append(dc)
 
 dc = DjnnClass("WallClock", "", "../src/base", origin=None, finalize_construction=False)
 dcs.append(dc)

@@ -249,6 +249,7 @@ djnn::CoreProcess* djnn_new_TextPrinter(djnn::CoreProcess* parent, const char* n
 djnn::CoreProcess* djnn_new_TextAccumulator(djnn::CoreProcess* parent, const char* name, const apistring& init) { return new djnn::TextAccumulator(parent, name, init); }
 djnn::CoreProcess* djnn_new_TextComparator(djnn::CoreProcess* parent, const char* name) { return new djnn::TextComparator(parent, name); }
 djnn::CoreProcess* djnn_new_TextCatenator(djnn::CoreProcess* parent, const char* name) { return new djnn::TextCatenator(parent, name); }
+djnn::CoreProcess* djnn_new_TextContainer(djnn::CoreProcess* parent, const char* name) { return new djnn::TextContainer(parent, name); }
 djnn::CoreProcess* djnn_new_WallClock(djnn::CoreProcess* parent, const char* name) { return new djnn::WallClock(parent, name); }
 djnn::CoreProcess* djnn_new_Window(djnn::CoreProcess* parent, const char* name, const apistring& title, double x, double y, double width, double height) { return new djnn::Window(parent, name, title, x, y, width, height); }
 djnn::CoreProcess* djnn_new_OutlineColor(djnn::CoreProcess* parent, const char* name, double r, double g, double b) { return new djnn::OutlineColor(parent, name, r, g, b); }

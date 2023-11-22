@@ -75,6 +75,10 @@ namespace djnn
   template <> const char name_info<TextComparatorAction>::right [] = "right";
   template <> const char name_info<TextComparatorAction>::serialize [] = "textcomparator";
 
+  template <> const char name_info<TextContainerAction>::left [] = "left";
+  template <> const char name_info<TextContainerAction>::right [] = "right";
+  template <> const char name_info<TextContainerAction>::serialize [] = "textcontainer";
+
   void
   DoubleFormatter::init (double initial, int decimal)
   {
