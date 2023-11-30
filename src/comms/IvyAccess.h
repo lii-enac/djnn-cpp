@@ -65,6 +65,7 @@ namespace djnn
     
     virtual ~IvyAccess ();
     void set_arriving(const string& v);
+    void set_arriving_info(const string& v);
     void set_leaving(const string& v);
 
     // make it public
@@ -89,6 +90,7 @@ namespace djnn
     IvyOutAction _out_a;
     Coupling _out_c;
     TextProperty _arriving;
+    TextProperty _arriving_info;
     TextProperty _leaving;
 
     // thread source

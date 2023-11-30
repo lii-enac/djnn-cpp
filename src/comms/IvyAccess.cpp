@@ -192,8 +192,14 @@ static void _on_ivy_arriving_leaving_agent ( IvyClientPtr app, void *user_data, 
   djnn::IvyAccess* access = reinterpret_cast<djnn::IvyAccess*>(user_data);
   if(STOP_IVY) return;
 
-  if (event == IvyApplicationConnected)
-    access->set_arriving (IvyGetApplicationName(app));
+  if (event == IvyApplicationConnected) {
+    string appName = IvyGetApplicationName(app);
+    string appHost = IvyGetApplicationHost(app);
+    access->set_arriving (appName);
+    access->set_arriving_info("appName: " + appName + " - FQDN: " + appHost);
+    //std::cerr << "TEST IVY: " << IvyGetApplicationName(app) << " - FQDN: " << IvyGetApplicationHost (app) << std::endl ; // << " - Id: " << app->app_port << std::endl;
+  }
+
   else if (event == IvyApplicationDisconnected)
     access->set_leaving (IvyGetApplicationName(app));
 }
@@ -221,6 +227,7 @@ IvyAccess::IvyAccess (CoreProcess* parent, const string& name,
   _out_a (this, "out_action", &_out),
   _out_c ( &_out , ACTIVATION, &_out_a, ACTIVATION, true ),
   _arriving ( this,  "arriving", ""),
+  _arriving_info ( this, "arriving_info", ""),
   _leaving ( this,  "leaving", "")
 {
   _bus =  bus;
@@ -303,6 +310,7 @@ IvyAccess::~IvyAccess ()
     if ( it_s->first.compare ("out") == 0
       || it_s->first.compare ("out_action") == 0
       || it_s->first.compare ("arriving") == 0
+      || it_s->first.compare ("arriving_info") == 0
       || it_s->first.compare ("leaving") == 0 ) {
       it_s ++;
     }
@@ -342,6 +350,18 @@ void IvyAccess::set_arriving(const string& v) {
     return;
   }
   _arriving.set_value (v, true);
+  GRAPH_EXEC;
+  djnn::release_exclusive_access (DBG_REL);
+}
+
+void IvyAccess::set_arriving_info(const string& v) {
+  djnn::IvyAccess* access = this;
+  djnn::get_exclusive_access (DBG_GET);
+  if(STOP_IVY) {
+    djnn::release_exclusive_access (DBG_REL);
+    return;
+  }
+  _arriving_info.set_value (v, true);
   GRAPH_EXEC;
   djnn::release_exclusive_access (DBG_REL);
 }
@@ -538,6 +558,9 @@ IvyAccess::find_child_impl (const string& key)
 
   else if (key.compare ("arriving") == 0)
     return &_arriving;
+
+  else if (key.compare ("arriving_info") == 0)
+    return &_arriving_info;
 
   else if (key.compare ("leaving") == 0)
     return &_leaving; 
